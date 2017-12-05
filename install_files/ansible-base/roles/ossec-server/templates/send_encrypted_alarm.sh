@@ -23,7 +23,7 @@ function send_encrypted_alert() {
     # Try to encrypt the alert message. We'll inspect the exit status of the
     # pipeline to decide whether to send the alert text, or the default
     # failure message.
-    encrypted_alert_text="$(printf "${ossec_alert_text}" | \
+    encrypted_alert_text="$(printf "%s" "${ossec_alert_text}" | \
         /usr/bin/formail -I '' | \
         /usr/bin/gpg --homedir /var/ossec/.gnupg --trust-model always -ear '{{ ossec_gpg_fpr }}')"
 
@@ -32,7 +32,7 @@ function send_encrypted_alert() {
         send_plaintext_fail_message
     else
         echo "${encrypted_alert_text}" | \
-            /usr/bin/mail -s "$(echo $SUBJECT | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
+            /usr/bin/mail -s "$(echo "${SUBJECT}" | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
     fi
 }
 
@@ -42,7 +42,7 @@ function send_encrypted_alert() {
 function send_plaintext_fail_message() {
     printf "Failed to encrypt OSSEC alert. Investigate the mailing configuration on the Monitor Server." | \
         /usr/bin/formail -I "" | \
-        /usr/bin/mail -s "$(echo $SUBJECT | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
+        /usr/bin/mail -s "$(echo "${SUBJECT}" | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
 }
 
 # Encrypt the OSSEC notification and pass to mailer for sending.

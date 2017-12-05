@@ -32,10 +32,17 @@ See the [Installation Guide](https://docs.securedrop.org/en/stable/#installtoc).
 
 See the [Development Guide](https://docs.securedrop.org/en/latest/development/getting_started.html) and the [Contributing Guidelines](https://docs.securedrop.org/en/latest/development/contributor_guidelines.html).
 
+Check out our [Development Roadmap](https://github.com/freedomofpress/securedrop/wiki/Development-Roadmap) to see our plans and priorities for upcoming releases.
+
 We also have a public [Gitter channel](https://gitter.im/freedomofpress/securedrop) and a [public Discourse forum](https://forum.securedrop.club/).
 
 ## License
 
 SecureDrop is open source and released under the [GNU Affero General Public License v3](/LICENSE).
 
-The [wordlist](/securedrop/wordlist) we use to generate source passphrases is based off a new [Diceware wordlist](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases) from the EFF.
+## Wordlists
+
+The wordlist we use to generate source passphrases come from various sources:
+
+* [en.txt](/securedrop/wordlists/en.txt) is based off a new [Diceware wordlist](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases) from the EFF.
+* [fr.txt](/securedrop/wordlists/en.txt) is based off Matthieu Weber's [translated diceware list](http://weber.fi.eu.org/index.shtml.en).

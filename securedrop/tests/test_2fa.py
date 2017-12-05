@@ -33,7 +33,7 @@ class TestJournalist2FA(flask_testing.TestCase):
         """
         if token is None:
             token = self.admin.totp.now()
-        self.client.post(url_for('login'),
+        self.client.post(url_for('main.login'),
                          data=dict(username=self.admin.username,
                                    password=self.admin_pw,
                                    token=token))
@@ -43,7 +43,7 @@ class TestJournalist2FA(flask_testing.TestCase):
         """
         if token is None:
             token = self.user.totp.now()
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token=token))
@@ -55,7 +55,7 @@ class TestJournalist2FA(flask_testing.TestCase):
         """
         token = self.user.totp.now()
         resp = self._login_user(token)
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
         resp = self._login_user(token)
         self.assert200(resp)
@@ -77,22 +77,24 @@ class TestJournalist2FA(flask_testing.TestCase):
 
         # Create and submit an invalid 2FA token
         invalid_token = u'000000'
-        resp = self.client.post(url_for('admin_new_user_two_factor',
+        resp = self.client.post(url_for('admin.new_user_two_factor',
                                         uid=self.admin.id),
                                 data=dict(token=invalid_token))
 
         self.assert200(resp)
-        self.assertMessageFlashed('Two-factor token failed to verify', 'error')
+        self.assertMessageFlashed(
+            'Could not verify token in two-factor authentication.', 'error')
         # last_token should be set to the invalid token we just tried to use
         self.assertEqual(self.admin.last_token, invalid_token)
 
         # Submit the same invalid token again
-        resp = self.client.post(url_for('admin_new_user_two_factor',
+        resp = self.client.post(url_for('admin.new_user_two_factor',
                                         uid=self.admin.id),
                                 data=dict(token=invalid_token))
 
         # A flashed message should appear
-        self.assertMessageFlashed('Two-factor token failed to verify', 'error')
+        self.assertMessageFlashed(
+            'Could not verify token in two-factor authentication.', 'error')
 
     def test_bad_token_fails_to_verify_on_new_user_two_factor_page(self):
         # Regression test
@@ -101,20 +103,22 @@ class TestJournalist2FA(flask_testing.TestCase):
 
         # Create and submit an invalid 2FA token
         invalid_token = u'000000'
-        resp = self.client.post(url_for('account_new_two_factor'),
+        resp = self.client.post(url_for('account.new_two_factor'),
                                 data=dict(token=invalid_token))
 
         self.assert200(resp)
-        self.assertMessageFlashed('Two-factor token failed to verify', 'error')
+        self.assertMessageFlashed(
+            'Could not verify token in two-factor authentication.', 'error')
         # last_token should be set to the invalid token we just tried to use
         self.assertEqual(self.user.last_token, invalid_token)
 
         # Submit the same invalid token again
-        resp = self.client.post(url_for('account_new_two_factor'),
+        resp = self.client.post(url_for('account.new_two_factor'),
                                 data=dict(token=invalid_token))
 
         # A flashed message should appear
-        self.assertMessageFlashed('Two-factor token failed to verify', 'error')
+        self.assertMessageFlashed(
+            'Could not verify token in two-factor authentication.', 'error')
 
     @classmethod
     def tearDownClass(cls):

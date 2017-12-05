@@ -21,9 +21,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
+import config
 import db
 import journalist
-import source
+from source_app import create_app
 import tests.utils.env as env
 
 LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
@@ -41,7 +42,7 @@ class alert_is_not_present(object):
             return True
 
 
-class FunctionalTest():
+class FunctionalTest(object):
 
     def _unused_port(self):
         s = socket.socket()
@@ -80,9 +81,9 @@ class FunctionalTest():
         log_file.flush()
         return firefox_binary.FirefoxBinary(log_file=log_file)
 
-    def setup(self):
+    def setup(self, session_expiration=30):
         # Patch the two-factor verification to avoid intermittent errors
-        self.patcher = mock.patch('journalist.Journalist.verify_token')
+        self.patcher = mock.patch('db.Journalist.verify_token')
         self.mock_journalist_verify_token = self.patcher.start()
         self.mock_journalist_verify_token.return_value = True
 
@@ -98,6 +99,9 @@ class FunctionalTest():
         self.source_location = "http://localhost:%d" % source_port
         self.journalist_location = "http://localhost:%d" % journalist_port
 
+        # Allow custom session expiration lengths
+        self.session_expiration = session_expiration
+
         def start_source_server():
             # We call Random.atfork() here because we fork the source and
             # journalist server from the main Python process we use to drive
@@ -106,7 +110,12 @@ class FunctionalTest():
             # is a problem because they would produce identical output if we
             # didn't re-seed them after forking.
             Random.atfork()
-            source.app.run(
+
+            config.SESSION_EXPIRATION_MINUTES = self.session_expiration
+
+            source_app = create_app(config)
+
+            source_app.run(
                 port=source_port,
                 debug=True,
                 use_reloader=False,
@@ -158,7 +167,8 @@ class FunctionalTest():
         self.driver.set_window_position(0, 0)
         self.driver.set_window_size(1024, 768)
 
-        self.secret_message = 'blah blah blah'
+        self.secret_message = ('These documents outline a major government '
+                               'invasion of privacy.')
 
     def teardown(self):
         self.patcher.stop()

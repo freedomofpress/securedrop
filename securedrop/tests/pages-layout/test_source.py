@@ -43,10 +43,23 @@ class TestSourceLayout(
         self._source_submits_a_file()
         self._screenshot('source-lookup.png')
 
+    def test_lookup_shows_codename(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_shows_codename()
+        self._screenshot('source-lookup-shows-codename.png')
+
     def test_login(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_login()
         self._screenshot('source-login.png')
+
+    def test_enters_text_in_login_form(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_login()
+        self._source_enters_codename_in_login_form()
+        self._screenshot('source-enter-codename-in-login.png')
 
     def test_use_tor_browser(self):
         self._source_visits_use_tor()
@@ -65,6 +78,13 @@ class TestSourceLayout(
         self._source_logs_out()
         self._screenshot('source-logout_flashed_message.png')
 
+    def test_submission_entered_text(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_enters_text_in_message_field()
+        self._screenshot('source-submission_entered_text.png')
+
     def test_next_submission_flashed_message(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -72,6 +92,38 @@ class TestSourceLayout(
         self._source_submits_a_file()
         self._source_submits_a_message()
         self._screenshot('source-next_submission_flashed_message.png')
+
+    def test_source_checks_for_reply(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._journalist_checks_messages()
+        self._journalist_downloads_message()
+        self._journalist_sends_reply_to_source()
+        self._source_visits_source_homepage()
+        self._source_chooses_to_login()
+        self._source_proceeds_to_login()
+        self._screenshot('source-checks_for_reply.png')
+        self._source_deletes_a_journalist_reply()
+        self._screenshot('source-deletes_reply.png')
+
+    def test_source_flagged(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._source_delete_key()
+        self._journalist_visits_col()
+        self._journalist_flags_source()
+        self._source_visits_source_homepage()
+        self._source_chooses_to_login()
+        self._source_proceeds_to_login()
+        self._screenshot('source-flagged.png')
 
     def test_notfound(self):
         self._source_not_found()
@@ -84,3 +136,25 @@ class TestSourceLayout(
     def test_why_journalist_key(self):
         self._source_why_journalist_key()
         self._screenshot('source-why_journalist_key.png')
+
+
+@pytest.mark.pagelayout
+class TestSourceSessionLayout(
+        functional_test.FunctionalTest,
+        source_navigation_steps.SourceNavigationSteps,
+        journalist_navigation_steps.JournalistNavigationSteps):
+
+    def setup(self):
+        self.session_length_minutes = 0.03
+        super(TestSourceSessionLayout, self).setup(
+            session_expiration=self.session_length_minutes)
+
+    def test_source_session_timeout(self):
+        self._source_visits_source_homepage()
+        self._source_clicks_submit_documents_on_homepage()
+        self._source_continues_to_submit_page()
+        self._source_waits_for_session_to_timeout(self.session_length_minutes)
+        self._source_enters_text_in_message_field()
+        self._source_clicks_submit_button_on_submission_page()
+        self._source_sees_session_timeout_message()
+        self._screenshot('source-session_timeout.png')

@@ -1,4 +1,7 @@
 @import base
+@import modules/visually-hidden
+@import modules/menu
+@import modules/flag
 
 +base_rules
 
@@ -11,6 +14,9 @@
     text-align: left
     margin-bottom: 1em
     border-radius: 5px
+
+    &:dir(rtl)
+      text-align: right
 
     .date
       float: right
@@ -47,10 +53,16 @@ p.breadcrumbs
   text-align: left
   position: relative
 
+  &:dir(rtl)
+    text-align: right
+
 #regenerate-code .confirm-prompt
   font-size: 14px
   font-style: italic
   text-align: left
+
+  &:dir(rtl)
+    text-align: right
 
   button
     padding: 5px 15px
@@ -78,3 +90,11 @@ button.small-danger, a.btn.small-danger, .btn.small-danger
 #cols li.source
   .button-star
     background-color: $color_grey_light
+
+.login-form
+  max-width: 445px
+  input
+    width: 100%
+
+.journalist-reply__input
+  max-width: 700px

@@ -49,23 +49,23 @@
   set_fact:
     _smtp_hostname_query_command: >-
       {% if ansible_lsb.id == "Tails" -%}torify {% endif %}
-      nslookup -vc -retry=3 -timeout=10 -fail {{ smtp_relay }} 8.8.8.8
+      host -W=10 -R=3 -T -4 {{ smtp_relay }} {{ dns_server }}
     _sasl_hostname_query_command: >-
       {% if ansible_lsb.id == "Tails" %}torify {% endif %}
-      nslookup -vc -retry=3 -timeout=10 -fail {{ sasl_domain }} 8.8.8.8
+      host -W=10 -R=3 -T -4 {{ sasl_domain }} {{ dns_server }}
 
 - name: Perform SMTP lookup check.
   command: "{{ _smtp_hostname_query_command }}"
   changed_when: false
   register: smtp_validate_result
-  # We'll inspect return code in subsequent task to provide an informative
-  # failure message.
+  # We'll inspect the output of this command in the next task to see if
+  # an address was found.
   ignore_errors: yes
 
 - name: Validate SMTP relay connection.
   assert:
     that:
-      - "{{ smtp_validate_result.rc == 0 }}"
+      - "'has address' in smtp_validate_result.stdout"
     msg: >-
       The SMTP relay domain failed during lookup. This domain
       is the server contacted for authentication in order to send
@@ -77,14 +77,14 @@
   command: "{{ _sasl_hostname_query_command }}"
   register: sasl_validate_result
   changed_when: false
-  # We'll inspect return code in subsequent task to provide an informative
-  # failure message.
+  # We'll inspect the output of this command in the next task to see if
+  # an address was found.
   ignore_errors: yes
 
 - name: Validate SASL domain.
   assert:
     that:
-      - "{{ sasl_validate_result.rc == 0 }}"
+      - "'has address' in sasl_validate_result.stdout"
     msg: >-
       The SASL domain failed during lookup. This is typically the
       portion of the email address after the '@' symbol, although

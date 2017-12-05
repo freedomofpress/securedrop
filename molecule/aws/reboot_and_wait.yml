@@ -1,0 +1,26 @@
+---
+- name: Gather EC2 facts to establish ansible_ec2_public_hostname.
+  ec2_facts:
+
+- name: Reboot ec2 boxes
+  local_action: ec2
+  args:
+    instance_tags:
+      build_num: "{{ lookup('env', 'CIRCLE_BUILD_NUM') }}"
+      job_name: "securedrop-ci"
+    wait: yes
+    region: "{{ lookup('env', 'CI_AWS_REGION') }}"
+    state: restarted
+  become: false
+
+- name: Wait for server to come back.
+  local_action: wait_for
+  args:
+    host: "{{ ansible_ec2_public_hostname }}"
+    port: "{{ ansible_port | default(22) }}"
+    delay: 60
+    timeout: 300
+    search_regex: OpenSSH
+    state: started
+  # Wait action runs on localhost, and does NOT require sudo.
+  become: false

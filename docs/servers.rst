@@ -216,7 +216,7 @@ While FDE can be useful in some cases, we currently do not recommend
 that you enable it because there are not many scenarios where it will be
 a net security benefit for SecureDrop operators. Doing so will introduce
 the need for more passwords and add even more responsibility on the
-administrator of the system (see `this GitHub
+admin of the system (see `this GitHub
 issue <https://github.com/freedomofpress/securedrop/issues/511#issuecomment-50823554>`__
 for more information).
 
@@ -225,7 +225,7 @@ installation option that says *Guided - use entire disk and set up LVM*.
 
 However, if you decide to go ahead and enable FDE, please note that
 doing so means SecureDrop will become unreachable after an automatic
-reboot. An administrator will need to be on hand to enter the password
+reboot. An admin will need to be on hand to enter the password
 in order to decrypt the disks and complete the startup process, which
 will occur anytime there is an automatic software update, and also
 several times during SecureDrop's installation. We recommend that the
@@ -235,7 +235,7 @@ receive an alert when the system becomes unavailable.
 To enable FDE, select *Guided - use entire disk and set up encrypted
 LVM* during the disk partitioning step and write the changes to disk.
 Follow the recommendations as to choosing a strong password. As the
-administrator, you will be responsible for keeping this passphrase safe.
+admin, you will be responsible for keeping this passphrase safe.
 Write it down somewhere and memorize it if you can. **If inadvertently
 lost it could result in total loss of the SecureDrop system.**
 
@@ -282,6 +282,8 @@ When you are done, make sure you save the following information:
 -  The IP address of the *Application Server*
 -  The IP address of the *Monitor Server*
 -  The non-root user's name and password for the servers.
+
+.. _test_connectivity:
 
 Test Connectivity
 -----------------

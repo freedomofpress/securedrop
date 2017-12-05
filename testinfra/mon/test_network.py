@@ -7,12 +7,12 @@ from jinja2 import Template
 securedrop_test_vars = pytest.securedrop_test_vars
 
 
+@pytest.mark.xfail()
 def test_mon_iptables_rules(SystemInfo, Command, Sudo):
-    app_ip = securedrop_test_vars.app_ip
 
     # Build a dict of variables to pass to jinja for iptables comparison
     kwargs = dict(
-        app_ip=app_ip,
+        app_ip=os.environ.get('APP_IP', securedrop_test_vars.app_ip),
         default_interface=Command.check_output(
             "ip r | head -n 1 | awk '{ print $5 }'"),
         tor_user_id=Command.check_output("id -u debian-tor"),
@@ -49,6 +49,7 @@ def test_mon_iptables_rules(SystemInfo, Command, Sudo):
     dict(host="0.0.0.0", proto="udp", port=1514, listening=True),
     dict(host="0.0.0.0", proto="tcp", port=1515, listening=False),
 ])
+@pytest.mark.xfail
 def test_listening_ports(Socket, Sudo, ossec_service):
     """
     Ensure the OSSEC-related services are listening on the

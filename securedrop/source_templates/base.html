@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ g.html_lang }}" dir="{{ g.text_direction }}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SecureDrop | Protecting Journalists and Sources</title>
+    <title>SecureDrop | {{ gettext('Protecting Journalists and Sources') }}</title>
 
     <link rel="stylesheet" href="/static/css/source.css">
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
@@ -15,12 +15,13 @@
     <div class="content">
       {% block header %}
       <div id="header">
-        <a href="{% if 'logged_in' in session %}{{ url_for('lookup') }}{% else %}{{ url_for('index') }}{% endif %}">
+        <a href="{% if 'logged_in' in session %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}">
           <img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px">
         </a>
+        {% include 'locales.html' %}
         {% if use_custom_header_image %}
         <div class="powered">
-          Powered by<br>
+          {{ gettext('Powered by') }}<br>
           <img src="/static/i/securedrop_small.png" alt="SecureDrop">
         </div>
         {% endif %}
@@ -29,7 +30,7 @@
 
       <div class="panel selected">
       {% if 'logged_in' in session %}
-        <a href="{{ url_for('logout') }}" class="sd-button btn pull-right" id="logout">EXIT</a>
+        <a href="{{ url_for('main.logout') }}" class="sd-button btn pull-right" id="logout">{{ gettext('LOG OUT') }}</a>
       {% endif %}
         <hr class="no-line">
 
@@ -39,7 +40,7 @@
 
       {% block footer %}
       <footer>
-        Like all software, SecureDrop may contain security bugs. Use at your own risk. Powered by SecureDrop {{ version }}.
+        {{ gettext('Like all software, SecureDrop may contain security bugs. Use at your own risk.') }} {{ gettext('Powered by') }} SecureDrop {{ version }}.
       </footer>
       {% endblock %}
     </div>

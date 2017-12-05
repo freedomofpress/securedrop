@@ -74,6 +74,13 @@ Some Selenium tests are decorated to produce before and after screenshots to aid
 in debugging. This behavior is enabled with the ``SCREENSHOTS_ENABLED`` environment
 variable. Output PNG files will be placed in the ``tests/log/`` directory.
 
+The `gnupg
+<https://pythonhosted.org/python-gnupg>`_ library can be quite verbose in its
+output. The default log level applied to this package is ``ERROR`` but this can
+be controlled via the ``GNUPG_LOG_LEVEL`` environment variable. It can have values
+such as ``INFO`` or ``DEBUG`` if some particular test case or test run needs
+greater verbosity.
+
 .. code:: sh
 
     SCREENSHOTS_ENABLED=1 pytest tests/functional/

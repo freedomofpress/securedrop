@@ -19,9 +19,9 @@
   with_indexed_items: "{{ local_deb_packages }}"
 
 # Using `dpkg` via `command` to ensure installation ensure installation
-# every time, regardless of whether packages changed. SecureDrop deb package 
-# builds are not deterministic, so the `copy` task above will always report 
-# changed. Once the `apt` task above has installed the packages, only the 
+# every time, regardless of whether packages changed. SecureDrop deb package
+# builds are not deterministic, so the `copy` task above will always report
+# changed. Once the `apt` task above has installed the packages, only the
 # `dpkg -i` calls will reinstall, ensuring the latest local code changes are used.
 - name: Install locally built deb packages (via dpkg).
   command: dpkg -i /root/{{ item }}

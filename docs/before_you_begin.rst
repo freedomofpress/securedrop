@@ -11,19 +11,24 @@ and sources, but no tool can guarantee safety. This guide will
 instruct you in installing and configuring SecureDrop, but it does not
 explain how to use it safely and effectively. Put another way: at the
 end of this guide, you will have built a car; you will not know how to
-drive. Make sure to review the :doc:`deployment_practices` to get the
-most out of your new SecureDrop instance.
+drive. Make sure to review the :ref:`Deployment Guide <deployment>` to review
+best practices for SecureDrop deployments.
 
 Installing SecureDrop is an extended manual process which requires a
 bunch of preparation and equipment. You should probably set aside a day
 to complete the install process. A successful install requires an
-administrator with at-least basic familiarity with Linux, the GNU core
+admin with at-least basic familiarity with Linux, the GNU core
 utilities and Bash shell. If you are not proficient in these areas, it
 is strongly recommended that you contact the `Freedom of the Press
 Foundation <https://securedrop.org/help>`__ for installation assistance.
 
 Before you begin, you will need to assemble all the :doc:`hardware <hardware>`
 that you are going to use.
+
+To better assist in the installation process, you can organize your work using the
+`SecureDrop Installation Worksheet <https://docs.google.com/a/freedom.press/document/d/18RMAzhx1XCgpmw366I8tItBXQTzkFy_i_D0c605DTS8/edit?usp=sharing>`__.
+It is **critical** you destroy this worksheet when your installation is complete
+and all of your passphrases have been safely stored in a password manager.
 
 When running commands or editing configuration files that include
 filenames, version numbers, usernames, and hostnames or IP addresses,

@@ -20,20 +20,20 @@
     - { role: common, tags: common }
     - { role: tor-hidden-services, tags: tor }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
-  sudo: yes
+  become: yes
 
 - name: Configure SecureDrop Monitor Server.
   hosts: securedrop_monitor_server
   roles:
     - { role: ossec-server, tags: [ ossec, ossec_server ] }
-  sudo: yes
+  become: yes
 
 - name: Configure SecureDrop Application Server.
   hosts: securedrop_application_server
   roles:
     - { role: ossec-agent, tags: [ ossec, ossec_agent ] }
     - { role: app, tags: app }
-  sudo: yes
+  become: yes
 
   # This section will put the ssh and iptables rules in place
   # It will then add any staging exemptions required
@@ -45,7 +45,7 @@
   hosts: securedrop
   roles:
     - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
-  sudo: yes
+  become: yes
 
 - name: Reboot Application and Monitor Servers.
   hosts: securedrop
@@ -56,4 +56,4 @@
     reboot_wait: no
   tasks:
     - include: tasks/reboot_if_first_install.yml
-  sudo: yes
+  become: yes

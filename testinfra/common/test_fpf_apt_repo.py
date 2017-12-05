@@ -1,3 +1,6 @@
+import pytest
+
+
 def test_fpf_apt_repo_present(File):
     """
     Ensure the FPF apt repo, apt.freedom.press, is configured.
@@ -29,18 +32,27 @@ def test_fpf_apt_repo_fingerprint(Command):
 
     fpf_gpg_pub_key_info = """/etc/apt/trusted.gpg.d/securedrop-keyring.gpg
 ---------------------------------------------
-pub   4096R/00F4AD77 2016-10-20 [expires: 2017-10-20]
+pub   4096R/00F4AD77 2016-10-20 [expires: 2018-10-05]
       Key fingerprint = 2224 5C81 E3BA EB41 38B3  6061 310F 5612 00F4 AD77
 uid                  SecureDrop Release Signing Key"""
 
     assert c.rc == 0
     assert fpf_gpg_pub_key_info in c.stdout
 
-    fpf_gpg_pub_key_fingerprint_expired = ('B89A 29DB 2128 160B 8E4B  '
-                                           '1B4C BADD E0C7 FC9F 6818')
-    fpf_gpg_pub_key_info_expired = """pub   4096R/FC9F6818 2014-10-26 [expired: 2016-10-27]
-      Key fingerprint = #{fpf_gpg_pub_key_fingerprint_expired}
-uid                  Freedom of the Press Foundation Master Signing Key"""
 
-    assert fpf_gpg_pub_key_fingerprint_expired not in c.stdout
-    assert fpf_gpg_pub_key_info_expired not in c.stdout
+@pytest.mark.parametrize('old_pubkey', [
+    'pub   4096R/FC9F6818 2014-10-26 [expired: 2016-10-27]',
+    'pub   4096R/00F4AD77 2016-10-20 [expires: 2017-10-20]',
+    'pub   4096R/00F4AD77 2016-10-20 [expired: 2017-10-20]',
+    'uid                  Freedom of the Press Foundation Master Signing Key',
+    'B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818',
+])
+def test_fpf_apt_repo_old_pubkeys_absent(Command, old_pubkey):
+    """
+    Ensure that expired (or about-to-expire) public keys for the FPF
+    apt repo are NOT present. Updates to the securedrop-keyring package
+    should enforce clobbering of old pubkeys, and this check will confirm
+    absence.
+    """
+    c = Command('apt-key finger')
+    assert old_pubkey not in c.stdout

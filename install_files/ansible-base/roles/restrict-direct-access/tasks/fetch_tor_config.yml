@@ -24,9 +24,8 @@
     dest: "{{ role_path }}/../../{{ item.item.filename }}"
     src: ths_config.j2
   # Local action, so we don't want elevated privileges
-  sudo: no
+  become: no
   with_items: "{{ tor_hidden_service_hostname_lookup.results }}"
   tags:
     - tor
     - admin
-

@@ -1,21 +1,21 @@
----                                                                             
-- name: Check whether Diffie-Hellman groups have been updated                   
-  stat:                                                                         
-    path: /etc/ssh/moduli                                                       
-  register: dh_moduli                                                           
+---
+- name: Check whether Diffie-Hellman groups have been updated
+  stat:
+    path: /etc/ssh/moduli
+  register: dh_moduli
 
 # SHA1 checksum represents the latest default primes/moduli shipped with OpenSSH
-                                                                                
-- name: Remove weak DH moduli                                                   
-  command: awk '$5 > 2000' /etc/ssh/moduli                                      
-  register: new_dh_moduli                                                       
-  when: dh_moduli.stat.checksum == '2dc7b3b18a2d3884ca4604466b75cf7903e96a97'   
-                                                                                
-- name: Install updated DH moduli                                               
-  copy:                                                                         
-    dest: /etc/ssh/moduli                                                       
-    content: "{{ new_dh_moduli.stdout }}"                                       
-    owner: root                                                                 
-    group: root                                                                 
-    mode: "0644"                                                                
-  when: dh_moduli.stat.checksum == '2dc7b3b18a2d3884ca4604466b75cf7903e96a97' 
+
+- name: Remove weak DH moduli
+  command: awk '$5 > 2000' /etc/ssh/moduli
+  register: new_dh_moduli
+  when: dh_moduli.stat.checksum == '2dc7b3b18a2d3884ca4604466b75cf7903e96a97'
+
+- name: Install updated DH moduli
+  copy:
+    dest: /etc/ssh/moduli
+    content: "{{ new_dh_moduli.stdout }}"
+    owner: root
+    group: root
+    mode: "0644"
+  when: dh_moduli.stat.checksum == '2dc7b3b18a2d3884ca4604466b75cf7903e96a97'

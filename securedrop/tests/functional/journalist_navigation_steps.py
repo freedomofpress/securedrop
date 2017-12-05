@@ -28,7 +28,7 @@ class JournalistNavigationSteps():
 
             return content
 
-    def _try_login_user(self, username, password, token):
+    def _input_text_in_login_form(self, username, password, token):
         self.driver.get(self.journalist_location + "/login")
         username_field = self.driver.find_element_by_css_selector(
             'input[name="username"]')
@@ -41,6 +41,9 @@ class JournalistNavigationSteps():
         token_field = self.driver.find_element_by_css_selector(
             'input[name="token"]')
         token_field.send_keys(token)
+
+    def _try_login_user(self, username, password, token):
+        self._input_text_in_login_form(username, password, token)
 
         submit_button = self.driver.find_element_by_css_selector(
             'button[type=submit]')
@@ -177,8 +180,9 @@ class JournalistNavigationSteps():
             # Successfully verifying the code should redirect to the admin
             # interface, and flash a message indicating success
             flashed_msgs = self.driver.find_elements_by_css_selector('.flash')
-            assert (("Two-factor token successfully verified for user"
-                     " {}!").format(self.new_user['username']) in
+            assert (("Token in two-factor authentication "
+                     "accepted for user {}.").format(
+                         self.new_user['username']) in
                     [el.text for el in flashed_msgs])
 
     @screenshots
@@ -367,8 +371,7 @@ class JournalistNavigationSteps():
         reset_pw_btn.click()
 
         def update_password_success():
-            assert ('The password was successfully updated' in
-                    self.driver.page_source)
+            assert 'Password updated.' in self.driver.page_source
 
         # Wait until page refreshes to avoid causing a broken pipe error (#623)
         self.wait_for(update_password_success)
@@ -388,9 +391,11 @@ class JournalistNavigationSteps():
         code_names = self.driver.find_elements_by_class_name('code-name')
         assert 1 == len(code_names)
 
-        # There should be a "1 unread" span in the sole collection entry
-        unread_span = self.driver.find_element_by_css_selector('span.unread')
-        assert "1 unread" in unread_span.text
+        if not hasattr(self, 'accept_languages'):
+            # There should be a "1 unread" span in the sole collection entry
+            unread_span = self.driver.find_element_by_css_selector(
+                'span.unread')
+            assert "1 unread" in unread_span.text
 
     @screenshots
     def _journalist_stars_and_unstars_single_message(self):
@@ -420,10 +425,16 @@ class JournalistNavigationSteps():
         for checkbox in checkboxes:
             assert checkbox.is_selected() is False
 
-    @screenshots
-    def _journalist_downloads_message(self):
+    def _journalist_selects_the_first_source(self):
         self.driver.find_element_by_css_selector(
             '#un-starred-source-link-1').click()
+
+    def _journalist_selects_documents_to_download(self):
+        self.driver.find_element_by_id('select_all').click()
+
+    @screenshots
+    def _journalist_downloads_message(self):
+        self._journalist_selects_the_first_source()
 
         submissions = self.driver.find_elements_by_css_selector(
             '#submissions a')
@@ -454,26 +465,41 @@ class JournalistNavigationSteps():
                                                   decrypted_submission)
         assert self.secret_message == submission
 
-    def _journalist_sends_reply_to_source(self):
+    def _journalist_composes_reply(self):
+        reply_text = ('Thanks for the documents. Can you submit more '
+                      'information about the main program?')
+        self.wait_for(lambda: self.driver.find_element_by_id(
+            'reply-text-field'
+        ), timeout=60)
         self.driver.find_element_by_id('reply-text-field').send_keys(
-            'Nice docs')
+            reply_text
+        )
 
+    def _journalist_sends_reply_to_source(self):
+        self._journalist_composes_reply()
         self.driver.find_element_by_id('reply-button').click()
 
-        assert "Thanks! Your reply has been stored." in self.driver.page_source
+        if not hasattr(self, 'accept_languages'):
+            assert ("Thanks. Your reply has been stored." in
+                    self.driver.page_source)
 
     def _visit_edit_account(self):
         edit_account_link = self.driver.find_element_by_id(
             'link-edit-account')
         edit_account_link.click()
 
-    def _visit_edit_hotp_secret(self):
-        hotp_reset_button = self.driver.find_elements_by_css_selector(
-            '#reset-two-factor-hotp')[0]
-        assert ('/account/reset-2fa-hotp' in
-                hotp_reset_button.get_attribute('action'))
+    def _visit_edit_secret(self, type):
+        reset_form = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-' + type)[0]
+        assert ('/account/reset-2fa-' + type in
+                reset_form.get_attribute('action'))
 
-        hotp_reset_button.click()
+        reset_button = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-' + type)[0]
+        reset_button.click()
+
+    def _visit_edit_hotp_secret(self):
+        self._visit_edit_secret('hotp')
 
     def _set_hotp_secret(self):
         hotp_secret_field = self.driver.find_elements_by_css_selector(
@@ -484,11 +510,7 @@ class JournalistNavigationSteps():
         submit_button.click()
 
     def _visit_edit_totp_secret(self):
-        totp_reset_button = self.driver.find_elements_by_css_selector(
-            '#reset-two-factor-totp')[0]
-        assert ('/account/reset-2fa-totp' in
-                totp_reset_button.get_attribute('action'))
-        totp_reset_button.click()
+        self._visit_edit_secret('totp')
 
     def _admin_visits_add_user(self):
         add_user_btn = self.driver.find_element_by_css_selector(
