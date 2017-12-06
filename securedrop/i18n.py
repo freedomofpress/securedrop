@@ -27,7 +27,7 @@ import re
 from os import path
 
 LOCALE_SPLIT = re.compile('(-|_)')
-LOCALES = set(['en_US'])
+LOCALES = ['en_US']
 babel = None
 
 
@@ -37,6 +37,7 @@ class LocaleNotFound(Exception):
 
 
 def setup_app(app, translation_dirs=None):
+    global LOCALES
     global babel
 
     if translation_dirs is None:
@@ -54,9 +55,16 @@ def setup_app(app, translation_dirs=None):
             'Expected exactly one translation directory but got {}.'
             .format(babel.translation_directories))
 
-    for dirname in os.listdir(next(babel.translation_directories)):
+    translation_directories = next(babel.translation_directories)
+    for dirname in os.listdir(translation_directories):
         if dirname != 'messages.pot':
-            LOCALES.add(dirname)
+            LOCALES.append(dirname)
+
+    LOCALES = _get_supported_locales(
+        LOCALES,
+        getattr(config, 'SUPPORTED_LOCALES', None),
+        getattr(config, 'DEFAULT_LOCALE', None),
+        translation_directories)
 
     babel.localeselector(get_locale)
 
@@ -104,10 +112,10 @@ def get_text_direction(locale):
     return core.Locale.parse(locale).text_direction
 
 
-def _get_supported_locales(locales, supported, default_locale):
-    """Return SUPPORTED_LOCALES from config.py. If it is missing return
-    the default locale.
-
+def _get_supported_locales(locales, supported, default_locale,
+                           translation_directories):
+    """Sanity checks on locales and supported locales from config.py.
+    Return the list of supported locales.
     """
 
     if not supported:
@@ -118,7 +126,7 @@ def _get_supported_locales(locales, supported, default_locale):
             "config.py SUPPORTED_LOCALES contains {} which is not among the "
             "locales found in the {} directory: {}".format(
                 list(unsupported),
-                babel.translation_directories,
+                translation_directories,
                 locales))
     if default_locale and default_locale not in supported:
         raise LocaleNotFound("config.py SUPPORTED_LOCALES contains {} "
@@ -126,7 +134,7 @@ def _get_supported_locales(locales, supported, default_locale):
                              "the value of DEFAULT_LOCALE '{}'".format(
                                  supported, default_locale))
 
-    return supported
+    return list(supported)
 
 
 NAME_OVERRIDES = {
@@ -135,12 +143,8 @@ NAME_OVERRIDES = {
 
 
 def get_locale2name():
-    locales = _get_supported_locales(
-        LOCALES,
-        getattr(config, 'SUPPORTED_LOCALES', None),
-        getattr(config, 'DEFAULT_LOCALE', None))
     locale2name = collections.OrderedDict()
-    for l in locales:
+    for l in LOCALES:
         if l in NAME_OVERRIDES:
             locale2name[l] = NAME_OVERRIDES[l]
         else:

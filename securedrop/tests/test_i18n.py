@@ -44,16 +44,17 @@ class TestI18N(object):
 
     def test_get_supported_locales(self):
         locales = ['en_US', 'fr_FR']
-        assert ['en_US'] == i18n._get_supported_locales(locales, None, None)
+        assert ['en_US'] == i18n._get_supported_locales(
+            locales, None, None, None)
         locales = ['en_US', 'fr_FR']
         supported = ['en_US', 'not_found']
         with pytest.raises(i18n.LocaleNotFound) as excinfo:
-            i18n._get_supported_locales(locales, supported, None)
+            i18n._get_supported_locales(locales, supported, None, None)
         assert "contains ['not_found']" in str(excinfo.value)
         supported = ['fr_FR']
         locale = 'not_found'
         with pytest.raises(i18n.LocaleNotFound) as excinfo:
-            i18n._get_supported_locales(locales, supported, locale)
+            i18n._get_supported_locales(locales, supported, locale, None)
         assert "DEFAULT_LOCALE 'not_found'" in str(excinfo.value)
 
     def verify_i18n(self, app):
@@ -209,6 +210,10 @@ class TestI18N(object):
         pybabel init -i {d}/messages.pot -d {d} -l nb_NO
         sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code norwegian"/' \
               {d}/nb_NO/LC_MESSAGES/messages.po
+
+        pybabel init -i {d}/messages.pot -d {d} -l es_ES
+        sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code spanish"/' \
+              {d}/es_ES/LC_MESSAGES/messages.po
         """.format(d=config.TEMP_DIR))
 
         manage.translate_messages(args)
@@ -221,6 +226,8 @@ class TestI18N(object):
                 config.SUPPORTED_LOCALES = [
                     'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
                 i18n.setup_app(app, translation_dirs=config.TEMP_DIR)
+                # es_ES must not be in LOCALES
+                assert i18n.LOCALES == config.SUPPORTED_LOCALES
                 self.verify_i18n(app)
         finally:
             if supported:
