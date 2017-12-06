@@ -363,7 +363,7 @@ class TestJournalistApp(TestCase):
                       password=overly_long_password),
             follow_redirects=True)
 
-        self.assertMessageFlashed('You submitted a bad password! '
+        self.assertMessageFlashed('You submitted an incorrect password! '
                                   'Password not changed.', 'error')
 
     def test_user_edits_password_too_long_warning(self):
@@ -377,7 +377,7 @@ class TestJournalistApp(TestCase):
                                    current_password=self.user_pw),
                          follow_redirects=True)
 
-        self.assertMessageFlashed('You submitted a bad password! '
+        self.assertMessageFlashed('You submitted an incorrect password! '
                                   'Password not changed.', 'error')
 
     def test_admin_add_user_password_too_long_warning(self):
@@ -753,8 +753,9 @@ class TestJournalistApp(TestCase):
                                    current_password=self.user_pw),
                          follow_redirects=True)
 
-        self.assertMessageFlashed('You submitted a bad password! Password not '
-                                  'changed.', 'error')
+        self.assertMessageFlashed(
+            'You submitted an incorrect password! Password not '
+            'changed.', 'error')
 
     def test_valid_user_password_change(self):
         self._login_user()
