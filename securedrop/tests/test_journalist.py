@@ -1211,6 +1211,8 @@ class TestJournalistApp(TestCase):
         finally:
             if supported:
                 config.SUPPORTED_LOCALES = supported
+            else:
+                del config.SUPPORTED_LOCALES
 
 
 class TestJournalistLogin(unittest.TestCase):
