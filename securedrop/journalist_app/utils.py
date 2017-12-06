@@ -136,7 +136,8 @@ def bulk_delete(filesystem_id, items_selected):
     db_session.commit()
 
     flash(ngettext("Submission deleted.",
-                   "Submissions deleted.",
+                   "{num} submissions deleted.".format(
+                       num=len(items_selected)),
                    len(items_selected)), "notification")
     return redirect(url_for('col.col', filesystem_id=filesystem_id))
 
