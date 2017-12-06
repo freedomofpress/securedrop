@@ -20,7 +20,6 @@ from flask_babel import Babel
 from babel import core
 
 import collections
-import config
 import os
 import re
 
@@ -36,7 +35,7 @@ class LocaleNotFound(Exception):
     """Raised when the desired locale is not in the translations directory"""
 
 
-def setup_app(app, translation_dirs=None):
+def setup_app(config, app, translation_dirs=None):
     global LOCALES
     global babel
 
@@ -66,10 +65,10 @@ def setup_app(app, translation_dirs=None):
         getattr(config, 'DEFAULT_LOCALE', None),
         translation_directories)
 
-    babel.localeselector(get_locale)
+    babel.localeselector(lambda: get_locale(config))
 
 
-def get_locale():
+def get_locale(config):
     """
     Get the locale as follows, by order of precedence:
     - l request argument or session['locale']
@@ -163,5 +162,5 @@ def locale_to_rfc_5646(locale):
         return LOCALE_SPLIT.split(locale)[0]
 
 
-def get_language():
-    return get_locale().split('_')[0]
+def get_language(config):
+    return get_locale(config).split('_')[0]

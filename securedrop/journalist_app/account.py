@@ -14,7 +14,7 @@ def make_blueprint(config):
 
     @view.route('/account', methods=('GET',))
     def edit():
-        password = make_password()
+        password = make_password(config)
         return render_template('edit_account.html',
                                password=password)
 

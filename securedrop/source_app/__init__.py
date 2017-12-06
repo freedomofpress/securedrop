@@ -44,7 +44,7 @@ def create_app(config):
     assets = Environment(app)
     app.config['assets'] = assets
 
-    i18n.setup_app(app)
+    i18n.setup_app(config, app)
 
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
@@ -81,7 +81,7 @@ def create_app(config):
     @ignore_static
     def setup_g():
         """Store commonly used values in Flask's special g object"""
-        g.locale = i18n.get_locale()
+        g.locale = i18n.get_locale(config)
         g.text_direction = i18n.get_text_direction(g.locale)
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
