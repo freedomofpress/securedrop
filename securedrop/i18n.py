@@ -35,9 +35,11 @@ class LocaleNotFound(Exception):
     """Raised when the desired locale is not in the translations directory"""
 
 
-def setup_app(config, app, translation_dirs=None):
+def setup_app(config, app):
     global LOCALES
     global babel
+
+    translation_dirs = getattr(config, 'TRANSLATION_DIRS', None)
 
     if translation_dirs is None:
             translation_dirs = \

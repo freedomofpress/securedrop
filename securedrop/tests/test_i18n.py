@@ -28,10 +28,10 @@ from werkzeug.datastructures import Headers
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import i18n
-import journalist
+import journalist_app
 import manage
 import pytest
-import source
+import source_app
 import version
 import utils
 
@@ -41,6 +41,12 @@ class TestI18N(object):
     @classmethod
     def setup_class(cls):
         utils.env.setup()
+
+    def get_fake_config(self):
+        class Config:
+            def __getattr__(self, name):
+                return getattr(config, name)
+        return Config()
 
     def test_get_supported_locales(self):
         locales = ['en_US', 'fr_FR']
@@ -218,31 +224,25 @@ class TestI18N(object):
 
         manage.translate_messages(args)
 
-        supported = getattr(config, 'SUPPORTED_LOCALES', None)
-        try:
-            if supported:
-                del config.SUPPORTED_LOCALES
-            for app in (journalist.app, source.app):
-                config.SUPPORTED_LOCALES = [
-                    'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
-                i18n.setup_app(app, translation_dirs=config.TEMP_DIR)
-                # es_ES must not be in LOCALES
-                assert i18n.LOCALES == config.SUPPORTED_LOCALES
-                self.verify_i18n(app)
-        finally:
-            if supported:
-                config.SUPPORTED_LOCALES = supported
+        fake_config = self.get_fake_config()
+        fake_config.SUPPORTED_LOCALES = [
+            'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
+        fake_config.TRANSLATION_DIRS = config.TEMP_DIR
+        for app in (journalist_app.create_app(fake_config),
+                    source_app.create_app(fake_config)):
+            assert i18n.LOCALES == fake_config.SUPPORTED_LOCALES
+            self.verify_i18n(app)
 
     def test_verify_default_locale_en_us_if_not_defined_in_config(self):
-        DEFAULT_LOCALE = config.DEFAULT_LOCALE
-        try:
-            del config.DEFAULT_LOCALE
-            not_translated = 'code hello i18n'
-            with source.app.test_client() as c:
-                c.get('/')
-                assert not_translated == gettext(not_translated)
-        finally:
-            config.DEFAULT_LOCALE = DEFAULT_LOCALE
+        class Config:
+            def __getattr__(self, name):
+                if name == 'DEFAULT_LOCALE':
+                    raise AttributeError()
+                return getattr(config, name)
+        not_translated = 'code hello i18n'
+        with source_app.create_app(Config()).test_client() as c:
+            c.get('/')
+            assert not_translated == gettext(not_translated)
 
     def test_locale_to_rfc_5646(self):
         assert i18n.locale_to_rfc_5646('en') == 'en'
@@ -252,12 +252,13 @@ class TestI18N(object):
         assert i18n.locale_to_rfc_5646('zh-hant') == 'zh-Hant'
 
     def test_html_en_lang_correct(self):
-        app = journalist.app.test_client()
+        fake_config = self.get_fake_config()
+        app = journalist_app.create_app(fake_config).test_client()
         resp = app.get('/', follow_redirects=True)
         html = resp.data.decode('utf-8')
         assert re.compile('<html .*lang="en".*>').search(html), html
 
-        app = source.app.test_client()
+        app = source_app.create_app(fake_config).test_client()
         resp = app.get('/', follow_redirects=True)
         html = resp.data.decode('utf-8')
         assert re.compile('<html .*lang="en".*>').search(html), html
@@ -269,12 +270,14 @@ class TestI18N(object):
 
     def test_html_fr_lang_correct(self):
         """Check that when the locale is fr_FR the lang property is correct"""
-        app = journalist.app.test_client()
+        fake_config = self.get_fake_config()
+        fake_config.SUPPORTED_LOCALES = ['fr_FR', 'en_US']
+        app = journalist_app.create_app(fake_config).test_client()
         resp = app.get('/?l=fr_FR', follow_redirects=True)
         html = resp.data.decode('utf-8')
         assert re.compile('<html .*lang="fr".*>').search(html), html
 
-        app = source.app.test_client()
+        app = source_app.create_app(fake_config).test_client()
         resp = app.get('/?l=fr_FR', follow_redirects=True)
         html = resp.data.decode('utf-8')
         assert re.compile('<html .*lang="fr".*>').search(html), html

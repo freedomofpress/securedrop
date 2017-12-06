@@ -50,7 +50,10 @@ class TestJournalistApp(TestCase):
 
     @patch('crypto_util.genrandomid', side_effect=['bad', VALID_PASSWORD])
     def test_make_password(self, mocked_pw_gen):
-        assert journalist_app.utils.make_password() == VALID_PASSWORD
+        class fake_config:
+            pass
+        assert (journalist_app.utils.make_password(fake_config) ==
+                VALID_PASSWORD)
 
     @patch('journalist.app.logger.error')
     def test_reply_error_logging(self, mocked_error_logger):
