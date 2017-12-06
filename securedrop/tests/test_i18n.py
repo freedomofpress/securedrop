@@ -283,8 +283,3 @@ class TestI18N(object):
         resp = app.get('/generate?l=fr_FR', follow_redirects=True)
         html = resp.data.decode('utf-8')
         assert re.compile('<html .*lang="fr".*>').search(html), html
-
-    @classmethod
-    def teardown_class(cls):
-        reload(journalist)
-        reload(source)

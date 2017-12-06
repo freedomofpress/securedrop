@@ -1252,9 +1252,3 @@ class TestJournalistLogin(unittest.TestCase):
         self.assertFalse(
             mock_scrypt_hash.called,
             "Called _scrypt_hash for password w/ invalid length")
-
-    @classmethod
-    def tearDownClass(cls):
-        # Reset the module variables that were changed to mocks so we don't
-        # break other tests
-        reload(journalist)
