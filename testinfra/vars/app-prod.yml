@@ -1,4 +1,4 @@
-
+---
 mon_ip: 10.0.1.5
 
 tor_services:
@@ -18,10 +18,6 @@ app_directories:
   - /var/lib/securedrop/store
   - /var/lib/securedrop/keys
   - /var/lib/securedrop/tmp
-
-tor_services:
-  - ssh
-  - source
 
 apparmor_enforce:
   - "/sbin/dhclient"

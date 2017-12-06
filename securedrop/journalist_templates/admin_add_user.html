@@ -1,23 +1,41 @@
 {% extends "base.html" %}
 {% block body %}
 <p>
-  <a href="/admin">« Back to admin interface</a>
+  <a href="/admin">« {{ gettext('Back to admin interface') }}</a>
 </p>
 
 <form method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <input name="password" type="hidden" value="{{ password }}">
-  <p><input name="username" type="text" placeholder="Username"></p>
-  <p>The user's password will be: <span class="password" id="password">{{ password }}</span></p>
   <p>
-    <input name="is_admin" id="is-admin" type="checkbox">
-    <label for="is_admin">Is Administrator</label>
+    {{ form.password(value=password, id=False) }}
+  </p>
+
+  <p>
+    {{ form.username(placeholder=gettext('Username')) }}
+    <br>
+    {% for error in form.username.errors %}
+      <span class="form-validation-error">{{ error }}</span>
+    {% endfor %}
+  </p>
+
+  <p>{{ gettext("The user's password will be:") }} <span class="password" id="password">{{ password }}</span></p>
+  <p>
+    {{ form.is_admin(id="is-admin") }}
+    <label for="is_admin">{{ gettext('Is Administrator') }}</label>
+    <br>
+    {% for error in form.is_admin.errors %}
+      <span class="form-validation-error">{{ error }}</span>
+    {% endfor %}
   </p>
   <p>
-    <input name="is_hotp" id="is-hotp" type="checkbox">
-    <label for="is_hotp">I'm using a Yubikey </label>
-    <input name="otp_secret" type="text" placeholder="HOTP Secret" size="60"><br>
+    {{ form.is_hotp(id="is-hotp") }}
+    <label for="is_hotp">{{ gettext("Is using a YubiKey [HOTP]") }} </label>
+    {{ form.otp_secret(placeholder=gettext('HOTP Secret'), size="60") }}
+    <br>
+    {% for error in form.is_hotp.errors + form.otp_secret.errors %}
+      <span class="form-validation-error">{{ error }}</span><br>
+    {% endfor %}
   </p>
-  <button type="submit" class="sd-button"><i class="fa fa-plus"></i> ADD USER</button>
+  <button type="submit" class="sd-button"><i class="fa fa-plus"></i>{{ gettext('ADD USER') }}</button>
 </form>
 {% endblock %}

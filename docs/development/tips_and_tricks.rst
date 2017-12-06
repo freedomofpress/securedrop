@@ -51,7 +51,7 @@ directly, please:
 
      .. code:: sh
 
-        securedrop/requirements/update_python_dependencies
+        make update-pip-dependencies
 
   #. Commit both the ``securedrop/requirements/*.in`` and
      ``securedrop/requirements/*.txt`` files

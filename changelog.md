@@ -1,5 +1,67 @@
 # Changelog
 
+## 0.5
+
+### Web Applications
+
+* Internationalize both web applications (#2470, #2392, #2400, #2374, #2626,
+  #2354, #2338, #2333, #2229, #2223).
+* Localize in Dutch, French, German, Norwegian, Portuguese and Spanish.
+* Add language picker to web applications (#2557).
+* Refactor both web applications using Flask Blueprints (#2294).
+* Add default 120 minute session timeout on both interfaces (#880, #2503).
+* Only show source codename on first session (#2327).
+* Invert `login_required` decorator on journalist interface so that logins
+  are required by default (#2460).
+* Require entry of old password before changing password (#2304).
+* Use whitespace control on Jinja templates (#2413).
+* Add reset icon to reset password button (#2423).
+* Improve form validation on new user creation in journalist interface (#2500).
+* Improve form validation on login form on source interface (#2376).
+* Resolve confusing use of first/third person on user creation (#2323).
+* Show which journalist is logged in on the journalist interface (#2293).
+* Create friendly session expiry page (#2290).
+* Improve UX to get to individual source page on journalist interface (#2130).
+* Improve UX on login forms by making fields longer (#2288).
+* Bugfix: Fix input validation on Yubikey for 2FA HOTP (#2311).
+* Bugfix: Remove extra level in folders in submission downloads (#2262).
+
+### Operations
+
+* Allow apache/apparmor file exception for proving onion ownership to a CA (#2602)
+* Enable admins to set supported locales via SecureDrop admin script (#2516)
+* Update AppArmor rules for Apache (#2507).
+* Reduce number of pip requirements files (#2175).
+
+### Monitoring
+
+* Add `/boot` to integrity checking (#2496).
+* Bugfix: Remove OSSEC syscheck monitoring of temporary files produced by bulk
+  download (#2606).
+
+### Tails Environment
+
+* Bugfix: Use host for SASL and SMTP domain validation (#2591).
+* Bugfix: Add trusted metadata to SecureDrop .desktop files (#2586).
+
+### Developer Workflow
+
+* Add updated Data Flow Diagrams (#2370).
+* Add safety check for Python dependencies in CI (#2451).
+* Remove noisy GnuPG debug output on test failure (#2595).
+* Convert tests in SubmissionNotInMemoryTest to pytest (#2548).
+* Document virtualized Admin Workstation setup (#2204, #2607).
+* Bugfix: Remove extra `rqworker` start in unit tests (#2613).
+* Bugfix: Resolve test failures in VirtualBox (#2396).
+
+### Documentation
+
+* Add sample SecureDrop privacy policy to documentation (#2340).
+* Break out "Deployment Best Practices" into discrete docs section (#2339).
+
+The issues for this release were tracked in the 0.5 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.5.
+
 ## 0.4.4
 
 Bugfix release. Fixes configuration management logic to ensure all packages

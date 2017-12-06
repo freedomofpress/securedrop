@@ -91,6 +91,40 @@ by clicking on it:
 
 |Weblate translate context screenshot|
 
+Instructions about a user navigation
+------------------------------------
+
+The strings may contain instructions relative to the user interface of
+a software. The software should be run and the steps verified to find
+the translation. For instance::
+
+  ...tap "Set up account"...
+
+must be translated by navigating to the localized interface of Google
+Authenticator and using the translation displayed in place of **Set up
+account**.
+
+Placeholders
+------------
+
+The strings may contain placeholders between braces: they will be
+substituted with actual content at runtime and must be left
+unmodified. For instance::
+
+  Edit user {user}
+
+will be displayed to the user as::
+
+  Edit user Jean-Claude
+
+The French translated string should look like::
+
+  Modifier l'utilisateur {user}
+
+And it would be **incorrect** to translate the placeholder like so::
+
+  Modifier l'utilisateur {utilisateur}
+
 Glossary
 --------
 

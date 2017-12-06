@@ -26,7 +26,7 @@
     state: present
     reload: yes
   with_items: "{{ grsec_sysctl_flags }}"
-  sudo: yes
+  become: yes
   tags:
     - hardening
     - grsec

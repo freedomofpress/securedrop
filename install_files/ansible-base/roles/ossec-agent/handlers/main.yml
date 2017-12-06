@@ -6,4 +6,3 @@
   service:
     name: ossec
     state: restarted
-

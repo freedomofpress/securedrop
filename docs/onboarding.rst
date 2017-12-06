@@ -4,7 +4,7 @@ Onboard Journalists
 Congratulations! You've successfully installed SecureDrop.
 
 At this point, the only person who has access to the system is the
-administrator. In order to grant access to journalists, you will need
+admin. In order to grant access to journalists, you will need
 to do some additional setup for each individual journalist.
 
 In order to use SecureDrop, each journalist needs two things:
@@ -55,7 +55,7 @@ used to create a Tails USB with persistence for the Admin Tails USB,
 as documented in the :doc:`Tails Setup Guide <set_up_tails>`.
 
 Once you're done, boot into the new Journalist Tails USB on the
-*Journalist Workstation*. Enable persistence and set an administrator
+*Journalist Workstation*. Enable persistence and set an admin
 password before continuing with the next section.
 
 Set up automatic access to the Journalist Interface
@@ -64,7 +64,7 @@ Set up automatic access to the Journalist Interface
 Since the Journalist Interface is an ATHS, we need to set up the
 Journalist Tails USB to auto-configure Tor just as we did with the
 Admin Tails USB. The procedure is essentially identical, except the
-SSH configuration will be skipped, since only Administrators need
+SSH configuration will be skipped, since only admins need
 to access the servers over SSH.
 
 .. tip:: Copy the files ``app-journalist-aths`` and ``app-source-ths`` from
@@ -106,7 +106,7 @@ Add an account on the Journalist Interface
 
 Finally, you need to add an account on the Journalist Interface so the journalist
 can log in and access submissions. See the section on :ref:`Adding Users` in
-the Administrator Guide.
+the admin Guide.
 
 Import GPG keys for journalists with access to SecureDrop to the SVS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -132,7 +132,7 @@ Verify Journalist Setup
 -----------------------
 
 Once the journalist device and account have been provisioned, then the
-administrator should run through the following steps with *each journalist* to
+admin should run through the following steps with *each journalist* to
 verify the journalist is set up for SecureDrop.
 
 The journalist should verify that they:

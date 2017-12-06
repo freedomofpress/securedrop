@@ -1,0 +1,9 @@
+{% for instance in molecule_instance_config_yml %}
+Host {{ instance.instance }}
+    IdentityFile {{ instance.identity_file }}
+    Hostname {{ instance.hostname }}
+    User {{ instance.user }}
+    loglevel ERROR
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+{% endfor %}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ g.html_lang }}" dir="{{ g.text_direction }}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/static/css/journalist.css">
 
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
+
+    {% include 'js-strings.html' %}
 
     {% assets filters="jsmin", output="gen/journalist.js",
       "js/libs/jquery-2.1.4.min.js", "js/journalist.js" %}
@@ -19,11 +21,11 @@
 
     {% if g.user %}
     <div id="logout">
-      <a href="{{ url_for('edit_account') }}" id="link-edit-account">Edit Account</a> |
+      {{ gettext('Logged on as') }} <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ g.user.username }}</a> |
       {% if g.user and g.user.is_admin %}
-      <a href="{{ url_for('admin_index') }}" id="link-admin-index">Admin</a> |
+      <a href="{{ url_for('admin.index') }}" id="link-admin-index">{{ gettext('Admin') }}</a> |
       {% endif %}
-      <a href="{{ url_for('logout') }}" id="link-logout">Logout</a>
+      <a href="{{ url_for('main.logout') }}" id="link-logout">{{ gettext('Log Out') }}</a>
     </div>
     <div class="clearfix"></div>
     {% endif %}
@@ -31,11 +33,11 @@
     <div class="content">
       {% block header %}
       <div id="header">
-        <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
+        <a href="{{ url_for('main.index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
+        {% include 'locales.html' %}
         {% if use_custom_header_image %}
         <div class="powered">
-          Powered by<br>
-          <img src="/static/i/securedrop_small.png" alt="SecureDrop">
+          {{ gettext('Powered by <br> <img src="/static/i/securedrop_small.png" alt="SecureDrop">') }}
         </div>
         {% endif %}
       </div>
@@ -49,7 +51,7 @@
 
       {% block footer %}
       <footer>
-        Powered by <em>SecureDrop {{ version }}</em>.
+        {{ gettext("Powered by <em>SecureDrop {version}</em>.").format(version=version)|safe }}
       </footer>
       {% endblock %}
     </div>

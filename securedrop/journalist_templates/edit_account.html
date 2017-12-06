@@ -3,77 +3,73 @@
 
 {% if user %}
   {# Only admins may edit usernames and admin status #}
-  <h1>Edit user "{{ user.username }}"</h1>
-  <p><a href="/admin">« Back to admin interface</a></p>
-  <h2>Change Username & Admin Status</h2>
+  <h1>{{ gettext('Edit user "{user}"').format(user=user.username) }}</h1>
+  <p><a href="/admin">« {{ gettext('Back to admin interface') }}</a></p>
+  <h2>{{ gettext('Change Username &amp; Admin Status') }}</h2>
   <form method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <p>
-      <label for="username">Change username</label>
+      <label for="username">{{ gettext('Change username') }}</label>
       <input name="username" id="username" type="text" placeholder="{{ user.username }}">
     </p>
     <p>
       <input name="is_admin" id="is-admin" type="checkbox" {% if user.is_admin %}checked{% endif %}>
-      <label for="is_admin">Is Administrator</label>
+      <label for="is_admin">{{ gettext('Is Administrator') }}</label>
     </p>
-    <button class="sd-button" type="submit" id="update">UPDATE</button>
+    <button class="sd-button" type="submit" id="update">{{ gettext('UPDATE') }}</button>
   </form>
 {% else %}
-  <h1>Edit your account</h1>
+  <h1>{{ gettext('Edit your account') }}</h1>
 {% endif %}
 
-<h2>Reset Password</h2>
+<h2>{{ gettext('Reset Password') }}</h2>
 
-<p>SecureDrop now uses automatically generated diceware passwords.</p>
-<p>Your password will be changed immediately, so you will need to save it before pressing
-the "Reset Password" button.</p>
+<p>{{ gettext('SecureDrop now uses automatically generated diceware passwords.') }}</p>
+<p>{{ gettext('Your password will be changed immediately, so you will need to save it before pressing the "Reset Password" button.') }}</p>
 
-{% if user %}
-  {% set password_reset_url = url_for('admin_new_password', user_id=user.id) %}
+{% if user and g.user != user %}
+  {% set password_reset_url = url_for('admin.new_password', user_id=user.id) %}
 {% else %}
-  {% set password_reset_url = url_for('new_password') %}
+  {% set password_reset_url = url_for('account.new_password') %}
+  <p>{{ gettext('Please enter your current password and two-factor code.') }}</p>
 {% endif %}
 
-<form action="{{ password_reset_url }}" method="post" id="new-password">
+<form action="{{ password_reset_url }}" method="post" id="new-password" class="login-form">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  {% if not user or g.user == user %}
+  <p><input type="password" name="current_password" placeholder="{{ gettext('Current Password') }}"></p>
+  <p><input name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}"></p>
+  {% endif %}
   <input name="password" type="hidden" value="{{ password }}">
   <p>
     {% if user %}
-      The user's password will be changed to:
+      {{ gettext("The user's password will be changed to:") }}
     {% else %}
-      Your password will be changed to:
+      {{ gettext('Your password will be changed to:') }}
     {% endif %}
     <br>
     <span id="password" class="password">{{ password }}</span>
   </p>
-  <button class="sd-button btn" type="submit" id="reset-password">RESET PASSWORD</button>
+  <button class="sd-button btn" type="submit" id="reset-password"><i class="fa fa-refresh"></i> {{ gettext('RESET PASSWORD') }}</button>
 </form>
 
 <hr class="no-line">
 
-<h2>Reset Two-Factor Authentication</h2>
+<h2>{{ gettext('Reset Two-Factor Authentication') }}</h2>
 
 {% if user %}
-<p>If a user's two-factor authentication credentials have been lost or
-compromised, you can reset them here. <em>If you do this, make sure the user is
-present and ready to set up their device with the new two-factor credentials.
-Otherwise, they will be locked out of their account.</em></p>
+<p>{{ gettext("If a user's two-factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two-factor credentials. Otherwise, they will be locked out of their account.") }}</em></p>
 {% else %}
-<p>If your two-factor authentication credentials have been lost or compromised,
-or you got a new device, you can reset your credentials here. <em>If you do
-this, make sure you are ready to set up your new device, otherwise you will be
-locked out of your account.</em></p>
+<p>{{ gettext('If your two-factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em>') }}</p>
 {% endif %}
-<p>To reset two-factor authentication for mobile apps such as Google
-Authenticator or FreeOTP, choose the first option. For hardware tokens like the
-Yubikey, choose the second.</p>
+<p>{{ gettext('To reset two-factor authentication for mobile apps such as Google Authenticator or FreeOTP, choose the first option. For hardware tokens like the Yubikey, choose the second.') }}</p>
 
 {% if user %}
-  {% set totp_reset_url = url_for('admin_reset_two_factor_totp') %}
-  {% set hotp_reset_url = url_for('admin_reset_two_factor_hotp') %}
+  {% set totp_reset_url = url_for('admin.reset_two_factor_totp') %}
+  {% set hotp_reset_url = url_for('admin.reset_two_factor_hotp') %}
 {% else %}
-  {% set totp_reset_url = url_for('account_reset_two_factor_totp') %}
-  {% set hotp_reset_url = url_for('account_reset_two_factor_hotp') %}
+  {% set totp_reset_url = url_for('account.reset_two_factor_totp') %}
+  {% set hotp_reset_url = url_for('account.reset_two_factor_hotp') %}
 {% endif %}
 
 {% macro twofa_reset(user, reset_url, type, button_text) %}
@@ -82,12 +78,12 @@ Yubikey, choose the second.</p>
   <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button class="sd-button" type="submit" class="pull-right"><i class="fa fa-refresh"></i> {{ button_text }}</button>
+  <button class="sd-button" id="button-reset-two-factor-{{ type }}" type="submit" class="pull-right"><i class="fa fa-refresh"></i> {{ button_text }}</button>
 </form>
 {%- endmacro %}
 
-{{ twofa_reset(user, totp_reset_url, "totp", "RESET TWO-FACTOR AUTHENTICATION (APP)")}}
+{{ twofa_reset(user, totp_reset_url, "totp", gettext("RESET TWO-FACTOR AUTHENTICATION (APP)"))}}
 <br>
-{{ twofa_reset(user, hotp_reset_url, "hotp", "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)")}}
+{{ twofa_reset(user, hotp_reset_url, "hotp", gettext("RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"))}}
 
 {% endblock %}

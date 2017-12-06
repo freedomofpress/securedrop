@@ -107,8 +107,8 @@ key:
 .. code:: sh
 
     cd ~/Persistent/securedrop/
-    git checkout 0.4.4
-    git tag -v 0.4.4
+    git checkout 0.5
+    git tag -v 0.5
 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the
 output of that last command.
@@ -148,7 +148,7 @@ To use the template:
 	     file used to protect the database.
 
 In case you wish to manually create a database, the suggested password fields in
-the administrator template are:
+the admin template are:
 
 **Administrator**:
 

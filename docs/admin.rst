@@ -1,7 +1,7 @@
-Administrator Guide
-=====================
+Admin Guide
+===========
 
-You (the administrator) should have your own username and password, plus
+You (the admin) should have your own username and password, plus
 two-factor authentication through either the Google Authenticator app
 on your smartphone or a YubiKey.
 
@@ -12,9 +12,9 @@ Responsibilities
 
 The SecureDrop architecture contains multiple hardened servers, and while we have
 automated many of the installation and maintenance tasks, a skilled Linux
-administrator and some manual intervention is required to responsibly run the system.
+admin and some manual intervention is required to responsibly run the system.
 
-This section outlines the tasks the administrator is responsible for in order to
+This section outlines the tasks the admin is responsible for in order to
 ensure that the SecureDrop server continues to be a safe place for sources to
 talk to journalists.
 
@@ -103,7 +103,7 @@ Here, you will hand the keyboard over to the journalist so they can
 create their own username. Once they’re done entering a
 username for themselves, have them write down their pre-generated diceware
 passphrase. Then, you will select whether you would like them
-to also be an administrator (this allows them to add or delete other
+to also be an admin (this allows them to add or delete other
 journalist accounts), and whether they will be using Google
 Authenticator or a YubiKey for two-factor authentication.
 
@@ -134,10 +134,8 @@ characters that are highlighted in yellow.
 Inside the Google Authenticator app, a new entry for this account will
 appear on the main screen, with a six digit number that recycles to a
 new number every thirty seconds. Enter the six digit number under
-“Verification code” at the bottom of the SecureDrop screen here, and hit
-enter:
-
-|Verify Google Authenticator works|
+“Verification code” at the bottom of the screen, and hit
+enter.
 
 If Google Authenticator was set up correctly, you will be redirected
 back to the Admin Interface and will see a flashed message that says
@@ -168,18 +166,54 @@ SecureDrop. Make sure the journalist remembers their username and
 password and always has their 2 factor authentication device in their
 possession when they attempt to log in to SecureDrop.
 
-.. |SecureDrop main page| image:: images/admin_main_home.png
-.. |SecureDrop admin home| image:: images/admin_secondary_home.png
-.. |Add a new user| image:: images/manual/journalist-admin_add_user_totp.png
-.. |Enable Google Authenticator| image:: images/manual/journalist-admin_new_user_two_factor_totp.png
-.. |Verify Google Authenticator works| image:: images/admin_enter_verification.png
-.. |Enable YubiKey| image:: images/manual/journalist-admin_add_user_hotp.png
-.. |Verify YubiKey| image:: images/manual/journalist-admin_new_user_two_factor_hotp.png
+.. |SecureDrop main page|
+  image:: images/manual/screenshots/journalist-admin_index_no_documents.png
+.. |SecureDrop admin home|
+  image:: images/manual/screenshots/journalist-admin_interface_index.png
+.. |Add a new user|
+  image:: images/manual/screenshots/journalist-admin_add_user_totp.png
+.. |Enable Google Authenticator|
+  image:: images/manual/screenshots/journalist-admin_new_user_two_factor_totp.png
+.. |Enable YubiKey|
+  image:: images/manual/screenshots/journalist-admin_add_user_hotp.png
+.. |Verify YubiKey|
+  image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
 
 .. _Updating the Servers:
 
 Updating the Servers
 --------------------
+
+Sometimes you will want to update the system configuration on the SecureDrop
+servers. For example, to customize the logo on the source interface,
+or change the PGP key that OSSEC alerts are encrypted to. You can do this from
+your *Admin Workstation* by following the procedure described in this
+section.
+
+Updating system configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The server configuration is stored on the *Admin Workstation* in
+``~/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific``.
+
+If you want to update the system configuration, there are two options:
+
+1. Manually edit the ``site-specific`` file to make the desired modifications.
+2. From ``~/Persistent/securedrop``, run
+   ``./securedrop-admin sdconfig --force``, which will require you to retype
+   each variable in ``site-specific``.
+
+Once you have edited the ``site-specific`` server configuration file, you will
+need to apply the changes to the servers. From ``~/Persistent/securedrop``:
+
+.. code:: sh
+
+  ./securedrop-admin install
+
+.. include:: includes/rerun-install-is-safe.txt
+
+Once the install command has successfully completed, the changes are applied.
+Read the next section if you have multiple admins.
 
 Managing ``site-specific`` updates on teams with multiple admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,8 +1,0 @@
----
-aws_instance_tags:
-  - server_type: mon-staging
-  - server_type: app-staging
-
-docker_instances:
-  - build
-  - apptestclient

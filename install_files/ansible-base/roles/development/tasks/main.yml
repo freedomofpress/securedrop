@@ -27,7 +27,7 @@
     name: sass
     version: "{{ securedrop_sass_ver }}"
     user_install: no
-  sudo: yes
+  become: yes
   tags:
     - development
 

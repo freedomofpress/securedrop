@@ -63,4 +63,3 @@
   # `aptitude hold <package>` doesn't report meaningful changed status,
   # so mark the task as not changed.
   changed_when: false
-

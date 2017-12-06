@@ -52,11 +52,6 @@ def setup():
     init_db()
     # Do tests that should always run on app startup
     crypto_util.do_runtime_tests()
-    # Start the Python-RQ worker if it's not already running
-    if not exists(TEST_WORKER_PIDFILE):
-        subprocess.Popen(["rqworker",
-                          "-P", config.SECUREDROP_ROOT,
-                          "--pid", TEST_WORKER_PIDFILE])
 
 
 def teardown():
@@ -69,10 +64,7 @@ def teardown():
     db_session.remove()
     try:
         shutil.rmtree(config.SECUREDROP_DATA_ROOT)
+        assert not os.path.exists(config.SECUREDROP_DATA_ROOT)  # safeguard for #844
     except OSError as exc:
-        os.system("find " + config.SECUREDROP_DATA_ROOT)  # REMOVE ME, see #844
         if 'No such file or directory' not in exc:
             raise
-    except:
-        os.system("find " + config.SECUREDROP_DATA_ROOT)  # REMOVE ME, see #844
-        raise

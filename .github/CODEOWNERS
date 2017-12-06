@@ -1,0 +1,10 @@
+# application code
+/securedrop/ @redshiftzero @heartsucker @dachary
+
+# ansible / deployment
+/build/         @conorsch @msheiny
+/devops/        @conorsch @msheiny
+/install_files/ @conorsch @msheiny
+/molecule/      @conorsch @msheiny
+/testinfra/     @conorsch @msheiny
+/tails_files/   @conorsch @msheiny

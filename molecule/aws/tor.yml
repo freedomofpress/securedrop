@@ -1,0 +1,16 @@
+---
+- name: Start Tor docker proxy for use in functional app tests.
+  docker_container:
+    name: tor
+    image: "hsaito/torbox"
+    state: started
+  tags: docker
+
+- name: Start functional docker container
+  docker_container:
+    name: apptestclient
+    image: "quay.io/freedomofpress/ubuntu:trusty"
+    command: "tail -f /dev/null"
+    state: started
+    env:
+      TOR_PROXY: "{{ lookup('pipe', 'docker exec tor hostname -I') }}"
