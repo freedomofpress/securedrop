@@ -7,7 +7,7 @@
   hosts: localhost
   connection: local
   gather_facts: no
-  sudo: no
+  become: no
   tasks:
     - name: Check for "build" machine in inventory.
       fail:
@@ -28,7 +28,7 @@
 # last wrapper role will run. This is a known bug and will be fixed in v2.0.
 - name: Build SecureDrop application Debian package from local repository.
   hosts: build
-  sudo: yes
+  become: yes
   pre_tasks:
     - name: Ensure all packages are up to date.
       apt:

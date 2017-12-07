@@ -53,7 +53,7 @@ These computers should all physically be in your organization's office.
 Infrastructure
 --------------
 
-There are four main components of SecureDrop: the servers, the administrators,
+There are four main components of SecureDrop: the servers, the admins,
 the sources, and the journalists.
 
 |SecureDrop architecture overview diagram|
@@ -70,11 +70,11 @@ which keeps track of the *Application Server* and sends out alerts if there's a
 problem. These two servers run on dedicated hardware connected to a dedicated
 firewall appliance. They are typically located physically inside the newsroom.
 
-Administrators
-~~~~~~~~~~~~~~
+Admins
+~~~~~~
 
-The SecureDrop servers are managed by a systems administrator; for larger
-newsrooms, there may be a team of systems administrators. The administrator
+The SecureDrop servers are managed by a systems admin; for larger
+newsrooms, there may be a team of systems admins. The admin
 uses a dedicated *Admin Workstation* running `Tails <https://tails.boum.org>`__
 and connects to the *Application* and *Monitor Servers* over authenticated `Tor Hidden Services
 <https://www.torproject.org/docs/hidden-services.html>`__ and manages them
@@ -105,7 +105,7 @@ computer.
 .. note:: The terms in italics are terms of art specific to SecureDrop. The
 	  :doc:`Terminology Guide <terminology>` provides more-precise
           definitions of these and other terms. SecureDrop is designed against
-          a comprehensive :doc:`development/threat_model`, and has a specific
+          a comprehensive :doc:`threat_model/threat_model`, and has a specific
           notion of the :doc:`roles <terminology>` that are involved in its
           operation.
 
@@ -117,7 +117,7 @@ Planning & Preparation
 
 Setting up SecureDrop is a multi-step process. Before getting started, you
 should make sure that you're prepared to operate and maintain it. You'll need
-a systems administrator who's familiar with Linux, the GNU utilities, and the
+a systems admin who's familiar with Linux, the GNU utilities, and the
 Bash shell. You'll need the :doc:`hardware <hardware>` on which SecureDrop
 runs — this will normally cost $2000-$3000 dollars. The journalists in your
 organization will need to be trained in the operation of SecureDrop, and
@@ -135,7 +135,7 @@ Technical Setup
 Once you are familiar with the architecture and have all the hardware,
 :doc:`setting up SecureDrop <install>` will take at least a day's work for your
 admin. We recommend that you set aside at least a week to
-:doc:`complete and test <deployment_practices>` your setup.
+:ref:`complete and test <Deployment>` your setup.
 
 Provisioning & Training
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -143,9 +143,9 @@ Provisioning & Training
 Once SecureDrop is installed, journalists will need to be provided with
 accounts, two-factor tokens, workstations, and so on — and then
 :doc:`trained <training_schedule>` to use these tools safely and reliably. You
-will probably also need to train additional backup administrators so that you
+will probably also need to train additional backup admins so that you
 can be sure that your SecureDrop setup keeps running even when your main
-administrator is on holiday.
+admin is on holiday.
 
 Introducing staff to SecureDrop takes half a day. Training a group to use
 SecureDrop proficiently takes at least a day — and a single trainer can only
@@ -163,7 +163,7 @@ Once you have a SecureDrop instance and your team knows how to use it, you
 should test it thoroughly and then tell the world. The `Freedom of the Press
 Foundation <https://securedrop.org/help>`__ are happy to help you check that
 your SecureDrop setup is up-to-code and properly grounded. After that you'll want
-to check out the :doc:`best practices <deployment_practices>` for your
+to check out the :ref:`best practices <Landing Page>` for your
 SecureDrop landing page and our guide to
 :doc:`promoting your SecureDrop instance <getting_the_most_out_of_securedrop>`.
 

@@ -36,4 +36,3 @@
         smtp_relay_cert_override_file != ''
   tags:
     - postfix_custom_cert
-

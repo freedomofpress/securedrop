@@ -7,7 +7,7 @@ import time
 REDIS_SUCCESS_RETURN_VALUE = 'success'
 
 
-def wait_for_redis_worker(job, timeout=5):
+def wait_for_redis_worker(job, timeout=60):
     """Raise an error if the Redis job doesn't complete successfully
     before a timeout.
 
@@ -27,7 +27,7 @@ def wait_for_redis_worker(job, timeout=5):
     assert False, 'Redis worker timed out!'
 
 
-def wait_for_assertion(assertion_expression, timeout=5):
+def wait_for_assertion(assertion_expression, timeout=10):
     """Calls an assertion_expression repeatedly, until the assertion
     passes or a timeout is reached.
 

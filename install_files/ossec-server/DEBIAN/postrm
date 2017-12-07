@@ -20,14 +20,14 @@ set -e
 check_delete_user(){
     user_name="$1"
     if [ "$(getent passwd | grep -q "^$user_name")" ]; then
-        deluser $user_name
+        deluser "${user_name}"
     fi
 }
 
 check_delete_group(){
     group_name="$1"
     if [ "$(getent group | grep -q "^$group_name")" ]; then
-        delgroup $group_name
+        delgroup "${group_name}"
     fi
 }
 

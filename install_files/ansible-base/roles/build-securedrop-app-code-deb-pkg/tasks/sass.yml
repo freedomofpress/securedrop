@@ -7,7 +7,7 @@
     # https://github.com/freedomofpress/securedrop/issues/1594).
     version: "3.4.23"
     user_install: no
-  sudo: yes
+  become: yes
 
 - name: Create static asset directories.
   file:

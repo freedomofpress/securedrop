@@ -47,6 +47,23 @@ def get_deb_packages():
 deb_packages = get_deb_packages()
 
 
+def get_deb_tags():
+    """
+    Helper function to build array of package and tag tuples
+    for lintian.
+    """
+    deb_tags = []
+
+    for deb in get_deb_packages():
+        for tag in securedrop_test_vars.lintian_tags:
+            deb_tags.append((deb, tag))
+
+    return deb_tags
+
+
+deb_tags = get_deb_tags()
+
+
 @pytest.mark.parametrize("deb", deb_packages)
 def test_build_deb_packages(File, deb):
     """
@@ -123,33 +140,6 @@ def test_deb_package_control_fields_homepage(File, Command, deb):
 
 
 @pytest.mark.parametrize("deb", deb_packages)
-def test_deb_package_contains_no_update_dependencies_file(File, Command, deb):
-    """
-    Ensures the update_python_dependencies script is not shipped via the
-    Debian packages.
-    """
-    deb_package = File(deb.format(
-        securedrop_test_vars.securedrop_version))
-    # Using `dpkg-deb` but `lintian --tag package-installs-python-bytecode`
-    # would be cleaner. Will defer to adding lintian tests later.
-    c = Command("dpkg-deb --contents {}".format(deb_package.path))
-    assert not re.search("^.*update_python_dependencies$", c.stdout, re.M)
-
-
-@pytest.mark.parametrize("deb", deb_packages)
-def test_deb_package_contains_no_pyc_files(File, Command, deb):
-    """
-    Ensures no .pyc files are shipped via the Debian packages.
-    """
-    deb_package = File(deb.format(
-        securedrop_test_vars.securedrop_version))
-    # Using `dpkg-deb` but `lintian --tag package-installs-python-bytecode`
-    # would be cleaner. Will defer to adding lintian tests later.
-    c = Command("dpkg-deb --contents {}".format(deb_package.path))
-    assert not re.search("^.*\.pyc$", c.stdout, re.M)
-
-
-@pytest.mark.parametrize("deb", deb_packages)
 def test_deb_package_contains_no_config_file(File, Command, deb):
     """
     Ensures the `securedrop-app-code` package does not ship a `config.py`
@@ -160,10 +150,36 @@ def test_deb_package_contains_no_config_file(File, Command, deb):
     """
     deb_package = File(deb.format(
         securedrop_test_vars.securedrop_version))
-    # Using `dpkg-deb` but `lintian --tag package-installs-python-bytecode`
-    # would be cleaner. Will defer to adding lintian tests later.
     c = Command("dpkg-deb --contents {}".format(deb_package.path))
     assert not re.search("^.*config\.py$", c.stdout, re.M)
+
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_deb_package_contains_pot_file(File, Command, deb):
+    """
+    Ensures the `securedrop-app-code` package has the
+    messages.pot file
+    """
+    deb_package = File(deb.format(
+        securedrop_test_vars.securedrop_version))
+    c = Command("dpkg-deb --contents {}".format(deb_package.path))
+    # Only relevant for the securedrop-app-code package:
+    if "securedrop-app-code" in deb_package.path:
+        assert re.search("^.*messages.pot$", c.stdout, re.M)
+
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_deb_package_contains_mo_file(File, Command, deb):
+    """
+    Ensures the `securedrop-app-code` package has at least one
+    compiled mo file.
+    """
+    deb_package = File(deb.format(
+        securedrop_test_vars.securedrop_version))
+    c = Command("dpkg-deb --contents {}".format(deb_package.path))
+    # Only relevant for the securedrop-app-code package:
+    if "securedrop-app-code" in deb_package.path:
+        assert re.search("^.*messages\.mo$", c.stdout, re.M)
 
 
 @pytest.mark.parametrize("deb", deb_packages)
@@ -216,3 +232,31 @@ def test_deb_package_contains_css(File, Command, deb):
             assert re.search("^.*\./var/www/securedrop/static/"
                              "css/{}.css.map$".format(css_type), c.stdout,
                              re.M)
+
+
+@pytest.mark.parametrize("deb, tag", deb_tags)
+def test_deb_package_lintian(File, Command, deb, tag):
+    """
+    Ensures lintian likes our  Debian packages.
+    """
+    deb_package = File(deb.format(
+        securedrop_test_vars.securedrop_version))
+    c = Command("""lintian --tags {} --no-tag-display-limit {}""".format(
+        tag, deb_package.path))
+    assert len(c.stdout) == 0
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_deb_app_package_contains_https_validate_dir(host, deb):
+    """
+    Ensures the `securedrop-app-code` package ships with a validation
+    '.well-known' directory
+    """
+    deb_package = host.file(deb.format(
+        securedrop_test_vars.securedrop_version))
+
+    # Only relevant for the securedrop-app-code package:
+    if "securedrop-app-code" in deb_package.path:
+        c = host.run("dpkg-deb --contents {}".format(deb_package.path))
+        # static/gen/ directory should exist
+        assert re.search("^.*\./var/www/securedrop/"
+                ".well-known/$", c.stdout, re.M)

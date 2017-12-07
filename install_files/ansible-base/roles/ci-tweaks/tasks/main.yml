@@ -1,0 +1,17 @@
+---
+- name: Extract ec2 vars when in AWS
+  ec2_facts:
+
+- name: Set inventory hostnames
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Ensure new hostname attached to localhost
+  lineinfile:
+    dest: /etc/hosts
+    line: "127.0.0.1 localhost {{ inventory_hostname }}"
+    regexp: '^127\.0\.0\.1'
+
+- name: Set remote host for any reboot tasks under AWS
+  set_fact:
+    remote_host_ref: "{{ ansible_ec2_public_hostname }}"

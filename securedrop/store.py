@@ -5,7 +5,6 @@ import config
 import zipfile
 import crypto_util
 import tempfile
-import subprocess
 import gzip
 from werkzeug import secure_filename
 
@@ -78,6 +77,7 @@ def get_bulk_archive(selected_submissions, zip_directory=''):
     # folder structure per #383
     with zipfile.ZipFile(zip_file, 'w') as zip:
         for source in sources:
+            fname = ""
             submissions = [s for s in selected_submissions
                            if s.source.journalist_designation == source]
             for submission in submissions:
@@ -85,9 +85,12 @@ def get_bulk_archive(selected_submissions, zip_directory=''):
                                 submission.filename)
                 verify(filename)
                 document_number = submission.filename.split('-')[0]
+                if zip_directory == submission.source.journalist_filename:
+                    fname = zip_directory
+                else:
+                    fname = os.path.join(zip_directory, source)
                 zip.write(filename, arcname=os.path.join(
-                    zip_directory,
-                    source,
+                    fname,
                     "%s_%s" % (document_number,
                                submission.source.last_updated.date()),
                     os.path.basename(filename)
@@ -156,18 +159,3 @@ def rename_submission(filesystem_id, orig_filename, journalist_filename):
             else:
                 return new_filename  # Only return new filename if successful
     return orig_filename
-
-
-def secure_unlink(fn, recursive=False):
-    verify(fn)
-    command = ['srm']
-    if recursive:
-        command.append('-r')
-    command.append(fn)
-    subprocess.check_call(command)
-    return "success"
-
-
-def delete_source_directory(filesystem_id):
-    secure_unlink(path(filesystem_id), recursive=True)
-    return "success"

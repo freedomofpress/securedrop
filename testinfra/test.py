@@ -92,9 +92,7 @@ testinfra \
         else:
             if target_host in ["apptestclient"]:
                 conn_type = "docker"
-            ssh_config_path = "{}/.ssh/sshconfig-securedrop-ci-{}".format(
-                                            os.environ["HOME"],
-                                            os.environ["BUILD_NUM"])
+            ssh_config_path = os.environ["CI_SSH_CONFIG"]
             testinfra_command_template = """
 testinfra \
     -vv \

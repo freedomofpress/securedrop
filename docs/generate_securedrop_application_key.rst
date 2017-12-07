@@ -33,7 +33,7 @@ To set the system time:
 #. Click the upper right down arrow in the menu bar and select the wrench icon:
    |select settings|
 #. Then click **Date & Time**.
-#. Click **Unlock**. Type in the administrator password you set when you
+#. Click **Unlock**. Type in the admin password you set when you
    started up Tails.
 #. Set the correct time, region and city.
 #. Click **Lock**, exit Settings and wait for the system time to update in the
@@ -87,7 +87,7 @@ generated.
 |My Keys|
 
 #. Select the key you just generated and click "File" then "Export".
-#. Save the key to the *Transfer Device* as ``SecureDrop.pub.asc``, and make
+#. Save the key to the *Transfer Device* as ``SecureDrop.asc``, and make
    sure you change the file type from "PGP keys" to "Armored PGP keys" which
    can be switched at the bottom of the Save window. Click the 'Export' button
    after switching to armored keys.

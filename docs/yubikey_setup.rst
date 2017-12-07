@@ -1,86 +1,101 @@
-Using YubiKey with the Journalist Interface
-===========================================
+Using a YubiKey with the *Journalist Interface*
+===============================================
 
-This is a quick and dirty guide to using YubiKey for two-factor
-authentication on the Journalist Interface.
+This guide describes in detail how to set up a YubiKey for two-factor
+authentication on the *Journalist Interface*. This setup is performed
+once per journalist to create a secure log-in method. The process
+requires some configuration steps using a separate software tool.
 
-Download the YubiKey personalization tool
------------------------------------------
+.. note:: You will do all of these steps from within the Tails
+          operating system.
 
-YubiKeys are modifiable using the YubiKey personalization tool, which is
-available for Windows/Mac/Linux and can be downloaded here:
-https://www.yubico.com/products/services-software/personalization-tools/use/.
-If you wish to use Tails, install the YubiKey personalization tool on
-the command line with ``apt-get install yubikey-personalization-gui``.
+What is a YubiKey?
+------------------
 
-Once you have downloaded and installed the personalization program,
-insert your YubiKey and launch the program. If you are running Tails,
-you need to launch the program as the root user.
+A YubiKey is a physical token used for two-factor authentication. They
+are made by a company called Yubico and are `commercially available`_.
 
-Set up OATH-HOTP
-----------------
+.. _`commercially available`: https://www.yubico.com/products/yubikey-hardware/fido-u2f-security-key
 
-When you first launch the program, you will see the heading "Personalize
-your YubiKey in:" following by a list of configuration options. The
-SecureDrop admin interface uses "OATH-HOTP mode", so click that entry in
-the list.
+Download and Launch the YubiKey Personalization Tool
+----------------------------------------------------
 
-The next window will have the heading "Program in OATH-HOTP mode" and
-will offer you a choice between "Quick" or "Advanced" configuration.
-Choose "Quick".
+#. Start Tails. At the log in-screen, choose the option to allow an
+   administrator password.
+#. Open a terminal and enter
 
-First choose the configuration slot for this token. Unless you already
-use the YubiKey for something else, you should choose Configuration Slot
-1. If you already using the first slot, choose Configuration Slot 2.
-Note that you will have to press and hold for several seconds to use the
-token from Slot 2 instead of the one in Slot 1. See the `YubiKey
-manual <https://www.yubico.com/wp-content/uploads/2013/07/YubiKey-Manual-v3_1.pdf>`__
-for more information.
+.. code:: sh
 
-In the section title "OATH-HOTP parameters", you will need to change the
-default settings. First, *uncheck* the checkbox for "OATH Token
-Identifier (6 bytes)". Also uncheck the box for "Hide secret". This will
-display the data in the "Secret Key (20 bytes hex)" field. This data
-cannot be copied unless the "Hide secret" box is unchecked.
+   sudo apt-get update;
+   sudo apt-get install yubikey-personalization-gui
+   
+#. Once you have downloaded and installed the personalization program,
+   open a **Root Terminal** by choosing **Applications ▸ System Tools
+   ▸ Root Terminal**.
 
-|YubiKey OATH-HOTP Configuration|
+#. Open the YubiKey personalization tool by entering
 
-Now that you have chosen the correct configuration options for use with
-SecureDrop, click the "Write Configuration" button. Click through the
-warning about overwriting Configuration Slot 1 and choose a location to
-save the log file.
+.. code:: sh
 
-When the configuration has been successfully written, you should see
-green text saying "YubiKey successfully configured" at the top of the
-window.
+   yubikey-personalization-gui
 
-Set up a user with the OATH-HOTP secret key
--------------------------------------------
+Setting Up Hardware-Based Codes
+-------------------------------
 
-Now you will have to set up a new user for the Journalist Interface with
-the secret key from the "Secret Key (20 bytes hex)" field.
+After opening the personalization tool, click the heading
+**OATH-HOTP**. This will bring you to a window called **Program in
+OATH-HTOP mode**.
 
-manage.py
-~~~~~~~~~
+Click on the **Quick** button.
 
-If you have just installed SecureDrop, you will need to add the first
-admin user to the Journalist Interface with ``manage.py``. ``cd`` to the
-``SECUREDROP_ROOT``, which is ``/vagrant/securedrop`` in development and
-``/var/www/securedrop`` in production. Run ``./manage.py add-admin``.
-Fill in the username prompt. Be sure to save the automatically generated
-diceware passphrase in the user's KeePassX database. When it asks "Is this admin
-using a YubiKey [HOTP]? (y/N)", type "y", then enter. At the "Please
-configure your YubiKey and enter the secret:" prompt, enter the Secret
-Key value and hit enter. Note that the spaces are optional. When you are
-done, you should see a message saying "Admin '(your username)'
-successfully added".
+|YubiKey Overview|
 
-Admin Interface
-~~~~~~~~~~~~~~~
+Under **Configuration Slot**, click **Configuration Slot 1**.
 
-If you already have an admin user configured, use the "Add user" page in
-the admin interface to add new users. If they want to use YubiKey for
-two-factor, just check the "I'm using a YubiKey [HOTP]" checkbox and
-enter the Secret Key in the "HOTP secret" field.
+.. note:: If you are already using this YubiKey for something else,
+          you should choose **Configuration Slot 2**. You will have to
+          press and hold for several seconds to use the token from
+          **Slot 2** instead of the one in **Slot 1**. See the
+          `YubiKey manual`_ for more information.
 
-.. |YubiKey OATH-HOTP Configuration| image:: images/yubikey_oath_hotp_configuration.png
+.. _`Yubikey manual`: https://www.yubico.com/wp-content/uploads/2015/03/YubiKeyManual_v3.4.pdf
+
+In the section titled **OATH-HOTP parameters**, uncheck the box for
+**OATH Token Identifier (6 bytes)**. Next, uncheck the box for **Hide
+secret**. This will display the **Secret Key (20 bytes Hex)**
+field.
+
+.. important:: Make a note somewhere safe of the **Secret Key (20
+               bytes Hex)** value.
+
+|YubiKey Config|
+
+When ready, click the **Write Configuration** button.
+
+Click through the warning about overwriting the configuration slot and
+choose a location to save the log file. When the configuration is
+done, you should see green text saying **YubiKey configured** at the
+top of the window.
+
+Adding Users
+------------
+
+When adding new users, a SecureDrop administrator will need the
+**Secret Key** value described above. She will enter it after
+selecting the **I'm Using a YubiKey** option while :ref:`adding users
+<Adding Users>`.
+
+Using Your YubiKey
+------------------
+
+When using a Yubikey to log-in to the *Journalist Interface*, insert
+the Yubikey into the USB port and enter your username and
+passphrase. Then click the **Two-factor Code** field to focus the
+cursor there. Quickly press the lighted button on your YubiKey. This
+will insert the 6-digit code that you will need to log in.
+
+.. note:: When using **Configuration Slot 2**, be sure to press and hold
+          the YubiKey button for approximately 3 seconds.
+
+.. |YubiKey Overview| image:: images/yubikey_overview.png
+.. |YubiKey Config| image:: images/yubikey_oath_htop_configuration.png

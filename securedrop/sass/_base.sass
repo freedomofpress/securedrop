@@ -28,6 +28,9 @@
     text-align: left
     font-size: 30px
 
+    &:dir(rtl)
+      text-align: right
+
   h2
     font-size: 25px
 
@@ -61,6 +64,9 @@
     margin-bottom: 20px
     text-align: left
 
+    &:dir(rtl)
+      text-align: right
+
   .doc-check
     margin-right: 10px
 
@@ -69,7 +75,10 @@
 
   .sd-button
     font-weight: normal
-    letter-spacing: 0.15em
+    &:not([lang=ar])
+      letter-spacing: 0.15em
+    &:lang(ar)
+      letter-spacing: 0em
 
   .select
     border: 1px #C4C2C2 solid
@@ -89,11 +98,20 @@
   .pull-left
     float: left
 
+    &:dir(rtl)
+      float: right
+
   .pull-right
     float: right
 
+    &:dir(rtl)
+      float: left
+
   #header
     float: left
+
+    &:dir(rtl)
+      float: right
 
     .powered
       margin-top: 10px
@@ -112,11 +130,16 @@
       padding: 6px
       text-align: left
 
+      &:dir(rtl)
+        text-align: right
+
       &:last-child
         border-bottom: none
 
       .date
         float: right
+        &:dir(rtl)
+          float: left
         background-color: $color_grey_medium
         color: #ffffff
         font-size: 10px
@@ -130,7 +153,6 @@
 
         a
           color: #333
-          text-decoration: none
           font-weight: bold
           margin: 5px
           display: inline-block
@@ -191,13 +213,6 @@
     font-size: large
     text-align: center
 
-  .code-reminder
-    background: rgba(0, 0, 0, 0.05)
-    box-sizing: border-box
-    -moz-box-sizing: border-box
-    padding: 5px 10px
-    text-align: center
-
   .snippet
     border: 1px solid #c3c3c3
     background: $color_grey_xlight
@@ -206,6 +221,8 @@
       background-color: $color_grey_xlight
       padding: 12px
       width: 330px
+      @media only screen and (max-width: 815px)
+        width: 100%
       display: inline-block
       vertical-align: top
 
@@ -223,6 +240,8 @@
       display: inline-block
       vertical-align: top
       width: 401px
+      @media only screen and (max-width: 815px)
+        width: 100%
       background: white
       overflow: hidden
 
@@ -230,8 +249,9 @@
         vertical-align: top
         display: block
         padding: 10px
-        min-width: 406px
-        max-width: 406px
+        width: 406px
+        @media only screen and (max-width: 815px)
+          width: 100%
         min-height: 168px
         border: none
 
@@ -277,6 +297,9 @@
     margin: 10px
     text-align: left
     font-size: medium
+
+    &:dir(rtl)
+      text-align: right
 
   .flash
     display: flex
@@ -355,7 +378,7 @@
 
   .logo
     width: 250px
-    margin-right: 20px
+    margin-right: 9px
     margin-top: 36px
     margin-left: 9px
 
@@ -366,11 +389,17 @@
   .submissions
     padding-left: 0px
 
+    &:dir(rtl)
+      padding-right: 0px
+
   .submission
     background: $color_grey_xlight
     border-bottom: 1px solid #ddd
     padding: 10px
     text-align: left
+
+    &:dir(rtl)
+      text-align: right
 
     &:last-child
       border-bottom: none
@@ -438,3 +467,7 @@
     margin-top: 20px
     padding-top: 20px
     color: $color_grey_medium
+
+span.form-validation-error
+  color: red
+  font-size: small
