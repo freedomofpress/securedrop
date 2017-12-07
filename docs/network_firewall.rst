@@ -167,7 +167,7 @@ Connect to the pfSense WebGUI
    |Your Connection is Insecure|
 
 #. You should see the login page for the pfSense GUI. Log in with the
-   default username and password (``admin`` / ``pfsense``).
+   default username and passphrase (``admin`` / ``pfsense``).
 
    |Default pfSense|
 
@@ -203,7 +203,7 @@ Setup Wizard
 
    |Configure LAN Interface|
 
-#. Set a strong admin password. We recommend generating a strong password
+#. Set a strong admin passphrase. We recommend generating a strong passphrase
    with KeePassX, and saving it in the Tails Persistent folder using the
    provided KeePassX database template. Click **Next**.
 

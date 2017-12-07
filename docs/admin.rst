@@ -1,7 +1,7 @@
 Admin Guide
 ===========
 
-You (the admin) should have your own username and password, plus
+You (the admin) should have your own username and passphrase, plus
 two-factor authentication through either the Google Authenticator app
 on your smartphone or a YubiKey.
 
@@ -163,7 +163,7 @@ factor token successfully verified for user *new username*!".
 
 Congratulations! You have successfully set up a journalist on
 SecureDrop. Make sure the journalist remembers their username and
-password and always has their 2 factor authentication device in their
+passphrase and always has their 2 factor authentication device in their
 possession when they attempt to log in to SecureDrop.
 
 .. |SecureDrop main page|
