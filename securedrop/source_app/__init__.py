@@ -71,8 +71,10 @@ def create_app(config):
         # about Tor2Web, corresponding to the initial page load.
         if 'X-tor2web' in request.headers:
             flash(Markup(gettext(
-                '<strong>WARNING:</strong> You appear to be using Tor2Web. '
-                'This <strong>does not</strong> provide anonymity. '
+                '<strong>WARNING:&nbsp;</strong> '
+                'You appear to be using Tor2Web. '
+                'This <strong>&nbsp;does not&nbsp;</strong> '
+                'provide anonymity. '
                 '<a href="{url}">Why is this dangerous?</a>')
                 .format(url=url_for('info.tor2web_warning'))),
                   "banner-warning")
