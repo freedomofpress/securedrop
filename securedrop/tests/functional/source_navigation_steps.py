@@ -170,7 +170,7 @@ class SourceNavigationStepsMixin():
 
             if not hasattr(self, 'accept_languages'):
                 file_notification = self.driver.find_element_by_class_name(
-                    'info')
+                    'next_submission')
                 tmpname = os.path.basename(filename)
                 assert tmpname in file_notification.text
                 notification = self.driver.find_element_by_css_selector(
