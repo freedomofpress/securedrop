@@ -31,7 +31,6 @@ Localization of the source and journalist interfaces
 The source and journalist interface are translated in the following
 languages:
 
-* Arabic (ar)
 * German (de_DE)
 * Spanish (es_ES)
 * French (fr_FR)

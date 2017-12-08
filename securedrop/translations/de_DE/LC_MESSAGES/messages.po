@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-29 09:49+0000\n"
+"PO-Revision-Date: 2017-12-04 13:00+0000\n"
 "Last-Translator: heartsucker <heartsucker@riseup.net>\n"
 "Language-Team: German "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/de/>\n"
@@ -200,12 +200,12 @@ msgid "No unread submissions in selected collections."
 msgstr "Keine ungelesenen Einreichungen in den ausgewählten Sammlungen."
 
 #: journalist_templates/_source_row.html:19
-msgid "docs {doc_num}"
-msgstr "Dok. {doc_num}"
+msgid "{doc_num} docs"
+msgstr "{doc_num} Dok."
 
 #: journalist_templates/_source_row.html:20
-msgid "messages {msg_num}"
-msgstr "Nach. {msg_num}"
+msgid "{msg_num} messages"
+msgstr "{msg_num} Nachr."
 
 #: journalist_templates/_source_row.html:23
 msgid "{num_unread} unread"
@@ -891,11 +891,11 @@ msgstr ""
 "Bitte notieren Sie sich diesen Decknamen und bewahren Sie ihn an einem "
 "sicheren Ort auf oder merken Sie ihn sich."
 
-#: source_templates/generate.html:45
+#: source_templates/generate.html:44
 msgid "USE NEW CODENAME"
 msgstr "NUTZE EIN NEUER DECKNAMEN"
 
-#: source_templates/generate.html:47
+#: source_templates/generate.html:46
 msgid "USE EXISTING CODENAME"
 msgstr "NUTZE VORHANDENE DECKNAME"
 
@@ -1317,3 +1317,6 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Zurück zur Einreichungsseite"
+
+#~ msgid "messages {msg_num}"
+#~ msgstr "Nach. {msg_num}"

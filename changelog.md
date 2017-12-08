@@ -1,12 +1,12 @@
 # Changelog
 
-## 0.5-rc5
+## 0.5
 
 ### Web Applications
 
 * Internationalize both web applications (#2470, #2392, #2400, #2374, #2626,
   #2354, #2338, #2333, #2229, #2223).
-* Localize in Arabic, Dutch, French, German, Norwegian, Portuguese and Spanish.
+* Localize in Dutch, French, German, Norwegian, Portuguese and Spanish.
 * Add language picker to web applications (#2557).
 * Refactor both web applications using Flask Blueprints (#2294).
 * Add default 120 minute session timeout on both interfaces (#880, #2503).

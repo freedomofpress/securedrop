@@ -1198,7 +1198,7 @@ class TestJournalistApp(TestCase):
         try:
             if supported:
                 del config.SUPPORTED_LOCALES
-            config.SUPPORTED_LOCALES = ['en_US', 'fr_FR', 'ar']
+            config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
 
             source, _ = utils.db_helper.init_source()
             self._login_user()
