@@ -244,9 +244,9 @@ command will tell you what key was used to encrypt the file. If you are not
 comfortable at the command line, contact your SecureDrop administrator or
 Freedom of the Press Foundation for assistance.
 
-.. warning:: You should not transfer source material off the SVS for decryption,
-             and should instead transfer cryptographic keys *to* the device for
-             decryption and metadata removal.
+.. warning:: **Do not** transfer source material off the *Secure Viewing Station*
+             for decryption. Instead, transfer cryptographic keys *to* the SVS
+             device for decryption and metadata removal.
 
 Researching Submissions
 ~~~~~~~~~~~~~~~~~~~~~~~
