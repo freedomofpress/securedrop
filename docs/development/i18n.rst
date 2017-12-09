@@ -1,7 +1,7 @@
 Internationalization (i18n)
 ===========================
 
-The code, templates and javascript user visible strings must all be
+The code, templates and JavaScript user visible strings must all be
 wrapped with `gettext`_ functions to be substituted at runtime with
 the equivalent localized string. These function names are used as
 markers to collect the strings to be translated and store them into
@@ -64,7 +64,7 @@ must be updated.
 Updating strings to be translated
 ---------------------------------
 
-After modifying a string in the code, templates, javascript or desktop
+After modifying a string in the code, templates, JavaScript or desktop
 labels, the ``securedrop/translations/messages.pot`` files must be
 updated by running the following command in ``/vagrant/securedrop``,
 in the development virtual machine:

@@ -12,12 +12,12 @@ function tbb_version() {
   return Number(major_version);
 }
 
-// Warn about using Javascript and not using Tor Browser
+// Warn about using JavaScript and not using Tor Browser
 $(function(){
   if (is_likely_tor_browser()) {
     // If the source is using Tor Browser, we want to encourage them to turn Tor
     // Browser's Security Slider to "High", which enables various hardening
-    // methods, including disabling Javascript. Since JS is disabled by turning
+    // methods, including disabling JavaScript. Since JS is disabled by turning
     // the Security Slider to "High", this code only runs if it set to another
     // (less hardened) setting.
     $('.js-warning').show();
