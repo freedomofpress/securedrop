@@ -16,7 +16,7 @@ than betray a source.
 
 More recently, there have been a record number of leak prosecutions largely because
 the government has learned they don’t need reporters to testify against their
-sources anymore. Instead, they can just secretly subpoena third party services
+sources anymore. Instead, they can just secretly subpoena third-party services
 like Google or AT&T or Verizon or Facebook and get a treasure trove of digital
 information on reporters and sources’ communications. For example, the Associated
 Press had twenty of their phone lines subpoenaed without their knowledge in order
@@ -101,7 +101,7 @@ Free and open source software
 can install SecureDrop themselves, but the code is available online for security
 experts to test for vulnerabilities.
 
-SecureDrop has gone through four audits by third party penetration testing firms
+SecureDrop has gone through four audits by third-party penetration testing firms
 and will continue to go through audits when major changes are made to the code
 base in the future. We always publish these audits publicly so everyone can be
 assured that SecureDrop is as safe to use as possible.

@@ -35,7 +35,7 @@ These are the core components of a SecureDrop instance.
 
 We are often asked if it is acceptable to run SecureDrop on
 cloud servers (e.g. Amazon EC2, DigitalOcean, etc.) or on dedicated
-servers in third party datacenters instead of on dedicated hardware
+servers in third-party datacenters instead of on dedicated hardware
 hosted in the organization. This request is generally motivated by a
 desire for cost savings and/or convenience. However: we consider it
 **critical** to have dedicated physical machines hosted within the
@@ -63,12 +63,12 @@ organization for both technical and legal reasons:
 * In addition, attackers with legal authority such as law
   enforcement agencies may (depending on the jurisdiction) be able
   to compel physical access, potentially with a gag order attached,
-  meaning that the 3rd party hosting your servers or VMs may be
+  meaning that the third party hosting your servers or VMs may be
   legally unable to tell you that law enforcement has been given
   access to your SecureDrop servers.
 
 One of the core goals of SecureDrop is to avoid the potential
-compromise of sources through the compromise of third party
+compromise of sources through the compromise of third-party
 communications providers. Therefore, we consider the use of
 virtualization for production instances of SecureDrop to be an
 unacceptable compromise and do not support it. Instead, dedicated

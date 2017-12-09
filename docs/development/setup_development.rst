@@ -153,7 +153,7 @@ Visit our repository_ fork it and clone it on you local machine:
 Install python requirments
 --------------------------
 
-SecureDrop uses many 3rd party open source packages from the python community.
+SecureDrop uses many third-party open source packages from the python community.
 Ensure your virtualenv is activated and install the packages.
 
 .. code:: sh
