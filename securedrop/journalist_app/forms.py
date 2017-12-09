@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask_babel import lazy_gettext
+from flask_babel import lazy_gettext as gettext
 from flask_wtf import FlaskForm
 from wtforms import (TextAreaField, TextField, BooleanField, HiddenField,
                      ValidationError)
@@ -12,7 +12,7 @@ from db import Journalist
 def otp_secret_validation(form, field):
     strip_whitespace = field.data.replace(' ', '')
     if len(strip_whitespace) != 40:
-        raise ValidationError(lazy_gettext(
+        raise ValidationError(gettext(
             'Field must be 40 characters long but '
             'got {num_chars}.'.format(
                 num_chars=len(strip_whitespace)
@@ -22,16 +22,16 @@ def otp_secret_validation(form, field):
 def minimum_length_validation(form, field):
     if len(field.data) < Journalist.MIN_USERNAME_LEN:
         raise ValidationError(
-            lazy_gettext('Field must be at least {min_chars} '
-                         'characters long but only got '
-                         '{num_chars}.'.format(
-                             min_chars=Journalist.MIN_USERNAME_LEN,
-                             num_chars=len(field.data))))
+            gettext('Field must be at least {min_chars} '
+                    'characters long but only got '
+                    '{num_chars}.'.format(
+                        min_chars=Journalist.MIN_USERNAME_LEN,
+                        num_chars=len(field.data))))
 
 
 class NewUserForm(FlaskForm):
     username = TextField('username', validators=[
-        InputRequired(message=lazy_gettext('This field is required.')),
+        InputRequired(message=gettext('This field is required.')),
         minimum_length_validation
     ])
     password = HiddenField('password')
@@ -48,7 +48,7 @@ class ReplyForm(FlaskForm):
         u'Message',
         id="content-area",
         validators=[
-            InputRequired(message=lazy_gettext(
+            InputRequired(message=gettext(
                 'You cannot send an empty reply.')),
         ],
     )
