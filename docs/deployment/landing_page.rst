@@ -79,17 +79,17 @@ signature:
 
     openssl req -new -newkey rsa:4096 -nodes -sha256 -keyout domain.com.key -out domain.com.csr
 
-**Don't load any resources (scripts, web fonts, etc.) from 3rd parties
+**Don't load any resources (scripts, web fonts, etc.) from third parties
 (e.g. Google Web Fonts)**
 
 This will potentially leak information about sources to third parties,
 which can more easily be accessed by law enforcement agencies. Simply
 copy them to your server and serve them yourself to avoid this problem.
 
-Don't use 3rd party analytics, tracking, or advertising
--------------------------------------------------------
+Do not use third-party analytics, tracking, or advertising
+----------------------------------------------------------
 
-Most news websites, even those that are non-profits, use 3rd-party
+Most news websites, even those that are non-profits, use third-party
 analytics tools or tracking bugs on their websites. It is vital that
 these are disabled for the SecureDrop landing page.
 
