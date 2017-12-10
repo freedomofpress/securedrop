@@ -112,7 +112,7 @@ the remote servers. ::
 
     ./securedrop-admin install
 
-You will be prompted to enter the sudo password for the *Application* and
+You will be prompted to enter the sudo passphrase for the *Application* and
 *Monitor Servers* (which should be the same).
 
 The install process will take some time, and it will return

@@ -34,7 +34,7 @@ supported, but require 2FA to be configured. See the :doc:`2FA setup guide
 Test the 2FA functionality by connecting a keyboard and display to each server,
 then login with the Admin username. You will need:
 
-* sudo password for the Admin username
+* sudo passphrase for the Admin username
 * TOTP code from a 2FA app such as Google Authenticator or FreeOTP
 
 Confirm that logging in via TTY prompts for a 2FA code, and that the code
@@ -76,7 +76,7 @@ Test the web interfaces
    in as the admin user you just created.
 
    - Open the Tor Browser and navigate to the onion URL from
-     app-journalist-aths. Enter your password and two-factor
+     app-journalist-aths. Enter your passphrase and two-factor
      authentication code to log in.
    - If you have problems logging in to the Admin/Journalist Interface,
      SSH to the *Application Server* and restart the ntp daemon to synchronize
