@@ -19,6 +19,7 @@
   roles:
     - { role: common, tags: common }
     - { role: tor-hidden-services, tags: tor }
+    - { role: install-fpf-repo, tags: fpf }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
   become: yes
 
