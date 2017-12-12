@@ -16,11 +16,23 @@ test:
 		$(EXTRA_TEST_ARGS) \
 		--name $(IMAGE)-test \
 		-ti $(IMAGE)-test:$(TAG) \
-		./test -v $(TESTFILES)
+		./bin/test -v $(TESTFILES)
 
 .PHONY: testclean
 testclean:
 	-docker rm -f $(IMAGE)-test
+
+.PHONY: dev
+dev:
+	docker run \
+		-p8080:8080 -p8081:8081 \
+		$(EXTRA_DEV_ARGS) \
+		-v $(shell pwd):/app \
+		-ti $(IMAGE)-test:$(TAG) \
+		./bin/dev
+
+
+config.py: test-config
 
 .PHONY: test-config
 test-config:
