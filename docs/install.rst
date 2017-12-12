@@ -44,6 +44,22 @@ parentheses. When the source interface is displayed in French (for
 instance), people submitting documents will expect a journalist fluent
 in French is available to read them and followup.
 
+Custom logo for the source and journalist interface
+---------------------------------------------------
+
+An image to replace the SecureDrop logo on the *Source Interface* and
+*Journalist Interface* can be provided during the installation. It
+should be prepared in advance and available from the *Admin
+Workstation*.
+
+- Recommended size: ``500px x 450px``
+- Recommended format: PNG
+
+.. note:: Should you want to update the logo after the installation,
+          it is enough to just replace the file in the
+          ``install_files/ansible-base`` directory and run the
+          ``./securedrop-admin install`` command again.
+
 Configure the Installation
 --------------------------
 
@@ -64,18 +80,13 @@ continuing:
 -  The first username of a journalist who will be using SecureDrop (you
    can add more later)
 -  The username of the system admin
--  (Optional) An image to replace the SecureDrop logo on the *Source
-   Interface* and *Journalist Interface*
-
-   -  Recommended size: ``500px x 450px``
-   -  Recommended format: PNG
 
 You will have to copy the following required files to
 ``install_files/ansible-base``:
 
 -  SecureDrop Submission Key public key file
 -  Admin GPG public key file (for encrypting OSSEC alerts)
--  (Optional) Custom header image file
+-  (Optional) Custom logo image file
 
 The SecureDrop Submission Key should be located on your *Transfer
 Device* from earlier. It will depend on the location where the USB stick
