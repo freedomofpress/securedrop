@@ -270,6 +270,11 @@ We recommend always doing as much work as possible inside of Tails
 before copying documents back to your *Journalist Workstation*. This
 includes stripping metadata with MAT.
 
+.. warning:: MAT is no longer actively maintained and **will not**
+             strip all metadata, even when the output claims the
+             document is clean. Some metadata are likely to persist:
+             you must **never** assume MAT has removed all metadata.
+
 When you no longer need documents, you can right-click on them and
 choose **Wipe** to delete them.
 
