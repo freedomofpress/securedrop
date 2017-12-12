@@ -99,14 +99,8 @@ maintained by `Freedom of the Press Foundation employees
 maintained `by a horizontal community of volunteers
 <https://securedrop-club.readthedocs.io/en/latest/team.html>`__.
 
-You can browse the list of services and their corresponding Ansible
-playbook to find one you would like to improve:
-
-* `Weblate <https://weblate.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/weblate>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Weblate>`__
-* `Discourse <https://forum.securedrop.club>`__ (no playbook yet) and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Discourse>`__
-* `GitLab <https://lab.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/gitlab>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=GitLab>`__
-* `Packages <https://packages.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/packages>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Packages>`__
-* `Other elements of infrastructure <https://securedrop-club.readthedocs.io>`__ and their associated `playbooks <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Other>`__
+You will find a list of the pending tasks to improve the ``securedrop.club`` services in
+the `contribution guide <https://securedrop-club.readthedocs.io/en/latest/contribute.html>`__.
 
 If you're in doubt, feel free to reach out to the `DevOps section of
 the forum <https://forum.securedrop.club/c/devops>`__ or directly to `a
