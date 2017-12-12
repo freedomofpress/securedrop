@@ -57,21 +57,21 @@ organization you are submitting to.
 |Source Interface with Javascript Disabled|
 
 If this is the first time you're using the Tor browser, it's likely that you
-have Javascript enabled and that the Security Slider that Tor browser provides
+have JavaScript enabled and that the Security Slider that Tor browser provides
 is set to "Low". If you do, there will be a purple warning banner at the top of
-the page that encourages you to disable Javascript and turn up the Security
+the page that encourages you to disable JavaScript and turn up the Security
 Slider to "High":
 
 |Source Interface Security Slider Warning|
 
 Click the **Learn how to set it to high** link in the warning banner and a
-message bubble will pop up explaining how to disable Javascript and turn up the
+message bubble will pop up explaining how to disable JavaScript and turn up the
 Slider:
 
 |Fix Javascript warning|
 
 Follow the instructions and the page should refresh automatically. Note
-that this will change the slider and disable Javascript for every page in your
+that this will change the slider and disable JavaScript for every page in your
 Tor Browser, and this setting will persist across browser sessions.
 
 |Security Slider|
