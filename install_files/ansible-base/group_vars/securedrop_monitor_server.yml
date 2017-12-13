@@ -16,6 +16,19 @@ tor_instances:
   - service: ssh
     filename: mon-ssh-aths
 
-authd_rules:
-  - "-A INPUT -s {{ app_hostname }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -d {{ app_hostname }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT"
+authd_iprules:
+  - chain: INPUT
+    dest: "{{ app_hostname  }}"
+    proto: tcp
+    dest_port: 1515
+    match: state
+    cstate: "NEW,ESTABLISHED,RELATED"
+    jump: ACCEPT
+
+  - chain: OUTPUT
+    source: "{{ app_hostname }}"
+    proto: tcp
+    source_port: 1515
+    match: state
+    cstate: "ESTABLISHED,RELATED"
+    jump: ACCEPT

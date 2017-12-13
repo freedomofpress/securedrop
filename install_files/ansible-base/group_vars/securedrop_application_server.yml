@@ -20,6 +20,19 @@ tor_instances:
   - service: journalist
     filename: app-journalist-aths
 
-agent_auth_rules:
-  - "-A OUTPUT -d {{ monitor_ip  }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A INPUT -s {{ monitor_ip }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT"
+authd_iprules:
+  - chain: OUTPUT
+    dest: "{{ monitor_ip  }}"
+    proto: tcp
+    dest_port: 1515
+    match: state
+    cstate: "NEW,ESTABLISHED,RELATED"
+    jump: ACCEPT
+
+  - chain: INPUT
+    source: "{{ monitor_ip  }}"
+    proto: tcp
+    source_port: 1515
+    match: state
+    cstate: "ESTABLISHED,RELATED"
+    jump: ACCEPT
