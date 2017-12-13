@@ -33,3 +33,6 @@ authd_iprules:
     match: state
     cstate: "ESTABLISHED,RELATED"
     jump: ACCEPT
+
+# Declare Monitor Server as OSSEC server role.
+ossec_is_server: yes
