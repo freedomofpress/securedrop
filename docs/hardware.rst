@@ -33,6 +33,9 @@ These are the core components of a SecureDrop instance.
 * *Network Firewall*: 1 physical computer that is used as a dedicated firewall
   for the SecureDrop servers.
 
+An acceptable alternative that requires more technical expertise is
+to :doc:`configure an existing hardware firewall <network_firewall>`.
+
 We are often asked if it is acceptable to run SecureDrop on
 cloud servers (e.g. Amazon EC2, DigitalOcean, etc.) or on dedicated
 servers in third-party datacenters instead of on dedicated hardware
