@@ -44,7 +44,6 @@
   command: openssl genrsa -out /var/ossec/etc/sslmanager.key 4096
   args:
     creates: /var/ossec/etc/sslmanager.key
-  when: ossec_agent_already_registered == false
   tags:
     - ossec_auth
 
@@ -55,6 +54,5 @@
     -key /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert -days 365
   args:
     creates: /var/ossec/etc/sslmanager.cert
-  when: ossec_agent_already_registered == false
   tags:
     - ossec_auth
