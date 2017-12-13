@@ -15,6 +15,7 @@ assets:
 
 .PHONY: images
 images:
+	find . -name '*.pyc' | xargs --no-run-if-empty rm
 	docker build $(EXTRA_BUILD_ARGS) -f Dockerfile -t $(IMAGE)-test:$(TAG) .
 
 .PHONY: test
