@@ -4,7 +4,6 @@ import gzip
 from mock import patch, ANY
 import re
 
-from bs4 import BeautifulSoup
 from flask import session, escape, url_for
 from flask_testing import TestCase
 
@@ -89,16 +88,6 @@ class TestSourceApp(TestCase):
         # codename is also stored in the session - make sure it matches the
         # codename displayed to the source
         self.assertEqual(codename, escape(session_codename))
-
-    def test_generate_has_login_link(self):
-        """The generate page should have a link to remind people to login
-           if they already have a codename, rather than create a new one.
-        """
-        resp = self.client.get('/generate')
-        self.assertIn("USE EXISTING CODENAME", resp.data)
-        soup = BeautifulSoup(resp.data, 'html.parser')
-        already_have_codename_link = soup.select('a#already-have-codename')[0]
-        self.assertEqual(already_have_codename_link['href'], '/login')
 
     def test_generate_already_logged_in(self):
         with self.client as client:
