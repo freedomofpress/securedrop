@@ -27,3 +27,5 @@ postfix_hostname: ossec.server
 # but unnecessary in staging contexts, where SASL authentication
 # will always fail, due to lack of site-specific credentials.
 ossec_server_enable_postfix: True
+
+ossec_agent_already_registered: false

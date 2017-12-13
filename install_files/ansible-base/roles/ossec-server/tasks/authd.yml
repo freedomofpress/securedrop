@@ -7,16 +7,6 @@
   tags:
     - ossec_auth
 
-  # Store a boolean host fact that states whether the Application Server
-  # is already registered with the Monitor Server. If it is, we can skip several tasks.
-  # To make the conditional templating simpler, we'll default to false for the fact value,
-  # and overwrite it with "true" only if the Application Server is actually registered.
-- name: Initialize host fact for OSSEC registration state.
-  set_fact:
-    ossec_agent_already_registered: false
-  tags:
-    - ossec_auth
-
 - name: Set host fact for OSSEC registration state.
   set_fact:
     ossec_agent_already_registered: true
