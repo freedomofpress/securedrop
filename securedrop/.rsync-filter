@@ -1,6 +1,7 @@
 exclude config.py
 include config.py.example
 include *.py
+include securedrop-admin
 include COPYING
 include dictionaries/
 include dictionaries/*.txt
