@@ -7,32 +7,32 @@
   tags:
     - apt
 
-  # Check for the IPv4 rules file on disk. On the first run of this playbook,
-  # the file won't exist yet. Only add iptables rules if the file already exists.
-- name: Check whether iptables rules exist.
-  stat:
-    path: /etc/network/iptables/rules_v4
-  register: iptables_rules_check_result
-
-- name: Add firewall exemption for OSSEC agent registration.
-  lineinfile:
-    dest: /etc/network/iptables/rules_v4
-    # last line in the initial *filter stanza (which must come before any rules)
-    # rules will be applied before the default rules defined in rules_v4 file
-    insertafter: "^:LOGNDROP"
-    regexp: "{{ item }}"
-    line: "{{ item }}"
-  notify: reload iptables rules
-  with_items: "{{ agent_auth_rules }}"
-  when: hostvars[groups.securedrop_monitor_server.0].ossec_agent_already_registered == false and
-        iptables_rules_check_result.stat.exists == true
+- name: Add firewall exemption for OSSEC agent registration (both servers)
+  iptables:
+    chain: "{{ item[0].chain }}"
+    destination: "{{ item[0].dest|default(omit) }}"
+    destination_port: "{{ item[0].dest_port|default(omit) }}"
+    protocol: "{{ item[0].proto }}"
+    ctstate: "{{ item[0].cstate }}"
+    jump: "{{ item[0].jump }}"
+    match: "{{ item[0].match }}"
+    source: "{{ item[0].source|default(omit) }}"
+    source_port: "{{ item[0].source_port|default(omit) }}"
+    state: present
+  delegate_to: "{{ item[1] }}"
+  with_nested:
+    - "{{ authd_iprules }}"
+    - "{{ groups['all'] }}"
+  when: not ossec_agent_already_registered
   tags:
     - iptables
     - ossec_auth
 
+- debug: var="{{ groups['securedrop_monitor_server'] + groups['securedrop_application_server'] }}"
+
 - name: Register OSSEC agent.
   command: /var/ossec/bin/agent-auth -m {{ monitor_ip }} -p 1515 -A {{ app_hostname }}
-  when: hostvars[groups.securedrop_monitor_server.0].ossec_agent_already_registered == false
+  when: not ossec_agent_already_registered
   tags:
     - ossec_auth
 
@@ -42,17 +42,23 @@
   # connect to the ossec server. The monitor server's OSSEC server needs to
   # restart after the agent connects to correctly display the agent status.
 - name: Remove firewall exemption for OSSEC agent registration.
-  lineinfile:
-    state: absent
-    dest: /etc/network/iptables/rules_v4
-    line: "{{ item }}"
-  register: removed_ossec_exemptions
-  notify:
-    - reload iptables rules
-    - restart ossec
-  with_items: "{{ agent_auth_rules }}"
-  when: hostvars[groups.securedrop_monitor_server.0].ossec_agent_already_registered == false and
-        iptables_rules_check_result.stat.exists == true
+  iptables:
+    chain: "{{ item[0].chain }}"
+    destination: "{{ item[0].dest|default(omit) }}"
+    destination_port: "{{ item[0].dest_port|default(omit) }}"
+    protocol: "{{ item[0].proto }}"
+    ctstate: "{{ item[0].cstate }}"
+    jump: "{{ item[0].jump }}"
+    match: "{{ item[0].match }}"
+    source: "{{ item[0].source|default(omit) }}"
+    source_port: "{{ item[0].source_port|default(omit) }}"
+    state: present
+  delegate_to: "{{ item[1] }}"
+  with_nested:
+    - "{{ authd_iprules }}"
+    - "{{ groups['securedrop_monitor_server'] + groups['securedrop_application_server'] }}"
+  when: not ossec_agent_already_registered
+  notify: restart ossec
   tags:
     - iptables
     - ossec_auth
