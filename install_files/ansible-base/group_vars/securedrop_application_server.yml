@@ -37,3 +37,6 @@ authd_iprules:
     match: state
     cstate: "ESTABLISHED,RELATED"
     jump: ACCEPT
+
+# Declare Application Server as OSSEC agent role.
+ossec_is_client: yes
