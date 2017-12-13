@@ -19,9 +19,11 @@
 - name: Add the OSSEC GPG public key to the OSSEC manager keyring.
   # multiline format for command module, since this is a long command
   command: >
-    su -s /bin/bash -c 'gpg
+    gpg
     --homedir /var/ossec/.gnupg
-    --import /var/ossec/{{ ossec_alert_gpg_public_key }}' {{ ossec_group }}
+    --import /var/ossec/{{ ossec_alert_gpg_public_key }}
+  become: yes
+  become_user: "{{ ossec_group }}"
   register: add_ossec_gpg_key_result
   changed_when: "'imported: 1' in add_ossec_gpg_key_result.stderr"
   tags:
