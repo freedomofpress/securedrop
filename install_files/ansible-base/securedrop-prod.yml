@@ -17,10 +17,10 @@
 - name: Add FPF apt repository and install base packages.
   hosts: securedrop
   roles:
-    - { role: common, tags: common }
-    - { role: tor-hidden-services, tags: tor }
     - { role: install-fpf-repo, tags: fpf }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
+    - { role: common, tags: common }
+    - { role: tor-hidden-services, tags: tor }
   become: yes
 
 - name: Configure SecureDrop Monitor Server.
