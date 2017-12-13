@@ -20,7 +20,7 @@ images:
 
 .PHONY: test
 test:
-	docker run --privileged \
+	docker run \
 		-e COMMIT_SHA=$(TAG) \
 		$(EXTRA_TEST_ARGS) \
 		--name $(IMAGE)-test \
