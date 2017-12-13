@@ -19,6 +19,7 @@
 
 .menu__trigger-text
   display: inline-block
+  text-transform: capitalize
 
 .menu__items
   display: none
@@ -38,6 +39,9 @@
   text-decoration: none
   &:hover, &:focus, &:active
     background-color: $color_grey_xlight
+
+.menu__item a span
+  text-transform: capitalize
 
 .menu__item:last-of-type a
   border-bottom: 0
