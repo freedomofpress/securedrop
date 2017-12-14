@@ -595,6 +595,9 @@ class JournalistNavigationStepsMixin():
 
     def _source_delete_key(self):
         filesystem_id = crypto_util.hash_codename(self.source_name)
+        key = None
+        while not key:
+            key = crypto_util.getkey(filesystem_id)
         crypto_util.delete_reply_keypair(filesystem_id)
 
     def _journalist_continues_after_flagging(self):
