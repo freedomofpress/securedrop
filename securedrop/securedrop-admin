@@ -289,7 +289,6 @@ if __name__ == "__main__":
         """Needed to combine formatting classes for help output"""
         pass
 
-    # Processing argument parsing logic -- yuck
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=ArgParseFormatterCombo)
     parser.add_argument('-v', action='store_true', default=False,
