@@ -57,9 +57,9 @@ def sdconfig(args):
     ]
     # Honor `--force` flag to clobber existing (misconfigured) vars,
     # otherwise read in the existing vars to supply defaults.
-    if os.path.exists(SITE_CONFIG) and args.force is False:
+    if os.path.exists(args.site_config) and args.force is False:
         ansible_cmd.append('--extra-vars')
-        ansible_cmd.append("@{}".format(SITE_CONFIG))
+        ansible_cmd.append("@{}".format(args.site_config))
 
     sdlog.info("Configuring SecureDrop site-specific information")
     subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH, env=os.environ.copy())
@@ -200,13 +200,14 @@ def install_securedrop(args):
     try:
         # Attempt to read site-specific vars file, specifically
         # for informative messaging via exception handling.
-        with open(SITE_CONFIG) as site_config_file:
+        with open(args.site_config) as site_config_file:
             yaml.safe_load(site_config_file.read())
     except IOError:
         sdlog.error("Config file missing, re-run with sdconfig")
         sys.exit(1)
     except yaml.YAMLError:
-        sdlog.error("There was an issue processing {}".format(SITE_CONFIG))
+        sdlog.error("There was an issue processing {}".format(
+            args.site_config))
         sys.exit(1)
 
     else:
@@ -295,6 +296,8 @@ if __name__ == "__main__":
                         help="Increase verbosity on output")
     parser.add_argument('-d', action='store_true', default=False,
                         help="Developer mode. Not to be used in production.")
+    parser.add_argument('--site-config', default=SITE_CONFIG,
+                        help="path to the YAML site configuration file")
     subparsers = parser.add_subparsers()
 
     parse_setup = subparsers.add_parser('setup', help=envsetup.__doc__)
