@@ -26,6 +26,7 @@
 
 - name: Add firewall exemption for OSSEC agent registration (both servers)
   iptables:
+    action: insert
     chain: "{{ item.chain }}"
     destination: "{{ item.dest|default(omit) }}"
     destination_port: "{{ item.dest_port|default(omit) }}"
