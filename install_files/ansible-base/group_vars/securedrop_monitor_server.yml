@@ -19,7 +19,7 @@ tor_instances:
 
 authd_iprules:
   - chain: INPUT
-    dest: "{{ app_hostname  }}"
+    source: "{{ app_hostname  }}"
     proto: tcp
     dest_port: 1515
     match: state
@@ -27,7 +27,7 @@ authd_iprules:
     jump: ACCEPT
 
   - chain: OUTPUT
-    source: "{{ app_hostname }}"
+    dest: "{{ app_hostname }}"
     proto: tcp
     source_port: 1515
     match: state
