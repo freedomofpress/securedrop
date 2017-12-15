@@ -279,8 +279,7 @@ identity. Instead, use public wifi networks and devices you control.
 
 - Do NOT access SecureDrop on your home network. 
 
-- DO access SecureDrop on a network not associated with you, like the 
-wifi at a library or cafe.
+- DO access SecureDrop on a network not associated with you, like the wifi at a library or cafe.
 
 **Got it. How can I submit files and messages through SecureDrop?**
 
