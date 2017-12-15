@@ -21,6 +21,34 @@ VENV_DIR = os.path.join(SD_DIR, ".venv")
 VENV_ACTIVATION = os.path.join(VENV_DIR, 'bin/activate_this.py')
 
 
+class SiteConfig(object):
+
+    def __init__(self, args):
+        self.args = args
+
+    def exists(self):
+        return os.path.exists(self.args.site_config)
+
+    def validate(self):
+        # Yaml library cannot be imported until virtualenv is activated
+        # (hence the yaml library is not imported up-top)
+        import yaml
+
+        try:
+            # Attempt to read site-specific vars file, specifically
+            # for informative messaging via exception handling.
+            with open(self.args.site_config) as site_config_file:
+                yaml.safe_load(site_config_file.read())
+        except IOError:
+            sdlog.error("Config file missing, re-run with sdconfig")
+            raise
+        except yaml.YAMLError:
+            sdlog.error("There was an issue processing {}".format(
+                self.args.site_config))
+            raise
+        return True
+
+
 def setup_logger(verbose=False):
     """ Configure logging handler """
     # Set default level on parent
@@ -57,7 +85,7 @@ def sdconfig(args):
     ]
     # Honor `--force` flag to clobber existing (misconfigured) vars,
     # otherwise read in the existing vars to supply defaults.
-    if os.path.exists(args.site_config) and args.force is False:
+    if SiteConfig(args).exists() and args.force is False:
         ansible_cmd.append('--extra-vars')
         ansible_cmd.append("@{}".format(args.site_config))
 
@@ -193,32 +221,16 @@ def install_pip_dependencies(args, pip_install_cmd=[
 def install_securedrop(args):
     """Install/Update SecureDrop"""
     activate_venv(args)
-    # Yaml library cannot be imported until virtualenv is activated
-    # (hence the yaml library is not imported up-top)
-    import yaml
+    SiteConfig(args).validate()
 
-    try:
-        # Attempt to read site-specific vars file, specifically
-        # for informative messaging via exception handling.
-        with open(args.site_config) as site_config_file:
-            yaml.safe_load(site_config_file.read())
-    except IOError:
-        sdlog.error("Config file missing, re-run with sdconfig")
-        raise
-    except yaml.YAMLError:
-        sdlog.error("There was an issue processing {}".format(
-            args.site_config))
-        raise
-
-    else:
-        sdlog.info("Now installing SecureDrop on remote servers.")
-        sdlog.info("You will be prompted for the sudo password on the "
-                   "servers.")
-        sdlog.info("The sudo password is only necessary during initial "
-                   "installation.")
-        subprocess.check_call([os.path.join(ANSIBLE_PATH,
-                                            'securedrop-prod.yml'),
-                              '--ask-become-pass'], cwd=ANSIBLE_PATH)
+    sdlog.info("Now installing SecureDrop on remote servers.")
+    sdlog.info("You will be prompted for the sudo password on the "
+               "servers.")
+    sdlog.info("The sudo password is only necessary during initial "
+               "installation.")
+    subprocess.check_call([os.path.join(ANSIBLE_PATH,
+                                        'securedrop-prod.yml'),
+                          '--ask-become-pass'], cwd=ANSIBLE_PATH)
 
 
 def backup_securedrop(args):
