@@ -41,7 +41,7 @@ def activate_venv(args):
             execfile(VENV_ACTIVATION, dict(__file__=VENV_ACTIVATION))
     except IOError:
         sdlog.error("Pre-requisites not in place, re-run command with 'setup'")
-        sys.exit(1)
+        raise
 
 
 def sdconfig(args):
@@ -116,7 +116,7 @@ def install_apt_dependencies(args):
         # on with more apt requests.
         sdlog.error(("Failed to install apt dependencies. Check network"
                      " connection and try again."))
-        sys.exit(1)
+        raise
 
 
 def envsetup(args):
@@ -149,7 +149,7 @@ def envsetup(args):
             sdlog.debug(e.output)
             sdlog.error(("Unable to create virtualenv. Check network settings"
                          " and try again."))
-            sys.exit(1)
+            raise
     else:
         sdlog.info("Virtualenv already exists, not creating")
 
@@ -181,7 +181,7 @@ def install_pip_dependencies(args, pip_install_cmd=[
         sdlog.debug(e.output)
         sdlog.error(("Failed to install pip dependencies. Check network"
                      " connection and try again."))
-        sys.exit(1)
+        raise
 
     sdlog.debug(pip_output)
     if "Successfully installed" in pip_output:
@@ -204,11 +204,11 @@ def install_securedrop(args):
             yaml.safe_load(site_config_file.read())
     except IOError:
         sdlog.error("Config file missing, re-run with sdconfig")
-        sys.exit(1)
+        raise
     except yaml.YAMLError:
         sdlog.error("There was an issue processing {}".format(
             args.site_config))
-        sys.exit(1)
+        raise
 
     else:
         sdlog.info("Now installing SecureDrop on remote servers.")
@@ -337,4 +337,12 @@ def parse_argv(argv):
 if __name__ == "__main__":
     args = parse_argv(sys.argv[1:])
     setup_logger(args.v)
-    args.func(args)
+    if args.v:
+        args.func(args)
+    else:
+        try:
+            args.func(args)
+        except Exception:
+            sys.exit(1)
+        else:
+            sys.exit(0)

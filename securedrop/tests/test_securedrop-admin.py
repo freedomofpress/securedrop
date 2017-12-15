@@ -70,7 +70,7 @@ class TestSecureDropAdmin(object):
 
     def test_install_pip_dependencies_fail(self, caplog):
         args = argparse.Namespace()
-        with pytest.raises(SystemExit):
+        with pytest.raises(subprocess.CalledProcessError):
             securedrop_admin.install_pip_dependencies(
                 args, ['/bin/sh', '-c',
                        'echo in stdout ; echo in stderr >&2 ; false'])
