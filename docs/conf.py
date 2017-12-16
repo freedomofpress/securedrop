@@ -307,3 +307,5 @@ html_context = {
         "last_updated": True,
         "commit": False,
 }
+
+html_show_sourcelink = False
