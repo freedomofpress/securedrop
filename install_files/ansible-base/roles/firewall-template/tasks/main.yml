@@ -1,0 +1,10 @@
+---
+- name: Create pfSense directory for firewall XML templates.
+  become: yes
+  copy:
+    src: "{{ firewall_network_base }}"
+    state: directory
+    dest: /var/lib/unsafe-browser/chroot/home/clearnet/
+    mode: "0770"
+    owner: amnesia
+    group: amnesia

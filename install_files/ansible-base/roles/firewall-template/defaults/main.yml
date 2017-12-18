@@ -1,0 +1,6 @@
+# Locations for SecureDrop-specific dotfiles, for Tails persistence.
+tails_config_amnesia_home: /home/amnesia
+tails_config_amnesia_persistent: "{{ tails_config_amnesia_home }}/Persistent"
+
+# Directory containing Ansible config, including site-specific customizations.
+firewall_network_base: "{{ tails_config_amnesia_persistent }}/securedrop/install_files/network_base"
