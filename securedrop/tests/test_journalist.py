@@ -532,7 +532,7 @@ class TestJournalistApp(TestCase):
         resp = self.client.get(url_for('admin.new_user_two_factor',
                                        uid=self.user.id))
         # any GET req should take a user to the admin.new_user_two_factor page
-        self.assertIn('Authenticator', resp.data)
+        self.assertIn('FreeOTP', resp.data)
 
     def test_http_get_on_admin_add_user_page(self):
         self._login_admin()
