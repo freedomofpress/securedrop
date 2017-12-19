@@ -10,6 +10,7 @@ RUN gem install sass -v 3.4.23
 # test requirements:
 RUN apt-get install -y firefox
 RUN apt-get install -y git xvfb haveged curl gettext paxctl
+RUN apt-get install -y x11vnc
 
 # pinned firefox version for selenium compatibility. See bd795e2f5865b4f6e6e1b88bcbbacef704675c74
 ENV FIREFOX_CHECKSUM=88d25053306d33658580973b063cd459a56e3596a3a298c1fb8ab1d52171d860
@@ -50,5 +51,6 @@ RUN make test-config
 RUN ./manage.py reset
 
 EXPOSE 8080 8081
+EXPOSE 5901
 
 CMD ["./manage.py", "run"]
