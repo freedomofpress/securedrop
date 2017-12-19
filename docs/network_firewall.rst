@@ -473,12 +473,15 @@ SecureDrop Configuration (Templates)
 ------------------------------------
 
 As an alternative to the manually provided screenshots, you can use our ``.xml``
-templates. However, because of the Tails chroot, you can not download the
-``.xml`` files directly. Using the Unsecure Browser, download the files from
-`GitHub <https://github.com/freedomofpress/securedrop/tree/develop/install_files/network_firewall/>`__
-as "Raw" and save them as plaintext documents.
+templates. Using the Unsafe Browser, copy the files over by opening a Terminal
+by navigating to the ``~/Persistent/securedrop`` directory and running:
 
-Navigate to **Diagnostics ▸ Backup & Restore**:
+.. code:: sh
+
+    ./securedrop-admin firewall-template
+
+Open the Unsafe Browser, connect to your pfSense file and then Navigate to 
+**Diagnostics ▸ Backup & Restore**:
 
 |Backup & Restore|
 

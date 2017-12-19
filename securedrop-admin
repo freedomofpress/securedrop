@@ -248,6 +248,18 @@ def restore_securedrop(args):
     subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
 
 
+def run_firewall_template(args):
+    """Move Firewall XML templates to the clearnet Tails user.
+    This requires sudo priviledges and setting the clearnet user as the
+    owner of the giles."""
+    sdlog.info("Moving the firewall xml files")
+    ansible_cmd = [
+        'ansible-playbook',
+        os.path.join(ANSIBLE_PATH, 'firewall-template.yml'),
+    ]
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+
+
 def run_tails_config(args):
     """Configure Tails environment post SD install"""
     activate_venv(args)
@@ -306,6 +318,10 @@ if __name__ == "__main__":
                                           help=restore_securedrop.__doc__)
     parse_restore.set_defaults(func=restore_securedrop)
     parse_restore.add_argument("restore_file")
+
+    parse_tailsconfig = subparsers.add_parser('firewalltemplate',
+                                           help=run_firewall_template.__doc__)
+    parse_tailsconfig.set_defaults(func=run_firewall_template)
 
     args = parser.parse_args()
     setup_logger(args.v)
