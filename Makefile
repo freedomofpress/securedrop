@@ -33,16 +33,6 @@ docs-lint: ## Check documentation for common syntax errors.
 # The `-n` option enables "nit-picky" mode.
 	make -C docs/ clean && sphinx-build -Wn docs/ docs/_build/html
 
-.PHONY: update-user-guides
-update-user-guides: ## Update screenshots for the user guides.
-	if [ -d "/vagrant" ]; then \
-		bash -c "pushd /vagrant/securedrop; pytest -v tests/pages-layout --page-layout; popd"; \
-		cp /vagrant/securedrop/tests/pages-layout/screenshots/en_US/*.png /vagrant/docs/images/manual/screenshots/; \
-	else \
-		printf "You must run this from the development VM!\n"; \
-		exit 1; \
-	fi
-
 .PHONY: docs
 docs: ## Build project documentation in live reload for editing
 # Spins up livereload environment for editing; blocks.
