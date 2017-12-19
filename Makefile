@@ -1,6 +1,7 @@
 DEFAULT_GOAL: help
 SHELL := /bin/bash
 PWD := $(shell pwd)
+TAG ?= $(shell git rev-parse HEAD)
 
 .PHONY: ci-spinup
 ci-spinup: ## Creates AWS EC2 hosts for testing staging environment.
@@ -17,6 +18,14 @@ ci-run: ## Provisions AWS EC2 hosts for testing staging environment.
 .PHONY: ci-go
 ci-go: ## Creates, provisions, tests, and destroys AWS EC2 hosts for testing staging environment.
 	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s aws; else echo Not running on docs branch...; fi
+
+.PHONY: ci-lint-image
+ci-lint-image: ## Builds linting container.
+	docker build $(EXTRA_BUILD_ARGS) -t securedrop-lint:${TAG} -f devops/docker/Dockerfile.linting .
+
+.PHONY: ci-lint
+ci-lint: ## Runs linting in linting container.
+	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-lint:${TAG}
 
 .PHONY: docs-lint
 docs-lint: ## Check documentation for common syntax errors.
@@ -68,12 +77,19 @@ shellcheck: ## Lints Bash and sh scripts.
 # don't maintain those scripts. Omitting the `.venv/` dir because we don't control
 # files in there. Omitting the ossec packages because there are a LOT of violations,
 # and we have a separate issue dedicated to cleaning those up.
+	@docker create -v /mnt --name shellcheck-targets circleci/python:2 /bin/true 2> /dev/null || true
+	@docker cp $(PWD)/. shellcheck-targets:/mnt/
 	@find "." \( -path "./.venv" -o -path "./install_files/ossec-server" \
 		-o -path "./install_files/ossec-agent" \) -prune \
 		-o -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
 		| perl -F: -lanE '$$F[1] =~ /x-shellscript/ and say $$F[0]' \
-		| xargs docker run -v "$(PWD):/mnt" -t koalaman/shellcheck:v0.4.6 \
+		| xargs docker run --rm --volumes-from shellcheck-targets \
+		-t koalaman/shellcheck:v0.4.6 \
 		-x --exclude=SC1091,SC2001,SC2064,SC2181
+
+.PHONY: shellcheckclean
+shellcheckclean: ## Cleans up temporary container associated with shellcheck target.
+	@docker rm -f shellcheck-targets
 
 .PHONY: lint
 lint: docs-lint flake8 html-lint yamllint shellcheck ## Runs all linting tools (docs, flake8, HTML, YAML, shell).
