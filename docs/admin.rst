@@ -134,8 +134,8 @@ new number every thirty seconds. Enter the six digit number under
 enter.
 
 If FreeOTP was set up correctly, you will be redirected
-back to the Admin Interface and will see a flashed message that says
-"Two factor token successfully verified for user *new username*!".
+back to the Admin Interface and will see a confirmation that the
+two-factor token was verified.
 
 .. include:: includes/otp-app.txt
 
