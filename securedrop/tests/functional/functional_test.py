@@ -27,7 +27,9 @@ import journalist
 from source_app import create_app
 import tests.utils.env as env
 
-LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
+FUNCTIONAL_TEST_DIR = abspath(dirname(__file__))
+LOGFILE_PATH = abspath(join(FUNCTIONAL_TEST_DIR, '../log/firefox.log'))
+TBB_PATH = abspath(join(expanduser('~'), '.local/tbb/tor-browser_en-US'))
 
 
 # https://stackoverflow.com/a/34795883/837471
@@ -46,7 +48,7 @@ class FunctionalTest(object):
 
     def _unused_port(self):
         s = socket.socket()
-        s.bind(("localhost", 0))
+        s.bind(('127.0.0.1', 0))
         port = s.getsockname()[1]
         s.close()
         return port
@@ -57,10 +59,19 @@ class FunctionalTest(object):
         connrefused_retry_count = 3
         connrefused_retry_interval = 5
 
+        # Don't use Tor when reading from localhost, and turn off private
+        # browsing. We need to turn off private browsing because we won't be
+        # able to access the browser's cookies in private browsing mode. Since
+        # we use session cookies in SD anyway (in private browsing mode all
+        # cookies are set as session cookies), this should not affect session
+        # lifetime.
+        pref_dict = {'network.proxy.no_proxies_on': '127.0.0.1',
+                     'browser.privatebrowsing.autostart': False}
         for i in range(connrefused_retry_count + 1):
             try:
-                driver = webdriver.Firefox(firefox_binary=firefox,
-                                           firefox_profile=profile)
+                driver = TorBrowserDriver(TBB_PATH,
+                                          pref_dict=pref_dict,
+                                          tbb_logfile_path=LOGFILE_PATH)
                 if i > 0:
                     # i==0 is normal behavior without connection refused.
                     print('NOTE: Retried {} time(s) due to '
@@ -96,8 +107,8 @@ class FunctionalTest(object):
         source_port = self._unused_port()
         journalist_port = self._unused_port()
 
-        self.source_location = "http://localhost:%d" % source_port
-        self.journalist_location = "http://localhost:%d" % journalist_port
+        self.source_location = "http://127.0.0.1:%d" % source_port
+        self.journalist_location = "http://127.0.0.1:%d" % journalist_port
 
         # Allow custom session expiration lengths
         self.session_expiration = session_expiration

@@ -8,4 +8,4 @@ py
 pytest
 pytest-cov
 pytest-capturelog
-selenium < 3
+tbselenium

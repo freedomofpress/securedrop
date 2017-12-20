@@ -27,6 +27,14 @@ def test_firefox_is_installed(Package, Command):
     assert c.stdout.rstrip() == "Mozilla Firefox 46.0.1"
 
 
+def test_tbb_dependency(File):
+    f = File("~/.local/tbb/tor-browser_en-US/Browser/firefox")
+    assert f.is_file
+    assert oct(f.mode) == "0700"
+    assert f.user != "root"
+    assert f.group != "root"
+
+
 def test_xvfb_service_config(File, Sudo):
     """
     Ensure xvfb service configuration file is present.
