@@ -489,9 +489,21 @@ should examine these alerts regularly to ensure that the SecureDrop
 environment has not been compromised in any way, and follow up on any
 particularly concerning messages with direct investigation.
 
+An initial SecureDrop install will generate quite a few alerts as OSSEC is installed
+early in the install process.
+As part of the administration of a SecureDrop instance, regularly looking through
+the generated alerts will be able to and gather status on the overall health of
+your SecureDrop instance.
+
+Ossec alerts will range from a severity level of 1 to 14, and as a baseline, you
+should expect to see the following alerts that are either informative or for which
+you should take action:
+
 Common OSSEC Alerts
 ~~~~~~~~~~~~~~~~~~~
 
+Package updates
+^^^^^^^^^^^^^^^
 The SecureDrop *Application* and *Monitor Servers* reboot every night, as part
 of the unattended upgrades process. When the servers come back up, OSSEC will
 start again and report the change in status. Therefore you should receive an
@@ -520,7 +532,21 @@ can review the logs in ``/var/log/apt/history.log``. ::
 
     status installed <package name> <version>
 
-This is a normal alert, it tells you your system is up-to-date and patched.
+In conjunction to these alerts, you should also receive alerts pertaining to file
+checksum changes. ::
+
+    Received From: (app)
+    Rule: 550 fired (level 7) -> "Integrity checksum changed."
+    Portion of the log(s):
+
+    Integrity checksum changed for: '/usr/sbin/<binary name>'
+    Old md5sum was: '<old md5sum>'
+    New md5sum is : '<new md5sum>'
+    Old sha1sum was: '<old sha1sum>'
+    New sha1sum is : '<new sha1sum>'
+
+These are normal alerts, they tell you that your SecureDrop servers are are
+properly up-to-date and patched.
 
 Occasionally your SecureDrop Servers will send an alert for failing to connect
 to Tor relays. Since SecureDrop runs as a Tor Onion Service, it is possible
@@ -540,8 +566,40 @@ securedrop@freedom.press for help.
 
 .. _SecureDrop Support Portal: https://securedrop-support.readthedocs.io/en/latest/
 
+Daily reports
+^^^^^^^^^^^^^
+
+On days where file integrity checksums have changed or users login the the ``app``
+or ``mon`` servers, you will receive emails entitled ``Daily report: File changes`` or
+``Daily report: Successful logins``. These emails may be a more digestible format
+should you not have continuous access to the inbox or GPG key.
+
+**Action**: periodically review these daily reports to ensure file changes correspond
+to platform updates and logins correspond to admin activity on the SecureDrop environment.
+
+If you would have any suggestions on how to further tune or improve the alerting,
+you can join the discussion or open an issue on `GitHub <https://github.com/freedomofpress/securedrop/labels/goals%3A%20reduce%20IDS%20noise>`__.
+
 Uncommon OSSEC Alerts
 ~~~~~~~~~~~~~~~~~~~~~
+
+Logins
+^^^^^^
+Ossec will send an alert whenever a user interactively logs into the system (via SSH
+or console). You will receive an email containing the following. ::
+
+    Rule: 40101 (level 12) -> 'System user successfully logged to the system.'
+
+**Action**: Ensure that this action was performed by either you or a fellow administrator.
+
+``securedrop-admin`` commands
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Ossec will sent an alert when there is change to the infrastructure, configuration or
+backups using the command-line `securedrop-admin` tool. ::
+
+    Rule: 400001 fired (level 13) -> "Ansible playbook run on server (securedrop-admin install, backup, or restore)."
+
+**Action**: You should ensure that this action was performed by you or a fellow administrator.
 
 If you believe that the system is behaving abnormally, you should
 contact us at the `SecureDrop Support Portal`_ or securedrop@freedom.press for
