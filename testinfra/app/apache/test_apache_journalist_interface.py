@@ -14,6 +14,7 @@ wanted_apache_headers = [
   'Header set X-Download-Options: noopen',
   "Header set X-Content-Security-Policy: \"default-src 'self'\"",
   "Header set Content-Security-Policy: \"default-src 'self'\"",
+  'Header set Referrer-Policy "no-referrer"',
   'Header unset Etag',
 ]
 
