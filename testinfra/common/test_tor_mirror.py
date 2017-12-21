@@ -13,23 +13,41 @@ def test_tor_mirror_present(File):
     assert f.contains(regex)
 
 
-def test_tor_mirror_fingerprint(Command):
+def test_tor_keyring_absent(Command):
     """
-    Ensure the FPF tor mirror repo has the correct fingerprint on the
-    associated signing pubkey. We don't use the SecureDrop Release Signing
-    Key for the Tor mirror: packages are identical to the official Tor repo,
-    so signatures match, as well.
+    Tor packages are installed via the FPF apt mirror, and signed with the
+    SecureDrop Release Signing Key. As such, the official Tor public key
+    should *not* be present, since we don't want to install packages
+    from that source.
+    """
+    # Can't use the TestInfra Package module to check state=absent,
+    # so let's check by shelling out to `dpkg -l`. Dpkg will automatically
+    # honor simple regex in package names.
+    package = "deb.torproject.org-keyring"
+    c = Command("dpkg -l {}".format(package))
+    assert c.rc == 1
+    error_text = "dpkg-query: no packages found matching {}".format(package)
+    assert c.stderr == error_text
+
+
+@pytest.mark.parametrize('tor_key_info', [
+    "pub   2048R/886DDD89 2009-09-04 [expires: 2020-08-29]",
+    "Key fingerprint = A3C4 F0F9 79CA A22C DBA8  F512 EE8C BC9E 886D DD89",
+    "deb.torproject.org archive signing key",
+])
+def test_tor_mirror_fingerprint(Command, tor_key_info):
+    """
+    Legacy test. The Tor Project key was added to SecureDrop servers
+    via the `deb.torproject.org-keyring` package. Since FPF started mirroring
+    the official Tor apt repository, we no longer need the key to be present.
+
+    Since the `deb.torproject.org-keyring` package is installed on already
+    running instances, the public key will still be present. We'll need
+    to remove those packages separately.
     """
     c = Command('apt-key finger')
-    tor_gpg_pub_key_info = """/etc/apt/trusted.gpg.d/deb.torproject.org-keyring.gpg
------------------------------------------------------
-pub   2048R/886DDD89 2009-09-04 [expires: 2020-08-29]
-      Key fingerprint = A3C4 F0F9 79CA A22C DBA8  F512 EE8C BC9E 886D DD89
-uid                  deb.torproject.org archive signing key
-sub   2048R/219EC810 2009-09-04 [expires: 2018-08-30]"""
-
     assert c.rc == 0
-    assert tor_gpg_pub_key_info in c.stdout
+    assert tor_key_info not in c.stdout
 
 
 @pytest.mark.parametrize('filename', [
