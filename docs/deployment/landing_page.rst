@@ -284,10 +284,11 @@ identity. Instead, use public wifi networks and devices you control.
 **Got it. How can I submit files and messages through SecureDrop?**
 
 Once you are connected to a public network at a cafe or library, download 
-and install the `Tor Browser bundle <https://www.torproject.org/projects/torbrowser>`_. 
+and install the `Tor Browser <https://www.torproject.org/projects/torbrowser>`_. 
 
-Launch the Tor Browser. Visit our organization’s unique SecureDrop URL 
-at our unique URL. Follow the instructions you find on our source page to 
+Launch the Tor Browser. Visit our organization’s unique SecureDrop URL at 
+**http://our-unique-URL.onion/**. 
+Follow the instructions you find on our source page to 
 send us materials and messages.
 
 When you make your first submission, you will receive a unique codename. 
@@ -307,7 +308,7 @@ the submission process.
 Or, you can use an alternate operating system like Tails, 
 which boots from a USB stick and erases your activity at the end of every session.
 
-A file contains valuable metadata about its source — when it was created 
+A file contains valuable `metadata <https://ssd.eff.org/en/module/why-metadata-matters>`_ about its source — when it was created 
 and downloaded, what machine was involved, the machine’s owner, etc.
 You can scrub metadata from some files prior to submission using the Metadata 
 Anonymization Toolkit featured in Tails.
@@ -315,9 +316,9 @@ Anonymization Toolkit featured in Tails.
 Your online behavior can be extremely revealing. 
 Regularly monitoring our publication’s social media or website can potentially 
 flag you as a source. Take great care to think about what your online behavior 
-might reveal, and consider using Tor Browser for such monitoring.
+might reveal, and consider using Tor Browser to mitigate such monitoring.
 
-Our organization retains strict control over our SecureDrop project. 
+Our organization retains strict access control over our SecureDrop project. 
 A select few journalists within our organization will have access to 
 SecureDrop submissions. We control the servers that store your submissions, 
 so no third party has direct access to the metadata or content of what you send us.
