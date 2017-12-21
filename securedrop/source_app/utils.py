@@ -28,11 +28,11 @@ def valid_codename(codename):
     return source is not None
 
 
-def generate_unique_codename():
+def generate_unique_codename(config):
     """Generate random codenames until we get an unused one"""
     while True:
         codename = crypto_util.genrandomid(Source.NUM_WORDS,
-                                           i18n.get_language())
+                                           i18n.get_language(config))
 
         # The maximum length of a word in the wordlist is 9 letters and the
         # codename length is 7 words, so it is currently impossible to

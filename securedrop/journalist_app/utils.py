@@ -198,9 +198,9 @@ def col_delete(cols_selected):
     return redirect(url_for('main.index'))
 
 
-def make_password():
+def make_password(config):
     while True:
-        password = crypto_util.genrandomid(7, i18n.get_language())
+        password = crypto_util.genrandomid(7, i18n.get_language(config))
         try:
             Journalist.check_password_acceptable(password)
             return password

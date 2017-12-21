@@ -70,7 +70,8 @@ def make_blueprint(config):
                 return redirect(url_for('admin.new_user_two_factor',
                                         uid=new_user.id))
 
-        return render_template("admin_add_user.html", password=make_password(),
+        return render_template("admin_add_user.html",
+                               password=make_password(config),
                                form=form)
 
     @view.route('/2fa', methods=('GET', 'POST'))
@@ -171,7 +172,7 @@ def make_blueprint(config):
 
             commit_account_changes(user)
 
-        password = make_password()
+        password = make_password(config)
         return render_template("edit_account.html", user=user,
                                password=password)
 

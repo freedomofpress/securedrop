@@ -36,7 +36,7 @@ def make_blueprint(config):
                   "notification")
             return redirect(url_for('.lookup'))
 
-        codename = generate_unique_codename()
+        codename = generate_unique_codename(config)
         session['codename'] = codename
         session['new_user'] = True
         return render_template('generate.html', codename=codename)

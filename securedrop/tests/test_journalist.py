@@ -18,6 +18,7 @@ from db import (db_session, InvalidPasswordLength, Journalist, Reply, Source,
                 Submission)
 import db
 import journalist
+import journalist_app
 import journalist_app.utils
 import utils
 
@@ -50,7 +51,10 @@ class TestJournalistApp(TestCase):
 
     @patch('crypto_util.genrandomid', side_effect=['bad', VALID_PASSWORD])
     def test_make_password(self, mocked_pw_gen):
-        assert journalist_app.utils.make_password() == VALID_PASSWORD
+        class fake_config:
+            pass
+        assert (journalist_app.utils.make_password(fake_config) ==
+                VALID_PASSWORD)
 
     @patch('journalist.app.logger.error')
     def test_reply_error_logging(self, mocked_error_logger):
@@ -1188,29 +1192,46 @@ class TestJournalistApp(TestCase):
         # Verify the source is not starred
         self.assertFalse(source_1.star.starred)
 
+
+class TestJournalistLocale(TestCase):
+
+    def setUp(self):
+        utils.env.setup()
+
+        # Patch the two-factor verification to avoid intermittent errors
+        utils.db_helper.mock_verify_token(self)
+
+        # Setup test user
+        self.user, self.user_pw = utils.db_helper.init_journalist()
+
+    def tearDown(self):
+        utils.env.teardown()
+
+    def get_fake_config(self):
+        class Config:
+            def __getattr__(self, name):
+                return getattr(config, name)
+        return Config()
+
+    # A method required by flask_testing.TestCase
+    def create_app(self):
+        fake_config = self.get_fake_config()
+        fake_config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
+        return journalist_app.create_app(fake_config)
+
     def test_render_locales(self):
         """the locales.html template must collect both request.args (l=XX) and
         request.view_args (/<filesystem_id>) to build the URL to
         change the locale
 
         """
-        supported = getattr(config, 'SUPPORTED_LOCALES', None)
-        try:
-            if supported:
-                del config.SUPPORTED_LOCALES
-            config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
+        source, _ = utils.db_helper.init_source()
+        self._ctx.g.user = self.user
 
-            source, _ = utils.db_helper.init_source()
-            self._login_user()
-
-            url = url_for('col.col', filesystem_id=source.filesystem_id)
-            resp = self.client.get(url + '?l=fr_FR')
-            self.assertNotIn('?l=fr_FR', resp.data)
-            self.assertIn(url + '?l=en_US', resp.data)
-
-        finally:
-            if supported:
-                config.SUPPORTED_LOCALES = supported
+        url = url_for('col.col', filesystem_id=source.filesystem_id)
+        resp = self.client.get(url + '?l=fr_FR')
+        self.assertNotIn('?l=fr_FR', resp.data)
+        self.assertIn(url + '?l=en_US', resp.data)
 
 
 class TestJournalistLogin(unittest.TestCase):
@@ -1250,9 +1271,3 @@ class TestJournalistLogin(unittest.TestCase):
         self.assertFalse(
             mock_scrypt_hash.called,
             "Called _scrypt_hash for password w/ invalid length")
-
-    @classmethod
-    def tearDownClass(cls):
-        # Reset the module variables that were changed to mocks so we don't
-        # break other tests
-        reload(journalist)
