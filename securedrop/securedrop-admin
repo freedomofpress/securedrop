@@ -65,6 +65,10 @@ class SiteConfig(object):
              u'Hostname for Application Server',
              None,
              None],
+            ['monitor_hostname', 'mon',
+             u'Hostname for Monitor Server',
+             None,
+             None],
         ]
 
     def load_and_update_config(self):
