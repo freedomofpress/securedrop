@@ -101,6 +101,18 @@ class TestSiteConfig(object):
                                   app_path='.')
         assert securedrop_admin.SiteConfig(args).exists()
 
+    def test_validate_ossec_email(self):
+        validator = securedrop_admin.SiteConfig.ValidateOSSECEmail()
+
+        assert validator.validate(Document('good@mail.com'))
+        with pytest.raises(ValidationError):
+            validator.validate(Document('badmail'))
+        with pytest.raises(ValidationError):
+            validator.validate(Document(''))
+        with pytest.raises(ValidationError) as e:
+            validator.validate(Document('ossec@ossec.test'))
+        assert 'something other than ossec@ossec.test' in e.value.message
+
     def test_is_tails(self):
         validator = securedrop_admin.SiteConfig.ValidateDNS()
         with mock.patch('subprocess.check_output', return_value='Tails'):

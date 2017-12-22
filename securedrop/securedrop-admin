@@ -112,6 +112,15 @@ class SiteConfig(object):
                     message='fingerprints must be 40 hexadecimal characters')
             return True
 
+    class ValidateOSSECEmail(Validator):
+        def validate(self, document):
+            text = document.text
+            if text and '@' in text and 'ossec@ossec.test' != text:
+                return True
+            raise ValidationError(
+                message=("Must contain a @ and be set to "
+                         "something other than ossec@ossec.test"))
+
     def __init__(self, args):
         self.args = args
         translations = SiteConfig.Locales(
@@ -164,6 +173,10 @@ class SiteConfig(object):
              u'Full fingerprint for the OSSEC alerts GPG public key',
              SiteConfig.ValidateFingerprint(),
              self.sanitize_fingerprint],
+            ['ossec_alert_email', '',
+             u'Admin email address for receiving OSSEC alerts',
+             SiteConfig.ValidateOSSECEmail(),
+             None],
         ]
 
     def load_and_update_config(self):

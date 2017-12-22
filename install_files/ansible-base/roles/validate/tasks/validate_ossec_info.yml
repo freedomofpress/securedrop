@@ -1,15 +1,4 @@
 ---
-- name: Validate OSSEC Admin email address.
-  assert:
-    that:
-      - "'@' in ossec_alert_email"
-      - ossec_alert_email != "ossec@ossec.test"
-    msg: >-
-      OSSEC Admin email address must be valid.
-      This address is used to receive OSSEC notifications.
-      {{ securedrop_validate_error_msg_start }} the `ossec_alert_email` var
-      is set correctly.
-
 - name: Validate SASL username for OSSEC config.
   assert:
     that:
