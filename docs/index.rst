@@ -87,7 +87,16 @@ anonymous sources.
    upgrade/0.4.x_to_0.5.rst
    upgrade/0.3.x_to_0.4.rst
    upgrade_to_tails_2x.rst
-   upgrade_to_tails_3x.rst
+   upgrade_to_tails_3x
+
+.. toctree::
+   :caption: Manually Upgrade Tails
+   :name: manuallyupgradetailstoc
+   :maxdepth: 2
+
+   manually_upgrade_tails/when
+   manually_upgrade_tails/how_often
+   manually_upgrade_tails/how
 
 .. toctree::
    :caption: Developer Documentation
