@@ -112,6 +112,12 @@ class TestSiteConfig(object):
             validator.validate(Document(""))
         assert validator.validate(Document("gooduser"))
 
+    def test_validate_ip(self):
+        validator = securedrop_admin.SiteConfig.ValidateIP()
+        with pytest.raises(ValidationError):
+            validator.validate(Document("599.20"))
+        assert validator.validate(Document("192.168.1.1"))
+
     def test_save(self, tmpdir):
         site_config_path = join(str(tmpdir), 'site_config')
         args = argparse.Namespace(site_config=site_config_path,

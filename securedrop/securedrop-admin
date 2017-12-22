@@ -9,6 +9,7 @@ instances.
 import argparse
 import logging
 import os
+import re
 import subprocess
 import sys
 import types
@@ -34,6 +35,14 @@ class SiteConfig(object):
             raise ValidationError(
                 message="Must not be root, amnesia or an empty string")
 
+    class ValidateIP(Validator):
+        def validate(self, document):
+            if re.match('((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}$',
+                        document.text):
+                return True
+            raise ValidationError(
+                message="An IP address must be something like 10.240.20.83")
+
     def __init__(self, args):
         self.args = args
         translations = SiteConfig.Locales(
@@ -43,6 +52,10 @@ class SiteConfig(object):
             ['ssh_users', 'sd',
              u'Username for SSH access to the servers',
              SiteConfig.ValidateUser(),
+             None],
+            ['app_ip', '10.20.2.2',
+             u'Local IPv4 address for the Application Server',
+             SiteConfig.ValidateIP(),
              None],
         ]
 
