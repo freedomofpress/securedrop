@@ -3,13 +3,5 @@
 #credentials are not used when running the app and mon playbooks for
 #production.
 
-- include: validate_gpg_info.yml
-  with_items:
-    - keyfile: "{{ ossec_alert_gpg_public_key }}"
-      fingerprint: "{{ ossec_gpg_fpr }}"
-
-    - keyfile: "{{ securedrop_app_gpg_public_key }}"
-      fingerprint: "{{ securedrop_app_gpg_fingerprint }}"
-
 - include: validate_tails_environment.yml
   when: securedrop_validate_tails_environment

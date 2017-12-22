@@ -292,6 +292,30 @@ class TestSiteConfig(object):
         """)
         assert expected == open(site_config_path).read()
 
+    def test_validate_gpg_key(self, caplog):
+        args = argparse.Namespace(site_config='INVALID',
+                                  ansible_path='tests/files',
+                                  app_path='.')
+        site_config = securedrop_admin.SiteConfig(args)
+        site_config.config = {
+            'securedrop_app_gpg_public_key':
+            'test_journalist_key.pub',
+
+            'securedrop_app_gpg_fingerprint':
+            '65A1B5FF195B56353CC63DFFCC40EF1228271441',
+
+            'ossec_alert_gpg_public_key':
+            'test_journalist_key.pub',
+
+            'ossec_gpg_fpr':
+            '65A1B5FF195B56353CC63DFFCC40EF1228271441',
+        }
+        assert site_config.validate_gpg_keys()
+        site_config.config['ossec_gpg_fpr'] = 'FAIL'
+        with pytest.raises(subprocess.CalledProcessError):
+            site_config.validate_gpg_keys()
+        assert 'FAIL does not match' in caplog.text()
+
     @mock.patch('sa.SiteConfig.validated_input',
                 side_effect=lambda p, d, v, t: d)
     @mock.patch('sa.SiteConfig.save')

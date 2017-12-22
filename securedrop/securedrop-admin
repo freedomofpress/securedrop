@@ -303,6 +303,30 @@ class SiteConfig(object):
     def sanitize_fingerprint(self, value):
         return value.upper().replace(' ', '')
 
+    def validate_gpg_keys(self):
+        keys = (('securedrop_app_gpg_public_key',
+                 'securedrop_app_gpg_fingerprint'),
+
+                ('ossec_alert_gpg_public_key',
+                 'ossec_gpg_fpr'))
+        for (public_key, fingerprint) in keys:
+            validate = os.path.join(
+                self.args.app_path, 'bin', 'validate-gpg-key.sh')
+            public_key = os.path.join(self.args.ansible_path,
+                                      self.config[public_key])
+            fingerprint = self.config[fingerprint]
+            try:
+                sdlog.debug(subprocess.check_output(
+                    [validate, public_key, fingerprint],
+                    stderr=subprocess.STDOUT))
+            except subprocess.CalledProcessError as e:
+                sdlog.debug(e.output)
+                sdlog.error("fingerprint {} ".format(fingerprint) +
+                            "does not match " +
+                            "the public key {}".format(public_key))
+                raise
+        return True
+
     def exists(self):
         return os.path.exists(self.args.site_config)
 
