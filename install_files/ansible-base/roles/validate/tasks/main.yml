@@ -5,8 +5,6 @@
 
 - include: validate_supported_locales.yml
 
-- include: validate_users.yml
-
 - include: validate_gpg_info.yml
   with_items:
     - keyfile: "{{ ossec_alert_gpg_public_key }}"

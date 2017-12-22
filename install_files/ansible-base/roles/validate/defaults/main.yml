@@ -1,11 +1,4 @@
 ---
-# List of prohibited usernames for use in production contexts.
-# The Admin should set a unique username for the instance, to be
-# used in all subsequent tasks.
-securedrop_validate_disallowed_users:
-  - amnesia
-  - root
-
 # Whether to expect a persistence-enabled Tails environment. Defaults to true,
 # for prod contexts, but override capability is provided for testing.
 securedrop_validate_tails_environment: true

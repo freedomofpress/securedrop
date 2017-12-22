@@ -26,12 +26,24 @@ VENV_ACTIVATION = os.path.join(VENV_DIR, 'bin/activate_this.py')
 
 class SiteConfig(object):
 
+    class ValidateUser(Validator):
+        def validate(self, document):
+            text = document.text
+            if text != '' and text != 'root' and text != 'amnesia':
+                return True
+            raise ValidationError(
+                message="Must not be root, amnesia or an empty string")
+
     def __init__(self, args):
         self.args = args
         translations = SiteConfig.Locales(
             self.args.app_path).get_translations()
         translations = " ".join(translations)
         self.desc = [
+            ['ssh_users', 'sd',
+             u'Username for SSH access to the servers',
+             SiteConfig.ValidateUser(),
+             None],
         ]
 
     def load_and_update_config(self):

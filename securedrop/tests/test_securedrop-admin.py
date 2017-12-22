@@ -101,6 +101,17 @@ class TestSiteConfig(object):
                                   app_path='.')
         assert securedrop_admin.SiteConfig(args).exists()
 
+
+    def test_validate_user(self):
+        validator = securedrop_admin.SiteConfig.ValidateUser()
+        with pytest.raises(ValidationError):
+            validator.validate(Document("amnesia"))
+        with pytest.raises(ValidationError):
+            validator.validate(Document("root"))
+        with pytest.raises(ValidationError):
+            validator.validate(Document(""))
+        assert validator.validate(Document("gooduser"))
+
     def test_save(self, tmpdir):
         site_config_path = join(str(tmpdir), 'site_config')
         args = argparse.Namespace(site_config=site_config_path,
