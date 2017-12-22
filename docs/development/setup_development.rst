@@ -122,7 +122,7 @@ different version, the path to ``virtualenvwrapper.sh`` will differ. Running
 .. code:: sh
 
     sudo easy_install pip # if you don't already have pip
-    pip install -U virtualenvwrapper
+    sudo -H pip install -U virtualenvwrapper --ignore-installed six
     source /usr/local/bin/virtualenvwrapper.sh
     mkvirtualenv -p python2 securedrop
 
