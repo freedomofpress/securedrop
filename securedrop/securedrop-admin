@@ -98,6 +98,20 @@ class SiteConfig(object):
                 return True
             raise ValidationError(message="Must be either yes or no")
 
+    class ValidateFingerprint(Validator):
+        def validate(self, document):
+            text = document.text.replace(' ', '')
+            if text == '65A1B5FF195B56353CC63DFFCC40EF1228271441':
+                raise ValidationError(
+                    message='This is the TEST journalist fingerprint')
+            if text == '600BC6D5142C68F35DDBCEA87B597104EDDDC102':
+                raise ValidationError(
+                    message='This is the TEST admin fingerprint')
+            if not re.match('[a-fA-F0-9]{40}$', text):
+                raise ValidationError(
+                    message='fingerprints must be 40 hexadecimal characters')
+            return True
+
     def __init__(self, args):
         self.args = args
         translations = SiteConfig.Locales(
@@ -138,6 +152,10 @@ class SiteConfig(object):
              'SecureDrop Application GPG public key',
              SiteConfig.ValidatePath(self.args.ansible_path),
              None],
+            ['securedrop_app_gpg_fingerprint', '',
+             u'Full fingerprint for the SecureDrop Application GPG Key',
+             SiteConfig.ValidateFingerprint(),
+             self.sanitize_fingerprint],
         ]
 
     def load_and_update_config(self):
@@ -178,6 +196,9 @@ class SiteConfig(object):
             return transform(value)
         else:
             return value
+
+    def sanitize_fingerprint(self, value):
+        return value.upper().replace(' ', '')
 
     def exists(self):
         return os.path.exists(self.args.site_config)

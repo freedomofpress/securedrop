@@ -184,6 +184,40 @@ class TestSiteConfig(object):
         assert validator.validate(Document("no"))
         assert validator.validate(Document("NO"))
 
+    def test_validate_fingerprint(self):
+        validator = securedrop_admin.SiteConfig.ValidateFingerprint()
+        assert validator.validate(Document(
+            "012345678901234567890123456789ABCDEFABCD"))
+        assert validator.validate(Document(
+            "01234 5678901234567890123456789ABCDE   FABCD"))
+
+        with pytest.raises(ValidationError) as e:
+            validator.validate(Document(
+                "65A1B5FF195B56353CC63DFFCC40EF1228271441"))
+        assert 'TEST journalist' in e.value.message
+
+        with pytest.raises(ValidationError) as e:
+            validator.validate(Document(
+                "600BC6D5142C68F35DDBCEA87B597104EDDDC102"))
+        assert 'TEST admin' in e.value.message
+
+        with pytest.raises(ValidationError) as e:
+            validator.validate(Document(
+                "0000"))
+        assert '40 hexadecimal' in e.value.message
+
+        with pytest.raises(ValidationError) as e:
+            validator.validate(Document(
+                "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"))
+        assert '40 hexadecimal' in e.value.message
+
+    def test_sanitize_fingerprint(self):
+        args = argparse.Namespace(site_config='DOES_NOT_EXIST',
+                                  ansible_path='.',
+                                  app_path='.')
+        site_config = securedrop_admin.SiteConfig(args)
+        assert "ABC" == site_config.sanitize_fingerprint("    A bc")
+
     def test_save(self, tmpdir):
         site_config_path = join(str(tmpdir), 'site_config')
         args = argparse.Namespace(site_config=site_config_path,
