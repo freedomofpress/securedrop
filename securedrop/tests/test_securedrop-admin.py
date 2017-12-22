@@ -239,6 +239,12 @@ class TestSiteConfig(object):
         site_config = securedrop_admin.SiteConfig(args)
         assert "ABC" == site_config.sanitize_fingerprint("    A bc")
 
+    def test_validate_int(self):
+        validator = securedrop_admin.SiteConfig.ValidateInt()
+        with pytest.raises(ValidationError):
+            validator.validate(Document("123X"))
+        assert validator.validate(Document("192"))
+
     def test_save(self, tmpdir):
         site_config_path = join(str(tmpdir), 'site_config')
         args = argparse.Namespace(site_config=site_config_path,

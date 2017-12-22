@@ -119,6 +119,12 @@ class SiteConfig(object):
                     message='fingerprints must be 40 hexadecimal characters')
             return True
 
+    class ValidateInt(Validator):
+        def validate(self, document):
+            if re.match('\d+$', document.text):
+                return True
+            raise ValidationError(message="Must be an integer")
+
     class ValidateOSSECEmail(Validator):
         def validate(self, document):
             text = document.text
@@ -188,6 +194,10 @@ class SiteConfig(object):
              u'SMTP relay for sending OSSEC alerts',
              SiteConfig.ValidateFQDN(),
              None],
+            ['smtp_relay_port', '587',
+             u'SMTP port for sending OSSEC alerts',
+             SiteConfig.ValidateInt(),
+             int],
         ]
 
     def load_and_update_config(self):
