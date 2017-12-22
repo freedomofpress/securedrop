@@ -133,6 +133,14 @@ class SiteConfig(object):
             raise ValidationError(
                 message="The SASL username should not include the domain name")
 
+    class ValidateOSSECPassword(Validator):
+        def validate(self, document):
+            text = document.text
+            if len(text) >= 8 and 'password123' != text:
+                return True
+            raise ValidationError(
+                message="Password for OSSEC email account must be strong")
+
     class ValidateOSSECEmail(Validator):
         def validate(self, document):
             text = document.text
@@ -213,6 +221,10 @@ class SiteConfig(object):
             ['sasl_username', '',
              u'SASL username for sending OSSEC alerts',
              SiteConfig.ValidateOSSECUsername(),
+             None],
+            ['sasl_password', '',
+             u'SASL password for sending OSSEC alerts',
+             SiteConfig.ValidateOSSECPassword(),
              None],
         ]
 

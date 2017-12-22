@@ -13,7 +13,5 @@
     - keyfile: "{{ securedrop_app_gpg_public_key }}"
       fingerprint: "{{ securedrop_app_gpg_fingerprint }}"
 
-- include: validate_ossec_info.yml
-
 - include: validate_tails_environment.yml
   when: securedrop_validate_tails_environment

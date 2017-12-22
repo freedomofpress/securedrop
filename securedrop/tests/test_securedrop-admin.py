@@ -110,6 +110,17 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError):
             validator.validate(Document('test'))
 
+    def test_validate_ossec_password(self):
+        validator = securedrop_admin.SiteConfig.ValidateOSSECPassword()
+
+        assert validator.validate(Document('goodpassword'))
+        with pytest.raises(ValidationError):
+            validator.validate(Document('password123'))
+        with pytest.raises(ValidationError):
+            validator.validate(Document(''))
+        with pytest.raises(ValidationError):
+            validator.validate(Document('short'))
+
     def test_validate_ossec_email(self):
         validator = securedrop_admin.SiteConfig.ValidateOSSECEmail()
 
