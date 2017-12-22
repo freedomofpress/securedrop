@@ -75,6 +75,21 @@ class SiteConfig(object):
             raise ValidationError(
                 message='Unable to resolve gnu.org using this DNS')
 
+    class ValidatePath(Validator):
+        def __init__(self, basedir):
+            self.basedir = basedir
+            super(SiteConfig.ValidatePath, self).__init__()
+
+        def validate(self, document):
+            if document.text == '':
+                raise ValidationError(
+                    message='an existing file name is required')
+            path = os.path.join(self.basedir, document.text)
+            if os.path.exists(path):
+                return True
+            raise ValidationError(
+                message=path + ' file does not exist')
+
     def __init__(self, args):
         self.args = args
         translations = SiteConfig.Locales(

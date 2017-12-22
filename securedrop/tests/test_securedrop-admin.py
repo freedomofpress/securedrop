@@ -165,6 +165,16 @@ class TestSiteConfig(object):
             validator.validate(Document("599.20"))
         assert validator.validate(Document("192.168.1.1"))
 
+    def test_validate_path(self):
+        mydir = dirname(__file__)
+        myfile = basename(__file__)
+        validator = securedrop_admin.SiteConfig.ValidatePath(mydir)
+        assert validator.validate(Document(myfile))
+        with pytest.raises(ValidationError):
+            validator.validate(Document("NONEXIST"))
+        with pytest.raises(ValidationError):
+            validator.validate(Document(""))
+
     def test_save(self, tmpdir):
         site_config_path = join(str(tmpdir), 'site_config')
         args = argparse.Namespace(site_config=site_config_path,
