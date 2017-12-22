@@ -57,6 +57,10 @@ class SiteConfig(object):
              u'Local IPv4 address for the Application Server',
              SiteConfig.ValidateIP(),
              None],
+            ['monitor_ip', '10.20.3.2',
+             u'Local IPv4 address for the Monitor Server',
+             SiteConfig.ValidateIP(),
+             None],
         ]
 
     def load_and_update_config(self):
