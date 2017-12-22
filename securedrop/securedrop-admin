@@ -61,6 +61,10 @@ class SiteConfig(object):
              u'Local IPv4 address for the Monitor Server',
              SiteConfig.ValidateIP(),
              None],
+            ['app_hostname', 'app',
+             u'Hostname for Application Server',
+             None,
+             None],
         ]
 
     def load_and_update_config(self):
