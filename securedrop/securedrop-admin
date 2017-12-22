@@ -198,6 +198,10 @@ class SiteConfig(object):
              u'SMTP port for sending OSSEC alerts',
              SiteConfig.ValidateInt(),
              int],
+            ['sasl_domain', "gmail.com",
+             u'SASL domain for sending OSSEC alerts',
+             SiteConfig.ValidateFQDN(),
+             None],
         ]
 
     def load_and_update_config(self):
