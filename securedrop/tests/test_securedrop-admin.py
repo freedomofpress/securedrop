@@ -101,6 +101,53 @@ class TestSiteConfig(object):
                                   app_path='.')
         assert securedrop_admin.SiteConfig(args).exists()
 
+    def test_is_tails(self):
+        validator = securedrop_admin.SiteConfig.ValidateDNS()
+        with mock.patch('subprocess.check_output', return_value='Tails'):
+            assert validator.is_tails()
+        with mock.patch('subprocess.check_output', return_value='Debian'):
+            assert validator.is_tails() is False
+        with mock.patch('subprocess.check_output',
+                        side_effect=subprocess.CalledProcessError(
+                            1, 'cmd', 'BANG')):
+            assert validator.is_tails() is False
+
+    def test_lookup_dns(self, caplog):
+        validator = securedrop_admin.SiteConfig.ValidateDNS()
+        with mock.patch('sa.SiteConfig.ValidateDNS.is_tails',
+                        return_value=True):
+            with mock.patch('subprocess.check_output',
+                            return_value='has address') as check_output:
+                assert validator.lookup_fqdn('gnu.org', '8.8.8.8')
+                assert check_output.call_args[0][0].startswith('torify')
+                assert check_output.call_args[0][0].endswith('8.8.8.8')
+
+        with mock.patch('sa.SiteConfig.ValidateDNS.is_tails',
+                        return_value=False):
+            with mock.patch('subprocess.check_output',
+                            return_value='failed') as check_output:
+                assert validator.lookup_fqdn('gnu.org') is False
+                assert not check_output.call_args[0][0].startswith('torify')
+                assert 'failed' in caplog.text()
+
+        with mock.patch('sa.SiteConfig.ValidateDNS.is_tails',
+                        return_value=False):
+            with mock.patch('subprocess.check_output',
+                            side_effect=subprocess.CalledProcessError(
+                                1, 'cmd', 'BANG')):
+                assert validator.lookup_fqdn('gnu.org') is False
+                assert 'BANG' in caplog.text()
+
+    def test_validate_dns_server(self, caplog):
+        validator = securedrop_admin.SiteConfig.ValidateDNSServer()
+        with mock.patch('sa.SiteConfig.ValidateDNS.lookup_fqdn',
+                        return_value=True):
+            assert validator.validate(Document('8.8.8.8'))
+        with mock.patch('sa.SiteConfig.ValidateDNS.lookup_fqdn',
+                        return_value=False):
+            with pytest.raises(ValidationError):
+                validator.validate(Document('8.8.8.8'))
+
 
     def test_validate_user(self):
         validator = securedrop_admin.SiteConfig.ValidateUser()
