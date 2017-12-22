@@ -160,6 +160,15 @@ class TestSiteConfig(object):
             with pytest.raises(ValidationError):
                 validator.validate(Document('8.8.8.8'))
 
+    def test_lookup_fqdn(self, caplog):
+        validator = securedrop_admin.SiteConfig.ValidateFQDN()
+        with mock.patch('sa.SiteConfig.ValidateDNS.lookup_fqdn',
+                        return_value=True):
+            assert validator.validate(Document('gnu.org'))
+        with mock.patch('sa.SiteConfig.ValidateDNS.lookup_fqdn',
+                        return_value=False):
+            with pytest.raises(ValidationError):
+                assert validator.validate(Document('gnu.org'))
 
     def test_validate_user(self):
         validator = securedrop_admin.SiteConfig.ValidateUser()
