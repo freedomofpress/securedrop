@@ -101,6 +101,15 @@ class TestSiteConfig(object):
                                   app_path='.')
         assert securedrop_admin.SiteConfig(args).exists()
 
+    def test_validate_ossec_username(self):
+        validator = securedrop_admin.SiteConfig.ValidateOSSECUsername()
+
+        assert validator.validate(Document('username'))
+        with pytest.raises(ValidationError):
+            validator.validate(Document('bad@user'))
+        with pytest.raises(ValidationError):
+            validator.validate(Document('test'))
+
     def test_validate_ossec_email(self):
         validator = securedrop_admin.SiteConfig.ValidateOSSECEmail()
 

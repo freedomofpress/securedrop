@@ -125,6 +125,14 @@ class SiteConfig(object):
                 return True
             raise ValidationError(message="Must be an integer")
 
+    class ValidateOSSECUsername(Validator):
+        def validate(self, document):
+            text = document.text
+            if text and '@' not in text and 'test' != text:
+                return True
+            raise ValidationError(
+                message="The SASL username should not include the domain name")
+
     class ValidateOSSECEmail(Validator):
         def validate(self, document):
             text = document.text
@@ -201,6 +209,10 @@ class SiteConfig(object):
             ['sasl_domain', "gmail.com",
              u'SASL domain for sending OSSEC alerts',
              SiteConfig.ValidateFQDN(),
+             None],
+            ['sasl_username', '',
+             u'SASL username for sending OSSEC alerts',
+             SiteConfig.ValidateOSSECUsername(),
              None],
         ]
 
