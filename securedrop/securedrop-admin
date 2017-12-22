@@ -29,16 +29,14 @@ class SiteConfig(object):
     def exists(self):
         return os.path.exists(self.args.site_config)
 
-    def validate(self):
+    def load(self):
         # Yaml library cannot be imported until virtualenv is activated
         # (hence the yaml library is not imported up-top)
         import yaml
 
         try:
-            # Attempt to read site-specific vars file, specifically
-            # for informative messaging via exception handling.
             with open(self.args.site_config) as site_config_file:
-                yaml.safe_load(site_config_file.read())
+                return yaml.safe_load(site_config_file)
         except IOError:
             sdlog.error("Config file missing, re-run with sdconfig")
             raise
@@ -46,7 +44,6 @@ class SiteConfig(object):
             sdlog.error("There was an issue processing {}".format(
                 self.args.site_config))
             raise
-        return True
 
 
 def setup_logger(verbose=False):
@@ -221,7 +218,7 @@ def install_pip_dependencies(args, pip_install_cmd=[
 def install_securedrop(args):
     """Install/Update SecureDrop"""
     activate_venv(args)
-    SiteConfig(args).validate()
+    SiteConfig(args).load()
 
     sdlog.info("Now installing SecureDrop on remote servers.")
     sdlog.info("You will be prompted for the sudo password on the "
