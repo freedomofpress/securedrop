@@ -160,6 +160,10 @@ class SiteConfig(object):
              u'Local filepath to OSSEC alerts GPG public key',
              SiteConfig.ValidatePath(self.args.ansible_path),
              None],
+            ['ossec_gpg_fpr', '',
+             u'Full fingerprint for the OSSEC alerts GPG public key',
+             SiteConfig.ValidateFingerprint(),
+             self.sanitize_fingerprint],
         ]
 
     def load_and_update_config(self):
