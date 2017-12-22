@@ -21,6 +21,7 @@ sdlog = logging.getLogger(__name__)
 
 SD_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 ANSIBLE_PATH = os.path.join(SD_DIR, "./install_files/ansible-base")
+APP_PATH = os.path.join(SD_DIR, "securedrop")
 SITE_CONFIG = os.path.join(ANSIBLE_PATH, "group_vars/all/site-specific")
 VENV_DIR = os.path.join(SD_DIR, ".venv")
 VENV_ACTIVATION = os.path.join(VENV_DIR, 'bin/activate_this.py')
@@ -125,6 +126,33 @@ class SiteConfig(object):
                 return True
             raise ValidationError(message="Must be an integer")
 
+    class Locales(object):
+        def __init__(self, appdir):
+            self.translation_dir = os.path.realpath(
+                os.path.join(appdir, 'translations'))
+
+        def get_translations(self):
+            translations = set(['en', 'en_US'])
+            for dirname in os.listdir(self.translation_dir):
+                if dirname != 'messages.pot':
+                    translations.add(dirname)
+            return translations
+
+    class ValidateLocales(Validator):
+        def __init__(self, basedir):
+            self.basedir = basedir
+            super(SiteConfig.ValidateLocales, self).__init__()
+
+        def validate(self, document):
+            desired = document.text.split()
+            existing = SiteConfig.Locales(self.basedir).get_translations()
+            missing = set(desired) - set(existing)
+            if not missing:
+                return True
+            raise ValidationError(
+                message="The following locales do not exist " + " ".join(
+                    missing))
+
     class ValidateOSSECUsername(Validator):
         def validate(self, document):
             text = document.text
@@ -226,6 +254,11 @@ class SiteConfig(object):
              u'SASL password for sending OSSEC alerts',
              SiteConfig.ValidateOSSECPassword(),
              None],
+            ['securedrop_supported_locales', '',
+             u'Space separated list of additional locales to support '
+             '(' + translations + ')',
+             SiteConfig.ValidateLocales(self.args.app_path),
+             string.split],
         ]
 
     def load_and_update_config(self):

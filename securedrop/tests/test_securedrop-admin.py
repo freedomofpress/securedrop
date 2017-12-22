@@ -265,6 +265,19 @@ class TestSiteConfig(object):
             validator.validate(Document("123X"))
         assert validator.validate(Document("192"))
 
+    def test_locales(self):
+        locales = securedrop_admin.SiteConfig.Locales('.')
+        translations = locales.get_translations()
+        assert 'en_US' in translations
+        assert 'fr_FR' in translations
+
+    def test_validate_locales(self):
+        validator = securedrop_admin.SiteConfig.ValidateLocales('.')
+        assert validator.validate(Document('en_US  fr_FR '))
+        with pytest.raises(ValidationError) as e:
+            validator.validate(Document('BAD'))
+        assert 'BAD' in e.value.message
+
     def test_save(self, tmpdir):
         site_config_path = join(str(tmpdir), 'site_config')
         args = argparse.Namespace(site_config=site_config_path,
