@@ -1,16 +1,16 @@
 import pytest
 
 
-def test_tor_mirror_present(File):
+def test_tor_mirror_present(host):
     """
     Ensure the FPF mirror of the Tor apt repo, tor-apt.freedom.press,
     is configured. This repository required manual updating with current
     tor releases, to avoid breakage of untested updates.
     """
-    f = File('/etc/apt/sources.list.d/tor_apt_freedom_press.list')
+    f = '/etc/apt/sources.list.d/tor_apt_freedom_press.list'
 
     regex = ('^deb https:\/\/tor-apt\.freedom\.press trusty main$')
-    assert f.contains(regex)
+    assert host.file(f).contains(regex)
 
 
 def test_tor_keyring_absent(host):
@@ -35,7 +35,7 @@ def test_tor_keyring_absent(host):
     "Key fingerprint = A3C4 F0F9 79CA A22C DBA8  F512 EE8C BC9E 886D DD89",
     "deb.torproject.org archive signing key",
 ])
-def test_tor_mirror_fingerprint(Command, tor_key_info):
+def test_tor_mirror_fingerprint(host, tor_key_info):
     """
     Legacy test. The Tor Project key was added to SecureDrop servers
     via the `deb.torproject.org-keyring` package. Since FPF started mirroring
@@ -45,7 +45,7 @@ def test_tor_mirror_fingerprint(Command, tor_key_info):
     running instances, the public key will still be present. We'll need
     to remove those packages separately.
     """
-    c = Command('apt-key finger')
+    c = host.run('apt-key finger')
     assert c.rc == 0
     assert tor_key_info not in c.stdout
 
@@ -54,23 +54,23 @@ def test_tor_mirror_fingerprint(Command, tor_key_info):
     '/etc/apt/security.list',
     '/etc/apt/sources.list.d',
 ])
-def test_tor_project_repo_absent(Command, filename):
+def test_tor_project_repo_absent(host, filename):
     """
     Ensure that no apt source list files contain the entry for
     the official Tor apt repo, since we don't control issuing updates
     in that repo. We're mirroring it to avoid breakage caused by
     untested updates (which has broken prod twice to date).
     """
-    c = Command("grep -riP 'deb\.torproject\.org' {}".format(filename))
+    c = host.run("grep -riP 'deb\.torproject\.org' {}".format(filename))
     # Grep returns non-zero when no matches, and we want no matches.
     assert c.rc != 0
     assert c.stdout == ""
 
 
-def test_tor_project_repo_files_absent(File):
+def test_tor_project_repo_files_absent(host):
     """
     Ensure that specific apt source list files are absent,
     having been 'hidden' via the securedrop-config package.
     """
-    f = File("/etc/apt/sources.list.d/deb_torproject_org_torproject_org.list")
-    assert not f.exists
+    f = "/etc/apt/sources.list.d/deb_torproject_org_torproject_org.list"
+    assert not host.file(f).exists
