@@ -31,10 +31,21 @@
   tags:
     - dns
 
+# We expect that once ntpd is running, the socket will be in use, so we
+# ignore errors in the below task. However, if the command fails for some other
+# reason, we want to fail the task, so we inspect the error output.
 - name: Ensure the system clock is set accurately.
   command: "ntpdate ntp.ubuntu.com"
   register: ntpdate_result
   changed_when: "'offset' in ntpdate_result.stdout"
+  ignore_errors: yes
   become: yes
+  tags:
+    - ntp
+
+- name: See if ntpd is already running.
+  fail:
+    msg: "{{ ntpdate_result.stderr }}"
+  when: "ntpdate_result.rc != 0 and 'NTP socket is in use' not in ntpdate_result.stderr"
   tags:
     - ntp
