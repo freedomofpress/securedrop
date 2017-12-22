@@ -175,6 +175,15 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError):
             validator.validate(Document(""))
 
+    def test_validate_yes_no(self):
+        validator = securedrop_admin.SiteConfig.ValidateYesNo()
+        with pytest.raises(ValidationError):
+            validator.validate(Document("something"))
+        assert validator.validate(Document("yes"))
+        assert validator.validate(Document("YES"))
+        assert validator.validate(Document("no"))
+        assert validator.validate(Document("NO"))
+
     def test_save(self, tmpdir):
         site_config_path = join(str(tmpdir), 'site_config')
         args = argparse.Namespace(site_config=site_config_path,
