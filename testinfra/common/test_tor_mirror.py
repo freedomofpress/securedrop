@@ -13,7 +13,7 @@ def test_tor_mirror_present(File):
     assert f.contains(regex)
 
 
-def test_tor_keyring_absent(Command):
+def test_tor_keyring_absent(host):
     """
     Tor packages are installed via the FPF apt mirror, and signed with the
     SecureDrop Release Signing Key. As such, the official Tor public key
@@ -24,10 +24,10 @@ def test_tor_keyring_absent(Command):
     # so let's check by shelling out to `dpkg -l`. Dpkg will automatically
     # honor simple regex in package names.
     package = "deb.torproject.org-keyring"
-    c = Command("dpkg -l {}".format(package))
+    c = host.run("dpkg -l {}".format(package))
     assert c.rc == 1
     error_text = "dpkg-query: no packages found matching {}".format(package)
-    assert c.stderr == error_text
+    assert c.stderr.rstrip() == error_text
 
 
 @pytest.mark.parametrize('tor_key_info', [
