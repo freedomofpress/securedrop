@@ -11,6 +11,9 @@ import logging
 import os
 import subprocess
 import sys
+import types
+import prompt_toolkit
+from prompt_toolkit.validation import Validator, ValidationError
 
 sdlog = logging.getLogger(__name__)
 
@@ -25,9 +28,63 @@ class SiteConfig(object):
 
     def __init__(self, args):
         self.args = args
+        translations = SiteConfig.Locales(
+            self.args.app_path).get_translations()
+        translations = " ".join(translations)
+        self.desc = [
+        ]
+
+    def load_and_update_config(self):
+        if self.exists():
+            self.config = self.load()
+        else:
+            self.config = None
+        return self.update_config()
+
+    def update_config(self):
+        config = {}
+        for (var, default, prompt, validator, transform) in self.desc:
+            if self.config:
+                default = self.config.get(var)
+            prompt += ': '
+            sdlog.debug(prompt + str(default))
+            config[var] = self.validated_input(
+                prompt, default, validator, transform)
+        self.config = config
+        self.save()
+        self.validate_gpg_keys()
+        return True
+
+    def validated_input(self, prompt, default, validator, transform):
+        if type(default) is bool:
+            default = default and 'yes' or 'no'
+        if type(default) is int:
+            default = str(default)
+        if isinstance(default, types.ListType):
+            default = " ".join(default)
+        kwargs = {}
+        if validator:
+            kwargs['validator'] = validator
+        value = prompt_toolkit.prompt(prompt,
+                                      default=unicode(default, 'utf-8'),
+                                      **kwargs)
+        if transform:
+            return transform(value)
+        else:
+            return value
 
     def exists(self):
         return os.path.exists(self.args.site_config)
+
+    def save(self):
+        # Yaml library cannot be imported until virtualenv is activated
+        # (hence the yaml library is not imported up-top)
+        import yaml
+
+        with open(self.args.site_config, 'w') as site_config_file:
+            yaml.safe_dump(self.config,
+                           site_config_file,
+                           default_flow_style=False)
 
     def load(self):
         # Yaml library cannot be imported until virtualenv is activated
@@ -72,22 +129,7 @@ def activate_venv(args):
 def sdconfig(args):
     """Configure SD site settings"""
     activate_venv(args)
-
-    ansible_cmd = [
-        'ansible-playbook',
-        # Passing an empty inventory file to override the automatic dynamic
-        # inventory script, which fails if no site vars are configured.
-        '-i', '/dev/null',
-        os.path.join(ANSIBLE_PATH, 'securedrop-configure.yml'),
-    ]
-    # Honor `--force` flag to clobber existing (misconfigured) vars,
-    # otherwise read in the existing vars to supply defaults.
-    if SiteConfig(args).exists() and args.force is False:
-        ansible_cmd.append('--extra-vars')
-        ansible_cmd.append("@{}".format(args.site_config))
-
-    sdlog.info("Configuring SecureDrop site-specific information")
-    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH, env=os.environ.copy())
+    SiteConfig(args).load_and_update_config()
 
 
 def run_command(command):
@@ -307,6 +349,10 @@ def parse_argv(argv):
                         help="Developer mode. Not to be used in production.")
     parser.add_argument('--site-config', default=SITE_CONFIG,
                         help="path to the YAML site configuration file")
+    parser.add_argument('--ansible-path', default=ANSIBLE_PATH,
+                        help="path to the Ansible root")
+    parser.add_argument('--app-path', default=APP_PATH,
+                        help="path to the SecureDrop application root")
     subparsers = parser.add_subparsers()
 
     parse_setup = subparsers.add_parser('setup', help=envsetup.__doc__)
@@ -314,10 +360,6 @@ def parse_argv(argv):
 
     parse_sdconfig = subparsers.add_parser('sdconfig', help=sdconfig.__doc__)
     parse_sdconfig.set_defaults(func=sdconfig)
-    parse_sdconfig.add_argument(
-        '-f', '--force', action='store_true',
-        help="Clobber site-specific vars for reconfiguration"
-        )
 
     parse_install = subparsers.add_parser('install',
                                           help=install_securedrop.__doc__)

@@ -93,6 +93,9 @@ paramiko==2.1.2 \
     --hash=sha256:5fae49bed35e2e3d45c4f7b0db2d38b9ca626312d91119b3991d0ecf8125e310 \
     --hash=sha256:bdf239647e18b9b9ddbc2894fd1de9786b7a9144b1d19e32a5be3bb4bb63ae5d \
     # via ansible
+prompt-toolkit==1.0.15 \
+    --hash=sha256:3f473ae040ddaa52b52f97f6b4a493cfa9f5920c255a12dc56a7d34397a398a4 \
+    --hash=sha256:858588f1983ca497f1cf4ffde01d978a3ea02b01c8a26a8bbc5cd2e66d816917
 pyasn1==0.2.3 \
     --hash=sha256:0439b9bd518418260c2641a571f0e07fce4370cab13b68f19b5e023306c03cad \
     --hash=sha256:738c4ebd88a718e700ee35c8d129acce2286542daa80a82823a7073644f706ad \
@@ -113,4 +116,8 @@ pyyaml==3.12 \
 six==1.10.0 \
     --hash=sha256:0ff78c403d9bccf5a425a6d31a12aa6b47f1c21ca4dc2573a7e2f32a97335eb1 \
     --hash=sha256:105f8d68616f8248e24bf0e9372ef04d3cc10104f1980f54d57b2ce73a5ad56a \
-    # via cryptography
+    # via cryptography, prompt-toolkit
+wcwidth==0.1.7 \
+    --hash=sha256:3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e \
+    --hash=sha256:f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c \
+    # via prompt-toolkit
