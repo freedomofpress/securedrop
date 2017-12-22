@@ -260,3 +260,24 @@ def test_deb_app_package_contains_https_validate_dir(host, deb):
         # static/gen/ directory should exist
         assert re.search("^.*\./var/www/securedrop/"
                 ".well-known/$", c.stdout, re.M)
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_grsec_metapackage(host, deb):
+    """
+    Sanity checks on the securedrop-grsec metapackage. Mostly checks
+    for presence of PaX flags hook and sysctl settings.
+    Does not validate file contents, just presence.
+    """
+
+    deb_package = host.file(deb.format(
+        securedrop_test_vars.securedrop_version))
+
+    if "securedrop-grsec" in deb_package.path:
+        c = host.run("dpkg-deb --contents {}".format(deb_package.path))
+        # Custom sysctl options should be present
+        assert re.search("^.*\./etc/sysctl.d/30-securedrop.conf$",
+                         c.stdout, re.M)
+        c = host.run("dpkg-deb --contents {}".format(deb_package.path))
+        # Post-install kernel hook for managing PaX flags must exist.
+        assert re.search("^.*\./etc/kernel/postinst.d/paxctl-grub$",
+                         c.stdout, re.M)
