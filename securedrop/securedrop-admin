@@ -156,6 +156,10 @@ class SiteConfig(object):
              u'Full fingerprint for the SecureDrop Application GPG Key',
              SiteConfig.ValidateFingerprint(),
              self.sanitize_fingerprint],
+            ['ossec_alert_gpg_public_key', 'ossec.pub',
+             u'Local filepath to OSSEC alerts GPG public key',
+             SiteConfig.ValidatePath(self.args.ansible_path),
+             None],
         ]
 
     def load_and_update_config(self):
