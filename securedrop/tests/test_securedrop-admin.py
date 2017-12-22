@@ -27,6 +27,11 @@ here = abspath(join(dirname(realpath(__file__))))
 securedrop_admin = imp.load_source('sa', here + '/../securedrop-admin')
 
 
+class Document(object):
+    def __init__(self, text):
+        self.text = text
+
+
 class TestSecureDropAdmin(object):
 
     def test_verbose(self, capsys):
