@@ -45,4 +45,8 @@
     - role: build-generic-pkg
       tags: "securedrop-grsec"
       package_name: "securedrop-grsec"
+
+    - role: build-generic-pkg
+      tags: "securedrop-config"
+      package_name: "securedrop-config"
   tags: rebuild
