@@ -150,8 +150,8 @@ Visit our repository_ fork it and clone it on you local machine:
 
 .. _repository: https://github.com/freedomofpress/securedrop
 
-Install python requirments
---------------------------
+Install python requirements
+---------------------------
 
 SecureDrop uses many third-party open source packages from the python community.
 Ensure your virtualenv is activated and install the packages.
