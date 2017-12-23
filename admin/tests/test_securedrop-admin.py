@@ -53,41 +53,6 @@ class TestSecureDropAdmin(object):
         assert 'HIDDEN' not in out
         assert 'VISIBLE' in out
 
-    def test_run_command(self):
-        for output_line in securedrop_admin.run_command(
-                ['/bin/echo', 'something']):
-            assert output_line.strip() == 'something'
-
-        lines = []
-        with pytest.raises(subprocess.CalledProcessError):
-            for output_line in securedrop_admin.run_command(
-                    ['sh', '-c',
-                     'echo in stdout ; echo in stderr >&2 ; false']):
-                lines.append(output_line.strip())
-        assert lines[0] == 'in stdout'
-        assert lines[1] == 'in stderr'
-
-    def test_install_pip_dependencies_up_to_date(self, caplog):
-        args = argparse.Namespace()
-        securedrop_admin.install_pip_dependencies(args, ['/bin/echo'])
-        assert 'securedrop-admin are up-to-date' in caplog.text
-
-    def test_install_pip_dependencies_upgraded(self, caplog):
-        args = argparse.Namespace()
-        securedrop_admin.install_pip_dependencies(
-            args, ['/bin/echo', 'Successfully installed'])
-        assert 'securedrop-admin upgraded' in caplog.text
-
-    def test_install_pip_dependencies_fail(self, caplog):
-        args = argparse.Namespace()
-        with pytest.raises(subprocess.CalledProcessError):
-            securedrop_admin.install_pip_dependencies(
-                args, ['/bin/sh', '-c',
-                       'echo in stdout ; echo in stderr >&2 ; false'])
-        assert 'Failed to install' in caplog.text
-        assert 'in stdout' in caplog.text
-        assert 'in stderr' in caplog.text
-
 
 class TestSiteConfig(object):
 

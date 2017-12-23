@@ -17,7 +17,6 @@ itsdangerous==0.24        # via flask
 jinja2==2.10
 jsmin==2.2.2
 markupsafe==1.0           # via jinja2
-prompt-toolkit==1.0.15
 psutil==5.4.3
 pycryptodomex==3.4.7
 pyotp==2.2.6
@@ -26,9 +25,8 @@ qrcode==5.3
 redis==2.10.6
 rq==0.10.0
 scrypt==0.8.0
-six==1.11.0               # via prompt-toolkit, qrcode
+six==1.11.0               # via qrcode
 sqlalchemy==1.2.0
-wcwidth==0.1.7            # via prompt-toolkit
 webassets==0.12.1         # via flask-assets
 werkzeug==0.12.2
 wtforms==2.1              # via flask-wtf
