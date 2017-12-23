@@ -88,7 +88,7 @@ Admin Workstation
 The *Admin Workstation* is a machine that the system admin can
 use to connect to the *Application Server* and the *Monitor Server* using Tor
 and SSH. The admin will also need to have an Android or iOS
-device with the Google Authenticator app installed.
+device with the FreeOTP app installed.
 
 Secure Viewing Station
 ----------------------
@@ -116,10 +116,10 @@ systems. These instances use the standard TOTP and/or HOTP algorithms,
 and so a variety of devices can be used to provide two-factor
 authentication for devices. We recommend using one of:
 
--  An Android or iOS device with `Google
-   Authenticator <https://support.google.com/accounts/answer/1066447?hl=en>`__
-   installed
+-  FreeOTP `for Android <https://play.google.com/store/apps/details?id=org.fedorahosted.freeotp>`__ or `for iOS <https://itunes.apple.com/us/app/freeotp-authenticator/id872559395>`__ installed
 -  A `YubiKey <https://www.yubico.com/products/yubikey-hardware/>`__
+
+.. include:: includes/otp-app.txt
 
 Transfer Device
 ---------------

@@ -88,7 +88,7 @@ Participants: journalists and admins
 -  Check access to previously created Tails USB
 -  Generate personnel GPG keys
 -  Setup KeyPassX manager (one for *SVS*, one for personnel Tails)
--  Options between YubiKey/Google Authenticator app for 2FA (SSH,
+-  Options between YubiKey/FreeOTP app for 2FA (SSH,
    Journalist Interface, FDE and password managers)
 -  Secure-deleting and difference between wipe and erase free space on
    Tails, and when to use each
@@ -112,7 +112,7 @@ Participants: admins
 -  Check access to previously created Tails USB
 -  Generate personnel GPG keys
 -  Setup KeyPassX manager (one for *SVS*, one for personnel Tails)
--  Options between YubiKey/Google Authenticator app for 2FA (SSH,
+-  Options between YubiKey/FreeOTP app for 2FA (SSH,
    Journalist Interface, FDE and password managers)
 -  Secure-deleting and difference between wipe and erase free space on
    Tails, and when to use each

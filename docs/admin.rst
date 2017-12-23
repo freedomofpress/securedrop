@@ -2,7 +2,7 @@ Admin Guide
 ===========
 
 You (the admin) should have your own username and passphrase, plus
-two-factor authentication through either the Google Authenticator app
+two-factor authentication through either the FreeOTP app
 on your smartphone or a YubiKey.
 
 .. _Responsibilities:
@@ -104,42 +104,40 @@ create their own username. Once they’re done entering a
 username for themselves, have them write down their pre-generated diceware
 passphrase. Then, you will select whether you would like them
 to also be an admin (this allows them to add or delete other
-journalist accounts), and whether they will be using Google
-Authenticator or a YubiKey for two-factor authentication.
+journalist accounts), and whether they will be using FreeOTP
+or a YubiKey for two-factor authentication.
 
-.. tip:: Consider using the alternative `FreeOTP`_ application for mobile
-   two-factor authentication.
+FreeOTP
+~~~~~~~
 
-.. _`FreeOTP`: https://freeotp.github.io/
-
-Google Authenticator
-~~~~~~~~~~~~~~~~~~~~
-
-If they are using Google Authenticator for their two-factor, they can
+If they are using FreeOTP for their two-factor, they can
 just proceed to the next page:
 
-|Enable Google Authenticator|
+|Enable FreeOTP|
 
 At this point, the journalist should make sure they have downloaded the
-Google Authenticator app to their smartphone. It can be installed from
+FreeOTP app to their smartphone. It can be installed from
 the Apple Store for an iPhone or from the Google Play store for an
 Android phone. Once you download it and open it, the app does not
 require setup. It should prompt you to scan a barcode. The journalist
 should use their phone's camera to scan the barcode on the screen.
 
-If they have difficulty scanning the barcode, they can use the "Manual
-Entry" option and use their phone's keyboard to input the random
-characters that are highlighted in yellow.
+If they have difficulty scanning the barcode, they can tap on the icon
+at the top that shows a plus and the symbol of a key and use their
+phone's keyboard to input the random characters that are highlighted
+in yellow, in the ``Secret`` input field, without white space.
 
-Inside the Google Authenticator app, a new entry for this account will
+Inside the FreeOTP app, a new entry for this account will
 appear on the main screen, with a six digit number that recycles to a
 new number every thirty seconds. Enter the six digit number under
 “Verification code” at the bottom of the screen, and hit
 enter.
 
-If Google Authenticator was set up correctly, you will be redirected
-back to the Admin Interface and will see a flashed message that says
-"Two factor token successfully verified for user *new username*!".
+If FreeOTP was set up correctly, you will be redirected
+back to the Admin Interface and will see a confirmation that the
+two-factor token was verified.
+
+.. include:: includes/otp-app.txt
 
 YubiKey
 ~~~~~~~
@@ -172,7 +170,7 @@ possession when they attempt to log in to SecureDrop.
   image:: images/manual/screenshots/journalist-admin_interface_index.png
 .. |Add a new user|
   image:: images/manual/screenshots/journalist-admin_add_user_totp.png
-.. |Enable Google Authenticator|
+.. |Enable FreeOTP|
   image:: images/manual/screenshots/journalist-admin_new_user_two_factor_totp.png
 .. |Enable YubiKey|
   image:: images/manual/screenshots/journalist-admin_add_user_hotp.png

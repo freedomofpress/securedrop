@@ -159,9 +159,9 @@ class JournalistNavigationSteps():
 
         if not hasattr(self, 'accept_languages'):
             # Clicking submit on the add user form should redirect to
-            # the Google Authenticator page
+            # the FreeOTP page
             h1s = self.driver.find_elements_by_tag_name('h1')
-            assert "Enable Google Authenticator" in [el.text for el in h1s]
+            assert "Enable FreeOTP" in [el.text for el in h1s]
 
         # Retrieve the saved user object from the db and keep it around for
         # further testing

@@ -189,9 +189,8 @@ def _add_user(is_admin=False):
     else:
         print('User "{}" successfully added'.format(username))
         if not otp_secret:
-            # Print the QR code for FreeOTP/ Google Authenticator
-            print('\nScan the QR code below with FreeOTP or Google '
-                  'Authenticator:\n')
+            # Print the QR code for FreeOTP
+            print('\nScan the QR code below with FreeOTP:\n')
             uri = user.totp.provisioning_uri(username,
                                              issuer_name='SecureDrop')
             qr = qrcode.QRCode()

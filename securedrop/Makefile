@@ -45,3 +45,14 @@ test-config:
          ctx = {"securedrop_app_gpg_fingerprint": "65A1B5FF195B56353CC63DFFCC40EF1228271441"}; \
          ctx.update(dict((k, {"stdout":v}) for k,v in os.environ.iteritems())); \
          ctx = open("config.py", "w").write(env.get_template("config.py.example").render(ctx))'
+
+.PHONY: update-user-guides
+update-user-guides:
+	docker run \
+		--name $(IMAGE)-update-user-guides \
+		--rm \
+		-e USER_ID=$(shell id -u) \
+		-v $(shell git rev-parse --show-toplevel):$(shell git rev-parse --show-toplevel) \
+		-w $(shell pwd) \
+		-ti $(IMAGE)-test:$(TAG) \
+		./bin/update-user-guides
