@@ -147,8 +147,24 @@ def envsetup(args):
         sdlog.info("Virtualenv already exists, not creating")
 
     install_pip_dependencies(args)
+    if os.path.exists(os.path.join(DIR, 'setup.py')):
+        install_pip_self(args)
 
     sdlog.info("Finished installing SecureDrop dependencies")
+
+
+def install_pip_self(args):
+    pip_install_cmd = [
+        os.path.join(VENV_DIR, 'bin', 'pip'),
+        'install', '-e', DIR
+    ]
+    try:
+        subprocess.check_output(maybe_torify() + pip_install_cmd,
+                                stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        sdlog.debug(e.output)
+        sdlog.error("Unable to install self, run with -v for more information")
+        raise
 
 
 def install_pip_dependencies(args, pip_install_cmd=[

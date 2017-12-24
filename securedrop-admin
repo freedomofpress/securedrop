@@ -2,4 +2,9 @@
 # this is for backward compatibility and also because it
 # is more convenient for the admin to have the script at
 # the top level of the SecureDrop repository
-exec securedrop/securedrop-admin "$@"
+d=$(dirname "$0")
+if test "${!#}" = "setup" ; then
+   exec python "$d/admin/bootstrap.py"
+else
+   exec "$d/admin/.venv/bin/securedrop-admin" "$@"
+fi

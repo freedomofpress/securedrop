@@ -510,8 +510,8 @@ def parse_argv(argv):
     return parser.parse_args(argv)
 
 
-if __name__ == "__main__":
-    args = parse_argv(sys.argv[1:])
+def main(argv):
+    args = parse_argv(argv)
     setup_logger(args.v)
     if args.v:
         args.func(args)
@@ -522,3 +522,7 @@ if __name__ == "__main__":
             sys.exit(1)
         else:
             sys.exit(0)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
