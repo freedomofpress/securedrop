@@ -18,8 +18,7 @@
 #
 
 import argparse
-import imp
-from os.path import abspath, dirname, join, realpath, basename
+from os.path import dirname, join, basename
 import mock
 from prompt_toolkit.validation import ValidationError
 import pytest
@@ -28,8 +27,7 @@ import subprocess
 import textwrap
 import yaml
 
-here = abspath(join(dirname(realpath(__file__))))
-securedrop_admin = imp.load_source('sa', here + '/../securedrop-admin')
+import securedrop_admin
 
 
 class Document(object):
@@ -59,11 +57,11 @@ class TestSiteConfig(object):
     def test_exists(self):
         args = argparse.Namespace(site_config='DOES_NOT_EXIST',
                                   ansible_path='.',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         assert not securedrop_admin.SiteConfig(args).exists()
         args = argparse.Namespace(site_config=__file__,
                                   ansible_path='.',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         assert securedrop_admin.SiteConfig(args).exists()
 
     def test_validate_ossec_username(self):
@@ -111,7 +109,7 @@ class TestSiteConfig(object):
 
     def test_lookup_dns(self, caplog):
         validator = securedrop_admin.SiteConfig.ValidateDNS()
-        with mock.patch('sa.SiteConfig.ValidateDNS.is_tails',
+        with mock.patch('securedrop_admin.SiteConfig.ValidateDNS.is_tails',
                         return_value=True):
             with mock.patch('subprocess.check_output',
                             return_value='has address') as check_output:
@@ -119,38 +117,38 @@ class TestSiteConfig(object):
                 assert check_output.call_args[0][0].startswith('torify')
                 assert check_output.call_args[0][0].endswith('8.8.8.8')
 
-        with mock.patch('sa.SiteConfig.ValidateDNS.is_tails',
+        with mock.patch('securedrop_admin.SiteConfig.ValidateDNS.is_tails',
                         return_value=False):
             with mock.patch('subprocess.check_output',
                             return_value='failed') as check_output:
                 assert validator.lookup_fqdn('gnu.org') is False
                 assert not check_output.call_args[0][0].startswith('torify')
-                assert 'failed' in caplog.text()
+                assert 'failed' in caplog.text
 
-        with mock.patch('sa.SiteConfig.ValidateDNS.is_tails',
+        with mock.patch('securedrop_admin.SiteConfig.ValidateDNS.is_tails',
                         return_value=False):
             with mock.patch('subprocess.check_output',
                             side_effect=subprocess.CalledProcessError(
                                 1, 'cmd', 'BANG')):
                 assert validator.lookup_fqdn('gnu.org') is False
-                assert 'BANG' in caplog.text()
+                assert 'BANG' in caplog.text
 
     def test_validate_dns_server(self, caplog):
         validator = securedrop_admin.SiteConfig.ValidateDNSServer()
-        with mock.patch('sa.SiteConfig.ValidateDNS.lookup_fqdn',
+        with mock.patch('securedrop_admin.SiteConfig.ValidateDNS.lookup_fqdn',
                         return_value=True):
             assert validator.validate(Document('8.8.8.8'))
-        with mock.patch('sa.SiteConfig.ValidateDNS.lookup_fqdn',
+        with mock.patch('securedrop_admin.SiteConfig.ValidateDNS.lookup_fqdn',
                         return_value=False):
             with pytest.raises(ValidationError):
                 validator.validate(Document('8.8.8.8'))
 
     def test_lookup_fqdn(self, caplog):
         validator = securedrop_admin.SiteConfig.ValidateFQDN()
-        with mock.patch('sa.SiteConfig.ValidateDNS.lookup_fqdn',
+        with mock.patch('securedrop_admin.SiteConfig.ValidateDNS.lookup_fqdn',
                         return_value=True):
             assert validator.validate(Document('gnu.org'))
-        with mock.patch('sa.SiteConfig.ValidateDNS.lookup_fqdn',
+        with mock.patch('securedrop_admin.SiteConfig.ValidateDNS.lookup_fqdn',
                         return_value=False):
             with pytest.raises(ValidationError):
                 assert validator.validate(Document('gnu.org'))
@@ -220,7 +218,7 @@ class TestSiteConfig(object):
     def test_sanitize_fingerprint(self):
         args = argparse.Namespace(site_config='DOES_NOT_EXIST',
                                   ansible_path='.',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
         assert "ABC" == site_config.sanitize_fingerprint("    A bc")
 
@@ -231,13 +229,14 @@ class TestSiteConfig(object):
         assert validator.validate(Document("192"))
 
     def test_locales(self):
-        locales = securedrop_admin.SiteConfig.Locales('.')
+        locales = securedrop_admin.SiteConfig.Locales(dirname(__file__))
         translations = locales.get_translations()
         assert 'en_US' in translations
         assert 'fr_FR' in translations
 
     def test_validate_locales(self):
-        validator = securedrop_admin.SiteConfig.ValidateLocales('.')
+        validator = securedrop_admin.SiteConfig.ValidateLocales(
+            dirname(__file__))
         assert validator.validate(Document('en_US  fr_FR '))
         with pytest.raises(ValidationError) as e:
             validator.validate(Document('BAD'))
@@ -247,7 +246,7 @@ class TestSiteConfig(object):
         site_config_path = join(str(tmpdir), 'site_config')
         args = argparse.Namespace(site_config=site_config_path,
                                   ansible_path='.',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
         site_config.config = {'var1': u'val1', 'var2': u'val2'}
         site_config.save()
@@ -260,7 +259,7 @@ class TestSiteConfig(object):
     def test_validate_gpg_key(self, caplog):
         args = argparse.Namespace(site_config='INVALID',
                                   ansible_path='tests/files',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
         site_config.config = {
             'securedrop_app_gpg_public_key':
@@ -279,15 +278,15 @@ class TestSiteConfig(object):
         site_config.config['ossec_gpg_fpr'] = 'FAIL'
         with pytest.raises(subprocess.CalledProcessError):
             site_config.validate_gpg_keys()
-        assert 'FAIL does not match' in caplog.text()
+        assert 'FAIL does not match' in caplog.text
 
-    @mock.patch('sa.SiteConfig.validated_input',
+    @mock.patch('securedrop_admin.SiteConfig.validated_input',
                 side_effect=lambda p, d, v, t: d)
-    @mock.patch('sa.SiteConfig.save')
+    @mock.patch('securedrop_admin.SiteConfig.save')
     def test_update_config(self, mock_save, mock_validate_input):
         args = argparse.Namespace(site_config='tests/files/site-specific',
                                   ansible_path='tests/files',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
 
         assert site_config.load_and_update_config()
@@ -297,24 +296,24 @@ class TestSiteConfig(object):
     def test_load_and_update_config(self):
         args = argparse.Namespace(site_config='tests/files/site-specific',
                                   ansible_path='tests/files',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
-        with mock.patch('sa.SiteConfig.update_config'):
+        with mock.patch('securedrop_admin.SiteConfig.update_config'):
             site_config.load_and_update_config()
             assert site_config.config is not None
 
         args = argparse.Namespace(site_config='UNKNOWN',
                                   ansible_path='tests/files',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
-        with mock.patch('sa.SiteConfig.update_config'):
+        with mock.patch('securedrop_admin.SiteConfig.update_config'):
             site_config.load_and_update_config()
             assert site_config.config is None
 
     def test_validated_input(self):
         args = argparse.Namespace(site_config='UNKNOWN',
                                   ansible_path='tests/files',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
         value = 'VALUE'
         with mock.patch('prompt_toolkit.prompt', return_value=value):
@@ -326,23 +325,23 @@ class TestSiteConfig(object):
     def test_load(self, caplog):
         args = argparse.Namespace(site_config='tests/files/site-specific',
                                   ansible_path='tests/files',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
         assert 'app_hostname' in site_config.load()
 
         args = argparse.Namespace(site_config='UNKNOWN',
                                   ansible_path='tests/files',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
         with pytest.raises(IOError) as e:
             site_config.load()
         assert 'No such file' in e.value.strerror
-        assert 'Config file missing' in caplog.text()
+        assert 'Config file missing' in caplog.text
 
         args = argparse.Namespace(site_config='tests/files/corrupted',
                                   ansible_path='tests/files',
-                                  app_path='.')
+                                  app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
         with pytest.raises(yaml.YAMLError) as e:
             site_config.load()
-        assert 'issue processing' in caplog.text()
+        assert 'issue processing' in caplog.text

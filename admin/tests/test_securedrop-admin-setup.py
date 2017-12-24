@@ -18,44 +18,36 @@
 #
 
 import argparse
-import imp
-from os.path import abspath, dirname, join, realpath, basename
-import mock
-from prompt_toolkit.validation import ValidationError
 import pytest
-import string
 import subprocess
-import textwrap
-import yaml
 
-here = abspath(join(dirname(realpath(__file__))))
-securedrop_admin = imp.load_source('sa', here + '/../securedrop-admin-setup')
+import bootstrap
 
 
 class TestSecureDropAdmin(object):
 
     def test_verbose(self, capsys):
-        securedrop_admin.setup_logger(verbose=True)
-        securedrop_admin.sdlog.debug('VISIBLE')
+        bootstrap.setup_logger(verbose=True)
+        bootstrap.sdlog.debug('VISIBLE')
         out, err = capsys.readouterr()
         assert 'VISIBLE' in out
 
     def test_not_verbose(self, capsys):
-        securedrop_admin.setup_logger(verbose=False)
-        securedrop_admin.sdlog.debug('HIDDEN')
-        securedrop_admin.sdlog.info('VISIBLE')
+        bootstrap.setup_logger(verbose=False)
+        bootstrap.sdlog.debug('HIDDEN')
+        bootstrap.sdlog.info('VISIBLE')
         out, err = capsys.readouterr()
         assert 'HIDDEN' not in out
         assert 'VISIBLE' in out
 
     def test_run_command(self):
-        for output_line in securedrop_admin.run_command(
+        for output_line in bootstrap.run_command(
                 ['/bin/echo', 'something']):
             assert output_line.strip() == 'something'
 
         lines = []
         with pytest.raises(subprocess.CalledProcessError):
-            for output_line in securedrop_admin.run_command(
+            for output_line in bootstrap.run_command(
                     ['sh', '-c',
                      'echo in stdout ; echo in stderr >&2 ; false']):
                 lines.append(output_line.strip())
@@ -64,19 +56,19 @@ class TestSecureDropAdmin(object):
 
     def test_install_pip_dependencies_up_to_date(self, caplog):
         args = argparse.Namespace()
-        securedrop_admin.install_pip_dependencies(args, ['/bin/echo'])
+        bootstrap.install_pip_dependencies(args, ['/bin/echo'])
         assert 'securedrop-admin are up-to-date' in caplog.text
 
     def test_install_pip_dependencies_upgraded(self, caplog):
         args = argparse.Namespace()
-        securedrop_admin.install_pip_dependencies(
+        bootstrap.install_pip_dependencies(
             args, ['/bin/echo', 'Successfully installed'])
         assert 'securedrop-admin upgraded' in caplog.text
 
     def test_install_pip_dependencies_fail(self, caplog):
         args = argparse.Namespace()
         with pytest.raises(subprocess.CalledProcessError):
-            securedrop_admin.install_pip_dependencies(
+            bootstrap.install_pip_dependencies(
                 args, ['/bin/sh', '-c',
                        'echo in stdout ; echo in stderr >&2 ; false'])
         assert 'Failed to install' in caplog.text

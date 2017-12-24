@@ -36,7 +36,7 @@ from prompt_toolkit.validation import Validator, ValidationError
 
 sdlog = logging.getLogger(__name__)
 
-SD_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '../../..'))
+SD_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..'))
 ANSIBLE_PATH = os.path.join(SD_DIR, "./install_files/ansible-base")
 APP_PATH = os.path.join(SD_DIR, "securedrop")
 SITE_CONFIG = os.path.join(ANSIBLE_PATH, "group_vars/all/site-specific")
@@ -326,7 +326,8 @@ class SiteConfig(object):
                  'ossec_gpg_fpr'))
         for (public_key, fingerprint) in keys:
             validate = os.path.join(
-                self.args.app_path, 'bin', 'validate-gpg-key.sh')
+                os.path.dirname(__file__), '..', 'bin',
+                'validate-gpg-key.sh')
             public_key = os.path.join(self.args.ansible_path,
                                       self.config[public_key])
             fingerprint = self.config[fingerprint]
