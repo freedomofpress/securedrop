@@ -58,6 +58,13 @@ case "$1" in
       rm /tmp/securedrop_custom_logo.png
     fi
 
+    # This removes the MAC "hmac-sha1" from sshd_config.
+    # Ansible was updated, so future instances will not have this line present.
+    # This if-block may be removed from this script on 2019-01-01.
+    if grep -qE 'MACs\s.*hmac-sha1' /etc/ssh/sshd_config; then
+        sed -i 's/^\s*MACs\s.*/MACs hmac-sha2-256,hmac-sha2-512/' /etc/ssh/sshd_config;
+    fi
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
