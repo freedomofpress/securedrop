@@ -107,10 +107,9 @@ safety: ## Runs `safety check` to check python dependencies for vulnerabilities
 
 .PHONY: update-pip-requirements
 update-pip-requirements: ## Updates all Python requirements files via pip-compile.
-	pip-compile --generate-hashes --output-file securedrop/requirements/admin-requirements.txt \
-		securedrop/requirements/ansible.in
+	make -C admin update-pip-requirements
 	pip-compile --output-file securedrop/requirements/develop-requirements.txt \
-		securedrop/requirements/ansible.in \
+		admin/requirements-ansible.in \
 		securedrop/requirements/develop-requirements.in
 	pip-compile --output-file securedrop/requirements/test-requirements.txt \
 		securedrop/requirements/test-requirements.in
