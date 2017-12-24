@@ -40,8 +40,6 @@ SD_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '../../..'))
 ANSIBLE_PATH = os.path.join(SD_DIR, "./install_files/ansible-base")
 APP_PATH = os.path.join(SD_DIR, "securedrop")
 SITE_CONFIG = os.path.join(ANSIBLE_PATH, "group_vars/all/site-specific")
-VENV_DIR = os.path.join(SD_DIR, ".venv")
-VENV_ACTIVATION = os.path.join(VENV_DIR, 'bin/activate_this.py')
 
 
 class SiteConfig(object):
@@ -386,26 +384,13 @@ def setup_logger(verbose=False):
     sdlog.addHandler(stdout)
 
 
-def activate_venv(args):
-    """Use to activate the local virtualenv"""
-    try:
-        # If developer mode enabled, no need to enable virtualenv
-        if not args.d:
-            execfile(VENV_ACTIVATION, dict(__file__=VENV_ACTIVATION))
-    except IOError:
-        sdlog.error("Pre-requisites not in place, re-run command with 'setup'")
-        raise
-
-
 def sdconfig(args):
     """Configure SD site settings"""
-    activate_venv(args)
     SiteConfig(args).load_and_update_config()
 
 
 def install_securedrop(args):
     """Install/Update SecureDrop"""
-    activate_venv(args)
     SiteConfig(args).load()
 
     sdlog.info("Now installing SecureDrop on remote servers.")
@@ -423,7 +408,6 @@ def backup_securedrop(args):
     Creates a tarball of submissions and server config, and fetches
     back to the Admin Workstation. Future `restore` actions can be performed
     with the backup tarball."""
-    activate_venv(args)
     sdlog.info("Backing up the SecureDrop Application Server")
     ansible_cmd = [
         'ansible-playbook',
@@ -436,7 +420,6 @@ def restore_securedrop(args):
     """Perform restore of the SecureDrop Application Server.
     Requires a tarball of submissions and server config, created via
     the `backup` action."""
-    activate_venv(args)
     sdlog.info("Restoring the SecureDrop Application Server from backup")
     # Canonicalize filepath to backup tarball, so Ansible sees only the
     # basename. The files must live in ANSIBLE_PATH, but the securedrop-admin
@@ -453,7 +436,6 @@ def restore_securedrop(args):
 
 def run_tails_config(args):
     """Configure Tails environment post SD install"""
-    activate_venv(args)
     sdlog.info("Configuring Tails workstation environment")
     sdlog.info(("You'll be prompted for the temporary Tails admin password,"
                 " which was set on Tails login screen"))
@@ -470,7 +452,6 @@ def run_tails_config(args):
 
 def get_logs(args):
     """Get logs for forensics and debugging purposes"""
-    activate_venv(args)
     sdlog.info("Gathering logs for forensics and debugging")
     ansible_cmd = [
         'ansible-playbook',
