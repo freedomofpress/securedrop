@@ -302,12 +302,14 @@ or change the PGP key that OSSEC alerts are encrypted to. You can do this from
 your *Admin Workstation* by following the procedure described in this
 section.
 
+.. _Updating Logo Image:
+
 Updating Logo Image
 ~~~~~~~~~~~~~~~~~~~
 
 You can update the system logo shown on the web interfaces of your SecureDrop
-instance via the Admin Interface. Simply click the **Update Instace Config**
-button:
+instance via the Admin Interface. We recommend a size of ``500px x 450px``.
+Simply click the **Update Instance Config** button:
 
 |System Config Page|
 
