@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body %}
+<p>
+  <a href="/admin">« {{ gettext('Back to admin interface') }}</a>
+</p>
+
+<h1>{{ gettext('Instance Configuration') }}</h1>
+
+<h2>{{ gettext('Logo Image') }}</h2>
+
+<p>{{ gettext('Here you can update the image displayed on the SecureDrop web interfaces:') }}</p>
+
+<p>
+  <img src="{{ url_for('static', filename='i/logo.png') }}" class="logo small" alt="SecureDrop" width="250px">
+</p>
+
+<form method="post" enctype="multipart/form-data">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <p>
+    {{ form.logo }}
+    <br>
+    {% for error in form.logo.errors %}
+      <span class="form-validation-error">{{ error }}</span>
+    {% endfor %}
+  </p>
+  <button type="submit" class="sd-button">
+    <i class="fa fa-pencil"></i>{{ gettext('UPDATE LOGO') }}
+  </button>
+</form>
+{% endblock %}
