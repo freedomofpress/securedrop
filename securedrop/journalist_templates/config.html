@@ -17,13 +17,13 @@
 <form method="post" enctype="multipart/form-data">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <p>
-    {{ form.logo }}
+    {{ form.logo(id="logo-upload") }}
     <br>
     {% for error in form.logo.errors %}
       <span class="form-validation-error">{{ error }}</span>
     {% endfor %}
   </p>
-  <button type="submit" class="sd-button">
+  <button type="submit" class="sd-button" id="submit-logo-update">
     <i class="fa fa-pencil"></i>{{ gettext('UPDATE LOGO') }}
   </button>
 </form>

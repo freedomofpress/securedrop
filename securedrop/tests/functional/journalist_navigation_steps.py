@@ -3,6 +3,7 @@ import urllib2
 import re
 import tempfile
 import gzip
+import os
 
 from selenium.common.exceptions import NoSuchElementException
 
@@ -10,6 +11,7 @@ import tests.utils.db_helper as db_helper
 import crypto_util
 from db import Journalist
 from step_helpers import screenshots
+import config
 
 
 class JournalistNavigationSteps():
@@ -113,6 +115,28 @@ class JournalistNavigationSteps():
         if not hasattr(self, 'accept_languages'):
             h1s = self.driver.find_elements_by_tag_name('h1')
             assert "Admin Interface" in [el.text for el in h1s]
+
+    def _admin_visits_system_config_page(self):
+        system_config_link = self.driver.find_element_by_id(
+            'update-instance-config'
+        )
+        system_config_link.click()
+        if not hasattr(self, 'accept_languages'):
+            h1 = self.driver.find_element_by_tag_name('h1')
+            assert "Instance Configuration" in h1.text
+
+    def _admin_updates_logo_image(self):
+        logo_upload_input = self.driver.find_element_by_id('logo-upload')
+        logo_upload_input.send_keys(
+            os.path.join(config.SECUREDROP_ROOT, "static/i/logo.png")
+        )
+
+        submit_button = self.driver.find_element_by_id('submit-logo-update')
+        submit_button.click()
+
+        if not hasattr(self, 'accept_languages'):
+            flashed_msgs = self.driver.find_element_by_css_selector('.flash')
+            assert 'Image updated.' in flashed_msgs.text
 
     @screenshots
     def _add_user(self, username, is_admin=False, hotp=None):

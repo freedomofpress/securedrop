@@ -113,6 +113,14 @@ class TestJournalistLayout(
         self._admin_creates_a_user(hotp=None)
         self._screenshot('journalist-admin_new_user_two_factor_totp.png')
 
+    def test_admin_changes_logo(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_visits_system_config_page()
+        self._screenshot('journalist-admin_system_config_page.png')
+        self._admin_updates_logo_image()
+        self._screenshot('journalist-admin_changes_logo_image.png')
+
     def test_col_no_documents(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()

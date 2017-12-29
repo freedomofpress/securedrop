@@ -14,3 +14,9 @@ class TestAdminInterface(
         self._admin_adds_a_user()
         self._new_user_can_log_in()
         self._admin_can_edit_new_user()
+
+    def test_admin_updates_image(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_visits_system_config_page()
+        self._admin_updates_logo_image()
