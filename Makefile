@@ -43,8 +43,8 @@ flake8: ## Validates PEP8 compliance for Python source files.
 	flake8 --exclude='config.py' testinfra securedrop-admin \
 		securedrop/*.py securedrop/management \
 		securedrop/journalist_app/*.py \
-		securedrop/source_app/*.py \
-		securedrop/tests/functional securedrop/tests/*.py
+		securedrop/source_app/*.py securedrop/tests/pages-layout/*.py \
+		securedrop/tests/functional/*.py securedrop/tests/*.py
 
 # The --disable=names is required to use the BEM syntax
 # # https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/

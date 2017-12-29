@@ -33,6 +33,7 @@ def hardening(request):
     db.LOGIN_HARDENING = True
     return None
 
+
 @pytest.mark.pagelayout
 class TestJournalistLayout(
         functional_test.FunctionalTest,
@@ -314,7 +315,9 @@ class TestJournalistLayout(
         self._screenshot('journalist-index_javascript.png')
         self._journalist_selects_the_first_source()
         self._journalist_selects_documents_to_download()
-        self._screenshot('journalist-clicks_on_source_and_selects_documents.png')
+        self._screenshot(
+            'journalist-clicks_on_source_and_selects_documents.png'
+        )
 
     def test_index_entered_text(self):
         self._input_text_in_login_form('jane_doe', 'my password is long',
