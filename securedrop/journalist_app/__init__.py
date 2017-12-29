@@ -52,6 +52,16 @@ def create_app(config):
         template_filters.rel_datetime_format
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
+    @app.template_filter('autoversion')
+    def autoversion_filter(filename):
+        """Use this template filter for cache busting"""
+        if path.exists(filename[1:]):
+            timestamp = str(path.getmtime(filename[1:]))
+        else:
+            return filename
+        versioned_filename = "{0}?v={1}".format(filename, timestamp)
+        return versioned_filename
+
     @app.teardown_appcontext
     def shutdown_session(exception=None):
         """Automatically remove database sessions at the end of the request, or

@@ -11,7 +11,7 @@
 <p>{{ gettext('Here you can update the image displayed on the SecureDrop web interfaces:') }}</p>
 
 <p>
-  <img src="{{ url_for('static', filename='i/logo.png') }}" class="logo small" alt="SecureDrop" width="250px">
+  <img src="{{ url_for('static', filename='i/logo.png')|autoversion }}" class="logo small" alt="SecureDrop" width="250px">
 </p>
 
 <form method="post" enctype="multipart/form-data">
