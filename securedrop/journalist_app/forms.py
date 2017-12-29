@@ -2,6 +2,7 @@
 
 from flask_babel import lazy_gettext as gettext
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import (TextAreaField, TextField, BooleanField, HiddenField,
                      ValidationError)
 from wtforms.validators import InputRequired, Optional
@@ -52,3 +53,11 @@ class ReplyForm(FlaskForm):
                 'You cannot send an empty reply.')),
         ],
     )
+
+
+class LogoForm(FlaskForm):
+    logo = FileField(validators=[
+        FileRequired(message=gettext('File required.')),
+        FileAllowed(['jpg', 'png', 'jpeg'],
+                    message=gettext('Upload images only.'))
+    ])
