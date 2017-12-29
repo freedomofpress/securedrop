@@ -678,6 +678,42 @@ class TestJournalistApp(TestCase):
             " Please inform your administrator.",
             "error")
 
+    def test_logo_upload_with_valid_image_succeeds(self):
+        self._login_admin()
+
+        form = journalist_app.forms.LogoForm(
+            logo=(StringIO('imagedata'), 'test.png')
+        )
+        self.client.post(url_for('admin.manage_config'),
+                         data=form.data,
+                         follow_redirects=True)
+
+        self.assertMessageFlashed("Image updated.", "notification")
+
+    def test_logo_upload_with_invalid_filetype_fails(self):
+        self._login_admin()
+
+        form = journalist_app.forms.LogoForm(
+            logo=(StringIO('filedata'), 'bad.exe')
+        )
+        resp = self.client.post(url_for('admin.manage_config'),
+                                data=form.data,
+                                follow_redirects=True)
+
+        self.assertIn('Upload images only.', resp.data)
+
+    def test_logo_upload_with_empty_input_field_fails(self):
+        self._login_admin()
+
+        form = journalist_app.forms.LogoForm(
+            logo=(StringIO(''), '')
+        )
+        resp = self.client.post(url_for('admin.manage_config'),
+                                data=form.data,
+                                follow_redirects=True)
+
+        self.assertIn('File required.', resp.data)
+
     def test_admin_page_restriction_http_gets(self):
         admin_urls = [url_for('admin.index'), url_for('admin.add_user'),
                       url_for('admin.edit_user', user_id=self.user.id)]
