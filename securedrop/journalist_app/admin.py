@@ -233,4 +233,11 @@ def make_blueprint(config):
         set_diceware_password(user, password)
         return redirect(url_for('admin.edit_user', user_id=user_id))
 
+    @view.route('/ossec-test')
+    @admin_required
+    def ossec_test():
+        current_app.logger.error('This is a test OSSEC alert')
+        flash('Test alert sent. Check your email.', 'notification')
+        return redirect(url_for('admin.manage_config'))
+
     return view
