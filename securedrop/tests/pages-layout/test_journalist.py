@@ -191,6 +191,13 @@ class TestJournalistLayout(
         self._journalist_composes_reply()
         self._screenshot('journalist-composes_reply.png')
 
+    def test_admin_uses_ossec_alert_button(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_visits_system_config_page()
+        self._admin_can_send_test_alert()
+        self._screenshot('journalist-admin_ossec_alert_button.png')
+
     def test_delete_none(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()

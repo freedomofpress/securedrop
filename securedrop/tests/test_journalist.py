@@ -746,6 +746,15 @@ class TestJournalistApp(TestCase):
 
         self.assertIn('File required.', resp.data)
 
+    @patch('journalist.app.logger.error')
+    def test_creation_of_ossec_test_log_event(self, mocked_error_logger):
+        self._login_admin()
+        self.client.get(url_for('admin.ossec_test'))
+
+        mocked_error_logger.assert_called_once_with(
+            "This is a test OSSEC alert"
+        )
+
     def test_admin_page_restriction_http_gets(self):
         admin_urls = [url_for('admin.index'), url_for('admin.add_user'),
                       url_for('admin.edit_user', user_id=self.user.id)]
