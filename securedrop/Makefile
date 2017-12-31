@@ -3,7 +3,11 @@ IMAGE = securedrop
 
 .PHONY: lint
 lint:
-	pylint --reports=no --errors-only ./*.py ./**/*.py
+	find . -name '*.py' | xargs pylint --reports=no --errors-only --disable=import-error
+
+.PHONY: lint-full
+lint-full:
+	find . -name '*.py' | xargs pylint
 
 .PHONY: assets
 assets:
