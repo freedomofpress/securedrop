@@ -31,6 +31,14 @@ dev:
 		-ti $(IMAGE)-test:$(TAG) \
 		./bin/dev
 
+.PHONY: dev-shell
+dev-shell:
+	docker run \
+		-p8080:8080 -p8081:8081 \
+		$(EXTRA_DEV_ARGS) \
+		-v $(shell pwd):/app \
+		-ti $(IMAGE)-test:$(TAG) \
+		bash
 
 config.py: test-config
 
