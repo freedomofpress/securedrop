@@ -4,11 +4,10 @@ FROM ubuntu@sha256:084989eb923bd86dbf7e706d464cf3587274a826b484f75b69468c19f8ae3
 RUN apt-get update && \
     apt-get install -y python-pip libpython2.7-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server firefox git xvfb haveged curl \
-                       gettext paxctl x11vnc
+                       gettext paxctl x11vnc enchant
 
 RUN gem install sass -v 3.4.23
 
-# pinned firefox version for selenium compatibility. See bd795e2f5865b4f6e6e1b88bcbbacef704675c74
 ENV FIREFOX_CHECKSUM=88d25053306d33658580973b063cd459a56e3596a3a298c1fb8ab1d52171d860
 RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/+build/9727836/+files/firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb && \
     shasum -a 256 firefox*deb && \
