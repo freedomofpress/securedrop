@@ -31,17 +31,19 @@ class TestManagePy(object):
         # just test that the arg parser is stable
         manage.get_args()
 
-    def test_not_verbose(self, caplog):
+    def test_not_verbose(self, capfd):
         args = manage.get_args().parse_args(['run'])
         manage.setup_verbosity(args)
         manage.log.debug('INVISIBLE')
-        assert 'INVISIBLE' not in caplog.text()
+        _, err = capfd.readouterr()
+        assert 'INVISIBLE' not in err
 
-    def test_verbose(self, caplog):
+    def test_verbose(self, capfd):
         args = manage.get_args().parse_args(['--verbose', 'run'])
         manage.setup_verbosity(args)
         manage.log.debug('VISIBLE')
-        assert 'VISIBLE' in caplog.text()
+        _, err = capfd.readouterr()
+        assert 'VISIBLE' in err
 
 
 class TestManagementCommand(unittest.TestCase):
@@ -335,58 +337,54 @@ class TestManage(object):
         assert 'code hello i18n' in mo
         assert 'template hello i18n' not in mo
 
-    def test_clean_tmp_do_nothing(self, caplog):
-        args = argparse.Namespace(days=0,
-                                  directory=' UNLIKELY ',
-                                  verbose=logging.DEBUG)
+    def test_clean_tmp_do_nothing(self, capfd):
+        args = argparse.Namespace(
+            days=0, directory=' UNLIKELY ', verbose=logging.DEBUG)
         manage.setup_verbosity(args)
         manage.clean_tmp(args)
-        assert 'does not exist, do nothing' in caplog.text()
+        _, err = capfd.readouterr()
+        assert 'does not exist, do nothing' in err
 
-    def test_clean_tmp_too_young(self, caplog):
-        args = argparse.Namespace(days=24*60*60,
-                                  directory=config.TEMP_DIR,
-                                  verbose=logging.DEBUG)
+    def test_clean_tmp_too_young(self, capfd):
+        args = argparse.Namespace(
+            days=24 * 60 * 60,
+            directory=config.TEMP_DIR,
+            verbose=logging.DEBUG)
         open(os.path.join(config.TEMP_DIR, 'FILE'), 'a').close()
         manage.setup_verbosity(args)
         manage.clean_tmp(args)
-        assert 'modified less than' in caplog.text()
+        _, err = capfd.readouterr()
+        assert 'modified less than' in err
 
-    def test_clean_tmp_removed(self, caplog):
-        args = argparse.Namespace(days=0,
-                                  directory=config.TEMP_DIR,
-                                  verbose=logging.DEBUG)
+    def test_clean_tmp_removed(self, capfd):
+        args = argparse.Namespace(
+            days=0, directory=config.TEMP_DIR, verbose=logging.DEBUG)
         fname = os.path.join(config.TEMP_DIR, 'FILE')
         with open(fname, 'a'):
-            old = time.time() - 24*60*60
+            old = time.time() - 24 * 60 * 60
             os.utime(fname, (old, old))
         manage.setup_verbosity(args)
         manage.clean_tmp(args)
-        assert 'FILE removed' in caplog.text()
+        _, err = capfd.readouterr()
+        assert 'FILE removed' in err
 
 
 class TestSh(object):
-
     def test_sh(self):
         assert 'A' == manage.sh("echo -n A")
         with pytest.raises(Exception) as excinfo:
             manage.sh("exit 123")
         assert excinfo.value.returncode == 123
 
-    def test_sh_progress(self, caplog):
-        manage.sh("echo AB ; sleep 5 ; echo C")
-        records = caplog.records()
-        assert ':sh: ' in records[0].message
-        assert records[0].levelname == 'DEBUG'
-        assert 'AB' == records[1].message
-        assert records[1].levelname == 'DEBUG'
-        assert 'C' == records[2].message
-        assert records[2].levelname == 'DEBUG'
+    def test_sh_progress(self, capsys):
+        out = manage.sh("echo AB ; sleep 1 ; echo C")
+        assert 'AB' in out
+        assert 'C' in out
 
-    def test_sh_input(self, caplog):
+    def test_sh_input(self, capfd):
         assert 'abc' == manage.sh("cat", 'abc')
 
-    def test_sh_fail(self, caplog):
+    def test_sh_fail(self, capfd):
         level = manage.log.getEffectiveLevel()
         manage.log.setLevel(logging.INFO)
         assert manage.log.getEffectiveLevel() == logging.INFO
@@ -394,8 +392,9 @@ class TestSh(object):
             manage.sh("echo AB ; echo C ; exit 111")
         manage.log.setLevel(level)
         assert excinfo.value.returncode == 111
-        records = caplog.records()
-        assert 'AB' == records[0].message
-        assert records[0].levelname == 'ERROR'
-        assert 'C' == records[1].message
-        assert records[1].levelname == 'ERROR'
+        _, err = capfd.readouterr()
+        records = err.splitlines()
+        assert 'AB' in records[0]
+        assert 'ERROR' in records[0]
+        assert 'C' in records[1]
+        assert 'ERROR' in records[1]
