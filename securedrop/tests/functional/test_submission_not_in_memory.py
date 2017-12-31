@@ -1,6 +1,6 @@
 from functional_test import FunctionalTest
 import subprocess
-from source_navigation_steps import SourceNavigationSteps
+from source_navigation_steps import SourceNavigationStepsMixin
 import os
 import pytest
 import getpass
@@ -8,7 +8,7 @@ import re
 
 
 class TestSubmissionNotInMemory(FunctionalTest,
-                                SourceNavigationSteps):
+                                SourceNavigationStepsMixin):
 
     def setup(self):
         self.devnull = open('/dev/null', 'r')

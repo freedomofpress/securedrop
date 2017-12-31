@@ -5,7 +5,7 @@ from step_helpers import screenshots
 
 class TestAdminInterface(
         functional_test.FunctionalTest,
-        journalist_navigation_steps.JournalistNavigationSteps):
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
 
     @screenshots
     def test_admin_interface(self):

@@ -24,8 +24,8 @@ import pytest
 @pytest.mark.pagelayout
 class TestSourceLayout(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps,
-        journalist_navigation_steps.JournalistNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
 
     def test_index(self):
         self._source_visits_source_homepage()
@@ -141,8 +141,8 @@ class TestSourceLayout(
 @pytest.mark.pagelayout
 class TestSourceSessionLayout(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps,
-        journalist_navigation_steps.JournalistNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
 
     def setup(self):
         self.session_length_minutes = 0.03

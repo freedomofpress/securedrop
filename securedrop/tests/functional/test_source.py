@@ -4,7 +4,7 @@ import functional_test
 
 class TestSourceInterface(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin):
 
     def test_lookup_codename_hint(self):
         self._source_visits_source_homepage()

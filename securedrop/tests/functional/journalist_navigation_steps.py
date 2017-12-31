@@ -12,7 +12,7 @@ from db import Journalist
 from step_helpers import screenshots
 
 
-class JournalistNavigationSteps():
+class JournalistNavigationStepsMixin():
 
     @screenshots
     def _get_submission_content(self, file_url, raw_content):
