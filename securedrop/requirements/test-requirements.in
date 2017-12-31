@@ -7,5 +7,5 @@ pip-tools
 py
 pytest
 pytest-cov
-pytest-capturelog
+pytest-catchlog
 selenium < 3
