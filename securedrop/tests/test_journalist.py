@@ -301,7 +301,7 @@ class TestJournalistApp(TestCase):
         assert ('There was an error, and the new password might not have '
                 'been saved correctly.') in resp.data.decode('utf-8')
 
-    def test_user_edits_password_success_reponse(self):
+    def test_user_edits_password_success_response(self):
         self._login_user()
         resp = self.client.post(
             url_for('account.new_password'),
