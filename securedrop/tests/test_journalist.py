@@ -737,14 +737,6 @@ class TestJournalistApp(TestCase):
         text = resp.data.decode('utf-8')
         self.assertIn('Incorrect password or two-factor code', text)
 
-    def test_invalid_user_password_change(self):
-        self._login_user()
-        res = self.client.post(url_for('account.new_password'),
-                               data=dict(password='badpw',
-                                         token='mocked',
-                                         current_password=self.user_pw))
-        self.assertRedirects(res, url_for('account.edit'))
-
     def test_too_long_user_password_change(self):
         self._login_user()
 
