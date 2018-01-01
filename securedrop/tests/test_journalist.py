@@ -314,6 +314,27 @@ class TestJournalistApp(TestCase):
         assert "Password updated." in text
         assert VALID_PASSWORD_2 in text
 
+    def test_user_edits_password_expires_session(self):
+        with self.client as client:
+            # do a real login to get a real session
+            # (none of the mocking `g` hacks)
+            resp = client.post(url_for('main.login'),
+                               data=dict(username=self.user.username,
+                                         password=self.user_pw,
+                                         token='mocked'))
+            self.assertRedirects(resp, url_for('main.index'))
+            assert 'uid' in session
+
+            resp = client.post(
+                url_for('account.new_password'),
+                data=dict(current_password=self.user_pw,
+                          token='mocked',
+                          password=VALID_PASSWORD_2))
+
+            self.assertRedirects(resp, url_for('main.login'))
+            # verify the session was expired after the password was changed
+            assert 'uid' not in session
+
     def test_user_edits_password_error_reponse(self):
         self._login_user()
 
