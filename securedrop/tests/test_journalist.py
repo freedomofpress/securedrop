@@ -1069,16 +1069,17 @@ class TestJournalistApp(TestCase):
 
         try:
             with self.client as client:
-                # do a real login to get a real session
-                # (none of the mocking `g` hacks)
-                resp = self.client.post(url_for('main.login'),
-                                        data=dict(username=self.user.username,
-                                                  password=VALID_PASSWORD,
-                                                  token='mocked'))
-                assert resp.status_code == 200
-
                 # set the expiration to ensure we trigger an expiration
                 config.SESSION_EXPIRATION_MINUTES = -1
+
+                # do a real login to get a real session
+                # (none of the mocking `g` hacks)
+                resp = client.post(url_for('main.login'),
+                                   data=dict(username=self.user.username,
+                                             password=self.user_pw,
+                                             token='mocked'))
+                self.assertRedirects(resp, url_for('main.index'))
+                assert 'uid' in session
 
                 resp = client.get(url_for('account.edit'),
                                   follow_redirects=True)
