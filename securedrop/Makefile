@@ -1,6 +1,14 @@
 TAG ?= $(shell git rev-parse HEAD)
 IMAGE = securedrop
 
+.PHONY: lint
+lint:
+	find . -name '*.py' | xargs pylint --reports=no --errors-only --disable=import-error
+
+.PHONY: lint-full
+lint-full:
+	find . -name '*.py' | xargs pylint
+
 .PHONY: assets
 assets:
 	sass

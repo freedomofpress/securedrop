@@ -46,6 +46,10 @@ flake8: ## Validates PEP8 compliance for Python source files.
 		securedrop/source_app/*.py \
 		securedrop/tests/functional securedrop/tests/*.py
 
+.PHONY: app-lint
+app-lint: ## Tests pylint lint rule compliance.
+	cd securedrop && make lint
+
 # The --disable=names is required to use the BEM syntax
 # # https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
 .PHONY: html-lint
@@ -82,7 +86,7 @@ shellcheckclean: ## Cleans up temporary container associated with shellcheck tar
 	@docker rm -f shellcheck-targets
 
 .PHONY: lint
-lint: docs-lint flake8 html-lint yamllint shellcheck ## Runs all linting tools (docs, flake8, HTML, YAML, shell).
+lint: docs-lint app-lint flake8 html-lint yamllint shellcheck ## Runs all linting tools (docs, pylint, flake8, HTML, YAML, shell).
 
 .PHONY: docker-build-ubuntu
 docker-build-ubuntu: ## Builds SD Ubuntu docker container

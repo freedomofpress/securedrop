@@ -6,7 +6,7 @@ import zipfile
 import crypto_util
 import tempfile
 import gzip
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 
 from secure_tempfile import SecureTemporaryFile
 

@@ -36,8 +36,8 @@ def hardening(request):
 @pytest.mark.pagelayout
 class TestJournalistLayout(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps,
-        journalist_navigation_steps.JournalistNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
 
     def test_account_edit_hotp_secret(self):
         self._journalist_logs_in()

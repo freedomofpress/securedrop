@@ -217,7 +217,7 @@ def make_blueprint(config):
                 return redirect(url_for('.lookup', from_login='1'))
             else:
                 current_app.logger.info(
-                        "Login failed for invalid codename".format(codename))
+                        "Login failed for invalid codename")
                 flash(gettext("Sorry, that is not a recognized codename."),
                       "error")
         return render_template('login.html', form=form)

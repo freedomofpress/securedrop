@@ -12,7 +12,7 @@ from db import Journalist
 from step_helpers import screenshots
 
 
-class JournalistNavigationSteps():
+class JournalistNavigationStepsMixin():
 
     @screenshots
     def _get_submission_content(self, file_url, raw_content):
@@ -334,9 +334,9 @@ class JournalistNavigationSteps():
             'button[type=submit]')
         update_user_btn.click()
 
-        def can_edit_user():
+        def can_edit_user2():
             assert ('"{}"'.format(new_username) in self.driver.page_source)
-        self.wait_for(can_edit_user)
+        self.wait_for(can_edit_user2)
 
         # Update self.new_user with the new username for the future tests
         self.new_user['username'] = new_username
