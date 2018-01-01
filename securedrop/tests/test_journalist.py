@@ -301,7 +301,7 @@ class TestJournalistApp(TestCase):
         assert ('There was an error, and the new password might not have '
                 'been saved correctly.') in resp.data.decode('utf-8')
 
-    def test_user_edits_password_success_reponse(self):
+    def test_user_edits_password_success_response(self):
         self._login_user()
         resp = self.client.post(
             url_for('account.new_password'),
@@ -313,6 +313,27 @@ class TestJournalistApp(TestCase):
         text = resp.data.decode('utf-8')
         assert "Password updated." in text
         assert VALID_PASSWORD_2 in text
+
+    def test_user_edits_password_expires_session(self):
+        with self.client as client:
+            # do a real login to get a real session
+            # (none of the mocking `g` hacks)
+            resp = client.post(url_for('main.login'),
+                               data=dict(username=self.user.username,
+                                         password=self.user_pw,
+                                         token='mocked'))
+            self.assertRedirects(resp, url_for('main.index'))
+            assert 'uid' in session
+
+            resp = client.post(
+                url_for('account.new_password'),
+                data=dict(current_password=self.user_pw,
+                          token='mocked',
+                          password=VALID_PASSWORD_2))
+
+            self.assertRedirects(resp, url_for('main.login'))
+            # verify the session was expired after the password was changed
+            assert 'uid' not in session
 
     def test_user_edits_password_error_reponse(self):
         self._login_user()
@@ -737,14 +758,6 @@ class TestJournalistApp(TestCase):
         text = resp.data.decode('utf-8')
         self.assertIn('Incorrect password or two-factor code', text)
 
-    def test_invalid_user_password_change(self):
-        self._login_user()
-        res = self.client.post(url_for('account.new_password'),
-                               data=dict(password='badpw',
-                                         token='mocked',
-                                         current_password=self.user_pw))
-        self.assertRedirects(res, url_for('account.edit'))
-
     def test_too_long_user_password_change(self):
         self._login_user()
 
@@ -1077,16 +1090,17 @@ class TestJournalistApp(TestCase):
 
         try:
             with self.client as client:
-                # do a real login to get a real session
-                # (none of the mocking `g` hacks)
-                resp = self.client.post(url_for('main.login'),
-                                        data=dict(username=self.user.username,
-                                                  password=VALID_PASSWORD,
-                                                  token='mocked'))
-                assert resp.status_code == 200
-
                 # set the expiration to ensure we trigger an expiration
                 config.SESSION_EXPIRATION_MINUTES = -1
+
+                # do a real login to get a real session
+                # (none of the mocking `g` hacks)
+                resp = client.post(url_for('main.login'),
+                                   data=dict(username=self.user.username,
+                                             password=self.user_pw,
+                                             token='mocked'))
+                self.assertRedirects(resp, url_for('main.index'))
+                assert 'uid' in session
 
                 resp = client.get(url_for('account.edit'),
                                   follow_redirects=True)
