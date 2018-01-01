@@ -31,6 +31,7 @@ def make_blueprint(config):
             set_diceware_password(user, password)
             session.pop('uid', None)
             session.pop('expires', None)
+            return redirect(url_for('main.login'))
         return redirect(url_for('account.edit'))
 
     @view.route('/2fa', methods=('GET', 'POST'))
