@@ -33,6 +33,7 @@ import sys
 import types
 import prompt_toolkit
 from prompt_toolkit.validation import Validator, ValidationError
+import yaml
 
 sdlog = logging.getLogger(__name__)
 
@@ -347,20 +348,12 @@ class SiteConfig(object):
         return os.path.exists(self.args.site_config)
 
     def save(self):
-        # Yaml library cannot be imported until virtualenv is activated
-        # (hence the yaml library is not imported up-top)
-        import yaml
-
         with open(self.args.site_config, 'w') as site_config_file:
             yaml.safe_dump(self.config,
                            site_config_file,
                            default_flow_style=False)
 
     def load(self):
-        # Yaml library cannot be imported until virtualenv is activated
-        # (hence the yaml library is not imported up-top)
-        import yaml
-
         try:
             with open(self.args.site_config) as site_config_file:
                 return yaml.safe_load(site_config_file)
