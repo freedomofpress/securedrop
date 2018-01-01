@@ -37,11 +37,6 @@ import yaml
 
 sdlog = logging.getLogger(__name__)
 
-SD_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..'))
-ANSIBLE_PATH = os.path.join(SD_DIR, "./install_files/ansible-base")
-APP_PATH = os.path.join(SD_DIR, "securedrop")
-SITE_CONFIG = os.path.join(ANSIBLE_PATH, "group_vars/all/site-specific")
-
 
 class SiteConfig(object):
 
@@ -392,9 +387,9 @@ def install_securedrop(args):
                "servers.")
     sdlog.info("The sudo password is only necessary during initial "
                "installation.")
-    subprocess.check_call([os.path.join(ANSIBLE_PATH,
+    subprocess.check_call([os.path.join(args.ansible_path,
                                         'securedrop-prod.yml'),
-                          '--ask-become-pass'], cwd=ANSIBLE_PATH)
+                          '--ask-become-pass'], cwd=args.ansible_path)
 
 
 def backup_securedrop(args):
@@ -405,9 +400,9 @@ def backup_securedrop(args):
     sdlog.info("Backing up the SecureDrop Application Server")
     ansible_cmd = [
         'ansible-playbook',
-        os.path.join(ANSIBLE_PATH, 'securedrop-backup.yml'),
+        os.path.join(args.ansible_path, 'securedrop-backup.yml'),
     ]
-    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+    subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
 def restore_securedrop(args):
@@ -416,16 +411,17 @@ def restore_securedrop(args):
     the `backup` action."""
     sdlog.info("Restoring the SecureDrop Application Server from backup")
     # Canonicalize filepath to backup tarball, so Ansible sees only the
-    # basename. The files must live in ANSIBLE_PATH, but the securedrop-admin
+    # basename. The files must live in args.ansible_path,
+    # but the securedrop-admin
     # script will be invoked from the repo root, so preceding dirs are likely.
     restore_file_basename = os.path.basename(args.restore_file)
     ansible_cmd = [
         'ansible-playbook',
-        os.path.join(ANSIBLE_PATH, 'securedrop-restore.yml'),
+        os.path.join(args.ansible_path, 'securedrop-restore.yml'),
         '-e',
         "restore_file='{}'".format(restore_file_basename),
     ]
-    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+    subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
 def run_tails_config(args):
@@ -434,14 +430,14 @@ def run_tails_config(args):
     sdlog.info(("You'll be prompted for the temporary Tails admin password,"
                 " which was set on Tails login screen"))
     ansible_cmd = [
-        os.path.join(ANSIBLE_PATH, 'securedrop-tails.yml'),
+        os.path.join(args.ansible_path, 'securedrop-tails.yml'),
         "--ask-become-pass",
         # Passing an empty inventory file to override the automatic dynamic
         # inventory script, which fails if no site vars are configured.
         '-i', '/dev/null',
     ]
     subprocess.check_call(ansible_cmd,
-                          cwd=ANSIBLE_PATH)
+                          cwd=args.ansible_path)
 
 
 def get_logs(args):
@@ -449,11 +445,24 @@ def get_logs(args):
     sdlog.info("Gathering logs for forensics and debugging")
     ansible_cmd = [
         'ansible-playbook',
-        os.path.join(ANSIBLE_PATH, 'securedrop-logs.yml'),
+        os.path.join(args.ansible_path, 'securedrop-logs.yml'),
     ]
-    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+    subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
     sdlog.info("Encrypt logs and send to securedrop@freedom.press or upload "
                "to the SecureDrop support portal.")
+
+
+def set_default_paths(args):
+    if not args.ansible_path:
+        args.ansible_path = args.root + "/install_files/ansible-base"
+    args.ansible_path = os.path.realpath(args.ansible_path)
+    if not args.site_config:
+        args.site_config = args.ansible_path + "/group_vars/all/site-specific"
+    args.site_config = os.path.realpath(args.site_config)
+    if not args.app_path:
+        args.app_path = args.root + "/securedrop"
+    args.app_path = os.path.realpath(args.app_path)
+    return args
 
 
 def parse_argv(argv):
@@ -468,11 +477,13 @@ def parse_argv(argv):
                         help="Increase verbosity on output")
     parser.add_argument('-d', action='store_true', default=False,
                         help="Developer mode. Not to be used in production.")
-    parser.add_argument('--site-config', default=SITE_CONFIG,
+    parser.add_argument('--root', required=True,
+                        help="path to the root of the SecureDrop repository")
+    parser.add_argument('--site-config',
                         help="path to the YAML site configuration file")
-    parser.add_argument('--ansible-path', default=ANSIBLE_PATH,
+    parser.add_argument('--ansible-path',
                         help="path to the Ansible root")
-    parser.add_argument('--app-path', default=APP_PATH,
+    parser.add_argument('--app-path',
                         help="path to the SecureDrop application root")
     subparsers = parser.add_subparsers()
 
@@ -500,7 +511,7 @@ def parse_argv(argv):
                                        help=get_logs.__doc__)
     parse_logs.set_defaults(func=get_logs)
 
-    return parser.parse_args(argv)
+    return set_default_paths(parser.parse_args(argv))
 
 
 def main(argv):

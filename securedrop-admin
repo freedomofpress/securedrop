@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC1090
 # this is for backward compatibility and also because it
 # is more convenient for the admin to have the script at
 # the top level of the SecureDrop repository
@@ -6,5 +7,11 @@ d=$(dirname "$0")
 if test "${!#}" = "setup" ; then
    exec python "$d/admin/bootstrap.py"
 else
-   exec "$d/admin/.venv/bin/securedrop-admin" "$@"
+   activate="$d/admin/.venv/bin/activate"
+   if test -f "$activate" ; then
+      source "$activate"
+      exec "$d/admin/.venv/bin/securedrop-admin" --root "$d" "$@"
+   else
+      echo "please run '$0 setup' first"
+   fi
 fi
