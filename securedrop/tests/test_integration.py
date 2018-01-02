@@ -448,6 +448,7 @@ class TestIntegration(unittest.TestCase):
         self.assertIn(escape("%s's collection deleted" % (col_name,)),
                       resp.data)
         self.assertIn("No documents have been submitted!", resp.data)
+        self.assertTrue(async_genkey.called)
 
         # Make sure the collection is deleted from the filesystem
         utils.async.wait_for_assertion(
@@ -481,6 +482,7 @@ class TestIntegration(unittest.TestCase):
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
         self.assertIn("%s collections deleted" % (num_sources,), resp.data)
+        self.assertTrue(async_genkey.called)
 
         # Make sure the collections are deleted from the filesystem
         utils.async.wait_for_assertion(lambda: self.assertFalse(
