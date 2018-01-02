@@ -1,3 +1,4 @@
+bandit
 # yes, we need both boto and boto3
 boto
 boto3

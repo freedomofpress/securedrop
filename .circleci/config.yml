@@ -126,6 +126,10 @@ jobs:
           name: Check Python dependencies for CVEs
           command: make safety
 
+      - run:
+          name: Run static security testing on source code
+          command: make bandit
+
       - setup_remote_docker
 
       - run:
