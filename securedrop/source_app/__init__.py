@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 
-from source_app.formparser import MultiPartParser
-import werkzeug
-werkzeug.formparser.MultiPartParser = MultiPartParser
+from source_app.formparser import MultiPartParser # noqa
+import werkzeug # noqa
+werkzeug.formparser.MultiPartParser = MultiPartParser # noqa
 
 from flask import (Flask, render_template, flash, Markup, request, g, session,
                    url_for, redirect)
@@ -25,7 +25,6 @@ from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from source_app import main, info, api
 from source_app.decorators import ignore_static
 from source_app.utils import logged_in
-
 
 
 def create_app(config):
