@@ -1,4 +1,9 @@
 from datetime import datetime, timedelta
+
+from source_app.formparser import MultiPartParser
+import werkzeug
+werkzeug.formparser.MultiPartParser = MultiPartParser
+
 from flask import (Flask, render_template, flash, Markup, request, g, session,
                    url_for, redirect)
 from flask_babel import gettext
@@ -14,11 +19,13 @@ import store
 import template_filters
 import version
 
+
 from db import Source, db_session
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from source_app import main, info, api
 from source_app.decorators import ignore_static
 from source_app.utils import logged_in
+
 
 
 def create_app(config):
