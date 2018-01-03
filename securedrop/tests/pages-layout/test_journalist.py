@@ -33,6 +33,7 @@ def hardening(request):
     db.LOGIN_HARDENING = True
     return None
 
+
 @pytest.mark.pagelayout
 class TestJournalistLayout(
         functional_test.FunctionalTest,
@@ -112,6 +113,14 @@ class TestJournalistLayout(
         self._admin_visits_admin_interface()
         self._admin_creates_a_user(hotp=None)
         self._screenshot('journalist-admin_new_user_two_factor_totp.png')
+
+    def test_admin_changes_logo(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_visits_system_config_page()
+        self._screenshot('journalist-admin_system_config_page.png')
+        self._admin_updates_logo_image()
+        self._screenshot('journalist-admin_changes_logo_image.png')
 
     def test_col_no_documents(self):
         self._source_visits_source_homepage()
@@ -306,7 +315,9 @@ class TestJournalistLayout(
         self._screenshot('journalist-index_javascript.png')
         self._journalist_selects_the_first_source()
         self._journalist_selects_documents_to_download()
-        self._screenshot('journalist-clicks_on_source_and_selects_documents.png')
+        self._screenshot(
+            'journalist-clicks_on_source_and_selects_documents.png'
+        )
 
     def test_index_entered_text(self):
         self._input_text_in_login_form('jane_doe', 'my password is long',

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from flask import (Blueprint, render_template, request, url_for, redirect, g,
                    current_app, flash, abort)
 from flask_babel import gettext
@@ -11,7 +13,7 @@ from db import (db_session, Journalist, InvalidUsernameException,
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (make_password, commit_account_changes,
                                   set_diceware_password)
-from journalist_app.forms import NewUserForm
+from journalist_app.forms import LogoForm, NewUserForm
 
 
 def make_blueprint(config):
@@ -22,6 +24,20 @@ def make_blueprint(config):
     def index():
         users = Journalist.query.all()
         return render_template("admin.html", users=users)
+
+    @view.route('/config', methods=('GET', 'POST'))
+    @admin_required
+    def manage_config():
+        form = LogoForm()
+        if form.validate_on_submit():
+            f = form.logo.data
+            static_filepath = os.path.join(config.SECUREDROP_ROOT,
+                                           "static/i/logo.png")
+            f.save(static_filepath)
+            flash(gettext("Image updated."), "notification")
+            return redirect(url_for("admin.manage_config"))
+        else:
+            return render_template("config.html", form=form)
 
     @view.route('/add', methods=('GET', 'POST'))
     @admin_required

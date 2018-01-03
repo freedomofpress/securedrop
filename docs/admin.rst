@@ -302,10 +302,29 @@ or change the PGP key that OSSEC alerts are encrypted to. You can do this from
 your *Admin Workstation* by following the procedure described in this
 section.
 
+.. _Updating Logo Image:
+
+Updating Logo Image
+~~~~~~~~~~~~~~~~~~~
+
+You can update the system logo shown on the web interfaces of your SecureDrop
+instance via the Admin Interface. We recommend a size of ``500px x 450px``.
+Simply click the **Update Instance Config** button:
+
+|System Config Page|
+
+And on the instance configuration page, select and upload the image you prefer.
+You should see a message appear indicating the change was a success:
+
+|Logo Update|
+
+.. |System Config Page| image:: images/manual/screenshots/journalist-admin_system_config_page.png
+.. |Logo Update| image:: images/manual/screenshots/journalist-admin_changes_logo_image.png
+
 Updating system configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The server configuration is stored on the *Admin Workstation* in
+Other server configuration is stored on the *Admin Workstation* in
 ``~/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific``.
 
 If you want to update the system configuration, there are two options:
