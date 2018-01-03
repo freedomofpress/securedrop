@@ -7,17 +7,12 @@
 attrs==17.4.0             # via pytest
 beautifulsoup4==4.6.0
 blinker==1.4
-certifi==2017.4.17        # via requests
-chardet==3.0.4            # via requests
 click==6.7                # via flask, pip-tools
-coverage==4.4.1           # via coveralls, pytest-cov
-coveralls==1.1
-docopt==0.6.2             # via coveralls
+coverage==4.4.1           # via pytest-cov
 first==2.0.1              # via pip-tools
 flask-testing==0.6.2
 flask==0.12.2             # via flask-testing
 funcsigs==1.0.2           # via mock, pytest
-idna==2.5                 # via requests
 itsdangerous==0.24        # via flask
 jinja2==2.9.6             # via flask
 markupsafe==1.0           # via jinja2
@@ -28,8 +23,6 @@ pluggy==0.6.0             # via pytest
 py==1.5.2
 pytest-cov==2.5.1
 pytest==3.3.1
-requests==2.17.3          # via coveralls
 selenium==2.53.6
 six==1.10.0               # via mock, pip-tools, pytest
-urllib3==1.21.1           # via requests
 werkzeug==0.12.2          # via flask
