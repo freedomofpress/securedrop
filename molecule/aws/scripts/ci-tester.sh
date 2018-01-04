@@ -10,7 +10,7 @@ if [ "$?" == "0" ]; then
         ./testinfra/test.py apptestclient || export TEST_FAIL=true
         ;;
     "development")
-        ./testinfra/test.py development
+        ./testinfra/test.py development || export TEST_FAIL=true
         ;;
     esac
 fi
