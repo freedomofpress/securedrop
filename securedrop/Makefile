@@ -15,11 +15,13 @@ assets:
 
 .PHONY: images
 images:
+	find . -name '*.pyc' | xargs --no-run-if-empty rm
 	docker build $(EXTRA_BUILD_ARGS) -f Dockerfile -t $(IMAGE)-test:$(TAG) .
 
+TESTFILES ?= tests
 .PHONY: test
 test:
-	docker run --privileged \
+	docker run \
 		-e COMMIT_SHA=$(TAG) \
 		$(EXTRA_TEST_ARGS) \
 		--name $(IMAGE)-test \
@@ -36,6 +38,7 @@ dev:
 		-p8080:8080 -p8081:8081 \
 		$(EXTRA_DEV_ARGS) \
 		-v $(shell pwd):/app \
+		--rm \
 		-ti $(IMAGE)-test:$(TAG) \
 		./bin/dev
 

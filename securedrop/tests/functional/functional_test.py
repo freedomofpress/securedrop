@@ -87,6 +87,10 @@ class FunctionalTest(object):
         self.mock_journalist_verify_token = self.patcher.start()
         self.mock_journalist_verify_token.return_value = True
 
+        self.patcher2 = mock.patch('source_app.main.get_entropy_estimate')
+        self.mock_get_entropy_estimate = self.patcher2.start()
+        self.mock_get_entropy_estimate.return_value = 8192
+
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
         env.create_directories()

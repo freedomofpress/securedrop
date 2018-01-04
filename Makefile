@@ -40,7 +40,7 @@ docs: ## Build project documentation in live reload for editing
 
 .PHONY: flake8
 flake8: ## Validates PEP8 compliance for Python source files.
-	flake8 --exclude='config.py' testinfra securedrop-admin \
+	flake8 --exclude='config.py' testinfra securedrop/securedrop-admin \
 		securedrop/*.py securedrop/management \
 		securedrop/journalist_app/*.py \
 		securedrop/source_app/*.py securedrop/tests/pages-layout/*.py \

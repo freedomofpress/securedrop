@@ -1,0 +1,334 @@
+#!/usr/bin/env python2
+"""
+SecureDrop Admin Toolkit.
+
+For use by administrators to install, maintain, and manage their SD
+instances.
+"""
+
+import argparse
+import logging
+import os
+import subprocess
+import sys
+
+sdlog = logging.getLogger(__name__)
+
+SD_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+ANSIBLE_PATH = os.path.join(SD_DIR, "./install_files/ansible-base")
+SITE_CONFIG = os.path.join(ANSIBLE_PATH, "group_vars/all/site-specific")
+VENV_DIR = os.path.join(SD_DIR, ".venv")
+VENV_ACTIVATION = os.path.join(VENV_DIR, 'bin/activate_this.py')
+
+
+def setup_logger(verbose=False):
+    """ Configure logging handler """
+    # Set default level on parent
+    sdlog.setLevel(logging.DEBUG)
+    level = logging.DEBUG if verbose else logging.INFO
+
+    stdout = logging.StreamHandler(sys.stdout)
+    stdout.setFormatter(logging.Formatter('%(levelname)s: %(message)s'))
+    stdout.setLevel(level)
+    sdlog.addHandler(stdout)
+
+
+def activate_venv(args):
+    """Use to activate the local virtualenv"""
+    try:
+        # If developer mode enabled, no need to enable virtualenv
+        if not args.d:
+            execfile(VENV_ACTIVATION, dict(__file__=VENV_ACTIVATION))
+    except IOError:
+        sdlog.error("Pre-requisites not in place, re-run command with 'setup'")
+        sys.exit(1)
+
+
+def sdconfig(args):
+    """Configure SD site settings"""
+    activate_venv(args)
+
+    ansible_cmd = [
+        'ansible-playbook',
+        # Passing an empty inventory file to override the automatic dynamic
+        # inventory script, which fails if no site vars are configured.
+        '-i', '/dev/null',
+        os.path.join(ANSIBLE_PATH, 'securedrop-configure.yml'),
+    ]
+    # Honor `--force` flag to clobber existing (misconfigured) vars,
+    # otherwise read in the existing vars to supply defaults.
+    if os.path.exists(SITE_CONFIG) and args.force is False:
+        ansible_cmd.append('--extra-vars')
+        ansible_cmd.append("@{}".format(SITE_CONFIG))
+
+    sdlog.info("Configuring SecureDrop site-specific information")
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH, env=os.environ.copy())
+
+
+def run_command(command):
+    """
+    Wrapper function to display stdout for running command,
+    similar to how shelling out in a Bash script displays rolling output.
+
+    Yields a list of the stdout from the `command`, and raises a
+    CalledProcessError if `command` returns non-zero.
+    """
+    popen = subprocess.Popen(command,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT)
+    for stdout_line in iter(popen.stdout.readline, ""):
+        yield stdout_line
+    popen.stdout.close()
+    return_code = popen.wait()
+    if return_code:
+        raise subprocess.CalledProcessError(return_code, command)
+
+
+def install_apt_dependencies(args):
+    """
+    Install apt dependencies in Tails. In order to install Ansible in
+    a virtualenv, first there are a number of Python prerequisites.
+    """
+    sdlog.info("Installing SecureDrop Admin dependencies")
+    sdlog.info(("You'll be prompted for the temporary Tails admin password,"
+                " which was set on Tails login screen"))
+
+    apt_command = ['sudo', 'su', '-c',
+                   "apt-get update && \
+                   apt-get -q -o=Dpkg::Use-Pty=0 install -y \
+                   python-virtualenv \
+                   python-pip \
+                   ccontrol \
+                   virtualenv \
+                   libffi-dev \
+                   libssl-dev \
+                   libpython2.7-dev",
+                   ]
+
+    try:
+        # Print command results in real-time, to keep Admin apprised
+        # of progress during long-running command.
+        for output_line in run_command(apt_command):
+            print(output_line.rstrip())
+    except subprocess.CalledProcessError:
+        # Tails supports apt persistence, which was used by SecureDrop
+        # under Tails 2.x. If updates are being applied, don't try to pile
+        # on with more apt requests.
+        sdlog.error(("Failed to install apt dependencies. Check network"
+                     " connection and try again."))
+        sys.exit(1)
+
+
+def envsetup(args):
+    """Installs Admin tooling required for managing SecureDrop. Specifically:
+
+        * updates apt-cache
+        * installs apt packages for Python virtualenv
+        * creates virtualenv
+        * installs pip packages inside virtualenv
+
+    The virtualenv is created within the Persistence volume in Tails, so that
+    Ansible is available to the Admin on subsequent boots without requiring
+    installation of packages again.
+    """
+    # virtualenv doesnt exist? Install dependencies and create
+    if not os.path.exists(VENV_ACTIVATION):
+
+        install_apt_dependencies(args)
+
+        # Technically you can create a virtualenv from within python
+        # but pip can only be run over tor on tails, and debugging that
+        # along with instaling a third-party dependency is not worth
+        # the effort here.
+        sdlog.info("Setting up virtualenv")
+        try:
+            sdlog.debug(subprocess.check_output(['torify', 'virtualenv',
+                                                 VENV_DIR],
+                                                stderr=subprocess.STDOUT))
+        except subprocess.CalledProcessError as e:
+            sdlog.debug(e.output)
+            sdlog.error(("Unable to create virtualenv. Check network settings"
+                         " and try again."))
+            sys.exit(1)
+    else:
+        sdlog.info("Virtualenv already exists, not creating")
+
+    install_pip_dependencies(args)
+
+    sdlog.info("Finished installing SecureDrop dependencies")
+
+
+def install_pip_dependencies(args, pip_install_cmd=[
+        'torify',
+        os.path.join(VENV_DIR, 'bin', 'pip'),
+        'install',
+        # Specify requirements file.
+        '-r', os.path.join(SD_DIR, 'securedrop',
+                           'requirements', 'admin-requirements.txt'),
+        '--require-hashes',
+        # Make sure to upgrade packages only if necessary.
+        '-U', '--upgrade-strategy', 'only-if-needed',
+]):
+    """
+    Install Python dependencies via pip into virtualenv.
+    """
+
+    sdlog.info("Checking Python dependencies for securedrop-admin")
+    try:
+        pip_output = subprocess.check_output(pip_install_cmd,
+                                             stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        sdlog.debug(e.output)
+        sdlog.error(("Failed to install pip dependencies. Check network"
+                     " connection and try again."))
+        sys.exit(1)
+
+    sdlog.debug(pip_output)
+    if "Successfully installed" in pip_output:
+        sdlog.info("Python dependencies for securedrop-admin upgraded")
+    else:
+        sdlog.info("Python dependencies for securedrop-admin are up-to-date")
+
+
+def install_securedrop(args):
+    """Install/Update SecureDrop"""
+    activate_venv(args)
+    # Yaml library cannot be imported until virtualenv is activated
+    # (hence the yaml library is not imported up-top)
+    import yaml
+
+    try:
+        # Attempt to read site-specific vars file, specifically
+        # for informative messaging via exception handling.
+        with open(SITE_CONFIG) as site_config_file:
+            yaml.safe_load(site_config_file.read())
+    except IOError:
+        sdlog.error("Config file missing, re-run with sdconfig")
+        sys.exit(1)
+    except yaml.YAMLError:
+        sdlog.error("There was an issue processing {}".format(SITE_CONFIG))
+        sys.exit(1)
+
+    else:
+        sdlog.info("Now installing SecureDrop on remote servers.")
+        sdlog.info("You will be prompted for the sudo password on the "
+                   "servers.")
+        sdlog.info("The sudo password is only necessary during initial "
+                   "installation.")
+        subprocess.check_call([os.path.join(ANSIBLE_PATH,
+                                            'securedrop-prod.yml'),
+                              '--ask-become-pass'], cwd=ANSIBLE_PATH)
+
+
+def backup_securedrop(args):
+    """Perform backup of the SecureDrop Application Server.
+    Creates a tarball of submissions and server config, and fetches
+    back to the Admin Workstation. Future `restore` actions can be performed
+    with the backup tarball."""
+    activate_venv(args)
+    sdlog.info("Backing up the SecureDrop Application Server")
+    ansible_cmd = [
+        'ansible-playbook',
+        os.path.join(ANSIBLE_PATH, 'securedrop-backup.yml'),
+    ]
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+
+
+def restore_securedrop(args):
+    """Perform restore of the SecureDrop Application Server.
+    Requires a tarball of submissions and server config, created via
+    the `backup` action."""
+    activate_venv(args)
+    sdlog.info("Restoring the SecureDrop Application Server from backup")
+    # Canonicalize filepath to backup tarball, so Ansible sees only the
+    # basename. The files must live in ANSIBLE_PATH, but the securedrop-admin
+    # script will be invoked from the repo root, so preceding dirs are likely.
+    restore_file_basename = os.path.basename(args.restore_file)
+    ansible_cmd = [
+        'ansible-playbook',
+        os.path.join(ANSIBLE_PATH, 'securedrop-restore.yml'),
+        '-e',
+        "restore_file='{}'".format(restore_file_basename),
+    ]
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+
+
+def run_tails_config(args):
+    """Configure Tails environment post SD install"""
+    activate_venv(args)
+    sdlog.info("Configuring Tails workstation environment")
+    sdlog.info(("You'll be prompted for the temporary Tails admin password,"
+                " which was set on Tails login screen"))
+    ansible_cmd = [
+        os.path.join(ANSIBLE_PATH, 'securedrop-tails.yml'),
+        "--ask-become-pass",
+        # Passing an empty inventory file to override the automatic dynamic
+        # inventory script, which fails if no site vars are configured.
+        '-i', '/dev/null',
+    ]
+    subprocess.check_call(ansible_cmd,
+                          cwd=ANSIBLE_PATH)
+
+
+def get_logs(args):
+    """Get logs for forensics and debugging purposes"""
+    activate_venv(args)
+    sdlog.info("Gathering logs for forensics and debugging")
+    ansible_cmd = [
+        'ansible-playbook',
+        os.path.join(ANSIBLE_PATH, 'securedrop-logs.yml'),
+    ]
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+    sdlog.info("Encrypt logs and send to securedrop@freedom.press or upload "
+               "to the SecureDrop support portal.")
+
+
+if __name__ == "__main__":
+    class ArgParseFormatterCombo(argparse.ArgumentDefaultsHelpFormatter,
+                                 argparse.RawTextHelpFormatter):
+        """Needed to combine formatting classes for help output"""
+        pass
+
+    # Processing argument parsing logic -- yuck
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     formatter_class=ArgParseFormatterCombo)
+    parser.add_argument('-v', action='store_true', default=False,
+                        help="Increase verbosity on output")
+    parser.add_argument('-d', action='store_true', default=False,
+                        help="Developer mode. Not to be used in production.")
+    subparsers = parser.add_subparsers()
+
+    parse_setup = subparsers.add_parser('setup', help=envsetup.__doc__)
+    parse_setup.set_defaults(func=envsetup)
+
+    parse_sdconfig = subparsers.add_parser('sdconfig', help=sdconfig.__doc__)
+    parse_sdconfig.set_defaults(func=sdconfig)
+    parse_sdconfig.add_argument(
+        '-f', '--force', action='store_true',
+        help="Clobber site-specific vars for reconfiguration"
+        )
+
+    parse_install = subparsers.add_parser('install',
+                                          help=install_securedrop.__doc__)
+    parse_install.set_defaults(func=install_securedrop)
+
+    parse_tailsconfig = subparsers.add_parser('tailsconfig',
+                                              help=run_tails_config.__doc__)
+    parse_tailsconfig.set_defaults(func=run_tails_config)
+
+    parse_backup = subparsers.add_parser('backup',
+                                         help=backup_securedrop.__doc__)
+    parse_backup.set_defaults(func=backup_securedrop)
+
+    parse_restore = subparsers.add_parser('restore',
+                                          help=restore_securedrop.__doc__)
+    parse_restore.set_defaults(func=restore_securedrop)
+    parse_restore.add_argument("restore_file")
+
+    parse_logs = subparsers.add_parser('logs',
+                                       help=get_logs.__doc__)
+    parse_logs.set_defaults(func=get_logs)
+
+    args = parser.parse_args()
+    setup_logger(args.v)
+    args.func(args)
