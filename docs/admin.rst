@@ -73,6 +73,14 @@ for more information on common OSSEC alerts.
 .. warning:: Do not post logs or alerts to public forums without first carefully
     examining and redacting any sensitive information.
 
+.. note:: You can send a test OSSEC alert to verify OSSEC and your email configuration
+          is working properly through the *Admin Interface* by clicking **Send
+          Test OSSEC Alert**:
+
+          |Test Alert|
+
+.. |Test Alert| image:: images/manual/screenshots/journalist-admin_ossec_alert_button.png
+
 .. _`SecureDrop Support Portal`: https://securedrop-support.readthedocs.io/en/latest/
 
 

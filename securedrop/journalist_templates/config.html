@@ -6,6 +6,18 @@
 
 <h1>{{ gettext('Instance Configuration') }}</h1>
 
+<h2>{{ gettext('Alerts') }}</h2>
+
+<p>{{ gettext('Send a test encrypted email alert to verify OSSEC is working correctly:') }}</p>
+
+<p>
+  <a class="btn sd-button" href="{{ url_for('admin.ossec_test') }}" id="test-ossec-alert">
+    <i class="fa fa-bell"></i>{{ gettext('SEND TEST OSSEC ALERT') }}
+  </a>
+</p>
+
+<hr class="no-line">
+
 <h2>{{ gettext('Logo Image') }}</h2>
 
 <p>{{ gettext('Here you can update the image displayed on the SecureDrop web interfaces:') }}</p>
@@ -27,4 +39,5 @@
     <i class="fa fa-pencil"></i>{{ gettext('UPDATE LOGO') }}
   </button>
 </form>
+
 {% endblock %}
