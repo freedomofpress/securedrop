@@ -51,4 +51,4 @@ script:
   - pip freeze -l
   - SECUREDROP_TESTINFRA_TARGET_HOST=travis testinfra -v testinfra/development/
 after_success:
-  cd securedrop/ && coveralls
+  cd securedrop/
