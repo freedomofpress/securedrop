@@ -14,10 +14,4 @@ if [ "$?" == "0" ]; then
     esac
 fi
 
-# Remove any existing result files
-rm -r "./junit" || true
-mkdir "./junit" || true
-
-./testinfra/combine-junit.py ./*results.xml > "./junit/junit.xml"
-
 if [ "${TEST_FAIL}" == "true" ]; then exit 1; fi
