@@ -79,6 +79,22 @@
 @import "modules/list-plain-and-starred"
 // Logout - the logout button (top right)
 @import "modules/logout"
+// Label - forces a cursor pointer on label. Seems unnecessary if label 'for' attr is used, remove?
+@import "modules/label"
+// Em (light gray) - Doesn't seem to be being used. Delete?
+@import "modules/em-light-gray-emphasised-text"
+// QR code container
+@import "modules/qr-code-container"
+// Shared secret - OTP related. E.g. in Admin area.
+@import "modules/shared-secret"
+// Users table - Admin area only?
+@import "modules/users-table"
+// Regenerate codename button - only used by journalist?
+@import "modules/regenerate-codename-button"
+// Footer containing disclaimer text
+@import "modules/footer"
+// Form validation error - text to help users correct errors
+@import "modules/form-validation-error"
 
 =base_rules
   // LIBRARIES
@@ -125,50 +141,11 @@
   +submission
   +list-plain-and-starred
   +logout
-
-  label
-    cursor: pointer
-
-  em.light
-    color: gray
-
-  div#qrcode-container
-    text-align: center
-
-  span#shared-secret
-    background-color: #FFFD9E
-    color: #555
-    padding: 4px
-    border: 1px solid $color_grey_medium
-
-  table#users
-    width: 100%
-
-    td
-      text-align: center
-
-  #regenerate-codename-btn
-    padding: 5px 5px
-    color: $color_grey_medium
-    font-size: 14px
-
-    &:hover
-      color: #333
-
-    &:focus
-      outline: 0
-
-  #regenerate-codename-btn-label
-    font-size: 10px
-
-  footer
-    clear: both
-    text-align: center
-    border-top: 1px dashed $color_grey_xlight
-    margin-top: 20px
-    padding-top: 20px
-    color: $color_grey_medium
-
-span.form-validation-error
-  color: red
-  font-size: small
+  +label
+  +em-light-gray-emphasised-text
+  +qr-code-container
+  +shared-secret
+  +users-table
+  +regenerate-codename-button
+  +footer
+  +form-validation-error
