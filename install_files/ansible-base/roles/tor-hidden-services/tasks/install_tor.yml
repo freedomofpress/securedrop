@@ -33,3 +33,19 @@
   tags:
     - apt
     - tor
+
+- name: Extract tor version
+  shell: |
+    apt-cache policy tor | sed -e 's/^\s*Installed:\ \(\S*\)/\1/g;tx;d;:x'
+  changed_when: false
+  register: extract_tor_version
+  when: "'amazon' in ansible_product_version"
+
+- name: Dump Tor version to file (for reporting)
+  copy:
+    dest: "{{ playbook_dir }}/../../.tor_version"
+    content: "{{ extract_tor_version.stdout }}"
+  delegate_to: localhost
+  run_once: true
+  become: "no"
+  when: "'amazon' in ansible_product_version"
