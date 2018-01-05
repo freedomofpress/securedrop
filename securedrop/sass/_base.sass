@@ -9,7 +9,12 @@
 @import global/body-tag
 
 // MODULES - aim to make these encapsulated and order independent (using BEM syntax).
+// Button - Button types (call to action hierarchy)
 @import "modules/button"
+// Link - link types (anchor tags)
+@import modules/link
+// Headline - The typography hierarchy
+@import modules/headline
 
 =base_rules
   // LIBRARIES
@@ -22,43 +27,13 @@
 
   // MODULES - order is not significant.
   +button
-
-  h1, h2, h3
-    font-weight: bold
-
-  h1, h2
-    color: #7985aa
-
-  h1
-    text-align: left
-    font-size: 30px
-
-    &:dir(rtl)
-      text-align: right
-
-  h2
-    font-size: 25px
-
-    &.welcome-text
-      color: inherit
-      text-align: center
-
-  h3
-    text-align: center
+  +link
+  +headline
 
   .content
     position: relative
     margin: 15px auto
     max-width: 980px
-
-  a
-    color: $color_purple_medium
-
-    &.plain
-      color: #333
-
-      &:hover
-        color: $color_purple_medium
 
   .codename, .password
     font-family: monospace
