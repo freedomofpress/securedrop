@@ -1,6 +1,26 @@
 ---
 version: 2
 jobs:
+  dev-testinfra:
+    machine:
+      - image: circleci/classic:latest
+    steps:
+      - run:
+          name: Installing Python dependencies globally, to match SecureDrop deployment.
+          command: sudo -H pip install -r securedrop/requirements/develop-requirements.txt
+
+      - run:
+          name: Construct Ansible inventory file.
+          command: printf "[development]\nlocalhost ansible_connection=local\n[travis]\nlocalhost" > inventory
+
+      - run:
+          name: Run ansible playbook to configure development machine.
+          command: ansible-playbook -i inventory -vv --connection=local install_files/ansible-base/securedrop-development.yml
+
+      - run:
+          name: Run testinfra development tests.
+          command: SECUREDROP_TESTINFRA_TARGET_HOST=travis testinfra -v testinfra/development
+
   lint:
     docker:
       - image: gcr.io/cloud-builders/docker
@@ -175,6 +195,7 @@ workflows:
     jobs:
       - lint
       - tests
+      - dev-testinfra
       - staging-test:
           requires:
             - lint
