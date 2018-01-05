@@ -61,6 +61,10 @@
 @import "modules/flash"
 // Banner warning - Some kind of warning messages. Possibly unused? Delete?
 @import "modules/banner-warning"
+// Select container - contains all the controls for select all, etc when viewing documents for a source
+@import "modules/select-container"
+// Document actions button - Seems to be unused. Delete?
+@import "modules/document-actions-button"
 
 =base_rules
   // LIBRARIES
@@ -98,14 +102,8 @@
   +aside
   +flash
   +banner-warning
-
-  div
-    &#select-container
-      display: inline
-
-    &.document-actions button
-      font-size: 14px
-      padding: 6px 15px
+  +select-container
+  +document-actions-button
 
   .grid-item
     display: inline-block
