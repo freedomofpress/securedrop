@@ -69,15 +69,30 @@
       ignore_errors: true
       no_log: true
 
+    - name: Establish list of raw test results
+      set_fact:
+        raw_test_results:
+          - type: app
+            file: scripts/app-tests.sh
+            result: "{{ app_test_register }}"
+          - type: testinfra
+            file: scripts/ci-tester.sh
+            result: "{{ testinfra_results }}"
+
     - name: Dump raw test output
       copy:
         dest: "../../raw-test-output/{{item.type}}_tests.raw"
         content: "{{ item.result }}"
-      with_items:
-        - type: app
-          result: "{{ app_test_register }}"
-        - type: testinfra
-          result: "{{ testinfra_results }}"
+      with_items: "{{ raw_test_results }}"
+      no_log: true
+      become: no
+      delegate_to: localhost
+
+    - name: Dump results into junit files
+      template:
+        src: junit.xml.j2
+        dest: "../../{{ item.type }}-results.xml"
+      with_items: "{{ raw_test_results }}"
       become: no
       no_log: true
       delegate_to: localhost
