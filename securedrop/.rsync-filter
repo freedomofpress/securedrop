@@ -53,6 +53,8 @@ include sass/
 include sass/**.sass
 include sass/libraries/
 include sass/libraries/**.sass
+include sass/global/
+include sass/global/**.sass
 include sass/modules/
 include sass/modules/**.sass
 include babel.cfg

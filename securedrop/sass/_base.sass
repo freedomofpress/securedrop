@@ -1,23 +1,27 @@
 @import "variables"
+
+// LIBRARIES
+@import libraries/normalize
+@import libraries/font-awesome-iconography
+
+// GLOBAL - order is significant
+@import global/border-box-size-everything
+@import global/body-tag
+
+// MODULES - aim to make these encapsulated and order independent (using BEM syntax).
 @import "modules/button"
-@import "libraries/font-awesome-iconography"
-@import "libraries/normalize"
 
 =base_rules
-  *
-    box-sizing: border-box
-    // Firefox 24 (the basis of TBB at the time of this writing) does not support unprefixed box-sizing.
-    -moz-box-sizing: border-box
-
-  +font-awesome-iconography
+  // LIBRARIES
   +normalize
-  +button
+  +font-awesome-iconography
 
-  body
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif
-    font-weight: 300
-    padding: 0px
-    margin: 0px
+  // GLOBAL - order is significant
+  +border-box-size-everything
+  +body-tag
+
+  // MODULES - order is not significant.
+  +button
 
   h1, h2, h3
     font-weight: bold
