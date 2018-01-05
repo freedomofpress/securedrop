@@ -51,6 +51,8 @@ include wordlists/
 include wordlists/**.txt
 include sass/
 include sass/**.sass
+include sass/libraries/
+include sass/libraries/**.sass
 include sass/modules/
 include sass/modules/**.sass
 include babel.cfg
