@@ -25,38 +25,10 @@ jobs:
       - checkout
       - setup_remote_docker
 
-      - restore_cache:
-          keys:
-            - v1-sd-layers-{{ .Branch }}-
-            - v1-sd-layers-
-          paths:
-            - /caches/layers.tar.gz
-
-      - run:
-          name: Load image layer cache
-          command: |
-            set +o pipefail
-            docker load -i /caches/layers.tar |true
-
       - run:
           name: Build Docker images
           command: |
-            set +o pipefail
-            docker images
-            fromtag=$(docker images |grep securedrop-test |head -n1 |awk '{print $2}')
-            cd securedrop && TAG=${CIRCLE_SHA1} EXTRA_BUILD_ARGS="--cache-from securedrop-test:${fromtag:-latest}" make images
-
-      - run:
-          name: Save Docker image layer cache
-          command: |
-            mkdir -p /caches
-            docker images
-            docker save -o /caches/layers.tar securedrop-test:${CIRCLE_SHA1}
-
-      - save_cache:
-          key: v1-sd-layers-{{ .Branch }}-{{ epoch }}
-          paths:
-            - /caches/layers.tar
+            cd securedrop && TAG=${CIRCLE_SHA1} make images
 
       - run: mkdir -p ~/test-results
 
