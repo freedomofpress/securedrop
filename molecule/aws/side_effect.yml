@@ -10,6 +10,30 @@
     - include: reboot_and_wait.yml
       when: "false"
 
+- name: Setup junit env first
+  hosts: localhost
+  gather_facts: false
+  become: no
+  tasks:
+    - name: Ensure test folder(s) exists
+      file:
+        state: directory
+        path: "../../{{ item }}"
+      with_items:
+        - junit
+
+    - name: Dig out existing junit test results
+      find:
+        paths: "{{ (playbook_dir+'/../../junit')|realpath }}"
+        patterns: "*.xml"
+      register: find_junit_results
+
+    - name: Ensure existing junit files are purged
+      file:
+        state: absent
+        path: "{{ item.path }}"
+      with_items: "{{ find_junit_results.files }}"
+
 - name: Run application test suite in CI.
   hosts: "app-{{ ci_env }}"
   become: yes
@@ -43,6 +67,13 @@
       become: no
       ignore_errors: true
       no_log: true
+
+    - name: Combine tests for export
+      shell: ./testinfra/combine-junit.py ./*results.xml > ./junit/junit.xml
+      args:
+        chdir: ../../
+      delegate_to: localhost
+      become: no
 
     - fail:
       when: app_test_register|failed or testinfra_results|failed
