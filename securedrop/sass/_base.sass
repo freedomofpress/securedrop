@@ -55,6 +55,12 @@
 @import "modules/center-text-align"
 // Button centering - Helper class to center buttons in the page
 @import "modules/button-centering"
+// Aside - Seems to be being used like a type of helpful tips area or message
+@import "modules/aside"
+// Flash - Messages to talk to the user (success, security warnings, etc.)
+@import "modules/flash"
+// Banner warning - Some kind of warning messages. Possibly unused? Delete?
+@import "modules/banner-warning"
 
 =base_rules
   // LIBRARIES
@@ -89,69 +95,9 @@
   +clearfix
   +center-text-align
   +button-centering
-
-  aside, .flash, .banner-warning
-    border-radius: 10px
-
-    i
-      font-size: 18pt
-
-  aside
-    background-color: #fffbe6
-    color: #82572d
-
-  aside, .flash
-    padding: 10px
-    margin: 10px
-    text-align: left
-    font-size: medium
-
-    &:dir(rtl)
-      text-align: right
-
-  .flash
-    display: flex
-    flex-flow: row nowrap
-    align-items: flex-start
-
-    &.success
-      border: 1px solid #E1F1E5
-      background-color: #E6FFEB
-
-      strong
-        color: #299549
-
-    &.notification
-      border: 1px solid #8ed9f6
-      background-color: #e3f7fc
-      font-size: medium
-      font-weight: normal
-
-      i
-        color: #4f7685
-
-    &.error
-      border: 1px solid $color_error_border
-      background-color: $color_error_background
-
-      i
-        color: #D62727
-
-    &.important
-      border: 1px solid #EBDCEB
-      background: #FDFAFD
-
-      strong
-        color: #673466
-      p
-        color: #555555
-
-  .banner-warning
-    border: 1px solid $color_error_border
-    background-color: $color_error_background
-
-    i
-      color: #D62727
+  +aside
+  +flash
+  +banner-warning
 
   div
     &#select-container
