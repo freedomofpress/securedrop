@@ -1,0 +1,48 @@
+=cols
+  #cols
+    padding: 0
+
+    li.source
+      background: $color_grey_xlight
+      border-bottom: 1px solid #ddd
+      padding: 6px
+      text-align: left
+
+      &:dir(rtl)
+        text-align: right
+
+      &:last-child
+        border-bottom: none
+
+      .date
+        float: right
+        &:dir(rtl)
+          float: left
+        background-color: $color_grey_medium
+        color: #ffffff
+        font-size: 10px
+        font-weight: bold
+        padding: 5px
+        margin: 5px
+
+      .designation
+        display: inline-block
+        min-width: 260px
+
+        a
+          color: #333
+          font-weight: bold
+          margin: 5px
+          display: inline-block
+
+      .submission-count
+        display: inline-block
+
+        span
+          border: 1px solid #dedede
+          padding: 3px
+          margin-right: 5px
+          font-size: 12px
+
+          &.unread
+            border: 0

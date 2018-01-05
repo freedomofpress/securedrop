@@ -25,6 +25,20 @@
 @import modules/doc-check
 // Text link - make links purple in running text, possibly unnecessary.
 @import modules/text-link
+// Some kind of button possibly sd=standard button. Belongs in button module?
+@import modules/sd-button
+//variation on button for select all / none. In journalist interface only?
+@import modules/select
+// Pull - Quick layout helper classes
+@import modules/pull
+// Header - Area with logo
+@import modules/header
+//Cols - Something to do with the table of submitted documents. In journalist interface only?
+@import modules/cols
+//Panel - The main content area when the logo is on the left (logged in).
+@import modules/panel
+// Warning - Messages to user e.g. about protecting your security by turning Tor settings to high
+@import modules/warning
 
 =base_rules
   // LIBRARIES
@@ -44,127 +58,13 @@
   +document-actions
   +doc-check
   +text-link
-
-  .sd-button
-    font-weight: normal
-    &:not([lang=ar])
-      letter-spacing: 0.15em
-    &:lang(ar)
-      letter-spacing: 0em
-
-  .select
-    border: 1px #C4C2C2 solid
-    padding: 3px 10px
-    font-size: small
-    color: #6F6F6F
-    margin-right: 2px
-
-    &:hover
-      border-color: $color_grey_medium
-      color: #333
-
-  .pull-bottom
-    position: absolute
-    bottom: 0px
-
-  .pull-left
-    float: left
-
-    &:dir(rtl)
-      float: right
-
-  .pull-right
-    float: right
-
-    &:dir(rtl)
-      float: left
-
-  #header
-    float: left
-
-    &:dir(rtl)
-      float: right
-
-    .powered
-      margin-top: 10px
-      font-size: 13px
-      text-transform: uppercase
-      text-align: center
-      color: #666666
-      letter-spacing: normal
-
-  #cols
-    padding: 0
-
-    li.source
-      background: $color_grey_xlight
-      border-bottom: 1px solid #ddd
-      padding: 6px
-      text-align: left
-
-      &:dir(rtl)
-        text-align: right
-
-      &:last-child
-        border-bottom: none
-
-      .date
-        float: right
-        &:dir(rtl)
-          float: left
-        background-color: $color_grey_medium
-        color: #ffffff
-        font-size: 10px
-        font-weight: bold
-        padding: 5px
-        margin: 5px
-
-      .designation
-        display: inline-block
-        min-width: 260px
-
-        a
-          color: #333
-          font-weight: bold
-          margin: 5px
-          display: inline-block
-
-      .submission-count
-        display: inline-block
-
-        span
-          border: 1px solid #dedede
-          padding: 3px
-          margin-right: 5px
-          font-size: 12px
-
-          &.unread
-            border: 0
-
-  .panel
-    max-width: 800px
-    width: 100%
-    margin: 0 auto
-    padding: 16px 30px
-    border: 1px solid #c3c3c3
-    float: right
-
-  .warning
-    display: none
-    background-color: $color_warning_purple
-    color: white
-    padding: 10px 0
-    width: 100%
-    text-align: center
-    font-size: small
-    box-sizing: border-box
-    -moz-box-sizing: border-box
-
-    a
-      color: white
-
-  #warning-close
-    cursor: pointer
+  +sd-button
+  +select
+  +pull
+  +header
+  +cols
+  +panel
+  +warning
 
   .confirm-prompt
     visibility: hidden
