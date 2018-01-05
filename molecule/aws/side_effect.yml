@@ -21,6 +21,7 @@
         path: "../../{{ item }}"
       with_items:
         - junit
+        - raw-test-output
 
     - name: Dig out existing junit test results
       find:
@@ -67,6 +68,19 @@
       become: no
       ignore_errors: true
       no_log: true
+
+    - name: Dump raw test output
+      copy:
+        dest: "../../raw-test-output/{{item.type}}_tests.raw"
+        content: "{{ item.result }}"
+      with_items:
+        - type: app
+          result: "{{ app_test_register }}"
+        - type: testinfra
+          result: "{{ testinfra_results }}"
+      become: no
+      no_log: true
+      delegate_to: localhost
 
     - name: Combine tests for export
       shell: ./testinfra/combine-junit.py ./*results.xml > ./junit/junit.xml
