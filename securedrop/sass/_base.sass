@@ -15,6 +15,16 @@
 @import modules/link
 // Headline - The typography hierarchy
 @import modules/headline
+// Main content area - Outer container area for the whole page (see also: Panel)
+@import modules/main-content-area
+// Codename and password - common style for secrets
+@import modules/codename-and-password
+// Document actions - seems to be unused. Delete?
+@import modules/document-actions
+// Doc check - Checkbox spacing. In journalist interface only?
+@import modules/doc-check
+// Text link - make links purple in running text, possibly unnecessary.
+@import modules/text-link
 
 =base_rules
   // LIBRARIES
@@ -29,29 +39,11 @@
   +button
   +link
   +headline
-
-  .content
-    position: relative
-    margin: 15px auto
-    max-width: 980px
-
-  .codename, .password
-    font-family: monospace
-    letter-spacing: 0.15em
-    font-weight: normal
-
-  .document-actions
-    margin-bottom: 20px
-    text-align: left
-
-    &:dir(rtl)
-      text-align: right
-
-  .doc-check
-    margin-right: 10px
-
-  a.text-link
-    color: $color_purple_medium
+  +main-content-area
+  +codename-and-password
+  +document-actions
+  +doc-check
+  +text-link
 
   .sd-button
     font-weight: normal
