@@ -39,6 +39,22 @@
 @import modules/panel
 // Warning - Messages to user e.g. about protecting your security by turning Tor settings to high
 @import modules/warning
+// Confirm prompt - When deleting something this prompt is shown
+@import modules/confirm-prompt
+// 'Serious' text - Seems to be unused. Delete?
+@import modules/serious-text
+// Code - Area that the codename is shown in. In source interface only?
+@import "modules/code"
+// Snippet - Area for source to send file and message. In source interface only?
+@import "modules/snippet"
+// Hr - Layout and aesthetics helper classes using lines
+@import "modules/hr-horizontal-rule-line"
+// Clearfix - Helper class to deal with float problems
+@import "modules/clearfix"
+// Center text align - Helper class to align text
+@import "modules/center-text-align"
+// Button centering - Helper class to center buttons in the page
+@import "modules/button-centering"
 
 =base_rules
   // LIBRARIES
@@ -65,91 +81,14 @@
   +cols
   +panel
   +warning
-
-  .confirm-prompt
-    visibility: hidden
-
-    &:target
-      visibility: visible
-
-  p.serious
-    font-weight: bold
-    color: $color_warning_red
-
-  .code
-    background: rgba(0, 0, 0, 0.05)
-    box-sizing: border-box
-    -moz-box-sizing: border-box
-    padding: 10px 15px
-    border-bottom: 2px solid $color_warning_red
-    font-size: large
-    text-align: center
-
-  .snippet
-    border: 1px solid #c3c3c3
-    background: $color_grey_xlight
-
-    .attachment
-      background-color: $color_grey_xlight
-      padding: 12px
-      width: 330px
-      @media only screen and (max-width: 815px)
-        width: 100%
-      display: inline-block
-      vertical-align: top
-
-      .file-options
-        padding-top: 8px
-
-      input[type="file"]
-        background-color: rgba(0, 0, 0, 0.05)
-        padding: 10px
-        font-size: 14px
-        min-width: 100%
-        max-width: 100%
-
-    .message
-      display: inline-block
-      vertical-align: top
-      width: 401px
-      @media only screen and (max-width: 815px)
-        width: 100%
-      background: white
-      overflow: hidden
-
-      textarea
-        vertical-align: top
-        display: block
-        padding: 10px
-        width: 406px
-        @media only screen and (max-width: 815px)
-          width: 100%
-        min-height: 168px
-        border: none
-
-        &:focus
-          outline: none
-
-  hr
-    &.cut-out
-      border-style: dashed
-      border-bottom: none
-      border-color: #c3c3c3
-
-    &.no-line
-      clear: both
-      border: none
-      height: 10px
-
-  .clearfix
-    clear: both
-
-  .center
-    text-align: center
-
-  button.center
-    display: block
-    margin: 0 auto
+  +confirm-prompt
+  +serious-text
+  +code
+  +snippet
+  +hr-horizontal-rule-line
+  +clearfix
+  +center-text-align
+  +button-centering
 
   $color_error_border: #F68E8E
   $color_error_background: #FCE3E3
