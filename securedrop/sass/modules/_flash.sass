@@ -1,0 +1,48 @@
+=flash
+  .flash
+    display: flex
+    flex-flow: row nowrap
+    align-items: flex-start
+    border-radius: 10px
+    padding: 10px
+    margin: 10px
+    text-align: left
+    font-size: medium
+
+    &:dir(rtl)
+      text-align: right
+
+    i
+      font-size: 18pt
+
+    &.success
+      border: 1px solid #E1F1E5
+      background-color: #E6FFEB
+
+      strong
+        color: #299549
+
+    &.notification
+      border: 1px solid #8ed9f6
+      background-color: #e3f7fc
+      font-size: medium
+      font-weight: normal
+
+      i
+        color: #4f7685
+
+    &.error
+      border: 1px solid $color_error_border
+      background-color: $color_error_background
+
+      i
+        color: #D62727
+
+    &.important
+      border: 1px solid #EBDCEB
+      background: #FDFAFD
+
+      strong
+        color: #673466
+      p
+        color: #555555
