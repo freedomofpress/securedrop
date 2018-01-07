@@ -208,7 +208,13 @@ def make_blueprint(config):
     @admin_required
     def delete_user(user_id):
         user = Journalist.query.get(user_id)
-        if user:
+        if user_id == g.user.id:
+            # Do not flash because the interface already has safe guards.
+            # It can only happen by manually crafting a POST request
+            current_app.logger.error(
+                "Admin {} tried to delete itself".format(g.user.username))
+            abort(403)
+        elif user:
             db_session.delete(user)
             db_session.commit()
             flash(gettext("Deleted user '{user}'").format(

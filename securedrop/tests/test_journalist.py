@@ -270,6 +270,34 @@ class TestJournalistApp(TestCase):
         # Verify journalist is no longer in the database
         self.assertEqual(Journalist.query.get(self.user.id), None)
 
+    def test_admin_cannot_delete_self(self):
+        # Verify journalist is in the database
+        self.assertNotEqual(Journalist.query.get(self.user.id), None)
+
+        self._login_admin()
+        resp = self.client.post(url_for('admin.delete_user',
+                                        user_id=self.admin.id),
+                                follow_redirects=True)
+
+        # Assert correct interface behavior
+        self.assert403(resp)
+
+        resp = self.client.get(url_for('admin.index'))
+        self.assert200(resp)
+        self.assertIn("Admin Interface", resp.data)
+        # The user can be edited and deleted
+        self.assertIn(escape("Edit user {}".format(self.user.username)),
+                      resp.data)
+        self.assertIn(
+            escape("Delete user {}".format(self.user.username)),
+            resp.data)
+        # The admin can be edited but cannot deleted
+        self.assertIn(escape("Edit user {}".format(self.admin.username)),
+                      resp.data)
+        self.assertNotIn(
+            escape("Delete user {}".format(self.admin.username)),
+            resp.data)
+
     def test_admin_deletes_invalid_user_404(self):
         self._login_admin()
         invalid_user_pk = max([user.id for user in Journalist.query.all()]) + 1
