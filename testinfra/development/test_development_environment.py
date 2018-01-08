@@ -18,25 +18,25 @@ def test_development_app_dependencies(Package):
 
 
 @pytest.mark.parametrize('pip_package,version', [
-    ('Flask-Testing', '0.6.2'),
+    ('Flask-Testing', '0.7.1'),
     ('Flask', '0.12.2'),
-    ('Jinja2', '2.9.6'),
+    ('Jinja2', '2.10'),
     ('MarkupSafe', '1.0'),
-    ('Werkzeug', '0.12.2'),
+    ('Werkzeug', '0.14.1'),
     ('beautifulsoup4', '4.6.0'),
     ('click', '6.7'),
-    ('coverage', '4.4.1'),
+    ('coverage', '4.4.2'),
     ('first', '2.0.1'),
     ('funcsigs', '1.0.2'),
     ('itsdangerous', '0.24'),
     ('mock', '2.0.0'),
-    ('pbr', '3.0.1'),
-    ('pip-tools', '1.9.0'),
+    ('pbr', '3.1.1'),
+    ('pip-tools', '1.11.0'),
     ('py', '1.5.2'),
     ('pytest-cov', '2.5.1'),
-    ('pytest', '3.3.1'),
+    ('pytest', '3.3.2'),
     ('selenium', '2.53.6'),
-    ('six', '1.10.0'),
+    ('six', '1.11.0'),
 ])
 def test_development_pip_dependencies(Command, Sudo, pip_package, version):
     """
