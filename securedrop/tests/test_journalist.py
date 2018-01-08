@@ -691,9 +691,11 @@ class TestJournalistApp(TestCase):
                                    password=VALID_PASSWORD,
                                    is_admin=None))
 
-        mocked_error_logger.assert_called_once_with(
+        log_event = mocked_error_logger.call_args[0][0]
+        self.assertIn(
             "Adding user 'username' failed: (__builtin__.NoneType) "
-            "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']")
+            "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']",
+            log_event)
         self.assertMessageFlashed(
             "An error occurred saving this user to the database."
             " Please inform your administrator.",
