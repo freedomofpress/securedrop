@@ -30,7 +30,7 @@ RUN rm /etc/apt/sources.list.d/zesty.list
 RUN apt-get update
 
 COPY requirements requirements
-RUN pip install -r requirements/securedrop-requirements.txt
+RUN pip install -r requirements/securedrop-app-code-requirements.txt
 
 # test requirements:
 RUN pip install -r requirements/test-requirements.txt
