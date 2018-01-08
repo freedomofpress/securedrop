@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 
-from source_app.formparser import MultiPartParser # noqa
+from source_app.formparser import SDMultiPartParser # noqa
 import werkzeug # noqa
-werkzeug.formparser.MultiPartParser = MultiPartParser # noqa
+werkzeug.formparser.MultiPartParser = SDMultiPartParser # noqa
 
 from flask import (Flask, render_template, flash, Markup, request, g, session,
                    url_for, redirect)
