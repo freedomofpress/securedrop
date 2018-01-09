@@ -22,7 +22,7 @@ def test_development_app_dependencies(Package):
     ('Flask', '0.12.2'),
     ('Jinja2', '2.10'),
     ('MarkupSafe', '1.0'),
-    ('Werkzeug', '0.14.1'),
+    ('Werkzeug', '0.12.2'),
     ('beautifulsoup4', '4.6.0'),
     ('click', '6.7'),
     ('coverage', '4.4.2'),

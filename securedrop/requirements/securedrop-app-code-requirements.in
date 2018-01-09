@@ -14,4 +14,4 @@ redis
 rq
 scrypt
 SQLAlchemy
-Werkzeug
+Werkzeug==0.12.2

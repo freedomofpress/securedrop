@@ -27,5 +27,5 @@ scrypt==0.8.0
 six==1.11.0               # via qrcode
 sqlalchemy==1.2.0
 webassets==0.12.1         # via flask-assets
-werkzeug==0.14.1          # via flask
+werkzeug==0.12.2          # via flask
 wtforms==2.1              # via flask-wtf

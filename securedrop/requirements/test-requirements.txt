@@ -25,4 +25,4 @@ pytest-cov==2.5.1
 pytest==3.3.2
 selenium==2.53.6
 six==1.11.0               # via mock, pip-tools, pytest
-werkzeug==0.14.1          # via flask
+werkzeug==0.12.2          # via flask
