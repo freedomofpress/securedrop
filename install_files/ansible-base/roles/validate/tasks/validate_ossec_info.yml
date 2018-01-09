@@ -72,6 +72,7 @@
       OSSEC email notifications.
       {{ securedrop_validate_error_msg_start }} the `smtp_relay` var
       is set correctly.
+  ignore_errors: yes
 
 - name: Perform SASL lookup check.
   command: "{{ _sasl_hostname_query_command }}"
@@ -91,3 +92,4 @@
       configurations may vary.
       {{ securedrop_validate_error_msg_start }} the `sasl_domain` var
       is set correctly.
+  ignore_errors: yes
