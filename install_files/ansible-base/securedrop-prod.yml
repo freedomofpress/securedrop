@@ -15,18 +15,18 @@
     - { role: tor-hidden-services, tags: tor }
   become: yes
 
-- name: Configure mailing utilities.
-  hosts: securedrop_monitor_server
-  roles:
-    - role: postfix
-      tags: postfix
-  become: yes
-
 - name: Configure OSSEC.
   hosts: securedrop
   roles:
     - role: ossec
       tags: ossec
+  become: yes
+
+- name: Configure mailing utilities.
+  hosts: securedrop_monitor_server
+  roles:
+    - role: postfix
+      tags: postfix
   become: yes
 
 - name: Configure SecureDrop Application Server.
