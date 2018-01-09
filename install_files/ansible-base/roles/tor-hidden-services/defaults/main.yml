@@ -1,3 +1,4 @@
 ---
 tor_hidden_services_parent_dir: /var/lib/tor/services
 tor_user: debian-tor
+tor_apt_repo_dist: "{{ ansible_lsb.codename }}"
