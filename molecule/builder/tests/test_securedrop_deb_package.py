@@ -218,6 +218,8 @@ def test_deb_package_contains_no_generated_assets(File, Command, deb):
         # no SASS files should exist; only the generated CSS files.
         assert not re.search("^.*sass.*$", c.stdout, re.M)
 
+        #no .map files should exist; only the generated CSS files.
+        assert not re.search("^.*css.map$", c.stdout, re.M)
 
 @pytest.mark.parametrize("deb", deb_packages)
 def test_deb_package_contains_css(File, Command, deb):
@@ -235,9 +237,6 @@ def test_deb_package_contains_css(File, Command, deb):
         for css_type in ['journalist', 'source']:
             assert re.search("^.*\./var/www/securedrop/static/"
                              "css/{}.css$".format(css_type), c.stdout, re.M)
-            assert re.search("^.*\./var/www/securedrop/static/"
-                             "css/{}.css.map$".format(css_type), c.stdout,
-                             re.M)
 
 
 @pytest.mark.parametrize("deb, tag", deb_tags)
