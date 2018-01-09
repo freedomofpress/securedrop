@@ -31,18 +31,18 @@
         when: install_local_packages }
   become: yes
 
-- name: Configure mailing utilities.
-  hosts: mon-staging
-  roles:
-    - role: postfix
-      tags: postfix
-  become: yes
-
 - name: Configure OSSEC.
   hosts: staging
   roles:
     - role: ossec
       tags: ossec
+  become: yes
+
+- name: Configure mailing utilities.
+  hosts: mon-staging
+  roles:
+    - role: postfix
+      tags: postfix
   become: yes
 
 - name: Configure SecureDrop Application Server.
