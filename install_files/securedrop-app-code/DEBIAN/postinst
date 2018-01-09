@@ -19,7 +19,7 @@ set -x
 case "$1" in
     configure)
     pip install --no-index --find-links=/var/securedrop/wheelhouse --upgrade \
-      -r /var/www/securedrop/requirements/securedrop-requirements.txt
+      -r /var/www/securedrop/requirements/securedrop-app-code-requirements.txt
 
     chown -R www-data:www-data /var/www/securedrop
     chown www-data:www-data /var/www/journalist.wsgi
