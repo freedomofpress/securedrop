@@ -47,6 +47,20 @@ To get started working with the development environment:
    ./manage.py add-admin   # create a user to use when logging in to the Journalist Interface
    pytest -v tests/        # run the unit and functional tests
 
+.. sidebar:: Note to Qubes users
+
+	     Qubes users and others for whom Vagrant is not an option can still
+	     use the Development environment via Docker. In a Debian AppVM,
+	     follow `these instructions`_ to install Docker-CE. Then, from the
+	     Securedrop repo, do
+
+	     ::
+
+		$ cd securedrop
+		$ make images dev
+
+.. _`these instructions`: https://docs.docker.com/engine/installation/linux/docker-ce/debian/
+		
 SecureDrop consists of two separate web applications (the Source Interface and
 the Journalist Interface) that run concurrently. In the Development environment
 they are configured to detect code changes and automatically reload whenever a
