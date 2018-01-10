@@ -3,6 +3,18 @@
 Landing Page
 ============
 
+SecureDrop itself runs as a Tor hidden service. Organizations also need to
+create a SecureDrop *Landing Page* that will explain how SecureDrop works, give
+sources instructions on how to access the Tor hidden service, and disclose the
+risks. We also recommend including a privacy policy (see our :ref:`Sample
+Privacy Policy`) describing what data is collected and how it will be used by
+your organization.
+
+.. note:: SecureDrop will bring more attention to your organization from
+          security researchers and others. A landing page that fails to
+          implement minimum security requirements is sure to be noticed, and
+          could undermine trust, discouraging possible sources.
+
 URL and location
 ----------------
 
