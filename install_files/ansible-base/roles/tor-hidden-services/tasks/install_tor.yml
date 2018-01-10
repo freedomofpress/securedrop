@@ -1,7 +1,7 @@
 ---
 - name: Remove Tor project GPG signing key.
   apt_key:
-    state: absent
+    state: "{{ 'absent' if tor_apt_key_removal|bool else 'present' }}"
     id: A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
   tags:
     - apt

@@ -23,6 +23,7 @@ pipeline {
                 sh '''. devops/scripts/aws-jenkins-venv.sh
                     |pip install -r securedrop/requirements/develop-requirements.txt
                     |make build-debs
+                    |ansible -i molecule/aws/.molecule/ansible_inventory.yml all -b -m apt_key -a "id=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 keyserver=pgp.mit.edu"
                     |molecule converge -s aws -- -e primary_network_iface=eth0 -e tor_apt_repo_dist=tor-nightly-0.3.2.x-trusty --skip-tags app-test,grsec
                     |molecule verify -s aws'''.stripMargin()
             }

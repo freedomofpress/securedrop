@@ -2,3 +2,8 @@
 tor_hidden_services_parent_dir: /var/lib/tor/services
 tor_user: debian-tor
 tor_apt_repo_dist: "{{ ansible_lsb.codename }}"
+
+# ensure upstream tor apt key no longer on SD instances
+# why is this a configurable var? for CI testing with the
+# tor nightly repo. this should not be modified in prod.
+tor_apt_key_removal: true
