@@ -12,7 +12,7 @@ follow the steps below.
 
 .. include:: includes/otp-app.txt
 
-- Tap the QRcode symbol at the top
+- Tap the QR code symbol at the top
 - Scan the barcode using your phone's camera
 
 A new entry will automatically be added to the list. If you wish to edit
