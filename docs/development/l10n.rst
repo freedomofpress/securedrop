@@ -125,6 +125,38 @@ And it would be **incorrect** to translate the placeholder like so::
 
   Modifier l'utilisateur {utilisateur}
 
+Reviews
+-------
+
+Every translated string must be reviewed before it can be merged in
+SecureDrop to make sure the source or journalist will not be confused
+by an incorrect translation.
+
+Anyone can contribute translations, just like anyone can edit
+wikipedia. But they do not have the right to review translations, only
+trusted translators can. When translators feel confident they can
+become reviewers, they can ask for their rights to be elevated by
+posting a message in the `translation category of the SecureDrop forum`_.
+
+A reviewer with elevated permissions can see ``Waiting for review``
+and ``Approved`` radio buttons which are initially set to ``Waiting
+for review``.
+
+|Waiting for review screenshot|
+
+When the translation is correct, the reviewer should change to
+``Approved``.
+
+|Approved screenshot|
+
+When in this state, a translation can no longer be modified by
+translators who do not have elevated permissions. They can still
+suggest modifications if they notice something wrong and comment if
+they disagree.
+
+|Not a reviewer screenshot|
+
+
 Glossary
 --------
 
@@ -388,4 +420,6 @@ Frequently Asked Questions
 .. |Weblate glossary show page screenshot| image:: ../images/weblate/glossary1.png
 .. |Weblate glossary add page screenshot| image:: ../images/weblate/glossary2.png
 .. |Weblate glossary list page screenshot| image:: ../images/weblate/glossary3.png
-
+.. |Waiting for review screenshot| image:: ../images/weblate/review1.png
+.. |Approved screenshot| image:: ../images/weblate/review2.png
+.. |Not a reviewer screenshot| image:: ../images/weblate/review3.png
