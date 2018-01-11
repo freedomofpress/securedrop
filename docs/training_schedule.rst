@@ -31,7 +31,7 @@ recipients and anyone else interested
 
 -  Go over the SecureDrop `FAQs <https://securedrop.org/faq>`__
 -  Go over the SecureDrop :ref:`environment diagrams <securedrop_architecture_diagram>`
--  Importance of the landing page security and Twitter feedback
+-  Importance of the *Landing Page* security and Twitter feedback
 -  Demo the source submission process
 -  Demo the journalist's processes for checking the Journalist Interface
 -  Demo the journalist's processes for replies

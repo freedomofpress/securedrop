@@ -2,12 +2,12 @@ Whole Site Changes
 ==================
 
 Ideally, some or all of the following changes are made to improve the
-overall security of the path to the landing page and obfuscate traffic
+overall security of the path to the *Landing Page* and obfuscate traffic
 analysis.
 
 #. Make your entire site available through HTTPS.
 
-   - That way, visits to your landing page won't stand out as the only encrypted
+   - That way, visits to your *Landing Page* won't stand out as the only encrypted
      traffic to your site.
 
 #. Include an iframe for all (or a random subset of) visitors, loading
