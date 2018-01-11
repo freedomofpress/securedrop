@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.5.1-rc1
+
+### Web Applications
+
+* Enable administrators to update the SecureDrop logo via the Admin Interface (#2769).
+* Enable administrators to send test OSSEC alerts via the Admin Interface (#2771).
+* Improve the language menu (#2733).
+* Disable .map file generation when compiling CSS files from SASS (#2814).
+* User logout on password reset (#2756).
+* Update pip requirements (#2811).
+
+### Operations
+
+* Use apt mirror for Tor packages (#2441).
+* Push grsecurity tasks to the beginning of the install process (#2741).
+* Remove flaky SMTP/SASL host validation during SecureDrop configuration (#2815).
+* Automate post-Ubuntu install checks verifying DNS, NTP is working (#2129).
+* Validate GnuPG key is not a private key prior to install (#2735).
+* Remove HMAC-SHA1 from SSH config (#2730).
+
+### Monitoring
+
+* Prevent OSSEC from sending daily emails on startup (#2701).
+
+### Documentation
+
+* Replace Google Authenticator with FreeOTP (#2757).
+* Add recommended landing page content (#2752).
+
+The issues for this release were tracked in the 0.5.1 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.5.1.
+
 ## 0.5
 
 ### Web Applications
