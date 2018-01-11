@@ -154,6 +154,7 @@
   /var/www/securedrop/journalist_templates/admin_new_user_two_factor.html r,
   /var/www/securedrop/journalist_templates/base.html r,
   /var/www/securedrop/journalist_templates/col.html r,
+  /var/www/securedrop/journalist_templates/config.html r,
   /var/www/securedrop/journalist_templates/delete.html r,
   /var/www/securedrop/journalist_templates/edit_account.html r,
   /var/www/securedrop/journalist_templates/flag.html r,
