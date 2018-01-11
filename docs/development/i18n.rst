@@ -152,13 +152,26 @@ to the ``develop`` branch via pull requests for merge on a regular basis.
       $ git fetch lab
       $ git checkout -b wip-i18n origin/develop
       $ git checkout lab/i18n -- securedrop/translations \
-        install_files/ansible-base/roles/tails-config/templates/{nl,fr,de_DE,nb_NO,pt_BR,es_ES}.po
+        install_files/ansible-base/roles/tails-config/templates/{nl,fr,de_DE,nb_NO,pt_BR,es_ES,zh_Hant}.po
       $ git add securedrop/translations/{nl,fr,de_DE,nb_NO,pt_BR,es_ES}/LC_MESSAGES/messages.po \
-        install_files/ansible-base/roles/tails-config/templates/{nl,fr,de_DE,nb_NO,pt_BR,es_ES}.po
+        install_files/ansible-base/roles/tails-config/templates/{nl,fr,de_DE,nb_NO,pt_BR,es_ES,zh_Hant}.po
       $ vagrant ssh development
       $ cd /vagrant/securedrop ; ./manage.py --verbose translate-desktop --compile
       $ git commit -m 'sync with weblate' translations
       $ git push wip-i18n
+
+List contributors for each supported language:
+
+.. code:: sh
+
+      $ for l in nl fr de_DE nb_NO pt_BR es_ES zh_Hant ; do echo -n "$l " ; git log --format=%aN lab/i18n -- install_files/ansible-base/roles/tails-config/templates/$l.po securedrop/translations/$l/LC_MESSAGES/messages.po | sort -u | tr '\n' ',' | sed -e 's/,/, /g' ; echo ; done
+      nl Anne M, kwadronaut, Loic Dachary, Yarno Ritzen,
+      fr Alain-Olivier,
+      de_DE Anna Skaja, Eric H., Ettore Atalan, kwadronaut, Loic Dachary,
+      nb_NO Allan Nordhøy, A. Nonymous, Loic Dachary, Øyvind Bye Skille,
+      pt_BR Bernardo Tonasse, Cecília do Lago, communiaa, Loic Dachary,
+      es_ES Anatoli, A. Nonymous, Camille Fassett, Daniel Arauz, Freddy Martinez, Jose, Loic Dachary,
+      zh_Hant A. Nonymous, Chi-Hsun Tsai, H.-L. Lee, Jin Lin Wright, Loic Dachary, Shih-Chieh Ilya Li,
 
 Verify the translations are not broken:
 
@@ -166,7 +179,7 @@ Verify the translations are not broken:
 
       $ vagrant ssh development
       $ cd /vagrant/securedrop
-      $ PAGE_LAYOUT_LOCALES='de_DE,es_ES,fr_FR,nb_NO,nl,pt_BR' \
+      $ PAGE_LAYOUT_LOCALES='de_DE,es_ES,fr_FR,nb_NO,nl,pt_BR,zh_Hant' \
           pytest -v --page-layout tests/pages-layout
 
 Go to https://github.com/freedomofpress/securedrop and propose a pull request.
