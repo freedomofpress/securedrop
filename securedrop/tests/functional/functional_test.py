@@ -25,6 +25,7 @@ import config
 import db
 import journalist
 from source_app import create_app
+import crypto_util
 import tests.utils.env as env
 
 LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
@@ -173,6 +174,14 @@ class FunctionalTest(object):
 
         self.secret_message = ('These documents outline a major government '
                                'invasion of privacy.')
+
+    def wait_for_source_key(self, source_name):
+        filesystem_id = crypto_util.hash_codename(source_name)
+
+        def key_available(filesystem_id):
+            assert crypto_util.getkey(filesystem_id)
+        self.wait_for(
+            lambda: key_available(filesystem_id))
 
     def teardown(self):
         self.patcher.stop()
