@@ -74,8 +74,8 @@ for more information on common OSSEC alerts.
     examining and redacting any sensitive information.
 
 .. note:: You can send a test OSSEC alert to verify OSSEC and your email configuration
-          is working properly through the *Admin Interface* by clicking **Send
-          Test OSSEC Alert**:
+          is working properly through the *Instance Config* in the *Admin Interface* by
+          clicking **Send Test OSSEC Alert**:
 
           |Test Alert|
 
@@ -317,7 +317,7 @@ Updating Logo Image
 
 You can update the system logo shown on the web interfaces of your SecureDrop
 instance via the Admin Interface. We recommend a size of ``500px x 450px``.
-Simply click the **Update Instance Config** button:
+Simply click the **Instance Config** button:
 
 |System Config Page|
 
