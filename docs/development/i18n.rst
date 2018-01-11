@@ -152,9 +152,9 @@ to the ``develop`` branch via pull requests for merge on a regular basis.
       $ git fetch lab
       $ git checkout -b wip-i18n origin/develop
       $ git checkout lab/i18n -- securedrop/translations \
-        install_files/ansible-base/roles/tails-config/templates/{nl,fr,de_DE,nb_NO,pt_BR,es_ES}.po
+        install_files/ansible-base/roles/tails-config/templates/{nl,fr,de_DE,nb_NO,pt_BR,es_ES,zh_Hant}.po
       $ git add securedrop/translations/{nl,fr,de_DE,nb_NO,pt_BR,es_ES}/LC_MESSAGES/messages.po \
-        install_files/ansible-base/roles/tails-config/templates/{nl,fr,de_DE,nb_NO,pt_BR,es_ES}.po
+        install_files/ansible-base/roles/tails-config/templates/{nl,fr,de_DE,nb_NO,pt_BR,es_ES,zh_Hant}.po
       $ vagrant ssh development
       $ cd /vagrant/securedrop ; ./manage.py --verbose translate-desktop --compile
       $ git commit -m 'sync with weblate' translations
@@ -166,7 +166,7 @@ Verify the translations are not broken:
 
       $ vagrant ssh development
       $ cd /vagrant/securedrop
-      $ PAGE_LAYOUT_LOCALES='de_DE,es_ES,fr_FR,nb_NO,nl,pt_BR' \
+      $ PAGE_LAYOUT_LOCALES='de_DE,es_ES,fr_FR,nb_NO,nl,pt_BR,zh_Hant' \
           pytest -v --page-layout tests/pages-layout
 
 Go to https://github.com/freedomofpress/securedrop and propose a pull request.
