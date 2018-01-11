@@ -685,7 +685,7 @@ class TestJournalistApp(TestCase):
 
         # there are better ways to do this, but flake8 complains
         journo = Journalist.query.filter(Journalist.username == new_user).one()
-        assert journo.is_admin is True
+        assert journo.is_admin is False
 
     def test_admin_renames_user(self):
         self._login_admin()
