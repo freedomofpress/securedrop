@@ -1,9 +1,10 @@
 # Changelog
 
-## 0.5.1-rc2
+## 0.5.1-rc3
 
 ### Web Applications
 
+* Add zh-Hant locale (#2830).
 * Enable administrators to update the SecureDrop logo via the Admin Interface (#2769).
 * Enable administrators to send test OSSEC alerts via the Admin Interface (#2771).
 * Improve the language menu (#2733).
