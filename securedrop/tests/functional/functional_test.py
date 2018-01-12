@@ -181,7 +181,7 @@ class FunctionalTest(object):
         def key_available(filesystem_id):
             assert crypto_util.getkey(filesystem_id)
         self.wait_for(
-            lambda: key_available(filesystem_id))
+            lambda: key_available(filesystem_id), timeout=60)
 
     def teardown(self):
         self.patcher.stop()
