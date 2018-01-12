@@ -37,6 +37,7 @@ languages:
 * Norwegian (nb_NO)
 * Dutch (nl)
 * Portuguese, Brasil (pt_BR)
+* Chinese, Traditional (zh_Hant)
 
 During the installation you will be given the opportunity to choose the
 list of supported languages to display, using the code shown in
