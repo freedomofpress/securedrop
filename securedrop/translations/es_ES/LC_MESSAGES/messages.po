@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-01-11 00:00+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2018-01-13 03:00+0000\n"
+"Last-Translator: Pablo Di Noto <pdinoto@gmail.com>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
@@ -30,7 +30,7 @@ msgstr "Su sesión ha sido terminada debido a inactividad"
 
 #: journalist_app/account.py:26
 msgid "Incorrect password or two-factor code."
-msgstr "Clave o el código de autenticación de dos factores incorrecto."
+msgstr "Clave o código de autenticación de dos factores incorrecto."
 
 #: journalist_app/account.py:42
 msgid "Token in two-factor authentication verified."
@@ -72,8 +72,8 @@ msgstr ""
 #: journalist_app/admin.py:135
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
-"Formato secreto inválido: por favor envíe solo las letras A-F y los números "
-"0-9."
+"Formato del secreto inválido: por favor envíe solo las letras A-F y los "
+"números 0-9."
 
 #: journalist_app/admin.py:140
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
@@ -88,11 +88,11 @@ msgstr "¡Ocurrió un error inesperado! Por favor informe a su administrador."
 
 #: journalist_app/admin.py:178
 msgid "Username \"{user}\" already taken."
-msgstr "El nombre de usuario \"{user}\" ya lo han tomado."
+msgstr "El nombre de usuario \"{user}\" ya se encuentra en uso."
 
 #: journalist_app/admin.py:214
 msgid "Deleted user '{user}'"
-msgstr "Usuario eliminado '{user}'"
+msgstr "Usuario '{user}' eliminado"
 
 #: journalist_app/col.py:47
 msgid "{source_name}'s collection deleted"
@@ -108,18 +108,19 @@ msgstr "Solo administradores pueden entrar a esta página."
 
 #: journalist_app/forms.py:19
 msgid "Field must be 40 characters long but got {num_chars}."
-msgstr "El area debe ser de 40 caracteres de longitud, pero tiene {num_chars}."
+msgstr ""
+"Este campo debe ser de 40 caracteres de longitud, pero tiene {num_chars}."
 
 #: journalist_app/forms.py:30
 msgid ""
 "Field must be at least {min_chars} characters long but only got {num_chars}."
 msgstr ""
-"El área debe ser por lo menos {min_chars}  caracteres de longitud, pero sólo "
+"El campo debe ser por lo menos {min_chars} caracteres de longitud, pero sólo "
 "tiene {num_chars}."
 
 #: journalist_app/forms.py:35 source_app/forms.py:11
 msgid "This field is required."
-msgstr "Esta área es obligatoria."
+msgstr "Este campo es obligatorio."
 
 #: journalist_app/forms.py:52
 msgid "You cannot send an empty reply."
@@ -139,7 +140,7 @@ msgstr "Gracias. Su respuesta ha sido guardada."
 
 #: journalist_app/main.py:139
 msgid "No collections selected for download."
-msgstr "No hay colecciones seleccionadas para bajar."
+msgstr "No hay colecciones seleccionadas para descargar."
 
 #: journalist_app/main.py:142 journalist_app/utils.py:189
 msgid "No collections selected for deletion."
@@ -189,7 +190,7 @@ msgstr[1] "{num} colecciones eliminadas"
 
 #: journalist_app/utils.py:229
 msgid "You submitted a bad password! Password not changed."
-msgstr "¡Envió una contraseña incorrecta! La contraseña no cambió."
+msgstr "¡Envió una contraseña incorrecta! La contraseña no fue cambiada."
 
 #: journalist_app/utils.py:236
 msgid ""
@@ -216,18 +217,18 @@ msgstr "No hay envios sin leer en las colecciones seleccionadas."
 #: journalist_templates/_source_row.html:19
 msgid "1 doc"
 msgid_plural "{doc_num} docs"
-msgstr[0] "1 doc"
-msgstr[1] "{doc_num} docs"
+msgstr[0] "1 documento"
+msgstr[1] "{doc_num} documentos"
 
 #: journalist_templates/_source_row.html:20
 msgid "1 message"
 msgid_plural "{msg_num} messages"
-msgstr[0] "1 Mensaje"
-msgstr[1] "{msg_num} Mensajes"
+msgstr[0] "1 mensaje"
+msgstr[1] "{msg_num} mensajes"
 
 #: journalist_templates/_source_row.html:23
 msgid "{num_unread} unread"
-msgstr "{num_unread}  sin leer"
+msgstr "{num_unread} sin leer"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -258,21 +259,21 @@ msgid ""
 "for your account in the app, enter one of the 6-digit codes from the app to "
 "confirm that two factor authentication is set up correctly."
 msgstr ""
-"¡Ya casi termina! Para terminar de reajustar la autenticación de dos "
+"¡Ya casi termina! Para terminar de restablecer la autenticación de dos "
 "factores, siga las instrucciones de abajo para configurar FreeOTP. Una vez "
 "que haya agregado la entrada para su cuenta en la aplicación, introduzca uno "
-"de los códigos de 6 dígitos de la aplicación para confirmar que la "
-"autenticación de dos factores esta configura correctamente."
+"de los códigos de 6 dígitos generados por la aplicación para confirmar que "
+"la autenticación de dos factores esta configura correctamente."
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:9
 msgid "Install FreeOTP on your phone"
-msgstr "Instalar FreeOTP en su teléfono"
+msgstr "Instale FreeOTP en su teléfono"
 
 #: journalist_templates/account_new_two_factor.html:9
 #: journalist_templates/admin_new_user_two_factor.html:10
 msgid "Open the FreeOTP app"
-msgstr "Abrir la app FreeOTP"
+msgstr "Abra la app FreeOTP"
 
 #: journalist_templates/account_new_two_factor.html:10
 #: journalist_templates/admin_new_user_two_factor.html:11
@@ -285,8 +286,8 @@ msgid ""
 "Your phone will now be in \"scanning\" mode. When you are in this mode, scan "
 "the barcode below:"
 msgstr ""
-"Su teléfono está en modo de detección. Escanee el código que se encuentra "
-"abajo:"
+"Su teléfono pasará a estar en modo de escaneo. Una vez en ese modo, escanee "
+"el código que se encuentra abajo:"
 
 #: journalist_templates/account_new_two_factor.html:14
 #: journalist_templates/admin_new_user_two_factor.html:15
@@ -299,7 +300,7 @@ msgstr ""
 #: journalist_templates/admin_new_user_two_factor.html:18
 msgid "Once you have scanned the barcode, enter the 6-digit code below:"
 msgstr ""
-"Una vez que haya escaneado el código de barras, ingrese el codigo de 6 "
+"Una vez que haya escaneado el código de barras, ingrese el código de 6 "
 "dígitos abajo:"
 
 #: journalist_templates/account_new_two_factor.html:17
