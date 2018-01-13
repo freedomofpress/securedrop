@@ -96,6 +96,6 @@ log_events_with_ossec_alerts:
 
   - name: test_ossec_agent_started_does_not_produce_email
     alert: >
-      ossec: Agent started: 'app->10.20.2.2'.
+      ossec: Agent started
     level: "1"
-    rule_id: "400501"
+    rule_id: "400503"
