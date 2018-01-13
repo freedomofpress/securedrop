@@ -55,8 +55,9 @@ def create_app(config):
     @app.template_filter('autoversion')
     def autoversion_filter(filename):
         """Use this template filter for cache busting"""
-        if path.exists(filename[1:]):
-            timestamp = str(path.getmtime(filename[1:]))
+        absolute_filename = path.join(config.SECUREDROP_ROOT, filename[1:])
+        if path.exists(absolute_filename):
+            timestamp = str(path.getmtime(absolute_filename))
         else:
             return filename
         versioned_filename = "{0}?v={1}".format(filename, timestamp)
