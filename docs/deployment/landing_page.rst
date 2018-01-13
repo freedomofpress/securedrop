@@ -1,7 +1,7 @@
 .. _Landing Page:
 
-Landing Page
-============
+*Landing Page*
+==============
 
 SecureDrop itself runs as a Tor hidden service. Organizations also need to
 create a SecureDrop *Landing Page* that will explain how SecureDrop works, give
@@ -11,7 +11,7 @@ Privacy Policy`) describing what data is collected and how it will be used by
 your organization.
 
 .. note:: SecureDrop will bring more attention to your organization from
-          security researchers and others. A landing page that fails to
+          security researchers and others. A *Landing Page* that fails to
           implement minimum security requirements is sure to be noticed, and
           could undermine trust, discouraging possible sources.
 
@@ -23,7 +23,7 @@ your top-level domain, e.g. organization.com/securedrop. This is because
 TLS does not encrypt the hostname, so a SecureDrop user whose connection
 is being monitored would be trivially discovered.
 
-If the landing page is deployed on the same domain as another site, you
+If the *Landing Page* is deployed on the same domain as another site, you
 might consider having some specific configuration (such as the security
 headers below) apply only to the /securedrop request URI. This can be done
 in Apache by the encapsulating these settings within a
@@ -38,12 +38,12 @@ HTTPS only (no mixed content)
 Most news organizations, `in fact almost
 all <https://freedom.press/blog/2014/09/after-nsa-revelations-why-arent-more-news-organizations-using-https>`__,
 do not use HTTPS encryption by default. This is the number one minimum
-requirement for the SecureDrop landing page on your website. Without
+requirement for the SecureDrop *Landing Page* on your website. Without
 HTTPS, a source can easily be exposed as a visitor to your site.
 
 This may be difficult if your website serves advertisements or utilizes
 a legacy content delivery network. You should make sure the SecureDrop
-landing page does not serve ads of any kind, even if the rest of your
+*Landing Page* does not serve ads of any kind, even if the rest of your
 site does.
 
 If you do not serve ads on any of your site, you should also consider
@@ -82,8 +82,8 @@ When you do this, it's imperative that you use SHA-2 as the hashing
 algorithm instead of SHA-1, which is `being phased
 out <http://googleonlinesecurity.blogspot.com/2014/09/gradually-sunsetting-sha-1.html>`__.
 You should also choose a key size of *at least* 2048 bits. These
-parameters will help ensure that the encryption used on your landing
-page is sufficiently strong. The following example OpenSSL command will
+parameters will help ensure that the encryption used on your *Landing
+Page* is sufficiently strong. The following example OpenSSL command will
 create a private key and CSR with a 4096-bit key length and a SHA-256
 signature:
 
@@ -103,17 +103,17 @@ Do not use third-party analytics, tracking, or advertising
 
 Most news websites, even those that are non-profits, use third-party
 analytics tools or tracking bugs on their websites. It is vital that
-these are disabled for the SecureDrop landing page.
+these are disabled for the SecureDrop *Landing Page*.
 
 In the past, some news organizations were heavily criticized when launching
-their SecureDrop instances because their landing page contained
+their SecureDrop instances because their *Landing Page* contained
 trackers. They claimed they were going to great lengths to protect
-sources' anonymity, but by having trackers on their landing page, this also
+sources' anonymity, but by having trackers on their *Landing Page*, this also
 opened up multiple avenues for third parties to collect information on
 those sources. This information can potentially be accessed by law
 enforcement or intelligence agencies and could unduly expose a source.
 
-Similarly, consider avoiding the use of Cloudflare (and other CDNs: Akamai, StackPath, Incapsula, Amazon CloudFront, etc.) for the SecureDrop landing page. These services intercept requests between a potential source and the SecureDrop landing page and can be used to `track <https://github.com/Synzvato/decentraleyes/wiki/Frequently-Asked-Questions>`__ or collect information on sources.
+Similarly, consider avoiding the use of Cloudflare (and other CDNs: Akamai, StackPath, Incapsula, Amazon CloudFront, etc.) for the SecureDrop *Landing Page*. These services intercept requests between a potential source and the SecureDrop *Landing Page* and can be used to `track <https://github.com/Synzvato/decentraleyes/wiki/Frequently-Asked-Questions>`__ or collect information on sources.
 
 Apply applicable security headers
 ---------------------------------
@@ -213,15 +213,15 @@ link <https://gist.github.com/mtigas/8601685>`__ and use the
 configuration example provided by ProPublica.
 
 **Change detection monitoring for the web application configuration and
-landing page content**
+*Landing Page* content**
 
 OSSEC is a free and open source host-based intrusion detection suite
 that includes a file integrity monitor. More information can be found
 `here. <https://ossec.github.io/>`__
 
-**Don't log access to the landing page in the webserver**
+**Don't log access to the *Landing Page* in the webserver**
 
-Here's an Apache example that would exclude the landing page from
+Here's an Apache example that would exclude the *Landing Page* from
 logging:
 
 ::
@@ -238,7 +238,7 @@ In nginx, logging can be disabled like so:
 
 **Security suggestions**
 
-To guard your landing page against being modified by an attacker and
+To guard your *Landing Page* against being modified by an attacker and
 directing sources to a rogue SecureDrop instance, you will need good
 security practices applying to the machine where it is hosted. Whether
 it's a VPS in the cloud or dedicated server in your office, you should
@@ -256,7 +256,7 @@ consider the following:
 -  Two-factor authentication (see libpam-google-authenticator,
    libpam-yubico)
 
-It's preferable for the landing page to have its own segmented
+It's preferable for the *Landing Page* to have its own segmented
 environment instead of hosting it alongside other sites running
 potentially vulnerable software or content management systems. Check
 that user and group file permissions are locked down and that modules or
@@ -264,13 +264,13 @@ gateway interfaces for dynamic scripting languages are not enabled. You
 don't want any unnecessary code or services running as this increases
 the attack surface.
 
-Landing page content suggestions
---------------------------------
+*Landing Page* content suggestions
+----------------------------------
 
 The content below presents sample text for the SecureDrop component of a news 
 organization’s tips page. It does not account for any specific legal 
 or organizational needs, but should provide guidance for any outlet getting 
-started on crafting landing page language. Any tweaks to the sample content 
+started on crafting *Landing Page* language. Any tweaks to the sample content 
 should be left to the legal and editorial discretion of the individual outlet, 
 and should be viewed as essential to upholding source protection and transparency.
 

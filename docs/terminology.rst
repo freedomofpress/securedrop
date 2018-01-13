@@ -48,6 +48,13 @@ The *Monitor Server* keeps track of the *Application Server* and sends out an
 email alert if something seems wrong. Only system admins connect
 to this server, and they may only do so using Tor.
 
+Landing Page
+------------
+
+The *Landing Page* is the public-facing webpage for a SecureDrop instance. This
+page is hosted as a standard (i.e. non-Tor) webpage on the news organization's
+site. It provides first instructions for potential sources.
+
 Source Interface
 ----------------
 

@@ -68,8 +68,8 @@ Some good examples include the `Toronto Globe and Mail`_, The Intercept, and
 .. _`Toronto Globe and Mail`: https://www.theglobeandmail.com/news/news-video/video-a-step-by-step-guide-to-using-securedrop/article28676619/
 .. _`Lucy Parsons Labs`: https://www.youtube.com/watch?v=LkgN244ggzs
 
-Regularly Share Your SecureDrop Landing Page on Social Media
-------------------------------------------------------------
+Regularly Share Your SecureDrop *Landing Page* on Social Media
+--------------------------------------------------------------
 
 The majority of adults in the United States now get their news from Facebook or
 other social media sites like Twitter, so it’s important to regularly remind

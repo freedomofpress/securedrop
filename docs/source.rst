@@ -28,7 +28,7 @@ The easiest and most secure way to use Tor is to download the Tor Browser from t
 * If your mail provider is less likely to be monitored, you can send a mail to gettor@torproject.org and a bot will answer with instructions
 * If you routinely use GitHub, you can use it to `download the Tor Browser <https://github.com/TheTorProject/gettorbrowser>`__
 
-Once you have the Tor Browser, launch it and enter the ".onion" address for the Source Interface of the organization that you wish to submit to. You can find this address on the organization's landing page, or listed on the SecureDrop Directory.
+Once you have the Tor Browser, launch it and enter the ".onion" address for the Source Interface of the organization that you wish to submit to. You can find this address on the organization's *Landing Page*, or listed on the SecureDrop Directory.
 
 While using the Tor Browser on your personal computer helps hide your activity on the network, it leaves traces (of its own installation) on your local machine. For even more deniability, we recommend booting into a live system such as `Tails`_ for a higher level of security. Tails is specifically designed to run on your computer without leaving traces of your activity, and automatically routes all of your Internet browsing through Tor so you can easily access SecureDrop safely.
 
@@ -41,9 +41,9 @@ Choose who to submit to
 
 Each SecureDrop instance is totally independent, and submissions to that instance are only available to journalists associated with that organization.
 
-All organizations have a *landing page* that provides their own organization-specific recommendations for using SecureDrop. We encourage you to consider an organization's landing page before submitting to them.
+All organizations have a *Landing Page* that provides their own organization-specific recommendations for using SecureDrop. We encourage you to consider an organization's *Landing Page* before submitting to them.
 
-Most organizations make their landing page prominently accessible from their main website's homepage. You can also find an incomplete list of organizations accepting submissions through SecureDrop on the `SecureDrop Directory`_ maintained by Freedom of the Press Foundation.
+Most organizations make their *Landing Page* prominently accessible from their main website's homepage. You can also find an incomplete list of organizations accepting submissions through SecureDrop on the `SecureDrop Directory`_ maintained by Freedom of the Press Foundation.
 
 .. _`SecureDrop Directory`: https://securedrop.org/directory
 

@@ -516,7 +516,7 @@ What a global adversary can achieve against the source, admin, or journalist:
    investigation, including looking at who has read up on SecureDrop and
    who has used Tor.
 -  A global adversary may be able to forge an SSL certificate and use it
-   to spoof an organization's HTTPS landing page, thereby tricking the
+   to spoof an organization's HTTPS *Landing Page*, thereby tricking the
    source into visiting a fake SecureDrop site.
 
 What a random person on the Internet can achieve
