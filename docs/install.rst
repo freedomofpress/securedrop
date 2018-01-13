@@ -34,6 +34,7 @@ languages:
 * German (de_DE)
 * Spanish (es_ES)
 * French (fr_FR)
+* Italian (it_IT)
 * Norwegian (nb_NO)
 * Dutch (nl)
 * Portuguese, Brasil (pt_BR)
