@@ -8,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 import crypto_util
 import store
 
-from db import db_session, Submission
+from models import db_session, Submission
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (make_star_true, make_star_false, get_source,
                                   delete_collection, col_download_unread,

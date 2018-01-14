@@ -9,7 +9,7 @@ from sqlalchemy.sql.expression import false
 import crypto_util
 import store
 
-from db import db_session, Source, SourceStar, Submission, Reply
+from models import db_session, Source, SourceStar, Submission, Reply
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (validate_user, bulk_delete, download,
                                   confirm_bulk_delete, get_source)

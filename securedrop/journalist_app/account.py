@@ -4,7 +4,7 @@ from flask import (Blueprint, render_template, request, g, redirect, url_for,
                    flash, session)
 from flask_babel import gettext
 
-from db import db_session
+from models import db_session
 from journalist_app.utils import (make_password, set_diceware_password,
                                   validate_user)
 

@@ -5,7 +5,7 @@ from flask import url_for
 import flask_testing
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from db import Journalist, BadTokenException
+from models import Journalist, BadTokenException
 import journalist
 import utils
 

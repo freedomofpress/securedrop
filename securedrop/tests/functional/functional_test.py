@@ -22,7 +22,7 @@ from selenium.webdriver.support import expected_conditions
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
-import db
+import models
 import journalist
 from source_app import create_app
 import crypto_util
@@ -84,7 +84,7 @@ class FunctionalTest(object):
 
     def setup(self, session_expiration=30):
         # Patch the two-factor verification to avoid intermittent errors
-        self.patcher = mock.patch('db.Journalist.verify_token')
+        self.patcher = mock.patch('models.Journalist.verify_token')
         self.mock_journalist_verify_token = self.patcher.start()
         self.mock_journalist_verify_token.return_value = True
 
@@ -96,7 +96,7 @@ class FunctionalTest(object):
 
         env.create_directories()
         self.gpg = env.init_gpg()
-        db.init_db()
+        models.init_db()
 
         source_port = self._unused_port()
         journalist_port = self._unused_port()

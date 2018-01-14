@@ -5,7 +5,7 @@ import unittest
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
-import db
+import models
 import store
 import utils
 
@@ -175,9 +175,9 @@ class TestCryptoUtil(unittest.TestCase):
         codename = crypto_util.genrandomid()
         filesystem_id = crypto_util.hash_codename(codename)
         journalist_filename = crypto_util.display_id()
-        source = db.Source(filesystem_id, journalist_filename)
-        db.db_session.add(source)
-        db.db_session.commit()
+        source = models.Source(filesystem_id, journalist_filename)
+        models.db_session.add(source)
+        models.db_session.commit()
         crypto_util.genkeypair(source.filesystem_id, codename)
 
         self.assertIsNotNone(crypto_util.getkey(filesystem_id))

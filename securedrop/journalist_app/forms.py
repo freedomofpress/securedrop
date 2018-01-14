@@ -7,7 +7,7 @@ from wtforms import (TextAreaField, TextField, BooleanField, HiddenField,
                      ValidationError)
 from wtforms.validators import InputRequired, Optional
 
-from db import Journalist
+from models import Journalist
 
 
 def otp_secret_validation(form, field):

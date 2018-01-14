@@ -11,7 +11,7 @@ import i18n
 import template_filters
 import version
 
-from db import db_session, Journalist
+from models import db_session, Journalist
 from journalist_app import account, admin, main, col
 from journalist_app.utils import get_source, logged_in
 

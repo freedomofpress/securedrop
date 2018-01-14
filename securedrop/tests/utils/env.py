@@ -12,7 +12,7 @@ import gnupg
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
-from db import init_db, db_session
+from models import init_db, db_session
 
 FILES_DIR = abspath(join(dirname(realpath(__file__)), '..', 'files'))
 

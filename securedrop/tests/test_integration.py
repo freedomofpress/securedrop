@@ -17,7 +17,7 @@ import gnupg
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
-from db import db_session, Journalist
+from models import db_session, Journalist
 import journalist
 import source
 import store
@@ -42,7 +42,7 @@ class TestIntegration(unittest.TestCase):
         self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
 
         # Patch the two-factor verification to avoid intermittent errors
-        patcher = mock.patch('db.Journalist.verify_token')
+        patcher = mock.patch('models.Journalist.verify_token')
         self.addCleanup(patcher.stop)
         self.mock_journalist_verify_token = patcher.start()
         self.mock_journalist_verify_token.return_value = True

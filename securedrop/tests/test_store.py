@@ -6,7 +6,7 @@ import zipfile
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
-from db import db_session
+from models import db_session
 import store
 import utils
 

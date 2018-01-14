@@ -10,7 +10,7 @@ from sqlalchemy.exc import IntegrityError
 import crypto_util
 import store
 
-from db import Source, db_session, Submission, Reply, get_one_or_else
+from models import Source, db_session, Submission, Reply, get_one_or_else
 from rm import srm
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,

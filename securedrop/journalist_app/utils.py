@@ -11,10 +11,10 @@ import i18n
 import store
 import worker
 
-from db import (db_session, get_one_or_else, Source, Journalist,
-                InvalidUsernameException, WrongPasswordException,
-                LoginThrottledException, BadTokenException, SourceStar,
-                PasswordError, Submission)
+from models import (db_session, get_one_or_else, Source, Journalist,
+                    InvalidUsernameException, WrongPasswordException,
+                    LoginThrottledException, BadTokenException, SourceStar,
+                    PasswordError, Submission)
 from rm import srm
 
 
@@ -110,7 +110,7 @@ def download(zip_basename, submissions):
 
     :param str zip_basename: The basename of the ZIP-file download.
 
-    :param list submissions: A list of :class:`db.Submission`s to
+    :param list submissions: A list of :class:`models.Submission`s to
                              include in the ZIP-file.
     """
     zf = store.get_bulk_archive(submissions,

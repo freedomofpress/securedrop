@@ -19,7 +19,7 @@ import unittest
 import version
 import utils
 
-from db import Journalist, db_session
+from models import Journalist, db_session
 
 
 YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',

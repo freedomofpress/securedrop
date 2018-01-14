@@ -8,8 +8,8 @@ from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
-from db import (db_session, Journalist, InvalidUsernameException,
-                PasswordError)
+from models import (db_session, Journalist, InvalidUsernameException,
+                    PasswordError)
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (make_password, commit_account_changes,
                                   set_diceware_password)

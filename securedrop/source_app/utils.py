@@ -9,7 +9,7 @@ import crypto_util
 import i18n
 import store
 
-from db import Source, db_session
+from models import Source, db_session
 
 
 def logged_in():

@@ -8,7 +8,7 @@ from flask import session, escape, url_for
 from flask_testing import TestCase
 
 import crypto_util
-from db import db_session, Source
+from models import db_session, Source
 import source
 import version
 import utils

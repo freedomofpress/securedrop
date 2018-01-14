@@ -14,7 +14,7 @@ import store
 import template_filters
 import version
 
-from db import Source, db_session
+from models import Source, db_session
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from source_app import main, info, api
 from source_app.decorators import ignore_static

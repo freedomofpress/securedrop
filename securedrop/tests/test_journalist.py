@@ -14,9 +14,9 @@ from sqlalchemy.exc import IntegrityError
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
-from db import (db_session, InvalidPasswordLength, Journalist, Reply, Source,
-                Submission)
-import db
+from models import (db_session, InvalidPasswordLength, Journalist, Reply,
+                    Source, Submission)
+import models
 import journalist
 import journalist_app
 import journalist_app.utils
@@ -65,7 +65,7 @@ class TestJournalistApp(TestCase):
         exception_class = StaleDataError
         exception_msg = 'Potentially sensitive content!'
 
-        with patch('db.db_session.commit',
+        with patch('models.db_session.commit',
                    side_effect=exception_class(exception_msg)):
             self.client.post(url_for('main.reply'),
                              data={'filesystem_id': filesystem_id,
@@ -85,7 +85,7 @@ class TestJournalistApp(TestCase):
 
         exception_class = StaleDataError
 
-        with patch('db.db_session.commit', side_effect=exception_class()):
+        with patch('models.db_session.commit', side_effect=exception_class()):
             self.client.post(url_for('main.reply'),
                              data={'filesystem_id': filesystem_id,
                              'message': '_'})
@@ -123,7 +123,7 @@ class TestJournalistApp(TestCase):
         self.assertRedirects(resp, url_for('main.login'))
 
     def test_login_throttle(self):
-        db.LOGIN_HARDENING = True
+        models.LOGIN_HARDENING = True
         try:
             for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
                 resp = self.client.post(url_for('main.login'),
@@ -141,7 +141,7 @@ class TestJournalistApp(TestCase):
             self.assertIn("Please wait at least {} seconds".format(
                 Journalist._LOGIN_ATTEMPT_PERIOD), resp.data)
         finally:
-            db.LOGIN_HARDENING = False
+            models.LOGIN_HARDENING = False
 
     def test_login_invalid_credentials(self):
         resp = self.client.post(url_for('main.login'),
@@ -320,7 +320,7 @@ class TestJournalistApp(TestCase):
     def test_admin_edits_user_password_error_response(self):
         self._login_admin()
 
-        with patch('db.db_session.commit', side_effect=Exception()):
+        with patch('models.db_session.commit', side_effect=Exception()):
             resp = self.client.post(
                 url_for('admin.new_password', user_id=self.user.id),
                 data=dict(password=VALID_PASSWORD_2),
@@ -366,7 +366,7 @@ class TestJournalistApp(TestCase):
     def test_user_edits_password_error_reponse(self):
         self._login_user()
 
-        with patch('db.db_session.commit', side_effect=Exception()):
+        with patch('models.db_session.commit', side_effect=Exception()):
             resp = self.client.post(
                 url_for('account.new_password'),
                 data=dict(current_password=self.user_pw,
@@ -502,7 +502,7 @@ class TestJournalistApp(TestCase):
             "Invalid secret format: "
             "odd-length secret. Did you mistype the secret?", "error")
 
-    @patch('db.Journalist.set_hotp_secret')
+    @patch('models.Journalist.set_hotp_secret')
     @patch('journalist.app.logger.error')
     def test_admin_resets_user_hotp_error(self,
                                           mocked_error_logger,
@@ -1250,7 +1250,7 @@ class TestJournalistApp(TestCase):
         self.assert200(resp)
 
         # Verify there are no remaining sources
-        remaining_sources = db_session.query(db.Source).all()
+        remaining_sources = db_session.query(models.Source).all()
         self.assertEqual(len(remaining_sources), 0)
 
     def test_col_process_successfully_stars_sources(self):
@@ -1353,8 +1353,8 @@ class TestJournalistLogin(unittest.TestCase):
         # (as in `shared_teardown`).
         db_session.remove()
 
-    @patch('db.Journalist._scrypt_hash')
-    @patch('db.Journalist.valid_password', return_value=True)
+    @patch('models.Journalist._scrypt_hash')
+    @patch('models.Journalist.valid_password', return_value=True)
     def test_valid_login_calls_scrypt(self,
                                       mock_scrypt_hash,
                                       mock_valid_password):
@@ -1363,7 +1363,7 @@ class TestJournalistLogin(unittest.TestCase):
             mock_scrypt_hash.called,
             "Failed to call _scrypt_hash for password w/ valid length")
 
-    @patch('db.Journalist._scrypt_hash')
+    @patch('models.Journalist._scrypt_hash')
     def test_login_with_invalid_password_doesnt_call_scrypt(self,
                                                             mock_scrypt_hash):
         invalid_pw = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
