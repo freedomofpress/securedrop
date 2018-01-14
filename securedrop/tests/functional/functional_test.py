@@ -22,9 +22,9 @@ from selenium.webdriver.support import expected_conditions
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
-import journalist
+import journalist_app
+import source_app
 from db import db
-from source_app import create_app
 import crypto_util
 import tests.utils.env as env
 
@@ -83,6 +83,8 @@ class FunctionalTest(object):
         return firefox_binary.FirefoxBinary(log_file=log_file)
 
     def setup(self, session_expiration=30):
+        self.__context = journalist_app.create_app(config).app_context()
+        self.__context.push()
         # Patch the two-factor verification to avoid intermittent errors
         self.patcher = mock.patch('models.Journalist.verify_token')
         self.mock_journalist_verify_token = self.patcher.start()
@@ -118,9 +120,7 @@ class FunctionalTest(object):
 
             config.SESSION_EXPIRATION_MINUTES = self.session_expiration
 
-            source_app = create_app(config)
-
-            source_app.run(
+            source_app.create_app(config).run(
                 port=source_port,
                 debug=True,
                 use_reloader=False,
@@ -128,7 +128,7 @@ class FunctionalTest(object):
 
         def start_journalist_server():
             Random.atfork()
-            journalist.app.run(
+            journalist_app.create_app(config).run(
                 port=journalist_port,
                 debug=True,
                 use_reloader=False,
@@ -190,6 +190,7 @@ class FunctionalTest(object):
             self.driver.quit()
         self.source_process.terminate()
         self.journalist_process.terminate()
+        self.__context.pop()
 
     def wait_for(self, function_with_assertion, timeout=5):
         """Polling wait for an arbitrary assertion."""

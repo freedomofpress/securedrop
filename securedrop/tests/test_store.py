@@ -6,10 +6,9 @@ import zipfile
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
+import journalist_app
 import store
 import utils
-
-from db import db
 
 
 class TestStore(unittest.TestCase):
@@ -17,11 +16,13 @@ class TestStore(unittest.TestCase):
     """The set of tests for store.py."""
 
     def setUp(self):
+        self.__context = journalist_app.create_app(config).app_context()
+        self.__context.push()
         utils.env.setup()
 
     def tearDown(self):
         utils.env.teardown()
-        db.session.remove()
+        self.__context.pop()
 
     def create_file_in_source_dir(self, filesystem_id, filename):
         """Helper function for simulating files"""

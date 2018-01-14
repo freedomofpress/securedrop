@@ -5,6 +5,7 @@ import unittest
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
+import journalist_app
 import models
 import store
 import utils
@@ -17,10 +18,13 @@ class TestCryptoUtil(unittest.TestCase):
     """The set of tests for crypto_util.py."""
 
     def setUp(self):
+        self.__context = journalist_app.create_app(config).app_context()
+        self.__context.push()
         utils.env.setup()
 
     def tearDown(self):
         utils.env.teardown()
+        self.__context.pop()
 
     def test_word_list_does_not_contain_empty_strings(self):
         self.assertNotIn('', (crypto_util._get_wordlist('en')

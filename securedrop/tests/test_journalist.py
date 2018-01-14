@@ -66,7 +66,7 @@ class TestJournalistApp(TestCase):
         exception_class = StaleDataError
         exception_msg = 'Potentially sensitive content!'
 
-        with patch('db.session.commit',
+        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
                    side_effect=exception_class(exception_msg)):
             self.client.post(url_for('main.reply'),
                              data={'filesystem_id': filesystem_id,
@@ -86,7 +86,8 @@ class TestJournalistApp(TestCase):
 
         exception_class = StaleDataError
 
-        with patch('db.session.commit', side_effect=exception_class()):
+        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
+                   side_effect=exception_class()):
             self.client.post(url_for('main.reply'),
                              data={'filesystem_id': filesystem_id,
                              'message': '_'})
@@ -321,14 +322,16 @@ class TestJournalistApp(TestCase):
     def test_admin_edits_user_password_error_response(self):
         self._login_admin()
 
-        with patch('db.session.commit', side_effect=Exception()):
+        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
+                   side_effect=Exception()):
             resp = self.client.post(
                 url_for('admin.new_password', user_id=self.user.id),
                 data=dict(password=VALID_PASSWORD_2),
                 follow_redirects=True)
 
+        text = resp.data.decode('utf-8')
         assert ('There was an error, and the new password might not have '
-                'been saved correctly.') in resp.data.decode('utf-8')
+                'been saved correctly.') in text, text
 
     def test_user_edits_password_success_response(self):
         self._login_user()
@@ -367,7 +370,8 @@ class TestJournalistApp(TestCase):
     def test_user_edits_password_error_reponse(self):
         self._login_user()
 
-        with patch('db.session.commit', side_effect=Exception()):
+        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
+                   side_effect=Exception()):
             resp = self.client.post(
                 url_for('account.new_password'),
                 data=dict(current_password=self.user_pw,
@@ -1339,6 +1343,8 @@ class TestJournalistLocale(TestCase):
 class TestJournalistLogin(unittest.TestCase):
 
     def setUp(self):
+        self.__context = journalist_app.create_app(config).app_context()
+        self.__context.push()
         utils.env.setup()
 
         # Patch the two-factor verification so it always succeeds
@@ -1348,11 +1354,7 @@ class TestJournalistLogin(unittest.TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-        # TODO: figure out why this is necessary here, but unnecessary in all
-        # of the tests in `tests/test_unit_*.py`. Without this, the session
-        # continues to return values even if the underlying database is deleted
-        # (as in `shared_teardown`).
-        db.session.remove()
+        self.__context.pop()
 
     @patch('models.Journalist._scrypt_hash')
     @patch('models.Journalist.valid_password', return_value=True)

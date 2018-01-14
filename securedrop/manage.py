@@ -87,7 +87,7 @@ def reset(args):
         pass
 
     # Regenerate the database
-    db.creat_all()
+    db.create_all()
 
     # Clear submission/reply storage
     try:

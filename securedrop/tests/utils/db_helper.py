@@ -61,9 +61,9 @@ def reply(journalist, source, num_replies):
                             store.path(source.filesystem_id, fname))
         reply = models.Reply(journalist, source, fname)
         replies.append(reply)
-        models.db.session.add(reply)
+        db.session.add(reply)
 
-    models.db.session.commit()
+    db.session.commit()
     return replies
 
 
@@ -88,7 +88,7 @@ def mark_downloaded(*submissions):
     """
     for submission in submissions:
         submission.downloaded = True
-    models.db.session.commit()
+    db.session.commit()
 
 
 # models.{Source,Submission}
@@ -106,8 +106,8 @@ def init_source_without_keypair():
     filesystem_id = crypto_util.hash_codename(codename)
     journalist_filename = crypto_util.display_id()
     source = models.Source(filesystem_id, journalist_filename)
-    models.db.session.add(source)
-    models.db.session.commit()
+    db.session.add(source)
+    db.session.commit()
     # Create the directory to store their submissions and replies
     os.mkdir(store.path(source.filesystem_id))
 
@@ -152,9 +152,9 @@ def submit(source, num_submissions):
                                               str(os.urandom(1)))
         submission = models.Submission(source, fpath)
         submissions.append(submission)
-        models.db.session.add(submission)
+        db.session.add(submission)
 
-    models.db.session.commit()
+    db.session.commit()
     return submissions
 
 
