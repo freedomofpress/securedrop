@@ -1,6 +1,7 @@
 cssmin
 Flask-Assets
 Flask-Babel
+Flask-SQLAlchemy
 Flask-WTF
 Flask
 gnupg
