@@ -1,5 +1,5 @@
-# ubuntu:14.04 as of 2017-11-15
-FROM ubuntu@sha256:f6eed4def93a3b54da920737f0abf1a8cae2e480bb368280c898265fcaf910a3
+# ubuntu:14.04 as of 2017-12-15
+FROM ubuntu@sha256:084989eb923bd86dbf7e706d464cf3587274a826b484f75b69468c19f8ae354c
 
 RUN apt-get update && \
     apt-get install -y python-pip libpython2.7-dev libssl-dev secure-delete \
