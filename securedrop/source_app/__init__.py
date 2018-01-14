@@ -1,4 +1,9 @@
 from datetime import datetime, timedelta
+
+from source_app.formparser import SDMultiPartParser # noqa
+import werkzeug # noqa
+werkzeug.formparser.MultiPartParser = SDMultiPartParser # noqa
+
 from flask import (Flask, render_template, flash, Markup, request, g, session,
                    url_for, redirect)
 from flask_babel import gettext
@@ -13,6 +18,7 @@ import i18n
 import store
 import template_filters
 import version
+
 
 from db import Source, db_session
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads

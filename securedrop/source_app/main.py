@@ -104,7 +104,14 @@ def make_blueprint(config):
     @login_required
     def submit():
         msg = request.form['msg']
-        fh = request.files['fh']
+        files = request.files
+        fh = files.getlist('fh[]')
+
+        #  Based on http://flask.pocoo.org/docs/0.12/patterns/fileuploads/
+        #  if user does not select file, browser also
+        #  submit a empty part without filename
+        if fh and not fh[0].filename:
+            fh = []
 
         # Don't submit anything if it was an "empty" submission. #878
         if not (msg or fh):
@@ -113,27 +120,40 @@ def make_blueprint(config):
                   "error")
             return redirect(url_for('main.lookup'))
 
-        fnames = []
         journalist_filename = g.source.journalist_filename
         first_submission = g.source.interaction_count == 0
 
         if msg:
             g.source.interaction_count += 1
-            fnames.append(
+            fname = (
                 store.save_message_submission(
                     g.filesystem_id,
                     g.source.interaction_count,
                     journalist_filename,
                     msg))
+            submission = Submission(g.source, fname)
+            db_session.add(submission)
+            db_session.commit()
+
         if fh:
-            g.source.interaction_count += 1
-            fnames.append(
-                store.save_file_submission(
-                    g.filesystem_id,
-                    g.source.interaction_count,
-                    journalist_filename,
-                    fh.filename,
-                    fh.stream))
+            for file_submitted in fh:
+                g.source.interaction_count += 1
+                fname = (
+                    store.save_file_submission(
+                        g.filesystem_id,
+                        g.source.interaction_count,
+                        journalist_filename,
+                        file_submitted.filename,
+                        file_submitted.stream))
+                submission = Submission(g.source, fname)
+                db_session.add(submission)
+                db_session.commit()
+
+                filename = Markup.escape(file_submitted.filename)
+                html_msg = render_template(
+                    'next_submission_flashed_message.html',
+                    html_contents=u"{0}".format(filename))
+                flash(Markup(html_msg), "next_submission")
 
         if first_submission:
             msg = render_template('first_submission_flashed_message.html')
@@ -143,18 +163,15 @@ def make_blueprint(config):
             if msg and not fh:
                 html_contents = gettext('Thanks! We received your message.')
             elif not msg and fh:
-                html_contents = gettext('Thanks! We received your document.')
+                html_contents = gettext('Thanks! We received your'
+                                        ' document(s).')
             else:
                 html_contents = gettext('Thanks! We received your message and '
-                                        'document.')
+                                        'document(s).')
 
             msg = render_template('next_submission_flashed_message.html',
                                   html_contents=html_contents)
             flash(Markup(msg), "success")
-
-        for fname in fnames:
-            submission = Submission(g.source, fname)
-            db_session.add(submission)
 
         if g.source.pending:
             g.source.pending = False

@@ -3,6 +3,9 @@
 # Relevant docs: https://docs.travis-ci.com/user/trusty-ci-environment/
 sudo: required
 dist: trusty
+# New Trusty image introduced on Dec 12, 2017
+# https://blog.travis-ci.com/2017-12-12-new-trusty-images-q4-launch
+group: deprecated-2017Q4
 # Pin older version of Firefox, for Selenium compatibility. Must match version
 # specified in app-test role vars!
 addons:

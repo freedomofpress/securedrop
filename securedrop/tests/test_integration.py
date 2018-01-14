@@ -156,10 +156,10 @@ class TestIntegration(unittest.TestCase):
             resp = source_app.post('/create', follow_redirects=True)
             filesystem_id = g.filesystem_id
             # redirected to submission form
-            resp = self.source_app.post('/submit', data=dict(
-                msg="",
-                fh=(StringIO(test_file_contents), test_filename),
-            ), follow_redirects=True)
+            resp = self.source_app.post('/submit', data={
+                'msg': "",
+                'fh[]': [(StringIO(test_file_contents), test_filename), ],
+            }, follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
             source_app.get('/logout')
 
@@ -421,10 +421,10 @@ class TestIntegration(unittest.TestCase):
         # first, add a source
         self.source_app.get('/generate')
         self.source_app.post('/create')
-        resp = self.source_app.post('/submit', data=dict(
-            msg="This is a test.",
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
+        resp = self.source_app.post('/submit', data={
+            'msg': "This is a test.",
+            'fh[]': []
+        }, follow_redirects=True)
 
         assert resp.status_code == 200, resp.data.decode('utf-8')
 
@@ -464,10 +464,10 @@ class TestIntegration(unittest.TestCase):
         for i in range(num_sources):
             self.source_app.get('/generate')
             self.source_app.post('/create')
-            self.source_app.post('/submit', data=dict(
-                msg="This is a test " + str(i) + ".",
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
+            self.source_app.post('/submit', data={
+                'msg': "This is a test " + str(i) + ".",
+                'fh[]': []
+            }, follow_redirects=True)
             self.source_app.get('/logout')
 
         resp = self.journalist_app.get('/')
@@ -591,18 +591,18 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(resp.status_code, 302)
 
     def helper_filenames_submit(self):
-        self.source_app.post('/submit', data=dict(
-            msg="This is a test.",
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
-        self.source_app.post('/submit', data=dict(
-            msg="This is a test.",
-            fh=(StringIO('This is a test'), 'test.txt'),
-        ), follow_redirects=True)
-        self.source_app.post('/submit', data=dict(
-            msg="",
-            fh=(StringIO('This is a test'), 'test.txt'),
-        ), follow_redirects=True)
+        self.source_app.post('/submit', data={
+            'msg': "This is a test.",
+            'fh[]': [],
+        }, follow_redirects=True)
+        self.source_app.post('/submit', data={
+            'msg': "This is a test.",
+            'fh[]': [(StringIO('This is a test'), 'test.txt'), ],
+        }, follow_redirects=True)
+        self.source_app.post('/submit', data={
+            'msg': "",
+            'fh[]': [(StringIO('This is a test'), 'test.txt'), ],
+        }, follow_redirects=True)
 
     def helper_filenames_delete(self, soup, i):
         filesystem_id = soup.select('input[name="filesystem_id"]')[0]['value']

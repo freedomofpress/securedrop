@@ -1,5 +1,6 @@
 import tempfile
 import time
+import os.path
 
 from selenium.webdriver.common.action_chains import ActionChains
 from step_helpers import screenshots
@@ -154,7 +155,7 @@ class SourceNavigationStepsMixin():
             filename = file.name
 
             file_upload_box = self.driver.find_element_by_css_selector(
-                '[name=fh]')
+                '[name=fh\[\]]')
             file_upload_box.send_keys(filename)
 
             submit_button = self.driver.find_element_by_id('submit-doc-button')
@@ -169,6 +170,10 @@ class SourceNavigationStepsMixin():
             self.wait_for_source_key(self.source_name)
 
             if not hasattr(self, 'accept_languages'):
+                file_notification = self.driver.find_element_by_class_name(
+                    'next_submission')
+                tmpname = os.path.basename(filename)
+                assert tmpname in file_notification.text
                 notification = self.driver.find_element_by_css_selector(
                     '.success')
                 expected_notification = (
