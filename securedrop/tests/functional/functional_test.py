@@ -22,8 +22,8 @@ from selenium.webdriver.support import expected_conditions
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
-import models
 import journalist
+from db import db
 from source_app import create_app
 import crypto_util
 import tests.utils.env as env
@@ -96,7 +96,7 @@ class FunctionalTest(object):
 
         env.create_directories()
         self.gpg = env.init_gpg()
-        models.init_db()
+        db.create_all()
 
         source_port = self._unused_port()
         journalist_port = self._unused_port()

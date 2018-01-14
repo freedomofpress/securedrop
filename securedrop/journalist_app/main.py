@@ -9,7 +9,8 @@ from sqlalchemy.sql.expression import false
 import crypto_util
 import store
 
-from models import db_session, Source, SourceStar, Submission, Reply
+from db import db
+from models import Source, SourceStar, Submission, Reply
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (validate_user, bulk_delete, download,
                                   confirm_bulk_delete, get_source)
@@ -31,8 +32,8 @@ def make_blueprint(config):
 
                 # Update access metadata
                 user.last_access = datetime.utcnow()
-                db_session.add(user)
-                db_session.commit()
+                db.session.add(user)
+                db.session.commit()
 
                 session['uid'] = user.id
                 return redirect(url_for('main.index'))
@@ -101,8 +102,8 @@ def make_blueprint(config):
         reply = Reply(g.user, g.source, filename)
 
         try:
-            db_session.add(reply)
-            db_session.commit()
+            db.session.add(reply)
+            db.session.commit()
         except Exception as exc:
             flash(gettext(
                 "An unexpected error occurred! Please "
@@ -123,7 +124,7 @@ def make_blueprint(config):
     @view.route('/flag', methods=('POST',))
     def flag():
         g.source.flagged = True
-        db_session.commit()
+        db.session.commit()
         return render_template('flag.html', filesystem_id=g.filesystem_id,
                                codename=g.source.journalist_designation)
 
@@ -163,7 +164,7 @@ def make_blueprint(config):
                 g.filesystem_id,
                 item.filename,
                 g.source.journalist_filename)
-        db_session.commit()
+        db.session.commit()
 
         flash(gettext(
             "The source '{original_name}' has been renamed to '{new_name}'")

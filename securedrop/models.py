@@ -9,9 +9,8 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Binary
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from jinja2 import Markup
@@ -23,7 +22,7 @@ import qrcode
 # Using svg because it doesn't require additional dependencies
 import qrcode.image.svg
 
-import config
+from db import db
 import store
 
 
@@ -33,31 +32,6 @@ LOGIN_HARDENING = True
 # precisely control which code paths are exercised.
 if os.environ.get('SECUREDROP_ENV') == 'test':
     LOGIN_HARDENING = False
-
-# http://flask.pocoo.org/docs/patterns/sqlalchemy/
-
-if config.DATABASE_ENGINE == "sqlite":
-    engine = create_engine(
-        config.DATABASE_ENGINE + ":///" +
-        config.DATABASE_FILE
-    )
-
-    engine.execute('PRAGMA secure_delete = ON')
-    engine.execute('PRAGMA auto_vacuum = FULL')
-else:  # pragma: no cover
-    engine = create_engine(
-        config.DATABASE_ENGINE + '://' +
-        config.DATABASE_USERNAME + ':' +
-        config.DATABASE_PASSWORD + '@' +
-        config.DATABASE_HOST + '/' +
-        config.DATABASE_NAME, echo=False
-    )
-
-db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
-                                         bind=engine))
-Base = declarative_base()
-Base.query = db_session.query_property()
 
 
 def get_one_or_else(query, logger, failure_method):
@@ -73,7 +47,7 @@ def get_one_or_else(query, logger, failure_method):
         failure_method(404)
 
 
-class Source(Base):
+class Source(db.Model):
     __tablename__ = 'sources'
     id = Column(Integer, primary_key=True)
     filesystem_id = Column(String(96), unique=True)
@@ -130,7 +104,7 @@ class Source(Base):
         return collection
 
 
-class Submission(Base):
+class Submission(db.Model):
     __tablename__ = 'submissions'
     id = Column(Integer, primary_key=True)
     source_id = Column(Integer, ForeignKey('sources.id'))
@@ -152,7 +126,7 @@ class Submission(Base):
         return '<Submission %r>' % (self.filename)
 
 
-class Reply(Base):
+class Reply(db.Model):
     __tablename__ = "replies"
     id = Column(Integer, primary_key=True)
 
@@ -182,7 +156,7 @@ class Reply(Base):
         return '<Reply %r>' % (self.filename)
 
 
-class SourceStar(Base):
+class SourceStar(db.Model):
     __tablename__ = 'source_stars'
     id = Column("id", Integer, primary_key=True)
     source_id = Column("source_id", Integer, ForeignKey('sources.id'))
@@ -249,7 +223,7 @@ class NonDicewarePassword(PasswordError):
     """
 
 
-class Journalist(Base):
+class Journalist(db.Model):
     __tablename__ = "journalists"
     id = Column(Integer, primary_key=True)
     username = Column(String(255), nullable=False, unique=True)
@@ -394,7 +368,7 @@ class Journalist(Base):
 
         # Store latest token to prevent OTP token reuse
         self.last_token = token
-        db_session.commit()
+        db.session.commit()
 
         if self.is_totp:
             # Also check the given token against the previous and next
@@ -408,7 +382,7 @@ class Journalist(Base):
                     self.hotp_counter + 20):
                 if self.hotp.verify(token, counter_val):
                     self.hotp_counter = counter_val + 1
-                    db_session.commit()
+                    db.session.commit()
                     return True
             return False
 
@@ -419,8 +393,8 @@ class Journalist(Base):
     def throttle_login(cls, user):
         # Record the login attempt...
         login_attempt = JournalistLoginAttempt(user)
-        db_session.add(login_attempt)
-        db_session.commit()
+        db.session.add(login_attempt)
+        db.session.commit()
 
         # ...and reject it if they have exceeded the threshold
         login_attempt_period = datetime.datetime.utcnow() - \
@@ -456,7 +430,7 @@ class Journalist(Base):
         return user
 
 
-class JournalistLoginAttempt(Base):
+class JournalistLoginAttempt(db.Model):
 
     """This model keeps track of journalist's login attempts so we can
     rate limit them in order to prevent attackers from brute forcing
@@ -468,8 +442,3 @@ class JournalistLoginAttempt(Base):
 
     def __init__(self, journalist):
         self.journalist_id = journalist.id
-
-
-# Declare (or import) models before init_db
-def init_db():
-    Base.metadata.create_all(bind=engine)

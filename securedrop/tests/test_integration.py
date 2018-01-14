@@ -17,7 +17,8 @@ import gnupg
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
-from models import db_session, Journalist
+from db import db
+from models import Journalist
 import journalist
 import source
 import store
@@ -52,8 +53,8 @@ class TestIntegration(unittest.TestCase):
         self.user_pw = "corret horse battery staple haha cultural reference"
         self.user = Journalist(username="some-username",
                                password=self.user_pw)
-        db_session.add(self.user)
-        db_session.commit()
+        db.session.add(self.user)
+        db.session.commit()
         self._login_user()
 
     def tearDown(self):

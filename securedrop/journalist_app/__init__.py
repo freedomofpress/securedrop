@@ -11,7 +11,8 @@ import i18n
 import template_filters
 import version
 
-from models import db_session, Journalist
+from db import db
+from models import Journalist
 from journalist_app import account, admin, main, col
 from journalist_app.utils import get_source, logged_in
 
@@ -27,6 +28,21 @@ def create_app(config):
 
     CSRFProtect(app)
     Environment(app)
+
+    if config.DATABASE_ENGINE == "sqlite":
+        db_uri = (config.DATABASE_ENGINE + ":///" +
+                  config.DATABASE_FILE)
+    else:
+        db_uri = (
+            config.DATABASE_ENGINE + '://' +
+            config.DATABASE_USERNAME + ':' +
+            config.DATABASE_PASSWORD + '@' +
+            config.DATABASE_HOST + '/' +
+            config.DATABASE_NAME
+        )
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+    db.init_app(app)
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
@@ -62,12 +78,6 @@ def create_app(config):
             return filename
         versioned_filename = "{0}?v={1}".format(filename, timestamp)
         return versioned_filename
-
-    @app.teardown_appcontext
-    def shutdown_session(exception=None):
-        """Automatically remove database sessions at the end of the request, or
-        when the application shuts down"""
-        db_session.remove()
 
     @app.before_request
     def setup_g():

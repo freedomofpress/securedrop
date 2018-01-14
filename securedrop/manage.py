@@ -20,8 +20,8 @@ from sqlalchemy.orm.exc import NoResultFound
 os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
 import config
 import crypto_util
-from models import (db_session, init_db, Journalist, PasswordError,
-                    InvalidUsernameException)
+from db import db
+from models import Journalist, PasswordError, InvalidUsernameException
 from management.run import run
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
@@ -87,7 +87,7 @@ def reset(args):
         pass
 
     # Regenerate the database
-    init_db()
+    db.creat_all()
 
     # Clear submission/reply storage
     try:
@@ -175,10 +175,10 @@ def _add_user(is_admin=False):
                           password=password,
                           is_admin=is_admin,
                           otp_secret=otp_secret)
-        db_session.add(user)
-        db_session.commit()
+        db.session.add(user)
+        db.session.commit()
     except Exception as exc:
-        db_session.rollback()
+        db.session.rollback()
         if "UNIQUE constraint failed: journalists.username" in str(exc):
             print('ERROR: That username is already taken!')
         else:
@@ -236,8 +236,8 @@ def delete_user(args):
 
     # Try to delete user from the database
     try:
-        db_session.delete(selected_user)
-        db_session.commit()
+        db.session.delete(selected_user)
+        db.session.commit()
     except Exception as e:
         # If the user was deleted between the user selection and confirmation,
         # (e.g., through the web app), we don't report any errors. If the user

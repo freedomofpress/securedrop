@@ -19,7 +19,8 @@ import unittest
 import version
 import utils
 
-from models import Journalist, db_session
+from db import db
+from models import Journalist
 
 
 YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
@@ -147,7 +148,7 @@ class TestManagementCommand(unittest.TestCase):
         assert os.path.exists(config.STORE_DIR)
 
         # Verify journalist user present in the database is gone
-        db_session.remove()  # Close session and get a session on the new db
+        db.session.remove()  # Close session and get a session on the new db
         with self.assertRaises(NoResultFound):
             Journalist.query.filter_by(username=user_should_be_gone).one()
 

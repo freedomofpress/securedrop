@@ -6,9 +6,10 @@ import zipfile
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
-from models import db_session
 import store
 import utils
+
+from db import db
 
 
 class TestStore(unittest.TestCase):
@@ -20,7 +21,7 @@ class TestStore(unittest.TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-        db_session.remove()
+        db.session.remove()
 
     def create_file_in_source_dir(self, filesystem_id, filename):
         """Helper function for simulating files"""

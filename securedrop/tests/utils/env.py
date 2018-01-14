@@ -12,7 +12,7 @@ import gnupg
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
-from models import init_db, db_session
+from db import db
 
 FILES_DIR = abspath(join(dirname(realpath(__file__)), '..', 'files'))
 
@@ -49,7 +49,7 @@ def setup():
     """Set up the file system, GPG, and database."""
     create_directories()
     init_gpg()
-    init_db()
+    db.create_all()
     # Do tests that should always run on app startup
     crypto_util.do_runtime_tests()
 
@@ -61,7 +61,7 @@ def teardown():
     for t in threading.enumerate():
         if t.is_alive() and not isinstance(t, threading._MainThread):
             t.join()
-    db_session.remove()
+    db.session.remove()
     shutil.rmtree(config.TEMP_DIR)
     try:
         shutil.rmtree(config.SECUREDROP_DATA_ROOT)

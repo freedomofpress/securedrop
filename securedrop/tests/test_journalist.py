@@ -14,8 +14,9 @@ from sqlalchemy.exc import IntegrityError
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
-from models import (db_session, InvalidPasswordLength, Journalist, Reply,
-                    Source, Submission)
+from db import db
+from models import (InvalidPasswordLength, Journalist, Reply, Source,
+                    Submission)
 import models
 import journalist
 import journalist_app
@@ -65,7 +66,7 @@ class TestJournalistApp(TestCase):
         exception_class = StaleDataError
         exception_msg = 'Potentially sensitive content!'
 
-        with patch('models.db_session.commit',
+        with patch('db.session.commit',
                    side_effect=exception_class(exception_msg)):
             self.client.post(url_for('main.reply'),
                              data={'filesystem_id': filesystem_id,
@@ -85,7 +86,7 @@ class TestJournalistApp(TestCase):
 
         exception_class = StaleDataError
 
-        with patch('models.db_session.commit', side_effect=exception_class()):
+        with patch('db.session.commit', side_effect=exception_class()):
             self.client.post(url_for('main.reply'),
                              data={'filesystem_id': filesystem_id,
                              'message': '_'})
@@ -320,7 +321,7 @@ class TestJournalistApp(TestCase):
     def test_admin_edits_user_password_error_response(self):
         self._login_admin()
 
-        with patch('models.db_session.commit', side_effect=Exception()):
+        with patch('db.session.commit', side_effect=Exception()):
             resp = self.client.post(
                 url_for('admin.new_password', user_id=self.user.id),
                 data=dict(password=VALID_PASSWORD_2),
@@ -366,7 +367,7 @@ class TestJournalistApp(TestCase):
     def test_user_edits_password_error_reponse(self):
         self._login_user()
 
-        with patch('models.db_session.commit', side_effect=Exception()):
+        with patch('db.session.commit', side_effect=Exception()):
             resp = self.client.post(
                 url_for('account.new_password'),
                 data=dict(current_password=self.user_pw,
@@ -909,7 +910,7 @@ class TestJournalistApp(TestCase):
         journalist_app.utils.delete_collection(self.source.filesystem_id)
 
         # Source should be gone
-        results = db_session.query(Source).filter(
+        results = db.session.query(Source).filter(
             Source.id == self.source.id).all()
         self.assertEqual(results, [])
 
@@ -926,10 +927,10 @@ class TestJournalistApp(TestCase):
         journalist_app.utils.delete_collection(self.source.filesystem_id)
         results = Source.query.filter(Source.id == self.source.id).all()
         self.assertEqual(results, [])
-        results = db_session.query(
+        results = db.session.query(
             Submission.source_id == self.source.id).all()
         self.assertEqual(results, [])
-        results = db_session.query(Reply.source_id == self.source.id).all()
+        results = db.session.query(Reply.source_id == self.source.id).all()
         self.assertEqual(results, [])
 
     def test_delete_source_deletes_source_key(self):
@@ -1250,7 +1251,7 @@ class TestJournalistApp(TestCase):
         self.assert200(resp)
 
         # Verify there are no remaining sources
-        remaining_sources = db_session.query(models.Source).all()
+        remaining_sources = db.session.query(models.Source).all()
         self.assertEqual(len(remaining_sources), 0)
 
     def test_col_process_successfully_stars_sources(self):
@@ -1351,7 +1352,7 @@ class TestJournalistLogin(unittest.TestCase):
         # of the tests in `tests/test_unit_*.py`. Without this, the session
         # continues to return values even if the underlying database is deleted
         # (as in `shared_teardown`).
-        db_session.remove()
+        db.session.remove()
 
     @patch('models.Journalist._scrypt_hash')
     @patch('models.Journalist.valid_password', return_value=True)

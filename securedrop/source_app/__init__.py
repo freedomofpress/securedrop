@@ -14,7 +14,8 @@ import store
 import template_filters
 import version
 
-from models import Source, db_session
+from db import db
+from models import Source
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from source_app import main, info, api
 from source_app.decorators import ignore_static
@@ -31,8 +32,34 @@ def create_app(config):
     # The default CSRF token expiration is 1 hour. Since large uploads can
     # take longer than an hour over Tor, we increase the valid window to 24h.
     app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60 * 24
-
     CSRFProtect(app)
+
+    if config.DATABASE_ENGINE == "sqlite":
+        db_uri = (config.DATABASE_ENGINE + ":///" +
+                  config.DATABASE_FILE)
+    else:
+        db_uri = (
+            config.DATABASE_ENGINE + '://' +
+            config.DATABASE_USERNAME + ':' +
+            config.DATABASE_PASSWORD + '@' +
+            config.DATABASE_HOST + '/' +
+            config.DATABASE_NAME
+        )
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+    db.init_app(app)
+
+    if config.DATABASE_ENGINE == "sqlite":
+        db_uri = (config.DATABASE_ENGINE + ":///" +
+                  config.DATABASE_FILE)
+    else:  # pragma: no cover
+        db_uri = (
+            config.DATABASE_ENGINE + '://' +
+            config.DATABASE_USERNAME + ':' +
+            config.DATABASE_PASSWORD + '@' +
+            config.DATABASE_HOST + '/' +
+            config.DATABASE_NAME
+        )
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
@@ -120,12 +147,6 @@ def create_app(config):
                 del session['codename']
                 return redirect(url_for('main.index'))
             g.loc = store.path(g.filesystem_id)
-
-    @app.teardown_appcontext
-    def shutdown_session(exception=None):
-        """Automatically remove database sessions at the end of the request, or
-        when the application shuts down"""
-        db_session.remove()
 
     @app.errorhandler(404)
     def page_not_found(error):

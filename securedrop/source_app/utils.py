@@ -9,7 +9,8 @@ import crypto_util
 import i18n
 import store
 
-from models import Source, db_session
+from db import db
+from models import Source
 
 
 def logged_in():
@@ -77,7 +78,7 @@ def async_genkey(filesystem_id, codename):
         source = Source.query.filter(Source.filesystem_id == filesystem_id) \
                        .one()
         source.last_updated = datetime.utcnow()
-        db_session.commit()
+        db.session.commit()
     except Exception as e:
         logging.getLogger(__name__).error(
                 "async_genkey for source (filesystem_id={}): {}"

@@ -9,6 +9,8 @@ import models
 import store
 import utils
 
+from db import db
+
 
 class TestCryptoUtil(unittest.TestCase):
 
@@ -176,8 +178,8 @@ class TestCryptoUtil(unittest.TestCase):
         filesystem_id = crypto_util.hash_codename(codename)
         journalist_filename = crypto_util.display_id()
         source = models.Source(filesystem_id, journalist_filename)
-        models.db_session.add(source)
-        models.db_session.commit()
+        db.session.add(source)
+        db.session.commit()
         crypto_util.genkeypair(source.filesystem_id, codename)
 
         self.assertIsNotNone(crypto_util.getkey(filesystem_id))

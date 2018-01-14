@@ -11,7 +11,8 @@ import i18n
 import store
 import worker
 
-from models import (db_session, get_one_or_else, Source, Journalist,
+from db import db
+from models import (get_one_or_else, Source, Journalist,
                     InvalidUsernameException, WrongPasswordException,
                     LoginThrottledException, BadTokenException, SourceStar,
                     PasswordError, Submission)
@@ -30,17 +31,17 @@ def logged_in():
 
 
 def commit_account_changes(user):
-    if db_session.is_modified(user):
+    if db.session.is_modified(user):
         try:
-            db_session.add(user)
-            db_session.commit()
+            db.session.add(user)
+            db.session.commit()
         except Exception as e:
             flash(gettext(
                 "An unexpected error occurred! Please "
                   "inform your administrator."), "error")
             current_app.logger.error("Account changes for '{}' failed: {}"
                                      .format(user, e))
-            db_session.rollback()
+            db.session.rollback()
         else:
             flash(gettext("Account updated."), "success")
 
@@ -121,7 +122,7 @@ def download(zip_basename, submissions):
     # Mark the submissions that have been downloaded as such
     for submission in submissions:
         submission.downloaded = True
-    db_session.commit()
+    db.session.commit()
 
     return send_file(zf.name, mimetype="application/zip",
                      attachment_filename=attachment_filename,
@@ -132,8 +133,8 @@ def bulk_delete(filesystem_id, items_selected):
     for item in items_selected:
         item_path = store.path(filesystem_id, item.filename)
         worker.enqueue(srm, item_path)
-        db_session.delete(item)
-    db_session.commit()
+        db.session.delete(item)
+    db.session.commit()
 
     flash(ngettext("Submission deleted.",
                    "{num} submissions deleted.".format(
@@ -155,15 +156,15 @@ def make_star_true(filesystem_id):
         source.star.starred = True
     else:
         source_star = SourceStar(source)
-        db_session.add(source_star)
+        db.session.add(source_star)
 
 
 def make_star_false(filesystem_id):
     source = get_source(filesystem_id)
     if not source.star:
         source_star = SourceStar(source)
-        db_session.add(source_star)
-        db_session.commit()
+        db.session.add(source_star)
+        db.session.commit()
     source.star.starred = False
 
 
@@ -171,7 +172,7 @@ def col_star(cols_selected):
     for filesystem_id in cols_selected:
         make_star_true(filesystem_id)
 
-    db_session.commit()
+    db.session.commit()
     return redirect(url_for('main.index'))
 
 
@@ -179,7 +180,7 @@ def col_un_star(cols_selected):
     for filesystem_id in cols_selected:
         make_star_false(filesystem_id)
 
-    db_session.commit()
+    db.session.commit()
     return redirect(url_for('main.index'))
 
 
@@ -217,8 +218,8 @@ def delete_collection(filesystem_id):
 
     # Delete their entry in the db
     source = get_source(filesystem_id)
-    db_session.delete(source)
-    db_session.commit()
+    db.session.delete(source)
+    db.session.commit()
     return job
 
 
@@ -231,7 +232,7 @@ def set_diceware_password(user, password):
         return
 
     try:
-        db_session.commit()
+        db.session.commit()
     except Exception:
         flash(gettext(
             'There was an error, and the new password might not have been '
