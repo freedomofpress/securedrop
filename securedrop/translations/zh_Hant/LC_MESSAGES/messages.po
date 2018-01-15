@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-01-11 04:00+0000\n"
+"PO-Revision-Date: 2018-01-11 09:00+0000\n"
 "Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
 "Language-Team: Chinese (Traditional) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/zh_Hant/>\n"
@@ -128,11 +128,11 @@ msgstr "謝謝，我們已儲存您的回覆。"
 
 #: journalist_app/main.py:139
 msgid "No collections selected for download."
-msgstr "未選擇要下載的資料夾。"
+msgstr "未選擇要下載的集件。"
 
 #: journalist_app/main.py:142 journalist_app/utils.py:189
 msgid "No collections selected for deletion."
-msgstr "未選擇要刪除的資料夾。"
+msgstr "未選擇要刪除的集件。"
 
 #: journalist_app/main.py:168
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
@@ -188,7 +188,7 @@ msgstr "密碼已更新。別忘了將它保存在你的 KeePassX 數據庫中�
 
 #: journalist_app/utils.py:262
 msgid "No unread submissions in selected collections."
-msgstr "在所選擇的收藏集件中，並無未讀的提交資訊。"
+msgstr "在所選擇的集件中，並無未讀的提交資訊。"
 
 #: journalist_templates/_source_row.html:19
 msgid "1 doc"
@@ -207,7 +207,7 @@ msgstr "{num_unread} 未讀"
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
 msgid "Change Secret"
-msgstr "更改祕密"
+msgstr "更改動能態密碼"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
 #: journalist_templates/admin_add_user.html:33
@@ -423,7 +423,7 @@ msgstr "確認"
 msgid ""
 "The documents are stored encrypted for security. To read them, you will need "
 "to decrypt them using GPG."
-msgstr "為安全起見，所有文件都已經在儲存前加密。須以 GPG 解密方可查閱文件。"
+msgstr "為安全起見，所有文件都經加密儲存。須以 GPG 解密方可查閱文件。"
 
 #: journalist_templates/col.html:26
 msgid "Download Selected"
@@ -470,14 +470,14 @@ msgstr "如要回覆此名線人，請點擊下方。"
 
 #: journalist_templates/col.html:93
 msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "請對此位線人加旗標誌，以進行回覆"
+msgstr "請對此位線人加註旗誌，以進行回覆"
 
 #: journalist_templates/col.html:98
 msgid ""
 "Click below to delete this source's collection. <em>Warning: If you do this, "
 "the files seen here will be unrecoverable and the source will no longer be "
 "able to login using their previous codename.</em>"
-msgstr "點擊下方以刪除這名線人的集件。<em>警告：如果這麼做，這裏看到的檔案將無法恢復，而線人將無法用之前的代號登錄。</em>"
+msgstr "點擊下方來刪除這名線人的集件。<em>警告：如果這麼做，這裏看到的檔案將無法恢復，而線人將無法用之前的代號登錄。</em>"
 
 #: journalist_templates/col.html:104
 msgid "DELETE COLLECTION"
@@ -493,7 +493,7 @@ msgstr "警示"
 
 #: journalist_templates/config.html:11
 msgid "Send a test encrypted email alert to verify OSSEC is working correctly:"
-msgstr "傳送一則測試的加密電郵警報來核實  OSSEC 是否正確執行:"
+msgstr "傳送一則測試的加密電郵警報來查驗  OSSEC 是否正確執行:"
 
 #: journalist_templates/config.html:15
 msgid "SEND TEST OSSEC ALERT"
@@ -607,7 +607,7 @@ msgid ""
 "this, make sure you are ready to set up your new device, otherwise you will "
 "be locked out of your account.</em>"
 msgstr ""
-"如果你的雙因素驗證證書已丢失或遭到破壞，或是你有一件新設備，可以在此重置你的證書。<em> "
+"如果你的雙因素驗證證明已丢失或遭到破壞，或是你有一件新設備，可以在此重置你的證明。<em> "
 "如果要這麼做，請確認新設備已設置妥當，否则你的帳戶會被鎖住。</em>"
 
 #: journalist_templates/edit_account.html:65
@@ -618,7 +618,7 @@ msgstr "利用手機應用程式，如 FreeOTP 來重置雙因素驗證，請選
 
 #: journalist_templates/edit_account.html:85
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr "重置雙因素驗證器（應用程式）"
+msgstr "重置雙因素驗證（應用程式）"
 
 #: journalist_templates/edit_account.html:87
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
