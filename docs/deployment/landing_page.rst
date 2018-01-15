@@ -15,7 +15,7 @@ your organization.
           implement minimum security requirements is sure to be noticed, and
           could undermine trust, discouraging possible sources.
 
-URL and location
+URL and Location
 ----------------
 
 Ideally you would not use a separate subdomain, but would use a path at
@@ -32,14 +32,12 @@ block, which can be defined similarly in nginx by using the
 `location {} <http://nginx.org/en/docs/http/ngx_http_core_module.html#location>`__
 directive.
 
-HTTPS only (no mixed content)
+HTTPS Only (No Mixed Content)
 -----------------------------
 
-Most news organizations, `in fact almost
-all <https://freedom.press/blog/2014/09/after-nsa-revelations-why-arent-more-news-organizations-using-https>`__,
-do not use HTTPS encryption by default. This is the number one minimum
-requirement for the SecureDrop *Landing Page* on your website. Without
-HTTPS, a source can easily be exposed as a visitor to your site.
+HTTPS encryption is the number-one security requirement for your site's
+SecureDrop *Landing Page*. Without HTTPS, a source can easily be exposed as a
+visitor to your site.
 
 This may be difficult if your website serves advertisements or utilizes
 a legacy content delivery network. You should make sure the SecureDrop
@@ -71,7 +69,7 @@ recorded SSL sessions. You may need to talk to your CA (certificate
 authority) and CDN (content delivery network) for this, although our
 recommended configuration below provides forward secrecy.
 
-SSL certificate recommendations
+SSL Certificate Recommendations
 -------------------------------
 
 Regardless of where you choose to purchase your SSL cert and which CA
@@ -98,12 +96,12 @@ This will potentially leak information about sources to third parties,
 which can more easily be accessed by law enforcement agencies. Simply
 copy them to your server and serve them yourself to avoid this problem.
 
-Do not use third-party analytics, tracking, or advertising
+Do Not Use Third-Party Analytics, Tracking, or Advertising
 ----------------------------------------------------------
 
-Most news websites, even those that are non-profits, use third-party
-analytics tools or tracking bugs on their websites. It is vital that
-these are disabled for the SecureDrop *Landing Page*.
+Most news websites, even those that are non-profits, use third-party analytics
+tools or tracking bugs on their websites. It is vital that these are disabled
+for the SecureDrop *Landing Page*.
 
 In the past, some news organizations were heavily criticized when launching
 their SecureDrop instances because their *Landing Page* contained
@@ -113,10 +111,15 @@ opened up multiple avenues for third parties to collect information on
 those sources. This information can potentially be accessed by law
 enforcement or intelligence agencies and could unduly expose a source.
 
-Similarly, consider avoiding the use of Cloudflare (and other CDNs: Akamai, StackPath, Incapsula, Amazon CloudFront, etc.) for the SecureDrop *Landing Page*. These services intercept requests between a potential source and the SecureDrop *Landing Page* and can be used to `track <https://github.com/Synzvato/decentraleyes/wiki/Frequently-Asked-Questions>`__ or collect information on sources.
+Similarly, consider avoiding Cloudflare (and other CDNs like Akamai, StackPath,
+Incapsula, Amazon CloudFront, etc.) for the SecureDrop *Landing Page*. These
+services intercept requests between a potential source and the SecureDrop
+*Landing Page* and can be used to `track`_ or collect information on sources.
 
-Apply applicable security headers
----------------------------------
+.. _`track`: https://github.com/Synzvato/decentraleyes/wiki/Frequently-Asked-Questions
+
+Apply Security Headers
+----------------------
 
 Security headers give instructions to the web browser on how to handle
 requests from the web application. These headers set strict rules for
@@ -160,7 +163,7 @@ If you intend to run nginx as your webserver instead, this will work:
     add_header Referrer-Policy "no-referrer";
 
 
-Additional Apache configuration
+Additional Apache Configuration
 -------------------------------
 
 To enforce HTTPS/SSL always, you need to set up redirection within the
@@ -236,7 +239,8 @@ In nginx, logging can be disabled like so:
     access_log off;
     error_log off;
 
-**Security suggestions**
+Further Security Considerations
+-------------------------------
 
 To guard your *Landing Page* against being modified by an attacker and
 directing sources to a rogue SecureDrop instance, you will need good
@@ -244,7 +248,7 @@ security practices applying to the machine where it is hosted. Whether
 it's a VPS in the cloud or dedicated server in your office, you should
 consider the following:
 
--  Brute force login protection (see sshguard or fail2ban)
+-  Brute force login protection (see `fail2ban`_ or `sshguard`_)
 -  Disable root SSH login
 -  Use SSH keys instead of passwords
 -  Use long, random and complex passwords
@@ -264,7 +268,10 @@ gateway interfaces for dynamic scripting languages are not enabled. You
 don't want any unnecessary code or services running as this increases
 the attack surface.
 
-*Landing Page* content suggestions
+.. _`fail2ban` : https://github.com/fail2ban/fail2ban
+.. _`sshguard` : https://www.sshguard.net/
+
+*Landing Page* Content Suggestions
 ----------------------------------
 
 The content below presents sample text for the SecureDrop component of a news 
@@ -273,6 +280,8 @@ or organizational needs, but should provide guidance for any outlet getting
 started on crafting *Landing Page* language. Any tweaks to the sample content 
 should be left to the legal and editorial discretion of the individual outlet, 
 and should be viewed as essential to upholding source protection and transparency.
+
+----
 
 **What is SecureDrop?**
 
