@@ -12,11 +12,11 @@ linux-image-3.14.*-grsec
 linux-headers-3.14.*-grsec
     Header files related to the Linux kernel.
 
-`ossec-agent <https://github.com/freedomofpress/ossec>`_
+`ossec-agent <https://github.com/ossec/ossec-hids>`_
     Installs the OSSEC agent, repackaged for Ubuntu.
     Listed as a dependency of ``securedrop-ossec-agent``.
 
-`ossec-server <https://github.com/freedomofpress/ossec>`_
+`ossec-server <https://github.com/ossec/ossec-hids>`_
     Installs the OSSEC manager, repackaged for Ubuntu.
     Listed as a dependency of ``securedrop-ossec-server``.
 
