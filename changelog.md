@@ -1,10 +1,10 @@
 # Changelog
 
-## 0.5.1-rc4
+## 0.5.1-rc5
 
 ### Web Applications
 
-* Add Chinese, Turkish and Italian translations (#2830).
+* Add Arabic, Chinese, Turkish and Italian translations (#2830).
 * Enable administrators to update the SecureDrop logo via the Admin Interface (#2769).
 * Enable administrators to send test OSSEC alerts via the Admin Interface (#2771).
 * Improve the language menu (#2733).
