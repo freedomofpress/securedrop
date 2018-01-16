@@ -34,9 +34,12 @@ def make_blueprint(config):
             static_filepath = os.path.join(config.SECUREDROP_ROOT,
                                            "static/i/logo.png")
             f.save(static_filepath)
-            flash(gettext("Image updated."), "notification")
+            flash(gettext("Image updated."), "logo-success")
             return redirect(url_for("admin.manage_config"))
         else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash(error, "logo-error")
             return render_template("config.html", form=form)
 
     @view.route('/add', methods=('GET', 'POST'))

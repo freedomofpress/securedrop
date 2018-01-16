@@ -31,13 +31,11 @@
   <p>
     {{ form.logo(id="logo-upload") }}
     <br>
-    {% for error in form.logo.errors %}
-      <span class="form-validation-error">{{ error }}</span>
-    {% endfor %}
   </p>
   <button type="submit" class="sd-button" id="submit-logo-update">
     <i class="fa fa-pencil"></i>{{ gettext('UPDATE LOGO') }}
   </button>
+  {% include 'logo_upload_flashed.html' %}
 </form>
 
 {% endblock %}
