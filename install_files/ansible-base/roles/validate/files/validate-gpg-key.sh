@@ -46,6 +46,13 @@ trap report_error ERR
 printf "Importing pubkey file from '%s'...\n" "${key_location}"
 gpg2 --batch --import "${key_location}" 2> /dev/null
 
+#Validate that gpg key imported is not a keypair -- that there is a private key included
+printf "Validating that specified key does not contain private key.\n"
+if grep -q "BEGIN PGP PRIVATE KEY" "${key_location}"; then
+    printf "Failed! Key specified %s contains private key!\n" "${key_location}"
+    exit 1
+fi
+
 printf "Validating fingerprint and public key key match...\n"
 printf "\t Public key: %s\n" "${key_location}"
 printf "\t Fingerprint: %s\n" "${fingerprint}"

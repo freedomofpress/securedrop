@@ -1,24 +1,81 @@
 ---
 version: 2
 jobs:
-  docs-lint:
+  lint:
     docker:
-      - image: quay.io/freedomofpress/circleci-docker:latest
-
+      - image: gcr.io/cloud-builders/docker
     steps:
+      - run: apt-get install -y make
       - checkout
+      - setup_remote_docker
+
+      - run: TAG=${CIRCLE_SHA1} make ci-lint-image
+
+      - run: TAG=${CIRCLE_SHA1} make ci-lint
+
+  tests:
+    docker:
+      - image: gcr.io/cloud-builders/docker
+    working_directory: /build
+    environment:
+      DOCKER_API_VERSION=1.23
+    parallelism: 3
+    steps:
+      - run: apt-get install -y make
+      - checkout
+      - setup_remote_docker
+
+      - restore_cache:
+          keys:
+            - v1-sd-layers-{{ .Branch }}-
+            - v1-sd-layers-
+          paths:
+            - /caches/layers.tar.gz
 
       - run:
-          name: Rebase on-top of latest develop
-          command: ./devops/scripts/rebase-develop.sh
+          name: Load image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/layers.tar |true
 
       - run:
-          name: Installation pre-reqs
-          command: pip install -U -r securedrop/requirements/develop-requirements.txt
+          name: Build Docker images
+          command: |
+            set +o pipefail
+            docker images
+            fromtag=$(docker images |grep securedrop-test |head -n1 |awk '{print $2}')
+            cd securedrop && TAG=${CIRCLE_SHA1} EXTRA_BUILD_ARGS="--cache-from securedrop-test:${fromtag:-latest}" make images
 
       - run:
-          name: Run docs lint
-          command: make docs-lint
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker images
+            docker save -o /caches/layers.tar securedrop-test:${CIRCLE_SHA1}
+
+      - save_cache:
+          key: v1-sd-layers-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/layers.tar
+
+      - run: mkdir -p ~/test-results
+
+      - run: |
+          export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
+          docker rm -f securedrop-test || true
+          cd securedrop && TAG=${CIRCLE_SHA1} EXTRA_TEST_ARGS=$(bash <(curl -s https://codecov.io/env)) make test
+
+      - run:
+          name: Report results
+          command: |
+            docker cp securedrop-test:/tmp/test-results ~/
+          when: always
+
+      - store_test_results:
+          path: ~/test-results
+
+      - store_artifacts:
+          path: ~/test-results
 
   staging-test:
     docker:
@@ -112,80 +169,15 @@ jobs:
       - store_artifacts:
           path: /root/sd/junit
 
-  tests:
-    docker:
-      - image: gcr.io/cloud-builders/docker
-    working_directory: /build
-    environment:
-      DOCKER_API_VERSION=1.23
-    parallelism: 3
-    steps:
-      - run: apt-get install -y make
-      - checkout
-      - setup_remote_docker
-
-      - restore_cache:
-          keys:
-            - v1-sd-layers-{{ .Branch }}-
-            - v1-sd-layers-
-          paths:
-            - /caches/layers.tar.gz
-
-      - run:
-          name: Load image layer cache
-          command: |
-            set +o pipefail
-            docker load -i /caches/layers.tar |true
-
-      - run:
-          name: Build Docker images
-          command: |
-            set +o pipefail
-            docker images
-            fromtag=$(docker images |grep securedrop-test |head -n1 |awk '{print $2}')
-            cd securedrop && EXTRA_BUILD_ARGS="--cache-from securedrop-test:${fromtag:-latest}" make images TAG=${CIRCLE_SHA1}
-
-      - run:
-          name: Save Docker image layer cache
-          command: |
-            mkdir -p /caches
-            docker images
-            docker save -o /caches/layers.tar securedrop-test:${CIRCLE_SHA1}
-
-      - save_cache:
-          key: v1-sd-layers-{{ .Branch }}-{{ epoch }}
-          paths:
-            - /caches/layers.tar
-
-      - run: mkdir -p ~/test-results
-
-      - run: |
-          set +o pipefail
-          export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
-          docker rm -f securedrop-test |true
-          cd securedrop && make test TAG=${CIRCLE_SHA1}
-
-      - run:
-          name: Report results
-          command: |
-            docker cp securedrop-test:/tmp/test-results ~/
-          when: always
-
-      - store_test_results:
-          path: ~/test-results
-
-      - store_artifacts:
-          path: ~/test-results
-
 workflows:
   version: 2
   securedrop_ci:
     jobs:
+      - lint
       - tests
-      - docs-lint
       - staging-test:
           requires:
-            - docs-lint
+            - lint
       - staging-test-with-rebase:
           requires:
-            - docs-lint
+            - lint

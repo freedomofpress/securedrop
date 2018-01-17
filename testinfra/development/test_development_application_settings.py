@@ -121,14 +121,9 @@ def test_development_clean_tmp_cron_job(Command, Sudo):
 def test_development_default_logo_exists(File):
     """
     Checks for default SecureDrop logo file.
-
-    TODO: Add check for custom logo file.
     """
 
     f = File("{}/static/i/logo.png".format(sd_test_vars.securedrop_code))
     assert f.is_file
     assert f.user == sd_test_vars.securedrop_user
     assert f.group == sd_test_vars.securedrop_user
-    # check if logo is NOT the default securedrop png
-    if not f.md5sum == "92443946d5c9e05020a090f97b62d027":
-        assert oct(f.mode) == "0400"

@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from datetime import datetime
 import os
 from os.path import abspath, dirname, realpath
 import pytest
@@ -24,7 +23,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
 from selenium import webdriver
-from selenium.webdriver.firefox import firefox_binary
 
 from tests.functional import functional_test
 

@@ -7,7 +7,11 @@ USB* to access the Network Firewall's web interface for configuration.
 
 Unfortunately, due to the wide variety of firewalls that may be used, we
 do not provide specific instructions to cover every type or variation in
-software or hardware. This guide is based on pfSense, and assumes your
+software or hardware.
+However, if you have the necessary
+expertise, we provide `abstract firewall rules`_ that can be
+implemented with iptables, Cisco IOS etc.
+This guide is based on pfSense, and assumes your
 firewall hardware has at least three interfaces: WAN, LAN, and OPT1. For
 hardware, you can build your own network firewall (not covered in this
 guide) and `install
@@ -167,7 +171,7 @@ Connect to the pfSense WebGUI
    |Your Connection is Insecure|
 
 #. You should see the login page for the pfSense GUI. Log in with the
-   default username and password (``admin`` / ``pfsense``).
+   default username and passphrase (``admin`` / ``pfsense``).
 
    |Default pfSense|
 
@@ -203,7 +207,7 @@ Setup Wizard
 
    |Configure LAN Interface|
 
-#. Set a strong admin password. We recommend generating a strong password
+#. Set a strong admin passphrase. We recommend generating a strong passphrase
    with KeePassX, and saving it in the Tails Persistent folder using the
    provided KeePassX database template. Click **Next**.
 
@@ -578,3 +582,25 @@ Once it is complete, you will see a notification of successful upgrade:
 .. [#] Tails screenshots were taken on Tails 3.0~beta4. Please make an issue on
        GitHub if you are using the most recent version of Tails and the
        interface is different from what you see here.
+
+.. _abstract firewall rules:
+
+Abstract firewall rules
+-----------------------
+
+The pfSense instructions using the web interface can also be precisely
+described as follows:
+
+* Disable DHCP (in case the firewall is providing a DHCP server by default)
+* Disallow all traffic by default (inbound or outbound)
+* Allow UDP OSSEC (port 1514) from *Application Server* to *Monitor Server*
+* Allow TCP ossec agent auth (port 1515) from *Application Server* to *Monitor Server*
+* Allow TCP/UDP DNS from *Application Server* and *Monitor Server* to the IPs of known name servers
+* Allow UDP NTP from *Application Server* and *Monitor Server* to all
+* Allow TCP any port from *Application Server* and *Monitor Server* to all (this is needed for making connections to the Tor network)
+* Allow TCP 80/443 from *Admin Workstation* to all (in case there is a need to access the web interface of the firewall)
+* Allow TCP ssh from *Admin Workstation* to *Application Server* and *Monitor Server*
+* Allow TCP any port from *Admin Workstation* to all
+
+This can be implemented with iptables, Cisco IOS etc. if you have the
+necessary expertise.

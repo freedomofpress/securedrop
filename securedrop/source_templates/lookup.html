@@ -9,7 +9,7 @@
       <img src="{{ url_for('static', filename='i/relieved_face.png')  }}" alt="relieved-face" class="icon">
       <div class="message">
         <strong>{{ gettext('Whew, it’s you! Now, the embarrassing part...') }}</strong>
-        <p>{{ gettext('Our servers experienced an unusual surge of new activity, when you last visited. This could have been human activity, an automated attack, or just some random blip. To err on the side of caution, we put a hold on sending all documents from that day through to our journalists.') }}</p>
+        <p>{{ gettext('Our servers experienced an unusual surge of new activity, when you last visited. To err on the side of caution, we put a hold on sending all documents from that day through to our journalists.') }}</p>
 
         <p>{{ gettext('Now that we know you’re really a human, though, we’ll get your previous submission into the hands of a journalist straight away. We’re sorry for the delay. Please do check back again in a week or so.') }}</p>
       </div>
@@ -97,7 +97,7 @@
 {% if new_user %}
 <div class="code-reminder" id="codename-hint">
   <div id="codename-hint-visible">
-    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17px" height="20px"> {{ gettext('Remember your codename is:') }}
+    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17px" height="20px"> {{ gettext('Remember, your codename is:') }}
     <a id="codename-hint-show" class="show pull-right visible-codename" href="#codename-hint-visible">{{ gettext('Show') }}</a>
     <div id="codename-hint-content" class="hidden-codename codename">
       <a id="codename-hint-hide" class="pull-right" href="#codename-hint">{{ gettext('Hide') }}</a>

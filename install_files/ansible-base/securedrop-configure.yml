@@ -47,15 +47,6 @@
       default: "8.8.8.8"
       private: no
 
-    - name: securedrop_header_image
-      prompt: >-
-        Local filepath to your organization's logo,
-        to be displayed on the Source Interface
-      private: no
-      # Default must be empty string, since "None" will be interpreted
-      # as filepath, causing app role to fail.
-      default: ""
-
     - name: securedrop_app_gpg_public_key
       prompt: Local filepath to public key for SecureDrop Application GPG public key
       default: SecureDrop.asc
@@ -157,8 +148,6 @@
           var_value: "{{ monitor_hostname }}"
         - var_name: dns_server
           var_value: "{{ dns_server }}"
-        - var_name: securedrop_header_image
-          var_value: "{{ securedrop_header_image }}"
         - var_name: securedrop_app_gpg_public_key
           var_value: "{{ securedrop_app_gpg_public_key }}"
         - var_name: securedrop_app_gpg_fingerprint

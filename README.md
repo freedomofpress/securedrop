@@ -3,7 +3,7 @@
 </p>
 
 [![Build Status](https://travis-ci.org/freedomofpress/securedrop.svg?branch=develop)](https://travis-ci.org/freedomofpress/securedrop)
-[![Coverage Status](https://coveralls.io/repos/freedomofpress/securedrop/badge.svg?branch=develop&service=github)](https://coveralls.io/github/freedomofpress/securedrop?branch=develop)
+[![codecov](https://codecov.io/gh/freedomofpress/securedrop/branch/develop/graph/badge.svg)](https://codecov.io/gh/freedomofpress/securedrop)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/freedomofpress/securedrop?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 SecureDrop is an open-source whistleblower submission system that media organizations can use to securely accept documents from, and communicate with anonymous sources. It was originally created by the late Aaron Swartz and is currently managed by the [Freedom of the Press Foundation](https://freedom.press).
@@ -30,11 +30,7 @@ See the [Installation Guide](https://docs.securedrop.org/en/stable/#installtoc).
 
 ## How to Contribute to SecureDrop
 
-See the [Development Guide](https://docs.securedrop.org/en/latest/development/getting_started.html) and the [Contributing Guidelines](https://docs.securedrop.org/en/latest/development/contributor_guidelines.html).
-
-Check out our [Development Roadmap](https://github.com/freedomofpress/securedrop/wiki/Development-Roadmap) to see our plans and priorities for upcoming releases.
-
-We also have a public [Gitter channel](https://gitter.im/freedomofpress/securedrop) and a [public Discourse forum](https://forum.securedrop.club/).
+See our [contribution page](CONTRIBUTING.md)
 
 ## License
 
@@ -46,3 +42,10 @@ The wordlist we use to generate source passphrases come from various sources:
 
 * [en.txt](/securedrop/wordlists/en.txt) is based off a new [Diceware wordlist](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases) from the EFF.
 * [fr.txt](/securedrop/wordlists/en.txt) is based off Matthieu Weber's [translated diceware list](http://weber.fi.eu.org/index.shtml.en).
+
+
+## Acknowledgments
+
+A huge thank you to all SecureDrop contributors! You can see just
+code and documentation contributors in the ["Contributors"](https://github.com/freedomofpress/securedrop/graphs/contributors)
+tab on GitHub, and you can see code, documentation and translation contributors together [here](https://lab.securedrop.club/bot/securedrop/graphs/i18n).

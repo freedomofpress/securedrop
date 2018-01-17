@@ -20,14 +20,13 @@ from flask_babel import Babel
 from babel import core
 
 import collections
-import config
 import os
 import re
 
 from os import path
 
 LOCALE_SPLIT = re.compile('(-|_)')
-LOCALES = set(['en_US'])
+LOCALES = ['en_US']
 babel = None
 
 
@@ -36,8 +35,11 @@ class LocaleNotFound(Exception):
     """Raised when the desired locale is not in the translations directory"""
 
 
-def setup_app(app, translation_dirs=None):
+def setup_app(config, app):
+    global LOCALES
     global babel
+
+    translation_dirs = getattr(config, 'TRANSLATION_DIRS', None)
 
     if translation_dirs is None:
             translation_dirs = \
@@ -54,14 +56,21 @@ def setup_app(app, translation_dirs=None):
             'Expected exactly one translation directory but got {}.'
             .format(babel.translation_directories))
 
-    for dirname in os.listdir(next(babel.translation_directories)):
+    translation_directories = next(babel.translation_directories)
+    for dirname in os.listdir(translation_directories):
         if dirname != 'messages.pot':
-            LOCALES.add(dirname)
+            LOCALES.append(dirname)
 
-    babel.localeselector(get_locale)
+    LOCALES = _get_supported_locales(
+        LOCALES,
+        getattr(config, 'SUPPORTED_LOCALES', None),
+        getattr(config, 'DEFAULT_LOCALE', None),
+        translation_directories)
+
+    babel.localeselector(lambda: get_locale(config))
 
 
-def get_locale():
+def get_locale(config):
     """
     Get the locale as follows, by order of precedence:
     - l request argument or session['locale']
@@ -104,10 +113,10 @@ def get_text_direction(locale):
     return core.Locale.parse(locale).text_direction
 
 
-def _get_supported_locales(locales, supported, default_locale):
-    """Return SUPPORTED_LOCALES from config.py. If it is missing return
-    the default locale.
-
+def _get_supported_locales(locales, supported, default_locale,
+                           translation_directories):
+    """Sanity checks on locales and supported locales from config.py.
+    Return the list of supported locales.
     """
 
     if not supported:
@@ -118,7 +127,7 @@ def _get_supported_locales(locales, supported, default_locale):
             "config.py SUPPORTED_LOCALES contains {} which is not among the "
             "locales found in the {} directory: {}".format(
                 list(unsupported),
-                babel.translation_directories,
+                translation_directories,
                 locales))
     if default_locale and default_locale not in supported:
         raise LocaleNotFound("config.py SUPPORTED_LOCALES contains {} "
@@ -126,7 +135,7 @@ def _get_supported_locales(locales, supported, default_locale):
                              "the value of DEFAULT_LOCALE '{}'".format(
                                  supported, default_locale))
 
-    return supported
+    return list(supported)
 
 
 NAME_OVERRIDES = {
@@ -135,12 +144,8 @@ NAME_OVERRIDES = {
 
 
 def get_locale2name():
-    locales = _get_supported_locales(
-        LOCALES,
-        getattr(config, 'SUPPORTED_LOCALES', None),
-        getattr(config, 'DEFAULT_LOCALE', None))
     locale2name = collections.OrderedDict()
-    for l in locales:
+    for l in LOCALES:
         if l in NAME_OVERRIDES:
             locale2name[l] = NAME_OVERRIDES[l]
         else:
@@ -159,5 +164,5 @@ def locale_to_rfc_5646(locale):
         return LOCALE_SPLIT.split(locale)[0]
 
 
-def get_language():
-    return get_locale().split('_')[0]
+def get_language(config):
+    return get_locale(config).split('_')[0]

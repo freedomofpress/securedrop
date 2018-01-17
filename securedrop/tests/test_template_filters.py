@@ -9,14 +9,20 @@ from flask import session
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import i18n
-import journalist
+import journalist_app
 import manage
-import source
+import source_app
 import template_filters
 import version
 
 
 class TestTemplateFilters(object):
+
+    def get_fake_config(self):
+        class Config:
+            def __getattr__(self, name):
+                return getattr(config, name)
+        return Config()
 
     def verify_rel_datetime_format(self, app):
         with app.test_client() as c:
@@ -104,21 +110,11 @@ class TestTemplateFilters(object):
         pybabel init -i {d}/messages.pot -d {d} -l fr_FR
         """.format(d=config.TEMP_DIR))
 
-        supported = getattr(config, 'SUPPORTED_LOCALES', None)
-        try:
-            if supported:
-                del config.SUPPORTED_LOCALES
-            for app in (journalist.app, source.app):
-                config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
-                app.config['BABEL_TRANSLATION_DIRECTORIES'] = config.TEMP_DIR
-                i18n.setup_app(app)
-                self.verify_filesizeformat(app)
-                self.verify_rel_datetime_format(app)
-        finally:
-            if supported:
-                config.SUPPORTED_LOCALES = supported
-
-    @classmethod
-    def teardown_class(cls):
-        reload(journalist)
-        reload(source)
+        fake_config = self.get_fake_config()
+        fake_config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
+        fake_config.TRANSLATION_DIRS = config.TEMP_DIR
+        for app in (journalist_app.create_app(fake_config),
+                    source_app.create_app(fake_config)):
+            assert i18n.LOCALES == fake_config.SUPPORTED_LOCALES
+            self.verify_filesizeformat(app)
+            self.verify_rel_datetime_format(app)

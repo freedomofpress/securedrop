@@ -64,12 +64,11 @@ Updating screenshots
 --------------------
 
 The user guides for SecureDrop contain screenshots of the web applications.
-To update these screenshots automatically, from ``/vagrant`` inside a
-development VM you can run:
+To update these screenshots automatically you can run:
 
 .. code:: sh
 
-   make update-user-guides
+   make -C securedrop images update-user-guides
 
 This will generate screenshots for each image in the web application and copy
 them to the folder under ``docs/images/manual/screenshots`` where they will

@@ -1,0 +1,51 @@
+---
+# The network firewall rules are set up to disable DNS traffic to the gateway,
+# so if the admin did not set name servers, DNS queries will fail. Test by
+# running host freedom.press and fail out with informative message if admin
+# needs to SSH into the servers and configure DNS servers.
+- name: Test DNS lookups.
+  command: "host freedom.press"
+  register: dns_configuration_result
+  changed_when: false
+  # We'll inspect the output of this command in the next task to see if
+  # an IP address was found.
+  ignore_errors: yes
+  tags:
+    - dns
+
+- name: Verify DNS server was configured correctly during OS install.
+  assert:
+    that:
+      - "'has address' in dns_configuration_result.stdout"
+    msg: >-
+      Host not found. Check the pfSense logs and see if UDP traffic to the
+      gateway on port 53 is blocked. You may need to add the following lines
+      to `/etc/resolvconf/resolv.conf.d/tail` on each server:
+
+      nameserver 8.8.8.8
+      nameserver 8.8.4.4
+
+      Then run `sudo dpkg-reconfigure resolvconf`. This will update
+      `/etc/resolv.conf` to include the new name servers. Then you can return
+      to the Admin Workstation and rerun the install.
+  tags:
+    - dns
+
+# We expect that once ntpd is running, the socket will be in use, so we
+# ignore errors in the below task. However, if the command fails for some other
+# reason, we want to fail the task, so we inspect the error output.
+- name: Ensure the system clock is set accurately.
+  command: "ntpdate ntp.ubuntu.com"
+  register: ntpdate_result
+  changed_when: "'offset' in ntpdate_result.stdout"
+  ignore_errors: yes
+  become: yes
+  tags:
+    - ntp
+
+- name: See if ntpd is already running.
+  fail:
+    msg: "{{ ntpdate_result.stderr }}"
+  when: "ntpdate_result.rc != 0 and 'NTP socket is in use' not in ntpdate_result.stderr"
+  tags:
+    - ntp

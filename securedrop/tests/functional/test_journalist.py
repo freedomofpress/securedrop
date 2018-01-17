@@ -22,8 +22,8 @@ import functional_test
 
 class TestJournalist(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps,
-        journalist_navigation_steps.JournalistNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
 
     def test_journalist_verifies_deletion_of_one_submission_javascript(self):
         self._source_visits_source_homepage()

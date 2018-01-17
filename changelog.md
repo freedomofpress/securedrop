@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.5.1
+
+### Web Applications
+
+* Add Arabic, Chinese, Turkish and Italian translations (#2830).
+* Enable administrators to update the SecureDrop logo via the Admin Interface (#2769).
+* Enable administrators to send test OSSEC alerts via the Admin Interface (#2771).
+* Improve the language menu (#2733).
+* Disable .map file generation when compiling CSS files from SASS (#2814).
+* User logout on password reset (#2756).
+* Update pip requirements (#2811).
+
+### Operations
+
+* Use apt mirror for Tor packages (#2441).
+* Push grsecurity tasks to the beginning of the install process (#2741).
+* Remove flaky SMTP/SASL host validation during SecureDrop configuration (#2815).
+* Automate post-Ubuntu install checks verifying DNS, NTP is working (#2129).
+* Validate GnuPG key is not a private key prior to install (#2735).
+* Remove HMAC-SHA1 from SSH config (#2730).
+
+### Monitoring
+
+* Prevent OSSEC from sending daily emails on startup (#2701).
+
+### Documentation
+
+* Replace Google Authenticator with FreeOTP (#2757).
+* Add recommended landing page content (#2752).
+
+The issues for this release were tracked in the 0.5.1 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.5.1.
+
 ## 0.5
 
 ### Web Applications
@@ -159,12 +192,12 @@ https://github.com/freedomofpress/securedrop/milestones/0.4.1.
 The issues for this release were tracked in the 0.4 milestone on Github:
 https://github.com/freedomofpress/securedrop/milestones/0.4.
 
-This changelog shows major changes below. Please diff the tags to see the full list of changes. 
+This changelog shows major changes below. Please diff the tags to see the full list of changes.
 
 ### Deployment
 
 * Enable optional HTTPS on the source interface (#1605).
-* Standardize SecureDrop server installation on a single username (#1796). 
+* Standardize SecureDrop server installation on a single username (#1796).
 * Add `securedrop-admin` script and update version of Ansible running in the workstation (#1146, #1885).
 * Add validation of user-provided values during SecureDrop installation (#1663, #749, #1257).
 * Removes `prod-specific.yml` configuration file (#1758).
@@ -177,10 +210,10 @@ This changelog shows major changes below. Please diff the tags to see the full l
 ### Developer Workflow
 
 * Reconciles divergent master and develop branches (#1559).
-* Increases unit test coverage to from 65% to 92%. 
-* Adds testinfra system configuration test suite (#1580). 
+* Increases unit test coverage to from 65% to 92%.
+* Adds testinfra system configuration test suite (#1580).
 * Removes unnecessary test wrappers (#1412).
-* Major improvements to SecureDrop CI and testing flow including adding the staging environment to CI (#1067). 
+* Major improvements to SecureDrop CI and testing flow including adding the staging environment to CI (#1067).
 
 ### Web App: Source
 
@@ -197,10 +230,10 @@ This changelog shows major changes below. Please diff the tags to see the full l
 * Adds minimum password length requirements for new journalist accounts (#980).
 * Delete submissions that have had their sources deleted (#1188).
 * Bugfix: Empty replies can no longer be sent to a source (#1715).
-* Bugfix: Handle non hexadecimal digits for the 2FA secret (#1869). 
+* Bugfix: Handle non hexadecimal digits for the 2FA secret (#1869).
 * Bugfix: Handle token reuse for the 2FA secret on /admin/2fa (#1687).
-* Bugfix: Handle attempts to make duplicate user accounts (#1693). 
-* Bugfix: Fix confusing UI on message/reply icons (#1258). 
+* Bugfix: Handle attempts to make duplicate user accounts (#1693).
+* Bugfix: Fix confusing UI on message/reply icons (#1258).
 
 ### Tails Environment
 
@@ -385,7 +418,7 @@ This is a high-level overview of some of the more significant changes between Se
 * Do not set headers in the web app (handle by production config.)
 * Add 2fac auth for journalist interface
 * Allow OSSEC emails to be encrypted with admin GPG key
-* Install app server, monitor server, Python dependencies, and custom configuration via deb packages
+* Install app server, monitor server, Python dependencies, and custom configuration via Debian packages
 * UI refresh on source and journalist interfaces
 * New UX for journalists:
   * "quick filter" box for codenames
@@ -395,8 +428,8 @@ This is a high-level overview of some of the more significant changes between Se
   * more detailed source listings
 * Normalize submission timestamps to that of the most recent submission
 to minimize metadata that could be used for correlation
-* Handle journalist authentication in the Document Interface instead of relying entirely on Authenticated Tor Hidden Services.
-* Document Interface supports two-factor authentication via Google Authenticator or Yubikey
+* Handle journalist authentication in the Document Interface instead of relying entirely on Authenticated Tor hidden services.
+* Document Interface supports two-factor authentication via Google Authenticator or YubiKey
   * These logins are hardened in a manner similar to that of the `google-authenticator` PAM module: tokens may only be used once, logins are rate limited, etc.
   * If you are using TOTP, the window is expanded from 1 period to 3 in order to help the situation where the server and client's clocks are skewed
 * Add Admin Interface so privileged "admin" users may add, edit, or delete other users on the Document Interface

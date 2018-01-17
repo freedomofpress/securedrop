@@ -119,9 +119,3 @@ class TestJournalist2FA(flask_testing.TestCase):
         # A flashed message should appear
         self.assertMessageFlashed(
             'Could not verify token in two-factor authentication.', 'error')
-
-    @classmethod
-    def tearDownClass(cls):
-        # Reset the module variables that were changed to mocks so we don't
-        # break other tests
-        reload(journalist)

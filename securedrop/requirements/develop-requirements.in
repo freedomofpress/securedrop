@@ -4,6 +4,7 @@ flake8
 html-linter
 molecule>=2.*
 pip-tools>=1.10
+pylint
 pytest-xdist
 safety
 sphinx

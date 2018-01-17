@@ -19,6 +19,7 @@
 
 .menu__trigger-text
   display: inline-block
+  text-transform: capitalize
 
 .menu__items
   display: none
@@ -39,6 +40,9 @@
   &:hover, &:focus, &:active
     background-color: $color_grey_xlight
 
+.menu__item a span
+  text-transform: capitalize
+
 .menu__item:last-of-type a
   border-bottom: 0
 
@@ -53,7 +57,7 @@
   width: 100vw
   height: 100vh
   background-color: transparent
-  & .menu__trigger-text, & .menu__icon
+  & .menu__trigger-text, & .menu__trigger-arrow
     display: none
 
 .menu__checkbox:focus  ~ .menu__trigger
@@ -61,10 +65,3 @@
 
 .menu__checkbox:checked:focus ~ .menu__trigger
   background-color: transparent
-
-.menu__icon
-  &:dir(ltr)
-    margin-right: $spacing-unit
-
-  &:dir(rtl)
-    margin-left: $spacing-unit
