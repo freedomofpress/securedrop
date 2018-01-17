@@ -3,4 +3,4 @@ deb-src http://security.ubuntu.com/ubuntu trusty-security main
 deb http://security.ubuntu.com/ubuntu trusty-security universe
 deb-src http://security.ubuntu.com/ubuntu trusty-security universe
 deb [arch=amd64] {{ apt_repo_url }} trusty main
-deb http://deb.torproject.org/torproject.org trusty main
+deb {{ tor_apt_repo_url }} trusty main

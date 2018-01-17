@@ -8,10 +8,6 @@ securedrop_app_install_from_repo: True
 # in prod and staging, but not relevant for development.
 securedrop_app_configure_apache: True
 
-# The securedrop_header_image must be in the install_files/ansible-base/
-# directory. Leave set to empty to use the SecureDrop logo.
-securedrop_header_image: ""
-
 # Username for ownership of the app code document root. Permitting override
 # for the development environment, e.g. "vagrant" or "travis".
 securedrop_user: www-data

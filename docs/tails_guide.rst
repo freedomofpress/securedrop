@@ -88,9 +88,9 @@ Start Tails and enable the persistent volume
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When starting Tails, you should see a "Welcome to Tails" screen with two
-options. Select *Yes* to enable the persistent volume and enter your password.
+options. Select *Yes* to enable the persistent volume and enter your passphrase.
 Select *Yes* to show more options and click *Forward*. Enter an *Administration
-password* for use with this specific Tails session and click *Login*.
+passphrase* for use with this specific Tails session and click *Login*.
 
 Download the repository
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -108,10 +108,10 @@ repository is fairly large and Tor can be slow, this may take a few minutes.
 Passphrase Database
 ~~~~~~~~~~~~~~~~~~~
 
-We provide a KeePassX password database template to make it easier for
+We provide a KeePassX passphrase database template to make it easier for
 admins and journalists to generate strong, unique passphrases and
 store them securely. Once you have set up Tails with persistence and
-have cloned the repo, you can set up your personal password database
+have cloned the repo, you can set up your personal passphrase database
 using this template.
 
 You can find the template in ``tails_files/securedrop-keepassx.kdbx``
@@ -127,12 +127,12 @@ To use the template:
 -  Click **Database** and **Save Database As**
 -  Save the database in the Persistent folder
 
-.. tip:: If you would like to add a master password, navigate to **Database** and
+.. tip:: If you would like to add a master passphrase, navigate to **Database** and
    **Change master key**. Note that since each KeePassX database is stored
    on the encrypted persistent volume, this additional passphrase is not necessary.
 
-.. warning:: You will not be able to access your passwords if you
-	     forget the master password or the location of the key
+.. warning:: You will not be able to access your passphrases if you
+	     forget the master passphrase or the location of the key
 	     file used to protect the database.
 
 
@@ -150,7 +150,7 @@ by typing these commands into the terminal:
 
     ./securedrop-admin tailsconfig
 
-Type the administration password that you selected when starting Tails and hit
+Type the administration passphrase that you selected when starting Tails and hit
 enter. This installation script does the following:
 
 * Downloads additional software
@@ -171,7 +171,7 @@ for each interface, provided to you by the admin.
 We use an "authenticated" Tor Hidden Service so that adversaries cannot access
 the Journalist Interface, providing a layer of defense-in-depth which protects the
 Journalist Interface even if there is a security vulnerability in the web
-application, or if the journalist's username, password, and two-factor token
+application, or if the journalist's username, passphrase, and two-factor token
 are stolen. The extra configuration that is required is handled by this script.
 
 Our ``./securedrop-admin tailsconfig`` tool sets up Tails to work with SecureDrop

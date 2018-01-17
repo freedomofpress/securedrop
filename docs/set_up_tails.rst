@@ -68,7 +68,7 @@ drive. This information will remain available to you even if you reboot
 Tails. (Tails securely erases all other data on every shutdown.)
 
 You will need to create a persistent storage on each Tails drive, with a
-unique password for each.
+unique passphrase for each.
 
 Please use the instructions on the `Tails website
 <https://tails.boum.org/doc/first_steps/persistence/index.en.html>`__

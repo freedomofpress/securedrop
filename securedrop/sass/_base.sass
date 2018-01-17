@@ -1,473 +1,151 @@
-@import button-rules
-@import font-awesome
-@import normalize
+@import "variables"
+
+// LIBRARIES
+@import libraries/normalize
+@import libraries/font-awesome-iconography
+
+// GLOBAL - order is significant
+@import global/border-box-size-everything
+@import global/body-tag
+
+// MODULES - aim to make these encapsulated and order independent (using BEM syntax).
+// Button - Button types (call to action hierarchy)
+@import "modules/button"
+// Link - link types (anchor tags)
+@import modules/link
+// Headline - The typography hierarchy
+@import modules/headline
+// Main content area - Outer container area for the whole page (see also: Panel)
+@import modules/main-content-area
+// Codename and password - common style for secrets
+@import modules/codename-and-password
+// Document actions - seems to be unused. Delete?
+@import modules/document-actions
+// Doc check - Checkbox spacing. In journalist interface only?
+@import modules/doc-check
+// Text link - make links purple in running text, possibly unnecessary.
+@import modules/text-link
+// Some kind of button possibly sd=standard button. Belongs in button module?
+@import modules/sd-button
+//variation on button for select all / none. In journalist interface only?
+@import modules/select
+// Pull - Quick layout helper classes
+@import modules/pull
+// Header - Area with logo
+@import modules/header
+//Cols - Something to do with the table of submitted documents. In journalist interface only?
+@import modules/cols
+//Panel - The main content area when the logo is on the left (logged in).
+@import modules/panel
+// Warning - Messages to user e.g. about protecting your security by turning Tor settings to high
+@import modules/warning
+// Confirm prompt - When deleting something this prompt is shown
+@import modules/confirm-prompt
+// 'Serious' text - Seems to be unused. Delete?
+@import modules/serious-text
+// Code - Area that the codename is shown in. In source interface only?
+@import "modules/code"
+// Snippet - Area for source to send file and message. In source interface only?
+@import "modules/snippet"
+// Hr - Layout and aesthetics helper classes using lines
+@import "modules/hr-horizontal-rule-line"
+// Clearfix - Helper class to deal with float problems
+@import "modules/clearfix"
+// Center text align - Helper class to align text
+@import "modules/center-text-align"
+// Button centering - Helper class to center buttons in the page
+@import "modules/button-centering"
+// Aside - Seems to be being used like a type of helpful tips area or message
+@import "modules/aside"
+// Flash - Messages to talk to the user (success, security warnings, etc.)
+@import "modules/flash"
+// Banner warning - Some kind of warning messages. Possibly unused? Delete?
+@import "modules/banner-warning"
+// Select container - contains all the controls for select all, etc when viewing documents for a source
+@import "modules/select-container"
+// Document actions button - Seems to be unused. Delete?
+@import "modules/document-actions-button"
+// Grid item - part of the grid. Doesnt seem to be used very much though.
+@import "modules/grid-item"
+// Option - might be unused. Delete?
+@import "modules/option"
+// Logo - Small and large versions of the branding; can also be the journalist org brand (not SD).
+@import "modules/logo"
+// Submissions - container for all of the submissions
+@import "modules/submissions"
+// Submission - an individual submission
+@import "modules/submission"
+// List plain and starred - two types of lists
+@import "modules/list-plain-and-starred"
+// Logout - the logout button (top right)
+@import "modules/logout"
+// Label - forces a cursor pointer on label. Seems unnecessary if label 'for' attr is used, remove?
+@import "modules/label"
+// Em (light gray) - Doesn't seem to be being used. Delete?
+@import "modules/em-light-gray-emphasised-text"
+// QR code container
+@import "modules/qr-code-container"
+// Shared secret - OTP related. E.g. in Admin area.
+@import "modules/shared-secret"
+// Users table - Admin area only?
+@import "modules/users-table"
+// Regenerate codename button - only used by journalist?
+@import "modules/regenerate-codename-button"
+// Footer containing disclaimer text
+@import "modules/footer"
+// Form validation error - text to help users correct errors
+@import "modules/form-validation-error"
 
 =base_rules
-  *
-    box-sizing: border-box
-    // Firefox 24 (the basis of TBB at the time of this writing) does not support unprefixed box-sizing.
-    -moz-box-sizing: border-box
-
-  +font_rules
-  +normalize_rules
-  +button_rules
-
-  body
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif
-    font-weight: 300
-    padding: 0px
-    margin: 0px
-
-  h1, h2, h3
-    font-weight: bold
-
-  h1, h2
-    color: #7985aa
-
-  h1
-    text-align: left
-    font-size: 30px
-
-    &:dir(rtl)
-      text-align: right
-
-  h2
-    font-size: 25px
-
-    &.welcome-text
-      color: inherit
-      text-align: center
-
-  h3
-    text-align: center
-
-  .content
-    position: relative
-    margin: 15px auto
-    max-width: 980px
-
-  a
-    color: $color_purple_medium
-
-    &.plain
-      color: #333
-
-      &:hover
-        color: $color_purple_medium
-
-  .codename, .password
-    font-family: monospace
-    letter-spacing: 0.15em
-    font-weight: normal
-
-  .document-actions
-    margin-bottom: 20px
-    text-align: left
-
-    &:dir(rtl)
-      text-align: right
-
-  .doc-check
-    margin-right: 10px
-
-  a.text-link
-    color: $color_purple_medium
-
-  .sd-button
-    font-weight: normal
-    &:not([lang=ar])
-      letter-spacing: 0.15em
-    &:lang(ar)
-      letter-spacing: 0em
-
-  .select
-    border: 1px #C4C2C2 solid
-    padding: 3px 10px
-    font-size: small
-    color: #6F6F6F
-    margin-right: 2px
-
-    &:hover
-      border-color: $color_grey_medium
-      color: #333
-
-  .pull-bottom
-    position: absolute
-    bottom: 0px
-
-  .pull-left
-    float: left
-
-    &:dir(rtl)
-      float: right
-
-  .pull-right
-    float: right
-
-    &:dir(rtl)
-      float: left
-
-  #header
-    float: left
-
-    &:dir(rtl)
-      float: right
-
-    .powered
-      margin-top: 10px
-      font-size: 13px
-      text-transform: uppercase
-      text-align: center
-      color: #666666
-      letter-spacing: normal
-
-  #cols
-    padding: 0
-
-    li.source
-      background: $color_grey_xlight
-      border-bottom: 1px solid #ddd
-      padding: 6px
-      text-align: left
-
-      &:dir(rtl)
-        text-align: right
-
-      &:last-child
-        border-bottom: none
-
-      .date
-        float: right
-        &:dir(rtl)
-          float: left
-        background-color: $color_grey_medium
-        color: #ffffff
-        font-size: 10px
-        font-weight: bold
-        padding: 5px
-        margin: 5px
-
-      .designation
-        display: inline-block
-        min-width: 260px
-
-        a
-          color: #333
-          font-weight: bold
-          margin: 5px
-          display: inline-block
-
-      .submission-count
-        display: inline-block
-
-        span
-          border: 1px solid #dedede
-          padding: 3px
-          margin-right: 5px
-          font-size: 12px
-
-          &.unread
-            border: 0
-
-  .panel
-    max-width: 800px
-    width: 100%
-    margin: 0 auto
-    padding: 16px 30px
-    border: 1px solid #c3c3c3
-    float: right
-
-  .warning
-    display: none
-    background-color: $color_warning_purple
-    color: white
-    padding: 10px 0
-    width: 100%
-    text-align: center
-    font-size: small
-    box-sizing: border-box
-    -moz-box-sizing: border-box
-
-    a
-      color: white
-
-  #warning-close
-    cursor: pointer
-
-  .confirm-prompt
-    visibility: hidden
-
-    &:target
-      visibility: visible
-
-  p.serious
-    font-weight: bold
-    color: $color_warning_red
-
-  .code
-    background: rgba(0, 0, 0, 0.05)
-    box-sizing: border-box
-    -moz-box-sizing: border-box
-    padding: 10px 15px
-    border-bottom: 2px solid $color_warning_red
-    font-size: large
-    text-align: center
-
-  .snippet
-    border: 1px solid #c3c3c3
-    background: $color_grey_xlight
-
-    .attachment
-      background-color: $color_grey_xlight
-      padding: 12px
-      width: 330px
-      @media only screen and (max-width: 815px)
-        width: 100%
-      display: inline-block
-      vertical-align: top
-
-      .file-options
-        padding-top: 8px
-
-      input[type="file"]
-        background-color: rgba(0, 0, 0, 0.05)
-        padding: 10px
-        font-size: 14px
-        min-width: 100%
-        max-width: 100%
-
-    .message
-      display: inline-block
-      vertical-align: top
-      width: 401px
-      @media only screen and (max-width: 815px)
-        width: 100%
-      background: white
-      overflow: hidden
-
-      textarea
-        vertical-align: top
-        display: block
-        padding: 10px
-        width: 406px
-        @media only screen and (max-width: 815px)
-          width: 100%
-        min-height: 168px
-        border: none
-
-        &:focus
-          outline: none
-
-  hr
-    &.cut-out
-      border-style: dashed
-      border-bottom: none
-      border-color: #c3c3c3
-
-    &.no-line
-      clear: both
-      border: none
-      height: 10px
-
-  .clearfix
-    clear: both
-
-  .center
-    text-align: center
-
-  button.center
-    display: block
-    margin: 0 auto
-
-  $color_error_border: #F68E8E
-  $color_error_background: #FCE3E3
-
-  aside, .flash, .banner-warning
-    border-radius: 10px
-
-    i
-      font-size: 18pt
-
-  aside
-    background-color: #fffbe6
-    color: #82572d
-
-  aside, .flash
-    padding: 10px
-    margin: 10px
-    text-align: left
-    font-size: medium
-
-    &:dir(rtl)
-      text-align: right
-
-  .flash
-    display: flex
-    flex-flow: row nowrap
-    align-items: flex-start
-
-    &.success
-      border: 1px solid #E1F1E5
-      background-color: #E6FFEB
-
-      strong
-        color: #299549
-
-    &.notification
-      border: 1px solid #8ed9f6
-      background-color: #e3f7fc
-      font-size: medium
-      font-weight: normal
-
-      i
-        color: #4f7685
-
-    &.error
-      border: 1px solid $color_error_border
-      background-color: $color_error_background
-
-      i
-        color: #D62727
-
-    &.important
-      border: 1px solid #EBDCEB
-      background: #FDFAFD
-
-      strong
-        color: #673466
-      p
-        color: #555555
-
-  .banner-warning
-    border: 1px solid $color_error_border
-    background-color: $color_error_background
-
-    i
-      color: #D62727
-
-  div
-    &#select-container
-      display: inline
-
-    &.document-actions button
-      font-size: 14px
-      padding: 6px 15px
-
-  .grid-item
-    display: inline-block
-    letter-spacing: normal
-
-  .option
-    display: inline-block
-    width: 30%
-    min-width: 300px
-    min-height: 310px
-    margin: 1%
-    padding: 25px
-    border: 1px solid #c3c3c3
-    vertical-align: top
-    position: relative
-
-    &.alt
-      background-color: $color_purple_medium
-      color: white
-
-    &.selected
-      width: 500px
-      height: auto
-
-  .logo
-    width: 250px
-    margin-right: 9px
-    margin-top: 36px
-    margin-left: 9px
-
-    &.small
-      width: 150px
-      margin-top: 20px
-
-  .submissions
-    padding-left: 0px
-
-    &:dir(rtl)
-      padding-right: 0px
-
-  .submission
-    background: $color_grey_xlight
-    border-bottom: 1px solid #ddd
-    padding: 10px
-    text-align: left
-
-    &:dir(rtl)
-      text-align: right
-
-    &:last-child
-      border-bottom: none
-
-    .file
-      min-width: 300px
-      display: inline-block
-
-      &.reply
-        font-size: small
-
-    .info
-      font-size: 12px
-      color: #666666
-
-  ul.plain
-    list-style: none
-
-  ul.starred
-    margin-bottom: 1.33em
-
-  div#logout
-    float: right
-    margin: 1em 1em 0 1em
-
-  label
-    cursor: pointer
-
-  em.light
-    color: gray
-
-  div#qrcode-container
-    text-align: center
-
-  span#shared-secret
-    background-color: #FFFD9E
-    color: #555
-    padding: 4px
-    border: 1px solid $color_grey_medium
-
-  table#users
-    width: 100%
-
-    td
-      text-align: center
-
-  #regenerate-codename-btn
-    padding: 5px 5px
-    color: $color_grey_medium
-    font-size: 14px
-
-    &:hover
-      color: #333
-
-    &:focus
-      outline: 0
-
-  #regenerate-codename-btn-label
-    font-size: 10px
-
-  footer
-    clear: both
-    text-align: center
-    border-top: 1px dashed $color_grey_xlight
-    margin-top: 20px
-    padding-top: 20px
-    color: $color_grey_medium
-
-span.form-validation-error
-  color: red
-  font-size: small
+  // LIBRARIES
+  +normalize
+  +font-awesome-iconography
+
+  // GLOBAL - order is significant
+  +border-box-size-everything
+  +body-tag
+
+  // MODULES - order is not significant.
+  +button
+  +link
+  +headline
+  +main-content-area
+  +codename-and-password
+  +document-actions
+  +doc-check
+  +text-link
+  +sd-button
+  +select
+  +pull
+  +header
+  +cols
+  +panel
+  +warning
+  +confirm-prompt
+  +serious-text
+  +code
+  +snippet
+  +hr-horizontal-rule-line
+  +clearfix
+  +center-text-align
+  +button-centering
+  +aside
+  +flash
+  +banner-warning
+  +select-container
+  +document-actions-button
+  +grid-item
+  +option
+  +logo
+  +submissions
+  +submission
+  +list-plain-and-starred
+  +logout
+  +label
+  +em-light-gray-emphasised-text
+  +qr-code-container
+  +shared-secret
+  +users-table
+  +regenerate-codename-button
+  +footer
+  +form-validation-error

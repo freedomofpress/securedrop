@@ -24,8 +24,8 @@ import pytest
 @pytest.mark.pagelayout
 class TestSourceLayout(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps,
-        journalist_navigation_steps.JournalistNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
 
     def test_index(self):
         self._source_visits_source_homepage()
@@ -141,8 +141,8 @@ class TestSourceLayout(
 @pytest.mark.pagelayout
 class TestSourceSessionLayout(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps,
-        journalist_navigation_steps.JournalistNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
 
     def setup(self):
         self.session_length_minutes = 0.03
@@ -155,6 +155,5 @@ class TestSourceSessionLayout(
         self._source_continues_to_submit_page()
         self._source_waits_for_session_to_timeout(self.session_length_minutes)
         self._source_enters_text_in_message_field()
-        self._source_clicks_submit_button_on_submission_page()
-        self._source_sees_session_timeout_message()
+        self._source_visits_source_homepage()
         self._screenshot('source-session_timeout.png')

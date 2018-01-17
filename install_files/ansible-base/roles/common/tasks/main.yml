@@ -1,4 +1,6 @@
 ---
+- include: post_ubuntu_install_checks.yml
+
 - include: create_users.yml
 
 - include: setup_etc_hosts.yml

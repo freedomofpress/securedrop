@@ -6,9 +6,10 @@ ip_info:
 
 ### Used by the install_local_deb_pkgs role ###
 local_deb_packages:
+  - "securedrop-keyring-0.1.1+{{ securedrop_app_code_version }}-amd64.deb"
+  - "securedrop-config-0.1.0+{{ securedrop_app_code_version }}-amd64.deb"
   - "securedrop-ossec-server-2.8.2+{{ securedrop_app_code_version }}-amd64.deb"
   - ossec-server-2.8.2-amd64.deb
-  - "securedrop-keyring-0.1.1+{{ securedrop_app_code_version }}-amd64.deb"
 
 # Configure the tor hidden services. The Monitor server has only one,
 # for SSH, since no web interfaces.

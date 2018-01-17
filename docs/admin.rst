@@ -1,8 +1,8 @@
 Admin Guide
 ===========
 
-You (the admin) should have your own username and password, plus
-two-factor authentication through either the Google Authenticator app
+You (the admin) should have your own username and passphrase, plus
+two-factor authentication through either the FreeOTP app
 on your smartphone or a YubiKey.
 
 .. _Responsibilities:
@@ -73,6 +73,14 @@ for more information on common OSSEC alerts.
 .. warning:: Do not post logs or alerts to public forums without first carefully
     examining and redacting any sensitive information.
 
+.. note:: You can send a test OSSEC alert to verify OSSEC and your email configuration
+          is working properly through the *Admin Interface* by clicking **Send
+          Test OSSEC Alert**:
+
+          |Test Alert|
+
+.. |Test Alert| image:: images/manual/screenshots/journalist-admin_ossec_alert_button.png
+
 .. _`SecureDrop Support Portal`: https://securedrop-support.readthedocs.io/en/latest/
 
 
@@ -104,42 +112,40 @@ create their own username. Once they’re done entering a
 username for themselves, have them write down their pre-generated diceware
 passphrase. Then, you will select whether you would like them
 to also be an admin (this allows them to add or delete other
-journalist accounts), and whether they will be using Google
-Authenticator or a YubiKey for two-factor authentication.
+journalist accounts), and whether they will be using FreeOTP
+or a YubiKey for two-factor authentication.
 
-.. tip:: Consider using the alternative `FreeOTP`_ application for mobile
-   two-factor authentication.
+FreeOTP
+~~~~~~~
 
-.. _`FreeOTP`: https://freeotp.github.io/
-
-Google Authenticator
-~~~~~~~~~~~~~~~~~~~~
-
-If they are using Google Authenticator for their two-factor, they can
+If they are using FreeOTP for their two-factor, they can
 just proceed to the next page:
 
-|Enable Google Authenticator|
+|Enable FreeOTP|
 
 At this point, the journalist should make sure they have downloaded the
-Google Authenticator app to their smartphone. It can be installed from
+FreeOTP app to their smartphone. It can be installed from
 the Apple Store for an iPhone or from the Google Play store for an
 Android phone. Once you download it and open it, the app does not
 require setup. It should prompt you to scan a barcode. The journalist
 should use their phone's camera to scan the barcode on the screen.
 
-If they have difficulty scanning the barcode, they can use the "Manual
-Entry" option and use their phone's keyboard to input the random
-characters that are highlighted in yellow.
+If they have difficulty scanning the barcode, they can tap on the icon
+at the top that shows a plus and the symbol of a key and use their
+phone's keyboard to input the random characters that are highlighted
+in yellow, in the ``Secret`` input field, without white space.
 
-Inside the Google Authenticator app, a new entry for this account will
+Inside the FreeOTP app, a new entry for this account will
 appear on the main screen, with a six digit number that recycles to a
 new number every thirty seconds. Enter the six digit number under
 “Verification code” at the bottom of the screen, and hit
 enter.
 
-If Google Authenticator was set up correctly, you will be redirected
-back to the Admin Interface and will see a flashed message that says
-"Two factor token successfully verified for user *new username*!".
+If FreeOTP was set up correctly, you will be redirected
+back to the Admin Interface and will see a confirmation that the
+two-factor token was verified.
+
+.. include:: includes/otp-app.txt
 
 YubiKey
 ~~~~~~~
@@ -163,7 +169,7 @@ factor token successfully verified for user *new username*!".
 
 Congratulations! You have successfully set up a journalist on
 SecureDrop. Make sure the journalist remembers their username and
-password and always has their 2 factor authentication device in their
+passphrase and always has their 2 factor authentication device in their
 possession when they attempt to log in to SecureDrop.
 
 .. |SecureDrop main page|
@@ -172,12 +178,126 @@ possession when they attempt to log in to SecureDrop.
   image:: images/manual/screenshots/journalist-admin_interface_index.png
 .. |Add a new user|
   image:: images/manual/screenshots/journalist-admin_add_user_totp.png
-.. |Enable Google Authenticator|
+.. |Enable FreeOTP|
   image:: images/manual/screenshots/journalist-admin_new_user_two_factor_totp.png
 .. |Enable YubiKey|
   image:: images/manual/screenshots/journalist-admin_add_user_hotp.png
 .. |Verify YubiKey|
   image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
+
+Server Command Line
+-------------------
+
+Generally, you should avoid directly SSHing into the servers in favor of using
+the *Admin Interface* or ``securedrop-admin`` CLI tool. However, in some cases,
+you may need to SSH in order to troubleshoot and fix a problem that cannot be
+resolved via these tools.
+
+In this section we cover basic commands you may find useful when you SSH into
+the *Application Server* and *Monitor Server*.
+
+.. tip:: When you SSH into either SecureDrop server, you will be dropped into a
+        ``tmux`` session. ``tmux`` is a screen multiplexer - it allows you to tile
+        panes, preserve sessions to keep your session alive if the network
+        connection fails, and more. Check out this `tmux tutorial`_ to learn how
+        to use ``tmux``.
+
+.. _`tmux tutorial`:
+  https://robots.thoughtbot.com/a-tmux-crash-course
+
+Both Servers
+~~~~~~~~~~~~
+
+.. tip:: If you want a refresher of the Linux command line, we recommend
+  `this resource`_ to cover the fundamentals.
+
+.. _`this resource`:
+  http://linuxcommand.org/lc3_learning_the_shell.php
+
+Shutdown the Servers
+^^^^^^^^^^^^^^^^^^^^
+
+.. code:: sh
+
+  sudo shutdown now -h
+
+Rebooting the Servers
+^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: sh
+
+  sudo reboot
+
+Investigating Logs
+^^^^^^^^^^^^^^^^^^^
+
+Refer to the :doc:`Useful Logs <logging>` documentation to see the locations of
+files that contain relevant information while debugging issues on your SecureDrop
+servers.
+
+.. note:: You can also use the ``securedrop-admin`` tool to extract logs to
+  send to Freedom of the Press Foundation for analysis:
+
+    .. code:: sh
+
+      cd ~/Persistent/securedrop
+      ./securedrop-admin logs
+
+  This command will produce encrypted tarballs containing logs from each server.
+
+Immediately Apply a SecureDrop Update
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+SecureDrop will update and reboot once per day. However, if after a SecureDrop
+update `is announced`_ you wish to fetch the update immediately, you can SSH
+into each server and run:
+
+.. code:: sh
+
+  sudo cron-apt -i -s
+
+.. _`is announced`:
+  https://securedrop.org/news
+
+Application Server
+~~~~~~~~~~~~~~~~~~
+
+Adding Users (CLI)
+^^^^^^^^^^^^^^^^^^
+
+After the provisioning of the first administrator account, we recommend
+using the Admin Interface web application for adding additional journalists
+and administrators.
+
+However, you can also add users via ``./manage.py`` in ``/var/www/securedrop/``
+as described :doc:`during first install <create_admin_account>`. You can use
+this command line method if the web application is unavailable.
+
+Restart the Web Server
+^^^^^^^^^^^^^^^^^^^^^^^
+
+If you make changes to your Apache configuration, you may want to restart the
+web server to apply the changes:
+
+.. code:: sh
+
+  sudo service apache2 restart
+
+Monitor Server
+~~~~~~~~~~~~~~
+
+Restart OSSEC
+^^^^^^^^^^^^^
+
+If you make changes to your OSSEC monitoring configuration, you will want to
+restart OSSEC via `OSSEC's control script`_, ``ossec-control``:
+
+.. code:: sh
+
+   sudo /var/ossec/bin/ossec-control restart
+
+.. _`OSSEC's control script`:
+  https://ossec-docs.readthedocs.io/en/latest/programs/ossec-control.html
 
 .. _Updating the Servers:
 
@@ -190,10 +310,29 @@ or change the PGP key that OSSEC alerts are encrypted to. You can do this from
 your *Admin Workstation* by following the procedure described in this
 section.
 
+.. _Updating Logo Image:
+
+Updating Logo Image
+~~~~~~~~~~~~~~~~~~~
+
+You can update the system logo shown on the web interfaces of your SecureDrop
+instance via the Admin Interface. We recommend a size of ``500px x 450px``.
+Simply click the **Update Instance Config** button:
+
+|System Config Page|
+
+And on the instance configuration page, select and upload the image you prefer.
+You should see a message appear indicating the change was a success:
+
+|Logo Update|
+
+.. |System Config Page| image:: images/manual/screenshots/journalist-admin_system_config_page.png
+.. |Logo Update| image:: images/manual/screenshots/journalist-admin_changes_logo_image.png
+
 Updating system configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The server configuration is stored on the *Admin Workstation* in
+Other server configuration is stored on the *Admin Workstation* in
 ``~/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific``.
 
 If you want to update the system configuration, there are two options:

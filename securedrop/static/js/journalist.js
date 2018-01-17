@@ -1,5 +1,5 @@
 /**
- * The journalist page should degrade gracefully without Javascript. To avoid
+ * The journalist page should degrade gracefully without JavaScript. To avoid
  * confusing users, this function dynamically adds elements that require JS.
  */
 function enhance_ui() {
@@ -11,7 +11,7 @@ function enhance_ui() {
 
   $('div#index-select-container').replaceWith('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> ' + get_string("select-all-string") + '</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> ' + get_string("select-none-string") + '</span>');
 
-  // Change the action on the /col pages so we use a Javascript
+  // Change the action on the /col pages so we use a JavaScript
   // confirmation instead of redirecting to a confirmation page before
   // deleting submissions
   $('button#delete-selected').attr('value', 'delete');

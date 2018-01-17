@@ -1,35 +1,51 @@
 ---
-- name: Install Tor project GPG signing key.
+- name: Remove Tor project GPG signing key.
   apt_key:
-    state: present
-    data: "{{ lookup('file', 'tor-signing-key.pub') }}"
+    state: absent
+    id: A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
   tags:
     - apt
     - tor
 
 - name: Setup Tor apt repo.
   apt_repository:
-    repo: deb http://deb.torproject.org/torproject.org {{ ansible_lsb.codename }} main
+    filename: tor_apt_freedom_press
+    repo: deb {{ tor_apt_repo_url }} {{ ansible_lsb.codename }} main
     state: present
   register: add_tor_apt_repo
   tags:
     - apt
     - tor
 
-- name: Update apt cache.
-  apt:
-    update_cache: yes
-  when: add_tor_apt_repo.changed
-
+# Remove official Tor apt repo key, so only the SecureDrop Release
+# Signing Key is used, for the FPF tor apt mirror
 - name: Install Tor and Tor keyring packages.
   apt:
-    pkg: "{{ item }}"
-    state: latest
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
     update_cache: yes
     cache_valid_time: 3600
   with_items:
-    - deb.torproject.org-keyring
-    - tor
+    - name: tor
+      state: present
+    - name: deb.torproject.org-keyring
+      state: absent
   tags:
     - apt
     - tor
+
+- name: Extract tor version
+  shell: |
+    apt-cache policy tor | sed -e 's/^\s*Installed:\ \(\S*\)/\1/g;tx;d;:x'
+  changed_when: false
+  register: extract_tor_version
+  when: "'amazon' in ansible_product_version"
+
+- name: Dump Tor version to file (for reporting)
+  copy:
+    dest: "{{ playbook_dir }}/../../.tor_version"
+    content: "{{ extract_tor_version.stdout }}"
+  delegate_to: localhost
+  run_once: true
+  become: "no"
+  when: "'amazon' in ansible_product_version"

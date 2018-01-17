@@ -18,3 +18,15 @@
     - { role: app, tags: app }
     - { role: app-test, tags: app-test }
   become: yes
+
+  tasks:
+    # Uses creates arg because translation compilation will generate a new
+    # MO file even if the PO file has not changed.
+    - name: Compile translations (convert messages.po files to messages.mo files).
+      command:
+        ./manage.py --verbose translate-messages --compile
+      args:
+        chdir: '{{ securedrop_repo }}/securedrop'
+        creates: '{{ securedrop_repo }}/securedrop/translations/fr_FR/LC_MESSAGES/messages.mo'
+      tags:
+        - development

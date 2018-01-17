@@ -1,25 +1,18 @@
 #!/usr/bin/env ansible-playbook
 ---
-- name: Migrate site-specific information in vars files.
+- name: Ensure validation is run before prod install
   hosts: localhost
   connection: local
-  pre_tasks:
-    - name: Copy deprecated prod-specific.yml vars file.
-      command: >
-        cp "{{ playbook_dir }}/prod-specific.yml"
-        "{{ playbook_dir }}/group_vars/all/site-specific"
-      # Don't clobber new vars file with old, just create it.
-      args:
-        creates: "{{ playbook_dir }}/group_vars/all/site-specific"
   roles:
     - { role: validate, tags: validate }
 
 - name: Add FPF apt repository and install base packages.
   hosts: securedrop
   roles:
+    - { role: install-fpf-repo, tags: fpf }
+    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
     - { role: common, tags: common }
     - { role: tor-hidden-services, tags: tor }
-    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
   become: yes
 
 - name: Configure SecureDrop Monitor Server.

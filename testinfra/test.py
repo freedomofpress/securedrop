@@ -32,8 +32,7 @@ def get_target_roles(target_host):
                                     'testinfra/development/test_xvfb.py'],
                     "mon-staging": ['testinfra/mon',
                                     'testinfra/common'],
-                    "mon-prod":    ['testinfra/mon'],
-                    "apptestclient": ['testinfra/functional']}
+                    "mon-prod":    ['testinfra/mon']}
 
     try:
         return target_roles[target_host]
@@ -90,8 +89,6 @@ testinfra \
             ssh_config_path = ""
             testinfra_command_template = "testinfra -vv {target_roles}"
         else:
-            if target_host in ["apptestclient"]:
-                conn_type = "docker"
             ssh_config_path = os.environ["CI_SSH_CONFIG"]
             testinfra_command_template = """
 testinfra \

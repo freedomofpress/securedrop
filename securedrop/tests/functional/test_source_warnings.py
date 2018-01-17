@@ -4,7 +4,7 @@ import functional_test
 
 class TestSourceInterfaceBannerWarnings(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin):
 
     def test_warning_appears_if_tor_browser_not_in_use(self):
         self.driver.get(self.source_location)

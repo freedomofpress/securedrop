@@ -7,6 +7,35 @@ Source Guide
           computer should you use? what network should you be on? etc.
 
 
+Choosing the right location
+---------------------------
+
+When national security is involved, we suggest you buy a new computer,
+a USB key and pay cash. In any case you must then find a busy
+coworking place or cyber cafe you don't regularly go to and sit at a
+place with your back to a wall to avoid cameras capturing information
+on your screen or keystrokes.
+
+Get the Tor Browser
+-------------------
+
+Each SecureDrop instance has a publicly available *Source Interface*: a website where sources can create anonymous accounts, submit files and messages, and check back for replies.
+
+Each Source Interface is only available as a *Tor Hidden Service*, which is a special type of website with an address ending in ".onion" that is only accessible through Tor. Tor is an anonymizing network that makes it difficult for anybody observing the network to associate a user's identity (e.g. their computer's IP address) with their activity (e.g. uploading information to SecureDrop).
+
+The easiest and most secure way to use Tor is to download the Tor Browser from the `Tor Project website`_. The Tor Browser is a modified version of the Firefox web browser designed to protect your security and anonymity while using Tor. If there is a chance that downloading the Tor Browser raises suspicion, you have a few alternatives.
+
+* If your mail provider is less likely to be monitored, you can send a mail to gettor@torproject.org and a bot will answer with instructions
+* If you routinely use GitHub, you can use it to `download the Tor Browser <https://github.com/TheTorProject/gettorbrowser>`__
+
+Once you have the Tor Browser, launch it and enter the ".onion" address for the Source Interface of the organization that you wish to submit to. You can find this address on the organization's landing page, or listed on the SecureDrop Directory.
+
+While using the Tor Browser on your personal computer helps hide your activity on the network, it leaves traces (of its own installation) on your local machine. For even more deniability, we recommend booting into a live system such as `Tails`_ for a higher level of security. Tails is specifically designed to run on your computer without leaving traces of your activity, and automatically routes all of your Internet browsing through Tor so you can easily access SecureDrop safely.
+
+.. _`Tor Project website`: https://www.torproject.org/
+.. _`Tails`: https://tails.boum.org/
+
+
 Choose who to submit to
 -----------------------
 
@@ -17,34 +46,6 @@ All organizations have a *landing page* that provides their own organization-spe
 Most organizations make their landing page prominently accessible from their main website's homepage. You can also find an incomplete list of organizations accepting submissions through SecureDrop on the `SecureDrop Directory`_ maintained by Freedom of the Press Foundation.
 
 .. _`SecureDrop Directory`: https://securedrop.org/directory
-
-
-Get the Tor Browser
--------------------
-
-.. todo:: There is a classic chicken and egg problem with encouraging
-   sources to use Tor. If their network traffic is already being
-   monitored (e.g. at their workplace by the IT department, at their
-   home by their ISP, anywhere by FVEY...), and they don't know to use
-   Tor from the start (like Snowden did), then their initial interest
-   in using SecureDrop might be enough to make them a target. One
-   partial mitigation might be to make this section the first section
-   in this document, and encourage them to "stop, drop, and Tor
-   Browser" before continuing or clicking any more links.
-
-Each SecureDrop instance has a publicly available *Source Interface*: a website where sources can create anonymous accounts, submit files and messages, and check back for replies.
-
-Each Source Interface is only available as a *Tor Hidden Service*, which is a special type of website with an address ending in ".onion" that is only accessible through Tor. Tor is an anonymizing network that makes it difficult for anybody observing the network to associate a user's identity (e.g. their computer's IP address) with their activity (e.g. uploading information to SecureDrop).
-
-The easiest and most secure way to use Tor is to download the Tor Browser from the `Tor Project website`_. The Tor Browser is a modified version of the Firefox web browser designed to protect your security and anonymity while using Tor.
-
-Once you have the Tor Browser, launch it and enter the ".onion" address for the Source Interface of the organization that you wish to submit to. You can find this address on the organization's landing page, or listed on the SecureDrop Directory.
-
-While using the Tor Browser on your personal computer helps hide your activity on the network, it leaves traces (of its own installation) on your local machine. For even more deniability, we recommend booting into a live system such as `Tails`_ for a higher level of security. Tails is specifically designed to run on your computer without leaving traces of your activity, and automatically routes all of your Internet browsing through Tor so you can easily access SecureDrop safely.
-
-.. _`Tor Project website`: https://www.torproject.org/
-.. _`Tails`: https://tails.boum.org/
-
 
 Making your First Submission
 ----------------------------
@@ -57,21 +58,21 @@ organization you are submitting to.
 |Source Interface with Javascript Disabled|
 
 If this is the first time you're using the Tor browser, it's likely that you
-have Javascript enabled and that the Security Slider that Tor browser provides
+have JavaScript enabled and that the Security Slider that Tor browser provides
 is set to "Low". If you do, there will be a purple warning banner at the top of
-the page that encourages you to disable Javascript and turn up the Security
+the page that encourages you to disable JavaScript and turn up the Security
 Slider to "High":
 
 |Source Interface Security Slider Warning|
 
 Click the **Learn how to set it to high** link in the warning banner and a
-message bubble will pop up explaining how to disable Javascript and turn up the
+message bubble will pop up explaining how to disable JavaScript and turn up the
 Slider:
 
 |Fix Javascript warning|
 
 Follow the instructions and the page should refresh automatically. Note
-that this will change the slider and disable Javascript for every page in your
+that this will change the slider and disable JavaScript for every page in your
 Tor Browser, and this setting will persist across browser sessions.
 
 |Security Slider|

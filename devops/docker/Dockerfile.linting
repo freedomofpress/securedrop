@@ -1,0 +1,12 @@
+FROM circleci/python:2
+
+# for pylint spell checking
+RUN sudo apt-get install -y enchant
+
+COPY securedrop/requirements securedrop/requirements
+RUN sudo pip install -r securedrop/requirements/develop-requirements.txt
+
+WORKDIR /src
+COPY . /src
+
+CMD ["sudo", "make", "--keep-going", "lint"]

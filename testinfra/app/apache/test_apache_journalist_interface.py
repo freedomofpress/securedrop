@@ -8,11 +8,13 @@ securedrop_test_vars = pytest.securedrop_test_vars
 wanted_apache_headers = [
   'Header edit Set-Cookie ^(.*)$ $1;HttpOnly',
   'Header always append X-Frame-Options: DENY',
+  'Header set Referrer-Policy "no-referrer"',
   'Header set X-XSS-Protection: "1; mode=block"',
   'Header set X-Content-Type-Options: nosniff',
   'Header set X-Download-Options: noopen',
   "Header set X-Content-Security-Policy: \"default-src 'self'\"",
   "Header set Content-Security-Policy: \"default-src 'self'\"",
+  'Header set Referrer-Policy "no-referrer"',
   'Header unset Etag',
 ]
 

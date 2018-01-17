@@ -1,6 +1,7 @@
 exclude config.py
 include config.py.example
 include *.py
+include securedrop-admin
 include COPYING
 include dictionaries/
 include dictionaries/*.txt
@@ -51,6 +52,10 @@ include wordlists/
 include wordlists/**.txt
 include sass/
 include sass/**.sass
+include sass/libraries/
+include sass/libraries/**.sass
+include sass/global/
+include sass/global/**.sass
 include sass/modules/
 include sass/modules/**.sass
 include babel.cfg

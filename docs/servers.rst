@@ -189,10 +189,10 @@ firewall. If you did not, adjust these settings accordingly.
 Continue the installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can choose whatever username and password you would like. To make
-things easier later you should use the same username and same password
-on both servers (but not the same password as username). Make sure to
-save this password in your admin KeePassX database afterwards.
+You can choose whatever username and passphrase you would like. To make
+things easier later you should use the same username and same passphrase
+on both servers (but not the same passphrase as username). Make sure to
+save this passphrase in your admin KeePassX database afterwards.
 
 Click 'no' when asked to encrypt the home directory. Then configure your
 time zone.
@@ -215,7 +215,7 @@ information on them stays private in case they are seized or stolen.
 While FDE can be useful in some cases, we currently do not recommend
 that you enable it because there are not many scenarios where it will be
 a net security benefit for SecureDrop operators. Doing so will introduce
-the need for more passwords and add even more responsibility on the
+the need for more passphrases and add even more responsibility on the
 admin of the system (see `this GitHub
 issue <https://github.com/freedomofpress/securedrop/issues/511#issuecomment-50823554>`__
 for more information).
@@ -225,7 +225,7 @@ installation option that says *Guided - use entire disk and set up LVM*.
 
 However, if you decide to go ahead and enable FDE, please note that
 doing so means SecureDrop will become unreachable after an automatic
-reboot. An admin will need to be on hand to enter the password
+reboot. An admin will need to be on hand to enter the passphrase
 in order to decrypt the disks and complete the startup process, which
 will occur anytime there is an automatic software update, and also
 several times during SecureDrop's installation. We recommend that the
@@ -234,7 +234,7 @@ receive an alert when the system becomes unavailable.
 
 To enable FDE, select *Guided - use entire disk and set up encrypted
 LVM* during the disk partitioning step and write the changes to disk.
-Follow the recommendations as to choosing a strong password. As the
+Follow the recommendations as to choosing a strong passphrase. As the
 admin, you will be responsible for keeping this passphrase safe.
 Write it down somewhere and memorize it if you can. **If inadvertently
 lost it could result in total loss of the SecureDrop system.**
@@ -281,7 +281,7 @@ When you are done, make sure you save the following information:
 
 -  The IP address of the *Application Server*
 -  The IP address of the *Monitor Server*
--  The non-root user's name and password for the servers.
+-  The non-root user's name and passphrase for the servers.
 
 .. _test_connectivity:
 
@@ -294,7 +294,7 @@ Workstation to both of the servers before continuing with the
 installation.
 
 In a terminal, verify that you can SSH into both servers,
-authenticating with your password:
+authenticating with your passphrase:
 
 .. code:: sh
 
@@ -310,7 +310,7 @@ Set up SSH keys
 ---------------
 
 Ubuntu's default SSH configuration authenticates users with their
-passwords; however, public key authentication is more secure, and once
+passphrases; however, public key authentication is more secure, and once
 it's set up it is also easier to use. In this section, we will create
 a new SSH key for authenticating to both servers. Since the Admin Live
 USB was set up with `SSH Client Persistence`_, this key will be saved
@@ -335,7 +335,7 @@ type it (Tails' pinentry will not allow you to copy and paste a passphrase).
 
 Once the key has finished generating, you need to copy the public key
 to both servers. Use ``ssh-copy-id`` to copy the public key to each
-server, authenticating with your password:
+server, authenticating with your passphrase:
 
 .. code:: sh
 
@@ -352,31 +352,3 @@ the below commands. You should not be prompted for a passphrase
     app
     $ ssh <username>@<Monitor IP address> hostname
     mon
-
-Minor Admin Tasks
------------------
-
-DNS
-~~~
-
-The network firewall rules are set up to disable DNS traffic to the gateway,
-so if your system has not set nameservers, DNS queries will fail. You can
-test this by running ``host freedom.press``. If the host isn't found,
-or there is some other sort of failure, check the pfSense logs. You may see
-UDP traffic to the gateway on port 53 being blocked.
-
-If this is the case, you need add the following lines to ``/etc/resolvconf/resolv.conf.d/tail``
-
-.. code::
-
-    nameserver 8.8.8.8
-    nameserver 8.8.4.4
-
-Then run ``sudo dpkg-reconfigure resolvconf``. This will update ``/etc/resolv.conf``
-to include the new name servers. Verify that ``host freedom.press`` succeeds.
-
-System Date
-~~~~~~~~~~~
-
-The ``ansible`` playbooks you will run later depend on the system clock
-being set accurately, so run ``sudo ntpdate ntp.ubuntu.com`` on both servers.

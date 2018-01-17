@@ -9,7 +9,7 @@ Journalist Interface, they need:
    credentials to log in:
 
    * Username
-   * Password
+   * Passphrase
    * Two-factor authentication code
 
 You should create a separate account on the Journalist Interface for
@@ -45,7 +45,7 @@ output like this:
 .. highlight:: none
 .. code::
 
-    This journalist's password is: delivery propose requisite stunner dragonfly unstamped stowaway
+    This journalist's passphrase is: delivery propose requisite stunner dragonfly unstamped stowaway
 
 Passphrases include the spaces between the words, but not leading or trailing
 whitespace. Be sure to save this passphrase in the appropriate KeePassX database.
@@ -60,5 +60,8 @@ created.
 
 For adding more user accounts, please refer now to our :doc:`Admin
 Interface Guide <admin>`.
+
+.. note:: You can now set a custom logo image on your web interfaces by
+           following the :ref:`Updating Logo Image` documentation.
 
 .. |TorBrowser| image:: images/torbrowser.png

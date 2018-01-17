@@ -11,6 +11,7 @@ import zipfile
 
 from bs4 import BeautifulSoup
 from flask import session, g, escape
+from mock import patch
 import gnupg
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
@@ -414,7 +415,8 @@ class TestIntegration(unittest.TestCase):
 
             source_app.get('/logout')
 
-    def test_delete_collection(self):
+    @patch('source_app.main.async_genkey')
+    def test_delete_collection(self, async_genkey):
         """Test the "delete collection" button on each collection page"""
         # first, add a source
         self.source_app.get('/generate')
@@ -438,6 +440,7 @@ class TestIntegration(unittest.TestCase):
         delete_form_inputs = soup.select('form#delete-collection')[0]('input')
         filesystem_id = delete_form_inputs[1]['value']
         col_name = delete_form_inputs[2]['value']
+
         resp = self.journalist_app.post('/col/delete/' + filesystem_id,
                                         follow_redirects=True)
         self.assertEquals(resp.status_code, 200)
@@ -445,13 +448,15 @@ class TestIntegration(unittest.TestCase):
         self.assertIn(escape("%s's collection deleted" % (col_name,)),
                       resp.data)
         self.assertIn("No documents have been submitted!", resp.data)
+        self.assertTrue(async_genkey.called)
 
         # Make sure the collection is deleted from the filesystem
         utils.async.wait_for_assertion(
             lambda: self.assertFalse(os.path.exists(store.path(filesystem_id)))
         )
 
-    def test_delete_collections(self):
+    @patch('source_app.main.async_genkey')
+    def test_delete_collections(self, async_genkey):
         """Test the "delete selected" checkboxes on the index page that can be
         used to delete multiple collections"""
         # first, add some sources
@@ -470,12 +475,14 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(resp.data, 'html.parser')
         checkbox_values = [checkbox['value'] for checkbox in
                            soup.select('input[name="cols_selected"]')]
+
         resp = self.journalist_app.post('/col/process', data=dict(
             action='delete',
             cols_selected=checkbox_values
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
         self.assertIn("%s collections deleted" % (num_sources,), resp.data)
+        self.assertTrue(async_genkey.called)
 
         # Make sure the collections are deleted from the filesystem
         utils.async.wait_for_assertion(lambda: self.assertFalse(

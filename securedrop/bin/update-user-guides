@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+export DISPLAY=:1
+Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+redis-server &
+
+rm /dev/random
+ln -s /dev/urandom /dev/random
+
+if ! test -f config.py ; then
+    trap "rm config.py" EXIT
+    make test-config
+fi
+
+sass --force --stop-on-error --update sass:static/css --style compressed
+chown -R "$USER_ID" static .sass-cache
+
+pytest -v tests/pages-layout --page-layout
+cp tests/pages-layout/screenshots/en_US/*.png ../docs/images/manual/screenshots
+chown -R "$USER_ID" tests/pages-layout/screenshots ../docs/images/manual/screenshots ./*/__pycache__ ./*/*/__pycache__ || true
