@@ -84,6 +84,7 @@ jobs:
           FPF_CI: true
           CI_SD_ENV: staging
           CI_AWS_TYPE: t2.medium
+          CI_AWS_REGION: us-west-2
           FPF_GRSEC: false
           TEST_REPORTS: /root/sd
     working_directory: ~/sd
