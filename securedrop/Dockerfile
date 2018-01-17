@@ -19,10 +19,10 @@ RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/
 #
 # This can be removed when upgrading to something more recent than trusty
 #
-RUN echo deb http://archive.ubuntu.com/ubuntu/ zesty main > /etc/apt/sources.list.d/zesty.list && \
+RUN echo deb http://archive.ubuntu.com/ubuntu/ xenial main > /etc/apt/sources.list.d/xenial.list && \
     apt-get update && \
     apt-get install -y gettext && \
-    rm /etc/apt/sources.list.d/zesty.list && \
+    rm /etc/apt/sources.list.d/xenial.list && \
     apt-get update
 
 COPY requirements requirements
