@@ -35,13 +35,13 @@ class TestManagePy(object):
         args = manage.get_args().parse_args(['run'])
         manage.setup_verbosity(args)
         manage.log.debug('INVISIBLE')
-        assert 'INVISIBLE' not in caplog.text()
+        assert 'INVISIBLE' not in caplog.text
 
     def test_verbose(self, caplog):
         args = manage.get_args().parse_args(['--verbose', 'run'])
         manage.setup_verbosity(args)
         manage.log.debug('VISIBLE')
-        assert 'VISIBLE' in caplog.text()
+        assert 'VISIBLE' in caplog.text
 
 
 class TestManagementCommand(unittest.TestCase):
@@ -341,7 +341,7 @@ class TestManage(object):
                                   verbose=logging.DEBUG)
         manage.setup_verbosity(args)
         manage.clean_tmp(args)
-        assert 'does not exist, do nothing' in caplog.text()
+        assert 'does not exist, do nothing' in caplog.text
 
     def test_clean_tmp_too_young(self, caplog):
         args = argparse.Namespace(days=24*60*60,
@@ -350,7 +350,7 @@ class TestManage(object):
         open(os.path.join(config.TEMP_DIR, 'FILE'), 'a').close()
         manage.setup_verbosity(args)
         manage.clean_tmp(args)
-        assert 'modified less than' in caplog.text()
+        assert 'modified less than' in caplog.text
 
     def test_clean_tmp_removed(self, caplog):
         args = argparse.Namespace(days=0,
@@ -362,7 +362,7 @@ class TestManage(object):
             os.utime(fname, (old, old))
         manage.setup_verbosity(args)
         manage.clean_tmp(args)
-        assert 'FILE removed' in caplog.text()
+        assert 'FILE removed' in caplog.text
 
 
 class TestSh(object):
@@ -375,7 +375,7 @@ class TestSh(object):
 
     def test_sh_progress(self, caplog):
         manage.sh("echo AB ; sleep 5 ; echo C")
-        records = caplog.records()
+        records = caplog.records
         assert ':sh: ' in records[0].message
         assert records[0].levelname == 'DEBUG'
         assert 'AB' == records[1].message
@@ -394,7 +394,7 @@ class TestSh(object):
             manage.sh("echo AB ; echo C ; exit 111")
         manage.log.setLevel(level)
         assert excinfo.value.returncode == 111
-        records = caplog.records()
+        records = caplog.records
         assert 'AB' == records[0].message
         assert records[0].levelname == 'ERROR'
         assert 'C' == records[1].message

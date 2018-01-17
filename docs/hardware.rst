@@ -33,9 +33,12 @@ These are the core components of a SecureDrop instance.
 * *Network Firewall*: 1 physical computer that is used as a dedicated firewall
   for the SecureDrop servers.
 
+An acceptable alternative that requires more technical expertise is
+to :doc:`configure an existing hardware firewall <network_firewall>`.
+
 We are often asked if it is acceptable to run SecureDrop on
 cloud servers (e.g. Amazon EC2, DigitalOcean, etc.) or on dedicated
-servers in third party datacenters instead of on dedicated hardware
+servers in third-party datacenters instead of on dedicated hardware
 hosted in the organization. This request is generally motivated by a
 desire for cost savings and/or convenience. However: we consider it
 **critical** to have dedicated physical machines hosted within the
@@ -63,12 +66,12 @@ organization for both technical and legal reasons:
 * In addition, attackers with legal authority such as law
   enforcement agencies may (depending on the jurisdiction) be able
   to compel physical access, potentially with a gag order attached,
-  meaning that the 3rd party hosting your servers or VMs may be
+  meaning that the third party hosting your servers or VMs may be
   legally unable to tell you that law enforcement has been given
   access to your SecureDrop servers.
 
 One of the core goals of SecureDrop is to avoid the potential
-compromise of sources through the compromise of third party
+compromise of sources through the compromise of third-party
 communications providers. Therefore, we consider the use of
 virtualization for production instances of SecureDrop to be an
 unacceptable compromise and do not support it. Instead, dedicated
@@ -135,10 +138,12 @@ needs a two-factor authenticator. We currently support two options for
 two-factor authentication:
 
 * Your existing smartphone with an app that computes TOTP codes
-  (e.g. `Google Authenticator <https://support.google.com/accounts/answer/1066447?hl=en>`__).
+  (e.g. FreeOTP `for Android <https://play.google.com/store/apps/details?id=org.fedorahosted.freeotp>`__ and `for iOS <https://itunes.apple.com/us/app/freeotp-authenticator/id872559395>`__).
 
 * A dedicated hardware dongle that computes HOTP codes (e.g. a
   `YubiKey <https://www.yubico.com/products/yubikey-hardware/yubikey/>`__).
+
+.. include:: includes/otp-app.txt
 
 **Transfer Device(s)**: You need a mechanism to transfer encrypted submissions
 from the **Journalist Workstation** to the *SVS* to decrypt and view them. The

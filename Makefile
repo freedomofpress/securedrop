@@ -1,18 +1,7 @@
 DEFAULT_GOAL: help
 SHELL := /bin/bash
 PWD := $(shell pwd)
-
-.PHONY: app-images
-app-images: ## Create securedrop application docker images
-	$(MAKE) -C securedrop images
-
-.PHONY: app-test
-app-test: ## Run securedrop application level tests
-	$(MAKE) -C securedrop test
-
-.PHONY: app-testclean
-app-testclean: ## Delete securedrop application related containers
-	$(MAKE) -C securedrop testclean
+TAG ?= $(shell git rev-parse HEAD)
 
 .PHONY: ci-spinup
 ci-spinup: ## Creates AWS EC2 hosts for testing staging environment.
@@ -30,21 +19,19 @@ ci-run: ## Provisions AWS EC2 hosts for testing staging environment.
 ci-go: ## Creates, provisions, tests, and destroys AWS EC2 hosts for testing staging environment.
 	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s aws; else echo Not running on docs branch...; fi
 
+.PHONY: ci-lint-image
+ci-lint-image: ## Builds linting container.
+	docker build $(EXTRA_BUILD_ARGS) -t securedrop-lint:${TAG} -f devops/docker/Dockerfile.linting .
+
+.PHONY: ci-lint
+ci-lint: ## Runs linting in linting container.
+	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-lint:${TAG}
+
 .PHONY: docs-lint
 docs-lint: ## Check documentation for common syntax errors.
 # The `-W` option converts warnings to errors.
 # The `-n` option enables "nit-picky" mode.
 	make -C docs/ clean && sphinx-build -Wn docs/ docs/_build/html
-
-.PHONY: update-user-guides
-update-user-guides: ## Update screenshots for the user guides.
-	if [ -d "/vagrant" ]; then \
-		bash -c "pushd /vagrant/securedrop; pytest -v tests/pages-layout --page-layout; popd"; \
-		cp /vagrant/securedrop/tests/pages-layout/screenshots/en_US/*.png /vagrant/docs/images/manual/screenshots/; \
-	else \
-		printf "You must run this from the development VM!\n"; \
-		exit 1; \
-	fi
 
 .PHONY: docs
 docs: ## Build project documentation in live reload for editing
@@ -53,11 +40,15 @@ docs: ## Build project documentation in live reload for editing
 
 .PHONY: flake8
 flake8: ## Validates PEP8 compliance for Python source files.
-	flake8 --exclude='config.py' testinfra securedrop-admin \
+	flake8 --exclude='config.py' testinfra securedrop/securedrop-admin \
 		securedrop/*.py securedrop/management \
 		securedrop/journalist_app/*.py \
-		securedrop/source_app/*.py \
-		securedrop/tests/functional securedrop/tests/*.py
+		securedrop/source_app/*.py securedrop/tests/pages-layout/*.py \
+		securedrop/tests/functional/*.py securedrop/tests/*.py
+
+.PHONY: app-lint
+app-lint: ## Tests pylint lint rule compliance.
+	cd securedrop && make lint
 
 # The --disable=names is required to use the BEM syntax
 # # https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
@@ -80,15 +71,22 @@ shellcheck: ## Lints Bash and sh scripts.
 # don't maintain those scripts. Omitting the `.venv/` dir because we don't control
 # files in there. Omitting the ossec packages because there are a LOT of violations,
 # and we have a separate issue dedicated to cleaning those up.
+	@docker create -v /mnt --name shellcheck-targets circleci/python:2 /bin/true 2> /dev/null || true
+	@docker cp $(PWD)/. shellcheck-targets:/mnt/
 	@find "." \( -path "./.venv" -o -path "./install_files/ossec-server" \
 		-o -path "./install_files/ossec-agent" \) -prune \
 		-o -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
 		| perl -F: -lanE '$$F[1] =~ /x-shellscript/ and say $$F[0]' \
-		| xargs docker run -v "$(PWD):/mnt" -t koalaman/shellcheck:v0.4.6 \
+		| xargs docker run --rm --volumes-from shellcheck-targets \
+		-t koalaman/shellcheck:v0.4.6 \
 		-x --exclude=SC1091,SC2001,SC2064,SC2181
 
+.PHONY: shellcheckclean
+shellcheckclean: ## Cleans up temporary container associated with shellcheck target.
+	@docker rm -f shellcheck-targets
+
 .PHONY: lint
-lint: docs-lint flake8 html-lint yamllint shellcheck ## Runs all linting tools (docs, flake8, HTML, YAML, shell).
+lint: docs-lint app-lint flake8 html-lint yamllint shellcheck ## Runs all linting tools (docs, pylint, flake8, HTML, YAML, shell).
 
 .PHONY: docker-build-ubuntu
 docker-build-ubuntu: ## Builds SD Ubuntu docker container
@@ -116,8 +114,8 @@ update-pip-requirements: ## Updates all Python requirements files via pip-compil
 		securedrop/requirements/develop-requirements.in
 	pip-compile --output-file securedrop/requirements/test-requirements.txt \
 		securedrop/requirements/test-requirements.in
-	pip-compile --output-file securedrop/requirements/securedrop-requirements.txt \
-		securedrop/requirements/securedrop-requirements.in
+	pip-compile --output-file securedrop/requirements/securedrop-app-code-requirements.txt \
+		securedrop/requirements/securedrop-app-code-requirements.in
 
 .PHONY: libvirt-share
 libvirt-share: ## Configure ACLs to allow RWX for libvirt VM (e.g. Admin Workstation)

@@ -1,0 +1,12 @@
+#!/bin/bash
+export DISPLAY=:1
+Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+redis-server &
+
+rm /dev/random
+ln -s /dev/urandom /dev/random
+
+x11vnc -display :1 -autoport 5901 -shared &
+
+make config.py
+./manage.py run

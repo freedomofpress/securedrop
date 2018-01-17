@@ -22,7 +22,7 @@
     - "{{ securedrop_code_filtered }}/static/.webassets-cache"
 
 - name: Compile SASS to CSS.
-  shell: "/usr/local/bin/sass --force --stop-on-error --update sass:{{ securedrop_code_filtered }}/static/css --style compressed"
+  shell: "/usr/local/bin/sass --force --stop-on-error --update sass:{{ securedrop_code_filtered }}/static/css --style compressed --sourcemap=none"
   args:
     chdir: "{{ securedrop_code_filtered }}"
 

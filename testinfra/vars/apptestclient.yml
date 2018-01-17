@@ -1,7 +1,0 @@
----
-tor_url_files:
-  - file: app-source-ths
-    check_string: "SUBMIT DOCUMENTS"
-    error_string: "ERROR"
-  # need to refactor docker tor image before I can check this
-  #- app-journalist-aths

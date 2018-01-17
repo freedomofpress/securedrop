@@ -4,7 +4,7 @@ import functional_test
 
 class TestSourceSessions(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin):
 
     def setup(self):
         # The session expiration here cannot be set to -1
@@ -21,6 +21,5 @@ class TestSourceSessions(
         self._source_continues_to_submit_page()
         self._source_waits_for_session_to_timeout(
             self.session_length_minutes)
-        self._source_enters_text_in_message_field()
-        self._source_clicks_submit_button_on_submission_page()
+        self._source_visits_source_homepage()
         self._source_sees_session_timeout_message()

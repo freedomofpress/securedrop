@@ -4,7 +4,6 @@ import gzip
 from mock import patch, ANY
 import re
 
-from bs4 import BeautifulSoup
 from flask import session, escape, url_for
 from flask_testing import TestCase
 
@@ -89,16 +88,6 @@ class TestSourceApp(TestCase):
         # codename is also stored in the session - make sure it matches the
         # codename displayed to the source
         self.assertEqual(codename, escape(session_codename))
-
-    def test_generate_has_login_link(self):
-        """The generate page should have a link to remind people to login
-           if they already have a codename, rather than create a new one.
-        """
-        resp = self.client.get('/generate')
-        self.assertIn("USE EXISTING CODENAME", resp.data)
-        soup = BeautifulSoup(resp.data, 'html.parser')
-        already_have_codename_link = soup.select('a#already-have-codename')[0]
-        self.assertEqual(already_have_codename_link['href'], '/login')
 
     def test_generate_already_logged_in(self):
         with self.client as client:
@@ -313,6 +302,38 @@ class TestSourceApp(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn("Thanks! We received your message and document",
                           resp.data)
+
+    @patch('source_app.main.async_genkey')
+    @patch('source_app.main.get_entropy_estimate')
+    def test_submit_message_with_low_entropy(self, get_entropy_estimate,
+                                             async_genkey):
+        get_entropy_estimate.return_value = 300
+
+        with self.client as client:
+            new_codename(client, session)
+            self._dummy_submission(client)
+            resp = client.post('/submit', data=dict(
+                msg="This is a test.",
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertFalse(async_genkey.called)
+
+    @patch('source_app.main.async_genkey')
+    @patch('source_app.main.get_entropy_estimate')
+    def test_submit_message_with_enough_entropy(self, get_entropy_estimate,
+                                                async_genkey):
+        get_entropy_estimate.return_value = 2400
+
+        with self.client as client:
+            new_codename(client, session)
+            self._dummy_submission(client)
+            resp = client.post('/submit', data=dict(
+                msg="This is a test.",
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertTrue(async_genkey.called)
 
     def test_delete_all_successfully_deletes_replies(self):
         journalist, _ = utils.db_helper.init_journalist()

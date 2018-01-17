@@ -493,21 +493,8 @@ Common OSSEC Alerts
 ~~~~~~~~~~~~~~~~~~~
 
 The SecureDrop *Application* and *Monitor Servers* reboot every night, as part
-of the unattended upgrades process. When the servers come back up, OSSEC will
-start again and report the change in status. Therefore you should receive an
-email alert every morning containing text similar to: ::
-
-    Received From: mon->ossec-monitord
-    Rule: 502 fired (level 3) -> "Ossec server started."
-    Portion of the log(s):
-
-    ossec: Ossec started.
-
-This is a normal alert, and informs you that the system is working as expected.
-
-Similarly, your SecureDrop Application and Monitoring Servers will
-check for application updates on your servers. Should your servers require
-updates, OSSEC will alarm because the packages binaries will have changed
+of the unattended upgrades process. Therefore, on nights where packages were updated,
+you should receive email alerts every morning indicating binaries have changed.
 Below is a sample alert, but you may see any number of these records in the
 logs. This will happen in batches so these emails might be longer than the
 below alert. You should also see them in an email named ``Daily Report:
@@ -520,7 +507,7 @@ can review the logs in ``/var/log/apt/history.log``. ::
 
     status installed <package name> <version>
 
-This is a normal alert, it tells you your system is up-to-date and patched.
+These are normal alerts, they tell you your system is up-to-date and patched.
 
 Occasionally your SecureDrop Servers will send an alert for failing to connect
 to Tor relays. Since SecureDrop runs as a Tor Onion Service, it is possible

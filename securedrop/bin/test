@@ -1,0 +1,30 @@
+#!/bin/bash
+set -euo pipefail
+export DISPLAY=:1
+Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+redis-server &
+
+rm /dev/random
+ln -s /dev/urandom /dev/random
+
+x11vnc -display :1 -autoport 5901 -shared &
+
+touch tests/log/firefox.log
+function finish {
+  cp tests/log/firefox.log /tmp/test-results/logs/
+  bash <(curl -s https://codecov.io/bash)
+}
+trap finish EXIT
+
+mkdir -p "/tmp/test-results/logs"
+
+export PAGE_LAYOUT_LOCALES="en_US,fr_FR"
+pytest \
+  --page-layout \
+  --durations 10 \
+  --junitxml=/tmp/test-results/junit.xml \
+  --cov-report html:/tmp/test-results/cov_html \
+  --cov-report xml:/tmp/test-results/cov.xml \
+  --cov-report annotate:/tmp/test-results/cov_annotate \
+  --cov=. \
+  "$@"

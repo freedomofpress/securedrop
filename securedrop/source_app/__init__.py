@@ -44,7 +44,7 @@ def create_app(config):
     assets = Environment(app)
     app.config['assets'] = assets
 
-    i18n.setup_app(app)
+    i18n.setup_app(config, app)
 
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
@@ -71,8 +71,10 @@ def create_app(config):
         # about Tor2Web, corresponding to the initial page load.
         if 'X-tor2web' in request.headers:
             flash(Markup(gettext(
-                '<strong>WARNING:</strong> You appear to be using Tor2Web. '
-                'This <strong>does not</strong> provide anonymity. '
+                '<strong>WARNING:&nbsp;</strong> '
+                'You appear to be using Tor2Web. '
+                'This <strong>&nbsp;does not&nbsp;</strong> '
+                'provide anonymity. '
                 '<a href="{url}">Why is this dangerous?</a>')
                 .format(url=url_for('info.tor2web_warning'))),
                   "banner-warning")
@@ -81,7 +83,7 @@ def create_app(config):
     @ignore_static
     def setup_g():
         """Store commonly used values in Flask's special g object"""
-        g.locale = i18n.get_locale()
+        g.locale = i18n.get_locale(config)
         g.text_direction = i18n.get_text_direction(g.locale)
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()

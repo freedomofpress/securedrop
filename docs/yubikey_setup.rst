@@ -21,7 +21,7 @@ Download and Launch the YubiKey Personalization Tool
 ----------------------------------------------------
 
 #. Start Tails. At the log in-screen, choose the option to allow an
-   administrator password.
+   administrator passphrase.
 #. Open a terminal and enter
 
 .. code:: sh

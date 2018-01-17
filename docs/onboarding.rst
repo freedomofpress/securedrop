@@ -56,7 +56,7 @@ as documented in the :doc:`Tails Setup Guide <set_up_tails>`.
 
 Once you're done, boot into the new Journalist Tails USB on the
 *Journalist Workstation*. Enable persistence and set an admin
-password before continuing with the next section.
+passphrase before continuing with the next section.
 
 Set up automatic access to the Journalist Interface
 ---------------------------------------------------

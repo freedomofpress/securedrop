@@ -2,6 +2,11 @@
 
 {% block body %}
 <h1>{{ gettext('Welcome') }}</h1>
+
+<aside class="center">
+  <p>{{ gettext('Please either write this codename down and keep it in a safe place, or memorize it.<br> This will allow you to log back in and receive replies from journalists.') }}</p>
+</aside>
+
 <p class="explanation">{{ gettext('This codename is what you will use in future visits to receive messages from our journalists in response to what you submit on the next screen.') }}</p>
 
 <hr class="no-line">
@@ -27,22 +32,16 @@
 <hr class="no-line">
 
 <p class="explanation">{{ gettext('Because we use none of the traditional means to track users of our <strong>SecureDrop</strong>
- service, using this codename with future visits is the  only way we have to communicate with you, should we have
+ service, in future visits, using this codename will be the only way we have to communicate with you should we have
  questions or are interested in additional documents. Unlike passwords, there is no way to retrieve a lost codename.') }}
 </p>
-
-<hr class="no-line">
-<aside class="center">
-  <p>{{ gettext('Please either write this codename down and keep it in a safe place, or memorize it.') }}</p>
-</aside>
 
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <button type="submit" class="sd-button btn btn--space primary pull-right" id="continue-button">
     <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="17px" height="17px">
     <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="17px" height="17px">
-     {{ gettext('USE NEW CODENAME') }}
+     {{ gettext('SUBMIT DOCUMENTS') }}
   </button>
-  <a id="already-have-codename" href="{{ url_for('main.login') }}" class="sd-button btn btn--space secondary pull-right">{{ gettext('USE EXISTING CODENAME') }}</a>
 </form>
 {% endblock %}

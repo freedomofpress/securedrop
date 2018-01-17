@@ -35,7 +35,7 @@ ClientAliveInterval 300
 ClientAliveCountMax 0
 Ciphers aes256-gcm@openssh.com,aes256-ctr,chacha20-poly1305@openssh.com
 KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
-MACs hmac-sha2-256,hmac-sha2-512,hmac-sha1
+MACs hmac-sha2-256,hmac-sha2-512
 GatewayPorts no
 AllowGroups ssh
 AllowTcpForwarding no

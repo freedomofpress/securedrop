@@ -25,6 +25,7 @@ import config
 import db
 import journalist
 from source_app import create_app
+import crypto_util
 import tests.utils.env as env
 
 LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
@@ -86,6 +87,10 @@ class FunctionalTest(object):
         self.patcher = mock.patch('db.Journalist.verify_token')
         self.mock_journalist_verify_token = self.patcher.start()
         self.mock_journalist_verify_token.return_value = True
+
+        self.patcher2 = mock.patch('source_app.main.get_entropy_estimate')
+        self.mock_get_entropy_estimate = self.patcher2.start()
+        self.mock_get_entropy_estimate.return_value = 8192
 
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
@@ -169,6 +174,14 @@ class FunctionalTest(object):
 
         self.secret_message = ('These documents outline a major government '
                                'invasion of privacy.')
+
+    def wait_for_source_key(self, source_name):
+        filesystem_id = crypto_util.hash_codename(source_name)
+
+        def key_available(filesystem_id):
+            assert crypto_util.getkey(filesystem_id)
+        self.wait_for(
+            lambda: key_available(filesystem_id), timeout=60)
 
     def teardown(self):
         self.patcher.stop()

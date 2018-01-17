@@ -1,0 +1,5 @@
+*.pyc
+.sass-cache
+static/gen
+static/.webassets-cache
+tests/log/*

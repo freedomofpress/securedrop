@@ -18,6 +18,7 @@ from db import (db_session, InvalidPasswordLength, Journalist, Reply, Source,
                 Submission)
 import db
 import journalist
+import journalist_app
 import journalist_app.utils
 import utils
 
@@ -50,7 +51,10 @@ class TestJournalistApp(TestCase):
 
     @patch('crypto_util.genrandomid', side_effect=['bad', VALID_PASSWORD])
     def test_make_password(self, mocked_pw_gen):
-        assert journalist_app.utils.make_password() == VALID_PASSWORD
+        class fake_config:
+            pass
+        assert (journalist_app.utils.make_password(fake_config) ==
+                VALID_PASSWORD)
 
     @patch('journalist.app.logger.error')
     def test_reply_error_logging(self, mocked_error_logger):
@@ -297,7 +301,7 @@ class TestJournalistApp(TestCase):
         assert ('There was an error, and the new password might not have '
                 'been saved correctly.') in resp.data.decode('utf-8')
 
-    def test_user_edits_password_success_reponse(self):
+    def test_user_edits_password_success_response(self):
         self._login_user()
         resp = self.client.post(
             url_for('account.new_password'),
@@ -309,6 +313,27 @@ class TestJournalistApp(TestCase):
         text = resp.data.decode('utf-8')
         assert "Password updated." in text
         assert VALID_PASSWORD_2 in text
+
+    def test_user_edits_password_expires_session(self):
+        with self.client as client:
+            # do a real login to get a real session
+            # (none of the mocking `g` hacks)
+            resp = client.post(url_for('main.login'),
+                               data=dict(username=self.user.username,
+                                         password=self.user_pw,
+                                         token='mocked'))
+            self.assertRedirects(resp, url_for('main.index'))
+            assert 'uid' in session
+
+            resp = client.post(
+                url_for('account.new_password'),
+                data=dict(current_password=self.user_pw,
+                          token='mocked',
+                          password=VALID_PASSWORD_2))
+
+            self.assertRedirects(resp, url_for('main.login'))
+            # verify the session was expired after the password was changed
+            assert 'uid' not in session
 
     def test_user_edits_password_error_reponse(self):
         self._login_user()
@@ -532,7 +557,7 @@ class TestJournalistApp(TestCase):
         resp = self.client.get(url_for('admin.new_user_two_factor',
                                        uid=self.user.id))
         # any GET req should take a user to the admin.new_user_two_factor page
-        self.assertIn('Authenticator', resp.data)
+        self.assertIn('FreeOTP', resp.data)
 
     def test_http_get_on_admin_add_user_page(self):
         self._login_admin()
@@ -666,13 +691,71 @@ class TestJournalistApp(TestCase):
                                    password=VALID_PASSWORD,
                                    is_admin=None))
 
-        mocked_error_logger.assert_called_once_with(
+        log_event = mocked_error_logger.call_args[0][0]
+        self.assertIn(
             "Adding user 'username' failed: (__builtin__.NoneType) "
-            "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']")
+            "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']",
+            log_event)
         self.assertMessageFlashed(
             "An error occurred saving this user to the database."
             " Please inform your administrator.",
             "error")
+
+    def test_logo_upload_with_valid_image_succeeds(self):
+        # Save original logo to restore after test run
+        logo_image_location = os.path.join(config.SECUREDROP_ROOT,
+                                           "static/i/logo.png")
+        with open(logo_image_location) as logo_file:
+            original_image = logo_file.read()
+
+        try:
+            self._login_admin()
+
+            form = journalist_app.forms.LogoForm(
+                logo=(StringIO('imagedata'), 'test.png')
+            )
+            self.client.post(url_for('admin.manage_config'),
+                             data=form.data,
+                             follow_redirects=True)
+
+            self.assertMessageFlashed("Image updated.", "notification")
+        finally:
+            # Restore original image to logo location for subsequent tests
+            with open(logo_image_location, 'w') as logo_file:
+                logo_file.write(original_image)
+
+    def test_logo_upload_with_invalid_filetype_fails(self):
+        self._login_admin()
+
+        form = journalist_app.forms.LogoForm(
+            logo=(StringIO('filedata'), 'bad.exe')
+        )
+        resp = self.client.post(url_for('admin.manage_config'),
+                                data=form.data,
+                                follow_redirects=True)
+
+        self.assertIn('Upload images only.', resp.data)
+
+    def test_logo_upload_with_empty_input_field_fails(self):
+        self._login_admin()
+
+        form = journalist_app.forms.LogoForm(
+            logo=(StringIO(''), '')
+        )
+        resp = self.client.post(url_for('admin.manage_config'),
+                                data=form.data,
+                                follow_redirects=True)
+
+        self.assertIn('File required.', resp.data)
+
+    @patch('journalist.app.logger.error')
+    def test_creation_of_ossec_test_log_event(self, mocked_error_logger):
+        self._login_admin()
+        self.client.get(url_for('admin.ossec_test'))
+
+        mocked_error_logger.assert_called_once_with(
+            "This is a test OSSEC alert"
+        )
 
     def test_admin_page_restriction_http_gets(self):
         admin_urls = [url_for('admin.index'), url_for('admin.add_user'),
@@ -732,14 +815,6 @@ class TestJournalistApp(TestCase):
 
         text = resp.data.decode('utf-8')
         self.assertIn('Incorrect password or two-factor code', text)
-
-    def test_invalid_user_password_change(self):
-        self._login_user()
-        res = self.client.post(url_for('account.new_password'),
-                               data=dict(password='badpw',
-                                         token='mocked',
-                                         current_password=self.user_pw))
-        self.assertRedirects(res, url_for('account.edit'))
 
     def test_too_long_user_password_change(self):
         self._login_user()
@@ -1073,16 +1148,17 @@ class TestJournalistApp(TestCase):
 
         try:
             with self.client as client:
-                # do a real login to get a real session
-                # (none of the mocking `g` hacks)
-                resp = self.client.post(url_for('main.login'),
-                                        data=dict(username=self.user.username,
-                                                  password=VALID_PASSWORD,
-                                                  token='mocked'))
-                assert resp.status_code == 200
-
                 # set the expiration to ensure we trigger an expiration
                 config.SESSION_EXPIRATION_MINUTES = -1
+
+                # do a real login to get a real session
+                # (none of the mocking `g` hacks)
+                resp = client.post(url_for('main.login'),
+                                   data=dict(username=self.user.username,
+                                             password=self.user_pw,
+                                             token='mocked'))
+                self.assertRedirects(resp, url_for('main.index'))
+                assert 'uid' in session
 
                 resp = client.get(url_for('account.edit'),
                                   follow_redirects=True)
@@ -1188,29 +1264,46 @@ class TestJournalistApp(TestCase):
         # Verify the source is not starred
         self.assertFalse(source_1.star.starred)
 
+
+class TestJournalistLocale(TestCase):
+
+    def setUp(self):
+        utils.env.setup()
+
+        # Patch the two-factor verification to avoid intermittent errors
+        utils.db_helper.mock_verify_token(self)
+
+        # Setup test user
+        self.user, self.user_pw = utils.db_helper.init_journalist()
+
+    def tearDown(self):
+        utils.env.teardown()
+
+    def get_fake_config(self):
+        class Config:
+            def __getattr__(self, name):
+                return getattr(config, name)
+        return Config()
+
+    # A method required by flask_testing.TestCase
+    def create_app(self):
+        fake_config = self.get_fake_config()
+        fake_config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
+        return journalist_app.create_app(fake_config)
+
     def test_render_locales(self):
         """the locales.html template must collect both request.args (l=XX) and
         request.view_args (/<filesystem_id>) to build the URL to
         change the locale
 
         """
-        supported = getattr(config, 'SUPPORTED_LOCALES', None)
-        try:
-            if supported:
-                del config.SUPPORTED_LOCALES
-            config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
+        source, _ = utils.db_helper.init_source()
+        self._ctx.g.user = self.user
 
-            source, _ = utils.db_helper.init_source()
-            self._login_user()
-
-            url = url_for('col.col', filesystem_id=source.filesystem_id)
-            resp = self.client.get(url + '?l=fr_FR')
-            self.assertNotIn('?l=fr_FR', resp.data)
-            self.assertIn(url + '?l=en_US', resp.data)
-
-        finally:
-            if supported:
-                config.SUPPORTED_LOCALES = supported
+        url = url_for('col.col', filesystem_id=source.filesystem_id)
+        resp = self.client.get(url + '?l=fr_FR')
+        self.assertNotIn('?l=fr_FR', resp.data)
+        self.assertIn(url + '?l=en_US', resp.data)
 
 
 class TestJournalistLogin(unittest.TestCase):
@@ -1250,9 +1343,3 @@ class TestJournalistLogin(unittest.TestCase):
         self.assertFalse(
             mock_scrypt_hash.called,
             "Called _scrypt_hash for password w/ invalid length")
-
-    @classmethod
-    def tearDownClass(cls):
-        # Reset the module variables that were changed to mocks so we don't
-        # break other tests
-        reload(journalist)
