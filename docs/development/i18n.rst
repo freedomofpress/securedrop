@@ -297,6 +297,54 @@ We do not want to publish the translator emails so we strip them:
        git log --pretty='%aN' $previous_version..lab/i18n -- \
         securedrop/translations install_files/ansible-base/roles/tails-config/templates | sort -u
 
+Translations administrators
+---------------------------
+
+A translation administrator is a person who is actively performing
+administrative duties. They have special permissions on the
+repositories and the translation platform. When someone is willing to
+become an administrator, a thread is started in `the translation
+section of the forum
+<https://forum.securedrop.club/c/translations>`_. If there is a
+consensus, the permissions of the new administrator are elevated after
+a week or more. If there is no consensus, a public vote is organized
+among the current administrators.
+
+All administrators are listed in the `forum introduction page
+<https://forum.securedrop.club/t/about-the-translations-category/16/1>`_
+
+An administrator who has not be active for two months or more is
+removed from the list and their permissions revoked. They can apply
+again at anytime.
+
+The community of SecureDrop translators works very closely with the
+SecureDrop developers and some of them participate in both
+groups. However, the translators community has a different set of
+rules and permissions, reason why it makes sense to have an
+independent policy.
+
+Administrator permissions
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An administrator may not need or want all permissions but they are
+entitled to have all of them.
+
+* https://weblate.securedrop.club/admin/auth/user/ grant staff and superuser status
+* https://forum.securedrop.club/admin/users/list/active click on the user and ``Grant Moderation``
+* https://lab.securedrop.club/bot/securedrop/project_members add as a ``Master`` member
+
+Granting reviewer privileges in Weblate
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* visit https://weblate.securedrop.club/admin/auth/user/
+* click on the user name
+* in the ``Groups`` block
+    * select ``Localizationlab`` in the ``Available groups`` list and
+      click on the right arrow to move it to the ``Chosen groups``
+      list
+    * select ``Users`` in the ``Chosen groups`` list and click on the
+      left arrow to remove it
+
 
 .. _`gettext`: https://www.gnu.org/software/gettext/
 .. _`pybabel`: http://babel.pocoo.org/
