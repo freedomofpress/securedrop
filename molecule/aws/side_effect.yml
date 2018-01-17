@@ -94,6 +94,10 @@
         dest: "../../{{ item.type }}-results.xml"
       with_items: "{{ raw_test_results }}"
       become: no
+      # THIS NEEDS TO BE SKIPPED FOR THE TIME BEING.
+      # CAUSING PARSING FAILURES ON TEST COMBINE
+      # See pull/2796
+      when: false
       no_log: true
       delegate_to: localhost
 
