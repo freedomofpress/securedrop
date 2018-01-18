@@ -13,29 +13,31 @@
     {% include 'banner_warning_flashed.html' %}
 
     <div class="content">
-      {% block header %}
-      <div id="header">
-        <a href="{% if 'logged_in' in session %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}">
-          <img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px">
-        </a>
-        {% include 'locales.html' %}
-        {% if use_custom_header_image %}
-        <div class="powered">
-          {{ gettext('Powered by') }}<br>
-          <img src="/static/i/securedrop_small.png" alt="SecureDrop">
+      <div class="container">
+        {% block header %}
+        <div id="header">
+          <a href="{% if 'logged_in' in session %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}">
+            <img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px">
+          </a>
+          {% include 'locales.html' %}
+          {% if use_custom_header_image %}
+          <div class="powered">
+            {{ gettext('Powered by') }}<br>
+            <img src="/static/i/securedrop_small.png" alt="SecureDrop">
+          </div>
+          {% endif %}
         </div>
+        {% endblock %}
+
+        <div class="panel selected">
+        {% if 'logged_in' in session %}
+          <a href="{{ url_for('main.logout') }}" class="sd-button btn pull-right" id="logout">{{ gettext('LOG OUT') }}</a>
         {% endif %}
-      </div>
-      {% endblock %}
+          <hr class="no-line">
 
-      <div class="panel selected">
-      {% if 'logged_in' in session %}
-        <a href="{{ url_for('main.logout') }}" class="sd-button btn pull-right" id="logout">{{ gettext('LOG OUT') }}</a>
-      {% endif %}
-        <hr class="no-line">
+          {% block body %}{% endblock %}
 
-        {% block body %}{% endblock %}
-
+        </div>
       </div>
 
       {% block footer %}
