@@ -18,6 +18,9 @@
         name: "sdci-{{ job_id }}"
         state: absent
         region: "{{ aws_ec2_ci_region }}"
+      # If the tear-down fails with the in-ability to remove a key, lets not
+      # fail the actual tear-down process!!
+      ignore_errors: true
 
     - name: Destroy molecule EC2 instance(s)
       ec2:

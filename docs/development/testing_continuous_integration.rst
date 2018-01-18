@@ -3,22 +3,9 @@
 Testing: CI
 ===========
 
-The SecureDrop project uses multiple automated third-party solutions
-for running automated test suites on code changes:
+The SecureDrop project uses CircleCI_ for running automated test suites on code changes:
 
-  * Travis_
-  * CircleCI_
-
-.. _Travis: https://travis-ci.org/freedomofpress/securedrop/
 .. _CircleCI: http://circleci.com/gh/freedomofpress/securedrop/
-
-Travis tests
-------------
-
-The Travis_ test suite provisions the development VM and runs the application
-test suite against the latest version of the code. It also performs basic
-linting and validation, e.g. checking for mistakes in the Sphinx documentation
-(see :doc:`documentation_guidelines`).
 
 CI test layout
 --------------
@@ -29,10 +16,9 @@ The relevant files for configuring the CI tests are: ::
     ├── devops
     │   ├── inventory <-- environment specific inventory
     │   ├── playbooks <-- playbooks to start CI boxes
-    │   ├── scripts   <-- shell wrapper scripts 
+    │   ├── scripts   <-- shell wrapper scripts
     │   ├── templates <-- contains templates for ansible tasks
     │   └── vars <-- environment specific variables
-    ├── .travis.yml  <--- config for development tests on travis
     └── Makefile  <-- defines make task shortcuts
 
 The files under ``devops/`` are used to create a minimized staging environment
@@ -45,6 +31,9 @@ Running the CI staging environment
 The staging environment tests will run automatically in CircleCI,
 when changes are submitted by Freedom of the Press Foundation staff
 (i.e. members of the ``freedomofpress`` GitHub organization).
+
+It also performs basic linting and validation, e.g. checking for mistakes in
+the Sphinx documentation.
 
 .. tip:: You will need an Amazon Web Services EC2 account to proceed.
          See the `AWS Getting Started Guide`_ for detailed instructions.
