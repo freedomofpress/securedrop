@@ -17,7 +17,7 @@ ci-run: ## Provisions AWS EC2 hosts for testing staging environment.
 
 .PHONY: ci-go
 ci-go: ## Creates, provisions, tests, and destroys AWS EC2 hosts for testing staging environment.
-	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s aws; else echo Not running on docs branch...; fi
+	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule --debug test -s aws; else echo Not running on docs branch...; fi
 
 .PHONY: ci-lint-image
 ci-lint-image: ## Builds linting container.
@@ -94,7 +94,7 @@ docker-build-ubuntu: ## Builds SD Ubuntu docker container
 
 .PHONY: build-debs
 build-debs: ## Builds and tests debian packages
-	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s builder; else echo Not running on docs branch...; fi
+	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule --debug test -s builder; else echo Not running on docs branch...; fi
 
 .PHONY: safety
 safety: ## Runs `safety check` to check python dependencies for vulnerabilities
