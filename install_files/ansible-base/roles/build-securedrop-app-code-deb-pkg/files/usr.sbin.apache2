@@ -163,6 +163,8 @@
   /var/www/securedrop/journalist_templates/js-strings.html r,
   /var/www/securedrop/journalist_templates/locales.html r,
   /var/www/securedrop/journalist_templates/login.html r,
+  /var/www/securedrop/models.py r,
+  /var/www/securedrop/models.pyc rw,
   /var/www/securedrop/request_that_secures_file_uploads.py r,
   /var/www/securedrop/request_that_secures_file_uploads.pyc rw,
   /var/www/securedrop/rm.py r,
