@@ -1,4 +1,4 @@
-boto
+boto3
 docker-py
 flake8
 html-linter
