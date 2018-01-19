@@ -2,7 +2,7 @@
   <img src="/docs/images/logo.png" width="350" height="350">
 </p>
 
-[![Build Status](https://travis-ci.org/freedomofpress/securedrop.svg?branch=develop)](https://travis-ci.org/freedomofpress/securedrop)
+[![Build Status](https://circleci.com/gh/freedomofpress/securedrop/tree/develop.png)](https://circleci.com/gh/freedomofpress/workflows/securedrop/tree/develop)
 [![codecov](https://codecov.io/gh/freedomofpress/securedrop/branch/develop/graph/badge.svg)](https://codecov.io/gh/freedomofpress/securedrop)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/freedomofpress/securedrop?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
