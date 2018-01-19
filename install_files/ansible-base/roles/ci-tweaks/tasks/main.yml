@@ -14,4 +14,4 @@
 
 - name: Set remote host for any reboot tasks under AWS
   set_fact:
-    remote_host_ref: "{{ ansible_ec2_public_hostname }}"
+    remote_host_ref: "{{ ansible_ec2_local_hostname if 'Jenkins' in ansible_ec2_security_groups else ansible_ec2_public_hostname }}"

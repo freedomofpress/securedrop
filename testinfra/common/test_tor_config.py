@@ -1,28 +1,16 @@
 import pytest
-import re
 
 sdvars = pytest.securedrop_test_vars
 
 
-def test_tor_apt_repo(File):
-    """
-    Ensure the Tor Project apt repository is configured.
-    The version of Tor in the Trusty repos is not up to date.
-    """
-    f = File('/etc/apt/sources.list.d/deb_torproject_org_torproject_org.list')
-    repo_regex = re.escape('deb http://deb.torproject.org/torproject.org '
-                           'trusty main')
-    assert f.contains(repo_regex)
-
-
 @pytest.mark.parametrize('package', [
-    'deb.torproject.org-keyring',
     'tor',
 ])
 def test_tor_packages(Package, package):
     """
-    Ensure Tor packages are installed. Includes a check for the keyring,
-    so that automatic updates can handle rotating the signing key if necessary.
+    Ensure Tor packages are installed. Does not include the Tor keyring
+    package, since we want only the SecureDrop Release Signing Key
+    to be used even for Tor packages.
     """
     assert Package(package).is_installed
 
@@ -83,22 +71,3 @@ def test_tor_torrc_sandbox(File):
     # Only `Sandbox 1` will enable, but make sure there are zero occurrances
     # of "Sandbox", otherwise we may have a regression somewhere.
     assert not f.contains("^.*Sandbox.*$")
-
-
-def test_tor_signing_key_fingerprint(Command):
-    """
-    The `deb.torproject.org-keyring` package manages the repo signing pubkey
-    for tor-related packages, so make sure that fingerprint matches
-    expectations.
-    """
-
-    c = Command("apt-key finger")
-    tor_gpg_pub_key_info = """/etc/apt/trusted.gpg.d/deb.torproject.org-keyring.gpg
------------------------------------------------------
-pub   2048R/886DDD89 2009-09-04 [expires: 2020-08-29]
-      Key fingerprint = A3C4 F0F9 79CA A22C DBA8  F512 EE8C BC9E 886D DD89
-uid                  deb.torproject.org archive signing key
-sub   2048R/219EC810 2009-09-04 [expires: 2018-08-30]"""
-
-    assert c.rc == 0
-    assert tor_gpg_pub_key_info in c.stdout

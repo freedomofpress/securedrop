@@ -1,0 +1,45 @@
+=snippet
+  .snippet
+    border: 1px solid #c3c3c3
+    background: $color_grey_xlight
+
+    .attachment
+      background-color: $color_grey_xlight
+      padding: 12px
+      width: 330px
+      @media only screen and (max-width: 815px)
+        width: 100%
+      display: inline-block
+      vertical-align: top
+
+      .file-options
+        padding-top: 8px
+
+      input[type="file"]
+        background-color: rgba(0, 0, 0, 0.05)
+        padding: 10px
+        font-size: 14px
+        min-width: 100%
+        max-width: 100%
+
+    .message
+      display: inline-block
+      vertical-align: top
+      width: 401px
+      @media only screen and (max-width: 815px)
+        width: 100%
+      background: white
+      overflow: hidden
+
+      textarea
+        vertical-align: top
+        display: block
+        padding: 10px
+        width: 406px
+        @media only screen and (max-width: 815px)
+          width: 100%
+        min-height: 168px
+        border: none
+
+        &:focus
+          outline: none

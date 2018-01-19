@@ -136,7 +136,8 @@ def bulk_delete(filesystem_id, items_selected):
     db_session.commit()
 
     flash(ngettext("Submission deleted.",
-                   "Submissions deleted.",
+                   "{num} submissions deleted.".format(
+                       num=len(items_selected)),
                    len(items_selected)), "notification")
     return redirect(url_for('col.col', filesystem_id=filesystem_id))
 
@@ -197,9 +198,9 @@ def col_delete(cols_selected):
     return redirect(url_for('main.index'))
 
 
-def make_password():
+def make_password(config):
     while True:
-        password = crypto_util.genrandomid(7, i18n.get_language())
+        password = crypto_util.genrandomid(7, i18n.get_language(config))
         try:
             Journalist.check_password_acceptable(password)
             return password

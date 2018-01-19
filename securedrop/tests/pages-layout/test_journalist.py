@@ -33,11 +33,12 @@ def hardening(request):
     db.LOGIN_HARDENING = True
     return None
 
+
 @pytest.mark.pagelayout
 class TestJournalistLayout(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps,
-        journalist_navigation_steps.JournalistNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
 
     def test_account_edit_hotp_secret(self):
         self._journalist_logs_in()
@@ -113,6 +114,14 @@ class TestJournalistLayout(
         self._admin_creates_a_user(hotp=None)
         self._screenshot('journalist-admin_new_user_two_factor_totp.png')
 
+    def test_admin_changes_logo(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_visits_system_config_page()
+        self._screenshot('journalist-admin_system_config_page.png')
+        self._admin_updates_logo_image()
+        self._screenshot('journalist-admin_changes_logo_image.png')
+
     def test_col_no_documents(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -181,6 +190,13 @@ class TestJournalistLayout(
         self._journalist_downloads_message()
         self._journalist_composes_reply()
         self._screenshot('journalist-composes_reply.png')
+
+    def test_admin_uses_ossec_alert_button(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_visits_system_config_page()
+        self._admin_can_send_test_alert()
+        self._screenshot('journalist-admin_ossec_alert_button.png')
 
     def test_delete_none(self):
         self._source_visits_source_homepage()
@@ -306,7 +322,9 @@ class TestJournalistLayout(
         self._screenshot('journalist-index_javascript.png')
         self._journalist_selects_the_first_source()
         self._journalist_selects_documents_to_download()
-        self._screenshot('journalist-clicks_on_source_and_selects_documents.png')
+        self._screenshot(
+            'journalist-clicks_on_source_and_selects_documents.png'
+        )
 
     def test_index_entered_text(self):
         self._input_text_in_login_form('jane_doe', 'my password is long',

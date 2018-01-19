@@ -29,7 +29,7 @@ General Best Practices
 
    If you use your SecureDrop passphrase on another system, a compromise of that
    system could theoretically be used to compromise SecureDrop. You should avoid
-   reusing passwords in general, but it is especially important to avoid doing
+   reusing passphrases in general, but it is especially important to avoid doing
    so in the context of SecureDrop.
 
 For Sources
@@ -67,7 +67,7 @@ And each Journalist would only have to:
 #. Remember the passphrases to unlock the persistent storage on both of these
    Tails USBs.
 
-Memorizing further passwords beyond the ones listed above is counterproductive:
+Memorizing further passphrases beyond the ones listed above is counterproductive:
 an attacker with access to any of those environments would be able to pivot to
 anything they wish to access, and increasing the burden of keeping track of
 additional credentials is unpleasant for journalists and admins and

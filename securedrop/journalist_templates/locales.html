@@ -2,7 +2,7 @@
 <div class="menu">
   <input id="menu-1-checkbox" class="menu__checkbox visually-hidden" type="checkbox" >
   <label for="menu-1-checkbox" class="menu__trigger">
-    <span class="menu__icon flag flag--{{ g.locale }}"></span>
+    <span class="menu__trigger-arrow">▼</span>
     <span class="menu__trigger-text">{{ g.locales[g.locale] }}</span>
   </label>
 
@@ -19,7 +19,6 @@
           {% set url = '' %}
         {% endif %}
         <a href="{{ url }}" rel="nofollow">
-          <span class="menu__icon flag flag--{{locale}}"></span>
           <span>{{ g.locales[locale] }}</span>
         </a>
       </li>

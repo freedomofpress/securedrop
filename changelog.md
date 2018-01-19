@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.5.1
+
+### Web Applications
+
+* Add Arabic, Chinese, Turkish and Italian translations (#2830).
+* Enable administrators to update the SecureDrop logo via the Admin Interface (#2769).
+* Enable administrators to send test OSSEC alerts via the Admin Interface (#2771).
+* Improve the language menu (#2733).
+* Disable .map file generation when compiling CSS files from SASS (#2814).
+* User logout on password reset (#2756).
+* Update pip requirements (#2811).
+
+### Operations
+
+* Use apt mirror for Tor packages (#2441).
+* Push grsecurity tasks to the beginning of the install process (#2741).
+* Remove flaky SMTP/SASL host validation during SecureDrop configuration (#2815).
+* Automate post-Ubuntu install checks verifying DNS, NTP is working (#2129).
+* Validate GnuPG key is not a private key prior to install (#2735).
+* Remove HMAC-SHA1 from SSH config (#2730).
+
+### Monitoring
+
+* Prevent OSSEC from sending daily emails on startup (#2701).
+
+### Documentation
+
+* Replace Google Authenticator with FreeOTP (#2757).
+* Add recommended landing page content (#2752).
+
+The issues for this release were tracked in the 0.5.1 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.5.1.
+
 ## 0.5
 
 ### Web Applications
@@ -385,7 +418,7 @@ This is a high-level overview of some of the more significant changes between Se
 * Do not set headers in the web app (handle by production config.)
 * Add 2fac auth for journalist interface
 * Allow OSSEC emails to be encrypted with admin GPG key
-* Install app server, monitor server, Python dependencies, and custom configuration via deb packages
+* Install app server, monitor server, Python dependencies, and custom configuration via Debian packages
 * UI refresh on source and journalist interfaces
 * New UX for journalists:
   * "quick filter" box for codenames
@@ -395,8 +428,8 @@ This is a high-level overview of some of the more significant changes between Se
   * more detailed source listings
 * Normalize submission timestamps to that of the most recent submission
 to minimize metadata that could be used for correlation
-* Handle journalist authentication in the Document Interface instead of relying entirely on Authenticated Tor Hidden Services.
-* Document Interface supports two-factor authentication via Google Authenticator or Yubikey
+* Handle journalist authentication in the Document Interface instead of relying entirely on Authenticated Tor hidden services.
+* Document Interface supports two-factor authentication via Google Authenticator or YubiKey
   * These logins are hardened in a manner similar to that of the `google-authenticator` PAM module: tokens may only be used once, logins are rate limited, etc.
   * If you are using TOTP, the window is expanded from 1 period to 3 in order to help the situation where the server and client's clocks are skewed
 * Add Admin Interface so privileged "admin" users may add, edit, or delete other users on the Document Interface

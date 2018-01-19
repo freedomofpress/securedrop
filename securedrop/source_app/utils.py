@@ -1,3 +1,4 @@
+import logging
 import subprocess
 
 from datetime import datetime
@@ -28,11 +29,11 @@ def valid_codename(codename):
     return source is not None
 
 
-def generate_unique_codename():
+def generate_unique_codename(config):
     """Generate random codenames until we get an unused one"""
     while True:
         codename = crypto_util.genrandomid(Source.NUM_WORDS,
-                                           i18n.get_language())
+                                           i18n.get_language(config))
 
         # The maximum length of a word in the wordlist is 9 letters and the
         # codename length is 7 words, so it is currently impossible to
@@ -52,6 +53,10 @@ def generate_unique_codename():
             Source.filesystem_id == filesystem_id).all()
         if len(matching_sources) == 0:
             return codename
+
+
+def get_entropy_estimate():
+    return int(open('/proc/sys/kernel/random/entropy_avail').read())
 
 
 def async(f):
@@ -74,7 +79,7 @@ def async_genkey(filesystem_id, codename):
         source.last_updated = datetime.utcnow()
         db_session.commit()
     except Exception as e:
-        current_app.logger.error(
+        logging.getLogger(__name__).error(
                 "async_genkey for source (filesystem_id={}): {}"
                 .format(filesystem_id, e))
 

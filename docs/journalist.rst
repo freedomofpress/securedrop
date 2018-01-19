@@ -244,9 +244,9 @@ command will tell you what key was used to encrypt the file. If you are not
 comfortable at the command line, contact your SecureDrop administrator or
 Freedom of the Press Foundation for assistance.
 
-.. warning:: You should not transfer source material off the SVS for decryption,
-             and should instead transfer cryptographic keys *to* the device for
-             decryption and metadata removal.
+.. warning:: **Do not** transfer source material off the *Secure Viewing Station*
+             for decryption. Instead, transfer cryptographic keys *to* the SVS
+             device for decryption and metadata removal.
 
 Researching Submissions
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -269,6 +269,11 @@ left corner, Accessories, Metadata Anonymisation Toolkit.
 We recommend always doing as much work as possible inside of Tails
 before copying documents back to your *Journalist Workstation*. This
 includes stripping metadata with MAT.
+
+.. warning:: MAT is no longer actively maintained and **will not**
+             strip all metadata, even when the output claims the
+             document is clean. Some metadata are likely to persist:
+             you must **never** assume MAT has removed all metadata.
 
 When you no longer need documents, you can right-click on them and
 choose **Wipe** to delete them.

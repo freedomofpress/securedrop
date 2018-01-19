@@ -68,7 +68,7 @@ anonymous sources.
 
    getting_the_most_out_of_securedrop
    what_makes_securedrop_unique
-   google_authenticator
+   servers_2fa
    logging
    ossec_alerts
    tails_guide
@@ -95,6 +95,7 @@ anonymous sources.
    :maxdepth: 2
 
    development/getting_started
+   development/setup_development
    development/virtual_environments
    development/virtualizing_tails
    development/contributor_guidelines

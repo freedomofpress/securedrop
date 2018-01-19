@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block body %}
 {% if user.is_totp %}
-<h1>{{ gettext('Enable Google Authenticator') }}</h1>
-<p>{{ gettext("You're almost done! To finish resetting your two-factor authentication, follow the instructions below to set up Google Authenticator. Once you've added the entry for your account in the app, enter one of the 6-digit codes from the app to confirm that two factor authentication is set up correctly.") }}</p>
+<h1>{{ gettext('Enable FreeOTP') }}</h1>
+<p>{{ gettext("You're almost done! To finish resetting your two-factor authentication, follow the instructions below to set up FreeOTP. Once you've added the entry for your account in the app, enter one of the 6-digit codes from the app to confirm that two factor authentication is set up correctly.") }}</p>
 
 <ol>
-  <li>{{ gettext('Install Google Authenticator on your phone') }}</li>
-  <li>{{ gettext('Open the Google Authenticator app') }}</li>
-  <li>{{ gettext('Tap menu, then tap "Set up account", then tap "Scan a barcode"') }}</li>
+  <li>{{ gettext('Install FreeOTP on your phone') }}</li>
+  <li>{{ gettext('Open the FreeOTP app') }}</li>
+  <li>{{ gettext('Tap the QRcode symbol at the top') }}</li>
   <li>{{ gettext('Your phone will now be in "scanning" mode. When you are in this mode, scan the barcode below:') }}</li>
 </ol>
 <div id="qrcode-container">{{ user.shared_secret_qrcode }}</div>

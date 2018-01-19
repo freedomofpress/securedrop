@@ -97,7 +97,7 @@ Open a Nautilus window with admin privileges by going to
 |Open Terminal|
 
 Type ``gksu nautilus`` at the terminal prompt and hit enter. You'll need to type
-your admin password.
+your admin passphrase.
 
 |Start gksu nautilus|
 
@@ -107,8 +107,8 @@ your admin password.
   OK and continue normally.
 
   If a Nautilus window *doesn't* come up, it might be because an admin
-  password wasn't set. If that's the case, you'll need to restart and set an
-  admin password before continuing.
+  passphrase wasn't set. If that's the case, you'll need to restart and set an
+  admin passphrase before continuing.
 
 .. warning::
             Make sure you use keep the `Terminal` window open while you perform

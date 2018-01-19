@@ -1,11 +1,9 @@
 beautifulsoup4
 blinker
-coveralls
 Flask-Testing
 mock
 pip-tools
 py
 pytest
 pytest-cov
-pytest-capturelog
 selenium < 3

@@ -79,17 +79,17 @@ signature:
 
     openssl req -new -newkey rsa:4096 -nodes -sha256 -keyout domain.com.key -out domain.com.csr
 
-**Don't load any resources (scripts, web fonts, etc.) from 3rd parties
+**Don't load any resources (scripts, web fonts, etc.) from third parties
 (e.g. Google Web Fonts)**
 
 This will potentially leak information about sources to third parties,
 which can more easily be accessed by law enforcement agencies. Simply
 copy them to your server and serve them yourself to avoid this problem.
 
-Don't use 3rd party analytics, tracking, or advertising
--------------------------------------------------------
+Do not use third-party analytics, tracking, or advertising
+----------------------------------------------------------
 
-Most news websites, even those that are non-profits, use 3rd-party
+Most news websites, even those that are non-profits, use third-party
 analytics tools or tracking bugs on their websites. It is vital that
 these are disabled for the SecureDrop landing page.
 
@@ -130,6 +130,7 @@ If you use Apache, you can use these:
     Header set X-Download-Options: noopen
     Header set X-Permitted-Cross-Domain-Policies: master-only
     Header set Content-Security-Policy: "default-src 'self'"
+    Header set Referrer-Policy "no-referrer"
 
 If you intend to run nginx as your webserver instead, this will work:
 
@@ -141,9 +142,10 @@ If you intend to run nginx as your webserver instead, this will work:
     add_header X-Frame-Options DENY;
     add_header X-XSS-Protection "1; mode=block";
     add_header X-Content-Type-Options nosniff;
-    add_header Content-Security-Policy "default-src 'self'";
     add_header X-Download-Options: noopen;
     add_header X-Permitted-Cross-Domain-Policies master-only;
+    add_header Content-Security-Policy "default-src 'self'";
+    add_header Referrer-Policy "no-referrer";
 
 
 Additional Apache configuration
@@ -249,3 +251,78 @@ that user and group file permissions are locked down and that modules or
 gateway interfaces for dynamic scripting languages are not enabled. You
 don't want any unnecessary code or services running as this increases
 the attack surface.
+
+Landing page content suggestions
+--------------------------------
+
+The content below presents sample text for the SecureDrop component of a news 
+organization’s tips page. It does not account for any specific legal 
+or organizational needs, but should provide guidance for any outlet getting 
+started on crafting landing page language. Any tweaks to the sample content 
+should be left to the legal and editorial discretion of the individual outlet, 
+and should be viewed as essential to upholding source protection and transparency.
+
+**What is SecureDrop?**
+
+SecureDrop is an anonymity tool for journalists and whistleblowers. As a source, 
+you can use our SecureDrop installation to anonymously submit documents to our 
+organization. Our journalists use SecureDrop to receive source materials and 
+securely communicate with anonymous contacts.
+
+**What should I know before submitting material through SecureDrop?**
+
+To protect your anonymity when using SecureDrop, it is essential that you do 
+not use a network or device that can easily be traced back to your real 
+identity. Instead, use public wifi networks and devices you control.
+
+- Do NOT access SecureDrop on your employer’s network.
+
+- Do NOT access SecureDrop using your employer’s hardware. 
+
+- Do NOT access SecureDrop on your home network. 
+
+- DO access SecureDrop on a network not associated with you, like the wifi at a library or cafe.
+
+**Got it. How can I submit files and messages through SecureDrop?**
+
+Once you are connected to a public network at a cafe or library, download 
+and install the `Tor Browser <https://www.torproject.org/projects/torbrowser>`_. 
+
+Launch the Tor Browser. Visit our organization’s unique SecureDrop URL at 
+**http://our-unique-URL.onion/**. 
+Follow the instructions you find on our source page to 
+send us materials and messages.
+
+When you make your first submission, you will receive a unique codename. 
+Memorize it. If you write it down, be sure to destroy the copy as soon as 
+you’ve committed it to memory. Use your codename to sign back in to 
+our source page, check for responses from our journalists, and upload 
+additional materials.
+
+**As a source, what else should I know?**
+
+No tool can absolutely guarantee your security or anonymity. 
+The best way to protect your privacy and anonymity as a source 
+is to adhere to best practices.
+
+You can use a separate computer you’ve designated specifically to handle 
+the submission process. 
+Or, you can use an alternate operating system like Tails, 
+which boots from a USB stick and erases your activity at the end of every session.
+
+A file contains valuable `metadata <https://ssd.eff.org/en/module/why-metadata-matters>`_ about its source — when it was created 
+and downloaded, what machine was involved, the machine’s owner, etc.
+You can scrub metadata from some files prior to submission using the Metadata 
+Anonymization Toolkit featured in Tails.
+
+Your online behavior can be extremely revealing. 
+Regularly monitoring our publication’s social media or website can potentially 
+flag you as a source. Take great care to think about what your online behavior 
+might reveal, and consider using Tor Browser to mitigate such monitoring.
+
+Our organization retains strict access control over our SecureDrop project. 
+A select few journalists within our organization will have access to 
+SecureDrop submissions. We control the servers that store your submissions, 
+so no third party has direct access to the metadata or content of what you send us.
+
+Do not discuss leaking or whistleblowing, even with trusted contacts. 

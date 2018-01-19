@@ -137,3 +137,6 @@ junit/
 
 # molecule
 .molecule
+
+#Used in CI for parsing out tor nightly version
+.tor_version

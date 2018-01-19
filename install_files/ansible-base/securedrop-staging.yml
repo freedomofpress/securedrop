@@ -23,10 +23,10 @@
   roles:
     - role: ci-tweaks
       when: amazon_builder
-    - { role: common, tags: common }
-    - { role: tor-hidden-services, tags: tor }
     - { role: install-fpf-repo, tags: [fpfrepo] }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
+    - { role: common, tags: common }
+    - { role: tor-hidden-services, tags: tor }
     - { role: install-local-packages, tags: [install_local_packages, rebuild],
         when: install_local_packages }
   become: yes

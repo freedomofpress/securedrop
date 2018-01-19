@@ -7,39 +7,7 @@ of this key is only stored on the *Secure Viewing Station* which is never
 connected to the Internet. SecureDrop submissions can only be decrypted and
 read on the *Secure Viewing Station*.
 
-We will now prepare the *Secure Viewing Station* and generate the *SecureDrop
-Submission Key*.
-
-Ensure Filenames are Preserved
-------------------------------
-
-In order to preserve filenames when you decrypt submissions, on each *Secure
-Viewing Station*, you should open a **Terminal** and type the following commands:
-
-.. include:: includes/tails-svs-nautilus.txt
-
-Correct the system time
------------------------
-
-After booting up Tails on the *Secure Viewing Station*, you will need to
-manually set the system time before you create the *SecureDrop Submission
-Key*. Be sure to enable admin privileges before you do this. In Tails 3.x, you
-enable admin privileges by clicking the **+** button under **Additional
-Settings**, then navigating to **Administration Password**. Enter an
-administration password and then click **Start Tails**.
-
-To set the system time:
-
-#. Click the upper right down arrow in the menu bar and select the wrench icon:
-   |select settings|
-#. Then click **Date & Time**.
-#. Click **Unlock**. Type in the admin password you set when you
-   started up Tails.
-#. Set the correct time, region and city.
-#. Click **Lock**, exit Settings and wait for the system time to update in the
-   top panel.
-
-Once that's done, follow the steps below to create the key.
+We will now generate the *SecureDrop Submission Key*.
 
 Create the key
 --------------
@@ -111,7 +79,6 @@ At this point, you are done with the *Secure Viewing Station* for now. You
 can shut down Tails, grab the *admin Tails USB* and move over to your regular
 workstation.
 
-.. |select settings| image:: images/install/selectsettings.png
 .. |GPG generate key| image:: images/install/run_gpg_gen_key.png
 .. |GPG key options| image:: images/install/key_options.png
 .. |OK to generate| image:: images/install/ok_to_generate.png
