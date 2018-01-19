@@ -1,0 +1,8 @@
+#!/bin/bash
+# This script prepares a shell environment to run securedrop.
+export DISPLAY=:1
+rm /dev/random
+ln -s /dev/urandom /dev/random
+Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset >> /tmp/securedrop-xvfb.log 2>&1 &
+x11vnc -q -display :1 -autoport 5901 -shared >> /tmp/securedrop-x11vnc.log 2>&1 &
+redis-server >> /tmp/securedrop-redis.log 2>&1 &
