@@ -41,6 +41,9 @@ if config.DATABASE_ENGINE == "sqlite":
         config.DATABASE_ENGINE + ":///" +
         config.DATABASE_FILE
     )
+
+    engine.execute('PRAGMA secure_delete = ON')
+    engine.execute('PRAGMA auto_vacuum = FULL')
 else:  # pragma: no cover
     engine = create_engine(
         config.DATABASE_ENGINE + '://' +
