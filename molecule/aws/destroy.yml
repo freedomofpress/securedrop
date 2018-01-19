@@ -5,7 +5,8 @@
   vars:
     molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
-    molecule_instance_config: "{{ lookup('file', lookup('env', 'MOLECULE_INSTANCE_CONFIG')) | from_yaml }}"
+    molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
+    molecule_instance_config_yml: "{{ lookup('file', molecule_instance_config) | from_yaml }}"
     aws_ec2_ci_region: "{{ ansible_env.CI_AWS_REGION | default('us-west-1') }}"
     aws_ec2_teardown_timeout: 50
   tasks:
@@ -25,6 +26,6 @@
     - name: Destroy molecule EC2 instance(s)
       ec2:
         region: "{{ aws_ec2_ci_region }}"
-        instance_ids: "{{ molecule_instance_config|map(attribute='instance_id')|list }}"
+        instance_ids: "{{ molecule_instance_config_yml|map(attribute='instance_id')|list }}"
         state: absent
       ignore_errors: true
