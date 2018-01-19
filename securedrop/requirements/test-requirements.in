@@ -7,3 +7,4 @@ py
 pytest
 pytest-cov
 selenium < 3
+werkzeug>=0.12,<0.13
