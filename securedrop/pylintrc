@@ -132,7 +132,10 @@ disable=print-statement,
 # either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once). See also the "--disable" option for examples.
-enable=c-extension-no-member
+enable=wrong-spelling-in-comment,
+       wrong-spelling-in-docstring,
+       invalid-characters-in-docstring,
+       c-extension-no-member
 
 
 [REPORTS]
@@ -425,13 +428,13 @@ max-spelling-suggestions=4
 
 # Spelling dictionary name. Available dictionaries: en_US (myspell), en
 # (aspell), en_AU (aspell), en_CA (aspell), en_GB (aspell).
-spelling-dict=
+spelling-dict=en_US
 
 # List of comma separated words that should not be checked.
 spelling-ignore-words=
 
 # A path to a file that contains private dictionary; one word per line.
-spelling-private-dict-file=
+spelling-private-dict-file=.pylint-dictionary
 
 # Tells whether to store unknown words to indicated private dictionary in
 # --spelling-private-dict-file option instead of raising a message.
