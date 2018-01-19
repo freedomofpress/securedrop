@@ -54,8 +54,10 @@ class TestManagementCommand(unittest.TestCase):
         self.__context = journalist_app.create_app(config).app_context()
         self.__context.push()
         utils.env.setup()
+        self.__context.pop()
 
     def tearDown(self):
+        self.__context.push()
         utils.env.teardown()
         self.__context.pop()
 
