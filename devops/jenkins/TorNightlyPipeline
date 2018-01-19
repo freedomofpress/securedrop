@@ -21,9 +21,7 @@ pipeline {
                 git branch: 'develop', url: 'https://github.com/freedomofpress/securedrop.git'
 
                 sh '''. devops/scripts/aws-jenkins-venv.sh
-                    |pip install -r testinfra/requirements.txt '''.stripMargin()
-
-                sh '''. devops/scripts/aws-jenkins-venv.sh
+                    |pip install -r securedrop/requirements/develop-requirements.txt
                     |make build-debs
                     |molecule converge -s aws -- -e primary_network_iface=eth0 -e tor_repo_distro=tor-nightly-0.3.1.x-trusty -e tor_repo_pkgs='tor' --skip-tags app-test,grsec
                     |molecule verify -s aws'''.stripMargin()
