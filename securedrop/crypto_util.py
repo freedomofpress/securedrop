@@ -5,7 +5,7 @@ from base64 import b32encode
 import os
 import subprocess
 
-from Crypto.Random import random
+from Cryptodome.Random import random
 import gnupg
 from gnupg._util import _is_stream, _make_binary_stream
 import scrypt

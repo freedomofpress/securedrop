@@ -7,7 +7,7 @@ gnupg
 Jinja2
 jsmin
 psutil
-pycrypto
+pycryptodomex
 pyotp
 qrcode
 redis

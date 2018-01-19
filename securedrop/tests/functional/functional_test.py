@@ -12,7 +12,7 @@ import time
 import traceback
 import requests
 
-from Crypto import Random
+from Cryptodome import Random
 from selenium import webdriver
 from selenium.common.exceptions import (WebDriverException,
                                         NoAlertPresentException)
