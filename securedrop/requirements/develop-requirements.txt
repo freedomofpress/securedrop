@@ -23,7 +23,7 @@ binaryornot==0.4.4        # via cookiecutter
 boto3==1.4.7
 boto==2.48.0
 botocore==1.7.37          # via boto3, s3transfer
-certifi==2017.7.27.1      # via requests
+certifi==2017.7.27.1      # via requests, tornado
 cffi==1.10.0              # via bcrypt, cryptography, pynacl
 chardet==3.0.4            # via binaryornot, requests
 click-completion==0.2.1   # via molecule
@@ -35,7 +35,7 @@ cryptography==2.0.3       # via paramiko
 docker-py==1.10.6
 docker-pycreds==0.2.1     # via docker-py
 docopt==0.6.2             # via html-linter, template-remover
-docutils==0.14            # via sphinx
+docutils==0.14            # via botocore, sphinx
 dparse==0.2.1             # via safety
 enum34==1.1.6             # via astroid, cryptography, flake8
 execnet==1.4.1            # via pytest-xdist
@@ -53,9 +53,9 @@ ipaddress==1.0.18         # via cryptography, docker-py
 isort==4.2.15             # via pylint
 jinja2-time==0.2.0        # via cookiecutter
 jinja2==2.9.6             # via ansible, click-completion, cookiecutter, jinja2-time, molecule, sphinx
+jmespath==0.9.3           # via boto3, botocore
 lazy-object-proxy==1.3.1  # via astroid
 livereload==2.5.1         # via sphinx-autobuild
-jmespath==0.9.3           # via boto3, botocore
 markupsafe==1.0           # via jinja2
 marshmallow==2.13.5       # via molecule
 mccabe==0.6.1             # via flake8, pylint
@@ -87,7 +87,7 @@ pyparsing==2.2.0          # via packaging
 pytest-forked==0.2        # via pytest-xdist
 pytest-xdist==1.21.0
 pytest==3.3.1             # via pytest-forked, pytest-xdist, testinfra
-python-dateutil==2.6.1    # via arrow
+python-dateutil==2.6.1    # via arrow, botocore
 python-gilt==1.1.0        # via molecule
 pytz==2017.2              # via babel
 pyyaml==3.12              # via ansible, ansible-lint, dparse, molecule, python-gilt, sphinx-autobuild, watchdog, yamllint
