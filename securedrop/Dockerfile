@@ -41,6 +41,8 @@ RUN sass --force --stop-on-error --update sass:static/css --style compressed
 COPY . /app
 RUN make test-config && ./manage.py reset
 
+RUN ./manage.py --verbose translate-messages --compile
+
 EXPOSE 8080 8081 5901
 
 CMD ["./manage.py", "run"]
