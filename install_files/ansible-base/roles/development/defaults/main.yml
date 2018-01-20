@@ -1,9 +1,0 @@
----
-# The Python dependencies are packaged into the deb package via pip-wheel, but
-# in the development VM, the dependences will be installed directly via pip.
-securedrop_pip_requirements: "{{ securedrop_code }}/requirements/securedrop-app-code-requirements.txt"
-
-securedrop_pip_dev_requirements: "{{ securedrop_code }}/requirements/develop-requirements.txt"
-
-securedrop_sass_ver: 3.4.23
-securedrop_rvm_ver: 2.3.0
