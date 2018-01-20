@@ -6,6 +6,7 @@ import codecs
 import logging
 import os
 from os.path import dirname, join, realpath
+import pwd
 import shutil
 import signal
 import subprocess
@@ -15,6 +16,7 @@ import traceback
 import version
 
 import qrcode
+from sqlalchemy import text
 from sqlalchemy.orm.exc import NoResultFound
 
 os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
@@ -385,6 +387,17 @@ def translate_desktop(args):
                    sources=" ".join(args.source)))
 
 
+def init_db(args):
+    with journalist_app.create_app(config).app_context():
+        db.create_all()
+        db.session.execute(text('PRAGMA secure_delete = ON'))
+        db.session.execute(text('PRAGMA auto_vacuum = FULL'))
+        db.session.commit()
+
+    user = pwd.getpwnam(args.user)
+    os.chown('/var/lib/securedrop/db.sqlite', user.pw_uid, user.pw_gid)
+
+
 def get_args():
     parser = argparse.ArgumentParser(prog=__file__, description='Management '
                                      'and testing utility for SecureDrop.')
@@ -423,6 +436,12 @@ def get_args():
 
     set_translate_messages_parser(subps)
     set_translate_desktop_parser(subps)
+
+    init_db_subp = subps.add_parser('init-db', help='initialize the DB')
+    init_db_subp.add_argument('-u', '--user',
+                              help='Unix user for the DB',
+                              required=True)
+    init_db_subp.set_defaults(func=init_db)
 
     return parser
 

@@ -152,11 +152,9 @@
     - securedrop_config
 
 - name: Initialize sqlite database.
-  shell: >
-    su -s /bin/bash -c
-    "PYTHONPATH={{ securedrop_code }}
-    python -c 'import db; db.init_db()'"
-    {{ securedrop_user }}
+  shell: './manage.py init-db --user {{ securedrop_user }}'
+  args:
+    chdir: '{{ securedrop_code }}'
   when: not db.stat.exists
   tags:
     - database
