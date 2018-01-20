@@ -116,7 +116,7 @@ jobs:
 
       - run:
           name: Ensure environment torn down
-          command: molecule destroy -s aws
+          command: molecule --debug destroy -s aws
           when: on_fail
 
       - store_test_results:

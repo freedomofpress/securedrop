@@ -4,16 +4,16 @@
 #
 #    pip-compile --output-file securedrop/requirements/securedrop-app-code-requirements.txt securedrop/requirements/securedrop-app-code-requirements.in
 #
-babel==2.5.1              # via flask-babel
+babel==2.5.3              # via flask-babel
 click==6.7                # via flask, rq
 cssmin==0.2.0
 flask-assets==0.12
 flask-babel==0.11.2
 flask-wtf==0.14.2
-flask==0.12.2             # via flask-assets, flask-babel, flask-wtf
+flask==0.12.2
 gnupg==2.3.1
 itsdangerous==0.24        # via flask
-jinja2==2.10              # via flask, flask-babel
+jinja2==2.10
 jsmin==2.2.2
 markupsafe==1.0           # via jinja2
 psutil==5.4.3
@@ -25,7 +25,7 @@ redis==2.10.6
 rq==0.10.0
 scrypt==0.8.0
 six==1.11.0               # via qrcode
-sqlalchemy==1.2.0
+sqlalchemy==1.2.1
 webassets==0.12.1         # via flask-assets
-werkzeug==0.12.2          # via flask
+werkzeug==0.12.2
 wtforms==2.1              # via flask-wtf

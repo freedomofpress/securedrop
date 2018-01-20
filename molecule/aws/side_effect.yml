@@ -117,6 +117,6 @@
     # provisioning playbooks (rather than the CI bootstrapping playbooks).
     app_dir:
       staging: /var/www/securedrop
-    molecule_instance_yml: "{{ lookup('file', molecule_instance_config) | from_yaml }}"
     molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
+    molecule_instance_config_yml: "{{ lookup('file', molecule_instance_config) | from_yaml }}"
     molecule_scenario_directory: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
