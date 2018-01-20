@@ -746,7 +746,7 @@ class TestJournalistApp(TestCase):
                              data=form.data,
                              follow_redirects=True)
 
-            self.assertMessageFlashed("Image updated.", "notification")
+            self.assertMessageFlashed("Image updated.", "logo-success")
         finally:
             # Restore original image to logo location for subsequent tests
             with open(logo_image_location, 'w') as logo_file:
@@ -761,7 +761,7 @@ class TestJournalistApp(TestCase):
         resp = self.client.post(url_for('admin.manage_config'),
                                 data=form.data,
                                 follow_redirects=True)
-
+        self.assertMessageFlashed("Upload images only.", "logo-error")
         self.assertIn('Upload images only.', resp.data)
 
     def test_logo_upload_with_empty_input_field_fails(self):
@@ -774,6 +774,7 @@ class TestJournalistApp(TestCase):
                                 data=form.data,
                                 follow_redirects=True)
 
+        self.assertMessageFlashed("File required.", "logo-error")
         self.assertIn('File required.', resp.data)
 
     @patch('journalist.app.logger.error')
