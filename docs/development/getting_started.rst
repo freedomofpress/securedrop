@@ -83,6 +83,11 @@ Technical writers are invited to review `this documentation
 <https://docs.securedrop.org/>`__ and fix any mistake in accordance to
 the :doc:`documentation guidelines <documentation_guidelines>`.
 
+If this is your first time helping with SecureDrop documentation,
+consider working on `low-hanging fruit
+<https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3Adocs+label%3AP-easy>`__
+to become familiar with the process.
+
 Documentation tasks (bugs and improvements), ordered by priority:
 
 * `High <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3Adocs+label%3AP-high>`__
