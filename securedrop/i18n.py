@@ -87,7 +87,7 @@ def get_locale(config):
             sep = '_'
         try:
             accept_languages.append(str(core.Locale.parse(l, sep)))
-        except:
+        except Exception:
             pass
     if 'l' in request.args:
         if len(request.args['l']) == 0:

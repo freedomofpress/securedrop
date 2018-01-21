@@ -6,7 +6,7 @@ import binascii
 # Find the best implementation available on this platform
 try:
     from cStringIO import StringIO
-except:
+except ImportError:
     from StringIO import StringIO
 
 from sqlalchemy import create_engine, ForeignKey

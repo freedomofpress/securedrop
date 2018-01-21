@@ -144,7 +144,7 @@ class FunctionalTest(object):
             try:
                 requests.get(self.source_location)
                 requests.get(self.journalist_location)
-            except:
+            except Exception:
                 time.sleep(1)
             else:
                 break
