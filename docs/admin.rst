@@ -1,6 +1,8 @@
 Admin Guide
 ===========
 
+.. include:: ./includes/provide-feedback.txt
+
 You (the admin) should have your own username and passphrase, plus
 two-factor authentication through either the FreeOTP app
 on your smartphone or a YubiKey.
