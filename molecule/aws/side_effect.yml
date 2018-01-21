@@ -60,9 +60,9 @@
       args:
         chdir: ../../
       environment:
-        MON_IP: "{{ molecule_instance_yml | selectattr('instance','match','^mon') | map(attribute='priv_address')|first }}"
-        APP_IP: "{{ molecule_instance_yml | selectattr('instance','match','^app') | map(attribute='priv_address')|first }}"
-        CI_SSH_CONFIG: "{{ molecule_instance_yml[0].identity_file }}-config"
+        MON_IP: "{{ molecule_instance_config_yml | selectattr('instance','match','^mon') | map(attribute='priv_address')|first }}"
+        APP_IP: "{{ molecule_instance_config_yml | selectattr('instance','match','^app') | map(attribute='priv_address')|first }}"
+        CI_SSH_CONFIG: "{{ molecule_instance_config_yml[0].identity_file }}-config"
       register: testinfra_results
       delegate_to: localhost
       become: no
@@ -117,6 +117,6 @@
     # provisioning playbooks (rather than the CI bootstrapping playbooks).
     app_dir:
       staging: /var/www/securedrop
-    molecule_instance_yml: "{{ lookup('file', molecule_instance_config) | from_yaml }}"
     molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
+    molecule_instance_config_yml: "{{ lookup('file', molecule_instance_config) | from_yaml }}"
     molecule_scenario_directory: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"

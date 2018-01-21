@@ -1,4 +1,6 @@
+# yes, we need both boto and boto3
 boto
+boto3
 docker-py
 flake8
 html-linter
