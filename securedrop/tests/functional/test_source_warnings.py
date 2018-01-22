@@ -14,3 +14,12 @@ class TestSourceInterfaceBannerWarnings(
 
         assert ("We recommend using Tor Browser to access SecureDrop" in
                 warning_banner.text)
+
+        # User should be able to dismiss the warning
+        warning_dismiss_button = self.driver.find_element_by_id(
+            'use-tor-browser-close')
+        warning_dismiss_button.click()
+
+        def warning_banner_is_hidden():
+            assert warning_banner.is_displayed() is False
+        self.wait_for(warning_banner_is_hidden)
