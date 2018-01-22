@@ -478,9 +478,9 @@ by navigating to the ``~/Persistent/securedrop`` directory and running:
 
 .. code:: sh
 
-    ./securedrop-admin firewall-template
+    ./securedrop-admin firewalltemplate
 
-Open the Unsafe Browser, connect to your pfSense file and then Navigate to 
+Open the Unsafe Browser, connect to your pfSense file and then Navigate to
 **Diagnostics ▸ Backup & Restore**:
 
 |Backup & Restore|
