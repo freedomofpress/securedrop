@@ -95,7 +95,7 @@ def validate_user(username, password, token, error_message=None):
                     login_flashed_msg += gettext(
                         "Please wait for a new code from your two-factor token"
                         " or application before trying again.")
-            except:
+            except Exception:
                 pass
 
         flash(login_flashed_msg, "error")
