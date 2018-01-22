@@ -6,12 +6,6 @@ function is_likely_tor_browser() {
           window.navigator.mimeTypes.length === 0);
 }
 
-function tbb_version() {
-  var ua_match = window.navigator.userAgent.match(TBB_UA_REGEX);
-  var major_version = ua_match[1];
-  return Number(major_version);
-}
-
 // Warn about using JavaScript and not using Tor Browser
 $(function(){
   if (is_likely_tor_browser()) {
