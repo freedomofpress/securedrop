@@ -15,7 +15,7 @@ Steps are in `../../install_files/ansible-base/roles/app-test/tasks/install_tbb.
 
 This is yet to be in the Ansible.
 [Download](https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz) 0.17.0 from
-the [release page](https://github.com/mozilla/geckodriver/releases/tag/v0.17.0). Move the binary to `/usr/bin/env`.
+the [release page](https://github.com/mozilla/geckodriver/releases/tag/v0.17.0). Move the binary to `/usr/bin/`.
 
 
 In this branch, in the securedrop code directory, there is python script `test_utility_cmd.py` which will print you the password, and
