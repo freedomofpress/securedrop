@@ -16,6 +16,46 @@
     ossec_agent_already_registered: "{{ app_ip+' is available.' in hostvars[groups.securedrop_monitor_server.0].ossec_list_agents_result.stdout }}"
   # No "delegate_to", so that *both* hosts are aware of registration stauts via set_fact.
 
+- name: Find existing ossec remote IDs
+  find:
+    paths: /var/ossec/queue/rids
+    patterns: '^\d+$'
+    use_regex: "yes"
+  when:
+    - ossec_is_server
+  register: _existing_rids
+
+- name: Build list of existing remote IDs
+  set_fact:
+    build_rids: "{{ build_rids|default([]) + [item.path|basename] }}"
+  with_items: "{{ _existing_rids.files }}"
+  when:
+    - ossec_is_server
+
+- name: Stop ossec now for clean-up
+  service:
+    name: ossec
+    state: stopped
+  notify: restart ossec
+  when:
+    - not ossec_agent_already_registered
+
+- name: Purge existing ossec server existing agents
+  command: /var/ossec/bin/manage_agents -r {{ item }}
+  changed_when: false
+  with_items: "{{ build_rids|default([]) }}"
+  when:
+    - ossec_is_server
+    - not ossec_agent_already_registered
+
+- name: Erase existing client-side key
+  file:
+    path: /var/ossec/etc/client.keys
+    state: absent
+  when:
+    - ossec_is_client
+    - not ossec_agent_already_registered
+
 - name: Start authd.
   shell: /var/ossec/bin/ossec-authd -i {{ app_ip }} -p 1515 >/dev/null 2>&1 &
   async: 0
@@ -43,7 +83,6 @@
 
 - name: Register OSSEC agent.
   command: /var/ossec/bin/agent-auth -m {{ monitor_ip }} -p 1515 -A {{ app_hostname }}
-  notify: restart ossec
   when:
     - ossec_is_client
     - not ossec_agent_already_registered
