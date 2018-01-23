@@ -26,6 +26,7 @@ class TestJournalist(
         journalist_navigation_steps.JournalistNavigationStepsMixin):
 
     def test_journalist_verifies_deletion_of_one_submission_javascript(self):
+        # This deletion button is displayed on the individual source page
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
         self._source_continues_to_submit_page()
@@ -33,4 +34,38 @@ class TestJournalist(
         self._source_logs_out()
         self._journalist_logs_in()
         self._journalist_visits_col()
-        self._journalist_verifies_deletion_of_one_submission_javascript()
+        self._journalist_uses_delete_selected_button_javascript()
+
+    def test_journalist_uses_col_delete_collection_button_javascript(self):
+        # This delete button is displayed on the individual source page
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._journalist_visits_col()
+        self._journalist_uses_delete_collection_button_javascript()
+
+    def test_journalist_uses_index_delete_collections_button_javascript(self):
+        # This deletion button is displayed on the index page
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._journalist_uses_delete_collections_button_javascript()
+
+    def test_journalist_interface_ui_with_javascript(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._journalist_uses_js_filter_by_sources()
+        self._journalist_selects_all_sources_then_selects_none()
+        self._journalist_selects_the_first_source()
+        self._journalist_uses_js_buttons_to_download_unread()
+        self._journalist_delete_all_javascript()

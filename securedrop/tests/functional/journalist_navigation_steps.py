@@ -6,6 +6,7 @@ import gzip
 import os
 
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
 
 import tests.utils.db_helper as db_helper
 import crypto_util
@@ -78,17 +79,60 @@ class JournalistNavigationStepsMixin():
         self.driver.find_element_by_id('delete-selected').click()
         self._alert_wait()
 
-    def _journalist_verifies_deletion_of_one_submission_javascript(self):
+    def _journalist_clicks_delete_collections_javascript(self):
+        self.driver.find_element_by_id('delete-collections').click()
+        self._alert_wait()
+
+    def _journalist_clicks_delete_collection_javascript(self):
+        self.driver.find_element_by_id('delete-collection-button').click()
+        self._alert_wait()
+
+    def _journalist_uses_delete_selected_button_javascript(self):
         self._journalist_selects_first_doc()
         self._journalist_clicks_delete_selected_javascript()
         self._alert_dismiss()
+
         selected_count = len(self.driver.find_elements_by_name(
             'doc_names_selected'))
         assert selected_count > 0
+
         self._journalist_clicks_delete_selected_javascript()
         self._alert_accept()
         assert selected_count > len(self.driver.find_elements_by_name(
             'doc_names_selected'))
+
+    def _journalist_uses_delete_collection_button_javascript(self):
+        self._journalist_clicks_delete_collection_javascript()
+        self._alert_dismiss()
+
+        # After deletion the button will redirect us. Let's ensure we still
+        # see the delete collection button.
+        assert self.driver.find_element_by_id(
+            'delete-collection-button').is_displayed()
+
+        self._journalist_clicks_delete_collection_javascript()
+        self._alert_accept()
+
+        # Now we should be redirected to the index.
+        if not hasattr(self, 'accept-languages'):
+            assert "Sources" in self.driver.find_element_by_tag_name('h1').text
+
+    def _journalist_uses_delete_collections_button_javascript(self):
+        self.driver.find_element_by_id('select_all').click()
+
+        self._journalist_clicks_delete_collections_javascript()
+        self._alert_dismiss()
+
+        self.driver.find_element_by_id('select_all').click()
+        sources = self.driver.find_elements_by_class_name("code-name")
+        assert len(sources) > 0
+
+        self._journalist_clicks_delete_collections_javascript()
+        self._alert_accept()
+
+        # We should be redirected to the index without those boxes selected.
+        sources = self.driver.find_elements_by_class_name("code-name")
+        assert len(sources) == 0
 
     @screenshots
     def _admin_logs_in(self):
@@ -648,3 +692,38 @@ class JournalistNavigationStepsMixin():
         hotp_checkbox = self.driver.find_element_by_css_selector(
             'input[name="is_hotp"]')
         hotp_checkbox.click()
+
+    def _journalist_uses_js_filter_by_sources(self):
+        self.wait_for(lambda: self.driver.find_element_by_id("filter"))
+
+        filter_box = self.driver.find_element_by_id("filter")
+        filter_box.send_keys("thiswordisnotinthewordlist")
+
+        sources = self.driver.find_elements_by_class_name("code-name")
+        assert len(sources) > 0
+        for source in sources:
+            assert source.is_displayed() is False
+
+        filter_box.clear()
+        filter_box.send_keys(Keys.RETURN)
+
+        for source in sources:
+            assert source.is_displayed() is True
+
+    def _journalist_uses_js_buttons_to_download_unread(self):
+        self.driver.find_element_by_id('select_all').click()
+        checkboxes = self.driver.find_elements_by_name('doc_names_selected')
+        assert len(checkboxes) > 0
+        for checkbox in checkboxes:
+            assert checkbox.is_selected()
+
+        self.driver.find_element_by_id('select_none').click()
+        checkboxes = self.driver.find_elements_by_name('doc_names_selected')
+        for checkbox in checkboxes:
+            assert checkbox.is_selected() is False
+
+        self.driver.find_element_by_id('select_unread').click()
+        checkboxes = self.driver.find_elements_by_name('doc_names_selected')
+        for checkbox in checkboxes:
+            classes = checkbox.get_attribute('class')
+            assert 'unread-cb' in classes
