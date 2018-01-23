@@ -25,6 +25,11 @@
     - ossec_is_server
   register: _existing_rids
 
+- name: Overload agent already registered status to force reinstall
+  set_fact:
+    ossec_agent_already_registered: false
+  when: hostvars[groups.securedrop_monitor_server.0]._existing_rids.matched > 1
+
 - name: Build list of existing remote IDs
   set_fact:
     build_rids: "{{ build_rids|default([]) + [item.path|basename] }}"
