@@ -8,7 +8,6 @@ class SourceNavigationStepsMixin():
 
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
-
         if not hasattr(self, 'accept_languages'):
             assert ("SecureDrop | Protecting Journalists and Sources" ==
                     self.driver.title)
@@ -26,7 +25,7 @@ class SourceNavigationStepsMixin():
 
         submit_button_icon = self.driver.find_element_by_css_selector(
             'a#submit-documents-button > img.off-hover')
-        assert submit_button_icon.is_displayed()
+        self.wait_for(lambda: submit_button_icon.is_displayed())
 
         # The source hovers their cursor over the button, and the visual style
         # of the button changes to encourage them to click it.
@@ -37,6 +36,9 @@ class SourceNavigationStepsMixin():
         assert submit_button_icon.is_displayed() is False
         submit_button_hover_icon = self.driver.find_element_by_css_selector(
             'a#submit-documents-button > img.on-hover')
+        ActionChains(self.driver).move_to_element(
+                     submit_button_hover_icon).perform()
+        self.wait_for(lambda: submit_button_hover_icon.is_displayed())
         assert submit_button_hover_icon.is_displayed()
 
         # The source clicks the submit button.
@@ -53,7 +55,10 @@ class SourceNavigationStepsMixin():
     def _source_shows_codename(self):
         content = self.driver.find_element_by_id('codename-hint-content')
         assert not content.is_displayed()
-        self.driver.find_element_by_id('codename-hint-show').click()
+
+        self.safe_click_by_id('codename-hint-show')
+
+        self.wait_for(lambda: content.is_displayed())
         assert content.is_displayed()
         content_content = self.driver.find_element_by_css_selector(
                 '#codename-hint-content p')
@@ -62,7 +67,10 @@ class SourceNavigationStepsMixin():
     def _source_hides_codename(self):
         content = self.driver.find_element_by_id('codename-hint-content')
         assert content.is_displayed()
-        self.driver.find_element_by_id('codename-hint-hide').click()
+
+        self.safe_click_by_id('codename-hint-hide')
+
+        self.wait_for(lambda: not content.is_displayed())
         assert not content.is_displayed()
 
     def _source_sees_no_codename(self):
@@ -72,10 +80,8 @@ class SourceNavigationStepsMixin():
     def _source_chooses_to_login(self):
         self.driver.find_element_by_id('login-button').click()
 
-        logins = self.driver.find_elements_by_id(
-            'login-with-existing-codename')
-
-        assert len(logins) > 0
+        self.wait_for(lambda: self.driver.find_elements_by_id(
+            'login-with-existing-codename'))
 
     def _source_hits_cancel_at_login_page(self):
         self.driver.find_element_by_id('cancel').click()
@@ -91,8 +97,7 @@ class SourceNavigationStepsMixin():
             'login-with-existing-codename')
         codename_input.send_keys(self.source_name)
 
-        continue_button = self.driver.find_element_by_id('login')
-        continue_button.click()
+        self.safe_click_by_id('login')
 
         if not hasattr(self, 'accept_languages'):
             assert ("SecureDrop | Protecting Journalists and Sources" ==
@@ -133,9 +138,12 @@ class SourceNavigationStepsMixin():
 
         continue_button.click()
 
-        if not hasattr(self, 'accept_languages'):
-            headline = self.driver.find_element_by_class_name('headline')
-            assert 'Submit Files or Messages' == headline.text
+        def submit_page_loaded():
+            if not hasattr(self, 'accept_languages'):
+                headline = self.driver.find_element_by_class_name('headline')
+                assert 'Submit Files or Messages' == headline.text
+
+        self.wait_for(submit_page_loaded)
 
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
@@ -157,23 +165,35 @@ class SourceNavigationStepsMixin():
             assert toggled_submit_button_icon.is_displayed()
 
             submit_button.click()
-            self.wait_for_source_key(self.source_name)
 
-            if not hasattr(self, 'accept_languages'):
-                notification = self.driver.find_element_by_css_selector(
-                    '.success')
-                expected_notification = (
-                    'Thank you for sending this information to us')
-                assert expected_notification in notification.text
+            def file_submitted():
+                if not hasattr(self, 'accept_languages'):
+                    notification = self.driver.find_element_by_css_selector(
+                        '.success')
+                    expected_notification = (
+                        'Thank you for sending this information to us')
+                    assert expected_notification in notification.text
+
+            # Allow extra time for file uploads
+            self.wait_for(file_submitted, timeout=(self.sleep_time*3))
+
+            # allow time for reply key to be generated
+            time.sleep(5)
 
     def _source_submits_a_message(self):
         self._source_enters_text_in_message_field()
         self._source_clicks_submit_button_on_submission_page()
 
-        if not hasattr(self, 'accept_languages'):
-            notification = self.driver.find_element_by_css_selector(
-                '.success')
-            assert 'Thank' in notification.text
+        def message_submitted():
+            if not hasattr(self, 'accept_languages'):
+                notification = self.driver.find_element_by_css_selector(
+                    '.success')
+                assert 'Thank' in notification.text
+
+        self.wait_for(message_submitted)
+
+        # allow time for reply key to be generated
+        time.sleep(5)
 
     def _source_enters_text_in_message_field(self):
         text_box = self.driver.find_element_by_css_selector('[name=msg]')
@@ -182,7 +202,6 @@ class SourceNavigationStepsMixin():
     def _source_clicks_submit_button_on_submission_page(self):
         submit_button = self.driver.find_element_by_id('submit-doc-button')
         submit_button.click()
-        self.wait_for_source_key(self.source_name)
 
     def _source_deletes_a_journalist_reply(self):
         # Get the reply filename so we can use IDs to select the delete buttons
@@ -194,20 +213,34 @@ class SourceNavigationStepsMixin():
         delete_button = self.driver.find_element_by_id(delete_button_id)
         delete_button.click()
 
+        def confirm_displayed():
+            confirm_button_id = 'confirm-delete-reply-button-{}'.format(
+                reply_filename)
+            confirm_button = self.driver.find_element_by_id(confirm_button_id)
+            assert confirm_button.is_displayed()
+
+        self.wait_for(confirm_displayed)
+
         confirm_button_id = 'confirm-delete-reply-button-{}'.format(
             reply_filename)
         confirm_button = self.driver.find_element_by_id(confirm_button_id)
-        assert confirm_button.is_displayed()
         confirm_button.click()
 
-        if not hasattr(self, 'accept_languages'):
-            notification = self.driver.find_element_by_class_name(
-                'notification')
-            assert 'Reply deleted' in notification.text
+        def reply_deleted():
+            if not hasattr(self, 'accept_languages'):
+                notification = self.driver.find_element_by_class_name(
+                    'notification')
+                assert 'Reply deleted' in notification.text
+
+        self.wait_for(reply_deleted)
 
     def _source_logs_out(self):
-        self.driver.find_element_by_id('logout').click()
-        assert self.driver.find_element_by_css_selector('.important')
+        # New thing to delete XXX
+        logout = self.driver.find_element_by_id('logout')
+        logout.send_keys(" ")
+        logout.click()
+        self.wait_for(lambda:
+                      ("Submit for the first time" in self.driver.page_source))
 
     def _source_not_found(self):
         self.driver.get(self.source_location + "/unlikely")

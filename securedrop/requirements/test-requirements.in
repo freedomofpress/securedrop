@@ -7,6 +7,8 @@ py
 pytest
 pytest-cov
 pytest-mock
-requests
-selenium < 3
 hypothesis
+requests[socks]>2.21.0
+selenium
+tbselenium
+pyvirtualdisplay

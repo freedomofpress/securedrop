@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+#
+#
+# Ansible local fact producer for tor onion details of app server
+# to be chucked into /etc/ansible/facts.d/ with a .fact suffix
+
+import json
+import os
+
+TOR_SVC_PATH = "/var/lib/tor/services/"
+JOURNALIST_DIR = "journalist"
+SOURCE_DIR = "source"
+
+
+def extract_sd_onion_data(tor_path=TOR_SVC_PATH,
+                          journalist_dir=JOURNALIST_DIR,
+                          source_dir=SOURCE_DIR,
+                          protocol="http"):
+
+    for interface in [journalist_dir, source_dir]:
+        hostname_file = os.path.join(TOR_SVC_PATH, interface, 'hostname')
+        try:
+            with open(hostname_file) as f:
+                tor_config = f.readline().rstrip().split()
+
+            onion_addr = "{p}://{a}".format(p=protocol, a=tor_config[0])
+            auth_token = tor_config[1]
+
+        # This must be a source interface because we dont see hidservauth info
+        except IndexError:
+            source_int = onion_addr
+        # One of the files doesn't exist :| Maybe tor setup hasnt run yet.
+        except IOError:
+            return dict()
+        else:
+            journalist_int = onion_addr
+
+    return dict(journalist_location=journalist_int,
+                source_location=source_int,
+                hidserv_token=auth_token)
+
+
+if __name__ == '__main__':
+    print(json.dumps(extract_sd_onion_data()))

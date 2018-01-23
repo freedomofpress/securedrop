@@ -57,3 +57,14 @@
         content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
         dest: "{{ molecule_instance_config }}"
       when: server.changed | bool
+
+    - name: Ensure roles dir in-place
+      file:
+        path: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/roles"
+        state: directory
+
+    - name: Over-ride stable apt-test role logic with one from current branch
+      file:
+        src: "{{ lookup('pipe', 'git rev-parse --show-toplevel') }}/install_files/ansible-base/roles/app-test"
+        dest: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/roles/app-test"
+        state: link

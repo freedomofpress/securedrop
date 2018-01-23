@@ -5,9 +5,8 @@ set -euo pipefail
 
 source "${BASH_SOURCE%/*}/dev-deps"
 
-run_xvfb
-run_redis &
 setup_vncauth
+run_redis &
 run_x11vnc &
 urandom
 run_sass --force --update
@@ -26,6 +25,7 @@ mkdir -p "/tmp/test-results/logs"
 
 : "${PAGE_LAYOUT_LOCALES:=en_US,ar,fr_FR}"
 export PAGE_LAYOUT_LOCALES
+export TOR_FORCE_NET_CONFIG=0
 
 py.test \
   --page-layout \

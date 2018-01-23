@@ -26,7 +26,7 @@ install-mypy: ## pip install mypy in a dedicated python3 virtualenv
 	if [[ ! -d .python3/.venv ]] ; then \
 	  virtualenv --python=python3 .python3/.venv && \
 	  .python3/.venv/bin/pip3 install mypy ; \
-        fi
+		fi
 
 .PHONY: typelint
 typelint: install-mypy ## Runs type linting

@@ -5,3 +5,9 @@
     - apache
 
 - include: modern_gettext.yml
+  tags:
+    - modern_gettext
+
+- import_tasks: extract_apptor_test_config.yml
+  tags:
+    - functional_test
