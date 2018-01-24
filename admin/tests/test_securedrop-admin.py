@@ -64,6 +64,13 @@ class TestSiteConfig(object):
                                   app_path=dirname(__file__))
         assert securedrop_admin.SiteConfig(args).exists()
 
+    def test_validate_not_empty(self):
+        validator = securedrop_admin.SiteConfig.ValidateNotEmpty()
+
+        assert validator.validate(Document('something'))
+        with pytest.raises(ValidationError):
+            validator.validate(Document(''))
+
     def test_validate_ossec_username(self):
         validator = securedrop_admin.SiteConfig.ValidateOSSECUsername()
 

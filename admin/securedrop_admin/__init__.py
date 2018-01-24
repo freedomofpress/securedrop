@@ -40,6 +40,13 @@ sdlog = logging.getLogger(__name__)
 
 class SiteConfig(object):
 
+    class ValidateNotEmpty(Validator):
+        def validate(self, document):
+            if document.text != '':
+                return True
+            raise ValidationError(
+                message="Must not be an empty string")
+
     class ValidateUser(Validator):
         def validate(self, document):
             text = document.text
