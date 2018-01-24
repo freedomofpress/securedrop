@@ -543,8 +543,9 @@ def main(argv):
     else:
         try:
             args.func(args)
-        except Exception:
-            sys.exit(1)
+        except Exception as e:
+            raise SystemExit(
+                'ERROR (run with -v for more): {msg}'.format(msg=e))
         else:
             sys.exit(0)
 
