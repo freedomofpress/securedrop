@@ -1,6 +1,7 @@
 ---
 - name: Back up SecureDrop Application Server submissions.
   hosts: securedrop_application_server
+  max_fail_percentage: 0
   roles:
     - role: backup
       tags: backup
