@@ -1,9 +1,9 @@
 ---
-- name: Install postfix.
+- name: Install mailing utilities.
   apt:
     pkg: "{{ item }}"
-    state: latest
-  with_items: "{{ ossec_postfix_dependencies }}"
+    state: present
+  with_items: "{{ postfix_dependencies }}"
   tags:
     - apt
     - postfix
@@ -18,10 +18,10 @@
 
 - name: Create mapping for outbound address.
   copy:
-    content: "ossec@{{ postfix_hostname }} {{ ossec_from_address }}"
+    content: "ossec@{{ postfix_hostname }} {{ postfix_from_address }}"
     dest: /etc/postfix/generic
   notify: update generic_maps
-  when: ossec_from_address != ""
+  when: postfix_from_address != ""
   tags:
     - postfix
 
@@ -55,7 +55,7 @@
 - name: Configure Postfix service.
   service:
     name: postfix
-    state: "{{ 'started' if ossec_server_enable_postfix else 'stopped' }}"
-    enabled: "{{ ossec_server_enable_postfix }}"
+    state: "{{ 'started' if postfix_enable_service else 'stopped' }}"
+    enabled: "{{ postfix_enable_service }}"
 
 # TODO - name: configure postfix proxy

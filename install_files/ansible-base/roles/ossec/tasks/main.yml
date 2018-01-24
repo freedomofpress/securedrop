@@ -1,0 +1,8 @@
+---
+- include: configure_client.yml
+  when: ossec_is_client
+
+- include: configure_server.yml
+  when: ossec_is_server
+
+- include: register.yml
