@@ -253,6 +253,25 @@ class JournalistNavigationStepsMixin():
                          self.new_user['username']) in
                     [el.text for el in flashed_msgs])
 
+    def _admin_deletes_user(self):
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(
+            '.delete-user'), timeout=60)
+
+        # Get the delete user buttons
+        delete_buttons = self.driver.find_elements_by_css_selector(
+            '.delete-user')
+
+        # Try to delete a user
+        delete_buttons[0].click()
+
+        # Wait for JavaScript alert to pop up and accept it.
+        self._alert_wait()
+        self._alert_accept()
+
+        if not hasattr(self, 'accept_languages'):
+            flashed_msg = self.driver.find_element_by_css_selector('.flash')
+            assert "Deleted user" in flashed_msg.text
+
     def _admin_can_send_test_alert(self):
         alert_button = self.driver.find_element_by_id('test-ossec-alert')
         alert_button.click()

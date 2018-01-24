@@ -15,6 +15,12 @@ class TestAdminInterface(
         self._new_user_can_log_in()
         self._admin_can_edit_new_user()
 
+    def test_admin_deletes_user(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_adds_a_user()
+        self._admin_deletes_user()
+
     def test_admin_updates_image(self):
         self._admin_logs_in()
         self._admin_visits_admin_interface()
