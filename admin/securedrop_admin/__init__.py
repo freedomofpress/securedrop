@@ -272,7 +272,7 @@ class SiteConfig(object):
              u'SASL password for sending OSSEC alerts',
              SiteConfig.ValidateOSSECPassword(),
              None],
-            ['securedrop_supported_locales', '', types.ListType,
+            ['securedrop_supported_locales', [], types.ListType,
              u'Space separated list of additional locales to support '
              '(' + translations + ')',
              SiteConfig.ValidateLocales(self.args.app_path),
