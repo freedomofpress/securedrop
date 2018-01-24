@@ -40,9 +40,11 @@ def find_ansible_playbooks():
 def test_max_fail_percentage(host, playbook):
     """
     All SecureDrop playbooks should set `max_fail_percentage` to "0"
-    on each and every play. Doing so ensures that if an error is encountered
-    on one host, Ansible immediately exits, rather than continuing to configure
-    the other, as-yet-unfailed host.
+    on each and every play. Doing so ensures that an error on a single
+    host constitutes a play failure.
+
+    In conjunction with the `any_errors_fatal` option, tested separately,
+    this will achieve a "fail fast" behavior from Ansible.
 
     There's no ansible.cfg option to set for max_fail_percentage, which would
     allow for a single DRY update that would apply automatically to all
@@ -59,3 +61,20 @@ def test_max_fail_percentage(host, playbook):
         for play in playbook_yaml:
             assert 'max_fail_percentage' in play
             assert play['max_fail_percentage'] == 0
+
+
+@pytest.mark.parametrize('playbook', find_ansible_playbooks())
+def test_max_fail_percentage(host, playbook):
+    """
+    All SecureDrop playbooks should set `any_errors_fatal` to "yes"
+    on each and every play. In conjunction with `max_fail_percentage` set
+    to "0", doing so ensures that any errors will cause an immediate failure
+    on the playbook.
+    """
+    with open(playbook, 'r') as f:
+        playbook_yaml = yaml.safe_load(f)
+        # Descend into playbook list structure to validate play attributes.
+        for play in playbook_yaml:
+            assert 'any_errors_fatal' in play
+            # Ansible coerces booleans, so bare assert is sufficient
+            assert play['any_errors_fatal']
