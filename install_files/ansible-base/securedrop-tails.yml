@@ -4,6 +4,7 @@
 # Workstations. Should be run after the servers have been installed.
 - name: Configure Tails workstation.
   hosts: localhost
+  max_fail_percentage: 0
   connection: local
   gather_facts: yes
   roles:

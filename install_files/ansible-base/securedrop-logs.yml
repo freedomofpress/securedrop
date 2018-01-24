@@ -2,6 +2,7 @@
 - name: Gather logs for forensics from SecureDrop application server.
   hosts: securedrop
   become: yes
+  max_fail_percentage: 0
   vars:
     log_paths_reference:
       app:

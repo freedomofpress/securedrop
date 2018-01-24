@@ -2,12 +2,14 @@
 ---
 - name: Ensure validation is run before prod install
   hosts: localhost
+  max_fail_percentage: 0
   connection: local
   roles:
     - { role: validate, tags: validate }
 
 - name: Add FPF apt repository and install base packages.
   hosts: securedrop
+  max_fail_percentage: 0
   roles:
     - { role: install-fpf-repo, tags: fpf }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
@@ -17,12 +19,14 @@
 
 - name: Configure SecureDrop Monitor Server.
   hosts: securedrop_monitor_server
+  max_fail_percentage: 0
   roles:
     - { role: ossec-server, tags: [ ossec, ossec_server ] }
   become: yes
 
 - name: Configure SecureDrop Application Server.
   hosts: securedrop_application_server
+  max_fail_percentage: 0
   roles:
     - { role: ossec-agent, tags: [ ossec, ossec_agent ] }
     - { role: app, tags: app }
@@ -36,12 +40,14 @@
   # connection. After that point the admin will to proxy traffic over tor.
 - name: Lock down firewall configuration for Application and Monitor Servers.
   hosts: securedrop
+  max_fail_percentage: 0
   roles:
     - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
   become: yes
 
 - name: Reboot Application and Monitor Servers.
   hosts: securedrop
+  max_fail_percentage: 0
   vars:
     # Override the default behavior of waiting for the servers to come back.
     # Won't work on initial installs because the connection addresses change
