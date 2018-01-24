@@ -478,6 +478,10 @@ class JournalistNavigationStepsMixin():
                          'mocked')
         self.wait_for(found_sources)
 
+        # Log back out and log back admin in for subsequent tests
+        self._logout()
+        self._login_user(self.admin.username, self.admin_pw, 'mocked')
+
     @screenshots
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
@@ -631,6 +635,10 @@ class JournalistNavigationStepsMixin():
         assert ('/admin/reset-2fa-hotp' in
                 hotp_reset_button.get_attribute('action'))
         hotp_reset_button.click()
+
+    def _admin_accepts_2fa_js_alert(self):
+        self._alert_wait()
+        self._alert_accept()
 
     def _admin_visits_reset_2fa_totp(self):
         totp_reset_button = self.driver.find_elements_by_css_selector(
