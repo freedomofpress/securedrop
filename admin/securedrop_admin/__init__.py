@@ -307,6 +307,8 @@ class SiteConfig(object):
             default = str(default)
         if isinstance(default, types.ListType):
             default = " ".join(default)
+        if type(default) is not str:
+            default = str(default)
         kwargs = {}
         if validator:
             kwargs['validator'] = validator

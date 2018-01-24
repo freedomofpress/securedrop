@@ -322,12 +322,26 @@ class TestSiteConfig(object):
                                   ansible_path='tests/files',
                                   app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
-        value = 'VALUE'
-        with mock.patch('prompt_toolkit.prompt', return_value=value):
+
+        def auto_prompt(prompt, default, **kwargs):
+            return default
+
+        with mock.patch('prompt_toolkit.prompt', side_effect=auto_prompt):
+            value = 'VALUE'
             assert value == site_config.validated_input(
                 '', value, lambda: True, None)
             assert value.lower() == site_config.validated_input(
                 '', value, lambda: True, string.lower)
+            assert 'yes' == site_config.validated_input(
+                '', True, lambda: True, None)
+            assert 'no' == site_config.validated_input(
+                '', False, lambda: True, None)
+            assert '1234' == site_config.validated_input(
+                '', 1234, lambda: True, None)
+            assert "a b" == site_config.validated_input(
+                '', ['a', 'b'], lambda: True, None)
+            assert "{}" == site_config.validated_input(
+                '', {}, lambda: True, None)
 
     def test_load(self, caplog):
         args = argparse.Namespace(site_config='tests/files/site-specific',
