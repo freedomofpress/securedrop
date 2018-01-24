@@ -38,6 +38,10 @@ import yaml
 sdlog = logging.getLogger(__name__)
 
 
+class FingerprintException(Exception):
+    pass
+
+
 class SiteConfig(object):
 
     class ValidateNotEmpty(Validator):
@@ -350,10 +354,10 @@ class SiteConfig(object):
                     stderr=subprocess.STDOUT))
             except subprocess.CalledProcessError as e:
                 sdlog.debug(e.output)
-                sdlog.error("fingerprint {} ".format(fingerprint) +
-                            "does not match " +
-                            "the public key {}".format(public_key))
-                raise
+                raise FingerprintException(
+                    "fingerprint {} ".format(fingerprint) +
+                    "does not match " +
+                    "the public key {}".format(public_key))
         return True
 
     def exists(self):

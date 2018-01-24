@@ -283,9 +283,9 @@ class TestSiteConfig(object):
         }
         assert site_config.validate_gpg_keys()
         site_config.config['ossec_gpg_fpr'] = 'FAIL'
-        with pytest.raises(subprocess.CalledProcessError):
+        with pytest.raises(securedrop_admin.FingerprintException) as e:
             site_config.validate_gpg_keys()
-        assert 'FAIL does not match' in caplog.text
+        assert 'FAIL does not match' in e.value.message
 
     @mock.patch('securedrop_admin.SiteConfig.validated_input',
                 side_effect=lambda p, d, v, t: d)
