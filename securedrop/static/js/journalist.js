@@ -115,7 +115,8 @@ $(function () {
   });
 
   // Confirm before resetting two-factor authentication on edit user page
-  $('form#reset-two-factor').submit(function(event) {
+  $('.reset-two-factor').submit(function(event) {
+      var username = $(this).attr('data-username');
       return confirm(get_string("reset-user-mfa-confirm-string").supplant({ username: username }));
   });
 

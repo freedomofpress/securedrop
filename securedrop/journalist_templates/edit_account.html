@@ -73,7 +73,12 @@
 {% endif %}
 
 {% macro twofa_reset(user, reset_url, type, button_text) %}
-<form method="post" action="{{ reset_url }}" id="reset-two-factor-{{ type }}">
+{% if user %}
+  {% set username = user.username %}
+{% else %}
+  {% set username = g.user.username %}
+{% endif %}
+<form method="post" action="{{ reset_url }}" id="reset-two-factor-{{ type }}" class="reset-two-factor" data-username="{{ username }}">
   {% if user %}
   <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
