@@ -309,6 +309,15 @@ class TestSiteConfig(object):
             site_config.load_and_update_config()
             assert site_config.config is not None
 
+        args = argparse.Namespace(
+            site_config='tests/files/site-specific-missing-entries',
+            ansible_path='tests/files',
+            app_path=dirname(__file__))
+        site_config = securedrop_admin.SiteConfig(args)
+        with mock.patch('securedrop_admin.SiteConfig.update_config'):
+            site_config.load_and_update_config()
+            assert site_config.config is not None
+
         args = argparse.Namespace(site_config='UNKNOWN',
                                   ansible_path='tests/files',
                                   app_path=dirname(__file__))
