@@ -14,7 +14,7 @@ options:
   ossec_version:
     description:
       - version number of release to download
-    default: "2.8.2"
+    default: "2.9.3"
     required: no
 notes:
   - The OSSEC version to download is hardcoded to avoid surprises.
@@ -23,7 +23,7 @@ notes:
 '''
 EXAMPLES = '''
 - ossec_urls:
-    ossec_version: "2.8.2"
+    ossec_version: "2.9.3"
 '''
 
 from StringIO import StringIO
@@ -43,17 +43,13 @@ class OSSECURLs():
     def __init__(self, ossec_version):
         self.ossec_version = ossec_version
 
-        checksums = self.parse_checksums()
-
         self.ansible_facts = dict(
             ossec_version=self.ossec_version,
             ossec_tarball_filename=self.ossec_tarball_filename,
             ossec_tarball_url=self.ossec_tarball_url,
-            ossec_checksum_filename=self.ossec_checksum_filename,
-            ossec_checksum_url=self.ossec_checksum_url,
+            ossec_signature_filename=self.ossec_signature_filename,
+            ossec_signature_url=self.ossec_signature_url,
             )
-
-        self.ansible_facts.update(checksums)
 
     @property
     def ossec_tarball_filename(self):
@@ -63,42 +59,23 @@ class OSSECURLs():
     @property
     def ossec_tarball_url(self):
         return "https://github.com/ossec/ossec-hids/archive/{}.tar.gz".format(
-                self.ossec_version)
+                self.ossec_version, self.ossec_tarball_filename)
 
 
     @property
-    def ossec_checksum_url(self):
+    def ossec_signature_url(self):
         return "https://github.com/ossec/ossec-hids/releases/download/{}/{}".format(
-                self.ossec_version, self.ossec_checksum_filename)
+                self.ossec_version, self.ossec_signature_filename)
 
 
     @property
-    def ossec_checksum_filename(self):
-        return "{}-checksum.txt".format(self.ossec_tarball_filename)
-
-
-    def parse_checksums(self):
-        r = requests.get(self.ossec_checksum_url)
-        checksum_regex = re.compile(r'''
-                                    ^MD5\(
-                                    '''
-                                    +re.escape(self.ossec_tarball_filename)+
-                                    r'''\)=\s+(?P<ossec_md5_checksum>[0-9a-f]{32})\s+
-                                    SHA1\(
-                                    '''
-                                    +re.escape(self.ossec_tarball_filename)+
-                                    r'''\)=\s+(?P<ossec_sha1_checksum>[0-9a-f]{40})$
-                                    ''', re.VERBOSE | re.MULTILINE
-                                    )
-        checksum_list = r.content.rstrip()
-        results = re.match(checksum_regex, checksum_list).groupdict()
-        return results
-
+    def ossec_signature_filename(self):
+        return "ossec-hids-{}.tar.gz.asc".format(self.ossec_version)
 
 def main():
     module = AnsibleModule(
         argument_spec=dict(
-            ossec_version=dict(default="2.8.2" ),
+            ossec_version=dict(default="2.9.3" ),
         ),
         supports_check_mode=False
     )
