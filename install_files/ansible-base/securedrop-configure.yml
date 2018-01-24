@@ -4,6 +4,7 @@
   connection: local
   gather_facts: no
   max_fail_percentage: 0
+  any_errors_fatal: yes
   tasks:
     - debug:
         msg: >-
@@ -18,6 +19,7 @@
   connection: local
   gather_facts: no
   max_fail_percentage: 0
+  any_errors_fatal: yes
   vars_prompt:
     - name: ssh_users
       prompt: Username for SSH access to the servers
@@ -180,6 +182,7 @@
   connection: local
   gather_facts: yes
   max_fail_percentage: 0
+  any_errors_fatal: yes
   pre_tasks:
     # Use a first-found loop to avoid erroring out if the vars file doesn't
     # exist when the playbook is invoked, which is true on first run.
