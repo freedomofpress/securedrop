@@ -7,7 +7,6 @@ from jinja2 import Template
 securedrop_test_vars = pytest.securedrop_test_vars
 
 
-@pytest.mark.xfail()
 def test_app_iptables_rules(SystemInfo, Command, Sudo):
 
     # Build a dict of variables to pass to jinja for iptables comparison
