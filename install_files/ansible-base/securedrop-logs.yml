@@ -3,6 +3,7 @@
   hosts: securedrop
   become: yes
   max_fail_percentage: 0
+  any_errors_fatal: yes
   vars:
     log_paths_reference:
       app:
