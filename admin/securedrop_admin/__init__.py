@@ -287,18 +287,26 @@ class SiteConfig(object):
         return self.update_config()
 
     def update_config(self):
-        config = {}
-        for (var, default, prompt, validator, transform) in self.desc:
-            if self.config:
-                default = self.config.get(var)
-            prompt += ': '
-            sdlog.debug(prompt + str(default))
-            config[var] = self.validated_input(
-                prompt, default, validator, transform)
-        self.config = config
+        self.config = self.user_prompt_config()
         self.save()
         self.validate_gpg_keys()
         return True
+
+    def user_prompt_config(self):
+        config = {}
+        self_config = self.config or {}
+        for desc in self.desc:
+            (var, default, type, prompt, validator, transform) = desc
+            config[var] = self.user_prompt_config_one(desc,
+                                                      self_config.get(var))
+        return config
+
+    def user_prompt_config_one(self, desc, from_config):
+        (var, default, type, prompt, validator, transform) = desc
+        if from_config is not None:
+            default = from_config
+        prompt += ': '
+        return self.validated_input(prompt, default, validator, transform)
 
     def validated_input(self, prompt, default, validator, transform):
         if type(default) is bool:

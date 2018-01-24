@@ -326,6 +326,88 @@ class TestSiteConfig(object):
             site_config.load_and_update_config()
             assert site_config.config is None
 
+    def get_desc(self, site_config, var):
+        for desc in site_config.desc:
+            if desc[0] == var:
+                return desc
+
+    def verify_desc_consistency(self, site_config, desc):
+        (var, default, etype, prompt, validator, transform) = desc
+        # verify the default passes validation
+        assert site_config.user_prompt_config_one(desc, None) == default
+        assert type(default) == etype
+        with pytest.raises(ValidationError):
+            site_config.user_prompt_config_one(desc, '')
+
+    verify_prompt_ssh_users = verify_desc_consistency
+    verify_prompt_app_ip = verify_desc_consistency
+    verify_prompt_monitor_ip = verify_desc_consistency
+    verify_prompt_app_hostname = verify_desc_consistency
+    verify_prompt_monitor_hostname = verify_desc_consistency
+    verify_prompt_dns_server = verify_desc_consistency
+
+    def verify_prompt_securedrop_app_https_on_source_interface(
+            self, site_config, desc):
+        self.verify_desc_consistency(site_config, desc)
+        (var, default, etype, prompt, validator, transform) = desc
+        assert site_config.user_prompt_config_one(desc, True) is True
+        assert site_config.user_prompt_config_one(desc, False) is False
+        assert site_config.user_prompt_config_one(desc, 'YES') is True
+        assert site_config.user_prompt_config_one(desc, 'NO') is False
+
+    verify_prompt_securedrop_app_gpg_public_key = verify_desc_consistency
+
+    def verify_prompt_not_empty(self, site_config, desc):
+        with pytest.raises(ValidationError):
+            site_config.user_prompt_config_one(desc, '')
+
+    def verify_prompt_fingerprint(self, site_config, desc):
+        self.verify_prompt_not_empty(site_config, desc)
+        fpr = "0123456 789012 34567890123456789ABCDEFABCD"
+        clean_fpr = site_config.sanitize_fingerprint(fpr)
+        assert site_config.user_prompt_config_one(desc, fpr) == clean_fpr
+
+    verify_prompt_securedrop_app_gpg_fingerprint = verify_prompt_fingerprint
+    verify_prompt_ossec_alert_gpg_public_key = verify_desc_consistency
+    verify_prompt_ossec_gpg_fpr = verify_prompt_fingerprint
+    verify_prompt_ossec_alert_email = verify_prompt_not_empty
+    verify_prompt_smtp_relay = verify_prompt_not_empty
+    verify_prompt_smtp_relay_port = verify_desc_consistency
+    verify_prompt_sasl_domain = verify_desc_consistency
+    verify_prompt_sasl_username = verify_prompt_not_empty
+    verify_prompt_sasl_password = verify_prompt_not_empty
+
+    def verify_prompt_securedrop_supported_locales(self, site_config, desc):
+        (var, default, etype, prompt, validator, transform) = desc
+        # verify the default passes validation
+        assert site_config.user_prompt_config_one(desc, None) == default
+        assert type(default) == etype
+        assert site_config.user_prompt_config_one(
+            desc, 'en en_US') == ['en', 'en_US']
+        assert site_config.user_prompt_config_one(
+            desc, ['en', 'en_US']) == ['en', 'en_US']
+        assert site_config.user_prompt_config_one(desc, '') == []
+        with pytest.raises(ValidationError):
+            site_config.user_prompt_config_one(desc, 'wrong')
+
+    def test_user_prompt_config_one(self):
+        args = argparse.Namespace(site_config='UNKNOWN',
+                                  ansible_path='tests/files',
+                                  app_path=dirname(__file__))
+        site_config = securedrop_admin.SiteConfig(args)
+
+        def auto_prompt(prompt, default, **kwargs):
+            if 'validator' in kwargs:
+                assert kwargs['validator'].validate(Document(default))
+            return default
+
+        with mock.patch('prompt_toolkit.prompt', side_effect=auto_prompt):
+            for desc in site_config.desc:
+                (var, default, etype, prompt, validator, transform) = desc
+                method = 'verify_prompt_' + var
+                print("checking " + method)
+                getattr(self, method)(site_config, desc)
+
     def test_validated_input(self):
         args = argparse.Namespace(site_config='UNKNOWN',
                                   ansible_path='tests/files',
