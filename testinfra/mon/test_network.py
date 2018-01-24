@@ -7,7 +7,6 @@ from jinja2 import Template
 securedrop_test_vars = pytest.securedrop_test_vars
 
 
-@pytest.mark.xfail()
 def test_mon_iptables_rules(SystemInfo, Command, Sudo):
 
     # Build a dict of variables to pass to jinja for iptables comparison
@@ -49,7 +48,6 @@ def test_mon_iptables_rules(SystemInfo, Command, Sudo):
     dict(host="0.0.0.0", proto="udp", port=1514, listening=True),
     dict(host="0.0.0.0", proto="tcp", port=1515, listening=False),
 ])
-@pytest.mark.xfail
 def test_listening_ports(Socket, Sudo, ossec_service):
     """
     Ensure the OSSEC-related services are listening on the
