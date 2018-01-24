@@ -543,6 +543,8 @@ def main(argv):
     else:
         try:
             args.func(args)
+        except KeyboardInterrupt:
+            sys.exit(0)
         except Exception as e:
             raise SystemExit(
                 'ERROR (run with -v for more): {msg}'.format(msg=e))
