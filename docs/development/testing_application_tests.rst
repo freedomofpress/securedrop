@@ -7,7 +7,6 @@ The application test suite uses:
 
   * Pytest_
   * Selenium_
-  * Coveralls_
 
 The application tests consist of unit tests for the Python application code
 and functional tests that verify the functionality of the application code
@@ -24,7 +23,6 @@ recent Tor Browser.
 
 .. _Pytest: https://docs.pytest.org/en/latest/
 .. _Selenium: http://docs.seleniumhq.org/docs/
-.. _Coveralls: https://github.com/coveralls-clients/coveralls-python
 
 Installation
 ------------

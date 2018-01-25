@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from flask import (Blueprint, render_template, request, url_for, redirect, g,
                    current_app, flash, abort)
 from flask_babel import gettext
@@ -11,7 +13,7 @@ from db import (db_session, Journalist, InvalidUsernameException,
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (make_password, commit_account_changes,
                                   set_diceware_password)
-from journalist_app.forms import NewUserForm
+from journalist_app.forms import LogoForm, NewUserForm
 
 
 def make_blueprint(config):
@@ -22,6 +24,20 @@ def make_blueprint(config):
     def index():
         users = Journalist.query.all()
         return render_template("admin.html", users=users)
+
+    @view.route('/config', methods=('GET', 'POST'))
+    @admin_required
+    def manage_config():
+        form = LogoForm()
+        if form.validate_on_submit():
+            f = form.logo.data
+            static_filepath = os.path.join(config.SECUREDROP_ROOT,
+                                           "static/i/logo.png")
+            f.save(static_filepath)
+            flash(gettext("Image updated."), "notification")
+            return redirect(url_for("admin.manage_config"))
+        else:
+            return render_template("config.html", form=form)
 
     @view.route('/add', methods=('GET', 'POST'))
     @admin_required
@@ -70,7 +86,8 @@ def make_blueprint(config):
                 return redirect(url_for('admin.new_user_two_factor',
                                         uid=new_user.id))
 
-        return render_template("admin_add_user.html", password=make_password(),
+        return render_template("admin_add_user.html",
+                               password=make_password(config),
                                form=form)
 
     @view.route('/2fa', methods=('GET', 'POST'))
@@ -171,7 +188,7 @@ def make_blueprint(config):
 
             commit_account_changes(user)
 
-        password = make_password()
+        password = make_password(config)
         return render_template("edit_account.html", user=user,
                                password=password)
 
@@ -191,7 +208,13 @@ def make_blueprint(config):
     @admin_required
     def delete_user(user_id):
         user = Journalist.query.get(user_id)
-        if user:
+        if user_id == g.user.id:
+            # Do not flash because the interface already has safe guards.
+            # It can only happen by manually crafting a POST request
+            current_app.logger.error(
+                "Admin {} tried to delete itself".format(g.user.username))
+            abort(403)
+        elif user:
             db_session.delete(user)
             db_session.commit()
             flash(gettext("Deleted user '{user}'").format(
@@ -215,5 +238,12 @@ def make_blueprint(config):
         password = request.form.get('password')
         set_diceware_password(user, password)
         return redirect(url_for('admin.edit_user', user_id=user_id))
+
+    @view.route('/ossec-test')
+    @admin_required
+    def ossec_test():
+        current_app.logger.error('This is a test OSSEC alert')
+        flash(gettext('Test alert sent. Check your email.'), 'notification')
+        return redirect(url_for('admin.manage_config'))
 
     return view

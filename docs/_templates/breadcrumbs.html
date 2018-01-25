@@ -12,16 +12,8 @@
 {% set check_meta = False %}
 {% endif %}
 
-{% if check_meta and 'github_url' in meta %}
-{% set display_github = True %}
-{% endif %}
-
 {% if check_meta and 'bitbucket_url' in meta %}
 {% set display_bitbucket = True %}
-{% endif %}
-
-{% if check_meta and 'gitlab_url' in meta %}
-{% set display_gitlab = True %}
 {% endif %}
 
 <div role="navigation" aria-label="breadcrumbs navigation">

@@ -352,31 +352,3 @@ the below commands. You should not be prompted for a passphrase
     app
     $ ssh <username>@<Monitor IP address> hostname
     mon
-
-Minor Admin Tasks
------------------
-
-DNS
-~~~
-
-The network firewall rules are set up to disable DNS traffic to the gateway,
-so if your system has not set nameservers, DNS queries will fail. You can
-test this by running ``host freedom.press``. If the host isn't found,
-or there is some other sort of failure, check the pfSense logs. You may see
-UDP traffic to the gateway on port 53 being blocked.
-
-If this is the case, you need add the following lines to ``/etc/resolvconf/resolv.conf.d/tail``
-
-.. code::
-
-    nameserver 8.8.8.8
-    nameserver 8.8.4.4
-
-Then run ``sudo dpkg-reconfigure resolvconf``. This will update ``/etc/resolv.conf``
-to include the new name servers. Verify that ``host freedom.press`` succeeds.
-
-System Date
-~~~~~~~~~~~
-
-The ``ansible`` playbooks you will run later depend on the system clock
-being set accurately, so run ``sudo ntpdate ntp.ubuntu.com`` on both servers.

@@ -2,19 +2,19 @@
 set -euo pipefail
 export DISPLAY=:1
 Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
-haveged &
 redis-server &
-
-echo -n 4096 > /proc/sys/kernel/random/write_wakeup_threshold
 
 rm /dev/random
 ln -s /dev/urandom /dev/random
 
+x11vnc -display :1 -autoport 5901 -shared &
+
 touch tests/log/firefox.log
-function cleanup {
+function finish {
   cp tests/log/firefox.log /tmp/test-results/logs/
+  bash <(curl -s https://codecov.io/bash)
 }
-trap cleanup EXIT
+trap finish EXIT
 
 mkdir -p "/tmp/test-results/logs"
 

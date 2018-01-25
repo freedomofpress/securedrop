@@ -3,7 +3,7 @@
 </p>
 
 [![Build Status](https://travis-ci.org/freedomofpress/securedrop.svg?branch=develop)](https://travis-ci.org/freedomofpress/securedrop)
-[![Coverage Status](https://coveralls.io/repos/freedomofpress/securedrop/badge.svg?branch=develop&service=github)](https://coveralls.io/github/freedomofpress/securedrop?branch=develop)
+[![codecov](https://codecov.io/gh/freedomofpress/securedrop/branch/develop/graph/badge.svg)](https://codecov.io/gh/freedomofpress/securedrop)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/freedomofpress/securedrop?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 SecureDrop is an open-source whistleblower submission system that media organizations can use to securely accept documents from, and communicate with anonymous sources. It was originally created by the late Aaron Swartz and is currently managed by the [Freedom of the Press Foundation](https://freedom.press).
@@ -30,14 +30,7 @@ See the [Installation Guide](https://docs.securedrop.org/en/stable/#installtoc).
 
 ## How to Contribute to SecureDrop
 
-See the [Development Guide](https://docs.securedrop.org/en/latest/development/getting_started.html) and the [Contributing Guidelines](https://docs.securedrop.org/en/latest/development/contributor_guidelines.html).
-
-Check out our [Development Roadmap](https://github.com/freedomofpress/securedrop/wiki/Development-Roadmap) to see our plans and priorities for upcoming releases.
-
-For translators, see the [Translator Guide](https://docs.securedrop.org/en/stable/development/l10n.html) to learn how to get started with SecureDrop translations
-in our [translation portal](https://weblate.securedrop.club/).
-
-We also have a public [Gitter channel](https://gitter.im/freedomofpress/securedrop) and a [public Discourse forum](https://forum.securedrop.club/) where you can discuss SecureDrop and ask questions.
+See our [contribution page](CONTRIBUTING.md)
 
 ## License
 

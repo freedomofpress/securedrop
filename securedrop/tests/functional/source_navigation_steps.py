@@ -5,7 +5,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from step_helpers import screenshots
 
 
-class SourceNavigationSteps():
+class SourceNavigationStepsMixin():
 
     @screenshots
     def _source_visits_source_homepage(self):

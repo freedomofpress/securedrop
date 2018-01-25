@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import (Blueprint, render_template, request, g, redirect, url_for,
-                   flash)
+                   flash, session)
 from flask_babel import gettext
 
 from db import db_session
@@ -14,7 +14,7 @@ def make_blueprint(config):
 
     @view.route('/account', methods=('GET',))
     def edit():
-        password = make_password()
+        password = make_password(config)
         return render_template('edit_account.html',
                                password=password)
 
@@ -29,6 +29,9 @@ def make_blueprint(config):
                          error_message):
             password = request.form.get('password')
             set_diceware_password(user, password)
+            session.pop('uid', None)
+            session.pop('expires', None)
+            return redirect(url_for('main.login'))
         return redirect(url_for('account.edit'))
 
     @view.route('/2fa', methods=('GET', 'POST'))

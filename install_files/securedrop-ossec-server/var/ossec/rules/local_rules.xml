@@ -170,3 +170,23 @@
     <description>Ansible playbook run on server (securedrop-admin install, backup, or restore).</description>
   </rule>
 </group>
+
+<!--
+  Do not send an email alert on OSSEC server/agent started message. These are
+  purely informational events.
+-->
+<group name="Ossec start notifications">
+  <rule id="400501" level="1">
+    <if_sid>501</if_sid>
+    <match>Agent started</match>
+    <description>This alert overrides 501 to suppress daily email alerts to admins.</description>
+    <options>no_email_alert</options>
+  </rule>
+
+  <rule id="400502" level="1">
+    <if_sid>502</if_sid>
+    <match>Ossec started</match>
+    <description>This alert overrides 502 to suppress daily email alerts to admins.</description>
+    <options>no_email_alert</options>
+  </rule>
+</group>

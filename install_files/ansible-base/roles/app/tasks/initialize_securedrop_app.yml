@@ -162,25 +162,6 @@
     - database
     - securedrop_config
 
-  # If a custom header image is specified in site-specific vars,
-  # overwrite the default SecureDrop logo file. During upgrades
-  # to securedrop-app-code, dpkg will not overwrite the custom logo.
-  # The apache2 apparmor profile that ships with securedrop-app-code
-  # allows reading this specific filepath, so the custom logo must reside here.
-- name: Set custom logo file for Source Interface.
-  copy:
-    src: "{{ securedrop_header_image }}"
-    dest: "{{ securedrop_code }}/static/i/logo.png"
-    owner: "{{ securedrop_user }}"
-    group: "{{ securedrop_user }}"
-    mode: "0400"
-    backup: yes
-  when: securedrop_header_image is defined and
-        securedrop_header_image != ""
-  tags:
-    - logo
-    - securedrop_config
-
 - name: Add DEFAULT_LOCALE to config.py if missing.
   lineinfile:
     dest: "{{ securedrop_code }}/config.py"

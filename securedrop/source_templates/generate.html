@@ -31,7 +31,7 @@
 
 <hr class="no-line">
 
-<p class="explanation">{{ gettext('Because we use none of the traditional means to track users of our <strong>SecureDrop</strong>
+<p class="explanation">{{ gettext('Because we do not track users of our <strong>SecureDrop</strong>
  service, in future visits, using this codename will be the only way we have to communicate with you should we have
  questions or are interested in additional documents. Unlike passwords, there is no way to retrieve a lost codename.') }}
 </p>
@@ -41,8 +41,7 @@
   <button type="submit" class="sd-button btn btn--space primary pull-right" id="continue-button">
     <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="17px" height="17px">
     <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="17px" height="17px">
-     {{ gettext('USE NEW CODENAME') }}
+     {{ gettext('SUBMIT DOCUMENTS') }}
   </button>
-  <a id="already-have-codename" href="{{ url_for('main.login') }}" class="sd-button btn btn--space secondary pull-right">{{ gettext('USE EXISTING CODENAME') }}</a>
 </form>
 {% endblock %}

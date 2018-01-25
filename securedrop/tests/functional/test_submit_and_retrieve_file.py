@@ -6,8 +6,8 @@ from step_helpers import screenshots
 
 class TestSubmitAndRetrieveFile(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps,
-        journalist_navigation_steps.JournalistNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
 
     @screenshots
     def test_submit_and_retrieve_happy_path(self):

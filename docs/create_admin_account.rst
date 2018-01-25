@@ -61,4 +61,7 @@ created.
 For adding more user accounts, please refer now to our :doc:`Admin
 Interface Guide <admin>`.
 
+.. note:: You can now set a custom logo image on your web interfaces by
+           following the :ref:`Updating Logo Image` documentation.
+
 .. |TorBrowser| image:: images/torbrowser.png

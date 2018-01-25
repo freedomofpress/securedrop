@@ -85,3 +85,17 @@ log_events_with_ossec_alerts:
       iEwEExECAAwFAkqg7nQFgwll/3cACgkQ#0123nqvbpTAnH+GJA
     level: "13"
     rule_id: "400001"
+
+  # Override and Log (as to not send email of messages pertaining to pssec
+  # server and agent starting up after each reboot.
+  - name: test_ossec_server_started_does_not_produce_email
+    alert: >
+      ossec: Ossec started.
+    level: "1"
+    rule_id: "400502"
+
+  - name: test_ossec_agent_started_does_not_produce_email
+    alert: >
+      ossec: Agent started: 'app->10.20.2.2'.
+    level: "1"
+    rule_id: "400501"

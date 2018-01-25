@@ -36,7 +36,7 @@ def make_blueprint(config):
                   "notification")
             return redirect(url_for('.lookup'))
 
-        codename = generate_unique_codename()
+        codename = generate_unique_codename(config)
         session['codename'] = codename
         session['new_user'] = True
         return render_template('generate.html', codename=codename)
@@ -217,7 +217,7 @@ def make_blueprint(config):
                 return redirect(url_for('.lookup', from_login='1'))
             else:
                 current_app.logger.info(
-                        "Login failed for invalid codename".format(codename))
+                        "Login failed for invalid codename")
                 flash(gettext("Sorry, that is not a recognized codename."),
                       "error")
         return render_template('login.html', form=form)

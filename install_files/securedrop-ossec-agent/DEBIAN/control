@@ -6,7 +6,7 @@ Homepage: https://securedrop.org
 Package: securedrop-ossec-agent
 Version: 2.8.2+0.5
 Architecture: amd64
-Depends: ossec-agent,securedrop-keyring
+Depends: ossec-agent,securedrop-keyring,securedrop-config
 Replaces: ossec-agent
 Conflicts: securedrop-ossec-server
 Description: Installs the securedrop pre-configured OSSEC agent

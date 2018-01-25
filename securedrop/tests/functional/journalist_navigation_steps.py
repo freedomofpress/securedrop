@@ -3,6 +3,7 @@ import urllib2
 import re
 import tempfile
 import gzip
+import os
 
 from selenium.common.exceptions import NoSuchElementException
 
@@ -10,9 +11,10 @@ import tests.utils.db_helper as db_helper
 import crypto_util
 from db import Journalist
 from step_helpers import screenshots
+import config
 
 
-class JournalistNavigationSteps():
+class JournalistNavigationStepsMixin():
 
     @screenshots
     def _get_submission_content(self, file_url, raw_content):
@@ -114,6 +116,28 @@ class JournalistNavigationSteps():
             h1s = self.driver.find_elements_by_tag_name('h1')
             assert "Admin Interface" in [el.text for el in h1s]
 
+    def _admin_visits_system_config_page(self):
+        system_config_link = self.driver.find_element_by_id(
+            'update-instance-config'
+        )
+        system_config_link.click()
+        if not hasattr(self, 'accept_languages'):
+            h1 = self.driver.find_element_by_tag_name('h1')
+            assert "Instance Configuration" in h1.text
+
+    def _admin_updates_logo_image(self):
+        logo_upload_input = self.driver.find_element_by_id('logo-upload')
+        logo_upload_input.send_keys(
+            os.path.join(config.SECUREDROP_ROOT, "static/i/logo.png")
+        )
+
+        submit_button = self.driver.find_element_by_id('submit-logo-update')
+        submit_button.click()
+
+        if not hasattr(self, 'accept_languages'):
+            flashed_msgs = self.driver.find_element_by_css_selector('.flash')
+            assert 'Image updated.' in flashed_msgs.text
+
     @screenshots
     def _add_user(self, username, is_admin=False, hotp=None):
         username_field = self.driver.find_element_by_css_selector(
@@ -159,9 +183,9 @@ class JournalistNavigationSteps():
 
         if not hasattr(self, 'accept_languages'):
             # Clicking submit on the add user form should redirect to
-            # the Google Authenticator page
+            # the FreeOTP page
             h1s = self.driver.find_elements_by_tag_name('h1')
-            assert "Enable Google Authenticator" in [el.text for el in h1s]
+            assert "Enable FreeOTP" in [el.text for el in h1s]
 
         # Retrieve the saved user object from the db and keep it around for
         # further testing
@@ -184,6 +208,14 @@ class JournalistNavigationSteps():
                      "accepted for user {}.").format(
                          self.new_user['username']) in
                     [el.text for el in flashed_msgs])
+
+    def _admin_can_send_test_alert(self):
+        alert_button = self.driver.find_element_by_id('test-ossec-alert')
+        alert_button.click()
+
+        if not hasattr(self, 'accept_languages'):
+            flashed_msg = self.driver.find_element_by_css_selector('.flash')
+            assert "Test alert sent. Check your email." in flashed_msg.text
 
     @screenshots
     def _logout(self):
@@ -334,9 +366,9 @@ class JournalistNavigationSteps():
             'button[type=submit]')
         update_user_btn.click()
 
-        def can_edit_user():
+        def can_edit_user2():
             assert ('"{}"'.format(new_username) in self.driver.page_source)
-        self.wait_for(can_edit_user)
+        self.wait_for(can_edit_user2)
 
         # Update self.new_user with the new username for the future tests
         self.new_user['username'] = new_username
@@ -571,6 +603,9 @@ class JournalistNavigationSteps():
 
     def _source_delete_key(self):
         filesystem_id = crypto_util.hash_codename(self.source_name)
+        key = None
+        while not key:
+            key = crypto_util.getkey(filesystem_id)
         crypto_util.delete_reply_keypair(filesystem_id)
 
     def _journalist_continues_after_flagging(self):

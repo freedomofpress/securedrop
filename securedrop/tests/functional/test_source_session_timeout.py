@@ -4,7 +4,7 @@ import functional_test
 
 class TestSourceSessions(
         functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationSteps):
+        source_navigation_steps.SourceNavigationStepsMixin):
 
     def setup(self):
         # The session expiration here cannot be set to -1

@@ -1,0 +1,131 @@
+=button
+  button, a.btn, .btn
+    background: $color_purple_medium
+    box-sizing: border-box
+    -moz-box-sizing: border-box
+    padding: 10px 15px
+    border: 1px solid transparent
+    color: white
+    font-size: medium
+    cursor: pointer
+    text-align: center
+    text-decoration: none
+
+  button
+    &.starred
+      color: orange
+
+      &:hover
+        color: #FFC5AD
+        border: none
+        background-color: $color_purple_medium
+
+    &.un-starred
+      color: lightgray
+
+      &:hover
+        color: lightsalmon
+        border: none
+        background-color: $color_purple_medium
+
+    &.button-star:focus
+      outline: 0
+
+  button
+    &.plain
+      background: none
+      color: #333
+
+      &:hover
+        background: none
+        color: #333
+        border: 1px solid transparent
+
+    &:hover
+      background: white
+      color: $color_purple_medium
+      border: 1px solid $color_purple_medium
+
+  .btn
+    &.small
+      font-size: small
+      padding: 3px 10px
+
+    &.primary
+      display: block
+      margin-top: 0
+      margin-right: auto
+      display: inline-block
+
+    &.secondary
+      @extend .primary
+      background: white
+      color: $color_purple_medium_darker
+      border: 1px solid $color_purple_medium_darker
+
+    &.index
+      display: block
+      position: absolute
+      bottom: 8%
+      left: 8%
+      right: 8%
+
+  button.block, a.btn.block
+    text-decoration: none
+    min-width: 250px
+    margin-bottom: 20px
+
+  button.small, a.btn.small
+    font-size: small
+    padding: 3px 10px
+
+  a.btn:hover, .btn:hover
+    background: white
+    color: $color_purple_medium
+    border: 1px solid $color_purple_medium
+
+  button.alt, a.btn.alt, .btn.alt
+    background: transparent
+    border: 1px solid white
+
+  button.alt:hover, a.btn.alt:hover, .btn.alt:hover
+    background: white
+    color: $color_purple_medium
+
+  button.danger, a.danger, .btn.danger
+    background-color: $color_warning_red_pale
+
+  button.danger:hover, a.btn.danger:hover, .btn.danger:hover
+    background: white
+    border-color: $color_warning_red_pale
+    color: $color_warning_red_pale
+
+  .option a.btn.block
+    margin-bottom: 0px
+    width: 100%
+    display: block
+
+  .full-width
+    width: 100%
+
+  a > img.on-hover, button > img.on-hover
+    display: none
+
+  a:hover > img.off-hover, button:hover > img.off-hover
+    display: none
+
+  a:hover > img.on-hover, button:hover > img.on-hover
+    display: inline
+
+  a > img.icon, button > img.icon
+    vertical-align: middle
+
+  .button-star
+    padding: 0
+    background-color: $color_purple_medium
+    color: orange
+    border: none
+
+  .btn--space
+    margin-bottom: 5px
+    margin-left: 5px

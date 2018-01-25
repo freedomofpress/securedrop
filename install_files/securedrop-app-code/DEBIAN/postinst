@@ -19,7 +19,7 @@ set -x
 case "$1" in
     configure)
     pip install --no-index --find-links=/var/securedrop/wheelhouse --upgrade \
-      -r /var/www/securedrop/requirements/securedrop-requirements.txt
+      -r /var/www/securedrop/requirements/securedrop-app-code-requirements.txt
 
     chown -R www-data:www-data /var/www/securedrop
     chown www-data:www-data /var/www/journalist.wsgi
@@ -56,6 +56,13 @@ case "$1" in
       # Restore custom logo
       cp /tmp/securedrop_custom_logo.png /var/www/securedrop/static/i/logo.png
       rm /tmp/securedrop_custom_logo.png
+    fi
+
+    # This removes the MAC "hmac-sha1" from sshd_config.
+    # Ansible was updated, so future instances will not have this line present.
+    # This if-block may be removed from this script on 2019-01-01.
+    if grep -qE 'MACs\s.*hmac-sha1' /etc/ssh/sshd_config; then
+        sed -i 's/^\s*MACs\s.*/MACs hmac-sha2-256,hmac-sha2-512/' /etc/ssh/sshd_config;
     fi
 
     ;;

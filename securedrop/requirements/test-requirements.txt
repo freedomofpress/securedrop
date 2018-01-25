@@ -4,31 +4,25 @@
 #
 #    pip-compile --output-file securedrop/requirements/test-requirements.txt securedrop/requirements/test-requirements.in
 #
+attrs==17.4.0             # via pytest
 beautifulsoup4==4.6.0
 blinker==1.4
-certifi==2017.4.17        # via requests
-chardet==3.0.4            # via requests
 click==6.7                # via flask, pip-tools
-coverage==4.4.1           # via coveralls, pytest-cov
-coveralls==1.1
-docopt==0.6.2             # via coveralls
+coverage==4.4.2           # via pytest-cov
 first==2.0.1              # via pip-tools
-flask-testing==0.6.2
+flask-testing==0.7.1
 flask==0.12.2             # via flask-testing
-funcsigs==1.0.2           # via mock
-idna==2.5                 # via requests
+funcsigs==1.0.2           # via mock, pytest
 itsdangerous==0.24        # via flask
-jinja2==2.9.6             # via flask
+jinja2==2.10              # via flask
 markupsafe==1.0           # via jinja2
 mock==2.0.0
-pbr==3.0.1                # via mock
-pip-tools==1.9.0
-py==1.4.34
-pytest-capturelog==0.7
+pbr==3.1.1                # via mock
+pip-tools==1.11.0
+pluggy==0.6.0             # via pytest
+py==1.5.2
 pytest-cov==2.5.1
-pytest==3.1.1
-requests==2.17.3          # via coveralls
+pytest==3.3.2
 selenium==2.53.6
-six==1.10.0               # via mock, pip-tools
-urllib3==1.21.1           # via requests
+six==1.11.0               # via mock, pip-tools, pytest
 werkzeug==0.12.2          # via flask

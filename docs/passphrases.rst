@@ -37,9 +37,12 @@ performed by the admin will require the following set of passphrases:
    -  The Hidden Services values required to connect to the App and
       *Monitor Server*.
 
-The admin will also need to have an Android or iOS device with the
-Google Authenticator app installed. This means the admin will also have
-the following two credentials:
+The admin will also need to have a way to generate two-factor
+authentication tokens.
+
+.. include:: includes/otp-app.txt
+
+And the admin will also have the following two credentials:
 
 -  The secret code for the *Application Server*'s two-factor authentication.
 -  The secret code for the *Monitor Server*'s two-factor authentication.
@@ -61,7 +64,7 @@ will require the following set of passphrases:
    -  The journalist's personal GPG key.
 
 The journalist will also need to have a two-factor authenticator, such
-as an Android or iOS device with Google Authenticator installed, or a
+as an Android or iOS device with FreeOTP installed, or a
 YubiKey. This means the journalist will also have the following
 credential:
 

@@ -36,7 +36,7 @@ def create_app(config):
         flash(msg, 'error')
         return redirect(url_for('main.login'))
 
-    i18n.setup_app(app)
+    i18n.setup_app(config, app)
 
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
@@ -51,6 +51,16 @@ def create_app(config):
     app.jinja_env.filters['rel_datetime_format'] = \
         template_filters.rel_datetime_format
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
+
+    @app.template_filter('autoversion')
+    def autoversion_filter(filename):
+        """Use this template filter for cache busting"""
+        if path.exists(filename[1:]):
+            timestamp = str(path.getmtime(filename[1:]))
+        else:
+            return filename
+        versioned_filename = "{0}?v={1}".format(filename, timestamp)
+        return versioned_filename
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):
@@ -75,7 +85,7 @@ def create_app(config):
         if uid:
             g.user = Journalist.query.get(uid)
 
-        g.locale = i18n.get_locale()
+        g.locale = i18n.get_locale(config)
         g.text_direction = i18n.get_text_direction(g.locale)
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
