@@ -6,7 +6,7 @@
 #
 alabaster==0.7.10         # via sphinx
 ansible-lint==3.4.17      # via molecule
-ansible==2.3.2.0
+ansible==2.4.2.0
 anyconfig==0.9.1          # via molecule
 apipkg==1.4               # via execnet
 argh==0.26.2              # via sphinx-autobuild, watchdog
@@ -31,7 +31,7 @@ click==6.7                # via click-completion, cookiecutter, git-url-parse, m
 colorama==0.3.7           # via molecule, python-gilt
 configparser==3.5.0       # via flake8, pylint
 cookiecutter==1.5.1       # via molecule
-cryptography==2.0.3       # via paramiko
+cryptography==2.0.3       # via ansible, paramiko
 docker-py==1.10.6
 docker-pycreds==0.2.1     # via docker-py
 docopt==0.6.2             # via html-linter, template-remover
@@ -77,7 +77,6 @@ py==1.5.2                 # via pytest
 pyasn1==0.3.1             # via paramiko
 pycodestyle==2.3.1        # via flake8
 pycparser==2.18           # via cffi
-pycrypto==2.6.1           # via ansible
 pyflakes==1.5.0           # via flake8
 pygments==2.2.0           # via sphinx
 pylint==1.8.1

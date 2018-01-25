@@ -4,8 +4,8 @@
 #
 #    pip-compile --generate-hashes --output-file securedrop/requirements/admin-requirements.txt securedrop/requirements/ansible.in
 #
-ansible==2.3.2.0 \
-    --hash=sha256:0563b425279422487f12616ef719f6e558373b258dcf47e548d119be8d3168eb
+ansible==2.4.2.0 \
+    --hash=sha256:315f1580b20bbc2c2f1104f8b5e548c6b4cac943b88711639c5e0d4dfc4d7658
 asn1crypto==0.22.0 \
     --hash=sha256:cbbadd640d3165ab24b06ef25d1dca09a3441611ac15f6a6b452474fdf0aed1a \
     --hash=sha256:d232509fefcfcdb9a331f37e9c9dc20441019ad927c7d2176cf18ed5da0ba097 \
@@ -67,7 +67,7 @@ cryptography==1.9 \
     --hash=sha256:c26e057a2de13e97e708328d295c5ac4cd3eab4a5c42ce727dd1a53316034b8a \
     --hash=sha256:ca72537a7064bb80e34b6908e576ffc8e2c2cad29a7168f48d0999df089695c3 \
     --hash=sha256:fab8ec6866e384d9827d5dc02a1383e991a6c05c54f818316c4b829e56ca2ba3 \
-    # via paramiko
+    # via ansible, paramiko
 enum34==1.1.6 \
     --hash=sha256:2d81cbbe0e73112bdfe6ef8576f2238f2ba27dd0d55752a776c41d38b7da2850 \
     --hash=sha256:644837f692e5f550741432dd3f223bbb9852018674981b1664e5dc339387588a \
@@ -100,9 +100,6 @@ pyasn1==0.2.3 \
 pycparser==2.17 \
     --hash=sha256:0aac31e917c24cb3357f5a4d5566f2cc91a19ca41862f6c3c22dc60a629673b6 \
     # via cffi
-pycrypto==2.6.1 \
-    --hash=sha256:f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c \
-    # via ansible
 pyyaml==3.12 \
     --hash=sha256:16b20e970597e051997d90dc2cddc713a2876c47e3d92d59ee198700c5427736 \
     --hash=sha256:3262c96a1ca437e7e4763e2843746588a965426550f3797a79fca9c6199c431f \
