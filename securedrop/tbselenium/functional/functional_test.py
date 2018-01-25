@@ -9,9 +9,13 @@ import signal
 import socket
 import time
 import traceback
+import subprocess
 import requests
 
+
+
 import pyotp
+import gnupg
 from selenium import webdriver
 from selenium.common.exceptions import (WebDriverException,
                                         NoAlertPresentException)
@@ -29,6 +33,8 @@ os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 FUNCTIONAL_TEST_DIR = abspath(dirname(__file__))
 LOGFILE_PATH = abspath(join(FUNCTIONAL_TEST_DIR, 'log/firefox.log'))
+FILES_DIR = abspath(join(dirname(realpath(__file__)), '../..', 'tests/files'))
+
 
 
 # https://stackoverflow.com/a/34795883/837471
@@ -88,6 +94,26 @@ class FunctionalTest(object):
                     continue
                 raise
 
+    def init_gpg(self):
+        """Initialize the GPG keyring and import the journalist key for
+        testing.
+        """
+        gpg = gnupg.GPG(homedir="/tmp/testgpg")
+        # Faster to import a pre-generated key than to gen a new one every time.
+        for keyfile in (join(FILES_DIR, "test_journalist_key.pub"),
+                        join(FILES_DIR, "test_journalist_key.sec")):
+            gpg.import_keys(open(keyfile).read())
+        return gpg
+
+    def system(self, cmd):
+        """
+        Invoke a shell command. Primary replacement for os.system calls.
+        """
+        print(cmd)
+        ret = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+        out, err = ret.communicate()
+        return out
 
     def setup(self, session_expiration=30):
 
@@ -117,6 +143,8 @@ class FunctionalTest(object):
 
         if not hasattr(self, 'override_driver'):
             self.driver = self._create_webdriver()
+
+        self.gpg = self.init_gpg()
 
         # Polls the DOM to wait for elements. To read more about why
         # this is necessary:
