@@ -15,7 +15,7 @@ fi
 
 mkdir -p "/tmp/test-results/logs"
 
-export PAGE_LAYOUT_LOCALES="en_US,fr_FR"
+export PAGE_LAYOUT_LOCALES="en_US,ar,fr_FR"
 pytest \
   --page-layout \
   --durations 10 \

@@ -10,4 +10,4 @@ cd "$1" || exit 1
 # are time consuming.
 # * en_US: source strings
 # * fr_FR: left-to-right translations
-PAGE_LAYOUT_LOCALES='en_US,fr_FR' pytest --page-layout --junit-xml=/tmp/apptest.xml --junit-prefix=apptest tests/
+PAGE_LAYOUT_LOCALES='en_US,ar,fr_FR' pytest --page-layout --junit-xml=/tmp/apptest.xml --junit-prefix=apptest tests/
