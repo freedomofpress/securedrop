@@ -112,7 +112,7 @@ jobs:
 
       - run:
           name: Check Python dependencies for CVEs
-          command: make safety || true # Revert when Ansible 2.4 is used
+          command: make safety
 
       - setup_remote_docker
 
