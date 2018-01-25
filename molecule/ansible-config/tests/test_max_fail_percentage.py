@@ -64,7 +64,7 @@ def test_max_fail_percentage(host, playbook):
 
 
 @pytest.mark.parametrize('playbook', find_ansible_playbooks())
-def test_max_fail_percentage(host, playbook):
+def test_any_errors_fatal(host, playbook):
     """
     All SecureDrop playbooks should set `any_errors_fatal` to "yes"
     on each and every play. In conjunction with `max_fail_percentage` set
