@@ -1,10 +1,13 @@
 import pytest
 import urllib2
+import json
 import re
 import tempfile
 import gzip
 import time
 import os
+
+from os.path import abspath, realpath, dirname, join
 
 from selenium.common.exceptions import NoSuchElementException
 
@@ -27,6 +30,26 @@ class JournalistNavigationStepsMixin():
             content = gzf.read()
 
             return content
+
+    def return_downloaded_content(self, url, cookies):
+        """
+        This downloads and returns the content to the caller
+        :param url: URL to download
+        :param cookies: the cookies to access
+        :return: Content of the URL
+        """
+        temp_cookie_file = tempfile.NamedTemporaryFile('w', delete=False)
+        data = {'url': url, 'cookies': cookies}
+        json.dump(data, temp_cookie_file)
+        temp_cookie_file.close()
+
+        cmd_path = abspath(join(dirname(realpath(__file__)), 'download_content.py'))
+        # Now call the external program to handle the download
+        cmd = 'python {0} {1}'.format(cmd_path, temp_cookie_file.name)
+        if '.onion' in url:
+            cmd = 'torify ' + cmd
+        raw_content = self.system(cmd).strip()
+        return raw_content
 
     def _input_text_in_login_form(self, username, password, token):
         self.driver.get(self.journalist_location + "/login")
@@ -436,7 +459,8 @@ class JournalistNavigationStepsMixin():
 
         # There should be 1 collection in the list of collections
         code_names = self.driver.find_elements_by_class_name('code-name')
-        assert 1 == len(code_names)
+        assert 0 != len(code_names), code_names
+        assert 2 >= len(code_names), code_names
 
         if not hasattr(self, 'accept_languages'):
             # There should be a "1 unread" span in the sole collection entry
@@ -503,12 +527,8 @@ class JournalistNavigationStepsMixin():
                 cookie_strs.append(cookie_str)
             return ' '.join(cookie_strs)
 
-        submission_req = urllib2.Request(file_url)
-        submission_req.add_header(
-            'Cookie',
-            cookie_string_from_selenium_cookies(
+        raw_content = self.return_downloaded_content(file_url, cookie_string_from_selenium_cookies(
                 self.driver.get_cookies()))
-        raw_content = urllib2.urlopen(submission_req).read()
 
         decrypted_submission = self.gpg.decrypt(raw_content)
         submission = self._get_submission_content(file_url,
@@ -526,7 +546,7 @@ class JournalistNavigationStepsMixin():
         )
 
     def _journalist_sends_reply_to_source(self):
-        self._journalist_selects_the_first_source()  # XXXX
+        #self._journalist_selects_the_first_source()  # XXXX
         self._journalist_composes_reply()
         self.driver.find_element_by_id('reply-button').click()
         time.sleep(2)

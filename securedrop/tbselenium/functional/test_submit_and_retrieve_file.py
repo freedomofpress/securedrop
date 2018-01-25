@@ -20,7 +20,7 @@ class TestSubmitAndRetrieveFile(
         self._journalist_checks_messages()
         self._journalist_stars_and_unstars_single_message()
         self._journalist_selects_all_sources_then_selects_none()
-        #self._journalist_downloads_message()
+        self._journalist_downloads_message()
         self._journalist_sends_reply_to_source()
         self._source_visits_source_homepage()
         self._source_chooses_to_login()
