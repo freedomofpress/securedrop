@@ -93,6 +93,10 @@ jobs:
       - checkout
 
       - run:
+          name: Rebase on-top of latest develop
+          command: ./devops/scripts/rebase-develop.sh
+
+      - run:
           name: Installation apt pre-reqs
           command: apt-get install -y enchant
 
