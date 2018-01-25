@@ -21,6 +21,8 @@
 
 - name: Configure OSSEC.
   hosts: securedrop
+  max_fail_percentage: 0
+  any_errors_fatal: yes
   roles:
     - role: ossec
       tags: ossec
