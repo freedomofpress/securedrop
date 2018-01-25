@@ -9,7 +9,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 import tests.utils.db_helper as db_helper
 import crypto_util
-from db import Journalist
+from models import Journalist
 from step_helpers import screenshots
 import config
 

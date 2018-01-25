@@ -4,7 +4,7 @@ from flask import (Blueprint, render_template, request, g, redirect, url_for,
                    flash, session)
 from flask_babel import gettext
 
-from db import db_session
+from db import db
 from journalist_app.utils import (make_password, set_diceware_password,
                                   validate_user)
 
@@ -53,7 +53,7 @@ def make_blueprint(config):
     def reset_two_factor_totp():
         g.user.is_totp = True
         g.user.regenerate_totp_shared_secret()
-        db_session.commit()
+        db.session.commit()
         return redirect(url_for('account.new_two_factor'))
 
     @view.route('/reset-2fa-hotp', methods=['POST'])
@@ -61,7 +61,7 @@ def make_blueprint(config):
         otp_secret = request.form.get('otp_secret', None)
         if otp_secret:
             g.user.set_hotp_secret(otp_secret)
-            db_session.commit()
+            db.session.commit()
             return redirect(url_for('account.new_two_factor'))
         else:
             return render_template('account_edit_hotp_secret.html')

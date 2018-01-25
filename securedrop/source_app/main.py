@@ -10,7 +10,8 @@ from sqlalchemy.exc import IntegrityError
 import crypto_util
 import store
 
-from db import Source, db_session, Submission, Reply, get_one_or_else
+from db import db
+from models import Source, Submission, Reply, get_one_or_else
 from rm import srm
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
@@ -46,11 +47,11 @@ def make_blueprint(config):
         filesystem_id = crypto_util.hash_codename(session['codename'])
 
         source = Source(filesystem_id, crypto_util.display_id())
-        db_session.add(source)
+        db.session.add(source)
         try:
-            db_session.commit()
+            db.session.commit()
         except IntegrityError as e:
-            db_session.rollback()
+            db.session.rollback()
             current_app.logger.error(
                 "Attempt to create a source with duplicate codename: %s" %
                 (e,))
@@ -154,7 +155,7 @@ def make_blueprint(config):
 
         for fname in fnames:
             submission = Submission(g.source, fname)
-            db_session.add(submission)
+            db.session.add(submission)
 
         if g.source.pending:
             g.source.pending = False
@@ -172,7 +173,7 @@ def make_blueprint(config):
                                 entropy_avail))
 
         g.source.last_updated = datetime.utcnow()
-        db_session.commit()
+        db.session.commit()
         normalize_timestamps(g.filesystem_id)
 
         return redirect(url_for('main.lookup'))
@@ -184,8 +185,8 @@ def make_blueprint(config):
             Reply.filename == request.form['reply_filename'])
         reply = get_one_or_else(query, current_app.logger, abort)
         srm(store.path(g.filesystem_id, reply.filename))
-        db_session.delete(reply)
-        db_session.commit()
+        db.session.delete(reply)
+        db.session.commit()
 
         flash(gettext("Reply deleted"), "notification")
         return redirect(url_for('.lookup'))
@@ -201,8 +202,8 @@ def make_blueprint(config):
 
         for reply in replies:
             srm(store.path(g.filesystem_id, reply.filename))
-            db_session.delete(reply)
-        db_session.commit()
+            db.session.delete(reply)
+        db.session.commit()
 
         flash(gettext("All replies have been deleted"), "notification")
         return redirect(url_for('.lookup'))

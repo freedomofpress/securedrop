@@ -6,18 +6,23 @@ from gnupg._util import _is_stream
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
+import journalist_app
 import secure_tempfile
 import utils
 
 
 class TestSecureTempfile(unittest.TestCase):
+
     def setUp(self):
+        self.__context = journalist_app.create_app(config).app_context()
+        self.__context.push()
         utils.env.setup()
         self.f = secure_tempfile.SecureTemporaryFile(config.STORE_DIR)
         self.msg = '410,757,864,530'
 
     def tearDown(self):
         utils.env.teardown()
+        self.__context.pop()
 
     def test_read_before_writing(self):
         with self.assertRaisesRegexp(AssertionError,

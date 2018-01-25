@@ -4,8 +4,8 @@ import mock
 
 import journalist
 from utils import db_helper, env
-from db import (Journalist, Submission, Reply, get_one_or_else,
-                LoginThrottledException)
+from models import (Journalist, Submission, Reply, get_one_or_else,
+                    LoginThrottledException)
 
 
 class TestDatabase(TestCase):

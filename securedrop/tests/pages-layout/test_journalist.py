@@ -20,17 +20,17 @@ from tests.functional import source_navigation_steps
 import functional_test
 import pytest
 
-import db
+import models
 
 
 @pytest.fixture
 def hardening(request):
-    hardening = db.LOGIN_HARDENING
+    hardening = models.LOGIN_HARDENING
 
     def finalizer():
-        db.LOGIN_HARDENING = hardening
+        models.LOGIN_HARDENING = hardening
     request.addfinalizer(finalizer)
-    db.LOGIN_HARDENING = True
+    models.LOGIN_HARDENING = True
     return None
 
 

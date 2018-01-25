@@ -19,7 +19,10 @@ import unittest
 import version
 import utils
 
-from db import Journalist, db_session
+import journalist_app
+
+from db import db
+from models import Journalist
 
 
 YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
@@ -27,6 +30,7 @@ YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
 
 
 class TestManagePy(object):
+
     def test_parse_args(self):
         # just test that the arg parser is stable
         manage.get_args()
@@ -45,11 +49,17 @@ class TestManagePy(object):
 
 
 class TestManagementCommand(unittest.TestCase):
+
     def setUp(self):
+        self.__context = journalist_app.create_app(config).app_context()
+        self.__context.push()
         utils.env.setup()
+        self.__context.pop()
 
     def tearDown(self):
+        self.__context.push()
         utils.env.teardown()
+        self.__context.pop()
 
     @mock.patch("__builtin__.raw_input", return_value='jen')
     def test_get_username_success(self, mock_stdin):
@@ -147,7 +157,7 @@ class TestManagementCommand(unittest.TestCase):
         assert os.path.exists(config.STORE_DIR)
 
         # Verify journalist user present in the database is gone
-        db_session.remove()  # Close session and get a session on the new db
+        db.session.remove()  # Close session and get a session on the new db
         with self.assertRaises(NoResultFound):
             Journalist.query.filter_by(username=user_should_be_gone).one()
 
@@ -155,11 +165,14 @@ class TestManagementCommand(unittest.TestCase):
 class TestManage(object):
 
     def setup(self):
+        self.__context = journalist_app.create_app(config).app_context()
+        self.__context.push()
         self.dir = abspath(dirname(realpath(__file__)))
         utils.env.setup()
 
     def teardown(self):
         utils.env.teardown()
+        self.__context.pop()
 
     @mock.patch("__builtin__.raw_input", return_value='foo-bar-baz')
     def test_get_username(self, mock_get_usernam):

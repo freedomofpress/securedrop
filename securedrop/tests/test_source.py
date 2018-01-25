@@ -8,7 +8,8 @@ from flask import session, escape, url_for
 from flask_testing import TestCase
 
 import crypto_util
-from db import db_session, Source
+from db import db
+from models import Source
 import source
 import version
 import utils
@@ -459,8 +460,8 @@ class TestSourceApp(TestCase):
             filesystem_id = crypto_util.hash_codename(codename)
             crypto_util.delete_reply_keypair(filesystem_id)
             source = Source.query.filter_by(filesystem_id=filesystem_id).one()
-            db_session.delete(source)
-            db_session.commit()
+            db.session.delete(source)
+            db.session.commit()
 
             # Source attempts to continue to navigate
             resp = client.post('/lookup', follow_redirects=True)
