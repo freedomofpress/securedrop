@@ -62,12 +62,13 @@ def test_ossec_pubkey_in_keyring(Command, Sudo):
     Ensure the test Admin GPG public key exists in the keyring
     within the ossec home directory.
     """
-    ossec_gpg_pubkey_info = """pub   4096R/EDDDC102 2014-10-15
-uid                  Test/Development (DO NOT USE IN PRODUCTION) (Admin's OSSEC Alert GPG key) <securedrop@freedom.press>
-sub   4096R/97D2EB39 2014-10-15"""  # noqa
+    ossec_gpg_pubkey_info = """pub   2048R/B5E53711 2018-01-25
+uid                  SecureDrop admin key for tests (do not use in production)
+sub   2048R/EC1DF5D0 2018-01-25"""  # noqa
     with Sudo("ossec"):
-        c = Command.check_output("gpg --homedir /var/ossec/.gnupg "
-                                 "--list-keys EDDDC102")
+        c = Command.check_output(
+            "gpg --homedir /var/ossec/.gnupg "
+            "--list-keys 53E1113AC1F25027BA5D475B1141E2BBB5E53711")
         assert c == ossec_gpg_pubkey_info
 
 

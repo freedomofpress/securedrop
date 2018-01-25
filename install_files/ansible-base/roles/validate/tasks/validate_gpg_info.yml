@@ -6,7 +6,7 @@
       # Should not match the fingerprint for the TEST Journalist pubkey.
       - item.fingerprint != "65A1B5FF195B56353CC63DFFCC40EF1228271441"
       # Should not match the fingerprint for the TEST Admin pubkey.
-      - item.fingerprint != "600BC6D5142C68F35DDBCEA87B597104EDDDC102"
+      - item.fingerprint != "53E1113AC1F25027BA5D475B1141E2BBB5E53711"
       # Should not contain whitespace.
       - "' ' not in item.fingerprint"
       # Must be a full-length fingerprint.
