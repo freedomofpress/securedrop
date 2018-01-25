@@ -27,6 +27,10 @@ ci-lint-image: ## Builds linting container.
 ci-lint: ## Runs linting in linting container.
 	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-lint:${TAG}
 
+.PHONY: ansible-config-lint
+ansible-config-lint: ## Runs custom Ansible env linting tasks.
+	molecule verify -s ansible-config
+
 .PHONY: docs-lint
 docs-lint: ## Check documentation for common syntax errors.
 # The `-W` option converts warnings to errors.
@@ -86,7 +90,7 @@ shellcheckclean: ## Cleans up temporary container associated with shellcheck tar
 	@docker rm -f shellcheck-targets
 
 .PHONY: lint
-lint: docs-lint app-lint flake8 html-lint yamllint shellcheck ## Runs all linting tools (docs, pylint, flake8, HTML, YAML, shell).
+lint: docs-lint app-lint flake8 html-lint yamllint shellcheck ansible-config-lint ## Runs all linting tools (docs, pylint, flake8, HTML, YAML, shell, ansible-config).
 
 .PHONY: docker-build-ubuntu
 docker-build-ubuntu: ## Builds SD Ubuntu docker container

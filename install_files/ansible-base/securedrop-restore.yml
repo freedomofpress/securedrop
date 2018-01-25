@@ -1,6 +1,8 @@
 ---
 - name: Restore SecureDrop Application Server from previous config.
   hosts: securedrop_application_server
+  max_fail_percentage: 0
+  any_errors_fatal: yes
   roles:
     - role: restore
       tags: restore
