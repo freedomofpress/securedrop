@@ -194,7 +194,7 @@ class SourceNavigationStepsMixin():
     def _source_clicks_submit_button_on_submission_page(self):
         submit_button = self.driver.find_element_by_id('submit-doc-button')
         submit_button.click()
-        self.wait_for_source_key(self.source_name)
+        time.sleep(2)
 
     @screenshots
     def _source_deletes_a_journalist_reply(self):
