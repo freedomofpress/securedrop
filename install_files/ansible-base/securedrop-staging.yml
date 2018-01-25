@@ -37,6 +37,8 @@
 
 - name: Configure OSSEC.
   hosts: staging
+  max_fail_percentage: 0
+  any_errors_fatal: yes
   roles:
     - role: ossec
       tags: ossec
