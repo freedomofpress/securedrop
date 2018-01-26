@@ -1,13 +1,11 @@
 ---
-# Downloads latest pfSense files for template XML files. Should be ran before
-# installing Ubuntu servers
-- name: Install Firewall Template Files
+- name: Install Firewall Template Files.
   hosts: localhost
   connection: local
   gather_facts: no
   become: yes
   tasks:
-      debug:
+    - debug:
         msg: >-
           You have successfully checked out the latest pfSense firewall files.
 
