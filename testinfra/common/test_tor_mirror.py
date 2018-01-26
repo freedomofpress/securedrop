@@ -2,8 +2,9 @@ import os
 import pytest
 
 
-@pytest.mark.skipif(os.environ.get('CIRCLE_BRANCH', 'na').startswith('release'),
-                    reason="Release branches will use tor-apt-test repo")
+@pytest.mark.skipif(
+        os.environ.get('CIRCLE_BRANCH', 'na').startswith('release'),
+        reason="Release branches will use tor-apt-test repo")
 def test_tor_mirror_present(host):
     """
     Ensure the FPF mirror of the Tor apt repo, tor-apt.freedom.press,
