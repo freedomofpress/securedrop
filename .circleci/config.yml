@@ -147,6 +147,9 @@ jobs:
       - store_artifacts:
           path: /root/sd/raw-test-output
 
+      - store_artifacts:
+          path: ~/.tor_version
+
 workflows:
   version: 2
   securedrop_ci:
