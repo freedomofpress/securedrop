@@ -3,6 +3,7 @@ d2to1
 flake8
 mock
 pbr
+pip-tools
 pylint
 pytest
 tox
