@@ -2,9 +2,8 @@
 """Testing utilities related to setup and teardown of test environment.
 """
 import os
-from os.path import abspath, dirname, exists, isdir, join, realpath
+from os.path import abspath, dirname, isdir, join, realpath
 import shutil
-import subprocess
 import threading
 
 import gnupg
@@ -65,7 +64,8 @@ def teardown():
     shutil.rmtree(config.TEMP_DIR)
     try:
         shutil.rmtree(config.SECUREDROP_DATA_ROOT)
-        assert not os.path.exists(config.SECUREDROP_DATA_ROOT)  # safeguard for #844
+        # safeguard for #844
+        assert not os.path.exists(config.SECUREDROP_DATA_ROOT)
     except OSError as exc:
         if 'No such file or directory' not in exc:
             raise
