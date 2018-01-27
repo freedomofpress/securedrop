@@ -398,10 +398,22 @@ def init_db(args):
     os.chown('/var/lib/securedrop/db.sqlite', user.pw_uid, user.pw_gid)
 
 
+def how_many_submissions_today(args):
+    count_file = os.path.join(args.data_root, 'submissions_today.txt')
+    sh("""
+    find {dir} -type f -a -mmin -1440 | wc -l > {count_file}
+    """.format(dir=args.store_dir,
+               count_file=count_file))
+
+
 def get_args():
     parser = argparse.ArgumentParser(prog=__file__, description='Management '
                                      'and testing utility for SecureDrop.')
     parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('--data-root',
+                        default=config.SECUREDROP_DATA_ROOT,
+                        help=('directory in which the securedrop '
+                              'data is stored'))
     parser.add_argument('--store-dir',
                         default=config.STORE_DIR,
                         help=('directory in which the documents are stored'))
@@ -439,6 +451,7 @@ def get_args():
 
     set_translate_messages_parser(subps)
     set_translate_desktop_parser(subps)
+    set_how_many_submissions_today(subps)
 
     init_db_subp = subps.add_parser('init-db', help='initialize the DB')
     init_db_subp.add_argument('-u', '--user',
@@ -447,6 +460,14 @@ def get_args():
     init_db_subp.set_defaults(func=init_db)
 
     return parser
+
+
+def set_how_many_submissions_today(subps):
+    parser = subps.add_parser(
+        'how-many-submissions-today',
+        help=('Update the file containing '
+              'the number of submissions in the past 24h'))
+    parser.set_defaults(func=how_many_submissions_today)
 
 
 def set_translate_parser(subps,

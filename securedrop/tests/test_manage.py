@@ -377,6 +377,21 @@ class TestManage(object):
         manage.clean_tmp(args)
         assert 'FILE removed' in caplog.text
 
+    def test_how_many_submissions_today(self, tmpdir):
+        data_root = tmpdir
+        store_dir = tmpdir.join('store')
+        args = argparse.Namespace(data_root=str(data_root),
+                                  store_dir=str(store_dir),
+                                  verbose=logging.DEBUG)
+
+        store_dir.join('recent').ensure()
+        older = store_dir.join('older')
+        older.ensure()
+        older.setmtime(time.time() - 2*24*60*60)
+        manage.how_many_submissions_today(args)
+        count_file = data_root.join('submissions_today.txt')
+        assert count_file.read() == "1\n"
+
 
 class TestSh(object):
 
