@@ -1,6 +1,8 @@
 ---
 - name: Configure SecureDrop Development machine.
   hosts: development
+  max_fail_percentage: 0
+  any_errors_fatal: yes
   pre_tasks:
     # Ensure all upgrades are applied. Also updates the apt cache,
     # which will remain sufficiently fresh to prevent repeated cache updates

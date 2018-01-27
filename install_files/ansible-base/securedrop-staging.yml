@@ -2,6 +2,8 @@
 ---
 - name: Scrape build directory
   hosts: localhost
+  max_fail_percentage: 0
+  any_errors_fatal: yes
   tasks:
     - name: Establish list of files in build/
       find:
@@ -20,6 +22,8 @@
 
 - name: Add FPF apt repository and install base packages.
   hosts: staging
+  max_fail_percentage: 0
+  any_errors_fatal: yes
   roles:
     - role: ci-tweaks
       when: amazon_builder
@@ -40,6 +44,8 @@
 
 - name: Configure mailing utilities.
   hosts: mon-staging
+  max_fail_percentage: 0
+  any_errors_fatal: yes
   roles:
     - role: postfix
       tags: postfix
@@ -47,6 +53,8 @@
 
 - name: Configure SecureDrop Application Server.
   hosts: app-staging
+  max_fail_percentage: 0
+  any_errors_fatal: yes
   roles:
     - { role: app, tags: app }
     - { role: app-test, tags: app-test }
@@ -57,12 +65,16 @@
   # and default false in production environments, in order to force SSH traffic over Tor.
 - name: Configure host firewalls (with direct access for staging).
   hosts: staging
+  max_fail_percentage: 0
+  any_errors_fatal: yes
   roles:
     - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
   become: yes
 
 - name: Reboot Application and Monitor Servers.
   hosts: staging
+  max_fail_percentage: 0
+  any_errors_fatal: yes
   tasks:
     - include: tasks/reboot_if_first_install.yml
       when: not amazon_builder
