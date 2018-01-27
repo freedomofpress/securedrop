@@ -5,4 +5,9 @@ LOGFILE=/var/log/procmail.log
 SUBJECT=`formail -xSubject:`
 :0 c
 *^To:.*root.*
-|/var/ossec/send_encrypted_alarm.sh
+|/var/ossec/send_encrypted_alarm.sh ossec
+
+:0 c
+*^To:.*journalist.*
+|/var/ossec/process_submissions_today.sh
+

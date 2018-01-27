@@ -190,3 +190,11 @@
     <options>no_email_alert</options>
   </rule>
 </group>
+
+<group name="multiple_drops">
+  <rule id="400600" level="7" >
+    <if_sid>530</if_sid>
+    <match>ossec: output: 'head -1 /var/lib/securedrop/submissions_today.txt</match>
+    <description>Number of submissions received in the past 24h.</description>
+  </rule>
+</group>

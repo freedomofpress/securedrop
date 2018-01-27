@@ -54,6 +54,17 @@
   with_items: "{{ apparmor_profiles }}"
   tags: apparmor
 
+- name: Create cron.daily directory.
+  file:
+    state: directory
+    dest: "{{ securedrop_app_code_deb_dir }}/etc/cron.daily"
+
+- name: Copy crontab.
+  copy:
+    src: cron.daily
+    dest: "{{ securedrop_app_code_deb_dir }}/etc/cron.daily/securedrop"
+    mode: 0755
+
 - name: Build securedrop-app-code Debian package.
   command: dpkg-deb --build {{ securedrop_app_code_deb_dir }}
 

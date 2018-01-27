@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /var/www/securedrop || exit 1
+./manage.py how-many-submissions-today

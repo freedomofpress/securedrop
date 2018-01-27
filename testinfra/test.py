@@ -30,7 +30,7 @@ def get_target_roles(target_host):
                                     'testinfra/app-code',
                                     'testinfra/common',
                                     'testinfra/development/test_xvfb.py'],
-                    "staging": [],
+                    "staging": ['testinfra/ossec'],
                     "mon-staging": ['testinfra/mon',
                                     'testinfra/common'],
                     "mon-prod":    ['testinfra/mon']}
@@ -123,6 +123,7 @@ testinfra \
 testinfra \
     -vv \
     --connection ansible \
+    {testinfra_args} \
     {ssh_config_path} \
     {inventory} \
     {junit} \
@@ -131,7 +132,8 @@ testinfra \
 """.format(ssh_config_path=ssh_config_path,
            inventory=inventory,
            target_roles=" ".join(target_roles),
-           junit=junit).lstrip().rstrip()
+           junit=junit,
+           testinfra_args=os.environ.get('TESTINFRA_ARGS', ''))
 
     else:
         ssh_config_path = ""
