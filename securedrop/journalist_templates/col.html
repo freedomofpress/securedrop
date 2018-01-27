@@ -24,7 +24,7 @@
       <p>
         <div id="select-container"></div>
         <button type="submit" name="action" value="download" class="small"><i class="fa fa-download"></i> {{ gettext('Download Selected') }}</button>
-        <button type="submit" name="action" value="confirm_delete" id="delete-selected" class="small danger"><i class="fa fa-trash-o"></i> {{ gettext('Delete Selected') }}</button>
+        <a href="#delete-selected-confirmation-modal" class="btn small danger"><i class="fa fa-trash-o"></i> {{ gettext('Delete Selected') }}</a>
       </p>
 
       <ul id="submissions" class="plain submissions">
@@ -61,6 +61,18 @@
           </li>
         {% endfor %}
       </ul>
+
+      <!-- Confirmation modal for selected documents -->
+      <div id="delete-selected-confirmation-modal" class="modal-dialog">
+        <a href="#close" class="external"></a>
+        <div>
+          <a href="#close" title="Close" class="close">X</a>
+          <h2>{{ gettext('Delete Confirmation') }}</h2>
+          <p>{{ gettext('Are you sure you want to delete the selected documents?') }}</p>
+          <a href="#close" title="Cancel" class="btn sd-button">Cancel</a>
+          <button type="submit" name="action" value="confirm_delete" id="delete-selected" class="sd-button danger">Delete</button>
+        </div>
+      </div>
 
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
@@ -101,7 +113,19 @@
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}">
-    <button id="delete-collection-button" type="submit" class="sd-button danger"><i class="fa fa-trash-o"></i> {{ gettext('DELETE COLLECTION') }}</button>
+    <a href="#delete-collection-confirmation-modal" class="btn sd-button danger"><i class="fa fa-trash-o"></i> {{ gettext('DELETE COLLECTION') }}</a>
+
+    <!-- Confirmation modal for entire collection deletion -->
+    <div id="delete-collection-confirmation-modal" class="modal-dialog">
+      <a href="#close" class="external"></a>
+      <div>
+        <a href="#close" title="Close" class="close">X</a>
+        <h2>{{ gettext('Delete Confirmation') }}</h2>
+        <p>{{ gettext('Are you sure you want to delete this collection?') }}</p>
+        <a href="#close" title="Cancel" class="btn sd-button">Cancel</a>
+        <button type="submit" id="delete-collection-button" name="action" value="delete" class="sd-button danger">Delete</button>
+      </div>
+    </div>
   </form>
 
 </div>

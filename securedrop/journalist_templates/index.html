@@ -12,7 +12,9 @@
         <button type="submit" name="action" value="download-all" class="small"><i class="fa fa-download"></i> {{ gettext('Download') }}</button>
         <button type="submit" name="action" value="star" class="small"><i class="fa fa-star"></i> {{ gettext('Star') }}</button>
         <button type="submit" name="action" value="un-star" class="small"><i class="fa fa-star-half-full"></i> {{ gettext('Un-star') }}</button>
-        <button type="submit" id="delete-collections" name="action" value="delete" class="small-danger"><i class="fa fa-trash-o"></i> {{ gettext('Delete') }}</button>
+        <a href="#delete-confirmation-modal" class="btn small danger">
+          <i class="fa fa-trash-o"></i> {{ gettext('Delete') }}
+        </a>
       </p>
 
       {% if starred %}
@@ -36,6 +38,18 @@
           {% endfor %}
         </ul>
       {% endif %}
+
+      <!-- Delete confirmation modal -->
+      <div id="delete-confirmation-modal" class="modal-dialog">
+        <a href="#close" class="external"></a>
+        <div>
+          <a href="#close" title="Close" class="close">X</a>
+          <h2>{{ gettext('Delete Confirmation') }}</h2>
+          <p>{{ gettext('Are you sure you want to delete the selected collections?') }}</p>
+          <a href="#close" title="Cancel" class="btn sd-button">Cancel</a>
+          <button type="submit" id="delete-collections" name="action" value="delete" class="sd-button danger">Delete</button>
+        </div>
+      </div>
 
     </form>
   {% else %}
