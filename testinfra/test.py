@@ -24,6 +24,7 @@ def get_target_roles(target_host):
                                     'testinfra/app-code',
                                     'testinfra/common',
                                     'testinfra/development/test_xvfb.py'],
+                    "staging": [],
                     "mon-staging": ['testinfra/mon',
                                     'testinfra/common'],
                     "mon-prod":    ['testinfra/mon']}
@@ -91,6 +92,35 @@ testinfra \
     --hosts {target_host} \
     {target_roles}
 """.lstrip().rstrip()
+
+    elif target_host == 'staging':
+        if "CI_SSH_CONFIG" in os.environ:
+            ssh_config_path = '--ssh-config ' + os.environ["CI_SSH_CONFIG"]
+            inventory = ""
+            junit = """
+            --junit-xml=./{target_host}-results.xml \
+            --junit-prefix={target_host} \
+            """
+        else:
+            ssh_config_path = ""
+            inventory = """
+            --ansible-inventory \
+            .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory \
+            """
+            junit = ""
+        testinfra_command_template = """
+testinfra \
+    -vv \
+    --connection ansible \
+    {ssh_config_path} \
+    {inventory} \
+    {junit} \
+    --hosts app-staging,mon-staging \
+    {target_roles}
+""".format(ssh_config_path=ssh_config_path,
+           inventory=inventory,
+           target_roles=" ".join(target_roles),
+           junit=junit).lstrip().rstrip()
 
     else:
         ssh_config_path = ""
