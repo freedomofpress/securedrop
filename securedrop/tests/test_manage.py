@@ -170,7 +170,8 @@ def test_reset(journalist_app, test_journo, config):
         # We need to override the config to point at the per-test DB
         manage.config = config
 
-        return_value = manage.reset(args=None)
+        args = argparse.Namespace(store_dir=config.STORE_DIR)
+        return_value = manage.reset(args=args)
         assert return_value == 0
         assert os.path.exists(config.DATABASE_FILE)
         assert os.path.exists(config.STORE_DIR)
