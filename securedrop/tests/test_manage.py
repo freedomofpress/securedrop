@@ -2,6 +2,7 @@
 
 import argparse
 import io
+import datetime
 import logging
 import os
 import manage
@@ -13,7 +14,8 @@ from StringIO import StringIO
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
-from models import Journalist
+from models import Journalist, db
+from utils import db_helper
 
 
 YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
@@ -222,3 +224,28 @@ def test_clean_tmp_removed(config, caplog):
     manage.setup_verbosity(args)
     manage.clean_tmp(args)
     assert 'FILE removed' in caplog.text
+
+
+def test_were_there_submissions_today(source_app, config):
+    original_config = manage.config
+    try:
+        # We need to override the config to point at the per-test DB
+        manage.config = config
+        data_root = config.SECUREDROP_DATA_ROOT
+        args = argparse.Namespace(data_root=data_root,
+                                  verbose=logging.DEBUG)
+
+        with source_app.app_context():
+            count_file = os.path.join(data_root, 'submissions_today.txt')
+            source, codename = db_helper.init_source_without_keypair()
+            source.last_updated = (datetime.datetime.utcnow() -
+                                   datetime.timedelta(hours=24*2))
+            db.session.commit()
+            manage.were_there_submissions_today(args)
+            assert io.open(count_file).read() == "0"
+            source.last_updated = datetime.datetime.utcnow()
+            db.session.commit()
+            manage.were_there_submissions_today(args)
+            assert io.open(count_file).read() == "1"
+    finally:
+        manage.config = original_config
