@@ -190,3 +190,14 @@
     <options>no_email_alert</options>
   </rule>
 </group>
+
+<group name="Ossec daily notifications">
+  <rule id="400600" level="1" >
+    <if_sid>530</if_sid>
+    <options>alert_by_email</options> <!-- force email to be sent -->
+    <match>ossec: output: 'head -1 /var/lib/securedrop/submissions_today.txt</match>
+    <description>Boolean value indicating if there were submissions in the past 24h.</description>
+  </rule>
+</group>
+
+
