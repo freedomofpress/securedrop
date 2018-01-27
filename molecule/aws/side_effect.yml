@@ -10,6 +10,31 @@
     - include: reboot_and_wait.yml
       when: "false"
 
+- name: Setup junit env first
+  hosts: localhost
+  gather_facts: false
+  become: no
+  tasks:
+    - name: Ensure test folder(s) exists
+      file:
+        state: directory
+        path: "../../{{ item }}"
+      with_items:
+        - junit
+        - raw-test-output
+
+    - name: Dig out existing junit test results
+      find:
+        paths: "{{ (playbook_dir+'/../../junit')|realpath }}"
+        patterns: "*.xml"
+      register: find_junit_results
+
+    - name: Ensure existing junit files are purged
+      file:
+        state: absent
+        path: "{{ item.path }}"
+      with_items: "{{ find_junit_results.files }}"
+
 - name: Run application test suite in CI.
   hosts: "app-{{ ci_env }}"
   become: yes
@@ -43,6 +68,45 @@
       become: no
       ignore_errors: true
       no_log: true
+
+    - name: Establish list of raw test results
+      set_fact:
+        raw_test_results:
+          - type: app
+            file: scripts/app-tests.sh
+            result: "{{ app_test_register }}"
+          - type: testinfra
+            file: scripts/ci-tester.sh
+            result: "{{ testinfra_results }}"
+
+    - name: Dump raw test output
+      copy:
+        dest: "../../raw-test-output/{{item.type}}_tests.raw"
+        content: "{{ item.result }}"
+      with_items: "{{ raw_test_results }}"
+      no_log: true
+      become: no
+      delegate_to: localhost
+
+    - name: Dump results into junit files
+      template:
+        src: junit.xml.j2
+        dest: "../../{{ item.type }}-results.xml"
+      with_items: "{{ raw_test_results }}"
+      become: no
+      # THIS NEEDS TO BE SKIPPED FOR THE TIME BEING.
+      # CAUSING PARSING FAILURES ON TEST COMBINE
+      # See pull/2796
+      when: false
+      no_log: true
+      delegate_to: localhost
+
+    - name: Combine tests for export
+      shell: ./testinfra/combine-junit.py ./*results.xml > ./junit/junit.xml
+      args:
+        chdir: ../../
+      delegate_to: localhost
+      become: no
 
     - fail:
       when: app_test_register|failed or testinfra_results|failed
