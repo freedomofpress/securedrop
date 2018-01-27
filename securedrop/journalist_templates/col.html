@@ -101,7 +101,7 @@
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}">
-    <button type="submit" class="sd-button danger"><i class="fa fa-trash-o"></i> {{ gettext('DELETE COLLECTION') }}</button>
+    <button id="delete-collection-button" type="submit" class="sd-button danger"><i class="fa fa-trash-o"></i> {{ gettext('DELETE COLLECTION') }}</button>
   </form>
 
 </div>
