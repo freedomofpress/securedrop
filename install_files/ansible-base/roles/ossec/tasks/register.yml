@@ -1,0 +1,144 @@
+---
+- name: Check whether Application Server is registered as OSSEC agent.
+  command: /var/ossec/bin/list_agents -a
+  register: ossec_list_agents_result
+  # Read-only task, so don't report changed
+  when: ossec_is_server
+  changed_when: false
+
+# Gnarly vars retrieval logic in this task. The "register" action above applies
+# only to the Monitor Server, so the Application Server won't be able to access
+# the value (and the play will fail as a result). So on both hosts, let's look up
+# the registered value by referencing the hostvars for the Monitor Server, then
+# copy the result to a more conveniently named fact on both hosts.
+- name: Set host fact for OSSEC registration state.
+  set_fact:
+    ossec_agent_already_registered: "{{ app_ip+' is available.' in hostvars[groups.securedrop_monitor_server.0].ossec_list_agents_result.stdout }}"
+  # No "delegate_to", so that *both* hosts are aware of registration stauts via set_fact.
+
+- name: Find existing ossec remote IDs
+  find:
+    paths: /var/ossec/queue/rids
+    patterns: '^\d+$'
+    use_regex: "yes"
+  when:
+    - ossec_is_server
+  register: _existing_rids
+
+- name: Overload agent already registered status to force reinstall
+  set_fact:
+    ossec_agent_already_registered: false
+  when: hostvars[groups.securedrop_monitor_server.0]._existing_rids.matched > 1
+
+- name: Build list of existing remote IDs
+  set_fact:
+    build_rids: "{{ build_rids|default([]) + [item.path|basename] }}"
+  with_items: "{{ _existing_rids.files }}"
+  when:
+    - ossec_is_server
+
+- name: Stop ossec now for clean-up
+  service:
+    name: ossec
+    state: stopped
+  notify: restart ossec
+  when:
+    - not ossec_agent_already_registered
+
+- name: Purge existing ossec server existing agents
+  command: /var/ossec/bin/manage_agents -r {{ item }}
+  changed_when: false
+  with_items: "{{ build_rids|default([]) }}"
+  when:
+    - ossec_is_server
+    - not ossec_agent_already_registered
+
+- name: Erase existing client-side key
+  file:
+    path: /var/ossec/etc/client.keys
+    state: absent
+  when:
+    - ossec_is_client
+    - not ossec_agent_already_registered
+
+- name: Start authd.
+  shell: /var/ossec/bin/ossec-authd -i {{ app_ip }} -p 1515 >/dev/null 2>&1 &
+  async: 0
+  poll: 0
+  when:
+    - ossec_is_server
+    - not ossec_agent_already_registered
+
+- name: Add firewall exemption for OSSEC agent registration (both servers)
+  iptables:
+    action: insert
+    chain: "{{ item.chain }}"
+    destination: "{{ item.dest|default(omit) }}"
+    destination_port: "{{ item.dest_port|default(omit) }}"
+    protocol: "{{ item.proto }}"
+    ctstate: "{{ item.cstate }}"
+    jump: "{{ item.jump }}"
+    match: "{{ item.match }}"
+    source: "{{ item.source|default(omit) }}"
+    source_port: "{{ item.source_port|default(omit) }}"
+    state: present
+  # No "delegate_to", since servers will have different group_vars.
+  with_items: "{{ authd_iprules }}"
+  when: not ossec_agent_already_registered
+
+- name: Register OSSEC agent.
+  command: /var/ossec/bin/agent-auth -m {{ monitor_ip }} -p 1515 -A {{ app_hostname }}
+  when:
+    - ossec_is_client
+    - not ossec_agent_already_registered
+
+# If the OSSEC agent auth iptable rule exemptions are in place remove them and
+# restart OSSEC. This order does matter. The app server's
+# ossec agent needs to restart to load the imported cert from authd and
+# connect to the ossec server. The monitor server's OSSEC server needs to
+# restart after the agent connects to correctly display the agent status.
+- name: Remove firewall exemption for OSSEC agent registration.
+  iptables:
+    chain: "{{ item.chain }}"
+    destination: "{{ item.dest|default(omit) }}"
+    destination_port: "{{ item.dest_port|default(omit) }}"
+    protocol: "{{ item.proto }}"
+    ctstate: "{{ item.cstate }}"
+    jump: "{{ item.jump }}"
+    match: "{{ item.match }}"
+    source: "{{ item.source|default(omit) }}"
+    source_port: "{{ item.source_port|default(omit) }}"
+    state: absent
+  with_items: "{{ authd_iprules }}"
+  # No conditional, to force state=absent in all cases.
+
+# Contact the OSSEC server and ensure that the authd process
+# is not running. Declaring these as tasks rather than handlers
+# to ensure that the the cleanup happens every time, in case
+# authd was somehow left running, e.g. if playbook was interrupted.
+- name: Check if authd process is running on Monitor Server.
+  command: pgrep ossec-authd
+  # pgrep returns 1 if no process is found, so ignore that error.
+  # This is essentially a read-only task, with the subsequent task
+  # potentially making changes
+  failed_when: false
+  changed_when: false
+  register: ossec_authd_running_check
+  when: ossec_is_server
+
+- name: Kill authd process (if running) on Monitor Server.
+  # This should work using the pattern to grep for in the output of ps per
+  # http://docs.ansible.com/service_module.html
+  # Currently getting an error saying
+  # failed: [mon-staging] => {"failed": true}
+  #  msg: service not found: ossec-authd
+  # service: name=ossec-authd pattern=/var/ossec/bin/ossec-authd state=started
+  command: kill {{ item }}
+  # It's technically possible that pgrep will return more than one PID.
+  # Let's be careful and kill each process, even though in most cases there
+  # will be only one, if any.
+  with_items: "{{ ossec_authd_running_check.stdout_lines }}"
+  when:
+    - ossec_is_server
+    - ossec_authd_running_check.rc == 0
+    - ossec_authd_running_check.stdout != ""

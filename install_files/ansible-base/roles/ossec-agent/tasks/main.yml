@@ -1,4 +1,0 @@
----
-- include: agent_config.yml
-
-- include: cleanup_authd.yml

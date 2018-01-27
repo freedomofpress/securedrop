@@ -1,8 +1,0 @@
----
-- name: reload iptables rules
-  shell: iptables-restore < /etc/network/iptables/rules_v4
-
-- name: restart ossec
-  service:
-    name: ossec
-    state: restarted
