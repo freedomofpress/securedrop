@@ -46,5 +46,6 @@ def main():
     subprocess.check_call(['service', 'apache2', 'restart'])
     subprocess.check_call(['service', 'tor', 'reload'])
 
+
 if __name__ == "__main__":
     main()
