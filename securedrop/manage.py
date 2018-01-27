@@ -95,15 +95,15 @@ def reset(args):
 
     # Clear submission/reply storage
     try:
-        os.stat(config.STORE_DIR)
+        os.stat(args.store_dir)
     except OSError:
         pass
     else:
-        for source_dir in os.listdir(config.STORE_DIR):
+        for source_dir in os.listdir(args.store_dir):
             try:
                 # Each entry in STORE_DIR is a directory corresponding
                 # to a source
-                shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
+                shutil.rmtree(os.path.join(args.store_dir, source_dir))
             except OSError:
                 pass
     return 0
@@ -402,6 +402,9 @@ def get_args():
     parser = argparse.ArgumentParser(prog=__file__, description='Management '
                                      'and testing utility for SecureDrop.')
     parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('--store-dir',
+                        default=config.STORE_DIR,
+                        help=('directory in which the documents are stored'))
     subps = parser.add_subparsers()
     # Run WSGI app
     run_subp = subps.add_parser('run', help='Run the Werkzeug source & '
