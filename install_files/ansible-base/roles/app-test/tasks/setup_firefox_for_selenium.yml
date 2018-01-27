@@ -13,7 +13,7 @@
     purge: yes
   when:
     - not firefox_installed_result|failed
-    - firefox_installed_result.stdout != "Mozilla Firefox 46.0.1"
+    - firefox_installed_result.stdout|default('') != "Mozilla Firefox 46.0.1"
 
 # Selenium 3 makes breaking changes with the 2.X API, and requires the
 # installation of the Mozilla geckodriver. Since the Aaron Swartz Day Hackathon
