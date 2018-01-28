@@ -69,6 +69,15 @@ continuing:
    can add more later)
 -  The username of the system admin
 
+You can also, optionally, require that :doc:`daily notifications about
+the number of submissions <journalist>` received in the past 24h are
+sent via email so journalists know if it is worth checking the
+*Journalist Interface*. For this you will need:
+
+-  The Journalist Alert Key
+-  The Journalist Alert Key fingerprint
+-  The email address that will receive the daily notifications
+
 You will have to copy the following required files to
 ``install_files/ansible-base``:
 
