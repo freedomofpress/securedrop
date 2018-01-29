@@ -90,7 +90,7 @@ class OSSECURLs():
 
 
 def main():
-    module = AnsibleModule( # noqa E405
+    module = AnsibleModule(  # noqa: F405
         argument_spec=dict(
             ossec_version=dict(default="2.8.2"),
         ),
