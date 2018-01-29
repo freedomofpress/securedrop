@@ -26,7 +26,7 @@ EXAMPLES = '''
     ossec_version: "2.8.2"
 '''
 
-import re # noqa E402
+import re  # noqa: E402
 
 
 HAS_REQUESTS = True
@@ -64,7 +64,7 @@ class OSSECURLs():
 
     @property
     def ossec_checksum_url(self):
-        return "https://github.com/ossec/ossec-hids/releases/download/{}/{}".format( # noqa E501
+        return "https://github.com/ossec/ossec-hids/releases/download/{}/{}".format(  # noqa: E501
                 self.ossec_version, self.ossec_checksum_filename)
 
     @property
