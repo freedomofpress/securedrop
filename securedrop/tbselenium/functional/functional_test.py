@@ -8,6 +8,7 @@ from os.path import abspath, dirname, join, realpath, expanduser
 import signal
 import socket
 import time
+import json
 import traceback
 import subprocess
 import requests
@@ -120,13 +121,19 @@ class FunctionalTest(object):
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
 
+        instance_information_path = join(FUNCTIONAL_TEST_DIR, 'instance_information.json')
 
-        self.source_location = "http://127.0.0.1:8080"
-        self.journalist_location = "http://127.0.0.1:8081"
-        self.journo = {'password': 'subside pristine smitten sandpaper curler carve waggle',
-                       'secret': 'j2ugccqm3iwlydp7', 'name': 'foot'}
-        self.journo['totp'] = pyotp.TOTP(self.journo['secret'])
-        self.new_totp = None # To be created runtime
+        if os.path.exists(instance_information_path):
+            with open(instance_information_path) as fobj:
+                data = json.load(fobj)
+            self.source_location = data.get('source_location', "http://127.0.0.1:8080")
+            self.journalist_location = data.get('journalist_location', "http://127.0.0.1:8081")
+            self.hidserv_data = data.get('hidserv_token', '')
+            self.journo = data.get('user')
+            self.journo['totp'] = pyotp.TOTP(self.journo['secret'])
+            self.new_totp = None # To be created runtime
+        else:
+            assert False, "Missing instance information JSON file."
 
         # Allow custom session expiration lengths
         self.session_expiration = session_expiration
