@@ -14,3 +14,9 @@ class TestSourceInterfaceBannerWarnings(
 
         assert ("We recommend using Tor Browser to access SecureDrop" in
                 warning_banner.text)
+
+    def test_warning_high_security(self):
+        self.driver.get(self.source_location)
+
+        banner = self.driver.find_element_by_class_name('js-warning')
+        assert ("Security Slider to High", banner.text)
