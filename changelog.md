@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.2~rc1
+
+* Replace PyCrypto (#2903).
+* Use `max_fail_percentage` to force immediate Ansible exits in playbook runs (#2922).
+* Bugfix: Dynamically allocate firewall during OSSEC registration (#2748).
+* Bugfix: Add all languages to sdconfig prompt (#2935).
+
+The issues for this release were tracked in the 0.5.2 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestone/41
+
 ## 0.5.1
 
 ### Web Applications
