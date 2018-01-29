@@ -83,8 +83,8 @@ class JournalistNavigationStepsMixin():
     @screenshots
     def _journalist_logs_in(self):
         # Create a test user for logging in
-        self.user, self.user_pw = self.journo['name'], self.journo['password']
-        self._login_user(self.user, self.user_pw, str(self.journo['totp'].now()))
+        self.user, self.user_pw = self.admin_user['name'], self.admin_user['password']
+        self._login_user(self.user, self.user_pw, str(self.admin_user['totp'].now()))
 
         headline = self.driver.find_element_by_css_selector('span.headline')
         if not hasattr(self, 'accept_languages'):
@@ -117,8 +117,8 @@ class JournalistNavigationStepsMixin():
 
     @screenshots
     def _admin_logs_in(self):
-        self.admin, self.admin_pw = self.journo['name'], self.journo['password']
-        self._login_user(self.admin, self.admin_pw, str(self.journo['totp'].now()))
+        self.admin, self.admin_pw = self.admin_user['name'], self.admin_user['password']
+        self._login_user(self.admin, self.admin_pw, str(self.admin_user['totp'].now()))
 
         if not hasattr(self, 'accept_languages'):
             # Admin user should log in to the same interface as a
@@ -368,7 +368,7 @@ class JournalistNavigationStepsMixin():
         self._logout()
 
         time.sleep(2)
-        self._login_user(self.admin, self.admin_pw, str(self.journo['totp'].now()))
+        self._login_user(self.admin, self.admin_pw, str(self.admin_user['totp'].now()))
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_id(
@@ -421,7 +421,7 @@ class JournalistNavigationStepsMixin():
         # Log the admin user back in
         self._logout()
         time.sleep(61)
-        self._login_user(self.admin, self.admin_pw, str(self.journo['totp'].now()))
+        self._login_user(self.admin, self.admin_pw, str(self.admin_user['totp'].now()))
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_id(
