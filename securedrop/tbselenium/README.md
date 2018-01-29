@@ -25,7 +25,22 @@ TOTP secret.
 $ python test_utility_cmd.py --username foobar --admin
 ```
 
-Update this information to the `functional/functional_test.py` in line **100** in `self.journo` value.
+Update this information to the `functional/instance_infomration.json file.
+
+The content of the file looks like below.
+
+```
+{
+    "hidserv_token": "",
+    "journalist_location": "http://127.0.0.1:8081",
+    "source_location": "http://127.0.0.1:8080",
+    "user": {
+        "name": "foot",
+        "password": "your admin password",
+        "secret": "2FA secret without spaces."
+    }
+}
+```
 
 ### Run the tests
 
