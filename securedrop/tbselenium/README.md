@@ -34,6 +34,7 @@ The content of the file looks like below.
     "hidserv_token": "",
     "journalist_location": "http://127.0.0.1:8081",
     "source_location": "http://127.0.0.1:8080",
+    "sleep_time": 2,
     "user": {
         "name": "foot",
         "password": "your admin password",

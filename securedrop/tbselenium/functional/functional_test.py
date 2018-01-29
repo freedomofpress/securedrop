@@ -132,6 +132,7 @@ class FunctionalTest(object):
             self.admin_user = data.get('user')
             self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
             self.new_totp = None # To be created runtime
+            self.sleep_time = data.get('sleep_time', 2)
         else:
             assert False, "Missing instance information JSON file."
 

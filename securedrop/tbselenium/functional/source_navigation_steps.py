@@ -75,7 +75,7 @@ class SourceNavigationStepsMixin():
     @screenshots
     def _source_chooses_to_login(self):
         self.driver.find_element_by_id('login-button').click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
         logins = self.driver.find_elements_by_id(
             'login-with-existing-codename')
@@ -100,7 +100,7 @@ class SourceNavigationStepsMixin():
 
         continue_button = self.driver.find_element_by_id('login')
         continue_button.click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             assert ("SecureDrop | Protecting Journalists and Sources" ==
@@ -194,7 +194,7 @@ class SourceNavigationStepsMixin():
     def _source_clicks_submit_button_on_submission_page(self):
         submit_button = self.driver.find_element_by_id('submit-doc-button')
         submit_button.click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
     @screenshots
     def _source_deletes_a_journalist_reply(self):
@@ -206,14 +206,14 @@ class SourceNavigationStepsMixin():
         delete_button_id = 'delete-reply-{}'.format(reply_filename)
         delete_button = self.driver.find_element_by_id(delete_button_id)
         delete_button.click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
         confirm_button_id = 'confirm-delete-reply-button-{}'.format(
             reply_filename)
         confirm_button = self.driver.find_element_by_id(confirm_button_id)
         assert confirm_button.is_displayed()
         confirm_button.click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             notification = self.driver.find_element_by_class_name(
