@@ -137,7 +137,7 @@ class JournalistNavigationStepsMixin():
         admin_interface_link = self.driver.find_element_by_id(
             'link-admin-index')
         admin_interface_link.click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
         if not hasattr(self, 'accept_languages'):
             h1s = self.driver.find_elements_by_tag_name('h1')
             assert "Admin Interface" in [el.text for el in h1s]
@@ -147,7 +147,7 @@ class JournalistNavigationStepsMixin():
             'update-instance-config'
         )
         system_config_link.click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
         if not hasattr(self, 'accept_languages'):
             h1 = self.driver.find_element_by_tag_name('h1')
             assert "Instance Configuration" in h1.text
@@ -160,7 +160,7 @@ class JournalistNavigationStepsMixin():
 
         submit_button = self.driver.find_element_by_id('submit-logo-update')
         submit_button.click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             flashed_msgs = self.driver.find_element_by_css_selector('.flash')
@@ -194,7 +194,7 @@ class JournalistNavigationStepsMixin():
         add_user_btn = self.driver.find_element_by_css_selector(
             'button#add-user')
         add_user_btn.click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             # The add user page has a form with an "ADD USER" button
@@ -229,7 +229,7 @@ class JournalistNavigationStepsMixin():
             'button[type=submit]')
         submit_button.click()
 
-        time.sleep(2)
+        time.sleep(self.sleep_time)
         if not hasattr(self, 'accept_languages'):
             # Successfully verifying the code should redirect to the admin
             # interface, and flash a message indicating success
@@ -326,7 +326,7 @@ class JournalistNavigationStepsMixin():
             self.driver.find_elements_by_tag_name('a'))
         assert 1 == len(new_user_edit_links)
         new_user_edit_links[0].click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
         # The header says "Edit user "username"".
         h1s = self.driver.find_elements_by_tag_name('h1')[0]
         assert 'Edit user "{}"'.format(username) == h1s.text
@@ -367,7 +367,7 @@ class JournalistNavigationStepsMixin():
         # Log the new user out
         self._logout()
 
-        time.sleep(2)
+        time.sleep(self.sleep_time)
         self._login_user(self.admin, self.admin_pw, str(self.admin_user['totp'].now()))
 
         # Go to the admin interface
@@ -375,7 +375,7 @@ class JournalistNavigationStepsMixin():
             'link-admin-index')
         admin_interface_link.click()
 
-        time.sleep(2)
+        time.sleep(self.sleep_time)
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
         new_user_edit_links = filter(
@@ -384,7 +384,7 @@ class JournalistNavigationStepsMixin():
             self.driver.find_elements_by_tag_name('a'))
         assert len(new_user_edit_links) == 1
         new_user_edit_links[0].click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
         def can_edit_user():
             assert ('"{}"'.format(self.new_user['username']) in
@@ -427,7 +427,7 @@ class JournalistNavigationStepsMixin():
         admin_interface_link = self.driver.find_element_by_id(
             'link-admin-index')
         admin_interface_link.click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
         # Edit the new user's password
         self._edit_user(self.new_user['username'])
@@ -438,7 +438,7 @@ class JournalistNavigationStepsMixin():
         reset_pw_btn = self.driver.find_element_by_css_selector(
             '#reset-password')
         reset_pw_btn.click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
         def update_password_success():
             assert 'Password updated.' in self.driver.page_source
@@ -501,7 +501,7 @@ class JournalistNavigationStepsMixin():
     def _journalist_selects_the_first_source(self):
         self.driver.find_element_by_css_selector(
             '#un-starred-source-link-1').click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
     def _journalist_selects_documents_to_download(self):
         self.driver.find_element_by_id('select_all').click()
@@ -549,7 +549,7 @@ class JournalistNavigationStepsMixin():
         #self._journalist_selects_the_first_source()  # XXXX
         self._journalist_composes_reply()
         self.driver.find_element_by_id('reply-button').click()
-        time.sleep(2)
+        time.sleep(self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             assert ("Thanks. Your reply has been stored." in
