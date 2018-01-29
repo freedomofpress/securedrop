@@ -129,8 +129,8 @@ class FunctionalTest(object):
             self.source_location = data.get('source_location', "http://127.0.0.1:8080")
             self.journalist_location = data.get('journalist_location', "http://127.0.0.1:8081")
             self.hidserv_data = data.get('hidserv_token', '')
-            self.journo = data.get('user')
-            self.journo['totp'] = pyotp.TOTP(self.journo['secret'])
+            self.admin_user = data.get('user')
+            self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
             self.new_totp = None # To be created runtime
         else:
             assert False, "Missing instance information JSON file."
