@@ -57,8 +57,7 @@ printf "Validating fingerprint and public key key match...\n"
 printf "\t Public key: %s\n" "${key_location}"
 printf "\t Fingerprint: %s\n" "${fingerprint}"
 
-gpg2 --list-keys "$fingerprint" | \
-  grep -qP "^\s+${fingerprint}" 2> /dev/null
+gpg2 --fingerprint "$fingerprint"
 
 printf "Success! Specified fingerprint matches pubkey file.\n"
 exit 0

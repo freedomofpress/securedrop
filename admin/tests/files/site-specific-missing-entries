@@ -1,0 +1,14 @@
+app_hostname: app
+app_ip: 10.20.2.2
+dns_server: 8.8.8.8
+monitor_hostname: mon
+monitor_ip: 10.20.3.2
+ossec_alert_email: la@foo.com
+ossec_alert_gpg_public_key: key.asc
+ossec_gpg_fpr: E99FFE83DF73E72FB6B264ED992D23B392F9E4F2
+sasl_domain: gnu.com
+sasl_password: passowrdok
+sasl_username: usernameok
+securedrop_app_gpg_fingerprint: E99FFE83DF73E72FB6B264ED992D23B392F9E4F2
+securedrop_app_gpg_public_key: key.asc
+smtp_relay: smtp.gmail.com
