@@ -20,6 +20,10 @@
 - name: Force possible tor update
   meta: flush_handlers
 
+- name: Squash testinfra failure for packages needing update
+  apt:
+    upgrade: safe
+
 - name: Extract latest tor version
   shell: |
     apt-cache policy tor | sed -e 's/^\s*Installed:\ \(\S*\)/\1/g;tx;d;:x'
