@@ -148,7 +148,7 @@ jobs:
           path: /root/sd/raw-test-output
 
       - store_artifacts:
-          path: ~/.tor_version
+          path: /root/sd/.tor_version
 
 workflows:
   version: 2
