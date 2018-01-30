@@ -1,7 +1,7 @@
 Tails Guide
 ===========
 
-To log-in SecureDrop and retreived messages sent by sources, the journalist
+To log-in to SecureDrop and retrieve messages sent by sources, the journalist
 must be using the Tails operating system. The admin must also use Tails to
 access the *Journalist Interface* and create new users.
 
@@ -18,7 +18,7 @@ Note that for all of these instructions to work, you should have already
 installed the main SecureDrop application. It is also required that you use
 Tails version 2.x or greater.
 
-Installing Tails on USB sticks
+Installing Tails on USB Sticks
 ------------------------------
 
 Tails is a live operating system that is run from removable media, such as a
@@ -43,7 +43,7 @@ stick. Here are some links to help you out:
 .. _`Install onto a USB stick or SD card`: https://tails.boum.org/doc/first_steps/installation/index.en.html
 .. _`Create & configure the persistent volume`: https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html
 
-Note for Mac OS X users manually installing Tails
+Note for Mac OS X Users Manually Installing Tails
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Tails documentation for `manually installing Tails onto a USB device
@@ -68,7 +68,7 @@ minutes for us.
 
 .. _`manually installing Tails onto a USB device on Mac OS X`: https://tails.boum.org/doc/first_steps/installation/manual/mac/index.en.html
 
-Configure Tails for use with SecureDrop
+Configure Tails for Use with SecureDrop
 ---------------------------------------
 
 .. _enable_persistence_in_tails:
@@ -84,7 +84,7 @@ website <https://tails.boum.org/doc/first_steps/persistence/index.en.html>`__.
 You will be asked to select from a list of persistence features, such as
 personal data. We require that you enable **all** features.
 
-Start Tails and enable the persistent volume
+Start Tails and Enable the Persistent Volume
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When starting Tails, you should see a "Welcome to Tails" screen with two
@@ -92,7 +92,7 @@ options. Select *Yes* to enable the persistent volume and enter your passphrase.
 Select *Yes* to show more options and click *Forward*. Enter an *Administration
 passphrase* for use with this specific Tails session and click *Login*.
 
-Download the repository
+Download the Repository
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 The rest of the SecureDrop-specific configuration is assisted by files stored
@@ -127,16 +127,17 @@ To use the template:
 -  Click **Database** and **Save Database As**
 -  Save the database in the Persistent folder
 
-.. tip:: If you would like to add a master passphrase, navigate to **Database** and
-   **Change master key**. Note that since each KeePassX database is stored
-   on the encrypted persistent volume, this additional passphrase is not necessary.
+.. tip:: If you would like to add a master passphrase, navigate to **Database**
+         and **Change master key**. Note that since each KeePassX database is
+         stored on the encrypted persistent volume, this additional passphrase
+         is not necessary.
 
-.. warning:: You will not be able to access your passphrases if you
-	     forget the master passphrase or the location of the key
-	     file used to protect the database.
+.. warning:: You will not be able to access your passphrases if you forget the
+	     master passphrase or the location of the key file used to protect
+	     the database.
 
 
-Set up easy access to the Journalist Interface
+Set Up Easy Access to the Journalist Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To complete setup of the *Admin Workstation* or Journalist Workstation, we
@@ -156,7 +157,7 @@ enter. This installation script does the following:
 * Downloads additional software
 * Installs a program that automatically and persistently configures Tor to
   access the SecureDrop servers and interfaces, by adding ``HidServAuth`` values
-  to ``/etc/tor/torrc``.
+  to ``/etc/tor/torrc``
 * Sets up desktop and main menu shortcuts for the *Journalist Interface* and
   *Source Interface*
 * Sets up SSH host aliases for ``mon`` and ``app``
@@ -178,7 +179,7 @@ Our ``./securedrop-admin tailsconfig`` tool sets up Tails to work with SecureDro
 every time you login. As long as Tails is booted with the persistent volume enabled
 then you can open the Tor Browser and connect to the Journalist Interface as normal.
 
-Create bookmarks for Source and Journalist Interfaces
+Create Bookmarks for Source and Journalist Interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want, you can open the browser and create bookmarks for the Source and
