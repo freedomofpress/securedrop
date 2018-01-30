@@ -9,6 +9,7 @@ from datetime import datetime
 import os
 import tarfile
 
+
 def main():
     backup_filename = 'sd-backup-{}.tar.gz'.format(
         datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
@@ -31,6 +32,7 @@ def main():
         backup.add(torrc)
 
     print backup_filename
+
 
 if __name__ == "__main__":
     main()

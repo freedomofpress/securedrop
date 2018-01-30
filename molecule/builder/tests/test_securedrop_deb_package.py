@@ -218,8 +218,9 @@ def test_deb_package_contains_no_generated_assets(File, Command, deb):
         # no SASS files should exist; only the generated CSS files.
         assert not re.search("^.*sass.*$", c.stdout, re.M)
 
-        #no .map files should exist; only the generated CSS files.
+        # no .map files should exist; only the generated CSS files.
         assert not re.search("^.*css.map$", c.stdout, re.M)
+
 
 @pytest.mark.parametrize("deb", deb_packages)
 def test_deb_package_contains_css(File, Command, deb):
@@ -250,6 +251,7 @@ def test_deb_package_lintian(File, Command, deb, tag):
         tag, deb_package.path))
     assert len(c.stdout) == 0
 
+
 @pytest.mark.parametrize("deb", deb_packages)
 def test_deb_app_package_contains_https_validate_dir(host, deb):
     """
@@ -264,7 +266,8 @@ def test_deb_app_package_contains_https_validate_dir(host, deb):
         c = host.run("dpkg-deb --contents {}".format(deb_package.path))
         # static/gen/ directory should exist
         assert re.search("^.*\./var/www/securedrop/"
-                ".well-known/$", c.stdout, re.M)
+                         ".well-known/$", c.stdout, re.M)
+
 
 @pytest.mark.parametrize("deb", deb_packages)
 def test_grsec_metapackage(host, deb):

@@ -9,15 +9,12 @@ to backup the 0.3 system and stores it in /tmp/sd-backup-0.3-TIME_STAMP.zip.gpg
 
 import sys
 import os
-import re
 import zipfile
 from datetime import datetime
-import functools
 # Import the application config.py file
 sys.path.append("/var/www/securedrop")
-import config
-import gnupg
-import subprocess
+import config  # noqa: F403
+import gnupg  # noqa: F403
 
 TOR_SERVICES = "/var/lib/tor/services"
 TOR_CONFIG = "/etc/tor/torrc"
@@ -77,6 +74,7 @@ def main():
         collect_tor_files(zf)
     encrypt_zip_file(zf_fn)
     print zf_fn
+
 
 if __name__ == "__main__":
     main()

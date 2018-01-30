@@ -1,5 +1,6 @@
 # -*- encoding:utf-8 -*-
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, \
+        unicode_literals
 
 import sys
 
@@ -18,11 +19,13 @@ def print_red_bold(text):
 
 class CallbackModule(CallbackBase):
     def __init__(self):
-        # Can't use `on_X` because this isn't forwards compatible with Ansible 2.0+
+        # Can't use `on_X` because this isn't forwards compatible
+        # with Ansible 2.0+
         required_version = '2.4.2'  # Keep synchronized with requirements files
         if not ansible.__version__.startswith(required_version):
             print_red_bold(
-                "SecureDrop restriction: only Ansible {version}.* is supported. "
+                "SecureDrop restriction: only Ansible {version}.*"
+                "is supported."
                 .format(version=required_version)
             )
             sys.exit(1)

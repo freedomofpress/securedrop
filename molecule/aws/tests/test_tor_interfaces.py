@@ -8,6 +8,7 @@ TOR_URL_FILES = [{'file': 'app-source-ths',
 
 testinfra_hosts = ["docker://apptestclient"]
 
+
 @pytest.mark.parametrize('site', TOR_URL_FILES)
 def test_www(host, site):
     """
