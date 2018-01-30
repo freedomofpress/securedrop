@@ -9,6 +9,14 @@
     # WHEN REINSTATING REBOOT
     - include: reboot_and_wait.yml
       when: "false"
+    - include: tor_apt_test.yml
+      when: (lookup('env','CIRCLE_BRANCH')|default('na')).startswith('release')
+  handlers:
+    - name: update tor
+      apt:
+        name: tor
+        state: latest
+        update_cache: yes
 
 - name: Setup junit env first
   hosts: localhost
