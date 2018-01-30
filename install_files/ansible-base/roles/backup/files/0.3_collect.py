@@ -13,8 +13,8 @@ import zipfile
 from datetime import datetime
 # Import the application config.py file
 sys.path.append("/var/www/securedrop")
-import config # noqa: ignore=F403
-import gnupg # noqa: ignore=F403
+import config  # noqa: F403
+import gnupg  # noqa: F403
 
 TOR_SERVICES = "/var/lib/tor/services"
 TOR_CONFIG = "/etc/tor/torrc"
