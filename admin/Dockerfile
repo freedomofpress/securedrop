@@ -13,6 +13,8 @@ WORKDIR /opt
 COPY bootstrap.py .
 COPY requirements.txt .
 RUN python bootstrap.py -v
+ENV VIRTUAL_ENV /opt/.venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 COPY requirements-dev.txt .
-RUN .venv/bin/pip install -r requirements-dev.txt
-COPY . .
+RUN pip install -r requirements-dev.txt
+RUN chown -R $USER_NAME /opt

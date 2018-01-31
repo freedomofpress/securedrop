@@ -1,0 +1,82 @@
+#!/bin/bash
+# shellcheck disable=SC2086
+# we ignore SC2086 because ${DOCKER_BUILD_ARGUMENTS:-} is intended to
+# be evaluated into multiple strings, not a single argument.
+
+set -euo pipefail
+
+TOPLEVEL=$(git rev-parse --show-toplevel)
+
+function display_dots() {
+    echo -n "Docker image build in progress "
+    trap "echo ' done !' ; exit 0" USR1
+    trap "exit 0" USR2
+    while : ; do
+        sleep 5
+        echo -n .
+    done
+}
+
+function ticker() {
+    local pid
+    display_dots &
+    pid="$!"
+    if "$@" ; then
+        status=0
+        kill -USR1 $pid
+    else
+        status=1
+        kill -USR2 $pid
+    fi
+    wait
+    return $status
+}
+
+function docker_image_circle() {
+    local out
+    out="$(mktemp)"
+    ( cat Dockerfile ; echo COPY . . ) > circle.docker
+    if ! docker build ${DOCKER_BUILD_ARGUMENTS:-} -t securedrop-admin -f circle.docker . >& "$out" ; then
+        cat "$out"
+        status=1
+    else
+        status=0
+    fi
+    rm circle.docker
+    return $status
+}
+
+function docker_run_circle() {
+    docker run --rm -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-admin "$@"
+}
+
+function docker_image() {
+    local out
+    out="$(mktemp)"
+    if ! docker build \
+         ${DOCKER_BUILD_ARGUMENTS:-} \
+	 --build-arg=USER_ID="$(id -u)" \
+	 --build-arg=USER_NAME="${USER:-root}" \
+         -t securedrop-admin "${TOPLEVEL}/admin" >& "$out" ; then
+        cat "$out"
+        return 1
+    fi
+    return 0
+}
+
+function docker_run() {
+    docker run \
+	   --rm \
+	   --user "${USER:-root}" \
+	   --volume "${TOPLEVEL}:${TOPLEVEL}" \
+	   --workdir "${TOPLEVEL}/admin" \
+	   -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-admin "$@"
+}
+
+if test -n "${CIRCLE_SHA1:-}" ; then
+   docker_image_circle
+   docker_run_circle "$@"
+else
+   ticker docker_image
+   docker_run "$@"
+fi
