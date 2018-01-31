@@ -57,25 +57,24 @@ Journalist Interface <yubikey_setup>`.)
 
 |Journalist Interface Login|
 
-Receiving daily notifications about submissions
------------------------------------------------
+Daily journalist alerts about submissions
+-----------------------------------------
 
 When a SecureDrop has little activity and receives only a few
 submissions every other week, checking the *Journalist Interface*
-daily only to find nothing is waiting is a burden. It is more
+daily only to find there is nothing is a burden. It is more
 convenient for journalists to be notified daily via email about the
 number of submissions received in the past 24h.
 
 If the email shows submissions were received, the journalist can
-connect to the *Journalist Interface* to get it.
+connect to the *Journalist Interface* to get them.
 
 This is an optional feature that must be activated :doc:`by the
 administrator <admin>`. In the simplest case a journalist provides
 her/his email and GPG public key to the admin. If a team of journalist
-want to receive these daily notifications, they should share a GPG
-public key and ask the admin to setup a mail alias (SecureDrop does
-not provide that) so they all receive the daily notificaitons and are
-able to decrypt them.
+wants to receive these daily alerts, they should share a GPG key and
+ask the admin to setup a mail alias (SecureDrop does not provide that
+service) so they all receive the alerts and are able to decrypt them.
 
 Interacting With Sources
 ------------------------

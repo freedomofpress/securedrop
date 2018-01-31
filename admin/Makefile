@@ -1,17 +1,13 @@
 DEFAULT_GOAL: help
 
 .PHONY: test
-test: image  ## Run tox inside a docker container
-	docker run --rm securedrop-admin .venv/bin/tox
-
-.PHONY: image
-image: ## Create the docker image to run tests
-	docker build -f Dockerfile -t securedrop-admin .
+test:  ## Run tox
+	bin/dev-shell tox
 
 .PHONY: update-pip-requirements
 update-pip-requirements: ## Updates all Python requirements files via pip-compile.
-	pip-compile --generate-hashes --output-file requirements.txt requirements.in requirements-ansible.in
-	pip-compile --generate-hashes --output-file requirements-dev.txt requirements-dev.in
+	bin/dev-shell pip-compile --generate-hashes --output-file requirements.txt requirements.in requirements-ansible.in
+	bin/dev-shell pip-compile --generate-hashes --output-file requirements-dev.txt requirements-dev.in
 
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
@@ -22,7 +18,7 @@ update-pip-requirements: ## Updates all Python requirements files via pip-compil
 # 6. Format columns with colon as delimiter.
 .PHONY: help
 help: ## Print this message and exit.
-	@printf "Makefile for developing and testing SecureDrop.\n"
+	@printf "Makefile for developing and testing securedrop-admin.\n"
 	@printf "Subcommands:\n\n"
 	@awk 'BEGIN {FS = ":.*?## "} /^[0-9a-zA-Z_-]+:.*?## / {printf "\033[36m%s\033[0m : %s\n", $$1, $$2}' $(MAKEFILE_LIST) \
 		| sort \

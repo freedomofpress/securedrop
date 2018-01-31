@@ -42,6 +42,10 @@ class FingerprintException(Exception):
     pass
 
 
+class JournalistAlertEmailException(Exception):
+    pass
+
+
 class SiteConfig(object):
 
     class ValidateNotEmpty(Validator):
@@ -121,6 +125,13 @@ class SiteConfig(object):
             raise ValidationError(
                 message=path + ' file does not exist')
 
+    class ValidateOptionalPath(ValidatePath):
+        def validate(self, document):
+            if document.text == '':
+                return True
+            return super(SiteConfig.ValidateOptionalPath, self).validate(
+                document)
+
     class ValidateYesNo(Validator):
         def validate(self, document):
             text = document.text.lower()
@@ -141,6 +152,13 @@ class SiteConfig(object):
                 raise ValidationError(
                     message='fingerprints must be 40 hexadecimal characters')
             return True
+
+    class ValidateOptionalFingerprint(ValidateFingerprint):
+        def validate(self, document):
+            if document.text == '':
+                return True
+            return super(SiteConfig.ValidateOptionalFingerprint,
+                         self).validate(document)
 
     class ValidateInt(Validator):
         def validate(self, document):
@@ -191,14 +209,33 @@ class SiteConfig(object):
             raise ValidationError(
                 message="Password for OSSEC email account must be strong")
 
-    class ValidateOSSECEmail(Validator):
+    class ValidateEmail(Validator):
         def validate(self, document):
             text = document.text
-            if text and '@' in text and 'ossec@ossec.test' != text:
+            if text == '':
+                raise ValidationError(
+                    message=("Must not be empty"))
+            if '@' not in text:
+                raise ValidationError(
+                    message=("Must contain a @"))
+            return True
+
+    class ValidateOptionalEmail(ValidateEmail):
+        def validate(self, document):
+            if document.text == '':
+                return True
+            return super(SiteConfig.ValidateOptionalEmail, self).validate(
+                document)
+
+    class ValidateOSSECEmail(ValidateEmail):
+        def validate(self, document):
+            super(SiteConfig.ValidateOSSECEmail, self).validate(document)
+            text = document.text
+            if 'ossec@ossec.test' != text:
                 return True
             raise ValidationError(
-                message=("Must contain a @ and be set to "
-                         "something other than ossec@ossec.test"))
+                message=("Must be set to something other than "
+                         "ossec@ossec.test"))
 
     def __init__(self, args):
         self.args = args
@@ -256,6 +293,19 @@ class SiteConfig(object):
              u'Admin email address for receiving OSSEC alerts',
              SiteConfig.ValidateOSSECEmail(),
              None],
+            ['journalist_alert_gpg_public_key', '', str,
+             u'Local filepath to journalist alerts GPG public key (optional)',
+             SiteConfig.ValidateOptionalPath(self.args.ansible_path),
+             None],
+            ['journalist_gpg_fpr', '', str,
+             u'Full fingerprint for the journalist alerts '
+             u'GPG public key (optional)',
+             SiteConfig.ValidateOptionalFingerprint(),
+             self.sanitize_fingerprint],
+            ['journalist_alert_email', '', str,
+             u'Email address for receiving journalist alerts',
+             SiteConfig.ValidateOptionalEmail(),
+             None],
             ['smtp_relay', "smtp.gmail.com", str,
              u'SMTP relay for sending OSSEC alerts',
              SiteConfig.ValidateNotEmpty(),
@@ -294,6 +344,7 @@ class SiteConfig(object):
         self.config = self.user_prompt_config()
         self.save()
         self.validate_gpg_keys()
+        self.validate_journalist_alert_email()
         return True
 
     def user_prompt_config(self):
@@ -340,11 +391,17 @@ class SiteConfig(object):
                  'securedrop_app_gpg_fingerprint'),
 
                 ('ossec_alert_gpg_public_key',
-                 'ossec_gpg_fpr'))
+                 'ossec_gpg_fpr'),
+
+                ('journalist_alert_gpg_public_key',
+                 'journalist_gpg_fpr'))
+        validate = os.path.join(
+            os.path.dirname(__file__), '..', 'bin',
+            'validate-gpg-key.sh')
         for (public_key, fingerprint) in keys:
-            validate = os.path.join(
-                os.path.dirname(__file__), '..', 'bin',
-                'validate-gpg-key.sh')
+            if (self.config[public_key] == '' and
+                self.config[fingerprint] == ''):
+                continue
             public_key = os.path.join(self.args.ansible_path,
                                       self.config[public_key])
             fingerprint = self.config[fingerprint]
@@ -358,6 +415,23 @@ class SiteConfig(object):
                     "fingerprint {} ".format(fingerprint) +
                     "does not match " +
                     "the public key {}".format(public_key))
+        return True
+
+    def validate_journalist_alert_email(self):
+        if (self.config['journalist_alert_gpg_public_key'] == '' and
+            self.config['journalist_gpg_fpr'] == ''):
+            return True
+
+        class Document(object):
+            def __init__(self, text):
+                self.text = text
+                
+        try:
+            SiteConfig.ValidateEmail().validate(Document(
+                self.config['journalist_alert_email']))
+        except ValidationError as e:
+            raise JournalistAlertEmailException(
+                "journalist alerts email: " + e.message)
         return True
 
     def exists(self):

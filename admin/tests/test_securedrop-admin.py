@@ -91,14 +91,25 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError):
             validator.validate(Document('short'))
 
-    def test_validate_ossec_email(self):
-        validator = securedrop_admin.SiteConfig.ValidateOSSECEmail()
+    def test_validate_email(self):
+        validator = securedrop_admin.SiteConfig.ValidateEmail()
 
         assert validator.validate(Document('good@mail.com'))
         with pytest.raises(ValidationError):
             validator.validate(Document('badmail'))
         with pytest.raises(ValidationError):
             validator.validate(Document(''))
+
+    def test_validate_optional_email(self):
+        validator = securedrop_admin.SiteConfig.ValidateOptionalEmail()
+
+        assert validator.validate(Document('good@mail.com'))
+        assert validator.validate(Document(''))
+
+    def test_validate_ossec_email(self):
+        validator = securedrop_admin.SiteConfig.ValidateOSSECEmail()
+
+        assert validator.validate(Document('good@mail.com'))
         with pytest.raises(ValidationError) as e:
             validator.validate(Document('ossec@ossec.test'))
         assert 'something other than ossec@ossec.test' in e.value.message
@@ -186,6 +197,13 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError):
             validator.validate(Document(""))
 
+    def test_validate_optional_path(self):
+        mydir = dirname(__file__)
+        myfile = basename(__file__)
+        validator = securedrop_admin.SiteConfig.ValidateOptionalPath(mydir)
+        assert validator.validate(Document(myfile))
+        assert validator.validate(Document(""))
+
     def test_validate_yes_no(self):
         validator = securedrop_admin.SiteConfig.ValidateYesNo()
         with pytest.raises(ValidationError):
@@ -221,6 +239,12 @@ class TestSiteConfig(object):
             validator.validate(Document(
                 "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"))
         assert '40 hexadecimal' in e.value.message
+
+    def test_validate_optional_fingerprint(self):
+        validator = securedrop_admin.SiteConfig.ValidateOptionalFingerprint()
+        assert validator.validate(Document(
+            "012345678901234567890123456789ABCDEFABCD"))
+        assert validator.validate(Document(""))
 
     def test_sanitize_fingerprint(self):
         args = argparse.Namespace(site_config='DOES_NOT_EXIST',
@@ -267,8 +291,7 @@ class TestSiteConfig(object):
         args = argparse.Namespace(site_config='INVALID',
                                   ansible_path='tests/files',
                                   app_path=dirname(__file__))
-        site_config = securedrop_admin.SiteConfig(args)
-        site_config.config = {
+        good_config = {
             'securedrop_app_gpg_public_key':
             'test_journalist_key.pub',
 
@@ -280,13 +303,62 @@ class TestSiteConfig(object):
 
             'ossec_gpg_fpr':
             '65A1B5FF195B56353CC63DFFCC40EF1228271441',
-        }
-        assert site_config.validate_gpg_keys()
-        site_config.config['ossec_gpg_fpr'] = 'FAIL'
-        with pytest.raises(securedrop_admin.FingerprintException) as e:
-            site_config.validate_gpg_keys()
-        assert 'FAIL does not match' in e.value.message
 
+            'journalist_alert_gpg_public_key':
+            'test_journalist_key.pub',
+
+            'journalist_gpg_fpr':
+            '65A1B5FF195B56353CC63DFFCC40EF1228271441',
+        }
+        site_config = securedrop_admin.SiteConfig(args)
+        site_config.config = good_config
+        assert site_config.validate_gpg_keys()
+
+        for key in ('securedrop_app_gpg_fingerprint',
+                    'ossec_gpg_fpr',
+                    'journalist_gpg_fpr'):
+            bad_config = good_config.copy()
+            bad_config[key] = 'FAIL'
+            site_config.config = bad_config
+            with pytest.raises(securedrop_admin.FingerprintException) as e:
+                site_config.validate_gpg_keys()
+            assert 'FAIL does not match' in e.value.message
+
+    def Ktest_journalist_alert_email(self):
+        args = argparse.Namespace(site_config='INVALID',
+                                  ansible_path='tests/files',
+                                  app_path=dirname(__file__))
+        site_config = securedrop_admin.SiteConfig(args)
+        site_config.config = {
+            'journalist_alert_gpg_public_key':
+            '',
+
+            'journalist_gpg_fpr':
+            '',
+        }
+        assert site_config.validate_journalist_alert_email()
+        site_config.config = {
+            'journalist_alert_gpg_public_key':
+            'test_journalist_key.pub',
+
+            'journalist_gpg_fpr':
+            '65A1B5FF195B56353CC63DFFCC40EF1228271441',
+        }
+        site_config.config['journalist_alert_email'] = ''
+        with pytest.raises(
+                securedrop_admin.JournalistAlertEmailException) as e:
+            site_config.validate_journalist_alert_email()
+        assert 'not be empty' in e.value.message
+
+        site_config.config['journalist_alert_email'] = 'bademail'
+        with pytest.raises(
+                securedrop_admin.JournalistAlertEmailException) as e:
+            site_config.validate_journalist_alert_email()
+        assert 'Must contain a @' in e.value.message
+        
+        site_config.config['journalist_alert_email'] = 'good@email.com'
+        assert site_config.validate_journalist_alert_email()
+        
     @mock.patch('securedrop_admin.SiteConfig.validated_input',
                 side_effect=lambda p, d, v, t: d)
     @mock.patch('securedrop_admin.SiteConfig.save')
@@ -331,11 +403,15 @@ class TestSiteConfig(object):
             if desc[0] == var:
                 return desc
 
-    def verify_desc_consistency(self, site_config, desc):
+    def verify_desc_consistency_optional(self, site_config, desc):
         (var, default, etype, prompt, validator, transform) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
         assert type(default) == etype
+
+    def verify_desc_consistency(self, site_config, desc):
+        self.verify_desc_consistency_optional(site_config, desc)
+        (var, default, etype, prompt, validator, transform) = desc
         with pytest.raises(ValidationError):
             site_config.user_prompt_config_one(desc, '')
 
@@ -361,16 +437,23 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError):
             site_config.user_prompt_config_one(desc, '')
 
-    def verify_prompt_fingerprint(self, site_config, desc):
-        self.verify_prompt_not_empty(site_config, desc)
+    def verify_prompt_fingerprint_optional(self, site_config, desc):
         fpr = "0123456 789012 34567890123456789ABCDEFABCD"
         clean_fpr = site_config.sanitize_fingerprint(fpr)
         assert site_config.user_prompt_config_one(desc, fpr) == clean_fpr
+
+    def verify_prompt_fingerprint(self, site_config, desc):
+        self.verify_prompt_not_empty(site_config, desc)
+        self.verify_prompt_fingerprint_optional(site_config, desc)
 
     verify_prompt_securedrop_app_gpg_fingerprint = verify_prompt_fingerprint
     verify_prompt_ossec_alert_gpg_public_key = verify_desc_consistency
     verify_prompt_ossec_gpg_fpr = verify_prompt_fingerprint
     verify_prompt_ossec_alert_email = verify_prompt_not_empty
+    verify_prompt_journalist_alert_gpg_public_key = (
+        verify_desc_consistency_optional)
+    verify_prompt_journalist_gpg_fpr = verify_prompt_fingerprint_optional
+    verify_prompt_journalist_alert_email = verify_desc_consistency_optional
     verify_prompt_smtp_relay = verify_prompt_not_empty
     verify_prompt_smtp_relay_port = verify_desc_consistency
     verify_prompt_sasl_domain = verify_desc_consistency

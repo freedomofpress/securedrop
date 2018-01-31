@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -eu
+
+TOPLEVEL=$(git rev-parse --show-toplevel)
+
+function docker_image() {
+    local out
+    out="$(mktemp)"
+    if ! docker build \
+	 --build-arg=USER_ID=$(id -u) \
+	 --build-arg=USER_NAME="$USER" \
+         -t securedrop-admin $TOPLEVEL/admin >& "$out" ; then
+        cat "$out"
+        return 1
+    fi
+    return 0
+}
+
+function docker_run() {
+    docker run \
+	   --rm \
+	   --user "$USER" \
+	   --volume "$TOPLEVEL:$TOPLEVEL" \
+	   --workdir "$TOPLEVEL/admin" \
+	   -ti securedrop-admin "$@"
+}
+
+docker_image
+docker_run "$@"
