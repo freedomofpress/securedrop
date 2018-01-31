@@ -411,6 +411,41 @@ class TestSiteConfig(object):
                 site_config.validate_gpg_keys()
             assert 'FAIL does not match' in e.value.message
 
+    def test_journalist_alert_email(self):
+        args = argparse.Namespace(site_config='INVALID',
+                                  ansible_path='tests/files',
+                                  app_path=dirname(__file__))
+        site_config = securedrop_admin.SiteConfig(args)
+        site_config.config = {
+            'journalist_alert_gpg_public_key':
+            '',
+
+            'journalist_gpg_fpr':
+            '',
+        }
+        assert site_config.validate_journalist_alert_email()
+        site_config.config = {
+            'journalist_alert_gpg_public_key':
+            'test_journalist_key.pub',
+
+            'journalist_gpg_fpr':
+            '65A1B5FF195B56353CC63DFFCC40EF1228271441',
+        }
+        site_config.config['journalist_alert_email'] = ''
+        with pytest.raises(
+                securedrop_admin.JournalistAlertEmailException) as e:
+            site_config.validate_journalist_alert_email()
+        assert 'not be empty' in e.value.message
+
+        site_config.config['journalist_alert_email'] = 'bademail'
+        with pytest.raises(
+                securedrop_admin.JournalistAlertEmailException) as e:
+            site_config.validate_journalist_alert_email()
+        assert 'Must contain a @' in e.value.message
+
+        site_config.config['journalist_alert_email'] = 'good@email.com'
+        assert site_config.validate_journalist_alert_email()
+
     @mock.patch('securedrop_admin.SiteConfig.validated_input',
                 side_effect=lambda p, d, v, t: d)
     @mock.patch('securedrop_admin.SiteConfig.save')
