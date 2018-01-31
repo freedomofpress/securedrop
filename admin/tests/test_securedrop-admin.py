@@ -278,6 +278,13 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError):
             validator.validate(Document(""))
 
+    def test_validate_optional_path(self):
+        mydir = dirname(__file__)
+        myfile = basename(__file__)
+        validator = securedrop_admin.SiteConfig.ValidateOptionalPath(mydir)
+        assert validator.validate(Document(myfile))
+        assert validator.validate(Document(""))
+
     def test_validate_yes_no(self):
         validator = securedrop_admin.SiteConfig.ValidateYesNo()
         with pytest.raises(ValidationError):
@@ -498,6 +505,8 @@ class TestSiteConfig(object):
     verify_prompt_ossec_alert_gpg_public_key = verify_desc_consistency
     verify_prompt_ossec_gpg_fpr = verify_prompt_fingerprint
     verify_prompt_ossec_alert_email = verify_prompt_not_empty
+    verify_prompt_journalist_alert_gpg_public_key = (
+        verify_desc_consistency_optional)
     verify_prompt_smtp_relay = verify_prompt_not_empty
     verify_prompt_smtp_relay_port = verify_desc_consistency
     verify_prompt_sasl_domain = verify_desc_consistency_allow_empty

@@ -122,6 +122,13 @@ class SiteConfig(object):
             raise ValidationError(
                 message=path + ' file does not exist')
 
+    class ValidateOptionalPath(ValidatePath):
+        def validate(self, document):
+            if document.text == '':
+                return True
+            return super(SiteConfig.ValidateOptionalPath, self).validate(
+                document)
+
     class ValidateYesNo(Validator):
         def validate(self, document):
             text = document.text.lower()
@@ -268,6 +275,10 @@ class SiteConfig(object):
             ['ossec_alert_email', '', str,
              u'Admin email address for receiving OSSEC alerts',
              SiteConfig.ValidateOSSECEmail(),
+             None],
+            ['journalist_alert_gpg_public_key', '', str,
+             u'Local filepath to journalist alerts GPG public key (optional)',
+             SiteConfig.ValidateOptionalPath(self.args.ansible_path),
              None],
             ['smtp_relay', "smtp.gmail.com", str,
              u'SMTP relay for sending OSSEC alerts',
