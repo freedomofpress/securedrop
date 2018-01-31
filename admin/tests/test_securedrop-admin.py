@@ -390,13 +390,20 @@ class TestSiteConfig(object):
 
             'ossec_gpg_fpr':
             '65A1B5FF195B56353CC63DFFCC40EF1228271441',
+
+            'journalist_alert_gpg_public_key':
+            'test_journalist_key.pub',
+
+            'journalist_gpg_fpr':
+            '65A1B5FF195B56353CC63DFFCC40EF1228271441',
         }
         site_config = securedrop_admin.SiteConfig(args)
         site_config.config = good_config
         assert site_config.validate_gpg_keys()
 
         for key in ('securedrop_app_gpg_fingerprint',
-                    'ossec_gpg_fpr'):
+                    'ossec_gpg_fpr',
+                    'journalist_gpg_fpr'):
             bad_config = good_config.copy()
             bad_config[key] = 'FAIL'
             site_config.config = bad_config
