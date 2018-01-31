@@ -448,11 +448,15 @@ class TestSiteConfig(object):
             if desc[0] == var:
                 return desc
 
-    def verify_desc_consistency(self, site_config, desc):
+    def verify_desc_consistency_optional(self, site_config, desc):
         (var, default, etype, prompt, validator, transform) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
         assert type(default) == etype
+
+    def verify_desc_consistency(self, site_config, desc):
+        self.verify_desc_consistency_optional(site_config, desc)
+        (var, default, etype, prompt, validator, transform) = desc
         with pytest.raises(ValidationError):
             site_config.user_prompt_config_one(desc, '')
 
