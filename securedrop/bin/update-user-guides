@@ -2,11 +2,19 @@
 
 set -e
 export DISPLAY=:1
-Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
-redis-server &
 
 rm /dev/random
 ln -s /dev/urandom /dev/random
+function run_xvfb() {
+    Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset >& /tmp/xvfb.out || cat /tmp/xvfb.out
+}
+
+function run_redis() {
+    redis-server >& /tmp/redis.out || cat /tmp/redis.out
+}
+
+run_xvfb &
+run_redis &
 
 if ! test -f config.py ; then
     trap "rm config.py" EXIT
