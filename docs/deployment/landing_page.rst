@@ -237,7 +237,7 @@ In nginx, logging can be disabled like so:
 ::
 
     access_log off;
-    error_log off;
+    error_log /dev/null;
 
 Further Security Considerations
 -------------------------------
