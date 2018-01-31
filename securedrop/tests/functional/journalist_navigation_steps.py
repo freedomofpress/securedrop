@@ -75,43 +75,73 @@ class JournalistNavigationStepsMixin():
     def _journalist_selects_first_doc(self):
         self.driver.find_elements_by_name('doc_names_selected')[0].click()
 
-    def _journalist_clicks_delete_selected_javascript(self):
-        self.driver.find_element_by_id('delete-selected').click()
-        self._alert_wait()
+    def _journalist_clicks_delete_collections_cancel_on_modal(self):
+        self.driver.find_element_by_id('cancel-collections-deletions').click()
 
-    def _journalist_clicks_delete_collections_javascript(self):
+    def _journalist_clicks_delete_selected_cancel_on_modal(self):
+        self.driver.find_element_by_id('cancel-selected-deletions').click()
+
+    def _journalist_clicks_delete_collection_cancel_on_modal(self):
+        self.driver.find_element_by_id('cancel-collection-deletions').click()
+
+    def _journalist_clicks_delete_collections_on_modal(self):
         self.driver.find_element_by_id('delete-collections').click()
-        self._alert_wait()
 
-    def _journalist_clicks_delete_collection_javascript(self):
+    def _journalist_clicks_delete_selected_on_modal(self):
+        self.driver.find_element_by_id('delete-selected').click()
+
+    def _journalist_clicks_delete_collection_on_modal(self):
         self.driver.find_element_by_id('delete-collection-button').click()
-        self._alert_wait()
+
+    def _journalist_sees_delete_collections_confirmation_javascript(self):
+        assert self.driver.find_element_by_id(
+            'delete-confirmation-modal').is_displayed()
+
+    def _journalist_sees_delete_selected_confirmation_javascript(self):
+        assert self.driver.find_element_by_id(
+            'delete-selected-confirmation-modal').is_displayed()
+
+    def _journalist_sees_delete_collection_confirmation_javascript(self):
+        assert self.driver.find_element_by_id(
+            'delete-collection-confirmation-modal').is_displayed()
+
+    def _journalist_clicks_delete_selected_link(self):
+        self.driver.find_element_by_id('delete-selected-link').click()
+        self._journalist_sees_delete_selected_confirmation_javascript()
+
+    def _journalist_clicks_delete_collections_link(self):
+        self.driver.find_element_by_id('delete-collections-link').click()
+        self._journalist_sees_delete_collections_confirmation_javascript()
+
+    def _journalist_clicks_delete_collection_link(self):
+        self.driver.find_element_by_id('delete-collection-link').click()
+        self._journalist_sees_delete_collection_confirmation_javascript()
 
     def _journalist_uses_delete_selected_button_javascript(self):
         self._journalist_selects_first_doc()
-        self._journalist_clicks_delete_selected_javascript()
-        self._alert_dismiss()
+        self._journalist_clicks_delete_selected_link()
+        self._journalist_clicks_delete_selected_cancel_on_modal()
 
         selected_count = len(self.driver.find_elements_by_name(
             'doc_names_selected'))
         assert selected_count > 0
 
-        self._journalist_clicks_delete_selected_javascript()
-        self._alert_accept()
+        self._journalist_clicks_delete_selected_link()
+        self._journalist_clicks_delete_selected_on_modal()
         assert selected_count > len(self.driver.find_elements_by_name(
             'doc_names_selected'))
 
     def _journalist_uses_delete_collection_button_javascript(self):
-        self._journalist_clicks_delete_collection_javascript()
-        self._alert_dismiss()
+        self._journalist_clicks_delete_collection_link()
+        self._journalist_clicks_delete_collection_cancel_on_modal()
 
         # After deletion the button will redirect us. Let's ensure we still
         # see the delete collection button.
         assert self.driver.find_element_by_id(
-            'delete-collection-button').is_displayed()
+            'delete-collection-link').is_displayed()
 
-        self._journalist_clicks_delete_collection_javascript()
-        self._alert_accept()
+        self._journalist_clicks_delete_collection_link()
+        self._journalist_clicks_delete_collection_on_modal()
 
         # Now we should be redirected to the index.
         if not hasattr(self, 'accept-languages'):
@@ -120,15 +150,15 @@ class JournalistNavigationStepsMixin():
     def _journalist_uses_delete_collections_button_javascript(self):
         self.driver.find_element_by_id('select_all').click()
 
-        self._journalist_clicks_delete_collections_javascript()
-        self._alert_dismiss()
+        self._journalist_clicks_delete_collections_link()
+        self._journalist_clicks_delete_collections_cancel_on_modal()
 
         self.driver.find_element_by_id('select_all').click()
         sources = self.driver.find_elements_by_class_name("code-name")
         assert len(sources) > 0
 
-        self._journalist_clicks_delete_collections_javascript()
-        self._alert_accept()
+        self._journalist_clicks_delete_collections_link()
+        self._journalist_clicks_delete_collections_on_modal()
 
         # We should be redirected to the index without those boxes selected.
         sources = self.driver.find_elements_by_class_name("code-name")
@@ -685,7 +715,7 @@ class JournalistNavigationStepsMixin():
     def _journalist_delete_all_javascript(self):
         self.driver.find_element_by_id('select_all').click()
         self.driver.find_element_by_id('delete-selected').click()
-        self._alert_wait()
+        # self._alert_wait()
 
     def _journalist_delete_one(self):
         self.driver.find_elements_by_name('doc_names_selected')[0].click()

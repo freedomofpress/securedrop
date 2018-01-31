@@ -52,14 +52,14 @@ $(function () {
     checkboxes.prop('checked', false);
   });
   unread.click(function() {
-    var checkboxes = document.querySelectorAll(".submission > [type='checkbox']");
-    for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i].className.includes("unread-cb"))
-            checkboxes[i].checked = true;
-        else
-            checkboxes[i].checked = false;
-    }
-  });
+      var checkboxes = document.querySelectorAll(".submission > [type='checkbox']");
+      for (var i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].className.includes("unread-cb"))
+              checkboxes[i].checked = true;
+          else
+              checkboxes[i].checked = false;
+      }
+    });
 
   $("#unread a").click(function(){
     $("#unread").html("unread: 0");
