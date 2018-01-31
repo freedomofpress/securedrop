@@ -54,9 +54,10 @@ update-user-guides: ## Runs the page layout tests to regenerate screenshots
 	docker run \
 		--name $(IMAGE)-update-user-guides \
 		--rm \
-		-e USER_ID=$(shell id -u) \
-		-v $(shell git rev-parse --show-toplevel):$(shell git rev-parse --show-toplevel) \
-		-w $(shell pwd) \
+		--user $(USER) \
+		--volume $(shell git rev-parse --show-toplevel):$(shell git rev-parse --show-toplevel) \
+		--workdir $(shell pwd) \
+		--publish 5901:5901 \
 		-ti $(IMAGE)-test:$(TAG) \
 		./bin/update-user-guides
 
