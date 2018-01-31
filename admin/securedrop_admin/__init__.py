@@ -192,14 +192,26 @@ class SiteConfig(object):
             raise ValidationError(
                 message="Password for OSSEC email account must be strong")
 
-    class ValidateOSSECEmail(Validator):
+    class ValidateEmail(Validator):
         def validate(self, document):
             text = document.text
-            if text and '@' in text and 'ossec@ossec.test' != text:
+            if text == '':
+                raise ValidationError(
+                    message=("Must not be empty"))
+            if '@' not in text:
+                raise ValidationError(
+                    message=("Must contain a @"))
+            return True
+
+    class ValidateOSSECEmail(ValidateEmail):
+        def validate(self, document):
+            super(SiteConfig.ValidateOSSECEmail, self).validate(document)
+            text = document.text
+            if 'ossec@ossec.test' != text:
                 return True
             raise ValidationError(
-                message=("Must contain a @ and be set to "
-                         "something other than ossec@ossec.test"))
+                message=("Must be set to something other than "
+                         "ossec@ossec.test"))
 
     def __init__(self, args):
         self.args = args

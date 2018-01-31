@@ -178,14 +178,19 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError):
             validator.validate(Document('short'))
 
-    def test_validate_ossec_email(self):
-        validator = securedrop_admin.SiteConfig.ValidateOSSECEmail()
+    def test_validate_email(self):
+        validator = securedrop_admin.SiteConfig.ValidateEmail()
 
         assert validator.validate(Document('good@mail.com'))
         with pytest.raises(ValidationError):
             validator.validate(Document('badmail'))
         with pytest.raises(ValidationError):
             validator.validate(Document(''))
+
+    def test_validate_ossec_email(self):
+        validator = securedrop_admin.SiteConfig.ValidateOSSECEmail()
+
+        assert validator.validate(Document('good@mail.com'))
         with pytest.raises(ValidationError) as e:
             validator.validate(Document('ossec@ossec.test'))
         assert 'something other than ossec@ossec.test' in e.value.message
