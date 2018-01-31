@@ -359,8 +359,7 @@ class TestSiteConfig(object):
         args = argparse.Namespace(site_config='INVALID',
                                   ansible_path='tests/files',
                                   app_path=dirname(__file__))
-        site_config = securedrop_admin.SiteConfig(args)
-        site_config.config = {
+        good_config = {
             'securedrop_app_gpg_public_key':
             'test_journalist_key.pub',
 
@@ -373,11 +372,18 @@ class TestSiteConfig(object):
             'ossec_gpg_fpr':
             '65A1B5FF195B56353CC63DFFCC40EF1228271441',
         }
+        site_config = securedrop_admin.SiteConfig(args)
+        site_config.config = good_config
         assert site_config.validate_gpg_keys()
-        site_config.config['ossec_gpg_fpr'] = 'FAIL'
-        with pytest.raises(securedrop_admin.FingerprintException) as e:
-            site_config.validate_gpg_keys()
-        assert 'FAIL does not match' in e.value.message
+
+        for key in ('securedrop_app_gpg_fingerprint',
+                    'ossec_gpg_fpr'):
+            bad_config = good_config.copy()
+            bad_config[key] = 'FAIL'
+            site_config.config = bad_config
+            with pytest.raises(securedrop_admin.FingerprintException) as e:
+                site_config.validate_gpg_keys()
+            assert 'FAIL does not match' in e.value.message
 
     @mock.patch('securedrop_admin.SiteConfig.validated_input',
                 side_effect=lambda p, d, v, t: d)
