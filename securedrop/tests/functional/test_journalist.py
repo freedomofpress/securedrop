@@ -68,4 +68,4 @@ class TestJournalist(
         self._journalist_selects_all_sources_then_selects_none()
         self._journalist_selects_the_first_source()
         self._journalist_uses_js_buttons_to_download_unread()
-        self._journalist_delete_all_javascript()
+        self._journalist_delete_all_confirmation()

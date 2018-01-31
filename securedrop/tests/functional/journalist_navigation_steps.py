@@ -694,12 +694,12 @@ class JournalistNavigationStepsMixin():
         for checkbox in self.driver.find_elements_by_name(
                 'doc_names_selected'):
             checkbox.click()
-        self.driver.find_element_by_id('delete-selected').click()
+        self.driver.find_element_by_id('delete-selected-link').click()
 
     def _journalist_confirm_delete_all(self):
         self.wait_for(
-            lambda: self.driver.find_element_by_id('confirm-delete'))
-        confirm_btn = self.driver.find_element_by_id('confirm-delete')
+            lambda: self.driver.find_element_by_id('delete-selected'))
+        confirm_btn = self.driver.find_element_by_id('delete-selected')
         confirm_btn.click()
 
     def _source_delete_key(self):
@@ -712,14 +712,13 @@ class JournalistNavigationStepsMixin():
     def _journalist_delete_none(self):
         self.driver.find_element_by_id('delete-selected').click()
 
-    def _journalist_delete_all_javascript(self):
+    def _journalist_delete_all_confirmation(self):
         self.driver.find_element_by_id('select_all').click()
-        self.driver.find_element_by_id('delete-selected').click()
-        # self._alert_wait()
+        self.driver.find_element_by_id('delete-selected-link').click()
 
     def _journalist_delete_one(self):
         self.driver.find_elements_by_name('doc_names_selected')[0].click()
-        self.driver.find_element_by_id('delete-selected').click()
+        self.driver.find_element_by_id('delete-selected-link').click()
 
     def _journalist_flags_source(self):
         self.driver.find_element_by_id('flag-button').click()

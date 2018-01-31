@@ -210,7 +210,7 @@ class TestJournalistLayout(
         self._journalist_delete_none()
         self._screenshot('journalist-delete_none.png')
 
-    def test_delete_one_javascript(self):
+    def test_delete_one_confirmation(self):
         self._javascript_toggle()
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -221,11 +221,10 @@ class TestJournalistLayout(
         self._journalist_logs_in()
         self._journalist_visits_col()
         self._journalist_selects_first_doc()
-        self._journalist_clicks_delete_selected_javascript()
-        self._save_alert('journalist-delete_one_javascript.txt')
-        self._alert_accept()
+        self._journalist_clicks_delete_selected_link()
+        self._screenshot('journalist-delete_one_confirmation.png')
 
-    def test_delete_all_javascript(self):
+    def test_delete_all_confirmation(self):
         self._javascript_toggle()
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -235,9 +234,8 @@ class TestJournalistLayout(
         self._source_logs_out()
         self._journalist_logs_in()
         self._journalist_visits_col()
-        self._journalist_delete_all_javascript()
-        self._save_alert('journalist-delete_all_javascript.txt')
-        self._alert_accept()
+        self._journalist_delete_all_confirmation()
+        self._screenshot('journalist-delete_all_confirmation.png')
 
     def test_delete_one(self):
         self._source_visits_source_homepage()
