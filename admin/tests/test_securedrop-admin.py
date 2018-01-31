@@ -195,6 +195,12 @@ class TestSiteConfig(object):
             validator.validate(Document('ossec@ossec.test'))
         assert 'something other than ossec@ossec.test' in e.value.message
 
+    def test_validate_optional_email(self):
+        validator = securedrop_admin.SiteConfig.ValidateOptionalEmail()
+
+        assert validator.validate(Document('good@mail.com'))
+        assert validator.validate(Document(''))
+
     def test_is_tails(self):
         validator = securedrop_admin.SiteConfig.ValidateDNS()
         with mock.patch('subprocess.check_output', return_value='Tails'):
@@ -517,6 +523,7 @@ class TestSiteConfig(object):
     verify_prompt_journalist_alert_gpg_public_key = (
         verify_desc_consistency_optional)
     verify_prompt_journalist_gpg_fpr = verify_prompt_fingerprint_optional
+    verify_prompt_journalist_alert_email = verify_desc_consistency_optional
     verify_prompt_smtp_relay = verify_prompt_not_empty
     verify_prompt_smtp_relay_port = verify_desc_consistency
     verify_prompt_sasl_domain = verify_desc_consistency_allow_empty

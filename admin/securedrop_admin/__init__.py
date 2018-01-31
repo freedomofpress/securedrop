@@ -227,6 +227,13 @@ class SiteConfig(object):
                 message=("Must be set to something other than "
                          "ossec@ossec.test"))
 
+    class ValidateOptionalEmail(ValidateEmail):
+        def validate(self, document):
+            if document.text == '':
+                return True
+            return super(SiteConfig.ValidateOptionalEmail, self).validate(
+                document)
+
     def __init__(self, args):
         self.args = args
         translations = SiteConfig.Locales(
@@ -292,6 +299,10 @@ class SiteConfig(object):
              u'GPG public key (optional)',
              SiteConfig.ValidateOptionalFingerprint(),
              self.sanitize_fingerprint],
+            ['journalist_alert_email', '', str,
+             u'Email address for receiving journalist alerts (optional)',
+             SiteConfig.ValidateOptionalEmail(),
+             None],
             ['smtp_relay', "smtp.gmail.com", str,
              u'SMTP relay for sending OSSEC alerts',
              SiteConfig.ValidateNotEmpty(),
