@@ -13,8 +13,13 @@ function run_redis() {
     redis-server >& /tmp/redis.out || cat /tmp/redis.out
 }
 
+function run_x11vnc() {
+    x11vnc -display :1 -autoport 5901 -shared >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
+}
+
 run_xvfb &
 run_redis &
+run_x11vnc &
 
 if ! test -f config.py ; then
     trap "rm config.py" EXIT
