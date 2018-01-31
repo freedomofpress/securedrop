@@ -150,6 +150,13 @@ class SiteConfig(object):
                     message='fingerprints must be 40 hexadecimal characters')
             return True
 
+    class ValidateOptionalFingerprint(ValidateFingerprint):
+        def validate(self, document):
+            if document.text == '':
+                return True
+            return super(SiteConfig.ValidateOptionalFingerprint,
+                         self).validate(document)
+
     class ValidateInt(Validator):
         def validate(self, document):
             if re.match('\d+$', document.text):
@@ -280,6 +287,11 @@ class SiteConfig(object):
              u'Local filepath to journalist alerts GPG public key (optional)',
              SiteConfig.ValidateOptionalPath(self.args.ansible_path),
              None],
+            ['journalist_gpg_fpr', '', str,
+             u'Full fingerprint for the journalist alerts '
+             u'GPG public key (optional)',
+             SiteConfig.ValidateOptionalFingerprint(),
+             self.sanitize_fingerprint],
             ['smtp_relay', "smtp.gmail.com", str,
              u'SMTP relay for sending OSSEC alerts',
              SiteConfig.ValidateNotEmpty(),

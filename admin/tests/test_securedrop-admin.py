@@ -321,6 +321,12 @@ class TestSiteConfig(object):
                 "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"))
         assert '40 hexadecimal' in e.value.message
 
+    def test_validate_optional_fingerprint(self):
+        validator = securedrop_admin.SiteConfig.ValidateOptionalFingerprint()
+        assert validator.validate(Document(
+            "012345678901234567890123456789ABCDEFABCD"))
+        assert validator.validate(Document(""))
+
     def test_sanitize_fingerprint(self):
         args = argparse.Namespace(site_config='DOES_NOT_EXIST',
                                   ansible_path='.',
@@ -489,8 +495,7 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError):
             site_config.user_prompt_config_one(desc, '')
 
-    def verify_prompt_fingerprint(self, site_config, desc):
-        self.verify_prompt_not_empty(site_config, desc)
+    def verify_prompt_fingerprint_optional(self, site_config, desc):
         fpr = "0123456 789012 34567890123456789ABCDEFABCD"
         clean_fpr = site_config.sanitize_fingerprint(fpr)
         assert site_config.user_prompt_config_one(desc, fpr) == clean_fpr
@@ -501,12 +506,17 @@ class TestSiteConfig(object):
         assert site_config.user_prompt_config_one(desc, None) == default
         assert type(default) == etype
 
+    def verify_prompt_fingerprint(self, site_config, desc):
+        self.verify_prompt_not_empty(site_config, desc)
+        self.verify_prompt_fingerprint_optional(site_config, desc)
+
     verify_prompt_securedrop_app_gpg_fingerprint = verify_prompt_fingerprint
     verify_prompt_ossec_alert_gpg_public_key = verify_desc_consistency
     verify_prompt_ossec_gpg_fpr = verify_prompt_fingerprint
     verify_prompt_ossec_alert_email = verify_prompt_not_empty
     verify_prompt_journalist_alert_gpg_public_key = (
         verify_desc_consistency_optional)
+    verify_prompt_journalist_gpg_fpr = verify_prompt_fingerprint_optional
     verify_prompt_smtp_relay = verify_prompt_not_empty
     verify_prompt_smtp_relay_port = verify_desc_consistency
     verify_prompt_sasl_domain = verify_desc_consistency_allow_empty
