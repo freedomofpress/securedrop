@@ -353,10 +353,10 @@ class SiteConfig(object):
 
                 ('ossec_alert_gpg_public_key',
                  'ossec_gpg_fpr'))
+        validate = os.path.join(
+            os.path.dirname(__file__), '..', 'bin',
+            'validate-gpg-key.sh')
         for (public_key, fingerprint) in keys:
-            validate = os.path.join(
-                os.path.dirname(__file__), '..', 'bin',
-                'validate-gpg-key.sh')
             public_key = os.path.join(self.args.ansible_path,
                                       self.config[public_key])
             fingerprint = self.config[fingerprint]
