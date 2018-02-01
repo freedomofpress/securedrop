@@ -85,9 +85,6 @@ Submissions are decrypted on an air-gapped computer also using Tails. This
 mitigates against the risk that an attacker could send malware through SecureDrop
 in an attempt to infect the news organization’s normal network as well.
 
-The SecureDrop servers also undergo significant system hardening in order to
-make it as difficult as possible for hackers to break in.
-
 The SecureDrop servers also undergo significant system hardening in order to make
 it as difficult as possible for hackers to break in. By doing so, SecureDrop
 protects sources against networks that are already compromised, as well as a news
