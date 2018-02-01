@@ -118,13 +118,15 @@ class JournalistNavigationStepsMixin():
         self._journalist_sees_delete_collection_confirmation()
 
     def _journalist_uses_delete_selected_button_confirmation(self):
-        self._journalist_selects_first_doc()
-        self._journalist_clicks_delete_selected_link()
-        self._journalist_clicks_delete_selected_cancel_on_modal()
-
         selected_count = len(self.driver.find_elements_by_name(
             'doc_names_selected'))
         assert selected_count > 0
+
+        self._journalist_selects_first_doc()
+        self._journalist_clicks_delete_selected_link()
+        self._journalist_clicks_delete_selected_cancel_on_modal()
+        assert selected_count == len(self.driver.find_elements_by_name(
+            'doc_names_selected'))
 
         self._journalist_clicks_delete_selected_link()
         self._journalist_clicks_delete_selected_on_modal()
@@ -148,8 +150,10 @@ class JournalistNavigationStepsMixin():
             assert "Sources" in self.driver.find_element_by_tag_name('h1').text
 
     def _journalist_uses_delete_collections_button_confirmation(self):
-        self.driver.find_element_by_id('select_all').click()
+        sources = self.driver.find_elements_by_class_name("code-name")
+        assert len(sources) > 0
 
+        self.driver.find_element_by_id('select_all').click()
         self._journalist_clicks_delete_collections_link()
         self._journalist_clicks_delete_collections_cancel_on_modal()
 
