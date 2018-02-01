@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.2~rc1
+## 0.5.2
 
 * Replace PyCrypto (#2903).
 * Use `max_fail_percentage` to force immediate Ansible exits in playbook runs (#2922).
