@@ -25,6 +25,7 @@ from selenium.webdriver.support import expected_conditions
 
 TBB_PATH = abspath(join(expanduser('~'), '.local/tbb/tor-browser_en-US/'))
 os.environ['TBB_PATH'] = TBB_PATH
+TBBRC = join(TBB_PATH, 'Browser/TorBrowser/Data/Tor/torrc')
 
 from tbselenium.tbdriver import TorBrowserDriver
 from tbselenium.utils import start_xvfb, stop_xvfb
@@ -58,6 +59,26 @@ class FunctionalTest(object):
         port = s.getsockname()[1]
         s.close()
         return port
+
+    def add_hidservauth(self, address, token):
+        if not os.path.exists(TBBRC):
+            return False
+        found_flag = False
+        entry = "HidServAuth {0} {1}\n".format(address,token)
+        lines = []
+        with open(TBBRC) as fobj:
+            lines = fobj.readlines()
+        for line in lines:
+            if entry.strip() == line.strip():
+                found_flag = True
+
+        if found_flag:  # We already have the information in the torrc file
+            return True
+        lines.append(entry)
+
+        with open(TBBRC, 'w') as fobj:
+            fobj.write(''.join(lines))
+        return True
 
     def _create_webdriver(self,  profile=None):
         log_file = open(LOGFILE_PATH, 'a')
@@ -128,11 +149,15 @@ class FunctionalTest(object):
                 data = json.load(fobj)
             self.source_location = data.get('source_location', "http://127.0.0.1:8080")
             self.journalist_location = data.get('journalist_location', "http://127.0.0.1:8081")
-            self.hidserv_data = data.get('hidserv_token', '')
+            self.hidservauth = data.get('hidserv_token', '')
             self.admin_user = data.get('user')
             self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
             self.new_totp = None # To be created runtime
-            self.sleep_time = data.get('sleep_time', 2)
+            self.sleep_time = data.get('sleep_time', 5)
+            if self.hidservauth:
+                if self.journalist_location.startswith('http://'):
+                    location = self.journalist_location[7:]
+                self.add_hidservauth(location, self.hidservauth)
         else:
             assert False, "Missing instance information JSON file."
 
@@ -167,7 +192,7 @@ class FunctionalTest(object):
         # will only report failure after 60 seconds which is painful
         # for quickly debuging.
         #
-        self.driver.implicitly_wait(10)
+        self.driver.implicitly_wait(15)
 
         # Set window size and position explicitly to avoid potential bugs due
         # to discrepancies between environments.
