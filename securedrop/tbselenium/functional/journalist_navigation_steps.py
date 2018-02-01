@@ -73,18 +73,32 @@ class JournalistNavigationStepsMixin():
         submit_button.send_keys(u'\ue007')
 
     @screenshots
-    def _login_user(self, username, password, token):
-        self._try_login_user(username, password, token)
-        # Successful login should redirect to the index
-        self.driver.get_screenshot_as_file(os.path.join(LOG_DIR, "journalist2.png"))
-        time.sleep(10)
-        assert self.driver.current_url == self.journalist_location + '/', self.driver.current_url
+    def _login_user(self, username, password, otp, maxtries=3):
+        token = str(otp.now())
+        for i in range(maxtries):
+
+            self._try_login_user(username, password, token)
+            # Successful login should redirect to the index
+            time.sleep(self.sleep_time+10)
+            if self.driver.current_url != self.journalist_location + '/':
+                    new_token = str(otp.now())
+                    while token == new_token:
+                        time.sleep(1)
+                        new_token = str(otp.now())
+                        print("Token: {} New token: {}".format(token, new_token))
+                    token = new_token
+            else:
+                return
+
+        # If we reach here, assert the error
+        assert self.driver.current_url == self.journalist_location + '/',\
+                self.driver.current_url
 
     @screenshots
     def _journalist_logs_in(self):
         # Create a test user for logging in
         self.user, self.user_pw = self.admin_user['name'], self.admin_user['password']
-        self._login_user(self.user, self.user_pw, str(self.admin_user['totp'].now()))
+        self._login_user(self.user, self.user_pw, self.admin_user['totp'])
 
         headline = self.driver.find_element_by_css_selector('span.headline')
         if not hasattr(self, 'accept_languages'):
@@ -118,7 +132,7 @@ class JournalistNavigationStepsMixin():
     @screenshots
     def _admin_logs_in(self):
         self.admin, self.admin_pw = self.admin_user['name'], self.admin_user['password']
-        self._login_user(self.admin, self.admin_pw, str(self.admin_user['totp'].now()))
+        self._login_user(self.admin, self.admin_pw, self.admin_user['totp'])
 
         if not hasattr(self, 'accept_languages'):
             # Admin user should log in to the same interface as a
@@ -277,7 +291,7 @@ class JournalistNavigationStepsMixin():
         # Log the new user in
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
-                         str(self.new_totp.now()))
+                         self.new_totp)
 
         if not hasattr(self, 'accept_languages'):
             # Test that the new user was logged in successfully
@@ -368,7 +382,7 @@ class JournalistNavigationStepsMixin():
         self._logout()
 
         time.sleep(self.sleep_time)
-        self._login_user(self.admin, self.admin_pw, str(self.admin_user['totp'].now()))
+        self._login_user(self.admin, self.admin_pw, self.admin_user['totp'])
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_id(
@@ -412,7 +426,7 @@ class JournalistNavigationStepsMixin():
         time.sleep(61)
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
-                         str(self.new_totp.now()))
+                         self.new_totp)
         if not hasattr(self, 'accept_languages'):
             def found_sources():
                 assert 'Sources' in self.driver.page_source
@@ -421,7 +435,7 @@ class JournalistNavigationStepsMixin():
         # Log the admin user back in
         self._logout()
         time.sleep(61)
-        self._login_user(self.admin, self.admin_pw, str(self.admin_user['totp'].now()))
+        self._login_user(self.admin, self.admin_pw, self.admin_user['totp'])
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_id(
