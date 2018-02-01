@@ -65,16 +65,19 @@
       </ul>
 
       <!-- Confirmation modal for selected documents -->
-      <div id="delete-selected-confirmation-modal" class="modal-dialog">
-        <a href="#close" class="external"></a>
-        <div>
-          <a href="#close" title="{{ gettext('Close') }}" class="close">X</a>
-          <h2>{{ gettext('Delete Confirmation') }}</h2>
-          <p>{{ gettext('Are you sure you want to delete the selected documents?') }}</p>
-          <a href="#close" id="cancel-selected-deletions" title="{{ gettext('Cancel') }}" class="btn sd-button">{{ gettext('Cancel') }}</a>
-          <button type="submit" name="action" value="confirm_delete" id="delete-selected" class="sd-button danger">{{ gettext('Delete') }}</button>
-        </div>
-      </div>
+      {% with %}
+        {% set modal_data = {
+                              "modal_id": "delete-selected-confirmation-modal",
+                              "modal_header": gettext('Delete Confirmation'),
+                              "modal_body": gettext('Are you sure you want to delete the selected documents?'),
+                              "cancel_id": "cancel-selected-deletions",
+                              "submit_id": "delete-selected",
+                              "submit_btn_type": "danger",
+                              "submit_btn_text": gettext('Delete')
+                            }
+        %}
+        {% include '_confirmation_modal.html' %}
+      {% endwith %}
 
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
@@ -120,16 +123,19 @@
     </a>
 
     <!-- Confirmation modal for entire collection deletion -->
-    <div id="delete-collection-confirmation-modal" class="modal-dialog">
-      <a href="#close" class="external"></a>
-      <div>
-        <a href="#close" title="{{ gettext('Close') }}" class="close">X</a>
-        <h2>{{ gettext('Delete Confirmation') }}</h2>
-        <p>{{ gettext('Are you sure you want to delete this collection?') }}</p>
-        <a href="#close" id="cancel-collection-deletions" title="{{ gettext('Cancel') }}" class="btn sd-button">{{ gettext('Cancel') }}</a>
-        <button type="submit" id="delete-collection-button" name="action" value="delete" class="sd-button danger">{{ gettext('Delete') }}</button>
-      </div>
-    </div>
+    {% with %}
+      {% set modal_data = {
+                            "modal_id": "delete-collection-confirmation-modal",
+                            "modal_header": gettext('Delete Confirmation'),
+                            "modal_body": gettext('Are you sure you want to delete this collection?'),
+                            "cancel_id": "cancel-collection-deletions",
+                            "submit_id": "delete-collection-button",
+                            "submit_btn_type": "danger",
+                            "submit_btn_text": gettext('Delete')
+                          }
+      %}
+      {% include '_confirmation_modal.html' %}
+    {% endwith %}
   </form>
 
 </div>
