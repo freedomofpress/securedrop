@@ -68,11 +68,11 @@
       <div id="delete-selected-confirmation-modal" class="modal-dialog">
         <a href="#close" class="external"></a>
         <div>
-          <a href="#close" title="Close" class="close">X</a>
+          <a href="#close" title="{{ gettext('Close') }}" class="close">X</a>
           <h2>{{ gettext('Delete Confirmation') }}</h2>
           <p>{{ gettext('Are you sure you want to delete the selected documents?') }}</p>
-          <a href="#close" id="cancel-selected-deletions" title="Cancel" class="btn sd-button">Cancel</a>
-          <button type="submit" name="action" value="confirm_delete" id="delete-selected" class="sd-button danger">Delete</button>
+          <a href="#close" id="cancel-selected-deletions" title="{{ gettext('Cancel') }}" class="btn sd-button">{{ gettext('Cancel') }}</a>
+          <button type="submit" name="action" value="confirm_delete" id="delete-selected" class="sd-button danger">{{ gettext('Delete') }}</button>
         </div>
       </div>
 
@@ -123,11 +123,11 @@
     <div id="delete-collection-confirmation-modal" class="modal-dialog">
       <a href="#close" class="external"></a>
       <div>
-        <a href="#close" title="Close" class="close">X</a>
+        <a href="#close" title="{{ gettext('Close') }}" class="close">X</a>
         <h2>{{ gettext('Delete Confirmation') }}</h2>
         <p>{{ gettext('Are you sure you want to delete this collection?') }}</p>
-        <a href="#close" id="cancel-collection-deletions" title="Cancel" class="btn sd-button">Cancel</a>
-        <button type="submit" id="delete-collection-button" name="action" value="delete" class="sd-button danger">Delete</button>
+        <a href="#close" id="cancel-collection-deletions" title="{{ gettext('Cancel') }}" class="btn sd-button">{{ gettext('Cancel') }}</a>
+        <button type="submit" id="delete-collection-button" name="action" value="delete" class="sd-button danger">{{ gettext('Delete') }}</button>
       </div>
     </div>
   </form>
