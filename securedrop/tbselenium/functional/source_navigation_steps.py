@@ -56,7 +56,9 @@ class SourceNavigationStepsMixin():
     def _source_shows_codename(self):
         content = self.driver.find_element_by_id('codename-hint-content')
         assert not content.is_displayed()
+        time.sleep(5)  #  Long waits
         self.driver.find_element_by_id('codename-hint-show').click()
+        time.sleep(5)  #  Long waits
         assert content.is_displayed()
         content_content = self.driver.find_element_by_css_selector(
                 '#codename-hint-content p')
@@ -65,7 +67,9 @@ class SourceNavigationStepsMixin():
     def _source_hides_codename(self):
         content = self.driver.find_element_by_id('codename-hint-content')
         assert content.is_displayed()
+        time.sleep(5)  #  Long waits
         self.driver.find_element_by_id('codename-hint-hide').click()
+        time.sleep(5)  #  Long waits
         assert not content.is_displayed()
 
     def _source_sees_no_codename(self):
@@ -100,7 +104,7 @@ class SourceNavigationStepsMixin():
 
         continue_button = self.driver.find_element_by_id('login')
         continue_button.click()
-        time.sleep(self.sleep_time)
+        time.sleep(5) #  Long waits
 
         if not hasattr(self, 'accept_languages'):
             assert ("SecureDrop | Protecting Journalists and Sources" ==
@@ -142,6 +146,7 @@ class SourceNavigationStepsMixin():
         assert continue_button_hover_icon.is_displayed()
 
         continue_button.click()
+        time.sleep(self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             headline = self.driver.find_element_by_class_name('headline')
@@ -168,7 +173,7 @@ class SourceNavigationStepsMixin():
             assert toggled_submit_button_icon.is_displayed()
 
             submit_button.click()
-            time.sleep(5)
+            time.sleep(5)  #  Long waits
 
             if not hasattr(self, 'accept_languages'):
                 notification = self.driver.find_element_by_css_selector(
@@ -223,6 +228,7 @@ class SourceNavigationStepsMixin():
     @screenshots
     def _source_logs_out(self):
         self.driver.find_element_by_id('logout').click()
+        time.sleep(self.sleep_time)
         assert self.driver.find_element_by_css_selector('.important')
 
     def _source_not_found(self):
