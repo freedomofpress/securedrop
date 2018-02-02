@@ -24,7 +24,9 @@
       <p>
         <div id="select-container"></div>
         <button type="submit" name="action" value="download" class="small"><i class="fa fa-download"></i> {{ gettext('Download Selected') }}</button>
-        <button type="submit" name="action" value="confirm_delete" id="delete-selected" class="small danger"><i class="fa fa-trash-o"></i> {{ gettext('Delete Selected') }}</button>
+        <a href="#delete-selected-confirmation-modal" id="delete-selected-link" class="btn small danger">
+          <i class="fa fa-trash-o"></i> {{ gettext('Delete Selected') }}
+        </a>
       </p>
 
       <ul id="submissions" class="plain submissions">
@@ -61,6 +63,21 @@
           </li>
         {% endfor %}
       </ul>
+
+      <!-- Confirmation modal for selected documents -->
+      {% with %}
+        {% set modal_data = {
+                              "modal_id": "delete-selected-confirmation-modal",
+                              "modal_header": gettext('Delete Confirmation'),
+                              "modal_body": gettext('Are you sure you want to delete the selected documents?'),
+                              "cancel_id": "cancel-selected-deletions",
+                              "submit_id": "delete-selected",
+                              "submit_btn_type": "danger",
+                              "submit_btn_text": gettext('Delete')
+                            }
+        %}
+        {% include '_confirmation_modal.html' %}
+      {% endwith %}
 
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
@@ -101,7 +118,24 @@
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}">
-    <button id="delete-collection-button" type="submit" class="sd-button danger"><i class="fa fa-trash-o"></i> {{ gettext('DELETE COLLECTION') }}</button>
+    <a href="#delete-collection-confirmation-modal" id="delete-collection-link" class="btn sd-button danger">
+      <i class="fa fa-trash-o"></i> {{ gettext('DELETE COLLECTION') }}
+    </a>
+
+    <!-- Confirmation modal for entire collection deletion -->
+    {% with %}
+      {% set modal_data = {
+                            "modal_id": "delete-collection-confirmation-modal",
+                            "modal_header": gettext('Delete Confirmation'),
+                            "modal_body": gettext('Are you sure you want to delete this collection?'),
+                            "cancel_id": "cancel-collection-deletions",
+                            "submit_id": "delete-collection-button",
+                            "submit_btn_type": "danger",
+                            "submit_btn_text": gettext('Delete')
+                          }
+      %}
+      {% include '_confirmation_modal.html' %}
+    {% endwith %}
   </form>
 
 </div>
