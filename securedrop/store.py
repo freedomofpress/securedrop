@@ -10,8 +10,6 @@ from werkzeug.utils import secure_filename
 
 from secure_tempfile import SecureTemporaryFile
 
-import logging
-log = logging.getLogger(__name__)
 
 VALIDATE_FILENAME = re.compile(
     "^(?P<index>\d+)\-[a-z0-9-_]*"
