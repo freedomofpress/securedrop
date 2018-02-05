@@ -1,0 +1,12 @@
+---
+signal_cli_version: 0.5.6
+signal_cli_url: https://github.com/AsamK/signal-cli/releases/download/v{{ signal_cli_version }}/signal-cli-{{ signal_cli_version }}.tar.gz
+signal_cli_sig_url: "{{ signal_cli_url }}.asc"
+signal_cli_checksum: sha256:38008a01328e01056cea5470c2e61a2cacbfe5e98d711a9d4d99f5a0c0c13385
+build_path: /tmp/build/signal-cli
+package_path: /tmp/securedrop-signal-cli-{{ signal_cli_version }}+{{ securedrop_app_code_version }}-amd64
+signal_cli_build_deb_package_local_dest_dir: "../../build/"
+signal_cli_rsync_opts:
+  - "--chmod=u=rwX,g=rX,o=rX"
+  - "--chown=root:root"
+  - "--exclude=*.deb"

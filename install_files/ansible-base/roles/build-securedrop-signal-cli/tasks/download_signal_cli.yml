@@ -1,0 +1,55 @@
+---
+- block:
+  - name: Create src path folders
+    file:
+      state: directory
+      path: "{{ item }}"
+    with_items:
+      - "{{ package_path }}"
+      - "{{ build_path }}"
+
+  - name: Copy pubkey
+    copy: src=../files/asamk.pub dest="{{ build_path }}/asamk.pub"
+
+  - name: Import pubkey
+    shell: "gpg --import {{ build_path }}/asamk.pub"
+
+  - name: Download signal-cli v{{ signal_cli_version }}.
+    get_url:
+      url: "{{ item }}"
+      dest: "{{ build_path }}/{{ item | basename }}"
+      checksum: "{{ signal_cli_checksum }}"
+    with_items:
+      - "{{ signal_cli_url }}"
+
+  - name: Download signal-cli v{{ signal_cli_version }} signature.
+    get_url:
+      url: "{{ item }}"
+      dest: "{{ build_path }}/{{ item | basename }}"
+    with_items:
+      - "{{ signal_cli_sig_url }}"
+
+  - name: Verify signature
+    shell: "gpg --verify {{ build_path }}/{{ signal_cli_sig_url | basename }}"
+
+  - name: Create opt directory in build path.
+    file:
+      state: directory
+      dest: "{{ package_path }}/opt/"
+
+  - name: Unarchive signal-cli v{{ signal_cli_version }}.
+    unarchive:
+      src: "{{ build_path }}/{{ signal_cli_url | basename }}"
+      remote_src: True
+      dest: "{{ package_path }}/opt/"
+
+  - name: Create apparmor.d directory in build path.
+    file:
+      state: directory
+      dest: "{{ package_path }}/etc/apparmor.d"
+    tags: apparmor
+
+  - name: Copy AppArmor profile
+    copy:
+      src: ../files/usr.lib.jvm.java-7-openjdk-amd64.jre.bin.java
+      dest: "{{ package_path }}/etc/apparmor.d/usr.lib.jvm.java-7-openjdk-amd64.jre.bin.java"

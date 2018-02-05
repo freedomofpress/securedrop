@@ -51,4 +51,9 @@
     - role: build-generic-pkg
       tags: "securedrop-config"
       package_name: "securedrop-config"
+
+    - role: build-securedrop-signal-cli
+      tags: "signal-cli"
+      package_name: "securedrop-signal-cli"
+
   tags: rebuild
