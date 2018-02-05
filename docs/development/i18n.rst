@@ -320,9 +320,8 @@ among the current administrators.
 All administrators are listed in the `forum introduction page
 <https://forum.securedrop.club/t/about-the-translations-category/16/1>`_
 
-An administrator who has not be active for two months or more is
-removed from the list and their permissions revoked. They can apply
-again at anytime.
+The privileges of an administrator who has not been active for six months
+or more are revoked. They can apply again at any time.
 
 The community of SecureDrop translators works very closely with the
 SecureDrop developers and some of them participate in both

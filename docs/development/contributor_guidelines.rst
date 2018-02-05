@@ -145,6 +145,9 @@ committed to do so in a transparent way as follows:
       be granted the privilege
 * Step 3: the thread is closed
 
+The privileges of a developer who has not been active for six months or
+more are revoked. They can apply again at any time.
+
 Other Tips
 ----------
 
