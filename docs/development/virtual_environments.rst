@@ -45,6 +45,7 @@ To get started working with the development environment:
    ./manage.py run         # run development servers
    ./manage.py reset       # resets the state of the development instance
    ./manage.py add-admin   # create a user to use when logging in to the Journalist Interface
+   ./manage.py translate-messages --compile   # add languages and display the i18n menu
    pytest -v tests/        # run the unit and functional tests
 
 .. sidebar:: Note to Qubes users
