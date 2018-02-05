@@ -1,0 +1,18 @@
+---
+- name: Signal-cli Test notification
+  command: '/usr/local/bin/signal-cli --config /etc/signal/ -u {{ signal_number }} send -m "This is a test message!" {{ signal_destination_number }}'
+  become: yes
+
+- name: Signal-cli get safety number
+  command: '/usr/local/bin/signal-cli --config /etc/signal -u {{ signal_number }} listIdentities -n {{ signal_destination_number }}'
+  become: yes
+  register: signal_safety_number
+
+# - name: Write safety number
+#   local_action: copy content="{{ signal_safety_number }}" dest="/tmp/{{ signal_number }}-safety.txt"
+#   become: yes
+#
+# - name: Fetch safety number
+#   fetch:
+#     src: "/tmp/{{ signal_number }}-safety.txt"
+#     dest: "{{ signal_number }}-safety.txt"

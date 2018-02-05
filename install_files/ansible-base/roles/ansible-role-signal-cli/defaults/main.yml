@@ -1,0 +1,19 @@
+---
+signal_number: ""
+
+#for test notification
+signal_destination_number: ""
+# When a number has already been used for registration (whether it succeeded or
+# not) and the role is re-run, the role by default will not try to re-register
+# with that same number. Set signal_force_re_registration to True to change
+# that.
+signal_force_re_registration: False
+
+# TODO. Ideally we'd be able to use a fact to determine whether we're running in
+# interactive mode or not. Since I haven't been able to find such a fact, the
+# following var is used instead and set to False by default to be safe.
+ansible_interactive_mode: False
+
+# Allow skipping registration of signal CLI registration task
+signal_cli_register: False
+signal_cli_unix_user: "{{ ansible_user }}"

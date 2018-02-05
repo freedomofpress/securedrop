@@ -1,0 +1,11 @@
+---
+- block:
+  - name: Convert jvm header for pax
+    shell: "paxctl -c /usr/lib/jvm/java-7-openjdk-amd64/bin/java"
+    become: yes
+
+  - name: Set jvm pax flag
+    shell: "paxctl -m /usr/lib/jvm/java-7-openjdk-amd64/bin/java"
+    become: yes
+
+  become: True

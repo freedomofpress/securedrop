@@ -1,0 +1,17 @@
+---
+- name: Create config directory
+  file:
+    path: /etc/signal/data/
+    state: directory
+    mode: "0755"
+    recurse: yes
+  become: yes
+
+- name: Copy config
+  copy:
+    src: "{{ signal_number }}"
+    dest: "/etc/signal/data/{{ signal_number }}"
+    owner: "{{ signal_cli_unix_user }}"
+    group: "{{ signal_cli_unix_user }}"
+    mode: "0400"
+  become: yes
