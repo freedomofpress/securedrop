@@ -302,10 +302,9 @@ We do not want to publish the translator emails so we strip them:
 Translations administrators
 ---------------------------
 
-.. note:: the translation workflow is different from the code and
-          documentation development workflow, see the associated
-          :ref:`privilege escalation <contributor-permissions>`
-          documentation.
+.. note:: The privilege escalation workflow is different for
+          :ref:`code maintainers <contributor-permissions>` and
+          :ref:`translation maintainers <i18n-administrator-permissions>`.
 
 A translation administrator is a person who is actively performing
 administrative duties. They have special permissions on the

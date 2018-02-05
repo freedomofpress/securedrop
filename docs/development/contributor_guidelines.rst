@@ -123,10 +123,9 @@ check out this
 Privileges
 ----------
 
-.. note:: the translation workflow is different from the code and
-          documentation development workflow, see the associated
-          :ref:`privilege escalation <i18n-administrator-permissions>`
-          documentation.
+.. note:: The privilege escalation workflow is different for
+          :ref:`code maintainers <contributor-permissions>` and
+          :ref:`translation maintainers <i18n-administrator-permissions>`.
 
 Dedicated contributors to SecureDrop will be granted extra privileges
 such as the right to push new branches or to merge pull requests. Any
