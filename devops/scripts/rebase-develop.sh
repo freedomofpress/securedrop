@@ -3,7 +3,7 @@
 set -e
 
 # If current branch is not master or doesnt start with release...
-if [[ "$CIRCLE_BRANCH" != "master"  && "$CIRCLE_BRANCH" != release*  ]]; then
+if [[ "$CIRCLE_BRANCH" != "master"  && "$CIRCLE_BRANCH" != release*  && "$CIRCLE_BRANCH" != merge-* ]]; then
 
   # Git will yell at you when trying to rebase without author/email configured
   git config --global user.email "ci@freedom.press"
