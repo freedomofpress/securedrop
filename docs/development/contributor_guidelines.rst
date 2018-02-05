@@ -122,12 +122,21 @@ Privileges
 ----------
 
 Dedicated contributors to SecureDrop will be granted extra privileges
-such as the right to push new branches or to merge pull
-requests. There is no formal process at the moment but the general
-idea is that any contributor with the right technical and social
-skills is entitled to ask. The people who have the power to grant such
-privileges are committed to do so in a transparent way to avoid any
-disputes.
+such as the right to push new branches or to merge pull requests. Any
+contributor with the right technical and social skills is entitled to
+ask. The people who have the power to grant such privileges are
+committed to do so in a transparent way as follows:
+
+* Step 1: the contributor posts a message `in the forum
+  <https://forum.securedrop.club/>`__ asking for privileges (review or
+  merge, etc.).
+* Step 2: after at least a week someone with permissions to grant such
+  privilege reviews the thread and either:
+    * grants the privilege if there are no objections from current
+      maintainers and adds a message to the thread
+    * explains what is expected from the contributor before they can
+      be granted the privilege
+* Step 3: the thread is closed
 
 Other Tips
 ----------
