@@ -63,6 +63,12 @@ Vagrant.configure("2") do |config|
     staging.vm.box = "bento/ubuntu-14.04"
     staging.vm.network "private_network", ip: "10.0.1.3", virtualbox__intnet: internal_network_name
     staging.vm.synced_folder './', '/vagrant', disabled: true
+    staging.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+    end
+    staging.vm.provider "libvirt" do |lv, override|
+      lv.memory = 1024
+    end
   end
 
   config.vm.define 'app-staging', autostart: false do |staging|
