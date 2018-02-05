@@ -118,8 +118,15 @@ should be removed. If you are unfamiliar with how to squash commits with rebase,
 check out this
 `blog post <http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html>`__.
 
+.. _contributor-permissions:
+
 Privileges
 ----------
+
+.. note:: the translation workflow is different from the code and
+          documentation development workflow, see the associated
+          :ref:`privilege escalation <i18n-administrator-permissions>`
+          documentation.
 
 Dedicated contributors to SecureDrop will be granted extra privileges
 such as the right to push new branches or to merge pull requests. Any

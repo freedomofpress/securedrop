@@ -297,8 +297,15 @@ We do not want to publish the translator emails so we strip them:
        git log --pretty='%aN' $previous_version..lab/i18n -- \
         securedrop/translations install_files/ansible-base/roles/tails-config/templates | sort -u
 
+.. _i18n-administrator-permissions:
+
 Translations administrators
 ---------------------------
+
+.. note:: the translation workflow is different from the code and
+          documentation development workflow, see the associated
+          :ref:`privilege escalation <contributor-permissions>`
+          documentation.
 
 A translation administrator is a person who is actively performing
 administrative duties. They have special permissions on the
