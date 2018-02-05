@@ -118,16 +118,36 @@ should be removed. If you are unfamiliar with how to squash commits with rebase,
 check out this
 `blog post <http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html>`__.
 
+.. _contributor-permissions:
+
 Privileges
 ----------
 
+.. note:: The privilege escalation workflow is different for
+          :ref:`code maintainers <contributor-permissions>` and
+          :ref:`translation maintainers <i18n-administrator-permissions>`.
+
 Dedicated contributors to SecureDrop will be granted extra privileges
-such as the right to push new branches or to merge pull
-requests. There is no formal process at the moment but the general
-idea is that any contributor with the right technical and social
-skills is entitled to ask. The people who have the power to grant such
-privileges are committed to do so in a transparent way to avoid any
-disputes.
+such as the right to push new branches or to merge pull requests. Any
+contributor with the right technical and social skills is entitled to
+ask. The people who have the power to grant such privileges are
+committed to do so in a transparent way as follows:
+
+#. The contributor posts a message `in the forum
+   <https://forum.securedrop.club/>`__ asking for privileges (review or
+   merge, etc.).
+#. After at least a week someone with permissions to grant such
+   privilege reviews the thread and either:
+
+   * grants the privilege if there are no objections from current
+     maintainers and adds a message to the thread; or
+   * explains what is expected from the contributor before they can
+     be granted the privilege.
+
+#. The thread is closed.
+
+The privileges of a developer who has not been active for six months or
+more are revoked. They can apply again at any time.
 
 Other Tips
 ----------

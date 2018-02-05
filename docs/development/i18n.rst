@@ -297,8 +297,14 @@ We do not want to publish the translator emails so we strip them:
        git log --pretty='%aN' $previous_version..lab/i18n -- \
         securedrop/translations install_files/ansible-base/roles/tails-config/templates | sort -u
 
+.. _i18n-administrator-permissions:
+
 Translations administrators
 ---------------------------
+
+.. note:: The privilege escalation workflow is different for
+          :ref:`code maintainers <contributor-permissions>` and
+          :ref:`translation maintainers <i18n-administrator-permissions>`.
 
 A translation administrator is a person who is actively performing
 administrative duties. They have special permissions on the
@@ -313,9 +319,8 @@ among the current administrators.
 All administrators are listed in the `forum introduction page
 <https://forum.securedrop.club/t/about-the-translations-category/16/1>`_
 
-An administrator who has not be active for two months or more is
-removed from the list and their permissions revoked. They can apply
-again at anytime.
+The privileges of an administrator who has not been active for six months
+or more are revoked. They can apply again at any time.
 
 The community of SecureDrop translators works very closely with the
 SecureDrop developers and some of them participate in both
