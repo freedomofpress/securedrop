@@ -24,8 +24,8 @@
       <p>
         <div id="select-container"></div>
         <button type="submit" name="action" value="download" class="small"><i class="fa fa-download"></i> {{ gettext('Download Selected') }}</button>
-        <a href="#delete-selected-confirmation-modal" id="delete-selected-link" class="btn small danger">
-          <i class="fa fa-trash-o"></i> {{ gettext('Delete Selected') }}
+        <a href="#delete-selected-confirmation-modal" id="delete-selected-link">
+          <button type="button" class="small danger"><i class="fa fa-trash-o"></i> {{ gettext('Delete Selected') }}</button>
         </a>
       </p>
 
@@ -118,8 +118,8 @@
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}">
-    <a href="#delete-collection-confirmation-modal" id="delete-collection-link" class="btn sd-button danger">
-      <i class="fa fa-trash-o"></i> {{ gettext('DELETE COLLECTION') }}
+    <a href="#delete-collection-confirmation-modal" id="delete-collection-link">
+      <button type="button" class="sd-button danger"><i class="fa fa-trash-o"></i> {{ gettext('DELETE COLLECTION') }}</button>
     </a>
 
     <!-- Confirmation modal for entire collection deletion -->
