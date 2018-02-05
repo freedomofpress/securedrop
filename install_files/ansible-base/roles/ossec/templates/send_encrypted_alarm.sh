@@ -34,6 +34,12 @@ function send_encrypted_alert() {
         echo "${encrypted_alert_text}" | \
             /usr/bin/mail -s "$(echo "${SUBJECT}" | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
     fi
+
+    #check for signal cli and send alert to number
+    if [[ -x "$(command -v signal-cli)" ]]; then
+        /usr/local/bin/signal-cli --config /etc/signal -u '{{ signal_number }}' send -m "${ossec_alert_text}" '{{ signal_destination_number }}'
+    fi
+
 }
 
 # Failover alerting function, in case the primary function failed.
