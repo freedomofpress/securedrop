@@ -206,10 +206,10 @@ def encrypt(plaintext, fingerprints, output=None):
 def decrypt(secret, ciphertext):
     """
     >>> key = genkeypair('randomid', 'randomid')
-    >>> decrypt('randomid',
-    ...   encrypt('Goodbye, cruel world!', str(key))
-    ... )
-    'Goodbye, cruel world!'
+    >>> message = u'Buenos días, mundo hermoso!'
+    >>> ciphertext = encrypt(message, str(key))
+    >>> decrypt('randomid', ciphertext) == message.encode('utf-8')
+    True
     """
     hashed_codename = hash_codename(secret, salt=SCRYPT_GPG_PEPPER)
     return gpg.decrypt(ciphertext, passphrase=hashed_codename).data
