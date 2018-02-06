@@ -1,6 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Workaround for URL breakage, see #2970.
+Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
+
 Vagrant.configure("2") do |config|
 
   # Vagrant 1.7.0+ removes the insecure_private_key by default
