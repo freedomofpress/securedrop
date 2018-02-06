@@ -117,7 +117,7 @@ jobs:
 
       - run:
           name: Installation pre-reqs
-          command: pip install -U -r securedrop/requirements/develop-requirements.txt
+          command: pip install -U -r ./securedrop/requirements/develop-requirements.txt
 
       - run:
           name: Check Python dependencies for CVEs
@@ -146,6 +146,9 @@ jobs:
 
       - store_artifacts:
           path: /root/sd/raw-test-output
+
+      - store_artifacts:
+          path: /root/sd/.tor_version
 
 workflows:
   version: 2
