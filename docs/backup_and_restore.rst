@@ -9,7 +9,7 @@ Performing such a migration consists of:
   2. Do a new install of the same version of SecureDrop on the new hardware.
   3. *Restore* the backup to the new installation.
 
-Maintaining periodic backups are generally a good practice to guard against data loss.
+Maintaining periodic backups is generally a good practice to guard against data loss.
 In the event of hardware failure on the SecureDrop servers, having a recent backup
 will enable you to redeploy the system without changing Onion URLs, recreating
 Journalist accounts, or losing historical submissions from sources.
