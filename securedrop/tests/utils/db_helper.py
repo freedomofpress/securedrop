@@ -5,11 +5,12 @@ filesystem) interaction.
 import mock
 import os
 
+from flask import current_app
+
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
 import models
-import store
 
 from db import db
 
@@ -58,7 +59,8 @@ def reply(journalist, source, num_replies):
                                 crypto_util.getkey(source.filesystem_id),
                                 config.JOURNALIST_KEY
                             ],
-                            store.path(source.filesystem_id, fname))
+                            current_app.storage.path(source.filesystem_id,
+                                                     fname))
         reply = models.Reply(journalist, source, fname)
         replies.append(reply)
         db.session.add(reply)
@@ -109,7 +111,7 @@ def init_source_without_keypair():
     db.session.add(source)
     db.session.commit()
     # Create the directory to store their submissions and replies
-    os.mkdir(store.path(source.filesystem_id))
+    os.mkdir(current_app.storage.path(source.filesystem_id))
 
     return source, codename
 
@@ -146,10 +148,12 @@ def submit(source, num_submissions):
     submissions = []
     for _ in range(num_submissions):
         source.interaction_count += 1
-        fpath = store.save_message_submission(source.filesystem_id,
-                                              source.interaction_count,
-                                              source.journalist_filename,
-                                              str(os.urandom(1)))
+        fpath = current_app.storage.save_message_submission(
+            source.filesystem_id,
+            source.interaction_count,
+            source.journalist_filename,
+            str(os.urandom(1))
+        )
         submission = models.Submission(source, fpath)
         submissions.append(submission)
         db.session.add(submission)

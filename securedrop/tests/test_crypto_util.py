@@ -2,12 +2,13 @@
 import os
 import unittest
 
+from flask import current_app
+
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
 import journalist_app
 import models
-import store
 import utils
 
 from db import db
@@ -51,7 +52,7 @@ class TestCryptoUtil(unittest.TestCase):
         ciphertext = crypto_util.encrypt(
             message,
             [crypto_util.getkey(source.filesystem_id), config.JOURNALIST_KEY],
-            store.path(source.filesystem_id, 'somefile.gpg'))
+            current_app.storage.path(source.filesystem_id, 'somefile.gpg'))
 
         self.assertIsInstance(ciphertext, str)
         self.assertNotEqual(ciphertext, message)
@@ -64,7 +65,7 @@ class TestCryptoUtil(unittest.TestCase):
             crypto_util.encrypt(
                 str(os.urandom(1)),
                 [],
-                store.path(source.filesystem_id, 'other.gpg'))
+                current_app.storage.path(source.filesystem_id, 'other.gpg'))
 
     def test_encrypt_without_output(self):
         """We simply do not specify the option output keyword argument
@@ -99,7 +100,7 @@ class TestCryptoUtil(unittest.TestCase):
                 fh,
                 [crypto_util.getkey(source.filesystem_id),
                  config.JOURNALIST_KEY],
-                store.path(source.filesystem_id, 'somefile.gpg'))
+                current_app.storage.path(source.filesystem_id, 'somefile.gpg'))
         plaintext = crypto_util.decrypt(codename, ciphertext)
 
         with open(os.path.realpath(__file__)) as fh:
@@ -114,7 +115,7 @@ class TestCryptoUtil(unittest.TestCase):
         ciphertext = crypto_util.encrypt(
             message,
             crypto_util.getkey(source.filesystem_id),
-            store.path(source.filesystem_id, 'somefile.gpg'))
+            current_app.storage.path(source.filesystem_id, 'somefile.gpg'))
         plaintext = crypto_util.decrypt(codename, ciphertext)
 
         self.assertEqual(message, plaintext)
@@ -126,7 +127,7 @@ class TestCryptoUtil(unittest.TestCase):
             message,
             [crypto_util.getkey(source.filesystem_id),
              config.JOURNALIST_KEY],
-            store.path(source.filesystem_id, 'somefile.gpg'))
+            current_app.storage.path(source.filesystem_id, 'somefile.gpg'))
         plaintext = crypto_util.decrypt(codename, ciphertext)
 
         self.assertEqual(message, plaintext)

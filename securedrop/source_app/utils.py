@@ -9,7 +9,6 @@ from threading import Thread
 
 import crypto_util
 import i18n
-import store
 
 from models import Source
 
@@ -94,7 +93,7 @@ def normalize_timestamps(filesystem_id):
     the latest submission. This minimizes metadata that could be useful to
     investigators. See #301.
     """
-    sub_paths = [store.path(filesystem_id, submission.filename)
+    sub_paths = [current_app.storage.path(filesystem_id, submission.filename)
                  for submission in g.source.submissions]
     if len(sub_paths) > 1:
         args = ["touch"]

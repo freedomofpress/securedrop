@@ -6,7 +6,6 @@ from flask_babel import gettext
 from sqlalchemy.orm.exc import NoResultFound
 
 import crypto_util
-import store
 
 from db import db
 from models import Submission
@@ -83,7 +82,7 @@ def make_blueprint(config):
             current_app.logger.error(
                 "Could not mark " + fn + " as downloaded: %s" % (e,))
 
-        return send_file(store.path(filesystem_id, fn),
+        return send_file(current_app.storage.path(filesystem_id, fn),
                          mimetype="application/pgp-encrypted")
 
     return view

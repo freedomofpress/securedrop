@@ -10,7 +10,6 @@ from sqlalchemy.orm.exc import NoResultFound
 
 import crypto_util
 import i18n
-import store
 import template_filters
 import version
 
@@ -20,6 +19,7 @@ from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from source_app import main, info, api
 from source_app.decorators import ignore_static
 from source_app.utils import logged_in
+from store import Storage
 
 
 def create_app(config):
@@ -49,17 +49,9 @@ def create_app(config):
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     db.init_app(app)
 
-    if config.DATABASE_ENGINE == "sqlite":
-        db_uri = (config.DATABASE_ENGINE + ":///" +
-                  config.DATABASE_FILE)
-    else:  # pragma: no cover
-        db_uri = (
-            config.DATABASE_ENGINE + '://' +
-            config.DATABASE_USERNAME + ':' +
-            config.DATABASE_PASSWORD + '@' +
-            config.DATABASE_HOST + '/' +
-            config.DATABASE_NAME
-        )
+    app.storage = Storage(config.STORE_DIR,
+                          config.TEMP_DIR,
+                          config.JOURNALIST_KEY)
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
@@ -146,7 +138,7 @@ def create_app(config):
                 del session['logged_in']
                 del session['codename']
                 return redirect(url_for('main.index'))
-            g.loc = store.path(g.filesystem_id)
+            g.loc = app.storage.path(g.filesystem_id)
 
     @app.errorhandler(404)
     def page_not_found(error):

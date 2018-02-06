@@ -8,7 +8,6 @@ from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
 
 import crypto_util
-import store
 
 from db import db
 from models import Source, Submission, Reply, get_one_or_else
@@ -60,7 +59,7 @@ def make_blueprint(config):
             del session['codename']
             abort(500)
         else:
-            os.mkdir(store.path(filesystem_id))
+            os.mkdir(current_app.storage.path(filesystem_id))
 
         session['logged_in'] = True
         return redirect(url_for('.lookup'))
@@ -70,7 +69,10 @@ def make_blueprint(config):
     def lookup():
         replies = []
         for reply in g.source.replies:
-            reply_path = store.path(g.filesystem_id, reply.filename)
+            reply_path = current_app.storage.path(
+                g.filesystem_id,
+                reply.filename,
+            )
             try:
                 reply.decrypted = crypto_util.decrypt(
                     g.codename,
@@ -122,7 +124,7 @@ def make_blueprint(config):
         if msg:
             g.source.interaction_count += 1
             fnames.append(
-                store.save_message_submission(
+                current_app.storage.save_message_submission(
                     g.filesystem_id,
                     g.source.interaction_count,
                     journalist_filename,
@@ -130,7 +132,7 @@ def make_blueprint(config):
         if fh:
             g.source.interaction_count += 1
             fnames.append(
-                store.save_file_submission(
+                current_app.storage.save_file_submission(
                     g.filesystem_id,
                     g.source.interaction_count,
                     journalist_filename,
@@ -186,7 +188,7 @@ def make_blueprint(config):
         query = Reply.query.filter(
             Reply.filename == request.form['reply_filename'])
         reply = get_one_or_else(query, current_app.logger, abort)
-        srm(store.path(g.filesystem_id, reply.filename))
+        srm(current_app.storage.path(g.filesystem_id, reply.filename))
         db.session.delete(reply)
         db.session.commit()
 
@@ -203,7 +205,7 @@ def make_blueprint(config):
             return redirect(url_for('.lookup'))
 
         for reply in replies:
-            srm(store.path(g.filesystem_id, reply.filename))
+            srm(current_app.storage.path(g.filesystem_id, reply.filename))
             db.session.delete(reply)
         db.session.commit()
 

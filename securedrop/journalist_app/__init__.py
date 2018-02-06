@@ -12,9 +12,10 @@ import template_filters
 import version
 
 from db import db
-from models import Journalist
 from journalist_app import account, admin, main, col
 from journalist_app.utils import get_source, logged_in
+from models import Journalist
+from store import Storage
 
 _insecure_views = ['main.login', 'static']
 
@@ -43,6 +44,10 @@ def create_app(config):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     db.init_app(app)
+
+    app.storage = Storage(config.STORE_DIR,
+                          config.TEMP_DIR,
+                          config.JOURNALIST_KEY)
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):

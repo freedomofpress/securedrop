@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from cStringIO import StringIO
+import gnupg
 import gzip
 import mock
 import os
@@ -12,19 +12,19 @@ import unittest
 import zipfile
 
 from bs4 import BeautifulSoup
-from flask import session, g, escape
+from cStringIO import StringIO
+from flask import session, g, escape, current_app
 from mock import patch
-import gnupg
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
-from db import db
-from models import Journalist
 import journalist_app
 import source_app
-import store
 import utils
+
+from db import db
+from models import Journalist
 
 # Seed the RNG for deterministic testing
 random.seed('ಠ_ಠ')
@@ -56,7 +56,7 @@ class TestIntegration(unittest.TestCase):
         self.mock_journalist_verify_token.return_value = True
 
         # Add a test user to the journalist interface
-        self.user_pw = "corret horse battery staple haha cultural reference"
+        self.user_pw = "correct horse battery staple haha cultural reference"
         self.username = crypto_util.genrandomid()
         user = Journalist(username=self.username, password=self.user_pw)
         db.session.add(user)
@@ -154,7 +154,8 @@ class TestIntegration(unittest.TestCase):
             # needs to wait for the worker to get the job and execute it
             utils.async.wait_for_assertion(
                 lambda: self.assertFalse(
-                    os.path.exists(store.path(filesystem_id, doc_name))
+                    os.path.exists(current_app.storage.path(filesystem_id,
+                                                            doc_name))
                 )
             )
 
@@ -248,12 +249,15 @@ class TestIntegration(unittest.TestCase):
             # needs to wait for the worker to get the job and execute it
             utils.async.wait_for_assertion(
                 lambda: self.assertFalse(
-                    os.path.exists(store.path(filesystem_id, doc_name))
+                    os.path.exists(current_app.storage.path(filesystem_id,
+                                                            doc_name))
                 )
             )
 
     def test_reply_normal(self):
+        self.__context.push()
         self.helper_test_reply("This is a test reply.", True)
+        self.__context.pop()
 
     def test_unicode_reply_with_ansi_env(self):
         # This makes python-gnupg handle encoding equivalent to if we were
@@ -267,7 +271,9 @@ class TestIntegration(unittest.TestCase):
         old_encoding = crypto_util.gpg._encoding
         crypto_util.gpg._encoding = "ansi_x3.4_1968"
         try:
+            self.__context.push()
             self.helper_test_reply("ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
+            self.__context.pop()
         finally:
             crypto_util.gpg._encoding = old_encoding
 
@@ -433,7 +439,7 @@ class TestIntegration(unittest.TestCase):
                 # Make sure the reply is deleted from the filesystem
                 utils.async.wait_for_assertion(
                     lambda: self.assertFalse(os.path.exists(
-                        store.path(filesystem_id, msgid))))
+                        current_app.storage.path(filesystem_id, msgid))))
 
             app.get('/logout')
 
@@ -479,7 +485,7 @@ class TestIntegration(unittest.TestCase):
             # Make sure the collection is deleted from the filesystem
             utils.async.wait_for_assertion(
                 lambda: self.assertFalse(
-                    os.path.exists(store.path(filesystem_id)))
+                    os.path.exists(current_app.storage.path(filesystem_id)))
             )
 
     @patch('source_app.main.async_genkey')
@@ -516,7 +522,7 @@ class TestIntegration(unittest.TestCase):
 
             # Make sure the collections are deleted from the filesystem
             utils.async.wait_for_assertion(lambda: self.assertFalse(
-                any([os.path.exists(store.path(filesystem_id))
+                any([os.path.exists(current_app.storage.path(filesystem_id))
                     for filesystem_id in checkbox_values])))
 
     def test_filenames(self):
@@ -680,5 +686,6 @@ class TestIntegration(unittest.TestCase):
 
         # Make sure the files were deleted from the filesystem
         utils.async.wait_for_assertion(lambda: self.assertFalse(
-            any([os.path.exists(store.path(filesystem_id, doc_name))
+            any([os.path.exists(current_app.storage.path(filesystem_id,
+                                                         doc_name))
                  for doc_name in checkbox_values])))
