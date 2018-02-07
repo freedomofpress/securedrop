@@ -6,7 +6,6 @@ from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
 from flask_babel import gettext, ngettext
 from sqlalchemy.sql.expression import false
 
-import crypto_util
 import i18n
 import worker
 
@@ -201,7 +200,9 @@ def col_delete(cols_selected):
 
 def make_password(config):
     while True:
-        password = crypto_util.genrandomid(7, i18n.get_language(config))
+        password = current_app.crypto_util.genrandomid(
+            7,
+            i18n.get_language(config))
         try:
             Journalist.check_password_acceptable(password)
             return password
@@ -214,7 +215,7 @@ def delete_collection(filesystem_id):
     job = worker.enqueue(srm, current_app.storage.path(filesystem_id))
 
     # Delete the source's reply keypair
-    crypto_util.delete_reply_keypair(filesystem_id)
+    current_app.crypto_util.delete_reply_keypair(filesystem_id)
 
     # Delete their entry in the db
     source = get_source(filesystem_id)

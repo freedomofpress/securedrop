@@ -5,9 +5,8 @@ import re
 import tempfile
 import zipfile
 
+from flask import current_app
 from werkzeug.utils import secure_filename
-
-import crypto_util
 
 from secure_tempfile import SecureTemporaryFile
 
@@ -141,7 +140,8 @@ class Storage:
                         break
                     gzf.write(buf)
 
-            crypto_util.encrypt(stf, self.__gpg_key, encrypted_file_path)
+            current_app.crypto_util.encrypt(
+                stf, self.__gpg_key, encrypted_file_path)
 
         return encrypted_file_name
 
@@ -149,7 +149,7 @@ class Storage:
                                 journalist_filename, message):
         filename = "{0}-{1}-msg.gpg".format(count, journalist_filename)
         msg_loc = self.path(filesystem_id, filename)
-        crypto_util.encrypt(message, self.__gpg_key, msg_loc)
+        current_app.crypto_util.encrypt(message, self.__gpg_key, msg_loc)
         return filename
 
     def rename_submission(self,

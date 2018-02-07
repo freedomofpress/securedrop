@@ -9,7 +9,6 @@ from flask import current_app
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
-import crypto_util
 import models
 
 from db import db
@@ -27,8 +26,8 @@ def init_journalist(is_admin=False):
               corresponding to the row just added to the database. The
               second, their password string.
     """
-    username = crypto_util.genrandomid()
-    user_pw = crypto_util.genrandomid()
+    username = current_app.crypto_util.genrandomid()
+    user_pw = current_app.crypto_util.genrandomid()
     user = models.Journalist(username, user_pw, is_admin)
     db.session.add(user)
     db.session.commit()
@@ -54,13 +53,12 @@ def reply(journalist, source, num_replies):
         source.interaction_count += 1
         fname = "{}-{}-reply.gpg".format(source.interaction_count,
                                          source.journalist_filename)
-        crypto_util.encrypt(str(os.urandom(1)),
-                            [
-                                crypto_util.getkey(source.filesystem_id),
-                                config.JOURNALIST_KEY
-                            ],
-                            current_app.storage.path(source.filesystem_id,
-                                                     fname))
+        current_app.crypto_util.encrypt(
+            str(os.urandom(1)),
+            [current_app.crypto_util.getkey(source.filesystem_id),
+             config.JOURNALIST_KEY],
+            current_app.storage.path(source.filesystem_id, fname))
+
         reply = models.Reply(journalist, source, fname)
         replies.append(reply)
         db.session.add(reply)
@@ -104,9 +102,9 @@ def init_source_without_keypair():
     initialized. The second, their codename string.
     """
     # Create source identity and database record
-    codename = crypto_util.genrandomid()
-    filesystem_id = crypto_util.hash_codename(codename)
-    journalist_filename = crypto_util.display_id()
+    codename = current_app.crypto_util.genrandomid()
+    filesystem_id = current_app.crypto_util.hash_codename(codename)
+    journalist_filename = current_app.crypto_util.display_id()
     source = models.Source(filesystem_id, journalist_filename)
     db.session.add(source)
     db.session.commit()
@@ -126,7 +124,7 @@ def init_source():
     initialized. The second, their codename string.
     """
     source, codename = init_source_without_keypair()
-    crypto_util.genkeypair(source.filesystem_id, codename)
+    current_app.crypto_util.genkeypair(source.filesystem_id, codename)
 
     return source, codename
 

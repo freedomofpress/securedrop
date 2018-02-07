@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 """Testing utilities related to setup and teardown of test environment.
 """
+import gnupg
 import os
-from os.path import abspath, dirname, isdir, join, realpath
 import shutil
 import threading
 
-import gnupg
+from os.path import abspath, dirname, isdir, join, realpath
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
-import crypto_util
+
 from db import db
 
 FILES_DIR = abspath(join(dirname(realpath(__file__)), '..', 'files'))
@@ -49,8 +49,6 @@ def setup():
     create_directories()
     init_gpg()
     db.create_all()
-    # Do tests that should always run on app startup
-    crypto_util.do_runtime_tests()
 
 
 def teardown():

@@ -5,8 +5,8 @@ import argparse
 import codecs
 import logging
 import os
-from os.path import dirname, join, realpath
 import pwd
+import qrcode
 import shutil
 import signal
 import subprocess
@@ -15,14 +15,15 @@ import time
 import traceback
 import version
 
-import qrcode
+from flask import current_app
+from os.path import dirname, join, realpath
 from sqlalchemy import text
 from sqlalchemy.orm.exc import NoResultFound
 
 os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
 import config
-import crypto_util
 import journalist_app
+
 from db import db
 from models import Journalist, PasswordError, InvalidUsernameException
 from management.run import run
@@ -143,7 +144,7 @@ def _get_yubikey_usage():
 
 def _make_password():
     while True:
-        password = crypto_util.genrandomid(7)
+        password = current_app.crypto_util.genrandomid(7)
         try:
             Journalist.check_password_acceptable(password)
             return password

@@ -18,7 +18,6 @@ from mock import patch
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
-import crypto_util
 import journalist_app
 import source_app
 import utils
@@ -47,7 +46,7 @@ class TestIntegration(unittest.TestCase):
         self.__context.push()
         utils.env.setup()
 
-        self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
+        self.gpg = self.journalist_app.crypto_util.gpg
 
         # Patch the two-factor verification to avoid intermittent errors
         patcher = mock.patch('models.Journalist.verify_token')
@@ -57,7 +56,7 @@ class TestIntegration(unittest.TestCase):
 
         # Add a test user to the journalist interface
         self.user_pw = "correct horse battery staple haha cultural reference"
-        self.username = crypto_util.genrandomid()
+        self.username = self.journalist_app.crypto_util.genrandomid()
         user = Journalist(username=self.username, password=self.user_pw)
         db.session.add(user)
         db.session.commit()
@@ -268,14 +267,14 @@ class TestIntegration(unittest.TestCase):
         # _encoding attribute it would have had it been initialized in a "C"
         # environment. See
         # https://github.com/freedomofpress/securedrop/issues/1360 for context.
-        old_encoding = crypto_util.gpg._encoding
-        crypto_util.gpg._encoding = "ansi_x3.4_1968"
+        self.__context.push()
+        old_encoding = current_app.crypto_util.gpg._encoding
+        current_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
         try:
-            self.__context.push()
             self.helper_test_reply("ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
-            self.__context.pop()
         finally:
-            crypto_util.gpg._encoding = old_encoding
+            current_app.crypto_util.gpg._encoding = old_encoding
+        self.__context.pop()
 
     def _can_decrypt_with_key(self, msg, key_fpr, passphrase=None):
         """
@@ -299,9 +298,9 @@ class TestIntegration(unittest.TestCase):
 
         # Attempt decryption with the given key
         if passphrase:
-            passphrase = crypto_util.hash_codename(
+            passphrase = current_app.crypto_util.hash_codename(
                 passphrase,
-                salt=crypto_util.SCRYPT_GPG_PEPPER)
+                salt=current_app.crypto_util.scrypt_gpg_pepper)
         decrypted_data = gpg.decrypt(msg, passphrase=passphrase)
         self.assertTrue(
             decrypted_data.ok,
@@ -363,8 +362,9 @@ class TestIntegration(unittest.TestCase):
 
         # Block up to 15s for the reply keypair, so we can test sending a reply
         utils.async.wait_for_assertion(
-            lambda: self.assertNotEqual(crypto_util.getkey(filesystem_id),
-                                        None),
+            lambda: self.assertNotEqual(
+                current_app.crypto_util.getkey(filesystem_id),
+                None),
             15)
 
         # Create 2 replies to test deleting on journalist and source interface
@@ -403,8 +403,10 @@ class TestIntegration(unittest.TestCase):
         zf = zipfile.ZipFile(StringIO(resp.data), 'r')
         data = zf.read(zf.namelist()[0])
         self._can_decrypt_with_key(data, config.JOURNALIST_KEY)
-        self._can_decrypt_with_key(data, crypto_util.getkey(filesystem_id),
-                                   codename)
+        self._can_decrypt_with_key(
+            data,
+            current_app.crypto_util.getkey(filesystem_id),
+            codename)
 
         # Test deleting reply on the journalist interface
         last_reply_number = len(

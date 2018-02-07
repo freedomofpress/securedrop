@@ -8,11 +8,11 @@ from jinja2 import evalcontextfilter
 from os import path
 from sqlalchemy.orm.exc import NoResultFound
 
-import crypto_util
 import i18n
 import template_filters
 import version
 
+from crypto_util import CryptoUtil
 from db import db
 from models import Source
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
@@ -52,6 +52,17 @@ def create_app(config):
     app.storage = Storage(config.STORE_DIR,
                           config.TEMP_DIR,
                           config.JOURNALIST_KEY)
+
+    app.crypto_util = CryptoUtil(
+        scrypt_params=config.SCRYPT_PARAMS,
+        scrypt_id_pepper=config.SCRYPT_ID_PEPPER,
+        scrypt_gpg_pepper=config.SCRYPT_GPG_PEPPER,
+        securedrop_root=config.SECUREDROP_ROOT,
+        word_list=config.WORD_LIST,
+        nouns_file=config.NOUNS,
+        adjectives_file=config.ADJECTIVES,
+        gpg_key_dir=config.GPG_KEY_DIR,
+    )
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
@@ -126,7 +137,7 @@ def create_app(config):
         # these common values.
         if logged_in():
             g.codename = session['codename']
-            g.filesystem_id = crypto_util.hash_codename(g.codename)
+            g.filesystem_id = app.crypto_util.hash_codename(g.codename)
             try:
                 g.source = Source.query \
                             .filter(Source.filesystem_id == g.filesystem_id) \
