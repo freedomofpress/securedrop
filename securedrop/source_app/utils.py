@@ -3,13 +3,14 @@ import subprocess
 
 from datetime import datetime
 from flask import session, current_app, abort, g
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from threading import Thread
 
 import crypto_util
 import i18n
 import store
 
-from db import db
 from models import Source
 
 
@@ -68,21 +69,23 @@ def async(f):
 
 
 @async
-def async_genkey(filesystem_id, codename):
+def async_genkey(db_uri, filesystem_id, codename):
     crypto_util.genkeypair(filesystem_id, codename)
 
     # Register key generation as update to the source, so sources will
     # filter to the top of the list in the journalist interface if a
     # flagged source logs in and has a key generated for them. #789
+    session = sessionmaker(bind=create_engine(db_uri))()
     try:
-        source = Source.query.filter(Source.filesystem_id == filesystem_id) \
-                       .one()
+        source = session.query(Source).filter(
+            Source.filesystem_id == filesystem_id).one()
         source.last_updated = datetime.utcnow()
-        db.session.commit()
+        session.commit()
     except Exception as e:
         logging.getLogger(__name__).error(
                 "async_genkey for source (filesystem_id={}): {}"
                 .format(filesystem_id, e))
+    session.close()
 
 
 def normalize_timestamps(filesystem_id):

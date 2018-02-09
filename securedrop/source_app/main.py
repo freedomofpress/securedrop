@@ -90,7 +90,8 @@ def make_blueprint(config):
         # Only do this if the journalist has flagged the source as one
         # that they would like to reply to. (Issue #140.)
         if not crypto_util.getkey(g.filesystem_id) and g.source.flagged:
-            async_genkey(g.filesystem_id, g.codename)
+            db_uri = current_app.config['SQLALCHEMY_DATABASE_URI']
+            async_genkey(db_uri, g.filesystem_id, g.codename)
 
         return render_template(
             'lookup.html',
@@ -164,7 +165,8 @@ def make_blueprint(config):
             # (gpg reads 300 bytes from /dev/random)
             entropy_avail = get_entropy_estimate()
             if entropy_avail >= 2400:
-                async_genkey(g.filesystem_id, g.codename)
+                db_uri = current_app.config['SQLALCHEMY_DATABASE_URI']
+                async_genkey(db_uri, g.filesystem_id, g.codename)
                 current_app.logger.info("generating key, entropy: {}".format(
                     entropy_avail))
             else:
