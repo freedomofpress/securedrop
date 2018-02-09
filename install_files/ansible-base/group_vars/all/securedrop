@@ -53,3 +53,8 @@ appserver_dependencies:
   - supervisor
 
 tor_apt_repo_url: https://tor-apt.freedom.press
+
+# If you bump this, also remember to bump in molecule/builder/tests/vars.yml
+securedrop_pkg_grsec:
+  ver: "3.14.79+r1"
+  depends: "linux-image-3.14.79-grsec"
