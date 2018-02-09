@@ -60,8 +60,8 @@ files into the corresponding ``*.j2`` file and committed to the respository.
 They are then installed when configuring Tails with
 the ``tasks/create_desktop_shortcuts.yml`` tasks.
 
-The manage.py translate helper
-------------------------------
+The manage.py translate helpers
+-------------------------------
 
 The `pybabel`_ and `gettext`_ command line is wrapped into the
 ``manage.py translate-messages`` and ``manage.py translate-desktop``
