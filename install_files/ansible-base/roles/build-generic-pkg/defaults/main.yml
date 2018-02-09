@@ -4,3 +4,11 @@
 securedrop_local_build: "../../build"
 
 securedrop_generic_build_path: "/tmp/build/"
+
+securedrop_app_rsync_opts:
+  - "--chmod=u=rwX,g=rX,o=rX"
+  - "--chown=root:root"
+  - "--exclude=*.git"
+  - "--exclude=*aths"
+  - "--exclude=*.deb"
+  - "--exclude=*.j2"
