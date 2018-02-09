@@ -3,6 +3,7 @@ securedrop_version: "0.5.1"
 ossec_version: "2.8.2"
 keyring_version: "0.1.1"
 config_version: "0.1.0"
+grsec_version: "3.14.79+r1"
 
 # These values will be interpolated with values populated above
 # via helper functions in the tests.
@@ -26,6 +27,7 @@ build_deb_packages:
   - /tmp/build/ossec-agent-{ossec_version}-amd64.deb
   - /tmp/build/securedrop-keyring-{keyring_version}+{securedrop_version}-amd64.deb
   - /tmp/build/securedrop-config-{config_version}+{securedrop_version}-amd64.deb
+  - /tmp/build/securedrop-grsec-{grsec_version}-amd64.deb
 
 lintian_tags:
   # - non-standard-file-perm
