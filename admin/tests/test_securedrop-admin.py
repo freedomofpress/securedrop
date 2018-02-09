@@ -287,6 +287,26 @@ class TestSiteConfig(object):
             site_config.validate_gpg_keys()
         assert 'FAIL does not match' in e.value.message
 
+    def test_validate_sasl_domain(self, caplog):
+        args = argparse.Namespace(site_config='INVALID',
+                                  ansible_path='tests/files',
+                                  app_path=dirname(__file__))
+        site_config = securedrop_admin.SiteConfig(args)
+        site_config.config = {
+            'ossec_alert_gpg_public_key':
+            'test_journalist_key.pub',
+
+            'ossec_gpg_fpr':
+            '65A1B5FF195B56353CC63DFFCC40EF1228271441',
+
+            'sasl_username':
+            'alice',
+
+            'sasl_domain':
+            '',
+        }
+        assert site_config.ValidateSASLDomain()
+
     @mock.patch('securedrop_admin.SiteConfig.validated_input',
                 side_effect=lambda p, d, v, t: d)
     @mock.patch('securedrop_admin.SiteConfig.save')
