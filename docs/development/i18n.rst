@@ -216,10 +216,9 @@ Merging develop into the weblate fork
 
 `Weblate`_ works on a long standing fork of the `SecureDrop git
 repository`_ and is exclusively responsible for the content of the
-``*.pot`` and ``*.po`` files. It needs to merge the content of the
-``develop`` branch back into its ``i18n`` branch to be able to extract
-from the sources new strings to translate or existing strings that
-have been updated.
+``*.pot`` and ``*.po`` files. The content of the
+``develop`` branch must be merged into the ``i18n`` branch to extract
+new strings to translate or existing strings that were updated.
 
 The translations must be suspended in `Weblate`_ to avoid conflicts.
 
@@ -245,7 +244,7 @@ The ``develop`` branch can now be merged into ``i18n`` as follows:
 
 The ``manage.py`` command examines all the source files, looking for
 strings that need to be translated (i.e. gettext('translate me') etc.)
-and update the files used by Weblate, removing, updating and inserting
+and update the ``*.pot`` and ``*.po`` files, removing, updating and inserting
 strings to keep them in sync withe the sources. Carefully review the
 output of ``git diff``. Check ``messages.pot`` first for updated strings,
 looking for formatting problems. Then review the ``messages.po`` of one
@@ -263,7 +262,8 @@ with:
 * Go to the `Weblate commit page for SecureDrop`_ and verify the
   commit hash matches the last commit of the ``i18n`` branch. This must
   happen instantly after the branch is pushed because Weblate is
-  notified by GitLab via a webhook. If it is different, ask for help.
+  notified via a webhook. If it is different,
+  `ask for help <https://gitter.im/freedomofpress/securedrop>`__.
 
 |Weblate commit Unlock|
 
