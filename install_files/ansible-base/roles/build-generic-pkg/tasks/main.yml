@@ -1,14 +1,45 @@
 ---
+- name: Reduce weird path re-usage
+  set_fact:
+    package_path: "{{ role_path }}/../../../{{ package_name }}/"
+    build_path: "{{ securedrop_generic_build_path }}/{{ package_name }}"
+
+- name: Ensure build directory in-place
+  file:
+    state: directory
+    path: "{{ securedrop_generic_build_path }}"
+
 - name: Copy app code to build directory.
   synchronize:
     # All Debian package control files for FPF-maintained packages reside in
     # `install_files/<package_name>` in the SecureDrop git repository.
-    src: "{{ role_path }}/../../../{{ package_name }}/"
-    dest: "/tmp/build/{{ package_name }}/"
+    src: "{{ package_path }}"
+    dest: "{{ build_path }}/"
     recursive: yes
     delete: yes
     use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
     rsync_opts: "{{ securedrop_app_rsync_opts }}"
+
+- name: Find any jinja templates
+  find:
+    paths: "{{ package_path }}"
+    patterns: "*.j2"
+    recurse: yes
+  delegate_to: localhost
+  become: no
+  register: jinja_files_found
+
+- name: Create any necessary parent directories for jinja files
+  file:
+    path: "{{ build_path }}/{{ item.path | dirname |regex_replace('^\\/.*'+package_name, '') }}"
+    state: directory
+  with_items: "{{ jinja_files_found.files }}"
+
+- name: Template out any jinja files found and copy over
+  template:
+    src: "{{ item.path }}"
+    dest: "{{ build_path }}/{{ item.path | regex_replace('^\\/.*'+package_name, '') | regex_replace ('\\.j2$','') }}"
+  with_items: "{{ jinja_files_found.files }}"
 
 - name: run bash script to build generic packages
   script: "build_generic_package.sh {{ package_name }}"
