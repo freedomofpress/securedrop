@@ -2,20 +2,63 @@ Internationalization (i18n)
 ===========================
 
 The code, templates and JavaScript user visible strings must all be
-wrapped with `gettext`_ functions to be substituted at runtime with
-the equivalent localized string. These function names are used as
-markers to collect the strings to be translated and store them into
-the ``securedrop/translations/messages.pot`` file. For each language
+wrapped with `gettext`_ functions to be substituted with the
+equivalent localized string. For instance:
+
+.. code:: python
+
+     if not (msg or fh):
+       flash(gettext("You must enter a message or choose a file to submit."), "error")
+       return redirect(url_for('main.lookup'))
+
+The ``gettext`` function reads ``.mo`` files to find the translation
+for the string given in argument at runtime. It is used as a marker by
+`pybabel <http://babel.pocoo.org/>`__ or similar tools to collect the
+strings to be translated and store them into a `.pot
+<https://www.gnu.org/software/gettext/manual/gettext.html#index-files_002c-_002epot>`__
+file at ``securedrop/translations/messages.pot``. For instance:
+
+::
+
+    #: source_app/main.py:111
+    msgid "You must enter a message or choose a file to submit."
+    msgstr ""
+
+For each language
 to be translated, a directory is created such as
-``securedrop/translations/fr_FR`` and populated with files derived
-from ``securedrop/translations/messages.pot``, for translators to work
-with and for the `gettext`_ substitution at runtime.
+``securedrop/translations/fr_FR`` and populated
+with a `.po <https://www.gnu.org/software/gettext/manual/gettext.html#PO-Files>`__ file
+derived from ``securedrop/translations/messages.pot``, for translators to work
+with. For instance
+``securedrop/translations/fr_FR/LC_MESSAGES/messages.po`` is almost identical to
+``securedrop/translations/messages.pot`` except for the `msgstr`
+field which contains the translation:
+
+::
+
+    #: source_app/main.py:111
+    msgid "You must enter a message or choose a file to submit."
+    msgstr "Vous devez saisir un message ou sélectionner un fichier à envoyer."
+
+This file is compiled into an optimized binary form, the `.mo
+<https://www.gnu.org/software/gettext/manual/gettext.html#MO-Files>`__
+file used by the `gettext`_ function at runtime.
+
+The `Weblate`_ web application is used to translate strings and relies
+on the `gettext`_ format behind the scene. It owns the
+``securedrop/translations/messages.pot`` file and all other
+translation related files. The SecureDrop code is modified by sending
+a pull request but the translations are exclusively modified via
+`Weblate`_.
 
 The desktop icon are in the
 ``install_files/ansible-base/roles/tails-config/templates`` directory.
 Their labels are collected in the ``desktop.pot`` file and translated
 in the corresponding ``.po`` files in the same directory (``fr.po``,
-``de.po`` etc.)
+``de.po`` etc.). All translations are merged from the ``*.j2.in``
+files into the corresponding ``*.j2`` file and committed to the respository.
+They are then installed when configuring Tails with
+the ``tasks/create_desktop_shortcuts.yml`` tasks.
 
 The manage.py translate helper
 ------------------------------
