@@ -135,6 +135,7 @@ with:
 .. code:: sh
 
      $ export PAGE_LAYOUT_LOCALES=en_US,fr_FR
+     $ ./manage.py --verbose translate-messages --compile
      $ pytest -v --page-layout tests/pages-layout
      ...
      ...TestJournalistLayout::test_col_no_documents[en_US] PASSED
@@ -196,6 +197,7 @@ Verify the translations are not broken:
 
       $ vagrant ssh development
       $ cd /vagrant/securedrop
+      $ ./manage.py --verbose translate-messages --compile
       $ PAGE_LAYOUT_LOCALES=$(echo $sm | tr ' ' ',') \
           pytest -v --page-layout tests/pages-layout
 
