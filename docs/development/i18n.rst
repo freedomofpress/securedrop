@@ -296,7 +296,7 @@ Translator credits
 ------------------
 
 Verify the names and emails look ok, otherwise add to `.mailmap
-<https://git-scm.com/docs/git-check-mailmap>`_ until it does:
+<https://git-scm.com/docs/git-check-mailmap>`__ until it does:
 
 .. code:: sh
 
