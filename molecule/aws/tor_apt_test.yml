@@ -1,0 +1,39 @@
+---
+- name: Add apt SD test public key
+  apt_key:
+    data: "{{ lookup('file','securedrop_test.pub') }}"
+    state: present
+
+- name: Temporary fix for GH issue 2938
+  file:
+    state: absent
+    path: "/etc/apt/sources.list.d/tor_apt_freedom_press.list"
+
+- name: Switch apt repo URLs to staging.
+  replace:
+    dest: "/etc/apt/sources.list.d/tor.apt.freedom.press.list"
+    replace: "tor-apt-test.freedom.press"
+    regexp: '//tor-apt\.freedom\.press'
+  ignore_errors: "yes"
+  notify: update tor
+
+- name: Force possible tor update
+  meta: flush_handlers
+
+- name: Squash testinfra failure for packages needing update
+  apt:
+    upgrade: safe
+
+- name: Extract latest tor version
+  shell: |
+    apt-cache policy tor | sed -e 's/^\s*Installed:\ \(\S*\)/\1/g;tx;d;:x'
+  changed_when: false
+  register: extract_tor_version
+
+- name: Dump Tor version to file (for reporting)
+  copy:
+    dest: "{{ playbook_dir }}/../../.tor_version"
+    content: "{{ extract_tor_version.stdout }}"
+  delegate_to: localhost
+  run_once: true
+  become: "no"

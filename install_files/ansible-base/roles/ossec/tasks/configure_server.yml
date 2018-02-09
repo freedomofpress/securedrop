@@ -1,0 +1,58 @@
+---
+- name: Install OSSEC manager package.
+  apt:
+    name: securedrop-ossec-server
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  when: not install_local_packages
+  tags:
+    - apt
+
+- name: Copy the OSSEC GPG public key for sending encrypted alerts.
+  copy:
+    src: "{{ ossec_alert_gpg_public_key }}"
+    dest: /var/ossec
+  tags:
+    - gpg
+
+- name: Add the OSSEC GPG public key to the OSSEC manager keyring.
+  # multiline format for command module, since this is a long command
+  command: >
+    gpg
+    --homedir /var/ossec/.gnupg
+    --import /var/ossec/{{ ossec_alert_gpg_public_key }}
+  become: yes
+  become_user: "{{ ossec_group }}"
+  register: add_ossec_gpg_key_result
+  changed_when: "'imported: 1' in add_ossec_gpg_key_result.stderr"
+  tags:
+    - gpg
+
+- name: Copy script for sending GPG-encrypted OSSEC alerts.
+  template:
+    src: send_encrypted_alarm.sh
+    dest: /var/ossec/send_encrypted_alarm.sh
+    mode: "0550"
+    owner: root
+    group: ossec
+  tags:
+    - procmail
+    - permissions
+
+- name: Create OSSEC manager SSL key.
+  command: openssl genrsa -out /var/ossec/etc/sslmanager.key 4096
+  args:
+    creates: /var/ossec/etc/sslmanager.key
+  tags:
+    - ossec_auth
+
+- name: Create OSSEC manager SSL certificate.
+  command: >
+    openssl req -new -x509 -batch
+    -subj "/CA=AU/ST=Some-State/locality=city/O=Internet Widgits Pty Ltd/commonName=mon/organizationUnitName=section/emailAddress=admin@localhost"
+    -key /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert -days 365
+  args:
+    creates: /var/ossec/etc/sslmanager.cert
+  tags:
+    - ossec_auth
