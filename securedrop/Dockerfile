@@ -34,19 +34,6 @@ RUN pip install -r requirements/securedrop-app-code-requirements.txt && \
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
 
-WORKDIR /app
-
-RUN mkdir -p /var/lib/securedrop/store /var/lib/securedrop/keys
-COPY ./tests/files/test_journalist_key.pub /var/lib/securedrop/keys
-RUN gpg --homedir /var/lib/securedrop/keys --import /var/lib/securedrop/keys/test_journalist_key.pub
-
-COPY static static
-COPY sass sass
-RUN sass --force --stop-on-error --update sass:static/css --style compressed
-
-COPY . /app
-RUN make test-config && ./manage.py reset
+STOPSIGNAL SIGKILL
 
 EXPOSE 8080 8081 5901
-
-CMD ["./manage.py", "run"]

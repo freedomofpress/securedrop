@@ -1,29 +1,82 @@
 #!/bin/bash
-# This script runs an arbitrary command in a containerized dev environment.
-# The current working directory is volume mounted into the container at /app.
-# It is intended to be run from the securedrop subdirectory of a repository
-# checkot. By default it attempts to map the relevant ports (8080,8081,5901).
-# This behavior can be skipped by setting the 'SKIP_PORTS' environment
-# variable.  It assumes the most recent securedrop-test image is a good
-# candidate to use for a dev environment. This can be overriden via the TAG
-# environment variable.
-set -euo pipefail
-most_recent_tag=$(docker images -q securedrop-test |head -n1)
-args="$*"
-if (( $# == 0 )); then
-  # If no arguments are supplied start a shell.
-  args=("bash")
+# shellcheck disable=SC2086
+# we ignore SC2086 because ${DOCKER_BUILD_ARGUMENTS:-} is intended to
+# be evaluated into multiple strings, not a single argument.
+
+set -eu
+
+TOPLEVEL=$(git rev-parse --show-toplevel)
+
+function display_dots() {
+    echo -n "Docker image build in progress "
+    trap "echo ' done !' ; exit 0" USR1
+    trap "exit 0" USR2
+    while : ; do
+        sleep 5
+        echo -n .
+    done
+}
+
+function ticker() {
+    local pid
+    display_dots &
+    pid="$!"
+    if "$@" ; then
+        status=0
+        kill -USR1 $pid
+    else
+        status=1
+        kill -USR2 $pid
+    fi
+    wait
+    return $status
+}
+
+function docker_image_circle() {
+    local out
+    out="$(mktemp)"
+    ( cat Dockerfile ; echo WORKDIR /app ; echo COPY . . ) > circle.docker
+    if ! docker build ${DOCKER_BUILD_ARGUMENTS:-} -t "securedrop-test:${CIRCLE_SHA1}" -f circle.docker . >& "$out" ; then
+        cat "$out"
+        status=1
+    else
+        status=0
+    fi
+    rm circle.docker
+    return $status
+}
+
+function docker_run_circle() {
+    docker run -ti ${DOCKER_RUN_ARGUMENTS:-} --name securedrop-test "securedrop-test:${CIRCLE_SHA1}" "$@"
+}
+
+function docker_image() {
+    local out
+    out="$(mktemp)"
+    if ! docker build \
+         ${DOCKER_BUILD_ARGUMENTS:-} \
+	 --build-arg=USER_ID="$(id -u)" \
+	 --build-arg=USER_NAME="${USER:-root}" \
+         -t securedrop-test "${TOPLEVEL}/securedrop" >& "$out" ; then
+        cat "$out"
+        return 1
+    fi
+    return 0
+}
+
+function docker_run() {
+    docker run \
+	   --rm \
+	   --user "${USER:-root}" \
+	   --volume "${TOPLEVEL}:${TOPLEVEL}" \
+	   --workdir "${TOPLEVEL}/securedrop" \
+	   -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-test "$@"
+}
+
+if test -n "${CIRCLE_SHA1:-}" ; then
+   docker_image_circle
+   docker_run_circle "$@"
+else
+   ticker docker_image
+   docker_run "$@"
 fi
-docker_args=()
-if [ -z "${SKIP_PORTS:-}" ]; then
-  docker_args+=(
-    -p8080:8080 -p8081:8081 -p5901:5901
-  )
-fi
-docker_args+=(
-  # do a volume mapp of the source
-  -v "$(pwd):/app"
-  -ti "securedrop-test:${TAG:-${most_recent_tag}}"
-  bash -c "source bin/dev-deps;${args[@]}"
-)
-docker run "${docker_args[@]}"
