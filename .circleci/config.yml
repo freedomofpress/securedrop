@@ -50,7 +50,7 @@ jobs:
             set +o pipefail
             docker images
             fromtag=$(docker images |grep securedrop-test |head -n1 |awk '{print $2}')
-            cd securedrop && TAG=${CIRCLE_SHA1} EXTRA_BUILD_ARGS="--cache-from securedrop-test:${fromtag:-latest}" make images
+            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test:${fromtag:-latest}" ./bin/dev-shell true
 
       - run:
           name: Save Docker image layer cache
@@ -66,10 +66,13 @@ jobs:
 
       - run: mkdir -p ~/test-results
 
-      - run: |
-          export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
-          docker rm -f securedrop-test || true
-          cd securedrop && TAG=${CIRCLE_SHA1} EXTRA_TEST_ARGS=$(bash <(curl -s https://codecov.io/env)) make test
+      - run:
+          name: Run tests
+          command: |
+            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
+            docker rm -f securedrop-test || true
+            fromtag=$(docker images |grep securedrop-test |head -n1 |awk '{print $2}')
+            cd securedrop && DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test:${fromtag:-latest}" make test
 
       - run:
           name: Report results
