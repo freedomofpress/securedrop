@@ -75,47 +75,55 @@ class JournalistNavigationStepsMixin():
     def _journalist_selects_first_doc(self):
         self.driver.find_elements_by_name('doc_names_selected')[0].click()
 
+    def _journalist_clicks_on_modal(self, click_id):
+        self.driver.find_element_by_id(click_id).click()
+
+        def link_not_displayed():
+            assert (
+                (not self.driver.find_elements_by_id(click_id)) or
+                (not self.driver.find_element_by_id(click_id).is_displayed()))
+        self.wait_for(link_not_displayed)
+
     def _journalist_clicks_delete_collections_cancel_on_modal(self):
-        self.driver.find_element_by_id('cancel-collections-deletions').click()
+        self._journalist_clicks_on_modal('cancel-collections-deletions')
 
     def _journalist_clicks_delete_selected_cancel_on_modal(self):
-        self.driver.find_element_by_id('cancel-selected-deletions').click()
+        self._journalist_clicks_on_modal('cancel-selected-deletions')
 
     def _journalist_clicks_delete_collection_cancel_on_modal(self):
-        self.driver.find_element_by_id('cancel-collection-deletions').click()
+        self._journalist_clicks_on_modal('cancel-collection-deletions')
 
     def _journalist_clicks_delete_collections_on_modal(self):
-        self.driver.find_element_by_id('delete-collections').click()
+        self._journalist_clicks_on_modal('delete-collections')
 
     def _journalist_clicks_delete_selected_on_modal(self):
-        self.driver.find_element_by_id('delete-selected').click()
+        self._journalist_clicks_on_modal('delete-selected')
 
     def _journalist_clicks_delete_collection_on_modal(self):
-        self.driver.find_element_by_id('delete-collection-button').click()
+        self._journalist_clicks_on_modal('delete-collection-button')
 
-    def _journalist_sees_delete_collections_confirmation(self):
-        assert self.driver.find_element_by_id(
-            'delete-confirmation-modal').is_displayed()
+    def _journalist_clicks_delete_link(self, click_id, displayed_id):
+        assert not self.driver.find_element_by_id(displayed_id).is_displayed()
+        self.driver.find_element_by_id(click_id).click()
 
-    def _journalist_sees_delete_selected_confirmation(self):
-        assert self.driver.find_element_by_id(
-            'delete-selected-confirmation-modal').is_displayed()
-
-    def _journalist_sees_delete_collection_confirmation(self):
-        assert self.driver.find_element_by_id(
-            'delete-collection-confirmation-modal').is_displayed()
+        def link_displayed():
+            assert self.driver.find_element_by_id(displayed_id).is_displayed()
+        self.wait_for(link_displayed)
 
     def _journalist_clicks_delete_selected_link(self):
-        self.driver.find_element_by_id('delete-selected-link').click()
-        self._journalist_sees_delete_selected_confirmation()
+        self._journalist_clicks_delete_link(
+            'delete-selected-link',
+            'delete-selected-confirmation-modal')
 
     def _journalist_clicks_delete_collections_link(self):
-        self.driver.find_element_by_id('delete-collections-link').click()
-        self._journalist_sees_delete_collections_confirmation()
+        self._journalist_clicks_delete_link(
+            'delete-collections-link',
+            'delete-confirmation-modal')
 
     def _journalist_clicks_delete_collection_link(self):
-        self.driver.find_element_by_id('delete-collection-link').click()
-        self._journalist_sees_delete_collection_confirmation()
+        self._journalist_clicks_delete_link(
+            'delete-collection-link',
+            'delete-collection-confirmation-modal')
 
     def _journalist_uses_delete_selected_button_confirmation(self):
         selected_count = len(self.driver.find_elements_by_name(
@@ -139,8 +147,10 @@ class JournalistNavigationStepsMixin():
 
         # After deletion the button will redirect us. Let's ensure we still
         # see the delete collection button.
-        assert self.driver.find_element_by_id(
-            'delete-collection-link').is_displayed()
+        def delete_collection_link_displayed():
+            assert self.driver.find_element_by_id(
+                'delete-collection-link').is_displayed()
+        self.wait_for(delete_collection_link_displayed, timeout=60)
 
         self._journalist_clicks_delete_collection_link()
         self._journalist_clicks_delete_collection_on_modal()
