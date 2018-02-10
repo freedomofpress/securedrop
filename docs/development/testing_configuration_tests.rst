@@ -20,11 +20,7 @@ Running the config tests
 ------------------------
 
 In order to run the tests, first create and provision the VM you intend
-to test. For the development VM:
-
-.. code:: sh
-
-    vagrant up development
+to test.
 
 For the staging VMs:
 
@@ -39,7 +35,6 @@ machines for faster testing:
 
 .. code:: sh
 
-    ./testinfra/test.py development
     ./testinfra/test.py app-staging
     ./testinfra/test.py mon-staging
 
@@ -65,7 +60,6 @@ than the Ansible playbooks: ::
     ├── app-prod.yml
     ├── app-staging.yml
     ├── build.yml
-    ├── development.yml
     ├── mon-prod.yml
     └── mon-staging.yml
 
@@ -102,7 +96,6 @@ Vagrantfile: ::
     ├── app-code
     ├── build
     ├── common
-    ├── development
     └── mon
 
 Ideally the config tests would be broken up according to roles,
