@@ -39,9 +39,7 @@ The tests can be run inside the development VM:
 
 .. code:: sh
 
-    vagrant ssh development
-    cd /vagrant/securedrop
-    pytest -v tests
+    make -C securedrop test
 
 Or the app-staging VM:
 
@@ -59,18 +57,15 @@ If you just want to run the functional tests, you can use:
 
 .. code:: sh
 
-    pytest -v tests/functional/
+    securedrop/bin/dev-shell bin/run-test -v tests/functional
 
 Similarly, if you want to run a single test, you can specify it through the
 file, class, and test name:
 
 .. code:: sh
 
-    pytest tests/test_journalist.py::TestJournalistApp::test_invalid_credentials
-
-Some Selenium tests are decorated to produce before and after screenshots to aid
-in debugging. This behavior is enabled with the ``SCREENSHOTS_ENABLED`` environment
-variable. Output PNG files will be placed in the ``tests/log/`` directory.
+    securedrop/bin/dev-shell bin/run-test \
+        tests/test_journalist.py::TestJournalistApp::test_invalid_credentials
 
 The `gnupg
 <https://pythonhosted.org/python-gnupg>`_ library can be quite verbose in its
@@ -78,10 +73,6 @@ output. The default log level applied to this package is ``ERROR`` but this can
 be controlled via the ``GNUPG_LOG_LEVEL`` environment variable. It can have values
 such as ``INFO`` or ``DEBUG`` if some particular test case or test run needs
 greater verbosity.
-
-.. code:: sh
-
-    SCREENSHOTS_ENABLED=1 pytest tests/functional/
 
 Page Layout Tests
 ~~~~~~~~~~~~~~~~~
@@ -96,7 +87,7 @@ option:
 
 .. code:: sh
 
-    pytest tests/ --page-layout
+    securedrop/bin/dev-shell bin/run-test --page-layout tests
 
 
 Updating the application tests

@@ -1,11 +1,14 @@
 Virtual Environments: Servers
 =============================
 
-There are three predefined virtual environments in the Vagrantfile:
+There are two predefined virtual environments in the Vagrantfile:
 
-1. :ref:`Development <development_vm>`
-2. :ref:`Staging <staging_vms>`
-3. :ref:`Production <production_vms>`
+* :ref:`Staging <staging_vms>`
+* :ref:`Production <production_vms>`
+
+And one Docker environement:
+
+* :ref:`Development <development_container>`
 
 This document explains the purpose of, and how to get started working with, each
 one.
@@ -21,46 +24,28 @@ one.
 .. note:: If you see test failures due to ``Too many levels of symbolic links``
           and you are using VirtualBox, try restarting VirtualBox.
 
-.. _development_vm:
+.. _development_container:
 
 Development
 -----------
 
-This VM is intended for rapid development on the SecureDrop web application. It
-syncs the top level of the SecureDrop repo to the ``/vagrant`` directory on the
-VM, which means you can use your favorite editor on your host machine to edit
-the code. This machine has no security hardening or monitoring.
-
-.. tip:: This is the default VM, so you don't need to specify the
-   ``development`` machine name when running commands like ``vagrant up`` and
-   ``vagrant ssh``. Of course, you can specify the name if you want to.
+This Docker container is intended for rapid development on the
+SecureDrop web application.  It contains all the dependencies required
+to run the tests, a demo server etc. The SecureDrop repository is bind
+mounted into the container and files modified in the container are
+also modified in the repository. This container has no security
+hardening or monitoring.
 
 To get started working with the development environment:
 
 .. code:: sh
 
-   vagrant up
-   vagrant ssh
-   cd /vagrant/securedrop
-   ./manage.py run         # run development servers
-   ./manage.py reset       # resets the state of the development instance
-   ./manage.py add-admin   # create a user to use when logging in to the Journalist Interface
-   pytest -v tests/        # run the unit and functional tests
+   cd securedrop
+   make dev                                    # run development servers
+   make test                                   # run tests
+   bin/dev-shell bin/run-test tests/functional # functional tests only
+   bin/dev-shell bash                          # shell inside the container
 
-.. sidebar:: Note to Qubes users
-
-	     Qubes users and others for whom Vagrant is not an option can still
-	     use the Development environment via Docker. In a Debian AppVM,
-	     follow `these instructions`_ to install Docker-CE. Then, from the
-	     Securedrop repo, do
-
-	     ::
-
-		$ cd securedrop
-		$ make images dev
-
-.. _`these instructions`: https://docs.docker.com/engine/installation/linux/docker-ce/debian/
-		
 SecureDrop consists of two separate web applications (the Source Interface and
 the Journalist Interface) that run concurrently. In the Development environment
 they are configured to detect code changes and automatically reload whenever a
@@ -69,6 +54,13 @@ following ports:
 
 * Source Interface: `localhost:8080 <http://localhost:8080>`__
 * Journalist Interface: `localhost:8081 <http://localhost:8081>`__
+
+A demo user is created by default when running ``make dev`` and has
+the following credentials:
+
+* username: journalist
+* password: WEjwn8ZyczDhQSK24YKM8C9a
+* TOTP secret: JHCO GO7V CER3 EJ4L
 
 .. _staging_vms:
 
