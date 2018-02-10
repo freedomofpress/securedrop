@@ -119,7 +119,7 @@ Setting up SecureDrop is a multi-step process. Before getting started, you
 should make sure that you're prepared to operate and maintain it. You'll need
 a systems admin who's familiar with Linux, the GNU utilities, and the
 Bash shell. You'll need the :doc:`hardware <hardware>` on which SecureDrop
-runs — this will normally cost $2000-$3000 dollars. The journalists in your
+runs — this will normally cost $2000-$3000. The journalists in your
 organization will need to be trained in the operation of SecureDrop, and
 you'll need to publish and promote your new SecureDrop instance afterwards —
 using your existing websites, mailing lists, and social media.

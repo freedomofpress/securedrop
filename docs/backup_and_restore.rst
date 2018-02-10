@@ -86,7 +86,7 @@ to debug your connectivity before proceeding further. Make sure:
 
 * The *Admin Workstation* is connected to the Internet.
 * Tor started successfully.
-* The ``HidServAuth`` values from ``app-ssh-aths`` and ``mon-ssh-aths`` are in
+* The ``HidServAuth`` values from ``install_files/ansible-base/app-ssh-aths`` and ``install_files/ansible-base/mon-ssh-aths`` are in
   Tails' ``/etc/tor/torrc``. If they are not, again, see 
   :doc:`configure_admin_workstation_post_install` for detailed instructions.
 
@@ -123,11 +123,11 @@ one. As before, to get started, boot the *Admin Workstation*, ``cd`` to the
 SecureDrop repository, and ensure that you have SecureDrop 0.4 or later
 checked out.
 
-The restore role expects to find a ``.tar.gz`` backup archive in
+The restore command expects to find a ``.tar.gz`` backup archive in
 ``install_files/ansible-base`` under the SecureDrop repository root directory.
 If you are using the same *Admin Workstation* to do a restore from a previous
 backup, it should already be there because it was placed there by the backup
-role. Otherwise, you should copy the backup archive that you wish to restore to
+command. Otherwise, you should copy the backup archive that you wish to restore to
 ``install_files/ansible-base``.
 
 .. note:: The backup strategy used for SecureDrop versions prior to 0.3.7
