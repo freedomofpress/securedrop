@@ -1,13 +1,20 @@
 #!/bin/bash
+# shellcheck disable=SC1090
+
 set -euo pipefail
-# shellcheck source=./dev-deps
-. "${BASH_SOURCE%/*}/dev-deps"
+
+source "${BASH_SOURCE%/*}/dev-deps"
+
+run_xvfb &
+run_redis &
+urandom
+run_sass
+maybe_create_config_py
 
 if [ -n "${CIRCLE_BRANCH:-}" ] ; then
     touch tests/log/firefox.log
     function finish {
         cp tests/log/firefox.log /tmp/test-results/logs/
-        cp /tmp/securedrop*log /tmp/test-results/logs/
         bash <(curl -s https://codecov.io/bash)
     }
     trap finish EXIT

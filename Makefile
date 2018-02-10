@@ -21,7 +21,7 @@ ci-go: ## Creates, provisions, tests, and destroys AWS EC2 hosts for testing sta
 
 .PHONY: ci-lint-image
 ci-lint-image: ## Builds linting container.
-	docker build $(EXTRA_BUILD_ARGS) -t securedrop-lint:${TAG} -f devops/docker/Dockerfile.linting .
+	docker build $(DOCKER_BUILD_ARGUMENTS) -t securedrop-lint:${TAG} -f devops/docker/Dockerfile.linting .
 
 .PHONY: ci-lint
 ci-lint: ## Runs linting in linting container.
