@@ -244,11 +244,13 @@ class Journalist(db.Model):
 
     MIN_USERNAME_LEN = 3
 
-    def __init__(self, username, password, is_admin=False, otp_secret=None):
+    def __init__(self, username, password,
+                 is_admin=False, otp_secret=None, is_totp=True):
         self.check_username_acceptable(username)
         self.username = username
         self.set_password(password)
         self.is_admin = is_admin
+        self.is_totp = is_totp
 
         if otp_secret:
             self.set_hotp_secret(otp_secret)

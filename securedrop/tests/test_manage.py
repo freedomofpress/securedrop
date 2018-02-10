@@ -87,7 +87,11 @@ class TestManagementCommand(unittest.TestCase):
         """Regression test for bad secret logic in manage.py"""
 
         # We will try to provide one invalid and one valid secret
-        return_value = manage._add_user()
+        args = argparse.Namespace(password=None,
+                                  username=None,
+                                  totp=None,
+                                  otp_secret=None)
+        return_value = manage._add_user(args)
         self.assertEqual(return_value, 0)
         self.assertIn('Try again.', sys.stdout.getvalue())
         self.assertIn('successfully added', sys.stdout.getvalue())
@@ -102,12 +106,16 @@ class TestManagementCommand(unittest.TestCase):
         """Regression test for duplicate username logic in manage.py"""
 
         # Inserting the user for the first time should succeed
-        return_value = manage._add_user()
+        args = argparse.Namespace(password=None,
+                                  username=None,
+                                  totp=None,
+                                  otp_secret=None)
+        return_value = manage._add_user(args)
         self.assertEqual(return_value, 0)
         self.assertIn('successfully added', sys.stdout.getvalue())
 
         # Inserting the user for a second time should fail
-        return_value = manage._add_user()
+        return_value = manage._add_user(args)
         self.assertEqual(return_value, 1)
         self.assertIn('ERROR: That username is already taken!',
                       sys.stdout.getvalue())
@@ -122,7 +130,11 @@ class TestManagementCommand(unittest.TestCase):
                          mock_yubikey,
                          mock_user_to_delete,
                          mock_user_del_confirm):
-        return_value = manage._add_user()
+        args = argparse.Namespace(password=None,
+                                  username=None,
+                                  totp=None,
+                                  otp_secret=None)
+        return_value = manage._add_user(args)
         self.assertEqual(return_value, 0)
 
         return_value = manage.delete_user(args=None)
