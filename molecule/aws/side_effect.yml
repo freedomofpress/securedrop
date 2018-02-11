@@ -41,7 +41,6 @@
       script: scripts/app-tests.sh "{{ app_dir[ci_env] }}"
       register: app_test_register
       ignore_errors: true
-      no_log: true
 
       # The test results file will be posted as an artifact for the CI run,
       # so developers can download it and inspect it in detail.
@@ -63,7 +62,6 @@
       delegate_to: localhost
       become: no
       ignore_errors: true
-      no_log: true
 
     - name: Establish list of raw test results
       set_fact:
@@ -80,7 +78,6 @@
         dest: "../../raw-test-output/{{item.type}}_tests.raw"
         content: "{{ item.result }}"
       with_items: "{{ raw_test_results }}"
-      no_log: true
       become: no
       delegate_to: localhost
 
@@ -94,7 +91,6 @@
       # CAUSING PARSING FAILURES ON TEST COMBINE
       # See pull/2796
       when: false
-      no_log: true
       delegate_to: localhost
 
     - name: Combine tests for export
