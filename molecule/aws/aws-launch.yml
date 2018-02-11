@@ -64,7 +64,6 @@
           'port': '22',
           'hostname': item[aws_instance_dns],
           'identity_file': molecule_ephemeral_directory+'/'+job_id }] }}"
-      no_log: yes
       with_items: "{{ reg_ec_instance.results|map(attribute='tagged_instances')|list }}"
       register: instance_config_dict
 
