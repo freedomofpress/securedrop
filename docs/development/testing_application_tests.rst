@@ -48,9 +48,14 @@ Or the app-staging VM:
 .. code:: sh
 
     vagrant ssh app-staging
-    sudo su www-data -s /bin/bash
+    sudo bash
     cd /var/www/securedrop
     pytest -v tests
+    chown -R www-data /var/lib/securedrop /var/www/securedrop
+
+.. warning:: The ``chown`` is necessary because running the tests as
+             root will change ownership of some files, creating
+             problems with the source and journalist interfaces.
 
 For explanation of the difference between these machines, see
 :doc:`virtual_environments`.
