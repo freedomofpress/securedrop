@@ -48,7 +48,7 @@ Or the app-staging VM:
 .. code:: sh
 
     vagrant ssh app-staging
-    sudo su www-data -s /bin/bash
+    sudo bash
     cd /var/www/securedrop
     pytest -v tests
 
