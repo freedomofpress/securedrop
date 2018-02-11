@@ -9,11 +9,7 @@ import subprocess
 import sys
 import tempfile
 
-# By default let's assume we're testing against the development VM.
-try:
-    target_host = sys.argv[1]
-except IndexError:
-    target_host = "development"
+target_host = sys.argv[1]
 
 # Set env var so that `testinfra/conftest.py` can read in a YAML vars file
 # specific to the host being tested.
@@ -24,9 +20,7 @@ def get_target_roles(target_host):
     """
     Assemble list of role tests to run. Hard-coded per host.
     """
-    target_roles = {"development": ['testinfra/app-code',
-                                    'testinfra/development'],
-                    "app-staging": ['testinfra/app',
+    target_roles = {"app-staging": ['testinfra/app',
                                     'testinfra/app-code',
                                     'testinfra/common',
                                     'testinfra/development/test_xvfb.py'],
@@ -84,13 +78,8 @@ testinfra \
 """.lstrip().rstrip()
 
     elif os.environ.get("FPF_CI", 'false') == 'true':
-        if os.environ.get("CI_SD_ENV", "development") == "development":
-            os.environ['SECUREDROP_TESTINFRA_TARGET_HOST'] = "travis"
-            ssh_config_path = ""
-            testinfra_command_template = "testinfra -vv {target_roles}"
-        else:
-            ssh_config_path = os.environ["CI_SSH_CONFIG"]
-            testinfra_command_template = """
+        ssh_config_path = os.environ["CI_SSH_CONFIG"]
+        testinfra_command_template = """
 testinfra \
     -vv \
     -n 8 \
