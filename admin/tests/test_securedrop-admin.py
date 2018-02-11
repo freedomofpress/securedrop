@@ -383,9 +383,9 @@ class TestSiteConfig(object):
         assert site_config.user_prompt_config_one(desc, None) == default
         assert type(default) == etype
         assert site_config.user_prompt_config_one(
-            desc, 'en en_US') == ['en', 'en_US']
+            desc, 'fr_FR en_US') == ['fr_FR', 'en_US']
         assert site_config.user_prompt_config_one(
-            desc, ['en', 'en_US']) == ['en', 'en_US']
+            desc, ['fr_FR', 'en_US']) == ['fr_FR', 'en_US']
         assert site_config.user_prompt_config_one(desc, '') == []
         with pytest.raises(ValidationError):
             site_config.user_prompt_config_one(desc, 'wrong')
