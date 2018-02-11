@@ -16,9 +16,9 @@ function tbb_version() {
 $(function(){
   if (is_likely_tor_browser()) {
     // If the source is using Tor Browser, we want to encourage them to turn Tor
-    // Browser's Security Slider to "High", which enables various hardening
+    // Browser's Security Slider to "Safest", which enables various hardening
     // methods, including disabling JavaScript. Since JS is disabled by turning
-    // the Security Slider to "High", this code only runs if it set to another
+    // the Security Slider to "Safest", this code only runs if it set to another
     // (less hardened) setting.
     $('.js-warning').show();
     $('#js-warning-close').click(function(){
@@ -26,7 +26,7 @@ $(function(){
     });
 
     // Display a friendly bubble with step-by-step instructions on how to turn
-    // the security slider to High.
+    // the security slider to Safest.
     var infoBubble = $('#security-slider-info-bubble');
     var fadeDuration = 500; // milliseconds
 
