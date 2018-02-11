@@ -297,6 +297,7 @@ class TestSiteConfig(object):
         site_config = securedrop_admin.SiteConfig(args)
 
         assert site_config.load_and_update_config()
+        assert 'user_defined_variable' in site_config.config
         mock_save.assert_called_once()
         mock_validate_input.assert_called()
 
