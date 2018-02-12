@@ -21,7 +21,7 @@ requests to ``develop``.
 Automated Testing
 -----------------
 
-When a pull request is submitted, we have Travis CI automatically run the
+When a pull request is submitted, we have Circle CI automatically run the
 SecureDrop test suites, which consist of:
 
   #. Unit tests of the Python SecureDrop application code.
@@ -126,8 +126,8 @@ such as the right to push new branches or to merge pull
 requests. There is no formal process at the moment but the general
 idea is that any contributor with the right technical and social
 skills is entitled to ask. The people who have the power to grant such
-privileges are commited to do so in a transparent way to avoid any
-dispute.
+privileges are committed to do so in a transparent way to avoid any
+disputes.
 
 Other Tips
 ----------

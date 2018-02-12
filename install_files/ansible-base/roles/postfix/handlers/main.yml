@@ -1,0 +1,19 @@
+---
+- name: update aliases
+  command: postalias /etc/aliases
+
+- name: update sasl_passwd db
+  command: postmap /etc/postfix/sasl_passwd
+
+- name: update generic_maps
+  command: postmap /etc/postfix/generic
+
+- name: postmap_header_checks
+  command: postmap /etc/postfix/header_checks
+
+- name: restart postfix
+  service:
+    name: postfix
+    state: restarted
+  # Don't bounce the service if set to disabled, e.g. in staging
+  when: postfix_enable_service

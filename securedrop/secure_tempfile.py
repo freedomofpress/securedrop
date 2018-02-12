@@ -4,9 +4,9 @@ import os
 from tempfile import _TemporaryFileWrapper
 
 from gnupg._util import _STREAMLIKE_TYPES
-from Crypto.Cipher import AES
-from Crypto.Random import random
-from Crypto.Util import Counter
+from Cryptodome.Cipher import AES
+from Cryptodome.Random import random
+from Cryptodome.Util import Counter
 
 
 class SecureTemporaryFile(_TemporaryFileWrapper, object):

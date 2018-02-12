@@ -1,6 +1,8 @@
 ---
 - name: Build SecureDrop application Debian package from local repository.
   hosts: build
+  max_fail_percentage: 0
+  any_errors_fatal: yes
   become: yes
   pre_tasks:
     - name: Ensure all packages are up to date.

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuite failures="0" errors="{% if item.result|failed %}1{% else %}0{% endif %}" name="ansible" tests="1" time="0">
+<testcase classname="high-level-test-runner-result" file="{{ item.file }}" line="1" name="{{ item.type }}" time="0">
+<system-out>{{ item.result.stdout|striptags }}</system-out>
+<system-err>{{ item.result.stderr|striptags }}</system-err>
+{% if item.result|failed %}<error message="{{ item.type }} runner failed during execution phase">{{ item.result.stderr|striptags }}</error>{% endif %}
+</testcase>
+</testsuite>

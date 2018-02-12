@@ -1,0 +1,12 @@
+---
+# Override capability for installing locally built deb packages in the staging
+# environment. By default, packages are installed via the FPF apt repo.
+install_local_packages: False
+
+ossec_group: ossec
+
+# By default, no roles are assigned. Via group_vars or otherwise,
+# identify which hosts should act as server or client. The role
+# will execute tasks conditionally based on the var values.
+ossec_is_server: False
+ossec_is_client: False

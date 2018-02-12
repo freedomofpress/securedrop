@@ -1,0 +1,40 @@
+---
+  # This log file doesn't exist by default, so we need to create it. We don't
+  # want to clobber the contents if it already exists, however, thus the "force: no".
+  # The `copy` module will back off if the file already exists, which means permissions
+  # will be ignored if the file exists. A subsequent task will handle permissions.
+- name: Create procmail log file.
+  copy:
+    dest: /var/log/procmail.log
+    mode: "0660"
+    owner: ossec
+    group: root
+    content: ""
+    force: no
+  tags:
+    - procmail
+    - permissions
+    - logging
+
+  # The previous task is essentially a `touch` command, without the side-effect of reporting
+  # "changed" every time. In order to force correct ownership and permissions, we'll take a
+  # second pass at the log file and only report "changed" if updates were made.
+- name: Update permissions on procmail log file.
+  file:
+    path: /var/log/procmail.log
+    mode: "0660"
+    owner: ossec
+    group: root
+  tags:
+    - procmail
+    - permissions
+    - logging
+
+- name: Copy procmail config file.
+  copy:
+    src: procmailrc
+    dest: /var/ossec/.procmailrc
+    owner: root
+    group: ossec
+  tags:
+    - procmail
