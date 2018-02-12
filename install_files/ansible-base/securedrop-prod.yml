@@ -33,8 +33,12 @@
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
+  roles:
     - role: postfix
       tags: postfix
+    - role: ansible-role-signal-cli
+      tags: signal-cli,
+      when: signal_notifications is defined and signal_notifications
   become: yes
 
 - name: Configure SecureDrop Application Server.

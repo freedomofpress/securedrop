@@ -13,5 +13,5 @@
     dest: "/etc/signal/data/{{ signal_number }}"
     owner: "{{ signal_cli_unix_user }}"
     group: "{{ signal_cli_unix_user }}"
-    mode: "0400"
+    mode: "0660"
   become: yes

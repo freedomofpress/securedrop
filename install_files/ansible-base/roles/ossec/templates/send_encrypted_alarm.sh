@@ -40,6 +40,20 @@ function send_encrypted_alert() {
         /usr/local/bin/signal-cli --config /etc/signal -u '{{ signal_number }}' send -m "${ossec_alert_text}" '{{ signal_destination_number }}'
     fi
 
+    if [[ $? -ne 0 ]]; then
+        logger -s "A Signal CLI error occurred"
+        send_signal_fail_message
+    fi
+
+}
+
+# Failover to indicate Signal-cli is not functionning properly
+function send_signal_fail_message() {
+    encrypted_alert_text="$(printf "An error occurred while sending a signal message" | \
+      /usr/bin/formail -I '' | \
+      /usr/bin/gpg --homedir /var/ossec/.gnupg --trust-model always -ear '{{ ossec_gpg_fpr }}')"
+    /usr/bin/mail -s "$(echo "${SUBJECT}" | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
+
 }
 
 # Failover alerting function, in case the primary function failed.

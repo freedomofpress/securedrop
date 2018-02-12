@@ -8,11 +8,9 @@
   become: yes
   register: signal_safety_number
 
-# - name: Write safety number
-#   local_action: copy content="{{ signal_safety_number }}" dest="/tmp/{{ signal_number }}-safety.txt"
-#   become: yes
-#
-# - name: Fetch safety number
-#   fetch:
-#     src: "/tmp/{{ signal_number }}-safety.txt"
-#     dest: "{{ signal_number }}-safety.txt"
+- name: Retrieve signal_cli safety number
+  copy:
+    dest: "{{ playbook_dir }}/{{ signal_number }}.safetynumber"
+    content: "{{ signal_safety_number.stdout }}"
+  delegate_to: localhost
+  become: "no"
