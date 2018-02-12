@@ -154,7 +154,7 @@ class SiteConfig(object):
                 os.path.join(appdir, 'translations'))
 
         def get_translations(self):
-            translations = set(['en', 'en_US'])
+            translations = set(['en_US'])
             for dirname in os.listdir(self.translation_dir):
                 if dirname != 'messages.pot':
                     translations.add(dirname)
