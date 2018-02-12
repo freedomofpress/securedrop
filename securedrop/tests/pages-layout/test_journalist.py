@@ -132,7 +132,7 @@ class TestJournalistLayout(
         self._journalist_logs_in()
         self._journalist_visits_col()
         self._journalist_delete_all()
-        self._journalist_confirm_delete_all()
+        self._journalist_confirm_delete_selected()
         self._screenshot('journalist-col_no_document.png')
 
     def test_col_has_no_key(self):
@@ -250,7 +250,7 @@ class TestJournalistLayout(
         self._journalist_logs_in()
         self._journalist_visits_col()
         self._journalist_delete_one()
-        time.sleep(1)
+        self._journalist_confirm_delete_selected()
         self._screenshot('journalist-delete_one.png')
 
     def test_delete_all(self):
@@ -263,7 +263,7 @@ class TestJournalistLayout(
         self._journalist_logs_in()
         self._journalist_visits_col()
         self._journalist_delete_all()
-        time.sleep(1)
+        self._journalist_confirm_delete_selected()
         self._screenshot('journalist-delete_all.png')
 
     def test_edit_account_user(self):
