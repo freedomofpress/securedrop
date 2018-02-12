@@ -19,6 +19,7 @@ from tests.functional import journalist_navigation_steps
 from tests.functional import source_navigation_steps
 import functional_test
 import pytest
+import time
 
 import models
 
@@ -222,6 +223,7 @@ class TestJournalistLayout(
         self._journalist_visits_col()
         self._journalist_selects_first_doc()
         self._journalist_clicks_delete_selected_link()
+        time.sleep(1)
         self._screenshot('journalist-delete_one_confirmation.png')
 
     def test_delete_all_confirmation(self):
@@ -235,6 +237,7 @@ class TestJournalistLayout(
         self._journalist_logs_in()
         self._journalist_visits_col()
         self._journalist_delete_all_confirmation()
+        time.sleep(1)
         self._screenshot('journalist-delete_all_confirmation.png')
 
     def test_delete_one(self):
@@ -247,6 +250,7 @@ class TestJournalistLayout(
         self._journalist_logs_in()
         self._journalist_visits_col()
         self._journalist_delete_one()
+        time.sleep(1)
         self._screenshot('journalist-delete_one.png')
 
     def test_delete_all(self):
@@ -259,6 +263,7 @@ class TestJournalistLayout(
         self._journalist_logs_in()
         self._journalist_visits_col()
         self._journalist_delete_all()
+        time.sleep(1)
         self._screenshot('journalist-delete_all.png')
 
     def test_edit_account_user(self):
