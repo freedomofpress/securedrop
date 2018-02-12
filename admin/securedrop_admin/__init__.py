@@ -200,14 +200,6 @@ class SiteConfig(object):
                 message=("Must contain a @ and be set to "
                          "something other than ossec@ossec.test"))
 
-    class ValidateSASLDomain(Validator):
-        def validate(self, document):
-            if document.text == '' or SiteConfig.ValidateFQDN():
-                return True
-            raise ValidationError(
-                message=("Must contain a valid domain or be empty")
-            )
-
     def __init__(self, args):
         self.args = args
         translations = SiteConfig.Locales(
@@ -274,7 +266,7 @@ class SiteConfig(object):
              int],
             ['sasl_domain', "gmail.com", str,
              u'SASL domain for sending OSSEC alerts',
-             SiteConfig.ValidateSASLDomain(),
+             None,
              None],
             ['sasl_username', '', str,
              u'SASL username for sending OSSEC alerts',

@@ -287,26 +287,6 @@ class TestSiteConfig(object):
             site_config.validate_gpg_keys()
         assert 'FAIL does not match' in e.value.message
 
-    def test_validate_sasl_domain(self, caplog):
-        args = argparse.Namespace(site_config='INVALID',
-                                  ansible_path='tests/files',
-                                  app_path=dirname(__file__))
-        site_config = securedrop_admin.SiteConfig(args)
-        site_config.config = {
-            'ossec_alert_gpg_public_key':
-            'test_journalist_key.pub',
-
-            'ossec_gpg_fpr':
-            '65A1B5FF195B56353CC63DFFCC40EF1228271441',
-
-            'sasl_username':
-            'alice',
-
-            'sasl_domain':
-            '',
-        }
-        assert site_config.ValidateSASLDomain()
-
     @mock.patch('securedrop_admin.SiteConfig.validated_input',
                 side_effect=lambda p, d, v, t: d)
     @mock.patch('securedrop_admin.SiteConfig.save')
@@ -387,13 +367,19 @@ class TestSiteConfig(object):
         clean_fpr = site_config.sanitize_fingerprint(fpr)
         assert site_config.user_prompt_config_one(desc, fpr) == clean_fpr
 
+    def verify_desc_consistency_allow_empty(self, site_config, desc):
+        (var, default, etype, prompt, validator, transform) = desc
+        # verify the default passes validation
+        assert site_config.user_prompt_config_one(desc, None) == default
+        assert type(default) == etype
+
     verify_prompt_securedrop_app_gpg_fingerprint = verify_prompt_fingerprint
     verify_prompt_ossec_alert_gpg_public_key = verify_desc_consistency
     verify_prompt_ossec_gpg_fpr = verify_prompt_fingerprint
     verify_prompt_ossec_alert_email = verify_prompt_not_empty
     verify_prompt_smtp_relay = verify_prompt_not_empty
     verify_prompt_smtp_relay_port = verify_desc_consistency
-    verify_prompt_sasl_domain = verify_desc_consistency
+    verify_prompt_sasl_domain = verify_desc_consistency_allow_empty
     verify_prompt_sasl_username = verify_prompt_not_empty
     verify_prompt_sasl_password = verify_prompt_not_empty
 
