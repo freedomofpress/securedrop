@@ -291,7 +291,7 @@ class SiteConfig(object):
         return self.update_config()
 
     def update_config(self):
-        self.config = self.user_prompt_config()
+        self.config.update(self.user_prompt_config())
         self.save()
         self.validate_gpg_keys()
         return True
