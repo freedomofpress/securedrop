@@ -52,6 +52,9 @@ Or the app-staging VM:
     cd /var/www/securedrop
     pytest -v tests
 
+.. warning:: Running the test suite as the root user in ``app-staging`` will
+    render the VM unusable for interactive testing.
+
 For explanation of the difference between these machines, see
 :doc:`virtual_environments`.
 
