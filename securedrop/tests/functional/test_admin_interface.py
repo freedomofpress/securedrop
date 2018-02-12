@@ -1,13 +1,11 @@
 import functional_test
 import journalist_navigation_steps
-from step_helpers import screenshots
 
 
 class TestAdminInterface(
         functional_test.FunctionalTest,
         journalist_navigation_steps.JournalistNavigationStepsMixin):
 
-    @screenshots
     def test_admin_interface(self):
         self._admin_logs_in()
         self._admin_visits_admin_interface()

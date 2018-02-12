@@ -11,13 +11,11 @@ from selenium.webdriver.common.keys import Keys
 import tests.utils.db_helper as db_helper
 import crypto_util
 from models import Journalist
-from step_helpers import screenshots
 import config
 
 
 class JournalistNavigationStepsMixin():
 
-    @screenshots
     def _get_submission_content(self, file_url, raw_content):
         if not file_url.endswith(".gz.gpg"):
             return str(raw_content)
@@ -52,13 +50,11 @@ class JournalistNavigationStepsMixin():
             'button[type=submit]')
         submit_button.click()
 
-    @screenshots
     def _login_user(self, username, password, token):
         self._try_login_user(username, password, token)
         # Successful login should redirect to the index
         assert self.driver.current_url == self.journalist_location + '/'
 
-    @screenshots
     def _journalist_logs_in(self):
         # Create a test user for logging in
         self.user, self.user_pw = db_helper.init_journalist()
@@ -178,7 +174,6 @@ class JournalistNavigationStepsMixin():
         sources = self.driver.find_elements_by_class_name("code-name")
         assert len(sources) == 0
 
-    @screenshots
     def _admin_logs_in(self):
         self.admin, self.admin_pw = db_helper.init_journalist(is_admin=True)
         self._login_user(self.admin.username, self.admin_pw, 'mocked')
@@ -195,7 +190,6 @@ class JournalistNavigationStepsMixin():
             links = self.driver.find_elements_by_tag_name('a')
             assert 'Admin' in [el.text for el in links]
 
-    @screenshots
     def _admin_visits_admin_interface(self):
         admin_interface_link = self.driver.find_element_by_id(
             'link-admin-index')
@@ -226,7 +220,6 @@ class JournalistNavigationStepsMixin():
             flashed_msgs = self.driver.find_element_by_css_selector('.flash')
             assert 'Image updated.' in flashed_msgs.text
 
-    @screenshots
     def _add_user(self, username, is_admin=False, hotp=None):
         username_field = self.driver.find_element_by_css_selector(
             'input[name="username"]')
@@ -249,7 +242,6 @@ class JournalistNavigationStepsMixin():
             'button[type=submit]')
         submit_button.click()
 
-    @screenshots
     def _admin_adds_a_user(self):
         add_user_btn = self.driver.find_element_by_css_selector(
             'button#add-user')
@@ -324,7 +316,6 @@ class JournalistNavigationStepsMixin():
             flashed_msg = self.driver.find_element_by_css_selector('.flash')
             assert "Test alert sent. Check your email." in flashed_msg.text
 
-    @screenshots
     def _logout(self):
         # Click the logout link
         logout_link = self.driver.find_element_by_id('link-logout')
@@ -336,7 +327,6 @@ class JournalistNavigationStepsMixin():
                     self.driver.page_source)
         self.wait_for(login_page)
 
-    @screenshots
     def _check_login_with_otp(self, otp):
         self._logout()
         self._login_user(self.new_user['username'],
@@ -345,7 +335,6 @@ class JournalistNavigationStepsMixin():
             # Test that the new user was logged in successfully
             assert 'Sources' in self.driver.page_source
 
-    @screenshots
     def _new_user_can_log_in(self):
         # Log the admin user out
         self._logout()
@@ -364,7 +353,6 @@ class JournalistNavigationStepsMixin():
         with pytest.raises(NoSuchElementException):
             self.driver.find_element_by_id('link-admin-index')
 
-    @screenshots
     def _edit_account(self):
         edit_account_link = self.driver.find_element_by_id(
             'link-edit-account')
@@ -394,7 +382,6 @@ class JournalistNavigationStepsMixin():
         assert ('/account/reset-2fa-hotp' in
                 hotp_reset_button.get_attribute('action'))
 
-    @screenshots
     def _edit_user(self, username):
         user = Journalist.query.filter_by(username=username).one()
 
@@ -438,7 +425,6 @@ class JournalistNavigationStepsMixin():
         assert int(hotp_reset_uid.get_attribute('value')) == user.id
         assert hotp_reset_uid.is_displayed() is False
 
-    @screenshots
     def _admin_can_edit_new_user(self):
         # Log the new user out
         self._logout()
@@ -526,7 +512,6 @@ class JournalistNavigationStepsMixin():
         self._logout()
         self._login_user(self.admin.username, self.admin_pw, 'mocked')
 
-    @screenshots
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
 
@@ -540,7 +525,6 @@ class JournalistNavigationStepsMixin():
                 'span.unread')
             assert "1 unread" in unread_span.text
 
-    @screenshots
     def _journalist_stars_and_unstars_single_message(self):
         # Message begins unstarred
         with pytest.raises(NoSuchElementException):
@@ -556,7 +540,6 @@ class JournalistNavigationStepsMixin():
         with pytest.raises(NoSuchElementException):
             self.driver.find_element_by_id('starred-source-link-1')
 
-    @screenshots
     def _journalist_selects_all_sources_then_selects_none(self):
         self.driver.find_element_by_id('select_all').click()
         checkboxes = self.driver.find_elements_by_id('checkbox')
@@ -575,7 +558,6 @@ class JournalistNavigationStepsMixin():
     def _journalist_selects_documents_to_download(self):
         self.driver.find_element_by_id('select_all').click()
 
-    @screenshots
     def _journalist_downloads_message(self):
         self._journalist_selects_the_first_source()
 
