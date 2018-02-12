@@ -11,6 +11,7 @@ import time
 import json
 import traceback
 import subprocess
+import shutil
 import requests
 
 
@@ -116,6 +117,32 @@ class FunctionalTest(object):
                     continue
                 raise
 
+    def _create_secondary_firefox_driver(self):
+        profile = None
+        self.f_profile_path = "/tmp/testprofile"
+        if os.path.exists(self.f_profile_path):
+            shutil.rmtree(self.f_profile_path)
+        if self.journalist_location.find('.onion') != -1:
+            os.mkdir(self.f_profile_path)
+            profile = webdriver.FirefoxProfile(self.f_profile_path)
+            # set FF preference to socks proxy in Tor Browser
+            profile.set_preference("network.proxy.type", 1)
+            profile.set_preference("network.proxy.socks", "127.0.0.1")
+            profile.set_preference("network.proxy.socks_port", 9150)
+            profile.set_preference("network.proxy.socks_version", 5)
+            profile.set_preference("network.proxy.socks_remote_dns", True)
+            profile.set_preference("network.dns.blockDotOnion", False)
+            profile.update_preferences()
+        self.second_driver = webdriver.Firefox(firefox_profile=profile)
+        self.second_driver.implicitly_wait(15)
+
+    def swap_drivers(self):
+        if not self.second_driver:
+            self._create_secondary_firefox_driver()
+        # Only if we two drivers
+        if self.driver and self.second_driver:
+            self.driver, self.second_driver = self.second_driver, self.driver
+
     def init_gpg(self):
         """Initialize the GPG keyring and import the journalist key for
         testing.
@@ -173,9 +200,10 @@ class FunctionalTest(object):
                 time.sleep(1)
             else:
                 break
-
+        self._create_secondary_firefox_driver()
         if not hasattr(self, 'override_driver'):
             self.driver = self._create_webdriver()
+            #self._create_secondary_firefox_driver()
 
         self.gpg = self.init_gpg()
 
@@ -194,6 +222,7 @@ class FunctionalTest(object):
         #
         self.driver.implicitly_wait(15)
 
+
         # Set window size and position explicitly to avoid potential bugs due
         # to discrepancies between environments.
         #self.driver.set_window_position(0, 0)
@@ -206,6 +235,8 @@ class FunctionalTest(object):
 
         if not hasattr(self, 'override_driver'):
             self.driver.quit()
+        if self.second_driver:
+            self.second_driver.quit()
 
     def create_new_totp(self, secret):
         self.new_totp = pyotp.TOTP(secret)
