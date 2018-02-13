@@ -1,11 +1,16 @@
 ---
-- include: install_signal_cli.yml
 
-- include: register_signal_number.yml
-  when: signal_cli_register
+- include: install_signal_cli.yml
+  when: signal_notifications
 
 - include: copy_signal-cli_config.yml
-  when: signal_cli_copy_config
+  when:
+    - signal_notifications
+    - signal_cli_copy_config
 
 - include: signal-cli_post_install.yml
-  when: signal_destination_number
+  when:
+    - signal_notifications
+    - signal_cli_copy_config
+    - signal_number is defined
+    - signal_destination_number is defined

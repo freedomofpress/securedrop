@@ -91,11 +91,11 @@
 {% if signal_notifications is defined and signal_notifications %}
 # Signal-cli iptables rules
 # dns rule
--A OUTPUT -d {{ dns_server }} -p tcp --dport 53 -m owner --uid-owner postfix -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "signal-cli dns rule"
--A OUTPUT -d {{ dns_server }} -p udp --dport 53 -m owner --uid-owner postfix -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "signal-cli dns rule"
+-A OUTPUT -d {{ dns_server }} -p tcp --dport 53 -m owner --uid-owner ossec -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "signal-cli dns rule"
+-A OUTPUT -d {{ dns_server }} -p udp --dport 53 -m owner --uid-owner ossec -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "signal-cli dns rule"
 
 # outbound rules for signal-cli
--A OUTPUT -p tcp --dport 443 -m owner --uid-owner postfix -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow signal-cli messages outbound" -j ACCEPT
+-A OUTPUT -p tcp --dport 443 -m owner --uid-owner ossec -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT -m comment --comment "Allow signal-cli messages outbound"
 -A INPUT -p tcp --sport 443 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow signal-cli responses inbound"
 {% endif %}
 

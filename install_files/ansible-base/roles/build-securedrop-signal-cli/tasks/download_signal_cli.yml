@@ -49,7 +49,7 @@
       dest: "{{ package_path }}/etc/apparmor.d"
     tags: apparmor
 
-  - name: Copy AppArmor profile
-    copy:
-      src: ../files/usr.lib.jvm.java-7-openjdk-amd64.jre.bin.java
+  - name: Copy AppArmor profile for Java
+    template:
+      src: usr.lib.jvm.java-7-openjdk-amd64.jre.bin.java.j2
       dest: "{{ package_path }}/etc/apparmor.d/usr.lib.jvm.java-7-openjdk-amd64.jre.bin.java"

@@ -1,12 +1,4 @@
 ---
-- name: Create config directory
-  file:
-    path: /etc/signal/data/
-    state: directory
-    mode: "0755"
-    recurse: yes
-  become: yes
-
 - name: Copy config
   copy:
     src: "{{ signal_number }}"

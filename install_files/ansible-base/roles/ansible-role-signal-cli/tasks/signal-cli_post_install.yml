@@ -1,5 +1,5 @@
 ---
-- name: Signal-cli Test notification
+- name: Signal-cli test notification
   command: '/usr/local/bin/signal-cli --config /etc/signal/ -u {{ signal_number }} send -m "This is a test message!" {{ signal_destination_number }}'
   become: yes
 

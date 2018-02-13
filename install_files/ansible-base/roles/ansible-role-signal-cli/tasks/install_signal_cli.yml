@@ -1,14 +1,6 @@
 ---
 - block:
-  - name: Install securedrop-signal-cli package from FPF repo.
-    apt:
-      pkg: securedrop-signal-cli
-      state: latest
-      update_cache: yes
-      cache_valid_time: 3600
-    tags:
-      - apt
-  
+
   - name: Convert jvm header for pax
     shell: "paxctl -c /usr/lib/jvm/java-7-openjdk-amd64/bin/java"
     become: yes
@@ -17,4 +9,12 @@
     shell: "paxctl -m /usr/lib/jvm/java-7-openjdk-amd64/bin/java"
     become: yes
 
-  become: True
+  - name: Create config directory
+    file:
+      path: /etc/signal/data/
+      state: directory
+      owner: "{{ signal_cli_unix_user }}"
+      group: "{{ signal_cli_unix_user }}"
+      mode: "0755"
+      recurse: yes
+    become: yes
