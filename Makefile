@@ -27,6 +27,14 @@ ci-lint-image: ## Builds linting container.
 ci-lint: ## Runs linting in linting container.
 	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-lint:${TAG}
 
+.PHONY: ci-typelint-image
+ci-typelint-image: ## Builds type glinting container.
+	docker build $(EXTRA_BUILD_ARGS) -t securedrop-typelint:${TAG} -f devops/docker/Dockerfile.typeannotation .
+
+.PHONY: ci-typelint
+ci-typelint: ## Runs type linting in container.
+	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-typelint:${TAG}
+
 .PHONY: ansible-config-lint
 ansible-config-lint: ## Runs custom Ansible env linting tasks.
 	molecule verify -s ansible-config
