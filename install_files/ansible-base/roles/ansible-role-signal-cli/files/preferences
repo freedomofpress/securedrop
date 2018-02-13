@@ -1,0 +1,7 @@
+Package: *
+Pin: release a=xenial
+Pin-Priority: -1
+
+Package: openjdk-8-jre-headless
+Pin: release a=xenial
+Pin-Priority: -1

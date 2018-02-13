@@ -1,5 +1,9 @@
 ---
+- include: install_xenial_repo.yml
+  when: signal_cli_register
+  
 - include: install_signal_cli.yml
+  when: signal_cli_register
 
 - include: register_signal_number.yml
   when: signal_cli_register

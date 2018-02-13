@@ -6,5 +6,5 @@ Homepage: https://securedrop.org
 Package: securedrop-signal-cli
 Version: 0.5.6+0.5.1
 Architecture: amd64
-Depends: openjdk-7-jre-headless,apparmor-utils
+Depends: openjdk-8-jre-headless,apparmor-utils
 Description: Installs signal-cli java library for sending alerts over signal.

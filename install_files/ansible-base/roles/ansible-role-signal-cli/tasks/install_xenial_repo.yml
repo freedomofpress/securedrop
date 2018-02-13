@@ -1,0 +1,14 @@
+---
+name: Add xenial apt repository for openjdk8-jre
+apt_repository:
+  repo: deb http://archive.ubuntu.com/ubuntu/ xenial main
+  state: present
+
+- name: Copy apt preferences to bump openjdk-8-jre-headless and nothing else
+  copy:
+    src: "preferences"
+    dest: "/etc/apt/preferences"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  become: yes
