@@ -692,7 +692,7 @@ class JournalistNavigationStepsMixin():
             checkbox.click()
         self.driver.find_element_by_id('delete-selected-link').click()
 
-    def _journalist_confirm_delete_all(self):
+    def _journalist_confirm_delete_selected(self):
         self.wait_for(
             lambda: self.driver.find_element_by_id('delete-selected'))
         confirm_btn = self.driver.find_element_by_id('delete-selected')
