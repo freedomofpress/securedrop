@@ -1,0 +1,20 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Bring in SecureDrop production version
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Ensure molecule ephemeral dir exists
+      file:
+        state: directory
+        path: "{{ molecule_ephemeral_directory }}"
+
+    - name: Clone in copy of original SD version
+      git:
+        repo: https://github.com/freedomofpress/securedrop.git
+        dest: "{{ molecule_ephemeral_directory }}/sd-orig"
+        version: "release/{{ ORIG_SECUREDROP_VER }}"
+        depth: 1
+  vars:
+    ORIG_SECUREDROP_VER: 0.5.2
+    molecule_ephemeral_directory: "{{ playbook_dir }}/.molecule"
