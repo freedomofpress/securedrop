@@ -7,7 +7,7 @@ import binascii
 try:
     from cStringIO import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from StringIO import StringIO  # type: ignore
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref

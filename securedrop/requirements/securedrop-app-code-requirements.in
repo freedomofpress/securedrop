@@ -15,4 +15,5 @@ redis
 rq
 scrypt
 SQLAlchemy
+typing
 Werkzeug==0.12.2

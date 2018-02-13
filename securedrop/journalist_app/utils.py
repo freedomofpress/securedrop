@@ -20,6 +20,7 @@ from rm import srm
 
 
 def logged_in():
+    # type: () -> bool
     # When a user is logged in, we push their user ID (database primary key)
     # into the session. setup_g checks for this value, and if it finds it,
     # stores a reference to the user's Journalist object in g.

@@ -9,6 +9,7 @@ from Cryptodome.Random import random
 import gnupg
 from gnupg._util import _is_stream, _make_binary_stream
 import scrypt
+from typing import Dict, List, Text  # noqa: F401
 
 import config
 import store
@@ -49,7 +50,7 @@ do_runtime_tests()
 gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
 
 # map code for a given language to a localized wordlist
-language2words = {}
+language2words = {}  # type: Dict[Text,List[str]]
 nouns = open(config.NOUNS).read().rstrip('\n').split('\n')
 adjectives = open(config.ADJECTIVES).read().rstrip('\n').split('\n')
 
@@ -80,6 +81,7 @@ def clean(s, also=''):
 
 
 def _get_wordlist(locale):
+    # type: (Text) -> List[str]
     """" Ensure the wordlist for the desired locale is read and available
     in the words global variable. If there is no wordlist for the
     desired local, fallback to the default english wordlist.
