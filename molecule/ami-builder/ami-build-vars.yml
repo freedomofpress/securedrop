@@ -1,0 +1,5 @@
+---
+install_local_packages: false
+primary_network_iface: eth0
+ssh_users: sdrop
+securedrop_app_install_from_repo: true
