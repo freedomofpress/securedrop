@@ -56,7 +56,7 @@ The desktop icon are in the
 Their labels are collected in the ``desktop.pot`` file and translated
 in the corresponding ``.po`` files in the same directory (``fr.po``,
 ``de.po`` etc.). All translations are merged from the ``*.j2.in``
-files into the corresponding ``*.j2`` file and committed to the respository.
+files into the corresponding ``*.j2`` file and committed to the repository.
 They are then installed when configuring Tails with
 the ``tasks/create_desktop_shortcuts.yml`` tasks.
 
@@ -91,7 +91,7 @@ which wraps ``manage.py translate-messages`` and ``manage.py
 translate-desktop``.  The updated
 ``securedrop/translations/messages.pot`` and
 ``install_files/ansible-base/roles/tails-config/templates/desktop.pot``
-should then be reviewed and commited.
+should then be reviewed and committed.
 
 .. note:: The changes will only be visible in the `Weblate`_ web
    interface used by translators after :ref:`merging_develop_into_the_weblate_fork`.
