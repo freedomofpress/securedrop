@@ -7,8 +7,7 @@ Test connectivity
 SSH to both servers over Tor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On the *Admin Workstation*, you should be able to SSH to the App
-Server and the *Monitor Server*. ::
+On the *Admin Workstation*, you should be able to SSH to the *Application Server* and the *Monitor Server*. ::
 
    ssh app
    ssh mon
