@@ -1,0 +1,10 @@
+FROM circleci/python:3.6.4-stretch
+
+
+RUN  sudo pip3 install mypy
+
+WORKDIR /src
+COPY . /src
+
+
+CMD ["sudo", "mypy", "./securedrop", "./admin"]
