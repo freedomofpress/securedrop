@@ -23,6 +23,7 @@ Ubuntu/Debian
 
 .. code:: sh
 
+   sudo apt-get update
    sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev \
        dpkg-dev git linux-headers-$(uname -r) virtualbox
 
