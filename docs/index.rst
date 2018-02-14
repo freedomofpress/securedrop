@@ -110,6 +110,7 @@ anonymous sources.
    development/apt_repo
    development/updating_ossec
    development/apparmor_profiles
+   development/portable_demo
 
 .. toctree::
   :caption: Threat Model
