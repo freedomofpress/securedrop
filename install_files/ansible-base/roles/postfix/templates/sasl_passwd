@@ -1,1 +1,1 @@
-[{{ smtp_relay }}]:{{ smtp_relay_port }}   {{ sasl_username }}@{{ sasl_domain }}:{{ sasl_password }}
+[{{ smtp_relay }}]:{{ smtp_relay_port }}   {{ sasl_username }}{% if sasl_domain %}@{{ sasl_domain }}{% endif %}:{{ sasl_password }}

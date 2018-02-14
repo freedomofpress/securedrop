@@ -368,13 +368,19 @@ class TestSiteConfig(object):
         clean_fpr = site_config.sanitize_fingerprint(fpr)
         assert site_config.user_prompt_config_one(desc, fpr) == clean_fpr
 
+    def verify_desc_consistency_allow_empty(self, site_config, desc):
+        (var, default, etype, prompt, validator, transform) = desc
+        # verify the default passes validation
+        assert site_config.user_prompt_config_one(desc, None) == default
+        assert type(default) == etype
+
     verify_prompt_securedrop_app_gpg_fingerprint = verify_prompt_fingerprint
     verify_prompt_ossec_alert_gpg_public_key = verify_desc_consistency
     verify_prompt_ossec_gpg_fpr = verify_prompt_fingerprint
     verify_prompt_ossec_alert_email = verify_prompt_not_empty
     verify_prompt_smtp_relay = verify_prompt_not_empty
     verify_prompt_smtp_relay_port = verify_desc_consistency
-    verify_prompt_sasl_domain = verify_desc_consistency
+    verify_prompt_sasl_domain = verify_desc_consistency_allow_empty
     verify_prompt_sasl_username = verify_prompt_not_empty
     verify_prompt_sasl_password = verify_prompt_not_empty
 

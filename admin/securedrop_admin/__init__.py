@@ -266,7 +266,7 @@ class SiteConfig(object):
              int],
             ['sasl_domain', "gmail.com", str,
              u'SASL domain for sending OSSEC alerts',
-             SiteConfig.ValidateNotEmpty(),
+             None,
              None],
             ['sasl_username', '', str,
              u'SASL username for sending OSSEC alerts',
