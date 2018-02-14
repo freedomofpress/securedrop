@@ -34,7 +34,7 @@ If you have the :ref:`Development VM <development_vm>` running, you should run
 the forwarded port on 8000 will collide with sphinx-autobuild process running
 on localhost.
 
-You can then can browse the documentation at http://127.0.0.1:8000/.
+You can then browse the documentation at http://127.0.0.1:8000/.
 As you make changes, the docs will automatically rebuild in the browser
 window, so you don't need to refresh the page manually.
 
