@@ -1,0 +1,57 @@
+#!/usr/bin/python
+from PyQt4 import QtGui
+import sys
+import subprocess
+import os
+
+import updaterUI
+import strings
+
+
+class UpdaterApp(QtGui.QMainWindow, updaterUI.Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(UpdaterApp, self).__init__(parent)
+        self.setupUi(self)
+        self.label.setText(strings.update_in_progress)
+        self.pushButton.setText(strings.install_later_button)
+        self.pushButton.clicked.connect(self.close)
+        self.pushButton_2.setText(strings.install_update_button)
+        self.pushButton_2.clicked.connect(self.update_securedrop)
+
+    def update_securedrop(self):
+        self.progressBar.setProperty("value", 10)
+        self.statusbar.showMessage(strings.fetching_update)
+        self.progressBar.setProperty("value", 20)
+        update_command = ['/home/amnesia/Persistent/securedrop/securedrop-admin', 'update']
+        output = subprocess.check_output(update_command,
+                stderr=subprocess.STDOUT)
+        self.progressBar.setProperty("value", 40)
+        self.plainTextEdit.setPlainText(output)
+        self.plainTextEdit.setReadOnly = True
+        self.progressBar.setProperty("value", 50)
+        self.statusbar.showMessage(strings.updating_tails_env)
+        #tailsconfig_command = ['/home/amnesia/Persistent/securedrop/securedrop-admin', 'tailsconfig']
+        #output = subprocess.check_output(tailsconfig_command,
+        #        stderr=subprocess.STDOUT)
+        self.statusbar.showMessage(strings.finished)
+        self.progressBar.setProperty("value", 100)
+
+
+    def alert_success(self):
+        pass
+
+    def alert_failure(self):
+        pass
+
+
+
+def main():
+    app = QtGui.QApplication(sys.argv)
+    form = UpdaterApp()
+    form.show()
+    app.exec_()
+
+
+if __name__ == '__main__':
+    main()
+
