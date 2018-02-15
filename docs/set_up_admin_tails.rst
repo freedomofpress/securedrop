@@ -150,7 +150,7 @@ To use the template:
 In case you wish to manually create a database, the suggested password fields in
 the admin template are:
 
-**Administrator**:
+**Admin**:
 
 - Admin account username
 - App Server SSH Onion URL
