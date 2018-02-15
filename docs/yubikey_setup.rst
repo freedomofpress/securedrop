@@ -80,7 +80,7 @@ top of the window.
 Adding Users
 ------------
 
-When adding new users, a SecureDrop administrator will need the
+When adding new users, a SecureDrop admin will need the
 **Secret Key** value described above. She will enter it after
 selecting the **I'm Using a YubiKey** option while :ref:`adding users
 <Adding Users>`.
