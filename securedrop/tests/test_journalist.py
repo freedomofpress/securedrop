@@ -5,7 +5,7 @@ import random
 import unittest
 import zipfile
 
-from flask import url_for, escape, session
+from flask import url_for, escape, session, current_app
 from flask_testing import TestCase
 from mock import patch
 from sqlalchemy.orm.exc import StaleDataError
@@ -13,7 +13,7 @@ from sqlalchemy.exc import IntegrityError
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
-import crypto_util
+
 from db import db
 from models import (InvalidPasswordLength, Journalist, Reply, Source,
                     Submission)
@@ -50,7 +50,8 @@ class TestJournalistApp(TestCase):
     def tearDown(self):
         utils.env.teardown()
 
-    @patch('crypto_util.genrandomid', side_effect=['bad', VALID_PASSWORD])
+    @patch('crypto_util.CryptoUtil.genrandomid',
+           side_effect=['bad', VALID_PASSWORD])
     def test_make_password(self, mocked_pw_gen):
         class fake_config:
             pass
@@ -943,13 +944,13 @@ class TestJournalistApp(TestCase):
         self._delete_collection_setup()
 
         # Source key exists
-        source_key = crypto_util.getkey(self.source.filesystem_id)
+        source_key = current_app.crypto_util.getkey(self.source.filesystem_id)
         self.assertNotEqual(source_key, None)
 
         journalist_app.utils.delete_collection(self.source.filesystem_id)
 
         # Source key no longer exists
-        source_key = crypto_util.getkey(self.source.filesystem_id)
+        source_key = current_app.crypto_util.getkey(self.source.filesystem_id)
         self.assertEqual(source_key, None)
 
     def test_delete_source_deletes_docs_on_disk(self):

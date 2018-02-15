@@ -6,9 +6,7 @@ from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
 from flask_babel import gettext, ngettext
 from sqlalchemy.sql.expression import false
 
-import crypto_util
 import i18n
-import store
 import worker
 
 from db import db
@@ -115,8 +113,8 @@ def download(zip_basename, submissions):
     :param list submissions: A list of :class:`models.Submission`s to
                              include in the ZIP-file.
     """
-    zf = store.get_bulk_archive(submissions,
-                                zip_directory=zip_basename)
+    zf = current_app.storage.get_bulk_archive(submissions,
+                                              zip_directory=zip_basename)
     attachment_filename = "{}--{}.zip".format(
         zip_basename, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
 
@@ -132,7 +130,7 @@ def download(zip_basename, submissions):
 
 def bulk_delete(filesystem_id, items_selected):
     for item in items_selected:
-        item_path = store.path(filesystem_id, item.filename)
+        item_path = current_app.storage.path(filesystem_id, item.filename)
         worker.enqueue(srm, item_path)
         db.session.delete(item)
     db.session.commit()
@@ -202,7 +200,9 @@ def col_delete(cols_selected):
 
 def make_password(config):
     while True:
-        password = crypto_util.genrandomid(7, i18n.get_language(config))
+        password = current_app.crypto_util.genrandomid(
+            7,
+            i18n.get_language(config))
         try:
             Journalist.check_password_acceptable(password)
             return password
@@ -212,10 +212,10 @@ def make_password(config):
 
 def delete_collection(filesystem_id):
     # Delete the source's collection of submissions
-    job = worker.enqueue(srm, store.path(filesystem_id))
+    job = worker.enqueue(srm, current_app.storage.path(filesystem_id))
 
     # Delete the source's reply keypair
-    crypto_util.delete_reply_keypair(filesystem_id)
+    current_app.crypto_util.delete_reply_keypair(filesystem_id)
 
     # Delete their entry in the db
     source = get_source(filesystem_id)

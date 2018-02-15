@@ -5,9 +5,6 @@ from flask import (Blueprint, redirect, url_for, render_template, flash,
 from flask_babel import gettext
 from sqlalchemy.orm.exc import NoResultFound
 
-import crypto_util
-import store
-
 from db import db
 from models import Submission
 from journalist_app.forms import ReplyForm
@@ -36,7 +33,7 @@ def make_blueprint(config):
     def col(filesystem_id):
         form = ReplyForm()
         source = get_source(filesystem_id)
-        source.has_key = crypto_util.getkey(filesystem_id)
+        source.has_key = current_app.crypto_util.getkey(filesystem_id)
         return render_template("col.html", filesystem_id=filesystem_id,
                                source=source, form=form)
 
@@ -83,7 +80,7 @@ def make_blueprint(config):
             current_app.logger.error(
                 "Could not mark " + fn + " as downloaded: %s" % (e,))
 
-        return send_file(store.path(filesystem_id, fn),
+        return send_file(current_app.storage.path(filesystem_id, fn),
                          mimetype="application/pgp-encrypted")
 
     return view

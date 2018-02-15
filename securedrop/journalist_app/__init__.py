@@ -11,10 +11,12 @@ import i18n
 import template_filters
 import version
 
+from crypto_util import CryptoUtil
 from db import db
-from models import Journalist
 from journalist_app import account, admin, main, col
 from journalist_app.utils import get_source, logged_in
+from models import Journalist
+from store import Storage
 
 _insecure_views = ['main.login', 'static']
 
@@ -43,6 +45,21 @@ def create_app(config):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     db.init_app(app)
+
+    app.storage = Storage(config.STORE_DIR,
+                          config.TEMP_DIR,
+                          config.JOURNALIST_KEY)
+
+    app.crypto_util = CryptoUtil(
+        scrypt_params=config.SCRYPT_PARAMS,
+        scrypt_id_pepper=config.SCRYPT_ID_PEPPER,
+        scrypt_gpg_pepper=config.SCRYPT_GPG_PEPPER,
+        securedrop_root=config.SECUREDROP_ROOT,
+        word_list=config.WORD_LIST,
+        nouns_file=config.NOUNS,
+        adjectives_file=config.ADJECTIVES,
+        gpg_key_dir=config.GPG_KEY_DIR,
+    )
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):

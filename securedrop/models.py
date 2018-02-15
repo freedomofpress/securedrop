@@ -1,7 +1,13 @@
-import os
+# -*- coding: utf-8 -*-
+import binascii
 import datetime
 import base64
-import binascii
+import os
+import scrypt
+import pyotp
+import qrcode
+# Using svg because it doesn't require additional dependencies
+import qrcode.image.svg
 
 # Find the best implementation available on this platform
 try:
@@ -9,21 +15,14 @@ try:
 except ImportError:
     from StringIO import StringIO  # type: ignore
 
+from flask import current_app
+from jinja2 import Markup
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Binary
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-from jinja2 import Markup
-
-import scrypt
-import pyotp
-
-import qrcode
-# Using svg because it doesn't require additional dependencies
-import qrcode.image.svg
 
 from db import db
-import store
 
 
 LOGIN_HARDENING = True
@@ -120,7 +119,8 @@ class Submission(db.Model):
     def __init__(self, source, filename):
         self.source_id = source.id
         self.filename = filename
-        self.size = os.stat(store.path(source.filesystem_id, filename)).st_size
+        self.size = os.stat(current_app.storage.path(source.filesystem_id,
+                                                     filename)).st_size
 
     def __repr__(self):
         return '<Submission %r>' % (self.filename)
@@ -150,7 +150,8 @@ class Reply(db.Model):
         self.journalist_id = journalist.id
         self.source_id = source.id
         self.filename = filename
-        self.size = os.stat(store.path(source.filesystem_id, filename)).st_size
+        self.size = os.stat(current_app.storage.path(source.filesystem_id,
+                                                     filename)).st_size
 
     def __repr__(self):
         return '<Reply %r>' % (self.filename)

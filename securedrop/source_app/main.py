@@ -7,9 +7,6 @@ from flask import (Blueprint, render_template, flash, redirect, url_for, g,
 from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
 
-import crypto_util
-import store
-
 from db import db
 from models import Source, Submission, Reply, get_one_or_else
 from rm import srm
@@ -44,9 +41,10 @@ def make_blueprint(config):
 
     @view.route('/create', methods=['POST'])
     def create():
-        filesystem_id = crypto_util.hash_codename(session['codename'])
+        filesystem_id = current_app.crypto_util.hash_codename(
+            session['codename'])
 
-        source = Source(filesystem_id, crypto_util.display_id())
+        source = Source(filesystem_id, current_app.crypto_util.display_id())
         db.session.add(source)
         try:
             db.session.commit()
@@ -60,7 +58,7 @@ def make_blueprint(config):
             del session['codename']
             abort(500)
         else:
-            os.mkdir(store.path(filesystem_id))
+            os.mkdir(current_app.storage.path(filesystem_id))
 
         session['logged_in'] = True
         return redirect(url_for('.lookup'))
@@ -70,9 +68,12 @@ def make_blueprint(config):
     def lookup():
         replies = []
         for reply in g.source.replies:
-            reply_path = store.path(g.filesystem_id, reply.filename)
+            reply_path = current_app.storage.path(
+                g.filesystem_id,
+                reply.filename,
+            )
             try:
-                reply.decrypted = crypto_util.decrypt(
+                reply.decrypted = current_app.crypto_util.decrypt(
                     g.codename,
                     open(reply_path).read()).decode('utf-8')
             except UnicodeDecodeError:
@@ -89,9 +90,13 @@ def make_blueprint(config):
         # Generate a keypair to encrypt replies from the journalist
         # Only do this if the journalist has flagged the source as one
         # that they would like to reply to. (Issue #140.)
-        if not crypto_util.getkey(g.filesystem_id) and g.source.flagged:
+        if not current_app.crypto_util.getkey(g.filesystem_id) and \
+                g.source.flagged:
             db_uri = current_app.config['SQLALCHEMY_DATABASE_URI']
-            async_genkey(db_uri, g.filesystem_id, g.codename)
+            async_genkey(current_app.crypto_util,
+                         db_uri,
+                         g.filesystem_id,
+                         g.codename)
 
         return render_template(
             'lookup.html',
@@ -99,7 +104,7 @@ def make_blueprint(config):
             replies=replies,
             flagged=g.source.flagged,
             new_user=session.get('new_user', None),
-            haskey=crypto_util.getkey(
+            haskey=current_app.crypto_util.getkey(
                 g.filesystem_id))
 
     @view.route('/submit', methods=('POST',))
@@ -122,7 +127,7 @@ def make_blueprint(config):
         if msg:
             g.source.interaction_count += 1
             fnames.append(
-                store.save_message_submission(
+                current_app.storage.save_message_submission(
                     g.filesystem_id,
                     g.source.interaction_count,
                     journalist_filename,
@@ -130,7 +135,7 @@ def make_blueprint(config):
         if fh:
             g.source.interaction_count += 1
             fnames.append(
-                store.save_file_submission(
+                current_app.storage.save_file_submission(
                     g.filesystem_id,
                     g.source.interaction_count,
                     journalist_filename,
@@ -166,7 +171,11 @@ def make_blueprint(config):
             entropy_avail = get_entropy_estimate()
             if entropy_avail >= 2400:
                 db_uri = current_app.config['SQLALCHEMY_DATABASE_URI']
-                async_genkey(db_uri, g.filesystem_id, g.codename)
+
+                async_genkey(current_app.crypto_util,
+                             db_uri,
+                             g.filesystem_id,
+                             g.codename)
                 current_app.logger.info("generating key, entropy: {}".format(
                     entropy_avail))
             else:
@@ -186,7 +195,7 @@ def make_blueprint(config):
         query = Reply.query.filter(
             Reply.filename == request.form['reply_filename'])
         reply = get_one_or_else(query, current_app.logger, abort)
-        srm(store.path(g.filesystem_id, reply.filename))
+        srm(current_app.storage.path(g.filesystem_id, reply.filename))
         db.session.delete(reply)
         db.session.commit()
 
@@ -203,7 +212,7 @@ def make_blueprint(config):
             return redirect(url_for('.lookup'))
 
         for reply in replies:
-            srm(store.path(g.filesystem_id, reply.filename))
+            srm(current_app.storage.path(g.filesystem_id, reply.filename))
             db.session.delete(reply)
         db.session.commit()
 

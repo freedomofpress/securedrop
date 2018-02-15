@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-from cStringIO import StringIO
 import gzip
-from mock import patch, ANY
+import json
 import re
 
-from flask import session, escape, url_for
+from cStringIO import StringIO
+from flask import session, escape, url_for, current_app
 from flask_testing import TestCase
+from mock import patch, ANY
 
-import crypto_util
+import config
+import source
+import utils
+import version
+
 from db import db
 from models import Source
-import source
-import version
-import utils
-import json
-import config
 from utils.db_helper import new_codename
 
 overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
@@ -49,7 +49,7 @@ class TestSourceApp(TestCase):
         validation. Otherwise a source will have a codename and be unable to
         return."""
 
-        wordlist_en = crypto_util._get_wordlist('en')
+        wordlist_en = current_app.crypto_util.get_wordlist('en')
 
         # chunk the words to cut down on the number of requets we make
         # otherwise this test is *slow*
@@ -111,7 +111,7 @@ class TestSourceApp(TestCase):
             self.assertIn("Submit Materials", resp.data)
 
     @patch('source.app.logger.warning')
-    @patch('crypto_util.genrandomid',
+    @patch('crypto_util.CryptoUtil.genrandomid',
            side_effect=[overly_long_codename, 'short codename'])
     def test_generate_too_long_codename(self, genrandomid, logger):
         """Generate a codename that exceeds the maximum codename length"""
@@ -407,7 +407,7 @@ class TestSourceApp(TestCase):
         self.assertEqual(json.loads(resp.data.decode('utf-8')).get(
             'sd_version'), version.__version__)
 
-    @patch('crypto_util.hash_codename')
+    @patch('crypto_util.CryptoUtil.hash_codename')
     def test_login_with_overly_long_codename(self, mock_hash_codename):
         """Attempting to login with an overly long codename should result in
         an error, and scrypt should not be called to avoid DoS."""
@@ -457,8 +457,8 @@ class TestSourceApp(TestCase):
                                follow_redirects=True)
 
             # Now the journalist deletes the source
-            filesystem_id = crypto_util.hash_codename(codename)
-            crypto_util.delete_reply_keypair(filesystem_id)
+            filesystem_id = current_app.crypto_util.hash_codename(codename)
+            current_app.crypto_util.delete_reply_keypair(filesystem_id)
             source = Source.query.filter_by(filesystem_id=filesystem_id).one()
             db.session.delete(source)
             db.session.commit()

@@ -9,7 +9,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
 import tests.utils.db_helper as db_helper
-import crypto_util
 from models import Journalist
 import config
 
@@ -699,8 +698,9 @@ class JournalistNavigationStepsMixin():
         confirm_btn.click()
 
     def _source_delete_key(self):
-        filesystem_id = crypto_util.hash_codename(self.source_name)
-        crypto_util.delete_reply_keypair(filesystem_id)
+        filesystem_id = self.source_app.crypto_util.hash_codename(
+            self.source_name)
+        self.source_app.crypto_util.delete_reply_keypair(filesystem_id)
 
     def _journalist_continues_after_flagging(self):
         self.driver.find_element_by_id('continue-to-list').click()

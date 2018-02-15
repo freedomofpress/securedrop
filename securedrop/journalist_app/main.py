@@ -6,9 +6,6 @@ from flask import (Blueprint, request, current_app, session, url_for, redirect,
 from flask_babel import gettext
 from sqlalchemy.sql.expression import false
 
-import crypto_util
-import store
-
 from db import db
 from models import Source, SourceStar, Submission, Reply
 from journalist_app.forms import ReplyForm
@@ -95,10 +92,12 @@ def make_blueprint(config):
         g.source.interaction_count += 1
         filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
                                               g.source.journalist_filename)
-        crypto_util.encrypt(form.message.data,
-                            [crypto_util.getkey(g.filesystem_id),
-                             config.JOURNALIST_KEY],
-                            output=store.path(g.filesystem_id, filename))
+        current_app.crypto_util.encrypt(
+            form.message.data,
+            [current_app.crypto_util.getkey(g.filesystem_id),
+             config.JOURNALIST_KEY],
+            output=current_app.storage.path(g.filesystem_id, filename),
+        )
         reply = Reply(g.user, g.source, filename)
 
         try:
@@ -157,10 +156,10 @@ def make_blueprint(config):
     @view.route('/regenerate-code', methods=('POST',))
     def regenerate_code():
         original_journalist_designation = g.source.journalist_designation
-        g.source.journalist_designation = crypto_util.display_id()
+        g.source.journalist_designation = current_app.crypto_util.display_id()
 
         for item in g.source.collection:
-            item.filename = store.rename_submission(
+            item.filename = current_app.storage.rename_submission(
                 g.filesystem_id,
                 item.filename,
                 g.source.journalist_filename)
