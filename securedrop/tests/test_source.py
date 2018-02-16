@@ -102,6 +102,16 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "because you are already logged in." in text
 
+    def test_create_new_source(self, source_app):
+        with source_app.test_client() as app:
+            resp = app.get('/generate')
+            assert resp.status_code == 200
+            resp = app.post('/create', follow_redirects=True)
+            assert session['logged_in'] is True
+            # should be redirected to /lookup
+            text = resp.data.decode('utf-8')
+            assert "Submit Materials" in text
+
 
 class TestSourceApp(TestCase):
 
@@ -113,14 +123,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_create_new_source(self):
-        with self.client as c:
-            resp = c.get('/generate')
-            resp = c.post('/create', follow_redirects=True)
-            self.assertTrue(session['logged_in'])
-            # should be redirected to /lookup
-            self.assertIn("Submit Materials", resp.data)
 
     @patch('source.app.logger.warning')
     @patch('crypto_util.CryptoUtil.genrandomid',
