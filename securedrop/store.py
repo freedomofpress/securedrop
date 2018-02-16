@@ -129,7 +129,7 @@ class Storage:
             count,
             journalist_filename)
         encrypted_file_path = self.path(filesystem_id, encrypted_file_name)
-        with SecureTemporaryFile("/tmp") as stf:
+        with SecureTemporaryFile("/tmp") as stf:  # nosec
             with gzip.GzipFile(filename=sanitized_filename,
                                mode='wb', fileobj=stf) as gzf:
                 # Buffer the stream into the gzip file to avoid excessive

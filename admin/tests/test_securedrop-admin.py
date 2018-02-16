@@ -121,15 +121,15 @@ class TestSiteConfig(object):
             with mock.patch('subprocess.check_output',
                             return_value='has address') as check_output:
                 assert validator.lookup_fqdn('gnu.org', '8.8.8.8')
-                assert check_output.call_args[0][0].startswith('torify')
-                assert check_output.call_args[0][0].endswith('8.8.8.8')
+                assert check_output.call_args[0][0][0] == 'torify'
+                assert check_output.call_args[0][0][6] == '8.8.8.8'
 
         with mock.patch('securedrop_admin.SiteConfig.ValidateDNS.is_tails',
                         return_value=False):
             with mock.patch('subprocess.check_output',
                             return_value='failed') as check_output:
                 assert validator.lookup_fqdn('gnu.org') is False
-                assert not check_output.call_args[0][0].startswith('torify')
+                assert not check_output.call_args[0][0][0] == 'torify'
                 assert 'failed' in caplog.text
 
         with mock.patch('securedrop_admin.SiteConfig.ValidateDNS.is_tails',

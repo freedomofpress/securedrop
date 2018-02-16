@@ -313,7 +313,7 @@ def translate_messages(args):
                    sources=" ".join(args.source)))
 
         changed = subprocess.call("git diff --quiet {}".format(messages_file),
-                                  shell=True)
+                                  shell=True)  # nosec
 
         if changed and len(os.listdir(args.translations_dir)) > 1:
             sh("""
@@ -360,7 +360,7 @@ def translate_desktop(args):
                    sources=" ".join(args.source)))
 
         changed = subprocess.call("git diff --quiet {}".format(messages_file),
-                                  shell=True)
+                                  shell=True)  # nosec
 
         if changed:
             for f in os.listdir(args.translations_dir):
