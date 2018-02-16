@@ -16,8 +16,20 @@ import version
 from db import db
 from models import Source
 from utils.db_helper import new_codename
+from utils.instrument import InstrumentedApp
 
 overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
+
+
+class TestPytestSourceApp:
+
+    def test_page_not_found(self, source_app):
+        """Verify the page not found condition returns the intended template"""
+        with InstrumentedApp(source_app) as ins:
+            with source_app.test_client() as app:
+                resp = app.get('UNKNOWN')
+                assert resp.status_code == 404
+                ins.assert_template_used('notfound.html')
 
 
 class TestSourceApp(TestCase):
@@ -30,12 +42,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_page_not_found(self):
-        """Verify the page not found condition returns the intended template"""
-        response = self.client.get('/UNKNOWN')
-        self.assert404(response)
-        self.assertTemplateUsed('notfound.html')
 
     def test_index(self):
         """Test that the landing page loads and looks how we expect"""
