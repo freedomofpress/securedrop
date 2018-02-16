@@ -65,7 +65,7 @@ To update these screenshots automatically you can run:
 
    make -C securedrop images update-user-guides
 
-This will generate screenshots for each image in the web application and copy
+This will generate screenshots for each page in the web application and copy
 them to the folder under ``docs/images/manual/screenshots`` where they will
 replace the existing screenshots. Stage for commit any screenshots you wish to
 update. If you wish to update all screenshots, simply stage for commit all
