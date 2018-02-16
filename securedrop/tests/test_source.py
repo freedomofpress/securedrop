@@ -89,6 +89,19 @@ class TestPytestSourceApp:
         # codename displayed to the source
         assert codename == escape(session_codename)
 
+    def test_generate_already_logged_in(self, source_app):
+        with source_app.test_client() as app:
+            new_codename(app, session)
+            # Make sure it redirects to /lookup when logged in
+            resp = app.get('/generate')
+            assert resp.status_code == 302
+            # Make sure it flashes the message on the lookup page
+            resp = app.get('/generate', follow_redirects=True)
+            # Should redirect to /lookup
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "because you are already logged in." in text
+
 
 class TestSourceApp(TestCase):
 
@@ -100,18 +113,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_generate_already_logged_in(self):
-        with self.client as client:
-            new_codename(client, session)
-            # Make sure it redirects to /lookup when logged in
-            resp = client.get('/generate')
-            self.assertEqual(resp.status_code, 302)
-            # Make sure it flashes the message on the lookup page
-            resp = client.get('/generate', follow_redirects=True)
-            # Should redirect to /lookup
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("because you are already logged in.", resp.data)
 
     def test_create_new_source(self):
         with self.client as c:
