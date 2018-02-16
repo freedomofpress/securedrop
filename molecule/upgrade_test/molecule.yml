@@ -1,0 +1,54 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+lint:
+  name: yamllint
+
+platforms:
+  - name: app-staging
+    box: bento/ubuntu-14.04
+    instance_raw_config_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true"
+    memory: 1024
+    groups:
+      - securedrop_application_server
+      - securedrop
+      - staging
+
+  - name: mon-staging
+    box: bento/ubuntu-14.04
+    instance_raw_config_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true"
+    memory: 1024
+    groups:
+      - securedrop_monitor_server
+      - securedrop
+      - staging
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  inventory:
+    links:
+      group_vars: ../../../install_files/ansible-base/group_vars
+      host_vars: ../../../install_files/ansible-base/host_vars
+  env:
+    ANSIBLE_ROLES_PATH: .molecule/sd-orig/install_files/ansible-base/roles
+  options:
+    skip-tags: "local_build"
+    e: "@ansible-override-vars.yml"
+  config_options:
+    ssh_connection:
+      pipelining: True
+
+scenario:
+  name: upgrade_test
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
