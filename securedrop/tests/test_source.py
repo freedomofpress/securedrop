@@ -64,6 +64,31 @@ class TestPytestSourceApp:
                 assert 'Sorry, that is not a recognized codename.' in text
                 assert 'logged_in' not in session
 
+    def _find_codename(self, html):
+        """Find a source codename (diceware passphrase) in HTML"""
+        # Codenames may contain HTML escape characters, and the wordlist
+        # contains various symbols.
+        codename_re = (r'<p [^>]*id="codename"[^>]*>'
+                       r'(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>')
+        codename_match = re.search(codename_re, html)
+        assert codename_match is not None
+        return codename_match.group('codename')
+
+    def test_generate(self, source_app):
+        with source_app.test_client() as app:
+            resp = app.get('/generate')
+            assert resp.status_code == 200
+            session_codename = session['codename']
+
+        text = resp.data.decode('utf-8')
+        assert "This codename is what you will use in future visits" in text
+
+        codename = self._find_codename(resp.data)
+        assert len(codename.split()) == Source.NUM_WORDS
+        # codename is also stored in the session - make sure it matches the
+        # codename displayed to the source
+        assert codename == escape(session_codename)
+
 
 class TestSourceApp(TestCase):
 
@@ -75,29 +100,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def _find_codename(self, html):
-        """Find a source codename (diceware passphrase) in HTML"""
-        # Codenames may contain HTML escape characters, and the wordlist
-        # contains various symbols.
-        codename_re = (r'<p [^>]*id="codename"[^>]*>'
-                       r'(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>')
-        codename_match = re.search(codename_re, html)
-        self.assertIsNotNone(codename_match)
-        return codename_match.group('codename')
-
-    def test_generate(self):
-        with self.client as c:
-            resp = c.get('/generate')
-            self.assertEqual(resp.status_code, 200)
-            session_codename = session['codename']
-        self.assertIn("This codename is what you will use in future visits",
-                      resp.data)
-        codename = self._find_codename(resp.data)
-        self.assertEqual(len(codename.split()), Source.NUM_WORDS)
-        # codename is also stored in the session - make sure it matches the
-        # codename displayed to the source
-        self.assertEqual(codename, escape(session_codename))
 
     def test_generate_already_logged_in(self):
         with self.client as client:
