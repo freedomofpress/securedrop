@@ -146,6 +146,20 @@ class TestPytestSourceApp:
                         in logger.call_args[0][0])
                 assert 'codename' not in session
 
+    def test_lookup(self, source_app):
+        """Test various elements on the /lookup page."""
+        with source_app.test_client() as app:
+            codename = new_codename(app, session)
+            resp = app.post('/login', data=dict(codename=codename),
+                            follow_redirects=True)
+            # redirects to /lookup
+            text = resp.data.decode('utf-8')
+            assert "public key" in text
+            # download the public key
+            resp = app.get('/journalist-key')
+            text = resp.data.decode('utf-8')
+            assert "BEGIN PGP PUBLIC KEY BLOCK" in text
+
 
 class TestSourceApp(TestCase):
 
@@ -157,18 +171,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_lookup(self):
-        """Test various elements on the /lookup page."""
-        with self.client as client:
-            codename = new_codename(client, session)
-            resp = client.post('login', data=dict(codename=codename),
-                               follow_redirects=True)
-            # redirects to /lookup
-            self.assertIn("public key", resp.data)
-            # download the public key
-            resp = client.get('journalist-key')
-            self.assertIn("BEGIN PGP PUBLIC KEY BLOCK", resp.data)
 
     def test_login_and_logout(self):
         resp = self.client.get('/login')
