@@ -64,7 +64,7 @@ Next you will install Tails onto the Virtual Hard Disk Image. Start the VM, boot
 to Tails, and enter an administration password and start Tails.
 
 .. note:: For all the instructions that follow, you will need to configure an
-          administrator password each time you boot Tails.
+          administration password each time you boot Tails.
 
 1. Copy the following patch and save it as ``installer.patch`` in a folder in
    your Tails VM:
