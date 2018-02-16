@@ -112,6 +112,23 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "Submit Materials" in text
 
+    def test_generate_too_long_codename(self, source_app):
+        """Generate a codename that exceeds the maximum codename length"""
+
+        with patch.object(source_app.logger, 'warning') as logger:
+            with patch.object(crypto_util.CryptoUtil, 'genrandomid',
+                              side_effect=[overly_long_codename,
+                                           'short codename']):
+                with source_app.test_client() as app:
+                    resp = app.post('/generate')
+                    assert resp.status_code == 200
+
+        logger.assert_called_with(
+            "Generated a source codename that was too long, "
+            "skipping it. This should not happen. "
+            "(Codename='{}')".format(overly_long_codename)
+        )
+
 
 class TestSourceApp(TestCase):
 
@@ -123,22 +140,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    @patch('source.app.logger.warning')
-    @patch('crypto_util.CryptoUtil.genrandomid',
-           side_effect=[overly_long_codename, 'short codename'])
-    def test_generate_too_long_codename(self, genrandomid, logger):
-        """Generate a codename that exceeds the maximum codename length"""
-
-        with self.client as c:
-            resp = c.post('/generate')
-            self.assertEqual(resp.status_code, 200)
-
-        logger.assert_called_with(
-            "Generated a source codename that was too long, "
-            "skipping it. This should not happen. "
-            "(Codename='{}')".format(overly_long_codename)
-        )
 
     @patch('source.app.logger.error')
     def test_create_duplicate_codename(self, logger):
