@@ -129,6 +129,23 @@ class TestPytestSourceApp:
             "(Codename='{}')".format(overly_long_codename)
         )
 
+    def test_create_duplicate_codename(self, source_app):
+        with patch.object(source.app.logger, 'error') as logger:
+            with source_app.test_client() as app:
+                resp = app.get('/generate')
+                assert resp.status_code == 200
+
+                # Create a source the first time
+                resp = app.post('/create', follow_redirects=True)
+                assert resp.status_code == 200
+
+                # Attempt to add the same source
+                app.post('/create', follow_redirects=True)
+                logger.assert_called_once()
+                assert ("Attempt to create a source with duplicate codename"
+                        in logger.call_args[0][0])
+                assert 'codename' not in session
+
 
 class TestSourceApp(TestCase):
 
@@ -140,21 +157,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    @patch('source.app.logger.error')
-    def test_create_duplicate_codename(self, logger):
-        with self.client as c:
-            c.get('/generate')
-
-            # Create a source the first time
-            c.post('/create', follow_redirects=True)
-
-            # Attempt to add the same source
-            c.post('/create', follow_redirects=True)
-            logger.assert_called_once()
-            self.assertIn("Attempt to create a source with duplicate codename",
-                          logger.call_args[0][0])
-            assert 'codename' not in session
 
     def test_lookup(self):
         """Test various elements on the /lookup page."""
