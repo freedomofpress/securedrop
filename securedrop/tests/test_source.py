@@ -31,6 +31,15 @@ class TestPytestSourceApp:
                 assert resp.status_code == 404
                 ins.assert_template_used('notfound.html')
 
+    def test_index(self, source_app):
+        """Test that the landing page loads and looks how we expect"""
+        with source_app.test_client() as app:
+            resp = app.get('/')
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert 'Submit documents for the first time' in text
+            assert 'Already submitted something?' in text
+
 
 class TestSourceApp(TestCase):
 
@@ -42,13 +51,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_index(self):
-        """Test that the landing page loads and looks how we expect"""
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("Submit documents for the first time", response.data)
-        self.assertIn("Already submitted something?", response.data)
 
     def test_all_words_in_wordlist_validate(self):
         """Verify that all words in the wordlist are allowed by the form
