@@ -21,7 +21,7 @@ ci-go: ## Creates, provisions, tests, and destroys AWS EC2 hosts for testing sta
 
 .PHONY: ci-lint-image
 ci-lint-image: ## Builds linting container.
-	docker build $(EXTRA_BUILD_ARGS) -t securedrop-lint:${TAG} -f devops/docker/Dockerfile.linting .
+	docker build $(DOCKER_BUILD_ARGUMENTS) -t securedrop-lint:${TAG} -f devops/docker/Dockerfile.linting .
 
 .PHONY: ci-lint
 ci-lint: ## Runs linting in linting container.
@@ -48,7 +48,7 @@ docs-lint: ## Check documentation for common syntax errors.
 .PHONY: docs
 docs: ## Build project documentation in live reload for editing
 # Spins up livereload environment for editing; blocks.
-	make -C docs/ clean && sphinx-autobuild `[ $(PWD) = /vagrant ] && echo '--host 0.0.0.0'` docs/ docs/_build/html
+	make -C docs/ clean && sphinx-autobuild docs/ docs/_build/html
 
 .PHONY: flake8
 flake8: ## Validates PEP8 compliance for Python source files.

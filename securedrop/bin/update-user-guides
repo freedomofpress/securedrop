@@ -1,33 +1,17 @@
 #!/bin/bash
+# shellcheck disable=SC1090
 
-set -e
-export DISPLAY=:1
+set -eu
 
-function run_xvfb() {
-    Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset >& /tmp/xvfb.out || cat /tmp/xvfb.out
-}
-
-function run_redis() {
-    redis-server >& /tmp/redis.out || cat /tmp/redis.out
-}
-
-function run_x11vnc() {
-    x11vnc -display :1 -autoport 5901 -shared >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
-}
+source "${BASH_SOURCE%/*}/dev-deps"
 
 run_xvfb &
 run_redis &
 run_x11vnc &
+urandom
+run_sass
+maybe_create_config_py
 
-sudo rm /dev/random
-sudo ln -s /dev/urandom /dev/random
-
-if ! test -f config.py ; then
-    trap "rm config.py" EXIT
-    make test-config
-fi
-
-sass --force --stop-on-error --update sass:static/css --style compressed
-
+./manage.py translate-messages --compile
 pytest -v tests/pages-layout --page-layout
 cp tests/pages-layout/screenshots/en_US/*.png ../docs/images/manual/screenshots

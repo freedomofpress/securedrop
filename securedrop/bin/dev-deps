@@ -1,8 +1,46 @@
 #!/bin/bash
-# This script prepares a shell environment to run securedrop.
+
 export DISPLAY=:1
-rm /dev/random
-ln -s /dev/urandom /dev/random
-Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset >> /tmp/securedrop-xvfb.log 2>&1 &
-x11vnc -q -display :1 -autoport 5901 -shared >> /tmp/securedrop-x11vnc.log 2>&1 &
-redis-server >> /tmp/securedrop-redis.log 2>&1 &
+
+function run_xvfb() {
+    setsid Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset >& /tmp/xvfb.out || cat /tmp/xvfb.out
+}
+
+function run_redis() {
+    setsid redis-server >& /tmp/redis.out || cat /tmp/redis.out
+}
+
+function run_x11vnc() {
+    setsid x11vnc -display :1 -autoport 5901 -shared >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
+}
+
+function urandom() {
+    sudo rm /dev/random
+    sudo ln -s /dev/urandom /dev/random
+}
+
+function append_to_exit() {
+    local existing
+    existing="$(trap | sed -n "/EXIT\$/s/^trap -- '\(.*\)' EXIT/\1/p")"
+    trap "${existing:-true} ; $1" EXIT
+}
+
+function maybe_create_config_py() {
+    if ! test -f config.py ; then
+        append_to_exit "rm config.py"
+        make test-config
+    fi
+}
+
+function run_sass() {
+    sass --force --stop-on-error sass:static/css --style compressed "$@"
+}
+
+function reset_demo() {
+    sudo mkdir -p /var/lib/securedrop/store /var/lib/securedrop/keys
+    sudo chown -R "$(id -u)" /var/lib/securedrop
+    cp ./tests/files/test_journalist_key.pub /var/lib/securedrop/keys
+    gpg --homedir /var/lib/securedrop/keys --import /var/lib/securedrop/keys/test_journalist_key.pub >& /tmp/gpg.out || cat /tmp/gpg.out
+    ./manage.py reset
+    ./create-demo-user.py
+}
