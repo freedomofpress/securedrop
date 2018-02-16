@@ -40,6 +40,30 @@ class TestPytestSourceApp:
             assert 'Submit documents for the first time' in text
             assert 'Already submitted something?' in text
 
+    def test_all_words_in_wordlist_validate(self, source_app):
+        """Verify that all words in the wordlist are allowed by the form
+        validation. Otherwise a source will have a codename and be unable to
+        return."""
+
+        with source_app.app_context():
+            wordlist_en = current_app.crypto_util.get_wordlist('en')
+
+        # chunk the words to cut down on the number of requets we make
+        # otherwise this test is *slow*
+        chunks = [wordlist_en[i:i + 7] for i in range(0, len(wordlist_en), 7)]
+
+        with source_app.test_client() as app:
+            for words in chunks:
+                resp = app.post('/login', data=dict(codename=' '.join(words)),
+                                follow_redirects=True)
+                assert resp.status_code == 200
+                text = resp.data.decode('utf-8')
+                # If the word does not validate, then it will show
+                # 'Invalid input'. If it does validate, it should show that
+                # it isn't a recognized codename.
+                assert 'Sorry, that is not a recognized codename.' in text
+                assert 'logged_in' not in session
+
 
 class TestSourceApp(TestCase):
 
@@ -51,29 +75,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_all_words_in_wordlist_validate(self):
-        """Verify that all words in the wordlist are allowed by the form
-        validation. Otherwise a source will have a codename and be unable to
-        return."""
-
-        wordlist_en = current_app.crypto_util.get_wordlist('en')
-
-        # chunk the words to cut down on the number of requets we make
-        # otherwise this test is *slow*
-        chunks = [wordlist_en[i:i + 7] for i in range(0, len(wordlist_en), 7)]
-
-        for words in chunks:
-            with self.client as c:
-                resp = c.post('/login', data=dict(codename=' '.join(words)),
-                              follow_redirects=True)
-                self.assertEqual(resp.status_code, 200)
-                # If the word does not validate, then it will show
-                # 'Invalid input'. If it does validate, it should show that
-                # it isn't a recognized codename.
-                self.assertIn('Sorry, that is not a recognized codename.',
-                              resp.data)
-                self.assertNotIn('logged_in', session)
 
     def _find_codename(self, html):
         """Find a source codename (diceware passphrase) in HTML"""
