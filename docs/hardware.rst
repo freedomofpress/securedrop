@@ -95,12 +95,12 @@ Workstations
   <https://tails.boum.org/news/version_3.0/index.en.html#index3h3>`_.
 
 These components are necessary to do the initial installation of
-SecureDrop and to process submissions using the airgapped workflow.
+SecureDrop and to process submissions using the air-gapped workflow.
 
 Secure Viewing Station (SVS)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1 physical computer used as an airgap to decrypt and view submissions retrieved
+1 physical computer used as an air-gap to decrypt and view submissions retrieved
 from the *Application Server*.
 
 The chosen hardware should be solely used for this purpose and should have any
@@ -123,14 +123,14 @@ USB drive(s)
 ~~~~~~~~~~~~~~~~
 
 *At least 2* USB drives to use as a bootable Tails USB for the *SVS* and the
-**Admin Tails**/**Journalist Tails**.
+*Admin Workstation*/*Journalist Workstation*.
 
 If only one person is maintaining the system, you may use the same Tails
 instance as both the Admin Tails and the Journalist Tails; otherwise, we
 recommend buying 1 drive for each admin and each journalist.
 
 We also recommend buying two additional USBs to use as bootable backups of the
-*SVS* and **Admin Tails**.
+*SVS* and *Admin Workstation*.
 
 **Two-factor authenticator**: Two-factor authentication is used when connecting
 to different parts of the SecureDrop system. Each admin and each journalist
@@ -146,7 +146,7 @@ two-factor authentication:
 .. include:: includes/otp-app.txt
 
 **Transfer Device(s)**: You need a mechanism to transfer encrypted submissions
-from the **Journalist Workstation** to the *SVS* to decrypt and view them. The
+from the *Journalist Workstation* to the *SVS* to decrypt and view them. The
 most common transfer devices are DVD/CD-R discs and USB drives.
 
 From a security perspective, it is preferable to use write-once media such as
@@ -192,7 +192,7 @@ Offline Printer
 It is often useful to print submissions from the *Secure Viewing Station* for
 review and annotation.
 
-.. warning:: To maintain the integrity of the airgap, this printer should be
+.. warning:: To maintain the integrity of the air-gap, this printer should be
              dedicated to use with the *Secure Viewing Station*, connected via
              a wired connection, and should not have any wireless communication
              capabilities.
@@ -409,7 +409,7 @@ these components if they are already present.
 One option is to buy a Linux-compatible laptop such as a
 `Lenovo ThinkPad <http://www3.lenovo.com/us/en/laptops/thinkpad/thinkpad-t-series/c/thinkpadt>`__;
 we've tested the T420 and successfully removed the wireless components with ease.
-It's possible to repurpose old laptops from other manufacturers, as long as the
+It's possible to re-purpose old laptops from other manufacturers, as long as the
 wireless components are removable.
 
 Just as with the servers, you can also use an Intel NUC for the *SVS*. As noted
@@ -453,8 +453,8 @@ accordingly. Drives that are physically larger are often easier to label
 (e.g. with tape, printed sticker or a label from a labelmaker).
 
 If you are using DVD/CD-R's for the transfer device, you will need *two*
-DVD/CD writers: one for burning DVDs from the **Journalist
-Workstation**, and one for reading the burned DVDs on the *SVS*. We
+DVD/CD writers: one for burning DVDs from the *Journalist
+Workstation*, and one for reading the burned DVDs on the *SVS*. We
 recommend using two separate drives instead of sharing the same drive to
 avoid the potential risk of malware exfiltrating data by compromising
 the drive's firmware. We've found the DVD/CD writers from Samsung and LG
@@ -485,12 +485,12 @@ Printers
 Careful consideration should be given to the printer used with the *SVS*.
 Most printers today have wireless functionality (WiFi or Bluetooth
 connectivity) which should be **avoided** because it could be used to
-compromise the airgap.
+compromise the air-gap.
 
 Unfortunately, it is difficult to find printers that work with Tails,
 and it is increasingly difficult to find non-wireless printers at all.
 To assist you, we have compiled the following partial list of
-airgap-safe printers that have been tested and are known to work with
+air-gap-safe printers that have been tested and are known to work with
 Tails:
 
 +-------------------------+--------------+----------------+--------------------+

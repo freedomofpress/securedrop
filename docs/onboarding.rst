@@ -11,7 +11,7 @@ In order to use SecureDrop, each journalist needs two things:
 
 1. A *Journalist Tails USB*.
 
-     The Journalist Interface is only accessible as an authenticated Tor
+     The Journalist Interface is only accessible as an Authenticated Tor
      Hidden Service (ATHS). For ease of configuration and security, we
      require journalists to set up a Tails USB with persistence that
      they are required to use to access the Journalist Interface.

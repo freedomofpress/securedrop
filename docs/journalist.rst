@@ -49,7 +49,7 @@ help provide you with a Tails drive.
 
 Each journalist has an authenticated Tor hidden service URL for
 logging in to the *Journalist Interface*. This must be done using the
-Tails operating system. Click the **Journalist Interface** icon on the
+Tails operating system. Click the *Journalist Interface* icon on the
 desktop. This will open Tor Browser to a ".onion" page. Log in with
 your username, passphrase, and two-factor authentication token, as
 shown in the first screenshot below. (See :doc:`Using YubiKey with the

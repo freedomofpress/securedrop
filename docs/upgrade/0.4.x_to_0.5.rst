@@ -4,7 +4,7 @@ Upgrade from 0.4.x to 0.5.x
 .. note::
    First follow the instructions in the 0.3 to 0.4
    :doc:`migration document <0.3.x_to_0.4>`
-   if you have not yet updated your **Admin Workstation** to 0.4.
+   if you have not yet updated your *Admin Workstation* to 0.4.
 
 Beginning with SecureDrop 0.5, the source and journalist interfaces
 are localized. After an unattended upgrade of the application server,
@@ -14,7 +14,7 @@ these translations are available but are not activated by default.
    See the :doc:`installation documenation <../install>` for a list
    of supported languages.
 
-The steps below should be performed on the **Admin Workstation**
+The steps below should be performed on the *Admin Workstation*
 associated with your SecureDrop instance.
 
 Pull the latest release
