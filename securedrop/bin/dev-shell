@@ -65,6 +65,7 @@ function docker_image() {
 }
 
 function docker_run() {
+    find . \( -name '*.pyc' -o -name __pycache__ \) -delete
     docker run \
 	   --rm \
 	   --user "${USER:-root}" \
