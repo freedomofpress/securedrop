@@ -62,7 +62,7 @@ a printer, which will show the following:
 
 |add printer|
 
-Click "Add a Printer". By doing so, you'll now get a list of printers that Tails
+Click **Add a Printer**. By doing so, you'll now get a list of printers that Tails
 has auto-detected. You should now see this:
 
 |select printer to add|
