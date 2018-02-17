@@ -301,7 +301,7 @@ class SiteConfig(object):
         for desc in self.desc:
             (var, default, type, prompt, validator, transform) = desc
             config[var] = self.user_prompt_config_one(desc,
-                                                      self_config.get(var))
+                                                      self.config.get(var))
         return config
 
     def user_prompt_config_one(self, desc, from_config):
