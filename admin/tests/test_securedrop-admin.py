@@ -326,7 +326,7 @@ class TestSiteConfig(object):
         site_config = securedrop_admin.SiteConfig(args)
         with mock.patch('securedrop_admin.SiteConfig.update_config'):
             site_config.load_and_update_config()
-            assert site_config.config is not None
+            assert site_config.config != {}
 
         args = argparse.Namespace(
             site_config='tests/files/site-specific-missing-entries',
@@ -335,7 +335,7 @@ class TestSiteConfig(object):
         site_config = securedrop_admin.SiteConfig(args)
         with mock.patch('securedrop_admin.SiteConfig.update_config'):
             site_config.load_and_update_config()
-            assert site_config.config is not None
+            assert site_config.config != {}
 
         args = argparse.Namespace(site_config='UNKNOWN',
                                   ansible_path='tests/files',
@@ -343,7 +343,7 @@ class TestSiteConfig(object):
         site_config = securedrop_admin.SiteConfig(args)
         with mock.patch('securedrop_admin.SiteConfig.update_config'):
             site_config.load_and_update_config()
-            assert site_config.config is None
+            assert site_config.config == {}
 
     def get_desc(self, site_config, var):
         for desc in site_config.desc:
