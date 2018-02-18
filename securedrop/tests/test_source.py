@@ -15,6 +15,7 @@ import version
 
 from db import db
 from models import Source
+from source_app import main as source_app_main
 from utils.db_helper import new_codename
 from utils.instrument import InstrumentedApp
 
@@ -327,6 +328,22 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "Thanks! We received your message and document" in text
 
+    def test_submit_message_with_low_entropy(self, source_app):
+        with patch.object(source_app_main, 'async_genkey') as async_genkey:
+            with patch.object(source_app_main, 'get_entropy_estimate') \
+                    as get_entropy_estimate:
+                get_entropy_estimate.return_value = 300
+
+                with source_app.test_client() as app:
+                    new_codename(app, session)
+                    self._dummy_submission(app)
+                    resp = app.post('/submit', data=dict(
+                        msg="This is a test.",
+                        fh=(StringIO(''), ''),
+                    ), follow_redirects=True)
+                    assert resp.status_code == 200
+                    assert not async_genkey.called
+
 
 class TestSourceApp(TestCase):
 
@@ -349,22 +366,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    @patch('source_app.main.async_genkey')
-    @patch('source_app.main.get_entropy_estimate')
-    def test_submit_message_with_low_entropy(self, get_entropy_estimate,
-                                             async_genkey):
-        get_entropy_estimate.return_value = 300
-
-        with self.client as client:
-            new_codename(client, session)
-            self._dummy_submission(client)
-            resp = client.post('/submit', data=dict(
-                msg="This is a test.",
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertFalse(async_genkey.called)
 
     @patch('source_app.main.async_genkey')
     @patch('source_app.main.get_entropy_estimate')
