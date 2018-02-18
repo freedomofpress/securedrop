@@ -416,6 +416,13 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "You appear to be using Tor2Web." in text
 
+    def test_tor2web_warning(self, source_app):
+        with source_app.test_client() as app:
+            resp = app.get('/tor2web-warning')
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Why is there a warning about Tor2Web?" in text
+
 
 class TestSourceApp(TestCase):
 
@@ -438,11 +445,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    def test_tor2web_warning(self):
-        resp = self.client.get('/tor2web-warning')
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn("Why is there a warning about Tor2Web?", resp.data)
 
     def test_why_use_tor_browser(self):
         resp = self.client.get('/use-tor')
