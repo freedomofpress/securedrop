@@ -205,6 +205,38 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "Enter Codename" in text
 
+    def test_login_with_whitespace(self, source_app):
+        """
+        Test that codenames with leading or trailing whitespace still work"""
+
+        def login_test(app, codename):
+            resp = app.get('/login')
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Enter Codename" in text
+
+            resp = app.post('/login', data=dict(codename=codename),
+                            follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Submit Materials" in text
+            assert session['logged_in'] is True
+
+            resp = app.get('/logout', follow_redirects=True)
+
+        with source_app.test_client() as app:
+            codename = new_codename(app, session)
+
+        codenames = [
+            codename + ' ',
+            ' ' + codename + ' ',
+            ' ' + codename,
+        ]
+
+        for codename_ in codenames:
+            with source_app.test_client() as app:
+                login_test(app, codename_)
+
 
 class TestSourceApp(TestCase):
 
@@ -216,28 +248,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_login_with_whitespace(self):
-        """
-        Test that codenames with leading or trailing whitespace still work"""
-
-        with self.client as client:
-            def login_test(codename):
-                resp = client.get('/login')
-                self.assertEqual(resp.status_code, 200)
-                self.assertIn("Enter Codename", resp.data)
-
-                resp = client.post('/login', data=dict(codename=codename),
-                                   follow_redirects=True)
-                self.assertEqual(resp.status_code, 200)
-                self.assertIn("Submit Materials", resp.data)
-                self.assertTrue(session['logged_in'])
-                resp = client.get('/logout', follow_redirects=True)
-
-            codename = new_codename(client, session)
-            login_test(codename + ' ')
-            login_test(' ' + codename + ' ')
-            login_test(' ' + codename)
 
     def _dummy_submission(self, client):
         """
