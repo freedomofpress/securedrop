@@ -303,6 +303,18 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "Thanks! We received your message" in text
 
+    def test_submit_file(self, source_app):
+        with source_app.test_client() as app:
+            new_codename(app, session)
+            self._dummy_submission(app)
+            resp = app.post('/submit', data=dict(
+                msg="",
+                fh=(StringIO('This is a test'), 'test.txt'),
+            ), follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert 'Thanks! We received your document' in text
+
 
 class TestSourceApp(TestCase):
 
@@ -325,17 +337,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    def test_submit_file(self):
-        with self.client as client:
-            new_codename(client, session)
-            self._dummy_submission(client)
-            resp = client.post('/submit', data=dict(
-                msg="",
-                fh=(StringIO('This is a test'), 'test.txt'),
-            ), follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn('Thanks! We received your document', resp.data)
 
     def test_submit_both(self):
         with self.client as client:
