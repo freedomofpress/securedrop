@@ -409,6 +409,13 @@ class TestPytestSourceApp:
                                             mode=ANY,
                                             fileobj=ANY)
 
+    def test_tor2web_warning_headers(self, source_app):
+        with source_app.test_client() as app:
+            resp = app.get('/', headers=[('X-tor2web', 'encrypted')])
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "You appear to be using Tor2Web." in text
+
 
 class TestSourceApp(TestCase):
 
@@ -431,11 +438,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    def test_tor2web_warning_headers(self):
-        resp = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn("You appear to be using Tor2Web.", resp.data)
 
     def test_tor2web_warning(self):
         resp = self.client.get('/tor2web-warning')
