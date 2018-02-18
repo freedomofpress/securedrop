@@ -430,6 +430,13 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "You Should Use Tor Browser" in text
 
+    def test_why_journalist_key(self, source_app):
+        with source_app.test_client() as app:
+            resp = app.get('/why-journalist-key')
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Why download the journalist's public key?" in text
+
 
 class TestSourceApp(TestCase):
 
@@ -452,11 +459,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    def test_why_journalist_key(self):
-        resp = self.client.get('/why-journalist-key')
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn("Why download the journalist's public key?", resp.data)
 
     def test_metadata_route(self):
         resp = self.client.get('/metadata')
