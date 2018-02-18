@@ -237,6 +237,31 @@ class TestPytestSourceApp:
             with source_app.test_client() as app:
                 login_test(app, codename_)
 
+    @staticmethod
+    def _dummy_submission(app):
+        """
+        Helper to make a submission (content unimportant), mostly useful in
+        testing notification behavior for a source's first vs. their
+        subsequent submissions
+        """
+        return app.post('/submit', data=dict(
+            msg="Pay no attention to the man behind the curtain.",
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
+
+    def test_initial_submission_notification(self, source_app):
+        """
+        Regardless of the type of submission (message, file, or both), the
+        first submission is always greeted with a notification
+        reminding sources to check back later for replies.
+        """
+        with source_app.test_client() as app:
+            new_codename(app, session)
+            resp = self._dummy_submission(app)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Thank you for sending this information to us." in text
+
 
 class TestSourceApp(TestCase):
 
@@ -259,20 +284,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    def test_initial_submission_notification(self):
-        """
-        Regardless of the type of submission (message, file, or both), the
-        first submission is always greeted with a notification
-        reminding sources to check back later for replies.
-        """
-        with self.client as client:
-            new_codename(client, session)
-            resp = self._dummy_submission(client)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn(
-                "Thank you for sending this information to us.",
-                resp.data)
 
     def test_submit_message(self):
         with self.client as client:
