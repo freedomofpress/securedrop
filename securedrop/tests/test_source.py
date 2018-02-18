@@ -160,6 +160,44 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "BEGIN PGP PUBLIC KEY BLOCK" in text
 
+    def test_login_and_logout(self, source_app):
+        with source_app.test_client() as app:
+            resp = app.get('/login')
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Enter Codename" in text
+
+            codename = new_codename(app, session)
+            resp = app.post('/login', data=dict(codename=codename),
+                            follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Submit Materials" in text
+            assert session['logged_in'] is True
+
+            resp = app.get('/logout', follow_redirects=True)
+            assert resp.status_code == 200
+
+        with source_app.test_client() as app:
+            resp = app.post('/login', data=dict(codename='invalid'),
+                            follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert 'Sorry, that is not a recognized codename.' in text
+            assert 'logged_in' not in session
+
+        with source_app.test_client() as app:
+            resp = app.post('/login', data=dict(codename=codename),
+                            follow_redirects=True)
+            assert resp.status_code == 200
+            assert session['logged_in'] is True
+
+            resp = app.get('/logout', follow_redirects=True)
+            assert 'logged_in' not in session
+            assert 'codename' not in session
+            text = resp.data.decode('utf-8')
+            assert 'Thank you for exiting your session!' in text
+
 
 class TestSourceApp(TestCase):
 
@@ -171,43 +209,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_login_and_logout(self):
-        resp = self.client.get('/login')
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn("Enter Codename", resp.data)
-
-        with self.client as client:
-            codename = new_codename(client, session)
-            resp = client.post('/login', data=dict(codename=codename),
-                               follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("Submit Materials", resp.data)
-            self.assertTrue(session['logged_in'])
-            resp = client.get('/logout', follow_redirects=True)
-
-        with self.client as c:
-            resp = c.post('/login', data=dict(codename='invalid'),
-                          follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn('Sorry, that is not a recognized codename.',
-                          resp.data)
-            self.assertNotIn('logged_in', session)
-
-        with self.client as c:
-            resp = c.post('/login', data=dict(codename=codename),
-                          follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertTrue(session['logged_in'])
-            resp = c.get('/logout', follow_redirects=True)
-
-            # sessions always have 'expires', so pop it for the next check
-            session.pop('expires', None)
-
-            self.assertNotIn('logged_in', session)
-            self.assertNotIn('codename', session)
-
-            self.assertIn('Thank you for exiting your session!', resp.data)
 
     def test_user_must_log_in_for_protected_views(self):
         with self.client as c:
