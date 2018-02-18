@@ -445,6 +445,22 @@ class TestPytestSourceApp:
             assert json.loads(resp.data.decode('utf-8')).get('sd_version') \
                 == version.__version__
 
+    def test_login_with_overly_long_codename(self, source_app):
+        """Attempting to login with an overly long codename should result in
+        an error, and scrypt should not be called to avoid DoS."""
+        with patch.object(crypto_util.CryptoUtil, 'hash_codename') \
+                as mock_hash_codename:
+            with source_app.test_client() as app:
+                resp = app.post('/login',
+                                data=dict(codename=overly_long_codename),
+                                follow_redirects=True)
+                assert resp.status_code == 200
+                text = resp.data.decode('utf-8')
+                assert ("Field must be between 1 and {} characters long."
+                        .format(Source.MAX_CODENAME_LEN)) in text
+                assert not mock_hash_codename.called, \
+                    "Called hash_codename for codename w/ invalid length"
+
 
 class TestSourceApp(TestCase):
 
@@ -467,21 +483,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    @patch('crypto_util.CryptoUtil.hash_codename')
-    def test_login_with_overly_long_codename(self, mock_hash_codename):
-        """Attempting to login with an overly long codename should result in
-        an error, and scrypt should not be called to avoid DoS."""
-        with self.client as c:
-            resp = c.post('/login', data=dict(codename=overly_long_codename),
-                          follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("Field must be between 1 and {} "
-                          "characters long.".format(Source.MAX_CODENAME_LEN),
-                          resp.data)
-            self.assertFalse(mock_hash_codename.called,
-                             "Called hash_codename for codename w/ invalid "
-                             "length")
 
     @patch('source.app.logger.warning')
     @patch('subprocess.call', return_value=1)
