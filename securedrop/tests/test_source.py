@@ -517,6 +517,19 @@ class TestPytestSourceApp:
                 "Found no Sources when one was expected: "
                 "No row was found for one()")
 
+    def test_login_with_invalid_codename(self, source_app):
+        """Logging in with a codename with invalid characters should return
+        an informative message to the user."""
+
+        invalid_codename = '[]'
+
+        with source_app.test_client() as app:
+            resp = app.post('/login', data=dict(codename=invalid_codename),
+                            follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Invalid input." in text
+
 
 class TestSourceApp(TestCase):
 
@@ -539,18 +552,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    def test_login_with_invalid_codename(self):
-        """Logging in with a codename with invalid characters should return
-        an informative message to the user."""
-
-        invalid_codename = '[]'
-
-        with self.client as c:
-            resp = c.post('/login', data=dict(codename=invalid_codename),
-                          follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("Invalid input.", resp.data)
 
     def _test_source_session_expiration(self):
         try:
