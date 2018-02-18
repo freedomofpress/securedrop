@@ -286,6 +286,23 @@ class TestPytestSourceApp:
             assert "You must enter a message or choose a file to submit." \
                 in text
 
+    def test_submit_big_message(self, source_app):
+        '''
+        When the message is larger than 512KB it's written to disk instead of
+        just residing in memory. Make sure the different return type of
+        SecureTemporaryFile is handled as well as BytesIO.
+        '''
+        with source_app.test_client() as app:
+            new_codename(app, session)
+            self._dummy_submission(app)
+            resp = app.post('/submit', data=dict(
+                msg="AA" * (1024 * 512),
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Thanks! We received your message" in text
+
 
 class TestSourceApp(TestCase):
 
@@ -308,22 +325,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    def test_submit_big_message(self):
-        '''
-        When the message is larger than 512KB it's written to disk instead of
-        just residing in memory. Make sure the different return type of
-        SecureTemporaryFile is handled as well as BytesIO.
-        '''
-        with self.client as client:
-            new_codename(client, session)
-            self._dummy_submission(client)
-            resp = client.post('/submit', data=dict(
-                msg="AA" * (1024 * 512),
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("Thanks! We received your message", resp.data)
 
     def test_submit_file(self):
         with self.client as client:
