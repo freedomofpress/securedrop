@@ -2,6 +2,7 @@
 import gzip
 import json
 import re
+import subprocess
 
 from cStringIO import StringIO
 from flask import session, escape, url_for, current_app
@@ -461,6 +462,30 @@ class TestPytestSourceApp:
                 assert not mock_hash_codename.called, \
                     "Called hash_codename for codename w/ invalid length"
 
+    def test_failed_normalize_timestamps_logs_warning(self, source_app):
+        """If a normalize timestamps event fails, the subprocess that calls
+        touch will fail and exit 1. When this happens, the submission should
+        still occur, but a warning should be logged (this will trigger an
+        OSSEC alert)."""
+
+        with patch.object(source_app.logger, 'warning') as logger:
+            with patch.object(subprocess, 'call', return_value=1):
+                with source_app.test_client() as app:
+                    new_codename(app, session)
+                    self._dummy_submission(app)
+                    resp = app.post('/submit', data=dict(
+                        msg="This is a test.",
+                        fh=(StringIO(''), ''),
+                    ), follow_redirects=True)
+                    assert resp.status_code == 200
+                    text = resp.data.decode('utf-8')
+                    assert "Thanks! We received your message" in text
+
+                    logger.assert_called_once_with(
+                        "Couldn't normalize submission "
+                        "timestamps (touch exited with 1)"
+                    )
+
 
 class TestSourceApp(TestCase):
 
@@ -483,29 +508,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    @patch('source.app.logger.warning')
-    @patch('subprocess.call', return_value=1)
-    def test_failed_normalize_timestamps_logs_warning(self, call, logger):
-        """If a normalize timestamps event fails, the subprocess that calls
-        touch will fail and exit 1. When this happens, the submission should
-        still occur, but a warning should be logged (this will trigger an
-        OSSEC alert)."""
-
-        with self.client as client:
-            new_codename(client, session)
-            self._dummy_submission(client)
-            resp = client.post('/submit', data=dict(
-                msg="This is a test.",
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("Thanks! We received your message", resp.data)
-
-            logger.assert_called_once_with(
-                "Couldn't normalize submission "
-                "timestamps (touch exited with 1)"
-            )
 
     @patch('source.app.logger.error')
     def test_source_is_deleted_while_logged_in(self, logger):
