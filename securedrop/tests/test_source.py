@@ -375,6 +375,23 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "All replies have been deleted" in text
 
+    def test_delete_all_replies_already_deleted(self, source_app):
+        with source_app.app_context():
+            journalist, _ = utils.db_helper.init_journalist()
+            source, codename = utils.db_helper.init_source()
+            # Note that we are creating the source and no replies
+
+        with source_app.test_client() as app:
+            with patch.object(source_app.logger, 'error') as logger:
+                resp = app.post('/login', data=dict(codename=codename),
+                                follow_redirects=True)
+                assert resp.status_code == 200
+                resp = app.post('/delete-all', follow_redirects=True)
+                assert resp.status_code == 200
+                logger.assert_called_once_with(
+                    "Found no replies when at least one was expected"
+                )
+
 
 class TestSourceApp(TestCase):
 
@@ -397,22 +414,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    @patch('source.app.logger.error')
-    def test_delete_all_replies_already_deleted(self, logger):
-        journalist, _ = utils.db_helper.init_journalist()
-        source, codename = utils.db_helper.init_source()
-        # Note that we are creating the source and no replies
-
-        with self.client as c:
-            resp = c.post('/login', data=dict(codename=codename),
-                          follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            resp = c.post('/delete-all', follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            logger.assert_called_once_with(
-                "Found no replies when at least one was expected"
-            )
 
     @patch('gzip.GzipFile', wraps=gzip.GzipFile)
     def test_submit_sanitizes_filename(self, gzipfile):
