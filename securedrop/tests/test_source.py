@@ -530,6 +530,27 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "Invalid input." in text
 
+    def test_source_session_expiration(self, config, source_app):
+        with source_app.test_client() as app:
+            codename = new_codename(app, session)
+
+            # set the expiration to ensure we trigger an expiration
+            config.SESSION_EXPIRATION_MINUTES = -1
+
+            resp = app.post('/login',
+                            data=dict(codename=codename),
+                            follow_redirects=True)
+            assert resp.status_code == 200
+            resp = app.get('/lookup', follow_redirects=True)
+
+            # check that the session was cleared (apart from 'expires'
+            # which is always present and 'csrf_token' which leaks no info)
+            session.pop('expires', None)
+            session.pop('csrf_token', None)
+            assert not session, session
+            text = resp.data.decode('utf-8')
+            assert 'Your session timed out due to inactivity' in text
+
 
 class TestSourceApp(TestCase):
 
@@ -552,39 +573,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    def _test_source_session_expiration(self):
-        try:
-            old_expiration = config.SESSION_EXPIRATION_MINUTES
-            has_session_expiration = True
-        except AttributeError:
-            has_session_expiration = False
-
-        try:
-            with self.client as client:
-                codename = new_codename(client, session)
-
-                # set the expiration to ensure we trigger an expiration
-                config.SESSION_EXPIRATION_MINUTES = -1
-
-                resp = client.post('/login',
-                                   data=dict(codename=codename),
-                                   follow_redirects=True)
-                assert resp.status_code == 200
-                resp = client.get('/lookup', follow_redirects=True)
-
-                # check that the session was cleared (apart from 'expires'
-                # which is always present and 'csrf_token' which leaks no info)
-                session.pop('expires', None)
-                session.pop('csrf_token', None)
-                assert not session, session
-                assert ('You have been logged out due to inactivity' in
-                        resp.data.decode('utf-8'))
-        finally:
-            if has_session_expiration:
-                config.SESSION_EXPIRATION_MINUTES = old_expiration
-            else:
-                del config.SESSION_EXPIRATION_MINUTES
 
     def test_csrf_error_page(self):
         old_enabled = self.app.config['WTF_CSRF_ENABLED']
