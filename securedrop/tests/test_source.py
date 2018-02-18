@@ -437,6 +437,14 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "Why download the journalist's public key?" in text
 
+    def test_metadata_route(self, source_app):
+        with source_app.test_client() as app:
+            resp = app.get('/metadata')
+            assert resp.status_code == 200
+            assert resp.headers.get('Content-Type') == 'application/json'
+            assert json.loads(resp.data.decode('utf-8')).get('sd_version') \
+                == version.__version__
+
 
 class TestSourceApp(TestCase):
 
@@ -459,13 +467,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    def test_metadata_route(self):
-        resp = self.client.get('/metadata')
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.headers.get('Content-Type'), 'application/json')
-        self.assertEqual(json.loads(resp.data.decode('utf-8')).get(
-            'sd_version'), version.__version__)
 
     @patch('crypto_util.CryptoUtil.hash_codename')
     def test_login_with_overly_long_codename(self, mock_hash_codename):
