@@ -274,6 +274,18 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert "Thanks! We received your message" in text
 
+    def test_submit_empty_message(self, source_app):
+        with source_app.test_client() as app:
+            new_codename(app, session)
+            resp = app.post('/submit', data=dict(
+                msg="",
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "You must enter a message or choose a file to submit." \
+                in text
+
 
 class TestSourceApp(TestCase):
 
@@ -296,17 +308,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    def test_submit_empty_message(self):
-        with self.client as client:
-            new_codename(client, session)
-            resp = client.post('/submit', data=dict(
-                msg="",
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
-            self.assertIn("You must enter a message or choose a file to "
-                          "submit.",
-                          resp.data)
 
     def test_submit_big_message(self):
         '''
