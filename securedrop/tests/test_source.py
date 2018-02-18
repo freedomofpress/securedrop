@@ -486,6 +486,37 @@ class TestPytestSourceApp:
                         "timestamps (touch exited with 1)"
                     )
 
+    def test_source_is_deleted_while_logged_in(self, source_app):
+        """If a source is deleted by a journalist when they are logged in,
+        a NoResultFound will occur. The source should be redirected to the
+        index when this happens, and a warning logged."""
+
+        with patch.object(source_app.logger, 'error') as logger:
+            with source_app.test_client() as app:
+                codename = new_codename(app, session)
+                resp = app.post('login', data=dict(codename=codename),
+                                follow_redirects=True)
+
+                # Now the journalist deletes the source
+                filesystem_id = source_app.crypto_util.hash_codename(codename)
+                source_app.crypto_util.delete_reply_keypair(filesystem_id)
+                source = Source.query.filter_by(
+                    filesystem_id=filesystem_id).one()
+                db.session.delete(source)
+                db.session.commit()
+
+                # Source attempts to continue to navigate
+                resp = app.post('/lookup', follow_redirects=True)
+                assert resp.status_code == 200
+                text = resp.data.decode('utf-8')
+                assert 'Submit documents for the first time' in text
+                assert 'logged_in' not in session
+                assert 'codename' not in session
+
+            logger.assert_called_once_with(
+                "Found no Sources when one was expected: "
+                "No row was found for one()")
+
 
 class TestSourceApp(TestCase):
 
@@ -508,35 +539,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    @patch('source.app.logger.error')
-    def test_source_is_deleted_while_logged_in(self, logger):
-        """If a source is deleted by a journalist when they are logged in,
-        a NoResultFound will occur. The source should be redirected to the
-        index when this happens, and a warning logged."""
-
-        with self.client as client:
-            codename = new_codename(client, session)
-            resp = client.post('login', data=dict(codename=codename),
-                               follow_redirects=True)
-
-            # Now the journalist deletes the source
-            filesystem_id = current_app.crypto_util.hash_codename(codename)
-            current_app.crypto_util.delete_reply_keypair(filesystem_id)
-            source = Source.query.filter_by(filesystem_id=filesystem_id).one()
-            db.session.delete(source)
-            db.session.commit()
-
-            # Source attempts to continue to navigate
-            resp = client.post('/lookup', follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn('Submit documents for the first time', resp.data)
-            self.assertNotIn('logged_in', session.keys())
-            self.assertNotIn('codename', session.keys())
-
-        logger.assert_called_once_with(
-            "Found no Sources when one was expected: "
-            "No row was found for one()")
 
     def test_login_with_invalid_codename(self):
         """Logging in with a codename with invalid characters should return
