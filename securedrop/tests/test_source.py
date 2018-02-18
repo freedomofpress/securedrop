@@ -392,6 +392,23 @@ class TestPytestSourceApp:
                     "Found no replies when at least one was expected"
                 )
 
+    def test_submit_sanitizes_filename(self, source_app):
+        """Test that upload file name is sanitized"""
+        insecure_filename = '../../bin/gpg'
+        sanitized_filename = 'bin_gpg'
+
+        with patch.object(gzip, 'GzipFile', wraps=gzip.GzipFile) as gzipfile:
+            with source_app.test_client() as app:
+                new_codename(app, session)
+                resp = app.post('/submit', data=dict(
+                    msg="",
+                    fh=(StringIO('This is a test'), insecure_filename),
+                ), follow_redirects=True)
+                assert resp.status_code == 200
+                gzipfile.assert_called_with(filename=sanitized_filename,
+                                            mode=ANY,
+                                            fileobj=ANY)
+
 
 class TestSourceApp(TestCase):
 
@@ -414,22 +431,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    @patch('gzip.GzipFile', wraps=gzip.GzipFile)
-    def test_submit_sanitizes_filename(self, gzipfile):
-        """Test that upload file name is sanitized"""
-        insecure_filename = '../../bin/gpg'
-        sanitized_filename = 'bin_gpg'
-
-        with self.client as client:
-            new_codename(client, session)
-            client.post('/submit', data=dict(
-                msg="",
-                fh=(StringIO('This is a test'), insecure_filename),
-            ), follow_redirects=True)
-            gzipfile.assert_called_with(filename=sanitized_filename,
-                                        mode=ANY,
-                                        fileobj=ANY)
 
     def test_tor2web_warning_headers(self):
         resp = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
