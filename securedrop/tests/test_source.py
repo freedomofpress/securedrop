@@ -344,6 +344,22 @@ class TestPytestSourceApp:
                     assert resp.status_code == 200
                     assert not async_genkey.called
 
+    def test_submit_message_with_enough_entropy(self, source_app):
+        with patch.object(source_app_main, 'async_genkey') as async_genkey:
+            with patch.object(source_app_main, 'get_entropy_estimate') \
+                    as get_entropy_estimate:
+                get_entropy_estimate.return_value = 2400
+
+                with source_app.test_client() as app:
+                    new_codename(app, session)
+                    self._dummy_submission(app)
+                    resp = app.post('/submit', data=dict(
+                        msg="This is a test.",
+                        fh=(StringIO(''), ''),
+                    ), follow_redirects=True)
+                    assert resp.status_code == 200
+                    assert async_genkey.called
+
 
 class TestSourceApp(TestCase):
 
@@ -366,22 +382,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    @patch('source_app.main.async_genkey')
-    @patch('source_app.main.get_entropy_estimate')
-    def test_submit_message_with_enough_entropy(self, get_entropy_estimate,
-                                                async_genkey):
-        get_entropy_estimate.return_value = 2400
-
-        with self.client as client:
-            new_codename(client, session)
-            self._dummy_submission(client)
-            resp = client.post('/submit', data=dict(
-                msg="This is a test.",
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertTrue(async_genkey.called)
 
     def test_delete_all_successfully_deletes_replies(self):
         journalist, _ = utils.db_helper.init_journalist()
