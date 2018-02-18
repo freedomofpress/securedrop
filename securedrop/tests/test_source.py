@@ -198,6 +198,13 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert 'Thank you for exiting your session!' in text
 
+    def test_user_must_log_in_for_protected_views(self, source_app):
+        with source_app.test_client() as app:
+            resp = app.get('/lookup', follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Enter Codename" in text
+
 
 class TestSourceApp(TestCase):
 
@@ -209,12 +216,6 @@ class TestSourceApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_user_must_log_in_for_protected_views(self):
-        with self.client as c:
-            resp = c.get('/lookup', follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("Enter Codename", resp.data)
 
     def test_login_with_whitespace(self):
         """
