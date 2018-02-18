@@ -360,6 +360,21 @@ class TestPytestSourceApp:
                     assert resp.status_code == 200
                     assert async_genkey.called
 
+    def test_delete_all_successfully_deletes_replies(self, source_app):
+        with source_app.app_context():
+            journalist, _ = utils.db_helper.init_journalist()
+            source, codename = utils.db_helper.init_source()
+            utils.db_helper.reply(journalist, source, 1)
+
+        with source_app.test_client() as app:
+            resp = app.post('/login', data=dict(codename=codename),
+                            follow_redirects=True)
+            assert resp.status_code == 200
+            resp = app.post('/delete-all', follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "All replies have been deleted" in text
+
 
 class TestSourceApp(TestCase):
 
@@ -382,18 +397,6 @@ class TestSourceApp(TestCase):
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-
-    def test_delete_all_successfully_deletes_replies(self):
-        journalist, _ = utils.db_helper.init_journalist()
-        source, codename = utils.db_helper.init_source()
-        utils.db_helper.reply(journalist, source, 1)
-        with self.client as c:
-            resp = c.post('/login', data=dict(codename=codename),
-                          follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            resp = c.post('/delete-all', follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("All replies have been deleted", resp.data)
 
     @patch('source.app.logger.error')
     def test_delete_all_replies_already_deleted(self, logger):
