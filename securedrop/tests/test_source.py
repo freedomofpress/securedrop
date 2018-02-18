@@ -5,8 +5,7 @@ import re
 import subprocess
 
 from cStringIO import StringIO
-from flask import session, escape, url_for, current_app
-from flask_testing import TestCase
+from flask import session, escape, current_app
 from mock import patch, ANY
 
 from sdconfig import config
@@ -551,40 +550,13 @@ class TestPytestSourceApp:
             text = resp.data.decode('utf-8')
             assert 'Your session timed out due to inactivity' in text
 
+    def test_csrf_error_page(self, config, source_app):
+        source_app.config['WTF_CSRF_ENABLED'] = True
+        with source_app.test_client() as app:
+            with InstrumentedApp(source_app) as ins:
+                resp = app.post('/create')
+                ins.assert_redirects(resp, '/')
 
-class TestSourceApp(TestCase):
-
-    def create_app(self):
-        return source.app
-
-    def setUp(self):
-        utils.env.setup()
-
-    def tearDown(self):
-        utils.env.teardown()
-
-    def _dummy_submission(self, client):
-        """
-        Helper to make a submission (content unimportant), mostly useful in
-        testing notification behavior for a source's first vs. their
-        subsequent submissions
-        """
-        return client.post('/submit', data=dict(
-            msg="Pay no attention to the man behind the curtain.",
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
-
-    def test_csrf_error_page(self):
-        old_enabled = self.app.config['WTF_CSRF_ENABLED']
-        self.app.config['WTF_CSRF_ENABLED'] = True
-
-        try:
-            with self.app.test_client() as app:
-                resp = app.post(url_for('main.create'))
-                self.assertRedirects(resp, url_for('main.index'))
-
-                resp = app.post(url_for('main.create'), follow_redirects=True)
-                self.assertIn('Your session timed out due to inactivity',
-                              resp.data)
-        finally:
-            self.app.config['WTF_CSRF_ENABLED'] = old_enabled
+            resp = app.post('/create', follow_redirects=True)
+            text = resp.data.decode('utf-8')
+            assert 'Your session timed out due to inactivity' in text
