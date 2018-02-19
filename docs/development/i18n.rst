@@ -2,23 +2,66 @@ Internationalization (i18n)
 ===========================
 
 The code, templates and JavaScript user visible strings must all be
-wrapped with `gettext`_ functions to be substituted at runtime with
-the equivalent localized string. These function names are used as
-markers to collect the strings to be translated and store them into
-the ``securedrop/translations/messages.pot`` file. For each language
+wrapped with `gettext`_ functions to be substituted with the
+equivalent localized string. For instance:
+
+.. code:: python
+
+     if not (msg or fh):
+       flash(gettext("You must enter a message or choose a file to submit."), "error")
+       return redirect(url_for('main.lookup'))
+
+The ``gettext`` function reads ``.mo`` files to find the translation
+for the string given in argument at runtime. It is used as a marker by
+`pybabel <http://babel.pocoo.org/>`__ or similar tools to collect the
+strings to be translated and store them into a `.pot
+<https://www.gnu.org/software/gettext/manual/gettext.html#index-files_002c-_002epot>`__
+file at ``securedrop/translations/messages.pot``. For instance:
+
+::
+
+    #: source_app/main.py:111
+    msgid "You must enter a message or choose a file to submit."
+    msgstr ""
+
+For each language
 to be translated, a directory is created such as
-``securedrop/translations/fr_FR`` and populated with files derived
-from ``securedrop/translations/messages.pot``, for translators to work
-with and for the `gettext`_ substitution at runtime.
+``securedrop/translations/fr_FR`` and populated
+with a `.po <https://www.gnu.org/software/gettext/manual/gettext.html#PO-Files>`__ file
+derived from ``securedrop/translations/messages.pot``, for translators to work
+with. For instance
+``securedrop/translations/fr_FR/LC_MESSAGES/messages.po`` is almost identical to
+``securedrop/translations/messages.pot`` except for the `msgstr`
+field which contains the translation:
+
+::
+
+    #: source_app/main.py:111
+    msgid "You must enter a message or choose a file to submit."
+    msgstr "Vous devez saisir un message ou sélectionner un fichier à envoyer."
+
+This file is compiled into an optimized binary form, the `.mo
+<https://www.gnu.org/software/gettext/manual/gettext.html#MO-Files>`__
+file used by the `gettext`_ function at runtime.
+
+The `Weblate`_ web application is used to translate strings and relies
+on the `gettext`_ format behind the scene. It owns the
+``securedrop/translations/messages.pot`` file and all other
+translation related files. The SecureDrop code is modified by sending
+a pull request but the translations are exclusively modified via
+`Weblate`_.
 
 The desktop icon are in the
 ``install_files/ansible-base/roles/tails-config/templates`` directory.
 Their labels are collected in the ``desktop.pot`` file and translated
 in the corresponding ``.po`` files in the same directory (``fr.po``,
-``de.po`` etc.)
+``de.po`` etc.). All translations are merged from the ``*.j2.in``
+files into the corresponding ``*.j2`` file and committed to the repository.
+They are then installed when configuring Tails with
+the ``tasks/create_desktop_shortcuts.yml`` tasks.
 
-The manage.py translate helper
-------------------------------
+The manage.py translate helpers
+-------------------------------
 
 The `pybabel`_ and `gettext`_ command line is wrapped into the
 ``manage.py translate-messages`` and ``manage.py translate-desktop``
@@ -28,38 +71,9 @@ run tests with fixtures and for packaging.
 Creating new translations
 -------------------------
 
-For the applications, a user with weblate admin rights must visit the
-`Weblate translation creation page`_ and add the desired languages.
-
-For the desktop, the translations must be suspended in `Weblate`_ to
-avoid conflicts.
-
-* Go to the `Weblate commit page for SecureDrop`_
-
-|Weblate commit Lock|
-
-* Click ``Lock``
-
-|Weblate commit Locked|
-
-Now new files must be created and pushed to weblate with:
-
-.. code:: sh
-
-    $ git clone -b i18n http://lab.securedrop.club/bot/securedrop
-    $ cd securedrop/install_files/ansible-base/roles/tails-config/templates
-    $ msginit --no-translator --locale ar --output ar.po --input desktop.pot
-    $ git add ar.po
-    $ git commit -m 'i18n: add ar.po' ar.po
-    $ git push
-
-Where ``ar`` is the name of the locale, exactly matching the name of
-the corresponding application translation.
-
-After pushing the new translation, make sure to unlock the translations.
-
-The list of supported languages in the SecureDrop :doc:`installation documentation <../install>`
-must be updated.
+A user with weblate admin rights must visit the
+`Weblate translation creation page`_ and the `Weblate desktop translation creation page`_
+to add the desired languages.
 
 Updating strings to be translated
 ---------------------------------
@@ -77,10 +91,10 @@ which wraps ``manage.py translate-messages`` and ``manage.py
 translate-desktop``.  The updated
 ``securedrop/translations/messages.pot`` and
 ``install_files/ansible-base/roles/tails-config/templates/desktop.pot``
-should then be reviewed and commited. Once merged in develop, the
-changes will be visible in the `Weblate`_ web interface used by
-translators because it watches the develop branch of the SecureDrop
-repository.
+should then be reviewed and committed.
+
+.. note:: The changes will only be visible in the `Weblate`_ web
+   interface used by translators after :ref:`merging_develop_into_the_weblate_fork`.
 
 Compiling translations
 ----------------------
@@ -121,6 +135,7 @@ with:
 .. code:: sh
 
      $ export PAGE_LAYOUT_LOCALES=en_US,fr_FR
+     $ ./manage.py --verbose translate-messages --compile
      $ pytest -v --page-layout tests/pages-layout
      ...
      ...TestJournalistLayout::test_col_no_documents[en_US] PASSED
@@ -182,6 +197,7 @@ Verify the translations are not broken:
 
       $ vagrant ssh development
       $ cd /vagrant/securedrop
+      $ ./manage.py --verbose translate-messages --compile
       $ PAGE_LAYOUT_LOCALES=$(echo $sm | tr ' ' ',') \
           pytest -v --page-layout tests/pages-layout
 
@@ -193,15 +209,16 @@ Go to https://github.com/freedomofpress/securedrop and propose a pull request.
           form when ``securedrop-admin tailsconfig`` is run because
           the development environment is not available.
 
+.. _merging_develop_into_the_weblate_fork:
+
 Merging develop into the weblate fork
 -------------------------------------
 
 `Weblate`_ works on a long standing fork of the `SecureDrop git
 repository`_ and is exclusively responsible for the content of the
-``*.pot`` and ``*.po`` files. It needs to merge the content of the
-``develop`` branch back into its ``i18n`` branch to be able to extract
-from the sources new strings to translate or existing strings that
-have been updated.
+``*.pot`` and ``*.po`` files. The content of the
+``develop`` branch must be merged into the ``i18n`` branch to extract
+new strings to translate or existing strings that were updated.
 
 The translations must be suspended in `Weblate`_ to avoid conflicts.
 
@@ -227,7 +244,7 @@ The ``develop`` branch can now be merged into ``i18n`` as follows:
 
 The ``manage.py`` command examines all the source files, looking for
 strings that need to be translated (i.e. gettext('translate me') etc.)
-and update the files used by Weblate, removing, updating and inserting
+and update the ``*.pot`` and ``*.po`` files, removing, updating and inserting
 strings to keep them in sync withe the sources. Carefully review the
 output of ``git diff``. Check ``messages.pot`` first for updated strings,
 looking for formatting problems. Then review the ``messages.po`` of one
@@ -245,7 +262,8 @@ with:
 * Go to the `Weblate commit page for SecureDrop`_ and verify the
   commit hash matches the last commit of the ``i18n`` branch. This must
   happen instantly after the branch is pushed because Weblate is
-  notified by GitLab via a webhook. If it is different, ask for help.
+  notified via a webhook. If it is different,
+  `ask for help <https://gitter.im/freedomofpress/securedrop>`__.
 
 |Weblate commit Unlock|
 
@@ -278,7 +296,7 @@ Translator credits
 ------------------
 
 Verify the names and emails look ok, otherwise add to `.mailmap
-<https://git-scm.com/docs/git-check-mailmap>`_ until it does:
+<https://git-scm.com/docs/git-check-mailmap>`__ until it does:
 
 .. code:: sh
 
@@ -359,6 +377,7 @@ Granting reviewer privileges in Weblate
 .. _`patch they contain is unique`: https://git-scm.com/docs/git-patch-id
 .. _`Weblate commit page for SecureDrop`: https://weblate.securedrop.club/projects/securedrop/securedrop/#repository
 .. _`Weblate translation creation page`: https://weblate.securedrop.club/new-lang/securedrop/securedrop/
+.. _`Weblate desktop translation creation page`: https://weblate.securedrop.club/new-lang/securedrop/desktop/
 
 .. |Weblate commit Lock| image:: ../images/weblate/admin-lock.png
 .. |Weblate commit Locked| image:: ../images/weblate/admin-locked.png
