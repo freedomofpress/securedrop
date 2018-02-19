@@ -27,13 +27,16 @@ ci-lint-image: ## Builds linting container.
 ci-lint: ## Runs linting in linting container.
 	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-lint:${TAG}
 
-.PHONY: ci-typelint-image
-ci-typelint-image: ## Builds type glinting container.
-	docker build $(EXTRA_BUILD_ARGS) -t securedrop-typelint:${TAG} -f devops/docker/Dockerfile.typeannotation .
+.PHONY: install-mypy
+install-mypy: ## pip install mypy in a dedicated python3 virtualenv
+	if [[ ! -d .python3/.venv ]] ; then \
+	  virtualenv --python=python3 .python3/.venv && \
+	  .python3/.venv/bin/pip3 install mypy ; \
+        fi
 
-.PHONY: ci-typelint
-ci-typelint: ## Runs type linting in container.
-	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-typelint:${TAG}
+.PHONY: typelint
+typelint: install-mypy ## Runs type linting
+	.python3/.venv/bin/mypy ./securedrop ./admin
 
 .PHONY: ansible-config-lint
 ansible-config-lint: ## Runs custom Ansible env linting tasks.

@@ -1,7 +1,8 @@
-FROM circleci/python:2
+FROM circleci/python:2-stretch
 
-# for pylint spell checking
-RUN sudo apt-get install -y enchant
+# enchant is for pylint spell checking
+# python3-dev is for mypy
+RUN sudo apt-get update && sudo apt-get install -y enchant python3-dev
 
 COPY securedrop/requirements securedrop/requirements
 RUN sudo pip install -r securedrop/requirements/develop-requirements.txt
@@ -15,4 +16,6 @@ RUN sudo pip install pyenchant==2.0.0
 WORKDIR /src
 COPY . /src
 
-CMD ["sudo", "make", "--keep-going", "lint"]
+RUN sudo make install-mypy
+
+CMD ["sudo", "make", "--keep-going", "lint", "typelint"]
