@@ -10,7 +10,7 @@ import zipfile
 from flask import current_app
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import config
+from sdconfig import config
 import journalist_app
 import utils
 

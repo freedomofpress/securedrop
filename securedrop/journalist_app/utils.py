@@ -16,6 +16,10 @@ from models import (get_one_or_else, Source, Journalist,
                     PasswordError, Submission)
 from rm import srm
 
+MYPY = False
+if MYPY:
+    from sdconfig import SDConfig  # noqa: F401
+
 
 def logged_in():
     # type: () -> bool
@@ -199,6 +203,7 @@ def col_delete(cols_selected):
 
 
 def make_password(config):
+    # type: (SDConfig) -> str
     while True:
         password = current_app.crypto_util.genrandomid(
             7,

@@ -7,7 +7,7 @@ import os
 from flask import session
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import config
+from sdconfig import SDConfig, config
 import i18n
 import journalist_app
 import manage
@@ -19,10 +19,7 @@ import version
 class TestTemplateFilters(object):
 
     def get_fake_config(self):
-        class Config:
-            def __getattr__(self, name):
-                return getattr(config, name)
-        return Config()
+        return SDConfig()
 
     def verify_rel_datetime_format(self, app):
         with app.test_client() as c:

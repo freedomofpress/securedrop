@@ -21,7 +21,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import config
+from sdconfig import config
 import journalist_app
 import source_app
 import tests.utils.env as env

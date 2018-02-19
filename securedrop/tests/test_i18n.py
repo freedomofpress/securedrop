@@ -27,7 +27,7 @@ from flask_babel import gettext
 from werkzeug.datastructures import Headers
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import config
+from sdconfig import SDConfig, config
 import i18n
 import journalist_app
 import manage
@@ -56,10 +56,7 @@ class TestI18N(unittest.TestCase):
         self.__context.pop()
 
     def get_fake_config(self):
-        class Config:
-            def __getattr__(self, name):
-                return getattr(config, name)
-        return Config()
+        return SDConfig()
 
     def test_get_supported_locales(self):
         locales = ['en_US', 'fr_FR']

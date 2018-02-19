@@ -5,7 +5,7 @@ import unittest
 from gnupg._util import _is_stream
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import config
+from sdconfig import config
 import journalist_app
 import secure_tempfile
 import utils

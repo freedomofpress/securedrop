@@ -9,7 +9,7 @@ import threading
 from os.path import abspath, dirname, isdir, join, realpath
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import config
+from sdconfig import config
 
 from db import db
 

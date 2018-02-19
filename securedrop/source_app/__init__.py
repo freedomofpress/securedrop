@@ -21,8 +21,13 @@ from source_app.decorators import ignore_static
 from source_app.utils import logged_in
 from store import Storage
 
+MYPY = False
+if MYPY:
+    from sdconfig import SDConfig  # noqa: F401
+
 
 def create_app(config):
+    # type: (SDConfig) -> Flask
     app = Flask(__name__,
                 template_folder=config.SOURCE_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
@@ -79,7 +84,7 @@ def create_app(config):
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals['version'] = version.__version__
-    if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
+    if config.CUSTOM_HEADER_IMAGE:
         app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
         app.jinja_env.globals['use_custom_header_image'] = True
     else:
@@ -92,7 +97,7 @@ def create_app(config):
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
     for module in [main, info, api]:
-        app.register_blueprint(module.make_blueprint(config))
+        app.register_blueprint(module.make_blueprint(config))  # type: ignore
 
     @app.before_request
     @ignore_static

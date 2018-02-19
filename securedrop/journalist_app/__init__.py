@@ -18,15 +18,21 @@ from journalist_app.utils import get_source, logged_in
 from models import Journalist
 from store import Storage
 
+MYPY = False
+if MYPY:
+    from sdconfig import SDConfig  # noqa: F401
+
 _insecure_views = ['main.login', 'static']
 
 
 def create_app(config):
+    # type: (SDConfig) -> Flask
     app = Flask(__name__,
                 template_folder=config.JOURNALIST_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
 
     app.config.from_object(config.JournalistInterfaceFlaskConfig)
+    app.sdconfig = config
 
     CSRFProtect(app)
     Environment(app)
@@ -74,7 +80,7 @@ def create_app(config):
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals['version'] = version.__version__
-    if hasattr(config, 'CUSTOM_HEADER_IMAGE'):
+    if config.CUSTOM_HEADER_IMAGE:
         app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
         app.jinja_env.globals['use_custom_header_image'] = True
     else:

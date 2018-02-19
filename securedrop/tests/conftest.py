@@ -10,7 +10,7 @@ import psutil
 import pytest
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import config
+from sdconfig import config
 
 # TODO: the PID file for the redis worker is hard-coded below.
 # Ideally this constant would be provided by a test harness.

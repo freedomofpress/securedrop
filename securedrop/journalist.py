@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import config
+from sdconfig import config
 
 from journalist_app import create_app
 

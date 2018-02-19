@@ -8,7 +8,7 @@ from flask import session, escape, url_for, current_app
 from flask_testing import TestCase
 from mock import patch, ANY
 
-import config
+from sdconfig import config
 import source
 import utils
 import version

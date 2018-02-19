@@ -21,7 +21,7 @@ from sqlalchemy import text
 from sqlalchemy.orm.exc import NoResultFound
 
 os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
-import config
+from sdconfig import config
 import journalist_app
 
 from db import db
