@@ -1,6 +1,11 @@
 .git
 .vagrant
+**/_build
+**/.mypy_cache
+**/.eggs
+**/.tox
 **/venv
+**/.venv
 
 **/__pycache__
 **/*.pyc
