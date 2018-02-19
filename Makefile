@@ -70,7 +70,7 @@ yamllint: ## Lints YAML files (does not validate syntax!)
 # Prune the `.venv/` dir if it exists, since it contains pip-installed files
 # and is not subject to our linting. Using grep to filter filepaths since
 # `-regextype=posix-extended` is not cross-platform.
-	@find "$(PWD)" -path "$(PWD)/.venv" -prune -o -type f \
+	@find "$(PWD)" -path "*/.venv" -prune -o -type f \
 		| grep -E '^.*\.ya?ml' | xargs yamllint -c "$(PWD)/.yamllint"
 
 .PHONY: shellcheck
@@ -81,7 +81,7 @@ shellcheck: ## Lints Bash and sh scripts.
 # and we have a separate issue dedicated to cleaning those up.
 	@docker create -v /mnt --name shellcheck-targets circleci/python:2 /bin/true 2> /dev/null || true
 	@docker cp $(PWD)/. shellcheck-targets:/mnt/
-	@find "." \( -path "./.venv" -o -path "./install_files/ossec-server" \
+	@find "." \( -path "*/.venv" -o -path "./install_files/ossec-server" \
 		-o -path "./install_files/ossec-agent" \) -prune \
 		-o -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
 		| perl -F: -lanE '$$F[1] =~ /x-shellscript/ and say $$F[0]' \
