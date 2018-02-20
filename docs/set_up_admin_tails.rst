@@ -53,9 +53,16 @@ Start by running the following commands to download the git repository.
 .. note:: Since the repository is fairly large and Tor can be slow,
 	  this may take a few minutes.
 
+.. caution:: Do not download SecureDrop Git repository as a Zip file,
+             or any other means. Only download by using the given git
+             command.
+
 
 Verify the Release Tag
 ~~~~~~~~~~~~~~~~~~~~~~
+
+.. caution:: Do not skip this step as this steps validates the files
+             in your Git repository.
 
 First, download and verify the **SecureDrop Release Signing Key**.
 
