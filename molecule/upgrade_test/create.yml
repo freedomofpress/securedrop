@@ -7,6 +7,7 @@
     molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | molecule_from_yaml }}"
   tasks:
+
     - name: Create molecule instance(s)
       molecule_vagrant:
         instance_name: "{{ item.name }}"

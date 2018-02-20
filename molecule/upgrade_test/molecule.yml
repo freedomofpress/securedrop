@@ -45,6 +45,8 @@ provisioner:
   config_options:
     ssh_connection:
       pipelining: True
+  playbooks:
+    side_effect: side_effect.yml
 
 scenario:
   name: upgrade_test
