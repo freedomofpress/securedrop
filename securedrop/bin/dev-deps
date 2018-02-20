@@ -33,7 +33,7 @@ function maybe_create_config_py() {
 }
 
 function run_sass() {
-    sass --force --stop-on-error sass:static/css --style compressed "$@"
+    sass --stop-on-error sass:static/css --style compressed "$@"
 }
 
 function reset_demo() {

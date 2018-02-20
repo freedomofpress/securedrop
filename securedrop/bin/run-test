@@ -8,7 +8,7 @@ source "${BASH_SOURCE%/*}/dev-deps"
 run_xvfb &
 run_redis &
 urandom
-run_sass --update
+run_sass --force --update
 maybe_create_config_py
 
 if [ -n "${CIRCLE_BRANCH:-}" ] ; then
