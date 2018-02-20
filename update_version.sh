@@ -63,12 +63,22 @@ dch -b -v "${NEW_VERSION}" -D trusty -c install_files/securedrop-app-code/usr/sh
 # Due to `set -e`, providing an empty commit message here will cause the script to abort early.
 git commit -a
 
-# Initiate the process of creating a signed tag, using the workflow for signing with the airgapped signing key.
-git tag -a "${NEW_VERSION}"
-TAGFILE="${NEW_VERSION}.tag"
-git cat-file tag "${NEW_VERSION}" > "${TAGFILE}"
-
-echo
 echo "[ok] Version update complete and committed."
-echo "     Please continue the airgapped signing process with the tag file: ${TAGFILE}"
-echo
+
+# We use the version string 0.x.y~rcz for the release candidate deb packages but
+# we use 0.x.y-rcz for the tags as "~" is an invalid character in a git tag.
+if [[ $NEW_VERSION == *~* ]]; then
+  # This is an rc and we should replace "~" with "-" in the tag version.
+  TAG_VERSION="${NEW_VERSION//\~/\-}"
+else
+  # This is a stable release.
+  TAG_VERSION="${NEW_VERSION}"
+fi
+
+git tag -a "${TAG_VERSION}"
+TAGFILE="${TAG_VERSION}.tag"
+git cat-file tag "${TAG_VERSION}" > "${TAGFILE}"
+echo "A tag has been generated: ${TAGFILE}"
+
+# Remind the developer that in order to create a signed tag for release, they must proceed with the airgapped signing process.
+echo "If you wish to release this version, please continue the airgapped signing process with the tag file."
