@@ -38,4 +38,5 @@ def add_test_user(username, password, otp_secret, is_admin=False):
 if __name__ == "__main__":  # pragma: no cover
     add_test_user("journalist",
                   "WEjwn8ZyczDhQSK24YKM8C9a",
-                  "JHCOGO7VCER3EJ4L")
+                  "JHCOGO7VCER3EJ4L",
+                  is_admin=True)
