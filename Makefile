@@ -25,15 +25,18 @@ ci-lint-image: ## Builds linting container.
 
 .PHONY: ci-lint
 ci-lint: ## Runs linting in linting container.
-	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-lint:${TAG}
+	devops/scripts/dev-shell-ci sudo make --keep-going lint typelint
 
-.PHONY: ci-typelint-image
-ci-typelint-image: ## Builds type glinting container.
-	docker build $(EXTRA_BUILD_ARGS) -t securedrop-typelint:${TAG} -f devops/docker/Dockerfile.typeannotation .
+.PHONY: install-mypy
+install-mypy: ## pip install mypy in a dedicated python3 virtualenv
+	if [[ ! -d .python3/.venv ]] ; then \
+	  virtualenv --python=python3 .python3/.venv && \
+	  .python3/.venv/bin/pip3 install mypy ; \
+        fi
 
-.PHONY: ci-typelint
-ci-typelint: ## Runs type linting in container.
-	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-typelint:${TAG}
+.PHONY: typelint
+typelint: install-mypy ## Runs type linting
+	.python3/.venv/bin/mypy ./securedrop ./admin
 
 .PHONY: ansible-config-lint
 ansible-config-lint: ## Runs custom Ansible env linting tasks.
@@ -70,7 +73,7 @@ yamllint: ## Lints YAML files (does not validate syntax!)
 # Prune the `.venv/` dir if it exists, since it contains pip-installed files
 # and is not subject to our linting. Using grep to filter filepaths since
 # `-regextype=posix-extended` is not cross-platform.
-	@find "$(PWD)" -path "$(PWD)/.venv" -prune -o -type f \
+	@find "$(PWD)" -path "*/.venv" -prune -o -type f \
 		| grep -E '^.*\.ya?ml' | xargs yamllint -c "$(PWD)/.yamllint"
 
 .PHONY: shellcheck
@@ -81,7 +84,7 @@ shellcheck: ## Lints Bash and sh scripts.
 # and we have a separate issue dedicated to cleaning those up.
 	@docker create -v /mnt --name shellcheck-targets circleci/python:2 /bin/true 2> /dev/null || true
 	@docker cp $(PWD)/. shellcheck-targets:/mnt/
-	@find "." \( -path "./.venv" -o -path "./install_files/ossec-server" \
+	@find "." \( -path "*/.venv" -o -path "./install_files/ossec-server" \
 		-o -path "./install_files/ossec-agent" \) -prune \
 		-o -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
 		| perl -F: -lanE '$$F[1] =~ /x-shellscript/ and say $$F[0]' \

@@ -1,36 +1,13 @@
 #!/bin/bash
-# shellcheck disable=SC2086
+# shellcheck disable=SC2086,SC1090
 # we ignore SC2086 because ${DOCKER_BUILD_ARGUMENTS:-} is intended to
 # be evaluated into multiple strings, not a single argument.
+# we ignore SC1090 because "source" is validated independently
 
 set -euo pipefail
 
 TOPLEVEL=$(git rev-parse --show-toplevel)
-
-function display_dots() {
-    echo -n "Docker image build in progress "
-    trap "echo ' done !' ; exit 0" USR1
-    trap "exit 0" USR2
-    while : ; do
-        sleep 5
-        echo -n .
-    done
-}
-
-function ticker() {
-    local pid
-    display_dots &
-    pid="$!"
-    if "$@" ; then
-        status=0
-        kill -USR1 $pid
-    else
-        status=1
-        kill -USR2 $pid
-    fi
-    wait
-    return $status
-}
+source "${BASH_SOURCE%/*}/../../devops/scripts/ticker"
 
 function docker_image_circle() {
     local out
