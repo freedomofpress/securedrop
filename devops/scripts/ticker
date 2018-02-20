@@ -1,0 +1,26 @@
+#!/bin/bash
+
+function display_dots() {
+    echo -n "Docker image build in progress "
+    trap "echo ' done !' ; exit 0" USR1
+    trap "exit 0" USR2
+    while : ; do
+        sleep 5
+        echo -n .
+    done
+}
+
+function ticker() {
+    local pid
+    display_dots &
+    pid="$!"
+    if "$@" ; then
+        status=0
+        kill -USR1 $pid
+    else
+        status=1
+        kill -USR2 $pid
+    fi
+    wait
+    return $status
+}
