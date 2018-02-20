@@ -14,8 +14,9 @@ RUN sudo pip install -r securedrop/requirements/develop-requirements.txt
 RUN sudo pip install pyenchant==2.0.0
 
 WORKDIR /src
-COPY . /src
 
+COPY Makefile /src/Makefile
 RUN sudo make install-mypy
 
+COPY . /src
 CMD ["sudo", "make", "--keep-going", "lint", "typelint"]
