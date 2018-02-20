@@ -25,7 +25,7 @@ ci-lint-image: ## Builds linting container.
 
 .PHONY: ci-lint
 ci-lint: ## Runs linting in linting container.
-	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-lint:${TAG}
+	devops/scripts/dev-shell-ci sudo make --keep-going lint typelint
 
 .PHONY: install-mypy
 install-mypy: ## pip install mypy in a dedicated python3 virtualenv

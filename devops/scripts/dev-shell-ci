@@ -1,0 +1,30 @@
+#!/bin/bash
+# shellcheck disable=SC1090
+# we ignore SC1090 because "source" is validated independently
+
+set -eu
+
+source "${BASH_SOURCE%/*}/ticker"
+
+TOPLEVEL=$(git rev-parse --show-toplevel)
+
+cd "${TOPLEVEL}"
+
+function docker_image() {
+    local out
+    out="$(mktemp)"
+    if ! make ci-lint-image >& "$out" ; then
+        cat "$out"
+        status=1
+    else
+        status=0
+    fi
+    return $status
+}
+
+function docker_run() {
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -ti securedrop-lint:"$(git rev-parse HEAD)" "$@"
+}
+
+ticker docker_image
+docker_run "$@"

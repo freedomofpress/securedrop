@@ -19,4 +19,3 @@ COPY Makefile /src/Makefile
 RUN sudo make install-mypy
 
 COPY . /src
-CMD ["sudo", "make", "--keep-going", "lint", "typelint"]
