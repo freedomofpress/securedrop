@@ -37,7 +37,7 @@ def test_index(source_app):
         resp = app.get('/')
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert 'Submit documents for the first time' in text
+        assert 'Submit for the first time' in text
         assert 'Already submitted something?' in text
 
 
@@ -115,7 +115,7 @@ def test_create_new_source(source_app):
         assert session['logged_in'] is True
         # should be redirected to /lookup
         text = resp.data.decode('utf-8')
-        assert "Submit Materials" in text
+        assert "Submit Files" in text
 
 
 def test_generate_too_long_codename(source_app):
@@ -181,7 +181,7 @@ def test_login_and_logout(source_app):
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Submit Materials" in text
+        assert "Submit Files" in text
         assert session['logged_in'] is True
 
     with source_app.test_client() as app:
@@ -232,7 +232,7 @@ def test_login_with_whitespace(source_app):
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Submit Materials" in text
+        assert "Submit Files" in text
         assert session['logged_in'] is True
 
     with source_app.test_client() as app:
@@ -537,7 +537,7 @@ def test_source_is_deleted_while_logged_in(source_app):
             resp = app.post('/lookup', follow_redirects=True)
             assert resp.status_code == 200
             text = resp.data.decode('utf-8')
-            assert 'Submit documents for the first time' in text
+            assert 'Submit for the first time' in text
             assert 'logged_in' not in session
             assert 'codename' not in session
 
