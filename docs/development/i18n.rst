@@ -182,6 +182,16 @@ to the ``develop`` branch via pull requests for merge on a regular basis.
       $ git commit -m 'sync with weblate' translations
       $ git push wip-i18n
 
+.. warning::
+
+   It is **very** important to carefully check each translated string
+   does not look strange. Even if the reviewer does not understand the
+   language, if a translated string looks strange, someone other than
+   the reviewer must be consulted to verify it means something. It is
+   extremely unlikely that a reviewer will manipulate a translated
+   string to introduce a vulnerability in SecureDrop. But it is easy to
+   check visually and significantly reduce the risk.
+
 List contributors for each supported language:
 
 .. code:: sh
