@@ -18,7 +18,7 @@
 #
 
 import argparse
-from os.path import dirname, join, basename
+from os.path import dirname, join, basename, exists
 import mock
 from prompt_toolkit.validation import ValidationError
 import pytest
@@ -301,6 +301,24 @@ class TestSiteConfig(object):
         mock_save.assert_called_once()
         mock_validate_input.assert_called()
 
+    @mock.patch('securedrop_admin.SiteConfig.validated_input',
+                side_effect=lambda p, d, v, t: d)
+    @mock.patch('securedrop_admin.SiteConfig.validate_gpg_keys')
+    def test_update_config_no_site_specific(
+            self,
+            validate_gpg_keys,
+            mock_validate_input,
+            tmpdir):
+        site_config_path = join(str(tmpdir), 'site_config')
+        args = argparse.Namespace(site_config=site_config_path,
+                                  ansible_path='.',
+                                  app_path=dirname(__file__))
+        site_config = securedrop_admin.SiteConfig(args)
+        assert site_config.load_and_update_config()
+        mock_validate_input.assert_called()
+        validate_gpg_keys.assert_called_once()
+        assert exists(site_config_path)
+
     def test_load_and_update_config(self):
         args = argparse.Namespace(site_config='tests/files/site-specific',
                                   ansible_path='tests/files',
@@ -308,7 +326,7 @@ class TestSiteConfig(object):
         site_config = securedrop_admin.SiteConfig(args)
         with mock.patch('securedrop_admin.SiteConfig.update_config'):
             site_config.load_and_update_config()
-            assert site_config.config is not None
+            assert site_config.config != {}
 
         args = argparse.Namespace(
             site_config='tests/files/site-specific-missing-entries',
@@ -317,7 +335,7 @@ class TestSiteConfig(object):
         site_config = securedrop_admin.SiteConfig(args)
         with mock.patch('securedrop_admin.SiteConfig.update_config'):
             site_config.load_and_update_config()
-            assert site_config.config is not None
+            assert site_config.config != {}
 
         args = argparse.Namespace(site_config='UNKNOWN',
                                   ansible_path='tests/files',
@@ -325,7 +343,7 @@ class TestSiteConfig(object):
         site_config = securedrop_admin.SiteConfig(args)
         with mock.patch('securedrop_admin.SiteConfig.update_config'):
             site_config.load_and_update_config()
-            assert site_config.config is None
+            assert site_config.config == {}
 
     def get_desc(self, site_config, var):
         for desc in site_config.desc:

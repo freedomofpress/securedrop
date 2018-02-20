@@ -287,7 +287,7 @@ class SiteConfig(object):
         if self.exists():
             self.config = self.load()
         else:
-            self.config = None
+            self.config = {}
         return self.update_config()
 
     def update_config(self):
@@ -298,11 +298,10 @@ class SiteConfig(object):
 
     def user_prompt_config(self):
         config = {}
-        self_config = self.config or {}
         for desc in self.desc:
             (var, default, type, prompt, validator, transform) = desc
             config[var] = self.user_prompt_config_one(desc,
-                                                      self_config.get(var))
+                                                      self.config.get(var))
         return config
 
     def user_prompt_config_one(self, desc, from_config):
