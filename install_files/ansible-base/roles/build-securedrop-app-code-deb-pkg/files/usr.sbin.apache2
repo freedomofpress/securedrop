@@ -173,6 +173,8 @@
   /var/www/securedrop/secure_tempfile.pyc rw,
   /var/www/securedrop/i18n.py r,
   /var/www/securedrop/i18n.pyc rw,
+  /var/www/securedrop/sdconfig.py r,
+  /var/www/securedrop/sdconfig.pyc rw,
   /var/www/securedrop/source.py r,
   /var/www/securedrop/source.pyc rw,
   /var/www/securedrop/source_app/__init__.py r,

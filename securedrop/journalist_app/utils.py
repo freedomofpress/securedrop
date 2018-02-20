@@ -16,8 +16,13 @@ from models import (get_one_or_else, Source, Journalist,
                     PasswordError, Submission)
 from rm import srm
 
-MYPY = False
-if MYPY:
+import typing
+# https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
+if typing.TYPE_CHECKING:
+    # flake8 can not understand type annotation yet.
+    # That is why all type annotation realted import
+    # statements has to be marked as noqa.
+    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from sdconfig import SDConfig  # noqa: F401
 
 

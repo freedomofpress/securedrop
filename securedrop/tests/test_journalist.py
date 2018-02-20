@@ -1175,7 +1175,7 @@ class TestJournalistApp(TestCase):
 
     def test_journalist_session_expiration(self):
         try:
-            old_expiration = self.app.sdconfig.SESSION_EXPIRATION_MINUTES
+            old_expiration = config.SESSION_EXPIRATION_MINUTES
             has_session_expiration = True
         except AttributeError:
             has_session_expiration = False
@@ -1183,7 +1183,7 @@ class TestJournalistApp(TestCase):
         try:
             with self.client as client:
                 # set the expiration to ensure we trigger an expiration
-                self.app.sdconfig.SESSION_EXPIRATION_MINUTES = -1
+                config.SESSION_EXPIRATION_MINUTES = -1
 
                 # do a real login to get a real session
                 # (none of the mocking `g` hacks)
@@ -1206,7 +1206,9 @@ class TestJournalistApp(TestCase):
                         resp.data.decode('utf-8'))
         finally:
             if has_session_expiration:
-                self.app.sdconfig.SESSION_EXPIRATION_MINUTES = old_expiration
+                config.SESSION_EXPIRATION_MINUTES = old_expiration
+            else:
+                del config.SESSION_EXPIRATION_MINUTES
 
     def test_csrf_error_page(self):
         old_enabled = self.app.config['WTF_CSRF_ENABLED']

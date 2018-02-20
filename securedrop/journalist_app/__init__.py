@@ -18,8 +18,13 @@ from journalist_app.utils import get_source, logged_in
 from models import Journalist
 from store import Storage
 
-MYPY = False
-if MYPY:
+import typing
+# https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
+if typing.TYPE_CHECKING:
+    # flake8 can not understand type annotation yet.
+    # That is why all type annotation realted import
+    # statements has to be marked as noqa.
+    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from sdconfig import SDConfig  # noqa: F401
 
 _insecure_views = ['main.login', 'static']
@@ -80,7 +85,7 @@ def create_app(config):
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals['version'] = version.__version__
-    if config.CUSTOM_HEADER_IMAGE:
+    if hasattr(config, 'CUSTOM_HEADER_IMAGE'):
         app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
         app.jinja_env.globals['use_custom_header_image'] = True
     else:
