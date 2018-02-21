@@ -11,9 +11,9 @@ define these terms.
 Source
 ------
 
-The *Source* is the person who submits documents to SecureDrop, and may use
+The *Source* is the person who submits documents to SecureDrop and may use
 SecureDrop to communicate with a *Journalist*. A *Source* will always
-access SecureDrop through the *Source Interface*, and must do so using Tor.
+access SecureDrop through the *Source Interface* and must do so using Tor.
 
 Instructions for using SecureDrop as a *Source* are available in our
 `Source Guide <https://docs.securedrop.org/en/latest/source.html>`__.
@@ -23,7 +23,7 @@ Journalist
 
 The *Journalist* uses SecureDrop to communicate with and download documents
 submitted by the *Source*. Journalists do this by using the *Journalist
-Workstation* to connect to the *Journalist Interface* over Tor.
+Workstation* to connect to the *Journalist Interface* through Tor.
 
 The *Journalist* also uses a *Transfer Device* to move documents to the *Secure
 Viewing Station*. If a *Journalist* chooses to release any of these documents,
@@ -60,7 +60,7 @@ Source Interface
 
 The *Source Interface* is the website that sources will access to
 submit documents and communicate with journalists. This site is
-hosted on the *Application Server* and can only be accessed over Tor.
+hosted on the *Application Server* and can only be accessed through Tor.
 
 Instructions for using the *Source Interface* are available in our `Source Guide
 <https://docs.securedrop.org/en/latest/source.html>`__.
@@ -111,7 +111,7 @@ system other than Tails on a USB, it does not need a hard drive or
 network device. We recommend physically removing the drive and any
 networking cards (wireless, Bluetooth, etc.) from this machine.
 
-This is also referred to as the "airgapped computer," meaning there is a
+This is also referred to as the "air-gapped computer," meaning there is a
 gap between it and a computer connected to the Internet.
 
 Two-Factor Authenticator
@@ -139,7 +139,7 @@ If you use a USB stick for the *Transfer Device*, we recommend using a
 small one (4GB or less). It will be necessary to securely wipe the entire
 device at times, and this process takes longer for larger devices.
 
-Depending on your threat model, you may wish to only use one-time use
+Depending on your threat model, you may wish to only use one-time-use
 media (such as CD-R or DVD-R) for transferring files to and from the
 *SVS*. While doing so is cumbersome, it reduces the risk of malware (that
 could be run simply by opening a malicious submission) exfiltrating
