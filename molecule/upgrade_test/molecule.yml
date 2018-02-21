@@ -29,6 +29,14 @@ platforms:
       - securedrop
       - staging
 
+  - name: apt
+    box: bento/ubuntu-14.04
+    instance_raw_config_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true, type: 'rsync'"
+    memory: 256
+    groups:
+      - apt
+
 provisioner:
   name: ansible
   lint:
