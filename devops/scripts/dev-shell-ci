@@ -7,6 +7,7 @@ set -eu
 source "${BASH_SOURCE%/*}/ticker"
 
 TOPLEVEL=$(git rev-parse --show-toplevel)
+: "${TAG:=$(git rev-parse HEAD)}"
 
 cd "${TOPLEVEL}"
 
@@ -23,7 +24,7 @@ function docker_image() {
 }
 
 function docker_run() {
-    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -ti securedrop-lint:"$(git rev-parse HEAD)" "$@"
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -ti securedrop-lint:"$TAG" "$@"
 }
 
 ticker docker_image
