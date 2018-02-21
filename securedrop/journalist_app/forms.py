@@ -59,5 +59,6 @@ class LogoForm(FlaskForm):
     logo = FileField(validators=[
         FileRequired(message=gettext('File required.')),
         FileAllowed(['jpg', 'png', 'jpeg'],
-                    message=gettext('Upload images only.'))
+                    message=gettext("You can only upload JPG/JPEG"
+                                    " or PNG image files."))
     ])

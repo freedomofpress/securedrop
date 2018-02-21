@@ -17,6 +17,7 @@ itsdangerous==0.24        # via flask
 jinja2==2.10
 jsmin==2.2.2
 markupsafe==1.0           # via jinja2
+pillow==5.0.0
 psutil==5.4.3
 pycryptodomex==3.4.7
 pyotp==2.2.6

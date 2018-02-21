@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from datetime import datetime
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
                    render_template, g, flash, abort)
@@ -42,6 +44,14 @@ def make_blueprint(config):
         session.pop('uid', None)
         session.pop('expires', None)
         return redirect(url_for('main.index'))
+
+    @view.route('/org-logo')
+    def select_logo():
+        if os.path.exists(os.path.join(current_app.static_folder, 'i',
+                          'custom_logo.png')):
+            return redirect(url_for('static', filename='i/custom_logo.png'))
+        else:
+            return redirect(url_for('static', filename='i/logo.png'))
 
     @view.route('/')
     def index():
