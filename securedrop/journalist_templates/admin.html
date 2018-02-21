@@ -24,9 +24,9 @@
         <td>{{ user.username }}</td>
         <td><a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}"><i class="fa fa-edit" title="{{ gettext('Edit user {username}').format(username=user.username) }}"></i></a></td>
 	{% if user.id == g.user.id %}
-        <td><i class="fa fa-trash-o"></i></button></td>
+        <td><i class="far fa-trash-alt"></i></button></td>
 	{% else %}
-        <td><button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}"><i class="fa fa-trash-o" title="{{ gettext('Delete user {username}').format(username=user.username) }}"></i></button></td>
+        <td><button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}"><i class="far fa-trash-alt" title="{{ gettext('Delete user {username}').format(username=user.username) }}"></i></button></td>
 	{% endif %}
         <td><time class="date" title="{{ user.created_on }}">{{ user.created_on|rel_datetime_format(relative=True) }}</time></td>
         {% if user.last_access %}
@@ -45,7 +45,7 @@
 <hr class="no-line">
 
 <a href="{{ url_for('admin.manage_config') }}" class="btn sd-button" id="update-instance-config">
-  <i class="fa fa-pencil"></i>{{ gettext('INSTANCE CONFIG') }}
+  <i class="fas fa-pencil-alt"></i>{{ gettext('INSTANCE CONFIG') }}
 </a>
 
 <hr class="no-line">

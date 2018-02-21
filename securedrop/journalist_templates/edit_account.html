@@ -50,7 +50,7 @@
     <br>
     <span id="password" class="password">{{ password }}</span>
   </p>
-  <button class="sd-button btn" type="submit" id="reset-password"><i class="fa fa-refresh"></i> {{ gettext('RESET PASSWORD') }}</button>
+  <button class="sd-button btn" type="submit" id="reset-password"><i class="fas fa-sync"></i> {{ gettext('RESET PASSWORD') }}</button>
 </form>
 
 <hr class="no-line">
@@ -83,7 +83,7 @@
   <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button class="sd-button" id="button-reset-two-factor-{{ type }}" type="submit" class="pull-right"><i class="fa fa-refresh"></i> {{ button_text }}</button>
+  <button class="sd-button" id="button-reset-two-factor-{{ type }}" type="submit" class="pull-right"><i class="fas fa-sync"></i> {{ button_text }}</button>
 </form>
 {%- endmacro %}
 
