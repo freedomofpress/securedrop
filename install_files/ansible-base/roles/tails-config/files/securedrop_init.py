@@ -20,24 +20,29 @@ path_persistent_desktop = '/lib/live/mount/persistence/TailsData_unlocked/dotfil
 
 # load torrc_additions
 if os.path.isfile(path_torrc_additions):
-    torrc_additions = open(path_torrc_additions).read()
+    with open(path_torrc_additions) as f:
+        torrc_additions = f.read()
 else:
     sys.exit('Error opening {0} for reading'.format(path_torrc_additions))
 
 # load torrc
 if os.path.isfile(path_torrc_backup):
-    torrc = open(path_torrc_backup).read()
+    with open(path_torrc_backup) as f:
+        torrc = f.read()
 else:
     if os.path.isfile(path_torrc):
-        torrc = open(path_torrc).read()
+        with open(path_torrc) as f:
+            torrc = f.read()
     else:
         sys.exit('Error opening {0} for reading'.format(path_torrc))
 
     # save a backup
-    open(path_torrc_backup, 'w').write(torrc)
+    with open(path_torrc_backup, 'w') as f:
+        f.write(torrc)
 
 # append the additions
-open(path_torrc, 'w').write(torrc + torrc_additions)
+with open(path_torrc, 'w') as f:
+    f.write(torrc + torrc_additions)
 
 # reload tor
 try:
