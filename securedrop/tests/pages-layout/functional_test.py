@@ -43,7 +43,8 @@ class FunctionalTest(functional_test.FunctionalTest):
         self.log_dir = abspath(
             os.path.join(dirname(realpath(__file__)),
                          'screenshots', self.accept_languages))
-        os.system("mkdir -p " + self.log_dir)
+        if not os.path.exists(self.log_dir):
+            os.makedirs(self.log_dir)
         firefox = self._prepare_webdriver()
         profile = webdriver.FirefoxProfile()
         profile.set_preference("intl.accept_languages", self.accept_languages)
