@@ -60,7 +60,8 @@ def generate_unique_codename(config):
 
 
 def get_entropy_estimate():
-    return int(open('/proc/sys/kernel/random/entropy_avail').read())
+    with open('/proc/sys/kernel/random/entropy_avail') as f:
+        return int(f.read())
 
 
 def async(f):
