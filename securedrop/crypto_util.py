@@ -15,7 +15,7 @@ import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
 if typing.TYPE_CHECKING:
     # flake8 can not understand type annotation yet.
-    # That is why all type annotation realted import
+    # That is why all type annotation relative import
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401stream
     from typing import Dict, List, Text  # noqa: F401
