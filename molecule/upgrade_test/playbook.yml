@@ -55,5 +55,6 @@
   max_fail_percentage: 0
   any_errors_fatal: yes
   tasks:
-    - include: reboot_and_wait.yml
+    - import_tasks: reboot_and_wait.yml
+      tags: reboot
   become: yes
