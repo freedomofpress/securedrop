@@ -1,4 +1,6 @@
 ---
+- import_playbook: sd_clone.yml
+
 - name: Create
   hosts: localhost
   connection: local
