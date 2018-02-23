@@ -209,7 +209,7 @@ different version, the path to ``virtualenvwrapper.sh`` will differ. Running
     sudo easy_install pip # if you don't already have pip
     sudo -H pip install -U virtualenvwrapper --ignore-installed six
     source /usr/local/bin/virtualenvwrapper.sh
-    mkvirtualenv -p python2 securedrop
+    mkvirtualenv -p python securedrop
 
 .. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
           to your ``~/.bashrc`` (or whatever your default shell configuration
