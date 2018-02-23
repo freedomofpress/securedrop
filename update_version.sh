@@ -24,6 +24,11 @@ if [ -z "$NEW_VERSION" ]; then
   exit 1
 fi
 
+if [[ $NEW_VERSION == *-rc* ]]; then
+  echo "Release candidates should use the versioning 0.x.y~rcZ!"
+  exit 1
+fi
+
 # Get the old version from securedrop/version.py
 old_version_regex="^__version__ = '(.*)'$"
 [[ "$(cat securedrop/version.py)" =~ $old_version_regex ]]
