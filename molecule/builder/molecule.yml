@@ -5,8 +5,6 @@ lint:
   name: yamllint
 platforms:
   - name: build
-    image: quay.io/freedomofpress/ubuntu:trusty
-    hash_name: ubuntu
     groups:
       - build
 provisioner:
