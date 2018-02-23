@@ -41,7 +41,7 @@ platforms:
       - "vm.synced_folder './', '/vagrant', disabled: true, type: 'rsync'"
     memory: 256
     groups:
-      - apt
+      - aptservers
 
 provisioner:
   name: ansible

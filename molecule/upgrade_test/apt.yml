@@ -1,7 +1,7 @@
 ---
 
 - name: Configure apt-server
-  hosts: apt
+  hosts: aptservers
   become: yes
   roles:
     - jdauphant.nginx
@@ -76,3 +76,10 @@
         - root "/var/repos/base"
         - location / { autoindex on; }
 
+- name: Configure apt-server
+  hosts: securedrop
+  become: yes
+  tasks:
+    - name: Install testing apt key to keyring
+      apt_key:
+        url: "http://{{ hostvars['apt']['ansible_default_ipv4']['address'] }}/apt-test.pub"
