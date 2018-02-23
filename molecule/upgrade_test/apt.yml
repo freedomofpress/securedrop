@@ -58,6 +58,11 @@
       command:  "gpg -b -u C5D5CD3B6D65484B -o {{ release_file }}.gpg {{ release_file }}"
       changed_when: false
 
+    - name: Copy pub key in-place
+      copy:
+        src: apt-test.pub
+        dest: /var/repos/base/apt-test.pub
+
   vars:
     molecule_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
     dpkg_dir: /var/repos/debs
