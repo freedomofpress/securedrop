@@ -1,19 +1,21 @@
 #!/bin/bash
 ## Usage: ./update_version.sh <version>
 
-# Only run this on the Vagrant development VM, with dch and git available
 set -e
 
-# Only run this on the Vagrant development VM, with dch and git available
-if [[ "$USER" != 'vagrant' || "$(hostname)" != 'development' ]]; then
-  echo 'Only run this on the Vagrant development VM!'
+# Only run this on the development environment, where dch is available
+if ! which dch > /dev/null ; then
+  echo 'dch is missing'
+  echo 'run with securedrop/bin/dev-shell ../update_version.sh <version>'
   exit 1
 fi
 
-# Since we're running in a VM, we won't have access to ~/.gitconfig. So the
+cd "$(git rev-parse --show-toplevel)"
+
+# Since we may be running in a container, we may not  have access to ~/.gitconfig. So the
 # repo-level git user config file must be set.
-if ! grep -q '^\[user\]' /vagrant/.git/config; then
-    echo 'Please set your git user config in /vagrant/.git/config and retry!'
+if ! grep -q '^\[user\]' .git/config; then
+    echo 'Please set your git user config in .git/config and retry!'
     exit 1
 fi
 
@@ -21,6 +23,11 @@ readonly NEW_VERSION=$1
 
 if [ -z "$NEW_VERSION" ]; then
   echo "You must specify the new version!"
+  exit 1
+fi
+
+if [[ $NEW_VERSION == *-rc* ]]; then
+  echo "Release candidates should use the versioning 0.x.y~rcZ!"
   exit 1
 fi
 
@@ -51,7 +58,7 @@ sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/conf.
 
 # Update the changelog
 sed -i "s/\(## ${OLD_VERSION}\)/## ${NEW_VERSION}\n\n\n\n\1/g" changelog.md
-vim +5 changelog.md
+vi +5 changelog.md
 
 export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
@@ -63,12 +70,22 @@ dch -b -v "${NEW_VERSION}" -D trusty -c install_files/securedrop-app-code/usr/sh
 # Due to `set -e`, providing an empty commit message here will cause the script to abort early.
 git commit -a
 
-# Initiate the process of creating a signed tag, using the workflow for signing with the airgapped signing key.
-git tag -a "${NEW_VERSION}"
-TAGFILE="${NEW_VERSION}.tag"
-git cat-file tag "${NEW_VERSION}" > "${TAGFILE}"
-
-echo
 echo "[ok] Version update complete and committed."
-echo "     Please continue the airgapped signing process with the tag file: ${TAGFILE}"
-echo
+
+# We use the version string 0.x.y~rcz for the release candidate deb packages but
+# we use 0.x.y-rcz for the tags as "~" is an invalid character in a git tag.
+if [[ $NEW_VERSION == *~* ]]; then
+  # This is an rc and we should replace "~" with "-" in the tag version.
+  TAG_VERSION="${NEW_VERSION//\~/\-}"
+else
+  # This is a stable release.
+  TAG_VERSION="${NEW_VERSION}"
+fi
+
+git tag -a "${TAG_VERSION}"
+TAGFILE="${TAG_VERSION}.tag"
+git cat-file tag "${TAG_VERSION}" > "${TAGFILE}"
+echo "A tag has been generated: ${TAGFILE}"
+
+# Remind the developer that in order to create a signed tag for release, they must proceed with the airgapped signing process.
+echo "If you wish to release this version, please continue the airgapped signing process with the tag file."
