@@ -1,12 +1,12 @@
 #!/bin/bash
 ## Usage: ./update_version.sh <version>
 
-# Only run this on the Vagrant development VM, with dch and git available
 set -e
 
-# Only run this on the Vagrant development VM, with dch and git available
-if [[ "$USER" != 'vagrant' || "$(hostname)" != 'development' ]]; then
-  echo 'Only run this on the Vagrant development VM!'
+# Only run this on the development environment, where dch is available
+if ! which dch > /dev/null ; then
+  echo 'dch is missing'
+  echo 'run with securedrop/bin/dev-shell ../update_version.sh <version>'
   exit 1
 fi
 
