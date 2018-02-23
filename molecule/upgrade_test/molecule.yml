@@ -14,6 +14,7 @@ platforms:
     instance_raw_config_args:
       - "vm.synced_folder './', '/vagrant', disabled: true"
       - "vm.network 'private_network', ip: '10.0.1.2'"
+      - "ssh.insert_key = false"
     memory: 1024
     private_ip: 10.0.1.2
     groups:
@@ -26,6 +27,7 @@ platforms:
     instance_raw_config_args:
       - "vm.synced_folder './', '/vagrant', disabled: true"
       - "vm.network 'private_network', ip: '10.0.1.3'"
+      - "ssh.insert_key = false"
     memory: 1024
     private_ip: 10.0.1.3
     groups:
