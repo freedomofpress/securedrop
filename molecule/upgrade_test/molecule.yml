@@ -13,7 +13,9 @@ platforms:
     box: bento/ubuntu-14.04
     instance_raw_config_args:
       - "vm.synced_folder './', '/vagrant', disabled: true"
+      - "vm.network 'private_network', ip: '10.0.1.2'"
     memory: 1024
+    private_ip: 10.0.1.2
     groups:
       - securedrop_application_server
       - securedrop
@@ -23,7 +25,9 @@ platforms:
     box: bento/ubuntu-14.04
     instance_raw_config_args:
       - "vm.synced_folder './', '/vagrant', disabled: true"
+      - "vm.network 'private_network', ip: '10.0.1.3'"
     memory: 1024
+    private_ip: 10.0.1.3
     groups:
       - securedrop_monitor_server
       - securedrop
