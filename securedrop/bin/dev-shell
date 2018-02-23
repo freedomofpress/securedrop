@@ -13,7 +13,7 @@ function docker_image_circle() {
     local out
     out="$(mktemp)"
     ( cat Dockerfile ; echo WORKDIR /app ; echo COPY . . ) > circle.docker
-    if ! docker build ${DOCKER_BUILD_ARGUMENTS:-} -t "securedrop-test:${CIRCLE_SHA1}" -f circle.docker . >& "$out" ; then
+    if ! docker build ${DOCKER_BUILD_ARGUMENTS:-} -t "securedrop-test:${CIRCLE_SHA1}" -f circle.docker . >& "${out}" ; then
         cat "$out"
         status=1
     else
@@ -28,17 +28,11 @@ function docker_run_circle() {
 }
 
 function docker_image() {
-    local out
-    out="$(mktemp)"
-    if ! docker build \
-         ${DOCKER_BUILD_ARGUMENTS:-} \
-	 --build-arg=USER_ID="$(id -u)" \
-	 --build-arg=USER_NAME="${USER:-root}" \
-         -t securedrop-test "${TOPLEVEL}/securedrop" >& "$out" ; then
-        cat "$out"
-        return 1
-    fi
-    return 0
+    docker build \
+           ${DOCKER_BUILD_ARGUMENTS:-} \
+	   --build-arg=USER_ID="$(id -u)" \
+	   --build-arg=USER_NAME="${USER:-root}" \
+           -t securedrop-test "${TOPLEVEL}/securedrop"
 }
 
 function docker_run() {

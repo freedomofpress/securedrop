@@ -62,7 +62,15 @@ Using the Docker environment
 The Docker based helpers are intended for rapid development on the
 SecureDrop web application and documentation. They use Docker images
 that contain all the dependencies required to run the tests, a demo
-server etc. The SecureDrop repository is bind mounted into the
+server etc.
+
+.. tip:: When run for the first time, building Docker images will take
+         a few minutes, even one hour when your Internet connection is
+         not fast. If you are unsure about what happens, you can get a
+         more verbose output by setting the environment
+         variable ``export DOCKER_BUILD_VERBOSE=true``.
+
+The SecureDrop repository is bind mounted into the
 container and files modified in the container are also modified in the
 repository. This container has no security hardening or monitoring.
 
