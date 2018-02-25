@@ -65,7 +65,7 @@ Ubuntu/Debian setup
 ~~~~~~~~~~~~~~~~~~~
 You will need to install a specific variant of the ``nc`` tool
 in order to support the ``-x`` option for specifying a proxy host.
-Mac OS X already runs the OpenBSD variant by default.
+macOS already runs the OpenBSD variant by default.
 
 .. code:: sh
 

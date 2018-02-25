@@ -58,7 +58,7 @@ To rebuild the local packages for the app code: ::
 The Debian packages will be rebuilt from the current state of your
 local git repository and then installed on the staging servers.
 
-.. note:: If you are using Mac OS X and you run into errors from Ansible
+.. note:: If you are using macOS and you run into errors from Ansible
           such as ``OSError: [Errno 24] Too many open files``, you may need to
           increase the maximum number of open files. Some guides online suggest
           a procedure to do this that involves booting to recovery mode
@@ -97,8 +97,8 @@ local git repository and then installed on the staging servers.
 
             sudo chown root:wheel /Library/LaunchDaemons/limit.maxfiles.plist
 
-          This will increase the maximum open file limits system wide on Mac
-          OS X (last tested on 10.11.6).
+          This will increase the maximum open file limits system wide on macOS
+          (last tested on 10.11.6).
 
 The web interfaces and SSH are available over Tor. A copy of the the Onion URLs
 for Source and Journalist Interfaces, as well as SSH access, are written to the
