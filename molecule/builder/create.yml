@@ -8,13 +8,36 @@
     molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"
     molecule_scenario_directory: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
-    docker_hash: "{{ lookup('file', '../docker_hashes.yml') | from_yaml }}"
   tasks:
+    - name: Get hash of our molecule folder, plus dockerfile
+      stat:
+        path: "./{{ item }}"
+        get_md5: "no"
+        checksum_algorithm: sha256
+      register: file_hashes
+      with_items:
+        - Dockerfile
+        - molecule.yml
+
+    - name: Get a unique concatenated hash for docker tagging
+      set_fact:
+        docker_tag: "{{ docker_tag|default('') + item[0:8] }}"
+      with_items: "{{ file_hashes.results| map(attribute='stat.checksum') | list }}"
+
+    - name: Create builder image
+      docker_image:
+        name: "sd.local/{{ item.name }}:{{ docker_tag }}"
+        path: .
+        buildargs:
+          IMAGE: "{{ item.image }}"
+          NAME: "{{ item.name }}"
+      with_items: "{{ molecule_yml.platforms }}"
+
     - name: Create molecule instance(s)
       docker_container:
         name: "{{ item.name }}"
         hostname: "{{ item.name }}"
-        image: "{{ item.image }}@{{ docker_hash[item.hash_name] }}"
+        image: "sd.local/{{ item.name }}:{{ docker_tag }}"
         state: started
         recreate: True
         command: "tail -f /dev/null"

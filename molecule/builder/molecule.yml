@@ -4,9 +4,9 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: build
-    image: quay.io/freedomofpress/ubuntu:trusty
-    hash_name: ubuntu
+  - name: trusty-sd-builder
+    # Trusty from 2017-12-15
+    image: ubuntu@sha256:084989eb923bd86dbf7e706d464cf3587274a826b484f75b69468c19f8ae354c
     groups:
       - build
 provisioner:

@@ -33,10 +33,11 @@
 - include: sass.yml
 
 - name: Create pip wheel archive for Debian package requirements.
-  command: >
-    pip wheel
-    -r {{ securedrop_code_filtered }}/requirements/securedrop-app-code-requirements.txt
-    -w {{ securedrop_app_code_deb_dir }}/var/securedrop/wheelhouse
+  shell: |
+    pip wheel \
+      -r {{ securedrop_code_filtered }}/requirements/securedrop-app-code-requirements.txt \
+      -w {{ securedrop_app_code_deb_dir }}/var/securedrop/wheelhouse 2>&1 | tee /tmp/w.out
+      ! grep -i --quiet 'Failed to build' /tmp/w.out
   tags: pip
 
 - include: translations.yml
