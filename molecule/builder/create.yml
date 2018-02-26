@@ -13,7 +13,10 @@
       docker_image:
         name: builder
         path: .
-        force: yes
+        buildargs:
+          IMAGE: "{{ item.image }}"
+      with_items: "{{ molecule_yml.platforms }}"
+
     - name: Create molecule instance(s)
       docker_container:
         name: "{{ item.name }}"
