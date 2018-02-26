@@ -1,19 +1,29 @@
 ---
 - block:
+  - name: Install openJDK-8 from xenial repos
+    apt:
+      pkg: openjdk-8-jre-headless
+      state: latest
+      update_cache: yes
+      default_release: xenial
+    tags:
+      - apt
+
   - name: Install securedrop-signal-cli package from FPF repo.
     apt:
       pkg: securedrop-signal-cli
       state: latest
       update_cache: yes
+      cache_valid_time: 3600
     tags:
       - apt
 
   - name: Convert jvm header for pax
-    shell: "paxctl -c /usr/lib/jvm/java-7-openjdk-amd64/bin/java"
+    shell: "paxctl -c /usr/lib/jvm/java-8-openjdk-amd64/bin/java"
     become: yes
 
   - name: Set jvm pax flag
-    shell: "paxctl -m /usr/lib/jvm/java-7-openjdk-amd64/bin/java"
+    shell: "paxctl -m /usr/lib/jvm/java-8-openjdk-amd64/bin/java"
     become: yes
 
   become: True
