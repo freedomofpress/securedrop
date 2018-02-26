@@ -159,7 +159,7 @@ What the Workstations can achieve
    :doc:`database with passphrases <../passphrases>`
    for the *Application Server*, the *Monitor Server*, and the GPG key the
    *Monitor Server* will encrypt OSSEC alerts to.
--  The **Journalist Workstation** requires Tails with a persistent
+-  The *Journalist Workstation* requires Tails with a persistent
    volume, which stores information such as the Hidden Service value
    required to connect to the Journalist Interface, as well as a :doc:`database
    with passphrases <../passphrases>` for the
@@ -261,7 +261,7 @@ What a compromise of the admin's property can achieve
       to.
    -  Access the admin's personal GPG key.
 
--  An attacker with admin access to the **Journalist Interface** can:
+-  An attacker with admin access to the *Journalist Interface* can:
 
    -  Add, modify, and delete journalist users.
    -  Change the codenames associated with sources within the Interface.
@@ -342,7 +342,7 @@ What a compromise of the journalist's property can achieve
       *Monitor Server*.
    -  Access the journalist's personal GPG key.
 
--  An attacker with journalist access to the **Journalist Interface** can:
+-  An attacker with journalist access to the *Journalist Interface* can:
 
    -  Change the codenames associated with sources within the Interface.
    -  Download, but not decrypt, submissions.

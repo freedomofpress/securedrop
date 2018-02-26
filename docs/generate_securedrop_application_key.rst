@@ -76,7 +76,7 @@ installation.  Double-click on the newly generated key and change to the
           screenshot.
 
 At this point, you are done with the *Secure Viewing Station* for now. You
-can shut down Tails, grab the *admin Tails USB* and move over to your regular
+can shut down Tails, grab the *Admin Tails USB* and move over to your regular
 workstation.
 
 .. |GPG generate key| image:: images/install/run_gpg_gen_key.png
