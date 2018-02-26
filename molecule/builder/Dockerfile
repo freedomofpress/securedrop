@@ -2,6 +2,7 @@ ARG IMAGE
 FROM $IMAGE
 
 # additional meta-data makes it easier to clean up, find
+ARG NAME
 LABEL org="Freedom of the Press"
 LABEL image_name="$NAME"
 
