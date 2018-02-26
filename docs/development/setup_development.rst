@@ -37,8 +37,8 @@ be installed via the official documentation links:
 .. _`Docker CE for Debian`: https://docs.docker.com/install/linux/docker-ce/debian/
 
 
-Mac OS X
-~~~~~~~~
+macOS
+~~~~~
 
 Install Docker_.
 
@@ -182,8 +182,8 @@ development-related tooling. Using `virtualenvwrapper
           file is) so that the command-line utilities ``virtualenvwrapper``
           provides are automatically available in the future.
 
-Mac OS X
-~~~~~~~~
+macOS
+~~~~~
 
 Install the dependencies for the development environment:
 
