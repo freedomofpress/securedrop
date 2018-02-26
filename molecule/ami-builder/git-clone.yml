@@ -1,6 +1,0 @@
----
-- name: Clone desired SD target to temp-space
-  hosts: localhost
-  become: no
-  taks:
-    - name: Create temp directory
