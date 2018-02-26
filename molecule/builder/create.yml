@@ -15,6 +15,7 @@
         path: .
         buildargs:
           IMAGE: "{{ item.image }}"
+          NAME: "{{ item.name }}"
       with_items: "{{ molecule_yml.platforms }}"
 
     - name: Create molecule instance(s)
