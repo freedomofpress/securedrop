@@ -1,0 +1,6 @@
+---
+install_local_packages: false
+primary_network_iface: eth0
+ssh_users: vagrant
+securedrop_app_install_from_repo: true
+allow_direct_access: true
