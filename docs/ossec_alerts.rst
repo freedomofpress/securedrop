@@ -191,6 +191,8 @@ in this configuration — it will not work; instead you must navigate
 passwords, and generate a new App password which you will use as the
 ``sasl_passwd``.
 
+.. important::  You must go into the mailbox settings under "Forwarding and POP/IMAP" and enable POP.
+
 Once the account is created you can log out and provide the values for
 ``sasl_username`` as your new Gmail username (without the domain),
 ``sasl_domain``, which is typically gmail.com (or your custom Google
