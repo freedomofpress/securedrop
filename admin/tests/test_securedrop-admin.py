@@ -51,6 +51,92 @@ class TestSecureDropAdmin(object):
         assert 'HIDDEN' not in out
         assert 'VISIBLE' in out
 
+    def test_check_for_updates_update_needed(self, tmpdir, caplog):
+        git_repo_path = str(tmpdir)
+        args = argparse.Namespace(root=git_repo_path)
+        current_tag = "0.6"
+        tags_available = "0.6\n0.6-rc1\n0.6.1\n"
+
+        with mock.patch('subprocess.check_call'):
+            with mock.patch('subprocess.check_output',
+                            side_effect=[current_tag, tags_available]):
+                update_status, tag = securedrop_admin.check_for_updates(args)
+                assert "Update needed" in caplog.text
+                assert update_status is True
+                assert tag == '0.6.1'
+
+    def test_check_for_updates_update_not_needed(self, tmpdir, caplog):
+        git_repo_path = str(tmpdir)
+        args = argparse.Namespace(root=git_repo_path)
+        current_tag = "0.6.1"
+        tags_available = "0.6\n0.6-rc1\n0.6.1\n"
+
+        with mock.patch('subprocess.check_call'):
+            with mock.patch('subprocess.check_output',
+                            side_effect=[current_tag, tags_available]):
+                update_status, tag = securedrop_admin.check_for_updates(args)
+                assert "All updates applied" in caplog.text
+                assert update_status is False
+                assert tag == '0.6.1'
+
+    def test_check_for_updates_if_most_recent_tag_is_rc(self, tmpdir, caplog):
+        """During pre-release QA, the most recent tag ends in *-rc. Let's
+        verify that users will not accidentally check out this tag."""
+        git_repo_path = str(tmpdir)
+        args = argparse.Namespace(root=git_repo_path)
+        current_tag = "0.6.1"
+        tags_available = "0.6\n0.6-rc1\n0.6.1\n0.6.1-rc1\n"
+
+        with mock.patch('subprocess.check_call'):
+            with mock.patch('subprocess.check_output',
+                            side_effect=[current_tag, tags_available]):
+                update_status, tag = securedrop_admin.check_for_updates(args)
+                assert "All updates applied" in caplog.text
+                assert update_status is False
+                assert tag == '0.6.1'
+
+    def test_update_exits_if_not_needed(self, tmpdir, caplog):
+        git_repo_path = str(tmpdir)
+        args = argparse.Namespace(root=git_repo_path)
+
+        with mock.patch('securedrop_admin.check_for_updates',
+                        return_value=(False, "0.6.1")):
+            securedrop_admin.update(args)
+            assert "Applying SecureDrop updates..." in caplog.text
+            assert "Updated to SecureDrop" not in caplog.text
+
+    def test_update_signature_verifies(self, tmpdir, caplog):
+        git_repo_path = str(tmpdir)
+        args = argparse.Namespace(root=git_repo_path)
+
+        git_output = 'Good signature from "SecureDrop Release Signing Key"'
+
+        with mock.patch('securedrop_admin.check_for_updates',
+                        return_value=(True, "0.6.1")):
+            with mock.patch('subprocess.check_call'):
+                with mock.patch('subprocess.check_output',
+                                return_value=git_output):
+                    securedrop_admin.update(args)
+                    assert "Applying SecureDrop updates..." in caplog.text
+                    assert "Signature verification successful." in caplog.text
+                    assert "Updated to SecureDrop" in caplog.text
+
+    def test_update_signature_does_not_verify(self, tmpdir, caplog):
+        git_repo_path = str(tmpdir)
+        args = argparse.Namespace(root=git_repo_path)
+
+        git_output = 'Bad signature from "SecureDrop Release Signing Key"'
+
+        with mock.patch('securedrop_admin.check_for_updates',
+                        return_value=(True, "0.6.1")):
+            with mock.patch('subprocess.check_call'):
+                with mock.patch('subprocess.check_output',
+                                return_value=git_output):
+                    securedrop_admin.update(args)
+                    assert "Applying SecureDrop updates..." in caplog.text
+                    assert "Signature verification failed." in caplog.text
+                    assert "Updated to SecureDrop" not in caplog.text
+
 
 class TestSiteConfig(object):
 
