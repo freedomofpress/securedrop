@@ -1,0 +1,108 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=US, ST=California, L=San Francisco, O=Freedom of the Press Test CA, OU=Ops, CN=Test CA/emailAddress=sysadmin@freedom.press
+        Validity
+            Not Before: Feb 27 20:12:50 2018 GMT
+            Not After : Jul 14 20:12:50 2045 GMT
+        Subject: C=US, ST=California, L=San Francisco, O=Freedom of the Press Test CA, CN=apt.freedom.press
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:d0:65:cf:43:dd:a8:03:d2:b2:7e:fc:90:67:04:
+                    f3:f9:3f:8e:9c:2c:e7:76:22:96:e6:da:2a:89:3d:
+                    a5:9a:7c:5e:e6:a6:93:68:c6:70:7f:1e:43:13:ca:
+                    98:09:7b:1a:1a:74:72:f0:45:76:7b:f9:67:3f:e3:
+                    34:1d:b2:c4:c9:8f:f7:d9:84:29:d9:f8:ea:de:08:
+                    aa:2b:40:f8:ee:c6:96:fa:08:c8:91:a2:97:1d:41:
+                    db:d8:af:66:f6:f7:fe:56:9c:63:c9:8b:46:e9:de:
+                    37:0f:14:39:9e:7e:63:36:f0:b6:c9:60:73:fe:ac:
+                    c8:de:45:a9:23:2a:89:5a:c3:8b:90:e0:70:37:11:
+                    23:12:7e:3a:4c:13:e8:d1:57:ee:88:ea:0e:39:f6:
+                    81:80:37:d5:38:3c:c8:93:90:30:f8:fb:61:6a:6d:
+                    e8:2a:1b:48:bb:df:36:c3:16:c5:d2:ec:31:6d:ba:
+                    a8:86:a4:98:f6:56:68:33:c2:06:1d:bc:9f:18:8f:
+                    63:88:9b:5b:67:ce:4e:36:23:69:c8:da:bd:dd:7e:
+                    d8:20:d3:c8:79:69:71:19:75:70:79:75:64:fe:96:
+                    10:b5:f8:03:91:11:7e:77:db:a9:b0:eb:a9:50:ff:
+                    97:ac:e6:87:2b:0f:33:f6:22:61:42:14:c0:c1:a7:
+                    7d:d3
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                76:A7:90:27:5A:E0:1E:71:D9:7E:E6:AB:18:68:76:1D:F7:8D:DA:E8
+            X509v3 Authority Key Identifier: 
+                keyid:BF:D2:CB:27:84:20:2B:B5:78:CF:A1:BD:93:9D:92:08:E7:6D:1E:7D
+
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Key Usage: 
+                Digital Signature, Key Encipherment
+            X509v3 Subject Alternative Name: 
+                DNS:apt.freedom.press, DNS:tor-apt.freedom.press
+            Netscape Comment: 
+                OpenSSL Generated Certificate
+    Signature Algorithm: sha256WithRSAEncryption
+         bf:70:e9:8a:e7:42:69:ed:5f:a4:8f:46:21:bd:66:4b:2b:cd:
+         04:58:60:8f:0f:5c:d7:8a:40:fb:c4:d2:14:e2:11:8e:f4:2b:
+         2f:d7:18:0e:ec:2b:d1:c5:50:51:e6:02:df:ac:58:80:0f:0b:
+         fe:f8:0c:0b:62:25:e1:80:21:3f:76:6e:5a:a3:af:89:6a:96:
+         5b:b7:8e:dc:a3:94:50:4a:a7:47:0a:89:c8:7e:fb:b5:c3:b4:
+         3c:52:87:a0:fe:84:3d:e7:44:60:31:a0:69:73:4f:d0:c7:d1:
+         15:f3:38:2a:0d:60:ba:b0:f3:4d:75:69:df:0d:6b:a5:e7:11:
+         2c:85:62:c5:64:c0:f3:8f:dc:ff:7e:d6:26:e4:c3:d0:4e:5e:
+         a6:71:6e:a8:04:b6:88:6b:1e:9e:a3:3a:3a:f2:8b:b3:ec:71:
+         cc:b4:1e:6b:af:cf:6e:c5:8f:e3:54:2e:0b:53:14:92:e4:73:
+         1f:1f:4f:c6:52:42:1d:a2:44:0d:92:29:91:c8:ec:f3:d0:4c:
+         f2:32:02:15:91:0d:1e:d6:38:41:85:13:15:43:64:bd:1f:4b:
+         70:29:a0:da:a9:e8:05:44:f1:e0:71:9d:c0:d2:5f:0c:4c:73:
+         30:46:01:8c:0f:fd:84:74:e0:0c:05:c5:5f:9d:c0:ac:3c:56:
+         3e:bc:a0:2f:13:e3:9a:36:fe:29:c4:6d:f9:50:cb:ee:08:e7:
+         b6:23:48:36:08:85:00:2d:4c:e0:ac:c6:48:ab:e3:36:ec:b4:
+         bf:8a:85:c6:fc:0b:c5:ed:81:b5:2c:57:7b:bd:19:ad:50:e7:
+         27:61:43:45:54:e1:20:4d:99:12:8e:cc:73:45:3d:e3:42:a2:
+         31:c0:1a:d7:4f:ea:c3:fb:78:f6:00:44:c0:ca:01:22:e8:25:
+         b8:4d:84:ac:a3:40:c8:ec:6b:03:64:b6:3f:32:15:8f:29:7d:
+         ee:6c:8c:75:3c:1c:a5:26:23:72:c9:1b:9c:02:41:c8:47:6a:
+         94:d2:28:79:a5:6b:d7:b3:8e:c1:54:df:ca:89:16:cb:b3:f8:
+         d0:88:4d:17:4c:1e:9a:41:06:0d:bf:d7:39:8f:40:2e:e4:a0:
+         14:02:52:53:dd:29:1d:21:0d:d3:61:f6:ab:ea:c6:f9:b0:e4:
+         89:36:84:7d:f7:a4:a1:8b:40:c6:b9:22:02:e4:43:fd:f3:a2:
+         d6:a4:18:c7:1f:dd:75:58:ec:fa:d2:55:b3:0c:c5:f3:0a:2a:
+         91:9c:23:c2:87:0f:e0:58:c8:7c:80:bb:94:a1:dc:e0:9b:62:
+         68:b6:8c:eb:78:8c:13:d2:38:d0:3d:63:46:18:05:a3:85:77:
+         0f:d4:8a:99:11:19:89:8d
+-----BEGIN CERTIFICATE-----
+MIIFYDCCA0igAwIBAgIBATANBgkqhkiG9w0BAQsFADCBqDELMAkGA1UEBhMCVVMx
+EzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNhbiBGcmFuY2lzY28xJTAj
+BgNVBAoMHEZyZWVkb20gb2YgdGhlIFByZXNzIFRlc3QgQ0ExDDAKBgNVBAsMA09w
+czEQMA4GA1UEAwwHVGVzdCBDQTElMCMGCSqGSIb3DQEJARYWc3lzYWRtaW5AZnJl
+ZWRvbS5wcmVzczAeFw0xODAyMjcyMDEyNTBaFw00NTA3MTQyMDEyNTBaMH0xCzAJ
+BgNVBAYTAlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRYwFAYDVQQHDA1TYW4gRnJh
+bmNpc2NvMSUwIwYDVQQKDBxGcmVlZG9tIG9mIHRoZSBQcmVzcyBUZXN0IENBMRow
+GAYDVQQDDBFhcHQuZnJlZWRvbS5wcmVzczCCASIwDQYJKoZIhvcNAQEBBQADggEP
+ADCCAQoCggEBANBlz0PdqAPSsn78kGcE8/k/jpws53YilubaKok9pZp8Xuamk2jG
+cH8eQxPKmAl7Ghp0cvBFdnv5Zz/jNB2yxMmP99mEKdn46t4IqitA+O7GlvoIyJGi
+lx1B29ivZvb3/lacY8mLRuneNw8UOZ5+Yzbwtslgc/6syN5FqSMqiVrDi5DgcDcR
+IxJ+OkwT6NFX7ojqDjn2gYA31Tg8yJOQMPj7YWpt6CobSLvfNsMWxdLsMW26qIak
+mPZWaDPCBh28nxiPY4ibW2fOTjYjacjavd1+2CDTyHlpcRl1cHl1ZP6WELX4A5ER
+fnfbqbDrqVD/l6zmhysPM/YiYUIUwMGnfdMCAwEAAaOBvjCBuzAdBgNVHQ4EFgQU
+dqeQJ1rgHnHZfuarGGh2HfeN2ugwHwYDVR0jBBgwFoAUv9LLJ4QgK7V4z6G9k52S
+COdtHn0wCQYDVR0TBAIwADALBgNVHQ8EBAMCBaAwMwYDVR0RBCwwKoIRYXB0LmZy
+ZWVkb20ucHJlc3OCFXRvci1hcHQuZnJlZWRvbS5wcmVzczAsBglghkgBhvhCAQ0E
+HxYdT3BlblNTTCBHZW5lcmF0ZWQgQ2VydGlmaWNhdGUwDQYJKoZIhvcNAQELBQAD
+ggIBAL9w6YrnQmntX6SPRiG9ZksrzQRYYI8PXNeKQPvE0hTiEY70Ky/XGA7sK9HF
+UFHmAt+sWIAPC/74DAtiJeGAIT92blqjr4lqllu3jtyjlFBKp0cKich++7XDtDxS
+h6D+hD3nRGAxoGlzT9DH0RXzOCoNYLqw8011ad8Na6XnESyFYsVkwPOP3P9+1ibk
+w9BOXqZxbqgEtohrHp6jOjryi7Psccy0Hmuvz27Fj+NULgtTFJLkcx8fT8ZSQh2i
+RA2SKZHI7PPQTPIyAhWRDR7WOEGFExVDZL0fS3ApoNqp6AVE8eBxncDSXwxMczBG
+AYwP/YR04AwFxV+dwKw8Vj68oC8T45o2/inEbflQy+4I57YjSDYIhQAtTOCsxkir
+4zbstL+Khcb8C8XtgbUsV3u9Ga1Q5ydhQ0VU4SBNmRKOzHNFPeNCojHAGtdP6sP7
+ePYARMDKASLoJbhNhKyjQMjsawNktj8yFY8pfe5sjHU8HKUmI3LJG5wCQchHapTS
+KHmla9ezjsFU38qJFsuz+NCITRdMHppBBg2/1zmPQC7koBQCUlPdKR0hDdNh9qvq
+xvmw5Ik2hH33pKGLQMa5IgLkQ/3zotakGMcf3XVY7PrSVbMMxfMKKpGcI8KHD+BY
+yHyAu5Sh3OCbYmi2jOt4jBPSONA9Y0YYBaOFdw/UipkRGYmN
+-----END CERTIFICATE-----

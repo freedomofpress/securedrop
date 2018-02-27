@@ -3,13 +3,28 @@
 - name: Configure apt-server
   hosts: aptservers
   become: yes
+  pre_tasks:
+    - name: Update cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Copy over certs
+      copy:
+        src: "{{ item.s }}"
+        dest: "{{ item.d }}"
+      with_items:
+        - s: apt_https.pub
+          d: /etc/ssl/certs/apt_freedom_press.pem
+        - s: apt_https.priv
+          d: /etc/ssl/private/apt_freedom_press.priv
+
   roles:
     - jdauphant.nginx
   post_tasks:
     - name: Install server dependencies
       apt:
         name: reprepro
-        update_cache: yes
 
     - name: Make directories
       file:
@@ -75,11 +90,39 @@
         - listen 80
         - root "/var/repos/base"
         - location / { autoindex on; }
+      encrypted:
+        - listen 443 ssl
+        - server_name apt.freedom.press
+        - ssl_certificate /etc/ssl/certs/apt_freedom_press.pem
+        - ssl_certificate_key /etc/ssl/private/apt_freedom_press.priv
+        - root "/var/repos/base"
+        - location / { autoindex on; }
 
 - name: Configure apt-server
   hosts: securedrop
+  gather_facts: false
   become: yes
   tasks:
     - name: Install testing apt key to keyring
       apt_key:
-        url: "http://{{ hostvars['apt']['ansible_default_ipv4']['address'] }}/apt-test.pub"
+        id: 6D65484B
+        url: "http://{{ hostvars['apt']['ansible_eth0'].ipv4.address }}/apt-test.pub"
+        state: present
+      tags: keyy
+
+    - name: Redirect apt.freedom.press to local apt server
+      lineinfile:
+        path: /etc/hosts
+        regexp: apt.freedom.press$
+        line: "{{ hostvars['apt']['ansible_eth0'].ipv4.address }}  apt.freedom.press"
+
+    - name: Add apt-test CA to CA trusted store
+      copy:
+        src: cacert.pub
+        dest: /usr/local/share/ca-certificates/fpf_test_ca.crt
+      notify: update ca
+  handlers:
+    - name: update ca
+      command: update-ca-certificates
+
+

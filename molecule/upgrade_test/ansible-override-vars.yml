@@ -4,3 +4,20 @@ primary_network_iface: eth0
 ssh_users: vagrant
 securedrop_app_install_from_repo: true
 allow_direct_access: true
+
+monitor_ip: "{{ hostvars['mon-staging']['ansible_'+primary_network_iface].ipv4.address }}"
+monitor_hostname: "{{ hostvars['mon-staging'].ansible_hostname }}"
+app_ip: "{{ hostvars['app-staging']['ansible_'+primary_network_iface].ipv4.address }}"
+app_hostname: "{{ hostvars['app-staging'].ansible_hostname }}"
+
+etc_hosts:
+  app-staging:
+    - reg: ^127.0.0.1
+      line: 127.0.0.1   app-staging localhost
+    - reg: securedrop-monitor-server-alias$
+      line: "{{ monitor_ip }}  mon-staging securedrop-monitor-server-alias"
+  mon-staging:
+    - reg: ^127.0.0.1\s+mon
+      line: 127.0.0.1   mon-staging localhost
+    - reg: app-staging$
+      line: "{{ app_ip }}  app-staging"
