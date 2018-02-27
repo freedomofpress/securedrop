@@ -49,10 +49,6 @@
 
 {% endif %}
 
-# Block all other outbound access for users in the ssh group
-# Load before generic loopback rules
--A OUTPUT -m owner --gid-owner ssh -j LOGNDROP -m comment --comment "Drop all other outbound traffic for ssh user"
-
 # DNS rules
 -A OUTPUT -d {{ dns_server }} -p tcp --dport 53 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
 -A OUTPUT -d {{ dns_server }} -p udp --dport 53 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
