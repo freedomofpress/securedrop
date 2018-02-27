@@ -10,11 +10,12 @@ lint:
 
 platforms:
   - name: app-staging
-    box: bento/ubuntu-14.04
+    box: fpf/securedrop-app
+    box_url: "../vagrant_packager/box_files/app_metadata.json"
     instance_raw_config_args:
-      - "vm.synced_folder './', '/vagrant', disabled: true"
-      - "vm.network 'private_network', ip: '10.0.1.2'"
       - "ssh.insert_key = false"
+    raw_config_args:
+      - "override.vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
     memory: 1024
     private_ip: 10.0.1.2
     groups:
@@ -23,11 +24,12 @@ platforms:
       - staging
 
   - name: mon-staging
-    box: bento/ubuntu-14.04
+    box: fpf/securedrop-mon
+    box_url: "../vagrant_packager/box_files/mon_metadata.json"
     instance_raw_config_args:
-      - "vm.synced_folder './', '/vagrant', disabled: true"
-      - "vm.network 'private_network', ip: '10.0.1.3'"
       - "ssh.insert_key = false"
+    raw_config_args:
+      - "override.vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
     memory: 1024
     private_ip: 10.0.1.3
     groups:
@@ -54,7 +56,6 @@ provisioner:
   env:
     ANSIBLE_ROLES_PATH: ".molecule/sd-orig/install_files/ansible-base/roles:.molecule/roles"
   options:
-    skip-tags: "local_build"
     e: "@ansible-override-vars.yml"
   config_options:
     ssh_connection:
@@ -67,6 +68,10 @@ scenario:
   create_sequence:
     - create
     - dependency
+  converge_sequence:
+    - create
+    - dependency
+    - converge
 verifier:
   name: testinfra
   lint:

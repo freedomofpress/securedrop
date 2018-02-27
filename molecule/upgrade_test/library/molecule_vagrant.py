@@ -254,7 +254,7 @@ Vagrant.configure('2') do |config|
     # Libvirt
     ##
     if provider['name'] == 'libvirt'
-      config.vm.provider provider['name'] do |libvirt|
+      config.vm.provider provider['name'] do |libvirt, override|
         libvirt.memory = provider['options']['memory']
         libvirt.cpus = provider['options']['cpus']
 
@@ -270,7 +270,7 @@ Vagrant.configure('2') do |config|
         # Raw Configuration
         if provider['raw_config_args']
           provider['raw_config_args'].each { |raw_config_arg|
-            eval("libvirt.#{raw_config_arg}")
+            eval("#{raw_config_arg}")
           }
         end
       end

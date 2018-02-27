@@ -18,7 +18,7 @@
 
         platform_box: "{{ item.box }}"
         platform_box_version: "{{ item.box_version | default(omit) }}"
-        platform_box_url: "{{ item.box_url | default(omit) }}"
+        platform_box_url: "{{ 'file://'+playbook_dir+'/' if item.box_url|default(false) else '' }}{{ item.box_url | default(omit) }}"
 
         provider_name: "{{ molecule_yml.driver.provider.name }}"
         provider_memory: "{{ item.memory | default(omit) }}"
