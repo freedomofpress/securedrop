@@ -143,6 +143,10 @@ self-signed-https-certs: ## Generates self-signed certs for TESTING the HTTPS co
 	@echo "Generating self-signed HTTPS certs for testing..."
 	@./devops/generate-self-signed-https-certs.sh
 
+.PHONY: vagrant_package
+vagrant_package: ## Package up a vagrant box of the last stable SD release
+	@devops/scripts/vagrant_package.sh
+
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
 # 2. Use sed-like syntax to remove the make targets

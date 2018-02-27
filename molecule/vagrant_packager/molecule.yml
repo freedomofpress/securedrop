@@ -54,6 +54,11 @@ provisioner:
 
 scenario:
   name: vagrant_packager
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - side_effect
 verifier:
   name: testinfra
   lint:
