@@ -24,7 +24,7 @@ class RequestThatSecuresFileUploads(wrappers.Request):
             # note in `config.py` for more info. Instead, we just use
             # `/tmp`, which has the additional benefit of being
             # automatically cleared on reboot.
-            return SecureTemporaryFile('/tmp')
+            return SecureTemporaryFile('/tmp')  # nosec
         return BytesIO()
 
     def make_form_data_parser(self):

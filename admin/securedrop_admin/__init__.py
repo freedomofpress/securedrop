@@ -85,7 +85,7 @@ class SiteConfig(object):
                 cmd = 'torify ' + cmd
             cmd += ' ' + (dns and dns or '8.8.8.8')
             try:
-                result = subprocess.check_output(cmd, shell=True,
+                result = subprocess.check_output(cmd.split(' '),
                                                  stderr=subprocess.STDOUT)
             except subprocess.CalledProcessError as e:
                 result = e.output
