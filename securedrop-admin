@@ -4,8 +4,9 @@
 # is more convenient for the admin to have the script at
 # the top level of the SecureDrop repository
 d=$(dirname "$0")
-if test "${!#}" = "setup" ; then
-   exec python "$d/admin/bootstrap.py"
+if test "$1" = "setup" ; then
+   shift
+   exec python "$d/admin/bootstrap.py" "$@"
 else
    activate="$d/admin/.venv/bin/activate"
    if test -f "$activate" ; then
