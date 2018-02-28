@@ -313,7 +313,8 @@ class JournalistNavigationStepsMixin():
 
         if not hasattr(self, 'accept_languages'):
             flashed_msg = self.driver.find_element_by_css_selector('.flash')
-            assert "Test alert sent. Check your email." in flashed_msg.text
+            assert ("Test alert sent. Please check your email."
+                    in flashed_msg.text)
 
     def _logout(self):
         # Click the logout link
