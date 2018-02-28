@@ -7,9 +7,9 @@ function enhance_ui() {
   $('div#filter-container').html('<input id="filter" type="text" placeholder="' + get_string("filter-by-codename-placeholder-string") + '" autofocus >');
 
   // Add the "select {all,none}" buttons
-  $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> ' + get_string("select-all-string") + '</span> <span id="select_unread" class="select"><i class="fa fa-check-square-o"></i> ' + get_string("select-unread-string") + '</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> ' + get_string("select-none-string") + '</span>');
+  $('div#select-container').html('<span id="select_all" class="select"><i class="far fa-check-square"></i> ' + get_string("select-all-string") + '</span> <span id="select_unread" class="select"><i class="far fa-check-square"></i> ' + get_string("select-unread-string") + '</span> <span id="select_none" class="select"><i class="far fa-square"></i> ' + get_string("select-none-string") + '</span>');
 
-  $('div#index-select-container').replaceWith('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> ' + get_string("select-all-string") + '</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> ' + get_string("select-none-string") + '</span>');
+  $('div#index-select-container').replaceWith('<span id="select_all" class="select"><i class="far fa-check-square"></i> ' + get_string("select-all-string") + '</span> <span id="select_none" class="select"><i class="far fa-square"></i> ' + get_string("select-none-string") + '</span>');
 
   // Change the action on the /col pages so we use a JavaScript
   // confirmation instead of redirecting to a confirmation page before

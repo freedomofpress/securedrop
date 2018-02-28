@@ -25,7 +25,7 @@
         <div id="select-container"></div>
         <button type="submit" name="action" value="download" class="small"><i class="fa fa-download"></i> {{ gettext('Download Selected') }}</button>
         <a href="#delete-selected-confirmation-modal" id="delete-selected-link">
-          <button type="button" class="small danger"><i class="fa fa-trash-o"></i> {{ gettext('Delete Selected') }}</button>
+          <button type="button" class="small danger"><i class="far fa-trash-alt"></i> {{ gettext('Delete Selected') }}</button>
         </a>
       </p>
 
@@ -54,11 +54,11 @@
               <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat() }}</span></span>
             {% endif %}
             {% if doc.filename.endswith('-doc.gz.gpg') %}
-              <i title="{{ gettext('Uploaded Document') }}" class="fa fa-file-archive-o pull-right"></i>
+              <i title="{{ gettext('Uploaded Document') }}" class="far fa-file-archive pull-right"></i>
             {% elif doc.filename.endswith('-reply.gpg') %}
               <i title="{{ gettext('Reply') }}" class="fa fa-reply pull-right"></i>
             {% else %}
-              <i title="{{ gettext('Message') }}" class="fa fa-file-text-o pull-right"></i>
+              <i title="{{ gettext('Message') }}" class="far fa-file-alt pull-right"></i>
             {% endif %}
           </li>
         {% endfor %}
@@ -119,7 +119,7 @@
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}">
     <a href="#delete-collection-confirmation-modal" id="delete-collection-link">
-      <button type="button" class="sd-button danger"><i class="fa fa-trash-o"></i> {{ gettext('DELETE COLLECTION') }}</button>
+      <button type="button" class="sd-button danger"><i class="far fa-trash-alt"></i> {{ gettext('DELETE COLLECTION') }}</button>
     </a>
 
     <!-- Confirmation modal for entire collection deletion -->
