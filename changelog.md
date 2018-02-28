@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6~rc1
+## 0.6~rc2
 
 ### Web Applications
 
@@ -16,6 +16,7 @@
 
 ### Operations
 
+* Update grsecurity-hardened kernels to 4.4.115 (#3077).
 * Bump Ansible version to 2.4.2 (#2929).
 * Allow sasl_domain to be empty (#2482).
 * Bugfix: Update AppArmor rule for Apache (#3020).
