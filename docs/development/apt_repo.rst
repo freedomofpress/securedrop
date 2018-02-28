@@ -5,12 +5,9 @@ This document contains a brief description of the Debian packages which are
 hosted and maintained by Freedom of the Press Foundation in our apt repository
 at `apt.freedom.press`_.
 
-linux-image-3.14.*-grsec
+linux-image-4.4.*-grsec
     This package contains the Linux kernel image, patched with grsecurity.
     Listed as a dependency of ``securedrop-grsec``.
-
-linux-headers-3.14.*-grsec
-    Header files related to the Linux kernel.
 
 `ossec-agent <https://github.com/ossec/ossec-hids>`_
     Installs the OSSEC agent, repackaged for Ubuntu.
