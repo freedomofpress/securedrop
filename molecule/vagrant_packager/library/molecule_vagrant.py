@@ -436,7 +436,8 @@ def main():
             provider_options=dict(type='dict', default={}),
             provider_raw_config_args=dict(type='list', default=None),
             force_stop=dict(type='bool', default=False),
-            state=dict(type='str', default='up', choices=['up', 'destroy', 'halt'])),
+            state=dict(type='str', default='up', choices=['up', 'destroy',
+                                                          'halt'])),
         supports_check_mode=False)
 
     v = VagrantClient(module)
