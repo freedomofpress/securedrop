@@ -10,7 +10,15 @@ from base64 import b32encode
 from Cryptodome.Random import random
 from flask import current_app
 from gnupg._util import _is_stream, _make_binary_stream
-from typing import Dict, List, Text  # noqa: F401
+
+import typing
+# https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
+if typing.TYPE_CHECKING:
+    # flake8 can not understand type annotation yet.
+    # That is why all type annotation relative import
+    # statements has to be marked as noqa.
+    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401stream
+    from typing import Dict, List, Text  # noqa: F401
 
 # to fix gpg error #78 on production
 os.environ['USERNAME'] = 'www-data'

@@ -16,6 +16,15 @@ from models import (get_one_or_else, Source, Journalist,
                     PasswordError, Submission)
 from rm import srm
 
+import typing
+# https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
+if typing.TYPE_CHECKING:
+    # flake8 can not understand type annotation yet.
+    # That is why all type annotation relative import
+    # statements has to be marked as noqa.
+    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
+    from sdconfig import SDConfig  # noqa: F401
+
 
 def logged_in():
     # type: () -> bool
@@ -199,6 +208,7 @@ def col_delete(cols_selected):
 
 
 def make_password(config):
+    # type: (SDConfig) -> str
     while True:
         password = current_app.crypto_util.genrandomid(
             7,

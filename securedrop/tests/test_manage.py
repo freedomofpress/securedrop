@@ -4,7 +4,7 @@ import argparse
 import os
 from os.path import abspath, dirname, exists, getmtime, join, realpath
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import config
+from sdconfig import config
 import logging
 import manage
 import mock

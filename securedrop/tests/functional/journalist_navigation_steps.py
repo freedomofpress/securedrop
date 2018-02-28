@@ -10,7 +10,7 @@ from selenium.webdriver.common.keys import Keys
 
 import tests.utils.db_helper as db_helper
 from models import Journalist
-import config
+from sdconfig import config
 
 
 class JournalistNavigationStepsMixin():

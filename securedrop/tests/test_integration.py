@@ -17,7 +17,7 @@ from flask import session, g, escape, current_app
 from mock import patch
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import config
+from sdconfig import config
 import journalist_app
 import source_app
 import utils

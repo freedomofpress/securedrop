@@ -5,7 +5,7 @@ import unittest
 from flask import current_app
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import config
+from sdconfig import config
 import crypto_util
 import journalist_app
 import models

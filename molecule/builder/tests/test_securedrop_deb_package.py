@@ -157,7 +157,7 @@ def test_deb_package_contains_no_config_file(File, Command, deb):
     deb_package = File(deb.format(
         securedrop_test_vars.securedrop_version))
     c = Command("dpkg-deb --contents {}".format(deb_package.path))
-    assert not re.search("^.*config\.py$", c.stdout, re.M)
+    assert not re.search("^.*/config\.py$", c.stdout, re.M)
 
 
 @pytest.mark.parametrize("deb", deb_packages)

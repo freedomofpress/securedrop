@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 
 os.environ["SECUREDROP_ENV"] = "dev"  # noqa
 import journalist_app
-import config
+from sdconfig import config
 from db import db
 from models import Journalist
 
