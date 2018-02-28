@@ -246,7 +246,8 @@ def make_blueprint(config):
     @admin_required
     def ossec_test():
         current_app.logger.error('This is a test OSSEC alert')
-        flash(gettext('Test alert sent. Check your email.'), 'notification')
+        flash(gettext('Test alert sent. Please check your email.'),
+              'notification')
         return redirect(url_for('admin.manage_config'))
 
     return view
