@@ -38,6 +38,11 @@ test-config: ## Generate the test config
 update-user-guides: ## Runs the page layout tests to regenerate screenshots
 	./bin/dev-shell ./bin/update-user-guides
 
+.PHONY: translate
+translate: ## Update POT translation files from sources
+	./bin/dev-shell ./i18n_tool.py translate-messages --extract-update
+	./bin/dev-shell ./i18n_tool.py translate-desktop --extract-update
+
 # For an explanation of this shell magic, see the Makefile in the root of the repository
 .PHONY: help
 help: ## Print this message and exit.

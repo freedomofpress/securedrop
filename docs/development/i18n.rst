@@ -245,18 +245,19 @@ The ``develop`` branch can now be merged into ``i18n`` as follows:
       $ git fetch lab
       $ git checkout -b i18n lab/i18n
       $ git merge origin/develop
-      $ make translate
+      $ make -C securedrop translate
 
-The ``i18n_tool.py`` command examines all the source files, looking for
-strings that need to be translated (i.e. gettext('translate me') etc.)
-and update the ``*.pot`` and ``*.po`` files, removing, updating and inserting
-strings to keep them in sync withe the sources. Carefully review the
-output of ``git diff``. Check ``messages.pot`` first for updated strings,
-looking for formatting problems. Then review the ``messages.po`` of one
-existing translation, with a focus on ``fuzzy`` translations. There is
-no need to review other translations because they are processed in the
-same way. When you are satisfied with the result, it can be merged
-with:
+The ``translate`` Makefile target relies on the ``i18n_tool.py`` command
+to examine all the source files, looking for strings that need to be
+translated (i.e. ``gettext('translate me')`` etc.)  and update the
+``*.pot`` and ``*.po`` files, removing, updating and inserting strings
+to keep them in sync with the sources. Carefully review the output of
+``git diff``. Check ``messages.pot`` first for updated strings,
+looking for formatting problems. Then review the ``messages.po`` of
+one existing translation, with a focus on ``fuzzy``
+translations. There is no need to review other translations because
+they are processed in the same way. When you are satisfied with the
+result, it can be merged with:
 
 .. code:: sh
 
