@@ -93,19 +93,26 @@ following ports:
 * Source Interface: `localhost:8080 <http://localhost:8080>`__
 * Journalist Interface: `localhost:8081 <http://localhost:8081>`__
 
-A demo journalist user is created by default when running ``make dev`` and has
-the following credentials:
+A test administrator (``journalist``) and non-admin user (``dellsberg``) are
+created by default when running ``make dev``. In addition, sources and
+submissions are present. The test users have the following credentials:
 
-* username: journalist
-* password: WEjwn8ZyczDhQSK24YKM8C9a
-* TOTP secret: JHCO GO7V CER3 EJ4L
+* **Username:** ``journalist`` or ``dellsberg``
+* **Password:** ``WEjwn8ZyczDhQSK24YKM8C9a``
+* **TOTP secret:** ``JHCO GO7V CER3 EJ4L``
+
+.. note:: The password and TOTP secret are the same for both accounts for
+   convenience during development.
 
 To generate the six digit token you need for logging in, use the TOTP secret in
 combination with an authenticator application that implements
 `RFC 6238 <https://tools.ietf.org/html/rfc6238>`__, such as
 `FreeOTP <https://freeotp.github.io/>`__ (Android and iOS) or
 `oathtool <http://www.nongnu.org/oath-toolkit/oathtool.1.html>`__
-(command line tool, multiple platforms).
+(command line tool, multiple platforms). Instead of typing the TOTP code, you
+can simply scan the following QR code:
+
+.. image:: ../images/devenv/test-users-totp-qrcode.png
 
 Setting up a multi-machine environment
 --------------------------------------

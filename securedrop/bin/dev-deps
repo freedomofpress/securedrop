@@ -42,5 +42,5 @@ function reset_demo() {
     cp ./tests/files/test_journalist_key.pub /var/lib/securedrop/keys
     gpg --homedir /var/lib/securedrop/keys --import /var/lib/securedrop/keys/test_journalist_key.pub >& /tmp/gpg.out || cat /tmp/gpg.out
     ./manage.py reset
-    ./create-demo-user.py
+    ./create-dev-data.py
 }
