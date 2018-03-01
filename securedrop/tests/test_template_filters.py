@@ -9,8 +9,8 @@ from flask import session
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config
 import i18n
+import i18n_tool
 import journalist_app
-import manage
 import source_app
 import template_filters
 import version
@@ -99,10 +99,10 @@ class TestTemplateFilters(object):
             'version': version.__version__,
         }
         args = argparse.Namespace(**kwargs)
-        manage.setup_verbosity(args)
-        manage.translate_messages(args)
+        i18n_tool.setup_verbosity(args)
+        i18n_tool.translate_messages(args)
 
-        manage.sh("""
+        i18n_tool.sh("""
         pybabel init -i {d}/messages.pot -d {d} -l en_US
         pybabel init -i {d}/messages.pot -d {d} -l fr_FR
         """.format(d=config.TEMP_DIR))
