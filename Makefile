@@ -138,11 +138,6 @@ libvirt-share: ## Configure ACLs to allow RWX for libvirt VM (e.g. Admin Worksta
 	@find "$(PWD)" -type d -and -user $$USER -exec setfacl -m u:libvirt-qemu:rwx {} +
 	@find "$(PWD)" -type f -and -user $$USER -exec setfacl -m u:libvirt-qemu:rw {} +
 
-.PHONY: translate
-translate: ## Update POT translation files from sources
-	@cd securedrop ; ./manage.py translate-messages --extract-update
-	@cd securedrop ; ./manage.py translate-desktop --extract-update
-
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
 # 2. Use sed-like syntax to remove the make targets
