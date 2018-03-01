@@ -60,11 +60,11 @@ files into the corresponding ``*.j2`` file and committed to the repository.
 They are then installed when configuring Tails with
 the ``tasks/create_desktop_shortcuts.yml`` tasks.
 
-The manage.py translate helpers
--------------------------------
+The i18n_tool.py translate helpers
+----------------------------------
 
 The `pybabel`_ and `gettext`_ command line is wrapped into the
-``manage.py translate-messages`` and ``manage.py translate-desktop``
+``i18n_tool.py translate-messages`` and ``i18n_tool.py translate-desktop``
 helpers for convenience. It is designed to be used by developers, to
 run tests with fixtures and for packaging.
 
@@ -86,7 +86,7 @@ updated by running the following command:
 
     make translate
 
-which wraps ``manage.py translate-messages`` and ``manage.py
+which wraps ``i18n_tool.py translate-messages`` and ``i18n_tool.py
 translate-desktop``.  The updated
 ``securedrop/translations/messages.pot`` and
 ``install_files/ansible-base/roles/tails-config/templates/desktop.pot``
@@ -103,7 +103,7 @@ files). This can be done by running the following command:
 
 .. code:: sh
 
-    securedrop/bin/dev-shell ./manage.py --verbose translate-messages --compile
+    securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-messages --compile
 
 For desktop files the compilation phases creates a modified version of
 the original file which includes all the translations collected from
@@ -111,7 +111,7 @@ the ``.po`` files.
 
 This can be done by running the following command::
 
-    securedrop/bin/dev-shell ./manage.py --verbose translate-desktop --compile
+    securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-desktop --compile
 
 Verifying translations
 ----------------------
@@ -133,7 +133,7 @@ with:
 
      $ securedrop/bin/dev-shell bash
      $ export PAGE_LAYOUT_LOCALES=en_US,fr_FR
-     $ ./manage.py --verbose translate-messages --compile
+     $ ./i18n_tool.py --verbose translate-messages --compile
      $ pytest -v --page-layout tests/pages-layout
      ...
      ...TestJournalistLayout::test_col_no_documents[en_US] PASSED
@@ -175,7 +175,7 @@ to the ``develop`` branch via pull requests for merge on a regular basis.
                install_files/ansible-base/roles/tails-config/templates/$l.po ; \
            git add install_files/ansible-base/roles/tails-config/templates/$l.po ; \
         done
-      $ securedrop/bin/dev-shell ./manage.py --verbose translate-desktop --compile
+      $ securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-desktop --compile
       $ git commit -m 'sync with weblate' translations
       $ git push wip-i18n
 
@@ -202,7 +202,7 @@ Verify the translations are not broken:
 
 .. code:: sh
 
-      $ securedrop/bin/dev-shell ./manage.py --verbose translate-messages --compile
+      $ securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-messages --compile
       $ PAGE_LAYOUT_LOCALES=$(echo $sm | tr ' ' ',') \
           pytest -v --page-layout tests/pages-layout
 
@@ -247,7 +247,7 @@ The ``develop`` branch can now be merged into ``i18n`` as follows:
       $ git merge origin/develop
       $ make translate
 
-The ``manage.py`` command examines all the source files, looking for
+The ``i18n_tool.py`` command examines all the source files, looking for
 strings that need to be translated (i.e. gettext('translate me') etc.)
 and update the ``*.pot`` and ``*.po`` files, removing, updating and inserting
 strings to keep them in sync withe the sources. Carefully review the
