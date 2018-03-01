@@ -6,6 +6,9 @@ docker-py
 flake8
 html-linter
 molecule>=2.*
+# Needed for ansible network filte
+# http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
+netaddr
 pip-tools>=1.10
 #
 # pyenchant should be included here but is in Dockerfile.linting
