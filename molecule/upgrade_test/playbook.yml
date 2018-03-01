@@ -12,10 +12,19 @@
       with_items: "{{ etc_hosts[ansible_hostname] }}"
       tags: hosts
   roles:
-    - { role: tor-hidden-services, tags: tor }
-    - { role: restrict-direct-access, tags: [ firewall ] }
+    - role: tor-hidden-services
+      tags: tor
+    - role: restrict-direct-access
+      tags: firewall
+    - role: ossec
+      tags: ossec
   post_tasks:
+    - name: Make sure worker directory is created?
+      file:
+        state: directory
+        path: /var/log/securedrop_worker
     - import_tasks: reboot_and_wait.yml
+      tags: reboot
   become: yes
 
 - name: Re-run OSSEC role
@@ -25,7 +34,33 @@
   roles:
     - role: ossec
       tags: ossec
+  post_tasks:
+    - name: Ensure tor is running
+      service:
+        name: tor
+        state: running
+      tags: always
+
+    - name: Ensure tor is running
+      service:
+        name: supervisor
+        state: running
+      delegate_to: app-staging
+      runonce: yes
+      tags: always
   become: yes
+
 
 - import_playbook: apt.yml
   tags: apt
+
+- name: Spit out details
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Spit out tor details
+      debug:
+        msg: "Source interface available at {{ lookup('file','.molecule/sd-orig/install_files/ansible-base/app-source-ths') }}"
+      tags:
+        - onion
+        - always
