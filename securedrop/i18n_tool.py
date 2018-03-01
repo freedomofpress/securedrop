@@ -162,8 +162,8 @@ def translate_desktop(args):
 
 
 def get_args():
-    parser = argparse.ArgumentParser(prog=__file__, description='Management '
-                                     'and testing utility for SecureDrop.')
+    parser = argparse.ArgumentParser(prog=__file__, description='i18n tool '
+                                     'for SecureDrop.')
     parser.add_argument('-v', '--verbose', action='store_true')
     subps = parser.add_subparsers()
 
