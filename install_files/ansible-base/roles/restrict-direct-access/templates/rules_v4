@@ -102,7 +102,7 @@
   {%- if ssh_ip|ipaddr(net_string) -%}
     {%- set ssh_local_net = net_string|ipaddr('cidr') -%}
     {%- set ssh_int = interface -%}
-      {%- if enable_ssh_over_tor == true or 'staging' in group_names -%}
+      {%- if enable_ssh_over_tor == false or 'staging' in group_names -%}
 -A INPUT -i {{ ssh_int }} -s {{ ssh_local_net }} -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 -A OUTPUT -o {{ ssh_int }} -p tcp -m owner --uid-owner root --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
       {%- endif %}
