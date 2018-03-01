@@ -12,8 +12,6 @@
         upgrade: dist
         update_cache: yes
         cache_valid_time: 3600
-      # Travis builds don't like the dist-upgrade. Only run in local VMs.
-      when: "'TRAVIS' not in ansible_env"
 
   roles:
     - { role: development, tags: development }

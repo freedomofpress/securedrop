@@ -1,6 +1,3 @@
-import os
-
-
 def test_xvfb_is_installed(Package):
     """
     Ensure apt requirements for Xvfb are present.
@@ -13,17 +10,13 @@ def test_firefox_is_installed(Package, Command):
     The app test suite requires a very specific version of Firefox, for
     compatibility with Selenium. Make sure to check the explicit
     version of Firefox, not just that any version of Firefox is installed.
-
-    In Travis, the Firefox installation is handled via the travis.yml
-    file, and so it won't show as installed via dpkg.
     """
-    if "TRAVIS" not in os.environ:
-        p = Package("firefox")
-        assert p.is_installed
+    p = Package("firefox")
+    assert p.is_installed
 
     c = Command("firefox --version")
     # Reminder: the rstrip is only necessary for local-context actions,
-    # e.g. in Travis, but it's a fine practice in all contexts.
+    # but it's a fine practice in all contexts.
     assert c.stdout.rstrip() == "Mozilla Firefox 46.0.1"
 
 

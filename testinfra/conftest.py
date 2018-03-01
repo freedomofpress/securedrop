@@ -25,11 +25,6 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
     filepath = os.path.join(os.path.dirname(__file__), "vars", hostname+".yml")
     with open(filepath, 'r') as f:
         hostvars = yaml.safe_load(f)
-    # The directory Travis runs builds in varies by PR, so we cannot hardcode
-    # it in the YAML testvars. Read it from env var and concatenate.
-    if hostname.lower() == 'travis':
-        build_env = os.environ["TRAVIS_BUILD_DIR"]
-        hostvars['securedrop_code'] = build_env+"/securedrop"
 
     if with_header:
         hostvars = dict(securedrop_test_vars=hostvars)

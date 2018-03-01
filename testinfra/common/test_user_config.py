@@ -1,5 +1,4 @@
 import os
-import pytest
 import re
 
 hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
@@ -65,8 +64,6 @@ def test_tmux_installed(Package):
     assert Package("tmux").is_installed
 
 
-@pytest.mark.skipif(hostenv == 'travis',
-                    reason="Bashrc tests dont make sense on Travis")
 def test_sudoers_tmux_env_deprecated(File):
     """
     Previous version of the Ansible config set the tmux config

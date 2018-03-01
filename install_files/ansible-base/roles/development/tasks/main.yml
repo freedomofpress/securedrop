@@ -34,14 +34,7 @@
 # necessary for automated tests
 - name: Compile sass to css
   shell: >
-    if [ -d /home/travis ]; then
-      /home/travis/.rvm/bin/rvm install {{ securedrop_rvm_ver }} &&
-      /home/travis/.rvm/bin/rvm use {{ securedrop_rvm_ver }} &&
-      gem install sass -v {{ securedrop_sass_ver }} &&
-      $(find /home/travis/.rvm -name sass | grep /wrappers/sass | head -1) --update sass:static/css
-    else
-      sass --update sass:static/css
-    fi
+    sass --update sass:static/css
   args:
     chdir: '{{ securedrop_repo  }}/securedrop'
   register: dev_sass_compile_result
