@@ -69,16 +69,10 @@ def test_securedrop_application_test_journalist_key(File, Sudo):
         securedrop_test_vars.securedrop_code))
     with Sudo():
         assert securedrop_config.is_file
-        # travis needs the config.py file ran owned by root not sure why
-        # just saw this note in the travis.yml config
-        if hostenv == "travis":
-            assert securedrop_config.user == "root"
-            assert securedrop_config.group == "root"
-        else:
-            assert securedrop_config.user == \
-                securedrop_test_vars.securedrop_user
-            assert securedrop_config.group == \
-                securedrop_test_vars.securedrop_user
+        assert securedrop_config.user == \
+            securedrop_test_vars.securedrop_user
+        assert securedrop_config.group == \
+            securedrop_test_vars.securedrop_user
         assert oct(securedrop_config.mode) == "0600"
         assert securedrop_config.contains(
             "^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$")

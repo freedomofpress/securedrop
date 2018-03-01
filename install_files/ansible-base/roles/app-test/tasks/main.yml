@@ -14,9 +14,6 @@
 - include: dev_setup_xvfb_for_functional_tests.yml
 
 - include: setup_firefox_for_selenium.yml
-  # Travis provides custom versions of Firefox via YAML config,
-  # so skip configuring Firefox if we're in Travis.
-  when: "'TRAVIS' not in ansible_env"
 
 - include: disable_mprotect_ff_plugin_container.yml
 

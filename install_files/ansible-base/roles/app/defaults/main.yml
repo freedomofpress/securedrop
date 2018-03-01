@@ -9,7 +9,7 @@ securedrop_app_install_from_repo: True
 securedrop_app_configure_apache: True
 
 # Username for ownership of the app code document root. Permitting override
-# for the development environment, e.g. "vagrant" or "travis".
+# for the development environment, e.g. "vagrant"
 securedrop_user: www-data
 
 # Location of the application code on disk. Defaults to Apache-friendly path,
