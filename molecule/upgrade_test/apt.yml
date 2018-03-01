@@ -3,80 +3,9 @@
 - name: Configure apt-server
   hosts: aptservers
   become: yes
-  pre_tasks:
-    - name: Update cache
-      apt:
-        update_cache: yes
-        cache_valid_time: 3600
-
-    - name: Copy over certs
-      copy:
-        src: "{{ item.s }}"
-        dest: "{{ item.d }}"
-      with_items:
-        - s: apt_https.pub
-          d: /etc/ssl/certs/apt_freedom_press.pem
-        - s: apt_https.priv
-          d: /etc/ssl/private/apt_freedom_press.priv
-
-  roles:
-    - jdauphant.nginx
-  post_tasks:
-    - name: Install server dependencies
-      apt:
-        name: reprepro
-
-    - name: Make directories
-      file:
-        state: directory
-        path: "/var/repos/{{ item }}"
-      with_items:
-        - base
-        - conf
-        - debs
-
-    - name: Copy over apt priv key
-      copy:
-        dest: /tmp/apt-test.priv
-        src: apt-test.priv
-
-    - name: Import apt-test key
-      command: gpg --import /tmp/apt-test.priv
-      ignore_errors: yes
-
-    - name: Copy over debs
-      synchronize:
-        src: "{{ molecule_dir }}/../../build/"
-        dest: /var/repos/debs/
-        delete: yes
-
-    - name: Establish config
-      template:
-        src: "distributions.j2"
-        dest: "/var/repos/conf/distributions"
-
-    - name: Run reprepo
-      shell: |
-        find {{dpkg_dir}} -type f -name '*.deb' -exec reprepro includedeb "{{rep_dist}}" '{}' \;
-      environment:
-        REPO_DIR: /var/repos
-        REPREPRO_CONFIG_DIR: /var/repos/conf
-        REPREPRO_BASE_DIR: /var/repos/base
-
-    - name: Delete existing signature
-      file:
-        state: absent
-        path: "{{ release_file }}.gpg"
-      changed_when: false
-
-    - name: Sign release file
-      command:  "gpg -b -u C5D5CD3B6D65484B -o {{ release_file }}.gpg {{ release_file }}"
-      changed_when: false
-
-    - name: Copy pub key in-place
-      copy:
-        src: apt-test.pub
-        dest: /var/repos/base/apt-test.pub
+  tasks:
+    - import_tasks: local_apt_mirror.yml
+      when: lookup('env','QA_FPF_REPO') == ''
 
   vars:
     molecule_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
@@ -103,26 +32,44 @@
   gather_facts: false
   become: yes
   tasks:
-    - name: Install testing apt key to keyring
-      apt_key:
-        id: 6D65484B
-        url: "http://{{ hostvars['apt']['ansible_eth0'].ipv4.address }}/apt-test.pub"
-        state: present
-      tags: keyy
+    - block:
+        - name: Redirect to local QA Apt server
+          set_fact:
+            apt_key_bits:
+              - url: "http://{{ hostvars['apt']['ansible_eth0'].ipv4.address }}/apt-test.pub"
+                id: 6D65484B
+            apt_test_etc_line: "{{ hostvars['apt']['ansible_eth0'].ipv4.address }}  apt.freedom.press"
+          when: lookup('env','QA_FPF_REPO') == ''
 
-    - name: Redirect apt.freedom.press to local apt server
-      lineinfile:
-        path: /etc/hosts
-        regexp: apt.freedom.press$
-        line: "{{ hostvars['apt']['ansible_eth0'].ipv4.address }}  apt.freedom.press"
+        - name: Redirect to FPF QA Apt server
+          set_fact:
+            apt_key_bits:
+              - data: "{{ lookup('file','files/apt-test-fpf.pub') }}"
+            apt_test_etc_line: "{{ lookup('dig', 'apt-test.freedom.press') }}  apt.freedom.press"
+          when: lookup('env','QA_FPF_REPO') != ''
 
-    - name: Add apt-test CA to CA trusted store
-      copy:
-        src: cacert.pub
-        dest: /usr/local/share/ca-certificates/fpf_test_ca.crt
-      notify: update ca
+        - name: Install testing apt key to keyring
+          apt_key:
+            id: "{{ item.id|default(omit) }}"
+            url: "{{ item.url|default(omit) }}"
+            data: "{{ item.data|default(omit) }}"
+            state: present
+          with_items: "{{ apt_key_bits }}"
+
+        - name: Redirect apt.freedom.press to local apt server
+          lineinfile:
+            path: /etc/hosts
+            regexp: apt.freedom.press$
+            line: "{{ apt_test_etc_line }}"
+
+        - name: Add apt-test CA to CA trusted store
+          copy:
+            src: cacert.pub
+            dest: /usr/local/share/ca-certificates/fpf_test_ca.crt
+          notify: update ca
+          when: lookup('env','QA_FPF_REPO') == ''
+      tags: apt
+
   handlers:
     - name: update ca
       command: update-ca-certificates
-
-

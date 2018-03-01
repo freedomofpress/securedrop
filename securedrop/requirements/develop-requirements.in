@@ -3,6 +3,8 @@ bandit
 boto
 boto3
 docker-py
+# Needed for dig ansible lookup
+dnspython
 flake8
 html-linter
 molecule>=2.*
