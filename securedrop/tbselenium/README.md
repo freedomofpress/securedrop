@@ -18,12 +18,14 @@ This is yet to be in the Ansible.
 the [release page](https://github.com/mozilla/geckodriver/releases/tag/v0.17.0). Move the binary to `/usr/bin/`.
 
 
-In this branch, in the securedrop code directory, there is python script `test_utility_cmd.py` which will print you the password, and
-TOTP secret.
+### To test in prod vms
 
-```
-$ python test_utility_cmd.py --username foobar --admin
-```
+- `sudo -u www-data bash`
+- `cd /var/wwww/securedrop/`
+- `./manage.py reset`    # This will clean the DB for testing
+- `./create-demo-user.py`  
+
+
 
 Update this information to the `functional/instance_infomration.json file.
 
@@ -34,11 +36,11 @@ The content of the file looks like below.
     "hidserv_token": "",
     "journalist_location": "http://127.0.0.1:8081",
     "source_location": "http://127.0.0.1:8080",
-    "sleep_time": 2,
+    "sleep_time": 10,
     "user": {
-        "name": "foot",
-        "password": "your admin password",
-        "secret": "2FA secret without spaces."
+        "name": "journalist",
+        "password": "WEjwn8ZyczDhQSK24YKM8C9a",
+        "secret": "JHCOGO7VCER3EJ4L"
     }
 }
 ```
@@ -46,7 +48,7 @@ The content of the file looks like below.
 ### Run the tests
 
 ```
-$ pytest -v functional/test_admin_interface.py | less
+$ pytest -v functional/test_source.py | less
 ```
 
 Remember to use to pipe to less, or less in case of a failure, there will be too much output.
