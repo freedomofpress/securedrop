@@ -3,12 +3,10 @@ from unittest import TestCase
 
 from functional_test import FunctionalTest
 from journalist_navigation_steps import JournalistNavigationStepsMixin
-from step_helpers import screenshots
 
 
 class MakeAccountChanges(FunctionalTest, JournalistNavigationStepsMixin,
                          TestCase):
-    @screenshots
     def test_admin_edit_account_html_template_rendering(self):
         """The edit_account.html template is used both when an admin is editing
         a user's account, and when a user is editing their own account. While

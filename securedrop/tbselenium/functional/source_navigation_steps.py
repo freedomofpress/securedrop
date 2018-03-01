@@ -3,12 +3,10 @@ import time
 import os
 
 from selenium.webdriver.common.action_chains import ActionChains
-from step_helpers import screenshots
 
 
 class SourceNavigationStepsMixin():
 
-    @screenshots
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
         if not hasattr(self, 'accept_languages'):
@@ -44,7 +42,6 @@ class SourceNavigationStepsMixin():
         # The source clicks the submit button.
         submit_button.click()
 
-    @screenshots
     def _source_chooses_to_submit_documents(self):
         self._source_clicks_submit_documents_on_homepage()
 
@@ -76,7 +73,6 @@ class SourceNavigationStepsMixin():
         codename = self.driver.find_elements_by_css_selector('.code-reminder')
         assert len(codename) == 0
 
-    @screenshots
     def _source_chooses_to_login(self):
         self.driver.find_element_by_id('login-button').click()
         time.sleep(self.sleep_time)
@@ -86,7 +82,6 @@ class SourceNavigationStepsMixin():
 
         assert len(logins) > 0
 
-    @screenshots
     def _source_hits_cancel_at_login_page(self):
         self.driver.find_element_by_id('cancel').click()
 
@@ -96,7 +91,6 @@ class SourceNavigationStepsMixin():
             assert ("SecureDrop | Protecting Journalists and Sources" ==
                     self.driver.title)
 
-    @screenshots
     def _source_proceeds_to_login(self):
         codename_input = self.driver.find_element_by_id(
             'login-with-existing-codename')
@@ -119,7 +113,6 @@ class SourceNavigationStepsMixin():
             'login-with-existing-codename')
         codename_input.send_keys('ascension hypertext concert synopses')
 
-    @screenshots
     def _source_hits_cancel_at_submit_page(self):
         self.driver.find_element_by_id('cancel').click()
 
@@ -127,7 +120,6 @@ class SourceNavigationStepsMixin():
             headline = self.driver.find_element_by_class_name('headline')
             assert 'Submit Materials' == headline.text
 
-    @screenshots
     def _source_continues_to_submit_page(self):
         continue_button = self.driver.find_element_by_id('continue-button')
 
@@ -151,8 +143,8 @@ class SourceNavigationStepsMixin():
         if not hasattr(self, 'accept_languages'):
             headline = self.driver.find_element_by_class_name('headline')
             assert 'Submit Materials' == headline.text
+        
 
-    @screenshots
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
             file.write(self.secret_message)
@@ -182,7 +174,6 @@ class SourceNavigationStepsMixin():
                     'Thank you for sending this information to us')
                 assert expected_notification in notification.text
 
-    @screenshots
     def _source_submits_a_message(self):
         self._source_enters_text_in_message_field()
         self._source_clicks_submit_button_on_submission_page()
@@ -201,7 +192,6 @@ class SourceNavigationStepsMixin():
         submit_button.click()
         time.sleep(self.sleep_time)
 
-    @screenshots
     def _source_deletes_a_journalist_reply(self):
         # Get the reply filename so we can use IDs to select the delete buttons
         reply_filename_element = self.driver.find_element_by_name(
@@ -225,9 +215,11 @@ class SourceNavigationStepsMixin():
                 'notification')
             assert 'Reply deleted' in notification.text
 
-    @screenshots
     def _source_logs_out(self):
-        self.driver.find_element_by_id('logout').click()
+        # New thing to delete XXX
+        logout = self.driver.find_element_by_id('logout')
+        logout.send_keys(" ")
+        logout.click()
         time.sleep(self.sleep_time)
         assert self.driver.find_element_by_css_selector('.important')
 

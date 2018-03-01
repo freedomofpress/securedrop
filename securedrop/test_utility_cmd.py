@@ -8,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
 import config
 import crypto_util
-from db import (db_session, init_db, Journalist, PasswordError,
+from models import (db_session, init_db, Journalist, PasswordError,
                 InvalidUsernameException)
 from management.run import run
 
