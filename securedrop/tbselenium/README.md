@@ -6,7 +6,7 @@ pip install tbselenium
 pip install PyVirtualDisplay==0.2.1
 ```
 
-### Install Tor Browser 7.0.11
+### Install Tor Browser 7.5
 
 Put it under `~/.local/tbb` directory.
 Steps are in `../../install_files/ansible-base/roles/app-test/tasks/install_tbb.yml` file.
