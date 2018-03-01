@@ -13,19 +13,19 @@ import time
 import version
 
 
-class TestManage(object):
+class TestI18NTool(object):
 
     def setup(self):
         self.dir = abspath(dirname(realpath(__file__)))
 
-    def test_translate_desktop_l10n(self):
+    def test_translate_desktop_l10n(self, tmpdir):
         in_files = {}
         for what in ('source', 'journalist'):
-            in_files[what] = join(config.TEMP_DIR, what + '.desktop.in')
+            in_files[what] = join(str(tmpdir), what + '.desktop.in')
             shutil.copy(join(self.dir, 'i18n/' + what + '.desktop.in'),
                         in_files[what])
         kwargs = {
-            'translations_dir': config.TEMP_DIR,
+            'translations_dir': str(tmpdir),
             'source': [in_files['source']],
             'extract_update': True,
             'compile': False,
@@ -35,7 +35,7 @@ class TestManage(object):
         args = argparse.Namespace(**kwargs)
         i18n_tool.setup_verbosity(args)
         i18n_tool.translate_desktop(args)
-        messages_file = join(config.TEMP_DIR, 'desktop.pot')
+        messages_file = join(str(tmpdir), 'desktop.pot')
         assert exists(messages_file)
         pot = open(messages_file).read()
         assert 'SecureDrop Source Interfaces' in pot
@@ -43,7 +43,7 @@ class TestManage(object):
         few_seconds_ago = time.time() - 60
         os.utime(messages_file, (few_seconds_ago, few_seconds_ago))
 
-        i18n_file = join(config.TEMP_DIR, 'source.desktop')
+        i18n_file = join(str(tmpdir), 'source.desktop')
 
         #
         # Extract+update but do not compile
@@ -57,7 +57,7 @@ class TestManage(object):
         assert old_messages_mtime < current_messages_mtime
 
         locale = 'fr_FR'
-        po_file = join(config.TEMP_DIR, locale + ".po")
+        po_file = join(str(tmpdir), locale + ".po")
         i18n_tool.sh("""
         msginit  --no-translator \
                  --locale {locale} \
@@ -87,13 +87,13 @@ class TestManage(object):
         i18n = open(i18n_file).read()
         assert 'SOURCE FR' in i18n
 
-    def test_translate_messages_l10n(self):
+    def test_translate_messages_l10n(self, tmpdir):
         source = [
             join(self.dir, 'i18n/code.py'),
             join(self.dir, 'i18n/template.html'),
         ]
         kwargs = {
-            'translations_dir': config.TEMP_DIR,
+            'translations_dir': str(tmpdir),
             'mapping': join(self.dir, 'i18n/babel.cfg'),
             'source': source,
             'extract_update': True,
@@ -102,19 +102,19 @@ class TestManage(object):
             'version': version.__version__,
         }
         args = argparse.Namespace(**kwargs)
-        messages_file = join(config.TEMP_DIR, 'messages.pot')
         i18n_tool.setup_verbosity(args)
         i18n_tool.translate_messages(args)
+        messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
         pot = open(messages_file).read()
         assert 'code hello i18n' in pot
         assert 'template hello i18n' in pot
 
         locale = 'en_US'
-        locale_dir = join(config.TEMP_DIR, locale)
+        locale_dir = join(str(tmpdir), locale)
         i18n_tool.sh("pybabel init -i {} -d {} -l {}".format(
             messages_file,
-            config.TEMP_DIR,
+            str(tmpdir),
             locale,
         ))
         mo_file = join(locale_dir, 'LC_MESSAGES/messages.mo')
@@ -125,12 +125,12 @@ class TestManage(object):
         assert 'code hello i18n' in mo
         assert 'template hello i18n' in mo
 
-    def test_translate_messages_compile_arg(self):
+    def test_translate_messages_compile_arg(self, tmpdir):
         source = [
             join(self.dir, 'i18n/code.py'),
         ]
         kwargs = {
-            'translations_dir': config.TEMP_DIR,
+            'translations_dir': str(tmpdir),
             'mapping': join(self.dir, 'i18n/babel.cfg'),
             'source': source,
             'extract_update': True,
@@ -139,19 +139,19 @@ class TestManage(object):
             'version': version.__version__,
         }
         args = argparse.Namespace(**kwargs)
-        messages_file = join(config.TEMP_DIR, 'messages.pot')
         i18n_tool.setup_verbosity(args)
         i18n_tool.translate_messages(args)
+        messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
         pot = open(messages_file).read()
         assert 'code hello i18n' in pot
 
         locale = 'en_US'
-        locale_dir = join(config.TEMP_DIR, locale)
+        locale_dir = join(str(tmpdir), locale)
         po_file = join(locale_dir, 'LC_MESSAGES/messages.po')
         i18n_tool.sh("pybabel init -i {} -d {} -l {}".format(
             messages_file,
-            config.TEMP_DIR,
+            str(tmpdir),
             locale,
         ))
         assert exists(po_file)
