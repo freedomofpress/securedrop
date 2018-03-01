@@ -22,7 +22,10 @@
     - name: Make sure worker directory is created?
       file:
         state: directory
-        path: /var/log/securedrop_worker
+        path: "/var/log/{{ item }}"
+      with_items:
+        - securedrop_worker
+        - cron-apt
     - import_tasks: reboot_and_wait.yml
       tags: reboot
   become: yes
