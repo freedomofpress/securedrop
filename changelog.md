@@ -1,5 +1,48 @@
 # Changelog
 
+## 0.6~rc2
+
+### Web Applications
+
+* Adds CSS-based source deletion confirmation (#295 ,#2946).
+* Resolve responsive issues on source and journalist interfaces (#2891, #2974).
+* Remove config global state (#2969).
+* Add functional test coverage for all JavaScript functionality (#2405).
+* Migrate to Flask-SQLAlchemy (#2866).
+* Improve UX on admin logo uploads (#2876).
+* Enable vacuum and secure delete in the database (#2868).
+* Bugfix: Ensure session is available for async_genkey (#2988).
+* Bugfix: Fix user confirmation before 2FA reset (#2920).
+
+### Operations
+
+* Update grsecurity-hardened kernels to 4.4.115 (#3077).
+* Bump Ansible version to 2.4.2 (#2929).
+* Allow sasl_domain to be empty (#2482).
+* Bugfix: Update AppArmor rule for Apache (#3020).
+* Allow syscheck to monitor /var/lib/tor/services (#2960).
+
+### Tails Environment
+
+* Add commands to check for and apply updates to the securedrop-admin CLI (#2976).
+
+### Developer Workflow 
+
+* Make the Docker-based development environment the default (#2902).
+* Rebase branches prior to running CI jobs (#2934).
+* Implement dev-shell script for interactive execution of commands in development containers (#2861, #2956).
+* Adds Bandit static analyzer for automated security scanning (#3055).
+* Adds initial support for checking type annotation (#3001, #3006, #3032).
+* Adds test user to development environment (#3040).
+* Update release script for new release candidate policy (#2950).
+
+### Documentation
+
+* Miscellaneous documentation improvements.
+
+The issues for this release were tracked in the 0.6 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.6.
+
 ## 0.5.2
 
 * Replace PyCrypto (#2903).
