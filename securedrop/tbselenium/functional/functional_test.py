@@ -180,7 +180,7 @@ class FunctionalTest(object):
             self.admin_user = data.get('user')
             self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
             self.new_totp = None # To be created runtime
-            self.sleep_time = data.get('sleep_time', 5)
+            self.sleep_time = data.get('sleep_time', 10)
             if self.hidservauth:
                 if self.journalist_location.startswith('http://'):
                     location = self.journalist_location[7:]
@@ -191,7 +191,7 @@ class FunctionalTest(object):
         # Allow custom session expiration lengths
         self.session_expiration = session_expiration
 
-
+        """
         for tick in range(30):
             try:
                 requests.get(self.source_location)
@@ -200,11 +200,11 @@ class FunctionalTest(object):
                 time.sleep(1)
             else:
                 break
+        """
         self._create_secondary_firefox_driver()
-        if not hasattr(self, 'override_driver'):
-            self.driver = self._create_webdriver()
-            #self._create_secondary_firefox_driver()
-
+        #  if not hasattr(self, 'override_driver'):
+        self.driver = self._create_webdriver()
+        
         self.gpg = self.init_gpg()
 
         # Polls the DOM to wait for elements. To read more about why
@@ -233,7 +233,7 @@ class FunctionalTest(object):
 
     def teardown(self):
 
-        if not hasattr(self, 'override_driver'):
+        if self.driver:
             self.driver.quit()
         if self.second_driver:
             self.second_driver.quit()
