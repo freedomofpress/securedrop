@@ -84,6 +84,11 @@ To get started, you can try the following:
    bin/dev-shell bin/run-test tests/functional # functional tests only
    bin/dev-shell bash                          # shell inside the container
 
+.. tip:: The interactive shell in the container does not run
+         ``redis``, ``Xvfb`` etc.  However you can import shell helper
+         functions with ``source bin/dev-deps`` and call ``run_xvfb``,
+         ``maybe_create_config_py`` etc.
+
 SecureDrop consists of two separate web applications (the Source Interface and
 the Journalist Interface) that run concurrently. In the development environment
 they are configured to detect code changes and automatically reload whenever a
