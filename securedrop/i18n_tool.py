@@ -234,9 +234,9 @@ class I18NTool(object):
 
     def setup_verbosity(self, args):
         if args.verbose:
-            logging.getLogger(__name__).setLevel(logging.DEBUG)
+            log.setLevel(logging.DEBUG)
         else:
-            logging.getLogger(__name__).setLevel(logging.INFO)
+            log.setLevel(logging.INFO)
 
     def main(self, argv):
         try:
