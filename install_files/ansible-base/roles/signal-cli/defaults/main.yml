@@ -1,0 +1,4 @@
+---
+signal_number: ""
+signal_destination_number: ""
+signal_cli_unix_user: "ossec"

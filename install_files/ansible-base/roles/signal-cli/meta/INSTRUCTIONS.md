@@ -11,13 +11,7 @@ If you would like to set up your SecureDrop instance to send Signal messages, he
 2- Set `signal_notifications: True`, `signal_cli_copy_config: False` and specify the values of `signal_number` and `signal_destination_number`
 3- If you already have a signal config for a number or if you are restoring from a backup, move it to `install_files/ansible-base`, set `signal_cli_copy_config: True` and go to step X
 4- Run the install script (`securedrop-admin install`)
-5- If you have copied your signal config, you should be receiving signal messages Otherwise, please continue
+5- If you have copied your signal config, you should be already be receiving Signal messages. If you haven't copied the config or if this a new install, please continue
 6- If you have not run `securedrop-admin tailsconfig`, do it now
-7- SSH into the monitor server (`ssh mon`)
-8- sudo -u ossec bash -c 'signal-cli --config /etc/signal/data/ -u +15143121553 register -v'
-9- sudo -u ossec bash -c 'signal-cli --config /etc/signal/data/ -u +15143121553 verify <NUMBER>'
-SCP the configuration back to you workstation for safeguarding purposes. Exercise great caution as the configuration file will contain encryption keys.
-10 -if you are in an ssh session `exit` until you are back in `/Persistent/securedrop`
-ssh -i ~/.vagrant.d/insecure_private_key vagrant@192.168.121.218 'sudo cat /etc/signal/data/+15143121553' > install_files/ansible-base/+15143121553
-
-12 - Run `securedrop-admin install` again if you would like to receive notifications
+7- `securedrop-admin signal_register` and follow instructions
+8- `securedrop-admin signal_backup` and follow instructions to backup the configuration to the admin workstation

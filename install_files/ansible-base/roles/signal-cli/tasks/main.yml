@@ -6,6 +6,7 @@
 - include: copy_signal-cli_config.yml
   when:
     - signal_notifications
+    - signal_cli_copy_config is defined
     - signal_cli_copy_config
 
 - include: signal-cli_post_install.yml

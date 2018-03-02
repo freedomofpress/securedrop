@@ -70,5 +70,5 @@ securedrop_app_configure_apache: True
 # Signal-cli for alerts is currently in experimental phase and is disabled by default
 signal_notifications: False
 signal_number: ""
-signal_cli_copy_config: True
+signal_cli_copy_config: False
 signal_destination_number: ""

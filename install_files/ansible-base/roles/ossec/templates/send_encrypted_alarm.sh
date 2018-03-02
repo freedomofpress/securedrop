@@ -35,14 +35,14 @@ function send_encrypted_alert() {
             /usr/bin/mail -s "$(echo "${SUBJECT}" | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
     fi
 
-    #check for signal cli and send alert to number
+    # Check for signal cli and send alert to number
     if [[ -x "$(command -v signal-cli)" ]]; then
         /usr/local/bin/signal-cli --config /etc/signal -u '{{ signal_number }}' send -m "${ossec_alert_text}" '{{ signal_destination_number }}'
-    fi
-
-    if [[ $? -ne 0 ]]; then
-        logger -s "A Signal CLI error occurred"
-        send_signal_fail_message
+        # Error handling
+        if [[ $? -ne 0 ]]; then
+            logger -s "A Signal CLI error occurred"
+            send_signal_fail_message
+        fi
     fi
 
 }

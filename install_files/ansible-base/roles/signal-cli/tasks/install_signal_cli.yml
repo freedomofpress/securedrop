@@ -1,5 +1,13 @@
 ---
 - block:
+  - name: Install securedrop-signal-sli package from FPF repo.
+    apt:
+      pkg: securedrop-signal-cli
+      state: latest
+      update_cache: yes
+      cache_valid_time: 3600
+    tags:
+      - apt
 
   - name: Convert jvm header for pax
     shell: "paxctl -c /usr/lib/jvm/java-7-openjdk-amd64/bin/java"

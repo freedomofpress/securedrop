@@ -200,6 +200,21 @@ class SiteConfig(object):
                 message=("Must contain a @ and be set to "
                          "something other than ossec@ossec.test"))
 
+    class ValidatePhoneNumber(Validator):
+        def validate(self, document):
+            if re.match('^\\+[0-9]+$',
+                        document.text):
+                return True
+            raise ValidationError(
+                message="A phone number must be something like +15555555555")
+
+    class ValidateOptionalPhoneNumber(ValidatePhoneNumber):
+        def validate(self, document):
+            if document.text == '':
+                return True
+            return super(SiteConfig.ValidateOptionalPhoneNumber, self).validate(
+                document)
+
     def __init__(self, args):
         self.args = args
         translations = SiteConfig.Locales(
@@ -281,6 +296,14 @@ class SiteConfig(object):
              '(' + translations + ')',
              SiteConfig.ValidateLocales(self.args.app_path),
              string.split],
+            ['signal_number', '', str,
+             u'Source phone number for Signal alerts',
+             SiteConfig.ValidateOptionalPhoneNumber(),
+             None],
+            ['signal_destination_number', '', str,
+             u'Destination phone number for Signal alerts',
+             SiteConfig.ValidateOptionalPhoneNumber(),
+             None],
         ]
 
     def load_and_update_config(self):
@@ -530,6 +553,57 @@ def get_logs(args):
     sdlog.info("Encrypt logs and send to securedrop@freedom.press or upload "
                "to the SecureDrop support portal.")
 
+def signal_register(args):
+    """Register signal-cli to send ossec alerts to administrators"""
+    sdlog.info("Beginning signal-cli enrollment")
+    sc = SiteConfig(args).load()
+    source_number = sc.get('signal_number')
+    destination_number = sc.get('signal_destination_number')
+
+    if source_number == "" or destination_number == "":
+        sdlog.info("Signal phone numbers not configured, cannot register signal number.")
+        return 0
+    else:
+        sdlog.info("Initiating signal-cli registration flow with number {}.".format(source_number))
+        ssh_connect = "{}@{}".format(sc.get('ssh_users'), "mon")
+        ssh_command = "sudo -u ossec bash -c 'signal-cli --config /etc/signal/ -u {} register'".format(source_number)
+        out = subprocess.check_output(['ssh', ssh_connect, ssh_command], cwd=args.root)
+        sdlog.info(out)
+        verification_code="x"
+        while(not re.match('^[0-9]{6}$', verification_code)):
+            verification_code = raw_input("Please enter the signal verification code(e.g.: 123456): ")
+            if re.match('^[0-9]{6}$', verification_code):
+                ssh_command = "sudo -u ossec bash -c 'signal-cli --config /etc/signal/ -u {} verify {}'".format(source_number, verification_code)
+                out = subprocess.check_output(['ssh', ssh_connect, ssh_command], cwd=args.root)
+                sdlog.info(out)
+                sdlog.info("Verification code {} sent to server.".format(verification_code))
+                ssh_command = "sudo -u ossec bash -c 'signal-cli --config /etc/signal/ -u {} send -m \"This is a test message!\" {}'".format(source_number, destination_number)
+                out = subprocess.check_output(['ssh', ssh_connect, ssh_command], cwd=args.root)
+                sdlog.info(out)
+                sdlog.info("Test message sent to {}.".format(destination_number))
+                ssh_command = "sudo -u ossec bash -c 'signal-cli --config /etc/signal -u {} listIdentities -n {}'".format(source_number, destination_number)
+                out = subprocess.check_output(['ssh', ssh_connect, ssh_command], cwd=args.root)
+                sdlog.info(out)
+                safety_number = re.match('[0-9 ]{72}', out)
+                sdlog.info("Please ensure safety number for {} is {} and mark as verified.".format(source_number, safety_number))
+                sdlog.info("Signal-cli registration completed.")
+            else:
+                sdlog.info("Incorrect verification code: must be 6 digits (e.g.: 123456)")
+
+def signal_backup(args):
+    """Backup signal configuration for adminstrators"""
+    sc = SiteConfig(args).load()
+    source_number = sc.get('signal_number')
+    if source_number == "" :
+        sdlog.info("No phone number specified, cannot backup signal config.")
+        return 0
+    else:
+        ssh_connect = "{}@{}".format(sc.get('ssh_users'), "mon")
+        ssh_command = "sudo cat /etc/signal/data/{}".format(source_number)
+        out = subprocess.check_output(['ssh', ssh_connect, ssh_command], cwd=args.root)
+        with open(args.ansible_path + "/{}".format(source_number), 'w') as f:
+            f.write(out)
+        #set signal_cli_copy_config: True
 
 def set_default_paths(args):
     if not args.ansible_path:
@@ -597,6 +671,13 @@ def parse_argv(argv):
                                        help=get_logs.__doc__)
     parse_logs.set_defaults(func=get_logs)
 
+    parse_signal_register = subparsers.add_parser('signal_register',
+					       help=signal_register.__doc__)
+    parse_signal_register.set_defaults(func=signal_register)
+
+    parse_signal_backup = subparsers.add_parser('signal_backup',
+                                               help=signal_backup.__doc__)
+    parse_signal_backup.set_defaults(func=signal_backup)
     return set_default_paths(parser.parse_args(argv))
 
 

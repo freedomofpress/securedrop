@@ -51,7 +51,7 @@
   roles:
     - role: postfix
       tags: postfix
-    - role: ansible-role-signal-cli
+    - role: signal-cli
       tags: signal-cli,
       when: signal_notifications is defined and signal_notifications
   become: yes
@@ -84,4 +84,3 @@
     - include: tasks/reboot_if_first_install.yml
       when: not amazon_builder
   become: yes
-
