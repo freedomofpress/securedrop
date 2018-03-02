@@ -59,7 +59,7 @@ def sh(command, input=None):
 
 class I18NTool(object):
 
-    def translate_messages(args):
+    def translate_messages(self, args):
         messages_file = os.path.join(args.translations_dir, 'messages.pot')
 
         if args.extract_update:
@@ -98,7 +98,8 @@ class I18NTool(object):
                 done
                 """.format(translations_dir=args.translations_dir,
                            messages_file=messages_file))
-                log.warning("messages translations updated in " + messages_file)
+                log.warning("messages translations updated in " +
+                            messages_file)
             else:
                 log.warning("messages translations are already up to date")
 
@@ -108,8 +109,7 @@ class I18NTool(object):
             pybabel compile --directory {translations_dir}
             """.format(translations_dir=args.translations_dir))
 
-
-    def translate_desktop(args):
+    def translate_desktop(self, args):
         messages_file = os.path.join(args.translations_dir, 'desktop.pot')
 
         if args.extract_update:
@@ -146,7 +146,8 @@ class I18NTool(object):
                     msgmerge --update {po_file} {messages_file}
                     """.format(po_file=po_file,
                                messages_file=messages_file))
-                log.warning("messages translations updated in " + messages_file)
+                log.warning("messages translations updated in " +
+                            messages_file)
             else:
                 log.warning("desktop translations are already up to date")
 
@@ -163,26 +164,28 @@ class I18NTool(object):
                        sources=" ".join(args.source)))
 
 
-    def get_args():
-        parser = argparse.ArgumentParser(prog=__file__, description='i18n tool '
-                                         'for SecureDrop.')
+    def get_args(self):
+        parser = argparse.ArgumentParser(
+            prog=__file__,
+            description='i18n tool for SecureDrop.')
         parser.add_argument('-v', '--verbose', action='store_true')
         subps = parser.add_subparsers()
 
-        set_translate_messages_parser(subps)
-        set_translate_desktop_parser(subps)
+        self.set_translate_messages_parser(subps)
+        self.set_translate_desktop_parser(subps)
 
         return parser
 
-
-    def set_translate_parser(subps,
+    def set_translate_parser(self,
+                             subps,
                              parser,
                              translations_dir,
                              sources):
         parser.add_argument(
             '--extract-update',
             action='store_true',
-            help='extract strings to translate and update existing translations')
+            help=('extract strings to translate and '
+                  'update existing translations'))
         parser.add_argument(
             '--compile',
             action='store_true',
@@ -195,8 +198,9 @@ class I18NTool(object):
         parser.add_argument(
             '--version',
             default=version.__version__,
-            help='SecureDrop version to store in pot files (default {})'.format(
-                version.__version__))
+            help=('SecureDrop version '
+                  'to store in pot files (default {})'.format(
+                      version.__version__)))
         parser.add_argument(
             '--source',
             default=sources,
@@ -204,24 +208,22 @@ class I18NTool(object):
             help='Source files and directories to extract (default {})'.format(
                 sources))
 
-
-    def set_translate_messages_parser(subps):
+    def set_translate_messages_parser(self, subps):
         parser = subps.add_parser('translate-messages',
                                   help=('Update and compile '
                                         'source and template translations'))
         translations_dir = join(dirname(realpath(__file__)), 'translations')
         sources = ['.', 'source_templates', 'journalist_templates']
-        set_translate_parser(subps, parser, translations_dir, sources)
+        self.set_translate_parser(subps, parser, translations_dir, sources)
         mapping = 'babel.cfg'
         parser.add_argument(
             '--mapping',
             default=mapping,
             help='Mapping of files to consider (default {})'.format(
                 mapping))
-        parser.set_defaults(func=translate_messages)
+        parser.set_defaults(func=self.translate_messages)
 
-
-    def set_translate_desktop_parser(subps):
+    def set_translate_desktop_parser(self, subps):
         parser = subps.add_parser('translate-desktop',
                                   help=('Update and compile '
                                         'desktop icons translations'))
@@ -229,21 +231,19 @@ class I18NTool(object):
             dirname(realpath(__file__)),
             '../install_files/ansible-base/roles/tails-config/templates')
         sources = ['desktop-journalist-icon.j2.in', 'desktop-source-icon.j2.in']
-        set_translate_parser(subps, parser, translations_dir, sources)
-        parser.set_defaults(func=translate_desktop)
+        self.set_translate_parser(subps, parser, translations_dir, sources)
+        parser.set_defaults(func=self.translate_desktop)
 
-
-    def setup_verbosity(args):
+    def setup_verbosity(self, args):
         if args.verbose:
             logging.getLogger(__name__).setLevel(logging.DEBUG)
         else:
             logging.getLogger(__name__).setLevel(logging.INFO)
 
-
-    def _run_from_commandline():  # pragma: no cover
+    def _run_from_commandline(self):  # pragma: no cover
         try:
-            args = get_args().parse_args()
-            setup_verbosity(args)
+            args = self.get_args().parse_args()
+            self.setup_verbosity(args)
             rc = args.func(args)
             sys.exit(rc)
         except KeyboardInterrupt:
@@ -251,4 +251,4 @@ class I18NTool(object):
 
 
 if __name__ == '__main__':  # pragma: no cover
-    _run_from_commandline()
+    I18NTool()._run_from_commandline()
