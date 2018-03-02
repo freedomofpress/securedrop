@@ -20,11 +20,11 @@ For most installations, we recommend buying a dedicated firewall
 appliance with pfSense pre-installed, such as the one recommended in the
 Hardware Guide.
 
-We currently recommend the `pfSense SG-2440
-<http://store.pfsense.org/SG-2440/>`__, which has 4 interfaces: WAN,
-LAN, OPT1, and OPT2. If your firewall only has 3 NICs (WAN, LAN, and
-OPT1), you will need to use a switch on the OPT1 interface to connect
-the *Admin Workstation* for the initial installation.
+We currently recommend the `pfSense SG-4860
+<https://store.netgate.com/SG-4860.aspx>`__, which has 6 interfaces: WAN,
+LAN, OPT1, OPT2, OPT3 and OPT4. If your firewall only has 3 NICs (WAN,
+LAN, and OPT1), you will need to use a switch on the OPT1 interface
+to connect the *Admin Workstation* for the initial installation.
 
 If you are new to pfSense or firewall management in general, we
 recommend the following resources:
@@ -39,16 +39,16 @@ recommend the following resources:
       this book, you need to become a `pfSense Gold
       Member <https://www.pfsense.org/our-services/gold-membership.html>`__.
 
-If you're using the recommended SG-2440 firewall, then you may find the
+If you're using the recommended SG-4860 firewall, then you may find the
 following resources useful:
 
--  `SG-2440
-   Quick Start Guide <https://www.netgate.com/docs/sg-2440/quick-start-guide.html>`__
--  `Factory Reset of the SG-2440 (video) <https://vimeo.com/143197016>`__
+-  `SG-4860
+   Quick Start Guide <https://www.netgate.com/docs/pfsense/sg-4860/quick-start-guide.html>`__
+-  `Factory Reset of the SG-4860 (video) <https://vimeo.com/143197016>`__
 -  `Connecting
-   to the SG-2440 Console <https://www.netgate.com/docs/sg-2440/connect-to-console.html>`__
+   to the SG-4860 Console <https://www.netgate.com/docs/pfsense/sg-4860/connect-to-console.html>`__
 
-Before you begin
+Before You Begin
 ----------------
 
 First, consider how the firewall will be connected to the Internet. You
@@ -66,10 +66,10 @@ you will be able to connect from the LAN to the pfSense WebGUI
 configuration wizard, and from there you will be able to configure the
 network so it is working correctly.
 
-Configuring your firewall
+Configuring Your Firewall
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If your firewall has 4 NICs, as the SG-2440 does, we will refer to the
+If your firewall has at least 4 NICs, as the SG-4860 does, we will refer to the
 ports as WAN, LAN, OPT1, and OPT2. In this case, we can now use a
 dedicated port on the network firewall for each component of SecureDrop
 (*Application Server*, *Monitor Server*, and *Admin Workstation*), so
@@ -176,6 +176,21 @@ Connect to the pfSense WebGUI
    |Default pfSense|
 
 .. _intentionally disables LAN access: https://labs.riseup.net/code/issues/7976
+
+Alternate Hostnames
+~~~~~~~~~~~~~~~~~~~
+
+Before you can set up the hardware firewall, you will need to set the
+**Alternate Hostnames** setting after logging in. You will see the Setup
+Wizard but you shoud exit out of it by navigating to **System** -> **Advanced**.
+In the **Alternate Hostnames** dialog box, add ``192.168.1.1`` as well as the
+IP address of the *Admin Gateway*. If you decide against using our recommended
+defaults for the *Admin Gateway*, you should include that value here. After
+saving these settings you should be able to go back to **System** and
+select **Setup Wizard**.
+
+|Alternate Hostnames|
+
 
 Setup Wizard
 ~~~~~~~~~~~~
@@ -556,6 +571,7 @@ Once it is complete, you will see a notification of successful upgrade:
 .. |Pop-up notification| image:: images/firewall/starting_the_unsafe_browser.png
 .. |Unsafe Browser Homepage| image:: images/firewall/unsafe_browser.png
 .. |Default pfSense| image:: images/firewall/default_pfsense.png
+.. |Alternate Hostnames| image:: /images/firewall/alternate_hostnames.png
 .. |Configure LAN Interface| image:: images/firewall/configure_lan_interface.png
 .. |pfSense General Info| image:: images/firewall/pfsense_general_information.png
 .. |Ping| image:: images/firewall/pfsense_diagnostics_ping.png
