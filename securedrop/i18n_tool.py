@@ -163,19 +163,6 @@ class I18NTool(object):
             """.format(translations_dir=args.translations_dir,
                        sources=" ".join(args.sources.split(','))))
 
-
-    def get_args(self):
-        parser = argparse.ArgumentParser(
-            prog=__file__,
-            description='i18n tool for SecureDrop.')
-        parser.add_argument('-v', '--verbose', action='store_true')
-        subps = parser.add_subparsers()
-
-        self.set_translate_messages_parser(subps)
-        self.set_translate_desktop_parser(subps)
-
-        return parser
-
     def set_translate_parser(self,
                              subps,
                              parser,
@@ -232,6 +219,18 @@ class I18NTool(object):
         sources = 'desktop-journalist-icon.j2.in,desktop-source-icon.j2.in'
         self.set_translate_parser(subps, parser, translations_dir, sources)
         parser.set_defaults(func=self.translate_desktop)
+
+    def get_args(self):
+        parser = argparse.ArgumentParser(
+            prog=__file__,
+            description='i18n tool for SecureDrop.')
+        parser.add_argument('-v', '--verbose', action='store_true')
+        subps = parser.add_subparsers()
+
+        self.set_translate_messages_parser(subps)
+        self.set_translate_desktop_parser(subps)
+
+        return parser
 
     def setup_verbosity(self, args):
         if args.verbose:
