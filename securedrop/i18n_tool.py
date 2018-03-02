@@ -59,6 +59,10 @@ def sh(command, input=None):
 
 class I18NTool(object):
 
+    def file_is_modified(self, path):
+        dir = dirname(path)
+        return subprocess.call(['git', '-C', dir, 'diff', '--quiet', path])
+
     def translate_messages(self, args):
         messages_file = os.path.join(args.translations_dir, 'messages.pot')
 
@@ -87,10 +91,8 @@ class I18NTool(object):
                        version=args.version,
                        sources=" ".join(args.sources.split(','))))
 
-            changed = subprocess.call("git diff --quiet {}".format(messages_file),
-                                      shell=True)  # nosec
-
-            if changed and len(os.listdir(args.translations_dir)) > 1:
+            if (self.file_is_modified(messages_file) and
+                    len(os.listdir(args.translations_dir)) > 1):
                 sh("""
                 set -xe
                 for translation in {translations_dir}/*/LC_MESSAGES/*.po ; do
@@ -134,10 +136,7 @@ class I18NTool(object):
                        version=args.version,
                        sources=" ".join(args.sources.split(','))))
 
-            changed = subprocess.call("git diff --quiet {}".format(messages_file),
-                                      shell=True)  # nosec
-
-            if changed:
+            if self.file_is_modified(messages_file):
                 for f in os.listdir(args.translations_dir):
                     if not f.endswith('.po'):
                         continue
