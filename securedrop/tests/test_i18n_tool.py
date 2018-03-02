@@ -7,8 +7,10 @@ from os.path import abspath, dirname, exists, getmtime, join, realpath
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import logging
 import i18n_tool
+from mock import patch
 import pytest
 import shutil
+import signal
 import subprocess
 import time
 import version
@@ -18,6 +20,34 @@ class TestI18NTool(object):
 
     def setup(self):
         self.dir = abspath(dirname(realpath(__file__)))
+
+    def test_main(self, tmpdir, caplog):
+        with pytest.raises(SystemExit):
+            i18n_tool.I18NTool().main(['--help'])
+
+        tool = i18n_tool.I18NTool()
+        with patch.object(tool,
+                          'setup_verbosity',
+                          side_effect=KeyboardInterrupt):
+            assert tool.main([
+                'translate-messages',
+                '--translations-dir', str(tmpdir)
+            ]) == signal.SIGINT
+
+        assert tool.main([
+            'translate-messages',
+            '--translations-dir', str(tmpdir),
+            '--extract-update'
+        ]) is None
+        assert 'pybabel extract' not in caplog.text
+
+        assert tool.main([
+            '--verbose',
+            'translate-messages',
+            '--translations-dir', str(tmpdir),
+            '--extract-update'
+        ]) is None
+        assert 'pybabel extract' in caplog.text
 
     def test_translate_desktop_l10n(self, tmpdir):
         in_files = {}
