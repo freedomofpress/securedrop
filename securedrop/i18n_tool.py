@@ -85,7 +85,7 @@ class I18NTool(object):
                        mapping=args.mapping,
                        messages_file=messages_file,
                        version=args.version,
-                       sources=" ".join(args.source)))
+                       sources=" ".join(args.sources.split(','))))
 
             changed = subprocess.call("git diff --quiet {}".format(messages_file),
                                       shell=True)  # nosec
@@ -132,7 +132,7 @@ class I18NTool(object):
             """.format(translations_dir=args.translations_dir,
                        messages_file=messages_file,
                        version=args.version,
-                       sources=" ".join(args.source)))
+                       sources=" ".join(args.sources.split(','))))
 
             changed = subprocess.call("git diff --quiet {}".format(messages_file),
                                       shell=True)  # nosec
@@ -161,7 +161,7 @@ class I18NTool(object):
                msgfmt --desktop --template $source -o $target -d .
             done
             """.format(translations_dir=args.translations_dir,
-                       sources=" ".join(args.source)))
+                       sources=" ".join(args.sources.split(','))))
 
 
     def get_args(self):
@@ -202,9 +202,8 @@ class I18NTool(object):
                   'to store in pot files (default {})'.format(
                       version.__version__)))
         parser.add_argument(
-            '--source',
+            '--sources',
             default=sources,
-            action='append',
             help='Source files and directories to extract (default {})'.format(
                 sources))
 
@@ -213,7 +212,7 @@ class I18NTool(object):
                                   help=('Update and compile '
                                         'source and template translations'))
         translations_dir = join(dirname(realpath(__file__)), 'translations')
-        sources = ['.', 'source_templates', 'journalist_templates']
+        sources = '.,source_templates,journalist_templates'
         self.set_translate_parser(subps, parser, translations_dir, sources)
         mapping = 'babel.cfg'
         parser.add_argument(
@@ -230,7 +229,7 @@ class I18NTool(object):
         translations_dir = join(
             dirname(realpath(__file__)),
             '../install_files/ansible-base/roles/tails-config/templates')
-        sources = ['desktop-journalist-icon.j2.in', 'desktop-source-icon.j2.in']
+        sources = 'desktop-journalist-icon.j2.in,desktop-source-icon.j2.in'
         self.set_translate_parser(subps, parser, translations_dir, sources)
         parser.set_defaults(func=self.translate_desktop)
 
