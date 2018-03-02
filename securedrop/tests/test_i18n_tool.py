@@ -34,8 +34,9 @@ class TestI18NTool(object):
             'version': version.__version__,
         }
         args = argparse.Namespace(**kwargs)
-        i18n_tool.setup_verbosity(args)
-        i18n_tool.translate_desktop(args)
+        tool = i18n_tool.I18NTool()
+        tool.setup_verbosity(args)
+        tool.translate_desktop(args)
         messages_file = join(str(tmpdir), 'desktop.pot')
         assert exists(messages_file)
         with io.open(messages_file) as fobj:
@@ -53,7 +54,7 @@ class TestI18NTool(object):
         kwargs['source'] = in_files.values()
         old_messages_mtime = getmtime(messages_file)
         assert not exists(i18n_file)
-        i18n_tool.translate_desktop(args)
+        tool.translate_desktop(args)
         assert not exists(i18n_file)
         current_messages_mtime = getmtime(messages_file)
         assert old_messages_mtime < current_messages_mtime
@@ -81,7 +82,7 @@ class TestI18NTool(object):
         kwargs['compile'] = True
         args = argparse.Namespace(**kwargs)
         old_messages_mtime = current_messages_mtime
-        i18n_tool.translate_desktop(args)
+        tool.translate_desktop(args)
         assert old_messages_mtime == getmtime(messages_file)
         with io.open(po_file) as fobj:
             po = fobj.read()
@@ -106,8 +107,9 @@ class TestI18NTool(object):
             'version': version.__version__,
         }
         args = argparse.Namespace(**kwargs)
-        i18n_tool.setup_verbosity(args)
-        i18n_tool.translate_messages(args)
+        tool = i18n_tool.I18NTool()
+        tool.setup_verbosity(args)
+        tool.translate_messages(args)
         messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
         with io.open(messages_file) as fobj:
@@ -124,7 +126,7 @@ class TestI18NTool(object):
         ))
         mo_file = join(locale_dir, 'LC_MESSAGES/messages.mo')
         assert not exists(mo_file)
-        i18n_tool.translate_messages(args)
+        tool.translate_messages(args)
         assert exists(mo_file)
         with io.open(mo_file) as fobj:
             mo = fobj.read()
@@ -145,8 +147,9 @@ class TestI18NTool(object):
             'version': version.__version__,
         }
         args = argparse.Namespace(**kwargs)
-        i18n_tool.setup_verbosity(args)
-        i18n_tool.translate_messages(args)
+        tool = i18n_tool.I18NTool()
+        tool.setup_verbosity(args)
+        tool.translate_messages(args)
         messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
         with io.open(messages_file) as fobj:
@@ -173,7 +176,7 @@ class TestI18NTool(object):
         #
         old_po_mtime = getmtime(po_file)
         assert not exists(mo_file)
-        i18n_tool.translate_messages(args)
+        tool.translate_messages(args)
         assert not exists(mo_file)
         current_po_mtime = getmtime(po_file)
         assert old_po_mtime < current_po_mtime
@@ -189,7 +192,7 @@ class TestI18NTool(object):
         kwargs['compile'] = True
         args = argparse.Namespace(**kwargs)
         old_po_mtime = current_po_mtime
-        i18n_tool.translate_messages(args)
+        tool.translate_messages(args)
         assert old_po_mtime == getmtime(po_file)
         with io.open(mo_file) as fobj:
             mo = fobj.read()
