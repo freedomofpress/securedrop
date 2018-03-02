@@ -39,8 +39,5 @@ authd_iprules:
 
 # Declare Application Server as OSSEC agent role.
 ossec_is_client: yes
-agent_auth_rules:
-  - "-A OUTPUT -d {{ monitor_ip  }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A INPUT -s {{ monitor_ip }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT"
 
 ssh_ip: "{{ app_ip|default(ansible_default_ipv4.address) }}"
