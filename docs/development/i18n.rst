@@ -60,11 +60,11 @@ files into the corresponding ``*.j2`` file and committed to the repository.
 They are then installed when configuring Tails with
 the ``tasks/create_desktop_shortcuts.yml`` tasks.
 
-The manage.py translate helpers
--------------------------------
+The i18n_tool.py translate helpers
+----------------------------------
 
 The `pybabel`_ and `gettext`_ command line is wrapped into the
-``manage.py translate-messages`` and ``manage.py translate-desktop``
+``i18n_tool.py translate-messages`` and ``i18n_tool.py translate-desktop``
 helpers for convenience. It is designed to be used by developers, to
 run tests with fixtures and for packaging.
 
@@ -80,14 +80,13 @@ Updating strings to be translated
 
 After modifying a string in the code, templates, JavaScript or desktop
 labels, the ``securedrop/translations/messages.pot`` files must be
-updated by running the following command in ``/vagrant/securedrop``,
-in the development virtual machine:
+updated by running the following command:
 
 .. code:: sh
 
     make translate
 
-which wraps ``manage.py translate-messages`` and ``manage.py
+which wraps ``i18n_tool.py translate-messages`` and ``i18n_tool.py
 translate-desktop``.  The updated
 ``securedrop/translations/messages.pot`` and
 ``install_files/ansible-base/roles/tails-config/templates/desktop.pot``
@@ -100,21 +99,19 @@ Compiling translations
 ----------------------
 
 `gettext`_ needs a compiled file for each language (the ``*.mo``
-files). This can be done by running the following command
-in ``/vagrant/securedrop``, in the development virtual machine:
+files). This can be done by running the following command:
 
 .. code:: sh
 
-    ./manage.py --verbose translate-messages --compile
+    securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-messages --compile
 
 For desktop files the compilation phases creates a modified version of
 the original file which includes all the translations collected from
 the ``.po`` files.
 
-This can be done by running the following command in
-``/vagrant/securedrop``, in the development virtual machine::
+This can be done by running the following command::
 
-    ./manage.py --verbose translate-desktop --compile
+    securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-desktop --compile
 
 Verifying translations
 ----------------------
@@ -127,15 +124,16 @@ the following:
 
 .. code:: sh
 
-     ./manage.py run
+     make -C securedrop dev
 
 An easier way is to generate screenshots for each desired language
 with:
 
 .. code:: sh
 
+     $ securedrop/bin/dev-shell bash
      $ export PAGE_LAYOUT_LOCALES=en_US,fr_FR
-     $ ./manage.py --verbose translate-messages --compile
+     $ ./i18n_tool.py --verbose translate-messages --compile
      $ pytest -v --page-layout tests/pages-layout
      ...
      ...TestJournalistLayout::test_col_no_documents[en_US] PASSED
@@ -177,8 +175,7 @@ to the ``develop`` branch via pull requests for merge on a regular basis.
                install_files/ansible-base/roles/tails-config/templates/$l.po ; \
            git add install_files/ansible-base/roles/tails-config/templates/$l.po ; \
         done
-      $ vagrant ssh development
-      $ cd /vagrant/securedrop ; ./manage.py --verbose translate-desktop --compile
+      $ securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-desktop --compile
       $ git commit -m 'sync with weblate' translations
       $ git push wip-i18n
 
@@ -205,9 +202,7 @@ Verify the translations are not broken:
 
 .. code:: sh
 
-      $ vagrant ssh development
-      $ cd /vagrant/securedrop
-      $ ./manage.py --verbose translate-messages --compile
+      $ securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-messages --compile
       $ PAGE_LAYOUT_LOCALES=$(echo $sm | tr ' ' ',') \
           pytest -v --page-layout tests/pages-layout
 
@@ -250,18 +245,19 @@ The ``develop`` branch can now be merged into ``i18n`` as follows:
       $ git fetch lab
       $ git checkout -b i18n lab/i18n
       $ git merge origin/develop
-      $ make translate
+      $ make -C securedrop translate
 
-The ``manage.py`` command examines all the source files, looking for
-strings that need to be translated (i.e. gettext('translate me') etc.)
-and update the ``*.pot`` and ``*.po`` files, removing, updating and inserting
-strings to keep them in sync withe the sources. Carefully review the
-output of ``git diff``. Check ``messages.pot`` first for updated strings,
-looking for formatting problems. Then review the ``messages.po`` of one
-existing translation, with a focus on ``fuzzy`` translations. There is
-no need to review other translations because they are processed in the
-same way. When you are satisfied with the result, it can be merged
-with:
+The ``translate`` Makefile target relies on the ``i18n_tool.py`` command
+to examine all the source files, looking for strings that need to be
+translated (i.e. ``gettext('translate me')`` etc.)  and update the
+``*.pot`` and ``*.po`` files, removing, updating and inserting strings
+to keep them in sync with the sources. Carefully review the output of
+``git diff``. Check ``messages.pot`` first for updated strings,
+looking for formatting problems. Then review the ``messages.po`` of
+one existing translation, with a focus on ``fuzzy``
+translations. There is no need to review other translations because
+they are processed in the same way. When you are satisfied with the
+result, it can be merged with:
 
 .. code:: sh
 

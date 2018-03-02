@@ -29,8 +29,8 @@ from werkzeug.datastructures import Headers
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config
 import i18n
+import i18n_tool
 import journalist_app
-import manage
 import pytest
 import source_app
 import version
@@ -205,10 +205,10 @@ class TestI18N(unittest.TestCase):
             'version': version.__version__,
         }
         args = argparse.Namespace(**kwargs)
-        manage.setup_verbosity(args)
-        manage.translate_messages(args)
+        i18n_tool.setup_verbosity(args)
+        i18n_tool.translate_messages(args)
 
-        manage.sh("""
+        i18n_tool.sh("""
         pybabel init -i {d}/messages.pot -d {d} -l en_US
 
         pybabel init -i {d}/messages.pot -d {d} -l fr_FR
@@ -232,7 +232,7 @@ class TestI18N(unittest.TestCase):
               {d}/es_ES/LC_MESSAGES/messages.po
         """.format(d=config.TEMP_DIR))
 
-        manage.translate_messages(args)
+        i18n_tool.translate_messages(args)
 
         fake_config = self.get_fake_config()
         fake_config.SUPPORTED_LOCALES = [
