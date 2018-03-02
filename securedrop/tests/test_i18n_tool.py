@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import argparse
 import os
 from os.path import abspath, dirname, exists, getmtime, join, realpath
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
@@ -12,7 +11,6 @@ import shutil
 import signal
 import subprocess
 import time
-import version
 
 
 class TestI18NTool(object):
@@ -54,18 +52,13 @@ class TestI18NTool(object):
             in_files[what] = join(str(tmpdir), what + '.desktop.in')
             shutil.copy(join(self.dir, 'i18n/' + what + '.desktop.in'),
                         in_files[what])
-        kwargs = {
-            'translations_dir': str(tmpdir),
-            'sources': in_files['source'],
-            'extract_update': True,
-            'compile': False,
-            'verbose': logging.DEBUG,
-            'version': version.__version__,
-        }
-        args = argparse.Namespace(**kwargs)
-        tool = i18n_tool.I18NTool()
-        tool.setup_verbosity(args)
-        tool.translate_desktop(args)
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'translate-desktop',
+            '--translations-dir', str(tmpdir),
+            '--sources', in_files['source'],
+            '--extract-update',
+        ])
         messages_file = join(str(tmpdir), 'desktop.pot')
         assert exists(messages_file)
         pot = open(messages_file).read()
@@ -79,10 +72,15 @@ class TestI18NTool(object):
         #
         # Extract+update but do not compile
         #
-        kwargs['sources'] = ",".join(in_files.values())
         old_messages_mtime = getmtime(messages_file)
         assert not exists(i18n_file)
-        tool.translate_desktop(args)
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'translate-desktop',
+            '--translations-dir', str(tmpdir),
+            '--sources', ",".join(in_files.values()),
+            '--extract-update',
+        ])
         assert not exists(i18n_file)
         current_messages_mtime = getmtime(messages_file)
         assert old_messages_mtime < current_messages_mtime
@@ -105,12 +103,14 @@ class TestI18NTool(object):
         #
         # Compile but do not extract+update
         #
-        kwargs['sources'] = ",".join(in_files.values() + ['BOOM'])
-        kwargs['extract_update'] = False
-        kwargs['compile'] = True
-        args = argparse.Namespace(**kwargs)
         old_messages_mtime = current_messages_mtime
-        tool.translate_desktop(args)
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'translate-desktop',
+            '--translations-dir', str(tmpdir),
+            '--sources', ",".join(in_files.values() + ['BOOM']),
+            '--compile',
+        ])
         assert old_messages_mtime == getmtime(messages_file)
         po = open(po_file).read()
         assert 'SecureDrop Source Interfaces' in po
@@ -123,19 +123,16 @@ class TestI18NTool(object):
             join(self.dir, 'i18n/code.py'),
             join(self.dir, 'i18n/template.html'),
         ]
-        kwargs = {
-            'translations_dir': str(tmpdir),
-            'mapping': join(self.dir, 'i18n/babel.cfg'),
-            'sources': ",".join(source),
-            'extract_update': True,
-            'compile': True,
-            'verbose': logging.DEBUG,
-            'version': version.__version__,
-        }
-        args = argparse.Namespace(**kwargs)
-        tool = i18n_tool.I18NTool()
-        tool.setup_verbosity(args)
-        tool.translate_messages(args)
+        args = [
+            '--verbose',
+            'translate-messages',
+            '--translations-dir', str(tmpdir),
+            '--mapping', join(self.dir, 'i18n/babel.cfg'),
+            '--sources', ",".join(source),
+            '--extract-update',
+            '--compile',
+        ]
+        i18n_tool.I18NTool().main(args)
         messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
         pot = open(messages_file).read()
@@ -151,27 +148,23 @@ class TestI18NTool(object):
         ))
         mo_file = join(locale_dir, 'LC_MESSAGES/messages.mo')
         assert not exists(mo_file)
-        tool.translate_messages(args)
+        i18n_tool.I18NTool().main(args)
         assert exists(mo_file)
         mo = open(mo_file).read()
         assert 'code hello i18n' in mo
         assert 'template hello i18n' in mo
 
     def test_translate_messages_compile_arg(self, tmpdir):
-        source = join(self.dir, 'i18n/code.py')
-        kwargs = {
-            'translations_dir': str(tmpdir),
-            'mapping': join(self.dir, 'i18n/babel.cfg'),
-            'sources': source,
-            'extract_update': True,
-            'compile': False,
-            'verbose': logging.DEBUG,
-            'version': version.__version__,
-        }
-        args = argparse.Namespace(**kwargs)
-        tool = i18n_tool.I18NTool()
-        tool.setup_verbosity(args)
-        tool.translate_messages(args)
+        args = [
+            '--verbose',
+            'translate-messages',
+            '--translations-dir', str(tmpdir),
+            '--mapping', join(self.dir, 'i18n/babel.cfg'),
+        ]
+        i18n_tool.I18NTool().main(args + [
+            '--sources', join(self.dir, 'i18n/code.py'),
+            '--extract-update',
+        ])
         messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
         pot = open(messages_file).read()
@@ -197,7 +190,10 @@ class TestI18NTool(object):
         #
         old_po_mtime = getmtime(po_file)
         assert not exists(mo_file)
-        tool.translate_messages(args)
+        i18n_tool.I18NTool().main(args + [
+            '--sources', join(self.dir, 'i18n/code.py'),
+            '--extract-update',
+        ])
         assert not exists(mo_file)
         current_po_mtime = getmtime(po_file)
         assert old_po_mtime < current_po_mtime
@@ -209,11 +205,11 @@ class TestI18NTool(object):
             join(self.dir, 'i18n/code.py'),
             join(self.dir, 'i18n/template.html'),
         ]
-        kwargs['extract_update'] = False
-        kwargs['compile'] = True
-        args = argparse.Namespace(**kwargs)
         old_po_mtime = current_po_mtime
-        tool.translate_messages(args)
+        i18n_tool.I18NTool().main(args + [
+            '--sources', ",".join(source),
+            '--compile',
+        ])
         assert old_po_mtime == getmtime(po_file)
         mo = open(mo_file).read()
         assert 'code hello i18n' in mo
