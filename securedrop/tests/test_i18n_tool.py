@@ -57,7 +57,7 @@ class TestI18NTool(object):
                         in_files[what])
         kwargs = {
             'translations_dir': str(tmpdir),
-            'source': [in_files['source']],
+            'sources': in_files['source'],
             'extract_update': True,
             'compile': False,
             'verbose': logging.DEBUG,
@@ -81,7 +81,7 @@ class TestI18NTool(object):
         #
         # Extract+update but do not compile
         #
-        kwargs['source'] = in_files.values()
+        kwargs['sources'] = ",".join(in_files.values())
         old_messages_mtime = getmtime(messages_file)
         assert not exists(i18n_file)
         tool.translate_desktop(args)
@@ -107,7 +107,7 @@ class TestI18NTool(object):
         #
         # Compile but do not extract+update
         #
-        kwargs['source'] = in_files.values() + ['BOOM']
+        kwargs['sources'] = ",".join(in_files.values() + ['BOOM'])
         kwargs['extract_update'] = False
         kwargs['compile'] = True
         args = argparse.Namespace(**kwargs)
@@ -130,7 +130,7 @@ class TestI18NTool(object):
         kwargs = {
             'translations_dir': str(tmpdir),
             'mapping': join(self.dir, 'i18n/babel.cfg'),
-            'source': source,
+            'sources': ",".join(source),
             'extract_update': True,
             'compile': True,
             'verbose': logging.DEBUG,
@@ -164,13 +164,11 @@ class TestI18NTool(object):
             assert 'template hello i18n' in mo
 
     def test_translate_messages_compile_arg(self, tmpdir):
-        source = [
-            join(self.dir, 'i18n/code.py'),
-        ]
+        source = join(self.dir, 'i18n/code.py')
         kwargs = {
             'translations_dir': str(tmpdir),
             'mapping': join(self.dir, 'i18n/babel.cfg'),
-            'source': source,
+            'sources': source,
             'extract_update': True,
             'compile': False,
             'verbose': logging.DEBUG,
