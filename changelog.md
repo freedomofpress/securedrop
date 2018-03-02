@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6~rc2
+## 0.6~rc3
 
 ### Web Applications
 
@@ -24,6 +24,7 @@
 
 ### Tails Environment
 
+* Refactor sdconfig into Python (#2758).
 * Add commands to check for and apply updates to the securedrop-admin CLI (#2976).
 
 ### Developer Workflow 
