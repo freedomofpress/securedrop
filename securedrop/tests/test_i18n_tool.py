@@ -215,6 +215,30 @@ class TestI18NTool(object):
         assert 'code hello i18n' in mo
         assert 'template hello i18n' not in mo
 
+    def test_update_docs(self, tmpdir, caplog):
+        os.makedirs(join(str(tmpdir), 'includes'))
+        i18n_tool.sh("""
+        cd {dir}
+        git init
+        git config user.email "you@example.com"
+        git config user.name "Your Name"
+        mkdir includes
+        touch includes/l10n.txt
+        git add includes/l10n.txt
+        git commit -m 'init'
+        """.format(dir=str(tmpdir)))
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-docs',
+            '--documentation-dir', str(tmpdir)])
+        assert 'l10n.txt updated' in caplog.text
+        caplog.clear()
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-docs',
+            '--documentation-dir', str(tmpdir)])
+        assert 'l10n.txt already up to date' in caplog.text
+
 
 class TestSh(object):
 
