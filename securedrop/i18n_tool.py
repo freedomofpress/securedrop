@@ -240,15 +240,14 @@ class I18NTool(object):
         else:
             logging.getLogger(__name__).setLevel(logging.INFO)
 
-    def _run_from_commandline(self):  # pragma: no cover
+    def main(self, argv):
         try:
-            args = self.get_args().parse_args()
+            args = self.get_args().parse_args(argv)
             self.setup_verbosity(args)
-            rc = args.func(args)
-            sys.exit(rc)
+            return args.func(args)
         except KeyboardInterrupt:
-            sys.exit(signal.SIGINT)
+            return signal.SIGINT
 
 
 if __name__ == '__main__':  # pragma: no cover
-    I18NTool()._run_from_commandline()
+    sys.exit(I18NTool().main(sys.argv[1:]))
