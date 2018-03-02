@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import argparse
-import logging
 from datetime import datetime, timedelta
 import os
 
@@ -13,7 +11,6 @@ import i18n_tool
 import journalist_app
 import source_app
 import template_filters
-import version
 
 
 class TestTemplateFilters(object):
@@ -86,21 +83,15 @@ class TestTemplateFilters(object):
             assert "072 To" in template_filters.filesizeformat(value)
 
     def test_filters(self):
-        sources = [
-            'tests/i18n/code.py',
-        ]
-        kwargs = {
-            'translations_dir': config.TEMP_DIR,
-            'mapping': 'tests/i18n/babel.cfg',
-            'source': sources,
-            'extract_update': True,
-            'compile': True,
-            'verbose': logging.DEBUG,
-            'version': version.__version__,
-        }
-        args = argparse.Namespace(**kwargs)
-        i18n_tool.setup_verbosity(args)
-        i18n_tool.translate_messages(args)
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'translate-messages',
+            '--mapping', 'tests/i18n/babel.cfg',
+            '--translations-dir', config.TEMP_DIR,
+            '--sources', 'tests/i18n/code.py',
+            '--extract-update',
+            '--compile',
+        ])
 
         i18n_tool.sh("""
         pybabel init -i {d}/messages.pot -d {d} -l en_US
