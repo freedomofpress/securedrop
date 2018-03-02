@@ -1,0 +1,6 @@
+---
+install_local_packages: true
+primary_network_iface: eth0
+ssh_users: sdrop
+enable_ssh_over_tor: false
+ssh_network_force: 0.0.0.0/0
