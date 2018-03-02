@@ -157,6 +157,14 @@ SecureDrop branch`_ which is a fork of the ``develop`` branch of the
 `SecureDrop git repository`_. These translations need to be submitted
 to the ``develop`` branch via pull requests for merge on a regular basis.
 
+SecureDrop only supports a subset of all the languages being worked on
+in `Weblate`_: some of them are partially translated or not fully
+reviewed. The list of supported languages is hard-coded in the
+``i18n_tool.py`` file, in the ``SUPPORTED_LANGUAGES`` variable. When a
+new language is fully translated and reviewed, the ``i18n_tool.py``
+file must be manually edited to add this new language to the
+``SUPPORTED_LANGUAGES`` variable.
+
 .. code:: sh
 
       $ git clone https://github.com/freedomofpress/securedrop
