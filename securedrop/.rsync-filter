@@ -65,4 +65,5 @@ include translations/*/
 include translations/*/*/
 include translations/*/*/*.po
 include .well-known/
+include .well-known/pki-validation/
 exclude *
