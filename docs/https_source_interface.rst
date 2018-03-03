@@ -54,7 +54,8 @@ and to demonstrate control over the Onion URL for your Source Interface.
 
 In order for you to demonstrate control over the Onion URL for your Source
 Interface, DigiCert will provide you with some text and ask you to make it
-available at a specific URL: ``<onion_url>/.well-known/pki-validation.html``.
+available at a `specific URL`_:
+``<onion_url>/.well-known/pki-validation/<unique_hash>.txt``.
 We have support for this workflow:
 
 .. code:: sh
@@ -63,9 +64,8 @@ We have support for this workflow:
     $ ssh app
 
     # Edit the validation file with content the CA provides
-    # Note that the filename can be anything as long as it ends
-    # with .htm or .html
-    $ sudo vi /var/www/securedrop/.well-known/pki-validation.html
+    # Replace <unique_hash> with the token provided by Digicert
+    $ sudo vi /var/www/securedrop/.well-known/pki-validation/<unique_hash>.txt
 
 While the `CAB forum`_ has specified that ``.onion`` certificates may have a
 maximum lifetime of 15 months, we have heard that some folks have run into
@@ -83,6 +83,7 @@ certificate a validity period of 12 months.
    Workstation, and avoiding copying the ``.key`` to any insecure removable
    media or other computers.
 
+.. _`specific URL`: https://www.digicert.com/certcentral-support/use-http-practical-demonstration-dcv-method.htm
 .. _`DigiCert's documentation`: https://www.digicert.com/blog/ordering-a-onion-certificate-from-digicert/
 .. |HTTPS Onion cert| image:: images/screenshots/onion-url-certificate.png
 .. _`contact DigiCert directly`: https://www.digicert.com/blog/ordering-a-onion-certificate-from-digicert/
@@ -99,10 +100,14 @@ First, on the *Admin Workstation*:
 
   cd ~/Persistent/securedrop
 
-Make note of the Source Interface Onion URL. Edit the site-specific variables
-for your organization in
-``install_files/ansible-base/group_vars/all/site-specific`` to include the
-following: ::
+Make note of the Source Interface Onion URL. Now from ``~/Persistent/securedrop``
+on your admin workstation:
+
+.. code:: sh
+
+  ./securedrop-admin sdconfig
+
+This command will prompt you for the following variables::
 
     securedrop_app_https_on_source_interface: yes
     securedrop_app_https_certificate_cert_src: sd.crt
@@ -113,7 +118,6 @@ The filenames should match the names of the files provided to you by DigiCert,
 and should be saved inside the ``install_files/ansible-base/`` directory. You'll
 rerun the configuration scripts: ::
 
-    ./securedrop-admin setup
     ./securedrop-admin install
 
 The webserver configuration will be updated to apply the HTTPS settings.
