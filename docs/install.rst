@@ -92,10 +92,7 @@ match your environment: ::
 
 The script will automatically validate the answers you provided, and display
 error messages if any problems were detected. The answers you provided will be
-written to the file ``install_files/ansible-base/group_vars/all/site-specific``,
-which you can edit in case of errors such as typos before rerunning the script.
-You can also run ``./securedrop-admin sdconfig --force`` to remove your entire
-configuration file and start over.
+written to the file ``install_files/ansible-base/group_vars/all/site-specific``.
 
 When you're done, save the file and quit the editor.
 

@@ -334,18 +334,16 @@ You should see a message appear indicating the change was a success:
 Updating system configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Other server configuration is stored on the *Admin Workstation* in
-``~/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific``.
+If you want to update the system configuration, you should use the
+``securedrop-admin`` tool on the *Admin Workstation*. From
+``~/Persistent/securedrop``, run:
 
-If you want to update the system configuration, there are two options:
+.. code:: sh
 
-1. Manually edit the ``site-specific`` file to make the desired modifications.
-2. From ``~/Persistent/securedrop``, run
-   ``./securedrop-admin sdconfig --force``, which will require you to retype
-   each variable in ``site-specific``.
+  ./securedrop-admin sdconfig
 
-Once you have edited the ``site-specific`` server configuration file, you will
-need to apply the changes to the servers. From ``~/Persistent/securedrop``:
+This will give you the opportunity to edit any variable. Next, you will
+need to apply the changes to the servers. Again from ``~/Persistent/securedrop``:
 
 .. code:: sh
 
@@ -355,6 +353,10 @@ need to apply the changes to the servers. From ``~/Persistent/securedrop``:
 
 Once the install command has successfully completed, the changes are applied.
 Read the next section if you have multiple admins.
+
+.. note::
+  Server configuration is stored on the *Admin Workstation* in
+  ``~/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific``.
 
 Managing ``site-specific`` updates on teams with multiple admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
