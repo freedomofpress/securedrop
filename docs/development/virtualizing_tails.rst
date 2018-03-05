@@ -115,7 +115,7 @@ to Tails, and enter an administration password and start Tails.
 .. code:: sh
 
   sudo patch -p0 -d/ < installer.patch
-  sudo /usr/bin/python -tt /usr/lib/tails_installer/tails-installer -u -n --clone -P -m -x
+  sudo /usr/bin/python -tt /usr/bin/tails-installer -u -n --clone -P -m -x
 
 3. The **Tails Installer** will appear. Click **Install Tails**.
 4. Once complete, navigate to **Applications**, **Utilities** and open **Disks**.
