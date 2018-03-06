@@ -590,7 +590,7 @@ def parse_argv(argv):
     parse_update.set_defaults(func=update)
 
     parse_check_updates = subparsers.add_parser('check_for_updates',
-                                                help=update.__doc__)
+                                                help=check_for_updates.__doc__)
     parse_check_updates.set_defaults(func=check_for_updates)
 
     parse_logs = subparsers.add_parser('logs',
