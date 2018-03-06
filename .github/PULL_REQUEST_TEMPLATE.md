@@ -22,9 +22,13 @@ Any special considerations for deployment? Consider both:
 
 ## Checklist
 
-### If you made changes to the app code:
+### If you made changes to the server application code:
 
-- [ ] Unit and functional tests pass on the development VM
+- [ ] Linting (`make ci-lint`) and tests (`make -C securedrop test`) pass in the development container
+
+### If you made changes to `securedrop-admin`:
+
+- [ ] Linting and tests (`make -C admin test`) pass in the admin development container
 
 ### If you made changes to the system configuration:
 
@@ -32,4 +36,4 @@ Any special considerations for deployment? Consider both:
 
 ### If you made changes to documentation:
 
-- [ ] Doc linting passed locally
+- [ ] Doc linting (`make docs-lint`) passed locally
