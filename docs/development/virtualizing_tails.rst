@@ -71,44 +71,44 @@ to Tails, and enter an administration password and start Tails.
 
 .. code:: python
 
-    --- /usr/lib/python2.7/dist-packages/tails_installer/creator.py      2018-01-22 14:59:40.000000000 +0100
-    +++ /usr/lib/python2.7/dist-packages/tails_installer/creator.py.mod  2018-03-05 05:15:00.000000000 -0800
-    @@ -595,16 +595,6 @@ class LinuxTailsInstallerCreator(TailsInstallerCreator):
-                    self.log.debug('Skipping non-removable device: %s'
-                                    % data['device'])
+  --- /usr/lib/python2.7/dist-packages/tails_installer/creator.py      2018-01-22 14:59:40.000000000 +0100
+  +++ /usr/lib/python2.7/dist-packages/tails_installer/creator.py.mod  2018-03-05 05:15:00.000000000 -0800
+  @@ -595,16 +595,6 @@ class LinuxTailsInstallerCreator(TailsInstallerCreator):
+                   self.log.debug('Skipping non-removable device: %s'
+                                  % data['device'])
 
-    -            # Only pay attention to USB and SDIO devices, unless --force'd
-    -            iface = drive.props.connection_bus
-    -            if iface != 'usb' and iface != 'sdio' \
-    -               and self.opts.force != data['device']:
-    -                self.log.warning(
-    -                    "Skipping device '%(device)s' connected to '%(interface)s' interface"
-    -                    % {'device': data['udi'], 'interface': iface}
-    -                )
-    -                continue
-    -
-                # Skip optical drives
-                if data['is_optical'] and self.opts.force != data['device']:
-                    self.log.debug('Skipping optical device: %s' % data['device'])
-    --- /usr/lib/python2.7/dist-packages/tails_installer/gui.py      2018-01-22 14:59:40.000000000 +0100
-    +++ /usr/lib/python2.7/dist-packages/tails_installer/gui.py.mod  2018-03-05 05:15:00.000000000 -0800
-    @@ -568,16 +568,6 @@ class TailsInstallerWindow(Gtk.ApplicationWindow):
-                        self.devices_with_persistence.append(info['parent'])
-                        continue
-                    pretty_name = self.get_device_pretty_name(info)
-    -                # Skip devices with non-removable bit enabled
-    -                if not info['removable']:
-    -                    message =_('The USB stick "%(pretty_name)s"'
-    -                               ' is configured as non-removable by its'
-    -                               ' manufacturer and Tails will fail to start on it.'
-    -                               ' Please try installing on a different model.') % {
-    -                               'pretty_name':  pretty_name
-    -                               }
-    -                    self.status(message)
-    -                    continue
-                    # Skip too small devices, but inform the user
-                    if not info['is_device_big_enough_for_installation']:
-                        message =_('The device "%(pretty_name)s"'
+  -            # Only pay attention to USB and SDIO devices, unless --force'd
+  -            iface = drive.props.connection_bus
+  -            if iface != 'usb' and iface != 'sdio' \
+  -               and self.opts.force != data['device']:
+  -                self.log.warning(
+  -                    "Skipping device '%(device)s' connected to '%(interface)s' interface"
+  -                    % {'device': data['udi'], 'interface': iface}
+  -                )
+  -                continue
+  -
+               # Skip optical drives
+               if data['is_optical'] and self.opts.force != data['device']:
+                   self.log.debug('Skipping optical device: %s' % data['device'])
+  --- /usr/lib/python2.7/dist-packages/tails_installer/gui.py      2018-01-22 14:59:40.000000000 +0100
+  +++ /usr/lib/python2.7/dist-packages/tails_installer/gui.py.mod  2018-03-05 05:15:00.000000000 -0800
+  @@ -568,16 +568,6 @@ class TailsInstallerWindow(Gtk.ApplicationWindow):
+                       self.devices_with_persistence.append(info['parent'])
+                       continue
+                   pretty_name = self.get_device_pretty_name(info)
+  -                # Skip devices with non-removable bit enabled
+  -                if not info['removable']:
+  -                    message =_('The USB stick "%(pretty_name)s"'
+  -                               ' is configured as non-removable by its'
+  -                               ' manufacturer and Tails will fail to start on it.'
+  -                               ' Please try installing on a different model.') % {
+  -                               'pretty_name':  pretty_name
+  -                               }
+  -                    self.status(message)
+  -                    continue
+                   # Skip too small devices, but inform the user
+                   if not info['is_device_big_enough_for_installation']:
+                       message =_('The device "%(pretty_name)s"'
 
 2. Now run the following two commands in a Terminal in your Tails VM:
 
