@@ -52,14 +52,24 @@ Upgrade Docs`_ for further details on how to update the suggested firewall.
 .. _`Netgate RSS Feed`: https://www.netgate.com/feed.xml
 .. _`pfSense Upgrade Docs`: https://doc.pfsense.org/index.php/Upgrade_Guide
 
-Keep your Tails Drives Updated
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Keep your SecureDrop Workstations Updated
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You should apply updates to your Tails drives as they are released, as they
-can contain critical security fixes. Subscribe to the `Tails RSS Feed`_ to be
+You should keep your SecureDrop workstations updated with:
+
+* **Tails updates**: for each *Admin Workstation*, *Journalist Workstation*, and
+  *Secure Viewing Station*
+* **SecureDrop workstation updates**: for each *Admin Workstation* and
+  *Journalist Workstation*
+
+You should apply Tails updates to your Tails drives as they are released, as they
+often contain critical security fixes. Subscribe to the `Tails RSS Feed`_ to be
 alerted of new releases. The online Tails drives, once booted and connected to Tor,
 will alert you if upgrades are available. Follow the `Tails Upgrade Documentation`_
 on how to upgrade the drives.
+
+For SecureDrop workstation updates, follow the instructions provided in the
+`Updating the Workstations`_ section below.
 
 .. _`Tails RSS Feed`: https://tails.boum.org/news/index.en.rss
 .. _`Tails
@@ -186,6 +196,25 @@ possession when they attempt to log in to SecureDrop.
   image:: images/manual/screenshots/journalist-admin_add_user_hotp.png
 .. |Verify YubiKey|
   image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
+
+.. _Updating the Workstations:
+
+Updating SecureDrop Workstations
+--------------------------------
+
+In addition to Tails updates, once you have upgraded to SecureDrop 0.6 or later,
+you can keep the SecureDrop software up to date on each *Journalist Workstation*
+and *Admin Workstation* using the ``securedrop-admin`` CLI. In each workstation:
+
+.. code:: sh
+
+  cd ~/Persistent/securedrop
+  ./securedrop-admin setup  # Run setup before the update
+  ./securedrop-admin update
+  ./securedrop-admin setup  # Run setup again after the update
+
+.. tip:: If you just want to check if there are updates available without
+        applying them, you can run ``./securedrop-admin check_for_updates``.
 
 Server Command Line
 -------------------
