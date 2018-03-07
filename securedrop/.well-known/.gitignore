@@ -1,1 +1,5 @@
-*
+# Ignore everything
+/*
+
+# Except pki-validation
+!pki-validation/
