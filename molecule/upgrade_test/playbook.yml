@@ -44,7 +44,7 @@
         state: running
       tags: always
 
-    - name: Ensure tor is running
+    - name: Ensure supervisor is running
       service:
         name: supervisor
         state: running
