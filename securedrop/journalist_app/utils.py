@@ -111,6 +111,39 @@ def validate_user(username, password, token, error_message=None):
         return None
 
 
+def validate_hotp_secret(user, otp_secret):
+    """
+    Validates and sets the HOTP provided by a user
+    :param user: the change is for this instance of the User object
+    :param otp_secret: the new HOTP secret
+    :return: True if it validates, False if it does not
+    """
+    try:
+        user.set_hotp_secret(otp_secret)
+    except TypeError as e:
+        if "Non-hexadecimal digit found" in str(e):
+            flash(gettext(
+                "Invalid secret format: "
+                "please only submit letters A-F and numbers 0-9."),
+                  "error")
+            return False
+        elif "Odd-length string" in str(e):
+            flash(gettext(
+                "Invalid secret format: "
+                "odd-length secret. Did you mistype the secret?"),
+                  "error")
+            return False
+        else:
+            flash(gettext(
+                "An unexpected error occurred! "
+                "Please inform your administrator."), "error")
+            current_app.logger.error(
+                "set_hotp_secret '{}' (id {}) failed: {}".format(
+                    otp_secret, user.id, e))
+            return False
+    return True
+
+
 def download(zip_basename, submissions):
     """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
     containing *submissions*. The ZIP-file, being a

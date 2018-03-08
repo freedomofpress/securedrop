@@ -12,7 +12,7 @@ from db import db
 from models import Journalist, InvalidUsernameException, PasswordError
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (make_password, commit_account_changes,
-                                  set_diceware_password)
+                                  set_diceware_password, validate_hotp_secret)
 from journalist_app.forms import LogoForm, NewUserForm
 
 
@@ -131,30 +131,10 @@ def make_blueprint(config):
         otp_secret = request.form.get('otp_secret', None)
         if otp_secret:
             user = Journalist.query.get(uid)
-            try:
-                user.set_hotp_secret(otp_secret)
-            except TypeError as e:
-                if "Non-hexadecimal digit found" in str(e):
-                    flash(gettext(
-                        "Invalid secret format: "
-                        "please only submit letters A-F and numbers 0-9."),
-                          "error")
-                elif "Odd-length string" in str(e):
-                    flash(gettext(
-                        "Invalid secret format: "
-                        "odd-length secret. Did you mistype the secret?"),
-                          "error")
-                else:
-                    flash(gettext(
-                        "An unexpected error occurred! "
-                        "Please inform your administrator."), "error")
-                    current_app.logger.error(
-                        "set_hotp_secret '{}' (id {}) failed: {}".format(
-                            otp_secret, uid, e))
+            if not validate_hotp_secret(user, otp_secret):
                 return render_template('admin_edit_hotp_secret.html', uid=uid)
-            else:
-                db.session.commit()
-                return redirect(url_for('admin.new_user_two_factor', uid=uid))
+            db.session.commit()
+            return redirect(url_for('admin.new_user_two_factor', uid=uid))
         else:
             return render_template('admin_edit_hotp_secret.html', uid=uid)
 
