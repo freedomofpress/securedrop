@@ -21,6 +21,9 @@
   display: inline-block
   text-transform: capitalize
 
+.menu__trigger-icon
+  padding-right: 0.15em
+
 .menu__items
   display: none
   position: absolute
@@ -57,7 +60,7 @@
   width: 100vw
   height: 100vh
   background-color: transparent
-  & .menu__trigger-text, & .menu__trigger-arrow
+  & .menu__trigger-text, & .menu__trigger-arrow, & .menu__trigger-icon
     display: none
 
 .menu__checkbox:focus  ~ .menu__trigger
