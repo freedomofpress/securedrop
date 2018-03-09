@@ -6,7 +6,7 @@ from flask_babel import gettext
 
 from db import db
 from journalist_app.utils import (make_password, set_diceware_password,
-                                  validate_user)
+                                  validate_user, validate_hotp_secret)
 
 
 def make_blueprint(config):
@@ -60,6 +60,8 @@ def make_blueprint(config):
     def reset_two_factor_hotp():
         otp_secret = request.form.get('otp_secret', None)
         if otp_secret:
+            if not validate_hotp_secret(g.user, otp_secret):
+                return render_template('account_edit_hotp_secret.html')
             g.user.set_hotp_secret(otp_secret)
             db.session.commit()
             return redirect(url_for('account.new_two_factor'))
