@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6~rc3
+## 0.6~rc4
 
 ### Web Applications
 
@@ -18,6 +18,7 @@
 
 * Update grsecurity-hardened kernels to 4.4.115 (#3077).
 * Bump Ansible version to 2.4.2 (#2929).
+* Update Apache/AppArmor configuration for proving .onion ownership (#2981).
 * Allow sasl_domain to be empty (#2482).
 * Bugfix: Update AppArmor rule for Apache (#3020).
 * Allow syscheck to monitor /var/lib/tor/services (#2960).
