@@ -185,6 +185,20 @@ class TestPytestJournalistApp:
         finally:
             models.LOGIN_HARDENING = False
 
+    def test_login_invalid_credentials(self, journalist_app):
+        with journalist_app.app_context():
+            user, password = utils.db_helper.init_journalist()
+            username = user.username
+
+        with journalist_app.test_client() as app:
+            resp = app.post('/login',
+                            data=dict(username=username,
+                                      password='invalid',
+                                      token='mocked'))
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Login failed" in text
+
 
 class TestJournalistApp(TestCase):
 
@@ -205,14 +219,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_login_invalid_credentials(self):
-        resp = self.client.post(url_for('main.login'),
-                                data=dict(username=self.user.username,
-                                          password='invalid',
-                                          token='mocked'))
-        self.assert200(resp)
-        self.assertIn("Login failed", resp.data)
 
     def test_validate_redirect(self):
         resp = self.client.post(url_for('main.index'),
