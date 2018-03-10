@@ -155,6 +155,36 @@ class TestPytestJournalistApp:
                 resp = app.get('/')
                 ins.assert_redirects(resp, '/login')
 
+    def test_login_throttle(self, journalist_app):
+        with journalist_app.app_context():
+            user, password = utils.db_helper.init_journalist()
+            username = user.username
+
+        # Overwrite the default value used during testing
+        # TODO this may break other tests during parallel testing
+        models.LOGIN_HARDENING = True
+        try:
+            with journalist_app.test_client() as app:
+                for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
+                    resp = app.post('/login',
+                                    data=dict(username=username,
+                                              password='invalid',
+                                              token='invalid'))
+                    assert resp.status_code == 200
+                    text = resp.data.decode('utf-8')
+                    assert "Login failed" in text
+
+                resp = app.post('/login',
+                                data=dict(username=username,
+                                          password='invalid',
+                                          token='invalid'))
+                assert resp.status_code == 200
+                text = resp.data.decode('utf-8')
+                assert ("Please wait at least {} seconds".format(
+                    Journalist._LOGIN_ATTEMPT_PERIOD) in text)
+        finally:
+            models.LOGIN_HARDENING = False
+
 
 class TestJournalistApp(TestCase):
 
@@ -175,27 +205,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_login_throttle(self):
-        models.LOGIN_HARDENING = True
-        try:
-            for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
-                resp = self.client.post(url_for('main.login'),
-                                        data=dict(username=self.user.username,
-                                                  password='invalid',
-                                                  token='mocked'))
-                self.assert200(resp)
-                self.assertIn("Login failed", resp.data)
-
-            resp = self.client.post(url_for('main.login'),
-                                    data=dict(username=self.user.username,
-                                              password='invalid',
-                                              token='mocked'))
-            self.assert200(resp)
-            self.assertIn("Please wait at least {} seconds".format(
-                Journalist._LOGIN_ATTEMPT_PERIOD), resp.data)
-        finally:
-            models.LOGIN_HARDENING = False
 
     def test_login_invalid_credentials(self):
         resp = self.client.post(url_for('main.login'),
