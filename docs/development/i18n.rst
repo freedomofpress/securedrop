@@ -298,6 +298,36 @@ Note that the new index will not be used right away, some workers may
 still have the old index open. Rebooting the machine is an option,
 waiting for a few hours is another option.
 
+Release management
+------------------
+
+Two weeks before the release: update
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The new and updated strings are uploaded to Weblate. This is done late in the SecureDrop release cycle so translators get less notifications. It would be inconvenient if there were hundreds of strings needing attention. But SecureDrop is small and it is ok to postpone notifications.
+
+* Merge develop into the Weblate fork
+* Post an announcement `to the translation section of the forum <https://forum.securedrop.club/c/translations>`__ (see `an example  <https://forum.securedrop.club/t/10-securedrop-strings-need-work-february-2018-feature-freeze/449>`__)
+* Add a prominent Weblate whiteboard announcement that reads `The X.Y.Z deadline is MM DD, YY midnight. String freeze will be in effect MM DD, YY midnight.`
+* Create a pull request for every source string suggestion coming from translators
+* Backport every commit changing a source string to the release branch
+
+One week before the release: string freeze
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Verify develop and the release branch have the same source strings
+* Merge develop into the Weblate fork
+* Post an announcement `to the translation section of the forum <https://forum.securedrop.club/c/translations>`__ (see `an example  <https://forum.securedrop.club/t/4-securedrop-strings-need-work-march-2018-string-freeze/461>`__)
+* Remind all developers about the string freeze, in the `chat room <https://gitter.im/freedomofpress/securedrop>`__
+* Add a prominent Weblate whiteboard announcement that reads `The X.Y.Z deadline is Month day, year midnight. String freeze is in effect: no source string are modified before the release.`
+
+The day of the release
+~~~~~~~~~~~~~~~~~~~~~~
+
+* Merge translations back to develop
+* Remove the prominent Weblate whiteboard announcement
+* Provide translator credits to add to the SecureDrop release announcement
+
 Translator credits
 ------------------
 
