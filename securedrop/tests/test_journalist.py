@@ -149,6 +149,12 @@ class TestPytestJournalistApp:
             text = resp.data.decode('utf-8')
             assert "You cannot send an empty reply." not in text
 
+    def test_unauthorized_access_redirects_to_login(self, journalist_app):
+        with journalist_app.test_client() as app:
+            with InstrumentedApp(journalist_app) as ins:
+                resp = app.get('/')
+                ins.assert_redirects(resp, '/login')
+
 
 class TestJournalistApp(TestCase):
 
@@ -169,10 +175,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_unauthorized_access_redirects_to_login(self):
-        resp = self.client.get(url_for('main.index'))
-        self.assertRedirects(resp, url_for('main.login'))
 
     def test_login_throttle(self):
         models.LOGIN_HARDENING = True
