@@ -199,6 +199,13 @@ class TestPytestJournalistApp:
         text = resp.data.decode('utf-8')
         assert "Login failed" in text
 
+    def test_validate_redirect(self, journalist_app):
+        with journalist_app.test_client() as app:
+            resp = app.post('/', follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Login to access" in text
+
 
 class TestJournalistApp(TestCase):
 
@@ -219,12 +226,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_validate_redirect(self):
-        resp = self.client.post(url_for('main.index'),
-                                follow_redirects=True)
-        self.assert200(resp)
-        self.assertIn("Login to access", resp.data)
 
     def test_login_valid_credentials(self):
         resp = self.client.post(url_for('main.login'),
