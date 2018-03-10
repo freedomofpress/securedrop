@@ -24,12 +24,22 @@ from sdconfig import SDConfig, config
 from db import db
 from models import (InvalidPasswordLength, Journalist, Reply, Source,
                     Submission)
+from utils.instrument import InstrumentedApp
 
 # Smugly seed the RNG for deterministic testing
 random.seed('¯\_(ツ)_/¯')
 
 VALID_PASSWORD = 'correct horse battery staple generic passphrase hooray'
 VALID_PASSWORD_2 = 'another correct horse battery staple generic passphrase'
+
+
+def _login_user(app, username, password, otp_secret):
+    resp = app.post('/login', data={'username': username,
+                                    'password': password,
+                                    'token': TOTP(otp_secret).now()},
+                    follow_redirects=True)
+    assert resp.status_code == 200
+    assert hasattr(g, 'user')  # ensure logged in
 
 
 class TestPytestJournalistApp:
@@ -44,26 +54,21 @@ class TestPytestJournalistApp:
                     fake_config)
                 assert password == VALID_PASSWORD
 
+
     def test_reply_error_logging(self, journalist_app):
         with journalist_app.app_context():
             source, _ = utils.db_helper.init_source()
             filesystem_id = source.filesystem_id
-            user, user_pw = utils.db_helper.init_journalist()
+            user, password = utils.db_helper.init_journalist()
             username = user.username
             user_id = user.id
-            totp = TOTP(user.otp_secret)
+            otp_secret = user.otp_secret
 
         exception_class = StaleDataError
         exception_msg = 'Potentially sensitive content!'
 
         with journalist_app.test_client() as app:
-            resp = app.post('/login', data={'username': username,
-                                            'password': user_pw,
-                                            'token': totp.now()},
-                            follow_redirects=True)
-            assert resp.status_code == 200
-            assert hasattr(g, 'user')  # ensure logged in
-
+            _login_user(app, username, password, otp_secret)
             with patch.object(journalist_app.logger, 'error') \
                     as mocked_error_logger:
                 with patch.object(db.session,
@@ -81,6 +86,31 @@ class TestPytestJournalistApp:
             "Reply from '{}' (ID {}) failed: {}!".format(username,
                                                          user_id,
                                                          exception_class))
+
+    def test_reply_error_flashed_message(self, journalist_app):
+        with journalist_app.app_context():
+            source, _ = utils.db_helper.init_source()
+            filesystem_id = source.filesystem_id
+
+            user, password = utils.db_helper.init_journalist()
+            username = user.username
+            otp_secret = user.otp_secret
+
+        exception_class = StaleDataError
+
+        with journalist_app.test_client() as app:
+            _login_user(app, username, password, otp_secret)
+
+            with InstrumentedApp(app) as ins:
+                with patch.object(db.session, 'commit',
+                                  side_effect=exception_class()):
+                    app.post('/reply',
+                             data={'filesystem_id': filesystem_id,
+                                   'message': '_'})
+
+                ins.assert_message_flashed(
+                    'An unexpected error occurred! Please '
+                    'inform your administrator.', 'error')
 
 
 class TestJournalistApp(TestCase):
@@ -102,23 +132,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_reply_error_flashed_message(self):
-        source, _ = utils.db_helper.init_source()
-        filesystem_id = source.filesystem_id
-        self._login_user()
-
-        exception_class = StaleDataError
-
-        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
-                   side_effect=exception_class()):
-            self.client.post(url_for('main.reply'),
-                             data={'filesystem_id': filesystem_id,
-                             'message': '_'})
-
-        self.assertMessageFlashed(
-            'An unexpected error occurred! Please '
-            'inform your administrator.', 'error')
 
     def test_empty_replies_are_rejected(self):
         source, _ = utils.db_helper.init_source()
