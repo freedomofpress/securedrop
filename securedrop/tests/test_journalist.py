@@ -5,9 +5,10 @@ import unittest
 import zipfile
 
 from cStringIO import StringIO
-from flask import url_for, escape, session, current_app
+from flask import url_for, escape, session, current_app, g
 from flask_testing import TestCase
 from mock import patch
+from pyotp import TOTP
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.exc import IntegrityError
 
@@ -43,6 +44,44 @@ class TestPytestJournalistApp:
                     fake_config)
                 assert password == VALID_PASSWORD
 
+    def test_reply_error_logging(self, journalist_app):
+        with journalist_app.app_context():
+            source, _ = utils.db_helper.init_source()
+            filesystem_id = source.filesystem_id
+            user, user_pw = utils.db_helper.init_journalist()
+            username = user.username
+            user_id = user.id
+            totp = TOTP(user.otp_secret)
+
+        exception_class = StaleDataError
+        exception_msg = 'Potentially sensitive content!'
+
+        with journalist_app.test_client() as app:
+            resp = app.post('/login', data={'username': username,
+                                            'password': user_pw,
+                                            'token': totp.now()},
+                            follow_redirects=True)
+            assert resp.status_code == 200
+            assert hasattr(g, 'user')  # ensure logged in
+
+            with patch.object(journalist_app.logger, 'error') \
+                    as mocked_error_logger:
+                with patch.object(db.session,
+                                  'commit',
+                                  side_effect=exception_class(exception_msg)):
+                    resp = app.post('/reply',
+                                    data={'filesystem_id': filesystem_id,
+                                          'message': '_'},
+                                    follow_redirects=True)
+                    assert resp.status_code == 200
+
+        # Notice the "potentially sensitive" exception_msg is not present in
+        # the log event.
+        mocked_error_logger.assert_called_once_with(
+            "Reply from '{}' (ID {}) failed: {}!".format(username,
+                                                         user_id,
+                                                         exception_class))
+
 
 class TestJournalistApp(TestCase):
 
@@ -63,28 +102,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    @patch('journalist.app.logger.error')
-    def test_reply_error_logging(self, mocked_error_logger):
-        source, _ = utils.db_helper.init_source()
-        filesystem_id = source.filesystem_id
-        self._login_user()
-
-        exception_class = StaleDataError
-        exception_msg = 'Potentially sensitive content!'
-
-        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
-                   side_effect=exception_class(exception_msg)):
-            self.client.post(url_for('main.reply'),
-                             data={'filesystem_id': filesystem_id,
-                             'message': '_'})
-
-        # Notice the "potentially sensitive" exception_msg is not present in
-        # the log event.
-        mocked_error_logger.assert_called_once_with(
-            "Reply from '{}' (ID {}) failed: {}!".format(self.user.username,
-                                                         self.user.id,
-                                                         exception_class))
 
     def test_reply_error_flashed_message(self):
         source, _ = utils.db_helper.init_source()
