@@ -51,9 +51,11 @@ Debian packages on the staging machines:
    ./manage.py add-admin
    pytest -v tests/
 
-To rebuild the local packages for the app code: ::
+To rebuild the local packages for the app code and update on staging: ::
 
    make build-debs
+   vagrant up /staging/
+   vagrant provision
 
 The Debian packages will be rebuilt from the current state of your
 local git repository and then installed on the staging servers.
