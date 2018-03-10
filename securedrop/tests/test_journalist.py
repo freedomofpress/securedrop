@@ -54,7 +54,6 @@ class TestPytestJournalistApp:
                     fake_config)
                 assert password == VALID_PASSWORD
 
-
     def test_reply_error_logging(self, journalist_app):
         with journalist_app.app_context():
             source, _ = utils.db_helper.init_source()
@@ -112,6 +111,25 @@ class TestPytestJournalistApp:
                     'An unexpected error occurred! Please '
                     'inform your administrator.', 'error')
 
+    def test_empty_replies_are_rejected(self, journalist_app):
+        with journalist_app.app_context():
+            source, _ = utils.db_helper.init_source()
+            filesystem_id = source.filesystem_id
+
+            user, password = utils.db_helper.init_journalist()
+            username = user.username
+            otp_secret = user.otp_secret
+
+        with journalist_app.test_client() as app:
+            _login_user(app, username, password, otp_secret)
+            resp = app.post(url_for('main.reply'),
+                            data={'filesystem_id': filesystem_id,
+                                  'message': ''},
+                            follow_redirects=True)
+
+            text = resp.data.decode('utf-8')
+            assert "You cannot send an empty reply." in text
+
 
 class TestJournalistApp(TestCase):
 
@@ -132,18 +150,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_empty_replies_are_rejected(self):
-        source, _ = utils.db_helper.init_source()
-        filesystem_id = source.filesystem_id
-        self._login_user()
-
-        resp = self.client.post(url_for('main.reply'),
-                                data={'filesystem_id': filesystem_id,
-                                      'message': ''},
-                                follow_redirects=True)
-
-        self.assertIn("You cannot send an empty reply.", resp.data)
 
     def test_nonempty_replies_are_accepted(self):
         source, _ = utils.db_helper.init_source()
