@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
-from cStringIO import StringIO
 import os
 import random
 import unittest
 import zipfile
 
+from cStringIO import StringIO
 from flask import url_for, escape, session, current_app
 from flask_testing import TestCase
 from mock import patch
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.exc import IntegrityError
+
+import crypto_util
+import models
+import journalist
+import journalist_app as journalist_app_module
+import utils
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config
@@ -17,17 +23,25 @@ from sdconfig import SDConfig, config
 from db import db
 from models import (InvalidPasswordLength, Journalist, Reply, Source,
                     Submission)
-import models
-import journalist
-import journalist_app
-import journalist_app.utils
-import utils
 
 # Smugly seed the RNG for deterministic testing
 random.seed('¯\_(ツ)_/¯')
 
 VALID_PASSWORD = 'correct horse battery staple generic passphrase hooray'
 VALID_PASSWORD_2 = 'another correct horse battery staple generic passphrase'
+
+
+class TestPytestJournalistApp:
+
+    def test_make_password(self, journalist_app):
+        with patch.object(crypto_util.CryptoUtil,
+                          'genrandomid',
+                          side_effect=['bad', VALID_PASSWORD]):
+            fake_config = SDConfig()
+            with journalist_app.test_request_context('/'):
+                password = journalist_app_module.utils.make_password(
+                    fake_config)
+                assert password == VALID_PASSWORD
 
 
 class TestJournalistApp(TestCase):
@@ -49,13 +63,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    @patch('crypto_util.CryptoUtil.genrandomid',
-           side_effect=['bad', VALID_PASSWORD])
-    def test_make_password(self, mocked_pw_gen):
-        fake_config = SDConfig()
-        assert (journalist_app.utils.make_password(fake_config) ==
-                VALID_PASSWORD)
 
     @patch('journalist.app.logger.error')
     def test_reply_error_logging(self, mocked_error_logger):
@@ -793,7 +800,7 @@ class TestJournalistApp(TestCase):
         try:
             self._login_admin()
 
-            form = journalist_app.forms.LogoForm(
+            form = journalist_app_module.forms.LogoForm(
                 logo=(StringIO('imagedata'), 'test.png')
             )
             self.client.post(url_for('admin.manage_config'),
@@ -809,7 +816,7 @@ class TestJournalistApp(TestCase):
     def test_logo_upload_with_invalid_filetype_fails(self):
         self._login_admin()
 
-        form = journalist_app.forms.LogoForm(
+        form = journalist_app_module.forms.LogoForm(
             logo=(StringIO('filedata'), 'bad.exe')
         )
         resp = self.client.post(url_for('admin.manage_config'),
@@ -821,7 +828,7 @@ class TestJournalistApp(TestCase):
     def test_logo_upload_with_empty_input_field_fails(self):
         self._login_admin()
 
-        form = journalist_app.forms.LogoForm(
+        form = journalist_app_module.forms.LogoForm(
             logo=(StringIO(''), '')
         )
         resp = self.client.post(url_for('admin.manage_config'),
@@ -960,7 +967,8 @@ class TestJournalistApp(TestCase):
         correspond to them are also deleted."""
 
         self._delete_collection_setup()
-        journalist_app.utils.delete_collection(self.source.filesystem_id)
+        journalist_app_module.utils.delete_collection(
+            self.source.filesystem_id)
 
         # Source should be gone
         results = db.session.query(Source).filter(
@@ -977,7 +985,8 @@ class TestJournalistApp(TestCase):
         record, as well as Reply & Submission records associated with
         that record are purged from the database."""
         self._delete_collection_setup()
-        journalist_app.utils.delete_collection(self.source.filesystem_id)
+        journalist_app_module.utils.delete_collection(
+            self.source.filesystem_id)
         results = Source.query.filter(Source.id == self.source.id).all()
         self.assertEqual(results, [])
         results = db.session.query(
@@ -995,7 +1004,8 @@ class TestJournalistApp(TestCase):
         source_key = current_app.crypto_util.getkey(self.source.filesystem_id)
         self.assertNotEqual(source_key, None)
 
-        journalist_app.utils.delete_collection(self.source.filesystem_id)
+        journalist_app_module.utils.delete_collection(
+            self.source.filesystem_id)
 
         # Source key no longer exists
         source_key = current_app.crypto_util.getkey(self.source.filesystem_id)
@@ -1011,7 +1021,8 @@ class TestJournalistApp(TestCase):
                                        self.source.filesystem_id)
         self.assertTrue(os.path.exists(dir_source_docs))
 
-        job = journalist_app.utils.delete_collection(self.source.filesystem_id)
+        job = journalist_app_module.utils.delete_collection(
+            self.source.filesystem_id)
 
         # Wait up to 5s to wait for Redis worker `srm` operation to complete
         utils.async.wait_for_redis_worker(job)
@@ -1369,7 +1380,7 @@ class TestJournalistLocale(TestCase):
     def create_app(self):
         fake_config = self.get_fake_config()
         fake_config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
-        return journalist_app.create_app(fake_config)
+        return journalist_app_module.create_app(fake_config)
 
     def test_render_locales(self):
         """the locales.html template must collect both request.args (l=XX) and
@@ -1389,7 +1400,7 @@ class TestJournalistLocale(TestCase):
 class TestJournalistLogin(unittest.TestCase):
 
     def setUp(self):
-        self.__context = journalist_app.create_app(config).app_context()
+        self.__context = journalist_app_module.create_app(config).app_context()
         self.__context.push()
         utils.env.setup()
 
