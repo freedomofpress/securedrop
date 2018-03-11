@@ -351,6 +351,19 @@ class TestPytestJournalistApp:
                 resp = app.get('/logout')
                 ins.assert_redirects(resp, '/')
 
+    def test_admin_index(self, journalist_app):
+        with journalist_app.app_context():
+            user, password = utils.db_helper.init_journalist(is_admin=True)
+            username = user.username
+            otp_secret = user.otp_secret
+
+        with journalist_app.test_client() as app:
+            _login_user(app, username, password, otp_secret)
+            resp = app.get('/admin/')
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Admin Interface" in text
+
 
 class TestJournalistApp(TestCase):
 
@@ -388,12 +401,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_index(self):
-        self._login_admin()
-        resp = self.client.get(url_for('admin.index'))
-        self.assert200(resp)
-        self.assertIn("Admin Interface", resp.data)
 
     def test_admin_delete_user(self):
         # Verify journalist is in the database
