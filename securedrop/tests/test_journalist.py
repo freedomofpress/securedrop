@@ -206,6 +206,23 @@ class TestPytestJournalistApp:
             text = resp.data.decode('utf-8')
             assert "Login to access" in text
 
+    def test_login_valid_credentials(self, journalist_app):
+        with journalist_app.app_context():
+            user, password = utils.db_helper.init_journalist()
+            username = user.username
+            otp_secret = user.otp_secret
+
+        with journalist_app.test_client() as app:
+            resp = app.post('/login',
+                            data=dict(username=username,
+                                      password=password,
+                                      token=TOTP(otp_secret).now()),
+                            follow_redirects=True)
+        assert resp.status_code == 200  # successful login redirects to index
+        text = resp.data.decode('utf-8')
+        assert "Sources" in text
+        assert "No documents have been submitted!" in text
+
 
 class TestJournalistApp(TestCase):
 
@@ -226,16 +243,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_login_valid_credentials(self):
-        resp = self.client.post(url_for('main.login'),
-                                data=dict(username=self.user.username,
-                                          password=self.user_pw,
-                                          token='mocked'),
-                                follow_redirects=True)
-        self.assert200(resp)  # successful login redirects to index
-        self.assertIn("Sources", resp.data)
-        self.assertIn("No documents have been submitted!", resp.data)
 
     def test_admin_login_redirects_to_index(self):
         resp = self.client.post(url_for('main.login'),
