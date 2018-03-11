@@ -238,6 +238,21 @@ class TestPytestJournalistApp:
                                 follow_redirects=False)
                 ins.assert_redirects(resp, '/')
 
+    def test_user_login_redirects_to_index(self, journalist_app):
+        with journalist_app.app_context():
+            user, password = utils.db_helper.init_journalist(is_admin=False)
+            username = user.username
+            otp_secret = user.otp_secret
+
+        with journalist_app.test_client() as app:
+            with InstrumentedApp(journalist_app) as ins:
+                resp = app.post('/login',
+                                data=dict(username=username,
+                                          password=password,
+                                          token=TOTP(otp_secret).now()),
+                                follow_redirects=False)
+                ins.assert_redirects(resp, '/')
+
 
 class TestJournalistApp(TestCase):
 
@@ -258,13 +273,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_user_login_redirects_to_index(self):
-        resp = self.client.post(url_for('main.login'),
-                                data=dict(username=self.user.username,
-                                          password=self.user_pw,
-                                          token='mocked'))
-        self.assertRedirects(resp, url_for('main.index'))
 
     def test_admin_has_link_to_edit_account_page_in_index_page(self):
         resp = self.client.post(url_for('main.login'),
