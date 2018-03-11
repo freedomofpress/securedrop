@@ -32,6 +32,12 @@ random.seed('¯\_(ツ)_/¯')
 VALID_PASSWORD = 'correct horse battery staple generic passphrase hooray'
 VALID_PASSWORD_2 = 'another correct horse battery staple generic passphrase'
 
+# These are factored out of the tests because some test have a
+# postive/negative case under varying conditions, and we don't want
+# false postives after modifying a string in the application.
+EMPTY_REPLY_TEXT = "You cannot send an empty reply."
+ADMIN_LINK = '<a href="/admin/" id="link-admin-index">'
+
 
 def _login_user(app, username, password, otp_secret):
     resp = app.post('/login', data={'username': username,
@@ -128,7 +134,7 @@ class TestPytestJournalistApp:
                             follow_redirects=True)
 
             text = resp.data.decode('utf-8')
-            assert "You cannot send an empty reply." in text
+            assert EMPTY_REPLY_TEXT in text
 
     def test_nonempty_replies_are_accepted(self, journalist_app):
         with journalist_app.app_context():
@@ -147,7 +153,7 @@ class TestPytestJournalistApp:
                             follow_redirects=True)
 
             text = resp.data.decode('utf-8')
-            assert "You cannot send an empty reply." not in text
+            assert EMPTY_REPLY_TEXT not in text
 
     def test_unauthorized_access_redirects_to_login(self, journalist_app):
         with journalist_app.test_client() as app:
@@ -302,9 +308,8 @@ class TestPytestJournalistApp:
                                       password=password,
                                       token=TOTP(otp_secret).now()),
                             follow_redirects=True)
-        admin_link = '<a href="/admin/" id="link-admin-index">'
         text = resp.data.decode('utf-8')
-        assert admin_link in text
+        assert ADMIN_LINK in text
 
     def test_user_lacks_link_to_admin_index_page_in_index_page(self,
                                                                journalist_app):
@@ -319,9 +324,8 @@ class TestPytestJournalistApp:
                                       password=password,
                                       token=TOTP(otp_secret).now()),
                             follow_redirects=True)
-        admin_link = '<a href="/admin/" id="link-admin-index">'
         text = resp.data.decode('utf-8')
-        assert admin_link not in text
+        assert ADMIN_LINK not in text
 
 
 class TestJournalistApp(TestCase):
