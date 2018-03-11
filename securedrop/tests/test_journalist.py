@@ -289,6 +289,23 @@ class TestPytestJournalistApp:
         text = resp.data.decode('utf-8')
         assert edit_account_link in text
 
+    def test_admin_has_link_to_admin_index_page_in_index_page(self,
+                                                              journalist_app):
+        with journalist_app.app_context():
+            user, password = utils.db_helper.init_journalist(is_admin=True)
+            username = user.username
+            otp_secret = user.otp_secret
+
+        with journalist_app.test_client() as app:
+            resp = app.post('/login',
+                            data=dict(username=username,
+                                      password=password,
+                                      token=TOTP(otp_secret).now()),
+                            follow_redirects=True)
+        admin_link = '<a href="/admin/" id="link-admin-index">'
+        text = resp.data.decode('utf-8')
+        assert admin_link in text
+
 
 class TestJournalistApp(TestCase):
 
@@ -309,16 +326,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_admin_has_link_to_admin_index_page_in_index_page(self):
-        resp = self.client.post(url_for('main.login'),
-                                data=dict(username=self.admin.username,
-                                          password=self.admin_pw,
-                                          token='mocked'),
-                                follow_redirects=True)
-        admin_link = '<a href="{}" id="link-admin-index">'.format(
-            url_for('admin.index'))
-        self.assertIn(admin_link, resp.data)
 
     def test_user_lacks_link_to_admin_index_page_in_index_page(self):
         resp = self.client.post(url_for('main.login'),
