@@ -306,6 +306,23 @@ class TestPytestJournalistApp:
         text = resp.data.decode('utf-8')
         assert admin_link in text
 
+    def test_user_lacks_link_to_admin_index_page_in_index_page(self,
+                                                               journalist_app):
+        with journalist_app.app_context():
+            user, password = utils.db_helper.init_journalist()
+            username = user.username
+            otp_secret = user.otp_secret
+
+        with journalist_app.test_client() as app:
+            resp = app.post('/login',
+                            data=dict(username=username,
+                                      password=password,
+                                      token=TOTP(otp_secret).now()),
+                            follow_redirects=True)
+        admin_link = '<a href="/admin/" id="link-admin-index">'
+        text = resp.data.decode('utf-8')
+        assert admin_link not in text
+
 
 class TestJournalistApp(TestCase):
 
@@ -326,16 +343,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_user_lacks_link_to_admin_index_page_in_index_page(self):
-        resp = self.client.post(url_for('main.login'),
-                                data=dict(username=self.user.username,
-                                          password=self.user_pw,
-                                          token='mocked'),
-                                follow_redirects=True)
-        admin_link = '<a href="{}" id="link-admin-index">'.format(
-            url_for('admin.index'))
-        self.assertNotIn(admin_link, resp.data)
 
     # WARNING: we are purposely doing something that would not work in
     # production in the _login_user and _login_admin methods. This is done as a
