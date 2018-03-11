@@ -271,6 +271,24 @@ class TestPytestJournalistApp:
         text = resp.data.decode('utf-8')
         assert edit_account_link in text
 
+    def test_user_has_link_to_edit_account_page_in_index_page(self,
+                                                              journalist_app):
+        with journalist_app.app_context():
+            user, password = utils.db_helper.init_journalist()
+            username = user.username
+            otp_secret = user.otp_secret
+
+        with journalist_app.test_client() as app:
+            resp = app.post('/login',
+                            data=dict(username=username,
+                                      password=password,
+                                      token=TOTP(otp_secret).now()),
+                            follow_redirects=True)
+        edit_account_link = ('<a href="/account/account" '
+                             'id="link-edit-account">')
+        text = resp.data.decode('utf-8')
+        assert edit_account_link in text
+
 
 class TestJournalistApp(TestCase):
 
@@ -291,16 +309,6 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
-
-    def test_user_has_link_to_edit_account_page_in_index_page(self):
-        resp = self.client.post(url_for('main.login'),
-                                data=dict(username=self.user.username,
-                                          password=self.user_pw,
-                                          token='mocked'),
-                                follow_redirects=True)
-        edit_account_link = '<a href="{}" id="link-edit-account">'.format(
-            url_for('account.edit'))
-        self.assertIn(edit_account_link, resp.data)
 
     def test_admin_has_link_to_admin_index_page_in_index_page(self):
         resp = self.client.post(url_for('main.login'),
