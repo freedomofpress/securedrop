@@ -339,6 +339,18 @@ class TestPytestJournalistApp:
                 resp = app.get('/logout')
                 ins.assert_redirects(resp, '/')
 
+    def test_user_logout_redirects_to_index(self, journalist_app):
+        with journalist_app.app_context():
+            user, password = utils.db_helper.init_journalist()
+            username = user.username
+            otp_secret = user.otp_secret
+
+        with journalist_app.test_client() as app:
+            with InstrumentedApp(journalist_app) as ins:
+                _login_user(app, username, password, otp_secret)
+                resp = app.get('/logout')
+                ins.assert_redirects(resp, '/')
+
 
 class TestJournalistApp(TestCase):
 
@@ -376,11 +388,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_user_logout_redirects_to_index(self):
-        self._login_user()
-        resp = self.client.get(url_for('main.logout'))
-        self.assertRedirects(resp, url_for('main.index'))
 
     def test_admin_index(self):
         self._login_admin()
