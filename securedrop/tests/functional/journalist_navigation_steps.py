@@ -707,7 +707,7 @@ class JournalistNavigationStepsMixin():
         self.driver.find_element_by_id('continue-to-list').click()
 
     def _journalist_delete_none(self):
-        self.driver.find_element_by_id('delete-selected').click()
+        self.driver.find_element_by_id('delete-selected-link').click()
 
     def _journalist_delete_all_confirmation(self):
         self.driver.find_element_by_id('select_all').click()
