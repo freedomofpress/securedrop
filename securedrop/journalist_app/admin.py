@@ -74,8 +74,8 @@ def make_blueprint(config):
                 db.session.rollback()
                 form_valid = False
                 if "UNIQUE constraint failed: journalists.username" in str(e):
-                    flash(gettext("That username is already in use"),
-                          "error")
+                    flash(gettext('Username "{user}" already taken.'.format(
+                        user=username)), "error")
                 else:
                     flash(gettext("An error occurred saving this user"
                                   " to the database."

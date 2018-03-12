@@ -382,13 +382,13 @@ class TestJournalistApp(TestCase):
         assert ('There was an error, and the new password might not have '
                 'been saved correctly.') in resp.data.decode('utf-8')
 
-    def test_admin_add_user_when_username_already_in_use(self):
+    def test_admin_add_user_when_username_already_taken(self):
         self._login_admin()
         resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username=self.admin.username,
                                           password=VALID_PASSWORD,
                                           is_admin=None))
-        self.assertIn('That username is already in use', resp.data)
+        self.assertIn('already taken', resp.data)
 
     def test_max_password_length(self):
         """Creating a Journalist with a password that is greater than the
