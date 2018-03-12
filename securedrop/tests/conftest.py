@@ -1,16 +1,21 @@
 # -*- coding: utf-8 -*-
+
+import gnupg
+import logging
 import os
+import psutil
+import pytest
 import shutil
 import signal
 import subprocess
-import logging
-
-import gnupg
-import psutil
-import pytest
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import config
+from sdconfig import SDConfig, config as original_config
+
+from os import path
+
+from db import db
+from source_app import create_app as create_source_app
 
 # TODO: the PID file for the redis worker is hard-coded below.
 # Ideally this constant would be provided by a test harness.
@@ -44,11 +49,46 @@ def pytest_collection_modifyitems(config, items):
 
 
 @pytest.fixture(scope='session')
-def setUptearDown():
-    _start_test_rqworker(config)
+def setUpTearDown():
+    _start_test_rqworker(original_config)
     yield
     _stop_test_rqworker()
-    _cleanup_test_securedrop_dataroot(config)
+    _cleanup_test_securedrop_dataroot(original_config)
+
+
+@pytest.fixture(scope='function')
+def config(tmpdir):
+    '''Clone the module so we can modify it per test.'''
+
+    cnf = SDConfig()
+
+    data = tmpdir.mkdir('data')
+    keys = data.mkdir('keys')
+    store = data.mkdir('store')
+    tmp = data.mkdir('tmp')
+    sqlite = data.join('db.sqlite')
+
+    gpg = gnupg.GPG(homedir=str(keys))
+    with open(path.join(path.dirname(__file__),
+                        'files',
+                        'test_journalist_key.pub')) as f:
+        gpg.import_keys(f.read())
+
+    cnf.SECUREDROP_DATA_ROOT = str(data)
+    cnf.GPG_KEY_DIR = str(keys)
+    cnf.STORE_DIR = str(store)
+    cnf.TEMP_DIR = str(tmp)
+    cnf.DATABASE_FILE = str(sqlite)
+
+    return cnf
+
+
+@pytest.fixture(scope='function')
+def source_app(config):
+    app = create_source_app(config)
+    with app.app_context():
+        db.create_all()
+    return app
 
 
 def _start_test_rqworker(config):
