@@ -14,8 +14,8 @@ def otp_secret_validation(form, field):
     strip_whitespace = field.data.replace(' ', '')
     if len(strip_whitespace) != 40:
         raise ValidationError(gettext(
-            'Field must be 40 characters long but '
-            'got {num_chars}.'.format(
+            'HOTP secrets are 40 characters long - '
+            'you have entered {num_chars}.'.format(
                 num_chars=len(strip_whitespace)
             )))
 

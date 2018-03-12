@@ -688,7 +688,7 @@ class TestJournalistApp(TestCase):
                                           is_admin=None,
                                           is_hotp=True,
                                           otp_secret='123'))
-        self.assertIn('Field must be 40 characters long', resp.data)
+        self.assertIn('HOTP secrets are 40 characters', resp.data)
 
     def test_admin_add_user_yubikey_valid_length(self):
         self._login_admin()
