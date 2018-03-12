@@ -107,6 +107,86 @@ Run the checks locally via:
 
       make yamllint
 
+Type Hints in Python code
+-------------------------
+
+By adding type hints/annotations in the Python code, we are making the codebase
+easier to maintain in the long run by explicitly specifying the expected input/output
+types of various functions.
+
+Any pull request with Python code in SecureDrop should have corresponding type hints
+for all the functions. Type hints and function annotations are defined in 
+`PEP 484 <https://www.python.org/dev/peps/pep-0484>`_ and in `PEP 3107
+<https://www.python.org/dev/peps/pep-3107>`_. We also use the `mypy <http://mypy-lang.org>`_
+tool in our CI to find bugs in our Python code.
+
+If you are new to Python type hinting, please read the above mentioned PEP documents,
+and then go through the examples in 
+`mypy documentation <https://mypy.readthedocs.io/en/stable/builtin_types.html>`_.
+SecureDrop uses Python2, that is why all type annotation/hints are mentioned as code
+comments. The `typing <https://pypi.python.org/pypi/typing>`_ module is also not 
+part of the standard library. It is being installed as part of the development
+and run-time dependency. 
+
+Example of type hint
+~~~~~~~~~~~~~~~~~~~~
+
+.. code:: Python
+
+    import typing
+    # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
+    if typing.TYPE_CHECKING:
+        # flake8 can not understand type annotation yet.
+        # That is why all type annotation relative import
+        # statements has to be marked as noqa.
+        # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
+        from typing import Dict  # noqa: F401
+
+    class Config(object):
+
+        def __init__(self):
+            # type: () -> None
+            self.NAMES = {}  # type: Dict[str, str]
+
+        def add(self, a, b):
+            # type: (int, int) -> float
+            c = 10.5  # type: float
+            return a + b + c
+
+        def update(self, uid, Name):
+            # type: (int, str) -> None
+            """
+            This method updates the name example.
+            """
+            self.NAMES[uid] = Name
+
+    def main():
+        # type: () -> None
+        config = Config()  # type: Config
+        config.add(2, 3)
+        config.update(223, "SD")
+
+    if __name__ == '__main__':
+        main()
+
+The above example shows how to do a conditional import of ``Dict`` class from 
+``typing`` module. ``typing.TYPE_CHECKING`` will only be true when we use mypy
+to check type annotations.
+
+
+How to use mypy?
+~~~~~~~~~~~~~~~~~
+
+``make lint`` already checks for any error using the ``mypy`` tool. In case you want
+to have a local installation, you can do that using a Python3 virtualenv.
+
+.. code:: shell
+
+    $ python3 -m venv ../.py3
+    $ source ../.py3/bin/activate
+    $ pip install mypy
+    $ mypy --py2 securedrop
+
 Git History
 -----------
 
