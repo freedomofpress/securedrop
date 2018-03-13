@@ -208,7 +208,8 @@ class TestJournalistLayout(
         self._source_logs_out()
         self._journalist_logs_in()
         self._journalist_visits_col()
-        self._journalist_delete_none()
+        self._journalist_clicks_delete_selected_link()
+        self._journalist_confirm_delete_selected()
         self._screenshot('journalist-delete_none.png')
 
     def test_delete_one_confirmation(self):
