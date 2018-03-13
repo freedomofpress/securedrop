@@ -262,6 +262,8 @@ also be possible to print and cut out labels using adhesive-backed paper and som
 -  :download:`Secure Viewing Station TAILS USB Drive Label <images/labels/usb_svs.png>`
 -  :download:`File Transfer USB Drive Label <images/labels/usb_file_transfer.png>`
 
+.. _Specific Hardware Recommendations:
+
 Specific Hardware Recommendations
 ---------------------------------
 
