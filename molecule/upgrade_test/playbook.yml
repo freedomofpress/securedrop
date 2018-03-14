@@ -42,6 +42,7 @@
       service:
         name: tor
         state: running
+        enabled: yes
       tags: always
 
     - name: Ensure supervisor is running
