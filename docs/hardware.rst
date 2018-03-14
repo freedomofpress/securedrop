@@ -397,6 +397,25 @@ After Ubuntu is installed, for each Mac Mini you should:
 #. Select **Reboot the system** and remove the installation media.
    Your server should now boot to Ubuntu by default.
 
+Journalist Workstation and Admin Workstation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Both the *Journalist Workstation* and the *Admin Workstation* must be compatible
+with the Tails operating system. Compare any hardware you want to procure or
+allocate for this purpose against the `list of known issues <https://tails.boum.org/support/known_issues/index.en.html>`__
+maintained by the Tails project, but please be advised that the list is far
+from exhaustive.
+
+We advise against using Macs, as there are many Tails compatibility issues both
+with older and with newer models. Instead, we recommend the
+`ThinkPad T series <https://www3.lenovo.com/us/en/laptops/thinkpad/thinkpad-t-series/c/thinkpadt>`__,
+and have had good experiences specifically with the T420 and T440. The
+`ThinkWiki <https://www.thinkwiki.org/wiki/ThinkWiki>`__ is an excellent,
+independently maintained resource for verifying general Linux compatibility of
+almost any ThinkPad model.
+
+For any Tails workstation, we recommend at least 8GB of RAM.
+
 Secure Viewing Station (SVS)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -408,11 +427,11 @@ touch the Internet or run an operating system other than Tails, it does
 not need a hard drive or network device; in fact, we recommend removing
 these components if they are already present.
 
-One option is to buy a Linux-compatible laptop such as a
-`Lenovo ThinkPad <http://www3.lenovo.com/us/en/laptops/thinkpad/thinkpad-t-series/c/thinkpadt>`__;
-we've tested the T420 and successfully removed the wireless components with ease.
-It's possible to re-purpose old laptops from other manufacturers, as long as the
-wireless components are removable.
+As with the workstations, one good option is to buy a Linux-compatible laptop
+from the Lenovo ThinkPad T series. We have tested the T420 and successfully
+removed the wireless components with ease. It's possible to re-purpose old
+laptops from other manufacturers, as long as the wireless components are
+removable.
 
 Just as with the servers, you can also use an Intel NUC for the *SVS*. As noted
 before, NUCs do not ship with a hard drive, and can be configured without any
