@@ -48,126 +48,116 @@ def _login_user(app, username, password, otp_secret):
     assert hasattr(g, 'user')  # ensure logged in
 
 
-class TestPytestJournalistApp:
+def test_make_password(journalist_app):
+    with patch.object(crypto_util.CryptoUtil, 'genrandomid',
+                      side_effect=['bad', VALID_PASSWORD]):
+        fake_config = SDConfig()
+        with journalist_app.test_request_context('/'):
+            password = journalist_app_module.utils.make_password(fake_config)
+            assert password == VALID_PASSWORD
 
-    def test_make_password(self, journalist_app):
-        with patch.object(crypto_util.CryptoUtil,
-                          'genrandomid',
-                          side_effect=['bad', VALID_PASSWORD]):
-            fake_config = SDConfig()
-            with journalist_app.test_request_context('/'):
-                password = journalist_app_module.utils.make_password(
-                    fake_config)
-                assert password == VALID_PASSWORD
 
-    def test_reply_error_logging(self, journalist_app, test_journo):
-        with journalist_app.app_context():
-            source, _ = utils.db_helper.init_source()
-            filesystem_id = source.filesystem_id
+def test_reply_error_logging(journalist_app, test_journo):
+    with journalist_app.app_context():
+        source, _ = utils.db_helper.init_source()
+        filesystem_id = source.filesystem_id
 
-        exception_class = StaleDataError
-        exception_msg = 'Potentially sensitive content!'
+    exception_class = StaleDataError
+    exception_msg = 'Potentially sensitive content!'
 
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'],
+                    test_journo['password'], test_journo['otp_secret'])
+        with patch.object(journalist_app.logger, 'error') \
+                as mocked_error_logger:
+            with patch.object(db.session, 'commit',
+                              side_effect=exception_class(exception_msg)):
+                resp = app.post('/reply',
+                                data={'filesystem_id': filesystem_id,
+                                      'message': '_'},
+                                follow_redirects=True)
+                assert resp.status_code == 200
+
+    # Notice the "potentially sensitive" exception_msg is not present in
+    # the log event.
+    mocked_error_logger.assert_called_once_with(
+        "Reply from '{}' (ID {}) failed: {}!".format(
+            test_journo['username'],
+            test_journo['id'],
+            exception_class))
+
+
+def test_reply_error_flashed_message(journalist_app, test_journo):
+    with journalist_app.app_context():
+        source, _ = utils.db_helper.init_source()
+        filesystem_id = source.filesystem_id
+
+    exception_class = StaleDataError
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'],
+                    test_journo['password'], test_journo['otp_secret'])
+
+        with InstrumentedApp(app) as ins:
+            with patch.object(db.session, 'commit',
+                              side_effect=exception_class()):
+                app.post('/reply',
+                         data={'filesystem_id': filesystem_id,
+                               'message': '_'})
+
+            ins.assert_message_flashed(
+                'An unexpected error occurred! Please '
+                'inform your administrator.', 'error')
+
+
+def test_empty_replies_are_rejected(journalist_app, test_journo):
+    with journalist_app.app_context():
+        source, _ = utils.db_helper.init_source()
+        filesystem_id = source.filesystem_id
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'],
+                    test_journo['password'], test_journo['otp_secret'])
+        resp = app.post(url_for('main.reply'),
+                        data={'filesystem_id': filesystem_id,
+                              'message': ''},
+                        follow_redirects=True)
+
+        text = resp.data.decode('utf-8')
+        assert EMPTY_REPLY_TEXT in text
+
+
+def test_nonempty_replies_are_accepted(journalist_app, test_journo):
+    with journalist_app.app_context():
+        source, _ = utils.db_helper.init_source()
+        filesystem_id = source.filesystem_id
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'],
+                    test_journo['password'], test_journo['otp_secret'])
+        resp = app.post(url_for('main.reply'),
+                        data={'filesystem_id': filesystem_id,
+                              'message': '_'},
+                        follow_redirects=True)
+
+        text = resp.data.decode('utf-8')
+        assert EMPTY_REPLY_TEXT not in text
+
+
+def test_unauthorized_access_redirects_to_login(journalist_app):
+    with journalist_app.test_client() as app:
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.get('/')
+            ins.assert_redirects(resp, '/login')
+
+
+def test_login_throttle(journalist_app, test_journo):
+    # Overwrite the default value used during testing
+    # TODO this may break other tests during parallel testing
+    models.LOGIN_HARDENING = True
+    try:
         with journalist_app.test_client() as app:
-            _login_user(app, test_journo['username'],
-                        test_journo['password'], test_journo['otp_secret'])
-            with patch.object(journalist_app.logger, 'error') \
-                    as mocked_error_logger:
-                with patch.object(db.session,
-                                  'commit',
-                                  side_effect=exception_class(exception_msg)):
-                    resp = app.post('/reply',
-                                    data={'filesystem_id': filesystem_id,
-                                          'message': '_'},
-                                    follow_redirects=True)
-                    assert resp.status_code == 200
-
-        # Notice the "potentially sensitive" exception_msg is not present in
-        # the log event.
-        mocked_error_logger.assert_called_once_with(
-            "Reply from '{}' (ID {}) failed: {}!".format(
-                test_journo['username'],
-                test_journo['id'],
-                exception_class))
-
-    def test_reply_error_flashed_message(self, journalist_app, test_journo):
-        with journalist_app.app_context():
-            source, _ = utils.db_helper.init_source()
-            filesystem_id = source.filesystem_id
-
-        exception_class = StaleDataError
-
-        with journalist_app.test_client() as app:
-            _login_user(app, test_journo['username'],
-                        test_journo['password'], test_journo['otp_secret'])
-
-            with InstrumentedApp(app) as ins:
-                with patch.object(db.session, 'commit',
-                                  side_effect=exception_class()):
-                    app.post('/reply',
-                             data={'filesystem_id': filesystem_id,
-                                   'message': '_'})
-
-                ins.assert_message_flashed(
-                    'An unexpected error occurred! Please '
-                    'inform your administrator.', 'error')
-
-    def test_empty_replies_are_rejected(self, journalist_app, test_journo):
-        with journalist_app.app_context():
-            source, _ = utils.db_helper.init_source()
-            filesystem_id = source.filesystem_id
-
-        with journalist_app.test_client() as app:
-            _login_user(app, test_journo['username'],
-                        test_journo['password'], test_journo['otp_secret'])
-            resp = app.post(url_for('main.reply'),
-                            data={'filesystem_id': filesystem_id,
-                                  'message': ''},
-                            follow_redirects=True)
-
-            text = resp.data.decode('utf-8')
-            assert EMPTY_REPLY_TEXT in text
-
-    def test_nonempty_replies_are_accepted(self, journalist_app,
-                                           test_journo):
-        with journalist_app.app_context():
-            source, _ = utils.db_helper.init_source()
-            filesystem_id = source.filesystem_id
-
-        with journalist_app.test_client() as app:
-            _login_user(app, test_journo['username'],
-                        test_journo['password'],
-                        test_journo['otp_secret'])
-            resp = app.post(url_for('main.reply'),
-                            data={'filesystem_id': filesystem_id,
-                                  'message': '_'},
-                            follow_redirects=True)
-
-            text = resp.data.decode('utf-8')
-            assert EMPTY_REPLY_TEXT not in text
-
-    def test_unauthorized_access_redirects_to_login(self, journalist_app):
-        with journalist_app.test_client() as app:
-            with InstrumentedApp(journalist_app) as ins:
-                resp = app.get('/')
-                ins.assert_redirects(resp, '/login')
-
-    def test_login_throttle(self, journalist_app, test_journo):
-        # Overwrite the default value used during testing
-        # TODO this may break other tests during parallel testing
-        models.LOGIN_HARDENING = True
-        try:
-            with journalist_app.test_client() as app:
-                for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
-                    resp = app.post(
-                        '/login',
-                        data=dict(username=test_journo['username'],
-                                  password='invalid',
-                                  token='invalid'))
-                    assert resp.status_code == 200
-                    text = resp.data.decode('utf-8')
-                    assert "Login failed" in text
-
+            for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
                 resp = app.post(
                     '/login',
                     data=dict(username=test_journo['username'],
@@ -175,147 +165,162 @@ class TestPytestJournalistApp:
                               token='invalid'))
                 assert resp.status_code == 200
                 text = resp.data.decode('utf-8')
-                assert ("Please wait at least {} seconds".format(
-                    Journalist._LOGIN_ATTEMPT_PERIOD) in text)
-        finally:
-            models.LOGIN_HARDENING = False
+                assert "Login failed" in text
 
-    def test_login_invalid_credentials(self, journalist_app, test_journo):
-        with journalist_app.test_client() as app:
-            resp = app.post('/login',
-                            data=dict(username=test_journo['username'],
-                                      password='invalid',
-                                      token='mocked'))
+            resp = app.post(
+                '/login',
+                data=dict(username=test_journo['username'],
+                          password='invalid',
+                          token='invalid'))
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert ("Please wait at least {} seconds".format(
+                Journalist._LOGIN_ATTEMPT_PERIOD) in text)
+    finally:
+        models.LOGIN_HARDENING = False
+
+
+def test_login_invalid_credentials(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        resp = app.post('/login',
+                        data=dict(username=test_journo['username'],
+                                  password='invalid',
+                                  token='mocked'))
+    assert resp.status_code == 200
+    text = resp.data.decode('utf-8')
+    assert "Login failed" in text
+
+
+def test_validate_redirect(journalist_app):
+    with journalist_app.test_client() as app:
+        resp = app.post('/', follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Login failed" in text
+        assert "Login to access" in text
 
-    def test_validate_redirect(self, journalist_app):
-        with journalist_app.test_client() as app:
-            resp = app.post('/', follow_redirects=True)
-            assert resp.status_code == 200
-            text = resp.data.decode('utf-8')
-            assert "Login to access" in text
 
-    def test_login_valid_credentials(self, journalist_app, test_journo):
-        with journalist_app.test_client() as app:
-            resp = app.post(
-                '/login',
-                data=dict(username=test_journo['username'],
-                          password=test_journo['password'],
-                          token=TOTP(test_journo['otp_secret']).now()),
-                follow_redirects=True)
-        assert resp.status_code == 200  # successful login redirects to index
-        text = resp.data.decode('utf-8')
-        assert "Sources" in text
-        assert "No documents have been submitted!" in text
+def test_login_valid_credentials(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        resp = app.post(
+            '/login',
+            data=dict(username=test_journo['username'],
+                      password=test_journo['password'],
+                      token=TOTP(test_journo['otp_secret']).now()),
+            follow_redirects=True)
+    assert resp.status_code == 200  # successful login redirects to index
+    text = resp.data.decode('utf-8')
+    assert "Sources" in text
+    assert "No documents have been submitted!" in text
 
-    def test_admin_login_redirects_to_index(self, journalist_app, test_admin):
-        with journalist_app.test_client() as app:
-            with InstrumentedApp(journalist_app) as ins:
-                resp = app.post(
-                    '/login',
-                    data=dict(username=test_admin['username'],
-                              password=test_admin['password'],
-                              token=TOTP(test_admin['otp_secret']).now()),
-                    follow_redirects=False)
-                ins.assert_redirects(resp, '/')
 
-    def test_user_login_redirects_to_index(self, journalist_app,
-                                           test_journo):
-        with journalist_app.test_client() as app:
-            with InstrumentedApp(journalist_app) as ins:
-                resp = app.post(
-                    '/login',
-                    data=dict(username=test_journo['username'],
-                              password=test_journo['password'],
-                              token=TOTP(test_journo['otp_secret']).now()),
-                    follow_redirects=False)
-                ins.assert_redirects(resp, '/')
-
-    def test_admin_has_link_to_edit_account_page_in_index_page(self,
-                                                               journalist_app,
-                                                               test_admin):
-        with journalist_app.test_client() as app:
+def test_admin_login_redirects_to_index(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
                 '/login',
                 data=dict(username=test_admin['username'],
                           password=test_admin['password'],
                           token=TOTP(test_admin['otp_secret']).now()),
-                follow_redirects=True)
-        edit_account_link = ('<a href="/account/account" '
-                             'id="link-edit-account">')
-        text = resp.data.decode('utf-8')
-        assert edit_account_link in text
+                follow_redirects=False)
+            ins.assert_redirects(resp, '/')
 
-    def test_user_has_link_to_edit_account_page_in_index_page(self,
-                                                              journalist_app,
-                                                              test_journo):
-        with journalist_app.test_client() as app:
+
+def test_user_login_redirects_to_index(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
                 '/login',
                 data=dict(username=test_journo['username'],
                           password=test_journo['password'],
                           token=TOTP(test_journo['otp_secret']).now()),
-                follow_redirects=True)
-        edit_account_link = ('<a href="/account/account" '
-                             'id="link-edit-account">')
-        text = resp.data.decode('utf-8')
-        assert edit_account_link in text
+                follow_redirects=False)
+            ins.assert_redirects(resp, '/')
 
-    def test_admin_has_link_to_admin_index_page_in_index_page(self,
-                                                              journalist_app,
-                                                              test_admin):
-        with journalist_app.test_client() as app:
-            resp = app.post(
-                '/login',
-                data=dict(username=test_admin['username'],
-                          password=test_admin['password'],
-                          token=TOTP(test_admin['otp_secret']).now()),
-                follow_redirects=True)
-        text = resp.data.decode('utf-8')
-        assert ADMIN_LINK in text
 
-    def test_user_lacks_link_to_admin_index_page_in_index_page(self,
-                                                               journalist_app,
-                                                               test_journo):
-        with journalist_app.test_client() as app:
-            resp = app.post(
-                '/login',
-                data=dict(username=test_journo['username'],
-                          password=test_journo['password'],
-                          token=TOTP(test_journo['otp_secret']).now()),
-                follow_redirects=True)
-        text = resp.data.decode('utf-8')
-        assert ADMIN_LINK not in text
+def test_admin_has_link_to_edit_account_page_in_index_page(journalist_app,
+                                                           test_admin):
+    with journalist_app.test_client() as app:
+        resp = app.post(
+            '/login',
+            data=dict(username=test_admin['username'],
+                      password=test_admin['password'],
+                      token=TOTP(test_admin['otp_secret']).now()),
+            follow_redirects=True)
+    edit_account_link = ('<a href="/account/account" '
+                         'id="link-edit-account">')
+    text = resp.data.decode('utf-8')
+    assert edit_account_link in text
 
-    def test_admin_logout_redirects_to_index(self, journalist_app, test_admin):
-        with journalist_app.test_client() as app:
-            with InstrumentedApp(journalist_app) as ins:
-                _login_user(app, test_admin['username'],
-                            test_admin['password'],
-                            test_admin['otp_secret'])
-                resp = app.get('/logout')
-                ins.assert_redirects(resp, '/')
 
-    def test_user_logout_redirects_to_index(self, journalist_app,
-                                            test_journo):
-        with journalist_app.test_client() as app:
-            with InstrumentedApp(journalist_app) as ins:
-                _login_user(app, test_journo['username'],
-                            test_journo['password'],
-                            test_journo['otp_secret'])
-                resp = app.get('/logout')
-                ins.assert_redirects(resp, '/')
+def test_user_has_link_to_edit_account_page_in_index_page(journalist_app,
+                                                          test_journo):
+    with journalist_app.test_client() as app:
+        resp = app.post(
+            '/login',
+            data=dict(username=test_journo['username'],
+                      password=test_journo['password'],
+                      token=TOTP(test_journo['otp_secret']).now()),
+            follow_redirects=True)
+    edit_account_link = ('<a href="/account/account" '
+                         'id="link-edit-account">')
+    text = resp.data.decode('utf-8')
+    assert edit_account_link in text
 
-    def test_admin_index(self, journalist_app, test_admin):
-        with journalist_app.test_client() as app:
-            _login_user(app, test_admin['username'], test_admin['password'],
+
+def test_admin_has_link_to_admin_index_page_in_index_page(journalist_app,
+                                                          test_admin):
+    with journalist_app.test_client() as app:
+        resp = app.post(
+            '/login',
+            data=dict(username=test_admin['username'],
+                      password=test_admin['password'],
+                      token=TOTP(test_admin['otp_secret']).now()),
+            follow_redirects=True)
+    text = resp.data.decode('utf-8')
+    assert ADMIN_LINK in text
+
+
+def test_user_lacks_link_to_admin_index_page_in_index_page(journalist_app,
+                                                           test_journo):
+    with journalist_app.test_client() as app:
+        resp = app.post(
+            '/login',
+            data=dict(username=test_journo['username'],
+                      password=test_journo['password'],
+                      token=TOTP(test_journo['otp_secret']).now()),
+            follow_redirects=True)
+    text = resp.data.decode('utf-8')
+    assert ADMIN_LINK not in text
+
+
+def test_admin_logout_redirects_to_index(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        with InstrumentedApp(journalist_app) as ins:
+            _login_user(app, test_admin['username'],
+                        test_admin['password'],
                         test_admin['otp_secret'])
-            resp = app.get('/admin/')
-            assert resp.status_code == 200
-            text = resp.data.decode('utf-8')
-            assert "Admin Interface" in text
+            resp = app.get('/logout')
+            ins.assert_redirects(resp, '/')
+
+
+def test_user_logout_redirects_to_index(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        with InstrumentedApp(journalist_app) as ins:
+            _login_user(app, test_journo['username'],
+                        test_journo['password'],
+                        test_journo['otp_secret'])
+            resp = app.get('/logout')
+            ins.assert_redirects(resp, '/')
+
+
+def test_admin_index(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.get('/admin/')
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Admin Interface" in text
 
 
 class TestJournalistApp(TestCase):
