@@ -57,11 +57,7 @@ def test_make_password(journalist_app):
             assert password == VALID_PASSWORD
 
 
-def test_reply_error_logging(journalist_app, test_journo):
-    with journalist_app.app_context():
-        source, _ = utils.db_helper.init_source()
-        filesystem_id = source.filesystem_id
-
+def test_reply_error_logging(journalist_app, test_journo, test_source):
     exception_class = StaleDataError
     exception_msg = 'Potentially sensitive content!'
 
@@ -72,10 +68,11 @@ def test_reply_error_logging(journalist_app, test_journo):
                 as mocked_error_logger:
             with patch.object(db.session, 'commit',
                               side_effect=exception_class(exception_msg)):
-                resp = app.post('/reply',
-                                data={'filesystem_id': filesystem_id,
-                                      'message': '_'},
-                                follow_redirects=True)
+                resp = app.post(
+                    '/reply',
+                    data={'filesystem_id': test_source['filesystem_id'],
+                          'message': '_'},
+                    follow_redirects=True)
                 assert resp.status_code == 200
 
     # Notice the "potentially sensitive" exception_msg is not present in
@@ -87,11 +84,7 @@ def test_reply_error_logging(journalist_app, test_journo):
             exception_class))
 
 
-def test_reply_error_flashed_message(journalist_app, test_journo):
-    with journalist_app.app_context():
-        source, _ = utils.db_helper.init_source()
-        filesystem_id = source.filesystem_id
-
+def test_reply_error_flashed_message(journalist_app, test_journo, test_source):
     exception_class = StaleDataError
 
     with journalist_app.test_client() as app:
@@ -102,7 +95,7 @@ def test_reply_error_flashed_message(journalist_app, test_journo):
             with patch.object(db.session, 'commit',
                               side_effect=exception_class()):
                 app.post('/reply',
-                         data={'filesystem_id': filesystem_id,
+                         data={'filesystem_id': test_source['filesystem_id'],
                                'message': '_'})
 
             ins.assert_message_flashed(
@@ -110,16 +103,12 @@ def test_reply_error_flashed_message(journalist_app, test_journo):
                 'inform your administrator.', 'error')
 
 
-def test_empty_replies_are_rejected(journalist_app, test_journo):
-    with journalist_app.app_context():
-        source, _ = utils.db_helper.init_source()
-        filesystem_id = source.filesystem_id
-
+def test_empty_replies_are_rejected(journalist_app, test_journo, test_source):
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'],
                     test_journo['password'], test_journo['otp_secret'])
         resp = app.post(url_for('main.reply'),
-                        data={'filesystem_id': filesystem_id,
+                        data={'filesystem_id': test_source['filesystem_id'],
                               'message': ''},
                         follow_redirects=True)
 
@@ -127,16 +116,13 @@ def test_empty_replies_are_rejected(journalist_app, test_journo):
         assert EMPTY_REPLY_TEXT in text
 
 
-def test_nonempty_replies_are_accepted(journalist_app, test_journo):
-    with journalist_app.app_context():
-        source, _ = utils.db_helper.init_source()
-        filesystem_id = source.filesystem_id
-
+def test_nonempty_replies_are_accepted(journalist_app, test_journo,
+                                       test_source):
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'],
                     test_journo['password'], test_journo['otp_secret'])
         resp = app.post(url_for('main.reply'),
-                        data={'filesystem_id': filesystem_id,
+                        data={'filesystem_id': test_source['filesystem_id'],
                               'message': '_'},
                         follow_redirects=True)
 

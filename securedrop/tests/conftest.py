@@ -124,6 +124,15 @@ def test_admin(journalist_app):
                 'otp_secret': otp_secret}
 
 
+@pytest.fixture(scope='function')
+def test_source(journalist_app):
+    with journalist_app.app_context():
+        source, _ = utils.db_helper.init_source()
+        filesystem_id = source.filesystem_id
+        return {'source': source,
+                'filesystem_id': filesystem_id}
+
+
 def _start_test_rqworker(config):
     if not psutil.pid_exists(_get_pid_from_file(TEST_WORKER_PIDFILE)):
         tmp_logfile = open('/tmp/test_rqworker.log', 'w')
