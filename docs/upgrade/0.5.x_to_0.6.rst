@@ -132,20 +132,20 @@ with the same text that you selected during boot, e.g.:
 
     menuentry 'Ubuntu, with Linux 3.14.xx-grsec…
 
-Take note of its position among the other submenu entries (it will most likely 
+Take note of its position among the other submenu entries (it will most likely
 be third). Then edit the GRUB configuration:
 
 .. code:: sh
 
-  sudo vim /etc/grub/default
+  sudo vim /etc/default/grub
 
-Make a backup of the file or take a note of the current value of 
-``GRUB_DEFAULT`` somewhere, so you can restore the previous behavior easily at a 
+Make a backup of the file or take a note of the current value of
+``GRUB_DEFAULT`` somewhere, so you can restore the previous behavior easily at a
 later point.
 
-Once you have done so, set the ``GRUB_DEFAULT`` variable to point to the index 
-of the  menu and submenu. Note that the index starts at 0, so for a typical 
-setup, the line in ``/etc/grub/default`` would look like this:
+Once you have done so, set the ``GRUB_DEFAULT`` variable to point to the index
+of the  menu and submenu. Note that the index starts at 0, so for a typical
+setup, the line in ``/etc/default/grub`` would look like this:
 
 .. code:: sh
 
