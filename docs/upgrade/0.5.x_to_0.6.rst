@@ -4,12 +4,13 @@ Upgrade from 0.5.x to 0.6.x
 Updating the Tails workstations
 -------------------------------
 
-All Tails drives should be updated to Tails 3.6,
-`released concurrently <https://blog.torproject.org/tails-36-out>`__ with
-SecureDrop 0.6. For the *Admin Workstation* and *Journalist Workstation*, you
-will be prompted on boot about this upgrade. All you need to do is accept the
-upgrade. To upgrade the *Secure Viewing Station* to Tails 3.6, you will need to
-perform a `manual Tails upgrade <https://tails.boum.org/upgrade/tails/index.en.html>`__.
+All Tails drives should be updated to Tails 3.6, `released
+concurrently <https://blog.torproject.org/tails-36-out>`__ with
+SecureDrop 0.6. For the *Secure Viewing Station*, *Admin Workstation*
+and *Journalist Workstation*, you need `to manually upgrade
+<https://tails.boum.org/news/version_3.6/index.en.html#index3h1>`__ as
+explained in the `Tails documentation
+<https://tails.boum.org/upgrade/index.en.html>`__.
 
 For the *Journalist Workstations* and the *Admin Workstation*, you will also
 need to update the SecureDrop code using the following manual method:
