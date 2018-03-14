@@ -174,7 +174,7 @@ Now you can reboot into the old, working kernel.
 The server should come up automatically. From here on, you should be
 able to perform all administrative tasks via SSH as usual. If you want
 additional confirmation of the kernel version, the command 
-``uname -a`` should display ``3.14.79-grsec``.
+``uname -r`` should display ``3.14.79-grsec``.
 
 Please notify us of the compatibility issue so we can help you resolve it ASAP.
 
