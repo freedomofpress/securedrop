@@ -327,6 +327,7 @@ The day of the release
 ~~~~~~~~~~~~~~~~~~~~~~
 
 * Merge translations back to develop
+* :ref:`Update the screenshots <updating_screenshots>`
 * Remove the prominent Weblate whiteboard announcement
 * Provide translator credits to add to the SecureDrop release announcement
 
