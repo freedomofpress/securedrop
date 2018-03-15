@@ -33,7 +33,7 @@ supported, but require 2FA to be configured. See the :doc:`2FA setup guide
 Test the 2FA functionality by connecting a keyboard and display to each server,
 then login with the Admin username. You will need:
 
-* sudo passphrase for the Admin username
+* sudo passphrase for the admin username
 * TOTP code from a 2FA app such as FreeOTP
 
 Confirm that logging in via TTY prompts for a 2FA code, and that the code
@@ -56,12 +56,12 @@ On each server:
 On the *Application Server*:
 
 #. Check the AppArmor status with ``sudo aa-status``. On a production
-   instance all profiles should be in enforce mode.
+   instance all profiles should be in ``enforce`` mode.
 
 Test the web interfaces
 -----------------------
 
-#. Make sure the Source Interface is available, and that you can make a
+#. Make sure the *Source Interface* is available, and that you can make a
    submission.
 
    - Do this by opening the Tor Browser and navigating to the onion
@@ -71,13 +71,13 @@ Test the web interfaces
    - Usage of the Source Interface is covered by our :doc:`Source User
      Manual <source>`.
 
-#. Test that you can access the Journalist Interface, and that you can log
+#. Test that you can access the *Journalist Interface*, and that you can log
    in as the admin user you just created.
 
    - Open the Tor Browser and navigate to the onion URL from
-     app-journalist-aths. Enter your passphrase and two-factor
+     ``app-journalist-aths``. Enter your passphrase and two-factor
      authentication code to log in.
-   - If you have problems logging in to the Admin/Journalist Interface,
+   - If you have problems logging in to the *Admin/Journalist Interface*,
      SSH to the *Application Server* and restart the ntp daemon to synchronize
      the time: ``sudo service ntp restart``. Also check that your
      smartphone's time is accurate and set to network time in its
@@ -92,17 +92,17 @@ Test the web interfaces
 
 #. Test that the source received the reply.
 
-   - Within Tor Browser, navigate back to the app-source-ths URL and
+   - Within Tor Browser, navigate back to the ``app-source-ths`` URL and
      use your previous test source codename to log in (or reload the
      page if it's still open) and check that the reply you just made
      is present.
 
 #. We highly recommend that you create persistent bookmarks for the
-   Source and Journalist Interface addresses within Tor Browser.
+   *Source Interface* and *Journalist Interface* Interface addresses within Tor Browser.
 
 #. Remove the test submissions you made prior to putting SecureDrop to
    real use. On the main Journalist Interface page, select all sources and
-   click 'Delete selected'.
+   click **Delete selected**.
 
 Once you've tested the installation and verified that everything is
 working, see :doc:`How to Use SecureDrop <journalist>`.
