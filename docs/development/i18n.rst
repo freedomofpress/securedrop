@@ -271,6 +271,8 @@ result, it can be merged with:
   notified via a webhook. If it is different,
   `ask for help <https://gitter.im/freedomofpress/securedrop>`__.
 
+* Click ``Unlock``
+
 |Weblate commit Unlock|
 
 `Weblate`_ pushes the translations done via the web interface
