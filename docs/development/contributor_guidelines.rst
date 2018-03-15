@@ -10,13 +10,15 @@ This helps verify commits proposed in a pull request are from the expected autho
 Branching Strategy
 ------------------
 
-SecureDrop uses a branching model based on `git-flow
-<http://nvie.com/posts/a-successful-git-branching-model/>`__.  The ``master``
-branch always points to the latest stable release. Use this branch if you are
-interested in installing or auditing SecureDrop.  Development for the upcoming
-release of SecureDrop takes place on ``develop``, which is the default
-branch. If you want to contribute, you should branch from and submit pull
-requests to ``develop``.
+Development for the upcoming release of SecureDrop takes place on ``develop``,
+which is the default branch. If you want to contribute, you should branch
+from and submit pull requests to ``develop``. If you want to install or audit
+SecureDrop, you should use the latest tag that is not a release candidate (e.g.
+``0.6`` not ``0.6-rc1``).
+
+.. tip:: After you have cloned the SecureDrop repository, you can run
+   ``git tag`` locally to see all the tags. Alternatively, you can view them on
+   `GitHub <https://github.com/freedomofpress/securedrop/releases>`__.
 
 Automated Testing
 -----------------
