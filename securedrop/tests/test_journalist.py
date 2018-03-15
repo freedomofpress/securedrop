@@ -309,6 +309,27 @@ def test_admin_index(journalist_app, test_admin):
         assert "Admin Interface" in text
 
 
+def test_admin_delete_user(journalist_app, test_admin, test_journo):
+    # Verify journalist is in the database
+    with journalist_app.app_context():
+        assert Journalist.query.get(test_journo['id']) is not None
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.post('/admin/delete/{}'.format(test_journo['id']),
+                        follow_redirects=True)
+
+        # Assert correct interface behavior
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert escape("Deleted user '{}'".format(test_journo['username'])) in text
+
+    # Verify journalist is no longer in the database
+    with journalist_app.app_context():
+        assert Journalist.query.get(test_journo['id']) is None
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -345,22 +366,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_delete_user(self):
-        # Verify journalist is in the database
-        self.assertNotEqual(Journalist.query.get(self.user.id), None)
-
-        self._login_admin()
-        resp = self.client.post(url_for('admin.delete_user',
-                                        user_id=self.user.id),
-                                follow_redirects=True)
-
-        # Assert correct interface behavior
-        self.assert200(resp)
-        self.assertIn(escape("Deleted user '{}'".format(self.user.username)),
-                      resp.data)
-        # Verify journalist is no longer in the database
-        self.assertEqual(Journalist.query.get(self.user.id), None)
 
     def test_admin_cannot_delete_self(self):
         # Verify journalist is in the database
