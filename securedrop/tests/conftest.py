@@ -17,6 +17,7 @@ from os import path
 from db import db
 from journalist_app import create_app as create_journalist_app
 from source_app import create_app as create_source_app
+import utils
 
 # TODO: the PID file for the redis worker is hard-coded below.
 # Ideally this constant would be provided by a test harness.
@@ -98,6 +99,38 @@ def journalist_app(config):
     with app.app_context():
         db.create_all()
     return app
+
+
+@pytest.fixture(scope='function')
+def test_journo(journalist_app):
+    with journalist_app.app_context():
+        user, password = utils.db_helper.init_journalist(is_admin=False)
+        username = user.username
+        otp_secret = user.otp_secret
+        return {'username': username,
+                'password': password,
+                'otp_secret': otp_secret,
+                'id': user.id}
+
+
+@pytest.fixture(scope='function')
+def test_admin(journalist_app):
+    with journalist_app.app_context():
+        user, password = utils.db_helper.init_journalist(is_admin=True)
+        username = user.username
+        otp_secret = user.otp_secret
+        return {'username': username,
+                'password': password,
+                'otp_secret': otp_secret}
+
+
+@pytest.fixture(scope='function')
+def test_source(journalist_app):
+    with journalist_app.app_context():
+        source, _ = utils.db_helper.init_source()
+        filesystem_id = source.filesystem_id
+        return {'source': source,
+                'filesystem_id': filesystem_id}
 
 
 def _start_test_rqworker(config):
