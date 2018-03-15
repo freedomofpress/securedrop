@@ -4,12 +4,13 @@ Upgrade from 0.5.x to 0.6.x
 Updating the Tails workstations
 -------------------------------
 
-All Tails drives should be updated to Tails 3.6,
-`released concurrently <https://blog.torproject.org/tails-36-out>`__ with
-SecureDrop 0.6. For the *Admin Workstation* and *Journalist Workstation*, you
-will be prompted on boot about this upgrade. All you need to do is accept the
-upgrade. To upgrade the *Secure Viewing Station* to Tails 3.6, you will need to
-perform a `manual Tails upgrade <https://tails.boum.org/upgrade/tails/index.en.html>`__.
+All Tails drives should be updated to Tails 3.6, `released
+concurrently <https://blog.torproject.org/tails-36-out>`__ with
+SecureDrop 0.6. For the *Secure Viewing Station*, *Admin Workstation*
+and *Journalist Workstation*, you need `to manually upgrade
+<https://tails.boum.org/news/version_3.6/index.en.html#index3h1>`__ as
+explained in the `Tails documentation
+<https://tails.boum.org/upgrade/index.en.html>`__.
 
 For the *Journalist Workstations* and the *Admin Workstation*, you will also
 need to update the SecureDrop code using the following manual method:
@@ -132,20 +133,20 @@ with the same text that you selected during boot, e.g.:
 
     menuentry 'Ubuntu, with Linux 3.14.xx-grsec…
 
-Take note of its position among the other submenu entries (it will most likely 
+Take note of its position among the other submenu entries (it will most likely
 be third). Then edit the GRUB configuration:
 
 .. code:: sh
 
-  sudo vim /etc/grub/default
+  sudo vim /etc/default/grub
 
-Make a backup of the file or take a note of the current value of 
-``GRUB_DEFAULT`` somewhere, so you can restore the previous behavior easily at a 
+Make a backup of the file or take a note of the current value of
+``GRUB_DEFAULT`` somewhere, so you can restore the previous behavior easily at a
 later point.
 
-Once you have done so, set the ``GRUB_DEFAULT`` variable to point to the index 
-of the  menu and submenu. Note that the index starts at 0, so for a typical 
-setup, the line in ``/etc/grub/default`` would look like this:
+Once you have done so, set the ``GRUB_DEFAULT`` variable to point to the index
+of the  menu and submenu. Note that the index starts at 0, so for a typical
+setup, the line in ``/etc/default/grub`` would look like this:
 
 .. code:: sh
 
@@ -175,7 +176,7 @@ Now you can reboot into the old, working kernel.
 The server should come up automatically. From here on, you should be
 able to perform all administrative tasks via SSH as usual. If you want
 additional confirmation of the kernel version, the command 
-``uname -a`` should display ``3.14.79-grsec``.
+``uname -r`` should display ``3.14.79-grsec``.
 
 Please notify us of the compatibility issue so we can help you resolve it ASAP.
 
