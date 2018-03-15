@@ -17,6 +17,7 @@ need to update the SecureDrop code using the following manual method:
 .. code:: sh
 
    cd ~/Persistent/securedrop
+   git fetch --tags
    git checkout 0.6
    gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
    git tag -v 0.6 # Output should include "Good signature"
