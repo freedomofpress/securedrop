@@ -12,7 +12,7 @@ class TestSourceInterfaceBannerWarnings(
         warning_banner = self.driver.find_element_by_class_name(
             'use-tor-browser')
 
-        assert ("We recommend using Tor Browser to access SecureDrop" in
+        assert ("It is recommended to use the Tor Browser" in
                 warning_banner.text)
 
         # User should be able to dismiss the warning

@@ -64,7 +64,7 @@ the page that encourages you to disable JavaScript and turn up the **Security Sl
 
 |Source Interface Security Slider Warning|
 
-Click the **Learn how to set it to safest** link in the warning banner and a
+Click the **Learn how to set it to Safest** link in the warning banner and a
 message bubble will pop up explaining how to disable JavaScript and turn up the
 Slider:
 
