@@ -60,8 +60,7 @@ organization you are submitting to.
 If this is the first time you're using the Tor browser, it's likely that you
 have JavaScript enabled and that the Security Slider that Tor browser provides
 is set to "Low". If you do, there will be a purple warning banner at the top of
-the page that encourages you to disable JavaScript and turn up the Security
-Slider to "Safest":
+the page that encourages you to disable JavaScript and turn up the **Security Slider** to **Safest**:
 
 |Source Interface Security Slider Warning|
 
