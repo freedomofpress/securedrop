@@ -323,7 +323,8 @@ def test_admin_delete_user(journalist_app, test_admin, test_journo):
         # Assert correct interface behavior
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert escape("Deleted user '{}'".format(test_journo['username'])) in text
+        assert escape("Deleted user '{}'".format(test_journo['username'])) \
+            in text
 
     # Verify journalist is no longer in the database
     with journalist_app.app_context():
