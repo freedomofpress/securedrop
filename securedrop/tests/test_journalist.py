@@ -331,6 +331,34 @@ def test_admin_delete_user(journalist_app, test_admin, test_journo):
         assert Journalist.query.get(test_journo['id']) is None
 
 
+def test_admin_cannot_delete_self(journalist_app, test_admin, test_journo):
+    # Verify journalist is in the database
+    with journalist_app.app_context():
+        assert Journalist.query.get(test_journo['id']) is not None
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.post('/admin/delete/{}'.format(test_admin['id']),
+                        follow_redirects=True)
+
+        # Assert correct interface behavior
+        assert resp.status_code == 403
+
+        resp = app.get('/admin/', follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Admin Interface" in text
+
+        # The user can be edited and deleted
+        assert escape("Edit user {}".format(test_journo['username'])) in text
+        assert escape("Delete user {}".format(test_journo['username'])) in text
+        # The admin can be edited but cannot deleted
+        assert escape("Edit user {}".format(test_admin['username'])) in text
+        assert escape("Delete user {}".format(test_admin['username'])) \
+            not in text
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -367,34 +395,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_cannot_delete_self(self):
-        # Verify journalist is in the database
-        self.assertNotEqual(Journalist.query.get(self.user.id), None)
-
-        self._login_admin()
-        resp = self.client.post(url_for('admin.delete_user',
-                                        user_id=self.admin.id),
-                                follow_redirects=True)
-
-        # Assert correct interface behavior
-        self.assert403(resp)
-
-        resp = self.client.get(url_for('admin.index'))
-        self.assert200(resp)
-        self.assertIn("Admin Interface", resp.data)
-        # The user can be edited and deleted
-        self.assertIn(escape("Edit user {}".format(self.user.username)),
-                      resp.data)
-        self.assertIn(
-            escape("Delete user {}".format(self.user.username)),
-            resp.data)
-        # The admin can be edited but cannot deleted
-        self.assertIn(escape("Edit user {}".format(self.admin.username)),
-                      resp.data)
-        self.assertNotIn(
-            escape("Delete user {}".format(self.admin.username)),
-            resp.data)
 
     def test_admin_deletes_invalid_user_404(self):
         self._login_admin()
