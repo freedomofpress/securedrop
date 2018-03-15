@@ -15,6 +15,7 @@ from sdconfig import SDConfig, config as original_config
 from os import path
 
 from db import db
+from journalist_app import create_app as create_journalist_app
 from source_app import create_app as create_source_app
 
 # TODO: the PID file for the redis worker is hard-coded below.
@@ -86,6 +87,14 @@ def config(tmpdir):
 @pytest.fixture(scope='function')
 def source_app(config):
     app = create_source_app(config)
+    with app.app_context():
+        db.create_all()
+    return app
+
+
+@pytest.fixture(scope='function')
+def journalist_app(config):
+    app = create_journalist_app(config)
     with app.app_context():
         db.create_all()
     return app
