@@ -55,6 +55,8 @@ prefix the branch name with ``docs-`` to skip the staging run. Project
 maintainers will still need to approve the PR prior to merge, and the linting
 checks will also still run.
 
+.. _updating_screenshots:
+
 Updating screenshots
 --------------------
 
