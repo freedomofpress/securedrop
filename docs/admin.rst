@@ -371,8 +371,12 @@ If you want to update the system configuration, you should use the
 
   ./securedrop-admin sdconfig
 
-This will give you the opportunity to edit any variable. Next, you will
-need to apply the changes to the servers. Again from ``~/Persistent/securedrop``:
+This will give you the opportunity to edit any variable. Answer the prompts with values
+that match your environment. An example of one such prompt would be to set the ``daily reboot time``.
+To minimize the presence/duration of plaintext in memory, the servers are rebooted every 24 hours
+to periodically wipe the memory. As an admin, you can configure this automatic reboot time.
+By default, it is set at 4:00 a.m. and you can change it to suit your timing. Next, you will need to
+apply the changes to the servers. Again from ``~/Persistent/securedrop``:
 
 .. code:: sh
 

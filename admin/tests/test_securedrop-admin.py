@@ -157,6 +157,21 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError):
             validator.validate(Document(''))
 
+    def test_validate_time(self):
+        validator = securedrop_admin.SiteConfig.ValidateTime()
+
+        assert validator.validate(Document('4'))
+        with pytest.raises(ValidationError):
+            validator.validate(Document(''))
+        with pytest.raises(ValidationError):
+            validator.validate(Document('four'))
+        with pytest.raises(ValidationError):
+            validator.validate(Document('4.30'))
+        with pytest.raises(ValidationError):
+            validator.validate(Document('25'))
+        with pytest.raises(ValidationError):
+            validator.validate(Document('-4'))
+
     def test_validate_ossec_username(self):
         validator = securedrop_admin.SiteConfig.ValidateOSSECUsername()
 
@@ -484,6 +499,7 @@ class TestSiteConfig(object):
     verify_prompt_ossec_alert_email = verify_prompt_not_empty
     verify_prompt_smtp_relay = verify_prompt_not_empty
     verify_prompt_smtp_relay_port = verify_desc_consistency
+    verify_prompt_daily_reboot_time = verify_desc_consistency
     verify_prompt_sasl_domain = verify_desc_consistency_allow_empty
     verify_prompt_sasl_username = verify_prompt_not_empty
     verify_prompt_sasl_password = verify_prompt_not_empty

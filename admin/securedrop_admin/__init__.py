@@ -51,6 +51,13 @@ class SiteConfig(object):
             raise ValidationError(
                 message="Must not be an empty string")
 
+    class ValidateTime(Validator):
+        def validate(self, document):
+            if document.text.isdigit() and int(document.text) in range(0, 24):
+                return True
+            raise ValidationError(
+                message="Must be an integer between 0 and 23")
+
     class ValidateUser(Validator):
         def validate(self, document):
             text = document.text
@@ -210,6 +217,10 @@ class SiteConfig(object):
              u'Username for SSH access to the servers',
              SiteConfig.ValidateUser(),
              None],
+            ['daily_reboot_time', 4, int,
+             u'Daily reboot time of the server (24-hour clock)',
+             SiteConfig.ValidateTime(),
+             int],
             ['app_ip', '10.20.2.2', str,
              u'Local IPv4 address for the Application Server',
              SiteConfig.ValidateIP(),
