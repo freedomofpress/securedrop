@@ -5,9 +5,11 @@ import argparse
 import io
 import logging
 import os
+import re
 import signal
 import subprocess
 import sys
+import textwrap
 import version
 
 from os.path import dirname, join, realpath
@@ -330,8 +332,39 @@ class I18NTool(object):
                 updated = True
 
             if updated:
-                sh("git -C {r} commit -m 'l10n: updated {l}'".format(
-                    r=args.root, l=code))
+                self.upstream_commit(args, code)
+
+    def upstream_commit(self, args, code):
+        authors = set()
+        for path in sh("git -C {r} diff --name-only --cached".format(
+                r=args.root)).split():
+            previous_message = sh("git -C {r} log -n 1 {p}".format(
+                r=args.root, p=path))
+            m = re.search('copied from (\w+)', previous_message)
+            if m:
+                origin = m.group(1)
+            else:
+                origin = ''
+            authors |= set(sh("""
+            git -C {r} log --format=%aN {o}..i18n/i18n -- {p}
+            """.format(r=args.root, o=origin, p=path)).strip().split('\n'))
+        current = sh("git -C {r} rev-parse i18n/i18n".format(
+            r=args.root)).strip()
+        info = I18NTool.SUPPORTED_LANGUAGES[code]
+        message = textwrap.dedent(u"""
+        l10n: updated {code} {name}
+
+        localizers: {authors}
+
+        {remote}
+        copied from {current}
+        """.format(remote=args.url,
+                   name=info['name'],
+                   authors=", ".join(authors),
+                   code=code,
+                   current=current))
+        sh(u'git -C {r} commit -m "{message}"'.format(
+            r=args.root, message=message.replace('"', '\"')).encode('utf-8'))
 
     def set_update_from_weblate_parser(self, subps):
         parser = subps.add_parser('update-from-weblate',
