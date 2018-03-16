@@ -31,4 +31,4 @@ class TestSourceInterfaceBannerWarnings(
         self.driver.get(self.source_location)
 
         banner = self.driver.find_element_by_class_name('js-warning')
-        assert ("Security Slider to High", banner.text)
+        assert "Security Slider to High", banner.text
