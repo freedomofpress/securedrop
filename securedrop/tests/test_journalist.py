@@ -9,6 +9,7 @@ from flask import url_for, escape, session, current_app, g
 from flask_testing import TestCase
 from mock import patch
 from pyotp import TOTP
+from sqlalchemy.sql.expression import func
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.exc import IntegrityError
 
@@ -375,6 +376,17 @@ def test_admin_edits_user_password_success_response(journalist_app,
         assert VALID_PASSWORD_2 in text
 
 
+def test_admin_deletes_invalid_user_404(journalist_app, test_admin):
+    with journalist_app.app_context():
+        invalid_id = db.session.query(func.max(Journalist.id)).scalar() + 1
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.post('/admin/delete/{}'.format(invalid_id))
+        assert resp.status_code == 404
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -411,13 +423,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_deletes_invalid_user_404(self):
-        self._login_admin()
-        invalid_user_pk = max([user.id for user in Journalist.query.all()]) + 1
-        resp = self.client.post(url_for('admin.delete_user',
-                                        user_id=invalid_user_pk))
-        self.assert404(resp)
 
     def test_admin_edits_user_password_error_response(self):
         self._login_admin()
