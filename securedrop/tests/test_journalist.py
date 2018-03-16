@@ -359,6 +359,22 @@ def test_admin_cannot_delete_self(journalist_app, test_admin, test_journo):
             not in text
 
 
+def test_admin_edits_user_password_success_response(journalist_app,
+                                                    test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post('/admin/edit/{}/new-password'.format(test_admin['id']),
+                        data=dict(password=VALID_PASSWORD_2),
+                        follow_redirects=True)
+        assert resp.status_code == 200
+
+        text = resp.data.decode('utf-8')
+        assert 'Password updated.' in text
+        assert VALID_PASSWORD_2 in text
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -402,18 +418,6 @@ class TestJournalistApp(TestCase):
         resp = self.client.post(url_for('admin.delete_user',
                                         user_id=invalid_user_pk))
         self.assert404(resp)
-
-    def test_admin_edits_user_password_success_response(self):
-        self._login_admin()
-
-        resp = self.client.post(
-            url_for('admin.new_password', user_id=self.user.id),
-            data=dict(password=VALID_PASSWORD_2),
-            follow_redirects=True)
-
-        text = resp.data.decode('utf-8')
-        assert 'Password updated.' in text
-        assert VALID_PASSWORD_2 in text
 
     def test_admin_edits_user_password_error_response(self):
         self._login_admin()
