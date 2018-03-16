@@ -363,8 +363,9 @@ class JournalistNavigationStepsMixin():
     def _logout(self):
         # Click the logout link
         logout_link = self.driver.find_element_by_id('link-logout')
+        logout_link.send_keys(" ")
         logout_link.click()
-        time.sleep(30)  # Because this takes time
+        time.sleep(60)  # Because this takes time
 
         # Logging out should redirect back to the login page
         def login_page():
