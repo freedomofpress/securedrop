@@ -248,7 +248,10 @@ class TestI18NTool(object):
            cd {d}/$r
            git init
            git config user.email "you@example.com"
-           git config user.name "Your Name"
+           git config user.name "Loïc Nordhøy"
+           touch README.md
+           git add README.md
+           git commit -m 'README' README.md
         done
         cp -a {o}/i18n/* {d}/i18n
         cd {d}/i18n
@@ -304,6 +307,8 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' not in r()
         assert 'l10n: updated de_DE' not in r()
+        message = i18n_tool.sh("git -C {d}/securedrop show".format(d=d))
+        assert u"Loïc" in message
 
         #
         # an update is done to nl in weblate
@@ -314,9 +319,14 @@ class TestI18NTool(object):
         f=securedrop/translations/nl/LC_MESSAGES/messages.po
         sed -i -e 's/inactiviteit/INACTIVITEIT/' $f
         git add $f
+        git config user.email "somone@else.com"
+        git config user.name "Someone Else"
         git commit -m 'translation change' $f
-        """.format(o=self.dir,
-                   d=d))
+
+        cd {d}/securedrop
+        git config user.email "somone@else.com"
+        git config user.name "Someone Else"
+        """.format(d=d))
 
         #
         # the nl translation update from weblate is copied
@@ -332,6 +342,9 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' in r()
         assert 'l10n: updated de_DE' not in r()
+        message = i18n_tool.sh("git -C {d}/securedrop show".format(d=d))
+        assert "Someone Else" in message
+        assert u"Loïc" not in message
 
 
 class TestSh(object):
