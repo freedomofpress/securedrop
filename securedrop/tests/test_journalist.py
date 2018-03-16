@@ -387,6 +387,25 @@ def test_admin_deletes_invalid_user_404(journalist_app, test_admin):
         assert resp.status_code == 404
 
 
+def test_admin_edits_user_password_error_response(journalist_app,
+                                                  test_admin,
+                                                  test_journo):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
+                   side_effect=Exception()):
+            resp = app.post(('/admin/edit/{}/new-password'
+                             .format(test_journo['id'])),
+                            data=dict(password=VALID_PASSWORD_2),
+                            follow_redirects=True)
+
+        text = resp.data.decode('utf-8')
+        assert ('There was an error, and the new password might not have '
+                'been saved correctly.') in text
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -423,20 +442,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_edits_user_password_error_response(self):
-        self._login_admin()
-
-        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
-                   side_effect=Exception()):
-            resp = self.client.post(
-                url_for('admin.new_password', user_id=self.user.id),
-                data=dict(password=VALID_PASSWORD_2),
-                follow_redirects=True)
-
-        text = resp.data.decode('utf-8')
-        assert ('There was an error, and the new password might not have '
-                'been saved correctly.') in text, text
 
     def test_user_edits_password_success_response(self):
         self._login_user()
