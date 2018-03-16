@@ -161,23 +161,11 @@ to the ``develop`` branch via pull requests for merge on a regular basis.
 
       $ git clone https://github.com/freedomofpress/securedrop
       $ cd securedrop
-      $ git remote add lab http://lab.securedrop.club/bot/securedrop/tree/i18n
-      $ git fetch lab
       $ git checkout -b wip-i18n origin/develop
-      $ git checkout lab/i18n -- securedrop/translations
-      $ sm="nl fr_FR de_DE nb_NO pt_BR es_ES zh_Hant tr it_IT ar"
-      $ sd="nl fr de_DE nb_NO pt_BR es_ES zh_Hant tr it ar"
-      $ for l in $sm ; do \
-           git add securedrop/translations/$l/LC_MESSAGES/messages.po ; \
-        done
-      $ for l in $sd ; do \
-           git checkout lab/i18n -- \
-               install_files/ansible-base/roles/tails-config/templates/$l.po ; \
-           git add install_files/ansible-base/roles/tails-config/templates/$l.po ; \
-        done
+      $ securedrop/bin/dev-shell ./i18n_tool.py --verbose update-from-weblate
       $ securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-desktop --compile
-      $ git commit -m 'sync with weblate' translations
-      $ git push wip-i18n
+      $ git commit -m 'l10n: compile desktop files' translations # if needed
+      $ git push wip-i18n # and make a pull request from the branch
 
 .. warning::
 

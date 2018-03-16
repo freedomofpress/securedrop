@@ -239,6 +239,100 @@ class TestI18NTool(object):
             '--documentation-dir', str(tmpdir)])
         assert 'l10n.txt already up to date' in caplog.text
 
+    def test_update_from_weblate(self, tmpdir, caplog):
+        d = str(tmpdir)
+        i18n_tool.sh("""
+        set -ex
+        for r in i18n securedrop ; do
+           mkdir {d}/$r
+           cd {d}/$r
+           git init
+           git config user.email "you@example.com"
+           git config user.name "Your Name"
+        done
+        cp -a {o}/i18n/* {d}/i18n
+        cd {d}/i18n
+        git add securedrop install_files
+        git commit -m 'init' -a
+        git checkout -b i18n master
+        """.format(o=self.dir,
+                   d=d))
+
+        def r():
+            return "".join([str(l) for l in caplog.records])
+
+        #
+        # de_DE is not amount the supported languages, it is not taken
+        # into account despite the fact that it exists in weblate.
+        #
+        caplog.clear()
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-from-weblate',
+            '--root', join(str(tmpdir), 'securedrop'),
+            '--url', join(str(tmpdir), 'i18n'),
+            '--supported-languages', 'nl',
+        ])
+        assert 'l10n: updated nl' in r()
+        assert 'l10n: updated de_DE' not in r()
+
+        #
+        # de_DE is added but there is no change in the nl translation
+        # therefore nothing is done for nl
+        #
+        caplog.clear()
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-from-weblate',
+            '--root', join(str(tmpdir), 'securedrop'),
+            '--url', join(str(tmpdir), 'i18n'),
+            '--supported-languages', 'nl,de_DE',
+        ])
+        assert 'l10n: updated nl' not in r()
+        assert 'l10n: updated de_DE' in r()
+
+        #
+        # nothing new for nl or de_DE: nothing is done
+        #
+        caplog.clear()
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-from-weblate',
+            '--root', join(str(tmpdir), 'securedrop'),
+            '--url', join(str(tmpdir), 'i18n'),
+            '--supported-languages', 'nl,de_DE',
+        ])
+        assert 'l10n: updated nl' not in r()
+        assert 'l10n: updated de_DE' not in r()
+
+        #
+        # an update is done to nl in weblate
+        #
+        i18n_tool.sh("""
+        set -ex
+        cd {d}/i18n
+        f=securedrop/translations/nl/LC_MESSAGES/messages.po
+        sed -i -e 's/inactiviteit/INACTIVITEIT/' $f
+        git add $f
+        git commit -m 'translation change' $f
+        """.format(o=self.dir,
+                   d=d))
+
+        #
+        # the nl translation update from weblate is copied
+        # over.
+        #
+        caplog.clear()
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-from-weblate',
+            '--root', join(str(tmpdir), 'securedrop'),
+            '--url', join(str(tmpdir), 'i18n'),
+            '--supported-languages', 'nl,de_DE',
+        ])
+        assert 'l10n: updated nl' in r()
+        assert 'l10n: updated de_DE' not in r()
+
 
 class TestSh(object):
 

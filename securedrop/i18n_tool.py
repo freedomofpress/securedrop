@@ -86,6 +86,17 @@ class I18NTool(object):
         dir = dirname(path)
         return subprocess.call(['git', '-C', dir, 'diff', '--quiet', path])
 
+    def ensure_i18n_remote(self, args):
+        sh("""
+        set -ex
+        cd {root}
+        if ! git remote | grep --quiet i18n ; then
+           git remote add i18n {url}
+        fi
+        git fetch i18n
+        """.format(root=args.root,
+                   url=args.url))
+
     def translate_messages(self, args):
         messages_file = os.path.join(args.translations_dir, 'messages.pot')
 
@@ -274,6 +285,73 @@ class I18NTool(object):
                   ' (default {})'.format(documentation_dir)))
         parser.set_defaults(func=self.update_docs)
 
+    def update_from_weblate(self, args):
+        self.ensure_i18n_remote(args)
+        codes = I18NTool.SUPPORTED_LANGUAGES.keys()
+        if args.supported_languages:
+            codes = args.supported_languages.split(',')
+        for code in codes:
+            info = I18NTool.SUPPORTED_LANGUAGES[code]
+
+            def need_update(p):
+                exists = os.path.exists(join(args.root, p))
+                sh("""
+                set -ex
+                cd {r}
+                git checkout i18n/i18n -- {p}
+                git reset HEAD -- {p}
+                """.format(r=args.root, p=p))
+                if not exists:
+                    return True
+                else:
+                    return self.file_is_modified(join(args.root, p))
+
+            def add(p):
+                sh("git -C {r} add {p}".format(r=args.root, p=p))
+            updated = False
+            #
+            # Update messages
+            #
+            p = "securedrop/translations/{l}/LC_MESSAGES/messages.po".format(
+                l=code)
+            if need_update(p):
+                add(p)
+                updated = True
+            #
+            # Update desktop
+            #
+            desktop_code = info['desktop']
+            p = join("install_files/ansible-base/roles",
+                     "tails-config/templates/{l}.po".format(
+                         l=desktop_code))
+            if need_update(p):
+                add(p)
+                updated = True
+
+            if updated:
+                sh("git -C {r} commit -m 'l10n: updated {l}'".format(
+                    r=args.root, l=code))
+
+    def set_update_from_weblate_parser(self, subps):
+        parser = subps.add_parser('update-from-weblate',
+                                  help=('Import translations from weblate'))
+        root = join(dirname(realpath(__file__)), '..')
+        parser.add_argument(
+            '--root',
+            default=root,
+            help=('root of the SecureDrop git repository'
+                  ' (default {})'.format(root)))
+        url = 'https://lab.securedrop.club/bot/securedrop.git'
+        parser.add_argument(
+            '--url',
+            default=url,
+            help=('URL of the weblate repository'
+                  ' (default {})'.format(url)))
+        parser.add_argument(
+            '--supported-languages',
+            help='comma separated list of supported languages')
+        parser.set_defaults(func=self.update_from_weblate)
+
     def get_args(self):
         parser = argparse.ArgumentParser(
             prog=__file__,
@@ -284,6 +362,7 @@ class I18NTool(object):
         self.set_translate_messages_parser(subps)
         self.set_translate_desktop_parser(subps)
         self.set_update_docs_parser(subps)
+        self.set_update_from_weblate_parser(subps)
 
         return parser
 
