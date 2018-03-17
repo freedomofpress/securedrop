@@ -3,6 +3,7 @@ from PyQt5 import QtGui, QtWidgets
 import sys
 import subprocess
 import os
+import pexpect
 
 import updaterUI
 import strings
@@ -81,6 +82,42 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             return sudo_password
         else:
             sys.exit(0)
+
+    def configure_tails(self):
+        """Run tailsconfig if the signature verified and the update succeeded."""
+        tailsconfig_command = '/home/amnesia/Persistent/securedrop/securedrop-admin tailsconfig'
+        if self.update_success:
+            self.statusbar.showMessage(strings.updating_tails_env)
+            # Get sudo password and add an enter key as tailsconfig command
+            # expects
+            sudo_password = self.get_sudo_password() + '\n'
+            try:
+                child = pexpect.spawn(tailsconfig_command)
+                child.expect('SUDO password:')
+                self.output += child.before.decode('utf-8')
+                child.sendline(sudo_password)
+                child.expect(pexpect.EOF)
+                self.output += child.before.decode('utf-8')
+                self.plainTextEdit.setPlainText(self.output)
+
+                # For Tailsconfig to be considered a success, we expect no
+                # failures in the Ansible output.
+                if 'failed=0' not in self.output:
+                    self.update_success = False
+                    failure_reason = strings.tailsconfig_failed_generic_reason
+                    return failure_reason
+
+            except pexpect.exceptions.TIMEOUT:
+                self.update_success = False
+                failure_reason = strings.tailsconfig_failed_sudo_password
+                return failure_reason
+
+            except subprocess.CalledProcessError:
+                self.update_success = False
+                failure_reason = strings.tailsconfig_failed_generic_reason
+                return failure_reason
+
+        return 'Success!'
 
 
 def main():
