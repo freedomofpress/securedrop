@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 import sys
 import subprocess
 import os
@@ -8,10 +8,12 @@ import updaterUI
 import strings
 
 
-class UpdaterApp(QtGui.QMainWindow, updaterUI.Ui_MainWindow):
+class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
     def __init__(self, parent=None):
         super(UpdaterApp, self).__init__(parent)
         self.setupUi(self)
+        self.progressBar.setProperty("value", 0)
+        self.setWindowIcon(QtGui.QIcon('/home/amnesia/Persistent/securedrop/journalist_gui/securedrop_icon.png'))
         self.label.setText(strings.update_in_progress)
         self.pushButton.setText(strings.install_later_button)
         self.pushButton.clicked.connect(self.close)
@@ -22,7 +24,8 @@ class UpdaterApp(QtGui.QMainWindow, updaterUI.Ui_MainWindow):
         self.progressBar.setProperty("value", 10)
         self.statusbar.showMessage(strings.fetching_update)
         self.progressBar.setProperty("value", 20)
-        update_command = ['/home/amnesia/Persistent/securedrop/securedrop-admin', 'update']
+        update_command = ['/home/amnesia/Persistent/securedrop/securedrop-admin',
+                          'update']
         output = subprocess.check_output(update_command,
                 stderr=subprocess.STDOUT)
         self.progressBar.setProperty("value", 40)
@@ -46,7 +49,7 @@ class UpdaterApp(QtGui.QMainWindow, updaterUI.Ui_MainWindow):
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     form = UpdaterApp()
     form.show()
     app.exec_()
@@ -54,4 +57,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
