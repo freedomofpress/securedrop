@@ -13,6 +13,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         super(UpdaterApp, self).__init__(parent)
         self.setupUi(self)
         self.progressBar.setProperty("value", 0)
+        self.setWindowTitle(strings.window_title)
         self.setWindowIcon(QtGui.QIcon('/home/amnesia/Persistent/securedrop/journalist_gui/securedrop_icon.png'))
         self.label.setText(strings.update_in_progress)
         self.pushButton.setText(strings.install_later_button)
@@ -26,26 +27,47 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.progressBar.setProperty("value", 20)
         update_command = ['/home/amnesia/Persistent/securedrop/securedrop-admin',
                           'update']
-        output = subprocess.check_output(update_command,
-                stderr=subprocess.STDOUT)
+        try:
+            output = subprocess.check_output(update_command,
+                                             stderr=subprocess.STDOUT)
+            update_success = True
+        except subprocess.CalledProcessError as e:
+            output = e.output
+            update_success = False
+
         self.progressBar.setProperty("value", 40)
-        self.plainTextEdit.setPlainText(output)
+        self.plainTextEdit.setPlainText(output.decode('utf-8'))
         self.plainTextEdit.setReadOnly = True
+
         self.progressBar.setProperty("value", 50)
         self.statusbar.showMessage(strings.updating_tails_env)
         #tailsconfig_command = ['/home/amnesia/Persistent/securedrop/securedrop-admin', 'tailsconfig']
         #output = subprocess.check_output(tailsconfig_command,
         #        stderr=subprocess.STDOUT)
-        self.statusbar.showMessage(strings.finished)
-        self.progressBar.setProperty("value", 100)
+        self.progressBar.setProperty("value", 80)
 
+        if update_success:
+            self.statusbar.showMessage(strings.finished)
+            self.progressBar.setProperty("value", 100)
+            self.alert_success()
+        else:
+            self.alert_failure(strings.update_failed_generic_reason)
 
     def alert_success(self):
-        pass
+        success_dialog_box = QtWidgets.QMessageBox()
+        success_dialog_box.setIcon(QtWidgets.QMessageBox.Information)
+        success_dialog_box.setText(strings.finished_dialog_message)
+        success_dialog_box.setWindowTitle(strings.finished_dialog_title)
+        success_dialog_box.exec_()
+        sys.exit(0)
 
-    def alert_failure(self):
-        pass
-
+    def alert_failure(self, failure_reason):
+        error_dialog_box = QtWidgets.QMessageBox()
+        error_dialog_box.setIcon(QtWidgets.QMessageBox.Critical)
+        error_dialog_box.setText(failure_reason)
+        error_dialog_box.setWindowTitle(update_failed_dialog_title)
+        error_dialog_box.exec_()
+        sys.exit(1)
 
 
 def main():
