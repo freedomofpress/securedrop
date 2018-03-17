@@ -73,6 +73,15 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         error_dialog_box.exec_()
         sys.exit(1)
 
+    def get_sudo_password(self):
+        sudo_password, ok_is_pressed = QtWidgets.QInputDialog.getText(
+            self, "Tails sudo password", "Tails sudo password:",
+            QtWidgets.QLineEdit.Password, "")
+        if ok_is_pressed and sudo_password:
+            return sudo_password
+        else:
+            sys.exit(0)
+
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
