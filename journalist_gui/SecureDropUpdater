@@ -29,29 +29,25 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         update_command = ['/home/amnesia/Persistent/securedrop/securedrop-admin',
                           'update']
         try:
-            output = subprocess.check_output(update_command,
-                                             stderr=subprocess.STDOUT)
-            if 'Signature verification failed' in output:
-                update_success = False
+            self.output = subprocess.check_output(update_command,
+                                                  stderr=subprocess.STDOUT)
+            if 'Signature verification failed' in self.output:
+                self.update_success = False
                 failure_reason = strings.update_failed_sig_failure
-            update_success = True
+            self.update_success = True
         except subprocess.CalledProcessError as e:
-            output = e.output
-            update_success = False
+            self.output = e.output
+            self.update_success = False
             failure_reason = strings.update_failed_generic_reason
-
         self.progressBar.setProperty("value", 40)
-        self.plainTextEdit.setPlainText(output.decode('utf-8'))
+        self.plainTextEdit.setPlainText(self.output.decode('utf-8'))
         self.plainTextEdit.setReadOnly = True
 
         self.progressBar.setProperty("value", 50)
-        self.statusbar.showMessage(strings.updating_tails_env)
-        #tailsconfig_command = ['/home/amnesia/Persistent/securedrop/securedrop-admin', 'tailsconfig']
-        #output = subprocess.check_output(tailsconfig_command,
-        #        stderr=subprocess.STDOUT)
+        failure_reason = self.configure_tails()
         self.progressBar.setProperty("value", 80)
 
-        if update_success:
+        if self.update_success:
             self.statusbar.showMessage(strings.finished)
             self.progressBar.setProperty("value", 100)
             self.alert_success()
