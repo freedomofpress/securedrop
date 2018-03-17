@@ -109,4 +109,4 @@ output = subprocess.check_output([path_securedrop_admin_venv,
 
 if 'Update needed' in output:
     # Start the SecureDrop updater GUI.
-    subprocess.Popen(['python', path_gui_updater], env=env)
+    subprocess.Popen(['python3', path_gui_updater], env=env)
