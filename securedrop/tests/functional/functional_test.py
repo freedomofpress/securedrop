@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import errno
+import json
 import mock
 import os
 import signal
@@ -8,6 +9,7 @@ import socket
 import time
 import traceback
 import requests
+from contextlib import contextmanager
 
 from Cryptodome import Random
 from datetime import datetime
@@ -26,6 +28,8 @@ import journalist_app
 import source_app
 import tests.utils.env as env
 
+from flask import request
+
 from db import db
 
 LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
@@ -41,6 +45,44 @@ class alert_is_not_present(object):
             return False
         except NoAlertPresentException:
             return True
+
+
+@contextmanager
+def capturel10n(app, what):
+    if 'PAGE_LAYOUT_CAPTURE_L10N' not in os.environ:
+        yield
+        return
+    source_strings = set()
+
+    patcher1 = mock.patch('babel.support.Translations.ugettext')
+    mock_ugettext = patcher1.start()
+
+    def f(a):
+        source_strings.add(a)
+        return a
+    mock_ugettext.side_effect = f
+
+    patcher2 = mock.patch('babel.support.Translations.ungettext')
+    mock_ungettext = patcher2.start()
+
+    def g(a, b, c):
+        s = c == 1 and a or b
+        source_strings.add(s)
+        return s
+    mock_ungettext.side_effect = g
+
+    @app.before_request
+    def trace_endpoint():
+        if request.endpoint != 'static':
+            source_strings.clear()
+
+    @app.after_request
+    def dump_endpoint(response):
+        fd = open(os.path.join(LOG_DIR, 'source_strings.json'), 'wb')
+        fd.write(json.dumps(list(source_strings)))
+        return response
+
+    yield
 
 
 class FunctionalTest(object):
@@ -123,19 +165,22 @@ class FunctionalTest(object):
 
             config.SESSION_EXPIRATION_MINUTES = self.session_expiration
 
-            app.run(
-                port=source_port,
-                debug=True,
-                use_reloader=False,
-                threaded=True)
+            with capturel10n(app, 'source'):
+                app.run(
+                    port=source_port,
+                    debug=True,
+                    use_reloader=False,
+                    threaded=True)
 
         def start_journalist_server(app):
             Random.atfork()
-            app.run(
-                port=journalist_port,
-                debug=True,
-                use_reloader=False,
-                threaded=True)
+
+            with capturel10n(app, 'journalist'):
+                app.run(
+                    port=journalist_port,
+                    debug=True,
+                    use_reloader=False,
+                    threaded=True)
 
         self.source_process = Process(
             target=lambda: start_source_server(self.source_app))

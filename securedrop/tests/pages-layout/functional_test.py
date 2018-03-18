@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import os
-from os.path import abspath, dirname, realpath
+from os.path import abspath, dirname, realpath, join
 import pytest
 
 from selenium.webdriver.common.action_chains import ActionChains
@@ -58,7 +58,15 @@ class FunctionalTest(functional_test.FunctionalTest):
 
     def _screenshot(self, filename):
         self.driver.set_window_size(1024, 500)  # Trim size of images for docs
-        self.driver.save_screenshot(os.path.join(self.log_dir, filename))
+        path = os.path.join(self.log_dir, filename)
+        self.driver.save_screenshot(path)
+        # save the l10n strings used by the last request
+        source_strings_path = abspath(join(dirname(realpath(__file__)),
+                                           '..', 'log', 'source_strings.json'))
+        if os.path.exists(source_strings_path):
+            l10n_filename = os.path.splitext(filename)[0] + ".json"
+            l10n_path = os.path.join(self.log_dir, l10n_filename)
+            os.rename(source_strings_path, l10n_path)
 
     def _javascript_toggle(self):
         # the following is a noop for some reason, workaround it
