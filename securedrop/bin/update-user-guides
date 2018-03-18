@@ -13,5 +13,5 @@ run_sass --force --update
 maybe_create_config_py
 
 ./i18n_tool.py translate-messages --compile
-pytest -v tests/pages-layout --page-layout
+pytest -v --page-layout "${@:-tests/pages-layout}"
 cp tests/pages-layout/screenshots/en_US/*.png ../docs/images/manual/screenshots
