@@ -419,11 +419,11 @@ class Journalist(db.Model):
         if LOGIN_HARDENING:
             cls.throttle_login(user)
 
-        # Prevent TOTP token reuse
-        if user.last_token is not None:
-            if pyotp.utils.compare_digest(token, user.last_token):
-                raise BadTokenException("previously used token "
-                                        "{}".format(token))
+            # Prevent TOTP token reuse
+            if user.last_token is not None:
+                if pyotp.utils.compare_digest(token, user.last_token):
+                    raise BadTokenException("previously used token "
+                                            "{}".format(token))
         if not user.verify_token(token):
             raise BadTokenException("invalid token")
         if not user.valid_password(password):

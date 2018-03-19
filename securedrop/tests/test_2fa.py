@@ -6,6 +6,8 @@ import flask_testing
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from models import Journalist, BadTokenException
+
+import models
 import journalist
 import utils
 
@@ -53,22 +55,32 @@ class TestJournalist2FA(flask_testing.TestCase):
         """Ensure that logging in twice with the same TOTP token
         fails.
         """
-        token = self.user.totp.now()
-        resp = self._login_user(token)
-        self.assertRedirects(resp, url_for('main.index'))
+        original_hardening = models.LOGIN_HARDENING
+        try:
+            models.LOGIN_HARDENING = True
+            token = self.user.totp.now()
+            resp = self._login_user(token)
+            self.assertRedirects(resp, url_for('main.index'))
 
-        resp = self._login_user(token)
-        self.assert200(resp)
-        self.assertIn("Login failed", resp.data)
+            resp = self._login_user(token)
+            self.assert200(resp)
+            self.assertIn("Login failed", resp.data)
+        finally:
+            models.LOGIN_HARDENING = original_hardening
 
     def test_totp_reuse_protections2(self):
         """More granular than the preceeding test, we want to make sure
         the right exception is being raised in the right place.
         """
-        valid_token = self.user.totp.now()
-        Journalist.login(self.user.username, self.user_pw, valid_token)
-        with self.assertRaises(BadTokenException):
+        original_hardening = models.LOGIN_HARDENING
+        try:
+            models.LOGIN_HARDENING = True
+            valid_token = self.user.totp.now()
             Journalist.login(self.user.username, self.user_pw, valid_token)
+            with self.assertRaises(BadTokenException):
+                Journalist.login(self.user.username, self.user_pw, valid_token)
+        finally:
+            models.LOGIN_HARDENING = original_hardening
 
     def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(self):
         # Regression test
