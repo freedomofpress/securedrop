@@ -223,6 +223,21 @@ class TestI18NTool(object):
             assert 'code hello i18n' in mo
             assert 'template hello i18n' not in mo
 
+    def test_require_git_email_name(self, tmpdir):
+        i18n_tool.sh("""
+        cd {dir}
+        git init
+        """.format(dir=str(tmpdir)))
+        with pytest.raises(Exception) as excinfo:
+            i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
+        assert 'please set name' in excinfo.value.message
+        i18n_tool.sh("""
+        cd {dir}
+        git config user.email "you@example.com"
+        git config user.name "Your Name"
+        """.format(dir=str(tmpdir)))
+        assert i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
+
     def test_update_docs(self, tmpdir, caplog):
         os.makedirs(join(str(tmpdir), 'includes'))
         i18n_tool.sh("""
