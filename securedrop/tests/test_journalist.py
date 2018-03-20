@@ -490,6 +490,19 @@ def test_user_edits_password_error_reponse(journalist_app, test_journo):
         models.LOGIN_HARDENING = original_hardening
 
 
+def test_admin_add_user_when_username_already_taken(journalist_app,
+                                                    test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.post('/admin/add',
+                        data=dict(username=test_admin['username'],
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+        text = resp.data.decode('utf-8')
+        assert 'already taken' in text
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -526,14 +539,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_add_user_when_username_already_taken(self):
-        self._login_admin()
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username=self.admin.username,
-                                          password=VALID_PASSWORD,
-                                          is_admin=None))
-        self.assertIn('already taken', resp.data)
 
     def test_max_password_length(self):
         """Creating a Journalist with a password that is greater than the
