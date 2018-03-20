@@ -514,6 +514,18 @@ def test_max_password_length():
                    password=overly_long_password)
 
 
+def test_min_password_length():
+    """Creating a Journalist with a password that is smaller than the
+       minimum password length should raise an exception. This uses the
+       magic number 7 below to get around the "diceware-like" requirement
+       that may cause a failure before the length check.
+    """
+    password = ('a ' * 7)[0:(Journalist.MIN_PASSWORD_LEN - 1)]
+    with pytest.raises(InvalidPasswordLength):
+        Journalist(username="My Password is Too Small!",
+                   password=password)
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -550,17 +562,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_min_password_length(self):
-        """Creating a Journalist with a password that is smaller than the
-           minimum password length should raise an exception. This uses the
-           magic number 7 below to get around the "diceware-like" requirement
-           that may cause a failure before the length check.
-        """
-        password = ('a ' * 7)[0:(Journalist.MIN_PASSWORD_LEN - 1)]
-        with self.assertRaises(InvalidPasswordLength):
-            Journalist(username="My Password is Too Small!",
-                       password=password)
 
     def test_admin_edits_user_password_too_long_warning(self):
         self._login_admin()
