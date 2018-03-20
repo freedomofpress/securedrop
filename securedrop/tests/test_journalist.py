@@ -406,6 +406,31 @@ def test_admin_edits_user_password_error_response(journalist_app,
                 'been saved correctly.') in text
 
 
+def test_user_edits_password_success_response(journalist_app, test_journo):
+    original_hardening = models.LOGIN_HARDENING
+    try:
+        # Set this to false because we login then immedialtey reuse the same
+        # token when authenticating to change the password. This triggers login
+        # hardening measures.
+        models.LOGIN_HARDENING = False
+
+        with journalist_app.test_client() as app:
+            _login_user(app, test_journo['username'], test_journo['password'],
+                        test_journo['otp_secret'])
+            token = TOTP(test_journo['otp_secret']).now()
+            resp = app.post('/account/new-password',
+                            data=dict(current_password=test_journo['password'],
+                                      token=token,
+                                      password=VALID_PASSWORD_2),
+                            follow_redirects=True)
+
+            text = resp.data.decode('utf-8')
+            assert "Password updated." in text
+            assert VALID_PASSWORD_2 in text
+    finally:
+        models.LOGIN_HARDENING = original_hardening
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -442,19 +467,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_user_edits_password_success_response(self):
-        self._login_user()
-        resp = self.client.post(
-            url_for('account.new_password'),
-            data=dict(current_password=self.user_pw,
-                      token='mocked',
-                      password=VALID_PASSWORD_2),
-            follow_redirects=True)
-
-        text = resp.data.decode('utf-8')
-        assert "Password updated." in text
-        assert VALID_PASSWORD_2 in text
 
     def test_user_edits_password_expires_session(self):
         with self.client as client:
