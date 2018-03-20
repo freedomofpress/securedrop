@@ -459,6 +459,37 @@ def test_user_edits_password_expires_session(journalist_app, test_journo):
         models.LOGIN_HARDENING = original_hardening
 
 
+def test_user_edits_password_error_reponse(journalist_app, test_journo):
+    original_hardening = models.LOGIN_HARDENING
+    try:
+        # Set this to false because we login then immedialtey reuse the same
+        # token when authenticating to change the password. This triggers login
+        # hardening measures.
+        models.LOGIN_HARDENING = False
+
+        with journalist_app.test_client() as app:
+            _login_user(app, test_journo['username'], test_journo['password'],
+                        test_journo['otp_secret'])
+
+            # patch token verification because there are multiple commits
+            # to the database and this isolates the one we want to fail
+            with patch.object(Journalist, 'verify_token', return_value=True):
+                with patch.object(db.session, 'commit',
+                                  side_effect=Exception()):
+                    resp = app.post(
+                        '/account/new-password',
+                        data=dict(current_password=test_journo['password'],
+                                  token='mocked',
+                                  password=VALID_PASSWORD_2),
+                        follow_redirects=True)
+
+            text = resp.data.decode('utf-8')
+            assert ('There was an error, and the new password might not have '
+                    'been saved correctly.') in text
+    finally:
+        models.LOGIN_HARDENING = original_hardening
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -495,21 +526,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_user_edits_password_error_reponse(self):
-        self._login_user()
-
-        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
-                   side_effect=Exception()):
-            resp = self.client.post(
-                url_for('account.new_password'),
-                data=dict(current_password=self.user_pw,
-                          token='mocked',
-                          password=VALID_PASSWORD_2),
-                follow_redirects=True)
-
-        assert ('There was an error, and the new password might not have '
-                'been saved correctly.') in resp.data.decode('utf-8')
 
     def test_admin_add_user_when_username_already_taken(self):
         self._login_admin()
