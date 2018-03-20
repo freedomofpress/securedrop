@@ -431,6 +431,34 @@ def test_user_edits_password_success_response(journalist_app, test_journo):
         models.LOGIN_HARDENING = original_hardening
 
 
+def test_user_edits_password_expires_session(journalist_app, test_journo):
+    original_hardening = models.LOGIN_HARDENING
+    try:
+        # Set this to false because we login then immedialtey reuse the same
+        # token when authenticating to change the password. This triggers login
+        # hardening measures.
+        models.LOGIN_HARDENING = False
+        with journalist_app.test_client() as app:
+            _login_user(app, test_journo['username'], test_journo['password'],
+                        test_journo['otp_secret'])
+            assert 'uid' in session
+
+            with InstrumentedApp(journalist_app) as ins:
+                token = TOTP(test_journo['otp_secret']).now()
+                resp = app.post('/account/new-password',
+                                data=dict(
+                                    current_password=test_journo['password'],
+                                    token=token,
+                                    password=VALID_PASSWORD_2))
+
+                ins.assert_redirects(resp, '/login')
+
+            # verify the session was expired after the password was changed
+            assert 'uid' not in session
+    finally:
+        models.LOGIN_HARDENING = original_hardening
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -467,27 +495,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_user_edits_password_expires_session(self):
-        with self.client as client:
-            # do a real login to get a real session
-            # (none of the mocking `g` hacks)
-            resp = client.post(url_for('main.login'),
-                               data=dict(username=self.user.username,
-                                         password=self.user_pw,
-                                         token='mocked'))
-            self.assertRedirects(resp, url_for('main.index'))
-            assert 'uid' in session
-
-            resp = client.post(
-                url_for('account.new_password'),
-                data=dict(current_password=self.user_pw,
-                          token='mocked',
-                          password=VALID_PASSWORD_2))
-
-            self.assertRedirects(resp, url_for('main.login'))
-            # verify the session was expired after the password was changed
-            assert 'uid' not in session
 
     def test_user_edits_password_error_reponse(self):
         self._login_user()
