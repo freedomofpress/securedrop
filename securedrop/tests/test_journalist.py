@@ -526,6 +526,28 @@ def test_min_password_length():
                    password=password)
 
 
+def test_admin_edits_user_password_too_long_warning(journalist_app,
+                                                    test_admin,
+                                                    test_journo):
+    # append a bunch of a's to a diceware password to keep it "diceware-like"
+    overly_long_password = VALID_PASSWORD + \
+        'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(
+                '/admin/edit/{}/new-password'.format(test_journo['id']),
+                data=dict(username=test_journo['username'],
+                          is_admin=None,
+                          password=overly_long_password),
+                follow_redirects=True)
+
+            ins.assert_message_flashed('You submitted a bad password! '
+                                       'Password not changed.', 'error')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -562,20 +584,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_edits_user_password_too_long_warning(self):
-        self._login_admin()
-        overly_long_password = VALID_PASSWORD + \
-            'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
-
-        self.client.post(
-            url_for('admin.new_password', user_id=self.user.id),
-            data=dict(username=self.user.username, is_admin=None,
-                      password=overly_long_password),
-            follow_redirects=True)
-
-        self.assertMessageFlashed('You submitted a bad password! '
-                                  'Password not changed.', 'error')
 
     def test_user_edits_password_too_long_warning(self):
         self._login_user()
