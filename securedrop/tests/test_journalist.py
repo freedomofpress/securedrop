@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import pytest
 import random
 import unittest
 import zipfile
@@ -503,6 +504,16 @@ def test_admin_add_user_when_username_already_taken(journalist_app,
         assert 'already taken' in text
 
 
+def test_max_password_length():
+    """Creating a Journalist with a password that is greater than the
+    maximum password length should raise an exception"""
+    overly_long_password = VALID_PASSWORD + \
+        'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
+    with pytest.raises(InvalidPasswordLength):
+        Journalist(username="My Password is Too Big!",
+                   password=overly_long_password)
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -539,15 +550,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_max_password_length(self):
-        """Creating a Journalist with a password that is greater than the
-        maximum password length should raise an exception"""
-        overly_long_password = VALID_PASSWORD + \
-            'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
-        with self.assertRaises(InvalidPasswordLength):
-            Journalist(username="My Password is Too Big!",
-                       password=overly_long_password)
 
     def test_min_password_length(self):
         """Creating a Journalist with a password that is smaller than the
