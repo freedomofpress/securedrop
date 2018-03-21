@@ -79,6 +79,11 @@ def test_journalist_string_representation(journalist_app, test_journo):
         test_journo['journalist'].__repr__()
 
 
+def test_source_string_representation(journalist_app, test_source):
+    with journalist_app.app_context():
+        test_source['source'].__repr__()
+
+
 class TestDatabase(TestCase):
 
     def create_app(self):
@@ -91,10 +96,6 @@ class TestDatabase(TestCase):
         env.teardown()
 
     # Check __repr__ do not throw exceptions
-
-    def test_source_string_representation(self):
-        test_source, _ = db_helper.init_source()
-        test_source.__repr__()
 
     def test_throttle_login(self):
         journalist, _ = db_helper.init_journalist()
