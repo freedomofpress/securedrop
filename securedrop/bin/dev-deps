@@ -44,3 +44,11 @@ function reset_demo() {
     ./manage.py reset
     ./create-dev-data.py
 }
+
+function setup_test_environment() {
+    run_xvfb &
+    run_redis &
+    urandom
+    run_sass --force --update
+    maybe_create_config_py
+}

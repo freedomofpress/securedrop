@@ -9,7 +9,8 @@ RUN apt-get update && \
     apt-get install -y devscripts \
                        python-pip libpython2.7-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server firefox git xvfb haveged curl \
-                       gettext paxctl x11vnc enchant
+                       gettext paxctl x11vnc enchant \
+                       libffi-dev libxml2-dev libxslt1-dev
 
 RUN gem install sass -v 3.4.23
 
@@ -31,6 +32,7 @@ RUN echo deb http://archive.ubuntu.com/ubuntu/ xenial main > /etc/apt/sources.li
 
 COPY requirements requirements
 RUN pip install -r requirements/securedrop-app-code-requirements.txt && \
+    pip install -r requirements/develop-requirements.txt && \
     pip install -r requirements/test-requirements.txt
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi

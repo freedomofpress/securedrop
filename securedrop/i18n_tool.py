@@ -2,14 +2,21 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import json
 import logging
 import os
 import re
 import signal
 import subprocess
 import sys
+import tempfile
 import textwrap
 import version
+
+from twisted.internet import reactor
+import scrapy
+from scrapy.crawler import Crawler
+from scrapy import signals
 
 from os.path import dirname, join, realpath
 
@@ -59,6 +66,82 @@ def sh(command, input=None):
     return "".join(lines_of_command_output)
 
 
+class WeblateSpider(scrapy.Spider):
+    handle_httpstatus_list = [404, 500]
+
+    name = "weblate"
+
+    custom_settings = {
+        'RETRY_ENABLED': False,
+        'EXTENSIONS': {
+            'scrapy.extensions.telnet.TelnetConsole': None,
+            'scrapy.extensions.memusage.MemoryUsage': None,
+            'scrapy.extensions.logstats.LogStats': None,
+            'scrapy.extensions.corestats.CoreStats': None,
+        },
+        'DOWNLOADER_MIDDLEWARES': {
+            'scrapy.downloadermiddlewares.stats.DownloaderStats': None,
+        },
+        'ITEM_PIPELINES': {
+            'i18n_tool.JsonMailWriterPipeline': 800,
+        }
+    }
+
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        spider = super(WeblateSpider, cls).from_crawler(crawler,
+                                                        *args,
+                                                        **kwargs)
+        crawler.signals.connect(spider.spider_error,
+                                signal=signals.spider_error)
+        spider.failed = False
+        return spider
+
+    def spider_error(self, failure, response, spider):
+        self.failed = True
+
+    def start_requests(self):
+        yield scrapy.Request(self.url + '/accounts/login/',
+                             callback=self.login)
+
+    def login(self, response):
+        return scrapy.FormRequest.from_response(
+            response,
+            formdata={
+                'username': self.username,
+                'password': self.password
+            },
+            callback=self.after_login)
+
+    def after_login(self, response):
+        assert response.css('#profile-button')
+        return scrapy.Request(
+            url=self.url + '/admin/auth/user/',
+            callback=self.user_list)
+
+    def user_list(self, response):
+        next_page = response.xpath(
+            '//a[@title="Localizationlab"]/@href').extract_first()
+        return response.follow(next_page, self.localizationlab_list)
+
+    def localizationlab_list(self, response):
+        for mail in response.css('.field-email::text').extract():
+            yield {'email': mail}
+
+
+class JsonMailWriterPipeline(object):
+
+    def open_spider(self, spider):
+        self.emails = []
+
+    def close_spider(self, spider):
+        open(spider.filename, 'w').write(" ".join(self.emails))
+
+    def process_item(self, item, spider):
+        self.emails.append(item['email'])
+        return item
+
+
 class I18NTool(object):
 
     #
@@ -96,8 +179,8 @@ class I18NTool(object):
            git remote add i18n {url}
         fi
         git fetch i18n
-        """.format(root=args.root,
-                   url=args.url))
+        """.format(root=args.securedrop_root,
+                   url=args.weblate_git_url))
 
     def translate_messages(self, args):
         messages_file = os.path.join(args.translations_dir, 'messages.pot')
@@ -306,20 +389,20 @@ class I18NTool(object):
             info = I18NTool.SUPPORTED_LANGUAGES[code]
 
             def need_update(p):
-                exists = os.path.exists(join(args.root, p))
+                exists = os.path.exists(join(args.securedrop_root, p))
                 sh("""
                 set -ex
                 cd {r}
                 git checkout i18n/i18n -- {p}
                 git reset HEAD -- {p}
-                """.format(r=args.root, p=p))
+                """.format(r=args.securedrop_root, p=p))
                 if not exists:
                     return True
                 else:
-                    return self.file_is_modified(join(args.root, p))
+                    return self.file_is_modified(join(args.securedrop_root, p))
 
             def add(p):
-                sh("git -C {r} add {p}".format(r=args.root, p=p))
+                sh("git -C {r} add {p}".format(r=args.securedrop_root, p=p))
             updated = False
             #
             # Update messages
@@ -344,12 +427,12 @@ class I18NTool(object):
                 self.upstream_commit(args, code)
 
     def upstream_commit(self, args, code):
-        self.require_git_email_name(args.root)
+        self.require_git_email_name(args.securedrop_root)
         authors = set()
         for path in sh("git -C {r} diff --name-only --cached".format(
-                r=args.root)).split():
+                r=args.securedrop_root)).split():
             previous_message = sh("git -C {r} log -n 1 {p}".format(
-                r=args.root, p=path))
+                r=args.securedrop_root, p=path))
             m = re.search('copied from (\w+)', previous_message)
             if m:
                 origin = m.group(1)
@@ -357,9 +440,11 @@ class I18NTool(object):
                 origin = ''
             authors |= set(sh("""
             git -C {r} log --format=%aN {o}..i18n/i18n -- {p}
-            """.format(r=args.root, o=origin, p=path)).strip().split('\n'))
+            """.format(r=args.securedrop_root,
+                       o=origin,
+                       p=path)).strip().split('\n'))
         current = sh("git -C {r} rev-parse i18n/i18n".format(
-            r=args.root)).strip()
+            r=args.securedrop_root)).strip()
         info = I18NTool.SUPPORTED_LANGUAGES[code]
         message = textwrap.dedent(u"""
         l10n: updated {code} {name}
@@ -368,33 +453,71 @@ class I18NTool(object):
 
         {remote}
         copied from {current}
-        """.format(remote=args.url,
+        """.format(remote=args.weblate_git_url,
                    name=info['name'],
                    authors=", ".join(authors),
                    code=code,
                    current=current))
         sh(u'git -C {r} commit -m "{message}"'.format(
-            r=args.root, message=message.replace('"', '\"')).encode('utf-8'))
+            r=args.securedrop_root,
+            message=message.replace('"', '\"')).encode('utf-8'))
 
-    def set_update_from_weblate_parser(self, subps):
-        parser = subps.add_parser('update-from-weblate',
-                                  help=('Import translations from weblate'))
+    def set_supported_languages_parser(self, parser):
         root = join(dirname(realpath(__file__)), '..')
         parser.add_argument(
-            '--root',
+            '--securedrop-root',
             default=root,
             help=('root of the SecureDrop git repository'
                   ' (default {})'.format(root)))
         url = 'https://lab.securedrop.club/bot/securedrop.git'
         parser.add_argument(
-            '--url',
+            '--weblate-git-url',
             default=url,
             help=('URL of the weblate repository'
                   ' (default {})'.format(url)))
         parser.add_argument(
             '--supported-languages',
             help='comma separated list of supported languages')
+
+    def set_update_from_weblate_parser(self, subps):
+        parser = subps.add_parser('update-from-weblate',
+                                  help=('Import translations from weblate'))
+        self.set_supported_languages_parser(parser)
         parser.set_defaults(func=self.update_from_weblate)
+
+    def credits(self, args):
+        with tempfile.NamedTemporaryFile() as f:
+            runner = Crawler(WeblateSpider)
+            d = runner.crawl(username=args.username,
+                             password=args.password,
+                             url=args.weblate_url,
+                             filename=f.name)
+            d.addBoth(lambda _: reactor.stop())
+            reactor.run()
+            assert not runner.spider.failed
+            print(open(f.name).read())
+
+    def set_weblate_parser(self, parser):
+        parser.add_argument(
+            '--username',
+            required=True,
+            help='weblate username')
+        parser.add_argument(
+            '--password',
+            required=True,
+            help='weblate password')
+        url = 'https://weblate.securedrop.club'
+        parser.add_argument(
+            '--weblate-url',
+            default=url,
+            help='weblate URL (default: {})'.format(url))
+
+    def set_credits_parser(self, subps):
+        parser = subps.add_parser('credits',
+                                  help=('Display localizers credits'))
+        self.set_supported_languages_parser(parser)
+        self.set_weblate_parser(parser)
+        parser.set_defaults(func=self.credits)
 
     def get_args(self):
         parser = argparse.ArgumentParser(
@@ -407,11 +530,13 @@ class I18NTool(object):
         self.set_translate_desktop_parser(subps)
         self.set_update_docs_parser(subps)
         self.set_update_from_weblate_parser(subps)
+        self.set_credits_parser(subps)
 
         return parser
 
     def setup_verbosity(self, args):
         if args.verbose:
+            logging.getLogger('scrapy').setLevel(logging.DEBUG)
             log.setLevel(logging.DEBUG)
         else:
             log.setLevel(logging.INFO)

@@ -9,8 +9,12 @@ from mock import patch
 import pytest
 import shutil
 import signal
+import socket
 import subprocess
 import time
+
+from twisted.web import server, resource
+from twisted.internet import reactor, endpoints
 
 
 class TestI18NTool(object):
@@ -287,8 +291,8 @@ class TestI18NTool(object):
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-from-weblate',
-            '--root', join(str(tmpdir), 'securedrop'),
-            '--url', join(str(tmpdir), 'i18n'),
+            '--securedrop-root', join(str(tmpdir), 'securedrop'),
+            '--weblate-git-url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl',
         ])
         assert 'l10n: updated nl' in r()
@@ -302,8 +306,8 @@ class TestI18NTool(object):
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-from-weblate',
-            '--root', join(str(tmpdir), 'securedrop'),
-            '--url', join(str(tmpdir), 'i18n'),
+            '--securedrop-root', join(str(tmpdir), 'securedrop'),
+            '--weblate-git-url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl,de_DE',
         ])
         assert 'l10n: updated nl' not in r()
@@ -316,8 +320,8 @@ class TestI18NTool(object):
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-from-weblate',
-            '--root', join(str(tmpdir), 'securedrop'),
-            '--url', join(str(tmpdir), 'i18n'),
+            '--securedrop-root', join(str(tmpdir), 'securedrop'),
+            '--weblate-git-url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl,de_DE',
         ])
         assert 'l10n: updated nl' not in r()
@@ -351,8 +355,8 @@ class TestI18NTool(object):
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-from-weblate',
-            '--root', join(str(tmpdir), 'securedrop'),
-            '--url', join(str(tmpdir), 'i18n'),
+            '--securedrop-root', join(str(tmpdir), 'securedrop'),
+            '--weblate-git-url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl,de_DE',
         ])
         assert 'l10n: updated nl' in r()
@@ -360,6 +364,89 @@ class TestI18NTool(object):
         message = i18n_tool.sh("git -C {d}/securedrop show".format(d=d))
         assert "Someone Else" in message
         assert u"Loïc" not in message
+
+    def test_credits(self, tmpdir):
+
+        s = socket.socket()
+        s.bind(("localhost", 0))
+        port = s.getsockname()[1]
+        s.close()
+
+        class LoginForm(resource.Resource):
+            isLeaf = True
+
+            def getChild(self, name, request):
+                if name == '':
+                    return self
+                return resource.Resource.getChild(self, name, request)
+
+            def render_POST(self, request):
+                return """
+                <html>
+                <div id="profile-button"></div>
+                </html>
+                """
+
+            def render_GET(self, request):
+                return """
+                <html>
+                <form method="post" action="/accounts/login/">
+                <input name="username">
+                <input name="password">
+                </form>
+                </html>
+                """
+
+        class User(resource.Resource):
+            isLeaf = True
+
+            def getChild(self, name, request):
+                if name == '':
+                    return self
+                return resource.Resource.getChild(self, name, request)
+
+            def render_GET(self, request):
+                return """
+                <html>
+                <a href="/localizationlab-users" title="Localizationlab"></a>
+                </html>
+                """
+
+        class LocalizationlabUsers(resource.Resource):
+            isLeaf = True
+
+            def render_GET(self, request):
+                return """
+                <html>
+                <div class="field-email">user01@mail.com</div>
+                <div class="field-email">user02@mail.com</div>
+                </html>
+                """
+
+        root = resource.Resource()
+        accounts = resource.Resource()
+        root.putChild('accounts', accounts)
+        accounts.putChild('login', LoginForm())
+        admin = resource.Resource()
+        root.putChild('admin', admin)
+        auth = resource.Resource()
+        admin.putChild('auth', auth)
+        auth.putChild('user', User())
+        root.putChild('localizationlab-users', LocalizationlabUsers())
+
+        site = server.Site(root)
+        endpoint = endpoints.TCP4ServerEndpoint(reactor, port)
+        endpoint.listen(site)
+
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'credits',
+            '--username', 'USER',
+            '--password', 'PASSWORD',
+            '--securedrop-root', join(str(tmpdir), 'securedrop'),
+            '--weblate-git-url', join(str(tmpdir), 'i18n'),
+            '--weblate-url', 'http://localhost:' + str(port),
+        ])
 
 
 class TestSh(object):
