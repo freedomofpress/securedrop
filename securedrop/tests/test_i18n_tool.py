@@ -287,8 +287,8 @@ class TestI18NTool(object):
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-from-weblate',
-            '--root', join(str(tmpdir), 'securedrop'),
-            '--url', join(str(tmpdir), 'i18n'),
+            '--securedrop-root', join(str(tmpdir), 'securedrop'),
+            '--weblate-git-url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl',
         ])
         assert 'l10n: updated nl' in r()
@@ -302,8 +302,8 @@ class TestI18NTool(object):
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-from-weblate',
-            '--root', join(str(tmpdir), 'securedrop'),
-            '--url', join(str(tmpdir), 'i18n'),
+            '--securedrop-root', join(str(tmpdir), 'securedrop'),
+            '--weblate-git-url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl,de_DE',
         ])
         assert 'l10n: updated nl' not in r()
@@ -316,8 +316,8 @@ class TestI18NTool(object):
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-from-weblate',
-            '--root', join(str(tmpdir), 'securedrop'),
-            '--url', join(str(tmpdir), 'i18n'),
+            '--securedrop-root', join(str(tmpdir), 'securedrop'),
+            '--weblate-git-url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl,de_DE',
         ])
         assert 'l10n: updated nl' not in r()
@@ -351,8 +351,8 @@ class TestI18NTool(object):
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-from-weblate',
-            '--root', join(str(tmpdir), 'securedrop'),
-            '--url', join(str(tmpdir), 'i18n'),
+            '--securedrop-root', join(str(tmpdir), 'securedrop'),
+            '--weblate-git-url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl,de_DE',
         ])
         assert 'l10n: updated nl' in r()
