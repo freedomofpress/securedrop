@@ -107,7 +107,8 @@ def test_journo(journalist_app):
         user, password = utils.db_helper.init_journalist(is_admin=False)
         username = user.username
         otp_secret = user.otp_secret
-        return {'username': username,
+        return {'journalist': user,
+                'username': username,
                 'password': password,
                 'otp_secret': otp_secret,
                 'id': user.id}
@@ -119,7 +120,8 @@ def test_admin(journalist_app):
         user, password = utils.db_helper.init_journalist(is_admin=True)
         username = user.username
         otp_secret = user.otp_secret
-        return {'username': username,
+        return {'admin': user,
+                'username': username,
                 'password': password,
                 'otp_secret': otp_secret}
 
