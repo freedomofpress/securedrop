@@ -50,6 +50,12 @@ class TestPytestManagementCommand(unittest.TestCase):
         with mock.patch("__builtin__.raw_input", return_value='jen'):
             assert manage._get_username() == 'jen'
 
+    def test_get_username_fail(self):
+        bad_username = 'a' * (Journalist.MIN_USERNAME_LEN - 1)
+        with mock.patch("__builtin__.raw_input",
+                        side_effect=[bad_username, 'jen']):
+            assert manage._get_username() == 'jen'
+
 
 class TestManagementCommand(unittest.TestCase):
 
@@ -63,11 +69,6 @@ class TestManagementCommand(unittest.TestCase):
         self.__context.push()
         utils.env.teardown()
         self.__context.pop()
-
-    @mock.patch("__builtin__.raw_input",
-                side_effect=['a' * (Journalist.MIN_USERNAME_LEN - 1), 'jen'])
-    def test_get_username_fail(self, mock_stdin):
-        assert manage._get_username() == 'jen'
 
     @mock.patch("__builtin__.raw_input", return_value='y')
     def test_get_yubikey_usage_yes(self, mock_stdin):
