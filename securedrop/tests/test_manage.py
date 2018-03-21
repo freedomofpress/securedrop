@@ -44,6 +44,13 @@ class TestManagePy(object):
         assert 'VISIBLE' in caplog.text
 
 
+class TestPytestManagementCommand(unittest.TestCase):
+
+    def test_get_username_success(self):
+        with mock.patch("__builtin__.raw_input", return_value='jen'):
+            assert manage._get_username() == 'jen'
+
+
 class TestManagementCommand(unittest.TestCase):
 
     def setUp(self):
@@ -56,10 +63,6 @@ class TestManagementCommand(unittest.TestCase):
         self.__context.push()
         utils.env.teardown()
         self.__context.pop()
-
-    @mock.patch("__builtin__.raw_input", return_value='jen')
-    def test_get_username_success(self, mock_stdin):
-        assert manage._get_username() == 'jen'
 
     @mock.patch("__builtin__.raw_input",
                 side_effect=['a' * (Journalist.MIN_USERNAME_LEN - 1), 'jen'])
