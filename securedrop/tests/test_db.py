@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from flask_testing import TestCase
+import pytest
+
 from mock import MagicMock
 
-import journalist
-
-from utils import db_helper, env
+from utils import db_helper
 from models import (Journalist, Submission, Reply, get_one_or_else,
                     LoginThrottledException)
 
@@ -56,6 +55,15 @@ def test_get_one_or_else_no_result_found(journalist_app, test_journo):
         mock_abort.assert_called_with(404)
 
 
+def test_throttle_login(journalist_app, test_journo):
+    with journalist_app.app_context():
+        journalist = test_journo['journalist']
+        for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
+            Journalist.throttle_login(journalist)
+        with pytest.raises(LoginThrottledException):
+            Journalist.throttle_login(journalist)
+
+
 def test_submission_string_representation(journalist_app, test_source):
     with journalist_app.app_context():
         db_helper.submit(test_source['source'], 2)
@@ -82,24 +90,3 @@ def test_journalist_string_representation(journalist_app, test_journo):
 def test_source_string_representation(journalist_app, test_source):
     with journalist_app.app_context():
         test_source['source'].__repr__()
-
-
-class TestDatabase(TestCase):
-
-    def create_app(self):
-        return journalist.app
-
-    def setUp(self):
-        env.setup()
-
-    def tearDown(self):
-        env.teardown()
-
-    # Check __repr__ do not throw exceptions
-
-    def test_throttle_login(self):
-        journalist, _ = db_helper.init_journalist()
-        for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
-            Journalist.throttle_login(journalist)
-        with self.assertRaises(LoginThrottledException):
-            Journalist.throttle_login(journalist)
