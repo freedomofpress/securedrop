@@ -63,6 +63,17 @@ def test_submission_string_representation(journalist_app, test_source):
         test_submission.__repr__()
 
 
+def test_reply_string_representation(journalist_app,
+                                     test_journo,
+                                     test_source):
+    with journalist_app.app_context():
+        db_helper.reply(test_journo['journalist'],
+                        test_source['source'],
+                        2)
+        test_reply = Reply.query.first()
+        test_reply.__repr__()
+
+
 class TestDatabase(TestCase):
 
     def create_app(self):
@@ -75,13 +86,6 @@ class TestDatabase(TestCase):
         env.teardown()
 
     # Check __repr__ do not throw exceptions
-
-    def test_reply_string_representation(self):
-        journalist, _ = db_helper.init_journalist()
-        source, _ = db_helper.init_source()
-        db_helper.reply(journalist, source, 2)
-        test_reply = Reply.query.first()
-        test_reply.__repr__()
 
     def test_journalist_string_representation(self):
         test_journalist, _ = db_helper.init_journalist()
