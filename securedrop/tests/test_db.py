@@ -56,6 +56,13 @@ def test_get_one_or_else_no_result_found(journalist_app, test_journo):
         mock_abort.assert_called_with(404)
 
 
+def test_submission_string_representation(journalist_app, test_source):
+    with journalist_app.app_context():
+        db_helper.submit(test_source['source'], 2)
+        test_submission = Submission.query.first()
+        test_submission.__repr__()
+
+
 class TestDatabase(TestCase):
 
     def create_app(self):
@@ -68,13 +75,6 @@ class TestDatabase(TestCase):
         env.teardown()
 
     # Check __repr__ do not throw exceptions
-
-    def test_submission_string_representation(self):
-        source, _ = db_helper.init_source()
-        db_helper.submit(source, 2)
-
-        test_submission = Submission.query.first()
-        test_submission.__repr__()
 
     def test_reply_string_representation(self):
         journalist, _ = db_helper.init_journalist()
