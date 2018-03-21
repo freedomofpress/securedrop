@@ -82,7 +82,15 @@ To get started, you can try the following:
    make dev                                    # run development servers
    make test                                   # run tests
    bin/dev-shell bin/run-test tests/functional # functional tests only
-   bin/dev-shell bash                          # shell inside the container
+
+To debug interactively, a shell with an X11 server can be setup with:
+
+.. code:: sh
+
+   $ bin/dev-shell bash                        # shell inside the container
+   $ source bin/dev-deps
+   $ setup_test_environment
+   $ pytest -v tests
 
 .. tip:: The interactive shell in the container does not run
          ``redis``, ``Xvfb`` etc.  However you can import shell helper

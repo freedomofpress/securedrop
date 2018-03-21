@@ -5,11 +5,7 @@ set -euo pipefail
 
 source "${BASH_SOURCE%/*}/dev-deps"
 
-run_xvfb &
-run_redis &
-urandom
-run_sass --force --update
-maybe_create_config_py
+setup_test_environment
 
 if [ -n "${CIRCLE_BRANCH:-}" ] ; then
     touch tests/log/firefox.log
