@@ -2,14 +2,21 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import json
 import logging
 import os
 import re
 import signal
 import subprocess
 import sys
+import tempfile
 import textwrap
 import version
+
+from twisted.internet import reactor
+import scrapy
+from scrapy.crawler import Crawler
+from scrapy import signals
 
 from os.path import dirname, join, realpath
 
@@ -57,6 +64,82 @@ def sh(command, input=None):
             cmd=command
         )
     return "".join(lines_of_command_output)
+
+
+class WeblateSpider(scrapy.Spider):
+    handle_httpstatus_list = [404, 500]
+
+    name = "weblate"
+
+    custom_settings = {
+        'RETRY_ENABLED': False,
+        'EXTENSIONS': {
+            'scrapy.extensions.telnet.TelnetConsole': None,
+            'scrapy.extensions.memusage.MemoryUsage': None,
+            'scrapy.extensions.logstats.LogStats': None,
+            'scrapy.extensions.corestats.CoreStats': None,
+        },
+        'DOWNLOADER_MIDDLEWARES': {
+            'scrapy.downloadermiddlewares.stats.DownloaderStats': None,
+        },
+        'ITEM_PIPELINES': {
+            'i18n_tool.JsonMailWriterPipeline': 800,
+        }
+    }
+
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        spider = super(WeblateSpider, cls).from_crawler(crawler,
+                                                        *args,
+                                                        **kwargs)
+        crawler.signals.connect(spider.spider_error,
+                                signal=signals.spider_error)
+        spider.failed = False
+        return spider
+
+    def spider_error(self, failure, response, spider):
+        self.failed = True
+
+    def start_requests(self):
+        yield scrapy.Request(self.url + '/accounts/login/',
+                             callback=self.login)
+
+    def login(self, response):
+        return scrapy.FormRequest.from_response(
+            response,
+            formdata={
+                'username': self.username,
+                'password': self.password
+            },
+            callback=self.after_login)
+
+    def after_login(self, response):
+        assert response.css('#profile-button')
+        return scrapy.Request(
+            url=self.url + '/admin/auth/user/',
+            callback=self.user_list)
+
+    def user_list(self, response):
+        next_page = response.xpath(
+            '//a[@title="Localizationlab"]/@href').extract_first()
+        return response.follow(next_page, self.localizationlab_list)
+
+    def localizationlab_list(self, response):
+        for mail in response.css('.field-email::text').extract():
+            yield {'email': mail}
+
+
+class JsonMailWriterPipeline(object):
+
+    def open_spider(self, spider):
+        self.emails = []
+
+    def close_spider(self, spider):
+        open(spider.filename, 'w').write(" ".join(self.emails))
+
+    def process_item(self, item, spider):
+        self.emails.append(item['email'])
+        return item
 
 
 class I18NTool(object):
@@ -402,6 +485,40 @@ class I18NTool(object):
         self.set_supported_languages_parser(parser)
         parser.set_defaults(func=self.update_from_weblate)
 
+    def credits(self, args):
+        with tempfile.NamedTemporaryFile() as f:
+            runner = Crawler(WeblateSpider)
+            d = runner.crawl(username=args.username,
+                             password=args.password,
+                             url=args.weblate_url,
+                             filename=f.name)
+            d.addBoth(lambda _: reactor.stop())
+            reactor.run()
+            assert not runner.spider.failed
+            print(open(f.name).read())
+
+    def set_weblate_parser(self, parser):
+        parser.add_argument(
+            '--username',
+            required=True,
+            help='weblate username')
+        parser.add_argument(
+            '--password',
+            required=True,
+            help='weblate password')
+        url = 'https://weblate.securedrop.club'
+        parser.add_argument(
+            '--weblate-url',
+            default=url,
+            help='weblate URL (default: {})'.format(url))
+
+    def set_credits_parser(self, subps):
+        parser = subps.add_parser('credits',
+                                  help=('Display localizers credits'))
+        self.set_supported_languages_parser(parser)
+        self.set_weblate_parser(parser)
+        parser.set_defaults(func=self.credits)
+
     def get_args(self):
         parser = argparse.ArgumentParser(
             prog=__file__,
@@ -413,11 +530,13 @@ class I18NTool(object):
         self.set_translate_desktop_parser(subps)
         self.set_update_docs_parser(subps)
         self.set_update_from_weblate_parser(subps)
+        self.set_credits_parser(subps)
 
         return parser
 
     def setup_verbosity(self, args):
         if args.verbose:
+            logging.getLogger('scrapy').setLevel(logging.DEBUG)
             log.setLevel(logging.DEBUG)
         else:
             log.setLevel(logging.INFO)
