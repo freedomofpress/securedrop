@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import pytest
 import random
 import unittest
 import zipfile
@@ -9,6 +10,7 @@ from flask import url_for, escape, session, current_app, g
 from flask_testing import TestCase
 from mock import patch
 from pyotp import TOTP
+from sqlalchemy.sql.expression import func
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.exc import IntegrityError
 
@@ -309,6 +311,243 @@ def test_admin_index(journalist_app, test_admin):
         assert "Admin Interface" in text
 
 
+def test_admin_delete_user(journalist_app, test_admin, test_journo):
+    # Verify journalist is in the database
+    with journalist_app.app_context():
+        assert Journalist.query.get(test_journo['id']) is not None
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.post('/admin/delete/{}'.format(test_journo['id']),
+                        follow_redirects=True)
+
+        # Assert correct interface behavior
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert escape("Deleted user '{}'".format(test_journo['username'])) \
+            in text
+
+    # Verify journalist is no longer in the database
+    with journalist_app.app_context():
+        assert Journalist.query.get(test_journo['id']) is None
+
+
+def test_admin_cannot_delete_self(journalist_app, test_admin, test_journo):
+    # Verify journalist is in the database
+    with journalist_app.app_context():
+        assert Journalist.query.get(test_journo['id']) is not None
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.post('/admin/delete/{}'.format(test_admin['id']),
+                        follow_redirects=True)
+
+        # Assert correct interface behavior
+        assert resp.status_code == 403
+
+        resp = app.get('/admin/', follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Admin Interface" in text
+
+        # The user can be edited and deleted
+        assert escape("Edit user {}".format(test_journo['username'])) in text
+        assert escape("Delete user {}".format(test_journo['username'])) in text
+        # The admin can be edited but cannot deleted
+        assert escape("Edit user {}".format(test_admin['username'])) in text
+        assert escape("Delete user {}".format(test_admin['username'])) \
+            not in text
+
+
+def test_admin_edits_user_password_success_response(journalist_app,
+                                                    test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post('/admin/edit/{}/new-password'.format(test_admin['id']),
+                        data=dict(password=VALID_PASSWORD_2),
+                        follow_redirects=True)
+        assert resp.status_code == 200
+
+        text = resp.data.decode('utf-8')
+        assert 'Password updated.' in text
+        assert VALID_PASSWORD_2 in text
+
+
+def test_admin_deletes_invalid_user_404(journalist_app, test_admin):
+    with journalist_app.app_context():
+        invalid_id = db.session.query(func.max(Journalist.id)).scalar() + 1
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.post('/admin/delete/{}'.format(invalid_id))
+        assert resp.status_code == 404
+
+
+def test_admin_edits_user_password_error_response(journalist_app,
+                                                  test_admin,
+                                                  test_journo):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
+                   side_effect=Exception()):
+            resp = app.post(('/admin/edit/{}/new-password'
+                             .format(test_journo['id'])),
+                            data=dict(password=VALID_PASSWORD_2),
+                            follow_redirects=True)
+
+        text = resp.data.decode('utf-8')
+        assert ('There was an error, and the new password might not have '
+                'been saved correctly.') in text
+
+
+def test_user_edits_password_success_response(journalist_app, test_journo):
+    original_hardening = models.LOGIN_HARDENING
+    try:
+        # Set this to false because we login then immedialtey reuse the same
+        # token when authenticating to change the password. This triggers login
+        # hardening measures.
+        models.LOGIN_HARDENING = False
+
+        with journalist_app.test_client() as app:
+            _login_user(app, test_journo['username'], test_journo['password'],
+                        test_journo['otp_secret'])
+            token = TOTP(test_journo['otp_secret']).now()
+            resp = app.post('/account/new-password',
+                            data=dict(current_password=test_journo['password'],
+                                      token=token,
+                                      password=VALID_PASSWORD_2),
+                            follow_redirects=True)
+
+            text = resp.data.decode('utf-8')
+            assert "Password updated." in text
+            assert VALID_PASSWORD_2 in text
+    finally:
+        models.LOGIN_HARDENING = original_hardening
+
+
+def test_user_edits_password_expires_session(journalist_app, test_journo):
+    original_hardening = models.LOGIN_HARDENING
+    try:
+        # Set this to false because we login then immedialtey reuse the same
+        # token when authenticating to change the password. This triggers login
+        # hardening measures.
+        models.LOGIN_HARDENING = False
+        with journalist_app.test_client() as app:
+            _login_user(app, test_journo['username'], test_journo['password'],
+                        test_journo['otp_secret'])
+            assert 'uid' in session
+
+            with InstrumentedApp(journalist_app) as ins:
+                token = TOTP(test_journo['otp_secret']).now()
+                resp = app.post('/account/new-password',
+                                data=dict(
+                                    current_password=test_journo['password'],
+                                    token=token,
+                                    password=VALID_PASSWORD_2))
+
+                ins.assert_redirects(resp, '/login')
+
+            # verify the session was expired after the password was changed
+            assert 'uid' not in session
+    finally:
+        models.LOGIN_HARDENING = original_hardening
+
+
+def test_user_edits_password_error_reponse(journalist_app, test_journo):
+    original_hardening = models.LOGIN_HARDENING
+    try:
+        # Set this to false because we login then immedialtey reuse the same
+        # token when authenticating to change the password. This triggers login
+        # hardening measures.
+        models.LOGIN_HARDENING = False
+
+        with journalist_app.test_client() as app:
+            _login_user(app, test_journo['username'], test_journo['password'],
+                        test_journo['otp_secret'])
+
+            # patch token verification because there are multiple commits
+            # to the database and this isolates the one we want to fail
+            with patch.object(Journalist, 'verify_token', return_value=True):
+                with patch.object(db.session, 'commit',
+                                  side_effect=Exception()):
+                    resp = app.post(
+                        '/account/new-password',
+                        data=dict(current_password=test_journo['password'],
+                                  token='mocked',
+                                  password=VALID_PASSWORD_2),
+                        follow_redirects=True)
+
+            text = resp.data.decode('utf-8')
+            assert ('There was an error, and the new password might not have '
+                    'been saved correctly.') in text
+    finally:
+        models.LOGIN_HARDENING = original_hardening
+
+
+def test_admin_add_user_when_username_already_taken(journalist_app,
+                                                    test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.post('/admin/add',
+                        data=dict(username=test_admin['username'],
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+        text = resp.data.decode('utf-8')
+        assert 'already taken' in text
+
+
+def test_max_password_length():
+    """Creating a Journalist with a password that is greater than the
+    maximum password length should raise an exception"""
+    overly_long_password = VALID_PASSWORD + \
+        'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
+    with pytest.raises(InvalidPasswordLength):
+        Journalist(username="My Password is Too Big!",
+                   password=overly_long_password)
+
+
+def test_min_password_length():
+    """Creating a Journalist with a password that is smaller than the
+       minimum password length should raise an exception. This uses the
+       magic number 7 below to get around the "diceware-like" requirement
+       that may cause a failure before the length check.
+    """
+    password = ('a ' * 7)[0:(Journalist.MIN_PASSWORD_LEN - 1)]
+    with pytest.raises(InvalidPasswordLength):
+        Journalist(username="My Password is Too Small!",
+                   password=password)
+
+
+def test_admin_edits_user_password_too_long_warning(journalist_app,
+                                                    test_admin,
+                                                    test_journo):
+    # append a bunch of a's to a diceware password to keep it "diceware-like"
+    overly_long_password = VALID_PASSWORD + \
+        'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(
+                '/admin/edit/{}/new-password'.format(test_journo['id']),
+                data=dict(username=test_journo['username'],
+                          is_admin=None,
+                          password=overly_long_password),
+                follow_redirects=True)
+
+            ins.assert_message_flashed('You submitted a bad password! '
+                                       'Password not changed.', 'error')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -345,174 +584,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_delete_user(self):
-        # Verify journalist is in the database
-        self.assertNotEqual(Journalist.query.get(self.user.id), None)
-
-        self._login_admin()
-        resp = self.client.post(url_for('admin.delete_user',
-                                        user_id=self.user.id),
-                                follow_redirects=True)
-
-        # Assert correct interface behavior
-        self.assert200(resp)
-        self.assertIn(escape("Deleted user '{}'".format(self.user.username)),
-                      resp.data)
-        # Verify journalist is no longer in the database
-        self.assertEqual(Journalist.query.get(self.user.id), None)
-
-    def test_admin_cannot_delete_self(self):
-        # Verify journalist is in the database
-        self.assertNotEqual(Journalist.query.get(self.user.id), None)
-
-        self._login_admin()
-        resp = self.client.post(url_for('admin.delete_user',
-                                        user_id=self.admin.id),
-                                follow_redirects=True)
-
-        # Assert correct interface behavior
-        self.assert403(resp)
-
-        resp = self.client.get(url_for('admin.index'))
-        self.assert200(resp)
-        self.assertIn("Admin Interface", resp.data)
-        # The user can be edited and deleted
-        self.assertIn(escape("Edit user {}".format(self.user.username)),
-                      resp.data)
-        self.assertIn(
-            escape("Delete user {}".format(self.user.username)),
-            resp.data)
-        # The admin can be edited but cannot deleted
-        self.assertIn(escape("Edit user {}".format(self.admin.username)),
-                      resp.data)
-        self.assertNotIn(
-            escape("Delete user {}".format(self.admin.username)),
-            resp.data)
-
-    def test_admin_deletes_invalid_user_404(self):
-        self._login_admin()
-        invalid_user_pk = max([user.id for user in Journalist.query.all()]) + 1
-        resp = self.client.post(url_for('admin.delete_user',
-                                        user_id=invalid_user_pk))
-        self.assert404(resp)
-
-    def test_admin_edits_user_password_success_response(self):
-        self._login_admin()
-
-        resp = self.client.post(
-            url_for('admin.new_password', user_id=self.user.id),
-            data=dict(password=VALID_PASSWORD_2),
-            follow_redirects=True)
-
-        text = resp.data.decode('utf-8')
-        assert 'Password updated.' in text
-        assert VALID_PASSWORD_2 in text
-
-    def test_admin_edits_user_password_error_response(self):
-        self._login_admin()
-
-        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
-                   side_effect=Exception()):
-            resp = self.client.post(
-                url_for('admin.new_password', user_id=self.user.id),
-                data=dict(password=VALID_PASSWORD_2),
-                follow_redirects=True)
-
-        text = resp.data.decode('utf-8')
-        assert ('There was an error, and the new password might not have '
-                'been saved correctly.') in text, text
-
-    def test_user_edits_password_success_response(self):
-        self._login_user()
-        resp = self.client.post(
-            url_for('account.new_password'),
-            data=dict(current_password=self.user_pw,
-                      token='mocked',
-                      password=VALID_PASSWORD_2),
-            follow_redirects=True)
-
-        text = resp.data.decode('utf-8')
-        assert "Password updated." in text
-        assert VALID_PASSWORD_2 in text
-
-    def test_user_edits_password_expires_session(self):
-        with self.client as client:
-            # do a real login to get a real session
-            # (none of the mocking `g` hacks)
-            resp = client.post(url_for('main.login'),
-                               data=dict(username=self.user.username,
-                                         password=self.user_pw,
-                                         token='mocked'))
-            self.assertRedirects(resp, url_for('main.index'))
-            assert 'uid' in session
-
-            resp = client.post(
-                url_for('account.new_password'),
-                data=dict(current_password=self.user_pw,
-                          token='mocked',
-                          password=VALID_PASSWORD_2))
-
-            self.assertRedirects(resp, url_for('main.login'))
-            # verify the session was expired after the password was changed
-            assert 'uid' not in session
-
-    def test_user_edits_password_error_reponse(self):
-        self._login_user()
-
-        with patch('sqlalchemy.orm.scoping.scoped_session.commit',
-                   side_effect=Exception()):
-            resp = self.client.post(
-                url_for('account.new_password'),
-                data=dict(current_password=self.user_pw,
-                          token='mocked',
-                          password=VALID_PASSWORD_2),
-                follow_redirects=True)
-
-        assert ('There was an error, and the new password might not have '
-                'been saved correctly.') in resp.data.decode('utf-8')
-
-    def test_admin_add_user_when_username_already_taken(self):
-        self._login_admin()
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username=self.admin.username,
-                                          password=VALID_PASSWORD,
-                                          is_admin=None))
-        self.assertIn('already taken', resp.data)
-
-    def test_max_password_length(self):
-        """Creating a Journalist with a password that is greater than the
-        maximum password length should raise an exception"""
-        overly_long_password = VALID_PASSWORD + \
-            'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
-        with self.assertRaises(InvalidPasswordLength):
-            Journalist(username="My Password is Too Big!",
-                       password=overly_long_password)
-
-    def test_min_password_length(self):
-        """Creating a Journalist with a password that is smaller than the
-           minimum password length should raise an exception. This uses the
-           magic number 7 below to get around the "diceware-like" requirement
-           that may cause a failure before the length check.
-        """
-        password = ('a ' * 7)[0:(Journalist.MIN_PASSWORD_LEN - 1)]
-        with self.assertRaises(InvalidPasswordLength):
-            Journalist(username="My Password is Too Small!",
-                       password=password)
-
-    def test_admin_edits_user_password_too_long_warning(self):
-        self._login_admin()
-        overly_long_password = VALID_PASSWORD + \
-            'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
-
-        self.client.post(
-            url_for('admin.new_password', user_id=self.user.id),
-            data=dict(username=self.user.username, is_admin=None,
-                      password=overly_long_password),
-            follow_redirects=True)
-
-        self.assertMessageFlashed('You submitted a bad password! '
-                                  'Password not changed.', 'error')
 
     def test_user_edits_password_too_long_warning(self):
         self._login_user()

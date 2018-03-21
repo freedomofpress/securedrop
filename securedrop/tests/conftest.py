@@ -123,7 +123,8 @@ def test_admin(journalist_app):
         return {'admin': user,
                 'username': username,
                 'password': password,
-                'otp_secret': otp_secret}
+                'otp_secret': otp_secret,
+                'id': user.id}
 
 
 @pytest.fixture(scope='function')

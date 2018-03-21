@@ -6,3 +6,6 @@ securedrop-adminc
 
 .sass-cache
 static/css/*
+
+# ruby debug (sass)
+*.rdb
