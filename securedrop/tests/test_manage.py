@@ -60,6 +60,10 @@ class TestPytestManagementCommand(unittest.TestCase):
         with mock.patch("__builtin__.raw_input", return_value='y'):
             assert manage._get_yubikey_usage()
 
+    def test_get_yubikey_usage_no(self):
+        with mock.patch("__builtin__.raw_input", return_value='n'):
+            assert not manage._get_yubikey_usage()
+
 
 class TestManagementCommand(unittest.TestCase):
 
@@ -73,10 +77,6 @@ class TestManagementCommand(unittest.TestCase):
         self.__context.push()
         utils.env.teardown()
         self.__context.pop()
-
-    @mock.patch("__builtin__.raw_input", return_value='n')
-    def test_get_yubikey_usage_no(self, mock_stdin):
-        assert not manage._get_yubikey_usage()
 
     @mock.patch("manage._get_username", return_value='ntoll')
     @mock.patch("manage._get_yubikey_usage", return_value=True)
