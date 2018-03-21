@@ -376,9 +376,7 @@ class I18NTool(object):
         sh(u'git -C {r} commit -m "{message}"'.format(
             r=args.root, message=message.replace('"', '\"')).encode('utf-8'))
 
-    def set_update_from_weblate_parser(self, subps):
-        parser = subps.add_parser('update-from-weblate',
-                                  help=('Import translations from weblate'))
+    def set_supported_languages_parser(self, parser):
         root = join(dirname(realpath(__file__)), '..')
         parser.add_argument(
             '--root',
@@ -394,6 +392,11 @@ class I18NTool(object):
         parser.add_argument(
             '--supported-languages',
             help='comma separated list of supported languages')
+
+    def set_update_from_weblate_parser(self, subps):
+        parser = subps.add_parser('update-from-weblate',
+                                  help=('Import translations from weblate'))
+        self.set_supported_languages_parser(parser)
         parser.set_defaults(func=self.update_from_weblate)
 
     def get_args(self):
