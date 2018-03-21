@@ -21,6 +21,24 @@ def test_get_one_or_else_returns_one(journalist_app, test_journo):
         assert selected_journo.id == test_journo['id']
 
 
+def test_get_one_or_else_multiple_results(journalist_app,
+                                          test_admin,
+                                          test_journo):
+    with journalist_app.app_context():
+        # precondition: there must be multiple journalists
+        assert Journalist.query.count() == 2
+
+        mock_logger = MagicMock()
+        mock_abort = MagicMock()
+
+        # this is equivalent to "SELECT *" which we know returns 2
+        query = Journalist.query
+        get_one_or_else(query, mock_logger, mock_abort)
+        # Not specifying the very long log line in `logger.error`
+        mock_logger.error.assert_called()
+        mock_abort.assert_called_with(500)
+
+
 class TestDatabase(TestCase):
 
     def create_app(self):
@@ -31,16 +49,6 @@ class TestDatabase(TestCase):
 
     def tearDown(self):
         env.teardown()
-
-    @mock.patch('flask.abort')
-    def test_get_one_or_else_multiple_results(self, mock):
-        journo_1, _ = db_helper.init_journalist()
-        journo_2, _ = db_helper.init_journalist()
-
-        with mock.patch('logger') as mock_logger:
-            get_one_or_else(Journalist.query, mock_logger, mock)
-        mock_logger.error.assert_called()  # Not specifying very long log line
-        mock.assert_called_with(500)
 
     @mock.patch('flask.abort')
     def test_get_one_or_else_no_result_found(self, mock):
