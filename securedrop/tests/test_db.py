@@ -1,11 +1,24 @@
 # -*- coding: utf-8 -*-
-from flask_testing import TestCase
 import mock
+
+from flask_testing import TestCase
+from mock import MagicMock
 
 import journalist
 from utils import db_helper, env
 from models import (Journalist, Submission, Reply, get_one_or_else,
                     LoginThrottledException)
+
+
+def test_get_one_or_else_returns_one(journalist_app, test_journo):
+    with journalist_app.app_context():
+        # precondition: there must be one journalist
+        assert Journalist.query.count() == 1
+
+        query = Journalist.query.filter_by(username=test_journo['username'])
+        selected_journo = get_one_or_else(query, MagicMock(), MagicMock())
+
+        assert selected_journo.id == test_journo['id']
 
 
 class TestDatabase(TestCase):
@@ -18,16 +31,6 @@ class TestDatabase(TestCase):
 
     def tearDown(self):
         env.teardown()
-
-    @mock.patch('flask.abort')
-    def test_get_one_or_else_returns_one(self, mock):
-        new_journo, _ = db_helper.init_journalist()
-
-        query = Journalist.query.filter(
-            Journalist.username == new_journo.username)
-        with mock.patch('logger') as mock_logger:
-            selected_journo = get_one_or_else(query, mock_logger, mock)
-        self.assertEqual(new_journo, selected_journo)
 
     @mock.patch('flask.abort')
     def test_get_one_or_else_multiple_results(self, mock):
