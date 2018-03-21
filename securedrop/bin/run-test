@@ -22,7 +22,9 @@ fi
 
 mkdir -p "/tmp/test-results/logs"
 
-export PAGE_LAYOUT_LOCALES="en_US,ar,fr_FR"
+: "${PAGE_LAYOUT_LOCALES:=en_US,ar,fr_FR}"
+export PAGE_LAYOUT_LOCALES
+
 pytest \
   --page-layout \
   --durations 10 \
