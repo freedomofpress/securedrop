@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import io
 import argparse
 from os.path import dirname, join, basename, exists
 import mock
@@ -347,7 +348,7 @@ class TestSiteConfig(object):
         var1: val1
         var2: val2
         """)
-        assert expected == open(site_config_path).read()
+        assert expected == io.open(site_config_path).read()
 
     def test_validate_gpg_key(self, caplog):
         args = argparse.Namespace(site_config='INVALID',

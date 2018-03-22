@@ -9,6 +9,7 @@ to backup the 0.3 system and stores it in /tmp/sd-backup-0.3-TIME_STAMP.zip.gpg
 
 import sys
 import os
+import io
 import zipfile
 from datetime import datetime
 # Import the application config.py file
@@ -58,7 +59,7 @@ def encrypt_zip_file(zf_fn):
     gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
     e_fn = '{}.gpg'.format(zf_fn)
 
-    stream = open(zf_fn, "rb")
+    stream = io.open(zf_fn, "rb")
     gpg.encrypt_file(stream, config.JOURNALIST_KEY, always_trust='True',
                      output=e_fn)
 

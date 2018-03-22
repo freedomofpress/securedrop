@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import pytest
+import io
 import random
 import unittest
 import zipfile
@@ -948,7 +949,7 @@ class TestJournalistApp(TestCase):
         # Save original logo to restore after test run
         logo_image_location = os.path.join(config.SECUREDROP_ROOT,
                                            "static/i/logo.png")
-        with open(logo_image_location) as logo_file:
+        with io.open(logo_image_location, 'rb') as logo_file:
             original_image = logo_file.read()
 
         try:
@@ -964,7 +965,7 @@ class TestJournalistApp(TestCase):
             self.assertMessageFlashed("Image updated.", "logo-success")
         finally:
             # Restore original image to logo location for subsequent tests
-            with open(logo_image_location, 'w') as logo_file:
+            with io.open(logo_image_location, 'wb') as logo_file:
                 logo_file.write(original_image)
 
     def test_logo_upload_with_invalid_filetype_fails(self):

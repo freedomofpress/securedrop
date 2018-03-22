@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import io
 import unittest
 
 from flask import current_app
@@ -98,7 +99,7 @@ class TestCryptoUtil(unittest.TestCase):
         `gnupg._util._is_stream(plaintext)` returns `True`).
         """
         source, codename = utils.db_helper.init_source()
-        with open(os.path.realpath(__file__)) as fh:
+        with io.open(os.path.realpath(__file__)) as fh:
             ciphertext = current_app.crypto_util.encrypt(
                 fh,
                 [current_app.crypto_util.getkey(source.filesystem_id),
@@ -106,7 +107,7 @@ class TestCryptoUtil(unittest.TestCase):
                 current_app.storage.path(source.filesystem_id, 'somefile.gpg'))
         plaintext = current_app.crypto_util.decrypt(codename, ciphertext)
 
-        with open(os.path.realpath(__file__)) as fh:
+        with io.open(os.path.realpath(__file__)) as fh:
             self.assertEqual(fh.read(), plaintext)
 
     def test_encrypt_fingerprints_not_a_list_or_tuple(self):

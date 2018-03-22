@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import os
+import io
 from os.path import abspath, dirname, realpath
 import pytest
 
@@ -74,5 +75,5 @@ class FunctionalTest(functional_test.FunctionalTest):
         actions.perform()
 
     def _save_alert(self, filename):
-        fd = open(os.path.join(self.log_dir, filename), 'wb')
+        fd = io.open(os.path.join(self.log_dir, filename), 'wb')
         fd.write(self.driver.switch_to.alert.text.encode('utf-8'))

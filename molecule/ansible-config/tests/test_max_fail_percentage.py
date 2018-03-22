@@ -1,5 +1,5 @@
 import os
-
+import io
 import pytest
 import yaml
 
@@ -55,7 +55,7 @@ def test_max_fail_percentage(host, playbook):
     the parameter, but we'll play it safe and require it everywhere,
     to avoid mistakes down the road.
     """
-    with open(playbook, 'r') as f:
+    with io.open(playbook, 'r') as f:
         playbook_yaml = yaml.safe_load(f)
         # Descend into playbook list structure to validate play attributes.
         for play in playbook_yaml:
@@ -71,7 +71,7 @@ def test_any_errors_fatal(host, playbook):
     to "0", doing so ensures that any errors will cause an immediate failure
     on the playbook.
     """
-    with open(playbook, 'r') as f:
+    with io.open(playbook, 'r') as f:
         playbook_yaml = yaml.safe_load(f)
         # Descend into playbook list structure to validate play attributes.
         for play in playbook_yaml:

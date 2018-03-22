@@ -26,6 +26,7 @@ instances.
 import argparse
 import logging
 import os
+import io
 import re
 import string
 import subprocess
@@ -363,14 +364,14 @@ class SiteConfig(object):
         return os.path.exists(self.args.site_config)
 
     def save(self):
-        with open(self.args.site_config, 'w') as site_config_file:
+        with io.open(self.args.site_config, 'w') as site_config_file:
             yaml.safe_dump(self.config,
                            site_config_file,
                            default_flow_style=False)
 
     def load(self):
         try:
-            with open(self.args.site_config) as site_config_file:
+            with io.open(self.args.site_config) as site_config_file:
                 return yaml.safe_load(site_config_file)
         except IOError:
             sdlog.error("Config file missing, re-run with sdconfig")

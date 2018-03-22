@@ -3,6 +3,7 @@
 
 import gnupg
 import os
+import io
 import scrypt
 import subprocess
 
@@ -64,10 +65,10 @@ class CryptoUtil:
         # map code for a given language to a localized wordlist
         self.__language2words = {}  # type: Dict[Text, List[str]]
 
-        with open(nouns_file) as f:
+        with io.open(nouns_file) as f:
             self.nouns = f.read().splitlines()
 
-        with open(adjectives_file) as f:
+        with io.open(adjectives_file) as f:
             self.adjectives = f.read().splitlines()
 
     # Make sure these pass before the app can run
@@ -104,7 +105,7 @@ class CryptoUtil:
             else:
                 wordlist_path = self.__word_list
 
-            with open(wordlist_path) as f:
+            with io.open(wordlist_path) as f:
                 content = f.read().splitlines()
                 self.__language2words[locale] = content
 

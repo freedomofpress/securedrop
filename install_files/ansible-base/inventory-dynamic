@@ -5,6 +5,7 @@ for SSH. The THS must already be provisioned on the target host.
 """
 import json
 import os
+import io
 import subprocess
 import yaml
 
@@ -41,7 +42,7 @@ def lookup_local_ipv4_address(hostname):
     Tor Hidden Services.
     """
     try:
-        with open(SECUREDROP_SITE_VARS, 'r') as f:
+        with io.open(SECUREDROP_SITE_VARS, 'r') as f:
             site_vars = yaml.safe_load(f)
             app_ip = site_vars['app_ip']
             monitor_ip = site_vars['monitor_ip']
@@ -69,7 +70,7 @@ def lookup_admin_username():
     vars file contains a list for this value.
     """
     try:
-        with open(SECUREDROP_SITE_VARS, 'r') as f:
+        with io.open(SECUREDROP_SITE_VARS, 'r') as f:
             site_vars = yaml.safe_load(f)
             admin_username = site_vars['ssh_users']
 
@@ -98,7 +99,7 @@ def lookup_tor_hostname(hostname):
     """
     aths_path = os.path.join(SECUREDROP_ANSIBLE_DIRECTORY,
                              "{}-ssh-aths".format(hostname))
-    with open(aths_path, 'r') as f:
+    with io.open(aths_path, 'r') as f:
         tor_config = f.readline().rstrip().split()
         try:
             # Ordinarily the Onion URL would be the first field in the file,

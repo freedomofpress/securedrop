@@ -2,6 +2,7 @@
 
 import grp
 import os
+import io
 import pwd
 import sys
 import subprocess
@@ -20,28 +21,28 @@ path_persistent_desktop = '/lib/live/mount/persistence/TailsData_unlocked/dotfil
 
 # load torrc_additions
 if os.path.isfile(path_torrc_additions):
-    with open(path_torrc_additions) as f:
+    with io.open(path_torrc_additions) as f:
         torrc_additions = f.read()
 else:
     sys.exit('Error opening {0} for reading'.format(path_torrc_additions))
 
 # load torrc
 if os.path.isfile(path_torrc_backup):
-    with open(path_torrc_backup) as f:
+    with io.open(path_torrc_backup) as f:
         torrc = f.read()
 else:
     if os.path.isfile(path_torrc):
-        with open(path_torrc) as f:
+        with io.open(path_torrc) as f:
             torrc = f.read()
     else:
         sys.exit('Error opening {0} for reading'.format(path_torrc))
 
     # save a backup
-    with open(path_torrc_backup, 'w') as f:
+    with io.open(path_torrc_backup, 'w') as f:
         f.write(torrc)
 
 # append the additions
-with open(path_torrc, 'w') as f:
+with io.open(path_torrc, 'w') as f:
     f.write(torrc + torrc_additions)
 
 # reload tor

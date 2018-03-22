@@ -2,6 +2,7 @@ from functional_test import FunctionalTest
 import subprocess
 from source_navigation_steps import SourceNavigationStepsMixin
 import os
+import io
 import pytest
 import getpass
 import re
@@ -11,7 +12,7 @@ class TestSubmissionNotInMemory(FunctionalTest,
                                 SourceNavigationStepsMixin):
 
     def setup(self):
-        self.devnull = open('/dev/null', 'r')
+        self.devnull = io.open('/dev/null', 'r')
         FunctionalTest.setup(self)
 
     def teardown(self):
@@ -26,7 +27,7 @@ class TestSubmissionNotInMemory(FunctionalTest,
                             stderr=self.devnull)
             subprocess.call(["sudo", "chown", getpass.getuser(),
                             core_dump_file_name])
-            with open(core_dump_file_name, 'r') as fp:
+            with io.open(core_dump_file_name, 'r') as fp:
                 return fp.read()
         finally:
             pass

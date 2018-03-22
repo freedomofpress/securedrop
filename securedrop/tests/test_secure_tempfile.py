@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import io
 import unittest
 
 from gnupg._util import _is_stream
@@ -62,7 +63,7 @@ class TestSecureTempfile(unittest.TestCase):
 
     def test_file_seems_encrypted(self):
         self.f.write(self.msg)
-        with open(self.f.filepath, 'rb') as fh:
+        with io.open(self.f.filepath, 'rb') as fh:
             contents = fh.read().decode()
 
         self.assertNotIn(self.msg, contents)
