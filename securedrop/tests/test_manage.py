@@ -192,6 +192,17 @@ class TestManagementCommand:
         manage.clean_tmp(args)
         assert 'does not exist, do nothing' in caplog.text
 
+    def test_clean_tmp_too_young(self, config, caplog):
+        args = argparse.Namespace(days=24*60*60,
+                                  directory=config.TEMP_DIR,
+                                  verbose=logging.DEBUG)
+        # create a file
+        open(os.path.join(config.TEMP_DIR, 'FILE'), 'a').close()
+
+        manage.setup_verbosity(args)
+        manage.clean_tmp(args)
+        assert 'modified less than' in caplog.text
+
 
 class TestManage(object):
 
@@ -204,15 +215,6 @@ class TestManage(object):
     def teardown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_clean_tmp_too_young(self, caplog):
-        args = argparse.Namespace(days=24*60*60,
-                                  directory=config.TEMP_DIR,
-                                  verbose=logging.DEBUG)
-        open(os.path.join(config.TEMP_DIR, 'FILE'), 'a').close()
-        manage.setup_verbosity(args)
-        manage.clean_tmp(args)
-        assert 'modified less than' in caplog.text
 
     def test_clean_tmp_removed(self, caplog):
         args = argparse.Namespace(days=0,
