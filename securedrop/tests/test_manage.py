@@ -88,6 +88,36 @@ class TestPytestManagementCommand:
         finally:
             manage.config = original_config
 
+    # Note: we use the `journalist_app` fixture because it creates the DB
+    def test_exception_handling_when_duplicate_username(self,
+                                                        journalist_app,
+                                                        config,
+                                                        mocker):
+        """Regression test for duplicate username logic in manage.py"""
+
+        mocker.patch("manage._get_username", return_value='foo-bar-baz')
+        mocker.patch("manage._get_yubikey_usage", return_value=False)
+        mocker.patch("sys.stdout", new_callable=StringIO)
+
+        original_config = manage.config
+
+        try:
+            # We need to override the config to point at the per-test DB
+            manage.config = config
+
+            # Inserting the user for the first time should succeed
+            return_value = manage._add_user()
+            assert return_value == 0
+            assert 'successfully added' in sys.stdout.getvalue()
+
+            # Inserting the user for a second time should fail
+            return_value = manage._add_user()
+            assert return_value == 1
+            assert ('ERROR: That username is already taken!' in
+                    sys.stdout.getvalue())
+        finally:
+            manage.config = original_config
+
 
 class TestManagementCommand(unittest.TestCase):
 
@@ -101,26 +131,6 @@ class TestManagementCommand(unittest.TestCase):
         self.__context.push()
         utils.env.teardown()
         self.__context.pop()
-
-    @mock.patch("manage._get_username", return_value='foo-bar-baz')
-    @mock.patch("manage._get_yubikey_usage", return_value=False)
-    @mock.patch("sys.stdout", new_callable=StringIO)
-    def test_exception_handling_when_duplicate_username(self,
-                                                        mock_username,
-                                                        mock_yubikey,
-                                                        mock_stdout):
-        """Regression test for duplicate username logic in manage.py"""
-
-        # Inserting the user for the first time should succeed
-        return_value = manage._add_user()
-        self.assertEqual(return_value, 0)
-        self.assertIn('successfully added', sys.stdout.getvalue())
-
-        # Inserting the user for a second time should fail
-        return_value = manage._add_user()
-        self.assertEqual(return_value, 1)
-        self.assertIn('ERROR: That username is already taken!',
-                      sys.stdout.getvalue())
 
     @mock.patch("manage._get_username", return_value='test-user-56789')
     @mock.patch("manage._get_yubikey_usage", return_value=False)
