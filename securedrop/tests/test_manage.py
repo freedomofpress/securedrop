@@ -140,6 +140,24 @@ class TestPytestManagementCommand:
         finally:
             manage.config = original_config
 
+    # Note: we use the `journalist_app` fixture because it creates the DB
+    def test_delete_non_existent_user(self, journalist_app, config, mocker):
+        mocker.patch("manage._get_username_to_delete",
+                     return_value='does-not-exist')
+        mocker.patch('manage._get_delete_confirmation', return_value=True)
+        mocker.patch("sys.stdout", new_callable=StringIO)
+
+        original_config = manage.config
+
+        try:
+            # We need to override the config to point at the per-test DB
+            manage.config = config
+            return_value = manage.delete_user(args=None)
+            assert return_value == 0
+            assert 'ERROR: That user was not found!' in sys.stdout.getvalue()
+        finally:
+            manage.config = original_config
+
 
 class TestManagementCommand(unittest.TestCase):
 
@@ -153,19 +171,6 @@ class TestManagementCommand(unittest.TestCase):
         self.__context.push()
         utils.env.teardown()
         self.__context.pop()
-
-    @mock.patch("manage._get_username_to_delete",
-                return_value='does-not-exist')
-    @mock.patch('manage._get_delete_confirmation', return_value=True)
-    @mock.patch("sys.stdout", new_callable=StringIO)
-    def test_delete_non_existent_user(self,
-                                      mock_user_to_delete,
-                                      mock_user_del_confirm,
-                                      mock_stdout):
-        return_value = manage.delete_user(args=None)
-        self.assertEqual(return_value, 0)
-        self.assertIn('ERROR: That user was not found!',
-                      sys.stdout.getvalue())
 
     @mock.patch("__builtin__.raw_input", return_value='test-user-12345')
     def test_get_username_to_delete(self, mock_username):
