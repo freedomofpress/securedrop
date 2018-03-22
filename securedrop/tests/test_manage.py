@@ -184,6 +184,14 @@ class TestManagementCommand:
         mocker.patch("__builtin__.raw_input", return_value='foo-bar-baz')
         assert manage._get_username() == 'foo-bar-baz'
 
+    def test_clean_tmp_do_nothing(self, caplog):
+        args = argparse.Namespace(days=0,
+                                  directory=' UNLIKELY::::::::::::::::: ',
+                                  verbose=logging.DEBUG)
+        manage.setup_verbosity(args)
+        manage.clean_tmp(args)
+        assert 'does not exist, do nothing' in caplog.text
+
 
 class TestManage(object):
 
@@ -196,14 +204,6 @@ class TestManage(object):
     def teardown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_clean_tmp_do_nothing(self, caplog):
-        args = argparse.Namespace(days=0,
-                                  directory=' UNLIKELY ',
-                                  verbose=logging.DEBUG)
-        manage.setup_verbosity(args)
-        manage.clean_tmp(args)
-        assert 'does not exist, do nothing' in caplog.text
 
     def test_clean_tmp_too_young(self, caplog):
         args = argparse.Namespace(days=24*60*60,
