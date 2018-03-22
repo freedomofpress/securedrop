@@ -158,6 +158,11 @@ class TestPytestManagementCommand:
         finally:
             manage.config = original_config
 
+    def test_get_username_to_delete(self, mocker):
+        mocker.patch("__builtin__.raw_input", return_value='test-user-12345')
+        return_value = manage._get_username_to_delete()
+        assert return_value == 'test-user-12345'
+
 
 class TestManagementCommand(unittest.TestCase):
 
@@ -171,11 +176,6 @@ class TestManagementCommand(unittest.TestCase):
         self.__context.push()
         utils.env.teardown()
         self.__context.pop()
-
-    @mock.patch("__builtin__.raw_input", return_value='test-user-12345')
-    def test_get_username_to_delete(self, mock_username):
-        return_value = manage._get_username_to_delete()
-        self.assertEqual(return_value, 'test-user-12345')
 
     def test_reset(self):
         test_journalist, _ = utils.db_helper.init_journalist()
