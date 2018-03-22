@@ -118,6 +118,28 @@ class TestPytestManagementCommand:
         finally:
             manage.config = original_config
 
+    # Note: we use the `journalist_app` fixture because it creates the DB
+    def test_delete_user(self, journalist_app, config, mocker):
+        mocker.patch("manage._get_username", return_value='test-user-56789')
+        mocker.patch("manage._get_yubikey_usage", return_value=False)
+        mocker.patch("manage._get_username_to_delete",
+                     return_value='test-user-56789')
+        mocker.patch('manage._get_delete_confirmation', return_value=True)
+
+        original_config = manage.config
+
+        try:
+            # We need to override the config to point at the per-test DB
+            manage.config = config
+
+            return_value = manage._add_user()
+            assert return_value == 0
+
+            return_value = manage.delete_user(args=None)
+            assert return_value == 0
+        finally:
+            manage.config = original_config
+
 
 class TestManagementCommand(unittest.TestCase):
 
@@ -131,22 +153,6 @@ class TestManagementCommand(unittest.TestCase):
         self.__context.push()
         utils.env.teardown()
         self.__context.pop()
-
-    @mock.patch("manage._get_username", return_value='test-user-56789')
-    @mock.patch("manage._get_yubikey_usage", return_value=False)
-    @mock.patch("manage._get_username_to_delete",
-                return_value='test-user-56789')
-    @mock.patch('manage._get_delete_confirmation', return_value=True)
-    def test_delete_user(self,
-                         mock_username,
-                         mock_yubikey,
-                         mock_user_to_delete,
-                         mock_user_del_confirm):
-        return_value = manage._add_user()
-        self.assertEqual(return_value, 0)
-
-        return_value = manage.delete_user(args=None)
-        self.assertEqual(return_value, 0)
 
     @mock.patch("manage._get_username_to_delete",
                 return_value='does-not-exist')
