@@ -180,6 +180,10 @@ class TestManagementCommand:
         finally:
             manage.config = original_config
 
+    def test_get_username(self, mocker):
+        mocker.patch("__builtin__.raw_input", return_value='foo-bar-baz')
+        assert manage._get_username() == 'foo-bar-baz'
+
 
 class TestManage(object):
 
@@ -192,10 +196,6 @@ class TestManage(object):
     def teardown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    @mock.patch("__builtin__.raw_input", return_value='foo-bar-baz')
-    def test_get_username(self, mock_get_usernam):
-        assert manage._get_username() == 'foo-bar-baz'
 
     def test_clean_tmp_do_nothing(self, caplog):
         args = argparse.Namespace(days=0,
