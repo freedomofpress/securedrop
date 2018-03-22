@@ -37,6 +37,22 @@ import version
 import utils
 
 
+def test_get_supported_locales():
+    locales = ['en_US', 'fr_FR']
+    assert ['en_US'] == i18n._get_supported_locales(
+        locales, None, None, None)
+    locales = ['en_US', 'fr_FR']
+    supported = ['en_US', 'not_found']
+    with pytest.raises(i18n.LocaleNotFound) as excinfo:
+        i18n._get_supported_locales(locales, supported, None, None)
+    assert "contains ['not_found']" in str(excinfo.value)
+    supported = ['fr_FR']
+    locale = 'not_found'
+    with pytest.raises(i18n.LocaleNotFound) as excinfo:
+        i18n._get_supported_locales(locales, supported, locale, None)
+    assert "DEFAULT_LOCALE 'not_found'" in str(excinfo.value)
+
+
 class TestI18N(unittest.TestCase):
 
     def setUp(self):
@@ -57,21 +73,6 @@ class TestI18N(unittest.TestCase):
 
     def get_fake_config(self):
         return SDConfig()
-
-    def test_get_supported_locales(self):
-        locales = ['en_US', 'fr_FR']
-        assert ['en_US'] == i18n._get_supported_locales(
-            locales, None, None, None)
-        locales = ['en_US', 'fr_FR']
-        supported = ['en_US', 'not_found']
-        with pytest.raises(i18n.LocaleNotFound) as excinfo:
-            i18n._get_supported_locales(locales, supported, None, None)
-        assert "contains ['not_found']" in str(excinfo.value)
-        supported = ['fr_FR']
-        locale = 'not_found'
-        with pytest.raises(i18n.LocaleNotFound) as excinfo:
-            i18n._get_supported_locales(locales, supported, locale, None)
-        assert "DEFAULT_LOCALE 'not_found'" in str(excinfo.value)
 
     def verify_i18n(self, app):
         not_translated = 'code hello i18n'
