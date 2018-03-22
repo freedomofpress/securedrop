@@ -7,16 +7,12 @@ import manage
 import mock
 import sys
 import time
-import utils
 
-from os.path import abspath, dirname, realpath
 from StringIO import StringIO
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import journalist_app
 
 from models import Journalist
-from sdconfig import config
 
 
 YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
@@ -203,20 +199,7 @@ class TestManagementCommand:
         manage.clean_tmp(args)
         assert 'modified less than' in caplog.text
 
-
-class TestManage(object):
-
-    def setup(self):
-        self.__context = journalist_app.create_app(config).app_context()
-        self.__context.push()
-        self.dir = abspath(dirname(realpath(__file__)))
-        utils.env.setup()
-
-    def teardown(self):
-        utils.env.teardown()
-        self.__context.pop()
-
-    def test_clean_tmp_removed(self, caplog):
+    def test_clean_tmp_removed(self, config, caplog):
         args = argparse.Namespace(days=0,
                                   directory=config.TEMP_DIR,
                                   verbose=logging.DEBUG)
