@@ -37,6 +37,124 @@ import version
 import utils
 
 
+def verify_i18n(app):
+    not_translated = 'code hello i18n'
+    translated_fr = 'code bonjour'
+
+    for accepted in ('unknown', 'en_US'):
+        headers = Headers([('Accept-Language', accepted)])
+        with app.test_request_context(headers=headers):
+            assert not hasattr(request, 'babel_locale')
+            assert not_translated == gettext(not_translated)
+            assert hasattr(request, 'babel_locale')
+            assert render_template_string('''
+            {{ gettext('code hello i18n') }}
+            ''').strip() == not_translated
+
+    for lang in ('fr_FR', 'fr', 'fr-FR'):
+        headers = Headers([('Accept-Language', lang)])
+        with app.test_request_context(headers=headers):
+            assert not hasattr(request, 'babel_locale')
+            assert translated_fr == gettext(not_translated)
+            assert hasattr(request, 'babel_locale')
+            assert render_template_string('''
+            {{ gettext('code hello i18n') }}
+            ''').strip() == translated_fr
+
+    # https://github.com/freedomofpress/securedrop/issues/2379
+    headers = Headers([('Accept-Language',
+                        'en-US;q=0.6,fr_FR;q=0.4,nb_NO;q=0.2')])
+    with app.test_request_context(headers=headers):
+        assert not hasattr(request, 'babel_locale')
+        assert not_translated == gettext(not_translated)
+
+    translated_cn = 'code chinese'
+
+    for lang in ('zh-CN', 'zh-Hans-CN'):
+        headers = Headers([('Accept-Language', lang)])
+        with app.test_request_context(headers=headers):
+            assert not hasattr(request, 'babel_locale')
+            assert translated_cn == gettext(not_translated)
+            assert hasattr(request, 'babel_locale')
+            assert render_template_string('''
+            {{ gettext('code hello i18n') }}
+            ''').strip() == translated_cn
+
+    translated_ar = 'code arabic'
+
+    for lang in ('ar', 'ar-kw'):
+        headers = Headers([('Accept-Language', lang)])
+        with app.test_request_context(headers=headers):
+            assert not hasattr(request, 'babel_locale')
+            assert translated_ar == gettext(not_translated)
+            assert hasattr(request, 'babel_locale')
+            assert render_template_string('''
+            {{ gettext('code hello i18n') }}
+            ''').strip() == translated_ar
+
+    with app.test_client() as c:
+        page = c.get('/login')
+        assert session.get('locale') is None
+        assert not_translated == gettext(not_translated)
+        assert '?l=fr_FR' in page.data
+        assert '?l=en_US' not in page.data
+
+        page = c.get('/login?l=fr_FR',
+                     headers=Headers([('Accept-Language', 'en_US')]))
+        assert session.get('locale') == 'fr_FR'
+        assert translated_fr == gettext(not_translated)
+        assert '?l=fr_FR' not in page.data
+        assert '?l=en_US' in page.data
+
+        c.get('/', headers=Headers([('Accept-Language', 'en_US')]))
+        assert session.get('locale') == 'fr_FR'
+        assert translated_fr == gettext(not_translated)
+
+        c.get('/?l=')
+        assert session.get('locale') is None
+        assert not_translated == gettext(not_translated)
+
+        c.get('/?l=en_US', headers=Headers([('Accept-Language', 'fr_FR')]))
+        assert session.get('locale') == 'en_US'
+        assert not_translated == gettext(not_translated)
+
+        c.get('/', headers=Headers([('Accept-Language', 'fr_FR')]))
+        assert session.get('locale') == 'en_US'
+        assert not_translated == gettext(not_translated)
+
+        c.get('/?l=', headers=Headers([('Accept-Language', 'fr_FR')]))
+        assert session.get('locale') is None
+        assert translated_fr == gettext(not_translated)
+
+        c.get('/')
+        assert session.get('locale') is None
+        assert not_translated == gettext(not_translated)
+
+        c.get('/?l=YY_ZZ')
+        assert session.get('locale') is None
+        assert not_translated == gettext(not_translated)
+
+    with app.test_request_context():
+        assert '' == render_template('locales.html')
+
+    with app.test_client() as c:
+        c.get('/')
+        locales = render_template('locales.html')
+        assert '?l=fr_FR' in locales
+        assert '?l=en_US' not in locales
+        c.get('/?l=ar')
+        base = render_template('base.html')
+        assert 'dir="rtl"' in base
+
+    # the canonical locale name is norsk bokmål but
+    # this is overriden with just norsk by i18n.NAME_OVERRIDES
+    with app.test_client() as c:
+        c.get('/?l=nb_NO')
+        base = render_template('base.html')
+        assert 'norsk' in base
+        assert 'norsk bo' not in base
+
+
 def test_get_supported_locales():
     locales = ['en_US', 'fr_FR']
     assert ['en_US'] == i18n._get_supported_locales(
@@ -73,123 +191,6 @@ class TestI18N(unittest.TestCase):
 
     def get_fake_config(self):
         return SDConfig()
-
-    def verify_i18n(self, app):
-        not_translated = 'code hello i18n'
-        translated_fr = 'code bonjour'
-
-        for accepted in ('unknown', 'en_US'):
-            headers = Headers([('Accept-Language', accepted)])
-            with app.test_request_context(headers=headers):
-                assert not hasattr(request, 'babel_locale')
-                assert not_translated == gettext(not_translated)
-                assert hasattr(request, 'babel_locale')
-                assert render_template_string('''
-                {{ gettext('code hello i18n') }}
-                ''').strip() == not_translated
-
-        for lang in ('fr_FR', 'fr', 'fr-FR'):
-            headers = Headers([('Accept-Language', lang)])
-            with app.test_request_context(headers=headers):
-                assert not hasattr(request, 'babel_locale')
-                assert translated_fr == gettext(not_translated)
-                assert hasattr(request, 'babel_locale')
-                assert render_template_string('''
-                {{ gettext('code hello i18n') }}
-                ''').strip() == translated_fr
-
-        # https://github.com/freedomofpress/securedrop/issues/2379
-        headers = Headers([('Accept-Language',
-                            'en-US;q=0.6,fr_FR;q=0.4,nb_NO;q=0.2')])
-        with app.test_request_context(headers=headers):
-            assert not hasattr(request, 'babel_locale')
-            assert not_translated == gettext(not_translated)
-
-        translated_cn = 'code chinese'
-
-        for lang in ('zh-CN', 'zh-Hans-CN'):
-            headers = Headers([('Accept-Language', lang)])
-            with app.test_request_context(headers=headers):
-                assert not hasattr(request, 'babel_locale')
-                assert translated_cn == gettext(not_translated)
-                assert hasattr(request, 'babel_locale')
-                assert render_template_string('''
-                {{ gettext('code hello i18n') }}
-                ''').strip() == translated_cn
-
-        translated_ar = 'code arabic'
-
-        for lang in ('ar', 'ar-kw'):
-            headers = Headers([('Accept-Language', lang)])
-            with app.test_request_context(headers=headers):
-                assert not hasattr(request, 'babel_locale')
-                assert translated_ar == gettext(not_translated)
-                assert hasattr(request, 'babel_locale')
-                assert render_template_string('''
-                {{ gettext('code hello i18n') }}
-                ''').strip() == translated_ar
-
-        with app.test_client() as c:
-            page = c.get('/login')
-            assert session.get('locale') is None
-            assert not_translated == gettext(not_translated)
-            assert '?l=fr_FR' in page.data
-            assert '?l=en_US' not in page.data
-
-            page = c.get('/login?l=fr_FR',
-                         headers=Headers([('Accept-Language', 'en_US')]))
-            assert session.get('locale') == 'fr_FR'
-            assert translated_fr == gettext(not_translated)
-            assert '?l=fr_FR' not in page.data
-            assert '?l=en_US' in page.data
-
-            c.get('/', headers=Headers([('Accept-Language', 'en_US')]))
-            assert session.get('locale') == 'fr_FR'
-            assert translated_fr == gettext(not_translated)
-
-            c.get('/?l=')
-            assert session.get('locale') is None
-            assert not_translated == gettext(not_translated)
-
-            c.get('/?l=en_US', headers=Headers([('Accept-Language', 'fr_FR')]))
-            assert session.get('locale') == 'en_US'
-            assert not_translated == gettext(not_translated)
-
-            c.get('/', headers=Headers([('Accept-Language', 'fr_FR')]))
-            assert session.get('locale') == 'en_US'
-            assert not_translated == gettext(not_translated)
-
-            c.get('/?l=', headers=Headers([('Accept-Language', 'fr_FR')]))
-            assert session.get('locale') is None
-            assert translated_fr == gettext(not_translated)
-
-            c.get('/')
-            assert session.get('locale') is None
-            assert not_translated == gettext(not_translated)
-
-            c.get('/?l=YY_ZZ')
-            assert session.get('locale') is None
-            assert not_translated == gettext(not_translated)
-
-        with app.test_request_context():
-            assert '' == render_template('locales.html')
-
-        with app.test_client() as c:
-            c.get('/')
-            locales = render_template('locales.html')
-            assert '?l=fr_FR' in locales
-            assert '?l=en_US' not in locales
-            c.get('/?l=ar')
-            base = render_template('base.html')
-            assert 'dir="rtl"' in base
-
-        # the canonical locale name is norsk bokmål but
-        # this is overriden with just norsk by i18n.NAME_OVERRIDES
-        with app.test_client() as c:
-            c.get('/?l=nb_NO')
-            base = render_template('base.html')
-            assert 'norsk' in base
-            assert 'norsk bo' not in base
 
     def test_i18n(self):
         sources = [
@@ -242,7 +243,7 @@ class TestI18N(unittest.TestCase):
         for app in (journalist_app.create_app(fake_config),
                     source_app.create_app(fake_config)):
             assert i18n.LOCALES == fake_config.SUPPORTED_LOCALES
-            self.verify_i18n(app)
+            verify_i18n(app)
 
     def test_verify_default_locale_en_us_if_not_defined_in_config(self):
         class Config:
