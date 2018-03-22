@@ -1,24 +1,22 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import os
-from os.path import abspath, dirname, realpath
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import config
 import logging
+import os
 import manage
 import mock
-from sqlalchemy.orm.exc import NoResultFound
-from StringIO import StringIO
 import sys
 import time
-import unittest
 import utils
 
+from os.path import abspath, dirname, realpath
+from StringIO import StringIO
+
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import journalist_app
 
-from db import db
 from models import Journalist
+from sdconfig import config
 
 
 YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
@@ -44,7 +42,7 @@ class TestManagePy(object):
         assert 'VISIBLE' in caplog.text
 
 
-class TestPytestManagementCommand:
+class TestManagementCommand:
 
     def test_get_username_success(self):
         with mock.patch("__builtin__.raw_input", return_value='jen'):
@@ -163,34 +161,24 @@ class TestPytestManagementCommand:
         return_value = manage._get_username_to_delete()
         assert return_value == 'test-user-12345'
 
+    def test_reset(self, journalist_app, test_journo, config):
+        original_config = manage.config
+        try:
+            # We need to override the config to point at the per-test DB
+            manage.config = config
 
-class TestManagementCommand(unittest.TestCase):
+            return_value = manage.reset(args=None)
+            assert return_value == 0
+            assert os.path.exists(config.DATABASE_FILE)
+            assert os.path.exists(config.STORE_DIR)
 
-    def setUp(self):
-        self.__context = journalist_app.create_app(config).app_context()
-        self.__context.push()
-        utils.env.setup()
-        self.__context.pop()
-
-    def tearDown(self):
-        self.__context.push()
-        utils.env.teardown()
-        self.__context.pop()
-
-    def test_reset(self):
-        test_journalist, _ = utils.db_helper.init_journalist()
-        user_should_be_gone = test_journalist.username
-
-        return_value = manage.reset(args=None)
-
-        self.assertEqual(return_value, 0)
-        assert os.path.exists(config.DATABASE_FILE)
-        assert os.path.exists(config.STORE_DIR)
-
-        # Verify journalist user present in the database is gone
-        db.session.remove()  # Close session and get a session on the new db
-        with self.assertRaises(NoResultFound):
-            Journalist.query.filter_by(username=user_should_be_gone).one()
+            # Verify journalist user present in the database is gone
+            with journalist_app.app_context():
+                res = Journalist.query \
+                    .filter_by(username=test_journo['username']).one_or_none()
+                assert res is None
+        finally:
+            manage.config = original_config
 
 
 class TestManage(object):
