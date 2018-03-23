@@ -20,21 +20,19 @@ import argparse
 import logging
 import os
 import re
-import unittest
 
 from flask import request, session, render_template_string, render_template
 from flask_babel import gettext
 from werkzeug.datastructures import Headers
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import SDConfig, config
+from sdconfig import SDConfig
 import i18n
 import i18n_tool
 import journalist_app as journalist_app_module
 import pytest
 import source_app
 import version
-import utils
 
 
 def verify_i18n(app):
@@ -273,42 +271,25 @@ def test_html_en_lang_correct(journalist_app, config):
     assert re.compile('<html .*lang="en".*>').search(html), html
 
 
-class TestI18N(unittest.TestCase):
+# Grab the journalist_app fixture to trigger creation of resources
+def test_html_fr_lang_correct(journalist_app, config):
+    """Check that when the locale is fr_FR the lang property is correct"""
 
-    def setUp(self):
-        self.__context = journalist_app_module.create_app(config).app_context()
+    # Then delete it because using it won't test what we want
+    del journalist_app
 
-        # Note: We only need the context for the setup/teardown; it interferes
-        # with the rest of the test cases.
-        self.__context.push()
-        utils.env.setup()
-        self.__context.pop()
+    config.SUPPORTED_LOCALES = ['fr_FR', 'en_US']
+    app = journalist_app_module.create_app(config).test_client()
+    resp = app.get('/?l=fr_FR', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert re.compile('<html .*lang="fr".*>').search(html), html
 
-    def tearDown(self):
-        # Note: We only need the context for the setup/teardown; it interferes
-        # with the rest of the test cases.
-        self.__context.push()
-        utils.env.teardown()
-        self.__context.pop()
+    app = source_app.create_app(config).test_client()
+    resp = app.get('/?l=fr_FR', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert re.compile('<html .*lang="fr".*>').search(html), html
 
-    def get_fake_config(self):
-        return SDConfig()
-
-    def test_html_fr_lang_correct(self):
-        """Check that when the locale is fr_FR the lang property is correct"""
-        fake_config = self.get_fake_config()
-        fake_config.SUPPORTED_LOCALES = ['fr_FR', 'en_US']
-        app = journalist_app_module.create_app(fake_config).test_client()
-        resp = app.get('/?l=fr_FR', follow_redirects=True)
-        html = resp.data.decode('utf-8')
-        assert re.compile('<html .*lang="fr".*>').search(html), html
-
-        app = source_app.create_app(fake_config).test_client()
-        resp = app.get('/?l=fr_FR', follow_redirects=True)
-        html = resp.data.decode('utf-8')
-        assert re.compile('<html .*lang="fr".*>').search(html), html
-
-        # check '/generate' too because '/' uses a different template
-        resp = app.get('/generate?l=fr_FR', follow_redirects=True)
-        html = resp.data.decode('utf-8')
-        assert re.compile('<html .*lang="fr".*>').search(html), html
+    # check '/generate' too because '/' uses a different template
+    resp = app.get('/generate?l=fr_FR', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert re.compile('<html .*lang="fr".*>').search(html), html
