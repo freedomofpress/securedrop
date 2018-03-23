@@ -5,8 +5,7 @@ import subprocess
 import os
 import pexpect
 
-import updaterUI
-import strings
+from journalist_gui import updaterUI, strings
 
 
 class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
