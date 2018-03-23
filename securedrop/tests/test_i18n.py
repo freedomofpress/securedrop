@@ -232,6 +232,18 @@ def test_i18n(journalist_app, config):
         verify_i18n(app)
 
 
+def test_verify_default_locale_en_us_if_not_defined_in_config(config):
+    class Config:
+        def __getattr__(self, name):
+            if name == 'DEFAULT_LOCALE':
+                raise AttributeError()
+            return getattr(config, name)
+    not_translated = 'code hello i18n'
+    with source_app.create_app(Config()).test_client() as c:
+        c.get('/')
+        assert not_translated == gettext(not_translated)
+
+
 class TestI18N(unittest.TestCase):
 
     def setUp(self):
@@ -252,17 +264,6 @@ class TestI18N(unittest.TestCase):
 
     def get_fake_config(self):
         return SDConfig()
-
-    def test_verify_default_locale_en_us_if_not_defined_in_config(self):
-        class Config:
-            def __getattr__(self, name):
-                if name == 'DEFAULT_LOCALE':
-                    raise AttributeError()
-                return getattr(config, name)
-        not_translated = 'code hello i18n'
-        with source_app.create_app(Config()).test_client() as c:
-            c.get('/')
-            assert not_translated == gettext(not_translated)
 
     def test_locale_to_rfc_5646(self):
         assert i18n.locale_to_rfc_5646('en') == 'en'
