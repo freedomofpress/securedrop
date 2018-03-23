@@ -30,7 +30,7 @@ os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config
 import i18n
 import i18n_tool
-import journalist_app
+import journalist_app as journalist_app_module
 import pytest
 import source_app
 import version
@@ -171,10 +171,71 @@ def test_get_supported_locales():
     assert "DEFAULT_LOCALE 'not_found'" in str(excinfo.value)
 
 
+# Grab the journalist_app fixture to trigger creation of resources
+def test_i18n(journalist_app, config):
+    # Then delete it because using it won't test what we want
+    del journalist_app
+
+    sources = [
+        'tests/i18n/code.py',
+        'tests/i18n/template.html',
+    ]
+    kwargs = {
+        'translations_dir': config.TEMP_DIR,
+        'mapping': 'tests/i18n/babel.cfg',
+        'source': sources,
+        'extract_update': True,
+        'compile': True,
+        'verbose': logging.DEBUG,
+        'version': version.__version__,
+    }
+    args = argparse.Namespace(**kwargs)
+    i18n_tool.setup_verbosity(args)
+    i18n_tool.translate_messages(args)
+
+    i18n_tool.sh("""
+    pybabel init -i {d}/messages.pot -d {d} -l en_US
+
+    pybabel init -i {d}/messages.pot -d {d} -l fr_FR
+    sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code bonjour"/' \
+          {d}/fr_FR/LC_MESSAGES/messages.po
+
+    pybabel init -i {d}/messages.pot -d {d} -l zh_Hans_CN
+    sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code chinese"/' \
+          {d}/zh_Hans_CN/LC_MESSAGES/messages.po
+
+    pybabel init -i {d}/messages.pot -d {d} -l ar
+    sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code arabic"/' \
+          {d}/ar/LC_MESSAGES/messages.po
+
+    pybabel init -i {d}/messages.pot -d {d} -l nb_NO
+    sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code norwegian"/' \
+          {d}/nb_NO/LC_MESSAGES/messages.po
+
+    pybabel init -i {d}/messages.pot -d {d} -l es_ES
+    sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code spanish"/' \
+          {d}/es_ES/LC_MESSAGES/messages.po
+    """.format(d=config.TEMP_DIR))
+
+    i18n_tool.translate_messages(args)
+
+    fake_config = SDConfig()
+    fake_config.SUPPORTED_LOCALES = [
+        'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
+    fake_config.TRANSLATION_DIRS = config.TEMP_DIR
+
+    # Use our config (and not an app fixture) because the i18n module
+    # grabs values at init time and we can't inject them later.
+    for app in (journalist_app_module.create_app(fake_config),
+                source_app.create_app(fake_config)):
+        assert i18n.LOCALES == fake_config.SUPPORTED_LOCALES
+        verify_i18n(app)
+
+
 class TestI18N(unittest.TestCase):
 
     def setUp(self):
-        self.__context = journalist_app.create_app(config).app_context()
+        self.__context = journalist_app_module.create_app(config).app_context()
 
         # Note: We only need the context for the setup/teardown; it interferes
         # with the rest of the test cases.
@@ -191,59 +252,6 @@ class TestI18N(unittest.TestCase):
 
     def get_fake_config(self):
         return SDConfig()
-
-    def test_i18n(self):
-        sources = [
-            'tests/i18n/code.py',
-            'tests/i18n/template.html',
-        ]
-        kwargs = {
-            'translations_dir': config.TEMP_DIR,
-            'mapping': 'tests/i18n/babel.cfg',
-            'source': sources,
-            'extract_update': True,
-            'compile': True,
-            'verbose': logging.DEBUG,
-            'version': version.__version__,
-        }
-        args = argparse.Namespace(**kwargs)
-        i18n_tool.setup_verbosity(args)
-        i18n_tool.translate_messages(args)
-
-        i18n_tool.sh("""
-        pybabel init -i {d}/messages.pot -d {d} -l en_US
-
-        pybabel init -i {d}/messages.pot -d {d} -l fr_FR
-        sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code bonjour"/' \
-              {d}/fr_FR/LC_MESSAGES/messages.po
-
-        pybabel init -i {d}/messages.pot -d {d} -l zh_Hans_CN
-        sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code chinese"/' \
-              {d}/zh_Hans_CN/LC_MESSAGES/messages.po
-
-        pybabel init -i {d}/messages.pot -d {d} -l ar
-        sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code arabic"/' \
-              {d}/ar/LC_MESSAGES/messages.po
-
-        pybabel init -i {d}/messages.pot -d {d} -l nb_NO
-        sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code norwegian"/' \
-              {d}/nb_NO/LC_MESSAGES/messages.po
-
-        pybabel init -i {d}/messages.pot -d {d} -l es_ES
-        sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code spanish"/' \
-              {d}/es_ES/LC_MESSAGES/messages.po
-        """.format(d=config.TEMP_DIR))
-
-        i18n_tool.translate_messages(args)
-
-        fake_config = self.get_fake_config()
-        fake_config.SUPPORTED_LOCALES = [
-            'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
-        fake_config.TRANSLATION_DIRS = config.TEMP_DIR
-        for app in (journalist_app.create_app(fake_config),
-                    source_app.create_app(fake_config)):
-            assert i18n.LOCALES == fake_config.SUPPORTED_LOCALES
-            verify_i18n(app)
 
     def test_verify_default_locale_en_us_if_not_defined_in_config(self):
         class Config:
@@ -265,7 +273,7 @@ class TestI18N(unittest.TestCase):
 
     def test_html_en_lang_correct(self):
         fake_config = self.get_fake_config()
-        app = journalist_app.create_app(fake_config).test_client()
+        app = journalist_app_module.create_app(fake_config).test_client()
         resp = app.get('/', follow_redirects=True)
         html = resp.data.decode('utf-8')
         assert re.compile('<html .*lang="en".*>').search(html), html
@@ -284,7 +292,7 @@ class TestI18N(unittest.TestCase):
         """Check that when the locale is fr_FR the lang property is correct"""
         fake_config = self.get_fake_config()
         fake_config.SUPPORTED_LOCALES = ['fr_FR', 'en_US']
-        app = journalist_app.create_app(fake_config).test_client()
+        app = journalist_app_module.create_app(fake_config).test_client()
         resp = app.get('/?l=fr_FR', follow_redirects=True)
         html = resp.data.decode('utf-8')
         assert re.compile('<html .*lang="fr".*>').search(html), html
