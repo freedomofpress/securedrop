@@ -244,6 +244,14 @@ def test_verify_default_locale_en_us_if_not_defined_in_config(config):
         assert not_translated == gettext(not_translated)
 
 
+def test_locale_to_rfc_5646():
+    assert i18n.locale_to_rfc_5646('en') == 'en'
+    assert i18n.locale_to_rfc_5646('en-US') == 'en'
+    assert i18n.locale_to_rfc_5646('en_US') == 'en'
+    assert i18n.locale_to_rfc_5646('en-us') == 'en'
+    assert i18n.locale_to_rfc_5646('zh-hant') == 'zh-Hant'
+
+
 class TestI18N(unittest.TestCase):
 
     def setUp(self):
@@ -264,13 +272,6 @@ class TestI18N(unittest.TestCase):
 
     def get_fake_config(self):
         return SDConfig()
-
-    def test_locale_to_rfc_5646(self):
-        assert i18n.locale_to_rfc_5646('en') == 'en'
-        assert i18n.locale_to_rfc_5646('en-US') == 'en'
-        assert i18n.locale_to_rfc_5646('en_US') == 'en'
-        assert i18n.locale_to_rfc_5646('en-us') == 'en'
-        assert i18n.locale_to_rfc_5646('zh-hant') == 'zh-Hant'
 
     def test_html_en_lang_correct(self):
         fake_config = self.get_fake_config()
