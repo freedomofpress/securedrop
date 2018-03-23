@@ -163,6 +163,7 @@ def test_get_username_to_delete(mocker):
     return_value = manage._get_username_to_delete()
     assert return_value == 'test-user-12345'
 
+
 def test_reset(journalist_app, test_journo, config):
     original_config = manage.config
     try:
