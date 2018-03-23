@@ -134,14 +134,3 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
                 return failure_reason
 
         return 'Success!'
-
-
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-    form = UpdaterApp()
-    form.show()
-    app.exec_()
-
-
-if __name__ == '__main__':
-    main()
