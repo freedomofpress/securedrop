@@ -252,6 +252,27 @@ def test_locale_to_rfc_5646():
     assert i18n.locale_to_rfc_5646('zh-hant') == 'zh-Hant'
 
 
+# Grab the journalist_app fixture to trigger creation of resources
+def test_html_en_lang_correct(journalist_app, config):
+    # Then delete it because using it won't test what we want
+    del journalist_app
+
+    app = journalist_app_module.create_app(config).test_client()
+    resp = app.get('/', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert re.compile('<html .*lang="en".*>').search(html), html
+
+    app = source_app.create_app(config).test_client()
+    resp = app.get('/', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert re.compile('<html .*lang="en".*>').search(html), html
+
+    # check '/generate' too because '/' uses a different template
+    resp = app.get('/generate', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert re.compile('<html .*lang="en".*>').search(html), html
+
+
 class TestI18N(unittest.TestCase):
 
     def setUp(self):
@@ -272,23 +293,6 @@ class TestI18N(unittest.TestCase):
 
     def get_fake_config(self):
         return SDConfig()
-
-    def test_html_en_lang_correct(self):
-        fake_config = self.get_fake_config()
-        app = journalist_app_module.create_app(fake_config).test_client()
-        resp = app.get('/', follow_redirects=True)
-        html = resp.data.decode('utf-8')
-        assert re.compile('<html .*lang="en".*>').search(html), html
-
-        app = source_app.create_app(fake_config).test_client()
-        resp = app.get('/', follow_redirects=True)
-        html = resp.data.decode('utf-8')
-        assert re.compile('<html .*lang="en".*>').search(html), html
-
-        # check '/generate' too because '/' uses a different template
-        resp = app.get('/generate', follow_redirects=True)
-        html = resp.data.decode('utf-8')
-        assert re.compile('<html .*lang="en".*>').search(html), html
 
     def test_html_fr_lang_correct(self):
         """Check that when the locale is fr_FR the lang property is correct"""
