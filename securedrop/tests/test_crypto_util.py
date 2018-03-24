@@ -81,6 +81,34 @@ def test_encrypt_without_output(source_app, config, test_source):
     assert plaintext == message
 
 
+def test_encrypt_binary_stream(source_app, config, test_source):
+    """Generally, we pass unicode strings (the type form data is
+    returned as) as plaintext to crypto_util.encrypt(). These have
+    to be converted to "binary stream" types (such as `file`) before
+    we can actually call gnupg.GPG.encrypt() on them. This is done
+    in crypto_util.encrypt() with an `if` branch that uses
+    `gnupg._util._is_stream(plaintext)` as the predicate, and calls
+    `gnupg._util._make_binary_stream(plaintext)` if necessary. This
+    test ensures our encrypt function works even if we provide
+    inputs such that this `if` branch is skipped (i.e., the object
+    passed for `plaintext` is one such that
+    `gnupg._util._is_stream(plaintext)` returns `True`).
+    """
+    with source_app.app_context():
+        with io.open(os.path.realpath(__file__)) as fh:
+            ciphertext = source_app.crypto_util.encrypt(
+                fh,
+                [source_app.crypto_util.getkey(test_source['filesystem_id']),
+                 config.JOURNALIST_KEY],
+                source_app.storage.path(test_source['filesystem_id'],
+                                        'somefile.gpg'))
+        plaintext = source_app.crypto_util.decrypt(test_source['codename'],
+                                                   ciphertext)
+
+    with io.open(os.path.realpath(__file__)) as fh:
+        assert fh.read() == plaintext
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -93,31 +121,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_encrypt_binary_stream(self):
-        """Generally, we pass unicode strings (the type form data is
-        returned as) as plaintext to crypto_util.encrypt(). These have
-        to be converted to "binary stream" types (such as `file`) before
-        we can actually call gnupg.GPG.encrypt() on them. This is done
-        in crypto_util.encrypt() with an `if` branch that uses
-        `gnupg._util._is_stream(plaintext)` as the predicate, and calls
-        `gnupg._util._make_binary_stream(plaintext)` if necessary. This
-        test ensures our encrypt function works even if we provide
-        inputs such that this `if` branch is skipped (i.e., the object
-        passed for `plaintext` is one such that
-        `gnupg._util._is_stream(plaintext)` returns `True`).
-        """
-        source, codename = utils.db_helper.init_source()
-        with io.open(os.path.realpath(__file__)) as fh:
-            ciphertext = current_app.crypto_util.encrypt(
-                fh,
-                [current_app.crypto_util.getkey(source.filesystem_id),
-                 config.JOURNALIST_KEY],
-                current_app.storage.path(source.filesystem_id, 'somefile.gpg'))
-        plaintext = current_app.crypto_util.decrypt(codename, ciphertext)
-
-        with io.open(os.path.realpath(__file__)) as fh:
-            self.assertEqual(fh.read(), plaintext)
 
     def test_encrypt_fingerprints_not_a_list_or_tuple(self):
         """If passed a single fingerprint as a string, encrypt should
