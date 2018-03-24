@@ -2,16 +2,10 @@
 import io
 import os
 import pytest
-import unittest
 
 from gnupg._util import _is_stream
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import config
-import journalist_app
-import secure_tempfile
-import utils
-
 from secure_tempfile import SecureTemporaryFile
 
 MESSAGE = '410,757,864,530'
@@ -107,22 +101,10 @@ def test_buffered_read():
     assert out == msg
 
 
-class TestSecureTempfile(unittest.TestCase):
-
-    def setUp(self):
-        self.__context = journalist_app.create_app(config).app_context()
-        self.__context.push()
-        utils.env.setup()
-        self.f = secure_tempfile.SecureTemporaryFile(config.STORE_DIR)
-        self.msg = '410,757,864,530'
-
-    def tearDown(self):
-        utils.env.teardown()
-        self.__context.pop()
-
-    def test_tmp_file_id_omits_invalid_chars(self):
-        """The `SecureTempFile.tmp_file_id` instance attribute is used as the filename
-        for the secure temporary file. This attribute should not contain
-        invalid characters such as '/' and '\0' (null)."""
-        self.assertNotIn('/', self.f.tmp_file_id)
-        self.assertNotIn('\0', self.f.tmp_file_id)
+def test_tmp_file_id_omits_invalid_chars():
+    """The `SecureTempFile.tmp_file_id` instance attribute is used as the filename
+    for the secure temporary file. This attribute should not contain
+    invalid characters such as '/' and '\0' (null)."""
+    f = SecureTemporaryFile('/tmp')
+    assert '/' not in f.tmp_file_id
+    assert '\0' not in f.tmp_file_id
