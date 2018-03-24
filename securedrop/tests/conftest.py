@@ -67,6 +67,7 @@ def config(tmpdir):
 
     data = tmpdir.mkdir('data')
     keys = data.mkdir('keys')
+    os.chmod(str(keys), 0o700)
     store = data.mkdir('store')
     tmp = data.mkdir('tmp')
     sqlite = data.join('db.sqlite')
