@@ -109,6 +109,24 @@ def test_encrypt_binary_stream(source_app, config, test_source):
         assert fh.read() == plaintext
 
 
+def test_encrypt_fingerprints_not_a_list_or_tuple(source_app, test_source):
+    """If passed a single fingerprint as a string, encrypt should
+    correctly place that string in a list, and encryption/
+    decryption should work as intended."""
+    message = 'test'
+
+    with source_app.app_context():
+        ciphertext = source_app.crypto_util.encrypt(
+            message,
+            source_app.crypto_util.getkey(test_source['filesystem_id']),
+            source_app.storage.path(test_source['filesystem_id'],
+                                    'somefile.gpg'))
+        plaintext = source_app.crypto_util.decrypt(test_source['codename'],
+                                                   ciphertext)
+
+    assert plaintext == message
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -121,20 +139,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_encrypt_fingerprints_not_a_list_or_tuple(self):
-        """If passed a single fingerprint as a string, encrypt should
-        correctly place that string in a list, and encryption/
-        decryption should work as intended."""
-        source, codename = utils.db_helper.init_source()
-        message = str(os.urandom(1))
-        ciphertext = current_app.crypto_util.encrypt(
-            message,
-            current_app.crypto_util.getkey(source.filesystem_id),
-            current_app.storage.path(source.filesystem_id, 'somefile.gpg'))
-        plaintext = current_app.crypto_util.decrypt(codename, ciphertext)
-
-        self.assertEqual(message, plaintext)
 
     def test_basic_encrypt_then_decrypt_multiple_recipients(self):
         source, codename = utils.db_helper.init_source()
