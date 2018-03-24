@@ -88,6 +88,10 @@ def test_file_is_removed_from_disk():
     assert not os.path.exists(f.filepath)
 
 
+def test_SecureTemporaryFile_is_a_STREAMLIKE_TYPE():
+    assert _is_stream(SecureTemporaryFile('/tmp'))
+
+
 class TestSecureTempfile(unittest.TestCase):
 
     def setUp(self):
@@ -100,10 +104,6 @@ class TestSecureTempfile(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_SecureTemporaryFile_is_a_STREAMLIKE_TYPE(self):
-        self.assertTrue(_is_stream(
-            secure_tempfile.SecureTemporaryFile('/tmp')))
 
     def test_buffered_read(self):
         msg = self.msg * 1000
