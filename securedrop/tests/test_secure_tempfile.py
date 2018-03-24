@@ -92,6 +92,21 @@ def test_SecureTemporaryFile_is_a_STREAMLIKE_TYPE():
     assert _is_stream(SecureTemporaryFile('/tmp'))
 
 
+def test_buffered_read():
+    f = SecureTemporaryFile('/tmp')
+    msg = MESSAGE * 1000
+    f.write(msg)
+    out = ''
+    while True:
+        chars = f.read(1024)
+        if chars:
+            out += chars
+        else:
+            break
+
+    assert out == msg
+
+
 class TestSecureTempfile(unittest.TestCase):
 
     def setUp(self):
@@ -104,19 +119,6 @@ class TestSecureTempfile(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_buffered_read(self):
-        msg = self.msg * 1000
-        self.f.write(msg)
-        str = ''
-        while True:
-            char = self.f.read(1024)
-            if char:
-                str += char
-            else:
-                break
-
-        self.assertEqual(str, msg)
 
     def test_tmp_file_id_omits_invalid_chars(self):
         """The `SecureTempFile.tmp_file_id` instance attribute is used as the filename
