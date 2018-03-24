@@ -63,6 +63,24 @@ def test_encrypt_failure(source_app, test_source):
         assert 'no terminal at all requested' in str(err)
 
 
+def test_encrypt_without_output(source_app, config, test_source):
+    """We simply do not specify the option output keyword argument
+    to crypto_util.encrypt() here in order to confirm encryption
+    works when it defaults to `None`.
+    """
+    message = 'test'
+    with source_app.app_context():
+        ciphertext = source_app.crypto_util.encrypt(
+            message,
+            [source_app.crypto_util.getkey(test_source['filesystem_id']),
+             config.JOURNALIST_KEY])
+        plaintext = source_app.crypto_util.decrypt(
+            test_source['codename'],
+            ciphertext)
+
+    assert plaintext == message
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -75,21 +93,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_encrypt_without_output(self):
-        """We simply do not specify the option output keyword argument
-        to crypto_util.encrypt() here in order to confirm encryption
-        works when it defaults to `None`.
-        """
-        source, codename = utils.db_helper.init_source()
-        message = str(os.urandom(1))
-        ciphertext = current_app.crypto_util.encrypt(
-            message,
-            [current_app.crypto_util.getkey(source.filesystem_id),
-             config.JOURNALIST_KEY])
-        plaintext = current_app.crypto_util.decrypt(codename, ciphertext)
-
-        self.assertEqual(message, plaintext)
 
     def test_encrypt_binary_stream(self):
         """Generally, we pass unicode strings (the type form data is
