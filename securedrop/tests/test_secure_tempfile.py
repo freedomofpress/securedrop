@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import os
 import io
+import os
+import pytest
 import unittest
 
 from gnupg._util import _is_stream
@@ -10,6 +11,15 @@ from sdconfig import config
 import journalist_app
 import secure_tempfile
 import utils
+
+from secure_tempfile import SecureTemporaryFile
+
+
+def test_read_before_writing():
+    f = SecureTemporaryFile('/tmp')
+    with pytest.raises(AssertionError) as err:
+        f.read()
+    assert 'You must write before reading!' in str(err)
 
 
 class TestSecureTempfile(unittest.TestCase):
@@ -24,11 +34,6 @@ class TestSecureTempfile(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_read_before_writing(self):
-        with self.assertRaisesRegexp(AssertionError,
-                                     'You must write before reading!'):
-            self.f.read()
 
     def test_write_then_read_once(self):
         self.f.write(self.msg)
