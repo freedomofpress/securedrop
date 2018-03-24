@@ -14,12 +14,20 @@ import utils
 
 from secure_tempfile import SecureTemporaryFile
 
+MESSAGE = '410,757,864,530'
+
 
 def test_read_before_writing():
     f = SecureTemporaryFile('/tmp')
     with pytest.raises(AssertionError) as err:
         f.read()
     assert 'You must write before reading!' in str(err)
+
+
+def test_write_then_read_once():
+    f = SecureTemporaryFile('/tmp')
+    f.write(MESSAGE)
+    assert f.read() == MESSAGE
 
 
 class TestSecureTempfile(unittest.TestCase):
@@ -34,11 +42,6 @@ class TestSecureTempfile(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_write_then_read_once(self):
-        self.f.write(self.msg)
-
-        self.assertEqual(self.f.read(), self.msg)
 
     def test_write_twice_then_read_once(self):
         self.f.write(self.msg)
