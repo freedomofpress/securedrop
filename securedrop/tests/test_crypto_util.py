@@ -36,6 +36,22 @@ def test_clean():
         assert 'invalid input: {}'.format(invalid) in str(err)
 
 
+def test_encrypt_success(source_app, config, test_source):
+    message = 'test'
+
+    with source_app.app_context():
+        ciphertext = source_app.crypto_util.encrypt(
+            message,
+            [source_app.crypto_util.getkey(test_source['filesystem_id']),
+             config.JOURNALIST_KEY],
+            source_app.storage.path(test_source['filesystem_id'],
+                                    'somefile.gpg'))
+
+        assert isinstance(ciphertext, str)
+        assert ciphertext != message
+        assert len(ciphertext) > 0
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -48,19 +64,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_encrypt_success(self):
-        source, _ = utils.db_helper.init_source()
-        message = str(os.urandom(1))
-        ciphertext = current_app.crypto_util.encrypt(
-            message,
-            [current_app.crypto_util.getkey(source.filesystem_id),
-             config.JOURNALIST_KEY],
-            current_app.storage.path(source.filesystem_id, 'somefile.gpg'))
-
-        self.assertIsInstance(ciphertext, str)
-        self.assertNotEqual(ciphertext, message)
-        self.assertGreater(len(ciphertext), 0)
 
     def test_encrypt_failure(self):
         source, _ = utils.db_helper.init_source()
