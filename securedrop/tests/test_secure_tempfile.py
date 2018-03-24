@@ -44,6 +44,16 @@ def test_write_then_read_twice():
     assert f.read() == ''
 
 
+def test_write_then_read_then_write():
+    f = SecureTemporaryFile('/tmp')
+    f.write(MESSAGE)
+    f.read()
+
+    with pytest.raises(AssertionError) as err:
+        f.write('be gentle to each other so we can be dangerous together')
+    assert 'You cannot write after reading!' in str(err)
+
+
 class TestSecureTempfile(unittest.TestCase):
 
     def setUp(self):
@@ -56,14 +66,6 @@ class TestSecureTempfile(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_write_then_read_then_write(self):
-        self.f.write(self.msg)
-        self.f.read()
-
-        with self.assertRaisesRegexp(AssertionError,
-                                     'You cannot write after reading!'):
-            self.f.write('BORN TO DIE')
 
     def test_read_write_unicode(self):
         unicode_msg = u'鬼神 Kill Em All 1989'
