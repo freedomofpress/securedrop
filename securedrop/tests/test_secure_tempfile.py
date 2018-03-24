@@ -71,6 +71,23 @@ def test_file_seems_encrypted():
     assert MESSAGE not in contents.decode()
 
 
+def test_file_is_removed_from_disk():
+    # once without reading the contents
+    f = SecureTemporaryFile('/tmp')
+    f.write(MESSAGE)
+    assert os.path.exists(f.filepath)
+    f.close()
+    assert not os.path.exists(f.filepath)
+
+    # once with reading the contents
+    f = SecureTemporaryFile('/tmp')
+    f.write(MESSAGE)
+    f.read()
+    assert os.path.exists(f.filepath)
+    f.close()
+    assert not os.path.exists(f.filepath)
+
+
 class TestSecureTempfile(unittest.TestCase):
 
     def setUp(self):
@@ -83,17 +100,6 @@ class TestSecureTempfile(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_file_is_removed_from_disk(self):
-        fp = self.f.filepath
-        self.f.write(self.msg)
-        self.f.read()
-
-        self.assertTrue(os.path.exists(fp))
-
-        self.f.close()
-
-        self.assertFalse(os.path.exists(fp))
 
     def test_SecureTemporaryFile_is_a_STREAMLIKE_TYPE(self):
         self.assertTrue(_is_stream(
