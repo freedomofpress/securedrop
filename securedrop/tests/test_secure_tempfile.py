@@ -61,6 +61,16 @@ def test_read_write_unicode():
     assert f.read().decode('utf-8') == unicode_msg
 
 
+def test_file_seems_encrypted():
+    f = SecureTemporaryFile('/tmp')
+    f.write(MESSAGE)
+    with io.open(f.filepath, 'rb') as fh:
+        contents = fh.read()
+
+    assert MESSAGE.encode('utf-8') not in contents
+    assert MESSAGE not in contents.decode()
+
+
 class TestSecureTempfile(unittest.TestCase):
 
     def setUp(self):
@@ -73,13 +83,6 @@ class TestSecureTempfile(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_file_seems_encrypted(self):
-        self.f.write(self.msg)
-        with io.open(self.f.filepath, 'rb') as fh:
-            contents = fh.read().decode()
-
-        self.assertNotIn(self.msg, contents)
 
     def test_file_is_removed_from_disk(self):
         fp = self.f.filepath
