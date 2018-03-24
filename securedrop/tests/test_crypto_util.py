@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import os
 import io
+import os
+import pytest
 import unittest
 
 from flask import current_app
@@ -22,6 +23,19 @@ def test_word_list_does_not_contain_empty_strings(journalist_app):
     assert '' not in journalist_app.crypto_util.adjectives
 
 
+def test_clean():
+    ok = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJ'
+          'KLMNOPQRSTUVWXYZ')
+    invalids = ['foo bar`', 'bar baz~']
+
+    assert crypto_util.clean(ok) == ok
+
+    for invalid in invalids:
+        with pytest.raises(CryptoException) as err:
+            crypto_util.clean(invalid)
+        assert 'invalid input: {}'.format(invalid) in str(err)
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -34,20 +48,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_clean(self):
-        ok = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJ'
-              'KLMNOPQRSTUVWXYZ')
-        invalid_1 = 'foo bar`'
-        invalid_2 = 'bar baz~'
-
-        self.assertEqual(ok, crypto_util.clean(ok))
-        with self.assertRaisesRegexp(CryptoException,
-                                     'invalid input: {}'.format(invalid_1)):
-            crypto_util.clean(invalid_1)
-        with self.assertRaisesRegexp(CryptoException,
-                                     'invalid input: {}'.format(invalid_2)):
-            crypto_util.clean(invalid_2)
 
     def test_encrypt_success(self):
         source, _ = utils.db_helper.init_source()
