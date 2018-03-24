@@ -37,6 +37,13 @@ def test_write_twice_then_read_once():
     assert f.read() == MESSAGE * 2
 
 
+def test_write_then_read_twice():
+    f = SecureTemporaryFile('/tmp')
+    f.write(MESSAGE)
+    assert f.read() == MESSAGE
+    assert f.read() == ''
+
+
 class TestSecureTempfile(unittest.TestCase):
 
     def setUp(self):
@@ -49,12 +56,6 @@ class TestSecureTempfile(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_write_then_read_twice(self):
-        self.f.write(self.msg)
-
-        self.assertEqual(self.f.read(), self.msg)
-        self.assertEqual(self.f.read(), '')
 
     def test_write_then_read_then_write(self):
         self.f.write(self.msg)
