@@ -54,6 +54,13 @@ def test_write_then_read_then_write():
     assert 'You cannot write after reading!' in str(err)
 
 
+def test_read_write_unicode():
+    f = SecureTemporaryFile('/tmp')
+    unicode_msg = u'鬼神 Kill Em All 1989'
+    f.write(unicode_msg)
+    assert f.read().decode('utf-8') == unicode_msg
+
+
 class TestSecureTempfile(unittest.TestCase):
 
     def setUp(self):
@@ -66,12 +73,6 @@ class TestSecureTempfile(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_read_write_unicode(self):
-        unicode_msg = u'鬼神 Kill Em All 1989'
-        self.f.write(unicode_msg)
-
-        self.assertEqual(self.f.read().decode('utf-8'), unicode_msg)
 
     def test_file_seems_encrypted(self):
         self.f.write(self.msg)
