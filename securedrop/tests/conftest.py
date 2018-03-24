@@ -132,9 +132,10 @@ def test_admin(journalist_app):
 @pytest.fixture(scope='function')
 def test_source(journalist_app):
     with journalist_app.app_context():
-        source, _ = utils.db_helper.init_source()
+        source, codename = utils.db_helper.init_source()
         filesystem_id = source.filesystem_id
         return {'source': source,
+                'codename': codename,
                 'filesystem_id': filesystem_id}
 
 
