@@ -52,6 +52,17 @@ def test_encrypt_success(source_app, config, test_source):
         assert len(ciphertext) > 0
 
 
+def test_encrypt_failure(source_app, test_source):
+    with source_app.app_context():
+        with pytest.raises(CryptoException) as err:
+            source_app.crypto_util.encrypt(
+                str(os.urandom(1)),
+                [],
+                source_app.storage.path(test_source['filesystem_id'],
+                                        'other.gpg'))
+        assert 'no terminal at all requested' in str(err)
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -64,15 +75,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_encrypt_failure(self):
-        source, _ = utils.db_helper.init_source()
-        with self.assertRaisesRegexp(CryptoException,
-                                     'no terminal at all requested'):
-            current_app.crypto_util.encrypt(
-                str(os.urandom(1)),
-                [],
-                current_app.storage.path(source.filesystem_id, 'other.gpg'))
 
     def test_encrypt_without_output(self):
         """We simply do not specify the option output keyword argument
