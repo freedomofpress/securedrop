@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import base64
 import os
+import io
 from tempfile import _TemporaryFileWrapper
 
 from gnupg._util import _STREAMLIKE_TYPES
@@ -47,7 +48,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         self.tmp_file_id = base64.urlsafe_b64encode(os.urandom(32)).strip('=')
         self.filepath = os.path.join(store_dir,
                                      '{}.aes'.format(self.tmp_file_id))
-        self.file = open(self.filepath, 'w+b')
+        self.file = io.open(self.filepath, 'w+b')
         super(SecureTemporaryFile, self).__init__(self.file, self.filepath)
 
     def create_key(self):

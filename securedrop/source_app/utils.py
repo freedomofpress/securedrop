@@ -1,3 +1,4 @@
+import io
 import logging
 import subprocess
 
@@ -60,7 +61,7 @@ def generate_unique_codename(config):
 
 
 def get_entropy_estimate():
-    with open('/proc/sys/kernel/random/entropy_avail') as f:
+    with io.open('/proc/sys/kernel/random/entropy_avail') as f:
         return int(f.read())
 
 

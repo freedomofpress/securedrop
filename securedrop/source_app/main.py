@@ -1,5 +1,6 @@
 import operator
 import os
+import io
 
 from datetime import datetime
 from flask import (Blueprint, render_template, flash, redirect, url_for, g,
@@ -73,7 +74,7 @@ def make_blueprint(config):
                 reply.filename,
             )
             try:
-                with open(reply_path) as f:
+                with io.open(reply_path, "rb") as f:
                     contents = f.read()
                 reply.decrypted = current_app.crypto_util.decrypt(
                     g.codename,

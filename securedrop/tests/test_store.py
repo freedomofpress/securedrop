@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import io
 import pytest
 import re
 import shutil
@@ -37,7 +38,7 @@ class TestStore(unittest.TestCase):
         os.makedirs(source_directory)
 
         file_path = os.path.join(source_directory, filename)
-        with open(file_path, 'a'):
+        with io.open(file_path, 'a'):
             os.utime(file_path, None)
 
         return source_directory, file_path
@@ -140,7 +141,7 @@ class TestStore(unittest.TestCase):
         archivefile_contents = archive.namelist()
 
         for archived_file, actual_file in zip(archivefile_contents, filenames):
-            actual_file_content = open(actual_file).read()
+            actual_file_content = io.open(actual_file, 'rb').read()
             zipped_file_content = archive.read(archived_file)
             self.assertEquals(zipped_file_content, actual_file_content)
 

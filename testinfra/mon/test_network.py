@@ -1,3 +1,4 @@
+import io
 import os
 import difflib
 import pytest
@@ -27,7 +28,7 @@ def test_mon_iptables_rules(SystemInfo, Command, Sudo):
         environment)
 
     # template out a local iptables jinja file
-    jinja_iptables = Template(open(iptables_file, 'r').read())
+    jinja_iptables = Template(io.open(iptables_file, 'r').read())
     iptables_expected = jinja_iptables.render(**kwargs)
 
     with Sudo():

@@ -3,6 +3,7 @@
 """
 import gnupg
 import os
+import io
 import shutil
 import threading
 
@@ -40,7 +41,7 @@ def init_gpg():
     # Faster to import a pre-generated key than to gen a new one every time.
     for keyfile in (join(FILES_DIR, "test_journalist_key.pub"),
                     join(FILES_DIR, "test_journalist_key.sec")):
-        gpg.import_keys(open(keyfile).read())
+        gpg.import_keys(io.open(keyfile).read())
     return gpg
 
 

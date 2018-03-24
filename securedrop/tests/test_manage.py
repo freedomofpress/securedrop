@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import io
 import logging
 import os
 import manage
@@ -202,7 +203,7 @@ def test_clean_tmp_too_young(config, caplog):
                               directory=config.TEMP_DIR,
                               verbose=logging.DEBUG)
     # create a file
-    open(os.path.join(config.TEMP_DIR, 'FILE'), 'a').close()
+    io.open(os.path.join(config.TEMP_DIR, 'FILE'), 'a').close()
 
     manage.setup_verbosity(args)
     manage.clean_tmp(args)
@@ -214,7 +215,7 @@ def test_clean_tmp_removed(config, caplog):
                               directory=config.TEMP_DIR,
                               verbose=logging.DEBUG)
     fname = os.path.join(config.TEMP_DIR, 'FILE')
-    with open(fname, 'a'):
+    with io.open(fname, 'a'):
         old = time.time() - 24*60*60
         os.utime(fname, (old, old))
     manage.setup_verbosity(args)

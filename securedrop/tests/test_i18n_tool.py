@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import io
 import os
 from os.path import abspath, dirname, exists, getmtime, join, realpath
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
@@ -37,8 +38,9 @@ class TestI18NTool(object):
         i18n_tool.translate_desktop(args)
         messages_file = join(str(tmpdir), 'desktop.pot')
         assert exists(messages_file)
-        pot = open(messages_file).read()
-        assert 'SecureDrop Source Interfaces' in pot
+        with io.open(messages_file) as fobj:
+            pot = fobj.read()
+            assert 'SecureDrop Source Interfaces' in pot
         # pretend this happened a few seconds ago
         few_seconds_ago = time.time() - 60
         os.utime(messages_file, (few_seconds_ago, few_seconds_ago))
@@ -81,11 +83,13 @@ class TestI18NTool(object):
         old_messages_mtime = current_messages_mtime
         i18n_tool.translate_desktop(args)
         assert old_messages_mtime == getmtime(messages_file)
-        po = open(po_file).read()
-        assert 'SecureDrop Source Interfaces' in po
-        assert 'SecureDrop Journalist Interfaces' not in po
-        i18n = open(i18n_file).read()
-        assert 'SOURCE FR' in i18n
+        with io.open(po_file) as fobj:
+            po = fobj.read()
+            assert 'SecureDrop Source Interfaces' in po
+            assert 'SecureDrop Journalist Interfaces' not in po
+        with io.open(i18n_file) as fobj:
+            i18n = fobj.read()
+            assert 'SOURCE FR' in i18n
 
     def test_translate_messages_l10n(self, tmpdir):
         source = [
@@ -106,9 +110,10 @@ class TestI18NTool(object):
         i18n_tool.translate_messages(args)
         messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
-        pot = open(messages_file).read()
-        assert 'code hello i18n' in pot
-        assert 'template hello i18n' in pot
+        with io.open(messages_file) as fobj:
+            pot = fobj.read()
+            assert 'code hello i18n' in pot
+            assert 'template hello i18n' in pot
 
         locale = 'en_US'
         locale_dir = join(str(tmpdir), locale)
@@ -121,9 +126,10 @@ class TestI18NTool(object):
         assert not exists(mo_file)
         i18n_tool.translate_messages(args)
         assert exists(mo_file)
-        mo = open(mo_file).read()
-        assert 'code hello i18n' in mo
-        assert 'template hello i18n' in mo
+        with io.open(mo_file) as fobj:
+            mo = fobj.read()
+            assert 'code hello i18n' in mo
+            assert 'template hello i18n' in mo
 
     def test_translate_messages_compile_arg(self, tmpdir):
         source = [
@@ -143,8 +149,9 @@ class TestI18NTool(object):
         i18n_tool.translate_messages(args)
         messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
-        pot = open(messages_file).read()
-        assert 'code hello i18n' in pot
+        with io.open(messages_file) as fobj:
+            pot = fobj.read()
+            assert 'code hello i18n' in pot
 
         locale = 'en_US'
         locale_dir = join(str(tmpdir), locale)
@@ -184,9 +191,10 @@ class TestI18NTool(object):
         old_po_mtime = current_po_mtime
         i18n_tool.translate_messages(args)
         assert old_po_mtime == getmtime(po_file)
-        mo = open(mo_file).read()
-        assert 'code hello i18n' in mo
-        assert 'template hello i18n' not in mo
+        with io.open(mo_file) as fobj:
+            mo = fobj.read()
+            assert 'code hello i18n' in mo
+            assert 'template hello i18n' not in mo
 
 
 class TestSh(object):

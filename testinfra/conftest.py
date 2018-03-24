@@ -6,6 +6,7 @@ can be reused across multiple hosts, with varied targets.
 Vars should be placed in `testinfra/vars/<hostname>.yml`.
 """
 
+import io
 import os
 import yaml
 
@@ -23,7 +24,7 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
     Vars must be stored in `testinfra/vars/<hostname>.yml`.
     """
     filepath = os.path.join(os.path.dirname(__file__), "vars", hostname+".yml")
-    with open(filepath, 'r') as f:
+    with io.open(filepath, 'r') as f:
         hostvars = yaml.safe_load(f)
 
     if with_header:

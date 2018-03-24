@@ -3,6 +3,7 @@ Import variables from vars.yml and inject into pytest namespace
 """
 
 import os
+import io
 import yaml
 
 
@@ -11,5 +12,5 @@ def pytest_namespace():
         global namespace
     """
     filepath = os.path.join(os.path.dirname(__file__), "vars.yml")
-    with open(filepath, 'r') as f:
+    with io.open(filepath, 'r') as f:
         return dict(securedrop_test_vars=yaml.safe_load(f))
