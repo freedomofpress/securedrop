@@ -16,6 +16,12 @@ from crypto_util import CryptoUtil, CryptoException
 from db import db
 
 
+def test_word_list_does_not_contain_empty_strings(journalist_app):
+    assert '' not in journalist_app.crypto_util.get_wordlist('en')
+    assert '' not in journalist_app.crypto_util.nouns
+    assert '' not in journalist_app.crypto_util.adjectives
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -28,11 +34,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_word_list_does_not_contain_empty_strings(self):
-        self.assertNotIn('', (current_app.crypto_util.get_wordlist('en')
-                              + current_app.crypto_util.nouns
-                              + current_app.crypto_util.adjectives))
 
     def test_clean(self):
         ok = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJ'
