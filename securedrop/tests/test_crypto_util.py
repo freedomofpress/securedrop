@@ -3,16 +3,10 @@ import io
 import os
 import pytest
 import re
-import unittest
-
-from flask import current_app
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import config
 import crypto_util
-import journalist_app
 import models
-import utils
 
 from crypto_util import CryptoUtil, CryptoException
 from db import db
@@ -220,27 +214,13 @@ def test_delete_reply_keypair(source_app, test_source):
     assert source_app.crypto_util.getkey(fid) is None
 
 
-class TestCryptoUtil(unittest.TestCase):
+def test_delete_reply_keypair_no_key(source_app):
+    """No exceptions should be raised when provided a filesystem id that
+    does not exist.
+    """
+    source_app.crypto_util.delete_reply_keypair('Reality Winner')
 
-    """The set of tests for crypto_util.py."""
 
-    def setUp(self):
-        self.__context = journalist_app.create_app(config).app_context()
-        self.__context.push()
-        utils.env.setup()
-
-    def tearDown(self):
-        utils.env.teardown()
-        self.__context.pop()
-
-    def test_delete_reply_keypair_no_key(self):
-        """No exceptions should be raised when provided a filesystem id that
-        does not exist.
-        """
-        current_app.crypto_util.delete_reply_keypair('Reality Winner')
-
-    def test_getkey(self):
-        source, _ = utils.db_helper.init_source()
-
-        self.assertIsNotNone(
-            current_app.crypto_util.getkey(source.filesystem_id))
+def test_getkey(source_app, test_source):
+    assert (source_app.crypto_util.getkey(test_source['filesystem_id'])
+            is not None)
