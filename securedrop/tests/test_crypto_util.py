@@ -154,6 +154,17 @@ def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
         assert plaintext == message
 
 
+def verify_genrandomid(app, locale):
+    id = app.crypto_util.genrandomid(locale=locale)
+    id_words = id.split()
+
+    assert crypto_util.clean(id) == id
+    assert len(id_words) == CryptoUtil.DEFAULT_WORDS_IN_RANDOM_ID
+
+    for word in id_words:
+        assert word in app.crypto_util.get_wordlist(locale)
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -166,15 +177,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def verify_genrandomid(self, locale):
-        id = current_app.crypto_util.genrandomid(locale=locale)
-        id_words = id.split()
-
-        self.assertEqual(id, crypto_util.clean(id))
-        self.assertEqual(len(id_words), CryptoUtil.DEFAULT_WORDS_IN_RANDOM_ID)
-        for word in id_words:
-            self.assertIn(word, current_app.crypto_util.get_wordlist(locale))
 
     def test_genrandomid_default_locale_is_en(self):
         self.verify_genrandomid('en')
