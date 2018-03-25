@@ -127,6 +127,33 @@ def test_encrypt_fingerprints_not_a_list_or_tuple(source_app, test_source):
     assert plaintext == message
 
 
+def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
+                                                        config,
+                                                        test_source):
+    message = 'test'
+
+    with source_app.app_context():
+        ciphertext = source_app.crypto_util.encrypt(
+            message,
+            [source_app.crypto_util.getkey(test_source['filesystem_id']),
+             config.JOURNALIST_KEY],
+            source_app.storage.path(test_source['filesystem_id'],
+                                    'somefile.gpg'))
+        plaintext = source_app.crypto_util.decrypt(test_source['codename'],
+                                                   ciphertext)
+
+        assert plaintext == message
+
+        # Since there's no way to specify which key to use for
+        # decryption to python-gnupg, we delete the `source`'s key and
+        # ensure we can decrypt with the `config.JOURNALIST_KEY`.
+        source_app.crypto_util.delete_reply_keypair(
+            test_source['filesystem_id'])
+        plaintext = source_app.crypto_util.gpg.decrypt(ciphertext).data
+
+        assert plaintext == message
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -139,26 +166,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_basic_encrypt_then_decrypt_multiple_recipients(self):
-        source, codename = utils.db_helper.init_source()
-        message = str(os.urandom(1))
-        ciphertext = current_app.crypto_util.encrypt(
-            message,
-            [current_app.crypto_util.getkey(source.filesystem_id),
-             config.JOURNALIST_KEY],
-            current_app.storage.path(source.filesystem_id, 'somefile.gpg'))
-        plaintext = current_app.crypto_util.decrypt(codename, ciphertext)
-
-        self.assertEqual(message, plaintext)
-
-        # Since there's no way to specify which key to use for
-        # decryption to python-gnupg, we delete the `source`'s key and
-        # ensure we can decrypt with the `config.JOURNALIST_KEY`.
-        current_app.crypto_util.delete_reply_keypair(source.filesystem_id)
-        plaintext_ = current_app.crypto_util.gpg.decrypt(ciphertext).data
-
-        self.assertEqual(message, plaintext_)
 
     def verify_genrandomid(self, locale):
         id = current_app.crypto_util.genrandomid(locale=locale)
