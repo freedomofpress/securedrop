@@ -192,6 +192,15 @@ def test_hash_codename(source_app):
     assert re.compile('^[2-7A-Z]{103}=$').match(hashed_codename)
 
 
+def test_display_id(source_app):
+    id = source_app.crypto_util.display_id()
+    id_words = id.split()
+
+    assert len(id_words) == 2
+    assert id_words[0] in source_app.crypto_util.adjectives
+    assert id_words[1] in source_app.crypto_util.nouns
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -204,14 +213,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_display_id(self):
-        id = current_app.crypto_util.display_id()
-        id_words = id.split()
-
-        self.assertEqual(len(id_words), 2)
-        self.assertIn(id_words[0], current_app.crypto_util.adjectives)
-        self.assertIn(id_words[1], current_app.crypto_util.nouns)
 
     def test_genkeypair(self):
         codename = current_app.crypto_util.genrandomid()
