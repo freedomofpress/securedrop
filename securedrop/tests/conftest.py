@@ -73,10 +73,11 @@ def config(tmpdir):
     sqlite = data.join('db.sqlite')
 
     gpg = gnupg.GPG(homedir=str(keys))
-    with io.open(path.join(path.dirname(__file__),
-                           'files',
-                           'test_journalist_key.pub')) as f:
-        gpg.import_keys(f.read())
+    for ext in ['sec', 'pub']:
+        with io.open(path.join(path.dirname(__file__),
+                               'files',
+                               'test_journalist_key.{}'.format(ext))) as f:
+            gpg.import_keys(f.read())
 
     cnf.SECUREDROP_DATA_ROOT = str(data)
     cnf.GPG_KEY_DIR = str(keys)
