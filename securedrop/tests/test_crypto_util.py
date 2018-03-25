@@ -2,6 +2,7 @@
 import io
 import os
 import pytest
+import re
 import unittest
 
 from flask import current_app
@@ -184,6 +185,13 @@ def test_get_wordlist(source_app, config):
             assert source_app.crypto_util.get_wordlist('unknown') == list_en
 
 
+def test_hash_codename(source_app):
+    codename = source_app.crypto_util.genrandomid()
+    hashed_codename = source_app.crypto_util.hash_codename(codename)
+
+    assert re.compile('^[2-7A-Z]{103}=$').match(hashed_codename)
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -204,12 +212,6 @@ class TestCryptoUtil(unittest.TestCase):
         self.assertEqual(len(id_words), 2)
         self.assertIn(id_words[0], current_app.crypto_util.adjectives)
         self.assertIn(id_words[1], current_app.crypto_util.nouns)
-
-    def test_hash_codename(self):
-        codename = current_app.crypto_util.genrandomid()
-        hashed_codename = current_app.crypto_util.hash_codename(codename)
-
-        self.assertRegexpMatches(hashed_codename, '^[2-7A-Z]{103}=$')
 
     def test_genkeypair(self):
         codename = current_app.crypto_util.genrandomid()
