@@ -201,6 +201,19 @@ def test_display_id(source_app):
     assert id_words[1] in source_app.crypto_util.nouns
 
 
+def test_genkeypair(source_app):
+    with source_app.app_context():
+        codename = source_app.crypto_util.genrandomid()
+        filesystem_id = source_app.crypto_util.hash_codename(codename)
+        journalist_filename = source_app.crypto_util.display_id()
+        source = models.Source(filesystem_id, journalist_filename)
+        db.session.add(source)
+        db.session.commit()
+        source_app.crypto_util.genkeypair(source.filesystem_id, codename)
+
+        assert source_app.crypto_util.getkey(filesystem_id) is not None
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -213,17 +226,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_genkeypair(self):
-        codename = current_app.crypto_util.genrandomid()
-        filesystem_id = current_app.crypto_util.hash_codename(codename)
-        journalist_filename = current_app.crypto_util.display_id()
-        source = models.Source(filesystem_id, journalist_filename)
-        db.session.add(source)
-        db.session.commit()
-        current_app.crypto_util.genkeypair(source.filesystem_id, codename)
-
-        self.assertIsNotNone(current_app.crypto_util.getkey(filesystem_id))
 
     def test_delete_reply_keypair(self):
         source, _ = utils.db_helper.init_source()
