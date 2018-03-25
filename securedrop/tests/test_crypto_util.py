@@ -214,6 +214,12 @@ def test_genkeypair(source_app):
         assert source_app.crypto_util.getkey(filesystem_id) is not None
 
 
+def test_delete_reply_keypair(source_app, test_source):
+    fid = test_source['filesystem_id']
+    source_app.crypto_util.delete_reply_keypair(fid)
+    assert source_app.crypto_util.getkey(fid) is None
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -226,12 +232,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_delete_reply_keypair(self):
-        source, _ = utils.db_helper.init_source()
-        current_app.crypto_util.delete_reply_keypair(source.filesystem_id)
-
-        self.assertIsNone(current_app.crypto_util.getkey(source.filesystem_id))
 
     def test_delete_reply_keypair_no_key(self):
         """No exceptions should be raised when provided a filesystem id that
