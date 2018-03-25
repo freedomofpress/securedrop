@@ -169,6 +169,21 @@ def test_genrandomid_default_locale_is_en(source_app):
     verify_genrandomid(source_app, 'en')
 
 
+def test_get_wordlist(source_app, config):
+    locales = []
+    wordlists_path = os.path.join(config.SECUREDROP_ROOT, 'wordlists')
+    for f in os.listdir(wordlists_path):
+        if f.endswith('.txt') and f != 'en.txt':
+            locales.append(f.split('.')[0])
+
+    with source_app.app_context():
+        list_en = source_app.crypto_util.get_wordlist('en')
+        for locale in locales:
+            assert source_app.crypto_util.get_wordlist(locale) != list_en
+            verify_genrandomid(source_app, locale)
+            assert source_app.crypto_util.get_wordlist('unknown') == list_en
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -181,20 +196,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_get_wordlist(self):
-        locales = []
-        wordlists_path = os.path.join(config.SECUREDROP_ROOT, 'wordlists')
-        for f in os.listdir(wordlists_path):
-            if f.endswith('.txt') and f != 'en.txt':
-                locales.append(f.split('.')[0])
-        wordlist_en = current_app.crypto_util.get_wordlist('en')
-        for locale in locales:
-            self.assertNotEqual(wordlist_en,
-                                current_app.crypto_util.get_wordlist(locale))
-            self.verify_genrandomid(locale)
-        self.assertEqual(wordlist_en,
-                         current_app.crypto_util.get_wordlist('unknown'))
 
     def test_display_id(self):
         id = current_app.crypto_util.display_id()
