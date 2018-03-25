@@ -165,6 +165,10 @@ def verify_genrandomid(app, locale):
         assert word in app.crypto_util.get_wordlist(locale)
 
 
+def test_genrandomid_default_locale_is_en(source_app):
+    verify_genrandomid(source_app, 'en')
+
+
 class TestCryptoUtil(unittest.TestCase):
 
     """The set of tests for crypto_util.py."""
@@ -177,9 +181,6 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
         self.__context.pop()
-
-    def test_genrandomid_default_locale_is_en(self):
-        self.verify_genrandomid('en')
 
     def test_get_wordlist(self):
         locales = []
