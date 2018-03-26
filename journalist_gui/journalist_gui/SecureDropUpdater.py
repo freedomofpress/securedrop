@@ -64,7 +64,8 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.plainTextEdit.setReadOnly = True
 
         self.progressBar.setProperty("value", 50)
-        failure_reason = self.configure_tails()
+        if self.update_success:
+            failure_reason = self.configure_tails()
         self.progressBar.setProperty("value", 80)
 
         if self.update_success:
