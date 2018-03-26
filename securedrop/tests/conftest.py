@@ -67,15 +67,17 @@ def config(tmpdir):
 
     data = tmpdir.mkdir('data')
     keys = data.mkdir('keys')
+    os.chmod(str(keys), 0o700)
     store = data.mkdir('store')
     tmp = data.mkdir('tmp')
     sqlite = data.join('db.sqlite')
 
     gpg = gnupg.GPG(homedir=str(keys))
-    with io.open(path.join(path.dirname(__file__),
-                           'files',
-                           'test_journalist_key.pub')) as f:
-        gpg.import_keys(f.read())
+    for ext in ['sec', 'pub']:
+        with io.open(path.join(path.dirname(__file__),
+                               'files',
+                               'test_journalist_key.{}'.format(ext))) as f:
+            gpg.import_keys(f.read())
 
     cnf.SECUREDROP_DATA_ROOT = str(data)
     cnf.GPG_KEY_DIR = str(keys)
@@ -131,9 +133,10 @@ def test_admin(journalist_app):
 @pytest.fixture(scope='function')
 def test_source(journalist_app):
     with journalist_app.app_context():
-        source, _ = utils.db_helper.init_source()
+        source, codename = utils.db_helper.init_source()
         filesystem_id = source.filesystem_id
         return {'source': source,
+                'codename': codename,
                 'filesystem_id': filesystem_id}
 
 
