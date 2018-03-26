@@ -1,8 +1,8 @@
 Getting Started with Weblate Translations
 =========================================
 
-SecureDrop is a whistleblower submission system that media
-organizations can use to securely accept documents from and
+SecureDrop is a whistleblower submission system for media
+organizations to securely accept documents from and
 communicate with anonymous sources. For more information, you may be
 interested to learn about :doc:`what makes SecureDrop unique
 <../what_makes_securedrop_unique>`.
@@ -50,10 +50,10 @@ Go to the `Weblate registration page`_
 
 |Weblate registration page screenshot|
 
-Fill the form and click **Register** and check your mail for a
-confirmation mail from **admin@securedrop.club** with the subject
-**[Weblate] Your registration on Weblate**. Click the first link to
-confirm: you will be redirected to the `Weblate dashboard`_:
+Fill the form and click **Register** and check your email for a message 
+with the subject **[Weblate] Your registration on Weblate** containing a
+confirmation link from **admin@securedrop.club**
+Confirming by clicking the first link will redirect you to the `Weblate dashboard`_:
 
 |Weblate dashboard screenshot|
 
@@ -79,37 +79,37 @@ your native language:
 Translate a phrase
 ------------------
 
-Each string to be translated is shown in a **Source** box and you can
+Each translatable string is shown in a **Source** box and you can
 translate it right below in the **Translation** text area. When you
-are done, click **Save** and another string will be proposed.
+are done, click **Save** and the next untranslated string will appear.
 
 |Weblate translate screenshot|
 
-For most strings a screenshot is available on the right side to show
-how it looks in context. The screenshot can be displayed in full size
-by clicking on it:
+For most strings a contextual screenshot is available on the right side showing
+how it looks in the software. Click to see it in full size.
 
 |Weblate translate context screenshot|
 
 Instructions about a user navigation
 ------------------------------------
 
-The strings may contain instructions relative to the user interface of
-a software. The software should be run and the steps verified to find
-the translation. For instance::
+Strings also come with instructions, further explaining them, 
+and detailing where they are to be found in the user interface of the software, in case
+you still aren't sure. When doing so, also verify that the steps needed to find it
+are correct.::
 
   ...tap "Set up account"...
 
-must be translated by navigating to the localized interface of Google
-Authenticator and using the translation displayed in place of **Set up
+To find this, navigate to the localized interface of FreeOTP to get a firmer grasp
+of what it does, and then translate the string displayed in place of **Set up
 account**.
 
 Placeholders
 ------------
 
-The strings may contain placeholders between braces: they will be
-substituted with actual content at runtime and must be left
-unmodified. For instance::
+Strings may contain placeholders, seen as content in between braces:
+These pick in other names and functions of the software, and must be left
+unmodified, but they can be moved around in a string. For instance::
 
   Edit user {user}
 
@@ -128,31 +128,30 @@ And it would be **incorrect** to translate the placeholder like so::
 Reviews
 -------
 
-Every translated string must be reviewed before it can be merged in
-SecureDrop to make sure the source or journalist will not be confused
+Translated strings are not put into SecureDrop before they are also reviewed.
+This is to make sure the source or journalist will not be confused
 by an incorrect translation.
 
 Anyone can contribute translations, just like anyone can edit
-wikipedia. But they do not have the right to review translations, only
-trusted translators can. When translators feel confident they can
-become reviewers, they can ask for their rights to be elevated by
-posting a message in the `translation category of the SecureDrop forum`_.
+Wikipedia. However the right to review translations, is only
+extended to trusted translators can. You can ask for your _translator_
+status to be elevated to _reviewer_ by posting a message in 
+the `translation category of the SecureDrop forum`_.
 
-A reviewer with elevated permissions can see ``Waiting for review``
-and ``Approved`` radio buttons which are initially set to ``Waiting
+A reviewer sees ``Waiting for review`` and ``Approved`` radio buttons 
+next to strings, all of which are initially set to ``Waiting
 for review``.
 
 |Waiting for review screenshot|
 
-When the translation is correct, the reviewer should change to
+When the translation is deemed correct, the reviewer should change it to
 ``Approved``.
 
 |Approved screenshot|
 
-When in this state, a translation can no longer be modified by
-translators who do not have elevated permissions. They can still
-suggest modifications if they notice something wrong and comment if
-they disagree.
+When in this state, only reviewers can modify the string.
+Translators can still suggest modifications if they notice something wrong,
+and comment if they disagree.
 
 |Not a reviewer screenshot|
 
@@ -160,8 +159,8 @@ they disagree.
 Glossary
 --------
 
-A :doc:`glossary <../terminology>` is available to explain the
-SecureDrop specific terms. In addition, it is important that some key
+A :doc:`glossary <../terminology>` is available, explaining terms specific
+to SecureDrop. It is also important that key
 terms are understood and precisely translated.
 
 Adversary
@@ -170,68 +169,67 @@ Adversary
 Your adversary is the person or organization attempting to undermine
 your security goals. Adversaries can be different, depending on the
 situation. For instance, you may worry about criminals spying on the
-network at a cafe, or your classmates at a school. Often the adversary
+network of a cafe, or your classmates at a school. Often the adversary
 is hypothetical.
 
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/adversary>`__
+This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/adversary>`__
 
 Air gap
 .......
 
-A computer or network that is physically isolated from all other
-networks, including the Internet, is said to be air-gapped.
+If there are no networked means of communicating with a computer you own,
+meaning a computer or a whole network is physically isolated from all other
+networks, including by its very nature the Internet, is said to be air-gapped.
 
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/air-gap>`__
+This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/air-gap>`__
 
 Attack
 ......
 
-In computer security, an attack is a method that can be used to
-compromise security, or its actual use. An attacker is the person or
-organization using an attack. An attack method is sometimes called an
-"exploit."
+In terms of computer security, an attack is a method used to
+attempt compromising security, or just gaining access to its actual use.
+An attacker is the person or organization carrying out an attack. An attack method, something targeting a 
+weakness in the security, is sometimes called an "exploit."
 
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/attack>`__
+This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/attack>`__
 
 Command line tool (command)
 ...........................
 
-The "command line" is an ancient way of giving a computer a series of
+The "command line" works by way of giving a computer a series of
 small, self-contained orders (think of those science fiction movies
 where teenage geniuses type long strings of green text onto black
 screens). To use a command line tool, the user types a command into a
 window called a terminal emulator, hits the return or enter key, and
-then receives a textual response in the same window. Windows, Linux
+then receives a textual response in the same window. Windows, Linux|GNU
 and Apple desktop computers still let you run software using this
-interface, and even some mobile phones can do the same with the right
-app. The command line can be used to run software pre-packaged with
-your operating system. Some downloadable programs, especially
+interface, as is the case on some mobile phones if you install the right app.
+The command line can be used to run software pre-packaged with
+your operating system, or install new ones. Some downloadable programs, especially
 technical utilities, use the command line instead of a more familiar
 "icons and buttons" user interface. The command line needn't be scary,
 but it does require you to type in exactly the right set of letters
 and numbers to get the correct result, and it's often unclear what to
 do if the responses don't match your expectations.
 
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/command-line-tool>`__
+This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/command-line-tool>`__
 
 
 Cryptography
 ............
 
-The art of designing secret codes or ciphers that let you send and
-receive messages to a recipient without others being able to
-understand the message.
+The art of designing secret codes or ciphers that let you exchange messages
+with a recipient without others being able to understand the message.
 
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/cryptography>`__
+This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/cryptography>`__
 
 Decrypt
 .......
 
 Make a secret message or data intelligible. The idea behind encryption
-is to make messages that can only be decrypted by the person or people
-who are meant to receive them.
+is to make messages that can only be decrypted by the person or people meant to receive them.
 
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/decrypt>`__
+This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/decrypt>`__
 
 Encryption
 ..........
@@ -355,9 +353,9 @@ confirmation that you are who you say you are. The second factor could
 be a one-off secret code, a number generated by a program running on a
 mobile device, or a device that you carry and that you can use to
 confirm who you are. Companies like banks, and major internet services
-like Google, Paypal and Twitter now offer two-factor authentication.
+like Google, PayPal and Twitter now offer two-factor authentication.
 
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/two-factor-authentication>`__
+This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/two-factor-authentication>`__
 
 Weblate glossary
 ----------------
@@ -392,9 +390,9 @@ Getting help
 
 Should you need help, you can do one of the following:
 
-* post a message in the `translation category of the SecureDrop forum`_
-* chat in the `SecureDrop instant messenging channel`_
-* read the `Weblate documentation`_
+* Post a message in the `translation category of the SecureDrop forum`_
+* Chat in the `SecureDrop instant messenging channel`_
+* Read the `Weblate documentation`_
 
 .. _`translation category of the SecureDrop forum`: https://forum.securedrop.club/c/translations
 .. _`SecureDrop instant messenging channel`: https://gitter.im/freedomofpress/securedrop
@@ -408,7 +406,7 @@ Frequently Asked Questions
 
   You can send a request for a new language in the `translation
   category of the SecureDrop forum`_. But please make sure the
-  language you want is definitely not present!
+  language you want is not already present.
 
 .. |Weblate registration page screenshot| image:: ../images/weblate/weblate1.png
 .. |GitHub authorization page screenshot| image:: ../images/weblate/weblate2.png
