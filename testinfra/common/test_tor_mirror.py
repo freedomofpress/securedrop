@@ -78,3 +78,18 @@ def test_tor_project_repo_files_absent(host):
     """
     f = "/etc/apt/sources.list.d/deb_torproject_org_torproject_org.list"
     assert not host.file(f).exists
+
+
+def test_tor_mirror_repo_declared_only_once(host):
+    """
+    The apt repo config is written both via the `securedrop-config`
+    package and via Ansible at install time. The filename logic
+    was slightly different for both between 0.5 and 0.6, so let's
+    ensure that we've cleaned up adequately, and the tor-apt mirror
+    is declared on the system only once.
+    """
+    c = host.command("grep -rl tor-apt /etc/apt/")
+    assert c.rc == 0
+    files_found = c.stdout.rstrip("\n").split("\n")
+    # Two files are expected, cron-apt and one apt repo
+    assert len(files_found) == 2
