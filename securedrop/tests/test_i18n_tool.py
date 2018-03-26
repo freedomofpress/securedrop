@@ -155,7 +155,7 @@ class TestI18NTool(object):
         assert not exists(mo_file)
         i18n_tool.I18NTool().main(args)
         assert exists(mo_file)
-        with io.open(mo_file) as fobj:
+        with io.open(mo_file, mode='rb') as fobj:
             mo = fobj.read()
             assert 'code hello i18n' in mo
             assert 'template hello i18n' in mo
@@ -218,7 +218,7 @@ class TestI18NTool(object):
             '--compile',
         ])
         assert old_po_mtime == getmtime(po_file)
-        with io.open(mo_file) as fobj:
+        with io.open(mo_file, mode='rb') as fobj:
             mo = fobj.read()
             assert 'code hello i18n' in mo
             assert 'template hello i18n' not in mo
