@@ -16,8 +16,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import argparse
-import logging
 import os
 import re
 
@@ -32,7 +30,6 @@ import i18n_tool
 import journalist_app as journalist_app_module
 import pytest
 import source_app
-import version
 
 
 def verify_i18n(app):
@@ -178,18 +175,15 @@ def test_i18n(journalist_app, config):
         'tests/i18n/code.py',
         'tests/i18n/template.html',
     ]
-    kwargs = {
-        'translations_dir': config.TEMP_DIR,
-        'mapping': 'tests/i18n/babel.cfg',
-        'source': sources,
-        'extract_update': True,
-        'compile': True,
-        'verbose': logging.DEBUG,
-        'version': version.__version__,
-    }
-    args = argparse.Namespace(**kwargs)
-    i18n_tool.setup_verbosity(args)
-    i18n_tool.translate_messages(args)
+
+    i18n_tool.I18NTool().main([
+        '--verbose',
+        'translate-messages',
+        '--mapping', 'tests/i18n/babel.cfg',
+        '--translations-dir', config.TEMP_DIR,
+        '--sources', ",".join(sources),
+        '--extract-update',
+    ])
 
     i18n_tool.sh("""
     pybabel init -i {d}/messages.pot -d {d} -l en_US
@@ -215,7 +209,12 @@ def test_i18n(journalist_app, config):
           {d}/es_ES/LC_MESSAGES/messages.po
     """.format(d=config.TEMP_DIR))
 
-    i18n_tool.translate_messages(args)
+    i18n_tool.I18NTool().main([
+        '--verbose',
+        'translate-messages',
+        '--translations-dir', config.TEMP_DIR,
+        '--compile',
+    ])
 
     fake_config = SDConfig()
     fake_config.SUPPORTED_LOCALES = [

@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import argparse
 import io
 import os
 from os.path import abspath, dirname, exists, getmtime, join, realpath
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import logging
 import i18n_tool
+from mock import patch
 import pytest
 import shutil
+import signal
 import subprocess
 import time
-import version
 
 
 class TestI18NTool(object):
@@ -19,23 +19,47 @@ class TestI18NTool(object):
     def setup(self):
         self.dir = abspath(dirname(realpath(__file__)))
 
+    def test_main(self, tmpdir, caplog):
+        with pytest.raises(SystemExit):
+            i18n_tool.I18NTool().main(['--help'])
+
+        tool = i18n_tool.I18NTool()
+        with patch.object(tool,
+                          'setup_verbosity',
+                          side_effect=KeyboardInterrupt):
+            assert tool.main([
+                'translate-messages',
+                '--translations-dir', str(tmpdir)
+            ]) == signal.SIGINT
+
+        assert tool.main([
+            'translate-messages',
+            '--translations-dir', str(tmpdir),
+            '--extract-update'
+        ]) is None
+        assert 'pybabel extract' not in caplog.text
+
+        assert tool.main([
+            '--verbose',
+            'translate-messages',
+            '--translations-dir', str(tmpdir),
+            '--extract-update'
+        ]) is None
+        assert 'pybabel extract' in caplog.text
+
     def test_translate_desktop_l10n(self, tmpdir):
         in_files = {}
         for what in ('source', 'journalist'):
             in_files[what] = join(str(tmpdir), what + '.desktop.in')
             shutil.copy(join(self.dir, 'i18n/' + what + '.desktop.in'),
                         in_files[what])
-        kwargs = {
-            'translations_dir': str(tmpdir),
-            'source': [in_files['source']],
-            'extract_update': True,
-            'compile': False,
-            'verbose': logging.DEBUG,
-            'version': version.__version__,
-        }
-        args = argparse.Namespace(**kwargs)
-        i18n_tool.setup_verbosity(args)
-        i18n_tool.translate_desktop(args)
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'translate-desktop',
+            '--translations-dir', str(tmpdir),
+            '--sources', in_files['source'],
+            '--extract-update',
+        ])
         messages_file = join(str(tmpdir), 'desktop.pot')
         assert exists(messages_file)
         with io.open(messages_file) as fobj:
@@ -50,10 +74,15 @@ class TestI18NTool(object):
         #
         # Extract+update but do not compile
         #
-        kwargs['source'] = in_files.values()
         old_messages_mtime = getmtime(messages_file)
         assert not exists(i18n_file)
-        i18n_tool.translate_desktop(args)
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'translate-desktop',
+            '--translations-dir', str(tmpdir),
+            '--sources', ",".join(in_files.values()),
+            '--extract-update',
+        ])
         assert not exists(i18n_file)
         current_messages_mtime = getmtime(messages_file)
         assert old_messages_mtime < current_messages_mtime
@@ -76,12 +105,14 @@ class TestI18NTool(object):
         #
         # Compile but do not extract+update
         #
-        kwargs['source'] = in_files.values() + ['BOOM']
-        kwargs['extract_update'] = False
-        kwargs['compile'] = True
-        args = argparse.Namespace(**kwargs)
         old_messages_mtime = current_messages_mtime
-        i18n_tool.translate_desktop(args)
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'translate-desktop',
+            '--translations-dir', str(tmpdir),
+            '--sources', ",".join(in_files.values() + ['BOOM']),
+            '--compile',
+        ])
         assert old_messages_mtime == getmtime(messages_file)
         with io.open(po_file) as fobj:
             po = fobj.read()
@@ -96,18 +127,16 @@ class TestI18NTool(object):
             join(self.dir, 'i18n/code.py'),
             join(self.dir, 'i18n/template.html'),
         ]
-        kwargs = {
-            'translations_dir': str(tmpdir),
-            'mapping': join(self.dir, 'i18n/babel.cfg'),
-            'source': source,
-            'extract_update': True,
-            'compile': True,
-            'verbose': logging.DEBUG,
-            'version': version.__version__,
-        }
-        args = argparse.Namespace(**kwargs)
-        i18n_tool.setup_verbosity(args)
-        i18n_tool.translate_messages(args)
+        args = [
+            '--verbose',
+            'translate-messages',
+            '--translations-dir', str(tmpdir),
+            '--mapping', join(self.dir, 'i18n/babel.cfg'),
+            '--sources', ",".join(source),
+            '--extract-update',
+            '--compile',
+        ]
+        i18n_tool.I18NTool().main(args)
         messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
         with io.open(messages_file) as fobj:
@@ -124,29 +153,24 @@ class TestI18NTool(object):
         ))
         mo_file = join(locale_dir, 'LC_MESSAGES/messages.mo')
         assert not exists(mo_file)
-        i18n_tool.translate_messages(args)
+        i18n_tool.I18NTool().main(args)
         assert exists(mo_file)
-        with io.open(mo_file) as fobj:
+        with io.open(mo_file, mode='rb') as fobj:
             mo = fobj.read()
             assert 'code hello i18n' in mo
             assert 'template hello i18n' in mo
 
     def test_translate_messages_compile_arg(self, tmpdir):
-        source = [
-            join(self.dir, 'i18n/code.py'),
+        args = [
+            '--verbose',
+            'translate-messages',
+            '--translations-dir', str(tmpdir),
+            '--mapping', join(self.dir, 'i18n/babel.cfg'),
         ]
-        kwargs = {
-            'translations_dir': str(tmpdir),
-            'mapping': join(self.dir, 'i18n/babel.cfg'),
-            'source': source,
-            'extract_update': True,
-            'compile': False,
-            'verbose': logging.DEBUG,
-            'version': version.__version__,
-        }
-        args = argparse.Namespace(**kwargs)
-        i18n_tool.setup_verbosity(args)
-        i18n_tool.translate_messages(args)
+        i18n_tool.I18NTool().main(args + [
+            '--sources', join(self.dir, 'i18n/code.py'),
+            '--extract-update',
+        ])
         messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
         with io.open(messages_file) as fobj:
@@ -173,7 +197,10 @@ class TestI18NTool(object):
         #
         old_po_mtime = getmtime(po_file)
         assert not exists(mo_file)
-        i18n_tool.translate_messages(args)
+        i18n_tool.I18NTool().main(args + [
+            '--sources', join(self.dir, 'i18n/code.py'),
+            '--extract-update',
+        ])
         assert not exists(mo_file)
         current_po_mtime = getmtime(po_file)
         assert old_po_mtime < current_po_mtime
@@ -185,16 +212,162 @@ class TestI18NTool(object):
             join(self.dir, 'i18n/code.py'),
             join(self.dir, 'i18n/template.html'),
         ]
-        kwargs['extract_update'] = False
-        kwargs['compile'] = True
-        args = argparse.Namespace(**kwargs)
         old_po_mtime = current_po_mtime
-        i18n_tool.translate_messages(args)
+        i18n_tool.I18NTool().main(args + [
+            '--sources', ",".join(source),
+            '--compile',
+        ])
         assert old_po_mtime == getmtime(po_file)
-        with io.open(mo_file) as fobj:
+        with io.open(mo_file, mode='rb') as fobj:
             mo = fobj.read()
             assert 'code hello i18n' in mo
             assert 'template hello i18n' not in mo
+
+    def test_require_git_email_name(self, tmpdir):
+        i18n_tool.sh("""
+        cd {dir}
+        git init
+        """.format(dir=str(tmpdir)))
+        with pytest.raises(Exception) as excinfo:
+            i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
+        assert 'please set name' in excinfo.value.message
+        i18n_tool.sh("""
+        cd {dir}
+        git config user.email "you@example.com"
+        git config user.name "Your Name"
+        """.format(dir=str(tmpdir)))
+        assert i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
+
+    def test_update_docs(self, tmpdir, caplog):
+        os.makedirs(join(str(tmpdir), 'includes'))
+        i18n_tool.sh("""
+        cd {dir}
+        git init
+        git config user.email "you@example.com"
+        git config user.name "Your Name"
+        mkdir includes
+        touch includes/l10n.txt
+        git add includes/l10n.txt
+        git commit -m 'init'
+        """.format(dir=str(tmpdir)))
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-docs',
+            '--documentation-dir', str(tmpdir)])
+        assert 'l10n.txt updated' in caplog.text
+        caplog.clear()
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-docs',
+            '--documentation-dir', str(tmpdir)])
+        assert 'l10n.txt already up to date' in caplog.text
+
+    def test_update_from_weblate(self, tmpdir, caplog):
+        d = str(tmpdir)
+        i18n_tool.sh("""
+        set -ex
+        for r in i18n securedrop ; do
+           mkdir {d}/$r
+           cd {d}/$r
+           git init
+           git config user.email "you@example.com"
+           git config user.name "Loïc Nordhøy"
+           touch README.md
+           git add README.md
+           git commit -m 'README' README.md
+        done
+        cp -a {o}/i18n/* {d}/i18n
+        cd {d}/i18n
+        git add securedrop install_files
+        git commit -m 'init' -a
+        git checkout -b i18n master
+        """.format(o=self.dir,
+                   d=d))
+
+        def r():
+            return "".join([str(l) for l in caplog.records])
+
+        #
+        # de_DE is not amount the supported languages, it is not taken
+        # into account despite the fact that it exists in weblate.
+        #
+        caplog.clear()
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-from-weblate',
+            '--root', join(str(tmpdir), 'securedrop'),
+            '--url', join(str(tmpdir), 'i18n'),
+            '--supported-languages', 'nl',
+        ])
+        assert 'l10n: updated nl' in r()
+        assert 'l10n: updated de_DE' not in r()
+
+        #
+        # de_DE is added but there is no change in the nl translation
+        # therefore nothing is done for nl
+        #
+        caplog.clear()
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-from-weblate',
+            '--root', join(str(tmpdir), 'securedrop'),
+            '--url', join(str(tmpdir), 'i18n'),
+            '--supported-languages', 'nl,de_DE',
+        ])
+        assert 'l10n: updated nl' not in r()
+        assert 'l10n: updated de_DE' in r()
+
+        #
+        # nothing new for nl or de_DE: nothing is done
+        #
+        caplog.clear()
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-from-weblate',
+            '--root', join(str(tmpdir), 'securedrop'),
+            '--url', join(str(tmpdir), 'i18n'),
+            '--supported-languages', 'nl,de_DE',
+        ])
+        assert 'l10n: updated nl' not in r()
+        assert 'l10n: updated de_DE' not in r()
+        message = i18n_tool.sh("git -C {d}/securedrop show".format(d=d))
+        assert u"Loïc" in message
+
+        #
+        # an update is done to nl in weblate
+        #
+        i18n_tool.sh("""
+        set -ex
+        cd {d}/i18n
+        f=securedrop/translations/nl/LC_MESSAGES/messages.po
+        sed -i -e 's/inactiviteit/INACTIVITEIT/' $f
+        git add $f
+        git config user.email "somone@else.com"
+        git config user.name "Someone Else"
+        git commit -m 'translation change' $f
+
+        cd {d}/securedrop
+        git config user.email "somone@else.com"
+        git config user.name "Someone Else"
+        """.format(d=d))
+
+        #
+        # the nl translation update from weblate is copied
+        # over.
+        #
+        caplog.clear()
+        i18n_tool.I18NTool().main([
+            '--verbose',
+            'update-from-weblate',
+            '--root', join(str(tmpdir), 'securedrop'),
+            '--url', join(str(tmpdir), 'i18n'),
+            '--supported-languages', 'nl,de_DE',
+        ])
+        assert 'l10n: updated nl' in r()
+        assert 'l10n: updated de_DE' not in r()
+        message = i18n_tool.sh("git -C {d}/securedrop show".format(d=d))
+        assert "Someone Else" in message
+        assert u"Loïc" not in message
 
 
 class TestSh(object):
