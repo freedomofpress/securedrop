@@ -73,6 +73,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             self.progressBar.setProperty("value", 100)
             self.alert_success()
         else:
+            self.statusbar.showMessage(failure_reason)
             self.alert_failure(failure_reason)
 
     def alert_success(self):
