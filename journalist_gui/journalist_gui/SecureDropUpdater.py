@@ -13,10 +13,6 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         super(UpdaterApp, self).__init__(parent)
         self.setupUi(self)
 
-        self.window_width = 350
-        self.window_collapsed_height = 175
-        self.window_full_height = 425
-
         self.progressBar.setProperty("value", 0)
         self.setWindowTitle(strings.window_title)
         self.setWindowIcon(QtGui.QIcon('./securedrop_icon.png'))
@@ -29,18 +25,16 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.pushButton_2.clicked.connect(self.update_securedrop)
 
         # Begin program with output box hidden.
-        self.groupBox.toggled.connect(self.expand_or_shrink_output_text_box)
-        self.groupBox.setChecked(False)
+        self.checkBox.toggled.connect(self.expand_or_shrink_output_text_box)
+        self.checkBox.setChecked(False)
         self.expand_or_shrink_output_text_box()
 
     def expand_or_shrink_output_text_box(self):
         # When user toggles the checkbox, expand the output box.
-        if self.groupBox.isChecked():
-            self.resize(self.window_width, self.window_full_height)
-            self.frame.setVisible(True)
+        if self.checkBox.isChecked():
+            self.plainTextEdit.setEnabled(True)
         else:
-            self.resize(self.window_width, self.window_collapsed_height)
-            self.frame.setVisible(False)
+            self.plainTextEdit.setEnabled(False)
 
     def update_securedrop(self):
         self.progressBar.setProperty("value", 10)
