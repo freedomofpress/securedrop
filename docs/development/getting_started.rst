@@ -124,8 +124,9 @@ by `Freedom of the Press Foundation employees
 <https://packages.securedrop.club/>`__ is signed by a `community of
 volunteers
 <https://securedrop-club.readthedocs.io/en/latest/team.html>`__ and
-must not be used for production purproses but is convenient for tests
-and demonstrations.
+must not be used for production purposes but is convenient for tests
+and demonstrations. The current responsibilities of the release manager is
+documented in this :doc:`detailed documentation <release_management>`.
 
 If you are a `Debian Developer <https://www.debian.org/devel/>`__ you
 can help improve packaging and the release process:
