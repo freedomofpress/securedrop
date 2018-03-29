@@ -338,6 +338,10 @@ class SiteConfig(object):
              u'SASL password for sending OSSEC alerts',
              SiteConfig.ValidateOSSECPassword(),
              None],
+            ['enable_ssh_over_tor', True, bool,
+             u'Enable SSH over Tor',
+             SiteConfig.ValidateYesNo(),
+             lambda x: x.lower() == 'yes'],
             ['securedrop_supported_locales', [], types.ListType,
              u'Space separated list of additional locales to support '
              '(' + translations + ')',
