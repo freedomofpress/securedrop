@@ -309,6 +309,7 @@ The new and updated strings are uploaded to Weblate. This is done late in the Se
 * Add a prominent Weblate whiteboard announcement that reads `The X.Y.Z deadline is MM DD, YY midnight. String freeze will be in effect MM DD, YY midnight.`
 * Create a pull request for every source string suggestion coming from translators
 * Backport every commit changing a source string to the release branch
+* Update the `i18n timeline`_ and `Weblate whiteboard`_
 
 One week before the release: string freeze
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -318,6 +319,7 @@ One week before the release: string freeze
 * Post an announcement `to the translation section of the forum <https://forum.securedrop.club/c/translations>`__ (see `an example  <https://forum.securedrop.club/t/4-securedrop-strings-need-work-march-2018-string-freeze/461>`__)
 * Remind all developers about the string freeze, in the `chat room <https://gitter.im/freedomofpress/securedrop>`__
 * Add a prominent Weblate whiteboard announcement that reads `The X.Y.Z deadline is Month day, year midnight. String freeze is in effect: no source string are modified before the release.`
+* Update the `i18n timeline`_ and `Weblate whiteboard`_
 
 The day of the release
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -326,6 +328,7 @@ The day of the release
 * :ref:`Update the screenshots <updating_screenshots>`
 * Remove the prominent Weblate whiteboard announcement
 * Provide translator credits to add to the SecureDrop release announcement
+* Update the `i18n timeline`_ and `Weblate whiteboard`_
 
 Translator credits
 ------------------
@@ -413,6 +416,8 @@ Granting reviewer privileges in Weblate
 .. _`Weblate commit page for SecureDrop`: https://weblate.securedrop.club/projects/securedrop/securedrop/#repository
 .. _`Weblate translation creation page`: https://weblate.securedrop.club/new-lang/securedrop/securedrop/
 .. _`Weblate desktop translation creation page`: https://weblate.securedrop.club/new-lang/securedrop/desktop/
+.. _`i18n timeline`: https://forum.securedrop.club/t/about-the-translations-category/16
+.. _`Weblate whiteboard`: https://weblate.securedrop.club/admin/trans/whiteboardmessage/5/change/
 
 .. |Weblate commit Lock| image:: ../images/weblate/admin-lock.png
 .. |Weblate commit Locked| image:: ../images/weblate/admin-locked.png
