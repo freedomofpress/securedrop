@@ -1,0 +1,32 @@
+---
+- block:
+    - name: Seek for existing tor aths ssh files
+      find:
+        paths:
+          - "{{ playbook_dir }}"
+        patterns:
+          - '*ssh-aths'
+      register: find_ssh_aths_result
+
+    - name: Delete any aths ssh files found
+      file:
+        state: absent
+        name: "{{ item.path }}"
+      with_items: "{{ find_ssh_aths_result.files }}"
+      register: aths_deletion_results
+
+  delegate_to: localhost
+  become: no
+  run_once: yes
+
+- name: Force a reboot conditionally, when tor_over_ssh status changed
+  command: shutdown -r now
+  when: aths_deletion_results|changed
+
+- name: Provide helpful user message and end early
+  fail:
+    msg: |
+      Due to the transition from ssh-over-tor to ssh-over-localnet
+      please re-run `./securedrop-admin install` again to continue
+      re-configuration.
+  when: aths_deletion_results|changed

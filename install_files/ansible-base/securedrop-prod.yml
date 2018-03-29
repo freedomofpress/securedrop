@@ -12,6 +12,15 @@
   hosts: securedrop
   max_fail_percentage: 0
   any_errors_fatal: yes
+  pre_tasks:
+    - name: Include restrict role early when using ssh over localnet
+      include_role:
+        name: restrict-direct-access
+      when: not enable_ssh_over_tor
+
+    - include: tasks/transistion_ssh_local.yml
+      when: not enable_ssh_over_tor
+      tags: restrict-direct-access
   roles:
     - { role: install-fpf-repo, tags: fpf }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
