@@ -104,7 +104,7 @@
         {%- set ssh_local_net = net_string|ipaddr('cidr') -%}
         {%- set ssh_int = interface -%}
           {%- if not enable_ssh_over_tor -%}
--A INPUT -i {{ ssh_int }} -s {{ ssh_net_in_override|default(ssh_local_net) }}-p tcp --dport 22 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "Rate limit incoming ssh traffic"
+-A INPUT -i {{ ssh_int }} -s {{ ssh_net_in_override|default(ssh_local_net) }} -p tcp --dport 22 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "Rate limit incoming ssh traffic"
 -A INPUT -i {{ ssh_int }} -s {{ ssh_net_in_override|default(ssh_local_net) }} -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 -A OUTPUT -o {{ ssh_int }} -p tcp -m owner --uid-owner root --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
           {%- endif %}
