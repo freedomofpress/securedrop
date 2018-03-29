@@ -37,11 +37,13 @@ class WindowTestCase(AppTestCase):
 
     def test_output_text_box_displayed_when_checkbox_toggled(self):
         
-        QTest.mouseClick(self.window.checkBox, Qt.LeftButton)
+        QTest.mouseClick(self.window.checkBox, Qt.LeftButton,
+                         pos=QtCore.QPoint(2,self.window.checkBox.height()/2))
         self.assertTrue(self.window.plainTextEdit.isEnabled())
 
         # And clicking again should hide the text box once again
-        QTest.mouseClick(self.window.checkBox, Qt.LeftButton)
+        QTest.mouseClick(self.window.checkBox, Qt.LeftButton,
+                         pos=QtCore.QPoint(2,self.window.checkBox.height()/2))
         self.assertFalse(self.window.plainTextEdit.isEnabled())
 
 if __name__ == '__main__':
