@@ -27,29 +27,9 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.pushButton_2.setText(strings.install_update_button)
         self.pushButton_2.clicked.connect(self.update_securedrop)
 
-        
-
     def update_securedrop(self):
         self.progressBar.setProperty("value", 10)
-        self.statusbar.showMessage(strings.fetching_update)
-        self.progressBar.setProperty("value", 20)
-        update_command = ['/home/amnesia/Persistent/securedrop/securedrop-admin',
-                          'update']
-        try:
-            self.output = subprocess.check_output(update_command,
-                                                  stderr=subprocess.STDOUT).decode('utf-8')
-            if 'Signature verification failed' in self.output:
-                self.update_success = False
-                failure_reason = strings.update_failed_sig_failure
-            self.update_success = True
-        except subprocess.CalledProcessError as e:
-            self.output = e.output
-            self.update_success = False
-            failure_reason = strings.update_failed_generic_reason
-        self.progressBar.setProperty("value", 40)
-        self.plainTextEdit.setPlainText(self.output)
-        self.plainTextEdit.setReadOnly = True
-
+        self.check_out_and_verify_latest_tag()
         self.progressBar.setProperty("value", 50)
         if self.update_success:
             failure_reason = self.configure_tails()
@@ -78,6 +58,26 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         error_dialog_box.setWindowTitle(strings.update_failed_dialog_title)
         error_dialog_box.exec_()
         self.progressBar.setProperty("value", 0)
+
+    def check_out_and_verify_latest_tag(self):
+        self.statusbar.showMessage(strings.fetching_update)
+        self.progressBar.setProperty("value", 20)
+        update_command = ['/home/amnesia/Persistent/securedrop/securedrop-admin',
+                          'update']
+        try:
+            self.output = subprocess.check_output(update_command,
+                                                  stderr=subprocess.STDOUT).decode('utf-8')
+            if 'Signature verification failed' in self.output:
+                self.update_success = False
+                failure_reason = strings.update_failed_sig_failure
+            self.update_success = True
+        except subprocess.CalledProcessError as e:
+            self.output = e.output
+            self.update_success = False
+            failure_reason = strings.update_failed_generic_reason
+        self.progressBar.setProperty("value", 40)
+        self.plainTextEdit.setPlainText(self.output)
+        self.plainTextEdit.setReadOnly = True
 
     def get_sudo_password(self):
         sudo_password, ok_is_pressed = QtWidgets.QInputDialog.getText(
