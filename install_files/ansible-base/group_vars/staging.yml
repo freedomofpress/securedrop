@@ -69,6 +69,3 @@ securedrop_app_configure_apache: True
 ### Use Signal-cli for ossec notifications ###
 # Signal-cli for alerts is currently in experimental phase.
 signal_notifications: True
-signal_number: ""
-signal_cli_copy_config: False
-signal_destination_number: ""

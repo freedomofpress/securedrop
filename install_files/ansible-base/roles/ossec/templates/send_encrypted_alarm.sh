@@ -35,8 +35,8 @@ function send_encrypted_alert() {
             /usr/bin/mail -s "$(echo "${SUBJECT}" | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
     fi
 
-    # Check for signal cli and send alert to number
-    if [[ -x "$(command -v signal-cli)" ]]; then
+    # Check for signal-cli and associated configuration to send alert.
+    if [[ -x "$(command -v signal-cli)" && -e "/etc/signal/data/{{ signal_number }}" ]]; then
         /usr/local/bin/signal-cli --config /etc/signal -u '{{ signal_number }}' send -m "${ossec_alert_text}" '{{ signal_destination_number }}'
         # Error handling
         if [[ $? -ne 0 ]]; then
@@ -44,16 +44,15 @@ function send_encrypted_alert() {
             send_signal_fail_message
         fi
     fi
-
 }
 
 # Failover to indicate Signal-cli is not functionning properly
 function send_signal_fail_message() {
-    encrypted_alert_text="$(printf "An error occurred while sending a signal message" | \
+    signal_fail_text="$(echo "An error occurred while sending a signal message" | \
       /usr/bin/formail -I '' | \
       /usr/bin/gpg --homedir /var/ossec/.gnupg --trust-model always -ear '{{ ossec_gpg_fpr }}')"
-    /usr/bin/mail -s "$(echo "${SUBJECT}" | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
-
+    echo "${signal_fail_text}" | \
+      /usr/bin/mail -s "$(echo "${SUBJECT}" | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
 }
 
 # Failover alerting function, in case the primary function failed.

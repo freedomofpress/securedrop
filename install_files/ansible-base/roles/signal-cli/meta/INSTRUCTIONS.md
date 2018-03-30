@@ -1,4 +1,4 @@
-You can now receive OSSEC alerts via Signal. There are four (4) that control the configuration of this functionality, which can be found in `securedrop-staging.yml` or `install_files/ansible-base/group_vars/all/site-specific`
+You can now receive SecureDrop OSSEC alerts via Signal. There are four (4) variables that control the configuration of this functionality, which can be found in  or `install_files/ansible-base/group_vars/all/site-specific`. Note that because of the precedence of variables, variables in `install_files/ansible-base/securedrop-staging.yml` will override the ones in `site-specific`.
 
 - `signal_notifications` (default set to `False`) must be set to `True` (e.g.: `signal_notifications: True`) to enable Signal notifications for the SecureDrop install.
 - `The signal number which will be used to send alerts (e.g.: `signal_number: "+15555555"`)
