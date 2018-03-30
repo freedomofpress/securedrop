@@ -1,4 +1,9 @@
 exclude config.py
+include alembic.ini
+include alembic/
+include alembic/env.py
+include alembic/versions/
+include alembic/versions/*.py
 include config.py.example
 include *.py
 include securedrop-admin
