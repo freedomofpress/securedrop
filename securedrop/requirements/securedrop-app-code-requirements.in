@@ -1,3 +1,4 @@
+alembic
 cryptography==2.0.3
 cssmin
 Flask-Assets
