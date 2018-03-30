@@ -37,8 +37,8 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
                           'update']
         try:
             self.output = subprocess.check_output(update_command,
-                                                  stderr=subprocess.STDOUT)
-            if 'Signature verification failed' in str(self.output):
+                                                  stderr=subprocess.STDOUT).decode('utf-8')
+            if 'Signature verification failed' in self.output:
                 self.update_success = False
                 failure_reason = strings.update_failed_sig_failure
             self.update_success = True
@@ -47,7 +47,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             self.update_success = False
             failure_reason = strings.update_failed_generic_reason
         self.progressBar.setProperty("value", 40)
-        self.plainTextEdit.setPlainText(self.output.decode('utf-8'))
+        self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
 
         self.progressBar.setProperty("value", 50)
