@@ -5,7 +5,7 @@ import subprocess
 import os
 import pexpect
 
-from journalist_gui import updaterUI, strings
+from journalist_gui import updaterUI, strings, resources_rc
 
 
 class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
@@ -13,9 +13,12 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         super(UpdaterApp, self).__init__(parent)
         self.setupUi(self)
 
+        pixmap = QtGui.QPixmap(":/images/static/securedrop.png")
+        self.label_2.setPixmap(pixmap)
+        self.label_2.setScaledContents(True)
         self.progressBar.setProperty("value", 0)
         self.setWindowTitle(strings.window_title)
-        self.setWindowIcon(QtGui.QIcon('./securedrop_icon.png'))
+        self.setWindowIcon(QtGui.QIcon(':/images/static/securedrop_icon.png'))
         self.label.setText(strings.update_in_progress)
 
         # Connect buttons to their functions.
@@ -24,17 +27,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.pushButton_2.setText(strings.install_update_button)
         self.pushButton_2.clicked.connect(self.update_securedrop)
 
-        # Begin program with output box hidden.
-        self.checkBox.toggled.connect(self.expand_or_shrink_output_text_box)
-        self.checkBox.setChecked(False)
-        self.expand_or_shrink_output_text_box()
-
-    def expand_or_shrink_output_text_box(self):
-        # When user toggles the checkbox, expand the output box.
-        if self.checkBox.isChecked():
-            self.plainTextEdit.setEnabled(True)
-        else:
-            self.plainTextEdit.setEnabled(False)
+        
 
     def update_securedrop(self):
         self.progressBar.setProperty("value", 10)
