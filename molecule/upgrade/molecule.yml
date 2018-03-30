@@ -64,7 +64,7 @@ provisioner:
     side_effect: side_effect.yml
 
 scenario:
-  name: upgrade_test
+  name: upgrade
   create_sequence:
     - create
     - dependency
