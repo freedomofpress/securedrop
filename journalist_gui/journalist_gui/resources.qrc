@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>static/securedrop.png</file>
+        <file>static/securedrop_icon.png</file>
+    </qresource>
+</RCC>
