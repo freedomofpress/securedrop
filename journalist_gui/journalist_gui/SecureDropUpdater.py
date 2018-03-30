@@ -32,7 +32,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.check_out_and_verify_latest_tag()
         self.progressBar.setProperty("value", 50)
         if self.update_success:
-            failure_reason = self.configure_tails()
+            self.failure_reason = self.configure_tails()
         self.progressBar.setProperty("value", 80)
 
         if self.update_success:
@@ -40,8 +40,8 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             self.progressBar.setProperty("value", 100)
             self.alert_success()
         else:
-            self.statusbar.showMessage(failure_reason)
-            self.alert_failure(failure_reason)
+            self.statusbar.showMessage(self.failure_reason)
+            self.alert_failure(self.failure_reason)
 
     def alert_success(self):
         success_dialog_box = QtWidgets.QMessageBox()
@@ -54,7 +54,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
     def alert_failure(self, failure_reason):
         error_dialog_box = QtWidgets.QMessageBox()
         error_dialog_box.setIcon(QtWidgets.QMessageBox.Critical)
-        error_dialog_box.setText(failure_reason)
+        error_dialog_box.setText(self.failure_reason)
         error_dialog_box.setWindowTitle(strings.update_failed_dialog_title)
         error_dialog_box.exec_()
         self.progressBar.setProperty("value", 0)
@@ -69,12 +69,13 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
                                                   stderr=subprocess.STDOUT).decode('utf-8')
             if 'Signature verification failed' in self.output:
                 self.update_success = False
-                failure_reason = strings.update_failed_sig_failure
-            self.update_success = True
+                self.failure_reason = strings.update_failed_sig_failure
+            else:
+                self.update_success = True
         except subprocess.CalledProcessError as e:
-            self.output = e.output
+            self.output = str(e.output)
             self.update_success = False
-            failure_reason = strings.update_failed_generic_reason
+            self.failure_reason = strings.update_failed_generic_reason
         self.progressBar.setProperty("value", 40)
         self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
@@ -109,17 +110,14 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
                 # failures in the Ansible output.
                 if 'failed=0' not in self.output:
                     self.update_success = False
-                    failure_reason = strings.tailsconfig_failed_generic_reason
-                    return failure_reason
+                    self.failure_reason = strings.tailsconfig_failed_generic_reason
 
             except pexpect.exceptions.TIMEOUT:
                 self.update_success = False
-                failure_reason = strings.tailsconfig_failed_sudo_password
-                return failure_reason
+                self.failure_reason = strings.tailsconfig_failed_sudo_password
 
             except subprocess.CalledProcessError:
                 self.update_success = False
-                failure_reason = strings.tailsconfig_failed_generic_reason
-                return failure_reason
+                self.failure_reason = strings.tailsconfig_failed_generic_reason
 
         return 'Success!'
