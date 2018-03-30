@@ -29,22 +29,16 @@ class WindowTestCase(AppTestCase):
     def test_progress_bar_begins_at_zero(self):
         self.assertEqual(self.window.progressBar.value(), 0)
 
+    def test_default_tab(self):
+        self.assertEqual(self.window.tabWidget.currentIndex(), 0)
 
-    def test_output_text_box_is_disabled(self):
-        self.assertFalse(self.window.plainTextEdit.isEnabled())
-        self.assertFalse(self.window.checkBox.isChecked())
+    def test_output_tab(self):
 
-
-    def test_output_text_box_displayed_when_checkbox_toggled(self):
-        
-        QTest.mouseClick(self.window.checkBox, Qt.LeftButton,
-                         pos=QtCore.QPoint(2,self.window.checkBox.height()/2))
-        self.assertTrue(self.window.plainTextEdit.isEnabled())
-
-        # And clicking again should hide the text box once again
-        QTest.mouseClick(self.window.checkBox, Qt.LeftButton,
-                         pos=QtCore.QPoint(2,self.window.checkBox.height()/2))
-        self.assertFalse(self.window.plainTextEdit.isEnabled())
+        tab = self.window.tabWidget.tabBar()
+        QTest.mouseClick(tab, Qt.LeftButton)
+        #print(pos)
+        self.assertEqual(self.window.tabWidget.currentIndex(),
+                         self.window.tabWidget.indexOf(self.window.tab_2))
 
 if __name__ == '__main__':
     unittest.main()
