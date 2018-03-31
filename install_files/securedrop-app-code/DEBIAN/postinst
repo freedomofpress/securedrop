@@ -21,6 +21,12 @@ database_migration() {
     database_dir='/var/lib/securedrop'
     database_file="$database_dir/db.sqlite"
 
+    # Ensure the directory exists (needed for fresh installs)
+    if [ ! -e "$database_dir" ]; then
+        mkdir -m 0770 "$database_dir"
+        chown www-data:www-data "$database_dir"
+    fi
+
     # Ensure the database exists.
     if [ ! -e "$database_file" ]; then
         old_umask=$(umask)
@@ -44,7 +50,7 @@ database_migration() {
         else
             # This is an old install, so mark that the schema is up to date
             # as of the version of migration 15ac9509fc68_init.py when we first
-            # started version controlling the database
+            # started version controlling the database.
             alembic stamp 15ac9509fc68
         fi
     fi
