@@ -68,6 +68,21 @@ def test_cron_apt_repo_config_update(File):
     assert f.contains('^{}$'.format(repo_config))
 
 
+def test_cron_apt_delete_vanilla_kernels(File):
+    """
+    Ensure cron-apt removes generic linux image packages when installed.
+    """
+
+    f = File('/etc/cron-apt/action.d/1-remove')
+    assert f.is_file
+    assert f.user == "root"
+    assert oct(f.mode) == "0644"
+    command = str('remove -y'
+                  ' linux-image-generic-lts-xenial linux-image-.*generic'
+                  ' -o quiet=2')
+    assert f.contains('^{}$'.format(command))
+
+
 def test_cron_apt_repo_config_upgrade(File):
     """
     Ensure cron-apt upgrades packages from the security.list config.

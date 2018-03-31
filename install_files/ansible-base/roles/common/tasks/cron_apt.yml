@@ -30,6 +30,16 @@
     - apt
     - cron-apt
 
+  # This action is also added by the securedrop-config package as of 0.1.1 to provide
+  # this logic for existing installs.
+- name: Configure cron-apt to remove vanilla kernels if they are installed.
+  copy:
+    src: 1-remove
+    dest: /etc/cron-apt/action.d/1-remove
+  tags:
+    - apt
+    - cron-apt
+
 - name: Configure cron-apt to upgrade the packages in the security.list repos.
   copy:
     src: 5-security
