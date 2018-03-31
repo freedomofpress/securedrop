@@ -16,6 +16,38 @@ set -x
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+database_migration() {
+    database_dir='/var/lib/securedrop'
+    database_file="$database_dir/db.sqlite"
+
+    # Ensure the directory exists (needed for fresh installs)
+    if [ ! -e "$database_dir" ]; then
+        mkdir -m 0770 "$database_dir"
+        chown www-data:www-data "$database_dir"
+    fi
+
+    # Ensure the database exists.
+    if [ ! -e "$database_file" ]; then
+        old_umask=$(umask)
+        umask 0027 # to get os 0640 permissions from the sqlite command
+
+        # Future-proof way to create an empty database.
+        sqlite3 "$database_file" '.databases'
+        umask "$old_umask"
+        chown www-data:www-data "$database_file"
+    fi
+
+    cd '/var/www/securedrop/'
+
+    # `alembic current` outputs nothing if the DB isn't under verion control.
+    if [ -z "$(alembic current)" ]; then
+        # Revision of migration 15ac9509fc68_init.py
+        alembic stamp 15ac9509fc68
+    fi
+
+    alembic upgrade head
+}
+
 case "$1" in
     configure)
     pip install --no-index --find-links=/var/securedrop/wheelhouse --upgrade \
@@ -68,6 +100,7 @@ case "$1" in
         sed -i 's/^\s*MACs\s.*/MACs hmac-sha2-256,hmac-sha2-512/' /etc/ssh/sshd_config;
     fi
 
+    database_migration
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
