@@ -51,6 +51,22 @@ def _login_user(app, username, password, otp_secret):
     assert hasattr(g, 'user')  # ensure logged in
 
 
+def test_user_with_whitespace_in_username_can_login(journalist_app):
+    # Create a user with whitespace at the end of the username
+    with journalist_app.app_context():
+        username_with_whitespace = 'journalist '
+        user, password = utils.db_helper.init_journalist(is_admin=False)
+        otp_secret = user.otp_secret
+        user.username = username_with_whitespace
+        db.session.add(user)
+        db.session.commit()
+
+    # Verify that user is able to login successfully
+    with journalist_app.test_client() as app:
+        _login_user(app, username_with_whitespace, password,
+                    otp_secret)
+
+
 def test_make_password(journalist_app):
     with patch.object(crypto_util.CryptoUtil, 'genrandomid',
                       side_effect=['bad', VALID_PASSWORD]):
