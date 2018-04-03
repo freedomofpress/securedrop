@@ -21,12 +21,6 @@ database_migration() {
     database_dir='/var/lib/securedrop'
     database_file="$database_dir/db.sqlite"
 
-    # Ensure the directory exists (needed for fresh installs)
-    if [ ! -e "$database_dir" ]; then
-        mkdir -m 0770 "$database_dir"
-        chown www-data:www-data "$database_dir"
-    fi
-
     # Ensure the database exists.
     if [ ! -e "$database_file" ]; then
         old_umask=$(umask)
@@ -65,10 +59,10 @@ database_migration() {
 case "$1" in
     configure)
     # Ensure SecureDrop's necessary directories are created
-    for dir in /var/lib/securedrop/{,tmp,store,keys,backups} /var/www/securedrop; do
+    for dir in /var/lib/securedrop/ /var/lib/securedrop/tmp /var/lib/securedrop/keys /var/lib/securedrop/store /var/www/securedrop; do
       mkdir -p "$dir"
       chmod 0700 "$dir"
-    done
+    done 
 
     chown -R www-data:www-data /var/lib/securedrop /var/www/securedrop
 

@@ -32,6 +32,10 @@ case "$1" in
     ;;
 
     purge)
+        for dir in securedrop/ securedrop/tmp securedrop/keys securedrop/store; do
+          full_path="/var/lib/$dir"
+          rm -rf "$full_path"
+        done 
         clean_pyc
     ;;
 
