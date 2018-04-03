@@ -51,5 +51,6 @@ appserver_dependencies:
   - apparmor-utils
   - redis-server
   - supervisor
+  - libjpeg-dev
 
 tor_apt_repo_url: https://tor-apt.freedom.press
