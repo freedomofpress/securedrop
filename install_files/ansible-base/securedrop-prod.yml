@@ -13,13 +13,23 @@
   max_fail_percentage: 0
   any_errors_fatal: yes
   pre_tasks:
+    - name: Check if install has been done before
+      stat:
+        path: /var/www/securedrop
+      delegate_to: "{{ groups['securedrop_application_server'][0] }}"
+      register: sd_dir_check
+
     - name: Include restrict role early when using ssh over localnet
       include_role:
         name: restrict-direct-access
-      when: not enable_ssh_over_tor
+      when:
+        - not enable_ssh_over_tor
+        - sd_dir_check.stat.exists
 
     - include: tasks/transistion_ssh_local.yml
-      when: not enable_ssh_over_tor
+      when:
+        - not enable_ssh_over_tor
+        - sd_dir_check.stat.exists
       tags: restrict-direct-access
   roles:
     - { role: install-fpf-repo, tags: fpf }
