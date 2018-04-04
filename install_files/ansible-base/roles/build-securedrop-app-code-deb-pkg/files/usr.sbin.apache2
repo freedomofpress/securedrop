@@ -245,6 +245,7 @@
   /var/www/securedrop/static/i/font-awesome/exclamation-triangle-black.png r,
   /var/www/securedrop/static/i/font-awesome/fa-arrow-circle-o-right-blue.png r,
   /var/www/securedrop/static/i/font-awesome/fa-arrow-circle-o-right-white.png r,
+  /var/www/securedrop/static/i/font-awesome/fa-globe-black.png r,
   /var/www/securedrop/static/i/font-awesome/info-circle-black.png r,
   /var/www/securedrop/static/i/font-awesome/lock-black.png r,
   /var/www/securedrop/static/i/font-awesome/refresh-blue.png r,
