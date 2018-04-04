@@ -228,6 +228,7 @@
   /var/www/securedrop/static/css/source.css r,
   /var/www/securedrop/static/css/journalist.css r,
   /var/www/securedrop/static/i/logo.png rw,
+  /var/www/securedrop/static/i/custom_logo.png rw,
   /var/www/securedrop/static/i/no16-global.png r,
   /var/www/securedrop/static/i/no16.png r,
   /var/www/securedrop/static/i/delete_gray.png r,
