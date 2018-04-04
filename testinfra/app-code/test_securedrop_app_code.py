@@ -23,7 +23,7 @@ def test_apache_default_docroot_is_absent(File):
   'python-pip',
   'redis-server',
   'secure-delete',
-  'sqlite',
+  'sqlite3',
   'supervisor',
 ])
 def test_securedrop_application_apt_dependencies(Package, package):

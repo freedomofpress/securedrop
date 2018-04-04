@@ -34,7 +34,7 @@ appserver_dependencies:
   - python
   - python-pip
   - secure-delete
-  - sqlite
+  - sqlite3
   - apparmor-utils
   - redis-server
   - supervisor
