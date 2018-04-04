@@ -103,6 +103,7 @@ anonymous sources.
    development/virtualizing_tails
    development/contributor_guidelines
    development/tips_and_tricks
+   development/database_migrations
    development/i18n
    development/l10n
    development/documentation_guidelines
