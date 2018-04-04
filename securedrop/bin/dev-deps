@@ -42,6 +42,13 @@ function reset_demo() {
     cp ./tests/files/test_journalist_key.pub /var/lib/securedrop/keys
     gpg --homedir /var/lib/securedrop/keys --import /var/lib/securedrop/keys/test_journalist_key.pub >& /tmp/gpg.out || cat /tmp/gpg.out
     ./i18n_tool.py translate-messages --compile
+
+    # remove previously uploaded custom logos
+    rm -f /var/www/securedrop/static/i/custom_logo.png
+
+    # create an empty database
+    sqlite /var/lib/securedrop/db.sqlite .databases &> /dev/null
+
     ./manage.py reset
     ./create-dev-data.py
 }
