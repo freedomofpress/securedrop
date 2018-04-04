@@ -6,5 +6,5 @@ Homepage: https://securedrop.org
 Package: securedrop-app-code
 Version: 0.7.0~rc1
 Architecture: amd64
-Depends: python-pip,apparmor-utils,gnupg2,haveged,python,python-pip,secure-delete,sqlite,apache2-mpm-worker,libapache2-mod-wsgi,libapache2-mod-xsendfile,redis-server,supervisor,securedrop-keyring,securedrop-config,libjpeg-dev
+Depends: python-pip,apparmor-utils,gnupg2,haveged,python,python-pip,secure-delete,sqlite3,apache2-mpm-worker,libapache2-mod-wsgi,libapache2-mod-xsendfile,redis-server,supervisor,securedrop-keyring,securedrop-config,libjpeg-dev
 Description: Packages the SecureDrop application code pip dependencies and apparmor profiles. This package will put the apparmor profiles in enforce mode. This package does use pip to install the pip wheelhouse
