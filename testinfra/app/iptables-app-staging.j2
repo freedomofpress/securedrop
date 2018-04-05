@@ -17,8 +17,8 @@
 -A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT
 -A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP
 -A INPUT -m comment --comment "Drop and log all other incoming traffic" -j LOGNDROP
--A OUTPUT -p tcp -m owner --uid-owner {{ tor_user_id }} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tor instance that provides ssh access" -j ACCEPT
--A OUTPUT -m owner --uid-owner {{ tor_user_id }} -m comment --comment "Drop all other traffic for the tor instance used for ssh" -j LOGNDROP
+-A OUTPUT -p tcp -m owner --uid-owner {{ tor_user_id }} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow tor outbound" -j ACCEPT
+-A OUTPUT -m owner --uid-owner {{ tor_user_id }} -m comment --comment "Drop all other traffic for tor" -j LOGNDROP
 -A OUTPUT -o lo -p tcp -m tcp --sport 80 -m owner --uid-owner {{ securedrop_user_id }} -m state --state RELATED,ESTABLISHED -m comment --comment "Restrict the apache user outbound connections" -j ACCEPT
 -A OUTPUT -o lo -p tcp -m tcp --sport 8080 -m owner --uid-owner {{ securedrop_user_id }} -m state --state RELATED,ESTABLISHED -m comment --comment "Restrict the apache user outbound connections" -j ACCEPT
 -A OUTPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -o lo -p tcp -m owner --uid-owner {{ securedrop_user_id }} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "for redis worker all application user local loopback user" -j ACCEPT

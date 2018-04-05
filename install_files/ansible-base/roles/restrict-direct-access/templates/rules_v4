@@ -19,17 +19,15 @@
 -A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow the established traffic from tor to the ssh dameon"
 {% endif %}
 
-{% if enable_ssh_over_tor or 'securedrop_application_server' in group_names %}
 # Load before tor user drop rules
 # TODO: use ansible facts to populate the in use interface to further restrict
 # the rules.
--A OUTPUT -p tcp -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
+-A OUTPUT -p tcp -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow tor outbound"
 -A INPUT -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic back for tor"
 
 # Drop all other outbound traffic by the tor user.
 # Load before generic loopback rules
--A OUTPUT -m owner --uid-owner debian-tor -j LOGNDROP -m comment --comment "Drop all other traffic for the tor instance used for ssh"
-{% endif %}
+-A OUTPUT -m owner --uid-owner debian-tor -j LOGNDROP -m comment --comment "Drop all other traffic for tor"
 
 {% if 'securedrop_application_server' in group_names %}
 # Only allow inbound rules from loopback with a dport of 80 or 8080 respectively for apache user
