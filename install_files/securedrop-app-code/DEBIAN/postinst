@@ -59,7 +59,7 @@ database_migration() {
 case "$1" in
     configure)
     # Ensure SecureDrop's necessary directories are created
-    for dir in /var/lib/securedrop/ /var/lib/securedrop/tmp /var/lib/securedrop/keys /var/lib/securedrop/store /var/www/securedrop; do
+    for dir in /var/lib/securedrop/{,tmp,store,keys,backups} /var/www/securedrop; do
       mkdir -p "$dir"
       chmod 0700 "$dir"
     done 
