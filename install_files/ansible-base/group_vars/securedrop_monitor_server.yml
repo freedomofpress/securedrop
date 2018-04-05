@@ -35,4 +35,4 @@ authd_iprules:
 # Declare Monitor Server as OSSEC server role.
 ossec_is_server: yes
 
-ssh_ip: "{{ mon_ip|default(ansible_default_ipv4.address) }}"
+ssh_ip: "{{ monitor_ip|default(ansible_default_ipv4.address) }}"
