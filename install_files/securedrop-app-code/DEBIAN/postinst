@@ -1,9 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 # postinst script for securedrop-app-code
 #
 # see: dh_installdeb(1)
 set -e
 set -x
+set -o pipefail
 # summary of how this script can be called:
 #        * <postinst> `configure' <most-recently-configured-version>
 #        * <old-postinst> `abort-upgrade' <new version>
@@ -39,13 +40,17 @@ database_migration() {
         alembic stamp 15ac9509fc68
     fi
 
+    if ! alembic current | grep -q '(head)'; then
+        date=$(date +%Y-%m-%d-%H-%M-%S)
+        cp /var/lib/securedrop/db.sqlite "/var/lib/securedrop/backups/$date-db.sqlite"
+    fi
     alembic upgrade head
 }
 
 case "$1" in
     configure)
     # Ensure SecureDrop's necessary directories are created
-    for dir in /var/lib/securedrop/ /var/lib/securedrop/tmp /var/lib/securedrop/keys /var/lib/securedrop/store /var/www/securedrop; do
+    for dir in /var/lib/securedrop/{,tmp,store,keys,backups} /var/www/securedrop; do
       mkdir -p "$dir"
       chmod 0700 "$dir"
     done 
