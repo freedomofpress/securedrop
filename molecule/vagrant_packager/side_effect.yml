@@ -16,7 +16,7 @@
   handlers:
     - name: disable tor
       service:
-        enabled: no
+        enabled: yes
         name: tor
         state: stopped
 
