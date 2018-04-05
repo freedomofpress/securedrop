@@ -3,3 +3,8 @@
   service:
     name: ssh
     state: restarted
+
+- name: drop flag for reboot
+  file:
+    path: "{{ securedrop_cond_reboot_file }}"
+    state: touch

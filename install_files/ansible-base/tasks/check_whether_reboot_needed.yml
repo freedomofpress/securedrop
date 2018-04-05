@@ -1,0 +1,34 @@
+---
+# Determine whether this is an initial installation on hardware.
+# The default iptables ruleset will include only 3 lines:
+#
+#   -P INPUT ACCEPT
+#   -P FORWARD ACCEPT
+#   -P OUTPUT ACCEPT
+#
+# So we can reliably determine whether the installation has been completed
+# by counting the number of firewall rules.
+- name: Read iptables rule set.
+  command: iptables -S
+  changed_when: false
+  register: iptables_ruleset_result
+
+# Determine whether a file was laid out by a previous role to indicate
+# a reboot is necessary at the end of the run. We can also explicitly set
+# a `securedrop_force_reboot` flag for over-riding reboot check
+- name: Check for existence of reboot file
+  stat:
+      path: "{{ securedrop_cond_reboot_file }}"
+      get_checksum: no
+      get_attributes: no
+  register: sd_reboot_file_check
+
+- name: Delete reboot file from intereferring with future runs
+  file:
+      path: "{{ securedrop_cond_reboot_file }}"
+      state: absent
+
+- name: Store whether this is a first-time installation.
+  set_fact:
+    securedrop_initial_installation: "{{ iptables_ruleset_result.stdout_lines|length <= 3 }}"
+    securedrop_conditional_reboot: "{{ securedrop_force_reboot|default(sd_reboot_file_check.stat.exists) }}"

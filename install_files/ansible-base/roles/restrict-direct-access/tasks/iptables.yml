@@ -42,6 +42,7 @@
     dest: /etc/network/iptables/rules_v4
     owner: root
     mode: "0644"
+  notify: drop flag for reboot
   tags:
     - iptables
     - permissions
