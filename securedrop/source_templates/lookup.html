@@ -9,7 +9,7 @@
       <img src="{{ url_for('static', filename='i/relieved_face.png')  }}" alt="relieved-face" class="icon">
       <div class="message">
         <strong>{{ gettext('Whew, it’s you! Now, the embarrassing part...') }}</strong>
-        <p>{{ gettext('Our servers experienced an unusual surge of new activity, when you last visited. To err on the side of caution, we put a hold on sending all documents from that day through to our journalists.') }}</p>
+        <p>{{ gettext('Our servers experienced an unusual surge of new activity, when you last visited. To err on the side of caution, we put a hold on sending all  files and messages from that day through to our journalists.') }}</p>
 
         <p>{{ gettext('Now that we know you’re really a human, though, we’ll get your previous submission into the hands of a journalist straight away. We’re sorry for the delay. Please do check back again in a week or so.') }}</p>
       </div>
@@ -17,11 +17,11 @@
   {% endif %}
 </div>
 
-<h1 class="headline">{{ gettext('Submit Materials') }}</h1>
+<h1 class="headline">{{ gettext('Submit Files or Messages') }}</h1>
 <p class="explanation">{{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_journalist_pubkey')) }}
 {{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_journalist_pubkey')) }}</p>
 
-<p class="explanation">{{ gettext('You can send a file, a message, or both.') }}</p>
+<p class="explanation">{{ gettext('You can submit any kind of file, a message, or both.') }}</p>
 <hr class="no-line">
 
 <form id="upload" method="post" action="{{ url_for('main.submit') }}" enctype="multipart/form-data" autocomplete="off">
@@ -55,7 +55,7 @@
 <div id="replies">
   {% if replies %}
     <aside>
-      <p>{{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting a new message above.") }}</p>
+      <p>{{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above.") }}</p>
     </aside>
     <hr class="no-line">
     {% for reply in replies %}
