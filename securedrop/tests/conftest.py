@@ -87,6 +87,9 @@ def config(tmpdir):
     cnf.TEMP_DIR = str(tmp)
     cnf.DATABASE_FILE = str(sqlite)
 
+    # create the db file
+    subprocess.check_call(['sqlite3', cnf.DATABASE_FILE, '.databases'])
+
     return cnf
 
 
