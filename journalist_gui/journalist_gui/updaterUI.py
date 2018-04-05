@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'journalist_gui/mainwindow2.ui'
+# Form implementation generated from reading ui file 'journalist_gui/mainwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.10.1
 #
@@ -11,8 +11,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(350, 500)
-        MainWindow.setMaximumSize(QtCore.QSize(350, 500))
+        MainWindow.resize(400, 500)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        MainWindow.setSizePolicy(sizePolicy)
+        MainWindow.setMinimumSize(QtCore.QSize(400, 500))
+        MainWindow.setMaximumSize(QtCore.QSize(400, 500))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -71,7 +77,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addLayout(self.horizontalLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 350, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 400, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
