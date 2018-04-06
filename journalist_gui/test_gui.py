@@ -1,13 +1,12 @@
 import unittest
 import subprocess
 from unittest import mock
-from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit
+from PyQt5.QtWidgets import QApplication
 from PyQt5.QtTest import QTest
 
-import time
 from journalist_gui.SecureDropUpdater import UpdaterApp, strings
+
 
 class AppTestCase(unittest.TestCase):
     def setUp(self):
@@ -16,6 +15,7 @@ class AppTestCase(unittest.TestCase):
             self.app = QApplication([''])
         else:
             self.app = qApp
+
 
 class WindowTestCase(AppTestCase):
     def setUp(self):
@@ -38,7 +38,6 @@ class WindowTestCase(AppTestCase):
 
         tab = self.window.tabWidget.tabBar()
         QTest.mouseClick(tab, Qt.LeftButton)
-        #print(pos)
         self.assertEqual(self.window.tabWidget.currentIndex(),
                          self.window.tabWidget.indexOf(self.window.tab_2))
 
