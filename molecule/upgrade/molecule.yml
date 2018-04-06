@@ -15,8 +15,8 @@ platforms:
     box_version: "0.6"
     instance_raw_config_args:
       - "ssh.insert_key = false"
-    raw_config_args:
-      - "override.vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
+    provider_override_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
     memory: 1024
     private_ip: 10.0.1.2
     groups:
@@ -30,8 +30,8 @@ platforms:
     box_version: "0.6"
     instance_raw_config_args:
       - "ssh.insert_key = false"
-    raw_config_args:
-      - "override.vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
+    provider_override_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
     memory: 1024
     private_ip: 10.0.1.3
     groups:
@@ -41,8 +41,8 @@ platforms:
 
   - name: apt
     box: bento/ubuntu-14.04
-    instance_raw_config_args:
-      - "vm.synced_folder './', '/vagrant', disabled: true, type: 'rsync'"
+    provider_override_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
     memory: 256
     groups:
       - aptservers

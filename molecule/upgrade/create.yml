@@ -23,6 +23,7 @@
         provider_name: "{{ molecule_yml.driver.provider.name }}"
         provider_memory: "{{ item.memory | default(omit) }}"
         provider_cpus: "{{ item.cpus | default(omit) }}"
+        provider_override_args: "{{ item.provider_override_args | default(omit) }}"
         provider_raw_config_args: "{{ item.raw_config_args | default(omit) }}"
         force_stop: yes
 
