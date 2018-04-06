@@ -37,42 +37,52 @@ Configuring SSH for local access
           exposed to unintended users if you did not properly follow our network
           firewall guide.
 
-The setting that controls SSH over LAN access is set during the `sdconfig` step
-of the install.
+.. warning:: This setting will lock you out of SSH access to your instance if your
+          *Admin Workstation* passes through a NAT in order to get to the
+          SecureDrop servers. If you are unsure whether this is the case, please
+          consult with your firewall configuration or network administrator.
 
 .. note:: Whichever network you install from will be the one that SSH is
           restricted to post-install. This will come into play particularly if
           you have multiple network interfaces.
 
-The workflow for configuration will look like this (answer 'no' or 'false') to
-the following :
+The setting that controls SSH over LAN access is set during the `sdconfig` step
+of the install. Below is an example of what the prompt will look like. You can
+answer either 'no' or 'false' when you are prompted for `Enable SSH over Tor`:
 
 .. code:: sh
 
     $ ./securedrop-admin sdconfig
 
-    INFO: Configuring SecureDrop site-specific information
-    [WARNING]: provided hosts list is empty, only localhost is available
+    Username for SSH access to the servers: vagrant
+    Local IPv4 address for the Application Server: 10.0.1.4
+    Local IPv4 address for the Monitor Server: 10.0.1.5
+    Hostname for Application Server: app
+    Hostname for Monitor Server: mon
+    [...]
+    Enable SSH over Tor: no
 
-
-    PLAY [Display message about upcoming interactive prompts.]
-    ***********************************************************************
-
-    TASK [debug]
-    ***********************************************************************
-    ok: [localhost] => {
-        "msg": "You will need to fill out the following prompts in order to
-        configure your SecureDrop instance. After entering all prompts, the
-        variables will be validated and any failures displayed. See the docs
-        for more information https://docs.securedrop.org/en/stable"
-        }
-
-    Force SSH over Tor - (otherwise over LAN) [true]: no
-
-
-Then as usual you'll run
+Then you'll have to run the installation script
 
 .. code:: sh
 
     $ ./securedrop-admin install
+
+.. note:: If you are migrating from a production install previously configured
+          with SSH over Tor, you will be prompted to re-run the `install` portion
+          twice. This is due to the behind the scenes configuration changes being
+          done to switch between Tor and the local network.
+
+Finally, re-configure your *Admin Workstation* as follows:
+
+.. code:: sh
+
     $ ./securedrop-admin tailsconfig
+
+Assuming everything is working you should be able to gain SSH access as follows
+
+.. code:: sh
+
+    $ ssh app
+    $ ssh mon
+
