@@ -2,7 +2,7 @@ import unittest
 import subprocess
 from unittest import mock
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QSizePolicy, QInputDialog
 from PyQt5.QtTest import QTest
 
 from journalist_gui.SecureDropUpdater import UpdaterApp, strings
@@ -74,6 +74,26 @@ class WindowTestCase(AppTestCase):
         self.assertEqual(self.window.update_success, False)
         self.assertEqual(self.window.failure_reason,
                          strings.update_failed_generic_reason)
+
+    def test_get_sudo_password_when_password_provided(self):
+        expected_password = "password"
+
+        with mock.patch.object(QInputDialog, 'getText',
+                          return_value=[expected_password, True]):
+            sudo_password = self.window.get_sudo_password()
+
+        self.assertEqual(sudo_password, expected_password)
+
+    def test_get_sudo_password_when_password_not_provided(self):
+        test_password = ""
+
+        with mock.patch.object(QInputDialog, 'getText',
+                          return_value=[test_password, False]):
+
+            # If the user does not provide a sudo password, we exit
+            # as we cannot update.
+            with self.assertRaises(SystemExit):
+                sudo_password = self.window.get_sudo_password()
 
 
 if __name__ == '__main__':
