@@ -1,5 +1,6 @@
 import unittest
 import subprocess
+import pexpect
 from unittest import mock
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QSizePolicy, QInputDialog
@@ -79,7 +80,7 @@ class WindowTestCase(AppTestCase):
         expected_password = "password"
 
         with mock.patch.object(QInputDialog, 'getText',
-                          return_value=[expected_password, True]):
+                               return_value=[expected_password, True]):
             sudo_password = self.window.get_sudo_password()
 
         self.assertEqual(sudo_password, expected_password)
@@ -88,12 +89,66 @@ class WindowTestCase(AppTestCase):
         test_password = ""
 
         with mock.patch.object(QInputDialog, 'getText',
-                          return_value=[test_password, False]):
-
+                               return_value=[test_password, False]):
             # If the user does not provide a sudo password, we exit
             # as we cannot update.
             with self.assertRaises(SystemExit):
-                sudo_password = self.window.get_sudo_password()
+                self.window.get_sudo_password()
+
+    def test_tailsconfig_no_failures(self):
+        self.window.update_success = True
+        with mock.patch.object(self.window, 'get_sudo_password',
+                               return_value="password"):
+            with mock.patch.object(self.window,
+                                   'pass_sudo_password_to_tailsconfig',
+                                   return_value="failed=0"):
+                self.window.configure_tails()
+
+        self.assertIn("failed=0", self.window.output)
+        self.assertEqual(self.window.update_success, True)
+
+    def test_tailsconfig_generic_failure(self):
+        self.window.update_success = True
+        with mock.patch.object(self.window, 'get_sudo_password',
+                               return_value="password"):
+            with mock.patch.object(self.window,
+                                   'pass_sudo_password_to_tailsconfig',
+                                   return_value="failed=10 ERROR!!!!!"):
+                self.window.configure_tails()
+
+        self.assertNotIn("failed=0", self.window.output)
+        self.assertEqual(self.window.update_success, False)
+        self.assertEqual(self.window.failure_reason,
+                         strings.tailsconfig_failed_generic_reason)
+
+    def test_tailsconfig_sudo_password_is_wrong(self):
+        self.window.update_success = True
+        with mock.patch.object(self.window, 'get_sudo_password',
+                               return_value="password"):
+            with mock.patch.object(self.window,
+                                   'pass_sudo_password_to_tailsconfig',
+                                   side_effect=pexpect.exceptions.TIMEOUT(1)):
+                self.window.configure_tails()
+
+        self.assertNotIn("failed=0", self.window.output)
+        self.assertEqual(self.window.update_success, False)
+        self.assertEqual(self.window.failure_reason,
+                         strings.tailsconfig_failed_sudo_password)
+
+    def test_tailsconfig_some_other_subprocess_error(self):
+        self.window.update_success = True
+        with mock.patch.object(self.window, 'get_sudo_password',
+                               return_value="password"):
+            with mock.patch.object(self.window,
+                                   'pass_sudo_password_to_tailsconfig',
+                                   side_effect=subprocess.CalledProcessError(
+                                       1, 'cmd', 'Generic other failure')):
+                self.window.configure_tails()
+
+        self.assertNotIn("failed=0", self.window.output)
+        self.assertEqual(self.window.update_success, False)
+        self.assertEqual(self.window.failure_reason,
+                         strings.tailsconfig_failed_generic_reason)
 
 
 if __name__ == '__main__':
