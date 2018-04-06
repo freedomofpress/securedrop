@@ -46,6 +46,15 @@ Configuring SSH for local access
           restricted to post-install. This will come into play particularly if
           you have multiple network interfaces.
 
+First, make sure your local SecureDrop environment is up-to-date and on the
+latest production release.
+
+.. code:: sh
+
+    $ cd ~/Persistent/securedrop
+    $ ./securedrop-admin update
+    $ ./securedrop-admin setup
+
 The setting that controls SSH over LAN access is set during the `sdconfig` step
 of the install. Below is an example of what the prompt will look like. You can
 answer either 'no' or 'false' when you are prompted for `Enable SSH over Tor`:
