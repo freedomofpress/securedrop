@@ -96,4 +96,3 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Command Output"))
         self.pushButton.setText(_translate("MainWindow", "Install Later"))
         self.pushButton_2.setText(_translate("MainWindow", "Install Now"))
-
