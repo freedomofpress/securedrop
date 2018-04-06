@@ -12,6 +12,7 @@ platforms:
   - name: app-staging
     box: fpf/securedrop-app
     box_url: "../vagrant_packager/box_files/app_metadata.json"
+    box_version: "0.6"
     instance_raw_config_args:
       - "ssh.insert_key = false"
     raw_config_args:
@@ -26,6 +27,7 @@ platforms:
   - name: mon-staging
     box: fpf/securedrop-mon
     box_url: "../vagrant_packager/box_files/mon_metadata.json"
+    box_version: "0.6"
     instance_raw_config_args:
       - "ssh.insert_key = false"
     raw_config_args:

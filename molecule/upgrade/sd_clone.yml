@@ -16,5 +16,5 @@
         version: "release/{{ ORIG_SECUREDROP_VER }}"
         depth: 1
   vars:
-    ORIG_SECUREDROP_VER: 0.5.2
+    ORIG_SECUREDROP_VER: 0.6
     molecule_ephemeral_directory: "{{ playbook_dir }}/.molecule"
