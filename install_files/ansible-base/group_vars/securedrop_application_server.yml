@@ -41,3 +41,4 @@ authd_iprules:
 ossec_is_client: yes
 
 ssh_ip: "{{ app_ip|default(ansible_default_ipv4.address) }}"
+adjacent_sd_ip: "{{ monitor_ip }}"

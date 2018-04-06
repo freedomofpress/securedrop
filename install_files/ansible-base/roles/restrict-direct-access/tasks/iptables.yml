@@ -36,6 +36,32 @@
     - iptables
     - permissions
 
+- name: Determine admin network - first find admin net dev
+  set_fact:
+    admin_dev: "{{ lookup('pipe','/bin/ip r get '+ssh_ip)|regex_search('(?<=dev )\\w+') }}"
+  when: not enable_ssh_over_tor
+  tags:
+    - iptables
+    - permissions
+
+- name: Gather localhost facts first
+  setup:
+  become: no
+  delegate_to: localhost
+  delegate_facts: True
+  run_once: True
+
+- name: Determine admin network - next compute admin network cidr
+  set_fact:
+    admin_net_cidr: "{{ '/'.join([hostvars['localhost']['ansible_'+admin_dev].ipv4.network,
+                        hostvars['localhost']['ansible_'+admin_dev].ipv4.netmask]
+                        )|ipaddr('cidr') }}"
+  delegate_to: localhost
+  when: not enable_ssh_over_tor
+  tags:
+    - iptables
+    - permissions
+
 - name: Copy IPv4 iptables rules.
   template:
     src: rules_v4
