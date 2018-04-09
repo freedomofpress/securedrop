@@ -1,3 +1,10 @@
 ---
 
-- import_playbook: apt.yml
+- name: Perform apt upgrades
+  hosts: securedrop
+  become: yes
+  tasks:
+    - name: Perform safe upgrade
+      apt:
+        update_cache: yes
+        upgrade: yes
