@@ -90,6 +90,14 @@ def test_verify_store_temp_dir_not_absolute():
     assert re.compile('temp_dir.*is not absolute').match(msg)
 
 
+def test_verify_flagged_file_in_sourcedir_returns_true(journalist_app, config):
+    source_directory, file_path = create_file_in_source_dir(
+        config, 'example-filesystem-id', '_FLAG'
+    )
+
+    assert journalist_app.storage.verify(file_path)
+
+
 class TestStore(unittest.TestCase):
 
     """The set of tests for store.py."""
@@ -114,15 +122,6 @@ class TestStore(unittest.TestCase):
             os.utime(file_path, None)
 
         return source_directory, file_path
-
-    def test_verify_flagged_file_in_sourcedir_returns_true(self):
-        source_directory, file_path = self.create_file_in_source_dir(
-            'example-filesystem-id', '_FLAG'
-        )
-
-        self.assertTrue(current_app.storage.verify(file_path))
-
-        shutil.rmtree(source_directory)  # Clean up created files
 
     def test_verify_invalid_file_extension_in_sourcedir_raises_exception(self):
         source_directory, file_path = self.create_file_in_source_dir(
