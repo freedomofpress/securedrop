@@ -123,6 +123,26 @@ def test_verify_invalid_filename_in_sourcedir_raises_exception(
     assert 'Invalid filename NOTVALID.gpg' in str(e)
 
 
+def test_get_zip(journalist_app, test_source, config):
+    with journalist_app.app_context():
+        submissions = utils.db_helper.submit(
+            test_source['source'], 2)
+        filenames = [os.path.join(config.STORE_DIR,
+                                  test_source['filesystem_id'],
+                                  submission.filename)
+                     for submission in submissions]
+
+        archive = zipfile.ZipFile(
+            journalist_app.storage.get_bulk_archive(submissions))
+        archivefile_contents = archive.namelist()
+
+    for archived_file, actual_file in zip(archivefile_contents, filenames):
+        with io.open(actual_file, 'rb') as f:
+            actual_file_content = f.read()
+        zipped_file_content = archive.read(archived_file)
+        assert zipped_file_content == actual_file_content
+
+
 class TestStore(unittest.TestCase):
 
     """The set of tests for store.py."""
@@ -147,23 +167,6 @@ class TestStore(unittest.TestCase):
             os.utime(file_path, None)
 
         return source_directory, file_path
-
-    def test_get_zip(self):
-        source, _ = utils.db_helper.init_source()
-        submissions = utils.db_helper.submit(source, 2)
-        filenames = [os.path.join(config.STORE_DIR,
-                                  source.filesystem_id,
-                                  submission.filename)
-                     for submission in submissions]
-
-        archive = zipfile.ZipFile(
-            current_app.storage.get_bulk_archive(submissions))
-        archivefile_contents = archive.namelist()
-
-        for archived_file, actual_file in zip(archivefile_contents, filenames):
-            actual_file_content = io.open(actual_file, 'rb').read()
-            zipped_file_content = archive.read(archived_file)
-            self.assertEquals(zipped_file_content, actual_file_content)
 
     def test_rename_valid_submission(self):
         source, _ = utils.db_helper.init_source()
