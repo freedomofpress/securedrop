@@ -18,6 +18,19 @@ import utils
 from store import Storage
 
 
+def create_file_in_source_dir(config, filesystem_id, filename):
+    """Helper function for simulating files"""
+    source_directory = os.path.join(config.STORE_DIR,
+                                    filesystem_id)
+    os.makedirs(source_directory)
+
+    file_path = os.path.join(source_directory, filename)
+    with io.open(file_path, 'a'):
+        os.utime(file_path, None)
+
+    return source_directory, file_path
+
+
 def test_path_returns_filename_of_folder(journalist_app, config):
     """`Storage.path` is called in this way in
         journalist.delete_collection
