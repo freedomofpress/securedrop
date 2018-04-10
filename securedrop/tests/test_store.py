@@ -3,7 +3,6 @@ import os
 import io
 import pytest
 import re
-import shutil
 import store
 import unittest
 import zipfile
@@ -111,6 +110,19 @@ def test_verify_invalid_file_extension_in_sourcedir_raises_exception(
     assert 'Invalid file extension .txt' in str(e)
 
 
+def test_verify_invalid_filename_in_sourcedir_raises_exception(
+        journalist_app, config):
+
+    source_directory, file_path = create_file_in_source_dir(
+        config, 'example-filesystem-id', 'NOTVALID.gpg'
+    )
+
+    with pytest.raises(store.PathException) as e:
+        journalist_app.storage.verify(file_path)
+
+    assert 'Invalid filename NOTVALID.gpg' in str(e)
+
+
 class TestStore(unittest.TestCase):
 
     """The set of tests for store.py."""
@@ -135,18 +147,6 @@ class TestStore(unittest.TestCase):
             os.utime(file_path, None)
 
         return source_directory, file_path
-
-    def test_verify_invalid_filename_in_sourcedir_raises_exception(self):
-        source_directory, file_path = self.create_file_in_source_dir(
-            'example-filesystem-id', 'NOTVALID.gpg'
-        )
-
-        with self.assertRaisesRegexp(
-                store.PathException,
-                'Invalid filename NOTVALID.gpg'):
-            current_app.storage.verify(file_path)
-
-        shutil.rmtree(source_directory)  # Clean up created files
 
     def test_get_zip(self):
         source, _ = utils.db_helper.init_source()
