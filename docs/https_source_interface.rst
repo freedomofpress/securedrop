@@ -67,6 +67,10 @@ We have support for this workflow:
     # Replace <unique_hash> with the token provided by Digicert
     $ sudo vi /var/www/securedrop/.well-known/pki-validation/<unique_hash>.txt
 
+.. note:: If you see "File Not Found" when navigating to this file in Tor Browser,
+    check out the latest release in your *Admin Workstation* and re-run
+    ``./securedrop-admin install``.
+
 While the `CAB forum`_ has specified that ``.onion`` certificates may have a
 maximum lifetime of 15 months, we have heard that some folks have run into
 issues with such certificates, and currently it seems safest to give the
