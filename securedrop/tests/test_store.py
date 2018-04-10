@@ -4,14 +4,9 @@ import io
 import pytest
 import re
 import store
-import unittest
 import zipfile
 
-from flask import current_app
-
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import config
-import journalist_app
 import utils
 
 from store import Storage
@@ -159,37 +154,12 @@ def test_rename_valid_submission(journalist_app, test_source):
     assert actual_filename == expected_filename
 
 
-class TestStore(unittest.TestCase):
+def test_rename_submission_with_invalid_filename(journalist_app):
+    original_filename = '1-quintuple_cant-msg.gpg'
+    returned_filename = journalist_app.storage.rename_submission(
+            'example-filesystem-id', original_filename,
+            'this-new-filename-should-not-be-returned')
 
-    """The set of tests for store.py."""
-
-    def setUp(self):
-        self.__context = journalist_app.create_app(config).app_context()
-        self.__context.push()
-        utils.env.setup()
-
-    def tearDown(self):
-        utils.env.teardown()
-        self.__context.pop()
-
-    def create_file_in_source_dir(self, filesystem_id, filename):
-        """Helper function for simulating files"""
-        source_directory = os.path.join(config.STORE_DIR,
-                                        filesystem_id)
-        os.makedirs(source_directory)
-
-        file_path = os.path.join(source_directory, filename)
-        with io.open(file_path, 'a'):
-            os.utime(file_path, None)
-
-        return source_directory, file_path
-
-    def test_rename_submission_with_invalid_filename(self):
-        original_filename = '1-quintuple_cant-msg.gpg'
-        returned_filename = current_app.storage.rename_submission(
-                'example-filesystem-id', original_filename,
-                'this-new-filename-should-not-be-returned')
-
-        # None of the above files exist, so we expect the attempt to rename
-        # the submission to fail and the original filename to be returned.
-        self.assertEquals(original_filename, returned_filename)
+    # None of the above files exist, so we expect the attempt to rename
+    # the submission to fail and the original filename to be returned.
+    assert original_filename == returned_filename
