@@ -69,6 +69,14 @@ def test_verify_store_dir_not_absolute():
     assert re.compile('storage_path.*is not absolute').match(msg)
 
 
+def test_verify_store_temp_dir_not_absolute():
+    with pytest.raises(store.PathException) as exc_info:
+        Storage('/', '..', '<not a gpg key>')
+
+    msg = str(exc_info.value)
+    assert re.compile('temp_dir.*is not absolute').match(msg)
+
+
 class TestStore(unittest.TestCase):
 
     """The set of tests for store.py."""
@@ -93,13 +101,6 @@ class TestStore(unittest.TestCase):
             os.utime(file_path, None)
 
         return source_directory, file_path
-
-    def test_verify_store_temp_dir_not_absolute(self):
-        with pytest.raises(store.PathException) as exc_info:
-            Storage('/', '..', '<not a gpg key>')
-
-        msg = str(exc_info.value)
-        assert re.compile('temp_dir.*is not absolute').match(msg)
 
     def test_verify_flagged_file_in_sourcedir_returns_true(self):
         source_directory, file_path = self.create_file_in_source_dir(
