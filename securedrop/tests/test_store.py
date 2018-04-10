@@ -29,6 +29,18 @@ def test_path_returns_filename_of_folder(journalist_app, config):
     assert generated_absolute_path == expected_absolute_path
 
 
+def test_path_returns_filename_of_items_within_folder(journalist_app, config):
+    """`Storage.path` is called in this way in journalist.bulk_delete"""
+    filesystem_id = 'example'
+    item_filename = '1-quintuple_cant-msg.gpg'
+    generated_absolute_path = journalist_app.storage.path(filesystem_id,
+                                                          item_filename)
+
+    expected_absolute_path = os.path.join(config.STORE_DIR,
+                                          filesystem_id, item_filename)
+    assert generated_absolute_path == expected_absolute_path
+
+
 class TestStore(unittest.TestCase):
 
     """The set of tests for store.py."""
@@ -53,18 +65,6 @@ class TestStore(unittest.TestCase):
             os.utime(file_path, None)
 
         return source_directory, file_path
-
-    def test_path_returns_filename_of_items_within_folder(self):
-        """`Storage.path` is called in this way in journalist.bulk_delete"""
-        filesystem_id = 'example'
-        item_filename = '1-quintuple_cant-msg.gpg'
-
-        generated_absolute_path = current_app.storage.path(filesystem_id,
-                                                           item_filename)
-
-        expected_absolute_path = os.path.join(config.STORE_DIR,
-                                              filesystem_id, item_filename)
-        self.assertEquals(generated_absolute_path, expected_absolute_path)
 
     def test_verify_path_not_absolute(self):
         with self.assertRaises(store.PathException):
