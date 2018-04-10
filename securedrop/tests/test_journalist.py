@@ -608,6 +608,25 @@ def test_admin_add_user_password_too_long_warning(journalist_app, test_admin):
                 'created. Please try again.', 'error')
 
 
+def test_admin_edits_user_invalid_username(
+        journalist_app, test_admin, test_journo):
+    """Test expected error message when admin attempts to change a user's
+    username to a username that is taken by another user."""
+    new_username = test_journo['username']
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(
+                '/admin/edit/{}'.format(test_admin['id']),
+                data=dict(username=new_username, is_admin=None))
+
+            ins.assert_message_flashed(
+                'Username "{}" already taken.'.format(new_username),
+                'error')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -644,19 +663,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_edits_user_invalid_username(self):
-        """Test expected error message when admin attempts to change a user's
-        username to a username that is taken by another user."""
-        self._login_admin()
-        new_username = self.admin.username
-
-        self.client.post(
-            url_for('admin.edit_user', user_id=self.user.id),
-            data=dict(username=new_username, is_admin=None))
-
-        self.assertMessageFlashed('Username "{}" already taken.'.format(
-            new_username), 'error')
 
     def test_admin_resets_user_hotp(self):
         self._login_admin()
