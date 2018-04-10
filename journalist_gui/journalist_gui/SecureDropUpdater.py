@@ -2,10 +2,9 @@
 from PyQt5 import QtGui, QtWidgets
 import sys
 import subprocess
-import os
 import pexpect
 
-from journalist_gui import updaterUI, strings, resources_rc
+from journalist_gui import updaterUI, strings, resources_rc  # noqa
 
 
 class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
@@ -62,11 +61,12 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
     def check_out_and_verify_latest_tag(self):
         self.statusbar.showMessage(strings.fetching_update)
         self.progressBar.setProperty("value", 20)
-        update_command = ['/home/amnesia/Persistent/securedrop/securedrop-admin',
-                          'update']
+        sdadmin_path = '/home/amnesia/Persistent/securedrop/securedrop-admin'
+        update_command = [sdadmin_path, 'update']
         try:
-            self.output = subprocess.check_output(update_command,
-                                                  stderr=subprocess.STDOUT).decode('utf-8')
+            self.output = subprocess.check_output(
+                update_command,
+                stderr=subprocess.STDOUT).decode('utf-8')
             if 'Signature verification failed' in self.output:
                 self.update_success = False
                 self.failure_reason = strings.update_failed_sig_failure
@@ -90,8 +90,10 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             sys.exit(0)
 
     def configure_tails(self):
-        """Run tailsconfig if the signature verified and the update succeeded."""
-        tailsconfig_command = '/home/amnesia/Persistent/securedrop/securedrop-admin tailsconfig'
+        """Run tailsconfig if the signature verified and the
+        update succeeded."""
+        tailsconfig_command = ("/home/amnesia/Persistent/"
+                               "securedrop/securedrop-admin tailsconfig")
         if self.update_success:
             self.statusbar.showMessage(strings.updating_tails_env)
             # Get sudo password and add an enter key as tailsconfig command
@@ -110,7 +112,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
                 # failures in the Ansible output.
                 if 'failed=0' not in self.output:
                     self.update_success = False
-                    self.failure_reason = strings.tailsconfig_failed_generic_reason
+                    self.failure_reason = strings.tailsconfig_failed_generic_reason  # noqa
 
             except pexpect.exceptions.TIMEOUT:
                 self.update_success = False
