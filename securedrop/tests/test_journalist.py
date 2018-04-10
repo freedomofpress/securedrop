@@ -627,6 +627,37 @@ def test_admin_edits_user_invalid_username(
                 'error')
 
 
+def test_admin_resets_user_hotp_format_non_hexa(
+        journalist_app, test_admin, test_journo):
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        journo = test_journo['journalist']
+        # guard to ensure check below tests the correct condition
+        assert journo.is_totp
+
+        old_secret = journo.otp_secret
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post('/admin/reset-2fa-hotp',
+                     data=dict(uid=test_journo['id'], otp_secret='ZZ'))
+
+            # fetch altered DB object
+            journo = Journalist.query.get(journo.id)
+
+            new_secret = journo.otp_secret
+            assert old_secret == new_secret
+
+            # ensure we didn't accidentally enable hotp
+            assert journo.is_totp
+
+            ins.assert_message_flashed(
+                "Invalid secret format: please only submit letters A-F and "
+                "numbers 0-9.", "error")
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -678,19 +709,6 @@ class TestJournalistApp(TestCase):
         self.assertRedirects(
             resp,
             url_for('admin.new_user_two_factor', uid=self.user.id))
-
-    def test_admin_resets_user_hotp_format_non_hexa(self):
-        self._login_admin()
-        old_hotp = self.user.hotp.secret
-
-        self.client.post(url_for('admin.reset_two_factor_hotp'),
-                         data=dict(uid=self.user.id, otp_secret='ZZ'))
-        new_hotp = self.user.hotp.secret
-
-        self.assertEqual(old_hotp, new_hotp)
-        self.assertMessageFlashed(
-            "Invalid secret format: "
-            "please only submit letters A-F and numbers 0-9.", "error")
 
     def test_admin_resets_user_hotp_format_odd(self):
         self._login_admin()
