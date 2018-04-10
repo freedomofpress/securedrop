@@ -61,6 +61,14 @@ def test_verify_store_path_not_absolute(journalist_app):
     assert 'The path is not absolute and/or normalized' in str(e)
 
 
+def test_verify_store_dir_not_absolute():
+    with pytest.raises(store.PathException) as exc_info:
+        Storage('..', '/', '<not a gpg key>')
+
+    msg = str(exc_info.value)
+    assert re.compile('storage_path.*is not absolute').match(msg)
+
+
 class TestStore(unittest.TestCase):
 
     """The set of tests for store.py."""
@@ -85,13 +93,6 @@ class TestStore(unittest.TestCase):
             os.utime(file_path, None)
 
         return source_directory, file_path
-
-    def test_verify_store_dir_not_absolute(self):
-        with pytest.raises(store.PathException) as exc_info:
-            Storage('..', '/', '<not a gpg key>')
-
-        msg = str(exc_info.value)
-        assert re.compile('storage_path.*is not absolute').match(msg)
 
     def test_verify_store_temp_dir_not_absolute(self):
         with pytest.raises(store.PathException) as exc_info:
