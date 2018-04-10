@@ -44,19 +44,21 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             self.alert_failure(self.failure_reason)
 
     def alert_success(self):
-        success_dialog_box = QtWidgets.QMessageBox()
-        success_dialog_box.setIcon(QtWidgets.QMessageBox.Information)
-        success_dialog_box.setText(strings.finished_dialog_message)
-        success_dialog_box.setWindowTitle(strings.finished_dialog_title)
-        success_dialog_box.exec_()
-        sys.exit(0)
+        self.success_dialog = QtWidgets.QMessageBox()
+        self.success_dialog.setIcon(QtWidgets.QMessageBox.Information)
+        self.success_dialog.setText(strings.finished_dialog_message)
+        self.success_dialog.setWindowTitle(strings.finished_dialog_title)
+        self.success_dialog.show()
+
+        # Close when "OK" is clicked - the update has finished.
+        self.success_dialog.buttonClicked.connect(self.close)
 
     def alert_failure(self, failure_reason):
-        error_dialog_box = QtWidgets.QMessageBox()
-        error_dialog_box.setIcon(QtWidgets.QMessageBox.Critical)
-        error_dialog_box.setText(self.failure_reason)
-        error_dialog_box.setWindowTitle(strings.update_failed_dialog_title)
-        error_dialog_box.exec_()
+        self.error_dialog = QtWidgets.QMessageBox()
+        self.error_dialog.setIcon(QtWidgets.QMessageBox.Critical)
+        self.error_dialog.setText(self.failure_reason)
+        self.error_dialog.setWindowTitle(strings.update_failed_dialog_title)
+        self.error_dialog.show()
         self.progressBar.setProperty("value", 0)
 
     def check_out_and_verify_latest_tag(self):
