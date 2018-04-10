@@ -41,6 +41,12 @@ def test_path_returns_filename_of_items_within_folder(journalist_app, config):
     assert generated_absolute_path == expected_absolute_path
 
 
+def test_verify_path_not_absolute(journalist_app, config):
+    with pytest.raises(store.PathException):
+        journalist_app.storage.verify(
+            os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
+
+
 class TestStore(unittest.TestCase):
 
     """The set of tests for store.py."""
@@ -65,11 +71,6 @@ class TestStore(unittest.TestCase):
             os.utime(file_path, None)
 
         return source_directory, file_path
-
-    def test_verify_path_not_absolute(self):
-        with self.assertRaises(store.PathException):
-            current_app.storage.verify(
-                os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
 
     def test_verify_in_store_dir(self):
         with self.assertRaisesRegexp(store.PathException, 'Invalid directory'):
