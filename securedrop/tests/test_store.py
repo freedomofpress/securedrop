@@ -54,6 +54,13 @@ def test_verify_in_store_dir(journalist_app, config):
     assert 'Invalid directory' in str(e)
 
 
+def test_verify_store_path_not_absolute(journalist_app):
+    with pytest.raises(store.PathException) as e:
+        journalist_app.storage.verify('..')
+
+    assert 'The path is not absolute and/or normalized' in str(e)
+
+
 class TestStore(unittest.TestCase):
 
     """The set of tests for store.py."""
@@ -78,12 +85,6 @@ class TestStore(unittest.TestCase):
             os.utime(file_path, None)
 
         return source_directory, file_path
-
-    def test_verify_store_path_not_absolute(self):
-        with pytest.raises(store.PathException) as exc_info:
-            current_app.storage.verify('..')
-
-        assert 'The path is not absolute and/or normalized' in str(exc_info)
 
     def test_verify_store_dir_not_absolute(self):
         with pytest.raises(store.PathException) as exc_info:
