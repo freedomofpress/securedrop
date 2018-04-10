@@ -567,6 +567,28 @@ def test_admin_edits_user_password_too_long_warning(journalist_app,
                                        'Password not changed.', 'error')
 
 
+def test_user_edits_password_too_long_warning(journalist_app, test_journo):
+    overly_long_password = VALID_PASSWORD + \
+        'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(
+                '/account/new-password',
+                data=dict(username=test_journo['username'],
+                          is_admin=None,
+                          token=TOTP(test_journo['otp_secret']).now(),
+                          current_password=test_journo['password'],
+                          password=overly_long_password),
+                follow_redirects=True)
+
+            ins.assert_message_flashed('You submitted a bad password! '
+                                       'Password not changed.', 'error')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -603,20 +625,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_user_edits_password_too_long_warning(self):
-        self._login_user()
-        overly_long_password = VALID_PASSWORD + \
-            'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
-
-        self.client.post(url_for('account.new_password'),
-                         data=dict(password=overly_long_password,
-                                   token='mocked',
-                                   current_password=self.user_pw),
-                         follow_redirects=True)
-
-        self.assertMessageFlashed('You submitted a bad password! '
-                                  'Password not changed.', 'error')
 
     def test_admin_add_user_password_too_long_warning(self):
         self._login_admin()
