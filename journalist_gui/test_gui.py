@@ -3,7 +3,8 @@ import subprocess
 import pexpect
 from unittest import mock
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QSizePolicy, QInputDialog
+from PyQt5.QtWidgets import (QApplication, QSizePolicy, QInputDialog,
+                             QMessageBox)
 from PyQt5.QtTest import QTest
 
 from journalist_gui.SecureDropUpdater import UpdaterApp, strings
@@ -149,6 +150,35 @@ class WindowTestCase(AppTestCase):
         self.assertEqual(self.window.update_success, False)
         self.assertEqual(self.window.failure_reason,
                          strings.tailsconfig_failed_generic_reason)
+
+    def test_update_securedrop_success(self):
+        with mock.patch.object(self.window, 'check_out_and_verify_latest_tag',
+                               return_value=""):
+            with mock.patch.object(self.window, 'configure_tails',
+                                   return_value=""):
+                self.window.update_success = True
+                self.window.update_securedrop()
+
+                # A success dialog box should pop up which we should be
+                # able to click. If it is not there, an exception will occur.
+                button = self.window.success_dialog.button(QMessageBox.Ok)
+                button.click()
+
+                self.assertEqual(self.window.progressBar.value(), 100)
+
+    def test_update_securedrop_failure(self):
+        with mock.patch.object(self.window, 'check_out_and_verify_latest_tag',
+                               return_value=""):
+            self.window.update_success = False
+            self.window.failure_reason = "This is a generic failure message"
+            self.window.update_securedrop()
+
+            # A failure dialog box should pop up which we should be
+            # able to click. If it is not there, an exception will occur.
+            button = self.window.error_dialog.button(QMessageBox.Ok)
+            button.click()
+
+            self.assertEqual(self.window.progressBar.value(), 0)
 
 
 if __name__ == '__main__':
