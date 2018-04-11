@@ -8,9 +8,9 @@ using Python3.
 Installing the dependencies in a virtual environment
 -----------------------------------------------------
 
-You can use the `pipenv tool <https://docs.pipenv.org>`_ to create a virtualenv and install the dependencies. First step
-is to `install pipenv <https://docs.pipenv.org/#install-pipenv-today>`_ itself. After that the following commands can be
-used to create the environment.
+You can use the `pipenv tool <https://docs.pipenv.org>`_ to create a virtualenv and install the dependencies. The first step
+is to `install pipenv <https://docs.pipenv.org/#install-pipenv-today>`_ itself. After that, the following commands can be
+used to create the environment:
 
 ::
 
@@ -21,6 +21,15 @@ used to create the environment.
 The first command will create the virtualenv and install the dependencies. The second command is used to
 enable the Pipenv shell.
 
+You can run the GUI via:
+
+::
+
+    $ python3 SecureDropUpdater
+
+Note that since the application expects to run in Tails, you should test its
+functionality in a Tails VM. You can follow the instructions in the
+:ref:`Virtualizing Tails <virtualizing_tails>` guide to set up your Tails VM.
 
 To update the UI design
 -----------------------
@@ -34,7 +43,7 @@ The design of the GUI is saved in the ``journalist_gui/mainwindow.ui`` file. To 
 
 
 
-If we make any changes to the UI, we  will have to use ``pyuic5`` command to update the corresponding Python code.
+If we make any changes to the UI, we will have to use ``pyuic5`` command to update the corresponding Python code.
 
 ::
 
@@ -59,8 +68,8 @@ Example qrc file:
         </qresource>
     </RCC>
 
-We will have to update the corresponding Python file for any change in this resource file. We can do that by the following
-command.
+We will have to update the corresponding Python file for any change in this resource file. We can do that using the following
+command:
 
 
 ::
@@ -76,8 +85,8 @@ command.
 Adding and running test cases
 ------------------------------
 
-We have Python unittests in the ``test_gui.py`` file. Any change in the actual application code will also require adding new
-test cases or updating the old ones. You can run the tests using the following command.
+We have Python unit tests in the ``test_gui.py`` file. Any change in the actual application code will also require adding new
+test cases or updating the old ones. You can run the tests using the following command:
 
 ::
 
