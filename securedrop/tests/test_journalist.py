@@ -658,6 +658,30 @@ def test_admin_resets_user_hotp_format_non_hexa(
                 "numbers 0-9.", "error")
 
 
+def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        journo = test_journo['journalist']
+        old_secret = journo.otp_secret
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post('/admin/reset-2fa-hotp',
+                            data=dict(uid=test_journo['id'],
+                                      otp_secret=123456))
+
+            # fetch altered DB object
+            journo = Journalist.query.get(journo.id)
+
+            new_secret = journo.otp_secret
+            assert old_secret != new_secret
+            assert not journo.is_totp
+
+            # Redirect to admin 2FA view
+            ins.assert_redirects(resp, '/admin/2fa?uid={}'.format(journo.id))
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -694,21 +718,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_resets_user_hotp(self):
-        self._login_admin()
-        old_hotp = self.user.hotp
-
-        resp = self.client.post(url_for('admin.reset_two_factor_hotp'),
-                                data=dict(uid=self.user.id, otp_secret=123456))
-        new_hotp = self.user.hotp
-
-        # check that hotp is different
-        self.assertNotEqual(old_hotp.secret, new_hotp.secret)
-        # Redirect to admin 2FA view
-        self.assertRedirects(
-            resp,
-            url_for('admin.new_user_two_factor', uid=self.user.id))
 
     def test_admin_resets_user_hotp_format_odd(self):
         self._login_admin()
