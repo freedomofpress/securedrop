@@ -106,6 +106,26 @@ class TestSecureDropAdmin(object):
             assert "Applying SecureDrop updates..." in caplog.text
             assert "Updated to SecureDrop" not in caplog.text
 
+    def test_update_gpg_recv_primary_key_failure(self, tmpdir, caplog):
+        """We should try a secondary keyserver if for some reason the primary
+        keyserver is not available."""
+        git_repo_path = str(tmpdir)
+        args = argparse.Namespace(root=git_repo_path)
+
+        git_output = 'Good signature from "SecureDrop Release Signing Key"'
+
+        with mock.patch('securedrop_admin.check_for_updates',
+                        return_value=(True, "0.6.1")):
+            with mock.patch('subprocess.check_call',
+                            side_effect=['', subprocess.CalledProcessError(
+                                1, 'gpg', 'Keyserver receive failed')]):
+                with mock.patch('subprocess.check_output',
+                                return_value=git_output):
+                    securedrop_admin.update(args)
+                    assert "Applying SecureDrop updates..." in caplog.text
+                    assert "Signature verification successful." in caplog.text
+                    assert "Updated to SecureDrop" in caplog.text
+
     def test_update_signature_verifies(self, tmpdir, caplog):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
