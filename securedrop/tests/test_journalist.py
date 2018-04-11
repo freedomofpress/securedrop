@@ -694,11 +694,11 @@ class TestJournalistApp(TestCase):
 
     def test_admin_resets_user_hotp_format_odd(self):
         self._login_admin()
-        old_hotp = self.user.hotp.secret
+        old_hotp = self.user.otp_secret
 
         self.client.post(url_for('admin.reset_two_factor_hotp'),
                          data=dict(uid=self.user.id, otp_secret='Z'))
-        new_hotp = self.user.hotp.secret
+        new_hotp = self.user.otp_secret
 
         self.assertEqual(old_hotp, new_hotp)
         self.assertMessageFlashed(
@@ -711,7 +711,7 @@ class TestJournalistApp(TestCase):
                                           mocked_error_logger,
                                           mock_set_hotp_secret):
         self._login_admin()
-        old_hotp = self.user.hotp.secret
+        old_hotp = self.user.otp_secret
 
         error_message = 'SOMETHING WRONG!'
         mock_set_hotp_secret.side_effect = TypeError(error_message)
@@ -719,7 +719,7 @@ class TestJournalistApp(TestCase):
         otp_secret = '1234'
         self.client.post(url_for('admin.reset_two_factor_hotp'),
                          data=dict(uid=self.user.id, otp_secret=otp_secret))
-        new_hotp = self.user.hotp.secret
+        new_hotp = self.user.otp_secret
 
         self.assertEqual(old_hotp, new_hotp)
         self.assertMessageFlashed("An unexpected error occurred! "
@@ -730,24 +730,24 @@ class TestJournalistApp(TestCase):
 
     def test_user_resets_hotp(self):
         self._login_user()
-        old_hotp = self.user.hotp
+        old_hotp = self.user.otp_secret
 
         resp = self.client.post(url_for('account.reset_two_factor_hotp'),
                                 data=dict(otp_secret=123456))
-        new_hotp = self.user.hotp
+        new_hotp = self.user.otp_secret
 
         # check that hotp is different
-        self.assertNotEqual(old_hotp.secret, new_hotp.secret)
+        self.assertNotEqual(old_hotp, new_hotp)
         # should redirect to verification page
         self.assertRedirects(resp, url_for('account.new_two_factor'))
 
     def test_user_resets_user_hotp_format_odd(self):
         self._login_user()
-        old_hotp = self.user.hotp.secret
+        old_hotp = self.user.otp_secret
 
         self.client.post(url_for('account.reset_two_factor_hotp'),
                          data=dict(uid=self.user.id, otp_secret='123'))
-        new_hotp = self.user.hotp.secret
+        new_hotp = self.user.otp_secret
 
         self.assertEqual(old_hotp, new_hotp)
         self.assertMessageFlashed(
@@ -756,11 +756,11 @@ class TestJournalistApp(TestCase):
 
     def test_user_resets_user_hotp_format_non_hexa(self):
         self._login_user()
-        old_hotp = self.user.hotp.secret
+        old_hotp = self.user.otp_secret
 
         self.client.post(url_for('account.reset_two_factor_hotp'),
                          data=dict(uid=self.user.id, otp_secret='ZZ'))
-        new_hotp = self.user.hotp.secret
+        new_hotp = self.user.otp_secret
 
         self.assertEqual(old_hotp, new_hotp)
         self.assertMessageFlashed(
@@ -773,7 +773,7 @@ class TestJournalistApp(TestCase):
                                          mocked_error_logger,
                                          mock_set_hotp_secret):
         self._login_user()
-        old_hotp = self.user.hotp.secret
+        old_hotp = self.user.otp_secret
 
         error_message = 'SOMETHING WRONG!'
         mock_set_hotp_secret.side_effect = TypeError(error_message)
@@ -781,7 +781,7 @@ class TestJournalistApp(TestCase):
         otp_secret = '1234'
         self.client.post(url_for('account.reset_two_factor_hotp'),
                          data=dict(uid=self.user.id, otp_secret=otp_secret))
-        new_hotp = self.user.hotp.secret
+        new_hotp = self.user.otp_secret
 
         self.assertEqual(old_hotp, new_hotp)
         self.assertMessageFlashed("An unexpected error occurred! "
@@ -1143,16 +1143,16 @@ class TestJournalistApp(TestCase):
 
     def test_edit_hotp(self):
         self._login_user()
-        old_hotp = self.user.hotp
+        old_hotp = self.user.otp_secret
 
         res = self.client.post(
             url_for('account.reset_two_factor_hotp'),
             data=dict(otp_secret=123456)
             )
-        new_hotp = self.user.hotp
+        new_hotp = self.user.otp_secret
 
         # check that hotp is different
-        self.assertNotEqual(old_hotp.secret, new_hotp.secret)
+        self.assertNotEqual(old_hotp, new_hotp)
 
         # should redirect to verification page
         self.assertRedirects(res, url_for('account.new_two_factor'))
