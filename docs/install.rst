@@ -60,7 +60,7 @@ continuing:
    can add more later)
 -  The username of the system admin
 
-You can also, optionally, configure a :doc:`daily notifications
+You can also, optionally, configure :doc:`daily notifications
 <journalist>` about whether or not submission activity occurred in the
 past 24 hours. They are sent via email so journalists know if it is
 worth checking the *Journalist Interface*. For this you will need:

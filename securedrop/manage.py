@@ -331,7 +331,7 @@ def set_were_there_submissions_today(subps):
     parser = subps.add_parser(
         'were-there-submissions-today',
         help=('Update the file indicating '
-              'iff submissions were received in the past 24h'))
+              'whether submissions were received in the past 24h'))
     parser.set_defaults(func=were_there_submissions_today)
 
 
