@@ -317,12 +317,12 @@ class Journalist(db.Model):
         self.otp_secret = pyotp.random_base32()
 
     def set_hotp_secret(self, otp_secret):
-        self.is_totp = False
         self.otp_secret = base64.b32encode(
             binascii.unhexlify(
                 otp_secret.replace(
                     " ",
                     "")))
+        self.is_totp = False
         self.hotp_counter = 0
 
     @property
