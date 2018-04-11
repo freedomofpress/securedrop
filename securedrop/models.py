@@ -327,11 +327,17 @@ class Journalist(db.Model):
 
     @property
     def totp(self):
-        return pyotp.TOTP(self.otp_secret)
+        if self.is_totp:
+            return pyotp.TOTP(self.otp_secret)
+        else:
+            raise ValueError('{} is not using TOTP'.format(self))
 
     @property
     def hotp(self):
-        return pyotp.HOTP(self.otp_secret)
+        if not self.is_totp:
+            return pyotp.HOTP(self.otp_secret)
+        else:
+            raise ValueError('{} is not using HOTP'.format(self))
 
     @property
     def shared_secret_qrcode(self):
