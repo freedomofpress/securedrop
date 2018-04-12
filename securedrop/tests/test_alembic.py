@@ -102,3 +102,49 @@ def test_schema_unchanged_after_up_then_downgrade(alembic_config,
                                       reverted_schema))
 
     assert reverted_schema == original_schema
+
+
+@pytest.mark.parametrize('migration', ALL_MIGRATIONS)
+def test_upgrade_with_data(alembic_config, config, migration):
+    migrations = list_migrations(alembic_config, migration)
+    if len(migrations) == 1:
+        # Degenerate case where there is no data for the first migration
+        return
+
+    # Upgrade to one migration before the target
+    target = migrations[-1]
+    upgrade(alembic_config, target)
+
+    # Dynamic module import
+    mod_name = 'tests.migrations.migration_{}'.format(migration)
+    mod = __import__(mod_name, fromlist=['UpgradeTester'])
+
+    # Load the test data
+    upgrade_tester = mod.UpgradeTester(config=config)
+    upgrade_tester.load_data()
+
+    # Upgrade to the target
+    upgrade(alembic_config, migration)
+
+    # Make sure it applied "cleanly" for some definition of clean
+    upgrade_tester.check_upgrade()
+
+
+@pytest.mark.parametrize('migration', ALL_MIGRATIONS)
+def test_downgrade_with_data(alembic_config, config, migration):
+    # Upgrade to the target
+    upgrade(alembic_config, migration)
+
+    # Dynamic module import
+    mod_name = 'tests.migrations.migration_{}'.format(migration)
+    mod = __import__(mod_name, fromlist=['DowngradeTester'])
+
+    # Load the test data
+    downgrade_tester = mod.DowngradeTester(config=config)
+    downgrade_tester.load_data()
+
+    # Downgrade to previous migration
+    downgrade(alembic_config, '-1')
+
+    # Make sure it applied "cleanly" for some definition of clean
+    downgrade_tester.check_downgrade()
