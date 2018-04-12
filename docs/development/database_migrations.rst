@@ -43,10 +43,16 @@ You do not need to worry about when or how these migrations are applied.
 Developer Workflow
 ------------------
 
+Updating the Models
+~~~~~~~~~~~~~~~~~~~
+
 When you want to modify the database schema, you need to add adjust the models in the file
 ``models.py``. All indices, constraints, or other metadata about the scheme needs to be in this
 file. The development server creates tables directly from the subclasses of ``db.Model`` so that
 they are available for manual and automated testing.
+
+Creating Migrations
+~~~~~~~~~~~~~~~~~~~
 
 Once you are satisfied with your new model, ``alembic`` can auto-generate migrations using
 SQLAlchemy metadata and comparing it to the schema of an up-to-date SQLite database. To generate a
@@ -65,3 +71,80 @@ command to see an output of the SQL that will be generated.
 .. code-block:: none
 
     alembic upgrade head --sql
+
+Testing Migrations
+~~~~~~~~~~~~~~~~~~
+
+The test suite already comes with a test runner (``test_alembic.py``) that runs a series of checks
+to ensure migration's upgrade and downgrade commands are idempotent and don't break the database.
+The test runner uses dynamic module import to iterate through all the migrations. You will need to
+create a python module in the ``tests/migrations/`` directory. You module **MUST** be named
+``migration_<revision identifier>.py``. For example, if your revision is named
+``15ac9509fc68_init.py``, your test module will be named ``migration_15ac9509fc68.py``.
+Example modules for the first two revisions are shown below.
+
+.. code-block:: none
+
+    tests/migrations/
+    ├── __init__.py
+    ├── migration_15ac9509fc68.py
+    └── migration_faac8092c123.py
+
+
+Your module **MUST** contain the following classes with the following attributes.
+
+.. code:: python
+
+    class UpgradeTester:
+
+        def __init__(self, config):
+            '''This function MUST accept an argument named `config`.
+               You will likely want to save a reference to the config in your
+               class so you can access the database later.
+            '''
+            self.config = config
+
+        def load_data(self):
+            '''This function loads data into the database and filesystem. It is
+               executed before the upgrade.
+            '''
+            pass
+
+        def check_upgrade(self):
+            '''This function is run after the upgrade and verifies the state
+               of the database or filesystem. It MUST raise an exception if the
+               check fails.
+            '''
+            pass
+
+
+    class DowngradeTester:
+
+        def __init__(self, config):
+            '''This function MUST accept an argument named `config`.
+               You will likely want to save a reference to the config in your
+               class so you can access the database later.
+            '''
+            self.config = config
+
+        def load_data(self):
+            '''This function loads data into the database and filesystem. It is
+               executed before the downgrade.
+            '''
+            pass
+
+        def check_downgrade(self):
+            '''This function is run after the downgrade and verifies the state
+               of the database or filesystem. It MUST raise an exception if the
+               check fails.
+            '''
+            pass
+
+Your migration test needs to load data that covers all edge cases such as potentially broken foreign
+keys or columns with unexpected content.
+
+Additionally, your test **MUST NOT** import anything from the ``models`` module as this will not
+accurately test your migration, and it will likely break during future code changes. In fact, you
+should use as few dependencies as possible in your test including other ``securedrop`` code as well
+as external packages. This may be a rather annoying requirement, but it will make the tests more
+robust aginst future code changes.
