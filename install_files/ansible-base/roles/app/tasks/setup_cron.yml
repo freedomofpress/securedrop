@@ -15,3 +15,11 @@
     special_time: daily
   tags:
     - cron
+
+- name: Add cron job to update the number of submissions in the past 24h
+  cron:
+    name: Update the number of submissions in the past 24h
+    job: "{{ securedrop_code }}/manage.py were-there-submissions-today"
+    special_time: daily
+  tags:
+    - cron

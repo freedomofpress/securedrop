@@ -60,6 +60,21 @@ continuing:
    can add more later)
 -  The username of the system admin
 
+You can also, optionally, configure :doc:`daily notifications
+<journalist>` about whether or not submission activity occurred in the
+past 24 hours. They are sent via email so journalists know if it is
+worth checking the *Journalist Interface*. For this you will need:
+
+-  The journalist alerts GPG key
+-  The journalist alerts GPG key fingerprint
+-  The email address that will receive the journalist alerts
+
+.. note:: It is not possible to specify multiple email addresses. If
+          there are more than one recipient, an alias or a mailing
+          list must be created. All journalist subscribed must share
+          the GPG private key, it is not possible to specify multiple
+          GPG keys.
+
 You will have to copy the following required files to
 ``install_files/ansible-base``:
 

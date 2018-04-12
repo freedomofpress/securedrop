@@ -11,8 +11,12 @@
 
 - name: Copy the OSSEC GPG public key for sending encrypted alerts.
   copy:
-    src: "{{ ossec_alert_gpg_public_key }}"
+    src: "{{ item }}"
     dest: /var/ossec
+  when: item != ''
+  with_items:
+    - "{{ ossec_alert_gpg_public_key }}"
+    - "{{ journalist_alert_gpg_public_key }}"
   tags:
     - gpg
 
@@ -21,11 +25,15 @@
   command: >
     gpg
     --homedir /var/ossec/.gnupg
-    --import /var/ossec/{{ ossec_alert_gpg_public_key }}
+    --import /var/ossec/{{ item }}
   become: yes
   become_user: "{{ ossec_group }}"
   register: add_ossec_gpg_key_result
   changed_when: "'imported: 1' in add_ossec_gpg_key_result.stderr"
+  when: item != ''
+  with_items:
+    - "{{ ossec_alert_gpg_public_key }}"
+    - "{{ journalist_alert_gpg_public_key }}"
   tags:
     - gpg
 
@@ -33,6 +41,17 @@
   template:
     src: send_encrypted_alarm.sh
     dest: /var/ossec/send_encrypted_alarm.sh
+    mode: "0550"
+    owner: root
+    group: ossec
+  tags:
+    - procmail
+    - permissions
+
+- name: Copy script for formatting journalist submission
+  copy:
+    src: process_submissions_today.sh
+    dest: /var/ossec/process_submissions_today.sh
     mode: "0550"
     owner: root
     group: ossec

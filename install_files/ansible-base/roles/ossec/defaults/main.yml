@@ -10,3 +10,14 @@ ossec_group: ossec
 # will execute tasks conditionally based on the var values.
 ossec_is_server: False
 ossec_is_client: False
+
+#
+# The journalist_* variables are optional and may not be present at
+# all in the site-specific file. Set an empty string as the default
+# for all of them to make it easier for tasks to test if they are set
+# or not by comparing to the empty string instead of testing if they
+# are defined and if they are set to the empty string.
+#
+journalist_alert_gpg_public_key: ""
+journalist_gpg_fpr: ""
+journalist_alert_email: ""

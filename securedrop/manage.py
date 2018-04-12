@@ -3,6 +3,7 @@
 
 import argparse
 import codecs
+import datetime
 import logging
 import os
 import pwd
@@ -14,15 +15,16 @@ import time
 import traceback
 
 from flask import current_app
-from sqlalchemy import text
+from sqlalchemy import text, create_engine
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm import sessionmaker
 
 os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
 from sdconfig import config
 import journalist_app
 
 from db import db
-from models import Journalist, PasswordError, InvalidUsernameException
+from models import Source, Journalist, PasswordError, InvalidUsernameException
 from management.run import run
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
@@ -51,15 +53,15 @@ def reset(args):
 
     # Clear submission/reply storage
     try:
-        os.stat(config.STORE_DIR)
+        os.stat(args.store_dir)
     except OSError:
         pass
     else:
-        for source_dir in os.listdir(config.STORE_DIR):
+        for source_dir in os.listdir(args.store_dir):
             try:
                 # Each entry in STORE_DIR is a directory corresponding
                 # to a source
-                shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
+                shutil.rmtree(os.path.join(args.store_dir, source_dir))
             except OSError:
                 pass
     return 0
@@ -250,10 +252,38 @@ def init_db(args):
     os.chown('/var/lib/securedrop/db.sqlite', user.pw_uid, user.pw_gid)
 
 
+def were_there_submissions_today(args):
+    if config.DATABASE_ENGINE == "sqlite":
+        db_uri = (config.DATABASE_ENGINE + ":///" +
+                  config.DATABASE_FILE)
+    else:
+        db_uri = (
+            config.DATABASE_ENGINE + '://' +
+            config.DATABASE_USERNAME + ':' +
+            config.DATABASE_PASSWORD + '@' +
+            config.DATABASE_HOST + '/' +
+            config.DATABASE_NAME
+        )
+    session = sessionmaker(bind=create_engine(db_uri))()
+    something = session.query(Source).filter(
+        Source.last_updated >
+        datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+    ).count() > 0
+    count_file = os.path.join(args.data_root, 'submissions_today.txt')
+    open(count_file, 'w').write(something and '1' or '0')
+
+
 def get_args():
     parser = argparse.ArgumentParser(prog=__file__, description='Management '
                                      'and testing utility for SecureDrop.')
     parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('--data-root',
+                        default=config.SECUREDROP_DATA_ROOT,
+                        help=('directory in which the securedrop '
+                              'data is stored'))
+    parser.add_argument('--store-dir',
+                        default=config.STORE_DIR,
+                        help=('directory in which the documents are stored'))
     subps = parser.add_subparsers()
     # Run WSGI app
     run_subp = subps.add_parser('run', help='Run the Werkzeug source & '
@@ -286,6 +316,8 @@ def get_args():
     set_clean_tmp_parser(subps, 'clean-tmp')
     set_clean_tmp_parser(subps, 'clean_tmp')
 
+    set_were_there_submissions_today(subps)
+
     init_db_subp = subps.add_parser('init-db', help='initialize the DB')
     init_db_subp.add_argument('-u', '--user',
                               help='Unix user for the DB',
@@ -293,6 +325,14 @@ def get_args():
     init_db_subp.set_defaults(func=init_db)
 
     return parser
+
+
+def set_were_there_submissions_today(subps):
+    parser = subps.add_parser(
+        'were-there-submissions-today',
+        help=('Update the file indicating '
+              'whether submissions were received in the past 24h'))
+    parser.set_defaults(func=were_there_submissions_today)
 
 
 def set_clean_tmp_parser(subps, name):
