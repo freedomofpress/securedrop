@@ -18,9 +18,6 @@ class UpdateThread(QThread):
         self.update_success = False
         self.failure_reason = ""
 
-    def __del__(self):
-        self.wait()
-
     def run(self):
         sdadmin_path = '/home/amnesia/Persistent/securedrop/securedrop-admin'
         update_command = [sdadmin_path, 'update']
@@ -54,9 +51,6 @@ class TailsconfigThread(QThread):
         self.failure_reason = ""
         self.sudo_password = ""
 
-    def __del__(self):
-        self.wait()
-
     def run(self):
         tailsconfig_command = ("/home/amnesia/Persistent/"
                                "securedrop/securedrop-admin "
@@ -74,7 +68,8 @@ class TailsconfigThread(QThread):
             if 'failed=0' not in self.output:
                 self.update_success = False
                 self.failure_reason = strings.tailsconfig_failed_generic_reason  # noqa
-
+            else:
+                self.update_success = True
         except pexpect.exceptions.TIMEOUT:
             self.update_success = False
             self.failure_reason = strings.tailsconfig_failed_sudo_password
