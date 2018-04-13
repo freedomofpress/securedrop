@@ -91,7 +91,6 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         super(UpdaterApp, self).__init__(parent)
         self.setupUi(self)
         self.output = "Beginning update:"
-        self.testing = False  # True only in testing
         self.update_success = False
 
         pixmap = QtGui.QPixmap(":/images/static/securedrop.png")
@@ -124,8 +123,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
         self.progressBar.setProperty("value", 50)
-        if not self.testing:
-            self.call_tailsconfig()
+        self.call_tailsconfig()
 
     def call_tailsconfig(self):
         # Now let us work on tailsconfig part
@@ -141,8 +139,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             self.pushButton_2.setEnabled(True)
             self.statusbar.showMessage(self.failure_reason)
             self.progressBar.setProperty("value", 0)
-            if not self.testing:
-                self.alert_failure(self.failure_reason)
+            self.alert_failure(self.failure_reason)
 
     def tails_status(self, result):
         "This is the slot for Tailsconfig thread"
@@ -154,12 +151,10 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         if self.update_success:
             self.statusbar.showMessage(strings.finished)
             self.progressBar.setProperty("value", 100)
-            if not self.testing:
-                self.alert_success()
+            self.alert_success()
         else:
             self.statusbar.showMessage(self.failure_reason)
-            if not self.testing:
-                self.alert_failure(self.failure_reason)
+            self.alert_failure(self.failure_reason)
             # Now everything is done, enable the button.
             self.pushButton.setEnabled(True)
             self.pushButton_2.setEnabled(True)
