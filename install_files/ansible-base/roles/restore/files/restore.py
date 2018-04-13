@@ -24,7 +24,7 @@ Usage: restore.py <backup file>
         sys.exit(1)
 
     if not os.path.exists(sys.argv[1]):
-        print("<backup file> '{}' not found".format(sys.argv(1)))
+        print("<backup file> '{}' not found".format(sys.argv[1]))
         sys.exit(1)
 
     if os.geteuid() != 0:
