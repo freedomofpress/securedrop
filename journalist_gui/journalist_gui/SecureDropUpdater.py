@@ -11,6 +11,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
     def __init__(self, parent=None):
         super(UpdaterApp, self).__init__(parent)
         self.setupUi(self)
+        self.output = "Beginning update:"
 
         pixmap = QtGui.QPixmap(":/images/static/securedrop.png")
         self.label_2.setPixmap(pixmap)
@@ -31,7 +32,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.check_out_and_verify_latest_tag()
         self.progressBar.setProperty("value", 50)
         if self.update_success:
-            self.failure_reason = self.configure_tails()
+            self.configure_tails()
         self.progressBar.setProperty("value", 80)
 
         if self.update_success:
@@ -43,19 +44,21 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             self.alert_failure(self.failure_reason)
 
     def alert_success(self):
-        success_dialog_box = QtWidgets.QMessageBox()
-        success_dialog_box.setIcon(QtWidgets.QMessageBox.Information)
-        success_dialog_box.setText(strings.finished_dialog_message)
-        success_dialog_box.setWindowTitle(strings.finished_dialog_title)
-        success_dialog_box.exec_()
-        sys.exit(0)
+        self.success_dialog = QtWidgets.QMessageBox()
+        self.success_dialog.setIcon(QtWidgets.QMessageBox.Information)
+        self.success_dialog.setText(strings.finished_dialog_message)
+        self.success_dialog.setWindowTitle(strings.finished_dialog_title)
+        self.success_dialog.show()
+
+        # Close when "OK" is clicked - the update has finished.
+        self.success_dialog.buttonClicked.connect(self.close)
 
     def alert_failure(self, failure_reason):
-        error_dialog_box = QtWidgets.QMessageBox()
-        error_dialog_box.setIcon(QtWidgets.QMessageBox.Critical)
-        error_dialog_box.setText(self.failure_reason)
-        error_dialog_box.setWindowTitle(strings.update_failed_dialog_title)
-        error_dialog_box.exec_()
+        self.error_dialog = QtWidgets.QMessageBox()
+        self.error_dialog.setIcon(QtWidgets.QMessageBox.Critical)
+        self.error_dialog.setText(self.failure_reason)
+        self.error_dialog.setWindowTitle(strings.update_failed_dialog_title)
+        self.error_dialog.show()
         self.progressBar.setProperty("value", 0)
 
     def check_out_and_verify_latest_tag(self):
@@ -89,23 +92,31 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         else:
             sys.exit(0)
 
+    def pass_sudo_password_to_tailsconfig(self, sudo_password):
+        """Pass the sudo password to tailsconfig, and then return
+        the output from the screen to the user"""
+        tailsconfig_command = ("/home/amnesia/Persistent/"
+                               "securedrop/securedrop-admin tailsconfig")
+
+        child = pexpect.spawn(tailsconfig_command)
+        child.expect('SUDO password:')
+        self.output += child.before.decode('utf-8')
+        child.sendline(sudo_password)
+        child.expect(pexpect.EOF)
+        return child.before.decode('utf-8')
+
     def configure_tails(self):
         """Run tailsconfig if the signature verified and the
         update succeeded."""
-        tailsconfig_command = ("/home/amnesia/Persistent/"
-                               "securedrop/securedrop-admin tailsconfig")
         if self.update_success:
             self.statusbar.showMessage(strings.updating_tails_env)
             # Get sudo password and add an enter key as tailsconfig command
             # expects
             sudo_password = self.get_sudo_password() + '\n'
             try:
-                child = pexpect.spawn(tailsconfig_command)
-                child.expect('SUDO password:')
-                self.output += child.before.decode('utf-8')
-                child.sendline(sudo_password)
-                child.expect(pexpect.EOF)
-                self.output += child.before.decode('utf-8')
+                self.output += self.pass_sudo_password_to_tailsconfig(
+                    sudo_password
+                )
                 self.plainTextEdit.setPlainText(self.output)
 
                 # For Tailsconfig to be considered a success, we expect no
@@ -121,5 +132,3 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             except subprocess.CalledProcessError:
                 self.update_success = False
                 self.failure_reason = strings.tailsconfig_failed_generic_reason
-
-        return 'Success!'
