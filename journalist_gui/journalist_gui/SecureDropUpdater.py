@@ -154,13 +154,16 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         if self.update_success:
             self.statusbar.showMessage(strings.finished)
             self.progressBar.setProperty("value", 100)
-            self.alert_success()
+            if not self.testing:
+                self.alert_success()
         else:
             self.statusbar.showMessage(self.failure_reason)
-            self.alert_failure(self.failure_reason)
+            if not self.testing:
+                self.alert_failure(self.failure_reason)
             # Now everything is done, enable the button.
             self.pushButton.setEnabled(True)
             self.pushButton_2.setEnabled(True)
+            self.progressBar.setProperty("value", 0)
 
     def update_securedrop(self):
         self.pushButton_2.setEnabled(False)
@@ -187,7 +190,6 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.error_dialog.setText(self.failure_reason)
         self.error_dialog.setWindowTitle(strings.update_failed_dialog_title)
         self.error_dialog.show()
-        self.progressBar.setProperty("value", 0)
 
     def get_sudo_password(self):
         sudo_password, ok_is_pressed = QtWidgets.QInputDialog.getText(
@@ -197,4 +199,3 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             return sudo_password
         else:
             sys.exit(0)
-
