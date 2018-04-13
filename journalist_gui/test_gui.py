@@ -55,7 +55,7 @@ class WindowTestCase(AppTestCase):
                          self.window.tabWidget.indexOf(self.window.tab_2))
 
     @mock.patch('subprocess.check_output',
-                return_value=b'Good signature from\nUpdated to SecureDrop')
+                return_value=b'Signature verification successful')
     def test_updateThread(self, check_output):
         self.window.update_thread.run()  # Call run directly
         self.assertEqual(self.window.update_success, True)
