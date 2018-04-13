@@ -28,7 +28,7 @@ class UpdateThread(QThread):
             if 'Signature verification failed' in self.output:
                 self.update_success = False
                 self.failure_reason = strings.update_failed_sig_failure
-            elif "Good signature from" in self.output:
+            elif "Signature verification successful" in self.output:
                 self.update_success = True
             else:
                 self.failure_reason = strings.update_failed_generic_reason
