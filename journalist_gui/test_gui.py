@@ -123,7 +123,7 @@ class WindowTestCase(AppTestCase):
     def test_tailsconfigThread_sudo_password_is_wrong(self, pt):
         child = pt()
         before = MagicMock()
-        before.decode.side_effect = ["some data",\
+        before.decode.side_effect = ["some data",
                                      pexpect.exceptions.TIMEOUT(1)]
         child.before = before
         self.window.tails_thread.run()
