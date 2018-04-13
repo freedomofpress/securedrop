@@ -23,7 +23,6 @@ class WindowTestCase(AppTestCase):
     def setUp(self):
         super(WindowTestCase, self).setUp()
         self.window = UpdaterApp()
-        self.window.testing = True
         self.window.show()
         QTest.qWaitForWindowExposed(self.window)
 
@@ -57,26 +56,32 @@ class WindowTestCase(AppTestCase):
     @mock.patch('subprocess.check_output',
                 return_value=b'Signature verification successful')
     def test_updateThread(self, check_output):
-        self.window.update_thread.run()  # Call run directly
-        self.assertEqual(self.window.update_success, True)
-        self.assertEqual(self.window.progressBar.value(), 50)
+        with mock.patch.object(self.window, "call_tailsconfig",
+                               return_value=""):
+            self.window.update_thread.run()  # Call run directly
+            self.assertEqual(self.window.update_success, True)
+            self.assertEqual(self.window.progressBar.value(), 50)
 
     @mock.patch('subprocess.check_output',
                 return_value=b'Signature verification failed')
     def test_updateThread_failure(self, check_output):
-        self.window.update_thread.run()  # Call run directly
-        self.assertEqual(self.window.update_success, False)
-        self.assertEqual(self.window.failure_reason,
-                         strings.update_failed_sig_failure)
+        with mock.patch.object(self.window, "call_tailsconfig",
+                               return_value=""):
+            self.window.update_thread.run()  # Call run directly
+            self.assertEqual(self.window.update_success, False)
+            self.assertEqual(self.window.failure_reason,
+                             strings.update_failed_sig_failure)
 
     @mock.patch('subprocess.check_output',
                 side_effect=subprocess.CalledProcessError(
                     1, 'cmd', b'Generic other failure'))
     def test_updateThread_generic_failure(self, check_output):
-        self.window.update_thread.run()  # Call run directly
-        self.assertEqual(self.window.update_success, False)
-        self.assertEqual(self.window.failure_reason,
-                         strings.update_failed_generic_reason)
+        with mock.patch.object(self.window, "call_tailsconfig",
+                               return_value=""):
+            self.window.update_thread.run()  # Call run directly
+            self.assertEqual(self.window.update_success, False)
+            self.assertEqual(self.window.failure_reason,
+                             strings.update_failed_generic_reason)
 
     def test_get_sudo_password_when_password_provided(self):
         expected_password = "password"
