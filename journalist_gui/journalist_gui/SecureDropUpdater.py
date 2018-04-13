@@ -28,8 +28,10 @@ class UpdateThread(QThread):
             if 'Signature verification failed' in self.output:
                 self.update_success = False
                 self.failure_reason = strings.update_failed_sig_failure
-            else:
+            elif "Good signature from" in self.output:
                 self.update_success = True
+            else:
+                self.failure_reason = strings.update_failed_generic_reason
         except subprocess.CalledProcessError as e:
             self.output = str(e.output)
             self.update_success = False
