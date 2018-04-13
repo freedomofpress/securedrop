@@ -94,6 +94,8 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         super(UpdaterApp, self).__init__(parent)
         self.setupUi(self)
         self.output = "Beginning update:"
+        self.testing = False  # True only in testing
+        self.update_success = False
 
         pixmap = QtGui.QPixmap(":/images/static/securedrop.png")
         self.label_2.setPixmap(pixmap)
@@ -125,7 +127,10 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
         self.progressBar.setProperty("value", 50)
+        if not self.testing:
+            self.call_tailsconfig()
 
+    def call_tailsconfig(self):
         # Now let us work on tailsconfig part
         if self.update_success:
             self.statusbar.showMessage(strings.updating_tails_env)
@@ -140,7 +145,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
 
     def tails_status(self, result):
         "This is the slot for Tailsconfig thread"
-        self.output = result['output']
+        self.output += result['output']
         self.update_success = result['status']
         self.failure_reason = result['failure_reason']
         self.plainTextEdit.setPlainText(self.output)

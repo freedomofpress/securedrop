@@ -23,6 +23,7 @@ class WindowTestCase(AppTestCase):
     def setUp(self):
         super(WindowTestCase, self).setUp()
         self.window = UpdaterApp()
+        self.window.testing = True
         self.window.show()
         QTest.qWaitForWindowExposed(self.window)
 
@@ -55,15 +56,15 @@ class WindowTestCase(AppTestCase):
 
     @mock.patch('subprocess.check_output',
                 return_value=b'Updated to SecureDrop')
-    def test_check_out_latest_tag_success(self, check_output):
-        self.window.check_out_and_verify_latest_tag()
+    def test_updateThread(self, check_output):
+        self.window.update_thread.run()  # Call run directly
         self.assertEqual(self.window.update_success, True)
-        self.assertEqual(self.window.progressBar.value(), 40)
+        self.assertEqual(self.window.progressBar.value(), 50)
 
     @mock.patch('subprocess.check_output',
                 return_value=b'Signature verification failed')
-    def test_check_out_latest_tag_verification_failure(self, check_output):
-        self.window.check_out_and_verify_latest_tag()
+    def test_updateThread_failure(self, check_output):
+        self.window.update_thread.run()  # Call run directly
         self.assertEqual(self.window.update_success, False)
         self.assertEqual(self.window.failure_reason,
                          strings.update_failed_sig_failure)
@@ -71,8 +72,8 @@ class WindowTestCase(AppTestCase):
     @mock.patch('subprocess.check_output',
                 side_effect=subprocess.CalledProcessError(
                     1, 'cmd', 'Generic other failure'))
-    def test_check_out_latest_generic_failure(self, check_output):
-        self.window.check_out_and_verify_latest_tag()
+    def test_updateThread_generic_failure(self, check_output):
+        self.window.update_thread.run()  # Call run directly
         self.assertEqual(self.window.update_success, False)
         self.assertEqual(self.window.failure_reason,
                          strings.update_failed_generic_reason)
