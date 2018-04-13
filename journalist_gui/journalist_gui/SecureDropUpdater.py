@@ -33,7 +33,7 @@ class UpdateThread(QThread):
             else:
                 self.failure_reason = strings.update_failed_generic_reason
         except subprocess.CalledProcessError as e:
-            self.output = str(e.output)
+            self.output = e.output.decode('utf-8')
             self.update_success = False
             self.failure_reason = strings.update_failed_generic_reason
         result = {'status': self.update_success,
@@ -139,6 +139,10 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         else:
             self.pushButton.setEnabled(True)
             self.pushButton_2.setEnabled(True)
+            self.statusbar.showMessage(self.failure_reason)
+            self.progressBar.setProperty("value", 0)
+            if not self.testing:
+                self.alert_failure(self.failure_reason)
 
     def tails_status(self, result):
         "This is the slot for Tailsconfig thread"
