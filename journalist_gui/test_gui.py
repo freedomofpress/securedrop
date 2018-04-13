@@ -55,7 +55,7 @@ class WindowTestCase(AppTestCase):
                          self.window.tabWidget.indexOf(self.window.tab_2))
 
     @mock.patch('subprocess.check_output',
-                return_value=b'Updated to SecureDrop')
+                return_value=b'Good signature from\nUpdated to SecureDrop')
     def test_updateThread(self, check_output):
         self.window.update_thread.run()  # Call run directly
         self.assertEqual(self.window.update_success, True)
@@ -71,7 +71,7 @@ class WindowTestCase(AppTestCase):
 
     @mock.patch('subprocess.check_output',
                 side_effect=subprocess.CalledProcessError(
-                    1, 'cmd', 'Generic other failure'))
+                    1, 'cmd', b'Generic other failure'))
     def test_updateThread_generic_failure(self, check_output):
         self.window.update_thread.run()  # Call run directly
         self.assertEqual(self.window.update_success, False)
