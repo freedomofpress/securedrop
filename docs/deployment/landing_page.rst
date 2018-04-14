@@ -59,6 +59,30 @@ preload list <https://hstspreload.appspot.com/>`__ if you can meet all
 of the requirements. This will tell web browsers that the site is only
 ever to be reached over HTTPS.
 
+Provide any .onion address without a hyperlink
+----------------------------------------------
+Because a visitor to your landing page may not be using the Tor browser yet,
+clicking a link to your SecureDrop instance or to any other .onion address may
+result in an error message. Worse, depending on the browser and network
+configuration, it may cause lookups that an adversary can use to identify
+SecureDrop-related behavior.
+
+Instead, we recommend including .onion addresses in plain text, without a
+hyperlink.
+
+Avoid direct links to SecureDrop.org from your landing page
+-----------------------------------------------------------
+
+We appreciate that you may want to link to `the SecureDrop website <https://securedrop.org/>`__
+to give landing page visitors more information about the system. Unfortunately,
+if a visitor visits these links without using the Tor browser, this generates
+traffic that an adversary may be able to use to identify SecureDrop-related
+behavior, regardless of the use of HTTPS.
+
+We suggest offering a reference to the SecureDrop hidden service in
+plain text, without a hyperlink (as per the preceding section):
+**secrdrop5wyphb5x.onion**
+
 Perfect Forward Secrecy
 -----------------------
 
