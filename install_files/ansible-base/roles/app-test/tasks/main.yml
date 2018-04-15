@@ -3,13 +3,11 @@
   when: "'staging' in group_names"
   tags:
     - apache
-    - non-development
 
 - include: apparmor_complain.yml
   when: securedrop_app_test_apparmor_complain
   tags:
     - aa-complain
-    - non-development
 
 - include: dev_setup_xvfb_for_functional_tests.yml
 
