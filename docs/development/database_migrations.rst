@@ -72,8 +72,8 @@ command to see an output of the SQL that will be generated.
 
     alembic upgrade head --sql
 
-Testing Migrations
-~~~~~~~~~~~~~~~~~~
+Unit Testing Migrations
+~~~~~~~~~~~~~~~~~~~~~~~
 
 The test suite already comes with a test runner (``test_alembic.py``) that runs a series of checks
 to ensure migration's upgrade and downgrade commands are idempotent and don't break the database.
@@ -148,3 +148,24 @@ accurately test your migration, and it will likely break during future code chan
 should use as few dependencies as possible in your test including other ``securedrop`` code as well
 as external packages. This may be a rather annoying requirement, but it will make the tests more
 robust aginst future code changes.
+
+Release Testing Migrations
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to ensure that migrations between from the previous to current version of SecureDrop apply
+cleanly in production-like instances, we have a helper script that is designed to load
+semi-randomized data into the database. You will need to modify the script ``qa_loader.py`` to
+include sample data. This sample data should intentionally include edge cases that might behave
+strangely such as data whose nullability is only enforced by the application or missing files.
+
+During QA, the release manager should follow these steps to test the migrations.
+
+1. Checkout the previous SecureDrop release
+2. Build Debian packages locally
+3. Provision staging VMs
+4. ``vagrant ssh app-staging``
+5. ``sudo su``
+6. ``cd /var/www/securedrop && ./qa_loader.py``
+7. Checkout the release candidate
+8. Re-provision the staging VMs
+9. Check that nothing went horribly wrong
