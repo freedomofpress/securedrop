@@ -16,6 +16,7 @@ include journalist_templates/
 include journalist_templates/*.html
 include management/
 include management/*.py
+include qa_loader.py
 include requirements/
 include requirements/**.txt
 include source_app/
