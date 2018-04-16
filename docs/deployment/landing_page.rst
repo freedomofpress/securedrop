@@ -118,6 +118,30 @@ services intercept requests between a potential source and the SecureDrop
 
 .. _`track`: https://github.com/Synzvato/decentraleyes/wiki/Frequently-Asked-Questions
 
+Do Not Hyperlink .onion Addresses
+---------------------------------
+Because a visitor to your *Landing Page* may not be using the Tor browser yet,
+clicking a link to your SecureDrop instance or to any other .onion address may
+result in an error message. Worse, depending on the browser and network
+configuration, it may cause lookups that an adversary can use to identify
+SecureDrop-related behavior.
+
+Instead, we recommend including .onion addresses in plain text, without a
+hyperlink.
+
+Avoid Direct Links to SecureDrop.org
+------------------------------------
+
+We appreciate that you may want to link to `the SecureDrop website <https://securedrop.org/>`__
+to give *Landing Page* visitors more information about the system. Unfortunately,
+if a visitor visits these links without using the Tor browser, this generates
+traffic that an adversary may be able to use to identify SecureDrop-related
+behavior, regardless of the use of HTTPS.
+
+We suggest offering a reference to the SecureDrop hidden service in
+plain text, without a hyperlink (as per the preceding section):
+**secrdrop5wyphb5x.onion**
+
 Apply Security Headers
 ----------------------
 
