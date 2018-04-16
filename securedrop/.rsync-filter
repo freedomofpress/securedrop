@@ -63,6 +63,8 @@ include tests/i18n/securedrop/translations/de_DE/LC_MESSAGES/*.po
 include tests/i18n/securedrop/translations/nl/
 include tests/i18n/securedrop/translations/nl/LC_MESSAGES/
 include tests/i18n/securedrop/translations/nl/LC_MESSAGES/*.po
+include tests/migrations/
+include tests/migrations/*.py
 include tests/log/
 include tests/utils/
 include tests/utils/**.py
