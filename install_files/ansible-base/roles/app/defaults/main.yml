@@ -4,10 +4,6 @@
 # deb packages. Development will also skip entirely.
 securedrop_app_install_from_repo: True
 
-# Whether to configure the Apache service for the application. Required
-# in prod and staging, but not relevant for development.
-securedrop_app_configure_apache: True
-
 # Username for ownership of the app code document root.
 securedrop_user: www-data
 

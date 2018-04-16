@@ -67,4 +67,4 @@ install_local_packages: true
 # the application code directly out of the local repo. Do, however, make sure
 # the Apache service is configured correctly.
 securedrop_app_install_from_repo: False
-securedrop_app_configure_apache: True
+

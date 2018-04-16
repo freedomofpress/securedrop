@@ -11,11 +11,9 @@
 # are written, otherwise the Apache enmod tasks will fail.
 - include: copy_ssl_certs.yml
   when:
-    - securedrop_app_configure_apache
     - securedrop_app_https_on_source_interface
 
 - include: install_and_harden_apache.yml
-  when: securedrop_app_configure_apache
 
 - include: configure_securedrop_worker.yml
 
