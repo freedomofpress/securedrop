@@ -2,8 +2,10 @@ window_title = 'SecureDrop Updater'
 update_in_progress = ("SecureDrop workstation updates are available! "
                       "You should install them now. If you don\'t want to, "
                       "you can install them the next time you reboot.")
-fetching_update = 'Fetching and verifying latest update...'
-updating_tails_env = 'Configuring local Tails environment...'
+fetching_update = ('Fetching and verifying latest update...'
+                   ' (4 mins remaining)')
+updating_tails_env = ('Configuring local Tails environment...'
+                      ' (1 min remaining)')
 finished = 'Update successfully completed!'
 finished_dialog_message = 'Updates completed successfully. Click OK to close.'
 finished_dialog_title = 'SecureDrop Workstation is up to date!'
