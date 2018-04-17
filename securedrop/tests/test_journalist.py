@@ -786,6 +786,27 @@ def test_user_resets_user_hotp_format_odd(journalist_app, test_journo):
     assert old_secret == new_secret
 
 
+def test_user_resets_user_hotp_format_non_hexa(journalist_app, test_journo):
+    old_secret = test_journo['otp_secret']
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('account.reset_two_factor_hotp'),
+                     data=dict(otp_secret='ZZ'))
+            ins.assert_message_flashed(
+                "Invalid secret format: "
+                "please only submit letters A-F and numbers 0-9.", "error")
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert old_secret == new_secret
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -822,19 +843,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_user_resets_user_hotp_format_non_hexa(self):
-        self._login_user()
-        old_hotp = self.user.otp_secret
-
-        self.client.post(url_for('account.reset_two_factor_hotp'),
-                         data=dict(uid=self.user.id, otp_secret='ZZ'))
-        new_hotp = self.user.otp_secret
-
-        self.assertEqual(old_hotp, new_hotp)
-        self.assertMessageFlashed(
-            "Invalid secret format: "
-            "please only submit letters A-F and numbers 0-9.", "error")
 
     @patch('models.Journalist.set_hotp_secret')
     @patch('journalist.app.logger.error')
