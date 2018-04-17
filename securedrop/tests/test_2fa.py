@@ -91,6 +91,59 @@ def test_totp_reuse_protections2(journalist_app, test_journo):
         models.LOGIN_HARDENING = original_hardening
 
 
+def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
+        journalist_app, test_admin):
+    '''Regression test for
+       https://github.com/freedomofpress/securedrop/pull/1692
+    '''
+    original_hardening = models.LOGIN_HARDENING
+    try:
+        models.LOGIN_HARDENING = True
+        invalid_token = u'000000'
+
+        with totp_window():
+            with journalist_app.test_client() as app:
+                resp = app.post(
+                    '/login',
+                    data=dict(username=test_admin['username'],
+                              password=test_admin['password'],
+                              token=TOTP(test_admin['otp_secret']).now()))
+
+                # Submit the token once
+                with InstrumentedApp(journalist_app) as ins:
+                    resp = app.post('/admin/2fa?uid={}'.format(
+                                        test_admin['id']),
+                                    data=dict(token=invalid_token))
+
+                    assert resp.status_code == 200
+                    ins.assert_message_flashed(
+                        'Could not verify token in two-factor authentication.',
+                        'error')
+
+            # last_token should be set to the token we just tried to use
+            with journalist_app.app_context():
+                admin = Journalist.query.get(test_admin['id'])
+                assert admin.last_token == invalid_token
+
+            with journalist_app.test_client() as app:
+                resp = app.post(
+                    '/login',
+                    data=dict(username=test_admin['username'],
+                              password=test_admin['password'],
+                              token=TOTP(test_admin['otp_secret']).now()))
+
+                # Submit the same invalid token again
+                with InstrumentedApp(journalist_app) as ins:
+                    resp = app.post('/admin/2fa?uid={}'.format(
+                                        test_admin['id']),
+                                    data=dict(token=invalid_token))
+                    ins.assert_message_flashed(
+                        'Could not verify token in two-factor authentication.',
+                        'error')
+    finally:
+        models.LOGIN_HARDENING = original_hardening
+
+
 class TestJournalist2FA(flask_testing.TestCase):
     def create_app(self):
         return journalist.app
@@ -129,32 +182,6 @@ class TestJournalist2FA(flask_testing.TestCase):
                                           password=self.user_pw,
                                           token=token))
         return resp
-
-    def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(self):
-        # Regression test
-        # https://github.com/freedomofpress/securedrop/pull/1692
-        self._login_admin()
-
-        # Create and submit an invalid 2FA token
-        invalid_token = u'000000'
-        resp = self.client.post(url_for('admin.new_user_two_factor',
-                                        uid=self.admin.id),
-                                data=dict(token=invalid_token))
-
-        self.assert200(resp)
-        self.assertMessageFlashed(
-            'Could not verify token in two-factor authentication.', 'error')
-        # last_token should be set to the invalid token we just tried to use
-        self.assertEqual(self.admin.last_token, invalid_token)
-
-        # Submit the same invalid token again
-        resp = self.client.post(url_for('admin.new_user_two_factor',
-                                        uid=self.admin.id),
-                                data=dict(token=invalid_token))
-
-        # A flashed message should appear
-        self.assertMessageFlashed(
-            'Could not verify token in two-factor authentication.', 'error')
 
     def test_bad_token_fails_to_verify_on_new_user_two_factor_page(self):
         # Regression test
