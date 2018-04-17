@@ -218,5 +218,5 @@ SSH Access
 
 By default, direct SSH access is not enabled in the prod environment. You will need to log
 in over Tor after initial provisioning or set ``enable_ssh_over_tor`` to "false"
-during ``./secure-admin tailsconfig``. See :ref:`ssh_over_tor` or :ref:`ssh_over_local`
+during ``./securedrop-admin tailsconfig``. See :ref:`ssh_over_tor` or :ref:`ssh_over_local`
 for more info.
