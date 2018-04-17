@@ -682,6 +682,30 @@ def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
             ins.assert_redirects(resp, '/admin/2fa?uid={}'.format(journo.id))
 
 
+def test_admin_resets_user_hotp_format_odd(journalist_app,
+                                           test_admin,
+                                           test_journo):
+    old_secret = test_journo['otp_secret']
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.reset_two_factor_hotp'),
+                     data=dict(uid=test_journo['id'], otp_secret='Z'))
+
+            ins.assert_message_flashed(
+                "Invalid secret format: "
+                "odd-length secret. Did you mistype the secret?", "error")
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert old_secret == new_secret
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -718,19 +742,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_resets_user_hotp_format_odd(self):
-        self._login_admin()
-        old_hotp = self.user.otp_secret
-
-        self.client.post(url_for('admin.reset_two_factor_hotp'),
-                         data=dict(uid=self.user.id, otp_secret='Z'))
-        new_hotp = self.user.otp_secret
-
-        self.assertEqual(old_hotp, new_hotp)
-        self.assertMessageFlashed(
-            "Invalid secret format: "
-            "odd-length secret. Did you mistype the secret?", "error")
 
     @patch('models.Journalist.set_hotp_secret')
     @patch('journalist.app.logger.error')
