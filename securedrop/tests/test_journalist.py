@@ -741,6 +741,30 @@ def test_admin_resets_user_hotp_error(mocker,
             bad_secret, test_journo['id'], error_message))
 
 
+def test_user_resets_hotp(journalist_app, test_journo):
+    old_secret = test_journo['otp_secret']
+    new_secret = 123456
+
+    # Precondition
+    assert new_secret != old_secret
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('account.reset_two_factor_hotp'),
+                            data=dict(otp_secret=new_secret))
+            # should redirect to verification page
+            ins.assert_redirects(resp, url_for('account.new_two_factor'))
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert old_secret != new_secret
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -777,19 +801,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_user_resets_hotp(self):
-        self._login_user()
-        old_hotp = self.user.otp_secret
-
-        resp = self.client.post(url_for('account.reset_two_factor_hotp'),
-                                data=dict(otp_secret=123456))
-        new_hotp = self.user.otp_secret
-
-        # check that hotp is different
-        self.assertNotEqual(old_hotp, new_hotp)
-        # should redirect to verification page
-        self.assertRedirects(resp, url_for('account.new_two_factor'))
 
     def test_user_resets_user_hotp_format_odd(self):
         self._login_user()
