@@ -706,6 +706,41 @@ def test_admin_resets_user_hotp_format_odd(journalist_app,
     assert old_secret == new_secret
 
 
+def test_admin_resets_user_hotp_error(mocker,
+                                      journalist_app,
+                                      test_admin,
+                                      test_journo):
+
+    bad_secret = '1234'
+    error_message = 'SOMETHING WRONG!'
+    mocked_error_logger = mocker.patch('journalist.app.logger.error')
+    old_secret = test_journo['otp_secret']
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        mocker.patch('models.Journalist.set_hotp_secret',
+                     side_effect=TypeError(error_message))
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.reset_two_factor_hotp'),
+                     data=dict(uid=test_journo['id'], otp_secret=bad_secret))
+            ins.assert_message_flashed("An unexpected error occurred! "
+                                       "Please inform your administrator.",
+                                       "error")
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert new_secret == old_secret
+
+    mocked_error_logger.assert_called_once_with(
+        "set_hotp_secret '{}' (id {}) failed: {}".format(
+            bad_secret, test_journo['id'], error_message))
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -742,29 +777,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    @patch('models.Journalist.set_hotp_secret')
-    @patch('journalist.app.logger.error')
-    def test_admin_resets_user_hotp_error(self,
-                                          mocked_error_logger,
-                                          mock_set_hotp_secret):
-        self._login_admin()
-        old_hotp = self.user.otp_secret
-
-        error_message = 'SOMETHING WRONG!'
-        mock_set_hotp_secret.side_effect = TypeError(error_message)
-
-        otp_secret = '1234'
-        self.client.post(url_for('admin.reset_two_factor_hotp'),
-                         data=dict(uid=self.user.id, otp_secret=otp_secret))
-        new_hotp = self.user.otp_secret
-
-        self.assertEqual(old_hotp, new_hotp)
-        self.assertMessageFlashed("An unexpected error occurred! "
-                                  "Please inform your administrator.", "error")
-        mocked_error_logger.assert_called_once_with(
-            "set_hotp_secret '{}' (id {}) failed: {}".format(
-                otp_secret, self.user.id, error_message))
 
     def test_user_resets_hotp(self):
         self._login_user()
