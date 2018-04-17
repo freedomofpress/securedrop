@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
-
-from functional_test import FunctionalTest
-from journalist_navigation_steps import JournalistNavigationStepsMixin
+import journalist_navigation_steps
+import functional_test
 
 
-class MakeAccountChanges(FunctionalTest, JournalistNavigationStepsMixin,
-                         TestCase):
+class TestMakeAccountChanges(
+        functional_test.FunctionalTest,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
+
     def test_admin_edit_account_html_template_rendering(self):
         """The edit_account.html template is used both when an admin is editing
         a user's account, and when a user is editing their own account. While
@@ -16,7 +16,7 @@ class MakeAccountChanges(FunctionalTest, JournalistNavigationStepsMixin,
         self._admin_logs_in()
         self._admin_visits_admin_interface()
         # Admin view of admin user
-        self._edit_user('admin')
+        self._edit_user(self.admin.username)
         self._admin_visits_admin_interface()
         self._admin_adds_a_user()
         # Admin view of non-admin user
