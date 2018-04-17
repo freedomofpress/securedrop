@@ -68,6 +68,29 @@ def test_totp_reuse_protections(journalist_app, test_journo):
         models.LOGIN_HARDENING = original_hardening
 
 
+def test_totp_reuse_protections2(journalist_app, test_journo):
+    """More granular than the preceeding test, we want to make sure the right
+       exception is being raised in the right place.
+    """
+    original_hardening = models.LOGIN_HARDENING
+    try:
+        models.LOGIN_HARDENING = True
+
+        with totp_window():
+            token = TOTP(test_journo['otp_secret']).now()
+
+            with journalist_app.app_context():
+                Journalist.login(test_journo['username'],
+                                 test_journo['password'],
+                                 token)
+                with pytest.raises(BadTokenException):
+                    Journalist.login(test_journo['username'],
+                                     test_journo['password'],
+                                     token)
+    finally:
+        models.LOGIN_HARDENING = original_hardening
+
+
 class TestJournalist2FA(flask_testing.TestCase):
     def create_app(self):
         return journalist.app
@@ -106,20 +129,6 @@ class TestJournalist2FA(flask_testing.TestCase):
                                           password=self.user_pw,
                                           token=token))
         return resp
-
-    def test_totp_reuse_protections2(self):
-        """More granular than the preceeding test, we want to make sure
-        the right exception is being raised in the right place.
-        """
-        original_hardening = models.LOGIN_HARDENING
-        try:
-            models.LOGIN_HARDENING = True
-            valid_token = self.user.totp.now()
-            Journalist.login(self.user.username, self.user_pw, valid_token)
-            with self.assertRaises(BadTokenException):
-                Journalist.login(self.user.username, self.user_pw, valid_token)
-        finally:
-            models.LOGIN_HARDENING = original_hardening
 
     def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(self):
         # Regression test
