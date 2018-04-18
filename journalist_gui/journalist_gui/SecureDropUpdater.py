@@ -125,6 +125,13 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.progressBar.setProperty("value", 50)
         self.call_tailsconfig()
 
+    def update_status_bar_and_output(self, status_message):
+        """This method updates the status bar and the output window with the
+        status_message."""
+        self.statusbar.showMessage(status_message)
+        self.output += status_message
+        self.plainTextEdit.setPlainText(self.output)
+
     def call_tailsconfig(self):
         # Now let us work on tailsconfig part
         if self.update_success:
@@ -132,12 +139,12 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             # expects
             sudo_password = self.get_sudo_password() + '\n'
             self.tails_thread.sudo_password = sudo_password
-            self.statusbar.showMessage(strings.updating_tails_env)
+            self.update_status_bar_and_output(strings.updating_tails_env)
             self.tails_thread.start()
         else:
             self.pushButton.setEnabled(True)
             self.pushButton_2.setEnabled(True)
-            self.statusbar.showMessage(self.failure_reason)
+            self.update_status_bar_and_output(self.failure_reason)
             self.progressBar.setProperty("value", 0)
             self.alert_failure(self.failure_reason)
 
@@ -149,11 +156,11 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.plainTextEdit.setPlainText(self.output)
         self.progressBar.setProperty("value", 80)
         if self.update_success:
-            self.statusbar.showMessage(strings.finished)
+            self.update_status_bar_and_output(strings.finished)
             self.progressBar.setProperty("value", 100)
             self.alert_success()
         else:
-            self.statusbar.showMessage(self.failure_reason)
+            self.update_status_bar_and_output(self.failure_reason)
             self.alert_failure(self.failure_reason)
             # Now everything is done, enable the button.
             self.pushButton.setEnabled(True)
@@ -164,7 +171,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.pushButton_2.setEnabled(False)
         self.pushButton.setEnabled(False)
         self.progressBar.setProperty("value", 10)
-        self.statusbar.showMessage(strings.fetching_update)
+        self.update_status_bar_and_output(strings.fetching_update)
         self.progressBar.setProperty("value", 20)
         # Now start the git and gpg commands
         self.update_thread.start()
