@@ -185,7 +185,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
 
     def get_sudo_password(self):
         sudo_password, ok_is_pressed = QtWidgets.QInputDialog.getText(
-            self, "Tails sudo password", "Tails sudo password:",
+            self, "Tails Administrator password", strings.sudo_password_text,
             QtWidgets.QLineEdit.Password, "")
         if ok_is_pressed and sudo_password:
             return sudo_password
