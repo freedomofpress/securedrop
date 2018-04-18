@@ -33,7 +33,7 @@ class UpdateThread(QThread):
             else:
                 self.failure_reason = strings.update_failed_generic_reason
         except subprocess.CalledProcessError as e:
-            self.output = e.output.decode('utf-8')
+            self.output += e.output.decode('utf-8')
             self.update_success = False
             self.failure_reason = strings.update_failed_generic_reason
         result = {'status': self.update_success,
@@ -90,7 +90,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
     def __init__(self, parent=None):
         super(UpdaterApp, self).__init__(parent)
         self.setupUi(self)
-        self.output = "Beginning update:"
+        self.output = "Beginning update: "
         self.update_success = False
 
         pixmap = QtGui.QPixmap(":/images/static/banner.png")
@@ -128,7 +128,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
     # A new slot will handle tailsconfig output
     def update_status(self, result):
         "This is the slot for update thread"
-        self.output = result['output']
+        self.output += result['output']
         self.update_success = result['status']
         self.failure_reason = result['failure_reason']
         self.progressBar.setProperty("value", 40)
