@@ -28,3 +28,4 @@ sudo_password_text = ("Enter the Tails Administrator password you "
                       "entered in the Tails Greeter.\n If you did not "
                       "set an Administrator password, click Cancel "
                       "and reboot. ")
+output_tab = 'Updater Details'

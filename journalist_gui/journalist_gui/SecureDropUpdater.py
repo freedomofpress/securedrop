@@ -101,6 +101,9 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.setWindowIcon(QtGui.QIcon(':/images/static/securedrop_icon.png'))
         self.label.setText(strings.update_in_progress)
 
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2),
+                                  strings.output_tab)
+
         # Connect buttons to their functions.
         self.pushButton.setText(strings.install_later_button)
         self.pushButton.setStyleSheet("""background-color: lightgrey;
