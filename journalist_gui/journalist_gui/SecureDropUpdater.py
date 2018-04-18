@@ -103,8 +103,14 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
 
         # Connect buttons to their functions.
         self.pushButton.setText(strings.install_later_button)
+        self.pushButton.setStyleSheet("""background-color: lightgrey;
+                                      min-height: 2em;
+                                      border-radius: 10px""")
         self.pushButton.clicked.connect(self.close)
         self.pushButton_2.setText(strings.install_update_button)
+        self.pushButton_2.setStyleSheet("""background-color: #E6FFEB;
+                                        min-height: 2em;
+                                        border-radius: 10px;""")
         self.pushButton_2.clicked.connect(self.update_securedrop)
         self.update_thread = UpdateThread()
         self.update_thread.signal.connect(self.update_status)
