@@ -13,9 +13,7 @@ local_deb_packages:
 
 # Configure the tor hidden services. The Monitor server has only one,
 # for SSH, since no web interfaces.
-tor_instances:
-  - service: ssh
-    filename: mon-ssh-aths
+tor_instances: "{{ [{ 'service': 'ssh', 'filename': 'mon-ssh-aths'}] if enable_ssh_over_tor else [] }}"
 
 authd_iprules:
   - chain: INPUT
@@ -36,3 +34,6 @@ authd_iprules:
 
 # Declare Monitor Server as OSSEC server role.
 ossec_is_server: yes
+
+ssh_ip: "{{ monitor_ip|default(ansible_default_ipv4.address) }}"
+adjacent_sd_ip: "{{ app_ip }}"

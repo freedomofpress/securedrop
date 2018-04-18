@@ -1,6 +1,6 @@
 ---
 - name: Gather EC2 facts to establish ansible_ec2_public_hostname.
-  ec2_facts:
+  ec2_metadata_facts:
 
 - name: Reboot ec2 boxes
   local_action: ec2

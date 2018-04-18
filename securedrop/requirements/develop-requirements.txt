@@ -62,6 +62,7 @@ marshmallow==2.13.5       # via molecule
 mccabe==0.6.1             # via flake8, pylint
 molecule==2.4.0
 monotonic==1.4            # via fasteners
+netaddr==0.7.19
 packaging==16.8           # via dparse, safety
 paramiko==2.2.1           # via ansible
 pathspec==0.5.5           # via yamllint

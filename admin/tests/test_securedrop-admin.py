@@ -580,14 +580,7 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError):
             site_config.user_prompt_config_one(desc, '')
 
-    verify_prompt_ssh_users = verify_desc_consistency
-    verify_prompt_app_ip = verify_desc_consistency
-    verify_prompt_monitor_ip = verify_desc_consistency
-    verify_prompt_app_hostname = verify_desc_consistency
-    verify_prompt_monitor_hostname = verify_desc_consistency
-    verify_prompt_dns_server = verify_desc_consistency
-
-    def verify_prompt_securedrop_app_https_on_source_interface(
+    def verify_prompt_boolean(
             self, site_config, desc):
         self.verify_desc_consistency(site_config, desc)
         (var, default, etype, prompt, validator, transform) = desc
@@ -595,6 +588,17 @@ class TestSiteConfig(object):
         assert site_config.user_prompt_config_one(desc, False) is False
         assert site_config.user_prompt_config_one(desc, 'YES') is True
         assert site_config.user_prompt_config_one(desc, 'NO') is False
+
+    verify_prompt_ssh_users = verify_desc_consistency
+    verify_prompt_app_ip = verify_desc_consistency
+    verify_prompt_monitor_ip = verify_desc_consistency
+    verify_prompt_app_hostname = verify_desc_consistency
+    verify_prompt_monitor_hostname = verify_desc_consistency
+    verify_prompt_dns_server = verify_desc_consistency
+
+    verify_prompt_securedrop_app_https_on_source_interface = \
+        verify_prompt_boolean
+    verify_prompt_enable_ssh_over_tor = verify_prompt_boolean
 
     verify_prompt_securedrop_app_gpg_public_key = verify_desc_consistency
 

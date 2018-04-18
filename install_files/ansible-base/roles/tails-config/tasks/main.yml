@@ -14,7 +14,10 @@
 
 - include: configure_network_hook.yml
 
+- name: Check that we are on an admin workstation
+  stat:
+    path: group_vars/all/site-specific
+  register: site_specific_result
+
 - include: create_ssh_aliases.yml
-  # Only Admin Workstation will have ATHS values for SSH, in addition
-  # to ATHS value for the Journalist Interface.
-  when: find_aths_info_result.matched > 1
+  when: site_specific_result.stat.exists

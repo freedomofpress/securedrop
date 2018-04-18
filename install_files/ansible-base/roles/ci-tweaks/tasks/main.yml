@@ -1,6 +1,6 @@
 ---
 - name: Extract ec2 vars when in AWS
-  ec2_facts:
+  ec2_metadata_facts:
 
 - name: Set inventory hostnames
   hostname:

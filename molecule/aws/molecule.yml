@@ -25,7 +25,7 @@ provisioner:
     name: ansible-lint
   options:
     skip-tags: "grsec,local_build"
-    e: "install_local_packages=true primary_network_iface=eth0 ssh_users=sdrop"
+    e: "@aws-vars.yml"
   config_options:
     defaults:
       callback_whitelist: "profile_tasks, timer"
