@@ -22,8 +22,7 @@ def get_target_roles(target_host):
     """
     target_roles = {"app-staging": ['testinfra/app',
                                     'testinfra/app-code',
-                                    'testinfra/common',
-                                    'testinfra/development/test_xvfb.py'],
+                                    'testinfra/common'],
                     "staging": ['testinfra/ossec'],
                     "mon-staging": ['testinfra/mon',
                                     'testinfra/common'],
