@@ -93,14 +93,17 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.output = "Beginning update:"
         self.update_success = False
 
-        pixmap = QtGui.QPixmap(":/images/static/securedrop.png")
+        pixmap = QtGui.QPixmap(":/images/static/banner.png")
         self.label_2.setPixmap(pixmap)
         self.label_2.setScaledContents(True)
+
         self.progressBar.setProperty("value", 0)
         self.setWindowTitle(strings.window_title)
         self.setWindowIcon(QtGui.QIcon(':/images/static/securedrop_icon.png'))
         self.label.setText(strings.update_in_progress)
 
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab),
+                                  strings.main_tab)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2),
                                   strings.output_tab)
 
