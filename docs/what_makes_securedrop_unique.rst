@@ -73,8 +73,9 @@ for an attacker to access.
 Protecting against hackers
 --------------------------
 
-A 2014 study showed that 20 of the top 25 news organization had, at one time or
-another, their networks compromised by state sponsored hackers.
+A 2014 study showed that 21 of the top 25 news organization had, at one time or
+another, `been targeted <https://www.reuters.com/article/us-media-cybercrime/journalists-media-under-attack-from-hackers-google-researchers-idUSBREA2R0EU20140328>`__
+by state sponsored hackers.
 
 Because of this threat, SecureDrop completely segments its traffic from a news
 organization’s normal network. Submissions are accessed and downloaded using the
