@@ -128,11 +128,11 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
     def call_tailsconfig(self):
         # Now let us work on tailsconfig part
         if self.update_success:
-            self.statusbar.showMessage(strings.updating_tails_env)
             # Get sudo password and add an enter key as tailsconfig command
             # expects
             sudo_password = self.get_sudo_password() + '\n'
             self.tails_thread.sudo_password = sudo_password
+            self.statusbar.showMessage(strings.updating_tails_env)
             self.tails_thread.start()
         else:
             self.pushButton.setEnabled(True)
