@@ -176,9 +176,6 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.success_dialog.setWindowTitle(strings.finished_dialog_title)
         self.success_dialog.show()
 
-        # Close when "OK" is clicked - the update has finished.
-        self.success_dialog.buttonClicked.connect(self.close)
-
     def alert_failure(self, failure_reason):
         self.error_dialog = QtWidgets.QMessageBox()
         self.error_dialog.setIcon(QtWidgets.QMessageBox.Critical)
