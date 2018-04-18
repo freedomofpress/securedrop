@@ -141,7 +141,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         """This method updates the status bar and the output window with the
         status_message."""
         self.statusbar.showMessage(status_message)
-        self.output += status_message
+        self.output += status_message + '\n'
         self.plainTextEdit.setPlainText(self.output)
 
     def call_tailsconfig(self):
