@@ -15,9 +15,12 @@ update_failed_generic_reason = ("Update failed. "
                                 "administrator.")
 update_failed_sig_failure = ("WARNING: Signature verification failed. "
                              "Contact your SecureDrop administrator "
-                             "immediately.")
-tailsconfig_failed_sudo_password = 'Sudo password incorrect'
+                             "or securedrop@freedom.press immediately.")
+tailsconfig_failed_sudo_password = ('Sudo password incorrect. Exiting upgrade'
+                                    ' - click Update Now to try again.')
 tailsconfig_failed_generic_reason = ("Tails workstation configuration failed. "
-                                     "Contact your administrator.")
-install_update_button = 'Install Now'
-install_later_button = 'Install Later'
+                                     "Contact your administrator. "
+                                     "If you are an administrator, contact "
+                                     "securedrop@freedom.press.")
+install_update_button = 'Update Now'
+install_later_button = 'Update Later'
