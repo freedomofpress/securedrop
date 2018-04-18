@@ -8,6 +8,29 @@ journalist. It covers the core functions necessary to start working
 with the platform: logging in securely, viewing documents, editing
 documents, and interacting with sources.
 
+Updating Your Workstation
+-------------------------
+
+You should keep your SecureDrop workstations updated with:
+
+* **Tails updates**
+* **SecureDrop workstation updates**
+
+You should apply Tails updates to your Tails drive as they are released, as they
+often contain critical security fixes. The *Journalist Workstation* Tails drive, once booted and
+connected to Tor, will alert you if upgrades are available. For most Tails
+upgrades, you can simply follow the steps in the Tails Upgrader that appears on
+screen to update your Tails drive. However, sometimes Tails upgrades are "manual"
+which means that you should follow the instructions in
+`Tails Upgrade Documentation`_ to upgrade the drives. Talk to your SecureDrop
+administrator if you have trouble.
+
+.. include:: includes/update-gui.txt
+
+.. _`Tails
+   Upgrade Documentation`: https://tails.boum.org/doc/first_steps/upgrade/index.en.html
+
+
 Creating a GPG Key
 ------------------
 
