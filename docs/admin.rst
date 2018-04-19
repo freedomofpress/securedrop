@@ -7,6 +7,8 @@ You (the admin) should have your own username and passphrase, plus
 two-factor authentication through either the FreeOTP app
 on your smartphone or a YubiKey.
 
+Arbitrary docs change.
+
 .. _Responsibilities:
 
 Responsibilities
