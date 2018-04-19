@@ -1,4 +1,4 @@
-window_title = 'SecureDrop Updater'
+window_title = 'SecureDrop Workstation Updater'
 update_in_progress = ("SecureDrop workstation updates are available! "
                       "It is recommended to install them now. \n\n"
                       "If you don\'t want to install them now, "
@@ -23,8 +23,9 @@ update_failed_generic_reason = ("Update failed. "
 update_failed_sig_failure = ("WARNING: Signature verification failed. "
                              "Contact your SecureDrop administrator "
                              "or securedrop@freedom.press immediately.")
-tailsconfig_failed_sudo_password = ('Administrator password incorrect. Exiting '
-                                    'upgrade - click Update Now to try again.')
+tailsconfig_failed_sudo_password = ('Administrator password incorrect. '
+                                    'Exiting upgrade - '
+                                    'click Update Now to try again.')
 tailsconfig_failed_generic_reason = ("Tails workstation configuration failed. "
                                      "Contact your administrator. "
                                      "If you are an administrator, contact "
@@ -36,4 +37,6 @@ sudo_password_text = ("Enter the Tails Administrator password you "
                       "set an Administrator password, click Cancel "
                       "and reboot. ")
 main_tab = 'Updates Available'
-output_tab = 'Detailed Ouptut'
+output_tab = 'Detailed Update Progress'
+initial_text_box = ("When the update begins, this area will populate with "
+                    "output.\n")
