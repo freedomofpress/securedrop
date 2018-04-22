@@ -7,6 +7,35 @@ import pexpect
 
 from journalist_gui import updaterUI, strings, resources_rc  # noqa
 
+class SetupThread(QThread):
+    signal = pyqtSignal('PyQt_PyObject')
+
+    def __init__(self):
+        QThread.__init__(self)
+        self.output = ""
+        self.update_success = False
+        self.failure_reason = ""
+
+    def run(self):
+        sdadmin_path = '/home/amnesia/Persistent/securedrop/securedrop-admin'
+        update_command = [sdadmin_path, 'setup']
+        try:
+            self.output = subprocess.check_output(
+                update_command,
+                stderr=subprocess.STDOUT).decode('utf-8')
+            if 'Failed to install' in self.output:
+                self.update_success = False
+                self.failure_reason = strings.update_failed_generic_reason
+            else:
+                self.update_success = True
+        except subprocess.CalledProcessError as e:
+            self.output += e.output.decode('utf-8')
+            self.update_success = False
+            self.failure_reason = strings.update_failed_generic_reason
+        result = {'status': self.update_success,
+                  'output': self.output,
+                  'failure_reason': self.failure_reason}
+        self.signal.emit(result)
 
 # This thread will handle the ./securedrop-admin update command
 class UpdateThread(QThread):
@@ -123,6 +152,27 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.update_thread.signal.connect(self.update_status)
         self.tails_thread = TailsconfigThread()
         self.tails_thread.signal.connect(self.tails_status)
+        self.setup_thread = SetupThread()
+        self.setup_thread.signal.connect(self.setup_status)
+
+    def setup_status(self, result):
+        "This is the slot for setup thread"
+        self.output += result['output']
+        self.update_success = result['status']
+        self.failure_reason = result['failure_reason']
+        self.progressBar.setProperty("value", 30)
+        self.plainTextEdit.setPlainText(self.output)
+        self.plainTextEdit.setReadOnly = True
+        if not self.update_success:  # Failed to do setup update
+            self.pushButton.setEnabled(True)
+            self.pushButton_2.setEnabled(True)
+            self.update_status_bar_and_output(self.failure_reason)
+            self.progressBar.setProperty("value", 0)
+            self.alert_failure(self.failure_reason)
+            return
+        self.update_status_bar_and_output(strings.fetching_update)
+        # Now start the git and gpg commands
+        self.update_thread.start()
 
     # This will update the output text after the git commands.
     # At the end of this function, we will try to do tailsconfig.
@@ -184,10 +234,9 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.pushButton_2.setEnabled(False)
         self.pushButton.setEnabled(False)
         self.progressBar.setProperty("value", 10)
-        self.update_status_bar_and_output(strings.fetching_update)
-        self.progressBar.setProperty("value", 20)
-        # Now start the git and gpg commands
-        self.update_thread.start()
+        self.update_status_bar_and_output(strings.doing_setup)
+        self.setup_thread.start()
+
 
     def alert_success(self):
         self.success_dialog = QtWidgets.QMessageBox()
