@@ -56,28 +56,27 @@ class WindowTestCase(AppTestCase):
     @mock.patch('subprocess.check_output',
                 return_value=b'Python dependencies for securedrop-admin')
     def test_setupThread(self, check_output):
-        with mock.patch.object(self.window, "update_thread",
-                               return_value=MagicMock()):
+        with mock.patch.object(self.window, "call_tailsconfig",
+                               return_value=""):
             self.window.setup_thread.run()  # Call run directly
             self.assertEqual(self.window.update_success, True)
-            self.assertEqual(self.window.progressBar.value(), 20)
+            self.assertEqual(self.window.progressBar.value(), 70)
 
     @mock.patch('subprocess.check_output',
                 return_value=b'Failed to install pip dependencies')
     def test_setupThread_failure(self, check_output):
-        with mock.patch.object(self.window, "update_thread",
-                               return_value=MagicMock()):
+        with mock.patch.object(self.window, "call_tailsconfig",
+                               return_value=""):
             self.window.setup_thread.run()  # Call run directly
             self.assertEqual(self.window.update_success, False)
             self.assertEqual(self.window.progressBar.value(), 0)
             self.assertEqual(self.window.failure_reason,
                              strings.update_failed_generic_reason)
 
-
     @mock.patch('subprocess.check_output',
                 return_value=b'Signature verification successful')
     def test_updateThread(self, check_output):
-        with mock.patch.object(self.window, "call_tailsconfig",
+        with mock.patch.object(self.window, "setup_thread",
                                return_value=""):
             self.window.update_thread.run()  # Call run directly
             self.assertEqual(self.window.update_success, True)
@@ -86,7 +85,7 @@ class WindowTestCase(AppTestCase):
     @mock.patch('subprocess.check_output',
                 return_value=b'Signature verification failed')
     def test_updateThread_failure(self, check_output):
-        with mock.patch.object(self.window, "call_tailsconfig",
+        with mock.patch.object(self.window, "setup_thread",
                                return_value=""):
             self.window.update_thread.run()  # Call run directly
             self.assertEqual(self.window.update_success, False)
@@ -97,7 +96,7 @@ class WindowTestCase(AppTestCase):
                 side_effect=subprocess.CalledProcessError(
                     1, 'cmd', b'Generic other failure'))
     def test_updateThread_generic_failure(self, check_output):
-        with mock.patch.object(self.window, "call_tailsconfig",
+        with mock.patch.object(self.window, "setup_thread",
                                return_value=""):
             self.window.update_thread.run()  # Call run directly
             self.assertEqual(self.window.update_success, False)
