@@ -4,7 +4,8 @@ Getting Started with Weblate Translations
 SecureDrop is a whistleblower submission system for media
 organizations to securely accept documents from and
 communicate with anonymous sources. For more information, you may be
-interested to learn about :doc:`what makes SecureDrop unique
+interested to watch `The Globe and Mail guide to using SecureDrop <https://www.youtube.com/watch?v=oSW2wMWtAMM>`_
+and learn about :doc:`what makes SecureDrop unique
 <../what_makes_securedrop_unique>`.
 
 SecureDrop uses the Weblate platform. This page lists detailed
