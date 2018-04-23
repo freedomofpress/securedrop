@@ -453,6 +453,49 @@ class JournalistNavigationStepsMixin:
         assert "/account/reset-2fa-totp" in totp_reset_button.get_attribute("action")
         hotp_reset_button = self.driver.find_elements_by_css_selector("#reset-two-factor-hotp")[0]
         assert "/account/reset-2fa-hotp" in hotp_reset_button.get_attribute("action")
+        # 2FA reset buttons show a tooltip with explanatory text on hover.
+        # Also, confirm the text on the tooltip is the correct one.
+        totp_reset_button = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-totp')[0]
+        ActionChains(self.driver).move_to_element(totp_reset_button).perform()
+        time.sleep(1)
+        explanatory_totp_tooltip_opacity = self.driver.execute_script(
+            'return \
+                window.getComputedStyle(\
+                    document.querySelector("#button-reset-two-factor-totp"), \
+                    ":after"\
+                ).getPropertyValue("opacity")'
+        )
+        explanatory_totp_tooltip_content = self.driver.execute_script(
+            'return \
+                window.getComputedStyle(\
+                    document.querySelector("#button-reset-two-factor-totp"), \
+                    ":after"\
+                ).getPropertyValue("content")'
+        )
+        assert explanatory_totp_tooltip_opacity == "1"
+        assert explanatory_totp_tooltip_content == "attr(tooltip)"
+
+        hotp_reset_button = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-hotp')[0]
+        ActionChains(self.driver).move_to_element(hotp_reset_button).perform()
+        time.sleep(1)
+        explanatory_hotp_tooltip_opacity = self.driver.execute_script(
+            'return \
+                window.getComputedStyle(\
+                    document.querySelector("#button-reset-two-factor-hotp"), \
+                    ":after"\
+                ).getPropertyValue("opacity")'
+        )
+        explanatory_hotp_tooltip_content = self.driver.execute_script(
+            'return \
+                window.getComputedStyle(\
+                    document.querySelector("#button-reset-two-factor-hotp"), \
+                    ":after"\
+                ).getPropertyValue("content")'
+        )
+        assert explanatory_hotp_tooltip_opacity == "1"
+        assert explanatory_hotp_tooltip_content == "attr(tooltip)"
 
     def _edit_user(self, username, is_admin=False):
         self.wait_for(lambda: self.driver.find_element_by_id("users"))
@@ -748,6 +791,28 @@ class JournalistNavigationStepsMixin:
     def _admin_visits_reset_2fa_hotp(self):
         for i in range(3):
             try:
+                # 2FA reset buttons show a tooltip with explanatory text on hover.
+                # Also, confirm the text on the tooltip is the correct one.
+                hotp_reset_button = self.driver.find_elements_by_css_selector(
+                    '#button-reset-two-factor-hotp')[0]
+                ActionChains(self.driver).move_to_element(hotp_reset_button).perform()
+                time.sleep(1)
+                explanatory_hotp_tooltip_opacity = self.driver.execute_script(
+                    'return \
+                        window.getComputedStyle(\
+                            document.querySelector("#button-reset-two-factor-hotp"), \
+                            ":after"\
+                        ).getPropertyValue("opacity")'
+                )
+                explanatory_hotp_tooltip_content = self.driver.execute_script(
+                    'return \
+                        window.getComputedStyle(\
+                            document.querySelector("#button-reset-two-factor-hotp"), \
+                            ":after"\
+                        ).getPropertyValue("content")'
+                )
+                assert explanatory_hotp_tooltip_opacity == "1"
+                assert explanatory_hotp_tooltip_content == "attr(tooltip)"
                 self.safe_click_by_id("button-reset-two-factor-hotp")
                 self._alert_wait()
                 self._alert_accept()
@@ -763,6 +828,28 @@ class JournalistNavigationStepsMixin:
     def _admin_visits_reset_2fa_totp(self):
         totp_reset_button = self.driver.find_elements_by_css_selector("#reset-two-factor-totp")[0]
         assert "/admin/reset-2fa-totp" in totp_reset_button.get_attribute("action")
+        # 2FA reset buttons show a tooltip with explanatory text on hover.
+        # Also, confirm the text on the tooltip is the correct one.
+        totp_reset_button = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-totp')[0]
+        ActionChains(self.driver).move_to_element(totp_reset_button).perform()
+        time.sleep(1)
+        explanatory_totp_tooltip_opacity = self.driver.execute_script(
+            'return \
+                window.getComputedStyle(\
+                    document.querySelector("#button-reset-two-factor-totp"), \
+                    ":after"\
+                ).getPropertyValue("opacity")'
+        )
+        explanatory_totp_tooltip_content = self.driver.execute_script(
+            'return \
+                window.getComputedStyle(\
+                    document.querySelector("#button-reset-two-factor-totp"), \
+                    ":after"\
+                ).getPropertyValue("content")'
+        )
+        assert explanatory_totp_tooltip_opacity == "1"
+        assert explanatory_totp_tooltip_content == "attr(tooltip)"
         totp_reset_button.click()
 
     def _admin_creates_a_user(self, hotp):
