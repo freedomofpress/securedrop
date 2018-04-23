@@ -1,6 +1,8 @@
 Useful Logs
 ===========
 
+For tips on collecting these logs, see `Admin Guide > Investigating Logs <https://docs.securedrop.org/en/stable/admin.html#investigating-logs>`__
+
 Both servers
 ------------
 
