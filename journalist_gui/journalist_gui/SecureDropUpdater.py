@@ -7,6 +7,7 @@ import pexpect
 
 from journalist_gui import updaterUI, strings, resources_rc  # noqa
 
+
 class SetupThread(QThread):
     signal = pyqtSignal('PyQt_PyObject')
 
@@ -36,6 +37,7 @@ class SetupThread(QThread):
                   'output': self.output,
                   'failure_reason': self.failure_reason}
         self.signal.emit(result)
+
 
 # This thread will handle the ./securedrop-admin update command
 class UpdateThread(QThread):
@@ -155,6 +157,8 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.setup_thread = SetupThread()
         self.setup_thread.signal.connect(self.setup_status)
 
+    # At the end of this function, we will try to do tailsconfig.
+    # A new slot will handle tailsconfig output
     def setup_status(self, result):
         "This is the slot for setup thread"
         self.output += result['output']
@@ -170,13 +174,9 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             self.progressBar.setProperty("value", 0)
             self.alert_failure(self.failure_reason)
             return
-        self.update_status_bar_and_output(strings.fetching_update)
-        # Now start the git and gpg commands
-        self.update_thread.start()
+        self.call_tailsconfig()
 
     # This will update the output text after the git commands.
-    # At the end of this function, we will try to do tailsconfig.
-    # A new slot will handle tailsconfig output
     def update_status(self, result):
         "This is the slot for update thread"
         self.output += result['output']
@@ -186,7 +186,8 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
         self.progressBar.setProperty("value", 50)
-        self.call_tailsconfig()
+        self.update_status_bar_and_output(strings.doing_setup)
+        self.setup_thread.start()
 
     def update_status_bar_and_output(self, status_message):
         """This method updates the status bar and the output window with the
@@ -234,9 +235,8 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.pushButton_2.setEnabled(False)
         self.pushButton.setEnabled(False)
         self.progressBar.setProperty("value", 10)
-        self.update_status_bar_and_output(strings.doing_setup)
-        self.setup_thread.start()
-
+        self.update_status_bar_and_output(strings.fetching_update)
+        self.update_thread.start()
 
     def alert_success(self):
         self.success_dialog = QtWidgets.QMessageBox()
