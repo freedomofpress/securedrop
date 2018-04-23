@@ -1,3 +1,6 @@
+# Ignore the lock file produced during a securedrop workstation update
+*.lock
+
 # ignore the production config files that don't end in .example
 securedrop-app-conf.yml
 securedrop-mon-conf.yml
