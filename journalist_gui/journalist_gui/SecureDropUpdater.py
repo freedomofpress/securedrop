@@ -164,7 +164,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.output += result['output']
         self.update_success = result['status']
         self.failure_reason = result['failure_reason']
-        self.progressBar.setProperty("value", 30)
+        self.progressBar.setProperty("value", 60)
         self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
         if not self.update_success:  # Failed to do setup update
@@ -174,6 +174,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             self.progressBar.setProperty("value", 0)
             self.alert_failure(self.failure_reason)
             return
+        self.progressBar.setProperty("value", 70)
         self.call_tailsconfig()
 
     # This will update the output text after the git commands.
