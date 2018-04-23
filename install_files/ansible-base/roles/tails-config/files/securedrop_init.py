@@ -108,6 +108,7 @@ output = subprocess.check_output([path_securedrop_admin_venv,
                                   '--root', path_securedrop_root,
                                   'check_for_updates'], env=env)
 
-if 'Update needed' in output:
+lock_location = "/home/amnesia/Persistent/securedrop/securedrop_update.lock"
+if 'Update needed' in output or os.path.exists(lock_location):
     # Start the SecureDrop updater GUI.
     subprocess.Popen(['python3', path_gui_updater], env=env)
