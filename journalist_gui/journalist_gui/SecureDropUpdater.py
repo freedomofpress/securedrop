@@ -231,6 +231,8 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.plainTextEdit.setPlainText(self.output)
         self.progressBar.setProperty("value", 80)
         if self.update_success:
+            # Remove lock
+            os.remove(LOCK_LOCATION)
             self.update_status_bar_and_output(strings.finished)
             self.progressBar.setProperty("value", 100)
             self.alert_success()
