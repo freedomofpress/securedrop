@@ -3,9 +3,13 @@ from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import QThread, pyqtSignal
 import sys
 import subprocess
+import os
 import pexpect
 
 from journalist_gui import updaterUI, strings, resources_rc  # noqa
+
+
+LOCK_LOCATION = "/home/amnesia/Persistent/securedrop/securedrop_update.lock"  # noqa
 
 
 class SetupThread(QThread):
@@ -20,6 +24,12 @@ class SetupThread(QThread):
     def run(self):
         sdadmin_path = '/home/amnesia/Persistent/securedrop/securedrop-admin'
         update_command = [sdadmin_path, 'setup']
+
+        # Create lock so we resume failed updates on reboot.
+        # Don't create the lock if it already exists.
+        if not os.path.exists(LOCK_LOCATION):
+            open(LOCK_LOCATION, 'a').close()
+
         try:
             self.output = subprocess.check_output(
                 update_command,
