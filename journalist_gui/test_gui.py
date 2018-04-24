@@ -7,7 +7,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QSizePolicy, QInputDialog)
 from PyQt5.QtTest import QTest
 
-from journalist_gui.SecureDropUpdater import UpdaterApp, strings
+from journalist_gui.SecureDropUpdater import UpdaterApp, strings, LOCK_LOCATION
 
 
 class AppTestCase(unittest.TestCase):
@@ -58,7 +58,10 @@ class WindowTestCase(AppTestCase):
     def test_setupThread(self, check_output):
         with mock.patch.object(self.window, "call_tailsconfig",
                                return_value=MagicMock()):
-            self.window.setup_thread.run()  # Call run directly
+            with mock.patch('builtins.open') as mock_open:
+                self.window.setup_thread.run()  # Call run directly
+
+            mock_open.assert_called_once_with(LOCK_LOCATION, 'a')
             self.assertEqual(self.window.update_success, True)
             self.assertEqual(self.window.progressBar.value(), 70)
 
@@ -67,7 +70,10 @@ class WindowTestCase(AppTestCase):
     def test_setupThread_failure(self, check_output):
         with mock.patch.object(self.window, "call_tailsconfig",
                                return_value=MagicMock()):
-            self.window.setup_thread.run()  # Call run directly
+            with mock.patch('builtins.open') as mock_open:
+                self.window.setup_thread.run()  # Call run directly
+
+            mock_open.assert_called_once_with(LOCK_LOCATION, 'a')
             self.assertEqual(self.window.update_success, False)
             self.assertEqual(self.window.progressBar.value(), 0)
             self.assertEqual(self.window.failure_reason,
@@ -128,7 +134,10 @@ class WindowTestCase(AppTestCase):
         before = MagicMock()
         before.decode.side_effect = ["SUDO: ", "Update successful. failed=0"]
         child.before = before
-        self.window.tails_thread.run()
+        with mock.patch('os.remove') as mock_remove:
+            self.window.tails_thread.run()
+
+        mock_remove.assert_called_once_with(LOCK_LOCATION)
         self.assertIn("failed=0", self.window.output)
         self.assertEqual(self.window.update_success, True)
 
@@ -173,13 +182,23 @@ class WindowTestCase(AppTestCase):
     def test_tails_status_success(self):
         result = {'status': True, "output": "successful.",
                   'failure_reason': ''}
-        self.window.tails_status(result)
+
+        with mock.patch('os.remove') as mock_remove:
+                    self.window.tails_status(result)
+
+        # We do remove the lock if the update does finish
+        mock_remove.assert_called_once_with(LOCK_LOCATION)
         self.assertEqual(self.window.progressBar.value(), 100)
 
     def test_tails_status_failure(self):
         result = {'status': False, "output": "successful.",
                   'failure_reason': '42'}
-        self.window.tails_status(result)
+
+        with mock.patch('os.remove') as mock_remove:
+                    self.window.tails_status(result)
+
+        # We do not remove the lock if the update does not finish
+        mock_remove.assert_not_called()
         self.assertEqual(self.window.progressBar.value(), 0)
 
 
