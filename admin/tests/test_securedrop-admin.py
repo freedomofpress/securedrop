@@ -177,10 +177,11 @@ class TestSecureDropAdmin(object):
             with mock.patch('subprocess.check_call'):
                 with mock.patch('subprocess.check_output',
                                 return_value=git_output):
-                    securedrop_admin.update(args)
-                    assert "Applying SecureDrop updates..." in caplog.text
-                    assert "Signature verification failed." in caplog.text
-                    assert "Updated to SecureDrop" not in caplog.text
+                    with pytest.raises(SystemExit):
+                        securedrop_admin.update(args)
+                        assert "Applying SecureDrop updates..." in caplog.text
+                        assert "Signature verification failed." in caplog.text
+                        assert "Updated to SecureDrop" not in caplog.text
 
 
 class TestSiteConfig(object):
