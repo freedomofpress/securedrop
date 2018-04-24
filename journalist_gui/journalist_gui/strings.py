@@ -10,7 +10,7 @@ update_in_progress = ("SecureDrop workstation updates are available! "
                       "automatically appear if you have not "
                       "completed any required updates.\n")
 fetching_update = ('Fetching and verifying latest update...'
-                   ' (4 mins remaining)')
+                   ' (5 mins remaining)')
 updating_tails_env = ('Configuring local Tails environment...'
                       ' (1 min remaining)')
 finished = 'Update successfully completed!'
@@ -40,3 +40,4 @@ main_tab = 'Updates Available'
 output_tab = 'Detailed Update Progress'
 initial_text_box = ("When the update begins, this area will populate with "
                     "output.\n")
+doing_setup = "Checking dependencies are up to date... (2 mins remaining)"
