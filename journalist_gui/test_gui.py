@@ -123,10 +123,7 @@ class WindowTestCase(AppTestCase):
 
         with mock.patch.object(QInputDialog, 'getText',
                                return_value=[test_password, False]):
-            # If the user does not provide a sudo password, we exit
-            # as we cannot update.
-            with self.assertRaises(SystemExit):
-                self.window.get_sudo_password()
+            self.assertIsNone(self.window.get_sudo_password())
 
     @mock.patch('pexpect.spawn')
     def test_tailsconfigThread_no_failures(self, pt):

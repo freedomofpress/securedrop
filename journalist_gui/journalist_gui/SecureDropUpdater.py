@@ -1,7 +1,6 @@
 #!/usr/bin/python
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import QThread, pyqtSignal
-import sys
 import subprocess
 import os
 import pexpect
@@ -212,16 +211,17 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         if self.update_success:
             # Get sudo password and add an enter key as tailsconfig command
             # expects
-            sudo_password = self.get_sudo_password() + '\n'
-            self.tails_thread.sudo_password = sudo_password
+            sudo_password = self.get_sudo_password()
+            if not sudo_password:
+                self.update_success = False
+                self.failure_reason = strings.missing_sudo_password
+                self.on_failure()
+                return
+            self.tails_thread.sudo_password = sudo_password + '\n'
             self.update_status_bar_and_output(strings.updating_tails_env)
             self.tails_thread.start()
         else:
-            self.pushButton.setEnabled(True)
-            self.pushButton_2.setEnabled(True)
-            self.update_status_bar_and_output(self.failure_reason)
-            self.progressBar.setProperty("value", 0)
-            self.alert_failure(self.failure_reason)
+            self.on_failure()
 
     def tails_status(self, result):
         "This is the slot for Tailsconfig thread"
@@ -237,12 +237,15 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
             self.progressBar.setProperty("value", 100)
             self.alert_success()
         else:
-            self.update_status_bar_and_output(self.failure_reason)
-            self.alert_failure(self.failure_reason)
-            # Now everything is done, enable the button.
-            self.pushButton.setEnabled(True)
-            self.pushButton_2.setEnabled(True)
-            self.progressBar.setProperty("value", 0)
+            self.on_failure()
+
+    def on_failure(self):
+        self.update_status_bar_and_output(self.failure_reason)
+        self.alert_failure(self.failure_reason)
+        # Now everything is done, enable the button.
+        self.pushButton.setEnabled(True)
+        self.pushButton_2.setEnabled(True)
+        self.progressBar.setProperty("value", 0)
 
     def update_securedrop(self):
         self.pushButton_2.setEnabled(False)
@@ -272,4 +275,4 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         if ok_is_pressed and sudo_password:
             return sudo_password
         else:
-            sys.exit(0)
+            return None

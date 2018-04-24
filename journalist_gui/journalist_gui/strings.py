@@ -16,6 +16,7 @@ updating_tails_env = ('Configuring local Tails environment...'
 finished = 'Update successfully completed!'
 finished_dialog_message = 'Updates completed successfully. '
 finished_dialog_title = 'SecureDrop Workstation is up to date!'
+missing_sudo_password = 'Missing Tails Administrator password'
 update_failed_dialog_title = 'Error Updating SecureDrop Workstation'
 update_failed_generic_reason = ("Update failed. "
                                 "Please contact your SecureDrop "
