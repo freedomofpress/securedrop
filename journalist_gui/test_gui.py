@@ -83,7 +83,8 @@ class WindowTestCase(AppTestCase):
             self.assertEqual(self.window.progressBar.value(), 50)
 
     @mock.patch('subprocess.check_output',
-                return_value=b'Signature verification failed')
+                side_effect=subprocess.CalledProcessError(
+                    1, 'cmd', b'Signature verification failed'))
     def test_updateThread_failure(self, check_output):
         with mock.patch.object(self.window, "setup_thread",
                                return_value=MagicMock()):

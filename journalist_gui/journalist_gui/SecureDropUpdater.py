@@ -56,17 +56,17 @@ class UpdateThread(QThread):
             self.output = subprocess.check_output(
                 update_command,
                 stderr=subprocess.STDOUT).decode('utf-8')
-            if 'Signature verification failed' in self.output:
-                self.update_success = False
-                self.failure_reason = strings.update_failed_sig_failure
-            elif "Signature verification successful" in self.output:
+            if "Signature verification successful" in self.output:
                 self.update_success = True
             else:
                 self.failure_reason = strings.update_failed_generic_reason
         except subprocess.CalledProcessError as e:
-            self.output += e.output.decode('utf-8')
             self.update_success = False
-            self.failure_reason = strings.update_failed_generic_reason
+            self.output += e.output.decode('utf-8')
+            if 'Signature verification failed' in self.output:
+                self.failure_reason = strings.update_failed_sig_failure
+            else:
+                self.failure_reason = strings.update_failed_generic_reason
         result = {'status': self.update_success,
                   'output': self.output,
                   'failure_reason': self.failure_reason}
