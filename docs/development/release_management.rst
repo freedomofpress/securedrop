@@ -42,27 +42,50 @@ Pre-Release
 
      securedrop/bin/dev-shell ../update_version.sh 0.x.y~rcN
 
-8. Build Debian packages and place them on ``apt-test.freedom.press``.
-9. Write a test plan that focuses on the new functionality introduced in the release.
-   Post for feedback and make changes based on suggestions from the community.
-10. Encourage QA participants to QA the release on production VMs and hardware. They
+8. If you would like to sign the release commit, you will need to do so manually:
+
+    a. Create a new signed commit and verify the signature:
+
+      ::
+
+         git reset HEAD~1
+         git commit -aS
+         git log --show-signature
+
+    b. Ensure the new commit is signed, take note of the commit hash.
+
+    c. Edit `0.x.y-rcN.tag` and replace the commit hash with the new (signed) commit
+       hash.
+
+    d. Delete the old tag and create a new one based on the tag file edited above:
+
+      ::
+
+         git tag -d 0.x.y-rcN
+         git mktag < 0.x.y-rcN.tag > .git/refs/tags/0.x.y-rcN
+
+9. Push the branch and tags.
+10. Build Debian packages and place them on ``apt-test.freedom.press``.
+11. Write a test plan that focuses on the new functionality introduced in the release.
+    Post for feedback and make changes based on suggestions from the community.
+12. Encourage QA participants to QA the release on production VMs and hardware. They
     should post their QA reports in the release issue such that it is clear what
     was and what was not tested. It is the responsibility of the release manager
     to ensure that sufficient QA is done on the release candidate prior to
     final release.
-11. Triage bugs as they are reported, if a bug is important to fix and does not
+13. Triage bugs as they are reported, if a bug is important to fix and does not
     receive attention, you should fix the bug yourself or find someone who agrees
     to work on a fix.
-12. Backport release QA fixes merged into ``develop`` into the
+14. Backport release QA fixes merged into ``develop`` into the
     release branch using ``git cherry-pick -x <commit>`` to clearly indicate
     where the commit originated from.
-13. At your discretion - for example when a significant fix is merged - prepare
+15. At your discretion - for example when a significant fix is merged - prepare
     additional release candidates and have fresh Debian packages prepared for
     testing.
-14. For a regular release, the string freeze will be declared by the
+16. For a regular release, the string freeze will be declared by the
     translation administrator one week prior to the release. After this is done, ensure
     that no changes involving string changes are backported into the release branch.
-15. Ensure that a draft of the release notes are prepared and shared with the
+17. Ensure that a draft of the release notes are prepared and shared with the
     community for feedback.
 
 Release Process
