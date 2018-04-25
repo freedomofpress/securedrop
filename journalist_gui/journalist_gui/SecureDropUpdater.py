@@ -3,12 +3,14 @@ from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import QThread, pyqtSignal
 import subprocess
 import os
+import re
 import pexpect
 
 from journalist_gui import updaterUI, strings, resources_rc  # noqa
 
 
 FLAG_LOCATION = "/home/amnesia/Persistent/.securedrop/securedrop_update.flag"  # noqa
+ESCAPE_POD = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
 
 
 class SetupThread(QThread):
@@ -121,7 +123,7 @@ class TailsconfigThread(QThread):
             self.update_success = False
             self.failure_reason = strings.tailsconfig_failed_generic_reason
         result = {'status': self.update_success,
-                  'output': self.output,
+                  'output': ESCAPE_POD.sub('', self.output),
                   'failure_reason': self.failure_reason}
         self.signal.emit(result)
 
