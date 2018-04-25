@@ -21,6 +21,9 @@ used to create the environment:
 The first command will create the virtualenv and install the dependencies. The second command is used to
 enable the Pipenv shell.
 
+.. note:: The Updater GUI does not use a virtual environment on the Tails
+   Workstations. As such, you can only use dependencies present in Tails.
+
 You can run the GUI via:
 
 ::
