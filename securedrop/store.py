@@ -131,7 +131,7 @@ class Storage:
         encrypted_file_path = self.path(filesystem_id, encrypted_file_name)
         with SecureTemporaryFile("/tmp") as stf:  # nosec
             with gzip.GzipFile(filename=sanitized_filename,
-                               mode='wb', fileobj=stf) as gzf:
+                               mode='wb', fileobj=stf, mtime=0) as gzf:
                 # Buffer the stream into the gzip file to avoid excessive
                 # memory consumption
                 while True:
