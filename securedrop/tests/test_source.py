@@ -428,7 +428,8 @@ def test_submit_sanitizes_filename(source_app):
             assert resp.status_code == 200
             gzipfile.assert_called_with(filename=sanitized_filename,
                                         mode=ANY,
-                                        fileobj=ANY)
+                                        fileobj=ANY,
+                                        mtime=0)
 
 
 def test_tor2web_warning_headers(source_app):
