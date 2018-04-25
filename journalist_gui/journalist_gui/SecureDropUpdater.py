@@ -8,7 +8,7 @@ import pexpect
 from journalist_gui import updaterUI, strings, resources_rc  # noqa
 
 
-LOCK_LOCATION = "/home/amnesia/Persistent/securedrop/securedrop_update.lock"  # noqa
+FLAG_LOCATION = "/home/amnesia/Persistent/.securedrop/securedrop_update.flag"  # noqa
 
 
 class SetupThread(QThread):
@@ -24,10 +24,10 @@ class SetupThread(QThread):
         sdadmin_path = '/home/amnesia/Persistent/securedrop/securedrop-admin'
         update_command = [sdadmin_path, 'setup']
 
-        # Create lock so we resume failed updates on reboot.
-        # Don't create the lock if it already exists.
-        if not os.path.exists(LOCK_LOCATION):
-            open(LOCK_LOCATION, 'a').close()
+        # Create flag file to indicate we should resume failed updates on
+        # reboot. Don't create the flag if it already exists.
+        if not os.path.exists(FLAG_LOCATION):
+            open(FLAG_LOCATION, 'a').close()
 
         try:
             self.output = subprocess.check_output(
@@ -231,8 +231,8 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.plainTextEdit.setPlainText(self.output)
         self.progressBar.setProperty("value", 80)
         if self.update_success:
-            # Remove lock
-            os.remove(LOCK_LOCATION)
+            # Remove flag file indicating an update is in progress
+            os.remove(FLAG_LOCATION)
             self.update_status_bar_and_output(strings.finished)
             self.progressBar.setProperty("value", 100)
             self.alert_success()
