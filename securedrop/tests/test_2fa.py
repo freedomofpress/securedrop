@@ -11,6 +11,7 @@ import models
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from models import Journalist, BadTokenException
+from utils import login_user
 from utils.instrument import InstrumentedApp
 
 
@@ -43,12 +44,7 @@ def test_totp_reuse_protections(journalist_app, test_journo):
             token = TOTP(test_journo['otp_secret']).now()
 
             with journalist_app.test_client() as app:
-                with InstrumentedApp(journalist_app) as ins:
-                    resp = app.post('/login',
-                                    data=dict(username=test_journo['username'],
-                                              password=test_journo['password'],
-                                              token=token))
-                    ins.assert_redirects(resp, '/')
+                login_user(app, test_journo)
                 resp = app.get('/logout', follow_redirects=True)
                 assert resp.status_code == 200
 
@@ -99,12 +95,7 @@ def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
 
         with totp_window():
             with journalist_app.test_client() as app:
-                resp = app.post(
-                    '/login',
-                    data=dict(username=test_admin['username'],
-                              password=test_admin['password'],
-                              token=TOTP(test_admin['otp_secret']).now()))
-
+                login_user(app, test_admin)
                 # Submit the token once
                 with InstrumentedApp(journalist_app) as ins:
                     resp = app.post('/admin/2fa?uid={}'.format(
@@ -122,12 +113,7 @@ def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
                 assert admin.last_token == invalid_token
 
             with journalist_app.test_client() as app:
-                resp = app.post(
-                    '/login',
-                    data=dict(username=test_admin['username'],
-                              password=test_admin['password'],
-                              token=TOTP(test_admin['otp_secret']).now()))
-
+                login_user(app, test_admin)
                 # Submit the same invalid token again
                 with InstrumentedApp(journalist_app) as ins:
                     resp = app.post('/admin/2fa?uid={}'.format(
@@ -152,12 +138,7 @@ def test_bad_token_fails_to_verify_on_new_user_two_factor_page(
 
         with totp_window():
             with journalist_app.test_client() as app:
-                resp = app.post(
-                    '/login',
-                    data=dict(username=test_journo['username'],
-                              password=test_journo['password'],
-                              token=TOTP(test_journo['otp_secret']).now()))
-
+                login_user(app, test_journo)
                 # Submit the token once
                 with InstrumentedApp(journalist_app) as ins:
                     resp = app.post('/account/2fa',
@@ -174,11 +155,7 @@ def test_bad_token_fails_to_verify_on_new_user_two_factor_page(
                 assert journo.last_token == invalid_token
 
             with journalist_app.test_client() as app:
-                resp = app.post(
-                    '/login',
-                    data=dict(username=test_journo['username'],
-                              password=test_journo['password'],
-                              token=TOTP(test_journo['otp_secret']).now()))
+                login_user(app, test_journo)
 
                 # Submit the same invalid token again
                 with InstrumentedApp(journalist_app) as ins:
