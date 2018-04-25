@@ -1,2 +1,0 @@
-PyQt5
-pexpect
