@@ -130,6 +130,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
     def __init__(self, parent=None):
         super(UpdaterApp, self).__init__(parent)
         self.setupUi(self)
+        self.statusbar.setSizeGripEnabled(False)
         self.output = strings.initial_text_box
         self.plainTextEdit.setPlainText(self.output)
         self.update_success = False
