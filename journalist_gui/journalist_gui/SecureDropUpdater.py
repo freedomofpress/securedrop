@@ -104,10 +104,11 @@ class TailsconfigThread(QThread):
             child.sendline(self.sudo_password)
             child.expect(pexpect.EOF)
             self.output += child.before.decode('utf-8')
+            child.close()
 
             # For Tailsconfig to be considered a success, we expect no
             # failures in the Ansible output.
-            if 'failed=0' not in self.output:
+            if child.exitstatus:
                 self.update_success = False
                 self.failure_reason = strings.tailsconfig_failed_generic_reason  # noqa
             else:
