@@ -177,7 +177,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.progressBar.setProperty("value", 60)
         self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
-        if not self.update_success:  # Failed to do setup update
+        if not self.update_success:  # Failed to do setup
             self.pushButton.setEnabled(True)
             self.pushButton_2.setEnabled(True)
             self.update_status_bar_and_output(self.failure_reason)
@@ -196,6 +196,13 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.progressBar.setProperty("value", 40)
         self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
+        if not self.update_success:  # Failed to do update
+            self.pushButton.setEnabled(True)
+            self.pushButton_2.setEnabled(True)
+            self.update_status_bar_and_output(self.failure_reason)
+            self.progressBar.setProperty("value", 0)
+            self.alert_failure(self.failure_reason)
+            return
         self.progressBar.setProperty("value", 50)
         self.update_status_bar_and_output(strings.doing_setup)
         self.setup_thread.start()
