@@ -97,7 +97,7 @@ jobs:
 
   updater-gui-tests:
     docker:
-      - image: circleci/python:3.6.4
+      - image: circleci/python:3.5
     steps:
       - checkout
 
@@ -106,17 +106,16 @@ jobs:
           command: sudo apt-get update && sudo apt-get install -y libqt5designer5
 
       - run:
-          name: Install requirements in a venv
+          name: Install requirements
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip3 install -r journalist_gui/requirements.txt
+            cd journalist_gui
+            pipenv install
 
       - run:
           name: Run tests
           command: |
-            . venv/bin/activate
-            xvfb-run python3 journalist_gui/test_gui.py
+            cd journalist_gui
+            xvfb-run pipenv run python3 test_gui.py
 
   staging-test-with-rebase:
     docker:
