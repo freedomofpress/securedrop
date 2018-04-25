@@ -130,8 +130,10 @@ class WindowTestCase(AppTestCase):
     def test_tailsconfigThread_no_failures(self, pt):
         child = pt()
         before = MagicMock()
+
         before.decode.side_effect = ["SUDO: ", "Update successful. failed=0"]
         child.before = before
+        child.exitstatus = 0
         with mock.patch('os.remove') as mock_remove:
             self.window.tails_thread.run()
 
