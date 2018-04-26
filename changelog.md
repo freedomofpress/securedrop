@@ -2,7 +2,46 @@
 
 ## 0.7.0~rc1
 
+### Web Applications
+* Updated messages on source interface (#3036, #3132)
+* Improvements in image upload functionality (#3057, #3222, #3225): Custom logos will now be automatically be resized and converted to pngs.
+* Use io.open instead of open across the web applications (#3064)
+* Include token reuse under login hardening flag (#3175)
+* Add Orbot warning in source interface (#3215)
 
+### Operations
+* Admins can optionally enable a daily encrypted email sent to journalists indicating whether or not they should check SecureDrop (#1195, #2803)
+* Admins can optionally disable the use of Tor for SSH and enable SSH over local network (#2592)
+* Remove vanilla Xenial Ubuntu kernels at install-time (#3158)
+* Added daily_reboot_time option in sdconfig (#3172)
+* Removes duplicate tor-apt repo from apt config (#3189)
+* Remove installed vanilla kernels via cron-apt (#3196)
+* Fixed typo in ansible restore script (#3263)
+
+### Tails Environment
+
+* Securedrop-admin update: Try alternate keyserver if primary is not available (#3257)
+* Fixed typo in ansible restore script (#3263)
+* Add SecureDrop Administrator Workstation updater GUI (#3300)
+
+### Developer Workflow
+
+* Add test data to Docker development environment (#3081)
+* i18n: centralize the list of supported languages in ./i18n_tool.py (#3100)
+* The Vagrant development environment VM has been deprecated (#3271). The current supported development environments are as follows:
+** The Docker development environments for application code changes and securedrop-admin changes.
+** Staging or production Vagrant VMs for all other changes.
+* Improved application tests by using pytest fixtures (#3140, #3179, #3181, #3183, #3190, #3191, #3249, #3250, #3256)
+* Unit tests: Verify journalist username containing whitespace can login (#3218)
+* Added hashes for pluggy python wheels (#3272)
+
+### Documentation
+* Update branch management docs (#3171)
+* Add Release manager guide (#3202)
+* Miscellaneous documentation improvements (#3147, #3153, #3156, #3168, #3201, #3252, #3265, #3295).
+
+The issues for this release were tracked in the 0.7 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.7.
 
 ## 0.6
 
