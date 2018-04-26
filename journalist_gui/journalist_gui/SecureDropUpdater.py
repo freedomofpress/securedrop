@@ -8,7 +8,7 @@ import pexpect
 from journalist_gui import updaterUI, strings, resources_rc  # noqa
 
 
-LOCK_LOCATION = "/home/amnesia/Persistent/securedrop/securedrop_update.lock"  # noqa
+FLAG_LOCATION = "/home/amnesia/Persistent/.securedrop/securedrop_update.flag"  # noqa
 
 
 class SetupThread(QThread):
@@ -24,10 +24,10 @@ class SetupThread(QThread):
         sdadmin_path = '/home/amnesia/Persistent/securedrop/securedrop-admin'
         update_command = [sdadmin_path, 'setup']
 
-        # Create lock so we resume failed updates on reboot.
-        # Don't create the lock if it already exists.
-        if not os.path.exists(LOCK_LOCATION):
-            open(LOCK_LOCATION, 'a').close()
+        # Create flag file to indicate we should resume failed updates on
+        # reboot. Don't create the flag if it already exists.
+        if not os.path.exists(FLAG_LOCATION):
+            open(FLAG_LOCATION, 'a').close()
 
         try:
             self.output = subprocess.check_output(
@@ -104,10 +104,11 @@ class TailsconfigThread(QThread):
             child.sendline(self.sudo_password)
             child.expect(pexpect.EOF)
             self.output += child.before.decode('utf-8')
+            child.close()
 
             # For Tailsconfig to be considered a success, we expect no
             # failures in the Ansible output.
-            if 'failed=0' not in self.output:
+            if child.exitstatus:
                 self.update_success = False
                 self.failure_reason = strings.tailsconfig_failed_generic_reason  # noqa
             else:
@@ -177,7 +178,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.progressBar.setProperty("value", 60)
         self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
-        if not self.update_success:  # Failed to do setup update
+        if not self.update_success:  # Failed to do setup
             self.pushButton.setEnabled(True)
             self.pushButton_2.setEnabled(True)
             self.update_status_bar_and_output(self.failure_reason)
@@ -196,6 +197,13 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.progressBar.setProperty("value", 40)
         self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
+        if not self.update_success:  # Failed to do update
+            self.pushButton.setEnabled(True)
+            self.pushButton_2.setEnabled(True)
+            self.update_status_bar_and_output(self.failure_reason)
+            self.progressBar.setProperty("value", 0)
+            self.alert_failure(self.failure_reason)
+            return
         self.progressBar.setProperty("value", 50)
         self.update_status_bar_and_output(strings.doing_setup)
         self.setup_thread.start()
@@ -232,8 +240,8 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.plainTextEdit.setPlainText(self.output)
         self.progressBar.setProperty("value", 80)
         if self.update_success:
-            # Remove lock
-            os.remove(LOCK_LOCATION)
+            # Remove flag file indicating an update is in progress
+            os.remove(FLAG_LOCATION)
             self.update_status_bar_and_output(strings.finished)
             self.progressBar.setProperty("value", 100)
             self.alert_success()
