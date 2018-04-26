@@ -95,6 +95,28 @@ jobs:
       - setup_remote_docker
       - run: cd admin ; make test
 
+  updater-gui-tests:
+    docker:
+      - image: circleci/python:3.5
+    steps:
+      - checkout
+
+      - run:
+          name: Install libqt5designer5
+          command: sudo apt-get update && sudo apt-get install -y libqt5designer5
+
+      - run:
+          name: Install requirements
+          command: |
+            cd journalist_gui
+            pipenv install
+
+      - run:
+          name: Run tests
+          command: |
+            cd journalist_gui
+            xvfb-run pipenv run python3 test_gui.py
+
   staging-test-with-rebase:
     docker:
       - image: quay.io/freedomofpress/circleci-docker:latest
@@ -164,6 +186,8 @@ workflows:
       - lint
       - tests
       - admin-tests
+      - updater-gui-tests
       - staging-test-with-rebase:
           requires:
             - lint
+            - updater-gui-tests

@@ -100,6 +100,7 @@ anonymous sources.
    development/setup_development
    development/making_pr
    development/admin_development
+   development/updategui_development
    development/virtual_environments
    development/virtualizing_tails
    development/contributor_guidelines

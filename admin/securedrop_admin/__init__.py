@@ -622,7 +622,7 @@ def update(args):
 
     if 'Good signature' not in sig_result:
         sdlog.info("Signature verification failed.")
-        return 1
+        sys.exit(1)
     sdlog.info("Signature verification successful.")
 
     sdlog.info("Updated to SecureDrop {}.".format(latest_tag))

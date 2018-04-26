@@ -68,8 +68,7 @@ alerted of new releases. The online Tails drives, once booted and connected to T
 will alert you if upgrades are available. Follow the `Tails Upgrade Documentation`_
 on how to upgrade the drives.
 
-For SecureDrop workstation updates, follow the instructions provided in the
-`Updating the Workstations`_ section below.
+.. include:: includes/update-gui.txt
 
 .. _`Tails RSS Feed`: https://tails.boum.org/news/index.en.rss
 .. _`Tails
@@ -196,25 +195,6 @@ possession when they attempt to log in to SecureDrop.
   image:: images/manual/screenshots/journalist-admin_add_user_hotp.png
 .. |Verify YubiKey|
   image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
-
-.. _Updating the Workstations:
-
-Updating SecureDrop Workstations
---------------------------------
-
-In addition to Tails updates, once you have upgraded to SecureDrop 0.6 or later,
-you can keep the SecureDrop software up to date on each *Journalist Workstation*
-and *Admin Workstation* using the ``securedrop-admin`` CLI. In each workstation:
-
-.. code:: sh
-
-  cd ~/Persistent/securedrop
-  ./securedrop-admin setup  # Run setup before the update
-  ./securedrop-admin update
-  ./securedrop-admin setup  # Run setup again after the update
-
-.. tip:: If you just want to check if there are updates available without
-        applying them, you can run ``./securedrop-admin check_for_updates``.
 
 Server Command Line
 -------------------
