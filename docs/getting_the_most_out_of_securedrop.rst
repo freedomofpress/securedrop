@@ -65,7 +65,7 @@ organizations have made short instructional videos walking through all the steps
 Some good examples include the `Toronto Globe and Mail`_, The Intercept, and
 `Lucy Parsons Labs`_.
 
-.. _`Toronto Globe and Mail`: https://www.theglobeandmail.com/news/news-video/video-a-step-by-step-guide-to-using-securedrop/article28676619/
+.. _`Toronto Globe and Mail`: https://www.youtube.com/watch?v=oSW2wMWtAMM
 .. _`Lucy Parsons Labs`: https://www.youtube.com/watch?v=LkgN244ggzs
 
 Regularly Share Your SecureDrop *Landing Page* on Social Media
