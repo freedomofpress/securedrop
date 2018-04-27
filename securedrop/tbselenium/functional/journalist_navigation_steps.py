@@ -385,7 +385,7 @@ class JournalistNavigationStepsMixin():
         # Log the admin user out
         self._logout()
 
-        time.sleep(61)
+        time.sleep(31)
         # Log the new user in
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
@@ -509,6 +509,7 @@ class JournalistNavigationStepsMixin():
         update_user_btn = self.driver.find_element_by_css_selector(
             'button[type=submit]')
         update_user_btn.click()
+        time.sleep(self.sleep_time)
 
         def can_edit_user2():
             assert ('"{}"'.format(new_username) in self.driver.page_source)
@@ -519,7 +520,7 @@ class JournalistNavigationStepsMixin():
 
         # Log the new user in with their new username
         self._logout()
-        time.sleep(61)
+        time.sleep(31)
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
                          self.new_totp)
@@ -530,7 +531,7 @@ class JournalistNavigationStepsMixin():
 
         # Log the admin user back in
         self._logout()
-        time.sleep(61)
+        time.sleep(31)
         self._login_user(self.admin, self.admin_pw, self.admin_user['totp'])
 
         # Go to the admin interface
@@ -540,7 +541,15 @@ class JournalistNavigationStepsMixin():
         time.sleep(self.sleep_time)
 
         # Edit the new user's password
-        self._edit_user(self.new_user['username'])
+        #self._edit_user(self.new_user['username'])
+        new_user_edit_links = filter(
+            lambda el: (el.get_attribute('data-username') ==
+                        self.new_user['username']),
+            self.driver.find_elements_by_tag_name('a'))
+        assert len(new_user_edit_links) == 1
+        new_user_edit_links[0].click()
+        time.sleep(self.sleep_time)
+
         new_password = self.driver.find_element_by_css_selector('#password') \
             .text.strip()
         self.new_user['password'] = new_password
