@@ -1,3 +1,5 @@
+.. _set_up_tails:
+
 Create Tails USBs
 =================
 

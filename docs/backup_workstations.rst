@@ -1,47 +1,51 @@
 Backup the Workstations
 =======================
 
+.. note::  This workflow will create a single USB drive with the data backed up
+ from all Tails drives. If instead you'd like to create a single duplicate
+ Tails drive, you should follow the official documentation
+ `maintained by the Tails project <https://tails.boum.org/doc/first_steps/persistence/copy/index.en.html>`_.
+
 Now that you have set up the *Secure Viewing Station*, the *Admin Workstation*,
 and your *Journalist Workstations*, it is important you make a backup. Your USB
-drive may wear out, a journalist might lose their backup drive, or something
-completely unexpected may happen.
+drive may wear out, a journalist might lose their drive, or something completely
+unexpected may happen.
 
 In all these cases, it is useful to have a backup of your data for each device.
 
-What you need
+What You Need
 -------------
 
-  #. Your *existing SecureDrop Tails USB sticks* (*Admin Workstation*,
-     *Journalist Workstation*, and *Secure Viewing Station*).
-  #. An *airgapped machine* to perform the Tails upgrades. The *Secure Viewing
-     Station* may be used for this task.
-  #. Your "master" Tails USB, which we will use to perform the backups.
-  #. At least one USB drive to backup the data on your current SecureDrop
-     Tails USB sticks.
+  #. You will need your *existing SecureDrop Tails USB sticks* (*Admin
+     Workstation*, *Journalist Workstation*, and *Secure Viewing Station*).
+  #. You will also need an *airgapped machine* to perform the backups. The
+     *Secure Viewing Station* may be used for this task.
+  #. You will also need a "primary" Tails USB, which we will use to perform
+     the backups.
+  #. You also need at least one USB drive to backup the data from your current
+     SecureDrop Tails USB sticks.
 
-  .. warning::
-             An airgapped machine (such as the *Secure Viewing Station*) is
-             required in order to perform these backups safely. By isolating
-             the machine from all network access, you reduce the exposure of
-             sensitive data to networked computers, thereby reducing the threat
-             of compromise by adversaries who wish to gain access to your
-             SecureDrop instance.
+.. warning:: An airgapped machine (such as the *Secure Viewing Station*) is
+ required in order to perform these backups safely. By isolating
+ the machine from all network access, you reduce the exposure of
+ sensitive data to networked computers, thereby reducing the threat
+ of compromise by adversaries who wish to gain access to your
+ SecureDrop instance.
 
-The airgapped machine should have 3 USB ports, so you can plug in the Tails
-drive you wish to upgrade, the *master Tails USB* drive, and the *backup drive*
-at the same time. If you don't have 3 USB ports available, you can use a USB
-hub, which may reduce transfer speeds.
+The airgapped machine should have 3 USB ports, so you can plug in the *primary
+Tails USB* drive, the Tails drive you want to backup, and the *backup drive* at
+the same time. If you don't have 3 USB ports available you can use a USB
+hub which may reduce transfer speeds.
 
-.. note::
-
-        The steps in this section should be performed for each *Secure Viewing
-        Station*, *Journalist Workstation*, and *Admin Workstation* USB drive in
-        your organization.
+.. note:: The steps in this section should be performed for each *Secure Viewing
+ Station*, *Journalist Workstation*, and *Admin Workstation* USB drive in
+ your organization.
 
 Preparing the Backup Device
 ---------------------------
 
-Navigate to **Applications** ▸ **Utilities** ▸ **Disks**.
+First you must boot the *primary Tails USB* drive. Ensure you set an administrator
+password set at the login screen. Then navigate to **Applications** ▸ **Utilities** ▸ **Disks**.
 
 |Applications Utilities Disks|
 
@@ -51,7 +55,7 @@ Select the drive from the list of drives in the left column.
 
 |Select the Disk|
 
-Click the button with the two cogs and click **Format Partition...**
+Click the button with the two cogs and click **Format Partition...**.
 
 |Click Cogs|
 
@@ -63,9 +67,8 @@ Fill out the form as follows:
 * **Type**: `Encrypted, compatible with Linux systems (LUKS + Ext4)`
 * **Name**: `Backup`
 
-.. warning::
-            Since this will serve as a long-term backup, **make sure to use a
-            strong passphrase.**
+.. warning:: Since this will serve as a long-term backup, **make sure to
+ use a strong passphrase**.
 
 Click **Format**.
 
@@ -81,8 +84,8 @@ Then, browse to **Places** ▸ **Computer**:
 
 |Browse to Places Computer|
 
-Click on the disk on the left side column. Fill in the passphrase you usually
-use when you enable Persistence on that device:
+Click on the disk on the left side column. Fill in the passphrase you set up
+when you :ref:`created your Tails devices <set_up_tails>`.
 
 |Fill in Passphrase|
 
@@ -91,28 +94,26 @@ mounted and ready to access.
 
 |Backup and TailsData Mounted|
 
-Open a Nautilus window with admin privileges by going to
-**Applications** ▸ **System Tools** ▸ **Terminal**.
+Open a Nautilus window with administrative privileges by first going to
+**Applications** ▸ **System Tools** ▸ **Root Terminal**.
 
-|Open Terminal|
+|Root Terminal|
 
-Type ``gksu nautilus`` at the terminal prompt and hit enter. You'll need to type
-your admin passphrase.
+Type ``nautilus`` at the terminal prompt and hit enter. You'll need to type in
+your administrative passphrase you set at the Tails login screen.
 
-|Start gksu nautilus|
+|Start Nautilus|
 
-.. note::
-  When you run ``gksu nautilus``, you may run into an error where Nautilus
-  complains that it can't create a required folder. If that happens, just click
-  OK and continue normally.
+.. note:: When you run ``nautilus``, you may run into an error where Nautilus
+ complains that it can't create a required folder. If that happens, just
+ click OK and continue normally.
 
-  If a Nautilus window *doesn't* come up, it might be because an admin
-  passphrase wasn't set. If that's the case, you'll need to restart and set an
-  admin passphrase before continuing.
+ If you can't find the "Root Terminal" window, it might be because an
+ administrator passphrase wasn't set when you logged in to Tails. If
+ that's the case, you'll need to restart Tails and set one at the login screen.
 
-.. warning::
-            Make sure you use keep the `Terminal` window open while you perform
-            the backups. Otherwise, the `Nautilus` window will close.
+.. warning:: Make sure you use keep the `Root Terminal` window open while
+ you perform the backups. Otherwise, the `Nautilus` window will close.
 
 Make sure you create a directory on the backup drive to store the data from the
 drive you are backing up:
@@ -138,10 +139,10 @@ USB drive, unmount the Backup partition and store the drive somewhere safely.
 .. |Click Cogs| image:: images/upgrade_to_tails_3x/click_the_button_with_cogs.png
 .. |Fill in Passphrase| image:: images/upgrade_to_tails_3x/fill_in_passphrase.png
 .. |Format Backup Drive| image:: images/upgrade_to_tails_3x/fill_out_as_follows.png
-.. |Start gksu nautilus| image:: images/upgrade_to_tails_3x/gksu_nautilus.png
+.. |Start Nautilus| image:: images/screenshots/root_terminal_nautilus_cli.png
 .. |Make Folders for All Drives| image:: images/upgrade_to_tails_3x/make_folders_for_all_drives.png
 .. |Backup and TailsData Mounted| image:: images/upgrade_to_tails_3x/backup_and_tailsdata_mounted.png
 .. |Applications Utilities Disks| image:: images/upgrade_to_tails_3x/navigate_to_applications.png
-.. |Open Terminal| image:: images/upgrade_to_tails_3x/open_terminal.png
+.. |Root Terminal| image:: images/screenshots/root_terminal.png
 .. |Select the Disk| image:: images/upgrade_to_tails_3x/select_the_disk.png
 .. |Two Partitions Appear| image:: images/upgrade_to_tails_3x/two_partitions_appear.png
