@@ -28,6 +28,11 @@ os.environ['USERNAME'] = 'www-data'
 # It supplies a CSPRNG but with an interface that supports methods like choice
 random = SystemRandom()
 
+# safe characters for every possible word in the wordlist includes capital
+# letters because codename hashes are base32-encoded with capital letters
+DICEWARE_SAFE_CHARS = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzA'
+                       'BCDEFGHIJKLMNOPQRSTUVWXYZ')
+
 
 class CryptoException(Exception):
     pass
@@ -236,12 +241,8 @@ def clean(s, also=''):
     >>> clean("Helloworld")
     'Helloworld'
     """
-    # safe characters for every possible word in the wordlist includes capital
-    # letters because codename hashes are base32-encoded with capital letters
-    ok = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJ'
-          'KLMNOPQRSTUVWXYZ')
     for c in s:
-        if c not in ok and c not in also:
+        if c not in DICEWARE_SAFE_CHARS and c not in also:
             raise CryptoException("invalid input: {0}".format(s))
     # scrypt.hash requires input of type str. Since the wordlist is all ASCII
     # characters, this conversion is not problematic
