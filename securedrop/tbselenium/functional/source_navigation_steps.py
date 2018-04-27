@@ -118,7 +118,7 @@ class SourceNavigationStepsMixin():
 
         if not hasattr(self, 'accept_languages'):
             headline = self.driver.find_element_by_class_name('headline')
-            assert 'Submit Materials' == headline.text
+            assert 'Submit Files or Messages' == headline.text
 
     def _source_continues_to_submit_page(self):
         continue_button = self.driver.find_element_by_id('continue-button')
@@ -142,7 +142,7 @@ class SourceNavigationStepsMixin():
 
         if not hasattr(self, 'accept_languages'):
             headline = self.driver.find_element_by_class_name('headline')
-            assert 'Submit Materials' == headline.text
+            assert 'Submit Files or Messages' == headline.text
         
 
     def _source_submits_a_file(self):
