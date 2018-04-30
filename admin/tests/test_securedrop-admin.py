@@ -102,9 +102,10 @@ class TestSecureDropAdmin(object):
 
         with mock.patch('securedrop_admin.check_for_updates',
                         return_value=(False, "0.6.1")):
-            securedrop_admin.update(args)
+            ret_code = securedrop_admin.update(args)
             assert "Applying SecureDrop updates..." in caplog.text
             assert "Updated to SecureDrop" not in caplog.text
+            assert ret_code == 0
 
     def test_update_gpg_recv_primary_key_failure(self, tmpdir, caplog):
         """We should try a secondary keyserver if for some reason the primary
@@ -131,10 +132,11 @@ class TestSecureDropAdmin(object):
             patcher.start()
 
         try:
-            securedrop_admin.update(args)
+            ret_code = securedrop_admin.update(args)
             assert "Applying SecureDrop updates..." in caplog.text
             assert "Signature verification successful." in caplog.text
             assert "Updated to SecureDrop" in caplog.text
+            assert ret_code == 0
         finally:
             for patcher in patchers:
                 patcher.stop()
@@ -161,10 +163,11 @@ class TestSecureDropAdmin(object):
             with mock.patch('subprocess.check_call'):
                 with mock.patch('subprocess.check_output',
                                 return_value=git_output):
-                    securedrop_admin.update(args)
+                    ret_code = securedrop_admin.update(args)
                     assert "Applying SecureDrop updates..." in caplog.text
                     assert "Signature verification successful." in caplog.text
                     assert "Updated to SecureDrop" in caplog.text
+                    assert ret_code == 0
 
     def test_update_signature_does_not_verify(self, tmpdir, caplog):
         git_repo_path = str(tmpdir)
@@ -177,11 +180,11 @@ class TestSecureDropAdmin(object):
             with mock.patch('subprocess.check_call'):
                 with mock.patch('subprocess.check_output',
                                 return_value=git_output):
-                    with pytest.raises(SystemExit):
-                        securedrop_admin.update(args)
-                        assert "Applying SecureDrop updates..." in caplog.text
-                        assert "Signature verification failed." in caplog.text
-                        assert "Updated to SecureDrop" not in caplog.text
+                    ret_code = securedrop_admin.update(args)
+                    assert "Applying SecureDrop updates..." in caplog.text
+                    assert "Signature verification failed." in caplog.text
+                    assert "Updated to SecureDrop" not in caplog.text
+                    assert ret_code != 0
 
 
 class TestSiteConfig(object):
