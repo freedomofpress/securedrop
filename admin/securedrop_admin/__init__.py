@@ -497,9 +497,9 @@ def install_securedrop(args):
                "servers.")
     sdlog.info("The sudo password is only necessary during initial "
                "installation.")
-    subprocess.check_call([os.path.join(args.ansible_path,
-                                        'securedrop-prod.yml'),
-                          '--ask-become-pass'], cwd=args.ansible_path)
+    return subprocess.check_call([os.path.join(args.ansible_path,
+                                 'securedrop-prod.yml'), '--ask-become-pass'],
+                                 cwd=args.ansible_path)
 
 
 def backup_securedrop(args):
@@ -512,7 +512,7 @@ def backup_securedrop(args):
         'ansible-playbook',
         os.path.join(args.ansible_path, 'securedrop-backup.yml'),
     ]
-    subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
+    return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
 def restore_securedrop(args):
@@ -531,7 +531,7 @@ def restore_securedrop(args):
         '-e',
         "restore_file='{}'".format(restore_file_basename),
     ]
-    subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
+    return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
 def run_tails_config(args):
@@ -546,8 +546,8 @@ def run_tails_config(args):
         # inventory script, which fails if no site vars are configured.
         '-i', '/dev/null',
     ]
-    subprocess.check_call(ansible_cmd,
-                          cwd=args.ansible_path)
+    return subprocess.check_call(ansible_cmd,
+                                 cwd=args.ansible_path)
 
 
 def check_for_updates(args):
@@ -622,10 +622,11 @@ def update(args):
 
     if 'Good signature' not in sig_result:
         sdlog.info("Signature verification failed.")
-        sys.exit(1)
+        return -1
     sdlog.info("Signature verification successful.")
 
     sdlog.info("Updated to SecureDrop {}.".format(latest_tag))
+    return 0
 
 
 def get_logs(args):
@@ -638,6 +639,7 @@ def get_logs(args):
     subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
     sdlog.info("Encrypt logs and send to securedrop@freedom.press or upload "
                "to the SecureDrop support portal.")
+    return 0
 
 
 def set_default_paths(args):
@@ -713,17 +715,18 @@ def main(argv):
     args = parse_argv(argv)
     setup_logger(args.v)
     if args.v:
-        args.func(args)
+        return_code = args.func(args)
+        sys.exit(return_code)
     else:
         try:
-            args.func(args)
+            return_code = args.func(args)
         except KeyboardInterrupt:
-            sys.exit(0)
+            sys.exit(-1)
         except Exception as e:
             raise SystemExit(
                 'ERROR (run with -v for more): {msg}'.format(msg=e))
         else:
-            sys.exit(0)
+            sys.exit(return_code)
 
 
 if __name__ == "__main__":
