@@ -1,10 +1,5 @@
 ---
-build_ossec_deb_pkg_dependencies:
-  - inotify-tools
-  - libssl-dev
-  - make
-  - tar
-  - unzip
+build_ossec_deb_pkg_dependencies: []
 
 ossec_server_hostname: ossec-server
 ossec_version: 2.8.2

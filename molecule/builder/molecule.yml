@@ -4,11 +4,33 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: trusty-sd-builder
-    # Trusty from 2017-12-15
-    image: ubuntu@sha256:084989eb923bd86dbf7e706d464cf3587274a826b484f75b69468c19f8ae354c
+  - name: trusty-sd-app
     groups:
-      - build
+      - builders
+  - name: trusty-sd-generic-ossec-agent
+    groups:
+      - builders
+  - name: trusty-sd-generic-ossec-server
+    groups:
+      - builders
+  - name: trusty-sd-generic-ossec-agent2
+    groups:
+      - builders
+  - name: trusty-sd-generic-ossec-server2
+    groups:
+      - builders
+  - name: trusty-sd-grsec
+    groups:
+      - builders
+  - name: trusty-sd-config
+    groups:
+      - builders
+  - name: trusty-sd-keyring
+    groups:
+      - builders
+  - name: trusty-sd-dpkg-verification
+    groups:
+      - testers
 provisioner:
   name: ansible
   inventory:

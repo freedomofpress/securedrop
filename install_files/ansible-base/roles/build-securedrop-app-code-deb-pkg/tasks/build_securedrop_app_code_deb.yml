@@ -1,11 +1,4 @@
 ---
-- name: Install dependencies for building securedrop-app-code deb package.
-  apt:
-    pkg: "{{ item }}"
-    state: latest
-  with_items: "{{ development_dependencies }}"
-  tags: apt
-
 - name: Install pip wheel.
   pip:
     name: wheel

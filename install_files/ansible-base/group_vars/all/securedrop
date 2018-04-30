@@ -15,21 +15,7 @@ remote_host_ref: "{{ ansible_ssh_host|default(inventory_hostname) }}"
 
 # Packages required for working on SecureDrop within development VM. Same list
 # is used on the build VM to pull in required packages.
-development_dependencies:
-  - ipython
-  - libssl-dev
-  - ntp
-  - python-dev
-  - python-ipdb
-  - python-pip
-  - ruby # to ensure `gem` command is available
-  - tmux
-  - vim
-  - libffi-dev # for sphinx
-  - git
-  - devscripts # for dch
-  - gdb # for gcore in TestSubmissionNotInMemory
-  - paxctl
+development_dependencies: []
 
 # These profiles are referenced by multiple machines, such as Application Server
 # for direct copying at install time, and the build machine for including them

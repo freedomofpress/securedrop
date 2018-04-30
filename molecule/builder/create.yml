@@ -26,22 +26,31 @@
 
     - name: Create builder image
       docker_image:
-        name: "sd.local/{{ item.name }}:{{ docker_tag }}"
+        name: "sd.local/trusty-sd-builder:{{ docker_tag }}"
         path: .
         buildargs:
-          IMAGE: "{{ item.image }}"
-          NAME: "{{ item.name }}"
-      with_items: "{{ molecule_yml.platforms }}"
+          IMAGE: ubuntu@sha256:084989eb923bd86dbf7e706d464cf3587274a826b484f75b69468c19f8ae354c
+          NAME: trusty-sd-builder-app
 
-    - name: Create molecule instance(s)
+    - name: Create builders
       docker_container:
         name: "{{ item.name }}"
         hostname: "{{ item.name }}"
-        image: "sd.local/{{ item.name }}:{{ docker_tag }}"
+        image: "sd.local/trusty-sd-builder:{{ docker_tag }}"
         state: started
-        recreate: True
         command: "tail -f /dev/null"
         privileged: "{{ item.privileged | default(omit) }}"
         volumes: "{{ item.volumes | default(omit) }}"
         capabilities: "{{ item.capabilities | default(omit) }}"
       with_items: "{{ molecule_yml.platforms }}"
+      when: "'testers' not in item.groups"
+
+    - name: Create molecule test instance
+      docker_container:
+        name: trusty-sd-dpkg-verification
+        hostname: trusty-sd-dpkg-verification
+        image: "sd.local/trusty-sd-builder:{{ docker_tag }}"
+        state: started
+        command: "tail -f /dev/null"
+        volumes:
+          - "{{ molecule_scenario_directory }}/../../build:/tmp/build:ro"

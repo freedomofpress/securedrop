@@ -1,54 +1,46 @@
 ---
 - name: Build SecureDrop application Debian package from local repository.
-  hosts: build
-  max_fail_percentage: 0
-  any_errors_fatal: yes
+  hosts: builders
+  # Build as fast as possible with each host going individually
+  strategy: free
   become: yes
-  pre_tasks:
-    - name: Ensure all packages are up to date.
-      apt:
-        upgrade: dist
-        update_cache: yes
-        cache_valid_time: 3600
-
-    # These packages are necessary for running the `update_version.sh` script.
-    - name: Install required build tools.
-      apt:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - devscripts
-        - git
-        - aptitude
   roles:
     - role: build-securedrop-app-code-deb-pkg
       tags: "app-deb"
+      when: "ansible_host == 'trusty-sd-app'"
 
     - role: build-ossec-deb-pkg
       tags: "ossec-server"
       purpose: server
+      when: "ansible_host == 'trusty-sd-generic-ossec-server'"
 
     - role: build-ossec-deb-pkg
       tags: "ossec-agent"
       purpose: agent
+      when: "ansible_host == 'trusty-sd-generic-ossec-agent'"
 
     - role: build-generic-pkg
       tags: "securedrop-ossec-server"
       package_name: "securedrop-ossec-server"
+      when: "ansible_host == 'trusty-sd-generic-ossec-server2'"
 
     - role: build-generic-pkg
       tags: "securedrop-ossec-agent"
       package_name: "securedrop-ossec-agent"
+      when: "ansible_host == 'trusty-sd-generic-ossec-agent2'"
 
     - role: build-generic-pkg
       tags: "securedrop-keyring"
       package_name: "securedrop-keyring"
+      when: "ansible_host == 'trusty-sd-keyring'"
 
     - role: build-generic-pkg
       tags: "securedrop-grsec"
       package_name: "securedrop-grsec"
+      when: "ansible_host == 'trusty-sd-grsec'"
 
     - role: build-generic-pkg
       tags: "securedrop-config"
       package_name: "securedrop-config"
+      when: "ansible_host == 'trusty-sd-config'"
   tags: rebuild
