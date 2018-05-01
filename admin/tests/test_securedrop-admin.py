@@ -363,6 +363,17 @@ class TestSiteConfig(object):
         assert validator.validate(Document("no"))
         assert validator.validate(Document("NO"))
 
+    def test_validate_ssh_tor_or_lan(self):
+        validator = securedrop_admin.SiteConfig.ValidateSSH()
+        with pytest.raises(ValidationError):
+            validator.validate(Document("not Tor or LAN"))
+        with pytest.raises(ValidationError):
+            validator.validate(Document("yes"))
+        with pytest.raises(ValidationError):
+            validator.validate(Document("no"))
+        assert validator.validate(Document("Tor"))
+        assert validator.validate(Document("LAN"))
+
     def test_validate_fingerprint(self):
         validator = securedrop_admin.SiteConfig.ValidateFingerprint()
         assert validator.validate(Document(
@@ -602,7 +613,6 @@ class TestSiteConfig(object):
 
     verify_prompt_securedrop_app_https_on_source_interface = \
         verify_prompt_boolean
-    verify_prompt_enable_ssh_over_tor = verify_prompt_boolean
 
     verify_prompt_securedrop_app_gpg_public_key = verify_desc_consistency
 
@@ -639,6 +649,7 @@ class TestSiteConfig(object):
     verify_prompt_sasl_domain = verify_desc_consistency_allow_empty
     verify_prompt_sasl_username = verify_prompt_not_empty
     verify_prompt_sasl_password = verify_prompt_not_empty
+    verify_prompt_enable_ssh_over_tor = verify_prompt_not_empty
 
     def verify_prompt_securedrop_supported_locales(self, site_config, desc):
         (var, default, etype, prompt, validator, transform) = desc
