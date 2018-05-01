@@ -47,6 +47,10 @@ class JournalistAlertEmailException(Exception):
     pass
 
 
+class HTTPSConfigException(Exception):
+    pass
+
+
 class SiteConfig(object):
 
     class ValidateNotEmpty(Validator):
@@ -356,11 +360,41 @@ class SiteConfig(object):
             self.config = {}
         return self.update_config()
 
+    def validate_https_files(self):
+        """
+        If HTTPS is enabled on Source Interface, we expect the cert/key
+        filenames to match what's specified in the Apache config. Let's
+        report failure if matching files are not found on disk.
+        """
+        wanted_files = [
+            "securedrop_source_onion.crt",
+            "securedrop_source_onion.key",
+            "DigiCertCA.crt",
+        ]
+
+        msg_raw = ("HTTPS was enabled, but the corresponding files were"
+                   " not found. Expected to find: '{}', '{}', '{}'")
+        msg = msg_raw.format(*wanted_files)
+        msg += " in {}/ .".format(self.args.ansible_path)
+        msg += "Consult the documentation for more information."
+
+        try:
+            for wanted_file in wanted_files:
+                wanted_path = os.path.join(self.args.ansible_path, wanted_file)
+                assert os.path.exists(wanted_path)
+        except AssertionError:
+            raise HTTPSConfigException(msg)
+
+        return True
+
     def update_config(self):
         self.config.update(self.user_prompt_config())
         self.save()
         self.validate_gpg_keys()
         self.validate_journalist_alert_email()
+        if 'securedrop_app_https_on_source_interface' in self.config and \
+                self.config['securedrop_app_https_on_source_interface']:
+            self.validate_https_files()
         return True
 
     def user_prompt_config(self):
