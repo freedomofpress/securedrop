@@ -206,7 +206,10 @@ class TestIntegration(unittest.TestCase):
             sio = StringIO(decrypted_data.data)
             with gzip.GzipFile(mode='rb', fileobj=sio) as gzip_file:
                 unzipped_decrypted_data = gzip_file.read()
+                mtime = gzip_file.mtime
             self.assertEqual(unzipped_decrypted_data, test_file_contents)
+            # Verify gzip file metadata and ensure timestamp is not present.
+            self.assertEqual(mtime, 0)
 
             # delete submission
             resp = app.get(col_url)
