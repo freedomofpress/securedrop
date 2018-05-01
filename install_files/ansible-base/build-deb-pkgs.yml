@@ -44,3 +44,27 @@
       package_name: "securedrop-config"
       when: "ansible_host == 'trusty-sd-config'"
   tags: rebuild
+
+# Typically we'd perform volume mounting here but to work around docker
+# remote calls (in CircleCI) we have to copy the files instead
+- name: Give dpkg verify container acccess to debs
+  hosts: testers
+  gather_facts: false
+  tasks:
+    - name: Discover local debian build files
+      find:
+        paths: "{{ playbook_dir + '/../../build/' }}"
+        patterns: '*.deb'
+      delegate_to: localhost
+      register: debian_files
+
+    - name: Create build dir
+      file:
+        state: directory
+        path: /tmp/build
+
+    - name: Drop debian files into container
+      copy:
+        src: "{{ item.path }}"
+        dest: /tmp/build/
+      with_items: "{{ debian_files.files }}"
