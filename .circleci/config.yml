@@ -132,6 +132,11 @@ jobs:
 
       - checkout
 
+      - restore_cache:
+          key: deb-builder-{{ checksum "molecule/builder/Dockerfile" }}
+          paths:
+            - /caches/deb-builder.tar.gz
+
       - run:
           name: Rebase on-top of latest develop
           command: ./devops/scripts/rebase-develop.sh
@@ -155,8 +160,26 @@ jobs:
       - setup_remote_docker
 
       - run:
+          name: Load image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/deb-builder.tar |true
+
+      - run:
           name: Run Debian builds
           command: make build-debs
+
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            D_IMAGE=$(docker image ls --filter "label=image_name=trusty-sd-builder-app" --format "{{.Repository}}:{{.Tag}}")
+            docker save -o /caches/deb-builder.tar.gz ${D_IMAGE}
+
+      - save_cache:
+          key: deb-builder-{{ checksum "molecule/builder/Dockerfile" }}
+          paths:
+            - /caches/deb-builder.tar.gz
 
       - run:
           name: Provision staging servers and run tests

@@ -17,7 +17,6 @@
       register: file_hashes
       with_items:
         - Dockerfile
-        - molecule.yml
 
     - name: Get a unique concatenated hash for docker tagging
       set_fact:
