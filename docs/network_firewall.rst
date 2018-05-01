@@ -466,8 +466,10 @@ to add a rule.
 
 |Firewall OPT2 Rules|
 
-Once you've set up the firewall, exit the Unsafe Browser, and continue
-with the "Keeping pfSense up to date" section below.
+Finally, click **Apply Changes**. This will save your changes. You should see a
+message "The changes have been applied successfully". Once you've set up the
+firewall, exit the Unsafe Browser, and continue with the "Keeping pfSense up
+to date" section below.
 
 Configuration Reference Templates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
