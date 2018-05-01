@@ -3,6 +3,7 @@ import pytest
 
 testinfra_hosts = ['docker://trusty-sd-app']
 
+
 def test_pip_wheel_installed(Command):
     """
     Ensure `wheel` is installed via pip, for packaging Python
