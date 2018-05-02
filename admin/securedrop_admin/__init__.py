@@ -247,6 +247,7 @@ class SiteConfig(object):
 
     def __init__(self, args):
         self.args = args
+        self.config = {}
         translations = SiteConfig.Locales(
             self.args.app_path).get_translations()
         translations = " ".join(translations)
@@ -352,8 +353,7 @@ class SiteConfig(object):
     def load_and_update_config(self):
         if self.exists():
             self.config = self.load()
-        else:
-            self.config = {}
+
         return self.update_config()
 
     def update_config(self):
@@ -367,6 +367,16 @@ class SiteConfig(object):
         config = {}
         for desc in self.desc:
             (var, default, type, prompt, validator, transform) = desc
+            if var == 'journalist_gpg_fpr':
+                if not config.get('journalist_alert_gpg_public_key',
+                                  None):
+                    config[var] = ''
+                    continue
+            if var == 'journalist_alert_email':
+                if not config.get('journalist_alert_gpg_public_key',
+                                  None):
+                    config[var] = ''
+                    continue
             config[var] = self.user_prompt_config_one(desc,
                                                       self.config.get(var))
         return config
