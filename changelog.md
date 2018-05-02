@@ -1,13 +1,14 @@
 # Changelog
 
-## 0.7.0~rc1
+## 0.7.0~rc2
 
 ### Web Applications
-* Updated messages on source interface (#3036, #3132)
+* Updated messages on source interface (#3036, #3132, #3321, #3322)
 * Improvements in image upload functionality (#3057, #3222, #3225): Custom logos will now be automatically be resized and converted to pngs.
 * Use io.open instead of open across the web applications (#3064)
 * Include token reuse under login hardening flag (#3175)
 * Add Orbot warning in source interface (#3215)
+* Removed compression time metadata on submission gzip archives (#3305)
 
 ### Operations
 * Admins can optionally enable a daily encrypted email sent to journalists indicating whether or not they should check SecureDrop (#1195, #2803)
@@ -38,7 +39,7 @@
 ### Documentation
 * Update branch management docs (#3171)
 * Add Release manager guide (#3202)
-* Miscellaneous documentation improvements (#3147, #3153, #3156, #3168, #3201, #3252, #3265, #3295).
+* Miscellaneous documentation improvements (#3147, #3153, #3156, #3168, #3201, #3252, #3265, #3295, #3315).
 
 The issues for this release were tracked in the 0.7 milestone on Github:
 https://github.com/freedomofpress/securedrop/milestones/0.7.
