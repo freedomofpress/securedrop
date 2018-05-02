@@ -71,6 +71,13 @@ class SiteConfig(object):
             raise ValidationError(
                 message="Must not be root, amnesia or an empty string")
 
+    class ValidateSSH(Validator):
+        def validate(self, document):
+            text = document.text
+            if text.lower() == 'tor' or text.lower() == 'lan':
+                return True
+            raise ValidationError(message="Must be Tor (recommended) or LAN")
+
     class ValidateIP(Validator):
         def validate(self, document):
             if re.match('((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}$',
@@ -340,9 +347,9 @@ class SiteConfig(object):
              SiteConfig.ValidateOSSECPassword(),
              None],
             ['enable_ssh_over_tor', True, bool,
-             u'Enable SSH over Tor',
-             SiteConfig.ValidateYesNo(),
-             lambda x: x.lower() == 'yes'],
+             u'Enable SSH over Tor (recommended) or LAN',
+             SiteConfig.ValidateSSH(),
+             self.sanitize_ssh_over_tor_or_lan],
             ['securedrop_supported_locales', [], types.ListType,
              u'Space separated list of additional locales to support '
              '(' + translations + ')',
@@ -410,6 +417,12 @@ class SiteConfig(object):
 
     def sanitize_fingerprint(self, value):
         return value.upper().replace(' ', '')
+
+    def sanitize_ssh_over_tor_or_lan(self, value):
+        if value.lower() == 'tor':
+            return True
+        elif value.lower() == 'lan':
+            return False
 
     def validate_gpg_keys(self):
         keys = (('securedrop_app_gpg_public_key',
