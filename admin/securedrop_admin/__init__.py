@@ -573,6 +573,12 @@ def run_tails_config(args):
                                  cwd=args.ansible_path)
 
 
+def check_for_updates_wrapper(args):
+    res, tag = check_for_updates(args)
+    # Because the command worked properly exit with 0.
+    return 0
+
+
 def check_for_updates(args):
     """Check for SecureDrop updates"""
     sdlog.info("Checking for SecureDrop updates...")
@@ -725,7 +731,7 @@ def parse_argv(argv):
 
     parse_check_updates = subparsers.add_parser('check_for_updates',
                                                 help=check_for_updates.__doc__)
-    parse_check_updates.set_defaults(func=check_for_updates)
+    parse_check_updates.set_defaults(func=check_for_updates_wrapper)
 
     parse_logs = subparsers.add_parser('logs',
                                        help=get_logs.__doc__)
