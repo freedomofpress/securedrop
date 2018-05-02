@@ -27,7 +27,7 @@ def test_apache_headers_source_interface(File, header):
     'WSGIProcessGroup source',
     'WSGIScriptAlias / /var/www/source.wsgi',
     'Header set Cache-Control "no-store"',
-    'Header set Referrer-Policy "no-referrer"',
+    'Header set Referrer-Policy "same-origin"',
     "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),
     """
 <Directory {}/static>
