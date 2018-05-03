@@ -290,6 +290,21 @@ class SiteConfig(object):
              'SecureDrop Application GPG public key',
              SiteConfig.ValidatePath(self.args.ansible_path),
              None],
+            ['securedrop_app_https_certificate_cert_src', '', str,
+             u'Local filepath to HTTPS certificate '
+             '(optional, only if using HTTPS on source interface)',
+             SiteConfig.ValidateOptionalPath(self.args.ansible_path),
+             None],
+            ['securedrop_app_https_certificate_key_src', '', str,
+             u'Local filepath to HTTPS certificate key '
+             '(optional, only if using HTTPS on source interface)',
+             SiteConfig.ValidateOptionalPath(self.args.ansible_path),
+             None],
+            ['securedrop_app_https_certificate_chain_src', '', str,
+             u'Local filepath to HTTPS certificate chain file '
+             '(optional, only if using HTTPS on source interface)',
+             SiteConfig.ValidateOptionalPath(self.args.ansible_path),
+             None],
             ['securedrop_app_gpg_fingerprint', '', str,
              u'Full fingerprint for the SecureDrop Application GPG Key',
              SiteConfig.ValidateFingerprint(),
