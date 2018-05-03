@@ -340,7 +340,8 @@ class SiteConfig(object):
              SiteConfig.ValidateOSSECPassword(),
              None],
             ['enable_ssh_over_tor', True, bool,
-             u'Enable SSH over Tor',
+             u'Enable SSH over Tor (recommended, disables SSH over LAN). '
+             u'If you respond no, SSH will be available over LAN only',
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes'],
             ['securedrop_supported_locales', [], types.ListType,
