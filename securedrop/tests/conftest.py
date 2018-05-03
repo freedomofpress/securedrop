@@ -31,7 +31,7 @@ gnupg_logger = logging.getLogger(gnupg.__name__)
 gnupg_logger.setLevel(logging.ERROR)
 valid_levels = {'INFO': logging.INFO, 'DEBUG': logging.DEBUG}
 gnupg_logger.setLevel(
-   valid_levels.get(os.environ.get('GNUPG_LOG_LEVEL', None), logging.ERROR)
+   valid_levels.get(os.environ.get('GNUPG_LOG_LEVEL', ""), logging.ERROR)
 )
 
 
