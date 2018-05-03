@@ -12,12 +12,12 @@ administrative access is over the Tor network. This provides a number of benefit
 
 Most administrators will need SSH access during the course of running a
 SecureDrop instance and a few times a year for maintenance. So the
-potential shortfalls of having SSH over Tor aren't usually a big deal.
-The cons of having SSH over Tor include:
+potential shortfalls of having SSH over Tor are not usually a major issue.
+The cons of having SSH over Tor can include:
 
-* Really slow and delayed remote terminal performance
+* Slow and delayed remote terminal performance
 * Allowing SSH access from outside of your local network can be seen as a
-  potential larger security hole for some organizations. Particularly those
+  potential larger security hole for some organizations, particularly those
   with tight network security controls.
 
 That being said, the default setting of only allowing SSH over Tor is a good fit
@@ -57,7 +57,7 @@ latest production release.
 
 The setting that controls SSH over LAN access is set during the ``sdconfig`` step
 of the install. Below is an example of what the prompt will look like. You can
-answer either 'Tor' or 'LAN' when you are prompted:
+answer either 'no' or 'false' when you are prompted for ``Enable SSH over Tor``:
 
 .. code:: sh
 
@@ -69,7 +69,7 @@ answer either 'Tor' or 'LAN' when you are prompted:
     Hostname for Application Server: app
     Hostname for Monitor Server: mon
     [...]
-    Enable SSH over Tor (recommended) or LAN: LAN
+    Enable SSH over Tor (recommended, disables SSH over LAN). If you respond no, SSH will be available over LAN only: yes
 
 Then you'll have to run the installation script:
 
