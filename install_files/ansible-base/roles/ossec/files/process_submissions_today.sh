@@ -5,6 +5,16 @@ function send_encrypted_alarm() {
 }
 
 function main() {
+    if throttle_once_every_24h ; then
+        handle_notification
+    fi
+}
+
+functin throttle_once_every_24h() {
+    return true if alert sent more than 24h ago
+}
+
+function handle_notification() {
     local sender
     local stdin
     sender=${1:-send_encrypted_alarm}
@@ -24,6 +34,7 @@ function main() {
             echo "There has been no submission activity in the past 24 hours."
             echo "You do not need to login to SecureDrop."
         fi | $sender journalist
+        remember alert was sent now
     else
         export SUBJECT="SecureDrop Submissions Error"
         (
@@ -32,6 +43,10 @@ function main() {
             echo "$stdin"
         ) | $sender ossec
     fi
+}
+
+functin test_throttle_once_every_24h() {
+    ...
 }
 
 function test_send_encrypted_alarm() {
