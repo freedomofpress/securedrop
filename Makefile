@@ -138,6 +138,11 @@ libvirt-share: ## Configure ACLs to allow RWX for libvirt VM (e.g. Admin Worksta
 	@find "$(PWD)" -type d -and -user $$USER -exec setfacl -m u:libvirt-qemu:rwx {} +
 	@find "$(PWD)" -type f -and -user $$USER -exec setfacl -m u:libvirt-qemu:rw {} +
 
+.PHONY: self-signed-https-certs
+self-signed-https-certs: ## Generates self-signed certs for TESTING the HTTPS config
+	@echo "Generating self-signed HTTPS certs for testing..."
+	@./devops/generate-self-signed-https-certs.sh
+
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
 # 2. Use sed-like syntax to remove the make targets

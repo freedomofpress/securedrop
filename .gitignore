@@ -18,6 +18,7 @@ mon-ssh-aths
 *.csr
 *.pem
 *.crt
+*.ca
 
 # ignore ansible retry files
 *.retry
