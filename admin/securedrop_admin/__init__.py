@@ -280,16 +280,16 @@ class SiteConfig(object):
              u'DNS server specified during installation',
              SiteConfig.ValidateNotEmpty(),
              None],
-            ['securedrop_app_https_on_source_interface', False, bool,
-             u'Whether HTTPS should be enabled on '
-             'Source Interface (requires EV cert)',
-             SiteConfig.ValidateYesNo(),
-             lambda x: x.lower() == 'yes'],
             ['securedrop_app_gpg_public_key', 'SecureDrop.asc', str,
              u'Local filepath to public key for '
              'SecureDrop Application GPG public key',
              SiteConfig.ValidatePath(self.args.ansible_path),
              None],
+            ['securedrop_app_https_on_source_interface', False, bool,
+             u'Whether HTTPS should be enabled on '
+             'Source Interface (requires EV cert)',
+             SiteConfig.ValidateYesNo(),
+             lambda x: x.lower() == 'yes'],
             ['securedrop_app_https_certificate_cert_src', '', str,
              u'Local filepath to HTTPS certificate '
              '(optional, only if using HTTPS on source interface)',
