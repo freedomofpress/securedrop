@@ -12,8 +12,10 @@ set -o pipefail
 keyfile_basename="securedrop_source_onion"
 keyfile_dest_dir="install_files/ansible-base"
 
+echo "WARNING: These certs should only be used in a test or development environment!"
+
 function generate-test-https-certs {
-    openssl genrsa -out "${keyfile_dest_dir}/${keyfile_basename}.key" 2048
+    openssl genrsa -out "${keyfile_dest_dir}/${keyfile_basename}.key" 4096
     openssl rsa -in "${keyfile_dest_dir}/${keyfile_basename}.key" -out "${keyfile_dest_dir}/${keyfile_basename}.key"
     openssl req -sha256 -new -key "${keyfile_dest_dir}/${keyfile_basename}.key" -out "${keyfile_dest_dir}/${keyfile_basename}.csr" -subj '/CN=localhost'
     openssl x509 -req -sha256 -days 365 -in "${keyfile_dest_dir}/${keyfile_basename}.csr" -signkey "${keyfile_dest_dir}/${keyfile_basename}.key" -out "${keyfile_dest_dir}/${keyfile_basename}.crt"
