@@ -111,12 +111,12 @@ on your admin workstation:
 
   ./securedrop-admin sdconfig
 
-This command will prompt you for the following variables::
+This command will prompt you for the following information::
 
-    securedrop_app_https_on_source_interface: yes
-    securedrop_app_https_certificate_cert_src: sd.crt
-    securedrop_app_https_certificate_key_src: sd.key
-    securedrop_app_https_certificate_chain_src: ca.crt
+  Whether HTTPS should be enabled on Source Interface (requires EV cert): yes
+  Local filepath to HTTPS certificate (optional, only if using HTTPS on source interface): sd.crt
+  Local filepath to HTTPS certificate key (optional, only if using HTTPS on source interface): sd.key
+  Local filepath to HTTPS certificate chain file (optional, only if using HTTPS on source interface): ca.crt
 
 The filenames should match the names of the files provided to you by DigiCert,
 and should be saved inside the ``install_files/ansible-base/`` directory. You'll

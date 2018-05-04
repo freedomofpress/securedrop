@@ -633,6 +633,12 @@ class TestSiteConfig(object):
         verify_desc_consistency_optional)
     verify_prompt_journalist_gpg_fpr = verify_prompt_fingerprint_optional
     verify_prompt_journalist_alert_email = verify_desc_consistency_optional
+    verify_prompt_securedrop_app_https_certificate_chain_src = (
+        verify_desc_consistency_optional)
+    verify_prompt_securedrop_app_https_certificate_key_src = (
+        verify_desc_consistency_optional)
+    verify_prompt_securedrop_app_https_certificate_cert_src = (
+        verify_desc_consistency_optional)
     verify_prompt_smtp_relay = verify_prompt_not_empty
     verify_prompt_smtp_relay_port = verify_desc_consistency
     verify_prompt_daily_reboot_time = verify_desc_consistency
