@@ -348,7 +348,7 @@
 		<destination>
 			<network>opt1</network>
 		</destination>
-		<descr><![CDATA[Block all non-whitelisted traffic from OPT2 and OPT2]]></descr>
+		<descr><![CDATA[Block all non-whitelisted traffic from OPT2 and OPT1]]></descr>
 		<created>
 			<time>1519947935</time>
 			<username>admin@10.20.1.2</username>
