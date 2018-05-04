@@ -9,8 +9,9 @@ released on May 9, 2018. Follow the graphical prompts on your workstations to
 perform this upgrade.
 
 For the *Journalist Workstations* and the *Admin Workstation*, you will also
-need to update the SecureDrop code. First, ensure that you have 
-`set a Tails administrator password <https://tails.boum.org/doc/first_steps/startup_options/administration_password/index.en.html>`__.
+need to update the SecureDrop code (which configures the workstation
+environment, such as the SecureDrop shortcuts on the Tails desktop). First,
+ensure that you have  `set a Tails administrator password <https://tails.boum.org/doc/first_steps/startup_options/administration_password/index.en.html>`__.
 Then, on the workstation to be updated, perform the following steps in a
 terminal:
 
@@ -18,9 +19,9 @@ terminal:
 
   cd ~/Persistent/securedrop
   git fetch --tags
-  git checkout 0.7
+  git checkout 0.7.0
   gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
-  git tag -v 0.7
+  git tag -v 0.7.0
 
 The output should include the following two lines:
 
@@ -49,20 +50,25 @@ Workstation Updater looks as follows:
 Configuring SSH over the local network
 --------------------------------------
 
-SecureDrop 0.7 ships with the option to SSH into the SecureDrop servers over the
+SecureDrop 0.7.0 ships with the option to SSH into the SecureDrop servers over the
 local network instead of the Tor network. Please see the :doc:`detailed documentation <../ssh_over_local_net>`
 for this feature.
 
 Configuring email alerts about new submissions
 ----------------------------------------------
 
-SecureDrop 0.7 allows you to configure an encrypted daily email alert informing
+SecureDrop 0.7.0 allows you to configure an encrypted daily email alert informing
 you about  whether or not there are new SecureDrop submissions. In order to
 configure this feature, you will need an email address that should receive 
 alerts, a public GPG key to use for that address, and the fingerprint for that
 key.
 
-On your *Admin Workstation*, copy the public key (e.g.,
+Note that you cannot configure multiple email addresses. If you would like the
+alerts to be sent to multiple users, you will have to set up a single email
+alias for this purpose, and all recipients will need to have access to a shared
+GPG key.
+
+To set up the alerts, on your *Admin Workstation*, copy the public key (e.g.,
 ``journalist.pub``) to
 ``~/Persistent/securedrop/install_files/ansible-base/``.
 
@@ -82,7 +88,7 @@ email every 24 hours.
 Configuring server reboot time
 ------------------------------
 
-SecureDrop 0.7 lets you configure the time of day (full hour) at which the 
+SecureDrop 0.7.0 lets you configure the time of day (full hour) at which the
 SecureDrop servers are rebooted.
 
 To do so, run  ``./securedrop-admin sdconfig`` on your *Admin Workstation* 
