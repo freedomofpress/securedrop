@@ -70,6 +70,8 @@ class TestJournalistMail(TestBase):
         for (destination, payload) in (
                 ('journalist', today_payload),
                 ('ossec', 'MYGREATPAYLOAD')):
+            assert self.run(host,
+                            "/var/ossec/process_submissions_today.sh forget")
             assert self.run(host, "postsuper -d ALL")
             assert self.run(
                 host,
@@ -82,7 +84,12 @@ class TestJournalistMail(TestBase):
         self.service_stopped(host, "postfix")
 
     def test_process_submissions_today(self, host):
-        self.run(host, "/var/ossec/process_submissions_today.sh test_main")
+        assert self.run(host,
+                        "/var/ossec/process_submissions_today.sh "
+                        "test_handle_notification")
+        assert self.run(host,
+                        "/var/ossec/process_submissions_today.sh "
+                        "test_modified_in_the_past_24h")
 
     def test_send_encrypted_alert(self, host):
         self.service_started(host, "postfix")
@@ -185,10 +192,15 @@ class TestJournalistMail(TestBase):
         # empty the mailq on mon in case there were leftovers
         #
         assert self.run(mon, "postsuper -d ALL")
+        #
+        # forget about past notifications in case there were leftovers
+        #
+        assert self.run(mon, "/var/ossec/process_submissions_today.sh forget")
 
         #
         # the command fires every time ossec starts,
         # regardless of the frequency
+        # https://github.com/ossec/ossec-hids/issues/1415
         #
         with app.sudo():
             self.service_restarted(app, "ossec")
@@ -202,6 +214,21 @@ class TestJournalistMail(TestBase):
         assert self.run(
             mon,
             "test 1 = $(mailq | grep journalist@ossec.test | wc -l)")
+
+        assert self.run(
+            mon,
+            "grep --count 'notification suppressed' /var/log/syslog "
+            "> /tmp/before")
+
+        #
+        # The second notification within less than 24h is suppressed
+        #
+        with app.sudo():
+            self.service_restarted(app, "ossec")
+        assert self.wait_for_command(mon, """
+        grep --count 'notification suppressed' /var/log/syslog > /tmp/after
+        test $(cat /tmp/before) -lt $(cat /tmp/after)
+        """)
 
         #
         # teardown the ossec and postfix on mon and app
