@@ -75,6 +75,9 @@ worth checking the *Journalist Interface*. For this you will need:
           the GPG private key, it is not possible to specify multiple
           GPG keys.
 
+.. note:: The journalist notification is sent after the daily reboot
+          of the *Application Server*.
+
 You will have to copy the following required files to
 ``install_files/ansible-base``:
 
