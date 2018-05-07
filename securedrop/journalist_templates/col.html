@@ -13,7 +13,7 @@
       <a href="#change-codename-{{ source.journalist_designation }}" title="{{ gettext('Generate a new random codename for this source. We recommend doing this if the first random codename is difficult to say or remember. You can generate new random codenames as many times as you like.') }}" class="plain" id="regenerate-codename-btn"><span id="regenerate-codename-btn-label">{{ gettext('Change codename') }}</span></a>
       <div id="change-codename-{{ source.journalist_designation }}" class="confirm-prompt">{{ gettext('Are you sure you want to generate a new codename?') }}
         <a href="#regenerate-code">{{ gettext('Cancel') }}</a>
-        <button class="sd-button" type="submit">{{ gettext('CONFIRM') }}</button>
+        <button class="sd-button" type="submit">{{ gettext('Confirm') }}</button>
       </div>
     </p>
   </form>
@@ -68,7 +68,7 @@
       {% with %}
         {% set modal_data = {
                               "modal_id": "delete-selected-confirmation-modal",
-                              "modal_header": gettext('Delete Confirmation'),
+                              "modal_header": gettext('Confirmation of deletion'),
                               "modal_body": gettext('Are you sure you want to delete the selected documents?'),
                               "cancel_id": "cancel-selected-deletions",
                               "submit_id": "delete-selected",
@@ -101,7 +101,7 @@
     </form>
   {% elif source.flagged %}
     <p class="notification">{{ gettext("You've flagged this source for reply.") }}</p>
-    <p>{{ gettext("An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here.") }}</p>
+    <p>{{ gettext("An encryption key will be generated for the source next time they log in, after which you will be able to reply to the source here.") }}</p>
   {% else %}
     <p>{{ gettext("Click below if you would like to write a reply to this source.") }}</p>
     <form action="{{ url_for('main.flag') }}" method="post">
@@ -112,7 +112,7 @@
   {% endif %}
   <hr class="no-line">
   <hr class="cut-out">
-  <p>{{ gettext("Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>")|safe }}</p>
+  <p>{{ gettext("Click below to delete this source's collection. <em>Warning: Afterwards, files seen here will be unrecoverable and the source will no longer be able to log in using their previous codename.</em>")|safe }}</p>
 
   <form id="delete-collection" action="{{ url_for('col.delete_single', filesystem_id=filesystem_id) }}" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
