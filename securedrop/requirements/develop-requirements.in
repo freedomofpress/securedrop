@@ -7,7 +7,7 @@ docker-py
 dnspython
 flake8
 html-linter
-molecule>=2.*
+molecule>2.13
 # Needed for ansible network filte
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
