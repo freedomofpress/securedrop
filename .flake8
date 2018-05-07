@@ -1,0 +1,7 @@
+[flake8]
+exclude =
+    config.py,
+    .venv/,
+    journalist_gui/journalist_gui/updaterUI.py,
+    journalist_gui/journalist_gui/resources_rc.py,
+    .python3

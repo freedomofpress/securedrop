@@ -55,7 +55,7 @@ docs: ## Build project documentation in live reload for editing
 
 .PHONY: flake8
 flake8: ## Validates PEP8 compliance for Python source files.
-	flake8 --exclude='config.py,.venv/,journalist_gui/journalist_gui/updaterUI.py,journalist_gui/journalist_gui/resources_rc.py'
+	flake8
 
 .PHONY: app-lint
 app-lint: ## Tests pylint lint rule compliance.
