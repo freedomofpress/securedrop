@@ -102,7 +102,7 @@ def main():
     ossec_version = module.params['ossec_version']
     try:
         ossec_config = OSSECURLs(ossec_version=ossec_version)
-    except:
+    except:  # noqa: E722
         msg = ("Failed to find checksum information for OSSEC v{}."
                "Ensure you have the proper release specified, "
                "and check the download page to confirm: "
