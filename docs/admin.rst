@@ -332,7 +332,7 @@ Simply click the **Update Instance Config** button:
 
 |System Config Page|
 
-And on the instance configuration page, select and upload the image you prefer.
+And on the instance configuration page, select and upload the PNG image you prefer.
 You should see a message appear indicating the change was a success:
 
 |Logo Update|
