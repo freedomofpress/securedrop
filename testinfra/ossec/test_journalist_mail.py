@@ -116,8 +116,8 @@ class TestJournalistMail(TestBase):
         # encrypted mail to journalist or ossec contact
         #
         for (who, payload, expected) in (
-                ('journalist', 'ossec: output\n1', '1'),
-                ('ossec', 'MYGREATPAYLOAD', 'MYGREATPAYLOAD')):
+                ('journalist', 'JOURNALISTPAYLOAD', 'JOURNALISTPAYLOAD'),
+                ('ossec', 'OSSECPAYLOAD', 'OSSECPAYLOAD')):
             assert self.run(host, "postsuper -d ALL")
             trigger(who, payload)
             assert self.run(
