@@ -8,12 +8,20 @@
     &:dir(rtl)
       text-align: right
 
-    &:last-child
-      border-bottom: none
+    &:first-child
+      border-top: 1px solid #ddd
 
     .file
       min-width: 300px
       display: inline-block
+      color: inherit
+      text-decoration: none
+      
+      &.unread
+        font-weight: bold
+      
+      &.read
+        color: #444
 
       &.reply
         font-size: small
@@ -21,3 +29,6 @@
     .info
       font-size: 12px
       color: #666666
+    
+    &.unread
+      background: white

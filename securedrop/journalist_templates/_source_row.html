@@ -1,18 +1,22 @@
 {% set docs = source.documents_messages_count()['documents'] %}
 {% set msgs = source.documents_messages_count()['messages'] %}
-<li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
+<li class="source {% if source.num_unread != 0 %}unread{% else %}read{% endif %}" data-source-designation="{{ source.journalist_designation|lower }}">
   <time class="date" title="{{ source.last_updated|rel_datetime_format }}" datetime="{{ source.last_updated|rel_datetime_format(fmt="%Y-%m-%d %H:%M:%S%Z") }}">{{ source.last_updated|rel_datetime_format(relative=True) }}</time>
   <div class="designation">
     {% if source.star.starred %}
       <button class="button-star starred" type="submit"
               formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}"><i class="fa fa-star"></i></button>
       <input id="checkbox" type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
-      <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}">{{ source.journalist_designation }}</a></span>
+      <a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
+        {{ source.journalist_designation }}
+      </a>
     {% else %}
       <button class="button-star un-starred" type="submit"
         formaction="{{ url_for('col.add_star', filesystem_id=source.filesystem_id) }}"><i class="fa fa-star"></i></button>
       <input id="checkbox" type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
-      <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}">{{ source.journalist_designation }}</a></span>
+      <a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
+        {{ source.journalist_designation }}
+      </a>
     {% endif %}
   </div>
   <div class="submission-count">

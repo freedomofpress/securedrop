@@ -3,16 +3,21 @@
     padding: 0
 
     li.source
-      background: $color_grey_xlight
       border-bottom: 1px solid #ddd
       padding: 6px
       text-align: left
+      
+      &.unread
+        background: white
+      
+      &.read
+        background: $color_grey_xlight
 
       &:dir(rtl)
         text-align: right
 
-      &:last-child
-        border-bottom: none
+      &:first-child
+        border-top: 1px solid #ddd
 
       .date
         float: right
@@ -34,6 +39,14 @@
           font-weight: bold
           margin: 5px
           display: inline-block
+
+      .code-name
+        text-decoration: none
+        &.read
+          font-weight: normal
+          color: #444
+        &.unread
+          font-weight: bold
 
       .submission-count
         display: inline-block
