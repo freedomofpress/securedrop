@@ -14,14 +14,7 @@
     - s: apt_https.priv
       d: /etc/ssl/private/apt_freedom_press.priv
 
-- include_role:
-    name: jdauphant.nginx
-
-- name: Install server dependencies
-  apt:
-    name: reprepro
-
-- name: Make directories
+- name: Make repo directories
   file:
     state: directory
     path: "/var/repos/{{ item }}"
@@ -39,36 +32,14 @@
   command: gpg --import /tmp/apt-test.priv
   ignore_errors: yes
 
-- name: Copy over debs
-  synchronize:
-    src: "{{ molecule_dir }}/../../build/"
-    dest: /var/repos/debs/
-    delete: yes
-
-- name: Establish config
-  template:
-    src: "distributions.j2"
-    dest: "/var/repos/conf/distributions"
-
-- name: Run reprepo
-  shell: |
-    find {{dpkg_dir}} -type f -name '*.deb' -exec reprepro includedeb "{{rep_dist}}" '{}' \;
-  environment:
-    REPO_DIR: /var/repos
-    REPREPRO_CONFIG_DIR: /var/repos/conf
-    REPREPRO_BASE_DIR: /var/repos/base
-
-- name: Delete existing signature
-  file:
-    state: absent
-    path: "{{ release_file }}.gpg"
-  changed_when: false
-
-- name: Sign release file
-  command:  "gpg -b -u C5D5CD3B6D65484B -o {{ release_file }}.gpg {{ release_file }}"
-  changed_when: false
+- include_role:
+    name: jdauphant.nginx
 
 - name: Copy pub key in-place
   copy:
-    src: apt-test.pub
-    dest: /var/repos/base/apt-test.pub
+    src: "{{ item }}"
+    dest: "/var/repos/base/{{ item }}"
+  with_items:
+    - apt-test.pub
+    - apt-test-fpf.pub
+

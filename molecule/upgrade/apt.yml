@@ -4,8 +4,13 @@
   hosts: aptservers
   become: yes
   tasks:
+    - name: Establish QA strategy
+      set_fact:
+        QA_APTTEST: "{{ lookup('env','QA_APTTEST')|bool }}"
+
     - import_tasks: local_apt_mirror.yml
-      when: lookup('env','QA_FPF_REPO') == ''
+    - import_tasks: local_apt_with_debs.yml
+      when: not QA_APTTEST
 
   vars:
     molecule_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
@@ -19,13 +24,14 @@
         - listen 80
         - root "/var/repos/base"
         - location / { autoindex on; }
+        - location /gpg { alias /var/repos/base/; }
       encrypted:
         - listen 443 ssl
         - server_name apt.freedom.press
         - ssl_certificate /etc/ssl/certs/apt_freedom_press.pem
         - ssl_certificate_key /etc/ssl/private/apt_freedom_press.priv
         - root "/var/repos/base"
-        - location / { autoindex on; }
+        - location / { {{ "proxy_pass https://apt-test.freedom.press;" if QA_APTTEST else "autoindex on;" }} }
 
 - name: Configure apt-server
   hosts: securedrop
@@ -36,17 +42,11 @@
         - name: Redirect to local QA Apt server
           set_fact:
             apt_key_bits:
-              - url: "http://{{ hostvars['apt']['ansible_eth0'].ipv4.address }}/apt-test.pub"
+              - url: "http://{{ hostvars['apt']['ansible_eth0'].ipv4.address }}/gpg/apt-test.pub"
                 id: 6D65484B
+              - url: "http://{{ hostvars['apt']['ansible_eth0'].ipv4.address }}/gpg/apt-test-fpf.pub"
+                id: 4A3BE4A92211B03C
             apt_test_etc_line: "{{ hostvars['apt']['ansible_eth0'].ipv4.address }}  apt.freedom.press"
-          when: lookup('env','QA_FPF_REPO') == ''
-
-        - name: Redirect to FPF QA Apt server
-          set_fact:
-            apt_key_bits:
-              - data: "{{ lookup('file','files/apt-test-fpf.pub') }}"
-            apt_test_etc_line: "{{ lookup('dig', 'apt-test.freedom.press') }}  apt.freedom.press"
-          when: lookup('env','QA_FPF_REPO') != ''
 
         - name: Install testing apt key to keyring
           apt_key:
@@ -67,7 +67,6 @@
             src: cacert.pub
             dest: /usr/local/share/ca-certificates/fpf_test_ca.crt
           notify: update ca
-          when: lookup('env','QA_FPF_REPO') == ''
       tags: apt
 
   handlers:
