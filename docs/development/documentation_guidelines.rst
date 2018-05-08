@@ -65,7 +65,7 @@ To update these screenshots automatically you can run:
 
 .. code:: sh
 
-   make -C securedrop images update-user-guides
+   make -C securedrop update-user-guides
 
 This will generate screenshots for each page in the web application and copy
 them to the folder under ``docs/images/manual/screenshots`` where they will
