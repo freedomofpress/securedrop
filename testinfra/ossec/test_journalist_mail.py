@@ -64,19 +64,18 @@ class TestJournalistMail(TestBase):
 
     def test_procmail(self, host):
         self.service_started(host, "postfix")
-        today_payload = (
-            'ossec: output: head -1 /var/lib/securedrop/submissions_today.txt'
-            '\n1234')
-        for (destination, payload) in (
-                ('journalist', today_payload),
-                ('ossec', 'MYGREATPAYLOAD')):
+        for (destination, f) in (
+                ('journalist', 'alert-journalist-one.txt'),
+                ('journalist', 'alert-journalist-two.txt'),
+                ('ossec', 'alert-ossec.txt')):
+            self.ansible(host, "copy",
+                         "dest=/tmp/{f} src=testinfra/ossec/{f}".format(f=f))
             assert self.run(host,
                             "/var/ossec/process_submissions_today.sh forget")
             assert self.run(host, "postsuper -d ALL")
             assert self.run(
                 host,
-                "echo -e '{payload}' | "
-                "mail -s 'abc' root@localhost".format(payload=payload))
+                "cat /tmp/{f} | mail -s 'abc' root@localhost".format(f=f))
             assert self.wait_for_command(
                 host,
                 "mailq | grep -q {destination}@ossec.test".format(

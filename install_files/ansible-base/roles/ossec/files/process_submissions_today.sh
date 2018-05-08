@@ -29,7 +29,7 @@ function handle_notification() {
     stdin="$(< /dev/stdin)"
 
     local count
-    count=$(echo "$stdin" | perl -ne 'print scalar(<>) and exit if(/ossec: output/);')
+    count=$(echo "$stdin" | perl -ne "print scalar(<>) and exit if(m|ossec: output: 'head -1 /var/lib/securedrop/submissions_today.txt|);")
     if [[ "$count" =~ ^[0-9]+$ ]] ; then
         export SUBJECT="Submissions in the past 24h"
         #
