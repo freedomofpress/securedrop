@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from PIL import Image
-
 import os
 
 from flask import (Blueprint, render_template, request, url_for, redirect, g,
@@ -33,19 +31,16 @@ def make_blueprint(config):
         form = LogoForm()
         if form.validate_on_submit():
             f = form.logo.data
-            custom_logo_filepath = os.path.join(config.SECUREDROP_ROOT,
-                                                "static/i/custom_logo.png")
+            custom_logo_filepath = os.path.join(current_app.static_folder, 'i',
+                                                'custom_logo.png')
             try:
-                with Image.open(f) as im:
-                    im.thumbnail((500, 450), resample=3)
-                    im.save(custom_logo_filepath, "PNG")
+                f.save(custom_logo_filepath)
                 flash(gettext("Image updated."), "logo-success")
             except Exception:
                 flash("Unable to process the image file."
                       " Try another one.", "logo-error")
             finally:
                 return redirect(url_for("admin.manage_config"))
-
         else:
             for field, errors in form.errors.items():
                 for error in errors:
