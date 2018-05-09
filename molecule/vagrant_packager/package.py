@@ -129,11 +129,11 @@ def main():
                                       temp_dir)
                 EPHEMERAL_DIRS[temp_dir] = ephemeral_path
 
-                os.mkdir(os.path.join(SCENARIO_PATH, ".molecule", temp_dir))
+                os.makedirs(os.path.join(SCENARIO_PATH, ".molecule", temp_dir))
             except OSError:
                 pass
 
-        vm = LibVirtPackager(".molecule_"+srv)
+        vm = LibVirtPackager("vagrant_packager_"+srv)
 
         tmp_img_file = join(EPHEMERAL_DIRS["tmp"], "wip.img")
         packaged_img_file = join(EPHEMERAL_DIRS["build"], "box.img")
