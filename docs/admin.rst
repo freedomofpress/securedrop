@@ -90,10 +90,7 @@ for more information on common OSSEC alerts.
 
           |Test Alert|
 
-.. |Test Alert| image:: images/manual/screenshots/journalist-admin_ossec_alert_button.png
-
 .. _`SecureDrop Support Portal`: https://securedrop-support.readthedocs.io/en/latest/
-
 
 .. _Adding Users:
 
@@ -183,18 +180,23 @@ SecureDrop. Make sure the journalist remembers their username and
 passphrase and always has their 2 factor authentication device in their
 possession when they attempt to log in to SecureDrop.
 
-.. |SecureDrop main page|
-  image:: images/manual/screenshots/journalist-admin_index_no_documents.png
-.. |SecureDrop admin home|
-  image:: images/manual/screenshots/journalist-admin_interface_index.png
-.. |Add a new user|
-  image:: images/manual/screenshots/journalist-admin_add_user_totp.png
-.. |Enable FreeOTP|
-  image:: images/manual/screenshots/journalist-admin_new_user_two_factor_totp.png
-.. |Enable YubiKey|
-  image:: images/manual/screenshots/journalist-admin_add_user_hotp.png
-.. |Verify YubiKey|
-  image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
+
+Passphrases and Two-Factor Resets
+---------------------------------
+
+While we publish some :ref:`passphrase best practices <passphrase_best_practices>`,
+your journalists may occasionally lock themselves out of their accounts. This
+can happen if, for example, they lose their two-factor device or if they
+forget the passphrase  to their password manager. When this happens, you
+can reset  their account by logging in as an administrator to the
+*Journalist Interface* and selecting *Admin* at the top right. Find their
+username and select **Edit**. Next, you can either rotate their passphrase or
+reset their two-factor authentication. You should make sure the user's
+passphrase is saved in a password manager *before* selecting "Reset Password".
+There are two options for resetting two-factor authentication depending on it
+was configured during on-boarding.
+
+|Reset Passphrase|
 
 Server Command Line
 -------------------
@@ -337,8 +339,6 @@ You should see a message appear indicating the change was a success:
 
 |Logo Update|
 
-.. |System Config Page| image:: images/manual/screenshots/journalist-admin_system_config_page.png
-.. |Logo Update| image:: images/manual/screenshots/journalist-admin_changes_logo_image.png
 
 Updating system configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -394,3 +394,14 @@ by monitoring OSSEC alerts. (Please note that while an OSSEC alert can notify yo
 occurrence of an update to the server, it may not reveal the content of the change.) Another
 management option would be SSHing into the server and manually inspecting the configuration to
 identify any discrepancies.
+
+.. |Reset Passphrase| image:: images/manual/screenshots/password_reset.png
+.. |Test Alert| image:: images/manual/screenshots/journalist-admin_ossec_alert_button.png
+.. |SecureDrop main page| image:: images/manual/screenshots/journalist-admin_index_no_documents.png
+.. |SecureDrop admin home| image:: images/manual/screenshots/journalist-admin_interface_index.png
+.. |Add a new user| image:: images/manual/screenshots/journalist-admin_add_user_totp.png
+.. |Enable FreeOTP| image:: images/manual/screenshots/journalist-admin_new_user_two_factor_totp.png
+.. |Enable YubiKey| image:: images/manual/screenshots/journalist-admin_add_user_hotp.png
+.. |Verify YubiKey| image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
+.. |System Config Page| image:: images/manual/screenshots/journalist-admin_system_config_page.png
+.. |Logo Update| image:: images/manual/screenshots/journalist-admin_changes_logo_image.png

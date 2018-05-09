@@ -1,3 +1,5 @@
+.. _passphrase_best_practices:
+
 Passphrase Best Practices
 =========================
 
