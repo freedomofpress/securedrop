@@ -77,10 +77,12 @@ class I18NTool(object):
         'de_DE': {'name': 'German', 'desktop': 'de_DE', },
         'es_ES': {'name': 'Spanish', 'desktop': 'es_ES', },
         'fr_FR': {'name': 'French', 'desktop': 'fr', },
+        'hi': {'name': 'Hindi', 'desktop': 'hi', },
         'it_IT': {'name': 'Italian', 'desktop': 'it', },
         'nb_NO': {'name': 'Norwegian', 'desktop': 'nb_NO', },
         'nl': {'name': 'Dutch', 'desktop': 'nl', },
         'pt_BR': {'name': 'Portuguese, Brasil', 'desktop': 'pt_BR', },
+        'ru': {'name': 'Russian', 'desktop': 'ru', },
         'tr': {'name': 'Turkish', 'desktop': 'tr', },
         'zh_Hant': {'name': 'Chinese, Traditional', 'desktop': 'zh_Hant', },
     }
