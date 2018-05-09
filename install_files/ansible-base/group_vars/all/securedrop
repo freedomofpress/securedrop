@@ -30,7 +30,6 @@ development_dependencies:
   - devscripts # for dch
   - gdb # for gcore in TestSubmissionNotInMemory
   - paxctl
-  - libjpeg-dev
 
 # These profiles are referenced by multiple machines, such as Application Server
 # for direct copying at install time, and the build machine for including them
@@ -53,7 +52,6 @@ appserver_dependencies:
   - apparmor-utils
   - redis-server
   - supervisor
-  - libjpeg-dev
 
 tor_apt_repo_url: https://tor-apt.freedom.press
 
