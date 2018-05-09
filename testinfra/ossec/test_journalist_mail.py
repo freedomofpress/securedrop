@@ -64,17 +64,18 @@ class TestJournalistMail(TestBase):
 
     def test_procmail(self, host):
         self.service_started(host, "postfix")
-        today_payload = (
-            'ossec: output: head -1 /var/lib/securedrop/submissions_today.txt'
-            '\n1234')
-        for (destination, payload) in (
-                ('journalist', today_payload),
-                ('ossec', 'MYGREATPAYLOAD')):
+        for (destination, f) in (
+                ('journalist', 'alert-journalist-one.txt'),
+                ('journalist', 'alert-journalist-two.txt'),
+                ('ossec', 'alert-ossec.txt')):
+            self.ansible(host, "copy",
+                         "dest=/tmp/{f} src=testinfra/ossec/{f}".format(f=f))
+            assert self.run(host,
+                            "/var/ossec/process_submissions_today.sh forget")
             assert self.run(host, "postsuper -d ALL")
             assert self.run(
                 host,
-                "echo -e '{payload}' | "
-                "mail -s 'abc' root@localhost".format(payload=payload))
+                "cat /tmp/{f} | mail -s 'abc' root@localhost".format(f=f))
             assert self.wait_for_command(
                 host,
                 "mailq | grep -q {destination}@ossec.test".format(
@@ -82,7 +83,12 @@ class TestJournalistMail(TestBase):
         self.service_stopped(host, "postfix")
 
     def test_process_submissions_today(self, host):
-        self.run(host, "/var/ossec/process_submissions_today.sh test_main")
+        assert self.run(host,
+                        "/var/ossec/process_submissions_today.sh "
+                        "test_handle_notification")
+        assert self.run(host,
+                        "/var/ossec/process_submissions_today.sh "
+                        "test_modified_in_the_past_24h")
 
     def test_send_encrypted_alert(self, host):
         self.service_started(host, "postfix")
@@ -109,8 +115,8 @@ class TestJournalistMail(TestBase):
         # encrypted mail to journalist or ossec contact
         #
         for (who, payload, expected) in (
-                ('journalist', 'ossec: output\n1', '1'),
-                ('ossec', 'MYGREATPAYLOAD', 'MYGREATPAYLOAD')):
+                ('journalist', 'JOURNALISTPAYLOAD', 'JOURNALISTPAYLOAD'),
+                ('ossec', 'OSSECPAYLOAD', 'OSSECPAYLOAD')):
             assert self.run(host, "postsuper -d ALL")
             trigger(who, payload)
             assert self.run(
@@ -185,10 +191,15 @@ class TestJournalistMail(TestBase):
         # empty the mailq on mon in case there were leftovers
         #
         assert self.run(mon, "postsuper -d ALL")
+        #
+        # forget about past notifications in case there were leftovers
+        #
+        assert self.run(mon, "/var/ossec/process_submissions_today.sh forget")
 
         #
         # the command fires every time ossec starts,
         # regardless of the frequency
+        # https://github.com/ossec/ossec-hids/issues/1415
         #
         with app.sudo():
             self.service_restarted(app, "ossec")
@@ -202,6 +213,21 @@ class TestJournalistMail(TestBase):
         assert self.run(
             mon,
             "test 1 = $(mailq | grep journalist@ossec.test | wc -l)")
+
+        assert self.run(
+            mon,
+            "grep --count 'notification suppressed' /var/log/syslog "
+            "> /tmp/before")
+
+        #
+        # The second notification within less than 24h is suppressed
+        #
+        with app.sudo():
+            self.service_restarted(app, "ossec")
+        assert self.wait_for_command(mon, """
+        grep --count 'notification suppressed' /var/log/syslog > /tmp/after
+        test $(cat /tmp/before) -lt $(cat /tmp/after)
+        """)
 
         #
         # teardown the ossec and postfix on mon and app
