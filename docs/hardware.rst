@@ -174,7 +174,7 @@ Depending on your setup, you may also need these to work on the *SVS*.
 	  firewall. In our experience, relatively recent recycled Dell
 	  desktops or servers are adequate for the SecureDrop servers,
 	  and recycled ThinkPad laptops work well for the
-	  Admin/Journalist workstations.
+	  *Admin Workstation*/*Journalist Workstation*.
 
 	  If you choose to use recycled hardware, you should of course
 	  consider whether or not it is trustworthy; making that

@@ -77,7 +77,7 @@ Persistence
 ~~~~~~~~~~~
 
 Creating an encrypted persistent volume will allow you to securely save
-information in the free space that is left on the Transfer Device. This
+information in the free space that is left on the *Transfer Device*. This
 information will remain available to you even if you reboot Tails. Instructions
 on how to create and use this volume can be found on the `Tails
 website <https://tails.boum.org/doc/first_steps/persistence/index.en.html>`__.

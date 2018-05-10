@@ -33,7 +33,7 @@ Configuring SSH for local access
 .. warning:: It is important that your firewall is configured adequately if you
           decide you need SSH over the local network. The install process locks
           down access as much as possible with net restrictions, SSH keys, and
-          google authenticator. However, you could still leave the interface
+          two-factor authentication. However, you could still leave the interface
           exposed to unintended users if you did not properly follow our network
           firewall guide.
 
