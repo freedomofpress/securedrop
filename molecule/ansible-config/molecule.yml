@@ -22,8 +22,8 @@ provisioner:
       callback_whitelist: "profile_tasks, timer"
   inventory:
     links:
-      group_vars: ../../../install_files/ansible-base/group_vars
-      host_vars: ../../../install_files/ansible-base/host_vars
+      group_vars: ../../install_files/ansible-base/group_vars
+      host_vars: ../../install_files/ansible-base/host_vars
   env:
     ANSIBLE_ROLES_PATH: ../../install_files/ansible-base/roles
 scenario:

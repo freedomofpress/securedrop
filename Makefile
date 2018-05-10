@@ -55,7 +55,7 @@ docs: ## Build project documentation in live reload for editing
 
 .PHONY: flake8
 flake8: ## Validates PEP8 compliance for Python source files.
-	flake8 --exclude='config.py,.venv/,journalist_gui/journalist_gui/updaterUI.py,journalist_gui/journalist_gui/resources_rc.py'
+	flake8
 
 .PHONY: app-lint
 app-lint: ## Tests pylint lint rule compliance.
@@ -142,6 +142,10 @@ libvirt-share: ## Configure ACLs to allow RWX for libvirt VM (e.g. Admin Worksta
 self-signed-https-certs: ## Generates self-signed certs for TESTING the HTTPS config
 	@echo "Generating self-signed HTTPS certs for testing..."
 	@./devops/generate-self-signed-https-certs.sh
+
+.PHONY: vagrant-package
+vagrant-package: ## Package up a vagrant box of the last stable SD release
+	@devops/scripts/vagrant_package.sh
 
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##

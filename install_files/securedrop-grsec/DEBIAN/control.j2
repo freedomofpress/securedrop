@@ -1,9 +1,9 @@
 Package: securedrop-grsec
 Source: securedrop-grsec
-Version: 4.4.115
+Version: {{ securedrop_pkg_grsec.ver }}
 Architecture: amd64
 Maintainer: SecureDrop Team <securedrop@freedom.press>
-Depends: linux-image-3.14.79-grsec,linux-image-4.4.115-grsec
+Depends: {{ securedrop_pkg_grsec.depends }}
 Section: admin
 Priority: optional
 Homepage: https://securedrop.org

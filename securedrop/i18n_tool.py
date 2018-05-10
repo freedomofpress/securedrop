@@ -332,7 +332,7 @@ class I18NTool(object):
             # Update messages
             #
             p = "securedrop/translations/{l}/LC_MESSAGES/messages.po".format(
-                l=code)
+                l=code)  # noqa: E741
             if need_update(p):
                 add(p)
                 updated = True
@@ -342,7 +342,7 @@ class I18NTool(object):
             desktop_code = info['desktop']
             p = join("install_files/ansible-base/roles",
                      "tails-config/templates/{l}.po".format(
-                         l=desktop_code))
+                         l=desktop_code))  # noqa: E741
             if need_update(p):
                 add(p)
                 updated = True

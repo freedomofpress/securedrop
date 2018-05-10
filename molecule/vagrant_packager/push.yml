@@ -1,0 +1,29 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Push boxes to s3 bucket
+  hosts: localhost
+  become: no
+  tasks:
+    - name: Create vagrant bucket
+      aws_s3:
+        bucket: "{{ bucket_name }}"
+        mode: create
+        region: us-east-1
+
+    - name: Find boxes to push up
+      find:
+        paths: "{{ playbook_dir }}/build/"
+        patterns: '*.box'
+      register: local_boxes
+
+    - name: Push boxes up
+      aws_s3:
+        bucket: "{{ bucket_name }}"
+        object: "{{ item.path | basename }}"
+        permission: "public-read"
+        src: "{{ item.path }}"
+        mode: put
+      with_items: "{{ local_boxes.files }}"
+  vars:
+    bucket_name: securedrop-vagrant

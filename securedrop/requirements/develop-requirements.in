@@ -3,9 +3,11 @@ bandit
 boto
 boto3
 docker-py
+# Needed for dig ansible lookup
+dnspython
 flake8
 html-linter
-molecule>=2.*
+molecule>2.13
 # Needed for ansible network filte
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
@@ -16,6 +18,7 @@ pip-tools>=1.10
 #
 pylint
 pytest-xdist
+python-vagrant
 safety
 sphinx
 sphinx-autobuild

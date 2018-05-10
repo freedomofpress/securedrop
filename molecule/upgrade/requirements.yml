@@ -1,0 +1,4 @@
+---
+
+- src: https://github.com/jdauphant/ansible-role-nginx.git
+  name: jdauphant.nginx

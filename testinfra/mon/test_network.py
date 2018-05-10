@@ -49,7 +49,7 @@ def test_mon_iptables_rules(SystemInfo, Command, Sudo):
     dict(host="0.0.0.0", proto="udp", port=1514, listening=True),
     dict(host="0.0.0.0", proto="tcp", port=1515, listening=False),
 ])
-def test_listening_ports(Socket, Sudo, ossec_service):
+def test_listening_ports(host, ossec_service):
     """
     Ensure the OSSEC-related services are listening on the
     expected sockets. Services to check include ossec-remoted
@@ -61,5 +61,17 @@ def test_listening_ports(Socket, Sudo, ossec_service):
     to config test YAML vars at that point.
     """
     socket = "{proto}://{host}:{port}".format(**ossec_service)
-    with Sudo():
-        assert Socket(socket).is_listening == ossec_service['listening']
+    with host.sudo():
+        # Really hacky work-around for bug found in testinfra 1.12.0
+        # https://github.com/philpep/testinfra/issues/311
+        if "udp" in socket:
+            lsof_socket = "{proto}@{host}:{port}".format(**ossec_service)
+            udp_check = host.run("lsof -n -i"+lsof_socket)
+
+            if ossec_service['listening']:
+                assert udp_check.rc == 0
+            else:
+                assert udp_check.rc == 1
+        else:
+            assert (host.socket(socket).is_listening ==
+                    ossec_service['listening'])

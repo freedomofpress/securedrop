@@ -17,3 +17,7 @@ securedrop/static/gen
 securedrop/static/.webassets-cache
 securedrop/tests/log/*
 securedrop/tests/pages-layout/
+**/.molecule
+build/*.deb
+**/*.box
+admin/.tox

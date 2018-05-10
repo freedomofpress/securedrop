@@ -13,8 +13,7 @@ provisioner:
   name: ansible
   inventory:
     links:
-      # Path is relative to .molecule folder
-      group_vars: ../../../install_files/ansible-base/group_vars
+      group_vars: ../../install_files/ansible-base/group_vars
   env:
     ANSIBLE_ROLES_PATH: ../../install_files/ansible-base/roles
     ANSIBLE_ACTION_PLUGINS: ../../install_files/ansible-base/action_plugins

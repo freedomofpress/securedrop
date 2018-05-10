@@ -38,6 +38,7 @@ def get_deb_packages():
             ossec_version=securedrop_test_vars.ossec_version,
             keyring_version=securedrop_test_vars.keyring_version,
             config_version=securedrop_test_vars.config_version,
+            grsec_version=securedrop_test_vars.grsec_version
             )
 
     deb_packages = [d.format(**substitutions) for d
@@ -289,3 +290,18 @@ def test_grsec_metapackage(host, deb):
         # Post-install kernel hook for managing PaX flags must exist.
         assert re.search("^.*\./etc/kernel/postinst.d/paxctl-grub$",
                          c.stdout, re.M)
+
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_jinja_files_not_present(host, deb):
+    """
+    Make sure that jinja (.j2) files were not copied over
+    as-is into the debian packages.
+    """
+
+    deb_package = host.file(deb.format(
+        securedrop_test_vars.securedrop_version))
+
+    c = host.run("dpkg-deb --contents {}".format(deb_package.path))
+    # There shouldn't be any files with a .j2 ending
+    assert not re.search("^.*\.j2$", c.stdout, re.M)

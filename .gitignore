@@ -147,3 +147,7 @@ raw-test-output/
 
 # Ignore visual studio code folder
 .vscode
+
+#Ignore vagrant staging files
+*.box
+*.img
