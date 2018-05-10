@@ -1,10 +1,9 @@
 # Changelog
 
-## 0.7.0~rc3
+## 0.7.0~rc4
 
 ### Web Applications
 * Updated messages on source interface (#3036, #3132, #3321, #3322)
-* Improvements in image upload functionality (#3057, #3222, #3225): Custom logos will now be automatically be resized and converted to pngs.
 * Use io.open instead of open across the web applications (#3064)
 * Include token reuse under login hardening flag (#3175)
 * Add Orbot warning in source interface (#3215)
