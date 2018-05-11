@@ -170,7 +170,7 @@ def run(args):  # pragma: no cover
         lambda: DevServerProcess('Source Interface',
                                  ['python', 'source.py'],
                                  'blue'),
-        lambda: DevServerProcess('Document Interface',
+        lambda: DevServerProcess('Journalist Interface',
                                  ['python', 'journalist.py'],
                                  'cyan'),
         lambda: DevServerProcess('SASS Compiler',
