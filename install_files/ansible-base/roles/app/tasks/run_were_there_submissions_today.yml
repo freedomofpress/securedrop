@@ -1,0 +1,13 @@
+- name: Check submissions_today
+  stat: path=/var/lib/securedrop/submissions_today.txt
+  register: submission_file
+  become: yes
+  tags:
+    - journalist-notifications
+
+- name: Run ./manage.py were-there-submissions-today to initialize flag
+  shell: "python /var/www/securedrop/manage.py were-there-submissions-today"
+  when: not submission_file.stat.exists
+  become: yes
+  tags:
+    - journalist-notifications
