@@ -20,3 +20,16 @@
 - include: setup_cron.yml
 
 - include: configure_haveged.yml
+
+# ./manage.py were-there-submissions-today runs every night as a cron. If the
+# instance is rebooted prior to the cron running a first time, a SecureDrop
+# Submissions error is sent to the admin.
+# (see https://github.com/freedomofpress/securedrop/issues/3393)
+- include: run_were_there_submissions_today.yml
+  when:
+    - journalist_gpg_fpr is defined
+    - journalist_gpg_fpr != ""
+    - journalist_alert_gpg_public_key is defined
+    - journalist_alert_gpg_public_key != ""
+    - journalist_alert_email is defined
+    - journalist_alert_email != ""
