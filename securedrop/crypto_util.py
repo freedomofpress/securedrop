@@ -6,9 +6,9 @@ import os
 import io
 import scrypt
 import subprocess
+from random import SystemRandom
 
 from base64 import b32encode
-from Cryptodome.Random import random
 from flask import current_app
 from gnupg._util import _is_stream, _make_binary_stream
 
@@ -23,6 +23,10 @@ if typing.TYPE_CHECKING:
 
 # to fix gpg error #78 on production
 os.environ['USERNAME'] = 'www-data'
+
+# SystemRandom sources from the system rand (e.g. urandom, CryptGenRandom, etc)
+# It supplies a CSPRNG but with an interface that supports methods like choice
+random = SystemRandom()
 
 
 class CryptoException(Exception):
