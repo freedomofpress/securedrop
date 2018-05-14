@@ -51,7 +51,7 @@ Journalist
 ----------
 
 The journalist will be using the *Journalist Workstation* with Tails to
-connect to the Journalist Interface. The tasks performed by the journalist
+connect to the *Journalist Interface*. The tasks performed by the journalist
 will require the following set of passphrases:
 
 -  A master passphrase for the persistent volume on the Tails device.
@@ -60,7 +60,7 @@ will require the following set of passphrases:
 
    -  The Hidden Service value required to connect to the Journalist
       Interface.
-   -  The Journalist Interface.
+   -  The *Journalist Interface*.
    -  The journalist's personal GPG key.
 
 The journalist will also need to have a two-factor authenticator, such
@@ -68,7 +68,7 @@ as an Android or iOS device with FreeOTP installed, or a
 YubiKey. This means the journalist will also have the following
 credential:
 
--  The secret code for the Journalist Interface's two-factor
+-  The secret code for the *Journalist Interface*'s two-factor
    authentication.
 
 *Secure Viewing Station*
