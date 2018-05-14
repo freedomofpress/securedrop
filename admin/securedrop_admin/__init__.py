@@ -654,8 +654,10 @@ def update(args):
         good_sig_text = 'Good signature from "SecureDrop Release Signing Key"'
         bad_sig_text = 'BAD signature'
         # To ensure that an adversary cannot name a malicious key good_sig_text
-        # we check that bad_sig_text does not appear.
-        if sig_result.count(RELEASE_KEY) == 1 and \
+        # we check that bad_sig_text does not appear and that the release key
+        # appears on the second line of the output.
+        gpg_lines = sig_result.split('\n')
+        if RELEASE_KEY in gpg_lines[1] and \
                 sig_result.count(good_sig_text) == 1 and \
                 bad_sig_text not in sig_result:
             sdlog.info("Signature verification successful.")
