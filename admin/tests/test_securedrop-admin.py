@@ -573,21 +573,21 @@ class TestSiteConfig(object):
                 return desc
 
     def verify_desc_consistency_optional(self, site_config, desc):
-        (var, default, etype, prompt, validator, transform) = desc
+        (var, default, etype, prompt, validator, transform, condition) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
         assert type(default) == etype
 
     def verify_desc_consistency(self, site_config, desc):
         self.verify_desc_consistency_optional(site_config, desc)
-        (var, default, etype, prompt, validator, transform) = desc
+        (var, default, etype, prompt, validator, transform, condition) = desc
         with pytest.raises(ValidationError):
             site_config.user_prompt_config_one(desc, '')
 
     def verify_prompt_boolean(
             self, site_config, desc):
         self.verify_desc_consistency(site_config, desc)
-        (var, default, etype, prompt, validator, transform) = desc
+        (var, default, etype, prompt, validator, transform, condition) = desc
         assert site_config.user_prompt_config_one(desc, True) is True
         assert site_config.user_prompt_config_one(desc, False) is False
         assert site_config.user_prompt_config_one(desc, 'YES') is True
@@ -616,7 +616,7 @@ class TestSiteConfig(object):
         assert site_config.user_prompt_config_one(desc, fpr) == clean_fpr
 
     def verify_desc_consistency_allow_empty(self, site_config, desc):
-        (var, default, etype, prompt, validator, transform) = desc
+        (var, default, etype, prompt, validator, transform, condition) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
         assert type(default) == etype
@@ -647,7 +647,7 @@ class TestSiteConfig(object):
     verify_prompt_sasl_password = verify_prompt_not_empty
 
     def verify_prompt_securedrop_supported_locales(self, site_config, desc):
-        (var, default, etype, prompt, validator, transform) = desc
+        (var, default, etype, prompt, validator, transform, condition) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
         assert type(default) == etype
@@ -672,7 +672,8 @@ class TestSiteConfig(object):
 
         with mock.patch('prompt_toolkit.prompt', side_effect=auto_prompt):
             for desc in site_config.desc:
-                (var, default, etype, prompt, validator, transform) = desc
+                (var, default, etype, prompt, validator, transform,
+                    condition) = desc
                 method = 'verify_prompt_' + var
                 print("checking " + method)
                 getattr(self, method)(site_config, desc)

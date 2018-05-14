@@ -255,115 +255,143 @@ class SiteConfig(object):
             ['ssh_users', 'sd', str,
              u'Username for SSH access to the servers',
              SiteConfig.ValidateUser(),
-             None],
+             None,
+             lambda config: True],
             ['daily_reboot_time', 4, int,
              u'Daily reboot time of the server (24-hour clock)',
              SiteConfig.ValidateTime(),
-             int],
+             int,
+             lambda config: True],
             ['app_ip', '10.20.2.2', str,
              u'Local IPv4 address for the Application Server',
              SiteConfig.ValidateIP(),
-             None],
+             None,
+             lambda config: True],
             ['monitor_ip', '10.20.3.2', str,
              u'Local IPv4 address for the Monitor Server',
              SiteConfig.ValidateIP(),
-             None],
+             None,
+             lambda config: True],
             ['app_hostname', 'app', str,
              u'Hostname for Application Server',
              SiteConfig.ValidateNotEmpty(),
-             None],
+             None,
+             lambda config: True],
             ['monitor_hostname', 'mon', str,
              u'Hostname for Monitor Server',
              SiteConfig.ValidateNotEmpty(),
-             None],
+             None,
+             lambda config: True],
             ['dns_server', '8.8.8.8', str,
              u'DNS server specified during installation',
              SiteConfig.ValidateNotEmpty(),
-             None],
+             None,
+             lambda config: True],
             ['securedrop_app_gpg_public_key', 'SecureDrop.asc', str,
              u'Local filepath to public key for '
              'SecureDrop Application GPG public key',
              SiteConfig.ValidatePath(self.args.ansible_path),
-             None],
+             None,
+             lambda config: True],
             ['securedrop_app_https_on_source_interface', False, bool,
              u'Whether HTTPS should be enabled on '
              'Source Interface (requires EV cert)',
              SiteConfig.ValidateYesNo(),
-             lambda x: x.lower() == 'yes'],
+             lambda x: x.lower() == 'yes',
+             lambda config: True],
             ['securedrop_app_https_certificate_cert_src', '', str,
-             u'Local filepath to HTTPS certificate '
-             '(optional, only if using HTTPS on source interface)',
+             u'Local filepath to HTTPS certificate ',
              SiteConfig.ValidateOptionalPath(self.args.ansible_path),
-             None],
+             None,
+             lambda config: config.get(
+                'securedrop_app_https_on_source_interface')],
             ['securedrop_app_https_certificate_key_src', '', str,
-             u'Local filepath to HTTPS certificate key '
-             '(optional, only if using HTTPS on source interface)',
+             u'Local filepath to HTTPS certificate key ',
              SiteConfig.ValidateOptionalPath(self.args.ansible_path),
-             None],
+             None,
+             lambda config: config.get(
+                'securedrop_app_https_on_source_interface')],
             ['securedrop_app_https_certificate_chain_src', '', str,
-             u'Local filepath to HTTPS certificate chain file '
-             '(optional, only if using HTTPS on source interface)',
+             u'Local filepath to HTTPS certificate chain file ',
              SiteConfig.ValidateOptionalPath(self.args.ansible_path),
-             None],
+             None,
+             lambda config: config.get(
+                'securedrop_app_https_on_source_interface')],
             ['securedrop_app_gpg_fingerprint', '', str,
              u'Full fingerprint for the SecureDrop Application GPG Key',
              SiteConfig.ValidateFingerprint(),
-             self.sanitize_fingerprint],
+             self.sanitize_fingerprint,
+             lambda config: True],
             ['ossec_alert_gpg_public_key', 'ossec.pub', str,
              u'Local filepath to OSSEC alerts GPG public key',
              SiteConfig.ValidatePath(self.args.ansible_path),
-             None],
+             None,
+             lambda config: True],
             ['ossec_gpg_fpr', '', str,
              u'Full fingerprint for the OSSEC alerts GPG public key',
              SiteConfig.ValidateFingerprint(),
-             self.sanitize_fingerprint],
+             self.sanitize_fingerprint,
+             lambda config: True],
             ['ossec_alert_email', '', str,
              u'Admin email address for receiving OSSEC alerts',
              SiteConfig.ValidateOSSECEmail(),
-             None],
+             None,
+             lambda config: True],
             ['journalist_alert_gpg_public_key', '', str,
              u'Local filepath to journalist alerts GPG public key (optional)',
              SiteConfig.ValidateOptionalPath(self.args.ansible_path),
-             None],
+             None,
+             lambda config: True],
             ['journalist_gpg_fpr', '', str,
              u'Full fingerprint for the journalist alerts '
              u'GPG public key (optional)',
              SiteConfig.ValidateOptionalFingerprint(),
-             self.sanitize_fingerprint],
+             self.sanitize_fingerprint,
+             lambda config: config.get('journalist_alert_gpg_public_key', None)
+                is not None],
             ['journalist_alert_email', '', str,
              u'Email address for receiving journalist alerts (optional)',
              SiteConfig.ValidateOptionalEmail(),
-             None],
+             None,
+             lambda config: config.get('journalist_alert_gpg_public_key', None)
+                is not None],
             ['smtp_relay', "smtp.gmail.com", str,
              u'SMTP relay for sending OSSEC alerts',
              SiteConfig.ValidateNotEmpty(),
-             None],
+             None,
+             lambda config: True],
             ['smtp_relay_port', 587, int,
              u'SMTP port for sending OSSEC alerts',
              SiteConfig.ValidateInt(),
-             int],
+             int,
+             lambda config: True],
             ['sasl_domain', "gmail.com", str,
              u'SASL domain for sending OSSEC alerts',
              None,
-             None],
+             None,
+             lambda config: True],
             ['sasl_username', '', str,
              u'SASL username for sending OSSEC alerts',
              SiteConfig.ValidateOSSECUsername(),
-             None],
+             None,
+             lambda config: True],
             ['sasl_password', '', str,
              u'SASL password for sending OSSEC alerts',
              SiteConfig.ValidateOSSECPassword(),
-             None],
+             None,
+             lambda config: True],
             ['enable_ssh_over_tor', True, bool,
              u'Enable SSH over Tor (recommended, disables SSH over LAN). '
              u'If you respond no, SSH will be available over LAN only',
              SiteConfig.ValidateYesNo(),
-             lambda x: x.lower() == 'yes'],
+             lambda x: x.lower() == 'yes',
+             lambda config: True],
             ['securedrop_supported_locales', [], types.ListType,
              u'Space separated list of additional locales to support '
              '(' + translations + ')',
              SiteConfig.ValidateLocales(self.args.app_path),
-             string.split],
+             string.split,
+             lambda config: True],
         ]
 
     def load_and_update_config(self):
@@ -382,23 +410,17 @@ class SiteConfig(object):
     def user_prompt_config(self):
         config = {}
         for desc in self.desc:
-            (var, default, type, prompt, validator, transform) = desc
-            if var == 'journalist_gpg_fpr':
-                if not config.get('journalist_alert_gpg_public_key',
-                                  None):
-                    config[var] = ''
-                    continue
-            if var == 'journalist_alert_email':
-                if not config.get('journalist_alert_gpg_public_key',
-                                  None):
-                    config[var] = ''
-                    continue
+            (var, default, type, prompt, validator, transform,
+                condition) = desc
+            if not condition(config):
+                config[var] = ''
+                continue
             config[var] = self.user_prompt_config_one(desc,
                                                       self.config.get(var))
         return config
 
     def user_prompt_config_one(self, desc, from_config):
-        (var, default, type, prompt, validator, transform) = desc
+        (var, default, type, prompt, validator, transform, condition) = desc
         if from_config is not None:
             default = from_config
         prompt += ': '
