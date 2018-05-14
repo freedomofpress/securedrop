@@ -118,7 +118,7 @@ key:
     git tag -v 0.7.0~rc1
 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the
-output of that last command.
+output of that last command along with the fingerprint above.
 
 .. caution:: If you do not, signature verification has failed and you
              *should not* proceed with the installation. If this
