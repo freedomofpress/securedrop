@@ -96,7 +96,7 @@ def _get_yubikey_usage():
         elif answer in ('', 'n', 'no'):
             return False
         else:
-            print 'Invalid answer. Please type "y" or "n"'
+            print('Invalid answer. Please type "y" or "n"')
 
 
 def _make_password():
@@ -220,7 +220,7 @@ def delete_user(args):
     return 0
 
 
-def clean_tmp(args):  # pragma: no cover
+def clean_tmp(args):
     """Cleanup the SecureDrop temp directory. """
     if not os.path.exists(args.directory):
         log.debug('{} does not exist, do nothing'.format(args.directory))
