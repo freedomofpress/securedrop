@@ -12,6 +12,8 @@ specific type of development task. We use Vagrant, VirtualBox, and
 Docker and our Ansible playbooks can provision these environments on
 either virtual machines or physical hardware.
 
+SecureDrop uses Python2. We are migrating to Python3. Some parts of the application are built with Python3. 
+
 Quick start
 -----------
 
@@ -76,6 +78,8 @@ repository. This container has no security hardening or monitoring.
 
 To get started, you can try the following:
 
+.. note:: Both the parent directory and a sub-directory are named 'securedrop.' To get started you'll need to cd into the sub-directory. 
+
 .. code:: sh
 
    cd securedrop
@@ -106,10 +110,10 @@ submissions are present. The test users have the following credentials:
 * **Password:** ``WEjwn8ZyczDhQSK24YKM8C9a``
 * **TOTP secret:** ``JHCO GO7V CER3 EJ4L``
 
-.. note:: The password and TOTP secret are the same for both accounts for
-   convenience during development.
+.. tip:: We're hosting a demonstration instance of SecureDrop so that anyone can see how   
+    it works. The demo site generates Time-based One-time Password (TOTP) that you can use with the password above. The password and TOTP secret are the same for both accounts for convenience during development. To get a generated token, go to: http://demo.securedrop.club/
 
-To generate the six digit token you need for logging in, use the TOTP secret in
+If you need to generate the six digit token, use the TOTP secret in
 combination with an authenticator application that implements
 `RFC 6238 <https://tools.ietf.org/html/rfc6238>`__, such as
 `FreeOTP <https://freeotp.github.io/>`__ (Android and iOS) or
@@ -212,10 +216,9 @@ Install the dependencies for the development environment:
 #. Ansible_
 #. rsync >= 3.1.0
 
-.. note:: Note that the version of rsync installed by default on macOS is
-          extremely out-of-date, as is Apple's custom. We recommend using
-          Homebrew_ to install a modern version (3.1.0 or greater):
-          ``brew install rsync``.
+If you use Homebrew to manage packages, you can install Vagrant and VirtualBox using the Homebrew extension homebrew-cask_ . 
+
+.. note:: Starting with OSX 10.13.3, you will need to `approve third-party apps`_ downloaded from the internet in your Mac OS Security & Privacy preferences. 
 
 There are several ways to install Ansible on a Mac. We recommend installing it
 to a virtual environment using ``virtualenvwrapper`` and ``pip``, so as not to
@@ -235,11 +238,15 @@ different version, the path to ``virtualenvwrapper.sh`` will differ. Running
           to your ``~/.bashrc`` (or whatever your default shell configuration
           file is) so that the command-line utilities ``virtualenvwrapper``
           provides are automatically available in the future.
+          
+The version of rsync installed by default on macOS is extremely out-of-date, as is Apple's custom. We recommend using Homebrew_ to install a modern version (3.1.0 or greater): ``brew install rsync``.
 
 .. _Vagrant: http://www.vagrantup.com/downloads.html
 .. _VirtualBox: https://www.virtualbox.org/wiki/Downloads
 .. _Ansible: http://docs.ansible.com/intro_installation.html
 .. _Homebrew: https://brew.sh/
+.. _homebrew-cask: http://sourabhbajaj.com/mac-setup/Vagrant/README.html
+.. _approve third-party apps: https://developer.apple.com/library/content/technotes/tn2459/_index.html
 
 Fork & Clone the repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
