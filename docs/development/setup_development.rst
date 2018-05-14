@@ -78,7 +78,7 @@ To get started, you can try the following:
 
 .. code:: sh
 
-   cd securedrop
+   cd securedrop/securedrop
    make dev                                    # run development servers
    make test                                   # run tests
    bin/dev-shell bin/run-test tests/functional # functional tests only
