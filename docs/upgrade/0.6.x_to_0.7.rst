@@ -19,7 +19,6 @@ terminal:
 
   cd ~/Persistent/securedrop
   git fetch --tags
-  git checkout 0.7.0
   gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
   git tag -v 0.7.0
 
@@ -31,7 +30,14 @@ The output should include the following two lines:
   gpg: Good signature from "SecureDrop Release Signing Key"
 
 Please verify that each character of the fingerprint above matches what you 
-see on the screen. Finally, run the following commands:
+see on the screen of your *Admin Workstation*. If it does, you can check out the
+new release:
+
+.. code:: sh
+
+  git checkout 0.7.0
+
+Finally, run the following commands:
 
 .. code:: sh
 
