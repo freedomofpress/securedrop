@@ -80,6 +80,14 @@ Journalist Interface <yubikey_setup>`.)
 
 |Journalist Interface Login|
 
+Reset Passphrase or Two-factor Authentication Token
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If necessary journalists may reset their user passphrase or two-factor authentication token in their user profile. To navigate to your user profile, log in to the *Journalist Interface* and click on the link in the upper right of the screen where it says **Logged on as <your user name>.** 
+
+If you have lost or forgotten your passphrase or two-factor authentication device, you will need to contact your SecureDrop admin for assistance.
+
+|Journalist account profile|
+
 Daily Journalist Alerts About Submissions
 -----------------------------------------
 
@@ -405,3 +413,4 @@ audio, and begin publishing important, high-impact work!
 .. |Encrypting 1| image:: images/manual/viewing6.png
 .. |Encrypting 2| image:: images/manual/viewing7.png
 .. |Encrypted document| image:: images/manual/viewing8.png
+.. |Journalist account profile| image:: images/manual/screenshots/journalist-edit_account_user.png
