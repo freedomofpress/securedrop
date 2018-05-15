@@ -66,6 +66,21 @@ class TestSecureDropAdmin(object):
                 assert update_status is True
                 assert tag == '0.6.1'
 
+    def test_check_for_updates_ensure_newline_stripped(self, tmpdir, caplog):
+        """Regression test for #3426"""
+        git_repo_path = str(tmpdir)
+        args = argparse.Namespace(root=git_repo_path)
+        current_tag = "0.6.1\n"
+        tags_available = "0.6\n0.6-rc1\n0.6.1\n"
+
+        with mock.patch('subprocess.check_call'):
+            with mock.patch('subprocess.check_output',
+                            side_effect=[current_tag, tags_available]):
+                update_status, tag = securedrop_admin.check_for_updates(args)
+                assert "All updates applied" in caplog.text
+                assert update_status is False
+                assert tag == '0.6.1'
+
     def test_check_for_updates_update_not_needed(self, tmpdir, caplog):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
