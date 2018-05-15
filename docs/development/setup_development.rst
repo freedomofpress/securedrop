@@ -12,7 +12,6 @@ specific type of development task. We use Vagrant, VirtualBox, and
 Docker and our Ansible playbooks can provision these environments on
 either virtual machines or physical hardware.
 
-
 SecureDrop uses Python2. We are migrating to Python3. Some parts of the application are built with Python3. 
 
 Quick Start
@@ -95,8 +94,6 @@ container and files modified in the container are also modified in the
 repository. This container has no security hardening or monitoring.
 
 To get started, you can try the following:
-
-.. note:: Both the parent directory and a sub-directory are named 'securedrop.' To get started you'll need to cd into the sub-directory. 
 
 .. code:: sh
 
@@ -225,9 +222,9 @@ Install the dependencies for the development environment:
 #. Ansible_
 #. rsync >= 3.1.0
 
-If you use Homebrew to manage packages, you can install Vagrant and VirtualBox using the Homebrew extension homebrew-cask_ . 
-
 .. note:: Starting with OSX 10.13.3, you will need to `approve third-party apps`_ downloaded from the internet in your Mac OS Security & Privacy preferences. 
+
+If you use Homebrew to manage packages, you can install Vagrant and VirtualBox using the Homebrew extension homebrew-cask_ . 
 
 There are several ways to install Ansible on a Mac. We recommend installing it
 to a virtual environment using ``virtualenvwrapper`` and ``pip``, so as not to
