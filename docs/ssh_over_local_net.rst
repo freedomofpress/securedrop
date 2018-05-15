@@ -69,7 +69,7 @@ answer either 'no' or 'false' when you are prompted for ``Enable SSH over Tor``:
     Hostname for Application Server: app
     Hostname for Monitor Server: mon
     [...]
-    Enable SSH over Tor (recommended, disables SSH over LAN). If you respond no, SSH will be available over LAN only: yes
+    Enable SSH over Tor (recommended, disables SSH over LAN). If you respond no, SSH will be available over LAN only: no
 
 Then you'll have to run the installation script:
 
