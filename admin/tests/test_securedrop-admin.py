@@ -593,6 +593,46 @@ class TestSiteConfig(object):
         assert site_config.user_prompt_config_one(desc, 'YES') is True
         assert site_config.user_prompt_config_one(desc, 'NO') is False
 
+    def test_desc_conditional(self):
+        """Ensure that conditional prompts behave correctly.
+
+            Prompts which depend on another question should only be
+            asked if the prior question was answered appropriately."""
+
+        questions = [
+            ['first_question',
+             False,
+             bool,
+             u'Test Question 1',
+             None,
+             lambda x: x.lower() == 'yes',
+             lambda config: True],
+            ['dependent_question',
+             'default_value',
+             str,
+             u'Test Question 2',
+             None,
+             None,
+             lambda config: config.get('first_question', False)]
+        ]
+        args = argparse.Namespace(site_config='tests/files/site-specific',
+                                  ansible_path='tests/files',
+                                  app_path=dirname(__file__))
+        site_config = securedrop_admin.SiteConfig(args)
+        site_config.desc = questions
+
+        def auto_prompt(prompt, default, **kwargs):
+            return default
+
+        with mock.patch('prompt_toolkit.prompt', side_effect=auto_prompt):
+            config = site_config.user_prompt_config()
+            assert config['dependent_question'] != 'default_value'
+
+            site_config.desc[0][1] = True
+
+            config = site_config.user_prompt_config()
+            assert config['dependent_question'] == 'default_value'
+
     verify_prompt_ssh_users = verify_desc_consistency
     verify_prompt_app_ip = verify_desc_consistency
     verify_prompt_monitor_ip = verify_desc_consistency
