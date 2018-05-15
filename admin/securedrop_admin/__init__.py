@@ -37,6 +37,7 @@ from prompt_toolkit.validation import Validator, ValidationError
 import yaml
 
 sdlog = logging.getLogger(__name__)
+RELEASE_KEY = '22245C81E3BAEB4138B36061310F561200F4AD77'
 
 
 class FingerprintException(Exception):
@@ -612,7 +613,7 @@ def check_for_updates(args):
 
 def get_release_key_from_keyserver(args, keyserver=None, timeout=45):
     gpg_recv = ['timeout', str(timeout), 'gpg', '--recv-key']
-    release_key = ['22245C81E3BAEB4138B36061310F561200F4AD77']
+    release_key = [RELEASE_KEY]
 
     # We construct the gpg --recv-key command based on optional keyserver arg.
     if keyserver:
@@ -633,9 +634,6 @@ def update(args):
         # Exit if we're up to date
         return 0
 
-    git_checkout_cmd = ['git', 'checkout', latest_tag]
-    subprocess.check_call(git_checkout_cmd, cwd=args.root)
-
     sdlog.info("Verifying signature on latest update...")
 
     try:
@@ -648,14 +646,35 @@ def update(args):
                                        keyserver=secondary_keyserver)
 
     git_verify_tag_cmd = ['git', 'tag', '-v', latest_tag]
-    sig_result = subprocess.check_output(git_verify_tag_cmd,
-                                         stderr=subprocess.STDOUT,
-                                         cwd=args.root)
+    try:
+        sig_result = subprocess.check_output(git_verify_tag_cmd,
+                                             stderr=subprocess.STDOUT,
+                                             cwd=args.root)
 
-    if 'Good signature' not in sig_result:
+        good_sig_text = 'Good signature from "SecureDrop Release Signing Key"'
+        bad_sig_text = 'BAD signature'
+        # To ensure that an adversary cannot name a malicious key good_sig_text
+        # we check that bad_sig_text does not appear and that the release key
+        # appears on the second line of the output.
+        gpg_lines = sig_result.split('\n')
+        if RELEASE_KEY in gpg_lines[1] and \
+                sig_result.count(good_sig_text) == 1 and \
+                bad_sig_text not in sig_result:
+            sdlog.info("Signature verification successful.")
+        else:  # If anything else happens, fail and exit 1
+            sdlog.info("Signature verification failed.")
+            return 1
+
+    except subprocess.CalledProcessError:
+        # If there is no signature, or if the signature does not verify,
+        # then git tag -v exits subprocess.check_output will exit 1
+        # and subprocess.check_output will throw a CalledProcessError
         sdlog.info("Signature verification failed.")
-        return -1
-    sdlog.info("Signature verification successful.")
+        return 1
+
+    # Only if the proper signature verifies do we check out the latest
+    git_checkout_cmd = ['git', 'checkout', latest_tag]
+    subprocess.check_call(git_checkout_cmd, cwd=args.root)
 
     sdlog.info("Updated to SecureDrop {}.".format(latest_tag))
     return 0
