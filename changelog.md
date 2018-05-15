@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.7.0~rc4
+## 0.7.0~rc5
 
 ### Web Applications
 * Updated messages on source interface (#3036, #3132, #3321, #3322)
@@ -25,6 +25,7 @@
 * Fixed typo in ansible restore script (#3263)
 * Add SecureDrop Administrator Workstation updater GUI (#3300)
 * Add HTTPS-related variables to securedrop-admin sdconfig prompt (#3366)
+* Improved tag validation logic for securedrop-admin update (#3406)
 
 ### Developer Workflow
 
