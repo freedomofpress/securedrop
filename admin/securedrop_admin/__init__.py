@@ -588,7 +588,8 @@ def check_for_updates(args):
     sdlog.info("Checking for SecureDrop updates...")
 
     # Determine what branch we are on
-    current_tag = subprocess.check_output(['git', 'describe'], cwd=args.root)
+    current_tag = subprocess.check_output(['git', 'describe'],
+                                          cwd=args.root).rstrip('\n')
 
     # Fetch all branches
     git_fetch_cmd = ['git', 'fetch', '--all']
