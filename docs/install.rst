@@ -25,10 +25,10 @@ on network speed and computing power.
 
 .. _configure_securedrop:
 
-Localization of the source and journalist interfaces
-----------------------------------------------------
+Localization of the *Source Interface* and *Journalist Interface*
+-----------------------------------------------------------------
 
-The source and journalist interface are translated in the following
+The *Source Interface* and *Journalist Interface* are translated in the following
 languages:
 
 .. include:: includes/l10n.txt
@@ -147,7 +147,7 @@ Service will be available in the following files under
 -  ``app-source-ths``: This is the .onion address of the Source
    Interface
 -  ``app-journalist-aths``: This is the ``HidServAuth`` configuration line
-   for the Journalist Interface. During a later step, this will be
+   for the *Journalist Interface*. During a later step, this will be
    automatically added to your Tor configuration file in order to
    exclusively connect to the hidden service.
 -  ``app-ssh-aths``: Same as above, for SSH access to the Application

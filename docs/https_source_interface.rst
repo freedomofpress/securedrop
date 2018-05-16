@@ -1,5 +1,5 @@
-HTTPS on the Source Interface
-======================================
+HTTPS on the *Source Interface*
+===============================
 
 The SecureDrop *Source Interface* is served over a Tor Hidden Service,
 requiring a ``*.onion`` URL to access it. While Tor Hidden Services provide

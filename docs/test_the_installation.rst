@@ -90,7 +90,7 @@ Test the web interfaces
 
    - While logged in as an admin, you can send a reply to the test
      source submission you made earlier.
-   - Usage of the Journalist Interface is covered by our :doc:`Journalist
+   - Usage of the *Journalist Interface* is covered by our :doc:`Journalist
      User Manual <journalist>`.
 
 #. Test that the source received the reply.
@@ -104,7 +104,7 @@ Test the web interfaces
    *Source Interface* and *Journalist Interface* Interface addresses within Tor Browser.
 
 #. Remove the test submissions you made prior to putting SecureDrop to
-   real use. On the main Journalist Interface page, select all sources and
+   real use. On the main *Journalist Interface* page, select all sources and
    click **Delete selected**.
 
 Once you've tested the installation and verified that everything is

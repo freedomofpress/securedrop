@@ -9,7 +9,7 @@ Auto-connect to the Authenticated Tor Hidden Services
 The SecureDrop installation process adds multiple layers of authentication to
 protect access to the most sensitive assets in the SecureDrop system:
 
-#. The Journalist Interface, because it provides access to submissions (although
+#. The *Journalist Interface*, because it provides access to submissions (although
    they are encrypted to an offline key), and some metadata about sources and
    submissions.
 #. SSH on the *Application Server*
@@ -42,7 +42,7 @@ with these scripts (``~/Persistent/securedrop/``), and run the install script:
 Type the Administration Password that you selected when starting Tails and hit
 **Enter**. This script installs a persistent script that runs every time you
 connect to a network in Tails, and automatically configures access to
-the Journalist Interface and to the servers via SSH. The HidServAuth info is
+the *Journalist Interface* and to the servers via SSH. The HidServAuth info is
 collected from files in
 ``~/Persistent/securedrop/install_files/ansible-base`` and stored in
 ``~/Persistent/.securedrop/torrc_additions`` thereafter.
@@ -53,7 +53,7 @@ collected from files in
          access for Journalists as well.
 
 In addition, the script creates desktop and menu shortcuts for the Source
-and Journalist Interfaces, directs Tails to install Ansible at the
+and *Journalist Interfaces*, directs Tails to install Ansible at the
 beginning of every session, and sets up SSH host aliases for the servers.
 
 The only thing you need to remember to do is enable

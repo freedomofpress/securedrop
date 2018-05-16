@@ -137,8 +137,8 @@ To use the template:
 	     the database.
 
 
-Set Up Easy Access to the Journalist Interface
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Set Up Easy Access to the *Journalist Interface*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To complete setup of the *Admin Workstation* or Journalist Workstation, we
 recommend using the scripts in ``tails_files`` to easily configure Tor to
@@ -170,20 +170,20 @@ If you're running the script as a journalist, you will need the .onion addresses
 for each interface, provided to you by the admin.
 
 We use an "authenticated" Tor Hidden Service so that adversaries cannot access
-the Journalist Interface, providing a layer of defense-in-depth which protects the
-Journalist Interface even if there is a security vulnerability in the web
+the *Journalist Interface*, providing a layer of defense-in-depth which protects the
+*Journalist Interface* even if there is a security vulnerability in the web
 application, or if the journalist's username, passphrase, and two-factor token
 are stolen. The extra configuration that is required is handled by this script.
 
 Our ``./securedrop-admin tailsconfig`` tool sets up Tails to work with SecureDrop
 every time you login. As long as Tails is booted with the persistent volume enabled
-then you can open the Tor Browser and connect to the Journalist Interface as normal.
+then you can open the Tor Browser and connect to the *Journalist Interface* as normal.
 
-Create Bookmarks for Source and Journalist Interfaces
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Create Bookmarks for *Source Interface* and *Journalist Interface*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want, you can open the browser and create bookmarks for the Source and
-Journalist Interfaces. Navigate to the site you wish to bookmark, select
+*Journalist Interfaces*. Navigate to the site you wish to bookmark, select
 *Bookmarks* and *Bookmark This Page*, give the site a useful name (e.g. *Source
 Interface*), and click *Done*. Tails will remember the bookmarks even if you
 reboot.

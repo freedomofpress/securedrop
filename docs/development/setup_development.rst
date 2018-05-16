@@ -90,13 +90,13 @@ To get started, you can try the following:
          ``maybe_create_config_py`` etc.
 
 SecureDrop consists of two separate web applications (the Source Interface and
-the Journalist Interface) that run concurrently. In the development environment
+the *Journalist Interface*) that run concurrently. In the development environment
 they are configured to detect code changes and automatically reload whenever a
 file is saved. They are made available on your host machine by forwarding the
 following ports:
 
 * Source Interface: `localhost:8080 <http://localhost:8080>`__
-* Journalist Interface: `localhost:8081 <http://localhost:8081>`__
+* *Journalist Interface*: `localhost:8081 <http://localhost:8081>`__
 
 A test administrator (``journalist``) and non-admin user (``dellsberg``) are
 created by default when running ``make dev``. In addition, sources and
