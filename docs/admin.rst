@@ -240,6 +240,8 @@ Rebooting the Servers
 
   sudo reboot
 
+.. _investigating_logs:
+
 Investigating Logs
 ^^^^^^^^^^^^^^^^^^^
 
