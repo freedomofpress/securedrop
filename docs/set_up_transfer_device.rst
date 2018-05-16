@@ -1,4 +1,4 @@
-Set up the Transfer Device
+Set Up the Transfer Device
 ==========================
 
 Journalists copy submissions from their *Journalist Workstation* to the
@@ -72,7 +72,7 @@ The Disks utility will ask you if you are sure: click **Format** to continue.
 After a few seconds, your new *Transfer Device* should be ready for use.
 If you haven't already, make sure to label it.
 
-Set up the USB Transfer Device on each workstation
+Set Up the USB Transfer Device on Each Workstation
 --------------------------------------------------
 
 On each *Journalist Workstation* and *Secure Viewing Station* you'd like to use

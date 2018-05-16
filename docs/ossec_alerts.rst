@@ -3,7 +3,7 @@
 OSSEC Guide
 ===========
 
-Setting up OSSEC alerts
+Setting Up OSSEC Alerts
 -----------------------
 
 OSSEC is an open source host-based intrusion detection system (IDS) that
@@ -168,7 +168,7 @@ when validating the SMTP relay TLS certificate.
 Save ``group_vars/all/site-specific``, exit the editor and :ref:`proceed with
 the installation <Install SecureDrop Servers>` by running the playbooks.
 
-Using Gmail for OSSEC alerts
+Using Gmail for OSSEC Alerts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It's easy to get SecureDrop to use Google's servers to deliver the
@@ -199,7 +199,7 @@ generated from the 2-step config for ``sasl_passwd``, as the primary
 account password won't work. The ``smtp_relay`` is smtp.gmail.com and
 the ``smtp_relay_port`` is 587.
 
-Configuring fingerprint verification
+Configuring Fingerprint Verification
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you run your own mail server, you may wish to increase the security
@@ -298,7 +298,7 @@ OSSEC service.
          the files live on the servers, since values like ``smtp_relay_port``
          are used in several locations throughout the config.
 
-Useful log files for OSSEC
+Useful Log Files for OSSEC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Other log files that may contain useful information:
@@ -320,7 +320,7 @@ Other log files that may contain useful information:
          security-related information about your organization's
          SecureDrop instance.
 
-Not receiving emails
+Not Receiving Emails
 ~~~~~~~~~~~~~~~~~~~~
 Some mail servers require that the sending email address match the account
 that authenticated to send mail. By default the *Monitor Server* will use
@@ -332,7 +332,7 @@ after the first playbook run, try setting ``ossec_from_address`` in
 ``group_vars/all/site-specific`` to the full email address used for sending the alerts,
 then run the playbook again.
 
-Message failed to encrypt
+Message Failed to Encrypt
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 If OSSEC cannot encrypt the alert to the GPG public key for the Admin
 email address (configured as ``ossec_alert_email`` in ``group_vars/all/site-specific``),

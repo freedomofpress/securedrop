@@ -1,4 +1,4 @@
-Before you begin
+Before You Begin
 ================
 
 Before you get started, you should familiarize yourself with the

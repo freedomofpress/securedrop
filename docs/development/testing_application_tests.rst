@@ -32,7 +32,7 @@ and app-staging VMs, based on the contents of
 ``securedrop/requirements/test-requirements.txt``.
 If you wish to change the dependencies, see :ref:`updating_pip_dependencies`.
 
-Running the application tests
+Running the Application Tests
 -----------------------------
 
 The tests can be run inside the development VM:
@@ -95,7 +95,7 @@ option:
     securedrop/bin/dev-shell bin/run-test --page-layout tests
 
 
-Updating the application tests
+Updating the Application Tests
 ------------------------------
 
 Unit tests are stored in the ``securedrop/tests/`` directory and functional

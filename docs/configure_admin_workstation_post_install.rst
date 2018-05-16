@@ -64,7 +64,7 @@ sure to enable persistence.
 
 .. _Authenticated Tor Hidden Services: https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient
 
-Set up two-factor authentication for the Admin
+Set Up Two-Factor Authentication or the Admin
 ----------------------------------------------
 The SecureDrop servers should always be accessed over SSH from the Admin
 Workstation. In the event of a connectivity problem, Admins can log in

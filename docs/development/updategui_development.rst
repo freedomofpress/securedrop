@@ -1,11 +1,11 @@
-Development of SecureDropUpdater in the journalist_gui directory
+Development of SecureDropUpdater in the journalist_gui Directory
 =================================================================
 
 The ``SecureDropUpdater`` is a tool used by the journalists and admins, this tool helps them to update their SecureDrop git repository to the latest released tag.
 It is a GUI tool and it is written using PyQt5 bindings of the `Qt framework <https://doc.qt.io/>`_. This tool is written
 using Python3.
 
-Installing the dependencies in a virtual environment
+Installing the Dependencies in a Virtual Environment
 -----------------------------------------------------
 
 You can use the `pipenv tool <https://docs.pipenv.org>`_ to create a virtualenv and install the dependencies. The first step
@@ -34,7 +34,7 @@ Note that since the application expects to run in Tails, you should test its
 functionality in a Tails VM. You can follow the instructions in the
 :ref:`Virtualizing Tails <virtualizing_tails>` guide to set up your Tails VM.
 
-To update the UI design
+To Update the UI Design
 -----------------------
 
 The design of the GUI is saved in the ``journalist_gui/mainwindow.ui`` file. To update the UI, one has to first install
@@ -53,7 +53,7 @@ If we make any changes to the UI, we will have to use ``pyuic5`` command to upda
     $ pyuic5 journalist_gui/mainwindow.ui -o journalist_gui/updaterUI.py
 
 
-Using resources in the UI
+Using Resources in the UI
 --------------------------
 
 All icons and images for the UI is stored in the ``journalist_gui/static`` directory. These are known as resources for the
@@ -88,8 +88,8 @@ command:
              should verify the changes to the file by running ``pyrcc5`` locally.
 
 
-Adding and running test cases
-------------------------------
+Adding and Running Test Cases
+-----------------------------
 
 We have Python unit tests in the ``test_gui.py`` file. Any change in the actual application code will also require adding new
 test cases or updating the old ones. You can run the tests using the following command:

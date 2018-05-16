@@ -9,7 +9,7 @@ read on the *Secure Viewing Station*.
 
 We will now generate the *SecureDrop Submission Key*.
 
-Create the key
+Create the Key
 --------------
 
 #. Navigate to **Applications ▸ Terminal** to open a terminal |Terminal|.
@@ -44,7 +44,7 @@ Create the key
    needed**.
 #. Wait for the key to finish generating.
 
-Export the public key
+Export the Public Key
 ---------------------
 
 To manage GPG keys using the graphical interface (a program called Seahorse),

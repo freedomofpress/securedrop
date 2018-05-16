@@ -97,8 +97,8 @@ Workstations
 These components are necessary to do the initial installation of
 SecureDrop and to process submissions using the air-gapped workflow.
 
-Secure Viewing Station (SVS)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*Secure Viewing Station* (SVS)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1 physical computer used as an air-gap to decrypt and view submissions retrieved
 from the *Application Server*.
@@ -107,7 +107,7 @@ The chosen hardware should be solely used for this purpose and should have any
 wireless networking hardware removed before use.
 
 Admin/Journalist Workstation(s)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 *At least 1* physical computer that is used as a workstation for SecureDrop
 admins and/or journalists.
@@ -119,8 +119,8 @@ depending on: the number of admins/journalists you wish to grant access to
 SecureDrop, whether they can share the same workstation due to availability
 requirements, geographic distribution, etc.
 
-USB drive(s)
-~~~~~~~~~~~~~~~~
+USB Drive(s)
+~~~~~~~~~~~~
 
 *At least 2* USB drives to use as a bootable Tails USB for the *SVS* and the
 *Admin Workstation*/*Journalist Workstation*.

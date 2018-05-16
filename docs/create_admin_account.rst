@@ -1,4 +1,4 @@
-Create an admin account on the *Journalist Interface*
+Create an Admin Account on the *Journalist Interface*
 =====================================================
 
 In order for any user (admin or journalist) to access the

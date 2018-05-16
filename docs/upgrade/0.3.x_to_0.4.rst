@@ -18,7 +18,7 @@ The steps below should be performed on **both the Admin and all Journalist
 Workstations**  associated with your SecureDrop instance. You do not need to
 run these steps on the *Secure Viewing Station*.
 
-Pull the latest release
+Pull the Latest Release
 -----------------------
 
 Open a **Terminal** and navigate to your SecureDrop directory.
@@ -67,7 +67,7 @@ instance.
    ./securedrop-admin setup
    ./securedrop-admin tailsconfig
 
-Clean up old version-controlled site config
+Clean Up Old Version-Controlled Site Config
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``tailsconfig`` task copied the site-specific configuration for your

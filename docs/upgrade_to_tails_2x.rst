@@ -37,10 +37,10 @@ The airgapped machine should have 3 USB ports, so you can plug in all 3 devices
 at the same time. If you don't have 3 USB ports available, you can use a USB
 hub, which may reduce transfer speeds.
 
-Upgrade each Tails device
+Upgrade Each Tails Device
 -------------------------
 
-1. Prepare the master Tails USB
+1. Prepare the Master Tails USB
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Because Tails 2.x is incompatible with older versions, you must create a new
@@ -181,7 +181,7 @@ unplugging and remounting the Tails device you're trying to upgrade.
 .. |Upgrade by cloning| image:: images/upgrade_to_tails_2x/upgrade_by_cloning.png
 .. |Select Target Device| image:: images/upgrade_to_tails_2x/select_target_device.png
 
-5. Re-install the automatic Tails configuration
+5. Re-Install the Automatic Tails Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. note:: This step is only applicable to Admin Tails USBs and Journalist Tails
@@ -218,12 +218,12 @@ When you're done, repeat this final step on the rest of the Tails devices. Once
 you have re-installed the Tails auto-configuration on all of the Tails devices,
 move on to the **Finishing up** section below.
 
-Finishing up
+Finishing Up
 ------------
 
 .. _verify-post-upgrade:
 
-Verify all devices are working
+Verify All Devices Are Working
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Shut down each Tails USB on the airgapped computer and move it to the computer
@@ -302,7 +302,7 @@ issue. In the event that one or more of your upgraded Tails USBs are not working
 as expected, don't worry: you can still manually restore from the Backup Device
 you created. (Isn't it great to have backups?)
 
-1. Restore data from the Backup Device
+1. Restore Data from the Backup Device
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the same airgapped machine, boot up the Tails USB stick you want to restore,
@@ -333,7 +333,7 @@ ownership of your personal files: ::
 
     find /live/persistence/TailsData_unlocked/ -uid 1000 -exec chown -R 1000:1000 '{}' \;
 
-2. Verify the restored data
+2. Verify the Restored Data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Shut down, and reboot the Tails USB. Now that you've restored the files, you

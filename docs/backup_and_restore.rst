@@ -19,7 +19,7 @@ Journalist accounts, or losing historical submissions from sources.
           *Journalist Interface* URLs. The *Monitor Server* will be configured
           from scratch in the event of a hardware migration.
 
-Minimizing disk space
+Minimizing Disk Space
 ---------------------
 
 Since the backup and restore operations both involve transferring *all* of
@@ -67,7 +67,7 @@ SecureDrop version 0.4 or later checked out (you can run ``git describe
           archive is the stored submissions), and you can use Tails' **Disks**
           utility to see how much free space you have on your persistent volume.
 
-Check connectivity
+Check Connectivity
 ''''''''''''''''''
 
 First, verify that your *Admin Workstation* is able to run Ansible and connect to
@@ -90,7 +90,7 @@ to debug your connectivity before proceeding further. Make sure:
   Tails' ``/etc/tor/torrc``. If they are not, again, see 
   :doc:`configure_admin_workstation_post_install` for detailed instructions.
 
-Create the backup
+Create the Backup
 '''''''''''''''''
 
 Run:
@@ -135,7 +135,7 @@ command. Otherwise, you should copy the backup archive that you wish to restore 
           You can safely remove those files once you've created the ``.tar.gz``
           backup archive described in this guide.
 
-Restoring from a backup file
+Restoring From a Backup File
 ''''''''''''''''''''''''''''
 
 To perform a restore, you must already have a backup archive. Provide its

@@ -21,10 +21,10 @@ Forking and Cloning the Project
 
 
 Make Your Changes and Push to the Fork
-----------------------------------------------
+--------------------------------------
 
-Create a branch
-~~~~~~~~~~~~~~~~~~
+Create a Branch
+~~~~~~~~~~~~~~~
 
 Create a branch on which you make your changes.
 
@@ -53,8 +53,8 @@ description message of your changes in a single command like this:
 
   git commit -a -m "<Description of changes made>"
 
-Pull the upstream changes
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Pull the Upstream Changes
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We get any updates made in the upstream repository.
 
@@ -64,7 +64,7 @@ We get any updates made in the upstream repository.
 
 
 Rebasing
-~~~~~~~~~
+~~~~~~~~
 
 Rebasing is the process of moving or combining a sequence of commits to a new
 base commit. Rebasing is most useful and easily visualized in the context of a
@@ -97,8 +97,8 @@ would be:
   :code:`A` and :code:`A` represents the same set of changes, but have
   different committer information. 
 
-Pushing the changes to GitHub Fork
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Pushing the Changes to GitHub Fork
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once your changes are committed and rebased, push the changes to your GitHub
 fork.
@@ -107,8 +107,8 @@ fork.
 
   git push origin <branch-name>
 
-Making a Pull Request to get Your Changes Merged in :code:`develop` branch
--------------------------------------------------------------------------------
+Making a Pull Request to Get Your Changes Merged in :code:`develop` Branch
+--------------------------------------------------------------------------
 
 1. Through GitHub make a pull request from the branch that you commited your
 code to.

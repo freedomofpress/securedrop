@@ -29,7 +29,7 @@ Ansible.
 
 Here is a list of bugs and features you can work on.
 
-Low hanging fruit
+Low-Hanging Fruit
 -----------------
 
 * `Suitable for hackathons <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A"hackathon">`__
@@ -41,7 +41,7 @@ Bugs
 * `Bugs <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3Abug>`__
 * `Low priority bugs <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3AP-low+label%3Abug>`__
 
-Issues sorted by topic
+Issues Sorted by Topic
 ----------------------
 
 * `User experience <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3AUX>`__
@@ -59,7 +59,7 @@ Issues sorted by topic
 * `Security <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3Asecurity>`__
 * `Research <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3Aresearch>`__
 
-Development environment
+Development Environment
 -----------------------
 
 * `Improve developer workflow <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+improve+developer+workflow%22>`__
@@ -113,7 +113,7 @@ the forum <https://forum.securedrop.club/c/devops>`__ or directly to `a
 team member
 <https://securedrop-club.readthedocs.io/en/latest/team.html>`__.
 
-Release managers
+Release Managers
 ~~~~~~~~~~~~~~~~
 
 All software deployed with SecureDrop is installed via

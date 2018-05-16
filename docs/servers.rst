@@ -1,4 +1,4 @@
-Set up the Servers
+Set Up the Servers
 ==================
 
 Now that the firewall is set up, you can plug the *Application Server*
@@ -18,7 +18,7 @@ The SecureDrop *Application Server* and *Monitor Server* run **Ubuntu Server
 download and verify the Ubuntu installation media. You should use the *Admin
 Workstation* to download and verify the Ubuntu installation media.
 
-Download the Ubuntu installation media
+Download the Ubuntu Installation Media
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The installation media and the files required to verify it are available on the
@@ -51,7 +51,7 @@ Alternatively, you can use the command line:
 .. _SHA256SUMS: http://releases.ubuntu.com/14.04.5/SHA256SUMS
 .. _SHA256SUMS.gpg: http://releases.ubuntu.com/14.04.5/SHA256SUMS.gpg
 
-Verify the Ubuntu installation media
+Verify the Ubuntu Installation Media
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You should verify the Ubuntu image you downloaded hasn't been modified by
@@ -95,7 +95,7 @@ following output in your terminal. ::
              installation. If this happens, please contact us at
              securedrop@freedom.press.
 
-Create the Ubuntu installation media
+Create the Ubuntu Installation Media
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To create the Ubuntu installation media, you can either burn the ISO image to a
@@ -142,7 +142,7 @@ After booting the Ubuntu image, select **Install Ubuntu Server**.
 Follow the steps to select your language, country and keyboard settings.
 Once that's done, let the installation process continue.
 
-Configure the network manually
+Configure the Network Manually
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Ubuntu installer will try to autoconfigure networking for the server
@@ -186,7 +186,7 @@ firewall. If you did not, adjust these settings accordingly.
   -  Hostname: mon
   -  Domain name should be left blank
 
-Continue the installation
+Continue the Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can choose whatever username and passphrase you would like. To make
@@ -197,7 +197,7 @@ save this passphrase in your admin KeePassX database afterwards.
 Click 'no' when asked to encrypt the home directory. Then configure your
 time zone.
 
-Partition the disks
+Partition the Disks
 ~~~~~~~~~~~~~~~~~~~
 
 Before setting up the server's disk partitions and filesystems in the
@@ -244,7 +244,7 @@ about overwriting anything currently on the server you are using. Select
 yes. You do not need an HTTP proxy, so when asked, you can just click
 continue.
 
-Finish the installation
+Finish the Installation
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Wait for the base system to finish installing. When you get to the
@@ -306,7 +306,7 @@ authenticating with your passphrase:
 .. tip:: If you cannot connect, check the network firewall logs for
          clues.
 
-Set up SSH keys
+Set Up SSH Keys
 ---------------
 
 Ubuntu's default SSH configuration authenticates users with their

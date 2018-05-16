@@ -1,4 +1,4 @@
-Set up the Secure Viewing Station
+Set Up the Secure Viewing Station
 =================================
 
 The *Secure Viewing Station* is the computer where journalists read and
@@ -48,7 +48,7 @@ Viewing Station*, you should open a **Terminal** and type the following commands
 
 .. include:: includes/tails-svs-nautilus.txt
 
-Correct the system time
+Correct the System Time
 -----------------------
 
 After booting up Tails on the *Secure Viewing Station*, you will need to

@@ -80,7 +80,7 @@ Journalist Interface <yubikey_setup>`.)
 
 |Journalist Interface Login|
 
-Daily journalist alerts about submissions
+Daily Journalist Alerts About Submissions
 -----------------------------------------
 
 When a SecureDrop has little activity and receives only a few
@@ -139,7 +139,7 @@ Documents and messages are encrypted to the SecureDrop installation's
 GPG public key. In order to read the messages or look at the documents
 you will need to transfer them to the *Secure Viewing Station*.
 
-Flag for reply
+Flag for Reply
 ~~~~~~~~~~~~~~
 
 If the server experiences a large number of new sources signing up at

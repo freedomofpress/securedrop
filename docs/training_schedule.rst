@@ -102,7 +102,7 @@ Participants: journalists and admins
 -  Using MAT (Metadata Anonymisation Toolkit)
 -  What to do for unsupported formats
 
-Admin training
+Admin Training
 ~~~~~~~~~~~~~~
 
 Time: 2 hours

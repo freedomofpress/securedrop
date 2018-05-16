@@ -2,7 +2,7 @@ Install SecureDrop
 ==================
 
 Install Prerequisites
-----------------------
+---------------------
 
 SecureDrop has some dependencies that need to be loaded onto the *Admin
 Workstation* prior to the installation of the server.
