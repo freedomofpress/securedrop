@@ -11,6 +11,8 @@ repository under the ``docs/`` directory.
 
 To get started editing the docs:
 
+.. _clone_the_rep:
+
 #. Clone the SecureDrop repository:
 
    .. code:: sh
@@ -89,41 +91,41 @@ branch.
 Style Guide
 -----------
 
-When specific elements from a user interface are mentioned by name or by label, **bold** it.
+Line Wrapping
+^^^^^^^^^^^^^
+
+Lines in the plain-text documentation files should wrap at 80 characters. (Some
+exceptions: complex code blocks showing example commands, or long URLs.)
+
+Terminology
+^^^^^^^^^^^
+
+Text taken directly from a user interface is in **bold face**.
 
     "Once you’re sure you have the right drive, click **Format Drive**."
 
-When SecureDrop-specific :doc:`terminology <../terminology>` is used, *italicize* it.
+SecureDrop-specific :doc:`terminology <../terminology>` is in *italics*.
 
-    "To get started, you’ll need two Tails drives: one for the *Admin Workstation* and one for the *Secure Viewing Station*."
-
-  .. todo:: I don't love this convention for a couple of reasons:
-
-         1. If there are a lot of references to terminology in the
-            same area of text, all of the short bursts of italics
-            makes it hard to read.
-         2. The default style for document references is also
-            italicized, which is confusing when used near
-            references to the terminology.
-
-Try to keep your lines wrapped to near 80 characters when editing the docs.
-Some exceptions are warranted, such as complex code blocks showing example
-commands, or long URLs, but in general the docs should be tightly wrapped.
+    "To get started, you’ll need two Tails drives: one for the *Admin
+    Workstation* and one for the *Secure Viewing Station*."
 
 When referring to virtual machines in the development environment, use
 lowercase for the name:
 
     app-staging VM
 
-Ensure that example commands in codeblocks are easily copy/pasteable.
+Code Blocks
+^^^^^^^^^^^
+    
+Ensure that example commands in codeblocks are easy to copy and paste.
 Do not prepend the ``$`` shell prompt indicator to example commands:
 
   .. code::
 
      echo hello
 
-In the context of a terminal session, with both typed commands and printed
-output text, then use ``$``, but only on the typed command lines:
+In the context of a terminal session with both typed commands and printed
+output text, use ``$`` before the typed commands:
 
   .. code::
 
@@ -132,15 +134,36 @@ output text, then use ``$``, but only on the typed command lines:
      $ echo sunshine
      sunshine
 
-Use absolute paths when referring to files outside the SecureDrop repository.
-Exceptions made for when it's clear from the surrounding context what the
-intended working directory is. For files inside the SecureDrop directory,
-write them as `./some_dir/file`, where `.` is the top level directory of the
-SecureDrop repo. Since by default the git repo will be cloned under the name
-`securedrop` and it also contains a `securedrop` subdirectory this is intended
-to avoid confusion.  Exceptions made for when it's clear from the context
-we're outside of the SecureDrop repo, but would like to somehow interact with
-it (e.g., we just cloned the repo and now we're going to `cd` into it).
+File Paths
+^^^^^^^^^^
+     
+:ref:`Cloning<clone_the_rep>` the SecureDrop git repository creates a directory
+called ``securedrop``. This ``securedrop`` directory also contains a
+``securedrop`` subdirectory for app code.
+
+.. code::
+
+     .
+     ├── securedrop
+     │   │
+     │  ...
+     │   ├── securedrop     
+    ... ...
+
+To avoid confusion, paths to files anywhere inside the SecureDrop git repository
+should be written as ``./some_dir/file``, where ``.`` is the top level directory
+of the SecureDrop repo.
+
+Use absolute paths when refering to files outside the SecureDrop repository:
+``/usr/local/bin/tor-browser``.
+
+Usage and Style
+^^^^^^^^^^^^^^^
+
+To avoid confusion, lists should include the so-called "Oxford comma":
+
+    You will need an email address, a public GPG key for that address, and the
+    fingerprint for that key.
 
 Capitalize all section headings in title case:
 
@@ -161,4 +184,3 @@ not
 
    Read the docs
    -------------
-
