@@ -1,9 +1,9 @@
 SecureDrop apt repository
 =========================
 
-This document contains a brief description of the Debian packages which are
-hosted and maintained by Freedom of the Press Foundation in our apt repository
-at `apt.freedom.press`_.
+This document contains brief descriptions of the Debian packages
+hosted and maintained by Freedom of the Press Foundation in our apt
+repository (`apt.freedom.press`_).
 
 linux-image-4.4.*-grsec
     This package contains the Linux kernel image, patched with grsecurity.
@@ -32,7 +32,7 @@ securedrop-ossec-server
     of ``linux-image-3.14-*-grsec``.
 
 securedrop-keyring
-    Packages the public signing key used conjunction with this apt repository.
+    Packages the public signing key for this apt repository.
     Allows for managed key rotation via automatic updates, as implemented in
     `SecureDrop 0.3.10`_.
 
