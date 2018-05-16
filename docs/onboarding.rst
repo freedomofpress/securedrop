@@ -102,13 +102,8 @@ Once the script is finished, you should be able to access the
 the *Journalist Interface*. You should be able to connect, and will be
 automatically taken to a login page.
 
-<<<<<<< HEAD
 Add an account on the *Journalist Interface*
 --------------------------------------------
-=======
-Add An Account on the Journalist Interface
-------------------------------------------
->>>>>>> regularize capitalization of section heading throughout docs
 
 Finally, you need to add an account on the *Journalist Interface* so the journalist
 can log in and access submissions. See the section on :ref:`Adding Users` in

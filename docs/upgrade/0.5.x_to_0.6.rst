@@ -48,7 +48,7 @@ and power the server back up. If you did not configure Google
 Authenticator for console access, you will need to use single user mode
 in order to login to each server.
 
-Boot into single user mode
+Boot into Single-User Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. |GRUB in default state| image:: ../images/0.5.x_to_0.6/grub-in-default-state.png

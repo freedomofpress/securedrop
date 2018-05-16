@@ -1,5 +1,5 @@
-2FA for app and mon servers
-===========================
+Two-Factor Authentication for *Application Server* and *Monitor Server*
+=======================================================================
 
 As part of the SecureDrop installation process, you will need to set
 up two-factor authentication (2FA) using the FreeOTP app for both the

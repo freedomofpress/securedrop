@@ -60,8 +60,8 @@ files into the corresponding ``*.j2`` file and committed to the repository.
 They are then installed when configuring Tails with
 the ``tasks/create_desktop_shortcuts.yml`` tasks.
 
-The i18n_tool.py Translate Helpers
-----------------------------------
+The i18n_tool.py Translation Helpers
+------------------------------------
 
 The `pybabel`_ and `gettext`_ command line is wrapped into the
 ``i18n_tool.py translate-messages`` and ``i18n_tool.py translate-desktop``
@@ -296,6 +296,8 @@ index from scratch with:
 Note that the new index will not be used right away, some workers may
 still have the old index open. Rebooting the machine is an option,
 waiting for a few hours is another option.
+
+.. _i18n_release:
 
 Release Management
 ------------------

@@ -225,8 +225,8 @@ in ``.kdb``). You should upgrade them to the new format by following these steps
       database in its new format (a file ending in ``.kdbx``) in the same folder
       as the previous database.
 
-5. Upgrade Secure Viewing Stations
-----------------------------------
+5. Upgrade the *Secure Viewing Station*
+---------------------------------------
 
 Due to a change in Tails 3, if you wish to preserve the names of files when
 decrypting, you'll need to apply the following fix by opening a **Terminal** on

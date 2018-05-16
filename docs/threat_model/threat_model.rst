@@ -36,10 +36,10 @@ Assumptions About the Admin and the Journalist
    :doc:`guidelines <../journalist>` for using SecureDrop
    and working with submitted documents.
 
-Assumptions About the Person Installing SecureDrop, Usually the Admin
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Assumptions About the Person Installing SecureDrop
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  The person acts reasonably and in good faith, e.g. if they were
+-  This person (usually the admin) acts reasonably and in good faith, e.g. if they were
    to give the attacker system-level access that would be unreasonable.
 -  The person obtains an authentic copy of SecureDrop and its
    dependencies.
@@ -54,8 +54,8 @@ Assumptions About the Source's Computer
 -  The computer correctly executes Tails or the Tor Browser.
 -  The computer is not compromised by malware.
 
-Assumptions About the *Admin Workstation* and the Journalist Workstation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Assumptions About the *Admin Workstation* and the *Journalist Workstation*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The computer correctly executes Tails.
 -  The computer and the Tails device are not compromised by malware.

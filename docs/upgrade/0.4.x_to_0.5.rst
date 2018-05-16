@@ -69,8 +69,8 @@ You should then proceed to update the application server with:
 
 .. include:: ../includes/rerun-install-is-safe.txt
 
-Verify the Source Interface Displays the Selected Languages
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Verify the *Source Interface* Displays the Selected Languages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The source and journalist interfaces will display the current language
 with a flag and clicking on the flag will show a menu with all
