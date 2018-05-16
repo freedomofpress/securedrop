@@ -682,25 +682,65 @@ class TestSiteConfig(object):
                 return desc
 
     def verify_desc_consistency_optional(self, site_config, desc):
-        (var, default, etype, prompt, validator, transform) = desc
+        (var, default, etype, prompt, validator, transform, condition) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
         assert type(default) == etype
 
     def verify_desc_consistency(self, site_config, desc):
         self.verify_desc_consistency_optional(site_config, desc)
-        (var, default, etype, prompt, validator, transform) = desc
+        (var, default, etype, prompt, validator, transform, condition) = desc
         with pytest.raises(ValidationError):
             site_config.user_prompt_config_one(desc, '')
 
     def verify_prompt_boolean(
             self, site_config, desc):
         self.verify_desc_consistency(site_config, desc)
-        (var, default, etype, prompt, validator, transform) = desc
+        (var, default, etype, prompt, validator, transform, condition) = desc
         assert site_config.user_prompt_config_one(desc, True) is True
         assert site_config.user_prompt_config_one(desc, False) is False
         assert site_config.user_prompt_config_one(desc, 'YES') is True
         assert site_config.user_prompt_config_one(desc, 'NO') is False
+
+    def test_desc_conditional(self):
+        """Ensure that conditional prompts behave correctly.
+
+            Prompts which depend on another question should only be
+            asked if the prior question was answered appropriately."""
+
+        questions = [
+            ['first_question',
+             False,
+             bool,
+             u'Test Question 1',
+             None,
+             lambda x: x.lower() == 'yes',
+             lambda config: True],
+            ['dependent_question',
+             'default_value',
+             str,
+             u'Test Question 2',
+             None,
+             None,
+             lambda config: config.get('first_question', False)]
+        ]
+        args = argparse.Namespace(site_config='tests/files/site-specific',
+                                  ansible_path='tests/files',
+                                  app_path=dirname(__file__))
+        site_config = securedrop_admin.SiteConfig(args)
+        site_config.desc = questions
+
+        def auto_prompt(prompt, default, **kwargs):
+            return default
+
+        with mock.patch('prompt_toolkit.prompt', side_effect=auto_prompt):
+            config = site_config.user_prompt_config()
+            assert config['dependent_question'] != 'default_value'
+
+            site_config.desc[0][1] = True
+
+            config = site_config.user_prompt_config()
+            assert config['dependent_question'] == 'default_value'
 
     verify_prompt_ssh_users = verify_desc_consistency
     verify_prompt_app_ip = verify_desc_consistency
@@ -725,7 +765,7 @@ class TestSiteConfig(object):
         assert site_config.user_prompt_config_one(desc, fpr) == clean_fpr
 
     def verify_desc_consistency_allow_empty(self, site_config, desc):
-        (var, default, etype, prompt, validator, transform) = desc
+        (var, default, etype, prompt, validator, transform, condition) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
         assert type(default) == etype
@@ -756,7 +796,7 @@ class TestSiteConfig(object):
     verify_prompt_sasl_password = verify_prompt_not_empty
 
     def verify_prompt_securedrop_supported_locales(self, site_config, desc):
-        (var, default, etype, prompt, validator, transform) = desc
+        (var, default, etype, prompt, validator, transform, condition) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
         assert type(default) == etype
@@ -781,7 +821,8 @@ class TestSiteConfig(object):
 
         with mock.patch('prompt_toolkit.prompt', side_effect=auto_prompt):
             for desc in site_config.desc:
-                (var, default, etype, prompt, validator, transform) = desc
+                (var, default, etype, prompt, validator, transform,
+                    condition) = desc
                 method = 'verify_prompt_' + var
                 print("checking " + method)
                 getattr(self, method)(site_config, desc)
