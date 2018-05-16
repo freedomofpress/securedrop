@@ -5,53 +5,67 @@
 
 +base_rules
 
-@keyframes fadein
+@keyframes screensaver-stop
   from
-    opacity: 0
+    height: 100%
 
   to
-    opacity: 1
+    height: 0
 
 
-@-webkit-keyframes fadein
+@-webkit-keyframes screensaver-stop
   from
-    opacity: 0
+    height: 100%
 
   to
-    opacity: 1
+    height: 0
 
 
-@keyframes fadeout
+@keyframes screensaver-start
   0%
-    opacity: 1
+    height: 0
 
   98%
-    opacity: 1
+    height: 0
 
   100%
-    opacity: 0
+    height: 100%
 
 
-@-webkit-keyframes fadeout
+@-webkit-keyframes screensaver-start
   0%
-    opacity: 1
+    height: 0
 
   98%
-    opacity: 1
+    height: 0
 
   100%
-    opacity: 0
+    height: 100%
 
 
-html
-  animation: fadeout 120s
-  -webkit-animation: fadeout 120s
-  opacity: 0
+#screensaver
+  animation: screensaver-start 120s
+  -webkit-animation: screensaver-start 120s
+  animation-fill-mode: forwards
+  position: fixed
+  width: 100%
+  height: 0
+  top: 0
+  left: 0
+  z-index: 1000
+  overflow: hidden
+  color: $color_grey_medium
+  background-color: #fff
+  /* center contents vertically and horizontally */
+  display: flex
+  justify-content: center
+  flex-direction: column
+  text-align: center
 
-  &:hover
+  html:hover &
     animation: none
     -webkit-animation: none
-    opacity: 1
+    height: 0
 
 +source_index_rules
 
