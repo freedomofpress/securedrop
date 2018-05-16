@@ -119,6 +119,11 @@ can simply scan the following QR code:
 
 .. image:: ../images/devenv/test-users-totp-qrcode.png
 
+.. note:: Only the English language will be functional by default. To use other
+   languages in your development environment, you must
+   `compile the translations <i18n.html#compiling-translations>`__.
+
+
 Setting up a multi-machine environment
 --------------------------------------
 
