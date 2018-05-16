@@ -78,19 +78,22 @@ to add the desired languages.
 Updating strings to be translated
 ---------------------------------
 
-After modifying a string in the code, templates, JavaScript or desktop
-labels, the ``securedrop/translations/messages.pot`` files must be
-updated by running the following command:
+After strings are modified in the code, templates, JavaScript or desktop
+labels, the ``securedrop/translations/messages.pot`` files must also be
+updated. Individual developers should NOT do this when changing strings
+in the code; the translations will be updated in bulk later on.
+
+Translations can be updated with the following command:
 
 .. code:: sh
 
     make translate
 
-which wraps ``i18n_tool.py translate-messages`` and ``i18n_tool.py
-translate-desktop``.  The updated
-``securedrop/translations/messages.pot`` and
-``install_files/ansible-base/roles/tails-config/templates/desktop.pot``
-should then be reviewed and committed.
+This wraps ``i18n_tool.py translate-messages`` and ``i18n_tool.py
+translate-desktop``.  These commands will update
+``securedrop/translations/messages.pot``,
+``install_files/ansible-base/roles/tails-config/templates/desktop.pot``,
+and the ``messages.po`` files for each language.
 
 .. note:: The changes will only be visible in the `Weblate`_ web
    interface used by translators after :ref:`merging_develop_into_the_weblate_fork`.
