@@ -141,3 +141,24 @@ SecureDrop repo. Since by default the git repo will be cloned under the name
 to avoid confusion.  Exceptions made for when it's clear from the context
 we're outside of the SecureDrop repo, but would like to somehow interact with
 it (e.g., we just cloned the repo and now we're going to `cd` into it).
+
+Capitalize all section headings in title case:
+
+.. code::
+
+   Before You Begin
+   ================
+
+   Read the Docs
+   -------------
+
+not
+
+.. code::
+
+   Before you begin
+   ================
+
+   Read the docs
+   -------------
+
