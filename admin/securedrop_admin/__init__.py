@@ -23,6 +23,7 @@ For use by administrators to install, maintain, and manage their SD
 instances.
 """
 
+from __future__ import print_function
 import argparse
 import logging
 import os
@@ -794,6 +795,10 @@ def main(argv):
             return_code = args.func(args)
         except KeyboardInterrupt:
             sys.exit(-1)
+        except subprocess.CalledProcessError as e:
+            print('ERROR (run with -v for more): {msg}'.format(msg=e),
+                  file=sys.stderr)
+            sys.exit(e.returncode)
         except Exception as e:
             raise SystemExit(
                 'ERROR (run with -v for more): {msg}'.format(msg=e))

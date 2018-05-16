@@ -295,6 +295,18 @@ class TestSecureDropAdmin(object):
                     assert "Updated to SecureDrop" not in caplog.text
                     assert ret_code != 0
 
+    def test_return_code(self, tmpdir, capsys):
+        """Ensure that securedrop-admin properly bubbles up any
+           non-zero return codes from subprocess calls."""
+        with mock.patch(
+                'securedrop_admin.install_securedrop',
+                side_effect=subprocess.CalledProcessError(
+                    42, 'xyz')):
+            with pytest.raises(SystemExit) as e:
+                securedrop_admin.main(
+                    ['--root', str(tmpdir), 'install'])
+            assert e.value.code == 42
+
 
 class TestSiteConfig(object):
 
