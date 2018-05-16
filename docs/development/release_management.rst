@@ -92,9 +92,11 @@ Release Process
 ---------------
 
 1. If this is a regular release, work with the translation administrator
-   responsible for this release cycle to review and merge the final translations they
-   prepare. You *must* manually inspect each line in the diff to ensure no malicious
-   content is introduced.
+   responsible for this release cycle to review and merge the final translations
+   and screenshots (if necessary) they prepare. Refer to the 
+   :ref:`i18n documentation <i18n_release>` for more information about the i18n 
+   release process. Note that you *must* manually inspect each line in the diff 
+   to ensure no malicious content is introduced.
 2. Prepare the final release commit and tag. Do not push the tag file.
 3. Step through the signing ceremony for the tag file. If you do not have
    permissions to do so, coordinate with someone that does.

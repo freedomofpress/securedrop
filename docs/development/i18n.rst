@@ -297,6 +297,8 @@ Note that the new index will not be used right away, some workers may
 still have the old index open. Rebooting the machine is an option,
 waiting for a few hours is another option.
 
+.. _i18n_release:
+
 Release management
 ------------------
 
