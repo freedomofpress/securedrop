@@ -20,7 +20,7 @@ This section outlines the tasks the admin is responsible for in order to
 ensure that the SecureDrop server continues to be a safe place for sources to
 talk to journalists.
 
-Keep your SecureDrop Server Updated
+Keep Your SecureDrop Server Updated
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You should maintain awareness of SecureDrop updates and take any required
@@ -36,7 +36,7 @@ intervention will be required.
 .. _`SecureDrop Release Blog`: https://securedrop.org/news
 .. _`SecureDrop RSS Feed`: https://securedrop.org/news/feed
 
-Keep your Network Firewall Updated
+Keep Your Network Firewall Updated
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given all traffic first hits the network firewall as it faces the non-Tor public
@@ -52,7 +52,7 @@ Upgrade Docs`_ for further details on how to update the suggested firewall.
 .. _`Netgate RSS Feed`: https://www.netgate.com/feed.xml
 .. _`pfSense Upgrade Docs`: https://doc.pfsense.org/index.php/Upgrade_Guide
 
-Keep your SecureDrop Workstations Updated
+Keep Your SecureDrop Workstations Updated
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You should keep your SecureDrop workstations updated with:
@@ -74,7 +74,7 @@ on how to upgrade the drives.
 .. _`Tails
    Upgrade Documentation`: https://tails.boum.org/doc/first_steps/upgrade/index.en.html
 
-Monitor OSSEC alerts for Unusual Activity
+Monitor OSSEC Alerts for Unusual Activity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You should decrypt and read your OSSEC alerts. Report any suspicious events to
@@ -341,7 +341,7 @@ You should see a message appear indicating the change was a success:
 .. |System Config Page| image:: images/manual/screenshots/journalist-admin_system_config_page.png
 .. |Logo Update| image:: images/manual/screenshots/journalist-admin_changes_logo_image.png
 
-Updating system configuration
+Updating System Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want to update the system configuration, you should use the
@@ -372,7 +372,7 @@ Read the next section if you have multiple admins.
   Server configuration is stored on the *Admin Workstation* in
   ``~/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific``.
 
-Managing ``site-specific`` updates on teams with multiple admins
+Managing ``site-specific`` Updates On Teams With Multiple Admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Organizations with multiple admins should establish a protocol to communicate

@@ -1,4 +1,4 @@
-SecureDrop apt repository
+SecureDrop apt Repository
 =========================
 
 This document contains brief descriptions of the Debian packages

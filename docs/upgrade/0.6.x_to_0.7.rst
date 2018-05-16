@@ -1,7 +1,7 @@
 Upgrade from 0.6.x to 0.7.x
 ===========================
 
-Updating the Tails workstations
+Updating the Tails Workstations
 -------------------------------
 
 All Tails drives should be updated to Tails 3.7, which is scheduled to be 
@@ -53,14 +53,14 @@ Workstation Updater looks as follows:
 
 |SecureDrop updater|
 
-Configuring SSH over the local network
+Configuring SSH Over the Local Network
 --------------------------------------
 
 SecureDrop 0.7.0 ships with the option to SSH into the SecureDrop servers over the
 local network instead of the Tor network. Please see the :doc:`detailed documentation <../ssh_over_local_net>`
 for this feature.
 
-Configuring email alerts about new submissions
+Configuring Email Alerts About New Submissions
 ----------------------------------------------
 
 SecureDrop 0.7.0 allows you to configure an encrypted daily email alert informing
@@ -91,7 +91,7 @@ Run ``./securedrop-admin install`` and wait for it to complete. The
 configured email address should now receive an encrypted notification
 email every 24 hours.
 
-Configuring server reboot time
+Configuring Server Reboot Time
 ------------------------------
 
 SecureDrop 0.7.0 lets you configure the time of day (full hour) at which the
@@ -103,7 +103,7 @@ functionality, you will be prompted for "Daily reboot time of the server (24-hou
 clock)". Specify the desired local time, e.g., type "18" for 6 PM. Then run 
 ``./securedrop-admin install`` to apply the change to the  servers.
 
-Getting support
+Getting Support
 ---------------
 
 Should you require further support with your SecureDrop installation or upgrade,

@@ -1,6 +1,6 @@
 .. _printer_setup_in_tails:
 
-Setting up a Printer in Tails
+Setting Up a Printer in Tails
 =============================
 
 Because Tails is supposed to be as "amnesiac" as possible, you want to

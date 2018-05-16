@@ -1,4 +1,4 @@
-Development of securedrop-admin in the admin directory
+Development of Securedrop-Admin in the Admin Directory
 ======================================================
 
 The ``admin`` directory contains the source of the

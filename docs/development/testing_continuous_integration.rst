@@ -7,7 +7,7 @@ The SecureDrop project uses CircleCI_ for running automated test suites on code 
 
 .. _CircleCI: http://circleci.com/gh/freedomofpress/securedrop/
 
-CI test layout
+CI Test Layout
 --------------
 
 The relevant files for configuring the CI tests are: ::
@@ -25,7 +25,7 @@ The files under ``devops/`` are used to create a minimized staging environment
 on AWS EC2. The CircleCI host is used as the Ansible controller to provision
 the machines and run the :ref:`config_tests` against them.
 
-Running the CI staging environment
+Running the CI Staging Environment
 ----------------------------------
 
 The staging environment tests will run automatically in CircleCI,
@@ -57,7 +57,7 @@ output as shown below:
 
 .. _Docker installation: https://www.docker.com/community-edition#/download
 
-Setup environment parameters
+Setup Environment Parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Source the setup script using the following command:
@@ -71,7 +71,7 @@ are some defaults set that you may want to change. You will need to determine
 the value of your VPC ID to use which is outside the scope of this guide.
 
 
-Use Makefile to provision hosts
+Use Makefile to Provision Hosts
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Run ``make help`` to see the full list of CI commands in the Makefile:
 

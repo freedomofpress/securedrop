@@ -1,7 +1,7 @@
 Upgrade Tails from 2.x to 3.x
 =============================
 
-Why you should upgrade
+Why You Should Upgrade
 ----------------------
 
 Starting with SecureDrop version 0.4, we require users update to Tails version
@@ -9,7 +9,7 @@ Starting with SecureDrop version 0.4, we require users update to Tails version
 will show you how to upgrade each Tails USB stick used in your SecureDrop
 instance.
 
-What you need
+What You Need
 -------------
 
   #. Your *existing SecureDrop Tails USB sticks* (*Admin Workstation*,
@@ -32,7 +32,7 @@ drive you wish to upgrade, the *master Tails USB* drive, and the *backup drive*
 at the same time. If you don't have 3 USB ports available, you can use a USB
 hub, which may reduce transfer speeds.
 
-1. Prepare the master Tails USB
+1. Prepare the Master Tails USB
 -------------------------------
 
 Because Tails 3.x is incompatible with older versions, you must create a new
@@ -49,7 +49,7 @@ At the Tails Greeter screen, enable admin privileges by setting a root password.
 In Tails 3.x, you do this by clicking the **+** button, then navigating to
 **Additional Settings** ▸ **Administration Password**.
 
-2. Backup the Tails drives
+2. Backup the Tails Drives
 --------------------------
 
 .. note::
@@ -166,7 +166,7 @@ USB drive, unmount the Backup partition and store the drive somewhere safely.
 .. |Select the Disk| image:: images/upgrade_to_tails_3x/select_the_disk.png
 .. |Two Partitions Appear| image:: images/upgrade_to_tails_3x/two_partitions_appear.png
 
-3. Upgrade the Tails drives
+3. Upgrade the Tails Drives
 ---------------------------
 
 .. note::
@@ -225,8 +225,8 @@ in ``.kdb``). You should upgrade them to the new format by following these steps
       database in its new format (a file ending in ``.kdbx``) in the same folder
       as the previous database.
 
-5. Upgrade Secure Viewing Stations
-----------------------------------
+5. Upgrade the *Secure Viewing Station*
+---------------------------------------
 
 Due to a change in Tails 3, if you wish to preserve the names of files when
 decrypting, you'll need to apply the following fix by opening a **Terminal** on
@@ -246,7 +246,7 @@ After upgrading to 0.4.x, you should move your backup drive to a safe location (
 used a strong passphrase). Else, you should destroy the backup drive following
 the instructions `here <upgrade_to_tails_2x.html#wipe-the-backup-device>`__.
 
-If you encounter issues
+If You Encounter Issues
 -----------------------
 
 If you run into issues, you can always restore your data from the Backup

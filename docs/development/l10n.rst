@@ -15,7 +15,7 @@ instructions for getting started with the Weblate platform as a
 translator. Before starting this guide, you should know which language
 you would like to translate.
 
-Who uses SecureDrop?
+Who Uses SecureDrop?
 --------------------
 
 There are two kind of SecureDrop users: :doc:`Sources <../source>` and
@@ -31,7 +31,7 @@ workflow of SecureDrop.
 Register for Weblate
 --------------------
 
-Login via GitHub for the first time
+Login via GitHub for the First Time
 ...................................
 
 If you already have a GitHub account, go to the `Weblate registration page`_:
@@ -46,7 +46,7 @@ You will then be redirected to the Weblate dashboard.
 
 |Weblate dashboard screenshot|
 
-Register a Weblate account
+Register a Weblate Account
 ..........................
 
 Go to the `Weblate registration page`_
@@ -62,7 +62,7 @@ Confirming by clicking the first link will redirect you to the `Weblate dashboar
 
 .. _`Weblate dashboard`: https://weblate.securedrop.club/
 
-Choose a language
+Choose a Language
 -----------------
 
 From your `Weblate dashboard`_:
@@ -79,7 +79,7 @@ your native language:
 
 |Weblate translate button screenshot|
 
-Translate a phrase
+Translate a Phrase
 ------------------
 
 Each translatable string is shown in a **Source** box and you can
@@ -93,7 +93,7 @@ how it looks in the software. Click to see it in full size.
 
 |Weblate translate context screenshot|
 
-Instructions about a user navigation
+Instructions About a User Navigation
 ------------------------------------
 
 Strings also come with instructions, further explaining them, 
@@ -196,7 +196,7 @@ weakness in the security, is sometimes called an "exploit."
 
 This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/attack>`__
 
-Command line tool (command)
+Command Line Tool (command)
 ...........................
 
 The "command line" works by way of giving a computer a series of
@@ -242,7 +242,7 @@ person who knows how to decrypt it back into a readable form.
 
 This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/encryption>`__
 
-Encryption key
+Encryption Key
 ..............
 
 An encryption key is a piece of information that is used to convert a
@@ -303,8 +303,8 @@ often referred to as your keyring.
 
 This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/keyring>`__
 
-Man-in-the-middle attack (MITM)
-..................................
+Man-in-the-Middle Attack (MITM)
+...............................
 
 Suppose you believe you were speaking to your friend, Bahram, via
 encrypted instant messager. To check it's really him, you ask him to
@@ -327,7 +327,7 @@ two communicators.
 
 This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/man-middle-attack>`__
 
-Public key encryption
+Public Key Encryption
 .....................
 
 Traditional encryption systems use the same secret, or key, to encrypt
@@ -345,7 +345,7 @@ web browsing.
 
 This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/public-key-encryption>`__
 
-Two-factor authentication
+Two-Factor Authentication
 .........................
 
 "Something you know, and something you have." Login systems that
@@ -360,7 +360,7 @@ like Google, PayPal and Twitter now offer two-factor authentication.
 
 This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/two-factor-authentication>`__
 
-Weblate glossary
+Weblate Glossary
 ----------------
 
 For each string to be translated, Weblate shows a glossary of terms
@@ -388,7 +388,7 @@ duplicate or other mistakes.
 .. tip:: The terms copied from the EFF glossary already have a
          translation in a number of languages.
 
-Getting help
+Getting Help
 ------------
 
 Should you need help, you can do one of the following:

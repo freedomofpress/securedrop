@@ -60,22 +60,22 @@ files into the corresponding ``*.j2`` file and committed to the repository.
 They are then installed when configuring Tails with
 the ``tasks/create_desktop_shortcuts.yml`` tasks.
 
-The i18n_tool.py translate helpers
-----------------------------------
+The i18n_tool.py Translation Helpers
+------------------------------------
 
 The `pybabel`_ and `gettext`_ command line is wrapped into the
 ``i18n_tool.py translate-messages`` and ``i18n_tool.py translate-desktop``
 helpers for convenience. It is designed to be used by developers, to
 run tests with fixtures and for packaging.
 
-Creating new translations
+Creating New Translations
 -------------------------
 
 A user with weblate admin rights must visit the
 `Weblate translation creation page`_ and the `Weblate desktop translation creation page`_
 to add the desired languages.
 
-Updating strings to be translated
+Updating Strings to be Translated
 ---------------------------------
 
 After strings are modified in the code, templates, JavaScript or desktop
@@ -98,7 +98,7 @@ and the ``messages.po`` files for each language.
 .. note:: The changes will only be visible in the `Weblate`_ web
    interface used by translators after :ref:`merging_develop_into_the_weblate_fork`.
 
-Compiling translations
+Compiling Translations
 ----------------------
 
 `gettext`_ needs a compiled file for each language (the ``*.mo``
@@ -116,7 +116,7 @@ This can be done by running the following command::
 
     securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-desktop --compile
 
-Verifying translations
+Verifying Translations
 ----------------------
 
 After a translation is compiled, the web page in which it shows can be
@@ -151,7 +151,7 @@ the file can be found in the function that created it in
 ``securedrop/tests/pages-layout/test_journalist.py`` or
 ``securedrop/tests/pages-layout/test_source.py``.
 
-Merging translations back to develop
+Merging Translations Back to Develop
 ------------------------------------
 
 `Weblate`_ automatically pushes the translations done via the web
@@ -216,7 +216,7 @@ Go to https://github.com/freedomofpress/securedrop and propose a pull request.
 
 .. _merging_develop_into_the_weblate_fork:
 
-Merging develop into the weblate fork
+Merging Develop into the Weblate Fork
 -------------------------------------
 
 `Weblate`_ works on a long standing fork of the `SecureDrop git
@@ -282,7 +282,7 @@ requests for the `SecureDrop git repository`_.
 
 |Weblate commit Unlocked|
 
-Updating the full text index
+Updating the Full Text Index
 ----------------------------
 
 The full text index can occasionally not be up to date. The symptom
@@ -302,10 +302,10 @@ waiting for a few hours is another option.
 
 .. _i18n_release:
 
-Release management
+Release Management
 ------------------
 
-Two weeks before the release: update
+Two Weeks Before the Release: Update
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The new and updated strings are uploaded to Weblate. This is done late in the SecureDrop release cycle so translators get less notifications. It would be inconvenient if there were hundreds of strings needing attention. But SecureDrop is small and it is ok to postpone notifications.
@@ -317,7 +317,7 @@ The new and updated strings are uploaded to Weblate. This is done late in the Se
 * Backport every commit changing a source string to the release branch
 * Update the `i18n timeline`_ and `Weblate whiteboard`_
 
-One week before the release: string freeze
+One Week Before the Release: String Freeze
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Verify develop and the release branch have the same source strings
@@ -327,7 +327,7 @@ One week before the release: string freeze
 * Add a prominent Weblate whiteboard announcement that reads `The X.Y.Z deadline is Month day, year midnight. String freeze is in effect: no source string are modified before the release.`
 * Update the `i18n timeline`_ and `Weblate whiteboard`_
 
-The day of the release
+The Day of the Release
 ~~~~~~~~~~~~~~~~~~~~~~
 
 * Merge translations back to develop
@@ -336,7 +336,7 @@ The day of the release
 * Provide translator credits to add to the SecureDrop release announcement
 * Update the `i18n timeline`_ and `Weblate whiteboard`_
 
-Translator credits
+Translator Credits
 ------------------
 
 Verify the names and emails look ok, otherwise add to `.mailmap
@@ -361,7 +361,7 @@ We do not want to publish the translator emails so we strip them:
 
 .. _i18n-administrator-permissions:
 
-Translations admins
+Translations Admins
 -------------------
 
 .. note:: The privilege escalation workflow is different for
@@ -390,7 +390,7 @@ groups. However, the translators community has a different set of
 rules and permissions, reason why it makes sense to have an
 independent policy.
 
-Admin permissions
+Admin Permissions
 ~~~~~~~~~~~~~~~~~
 
 An admin may not need or want all permissions but they are
@@ -400,7 +400,7 @@ entitled to have all of them.
 * https://forum.securedrop.club/admin/users/list/active click on the user and ``Grant Moderation``
 * https://lab.securedrop.club/bot/securedrop/project_members add as a ``Master`` member
 
-Granting reviewer privileges in Weblate
+Granting Reviewer Privileges in Weblate
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * visit https://weblate.securedrop.club/admin/auth/user/

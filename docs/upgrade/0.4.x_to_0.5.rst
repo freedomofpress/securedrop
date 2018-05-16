@@ -17,7 +17,7 @@ these translations are available but are not activated by default.
 The steps below should be performed on the *Admin Workstation*
 associated with your SecureDrop instance.
 
-Pull the latest release
+Pull the Latest Release
 -----------------------
 
 Open a **Terminal** and navigate to your SecureDrop directory.
@@ -50,7 +50,7 @@ Once you've verified the latest release, check it out:
 
    git checkout 0.5
 
-Choose the list of supported languages
+Choose the List of Supported Languages
 --------------------------------------
 
 You need to run the ``./securedrop-admin sdconfig`` command again,
@@ -69,8 +69,8 @@ You should then proceed to update the application server with:
 
 .. include:: ../includes/rerun-install-is-safe.txt
 
-Verify the source interface displays the selected languages
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Verify the *Source Interface* Displays the Selected Languages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The source and journalist interfaces will display the current language
 with a flag and clicking on the flag will show a menu with all

@@ -1,7 +1,7 @@
 Upgrade from 0.5.x to 0.6.x
 ===========================
 
-Updating the Tails workstations
+Updating the Tails Workstations
 -------------------------------
 
 All Tails drives should be updated to Tails 3.6, `released
@@ -29,7 +29,7 @@ From this point forward, you will be able to use the command
 and ``securedrop-admin update`` to check for updates and to apply them in a 
 single step.
 
-Troubleshooting Linux kernel issues
+Troubleshooting Linux Kernel Issues
 -----------------------------------
 
 The latest Linux kernel (version 4.4.115) will be automatically installed on your
@@ -48,7 +48,7 @@ and power the server back up. If you did not configure Google
 Authenticator for console access, you will need to use single user mode
 in order to login to each server.
 
-Boot into single user mode
+Boot into Single-User Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. |GRUB in default state| image:: ../images/0.5.x_to_0.6/grub-in-default-state.png
@@ -74,7 +74,7 @@ screenshot below:
 
 Press the “F10” key to boot.
 
-Test the new kernel
+Test the New Kernel
 ~~~~~~~~~~~~~~~~~~~
 
 Observe the boot process. It is possible that the system will fail to
@@ -95,7 +95,7 @@ If you are experiencing network issues or other kernel problems, we
 recommend that you roll back to an older kernel, and that you report the
 issue to us immediately. 
 
-Compare the behavior of the old kernel
+Compare the Behavior of the Old Kernel
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. |GRUB with advanced options selected| image:: ../images/0.5.x_to_0.6/grub-with-advanced-options-selected.png
@@ -115,7 +115,7 @@ Once you are logged in, check to see if you have network access. If you do, then
 your instance is having an issue with the 4.x kernel. In that case, we need to 
 temporarily set an older kernel as the default.
 
-Roll back to the old kernel
+Roll Back to the Old Kernel
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. important:: The older kernel has reached end of life, so it
@@ -180,7 +180,7 @@ additional confirmation of the kernel version, the command
 
 Please notify us of the compatibility issue so we can help you resolve it ASAP.
 
-Report compatibility issues
+Report Compatibility Issues
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have encountered issues with the kernel upgrade, it is important
@@ -211,7 +211,7 @@ You can share ``server-facts.log``, ``syslog`` and ``dmesg`` with us as follows:
 Once we get your information, we can try to provide assistance to
 resolve compatibility issues.
 
-Getting support
+Getting Support
 ---------------
 
 Should you require further support with your SecureDrop installation or upgrade,

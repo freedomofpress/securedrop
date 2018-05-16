@@ -1,4 +1,4 @@
-Set up the Network Firewall
+Set Up the Network Firewall
 ===========================
 
 Now that you've set up your password manager, you can move on to setting
@@ -285,7 +285,7 @@ interface**, scroll down, and click the **Save** button.
 
 |Disable DHCP|
 
-Assign a static IP address to the *Admin Workstation*
+Assign a Static IP Address to the *Admin Workstation*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now you will need to assign a static IP to the *Admin Workstation*.
@@ -336,7 +336,7 @@ change. You will need you have succeeded in connecting with your new
 static IP when you see a pop-up notification that says "Tor is ready.
 You can now access the Internet".
 
-Troubleshooting: DNS servers and the Unsafe Browser
+Troubleshooting: DNS Servers and the Unsafe Browser
 '''''''''''''''''''''''''''''''''''''''''''''''''''
 
 After saving the new network configuration, you may still encounter the
@@ -371,7 +371,7 @@ In order to use the firewall to isolate the *Application Server* and the *Monito
 Server* from each other, we need to connect them to separate interfaces, and then set
 up firewall rules that allow them to communicate.
 
-Set up OPT1
+Set Up OPT1
 ~~~~~~~~~~~
 
 We set up the LAN interface during the initial configuration. We now
@@ -388,7 +388,7 @@ as the default. **Save** and **Apply Changes**.
 
 |OPT1|
 
-Set up OPT2
+Set Up OPT2
 ~~~~~~~~~~~
 
 Next, you will have to enable the OPT2 interface. Go to
@@ -404,7 +404,7 @@ as the default. **Save** and **Apply Changes**.
 
 |OPT2|
 
-Set up the Firewall Rules
+Set Up the Firewall Rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Since there are a variety of firewalls with different configuration
@@ -501,7 +501,7 @@ As an alternative to the provided screenshots, you can examine the provided
 
 .. _`GitHub #2282`: https://github.com/freedomofpress/securedrop/pull/2282
 
-Tips for setting up pfSense Firewall Rules
+Tips for Setting Up pfSense Firewall Rules
 ------------------------------------------
 
 Here are some general tips for setting up pfSense firewall rules:
@@ -529,7 +529,7 @@ Here are some general tips for setting up pfSense firewall rules:
 
 .. _Keeping pfSense up to date:
 
-Keeping pfSense up to date
+Keeping pfSense Up to Date
 --------------------------
 
 Periodically, the pfSense project maintainers release an update to the

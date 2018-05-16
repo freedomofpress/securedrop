@@ -130,7 +130,7 @@ comments. The `typing <https://pypi.python.org/pypi/typing>`_ module is also not
 part of the standard library. It is being installed as part of the development
 and run-time dependency. 
 
-Example of type hint
+Example of Type Hint
 ~~~~~~~~~~~~~~~~~~~~
 
 .. code:: Python
@@ -176,7 +176,7 @@ The above example shows how to do a conditional import of ``Dict`` class from
 to check type annotations.
 
 
-How to use mypy?
+How to Use mypy?
 ~~~~~~~~~~~~~~~~~
 
 ``make lint`` already checks for any error using the ``mypy`` tool. In case you want

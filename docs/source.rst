@@ -7,7 +7,7 @@ Source Guide
           computer should you use? what network should you be on? etc.
 
 
-Choosing the right location
+Choosing the Right Location
 ---------------------------
 
 When national security is involved, we suggest you buy a new computer,
@@ -36,7 +36,7 @@ While using the Tor Browser on your personal computer helps hide your activity o
 .. _`Tails`: https://tails.boum.org/
 
 
-Choose who to submit to
+Choose Who to Submit To
 -----------------------
 
 Each SecureDrop instance is totally independent, and submissions to that instance are only available to journalists associated with that organization.
@@ -47,7 +47,7 @@ Most organizations make their *Landing Page* prominently accessible from their m
 
 .. _`SecureDrop Directory`: https://securedrop.org/directory
 
-Making your First Submission
+Making Your First Submission
 ----------------------------
 
 Open the Tor Browser and navigate to the .onion address for the SecureDrop

@@ -1,5 +1,5 @@
-Set up the Transfer Device
-==========================
+Set Up the *Transfer Device*
+============================
 
 Journalists copy submissions from their *Journalist Workstation* to the
 *Secure Viewing Station* using the *Transfer Device* which can be a
@@ -18,16 +18,16 @@ you should use USB drives instead. If you have chosen to use DVDs instead, there
 is nothing to set up now — just make sure that you have all the hardware on
 hand.
 
-USB Transfer Device Configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+USB *Transfer Device* Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The easiest and recommended option for a *Transfer Device* is a USB
 drive. If you have a large team of journalists you may want to :doc:`create
 several <onboarding>` of these. Here we'll just walk through
 making one *Transfer Device* [#]_.
 
-Create a USB Transfer Device
-----------------------------
+Create a USB *Transfer Device*
+------------------------------
 
 .. note:: This process will destroy all data currently on the drive.
 
@@ -72,15 +72,15 @@ The Disks utility will ask you if you are sure: click **Format** to continue.
 After a few seconds, your new *Transfer Device* should be ready for use.
 If you haven't already, make sure to label it.
 
-Set up the USB Transfer Device on each workstation
---------------------------------------------------
+Set Up the USB *Transfer Device* on Each Workstation
+----------------------------------------------------
 
 On each *Journalist Workstation* and *Secure Viewing Station* you'd like to use
 the *Transfer Device* you will securely save the passphrase on the
 persistent volume. This ensures that you will only have to type in the
 passphrase once during initial set up and it will be automatic thereafter:
 
-  #. Insert the Transfer Device
+  #. Insert the *Transfer Device*
   #. Go to **Places ▸ Computer** and click the USB drive in the left column.
   #. Type in the passphrase and click "Remember Password":
 

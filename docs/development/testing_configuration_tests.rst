@@ -16,7 +16,7 @@ Installation
 
     pip install -r securedrop/requirements/develop-requirements.txt
 
-Running the config tests
+Running the Config Tests
 ------------------------
 
 In order to run the tests, first create and provision the VM you intend
@@ -47,7 +47,7 @@ Test failure against any host will generate a report with informative output
 about the specific test that triggered the error. The wrapper script
 will also exit with a non-zero status code.
 
-Updating the config tests
+Updating the Config Tests
 -------------------------
 
 Changes to the Ansible config should result in failing config tests, but
@@ -85,7 +85,7 @@ add a new file to the ``testinfra/spec/app-staging`` directory.
 .. tip:: Read :ref:`updating_ossec_rules` to learn how to write tests for the
          OSSEC rules.
 
-Config test layout
+Config Test Layout
 ------------------
 
 The config tests are mostly broken up according to machines in the
@@ -103,7 +103,7 @@ mirroring the Ansible configuration. Prior to the reorganization of
 the Ansible layout, the tests are rather tightly coupled to hosts. The
 layout of config tests is therefore subject to change.
 
-Config testing strategy
+Config Testing Strategy
 -----------------------
 
 The config tests currently emphasize testing implementation rather than

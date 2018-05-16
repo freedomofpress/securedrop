@@ -24,7 +24,7 @@ In order to use SecureDrop, each journalist needs two things:
      for the journalist to decrypt and view submissions, they need
      access to a *Secure Viewing Station*.
 
-Determine access protocol for the *Secure Viewing Station*
+Determine Access Protocol for the *Secure Viewing Station*
 ----------------------------------------------------------
 
 Currently, SecureDrop only supports encrypting submissions to a single
@@ -45,7 +45,7 @@ Stations*.
           Viewing Stations.
 
 Create a Journalist Tails USB
--------------------------------------------
+-----------------------------
 
 Each journalist will need a Journalist Tails USB and a *Journalist
 Workstation*, which is the computer they use to boot their Tails USB.
@@ -58,7 +58,8 @@ Once you're done, boot into the new Journalist Tails USB on the
 *Journalist Workstation*. Enable persistence and set an admin
 passphrase before continuing with the next section.
 
-Set up automatic access to the *Journalist Interface*
+
+Set Up Automatic Access to the *Journalist Interface*
 -----------------------------------------------------
 
 Since the *Journalist Interface* is an ATHS, we need to set up the
@@ -108,7 +109,7 @@ Finally, you need to add an account on the *Journalist Interface* so the journal
 can log in and access submissions. See the section on :ref:`Adding Users` in
 the admin Guide.
 
-Import GPG keys for journalists with access to SecureDrop to the SVS
+Import GPG Keys for Journalists with Access to SecureDrop to the SVS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 While working on a story, journalists may need to transfer some documents or

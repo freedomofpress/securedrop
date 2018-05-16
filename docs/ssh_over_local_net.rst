@@ -27,7 +27,7 @@ network instead please continue to read.
 
 .. _ssh_over_local:
 
-Configuring SSH for local access
+Configuring SSH for Local Access
 --------------------------------
 
 .. warning:: It is important that your firewall is configured adequately if you

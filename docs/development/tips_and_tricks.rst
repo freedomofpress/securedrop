@@ -1,7 +1,7 @@
 Tips & Tricks
 =============
 
-Using Tor Browser with the development environment
+Using Tor Browser with the Development Environment
 --------------------------------------------------
 
 We strongly encourage sources to use the Tor Browser when they access
@@ -58,10 +58,10 @@ directly, please:
 
 .. _ssh_over_tor:
 
-Connecting to VMs via SSH over Tor
+Connecting to VMs via SSH Over Tor
 ----------------------------------
 
-Ubuntu/Debian setup
+Ubuntu/Debian Setup
 ~~~~~~~~~~~~~~~~~~~
 You will need to install a specific variant of the ``nc`` tool
 in order to support the ``-x`` option for specifying a proxy host.
