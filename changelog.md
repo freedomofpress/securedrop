@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.7.0~rc5
+## 0.7.0
 
 ### Web Applications
 * Updated messages on source interface (#3036, #3132, #3321, #3322)
