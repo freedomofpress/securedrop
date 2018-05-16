@@ -41,6 +41,7 @@ function reset_demo() {
     sudo chown -R "$(id -u)" /var/lib/securedrop
     cp ./tests/files/test_journalist_key.pub /var/lib/securedrop/keys
     gpg --homedir /var/lib/securedrop/keys --import /var/lib/securedrop/keys/test_journalist_key.pub >& /tmp/gpg.out || cat /tmp/gpg.out
+    ./i18n_tool.py translate-messages --compile
     ./manage.py reset
     ./create-dev-data.py
 }
