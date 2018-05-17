@@ -8,7 +8,7 @@
 
 <h2>{{ gettext('Alerts') }}</h2>
 
-<p>{{ gettext('Send an encrypted email to verify if OSSEC alerts work correctly:') }}</p>
+<p>{{ gettext('Send an encrypted email to verify that OSSEC alerts work:') }}</p>
 
 <p>
   <a class="btn sd-button" href="{{ url_for('admin.ossec_test') }}" id="test-ossec-alert">
@@ -36,7 +36,7 @@
     {{ gettext('Recommended size: 500px * 450px') }}
   </h5>
   <button type="submit" class="sd-button" id="submit-logo-update">
-    <i class="fas fa-pencil-alt"></i>{{ gettext('UPDATE LOGO') }}
+    <i class="fas fa-pencil-alt"></i>{{ gettext('Update logo') }}
   </button>
   {% include 'logo_upload_flashed.html' %}
 </form>
