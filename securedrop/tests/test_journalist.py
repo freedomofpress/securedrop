@@ -1007,6 +1007,28 @@ def test_admin_add_user_yubikey_valid_length(journalist_app, test_admin):
     assert 'Enable YubiKey (OATH-HOTP)' in resp.data.decode('utf-8')
 
 
+def test_admin_add_user_yubikey_correct_length_with_whitespace(
+        journalist_app,
+        test_admin):
+    otp = '12 34 56 78 90 12 34 56 78 90 12 34 56 78 90 12 34 56 78 90'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username='dellsberg',
+                                  password=VALID_PASSWORD,
+                                  password_again=VALID_PASSWORD,
+                                  is_admin=None,
+                                  is_hotp=True,
+                                  otp_secret=otp),
+                        follow_redirects=True)
+
+    # Should redirect to the token verification page
+    assert 'Enable YubiKey (OATH-HOTP)' in resp.data.decode('utf-8')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1043,22 +1065,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_add_user_yubikey_correct_length_with_whitespace(self):
-        self._login_admin()
-
-        otp = '12 34 56 78 90 12 34 56 78 90 12 34 56 78 90 12 34 56 78 90'
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username='dellsberg',
-                                          password=VALID_PASSWORD,
-                                          password_again=VALID_PASSWORD,
-                                          is_admin=None,
-                                          is_hotp=True,
-                                          otp_secret=otp),
-                                follow_redirects=True)
-
-        # Should redirect to the token verification page
-        self.assertIn('Enable YubiKey (OATH-HOTP)', resp.data)
 
     def test_admin_sets_user_to_admin(self):
         self._login_admin()
