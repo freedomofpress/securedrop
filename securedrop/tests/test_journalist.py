@@ -924,6 +924,24 @@ def test_http_get_on_admin_add_user_page(journalist_app, test_admin):
         assert 'ADD USER' in resp.data.decode('utf-8')
 
 
+def test_admin_add_user(journalist_app, test_admin):
+    username = 'dellsberg'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post('/admin/add',
+                            data=dict(username=username,
+                                      password=VALID_PASSWORD,
+                                      is_admin=None))
+
+            new_user = Journalist.query.filter_by(username=username).one()
+            ins.assert_redirects(resp, url_for('admin.new_user_two_factor',
+                                               uid=new_user.id))
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -960,18 +978,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_add_user(self):
-        self._login_admin()
-        max_journalist_pk = max([user.id for user in Journalist.query.all()])
-
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username='dellsberg',
-                                          password=VALID_PASSWORD,
-                                          is_admin=None))
-
-        self.assertRedirects(resp, url_for('admin.new_user_two_factor',
-                                           uid=max_journalist_pk+1))
 
     def test_admin_add_user_without_username(self):
         self._login_admin()
