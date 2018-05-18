@@ -303,6 +303,9 @@ with sensitive documents`_.
 Removing Metadata
 ~~~~~~~~~~~~~~~~~
 
+.. tip:: For detailed information about removing metadata from documents, check out
+         this in-depth `guide to removing metadata`_.
+
 Tails also comes with the `Metadata Anonymisation Toolkit`_ (MAT) that
 is used to help strip metadata from a variety of types of files,
 including png, jpg, OpenOffice/LibreOffice documents, Microsoft Office
@@ -323,6 +326,8 @@ When you no longer need documents, you can right-click on them and
 choose **Wipe** to delete them.
 
 |Wiping documents|
+
+.. _`guide to removing metadata`: https://freedom.press/training/everything-you-wanted-know-about-media-metadata-were-afraid-ask/
 
 Risks From Malware
 ~~~~~~~~~~~~~~~~~~
