@@ -955,6 +955,23 @@ def test_admin_add_user_without_username(journalist_app, test_admin):
     assert 'This field is required.' in resp.data.decode('utf-8')
 
 
+def test_admin_add_user_too_short_username(journalist_app, test_admin):
+    username = 'a' * (Journalist.MIN_USERNAME_LEN - 1)
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=username,
+                                  password='pentagonpapers',
+                                  password_again='pentagonpapers',
+                                  is_admin=None))
+        assert ('Field must be at least {} characters long'.format(
+                      Journalist.MIN_USERNAME_LEN) in
+                resp.data.decode('utf-8'))
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -991,18 +1008,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_add_user_too_short_username(self):
-        self._login_admin()
-        username = 'a' * (Journalist.MIN_USERNAME_LEN - 1)
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username=username,
-                                          password='pentagonpapers',
-                                          password_again='pentagonpapers',
-                                          is_admin=None))
-        self.assertIn('Field must be at least {} characters long'.format(
-                          Journalist.MIN_USERNAME_LEN),
-                      resp.data)
 
     def test_admin_add_user_yubikey_odd_length(self):
         self._login_admin()
