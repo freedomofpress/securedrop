@@ -880,6 +880,17 @@ def test_user_resets_totp(journalist_app, test_journo):
     assert new_secret != old_secret
 
 
+def test_admin_resets_hotp_with_missing_otp_secret_key(journalist_app,
+                                                       test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.post(url_for('admin.reset_two_factor_hotp'),
+                        data=dict(uid=test_admin['id']))
+
+    assert 'Change Secret' in resp.data.decode('utf-8')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -916,13 +927,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_resets_hotp_with_missing_otp_secret_key(self):
-        self._login_admin()
-        resp = self.client.post(url_for('admin.reset_two_factor_hotp'),
-                                data=dict(uid=self.user.id))
-
-        self.assertIn('Change Secret', resp.data)
 
     def test_admin_new_user_2fa_redirect(self):
         self._login_admin()
