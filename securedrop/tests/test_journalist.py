@@ -902,6 +902,19 @@ def test_admin_new_user_2fa_redirect(journalist_app, test_admin, test_journo):
             ins.assert_redirects(resp, url_for('admin.index'))
 
 
+def test_http_get_on_admin_new_user_two_factor_page(
+        journalist_app,
+        test_admin,
+        test_journo):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.get(
+                url_for('admin.new_user_two_factor', uid=test_journo['id']))
+    # any GET req should take a user to the admin.new_user_two_factor page
+    assert 'FreeOTP' in resp.data.decode('utf-8')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -938,13 +951,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_http_get_on_admin_new_user_two_factor_page(self):
-        self._login_admin()
-        resp = self.client.get(url_for('admin.new_user_two_factor',
-                                       uid=self.user.id))
-        # any GET req should take a user to the admin.new_user_two_factor page
-        self.assertIn('FreeOTP', resp.data)
 
     def test_http_get_on_admin_add_user_page(self):
         self._login_admin()
