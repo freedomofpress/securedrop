@@ -891,6 +891,17 @@ def test_admin_resets_hotp_with_missing_otp_secret_key(journalist_app,
     assert 'Change Secret' in resp.data.decode('utf-8')
 
 
+def test_admin_new_user_2fa_redirect(journalist_app, test_admin, test_journo):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(
+                url_for('admin.new_user_two_factor', uid=test_journo['id']),
+                data=dict(token=TOTP(test_journo['otp_secret']).now()))
+            ins.assert_redirects(resp, url_for('admin.index'))
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -927,13 +938,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_new_user_2fa_redirect(self):
-        self._login_admin()
-        resp = self.client.post(
-            url_for('admin.new_user_two_factor', uid=self.user.id),
-            data=dict(token='mocked'))
-        self.assertRedirects(resp, url_for('admin.index'))
 
     def test_http_get_on_admin_new_user_two_factor_page(self):
         self._login_admin()
