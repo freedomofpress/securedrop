@@ -1029,6 +1029,31 @@ def test_admin_add_user_yubikey_correct_length_with_whitespace(
     assert 'Enable YubiKey (OATH-HOTP)' in resp.data.decode('utf-8')
 
 
+def test_admin_sets_user_to_admin(journalist_app, test_admin):
+    new_user = 'admin-set-user-to-admin-test'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=new_user,
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+        assert resp.status_code in (200, 302)
+
+        journo = Journalist.query.filter_by(username=new_user).one()
+        # precondition check
+        assert journo.is_admin is False
+
+        resp = app.post(url_for('admin.edit_user', user_id=journo.id),
+                        data=dict(is_admin=True))
+        assert resp.status_code in (200, 302)
+
+        journo = Journalist.query.filter_by(username=new_user).one()
+        assert journo.is_admin is True
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1065,25 +1090,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_sets_user_to_admin(self):
-        self._login_admin()
-        new_user = 'admin-set-user-to-admin-test'
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username=new_user,
-                                          password=VALID_PASSWORD,
-                                          is_admin=None))
-        assert resp.status_code in (200, 302)
-        journo = Journalist.query.filter(Journalist.username == new_user).one()
-        assert not journo.is_admin
-
-        resp = self.client.post(url_for('admin.edit_user', user_id=journo.id),
-                                data=dict(is_admin=True))
-        assert resp.status_code in (200, 302), resp.data.decode('utf-8')
-
-        # there are better ways to do this, but flake8 complains
-        journo = Journalist.query.filter(Journalist.username == new_user).one()
-        assert journo.is_admin is True
 
     def test_admin_renames_user(self):
         self._login_admin()
