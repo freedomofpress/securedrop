@@ -915,6 +915,15 @@ def test_http_get_on_admin_new_user_two_factor_page(
     assert 'FreeOTP' in resp.data.decode('utf-8')
 
 
+def test_http_get_on_admin_add_user_page(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.get(url_for('admin.add_user'))
+        # any GET req should take a user to the admin_add_user page
+        assert 'ADD USER' in resp.data.decode('utf-8')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -951,12 +960,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_http_get_on_admin_add_user_page(self):
-        self._login_admin()
-        resp = self.client.get(url_for('admin.add_user'))
-        # any GET req should take a user to the admin_add_user page
-        self.assertIn('ADD USER', resp.data)
 
     def test_admin_add_user(self):
         self._login_admin()
