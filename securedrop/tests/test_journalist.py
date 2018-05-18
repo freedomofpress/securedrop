@@ -972,6 +972,21 @@ def test_admin_add_user_too_short_username(journalist_app, test_admin):
                 resp.data.decode('utf-8'))
 
 
+def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username='dellsberg',
+                                  password=VALID_PASSWORD,
+                                  password_again=VALID_PASSWORD,
+                                  is_admin=None,
+                                  is_hotp=True,
+                                  otp_secret='123'))
+        assert 'HOTP secrets are 40 characters' in resp.data.decode('utf-8')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1008,17 +1023,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_add_user_yubikey_odd_length(self):
-        self._login_admin()
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username='dellsberg',
-                                          password=VALID_PASSWORD,
-                                          password_again=VALID_PASSWORD,
-                                          is_admin=None,
-                                          is_hotp=True,
-                                          otp_secret='123'))
-        self.assertIn('HOTP secrets are 40 characters', resp.data)
 
     def test_admin_add_user_yubikey_valid_length(self):
         self._login_admin()
