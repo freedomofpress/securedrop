@@ -5,6 +5,7 @@ import io
 from tempfile import _TemporaryFileWrapper
 
 from gnupg._util import _STREAMLIKE_TYPES
+from cryptography.exceptions import AlreadyFinalized
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers.algorithms import AES
 from cryptography.hazmat.primitives.ciphers.modes import CTR
@@ -70,6 +71,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         """
         self.cipher = Cipher(AES(self.key), CTR(self.iv), default_backend())
         self.encryptor = self.cipher.encryptor()
+        self.decryptor = self.cipher.decryptor()
 
     def write(self, data):
         """Write `data` to the secure temporary file. This method may be
@@ -110,16 +112,18 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
             self.seek(0, 0)
             self.last_action = 'read'
 
-        decryptor = self.cipher.decryptor()
-
         if count:
-            return (
-                decryptor.update(self.file.read(count)) + decryptor.finalize()
-            )
+            return self.decryptor.update(self.file.read(count))
         else:
-            return (
-                decryptor.update(self.file.read()) + decryptor.finalize()
-            )
+            return self.decryptor.update(self.file.read())
+
+    def close(self):
+        try:
+            self.decryptor.finalize()
+        except AlreadyFinalized:
+            pass
+
+        super(SecureTemporaryFile, self).close()
 
 
 # python-gnupg will not recognize our SecureTemporaryFile as a stream-like type
