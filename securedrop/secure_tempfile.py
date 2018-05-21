@@ -118,11 +118,17 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
             return self.decryptor.update(self.file.read())
 
     def close(self):
+        """The __del__ method in tempfile._TemporaryFileWrapper (which
+        SecureTemporaryFile class inherits from) calls close() when the
+        temporary file is deleted.
+        """
         try:
             self.decryptor.finalize()
         except AlreadyFinalized:
             pass
 
+        # Since tempfile._TemporaryFileWrapper.close() does other cleanup,
+        # (i.e. deleting the temp file on disk), we need to call it also.
         super(SecureTemporaryFile, self).close()
 
 
