@@ -8,34 +8,13 @@
     molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"
     molecule_scenario_directory: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
+    image_hash: e9f1683b1fe756751e3ec6481860414988eceaa25663e2e98dd5223e6c3b2856
   tasks:
-    - name: Get hash of our molecule folder, plus dockerfile
-      stat:
-        path: "./{{ item }}"
-        get_md5: "no"
-        checksum_algorithm: sha256
-      register: file_hashes
-      with_items:
-        - Dockerfile
-
-    - name: Get a unique concatenated hash for docker tagging
-      set_fact:
-        docker_tag: "{{ docker_tag|default('') + item[0:8] }}"
-      with_items: "{{ file_hashes.results| map(attribute='stat.checksum') | list }}"
-
-    - name: Create builder image
-      docker_image:
-        name: "sd.local/trusty-sd-builder:{{ docker_tag }}"
-        path: .
-        buildargs:
-          IMAGE: ubuntu@sha256:084989eb923bd86dbf7e706d464cf3587274a826b484f75b69468c19f8ae354c
-          NAME: trusty-sd-builder-app
-
     - name: Create builders
       docker_container:
         name: "{{ item.name }}"
         hostname: "{{ item.name }}"
-        image: "sd.local/trusty-sd-builder:{{ docker_tag }}"
+        image: "quay.io/freedomofpress/sd-docker-builder@sha256:{{image_hash}}"
         state: started
         command: "tail -f /dev/null"
         privileged: "{{ item.privileged | default(omit) }}"
