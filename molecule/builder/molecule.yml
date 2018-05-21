@@ -28,6 +28,9 @@ platforms:
   - name: trusty-sd-keyring
     groups:
       - builders
+  - name: trusty-sd-sec-update
+    groups:
+      - builders
   - name: trusty-sd-dpkg-verification
     groups:
       - testers

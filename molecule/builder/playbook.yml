@@ -4,6 +4,11 @@
   # Build as fast as possible with each host going individually
   strategy: free
   become: yes
+  tasks:
+    - name: Update apt-cache for our security checker
+      apt:
+        update_cache: yes
+      when: "ansible_host == 'trusty-sd-sec-update'"
   roles:
     - role: build-securedrop-app-code-deb-pkg
       tags: "app-deb"
