@@ -94,8 +94,8 @@
 
 # Permit direct SSH access.
 # Allowed for staging and optionally for production (disables ssh over tor)
-{%- if not enable_ssh_over_tor -%}
-  {% for interface in ansible_interfaces -%}
+{% if not enable_ssh_over_tor %}
+  {%- for interface in ansible_interfaces -%}
     {%- if  hostvars[inventory_hostname]['ansible_'+interface].ipv4 -%}
         {%- set int_details = hostvars[inventory_hostname]['ansible_'+interface].ipv4 -%}
         {%- set net_string = '/'.join([int_details.network,int_details.netmask]) -%}
@@ -107,8 +107,8 @@
 -A OUTPUT -o {{ ssh_int }} -p tcp -m owner --uid-owner root --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
        {%- endif %}
     {%- endif %}
-  {% endfor %}
-{%- endif %}
+  {%- endfor %}
+{% endif %}
 
 # Allow generic loopback connections
 -A INPUT -i lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
