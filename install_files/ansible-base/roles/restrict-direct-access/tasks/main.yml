@@ -6,3 +6,6 @@
 - include: ssh.yml
 
 - include: iptables.yml
+  tags:
+    - iptables
+    - permissions
