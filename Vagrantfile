@@ -44,16 +44,12 @@ Vagrant.configure("2") do |config|
     end
     staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
+      ansible.inventory_path = "install_files/ansible-base/inventory-staging"
       ansible.verbose = 'v'
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all,localhost'
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
-      ansible.groups = {
-        'securedrop_application_server' => %w(app-staging),
-        'securedrop_monitor_server' => %w(mon-staging),
-        'staging:children' => %w(securedrop_application_server securedrop_monitor_server),
-      }
     end
   end
 
