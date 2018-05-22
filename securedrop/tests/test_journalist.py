@@ -682,6 +682,378 @@ def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
             ins.assert_redirects(resp, '/admin/2fa?uid={}'.format(journo.id))
 
 
+def test_admin_resets_user_hotp_format_odd(journalist_app,
+                                           test_admin,
+                                           test_journo):
+    old_secret = test_journo['otp_secret']
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.reset_two_factor_hotp'),
+                     data=dict(uid=test_journo['id'], otp_secret='Z'))
+
+            ins.assert_message_flashed(
+                "Invalid secret format: "
+                "odd-length secret. Did you mistype the secret?", "error")
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert old_secret == new_secret
+
+
+def test_admin_resets_user_hotp_error(mocker,
+                                      journalist_app,
+                                      test_admin,
+                                      test_journo):
+
+    bad_secret = '1234'
+    error_message = 'SOMETHING WRONG!'
+    mocked_error_logger = mocker.patch('journalist.app.logger.error')
+    old_secret = test_journo['otp_secret']
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        mocker.patch('models.Journalist.set_hotp_secret',
+                     side_effect=TypeError(error_message))
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.reset_two_factor_hotp'),
+                     data=dict(uid=test_journo['id'], otp_secret=bad_secret))
+            ins.assert_message_flashed("An unexpected error occurred! "
+                                       "Please inform your administrator.",
+                                       "error")
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert new_secret == old_secret
+
+    mocked_error_logger.assert_called_once_with(
+        "set_hotp_secret '{}' (id {}) failed: {}".format(
+            bad_secret, test_journo['id'], error_message))
+
+
+def test_user_resets_hotp(journalist_app, test_journo):
+    old_secret = test_journo['otp_secret']
+    new_secret = 123456
+
+    # Precondition
+    assert new_secret != old_secret
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('account.reset_two_factor_hotp'),
+                            data=dict(otp_secret=new_secret))
+            # should redirect to verification page
+            ins.assert_redirects(resp, url_for('account.new_two_factor'))
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert old_secret != new_secret
+
+
+def test_user_resets_user_hotp_format_odd(journalist_app, test_journo):
+    old_secret = test_journo['otp_secret']
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('account.reset_two_factor_hotp'),
+                     data=dict(otp_secret='123'))
+            ins.assert_message_flashed(
+                "Invalid secret format: "
+                "odd-length secret. Did you mistype the secret?", "error")
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert old_secret == new_secret
+
+
+def test_user_resets_user_hotp_format_non_hexa(journalist_app, test_journo):
+    old_secret = test_journo['otp_secret']
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('account.reset_two_factor_hotp'),
+                     data=dict(otp_secret='ZZ'))
+            ins.assert_message_flashed(
+                "Invalid secret format: "
+                "please only submit letters A-F and numbers 0-9.", "error")
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert old_secret == new_secret
+
+
+def test_user_resets_user_hotp_error(mocker,
+                                     journalist_app,
+                                     test_journo):
+    bad_secret = '1234'
+    old_secret = test_journo['otp_secret']
+    error_message = 'SOMETHING WRONG!'
+    mocked_error_logger = mocker.patch('journalist.app.logger.error')
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        mocker.patch('models.Journalist.set_hotp_secret',
+                     side_effect=TypeError(error_message))
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('account.reset_two_factor_hotp'),
+                     data=dict(otp_secret=bad_secret))
+            ins.assert_message_flashed(
+                "An unexpected error occurred! Please inform your "
+                "administrator.", "error")
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert old_secret == new_secret
+    mocked_error_logger.assert_called_once_with(
+        "set_hotp_secret '{}' (id {}) failed: {}".format(
+            bad_secret, test_journo['id'], error_message))
+
+
+def test_admin_resets_user_totp(journalist_app, test_admin, test_journo):
+    old_secret = test_journo['otp_secret']
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(
+                url_for('admin.reset_two_factor_totp'),
+                data=dict(uid=test_journo['id']))
+            ins.assert_redirects(
+                resp,
+                url_for('admin.new_user_two_factor', uid=test_journo['id']))
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert new_secret != old_secret
+
+
+def test_user_resets_totp(journalist_app, test_journo):
+    old_secret = test_journo['otp_secret']
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('account.reset_two_factor_totp'))
+            # should redirect to verification page
+            ins.assert_redirects(resp, url_for('account.new_two_factor'))
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo['id'])
+    new_secret = user.otp_secret
+
+    assert new_secret != old_secret
+
+
+def test_admin_resets_hotp_with_missing_otp_secret_key(journalist_app,
+                                                       test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.post(url_for('admin.reset_two_factor_hotp'),
+                        data=dict(uid=test_admin['id']))
+
+    assert 'Change Secret' in resp.data.decode('utf-8')
+
+
+def test_admin_new_user_2fa_redirect(journalist_app, test_admin, test_journo):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(
+                url_for('admin.new_user_two_factor', uid=test_journo['id']),
+                data=dict(token=TOTP(test_journo['otp_secret']).now()))
+            ins.assert_redirects(resp, url_for('admin.index'))
+
+
+def test_http_get_on_admin_new_user_two_factor_page(
+        journalist_app,
+        test_admin,
+        test_journo):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.get(
+                url_for('admin.new_user_two_factor', uid=test_journo['id']))
+    # any GET req should take a user to the admin.new_user_two_factor page
+    assert 'FreeOTP' in resp.data.decode('utf-8')
+
+
+def test_http_get_on_admin_add_user_page(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.get(url_for('admin.add_user'))
+        # any GET req should take a user to the admin_add_user page
+        assert 'ADD USER' in resp.data.decode('utf-8')
+
+
+def test_admin_add_user(journalist_app, test_admin):
+    username = 'dellsberg'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post('/admin/add',
+                            data=dict(username=username,
+                                      password=VALID_PASSWORD,
+                                      is_admin=None))
+
+            new_user = Journalist.query.filter_by(username=username).one()
+            ins.assert_redirects(resp, url_for('admin.new_user_two_factor',
+                                               uid=new_user.id))
+
+
+def test_admin_add_user_without_username(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username='',
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+
+    assert 'This field is required.' in resp.data.decode('utf-8')
+
+
+def test_admin_add_user_too_short_username(journalist_app, test_admin):
+    username = 'a' * (Journalist.MIN_USERNAME_LEN - 1)
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=username,
+                                  password='pentagonpapers',
+                                  password_again='pentagonpapers',
+                                  is_admin=None))
+        assert ('Field must be at least {} characters long'.format(
+                      Journalist.MIN_USERNAME_LEN) in
+                resp.data.decode('utf-8'))
+
+
+def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username='dellsberg',
+                                  password=VALID_PASSWORD,
+                                  password_again=VALID_PASSWORD,
+                                  is_admin=None,
+                                  is_hotp=True,
+                                  otp_secret='123'))
+        assert 'HOTP secrets are 40 characters' in resp.data.decode('utf-8')
+
+
+def test_admin_add_user_yubikey_valid_length(journalist_app, test_admin):
+    otp = '1234567890123456789012345678901234567890'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username='dellsberg',
+                                  password=VALID_PASSWORD,
+                                  password_again=VALID_PASSWORD,
+                                  is_admin=None,
+                                  is_hotp=True,
+                                  otp_secret=otp),
+                        follow_redirects=True)
+
+    # Should redirect to the token verification page
+    assert 'Enable YubiKey (OATH-HOTP)' in resp.data.decode('utf-8')
+
+
+def test_admin_add_user_yubikey_correct_length_with_whitespace(
+        journalist_app,
+        test_admin):
+    otp = '12 34 56 78 90 12 34 56 78 90 12 34 56 78 90 12 34 56 78 90'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username='dellsberg',
+                                  password=VALID_PASSWORD,
+                                  password_again=VALID_PASSWORD,
+                                  is_admin=None,
+                                  is_hotp=True,
+                                  otp_secret=otp),
+                        follow_redirects=True)
+
+    # Should redirect to the token verification page
+    assert 'Enable YubiKey (OATH-HOTP)' in resp.data.decode('utf-8')
+
+
+def test_admin_sets_user_to_admin(journalist_app, test_admin):
+    new_user = 'admin-set-user-to-admin-test'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=new_user,
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+        assert resp.status_code in (200, 302)
+
+        journo = Journalist.query.filter_by(username=new_user).one()
+        # precondition check
+        assert journo.is_admin is False
+
+        resp = app.post(url_for('admin.edit_user', user_id=journo.id),
+                        data=dict(is_admin=True))
+        assert resp.status_code in (200, 302)
+
+        journo = Journalist.query.filter_by(username=new_user).one()
+        assert journo.is_admin is True
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -718,253 +1090,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_resets_user_hotp_format_odd(self):
-        self._login_admin()
-        old_hotp = self.user.otp_secret
-
-        self.client.post(url_for('admin.reset_two_factor_hotp'),
-                         data=dict(uid=self.user.id, otp_secret='Z'))
-        new_hotp = self.user.otp_secret
-
-        self.assertEqual(old_hotp, new_hotp)
-        self.assertMessageFlashed(
-            "Invalid secret format: "
-            "odd-length secret. Did you mistype the secret?", "error")
-
-    @patch('models.Journalist.set_hotp_secret')
-    @patch('journalist.app.logger.error')
-    def test_admin_resets_user_hotp_error(self,
-                                          mocked_error_logger,
-                                          mock_set_hotp_secret):
-        self._login_admin()
-        old_hotp = self.user.otp_secret
-
-        error_message = 'SOMETHING WRONG!'
-        mock_set_hotp_secret.side_effect = TypeError(error_message)
-
-        otp_secret = '1234'
-        self.client.post(url_for('admin.reset_two_factor_hotp'),
-                         data=dict(uid=self.user.id, otp_secret=otp_secret))
-        new_hotp = self.user.otp_secret
-
-        self.assertEqual(old_hotp, new_hotp)
-        self.assertMessageFlashed("An unexpected error occurred! "
-                                  "Please inform your administrator.", "error")
-        mocked_error_logger.assert_called_once_with(
-            "set_hotp_secret '{}' (id {}) failed: {}".format(
-                otp_secret, self.user.id, error_message))
-
-    def test_user_resets_hotp(self):
-        self._login_user()
-        old_hotp = self.user.otp_secret
-
-        resp = self.client.post(url_for('account.reset_two_factor_hotp'),
-                                data=dict(otp_secret=123456))
-        new_hotp = self.user.otp_secret
-
-        # check that hotp is different
-        self.assertNotEqual(old_hotp, new_hotp)
-        # should redirect to verification page
-        self.assertRedirects(resp, url_for('account.new_two_factor'))
-
-    def test_user_resets_user_hotp_format_odd(self):
-        self._login_user()
-        old_hotp = self.user.otp_secret
-
-        self.client.post(url_for('account.reset_two_factor_hotp'),
-                         data=dict(uid=self.user.id, otp_secret='123'))
-        new_hotp = self.user.otp_secret
-
-        self.assertEqual(old_hotp, new_hotp)
-        self.assertMessageFlashed(
-            "Invalid secret format: "
-            "odd-length secret. Did you mistype the secret?", "error")
-
-    def test_user_resets_user_hotp_format_non_hexa(self):
-        self._login_user()
-        old_hotp = self.user.otp_secret
-
-        self.client.post(url_for('account.reset_two_factor_hotp'),
-                         data=dict(uid=self.user.id, otp_secret='ZZ'))
-        new_hotp = self.user.otp_secret
-
-        self.assertEqual(old_hotp, new_hotp)
-        self.assertMessageFlashed(
-            "Invalid secret format: "
-            "please only submit letters A-F and numbers 0-9.", "error")
-
-    @patch('models.Journalist.set_hotp_secret')
-    @patch('journalist.app.logger.error')
-    def test_user_resets_user_hotp_error(self,
-                                         mocked_error_logger,
-                                         mock_set_hotp_secret):
-        self._login_user()
-        old_hotp = self.user.otp_secret
-
-        error_message = 'SOMETHING WRONG!'
-        mock_set_hotp_secret.side_effect = TypeError(error_message)
-
-        otp_secret = '1234'
-        self.client.post(url_for('account.reset_two_factor_hotp'),
-                         data=dict(uid=self.user.id, otp_secret=otp_secret))
-        new_hotp = self.user.otp_secret
-
-        self.assertEqual(old_hotp, new_hotp)
-        self.assertMessageFlashed("An unexpected error occurred! "
-                                  "Please inform your administrator.", "error")
-        mocked_error_logger.assert_called_once_with(
-            "set_hotp_secret '{}' (id {}) failed: {}".format(
-                otp_secret, self.user.id, error_message))
-
-    def test_admin_resets_user_totp(self):
-        self._login_admin()
-        old_totp = self.user.totp
-
-        resp = self.client.post(
-            url_for('admin.reset_two_factor_totp'),
-            data=dict(uid=self.user.id))
-        new_totp = self.user.totp
-
-        self.assertNotEqual(old_totp.secret, new_totp.secret)
-
-        self.assertRedirects(
-            resp,
-            url_for('admin.new_user_two_factor', uid=self.user.id))
-
-    def test_user_resets_totp(self):
-        self._login_user()
-        old_totp = self.user.totp
-
-        resp = self.client.post(url_for('account.reset_two_factor_totp'))
-        new_totp = self.user.totp
-
-        # check that totp is different
-        self.assertNotEqual(old_totp.secret, new_totp.secret)
-
-        # should redirect to verification page
-        self.assertRedirects(resp, url_for('account.new_two_factor'))
-
-    def test_admin_resets_hotp_with_missing_otp_secret_key(self):
-        self._login_admin()
-        resp = self.client.post(url_for('admin.reset_two_factor_hotp'),
-                                data=dict(uid=self.user.id))
-
-        self.assertIn('Change Secret', resp.data)
-
-    def test_admin_new_user_2fa_redirect(self):
-        self._login_admin()
-        resp = self.client.post(
-            url_for('admin.new_user_two_factor', uid=self.user.id),
-            data=dict(token='mocked'))
-        self.assertRedirects(resp, url_for('admin.index'))
-
-    def test_http_get_on_admin_new_user_two_factor_page(self):
-        self._login_admin()
-        resp = self.client.get(url_for('admin.new_user_two_factor',
-                                       uid=self.user.id))
-        # any GET req should take a user to the admin.new_user_two_factor page
-        self.assertIn('FreeOTP', resp.data)
-
-    def test_http_get_on_admin_add_user_page(self):
-        self._login_admin()
-        resp = self.client.get(url_for('admin.add_user'))
-        # any GET req should take a user to the admin_add_user page
-        self.assertIn('ADD USER', resp.data)
-
-    def test_admin_add_user(self):
-        self._login_admin()
-        max_journalist_pk = max([user.id for user in Journalist.query.all()])
-
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username='dellsberg',
-                                          password=VALID_PASSWORD,
-                                          is_admin=None))
-
-        self.assertRedirects(resp, url_for('admin.new_user_two_factor',
-                                           uid=max_journalist_pk+1))
-
-    def test_admin_add_user_without_username(self):
-        self._login_admin()
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username='',
-                                          password=VALID_PASSWORD,
-                                          is_admin=None))
-        self.assertIn('This field is required.', resp.data)
-
-    def test_admin_add_user_too_short_username(self):
-        self._login_admin()
-        username = 'a' * (Journalist.MIN_USERNAME_LEN - 1)
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username=username,
-                                          password='pentagonpapers',
-                                          password_again='pentagonpapers',
-                                          is_admin=None))
-        self.assertIn('Field must be at least {} characters long'.format(
-                          Journalist.MIN_USERNAME_LEN),
-                      resp.data)
-
-    def test_admin_add_user_yubikey_odd_length(self):
-        self._login_admin()
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username='dellsberg',
-                                          password=VALID_PASSWORD,
-                                          password_again=VALID_PASSWORD,
-                                          is_admin=None,
-                                          is_hotp=True,
-                                          otp_secret='123'))
-        self.assertIn('HOTP secrets are 40 characters', resp.data)
-
-    def test_admin_add_user_yubikey_valid_length(self):
-        self._login_admin()
-
-        otp = '1234567890123456789012345678901234567890'
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username='dellsberg',
-                                          password=VALID_PASSWORD,
-                                          password_again=VALID_PASSWORD,
-                                          is_admin=None,
-                                          is_hotp=True,
-                                          otp_secret=otp),
-                                follow_redirects=True)
-
-        # Should redirect to the token verification page
-        self.assertIn('Enable YubiKey (OATH-HOTP)', resp.data)
-
-    def test_admin_add_user_yubikey_correct_length_with_whitespace(self):
-        self._login_admin()
-
-        otp = '12 34 56 78 90 12 34 56 78 90 12 34 56 78 90 12 34 56 78 90'
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username='dellsberg',
-                                          password=VALID_PASSWORD,
-                                          password_again=VALID_PASSWORD,
-                                          is_admin=None,
-                                          is_hotp=True,
-                                          otp_secret=otp),
-                                follow_redirects=True)
-
-        # Should redirect to the token verification page
-        self.assertIn('Enable YubiKey (OATH-HOTP)', resp.data)
-
-    def test_admin_sets_user_to_admin(self):
-        self._login_admin()
-        new_user = 'admin-set-user-to-admin-test'
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username=new_user,
-                                          password=VALID_PASSWORD,
-                                          is_admin=None))
-        assert resp.status_code in (200, 302)
-        journo = Journalist.query.filter(Journalist.username == new_user).one()
-        assert not journo.is_admin
-
-        resp = self.client.post(url_for('admin.edit_user', user_id=journo.id),
-                                data=dict(is_admin=True))
-        assert resp.status_code in (200, 302), resp.data.decode('utf-8')
-
-        # there are better ways to do this, but flake8 complains
-        journo = Journalist.query.filter(Journalist.username == new_user).one()
-        assert journo.is_admin is True
 
     def test_admin_renames_user(self):
         self._login_admin()
