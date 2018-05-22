@@ -10,3 +10,14 @@ ssh_listening_address: "{{ '127.0.0.1' if enable_ssh_over_tor else '0.0.0.0' }}"
 # in separate plays, so declaring it within the context of iptables role, so
 # the hostname files can be fetched back to the Admin Workstation.
 tor_hidden_services_parent_dir: /var/lib/tor/services
+
+
+# Platform specific command for inferring the local interface utilized
+# to route to a specific IP host
+admin_net_int:
+  Linux:
+    cmd: "/bin/ip r get "
+    rgx: "(?<=dev )\\w+"
+  Darwin:
+    cmd: "/sbin/route -n get "
+    rgx: "(?<=interface: )\\w+"
