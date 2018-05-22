@@ -6,13 +6,13 @@ must be using the Tails operating system. The admin must also use Tails to
 access the *Journalist Interface* and create new users.
 
 If you followed the :doc:`SecureDrop Installation instructions <install>`
-correctly, you should have already created a *Journalist Tails USB* and an
-*Admin Tails USB* and enabled the persistence volume on each. If you have not,
-or need to create another *Journalist Tails USB* for a second journalist,
-follow the steps below.
+correctly, you should have already created a *Journalist Workstation* Tails USB
+and an *Admin Workstation* Tails USB and enabled the persistence volume on
+each. If you have not, or need to create another Tails USB for a second
+journalist, follow the steps below.
 
-If you already know how to boot the *Admin Tails USB* or the *Journalist Tails
-USB* with persistence, you can skip down to the step 'download the repository'.
+If you already know how to boot the *Admin Workstation* or *Journalist Workstation*
+Tails USB with persistence, you can skip down to the step 'download the repository'.
 
 Note that for all of these instructions to work, you should have already
 installed the main SecureDrop application. It is also required that you use

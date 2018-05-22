@@ -50,8 +50,8 @@ Create a Journalist Tails USB
 Each journalist will need a Journalist Tails USB and a *Journalist
 Workstation*, which is the computer they use to boot their Tails USB.
 
-To create a Journalist Tails USB, just follow the same procedure you
-used to create a Tails USB with persistence for the Admin Tails USB,
+To create a *Journalist Interface* Tails USB, just follow the same procedure you
+used to create a Tails USB with persistence for the *Admin Workstation*,
 as documented in the :doc:`Tails Setup Guide <set_up_tails>`.
 
 Once you're done, boot into the new Journalist Tails USB on the
@@ -63,8 +63,8 @@ Set Up Automatic Access to the *Journalist Interface*
 -----------------------------------------------------
 
 Since the *Journalist Interface* is an ATHS, we need to set up the
-Journalist Tails USB to auto-configure Tor just as we did with the
-Admin Tails USB. The procedure is essentially identical, except the
+*Journalist Workstation* to auto-configure Tor just as we did with the
+*Admin Workstation*. The procedure is essentially identical, except the
 SSH configuration will be skipped, since only admins need
 to access the servers over SSH.
 

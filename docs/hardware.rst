@@ -126,7 +126,7 @@ USB Drive(s)
 *Admin Workstation*/*Journalist Workstation*.
 
 If only one person is maintaining the system, you may use the same Tails
-instance as both the Admin Tails and the Journalist Tails; otherwise, we
+instance as both the *Admin Workstation* and the *Journalist Workstation*; otherwise, we
 recommend buying 1 drive for each admin and each journalist.
 
 We also recommend buying two additional USBs to use as bootable backups of the
