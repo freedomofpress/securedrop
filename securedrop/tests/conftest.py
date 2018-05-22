@@ -93,7 +93,7 @@ def source_app(config):
     app = create_source_app(config)
     with app.app_context():
         db.create_all()
-    return app
+        yield app
 
 
 @pytest.fixture(scope='function')
@@ -101,7 +101,7 @@ def journalist_app(config):
     app = create_journalist_app(config)
     with app.app_context():
         db.create_all()
-    return app
+        yield app
 
 
 @pytest.fixture(scope='function')
