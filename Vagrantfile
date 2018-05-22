@@ -19,6 +19,8 @@ Vagrant.configure("2") do |config|
       config.ssh.host = find_ssh_aths("mon-ssh-aths")
       config.ssh.proxy_command = tor_ssh_proxy_command
       config.ssh.port = 22
+    elsif ARGV[0] == "ssh"
+      config.ssh.host = "10.0.1.3"
     end
     staging.vm.hostname = "mon-staging"
     staging.vm.box = "bento/ubuntu-14.04"
@@ -31,6 +33,8 @@ Vagrant.configure("2") do |config|
       config.ssh.host = find_ssh_aths("app-ssh-aths")
       config.ssh.proxy_command = tor_ssh_proxy_command
       config.ssh.port = 22
+    elsif ARGV[0] == "ssh"
+      config.ssh.host = "10.0.1.2"
     end
     staging.vm.hostname = "app-staging"
     staging.vm.box = "bento/ubuntu-14.04"
