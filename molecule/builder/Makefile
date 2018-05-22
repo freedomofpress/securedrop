@@ -2,10 +2,10 @@ DATE_STR := $(shell date +"%Y_%m_%e")
 
 .PHONY: build-container
 build-container: ## Build container utilized for debian pkg building
-	docker build -t quay.io/freedomofpress/sd-docker-builder:$(DATE_STR) .
+	docker build --no-cache -t quay.io/freedomofpress/sd-docker-builder:$(DATE_STR) .
 
 .PHONY: push-container
-build-deb-container: ## Push todays labeled build image to quay
+push-container: ## Push todays labeled build image to quay
 	docker push quay.io/freedomofpress/sd-docker-builder:$(DATE_STR)
 
 .PHONY: help
