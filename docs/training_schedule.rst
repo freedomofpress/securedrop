@@ -118,7 +118,7 @@ Participants: admins
    Tails, and when to use each
 -  Disaster recovery for 2FA and password manager, personnel GPG keys
 -  Updating Tails
--  Setting up SSH aliases for the admin Tails workstation
+-  Setting up SSH aliases for the *Admin Workstation*
 -  How to use screen or tmux to help prevent being locked out of the
    system
 -  Adding packages to Tails
