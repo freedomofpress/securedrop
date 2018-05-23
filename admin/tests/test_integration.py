@@ -37,6 +37,35 @@ smtp_relay_port: 587
 ssh_users: sd
 '''
 
+OUTPUT2 = '''app_hostname: app
+app_ip: 10.20.2.2
+daily_reboot_time: 5
+dns_server: 8.8.8.8
+enable_ssh_over_tor: true
+journalist_alert_email: test@gmail.com
+journalist_alert_gpg_public_key: sd_admin_test.pub
+journalist_gpg_fpr: 1F544B31C845D698EB31F2FF364F1162D32E7E58
+monitor_hostname: mon
+monitor_ip: 10.20.3.2
+ossec_alert_email: test@gmail.com
+ossec_alert_gpg_public_key: sd_admin_test.pub
+ossec_gpg_fpr: 1F544B31C845D698EB31F2FF364F1162D32E7E58
+sasl_domain: gmail.com
+sasl_password: testpassword
+sasl_username: testuser
+securedrop_app_gpg_fingerprint: 1F544B31C845D698EB31F2FF364F1162D32E7E58
+securedrop_app_gpg_public_key: sd_admin_test.pub
+securedrop_app_https_certificate_cert_src: ''
+securedrop_app_https_certificate_chain_src: ''
+securedrop_app_https_certificate_key_src: ''
+securedrop_app_https_on_source_interface: false
+securedrop_supported_locales:
+- de_DE
+- es_ES
+smtp_relay: smtp.gmail.com
+smtp_relay_port: 587
+ssh_users: sd
+'''
 
 def setup_function(function):
     global SD_DIR
@@ -112,6 +141,13 @@ def verify_admin_email_prompt(child):
 def verify_journalist_gpg_key_prompt(child):
     child.expect('Local filepath to journalist alerts GPG public key \(optional\)\:', timeout=2)  # noqa: E501
 
+
+def verify_journalist_fingerprint_prompt(child):
+    child.expect('Full fingerprint for the journalist alerts GPG public key \(optional\)\:', timeout=2)  # noqa: E501
+
+
+def verify_journalist_email_prompt(child):
+    child.expect('Email address for receiving journalist alerts \(optional\)\:', timeout=2)  # noqa: E501
 
 def verify_smtp_relay_prompt(child):
     child.expect('SMTP relay for sending OSSEC alerts\:', timeout=2)
@@ -197,3 +233,66 @@ def test_firstrun():
     with open(os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')) as fobj:    # noqa: E501
         data = fobj.read()
     assert data == OUTPUT1
+
+
+def test_journalist_alert():
+    output_file = os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')  # noqa: E501
+    # We want to start in a clean state
+    if os.path.exists(output_file):
+        os.remove(output_file)
+    cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                       'securedrop_admin/__init__.py')
+    child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
+    verify_username_prompt(child)
+    child.sendline('')
+    verify_reboot_prompt(child)
+    child.sendline('\b5')  # backspace and put 5
+    verify_ipv4_appserver_prompt(child)
+    child.sendline('')
+    verify_ipv4_monserver_prompt(child)
+    child.sendline('')
+    verify_hostname_app_prompt(child)
+    child.sendline('')
+    verify_hostname_mon_prompt(child)
+    child.sendline('')
+    verify_dns_prompt(child)
+    child.sendline('')
+    verify_app_gpg_key_prompt(child)
+    child.sendline('\b' * 14 + 'sd_admin_test.pub')
+    verify_https_prompt(child)
+    # Default answer is no
+    child.expect_exact('\x1b[0mn\x1b[0mo\x1b[74D\x1b[74C\x1b[?7h\x1b[0m\x1b[?12l\x1b[?25h')  # noqa: E501
+    child.sendline('')
+    verify_app_gpg_fingerprint_prompt(child)
+    child.sendline('1F544B31C845D698EB31F2FF364F1162D32E7E58')
+    verify_ossec_gpg_key_prompt(child)
+    child.sendline('\b' * 9 + 'sd_admin_test.pub')
+    verify_ossec_gpg_fingerprint_prompt(child)
+    child.sendline('1F544B31C845D698EB31F2FF364F1162D32E7E58')
+    verify_admin_email_prompt(child)
+    child.sendline('test@gmail.com')
+    # We will provide a key for this question
+    verify_journalist_gpg_key_prompt(child)
+    child.sendline('sd_admin_test.pub')
+    verify_journalist_fingerprint_prompt(child)
+    child.sendline('1F544B31C845D698EB31F2FF364F1162D32E7E58')
+    verify_journalist_email_prompt(child)
+    child.sendline('test@gmail.com')
+    verify_smtp_relay_prompt(child)
+    child.sendline('')
+    verify_smtp_port_prompt(child)
+    child.sendline('')
+    verify_sasl_domain_prompt(child)
+    child.sendline('')
+    verify_sasl_username_prompt(child)
+    child.sendline('testuser')
+    verify_sasl_password_prompt(child)
+    child.sendline('testpassword')
+    verify_ssh_over_lan_prompt(child)
+    child.sendline('')
+    verify_locales_prompt(child)
+    child.sendline('de_DE es_ES')
+    time.sleep(2)  # Give time for validation
+    with open(os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')) as fobj:    # noqa: E501
+        data = fobj.read()
+    assert data == OUTPUT2
