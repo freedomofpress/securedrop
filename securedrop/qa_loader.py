@@ -114,7 +114,7 @@ def fake_file(config, source_fid):
 
     filename = random_chars(20, nullable=False, chars=string.ascii_lowercase)
     filename = '1-' + filename + '-msg.gpg'
-    f_len = int(math.floor(random.expovariate(10) * 1024 * 1024 * 500))
+    f_len = int(math.floor(random.expovariate(100000) * 1024 * 1024 * 500))
     sub_path = current_app.storage.path(source_fid, filename)
     with open(sub_path, 'w') as f:
         f.write('x' * f_len)
@@ -191,7 +191,7 @@ def load_data(config, multiplier):
 
         for jid in range(1, JOURNALIST_COUNT * multiplier, 10):
             for sid in range(1, SOURCE_COUNT * multiplier, 10):
-                for _ in range(1, multiplier + 1):
+                for _ in range(1, 3):
                     new_reply(config, jid, sid)
 
         for jid in range(1, JOURNALIST_COUNT * multiplier, 10):
