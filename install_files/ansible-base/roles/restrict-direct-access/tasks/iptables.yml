@@ -15,15 +15,18 @@
   # The process should be re-designed so the iptables rules are not applied in
   # bulk. When that is done this issue will be avoided.
 
+- name: Gather localhost facts first
+  setup:
+  become: no
+  delegate_to: localhost
+  delegate_facts: True
+
 - name: Copy load_iptables if-up script.
   copy:
     src: load_iptables
     dest: /etc/network/if-up.d/load_iptables
     owner: root
     mode: "0744"
-  tags:
-    - iptables
-    - permissions
 
 - name: Create iptables directory.
   file:
@@ -32,35 +35,26 @@
     owner: root
     group: root
     dest: /etc/network/iptables
-  tags:
-    - iptables
-    - permissions
 
-- name: Determine admin network - first find admin net dev
+- name: Determine local platform specific routing info
   set_fact:
-    admin_dev: "{{ lookup('pipe','/bin/ip r get '+ssh_ip)|regex_search('(?<=dev )\\w+') }}"
-  when: not enable_ssh_over_tor
-  tags:
-    - iptables
-    - permissions
+    admin_route_map: "{{ admin_net_int[hostvars['localhost']['ansible_system']] }}"
 
-- name: Gather localhost facts first
-  setup:
-  become: no
-  delegate_to: localhost
-  delegate_facts: True
-  run_once: True
-
-- name: Determine admin network - next compute admin network cidr
+- name: Record admin network interface
   set_fact:
-    admin_net_cidr: "{{ '/'.join([hostvars['localhost']['ansible_'+admin_dev].ipv4.network,
-                        hostvars['localhost']['ansible_'+admin_dev].ipv4.netmask]
-                        )|ipaddr('cidr') }}"
+    admin_dev: "{{ lookup('pipe',admin_route_map.cmd+ssh_ip)|regex_search(admin_route_map.rgx) }}"
+
+# this is a weird work-around for an issue I found with Mac reporting the interface
+# wrapped in a list, rather than just a dict :shrug:
+- name: Hacky work-around for Mac/Linux interface structure divergence
+  set_fact:
+    admin_net_info: "{{ hostvars['localhost']['ansible_'+admin_dev].ipv4[0] | default(
+                        hostvars['localhost']['ansible_'+admin_dev].ipv4) }}"
+
+- name: Compute admin network CIDR
+  set_fact:
+    admin_net_cidr: "{{ '/'.join([admin_net_info.network, admin_net_info.netmask])|ipaddr('cidr') }}"
   delegate_to: localhost
-  when: not enable_ssh_over_tor
-  tags:
-    - iptables
-    - permissions
 
 - name: Copy IPv4 iptables rules.
   template:
@@ -69,9 +63,6 @@
     owner: root
     mode: "0644"
   notify: drop flag for reboot
-  tags:
-    - iptables
-    - permissions
 
 - name: Copy IPv6 iptables rules.
   copy:
@@ -79,6 +70,3 @@
     dest: /etc/network/iptables/rules_v6
     owner: root
     mode: "0644"
-  tags:
-    - iptables
-    - permissions

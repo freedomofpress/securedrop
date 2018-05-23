@@ -19,10 +19,13 @@ Vagrant.configure("2") do |config|
       config.ssh.host = find_ssh_aths("mon-ssh-aths")
       config.ssh.proxy_command = tor_ssh_proxy_command
       config.ssh.port = 22
+    elsif ARGV[0] == "ssh"
+      config.ssh.host = "10.0.1.3"
+      config.ssh.port = 22
     end
     staging.vm.hostname = "mon-staging"
     staging.vm.box = "bento/ubuntu-14.04"
-    staging.vm.network "private_network", ip: "10.0.1.3", virtualbox__intnet: internal_network_name
+    staging.vm.network "private_network", ip: "10.0.1.3"
     staging.vm.synced_folder './', '/vagrant', disabled: true
   end
 
@@ -31,10 +34,13 @@ Vagrant.configure("2") do |config|
       config.ssh.host = find_ssh_aths("app-ssh-aths")
       config.ssh.proxy_command = tor_ssh_proxy_command
       config.ssh.port = 22
+    elsif ARGV[0] == "ssh"
+      config.ssh.host = "10.0.1.2"
+      config.ssh.port = 22
     end
     staging.vm.hostname = "app-staging"
     staging.vm.box = "bento/ubuntu-14.04"
-    staging.vm.network "private_network", ip: "10.0.1.2", virtualbox__intnet: internal_network_name
+    staging.vm.network "private_network", ip: "10.0.1.2"
     staging.vm.synced_folder './', '/vagrant', disabled: true
     staging.vm.provider "virtualbox" do |v|
       v.memory = 1024
@@ -44,16 +50,12 @@ Vagrant.configure("2") do |config|
     end
     staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
+      ansible.inventory_path = "install_files/ansible-base/inventory-staging"
       ansible.verbose = 'v'
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all,localhost'
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
-      ansible.groups = {
-        'securedrop_application_server' => %w(app-staging),
-        'securedrop_monitor_server' => %w(mon-staging),
-        'staging:children' => %w(securedrop_application_server securedrop_monitor_server),
-      }
     end
   end
 
