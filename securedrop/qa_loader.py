@@ -11,6 +11,7 @@ from argparse import ArgumentParser
 from datetime import datetime
 from flask import current_app
 from os import path
+from sqlalchemy import text
 
 from crypto_util import DICEWARE_SAFE_CHARS
 from db import db
@@ -161,6 +162,12 @@ def new_abandoned_submission(config, source_id):
     db.session.add(submission)
 
 
+def delete_source(source_id):
+    '''For issue #1189'''
+    db.session.execute(text('DELETE FROM sources WHERE id = :source_id'),
+                       {'source_id':  source_id})
+
+
 def positive_int(s):
     i = int(s)
     if i < 1:
@@ -193,15 +200,20 @@ def load_data(config, multiplier):
             for sid in range(1, SOURCE_COUNT * multiplier, 10):
                 for _ in range(1, 3):
                     new_reply(config, jid, sid)
+        db.session.commit()
 
         for jid in range(1, JOURNALIST_COUNT * multiplier, 10):
             new_journalist_login_attempt(jid)
+        db.session.commit()
 
         for sid in range(SOURCE_COUNT * multiplier,
                          SOURCE_COUNT * multiplier + multiplier):
             new_abandoned_submission(config, sid)
+        db.session.commit()
 
-        # TODO add submissions without sources for #1189
+        for sid in range(3, SOURCE_COUNT * multiplier, 8):
+            delete_source(sid)
+        db.session.commit()
 
 
 def arg_parser():
