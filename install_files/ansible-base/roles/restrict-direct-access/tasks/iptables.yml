@@ -20,7 +20,6 @@
   become: no
   delegate_to: localhost
   delegate_facts: True
-  run_once: True
 
 - name: Copy load_iptables if-up script.
   copy:
@@ -44,15 +43,18 @@
 - name: Record admin network interface
   set_fact:
     admin_dev: "{{ lookup('pipe',admin_route_map.cmd+ssh_ip)|regex_search(admin_route_map.rgx) }}"
-  when: not enable_ssh_over_tor
+
+# this is a weird work-around for an issue I found with Mac reporting the interface
+# wrapped in a list, rather than just a dict :shrug:
+- name: Hacky work-around for Mac/Linux interface structure divergence
+  set_fact:
+    admin_net_info: "{{ hostvars['localhost']['ansible_'+admin_dev].ipv4[0] | default(
+                        hostvars['localhost']['ansible_'+admin_dev].ipv4) }}"
 
 - name: Compute admin network CIDR
   set_fact:
-    admin_net_cidr: "{{ '/'.join([hostvars['localhost']['ansible_'+admin_dev].ipv4.network,
-                        hostvars['localhost']['ansible_'+admin_dev].ipv4.netmask]
-                        )|ipaddr('cidr') }}"
+    admin_net_cidr: "{{ '/'.join([admin_net_info.network, admin_net_info.netmask])|ipaddr('cidr') }}"
   delegate_to: localhost
-  when: not enable_ssh_over_tor
 
 - name: Copy IPv4 iptables rules.
   template:
