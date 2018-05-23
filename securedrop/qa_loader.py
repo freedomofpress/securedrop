@@ -77,11 +77,12 @@ def new_journalist():
 def new_source():
     fid_len = random.randint(4, 32)
     designation_len = random.randint(4, 32)
-    source = Source(random_chars(fid_len, nullable=True,
+    source = Source(random_chars(fid_len, nullable=False,
                                  chars=string.ascii_lowercase),
                     random_chars(designation_len, nullable=False))
     source.flagged = bool_or_none()
     source.last_updated = random_datetime(nullable=True)
+    source.pending = False
 
     db.session.add(source)
 
