@@ -230,6 +230,7 @@ def arg_parser():
 
 def main():
     args = arg_parser().parse_args()
+    print('Loading data. This make take a while.')
     load_data(sdconfig, args.multiplier)
 
 
