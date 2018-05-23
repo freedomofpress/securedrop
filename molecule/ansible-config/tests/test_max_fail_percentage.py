@@ -28,8 +28,8 @@ def find_ansible_playbooks():
     for f in os.listdir(ANSIBLE_BASE):
         # Assume all YAML files in directory are playbooks.
         if f.endswith(".yml"):
-            # Ignore deprecated production vars file.
-            if f != "prod-specific.yml":
+            # Ignore files that are deprecated or require test exceptions
+            if f not in ["prod-specific.yml", "build-deb-pkgs.yml"]:
                 playbooks.append(os.path.join(ANSIBLE_BASE, f))
     # Sanity checking to make sure list of playbooks is not empty.
     assert len(playbooks) > 0

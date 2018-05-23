@@ -22,11 +22,12 @@
 
 - name: Find any jinja templates
   find:
-    paths: "{{ package_path }}"
+    # No longer seeing the `package_path` variable - seems like a bug
+    paths: "{{ role_path }}/../../../{{ package_name }}/"
     patterns: "*.j2"
     recurse: yes
-  delegate_to: localhost
   become: no
+  delegate_to: localhost
   register: jinja_files_found
 
 - name: Create any necessary parent directories for jinja files
