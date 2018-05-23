@@ -2,6 +2,7 @@ import os
 import time
 import pexpect
 import tempfile
+import subprocess
 
 SD_DIR = ''
 CURRENT_DIR = os.path.dirname(__file__)
@@ -102,16 +103,19 @@ def setup_function(function):
     global SD_DIR
     SD_DIR = tempfile.mkdtemp()
     ANSIBLE_BASE = '{0}/install_files/ansible-base'.format(SD_DIR)
-    os.system('mkdir -p {0}/group_vars/all'.format(ANSIBLE_BASE))
-    os.system('cp -r {0}/files/* {1}'.format(CURRENT_DIR, ANSIBLE_BASE))
+    cmd = 'mkdir -p {0}/group_vars/all'.format(ANSIBLE_BASE).split()
+    subprocess.check_call(cmd)
+    for name in ['sd_admin_test.pub', 'ca.crt', 'sd.crt', 'key.asc']:
+        subprocess.check_call('cp -r {0}/files/{1} {2}'.format(CURRENT_DIR,
+                              name, ANSIBLE_BASE).split())
     for name in ['de_DE', 'es_ES', 'fr_FR', 'pt_BR']:
         dircmd = 'mkdir -p {0}/securedrop/translations/{1}'.format(
             SD_DIR, name)
-        os.system(dircmd)
+        subprocess.check_call(dircmd.split())
 
 
 def teardown_function(function):
-    os.system('rm -rf {0}'.format(SD_DIR))
+    subprocess.check_call('rm -rf {0}'.format(SD_DIR).split())
 
 
 def verify_username_prompt(child):
