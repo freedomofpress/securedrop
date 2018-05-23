@@ -114,7 +114,9 @@ def fake_file(config, source_fid):
         os.mkdir(source_dir)
 
     filename = random_chars(20, nullable=False, chars=string.ascii_lowercase)
-    filename = '1-' + filename + '-msg.gpg'
+    num = random.randint(0, 100)
+    msg_type = 'msg' if random_bool() else 'doc.gz'
+    filename = '{}-{}-{}.gpg'.format(num, filename, msg_type)
     f_len = int(math.floor(random.expovariate(100000) * 1024 * 1024 * 500))
     sub_path = current_app.storage.path(source_fid, filename)
     with open(sub_path, 'w') as f:
