@@ -137,6 +137,11 @@ def verify_ipv4_monserver_prompt(child):
 
 def verify_hostname_app_prompt(child):
     child.expect('Hostname for Application Server', timeout=2)
+    # For any default input, the text comes in the following format
+    # child.expect takes a regular expression and child.expect_exact
+    # does a string matching. That is why all such strings are matched
+    # using child.expect_exact call
+    # https://pexpect.readthedocs.io/en/stable/api/pexpect.html#pexpect.spawn.expect_exact
     child.expect_exact('\x1b[0ma\x1b[0mp\x1b[0mp\x1b[36D\x1b[36C\x1b[?7h\x1b[0m\x1b[?12l\x1b[?25h', timeout=2)  # noqa: E501
 
 
@@ -284,10 +289,6 @@ def test_firstrun():
 
 
 def test_journalist_alert():
-    output_file = os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')  # noqa: E501
-    # We want to start in a clean state
-    if os.path.exists(output_file):
-        os.remove(output_file)
     cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                        'securedrop_admin/__init__.py')
     child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
@@ -347,10 +348,6 @@ def test_journalist_alert():
 
 
 def test_enable_https():
-    output_file = os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')  # noqa: E501
-    # We want to start in a clean state
-    if os.path.exists(output_file):
-        os.remove(output_file)
     cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                        'securedrop_admin/__init__.py')
     child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
