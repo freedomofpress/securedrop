@@ -14,9 +14,12 @@ function pipcompile () {
     pip-compile --no-header --generate-hashes $@
 }
 
+pipcompile --allow-unsafe --output-file ${SD_REQ_DIR}/pip-tooling.txt \
+    ${SD_REQ_DIR}/pip-tooling.in
+
 pipcompile --output-file ${SD_REQ_DIR}/develop-requirements.txt \
     admin/requirements-ansible.in \
-    securedrop/requirements/develop-requirements.in
+    ${SD_REQ_DIR}/develop-requirements.in
 
 pipcompile --output-file ${SD_REQ_DIR}/test-requirements.txt \
     ${SD_REQ_DIR}/test-requirements.in

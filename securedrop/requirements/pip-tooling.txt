@@ -1,0 +1,8 @@
+wheel==0.31.1 \
+    --hash=sha256:0a2e54558a0628f2145d2fc822137e322412115173e8a2ddbe1c9024338ae83c \
+    --hash=sha256:80044e51ec5bbf6c894ba0bc48d26a8c20a9ba629f4ca19ea26ecfcf87685f5f
+
+# The following packages are considered to be unsafe in a requirements file:
+pip==10.0.1 \
+    --hash=sha256:717cdffb2833be8409433a93746744b59505f42146e8d37de6c62b430e25d6d7 \
+    --hash=sha256:f2bd08e0cd1b06e10218feaf6fef299f473ba706582eb3bd9d52203fdbd7ee68
