@@ -1,4 +1,4 @@
-.. note:: SecureDrop maintains two versions of the documentation: `stable
+.. note:: SecureDrop maintains two versions of documentation: `stable
           <https://docs.securedrop.org/en/stable/development/getting_started.html>`_
           and `latest
           <https://docs.securedrop.org/en/latest/development/getting_started.html>`_.
@@ -6,4 +6,5 @@
           from our latest signed git tag. ``latest`` is built from the head of
           the ``develop`` git branch. In almost all cases involving development
           work, you'll want to make sure you have the ``latest`` version
-          selected by using the menu in the bottom left corner of Read the Docs.
+          selected by using the menu in the bottom left corner of the Read the
+          Docs site.

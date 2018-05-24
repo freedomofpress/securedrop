@@ -25,21 +25,20 @@ To get started editing the docs:
 
       pip install -r securedrop/requirements/develop-requirements.txt
 
-#. Build the docs and open the index page in your web browser:
+#. Build the docs for viewing in your web browser:
 
    .. code:: sh
 
       make docs
 
-You can then browse the documentation at http://127.0.0.1:8000/.
-As you make changes, the docs will automatically rebuild in the browser
+You can then browse the documentation at http://127.0.0.1:8000/. As you make
+changes, the documentation pages will automatically rebuild in the browser
 window, so you don't need to refresh the page manually.
 
-Testing documentation changes
+Testing Documentation Changes
 -----------------------------
 
-You can check the docs for formatting violations by running the linting
-option:
+You can check for formatting violations by running the linting option:
 
    .. code:: sh
 
@@ -59,7 +58,7 @@ checks will also still run.
 
 .. _updating_screenshots:
 
-Updating screenshots
+Updating Screenshots
 --------------------
 
 The user guides for SecureDrop contain screenshots of the web applications.
@@ -81,9 +80,8 @@ Integration with Read the Docs
 .. include:: ../includes/docs-branches.txt
 
 Our documentation is built and hosted by `Read the Docs`_ and is available at
-https://docs.securedrop.org. We use a
-`webhook`_ so the docs are rebuilt automatically when commits get pushed to the
-branch.
+https://docs.securedrop.org. We use a `webhook`_ to rebuild the documentation
+automatically when commits get pushed to the branch.
 
 .. _upstream Git repository: https://github.com/freedomofpress/securedrop
 .. _webhook: http://docs.readthedocs.org/en/latest/webhooks.html
@@ -116,7 +114,7 @@ lowercase for the name:
 
 Code Blocks
 ^^^^^^^^^^^
-    
+
 Ensure that example commands in codeblocks are easy to copy and paste.
 Do not prepend the ``$`` shell prompt indicator to example commands:
 
@@ -136,7 +134,7 @@ output text, use ``$`` before the typed commands:
 
 File Paths
 ^^^^^^^^^^
-     
+
 :ref:`Cloning<clone_the_rep>` the SecureDrop git repository creates a directory
 called ``securedrop``. This ``securedrop`` directory also contains a
 ``securedrop`` subdirectory for app code.
@@ -147,7 +145,7 @@ called ``securedrop``. This ``securedrop`` directory also contains a
      ├── securedrop
      │   │
      │  ...
-     │   ├── securedrop     
+     │   ├── securedrop
     ... ...
 
 To avoid confusion, paths to files anywhere inside the SecureDrop git repository
@@ -162,25 +160,25 @@ Usage and Style
 
 To avoid confusion, lists should include the so-called "Oxford comma":
 
-    You will need an email address, a public GPG key for that address, and the
-    fingerprint for that key.
+    "You will need an email address, a public GPG key for that address, and the
+    fingerprint for that key."
 
 Capitalize all section headings in title case:
 
-.. code::
+  .. code::
 
-   Before You Begin
-   ================
+     Before You Begin
+     ================
 
-   Read the Docs
-   -------------
+     Read the Docs
+     -------------
 
-not
+  not
 
-.. code::
+  .. code::
 
-   Before you begin
-   ================
+     Before you begin
+     ================
 
-   Read the docs
-   -------------
+     Read the docs
+     -------------
