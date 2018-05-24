@@ -3,7 +3,7 @@ import os
 import re
 
 
-testinfra_hosts = ['docker://trusty-sd-dpkg-verification']
+testinfra_hosts = ['docker://sd-builder-dpkg-verification']
 securedrop_test_vars = pytest.securedrop_test_vars
 
 

@@ -1,7 +1,7 @@
 import pytest
 
 
-testinfra_hosts = ['docker://trusty-sd-app']
+testinfra_hosts = ['docker://sd-builder-app']
 
 
 def test_pip_wheel_installed(Command):

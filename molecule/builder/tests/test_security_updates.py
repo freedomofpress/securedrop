@@ -1,4 +1,4 @@
-testinfra_hosts = ['docker://trusty-sd-sec-update']
+testinfra_hosts = ['docker://sd-builder-sec-update']
 
 
 def test_ensure_no_updates_avail(host):

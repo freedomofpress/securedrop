@@ -1,9 +1,9 @@
-# April 28th, 2018 ubuntu:trusty
-FROM ubuntu@sha256:b8855dc848e2622653ab557d1ce2f4c34218a9380cceaa51ced85c5f3c8eb201
+# ubuntu:xenial-20180417
+FROM ubuntu@sha256:1dfb94f13f5c181756b2ed7f174825029aca902c78d0490590b1aaa203abc052
 
 # additional meta-data makes it easier to clean up, find
 LABEL org="Freedom of the Press"
-LABEL image_name="trusty-sd-builder-app"
+LABEL image_name="sd-builder-app"
 
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         aptitude \
@@ -21,9 +21,13 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         python \
         python-dev \
         python-pip \
+        # ossec_urls.py
+        python-requests \
+        python-virtualenv \
         rsync \
         ruby \
         secure-delete \
+        sudo \
         sqlite \
         unzip \
         && apt-get clean \

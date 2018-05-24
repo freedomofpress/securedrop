@@ -8,46 +8,46 @@
     - name: Update apt-cache for our security checker
       apt:
         update_cache: yes
-      when: "ansible_host == 'trusty-sd-sec-update'"
+      when: "ansible_host == 'sd-builder-sec-update'"
   roles:
     - role: build-securedrop-app-code-deb-pkg
       tags: "app-deb"
-      when: "ansible_host == 'trusty-sd-app'"
+      when: "ansible_host == 'sd-builder-app'"
 
     - role: build-ossec-deb-pkg
       tags: "ossec-server"
       purpose: server
-      when: "ansible_host == 'trusty-sd-generic-ossec-server'"
+      when: "ansible_host == 'sd-builder-generic-ossec-server'"
 
     - role: build-ossec-deb-pkg
       tags: "ossec-agent"
       purpose: agent
-      when: "ansible_host == 'trusty-sd-generic-ossec-agent'"
+      when: "ansible_host == 'sd-builder-generic-ossec-agent'"
 
     - role: build-generic-pkg
       tags: "securedrop-ossec-server"
       package_name: "securedrop-ossec-server"
-      when: "ansible_host == 'trusty-sd-generic-ossec-server2' or ansible_host == 'localhost'"
+      when: "ansible_host == 'sd-builder-generic-ossec-server2' or ansible_host == 'localhost'"
 
     - role: build-generic-pkg
       tags: "securedrop-ossec-agent"
       package_name: "securedrop-ossec-agent"
-      when: "ansible_host == 'trusty-sd-generic-ossec-agent2' or ansible_host == 'localhost'"
+      when: "ansible_host == 'sd-builder-generic-ossec-agent2' or ansible_host == 'localhost'"
 
     - role: build-generic-pkg
       tags: "securedrop-keyring"
       package_name: "securedrop-keyring"
-      when: "ansible_host == 'trusty-sd-keyring' or ansible_host == 'localhost'"
+      when: "ansible_host == 'sd-builder-keyring' or ansible_host == 'localhost'"
 
     - role: build-generic-pkg
       tags: "securedrop-grsec"
       package_name: "securedrop-grsec"
-      when: "ansible_host == 'trusty-sd-grsec' or ansible_host == 'localhost'"
+      when: "ansible_host == 'sd-builder-grsec' or ansible_host == 'localhost'"
 
     - role: build-generic-pkg
       tags: "securedrop-config"
       package_name: "securedrop-config"
-      when: "ansible_host == 'trusty-sd-config' or ansible_host == 'localhost'"
+      when: "ansible_host == 'sd-builder-config' or ansible_host == 'localhost'"
   tags: rebuild
 
 # Typically we'd perform volume mounting here but to work around docker
