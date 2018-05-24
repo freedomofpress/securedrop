@@ -4,7 +4,7 @@ Flask-Assets
 Flask-Babel
 Flask-SQLAlchemy
 Flask-WTF
-Flask
+Flask<1.0.0
 gnupg
 Jinja2
 jsmin
