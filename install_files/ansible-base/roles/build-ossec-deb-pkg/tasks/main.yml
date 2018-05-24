@@ -52,9 +52,10 @@
         SHA1: {{ ossec_download.stat.checksum }}
 
       Try rerunning the playbook to download the files again.
-  when: not (ossec_download.stat.exists and
-             ossec_download.stat.md5 == "{{ ossec_md5_checksum }}" and
-             ossec_download.stat.checksum == "{{ ossec_sha1_checksum }}")
+  when:
+    - not ossec_download.stat.exists
+    - ossec_download.stat.md5 == ossec_md5_checksum
+    - ossec_download.stat.checksum == ossec_sha1_checksum
 
 - name: Install apt dependencies for building OSSEC packages.
   apt:
