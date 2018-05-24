@@ -11,7 +11,7 @@ SD_REQ_DIR=securedrop/requirements
 make -C admin update-pip-requirements
 
 function pipcompile () {
-    pip-compile --no-header --generate-hashes $@
+    pip-compile --no-header --generate-hashes "$@"
 }
 
 pipcompile --allow-unsafe --output-file ${SD_REQ_DIR}/pip-tooling.txt \

@@ -1,6 +1,3 @@
-import pytest
-
-
 testinfra_hosts = ['docker://sd-builder-app']
 
 SD_APP_VENV = "/tmp/sd-app-venv/"
