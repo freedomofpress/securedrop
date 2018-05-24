@@ -162,6 +162,8 @@ def new_abandoned_submission(config, source_id):
     submission = Submission(source, filename)
     submission.source_id = source_id
     db.session.add(submission)
+    db.session.commit()
+    delete_source(source_id)
 
 
 def delete_source(source_id):
@@ -211,11 +213,6 @@ def load_data(config, multiplier):
         for sid in range(SOURCE_COUNT * multiplier,
                          SOURCE_COUNT * multiplier + multiplier):
             new_abandoned_submission(config, sid)
-        db.session.commit()
-
-        for sid in range(3, SOURCE_COUNT * multiplier, 8):
-            delete_source(sid)
-        db.session.commit()
 
 
 def arg_parser():
