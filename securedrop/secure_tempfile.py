@@ -5,9 +5,11 @@ import io
 from tempfile import _TemporaryFileWrapper
 
 from gnupg._util import _STREAMLIKE_TYPES
-from Cryptodome.Cipher import AES
-from Cryptodome.Random import random
-from Cryptodome.Util import Counter
+from cryptography.exceptions import AlreadyFinalized
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers.algorithms import AES
+from cryptography.hazmat.primitives.ciphers.modes import CTR
+from cryptography.hazmat.primitives.ciphers import Cipher
 
 
 class SecureTemporaryFile(_TemporaryFileWrapper, object):
@@ -60,17 +62,16 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         https://github.com/freedomofpress/securedrop/pull/477#issuecomment-168445450).
         """
         self.key = os.urandom(self.AES_key_size / 8)
-        self.iv = random.getrandbits(self.AES_block_size)
+        self.iv = os.urandom(self.AES_block_size / 8)
         self.initialize_cipher()
 
     def initialize_cipher(self):
         """Creates the cipher-related objects needed for AES-CTR
         encryption and decryption.
         """
-        self.ctr_e = Counter.new(self.AES_block_size, initial_value=self.iv)
-        self.ctr_d = Counter.new(self.AES_block_size, initial_value=self.iv)
-        self.encryptor = AES.new(self.key, AES.MODE_CTR, counter=self.ctr_e)
-        self.decryptor = AES.new(self.key, AES.MODE_CTR, counter=self.ctr_d)
+        self.cipher = Cipher(AES(self.key), CTR(self.iv), default_backend())
+        self.encryptor = self.cipher.encryptor()
+        self.decryptor = self.cipher.decryptor()
 
     def write(self, data):
         """Write `data` to the secure temporary file. This method may be
@@ -85,7 +86,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         if isinstance(data, unicode):  # noqa
             data = data.encode('utf-8')
 
-        self.file.write(self.encryptor.encrypt(data))
+        self.file.write(self.encryptor.update(data))
 
     def read(self, count=None):
         """Read `data` from the secure temporary file. This method may
@@ -112,9 +113,23 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
             self.last_action = 'read'
 
         if count:
-            return self.decryptor.decrypt(self.file.read(count))
+            return self.decryptor.update(self.file.read(count))
         else:
-            return self.decryptor.decrypt(self.file.read())
+            return self.decryptor.update(self.file.read())
+
+    def close(self):
+        """The __del__ method in tempfile._TemporaryFileWrapper (which
+        SecureTemporaryFile class inherits from) calls close() when the
+        temporary file is deleted.
+        """
+        try:
+            self.decryptor.finalize()
+        except AlreadyFinalized:
+            pass
+
+        # Since tempfile._TemporaryFileWrapper.close() does other cleanup,
+        # (i.e. deleting the temp file on disk), we need to call it also.
+        super(SecureTemporaryFile, self).close()
 
 
 # python-gnupg will not recognize our SecureTemporaryFile as a stream-like type

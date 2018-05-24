@@ -1,3 +1,4 @@
+cryptography==2.0.3
 cssmin
 Flask-Assets
 Flask-Babel
@@ -8,7 +9,6 @@ gnupg
 Jinja2
 jsmin
 psutil
-pycryptodomex
 pyotp
 qrcode
 redis
