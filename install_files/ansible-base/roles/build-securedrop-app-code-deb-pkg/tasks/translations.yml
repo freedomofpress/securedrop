@@ -2,11 +2,14 @@
 - name: Install pip dependencies for SecureDrop.
   pip:
     requirements: "{{ securedrop_code_filtered }}/requirements/securedrop-app-code-requirements.txt"
+    extra_args: "--require-hashes"
+    virtualenv: "{{ securedrop_app_venv }}"
   tags:
     - pip
 
 - name: Compile PO to MO.
   shell: >-
+    . "{{ securedrop_app_venv }}/bin/activate";
     cp config.py.example config.py ;
     trap 'rm config.py' EXIT ;
     ./i18n_tool.py --verbose translate-messages --compile

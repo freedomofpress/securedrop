@@ -2,6 +2,9 @@
 # Directory for storing the DEBIAN control files.
 securedrop_app_code_deb_dir: "/tmp/{{ securedrop_app_code_deb }}"
 
+# Directory for storing virtualenv for translation tasks
+securedrop_app_venv: "/tmp/sd-app-venv"
+
 # Directory for storing the filtered application code files. These files
 # are "filtered" via an `.rsync-filter` file in the src directory.
 securedrop_code_filtered: "{{ securedrop_app_code_deb_dir }}/var/www/securedrop"
