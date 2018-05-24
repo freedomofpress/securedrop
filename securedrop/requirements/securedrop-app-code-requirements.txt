@@ -89,9 +89,9 @@ flask-sqlalchemy==2.3.2 \
 flask-wtf==0.14.2 \
     --hash=sha256:5d14d55cfd35f613d99ee7cba0fc3fbbe63ba02f544d349158c14ca15561cc36 \
     --hash=sha256:d9a9e366b32dcbb98ef17228e76be15702cd2600675668bca23f63a7947fd5ac
-flask==0.12.4 \
-    --hash=sha256:2ea22336f6d388b4b242bc3abf8a01244a8aa3e236e7407469ef78c16ba355dd \
-    --hash=sha256:6c02dbaa5a9ef790d8219bdced392e2d549c10cd5a5ba4b6aa65126b2271af29
+flask==0.12.2 \
+    --hash=sha256:0749df235e3ff61ac108f69ac178c9770caeaccad2509cb762ce1f65570a8856 \
+    --hash=sha256:49f44461237b69ecd901cc7ce66feea0319b9158743dd27a2899962ab214dac1
 gnupg==2.3.1 \
     --hash=sha256:8db5a05c369dbc231dab4c98515ce828f2dffdc14f1534441a6c59b71c6d2031
 idna==2.6 \

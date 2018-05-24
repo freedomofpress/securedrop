@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 export DISPLAY=:1
 
 function run_xvfb() {

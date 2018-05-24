@@ -25,12 +25,13 @@ RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/
 #
 RUN echo deb http://archive.ubuntu.com/ubuntu/ xenial main > /etc/apt/sources.list.d/xenial.list && \
     apt-get update && \
-    apt-get install -y gettext && \
+    apt-get install -y gettext python-virtualenv && \
     rm /etc/apt/sources.list.d/xenial.list && \
     apt-get update
 
 COPY requirements requirements
-RUN pip install -U pip && \
+RUN virtualenv /tmp/sd-venv && . /tmp/sd-venv/bin/activate && \
+    pip install -U pip && \
     pip install -r requirements/securedrop-app-code-requirements.txt && \
     pip install -r requirements/test-requirements.txt
 
@@ -39,3 +40,5 @@ RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp -
 STOPSIGNAL SIGKILL
 
 EXPOSE 8080 8081 5901
+COPY bin/venv-wrap-shell.sh /bin/venv-wrap-shell.sh
+ENTRYPOINT ["/bin/venv-wrap-shell.sh"]

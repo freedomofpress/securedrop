@@ -5,6 +5,7 @@
 # we ignore SC1090 because "source" is validated independently
 
 set -eu
+set -x
 
 TOPLEVEL=$(git rev-parse --show-toplevel)
 source "${BASH_SOURCE%/*}/../../devops/scripts/ticker"
@@ -49,6 +50,6 @@ if test -n "${CIRCLE_SHA1:-}" ; then
    docker_image_circle
    docker_run_circle "$@"
 else
-   ticker docker_image
+   docker_image
    docker_run "$@"
 fi
