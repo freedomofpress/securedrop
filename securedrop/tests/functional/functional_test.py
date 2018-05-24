@@ -9,7 +9,6 @@ import time
 import traceback
 import requests
 
-from Cryptodome import Random
 from datetime import datetime
 from multiprocessing import Process
 from os.path import abspath, dirname, join, realpath
@@ -113,14 +112,6 @@ class FunctionalTest(object):
         self.journalist_app = journalist_app.create_app(config)
 
         def start_source_server(app):
-            # We call Random.atfork() here because we fork the source and
-            # journalist server from the main Python process we use to drive
-            # our browser with multiprocessing.Process() below. These child
-            # processes inherit the same RNG state as the parent process, which
-            # is a problem because they would produce identical output if we
-            # didn't re-seed them after forking.
-            Random.atfork()
-
             config.SESSION_EXPIRATION_MINUTES = self.session_expiration
 
             app.run(
@@ -130,7 +121,6 @@ class FunctionalTest(object):
                 threaded=True)
 
         def start_journalist_server(app):
-            Random.atfork()
             app.run(
                 port=journalist_port,
                 debug=True,
