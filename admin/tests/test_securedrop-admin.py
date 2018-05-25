@@ -295,17 +295,32 @@ class TestSecureDropAdmin(object):
                     assert "Updated to SecureDrop" not in caplog.text
                     assert ret_code != 0
 
-    def test_return_code(self, tmpdir, capsys):
-        """Ensure that securedrop-admin properly bubbles up any
-           non-zero return codes from subprocess calls."""
+    def test_exit_codes(self, tmpdir):
+        """Ensure that securedrop-admin returns the correct
+           exit codes for success or failure."""
         with mock.patch(
                 'securedrop_admin.install_securedrop',
-                side_effect=subprocess.CalledProcessError(
-                    42, 'xyz')):
+                return_value=True):
             with pytest.raises(SystemExit) as e:
                 securedrop_admin.main(
                     ['--root', str(tmpdir), 'install'])
-            assert e.value.code == 42
+                assert e.value.code == securedrop_admin.EXIT_SUCCESS
+
+        with mock.patch(
+                'securedrop_admin.install_securedrop',
+                side_effect=subprocess.CalledProcessError(1, 'TestError')):
+            with pytest.raises(SystemExit) as e:
+                securedrop_admin.main(
+                    ['--root', str(tmpdir), 'install'])
+                assert e.value.code == securedrop_admin.EXIT_SUBPROCESS_ERROR
+
+        with mock.patch(
+                'securedrop_admin.install_securedrop',
+                side_effect=KeyboardInterrupt):
+            with pytest.raises(SystemExit) as e:
+                securedrop_admin.main(
+                    ['--root', str(tmpdir), 'install'])
+                assert e.value.code == securedrop_admin.EXIT_INTERRUPT
 
 
 class TestSiteConfig(object):

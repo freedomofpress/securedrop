@@ -39,6 +39,9 @@ import yaml
 
 sdlog = logging.getLogger(__name__)
 RELEASE_KEY = '22245C81E3BAEB4138B36061310F561200F4AD77'
+EXIT_SUCCESS = 0
+EXIT_SUBPROCESS_ERROR = 1
+EXIT_INTERRUPT = 2
 
 
 class FingerprintException(Exception):
@@ -789,21 +792,23 @@ def main(argv):
     setup_logger(args.v)
     if args.v:
         return_code = args.func(args)
-        sys.exit(return_code)
+        if return_code != 0:
+            sys.exit(EXIT_SUBPROCESS_ERROR)
     else:
         try:
             return_code = args.func(args)
         except KeyboardInterrupt:
-            sys.exit(-1)
+            print('Process was interrupted.')
+            sys.exit(EXIT_INTERRUPT)
         except subprocess.CalledProcessError as e:
             print('ERROR (run with -v for more): {msg}'.format(msg=e),
                   file=sys.stderr)
-            sys.exit(e.returncode)
+            sys.exit(EXIT_SUBPROCESS_ERROR)
         except Exception as e:
             raise SystemExit(
                 'ERROR (run with -v for more): {msg}'.format(msg=e))
         else:
-            sys.exit(return_code)
+            sys.exit(EXIT_SUCCESS)
 
 
 if __name__ == "__main__":
