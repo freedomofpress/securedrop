@@ -1,7 +1,8 @@
 ---
 - name: Install pip dependencies for SecureDrop.
-  pip:
-    requirements: "{{ securedrop_code_filtered }}/requirements/securedrop-app-code-requirements.txt"
+  shell: |
+    pip install \
+      -r {{ securedrop_code_filtered }}/requirements/securedrop-app-code-requirements.txt
   tags:
     - pip
 

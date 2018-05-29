@@ -1,0 +1,7 @@
+Package: *
+Pin: release a=trusty
+Pin-Priority: 900
+
+Package: python-pip
+Pin: release a=xenial
+Pin-Priority: 900

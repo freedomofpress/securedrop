@@ -3,7 +3,7 @@ import pytest
 
 testinfra_hosts = ['docker://trusty-sd-app']
 
-
+@pytest.mark.xfail(reason="pip wheel is installed via apt")
 def test_pip_wheel_installed(Command):
     """
     Ensure `wheel` is installed via pip, for packaging Python

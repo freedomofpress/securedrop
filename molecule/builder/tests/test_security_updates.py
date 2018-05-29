@@ -10,7 +10,7 @@ def test_ensure_no_updates_avail(host):
     # Filter out all the security repos to their own file
     # without this change all the package updates appeared as if they were
     # coming from normal ubuntu update channel (since they get posted to both)
-    host.run('egrep "^deb.*security" /etc/apt/sources.list > /tmp/sec.list')
+    host.run('egrep "^deb.*trusty-security" /etc/apt/sources.list > /tmp/sec.list')
 
     dist_upgrade_simulate = host.run('apt-get -s dist-upgrade '
                                      '-oDir::Etc::Sourcelist=/tmp/sec.list '
