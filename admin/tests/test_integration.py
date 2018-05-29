@@ -1,4 +1,5 @@
 import os
+import io
 import pexpect
 import re
 import subprocess
@@ -430,3 +431,56 @@ def test_sdconfig_enable_https_on_source_interface():
     with open(os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')) as fobj:    # noqa: E501
         data = fobj.read()
     assert HTTPS_OUTPUT == data
+
+
+# The following is the minimal git configuration which can be used to fetch
+# from the SecureDrop Github repository. We want to use this because the
+# developers may have the git setup to fetch from git@github.com: instead
+# of the https, and that requires authentication information.
+GIT_CONFIG = u'''[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[remote "origin"]
+        url = https://github.com/freedomofpress/securedrop.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+'''
+
+ORIGINAL_DIR = os.getcwd()
+NEW_TMP_DIR = ""
+
+
+# This class is to test all the git related operations.
+class TestGitOperations:
+
+    # We will create a new directory and copy the whole git repo
+    # there. This will help us not to destroy the actual work environment.
+    def setup_method(self, method):
+        global NEW_TMP_DIR
+        NEW_TMP_DIR = tempfile.mkdtemp()
+        cmd = ['cp', '-r', '../', NEW_TMP_DIR]
+        subprocess.check_call(cmd)
+        os.chdir(os.path.join(NEW_TMP_DIR, 'admin'))
+        subprocess.check_call('git reset --hard'.split())
+        # Now we will put in our own git configuration
+        with io.open('../.git/config', 'w') as fobj:
+            fobj.write(GIT_CONFIG)
+        # Let us move to an older tag
+        subprocess.check_call('git checkout 0.6'.split())
+
+    # We will go back to the original working directory when we are done.
+    def teardown_method(self, method):
+        global NEW_TMP_DIR
+        os.chdir(ORIGINAL_DIR)
+        # Let us remove the temporary directory
+        subprocess.check_call('rm -rf {0}'.format(NEW_TMP_DIR).split())
+
+    def test_check_for_update(self):
+        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                           'securedrop_admin/__init__.py')
+        fullcmd = 'python {0} --root {1} check_for_updates'.format(
+                  cmd, os.path.join(NEW_TMP_DIR,
+                                    'install_files/ansible-base '))
+        child = pexpect.spawn(fullcmd)
+        child.expect('Update needed', timeout=20)
