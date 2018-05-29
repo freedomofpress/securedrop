@@ -484,3 +484,12 @@ class TestGitOperations:
                                     'install_files/ansible-base '))
         child = pexpect.spawn(fullcmd)
         child.expect('Update needed', timeout=20)
+
+    def test_update(self):
+        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                           'securedrop_admin/__init__.py')
+        child = pexpect.spawn('python {0} --root {1} update'.format(
+                              cmd, os.path.join(
+                                                NEW_TMP_DIR,
+                                                'install_files/ansible-base')))
+        child.expect('Updated to SecureDrop', timeout=20)
