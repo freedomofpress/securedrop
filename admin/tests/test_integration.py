@@ -1,11 +1,16 @@
 import os
 import pexpect
-import tempfile
+import re
 import subprocess
+import tempfile
 
 SD_DIR = ''
 CURRENT_DIR = os.path.dirname(__file__)
 ANSIBLE_BASE = ''
+# Regex to strip ANSI escape chars
+# https://stackoverflow.com/questions/14693701/how-can-i-remove-the-ansi-escape-sequences-from-a-string-in-python
+ANSI_ESCAPE = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+
 
 OUTPUT1 = '''app_hostname: app
 app_ip: 10.20.2.2
@@ -124,33 +129,34 @@ def verify_username_prompt(child):
 def verify_reboot_prompt(child):
     child.expect(
         "Daily reboot time of the server \(24\-hour clock\):", timeout=2)
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' 4'  # Expected default
 
 
 def verify_ipv4_appserver_prompt(child):
     child.expect('Local IPv4 address for the Application Server\:', timeout=2)
+    # Expected default
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' 10.20.2.2'
 
 
 def verify_ipv4_monserver_prompt(child):
     child.expect('Local IPv4 address for the Monitor Server\:', timeout=2)
+    # Expected default
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' 10.20.3.2'
 
 
 def verify_hostname_app_prompt(child):
-    child.expect('Hostname for Application Server', timeout=2)
-    # For any default input, the text comes in the following format
-    # child.expect takes a regular expression and child.expect_exact
-    # does a string matching. That is why all such strings are matched
-    # using child.expect_exact call
-    # https://pexpect.readthedocs.io/en/stable/api/pexpect.html#pexpect.spawn.expect_exact
-    child.expect_exact('\x1b[0ma\x1b[0mp\x1b[0mp\x1b[36D\x1b[36C\x1b[?7h\x1b[0m\x1b[?12l\x1b[?25h', timeout=2)  # noqa: E501
+    child.expect('Hostname for Application Server\:', timeout=2)
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' app'  # Expected default
 
 
 def verify_hostname_mon_prompt(child):
     child.expect('Hostname for Monitor Server\:', timeout=2)
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' mon'  # Expected default
 
 
 def verify_dns_prompt(child):
     child.expect('DNS server specified during installation\:', timeout=2)
-    child.expect_exact('\x1b[0m8\x1b[0m.\x1b[0m8\x1b[0m.\x1b[0m8\x1b[0m.\x1b[0m8\x1b[49D\x1b[49C\x1b[?7h\x1b[0m\x1b[?12l\x1b[?25h')  # noqa: E501
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' 8.8.8.8'  # Expected default
 
 
 def verify_app_gpg_key_prompt(child):
@@ -203,17 +209,19 @@ def verify_journalist_email_prompt(child):
 
 def verify_smtp_relay_prompt(child):
     child.expect('SMTP relay for sending OSSEC alerts\:', timeout=2)
-    child.expect_exact('[0ms\x1b[0mm\x1b[0mt\x1b[0mp\x1b[0m.\x1b[0mg\x1b[0mm\x1b[0ma\x1b[0mi\x1b[0ml\x1b[0m.\x1b[0mc\x1b[0mo\x1b[0mm\x1b[51D\x1b[51C\x1b[?7h\x1b[0m\x1b[?12l\x1b[?25h')  # noqa: E501
+    # Expected default
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' smtp.gmail.com'
 
 
 def verify_smtp_port_prompt(child):
     child.expect('SMTP port for sending OSSEC alerts\:', timeout=2)
-    child.expect_exact('\x1b[0m5\x1b[0m8\x1b[0m7\x1b[39D\x1b[39C\x1b[?7h\x1b[0m\x1b[?12l\x1b[?25h')  # noqa: E501
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' 587'  # Expected default
 
 
 def verify_sasl_domain_prompt(child):
     child.expect('SASL domain for sending OSSEC alerts\:', timeout=2)
-    child.expect_exact('\x1b[0mg\x1b[0mm\x1b[0ma\x1b[0mi\x1b[0ml\x1b[0m.\x1b[0mc\x1b[0mo\x1b[0mm\x1b[47D\x1b[47C\x1b[?7h\x1b[0m\x1b[?12l\x1b[?25h')  # noqa: E501
+    # Expected default
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' gmail.com'
 
 
 def verify_sasl_username_prompt(child):
@@ -226,14 +234,14 @@ def verify_sasl_password_prompt(child):
 
 def verify_ssh_over_lan_prompt(child):
     child.expect('will be available over LAN only\:', timeout=2)
-    child.expect_exact('\x1b[0my\x1b[0me\x1b[0ms\x1b[37D\x1b[37C\x1b[?7h\x1b[0m\x1b[?12l\x1b[?25h')  # noqa: E501
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' yes'  # Expected default
 
 
 def verify_locales_prompt(child):
     child.expect('Space separated list of additional locales to support')  # noqa: E501
 
 
-def test_firstrun():
+def test_sdconfig_on_first_run():
     cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                        'securedrop_admin/__init__.py')
     child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
@@ -255,7 +263,6 @@ def test_firstrun():
     child.sendline('\b' * 14 + 'sd_admin_test.pub')
     verify_https_prompt(child)
     # Default answer is no
-    child.expect_exact('\x1b[0mn\x1b[0mo\x1b[74D\x1b[74C\x1b[?7h\x1b[0m\x1b[?12l\x1b[?25h')  # noqa: E501
     child.sendline('')
     verify_app_gpg_fingerprint_prompt(child)
     child.sendline('1F544B31C845D698EB31F2FF364F1162D32E7E58')
@@ -292,7 +299,7 @@ def test_firstrun():
     assert data == OUTPUT1
 
 
-def test_journalist_alert():
+def test_sdconfig_enable_journalist_alerts():
     cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                        'securedrop_admin/__init__.py')
     child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
@@ -314,7 +321,6 @@ def test_journalist_alert():
     child.sendline('\b' * 14 + 'sd_admin_test.pub')
     verify_https_prompt(child)
     # Default answer is no
-    child.expect_exact('\x1b[0mn\x1b[0mo\x1b[74D\x1b[74C\x1b[?7h\x1b[0m\x1b[?12l\x1b[?25h')  # noqa: E501
     child.sendline('')
     verify_app_gpg_fingerprint_prompt(child)
     child.sendline('1F544B31C845D698EB31F2FF364F1162D32E7E58')
@@ -356,7 +362,7 @@ def test_journalist_alert():
     assert JOURNALIST_ALERT_OUTPUT == data
 
 
-def test_enable_https():
+def test_sdconfig_enable_https_on_source_interface():
     cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                        'securedrop_admin/__init__.py')
     child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
@@ -378,7 +384,6 @@ def test_enable_https():
     child.sendline('\b' * 14 + 'sd_admin_test.pub')
     verify_https_prompt(child)
     # Default answer is no
-    child.expect_exact('\x1b[0mn\x1b[0mo\x1b[74D\x1b[74C\x1b[?7h\x1b[0m\x1b[?12l\x1b[?25h')  # noqa: E501
     # We will press backspace twice and type yes
     child.sendline('\b\byes')
     verify_https_cert_prompt(child)
