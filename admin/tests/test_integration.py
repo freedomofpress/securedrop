@@ -1,5 +1,4 @@
 import os
-import time
 import pexpect
 import tempfile
 import subprocess
@@ -282,7 +281,12 @@ def test_firstrun():
     child.sendline('')
     verify_locales_prompt(child)
     child.sendline('de_DE es_ES')
-    time.sleep(2)  # Give time for validation
+
+    child.expect(pexpect.EOF, timeout=10)  # Wait for validation to occur
+    child.close()
+    assert child.exitstatus == 0
+    assert child.signalstatus is None
+
     with open(os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')) as fobj:    # noqa: E501
         data = fobj.read()
     assert data == OUTPUT1
@@ -341,7 +345,12 @@ def test_journalist_alert():
     child.sendline('')
     verify_locales_prompt(child)
     child.sendline('de_DE es_ES')
-    time.sleep(2)  # Give time for validation
+
+    child.expect(pexpect.EOF, timeout=10)  # Wait for validation to occur
+    child.close()
+    assert child.exitstatus == 0
+    assert child.signalstatus is None
+
     with open(os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')) as fobj:    # noqa: E501
         data = fobj.read()
     assert JOURNALIST_ALERT_OUTPUT == data
@@ -407,7 +416,12 @@ def test_enable_https():
     child.sendline('')
     verify_locales_prompt(child)
     child.sendline('de_DE es_ES')
-    time.sleep(2)  # Give time for validation
+
+    child.expect(pexpect.EOF, timeout=10)  # Wait for validation to occur
+    child.close()
+    assert child.exitstatus == 0
+    assert child.signalstatus is None
+
     with open(os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')) as fobj:    # noqa: E501
         data = fobj.read()
     assert HTTPS_OUTPUT == data
