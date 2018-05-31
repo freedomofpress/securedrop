@@ -76,7 +76,7 @@ def test_grsecurity_kernel_is_running(Command):
     """
     c = Command('uname -r')
     assert c.stdout.endswith('-grsec')
-    assert c.stdout == '4.4.115-grsec'
+    assert c.stdout == '4.4.135-grsec'
 
 
 @pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
