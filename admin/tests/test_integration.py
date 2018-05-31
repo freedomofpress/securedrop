@@ -2,6 +2,7 @@ import os
 import io
 import pexpect
 import re
+import requests
 import subprocess
 import tempfile
 
@@ -480,7 +481,7 @@ class TestGitOperations:
         # Let us remove the temporary directory
         subprocess.check_call('rm -rf {0}'.format(NEW_TMP_DIR).split())
 
-    def test_check_for_update(self):
+    def test_check_for_update_when_updates_needed(self):
         cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                            'securedrop_admin/__init__.py')
         ansible_base = os.path.join(NEW_TMP_DIR,
@@ -489,6 +490,28 @@ class TestGitOperations:
                   cmd, ansible_base)
         child = pexpect.spawn(fullcmd)
         child.expect('Update needed', timeout=20)
+
+        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+        child.close()
+        assert child.exitstatus == 0
+        assert child.signalstatus is None
+
+    def test_check_for_update_when_updates_not_needed(self):
+        # Determine latest production tag using GitHub release object
+        github_url = 'https://api.github.com/repos/freedomofpress/securedrop/releases/latest'  # noqa: E501
+        latest_release = requests.get(github_url).json()
+        latest_tag = str(latest_release["tag_name"])
+
+        subprocess.check_call(["git", "checkout", latest_tag])
+
+        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                           'securedrop_admin/__init__.py')
+        ansible_base = os.path.join(NEW_TMP_DIR,
+                                    'securedrop/install_files/ansible-base')
+        fullcmd = 'python {0} --root {1} check_for_updates'.format(
+                  cmd, ansible_base)
+        child = pexpect.spawn(fullcmd)
+        child.expect('All updates applied', timeout=20)
 
         child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
         child.close()
