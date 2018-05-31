@@ -459,9 +459,13 @@ class TestGitOperations:
     def setup_method(self, method):
         global NEW_TMP_DIR
         NEW_TMP_DIR = tempfile.mkdtemp()
-        cmd = ['cp', '-r', '../', NEW_TMP_DIR]
+
+        # Clone the SecureDrop repository into a temp directory and move there.
+        cmd = ['git', 'clone',
+               'https://github.com/freedomofpress/securedrop.git']
         subprocess.check_call(cmd)
-        os.chdir(os.path.join(NEW_TMP_DIR, 'admin'))
+        subprocess.check_call(["mv", "securedrop", NEW_TMP_DIR])
+        os.chdir(os.path.join(NEW_TMP_DIR, 'securedrop/admin'))
         subprocess.check_call('git reset --hard'.split())
         # Now we will put in our own git configuration
         with io.open('../.git/config', 'w') as fobj:
@@ -479,17 +483,18 @@ class TestGitOperations:
     def test_check_for_update(self):
         cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                            'securedrop_admin/__init__.py')
+        ansible_base = os.path.join(NEW_TMP_DIR,
+                                    'securedrop/install_files/ansible-base')
         fullcmd = 'python {0} --root {1} check_for_updates'.format(
-                  cmd, os.path.join(NEW_TMP_DIR,
-                                    'install_files/ansible-base '))
+                  cmd, ansible_base)
         child = pexpect.spawn(fullcmd)
         child.expect('Update needed', timeout=20)
 
     def test_update(self):
         cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                            'securedrop_admin/__init__.py')
+        ansible_base = os.path.join(NEW_TMP_DIR,
+                                    'securedrop/install_files/ansible-base')
         child = pexpect.spawn('python {0} --root {1} update'.format(
-                              cmd, os.path.join(
-                                                NEW_TMP_DIR,
-                                                'install_files/ansible-base')))
+                              cmd, ansible_base))
         child.expect('Updated to SecureDrop', timeout=20)
