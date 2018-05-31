@@ -120,6 +120,9 @@ mock==2.0.0 \
 pbr==3.1.1 \
     --hash=sha256:05f61c71aaefc02d8e37c0a3eeb9815ff526ea28b3b76324769e6158d7f95be1 \
     --hash=sha256:60c25b7dfd054ef9bb0ae327af949dd4676aa09ac3a9471cdc871d8a9213f9ac
+pexpect==4.5.0 \
+    --hash=sha256:9783f4644a3ef8528a6f20374eeb434431a650c797ca6d8df0d81e30fffdfa24 \
+    --hash=sha256:9f8eb3277716a01faafaba553d629d3d60a1a624c7cf45daa600d2148c30020c
 pip-tools==2.0.2 \
     --hash=sha256:90bbe6731a6a34d339bf14d90cf2892475386c7d06c458208191ac9992110e0a \
     --hash=sha256:f11fc3bf1d87a0b4a68d4d595f619814e2396e92d75d7bdd2500edbf002ea6de
@@ -128,6 +131,10 @@ pluggy==0.6.0 \
     --hash=sha256:d345c8fe681115900d6da8d048ba67c25df42973bda370783cd58826442dcd7c \
     --hash=sha256:e160a7fcf25762bb60efc7e171d4497ff1d8d2d75a3d0df7a21b76821ecbf5c5 \
     # via pytest, tox
+ptyprocess==0.5.2 \
+    --hash=sha256:e64193f0047ad603b71f202332ab5527c5e52aa7c8b609704fc28c0dc20c4365 \
+    --hash=sha256:e8c43b5eee76b2083a9badde89fd1bbce6c8942d1045146e100b7b5e014f4f1a \
+    # via pexpect
 py==1.5.2 \
     --hash=sha256:8cca5c229d225f8c1e3085be4fcf306090b00850fefad892f9d96c7b6e2f310f \
     --hash=sha256:ca18943e28235417756316bfada6cd96b23ce60dd532642690dcfdaba988a76d \
