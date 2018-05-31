@@ -48,15 +48,6 @@ Vagrant.configure("2") do |config|
     staging.vm.provider "libvirt" do |lv, override|
       lv.memory = 1024
     end
-    staging.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
-      ansible.inventory_path = "install_files/ansible-base/inventory-staging"
-      ansible.verbose = 'v'
-      # Taken from the parallel execution tips and tricks
-      # https://docs.vagrantup.com/v2/provisioning/ansible.html
-      ansible.limit = 'all,localhost'
-      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
-    end
   end
 
   # The prod hosts are just like production but are virtualized.
