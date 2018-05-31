@@ -1,0 +1,5 @@
+---
+- name: Configure ostree repository
+  hosts: ostree
+  roles:
+    - ostree

@@ -50,6 +50,24 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define 'ostree', autostart: false do |ostree|
+    config.ssh.host = "10.0.1.6"
+    config.ssh.port = 22
+    ostree.vm.hostname = "ostree"
+    ostree.vm.box = "generic/fedora28"
+    ostree.vm.network "private_network", ip: "10.0.1.6"
+    ostree.vm.synced_folder './', '/home/vagrant/sync', disabled: true
+
+    ostree.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/ostree.yml"
+      ansible.verbose = 'v'
+      ansible.limit = 'all,localhost'
+      ansible.groups = {
+        'ostree' => %w(ostree)
+      }
+    end
+  end
+
   # The prod hosts are just like production but are virtualized.
   # All access to SSH and the web interfaces is only over Tor.
   config.vm.define 'mon-prod', autostart: false do |prod|
