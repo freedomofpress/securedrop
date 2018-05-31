@@ -490,6 +490,11 @@ class TestGitOperations:
         child = pexpect.spawn(fullcmd)
         child.expect('Update needed', timeout=20)
 
+        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+        child.close()
+        assert child.exitstatus == 0
+        assert child.signalstatus is None
+
     def test_update(self):
         cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                            'securedrop_admin/__init__.py')
@@ -498,3 +503,8 @@ class TestGitOperations:
         child = pexpect.spawn('python {0} --root {1} update'.format(
                               cmd, ansible_base))
         child.expect('Updated to SecureDrop', timeout=20)
+
+        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+        child.close()
+        assert child.exitstatus == 0
+        assert child.signalstatus is None
