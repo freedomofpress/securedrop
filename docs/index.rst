@@ -97,7 +97,7 @@ anonymous sources.
    :name: devdocs
    :maxdepth: 2
 
-   development/getting_started
+   development/contributing
    development/setup_development
    development/making_pr
    development/admin_development
