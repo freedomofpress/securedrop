@@ -1,6 +1,4 @@
 ---
-- include: post_ubuntu_install_checks.yml
-
 - include: create_users.yml
 
 - include: setup_etc_hosts.yml
@@ -22,3 +20,5 @@
 - include: disable_swap.yml
 
 - include: remove_kernel_modules.yml
+
+- include: post_ubuntu_install_checks.yml

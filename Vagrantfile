@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
       config.ssh.port = 22
     end
     staging.vm.hostname = "mon-staging"
-    staging.vm.box = "bento/ubuntu-14.04"
+    staging.vm.box = "bento/ubuntu-16.04"
     staging.vm.network "private_network", ip: "10.0.1.3"
     staging.vm.synced_folder './', '/vagrant', disabled: true
   end
@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
       config.ssh.port = 22
     end
     staging.vm.hostname = "app-staging"
-    staging.vm.box = "bento/ubuntu-14.04"
+    staging.vm.box = "bento/ubuntu-16.04"
     staging.vm.network "private_network", ip: "10.0.1.2"
     staging.vm.synced_folder './', '/vagrant', disabled: true
     staging.vm.provider "virtualbox" do |v|

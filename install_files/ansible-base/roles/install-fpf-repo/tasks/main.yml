@@ -10,7 +10,7 @@
 
 - name: Setup FPF apt repo.
   apt_repository:
-    repo: deb [arch=amd64] {{ apt_repo_url }} {{ ansible_lsb.codename }} main
+    repo: deb [arch=amd64] {{ apt_repo_url }} trusty main
     state: present
     update_cache: yes
   tags:

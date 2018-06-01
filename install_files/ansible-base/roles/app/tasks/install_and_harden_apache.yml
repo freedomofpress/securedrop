@@ -43,6 +43,18 @@
   tags:
     - apache
 
+- name: Disable blacklisted Apache modules.
+  apache2_module:
+    state: absent
+    name: "{{ item }}"
+    force: yes
+  with_items: "{{ apache_disabled_modules }}"
+  notify:
+    - restart apache2
+  tags:
+    - apache
+    - hardening
+
 - name: Enable required Apache modules.
   apache2_module:
     state: present
@@ -52,17 +64,6 @@
     - restart apache2
   tags:
     - apache
-
-- name: Disable blacklisted Apache modules.
-  apache2_module:
-    state: absent
-    name: "{{ item }}"
-  with_items: "{{ apache_disabled_modules }}"
-  notify:
-    - restart apache2
-  tags:
-    - apache
-    - hardening
 
 - name: Disable default Apache sites.
   file:

@@ -47,7 +47,7 @@ securedrop_app_https_ssl_ciphers:
 
 # Apt packages for configuring Apache service.
 apache_packages:
-  - apache2-mpm-worker
+  - apache2
   - libapache2-mod-wsgi
   - libapache2-mod-xsendfile
 
@@ -69,7 +69,7 @@ apache_modules:
   - dir
   - headers
   - mime
-  - mpm_event
+  - mpm_worker
   - negotiation
   - reqtimeout
   - rewrite
@@ -83,6 +83,7 @@ apache_disabled_modules:
   - authn_file
   - autoindex
   - env
+  - mpm_event
   - status
 
 # Log file location for worker service, used in supervisor template.
