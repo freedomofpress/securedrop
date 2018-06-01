@@ -14,5 +14,3 @@
 - include: setup_firefox_for_selenium.yml
 
 - include: disable_mprotect_ff_plugin_container.yml
-
-- include: modern_gettext.yml

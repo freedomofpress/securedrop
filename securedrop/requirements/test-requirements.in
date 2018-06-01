@@ -7,4 +7,5 @@ py
 pytest
 pytest-cov
 pytest-mock
-selenium < 3
+requests
+selenium

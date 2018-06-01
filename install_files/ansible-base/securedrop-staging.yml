@@ -59,6 +59,7 @@
   any_errors_fatal: yes
   roles:
     - { role: app, tags: app }
+    - { role: app-test, tags: app-test }
   become: yes
 
   # Set iptables rules with exemptions for staging that permit direct access for SSH.

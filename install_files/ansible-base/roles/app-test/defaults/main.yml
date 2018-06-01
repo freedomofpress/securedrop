@@ -10,6 +10,9 @@ apache_user: www-data
 
 # Additional apt packages required for running the application tests.
 test_apt_dependencies:
+  - enchant
+  - firefox
+  - gettext
   - xvfb
 
 # Additional Python dependencies required for running the application tests.

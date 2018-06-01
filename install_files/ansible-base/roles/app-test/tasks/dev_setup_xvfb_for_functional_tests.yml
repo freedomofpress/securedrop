@@ -13,24 +13,6 @@
   tags:
     - apt
 
-- name: Copy xvfb init script.
-  copy:
-    src: xvfb
-    dest: /etc/init.d/xvfb
-    owner: root
-    mode: "0700"
-  tags:
-    - xvfb
-    - permissions
-
-- name: Update rc.d to run xvfb at boot.
-  command: update-rc.d xvfb defaults
-  register: xvfb_setup
-  changed_when: "'System start/stop links for /etc/init.d/xvfb already exist' not in xvfb_setup.stdout"
-  notify: start xvfb
-  tags:
-    - xvfb
-
 - name: Set DISPLAY environment variable for xvfb.
   copy:
     src: xvfb_display.sh
