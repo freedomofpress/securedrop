@@ -49,11 +49,18 @@ database_migration() {
         fi
     fi
 
+    db_backup="/var/lib/securedrop/backups/$(date +%Y-%m-%d-%H-%M-%S)-db.sqlite"
+
     if ! alembic current | grep -q '(head)'; then
-        date=$(date +%Y-%m-%d-%H-%M-%S)
-        cp /var/lib/securedrop/db.sqlite "/var/lib/securedrop/backups/$date-db.sqlite"
+        cp /var/lib/securedrop/db.sqlite "$db_backup"
     fi
-    alembic upgrade head
+
+    if alembic upgrade head; then
+        rm -f "$db_backup"
+    else
+        echo "Error migrating database: Backup saved to $db_backup" >&2
+        return 1
+    fi
 }
 
 case "$1" in
@@ -62,7 +69,7 @@ case "$1" in
     for dir in /var/lib/securedrop/{,tmp,store,keys,backups} /var/www/securedrop; do
       mkdir -p "$dir"
       chmod 0700 "$dir"
-    done 
+    done
 
     chown -R www-data:www-data /var/lib/securedrop /var/www/securedrop
 
