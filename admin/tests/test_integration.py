@@ -1,6 +1,7 @@
 import os
 import io
 import pexpect
+import pytest
 import re
 import requests
 import subprocess
@@ -448,43 +449,30 @@ GIT_CONFIG = u'''[core]
         fetch = +refs/heads/*:refs/remotes/origin/*
 '''
 
-ORIGINAL_DIR = os.getcwd()
-NEW_TMP_DIR = ""
+
+@pytest.fixture
+def securedrop_git_repo(tmpdir):
+    os.chdir(str(tmpdir))
+    # Clone the SecureDrop repository into the temp directory.
+    cmd = ['git', 'clone',
+           'https://github.com/freedomofpress/securedrop.git']
+    subprocess.check_call(cmd)
+    os.chdir(os.path.join(str(tmpdir), 'securedrop/admin'))
+    subprocess.check_call('git reset --hard'.split())
+    # Now we will put in our own git configuration
+    with io.open('../.git/config', 'w') as fobj:
+        fobj.write(GIT_CONFIG)
+    # Let us move to an older tag
+    subprocess.check_call('git checkout 0.6'.split())
+    yield tmpdir
 
 
 # This class is to test all the git related operations.
 class TestGitOperations:
-
-    # We will create a new directory and copy the whole git repo
-    # there. This will help us not to destroy the actual work environment.
-    def setup_method(self, method):
-        global NEW_TMP_DIR
-        NEW_TMP_DIR = tempfile.mkdtemp()
-
-        # Clone the SecureDrop repository into a temp directory and move there.
-        cmd = ['git', 'clone',
-               'https://github.com/freedomofpress/securedrop.git']
-        subprocess.check_call(cmd)
-        subprocess.check_call(["mv", "securedrop", NEW_TMP_DIR])
-        os.chdir(os.path.join(NEW_TMP_DIR, 'securedrop/admin'))
-        subprocess.check_call('git reset --hard'.split())
-        # Now we will put in our own git configuration
-        with io.open('../.git/config', 'w') as fobj:
-            fobj.write(GIT_CONFIG)
-        # Let us move to an older tag
-        subprocess.check_call('git checkout 0.6'.split())
-
-    # We will go back to the original working directory when we are done.
-    def teardown_method(self, method):
-        global NEW_TMP_DIR
-        os.chdir(ORIGINAL_DIR)
-        # Let us remove the temporary directory
-        subprocess.check_call('rm -rf {0}'.format(NEW_TMP_DIR).split())
-
-    def test_check_for_update_when_updates_needed(self):
+    def test_check_for_update_when_updates_needed(self, securedrop_git_repo):
         cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                            'securedrop_admin/__init__.py')
-        ansible_base = os.path.join(NEW_TMP_DIR,
+        ansible_base = os.path.join(str(securedrop_git_repo),
                                     'securedrop/install_files/ansible-base')
         fullcmd = 'python {0} --root {1} check_for_updates'.format(
                   cmd, ansible_base)
@@ -496,7 +484,8 @@ class TestGitOperations:
         assert child.exitstatus == 0
         assert child.signalstatus is None
 
-    def test_check_for_update_when_updates_not_needed(self):
+    def test_check_for_update_when_updates_not_needed(self,
+                                                      securedrop_git_repo):
         # Determine latest production tag using GitHub release object
         github_url = 'https://api.github.com/repos/freedomofpress/securedrop/releases/latest'  # noqa: E501
         latest_release = requests.get(github_url).json()
@@ -506,7 +495,7 @@ class TestGitOperations:
 
         cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                            'securedrop_admin/__init__.py')
-        ansible_base = os.path.join(NEW_TMP_DIR,
+        ansible_base = os.path.join(str(securedrop_git_repo),
                                     'securedrop/install_files/ansible-base')
         fullcmd = 'python {0} --root {1} check_for_updates'.format(
                   cmd, ansible_base)
@@ -518,7 +507,7 @@ class TestGitOperations:
         assert child.exitstatus == 0
         assert child.signalstatus is None
 
-    def test_update(self):
+    def test_update(self, securedrop_git_repo):
         gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
 
         # If gpg.conf doesn't exist, create it and set a reliable default
@@ -534,11 +523,11 @@ class TestGitOperations:
 
         cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                            'securedrop_admin/__init__.py')
-        ansible_base = os.path.join(NEW_TMP_DIR,
+        ansible_base = os.path.join(str(securedrop_git_repo),
                                     'securedrop/install_files/ansible-base')
         child = pexpect.spawn('python {0} --root {1} update'.format(
                               cmd, ansible_base))
-        child.expect('Updated to SecureDrop', timeout=20)
+        child.expect('Updated to SecureDrop', timeout=100)
 
         child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
         child.close()
