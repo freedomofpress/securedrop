@@ -62,6 +62,8 @@ new migration use the following steps.
 
     cd securedrop/
     ./bin/dev-shell
+    source bin/dev-deps
+    maybe_create_config_py
     ./bin/new-migration 'my migration message'
 
 This will output a new migration into ``alembic/versions/``. You will need to verify that this
