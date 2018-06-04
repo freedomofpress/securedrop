@@ -45,9 +45,10 @@ ADMIN_LINK = '<a href="/admin/" id="link-admin-index">'
 
 
 def _login_user(app, username, password, otp_secret):
-    resp = app.post('/login', data={'username': username,
-                                    'password': password,
-                                    'token': TOTP(otp_secret).now()},
+    resp = app.post(url_for('main.login'),
+                    data={'username': username,
+                          'password': password,
+                          'token': TOTP(otp_secret).now()},
                     follow_redirects=True)
     assert resp.status_code == 200
     assert hasattr(g, 'user')  # ensure logged in
@@ -90,7 +91,7 @@ def test_reply_error_logging(journalist_app, test_journo, test_source):
             with patch.object(db.session, 'commit',
                               side_effect=exception_class(exception_msg)):
                 resp = app.post(
-                    '/reply',
+                    url_for('main.reply'),
                     data={'filesystem_id': test_source['filesystem_id'],
                           'message': '_'},
                     follow_redirects=True)
@@ -115,7 +116,7 @@ def test_reply_error_flashed_message(journalist_app, test_journo, test_source):
         with InstrumentedApp(app) as ins:
             with patch.object(db.session, 'commit',
                               side_effect=exception_class()):
-                app.post('/reply',
+                app.post(url_for('main.reply'),
                          data={'filesystem_id': test_source['filesystem_id'],
                                'message': '_'})
 
@@ -154,8 +155,8 @@ def test_nonempty_replies_are_accepted(journalist_app, test_journo,
 def test_unauthorized_access_redirects_to_login(journalist_app):
     with journalist_app.test_client() as app:
         with InstrumentedApp(journalist_app) as ins:
-            resp = app.get('/')
-            ins.assert_redirects(resp, '/login')
+            resp = app.get(url_for('main.index'))
+            ins.assert_redirects(resp, url_for('main.login'))
 
 
 def test_login_throttle(journalist_app, test_journo):
@@ -166,7 +167,7 @@ def test_login_throttle(journalist_app, test_journo):
         with journalist_app.test_client() as app:
             for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
                 resp = app.post(
-                    '/login',
+                    url_for('main.login'),
                     data=dict(username=test_journo['username'],
                               password='invalid',
                               token='invalid'))
@@ -175,7 +176,7 @@ def test_login_throttle(journalist_app, test_journo):
                 assert "Login failed" in text
 
             resp = app.post(
-                '/login',
+                url_for('main.login'),
                 data=dict(username=test_journo['username'],
                           password='invalid',
                           token='invalid'))
@@ -189,7 +190,7 @@ def test_login_throttle(journalist_app, test_journo):
 
 def test_login_invalid_credentials(journalist_app, test_journo):
     with journalist_app.test_client() as app:
-        resp = app.post('/login',
+        resp = app.post(url_for('main.login'),
                         data=dict(username=test_journo['username'],
                                   password='invalid',
                                   token='mocked'))
@@ -200,7 +201,7 @@ def test_login_invalid_credentials(journalist_app, test_journo):
 
 def test_validate_redirect(journalist_app):
     with journalist_app.test_client() as app:
-        resp = app.post('/', follow_redirects=True)
+        resp = app.post(url_for('main.index'), follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Login to access" in text
@@ -209,7 +210,7 @@ def test_validate_redirect(journalist_app):
 def test_login_valid_credentials(journalist_app, test_journo):
     with journalist_app.test_client() as app:
         resp = app.post(
-            '/login',
+            url_for('main.login'),
             data=dict(username=test_journo['username'],
                       password=test_journo['password'],
                       token=TOTP(test_journo['otp_secret']).now()),
@@ -224,31 +225,31 @@ def test_admin_login_redirects_to_index(journalist_app, test_admin):
     with journalist_app.test_client() as app:
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
-                '/login',
+                url_for('main.login'),
                 data=dict(username=test_admin['username'],
                           password=test_admin['password'],
                           token=TOTP(test_admin['otp_secret']).now()),
                 follow_redirects=False)
-            ins.assert_redirects(resp, '/')
+            ins.assert_redirects(resp, url_for('main.index'))
 
 
 def test_user_login_redirects_to_index(journalist_app, test_journo):
     with journalist_app.test_client() as app:
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
-                '/login',
+                url_for('main.login'),
                 data=dict(username=test_journo['username'],
                           password=test_journo['password'],
                           token=TOTP(test_journo['otp_secret']).now()),
                 follow_redirects=False)
-            ins.assert_redirects(resp, '/')
+            ins.assert_redirects(resp, url_for('main.index'))
 
 
 def test_admin_has_link_to_edit_account_page_in_index_page(journalist_app,
                                                            test_admin):
     with journalist_app.test_client() as app:
         resp = app.post(
-            '/login',
+            url_for('main.login'),
             data=dict(username=test_admin['username'],
                       password=test_admin['password'],
                       token=TOTP(test_admin['otp_secret']).now()),
@@ -263,7 +264,7 @@ def test_user_has_link_to_edit_account_page_in_index_page(journalist_app,
                                                           test_journo):
     with journalist_app.test_client() as app:
         resp = app.post(
-            '/login',
+            url_for('main.login'),
             data=dict(username=test_journo['username'],
                       password=test_journo['password'],
                       token=TOTP(test_journo['otp_secret']).now()),
@@ -278,7 +279,7 @@ def test_admin_has_link_to_admin_index_page_in_index_page(journalist_app,
                                                           test_admin):
     with journalist_app.test_client() as app:
         resp = app.post(
-            '/login',
+            url_for('main.login'),
             data=dict(username=test_admin['username'],
                       password=test_admin['password'],
                       token=TOTP(test_admin['otp_secret']).now()),
@@ -291,7 +292,7 @@ def test_user_lacks_link_to_admin_index_page_in_index_page(journalist_app,
                                                            test_journo):
     with journalist_app.test_client() as app:
         resp = app.post(
-            '/login',
+            url_for('main.login'),
             data=dict(username=test_journo['username'],
                       password=test_journo['password'],
                       token=TOTP(test_journo['otp_secret']).now()),
@@ -306,8 +307,8 @@ def test_admin_logout_redirects_to_index(journalist_app, test_admin):
             _login_user(app, test_admin['username'],
                         test_admin['password'],
                         test_admin['otp_secret'])
-            resp = app.get('/logout')
-            ins.assert_redirects(resp, '/')
+            resp = app.get(url_for('main.logout'))
+            ins.assert_redirects(resp, url_for('main.index'))
 
 
 def test_user_logout_redirects_to_index(journalist_app, test_journo):
@@ -316,15 +317,15 @@ def test_user_logout_redirects_to_index(journalist_app, test_journo):
             _login_user(app, test_journo['username'],
                         test_journo['password'],
                         test_journo['otp_secret'])
-            resp = app.get('/logout')
-            ins.assert_redirects(resp, '/')
+            resp = app.get(url_for('main.logout'))
+            ins.assert_redirects(resp, url_for('main.index'))
 
 
 def test_admin_index(journalist_app, test_admin):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.get('/admin/')
+        resp = app.get(url_for('admin.index'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Admin Interface" in text
@@ -338,7 +339,8 @@ def test_admin_delete_user(journalist_app, test_admin, test_journo):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.post('/admin/delete/{}'.format(test_journo['id']),
+        resp = app.post(url_for('admin.delete_user',
+                                user_id=test_journo['id']),
                         follow_redirects=True)
 
         # Assert correct interface behavior
@@ -360,13 +362,14 @@ def test_admin_cannot_delete_self(journalist_app, test_admin, test_journo):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.post('/admin/delete/{}'.format(test_admin['id']),
+        resp = app.post(url_for('admin.delete_user',
+                                user_id=test_admin['id']),
                         follow_redirects=True)
 
         # Assert correct interface behavior
         assert resp.status_code == 403
 
-        resp = app.get('/admin/', follow_redirects=True)
+        resp = app.get(url_for('admin.index'), follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Admin Interface" in text
@@ -386,7 +389,8 @@ def test_admin_edits_user_password_success_response(journalist_app,
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
 
-        resp = app.post('/admin/edit/{}/new-password'.format(test_admin['id']),
+        resp = app.post(url_for('admin.new_password',
+                                user_id=test_admin['id']),
                         data=dict(password=VALID_PASSWORD_2),
                         follow_redirects=True)
         assert resp.status_code == 200
@@ -403,7 +407,7 @@ def test_admin_deletes_invalid_user_404(journalist_app, test_admin):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.post('/admin/delete/{}'.format(invalid_id))
+        resp = app.post(url_for('admin.delete_user', user_id=invalid_id))
         assert resp.status_code == 404
 
 
@@ -416,8 +420,8 @@ def test_admin_edits_user_password_error_response(journalist_app,
 
         with patch('sqlalchemy.orm.scoping.scoped_session.commit',
                    side_effect=Exception()):
-            resp = app.post(('/admin/edit/{}/new-password'
-                             .format(test_journo['id'])),
+            resp = app.post(url_for('admin.new_password',
+                                    user_id=test_journo['id']),
                             data=dict(password=VALID_PASSWORD_2),
                             follow_redirects=True)
 
@@ -438,7 +442,7 @@ def test_user_edits_password_success_response(journalist_app, test_journo):
             _login_user(app, test_journo['username'], test_journo['password'],
                         test_journo['otp_secret'])
             token = TOTP(test_journo['otp_secret']).now()
-            resp = app.post('/account/new-password',
+            resp = app.post(url_for('account.new_password'),
                             data=dict(current_password=test_journo['password'],
                                       token=token,
                                       password=VALID_PASSWORD_2),
@@ -465,13 +469,13 @@ def test_user_edits_password_expires_session(journalist_app, test_journo):
 
             with InstrumentedApp(journalist_app) as ins:
                 token = TOTP(test_journo['otp_secret']).now()
-                resp = app.post('/account/new-password',
+                resp = app.post(url_for('account.new_password'),
                                 data=dict(
                                     current_password=test_journo['password'],
                                     token=token,
                                     password=VALID_PASSWORD_2))
 
-                ins.assert_redirects(resp, '/login')
+                ins.assert_redirects(resp, url_for('main.login'))
 
             # verify the session was expired after the password was changed
             assert 'uid' not in session
@@ -497,7 +501,7 @@ def test_user_edits_password_error_reponse(journalist_app, test_journo):
                 with patch.object(db.session, 'commit',
                                   side_effect=Exception()):
                     resp = app.post(
-                        '/account/new-password',
+                        url_for('account.new_password'),
                         data=dict(current_password=test_journo['password'],
                                   token='mocked',
                                   password=VALID_PASSWORD_2),
@@ -515,7 +519,7 @@ def test_admin_add_user_when_username_already_taken(journalist_app,
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.post('/admin/add',
+        resp = app.post(url_for('admin.add_user'),
                         data=dict(username=test_admin['username'],
                                   password=VALID_PASSWORD,
                                   is_admin=None))
@@ -557,7 +561,7 @@ def test_admin_edits_user_password_too_long_warning(journalist_app,
                     test_admin['otp_secret'])
         with InstrumentedApp(journalist_app) as ins:
             app.post(
-                '/admin/edit/{}/new-password'.format(test_journo['id']),
+                url_for('admin.new_password', user_id=test_journo['id']),
                 data=dict(username=test_journo['username'],
                           is_admin=None,
                           password=overly_long_password),
@@ -577,7 +581,7 @@ def test_user_edits_password_too_long_warning(journalist_app, test_journo):
 
         with InstrumentedApp(journalist_app) as ins:
             app.post(
-                '/account/new-password',
+                url_for('account.new_password'),
                 data=dict(username=test_journo['username'],
                           is_admin=None,
                           token=TOTP(test_journo['otp_secret']).now(),
@@ -598,7 +602,7 @@ def test_admin_add_user_password_too_long_warning(journalist_app, test_admin):
 
         with InstrumentedApp(journalist_app) as ins:
             app.post(
-                '/admin/add',
+                url_for('admin.add_user'),
                 data=dict(username='dellsberg',
                           password=overly_long_password,
                           is_admin=None))
@@ -619,7 +623,7 @@ def test_admin_edits_user_invalid_username(
 
         with InstrumentedApp(journalist_app) as ins:
             app.post(
-                '/admin/edit/{}'.format(test_admin['id']),
+                url_for('admin.edit_user', user_id=test_admin['id']),
                 data=dict(username=new_username, is_admin=None))
 
             ins.assert_message_flashed(
@@ -641,7 +645,7 @@ def test_admin_resets_user_hotp_format_non_hexa(
         old_secret = journo.otp_secret
 
         with InstrumentedApp(journalist_app) as ins:
-            app.post('/admin/reset-2fa-hotp',
+            app.post(url_for('admin.reset_two_factor_hotp'),
                      data=dict(uid=test_journo['id'], otp_secret='ZZ'))
 
             # fetch altered DB object
@@ -667,7 +671,7 @@ def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
         old_secret = journo.otp_secret
 
         with InstrumentedApp(journalist_app) as ins:
-            resp = app.post('/admin/reset-2fa-hotp',
+            resp = app.post(url_for('admin.reset_two_factor_hotp'),
                             data=dict(uid=test_journo['id'],
                                       otp_secret=123456))
 
@@ -679,7 +683,8 @@ def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
             assert not journo.is_totp
 
             # Redirect to admin 2FA view
-            ins.assert_redirects(resp, '/admin/2fa?uid={}'.format(journo.id))
+            ins.assert_redirects(resp, url_for('admin.new_user_two_factor',
+                                               uid=journo.id))
 
 
 def test_admin_resets_user_hotp_format_odd(journalist_app,
@@ -932,7 +937,7 @@ def test_admin_add_user(journalist_app, test_admin):
                     test_admin['otp_secret'])
 
         with InstrumentedApp(journalist_app) as ins:
-            resp = app.post('/admin/add',
+            resp = app.post(url_for('admin.add_user'),
                             data=dict(username=username,
                                       password=VALID_PASSWORD,
                                       is_admin=None))
