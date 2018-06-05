@@ -5,7 +5,7 @@ import re
 import subprocess
 
 from cStringIO import StringIO
-from flask import session, escape, current_app
+from flask import session, escape, current_app, url_for
 from mock import patch, ANY
 
 import crypto_util
@@ -34,7 +34,7 @@ def test_page_not_found(source_app):
 def test_index(source_app):
     """Test that the landing page loads and looks how we expect"""
     with source_app.test_client() as app:
-        resp = app.get('/')
+        resp = app.get(url_for('main.index'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert 'Submit for the first time' in text
@@ -55,7 +55,8 @@ def test_all_words_in_wordlist_validate(source_app):
 
     with source_app.test_client() as app:
         for words in chunks:
-            resp = app.post('/login', data=dict(codename=' '.join(words)),
+            resp = app.post(url_for('main.login'),
+                            data=dict(codename=' '.join(words)),
                             follow_redirects=True)
             assert resp.status_code == 200
             text = resp.data.decode('utf-8')
@@ -79,7 +80,7 @@ def _find_codename(html):
 
 def test_generate(source_app):
     with source_app.test_client() as app:
-        resp = app.get('/generate')
+        resp = app.get(url_for('main.generate'))
         assert resp.status_code == 200
         session_codename = session['codename']
 
@@ -97,10 +98,10 @@ def test_generate_already_logged_in(source_app):
     with source_app.test_client() as app:
         new_codename(app, session)
         # Make sure it redirects to /lookup when logged in
-        resp = app.get('/generate')
+        resp = app.get(url_for('main.generate'))
         assert resp.status_code == 302
         # Make sure it flashes the message on the lookup page
-        resp = app.get('/generate', follow_redirects=True)
+        resp = app.get(url_for('main.generate'), follow_redirects=True)
         # Should redirect to /lookup
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -109,9 +110,9 @@ def test_generate_already_logged_in(source_app):
 
 def test_create_new_source(source_app):
     with source_app.test_client() as app:
-        resp = app.get('/generate')
+        resp = app.get(url_for('main.generate'))
         assert resp.status_code == 200
-        resp = app.post('/create', follow_redirects=True)
+        resp = app.post(url_for('main.create'), follow_redirects=True)
         assert session['logged_in'] is True
         # should be redirected to /lookup
         text = resp.data.decode('utf-8')
@@ -126,7 +127,7 @@ def test_generate_too_long_codename(source_app):
                           side_effect=[overly_long_codename,
                                        'short codename']):
             with source_app.test_client() as app:
-                resp = app.post('/generate')
+                resp = app.post(url_for('main.generate'))
                 assert resp.status_code == 200
 
     logger.assert_called_with(
@@ -139,15 +140,15 @@ def test_generate_too_long_codename(source_app):
 def test_create_duplicate_codename(source_app):
     with patch.object(source.app.logger, 'error') as logger:
         with source_app.test_client() as app:
-            resp = app.get('/generate')
+            resp = app.get(url_for('main.generate'))
             assert resp.status_code == 200
 
             # Create a source the first time
-            resp = app.post('/create', follow_redirects=True)
+            resp = app.post(url_for('main.create'), follow_redirects=True)
             assert resp.status_code == 200
 
             # Attempt to add the same source
-            app.post('/create', follow_redirects=True)
+            app.post(url_for('main.create'), follow_redirects=True)
             logger.assert_called_once()
             assert ("Attempt to create a source with duplicate codename"
                     in logger.call_args[0][0])
@@ -158,26 +159,27 @@ def test_lookup(source_app):
     """Test various elements on the /lookup page."""
     with source_app.test_client() as app:
         codename = new_codename(app, session)
-        resp = app.post('/login', data=dict(codename=codename),
+        resp = app.post(url_for('main.login'), data=dict(codename=codename),
                         follow_redirects=True)
         # redirects to /lookup
         text = resp.data.decode('utf-8')
         assert "public key" in text
         # download the public key
-        resp = app.get('/journalist-key')
+        resp = app.get(url_for('info.download_journalist_pubkey'))
         text = resp.data.decode('utf-8')
         assert "BEGIN PGP PUBLIC KEY BLOCK" in text
 
 
 def test_login_and_logout(source_app):
     with source_app.test_client() as app:
-        resp = app.get('/login')
+        resp = app.get(url_for('main.login'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Enter Codename" in text
 
         codename = new_codename(app, session)
-        resp = app.post('/login', data=dict(codename=codename),
+        resp = app.post(url_for('main.login'),
+                        data=dict(codename=codename),
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -185,7 +187,8 @@ def test_login_and_logout(source_app):
         assert session['logged_in'] is True
 
     with source_app.test_client() as app:
-        resp = app.post('/login', data=dict(codename='invalid'),
+        resp = app.post(url_for('main.login'),
+                        data=dict(codename='invalid'),
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -193,17 +196,20 @@ def test_login_and_logout(source_app):
         assert 'logged_in' not in session
 
     with source_app.test_client() as app:
-        resp = app.post('/login', data=dict(codename=codename),
+        resp = app.post(url_for('main.login'),
+                        data=dict(codename=codename),
                         follow_redirects=True)
         assert resp.status_code == 200
         assert session['logged_in'] is True
 
-        resp = app.post('/login', data=dict(codename=codename),
+        resp = app.post(url_for('main.login'),
+                        data=dict(codename=codename),
                         follow_redirects=True)
         assert resp.status_code == 200
         assert session['logged_in'] is True
 
-        resp = app.get('/logout', follow_redirects=True)
+        resp = app.get(url_for('main.logout'),
+                       follow_redirects=True)
         assert 'logged_in' not in session
         assert 'codename' not in session
         text = resp.data.decode('utf-8')
@@ -212,7 +218,8 @@ def test_login_and_logout(source_app):
 
 def test_user_must_log_in_for_protected_views(source_app):
     with source_app.test_client() as app:
-        resp = app.get('/lookup', follow_redirects=True)
+        resp = app.get(url_for('main.lookup'),
+                       follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Enter Codename" in text
@@ -223,12 +230,13 @@ def test_login_with_whitespace(source_app):
     Test that codenames with leading or trailing whitespace still work"""
 
     def login_test(app, codename):
-        resp = app.get('/login')
+        resp = app.get(url_for('main.login'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Enter Codename" in text
 
-        resp = app.post('/login', data=dict(codename=codename),
+        resp = app.post(url_for('main.login'),
+                        data=dict(codename=codename),
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -255,10 +263,11 @@ def _dummy_submission(app):
     testing notification behavior for a source's first vs. their
     subsequent submissions
     """
-    return app.post('/submit', data=dict(
-        msg="Pay no attention to the man behind the curtain.",
-        fh=(StringIO(''), ''),
-    ), follow_redirects=True)
+    return app.post(
+        url_for('main.submit'),
+        data=dict(msg="Pay no attention to the man behind the curtain.",
+                  fh=(StringIO(''), '')),
+        follow_redirects=True)
 
 
 def test_initial_submission_notification(source_app):
@@ -279,10 +288,10 @@ def test_submit_message(source_app):
     with source_app.test_client() as app:
         new_codename(app, session)
         _dummy_submission(app)
-        resp = app.post('/submit', data=dict(
-            msg="This is a test.",
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg="This is a test.", fh=(StringIO(''), '')),
+            follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Thanks! We received your message" in text
@@ -291,10 +300,10 @@ def test_submit_message(source_app):
 def test_submit_empty_message(source_app):
     with source_app.test_client() as app:
         new_codename(app, session)
-        resp = app.post('/submit', data=dict(
-            msg="",
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg="", fh=(StringIO(''), '')),
+            follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "You must enter a message or choose a file to submit." \
@@ -310,10 +319,10 @@ def test_submit_big_message(source_app):
     with source_app.test_client() as app:
         new_codename(app, session)
         _dummy_submission(app)
-        resp = app.post('/submit', data=dict(
-            msg="AA" * (1024 * 512),
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg="AA" * (1024 * 512), fh=(StringIO(''), '')),
+            follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Thanks! We received your message" in text
@@ -323,10 +332,10 @@ def test_submit_file(source_app):
     with source_app.test_client() as app:
         new_codename(app, session)
         _dummy_submission(app)
-        resp = app.post('/submit', data=dict(
-            msg="",
-            fh=(StringIO('This is a test'), 'test.txt'),
-        ), follow_redirects=True)
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg="", fh=(StringIO('This is a test'), 'test.txt')),
+            follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert 'Thanks! We received your document' in text
@@ -336,10 +345,12 @@ def test_submit_both(source_app):
     with source_app.test_client() as app:
         new_codename(app, session)
         _dummy_submission(app)
-        resp = app.post('/submit', data=dict(
-            msg="This is a test",
-            fh=(StringIO('This is a test'), 'test.txt'),
-        ), follow_redirects=True)
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(
+                msg="This is a test",
+                fh=(StringIO('This is a test'), 'test.txt')),
+            follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Thanks! We received your message and document" in text
@@ -354,10 +365,10 @@ def test_submit_message_with_low_entropy(source_app):
             with source_app.test_client() as app:
                 new_codename(app, session)
                 _dummy_submission(app)
-                resp = app.post('/submit', data=dict(
-                    msg="This is a test.",
-                    fh=(StringIO(''), ''),
-                ), follow_redirects=True)
+                resp = app.post(
+                    url_for('main.submit'),
+                    data=dict(msg="This is a test.", fh=(StringIO(''), '')),
+                    follow_redirects=True)
                 assert resp.status_code == 200
                 assert not async_genkey.called
 
@@ -371,10 +382,10 @@ def test_submit_message_with_enough_entropy(source_app):
             with source_app.test_client() as app:
                 new_codename(app, session)
                 _dummy_submission(app)
-                resp = app.post('/submit', data=dict(
-                    msg="This is a test.",
-                    fh=(StringIO(''), ''),
-                ), follow_redirects=True)
+                resp = app.post(
+                    url_for('main.submit'),
+                    data=dict(msg="This is a test.", fh=(StringIO(''), '')),
+                    follow_redirects=True)
                 assert resp.status_code == 200
                 assert async_genkey.called
 
@@ -386,10 +397,11 @@ def test_delete_all_successfully_deletes_replies(source_app):
         utils.db_helper.reply(journalist, source, 1)
 
     with source_app.test_client() as app:
-        resp = app.post('/login', data=dict(codename=codename),
+        resp = app.post(url_for('main.login'),
+                        data=dict(codename=codename),
                         follow_redirects=True)
         assert resp.status_code == 200
-        resp = app.post('/delete-all', follow_redirects=True)
+        resp = app.post(url_for('main.batch_delete'), follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "All replies have been deleted" in text
@@ -403,10 +415,12 @@ def test_delete_all_replies_already_deleted(source_app):
 
     with source_app.test_client() as app:
         with patch.object(source_app.logger, 'error') as logger:
-            resp = app.post('/login', data=dict(codename=codename),
+            resp = app.post(url_for('main.login'),
+                            data=dict(codename=codename),
                             follow_redirects=True)
             assert resp.status_code == 200
-            resp = app.post('/delete-all', follow_redirects=True)
+            resp = app.post(url_for('main.batch_delete'),
+                            follow_redirects=True)
             assert resp.status_code == 200
             logger.assert_called_once_with(
                 "Found no replies when at least one was expected"
@@ -421,10 +435,12 @@ def test_submit_sanitizes_filename(source_app):
     with patch.object(gzip, 'GzipFile', wraps=gzip.GzipFile) as gzipfile:
         with source_app.test_client() as app:
             new_codename(app, session)
-            resp = app.post('/submit', data=dict(
-                msg="",
-                fh=(StringIO('This is a test'), insecure_filename),
-            ), follow_redirects=True)
+            resp = app.post(
+                url_for('main.submit'),
+                data=dict(
+                    msg="",
+                    fh=(StringIO('This is a test'), insecure_filename)),
+                follow_redirects=True)
             assert resp.status_code == 200
             gzipfile.assert_called_with(filename=sanitized_filename,
                                         mode=ANY,
@@ -434,7 +450,8 @@ def test_submit_sanitizes_filename(source_app):
 
 def test_tor2web_warning_headers(source_app):
     with source_app.test_client() as app:
-        resp = app.get('/', headers=[('X-tor2web', 'encrypted')])
+        resp = app.get(url_for('main.index'),
+                       headers=[('X-tor2web', 'encrypted')])
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "You appear to be using Tor2Web." in text
@@ -442,7 +459,7 @@ def test_tor2web_warning_headers(source_app):
 
 def test_tor2web_warning(source_app):
     with source_app.test_client() as app:
-        resp = app.get('/tor2web-warning')
+        resp = app.get(url_for('info.tor2web_warning'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Why is there a warning about Tor2Web?" in text
@@ -450,7 +467,7 @@ def test_tor2web_warning(source_app):
 
 def test_why_use_tor_browser(source_app):
     with source_app.test_client() as app:
-        resp = app.get('/use-tor')
+        resp = app.get(url_for('info.recommend_tor_browser'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "You Should Use Tor Browser" in text
@@ -458,7 +475,7 @@ def test_why_use_tor_browser(source_app):
 
 def test_why_journalist_key(source_app):
     with source_app.test_client() as app:
-        resp = app.get('/why-journalist-key')
+        resp = app.get(url_for('info.why_download_journalist_pubkey'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Why download the journalist's public key?" in text
@@ -466,7 +483,7 @@ def test_why_journalist_key(source_app):
 
 def test_metadata_route(source_app):
     with source_app.test_client() as app:
-        resp = app.get('/metadata')
+        resp = app.get(url_for('api.metadata'))
         assert resp.status_code == 200
         assert resp.headers.get('Content-Type') == 'application/json'
         assert json.loads(resp.data.decode('utf-8')).get('sd_version') \
@@ -479,7 +496,7 @@ def test_login_with_overly_long_codename(source_app):
     with patch.object(crypto_util.CryptoUtil, 'hash_codename') \
             as mock_hash_codename:
         with source_app.test_client() as app:
-            resp = app.post('/login',
+            resp = app.post(url_for('main.login'),
                             data=dict(codename=overly_long_codename),
                             follow_redirects=True)
             assert resp.status_code == 200
@@ -501,10 +518,12 @@ def test_failed_normalize_timestamps_logs_warning(source_app):
             with source_app.test_client() as app:
                 new_codename(app, session)
                 _dummy_submission(app)
-                resp = app.post('/submit', data=dict(
-                    msg="This is a test.",
-                    fh=(StringIO(''), ''),
-                ), follow_redirects=True)
+                resp = app.post(
+                    url_for('main.submit'),
+                    data=dict(
+                        msg="This is a test.",
+                        fh=(StringIO(''), '')),
+                    follow_redirects=True)
                 assert resp.status_code == 200
                 text = resp.data.decode('utf-8')
                 assert "Thanks! We received your message" in text
@@ -535,7 +554,7 @@ def test_source_is_deleted_while_logged_in(source_app):
             db.session.commit()
 
             # Source attempts to continue to navigate
-            resp = app.post('/lookup', follow_redirects=True)
+            resp = app.post(url_for('main.lookup'), follow_redirects=True)
             assert resp.status_code == 200
             text = resp.data.decode('utf-8')
             assert 'Submit for the first time' in text
@@ -554,7 +573,8 @@ def test_login_with_invalid_codename(source_app):
     invalid_codename = '[]'
 
     with source_app.test_client() as app:
-        resp = app.post('/login', data=dict(codename=invalid_codename),
+        resp = app.post(url_for('main.login'),
+                        data=dict(codename=invalid_codename),
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -568,11 +588,11 @@ def test_source_session_expiration(config, source_app):
         # set the expiration to ensure we trigger an expiration
         config.SESSION_EXPIRATION_MINUTES = -1
 
-        resp = app.post('/login',
+        resp = app.post(url_for('main.login'),
                         data=dict(codename=codename),
                         follow_redirects=True)
         assert resp.status_code == 200
-        resp = app.get('/lookup', follow_redirects=True)
+        resp = app.get(url_for('main.lookup'), follow_redirects=True)
 
         # check that the session was cleared (apart from 'expires'
         # which is always present and 'csrf_token' which leaks no info)
@@ -587,9 +607,9 @@ def test_csrf_error_page(config, source_app):
     source_app.config['WTF_CSRF_ENABLED'] = True
     with source_app.test_client() as app:
         with InstrumentedApp(source_app) as ins:
-            resp = app.post('/create')
-            ins.assert_redirects(resp, '/')
+            resp = app.post(url_for('main.create'))
+            ins.assert_redirects(resp, url_for('main.index'))
 
-        resp = app.post('/create', follow_redirects=True)
+        resp = app.post(url_for('main.create'), follow_redirects=True)
         text = resp.data.decode('utf-8')
         assert 'Your session timed out due to inactivity' in text
