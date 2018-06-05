@@ -47,7 +47,7 @@ function reset_demo() {
     rm -f /var/www/securedrop/static/i/custom_logo.png
 
     # create an empty database
-    sqlite /var/lib/securedrop/db.sqlite .databases &> /dev/null
+    sqlite3 /var/lib/securedrop/db.sqlite .databases &> /dev/null
 
     ./manage.py reset
     ./create-dev-data.py
