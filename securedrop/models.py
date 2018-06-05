@@ -46,6 +46,17 @@ def get_one_or_else(query, logger, failure_method):
         failure_method(404)
 
 
+class InstanceConfig(db.Model):
+    __tablename__ = 'instanceconfig'
+    MAX_VALUE_LEN = 2000
+
+    id = Column(Integer, primary_key=True)
+    # We store the names and values of different config options for the instance
+    # that can be set by the administrator in the Admin Interface.
+    name = Column(String(96), unique=True)
+    value = Column(String(MAX_VALUE_LEN))
+
+
 class Source(db.Model):
     __tablename__ = 'sources'
     id = Column(Integer, primary_key=True)

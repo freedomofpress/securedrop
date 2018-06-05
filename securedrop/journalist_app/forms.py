@@ -7,7 +7,7 @@ from wtforms import (TextAreaField, TextField, BooleanField, HiddenField,
                      ValidationError)
 from wtforms.validators import InputRequired, Optional
 
-from models import Journalist
+from models import Journalist, InstanceConfig
 
 
 def otp_secret_validation(form, field):
@@ -27,6 +27,16 @@ def minimum_length_validation(form, field):
                     'characters long but only got '
                     '{num_chars}.'.format(
                         min_chars=Journalist.MIN_USERNAME_LEN,
+                        num_chars=len(field.data))))
+
+
+def instance_config_length_validation(form, field):
+    if len(field.data) > InstanceConfig.MAX_VALUE_LEN:
+        raise ValidationError(
+            gettext('Field must be at most {max_chars} '
+                    'characters long but got '
+                    '{num_chars}.'.format(
+                        max_chars=InstanceConfig.MAX_VALUE_LEN,
                         num_chars=len(field.data))))
 
 
@@ -60,4 +70,11 @@ class LogoForm(FlaskForm):
         FileRequired(message=gettext('File required.')),
         FileAllowed(['png'],
                     message=gettext("You can only upload PNG image files."))
+    ])
+
+
+class SourceNoticeForm(FlaskForm):
+    text = TextAreaField('text', validators=[
+        InputRequired(message=gettext('This field is required.')),
+        minimum_length_validation
     ])

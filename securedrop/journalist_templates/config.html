@@ -1,10 +1,28 @@
 {% extends "base.html" %}
 {% block body %}
+{% from "_formhelpers.html" import render_textarea_field %}
+
 <p>
   <a href="/admin">« {{ gettext('Back to admin interface') }}</a>
 </p>
 
 <h1>{{ gettext('Instance Configuration') }}</h1>
+
+<h2>{{ gettext('Custom Notice') }}</h2>
+
+<p>{{ gettext('You can add custom text to the source interface:') }}</p>
+
+<form action="{{ url_for('admin.process_source_text') }}" method="post">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <p>
+    {{ render_textarea_field(source_notice_form.text, 30, 3) }}
+    <br>
+  </p>
+  <button type="submit" class="sd-button" id="submit-logo-update">
+    <i class="fas fa-pencil-alt"></i>{{ gettext('UPDATE NOTICE') }}
+  </button>
+  {% include 'logo_upload_flashed.html' %}
+</form>
 
 <h2>{{ gettext('Alerts') }}</h2>
 
@@ -29,7 +47,7 @@
 <form method="post" enctype="multipart/form-data">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <p>
-    {{ form.logo(id="logo-upload") }}
+    {{ logo_form.logo(id="logo-upload") }}
     <br>
   </p>
   <h5>

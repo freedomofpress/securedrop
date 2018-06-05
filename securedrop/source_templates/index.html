@@ -84,6 +84,10 @@
 
       {% include 'screensaver.html' %}
 
+      {% if custom_text %}
+          <p class="center">{{ custom_text.value }}</p>
+      {% endif %}
+
       <footer>
         {{ gettext('Like all software, SecureDrop may contain security bugs. Use at your own risk.') }}<br>{{ gettext('Powered by') }} SecureDrop {{ version }}.
       </footer>

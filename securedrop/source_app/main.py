@@ -9,7 +9,7 @@ from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
 
 from db import db
-from models import Source, Submission, Reply, get_one_or_else
+from models import Source, Submission, Reply, get_one_or_else, InstanceConfig
 from rm import srm
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
@@ -23,7 +23,9 @@ def make_blueprint(config):
 
     @view.route('/')
     def index():
-        return render_template('index.html')
+        custom_text = InstanceConfig.query.filter_by(name = 'source_notice') \
+                                          .one_or_none()
+        return render_template('index.html', custom_text=custom_text)
 
     @view.route('/generate', methods=('GET', 'POST'))
     def generate():

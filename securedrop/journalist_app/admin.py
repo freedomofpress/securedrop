@@ -9,11 +9,12 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
 from db import db
-from models import Journalist, InvalidUsernameException, PasswordError
+from models import (Journalist, InvalidUsernameException, PasswordError,
+                    InstanceConfig)
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (make_password, commit_account_changes,
                                   set_diceware_password, validate_hotp_secret)
-from journalist_app.forms import LogoForm, NewUserForm
+from journalist_app.forms import LogoForm, NewUserForm, SourceNoticeForm
 
 
 def make_blueprint(config):
@@ -28,9 +29,16 @@ def make_blueprint(config):
     @view.route('/config', methods=('GET', 'POST'))
     @admin_required
     def manage_config():
-        form = LogoForm()
-        if form.validate_on_submit():
-            f = form.logo.data
+        logo_form = LogoForm()
+        source_notice_form = SourceNoticeForm()
+        source_notice = InstanceConfig.query.filter_by(name='source_notice') \
+                                      .one_or_none()
+        # Populate the form with the existing value in the database
+        if source_notice:
+            source_notice_form.text.data = source_notice.value
+
+        if logo_form.validate_on_submit():
+            f = logo_form.logo.data
             custom_logo_filepath = os.path.join(current_app.static_folder, 'i',
                                                 'custom_logo.png')
             try:
@@ -42,10 +50,31 @@ def make_blueprint(config):
             finally:
                 return redirect(url_for("admin.manage_config"))
         else:
-            for field, errors in form.errors.items():
+            for field, errors in logo_form.errors.items():
                 for error in errors:
                     flash(error, "logo-error")
-            return render_template("config.html", form=form)
+            return render_template("config.html", logo_form=logo_form,
+                                   source_notice_form=source_notice_form)
+
+    @view.route('/source-text', methods=['POST'])
+    @admin_required
+    def process_source_text():
+        source_notice = InstanceConfig.query.filter_by(name='source_notice').one_or_none()
+        logo_form = LogoForm()
+        source_notice_form = SourceNoticeForm()
+        if source_notice_form.validate_on_submit():
+            if source_notice:  # then update existing value
+                source_notice.value = source_notice_form.text.data
+            else:  # create the row
+                source_notice = InstanceConfig(name='source_notice',
+                                                 value=source_notice_form.text.data)
+            db.session.add(source_notice)
+            db.session.commit()
+            flash(gettext("Custom source interface notice updated."), 'success')
+            return redirect(url_for("admin.manage_config"))
+        else:
+            return render_template("config.html", logo_form=logo_form,
+                                   source_notice_form=source_notice_form)
 
     @view.route('/add', methods=('GET', 'POST'))
     @admin_required
