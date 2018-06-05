@@ -17,8 +17,18 @@ function main() {
 function modified_in_the_past_24h() {
     local stamp
     stamp="$1"
+    #
+    # 24h is 1440 minutes but we subtract 30min to avoid the following race condition
+    #
+    # - machine reboots
+    # - notification sent
+    # - machine reboots 24h later but reboots 1 minute faster than the previous day
+    # - notification is sent 23h59 minutes after the last one and suppressed
+    #
+    local one_day
+    one_day=1410
     test -f "${stamp}" && \
-        find "${stamp}" -mtime -1 | \
+        find "${stamp}" -mmin "-${one_day}" | \
             grep --quiet "${stamp}"
 }
 

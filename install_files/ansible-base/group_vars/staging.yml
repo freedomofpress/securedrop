@@ -64,3 +64,4 @@ install_local_packages: true
 # the Apache service is configured correctly.
 securedrop_app_install_from_repo: False
 
+daily_reboot_time: 4 # An integer between 0 and 23
