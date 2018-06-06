@@ -3,7 +3,7 @@ Docker Build Maintenance
 
 Get your Quay account squared away
 -----------------------------------
-The container that performs builds of debian packages is version controlled in
+The container that performs builds of Debian packages is version controlled in
 a docker repository at **quay.io/freedomofpress/sd-docker-builder**.
 There are tight restrictions over who can make edits here. If you have permissions
 to do so, you'll need to make sure your local docker client has credentials to push.
@@ -43,7 +43,7 @@ After you have your new container built, to locally test it, update
     # Replace 2018_06_06 with the tag received above
     sed -i 's/@sha256:{{image_hash}}/:2018_06_06/g' create.yml
     cd ../../
-    make build-deps
+    make build-debs
 
 
 Assuming no errors here, now push the image to **quay.io** and update the molecule
@@ -61,9 +61,7 @@ scenario accordingly.
     # for example i received the following mesage
     # 2018_06_06: digest: sha256:15f43e8d86a164509bccbe9b1c9fb5e2b3e6edd87457a9b67fef47574ec8a89c size: 7907
     sed -i "s/docker-builder\:[0-9]*.*/docker-builder\:2018_06_06/g" molecule/builder/create.yml
-    sed -i 's/image_hash:.*/image_hash: 15f43e8d86a164509bccbe9b1c9fb5e2b3e6edd87457a9b67fef47574ec8a89c/g' create.yml
+    sed -i 's/image_hash:.*/image_hash: 15f43e8d86a164509bccbe9b1c9fb5e2b3e6edd87457a9b67fef47574ec8a89c/g' molecule/builder/create.yml
 
 
-Make sure your changes get commited and merged in. Others will have to re-base on that to take advantage of your changes.
-
-
+Make sure your changes get committed and merged in. Others will have to re-base on that to take advantage of your changes.

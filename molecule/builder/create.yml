@@ -9,7 +9,7 @@
     molecule_scenario_directory: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
     # sha256 digest of quay.io/freedomofpress/sd-docker-builder:2018_06_06
-    image_hash: 15f43e8d86a164509bccbe9b1c9fb5e2b3e6edd87457a9b67fef47574ec8a89c
+    image_hash: 7a5f4504f45738a004ca47f6a01e51601e5f9ab476899778b065fac8f91cdd1b
   tasks:
     - name: Create builders
       docker_container:
