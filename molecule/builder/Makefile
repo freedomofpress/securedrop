@@ -1,4 +1,4 @@
-DATE_STR := $(shell date +"%Y_%m_%e")
+DATE_STR := $(shell date +"%Y_%m_%d")
 
 .PHONY: build-container
 build-container: ## Build container utilized for debian pkg building
