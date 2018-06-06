@@ -14,3 +14,17 @@ test_apt_dependencies:
 
 # Additional Python dependencies required for running the application tests.
 test_pip_requirements: "{{ securedrop_code }}/requirements/test-requirements.txt"
+
+# Specify TBB version to download and install
+tbb_release: 7.5.4
+tbb_locale: en-US
+tbb_arch: 64
+tbb_directory: "/home/{{ ansible_user|default(ansible_ssh_user|default(lookup('env', 'USER'))) }}/.local/tbb"
+tbb_signing_key: EF6E286DDA85EA2A4BA7DE684E2C6E8793298290
+keyserver: "hkp://ipv4.pool.sks-keyservers.net"
+tbb_apt_dependencies:
+  - libasound2
+  - libdbus-glib-1-2
+  - libfontconfig1
+  - libgtk2.0-0
+  - libxrender1
