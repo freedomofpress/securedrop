@@ -5,6 +5,7 @@ import time
 
 from contextlib import contextmanager
 from datetime import datetime, timedelta
+from flask import url_for
 from pyotp import TOTP
 
 import models
@@ -45,11 +46,11 @@ def test_totp_reuse_protections(journalist_app, test_journo):
 
             with journalist_app.test_client() as app:
                 login_user(app, test_journo)
-                resp = app.get('/logout', follow_redirects=True)
+                resp = app.get(url_for('main.logout'), follow_redirects=True)
                 assert resp.status_code == 200
 
             with journalist_app.test_client() as app:
-                resp = app.post('/login',
+                resp = app.post(url_for('main.login'),
                                 data=dict(username=test_journo['username'],
                                           password=test_journo['password'],
                                           token=token))
@@ -98,8 +99,8 @@ def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
                 login_user(app, test_admin)
                 # Submit the token once
                 with InstrumentedApp(journalist_app) as ins:
-                    resp = app.post('/admin/2fa?uid={}'.format(
-                                        test_admin['id']),
+                    resp = app.post(url_for('admin.new_user_two_factor',
+                                            uid=test_admin['id']),
                                     data=dict(token=invalid_token))
 
                     assert resp.status_code == 200
@@ -116,8 +117,8 @@ def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
                 login_user(app, test_admin)
                 # Submit the same invalid token again
                 with InstrumentedApp(journalist_app) as ins:
-                    resp = app.post('/admin/2fa?uid={}'.format(
-                                        test_admin['id']),
+                    resp = app.post(url_for('admin.new_user_two_factor',
+                                            uid=test_admin['id']),
                                     data=dict(token=invalid_token))
                     ins.assert_message_flashed(
                         'Could not verify token in two-factor authentication.',
@@ -141,7 +142,7 @@ def test_bad_token_fails_to_verify_on_new_user_two_factor_page(
                 login_user(app, test_journo)
                 # Submit the token once
                 with InstrumentedApp(journalist_app) as ins:
-                    resp = app.post('/account/2fa',
+                    resp = app.post(url_for('account.new_two_factor'),
                                     data=dict(token=invalid_token))
 
                     assert resp.status_code == 200
@@ -159,7 +160,7 @@ def test_bad_token_fails_to_verify_on_new_user_two_factor_page(
 
                 # Submit the same invalid token again
                 with InstrumentedApp(journalist_app) as ins:
-                    resp = app.post('/account/2fa',
+                    resp = app.post(url_for('account.new_two_factor'),
                                     data=dict(token=invalid_token))
                     ins.assert_message_flashed(
                         'Could not verify token in two-factor authentication.',
