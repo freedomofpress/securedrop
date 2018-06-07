@@ -1,4 +1,9 @@
 exclude config.py
+include alembic.ini
+include alembic/
+include alembic/env.py
+include alembic/versions/
+include alembic/versions/*.py
 include config.py.example
 include *.py
 include securedrop-admin
@@ -11,6 +16,7 @@ include journalist_templates/
 include journalist_templates/*.html
 include management/
 include management/*.py
+include qa_loader.py
 include requirements/
 include requirements/**.txt
 include source_app/
@@ -58,6 +64,8 @@ include tests/i18n/securedrop/translations/de_DE/LC_MESSAGES/*.po
 include tests/i18n/securedrop/translations/nl/
 include tests/i18n/securedrop/translations/nl/LC_MESSAGES/
 include tests/i18n/securedrop/translations/nl/LC_MESSAGES/*.po
+include tests/migrations/
+include tests/migrations/*.py
 include tests/log/
 include tests/utils/
 include tests/utils/**.py

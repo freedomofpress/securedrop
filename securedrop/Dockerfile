@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get install -y devscripts \
                        python-pip libpython2.7-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server firefox git xvfb haveged curl \
-                       gettext paxctl x11vnc enchant libffi-dev
+                       gettext paxctl x11vnc enchant libffi-dev sqlite3
 
 RUN gem install sass -v 3.4.23
 

@@ -8,6 +8,7 @@ import logging
 import os
 import pwd
 import qrcode
+import subprocess
 import shutil
 import signal
 import sys
@@ -16,7 +17,7 @@ import traceback
 
 from contextlib import contextmanager
 from flask import current_app
-from sqlalchemy import text, create_engine
+from sqlalchemy import create_engine
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import sessionmaker
 
@@ -43,14 +44,45 @@ def reset(args):
     if not hasattr(config, 'DATABASE_FILE'):
         raise Exception("TODO: ./manage.py doesn't know how to clear the db "
                         'if the backend is not sqlite')
+
+    # we need to save some data about the old DB file so we can recreate it
+    # with the same state
+    try:
+        stat_res = os.stat(config.DATABASE_FILE)
+        uid = stat_res.st_uid
+        gid = stat_res.st_gid
+    except OSError:
+        uid = os.getuid()
+        gid = os.getgid()
+
     try:
         os.remove(config.DATABASE_FILE)
     except OSError:
         pass
 
     # Regenerate the database
-    with app_context():
-        db.create_all()
+    # 1. Create it
+    subprocess.check_call(['sqlite3', config.DATABASE_FILE, '.databases'])
+    # 2. Set permissions on it
+    os.chown(config.DATABASE_FILE, uid, gid)
+    os.chmod(config.DATABASE_FILE, 0o0640)
+
+    if os.environ.get('SECUREDROP_ENV') == 'dev':
+        # 3. Create the DB from the metadata directly when in 'dev' so
+        # developers can test application changes without first writing
+        # alembic migration.
+        with journalist_app.create_app(config).app_context():
+            db.create_all()
+    else:
+        # We have to override the hardcoded .ini file because during testing
+        # the value in the .ini doesn't exist.
+        ini_dir = os.path.dirname(getattr(config,
+                                          'TEST_ALEMBIC_INI',
+                                          'alembic.ini'))
+
+        # 3. Migrate it to 'head'
+        subprocess.check_call('cd {} && alembic upgrade head'.format(ini_dir),
+                              shell=True)  # nosec
 
     # Clear submission/reply storage
     try:
@@ -242,14 +274,11 @@ def clean_tmp(args):
 
 
 def init_db(args):
-    with journalist_app.create_app(config).app_context():
-        db.create_all()
-        db.session.execute(text('PRAGMA secure_delete = ON'))
-        db.session.execute(text('PRAGMA auto_vacuum = FULL'))
-        db.session.commit()
-
     user = pwd.getpwnam(args.user)
-    os.chown('/var/lib/securedrop/db.sqlite', user.pw_uid, user.pw_gid)
+    subprocess.check_call(['sqlite3', config.DATABASE_FILE, '.databases'])
+    os.chown(config.DATABASE_FILE, user.pw_uid, user.pw_gid)
+    os.chmod(config.DATABASE_FILE, 0o0640)
+    subprocess.check_call(['alembic', 'upgrade', 'head'])
 
 
 def were_there_submissions_today(args):

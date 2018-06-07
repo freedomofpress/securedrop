@@ -4,6 +4,7 @@
 #
 #    pip-compile --output-file securedrop/requirements/securedrop-app-code-requirements.txt securedrop/requirements/securedrop-app-code-requirements.in
 #
+alembic==0.9.9
 asn1crypto==0.24.0        # via cryptography
 babel==2.5.1              # via flask-babel
 cffi==1.11.5              # via cryptography
@@ -22,16 +23,19 @@ ipaddress==1.0.22         # via cryptography
 itsdangerous==0.24        # via flask
 jinja2==2.10
 jsmin==2.2.2
-markupsafe==1.0           # via jinja2
+mako==1.0.7               # via alembic
+markupsafe==1.0           # via jinja2, mako
 psutil==5.4.3
 pycparser==2.18           # via cffi
 pyotp==2.2.6
+python-dateutil==2.7.2    # via alembic
+python-editor==1.0.3      # via alembic
 pytz==2017.3              # via babel
 qrcode==5.3
 redis==2.10.6
 rq==0.10.0
 scrypt==0.8.0
-six==1.11.0               # via cryptography, qrcode
+six==1.11.0               # via cryptography, python-dateutil, qrcode
 sqlalchemy==1.2.0
 typing==3.6.4
 webassets==0.12.1         # via flask-assets

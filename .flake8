@@ -4,4 +4,5 @@ exclude =
     .venv/,
     journalist_gui/journalist_gui/updaterUI.py,
     journalist_gui/journalist_gui/resources_rc.py,
-    .python3
+    .python3,
+    securedrop/alembic/versions
