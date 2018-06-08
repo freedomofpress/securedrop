@@ -79,6 +79,7 @@ anonymous sources.
    yubikey_setup
    backup_and_restore
    backup_workstations
+   kernel_troubleshooting
 
 .. toctree::
    :caption: Upgrade SecureDrop
