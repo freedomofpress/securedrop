@@ -1,0 +1,71 @@
+---
+- name: Install TBB apt dependencies.
+  sudo: true
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items: "{{ tbb_apt_dependencies }}"
+
+- name: Create tbb directory.
+  sudo: true
+  file:
+    path: "{{ tbb_directory }}"
+    state: directory
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
+    mode: "0770"
+
+- name: Download TBB {{ tbb_release }} tarball and signature.
+  get_url:
+    url: "{{ item }}"
+    dest: "{{ tbb_directory }}/{{ item|basename }}"
+  with_items:
+    - https://dist.torproject.org/torbrowser/{{ tbb_release }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz
+    - https://dist.torproject.org/torbrowser/{{ tbb_release }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz.asc
+
+- name: Install gnupg-curl
+  sudo: true
+  apt:
+    name: gnupg-curl
+    state: present
+
+- name: Download TBB {{ tbb_release }} signing key.
+  sudo: true
+  command: gpg --keyserver {{ keyserver }} --recv-key {{ tbb_signing_key }}
+  register: gpg_import_tor_browser_devs_key_result
+  changed_when: "'imported: 1' in gpg_import_tor_browser_devs_key_result.stderr"
+
+- name: Verify TBB {{ tbb_release }} signature.
+  command: >
+    gpg --verify
+    tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz.asc
+    tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz
+  register: gpg_verify_result
+  changed_when: false
+  args:
+    chdir: "{{ tbb_directory }}"
+
+- name: Extract TBB {{ fpsd_crawler_tbb_release }} archive.
+  unarchive:
+    copy: no
+    src: "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz"
+    dest: "{{ tbb_directory }}"
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
+    mode: "0770"
+
+- name: Download geckodriver for compatibility with Tor
+  get_url:
+    dest: "/opt/geckodriver-v0.17.0-linux64.tar.gz"
+    url: https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz
+    sha256sum: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  tags:
+    - apt
+
+- name: install geckodriver
+  shell: |
+    cd /bin
+    tar -zxvf /opt/geckodriver-v0.17.0-linux64.tar.gz
+    chmod +x geckodriver
