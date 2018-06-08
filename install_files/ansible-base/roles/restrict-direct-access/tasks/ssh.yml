@@ -1,14 +1,4 @@
 ---
-- name: Install 2FA pam module.
-  apt:
-    name: libpam-google-authenticator
-    state: latest
-  tags:
-    - apt
-    - 2fa
-    - ssh
-    - pam
-
 - name: Copy SSH client config file.
   copy:
     src: ssh_config
