@@ -1,8 +1,8 @@
 Troubleshooting Kernel Updates
 ==============================
-For security reasons, new versions of the Linux kernel running on your your 
-*Application* and *Monitor Servers* may be installed automatically as part of a 
-SecureDrop release. All kernel updates are tested extensively
+Kernel updates address known bugs and security vulnerabilities in the Linux
+kernel. They may be installed automatically on your *Application* and *Monitor
+Servers* as part of a SecureDrop release. All kernel updates are tested extensively
 against :ref:`recommended hardware <Specific Hardware Recommendations>`. If
 things do go wrong (e.g., the server does not boot after a kernel update), 
 the following instructions will help you to roll back to the previous, 
@@ -20,7 +20,7 @@ Boot into Single-User Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. |GRUB in default state| image:: ./images/0.5.x_to_0.6/grub-in-default-state.png
-.. |GRUB in edit mode| image:: ./images/0.5.x_to_0.6/grub-in-edit-mode.png
+.. |GRUB in edit mode| image:: ./images/edit-grub-0.8.0.png
 
 To access single user mode, you will have to edit the boot options for
 the new kernel. You can do so using the GRUB bootloader, pictured below:
@@ -35,8 +35,9 @@ shut down the server.
 Once you hit a key, you will be able to interact with the menu with the
 up (⬆) and down (⬇) keys. Select “Ubuntu” as shown above, and press “e”
 to edit the boot options. In the line that begins “linux”, replace the
-word “quiet” with “single”. Note that the word "quiet" may be wrapped, as in the
-screenshot below:
+word “quiet” with “single”. Note that the word "quiet" may be wrapped. Once you
+have performed the replacement, the output on your console should look similar to
+the screenshot below.
 
 |GRUB in edit mode|
 
@@ -67,6 +68,7 @@ Compare the Behavior of the Old Kernel
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. |GRUB with advanced options selected| image:: ./images/0.5.x_to_0.6/grub-with-advanced-options-selected.png
+.. |Selecting a specific kernel in GRUB| image:: ./images/grubmenu-0.8.0.png
 
 Reboot the server in a safe way with ``sudo reboot``. After the BIOS screen,
 you can select a different kernel from the GRUB boot menu by selecting
@@ -74,8 +76,13 @@ you can select a different kernel from the GRUB boot menu by selecting
 
 |GRUB with advanced options selected|
 
-Under **Advanced Options**, choose the option with the previous kernel version.
-If unsure, please consult the `release notes for the most recent release of 
+The next menu should give you a list of kernels, similar to the one pictured
+below:
+
+|Selecting a specific kernel in GRUB|
+
+Choose the option with the previous kernel version. If unsure, please consult the
+`release notes for the most recent release of
 SecureDrop <https://securedrop.org/news/release-announcement/>`__, which will
 include details about kernel version changes.
 
@@ -90,7 +97,7 @@ temporarily set an older kernel as the default.
 Roll Back to the Old Kernel
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. important:: It is of critical importance for the near term security of your instance
+.. important:: It is of critical importance for the security of your instance
   that we work together to resolve any compatibility issues. Rolling back to an 
   older version is only a stopgap measure to avoid a prolonged outage of your
   SecureDrop instance.
