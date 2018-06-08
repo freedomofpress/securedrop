@@ -42,11 +42,50 @@ def downgrade(alembic_config, migration):
 
 def get_schema(app):
     with app.app_context():
-        return list(db.engine.execute(text('''
+        result = list(db.engine.execute(text('''
             SELECT type, name, tbl_name, sql
             FROM sqlite_master
             ORDER BY type, name, tbl_name
             ''')))
+
+    return {(x[0], x[1], x[2]): x[3] for x in result}
+
+
+def assert_schemas_equal(left, right):
+    for (k, v) in left.items():
+        if k not in right:
+            raise AssertionError(
+                'Left contained {} but right did not'.format(k))
+        if not ddl_equal(v, right[k]):
+            raise AssertionError(
+                'Schema for {} did not match:\nLeft:\n{}\nRight:\n{}'
+                .format(k, v, right[k]))
+        right.pop(k)
+
+    if right:
+        raise AssertionError(
+            'Right had additional tables: {}'.format(right.keys()))
+
+
+def ddl_equal(left, right):
+    '''Check the "tokenized" DDL is equivalent because, because sometimes
+        Alembic schemas append columns on the same line to the DDL comes out
+        like:
+
+        column1 TEXT NOT NULL, column2 TEXT NOT NULL
+
+        and SQLAlchemy comes out:
+
+        column1 TEXT NOT NULL,
+        column2 TEXT NOT NULL
+    '''
+    # ignore the autoindex cases
+    if left is None and right is None:
+        return True
+
+    left = [x for x in left.split() if x]
+    right = [x for x in right.split() if x]
+    return left == right
 
 
 def test_alembic_head_matches_db_models(journalist_app,
@@ -71,10 +110,10 @@ def test_alembic_head_matches_db_models(journalist_app,
 
     # The initial migration creates the table 'alembic_version', but this is
     # not present in the schema created by `db.create_all()`.
-    alembic_schema = list(filter(lambda x: x[2] != 'alembic_version',
-                                 alembic_schema))
+    alembic_schema = {k: v for k, v in alembic_schema.items()
+                      if k[2] != 'alembic_version'}
 
-    assert alembic_schema == models_schema
+    assert_schemas_equal(alembic_schema, models_schema)
 
 
 @pytest.mark.parametrize('migration', ALL_MIGRATIONS)
@@ -124,10 +163,10 @@ def test_schema_unchanged_after_up_then_downgrade(alembic_config,
     # The initial migration is a degenerate case because it creates the table
     # 'alembic_version', but rolling back the migration doesn't clear it.
     if len(migrations) == 1:
-        reverted_schema = list(filter(lambda x: x[2] != 'alembic_version',
-                                      reverted_schema))
+        reverted_schema = {k: v for k, v in reverted_schema.items()
+                           if k[2] != 'alembic_version'}
 
-    assert reverted_schema == original_schema
+    assert_schemas_equal(reverted_schema, original_schema)
 
 
 @pytest.mark.parametrize('migration', ALL_MIGRATIONS)
