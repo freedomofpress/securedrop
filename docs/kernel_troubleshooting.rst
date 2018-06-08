@@ -69,7 +69,7 @@ Compare the Behavior of the Old Kernel
 .. |GRUB with advanced options selected| image:: ./images/0.5.x_to_0.6/grub-with-advanced-options-selected.png
 
 Reboot the server in a safe way with ``sudo reboot``. After the BIOS screen,
-you can select a new kernel from the GRUB boot menu by selecting
+you can select a different kernel from the GRUB boot menu by selecting
 **Advanced Options for Ubuntu**, pictured below.
 
 |GRUB with advanced options selected|
