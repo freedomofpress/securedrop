@@ -4,6 +4,13 @@
 set -e
 set -x
 
+remove_2fa_tty_req() {
+    # The goal here is to remove legacy 2FA req on TTY logins
+    # Lets prevent this from bombing out the install though if it fails
+    auth_file=/etc/pam.d/common-auth
+    sed -i "/^auth\ required\ pam_google.*/d" ${auth_file} || true
+}
+
 case "$1" in
     configure)
 
@@ -15,6 +22,7 @@ case "$1" in
     if [ -f "$apt_security_list" ]; then
         sed -i 's/deb\.torproject\.org\/torproject\.org/tor-apt.freedom.press/g' "$apt_security_list"
     fi
+    remove_2fa_tty_req
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
