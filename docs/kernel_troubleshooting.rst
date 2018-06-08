@@ -11,12 +11,15 @@ together to resolve them as quickly as possible.
 
 First, you need to physically access each server. Power down the server
 (safely if possible), attach required peripherals (keyboard, monitor),
-and power the server back up. If you did not configure Google
-Authenticator for console access, you will need to use single user mode
-in order to login to each server.
+and power the server back up.
 
+If you have access to the password for your admin user, you can use it to log into
+each server without the use of two-factor authentication, which was disabled
+for keyboard logins in SecureDrop 0.8.0. You may have saved the password in the
+KeePassX database on your *Admin Workstation*. If you do not have the password,
+you can boot into single user mode instead.
 
-Boot into Single-User Mode
+Boot into Single User Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. |GRUB in default state| image:: ./images/0.5.x_to_0.6/grub-in-default-state.png
