@@ -325,12 +325,10 @@ class Journalist(db.Model):
     def _gen_salt(self, salt_bytes=32):
         return os.urandom(salt_bytes)
 
-    _SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
+    _LEGACY_SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
-    def _scrypt_hash(self, password, salt, params=None):
-        if not params:
-            params = self._SCRYPT_PARAMS
-        return scrypt.hash(str(password), salt, **params)
+    def _scrypt_hash(self, password, salt):
+        return scrypt.hash(str(password), salt, **self._LEGACY_SCRYPT_PARAMS)
 
     MAX_PASSWORD_LEN = 128
     MIN_PASSWORD_LEN = 14
