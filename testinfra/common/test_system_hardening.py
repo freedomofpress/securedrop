@@ -80,7 +80,7 @@ def test_swap_disabled(Command):
 
 def test_twofactor_disabled_on_tty(host):
     """
-    Having 2FA on TTY logins is security theater on systems without encrypted drives.
+    Having 2FA on TTY logins is cumbersome on systems without encrypted drives.
     Let's make sure this option is disabled!
     """
 
