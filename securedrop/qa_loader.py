@@ -64,6 +64,12 @@ def new_journalist():
                                          nullable=False),
                             pw,
                             random_bool())
+    if random_bool():
+        # to add legacy passwords back in
+        journalist.passphrase_hash = None
+        journalist.pw_salt = random_chars(32, nullable=False)
+        journalist.pw_hash = random_chars(64, nullable=False)
+
     journalist.is_admin = bool_or_none()
 
     journalist.is_totp = bool_or_none()
