@@ -383,12 +383,25 @@ class Journalist(db.Model):
 
         if self.passphrase_hash:
             # default case
-            return argon2.verify(passphrase, self.passphrase_hash)
+            is_valid = argon2.verify(passphrase, self.passphrase_hash)
         else:
             # legacy support
-            return pyotp.utils.compare_digest(
+            is_valid = pyotp.utils.compare_digest(
                 self._scrypt_hash(passphrase, self.pw_salt),
                 self.pw_hash)
+
+        # migrate new passwords
+        if is_valid and not self.passphrase_hash:
+            self.passphrase_hash = \
+                argon2.using(**ARGON2_PARAMS).hash(passphrase)
+            # passlib creates one merged field that embeds randomly generated
+            # salt in the output like $alg$salt$hash
+            self.pw_salt = None
+            self.pw_hash = None
+            db.session.add(self)
+            db.session.commit()
+
+        return is_valid
 
     def regenerate_totp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()
