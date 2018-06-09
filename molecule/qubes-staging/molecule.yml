@@ -1,0 +1,52 @@
+---
+driver:
+  name: delegated
+  options:
+    managed: True
+    login_cmd_template: 'ssh {instance} -F /tmp/molecule-qubes-ssh-config'
+    ansible_connection_options:
+      connection: ssh
+      ansible_ssh_common_args: -F /tmp/molecule-qubes-ssh-config
+      ansible_become_pass: securedrop
+
+platforms:
+  - name: app-staging
+    vm_base: sd-app-base
+    vm_name: sd-app
+    groups:
+      - securedrop_application_server
+      - staging
+
+  - name: mon-staging
+    vm_base: sd-mon-base
+    vm_name: sd-mon
+    groups:
+      - securedrop_monitor_server
+      - staging
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  config_options:
+    defaults:
+      callback_whitelist: "profile_tasks, timer"
+  options:
+    e: "@qubes-vars.yml"
+  inventory:
+    links:
+      group_vars: ../../install_files/ansible-base/group_vars
+      host_vars: ../../install_files/ansible-base/host_vars
+  env:
+    ANSIBLE_ROLES_PATH: ../../install_files/ansible-base/roles
+scenario:
+  name: qubes-staging
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - destroy
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
