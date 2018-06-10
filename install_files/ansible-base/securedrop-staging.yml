@@ -78,6 +78,6 @@
   max_fail_percentage: 0
   any_errors_fatal: yes
   tasks:
-    - include: tasks/reboot_if_first_install.yml
+    - include_tasks: tasks/reboot_if_first_install.yml
       when: not amazon_builder
   become: yes

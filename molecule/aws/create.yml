@@ -10,7 +10,7 @@
           - ci_environment != ""
           - aws_ec2_ci_tags.build_num != ""
 
-    - include: tor.yml
+    - import_tasks: tor.yml
 
     - name: Store job_id (job name and build number) as host fact.
       set_fact:
@@ -69,11 +69,11 @@
         aws_ec2_subnet_id: "{{ vpc_subnet_result.subnets[0].id }}"
         aws_ec2_ami: "{{ ami_search_result.results[0].ami_id }}"
 
-    - include: aws-launch.yml
+    - import_tasks: aws-launch.yml
 
   handlers:
     - name: aws relaunch
-      include: aws-launch.yml
+      import_tasks: aws-launch.yml
   vars:
     aws_ec2_instance_type: "{{ ansible_env.CI_AWS_TYPE | mandatory }}"
     aws_ec2_ci_region: "{{ ansible_env.CI_AWS_REGION | default('us-west-1') }}"

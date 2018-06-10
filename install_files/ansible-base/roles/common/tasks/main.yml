@@ -1,24 +1,24 @@
 ---
-- include: post_ubuntu_install_checks.yml
+- import_tasks: post_ubuntu_install_checks.yml
 
-- include: create_users.yml
+- import_tasks: create_users.yml
 
-- include: setup_etc_hosts.yml
+- import_tasks: setup_etc_hosts.yml
 
-- include: harden_dns.yml
+- import_tasks: harden_dns.yml
 
-- include: install_tmux.yml
+- import_tasks: install_tmux.yml
 
-- include: install_ntp.yml
+- import_tasks: install_ntp.yml
 
-- include: cron_apt.yml
+- import_tasks: cron_apt.yml
   tags:
     - reboot
 
-- include: apt_upgrade.yml
+- import_tasks: apt_upgrade.yml
 
-- include: sysctl.yml
+- import_tasks: sysctl.yml
 
-- include: disable_swap.yml
+- import_tasks: disable_swap.yml
 
-- include: remove_kernel_modules.yml
+- import_tasks: remove_kernel_modules.yml

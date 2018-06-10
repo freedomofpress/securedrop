@@ -1,18 +1,18 @@
 ---
-- include: staging_wsgi_files.yml
+- include_tasks: staging_wsgi_files.yml
   when: "'staging' in group_names"
   tags:
     - apache
 
-- include: apparmor_complain.yml
+- include_tasks: apparmor_complain.yml
   when: securedrop_app_test_apparmor_complain
   tags:
     - aa-complain
 
-- include: dev_setup_xvfb_for_functional_tests.yml
+- import_tasks: dev_setup_xvfb_for_functional_tests.yml
 
-- include: setup_firefox_for_selenium.yml
+- import_tasks: setup_firefox_for_selenium.yml
 
-- include: disable_mprotect_ff_plugin_container.yml
+- import_tasks: disable_mprotect_ff_plugin_container.yml
 
-- include: modern_gettext.yml
+- import_tasks: modern_gettext.yml

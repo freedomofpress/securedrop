@@ -5,4 +5,4 @@
 # in order to reuse a single implementation of reboot logic
 # as necessary.
 - name: reboot
-  include: "{{ role_path }}/../../tasks/reboot.yml"
+  import_tasks: "{{ role_path }}/../../tasks/reboot.yml"

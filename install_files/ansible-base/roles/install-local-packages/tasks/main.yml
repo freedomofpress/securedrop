@@ -7,6 +7,6 @@
   register: apt_mark_showhold_result
   changed_when: false
 
-- include: install_debs.yml
+- import_tasks: install_debs.yml
 
-- include: hold_debs.yml
+- import_tasks: hold_debs.yml

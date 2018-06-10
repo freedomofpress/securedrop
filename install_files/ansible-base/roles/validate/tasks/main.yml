@@ -1,3 +1,3 @@
 ---
-- include: validate_tails_environment.yml
+- include_tasks: validate_tails_environment.yml
   when: securedrop_validate_tails_environment

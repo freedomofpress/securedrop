@@ -1,2 +1,2 @@
 ---
-- include: build_securedrop_app_code_deb.yml
+- import_tasks: build_securedrop_app_code_deb.yml

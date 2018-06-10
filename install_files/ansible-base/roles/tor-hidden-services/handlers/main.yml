@@ -1,3 +1,3 @@
 ---
 - name: restart tor
-  include: restart-tor-carefully.yml
+  import_tasks: restart-tor-carefully.yml

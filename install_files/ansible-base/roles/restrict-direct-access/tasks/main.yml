@@ -1,11 +1,11 @@
 ---
-- include: fetch_tor_config.yml
+- import_tasks: fetch_tor_config.yml
 
-- include: dh_moduli.yml
+- import_tasks: dh_moduli.yml
 
-- include: ssh.yml
+- import_tasks: ssh.yml
 
-- include: iptables.yml
+- import_tasks: iptables.yml
   tags:
     - iptables
     - permissions

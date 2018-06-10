@@ -4,8 +4,8 @@
   hosts: securedrop
   become: yes
   tasks:
-    - include: reboot_and_wait.yml
-    - include: tor_apt_test.yml
+    - import_tasks: reboot_and_wait.yml
+    - include_tasks: tor_apt_test.yml
       when: (lookup('env','CIRCLE_BRANCH')|default('na')).startswith('release')
   handlers:
     - name: update tor

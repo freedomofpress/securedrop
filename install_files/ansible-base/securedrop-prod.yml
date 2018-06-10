@@ -26,7 +26,7 @@
         - not enable_ssh_over_tor
         - sd_dir_check.stat.exists
 
-    - include: tasks/transistion_ssh_local.yml
+    - include_tasks: tasks/transistion_ssh_local.yml
       when:
         - not enable_ssh_over_tor
         - sd_dir_check.stat.exists
@@ -88,5 +88,5 @@
     # from IPv4 to Onion URLs, so just reboot and don't wait.
     reboot_wait: no
   tasks:
-    - include: tasks/reboot_if_first_install.yml
+    - import_tasks: tasks/reboot_if_first_install.yml
   become: yes
