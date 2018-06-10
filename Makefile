@@ -73,7 +73,7 @@ yamllint: ## Lints YAML files (does not validate syntax!)
 # Prune the `.venv/` dir if it exists, since it contains pip-installed files
 # and is not subject to our linting. Using grep to filter filepaths since
 # `-regextype=posix-extended` is not cross-platform.
-	@find "$(PWD)" -path "*/.venv" -prune -o -type f \
+	@find "$(PWD)" -path "*/.venv" -prune -o -path "*/venv" -prune -o -type f \
 		| grep -E '^.*\.ya?ml' | xargs yamllint -c "$(PWD)/.yamllint"
 
 .PHONY: shellcheck
