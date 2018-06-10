@@ -20,4 +20,4 @@
   when:
     # Chained conditional; only inspect command results if running under grsecurity.
     - ansible_kernel.endswith('-grsec')
-    - "item.stdout != '- PaX flags: -----m-x---- [{{ item.item }}]' or item.rc != 0"
+    - item.stdout != '- PaX flags: -----m-x---- [' + item.item + ']' or item.rc != 0

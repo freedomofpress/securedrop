@@ -45,5 +45,5 @@
   # dot-separated, but `aa-status` the executable path in place of the filename.
   # Doing it this way keeps the config DRY and will work with future profiles as well.
   when: >
-    "/{{ item | regex_replace('\\.', '/') }}" not in apparmor_complaining_profiles_result.stdout_lines
+    ("/" + (item|regex_replace('\\.', '/'))) not in apparmor_complaining_profiles_result.stdout_lines
   with_items: "{{ apparmor_profiles }}"

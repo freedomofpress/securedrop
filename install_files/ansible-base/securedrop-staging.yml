@@ -17,7 +17,7 @@
     - name: Fail if package is missing from build dir
       fail:
         msg: "run 'make build-debs' - ../../build/{{item}} missing"
-      when: "'../../build/'+item not in found_debs"
+      when: "'../../build/' + item not in found_debs"
       with_items: "{{ expected_debs }}"
 
 - name: Add FPF apt repository and install base packages.
