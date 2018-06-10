@@ -13,11 +13,14 @@
     - /usr/lib/firefox/firefox
     - /usr/lib/firefox/plugin-container
 
+- debug:
+    var: paxctl_firefox_header_check
+
 # Flags as snagged from app-staging: '-----m-x-e--'
 - name: Adjust paxctl headers on firefox binaries.
   command: paxctl -zcm {{ item.item }}
-  with_items: "{{ paxctl_firefox_header_check.results }}"
+  with_items: paxctl_firefox_header_check.results
   when:
     # Chained conditional; only inspect command results if running under grsecurity.
     - ansible_kernel.endswith('-grsec')
-    - item.stdout != '- PaX flags: -----m-x---- [' + item.item + ']' or item.rc != 0
+    - item.item.stdout != '- PaX flags: -----m-x---- [' + item.item.item + ']' or item.item.rc != 0
