@@ -2,6 +2,12 @@
 # Description: apply the securedrop iptable rules
 if [ -f /etc/network/iptables/rules_v4 ]; then
   iptables-restore < /etc/network/iptables/rules_v4
+  # Extra additions, managed separately from the bulk template file.
+  # Only Xenial, not Trusty, will have the "_apt" user.
+  if [ id -u _apt ]; then
+      iptables -A OUTPUT -p tcp --match multiport --dports 80,443 -m owner --uid-owner _apt -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"
+  fi
+
 else
   echo "Iptables rules file does not exist"
   exit 1
