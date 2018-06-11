@@ -76,3 +76,14 @@ def test_swap_disabled(Command):
     # Expect that ONLY the headers will be present in the output.
     rgx = re.compile("Filename\s*Type\s*Size\s*Used\s*Priority")
     assert re.search(rgx, c)
+
+
+def test_twofactor_disabled_on_tty(host):
+    """
+    Having 2FA on TTY logins is cumbersome on systems without encrypted drives.
+    Let's make sure this option is disabled!
+    """
+
+    pam_auth_file = host.file("/etc/pam.d/common-auth").content_string
+
+    assert "auth required pam_google_authenticator.so" not in pam_auth_file
