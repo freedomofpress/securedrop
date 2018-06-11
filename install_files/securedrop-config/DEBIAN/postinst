@@ -11,6 +11,13 @@ remove_2fa_tty_req() {
     sed -i "/^auth\ required\ pam_google.*/d" ${auth_file} || true
 }
 
+permit_lts_upgrades() {
+    # The 'do-release-upgrade' command will show no versions unless
+    # explicitly allowed. Let's track the "lts" versions.
+    perl -pi -E 's/^Prompt=(?!lts$).*/Prompt=lts/' /etc/update-manager/release-upgrades
+
+}
+
 case "$1" in
     configure)
 
@@ -23,6 +30,7 @@ case "$1" in
         sed -i 's/deb\.torproject\.org\/torproject\.org/tor-apt.freedom.press/g' "$apt_security_list"
     fi
     remove_2fa_tty_req
+    permit_lts_upgrades
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
