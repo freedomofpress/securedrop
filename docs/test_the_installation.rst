@@ -29,8 +29,8 @@ Log in to Both Servers via TTY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All access to the SecureDrop servers should be performed over SSH from the
-*Admin Workstation*. To aid in troubleshooting, physical logins via TTY is
-supported.
+*Admin Workstation*. To aid in troubleshooting, login via a physical keyboard
+attached to the server is also supported.
 
 Sanity-Check the Installation
 -----------------------------
