@@ -8,8 +8,7 @@
     molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"
     molecule_scenario_directory: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
-    # sha256 digest of quay.io/freedomofpress/sd-docker-builder:2018_06_06
-    image_hash: 7a5f4504f45738a004ca47f6a01e51601e5f9ab476899778b065fac8f91cdd1b
+    image_hash: "{{ lookup('pipe', 'egrep -v ^# image_hash') }}"
   tasks:
     - name: Create builders
       docker_container:
