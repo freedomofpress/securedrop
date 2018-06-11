@@ -63,10 +63,3 @@ of the authenticated hidden services, restart Tails and make
 sure to enable persistence.
 
 .. _Authenticated Tor Hidden Services: https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient
-
-Set Up Two-Factor Authentication or the Admin
-----------------------------------------------
-The SecureDrop servers should always be accessed over SSH from the Admin
-Workstation. In the event of a connectivity problem, Admins can log in
-directly to the servers by attaching a keyboard and a display. In order to do
-so, you will need to :doc:`configure 2FA TOTP access <servers_2fa>`.

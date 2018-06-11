@@ -68,7 +68,6 @@ anonymous sources.
 
    getting_the_most_out_of_securedrop
    what_makes_securedrop_unique
-   servers_2fa
    logging
    ossec_alerts
    tails_guide
