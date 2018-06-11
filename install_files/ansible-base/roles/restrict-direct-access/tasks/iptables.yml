@@ -23,7 +23,7 @@
 
 - name: Copy load_iptables if-up script.
   copy:
-    src: load_iptables
+    src: "{{ role_path }}/../../securedrop-config/etc/network/if-up.d/load_iptables"
     dest: /etc/network/if-up.d/load_iptables
     owner: root
     mode: "0744"
