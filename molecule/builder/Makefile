@@ -6,7 +6,7 @@ build-container: ## Build container utilized for debian pkg building
 
 .PHONY: push-container
 push-container: ## Push todays labeled build image to quay
-	docker push quay.io/freedomofpress/sd-docker-builder:$(DATE_STR)
+	@./push.sh
 
 .PHONY: help
 help: ## Print this message and exit.
