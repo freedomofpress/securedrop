@@ -23,6 +23,7 @@ development_dependencies: []
 apparmor_profiles:
   - usr.sbin.tor
   - usr.sbin.apache2
+  - usr.sbin.haveged
 
 # Installing the securedrop-app-code.deb package
 securedrop_app_code_deb: "securedrop-app-code-{{ securedrop_app_code_version }}-amd64" # do not enter .deb extension

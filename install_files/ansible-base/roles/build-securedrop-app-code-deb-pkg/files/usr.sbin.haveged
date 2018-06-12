@@ -1,0 +1,21 @@
+# Last Modified: Tue Jun 12 18:30:54 2018
+#include <tunables/global>
+
+/usr/sbin/haveged {
+  #include <abstractions/base>
+  #include <local/usr.sbin.haveged>
+
+  capability sys_admin,
+
+  /dev/random w,
+  /run/haveged.pid w,
+  /sys/devices/system/cpu/ r,
+  /sys/devices/system/cpu/cpu*/cache/ r,
+  /sys/devices/system/cpu/cpu*/cache/index*/{type,size,level} r,
+  /usr/sbin/haveged mr,
+  owner @{PROC}/@{pid}/status r,
+  @{PROC}/sys/kernel/osrelease r,
+  @{PROC}/sys/kernel/random/poolsize r,
+  @{PROC}/sys/kernel/random/write_wakeup_threshold w,
+
+}
