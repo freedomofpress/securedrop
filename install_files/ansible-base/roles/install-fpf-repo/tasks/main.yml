@@ -2,18 +2,9 @@
 - name: Install SecureDrop apt repo GPG signing key.
   apt_key:
     state: present
-    data: "{{ lookup('file', 'fpf-signing-key.pub') }}"
+    data: "{{ lookup('file', item) }}"
     keyring: /etc/apt/trusted.gpg.d/securedrop-keyring.gpg
-  tags:
-    - apt
-    - fpf_repo
-
-- name: Install SecureDrop apt-test repo GPG signing key only in staging VM.
-  apt_key:
-    state: present
-    data: "{{ lookup('file', 'apt-test-signing-key.pub') }}"
-    keyring: /etc/apt/trusted.gpg.d/securedrop-keyring.gpg
-  when: "'staging' in group_names"
+  with_items: "{{ apt_repo_pubkey_files }}"
   tags:
     - apt
     - fpf_repo

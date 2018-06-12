@@ -15,3 +15,9 @@ apt_repo_url: https://apt.freedom.press
 # By default, install packages from the apt-repo, but under
 # staging hosts we'll prefer locally-built deb packages
 install_local_packages: False
+
+# Basename for GPG public key used for the FPF apt repository.
+# May be overridden in staging to install from a test/QA server,
+# the Release file for which will *not* be signed with the prod key.
+apt_repo_pubkey_files:
+  - fpf-signing-key.pub
