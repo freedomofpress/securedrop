@@ -79,3 +79,5 @@ iptables_complete_ruleset: |-
   -A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-ip-options --log-uid
   -A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-ip-options --log-uid
   -A LOGNDROP -j DROP
+
+fpf_apt_repo_url: "https://apt.freedom.press"

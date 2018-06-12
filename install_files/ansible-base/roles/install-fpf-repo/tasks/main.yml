@@ -8,6 +8,16 @@
     - apt
     - fpf_repo
 
+- name: Install SecureDrop apt-test repo GPG signing key only in staging VM.
+  apt_key:
+    state: present
+    data: "{{ lookup('file', 'apt-test-signing-key.pub') }}"
+    keyring: /etc/apt/trusted.gpg.d/securedrop-keyring.gpg
+  when: "'staging' in group_names"
+  tags:
+    - apt
+    - fpf_repo
+
 - name: Setup FPF apt repo.
   apt_repository:
     repo: deb [arch=amd64] {{ apt_repo_url }} {{ ansible_lsb.codename }} main

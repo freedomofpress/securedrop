@@ -99,3 +99,5 @@ log_events_with_ossec_alerts:
       ossec: Agent started
     level: "1"
     rule_id: "400503"
+
+fpf_apt_repo_url: "https://apt-test.freedom.press"

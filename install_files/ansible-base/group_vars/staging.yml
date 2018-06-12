@@ -65,3 +65,6 @@ install_local_packages: true
 securedrop_app_install_from_repo: False
 
 daily_reboot_time: 4 # An integer between 0 and 23
+
+# Apt-test repo is needed for testing new kernels in staging.
+apt_repo_url: "https://apt-test.freedom.press"
