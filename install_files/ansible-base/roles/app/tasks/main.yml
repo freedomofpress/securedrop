@@ -1,4 +1,7 @@
 ---
+- include: install_and_harden_apache.yml
+  tags: apache
+
 - include: app_install_fpf_deb_pkgs.yml
   when: securedrop_app_install_from_repo
 
@@ -9,8 +12,6 @@
 - include: copy_ssl_certs.yml
   when:
     - securedrop_app_https_on_source_interface
-
-- include: install_and_harden_apache.yml
 
 - include: configure_securedrop_worker.yml
 
