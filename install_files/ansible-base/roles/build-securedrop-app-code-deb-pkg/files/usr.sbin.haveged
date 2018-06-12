@@ -3,7 +3,6 @@
 
 /usr/sbin/haveged {
   #include <abstractions/base>
-  #include <local/usr.sbin.haveged>
 
   capability sys_admin,
 
