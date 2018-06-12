@@ -69,7 +69,6 @@ apache_modules:
   - dir
   - headers
   - mime
-  - mpm_worker
   - negotiation
   - reqtimeout
   - rewrite
@@ -83,7 +82,6 @@ apache_disabled_modules:
   - authn_file
   - autoindex
   - env
-  - mpm_event
   - status
 
 # Log file location for worker service, used in supervisor template.
