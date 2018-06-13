@@ -52,3 +52,5 @@ iptables_complete_ruleset: |-
 # Postfix should indeed be running on prod hosts, otherwise
 # OSSEC alerts cannot be delivered. It's disabled in staging.
 postfix_enabled: True
+
+fpf_apt_repo_url: "https://apt.freedom.press"

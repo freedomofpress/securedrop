@@ -2,8 +2,9 @@
 - name: Install SecureDrop apt repo GPG signing key.
   apt_key:
     state: present
-    data: "{{ lookup('file', 'fpf-signing-key.pub') }}"
+    data: "{{ lookup('file', item) }}"
     keyring: /etc/apt/trusted.gpg.d/securedrop-keyring.gpg
+  with_items: "{{ apt_repo_pubkey_files }}"
   tags:
     - apt
     - fpf_repo

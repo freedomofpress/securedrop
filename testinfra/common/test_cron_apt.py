@@ -2,6 +2,9 @@ import pytest
 import re
 
 
+test_vars = pytest.securedrop_test_vars
+
+
 @pytest.mark.parametrize('dependency', [
     'cron-apt',
     'ntp'
@@ -37,7 +40,7 @@ def test_cron_apt_config(File):
   'deb-src http://security.ubuntu.com/ubuntu trusty-security main',
   'deb http://security.ubuntu.com/ubuntu trusty-security universe',
   'deb-src http://security.ubuntu.com/ubuntu trusty-security universe',
-  'deb [arch=amd64] https://apt.freedom.press trusty main',
+  'deb [arch=amd64] {} trusty main'.format(test_vars.fpf_apt_repo_url),
   'deb https://tor-apt.freedom.press trusty main',
 ])
 def test_cron_apt_repo_list(File, repo):

@@ -65,3 +65,12 @@ install_local_packages: true
 securedrop_app_install_from_repo: False
 
 daily_reboot_time: 4 # An integer between 0 and 23
+
+# Apt-test repo is needed for testing new kernels in staging.
+apt_repo_url: "https://apt-test.freedom.press"
+
+# As of 0.7.0, we use separate repos for SecureDrop and Tor mirrors,
+# only one of which typically has a test/QA server configured.
+apt_repo_pubkey_files:
+  - apt-test-signing-key.pub
+  - fpf-signing-key.pub
