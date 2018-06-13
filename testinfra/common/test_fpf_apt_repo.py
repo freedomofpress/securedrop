@@ -1,4 +1,5 @@
 import pytest
+import re
 
 
 test_vars = pytest.securedrop_test_vars
@@ -23,12 +24,10 @@ def test_fpf_apt_repo_present(File):
     # apt repository is configured on the host
     if test_vars.fpf_apt_repo_url == "https://apt-test.freedom.press":
         f = File('/etc/apt/sources.list.d/apt_test_freedom_press.list')
-        assert f.contains('^deb \[arch=amd64\] '
-                          'https:\/\/apt-test\.freedom\.press trusty main$')
     else:
         f = File('/etc/apt/sources.list.d/apt_freedom_press.list')
-        assert f.contains('^deb \[arch=amd64\] https:\/\/apt\.freedom\.press '
-                          'trusty main$')
+    assert f.contains('^deb \[arch=amd64\] {} trusty main$'.format(
+                      re.escape(test_vars.fpf_apt_repo_url)))
 
 
 def test_fpf_apt_repo_fingerprint(Command):
