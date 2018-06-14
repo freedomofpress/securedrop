@@ -34,6 +34,10 @@ Any special considerations for deployment? Consider both:
 
 - [ ] [Configuration tests](https://docs.securedrop.org/en/latest/development/testing_configuration_tests.html) pass
 
+### If you made non-trivial code changes:
+
+- [ ] I have written a test plan and validated it for this PR
+
 ### If you made changes to documentation:
 
 - [ ] Doc linting (`make docs-lint`) passed locally
