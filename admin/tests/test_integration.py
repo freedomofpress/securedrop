@@ -466,6 +466,14 @@ def securedrop_git_repo(tmpdir):
     subprocess.check_call('git checkout 0.6'.split())
     yield tmpdir
 
+    # Save coverage information in same directory as unit test coverage
+    test_name = str(tmpdir).split('/')[-1]
+    subprocess.check_call(['cp',
+                           '{}/securedrop/admin/.coverage'.format(
+                               str(tmpdir)),
+                           '{}/../.coverage.{}'.format(CURRENT_DIR,
+                                                       test_name)])
+
 
 # This class is to test all the git related operations.
 class TestGitOperations:
@@ -474,7 +482,7 @@ class TestGitOperations:
                            'securedrop_admin/__init__.py')
         ansible_base = os.path.join(str(securedrop_git_repo),
                                     'securedrop/install_files/ansible-base')
-        fullcmd = 'python {0} --root {1} check_for_updates'.format(
+        fullcmd = 'coverage run {0} --root {1} check_for_updates'.format(
                   cmd, ansible_base)
         child = pexpect.spawn(fullcmd)
         child.expect('Update needed', timeout=20)
@@ -497,7 +505,7 @@ class TestGitOperations:
                            'securedrop_admin/__init__.py')
         ansible_base = os.path.join(str(securedrop_git_repo),
                                     'securedrop/install_files/ansible-base')
-        fullcmd = 'python {0} --root {1} check_for_updates'.format(
+        fullcmd = 'coverage run {0} --root {1} check_for_updates'.format(
                   cmd, ansible_base)
         child = pexpect.spawn(fullcmd)
         child.expect('All updates applied', timeout=20)
@@ -525,7 +533,7 @@ class TestGitOperations:
                            'securedrop_admin/__init__.py')
         ansible_base = os.path.join(str(securedrop_git_repo),
                                     'securedrop/install_files/ansible-base')
-        child = pexpect.spawn('python {0} --root {1} update'.format(
+        child = pexpect.spawn('coverage run {0} --root {1} update'.format(
                               cmd, ansible_base))
         child.expect('Updated to SecureDrop', timeout=100)
 
