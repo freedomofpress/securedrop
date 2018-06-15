@@ -1,6 +1,11 @@
+import os
+import pytest
+
 testinfra_hosts = ['docker://trusty-sd-sec-update']
 
 
+@pytest.mark.skipif(os.environ.get("FPF_CI", "false") == "true",
+                    reason="Skip in CI, only fail this test locally")
 def test_ensure_no_updates_avail(host):
     """
         Test to make sure that there are no security-updates in the
