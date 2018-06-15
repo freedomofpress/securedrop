@@ -20,7 +20,8 @@ set -e
 . /usr/share/debconf/confmodule
 
 clean_pyc() {
-    find /var/www/securedrop/alembic -name '*.pyc' -delete
+    find /var/www/securedrop/ -name '*.pyc' -delete
+    find /var/www/securedrop/ -name __pycache__ -delete
 }
 
 case "$1" in
@@ -32,11 +33,7 @@ case "$1" in
     ;;
 
     purge)
-        for dir in securedrop/ securedrop/tmp securedrop/keys securedrop/store; do
-          full_path="/var/lib/$dir"
-          rm -rf "$full_path"
-        done 
-        clean_pyc
+        rm -rf /var/lib/securedrop/ /var/www/securedrop
     ;;
 
     *)
