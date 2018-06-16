@@ -29,7 +29,7 @@ running a command on the *Application Server*. After that, the Journalist
 Interface admin can create additional accounts through the web
 interface.
 
-To create the first admin account, SSH to the *Application Server*, then:
+If you are installing SecureDrop yourself, to create the first admin account, :doc:`SSH to the Application Server <test_the_installation>`, then:
 
 .. code:: sh
 
@@ -65,3 +65,4 @@ Interface Guide <admin>`.
            following the :ref:`Updating Logo Image` documentation.
 
 .. |TorBrowser| image:: images/torbrowser.png
+
