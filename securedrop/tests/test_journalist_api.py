@@ -131,3 +131,18 @@ def test_user_without_token_cannot_delete_protected_endpoints(journalist_app,
                                headers=get_api_headers(''))
 
             assert response.status_code == 403
+
+
+def test_user_without_token_cannot_post_protected_endpoints(journalist_app,
+                                                            test_source):
+    with journalist_app.app_context():
+        protected_routes = [
+            url_for('api.post_reply', source_id=test_source['source'].id),
+            url_for('api.add_star', source_id=test_source['source'].id)
+        ]
+
+    with journalist_app.test_client() as app:
+        for protected_route in protected_routes:
+            response = app.post(protected_route,
+                                headers=get_api_headers(''))
+            assert response.status_code == 403
