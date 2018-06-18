@@ -1,9 +1,10 @@
+from functools import wraps
 import json
 
 from flask import abort, Blueprint, jsonify, request
 
 import config
-from models import Journalist
+from models import Journalist, Source
 
 
 def token_required(f):
@@ -47,5 +48,50 @@ def make_blueprint(config):
                  expiration=1800), 'expiration': 1800}), 200
         except:
             return abort(403, 'Token authentication failed.')
+
+    @api.route('/sources/', methods=['GET'])
+    @token_required
+    def get_all_sources():
+        sources = Source.query.all()
+        return jsonify(
+            {'sources': [source.to_json() for source in sources]}), 200
+
+    @api.route('/sources/<int:source_id>/', methods=['GET'])
+    @token_required
+    def single_source(source_id):
+        pass
+
+    @api.route('/sources/<int:source_id>/add_star/', methods=['POST'])
+    @token_required
+    def add_star(source_id):
+        pass
+
+    @api.route('/sources/<int:source_id>/remove_star/', methods=['DELETE'])
+    @token_required
+    def remove_star(source_id):
+        pass
+
+    @api.route('/sources/<int:source_id>/submissions/', methods=['GET',
+                                                                 'DELETE'])
+    @token_required
+    def all_source_submissions(source_id):
+        pass
+
+    @api.route('/sources/<int:source_id>/submissions/<int:submission_id>/download/',  # noqa
+               methods=['GET'])
+    @token_required
+    def download_submission(source_id, submission_id):
+        pass
+
+    @api.route('/sources/<int:source_id>/submissions/<int:submission_id>/',
+               methods=['GET', 'DELETE'])
+    @token_required
+    def single_submission(source_id, submission_id):
+        pass
+
+    @api.route('/sources/<int:source_id>/reply/', methods=['POST'])
+    @token_required
+    def post_reply(source_id):
+        pass
 
     return api

@@ -15,7 +15,7 @@ try:
 except ImportError:
     from StringIO import StringIO  # type: ignore
 
-from flask import current_app
+from flask import current_app, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from jinja2 import Markup
 from sqlalchemy import ForeignKey
@@ -102,6 +102,26 @@ class Source(db.Model):
         collection.extend(self.replies)
         collection.sort(key=lambda x: int(x.filename.split('-')[0]))
         return collection
+
+    def to_json(self):
+        docs_msg_count = self.documents_messages_count()
+
+        json_source = {
+            'url': url_for('api.single_source', source_id=self.id),
+            'source_id': self.id,
+            'journalist_designation': self.journalist_designation,
+            'flagged': self.flagged,
+            'last_updated': self.last_updated,
+            'interaction_count': self.interaction_count,
+            'number_of_documents': docs_msg_count['documents'],
+            'number_of_messages': docs_msg_count['messages'],
+            'submissions_url': url_for('api.all_source_submissions',
+                                       source_id=self.id),
+            'add_star_url': url_for('api.add_star', source_id=self.id),
+            'remove_star_url': url_for('api.remove_star', source_id=self.id),
+            'reply_url': url_for('api.post_reply', source_id=self.id)
+            }
+        return json_source
 
 
 class Submission(db.Model):

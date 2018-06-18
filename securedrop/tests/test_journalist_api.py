@@ -71,3 +71,18 @@ def test_user_cannot_get_an_api_token_with_wrong_2fa_token(journalist_app,
 
         assert response.status_code == 403
         assert observed_response['error'] == 'forbidden'
+
+
+def test_authorized_user_gets_all_sources(journalist_app, test_source,
+                                          journalist_api_token):
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.get_all_sources'),
+                           headers=get_api_headers(journalist_api_token))
+
+        data = json.loads(response.data)
+
+        assert response.status_code == 200
+
+        # We expect to see our test source in the response
+        assert test_source['source'].journalist_designation == \
+            data['sources'][0]['journalist_designation']
