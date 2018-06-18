@@ -28,7 +28,7 @@ if typing.TYPE_CHECKING:
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from sdconfig import SDConfig  # noqa: F401
 
-_insecure_api_views = ['api.get_endpoints']
+_insecure_api_views = ['api.get_endpoints', 'api.get_token']
 _insecure_views = ['main.login', 'main.select_logo', 'static']
 
 
@@ -123,7 +123,7 @@ def create_app(config):
 
         if str(request.endpoint).split('.')[0] == 'api':
             if request.endpoint not in _insecure_api_views:
-                abort(403)
+                abort(403, 'API token is invalid or expired.')
         else:  # We are not using the API
             if request.endpoint not in _insecure_views and not logged_in():
                 return redirect(url_for('main.login'))

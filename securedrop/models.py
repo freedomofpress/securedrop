@@ -16,6 +16,7 @@ except ImportError:
     from StringIO import StringIO  # type: ignore
 
 from flask import current_app
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from jinja2 import Markup
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
@@ -435,6 +436,20 @@ class Journalist(db.Model):
         if not user.valid_password(password):
             raise WrongPasswordException("invalid password")
         return user
+
+    def generate_api_token(self, expiration):
+        s = Serializer(current_app.config['SECRET_KEY'],
+                       expires_in=expiration)
+        return s.dumps({'id': self.id}).decode('ascii')
+
+    @staticmethod
+    def verify_api_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return None
+        return Journalist.query.get(data['id'])
 
 
 class JournalistLoginAttempt(db.Model):
