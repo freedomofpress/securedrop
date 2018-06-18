@@ -3,32 +3,36 @@ Admin Guide
 
 .. include:: ./includes/provide-feedback.txt
 
-You (the admin) should have your own username and passphrase, plus
-two-factor authentication through either the FreeOTP app
-on your smartphone or a YubiKey.
+The SecureDrop architecture contains multiple machines and hardened servers.
+While we have automated many of the installation and maintenance tasks, a
+skilled Linux admin is required to responsibly run the system.
+
+This section outlines the tasks the admin is responsible for in order to
+ensure that the SecureDrop server continues to be a safe place for sources to
+talk to journalists.
 
 .. _Responsibilities:
 
 Responsibilities
 ----------------
 
-The SecureDrop architecture contains multiple hardened servers, and while we have
-automated many of the installation and maintenance tasks, a skilled Linux
-admin and some manual intervention is required to responsibly run the system.
+Maintaining Credentials
+~~~~~~~~~~~~~~~~~~~~~~~
 
-This section outlines the tasks the admin is responsible for in order to
-ensure that the SecureDrop server continues to be a safe place for sources to
-talk to journalists.
+The admin should have her own username, passphrase, and two-factor
+authentication method (via smartphone app or YubiKey). Admins are also
+responsible for tracking user credentials and encouraging best practices. (See
+:doc:`passphrases` and :doc:`passphrase_best_practices`.)
 
-Keep Your SecureDrop Server Updated
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Updating the SecureDrop Servers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You should maintain awareness of SecureDrop updates and take any required
+The admin should be aware of all SecureDrop updates and take any required
 manual action if requested in the `SecureDrop Release Blog`_. We recommend
 subscribing to the `SecureDrop RSS Feed`_ to stay apprised of new updates.
 
 Most often, the SecureDrop server will automatically update via apt. However,
-occasionally you will need to run the Ansible playbooks. We will inform you in
+occasionally you will need to run Ansible playbooks. We will inform you in
 the release blog when this is the case. If you are onboarded to our `SecureDrop
 Support Portal`_, we will let you know in advance of major releases if manual
 intervention will be required.
@@ -36,14 +40,15 @@ intervention will be required.
 .. _`SecureDrop Release Blog`: https://securedrop.org/news
 .. _`SecureDrop RSS Feed`: https://securedrop.org/news/feed
 
-Keep Your Network Firewall Updated
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Updating the Network Firewall
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given all traffic first hits the network firewall as it faces the non-Tor public
-network, you will want to ensure that critical security patches are applied.
+network, the admin should ensure that critical security patches are applied to the
+firewall.
 
 Be informed of potential updates to your network firewall. If you're using the
-suggested network firewall by FPF you can subscribe to the `Netgate RSS Feed`_
+network firewall suggested by FPF, you can subscribe to the `Netgate RSS Feed`_
 to be alerted when releases occur. If critical security updates need to be
 applied, you can do so through the firewall's pfSense WebGUI. Refer to our
 :ref:`Keeping pfSense up to date` documentation or the official `pfSense
@@ -52,15 +57,15 @@ Upgrade Docs`_ for further details on how to update the suggested firewall.
 .. _`Netgate RSS Feed`: https://www.netgate.com/feed.xml
 .. _`pfSense Upgrade Docs`: https://doc.pfsense.org/index.php/Upgrade_Guide
 
-Keep Your SecureDrop Workstations Updated
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Updating the SecureDrop Workstations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You should keep your SecureDrop workstations updated with:
+The admin should keep all SecureDrop workstations updated with
 
-* **Tails updates**: for each *Admin Workstation*, *Journalist Workstation*, and
-  *Secure Viewing Station*
-* **SecureDrop workstation updates**: for each *Admin Workstation* and
-  *Journalist Workstation*
+* **Tails updates** for each *Admin Workstation*, *Journalist Workstation*, and
+  *Secure Viewing Station*; and
+* **SecureDrop workstation updates** for each *Admin Workstation* and
+  *Journalist Workstation*.
 
 You should apply Tails updates to your Tails drives as they are released, as they
 often contain critical security fixes. Subscribe to the `Tails RSS Feed`_ to be
@@ -74,15 +79,15 @@ on how to upgrade the drives.
 .. _`Tails
    Upgrade Documentation`: https://tails.boum.org/doc/first_steps/upgrade/index.en.html
 
-Monitor OSSEC Alerts for Unusual Activity
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Monitoring OSSEC Alerts for Unusual Activity
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You should decrypt and read your OSSEC alerts. Report any suspicious events to
+The admin should decrypt and read all OSSEC alerts. Report any suspicious events to
 FPF through the `SecureDrop Support Portal`_. See the :doc:`OSSEC Guide <ossec_alerts>`
 for more information on common OSSEC alerts.
 
 .. warning:: Do not post logs or alerts to public forums without first carefully
-    examining and redacting any sensitive information.
+	     examining and redacting any sensitive information.
 
 .. _test OSSEC alert:
 
