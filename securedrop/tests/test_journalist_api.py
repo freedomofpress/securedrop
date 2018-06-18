@@ -11,13 +11,7 @@ from models import Journalist
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config
-
-
-def get_api_headers():
-        return {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
+from utils.api_helper import get_api_headers
 
 
 def test_unauthenticated_user_gets_all_endpoints(journalist_app):

@@ -4,6 +4,7 @@ import gnupg
 import logging
 import os
 import io
+import json
 import psutil
 import pytest
 import shutil
@@ -11,6 +12,8 @@ import signal
 import subprocess
 
 from ConfigParser import SafeConfigParser
+from flask import url_for
+from pyotp import TOTP
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config as original_config
@@ -164,6 +167,20 @@ def test_source(journalist_app):
         return {'source': source,
                 'codename': codename,
                 'filesystem_id': filesystem_id}
+
+
+@pytest.fixture(scope='function')
+def journalist_api_token(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        valid_token = TOTP(test_journo['otp_secret']).now()
+        response = app.post(url_for('api.get_token'),
+                            data=json.dumps(
+                                {'username': test_journo['username'],
+                                 'password': test_journo['password'],
+                                 'one_time_code': valid_token}),
+                            headers=utils.api_helper.get_api_headers())
+        observed_response = json.loads(response.data)
+        return observed_response['token']
 
 
 def _start_test_rqworker(config):
