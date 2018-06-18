@@ -121,7 +121,7 @@ def create_app(config):
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
 
-        if str(request.endpoint).split('.')[0] == 'api':
+        if request.path.split('/')[1] == 'api':
             pass  # We use the @token_required decorator for the API endpoints
         else:  # We are not using the API
             if request.endpoint not in _insecure_views and not logged_in():
@@ -148,5 +148,14 @@ def create_app(config):
             return response, 403
         else:
             return render_template('403.html'), 403
+
+    @app.errorhandler(404)
+    def not_found(message):
+        if request.headers['Content-Type'] == 'application/json':
+            response = jsonify({'error': 'not found',
+                                'message': 'we could not find that resource'})
+            return response, 404
+        else:
+            return render_template('404.html'), 404
 
     return app

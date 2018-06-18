@@ -146,3 +146,13 @@ def test_user_without_token_cannot_post_protected_endpoints(journalist_app,
             response = app.post(protected_route,
                                 headers=get_api_headers(''))
             assert response.status_code == 403
+
+
+def test_api_404(journalist_app, journalist_api_token):
+    with journalist_app.test_client() as app:
+        response = app.get('/api/v1/invalidendpoint',
+                           headers=get_api_headers(journalist_api_token))
+        json_response = json.loads(response.data)
+
+        assert response.status_code == 404
+        assert json_response['error'] == 'not found'
