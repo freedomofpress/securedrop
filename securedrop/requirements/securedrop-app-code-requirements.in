@@ -15,6 +15,7 @@ qrcode
 redis
 rq
 scrypt
+sh
 SQLAlchemy
 typing
 Werkzeug==0.12.2
