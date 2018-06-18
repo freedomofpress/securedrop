@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
-from flask import Flask, session, redirect, url_for, flash, g, request
+from flask import abort, Flask, session, redirect, url_for, flash, g, request
 from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
@@ -27,8 +27,8 @@ if typing.TYPE_CHECKING:
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from sdconfig import SDConfig  # noqa: F401
 
-_insecure_views = ['main.login', 'main.select_logo', 'static',
-                   'api.get_endpoints']
+_insecure_api_views = ['api.get_endpoints']
+_insecure_views = ['main.login', 'main.select_logo', 'static']
 
 
 def create_app(config):
@@ -120,8 +120,12 @@ def create_app(config):
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
 
-        if request.endpoint not in _insecure_views and not logged_in():
-            return redirect(url_for('main.login'))
+        if str(request.endpoint).split('.')[0] == 'api':
+            if request.endpoint not in _insecure_api_views:
+                abort(403)
+        else:  # We are not using the API
+            if request.endpoint not in _insecure_views and not logged_in():
+                return redirect(url_for('main.login'))
 
         if request.method == 'POST':
             filesystem_id = request.form.get('filesystem_id')
