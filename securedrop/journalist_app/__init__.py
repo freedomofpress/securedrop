@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
-from flask import abort, Flask, session, redirect, url_for, flash, g, request
+from flask import (abort, Flask, session, redirect, url_for, flash, g, request,
+                   jsonify, render_template)
 from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
@@ -139,5 +140,14 @@ def create_app(config):
     app.register_blueprint(admin.make_blueprint(config), url_prefix='/admin')
     app.register_blueprint(col.make_blueprint(config), url_prefix='/col')
     app.register_blueprint(api.make_blueprint(config), url_prefix='/api/v1')
+
+    @app.errorhandler(403)
+    def forbidden(message):
+        if request.headers['Content-Type'] == 'application/json':
+            response = jsonify({'error': 'forbidden',
+                                'message': 'Not authorized'})
+            return response, 403
+        else:
+            return render_template('403.html'), 403
 
     return app
