@@ -122,8 +122,7 @@ def create_app(config):
         g.locales = i18n.get_locale2name()
 
         if str(request.endpoint).split('.')[0] == 'api':
-            if request.endpoint not in _insecure_api_views:
-                abort(403, 'API token is invalid or expired.')
+            pass  # We use the @token_required decorator for the API endpoints
         else:  # We are not using the API
             if request.endpoint not in _insecure_views and not logged_in():
                 return redirect(url_for('main.login'))
