@@ -86,3 +86,27 @@ def test_authorized_user_gets_all_sources(journalist_app, test_source,
         # We expect to see our test source in the response
         assert test_source['source'].journalist_designation == \
             data['sources'][0]['journalist_designation']
+
+
+def test_user_without_token_cannot_get_protected_endpoints(journalist_app,
+                                                           test_source):
+    with journalist_app.app_context():
+        protected_routes = [
+            url_for('api.get_all_sources'),
+            url_for('api.single_source', source_id=test_source['source'].id),
+            url_for('api.all_source_submissions',
+                    source_id=test_source['source'].id),
+            url_for('api.single_submission',
+                    source_id=test_source['source'].id,
+                    submission_id=test_source['submissions'][0].id),
+            url_for('api.download_submission',
+                    source_id=test_source['source'].id,
+                    submission_id=test_source['submissions'][0].id),
+            ]
+
+    with journalist_app.test_client() as app:
+        for protected_route in protected_routes:
+            response = app.get(protected_route,
+                               headers=get_api_headers(''))
+
+            assert response.status_code == 403
