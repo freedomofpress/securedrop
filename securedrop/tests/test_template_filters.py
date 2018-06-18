@@ -11,6 +11,8 @@ import journalist_app
 import source_app
 import template_filters
 
+from sh import pybabel
+
 
 def verify_rel_datetime_format(app):
     with app.test_client() as c:

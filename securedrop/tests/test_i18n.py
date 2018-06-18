@@ -31,6 +31,8 @@ import journalist_app as journalist_app_module
 import pytest
 import source_app
 
+from sh import sed, pybabel
+
 
 def verify_i18n(app):
     not_translated = 'code hello i18n'

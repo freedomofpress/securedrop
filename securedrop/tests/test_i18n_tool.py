@@ -10,8 +10,9 @@ from mock import patch
 import pytest
 import shutil
 import signal
-import subprocess
 import time
+
+from sh import sed, msginit, pybabel, git, touch
 
 
 class TestI18NTool(object):
@@ -368,39 +369,3 @@ class TestI18NTool(object):
         message = i18n_tool.sh("git -C {d}/securedrop show".format(d=d))
         assert "Someone Else" in message
         assert u"Loïc" not in message
-
-
-class TestSh(object):
-
-    def test_sh(self):
-        assert 'A' == i18n_tool.sh("echo -n A")
-        with pytest.raises(Exception) as excinfo:
-            i18n_tool.sh("exit 123")
-        assert excinfo.value.returncode == 123
-
-    def test_sh_progress(self, caplog):
-        i18n_tool.sh("echo AB ; sleep 5 ; echo C")
-        records = caplog.records
-        assert ':sh: ' in records[0].message
-        assert records[0].levelname == 'DEBUG'
-        assert 'AB' == records[1].message
-        assert records[1].levelname == 'DEBUG'
-        assert 'C' == records[2].message
-        assert records[2].levelname == 'DEBUG'
-
-    def test_sh_input(self, caplog):
-        assert 'abc' == i18n_tool.sh("cat", 'abc')
-
-    def test_sh_fail(self, caplog):
-        level = i18n_tool.log.getEffectiveLevel()
-        i18n_tool.log.setLevel(logging.INFO)
-        assert i18n_tool.log.getEffectiveLevel() == logging.INFO
-        with pytest.raises(subprocess.CalledProcessError) as excinfo:
-            i18n_tool.sh("echo AB ; echo C ; exit 111")
-        i18n_tool.log.setLevel(level)
-        assert excinfo.value.returncode == 111
-        records = caplog.records
-        assert 'AB' == records[0].message
-        assert records[0].levelname == 'ERROR'
-        assert 'C' == records[1].message
-        assert records[1].levelname == 'ERROR'
