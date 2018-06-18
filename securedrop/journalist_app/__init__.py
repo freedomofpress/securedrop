@@ -13,7 +13,7 @@ import version
 
 from crypto_util import CryptoUtil
 from db import db
-from journalist_app import account, admin, main, col
+from journalist_app import account, admin, api, main, col
 from journalist_app.utils import get_source, logged_in
 from models import Journalist
 from store import Storage
@@ -27,7 +27,8 @@ if typing.TYPE_CHECKING:
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from sdconfig import SDConfig  # noqa: F401
 
-_insecure_views = ['main.login', 'main.select_logo', 'static']
+_insecure_views = ['main.login', 'main.select_logo', 'static',
+                   'api.get_endpoints']
 
 
 def create_app(config):
@@ -144,5 +145,6 @@ def create_app(config):
                            url_prefix='/account')
     app.register_blueprint(admin.make_blueprint(config), url_prefix='/admin')
     app.register_blueprint(col.make_blueprint(config), url_prefix='/col')
+    app.register_blueprint(api.make_blueprint(config), url_prefix='/api/v1')
 
     return app
