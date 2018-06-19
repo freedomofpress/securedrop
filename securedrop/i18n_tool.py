@@ -213,16 +213,13 @@ class I18NTool(object):
         io.open(l10n_txt, mode='w').write(l10n_content)
         self.require_git_email_name(includes)
         if self.file_is_modified(l10n_txt):
-            sh("""
-            set -ex
-            cd {includes}
-            git add l10n.txt
-            git commit \
-              -m 'docs: update the list of supported languages' \
-              l10n.txt
-            """.format(includes=includes))
+            k = {'_cwd': includes}
+            git.add('l10n.txt', **k)
+            msg = 'docs: update the list of supported languages'
+            git.commit('-m', msg, 'l10n.txt', **k)
             log.warning(l10n_txt + " updated")
-            log.warning(sh("cd " + includes + "; git show"))
+            git_show_out = git.show(**k)
+            log.warning(git_show_out)
         else:
             log.warning(l10n_txt + " already up to date")
 

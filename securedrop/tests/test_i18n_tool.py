@@ -230,17 +230,15 @@ class TestI18NTool(object):
         assert i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
 
     def test_update_docs(self, tmpdir, caplog):
-        os.makedirs(join(str(tmpdir), 'includes'))
-        i18n_tool.sh("""
-        cd {dir}
-        git init
-        git config user.email "you@example.com"
-        git config user.name "Your Name"
-        mkdir includes
-        touch includes/l10n.txt
-        git add includes/l10n.txt
-        git commit -m 'init'
-        """.format(dir=str(tmpdir)))
+        k = {'_cwd': str(tmpdir)}
+        git.init(**k)
+        git.config('user.email', "you@example.com", **k)
+        git.config('user.name', "Your Name", **k)
+        os.mkdir(join(str(tmpdir), 'includes'))
+        touch('includes/l10n.txt', **k)
+        git.add('includes/l10n.txt', **k)
+        git.commit('-m', 'init', **k)
+
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-docs',
