@@ -281,20 +281,24 @@ class I18NTool(object):
     def upstream_commit(self, args, code):
         self.require_git_email_name(args.root)
         authors = set()
-        for path in sh("git -C {r} diff --name-only --cached".format(
-                r=args.root)).split():
-            previous_message = sh("git -C {r} log -n 1 {p}".format(
-                r=args.root, p=path))
-            m = re.search('copied from (\w+)', previous_message)
+        diffs = git('--no-pager', '-C', args.root,
+                    'diff', '--name-only', '--cached').stdout
+        for path in diffs.strip().split('\n'):
+            previous_message = unicode(git(
+                '--no-pager', '-C', args.root, 'log', '-n', '1', path,
+                _encoding='utf-8'))
+            m = re.search(u'copied from (\w+)', previous_message)
             if m:
                 origin = m.group(1)
             else:
                 origin = ''
-            authors |= set(sh("""
-            git -C {r} log --format=%aN {o}..i18n/i18n -- {p}
-            """.format(r=args.root, o=origin, p=path)).strip().split('\n'))
-        current = sh("git -C {r} rev-parse i18n/i18n".format(
-            r=args.root)).strip()
+            git_authors = unicode(git(
+                '--no-pager', '-C', args.root, 'log', '--format=%aN',
+                '{}..i18n/i18n'.format(origin), '--',
+                path, _encoding='utf-8'))
+            git_authors = git_authors.strip().split(u'\n')
+            authors |= set(git_authors)
+        current = git('-C', args.root, 'rev-parse', 'i18n/i18n').stdout
         info = I18NTool.SUPPORTED_LANGUAGES[code]
         message = textwrap.dedent(u"""
         l10n: updated {code} {name}
@@ -305,11 +309,10 @@ class I18NTool(object):
         copied from {current}
         """.format(remote=args.url,
                    name=info['name'],
-                   authors=", ".join(authors),
+                   authors=u", ".join(authors),
                    code=code,
                    current=current))
-        sh(u'git -C {r} commit -m "{message}"'.format(
-            r=args.root, message=message.replace('"', '\"')).encode('utf-8'))
+        git('-C', args.root, 'commit', '-m', message)
 
     def set_update_from_weblate_parser(self, subps):
         parser = subps.add_parser('update-from-weblate',
