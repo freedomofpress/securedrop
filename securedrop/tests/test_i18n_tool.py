@@ -199,18 +199,14 @@ class TestI18NTool(object):
             assert 'template hello i18n' not in mo
 
     def test_require_git_email_name(self, tmpdir):
-        i18n_tool.sh("""
-        cd {dir}
-        git init
-        """.format(dir=str(tmpdir)))
+        k = {'_cwd': str(tmpdir)}
+        git('init', **k)
         with pytest.raises(Exception) as excinfo:
             i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
         assert 'please set name' in excinfo.value.message
-        i18n_tool.sh("""
-        cd {dir}
-        git config user.email "you@example.com"
-        git config user.name "Your Name"
-        """.format(dir=str(tmpdir)))
+
+        git.config('user.email', "you@example.com", **k)
+        git.config('user.name', "Your Name", **k)
         assert i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
 
     def test_update_docs(self, tmpdir, caplog):
