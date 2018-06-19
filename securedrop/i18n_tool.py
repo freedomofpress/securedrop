@@ -5,6 +5,7 @@ import argparse
 import io
 import logging
 import os
+import glob
 import re
 import signal
 import subprocess
@@ -61,49 +62,33 @@ class I18NTool(object):
         messages_file = os.path.join(args.translations_dir, 'messages.pot')
 
         if args.extract_update:
-            sh("""
-            set -xe
-
-            mkdir -p {translations_dir}
-
-            pybabel extract \
-            --charset=utf-8 \
-            --mapping={mapping} \
-            --output={messages_file} \
-            --project=SecureDrop \
-            --version={version} \
-            --msgid-bugs-address='securedrop@freedom.press' \
-            --copyright-holder='Freedom of the Press Foundation' \
-            {sources}
-
-            # remove this line so the file does not change if no
-            # strings are modified
-            sed -i '/^"POT-Creation-Date/d' {messages_file}
-            """.format(translations_dir=args.translations_dir,
-                       mapping=args.mapping,
-                       messages_file=messages_file,
-                       version=args.version,
-                       sources=" ".join(args.sources.split(','))))
+            if not os.path.exists(args.translations_dir):
+                os.makedirs(args.translations_dir)
+            sources = args.sources.split(',')
+            pybabel.extract(
+                '--charset=utf-8',
+                '--mapping', args.mapping,
+                '--output', messages_file,
+                '--project=SecureDrop',
+                '--version', args.version,
+                "--msgid-bugs-address=securedrop@freedom.press",
+                "--copyright-holder=Freedom of the Press Foundation",
+                *sources)
+            sed('-i', '-e', '/^"POT-Creation-Date/d', messages_file)
 
             if (self.file_is_modified(messages_file) and
                     len(os.listdir(args.translations_dir)) > 1):
-                sh("""
-                set -xe
-                for translation in {translations_dir}/*/LC_MESSAGES/*.po ; do
-                  msgmerge --previous --update $translation {messages_file}
-                done
-                """.format(translations_dir=args.translations_dir,
-                           messages_file=messages_file))
-                log.warning("messages translations updated in " +
-                            messages_file)
+                tglob = '{}/*/LC_MESSAGES/*.po'.format(args.translations_dir)
+                for translation in glob.iglob(tglob):
+                    msgmerge('--previous', '--update', translation,
+                             messages_file)
+                log.warning("messages translations updated in {}".format(
+                            messages_file))
             else:
                 log.warning("messages translations are already up to date")
 
         if args.compile and len(os.listdir(args.translations_dir)) > 1:
-            sh("""
-            set -x
-            pybabel compile --directory {translations_dir}
-            """.format(translations_dir=args.translations_dir))
+            pybabel.compile('--directory', args.translations_dir)
 
     def translate_desktop(self, args):
         messages_file = os.path.join(args.translations_dir, 'desktop.pot')

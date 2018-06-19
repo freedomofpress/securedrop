@@ -147,11 +147,7 @@ class TestI18NTool(object):
 
         locale = 'en_US'
         locale_dir = join(str(tmpdir), locale)
-        i18n_tool.sh("pybabel init -i {} -d {} -l {}".format(
-            messages_file,
-            str(tmpdir),
-            locale,
-        ))
+        pybabel('init', '-i', messages_file, '-d', str(tmpdir), '-l', locale)
         mo_file = join(locale_dir, 'LC_MESSAGES/messages.mo')
         assert not exists(mo_file)
         i18n_tool.I18NTool().main(args)
@@ -181,11 +177,7 @@ class TestI18NTool(object):
         locale = 'en_US'
         locale_dir = join(str(tmpdir), locale)
         po_file = join(locale_dir, 'LC_MESSAGES/messages.po')
-        i18n_tool.sh("pybabel init -i {} -d {} -l {}".format(
-            messages_file,
-            str(tmpdir),
-            locale,
-        ))
+        pybabel(['init', '-i', messages_file, '-d', str(tmpdir), '-l', locale])
         assert exists(po_file)
         # pretend this happened a few seconds ago
         few_seconds_ago = time.time() - 60
