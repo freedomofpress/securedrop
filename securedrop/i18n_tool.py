@@ -52,15 +52,10 @@ class I18NTool(object):
         return subprocess.call(['git', '-C', dir, 'diff', '--quiet', path])
 
     def ensure_i18n_remote(self, args):
-        sh("""
-        set -ex
-        cd {root}
-        if ! git remote | grep --quiet i18n ; then
-           git remote add i18n {url}
-        fi
-        git fetch i18n
-        """.format(root=args.root,
-                   url=args.url))
+        k = {'_cwd': args.root}
+        if 'i18n' not in git.remote(**k).stdout:
+            git.remote.add('i18n', args.url, **k)
+        git.fetch('i18n', **k)
 
     def translate_messages(self, args):
         messages_file = os.path.join(args.translations_dir, 'messages.pot')
