@@ -347,6 +347,7 @@ class I18NTool(object):
 
     def setup_verbosity(self, args):
         if args.verbose:
+            logging.getLogger('sh.command').setLevel(logging.INFO)
             log.setLevel(logging.DEBUG)
         else:
             log.setLevel(logging.INFO)
