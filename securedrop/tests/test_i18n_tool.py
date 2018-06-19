@@ -253,25 +253,25 @@ class TestI18NTool(object):
 
     def test_update_from_weblate(self, tmpdir, caplog):
         d = str(tmpdir)
-        i18n_tool.sh("""
-        set -ex
-        for r in i18n securedrop ; do
-           mkdir {d}/$r
-           cd {d}/$r
-           git init
-           git config user.email "you@example.com"
-           git config user.name "Loïc Nordhøy"
-           touch README.md
-           git add README.md
-           git commit -m 'README' README.md
-        done
-        cp -a {o}/i18n/* {d}/i18n
-        cd {d}/i18n
-        git add securedrop install_files
-        git commit -m 'init' -a
-        git checkout -b i18n master
-        """.format(o=self.dir,
-                   d=d))
+        for repo in ('i18n', 'securedrop'):
+            os.mkdir(join(d, repo))
+            k = {'_cwd': join(d, repo)}
+            git.init(**k)
+            git.config('user.email', 'you@example.com', **k)
+            git.config('user.name',  u'Loïc Nordhøy', **k)
+            touch('README.md', **k)
+            git.add('README.md', **k)
+            git.commit('-m', 'README', 'README.md', **k)
+        for o in os.listdir(join(self.dir, 'i18n')):
+            f = join(self.dir, 'i18n', o)
+            if os.path.isfile(f):
+                shutil.copyfile(f, join(d, 'i18n', o))
+            else:
+                shutil.copytree(f, join(d, 'i18n', o))
+        k = {'_cwd': join(d, 'i18n')}
+        git.add('securedrop', 'install_files', **k)
+        git.commit('-m', 'init', '-a', **k)
+        git.checkout('-b', 'i18n', 'master', **k)
 
         def r():
             return "".join([str(l) for l in caplog.records])
@@ -319,26 +319,24 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' not in r()
         assert 'l10n: updated de_DE' not in r()
-        message = i18n_tool.sh("git -C {d}/securedrop show".format(d=d))
+        message = unicode(git('--no-pager', '-C', 'securedrop', 'show',
+                              _cwd=d, _encoding='utf-8'))
         assert u"Loïc" in message
 
         #
         # an update is done to nl in weblate
         #
-        i18n_tool.sh("""
-        set -ex
-        cd {d}/i18n
-        f=securedrop/translations/nl/LC_MESSAGES/messages.po
-        sed -i -e 's/inactiviteit/INACTIVITEIT/' $f
-        git add $f
-        git config user.email "somone@else.com"
-        git config user.name "Someone Else"
-        git commit -m 'translation change' $f
+        k = {'_cwd': join(d, 'i18n')}
+        f = 'securedrop/translations/nl/LC_MESSAGES/messages.po'
+        sed('-i', '-e', 's/inactiviteit/INACTIVITEIT/', f, **k)
+        git.add(f, **k)
+        git.config('user.email', 'somone@else.com', **k)
+        git.config('user.name', 'Someone Else', **k)
+        git.commit('-m', 'translation change', f, **k)
 
-        cd {d}/securedrop
-        git config user.email "somone@else.com"
-        git config user.name "Someone Else"
-        """.format(d=d))
+        k = {'_cwd': join(d, 'securedrop')}
+        git.config('user.email', 'somone@else.com', **k)
+        git.config('user.name', 'Someone Else', **k)
 
         #
         # the nl translation update from weblate is copied
@@ -354,6 +352,7 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' in r()
         assert 'l10n: updated de_DE' not in r()
-        message = i18n_tool.sh("git -C {d}/securedrop show".format(d=d))
+        message = unicode(git('--no-pager', '-C', 'securedrop', 'show',
+                              _cwd=d))
         assert "Someone Else" in message
         assert u"Loïc" not in message

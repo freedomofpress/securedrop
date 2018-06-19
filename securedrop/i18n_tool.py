@@ -244,19 +244,17 @@ class I18NTool(object):
 
             def need_update(p):
                 exists = os.path.exists(join(args.root, p))
-                sh("""
-                set -ex
-                cd {r}
-                git checkout i18n/i18n -- {p}
-                git reset HEAD -- {p}
-                """.format(r=args.root, p=p))
+                k = {'_cwd': args.root}
+                git.checkout('i18n/i18n', '--', p, **k)
+                git.reset('HEAD', '--', p, **k)
                 if not exists:
                     return True
                 else:
                     return self.file_is_modified(join(args.root, p))
 
             def add(p):
-                sh("git -C {r} add {p}".format(r=args.root, p=p))
+                git('-C', args.root, 'add', p)
+
             updated = False
             #
             # Update messages
