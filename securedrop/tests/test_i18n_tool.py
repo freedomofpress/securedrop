@@ -90,17 +90,15 @@ class TestI18NTool(object):
 
         locale = 'fr_FR'
         po_file = join(str(tmpdir), locale + ".po")
-        i18n_tool.sh("""
-        msginit  --no-translator \
-                 --locale {locale} \
-                 --output {po_file} \
-                 --input {messages_file}
-        sed -i -e '/{source}/,+1s/msgstr ""/msgstr "SOURCE FR"/' \
-                 {po_file}
-        """.format(source='SecureDrop Source Interfaces',
-                   messages_file=messages_file,
-                   po_file=po_file,
-                   locale=locale))
+        msginit(
+            '--no-translator',
+            '--locale', locale,
+            '--output', po_file,
+            '--input', messages_file)
+        source = 'SecureDrop Source Interfaces'
+        sed('-i', '-e',
+            '/{}/,+1s/msgstr ""/msgstr "SOURCE FR"/'.format(source),
+            po_file)
         assert exists(po_file)
 
         #

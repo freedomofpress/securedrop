@@ -94,52 +94,45 @@ class I18NTool(object):
         messages_file = os.path.join(args.translations_dir, 'desktop.pot')
 
         if args.extract_update:
-            sh("""
-            set -xe
-            cd {translations_dir}
-            xgettext \
-               --output=desktop.pot \
-               --language=Desktop \
-               --keyword \
-               --keyword=Name \
-               --package-version={version} \
-               --msgid-bugs-address='securedrop@freedom.press' \
-               --copyright-holder='Freedom of the Press Foundation' \
-               {sources}
-
-            # remove this line so the file does not change if no
-            # strings are modified
-            sed -i '/^"POT-Creation-Date/d' {messages_file}
-            """.format(translations_dir=args.translations_dir,
-                       messages_file=messages_file,
-                       version=args.version,
-                       sources=" ".join(args.sources.split(','))))
+            sources = args.sources.split(',')
+            k = {'_cwd': args.translations_dir}
+            xgettext(
+                "--output=desktop.pot",
+                "--language=Desktop",
+                "--keyword",
+                "--keyword=Name",
+                "--package-version", args.version,
+                "--msgid-bugs-address=securedrop@freedom.press",
+                "--copyright-holder=Freedom of the Press Foundation",
+                *sources,
+                **k)
+            sed('-i', '-e', '/^"POT-Creation-Date/d', messages_file, **k)
 
             if self.file_is_modified(messages_file):
                 for f in os.listdir(args.translations_dir):
                     if not f.endswith('.po'):
                         continue
                     po_file = os.path.join(args.translations_dir, f)
-                    sh("""
-                    msgmerge --update {po_file} {messages_file}
-                    """.format(po_file=po_file,
-                               messages_file=messages_file))
+                    msgmerge('--update', po_file, messages_file)
                 log.warning("messages translations updated in " +
                             messages_file)
             else:
                 log.warning("desktop translations are already up to date")
 
         if args.compile:
-            sh("""
-            set -ex
-            cd {translations_dir}
-            find *.po | sed -e 's/\.po$//' > LINGUAS
-            for source in {sources} ; do
-               target=$(basename $source .in)
-               msgfmt --desktop --template $source -o $target -d .
-            done
-            """.format(translations_dir=args.translations_dir,
-                       sources=" ".join(args.sources.split(','))))
+            pos = filter(lambda f: f.endswith('.po'),
+                         os.listdir(args.translations_dir))
+            linguas = map(lambda l: l.rstrip('.po'), pos)
+            content = "\n".join(linguas) + "\n"
+            open(join(args.translations_dir, 'LINGUAS'), 'w').write(content)
+
+            for source in args.sources.split(','):
+                target = source.rstrip('.in')
+                msgfmt('--desktop',
+                       '--template', source,
+                       '-o', target,
+                       '-d', '.',
+                       _cwd=args.translations_dir)
 
     def set_translate_parser(self,
                              subps,
