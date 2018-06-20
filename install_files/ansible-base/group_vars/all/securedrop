@@ -38,6 +38,7 @@ appserver_dependencies:
   - apparmor-utils
   - redis-server
   - supervisor
+  - libpython2.7-dev
 
 tor_apt_repo_url: https://tor-apt.freedom.press
 
