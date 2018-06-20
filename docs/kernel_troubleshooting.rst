@@ -119,7 +119,7 @@ be third). Then edit the GRUB configuration:
 
 .. code:: sh
 
-  sudo vim /etc/default/grub
+  sudo nano /etc/default/grub
 
 Make a backup of the file or take a note of the current value of
 ``GRUB_DEFAULT`` somewhere, so you can restore the previous behavior easily at a
@@ -239,7 +239,7 @@ by issuing the following command:
 
 .. code:: sh
 
-  sudo vim /etc/default/grub
+  sudo nano /etc/default/grub
 
 Make a backup of the file or take a note of the current value of
 ``GRUB_DEFAULT`` somewhere, so you can restore the previous behavior if needed.
