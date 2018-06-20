@@ -75,7 +75,7 @@ Compare the Behavior of the Old Kernel
 
 Reboot the server in a safe way with ``sudo reboot``. After the BIOS screen,
 you can select a different kernel from the GRUB boot menu by selecting
-**Advanced Options for Ubuntu**, pictured below.
+**Advanced options for Ubuntu**, pictured below.
 
 |GRUB with advanced options selected|
 
@@ -215,7 +215,7 @@ the *Admin Workstation*. Shut down the server safely using the command
 ``sudo shutdown -P now``. Ensure that the server is fully powered off.
 
 Attach required peripherals and power the server back up. After the GRUB bootloader
-appears, select **Advanced Options for Ubuntu**, pictured below.
+appears, select **Advanced options for Ubuntu**, pictured below.
 
 |GRUB with advanced options selected|
 
