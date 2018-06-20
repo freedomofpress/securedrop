@@ -149,15 +149,7 @@ vagrant-package: ## Package up a vagrant box of the last stable SD release
 
 .PHONY: clean
 clean: ## DANGER! Purges all site-specific info and developer files from project.
-	@rm -vf install_files/ansible-base/app-source-ths \
-		  install_files/ansible-base/app-ssh-aths \
-		  install_files/ansible-base/app-journalist-aths \
-		  install_files/ansible-base/mon-ssh-aths \
-		  build/*.deb
-	@find -type f -iname '*.pyc' -delete
-	@find -type f -iname '*.retry' -delete
-	@rm -rvf securedrop/static/.webassets-cache .venv
-	@git clean -f -x
+	@./devops/clean
 
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
