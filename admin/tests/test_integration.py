@@ -1,6 +1,9 @@
 import os
+import io
 import pexpect
+import pytest
 import re
+import requests
 import subprocess
 import tempfile
 
@@ -430,3 +433,111 @@ def test_sdconfig_enable_https_on_source_interface():
     with open(os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')) as fobj:    # noqa: E501
         data = fobj.read()
     assert HTTPS_OUTPUT == data
+
+
+# The following is the minimal git configuration which can be used to fetch
+# from the SecureDrop Github repository. We want to use this because the
+# developers may have the git setup to fetch from git@github.com: instead
+# of the https, and that requires authentication information.
+GIT_CONFIG = u'''[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[remote "origin"]
+        url = https://github.com/freedomofpress/securedrop.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+'''
+
+
+@pytest.fixture
+def securedrop_git_repo(tmpdir):
+    os.chdir(str(tmpdir))
+    # Clone the SecureDrop repository into the temp directory.
+    cmd = ['git', 'clone',
+           'https://github.com/freedomofpress/securedrop.git']
+    subprocess.check_call(cmd)
+    os.chdir(os.path.join(str(tmpdir), 'securedrop/admin'))
+    subprocess.check_call('git reset --hard'.split())
+    # Now we will put in our own git configuration
+    with io.open('../.git/config', 'w') as fobj:
+        fobj.write(GIT_CONFIG)
+    # Let us move to an older tag
+    subprocess.check_call('git checkout 0.6'.split())
+    yield tmpdir
+
+    # Save coverage information in same directory as unit test coverage
+    test_name = str(tmpdir).split('/')[-1]
+    subprocess.check_call(['cp',
+                           '{}/securedrop/admin/.coverage'.format(
+                               str(tmpdir)),
+                           '{}/../.coverage.{}'.format(CURRENT_DIR,
+                                                       test_name)])
+
+
+# This class is to test all the git related operations.
+class TestGitOperations:
+    def test_check_for_update_when_updates_needed(self, securedrop_git_repo):
+        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                           'securedrop_admin/__init__.py')
+        ansible_base = os.path.join(str(securedrop_git_repo),
+                                    'securedrop/install_files/ansible-base')
+        fullcmd = 'coverage run {0} --root {1} check_for_updates'.format(
+                  cmd, ansible_base)
+        child = pexpect.spawn(fullcmd)
+        child.expect('Update needed', timeout=20)
+
+        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+        child.close()
+        assert child.exitstatus == 0
+        assert child.signalstatus is None
+
+    def test_check_for_update_when_updates_not_needed(self,
+                                                      securedrop_git_repo):
+        # Determine latest production tag using GitHub release object
+        github_url = 'https://api.github.com/repos/freedomofpress/securedrop/releases/latest'  # noqa: E501
+        latest_release = requests.get(github_url).json()
+        latest_tag = str(latest_release["tag_name"])
+
+        subprocess.check_call(["git", "checkout", latest_tag])
+
+        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                           'securedrop_admin/__init__.py')
+        ansible_base = os.path.join(str(securedrop_git_repo),
+                                    'securedrop/install_files/ansible-base')
+        fullcmd = 'coverage run {0} --root {1} check_for_updates'.format(
+                  cmd, ansible_base)
+        child = pexpect.spawn(fullcmd)
+        child.expect('All updates applied', timeout=20)
+
+        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+        child.close()
+        assert child.exitstatus == 0
+        assert child.signalstatus is None
+
+    def test_update(self, securedrop_git_repo):
+        gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
+
+        # If gpg.conf doesn't exist, create it and set a reliable default
+        # keyserver for the tests.
+        gpgconf_path = os.path.join(gpgdir, 'gpg.conf')
+        if not os.path.exists(gpgconf_path):
+            os.mkdir(gpgdir)
+            with open(gpgconf_path, 'a') as f:
+                f.write('keyserver hkp://ipv4.pool.sks-keyservers.net')
+
+            # Ensure correct permissions on .gnupg home directory.
+            os.chmod(gpgdir, 0700)
+
+        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                           'securedrop_admin/__init__.py')
+        ansible_base = os.path.join(str(securedrop_git_repo),
+                                    'securedrop/install_files/ansible-base')
+        child = pexpect.spawn('coverage run {0} --root {1} update'.format(
+                              cmd, ansible_base))
+        child.expect('Updated to SecureDrop', timeout=100)
+
+        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+        child.close()
+        assert child.exitstatus == 0
+        assert child.signalstatus is None
