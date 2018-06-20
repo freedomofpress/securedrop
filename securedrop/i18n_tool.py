@@ -5,6 +5,7 @@ import argparse
 import io
 import logging
 import os
+import glob
 import re
 import signal
 import subprocess
@@ -14,50 +15,10 @@ import version
 
 from os.path import dirname, join, realpath
 
+from sh import git, pybabel, sed, msgmerge, xgettext, msgfmt
+
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
-
-
-def sh(command, input=None):
-    """Run the *command* which must be a shell snippet. The stdin is
-    either /dev/null or the *input* argument string.
-
-    The stderr/stdout of the snippet are captured and logged via
-    logging.debug(), one line at a time.
-    """
-    log.debug(":sh: " + command)
-    if input is None:
-        stdin = None
-    else:
-        stdin = subprocess.PIPE
-    proc = subprocess.Popen(
-        args=command,
-        stdin=stdin,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        shell=True,
-        bufsize=1)
-    if stdin is not None:
-        proc.stdin.write(input)
-        proc.stdin.close()
-    lines_of_command_output = []
-    loggable_line_list = []
-    with proc.stdout:
-        for line in iter(proc.stdout.readline, b''):
-            line = line.decode('utf-8')
-            lines_of_command_output.append(line)
-            loggable_line = line.strip().encode('ascii', 'ignore')
-            log.debug(loggable_line)
-            loggable_line_list.append(loggable_line)
-    if proc.wait() != 0:
-        if log.getEffectiveLevel() > logging.DEBUG:
-            for loggable_line in loggable_line_list:
-                log.error(loggable_line)
-        raise subprocess.CalledProcessError(
-            returncode=proc.returncode,
-            cmd=command
-        )
-    return "".join(lines_of_command_output)
 
 
 class I18NTool(object):
@@ -92,114 +53,86 @@ class I18NTool(object):
         return subprocess.call(['git', '-C', dir, 'diff', '--quiet', path])
 
     def ensure_i18n_remote(self, args):
-        sh("""
-        set -ex
-        cd {root}
-        if ! git remote | grep --quiet i18n ; then
-           git remote add i18n {url}
-        fi
-        git fetch i18n
-        """.format(root=args.root,
-                   url=args.url))
+        k = {'_cwd': args.root}
+        if 'i18n' not in git.remote(**k).stdout:
+            git.remote.add('i18n', args.url, **k)
+        git.fetch('i18n', **k)
 
     def translate_messages(self, args):
         messages_file = os.path.join(args.translations_dir, 'messages.pot')
 
         if args.extract_update:
-            sh("""
-            set -xe
-
-            mkdir -p {translations_dir}
-
-            pybabel extract \
-            --charset=utf-8 \
-            --mapping={mapping} \
-            --output={messages_file} \
-            --project=SecureDrop \
-            --version={version} \
-            --msgid-bugs-address='securedrop@freedom.press' \
-            --copyright-holder='Freedom of the Press Foundation' \
-            {sources}
-
-            # remove this line so the file does not change if no
-            # strings are modified
-            sed -i '/^"POT-Creation-Date/d' {messages_file}
-            """.format(translations_dir=args.translations_dir,
-                       mapping=args.mapping,
-                       messages_file=messages_file,
-                       version=args.version,
-                       sources=" ".join(args.sources.split(','))))
+            if not os.path.exists(args.translations_dir):
+                os.makedirs(args.translations_dir)
+            sources = args.sources.split(',')
+            pybabel.extract(
+                '--charset=utf-8',
+                '--mapping', args.mapping,
+                '--output', messages_file,
+                '--project=SecureDrop',
+                '--version', args.version,
+                "--msgid-bugs-address=securedrop@freedom.press",
+                "--copyright-holder=Freedom of the Press Foundation",
+                *sources)
+            sed('-i', '-e', '/^"POT-Creation-Date/d', messages_file)
 
             if (self.file_is_modified(messages_file) and
                     len(os.listdir(args.translations_dir)) > 1):
-                sh("""
-                set -xe
-                for translation in {translations_dir}/*/LC_MESSAGES/*.po ; do
-                  msgmerge --previous --update $translation {messages_file}
-                done
-                """.format(translations_dir=args.translations_dir,
-                           messages_file=messages_file))
-                log.warning("messages translations updated in " +
-                            messages_file)
+                tglob = '{}/*/LC_MESSAGES/*.po'.format(args.translations_dir)
+                for translation in glob.iglob(tglob):
+                    msgmerge('--previous', '--update', translation,
+                             messages_file)
+                log.warning("messages translations updated in {}".format(
+                            messages_file))
             else:
                 log.warning("messages translations are already up to date")
 
         if args.compile and len(os.listdir(args.translations_dir)) > 1:
-            sh("""
-            set -x
-            pybabel compile --directory {translations_dir}
-            """.format(translations_dir=args.translations_dir))
+            pybabel.compile('--directory', args.translations_dir)
 
     def translate_desktop(self, args):
         messages_file = os.path.join(args.translations_dir, 'desktop.pot')
 
         if args.extract_update:
-            sh("""
-            set -xe
-            cd {translations_dir}
-            xgettext \
-               --output=desktop.pot \
-               --language=Desktop \
-               --keyword \
-               --keyword=Name \
-               --package-version={version} \
-               --msgid-bugs-address='securedrop@freedom.press' \
-               --copyright-holder='Freedom of the Press Foundation' \
-               {sources}
-
-            # remove this line so the file does not change if no
-            # strings are modified
-            sed -i '/^"POT-Creation-Date/d' {messages_file}
-            """.format(translations_dir=args.translations_dir,
-                       messages_file=messages_file,
-                       version=args.version,
-                       sources=" ".join(args.sources.split(','))))
+            sources = args.sources.split(',')
+            k = {'_cwd': args.translations_dir}
+            xgettext(
+                "--output=desktop.pot",
+                "--language=Desktop",
+                "--keyword",
+                "--keyword=Name",
+                "--package-version", args.version,
+                "--msgid-bugs-address=securedrop@freedom.press",
+                "--copyright-holder=Freedom of the Press Foundation",
+                *sources,
+                **k)
+            sed('-i', '-e', '/^"POT-Creation-Date/d', messages_file, **k)
 
             if self.file_is_modified(messages_file):
                 for f in os.listdir(args.translations_dir):
                     if not f.endswith('.po'):
                         continue
                     po_file = os.path.join(args.translations_dir, f)
-                    sh("""
-                    msgmerge --update {po_file} {messages_file}
-                    """.format(po_file=po_file,
-                               messages_file=messages_file))
+                    msgmerge('--update', po_file, messages_file)
                 log.warning("messages translations updated in " +
                             messages_file)
             else:
                 log.warning("desktop translations are already up to date")
 
         if args.compile:
-            sh("""
-            set -ex
-            cd {translations_dir}
-            find *.po | sed -e 's/\.po$//' > LINGUAS
-            for source in {sources} ; do
-               target=$(basename $source .in)
-               msgfmt --desktop --template $source -o $target -d .
-            done
-            """.format(translations_dir=args.translations_dir,
-                       sources=" ".join(args.sources.split(','))))
+            pos = filter(lambda f: f.endswith('.po'),
+                         os.listdir(args.translations_dir))
+            linguas = map(lambda l: l.rstrip('.po'), pos)
+            content = "\n".join(linguas) + "\n"
+            open(join(args.translations_dir, 'LINGUAS'), 'w').write(content)
+
+            for source in args.sources.split(','):
+                target = source.rstrip('.in')
+                msgfmt('--desktop',
+                       '--template', source,
+                       '-o', target,
+                       '-d', '.',
+                       _cwd=args.translations_dir)
 
     def set_translate_parser(self,
                              subps,
@@ -280,16 +213,13 @@ class I18NTool(object):
         io.open(l10n_txt, mode='w').write(l10n_content)
         self.require_git_email_name(includes)
         if self.file_is_modified(l10n_txt):
-            sh("""
-            set -ex
-            cd {includes}
-            git add l10n.txt
-            git commit \
-              -m 'docs: update the list of supported languages' \
-              l10n.txt
-            """.format(includes=includes))
+            k = {'_cwd': includes}
+            git.add('l10n.txt', **k)
+            msg = 'docs: update the list of supported languages'
+            git.commit('-m', msg, 'l10n.txt', **k)
             log.warning(l10n_txt + " updated")
-            log.warning(sh("cd " + includes + "; git show"))
+            git_show_out = git.show(**k)
+            log.warning(git_show_out)
         else:
             log.warning(l10n_txt + " already up to date")
 
@@ -314,19 +244,17 @@ class I18NTool(object):
 
             def need_update(p):
                 exists = os.path.exists(join(args.root, p))
-                sh("""
-                set -ex
-                cd {r}
-                git checkout i18n/i18n -- {p}
-                git reset HEAD -- {p}
-                """.format(r=args.root, p=p))
+                k = {'_cwd': args.root}
+                git.checkout('i18n/i18n', '--', p, **k)
+                git.reset('HEAD', '--', p, **k)
                 if not exists:
                     return True
                 else:
                     return self.file_is_modified(join(args.root, p))
 
             def add(p):
-                sh("git -C {r} add {p}".format(r=args.root, p=p))
+                git('-C', args.root, 'add', p)
+
             updated = False
             #
             # Update messages
@@ -353,20 +281,24 @@ class I18NTool(object):
     def upstream_commit(self, args, code):
         self.require_git_email_name(args.root)
         authors = set()
-        for path in sh("git -C {r} diff --name-only --cached".format(
-                r=args.root)).split():
-            previous_message = sh("git -C {r} log -n 1 {p}".format(
-                r=args.root, p=path))
-            m = re.search('copied from (\w+)', previous_message)
+        diffs = git('--no-pager', '-C', args.root,
+                    'diff', '--name-only', '--cached').stdout
+        for path in diffs.strip().split('\n'):
+            previous_message = unicode(git(
+                '--no-pager', '-C', args.root, 'log', '-n', '1', path,
+                _encoding='utf-8'))
+            m = re.search(u'copied from (\w+)', previous_message)
             if m:
                 origin = m.group(1)
             else:
                 origin = ''
-            authors |= set(sh("""
-            git -C {r} log --format=%aN {o}..i18n/i18n -- {p}
-            """.format(r=args.root, o=origin, p=path)).strip().split('\n'))
-        current = sh("git -C {r} rev-parse i18n/i18n".format(
-            r=args.root)).strip()
+            git_authors = unicode(git(
+                '--no-pager', '-C', args.root, 'log', '--format=%aN',
+                '{}..i18n/i18n'.format(origin), '--',
+                path, _encoding='utf-8'))
+            git_authors = git_authors.strip().split(u'\n')
+            authors |= set(git_authors)
+        current = git('-C', args.root, 'rev-parse', 'i18n/i18n').stdout
         info = I18NTool.SUPPORTED_LANGUAGES[code]
         message = textwrap.dedent(u"""
         l10n: updated {code} {name}
@@ -377,11 +309,10 @@ class I18NTool(object):
         copied from {current}
         """.format(remote=args.url,
                    name=info['name'],
-                   authors=", ".join(authors),
+                   authors=u", ".join(authors),
                    code=code,
                    current=current))
-        sh(u'git -C {r} commit -m "{message}"'.format(
-            r=args.root, message=message.replace('"', '\"')).encode('utf-8'))
+        git('-C', args.root, 'commit', '-m', message)
 
     def set_update_from_weblate_parser(self, subps):
         parser = subps.add_parser('update-from-weblate',
@@ -419,6 +350,7 @@ class I18NTool(object):
 
     def setup_verbosity(self, args):
         if args.verbose:
+            logging.getLogger('sh.command').setLevel(logging.INFO)
             log.setLevel(logging.DEBUG)
         else:
             log.setLevel(logging.INFO)

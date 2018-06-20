@@ -11,6 +11,8 @@ import journalist_app
 import source_app
 import template_filters
 
+from sh import pybabel
+
 
 def verify_rel_datetime_format(app):
     with app.test_client() as c:
@@ -103,10 +105,9 @@ def do_test(config, create_app):
         '--compile',
     ])
 
-    i18n_tool.sh("""
-    pybabel init -i {d}/messages.pot -d {d} -l en_US
-    pybabel init -i {d}/messages.pot -d {d} -l fr_FR
-    """.format(d=config.TEMP_DIR))
+    for l in ('en_US', 'fr_FR'):
+        pot = os.path.join(config.TEMP_DIR, 'messages.pot')
+        pybabel('init', '-i', pot, '-d', config.TEMP_DIR, '-l', l)
 
     app = create_app(config)
 

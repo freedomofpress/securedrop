@@ -35,6 +35,7 @@ qrcode==5.3
 redis==2.10.6
 rq==0.10.0
 scrypt==0.8.0
+sh==1.12.14
 six==1.11.0               # via cryptography, python-dateutil, qrcode
 sqlalchemy==1.2.0
 typing==3.6.4

@@ -4,7 +4,12 @@ IMAGE = securedrop
 
 .PHONY: lint
 lint: ## Run the python linter with the project's default error settings
-	find . -name '*.py' | xargs pylint --reports=no --errors-only --disable=import-error
+	find . -name '*.py' | xargs pylint --reports=no --errors-only \
+	   --disable=import-error \
+	   --disable=no-name-in-module \
+	   --disable=unexpected-keyword-arg \
+	   --disable=too-many-function-args \
+	   --disable=import-error
 
 .PHONY: lint-full
 lint-full:  ## Run the python linter with nothing disabled

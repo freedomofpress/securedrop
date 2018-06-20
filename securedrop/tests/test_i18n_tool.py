@@ -4,14 +4,14 @@ import io
 import os
 from os.path import abspath, dirname, exists, getmtime, join, realpath
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import logging
 import i18n_tool
 from mock import patch
 import pytest
 import shutil
 import signal
-import subprocess
 import time
+
+from sh import sed, msginit, pybabel, git, touch
 
 
 class TestI18NTool(object):
@@ -31,21 +31,6 @@ class TestI18NTool(object):
                 'translate-messages',
                 '--translations-dir', str(tmpdir)
             ]) == signal.SIGINT
-
-        assert tool.main([
-            'translate-messages',
-            '--translations-dir', str(tmpdir),
-            '--extract-update'
-        ]) is None
-        assert 'pybabel extract' not in caplog.text
-
-        assert tool.main([
-            '--verbose',
-            'translate-messages',
-            '--translations-dir', str(tmpdir),
-            '--extract-update'
-        ]) is None
-        assert 'pybabel extract' in caplog.text
 
     def test_translate_desktop_l10n(self, tmpdir):
         in_files = {}
@@ -89,17 +74,15 @@ class TestI18NTool(object):
 
         locale = 'fr_FR'
         po_file = join(str(tmpdir), locale + ".po")
-        i18n_tool.sh("""
-        msginit  --no-translator \
-                 --locale {locale} \
-                 --output {po_file} \
-                 --input {messages_file}
-        sed -i -e '/{source}/,+1s/msgstr ""/msgstr "SOURCE FR"/' \
-                 {po_file}
-        """.format(source='SecureDrop Source Interfaces',
-                   messages_file=messages_file,
-                   po_file=po_file,
-                   locale=locale))
+        msginit(
+            '--no-translator',
+            '--locale', locale,
+            '--output', po_file,
+            '--input', messages_file)
+        source = 'SecureDrop Source Interfaces'
+        sed('-i', '-e',
+            '/{}/,+1s/msgstr ""/msgstr "SOURCE FR"/'.format(source),
+            po_file)
         assert exists(po_file)
 
         #
@@ -146,11 +129,7 @@ class TestI18NTool(object):
 
         locale = 'en_US'
         locale_dir = join(str(tmpdir), locale)
-        i18n_tool.sh("pybabel init -i {} -d {} -l {}".format(
-            messages_file,
-            str(tmpdir),
-            locale,
-        ))
+        pybabel('init', '-i', messages_file, '-d', str(tmpdir), '-l', locale)
         mo_file = join(locale_dir, 'LC_MESSAGES/messages.mo')
         assert not exists(mo_file)
         i18n_tool.I18NTool().main(args)
@@ -180,11 +159,7 @@ class TestI18NTool(object):
         locale = 'en_US'
         locale_dir = join(str(tmpdir), locale)
         po_file = join(locale_dir, 'LC_MESSAGES/messages.po')
-        i18n_tool.sh("pybabel init -i {} -d {} -l {}".format(
-            messages_file,
-            str(tmpdir),
-            locale,
-        ))
+        pybabel(['init', '-i', messages_file, '-d', str(tmpdir), '-l', locale])
         assert exists(po_file)
         # pretend this happened a few seconds ago
         few_seconds_ago = time.time() - 60
@@ -224,32 +199,26 @@ class TestI18NTool(object):
             assert 'template hello i18n' not in mo
 
     def test_require_git_email_name(self, tmpdir):
-        i18n_tool.sh("""
-        cd {dir}
-        git init
-        """.format(dir=str(tmpdir)))
+        k = {'_cwd': str(tmpdir)}
+        git('init', **k)
         with pytest.raises(Exception) as excinfo:
             i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
         assert 'please set name' in excinfo.value.message
-        i18n_tool.sh("""
-        cd {dir}
-        git config user.email "you@example.com"
-        git config user.name "Your Name"
-        """.format(dir=str(tmpdir)))
+
+        git.config('user.email', "you@example.com", **k)
+        git.config('user.name', "Your Name", **k)
         assert i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
 
     def test_update_docs(self, tmpdir, caplog):
-        os.makedirs(join(str(tmpdir), 'includes'))
-        i18n_tool.sh("""
-        cd {dir}
-        git init
-        git config user.email "you@example.com"
-        git config user.name "Your Name"
-        mkdir includes
-        touch includes/l10n.txt
-        git add includes/l10n.txt
-        git commit -m 'init'
-        """.format(dir=str(tmpdir)))
+        k = {'_cwd': str(tmpdir)}
+        git.init(**k)
+        git.config('user.email', "you@example.com", **k)
+        git.config('user.name', "Your Name", **k)
+        os.mkdir(join(str(tmpdir), 'includes'))
+        touch('includes/l10n.txt', **k)
+        git.add('includes/l10n.txt', **k)
+        git.commit('-m', 'init', **k)
+
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-docs',
@@ -264,25 +233,25 @@ class TestI18NTool(object):
 
     def test_update_from_weblate(self, tmpdir, caplog):
         d = str(tmpdir)
-        i18n_tool.sh("""
-        set -ex
-        for r in i18n securedrop ; do
-           mkdir {d}/$r
-           cd {d}/$r
-           git init
-           git config user.email "you@example.com"
-           git config user.name "Loïc Nordhøy"
-           touch README.md
-           git add README.md
-           git commit -m 'README' README.md
-        done
-        cp -a {o}/i18n/* {d}/i18n
-        cd {d}/i18n
-        git add securedrop install_files
-        git commit -m 'init' -a
-        git checkout -b i18n master
-        """.format(o=self.dir,
-                   d=d))
+        for repo in ('i18n', 'securedrop'):
+            os.mkdir(join(d, repo))
+            k = {'_cwd': join(d, repo)}
+            git.init(**k)
+            git.config('user.email', 'you@example.com', **k)
+            git.config('user.name',  u'Loïc Nordhøy', **k)
+            touch('README.md', **k)
+            git.add('README.md', **k)
+            git.commit('-m', 'README', 'README.md', **k)
+        for o in os.listdir(join(self.dir, 'i18n')):
+            f = join(self.dir, 'i18n', o)
+            if os.path.isfile(f):
+                shutil.copyfile(f, join(d, 'i18n', o))
+            else:
+                shutil.copytree(f, join(d, 'i18n', o))
+        k = {'_cwd': join(d, 'i18n')}
+        git.add('securedrop', 'install_files', **k)
+        git.commit('-m', 'init', '-a', **k)
+        git.checkout('-b', 'i18n', 'master', **k)
 
         def r():
             return "".join([str(l) for l in caplog.records])
@@ -330,26 +299,24 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' not in r()
         assert 'l10n: updated de_DE' not in r()
-        message = i18n_tool.sh("git -C {d}/securedrop show".format(d=d))
+        message = unicode(git('--no-pager', '-C', 'securedrop', 'show',
+                              _cwd=d, _encoding='utf-8'))
         assert u"Loïc" in message
 
         #
         # an update is done to nl in weblate
         #
-        i18n_tool.sh("""
-        set -ex
-        cd {d}/i18n
-        f=securedrop/translations/nl/LC_MESSAGES/messages.po
-        sed -i -e 's/inactiviteit/INACTIVITEIT/' $f
-        git add $f
-        git config user.email "somone@else.com"
-        git config user.name "Someone Else"
-        git commit -m 'translation change' $f
+        k = {'_cwd': join(d, 'i18n')}
+        f = 'securedrop/translations/nl/LC_MESSAGES/messages.po'
+        sed('-i', '-e', 's/inactiviteit/INACTIVITEIT/', f, **k)
+        git.add(f, **k)
+        git.config('user.email', 'somone@else.com', **k)
+        git.config('user.name', 'Someone Else', **k)
+        git.commit('-m', 'translation change', f, **k)
 
-        cd {d}/securedrop
-        git config user.email "somone@else.com"
-        git config user.name "Someone Else"
-        """.format(d=d))
+        k = {'_cwd': join(d, 'securedrop')}
+        git.config('user.email', 'somone@else.com', **k)
+        git.config('user.name', 'Someone Else', **k)
 
         #
         # the nl translation update from weblate is copied
@@ -365,42 +332,7 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' in r()
         assert 'l10n: updated de_DE' not in r()
-        message = i18n_tool.sh("git -C {d}/securedrop show".format(d=d))
+        message = unicode(git('--no-pager', '-C', 'securedrop', 'show',
+                              _cwd=d))
         assert "Someone Else" in message
         assert u"Loïc" not in message
-
-
-class TestSh(object):
-
-    def test_sh(self):
-        assert 'A' == i18n_tool.sh("echo -n A")
-        with pytest.raises(Exception) as excinfo:
-            i18n_tool.sh("exit 123")
-        assert excinfo.value.returncode == 123
-
-    def test_sh_progress(self, caplog):
-        i18n_tool.sh("echo AB ; sleep 5 ; echo C")
-        records = caplog.records
-        assert ':sh: ' in records[0].message
-        assert records[0].levelname == 'DEBUG'
-        assert 'AB' == records[1].message
-        assert records[1].levelname == 'DEBUG'
-        assert 'C' == records[2].message
-        assert records[2].levelname == 'DEBUG'
-
-    def test_sh_input(self, caplog):
-        assert 'abc' == i18n_tool.sh("cat", 'abc')
-
-    def test_sh_fail(self, caplog):
-        level = i18n_tool.log.getEffectiveLevel()
-        i18n_tool.log.setLevel(logging.INFO)
-        assert i18n_tool.log.getEffectiveLevel() == logging.INFO
-        with pytest.raises(subprocess.CalledProcessError) as excinfo:
-            i18n_tool.sh("echo AB ; echo C ; exit 111")
-        i18n_tool.log.setLevel(level)
-        assert excinfo.value.returncode == 111
-        records = caplog.records
-        assert 'AB' == records[0].message
-        assert records[0].levelname == 'ERROR'
-        assert 'C' == records[1].message
-        assert records[1].levelname == 'ERROR'

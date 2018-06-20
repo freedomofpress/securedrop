@@ -31,6 +31,8 @@ import journalist_app as journalist_app_module
 import pytest
 import source_app
 
+from sh import sed, pybabel
+
 
 def verify_i18n(app):
     not_translated = 'code hello i18n'
@@ -185,29 +187,19 @@ def test_i18n(journalist_app, config):
         '--extract-update',
     ])
 
-    i18n_tool.sh("""
-    pybabel init -i {d}/messages.pot -d {d} -l en_US
+    pot = os.path.join(config.TEMP_DIR, 'messages.pot')
+    pybabel('init', '-i', pot, '-d', config.TEMP_DIR, '-l', 'en_US')
 
-    pybabel init -i {d}/messages.pot -d {d} -l fr_FR
-    sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code bonjour"/' \
-          {d}/fr_FR/LC_MESSAGES/messages.po
-
-    pybabel init -i {d}/messages.pot -d {d} -l zh_Hans_CN
-    sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code chinese"/' \
-          {d}/zh_Hans_CN/LC_MESSAGES/messages.po
-
-    pybabel init -i {d}/messages.pot -d {d} -l ar
-    sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code arabic"/' \
-          {d}/ar/LC_MESSAGES/messages.po
-
-    pybabel init -i {d}/messages.pot -d {d} -l nb_NO
-    sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code norwegian"/' \
-          {d}/nb_NO/LC_MESSAGES/messages.po
-
-    pybabel init -i {d}/messages.pot -d {d} -l es_ES
-    sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code spanish"/' \
-          {d}/es_ES/LC_MESSAGES/messages.po
-    """.format(d=config.TEMP_DIR))
+    for (l, s) in (('fr_FR', 'code bonjour'),
+                   ('zh_Hans_CN', 'code chinese'),
+                   ('ar', 'code arabic'),
+                   ('nb_NO', 'code norwegian'),
+                   ('es_ES', 'code spanish')):
+        pybabel('init', '-i', pot, '-d', config.TEMP_DIR, '-l', l)
+        po = os.path.join(config.TEMP_DIR, l, 'LC_MESSAGES/messages.po')
+        sed('-i', '-e',
+            '/code hello i18n/,+1s/msgstr ""/msgstr "{}"/'.format(s),
+            po)
 
     i18n_tool.I18NTool().main([
         '--verbose',
