@@ -29,6 +29,9 @@ case "$1" in
         chown root:${GROUP} ${OSSEC_HOME}/rules/local_rules.xml
         chmod 440 ${OSSEC_HOME}/rules/local_rules.xml
 
+        # Disable do-release-upgrade notification
+        sed -i 's/Prompt=.*/Prompt=never/' /etc/update-manager/release-upgrades
+
         # Restart OSSEC to load the new configs.
         service ossec restart
     ;;
