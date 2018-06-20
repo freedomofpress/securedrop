@@ -209,7 +209,7 @@ update may be enforced as part of a release to protect the security of your
 instance. Please consult the `release notes <https://securedrop.org/news/release-announcement/>`__
 for details about kernel updates.
 
-You can test a kernel update without downtime for you instance by booting your
+You can test a kernel update without downtime for your instance by booting your
 *Monitor Server* with the new kernel. Log into your *Monitor Server* using
 the *Admin Workstation*. Shut down the server safely using the command
 ``sudo shutdown -P now``. Ensure that the server is fully powered off.
