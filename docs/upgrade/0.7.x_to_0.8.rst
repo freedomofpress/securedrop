@@ -14,6 +14,7 @@ workstations. This does *not* update the Tails operating system. The graphical
 updater was introduced in SecureDrop 0.7.0. It looks like this:
 
 .. |SecureDrop updater| image:: ../images/0.6.x_to_0.7/securedrop-updater.png
+
 |SecureDrop updater|
 
 Click "Update Now" to perform the update on each workstation where this prompt
