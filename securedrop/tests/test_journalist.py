@@ -188,6 +188,49 @@ def test_login_throttle(journalist_app, test_journo):
         models.LOGIN_HARDENING = False
 
 
+def test_login_throttle_is_not_global(journalist_app, test_journo, test_admin):
+    """The login throttling should be per-user, not global. Global login
+    throttling can prevent all users logging into the application."""
+
+    # Overwrite the default value used during testing
+    # Note that this may break other tests if doing parallel testing
+    models.LOGIN_HARDENING = True
+    try:
+        with journalist_app.test_client() as app:
+            for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
+                resp = app.post(
+                    url_for('main.login'),
+                    data=dict(username=test_journo['username'],
+                              password='invalid',
+                              token='invalid'))
+                assert resp.status_code == 200
+                text = resp.data.decode('utf-8')
+                assert "Login failed" in text
+
+            resp = app.post(
+                url_for('main.login'),
+                data=dict(username=test_journo['username'],
+                          password='invalid',
+                          token='invalid'))
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert ("Please wait at least {} seconds".format(
+                Journalist._LOGIN_ATTEMPT_PERIOD) in text)
+
+            # A different user should be able to login
+            resp = app.post(
+                url_for('main.login'),
+                data=dict(username=test_admin['username'],
+                          password=test_admin['password'],
+                          token=TOTP(test_admin['otp_secret']).now()),
+                follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Sources" in text
+    finally:
+        models.LOGIN_HARDENING = False
+
+
 def test_login_invalid_credentials(journalist_app, test_journo):
     with journalist_app.test_client() as app:
         resp = app.post(url_for('main.login'),
