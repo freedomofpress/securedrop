@@ -85,6 +85,7 @@ anonymous sources.
    :name: upgradetoc
    :maxdepth: 2
 
+   upgrade/0.7.x_to_0.8.rst
    upgrade/0.6.x_to_0.7.rst
    upgrade/0.5.x_to_0.6.rst
    upgrade/0.4.x_to_0.5.rst

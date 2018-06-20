@@ -161,6 +161,8 @@ additional confirmation of the kernel version, the command
 
 Please notify us of the compatibility issue so we can help you resolve it ASAP.
 
+.. _Report Compatibility Issues:
+
 Report Compatibility Issues
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -196,6 +198,8 @@ If you are not a member of our Support Portal, we also encourage you to request
 help in the `SecureDrop Community Forums <https://forum.securedrop.club/>`__.
 Choose carefully what information to disclose publicly. For example, raw logs
 may contain sensitive information useful to potential attackers.
+
+.. _Test and Enable an Updated Kernel:
 
 Test and Enable an Updated Kernel
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

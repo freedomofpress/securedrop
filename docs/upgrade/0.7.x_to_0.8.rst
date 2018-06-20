@@ -1,0 +1,97 @@
+Upgrade from 0.7.0 to 0.8.x
+===========================
+
+Updating the Tails Workstations
+-------------------------------
+
+We recommend that you update all Tails drives to version 3.8, which is scheduled
+to be released concurrently with SecureDrop 0.8.0 on June 26, 2018. Follow the
+graphical prompts on your workstations to perform this upgrade.
+
+For the *Journalist Workstations* and the *Admin Workstation*, the graphical
+SecureDrop updater will also prompt you to update the SecureDrop code on your
+workstations. This does *not* update the Tails operating system. The graphical
+updater was introduced in SecureDrop 0.7.0. It looks like this:
+
+.. |SecureDrop updater| image:: ../images/0.6.x_to_0.7/securedrop-updater.png
+|SecureDrop updater|
+
+Click "Update Now" to perform the update on each workstation where this prompt
+appears.
+
+Removal of Two-Factor Authentication for Keyboard Login
+-------------------------------------------------------
+
+SecureDrop 0.8.0 removes the requirement for two-factor authentication when
+logging into your server using an attached physical keyboard. This feature
+provided no real security benefit, as it could easily be bypassed using single
+user mode.
+
+To ensure that you can login as the admin user using a physical keyboard, you may
+wish to use this opportunity to cycle the admin user password on your SecureDrop
+servers.
+
+To do so, log into each SecureDrop server via SSH using your *Admin Workstation*.
+Become the root user by typing ``sudo su``, then change the password for the
+admin user by typing ``passwd <username>``, e.g., if your admin user account was
+called ``alice``, you would type ``passwd alice``.
+
+Enter a secure password and store it in the KeePassX password manager on your
+*Admin Workstation*.
+
+Troubleshooting Kernel Issues
+-----------------------------
+
+SecureDrop 0.8.0 ships with an update of the Linux kernel running on your
+*Application* and *Monitor Servers*, from version 4.4.115 to version 4.4.135.
+If you have not previously changed your default kernel, your server will
+boot into the new kernel automatically on its next reboot.
+
+We have tested this kernel extensively against :ref:`recommended hardware <Specific Hardware Recommendations>`
+and other common configurations. Compared with the previous kernel, it ships with
+additional hardware support. If you are experiencing an outage after the update,
+it may be due to differences between the two kernel versions relevant to your
+specific configuration.
+
+Please consult our :doc:`kernel troubleshooting guide <../kernel_troubleshooting>`
+for instructions on how to compare the differences between kernel versions and
+how to roll back to an earlier version if necessary.
+
+.. important::
+
+  It is of critical importance for the security and stability of your instance
+  that you :ref:`report kernel compatibility issues <Report Compatibility Issues>`
+  to us as soon as you become aware of them.
+
+Enabling the New Kernel After a Downgrade
+-----------------------------------------
+
+If you have previously downgraded your kernel to the 3.14.x series due to
+compatibility issues with the kernel that shipped with SecureDrop 0.7.0
+(version 4.4.115), we urge you to test the new kernel (version 4.4.135). The new
+kernel ships with expanded hardware support and is intended to address the
+hardware compatibility issues that we are aware of.
+
+You can test the new kernel without downtime by following
+:ref:`our instructions for testing and enabling a new kernel after a downgrade
+<Test and Enable an Updated Kernel>`. Please note that this is *only* necessary
+if you have manually downgraded the kernel; otherwise, the new kernel will be
+enabled automatically.
+
+If the new kernel does not address compatibility issues on your hardware, please
+let us know as soon as you can by following :ref:`our instructions for reporting
+compatibility issues <Report Compatibility Issues>`. We intend to remove support
+for kernel series 3.14.x in a future release, once all major compatibility
+issues we are aware of have been resolved.
+
+Getting Support
+---------------
+
+Should you require further support with your SecureDrop installation or upgrade,
+we are happy to help!
+
+-  Community support is available at https://forum.securedrop.club
+-  The Freedom of the Press Foundation offers training and priority support
+   services. See https://securedrop.org/priority-support/ for more information.
+   If you are already a member of our support portal, please don't hesitate to
+   open a ticket there.
