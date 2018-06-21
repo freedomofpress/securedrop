@@ -90,11 +90,17 @@ On the console which eventually appears, should be able to log in as the user yo
 
 ### Configure cloned VMs
 
-We'll need to fix each machine's idea of its own IP. In `dom0`, use `qvm-ls -n` to discover the IP addresses of `sd-app-base` and `sd-mon-base`. In the console for each machine, edit `/etc/network/interfaces` to update the `address` line with the machine's IP.
+We'll need to fix each machine's idea of its own IP. Use the following static IPs:
 
-`/etc/hosts` on each host needs to be modified to include all of these new VMs. On each host, add the IP and the hostname of each VM (`sd-trusty-base`, `sd-app-base`, `sd-mon-base`).
+  * `qvm-prefs sd-app-base ip 10.137.0.50`
+  * `qvm-prefs sd-mon-base ip 10.137.0.51`
 
-Finally, on each host edit `/etc/hostname` to reflect the machine's name.
+In the console for each machine, edit `/etc/network/interfaces` to update the `address` line with the machine's IP.
+
+`/etc/hosts` on each host needs to be modified to include the hostname and IP for itself. On each host, add the IP and the hostname of the VM.
+Use `sd-app` and `sd-mon`, omitting the `-base` suffix, since the cloned VMs will not have the suffix.
+
+Finally, on each host edit `/etc/hostname` to reflect the machine's name. Again, omit the `-base` suffix.
 
 Halt each machine, then restart each from `dom0`. The prompt in each console should reflect the correct name of the VM. You should be able to ping IPs on the internet.
 
