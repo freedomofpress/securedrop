@@ -475,6 +475,19 @@ def securedrop_git_repo(tmpdir):
                                                        test_name)])
 
 
+def set_reliable_keyserver(gpgdir):
+    # If gpg.conf doesn't exist, create it and set a reliable default
+    # keyserver for the tests.
+    gpgconf_path = os.path.join(gpgdir, 'gpg.conf')
+    if not os.path.exists(gpgconf_path):
+        os.mkdir(gpgdir)
+        with open(gpgconf_path, 'a') as f:
+            f.write('keyserver hkp://ipv4.pool.sks-keyservers.net')
+
+        # Ensure correct permissions on .gnupg home directory.
+        os.chmod(gpgdir, 0700)
+
+
 # This class is to test all the git related operations.
 class TestGitOperations:
     def test_check_for_update_when_updates_needed(self, securedrop_git_repo):
@@ -517,17 +530,7 @@ class TestGitOperations:
 
     def test_update(self, securedrop_git_repo):
         gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
-
-        # If gpg.conf doesn't exist, create it and set a reliable default
-        # keyserver for the tests.
-        gpgconf_path = os.path.join(gpgdir, 'gpg.conf')
-        if not os.path.exists(gpgconf_path):
-            os.mkdir(gpgdir)
-            with open(gpgconf_path, 'a') as f:
-                f.write('keyserver hkp://ipv4.pool.sks-keyservers.net')
-
-            # Ensure correct permissions on .gnupg home directory.
-            os.chmod(gpgdir, 0700)
+        set_reliable_keyserver(gpgdir)
 
         cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                            'securedrop_admin/__init__.py')
@@ -541,3 +544,33 @@ class TestGitOperations:
         child.close()
         assert child.exitstatus == 0
         assert child.signalstatus is None
+
+    def test_update_fails_when_no_signature_present(self, securedrop_git_repo):
+        gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
+        set_reliable_keyserver(gpgdir)
+
+        # First we make a very high version tag of SecureDrop so that the
+        # updater will try to update to it. Since the tag is unsigned, it
+        # should fail.
+        subprocess.check_call('git checkout develop'.split())
+        subprocess.check_call('git tag 9999999.0.0'.split())
+
+        # Switch back to an older branch for the test
+        subprocess.check_call('git checkout 0.6'.split())
+
+        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                           'securedrop_admin/__init__.py')
+        ansible_base = os.path.join(str(securedrop_git_repo),
+                                    'securedrop/install_files/ansible-base')
+        child = pexpect.spawn('coverage run {0} --root {1} update'.format(
+                              cmd, ansible_base))
+        output = child.read()
+        assert 'Updated to SecureDrop' not in output
+        assert 'Signature verification failed' in output
+
+        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+        child.close()
+
+        # Failures should eventually exit non-zero.
+        assert child.exitstatus != 0
+        assert child.signalstatus != 0
