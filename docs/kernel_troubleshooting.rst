@@ -75,7 +75,7 @@ Compare the Behavior of the Old Kernel
 
 Reboot the server in a safe way with ``sudo reboot``. After the BIOS screen,
 you can select a different kernel from the GRUB boot menu by selecting
-**Advanced Options for Ubuntu**, pictured below.
+**Advanced options for Ubuntu**, pictured below.
 
 |GRUB with advanced options selected|
 
@@ -119,7 +119,7 @@ be third). Then edit the GRUB configuration:
 
 .. code:: sh
 
-  sudo vim /etc/default/grub
+  sudo nano /etc/default/grub
 
 Make a backup of the file or take a note of the current value of
 ``GRUB_DEFAULT`` somewhere, so you can restore the previous behavior easily at a
@@ -161,6 +161,8 @@ additional confirmation of the kernel version, the command
 
 Please notify us of the compatibility issue so we can help you resolve it ASAP.
 
+.. _Report Compatibility Issues:
+
 Report Compatibility Issues
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -196,3 +198,59 @@ If you are not a member of our Support Portal, we also encourage you to request
 help in the `SecureDrop Community Forums <https://forum.securedrop.club/>`__.
 Choose carefully what information to disclose publicly. For example, raw logs
 may contain sensitive information useful to potential attackers.
+
+.. _Test and Enable an Updated Kernel:
+
+Test and Enable an Updated Kernel
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you have changed your default kernel, we urge you to test an updated kernel
+as soon as it becomes available in a future SecureDrop release. Note that an
+update may be enforced as part of a release to protect the security of your
+instance. Please consult the `release notes <https://securedrop.org/news/release-announcement/>`__
+for details about kernel updates.
+
+You can test a kernel update without downtime for your instance by booting your
+*Monitor Server* with the new kernel. Log into your *Monitor Server* using
+the *Admin Workstation*. Shut down the server safely using the command
+``sudo shutdown -P now``. Ensure that the server is fully powered off.
+
+Attach required peripherals and power the server back up. After the GRUB bootloader
+appears, select **Advanced options for Ubuntu**, pictured below.
+
+|GRUB with advanced options selected|
+
+If a SecureDrop release with a kernel update has been installed on your system,
+the updated kernel version will be available in the list of options:
+
+|Selecting a specific kernel in GRUB|
+
+Select the new kernel (you do not need to use the version with recovery mode).
+If you do not know your admin account password, you can `boot into single user mode`_
+by editing the boot options. Otherwise, press enter to boot.
+
+Verify that you can boot successfully, and that you have network access
+(``sudo host freedom.press``). If you still encounter problems with the new
+kernel, please `report compatibility issues`_ at your earliest convenience, and
+reboot the server into the old kernel for now.
+
+If the update resolved compatibility issues with an earlier kernel version, you
+can make the new kernel the default. Edit the file ``/etc/default/grub``, e.g.,
+by issuing the following command:
+
+.. code:: sh
+
+  sudo nano /etc/default/grub
+
+Make a backup of the file or take a note of the current value of
+``GRUB_DEFAULT`` somewhere, so you can restore the previous behavior if needed.
+Change the line to ``GRUB_DEFAULT=0``. This will ensure that SecureDrop uses the
+most recent kernel version installed on your server.
+
+Safely shut down the *Monitor Server*, remove attached peripherals, and reboot
+it. Verify  that it is working correctly by logging in using your *Admin
+Workstation*. If everything is working as expected, you can make the same change
+to ``/etc/default/grub`` on your *Application Server* as well. You can do so
+from your *Admin Workstation* and reboot the server using the command
+``sudo shutdown -r now``.
+
+Subsequent kernel updates will again be applied automatically.
