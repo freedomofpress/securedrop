@@ -18,8 +18,6 @@ set -e
 
 case "$1" in
     configure)
-        # Disable do-release-upgrade notification
-        sed -i 's/Prompt=.*/Prompt=never/' /etc/update-manager/release-upgrades
         service ossec restart
     ;;
 
