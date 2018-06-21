@@ -319,6 +319,54 @@ Get the source address with:
 
 Use Tor Browser in your `anon-whonix` Qube to try connecting to the source interface... make yourself a source and leave a submission!
 
+## Managing Qubes RPC for Admin API capability
+(These docs are WIP!) You'll need to grant the "work/sd-dev" VM the ability to create other VMs.
+Here is an example of an extremely permissive policy, that essentially makes "work/sd-dev" 
+as powerful as dom0 (we must reduce these grants before submitting for review):
+
+```
+/etc/qubes-rpc/policy/admin.vm.property.List:work $adminvm allow,target=$adminvm
+/etc/qubes-rpc/policy/admin.vm.List:work $adminvm allow,target=$adminvm
+/etc/qubes-rpc/policy/admin.vm.List:work $anyvm allow,target=$adminvm
+/etc/qubes-rpc/policy/include/admin-local-rwx:#work $tag:created-by-work allow,target=$adminvm
+/etc/qubes-rpc/policy/include/admin-local-rwx:work $adminvm allow,target=$adminvm
+/etc/qubes-rpc/policy/include/admin-local-rwx:work $anyvm allow,target=$adminvm
+/etc/qubes-rpc/policy/include/admin-global-ro:work $adminvm allow,target=$adminvm
+/etc/qubes-rpc/policy/include/admin-global-ro:work $anyvm allow,target=$adminvm
+/etc/qubes-rpc/policy/include/admin-global-rwx:work $adminvm allow,target=$adminvm
+/etc/qubes-rpc/policy/include/admin-global-rwx:work $anyvm allow,target=$adminvm
+/etc/qubes-rpc/policy/admin.property.List:work $adminvm allow,target=$adminvm
+/etc/qubes-rpc/policy/admin.vm.Create.StandaloneVM:work $adminvm allow,target=$adminvm
+/etc/qubes-rpc/policy/admin.vm.Create.StandaloneVM:work $anyvm allow,target=$adminvm
+/etc/qubes-rpc/policy.RegisterArgument:    # argument exceed 64 bytes, but that's fine, the call just wont work
+```
+
+In the example above, the SD dev machine is "work", but let's use "sd-dev" throughout instead.
+
+## Creating staging instance
+After creating the StandaloneVMs as described above:
+
+* sd-trusty-base
+* sd-app-base
+* sd-mon-base
+
+Run:
+
+```
+molecule test -s qubes-staging
+```
+
+Note that since the reboots don't automatically bring the machines back up, due to the fact
+that the machines are Standalone VMs, the "test" action will fail by default, unless you judiciously
+run `qvm-start <vm>` for each VM after they've shut down. You can use the smaller constituent
+Molecule actions, rather than the bundled "test" action:
+
+```
+molecule create -s qubes-staging
+molecule prepare -s qubes-staging
+molecule converge -s qubes-staging
+```
+
 ## That's it
 
 You should now have a running, configured SecureDrop staging instance running on your Qubes machine.
