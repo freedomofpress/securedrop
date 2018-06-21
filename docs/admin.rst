@@ -3,6 +3,11 @@ Admin Guide
 
 .. include:: ./includes/provide-feedback.txt
 
+.. _Responsibilities:
+
+Responsibilities
+----------------
+
 The SecureDrop architecture contains multiple machines and hardened servers.
 While we have automated many of the installation and maintenance tasks, a
 skilled Linux admin is required to responsibly run the system.
@@ -11,17 +16,12 @@ This section outlines the tasks the admin is responsible for in order to
 ensure that the SecureDrop server continues to be a safe place for sources to
 talk to journalists.
 
-.. _Responsibilities:
-
-Responsibilities
-----------------
-
 Maintaining Credentials
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 The admin should have her own username, passphrase, and two-factor
 authentication method (via smartphone app or YubiKey). Admins are also
-responsible for tracking user credentials and encouraging best practices. (See
+responsible for managing user credentials and encouraging best practices. (See
 :doc:`passphrases` and :doc:`passphrase_best_practices`.)
 
 Updating the SecureDrop Servers
@@ -32,7 +32,7 @@ manual action if requested in the `SecureDrop Release Blog`_. We recommend
 subscribing to the `SecureDrop RSS Feed`_ to stay apprised of new updates.
 
 Most often, the SecureDrop server will automatically update via apt. However,
-occasionally you will need to run Ansible playbooks. We will inform you in
+occasionally you will need to run ``securedrop-admin install``. We will inform you in
 the release blog when this is the case. If you are onboarded to our `SecureDrop
 Support Portal`_, we will let you know in advance of major releases if manual
 intervention will be required.
@@ -101,10 +101,13 @@ for more information on common OSSEC alerts.
 
 .. _`SecureDrop Support Portal`: https://securedrop-support.readthedocs.io/en/latest/
 
+Common Tasks
+------------
+
 .. _Adding Users:
 
 Adding Users
-------------
+~~~~~~~~~~~~
 
 Now you can add new logins for the journalists at your news organization
 who will be checking the system for submissions. Make sure the
@@ -133,7 +136,7 @@ journalist accounts), and whether they will be using FreeOTP
 or a YubiKey for two-factor authentication.
 
 FreeOTP
-~~~~~~~
+^^^^^^^
 
 If they are using FreeOTP for their two-factor, they can
 just proceed to the next page:
@@ -165,7 +168,7 @@ two-factor token was verified.
 .. include:: includes/otp-app.txt
 
 YubiKey
-~~~~~~~
+^^^^^^^
 
 If the journalist wishes to use a YubiKey for two-factor authentication,
 check the box next to "I'm using a YubiKey". You will then need to enter
@@ -202,8 +205,8 @@ possession when they attempt to log in to SecureDrop.
 .. |Verify YubiKey|
   image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
 
-Server Command Line
--------------------
+Server Command Line Use
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Generally, you should avoid directly SSHing into the servers in favor of using
 the *Admin Interface* or ``securedrop-admin`` CLI tool. However, in some cases,
@@ -222,17 +225,14 @@ the *Application Server* and *Monitor Server*.
 .. _`tmux tutorial`:
   https://robots.thoughtbot.com/a-tmux-crash-course
 
-Both Servers
-~~~~~~~~~~~~
-
 .. tip:: If you want a refresher of the Linux command line, we recommend
   `this resource`_ to cover the fundamentals.
 
 .. _`this resource`:
   http://linuxcommand.org/lc3_learning_the_shell.php
 
-Shutdown the Servers
-^^^^^^^^^^^^^^^^^^^^
+Shutting Down the Servers
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: sh
 
@@ -279,10 +279,10 @@ into each server and run:
   https://securedrop.org/news
 
 Application Server
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 Adding Users (CLI)
-^^^^^^^^^^^^^^^^^^
+&&&&&&&&&&&&&&&&&&
 
 After the provisioning of the first admin account, we recommend
 using the Admin Interface web application for adding additional journalists
@@ -293,7 +293,7 @@ as described :doc:`during first install <create_admin_account>`. You can use
 this command line method if the web application is unavailable.
 
 Restart the Web Server
-^^^^^^^^^^^^^^^^^^^^^^^
+&&&&&&&&&&&&&&&&&&&&&&
 
 If you make changes to your Apache configuration, you may want to restart the
 web server to apply the changes:
@@ -303,10 +303,10 @@ web server to apply the changes:
   sudo service apache2 restart
 
 Monitor Server
-~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^
 
 Restart OSSEC
-^^^^^^^^^^^^^
+&&&&&&&&&&&&&
 
 If you make changes to your OSSEC monitoring configuration, you will want to
 restart OSSEC via `OSSEC's control script`_, ``ossec-control``:
@@ -321,7 +321,7 @@ restart OSSEC via `OSSEC's control script`_, ``ossec-control``:
 .. _Updating the Servers:
 
 Updating the Servers
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 Sometimes you will want to update the system configuration on the SecureDrop
 servers. For example, to customize the logo on the source interface,
