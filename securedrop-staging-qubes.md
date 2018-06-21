@@ -16,14 +16,14 @@ On any exising Qube, download the Ubutnu Trusty server ISO, from
 
     http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso
 
-## Create the "build" VM
+## Create the Trusty base VM
 
 We're going to build a single, minimally configured Ubuntu VM. Once it's bootable, we'll clone it for the application and monitoring VMs.
 
 In `dom0`, do the following:
 
-    qvm-create sd-build --class StandaloneVM --property virt_mode=hvm --label green
-    qvm-volume extend sd-app:root 20g
+    qvm-create sd-trusty-base --class StandaloneVM --property virt_mode=hvm --label green
+    qvm-volume extend sd-trusty-base:root 20g
 
 Using the Qubes Settings interface (Q menu -> sd-build -> Qubes Settings), set the VM's kernel to "None", and give it at least 2 GB of RAM.
 
@@ -33,7 +33,7 @@ While you're in the settings interface, note the IP and gateway IP addresses Qub
 
 In dom0:
 
-    qvm-start sd-build --cdrom=<download-vm>:/path/to/ubuntu-14.04.5-server-amd64.iso
+    qvm-start sd-trusty-base --cdrom=<download-vm>:/path/to/ubuntu-14.04.5-server-amd64.iso
 
 where `download-vm` is the name of the VM to which you downloaded the ISO.
 
@@ -41,7 +41,7 @@ Start configuration.
 
 At some point you'll need to manually set up the network interface, after DHCP failss. If you didn't mark it down down earlier, you can check the machine's IP and gateway via the Qubes GUI. When prompted, use enter that IP address, with a `/24` netmask (for example: `10.137.0.16/24`. Use Qubes' internal resolvers as DNS servers: `10.139.1.1` and `10.139.1.2`. Use the gateway address indicated in the Qubes Settings UI.
 
-Give the new VM the hostname `sd-build`.
+Give the new VM the hostname `sd-trusty-base`.
 
 You'll be prompted to add a "regular" user for the VM: this is the user you'll be using later to SSH into the VM, so give it a username and password you're comfortable with.
 
@@ -53,7 +53,7 @@ The installer will prompt about where to install GRUB: choose the default (MBR).
 
 Once installation is done, let the machine shut down and then restart it with
 
-    qvm-start sd-build
+    qvm-start sd-trusty-base
 
 you should get a login prompt. Yay.
 
@@ -79,20 +79,20 @@ When initial configuration is done, `halt` the `sd-build` VM.
 
 In dom0:
 
-    qvm-clone sd-build sd-app
-    qvm-clone sd-build sd-mon
+    qvm-clone sd-trusty-base sd-app-base
+    qvm-clone sd-trusty-base sd-mon-base
 
 Try it:
 
-    qvm-start sd-mon
+    qvm-start sd-mon-base
 
-On the console which eventually appears, should be able to log in as the user you created. Also start `sd-app` and log in to get a console there.
+On the console which eventually appears, should be able to log in as the user you created. Also start `sd-app-base` and log in to get a console there.
 
 ### Configure cloned VMs
 
-We'll need to fix each machine's idea of its own IP. In `dom0`, use `qvm-ls -n` to discover the IP addresses of `sd-app` and `sd-mon`. In the console for each machine, edit `/etc/network/interfaces` to update the `address` line with the machine's IP.
+We'll need to fix each machine's idea of its own IP. In `dom0`, use `qvm-ls -n` to discover the IP addresses of `sd-app-base` and `sd-mon-base`. In the console for each machine, edit `/etc/network/interfaces` to update the `address` line with the machine's IP.
 
-`/etc/hosts` on each host needs to be modified to include all of these new VMs. On each host, add the IP and the hostname of each VM (`sd-build`, `sd-app`, `sd-mon`).
+`/etc/hosts` on each host needs to be modified to include all of these new VMs. On each host, add the IP and the hostname of each VM (`sd-trusty-base`, `sd-app-base`, `sd-mon-base`).
 
 Finally, on each host edit `/etc/hostname` to reflect the machine's name.
 
