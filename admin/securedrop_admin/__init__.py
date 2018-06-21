@@ -537,6 +537,7 @@ def setup_logger(verbose=False):
 def sdconfig(args):
     """Configure SD site settings"""
     SiteConfig(args).load_and_update_config()
+    return 0
 
 
 def install_securedrop(args):
@@ -807,8 +808,10 @@ def main(argv):
         except Exception as e:
             raise SystemExit(
                 'ERROR (run with -v for more): {msg}'.format(msg=e))
-        else:
-            sys.exit(EXIT_SUCCESS)
+    if return_code == 0:
+        sys.exit(EXIT_SUCCESS)
+    else:
+        sys.exit(EXIT_SUBPROCESS_ERROR)
 
 
 if __name__ == "__main__":
