@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0~rc1
+## 0.8.0~rc2
 
 ### Web Applications
 
@@ -13,6 +13,7 @@
 
 * Updated the grsecurity-hardened Linux Kernels to 4.4.135 on app and mon servers (#3494)
 * Removed 2FA for console logins for app and mon servers (#3507)
+* Suppresses OSSEC alerts asking SecureDrop administrators to upgrade to Xenial (#3205)
 * Upgraded to Tor 0.3.3.7 on app and mon servers (#3518)
 * Bugfix: Enable mon and app servers to use /32 addresses (#3465)
 
