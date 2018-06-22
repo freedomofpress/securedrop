@@ -4,17 +4,41 @@ This assumes you have an up-to-date Qubes installation on a compatible laptop wi
 
 ### Overview
 
-We're going to create three new standalone Qubes VMs:
+We're going to create two new standalone (HVM) Qubes VMs:
 
-- the securedrop application VM
-- the monitoring VM
-- a VM to provision the app and monitoring VMs, using existing Ansible playbooks
+- a base VM for the securedrop staging application
+- a base VM for the securedrop staging monitor
+
+along the way we'll be creating an Ubuntu Trusty VM, which we'll be using as a starting point for the application and monitoring base VMs.
+
+We'll also be creating `sd-dev`, a standalone Qube based on Debian 9, where we'll building and deploying the SecureDrop code and where server and client development can happen.
+
+## Create `sd-dev`
+
+Let's get started. Create yourself a new *standalone* Qube called `sd-dev` based on the Debian 9 template that comes standard in Qubes 4. You can use the "Q" menu for this, or in `dom0`:
+
+    qvm-clone --class StandaloneVM debian-9 sd-dev
+
+Now start the VM with:
+
+    qvm-start sd-dev
+
+and set up its "Q" app menu:
+
+    qvm-sync-appmenus sd-dev
 
 ## Download Ubuntu Trusty server ISO
 
-On any exising Qube, download the Ubutnu Trusty server ISO, from
+On `sd-dev`, download the Ubutnu Trusty server ISO, from
 
     http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso
+
+(you can start Firefox to do this, for example, or start a terminal and use `wget`)
+
+After downloading, confirm the ISO's validity by checking its SHA256 sum. Check against the shasum below and value at http://releases.ubuntu.com/14.04/SHA256SUMS :
+
+    $ sha256sum ubuntu-14.04.5-server-amd64.iso
+    dde07d37647a1d2d9247e33f14e91acb10445a97578384896b4e1d985f754cc1  ubuntu-14.04.5-server-amd64.iso
 
 ## Create the Trusty base VM
 
@@ -25,7 +49,7 @@ In `dom0`, do the following:
     qvm-create sd-trusty-base --class StandaloneVM --property virt_mode=hvm --label green
     qvm-volume extend sd-trusty-base:root 20g
 
-Using the Qubes Settings interface (Q menu -> sd-build -> Qubes Settings), set the VM's kernel to "None", and give it at least 2 GB of RAM.
+Using the Qubes Settings interface (Q menu -> sd-trusty-base -> Qubes Settings), set the VM's kernel to "None", and set its maximum and initial memory to 2GB.
 
 While you're in the settings interface, note the IP and gateway IP addresses Qubes gave the new VM: you'll need them for later configuration.
 
@@ -39,13 +63,13 @@ where `download-vm` is the name of the VM to which you downloaded the ISO.
 
 Start configuration.
 
-At some point you'll need to manually set up the network interface, after DHCP failss. If you didn't mark it down down earlier, you can check the machine's IP and gateway via the Qubes GUI. When prompted, use enter that IP address, with a `/24` netmask (for example: `10.137.0.16/24`. Use Qubes' internal resolvers as DNS servers: `10.139.1.1` and `10.139.1.2`. Use the gateway address indicated in the Qubes Settings UI.
+At some point you'll need to manually set up the network interface, after DHCP failss. If you didn't mark it down down earlier, you can check the machine's IP and gateway via the Qubes GUI. When prompted, use enter that IP address, with a `/24` netmask (for example: `10.137.0.16/24`. Use the IP address give in the settings interface for the VM's gateway (probably `10.137.0.6`). Use Qubes' internal resolvers as DNS servers: `10.139.1.1` and `10.139.1.2`.
 
-Give the new VM the hostname `sd-trusty-base`.
+Give the new VM the hostname `sd-trusty-base`, without a domain name.
 
-You'll be prompted to add a "regular" user for the VM: this is the user you'll be using later to SSH into the VM, so give it a username and password you're comfortable with.
+You'll be prompted to add a "regular" user for the VM: this is the user you'll be using later to SSH into the VM. We're using a standardized name/password pair: `securedrop/securedrop`.
 
-During partitionaing, ensure the installer uses the full 20GB volume you've given it. There's no need to encrypt the filesystem.
+When presented with the partitioning menu, choose "Guided - use entire disk" (not the default LVM choice). There's no need to encrypt the filesystem. When prompted, select "Virtual disk 1 (xvda)" to partition.
 
 During software installation, make sure you install the SSH server. You don't need to install anything else.
 
@@ -55,13 +79,13 @@ Once installation is done, let the machine shut down and then restart it with
 
     qvm-start sd-trusty-base
 
-you should get a login prompt. Yay.
+in `dom0`. You should get a login prompt. Yay!
 
 ### Initial VM configuration
 
 Before cloning this machine, we'll add some software we might want on all the staging VMs.
 
-In the new VM's console, do:
+In the new `sd-trusty-base` VM's console, do:
 
     sudo apt update
     sudo apt dist-upgrade
@@ -73,7 +97,7 @@ Before we continue, let's allow your user to `sudo` without their password. Edit
 
     %sudo    ALL=(ALL) NOPASSWD: ALL
 
-When initial configuration is done, `halt` the `sd-build` VM.
+When initial configuration is done, `halt` the `sd-trusty-base` VM.
 
 ## Clone VMs
 
@@ -82,20 +106,21 @@ In dom0:
     qvm-clone sd-trusty-base sd-app-base
     qvm-clone sd-trusty-base sd-mon-base
 
-Try it:
+We're going configure the VMs to use specific IP addresses, which will make various routing issues easier later. Run the following in `dom0` to set those IPs:
 
+    qvm-prefs sd-app-base ip 10.137.0.50
+    qvm-prefs sd-mon-base ip 10.137.0.51
+
+Now start both new VMs:
+
+    qvm-start sd-app-base
     qvm-start sd-mon-base
 
-On the console which eventually appears, should be able to log in as the user you created. Also start `sd-app-base` and log in to get a console there.
+On the consoles which eventually appear, you should be able to log in with `securedrop/securedrop`.
 
 ### Configure cloned VMs
 
-We'll need to fix each machine's idea of its own IP. Use the following static IPs:
-
-  * `qvm-prefs sd-app-base ip 10.137.0.50`
-  * `qvm-prefs sd-mon-base ip 10.137.0.51`
-
-In the console for each machine, edit `/etc/network/interfaces` to update the `address` line with the machine's IP.
+We'll need to fix each machine's idea of its own IP. In the console for each machine, edit `/etc/network/interfaces` to update the `address` line with the machine's IP.
 
 `/etc/hosts` on each host needs to be modified to include the hostname and IP for itself. On each host, add the IP and the hostname of the VM.
 Use `sd-app` and `sd-mon`, omitting the `-base` suffix, since the cloned VMs will not have the suffix.
@@ -108,126 +133,66 @@ Halt each machine, then restart each from `dom0`. The prompt in each console sho
 
 (Following https://www.qubes-os.org/doc/firewall/#enabling-networking-between-two-qubes)
 
-We want to be able to ssh from a normal Qubes VM to these new standalone VMs, and the `sd-build` VM must be able to SSH to the `sd-app` and `sd-mon` VMs. In order to do so, we have to adjust the firewall on `sys-firewall`.
+We want to be able to ssh from `sd-dev` to these new standalone VMs. In order to do so, we have to adjust the firewall on `sys-firewall`.
 
-First decide which VM you'll be using to SSH to `sd-build`. Generally this will be something like your "work" VM. On dom0, do
+Let's get the IP address of `sd-dev`. On `dom0`:
 
-    qvm-ls -n
+    qvm-ls -n | grep sd-dev | awk '{ print $4 }'
 
-to see the addresses of all the VMs. Note the address of your "source" VM ("work", eg) and of `sd-build`, `sd-mon`, and `sd-app` (the destinations).
+or just look in the Qubes Settings for sd-dev, or in the output of `/sbin/ifconfig` on `sd-dev` itself.
 
-Get a shell on `sys-firewall`. Enter the following
+Get a shell on `sys-firewall`. Create or edit `/rw/config/qubes-firewall-user-script`, to include the following:
 
-    sudo iptables -I FORWARD 2 -s <work-vm-address> -d <sd-build-addr> -j ACCEPT
-    sudo iptables -I FORWARD 2 -s <sd-build-addr> -d <sd-app-addr> -j ACCEPT
-    sudo iptables -I FORWARD 2 -s <sd-build-addr> -d <sd-mon-addr> -j ACCEPT
+    iptables -I FORWARD 2 -s <sd-dev-addr> -d 10.137.0.50 -j ACCEPT
+    iptables -I FORWARD 2 -s <sd-dev-addr> -d 10.137.0.51 -j ACCEPT
 
-Add more lines as you see fit if you anticipate wanted to ssh to and from other VMs.
+Run those commands with
 
-Now from your "work" VM, you should be able to do
+    sudo sh /rw/config/qubes-firewall-user-script
 
-    ssh <user-you-created>@<ip-of-sd-build>
+Now from `sd-dev`, you should be able to do
 
-and log in using the password you created.
+    ssh securedrop@10.137.0.50
 
-(If you were unable to connect, try adding the following on each destination VM, for each source which should be able to access it):
+and log in with the password `securedrop`.
 
-    sudo iptables -I INPUT -s <source address> -j ACCEPT
+### sd-dev hosts
 
-If everything worked as expected, make the changes persist over reboots: on the firewall VM, create or edit `/rw/config/qubes-firewall-user-script` to include the commands you ran (without the `sudo`).
+Edit `/etc/hosts` on `sd-dev` to include:
 
-(If required, on each destination VM, create/edit `/etc/rc.local` and add the `iptables` command you ran there (again without the `sudo`).
+    10.137.0.50 sd-app
+    10.137.0.51 sd-mon
 
 ### SSH using keys
 
-Later we'll be using Ansible to provision the application VMs, so we should make sure we can ssh between those machines without needing to type a password. On `sd-build`:
+Later we'll be using Ansible to provision the application VMs, so we should make sure we can ssh between those machines without needing to type a password. On `sd-dev`:
 
     ssh-keygen
-    ssh-copy-id <user>@sd-app
-    ssh-copy-id <user>@sd-mon
+    ssh-copy-id securedrop@sd-app
+    ssh-copy-id securedrop@sd-mon
 
-Confirm that you're able to ssh from `sd-build` to `sd-mon` and `sd-app` without being prompted for a password.
+Confirm that you're able to ssh as user `securedrop` from `sd-dev` to `sd-mon` and `sd-app` without being prompted for a password.
+
+### Qubes tools on sd-dev
+
+`sd-dev` is going to be administering other VMs, so it needs some Qubes tools installed:
+
+    sudo apt install qubes-core-admin-client python-qubesadmin
 
 ## SecureDrop Installation
 
-If you don't already have a shell, SSH to `sd-build`, where we'll run all of the following.
+We're going to configure `sd-dev` to build the securedrop `.deb`'s, then we're going to build them, and provision `sd-app` and `sd-mon`.
 
-### Baby steps
+Follow the instructions at https://docs.securedrop.org/en/latest/development/setup_development.html to set up the development environment.
 
-    sudo apt update
-    sudo apt install -y make git
+Notes:
 
-### Docker
-
-Following the Docker docs:
-
-    sudo apt install \
-      apt-transport-https \
-      ca-certificates \
-      curl \
-      software-properties-common
-
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
-    sudo apt-key fingerprint 0EBFCD88
-    # confirm figerprint 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88
-
-    sudo add-apt-repository \
-     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-     $(lsb_release -cs) \
-     edge"
-
-(Debian:)
-
-    sudo add-apt-repository \
-      "deb [arch=amd64] https://download.docker.com/linux/debian \
-      $(lsb_release -cs) \
-      stable"
-
-    sudo apt update
-    sudo apt install docker-ce
-
-Test that we're working:
-
-    sudo docker run hello-world
-
-Hurrah. Post-installation things:
-
-    sudo groupadd docker
-    sudo usermod -aG docker $USER
-
-Exit your ssh session, then ssh back in. Confirm you can run containers as your normal user:
-
-    docker run hello-world
-
-should work without error.
-
-### Clone the repo
-
-Clone the securedrop server repo: follow instructions at https://docs.securedrop.org/en/latest/development/setup_development.html#fork-clone-the-repository. If you anticipate wanting to server development, either copy an SSH keypair known to Github onto `sd-build` VM, or create a new keypair there and tell Github about it.
-
-Decide where you want to clone source code to on sd-server. `cd` to that directory, and do:
-
-    git clone git@github.com:<your github user>/securedrop.git
-
-### ansible, pip, virtualenv...
-
-We need some software on `sd-build` in order to build securedrop. In the root of the your checked out code on `sd-build`, do:
-
-    sudo apt install python-pip virtualenvwrapper
-    source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-    mkvirtualenv -p /usr/bin/python2 securedrop
-    workon securedrop
-
-Add `source /usr/share/virtualenvwrapper/virtualenvwrapper.sh` to your `~/.bashrc`. Later, when you ssh to `sd-build`, you'll only need to type
-
-    workon securedrop
-
-to enable your new python virtual environment.
-
-Install development requirements:
-
-    pip install -r securedrop/requirements/develop-requirements.txt
+- Don't forget to complete the Docker post-installation instructions. You should only need to complete the part about running docker as a non-root user (and you'll probably need to shutdown and restart the VM to ensure it works):
+https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user
+- You'll be accessing github from `sd-dev` to clone the Securedrop repo, so you'll want that VM to have an SSH key that github knows about. Either create a new one and register it with Github, or copy an existing key to `sd-dev`.
+- You can skip the "Using the Docker Environment" section altogether.
+- Installing kernel headers will fail. That's OK.
+- Installing Vagrant will fail. That's OK.
 
 ### Build
 
@@ -237,141 +202,60 @@ Now we can build the .debs for the server!
 
 This will take some time.
 
-### Configuration: GPG keys
-
-Before we can provision our application, we need to create two GPG keys: one for our document submissions, and one for OSSEC. Use
-
-    gpg --gen-key
-
-to create each key. Note that the document key should be 4096 bits. To make further handling easier, when prompted use the name "SecureDrop" for the application key, and "OSS" for the OSS key. Otherwise the defaults are fine.
-
-After keys are created, export both:
-
-    gpg --export "SecureDrop" > SecureDrop.asc
-    gpg --export "OSS" > OSS.asc
-
-Copy each exported key to the `install_files/ansible-base/` directory.
-
-Now run `gpg --fingerprint` to show the fingerprints of both the above keys. You'll need those for the next step.
-
-### Configuration: securedrop-setup
-
-We're going to use `securedrop-setup` to configure our staging instance before deployment.
-
-`ssh` to sd-build in a new shell. `cd` to your checked-out code. `securedrop-setup` builds its own virtual environment separate from the one we created for building, but I think it fails the first time through. In any case, run
-
-    securedrop-admin setup
-
-Wait for it to fail. Then
-
-    source .venv/bin/activate
-    pip install --upgrade pip
-
-Then run the admin script again
-
-    securedrop-admin setup
-
-Then
-
-    securedrop-admin sdconfig
-
-This will prompt you for a number of details: the username for accessing the application hosts (use your own username), the IP addresses and hostnames for the app and monitoring machines, the paths to the keys you created in the previous steps, and the fingerprints of the those keys (use the output from the `gpg --fingerprint` command. You can use dummy information for the questions about sending OSSEC email, since our system won't actually be attempting to send mail. You shouldn't need to enable SSH over Tor.
-
-When the script finishes it will leave site-specific configuration files in various places. We're ready to provision the VMs now.
-
-Exit this shell!
-
-## Provisioning
-
-Back in the shell where you run `make build-debs`, we can finally use Ansible to configure the VMs we created. Run the following:
-
-    ansible-playbook -i install_files/ansible-base/inventory-staging install_files/ansible-base/securedrop-staging.yml
-
-The process involves a number of reboots. On Qubes, the VMs will simply halt, and we'll have to restart them by hand with
-
-    qvm-start sd-app
-
-and/or
-
-    qvm-start sd-mon
-
-on dom0.
-
-If all goes well after some time the `sd-app` and `sd-mon` VMs will be automatically configured to run the securedrop staging environment.
-
-## Post-provisioning
-
-### Create admin user
-
-SSH to `sd-app`. You should be able to do
-
-    sudo su
-    cd /var/www/securedrop
-    ./manage.py add-admin
-
-### Tor service addresses
-
-We need the Tor service addresses, of course, so we can access the source and journalist interfaces.
-
-On `sd-app`, do:
-
-    sudo cat /var/lib/tor/services/journalist/hostname
-
-to get the journalist interface and key. You'll want this in order to configure the workstation.
-
-Get the source address with:
-
-    sudo cat /var/lib/tor/services/source/hostname
-
-Use Tor Browser in your `anon-whonix` Qube to try connecting to the source interface... make yourself a source and leave a submission!
-
 ## Managing Qubes RPC for Admin API capability
-(These docs are WIP!) You'll need to grant the "work/sd-dev" VM the ability to create other VMs.
-Here is an example of an extremely permissive policy, that essentially makes "work/sd-dev" 
-as powerful as dom0 (we must reduce these grants before submitting for review):
+
+(These docs are WIP!) You'll need to grant the "work/sd-dev" VM the ability to create other VMs. Here is an example of an extremely permissive policy, that essentially makes "work/sd-dev" as powerful as dom0 (we must reduce these grants before submitting for review):
 
 ```
-/etc/qubes-rpc/policy/admin.vm.property.List:work $adminvm allow,target=$adminvm
-/etc/qubes-rpc/policy/admin.vm.List:work $adminvm allow,target=$adminvm
-/etc/qubes-rpc/policy/admin.vm.List:work $anyvm allow,target=$adminvm
-/etc/qubes-rpc/policy/include/admin-local-rwx:#work $tag:created-by-work allow,target=$adminvm
-/etc/qubes-rpc/policy/include/admin-local-rwx:work $adminvm allow,target=$adminvm
-/etc/qubes-rpc/policy/include/admin-local-rwx:work $anyvm allow,target=$adminvm
-/etc/qubes-rpc/policy/include/admin-global-ro:work $adminvm allow,target=$adminvm
-/etc/qubes-rpc/policy/include/admin-global-ro:work $anyvm allow,target=$adminvm
-/etc/qubes-rpc/policy/include/admin-global-rwx:work $adminvm allow,target=$adminvm
-/etc/qubes-rpc/policy/include/admin-global-rwx:work $anyvm allow,target=$adminvm
-/etc/qubes-rpc/policy/admin.property.List:work $adminvm allow,target=$adminvm
-/etc/qubes-rpc/policy/admin.vm.Create.StandaloneVM:work $adminvm allow,target=$adminvm
-/etc/qubes-rpc/policy/admin.vm.Create.StandaloneVM:work $anyvm allow,target=$adminvm
-/etc/qubes-rpc/policy.RegisterArgument:    # argument exceed 64 bytes, but that's fine, the call just wont work
+/etc/qubes-rpc/policy/admin.vm.property.List:
+  sd-dev $adminvm allow,target=$adminvm
+
+/etc/qubes-rpc/policy/admin.vm.List:
+ sd-dev $adminvm allow,target=$adminvm
+ sd-dev $anyvm allow,target=$adminvm
+
+/etc/qubes-rpc/policy/admin.property.List:
+  sd-dev $adminvm allow,target=$adminvm
+
+/etc/qubes-rpc/policy/admin.vm.Create.StandaloneVM:
+  sd-dev $adminvm allow,target=$adminvm
+  sd-dev $anyvm allow,target=$adminvm
+
+/etc/qubes-rpc/policy/include/admin-local-rwx:
+  sd-dev $adminvm allow,target=$adminvm
+  sd-dev $anyvm allow,target=$adminvm
+
+/etc/qubes-rpc/policy/include/admin-global-ro:
+  sd-dev $adminvm allow,target=$adminvm
+  sd-dev $anyvm allow,target=$adminvm
+
+/etc/qubes-rpc/policy/include/admin-global-rwx:
+  sd-dev $adminvm allow,target=$adminvm
+  sd-dev $anyvm allow,target=$adminvm
+
+/etc/qubes-rpc/policy.RegisterArgument:
+   # argument exceed 64 bytes, but that's fine, the call just wont work
 ```
 
-In the example above, the SD dev machine is "work", but let's use "sd-dev" throughout instead.
+XXX Conor! not sure why that last line is in here...
 
 ## Creating staging instance
+
 After creating the StandaloneVMs as described above:
 
 * sd-trusty-base
 * sd-app-base
 * sd-mon-base
 
-Run:
+And after building the Securedrop .debs, we can finally provision the staging environment. In from the root of the Securedrop project in `sd-dev`, run:
 
-```
-molecule test -s qubes-staging
-```
+    molecule test -s qubes-staging
 
-Note that since the reboots don't automatically bring the machines back up, due to the fact
-that the machines are Standalone VMs, the "test" action will fail by default, unless you judiciously
-run `qvm-start <vm>` for each VM after they've shut down. You can use the smaller constituent
-Molecule actions, rather than the bundled "test" action:
+Note that since the reboots don't automatically bring the machines back up, due to the fact that the machines are Standalone VMs, the "test" action will fail by default, unless you judiciously run `qvm-start <vm>` for each VM after they've shut down. You can use the smaller constituent Molecule actions, rather than the bundled "test" action:
 
-```
-molecule create -s qubes-staging
-molecule prepare -s qubes-staging
-molecule converge -s qubes-staging
-```
+    molecule create -s qubes-staging
+    molecule prepare -s qubes-staging
+    molecule converge -s qubes-staging
 
 ## That's it
 
@@ -381,6 +265,5 @@ For day-to-day operation, you should only need to run the `sd-app` (and `sd-mon`
 
 ## Notes
 
-- We can *probably* replace `sd-build` with a normal Qubes VM. There would be some advantages to this, not the least of which would be the ability to copy/paste to and from the VM, and to run a browser in the VM.
 - You may need to bump up the memory for `sd-build` or `sd-app` past 2GB. I was running in to some issues which seemed to be solved by giving the VMs more memory.
 - `securedrop-admin` is made for the Tails environment and had to be modified a bit to run on `sd-build`. Also it interacts poorly with the existing virtual environment created there. We should decide if we need it at all, and if so how we can modify it to work better in for this task. Or perhaps we don't need it at all, if we instead can automatically configure the build, like we do in the existing Vagrant-based staging provisioning workflow.
