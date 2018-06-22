@@ -38,6 +38,15 @@ function handle_notification() {
     sender=${1:-send_encrypted_alarm}
     stdin="$(< /dev/stdin)"
 
+    #
+    # When .procmailrc changes, the pattern triggering this script will match
+    # itself. Just return and ignore the match.
+    #
+    if echo "$stdin" | grep -q "Integrity checksum changed for: '/var/ossec/.procmailrc'" ; then
+        echo "$0 ignore /var/ossec/.procmailrc checksum changes"
+        return 0
+    fi
+
     local count
     count=$(echo "$stdin" | perl -ne "print scalar(<>) and exit if(m|ossec: output: 'head -1 /var/lib/securedrop/submissions_today.txt|);")
     if [[ "$count" =~ ^[0-9]+$ ]] ; then
@@ -114,6 +123,10 @@ function test_handle_notification() {
         tail -n 200 /tmp/submission-{yes,no}.txt
         exit 1
     fi
+
+    (
+        echo "Integrity checksum changed for: '/var/ossec/.procmailrc'"
+    ) | handle_notification | grep -q "ignore /var/ossec/.procmailrc checksum changes" || exit 1
 }
 
 ${1:-main}
