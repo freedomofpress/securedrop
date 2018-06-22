@@ -5,16 +5,21 @@ ENV USER_NAME ${USER_NAME:-root}
 ARG USER_ID
 ENV USER_ID ${USER_ID:-0}
 
-RUN apt-get update
-RUN apt-get install -y python sudo lsb-release gnupg2 git
+RUN apt-get update && apt-get install -y \
+     python \
+     sudo \
+     lsb-release \
+     gnupg2 \
+     python-virtualenv \
+     git && apt-get clean
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
 
 WORKDIR /opt
-COPY bootstrap.py .
-COPY requirements.txt .
-RUN python bootstrap.py -v
+RUN chown -R $USER_NAME /opt
+USER ${USER_NAME}
 ENV VIRTUAL_ENV /opt/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+COPY requirements.txt .
 COPY requirements-dev.txt .
-RUN pip install -r requirements-dev.txt
-RUN chown -R $USER_NAME /opt
+RUN virtualenv .venv && \
+    pip install -r requirements-dev.txt
