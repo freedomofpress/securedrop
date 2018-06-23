@@ -156,3 +156,25 @@ def test_api_404(journalist_app, journalist_api_token):
 
         assert response.status_code == 404
         assert json_response['error'] == 'not found'
+
+
+def test_authorized_user_gets_single_source(journalist_app, test_source,
+                                            journalist_api_token):
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.single_source',
+                                   source_id=test_source['source'].id),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+        data = json.loads(response.data)
+        assert data['source_id'] == test_source['source'].id
+
+
+def test_get_non_existant_source_404s(journalist_app, journalist_api_token):
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.single_source',
+                                   source_id=1),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 404

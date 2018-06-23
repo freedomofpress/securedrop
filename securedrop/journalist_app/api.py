@@ -25,6 +25,13 @@ def token_required(f):
     return decorated_function
 
 
+def get_or_404(model, object_id):
+    result = model.query.get(object_id)
+    if result is None:
+        abort(404)
+    return result
+
+
 def make_blueprint(config):
     api = Blueprint('api', __name__)
 
@@ -59,7 +66,8 @@ def make_blueprint(config):
     @api.route('/sources/<int:source_id>/', methods=['GET'])
     @token_required
     def single_source(source_id):
-        pass
+        source = get_or_404(Source, source_id)
+        return jsonify(source.to_json()), 200
 
     @api.route('/sources/<int:source_id>/add_star/', methods=['POST'])
     @token_required
