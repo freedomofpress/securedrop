@@ -158,4 +158,13 @@ def create_app(config):
         else:
             return render_template('404.html'), 404
 
+    @app.errorhandler(405)
+    def method_not_allowed(message):
+        if request.headers['Content-Type'] == 'application/json':
+            response = jsonify({'error': 'method not allowed',
+                                'message': 'Not allowed'})
+            return response, 405
+        else:
+            return render_template('405.html'), 405
+
     return app
