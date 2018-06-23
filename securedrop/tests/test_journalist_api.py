@@ -315,3 +315,25 @@ def test_authorized_user_can_delete_source_collection(journalist_app,
 
         # Source does not exist
         assert Source.query.all() == []
+
+
+def test_authorized_user_can_download_submission(journalist_app,
+                                                 test_source,
+                                                 journalist_api_token):
+    with journalist_app.test_client() as app:
+        submission_id = test_source['source'].submissions[0].id
+        source_id = test_source['source'].id
+
+        response = app.get(url_for('api.download_submission',
+                                   source_id=source_id,
+                                   submission_id=submission_id),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+        # Submission should now be marked as downloaded in the database
+        submission = Submission.query.get(submission_id)
+        assert submission.downloaded
+
+        # Response should be a PGP encrypted download
+        assert response.mimetype == 'application/pgp-encrypted'

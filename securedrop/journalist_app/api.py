@@ -1,7 +1,7 @@
 from functools import wraps
 import json
 
-from flask import abort, Blueprint, jsonify, request
+from flask import abort, Blueprint, current_app, jsonify, request, send_file
 
 import config
 from db import db
@@ -105,7 +105,17 @@ def make_blueprint(config):
                methods=['GET'])
     @token_required
     def download_submission(source_id, submission_id):
-        pass
+        source = get_or_404(Source, source_id)
+        submission = get_or_404(Submission, submission_id)
+
+        # Mark as downloaded
+        submission.downloaded = True
+        db.session.commit()
+
+        return send_file(current_app.storage.path(source.filesystem_id,
+                                                  submission.filename),
+                         mimetype="application/pgp-encrypted",
+                         as_attachment=True)
 
     @api.route('/sources/<int:source_id>/submissions/<int:submission_id>/',
                methods=['GET', 'DELETE'])
