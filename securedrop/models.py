@@ -488,6 +488,14 @@ class Journalist(db.Model):
             return None
         return Journalist.query.get(data['id'])
 
+    def to_json(self):
+        json_user = {
+            'username': self.username,
+            'last_login': self.last_access,
+            'is_admin': self.is_admin
+        }
+        return json_user
+
 
 class JournalistLoginAttempt(db.Model):
 

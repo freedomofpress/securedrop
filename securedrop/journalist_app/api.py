@@ -143,4 +143,12 @@ def make_blueprint(config):
         return jsonify({'submissions': [submission.to_json() for \
                                         submission in submissions]}), 200
 
+    @api.route('/user/', methods=['GET'])
+    @token_required
+    def get_current_user():
+        # Get current user from token
+        auth_token = request.headers.get('Authorization').split(" ")[1]
+        user = Journalist.verify_api_token(auth_token)
+        return jsonify(user.to_json()), 200
+
     return api

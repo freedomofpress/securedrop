@@ -102,7 +102,8 @@ def test_user_without_token_cannot_get_protected_endpoints(journalist_app,
             url_for('api.download_submission',
                     source_id=test_source['source'].id,
                     submission_id=test_source['submissions'][0].id),
-            url_for('api.get_all_submissions')
+            url_for('api.get_all_submissions'),
+            url_for('api.get_current_user')
             ]
 
     with journalist_app.test_client() as app:
@@ -337,3 +338,16 @@ def test_authorized_user_can_download_submission(journalist_app,
 
         # Response should be a PGP encrypted download
         assert response.mimetype == 'application/pgp-encrypted'
+
+def test_authorized_user_can_get_current_user_endpoint(journalist_app,
+                                                       test_source,
+                                                       test_journo,
+                                                       journalist_api_token):
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.get_current_user'),
+                           headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 200
+
+        json_response = json.loads(response.data)
+        assert json_response['is_admin'] is False
+        assert json_response['username'] == test_journo['username']
