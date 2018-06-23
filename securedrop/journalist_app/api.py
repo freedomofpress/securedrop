@@ -91,7 +91,11 @@ def make_blueprint(config):
                                                                  'DELETE'])
     @token_required
     def all_source_submissions(source_id):
-        pass
+        if request.method == 'GET':
+            source = get_or_404(Source, source_id)
+            return jsonify(
+                {'submissions': [submission.to_json() for \
+                                 submission in source.submissions]}), 200
 
     @api.route('/sources/<int:source_id>/submissions/<int:submission_id>/download/',  # noqa
                methods=['GET'])
