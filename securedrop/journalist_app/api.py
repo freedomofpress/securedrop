@@ -82,7 +82,10 @@ def make_blueprint(config):
     @api.route('/sources/<int:source_id>/remove_star/', methods=['DELETE'])
     @token_required
     def remove_star(source_id):
-        pass
+        source = get_or_404(Source, source_id)
+        utils.make_star_false(source.filesystem_id)
+        db.session.commit()
+        return jsonify({'message': 'Star removed'}), 200
 
     @api.route('/sources/<int:source_id>/submissions/', methods=['GET',
                                                                  'DELETE'])

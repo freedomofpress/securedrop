@@ -192,3 +192,20 @@ def test_authorized_user_can_star_a_source(journalist_app, test_source,
         # Verify that the source was starred.
         assert SourceStar.query.filter(
             SourceStar.source_id == source_id).one().starred
+
+
+def test_authorized_user_can_unstar_a_source(journalist_app, test_source,
+                                             journalist_api_token):
+    with journalist_app.test_client() as app:
+        source_id = test_source['source'].id
+        response = app.post(url_for('api.add_star', source_id=source_id),
+                            headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 201
+
+        response = app.delete(url_for('api.remove_star', source_id=source_id),
+                              headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 200
+
+        # Verify that the source is gone.
+        assert SourceStar.query.filter(
+            SourceStar.source_id == source_id).one().starred is False
