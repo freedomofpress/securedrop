@@ -110,6 +110,12 @@ def make_blueprint(config):
         if request.method == 'GET':
             submission = get_or_404(Submission, submission_id)
             return jsonify(submission.to_json()), 200
+        elif request.method == 'DELETE':
+            submission = get_or_404(Submission, submission_id)
+            source = get_or_404(Source, source_id)
+            utils.delete_file(source.filesystem_id, submission.filename,
+                           submission)
+            return jsonify({'message': 'Submission deleted'}), 200
 
     @api.route('/sources/<int:source_id>/reply/', methods=['POST'])
     @token_required

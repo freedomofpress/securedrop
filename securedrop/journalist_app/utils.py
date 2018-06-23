@@ -170,12 +170,16 @@ def download(zip_basename, submissions):
                      as_attachment=True)
 
 
+def delete_file(filesystem_id, filename, file_object):
+    file_path = current_app.storage.path(filesystem_id, filename)
+    worker.enqueue(srm, file_path)
+    db.session.delete(file_object)
+    db.session.commit()
+
+
 def bulk_delete(filesystem_id, items_selected):
     for item in items_selected:
-        item_path = current_app.storage.path(filesystem_id, item.filename)
-        worker.enqueue(srm, item_path)
-        db.session.delete(item)
-    db.session.commit()
+        delete_file(filesystem_id, item.filename, item)
 
     flash(ngettext("Submission deleted.",
                    "{num} submissions deleted.".format(
