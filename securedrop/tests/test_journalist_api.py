@@ -7,7 +7,7 @@ from pyotp import TOTP
 
 from flask import url_for
 
-from models import Journalist, SourceStar
+from models import Journalist, SourceStar, Submission
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config
@@ -102,6 +102,7 @@ def test_user_without_token_cannot_get_protected_endpoints(journalist_app,
             url_for('api.download_submission',
                     source_id=test_source['source'].id,
                     submission_id=test_source['submissions'][0].id),
+            url_for('api.get_all_submissions')
             ]
 
     with journalist_app.test_client() as app:
@@ -221,3 +222,20 @@ def test_disallowed_methods_produces_405(journalist_app, test_source,
 
         assert response.status_code == 405
         assert json_response['error'] == 'method not allowed'
+
+
+def test_authorized_user_can_get_all_submissions(journalist_app, test_source,
+                                                 journalist_api_token):
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.get_all_submissions'),
+                           headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 200
+
+        json_response = json.loads(response.data)
+
+        observed_submissions = [submission['filename'] for \
+                                submission in json_response['submissions']]
+
+        expected_submissions = [submission.filename for \
+                                submission in Submission.query.all()]
+        assert observed_submissions == expected_submissions

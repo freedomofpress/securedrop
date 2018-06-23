@@ -6,7 +6,7 @@ from flask import abort, Blueprint, jsonify, request
 import config
 from db import db
 from journalist_app import utils
-from models import Journalist, Source
+from models import Journalist, Source, Submission
 
 
 def token_required(f):
@@ -109,5 +109,12 @@ def make_blueprint(config):
     @token_required
     def post_reply(source_id):
         pass
+
+    @api.route('/submissions/', methods=['GET'])
+    @token_required
+    def get_all_submissions():
+        submissions = Submission.query.all()
+        return jsonify({'submissions': [submission.to_json() for \
+                                        submission in submissions]}), 200
 
     return api

@@ -146,6 +146,23 @@ class Submission(db.Model):
     def __repr__(self):
         return '<Submission %r>' % (self.filename)
 
+    def to_json(self):
+        json_submission = {
+            'source_url': url_for('api.single_source',
+                                  source_id=self.source_id),
+            'submission_url': url_for('api.single_submission',
+                                      source_id=self.source_id,
+                                      submission_id=self.id),
+            'submission_id': self.id,
+            'filename': self.filename,
+            'size': self.size,
+            'is_read': self.downloaded,
+            'download_url': url_for('api.download_submission',
+                                    source_id=self.source_id,
+                                    submission_id=self.id),
+        }
+        return json_submission
+
 
 class Reply(db.Model):
     __tablename__ = "replies"
