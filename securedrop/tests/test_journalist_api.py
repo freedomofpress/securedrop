@@ -7,7 +7,7 @@ from pyotp import TOTP
 
 from flask import url_for
 
-from models import Journalist, SourceStar, Submission
+from models import Journalist, Source, SourceStar, Submission
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config
@@ -299,3 +299,19 @@ def test_authorized_user_can_delete_single_submission(journalist_app,
         # Submission now should be gone.
         assert Submission.query.filter(
             Submission.id == submission_id).all() == []
+
+
+def test_authorized_user_can_delete_source_collection(journalist_app,
+                                                      test_source,
+                                                      journalist_api_token):
+    with journalist_app.test_client() as app:
+        submission_id = test_source['source'].submissions[0].id
+        source_id = test_source['source'].id
+        response = app.delete(url_for('api.all_source_submissions',
+                                      source_id=source_id),
+                              headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+        # Source does not exist
+        assert Source.query.all() == []

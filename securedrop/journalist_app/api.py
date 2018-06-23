@@ -96,6 +96,10 @@ def make_blueprint(config):
             return jsonify(
                 {'submissions': [submission.to_json() for \
                                  submission in source.submissions]}), 200
+        elif request.method == 'DELETE':
+            source = get_or_404(Source, source_id)
+            utils.delete_collection(source.filesystem_id)
+            return jsonify({'message': 'Source and submissions deleted'}), 200
 
     @api.route('/sources/<int:source_id>/submissions/<int:submission_id>/download/',  # noqa
                methods=['GET'])
