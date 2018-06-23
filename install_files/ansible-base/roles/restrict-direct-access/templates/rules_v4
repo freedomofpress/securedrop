@@ -96,7 +96,7 @@
 # Allowed for staging and optionally for production (disables ssh over tor)
 {% if not enable_ssh_over_tor %}
   {%- for interface in ansible_interfaces -%}
-    {%- if  hostvars[inventory_hostname]['ansible_'+interface].ipv4 -%}
+    {%- if 'ipv4' in hostvars[inventory_hostname]['ansible_'+interface] -%}
         {%- set int_details = hostvars[inventory_hostname]['ansible_'+interface].ipv4 -%}
         {%- set net_string = '/'.join([int_details.network,int_details.netmask]) -%}
         {%- if ssh_ip|ipaddr(net_string) -%}
