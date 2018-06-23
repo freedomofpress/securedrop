@@ -7,7 +7,7 @@ from pyotp import TOTP
 
 from flask import url_for
 
-from models import Journalist
+from models import Journalist, SourceStar
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config
@@ -178,3 +178,17 @@ def test_get_non_existant_source_404s(journalist_app, journalist_api_token):
                            headers=get_api_headers(journalist_api_token))
 
         assert response.status_code == 404
+
+
+def test_authorized_user_can_star_a_source(journalist_app, test_source,
+                                           journalist_api_token):
+    with journalist_app.test_client() as app:
+        source_id = test_source['source'].id
+        response = app.post(url_for('api.add_star', source_id=source_id),
+                            headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 201
+
+        # Verify that the source was starred.
+        assert SourceStar.query.filter(
+            SourceStar.source_id == source_id).one().starred

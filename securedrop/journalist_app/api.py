@@ -4,6 +4,8 @@ import json
 from flask import abort, Blueprint, jsonify, request
 
 import config
+from db import db
+from journalist_app import utils
 from models import Journalist, Source
 
 
@@ -72,7 +74,10 @@ def make_blueprint(config):
     @api.route('/sources/<int:source_id>/add_star/', methods=['POST'])
     @token_required
     def add_star(source_id):
-        pass
+        source = get_or_404(Source, source_id)
+        utils.make_star_true(source.filesystem_id)
+        db.session.commit()
+        return jsonify({'message': 'Star added'}), 201
 
     @api.route('/sources/<int:source_id>/remove_star/', methods=['DELETE'])
     @token_required
