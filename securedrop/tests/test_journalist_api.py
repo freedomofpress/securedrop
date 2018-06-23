@@ -258,3 +258,26 @@ def test_authorized_user_get_source_submissions(journalist_app, test_source,
         expected_submissions = [submission.filename for submission in \
                                 test_source['source'].submissions]
         assert observed_submissions == expected_submissions
+
+
+def test_authorized_user_can_get_single_submission(journalist_app,
+                                                   test_source,
+                                                   journalist_api_token):
+    with journalist_app.test_client() as app:
+        submission_id = test_source['source'].submissions[0].id
+        source_id = test_source['source'].id
+        response = app.get(url_for('api.single_submission',
+                                   source_id=source_id,
+                                   submission_id=submission_id),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+        json_response = json.loads(response.data)
+
+        assert json_response['submission_id'] == submission_id
+        assert json_response['is_read'] is False
+        assert json_response['filename'] == \
+            test_source['source'].submissions[0].filename
+        assert json_response['size'] == \
+            test_source['source'].submissions[0].size

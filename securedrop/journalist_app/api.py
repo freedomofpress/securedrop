@@ -107,7 +107,9 @@ def make_blueprint(config):
                methods=['GET', 'DELETE'])
     @token_required
     def single_submission(source_id, submission_id):
-        pass
+        if request.method == 'GET':
+            submission = get_or_404(Submission, submission_id)
+            return jsonify(submission.to_json()), 200
 
     @api.route('/sources/<int:source_id>/reply/', methods=['POST'])
     @token_required
