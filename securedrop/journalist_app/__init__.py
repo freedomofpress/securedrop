@@ -140,6 +140,15 @@ def create_app(config):
     app.register_blueprint(col.make_blueprint(config), url_prefix='/col')
     app.register_blueprint(api.make_blueprint(config), url_prefix='/api/v1')
 
+    @app.errorhandler(400)
+    def bad_request(message):
+        if request.headers['Content-Type'] == 'application/json':
+            response = jsonify({'error': 'bad request',
+                                'message': 'We could not understand'})
+            return response, 400
+        else:
+            return render_template('400.html'), 400
+
     @app.errorhandler(403)
     def forbidden(message):
         if request.headers['Content-Type'] == 'application/json':
