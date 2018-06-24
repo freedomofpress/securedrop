@@ -3,10 +3,10 @@ import json
 
 from flask import abort, Blueprint, current_app, jsonify, request, send_file
 
-import config
+from sdconfig import config
 from db import db
 from journalist_app import utils
-from models import Journalist, Source, Submission
+from models import Journalist, Reply, Source, Submission
 
 
 def token_required(f):
@@ -134,7 +134,31 @@ def make_blueprint(config):
     @api.route('/sources/<int:source_id>/reply/', methods=['POST'])
     @token_required
     def post_reply(source_id):
-        pass
+        source = get_or_404(Source, source_id)
+        if 'reply' not in request.json:
+            abort(400)
+
+        # Get current user
+        auth_token = request.headers.get('Authorization').split(" ")[1]
+        user = Journalist.verify_api_token(auth_token)
+
+        data = json.loads(request.data)
+        if not data['reply']:  # Reply should not be empty
+            abort(400)
+
+        source.interaction_count += 1
+        filename = current_app.storage.save_pre_encrypted_reply(
+            source.filesystem_id,
+            source.interaction_count,
+            source.journalist_filename,
+            data['reply'])
+
+        reply = Reply(user, source,
+                      current_app.storage.path(source.filesystem_id, filename))
+        db.session.add(reply)
+        db.session.add(source)
+        db.session.commit()
+        return jsonify({'message': 'Your reply has been stored'}), 201
 
     @api.route('/submissions/', methods=['GET'])
     @token_required

@@ -5,9 +5,9 @@ import pytest
 
 from pyotp import TOTP
 
-from flask import url_for
+from flask import current_app, url_for
 
-from models import Journalist, Source, SourceStar, Submission
+from models import Journalist, Reply, Source, SourceStar, Submission
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config
@@ -373,3 +373,68 @@ def test_request_with_auth_header_but_no_token_triggers_403(journalist_app):
                                'Content-Type': 'application/json'
                            })
         assert response.status_code == 403
+
+
+def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
+                                       test_source, test_journo):
+    with journalist_app.test_client() as app:
+        source_id = test_source['source'].id
+        reply_content = 'This is a plaintext reply'
+        response = app.post(url_for('api.post_reply',
+                                    source_id=source_id),
+                            data=json.dumps({'reply': reply_content}),
+                            headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 201
+
+    with journalist_app.app_context():  # Now verify everything was saved.
+        # Get most recent reply in the database
+        reply = Reply.query.order_by(Reply.id.desc()).first()
+
+        assert reply.journalist_id == test_journo['id']
+        assert reply.source_id == source_id
+
+        source = Source.query.get(source_id)
+
+        expected_filename = '{}-{}-reply.gpg'.format(
+            source.interaction_count, source.journalist_filename)
+
+        expected_filepath = current_app.storage.path(
+            source.filesystem_id, expected_filename)
+
+        with open(expected_filepath, 'rb') as fh:
+            saved_content = fh.read()
+
+        assert reply_content == saved_content
+
+
+def test_reply_without_content_400(journalist_app, journalist_api_token,
+                                   test_source, test_journo):
+    with journalist_app.test_client() as app:
+        source_id = test_source['source'].id
+        response = app.post(url_for('api.post_reply',
+                                    source_id=source_id),
+                            data=json.dumps({'reply': ''}),
+                            headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 400
+
+
+def test_reply_without_reply_field_400(journalist_app, journalist_api_token,
+                                       test_source, test_journo):
+    with journalist_app.test_client() as app:
+        source_id = test_source['source'].id
+        response = app.post(url_for('api.post_reply',
+                                    source_id=source_id),
+                            data=json.dumps({'other': 'stuff'}),
+                            headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 400
+
+
+def test_reply_without_json_400(journalist_app, journalist_api_token,
+                                       test_source, test_journo):
+    with journalist_app.test_client() as app:
+        source_id = test_source['source'].id
+        response = app.post(url_for('api.post_reply',
+                                    source_id=source_id),
+                            data='invalid',
+                            headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 400

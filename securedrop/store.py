@@ -145,6 +145,17 @@ class Storage:
 
         return encrypted_file_name
 
+    def save_pre_encrypted_reply(self, filesystem_id, count,
+                                 journalist_filename, encrypted_content):
+        encrypted_file_name = "{0}-{1}-reply.gpg".format(count,
+                                                         journalist_filename)
+        encrypted_file_path = self.path(filesystem_id, encrypted_file_name)
+
+        with open(encrypted_file_path, 'wb') as fh:
+            fh.write(encrypted_content)
+
+        return encrypted_file_path
+
     def save_message_submission(self, filesystem_id, count,
                                 journalist_filename, message):
         filename = "{0}-{1}-msg.gpg".format(count, journalist_filename)
