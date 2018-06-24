@@ -13,8 +13,8 @@ def token_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         try:
-            auth_header = request.headers.get('Authorization')
-        except:
+            auth_header = request.headers['Authorization']
+        except KeyError:
             return abort(403, 'API token not found in Authorization header.')
 
         if auth_header:

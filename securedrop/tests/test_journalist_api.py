@@ -339,6 +339,7 @@ def test_authorized_user_can_download_submission(journalist_app,
         # Response should be a PGP encrypted download
         assert response.mimetype == 'application/pgp-encrypted'
 
+
 def test_authorized_user_can_get_current_user_endpoint(journalist_app,
                                                        test_source,
                                                        test_journo,
@@ -351,3 +352,24 @@ def test_authorized_user_can_get_current_user_endpoint(journalist_app,
         json_response = json.loads(response.data)
         assert json_response['is_admin'] is False
         assert json_response['username'] == test_journo['username']
+
+
+def test_request_with_missing_auth_header_triggers_403(journalist_app):
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.get_current_user'),
+                           headers={
+                               'Accept': 'application/json',
+                               'Content-Type': 'application/json'
+                           })
+        assert response.status_code == 403
+
+
+def test_request_with_auth_header_but_no_token_triggers_403(journalist_app):
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.get_current_user'),
+                           headers={
+                               'Authorization': '',
+                               'Accept': 'application/json',
+                               'Content-Type': 'application/json'
+                           })
+        assert response.status_code == 403
