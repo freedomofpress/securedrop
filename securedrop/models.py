@@ -103,6 +103,10 @@ class Source(db.Model):
         collection.sort(key=lambda x: int(x.filename.split('-')[0]))
         return collection
 
+    @property
+    def public_key(self):
+        return current_app.crypto_util.export_pubkey(self.filesystem_id)
+
     def to_json(self):
         docs_msg_count = self.documents_messages_count()
 
@@ -113,6 +117,7 @@ class Source(db.Model):
             'flagged': self.flagged,
             'last_updated': self.last_updated,
             'interaction_count': self.interaction_count,
+            'public_key': self.public_key,
             'number_of_documents': docs_msg_count['documents'],
             'number_of_messages': docs_msg_count['messages'],
             'submissions_url': url_for('api.all_source_submissions',

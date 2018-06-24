@@ -171,6 +171,7 @@ def test_authorized_user_gets_single_source(journalist_app, test_source,
 
         data = json.loads(response.data)
         assert data['source_id'] == test_source['source'].id
+        assert 'BEGIN PGP PUBLIC KEY' in data['public_key']
 
 
 def test_get_non_existant_source_404s(journalist_app, journalist_api_token):
