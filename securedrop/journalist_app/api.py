@@ -7,6 +7,7 @@ from sdconfig import config
 from db import db
 from journalist_app import utils
 from models import Journalist, Reply, Source, Submission
+from store import NotEncrypted
 
 
 def token_required(f):
@@ -147,11 +148,15 @@ def make_blueprint(config):
             abort(400)
 
         source.interaction_count += 1
-        filename = current_app.storage.save_pre_encrypted_reply(
-            source.filesystem_id,
-            source.interaction_count,
-            source.journalist_filename,
-            data['reply'])
+        try:
+            filename = current_app.storage.save_pre_encrypted_reply(
+                source.filesystem_id,
+                source.interaction_count,
+                source.journalist_filename,
+                data['reply'])
+        except NotEncrypted:
+            return jsonify(
+                {'message': 'You must encrypt replies client side'}), 412
 
         reply = Reply(user, source,
                       current_app.storage.path(source.filesystem_id, filename))

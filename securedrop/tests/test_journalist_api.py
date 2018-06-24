@@ -375,11 +375,30 @@ def test_request_with_auth_header_but_no_token_triggers_403(journalist_app):
         assert response.status_code == 403
 
 
+def test_unencrypted_replies_get_rejected(journalist_app, journalist_api_token,
+                                          test_source, test_journo):
+    with journalist_app.test_client() as app:
+        source_id = test_source['source'].id
+        reply_content = 'This is a plaintext reply'
+        response = app.post(url_for('api.post_reply',
+                                    source_id=source_id),
+                            data=json.dumps({'reply': reply_content}),
+                            headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 412
+
+
 def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
                                        test_source, test_journo):
     with journalist_app.test_client() as app:
         source_id = test_source['source'].id
-        reply_content = 'This is a plaintext reply'
+
+        # First we must encrypt the reply, or it will get rejected
+        # by the server.
+        source_key = current_app.crypto_util.getkey(
+            test_source['source'].filesystem_id)
+        reply_content = current_app.crypto_util.gpg.encrypt(
+            'This is a plaintext reply', source_key).data
+
         response = app.post(url_for('api.post_reply',
                                     source_id=source_id),
                             data=json.dumps({'reply': reply_content}),
