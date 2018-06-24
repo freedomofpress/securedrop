@@ -111,8 +111,10 @@ class Source(db.Model):
         docs_msg_count = self.documents_messages_count()
 
         json_source = {
-            'url': url_for('api.single_source', source_id=self.id),
+            'url': url_for('api.single_source',
+                           filesystem_id=self.filesystem_id),
             'source_id': self.id,
+            'filesystem_id': self.filesystem_id,
             'journalist_designation': self.journalist_designation,
             'flagged': self.flagged,
             'last_updated': self.last_updated,
@@ -121,10 +123,13 @@ class Source(db.Model):
             'number_of_documents': docs_msg_count['documents'],
             'number_of_messages': docs_msg_count['messages'],
             'submissions_url': url_for('api.all_source_submissions',
-                                       source_id=self.id),
-            'add_star_url': url_for('api.add_star', source_id=self.id),
-            'remove_star_url': url_for('api.remove_star', source_id=self.id),
-            'reply_url': url_for('api.post_reply', source_id=self.id)
+                                       filesystem_id=self.filesystem_id),
+            'add_star_url': url_for('api.add_star',
+                                    filesystem_id=self.filesystem_id),
+            'remove_star_url': url_for('api.remove_star',
+                                       filesystem_id=self.filesystem_id),
+            'reply_url': url_for('api.post_reply',
+                                 filesystem_id=self.filesystem_id)
             }
         return json_source
 
@@ -154,16 +159,16 @@ class Submission(db.Model):
     def to_json(self):
         json_submission = {
             'source_url': url_for('api.single_source',
-                                  source_id=self.source_id),
+                                  filesystem_id=self.source.filesystem_id),
             'submission_url': url_for('api.single_submission',
-                                      source_id=self.source_id,
+                                      filesystem_id=self.source.filesystem_id,
                                       submission_id=self.id),
             'submission_id': self.id,
             'filename': self.filename,
             'size': self.size,
             'is_read': self.downloaded,
             'download_url': url_for('api.download_submission',
-                                    source_id=self.source_id,
+                                    filesystem_id=self.source.filesystem_id,
                                     submission_id=self.id),
         }
         return json_submission

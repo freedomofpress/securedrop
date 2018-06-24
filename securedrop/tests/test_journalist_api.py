@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 import os
-import pytest
 
 from pyotp import TOTP
 
@@ -10,7 +9,6 @@ from flask import current_app, url_for
 from models import Journalist, Reply, Source, SourceStar, Submission
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import SDConfig, config
 from utils.api_helper import get_api_headers
 
 
@@ -37,8 +35,8 @@ def test_valid_user_can_get_an_api_token(journalist_app, test_journo):
                             headers=get_api_headers())
         observed_response = json.loads(response.data)
 
-        assert isinstance(Journalist.verify_api_token(observed_response['token']),
-                          Journalist) is True
+        assert isinstance(Journalist.verify_api_token(
+            observed_response['token']), Journalist) is True
         assert response.status_code == 200
 
 
@@ -91,16 +89,17 @@ def test_authorized_user_gets_all_sources(journalist_app, test_source,
 def test_user_without_token_cannot_get_protected_endpoints(journalist_app,
                                                            test_source):
     with journalist_app.app_context():
+        filesystem_id = test_source['source'].filesystem_id
         protected_routes = [
             url_for('api.get_all_sources'),
-            url_for('api.single_source', source_id=test_source['source'].id),
+            url_for('api.single_source', filesystem_id=filesystem_id),
             url_for('api.all_source_submissions',
-                    source_id=test_source['source'].id),
+                    filesystem_id=filesystem_id),
             url_for('api.single_submission',
-                    source_id=test_source['source'].id,
+                    filesystem_id=filesystem_id,
                     submission_id=test_source['submissions'][0].id),
             url_for('api.download_submission',
-                    source_id=test_source['source'].id,
+                    filesystem_id=filesystem_id,
                     submission_id=test_source['submissions'][0].id),
             url_for('api.get_all_submissions'),
             url_for('api.get_current_user')
@@ -117,20 +116,21 @@ def test_user_without_token_cannot_get_protected_endpoints(journalist_app,
 def test_user_without_token_cannot_delete_protected_endpoints(journalist_app,
                                                               test_source):
     with journalist_app.app_context():
+        filesystem_id = test_source['source'].filesystem_id
         protected_routes = [
             url_for('api.all_source_submissions',
-                    source_id=test_source['source'].id),
+                    filesystem_id=filesystem_id),
             url_for('api.single_submission',
-                    source_id=test_source['source'].id,
+                    filesystem_id=filesystem_id,
                     submission_id=test_source['submissions'][0].id),
             url_for('api.remove_star',
-                    source_id=test_source['source'].id),
+                    filesystem_id=filesystem_id),
             ]
 
     with journalist_app.test_client() as app:
         for protected_route in protected_routes:
             response = app.delete(protected_route,
-                               headers=get_api_headers(''))
+                                  headers=get_api_headers(''))
 
             assert response.status_code == 403
 
@@ -138,9 +138,10 @@ def test_user_without_token_cannot_delete_protected_endpoints(journalist_app,
 def test_user_without_token_cannot_post_protected_endpoints(journalist_app,
                                                             test_source):
     with journalist_app.app_context():
+        filesystem_id = test_source['source'].filesystem_id
         protected_routes = [
-            url_for('api.post_reply', source_id=test_source['source'].id),
-            url_for('api.add_star', source_id=test_source['source'].id)
+            url_for('api.post_reply', filesystem_id=filesystem_id),
+            url_for('api.add_star', filesystem_id=filesystem_id)
         ]
 
     with journalist_app.test_client() as app:
@@ -163,8 +164,9 @@ def test_api_404(journalist_app, journalist_api_token):
 def test_authorized_user_gets_single_source(journalist_app, test_source,
                                             journalist_api_token):
     with journalist_app.test_client() as app:
+        filesystem_id = test_source['source'].filesystem_id
         response = app.get(url_for('api.single_source',
-                                   source_id=test_source['source'].id),
+                                   filesystem_id=filesystem_id),
                            headers=get_api_headers(journalist_api_token))
 
         assert response.status_code == 200
@@ -177,7 +179,7 @@ def test_authorized_user_gets_single_source(journalist_app, test_source,
 def test_get_non_existant_source_404s(journalist_app, journalist_api_token):
     with journalist_app.test_client() as app:
         response = app.get(url_for('api.single_source',
-                                   source_id=1),
+                                   filesystem_id=1),
                            headers=get_api_headers(journalist_api_token))
 
         assert response.status_code == 404
@@ -186,8 +188,10 @@ def test_get_non_existant_source_404s(journalist_app, journalist_api_token):
 def test_authorized_user_can_star_a_source(journalist_app, test_source,
                                            journalist_api_token):
     with journalist_app.test_client() as app:
+        filesystem_id = test_source['source'].filesystem_id
         source_id = test_source['source'].id
-        response = app.post(url_for('api.add_star', source_id=source_id),
+        response = app.post(url_for('api.add_star',
+                                    filesystem_id=filesystem_id),
                             headers=get_api_headers(journalist_api_token))
 
         assert response.status_code == 201
@@ -200,12 +204,15 @@ def test_authorized_user_can_star_a_source(journalist_app, test_source,
 def test_authorized_user_can_unstar_a_source(journalist_app, test_source,
                                              journalist_api_token):
     with journalist_app.test_client() as app:
+        filesystem_id = test_source['source'].filesystem_id
         source_id = test_source['source'].id
-        response = app.post(url_for('api.add_star', source_id=source_id),
+        response = app.post(url_for('api.add_star',
+                                    filesystem_id=filesystem_id),
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 201
 
-        response = app.delete(url_for('api.remove_star', source_id=source_id),
+        response = app.delete(url_for('api.remove_star',
+                                      filesystem_id=filesystem_id),
                               headers=get_api_headers(journalist_api_token))
         assert response.status_code == 200
 
@@ -217,8 +224,9 @@ def test_authorized_user_can_unstar_a_source(journalist_app, test_source,
 def test_disallowed_methods_produces_405(journalist_app, test_source,
                                          journalist_api_token):
     with journalist_app.test_client() as app:
-        source_id = test_source['source'].id
-        response = app.delete(url_for('api.add_star', source_id=source_id),
+        filesystem_id = test_source['source'].filesystem_id
+        response = app.delete(url_for('api.add_star',
+                                      filesystem_id=filesystem_id),
                               headers=get_api_headers(journalist_api_token))
         json_response = json.loads(response.data)
 
@@ -235,10 +243,10 @@ def test_authorized_user_can_get_all_submissions(journalist_app, test_source,
 
         json_response = json.loads(response.data)
 
-        observed_submissions = [submission['filename'] for \
+        observed_submissions = [submission['filename'] for
                                 submission in json_response['submissions']]
 
-        expected_submissions = [submission.filename for \
+        expected_submissions = [submission.filename for
                                 submission in Submission.query.all()]
         assert observed_submissions == expected_submissions
 
@@ -246,18 +254,18 @@ def test_authorized_user_can_get_all_submissions(journalist_app, test_source,
 def test_authorized_user_get_source_submissions(journalist_app, test_source,
                                                 journalist_api_token):
     with journalist_app.test_client() as app:
-        source_id = test_source['source'].id
+        filesystem_id = test_source['source'].filesystem_id
         response = app.get(url_for('api.all_source_submissions',
-                                   source_id=source_id),
+                                   filesystem_id=filesystem_id),
                            headers=get_api_headers(journalist_api_token))
         assert response.status_code == 200
 
         json_response = json.loads(response.data)
 
-        observed_submissions = [submission['filename'] for \
+        observed_submissions = [submission['filename'] for
                                 submission in json_response['submissions']]
 
-        expected_submissions = [submission.filename for submission in \
+        expected_submissions = [submission.filename for submission in
                                 test_source['source'].submissions]
         assert observed_submissions == expected_submissions
 
@@ -267,9 +275,9 @@ def test_authorized_user_can_get_single_submission(journalist_app,
                                                    journalist_api_token):
     with journalist_app.test_client() as app:
         submission_id = test_source['source'].submissions[0].id
-        source_id = test_source['source'].id
+        filesystem_id = test_source['source'].filesystem_id
         response = app.get(url_for('api.single_submission',
-                                   source_id=source_id,
+                                   filesystem_id=filesystem_id,
                                    submission_id=submission_id),
                            headers=get_api_headers(journalist_api_token))
 
@@ -290,9 +298,9 @@ def test_authorized_user_can_delete_single_submission(journalist_app,
                                                       journalist_api_token):
     with journalist_app.test_client() as app:
         submission_id = test_source['source'].submissions[0].id
-        source_id = test_source['source'].id
+        filesystem_id = test_source['source'].filesystem_id
         response = app.delete(url_for('api.single_submission',
-                                      source_id=source_id,
+                                      filesystem_id=filesystem_id,
                                       submission_id=submission_id),
                               headers=get_api_headers(journalist_api_token))
 
@@ -307,10 +315,9 @@ def test_authorized_user_can_delete_source_collection(journalist_app,
                                                       test_source,
                                                       journalist_api_token):
     with journalist_app.test_client() as app:
-        submission_id = test_source['source'].submissions[0].id
-        source_id = test_source['source'].id
+        filesystem_id = test_source['source'].filesystem_id
         response = app.delete(url_for('api.all_source_submissions',
-                                      source_id=source_id),
+                                      filesystem_id=filesystem_id),
                               headers=get_api_headers(journalist_api_token))
 
         assert response.status_code == 200
@@ -324,10 +331,10 @@ def test_authorized_user_can_download_submission(journalist_app,
                                                  journalist_api_token):
     with journalist_app.test_client() as app:
         submission_id = test_source['source'].submissions[0].id
-        source_id = test_source['source'].id
+        filesystem_id = test_source['source'].filesystem_id
 
         response = app.get(url_for('api.download_submission',
-                                   source_id=source_id,
+                                   filesystem_id=filesystem_id,
                                    submission_id=submission_id),
                            headers=get_api_headers(journalist_api_token))
 
@@ -379,10 +386,10 @@ def test_request_with_auth_header_but_no_token_triggers_403(journalist_app):
 def test_unencrypted_replies_get_rejected(journalist_app, journalist_api_token,
                                           test_source, test_journo):
     with journalist_app.test_client() as app:
-        source_id = test_source['source'].id
+        filesystem_id = test_source['source'].filesystem_id
         reply_content = 'This is a plaintext reply'
         response = app.post(url_for('api.post_reply',
-                                    source_id=source_id),
+                                    filesystem_id=filesystem_id),
                             data=json.dumps({'reply': reply_content}),
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 412
@@ -392,6 +399,7 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
                                        test_source, test_journo):
     with journalist_app.test_client() as app:
         source_id = test_source['source'].id
+        filesystem_id = test_source['source'].filesystem_id
 
         # First we must encrypt the reply, or it will get rejected
         # by the server.
@@ -401,7 +409,7 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
             'This is a plaintext reply', source_key).data
 
         response = app.post(url_for('api.post_reply',
-                                    source_id=source_id),
+                                    filesystem_id=filesystem_id),
                             data=json.dumps({'reply': reply_content}),
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 201
@@ -430,9 +438,9 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
 def test_reply_without_content_400(journalist_app, journalist_api_token,
                                    test_source, test_journo):
     with journalist_app.test_client() as app:
-        source_id = test_source['source'].id
+        filesystem_id = test_source['source'].filesystem_id
         response = app.post(url_for('api.post_reply',
-                                    source_id=source_id),
+                                    filesystem_id=filesystem_id),
                             data=json.dumps({'reply': ''}),
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400
@@ -441,20 +449,20 @@ def test_reply_without_content_400(journalist_app, journalist_api_token,
 def test_reply_without_reply_field_400(journalist_app, journalist_api_token,
                                        test_source, test_journo):
     with journalist_app.test_client() as app:
-        source_id = test_source['source'].id
+        filesystem_id = test_source['source'].filesystem_id
         response = app.post(url_for('api.post_reply',
-                                    source_id=source_id),
+                                    filesystem_id=filesystem_id),
                             data=json.dumps({'other': 'stuff'}),
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400
 
 
 def test_reply_without_json_400(journalist_app, journalist_api_token,
-                                       test_source, test_journo):
+                                test_source, test_journo):
     with journalist_app.test_client() as app:
-        source_id = test_source['source'].id
+        filesystem_id = test_source['source'].filesystem_id
         response = app.post(url_for('api.post_reply',
-                                    source_id=source_id),
+                                    filesystem_id=filesystem_id),
                             data='invalid',
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400

@@ -3,7 +3,6 @@ import json
 
 from flask import abort, Blueprint, current_app, jsonify, request, send_file
 
-from sdconfig import config
 from db import db
 from journalist_app import utils
 from models import Journalist, Reply, Source, Submission
@@ -28,8 +27,11 @@ def token_required(f):
     return decorated_function
 
 
-def get_or_404(model, object_id):
-    result = model.query.get(object_id)
+def get_or_404(model, object_id, column=''):
+    if column:
+        result = model.query.filter(column == object_id).first()
+    else:
+        result = model.query.get(object_id)
     if result is None:
         abort(404)
     return result
@@ -56,7 +58,7 @@ def make_blueprint(config):
             journalist = Journalist.login(username, password, one_time_code)
             return jsonify({'token': journalist.generate_api_token(
                  expiration=1800), 'expiration': 1800}), 200
-        except:
+        except Exception:
             return abort(403, 'Token authentication failed.')
 
     @api.route('/sources/', methods=['GET'])
@@ -66,47 +68,47 @@ def make_blueprint(config):
         return jsonify(
             {'sources': [source.to_json() for source in sources]}), 200
 
-    @api.route('/sources/<int:source_id>/', methods=['GET'])
+    @api.route('/sources/<filesystem_id>/', methods=['GET'])
     @token_required
-    def single_source(source_id):
-        source = get_or_404(Source, source_id)
+    def single_source(filesystem_id):
+        source = get_or_404(Source, filesystem_id, Source.filesystem_id)
         return jsonify(source.to_json()), 200
 
-    @api.route('/sources/<int:source_id>/add_star/', methods=['POST'])
+    @api.route('/sources/<filesystem_id>/add_star/', methods=['POST'])
     @token_required
-    def add_star(source_id):
-        source = get_or_404(Source, source_id)
+    def add_star(filesystem_id):
+        source = get_or_404(Source, filesystem_id, Source.filesystem_id)
         utils.make_star_true(source.filesystem_id)
         db.session.commit()
         return jsonify({'message': 'Star added'}), 201
 
-    @api.route('/sources/<int:source_id>/remove_star/', methods=['DELETE'])
+    @api.route('/sources/<filesystem_id>/remove_star/', methods=['DELETE'])
     @token_required
-    def remove_star(source_id):
-        source = get_or_404(Source, source_id)
+    def remove_star(filesystem_id):
+        source = get_or_404(Source, filesystem_id, Source.filesystem_id)
         utils.make_star_false(source.filesystem_id)
         db.session.commit()
         return jsonify({'message': 'Star removed'}), 200
 
-    @api.route('/sources/<int:source_id>/submissions/', methods=['GET',
+    @api.route('/sources/<filesystem_id>/submissions/', methods=['GET',
                                                                  'DELETE'])
     @token_required
-    def all_source_submissions(source_id):
+    def all_source_submissions(filesystem_id):
         if request.method == 'GET':
-            source = get_or_404(Source, source_id)
+            source = get_or_404(Source, filesystem_id, Source.filesystem_id)
             return jsonify(
-                {'submissions': [submission.to_json() for \
+                {'submissions': [submission.to_json() for
                                  submission in source.submissions]}), 200
         elif request.method == 'DELETE':
-            source = get_or_404(Source, source_id)
+            source = get_or_404(Source, filesystem_id, Source.filesystem_id)
             utils.delete_collection(source.filesystem_id)
             return jsonify({'message': 'Source and submissions deleted'}), 200
 
-    @api.route('/sources/<int:source_id>/submissions/<int:submission_id>/download/',  # noqa
+    @api.route('/sources/<filesystem_id>/submissions/<int:submission_id>/download/',  # noqa
                methods=['GET'])
     @token_required
-    def download_submission(source_id, submission_id):
-        source = get_or_404(Source, source_id)
+    def download_submission(filesystem_id, submission_id):
+        source = get_or_404(Source, filesystem_id, Source.filesystem_id)
         submission = get_or_404(Submission, submission_id)
 
         # Mark as downloaded
@@ -118,24 +120,24 @@ def make_blueprint(config):
                          mimetype="application/pgp-encrypted",
                          as_attachment=True)
 
-    @api.route('/sources/<int:source_id>/submissions/<int:submission_id>/',
+    @api.route('/sources/<filesystem_id>/submissions/<int:submission_id>/',
                methods=['GET', 'DELETE'])
     @token_required
-    def single_submission(source_id, submission_id):
+    def single_submission(filesystem_id, submission_id):
         if request.method == 'GET':
             submission = get_or_404(Submission, submission_id)
             return jsonify(submission.to_json()), 200
         elif request.method == 'DELETE':
             submission = get_or_404(Submission, submission_id)
-            source = get_or_404(Source, source_id)
+            source = get_or_404(Source, filesystem_id, Source.filesystem_id)
             utils.delete_file(source.filesystem_id, submission.filename,
-                           submission)
+                              submission)
             return jsonify({'message': 'Submission deleted'}), 200
 
-    @api.route('/sources/<int:source_id>/reply/', methods=['POST'])
+    @api.route('/sources/<filesystem_id>/reply/', methods=['POST'])
     @token_required
-    def post_reply(source_id):
-        source = get_or_404(Source, source_id)
+    def post_reply(filesystem_id):
+        source = get_or_404(Source, filesystem_id, Source.filesystem_id)
         if 'reply' not in request.json:
             abort(400)
 
@@ -169,7 +171,7 @@ def make_blueprint(config):
     @token_required
     def get_all_submissions():
         submissions = Submission.query.all()
-        return jsonify({'submissions': [submission.to_json() for \
+        return jsonify({'submissions': [submission.to_json() for
                                         submission in submissions]}), 200
 
     @api.route('/user/', methods=['GET'])

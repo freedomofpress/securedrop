@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
-from flask import (abort, Flask, session, redirect, url_for, flash, g, request,
+from flask import (Flask, session, redirect, url_for, flash, g, request,
                    jsonify, render_template)
 from flask_assets import Environment
 from flask_babel import gettext
