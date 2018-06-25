@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-05-07 05:37+0000\n"
+"PO-Revision-Date: 2018-06-18 10:24+0000\n"
 "Last-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\n"
 "Language-Team: Italian <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/it/>\n"
@@ -118,8 +118,8 @@ msgid "File required."
 msgstr "File obbligatorio."
 
 #: journalist_app/forms.py:62
-msgid "Upload images only."
-msgstr "Carica solo immagini."
+msgid "You can only upload PNG image files."
+msgstr "Possono essere caricate solo immagini PNG."
 
 #: journalist_app/main.py:117 journalist_app/utils.py:47
 #: journalist_app/utils.py:137
@@ -240,8 +240,10 @@ msgstr[0] "1 messaggio"
 msgstr[1] "{msg_num} messaggi"
 
 #: journalist_templates/_source_row.html:27
-msgid "{num_unread} unread"
-msgstr "{num_unread} non letti"
+msgid "1 unread"
+msgid_plural "{num_unread} unread"
+msgstr[0] "1 non letto"
+msgstr[1] "{num_unread} non letti"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -556,8 +558,8 @@ msgstr ""
 "codice.</em>"
 
 #: journalist_templates/col.html:122
-msgid "DELETE COLLECTION"
-msgstr "CANCELLA ARCHIVIO"
+msgid "DELETE SOURCE AND SUBMISSIONS"
+msgstr "ELIMINA FONTE E MATERIALE INVIATO"
 
 #: journalist_templates/col.html:130
 msgid "Are you sure you want to delete this collection?"
@@ -871,8 +873,8 @@ msgstr "Questo nome in codice non è riconosciuto."
 msgid "Protecting Journalists and Sources"
 msgstr "Proteggi giornalisti e fonti"
 
-#: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/base.html:25 source_templates/base.html:47
+#: source_templates/index.html:33 source_templates/index.html:88
 msgid "Powered by"
 msgstr "Offerto da"
 
@@ -880,7 +882,7 @@ msgstr "Offerto da"
 msgid "LOG OUT"
 msgstr "ESCI"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:47 source_templates/index.html:88
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -1019,7 +1021,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "CONTROLLA RIPOSTE"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:96
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -1027,25 +1029,25 @@ msgstr ""
 "Sembra che tu stia usando il browser Tor. Puoi spostare il Tab di Sicurezza "
 "su \"Molto sicuro\" in quattro passaggi."
 
-#: source_templates/index.html:95
+#: source_templates/index.html:98
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Fare clic sull'<img src=\"{icon}\" alt=\"Tor icon\">icona di Tor nella barra "
 "in alto"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:99
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Fare clic su <strong>Impostazioni di Sicurezza...</strong>"
 
-#: source_templates/index.html:97
+#: source_templates/index.html:100
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Sposta il Tab di Sicurezza su <strong>\"Molto sicuro\"</strong>, poi fai "
 "clic su <strong>OK</strong>"
 
-#: source_templates/index.html:98
+#: source_templates/index.html:101
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">Fare clic qui</a> per ricaricare la pagina"
 
@@ -1194,6 +1196,10 @@ msgstr "Pagina non trovata"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Non è stato possibile trovare quello che hai richiesto."
 
+#: source_templates/screensaver.html:2
+msgid "Interface hidden. Move your cursor here to show."
+msgstr "Interfaccia nascosta. Muovere qui il cursore per mostrarla."
+
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
@@ -1212,19 +1218,17 @@ msgid "Why is there a warning about Tor2Web?"
 msgstr "Perché c'è un avviso su Tor2Web?"
 
 #: source_templates/tor2web-warning.html:4
-msgid ""
-"Using <a href=\"tor2web.org\">Tor2Web</a> to connect to SecureDrop will not "
-"protect your anonymity."
+msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgstr ""
-"Usare <a href=\"tor2web.org\">Tor2Web</a> per connettersi a SecureDrop non "
-"proteggerà il proprio anonimato."
+"Usare Tor2Web per connettersi a SecureDrop non proteggerà il proprio "
+"anonimato."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
-"It could be possible for anyone listening to Internet usage (your "
+"It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
 msgstr ""
-"Potrebbe essere possibile per chiunque stia controllando gli usi di Internet "
+"Potrebbe essere possibile per chiunque stia monitorando il traffcio Internet "
 "(il governo, il fornitore dei servizi Internet), identificarti."
 
 #: source_templates/tor2web-warning.html:6
@@ -1266,8 +1270,8 @@ msgstr ""
 
 #: source_templates/use-tor-browser.html:9
 msgid ""
-"If there is a chance that downloading the Tor Browser raises suspicion and "
-"your mail provider is less likely to be monitored, you can send a mail to "
+"If there is a chance that downloading Tor Browser raises suspicion and your "
+"mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
 "Se c'è la possibilità che scaricare il browser Tor possa destare sospetti e "
@@ -1375,8 +1379,14 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Torna alla pagina di invio documenti e messaggi"
 
-#~ msgid "You can only upload JPG/JPEG or PNG image files."
-#~ msgstr "Possono essere caricate solo immagini JPG/JPEG o PNG."
+#~ msgid "{num_unread} unread"
+#~ msgstr "{num_unread} non letti"
+
+#~ msgid "Upload images only."
+#~ msgstr "Carica solo immagini."
+
+#~ msgid "DELETE COLLECTION"
+#~ msgstr "CANCELLA ARCHIVIO"
 
 #~ msgid "That username is already in use"
 #~ msgstr "Nome utente non disponibile"
