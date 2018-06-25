@@ -103,6 +103,7 @@ anonymous sources.
    development/making_pr
    development/admin_development
    development/updategui_development
+   development/journalist_api
    development/virtual_environments
    development/virtualizing_tails
    development/contributor_guidelines
