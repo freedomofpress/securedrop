@@ -686,7 +686,18 @@ def update(args):
         if RELEASE_KEY in gpg_lines[1] and \
                 sig_result.count(good_sig_text) == 1 and \
                 bad_sig_text not in sig_result:
-            sdlog.info("Signature verification successful.")
+            # Finally, we check that there is no branch of the same name
+            # prior to reporting success.
+            cmd = ['git', 'show-ref', '--heads', '--verify', '--quiet',
+                   'refs/heads/{}'.format(latest_tag)]
+            try:
+                # We expect this to produce a non-zero exit code, which
+                # will produce a subprocess.CalledProcessError
+                subprocess.check_output(cmd)
+                sdlog.info("Signature verification failed.")
+                return 1
+            except subprocess.CalledProcessError:
+                sdlog.info("Signature verification successful.")
         else:  # If anything else happens, fail and exit 1
             sdlog.info("Signature verification failed.")
             return 1
