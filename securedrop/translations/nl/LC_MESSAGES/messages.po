@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-05-08 10:00+0000\n"
-"Last-Translator: Thom <thom.pp9@gmail.com>\n"
+"PO-Revision-Date: 2018-06-21 05:27+0000\n"
+"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
 "Language-Team: Dutch <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/nl/>\n"
 "Language: nl\n"
@@ -113,8 +113,8 @@ msgid "File required."
 msgstr "Bestand verplicht."
 
 #: journalist_app/forms.py:62
-msgid "Upload images only."
-msgstr "Alleen afbeeldingen uploaden."
+msgid "You can only upload PNG image files."
+msgstr "U kunt alleen PNG-afbeeldingsbestanden uploaden."
 
 #: journalist_app/main.py:117 journalist_app/utils.py:47
 #: journalist_app/utils.py:137
@@ -236,8 +236,10 @@ msgstr[0] "1 bericht"
 msgstr[1] "{msg_num} berichten"
 
 #: journalist_templates/_source_row.html:27
-msgid "{num_unread} unread"
-msgstr "{num_unread} ongelezen"
+msgid "1 unread"
+msgid_plural "{num_unread} unread"
+msgstr[0] "1 ongelezen"
+msgstr[1] "{num_unread} ongelezen"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -546,8 +548,8 @@ msgstr ""
 "haar vorige codenaam.</em>"
 
 #: journalist_templates/col.html:122
-msgid "DELETE COLLECTION"
-msgstr "COLLECTIE VERWIJDEREN"
+msgid "DELETE SOURCE AND SUBMISSIONS"
+msgstr "VERWIJDER BRON EN INZENDINGEN"
 
 #: journalist_templates/col.html:130
 msgid "Are you sure you want to delete this collection?"
@@ -860,8 +862,8 @@ msgstr "Helaas is dit een onbekende codenaam."
 msgid "Protecting Journalists and Sources"
 msgstr "Journalisten en bronnen beschermen"
 
-#: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/base.html:25 source_templates/base.html:47
+#: source_templates/index.html:33 source_templates/index.html:88
 msgid "Powered by"
 msgstr "Mogelijk gemaakt door"
 
@@ -869,7 +871,7 @@ msgstr "Mogelijk gemaakt door"
 msgid "LOG OUT"
 msgstr "UITLOGGEN"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:47 source_templates/index.html:88
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -1009,7 +1011,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "CHECK OF U ANTWOORD HEEFT"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:96
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -1017,25 +1019,25 @@ msgstr ""
 "Het lijkt erop dat u de Tor Browser gebruikt. U kunt de "
 "beveiligingsschuifbalk op Veiligste zetten in 4 stappen."
 
-#: source_templates/index.html:95
+#: source_templates/index.html:98
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Klik op het <img src=\"{icon}\" alt=\"Tor icon\"> Tor-icoon in de werkbalk "
 "hierboven"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:99
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Klik op <strong>Veiligheidsinstellingen...</strong>"
 
-#: source_templates/index.html:97
+#: source_templates/index.html:100
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Beweeg de schuifbalk naar <strong>Veiligste</strong> en klik vervolgens op "
 "<strong>OK</strong>"
 
-#: source_templates/index.html:98
+#: source_templates/index.html:101
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">Klik hier</a> om de pagina te verversen"
 
@@ -1187,6 +1189,10 @@ msgstr "Pagina niet gevonden"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Sorry, we kunnen niet vinden wat u zoekt."
 
+#: source_templates/screensaver.html:2
+msgid "Interface hidden. Move your cursor here to show."
+msgstr "Interface verborgen. Beweeg uw muis hier om te tonen."
+
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
@@ -1204,20 +1210,18 @@ msgid "Why is there a warning about Tor2Web?"
 msgstr "Waarom zie ik een waarschuwing over Tor2Web?"
 
 #: source_templates/tor2web-warning.html:4
-msgid ""
-"Using <a href=\"tor2web.org\">Tor2Web</a> to connect to SecureDrop will not "
-"protect your anonymity."
+msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgstr ""
-"Het gebruik van <a href=\"tor2web.org\">Tor2Web</a> om met SecureDrop te "
-"verbinden, zal uw anonimiteit niet beschermen."
+"Het gebruik van Tor2Web om met SecureDrop te verbinden, zal uw anonimiteit "
+"niet beschermen."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
-"It could be possible for anyone listening to Internet usage (your "
+"It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
 msgstr ""
-"Het is mogelijk dat iedereen die uw internetgebruik observeert (uw overheid, "
-"uw internetprovider), u kan identificeren."
+"Het is mogelijk dat iedereen die uw internetverkeer in de gaten houdt (uw "
+"overheid, uw internetprovider), u kan identificeren."
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
@@ -1258,8 +1262,8 @@ msgstr ""
 
 #: source_templates/use-tor-browser.html:9
 msgid ""
-"If there is a chance that downloading the Tor Browser raises suspicion and "
-"your mail provider is less likely to be monitored, you can send a mail to "
+"If there is a chance that downloading Tor Browser raises suspicion and your "
+"mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
 "Wanneer de kans bestaat dat het downloaden van de Tor Browser argwaan wekt "
@@ -1369,8 +1373,14 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
 
-#~ msgid "You can only upload JPG/JPEG or PNG image files."
-#~ msgstr "U kunt alleen JPG-/JPEG- of PNG-afbeeldingsbestanden uploaden."
+#~ msgid "{num_unread} unread"
+#~ msgstr "{num_unread} ongelezen"
+
+#~ msgid "Upload images only."
+#~ msgstr "Alleen afbeeldingen uploaden."
+
+#~ msgid "DELETE COLLECTION"
+#~ msgstr "COLLECTIE VERWIJDEREN"
 
 #~ msgid "That username is already in use"
 #~ msgstr "Die gebruikersnaam is al in gebruik"
