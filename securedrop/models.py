@@ -407,6 +407,7 @@ class Journalist(db.Model):
         login_attempt_period = datetime.datetime.utcnow() - \
             datetime.timedelta(seconds=cls._LOGIN_ATTEMPT_PERIOD)
         attempts_within_period = JournalistLoginAttempt.query.filter(
+            JournalistLoginAttempt.journalist_id == user.id).filter(
             JournalistLoginAttempt.timestamp > login_attempt_period).all()
         if len(attempts_within_period) > cls._MAX_LOGIN_ATTEMPTS_PER_PERIOD:
             raise LoginThrottledException(
