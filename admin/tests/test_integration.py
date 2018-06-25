@@ -538,7 +538,10 @@ class TestGitOperations:
                                     'securedrop/install_files/ansible-base')
         child = pexpect.spawn('coverage run {0} --root {1} update'.format(
                               cmd, ansible_base))
-        child.expect('Updated to SecureDrop', timeout=100)
+
+        output = child.read()
+        assert 'Updated to SecureDrop' in output
+        assert 'Signature verification successful' in output
 
         child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
         child.close()
