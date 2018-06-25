@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-05-07 07:00+0000\n"
-"Last-Translator: Drashti <drashtipandya37@gmail.com>\n"
+"PO-Revision-Date: 2018-06-19 14:27+0000\n"
+"Last-Translator: Dev Singh <devksingh4@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/hi/>\n"
 "Language: hi\n"
@@ -107,8 +107,8 @@ msgid "File required."
 msgstr "आवश्यक फाइल।"
 
 #: journalist_app/forms.py:62
-msgid "Upload images only."
-msgstr "केवल चित्र अपलोड करें।"
+msgid "You can only upload PNG image files."
+msgstr "आप केवल PNG छवि फ़ाइलों को अपलोड कर सकते हैं।"
 
 #: journalist_app/main.py:117 journalist_app/utils.py:47
 #: journalist_app/utils.py:137
@@ -223,8 +223,10 @@ msgstr[0] "1 मैसेज"
 msgstr[1] "{msg_num} मैसेजस"
 
 #: journalist_templates/_source_row.html:27
-msgid "{num_unread} unread"
-msgstr "{num_unread} अपठित"
+msgid "1 unread"
+msgid_plural "{num_unread} unread"
+msgstr[0] "एक बिना पढ़ा"
+msgstr[1] "{num_unread} बिना पढ़ा"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -526,8 +528,8 @@ msgstr ""
 "उपयोग करके लॉगिन नहीं कर पाएगे।</em>"
 
 #: journalist_templates/col.html:122
-msgid "DELETE COLLECTION"
-msgstr "संग्रह हटाएं"
+msgid "DELETE SOURCE AND SUBMISSIONS"
+msgstr "स्रोत और सबमिशन हटाएं"
 
 #: journalist_templates/col.html:130
 msgid "Are you sure you want to delete this collection?"
@@ -832,8 +834,8 @@ msgstr "क्षमा करें, वह एक मान्यता प्
 msgid "Protecting Journalists and Sources"
 msgstr "पत्रकारों और स्रोतों की रक्षा करते हुए"
 
-#: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/base.html:25 source_templates/base.html:47
+#: source_templates/index.html:33 source_templates/index.html:88
 msgid "Powered by"
 msgstr "द्वारा संचालित"
 
@@ -841,7 +843,7 @@ msgstr "द्वारा संचालित"
 msgid "LOG OUT"
 msgstr "लोग आउट"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:47 source_templates/index.html:88
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -971,7 +973,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "जवाब के लिए जाँच करें"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:96
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -979,22 +981,22 @@ msgstr ""
 "आप Tor ब्राउज़र का उपयोग करते हुए दिखाई देते हैं| आप सुरक्षा स्लाइडर को 4 चरणों में सबसे "
 "सुरक्षित बना सकते हैं!"
 
-#: source_templates/index.html:95
+#: source_templates/index.html:98
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr "<img src=\"{icon}\" alt=\"Tor icon\"> उपरोक्त टूलबार में Tor आइकन पर दबाएँ"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:99
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "<strong>सुरक्षा सेटिंग..</strong>पर दबाएँ"
 
-#: source_templates/index.html:97
+#: source_templates/index.html:100
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "स्लाइडर को <strong>सबसे सुरक्षित</strong> चालऐ, फिर <strong>Ok</strong> पर दबाएँ"
 
-#: source_templates/index.html:98
+#: source_templates/index.html:101
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "पृष्ठ को ताज़ा करने के लिए <a href=\"/\">यहां दबाएँ</a>"
 
@@ -1143,6 +1145,10 @@ msgstr "पृष्ठ नहीं मिला"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "क्षमा करें, हम आपके द्वारा अनुरोध किए गए स्थान का पता नहीं लगा सके।"
 
+#: source_templates/screensaver.html:2
+msgid "Interface hidden. Move your cursor here to show."
+msgstr "इंटरफ़ेस छिपा हुआ है। दिखाने के लिए यहां अपने कर्सर को ले जाएं यहाँ।"
+
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
@@ -1160,20 +1166,18 @@ msgid "Why is there a warning about Tor2Web?"
 msgstr "Tor2Web के बारे में चेतावनी क्यों है?"
 
 #: source_templates/tor2web-warning.html:4
-msgid ""
-"Using <a href=\"tor2web.org\">Tor2Web</a> to connect to SecureDrop will not "
-"protect your anonymity."
+msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgstr ""
-"SecureDrop से कनेक्ट करने के लिए <a href=\"tor2web.org\">Tor2Web</a> का उपयोग करने "
-"से आपकी अनामिकता की रक्षा नहीं होगी।"
+"SecureDrop से कनेक्ट करने के लिए Tor2Web का उपयोग करने से आपकी अनामिकता की "
+"रक्षा नहीं होगी।"
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
-"It could be possible for anyone listening to Internet usage (your "
+"It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
 msgstr ""
-"आपको पहचानने के लिए इंटरनेट उपयोग (आपकी सरकार, आपका इंटरनेट प्रदाता) सुनने वाले किसी के "
-"लिए यह संभव हो सकता है।"
+"आपकी पहचान करने के लिए किसी भी व्यक्ति के लिए आपके इंटरनेट यातायात (आपकी सरका"
+"र, आपका इंटरनेट प्रदाता) की निगरानी करना संभव हो सकता है।"
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
@@ -1213,13 +1217,13 @@ msgstr ""
 
 #: source_templates/use-tor-browser.html:9
 msgid ""
-"If there is a chance that downloading the Tor Browser raises suspicion and "
-"your mail provider is less likely to be monitored, you can send a mail to "
+"If there is a chance that downloading Tor Browser raises suspicion and your "
+"mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
-"यदि एक आशंका है कि Tor ब्राउज़र डाउनलोड करने से संदेह उठता है और आपके मेल प्रदाता पर नजर "
-"रखी जाने की संभावना कम है, तो आप एक मेल भेज सकते हैं इस पर <pre>gettor@torproject."
-"org</pre> और एक बॉट निर्देशों के साथ जवाब देंगे|"
+"यदि एक आशंका है कि Tor ब्राउज़र डाउनलोड करने से संदेह उठता है और आपके मेल "
+"प्रदाता पर नजर रखी जाने की संभावना कम है, तो आप एक मेल भेज सकते हैं इस पर "
+"<pre>gettor@torproject.org</pre> और एक बॉट निर्देशों के साथ जवाब देंगे|"
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
@@ -1319,8 +1323,14 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
 
-#~ msgid "You can only upload JPG/JPEG or PNG image files."
-#~ msgstr "आप केवल JPG/JPEG या PNG छवि फ़ाइलों को अपलोड कर सकते हैं।"
+#~ msgid "{num_unread} unread"
+#~ msgstr "{num_unread} अपठित"
+
+#~ msgid "Upload images only."
+#~ msgstr "केवल चित्र अपलोड करें।"
+
+#~ msgid "DELETE COLLECTION"
+#~ msgstr "संग्रह हटाएं"
 
 #~ msgid "That username is already in use"
 #~ msgstr "उपयोगकर्ता का नाम पहले से ही प्रयोग में है"
