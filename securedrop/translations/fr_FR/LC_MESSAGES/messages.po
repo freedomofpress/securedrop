@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-05-07 13:00+0000\n"
+"PO-Revision-Date: 2018-06-18 15:09+0000\n"
 "Last-Translator: AO <french.coordinator@rbox.me>\n"
 "Language-Team: French <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/fr/>\n"
@@ -30,15 +30,16 @@ msgstr "Vous avez été déconnecté pour cause d’inactivité"
 
 #: journalist_app/account.py:26
 msgid "Incorrect password or two-factor code."
-msgstr "Le mot de passe ou le code de validation en deux étapes est erroné."
+msgstr ""
+"Le mot de passe ou le code d’authentification à deux facteurs est erroné."
 
 #: journalist_app/account.py:42
 msgid "Token in two-factor authentication verified."
-msgstr "Le jeton de validation en deux étapes a été vérifié."
+msgstr "Le jeton d’authentification à deux facteurs a été vérifié."
 
 #: journalist_app/account.py:46 journalist_app/admin.py:116
 msgid "Could not verify token in two-factor authentication."
-msgstr "Impossible de vérifier le jeton de la validation en deux étapes."
+msgstr "Impossible de vérifier le jeton d’authentification à deux facteurs."
 
 #: journalist_app/admin.py:38
 msgid "Image updated."
@@ -67,7 +68,7 @@ msgstr ""
 #: journalist_app/admin.py:109
 msgid "Token in two-factor authentication accepted for user {user}."
 msgstr ""
-"Le jeton de la validation en deux étapes a été accepté pour l’utilisateur "
+"Le jeton d’authentification à deux facteurs a été accepté pour l’utilisateur "
 "{user}."
 
 #: journalist_app/admin.py:208
@@ -115,8 +116,8 @@ msgid "File required."
 msgstr "Un fichier est exigé."
 
 #: journalist_app/forms.py:62
-msgid "Upload images only."
-msgstr "Téléverser des images uniquement."
+msgid "You can only upload PNG image files."
+msgstr "Vous ne pouvez téléverser que des fichiers images PNG."
 
 #: journalist_app/main.py:117 journalist_app/utils.py:47
 #: journalist_app/utils.py:137
@@ -166,8 +167,8 @@ msgid ""
 "Please wait for a new code from your two-factor token or application before "
 "trying again."
 msgstr ""
-"Veuillez attendre un nouveau code de votre jeton ou application de "
-"validation en deux étapes avant de ressayer."
+"Veuillez attendre un nouveau code de votre jeton ou application "
+"d’authentification à deux facteurs avant de ressayer."
 
 #: journalist_app/utils.py:125
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
@@ -242,8 +243,10 @@ msgstr[0] "1 message"
 msgstr[1] "{msg_num} messages"
 
 #: journalist_templates/_source_row.html:27
-msgid "{num_unread} unread"
-msgstr "{num_unread} non lus"
+msgid "1 unread"
+msgid_plural "{num_unread} unread"
+msgstr[0] "1 non lu"
+msgstr[1] "{num_unread} non lus"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -274,11 +277,11 @@ msgid ""
 "for your account in the app, enter one of the 6-digit codes from the app to "
 "confirm that two factor authentication is set up correctly."
 msgstr ""
-"Vous avez presque terminé ! Pour finir de réinitialiser votre validation en "
-"deux étapes, suivez les instructions ci-dessous pour configurer FreeOTP. "
-"Après avoir ajouté votre compte dans l’appli, saisissez l’un des codes à 6 "
-"chiffres de l’appli pour confirmer que la validation en deux étapes est "
-"configurée correctement."
+"Vous avez presque terminé ! Pour finir de réinitialiser votre "
+"authentification à deux facteurs, suivez les instructions ci-dessous pour "
+"configurer FreeOTP. Après avoir ajouté votre compte dans l’appli, saisissez "
+"l’un des codes à 6 chiffres de l’appli pour confirmer que l’authentification "
+"à deux facteurs est configurée correctement."
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:9
@@ -420,10 +423,11 @@ msgid ""
 "set up correctly."
 msgstr ""
 "Vous avez presque terminé ! Pour finir d’ajouter ce nouvel utilisateur, "
-"faites-lui suivre les instructions ci-dessous pour configurer la validation "
-"en deux étapes avec FreeOTP. Après avoir ajouté son compte dans l’appli, "
-"demandez-lui de saisir l’un des codes à 6 chiffres de l’appli pour confirmer "
-"que la validation en deux étapes est configurée correctement."
+"faites-lui suivre les instructions ci-dessous pour configurer "
+"l’authentification à deux facteurs avec FreeOTP. Après avoir ajouté son "
+"compte dans l’appli, demandez-lui de saisir l’un des codes à 6 chiffres de "
+"l’appli pour confirmer que l’authentification à deux facteurs est configurée "
+"correctement."
 
 #: journalist_templates/base.html:24
 msgid "Logged on as"
@@ -557,8 +561,8 @@ msgstr ""
 "de code précédent.</em>"
 
 #: journalist_templates/col.html:122
-msgid "DELETE COLLECTION"
-msgstr "SUPPRIMER LA COLLECTION"
+msgid "DELETE SOURCE AND SUBMISSIONS"
+msgstr "SUPPRIMER LA SOURCE ET LES ENVOIS"
 
 #: journalist_templates/col.html:130
 msgid "Are you sure you want to delete this collection?"
@@ -663,8 +667,8 @@ msgstr ""
 #: journalist_templates/edit_account.html:34
 msgid "Please enter your current password and two-factor code."
 msgstr ""
-"Veuillez saisir votre mot de passe actuel et votre code de validation en "
-"deux étapes."
+"Veuillez saisir votre mot de passe actuel et votre code d’authentification à "
+"deux facteurs."
 
 #: journalist_templates/edit_account.html:40
 msgid "Current Password"
@@ -672,7 +676,7 @@ msgstr "Mot de passe actuel"
 
 #: journalist_templates/edit_account.html:41 journalist_templates/login.html:10
 msgid "Two-factor Code"
-msgstr "Code de validation en deux étapes"
+msgstr "Code d’authentification à deux facteurs"
 
 #: journalist_templates/edit_account.html:46
 msgid "The user's password will be changed to:"
@@ -688,7 +692,7 @@ msgstr "RÉINITIALISER LE MOT DE PASSE"
 
 #: journalist_templates/edit_account.html:58
 msgid "Reset Two-Factor Authentication"
-msgstr "Réinitialiser la validation en deux étapes"
+msgstr "Réinitialiser l’authentification à deux facteurs"
 
 #: journalist_templates/edit_account.html:61
 msgid ""
@@ -697,11 +701,11 @@ msgid ""
 "is present and ready to set up their device with the new two-factor "
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
-"Si les authentifiants de validation en deux étapes d’un utilisateur ont été "
-"perdus ou compromis, vous pouvez les réinitialiser ici. <em>Si vous le "
-"faites, assurez-vous que l’utilisateur est présent et prêt à configurer les "
-"nouveaux authentifiants de validation en deux étapes sur son appareil. Il ne "
-"pourra autrement plus accéder à son compte."
+"Si les authentifiants d’authentification à deux facteurs d’un utilisateur "
+"ont été perdus ou compromis, vous pouvez les réinitialiser ici. <em>Si vous "
+"le faites, assurez-vous que l’utilisateur est présent et prêt à configurer "
+"les nouveaux authentifiants d’authentification à deux facteurs sur son "
+"appareil. Il ne pourra autrement plus accéder à son compte."
 
 #: journalist_templates/edit_account.html:63
 msgid ""
@@ -710,27 +714,28 @@ msgid ""
 "this, make sure you are ready to set up your new device, otherwise you will "
 "be locked out of your account.</em>"
 msgstr ""
-"Si vos authentifiants de validation en deux étapes ont été perdus ou "
-"compromis ou si vous avez un nouvel appareil, vous pouvez les réinitialiser "
-"ici. <em>Si vous le faites, assurez-vous d’être prêt à configurer votre "
-"nouvel appareil, sans quoi vous ne pourrez plus accéder à votre compte.</em>"
+"Si vos authentifiants d’authentification à deux facteurs ont été perdus ou "
+"compromis ou encore si vous avez un nouvel appareil, vous pouvez les "
+"réinitialiser ici. <em>Si vous le faites, assurez-vous d’être prêt à "
+"configurer votre nouvel appareil, sans quoi vous ne pourrez plus accéder à "
+"votre compte.</em>"
 
 #: journalist_templates/edit_account.html:65
 msgid ""
 "To reset two-factor authentication for mobile apps such as FreeOTP, choose "
 "the first option. For hardware tokens like the Yubikey, choose the second."
 msgstr ""
-"Pour réinitialiser la validation en deux étapes pour des applis mobiles "
-"telles que FreeOTP, choisissez la première option. Pour les jetons matériels "
-"tels que Yubikey, choisissez la seconde."
+"Pour réinitialiser l’authentification à deux facteurs pour des applis "
+"mobiles telles que FreeOTP, choisissez la première option. Pour les jetons "
+"matériels tels que la Yubikey, choisissez la seconde."
 
 #: journalist_templates/edit_account.html:90
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr "RÉINITIALISER LA VALIDATION EN DEUX ÉTAPES (APPLI)"
+msgstr "RÉINITIALISER L’AUTHENTIFICATION À DEUX FACTEURS (APPLI)"
 
 #: journalist_templates/edit_account.html:92
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
-msgstr "RÉINITIALISER LA VALIDATION EN DEUX ÉTAPES (JETON MATÉRIEL)"
+msgstr "RÉINITIALISER L’AUTHENTIFICATION À DEUX FACTEURS (JETON MATÉRIEL)"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -805,7 +810,7 @@ msgstr "Voulez-vous vraiment supprimer l’utilisateur {username} ?"
 msgid ""
 "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr ""
-"Voulez-vous vraiment réinitialiser la validation en deux étapes pour "
+"Voulez-vous vraiment réinitialiser l’authentification à deux facteurs pour "
 "{username} ?"
 
 #: journalist_templates/login.html:4
@@ -878,8 +883,8 @@ msgstr "Désolé, ce nom de code n’est pas reconnu."
 msgid "Protecting Journalists and Sources"
 msgstr "Protège les journalistes et les sources"
 
-#: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/base.html:25 source_templates/base.html:47
+#: source_templates/index.html:33 source_templates/index.html:88
 msgid "Powered by"
 msgstr "Propulsée par"
 
@@ -887,7 +892,7 @@ msgstr "Propulsée par"
 msgid "LOG OUT"
 msgstr "DÉCONNEXION"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:47 source_templates/index.html:88
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -1027,7 +1032,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "CONSULTER LES RÉPONSES"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:96
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -1035,25 +1040,25 @@ msgstr ""
 "Il semble que vous utilisiez le navigateur Tor. Vous pouvez déplacer le "
 "curseur de sécurité sur « Le plus sûr » en quatre étapes."
 
-#: source_templates/index.html:95
+#: source_templates/index.html:98
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Cliquez sur <img src=\"{icon}\" alt=\"Tor icon\"> l’icône de Tor dans la "
 "barre d’outils ci-dessus"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:99
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Cliquez sur <strong>Paramètres de sécurité…</strong>"
 
-#: source_templates/index.html:97
+#: source_templates/index.html:100
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Déplacez le curseur sur « <strong>Le plus sûr</strong> », puis cliquez sur "
 "<strong>OK</strong>"
 
-#: source_templates/index.html:98
+#: source_templates/index.html:101
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">Cliquer ici</a> pour actualiser la page"
 
@@ -1207,6 +1212,10 @@ msgstr "La page est introuvable"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Désolé, nous n’avons pas trouvé ce que vous avez demandé."
 
+#: source_templates/screensaver.html:2
+msgid "Interface hidden. Move your cursor here to show."
+msgstr "L’interface est cachée. Déplacez votre curseur ici pour l’afficher."
+
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
@@ -1226,21 +1235,18 @@ msgid "Why is there a warning about Tor2Web?"
 msgstr "Pourquoi y a-t-il un avertissement au sujet de Tor2Web ?"
 
 #: source_templates/tor2web-warning.html:4
-msgid ""
-"Using <a href=\"tor2web.org\">Tor2Web</a> to connect to SecureDrop will not "
-"protect your anonymity."
+msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgstr ""
-"Utiliser <a href=\"tor2web.org\">Tor2Web</a> pour vous connecter à "
-"SecureDrop ne protégera pas votre anonymat."
+"Utiliser Tor2Web pour vous connecter à SecureDrop ne protégera pas votre "
+"anonymat."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
-"It could be possible for anyone listening to Internet usage (your "
+"It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
 msgstr ""
-"Il pourrait être possible que toute personne surveillant l’utilisation "
-"d’Internet (votre gouvernement, votre fournisseur d’accès) puisse vous "
-"identifier."
+"Toute personne surveillant votre trafic Internet (votre gouvernement, votre "
+"fournisseur d’accès) pourrait vous identifier."
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
@@ -1281,12 +1287,12 @@ msgstr ""
 
 #: source_templates/use-tor-browser.html:9
 msgid ""
-"If there is a chance that downloading the Tor Browser raises suspicion and "
-"your mail provider is less likely to be monitored, you can send a mail to "
+"If there is a chance that downloading Tor Browser raises suspicion and your "
+"mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
-"S’il y a le moindre risque que le téléchargement du navigateur Tor puisse "
-"éveiller les soupçons et si votre fournisseur de courriel est moins "
+"S’il est possible que le téléchargement du navigateur Tor suscite des "
+"soupçons et si votre fournisseur de services de courriel est moins "
 "susceptible d’être surveillé, vous pouvez envoyer un courriel à <pre> "
 "gettor@torproject.org</pre>, et un bot vous enverra des instructions."
 
@@ -1392,8 +1398,14 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Revenir à la page d'envoi"
 
-#~ msgid "You can only upload JPG/JPEG or PNG image files."
-#~ msgstr "Vous ne pouvez téléverser que des fichiers images JPG/JPEG ou PNG."
+#~ msgid "{num_unread} unread"
+#~ msgstr "{num_unread} non lus"
+
+#~ msgid "Upload images only."
+#~ msgstr "Ne téléverser que des images."
+
+#~ msgid "DELETE COLLECTION"
+#~ msgstr "SUPPRIMER LA COLLECTION"
 
 #~ msgid "That username is already in use"
 #~ msgstr "Ce nom d’utilisateur existe déjà"
