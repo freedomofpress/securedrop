@@ -688,16 +688,21 @@ def update(args):
                 bad_sig_text not in sig_result:
             # Finally, we check that there is no branch of the same name
             # prior to reporting success.
-            cmd = ['git', 'show-ref', '--heads', '--verify', '--quiet',
+            cmd = ['git', 'show-ref', '--heads', '--verify',
                    'refs/heads/{}'.format(latest_tag)]
             try:
                 # We expect this to produce a non-zero exit code, which
                 # will produce a subprocess.CalledProcessError
-                subprocess.check_output(cmd)
+                subprocess.check_output(cmd, stderr=subprocess.STDOUT)
                 sdlog.info("Signature verification failed.")
                 return 1
-            except subprocess.CalledProcessError:
-                sdlog.info("Signature verification successful.")
+            except subprocess.CalledProcessError, e:
+                if 'not a valid ref' in e.output:
+                    # Then there is no duplicate branch.
+                    sdlog.info("Signature verification successful.")
+                else:  # If any other exception occurs, we bail.
+                    sdlog.info("Signature verification failed.")
+                    return 1
         else:  # If anything else happens, fail and exit 1
             sdlog.info("Signature verification failed.")
             return 1
