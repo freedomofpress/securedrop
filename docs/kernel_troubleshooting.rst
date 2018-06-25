@@ -36,14 +36,14 @@ and reboot safely, provided you can log in. Do not unplug or forcibly
 shut down the server.
 
 Once you hit a key, you will be able to interact with the menu with the
-up (⬆) and down (⬇) keys. Select “Ubuntu” as shown above, and press “e”
-to edit the boot options. In the line that begins with “linux”, add the word
-“single” at the end. When you are done, the output on your console should look
+up (⬆) and down (⬇) keys. Select "Ubuntu" as shown above, and press "e"
+to edit the boot options. In the line that begins with "linux", add the word
+"single" at the end. When you are done, the output on your console should look
 similar to the screenshot below.
 
 |GRUB in edit mode|
 
-Press the “F10” key to boot.
+Press the "F10" key to boot.
 
 Test the New Kernel
 ~~~~~~~~~~~~~~~~~~~
@@ -130,10 +130,10 @@ setup, the line in ``/etc/default/grub`` would look like this:
 
 .. code:: sh
 
-  GRUB_DEFAULT=”1>2”
+  GRUB_DEFAULT="1>2"
 
-The “1” means the second entry of the main menu (“Advanced options”),
-the “2” means the third entry of the submenu. Again, update these
+The "1" means the second entry of the main menu ("Advanced options"),
+the "2" means the third entry of the submenu. Again, update these
 numbers consistent with your configuration. 
 
 
@@ -188,7 +188,7 @@ You can share ``server-facts.log``, ``syslog`` and ``dmesg`` with us as follows:
    and attach the files to it.
 -  Alternatively, email us at securedrop@freedom.press 
    (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__) 
-   with the subject “SecureDrop kernel facts” and the files attached.
+   with the subject "SecureDrop kernel facts" and the files attached.
 
 Once we get your information, we can try to provide assistance to
 resolve compatibility issues.
