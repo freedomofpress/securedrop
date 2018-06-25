@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-05-06 08:31+0000\n"
-"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
+"PO-Revision-Date: 2018-06-25 18:39+0000\n"
+"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.securedrop.club/projects/"
 "securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -113,8 +113,8 @@ msgid "File required."
 msgstr "Arquivo obrigatório."
 
 #: journalist_app/forms.py:62
-msgid "Upload images only."
-msgstr "Envie apenas imagens."
+msgid "You can only upload PNG image files."
+msgstr "Você pode carregar somente documentos de imagem PNG."
 
 #: journalist_app/main.py:117 journalist_app/utils.py:47
 #: journalist_app/utils.py:137
@@ -238,8 +238,10 @@ msgstr[0] "1 mensagem"
 msgstr[1] "{msg_num} mensagens"
 
 #: journalist_templates/_source_row.html:27
-msgid "{num_unread} unread"
-msgstr "{num_unread} não lidas"
+msgid "1 unread"
+msgid_plural "{num_unread} unread"
+msgstr[0] "1 não lida"
+msgstr[1] "{num_unread} não lidas"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -284,7 +286,7 @@ msgstr "Instale o FreeOTP no seu telefone"
 #: journalist_templates/account_new_two_factor.html:9
 #: journalist_templates/admin_new_user_two_factor.html:10
 msgid "Open the FreeOTP app"
-msgstr "Abra o FreeOTP"
+msgstr "Abrir o app FreeOTP"
 
 #: journalist_templates/account_new_two_factor.html:10
 #: journalist_templates/admin_new_user_two_factor.html:11
@@ -548,8 +550,8 @@ msgstr ""
 "conectar com o codinome atual. </em>"
 
 #: journalist_templates/col.html:122
-msgid "DELETE COLLECTION"
-msgstr "APAGAR COLEÇÃO"
+msgid "DELETE SOURCE AND SUBMISSIONS"
+msgstr "APAGAR FONTE E ENVIOS"
 
 #: journalist_templates/col.html:130
 msgid "Are you sure you want to delete this collection?"
@@ -616,7 +618,7 @@ msgstr "Editar usuário \"{user}\""
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username &amp; Admin Status"
-msgstr "Alterar nome de usuário e credenciais de administrador"
+msgstr "Alterar nome de usuário e credenciais de administração"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
@@ -682,7 +684,7 @@ msgid ""
 "is present and ready to set up their device with the new two-factor "
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
-"Se as credenciais de autentificação de dois fatores de um usuário forem "
+"Se as credenciais de autenticação de dois fatores de um usuário forem "
 "perdidas ou comprometidas, você pode redefini-las aqui. <em>Ao fazê-lo, essa "
 "pessoa deve estar presente e preparada para configurar o aparelho dela com "
 "as novas credenciais. Caso contrário, ela não poderá mais acessar a própria "
@@ -802,7 +804,7 @@ msgstr "Senha"
 
 #: journalist_templates/login.html:12
 msgid "LOG IN"
-msgstr "FAZER LOG IN"
+msgstr "ENTRAR"
 
 #: source_app/__init__.py:115
 msgid ""
@@ -835,16 +837,16 @@ msgstr "É preciso escrever uma mensagem ou escolher um arquivo para enviar."
 
 #: source_app/main.py:162
 msgid "Thanks! We received your message."
-msgstr "Agradecemos pela contribuição. Recebemos a sua mensagem."
+msgstr "Agradecemos a contribuição. Recebemos a sua mensagem."
 
 #: source_app/main.py:164
 msgid "Thanks! We received your document."
-msgstr "Agradecemos pela contribuição. Recebemos o seu documento."
+msgstr "Agradecemos a contribuição. Recebemos o seu documento."
 
 #: source_app/main.py:166
 msgid "Thanks! We received your message and document."
 msgstr ""
-"Agradecemos pela contribuição. Recebemos a sua mensagem e o seu documento."
+"Agradecemos sua contribuição. Recebemos a sua mensagem e o seu documento."
 
 #: source_app/main.py:213
 msgid "Reply deleted"
@@ -862,8 +864,8 @@ msgstr "Desculpe, este codinome não foi reconhecido."
 msgid "Protecting Journalists and Sources"
 msgstr "Protegendo Jornalistas e Fontes"
 
-#: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/base.html:25 source_templates/base.html:47
+#: source_templates/index.html:33 source_templates/index.html:88
 msgid "Powered by"
 msgstr "Este site utiliza o"
 
@@ -871,7 +873,7 @@ msgstr "Este site utiliza o"
 msgid "LOG OUT"
 msgstr "ENCERRAR SESSÃO"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:47 source_templates/index.html:88
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -925,9 +927,8 @@ msgid ""
 "This codename is what you will use in future visits to receive messages from "
 "our journalists in response to what you submit on the next screen."
 msgstr ""
-"Na página seguinte, você poderá enviar mensagens e documentos. Para "
-"consultar as respostas de nossos jornalistas ao material enviado, use o "
-"codinome abaixo ou um codinome já existente."
+"Este codinome é o que você usará em futuras visitas para receber mensagens "
+"de nossos jornalistas em resposta ao que você enviar na próxima tela."
 
 #: source_templates/generate.html:34
 msgid ""
@@ -952,10 +953,10 @@ msgid ""
 "your anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it "
 "to Safest</a>, or ignore this warning to continue."
 msgstr ""
-"<strong>Recomenda-se ajustar a barra de segurança para o nível \"O mais "
-"seguro\" para proteger o seu anonimato.</strong><a id=\"disable-js\" href="
-"\"\"> Aprenda como ajustar para o nível\"O mais seguro\" </a>, ou ignore "
-"este aviso e continue."
+"<strong>Recomenda-se ajustar a barra de segurança no nível \"O mais seguro\" "
+"para proteger o seu anonimato.</strong><a id=\"disable-js\" href=\"\"> "
+"Aprenda como ajustar  o nível \"O mais seguro\" </a>, ou ignore este aviso e "
+"continue."
 
 #: source_templates/index.html:18
 msgid ""
@@ -1004,7 +1005,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "LER RESPOSTAS"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:96
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -1012,25 +1013,25 @@ msgstr ""
 "Se você estiver usando o Navegador Tor, ajuste seu nível de segurança para "
 "\"O mais seguro\"  em apenas quatro passos."
 
-#: source_templates/index.html:95
+#: source_templates/index.html:98
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Clique no <img src=\"{icon}\" alt=\"ícone do Tor\"> na barra de ferramentas "
 "acima"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:99
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Clique em<strong> Configurações de Segurança...</strong>"
 
-#: source_templates/index.html:97
+#: source_templates/index.html:100
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Ajuste o nível de segurança para <strong>\"o mais seguro\" </strong> e "
 "clique em <strong>OK</strong>"
 
-#: source_templates/index.html:98
+#: source_templates/index.html:101
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">Clique aqui</a> para atualizar a página"
 
@@ -1180,6 +1181,10 @@ msgstr "Página não encontrada"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Desculpe, não pudemos localizar o conteúdo que você pediu."
 
+#: source_templates/screensaver.html:2
+msgid "Interface hidden. Move your cursor here to show."
+msgstr "Interface oculta. Mova o seu mouse aqui para exibi-la."
+
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
@@ -1198,16 +1203,13 @@ msgid "Why is there a warning about Tor2Web?"
 msgstr "Por que há uma advertência sobre o Tor2Web?"
 
 #: source_templates/tor2web-warning.html:4
-msgid ""
-"Using <a href=\"tor2web.org\">Tor2Web</a> to connect to SecureDrop will not "
-"protect your anonymity."
+msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgstr ""
-"O uso de <a href=\"tor2web.org\">Tor2Web</a> para conectar-se ao SecureDrop "
-"não protege o seu anonimato."
+"O uso de Tor2Web para conectar-se ao SecureDrop não protege o seu anonimato."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
-"It could be possible for anyone listening to Internet usage (your "
+"It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
 msgstr ""
 "Assim, a sua identidade pode ser descoberta por qualquer pessoa que monitore "
@@ -1253,14 +1255,14 @@ msgstr ""
 
 #: source_templates/use-tor-browser.html:9
 msgid ""
-"If there is a chance that downloading the Tor Browser raises suspicion and "
-"your mail provider is less likely to be monitored, you can send a mail to "
+"If there is a chance that downloading Tor Browser raises suspicion and your "
+"mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
-"Caso receie levantar suspeitas ao baixar o Tor - e sua conta de e-mail for "
-"menos vulnerável ao monitoramento por terceiros -, envie um e-mail para "
-"<pre>gettor@torproject.org</pre>. Você receberá um mensagem automática com "
-"instruções."
+"Caso você receie levantar suspeitas ao fazer download do Tor - e sua conta "
+"de e-mail for menos vulnerável ao monitoramento por terceiros -, envie um e-"
+"mail para <pre>gettor@torproject.org</pre>. Você receberá um mensagem "
+"automática com instruções."
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
@@ -1363,8 +1365,14 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Voltar à página de envio"
 
-#~ msgid "You can only upload JPG/JPEG or PNG image files."
-#~ msgstr "Você pode carregar somente documentos em formato JPG/JPEG ou PNG."
+#~ msgid "{num_unread} unread"
+#~ msgstr "{num_unread} não lidas"
+
+#~ msgid "Upload images only."
+#~ msgstr "Envie apenas imagens."
+
+#~ msgid "DELETE COLLECTION"
+#~ msgstr "APAGAR COLEÇÃO"
 
 #~ msgid "That username is already in use"
 #~ msgstr "O nome de usuário escolhido já está em uso"
