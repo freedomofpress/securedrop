@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-05-07 10:00+0000\n"
-"Last-Translator: Volkan <volkangezer@gmail.com>\n"
+"PO-Revision-Date: 2018-06-19 08:00+0000\n"
+"Last-Translator: Orhan <ofy@protonmail.com>\n"
 "Language-Team: Turkish <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/tr/>\n"
 "Language: tr\n"
@@ -114,8 +114,8 @@ msgid "File required."
 msgstr "Dosya gerekli."
 
 #: journalist_app/forms.py:62
-msgid "Upload images only."
-msgstr "Sadece resim yükleyin."
+msgid "You can only upload PNG image files."
+msgstr "Yalnızca PNG resim dosyalarını yükleyebilirsiniz."
 
 #: journalist_app/main.py:117 journalist_app/utils.py:47
 #: journalist_app/utils.py:137
@@ -233,8 +233,10 @@ msgstr[0] "1 İleti"
 msgstr[1] "{msg_num} İleti"
 
 #: journalist_templates/_source_row.html:27
-msgid "{num_unread} unread"
-msgstr "{num_unread} okunmamış"
+msgid "1 unread"
+msgid_plural "{num_unread} unread"
+msgstr[0] "1 okunmamış"
+msgstr[1] "{num_unread} okunmamış"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -539,8 +541,8 @@ msgstr ""
 "adıyla tekrar oturum açamayacaktır.</em>"
 
 #: journalist_templates/col.html:122
-msgid "DELETE COLLECTION"
-msgstr "DERLEMEYİ SİL"
+msgid "DELETE SOURCE AND SUBMISSIONS"
+msgstr "KAYNAĞI VE GÖNDERİLERİ SİL"
 
 #: journalist_templates/col.html:130
 msgid "Are you sure you want to delete this collection?"
@@ -856,8 +858,8 @@ msgstr "Üzgünüz, kod adı bilinmiyor."
 msgid "Protecting Journalists and Sources"
 msgstr "Gazetecileri ve Kaynakları Korumak"
 
-#: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/base.html:25 source_templates/base.html:47
+#: source_templates/index.html:33 source_templates/index.html:88
 msgid "Powered by"
 msgstr "Destekleyen"
 
@@ -865,7 +867,7 @@ msgstr "Destekleyen"
 msgid "LOG OUT"
 msgstr "OTURUMU KAPAT"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:47 source_templates/index.html:88
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -1003,7 +1005,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "YANITLARI KONTROL EDİN"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:96
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -1011,25 +1013,25 @@ msgstr ""
 "Tor Tarayıcı kullanıyor gibi gözüküyorsunuz. Dört kolay adımda Güvenlik "
 "Kaydırma düğmesini En Güvenli yapabilirsiniz."
 
-#: source_templates/index.html:95
+#: source_templates/index.html:98
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Yukarıdaki araç çubuğundaki <img src=\"{icon}\" alt=\"Tor simgesi\"> Tor "
 "simgesine tıklayın"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:99
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "<strong>Güvenlik Ayarları...</strong>'na tıklayın"
 
-#: source_templates/index.html:97
+#: source_templates/index.html:100
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Kaydırma düğmesini <strong>En Güvenli</strong> seçeneğine getirin ve daha "
 "sonra <strong>Tamam</strong> düğmesine tıklayın"
 
-#: source_templates/index.html:98
+#: source_templates/index.html:101
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "Sayfayı yenilemek için <a href=\"/\">buraya tıklayın</a>"
 
@@ -1181,6 +1183,10 @@ msgstr "Sayfa bulunamadı"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Üzgünüz, isteğinizi yerine getiremiyoruz."
 
+#: source_templates/screensaver.html:2
+msgid "Interface hidden. Move your cursor here to show."
+msgstr "Arayüz gizlendi. Görüntülemek için imleci buraya sürükleyin."
+
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
@@ -1199,16 +1205,14 @@ msgid "Why is there a warning about Tor2Web?"
 msgstr "Neden Tor2Web hakkında bir uyarı var?"
 
 #: source_templates/tor2web-warning.html:4
-msgid ""
-"Using <a href=\"tor2web.org\">Tor2Web</a> to connect to SecureDrop will not "
-"protect your anonymity."
+msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgstr ""
-"SecureDrop uygulamasına <a href=\"tor2web.org\">Tor2Web</a> kullanarak "
-"bağlanmak anonimliğinizi korumayacaktır."
+"SecureDrop uygulamasına Tor2Web kullanarak bağlanmak anonimliğinizi "
+"korumayacaktır."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
-"It could be possible for anyone listening to Internet usage (your "
+"It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
 msgstr ""
 "İnternet kullanımını gözetleyen herhangi birinin (hükümetiniz, İnternet "
@@ -1253,14 +1257,14 @@ msgstr ""
 
 #: source_templates/use-tor-browser.html:9
 msgid ""
-"If there is a chance that downloading the Tor Browser raises suspicion and "
-"your mail provider is less likely to be monitored, you can send a mail to "
+"If there is a chance that downloading Tor Browser raises suspicion and your "
+"mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
 "Tor Tarayıcı'yı indirmenizin şüphe uyandırma olasılığı varsa ve e-posta "
-"sağlayıcınızın izlenme ihtimali daha düşük ise, <pre>gettor@torproject.org</"
-"pre> adresine bir e-posta atabilirsiniz ve bir bot yönergeleri size yanıt "
-"olarak gönderecektir."
+"sağlayıcınızın izlenme ihtimali daha düşük ise, "
+"<pre>gettor@torproject.org</pre> adresine bir e-posta atabilirsiniz ve bir "
+"bot yönergeleri size yanıt olarak gönderecektir."
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
@@ -1364,8 +1368,14 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"
 
-#~ msgid "You can only upload JPG/JPEG or PNG image files."
-#~ msgstr "Yalnızca JPG/JPEG veya PNG resim dosyalarını yükleyebilirsiniz."
+#~ msgid "{num_unread} unread"
+#~ msgstr "{num_unread} okunmamış"
+
+#~ msgid "Upload images only."
+#~ msgstr "Sadece resim yükleyin."
+
+#~ msgid "DELETE COLLECTION"
+#~ msgstr "DERLEMEYİ SİL"
 
 #~ msgid "That username is already in use"
 #~ msgstr "Kullanıcı adı halihazırda kullanılıyor"
