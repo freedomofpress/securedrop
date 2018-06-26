@@ -1285,6 +1285,20 @@ def test_user_authorization_for_posts(journalist_app):
             assert resp.status_code == 302
 
 
+def test_incorrect_current_password_change(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        resp = app.post(url_for('account.new_password'),
+                        data=dict(password=VALID_PASSWORD,
+                                  token='mocked',
+                                  current_password='badpw'),
+                        follow_redirects=True)
+
+    text = resp.data.decode('utf-8')
+    assert 'Incorrect password or two-factor code' in text
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1318,17 +1332,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_incorrect_current_password_change(self):
-        self._login_user()
-        resp = self.client.post(url_for('account.new_password'),
-                                data=dict(password=VALID_PASSWORD,
-                                          token='mocked',
-                                          current_password='badpw'),
-                                follow_redirects=True)
-
-        text = resp.data.decode('utf-8')
-        self.assertIn('Incorrect password or two-factor code', text)
 
     def test_too_long_user_password_change(self):
         self._login_user()
