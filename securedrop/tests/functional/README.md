@@ -17,7 +17,6 @@ This is yet to be in the Ansible.
 [Download](https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz) 0.17.0 from
 the [release page](https://github.com/mozilla/geckodriver/releases/tag/v0.17.0). Move the binary to `/usr/bin/`.
 
-
 ### To test in prod vms
 
 - `sudo -u www-data bash`
