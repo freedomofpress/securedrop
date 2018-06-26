@@ -1,29 +1,26 @@
 Set Up the Network Firewall
 ===========================
 
-Now that you've set up your password manager, you can move on to setting
-up the Network Firewall. You should stay logged in to the *Admin Workstation*
-to access the Network Firewall's web interface for configuration.
+Now that you've set up your password manager, you can move on to setting up
+the Network Firewall. You should stay logged in to the *Admin Workstation* to
+access the Network Firewall's web interface for configuration.
 
 Unfortunately, due to the wide variety of firewalls that may be used, we
 do not provide specific instructions to cover every type or variation in
-software or hardware.
-However, if you have the necessary
-expertise, we provide `abstract firewall rules`_ that can be
-implemented with iptables, Cisco IOS etc.
-This guide is based on pfSense, and assumes your
-firewall hardware has at least three interfaces: WAN, LAN, and OPT1. For
-hardware, you can build your own network firewall (not covered in this
-guide) and `install
-pfSense <https://doc.pfsense.org/index.php/Installing_pfSense>`__ on it.
-For most installations, we recommend buying a dedicated firewall
-appliance with pfSense pre-installed, such as the one recommended in the
-Hardware Guide.
+software or hardware. However, if you have the necessary expertise, we
+provide `abstract firewall rules`_ that can be implemented with iptables, Cisco
+IOS etc. This guide is based on pfSense, and assumes your firewall hardware has
+at least three interfaces: WAN, LAN, and OPT1. For hardware, you can build
+your own network firewall (not covered in this guide) and `install pfSense 
+<https://doc.pfsense.org/index.php/Installing_pfSense>`__ on it. For most
+installations, we recommend buying a dedicated firewall appliance with
+pfSense pre-installed, such as the one recommended in the
+:ref:`Hardware Guide <hardware_guide>`.
 
-We currently recommend the `pfSense SG-4860
-<https://store.netgate.com/SG-4860.aspx>`__, which has 6 interfaces: WAN,
-LAN, OPT1, OPT2, OPT3 and OPT4. If your firewall only has 3 NICs (WAN,
-LAN, and OPT1), you will need to use a switch on the OPT1 interface
+We currently recommend the `pfSense SG-3100
+<https://store.netgate.com/SG-3100.aspx>`__, which has 6 interfaces: WAN,
+OPT1, LAN1, LAN2, LAN3 and LAN4. This firewall comes with an internal switch on 
+the LAN interface. If yours does not you will need to obtain a separate switch
 to connect the *Admin Workstation* for the initial installation.
 
 If you are new to pfSense or firewall management in general, we
@@ -39,14 +36,12 @@ recommend the following resources:
       this book, you need to become a `pfSense Gold
       Member <https://www.pfsense.org/our-services/gold-membership.html>`__.
 
-If you're using the recommended SG-4860 firewall, then you may find the
-following resources useful:
+If you're using the recommended SG-3100 firewall, then you may find the
+following resource useful. In particular, you can find instructions on factory
+resetting the firewall in ``Section 1.3``.
 
--  `SG-4860
-   Quick Start Guide <https://www.netgate.com/docs/pfsense/sg-4860/quick-start-guide.html>`__
--  `Factory Reset of the SG-4860 (video) <https://vimeo.com/143197016>`__
--  `Connecting
-   to the SG-4860 Console <https://www.netgate.com/docs/pfsense/sg-4860/connect-to-console.html>`__
+-  `SG-3100
+   Product Manual <https://www.netgate.com/docs/manuals/sg-3100-product-manual.pdf>`__
 
 Before You Begin
 ----------------
@@ -69,11 +64,11 @@ network so it is working correctly.
 Configuring Your Firewall
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If your firewall has at least 4 NICs, as the SG-4860 does, we will refer to the
-ports as WAN, LAN, OPT1, and OPT2. In this case, we can now use a
-dedicated port on the network firewall for each component of SecureDrop
-(*Application Server*, *Monitor Server*, and *Admin Workstation*), so
-you do not need a switch like you do for a 3-NIC configuration.
+If your firewall has at least 4 NICs, we will refer to the ports as WAN, LAN,
+OPT1, and OPT2. In this case, we can now use a dedicated port on the network
+firewall for each component of SecureDrop (*Application Server*,
+*Monitor Server*, and *Admin Workstation*), so you would not need a switch
+like you may for a 3-NIC configuration.
 
 Depending on your network configuration, you should define the following
 values before continuing. For the examples in this guide, we have
@@ -98,6 +93,35 @@ chosen:
 -  Monitor Subnet: ``10.20.3.0/24``
 -  Monitor Gateway: ``10.20.3.1``
 -  Monitor Server (OPT2) : ``10.20.3.2``
+
+3 NIC Example (SG-3100)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+As described earlier, the SG-3100 has an internal switch on the LAN interface,
+this means we can place the *Application Server* and *Admin Workstation* on 
+the same subnet. The configuration we have assumes you place the 
+*Admin Workstation* on LAN1 and the *Application Server* on LAN2.
+
+.. warning:: As you follow screenshots below, you should verify you are
+ using the values of the Admin/Application Gateway and Subnet instead of the
+ values defined in the 4NIC configuration above.
+
+.. raw:: html
+
+   <!-- -->
+-  Admin/Application Gateway: ``10.20.2.1``
+-  Admin/Application Subnet: ``10.20.2.0/24``
+-  Admin Workstation: ``10.20.2.2``
+-  Application Server (LAN2): ``10.20.2.3``
+
+.. raw:: html
+
+   <!-- -->
+
+-  Monitor Subnet: ``10.20.3.0/24``
+-  Monitor Gateway: ``10.20.3.1``
+-  Monitor Server (OPT2) : ``10.20.3.2``
+
 
 Initial Configuration
 ---------------------
@@ -276,7 +300,7 @@ In order to tighten the firewall rules as much as possible, we recommend
 disabling the DHCP server and assigning a static IP address to the Admin
 Workstation instead.
 
-Disable DHCP Server On the Firewall
+Disable DHCP Server on the Firewall
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To disable DHCP, navigate to **Services ▸ DHCP Server** in the pfSense
@@ -371,8 +395,16 @@ In order to use the firewall to isolate the *Application Server* and the *Monito
 Server* from each other, we need to connect them to separate interfaces, and then set
 up firewall rules that allow them to communicate.
 
+
+4 NIC Example
+~~~~~~~~~~~~~~~~
+
+If you are using a firewall that has a dedicated port for each component of
+SecureDrop, you can follow the below screenshots for setting up your firewall
+rules.
+
 Set Up OPT1
-~~~~~~~~~~~
+'''''''''''
 
 We set up the LAN interface during the initial configuration. We now
 need to set up the OPT1 interface for the *Application Server*. Start by
@@ -389,7 +421,7 @@ as the default. **Save** and **Apply Changes**.
 |OPT1|
 
 Set Up OPT2
-~~~~~~~~~~~
+'''''''''''
 
 Next, you will have to enable the OPT2 interface. Go to
 **Interfaces ▸ OPT2**, and check the box to **Enable Interface**. OPT2
@@ -404,8 +436,8 @@ as the default. **Save** and **Apply Changes**.
 
 |OPT2|
 
-Set Up the Firewall Rules
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Setup the Firewall Rules
+''''''''''''''''''''''''
 
 Since there are a variety of firewalls with different configuration
 interfaces and underlying sets of software, we cannot provide a set of
@@ -417,7 +449,7 @@ edit the interfaces, aliases, and firewall rules on your firewall to
 match them.
 
 Use Screenshots of Firewall Configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+'''''''''''''''''''''''''''''''''''''''''
 
 Here are some example screenshots of a working pfSense firewall
 configuration. You will add the firewall rules until they match what is
@@ -486,6 +518,106 @@ message "The changes have been applied successfully". Once you've set up the
 firewall, exit the Unsafe Browser, and continue with the "Keeping pfSense up
 to date" section below.
 
+3 NIC Example
+~~~~~~~~~~~~~
+
+The below guide assumes you are using a 3 NIC firewall such as the SG-3100.
+While the SG-3100 has an integrated switch, you may need to add a switch to
+the LAN interface 
+
+Verify LAN Interface
+''''''''''''''''''''
+
+We set up the LAN interface during the initial configuration. However, we
+should ensure that the LAN interface is set the the *Admin Gateway IP*. Start by
+connecting the *Admin Workstation* to the LAN1 port. Then use the WebGUI
+to configure the naviagate to **Interfaces ▸ LAN**, and check
+the box to **Enable Interface**. Use these settings:
+
+-  IPv4 Configuration Type: Static IPv4
+-  IPv4 Address: ``10.20.2.1`` (Application Gateway IP)
+
+Make sure that the CIDR routing prefix is correct (``/24``). Leave everything
+else as the default. **Save** and **Apply Changes**.
+
+
+Setup the Firewall Rules
+''''''''''''''''''''''''
+
+Since there are a variety of firewalls with different configuration interfaces
+and underlying sets of software, we cannot provide a set of network firewall
+rules to match every use case.
+
+The easiest way to set up your firewall rules is to look at the screenshots of
+a correctly configured firewall and edit the interfaces, aliases, and firewall
+rules on your firewall to match them.
+
+Use Screenshots of Firewall Configuration
+'''''''''''''''''''''''''''''''''''''''''
+
+Here are some example screenshots of a working pfSense firewall
+configuration. You will add the firewall rules until they match what is
+shown on the screenshots.
+
+First, we will configure IP and port aliases. Navigate to **Firewall ▸ Aliases**
+and you should see a screen with no currently defined IP aliases:
+
+|Blank IP Aliases|
+
+Next you will click **Add** to add each IP alias.
+You should leave the **Type** as **Host**.
+Make aliases for the following:
+
+- ``admin_workstation``: ``10.20.2.3``
+- ``app_server``: ``10.20.2.2``
+- ``external_dns_servers``: ``8.8.8.8, 8.8.4.4``
+- ``monitor_server``: ``10.20.3.2``
+- ``local_servers``: ``app_server, monitor_server``
+
+|3 NIC Firewall Alias|
+
+Click **Save** to add the alias.
+
+Keep adding aliases until the screenshot matches what is shown here:
+
+|3 NIC Firewall IP Aliases Pre Save|
+
+Finally, click **Apply Changes**. This will save your changes. You should see a
+message "The changes have been applied successfully":
+
+|3 NIC Firewall IP Aliases Post Save|
+
+Next click "Ports" for the port aliases, and add the following ports:
+
+- OSSEC: ``1514``
+- ossec_agent_auth: ``1515``
+
+Your configuration should match this screenshot:
+
+|Port Aliases|
+
+Next we will configure firewall rules for each interface. Navigate to **Firewall ▸
+Rules** to add firewall rules for the LAN, OPT1, and OPT2 interfaces.
+
+.. warning:: Be sure not to delete the Anti-Lockout Rule on the LAN interface.
+    Deleting this rule will lock you out of the pfSense WebGUI.
+
+Add or remove rules until they match the following screenshots by clicking **Add**
+to add a rule.
+
+**LAN interface:**
+
+|3 NIC LAN Rules|
+
+**OPT1 interface:**
+
+|3 NIC Firewall OPT1 Rules|
+
+Finally, click **Apply Changes**. This will save your changes. You should see a
+message "The changes have been applied successfully". Once you've set up the
+firewall, exit the Unsafe Browser, and continue with the "Keeping pfSense up
+to date" section below.
+
 Configuration Reference Templates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -529,7 +661,7 @@ Here are some general tips for setting up pfSense firewall rules:
 
 .. _Keeping pfSense up to date:
 
-Keeping pfSense Up to Date
+Keeping pfSense up to Date
 --------------------------
 
 Periodically, the pfSense project maintainers release an update to the
@@ -603,7 +735,7 @@ Once it is complete, you will see a notification of successful upgrade:
 
 .. _abstract firewall rules:
 
-Abstract firewall rules
+Abstract Firewall Rules
 -----------------------
 
 The pfSense instructions using the web interface can also be precisely

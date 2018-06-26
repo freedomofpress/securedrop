@@ -1,3 +1,5 @@
+.. _hardware_guide:
+
 Hardware
 ========
 
@@ -488,7 +490,8 @@ anywhere.
 Network Firewall
 ^^^^^^^^^^^^^^^^
 
-We recommend the `pfSense SG-4860 <https://store.netgate.com/SG-4860.aspx>`__.
+We recommend the `pfSense SG-3100
+<https://store.netgate.com/SG-3100.aspx>`__,.
 
 Network Switch
 ^^^^^^^^^^^^^^
@@ -497,6 +500,7 @@ This is optional, for people who are using a firewall with less than 4
 ports (the recommended firewall has 4 ports). Any old switch with more
 than 3 ports will do, such as the `5-port Netgear ProSafe Ethernet
 Switch <http://www.amazon.com/NETGEAR-ProSafe-Gigabit-Ethernet-Desktop/dp/B0000BVYT3/>`__.
+The SG-3100 sells with an internal switch on the LAN interface.
 
 .. _printers_tested_by_fpf:
 
