@@ -46,6 +46,7 @@ first==2.0.1              # via pip-tools
 flake8==3.5.0
 future==0.16.0            # via cookiecutter
 futures==3.2.0            # via s3transfer
+git-lfs==1.5
 git-url-parse==1.0.2      # via python-gilt
 gitdb2==2.0.3             # via gitpython
 gitpython==2.1.8          # via bandit
