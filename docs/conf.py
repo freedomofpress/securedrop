@@ -18,6 +18,10 @@ import os
 # https://docs.readthedocs.org/en/latest/faq.html#how-do-i-change-behavior-for-read-the-docs
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
+# Get SD root directory
+docs_dir = os.path.dirname(os.path.abspath(__file__))
+sd_root_dir = os.path.abspath(os.path.join(docs_dir,'../'))
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -112,6 +116,10 @@ todo_include_todos = False
 # a list of builtin themes.
 if on_rtd:
     html_theme = 'default'
+
+    print('Fetching files with git_lfs')
+    from git_lfs import fetch
+    fetch(sd_root_dir)
 else:
     try:
         # If you want to build the docs locally using the RTD theme,
