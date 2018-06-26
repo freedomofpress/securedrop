@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-06-19 14:27+0000\n"
-"Last-Translator: Dev Singh <devksingh4@gmail.com>\n"
+"PO-Revision-Date: 2018-06-26 15:10+0000\n"
+"Last-Translator: Drashti <drashtipandya37@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/hi/>\n"
 "Language: hi\n"
@@ -1147,7 +1147,7 @@ msgstr "क्षमा करें, हम आपके द्वारा अ
 
 #: source_templates/screensaver.html:2
 msgid "Interface hidden. Move your cursor here to show."
-msgstr "इंटरफ़ेस छिपा हुआ है। दिखाने के लिए यहां अपने कर्सर को ले जाएं यहाँ।"
+msgstr "इंटरफ़ेस छिपा हुआ है। दिखाने के लिए यहां अपने कर्सर को ले जाएं।"
 
 #: source_templates/session_timeout.html:6
 msgid ""
@@ -1221,7 +1221,7 @@ msgid ""
 "mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
-"यदि एक आशंका है कि Tor ब्राउज़र डाउनलोड करने से संदेह उठता है और आपके मेल "
+"यदि आशंका है कि Tor ब्राउज़र डाउनलोड करने से संदेह उठता है और आपके मेल "
 "प्रदाता पर नजर रखी जाने की संभावना कम है, तो आप एक मेल भेज सकते हैं इस पर "
 "<pre>gettor@torproject.org</pre> और एक बॉट निर्देशों के साथ जवाब देंगे|"
 
