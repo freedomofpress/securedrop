@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-06-21 08:05+0000\n"
+"PO-Revision-Date: 2018-06-26 15:10+0000\n"
 "Last-Translator: Adham Kurbanov <uz@zu.uz>\n"
 "Language-Team: Russian <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/ru/>\n"
@@ -243,9 +243,9 @@ msgstr[2] "{msg_num} сообщений"
 #: journalist_templates/_source_row.html:27
 msgid "1 unread"
 msgid_plural "{num_unread} unread"
-msgstr[0] "1 непрочитанное"
-msgstr[1] "{num_unread} непрочитанные"
-msgstr[2] "{num_unread} непрочитанные"
+msgstr[0] "1 непрочитанный материал"
+msgstr[1] "{num_unread} непрочитанных"
+msgstr[2] "{num_unread} непрочитанных материалов"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
