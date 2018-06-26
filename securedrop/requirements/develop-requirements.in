@@ -6,6 +6,7 @@ docker-py
 # Needed for dig ansible lookup
 dnspython
 flake8
+git-lfs # needed for RTD documentation building
 html-linter
 molecule>2.13
 # Needed for ansible network filter
