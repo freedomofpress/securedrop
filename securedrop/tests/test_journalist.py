@@ -1101,6 +1101,30 @@ def test_admin_sets_user_to_admin(journalist_app, test_admin):
         assert journo.is_admin is True
 
 
+def test_admin_renames_user(journalist_app, test_admin):
+    new_user = 'admin-renames-user-test'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=new_user,
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+        assert resp.status_code in (200, 302)
+        journo = Journalist.query.filter(Journalist.username == new_user).one()
+
+        new_user = new_user + 'a'
+        resp = app.post(url_for('admin.edit_user', user_id=journo.id),
+                        data=dict(username=new_user))
+    assert resp.status_code in (200, 302), resp.data.decode('utf-8')
+
+    # the following will throw an exception if new_user is not found
+    # therefore asserting it has been created
+    Journalist.query.filter(Journalist.username == new_user).one()
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1134,25 +1158,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_renames_user(self):
-        self._login_admin()
-        new_user = 'admin-renames-user-test'
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username=new_user,
-                                          password=VALID_PASSWORD,
-                                          is_admin=None))
-        assert resp.status_code in (200, 302)
-        journo = Journalist.query.filter(Journalist.username == new_user).one()
-
-        new_user = new_user + 'a'
-        resp = self.client.post(url_for('admin.edit_user', user_id=journo.id),
-                                data=dict(username=new_user))
-        assert resp.status_code in (200, 302), resp.data.decode('utf-8')
-
-        # the following will throw an exception if new_user is not found
-        # therefore asserting it has been created
-        Journalist.query.filter(Journalist.username == new_user).one()
 
     @patch('journalist_app.admin.current_app.logger.error')
     @patch('journalist_app.admin.Journalist',
