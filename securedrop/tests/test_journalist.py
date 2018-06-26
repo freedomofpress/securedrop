@@ -1239,6 +1239,23 @@ def test_admin_page_restriction_http_gets(journalist_app, test_journo):
             assert resp.status_code == 302
 
 
+def test_admin_page_restriction_http_posts(journalist_app, test_journo):
+    admin_urls = [url_for('admin.reset_two_factor_totp'),
+                  url_for('admin.reset_two_factor_hotp'),
+                  url_for('admin.add_user', user_id=test_journo['id']),
+                  url_for('admin.new_user_two_factor'),
+                  url_for('admin.reset_two_factor_totp'),
+                  url_for('admin.reset_two_factor_hotp'),
+                  url_for('admin.edit_user', user_id=test_journo['id']),
+                  url_for('admin.delete_user', user_id=test_journo['id'])]
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        for admin_url in admin_urls:
+            resp = app.post(admin_url)
+            assert resp.status_code == 302
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1272,20 +1289,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_page_restriction_http_posts(self):
-        admin_urls = [url_for('admin.reset_two_factor_totp'),
-                      url_for('admin.reset_two_factor_hotp'),
-                      url_for('admin.add_user', user_id=self.user.id),
-                      url_for('admin.new_user_two_factor'),
-                      url_for('admin.reset_two_factor_totp'),
-                      url_for('admin.reset_two_factor_hotp'),
-                      url_for('admin.edit_user', user_id=self.user.id),
-                      url_for('admin.delete_user', user_id=self.user.id)]
-        self._login_user()
-        for admin_url in admin_urls:
-            resp = self.client.post(admin_url)
-            self.assertStatus(resp, 302)
 
     def test_user_authorization_for_gets(self):
         urls = [url_for('main.index'), url_for('col.col', filesystem_id='1'),
