@@ -1179,6 +1179,24 @@ def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
             logo_file.write(original_image)
 
 
+def test_logo_upload_with_invalid_filetype_fails(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        form = journalist_app_module.forms.LogoForm(
+            logo=(StringIO('filedata'), 'bad.exe')
+        )
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('admin.manage_config'),
+                            data=form.data,
+                            follow_redirects=True)
+            ins.assert_message_flashed("You can only upload PNG image files.",
+                                       "logo-error")
+        text = resp.data.decode('utf-8')
+        assert "You can only upload PNG image files." in text
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1212,19 +1230,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_logo_upload_with_invalid_filetype_fails(self):
-        self._login_admin()
-
-        form = journalist_app_module.forms.LogoForm(
-            logo=(StringIO('filedata'), 'bad.exe')
-        )
-        resp = self.client.post(url_for('admin.manage_config'),
-                                data=form.data,
-                                follow_redirects=True)
-        self.assertMessageFlashed("You can only upload PNG image files.",
-                                  "logo-error")
-        self.assertIn("You can only upload PNG image files.", resp.data)
 
     def test_logo_upload_with_empty_input_field_fails(self):
         self._login_admin()
