@@ -18,6 +18,7 @@
 import source_navigation_steps
 import journalist_navigation_steps
 import functional_test
+import time
 
 
 class TestJournalist(
