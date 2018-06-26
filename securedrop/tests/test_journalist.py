@@ -1209,6 +1209,24 @@ def test_creation_of_ossec_test_log_event(journalist_app, test_admin, mocker):
     )
 
 
+def test_logo_upload_with_empty_input_field_fails(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        form = journalist_app_module.forms.LogoForm(
+            logo=(StringIO(''), '')
+        )
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('admin.manage_config'),
+                            data=form.data,
+                            follow_redirects=True)
+
+            ins.assert_message_flashed("File required.", "logo-error")
+    assert 'File required.' in resp.data.decode('utf-8')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1242,19 +1260,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_logo_upload_with_empty_input_field_fails(self):
-        self._login_admin()
-
-        form = journalist_app_module.forms.LogoForm(
-            logo=(StringIO(''), '')
-        )
-        resp = self.client.post(url_for('admin.manage_config'),
-                                data=form.data,
-                                follow_redirects=True)
-
-        self.assertMessageFlashed("File required.", "logo-error")
-        self.assertIn('File required.', resp.data)
 
     def test_admin_page_restriction_http_gets(self):
         admin_urls = [url_for('admin.index'), url_for('admin.add_user'),
