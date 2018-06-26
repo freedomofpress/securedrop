@@ -1,17 +1,19 @@
 # Changelog
 
-## 0.8.0~rc2
+## 0.8.0~rc3
 
 ### Web Applications
 
-* Fixed race condition with journalist notification where a daily notification would not be sent (#3479)
+* Adds a new support language: Swedish (#3570) 
 * Replace PyCryptodome with pyca/cryptography (#3458)
 * Add explanatory text to source interface screensaver (#3439, #3455)
 * Rename "Delete collection" on journalist interface for clarity (#2419)
+* Security: Login throttling is now per-user, mitigating a DoS vector (#3563)
 
 ### Operations
 
 * Updated the grsecurity-hardened Linux Kernels to 4.4.135 on app and mon servers (#3494)
+* Fixed race condition with journalist notification where a daily notification would not be sent (#3479)
 * Removed 2FA for console logins for app and mon servers (#3507)
 * Suppresses OSSEC alerts asking SecureDrop administrators to upgrade to Xenial (#3205)
 * Upgraded to Tor 0.3.3.7 on app and mon servers (#3518)
@@ -20,6 +22,7 @@
 ### Tails Environment
 
 * Support conditional questions in securedrop-admin sdconfig (#3401)
+* Security: Ensure that a branch cannot accidentally be checked out after tag verification (#3567)
 
 ### Developer Workflow
 
