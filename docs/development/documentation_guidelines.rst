@@ -1,6 +1,11 @@
 Documentation Guidelines
 ========================
 
+.. note:: Images hosted in the SecureDrop repository are tracked in `Git-LFS`_.
+          This requires installation and activation of the git-lfs plugin in
+          order to manipulate and build documentation locally. Instructions for
+          configuring your client can be `found here`_.
+
 SecureDrop's documentation is written in `ReStructuredText`_ (ReST),
 and is built by and hosted on `Read the Docs`_ (RTD). The
 documentation files are stored in the primary SecureDrop git
@@ -8,6 +13,9 @@ repository under the ``docs/`` directory.
 
 .. _ReStructuredText: http://sphinx-doc.org/rest.html
 .. _Read the Docs: https://docs.readthedocs.org/en/latest/index.html
+.. _Git-LFS: https://git-lfs.github.com/
+.. _found here: https://help.github.com/articles/installing-git-large-file-storage/
+
 
 To get started editing the docs:
 
