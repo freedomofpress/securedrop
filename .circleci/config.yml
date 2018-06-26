@@ -7,9 +7,6 @@ jobs:
     steps:
       - run: apt-get install -y make
       - checkout
-      - run:
-          name: Rebase on-top of latest develop
-          command: ./devops/scripts/rebase-develop.sh
       - setup_remote_docker
 
       - run: TAG=${CIRCLE_SHA1} make ci-lint-image
@@ -26,9 +23,6 @@ jobs:
     steps:
       - run: apt-get install -y make
       - checkout
-      - run:
-          name: Rebase on-top of latest develop
-          command: ./devops/scripts/rebase-develop.sh
       - setup_remote_docker
 
       - restore_cache:
@@ -131,10 +125,6 @@ jobs:
     steps:
 
       - checkout
-
-      - run:
-          name: Rebase on-top of latest develop
-          command: ./devops/scripts/rebase-develop.sh
 
       - run:
           name: Installation apt pre-reqs
