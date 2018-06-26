@@ -538,7 +538,10 @@ class TestGitOperations:
                                     'securedrop/install_files/ansible-base')
         child = pexpect.spawn('coverage run {0} --root {1} update'.format(
                               cmd, ansible_base))
-        child.expect('Updated to SecureDrop', timeout=100)
+
+        output = child.read()
+        assert 'Updated to SecureDrop' in output
+        assert 'Signature verification successful' in output
 
         child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
         child.close()
@@ -572,5 +575,37 @@ class TestGitOperations:
         child.close()
 
         # Failures should eventually exit non-zero.
+        assert child.exitstatus != 0
+        assert child.signalstatus != 0
+
+    def test_update_with_duplicate_branch_and_tag(self,
+                                                  securedrop_git_repo):
+        gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
+        set_reliable_keyserver(gpgdir)
+
+        github_url = 'https://api.github.com/repos/freedomofpress/securedrop/releases/latest'  # noqa: E501
+        latest_release = requests.get(github_url).json()
+        latest_tag = str(latest_release["tag_name"])
+
+        # Create a branch with the same name as a tag.
+        subprocess.check_call(['git', 'checkout', '-b', latest_tag])
+        # Checkout the older tag again in preparation for the update.
+        subprocess.check_call('git checkout 0.6'.split())
+
+        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                           'securedrop_admin/__init__.py')
+        ansible_base = os.path.join(str(securedrop_git_repo),
+                                    'securedrop/install_files/ansible-base')
+
+        child = pexpect.spawn('coverage run {0} --root {1} update'.format(
+                              cmd, ansible_base))
+        output = child.read()
+        # Verify that we do not falsely check out a branch instead of a tag.
+        assert 'Switched to branch' not in output
+        assert 'Updated to SecureDrop' not in output
+        assert 'Signature verification failed' in output
+
+        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+        child.close()
         assert child.exitstatus != 0
         assert child.signalstatus != 0
