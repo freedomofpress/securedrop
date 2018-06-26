@@ -1,10 +1,10 @@
 # Changelog
 
-## 0.8.0~rc3
+## 0.8.0
 
 ### Web Applications
 
-* Adds a new support language: Swedish (#3570) 
+* Adds a new supported language: Swedish (#3570) 
 * Replace PyCryptodome with pyca/cryptography (#3458)
 * Add explanatory text to source interface screensaver (#3439, #3455)
 * Rename "Delete collection" on journalist interface for clarity (#2419)
