@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-06-25 19:31+0000\n"
-"Last-Translator: Ali <aboshanab_@hotmail.com>\n"
+"PO-Revision-Date: 2018-06-26 15:10+0000\n"
+"Last-Translator: ramyraoof <ramy.raoof@gmail.com>\n"
 "Language-Team: Arabic <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/ar/>\n"
 "Language: ar\n"
@@ -111,7 +111,7 @@ msgstr "اِختَر ملف."
 
 #: journalist_app/forms.py:62
 msgid "You can only upload PNG image files."
-msgstr "أنواع الملفات المسموحة بامتداد pgn."
+msgstr "أنواع الملفات المسموحة بامتداد PNG."
 
 #: journalist_app/main.py:117 journalist_app/utils.py:47
 #: journalist_app/utils.py:137
@@ -251,11 +251,11 @@ msgstr[5] "{msg_num} رسالة"
 #: journalist_templates/_source_row.html:27
 msgid "1 unread"
 msgid_plural "{num_unread} unread"
-msgstr[0] "0 غير مقروءة"
-msgstr[1] "واحدة غير مقروءة"
-msgstr[2] "اثنتان غير مقروءتان"
-msgstr[3] "القليل غير مقروئين"
-msgstr[4] "الكثير غير مقروئين"
+msgstr[0] "0"
+msgstr[1] "واحدة"
+msgstr[2] "اثنتان"
+msgstr[3] "القليل"
+msgstr[4] "الكثير"
 msgstr[5] "{num_unread} غير مقروءة"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
@@ -557,7 +557,7 @@ msgstr ""
 
 #: journalist_templates/col.html:122
 msgid "DELETE SOURCE AND SUBMISSIONS"
-msgstr "حذف المصدر وتقديماته"
+msgstr "حذف المصدر ورسائله"
 
 #: journalist_templates/col.html:130
 msgid "Are you sure you want to delete this collection?"

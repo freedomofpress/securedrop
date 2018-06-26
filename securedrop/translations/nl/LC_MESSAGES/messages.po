@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-06-21 05:27+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
+"PO-Revision-Date: 2018-06-26 15:10+0000\n"
+"Last-Translator: Yarno Ritzen <yarnoritzen@gmail.com>\n"
 "Language-Team: Dutch <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/nl/>\n"
 "Language: nl\n"
@@ -114,7 +114,7 @@ msgstr "Bestand verplicht."
 
 #: journalist_app/forms.py:62
 msgid "You can only upload PNG image files."
-msgstr "U kunt alleen PNG-afbeeldingsbestanden uploaden."
+msgstr "U kunt alleen PNG-afbeeldingen uploaden."
 
 #: journalist_app/main.py:117 journalist_app/utils.py:47
 #: journalist_app/utils.py:137
@@ -1220,8 +1220,8 @@ msgid ""
 "It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
 msgstr ""
-"Het is mogelijk dat iedereen die uw internetverkeer in de gaten houdt (uw "
-"overheid, uw internetprovider), u kan identificeren."
+"Het is mogelijk voor iedereen die uw internetverkeer in de gaten houdt (uw "
+"overheid, uw internetprovider) om u te identificeren."
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
@@ -1266,10 +1266,10 @@ msgid ""
 "mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
-"Wanneer de kans bestaat dat het downloaden van de Tor Browser argwaan wekt "
-"en het minder waarschijnlijk is dat uw mail provider wordt gecontroleerd, "
-"kan u een e-mail sturen naar <pre>gettor@torproject.org</pre> en een bot zal "
-"met instructies antwoorden."
+"Als de kans bestaat dat het downloaden van de Tor Browser argwaan wekt en "
+"het minder waarschijnlijk is dat uw emailprovider in de gaten wordt "
+"gehouden, kan u een e-mail sturen naar <pre>gettor@torproject.org</pre> "
+"waarna een bot een email met instructies zals treun ."
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
