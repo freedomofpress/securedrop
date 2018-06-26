@@ -1150,6 +1150,35 @@ def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
             "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']") in log_event
 
 
+def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
+    # Save original logo to restore after test run
+    logo_image_location = os.path.join(config.SECUREDROP_ROOT,
+                                       "static/i/logo.png")
+    with io.open(logo_image_location, 'rb') as logo_file:
+        original_image = logo_file.read()
+
+    try:
+        with journalist_app.test_client() as app:
+            _login_user(app, test_admin['username'], test_admin['password'],
+                        test_admin['otp_secret'])
+            # Create 1px * 1px 'white' PNG file from its base64 string
+            form = journalist_app_module.forms.LogoForm(
+                logo=(BytesIO(base64.decodestring
+                      ("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
+                       "VR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=")), 'test.png')
+            )
+            with InstrumentedApp(journalist_app) as ins:
+                app.post(url_for('admin.manage_config'),
+                         data=form.data,
+                         follow_redirects=True)
+
+                ins.assert_message_flashed("Image updated.", "logo-success")
+    finally:
+        # Restore original image to logo location for subsequent tests
+        with io.open(logo_image_location, 'wb') as logo_file:
+            logo_file.write(original_image)
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1183,31 +1212,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_logo_upload_with_valid_image_succeeds(self):
-        # Save original logo to restore after test run
-        logo_image_location = os.path.join(config.SECUREDROP_ROOT,
-                                           "static/i/logo.png")
-        with io.open(logo_image_location, 'rb') as logo_file:
-            original_image = logo_file.read()
-
-        try:
-            self._login_admin()
-            # Create 1px * 1px 'white' PNG file from its base64 string
-            form = journalist_app_module.forms.LogoForm(
-                logo=(BytesIO(base64.decodestring
-                      ("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
-                       "VR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=")), 'test.png')
-            )
-            self.client.post(url_for('admin.manage_config'),
-                             data=form.data,
-                             follow_redirects=True)
-
-            self.assertMessageFlashed("Image updated.", "logo-success")
-        finally:
-            # Restore original image to logo location for subsequent tests
-            with io.open(logo_image_location, 'wb') as logo_file:
-                logo_file.write(original_image)
 
     def test_logo_upload_with_invalid_filetype_fails(self):
         self._login_admin()
