@@ -1268,6 +1268,23 @@ def test_user_authorization_for_gets(journalist_app):
             assert resp.status_code == 302
 
 
+def test_user_authorization_for_posts(journalist_app):
+    urls = [url_for('col.add_star', filesystem_id='1'),
+            url_for('col.remove_star', filesystem_id='1'),
+            url_for('col.process'),
+            url_for('col.delete_single', filesystem_id='1'),
+            url_for('main.reply'),
+            url_for('main.regenerate_code'),
+            url_for('main.bulk'),
+            url_for('account.new_two_factor'),
+            url_for('account.reset_two_factor_totp'),
+            url_for('account.reset_two_factor_hotp')]
+    with journalist_app.test_client() as app:
+        for url in urls:
+            resp = app.post(url)
+            assert resp.status_code == 302
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1301,21 +1318,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_user_authorization_for_posts(self):
-        urls = [url_for('col.add_star', filesystem_id='1'),
-                url_for('col.remove_star', filesystem_id='1'),
-                url_for('col.process'),
-                url_for('col.delete_single', filesystem_id='1'),
-                url_for('main.reply'),
-                url_for('main.regenerate_code'),
-                url_for('main.bulk'),
-                url_for('account.new_two_factor'),
-                url_for('account.reset_two_factor_totp'),
-                url_for('account.reset_two_factor_hotp')]
-        for url in urls:
-            res = self.client.post(url)
-            self.assertStatus(res, 302)
 
     def test_incorrect_current_password_change(self):
         self._login_user()
