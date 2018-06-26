@@ -1256,6 +1256,18 @@ def test_admin_page_restriction_http_posts(journalist_app, test_journo):
             assert resp.status_code == 302
 
 
+def test_user_authorization_for_gets(journalist_app):
+    urls = [url_for('main.index'), url_for('col.col', filesystem_id='1'),
+            url_for('col.download_single_submission',
+                    filesystem_id='1', fn='1'),
+            url_for('account.edit')]
+
+    with journalist_app.test_client() as app:
+        for url in urls:
+            resp = app.get(url)
+            assert resp.status_code == 302
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1289,16 +1301,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_user_authorization_for_gets(self):
-        urls = [url_for('main.index'), url_for('col.col', filesystem_id='1'),
-                url_for('col.download_single_submission',
-                        filesystem_id='1', fn='1'),
-                url_for('account.edit')]
-
-        for url in urls:
-            resp = self.client.get(url)
-            self.assertStatus(resp, 302)
 
     def test_user_authorization_for_posts(self):
         urls = [url_for('col.add_star', filesystem_id='1'),
