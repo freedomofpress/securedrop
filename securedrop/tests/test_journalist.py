@@ -1125,6 +1125,31 @@ def test_admin_renames_user(journalist_app, test_admin):
     Journalist.query.filter(Journalist.username == new_user).one()
 
 
+def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
+    mocked_error_logger = mocker.patch(
+            'journalist_app.admin.current_app.logger.error')
+    mocker.patch('journalist_app.admin.Journalist',
+                 side_effect=IntegrityError('STATEMENT', 'PARAMETERS', None))
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.add_user'),
+                     data=dict(username='username',
+                               password=VALID_PASSWORD,
+                               is_admin=None))
+            ins.assert_message_flashed(
+                "An error occurred saving this user to the database."
+                " Please inform your administrator.",
+                "error")
+
+    log_event = mocked_error_logger.call_args[0][0]
+    assert ("Adding user 'username' failed: (__builtin__.NoneType) "
+            "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']") in log_event
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1158,29 +1183,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    @patch('journalist_app.admin.current_app.logger.error')
-    @patch('journalist_app.admin.Journalist',
-           side_effect=IntegrityError('STATEMENT', 'PARAMETERS', None))
-    def test_admin_add_user_integrity_error(self,
-                                            mock_journalist,
-                                            mocked_error_logger):
-        self._login_admin()
-
-        self.client.post(url_for('admin.add_user'),
-                         data=dict(username='username',
-                                   password=VALID_PASSWORD,
-                                   is_admin=None))
-
-        log_event = mocked_error_logger.call_args[0][0]
-        self.assertIn(
-            "Adding user 'username' failed: (__builtin__.NoneType) "
-            "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']",
-            log_event)
-        self.assertMessageFlashed(
-            "An error occurred saving this user to the database."
-            " Please inform your administrator.",
-            "error")
 
     def test_logo_upload_with_valid_image_succeeds(self):
         # Save original logo to restore after test run
