@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-05-07 13:00+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2018-06-18 18:03+0000\n"
+"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål <https://weblate.securedrop.club/projects/"
 "securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -110,8 +110,8 @@ msgid "File required."
 msgstr "Fil påkrevd."
 
 #: journalist_app/forms.py:62
-msgid "Upload images only."
-msgstr "Bare last opp bilder."
+msgid "You can only upload PNG image files."
+msgstr "Du kan kun laste opp PNG-bildefiler."
 
 #: journalist_app/main.py:117 journalist_app/utils.py:47
 #: journalist_app/utils.py:137
@@ -228,8 +228,10 @@ msgstr[0] "1 Melding"
 msgstr[1] "{msg_num} meldinger"
 
 #: journalist_templates/_source_row.html:27
-msgid "{num_unread} unread"
-msgstr "{num_unread} uleste"
+msgid "1 unread"
+msgid_plural "{num_unread} unread"
+msgstr[0] "1 ulest"
+msgstr[1] "{num_unread} uleste"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -538,8 +540,8 @@ msgstr ""
 "em>"
 
 #: journalist_templates/col.html:122
-msgid "DELETE COLLECTION"
-msgstr "SLETT KILDEDATA"
+msgid "DELETE SOURCE AND SUBMISSIONS"
+msgstr "SLETT KILDEDATA OG INNSENDT INFO"
 
 #: journalist_templates/col.html:130
 msgid "Are you sure you want to delete this collection?"
@@ -849,8 +851,8 @@ msgstr "Beklager, det er ikke et gjenkjent kodenavn."
 msgid "Protecting Journalists and Sources"
 msgstr "Sikkerhet for journalister og kilder"
 
-#: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/base.html:25 source_templates/base.html:47
+#: source_templates/index.html:33 source_templates/index.html:88
 msgid "Powered by"
 msgstr "Drevet av"
 
@@ -858,7 +860,7 @@ msgstr "Drevet av"
 msgid "LOG OUT"
 msgstr "LOGG UT"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:47 source_templates/index.html:88
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -938,10 +940,10 @@ msgid ""
 "your anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it "
 "to Safest</a>, or ignore this warning to continue."
 msgstr ""
-"<strong>Det er anbefalt at sikkerhetsglidebryteren settes til \"Tryggest\" "
-"for å sikre din anonymitet:</strong><a id=\"disable-js\" href=\"\">Lær "
-"hvordan du setter den til \"Tryggest\"</a>, eller se bort fra denne "
-"advarselen for å fortsette uten."
+"<strong>Det er anbefalt at sikkerhetsglidebryteren settes til \"Safest\" for "
+"å sikre din anonymitet:</strong><a id=\"disable-js\" href=\"\">Lær hvordan "
+"du setter den til \"Safest\"</a>, eller se bort fra denne advarselen for å "
+"fortsette uten."
 
 #: source_templates/index.html:18
 msgid ""
@@ -991,7 +993,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "SE ETTER SVAR"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:96
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -999,24 +1001,24 @@ msgstr ""
 "Det ser ut som du bruker Tor-nettleseren. Du kan stille inn "
 "sikkerhetsbryteren til Safest i fire enkle steg."
 
-#: source_templates/index.html:95
+#: source_templates/index.html:98
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Klikk på <img src=\"{icon}\" alt=\"Tor icon\"> den grønne løken i "
 "verktøylinjen oppe til venstre"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:99
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Klikk <strong>Sikkerhetsinnstillinger…</strong>"
 
-#: source_templates/index.html:97
+#: source_templates/index.html:100
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Beveg glidebryteren til <strong>Safest</strong>, klikk så <strong>OK</strong>"
 
-#: source_templates/index.html:98
+#: source_templates/index.html:101
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">Klikk her</a> for å oppdatere siden"
 
@@ -1167,6 +1169,10 @@ msgstr "Fant ikke siden"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Beklager, men vi kunne ikke finne det du ba om."
 
+#: source_templates/screensaver.html:2
+msgid "Interface hidden. Move your cursor here to show."
+msgstr "Skjult grensesnitt. Beveg musepekeren for å vise."
+
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
@@ -1185,16 +1191,14 @@ msgid "Why is there a warning about Tor2Web?"
 msgstr "Hvorfor er det en advarsel om Tor2Web?"
 
 #: source_templates/tor2web-warning.html:4
-msgid ""
-"Using <a href=\"tor2web.org\">Tor2Web</a> to connect to SecureDrop will not "
-"protect your anonymity."
+msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgstr ""
-"Bruk av <a href=\"tor2web.org\">Tor2Web</a> for å kommunisere med SecureDrop "
-"vil ikke beskytte din anonymitet."
+"Bruk av Tor2Web for å kommunisere med SecureDrop vil ikke beskytte din "
+"anonymitet."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
-"It could be possible for anyone listening to Internet usage (your "
+"It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
 msgstr ""
 "Det er en mulighet for at alle som kan følge med på internettbruken din "
@@ -1239,8 +1243,8 @@ msgstr ""
 
 #: source_templates/use-tor-browser.html:9
 msgid ""
-"If there is a chance that downloading the Tor Browser raises suspicion and "
-"your mail provider is less likely to be monitored, you can send a mail to "
+"If there is a chance that downloading Tor Browser raises suspicion and your "
+"mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
 "Det er mulig at det å laste ned Tor-nettleseren hever mistanke og at e-"
@@ -1349,8 +1353,14 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
 
-#~ msgid "You can only upload JPG/JPEG or PNG image files."
-#~ msgstr "Du kan kun laste opp JPG/JPEG- eller PNG-bildefiler."
+#~ msgid "{num_unread} unread"
+#~ msgstr "{num_unread} uleste"
+
+#~ msgid "Upload images only."
+#~ msgstr "Bare last opp bilder."
+
+#~ msgid "DELETE COLLECTION"
+#~ msgstr "SLETT KILDEDATA"
 
 #~ msgid "That username is already in use"
 #~ msgstr "Brukernavnet du valgte er allerede i bruk"

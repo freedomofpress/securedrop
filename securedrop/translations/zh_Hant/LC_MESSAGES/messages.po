@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-05-07 18:00+0000\n"
-"Last-Translator: foolfitz <foolfitz@gmail.com>\n"
+"PO-Revision-Date: 2018-06-24 02:09+0000\n"
+"Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://weblate.securedrop.club/"
 "projects/securedrop/securedrop/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -26,7 +26,7 @@ msgstr "{time} 之前"
 
 #: journalist_app/__init__.py:78 journalist_app/__init__.py:116
 msgid "You have been logged out due to inactivity"
-msgstr "你因閒置太久已被登出"
+msgstr "您因閒置太久已被登出"
 
 #: journalist_app/account.py:26
 msgid "Incorrect password or two-factor code."
@@ -106,8 +106,8 @@ msgid "File required."
 msgstr "檔案欄為必要。"
 
 #: journalist_app/forms.py:62
-msgid "Upload images only."
-msgstr "僅上傳圖片。"
+msgid "You can only upload PNG image files."
+msgstr "僅可上傳 PNG 格式的圖片檔。"
 
 #: journalist_app/main.py:117 journalist_app/utils.py:47
 #: journalist_app/utils.py:137
@@ -212,8 +212,9 @@ msgid_plural "{msg_num} messages"
 msgstr[0] "{msg_num} 訊息"
 
 #: journalist_templates/_source_row.html:27
-msgid "{num_unread} unread"
-msgstr "{num_unread} 未讀"
+msgid "1 unread"
+msgid_plural "{num_unread} unread"
+msgstr[0] "{num_unread} 未讀"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -504,8 +505,8 @@ msgstr ""
 "復，而線人將無法用之前的代號登錄。</em>"
 
 #: journalist_templates/col.html:122
-msgid "DELETE COLLECTION"
-msgstr "删除集件"
+msgid "DELETE SOURCE AND SUBMISSIONS"
+msgstr "刪除線人與其提交的資料"
 
 #: journalist_templates/col.html:130
 msgid "Are you sure you want to delete this collection?"
@@ -796,8 +797,8 @@ msgstr "對不起，無法識別這個代號。"
 msgid "Protecting Journalists and Sources"
 msgstr "保護新聞記者與消息來源線人"
 
-#: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/base.html:25 source_templates/base.html:47
+#: source_templates/index.html:33 source_templates/index.html:88
 msgid "Powered by"
 msgstr "使用版本"
 
@@ -805,7 +806,7 @@ msgstr "使用版本"
 msgid "LOG OUT"
 msgstr "登出"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:47 source_templates/index.html:88
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -927,28 +928,28 @@ msgstr "如果您已提交過文件，您可在此登入來查閱回覆。"
 msgid "CHECK FOR A RESPONSE"
 msgstr "檢查回應"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:96
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
 msgstr "您似乎正在使用 Tor 瀏覽器。用 4 個步驟可將安全滑桿移動到最高安全層級。"
 
-#: source_templates/index.html:95
+#: source_templates/index.html:98
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr "在上方的工具條中，點擊<img src=\"{icon}\" alt=\"Tor 圖標\">Tor 圖標"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:99
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "點擊 <strong>安全性設置...</strong>"
 
-#: source_templates/index.html:97
+#: source_templates/index.html:100
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "將安全滑桿移動到<strong>最高安全層級</strong>，然後點擊 <strong>確認</strong>"
 
-#: source_templates/index.html:98
+#: source_templates/index.html:101
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">點擊此處</a> 以刷新頁面"
 
@@ -1092,6 +1093,10 @@ msgstr "找不到網頁"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "對不起，未能處置您的請求。"
 
+#: source_templates/screensaver.html:2
+msgid "Interface hidden. Move your cursor here to show."
+msgstr "界面已隱藏，在此移動滑鼠可使其顯現。"
+
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
@@ -1108,18 +1113,14 @@ msgid "Why is there a warning about Tor2Web?"
 msgstr "為什麼出現一個關於 Tor2Web 的警告？"
 
 #: source_templates/tor2web-warning.html:4
-msgid ""
-"Using <a href=\"tor2web.org\">Tor2Web</a> to connect to SecureDrop will not "
-"protect your anonymity."
-msgstr ""
-"使用 <a href=\"tor2web.org\">Tor2Web</a>連至 SecureDrop 將無法保護你的匿名安"
-"全。"
+msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+msgstr "使用 Tor2Web 連至 SecureDrop 將無法保護您的匿名安全。"
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
-"It could be possible for anyone listening to Internet usage (your "
+"It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
-msgstr "任何網路監聽者（如政府、網路服務業者）都有可能認出您。"
+msgstr "任何網路流量監控者（如政府、網路服務業者）都有可能認出您。"
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
@@ -1155,11 +1156,11 @@ msgstr "複製並貼上以下的網址到您的瀏覽器，並依照指示下載
 
 #: source_templates/use-tor-browser.html:9
 msgid ""
-"If there is a chance that downloading the Tor Browser raises suspicion and "
-"your mail provider is less likely to be monitored, you can send a mail to "
+"If there is a chance that downloading Tor Browser raises suspicion and your "
+"mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
-"如果下載 Tor Browser 容易引發他人懷疑，而郵件服務商較不受到監控, 則可以寄信"
+"如果下載 Tor Browser 容易引發他人懷疑，而郵件服務商較不受到監控，則可以寄信"
 "到 <pre>gettor@torproject.org</pre>它利用機器人提供答案指示。"
 
 #: source_templates/why-journalist-key.html:3
@@ -1256,8 +1257,14 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
 
-#~ msgid "You can only upload JPG/JPEG or PNG image files."
-#~ msgstr "僅可上傳  JPG/JPEG 或 PNG 格式的圖片檔。"
+#~ msgid "{num_unread} unread"
+#~ msgstr "{num_unread} 未讀"
+
+#~ msgid "Upload images only."
+#~ msgstr "僅上傳圖片。"
+
+#~ msgid "DELETE COLLECTION"
+#~ msgstr "删除集件"
 
 #~ msgid "That username is already in use"
 #~ msgstr "使用者名稱已被使用"

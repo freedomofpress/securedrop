@@ -83,6 +83,7 @@ class I18NTool(object):
         'nl': {'name': 'Dutch', 'desktop': 'nl', },
         'pt_BR': {'name': 'Portuguese, Brasil', 'desktop': 'pt_BR', },
         'ru': {'name': 'Russian', 'desktop': 'ru', },
+        'sv': {'name': 'Swedish', 'desktop': 'sv', },
         'tr': {'name': 'Turkish', 'desktop': 'tr', },
         'zh_Hant': {'name': 'Chinese, Traditional', 'desktop': 'zh_Hant', },
     }

@@ -10,5 +10,6 @@
 * Dutch (``nl``)
 * Portuguese, Brasil (``pt_BR``)
 * Russian (``ru``)
+* Swedish (``sv``)
 * Turkish (``tr``)
 * Chinese, Traditional (``zh_Hant``)

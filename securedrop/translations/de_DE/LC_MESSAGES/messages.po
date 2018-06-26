@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-05-06 19:00+0000\n"
+"PO-Revision-Date: 2018-06-23 17:15+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/de/>\n"
@@ -110,8 +110,8 @@ msgid "File required."
 msgstr "Datei erforderlich."
 
 #: journalist_app/forms.py:62
-msgid "Upload images only."
-msgstr "Laden Sie nur Bilder hoch."
+msgid "You can only upload PNG image files."
+msgstr "Sie können nur PNG-Bilddateien hochladen."
 
 #: journalist_app/main.py:117 journalist_app/utils.py:47
 #: journalist_app/utils.py:137
@@ -238,8 +238,10 @@ msgstr[0] "1 Nachricht"
 msgstr[1] "{msg_num} Nachrichten"
 
 #: journalist_templates/_source_row.html:27
-msgid "{num_unread} unread"
-msgstr "{num_unread} ungelesen"
+msgid "1 unread"
+msgid_plural "{num_unread} unread"
+msgstr[0] "1 ungelesen"
+msgstr[1] "{num_unread} ungelesen"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -509,7 +511,7 @@ msgstr "Löschbestätigung"
 
 #: journalist_templates/col.html:72
 msgid "Are you sure you want to delete the selected documents?"
-msgstr "Sind Sie sicher, dass Sie die markierten Dokumente löschen möchten?"
+msgstr "Sind Sie sicher, dass Sie die ausgewählten Dokumente löschen möchten?"
 
 #: journalist_templates/col.html:87
 msgid "No documents to display."
@@ -554,8 +556,8 @@ msgstr ""
 "kann sich nicht mehr mit ihrem früheren Decknamen anmelden.</em>"
 
 #: journalist_templates/col.html:122
-msgid "DELETE COLLECTION"
-msgstr "SAMMLUNG LÖSCHEN"
+msgid "DELETE SOURCE AND SUBMISSIONS"
+msgstr "QUELLE UND EINREICHUNGEN LÖSCHEN"
 
 #: journalist_templates/col.html:130
 msgid "Are you sure you want to delete this collection?"
@@ -873,8 +875,8 @@ msgstr "Entschuldigung, das ist kein erkannter Deckname."
 msgid "Protecting Journalists and Sources"
 msgstr "Schützt Journalisten und Quellen"
 
-#: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/base.html:25 source_templates/base.html:47
+#: source_templates/index.html:33 source_templates/index.html:88
 msgid "Powered by"
 msgstr "Ermöglicht durch"
 
@@ -882,7 +884,7 @@ msgstr "Ermöglicht durch"
 msgid "LOG OUT"
 msgstr "ABMELDEN"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:47 source_templates/index.html:88
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -1022,7 +1024,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "NACH EINER ANTWORT SCHAUEN"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:96
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -1030,25 +1032,25 @@ msgstr ""
 "Sie scheinen den Tor-Browser zu verwenden. In vier Schritten können Sie den "
 "Sicherheits-Schieberegler auf 'Am sichersten' stellen."
 
-#: source_templates/index.html:95
+#: source_templates/index.html:98
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Klicken Sie auf das <img src=\"{icon}\" alt=\"Tor-Symbol\"> Tor-Symbol in "
 "der Werkzeugleiste oben"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:99
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Klicken Sie auf <strong>Sicherheitseinstellungen...</strong>"
 
-#: source_templates/index.html:97
+#: source_templates/index.html:100
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Stellen Sie den Schieberegler auf <strong>'Am sichersten'</strong>, klicken "
 "Sie dann auf <strong>OK</strong>"
 
-#: source_templates/index.html:98
+#: source_templates/index.html:101
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">Klicken Sie hier</a>, um die Seite zu aktualisieren"
 
@@ -1201,6 +1203,11 @@ msgstr "Seite nicht gefunden"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Leider konnten wir nicht finden, was Sie angefordert haben."
 
+#: source_templates/screensaver.html:2
+msgid "Interface hidden. Move your cursor here to show."
+msgstr ""
+"Oberfläche versteckt. Bewegen Sie hier den Mauszeiger, um sie anzuzeigen."
+
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
@@ -1219,16 +1226,14 @@ msgid "Why is there a warning about Tor2Web?"
 msgstr "Warum gibt es eine Warnung über Tor2Web?"
 
 #: source_templates/tor2web-warning.html:4
-msgid ""
-"Using <a href=\"tor2web.org\">Tor2Web</a> to connect to SecureDrop will not "
-"protect your anonymity."
+msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgstr ""
-"Die Verwendung von <a href=\"tor2web.org\">Tor2Web</a>, um sich mit "
-"SecureDrop zu verbinden, schützt Ihre Anonymität nicht."
+"Die Verwendung von Tor2Web, um sich mit SecureDrop zu verbinden, schützt "
+"Ihre Anonymität nicht."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
-"It could be possible for anyone listening to Internet usage (your "
+"It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
 msgstr ""
 "Es könnte für jeden möglich sein, Ihren Internetverkehr zu überwachen (Ihre "
@@ -1273,14 +1278,14 @@ msgstr ""
 
 #: source_templates/use-tor-browser.html:9
 msgid ""
-"If there is a chance that downloading the Tor Browser raises suspicion and "
-"your mail provider is less likely to be monitored, you can send a mail to "
+"If there is a chance that downloading Tor Browser raises suspicion and your "
+"mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
-"Wenn der Download des Tor-Browsers einen Verdacht erwecken könnte, und ihr "
-"Mail-Provider weniger überwacht wird, können Sie einen E-Mail an "
-"<pre>gettor@torproject.org</pre> schicken. Ein Roboter werdet mit "
-"Anweisungen antworten."
+"Wenn es eine Möglichkeit gibt, dass das Herunterladen von Tor-Browser "
+"Verdacht erwecken könnte, und Ihr Mail-Anbieter weniger überwacht wird, "
+"können Sie eine E-Mail an <pre>gettor@torproject.org</pre> schicken und ein "
+"Bot wird mit Anweisungen antworten."
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
@@ -1384,8 +1389,14 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Zurück zur Einreichungsseite"
 
-#~ msgid "You can only upload JPG/JPEG or PNG image files."
-#~ msgstr "Sie können nur JPG/JPEG- oder PNG-Bilddateien hochladen."
+#~ msgid "{num_unread} unread"
+#~ msgstr "{num_unread} ungelesen"
+
+#~ msgid "Upload images only."
+#~ msgstr "Laden Sie nur Bilder hoch."
+
+#~ msgid "DELETE COLLECTION"
+#~ msgstr "SAMMLUNG LÖSCHEN"
 
 #~ msgid "That username is already in use"
 #~ msgstr "Dieser Benutzername ist bereits vergeben"
