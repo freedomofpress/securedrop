@@ -8,6 +8,7 @@ class TestSourceInterfaceBannerWarnings(
         source_navigation_steps.SourceNavigationStepsMixin):
 
     def test_warning_appears_if_tor_browser_not_in_use(self):
+        self.swap_drivers()
         self.driver.get(self.source_location)
 
         warning_banner = self.driver.find_element_by_class_name(
@@ -52,3 +53,11 @@ class TestSourceInterfaceBannerWarnings(
         def warning_banner_is_hidden():
             assert warning_banner.is_displayed() is False
         self.wait_for(warning_banner_is_hidden)
+        self.swap_drivers()
+
+
+    def test_warning_high_security(self):
+        self.driver.get(self.source_location)
+
+        banner = self.driver.find_element_by_class_name('js-warning')
+        assert "Security Slider to High", banner.text

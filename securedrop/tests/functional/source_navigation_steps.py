@@ -1,5 +1,6 @@
 import tempfile
 import time
+import os
 
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -8,7 +9,6 @@ class SourceNavigationStepsMixin():
 
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
-
         if not hasattr(self, 'accept_languages'):
             assert ("SecureDrop | Protecting Journalists and Sources" ==
                     self.driver.title)
@@ -53,7 +53,9 @@ class SourceNavigationStepsMixin():
     def _source_shows_codename(self):
         content = self.driver.find_element_by_id('codename-hint-content')
         assert not content.is_displayed()
+        time.sleep(5)  #  Long waits
         self.driver.find_element_by_id('codename-hint-show').click()
+        time.sleep(5)  #  Long waits
         assert content.is_displayed()
         content_content = self.driver.find_element_by_css_selector(
                 '#codename-hint-content p')
@@ -62,7 +64,9 @@ class SourceNavigationStepsMixin():
     def _source_hides_codename(self):
         content = self.driver.find_element_by_id('codename-hint-content')
         assert content.is_displayed()
+        time.sleep(5)  #  Long waits
         self.driver.find_element_by_id('codename-hint-hide').click()
+        time.sleep(5)  #  Long waits
         assert not content.is_displayed()
 
     def _source_sees_no_codename(self):
@@ -71,6 +75,7 @@ class SourceNavigationStepsMixin():
 
     def _source_chooses_to_login(self):
         self.driver.find_element_by_id('login-button').click()
+        time.sleep(self.sleep_time)
 
         logins = self.driver.find_elements_by_id(
             'login-with-existing-codename')
@@ -93,6 +98,7 @@ class SourceNavigationStepsMixin():
 
         continue_button = self.driver.find_element_by_id('login')
         continue_button.click()
+        time.sleep(5) #  Long waits
 
         if not hasattr(self, 'accept_languages'):
             assert ("SecureDrop | Protecting Journalists and Sources" ==
@@ -132,6 +138,7 @@ class SourceNavigationStepsMixin():
         assert continue_button_hover_icon.is_displayed()
 
         continue_button.click()
+        time.sleep(self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             headline = self.driver.find_element_by_class_name('headline')
@@ -157,7 +164,7 @@ class SourceNavigationStepsMixin():
             assert toggled_submit_button_icon.is_displayed()
 
             submit_button.click()
-            self.wait_for_source_key(self.source_name)
+            time.sleep(5)  #  Long waits
 
             if not hasattr(self, 'accept_languages'):
                 notification = self.driver.find_element_by_css_selector(
@@ -182,7 +189,7 @@ class SourceNavigationStepsMixin():
     def _source_clicks_submit_button_on_submission_page(self):
         submit_button = self.driver.find_element_by_id('submit-doc-button')
         submit_button.click()
-        self.wait_for_source_key(self.source_name)
+        time.sleep(self.sleep_time)
 
     def _source_deletes_a_journalist_reply(self):
         # Get the reply filename so we can use IDs to select the delete buttons
@@ -193,12 +200,14 @@ class SourceNavigationStepsMixin():
         delete_button_id = 'delete-reply-{}'.format(reply_filename)
         delete_button = self.driver.find_element_by_id(delete_button_id)
         delete_button.click()
+        time.sleep(self.sleep_time)
 
         confirm_button_id = 'confirm-delete-reply-button-{}'.format(
             reply_filename)
         confirm_button = self.driver.find_element_by_id(confirm_button_id)
         assert confirm_button.is_displayed()
         confirm_button.click()
+        time.sleep(self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             notification = self.driver.find_element_by_class_name(
@@ -206,7 +215,11 @@ class SourceNavigationStepsMixin():
             assert 'Reply deleted' in notification.text
 
     def _source_logs_out(self):
-        self.driver.find_element_by_id('logout').click()
+        # New thing to delete XXX
+        logout = self.driver.find_element_by_id('logout')
+        logout.send_keys(" ")
+        logout.click()
+        time.sleep(self.sleep_time)
         assert self.driver.find_element_by_css_selector('.important')
 
     def _source_not_found(self):
