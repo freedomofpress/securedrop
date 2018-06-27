@@ -150,3 +150,7 @@ Post-Release
 After the release, carefully monitor the FPF support portal (or ask those that have access to
 monitor) and SecureDrop community support forum for any issues that users are
 having.
+
+Finally, in a PR back to develop, cherry-pick the release commits (thus ensuring a consistent
+changelog in the future) and bump the version numbers
+in preparation for the next release (this is required for the upgrade testing scenario).

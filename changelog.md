@@ -1,8 +1,46 @@
 # Changelog
 
-## 0.8.0~rc1
+## 0.9.0~rc1
 
 
+
+## 0.8.0
+
+### Web Applications
+
+* Adds a new supported language: Swedish (#3570) 
+* Replace PyCryptodome with pyca/cryptography (#3458)
+* Add explanatory text to source interface screensaver (#3439, #3455)
+* Rename "Delete collection" on journalist interface for clarity (#2419)
+* Security: Login throttling is now per-user, mitigating a DoS vector (#3563)
+
+### Operations
+
+* Updated the grsecurity-hardened Linux Kernels to 4.4.135 on app and mon servers (#3494)
+* Fixed race condition with journalist notification where a daily notification would not be sent (#3479)
+* Removed 2FA for console logins for app and mon servers (#3507)
+* Suppresses OSSEC alerts asking SecureDrop administrators to upgrade to Xenial (#3205)
+* Upgraded to Tor 0.3.3.7 on app and mon servers (#3518)
+* Bugfix: Enable mon and app servers to use /32 addresses (#3465)
+
+### Tails Environment
+
+* Support conditional questions in securedrop-admin sdconfig (#3401)
+* Security: Ensure that a branch cannot accidentally be checked out after tag verification (#3567)
+
+### Developer Workflow
+
+* Use Alembic to version control database schema (#3211, #3260, #3273)
+* Integration tests for securedrop-admin sdconfig (#3472)
+* Use pytest for more Journalist Interface unit tests (#3456)
+* Rename Document Interface to Journalist Interface in Docker development environment (#3397)
+
+### Documentation
+
+* Miscellaneous documentation improvements (#3404, #3405, #3431, #3435,#3437, #3440, #3457, #3463, #3467, #3468, #3476, #3480)
+
+The issues for this release were tracked in the 0.8 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestone/43
 
 ## 0.7.0
 
