@@ -16,7 +16,7 @@ test_apt_dependencies:
 test_pip_requirements: "{{ securedrop_code }}/requirements/test-requirements.txt"
 
 # Specify TBB version to download and install
-tbb_release: 7.5
+tbb_release: 7.5.6
 tbb_locale: en-US
 tbb_arch: 64
 tbb_directory: "/home/{{ ansible_user|default(ansible_ssh_user|default(lookup('env', 'USER'))) }}/.local/tbb"
