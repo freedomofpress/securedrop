@@ -353,4 +353,6 @@ the below commands. You should not be prompted for a passphrase
     $ ssh <username>@<Monitor IP address> hostname
     mon
 
-If you have successfully connected to the app via SSH, the terminal output will be name of the app to which you have connected ('app' or 'mon') as shown above.
+If you have successfully connected to the server via SSH, the terminal
+output will be name of the server to which you have connected ('app'
+or 'mon') as shown above.
