@@ -56,3 +56,16 @@
     group: "{{ securedrop_user }}"
     mode: "0770"
 
+- name: Download geckodriver for compatibility with Tor
+  get_url:
+    dest: "/opt/geckodriver-v0.17.0-linux64.tar.gz"
+    url: https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz
+    sha256sum: 3154274c050d724eb2f4e8986a58ed37c0138b48304692bf7eeed827a5e82319
+  tags:
+    - apt
+
+- name: install geckodriver
+  shell: |
+    cd /bin
+    tar -zxvf /opt/geckodriver-v0.17.0-linux64.tar.gz
+    chmod +x geckodriver
