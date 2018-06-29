@@ -98,7 +98,7 @@ jobs:
       - run:
             name: Determine hash of admin folder
             command: |
-                tar --mtime='1970-01-01' -cf - admin | md5sum | tee admin-dir-hash.txt
+                (find "admin" -type f -exec md5sum {} +; find "admin" -type d) | LC_ALL=C sort | md5sum | tee admin-dir-hash.txt
 
       - restore_cache:
           keys:
