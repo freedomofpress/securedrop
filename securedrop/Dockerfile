@@ -9,7 +9,8 @@ RUN apt-get update && \
     apt-get install -y devscripts \
                        python-pip libpython2.7-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server firefox git xvfb haveged curl \
-                       gettext paxctl x11vnc enchant libffi-dev sqlite3
+                       gettext paxctl x11vnc enchant libffi-dev sqlite3 wget \
+                       libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1
 
 RUN gem install sass -v 3.4.23
 
@@ -20,9 +21,10 @@ RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/
     dpkg -i firefox*deb && apt-get install -f && \
     paxctl -cm /usr/lib/firefox/firefox
 
-RUN apt-get install -y wget libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1
 
-RUN gpg --keyserver=hkp://ipv4.pool.sks-keyservers.net --recv-keys EF6E286DDA85EA2A4BA7DE684E2C6E8793298290 && \
+COPY ./tor_project_public.pub /opt/
+
+RUN gpg --import /opt/tor_project_public.pub && \
     wget  https://www.torproject.org/dist/torbrowser/7.5.6/tor-browser-linux64-7.5.6_en-US.tar.xz && \
     wget https://www.torproject.org/dist/torbrowser/7.5.6/tor-browser-linux64-7.5.6_en-US.tar.xz.asc && \
     gpg --verify tor-browser-linux64-7.5.6_en-US.tar.xz.asc tor-browser-linux64-7.5.6_en-US.tar.xz
