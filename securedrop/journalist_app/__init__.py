@@ -2,7 +2,7 @@
 
 from datetime import datetime, timedelta
 from flask import (Flask, session, redirect, url_for, flash, g, request,
-                   jsonify, render_template)
+                   render_template)
 from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
@@ -41,7 +41,7 @@ def create_app(config):
     app.config.from_object(config.JournalistInterfaceFlaskConfig)
     app.sdconfig = config
 
-    CSRFProtect(app)
+    csrf = CSRFProtect(app)
     Environment(app)
 
     if config.DATABASE_ENGINE == "sqlite":
@@ -138,42 +138,35 @@ def create_app(config):
                            url_prefix='/account')
     app.register_blueprint(admin.make_blueprint(config), url_prefix='/admin')
     app.register_blueprint(col.make_blueprint(config), url_prefix='/col')
-    app.register_blueprint(api.make_blueprint(config), url_prefix='/api/v1')
+    api_blueprint = api.make_blueprint(config)
+    app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+    csrf.exempt(api_blueprint)
 
     @app.errorhandler(400)
     def bad_request(message):
-        if request.headers['Content-Type'] == 'application/json':
-            response = jsonify({'error': 'bad request',
-                                'message': 'We could not understand'})
-            return response, 400
-        else:
-            return render_template('400.html'), 400
+        return render_template('400.html'), 400
 
     @app.errorhandler(403)
     def forbidden(message):
-        if request.headers['Content-Type'] == 'application/json':
-            response = jsonify({'error': 'forbidden',
-                                'message': 'Not authorized'})
-            return response, 403
-        else:
-            return render_template('403.html'), 403
+        return render_template('403.html'), 403
 
     @app.errorhandler(404)
-    def not_found(message):
-        if request.headers['Content-Type'] == 'application/json':
-            response = jsonify({'error': 'not found',
-                                'message': 'we could not find that resource'})
-            return response, 404
-        else:
-            return render_template('404.html'), 404
+    def handle_404(message):
+        # Workaround for no blueprint-level 404/5 error handlers, see:
+        # https://github.com/pallets/flask/issues/503#issuecomment-71383286
+        if request.path.startswith('/api/'):
+            handler = app.error_handler_spec['api'][404].values()[0]
+            return handler(message)
+
+        return render_template('404.html'), 404
 
     @app.errorhandler(405)
     def method_not_allowed(message):
-        if request.headers['Content-Type'] == 'application/json':
-            response = jsonify({'error': 'method not allowed',
-                                'message': 'Not allowed'})
-            return response, 405
-        else:
-            return render_template('405.html'), 405
+        # blueprint level 405 error handlers also need to be applied manually
+        if request.path.startswith('/api/'):
+            handler = app.error_handler_spec['api'][405].values()[0]
+            return handler(message)
+
+        return render_template('405.html'), 405
 
     return app

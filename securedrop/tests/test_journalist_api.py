@@ -14,8 +14,7 @@ from utils.api_helper import get_api_headers
 
 def test_unauthenticated_user_gets_all_endpoints(journalist_app):
     with journalist_app.test_client() as app:
-        response = app.get(url_for('api.get_endpoints'),
-                           content_type='application/json')
+        response = app.get(url_for('api.get_endpoints'))
 
         observed_endpoints = json.loads(response.data)
 

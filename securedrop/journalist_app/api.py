@@ -139,15 +139,15 @@ def make_blueprint(config):
     def post_reply(filesystem_id):
         source = get_or_404(Source, filesystem_id, Source.filesystem_id)
         if 'reply' not in request.json:
-            abort(400)
+            abort(400, 'reply not found in request body')
 
         # Get current user
         auth_token = request.headers.get('Authorization').split(" ")[1]
         user = Journalist.verify_api_token(auth_token)
 
         data = json.loads(request.data)
-        if not data['reply']:  # Reply should not be empty
-            abort(400)
+        if not data['reply']:
+            abort(400, 'reply should not be empty')
 
         source.interaction_count += 1
         try:
@@ -181,5 +181,29 @@ def make_blueprint(config):
         auth_token = request.headers.get('Authorization').split(" ")[1]
         user = Journalist.verify_api_token(auth_token)
         return jsonify(user.to_json()), 200
+
+    @api.errorhandler(403)
+    def forbidden(message):
+        response = jsonify({'error': 'forbidden',
+                            'message': message.description})
+        return response, 403
+
+    @api.errorhandler(400)
+    def bad_request(message):
+        response = jsonify({'error': 'bad request',
+                            'message': message.description})
+        return response, 400
+
+    @api.errorhandler(404)
+    def not_found(message):
+        response = jsonify({'error': 'not found',
+                            'message': message.description})
+        return response, 404
+
+    @api.errorhandler(405)
+    def method_not_allowed(message):
+        response = jsonify({'error': 'method not allowed',
+                            'message': message.description})
+        return response, 405
 
     return api
