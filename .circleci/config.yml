@@ -91,9 +91,40 @@ jobs:
       - image: gcr.io/cloud-builders/docker
     steps:
       - run: apt-get install -y make
+
       - checkout
       - setup_remote_docker
+
+      - run:
+            name: Determine hash of admin folder
+            command: |
+                (find "admin" -type f -exec md5sum {} +; find "admin" -type d) | LC_ALL=C sort | md5sum | tee admin-dir-hash.txt
+
+      - restore_cache:
+          keys:
+            - admin-docker-layer-{{ checksum "admin-dir-hash.txt" }}-
+          paths:
+            - /caches/layers.tar
+
+      - run:
+          name: Load image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/layers.tar |true
+
       - run: cd admin ; make test
+
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker images
+            docker save -o /caches/layers.tar securedrop-admin:latest
+
+      - save_cache:
+          key: admin-docker-layer-{{ checksum "admin-dir-hash.txt" }}-
+          paths:
+            - /caches/layers.tar
 
   updater-gui-tests:
     docker:
