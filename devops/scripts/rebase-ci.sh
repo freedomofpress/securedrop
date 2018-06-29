@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2086
 #
 # To be utilized in CircleCI
 # Determine target branch from PR number and rebase against that
