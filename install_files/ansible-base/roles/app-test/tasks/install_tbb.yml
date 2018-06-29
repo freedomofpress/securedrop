@@ -64,8 +64,11 @@
   tags:
     - apt
 
+- name: extract geckodriver
+  unarchive:
+    src: /opt/geckodriver-v0.17.0-linux64.tar.gz
+    dest: /bin/
+
 - name: install geckodriver
   shell: |
-    cd /bin
-    tar -zxvf /opt/geckodriver-v0.17.0-linux64.tar.gz
-    chmod +x geckodriver
+    chmod +x /bin/geckodriver
