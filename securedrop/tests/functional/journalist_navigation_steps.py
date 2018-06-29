@@ -234,8 +234,7 @@ class JournalistNavigationStepsMixin():
             hotp_secret.send_keys(hotp)
 
         if is_admin:
-            # TODO implement (checkbox is unchecked by default)
-            pass
+            raise NotImplementedError("Admin's can't be added yet.")
 
         submit_button = self.driver.find_element_by_css_selector(
             'button[type=submit]')

@@ -164,15 +164,6 @@ from the `Vagrant Downloads page`_ and then install it.
             instructions in Vagrantfile that would enable vagrant-cachier are
             currently commented out.
 
-.. todo:: This warning is here because a common refrain during hackathons for
-          SecureDrop a while back was "setting up VMs is too slow, you should
-          use vagrant-cachier". We tried it and it had some nasty interactions
-          with Ansible, so we dropped it, and added this note to prevent other
-          people from making the same suggestion. Eventually, we should: (i)
-          Build our own base boxes to dramatically cut down on provisioning
-          times (ii) Remove this note as well as the commented vagrant-cachier
-          lines from the Vagrantfile
-
 VirtualBox should be at least version 5.x. See `GitHub #1381`_ for documentation
 of incompatibility with the older VirtualBox 4.x release series.
 

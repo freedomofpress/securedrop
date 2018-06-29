@@ -34,7 +34,7 @@
     - users
     - environment
 
-# TODO: Backwards-compatibility. Previously, the SecureDrop bashrc additions
+# Backwards-compatibility. Previously, the SecureDrop bashrc additions
 # for forcing a terminal multiplexer during interactive login sessions were
 # added to ~/.bashrc for each admin user account. It's cleaner to add the
 # config lines to /etc/profile.d, so all accounts get them by default.

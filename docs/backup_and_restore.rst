@@ -153,8 +153,6 @@ Once the restore is done, the Application Server will use the original Source an
 *Journalist Interface* Onion URLs. You will need to update the corresponding
 files on the Admin Workstation:
 
-.. todo:: We really should automate this process for Admins.
-
 * ``app-source-ths``
 * ``app-journalist-aths``
 * ``app-ssh-aths``

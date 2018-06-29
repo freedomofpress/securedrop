@@ -20,8 +20,6 @@
 {% endif %}
 
 # Load before tor user drop rules
-# TODO: use ansible facts to populate the in use interface to further restrict
-# the rules.
 -A OUTPUT -p tcp -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow tor outbound"
 -A INPUT -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic back for tor"
 
@@ -69,13 +67,11 @@
 
 {% if 'securedrop_application_server' in group_names %}
 # OSSEC server-agent rules
-# TODO add owner to OUTPUT rule
 -A OUTPUT -d {{ monitor_hostname }} -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
 -A INPUT -s {{ monitor_hostname }} -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
 
 {% elif 'securedrop_monitor_server' in group_names %}
 # OSSEC server-agent rules
-# TODO add owner to OUTPUT rule
 -A INPUT -s {{ app_hostname }} -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
 -A OUTPUT -d {{ app_hostname }} -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
 

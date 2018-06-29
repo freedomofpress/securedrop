@@ -40,13 +40,6 @@ key, used for decryption, stays on the *Journalist Workstation*. The
 public key, used for encryption, is copied to the *Secure Viewing
 Station*.
 
-.. todo:: This document recommends transferring documents from the
-          *SVS* to the *Journalist Workstation*, without any
-          discussion of the potential risks or mitigations that should
-          be taken when doing so. A section needs to be added on why
-          doing this could be risky, and what can be done to make this
-          situation better.
-
 If you do not yet have a GPG key, follow the instructions for your
 operating system to set one up:
 

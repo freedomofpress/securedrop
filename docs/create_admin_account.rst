@@ -50,9 +50,6 @@ output like this:
 Passphrases include the spaces between the words, but not leading or trailing
 whitespace. Be sure to save this passphrase in the appropriate KeePassX database.
 
-.. todo:: Clarify how to set up TOTP/HOTP through ``./manage.py
-          add-admin``.
-
 Once that's done, you should open the Tor Browser |TorBrowser| and
 navigate to the *Journalist Interface*'s .onion address. Verify that you
 can log in to the *Journalist Interface* with the admin account you just

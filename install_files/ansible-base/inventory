@@ -1,7 +1,6 @@
 #
 # Connection information so Ansible can access the app and monitor servers.
 # Defaults are from the documentation, adjust to your configuration.
-# TODO: configure networking with Ansible
 #
 # NOTE: after the install is complete, you can re-provision with Ansible but you will need to:
 # 1. Set up HidServAuth in your torrc with the values from app-ssh-aths and mon-ssh-aths

@@ -22,7 +22,7 @@ from journalist_app import create_app as create_journalist_app
 from source_app import create_app as create_source_app
 import utils
 
-# TODO: the PID file for the redis worker is hard-coded below.
+# The PID file for the redis worker is hard-coded below.
 # Ideally this constant would be provided by a test harness.
 # It has been intentionally omitted from `config.py.example`
 # in order to isolate the test vars from prod vars.

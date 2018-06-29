@@ -8,7 +8,6 @@ class FlaskConfig(object):
 
 # Use different secret keys for the two different applications so their
 # sessions can't be confused.
-# TODO consider using salts instead: http://pythonhosted.org//itsdangerous/#the-salt
 class SourceInterfaceFlaskConfig(FlaskConfig):
     SECRET_KEY = '{{ source_secret_key.stdout }}'
     SESSION_COOKIE_NAME = "ss"
@@ -60,7 +59,6 @@ elif env == 'test':
     FlaskConfig.TESTING = True
     # Disable CSRF checks to make writing tests easier
     FlaskConfig.WTF_CSRF_ENABLED = False
-    # TODO use a unique temporary directory for each test so we can parallelize them
     SECUREDROP_DATA_ROOT = '/tmp/securedrop'
 
 # The following configuration is dependent on SECUREDROP_DATA_ROOT
@@ -78,9 +76,6 @@ GPG_KEY_DIR=os.path.join(SECUREDROP_DATA_ROOT, 'keys')
 TEMP_DIR = os.path.join(SECUREDROP_DATA_ROOT, "tmp")
 
 # Database configuration
-# TODO we currently use sqlite in production since it is sufficient and simple,
-# but in the future may want to be able to choose a different database
-# depending on the environment
 DATABASE_ENGINE = 'sqlite'
 DATABASE_FILE = os.path.join(SECUREDROP_DATA_ROOT, 'db.sqlite')
 
