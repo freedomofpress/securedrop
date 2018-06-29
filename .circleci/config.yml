@@ -98,8 +98,7 @@ jobs:
       - run:
             name: Determine hash of admin folder
             command: |
-                git clean -fdX admin
-                tar -cf - admin | md5sum | tee admin-dir-hash.txt
+                tar --mtime='1970-01-01' -cf - admin | md5sum | tee admin-dir-hash.txt
 
       - restore_cache:
           keys:
