@@ -1,3 +1,4 @@
+from datetime import datetime
 from functools import wraps
 import json
 
@@ -56,8 +57,16 @@ def make_blueprint(config):
         one_time_code = creds['one_time_code']
         try:
             journalist = Journalist.login(username, password, one_time_code)
-            return jsonify({'token': journalist.generate_api_token(
-                 expiration=7200), 'expiration': 7200}), 200
+
+            response = jsonify({'token': journalist.generate_api_token(
+                 expiration=7200), 'expiration': 7200})
+
+            # Update access metadata
+            journalist.last_access = datetime.utcnow()
+            db.session.add(journalist)
+            db.session.commit()
+
+            return response, 200
         except Exception:
             return abort(403, 'Token authentication failed.')
 
@@ -138,6 +147,9 @@ def make_blueprint(config):
     @token_required
     def post_reply(filesystem_id):
         source = get_or_404(Source, filesystem_id, Source.filesystem_id)
+        if not request.json:
+            abort(400, 'please send requests in valid JSON')
+
         if 'reply' not in request.json:
             abort(400, 'reply not found in request body')
 
