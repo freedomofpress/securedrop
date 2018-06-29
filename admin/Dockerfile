@@ -15,11 +15,12 @@ RUN apt-get update && apt-get install -y \
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
 
 WORKDIR /opt
+COPY bootstrap.py .
+COPY requirements.txt .
 RUN chown -R $USER_NAME /opt
 USER ${USER_NAME}
+RUN python bootstrap.py -v
 ENV VIRTUAL_ENV /opt/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-COPY requirements.txt .
 COPY requirements-dev.txt .
-RUN virtualenv .venv && \
-    pip install -r requirements-dev.txt
+RUN pip install -r requirements-dev.txt
