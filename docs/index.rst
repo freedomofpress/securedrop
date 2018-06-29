@@ -79,6 +79,7 @@ anonymous sources.
    backup_and_restore
    backup_workstations
    kernel_troubleshooting
+   getting_support
 
 .. toctree::
    :caption: Upgrade SecureDrop
