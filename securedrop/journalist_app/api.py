@@ -57,7 +57,7 @@ def make_blueprint(config):
         try:
             journalist = Journalist.login(username, password, one_time_code)
             return jsonify({'token': journalist.generate_api_token(
-                 expiration=1800), 'expiration': 1800}), 200
+                 expiration=7200), 'expiration': 7200}), 200
         except Exception:
             return abort(403, 'Token authentication failed.')
 
