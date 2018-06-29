@@ -10,7 +10,8 @@ Responsibilities
 
 The SecureDrop architecture contains multiple machines and hardened servers.
 While we have automated many of the installation and maintenance tasks, a
-skilled Linux admin is required to responsibly run the system.
+skilled Linux admin is required to responsibly run the system. Arbitrary
+change inserted here.
 
 This section outlines the tasks the admin is responsible for in order to
 ensure that the SecureDrop server continues to be a safe place for sources to
