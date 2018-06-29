@@ -13,7 +13,6 @@ def test_tor_service_directories(File, Sudo, tor_service):
     with Sudo():
         f = File("/var/lib/tor/services/{}".format(tor_service['name']))
         assert f.is_directory
-        # TODO: tor might mark these dirs as setgid
         assert oct(f.mode) == "0700"
         assert f.user == "debian-tor"
         assert f.group == "debian-tor"

@@ -5,7 +5,7 @@
 # logging for the source interface is useful for debugging,
 # so we enable it here.
 
-# TODO: This staging-only template clobbers the production template
+# This staging-only template clobbers the production template
 # installed by the `app` role. That means the app-staging host
 # will always mark the task as changed. It would be cleaner to merge
 # the templates and use group_vars to conditionally enable the logging

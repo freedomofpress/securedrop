@@ -6,8 +6,6 @@ diagram <https://docs.securedrop.org/en/latest/overview.html#infrastructure>`__,
 are specific to SecureDrop. The list below attempts to enumerate and
 define these terms.
 
-.. todo:: Pictures would be good for many of the objects defined here
-
 Source
 ------
 

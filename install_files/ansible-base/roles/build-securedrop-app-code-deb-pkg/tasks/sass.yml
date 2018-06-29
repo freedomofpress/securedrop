@@ -2,7 +2,7 @@
 - name: Install sass Ruby gem
   gem:
     name: sass
-    # TODO: This version lock can be removed when if/when we can get Ruby>2
+    # This version lock can be removed when if/when we can get Ruby>2
     # installed on the machine that runs this task (see
     # https://github.com/freedomofpress/securedrop/issues/1594).
     version: "3.4.23"

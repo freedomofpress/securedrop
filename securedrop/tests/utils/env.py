@@ -16,7 +16,7 @@ from db import db
 
 FILES_DIR = abspath(join(dirname(realpath(__file__)), '..', 'files'))
 
-# TODO: the PID file for the redis worker is hard-coded below.  Ideally this
+# The PID file for the redis worker is hard-coded below.  Ideally this
 # constant would be provided by a test harness.  It has been intentionally
 # omitted from `config.py.example` in order to isolate the test vars from prod
 # vars.  When refactoring the test suite, the test_worker_pidfile

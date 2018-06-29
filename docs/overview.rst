@@ -58,9 +58,6 @@ the sources, and the journalists.
 
 |SecureDrop architecture overview diagram|
 
-.. todo:: A picture of an actual physical setup (e.g. the office
-          setup) with the components labeled would also be good here.
-
 Servers
 ~~~~~~~
 

@@ -161,7 +161,6 @@ def test_unauthorized_access_redirects_to_login(journalist_app):
 
 def test_login_throttle(journalist_app, test_journo):
     # Overwrite the default value used during testing
-    # TODO this may break other tests during parallel testing
     models.LOGIN_HARDENING = True
     try:
         with journalist_app.test_client() as app:
@@ -1130,9 +1129,6 @@ class TestJournalistApp(TestCase):
     # making a point of this, we hope to avoid the introduction of new tests,
     # that do not truly prove their result because of this disconnect between
     # request context in Flask Testing and production.
-    #
-    # TODO: either ditch Flask Testing or subclass it as discussed in the
-    # aforementioned issue to fix the described problem.
     def _login_admin(self):
         self._ctx.g.user = self.admin
 

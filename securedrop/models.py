@@ -26,9 +26,6 @@ from db import db
 
 
 LOGIN_HARDENING = True
-# Unfortunately, the login hardening measures mess with the tests in
-# non-deterministic ways.  TODO rewrite the tests so we can more
-# precisely control which code paths are exercised.
 if os.environ.get('SECUREDROP_ENV') == 'test':
     LOGIN_HARDENING = False
 

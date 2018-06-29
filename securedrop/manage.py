@@ -42,7 +42,7 @@ def reset(args):
     """
     # Erase the development db file
     if not hasattr(config, 'DATABASE_FILE'):
-        raise Exception("TODO: ./manage.py doesn't know how to clear the db "
+        raise Exception("./manage.py doesn't know how to clear the db "
                         'if the backend is not sqlite')
 
     # we need to save some data about the old DB file so we can recreate it

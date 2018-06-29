@@ -88,16 +88,6 @@ class DevServerProcessMonitor(object):  # pragma: no cover
 
     def monitor(self):
         while True:
-            # TODO: we currently don't handle input, which makes using an
-            # interactive debugger like pdb impossible. Since Flask provides
-            # a featureful in-browser debugger, I'll accept that pdb is
-            # broken for now. If someone really wants it, they should be
-            # able to change this function to make it work (although I'm not
-            # sure how hard that would be).
-            #
-            # If you really want to use pdb, you can just run the
-            # application scripts individually (`python source.py` or
-            # `python journalist.py`).
             rprocs, _, _ = select.select(self.procs, [], [])
 
             for proc in rprocs:

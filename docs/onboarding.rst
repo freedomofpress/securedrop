@@ -41,9 +41,6 @@ you have a lot of journalists who wish to access SecureDrop
 concurrently, you will need to provision multiple *Secure Viewing
 Stations*.
 
-.. todo:: Describe best practices for provisioning multiple Secure
-          Viewing Stations.
-
 Create a Journalist Tails USB
 -----------------------------
 

@@ -57,5 +57,3 @@
     name: postfix
     state: "{{ 'started' if postfix_enable_service else 'stopped' }}"
     enabled: "{{ postfix_enable_service }}"
-
-# TODO - name: configure postfix proxy

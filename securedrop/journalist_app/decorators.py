@@ -12,7 +12,6 @@ def admin_required(func):
     def wrapper(*args, **kwargs):
         if logged_in() and g.user.is_admin:
             return func(*args, **kwargs)
-        # TODO: sometimes this gets flashed 2x (Chrome only?)
         flash(gettext("Only administrators can access this page."),
               "notification")
         return redirect(url_for('main.index'))
