@@ -85,7 +85,7 @@ should be encrypted to).
 
 .. code:: sh
 
-  GET /api/v1/sources/
+  GET /api/v1/sources
 
 Response 200 (application/json):
 
@@ -199,7 +199,7 @@ Requires authentication.
 
 .. code:: sh
 
-  GET /api/v1/sources/<filesystem_id>/submissions/<int:submission_id>/
+  GET /api/v1/sources/<filesystem_id>/submissions/<int:submission_id>
 
 Response 200 (application/json):
 
@@ -259,7 +259,7 @@ Requires authentication.
 
 .. code:: sh
 
-  DELETE /api/v1/sources/<filesystem_id>/submissions/<int:submission_id>/
+  DELETE /api/v1/sources/<filesystem_id>/submissions/<int:submission_id>
 
 Response 200:
 
@@ -305,7 +305,7 @@ Requires authentication.
 
 .. code:: sh
 
-  POST /api/v1/sources/<filesystem_id>/star/
+  POST /api/v1/sources/<filesystem_id>/star
 
 Response 201 created:
 
@@ -322,7 +322,7 @@ Requires authentication.
 
 .. code:: sh
 
-  DELETE /api/v1/sources/<filesystem_id>/star/
+  DELETE /api/v1/sources/<filesystem_id>/star
 
 Response 200:
 
@@ -342,7 +342,7 @@ Requires authentication. This gets details of all submissions across sources.
 
 .. code:: sh
 
-  GET /api/v1/submissions/
+  GET /api/v1/submissions
 
 Response 200:
 
@@ -399,7 +399,7 @@ Requires authentication.
 
 .. code:: sh
 
-  GET /api/v1/user/
+  GET /api/v1/user
 
 Response 200:
 

@@ -43,13 +43,13 @@ def make_blueprint(config):
 
     @api.route('/')
     def get_endpoints():
-        endpoints = {'sources_url': '/api/v1/sources/',
-                     'current_user_url': '/api/v1/user/',
-                     'submissions_url': '/api/v1/submissions/',
-                     'auth_token_url': '/api/v1/token/'}
+        endpoints = {'sources_url': '/api/v1/sources',
+                     'current_user_url': '/api/v1/user',
+                     'submissions_url': '/api/v1/submissions',
+                     'auth_token_url': '/api/v1/token'}
         return jsonify(endpoints), 200
 
-    @api.route('/token/', methods=['POST'])
+    @api.route('/token', methods=['POST'])
     def get_token():
         creds = json.loads(request.data)
         username = creds['username']
@@ -70,20 +70,20 @@ def make_blueprint(config):
         except Exception:
             return abort(403, 'Token authentication failed.')
 
-    @api.route('/sources/', methods=['GET'])
+    @api.route('/sources', methods=['GET'])
     @token_required
     def get_all_sources():
         sources = Source.query.all()
         return jsonify(
             {'sources': [source.to_json() for source in sources]}), 200
 
-    @api.route('/sources/<filesystem_id>/', methods=['GET'])
+    @api.route('/sources/<filesystem_id>', methods=['GET'])
     @token_required
     def single_source(filesystem_id):
         source = get_or_404(Source, filesystem_id, Source.filesystem_id)
         return jsonify(source.to_json()), 200
 
-    @api.route('/sources/<filesystem_id>/add_star/', methods=['POST'])
+    @api.route('/sources/<filesystem_id>/add_star', methods=['POST'])
     @token_required
     def add_star(filesystem_id):
         source = get_or_404(Source, filesystem_id, Source.filesystem_id)
@@ -91,7 +91,7 @@ def make_blueprint(config):
         db.session.commit()
         return jsonify({'message': 'Star added'}), 201
 
-    @api.route('/sources/<filesystem_id>/remove_star/', methods=['DELETE'])
+    @api.route('/sources/<filesystem_id>/remove_star', methods=['DELETE'])
     @token_required
     def remove_star(filesystem_id):
         source = get_or_404(Source, filesystem_id, Source.filesystem_id)
@@ -99,8 +99,8 @@ def make_blueprint(config):
         db.session.commit()
         return jsonify({'message': 'Star removed'}), 200
 
-    @api.route('/sources/<filesystem_id>/submissions/', methods=['GET',
-                                                                 'DELETE'])
+    @api.route('/sources/<filesystem_id>/submissions', methods=['GET',
+                                                                'DELETE'])
     @token_required
     def all_source_submissions(filesystem_id):
         if request.method == 'GET':
@@ -113,7 +113,7 @@ def make_blueprint(config):
             utils.delete_collection(source.filesystem_id)
             return jsonify({'message': 'Source and submissions deleted'}), 200
 
-    @api.route('/sources/<filesystem_id>/submissions/<int:submission_id>/download/',  # noqa
+    @api.route('/sources/<filesystem_id>/submissions/<int:submission_id>/download',  # noqa
                methods=['GET'])
     @token_required
     def download_submission(filesystem_id, submission_id):
@@ -129,7 +129,7 @@ def make_blueprint(config):
                          mimetype="application/pgp-encrypted",
                          as_attachment=True)
 
-    @api.route('/sources/<filesystem_id>/submissions/<int:submission_id>/',
+    @api.route('/sources/<filesystem_id>/submissions/<int:submission_id>',
                methods=['GET', 'DELETE'])
     @token_required
     def single_submission(filesystem_id, submission_id):
@@ -143,7 +143,7 @@ def make_blueprint(config):
                               submission)
             return jsonify({'message': 'Submission deleted'}), 200
 
-    @api.route('/sources/<filesystem_id>/reply/', methods=['POST'])
+    @api.route('/sources/<filesystem_id>/reply', methods=['POST'])
     @token_required
     def post_reply(filesystem_id):
         source = get_or_404(Source, filesystem_id, Source.filesystem_id)
@@ -179,14 +179,14 @@ def make_blueprint(config):
         db.session.commit()
         return jsonify({'message': 'Your reply has been stored'}), 201
 
-    @api.route('/submissions/', methods=['GET'])
+    @api.route('/submissions', methods=['GET'])
     @token_required
     def get_all_submissions():
         submissions = Submission.query.all()
         return jsonify({'submissions': [submission.to_json() for
                                         submission in submissions]}), 200
 
-    @api.route('/user/', methods=['GET'])
+    @api.route('/user', methods=['GET'])
     @token_required
     def get_current_user():
         # Get current user from token
