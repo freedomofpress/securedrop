@@ -244,7 +244,7 @@ Response 201 created (application/json):
 
 Replies that do not contain a GPG encrypted message will be rejected:
 
-Response 412 (application/json):
+Response 400 (application/json):
 
 .. code:: sh
 

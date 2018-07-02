@@ -391,7 +391,7 @@ def test_unencrypted_replies_get_rejected(journalist_app, journalist_api_token,
                                     filesystem_id=filesystem_id),
                             data=json.dumps({'reply': reply_content}),
                             headers=get_api_headers(journalist_api_token))
-        assert response.status_code == 412
+        assert response.status_code == 400
 
 
 def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,

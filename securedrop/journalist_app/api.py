@@ -170,7 +170,7 @@ def make_blueprint(config):
                 data['reply'])
         except NotEncrypted:
             return jsonify(
-                {'message': 'You must encrypt replies client side'}), 412
+                {'message': 'You must encrypt replies client side'}), 400
 
         reply = Reply(user, source,
                       current_app.storage.path(source.filesystem_id, filename))
