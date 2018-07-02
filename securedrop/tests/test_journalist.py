@@ -1101,6 +1101,204 @@ def test_admin_sets_user_to_admin(journalist_app, test_admin):
         assert journo.is_admin is True
 
 
+def test_admin_renames_user(journalist_app, test_admin):
+    new_user = 'admin-renames-user-test'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=new_user,
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+        assert resp.status_code in (200, 302)
+        journo = Journalist.query.filter(Journalist.username == new_user).one()
+
+        new_user = new_user + 'a'
+        resp = app.post(url_for('admin.edit_user', user_id=journo.id),
+                        data=dict(username=new_user))
+    assert resp.status_code in (200, 302), resp.data.decode('utf-8')
+
+    # the following will throw an exception if new_user is not found
+    # therefore asserting it has been created
+    Journalist.query.filter(Journalist.username == new_user).one()
+
+
+def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
+    mocked_error_logger = mocker.patch(
+            'journalist_app.admin.current_app.logger.error')
+    mocker.patch('journalist_app.admin.Journalist',
+                 side_effect=IntegrityError('STATEMENT', 'PARAMETERS', None))
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.add_user'),
+                     data=dict(username='username',
+                               password=VALID_PASSWORD,
+                               is_admin=None))
+            ins.assert_message_flashed(
+                "An error occurred saving this user to the database."
+                " Please inform your administrator.",
+                "error")
+
+    log_event = mocked_error_logger.call_args[0][0]
+    assert ("Adding user 'username' failed: (__builtin__.NoneType) "
+            "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']") in log_event
+
+
+def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
+    # Save original logo to restore after test run
+    logo_image_location = os.path.join(config.SECUREDROP_ROOT,
+                                       "static/i/logo.png")
+    with io.open(logo_image_location, 'rb') as logo_file:
+        original_image = logo_file.read()
+
+    try:
+        with journalist_app.test_client() as app:
+            _login_user(app, test_admin['username'], test_admin['password'],
+                        test_admin['otp_secret'])
+            # Create 1px * 1px 'white' PNG file from its base64 string
+            form = journalist_app_module.forms.LogoForm(
+                logo=(BytesIO(base64.decodestring
+                      ("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
+                       "VR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=")), 'test.png')
+            )
+            with InstrumentedApp(journalist_app) as ins:
+                app.post(url_for('admin.manage_config'),
+                         data=form.data,
+                         follow_redirects=True)
+
+                ins.assert_message_flashed("Image updated.", "logo-success")
+    finally:
+        # Restore original image to logo location for subsequent tests
+        with io.open(logo_image_location, 'wb') as logo_file:
+            logo_file.write(original_image)
+
+
+def test_logo_upload_with_invalid_filetype_fails(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        form = journalist_app_module.forms.LogoForm(
+            logo=(StringIO('filedata'), 'bad.exe')
+        )
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('admin.manage_config'),
+                            data=form.data,
+                            follow_redirects=True)
+            ins.assert_message_flashed("You can only upload PNG image files.",
+                                       "logo-error")
+        text = resp.data.decode('utf-8')
+        assert "You can only upload PNG image files." in text
+
+
+def test_creation_of_ossec_test_log_event(journalist_app, test_admin, mocker):
+    mocked_error_logger = mocker.patch('journalist.app.logger.error')
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        app.get(url_for('admin.ossec_test'))
+
+    mocked_error_logger.assert_called_once_with(
+        "This is a test OSSEC alert"
+    )
+
+
+def test_logo_upload_with_empty_input_field_fails(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        form = journalist_app_module.forms.LogoForm(
+            logo=(StringIO(''), '')
+        )
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('admin.manage_config'),
+                            data=form.data,
+                            follow_redirects=True)
+
+            ins.assert_message_flashed("File required.", "logo-error")
+    assert 'File required.' in resp.data.decode('utf-8')
+
+
+def test_admin_page_restriction_http_gets(journalist_app, test_journo):
+    admin_urls = [url_for('admin.index'), url_for('admin.add_user'),
+                  url_for('admin.edit_user', user_id=test_journo['id'])]
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        for admin_url in admin_urls:
+            resp = app.get(admin_url)
+            assert resp.status_code == 302
+
+
+def test_admin_page_restriction_http_posts(journalist_app, test_journo):
+    admin_urls = [url_for('admin.reset_two_factor_totp'),
+                  url_for('admin.reset_two_factor_hotp'),
+                  url_for('admin.add_user', user_id=test_journo['id']),
+                  url_for('admin.new_user_two_factor'),
+                  url_for('admin.reset_two_factor_totp'),
+                  url_for('admin.reset_two_factor_hotp'),
+                  url_for('admin.edit_user', user_id=test_journo['id']),
+                  url_for('admin.delete_user', user_id=test_journo['id'])]
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        for admin_url in admin_urls:
+            resp = app.post(admin_url)
+            assert resp.status_code == 302
+
+
+def test_user_authorization_for_gets(journalist_app):
+    urls = [url_for('main.index'), url_for('col.col', filesystem_id='1'),
+            url_for('col.download_single_submission',
+                    filesystem_id='1', fn='1'),
+            url_for('account.edit')]
+
+    with journalist_app.test_client() as app:
+        for url in urls:
+            resp = app.get(url)
+            assert resp.status_code == 302
+
+
+def test_user_authorization_for_posts(journalist_app):
+    urls = [url_for('col.add_star', filesystem_id='1'),
+            url_for('col.remove_star', filesystem_id='1'),
+            url_for('col.process'),
+            url_for('col.delete_single', filesystem_id='1'),
+            url_for('main.reply'),
+            url_for('main.regenerate_code'),
+            url_for('main.bulk'),
+            url_for('account.new_two_factor'),
+            url_for('account.reset_two_factor_totp'),
+            url_for('account.reset_two_factor_hotp')]
+    with journalist_app.test_client() as app:
+        for url in urls:
+            resp = app.post(url)
+            assert resp.status_code == 302
+
+
+def test_incorrect_current_password_change(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        resp = app.post(url_for('account.new_password'),
+                        data=dict(password=VALID_PASSWORD,
+                                  token='mocked',
+                                  current_password='badpw'),
+                        follow_redirects=True)
+
+    text = resp.data.decode('utf-8')
+    assert 'Incorrect password or two-factor code' in text
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1134,167 +1332,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_admin_renames_user(self):
-        self._login_admin()
-        new_user = 'admin-renames-user-test'
-        resp = self.client.post(url_for('admin.add_user'),
-                                data=dict(username=new_user,
-                                          password=VALID_PASSWORD,
-                                          is_admin=None))
-        assert resp.status_code in (200, 302)
-        journo = Journalist.query.filter(Journalist.username == new_user).one()
-
-        new_user = new_user + 'a'
-        resp = self.client.post(url_for('admin.edit_user', user_id=journo.id),
-                                data=dict(username=new_user))
-        assert resp.status_code in (200, 302), resp.data.decode('utf-8')
-
-        # the following will throw an exception if new_user is not found
-        # therefore asserting it has been created
-        Journalist.query.filter(Journalist.username == new_user).one()
-
-    @patch('journalist_app.admin.current_app.logger.error')
-    @patch('journalist_app.admin.Journalist',
-           side_effect=IntegrityError('STATEMENT', 'PARAMETERS', None))
-    def test_admin_add_user_integrity_error(self,
-                                            mock_journalist,
-                                            mocked_error_logger):
-        self._login_admin()
-
-        self.client.post(url_for('admin.add_user'),
-                         data=dict(username='username',
-                                   password=VALID_PASSWORD,
-                                   is_admin=None))
-
-        log_event = mocked_error_logger.call_args[0][0]
-        self.assertIn(
-            "Adding user 'username' failed: (__builtin__.NoneType) "
-            "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']",
-            log_event)
-        self.assertMessageFlashed(
-            "An error occurred saving this user to the database."
-            " Please inform your administrator.",
-            "error")
-
-    def test_logo_upload_with_valid_image_succeeds(self):
-        # Save original logo to restore after test run
-        logo_image_location = os.path.join(config.SECUREDROP_ROOT,
-                                           "static/i/logo.png")
-        with io.open(logo_image_location, 'rb') as logo_file:
-            original_image = logo_file.read()
-
-        try:
-            self._login_admin()
-            # Create 1px * 1px 'white' PNG file from its base64 string
-            form = journalist_app_module.forms.LogoForm(
-                logo=(BytesIO(base64.decodestring
-                      ("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
-                       "VR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=")), 'test.png')
-            )
-            self.client.post(url_for('admin.manage_config'),
-                             data=form.data,
-                             follow_redirects=True)
-
-            self.assertMessageFlashed("Image updated.", "logo-success")
-        finally:
-            # Restore original image to logo location for subsequent tests
-            with io.open(logo_image_location, 'wb') as logo_file:
-                logo_file.write(original_image)
-
-    def test_logo_upload_with_invalid_filetype_fails(self):
-        self._login_admin()
-
-        form = journalist_app_module.forms.LogoForm(
-            logo=(StringIO('filedata'), 'bad.exe')
-        )
-        resp = self.client.post(url_for('admin.manage_config'),
-                                data=form.data,
-                                follow_redirects=True)
-        self.assertMessageFlashed("You can only upload PNG image files.",
-                                  "logo-error")
-        self.assertIn("You can only upload PNG image files.", resp.data)
-
-    def test_logo_upload_with_empty_input_field_fails(self):
-        self._login_admin()
-
-        form = journalist_app_module.forms.LogoForm(
-            logo=(StringIO(''), '')
-        )
-        resp = self.client.post(url_for('admin.manage_config'),
-                                data=form.data,
-                                follow_redirects=True)
-
-        self.assertMessageFlashed("File required.", "logo-error")
-        self.assertIn('File required.', resp.data)
-
-    @patch('journalist.app.logger.error')
-    def test_creation_of_ossec_test_log_event(self, mocked_error_logger):
-        self._login_admin()
-        self.client.get(url_for('admin.ossec_test'))
-
-        mocked_error_logger.assert_called_once_with(
-            "This is a test OSSEC alert"
-        )
-
-    def test_admin_page_restriction_http_gets(self):
-        admin_urls = [url_for('admin.index'), url_for('admin.add_user'),
-                      url_for('admin.edit_user', user_id=self.user.id)]
-
-        self._login_user()
-        for admin_url in admin_urls:
-            resp = self.client.get(admin_url)
-            self.assertStatus(resp, 302)
-
-    def test_admin_page_restriction_http_posts(self):
-        admin_urls = [url_for('admin.reset_two_factor_totp'),
-                      url_for('admin.reset_two_factor_hotp'),
-                      url_for('admin.add_user', user_id=self.user.id),
-                      url_for('admin.new_user_two_factor'),
-                      url_for('admin.reset_two_factor_totp'),
-                      url_for('admin.reset_two_factor_hotp'),
-                      url_for('admin.edit_user', user_id=self.user.id),
-                      url_for('admin.delete_user', user_id=self.user.id)]
-        self._login_user()
-        for admin_url in admin_urls:
-            resp = self.client.post(admin_url)
-            self.assertStatus(resp, 302)
-
-    def test_user_authorization_for_gets(self):
-        urls = [url_for('main.index'), url_for('col.col', filesystem_id='1'),
-                url_for('col.download_single_submission',
-                        filesystem_id='1', fn='1'),
-                url_for('account.edit')]
-
-        for url in urls:
-            resp = self.client.get(url)
-            self.assertStatus(resp, 302)
-
-    def test_user_authorization_for_posts(self):
-        urls = [url_for('col.add_star', filesystem_id='1'),
-                url_for('col.remove_star', filesystem_id='1'),
-                url_for('col.process'),
-                url_for('col.delete_single', filesystem_id='1'),
-                url_for('main.reply'),
-                url_for('main.regenerate_code'),
-                url_for('main.bulk'),
-                url_for('account.new_two_factor'),
-                url_for('account.reset_two_factor_totp'),
-                url_for('account.reset_two_factor_hotp')]
-        for url in urls:
-            res = self.client.post(url)
-            self.assertStatus(res, 302)
-
-    def test_incorrect_current_password_change(self):
-        self._login_user()
-        resp = self.client.post(url_for('account.new_password'),
-                                data=dict(password=VALID_PASSWORD,
-                                          token='mocked',
-                                          current_password='badpw'),
-                                follow_redirects=True)
-
-        text = resp.data.decode('utf-8')
-        self.assertIn('Incorrect password or two-factor code', text)
 
     def test_too_long_user_password_change(self):
         self._login_user()
