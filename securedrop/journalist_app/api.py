@@ -147,7 +147,7 @@ def make_blueprint(config):
     @token_required
     def post_reply(filesystem_id):
         source = get_or_404(Source, filesystem_id, Source.filesystem_id)
-        if not request.json:
+        if request.json is None:
             abort(400, 'please send requests in valid JSON')
 
         if 'reply' not in request.json:

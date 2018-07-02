@@ -465,3 +465,31 @@ def test_reply_without_json_400(journalist_app, journalist_api_token,
                             data='invalid',
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400
+
+
+def test_reply_with_valid_curly_json_400(journalist_app, journalist_api_token,
+                                         test_source, test_journo):
+    with journalist_app.test_client() as app:
+        filesystem_id = test_source['source'].filesystem_id
+        response = app.post(url_for('api.post_reply',
+                                    filesystem_id=filesystem_id),
+                            data='{}',
+                            headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 400
+
+        json_response = json.loads(response.data)
+        assert json_response['message'] == 'reply not found in request body'
+
+
+def test_reply_with_valid_square_json_400(journalist_app, journalist_api_token,
+                                          test_source, test_journo):
+    with journalist_app.test_client() as app:
+        filesystem_id = test_source['source'].filesystem_id
+        response = app.post(url_for('api.post_reply',
+                                    filesystem_id=filesystem_id),
+                            data='[]',
+                            headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 400
+
+        json_response = json.loads(response.data)
+        assert json_response['message'] == 'reply not found in request body'
