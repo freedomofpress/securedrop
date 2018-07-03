@@ -2,6 +2,7 @@
 
 from datetime import datetime
 import errno
+import mock
 from multiprocessing import Process
 import os
 from os.path import abspath, dirname, join, realpath, expanduser
@@ -14,8 +15,6 @@ import subprocess
 import shutil
 import requests
 
-
-
 import pyotp
 import gnupg
 from selenium import webdriver
@@ -23,25 +22,27 @@ from selenium.common.exceptions import (WebDriverException,
                                         NoAlertPresentException)
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-
-TBB_PATH = abspath(join(expanduser('~'), '.local/tbb/tor-browser_en-US/'))
-os.environ['TBB_PATH'] = TBB_PATH
-TBBRC = join(TBB_PATH, 'Browser/TorBrowser/Data/Tor/torrc')
-
 from tbselenium.tbdriver import TorBrowserDriver
 from tbselenium.utils import start_xvfb, stop_xvfb
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
+
+from sqlalchemy.exc import IntegrityError
+from models import Journalist
 from sdconfig import config
 import journalist_app
 import source_app
 import tests.utils.env as env
 
+from db import db
 
 FUNCTIONAL_TEST_DIR = abspath(dirname(__file__))
-LOGFILE_PATH = abspath(join(FUNCTIONAL_TEST_DIR, 'log/firefox.log'))
+LOGFILE_PATH = abspath(join(FUNCTIONAL_TEST_DIR, 'firefox.log'))
 FILES_DIR = abspath(join(dirname(realpath(__file__)), '../..', 'tests/files'))
 
+TBB_PATH = abspath(join(expanduser('~'), '.local/tbb/tor-browser_en-US/'))
+os.environ['TBB_PATH'] = TBB_PATH
+TBBRC = join(TBB_PATH, 'Browser/TorBrowser/Data/Tor/torrc')
 
 
 # https://stackoverflow.com/a/34795883/837471
@@ -69,7 +70,7 @@ class FunctionalTest(object):
         if not os.path.exists(TBBRC):
             return False
         found_flag = False
-        entry = "HidServAuth {0} {1}\n".format(address,token)
+        entry = "HidServAuth {0} {1}\n".format(address, token)
         lines = []
         with open(TBBRC) as fobj:
             lines = fobj.readlines()
@@ -103,12 +104,12 @@ class FunctionalTest(object):
         # cookies are set as session cookies), this should not affect session
         # lifetime.
         pref_dict = {'network.proxy.no_proxies_on': '127.0.0.1',
-                        'browser.privatebrowsing.autostart': False}
+                     'browser.privatebrowsing.autostart': False}
         for i in range(connrefused_retry_count + 1):
             try:
                 driver = TorBrowserDriver(TBB_PATH,
-                                        pref_dict = pref_dict,
-                                        tbb_logfile_path = LOGFILE_PATH)
+                                          pref_dict=pref_dict,
+                                          tbb_logfile_path=LOGFILE_PATH)
                 if i > 0:
                     # i==0 is normal behavior without connection refused.
                     print('NOTE: Retried {} time(s) due to '
@@ -119,6 +120,10 @@ class FunctionalTest(object):
                         and i < connrefused_retry_count):
                     time.sleep(connrefused_retry_interval)
                     continue
+                raise
+            except WebDriverException:
+                if i < connrefused_retry_count:
+                    time.sleep(connrefused_retry_interval)
                 raise
 
     def _create_secondary_firefox_driver(self):
@@ -137,7 +142,9 @@ class FunctionalTest(object):
             profile.set_preference("network.proxy.socks_remote_dns", True)
             profile.set_preference("network.dns.blockDotOnion", False)
             profile.update_preferences()
-        self.second_driver = webdriver.Firefox(firefox_profile=profile)
+        binpath = '/usr/lib/firefox-esr/firefox-esr'
+        self.second_driver = webdriver.Firefox(firefox_binary=binpath,
+                                               firefox_profile=profile)
         self.second_driver.implicitly_wait(15)
 
     def swap_drivers(self):
@@ -152,7 +159,7 @@ class FunctionalTest(object):
         testing.
         """
         gpg = gnupg.GPG(homedir="/tmp/testgpg")
-        # Faster to import a pre-generated key than to gen a new one every time.
+        # Faster to import a pre-generated key than a new one every time.
         for keyfile in (join(FILES_DIR, "test_journalist_key.pub"),
                         join(FILES_DIR, "test_journalist_key.sec")):
             gpg.import_keys(open(keyfile).read())
@@ -162,54 +169,126 @@ class FunctionalTest(object):
         """
         Invoke a shell command. Primary replacement for os.system calls.
         """
-        print(cmd)
         ret = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE,
-                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                               close_fds=True)
         out, err = ret.communicate()
         return out
 
     def setup(self, session_expiration=30):
 
-        signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
+        self.localtesting = False
+        self.driver = None
+        self.second_driver = None
 
-
-        instance_information_path = join(FUNCTIONAL_TEST_DIR, 'instance_information.json')
+        instance_information_path = join(FUNCTIONAL_TEST_DIR,
+                                         'instance_information.json')
 
         if os.path.exists(instance_information_path):
             with open(instance_information_path) as fobj:
                 data = json.load(fobj)
-            self.source_location = data.get('source_location', "http://127.0.0.1:8080")
-            self.journalist_location = data.get('journalist_location', "http://127.0.0.1:8081")
+            self.source_location = data.get('source_location')
+            self.journalist_location = data.get('journalist_location')
             self.hidservauth = data.get('hidserv_token', '')
             self.admin_user = data.get('user')
             self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
-            self.new_totp = None # To be created runtime
+            self.new_totp = None  # To be created runtime
             self.sleep_time = data.get('sleep_time', 10)
             if self.hidservauth:
                 if self.journalist_location.startswith('http://'):
                     location = self.journalist_location[7:]
                 self.add_hidservauth(location, self.hidservauth)
         else:
-            assert False, "Missing instance information JSON file."
+            self.localtesting = True
+            self.__context = journalist_app.create_app(config).app_context()
+            self.__context.push()
+
+            self.patcher2 = mock.patch('source_app.main.get_entropy_estimate')
+            self.mock_get_entropy_estimate = self.patcher2.start()
+            self.mock_get_entropy_estimate.return_value = 8192
+
+            env.create_directories()
+            self.gpg = env.init_gpg()
+            db.create_all()
+
+            # Add our test user
+            try:
+                valid_password = "correct horse battery staple profanity oil chewy"  # noqa: E501
+                user = Journalist(username='journalist',
+                                  password=valid_password,
+                                  is_admin=True)
+                user.otp_secret = 'JHCOGO7VCER3EJ4L'
+                user.pw_salt = user._gen_salt()
+                user.pw_hash = user._scrypt_hash('WEjwn8ZyczDhQSK24YKM8C9a',
+                                                 user.pw_salt)
+                db.session.add(user)
+                db.session.commit()
+            except IntegrityError:
+                print("Test user already added")
+                db.session.rollback()
+
+            source_port = self._unused_port()
+            journalist_port = self._unused_port()
+
+            self.source_location = "http://127.0.0.1:%d" % source_port
+            self.journalist_location = "http://127.0.0.1:%d" % journalist_port
+
+            # Allow custom session expiration lengths
+            self.session_expiration = session_expiration
+
+            self.source_app = source_app.create_app(config)
+            self.journalist_app = journalist_app.create_app(config)
+
+            self.admin_user = {
+                                "name": "journalist",
+                                "password": "WEjwn8ZyczDhQSK24YKM8C9a",
+                                "secret": "JHCOGO7VCER3EJ4L"}
+            self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
+            self.new_totp = None  # To be created runtime
+            self.sleep_time = 10
+
+            def start_source_server(app):
+                config.SESSION_EXPIRATION_MINUTES = self.session_expiration
+
+                app.run(
+                    port=source_port,
+                    debug=True,
+                    use_reloader=False,
+                    threaded=True)
+
+            def start_journalist_server(app):
+                app.run(
+                    port=journalist_port,
+                    debug=True,
+                    use_reloader=False,
+                    threaded=True)
+
+            self.source_process = Process(
+                target=lambda: start_source_server(self.source_app))
+
+            self.journalist_process = Process(
+                target=lambda: start_journalist_server(self.journalist_app))
+
+            self.source_process.start()
+            self.journalist_process.start()
+
+            for tick in range(30):
+                try:
+                    requests.get(self.source_location)
+                    requests.get(self.journalist_location)
+                except Exception:
+                    time.sleep(1)
+                else:
+                    break
+
+        signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
         # Allow custom session expiration lengths
         self.session_expiration = session_expiration
 
-        """
-        for tick in range(30):
-            try:
-                requests.get(self.source_location)
-                requests.get(self.journalist_location)
-            except Exception:
-                time.sleep(1)
-            else:
-                break
-        """
+        self.xvfb_display = start_xvfb()
         self._create_secondary_firefox_driver()
-        #  if not hasattr(self, 'override_driver'):
         self.driver = self._create_webdriver()
-
-        self.gpg = self.init_gpg()
 
         # Polls the DOM to wait for elements. To read more about why
         # this is necessary:
@@ -226,12 +305,6 @@ class FunctionalTest(object):
         #
         self.driver.implicitly_wait(15)
 
-
-        # Set window size and position explicitly to avoid potential bugs due
-        # to discrepancies between environments.
-        #self.driver.set_window_position(0, 0)
-        #self.driver.set_window_size(1024, 768)
-
         self.secret_message = ('These documents outline a major government '
                                'invasion of privacy.')
 
@@ -241,10 +314,14 @@ class FunctionalTest(object):
             self.driver.quit()
         if self.second_driver:
             self.second_driver.quit()
+        stop_xvfb(self.xvfb_display)
+        if self.localtesting:
+            self.source_process.terminate()
+            self.journalist_process.terminate()
+            self.__context.pop()
 
     def create_new_totp(self, secret):
         self.new_totp = pyotp.TOTP(secret)
-
 
     def wait_for(self, function_with_assertion, timeout=5):
         """Polling wait for an arbitrary assertion."""
