@@ -39,7 +39,7 @@ import tests.utils.env as env
 
 
 FUNCTIONAL_TEST_DIR = abspath(dirname(__file__))
-LOGFILE_PATH = abspath(join(FUNCTIONAL_TEST_DIR, 'log/firefox.log'))
+LOGFILE_PATH = abspath(join(FUNCTIONAL_TEST_DIR, 'firefox.log'))
 FILES_DIR = abspath(join(dirname(realpath(__file__)), '../..', 'tests/files'))
 
 
@@ -100,7 +100,7 @@ class FunctionalTest(object):
         # browsing. We need to turn off private browsing because we won't be
         # able to access the browser's cookies in private browsing mode. Since
         # we use session cookies in SD anyway (in private browsing mode all
-        # cookies are set as session cookies), this should not affect session
+        # cookies are set as session coo    kies), this should not affect session
         # lifetime.
         pref_dict = {'network.proxy.no_proxies_on': '127.0.0.1',
                         'browser.privatebrowsing.autostart': False}
@@ -137,7 +137,7 @@ class FunctionalTest(object):
             profile.set_preference("network.proxy.socks_remote_dns", True)
             profile.set_preference("network.dns.blockDotOnion", False)
             profile.update_preferences()
-        self.second_driver = webdriver.Firefox(firefox_profile=profile)
+        self.second_driver = webdriver.Firefox(firefox_binary='/usr/lib/firefox-esr/firefox-esr', firefox_profile=profile)
         self.second_driver.implicitly_wait(15)
 
     def swap_drivers(self):
@@ -205,7 +205,9 @@ class FunctionalTest(object):
             else:
                 break
         """
+        self.xvfb_display = start_xvfb()
         self._create_secondary_firefox_driver()
+        #self.second_driver = None
         #  if not hasattr(self, 'override_driver'):
         self.driver = self._create_webdriver()
 
@@ -239,8 +241,8 @@ class FunctionalTest(object):
 
         if self.driver:
             self.driver.quit()
-        if self.second_driver:
-            self.second_driver.quit()
+        #if self.second_driver:
+        #    self.second_driver.quit()
 
     def create_new_totp(self, secret):
         self.new_totp = pyotp.TOTP(secret)

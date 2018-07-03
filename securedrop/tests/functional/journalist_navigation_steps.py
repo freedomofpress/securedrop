@@ -644,9 +644,14 @@ class JournalistNavigationStepsMixin():
         raw_content = self.return_downloaded_content(file_url, cookie_string_from_selenium_cookies(
                 self.driver.get_cookies()))
 
+        print("===raw===")
+        print(raw_content)
+
         decrypted_submission = self.gpg.decrypt(raw_content)
         submission = self._get_submission_content(file_url,
                                                   decrypted_submission)
+        print("====check====")
+        print(repr(submission))
         assert self.secret_message == submission
 
     def _journalist_composes_reply(self):
