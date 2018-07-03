@@ -159,3 +159,6 @@ raw-test-output/
 #These files are used in CI/dev env for determining whether to rebuild docker
 #images
 *.checksum
+#Functional test logs
+securedrop/tests/functional/firefox.log
+securedrop/geckodriver.log
