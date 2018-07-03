@@ -29,3 +29,9 @@ tbb_apt_dependencies:
   - libgtk2.0-0
   - libxrender1
 
+tbb_sleep_time: 10
+tbb_selenium_user: journalist
+tbb_selenium_password: WEjwn8ZyczDhQSK24YKM8C9a
+tbb_selenium_secret: JHCOGO7VCER3EJ4L
+test_sd_root_dir: "{{ lookup('pipe','git rev-parse --show-toplevel') }}"
+tbb_funcfolder: "{{ test_sd_root_dir }}/securedrop/functional/instance_information.json"

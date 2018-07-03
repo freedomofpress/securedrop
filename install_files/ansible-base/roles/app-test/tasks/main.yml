@@ -18,3 +18,7 @@
 - include: modern_gettext.yml
 
 - include: install_tbb.yml
+
+- import_tasks: extract_apptor_test_config.yml
+  tags:
+    - functional_test
