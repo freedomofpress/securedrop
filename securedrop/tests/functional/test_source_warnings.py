@@ -55,7 +55,6 @@ class TestSourceInterfaceBannerWarnings(
         self.wait_for(warning_banner_is_hidden)
         self.swap_drivers()
 
-
     def test_warning_high_security(self):
         self.driver.get(self.source_location)
 
