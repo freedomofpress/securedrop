@@ -57,6 +57,18 @@ HTTP Authorization header:
 This header will be checked with each API request to see if it is valid and
 not yet expired. Tokens expire after 7200 seconds (120 minutes).
 
+Errors
+~~~~~~
+
+The API will respond to all errors (400-599) with a JSON object with the
+following fields:
+
+.. code:: sh
+
+  {
+    "message": "This is a detailed error message."
+  }
+
 Endpoints
 ~~~~~~~~~
 

@@ -7,6 +7,7 @@ from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
+from werkzeug.exceptions import default_exceptions
 
 import i18n
 import template_filters
@@ -82,6 +83,18 @@ def create_app(config):
         flash(msg, 'error')
         return redirect(url_for('main.login'))
 
+    def _handle_http_exception(error):
+        # Workaround for no blueprint-level 404/5 error handlers, see:
+        # https://github.com/pallets/flask/issues/503#issuecomment-71383286
+        handler = app.error_handler_spec['api'][error.code].values()[0]
+        if request.path.startswith('/api/') and handler:
+            return handler(error)
+
+        return render_template('error.html', error=error), error.code
+
+    for code in default_exceptions:
+        app.errorhandler(code)(_handle_http_exception)
+
     i18n.setup_app(config, app)
 
     app.jinja_env.trim_blocks = True
@@ -141,32 +154,5 @@ def create_app(config):
     api_blueprint = api.make_blueprint(config)
     app.register_blueprint(api_blueprint, url_prefix='/api/v1')
     csrf.exempt(api_blueprint)
-
-    @app.errorhandler(400)
-    def bad_request(message):
-        return render_template('400.html'), 400
-
-    @app.errorhandler(403)
-    def forbidden(message):
-        return render_template('403.html'), 403
-
-    @app.errorhandler(404)
-    def handle_404(message):
-        # Workaround for no blueprint-level 404/5 error handlers, see:
-        # https://github.com/pallets/flask/issues/503#issuecomment-71383286
-        if request.path.startswith('/api/'):
-            handler = app.error_handler_spec['api'][404].values()[0]
-            return handler(message)
-
-        return render_template('404.html'), 404
-
-    @app.errorhandler(405)
-    def method_not_allowed(message):
-        # blueprint level 405 error handlers also need to be applied manually
-        if request.path.startswith('/api/'):
-            handler = app.error_handler_spec['api'][405].values()[0]
-            return handler(message)
-
-        return render_template('405.html'), 405
 
     return app

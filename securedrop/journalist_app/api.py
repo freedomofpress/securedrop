@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from functools import wraps
 import json
+from werkzeug.exceptions import default_exceptions
 
 from flask import abort, Blueprint, current_app, jsonify, request, send_file
 
@@ -194,28 +195,15 @@ def make_blueprint(config):
         user = Journalist.verify_api_token(auth_token)
         return jsonify(user.to_json()), 200
 
-    @api.errorhandler(403)
-    def forbidden(message):
-        response = jsonify({'error': 'forbidden',
-                            'message': message.description})
-        return response, 403
+    def _handle_http_exception(error):
+        # Workaround for no blueprint-level 404/5 error handlers, see:
+        # https://github.com/pallets/flask/issues/503#issuecomment-71383286
+        response = jsonify({'error': error.name,
+                           'message': error.description})
 
-    @api.errorhandler(400)
-    def bad_request(message):
-        response = jsonify({'error': 'bad request',
-                            'message': message.description})
-        return response, 400
+        return response, error.code
 
-    @api.errorhandler(404)
-    def not_found(message):
-        response = jsonify({'error': 'not found',
-                            'message': message.description})
-        return response, 404
-
-    @api.errorhandler(405)
-    def method_not_allowed(message):
-        response = jsonify({'error': 'method not allowed',
-                            'message': message.description})
-        return response, 405
+    for code in default_exceptions:
+        api.errorhandler(code)(_handle_http_exception)
 
     return api

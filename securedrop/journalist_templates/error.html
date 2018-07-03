@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ error.code }}: {{ error.name }}</h1>
+{% if error.description %}
+  <p>{{ error.description }}</p>
+{% endif %}
+{% endblock %}

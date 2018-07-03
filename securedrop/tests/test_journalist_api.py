@@ -52,7 +52,7 @@ def test_user_cannot_get_an_api_token_with_wrong_password(journalist_app,
         observed_response = json.loads(response.data)
 
         assert response.status_code == 403
-        assert observed_response['error'] == 'forbidden'
+        assert observed_response['error'] == 'Forbidden'
 
 
 def test_user_cannot_get_an_api_token_with_wrong_2fa_token(journalist_app,
@@ -67,7 +67,7 @@ def test_user_cannot_get_an_api_token_with_wrong_2fa_token(journalist_app,
         observed_response = json.loads(response.data)
 
         assert response.status_code == 403
-        assert observed_response['error'] == 'forbidden'
+        assert observed_response['error'] == 'Forbidden'
 
 
 def test_authorized_user_gets_all_sources(journalist_app, test_source,
@@ -157,7 +157,7 @@ def test_api_404(journalist_app, journalist_api_token):
         json_response = json.loads(response.data)
 
         assert response.status_code == 404
-        assert json_response['error'] == 'not found'
+        assert json_response['error'] == 'Not Found'
 
 
 def test_authorized_user_gets_single_source(journalist_app, test_source,
@@ -230,7 +230,7 @@ def test_disallowed_methods_produces_405(journalist_app, test_source,
         json_response = json.loads(response.data)
 
         assert response.status_code == 405
-        assert json_response['error'] == 'method not allowed'
+        assert json_response['error'] == 'Method Not Allowed'
 
 
 def test_authorized_user_can_get_all_submissions(journalist_app, test_source,
