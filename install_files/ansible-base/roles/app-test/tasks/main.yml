@@ -11,3 +11,6 @@
 
 - include: modern_gettext.yml
 
+- import_tasks: extract_apptor_test_config.yml
+  tags:
+    - functional_test
