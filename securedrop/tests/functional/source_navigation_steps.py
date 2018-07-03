@@ -1,6 +1,5 @@
 import tempfile
 import time
-import os
 
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -53,9 +52,9 @@ class SourceNavigationStepsMixin():
     def _source_shows_codename(self):
         content = self.driver.find_element_by_id('codename-hint-content')
         assert not content.is_displayed()
-        time.sleep(5)  #  Long waits
+        time.sleep(5)  # Long waits
         self.driver.find_element_by_id('codename-hint-show').click()
-        time.sleep(5)  #  Long waits
+        time.sleep(5)  # Long waits
         assert content.is_displayed()
         content_content = self.driver.find_element_by_css_selector(
                 '#codename-hint-content p')
@@ -64,9 +63,9 @@ class SourceNavigationStepsMixin():
     def _source_hides_codename(self):
         content = self.driver.find_element_by_id('codename-hint-content')
         assert content.is_displayed()
-        time.sleep(5)  #  Long waits
+        time.sleep(5)  # Long waits
         self.driver.find_element_by_id('codename-hint-hide').click()
-        time.sleep(5)  #  Long waits
+        time.sleep(5)  # Long waits
         assert not content.is_displayed()
 
     def _source_sees_no_codename(self):
@@ -98,7 +97,7 @@ class SourceNavigationStepsMixin():
 
         continue_button = self.driver.find_element_by_id('login')
         continue_button.click()
-        time.sleep(5) #  Long waits
+        time.sleep(5)  # Long waits
 
         if not hasattr(self, 'accept_languages'):
             assert ("SecureDrop | Protecting Journalists and Sources" ==
@@ -164,7 +163,7 @@ class SourceNavigationStepsMixin():
             assert toggled_submit_button_icon.is_displayed()
 
             submit_button.click()
-            time.sleep(5)  #  Long waits
+            time.sleep(self.sleep_time)  # Long waits
 
             if not hasattr(self, 'accept_languages'):
                 notification = self.driver.find_element_by_css_selector(
