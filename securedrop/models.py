@@ -119,6 +119,7 @@ class Source(db.Model):
             'flagged': self.flagged,
             'last_updated': self.last_updated,
             'interaction_count': self.interaction_count,
+            'public_key_type': 'PGP',
             'public_key': self.public_key,
             'number_of_documents': docs_msg_count['documents'],
             'number_of_messages': docs_msg_count['messages'],
