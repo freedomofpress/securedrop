@@ -29,18 +29,11 @@ You can use the "Q" menu for this, or in ``dom0``:
 .. code:: sh
 
    qvm-clone --class StandaloneVM debian-9 sd-dev
-
-Now start the VM with:
-
-.. code:: sh
-
    qvm-start sd-dev
-
-and set up its "Q" app menu:
-
-.. code:: sh
-
    qvm-sync-appmenus sd-dev
+
+The commands above will created a new StandaloneVM, boot it, then update
+the Qubes menus with applications within that VM.
 
 Download Ubuntu Trusty server ISO
 ---------------------------------
@@ -74,13 +67,14 @@ In ``dom0``, do the following:
 
    qvm-create sd-trusty-base --class StandaloneVM --property virt_mode=hvm --label green
    qvm-volume extend sd-trusty-base:root 20g
-   qvm-prefs sd-trusty-base kernel ''
    qvm-prefs sd-trusty-base memory 2000
    qvm-prefs sd-trusty-base maxmem 2000
+   qvm-prefs sd-trusty-base kernel ''
    qvm-prefs sd-trusty-base
 
-The last command above will display the VM configuration. Note the IP and
-gateway IP addresses Qubes gave the new VM: you'll need them for later configuration.
+The commands above will create a new StandaloneVM, expand the storage space
+and memory available to it, as well as disable the integrated kernel support.
+The SecureDrop install process will install a custom kernel.
 
 Boot into installation media
 ----------------------------
@@ -108,37 +102,24 @@ You'll be prompted to add a "regular" user for the VM: this is the user you'll b
 using later to SSH into the VM. We're using a standardized name/password pair:
 ``securedrop/securedrop``.
 
-When presented with the partitioning menu, choose "Guided - use entire disk".
-There's no need to encrypt the filesystem.
-When prompted, select "Virtual disk 1 (xvda)" to partition.
-
-During software installation, make sure you install the SSH server.
-You don't need to install anything else.
-
-The installer will prompt about where to install GRUB: choose the default (MBR).
-
 Once installation is done, let the machine shut down and then restart it with
 
 .. code:: sh
 
    qvm-start sd-trusty-base
 
-in ``dom0``. You should get a login prompt. Yay!
+in ``dom0``. You should get a login prompt.
 
 Initial VM configuration
 ------------------------
 
-Before cloning this machine, we'll add some software we might want on all the staging VMs.
-
-In the new ``sd-trusty-base`` VM's console, do:
+Before cloning this machine, we'll update software to reduce provisioning time
+on the staging VMs. In the new ``sd-trusty-base`` VM's console, do:
 
 .. code:: sh
 
    sudo apt update
-   sudo apt dist-upgrade
-   sudo apt install vim
-
-Feel free to add anything else you need to make your console life happy.
+   sudo apt dist-upgrade -y
 
 Before we continue, let's allow your user to ``sudo`` without their password.
 Edit ``/etc/sudoers`` using ``visudo`` to make the sudo group line look like
@@ -147,7 +128,7 @@ Edit ``/etc/sudoers`` using ``visudo`` to make the sudo group line look like
 
    %sudo    ALL=(ALL) NOPASSWD: ALL
 
-When initial configuration is done, ``halt`` the ``sd-trusty-base`` VM.
+When initial configuration is done, run ``qvm-halt sd-trusty-base`` to shut it down.
 
 Clone VMs
 ---------
