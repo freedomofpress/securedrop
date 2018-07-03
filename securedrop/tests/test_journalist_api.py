@@ -34,7 +34,7 @@ def test_valid_user_can_get_an_api_token(journalist_app, test_journo):
                             headers=get_api_headers())
         observed_response = json.loads(response.data)
 
-        assert isinstance(Journalist.verify_api_token(
+        assert isinstance(Journalist.validate_api_token_and_get_user(
             observed_response['token']), Journalist) is True
         assert response.status_code == 200
 

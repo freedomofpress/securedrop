@@ -23,7 +23,7 @@ def token_required(f):
             auth_token = auth_header.split(" ")[1]
         else:
             auth_token = ''
-        if not Journalist.verify_api_token(auth_token):
+        if not Journalist.validate_api_token_and_get_user(auth_token):
             return abort(403, 'API token is invalid or expired.')
         return f(*args, **kwargs)
     return decorated_function
@@ -156,7 +156,7 @@ def make_blueprint(config):
 
         # Get current user
         auth_token = request.headers.get('Authorization').split(" ")[1]
-        user = Journalist.verify_api_token(auth_token)
+        user = Journalist.validate_api_token_and_get_user(auth_token)
 
         data = json.loads(request.data)
         if not data['reply']:
@@ -192,7 +192,8 @@ def make_blueprint(config):
     def get_current_user():
         # Get current user from token
         auth_token = request.headers.get('Authorization').split(" ")[1]
-        user = Journalist.verify_api_token(auth_token)
+
+        user = Journalist.validate_api_token_and_get_user(auth_token)
         return jsonify(user.to_json()), 200
 
     def _handle_http_exception(error):

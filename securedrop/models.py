@@ -491,7 +491,7 @@ class Journalist(db.Model):
         return s.dumps({'id': self.id}).decode('ascii')
 
     @staticmethod
-    def verify_api_token(token):
+    def validate_api_token_and_get_user(token):
         s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
