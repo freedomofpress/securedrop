@@ -34,7 +34,7 @@ token in the request body:
 
   {
   	"username": "journalist",
-  	"password": "mypasswordgoeshere",
+  	"passphrase": "monkey potato pizza quality silica growing deduce",
   	"one_time_code": "123456"
   }
 

@@ -178,7 +178,7 @@ def journalist_api_token(journalist_app, test_journo):
         response = app.post(url_for('api.get_token'),
                             data=json.dumps(
                                 {'username': test_journo['username'],
-                                 'password': test_journo['password'],
+                                 'passphrase': test_journo['password'],
                                  'one_time_code': valid_token}),
                             headers=utils.api_helper.get_api_headers())
         observed_response = json.loads(response.data)

@@ -29,7 +29,7 @@ def test_valid_user_can_get_an_api_token(journalist_app, test_journo):
         response = app.post(url_for('api.get_token'),
                             data=json.dumps(
                                 {'username': test_journo['username'],
-                                 'password': test_journo['password'],
+                                 'passphrase': test_journo['password'],
                                  'one_time_code': valid_token}),
                             headers=get_api_headers())
         observed_response = json.loads(response.data)
@@ -46,7 +46,7 @@ def test_user_cannot_get_an_api_token_with_wrong_password(journalist_app,
         response = app.post(url_for('api.get_token'),
                             data=json.dumps(
                                 {'username': test_journo['username'],
-                                 'password': 'wrong password',
+                                 'passphrase': 'wrong password',
                                  'one_time_code': valid_token}),
                             headers=get_api_headers())
         observed_response = json.loads(response.data)
@@ -61,7 +61,7 @@ def test_user_cannot_get_an_api_token_with_wrong_2fa_token(journalist_app,
         response = app.post(url_for('api.get_token'),
                             data=json.dumps(
                                 {'username': test_journo['username'],
-                                 'password': test_journo['password'],
+                                 'passphrase': test_journo['password'],
                                  'one_time_code': '123456'}),
                             headers=get_api_headers())
         observed_response = json.loads(response.data)

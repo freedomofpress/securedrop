@@ -54,10 +54,10 @@ def make_blueprint(config):
     def get_token():
         creds = json.loads(request.data)
         username = creds['username']
-        password = creds['password']
+        passphrase = creds['passphrase']
         one_time_code = creds['one_time_code']
         try:
-            journalist = Journalist.login(username, password, one_time_code)
+            journalist = Journalist.login(username, passphrase, one_time_code)
             token_expiry = datetime.now() + timedelta(seconds=7200)
             response = jsonify({'token': journalist.generate_api_token(
                  expiration=7200), 'expiration': token_expiry.isoformat()})
