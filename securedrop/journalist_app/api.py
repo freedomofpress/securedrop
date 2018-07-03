@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import wraps
 import json
 
@@ -57,9 +57,9 @@ def make_blueprint(config):
         one_time_code = creds['one_time_code']
         try:
             journalist = Journalist.login(username, password, one_time_code)
-
+            token_expiry = datetime.now() + timedelta(seconds=7200)
             response = jsonify({'token': journalist.generate_api_token(
-                 expiration=7200), 'expiration': 7200})
+                 expiration=7200), 'expiration': token_expiry.isoformat()})
 
             # Update access metadata
             journalist.last_access = datetime.utcnow()

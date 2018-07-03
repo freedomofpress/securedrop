@@ -38,12 +38,21 @@ token in the request body:
   	"one_time_code": "123456"
   }
 
+This will produce a response with your Authorization token:
+
+.. code:: sh
+
+  {
+      "expiration": "2018-07-03T02:56:22.700788",
+      "token": "eyJhbGciOiJIUzI1NiIsImV4cCI6MTUzMDU4NjU4MiwifWF0IjoxNTMwNTc5MzgyfQ.eyJpZCI6MX0.P_PfcLMk1Dq5VCIANo-lJbu0ZyCL2VcT8qf9fIZsTCM"
+  }
+
 Thereafter in order to authenticate to protected endpoints, send the token in
 HTTP Authorization header:
 
 .. code:: sh
 
-  Authorization: Token yourtokengoeshere
+  Authorization: Token eyJhbGciOiJIUzI1NiIsImV4cCI6MTUzMDU4NjU4MiwifWF0IjoxNTMwNTc5MzgyfQ.eyJpZCI6MX0.P_PfcLMk1Dq5VCIANo-lJbu0ZyCL2VcT8qf9fIZsTCM
 
 This header will be checked with each API request to see if it is valid and
 not yet expired. Tokens expire after 7200 seconds (120 minutes).
