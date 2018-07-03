@@ -119,6 +119,7 @@ contains the Ubuntu ISO, you would use dd like so: ::
 
    sudo dd conv=fdatasync if=ubuntu-14.04.5-server-amd64.iso of=/dev/sdX
 
+.. _install_trusty:
 
 Perform the Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~

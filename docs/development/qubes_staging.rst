@@ -7,17 +7,15 @@ with at least 16GB RAM and 60GB free disk space.
 Overview
 --------
 
-We're going to create two new standalone (HVM) Qubes VMs:
+We're going to create four new standalone (HVM) Qubes VMs:
 
+- a development VM for working on SecureDrop code
+- a base VM for cloning reusable staging VMs
 - a base VM for the *SecureDrop Application Server*
 - a base VM for the *SecureDrop Monitor Server*
 
-Along the way we'll be creating an Ubuntu Trusty VM, which we'll be using
-as a starting point for the application and monitoring base VMs.
-
-We'll also be creating ``sd-dev``, a standalone Qube based on Debian 9,
-where we'll building and deploying the SecureDrop code,
-and where server and client development can happen.
+The development VM, ``sd-dev``, will be based on Debian 9. All the other VMs
+will be based on Ubuntu Trusty.
 
 Create ``sd-dev``
 ---------------
@@ -83,20 +81,18 @@ In ``dom0``:
 
 .. code:: sh
 
-   qvm-start sd-trusty-base --cdrom=<download-vm>:/path/to/ubuntu-14.04.5-server-amd64.iso
+   qvm-start sd-trusty-base --cdrom=sd-dev:/home/user/ubuntu-14.04.5-server-amd64.iso
 
-where ``download-vm`` is the name of the VM to which you downloaded the ISO.
+You may need to edit the filepath above if you downloaded the ISO to a
+different location within the ``sd-dev`` VM. Choose **Install Ubuntu**.
+For the most part, the install process matches the
+:ref:`hardware install flow <install_trusty>`, with a few exceptions:
 
-Start configuration.
-
-At some point you'll need to manually set up the network interface, after DHCP
-fails. If you didn't mark it down down earlier, you can check the machine's IP
-and gateway via the Qubes GUI. When prompted, use enter that IP address,
-with a ``/24`` netmask (for example: ``10.137.0.16/24``. Use Qubes' internal resolvers
-as DNS servers: ``10.139.1.1`` and ``10.139.1.2``. Use the gateway address indicated
-in the Qubes Settings UI.
-
-Give the new VM the hostname ``sd-trusty-base``.
+  -  Server IP address: use value returned by ``qvm-prefs sd-trusty-base ip``, with ``/24`` netmask suffix
+  -  Gateway: use value returned by ``qvm-prefs sd-trusty-base visible_gateway``
+  -  For DNS, use Qubes's DNS servers: ``10.139.1.1`` and ``10.139.1.2``.
+  -  Hostname: ``sd-trusty-base``
+  -  Domain name should be left blank
 
 You'll be prompted to add a "regular" user for the VM: this is the user you'll be
 using later to SSH into the VM. We're using a standardized name/password pair:
@@ -128,7 +124,7 @@ Edit ``/etc/sudoers`` using ``visudo`` to make the sudo group line look like
 
    %sudo    ALL=(ALL) NOPASSWD: ALL
 
-When initial configuration is done, run ``qvm-halt sd-trusty-base`` to shut it down.
+When initial configuration is done, run ``qvm-shutdown sd-trusty-base`` to shut it down.
 
 Clone VMs
 ---------
@@ -180,19 +176,20 @@ should reflect the correct name of the VM. You should be able to ping IPs on the
 Inter-VM networking
 ~~~~~~~~~~~~~~~~~~~
 
-(Following https://www.qubes-os.org/doc/firewall/#enabling-networking-between-two-qubes)
+We want to be able to SSH connections from ``sd-dev`` to these new standalone VMs.
+In order to do so, we have to adjust the firewall on ``sys-firewall``.
 
-We want to be able to ssh from ``sd-dev`` to these new standalone VMs. In order
-to do so, we have to adjust the firewall on ``sys-firewall``.
+.. tip::
+
+   See the official Qubes guide on configuring `inter-VM networking`_ for details.
+
+.. _`inter-VM networking`: https://www.qubes-os.org/doc/firewall/#enabling-networking-between-two-qubes
 
 Let's get the IP address of ``sd-dev``. On ``dom0``:
 
 .. code:: sh
 
-   qvm-ls -n | grep sd-dev | awk '{ print $4 }'
-
-or just look in the Qubes Settings for sd-dev, or in the output of
-``/sbin/ifconfig`` on ``sd-dev`` itself.
+   qvm-prefs ip sd-dev
 
 Get a shell on ``sys-firewall``. Create or edit
 ``/rw/config/qubes-firewall-user-script``, to include the following:
@@ -216,16 +213,6 @@ Now from ``sd-dev``, you should be able to do
 
 and log in with the password ``securedrop``.
 
-sd-dev hosts
-~~~~~~~~~~~~
-
-Edit ``/etc/hosts`` on `sd-dev` to include:
-
-.. code:: sh
-
-   10.137.0.50 sd-app
-   10.137.0.51 sd-mon
-
 SSH using keys
 ~~~~~~~~~~~~~~
 
@@ -235,9 +222,9 @@ a password. On ``sd-dev``:
 
 .. code:: sh
 
-   ssh-keygen
-   ssh-copy-id securedrop@sd-app
-   ssh-copy-id securedrop@sd-mon
+   ssh-keygen -b 4096 -t rsa
+   ssh-copy-id securedrop@10.137.0.50
+   ssh-copy-id securedrop@10.137.0.51
 
 Confirm that you're able to ssh as user ``securedrop`` from ``sd-dev`` to
 ``sd-mon`` and ``sd-app`` without being prompted for a password.
