@@ -9,6 +9,7 @@ beautifulsoup4==4.6.0
 blinker==1.4
 click==6.7                # via flask, pip-tools
 coverage==4.4.2           # via pytest-cov
+easyprocess==0.2.3        # via pyvirtualdisplay
 first==2.0.1              # via pip-tools
 flask-testing==0.7.1
 flask==1.0.2              # via flask-testing
@@ -24,6 +25,8 @@ py==1.5.2
 pytest-cov==2.5.1
 pytest-mock==1.7.1
 pytest==3.3.2
-selenium==2.53.6
+pyvirtualdisplay==0.2.1
+selenium==3.13.0
 six==1.11.0               # via mock, pip-tools, pytest
 werkzeug==0.14.1          # via flask
+tbselenium==0.3.3

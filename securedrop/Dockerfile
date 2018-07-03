@@ -8,18 +8,20 @@ ENV USER_ID ${USER_ID:-0}
 RUN apt-get update && \
     apt-get install -y devscripts \
                        python-pip libpython2.7-dev libssl-dev secure-delete \
-                       gnupg2 ruby redis-server firefox git xvfb haveged curl \
+                       gnupg2 ruby redis-server git xvfb haveged curl \
                        gettext paxctl x11vnc enchant libffi-dev sqlite3 wget \
-                       libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1
+                       libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
+                       libcairo-gobject2 libgtk-3-0 libstartup-notification0
 
 RUN gem install sass -v 3.4.23
 
-ENV FIREFOX_CHECKSUM=88d25053306d33658580973b063cd459a56e3596a3a298c1fb8ab1d52171d860
-RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/+build/9727836/+files/firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb && \
+
+ENV FIREFOX_CHECKSUM=3524a6e27ff8098a5a59d13b60e89d79b87cae4c63d84ddd041052f17de2430f
+RUN curl -LO https://launchpad.net/~mozillateam/+archive/ubuntu/ppa/+files/firefox-esr_52.9.0esr+build2-0ubuntu0.14.04.1_amd64.deb && \
     shasum -a 256 firefox*deb && \
-    echo "${FIREFOX_CHECKSUM}  firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb" | shasum -a 256 -c - && \
+    echo "${FIREFOX_CHECKSUM}  firefox-esr_52.9.0esr+build2-0ubuntu0.14.04.1_amd64.deb" | shasum -a 256 -c - && \
     dpkg -i firefox*deb && apt-get install -f && \
-    paxctl -cm /usr/lib/firefox/firefox
+    paxctl -cm /usr/lib/firefox-esr/firefox-esr
 
 
 COPY ./tor_project_public.pub /opt/
@@ -56,6 +58,9 @@ RUN pip install -r requirements/securedrop-app-code-requirements.txt && \
     pip install -r requirements/test-requirements.txt
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
+RUN cp -r /root/.local /tmp/ && chmod +x /tmp/.local/tbb/tor-browser_en-US/Browser/firefox && chmod -R 777 /tmp/.local
+RUN chown -R $USER_NAME.$USER_NAME /tmp/.local/
+
 
 STOPSIGNAL SIGKILL
 
