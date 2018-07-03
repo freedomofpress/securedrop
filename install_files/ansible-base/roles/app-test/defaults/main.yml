@@ -8,3 +8,10 @@ securedrop_app_test_apparmor_complain: False
 # Source Interface config to enable logging in the staging environment.
 apache_user: www-data
 
+# Specify TBB functional_test.json file defaults
+tbb_sleep_time: 10
+tbb_selenium_user: journalist
+tbb_selenium_password: correct horse battery staple profanity oil chewy
+tbb_selenium_secret: JHCOGO7VCER3EJ4L
+test_sd_root_dir: "{{ lookup('pipe','git rev-parse --show-toplevel') }}"
+tbb_funcfolder: "{{ test_sd_root_dir }}/securedrop/functional/instance_information.json"
