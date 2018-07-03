@@ -155,3 +155,7 @@ raw-test-output/
 #Ignore vagrant staging files
 *.box
 *.img
+
+#Functional test logs
+securedrop/tests/functional/firefox.log
+securedrop/geckodriver.log
