@@ -241,32 +241,32 @@ SecureDrop Installation
 We're going to configure ``sd-dev`` to build the securedrop ``.deb`` files,
 then we're going to build them, and provision ``sd-app`` and ``sd-mon``.
 
-Follow the instructions at https://docs.securedrop.org/en/latest/development/setup_development.html
+Follow the instructions in the :doc:`developer documentation <setup_development>`
 to set up the development environment.
 
-Notes:
+.. todo::
 
-* Don't forget to complete the Docker post-installation instructions.
-  You should only need to complete the part about running docker as a non-root
-  user (and you'll probably need to shutdown and restart the VM to ensure it works):
-  https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user
-* You'll be accessing GitHub from ``sd-dev`` to clone the SecureDrop repo,
-  so you'll want that VM to have an SSH key that GitHub knows about.
-  Either create a new one and register it with Github, or copy an existing key to ``sd-dev``.
-* You can skip the "Using the Docker Environment" section altogether.
-* Installing kernel headers will fail. That's OK.
-* Installing Vagrant will fail. That's OK.
+   Clarify the dev env setup docs in terms of what's necessary for Qubes,
+   and what's not. The bulleted list below is a bit hand-wavy.
 
-Build
-~~~~~
+    - Don't forget to complete the Docker post-installation instructions.
+      You should only need to complete the part about running docker as a non-root
+      user (and you'll probably need to shutdown and restart the VM to ensure it works):
+      https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user
+    - You'll be accessing GitHub from ``sd-dev`` to clone the SecureDrop repo,
+      so you'll want that VM to have an SSH key that GitHub knows about.
+      Either create a new one and register it with Github, or copy an existing key to ``sd-dev``.
+    - You can skip the "Using the Docker Environment" section altogether.
+    - You can skip installing kernel headers.
+    - You can skip installing Vagrant.
 
-Now we can build the .debs for the server!
+Once finished, build the Debian packages for installation on the staging VMs.
 
-.. code:: sh
+.. code::
 
    make build-debs
 
-This will take some time.
+The ``.deb`` files will be available in ``build/``.
 
 Managing Qubes RPC for Admin API capability
 -------------------------------------------
