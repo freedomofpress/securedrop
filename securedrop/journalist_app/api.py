@@ -11,6 +11,15 @@ from models import Journalist, Reply, Source, Submission
 from store import NotEncrypted
 
 
+def get_user_object(request):
+    """Helper function to use in token_required views that need a user
+    object
+    """
+    auth_token = request.headers.get('Authorization').split(" ")[1]
+    user = Journalist.validate_api_token_and_get_user(auth_token)
+    return user
+
+
 def token_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -161,9 +170,7 @@ def make_blueprint(config):
         if 'reply' not in request.json:
             abort(400, 'reply not found in request body')
 
-        # Get current user
-        auth_token = request.headers.get('Authorization').split(" ")[1]
-        user = Journalist.validate_api_token_and_get_user(auth_token)
+        user = get_user_object(request)
 
         data = json.loads(request.data)
         if not data['reply']:
@@ -197,11 +204,9 @@ def make_blueprint(config):
     @api.route('/user', methods=['GET'])
     @token_required
     def get_current_user():
-        # Get current user from token
-        auth_token = request.headers.get('Authorization').split(" ")[1]
-
-        user = Journalist.validate_api_token_and_get_user(auth_token)
+        user = get_user_object(request)
         return jsonify(user.to_json()), 200
+
 
     def _handle_http_exception(error):
         # Workaround for no blueprint-level 404/5 error handlers, see:
