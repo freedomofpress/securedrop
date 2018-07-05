@@ -312,7 +312,7 @@ Requires authentication.
 
 .. code:: sh
 
-  DELETE /api/v1/sources/<filesystem_id>/submissions
+  DELETE /api/v1/sources/<filesystem_id>
 
 Response 200:
 

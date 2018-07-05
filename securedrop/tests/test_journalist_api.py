@@ -117,7 +117,7 @@ def test_user_without_token_cannot_delete_protected_endpoints(journalist_app,
     with journalist_app.app_context():
         filesystem_id = test_source['source'].filesystem_id
         protected_routes = [
-            url_for('api.all_source_submissions',
+            url_for('api.single_source',
                     filesystem_id=filesystem_id),
             url_for('api.single_submission',
                     filesystem_id=filesystem_id,
@@ -315,7 +315,7 @@ def test_authorized_user_can_delete_source_collection(journalist_app,
                                                       journalist_api_token):
     with journalist_app.test_client() as app:
         filesystem_id = test_source['source'].filesystem_id
-        response = app.delete(url_for('api.all_source_submissions',
+        response = app.delete(url_for('api.single_source',
                                       filesystem_id=filesystem_id),
                               headers=get_api_headers(journalist_api_token))
 

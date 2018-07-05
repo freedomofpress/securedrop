@@ -78,11 +78,16 @@ def make_blueprint(config):
         return jsonify(
             {'sources': [source.to_json() for source in sources]}), 200
 
-    @api.route('/sources/<filesystem_id>', methods=['GET'])
+    @api.route('/sources/<filesystem_id>', methods=['GET', 'DELETE'])
     @token_required
     def single_source(filesystem_id):
-        source = get_or_404(Source, filesystem_id, Source.filesystem_id)
-        return jsonify(source.to_json()), 200
+        if request.method == 'GET':
+            source = get_or_404(Source, filesystem_id, Source.filesystem_id)
+            return jsonify(source.to_json()), 200
+        elif request.method == 'DELETE':
+            source = get_or_404(Source, filesystem_id, Source.filesystem_id)
+            utils.delete_collection(source.filesystem_id)
+            return jsonify({'message': 'Source and submissions deleted'}), 200
 
     @api.route('/sources/<filesystem_id>/add_star', methods=['POST'])
     @token_required
@@ -100,19 +105,13 @@ def make_blueprint(config):
         db.session.commit()
         return jsonify({'message': 'Star removed'}), 200
 
-    @api.route('/sources/<filesystem_id>/submissions', methods=['GET',
-                                                                'DELETE'])
+    @api.route('/sources/<filesystem_id>/submissions', methods=['GET'])
     @token_required
     def all_source_submissions(filesystem_id):
-        if request.method == 'GET':
-            source = get_or_404(Source, filesystem_id, Source.filesystem_id)
-            return jsonify(
-                {'submissions': [submission.to_json() for
-                                 submission in source.submissions]}), 200
-        elif request.method == 'DELETE':
-            source = get_or_404(Source, filesystem_id, Source.filesystem_id)
-            utils.delete_collection(source.filesystem_id)
-            return jsonify({'message': 'Source and submissions deleted'}), 200
+        source = get_or_404(Source, filesystem_id, Source.filesystem_id)
+        return jsonify(
+            {'submissions': [submission.to_json() for
+                             submission in source.submissions]}), 200
 
     @api.route('/sources/<filesystem_id>/submissions/<int:submission_id>/download',  # noqa
                methods=['GET'])
