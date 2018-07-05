@@ -96,7 +96,7 @@ For the most part, the install process matches the
 
 You'll be prompted to add a "regular" user for the VM: this is the user you'll be
 using later to SSH into the VM. We're using a standardized name/password pair:
-``securedrop/securedrop``.
+``sdadmin/securedrop``.
 
 Once installation is done, let the machine shut down and then restart it with
 
@@ -153,7 +153,7 @@ Now start both new VMs:
    qvm-start sd-mon-base
 
 On the consoles which eventually appear, you should be able to log in with
-``securedrop/securedrop``.
+``sdadmin/securedrop``.
 
 Configure cloned VMs
 ~~~~~~~~~~~~~~~~~~~~
@@ -215,7 +215,7 @@ Now from ``sd-dev``, you should be able to do
 
 .. code:: sh
 
-   ssh securedrop@10.137.0.50
+   ssh sdadmin@10.137.0.50
 
 and log in with the password ``securedrop``.
 
@@ -229,16 +229,16 @@ a password. On ``sd-dev``:
 .. code:: sh
 
    ssh-keygen -b 4096 -t rsa
-   ssh-copy-id securedrop@10.137.0.50
-   ssh-copy-id securedrop@10.137.0.51
+   ssh-copy-id sdadmin@10.137.0.50
+   ssh-copy-id sdadmin@10.137.0.51
 
-Confirm that you're able to ssh as user ``securedrop`` from ``sd-dev`` to
+Confirm that you're able to ssh as user ``sdadmin`` from ``sd-dev`` to
 ``sd-mon`` and ``sd-app`` without being prompted for a password.
 
 SecureDrop Installation
 -----------------------
 
-We're going to configure ``sd-dev`` to build the securedrop ``.deb`` files,
+We're going to configure ``sd-dev`` to build the SecureDrop ``.deb`` files,
 then we're going to build them, and provision ``sd-app`` and ``sd-mon``.
 
 Follow the instructions in the :doc:`developer documentation <setup_development>`

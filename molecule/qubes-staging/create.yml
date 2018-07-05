@@ -48,6 +48,8 @@
           address: "{{ lookup('pipe', 'qvm-ls --raw-data --field ip '+item.vm_name) }}"
           identity_file: "~/.ssh/id_rsa"
           port: "22"
+          # Hardcoded username, must match the username manually configured during
+          # base VM creation (see developer documentation).
           user: "sdadmin"
       with_items: "{{ molecule_yml.platforms }}"
       register: instance_config_dict
