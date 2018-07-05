@@ -196,10 +196,16 @@ Get a shell on ``sys-firewall``. Create or edit
 
 .. code:: sh
 
-   iptables -I FORWARD 2 -s <sd-dev-addr> -d 10.137.0.50 -j ACCEPT
-   iptables -I FORWARD 2 -s <sd-dev-addr> -d 10.137.0.51 -j ACCEPT
+   sd_dev="<sd-dev-addr>"
+   sd_app="10.137.0.50"
+   sd_mon="10.137.0.51"
 
-Run those commands with
+   iptables -I FORWARD 2 -s "$sd_dev" -d "$sd_app" -j ACCEPT
+   iptables -I FORWARD 2 -s "$sd_dev" -d "$sd_mon" -j ACCEPT
+   iptables -I FORWARD 2 -s "$sd_app" -d "$sd_mon" -j ACCEPT
+   iptables -I FORWARD 2 -s "$sd_mon" -d "$sd_app" -j ACCEPT
+
+Run those commands on ``sys-firewall`` with
 
 .. code:: sh
 
