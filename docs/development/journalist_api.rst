@@ -356,6 +356,23 @@ Response 200:
     "message": "Star removed"
   }
 
+Flag a source [``POST``]
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Requires authentication.
+
+.. code:: sh
+
+  POST /api/v1/sources/<filesystem_id>/flag
+
+Response 200:
+
+.. code:: sh
+
+  {
+    "message": "Source flagged for reply"
+  }
+
 Submission ``[/submissions]``
 -----------------------------
 

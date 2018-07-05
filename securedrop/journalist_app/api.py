@@ -105,6 +105,14 @@ def make_blueprint(config):
         db.session.commit()
         return jsonify({'message': 'Star removed'}), 200
 
+    @api.route('/sources/<filesystem_id>/flag', methods=['POST'])
+    @token_required
+    def flag(filesystem_id):
+        source = get_or_404(Source, filesystem_id, Source.filesystem_id)
+        source.flagged = True
+        db.session.commit()
+        return jsonify({'message': 'Source flagged for reply'}), 200
+
     @api.route('/sources/<filesystem_id>/submissions', methods=['GET'])
     @token_required
     def all_source_submissions(filesystem_id):

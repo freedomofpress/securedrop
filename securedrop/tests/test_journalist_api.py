@@ -140,7 +140,8 @@ def test_user_without_token_cannot_post_protected_endpoints(journalist_app,
         filesystem_id = test_source['source'].filesystem_id
         protected_routes = [
             url_for('api.post_reply', filesystem_id=filesystem_id),
-            url_for('api.add_star', filesystem_id=filesystem_id)
+            url_for('api.add_star', filesystem_id=filesystem_id),
+            url_for('api.flag', filesystem_id=filesystem_id)
         ]
 
     with journalist_app.test_client() as app:
@@ -182,6 +183,21 @@ def test_get_non_existant_source_404s(journalist_app, journalist_api_token):
                            headers=get_api_headers(journalist_api_token))
 
         assert response.status_code == 404
+
+
+def test_authorized_user_can_flag_a_source(journalist_app, test_source,
+                                           journalist_api_token):
+    with journalist_app.test_client() as app:
+        filesystem_id = test_source['source'].filesystem_id
+        source_id = test_source['source'].id
+        response = app.post(url_for('api.flag',
+                                    filesystem_id=filesystem_id),
+                            headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+        # Verify that the source was flagged.
+        assert Source.query.get(source_id).flagged
 
 
 def test_authorized_user_can_star_a_source(journalist_app, test_source,
