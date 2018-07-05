@@ -18,7 +18,7 @@ The development VM, ``sd-dev``, will be based on Debian 9. All the other VMs
 will be based on Ubuntu Trusty.
 
 Create ``sd-dev``
----------------
+-----------------
 
 Let's get started. Create yourself a new *standalone* Qube called ``sd-dev`` based
 on the Debian 9 template that comes standard in Qubes 4.
@@ -271,10 +271,20 @@ The ``.deb`` files will be available in ``build/``.
 Managing Qubes RPC for Admin API capability
 -------------------------------------------
 
-(These docs are WIP!) You'll need to grant the "work/sd-dev" VM the ability
-to create other VMs. Here is an example of an extremely permissive policy,
-that essentially makes "work/sd-dev" as powerful as dom0
-(we must reduce these grants before submitting for review):
+You'll need to grant the ``sd-dev`` VM the ability to create other VMs.
+Here is an example of an extremely permissive policy, that essentially makes
+``sd-dev`` as powerful as ``dom0``.
+
+.. tip::
+
+   See the Qubes documentation for details on leveraging the `Admin API`_.
+
+.. _`Admin API`: https://www.qubes-os.org/doc/admin-api/
+
+.. todo::
+
+   Reduce these grants to the bare minimum necessary. We can likely
+   pare them down to a single grant, preferably with tags-based control.
 
 .. code:: sh
 
@@ -309,9 +319,10 @@ Creating staging instance
 
 After creating the StandaloneVMs as described above:
 
-* sd-trusty-base
-* sd-app-base
-* sd-mon-base
+* ``sd-dev``
+* ``sd-trusty-base``
+* ``sd-app-base``
+* ``sd-mon-base``
 
 And after building the SecureDrop .debs, we can finally provision the staging
 environment. In from the root of the SecureDrop project in ``sd-dev``, run:
@@ -332,18 +343,8 @@ rather than the bundled ``test`` action:
    molecule prepare -s qubes-staging
    molecule converge -s qubes-staging
 
-That's it
----------
-
-You should now have a running, configured SecureDrop staging instance running
+That's it. You should now have a running, configured SecureDrop staging instance running
 on your Qubes machine.
 
-For day-to-day operation, you should only need to run the ``sd-app`` and ``sd-mon`` VMs.
-To do development work on the the SecureDrop server, make your changes on ``sd-dev``,
-and build and deploy as covered in the SecureDrop documentation.
-
-Notes
------
-
-- You may need to bump up the memory for `sd-build` or `sd-app` past 2GB. I was running in to some issues which seemed to be solved by giving the VMs more memory.
-- `securedrop-admin` is made for the Tails environment and had to be modified a bit to run on `sd-build`. Also it interacts poorly with the existing virtual environment created there. We should decide if we need it at all, and if so how we can modify it to work better in for this task. Or perhaps we don't need it at all, if we instead can automatically configure the build, like we do in the existing Vagrant-based staging provisioning workflow.
+For day-to-day operation, you should run ``sd-dev`` in order to make code changes,
+and use the Molecule commands above to provision staging VMs on-demand.
