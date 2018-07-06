@@ -189,7 +189,7 @@ Let's get the IP address of ``sd-dev``. On ``dom0``:
 
 .. code:: sh
 
-   qvm-prefs ip sd-dev
+   qvm-prefs sd-dev ip
 
 Get a shell on ``sys-firewall``. Create or edit
 ``/rw/config/qubes-firewall-user-script``, to include the following:
@@ -233,7 +233,7 @@ a password. On ``sd-dev``:
    ssh-copy-id sdadmin@10.137.0.51
 
 Confirm that you're able to ssh as user ``sdadmin`` from ``sd-dev`` to
-``sd-mon`` and ``sd-app`` without being prompted for a password.
+``sd-mon-base`` and ``sd-app-base`` without being prompted for a password.
 
 SecureDrop Installation
 -----------------------
@@ -270,6 +270,10 @@ The ``.deb`` files will be available in ``build/``.
 
 Managing Qubes RPC for Admin API capability
 -------------------------------------------
+
+We're going to be running Qubes management commands on `sd-dev`, which requires some additional software. Install it with
+
+    sudo apt install qubes-core-admin-client
 
 You'll need to grant the ``sd-dev`` VM the ability to create other VMs.
 Here is an example of an extremely permissive policy, that essentially makes
