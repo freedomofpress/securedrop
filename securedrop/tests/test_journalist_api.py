@@ -7,6 +7,7 @@ from pyotp import TOTP
 from flask import current_app, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer
 
+from db import db
 from models import Journalist, Reply, Source, SourceStar, Submission
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
@@ -194,6 +195,30 @@ def test_attacker_cannot_create_valid_token_with_none_alg(journalist_app,
         response = app.delete(url_for('api.single_source',
                                       filesystem_id=filesystem_id),
                               headers=get_api_headers(attacker_token))
+
+        assert response.status_code == 403
+
+
+def test_attacker_cannot_use_token_after_admin_deletes(journalist_app,
+                                                       test_source,
+                                                       journalist_api_token):
+
+    with journalist_app.test_client() as app:
+        filesystem_id = test_source['source'].filesystem_id
+
+        # In a scenario where an attacker compromises a journalist workstation
+        # the admin should be able to delete the user and their token should
+        # no longer be valid.
+        attacker = Journalist.validate_api_token_and_get_user(
+            journalist_api_token)
+
+        db.session.delete(attacker)
+        db.session.commit()
+
+        # Now this token should not be valid.
+        response = app.delete(url_for('api.single_source',
+                                      filesystem_id=filesystem_id),
+                              headers=get_api_headers(journalist_api_token))
 
         assert response.status_code == 403
 
