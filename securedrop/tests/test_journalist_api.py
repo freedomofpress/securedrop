@@ -5,6 +5,7 @@ import os
 from pyotp import TOTP
 
 from flask import current_app, url_for
+from itsdangerous import TimedJSONWebSignatureSerializer
 
 from models import Journalist, Reply, Source, SourceStar, Submission
 
@@ -179,6 +180,22 @@ def test_user_without_token_cannot_delete_protected_endpoints(journalist_app,
                                   headers=get_api_headers(''))
 
             assert response.status_code == 403
+
+
+def test_attacker_cannot_create_valid_token_with_none_alg(journalist_app,
+                                                          test_source,
+                                                          test_journo):
+    with journalist_app.test_client() as app:
+        filesystem_id = test_source['source'].filesystem_id
+        s = TimedJSONWebSignatureSerializer('not the secret key',
+                                            algorithm_name='none')
+        attacker_token = s.dumps({'id': test_journo['id']}).decode('ascii')
+
+        response = app.delete(url_for('api.single_source',
+                                      filesystem_id=filesystem_id),
+                              headers=get_api_headers(attacker_token))
+
+        assert response.status_code == 403
 
 
 def test_user_without_token_cannot_post_protected_endpoints(journalist_app,
