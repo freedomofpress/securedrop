@@ -268,19 +268,16 @@ The ``.deb`` files will be available in ``build/``.
 Managing Qubes RPC for Admin API capability
 -------------------------------------------
 
-We're going to be running Qubes management commands on `sd-dev`, which requires some additional software. Install it with
+We're going to be running Qubes management commands on ``sd-dev``,
+which requires some additional software. Install it with
+
+.. code::  sh
 
     sudo apt install qubes-core-admin-client
 
 You'll need to grant the ``sd-dev`` VM the ability to create other VMs.
-Here is an example of an extremely permissive policy, that essentially makes
-``sd-dev`` as powerful as ``dom0``.
-
-.. tip::
-
-   See the Qubes documentation for details on leveraging the `Admin API`_.
-
-.. _`Admin API`: https://www.qubes-os.org/doc/admin-api/
+Here is an example of a permissive policy, sufficient to grant
+``sd-dev`` management capabilities over VMs it creates:
 
 .. todo::
 
@@ -295,6 +292,12 @@ Here is an example of an extremely permissive policy, that essentially makes
    /etc/qubes-rpc/policy/include/admin-global-rwx:
      sd-dev $adminvm allow,target=$adminvm
      sd-dev $tag:created-by-sd-dev allow,target=$adminvm
+
+.. tip::
+
+   See the Qubes documentation for details on leveraging the `Admin API`_.
+
+.. _`Admin API`: https://www.qubes-os.org/doc/admin-api/
 
 Creating staging instance
 -------------------------
