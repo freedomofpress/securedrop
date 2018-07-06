@@ -586,6 +586,20 @@ as the default. **Save** and **Apply Changes**.
 
 |3 NIC LAN Interface|
 
+Disable Anti-Lockout Rule
+'''''''''''''''''''''''''
+
+In order to further lockdown communication we will disable the rule that allows
+traffic to the firewall over the local network. Navigate to
+**System ▸ Advanced** and find the "Anti-lockout" rule. Ensure the box is
+checked and save the configuration.
+
+|Disable Anti-Lockout Rule|
+
+.. warning:: Do not reboot the firewall until after you have set the firewall
+ rules based on the screenshots below. If you get locked out of the firewall
+ you may have to factory reset it by connecting to it over the serial console.
+
 Set Up OPT1
 '''''''''''
 
@@ -772,6 +786,7 @@ Once it is complete, you will see a notification of successful upgrade:
 .. |3 NIC Firewall Alias| image::  images/firewall/three_nic_add_firewall_alias.png
 .. |3 NIC Firewall IP Aliases Pre Save| image:: images/firewall/three_nic_ip_aliases_pre_save.png
 .. |3 NIC Firewall IP Aliases Post Save| image:: images/firewall/three_nic_ip_aliases_post_save.png
+.. |Disable Anti-Lockout Rule| image:: images/firewall/disable_anti_lockout.png 
 .. |Update available| image:: images/firewall/pfsense_update_available.png
 .. |3 NIC Firewall LAN Rules| image:: images/firewall/three_nic_firewall_rules.png
 .. |3 NIC Firewall OPT1 Rules| image:: images/firewall/three_nic_opt1_firewall_rules.png
