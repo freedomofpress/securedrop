@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from functools import wraps
 import json
-from werkzeug.exceptions import default_exceptions
+from werkzeug.exceptions import default_exceptions  # type: ignore
 
 from flask import abort, Blueprint, current_app, jsonify, request, send_file
 
@@ -227,7 +227,6 @@ def make_blueprint(config):
     def get_current_user():
         user = get_user_object(request)
         return jsonify(user.to_json()), 200
-
 
     def _handle_http_exception(error):
         # Workaround for no blueprint-level 404/5 error handlers, see:

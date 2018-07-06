@@ -7,7 +7,7 @@ from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
-from werkzeug.exceptions import default_exceptions
+from werkzeug.exceptions import default_exceptions  # type: ignore
 
 import i18n
 import template_filters
