@@ -70,6 +70,53 @@ def test_user_cannot_get_an_api_token_with_wrong_2fa_token(journalist_app,
         assert observed_response['error'] == 'Forbidden'
 
 
+def test_user_cannot_get_an_api_token_with_no_passphase_field(journalist_app,
+                                                              test_journo):
+    with journalist_app.test_client() as app:
+        valid_token = TOTP(test_journo['otp_secret']).now()
+        response = app.post(url_for('api.get_token'),
+                            data=json.dumps(
+                                {'username': test_journo['username'],
+                                 'one_time_code': valid_token}),
+                            headers=get_api_headers())
+        observed_response = json.loads(response.data)
+
+        assert response.status_code == 400
+        assert observed_response['error'] == 'Bad Request'
+        assert observed_response['message'] == 'passphrase field is missing'
+
+
+def test_user_cannot_get_an_api_token_with_no_username_field(journalist_app,
+                                                             test_journo):
+    with journalist_app.test_client() as app:
+        valid_token = TOTP(test_journo['otp_secret']).now()
+        response = app.post(url_for('api.get_token'),
+                            data=json.dumps(
+                                {'passphrase': test_journo['password'],
+                                 'one_time_code': valid_token}),
+                            headers=get_api_headers())
+        observed_response = json.loads(response.data)
+
+        assert response.status_code == 400
+        assert observed_response['error'] == 'Bad Request'
+        assert observed_response['message'] == 'username field is missing'
+
+
+def test_user_cannot_get_an_api_token_with_no_otp_field(journalist_app,
+                                                        test_journo):
+    with journalist_app.test_client() as app:
+        response = app.post(url_for('api.get_token'),
+                            data=json.dumps(
+                                {'username': test_journo['username'],
+                                 'passphrase': test_journo['password']}),
+                            headers=get_api_headers())
+        observed_response = json.loads(response.data)
+
+        assert response.status_code == 400
+        assert observed_response['error'] == 'Bad Request'
+        assert observed_response['message'] == 'one_time_code field is missing'
+
+
 def test_authorized_user_gets_all_sources(journalist_app, test_source,
                                           journalist_api_token):
     with journalist_app.test_client() as app:

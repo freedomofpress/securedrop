@@ -7,7 +7,9 @@ from flask import abort, Blueprint, current_app, jsonify, request, send_file
 
 from db import db
 from journalist_app import utils
-from models import Journalist, Reply, Source, Submission
+from models import (Journalist, Reply, Source, Submission,
+                    LoginThrottledException, InvalidUsernameException,
+                    BadTokenException, WrongPasswordException)
 from store import NotEncrypted
 
 
@@ -62,9 +64,18 @@ def make_blueprint(config):
     @api.route('/token', methods=['POST'])
     def get_token():
         creds = json.loads(request.data)
-        username = creds['username']
-        passphrase = creds['passphrase']
-        one_time_code = creds['one_time_code']
+
+        username = creds.get('username', None)
+        passphrase = creds.get('passphrase', None)
+        one_time_code = creds.get('one_time_code', None)
+
+        if username is None:
+            return abort(400, 'username field is missing')
+        if passphrase is None:
+            return abort(400, 'passphrase field is missing')
+        if one_time_code is None:
+            return abort(400, 'one_time_code field is missing')
+
         try:
             journalist = Journalist.login(username, passphrase, one_time_code)
             token_expiry = datetime.now() + timedelta(seconds=7200)
@@ -77,7 +88,8 @@ def make_blueprint(config):
             db.session.commit()
 
             return response, 200
-        except Exception:
+        except (LoginThrottledException, InvalidUsernameException,
+                BadTokenException, WrongPasswordException):
             return abort(403, 'Token authentication failed.')
 
     @api.route('/sources', methods=['GET'])
