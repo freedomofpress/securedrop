@@ -197,9 +197,6 @@ class CryptoUtil:
         fingerprint = self.getkey(name)
         return self.gpg.export_keys(fingerprint)
 
-    def is_encrypted(self, content):
-        return bool(self.gpg.list_packets(content).key)
-
     def encrypt(self, plaintext, fingerprints, output=None):
         # Verify the output path
         if output:

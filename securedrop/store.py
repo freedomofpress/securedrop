@@ -155,8 +155,7 @@ class Storage:
     def save_pre_encrypted_reply(self, filesystem_id, count,
                                  journalist_filename, content):
 
-        # if not current_app.crypto_util.is_encrypted(content):  # slow
-        if 'BEGIN PGP MESSAGE' not in content:
+        if '-----BEGIN PGP MESSAGE-----' not in content.split('\n')[0]:
             raise NotEncrypted
 
         encrypted_file_name = "{0}-{1}-reply.gpg".format(count,
