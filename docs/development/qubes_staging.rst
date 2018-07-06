@@ -68,7 +68,6 @@ In ``dom0``, do the following:
    qvm-prefs sd-trusty-base memory 2000
    qvm-prefs sd-trusty-base maxmem 2000
    qvm-prefs sd-trusty-base kernel ''
-   qvm-prefs sd-trusty-base
 
 The commands above will create a new StandaloneVM, expand the storage space
 and memory available to it, as well as disable the integrated kernel support.
@@ -129,21 +128,19 @@ When initial configuration is done, run ``qvm-shutdown sd-trusty-base`` to shut 
 Clone VMs
 ---------
 
-In ``dom0``:
+We're going configure the VMs to use specific IP addresses, which will make
+various routing issues easier later. We'll also tag the VMs for management
+by the ``sd-dev`` VM. Doing so will require Qubes RPC policy changes,
+documented below. Run the following in ``dom0``:
 
 .. code:: sh
 
    qvm-clone sd-trusty-base sd-app-base
    qvm-clone sd-trusty-base sd-mon-base
-
-We're going configure the VMs to use specific IP addresses, which will make
-various routing issues easier later. Run the following in ``dom0``
-to set those IPs:
-
-.. code:: sh
-
    qvm-prefs sd-app-base ip 10.137.0.50
    qvm-prefs sd-mon-base ip 10.137.0.51
+   qvm-tags sd-app-base add created-by-sd-dev
+   qvm-tags sd-mon-base add created-by-sd-dev
 
 Now start both new VMs:
 
@@ -292,31 +289,12 @@ Here is an example of an extremely permissive policy, that essentially makes
 
 .. code:: sh
 
-   /etc/qubes-rpc/policy/admin.vm.property.List:
-     sd-dev $adminvm allow,target=$adminvm
-
-   /etc/qubes-rpc/policy/admin.vm.List:
-    sd-dev $adminvm allow,target=$adminvm
-    sd-dev $anyvm allow,target=$adminvm
-
-   /etc/qubes-rpc/policy/admin.property.List:
-     sd-dev $adminvm allow,target=$adminvm
-
-   /etc/qubes-rpc/policy/admin.vm.Create.StandaloneVM:
-     sd-dev $adminvm allow,target=$adminvm
-     sd-dev $anyvm allow,target=$adminvm
-
    /etc/qubes-rpc/policy/include/admin-local-rwx:
-     sd-dev $adminvm allow,target=$adminvm
-     sd-dev $anyvm allow,target=$adminvm
-
-   /etc/qubes-rpc/policy/include/admin-global-ro:
-     sd-dev $adminvm allow,target=$adminvm
-     sd-dev $anyvm allow,target=$adminvm
+     sd-dev $tag:created-by-sd-dev allow,target=$adminvm
 
    /etc/qubes-rpc/policy/include/admin-global-rwx:
      sd-dev $adminvm allow,target=$adminvm
-     sd-dev $anyvm allow,target=$adminvm
+     sd-dev $tag:created-by-sd-dev allow,target=$adminvm
 
 Creating staging instance
 -------------------------
