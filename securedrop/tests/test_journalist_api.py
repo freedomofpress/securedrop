@@ -250,6 +250,19 @@ def test_api_404(journalist_app, journalist_api_token):
         assert json_response['error'] == 'Not Found'
 
 
+def test_trailing_slash_cleanly_404s(journalist_app, test_source,
+                                     journalist_api_token):
+    with journalist_app.test_client() as app:
+        filesystem_id = test_source['source'].filesystem_id
+        response = app.get(url_for('api.single_source',
+                                   filesystem_id=filesystem_id) + '/',
+                           headers=get_api_headers(journalist_api_token))
+        json_response = json.loads(response.data)
+
+        assert response.status_code == 404
+        assert json_response['error'] == 'Not Found'
+
+
 def test_authorized_user_gets_single_source(journalist_app, test_source,
                                             journalist_api_token):
     with journalist_app.test_client() as app:
