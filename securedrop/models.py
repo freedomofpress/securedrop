@@ -116,11 +116,14 @@ class Source(db.Model):
             'source_id': self.id,
             'filesystem_id': self.filesystem_id,
             'journalist_designation': self.journalist_designation,
-            'flagged': self.flagged,
+            'is_flagged': self.flagged,
+            'is_starred': True if self.star else False,
             'last_updated': self.last_updated,
             'interaction_count': self.interaction_count,
-            'public_key_type': 'PGP',
-            'public_key': self.public_key,
+            'key': {
+              'type': 'PGP',
+              'public': self.public_key
+            },
             'number_of_documents': docs_msg_count['documents'],
             'number_of_messages': docs_msg_count['messages'],
             'submissions_url': url_for('api.all_source_submissions',
