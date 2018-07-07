@@ -20,7 +20,7 @@ will be based on Ubuntu Trusty.
 Create ``sd-dev``
 -----------------
 
-Let's get started. Create yourself a new *standalone* Qube called ``sd-dev`` based
+Let's get started. Create yourself a new standalone Qube called ``sd-dev`` based
 on the Debian 9 template that comes standard in Qubes 4.
 You can use the "Q" menu for this, or in ``dom0``:
 
@@ -147,8 +147,7 @@ We'll need to fix each machine's idea of its own IP. In the console for each
 machine, edit ``/etc/network/interfaces`` to update the ``address`` line with
 the machine's IP.
 
-``/etc/hosts`` on each host needs to be modified to include the hostname and IP
-for itself. On each host, add the IP and the hostname of the VM.
+Edit ``/etc/hosts`` on each host to include the hostname and IP for itself.
 Use ``sd-app`` and ``sd-mon``, omitting the ``-base`` suffix, since the cloned VMs
 will not have the suffix.
 
@@ -156,7 +155,8 @@ Finally, on each host edit ``/etc/hostname`` to reflect the machine's name.
 Again, omit the ``-base`` suffix.
 
 Halt each machine, then restart each from ``dom0``. The prompt in each console
-should reflect the correct name of the VM. You should be able to ping IPs on the internet.
+should reflect the correct name of the VM. Confirm you have network access by
+running ``host freedom.press``. It should show no errors.
 
 Inter-VM networking
 ~~~~~~~~~~~~~~~~~~~
@@ -207,13 +207,17 @@ and log in with the password ``securedrop``.
 SSH using keys
 ~~~~~~~~~~~~~~
 
+.. tip::
+   You likely already have an SSH keypair configured for access to GitHub.
+   If not, create one with ``ssh-keygen -b 4096 -t rsa``. The configuration
+   logic will use the key at ``~/.ssh/id_rsa`` to connect to the VMs.
+
 Later we'll be using Ansible to provision the application VMs, so we should
-make sure we can ssh between those machines without needing to type
+make sure we can SSH between those machines without needing to type
 a password. On ``sd-dev``:
 
 .. code:: sh
 
-   ssh-keygen -b 4096 -t rsa
    ssh-copy-id sdadmin@10.137.0.50
    ssh-copy-id sdadmin@10.137.0.51
 
@@ -225,25 +229,8 @@ SecureDrop Installation
 
 We're going to configure ``sd-dev`` to build the SecureDrop ``.deb`` files,
 then we're going to build them, and provision ``sd-app`` and ``sd-mon``.
-
 Follow the instructions in the :doc:`developer documentation <setup_development>`
 to set up the development environment.
-
-.. todo::
-
-   Clarify the dev env setup docs in terms of what's necessary for Qubes,
-   and what's not. The bulleted list below is a bit hand-wavy.
-
-    - Don't forget to complete the Docker post-installation instructions.
-      You should only need to complete the part about running docker as a non-root
-      user (and you'll probably need to shutdown and restart the VM to ensure it works):
-      https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user
-    - You'll be accessing GitHub from ``sd-dev`` to clone the SecureDrop repo,
-      so you'll want that VM to have an SSH key that GitHub knows about.
-      Either create a new one and register it with Github, or copy an existing key to ``sd-dev``.
-    - You can skip the "Using the Docker Environment" section altogether.
-    - You can skip installing kernel headers.
-    - You can skip installing Vagrant.
 
 Once finished, build the Debian packages for installation on the staging VMs.
 
@@ -263,9 +250,10 @@ which requires some additional software. Install it with
 
     sudo apt install qubes-core-admin-client
 
-You'll need to grant the ``sd-dev`` VM the ability to create other VMs.
-Here is an example of a permissive policy, sufficient to grant
-``sd-dev`` management capabilities over VMs it creates:
+You'll need to grant the ``sd-dev`` VM the ability to create other VMs,
+by editing the Qubes RPC policies in ``dom0``. Here is an example of a
+permissive policy, sufficient to grant ``sd-dev`` management capabilities
+over VMs it creates:
 
 .. todo::
 
@@ -304,11 +292,14 @@ environment. In from the root of the SecureDrop project in ``sd-dev``, run:
 
    molecule test -s qubes-staging
 
-Note that since the reboots don't automatically bring the machines back up,
-due to the fact that the machines are Standalone VMs, the ``test`` action will
-fail by default, unless you judiciously run ``qvm-start <vm>`` for each VM
-after they've shut down. You can use the smaller constituent Molecule actions,
-rather than the bundled ``test`` action:
+.. note::
+   The reboot actions run against the VMs during provisioning will only shutdown
+   the VMs, not start them again, since these are Standalone VMs. Therefore
+   the ``test`` action will fail by default, unless you judiciously run
+   ``qvm-start <vm>`` for each VM after they've shut down.
+
+You can use the smaller constituent Molecule actions, rather than the bundled
+``test`` action:
 
 .. code:: sh
 
@@ -316,8 +307,7 @@ rather than the bundled ``test`` action:
    molecule prepare -s qubes-staging
    molecule converge -s qubes-staging
 
-That's it. You should now have a running, configured SecureDrop staging instance running
-on your Qubes machine.
-
-For day-to-day operation, you should run ``sd-dev`` in order to make code changes,
-and use the Molecule commands above to provision staging VMs on-demand.
+That's it. You should now have a running, configured SecureDrop staging instance
+running on your Qubes machine. For day-to-day operation, you should run
+``sd-dev`` in order to make code changes, and use the Molecule commands above
+to provision staging VMs on-demand.
