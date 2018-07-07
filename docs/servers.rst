@@ -18,6 +18,8 @@ The SecureDrop *Application Server* and *Monitor Server* run **Ubuntu Server
 download and verify the Ubuntu installation media. You should use the *Admin
 Workstation* to download and verify the Ubuntu installation media.
 
+.. _download_trusty:
+
 Download the Ubuntu Installation Media
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -44,7 +46,7 @@ Alternatively, you can use the command line:
 
 .. note:: Downloading Ubuntu on the *Admin Workstation* can take a while
    because Tails does everything over Tor, and Tor is typically slow relative
-   to the speed of your upstream Internet conenction.
+   to the speed of your upstream Internet connection.
 
 .. _Ubuntu Releases page: http://releases.ubuntu.com/
 .. _ubuntu-14.04.5-server-amd64.iso: http://releases.ubuntu.com/14.04.5/ubuntu-14.04.5-server-amd64.iso

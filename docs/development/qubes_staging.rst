@@ -37,21 +37,9 @@ Download Ubuntu Trusty server ISO
 ---------------------------------
 
 On ``sd-dev``, download the Ubuntu Trusty server ISO, along with corresponding
-checksum and signature files.
-
-.. code:: sh
-
-   wget http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso
-   wget https://mirrors.ocf.berkeley.edu/ubuntu-releases/14.04.5/SHA256SUMS
-   wget https://mirrors.ocf.berkeley.edu/ubuntu-releases/14.04.5/SHA256SUMS.gpg
-
-After downloading, confirm the ISO's validity by checking its SHA256 sum.
-Note that you may need to download the GPG keys to validate the signature.
-
-.. code:: sh
-
-   gpg --verify SHA256SUMS.gpg SHA256SUMS
-   sha256sum --check --ignore-missing SHA256SUMS
+checksum and signature files. See the :ref:`hardware installation docs <download_trusty>`
+for detailed instructions. If you opt for the command line instructions,
+omit the ``torify`` prepended to the ``curl`` command.
 
 Create the Trusty base VM
 -------------------------
