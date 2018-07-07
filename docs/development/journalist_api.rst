@@ -55,7 +55,11 @@ HTTP Authorization header:
   Authorization: Token eyJhbGciOiJIUzI1NiIsImV4cCI6MTUzMDU4NjU4MiwifWF0IjoxNTMwNTc5MzgyfQ.eyJpZCI6MX0.P_PfcLMk1Dq5VCIANo-lJbu0ZyCL2VcT8qf9fIZsTCM
 
 This header will be checked with each API request to see if it is valid and
-not yet expired. Tokens expire after 7200 seconds (120 minutes).
+not yet expired. Tokens currently expire after 8 hours, but note that clients
+should use the expiration time provided in the response to determine when
+the token will expire. After the token expires point, users must
+login again. Clients implementing logout functionality should delete tokens
+locally upon logout.
 
 Errors
 ~~~~~~

@@ -13,6 +13,9 @@ from models import (Journalist, Reply, Source, Submission,
 from store import NotEncrypted
 
 
+TOKEN_EXPIRATION_MINS = 60 * 8
+
+
 def get_user_object(request):
     """Helper function to use in token_required views that need a user
     object
@@ -78,9 +81,11 @@ def make_blueprint(config):
 
         try:
             journalist = Journalist.login(username, passphrase, one_time_code)
-            token_expiry = datetime.now() + timedelta(seconds=7200)
+            token_expiry = datetime.now() + timedelta(
+                seconds=TOKEN_EXPIRATION_MINS * 60)
             response = jsonify({'token': journalist.generate_api_token(
-                 expiration=7200), 'expiration': token_expiry.isoformat()})
+                 expiration=TOKEN_EXPIRATION_MINS * 60),
+                 'expiration': token_expiry.isoformat()})
 
             # Update access metadata
             journalist.last_access = datetime.utcnow()
