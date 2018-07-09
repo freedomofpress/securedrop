@@ -51,8 +51,7 @@ def get_one_or_else(query, logger, failure_method):
 class Source(db.Model):
     __tablename__ = 'sources'
     id = Column(Integer, primary_key=True)
-    uuid = Column(String(36), unique=True, nullable=False,
-                  default=str(uuid.uuid4()))
+    uuid = Column(String(36), unique=True, nullable=False)
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
@@ -73,6 +72,7 @@ class Source(db.Model):
     def __init__(self, filesystem_id=None, journalist_designation=None):
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
+        self.uuid = str(uuid.uuid4())
 
     def __repr__(self):
         return '<Source %r>' % (self.journalist_designation)
