@@ -118,7 +118,7 @@ class Source(db.Model):
             'journalist_designation': self.journalist_designation,
             'is_flagged': self.flagged,
             'is_starred': True if self.star else False,
-            'last_updated': self.last_updated,
+            'last_updated': self.last_updated.isoformat() + 'Z',
             'interaction_count': self.interaction_count,
             'key': {
               'type': 'PGP',
@@ -505,7 +505,7 @@ class Journalist(db.Model):
     def to_json(self):
         json_user = {
             'username': self.username,
-            'last_login': self.last_access,
+            'last_login': self.last_access.isoformat() + 'Z',
             'is_admin': self.is_admin
         }
         return json_user

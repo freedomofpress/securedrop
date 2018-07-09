@@ -81,11 +81,11 @@ def make_blueprint(config):
 
         try:
             journalist = Journalist.login(username, passphrase, one_time_code)
-            token_expiry = datetime.now() + timedelta(
+            token_expiry = datetime.utcnow() + timedelta(
                 seconds=TOKEN_EXPIRATION_MINS * 60)
             response = jsonify({'token': journalist.generate_api_token(
                  expiration=TOKEN_EXPIRATION_MINS * 60),
-                 'expiration': token_expiry.isoformat()})
+                 'expiration': token_expiry.isoformat() + 'Z'})
 
             # Update access metadata
             journalist.last_access = datetime.utcnow()
