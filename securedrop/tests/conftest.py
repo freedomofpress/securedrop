@@ -163,11 +163,11 @@ def test_admin(journalist_app):
 def test_source(journalist_app):
     with journalist_app.app_context():
         source, codename = utils.db_helper.init_source()
-        filesystem_id = source.filesystem_id
         utils.db_helper.submit(source, 2)
         return {'source': source,
                 'codename': codename,
-                'filesystem_id': filesystem_id,
+                'filesystem_id': source.filesystem_id,
+                'uuid': source.uuid,
                 'submissions': source.submissions}
 
 

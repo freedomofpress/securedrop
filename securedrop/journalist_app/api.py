@@ -104,61 +104,55 @@ def make_blueprint(config):
         return jsonify(
             {'sources': [source.to_json() for source in sources]}), 200
 
-    @api.route('/sources/<filesystem_id>', methods=['GET', 'DELETE'])
+    @api.route('/sources/<uuid>', methods=['GET', 'DELETE'])
     @token_required
-    def single_source(filesystem_id):
+    def single_source(uuid):
         if request.method == 'GET':
-            source = get_or_404(Source, filesystem_id,
-                                column=Source.filesystem_id)
+            source = get_or_404(Source, uuid, column=Source.uuid)
             return jsonify(source.to_json()), 200
         elif request.method == 'DELETE':
-            source = get_or_404(Source, filesystem_id,
-                                column=Source.filesystem_id)
+            source = get_or_404(Source, uuid, column=Source.uuid)
             utils.delete_collection(source.filesystem_id)
             return jsonify({'message': 'Source and submissions deleted'}), 200
 
-    @api.route('/sources/<filesystem_id>/add_star', methods=['POST'])
+    @api.route('/sources/<uuid>/add_star', methods=['POST'])
     @token_required
-    def add_star(filesystem_id):
-        source = get_or_404(Source, filesystem_id,
-                            column=Source.filesystem_id)
+    def add_star(uuid):
+        source = get_or_404(Source, uuid, column=Source.uuid)
         utils.make_star_true(source.filesystem_id)
         db.session.commit()
         return jsonify({'message': 'Star added'}), 201
 
-    @api.route('/sources/<filesystem_id>/remove_star', methods=['DELETE'])
+    @api.route('/sources/<uuid>/remove_star', methods=['DELETE'])
     @token_required
-    def remove_star(filesystem_id):
-        source = get_or_404(Source, filesystem_id,
-                            column=Source.filesystem_id)
+    def remove_star(uuid):
+        source = get_or_404(Source, uuid, column=Source.uuid)
         utils.make_star_false(source.filesystem_id)
         db.session.commit()
         return jsonify({'message': 'Star removed'}), 200
 
-    @api.route('/sources/<filesystem_id>/flag', methods=['POST'])
+    @api.route('/sources/<uuid>/flag', methods=['POST'])
     @token_required
-    def flag(filesystem_id):
-        source = get_or_404(Source, filesystem_id,
-                            column=Source.filesystem_id)
+    def flag(uuid):
+        source = get_or_404(Source, uuid,
+                            column=Source.uuid)
         source.flagged = True
         db.session.commit()
         return jsonify({'message': 'Source flagged for reply'}), 200
 
-    @api.route('/sources/<filesystem_id>/submissions', methods=['GET'])
+    @api.route('/sources/<uuid>/submissions', methods=['GET'])
     @token_required
-    def all_source_submissions(filesystem_id):
-        source = get_or_404(Source, filesystem_id,
-                            column=Source.filesystem_id)
+    def all_source_submissions(uuid):
+        source = get_or_404(Source, uuid, column=Source.uuid)
         return jsonify(
             {'submissions': [submission.to_json() for
                              submission in source.submissions]}), 200
 
-    @api.route('/sources/<filesystem_id>/submissions/<int:submission_id>/download',  # noqa
+    @api.route('/sources/<uuid>/submissions/<int:submission_id>/download',  # noqa
                methods=['GET'])
     @token_required
-    def download_submission(filesystem_id, submission_id):
-        source = get_or_404(Source, filesystem_id,
-                            column=Source.filesystem_id)
+    def download_submission(uuid, submission_id):
+        source = get_or_404(Source, uuid, column=Source.uuid)
         submission = get_or_404(Submission, submission_id)
 
         # Mark as downloaded
@@ -170,26 +164,25 @@ def make_blueprint(config):
                          mimetype="application/pgp-encrypted",
                          as_attachment=True)
 
-    @api.route('/sources/<filesystem_id>/submissions/<int:submission_id>',
+    @api.route('/sources/<uuid>/submissions/<int:submission_id>',
                methods=['GET', 'DELETE'])
     @token_required
-    def single_submission(filesystem_id, submission_id):
+    def single_submission(uuid, submission_id):
         if request.method == 'GET':
             submission = get_or_404(Submission, submission_id)
             return jsonify(submission.to_json()), 200
         elif request.method == 'DELETE':
             submission = get_or_404(Submission, submission_id)
-            source = get_or_404(Source, filesystem_id,
-                                column=Source.filesystem_id)
+            source = get_or_404(Source, uuid, column=Source.uuid)
             utils.delete_file(source.filesystem_id, submission.filename,
                               submission)
             return jsonify({'message': 'Submission deleted'}), 200
 
-    @api.route('/sources/<filesystem_id>/reply', methods=['POST'])
+    @api.route('/sources/<uuid>/reply', methods=['POST'])
     @token_required
-    def post_reply(filesystem_id):
-        source = get_or_404(Source, filesystem_id,
-                            column=Source.filesystem_id)
+    def post_reply(uuid):
+        source = get_or_404(Source, uuid,
+                            column=Source.uuid)
         if request.json is None:
             abort(400, 'please send requests in valid JSON')
 

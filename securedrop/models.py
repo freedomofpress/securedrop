@@ -8,6 +8,7 @@ import pyotp
 import qrcode
 # Using svg because it doesn't require additional dependencies
 import qrcode.image.svg
+import uuid
 
 # Find the best implementation available on this platform
 try:
@@ -50,6 +51,8 @@ def get_one_or_else(query, logger, failure_method):
 class Source(db.Model):
     __tablename__ = 'sources'
     id = Column(Integer, primary_key=True)
+    uuid = Column(String(36), unique=True, nullable=False,
+                  default=str(uuid.uuid4()))
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
@@ -111,10 +114,8 @@ class Source(db.Model):
         docs_msg_count = self.documents_messages_count()
 
         json_source = {
-            'url': url_for('api.single_source',
-                           filesystem_id=self.filesystem_id),
-            'source_id': self.id,
-            'filesystem_id': self.filesystem_id,
+            'uuid': self.uuid,
+            'url': url_for('api.single_source', uuid=self.uuid),
             'journalist_designation': self.journalist_designation,
             'is_flagged': self.flagged,
             'is_starred': True if self.star else False,
@@ -127,13 +128,10 @@ class Source(db.Model):
             'number_of_documents': docs_msg_count['documents'],
             'number_of_messages': docs_msg_count['messages'],
             'submissions_url': url_for('api.all_source_submissions',
-                                       filesystem_id=self.filesystem_id),
-            'add_star_url': url_for('api.add_star',
-                                    filesystem_id=self.filesystem_id),
-            'remove_star_url': url_for('api.remove_star',
-                                       filesystem_id=self.filesystem_id),
-            'reply_url': url_for('api.post_reply',
-                                 filesystem_id=self.filesystem_id)
+                                       uuid=self.uuid),
+            'add_star_url': url_for('api.add_star', uuid=self.uuid),
+            'remove_star_url': url_for('api.remove_star', uuid=self.uuid),
+            'reply_url': url_for('api.post_reply', uuid=self.uuid)
             }
         return json_source
 
@@ -162,17 +160,16 @@ class Submission(db.Model):
 
     def to_json(self):
         json_submission = {
-            'source_url': url_for('api.single_source',
-                                  filesystem_id=self.source.filesystem_id),
+            'source_url': url_for('api.single_source', uuid=self.source.uuid),
             'submission_url': url_for('api.single_submission',
-                                      filesystem_id=self.source.filesystem_id,
+                                      uuid=self.source.uuid,
                                       submission_id=self.id),
             'submission_id': self.id,
             'filename': self.filename,
             'size': self.size,
             'is_read': self.downloaded,
             'download_url': url_for('api.download_submission',
-                                    filesystem_id=self.source.filesystem_id,
+                                    uuid=self.source.uuid,
                                     submission_id=self.id),
         }
         return json_submission
