@@ -61,7 +61,6 @@ RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp -
 RUN cp -r /root/.local /tmp/ && chmod +x /tmp/.local/tbb/tor-browser_en-US/Browser/firefox && chmod -R 777 /tmp/.local
 RUN chown -R $USER_NAME.$USER_NAME /tmp/.local/
 
-
 STOPSIGNAL SIGKILL
 
 EXPOSE 8080 8081 5901
