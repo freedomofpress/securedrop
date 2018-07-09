@@ -54,7 +54,7 @@ class JournalistNavigationStepsMixin():
         # Now call the external program to handle the download
         cmd = 'python {0} {1}'.format(cmd_path, temp_cookie_file.name)
         if '.onion' in url:
-            cmd = 'torsocks -P 9150 ' + cmd
+            cmd = 'nc -x 127.0.0.1:9150 ' + cmd
         raw_content = self.system(cmd).strip()
         return raw_content
 
