@@ -137,9 +137,9 @@ def test_upgrade_with_data(alembic_config, config, migration):
         # Degenerate case where there is no data for the first migration
         return
 
-    # Upgrade to one migration before the target
-    target = migrations[-1]
-    upgrade(alembic_config, target)
+    # Upgrade to one migration before the target stored in `migration`
+    last_migration = migrations[-2]
+    upgrade(alembic_config, last_migration)
 
     # Dynamic module import
     mod_name = 'tests.migrations.migration_{}'.format(migration)
