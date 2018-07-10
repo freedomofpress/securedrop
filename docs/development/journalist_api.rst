@@ -117,52 +117,50 @@ Response 200 (application/json):
 .. code:: sh
 
   {
-    "sources": [
-        {
-            "add_star_url": "/api/v1/sources/6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY%3D/add_star",
-            "filesystem_id": "6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY=",
-            "interaction_count": 2,
-            "is_flagged": false,
-            "is_starred": false,
-            "journalist_designation": "tight-fitting horsetail",
-            "key": {
-                "public": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nmQINBFtDtxcBEACaduNhYLXGe3brGRpSFeIe7j6hBVGCfDjfRV0KL2u8VUPIfKIZ\n4kkCtqdfTyTObSPxaTvd20LF+ENI9konXQAf2pBGxFBLRHx0cqwSlHvc6OjCJuXI\nmG94tPThMrw5xLgvhih8/PzdUvsC7vswMp5uAK5jIVam25pXJgjCtivEGVFars0q\n4H5ti3r3GHKhHA7ictjBesTDOiRT0NkCDPDjxv2V+AlNPjfFzf5lPw1zSFVZ5A52\n1OzgadqTZfj+/aZQcQkUA8omoTlcSJI4Mf/Dvn78j4A9bJO643U54rb8Nknnm2u8\niA4RTiGo0uTifZ1Q17tDJBlRTgheH4zrx8LJzEKY1RJDQt2K5RcHsU41TdbDVtbO\nRP6RX/xYRgNzyhUue3Vn3LtMzjmkbti3tiOtIAqUMgKuA6KTNY1uViDgF0hcgi6H\nzIWsoYBZx7RJhK5nEowmddTbN+Fp8gOoUhbCyKFo+f7W6dgVDl8KKJbUapaZpMnr\nk5ldS768Q2KqArSarZTCkUPSYHMvqBGP7ZR1l0HUY4qL1WGtibq3fTE/GPdyadc7\n98slu5/30prXgsV4/mTwWvBZQlixNSM0Rdw69sannDvtRfnH2ocF4oQKOf2htwQ1\nbLvknlOXvXZEy4ctu0FXoZUFjgXHPU5y7+XaxCfspfNSFB+xhzs8FWK9ywARAQAB\ntHxBdXRvZ2VuZXJhdGVkIEtleSA8NkNIQUQ3NFlVV1RZQk5FWVU0RFlSNlUyTExO\nWkdaR0hBWkFCNU82UjVXSEQyRFVGRlpTU05LS0lETk1BV1FXSUszQUFLWUo0NzdR\nRUc2UFJJRDVDUDJSUUoyU1dDUDNJTlBVNlhHWT0+iQI/BBMBCgApBQJbQ7cXAhsv\nBQkB4MqpBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQcNhgsP2ye/LjVw//\nXe/iXqAoJMc0o2x+/1Z0xyHP/uqy2nJ/ClVibhvwwDUoDGZb3l+1KZGqF9irdhOU\nXAE/N0taKG6LSAckW9I+2nXpUSNH4iXv8uwzW6VsNAY+BSmgRnS/KLsSr6DDFHek\n5zs6gftUYQoTOdpL3CxczGDnh2tJeJmGJcobAiCj8jArlLZhtK2sYHKEBDGW67rT\nskOTuRtRNYCDiOo/0WycD4AKtlZNCI9Az4Sn5Zq9ODlzwBKx7j2CdykKXeTSxqdd\nGZQc4+CD6xempUp2SKsacIhoQKfAw6q8L6pxcc3AJDtImCQJ7qNrEcLQCafQpLhx\nObXeDPNruxLHL+70rpIUs7bj5+ChZUwcfCzuT3bEqpKHCq+8vfpHJVgopUI1gg3G\nr88U6REdXobAQqh5AN3AFYFdg9P4XiFIpAnp7vCWkGGGULEQ0vnTZcASSdbj+MRI\n8v1qk0lZOMOn9JYYc3dePq5okZhfMqPOubEwaji8FDTOmhWnQiigIx8SS/XhQonY\nxJ14xgRoWCqwdBjrrjmJf+OScfJBZvFchf7mwkPkOUrdHCgUkWzGaUI4TLmh9xSk\nTy8fScG/U4JVlH0V8/xY01DOXvGRo3DAEn3ptm+j48fI1coH7jy0n9pQW4r2BNqX\n5MokpDpo3g5AaQr54IV1KBcetYBy301GxIytGaYThn8=\n=b/Mq\n-----END PGP PUBLIC KEY BLOCK-----\n",
-                "type": "PGP"
-            },
-            "last_updated": "2018-07-09T19:27:17.879344Z",
-            "number_of_documents": 0,
-            "number_of_messages": 2,
-            "remove_star_url": "/api/v1/sources/6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY%3D/remove_star",
-            "reply_url": "/api/v1/sources/6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY%3D/reply",
-            "source_id": 1,
-            "submissions_url": "/api/v1/sources/6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY%3D/submissions",
-            "url": "/api/v1/sources/6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY%3D"
-        },
-        {
-            "add_star_url": "/api/v1/sources/VITB6XPYQS3MB2HFEGF3NZYD5G5ZMGMOA2VFKETEGYYKDAY4DFI53ZJMNGCZKWMG2SON7XAUXNRWEURNJ2OVY4QJPGGMGO4TDMMWFSQ%3D/add_star",
-            "filesystem_id": "VITB6XPYQS3MB2HFEGF3NZYD5G5ZMGMOA2VFKETEGYYKDAY4DFI53ZJMNGCZKWMG2SON7XAUXNRWEURNJ2OVY4QJPGGMGO4TDMMWFSQ=",
-            "interaction_count": 2,
-            "is_flagged": false,
-            "is_starred": false,
-            "journalist_designation": "existential irreverence",
-            "key": {
-                "public": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nmQINBFtDtxkBEAC4XWuphmzqLCvMf86u6uoIAV5iKdcP8N3xlfmMEtu6I5gFE3+8\n4IOCWbAUcXLqhDY8RjId+gWoKIQZC0n9PDuF04cout6+F+nHlfm8Rx760mSPPTNW\nT9Gk3UtnJlMG+V6vPoiZpIb21rVgBg+7BuvVXyAc/nwiiCUeV/AFGwBMf6MKerCj\nmmo+nfcjJAAfep7NZH/YYEpwoQ9lxWjHn+8pQh9MI5FRur9XGv1+o244SaVHM/0w\n17S6AbPco67S8xyFMO5v88y5dUkJSsN72FX+dTS5Scurdl6J/KNvi4fzBZWg2VTu\nsT99OSOWTjXHX5bcR+43E3U+godOOLtzzfS1TIlAP4Xp+DvXMLwk33Vo73AWAv//\n9IVmk1hVOpmA37AEho9SfbIH4rvEi7aYesk2As5VIY47dIPrAPlf2GC6sTEXeVyJ\ncSEz4fWuMrbw4XtXTOHnf2zSwD8AteUtOcj83OXmLMAqtBFoXGv5Y0XakPJt5RYQ\nzZy6P77ULAKsqC154AkzaWGiQ8UmRhK1aHi3ks3PT91XmN8NYHTTgxRJGXI7gzkj\nn582Ix2EzuoJE16r05Z0M01ggwm1Z2ugHP8ningvCBq0cqpzad/bjF2iX4+pi8um\nuK57rky3Ci4hpDfaSR3CCZb7SNqdkFthKlwaGNOUIn6mBjO56MiXWIY2OQARAQAB\ntHxBdXRvZ2VuZXJhdGVkIEtleSA8VklUQjZYUFlRUzNNQjJIRkVHRjNOWllENUc1\nWk1HTU9BMlZGS0VURUdZWUtEQVk0REZJNTNaSk1OR0NaS1dNRzJTT043WEFVWE5S\nV0VVUk5KMk9WWTRRSlBHR01HTzRURE1NV0ZTUT0+iQI/BBMBCgApBQJbQ7cZAhsv\nBQkB4MqnBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQXFiwg/uZ5dM+sQ/+\nI7WBIFEcLC9PLCl96mmx2ena9jXYgF+QEkjFBkzOuKwcb70N9ViDzbQBYlfLd1y2\ngbfxRd2l4ODi0j3C8eaW8Iyn8518rZICVMzJPJIEr4RbOui2ykCTEy0SVa/XXbw9\nsNn1auyqUwVxI89HGd7K2yfnN5GFVKhrNRS78v07cGau5UKb+ky6WuyJQ8o+VNRM\nsFXVKYxUEUC9EaDoF55mDvxaNd0v2HG+SGVRmnNj64EvRE/o2Fk/vAozw4gbfL2s\nRyZ8Yl/3NK8bcea8fD7eRwfkVIyRsON8J6XrYmkimrCzi9a+XUH0Zg4YTmXo5COU\nv+poxkdtRxHq1stKYjngOhEnfOfsRf0KHO+yt1RgLs7yS53tNu1P2fQj4ND4yGVo\nHPA772x9Khc9ycM3RItW6JQEJKyoRz9KeTVERni+J0j8MGcGRx+0rLr6dpjrbdQY\nKHK/7i17F2yP7kpG4dSqHb1dRw1x5rBng69kEgaEum22oE69w5oiYGrMihSQtHCw\nzHf9ToOeMiJ5VBrl8obaAJUH+UoQxQD1LSiK1TNlNTA2Q+4z5AqCY3biLXpVFZdO\nlOrfoMRsXGYgxOWYJ7rhHk5zJlkU4pRiywcoSsAQ/mQj8D3Ar0mIqeXoExjseGS6\nAI08meR/2HO1G9XycrBcZfMMkHsnigD2InUdDCCxzlA=\n=HqmY\n-----END PGP PUBLIC KEY BLOCK-----\n",
-                "type": "PGP"
-            },
-            "last_updated": "2018-07-09T19:27:20.293592Z",
-            "number_of_documents": 0,
-            "number_of_messages": 2,
-            "remove_star_url": "/api/v1/sources/VITB6XPYQS3MB2HFEGF3NZYD5G5ZMGMOA2VFKETEGYYKDAY4DFI53ZJMNGCZKWMG2SON7XAUXNRWEURNJ2OVY4QJPGGMGO4TDMMWFSQ%3D/remove_star",
-            "reply_url": "/api/v1/sources/VITB6XPYQS3MB2HFEGF3NZYD5G5ZMGMOA2VFKETEGYYKDAY4DFI53ZJMNGCZKWMG2SON7XAUXNRWEURNJ2OVY4QJPGGMGO4TDMMWFSQ%3D/reply",
-            "source_id": 2,
-            "submissions_url": "/api/v1/sources/VITB6XPYQS3MB2HFEGF3NZYD5G5ZMGMOA2VFKETEGYYKDAY4DFI53ZJMNGCZKWMG2SON7XAUXNRWEURNJ2OVY4QJPGGMGO4TDMMWFSQ%3D/submissions",
-            "url": "/api/v1/sources/VITB6XPYQS3MB2HFEGF3NZYD5G5ZMGMOA2VFKETEGYYKDAY4DFI53ZJMNGCZKWMG2SON7XAUXNRWEURNJ2OVY4QJPGGMGO4TDMMWFSQ%3D"
-        }
-    ]
+      "sources": [
+          {
+              "add_star_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/add_star",
+              "interaction_count": 2,
+              "is_flagged": false,
+              "is_starred": false,
+              "journalist_designation": "validated benefactress",
+              "key": {
+                  "public": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nmQINBFtEA0YBEAChcaDWfnLvMNDypxF+YhNI/P0wYw7+kGGTCAr+pChzV1I3ZEBO\nOz3NU4G5+MYHstD3m4Cdcwdvo+S6E66B4h/9xWWtJLzBMmRNBrCpfny8id1QyNsd\n2PPYk2Dt6Xs9RZaHO3sd8nXVx07FwYmMzNa3UlRg6kb0EUwzNDOW0jaramutp1c0\noTHiEiHJ9wQLNnU55kIXBg6XTNpquCj8O6Vpnsgr0HCC+Fr9hno8u58seYUnyhaN\n3PNE7d96H3O1MNGk0L10vt1u/449DoYFeWR1GnhssfAlVjhizf1sflNXCybjACqK\ngVMsKnYpDWzIXOPF7jNW7jn/N3EpGhq1pjjAJ4LNPXnsTgCmkA5okcPSPIhUH2gN\n6WVtPryGQ9iV5cWgL2KDq35VoZ+6+raANAeE23yAnJW9c7HLRckeB429GNAu1TKR\nkNmDe6zmuhwM2VA+JDN23gFjl7uMgN9bVz6pAyA+0eUQG6Ak3fJmCAGdNIx0/Htq\nRgUwElpHDbrp8kzmadfdWVwq/Tf373FE5TFL2mQ7EVI8xQ4HWvhWRFjpQKWRzBsg\nBLXWzr2C6coQywNLUvJ0JEkm/Uihd5341JoRuotUAY8pwA3CWUTSSi/7yBBAJzRk\nNy7XivylH084DM2/EJaq5gNbHJ7jA31YymwQdw3OmIqX4K07zS2AdGX20QARAQAB\ntHxBdXRvZ2VuZXJhdGVkIEtleSA8TTdOUEo3RVJNQU9KREhPSUpaUTIzVEdTTlFR\nR0JIQTNEVUJMUjdFUDQ1R0pKWVJGVkpSTFVSSDI0NjRBS1dMTjYyVFNSWFNJMzJE\nNkQzTjdXVTRFWTU3SzdBRkpZVFpHR0NUQkFKUT0+iQI/BBMBCgApBQJbRANGAhsv\nBQkB4c/6BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQDDX++nndxld+CA/9\nGoG3Xm3e2pyW+itxKC/gOJiK/PXk/nrpNXF5d1b1TEbkMMmMy2Dw4YC/7btr3Q0D\nEUg5qXiIO+Tw9KNS1udTVJggG+jWehlgOMb0+Z7JUawPCwAFjU17BRdRVDv39Y5G\nGJSM68/e8n5HXLNx1ABFlm0qfGQQw+/anwwxCnJb5KgSZ64mZiYtjVNiaqrtxxB7\nXu6AOsTlWgzT5rkwrq6gZsdG53gRYQiaVLS8BDKT4WD45iYKR5nn0BvPN6/L+4UG\nQj0l2lbAuQGMuMVKCeRYIJEDzTeqHzxuqkrr79pBZz1rNSNWYmaYo5V7ZH1VIl5y\n+jf1mEbvhNQUoy2HCoTUGPJjpgg7LyN7S6eZH/J5Q8gHD4s+rnQbzJHwD3u5y3L+\nDtz3trQs6K6CcqsyYBCS0oH3DSYO9SJiBJqgoSKKs8/YtqWupDXUFCjcYgdxDEmR\nLw+Ovd0wEbs7JoMcpRtx3LHgpL6ICFZqFvA3IyTo6OCa8ZCCnvtkLvlinUg0TGTc\nmvThHu/1jbDZjAPWRiuoEcHz5XyFSrCzkXKvXEDqlsK1WADNWZlznfBhu9EgciHP\nlOAJrKulOC4TaRmHP+K5MFowmwB1IY9yErhvAobTnZn7sXqc2AY5cTPfphvuHJwR\nFwtb1yZ6TEBSiLywZguTHurVeIyKW4C2jSlqyV1BnH8=\n=/Wxo\n-----END PGP PUBLIC KEY BLOCK-----\n",
+                  "type": "PGP"
+              },
+              "last_updated": "2018-07-10T00:52:21.157409Z",
+              "number_of_documents": 0,
+              "number_of_messages": 2,
+              "remove_star_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/remove_star",
+              "reply_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/reply",
+              "submissions_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions",
+              "url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
+              "uuid": "9b6df7c9-a6b1-461d-91f0-5b715fc7a47a"
+          },
+          {
+              "add_star_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/add_star",
+              "interaction_count": 2,
+              "is_flagged": false,
+              "is_starred": false,
+              "journalist_designation": "navigational firearm",
+              "key": {
+                  "public": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nmQINBFtEA0sBEACsJK+UPZoemYts+L+4JnhsRXJqixMO2BDJEueiGg2Aq0CEI4pz\nmNq5Xn/ZjHChnh/3AEc/Svv1IpA8RH4cgTfKTzpv5OnEwk6+0FUgr2rhCLzju9At\nrdhE1wFhldSWU4RyB/sC0L20HSP0H6Uj2xsT+gqw06fNvEzHKEpGt9dR6hQxH9Hf\new0z/p8Oov7x5wRRnZbe1VezlAM4L7BsboBUNrLsnKi7BvZFihRrL+CYaSH/XZ1E\n/6aBNPol9zVEeG8A+L21TVvBsjHb76Jr5t9iIl1kd1z3mMgq9cZacal96aONISLU\nv3pdlpY+5lBFLvhiSfFcNNNwMkglKmzRxNVcmxhUMquFpUHlsLxcz177cftkR0qD\nJhyVqeYEWeZgJ8IRFWaRK5NvCCLSJoLtAYcx7IRRBZJ7Y5rGBPH6rjYw75fXhDHq\n+ApL5/iVPkxrKdYfBxQApuYNW0pUpML9GSGpBiF8ri3C11dKIfMjwO6a69YNoJi2\nqiu/7p+BIHLCrdHlYZCHTgrYXlx0uNR9pVry7ioNNekJaoBcXIfsL5n5QiVS9rX+\nNSNsUF+yEB/9OFFywwaHlvMLYBMm1ikiU7DAbxowJxbw7Sh8N/sP1LMiv/2YUHiT\nqUJHBdyuOvaVFhcgrXUKPaX2B/yaTjXl/9u0sSfM9uoGyRQoj+OwtwC7BwARAQAB\ntHxBdXRvZ2VuZXJhdGVkIEtleSA8SFNNM1FVNTdUQUdHVjNEVkU0UUFFRkxUVkU1\nNEk2T1ZSU0lSSkJOWE5CVTZYWUlYNDRFVzZJNFdHSkY0U1dVS1hKQlhFSTZKQ0NW\nNkREM0ZGM1BZQ1hXM1NYTlJORk5DSERGWVBFST0+iQI/BBMBCgApBQJbRANLAhsv\nBQkB4c/1BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQ3ZWCdf0oVBq5EQ/9\nEUvasqWfeyidKAcHfXa/mu0ENyeDbDXgJNiZB867v3MaZWUn+5qy+SRcDGev1TBl\nwOzSt7uao6Zrqi9/Lexe07xjLEGRGYolZwOFLP+vlULpsgncen8lpENwrtY9MO3w\nbiobArNhp0kCvn6aiUi8Lb3nl57FpJ9dKfhMmP7evf0DcEvFcsDBoR7LHkMgEHQX\n5WbkvMyO7eoU+S4KrtU8PbR03j3cDv+YvLCJnwJyO79SqbkxafmAKD5KaUnsRTK5\nvoIeDH5dhGOQI0/YpCcCNZJP187rooOwlBL+R2r+LhyjK5YUEH1XKz9z8M6oQirZ\ntG8JbZbxCc19OnhL3SijsGVpqIuENd0VuNA1TLfzlbhJ/AYMBcQgRSU3a0kWRA3+\nNEZ5vEQkWtaL2bxDv2TkJdbS335nCBkuOIJgVMGiy9OjZdT58zEqpMupBWCzA67O\nLdovCyvNErWcs30QUqVRHreIaUMEQBcqtWJAhnfdfXNaQUr3ac0oopEZi30I9uDW\nejVc+ml00nTeg3WLqibjaJkid8QTfwkxx4oJ4WJaCgq/b0UvyBxD04N/ZpJHG2ja\n28uQ8v9rBJgTPR5uZNw4of842u17J6F65x7+phnoy6ayXCV0fwgzjSg85dPUUPIT\ns1CnQxnBjVUbCHELdx2LR7XSmVwkAHBVJ1NALCMiQic=\n=pmcO\n-----END PGP PUBLIC KEY BLOCK-----\n",
+                  "type": "PGP"
+              },
+              "last_updated": "2018-07-10T00:52:25.696391Z",
+              "number_of_documents": 0,
+              "number_of_messages": 2,
+              "remove_star_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/remove_star",
+              "reply_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/reply",
+              "submissions_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/submissions",
+              "url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce",
+              "uuid": "f086bd03-1c89-49fb-82d5-00084c17b4ce"
+          }
+      ]
   }
 
-Individual Source ``[/sources/<filesystem_id>]``
-------------------------------------------------
+Individual Source ``[/sources/<uuid>]``
+---------------------------------------
 
 Requires authentication
 
@@ -173,24 +171,23 @@ Response 200 (application/json):
 .. code:: sh
 
   {
-    "add_star_url": "/api/v1/sources/6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY%3D/add_star",
-    "filesystem_id": "6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY=",
-    "interaction_count": 2,
-    "is_flagged": false,
-    "is_starred": false,
-    "journalist_designation": "tight-fitting horsetail",
-    "key": {
-        "public": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nmQINBFtDtxcBEACaduNhYLXGe3brGRpSFeIe7j6hBVGCfDjfRV0KL2u8VUPIfKIZ\n4kkCtqdfTyTObSPxaTvd20LF+ENI9konXQAf2pBGxFBLRHx0cqwSlHvc6OjCJuXI\nmG94tPThMrw5xLgvhih8/PzdUvsC7vswMp5uAK5jIVam25pXJgjCtivEGVFars0q\n4H5ti3r3GHKhHA7ictjBesTDOiRT0NkCDPDjxv2V+AlNPjfFzf5lPw1zSFVZ5A52\n1OzgadqTZfj+/aZQcQkUA8omoTlcSJI4Mf/Dvn78j4A9bJO643U54rb8Nknnm2u8\niA4RTiGo0uTifZ1Q17tDJBlRTgheH4zrx8LJzEKY1RJDQt2K5RcHsU41TdbDVtbO\nRP6RX/xYRgNzyhUue3Vn3LtMzjmkbti3tiOtIAqUMgKuA6KTNY1uViDgF0hcgi6H\nzIWsoYBZx7RJhK5nEowmddTbN+Fp8gOoUhbCyKFo+f7W6dgVDl8KKJbUapaZpMnr\nk5ldS768Q2KqArSarZTCkUPSYHMvqBGP7ZR1l0HUY4qL1WGtibq3fTE/GPdyadc7\n98slu5/30prXgsV4/mTwWvBZQlixNSM0Rdw69sannDvtRfnH2ocF4oQKOf2htwQ1\nbLvknlOXvXZEy4ctu0FXoZUFjgXHPU5y7+XaxCfspfNSFB+xhzs8FWK9ywARAQAB\ntHxBdXRvZ2VuZXJhdGVkIEtleSA8NkNIQUQ3NFlVV1RZQk5FWVU0RFlSNlUyTExO\nWkdaR0hBWkFCNU82UjVXSEQyRFVGRlpTU05LS0lETk1BV1FXSUszQUFLWUo0NzdR\nRUc2UFJJRDVDUDJSUUoyU1dDUDNJTlBVNlhHWT0+iQI/BBMBCgApBQJbQ7cXAhsv\nBQkB4MqpBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQcNhgsP2ye/LjVw//\nXe/iXqAoJMc0o2x+/1Z0xyHP/uqy2nJ/ClVibhvwwDUoDGZb3l+1KZGqF9irdhOU\nXAE/N0taKG6LSAckW9I+2nXpUSNH4iXv8uwzW6VsNAY+BSmgRnS/KLsSr6DDFHek\n5zs6gftUYQoTOdpL3CxczGDnh2tJeJmGJcobAiCj8jArlLZhtK2sYHKEBDGW67rT\nskOTuRtRNYCDiOo/0WycD4AKtlZNCI9Az4Sn5Zq9ODlzwBKx7j2CdykKXeTSxqdd\nGZQc4+CD6xempUp2SKsacIhoQKfAw6q8L6pxcc3AJDtImCQJ7qNrEcLQCafQpLhx\nObXeDPNruxLHL+70rpIUs7bj5+ChZUwcfCzuT3bEqpKHCq+8vfpHJVgopUI1gg3G\nr88U6REdXobAQqh5AN3AFYFdg9P4XiFIpAnp7vCWkGGGULEQ0vnTZcASSdbj+MRI\n8v1qk0lZOMOn9JYYc3dePq5okZhfMqPOubEwaji8FDTOmhWnQiigIx8SS/XhQonY\nxJ14xgRoWCqwdBjrrjmJf+OScfJBZvFchf7mwkPkOUrdHCgUkWzGaUI4TLmh9xSk\nTy8fScG/U4JVlH0V8/xY01DOXvGRo3DAEn3ptm+j48fI1coH7jy0n9pQW4r2BNqX\n5MokpDpo3g5AaQr54IV1KBcetYBy301GxIytGaYThn8=\n=b/Mq\n-----END PGP PUBLIC KEY BLOCK-----\n",
-        "type": "PGP"
-    },
-    "last_updated": "2018-07-09T19:27:17.879344Z",
-    "number_of_documents": 0,
-    "number_of_messages": 2,
-    "remove_star_url": "/api/v1/sources/6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY%3D/remove_star",
-    "reply_url": "/api/v1/sources/6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY%3D/reply",
-    "source_id": 1,
-    "submissions_url": "/api/v1/sources/6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY%3D/submissions",
-    "url": "/api/v1/sources/6CHAD74YUWTYBNEYU4DYR6U2LLNZGZGHAZAB5O6R5WHD2DUFFZSSNKKIDNMAWQWIK3AAKYJ477QEG6PRID5CP2RQJ2SWCP3INPU6XGY%3D"
+      "add_star_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/add_star",
+      "interaction_count": 2,
+      "is_flagged": false,
+      "is_starred": false,
+      "journalist_designation": "validated benefactress",
+      "key": {
+          "public": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nmQINBFtEA0YBEAChcaDWfnLvMNDypxF+YhNI/P0wYw7+kGGTCAr+pChzV1I3ZEBO\nOz3NU4G5+MYHstD3m4Cdcwdvo+S6E66B4h/9xWWtJLzBMmRNBrCpfny8id1QyNsd\n2PPYk2Dt6Xs9RZaHO3sd8nXVx07FwYmMzNa3UlRg6kb0EUwzNDOW0jaramutp1c0\noTHiEiHJ9wQLNnU55kIXBg6XTNpquCj8O6Vpnsgr0HCC+Fr9hno8u58seYUnyhaN\n3PNE7d96H3O1MNGk0L10vt1u/449DoYFeWR1GnhssfAlVjhizf1sflNXCybjACqK\ngVMsKnYpDWzIXOPF7jNW7jn/N3EpGhq1pjjAJ4LNPXnsTgCmkA5okcPSPIhUH2gN\n6WVtPryGQ9iV5cWgL2KDq35VoZ+6+raANAeE23yAnJW9c7HLRckeB429GNAu1TKR\nkNmDe6zmuhwM2VA+JDN23gFjl7uMgN9bVz6pAyA+0eUQG6Ak3fJmCAGdNIx0/Htq\nRgUwElpHDbrp8kzmadfdWVwq/Tf373FE5TFL2mQ7EVI8xQ4HWvhWRFjpQKWRzBsg\nBLXWzr2C6coQywNLUvJ0JEkm/Uihd5341JoRuotUAY8pwA3CWUTSSi/7yBBAJzRk\nNy7XivylH084DM2/EJaq5gNbHJ7jA31YymwQdw3OmIqX4K07zS2AdGX20QARAQAB\ntHxBdXRvZ2VuZXJhdGVkIEtleSA8TTdOUEo3RVJNQU9KREhPSUpaUTIzVEdTTlFR\nR0JIQTNEVUJMUjdFUDQ1R0pKWVJGVkpSTFVSSDI0NjRBS1dMTjYyVFNSWFNJMzJE\nNkQzTjdXVTRFWTU3SzdBRkpZVFpHR0NUQkFKUT0+iQI/BBMBCgApBQJbRANGAhsv\nBQkB4c/6BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQDDX++nndxld+CA/9\nGoG3Xm3e2pyW+itxKC/gOJiK/PXk/nrpNXF5d1b1TEbkMMmMy2Dw4YC/7btr3Q0D\nEUg5qXiIO+Tw9KNS1udTVJggG+jWehlgOMb0+Z7JUawPCwAFjU17BRdRVDv39Y5G\nGJSM68/e8n5HXLNx1ABFlm0qfGQQw+/anwwxCnJb5KgSZ64mZiYtjVNiaqrtxxB7\nXu6AOsTlWgzT5rkwrq6gZsdG53gRYQiaVLS8BDKT4WD45iYKR5nn0BvPN6/L+4UG\nQj0l2lbAuQGMuMVKCeRYIJEDzTeqHzxuqkrr79pBZz1rNSNWYmaYo5V7ZH1VIl5y\n+jf1mEbvhNQUoy2HCoTUGPJjpgg7LyN7S6eZH/J5Q8gHD4s+rnQbzJHwD3u5y3L+\nDtz3trQs6K6CcqsyYBCS0oH3DSYO9SJiBJqgoSKKs8/YtqWupDXUFCjcYgdxDEmR\nLw+Ovd0wEbs7JoMcpRtx3LHgpL6ICFZqFvA3IyTo6OCa8ZCCnvtkLvlinUg0TGTc\nmvThHu/1jbDZjAPWRiuoEcHz5XyFSrCzkXKvXEDqlsK1WADNWZlznfBhu9EgciHP\nlOAJrKulOC4TaRmHP+K5MFowmwB1IY9yErhvAobTnZn7sXqc2AY5cTPfphvuHJwR\nFwtb1yZ6TEBSiLywZguTHurVeIyKW4C2jSlqyV1BnH8=\n=/Wxo\n-----END PGP PUBLIC KEY BLOCK-----\n",
+          "type": "PGP"
+      },
+      "last_updated": "2018-07-10T00:52:21.157409Z",
+      "number_of_documents": 0,
+      "number_of_messages": 2,
+      "remove_star_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/remove_star",
+      "reply_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/reply",
+      "submissions_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions",
+      "url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
+      "uuid": "9b6df7c9-a6b1-461d-91f0-5b715fc7a47a"
   }
 
 Get all submissions associated with a source [``GET``]
@@ -200,33 +197,33 @@ Requires authentication.
 
 .. code:: sh
 
-  GET /api/v1/sources/<filesystem_id>/submissions
+  GET /api/v1/sources/<uuid>/submissions
 
 Response 200 (application/json):
 
 .. code:: sh
 
   {
-      "submissions": [
-          {
-              "download_url": "/api/v1/sources/LBICF2DPGI3AMD74HIYXQ7QKQB3MCCKNMQ6Q4VPOL3OYWMIDMYDO6A37KOJCZNT3GVOEMCDHECM4S4OAXGGMZ452SD454A6EADXN3ZI%3D/submissions/3/download/",
-              "filename": "1-clairvoyant_burdock-msg.gpg",
-              "is_read": false,
-              "size": 604,
-              "source_url": "/api/v1/sources/LBICF2DPGI3AMD74HIYXQ7QKQB3MCCKNMQ6Q4VPOL3OYWMIDMYDO6A37KOJCZNT3GVOEMCDHECM4S4OAXGGMZ452SD454A6EADXN3ZI%3D/",
-              "submission_id": 3,
-              "submission_url": "/api/v1/sources/LBICF2DPGI3AMD74HIYXQ7QKQB3MCCKNMQ6Q4VPOL3OYWMIDMYDO6A37KOJCZNT3GVOEMCDHECM4S4OAXGGMZ452SD454A6EADXN3ZI%3D/submissions/3/"
-          },
-          {
-              "download_url": "/api/v1/sources/LBICF2DPGI3AMD74HIYXQ7QKQB3MCCKNMQ6Q4VPOL3OYWMIDMYDO6A37KOJCZNT3GVOEMCDHECM4S4OAXGGMZ452SD454A6EADXN3ZI%3D/submissions/4/download/",
-              "filename": "2-clairvoyant_burdock-msg.gpg",
-              "is_read": false,
-              "size": 604,
-              "source_url": "/api/v1/sources/LBICF2DPGI3AMD74HIYXQ7QKQB3MCCKNMQ6Q4VPOL3OYWMIDMYDO6A37KOJCZNT3GVOEMCDHECM4S4OAXGGMZ452SD454A6EADXN3ZI%3D/",
-              "submission_id": 4,
-              "submission_url": "/api/v1/sources/LBICF2DPGI3AMD74HIYXQ7QKQB3MCCKNMQ6Q4VPOL3OYWMIDMYDO6A37KOJCZNT3GVOEMCDHECM4S4OAXGGMZ452SD454A6EADXN3ZI%3D/submissions/4/"
-          }
-      ]
+    "submissions": [
+        {
+            "download_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1/download",
+            "filename": "1-validated_benefactress-msg.gpg",
+            "is_read": false,
+            "size": 604,
+            "source_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
+            "submission_id": 1,
+            "submission_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1"
+        },
+        {
+            "download_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/2/download",
+            "filename": "2-validated_benefactress-msg.gpg",
+            "is_read": false,
+            "size": 604,
+            "source_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
+            "submission_id": 2,
+            "submission_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/2"
+        }
+    ]
   }
 
 Get a single submission associated with a source [``GET``]
@@ -236,20 +233,20 @@ Requires authentication.
 
 .. code:: sh
 
-  GET /api/v1/sources/<filesystem_id>/submissions/<int:submission_id>
+  GET /api/v1/sources/<uuid>/submissions/<int:submission_id>
 
 Response 200 (application/json):
 
 .. code:: sh
 
   {
-      "download_url": "/api/v1/sources/44YGZ2R7643TXBA65ZKRO5D6QH26RJ7NVDFMQJVFSMM6WA5W3ZDXNUYKGBTEUYGFCABBUEDLQ7OKS657WKOGUHFLVDLQ75GWTOX4D4A%3D/submissions/1/download/",
-      "filename": "1-olfactory_yuppie-msg.gpg",
-      "is_read": false,
-      "size": 604,
-      "source_url": "/api/v1/sources/44YGZ2R7643TXBA65ZKRO5D6QH26RJ7NVDFMQJVFSMM6WA5W3ZDXNUYKGBTEUYGFCABBUEDLQ7OKS657WKOGUHFLVDLQ75GWTOX4D4A%3D/",
-      "submission_id": 1,
-      "submission_url": "/api/v1/sources/44YGZ2R7643TXBA65ZKRO5D6QH26RJ7NVDFMQJVFSMM6WA5W3ZDXNUYKGBTEUYGFCABBUEDLQ7OKS657WKOGUHFLVDLQ75GWTOX4D4A%3D/submissions/1/"
+    "download_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1/download",
+    "filename": "1-validated_benefactress-msg.gpg",
+    "is_read": false,
+    "size": 604,
+    "source_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
+    "submission_id": 1,
+    "submission_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1"
   }
 
 Add a reply to a source [``POST``]
@@ -261,7 +258,7 @@ source.
 
 .. code:: sh
 
-  POST /api/v1/sources/<filesystem_id>/reply
+  POST /api/v1/sources/<uuid>/reply
 
 with the reply in the request body:
 
@@ -296,7 +293,7 @@ Requires authentication.
 
 .. code:: sh
 
-  DELETE /api/v1/sources/<filesystem_id>/submissions/<int:submission_id>
+  DELETE /api/v1/sources/<uuid>/submissions/<int:submission_id>
 
 Response 200:
 
@@ -313,7 +310,7 @@ Requires authentication.
 
 .. code:: sh
 
-  GET /api/v1/sources/<filesystem_id>/submissions/<int:submission_id>/download
+  GET /api/v1/sources/<uuid>/submissions/<int:submission_id>/download
 
 Response 200 will have ``Content-Type: application/pgp-encrypted`` and is the
 content of the PGP encrypted submission.
@@ -325,7 +322,7 @@ Requires authentication.
 
 .. code:: sh
 
-  DELETE /api/v1/sources/<filesystem_id>
+  DELETE /api/v1/sources/<uuid>
 
 Response 200:
 
@@ -342,7 +339,7 @@ Requires authentication.
 
 .. code:: sh
 
-  POST /api/v1/sources/<filesystem_id>/star
+  POST /api/v1/sources/<uuid>/star
 
 Response 201 created:
 
@@ -359,7 +356,7 @@ Requires authentication.
 
 .. code:: sh
 
-  DELETE /api/v1/sources/<filesystem_id>/star
+  DELETE /api/v1/sources/<uuid>/star
 
 Response 200:
 
@@ -376,7 +373,7 @@ Requires authentication.
 
 .. code:: sh
 
-  POST /api/v1/sources/<filesystem_id>/flag
+  POST /api/v1/sources/<uuid>/flag
 
 Response 200:
 
@@ -402,46 +399,46 @@ Response 200:
 
 .. code:: sh
 
-  {
-      "submissions": [
-          {
-              "download_url": "/api/v1/sources/HUIQTCLJSN7PACRN4YTC4GUTGD2ZESBTTGAJ5LLFWL4UZY3RP4YE6NO2FL4NZLNFCAJE5TIJS7H3U5YTMC3Z3UNJNCB6PDHU5AMQBRA%3D/submissions/1/download/",
-              "filename": "1-inspirational_busman-msg.gpg",
-              "is_read": false,
-              "size": 604,
-              "source_url": "/api/v1/sources/HUIQTCLJSN7PACRN4YTC4GUTGD2ZESBTTGAJ5LLFWL4UZY3RP4YE6NO2FL4NZLNFCAJE5TIJS7H3U5YTMC3Z3UNJNCB6PDHU5AMQBRA%3D/",
-              "submission_id": 1,
-              "submission_url": "/api/v1/sources/HUIQTCLJSN7PACRN4YTC4GUTGD2ZESBTTGAJ5LLFWL4UZY3RP4YE6NO2FL4NZLNFCAJE5TIJS7H3U5YTMC3Z3UNJNCB6PDHU5AMQBRA%3D/submissions/1/"
-          },
-          {
-              "download_url": "/api/v1/sources/HUIQTCLJSN7PACRN4YTC4GUTGD2ZESBTTGAJ5LLFWL4UZY3RP4YE6NO2FL4NZLNFCAJE5TIJS7H3U5YTMC3Z3UNJNCB6PDHU5AMQBRA%3D/submissions/2/download/",
-              "filename": "2-inspirational_busman-msg.gpg",
-              "is_read": false,
-              "size": 604,
-              "source_url": "/api/v1/sources/HUIQTCLJSN7PACRN4YTC4GUTGD2ZESBTTGAJ5LLFWL4UZY3RP4YE6NO2FL4NZLNFCAJE5TIJS7H3U5YTMC3Z3UNJNCB6PDHU5AMQBRA%3D/",
-              "submission_id": 2,
-              "submission_url": "/api/v1/sources/HUIQTCLJSN7PACRN4YTC4GUTGD2ZESBTTGAJ5LLFWL4UZY3RP4YE6NO2FL4NZLNFCAJE5TIJS7H3U5YTMC3Z3UNJNCB6PDHU5AMQBRA%3D/submissions/2/"
-          },
-          {
-              "download_url": "/api/v1/sources/C7YGA52VCSAILDUGWQININHKV7MO3SPUV67HAZKDGKDEVMBZPNGAJSGN7JTG5CZ7WNA4VR36ZKQ7BPI4Z544WBBBOTLRTAYO7LAVPUA%3D/submissions/3/download/",
-              "filename": "1-masculine_internationalization-msg.gpg",
-              "is_read": false,
-              "size": 604,
-              "source_url": "/api/v1/sources/C7YGA52VCSAILDUGWQININHKV7MO3SPUV67HAZKDGKDEVMBZPNGAJSGN7JTG5CZ7WNA4VR36ZKQ7BPI4Z544WBBBOTLRTAYO7LAVPUA%3D/",
-              "submission_id": 3,
-              "submission_url": "/api/v1/sources/C7YGA52VCSAILDUGWQININHKV7MO3SPUV67HAZKDGKDEVMBZPNGAJSGN7JTG5CZ7WNA4VR36ZKQ7BPI4Z544WBBBOTLRTAYO7LAVPUA%3D/submissions/3/"
-          },
-          {
-              "download_url": "/api/v1/sources/C7YGA52VCSAILDUGWQININHKV7MO3SPUV67HAZKDGKDEVMBZPNGAJSGN7JTG5CZ7WNA4VR36ZKQ7BPI4Z544WBBBOTLRTAYO7LAVPUA%3D/submissions/4/download/",
-              "filename": "2-masculine_internationalization-msg.gpg",
-              "is_read": false,
-              "size": 604,
-              "source_url": "/api/v1/sources/C7YGA52VCSAILDUGWQININHKV7MO3SPUV67HAZKDGKDEVMBZPNGAJSGN7JTG5CZ7WNA4VR36ZKQ7BPI4Z544WBBBOTLRTAYO7LAVPUA%3D/",
-              "submission_id": 4,
-              "submission_url": "/api/v1/sources/C7YGA52VCSAILDUGWQININHKV7MO3SPUV67HAZKDGKDEVMBZPNGAJSGN7JTG5CZ7WNA4VR36ZKQ7BPI4Z544WBBBOTLRTAYO7LAVPUA%3D/submissions/4/"
-          }
-      ]
-  }
+    {
+        "submissions": [
+            {
+                "download_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1/download",
+                "filename": "1-validated_benefactress-msg.gpg",
+                "is_read": false,
+                "size": 604,
+                "source_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
+                "submission_id": 1,
+                "submission_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1"
+            },
+            {
+                "download_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/2/download",
+                "filename": "2-validated_benefactress-msg.gpg",
+                "is_read": false,
+                "size": 604,
+                "source_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
+                "submission_id": 2,
+                "submission_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/2"
+            },
+            {
+                "download_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/submissions/3/download",
+                "filename": "1-navigational_firearm-msg.gpg",
+                "is_read": false,
+                "size": 604,
+                "source_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce",
+                "submission_id": 3,
+                "submission_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/submissions/3"
+            },
+            {
+                "download_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/submissions/4/download",
+                "filename": "2-navigational_firearm-msg.gpg",
+                "is_read": false,
+                "size": 604,
+                "source_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce",
+                "submission_id": 4,
+                "submission_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/submissions/4"
+            }
+        ]
+    }
 
 User ``[/user]``
 ----------------
