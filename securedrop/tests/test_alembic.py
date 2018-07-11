@@ -83,9 +83,14 @@ def ddl_equal(left, right):
     if left is None and right is None:
         return True
 
-    left = [x for x in left.split() if x]
-    right = [x for x in right.split() if x]
-    return left == right
+    left = [x for x in left.split('\n') if x]
+    right = [x for x in right.split('\n') if x]
+
+    # Strip commas, whitespace, quotes
+    left = [x.replace("\"", "").replace(",", "").strip() for x in left]
+    right = [x.replace("\"", "").replace(",", "").strip() for x in right]
+
+    return sorted(left) == sorted(right)
 
 
 def test_alembic_head_matches_db_models(journalist_app,
