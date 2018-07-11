@@ -7,31 +7,16 @@ with at least 16GB RAM and 60GB free disk space.
 Overview
 --------
 
-We're going to create four new standalone (HVM) Qubes VMs:
+Follow the the Qubes platform instructions in :doc:`setup_development`
+to create an ``sd-dev`` Standalone VM. Once done, we'll create three new
+Standalone (HVM) Qubes VMs for use with staging:
 
-- a development VM for working on SecureDrop code
-- a base VM for cloning reusable staging VMs
-- a base VM for the *SecureDrop Application Server*
-- a base VM for the *SecureDrop Monitor Server*
+- ``sd-trusty-base``, a base VM for cloning reusable staging VMs
+- ``sd-app-base``, a base VM for the *SecureDrop Application Server*
+- ``sd-mon-base``, a base VM for the *SecureDrop Monitor Server*
 
-The development VM, ``sd-dev``, will be based on Debian 9. All the other VMs
+While the development VM, ``sd-dev``, is based on Debian 9, the other VMs
 will be based on Ubuntu Trusty.
-
-Create ``sd-dev``
------------------
-
-Let's get started. Create yourself a new standalone Qube called ``sd-dev`` based
-on the Debian 9 template that comes standard in Qubes 4.
-You can use the "Q" menu for this, or in ``dom0``:
-
-.. code:: sh
-
-   qvm-clone --class StandaloneVM debian-9 sd-dev
-   qvm-start sd-dev
-   qvm-sync-appmenus sd-dev
-
-The commands above will created a new StandaloneVM, boot it, then update
-the Qubes menus with applications within that VM.
 
 Download Ubuntu Trusty server ISO
 ---------------------------------
