@@ -66,6 +66,9 @@ For the most part, the install process matches the
   -  Hostname: ``sd-trusty-base``
   -  Domain name should be left blank
 
+Make sure to configure LVM and use **Virtual disk 1 (xvda 20.0GB Xen Virtual Block device)**
+when asked for a target partition during installation. It should be the default option.
+
 You'll be prompted to add a "regular" user for the VM: this is the user you'll be
 using later to SSH into the VM. We're using a standardized name/password pair:
 ``sdadmin/securedrop``.
