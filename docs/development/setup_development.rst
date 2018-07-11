@@ -45,6 +45,23 @@ Install Docker_.
 .. _Docker: https://store.docker.com/editions/community/docker-ce-desktop-mac
 
 
+Qubes
+~~~~~
+
+Create a StandaloneVM based on Debian 9, called ``sd-dev``.
+You can use the **Q** menu to configure a new VM, or run
+the following in ``dom0``:
+
+.. code:: sh
+
+   qvm-clone --class StandaloneVM debian-9 sd-dev
+   qvm-start sd-dev
+   qvm-sync-appmenus sd-dev
+
+The commands above will created a new StandaloneVM, boot it, then update
+the Qubes menus with applications within that VM. Open a terminal in
+``sd-dev``, and proceed with installing `Docker CE for Debian`_.
+
 Fork & Clone the Repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
