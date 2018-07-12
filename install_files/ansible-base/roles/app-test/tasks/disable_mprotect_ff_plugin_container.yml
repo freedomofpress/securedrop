@@ -8,7 +8,6 @@
   # We'll catch that error and respond accordingly in the next task.
   failed_when: false
   register: paxctl_firefox_header_check
-  when: ansible_kernel.endswith('-grsec')
   with_items:
     - firefox
     - plugin-container
