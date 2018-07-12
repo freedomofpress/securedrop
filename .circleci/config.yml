@@ -63,6 +63,7 @@ jobs:
 
       - run:
           name: Run tests
+          no_output_timeout: 20m
           command: |
             export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
             docker rm -f securedrop-test || true
