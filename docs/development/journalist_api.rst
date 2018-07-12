@@ -159,8 +159,8 @@ Response 200 (application/json):
       ]
   }
 
-Individual Source ``[/sources/<uuid>]``
----------------------------------------
+Individual Source ``[/sources/<source_uuid>]``
+----------------------------------------------
 
 Requires authentication
 
@@ -197,33 +197,33 @@ Requires authentication.
 
 .. code:: sh
 
-  GET /api/v1/sources/<uuid>/submissions
+  GET /api/v1/sources/<source_uuid>/submissions
 
 Response 200 (application/json):
 
 .. code:: sh
 
   {
-    "submissions": [
-        {
-            "download_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1/download",
-            "filename": "1-validated_benefactress-msg.gpg",
-            "is_read": false,
-            "size": 604,
-            "source_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
-            "submission_id": 1,
-            "submission_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1"
-        },
-        {
-            "download_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/2/download",
-            "filename": "2-validated_benefactress-msg.gpg",
-            "is_read": false,
-            "size": 604,
-            "source_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
-            "submission_id": 2,
-            "submission_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/2"
-        }
-    ]
+      "submissions": [
+          {
+              "download_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241/submissions/4c2e701c-70d2-4cb5-87c0-de59c2ebbc62/download",
+              "filename": "1-dejected_respondent-msg.gpg",
+              "is_read": false,
+              "size": 603,
+              "source_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241",
+              "submission_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241/submissions/4c2e701c-70d2-4cb5-87c0-de59c2ebbc62",
+              "uuid": "4c2e701c-70d2-4cb5-87c0-de59c2ebbc62"
+          },
+          {
+              "download_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241/submissions/c2e00865-8f75-444a-b5b4-88424024ce69/download",
+              "filename": "2-dejected_respondent-msg.gpg",
+              "is_read": false,
+              "size": 604,
+              "source_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241",
+              "submission_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241/submissions/c2e00865-8f75-444a-b5b4-88424024ce69",
+              "uuid": "c2e00865-8f75-444a-b5b4-88424024ce69"
+          }
+      ]
   }
 
 Get a single submission associated with a source [``GET``]
@@ -233,20 +233,20 @@ Requires authentication.
 
 .. code:: sh
 
-  GET /api/v1/sources/<uuid>/submissions/<int:submission_id>
+  GET /api/v1/sources/<source_uuid>/submissions/<submission_uuid>
 
 Response 200 (application/json):
 
 .. code:: sh
 
   {
-    "download_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1/download",
-    "filename": "1-validated_benefactress-msg.gpg",
-    "is_read": false,
-    "size": 604,
-    "source_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
-    "submission_id": 1,
-    "submission_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1"
+      "download_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241/submissions/4c2e701c-70d2-4cb5-87c0-de59c2ebbc62/download",
+      "filename": "1-dejected_respondent-msg.gpg",
+      "is_read": false,
+      "size": 603,
+      "source_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241",
+      "submission_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241/submissions/4c2e701c-70d2-4cb5-87c0-de59c2ebbc62",
+      "uuid": "4c2e701c-70d2-4cb5-87c0-de59c2ebbc62"
   }
 
 Add a reply to a source [``POST``]
@@ -258,7 +258,7 @@ source.
 
 .. code:: sh
 
-  POST /api/v1/sources/<uuid>/reply
+  POST /api/v1/sources/<source_uuid>/reply
 
 with the reply in the request body:
 
@@ -293,7 +293,7 @@ Requires authentication.
 
 .. code:: sh
 
-  DELETE /api/v1/sources/<uuid>/submissions/<int:submission_id>
+  DELETE /api/v1/sources/<source_uuid>/submissions/<submission_uuid>
 
 Response 200:
 
@@ -310,7 +310,7 @@ Requires authentication.
 
 .. code:: sh
 
-  GET /api/v1/sources/<uuid>/submissions/<int:submission_id>/download
+  GET /api/v1/sources/<source_uuid>/submissions/<submission_uuid>/download
 
 Response 200 will have ``Content-Type: application/pgp-encrypted`` and is the
 content of the PGP encrypted submission.
@@ -322,7 +322,7 @@ Requires authentication.
 
 .. code:: sh
 
-  DELETE /api/v1/sources/<uuid>
+  DELETE /api/v1/sources/<source_uuid>
 
 Response 200:
 
@@ -339,7 +339,7 @@ Requires authentication.
 
 .. code:: sh
 
-  POST /api/v1/sources/<uuid>/star
+  POST /api/v1/sources/<source_uuid>/star
 
 Response 201 created:
 
@@ -356,7 +356,7 @@ Requires authentication.
 
 .. code:: sh
 
-  DELETE /api/v1/sources/<uuid>/star
+  DELETE /api/v1/sources/<source_uuid>/star
 
 Response 200:
 
@@ -373,7 +373,7 @@ Requires authentication.
 
 .. code:: sh
 
-  POST /api/v1/sources/<uuid>/flag
+  POST /api/v1/sources/<source_uuid>/flag
 
 Response 200:
 
@@ -399,46 +399,46 @@ Response 200:
 
 .. code:: sh
 
-    {
-        "submissions": [
-            {
-                "download_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1/download",
-                "filename": "1-validated_benefactress-msg.gpg",
-                "is_read": false,
-                "size": 604,
-                "source_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
-                "submission_id": 1,
-                "submission_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/1"
-            },
-            {
-                "download_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/2/download",
-                "filename": "2-validated_benefactress-msg.gpg",
-                "is_read": false,
-                "size": 604,
-                "source_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
-                "submission_id": 2,
-                "submission_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions/2"
-            },
-            {
-                "download_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/submissions/3/download",
-                "filename": "1-navigational_firearm-msg.gpg",
-                "is_read": false,
-                "size": 604,
-                "source_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce",
-                "submission_id": 3,
-                "submission_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/submissions/3"
-            },
-            {
-                "download_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/submissions/4/download",
-                "filename": "2-navigational_firearm-msg.gpg",
-                "is_read": false,
-                "size": 604,
-                "source_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce",
-                "submission_id": 4,
-                "submission_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/submissions/4"
-            }
-        ]
-    }
+  {
+      "submissions": [
+          {
+              "download_url": "/api/v1/sources/1ed4c191-c6b1-463b-92a5-102deaf7d40a/submissions/e58f6206-fc12-4dbe-9a9c-84c3d82eea2f/download",
+              "filename": "1-abridged_psalmist-msg.gpg",
+              "is_read": false,
+              "size": 604,
+              "source_url": "/api/v1/sources/1ed4c191-c6b1-463b-92a5-102deaf7d40a",
+              "submission_url": "/api/v1/sources/1ed4c191-c6b1-463b-92a5-102deaf7d40a/submissions/e58f6206-fc12-4dbe-9a9c-84c3d82eea2f",
+              "uuid": "e58f6206-fc12-4dbe-9a9c-84c3d82eea2f"
+          },
+          {
+              "download_url": "/api/v1/sources/1ed4c191-c6b1-463b-92a5-102deaf7d40a/submissions/a93d4123-a984-4740-9849-772c30694bab/download",
+              "filename": "2-abridged_psalmist-msg.gpg",
+              "is_read": false,
+              "size": 604,
+              "source_url": "/api/v1/sources/1ed4c191-c6b1-463b-92a5-102deaf7d40a",
+              "submission_url": "/api/v1/sources/1ed4c191-c6b1-463b-92a5-102deaf7d40a/submissions/a93d4123-a984-4740-9849-772c30694bab",
+              "uuid": "a93d4123-a984-4740-9849-772c30694bab"
+          },
+          {
+              "download_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241/submissions/4c2e701c-70d2-4cb5-87c0-de59c2ebbc62/download",
+              "filename": "1-dejected_respondent-msg.gpg",
+              "is_read": false,
+              "size": 603,
+              "source_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241",
+              "submission_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241/submissions/4c2e701c-70d2-4cb5-87c0-de59c2ebbc62",
+              "uuid": "4c2e701c-70d2-4cb5-87c0-de59c2ebbc62"
+          },
+          {
+              "download_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241/submissions/c2e00865-8f75-444a-b5b4-88424024ce69/download",
+              "filename": "2-dejected_respondent-msg.gpg",
+              "is_read": false,
+              "size": 604,
+              "source_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241",
+              "submission_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241/submissions/c2e00865-8f75-444a-b5b4-88424024ce69",
+              "uuid": "c2e00865-8f75-444a-b5b4-88424024ce69"
+          }
+      ]
+  }
 
 User ``[/user]``
 ----------------

@@ -115,7 +115,7 @@ class Source(db.Model):
 
         json_source = {
             'uuid': self.uuid,
-            'url': url_for('api.single_source', uuid=self.uuid),
+            'url': url_for('api.single_source', source_uuid=self.uuid),
             'journalist_designation': self.journalist_designation,
             'is_flagged': self.flagged,
             'is_starred': True if self.star else False,
@@ -128,10 +128,11 @@ class Source(db.Model):
             'number_of_documents': docs_msg_count['documents'],
             'number_of_messages': docs_msg_count['messages'],
             'submissions_url': url_for('api.all_source_submissions',
-                                       uuid=self.uuid),
-            'add_star_url': url_for('api.add_star', uuid=self.uuid),
-            'remove_star_url': url_for('api.remove_star', uuid=self.uuid),
-            'reply_url': url_for('api.post_reply', uuid=self.uuid)
+                                       source_uuid=self.uuid),
+            'add_star_url': url_for('api.add_star', source_uuid=self.uuid),
+            'remove_star_url': url_for('api.remove_star',
+                                       source_uuid=self.uuid),
+            'reply_url': url_for('api.post_reply', source_uuid=self.uuid)
             }
         return json_source
 
@@ -139,6 +140,7 @@ class Source(db.Model):
 class Submission(db.Model):
     __tablename__ = 'submissions'
     id = Column(Integer, primary_key=True)
+    uuid = Column(String(36), unique=True, nullable=False)
     source_id = Column(Integer, ForeignKey('sources.id'))
     source = relationship(
         "Source",
@@ -152,6 +154,7 @@ class Submission(db.Model):
     def __init__(self, source, filename):
         self.source_id = source.id
         self.filename = filename
+        self.uuid = str(uuid.uuid4())
         self.size = os.stat(current_app.storage.path(source.filesystem_id,
                                                      filename)).st_size
 
@@ -160,17 +163,18 @@ class Submission(db.Model):
 
     def to_json(self):
         json_submission = {
-            'source_url': url_for('api.single_source', uuid=self.source.uuid),
+            'source_url': url_for('api.single_source',
+                                  source_uuid=self.source.uuid),
             'submission_url': url_for('api.single_submission',
-                                      uuid=self.source.uuid,
-                                      submission_id=self.id),
-            'submission_id': self.id,
+                                      source_uuid=self.source.uuid,
+                                      submission_uuid=self.uuid),
             'filename': self.filename,
             'size': self.size,
             'is_read': self.downloaded,
+            'uuid': self.uuid,
             'download_url': url_for('api.download_submission',
-                                    uuid=self.source.uuid,
-                                    submission_id=self.id),
+                                    source_uuid=self.source.uuid,
+                                    submission_uuid=self.uuid),
         }
         return json_submission
 
