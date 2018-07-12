@@ -42,6 +42,9 @@ provisioner:
     ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
 scenario:
   name: qubes-staging
+  # Skip unnecessary "prepare" step in create sequence
+  create_sequence:
+    - create
   test_sequence:
     - destroy
     - create

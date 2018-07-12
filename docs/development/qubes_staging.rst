@@ -292,7 +292,6 @@ You can use the smaller constituent Molecule actions, rather than the bundled
 .. code:: sh
 
    molecule create -s qubes-staging
-   molecule prepare -s qubes-staging
    molecule converge -s qubes-staging
 
 That's it. You should now have a running, configured SecureDrop staging instance
