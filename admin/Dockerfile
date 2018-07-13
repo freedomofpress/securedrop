@@ -5,8 +5,8 @@ ENV USER_NAME ${USER_NAME:-root}
 ARG USER_ID
 ENV USER_ID ${USER_ID:-0}
 
-RUN apt-get update
-RUN apt-get install -y python sudo lsb-release gnupg2 git
+RUN apt-get update && \
+    apt-get install -y python sudo lsb-release gnupg2 git
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
 
 WORKDIR /opt
