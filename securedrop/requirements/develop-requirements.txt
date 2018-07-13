@@ -65,7 +65,7 @@ molecule==2.13.1
 monotonic==1.4            # via fasteners
 netaddr==0.7.19
 packaging==16.8           # via dparse, safety
-paramiko==2.2.1           # via ansible
+paramiko==2.4.1           # via ansible
 pathspec==0.5.5           # via yamllint
 pathtools==0.1.2          # via sphinx-autobuild, watchdog
 pbr==3.0.1                # via git-url-parse, molecule, python-gilt, stevedore
