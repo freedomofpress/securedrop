@@ -29,7 +29,6 @@ if typing.TYPE_CHECKING:
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from sdconfig import SDConfig  # noqa: F401
 
-_insecure_api_views = ['api.get_endpoints', 'api.get_token']
 _insecure_views = ['main.login', 'main.select_logo', 'static']
 
 
