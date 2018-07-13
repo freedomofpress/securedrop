@@ -86,7 +86,6 @@ def async_genkey(crypto_util_, db_uri, filesystem_id, codename):
     try:
         source = session.query(Source).filter(
             Source.filesystem_id == filesystem_id).one()
-        source.last_updated = datetime.utcnow()
         session.commit()
     except Exception as e:
         logging.getLogger(__name__).error(
