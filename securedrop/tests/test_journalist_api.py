@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import hashlib
 import json
 import os
 
@@ -448,6 +449,10 @@ def test_authorized_user_can_download_submission(journalist_app,
 
         # Response should be a PGP encrypted download
         assert response.mimetype == 'application/pgp-encrypted'
+
+        # Response should have Etag field with hash
+        assert response.headers['ETag'] == '"sha256:{}"'.format(
+            hashlib.sha256(response.data).hexdigest())
 
 
 def test_authorized_user_can_get_current_user_endpoint(journalist_app,

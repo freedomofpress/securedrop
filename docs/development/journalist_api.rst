@@ -315,6 +315,15 @@ Requires authentication.
 Response 200 will have ``Content-Type: application/pgp-encrypted`` and is the
 content of the PGP encrypted submission.
 
+An ETag header is also present containing the SHA256 hash of the response data:
+
+.. code:: sh
+
+  "sha256:c757c5aa263dc4a5a2bca8e7fe973367dbd2c1a6c780d19c0ba499e6b1b81efa"
+
+Note that these are not intended for cryptographic purposes and are present
+for clients to check that downloads are not corrupted.
+
 Delete a Source and all their associated submissions [``DELETE``]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

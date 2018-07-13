@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from functools import wraps
+import hashlib
 import json
 from werkzeug.exceptions import default_exceptions  # type: ignore
 
@@ -160,10 +161,16 @@ def make_blueprint(config):
         submission.downloaded = True
         db.session.commit()
 
-        return send_file(current_app.storage.path(source.filesystem_id,
-                                                  submission.filename),
-                         mimetype="application/pgp-encrypted",
-                         as_attachment=True)
+        response = send_file(current_app.storage.path(source.filesystem_id,
+                                                      submission.filename),
+                             mimetype="application/pgp-encrypted",
+                             as_attachment=True,
+                             add_etags=False)  # Disable Flask default ETag
+
+        response.direct_passthrough = False
+        response.headers['Etag'] = '"sha256:{}"'.format(
+            hashlib.sha256(response.get_data()).hexdigest())
+        return response
 
     @api.route('/sources/<source_uuid>/submissions/<submission_uuid>',
                methods=['GET', 'DELETE'])
