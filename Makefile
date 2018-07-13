@@ -147,6 +147,10 @@ self-signed-https-certs: ## Generates self-signed certs for TESTING the HTTPS co
 vagrant-package: ## Package up a vagrant box of the last stable SD release
 	@devops/scripts/vagrant_package.sh
 
+.PHONY: clean
+clean: ## DANGER! Purges all site-specific info and developer files from project.
+	@./devops/clean
+
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
 # 2. Use sed-like syntax to remove the make targets
