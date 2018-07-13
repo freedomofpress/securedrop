@@ -35,8 +35,11 @@ function remove_unwanted_files() {
     # idempotence for the cleanup action.
     if hash vagrant &> /dev/null && [[ -d .vagrant/ ]]
     then
-        printf "Removing vagrant VMs\\n"
-        vagrant destroy -f > /dev/null
+        printf "Removing vagrant VMs..."
+        # Using `|| true` as different versions of Vagrant exit different
+        # status codes depending on VM state during destroy.
+        vagrant destroy -f > /dev/null || true
+        printf " done\n"
     fi
 
     # Any and all git-ignored files and directories, if present. Includes e.g.
