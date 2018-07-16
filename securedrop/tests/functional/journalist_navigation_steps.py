@@ -282,7 +282,7 @@ class JournalistNavigationStepsMixin():
             'button[type=submit]')
         submit_button.click()
 
-    def _admin_adds_a_user(self):
+    def _admin_adds_a_user(self, new_username=''):
         add_user_btn = self.driver.find_element_by_css_selector(
             'button#add-user')
         add_user_btn.click()
@@ -296,8 +296,10 @@ class JournalistNavigationStepsMixin():
         password = self.driver.find_element_by_css_selector('#password') \
             .text.strip()
 
+        if not new_username:
+            new_username = journalist_usernames.next()
         self.new_user = dict(
-                username=journalist_usernames.next(),
+                username=new_username,
                 password=password,
             )
         self._add_user(self.new_user['username'])
@@ -403,6 +405,7 @@ class JournalistNavigationStepsMixin():
         edit_account_link = self.driver.find_element_by_id(
             'link-edit-account')
         edit_account_link.click()
+        time.sleep(self.sleep_time)
 
         # The header says "Edit your account"
         h1s = self.driver.find_elements_by_tag_name('h1')[0]
@@ -428,7 +431,7 @@ class JournalistNavigationStepsMixin():
         assert ('/account/reset-2fa-hotp' in
                 hotp_reset_button.get_attribute('action'))
 
-    def _edit_user(self, username):
+    def _edit_user(self, username, is_admin=False):
         # XXXX
         new_user_edit_links = filter(
             lambda el: el.get_attribute('data-username') == username,
@@ -451,7 +454,7 @@ class JournalistNavigationStepsMixin():
         # it's already checked appropriately to reflect the current status of
         # our user.
         username_field = self.driver.find_element_by_css_selector('#is-admin')
-        assert not bool(username_field.get_attribute('checked'))
+        assert bool(username_field.get_attribute('checked')) == is_admin
         # 2FA reset buttons at the bottom point to the admin URLs for
         # resettting 2FA and include the correct user id in the hidden uid.
         totp_reset_button = self.driver.find_elements_by_css_selector(
