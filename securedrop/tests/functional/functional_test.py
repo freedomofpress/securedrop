@@ -180,6 +180,7 @@ class FunctionalTest(object):
         self.localtesting = False
         self.driver = None
         self.second_driver = None
+        self.new_totp = None  # To be created runtime
 
         instance_information_path = join(FUNCTIONAL_TEST_DIR,
                                          'instance_information.json')
@@ -192,7 +193,6 @@ class FunctionalTest(object):
             self.hidservauth = data.get('hidserv_token', '')
             self.admin_user = data.get('user')
             self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
-            self.new_totp = None  # To be created runtime
             self.sleep_time = data.get('sleep_time', 10)
             if self.hidservauth:
                 if self.journalist_location.startswith('http://'):
@@ -244,8 +244,7 @@ class FunctionalTest(object):
                                 "password": "WEjwn8ZyczDhQSK24YKM8C9a",
                                 "secret": "JHCOGO7VCER3EJ4L"}
             self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
-            self.new_totp = None  # To be created runtime
-            self.sleep_time = 10
+            self.sleep_time = 2
 
             def start_source_server(app):
                 config.SESSION_EXPIRATION_MINUTES = self.session_expiration
