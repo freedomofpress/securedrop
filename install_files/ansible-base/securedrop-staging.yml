@@ -77,7 +77,7 @@
   hosts: staging
   max_fail_percentage: 0
   any_errors_fatal: yes
-  tasks:
-    - include: tasks/reboot_if_first_install.yml
+  roles:
+    - role: reboot-if-first-install
       when: not amazon_builder
   become: yes
