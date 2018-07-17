@@ -20,10 +20,9 @@ def test_unauthenticated_user_gets_all_endpoints(journalist_app):
         response = app.get(url_for('api.get_endpoints'))
 
         observed_endpoints = json.loads(response.data)
-
-        for expected_endpoint in ['current_user_url', 'sources_url',
-                                  'submissions_url']:
-            assert expected_endpoint in observed_endpoints.keys()
+        expected_endpoints = [u'current_user_url', u'submissions_url',
+                              u'sources_url', u'auth_token_url']
+        assert expected_endpoints == observed_endpoints.keys()
 
 
 def test_valid_user_can_get_an_api_token(journalist_app, test_journo):
