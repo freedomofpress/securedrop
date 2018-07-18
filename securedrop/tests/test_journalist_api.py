@@ -135,17 +135,17 @@ def test_authorized_user_gets_all_sources(journalist_app, test_source,
 
 
 def test_user_without_token_cannot_get_protected_endpoints(journalist_app,
-                                                           test_source):
+                                                           test_submissions):
     with journalist_app.app_context():
-        uuid = test_source['source'].uuid
+        uuid = test_submissions['source'].uuid
         protected_routes = [
             url_for('api.get_all_sources'),
             url_for('api.single_source', source_uuid=uuid),
             url_for('api.all_source_submissions', source_uuid=uuid),
             url_for('api.single_submission', source_uuid=uuid,
-                    submission_uuid=test_source['submissions'][0].uuid),
+                    submission_uuid=test_submissions['submissions'][0].uuid),
             url_for('api.download_submission', source_uuid=uuid,
-                    submission_uuid=test_source['submissions'][0].uuid),
+                    submission_uuid=test_submissions['submissions'][0].uuid),
             url_for('api.get_all_submissions'),
             url_for('api.get_current_user')
             ]
@@ -158,14 +158,14 @@ def test_user_without_token_cannot_get_protected_endpoints(journalist_app,
             assert response.status_code == 403
 
 
-def test_user_without_token_cannot_delete_protected_endpoints(journalist_app,
-                                                              test_source):
+def test_user_without_token_cannot_del_protected_endpoints(journalist_app,
+                                                           test_submissions):
     with journalist_app.app_context():
-        uuid = test_source['source'].uuid
+        uuid = test_submissions['source'].uuid
         protected_routes = [
             url_for('api.single_source', source_uuid=uuid),
             url_for('api.single_submission', source_uuid=uuid,
-                    submission_uuid=test_source['submissions'][0].uuid),
+                    submission_uuid=test_submissions['submissions'][0].uuid),
             url_for('api.remove_star', source_uuid=uuid),
             ]
 
@@ -336,7 +336,8 @@ def test_disallowed_methods_produces_405(journalist_app, test_source,
         assert json_response['error'] == 'Method Not Allowed'
 
 
-def test_authorized_user_can_get_all_submissions(journalist_app, test_source,
+def test_authorized_user_can_get_all_submissions(journalist_app,
+                                                 test_submissions,
                                                  journalist_api_token):
     with journalist_app.test_client() as app:
         response = app.get(url_for('api.get_all_submissions'),
@@ -353,10 +354,11 @@ def test_authorized_user_can_get_all_submissions(journalist_app, test_source,
         assert observed_submissions == expected_submissions
 
 
-def test_authorized_user_get_source_submissions(journalist_app, test_source,
+def test_authorized_user_get_source_submissions(journalist_app,
+                                                test_submissions,
                                                 journalist_api_token):
     with journalist_app.test_client() as app:
-        uuid = test_source['source'].uuid
+        uuid = test_submissions['source'].uuid
         response = app.get(url_for('api.all_source_submissions',
                                    source_uuid=uuid),
                            headers=get_api_headers(journalist_api_token))
@@ -368,16 +370,16 @@ def test_authorized_user_get_source_submissions(journalist_app, test_source,
                                 submission in json_response['submissions']]
 
         expected_submissions = [submission.filename for submission in
-                                test_source['source'].submissions]
+                                test_submissions['source'].submissions]
         assert observed_submissions == expected_submissions
 
 
 def test_authorized_user_can_get_single_submission(journalist_app,
-                                                   test_source,
+                                                   test_submissions,
                                                    journalist_api_token):
     with journalist_app.test_client() as app:
-        submission_uuid = test_source['source'].submissions[0].uuid
-        uuid = test_source['source'].uuid
+        submission_uuid = test_submissions['source'].submissions[0].uuid
+        uuid = test_submissions['source'].uuid
         response = app.get(url_for('api.single_submission',
                                    source_uuid=uuid,
                                    submission_uuid=submission_uuid),
@@ -390,17 +392,17 @@ def test_authorized_user_can_get_single_submission(journalist_app,
         assert json_response['uuid'] == submission_uuid
         assert json_response['is_read'] is False
         assert json_response['filename'] == \
-            test_source['source'].submissions[0].filename
+            test_submissions['source'].submissions[0].filename
         assert json_response['size'] == \
-            test_source['source'].submissions[0].size
+            test_submissions['source'].submissions[0].size
 
 
 def test_authorized_user_can_delete_single_submission(journalist_app,
-                                                      test_source,
+                                                      test_submissions,
                                                       journalist_api_token):
     with journalist_app.test_client() as app:
-        submission_uuid = test_source['source'].submissions[0].uuid
-        uuid = test_source['source'].uuid
+        submission_uuid = test_submissions['source'].submissions[0].uuid
+        uuid = test_submissions['source'].uuid
         response = app.delete(url_for('api.single_submission',
                                       source_uuid=uuid,
                                       submission_uuid=submission_uuid),
@@ -428,11 +430,11 @@ def test_authorized_user_can_delete_source_collection(journalist_app,
 
 
 def test_authorized_user_can_download_submission(journalist_app,
-                                                 test_source,
+                                                 test_submissions,
                                                  journalist_api_token):
     with journalist_app.test_client() as app:
-        submission_uuid = test_source['source'].submissions[0].uuid
-        uuid = test_source['source'].uuid
+        submission_uuid = test_submissions['source'].submissions[0].uuid
+        uuid = test_submissions['source'].uuid
 
         response = app.get(url_for('api.download_submission',
                                    source_uuid=uuid,
@@ -443,7 +445,7 @@ def test_authorized_user_can_download_submission(journalist_app,
 
         # Submission should now be marked as downloaded in the database
         submission = Submission.query.get(
-            test_source['source'].submissions[0].id)
+            test_submissions['source'].submissions[0].id)
         assert submission.downloaded
 
         # Response should be a PGP encrypted download
@@ -455,7 +457,6 @@ def test_authorized_user_can_download_submission(journalist_app,
 
 
 def test_authorized_user_can_get_current_user_endpoint(journalist_app,
-                                                       test_source,
                                                        test_journo,
                                                        journalist_api_token):
     with journalist_app.test_client() as app:
