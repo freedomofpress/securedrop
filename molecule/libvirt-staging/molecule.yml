@@ -44,6 +44,8 @@ provisioner:
   env:
     ANSIBLE_ROLES_PATH: ../../install_files/ansible-base/roles
     ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
+  options:
+    e: "@ansible-override-vars.yml"
 
 scenario:
   name: libvirt-staging
