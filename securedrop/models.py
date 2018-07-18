@@ -110,6 +110,14 @@ class Source(db.Model):
     def public_key(self):
         return current_app.crypto_util.export_pubkey(self.filesystem_id)
 
+    @public_key.setter
+    def public_key(self, value):
+        raise NotImplementedError
+
+    @public_key.deleter
+    def public_key(self):
+        raise NotImplementedError
+
     def to_json(self):
         docs_msg_count = self.documents_messages_count()
 
