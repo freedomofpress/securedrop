@@ -101,7 +101,7 @@ def make_blueprint(config):
     @api.route('/sources', methods=['GET'])
     @token_required
     def get_all_sources():
-        sources = Source.query.all()
+        sources = Source.query.filter_by(pending=False).all()
         return jsonify(
             {'sources': [source.to_json() for source in sources]}), 200
 
