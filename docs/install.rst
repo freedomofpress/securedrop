@@ -156,7 +156,7 @@ Service will be available in the following files under
 
 - ``app-source-ths`` contains the ``.onion`` address of the *Source
   Interface*.
-- ``app-journalcontainst-aths`` contains the ``HidServAuth``
+- ``app-journalist-aths`` contains the ``HidServAuth``
   configuration line for the *Journalist Interface*. During a later
   step, this will be automatically added to your Tor configuration
   file in order to exclusively limit connections to the hidden
@@ -165,6 +165,13 @@ Service will be available in the following files under
   *Application Server*.
 - ``mon-ssh-aths`` contains the ``HidServAuth`` for SSH access to the
   *Monitor Server*.
+
+.. warning:: The ``app-journalist-aths``, ``app-ssh-aths``, and 
+             ``mon-ssh-aths`` files contain passwords for their corresponding 
+             authenticated hidden services. They should not be shared with 
+             third parties or copied from the *Admin Workstation* for any 
+             reason other than well-defined administrative tasks such as 
+             onboarding new users or performing backups.
 
 The dynamic inventory file will automatically read the Onion URLs
 from the ``app-ssh-aths`` and ``mon-ssh-aths`` files and use them to connect

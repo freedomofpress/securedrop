@@ -76,6 +76,12 @@ to access the servers over SSH.
              and only the *Admin Workstation* should have shell access to the
              servers.
 
+.. warning:: The ``app-journalist-aths`` file contains a password for the 
+             authenticated hidden service used by the *Journalist Interface*, 
+             and should not be shared except through the onboarding process. 
+             Make sure to securely delete it from the Transfer Device once 
+             onboarding is complete.  
+
 Since you need will the Tails setup scripts (``securedrop/tails_files``) that
 you used to :doc:`Configure the *Admin Workstation* Post-Install
 <configure_admin_workstation_post_install>`, clone (and verify) the SecureDrop
