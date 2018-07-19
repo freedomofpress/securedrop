@@ -1,9 +1,7 @@
 ---
-install_local_packages: false
-primary_network_iface: eth0
-ssh_users: vagrant
-securedrop_app_install_from_repo: true
-allow_direct_access: true
-ssh_listening_address: 0.0.0.0
-app_ip: "{{ hostvars['app-staging']['ansible_'+primary_network_iface].ipv4.address }}"
-monitor_ip: "{{ hostvars['mon-staging']['ansible_'+primary_network_iface].ipv4.address }}"
+# Permit direct access via SSH
+ssh_net_in_override: 0.0.0.0/0
+
+# In libvirt, we want to connect over eth0, not eth1 which is used for
+# inter-VM communication for OSSEC.
+ssh_ip: "{{ ansible_default_ipv4.address }}"
