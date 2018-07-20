@@ -69,7 +69,9 @@ to access the servers over SSH.
          the *Admin Workstation* via the Transfer Device. Place these files
          in ``~/Persistent/securedrop/install_files/ansible-base`` on the
          *Journalist Workstation*, and the ``./securedrop-admin tailsconfig``
-         tool will automatically use them.
+         tool will automatically use them. Don't forget to securely delete 
+         these files from the *Transfer Device* when you're done, by 
+         right-clicking them in the file manager and selecting **Wipe**.
 
 .. warning:: Do **not** copy the files ``app-ssh-aths`` and ``mon-ssh-aths``
              to the *Journalist Workstation*. Those files grant access via SSH,
@@ -79,8 +81,6 @@ to access the servers over SSH.
 .. warning:: The ``app-journalist-aths`` file contains a password for the 
              authenticated hidden service used by the *Journalist Interface*, 
              and should not be shared except through the onboarding process. 
-             Make sure to securely delete it from the Transfer Device once 
-             onboarding is complete.  
 
 Since you need will the Tails setup scripts (``securedrop/tails_files``) that
 you used to :doc:`Configure the *Admin Workstation* Post-Install
