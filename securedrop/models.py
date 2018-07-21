@@ -49,7 +49,7 @@ class Source(db.Model):
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
-    last_updated = Column(DateTime, default=datetime.datetime.utcnow)
+    last_updated = Column(DateTime)
     star = relationship("SourceStar", uselist=False, backref="source")
 
     # sources are "pending" and don't get displayed to journalists until they
