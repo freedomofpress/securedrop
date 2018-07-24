@@ -118,13 +118,18 @@ class Source(db.Model):
     def to_json(self):
         docs_msg_count = self.documents_messages_count()
 
+        if self.last_updated:
+            last_updated = self.last_updated.isoformat() + 'Z'
+        else:
+            last_updated = datetime.datetime.utcnow().isoformat() + 'Z'
+
         json_source = {
             'uuid': self.uuid,
             'url': url_for('api.single_source', source_uuid=self.uuid),
             'journalist_designation': self.journalist_designation,
             'is_flagged': self.flagged,
             'is_starred': True if self.star else False,
-            'last_updated': self.last_updated.isoformat() + 'Z',
+            'last_updated': last_updated,
             'interaction_count': self.interaction_count,
             'key': {
               'type': 'PGP',
