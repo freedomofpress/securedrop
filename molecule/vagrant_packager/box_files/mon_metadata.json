@@ -12,6 +12,17 @@
           "checksum": "4358d2e31ee5dcfe4098fd2bedba3122967992de4c9b2dfb773805141d5ad633"
         }
       ]
+    },
+    {
+      "version": "0.8",
+      "providers": [
+        {
+          "name": "libvirt",
+          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging_0.8.box",
+          "checksum_type": "sha256",
+          "checksum": "c18fe9dddf28cc70b858b878550c5ae202e4a2c752119528ab7d2062dab15842"
+        }
+      ]
     }
   ]
 }
