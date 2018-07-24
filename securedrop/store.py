@@ -24,6 +24,13 @@ class PathException(Exception):
     pass
 
 
+class NotEncrypted(Exception):
+    """An exception raised if a file expected to be encrypted client-side
+    is actually plaintext.
+    """
+    pass
+
+
 class Storage:
 
     def __init__(self, storage_path, temp_dir, gpg_key):
@@ -144,6 +151,21 @@ class Storage:
                 stf, self.__gpg_key, encrypted_file_path)
 
         return encrypted_file_name
+
+    def save_pre_encrypted_reply(self, filesystem_id, count,
+                                 journalist_filename, content):
+
+        if '-----BEGIN PGP MESSAGE-----' not in content.split('\n')[0]:
+            raise NotEncrypted
+
+        encrypted_file_name = "{0}-{1}-reply.gpg".format(count,
+                                                         journalist_filename)
+        encrypted_file_path = self.path(filesystem_id, encrypted_file_name)
+
+        with open(encrypted_file_path, 'wb') as fh:
+            fh.write(content)
+
+        return encrypted_file_path
 
     def save_message_submission(self, filesystem_id, count,
                                 journalist_filename, message):

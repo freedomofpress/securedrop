@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
-from flask import Flask, session, redirect, url_for, flash, g, request
+from flask import (Flask, session, redirect, url_for, flash, g, request,
+                   render_template)
 from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
+from werkzeug.exceptions import default_exceptions  # type: ignore
 
 import i18n
 import template_filters
@@ -13,7 +15,7 @@ import version
 
 from crypto_util import CryptoUtil
 from db import db
-from journalist_app import account, admin, main, col
+from journalist_app import account, admin, api, main, col
 from journalist_app.utils import get_source, logged_in
 from models import Journalist
 from store import Storage
@@ -39,7 +41,7 @@ def create_app(config):
     app.config.from_object(config.JournalistInterfaceFlaskConfig)
     app.sdconfig = config
 
-    CSRFProtect(app)
+    csrf = CSRFProtect(app)
     Environment(app)
 
     if config.DATABASE_ENGINE == "sqlite":
@@ -80,6 +82,18 @@ def create_app(config):
         flash(msg, 'error')
         return redirect(url_for('main.login'))
 
+    def _handle_http_exception(error):
+        # Workaround for no blueprint-level 404/5 error handlers, see:
+        # https://github.com/pallets/flask/issues/503#issuecomment-71383286
+        handler = app.error_handler_spec['api'][error.code].values()[0]
+        if request.path.startswith('/api/') and handler:
+            return handler(error)
+
+        return render_template('error.html', error=error), error.code
+
+    for code in default_exceptions:
+        app.errorhandler(code)(_handle_http_exception)
+
     i18n.setup_app(config, app)
 
     app.jinja_env.trim_blocks = True
@@ -96,17 +110,6 @@ def create_app(config):
     app.jinja_env.filters['rel_datetime_format'] = \
         template_filters.rel_datetime_format
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
-
-    @app.template_filter('autoversion')
-    def autoversion_filter(filename):
-        """Use this template filter for cache busting"""
-        absolute_filename = path.join(config.SECUREDROP_ROOT, filename[1:])
-        if path.exists(absolute_filename):
-            timestamp = str(path.getmtime(absolute_filename))
-        else:
-            return filename
-        versioned_filename = "{0}?v={1}".format(filename, timestamp)
-        return versioned_filename
 
     @app.before_request
     def setup_g():
@@ -130,8 +133,11 @@ def create_app(config):
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
 
-        if request.endpoint not in _insecure_views and not logged_in():
-            return redirect(url_for('main.login'))
+        if request.path.split('/')[1] == 'api':
+            pass  # We use the @token_required decorator for the API endpoints
+        else:  # We are not using the API
+            if request.endpoint not in _insecure_views and not logged_in():
+                return redirect(url_for('main.login'))
 
         if request.method == 'POST':
             filesystem_id = request.form.get('filesystem_id')
@@ -144,5 +150,8 @@ def create_app(config):
                            url_prefix='/account')
     app.register_blueprint(admin.make_blueprint(config), url_prefix='/admin')
     app.register_blueprint(col.make_blueprint(config), url_prefix='/col')
+    api_blueprint = api.make_blueprint(config)
+    app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+    csrf.exempt(api_blueprint)
 
     return app

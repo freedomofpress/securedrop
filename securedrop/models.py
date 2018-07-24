@@ -8,6 +8,7 @@ import pyotp
 import qrcode
 # Using svg because it doesn't require additional dependencies
 import qrcode.image.svg
+import uuid
 
 # Find the best implementation available on this platform
 try:
@@ -15,7 +16,8 @@ try:
 except ImportError:
     from StringIO import StringIO  # type: ignore
 
-from flask import current_app
+from flask import current_app, url_for
+from itsdangerous import TimedJSONWebSignatureSerializer, BadData
 from jinja2 import Markup
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
@@ -46,6 +48,7 @@ def get_one_or_else(query, logger, failure_method):
 class Source(db.Model):
     __tablename__ = 'sources'
     id = Column(Integer, primary_key=True)
+    uuid = Column(String(36), unique=True, nullable=False)
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
@@ -66,6 +69,7 @@ class Source(db.Model):
     def __init__(self, filesystem_id=None, journalist_designation=None):
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
+        self.uuid = str(uuid.uuid4())
 
     def __repr__(self):
         return '<Source %r>' % (self.journalist_designation)
@@ -99,10 +103,49 @@ class Source(db.Model):
         collection.sort(key=lambda x: int(x.filename.split('-')[0]))
         return collection
 
+    @property
+    def public_key(self):
+        return current_app.crypto_util.export_pubkey(self.filesystem_id)
+
+    @public_key.setter
+    def public_key(self, value):
+        raise NotImplementedError
+
+    @public_key.deleter
+    def public_key(self):
+        raise NotImplementedError
+
+    def to_json(self):
+        docs_msg_count = self.documents_messages_count()
+
+        json_source = {
+            'uuid': self.uuid,
+            'url': url_for('api.single_source', source_uuid=self.uuid),
+            'journalist_designation': self.journalist_designation,
+            'is_flagged': self.flagged,
+            'is_starred': True if self.star else False,
+            'last_updated': self.last_updated.isoformat() + 'Z',
+            'interaction_count': self.interaction_count,
+            'key': {
+              'type': 'PGP',
+              'public': self.public_key
+            },
+            'number_of_documents': docs_msg_count['documents'],
+            'number_of_messages': docs_msg_count['messages'],
+            'submissions_url': url_for('api.all_source_submissions',
+                                       source_uuid=self.uuid),
+            'add_star_url': url_for('api.add_star', source_uuid=self.uuid),
+            'remove_star_url': url_for('api.remove_star',
+                                       source_uuid=self.uuid),
+            'reply_url': url_for('api.post_reply', source_uuid=self.uuid)
+            }
+        return json_source
+
 
 class Submission(db.Model):
     __tablename__ = 'submissions'
     id = Column(Integer, primary_key=True)
+    uuid = Column(String(36), unique=True, nullable=False)
     source_id = Column(Integer, ForeignKey('sources.id'))
     source = relationship(
         "Source",
@@ -116,11 +159,29 @@ class Submission(db.Model):
     def __init__(self, source, filename):
         self.source_id = source.id
         self.filename = filename
+        self.uuid = str(uuid.uuid4())
         self.size = os.stat(current_app.storage.path(source.filesystem_id,
                                                      filename)).st_size
 
     def __repr__(self):
         return '<Submission %r>' % (self.filename)
+
+    def to_json(self):
+        json_submission = {
+            'source_url': url_for('api.single_source',
+                                  source_uuid=self.source.uuid),
+            'submission_url': url_for('api.single_submission',
+                                      source_uuid=self.source.uuid,
+                                      submission_uuid=self.uuid),
+            'filename': self.filename,
+            'size': self.size,
+            'is_read': self.downloaded,
+            'uuid': self.uuid,
+            'download_url': url_for('api.download_submission',
+                                    source_uuid=self.source.uuid,
+                                    submission_uuid=self.uuid),
+        }
+        return json_submission
 
 
 class Reply(db.Model):
@@ -433,6 +494,28 @@ class Journalist(db.Model):
         if not user.valid_password(password):
             raise WrongPasswordException("invalid password")
         return user
+
+    def generate_api_token(self, expiration):
+        s = TimedJSONWebSignatureSerializer(
+            current_app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id}).decode('ascii')
+
+    @staticmethod
+    def validate_api_token_and_get_user(token):
+        s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except BadData:
+            return None
+        return Journalist.query.get(data['id'])
+
+    def to_json(self):
+        json_user = {
+            'username': self.username,
+            'last_login': self.last_access.isoformat() + 'Z',
+            'is_admin': self.is_admin
+        }
+        return json_user
 
 
 class JournalistLoginAttempt(db.Model):
