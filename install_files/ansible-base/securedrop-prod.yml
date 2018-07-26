@@ -87,6 +87,7 @@
     # Won't work on initial installs because the connection addresses change
     # from IPv4 to Onion URLs, so just reboot and don't wait.
     reboot_wait: no
-  tasks:
-    - include: tasks/reboot_if_first_install.yml
+  roles:
+    - role: reboot-if-first-install
+      when: not amazon_builder
   become: yes

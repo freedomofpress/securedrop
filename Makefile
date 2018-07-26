@@ -147,6 +147,10 @@ self-signed-https-certs: ## Generates self-signed certs for TESTING the HTTPS co
 vagrant-package: ## Package up a vagrant box of the last stable SD release
 	@devops/scripts/vagrant_package.sh
 
+.PHONY: staging
+staging: ## Creates local staging environment in VM, autodetecting platform
+	@./devops/create-staging-env
+
 .PHONY: clean
 clean: ## DANGER! Purges all site-specific info and developer files from project.
 	@./devops/clean
