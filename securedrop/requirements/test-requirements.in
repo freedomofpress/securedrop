@@ -7,4 +7,6 @@ py
 pytest
 pytest-cov
 pytest-mock
-selenium < 3
+selenium
+tbselenium
+pyvirtualdisplay
