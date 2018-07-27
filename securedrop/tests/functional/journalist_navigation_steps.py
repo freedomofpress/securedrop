@@ -5,6 +5,7 @@ import tempfile
 import gzip
 import time
 import os
+import random
 
 from os.path import abspath, realpath, dirname, join
 
@@ -12,11 +13,17 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
 
-# A generator to get two different usernames
+# A generator to get unlimited user names for our tests.
+# The pages-layout tests require many users during
+# the test run, that is why have the following
+# implementation.
 def get_journalist_usernames():
     yield "dellsberg"
     yield "jpb"
     yield "bassel"
+    while True:
+        num = random.randint(1000, 1000000)
+        yield "journalist" + str(num)
 
 
 journalist_usernames = get_journalist_usernames()
@@ -98,7 +105,7 @@ class JournalistNavigationStepsMixin():
 
         # If we reach here, assert the error
         assert self.driver.current_url == self.journalist_location + '/',\
-            self.driver.current_url
+            self.driver.current_url + " " + self.journalist_location
 
     def _journalist_logs_in(self):
         # Create a test user for logging in
@@ -588,7 +595,7 @@ class JournalistNavigationStepsMixin():
         # There should be 1 collection in the list of collections
         code_names = self.driver.find_elements_by_class_name('code-name')
         assert 0 != len(code_names), code_names
-        assert 10 >= len(code_names), code_names
+        assert 1 <= len(code_names), code_names
 
         if not hasattr(self, 'accept_languages'):
             # There should be a "1 unread" span in the sole collection entry
@@ -693,6 +700,8 @@ class JournalistNavigationStepsMixin():
         reset_button = self.driver.find_elements_by_css_selector(
             '#button-reset-two-factor-' + type)[0]
         reset_button.click()
+        self._alert_accept()
+        time.sleep(self.sleep_time)
 
     def _visit_edit_hotp_secret(self):
         self._visit_edit_secret('hotp')
@@ -704,6 +713,7 @@ class JournalistNavigationStepsMixin():
         submit_button = self.driver.find_element_by_css_selector(
             'button[type=submit]')
         submit_button.click()
+        time.sleep(self.sleep_time)
 
     def _visit_edit_totp_secret(self):
         self._visit_edit_secret('totp')
@@ -769,6 +779,11 @@ class JournalistNavigationStepsMixin():
         confirm_btn = self.driver.find_element_by_id('delete-selected')
 
         confirm_btn.click()
+
+    def _source_delete_key(self):
+        filesystem_id = self.source_app.crypto_util.hash_codename(
+            self.source_name)
+        self.source_app.crypto_util.delete_reply_keypair(filesystem_id)
 
     def _journalist_continues_after_flagging(self):
         self.driver.find_element_by_id('continue-to-list').click()
