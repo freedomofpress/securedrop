@@ -306,6 +306,12 @@ def test_authorized_user_can_star_a_source(journalist_app, test_source,
         assert SourceStar.query.filter(
             SourceStar.source_id == source_id).one().starred
 
+        # API should also report is_starred is true
+        response = app.get(url_for('api.single_source', source_uuid=uuid),
+                           headers=get_api_headers(journalist_api_token))
+        json_response = json.loads(response.data)
+        assert json_response['is_starred'] is True
+
 
 def test_authorized_user_can_unstar_a_source(journalist_app, test_source,
                                              journalist_api_token):
@@ -323,6 +329,12 @@ def test_authorized_user_can_unstar_a_source(journalist_app, test_source,
         # Verify that the source is gone.
         assert SourceStar.query.filter(
             SourceStar.source_id == source_id).one().starred is False
+
+        # API should also report is_starred is false
+        response = app.get(url_for('api.single_source', source_uuid=uuid),
+                           headers=get_api_headers(journalist_api_token))
+        json_response = json.loads(response.data)
+        assert json_response['is_starred'] is False
 
 
 def test_disallowed_methods_produces_405(journalist_app, test_source,
