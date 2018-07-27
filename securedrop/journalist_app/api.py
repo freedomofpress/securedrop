@@ -65,6 +65,21 @@ def make_blueprint(config):
                      'auth_token_url': '/api/v1/token'}
         return jsonify(endpoints), 200
 
+    # Before every post, we validate the payload before processing the request
+    @api.before_request
+    def validate_data():
+        if request.method == 'POST':
+            # flag and star can have empty payloads
+            if not request.data:
+                if ('flag' not in request.path and 'star' not in request.path):
+                    return abort(400, 'malformed request')
+            # other requests must have valid JSON payload
+            else:
+                try:
+                    json.loads(request.data)
+                except (ValueError):
+                    return abort(400, 'malformed request')
+
     @api.route('/token', methods=['POST'])
     def get_token():
         creds = json.loads(request.data)

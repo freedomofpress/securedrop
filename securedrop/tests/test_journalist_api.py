@@ -228,7 +228,8 @@ def test_user_without_token_cannot_post_protected_endpoints(journalist_app,
     with journalist_app.test_client() as app:
         for protected_route in protected_routes:
             response = app.post(protected_route,
-                                headers=get_api_headers(''))
+                                headers=get_api_headers(''),
+                                data=json.dumps({'some': 'stuff'}))
             assert response.status_code == 403
 
 
@@ -594,3 +595,66 @@ def test_reply_with_valid_square_json_400(journalist_app, journalist_api_token,
 
         json_response = json.loads(response.data)
         assert json_response['message'] == 'reply not found in request body'
+
+
+def test_malformed_json_400(journalist_app, journalist_api_token, test_journo,
+                            test_source):
+
+    with journalist_app.app_context():
+        uuid = test_source['source'].uuid
+        protected_routes = [
+            url_for('api.get_token'),
+            url_for('api.post_reply', source_uuid=uuid),
+            url_for('api.add_star', source_uuid=uuid),
+            url_for('api.flag', source_uuid=uuid),
+        ]
+    with journalist_app.test_client() as app:
+        for protected_route in protected_routes:
+
+            response = app.post(protected_route,
+                                data="{this is invalid {json!",
+                                headers=get_api_headers(journalist_api_token))
+            observed_response = json.loads(response.data)
+
+            assert response.status_code == 400
+            assert observed_response['error'] == 'Bad Request'
+
+
+def test_empty_json_400(journalist_app, journalist_api_token, test_journo,
+                        test_source):
+
+    with journalist_app.app_context():
+        uuid = test_source['source'].uuid
+        protected_routes = [
+            url_for('api.get_token'),
+            url_for('api.post_reply', source_uuid=uuid),
+        ]
+    with journalist_app.test_client() as app:
+        for protected_route in protected_routes:
+
+            response = app.post(protected_route,
+                                data="",
+                                headers=get_api_headers(journalist_api_token))
+            observed_response = json.loads(response.data)
+
+            assert response.status_code == 400
+            assert observed_response['error'] == 'Bad Request'
+
+
+def test_empty_json_20X(journalist_app, journalist_api_token, test_journo,
+                        test_source):
+
+    with journalist_app.app_context():
+        uuid = test_source['source'].uuid
+        protected_routes = [
+            url_for('api.add_star', source_uuid=uuid),
+            url_for('api.flag', source_uuid=uuid),
+        ]
+    with journalist_app.test_client() as app:
+        for protected_route in protected_routes:
+
+            response = app.post(protected_route,
+                                data="",
+                                headers=get_api_headers(journalist_api_token))
+
+            assert response.status_code in (200, 201)
