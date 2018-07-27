@@ -22,6 +22,8 @@ from selenium.common.exceptions import (WebDriverException,
                                         NoAlertPresentException)
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 from tbselenium.tbdriver import TorBrowserDriver
 from tbselenium.utils import start_xvfb, stop_xvfb
 
@@ -126,8 +128,7 @@ class FunctionalTest(object):
                     time.sleep(connrefused_retry_interval)
                 raise
 
-    def _create_secondary_firefox_driver(self):
-        profile = None
+    def _create_secondary_firefox_driver(self, profile=None):
         self.f_profile_path = "/tmp/testprofile"
         if os.path.exists(self.f_profile_path):
             shutil.rmtree(self.f_profile_path)
@@ -146,6 +147,42 @@ class FunctionalTest(object):
         self.second_driver = webdriver.Firefox(firefox_binary=binpath,
                                                firefox_profile=profile)
         self.second_driver.implicitly_wait(15)
+
+    def _create_webdriver2(self, profile=None):
+        # Only for layout tests
+        # see https://review.openstack.org/#/c/375258/ and the
+        # associated issues for background on why this is necessary
+        connrefused_retry_count = 3
+        connrefused_retry_interval = 5
+        binpath = '/usr/lib/firefox-esr/firefox-esr'
+        for i in range(connrefused_retry_count + 1):
+            try:
+                driver = webdriver.Firefox(firefox_binary=binpath,
+                                           firefox_profile=profile)
+                if i > 0:
+                    # i==0 is normal behavior without connection refused.
+                    print('NOTE: Retried {} time(s) due to '
+                          'connection refused.'.format(i))
+                return driver
+            except socket.error as socket_error:
+                if (socket_error.errno == errno.ECONNREFUSED
+                        and i < connrefused_retry_count):
+                    time.sleep(connrefused_retry_interval)
+                    continue
+                raise
+
+    def _javascript_toggle(self):
+        # the following is a noop for some reason, workaround it
+        # profile.set_preference("javascript.enabled", False)
+        # https://stackoverflow.com/a/36782979/837471
+        self.driver.get("about:config")
+        actions = ActionChains(self.driver)
+        actions.send_keys(Keys.RETURN)
+        actions.send_keys("javascript.enabled")
+        actions.perform()
+        actions.send_keys(Keys.TAB)
+        actions.send_keys(Keys.RETURN)
+        actions.perform()
 
     def swap_drivers(self):
         if not self.second_driver:
@@ -239,6 +276,7 @@ class FunctionalTest(object):
             self.source_app = source_app.create_app(config)
             self.journalist_app = journalist_app.create_app(config)
 
+            # This user is required for our tests cases to login
             self.admin_user = {
                                 "name": "journalist",
                                 "password": "WEjwn8ZyczDhQSK24YKM8C9a",
@@ -286,8 +324,14 @@ class FunctionalTest(object):
         self.session_expiration = session_expiration
 
         self.xvfb_display = start_xvfb()
-        self._create_secondary_firefox_driver()
-        self.driver = self._create_webdriver()
+        if not hasattr(self, 'override_driver'):
+            # Means this is not pages-layout tests
+            self._create_secondary_firefox_driver()
+            self.driver = self._create_webdriver()
+        else:
+            # We will use a normal firefox esr for the pages-layout tests
+            self.driver = self._create_webdriver2(self.new_profile)  # pylint: disable=no-member # noqa
+            self._javascript_toggle()
 
         # Polls the DOM to wait for elements. To read more about why
         # this is necessary:
