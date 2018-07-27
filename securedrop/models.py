@@ -123,12 +123,17 @@ class Source(db.Model):
         else:
             last_updated = datetime.datetime.utcnow().isoformat() + 'Z'
 
+        if self.star and self.star.starred:
+            starred = True
+        else:
+            starred = False
+
         json_source = {
             'uuid': self.uuid,
             'url': url_for('api.single_source', source_uuid=self.uuid),
             'journalist_designation': self.journalist_designation,
             'is_flagged': self.flagged,
-            'is_starred': True if self.star else False,
+            'is_starred': starred,
             'last_updated': last_updated,
             'interaction_count': self.interaction_count,
             'key': {
