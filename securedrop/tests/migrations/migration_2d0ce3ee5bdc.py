@@ -4,6 +4,7 @@ import random
 import string
 
 from sqlalchemy import text
+from uuid import uuid4
 
 from db import db
 from journalist_app import create_app
@@ -19,6 +20,7 @@ class Helper():
     def add_source():
         filesystem_id = random_chars(96) if random_bool() else None
         params = {
+            'uuid': str(uuid4()),
             'filesystem_id': filesystem_id,
             'journalist_designation': random_chars(50),
             'flagged': bool_or_none(),
@@ -26,10 +28,11 @@ class Helper():
             'pending': bool_or_none(),
             'interaction_count': random.randint(0, 1000),
         }
-        sql = '''INSERT INTO sources (filesystem_id, journalist_designation,
-                    flagged, last_updated, pending, interaction_count)
-                 VALUES (:filesystem_id, :journalist_designation, :flagged,
-                    :last_updated, :pending, :interaction_count)
+        sql = '''INSERT INTO sources (uuid, filesystem_id,
+                    journalist_designation, flagged, last_updated, pending,
+                    interaction_count)
+                 VALUES (:uuid, :filesystem_id, :journalist_designation,
+                    :flagged, :last_updated, :pending, :interaction_count)
               '''
         db.engine.execute(text(sql), **params)
 
@@ -132,14 +135,13 @@ class UpgradeTester(Helper):
             'last_token': last_token,
             'created_on': random_datetime(nullable=True),
             'last_access': random_datetime(nullable=True),
-            'passphrase_hash': random_bytes(32, 64, nullable=True)
         }
         sql = '''INSERT INTO journalists (username, pw_salt, pw_hash,
                     is_admin, otp_secret, is_totp, hotp_counter, last_token,
-                    created_on, last_access, passphrase_hash)
+                    created_on, last_access)
                  VALUES (:username, :pw_salt, :pw_hash, :is_admin,
                     :otp_secret, :is_totp, :hotp_counter, :last_token,
-                    :created_on, :last_access, :passphrase_hash);
+                    :created_on, :last_access);
               '''
         db.engine.execute(text(sql), **params)
 
@@ -201,12 +203,13 @@ class DowngradeTester(Helper):
             'last_token': last_token,
             'created_on': random_datetime(nullable=True),
             'last_access': random_datetime(nullable=True),
+            'passphrase_hash': random_bytes(32, 64, nullable=True)
         }
         sql = '''INSERT INTO journalists (username, pw_salt, pw_hash,
                     is_admin, otp_secret, is_totp, hotp_counter, last_token,
-                    created_on, last_access)
+                    created_on, last_access, passphrase_hash)
                  VALUES (:username, :pw_salt, :pw_hash, :is_admin,
                     :otp_secret, :is_totp, :hotp_counter, :last_token,
-                    :created_on, :last_access);
+                    :created_on, :last_access, :passphrase_hash);
               '''
         db.engine.execute(text(sql), **params)
