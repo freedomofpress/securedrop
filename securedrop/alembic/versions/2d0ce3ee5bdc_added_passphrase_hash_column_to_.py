@@ -1,7 +1,7 @@
 """added passphrase_hash column to journalists table
 
 Revision ID: 2d0ce3ee5bdc
-Revises: faac8092c123
+Revises: fccf57ceef02 
 Create Date: 2018-06-08 15:08:37.718268
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '2d0ce3ee5bdc'
-down_revision = 'faac8092c123'
+down_revision = 'fccf57ceef02'
 branch_labels = None
 depends_on = None
 
