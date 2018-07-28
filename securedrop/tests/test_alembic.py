@@ -2,6 +2,7 @@
 
 import os
 import pytest
+import re
 import subprocess
 
 from alembic.config import Config as AlembicConfig
@@ -19,6 +20,8 @@ MIGRATION_PATH = path.join(path.dirname(__file__), '..', 'alembic', 'versions')
 ALL_MIGRATIONS = [x.split('.')[0].split('_')[0]
                   for x in os.listdir(MIGRATION_PATH)
                   if x.endswith('.py')]
+
+WHITESPACE_REGEX = re.compile('\s*')
 
 
 def list_migrations(cfg_path, head):
@@ -83,12 +86,12 @@ def ddl_equal(left, right):
     if left is None and right is None:
         return True
 
-    left = [x for x in left.split('\n') if x]
-    right = [x for x in right.split('\n') if x]
+    left = [x for x in WHITESPACE_REGEX.split(left) if x]
+    right = [x for x in WHITESPACE_REGEX.split(right) if x]
 
-    # Strip commas, whitespace, quotes
-    left = [x.replace("\"", "").replace(",", "").strip() for x in left]
-    right = [x.replace("\"", "").replace(",", "").strip() for x in right]
+    # Strip commas and quotes
+    left = [x.replace("\"", "").replace(",", "") for x in left]
+    right = [x.replace("\"", "").replace(",", "") for x in right]
 
     return sorted(left) == sorted(right)
 
