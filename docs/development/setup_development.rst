@@ -120,7 +120,7 @@ created by default when running ``make dev``. In addition, sources and
 submissions are present. The test users have the following credentials:
 
 * **Username:** ``journalist`` or ``dellsberg``
-* **Password:** ``WEjwn8ZyczDhQSK24YKM8C9a``
+* **Password:** ``correct horse battery staple profanity oil chewy``
 * **TOTP secret:** ``JHCO GO7V CER3 EJ4L``
 
 .. note:: The password and TOTP secret are the same for both accounts for

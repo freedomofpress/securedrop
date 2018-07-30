@@ -19,6 +19,7 @@ except ImportError:
 from flask import current_app, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer, BadData
 from jinja2 import Markup
+from passlib.hash import argon2
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Binary
@@ -30,6 +31,8 @@ from db import db
 LOGIN_HARDENING = True
 if os.environ.get('SECUREDROP_ENV') == 'test':
     LOGIN_HARDENING = False
+
+ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
 
 
 def get_one_or_else(query, logger, failure_method):
@@ -269,13 +272,13 @@ class InvalidPasswordLength(PasswordError):
        password length.
     """
 
-    def __init__(self, password):
-        self.pw_len = len(password)
+    def __init__(self, passphrase):
+        self.passphrase_len = len(passphrase)
 
     def __str__(self):
-        if self.pw_len > Journalist.MAX_PASSWORD_LEN:
-            return "Password too long (len={})".format(self.pw_len)
-        if self.pw_len < Journalist.MIN_PASSWORD_LEN:
+        if self.passphrase_len > Journalist.MAX_PASSWORD_LEN:
+            return "Password too long (len={})".format(self.passphrase_len)
+        if self.passphrase_len < Journalist.MIN_PASSWORD_LEN:
             return "Password needs to be at least {} characters".format(
                 Journalist.MIN_PASSWORD_LEN
             )
@@ -302,6 +305,7 @@ class Journalist(db.Model):
 
     created_on = Column(DateTime, default=datetime.datetime.utcnow)
     last_access = Column(DateTime)
+    passphrase_hash = Column(String(256))
     login_attempts = relationship(
         "JournalistLoginAttempt",
         backref="journalist")
@@ -322,28 +326,31 @@ class Journalist(db.Model):
             self.username,
             " [admin]" if self.is_admin else "")
 
-    def _gen_salt(self, salt_bytes=32):
-        return os.urandom(salt_bytes)
+    _LEGACY_SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
-    _SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
-
-    def _scrypt_hash(self, password, salt, params=None):
-        if not params:
-            params = self._SCRYPT_PARAMS
-        return scrypt.hash(str(password), salt, **params)
+    def _scrypt_hash(self, password, salt):
+        return scrypt.hash(str(password), salt, **self._LEGACY_SCRYPT_PARAMS)
 
     MAX_PASSWORD_LEN = 128
     MIN_PASSWORD_LEN = 14
 
-    def set_password(self, password):
-        self.check_password_acceptable(password)
+    def set_password(self, passphrase):
+        self.check_password_acceptable(passphrase)
+
+        # "migrate" from the legacy case
+        if not self.passphrase_hash:
+            self.passphrase_hash = \
+                argon2.using(**ARGON2_PARAMS).hash(passphrase)
+            # passlib creates one merged field that embeds randomly generated
+            # salt in the output like $alg$salt$hash
+            self.pw_hash = None
+            self.pw_salt = None
 
         # Don't do anything if user's password hasn't changed.
-        if self.pw_hash and self.valid_password(password):
+        if self.passphrase_hash and self.valid_password(passphrase):
             return
 
-        self.pw_salt = self._gen_salt()
-        self.pw_hash = self._scrypt_hash(password, self.pw_salt)
+        self.passphrase_hash = argon2.using(**ARGON2_PARAMS).hash(passphrase)
 
     @classmethod
     def check_username_acceptable(cls, username):
@@ -366,15 +373,35 @@ class Journalist(db.Model):
         if len(password.split()) < 7:
             raise NonDicewarePassword()
 
-    def valid_password(self, password):
+    def valid_password(self, passphrase):
         # Avoid hashing passwords that are over the maximum length
-        if len(password) > self.MAX_PASSWORD_LEN:
-            raise InvalidPasswordLength(password)
+        if len(passphrase) > self.MAX_PASSWORD_LEN:
+            raise InvalidPasswordLength(passphrase)
+
         # No check on minimum password length here because some passwords
-        # may have been set prior to setting the minimum password length.
-        return pyotp.utils.compare_digest(
-            self._scrypt_hash(password, self.pw_salt),
-            self.pw_hash)
+        # may have been set prior to setting the mininum password length.
+
+        if self.passphrase_hash:
+            # default case
+            is_valid = argon2.verify(passphrase, self.passphrase_hash)
+        else:
+            # legacy support
+            is_valid = pyotp.utils.compare_digest(
+                self._scrypt_hash(passphrase, self.pw_salt),
+                self.pw_hash)
+
+        # migrate new passwords
+        if is_valid and not self.passphrase_hash:
+            self.passphrase_hash = \
+                argon2.using(**ARGON2_PARAMS).hash(passphrase)
+            # passlib creates one merged field that embeds randomly generated
+            # salt in the output like $alg$salt$hash
+            self.pw_salt = None
+            self.pw_hash = None
+            db.session.add(self)
+            db.session.commit()
+
+        return is_valid
 
     def regenerate_totp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()

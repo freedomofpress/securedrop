@@ -14,15 +14,12 @@ from models import Journalist, Source, Submission
 def add_test_user(username, password, otp_secret, is_admin=False):
     context = journalist_app.create_app(config).app_context()
     context.push()
-    valid_password = "correct horse battery staple profanity oil chewy"
 
     try:
         user = Journalist(username=username,
-                          password=valid_password,
+                          password=password,
                           is_admin=is_admin)
         user.otp_secret = otp_secret
-        user.pw_salt = user._gen_salt()
-        user.pw_hash = user._scrypt_hash(password, user.pw_salt)
         db.session.add(user)
         db.session.commit()
         print('Test user successfully added: '
@@ -72,7 +69,7 @@ def create_source_and_submissions(num_submissions=2):
 
 if __name__ == "__main__":  # pragma: no cover
     # Add two test users
-    test_password = "WEjwn8ZyczDhQSK24YKM8C9a"
+    test_password = "correct horse battery staple profanity oil chewy"
     test_otp_secret = "JHCOGO7VCER3EJ4L"
 
     add_test_user("journalist",

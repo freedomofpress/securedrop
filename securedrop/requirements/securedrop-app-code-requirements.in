@@ -1,4 +1,5 @@
 alembic
+argon2_cffi
 cryptography==2.0.3
 cssmin
 Flask-Assets
@@ -9,6 +10,7 @@ Flask
 gnupg
 Jinja2
 jsmin
+passlib
 psutil
 pyotp
 qrcode
