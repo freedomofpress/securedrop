@@ -129,9 +129,125 @@ virtualized, rather than running on hardware. You will need to
 playbook from running with Vagrant-specific info.
 
 You can provision production VMs from an Admin Workstation (most realistic),
-or from your host. Instructions for both follow.
+or from your host. If your host OS is Linux-based and you plan to use an Admin 
+Workstation, you will need to switch Vagrant's default virtualization provider 
+from ``virtualbox`` to  ``libvirt``.  The Admin Workstation VM configuration 
+under Linux uses QEMU/KVM, which cannot run simultaneously with Virtualbox.
+
+Instructions for both installation methods follow.
 
 .. _prod_install_from_tails:
+
+Switch Vagrant provider to libvirt - Ubuntu 16.04
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Uninstall any exiting version of Vagrant. Install libvirt and QEMU:
+
+.. code:: sh
+
+   sudo apt-get update
+   sudo apt-get remove vagrant
+   sudo apt-get install libvirt-bin libvirt-dev qemu-utils qemu
+   sudo /etc/init.d/libvirt-bin restart
+
+Add your user to the libvirtd group:
+
+.. code:: sh
+
+   sudo addgroup libvirtd
+   sudo usermod -a -g libvirtd $USER
+
+Log out, then log in again. Verify that libvirt is installed and KVM is
+available:
+
+.. code:: sh
+
+   libvirtd --version 
+   kvm-ok
+
+Reinstall Vagrant and install the required plugins for converting and using 
+libvirt boxes:
+
+.. code:: sh
+   
+   wget https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1_x86_64.deb
+   sudo dpkg -i vagrant_1.9.1_x86_64.deb
+   vagrant plugin install vagrant-libvirt
+   vagrant plugin install vagrant-mutate
+
+Convert the bento/14.04 Vagrant box from ``virtualbox`` to ``libvirt`` format:
+
+.. code:: sh
+
+   vagrant box add --provider virtualbox bento/ubuntu-14.04
+   vagrant mutate bento/ubuntu-14.04 libvirt
+
+Set the default Vagrant provider to ``libvirt``:
+
+.. code:: sh
+
+   echo 'export VAGRANT_DEFAULT_PROVIDER=libvirt' >> ~/.bashrc
+   export VAGRANT_DEFAULT_PROVIDER=libvirt
+
+
+.. note:: To explicitly specify the ``libvirt``  provider below, use the command 
+   ``vagrant up --provider=libvirt /prod/``
+
+
+Switch Vagrant provider to libvirt - Debian 9
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                
+Install Vagrant, libvirt, QEMU, and their dependencies:
+                                                                                
+.. code:: sh
+
+   sudo apt-get update
+   sudo apt-get install -y vagrant vagrant-libvirt libvirt-daemon-system qemu-kvm
+   sudo apt-get install -y nfs-common nfs-kernel-server ebtables dnsmasq
+   sudo apt-get install -y ansible rsync
+   vagrant plugin install vagrant-libvirt
+   sudo usermod -a -G libvirt debian
+   newgrp libvirt
+   sudo systemctl restart libvirtd                                                                    
+                                                                                
+Add your user to the kvm group to give it permission to run KVM:                                            
+                                                                                
+.. code:: sh
+
+   sudo usermod -a -G kvm debian
+   newgrp kvm
+   sudo rmmod kvm_intel
+   sudo rmmod kvm
+   sudo modprobe kvm
+   sudo modprobe kvm_intel
+                                                                    
+                                                                                
+Log out, then log in again. Verify that libvirt is installed and KVM is         
+available:                                                                      
+                                                                                
+.. code:: sh                                                                    
+                                                                                
+   libvirtd --version                                                           
+   kvm-ok                                                                       
+                                                                                
+Convert the bento/14.04 Vagrant box from ``virtualbox`` to ``libvirt`` format:  
+                                                                                
+.. code:: sh                                                                    
+                                              
+   sudo apt-get install -y vagrant-mutate                                  
+   vagrant box add --provider virtualbox bento/ubuntu-14.04                     
+   vagrant mutate bento/ubuntu-14.04 libvirt                                    
+                                                                                
+Set the default Vagrant provider to ``libvirt``:                                
+                                                                                
+.. code:: sh                                                                    
+                                                                                
+   echo 'export VAGRANT_DEFAULT_PROVIDER=libvirt' >> ~/.bashrc                  
+   export VAGRANT_DEFAULT_PROVIDER=libvirt                                      
+                                                                                
+.. note:: To explicitly specify the ``libvirt``  provider, use the command      
+   ``vagrant up --provider=libvirt /prod/``
+   
 
 Install from an Admin Workstation VM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
