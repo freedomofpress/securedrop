@@ -49,8 +49,10 @@ scenario:
     - destroy
     - create
     - converge
-    - destroy
 verifier:
   name: testinfra
   lint:
     name: flake8
+  directory: ../testinfra/staging/
+  options:
+    n: auto
