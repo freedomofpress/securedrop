@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import datetime
 import os
 
 from flask import current_app
+import sys
+import argparse
 from sqlalchemy.exc import IntegrityError
 
 os.environ["SECUREDROP_ENV"] = "dev"  # noqa
@@ -15,7 +16,7 @@ from db import db
 from models import Journalist, Reply, Source, Submission
 
 
-def main():
+def main(staging=False):
     app = journalist_app.create_app(config)
     with app.app_context():
         # Add two test users
@@ -26,6 +27,11 @@ def main():
                       test_password,
                       test_otp_secret,
                       is_admin=True)
+
+        # If staging, we only need the journalist user (admin)
+        if staging:
+            sys.exit(0)
+
         add_test_user("dellsberg",
                       test_password,
                       test_otp_secret,
@@ -104,4 +110,9 @@ def create_source_and_submissions(num_submissions=2, num_replies=2):
 
 
 if __name__ == "__main__":  # pragma: no cover
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--staging", help="Adding user for staging tests.",
+                        action="store_true")
+    args = parser.parse_args()
+
+    main(staging=args.staging)
