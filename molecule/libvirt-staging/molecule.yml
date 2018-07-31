@@ -46,6 +46,8 @@ provisioner:
     ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
   options:
     e: "@ansible-override-vars.yml"
+  playbooks:
+    converge: ../../install_files/ansible-base/securedrop-staging.yml
 
 scenario:
   name: libvirt-staging
@@ -53,7 +55,11 @@ scenario:
     - destroy
     - create
     - converge
+    - verify
 verifier:
   name: testinfra
   lint:
     name: flake8
+  directory: ../testinfra/staging/
+  options:
+    n: auto
