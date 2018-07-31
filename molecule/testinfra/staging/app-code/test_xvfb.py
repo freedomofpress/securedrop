@@ -1,3 +1,6 @@
+testinfra_hosts = ["app-staging"]
+
+
 def test_xvfb_is_installed(Package):
     """
     Ensure apt requirements for Xvfb are present.

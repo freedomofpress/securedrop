@@ -5,6 +5,7 @@ import pytest
 from jinja2 import Template
 
 
+testinfra_hosts = ["mon-staging"]
 securedrop_test_vars = pytest.securedrop_test_vars
 
 

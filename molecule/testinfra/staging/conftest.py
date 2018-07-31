@@ -11,8 +11,9 @@ import os
 import yaml
 
 
-target_host = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
-assert target_host != ""
+# The config tests target staging by default. It's possible to override
+# for e.g. prod, but the associated vars files are not yet ported.
+target_host = os.environ.get('SECUREDROP_TESTINFRA_TARGET_HOST', 'staging')
 
 
 def securedrop_import_testinfra_vars(hostname, with_header=False):

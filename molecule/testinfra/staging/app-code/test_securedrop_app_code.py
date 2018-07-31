@@ -2,8 +2,8 @@ import os
 import pytest
 
 
+testinfra_hosts = ["app-staging"]
 securedrop_test_vars = pytest.securedrop_test_vars
-hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
 
 
 def test_apache_default_docroot_is_absent(File):

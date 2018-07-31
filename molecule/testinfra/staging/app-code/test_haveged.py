@@ -1,3 +1,6 @@
+testinfra_hosts = ["app-staging"]
+
+
 def test_haveged_config(File):
     """
     Ensure haveged's low entrop watermark is sufficiently high.

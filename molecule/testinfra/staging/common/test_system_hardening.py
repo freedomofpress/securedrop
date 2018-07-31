@@ -2,8 +2,6 @@ import os
 import pytest
 import re
 
-hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
-
 
 @pytest.mark.parametrize('sysctl_opt', [
   ('net.ipv4.conf.all.accept_redirects', 0),
@@ -63,19 +61,21 @@ def test_blacklisted_kernel_modules(Command, File, Sudo, kernel_module):
     assert f.contains("^blacklist {}$".format(kernel_module))
 
 
-@pytest.mark.skipif(hostenv.startswith('mon'),
-                    reason="Monitor Server does not have swap disabled yet.")
 def test_swap_disabled(Command):
     """
     Ensure swap space is disabled. Prohibit writing memory to swapfiles
     to reduce the threat of forensic analysis leaking any sensitive info.
     """
-    c = Command.check_output('swapon --summary')
-    # A leading slash will indicate full path to a swapfile.
-    assert not re.search("^/", c, re.M)
-    # Expect that ONLY the headers will be present in the output.
-    rgx = re.compile("Filename\s*Type\s*Size\s*Used\s*Priority")
-    assert re.search(rgx, c)
+    hostname = Command.check_output('hostname')
+
+    # Mon doesn't have swap disabled yet
+    if not hostname.startswith('mon'):
+        c = Command.check_output('swapon --summary')
+        # A leading slash will indicate full path to a swapfile.
+        assert not re.search("^/", c, re.M)
+        # Expect that ONLY the headers will be present in the output.
+        rgx = re.compile("Filename\s*Type\s*Size\s*Used\s*Priority")
+        assert re.search(rgx, c)
 
 
 def test_twofactor_disabled_on_tty(host):
