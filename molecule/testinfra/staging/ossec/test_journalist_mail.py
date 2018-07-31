@@ -1,4 +1,5 @@
 import pytest
+import os
 import testinfra
 import time
 
@@ -68,8 +69,10 @@ class TestJournalistMail(TestBase):
                 ('journalist', 'alert-journalist-one.txt'),
                 ('journalist', 'alert-journalist-two.txt'),
                 ('ossec', 'alert-ossec.txt')):
+            # Look up CWD, in case tests move in the future
+            current_dir = os.path.dirname(os.path.abspath(__file__))
             self.ansible(host, "copy",
-                         "dest=/tmp/{f} src=testinfra/ossec/{f}".format(f=f))
+                         "dest=/tmp/{f} src={d}/{f}".format(f=f, d=current_dir))
             assert self.run(host,
                             "/var/ossec/process_submissions_today.sh forget")
             assert self.run(host, "postsuper -d ALL")
@@ -92,7 +95,7 @@ class TestJournalistMail(TestBase):
 
     def test_send_encrypted_alert(self, host):
         self.service_started(host, "postfix")
-        src = "install_files/ansible-base/roles/ossec/files/test_admin_key.sec"
+        src = "../../install_files/ansible-base/roles/ossec/files/test_admin_key.sec"
         self.ansible(host, "copy",
                      "dest=/tmp/test_admin_key.sec src={src}".format(src=src))
 
