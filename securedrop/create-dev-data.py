@@ -3,6 +3,8 @@
 
 import datetime
 import os
+import sys
+import argparse
 from sqlalchemy.exc import IntegrityError
 
 os.environ["SECUREDROP_ENV"] = "dev"  # noqa
@@ -90,10 +92,19 @@ if __name__ == "__main__":  # pragma: no cover
     test_password = "correct horse battery staple profanity oil chewy"
     test_otp_secret = "JHCOGO7VCER3EJ4L"
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--staging", help="Adding user for staging tests.",
+                    action="store_true")
+    args = parser.parse_args()
     add_test_user("journalist",
                   test_password,
                   test_otp_secret,
                   is_admin=True)
+
+    # If staging, we only need the journalist user (admin)
+    if args.staging:
+        sys.exit(0)
+
     add_test_user("dellsberg",
                   test_password,
                   test_otp_secret,
