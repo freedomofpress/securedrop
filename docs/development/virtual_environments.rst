@@ -141,12 +141,11 @@ Instructions for both installation methods follow.
 Switch Vagrant provider to libvirt - Ubuntu 16.04
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Uninstall any exiting version of Vagrant. Install libvirt and QEMU:
+Install libvirt and QEMU:
 
 .. code:: sh
 
    sudo apt-get update
-   sudo apt-get remove vagrant
    sudo apt-get install libvirt-bin libvirt-dev qemu-utils qemu
    sudo /etc/init.d/libvirt-bin restart
 
@@ -165,7 +164,7 @@ available:
    libvirtd --version 
    kvm-ok
 
-Reinstall Vagrant and install the required plugins for converting and using 
+Install Vagrant along with the required plugins for converting and using 
 libvirt boxes:
 
 .. code:: sh
@@ -174,6 +173,10 @@ libvirt boxes:
    sudo dpkg -i vagrant_1.9.1_x86_64.deb
    vagrant plugin install vagrant-libvirt
    vagrant plugin install vagrant-mutate
+
+.. note:: If Vagrant is already installed it may not recognize libvirt as a 
+   valid provider. In this case, remove Vagrant with ``sudo apt-get remove 
+   vagrant`` and reinstall it as above 
 
 Convert the bento/14.04 Vagrant box from ``virtualbox`` to ``libvirt`` format:
 
@@ -203,19 +206,16 @@ Install Vagrant, libvirt, QEMU, and their dependencies:
 
    sudo apt-get update
    sudo apt-get install -y vagrant vagrant-libvirt libvirt-daemon-system qemu-kvm
-   sudo apt-get install -y nfs-common nfs-kernel-server ebtables dnsmasq
    sudo apt-get install -y ansible rsync
    vagrant plugin install vagrant-libvirt
-   sudo usermod -a -G libvirt debian
-   newgrp libvirt
+   sudo usermod -a -G libvirt $USER 
    sudo systemctl restart libvirtd                                                                    
                                                                                 
 Add your user to the kvm group to give it permission to run KVM:                                            
                                                                                 
 .. code:: sh
 
-   sudo usermod -a -G kvm debian
-   newgrp kvm
+   sudo usermod -a -G kvm $USER
    sudo rmmod kvm_intel
    sudo rmmod kvm
    sudo modprobe kvm
