@@ -2,6 +2,7 @@ import os
 import pytest
 
 
+testinfra_hosts = ["mon-staging"]
 securedrop_test_vars = pytest.securedrop_test_vars
 
 

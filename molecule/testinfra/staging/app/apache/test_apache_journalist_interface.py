@@ -2,6 +2,7 @@ import pytest
 import re
 
 
+testinfra_hosts = ["app-staging"]
 securedrop_test_vars = pytest.securedrop_test_vars
 
 # Setting once so it can be reused in multiple tests.

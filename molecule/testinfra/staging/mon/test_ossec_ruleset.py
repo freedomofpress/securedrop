@@ -1,7 +1,7 @@
 import pytest
 import re
 
-
+testinfra_hosts = ["mon-staging"]
 alert_level_regex = re.compile(r"Level: '(\d+)'")
 rule_id_regex = re.compile(r"Rule id: '(\d+)'")
 sdvars = pytest.securedrop_test_vars

@@ -1,5 +1,6 @@
 import pytest
 
+testinfra_hosts = ["app-staging"]
 sdvars = pytest.securedrop_test_vars
 
 
