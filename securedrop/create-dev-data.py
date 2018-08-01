@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import datetime
 import os
 from sqlalchemy.exc import IntegrityError
 
@@ -58,6 +59,7 @@ def create_source_and_submissions(num_submissions=2):
                 source.journalist_filename,
                 'test submission!'
             )
+            source.last_updated = datetime.datetime.utcnow()
             submission = Submission(source, fpath)
             db.session.add(submission)
 
