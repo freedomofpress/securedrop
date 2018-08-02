@@ -77,7 +77,7 @@ def make_blueprint(config):
     def lookup():
         replies = []
         source_inbox = Reply.query.filter(Reply.source_id == g.source.id) \
-                                  .filter(Reply.source_deleted == False).all()  # noqa
+                                  .filter(Reply.deleted_by_source == False).all()  # noqa
 
         for reply in source_inbox:
             reply_path = current_app.storage.path(
@@ -214,7 +214,7 @@ def make_blueprint(config):
         query = Reply.query.filter(
             Reply.filename == request.form['reply_filename'])
         reply = get_one_or_else(query, current_app.logger, abort)
-        reply.source_deleted = True
+        reply.deleted_by_source = True
         db.session.add(reply)
         db.session.commit()
 
