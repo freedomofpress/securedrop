@@ -1259,7 +1259,7 @@ def test_admin_page_restriction_http_posts(journalist_app, test_journo):
 
 def test_user_authorization_for_gets(journalist_app):
     urls = [url_for('main.index'), url_for('col.col', filesystem_id='1'),
-            url_for('col.download_single_submission',
+            url_for('col.download_single_file',
                     filesystem_id='1', fn='1'),
             url_for('account.edit')]
 
@@ -1342,6 +1342,26 @@ def test_passphrase_migration_on_reset(journalist_app):
 
     # check that that a verification post-migration works
     assert journalist.valid_password(VALID_PASSWORD)
+
+
+def test_journalist_reply_view(journalist_app, test_source, test_journo):
+    source, _ = utils.db_helper.init_source()
+    journalist, _ = utils.db_helper.init_journalist()
+    submissions = utils.db_helper.submit(source, 1)
+    replies = utils.db_helper.reply(journalist, source, 1)
+
+    subm_url = url_for('col.download_single_file',
+                       filesystem_id=submissions[0].source.filesystem_id,
+                       fn=submissions[0].filename)
+    reply_url = url_for('col.download_single_file',
+                        filesystem_id=replies[0].source.filesystem_id,
+                        fn=replies[0].filename)
+
+    with journalist_app.test_client() as app:
+        resp = app.get(subm_url)
+        assert resp.status_code == 302
+        resp = app.get(reply_url)
+        assert resp.status_code == 302
 
 
 class TestJournalistApp(TestCase):
