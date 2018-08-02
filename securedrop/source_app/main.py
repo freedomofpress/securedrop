@@ -76,7 +76,10 @@ def make_blueprint(config):
     @login_required
     def lookup():
         replies = []
-        for reply in g.source.replies:
+        source_inbox = Reply.query.filter(Reply.source_id == g.source.id) \
+                                  .filter(Reply.source_deleted == False).all()  # noqa
+
+        for reply in source_inbox:
             reply_path = current_app.storage.path(
                 g.filesystem_id,
                 reply.filename,
@@ -203,11 +206,16 @@ def make_blueprint(config):
     @view.route('/delete', methods=('POST',))
     @login_required
     def delete():
+        """This deletes the reply from the source's inbox, but preserves
+        the history for journalists such that they can view conversation
+        history.
+        """
+
         query = Reply.query.filter(
             Reply.filename == request.form['reply_filename'])
         reply = get_one_or_else(query, current_app.logger, abort)
-        srm(current_app.storage.path(g.filesystem_id, reply.filename))
-        db.session.delete(reply)
+        reply.source_deleted = True
+        db.session.add(reply)
         db.session.commit()
 
         flash(gettext("Reply deleted"), "notification")
