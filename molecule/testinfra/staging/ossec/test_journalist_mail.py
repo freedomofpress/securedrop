@@ -4,6 +4,10 @@ import testinfra
 import time
 
 
+# DRY declaration of why we're skipping all these tests.
+# For details, see https://github.com/freedomofpress/securedrop/issues/3689
+SKIP_REASON="unimplemented, see GH#3689"
+
 class TestBase(object):
 
     @pytest.fixture(autouse=True)
@@ -63,6 +67,7 @@ class TestBase(object):
 
 class TestJournalistMail(TestBase):
 
+    @pytest.mark.skip(reason=SKIP_REASON)
     def test_procmail(self, host):
         self.service_started(host, "postfix")
         for (destination, f) in (
@@ -85,6 +90,7 @@ class TestJournalistMail(TestBase):
                     destination=destination))
         self.service_stopped(host, "postfix")
 
+    @pytest.mark.skip(reason=SKIP_REASON)
     def test_process_submissions_today(self, host):
         assert self.run(host,
                         "/var/ossec/process_submissions_today.sh "
@@ -93,6 +99,7 @@ class TestJournalistMail(TestBase):
                         "/var/ossec/process_submissions_today.sh "
                         "test_modified_in_the_past_24h")
 
+    @pytest.mark.skip(reason=SKIP_REASON)
     def test_send_encrypted_alert(self, host):
         self.service_started(host, "postfix")
         src = "../../install_files/ansible-base/roles/ossec/files/test_admin_key.sec"
@@ -147,6 +154,7 @@ class TestJournalistMail(TestBase):
             assert self.run(host, "mv /usr/bin/gpg.save /usr/bin/gpg")
         self.service_stopped(host, "postfix")
 
+    @pytest.mark.skip(reason=SKIP_REASON)
     def test_missing_journalist_alert(self, host):
         #
         # missing journalist mail does nothing
@@ -161,6 +169,7 @@ class TestJournalistMail(TestBase):
             """)
 
     # https://ossec-docs.readthedocs.io/en/latest/manual/rules-decoders/testing.html
+    @pytest.mark.skip(reason=SKIP_REASON)
     def test_ossec_rule_journalist(self, host):
         assert self.run(host, """
         set -ex
@@ -169,6 +178,7 @@ class TestJournalistMail(TestBase):
         echo "$l" | /var/ossec/bin/ossec-logtest -U '400600:1:ossec'
         """)
 
+    @pytest.mark.skip(reason=SKIP_REASON)
     def test_journalist_mail_notification(self, host):
         mon = host
         app = testinfra.host.Host.get_host(
