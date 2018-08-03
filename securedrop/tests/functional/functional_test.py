@@ -202,15 +202,6 @@ class FunctionalTest(object):
             gpg.import_keys(open(keyfile).read())
         return gpg
 
-    def system(self, cmd):
-        """
-        Invoke a shell command. Primary replacement for os.system calls.
-        """
-        ret = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE,
-                               stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                               close_fds=True)
-        out, err = ret.communicate()
-        return out
 
     def setup(self, session_expiration=30):
 
@@ -221,6 +212,9 @@ class FunctionalTest(object):
 
         instance_information_path = join(FUNCTIONAL_TEST_DIR,
                                          'instance_information.json')
+
+        env.create_directories()
+        self.gpg = env.init_gpg()
 
         if os.path.exists(instance_information_path):
             with open(instance_information_path) as fobj:
@@ -244,8 +238,6 @@ class FunctionalTest(object):
             self.mock_get_entropy_estimate = self.patcher2.start()
             self.mock_get_entropy_estimate.return_value = 8192
 
-            env.create_directories()
-            self.gpg = env.init_gpg()
             db.create_all()
 
             # Add our test user
