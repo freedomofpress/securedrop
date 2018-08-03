@@ -255,9 +255,8 @@ class FunctionalTest(object):
                                   password=valid_password,
                                   is_admin=True)
                 user.otp_secret = 'JHCOGO7VCER3EJ4L'
-                user.pw_salt = user._gen_salt()
-                user.pw_hash = user._scrypt_hash('WEjwn8ZyczDhQSK24YKM8C9a',
-                                                 user.pw_salt)
+                user.pw_salt = ""
+                user.pw_hash = ""
                 db.session.add(user)
                 db.session.commit()
             except IntegrityError:
@@ -279,7 +278,7 @@ class FunctionalTest(object):
             # This user is required for our tests cases to login
             self.admin_user = {
                                 "name": "journalist",
-                                "password": "WEjwn8ZyczDhQSK24YKM8C9a",
+                                "password": "correct horse battery staple profanity oil chewy",
                                 "secret": "JHCOGO7VCER3EJ4L"}
             self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
             self.sleep_time = 2
