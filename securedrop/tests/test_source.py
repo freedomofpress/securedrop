@@ -14,7 +14,7 @@ import utils
 import version
 
 from db import db
-from models import Source
+from models import Source, Reply
 from source_app import main as source_app_main
 from utils.db_helper import new_codename
 from utils.instrument import InstrumentedApp
@@ -394,6 +394,7 @@ def test_delete_all_successfully_deletes_replies(source_app):
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
         source, codename = utils.db_helper.init_source()
+        source_id = source.id
         utils.db_helper.reply(journalist, source, 1)
 
     with source_app.test_client() as app:
@@ -406,8 +407,41 @@ def test_delete_all_successfully_deletes_replies(source_app):
         text = resp.data.decode('utf-8')
         assert "All replies have been deleted" in text
 
+    with source_app.app_context():
+        source = Source.query.get(source_id)
+        replies = Reply.query.filter(Reply.source_id == source_id).all()
+        for reply in replies:
+            assert reply.deleted_by_source is True
 
-def test_delete_all_replies_already_deleted(source_app):
+
+def test_delete_all_replies_deleted_by_source_but_not_journalist(source_app):
+    """Replies can be deleted by a source, but not by journalists. As such,
+    replies may still exist in the replies table, but no longer be visible."""
+    with source_app.app_context():
+        journalist, _ = utils.db_helper.init_journalist()
+        source, codename = utils.db_helper.init_source()
+        utils.db_helper.reply(journalist, source, 1)
+        replies = Reply.query.filter(Reply.source_id == source.id).all()
+        for reply in replies:
+            reply.deleted_by_source = True
+            db.session.add(reply)
+            db.session.commit()
+
+    with source_app.test_client() as app:
+        with patch.object(source_app.logger, 'error') as logger:
+            resp = app.post(url_for('main.login'),
+                            data=dict(codename=codename),
+                            follow_redirects=True)
+            assert resp.status_code == 200
+            resp = app.post(url_for('main.batch_delete'),
+                            follow_redirects=True)
+            assert resp.status_code == 200
+            logger.assert_called_once_with(
+                "Found no replies when at least one was expected"
+            )
+
+
+def test_delete_all_replies_already_deleted_by_journalists(source_app):
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
         source, codename = utils.db_helper.init_source()
