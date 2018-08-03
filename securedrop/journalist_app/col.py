@@ -67,18 +67,21 @@ def make_blueprint(config):
         return method(cols_selected)
 
     @view.route('/<filesystem_id>/<fn>')
-    def download_single_submission(filesystem_id, fn):
-        """Sends a client the contents of a single submission."""
+    def download_single_file(filesystem_id, fn):
+        """Sends a client the contents of a single file, either a submission
+        or a journalist reply"""
         if '..' in fn or fn.startswith('/'):
             abort(404)
 
-        try:
-            Submission.query.filter(
-                Submission.filename == fn).one().downloaded = True
-            db.session.commit()
-        except NoResultFound as e:
-            current_app.logger.error(
-                "Could not mark " + fn + " as downloaded: %s" % (e,))
+        # only mark as read when it's a submission (and not a journalist reply)
+        if not fn.endswith('reply.gpg'):
+            try:
+                Submission.query.filter(
+                    Submission.filename == fn).one().downloaded = True
+                db.session.commit()
+            except NoResultFound as e:
+                current_app.logger.error(
+                    "Could not mark " + fn + " as downloaded: %s" % (e,))
 
         return send_file(current_app.storage.path(filesystem_id, fn),
                          mimetype="application/pgp-encrypted")
