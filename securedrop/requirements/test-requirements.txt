@@ -7,6 +7,8 @@
 attrs==17.4.0             # via pytest
 beautifulsoup4==4.6.0
 blinker==1.4
+certifi==2018.4.16        # via requests
+chardet==3.0.4            # via requests
 click==6.7                # via flask, pip-tools
 coverage==4.4.2           # via pytest-cov
 easyprocess==0.2.3        # via pyvirtualdisplay
@@ -14,6 +16,7 @@ first==2.0.1              # via pip-tools
 flask-testing==0.7.1
 flask==1.0.2              # via flask-testing
 funcsigs==1.0.2           # via mock, pytest
+idna==2.7                 # via requests
 itsdangerous==0.24        # via flask
 jinja2==2.10              # via flask
 markupsafe==1.0           # via jinja2
@@ -22,11 +25,15 @@ pbr==3.1.1                # via mock
 pip-tools==1.11.0
 pluggy==0.6.0             # via pytest
 py==1.5.2
+pysocks==1.6.8            # via requests
 pytest-cov==2.5.1
 pytest-mock==1.7.1
 pytest==3.3.2
 pyvirtualdisplay==0.2.1
+requests[socks]==2.19.1
 selenium==3.13.0
 six==1.11.0               # via mock, pip-tools, pytest
 werkzeug==0.14.1          # via flask
 tbselenium==0.3.3
+urllib3==1.23             # via requests
+werkzeug==0.12.2          # via flask

@@ -6,6 +6,7 @@ import gzip
 import time
 import os
 import random
+import requests
 
 from os.path import abspath, realpath, dirname, join
 
@@ -51,19 +52,19 @@ class JournalistNavigationStepsMixin():
         :param cookies: the cookies to access
         :return: Content of the URL
         """
-        temp_cookie_file = tempfile.NamedTemporaryFile('w', delete=False)
-        data = {'url': url, 'cookies': cookies}
-        json.dump(data, temp_cookie_file)
-        temp_cookie_file.close()
-
-        cmd_path = abspath(join(dirname(realpath(__file__)),
-                                'download_content.py'))
-        # Now call the external program to handle the download
-        cmd = 'python {0} {1}'.format(cmd_path, temp_cookie_file.name)
-        if '.onion' in url:
-            cmd = 'nc -x 127.0.0.1:9150 ' + cmd
-        raw_content = self.system(cmd).strip()
-        return raw_content
+        proxies = None
+        if ".onion" in url:
+            proxies = {
+            'http': 'socks5h://127.0.0.1:9150',
+            'https': 'socks5h://127.0.0.1:9150'
+        }
+        r = requests.get(url, cookies=cookies, proxies=proxies,  stream=True)
+        if r.status_code != 200:
+            raise Exception("Failed to download the data.")
+        data = b""
+        for chunk in r.iter_content(1024):
+            data += chunk
+        return data
 
     def _input_text_in_login_form(self, username, password, token):
         self.driver.get(self.journalist_location + "/login")
@@ -650,14 +651,13 @@ class JournalistNavigationStepsMixin():
 
         # Downloading files with Selenium is tricky because it cannot automate
         # the browser's file download dialog. We can directly request the file
-        # using urllib2, but we need to pass the cookies for the logged in user
+        # using requests, but we need to pass the cookies for the logged in user
         # for Flask to allow this.
         def cookie_string_from_selenium_cookies(cookies):
-            cookie_strs = []
+            result = {}
             for cookie in cookies:
-                cookie_str = "=".join([cookie['name'], cookie['value']]) + ';'
-                cookie_strs.append(cookie_str)
-            return ' '.join(cookie_strs)
+                result[cookie['name']] = cookie['value']
+            return result
 
         cks = cookie_string_from_selenium_cookies(self.driver.get_cookies())
         raw_content = self.return_downloaded_content(file_url, cks)
