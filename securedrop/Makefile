@@ -21,7 +21,7 @@ test: ## Run the test suite in a dockerized environment
 
 .PHONY: dev
 dev: ## Run the dev server
-	 DOCKER_RUN_ARGUMENTS='-p8080:8080 -p8081:8081 -p5901:5901' ./bin/dev-shell ./bin/run
+	 DOCKER_RUN_ARGUMENTS='-p127.0.0.1:8080:8080 -p127.0.0.1:8081:8081 -p127.0.0.1:5901:5901' ./bin/dev-shell ./bin/run
 
 config.py: test-config
 
