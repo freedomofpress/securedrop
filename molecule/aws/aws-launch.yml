@@ -72,12 +72,6 @@
         content: "{{ instance_conf | to_nice_yaml | molecule_header }}"
         dest: "{{ molecule_instance_config }}"
 
-    - name: Add AWS hosts to ephermeral ssh-config (needed for testinfra)
-      template:
-        dest: "{{ molecule_ephemeral_directory }}/{{ job_id }}-config"
-        src: ssh_config
-        mode: 0600
-
     - name: Add arbitrary sleep to give cloud-init some time
       wait_for:
         timeout: 60

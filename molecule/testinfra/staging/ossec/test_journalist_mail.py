@@ -6,7 +6,8 @@ import time
 
 # DRY declaration of why we're skipping all these tests.
 # For details, see https://github.com/freedomofpress/securedrop/issues/3689
-SKIP_REASON="unimplemented, see GH#3689"
+SKIP_REASON = "unimplemented, see GH#3689"
+
 
 class TestBase(object):
 
@@ -77,7 +78,8 @@ class TestJournalistMail(TestBase):
             # Look up CWD, in case tests move in the future
             current_dir = os.path.dirname(os.path.abspath(__file__))
             self.ansible(host, "copy",
-                         "dest=/tmp/{f} src={d}/{f}".format(f=f, d=current_dir))
+                         "dest=/tmp/{f} src={d}/{f}".format(f=f,
+                                                            d=current_dir))
             assert self.run(host,
                             "/var/ossec/process_submissions_today.sh forget")
             assert self.run(host, "postsuper -d ALL")
@@ -102,7 +104,8 @@ class TestJournalistMail(TestBase):
     @pytest.mark.skip(reason=SKIP_REASON)
     def test_send_encrypted_alert(self, host):
         self.service_started(host, "postfix")
-        src = "../../install_files/ansible-base/roles/ossec/files/test_admin_key.sec"
+        src = ("../../install_files/ansible-base/roles/ossec/files/"
+               "test_admin_key.sec")
         self.ansible(host, "copy",
                      "dest=/tmp/test_admin_key.sec src={src}".format(src=src))
 

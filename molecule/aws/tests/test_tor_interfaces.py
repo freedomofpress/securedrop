@@ -21,7 +21,7 @@ def test_www(host, site):
         os.path.dirname(__file__),
         "../../../install_files/ansible-base/{}".format(site['file'])
     )
-    onion_url_raw = io.open(onion_url_filepath, 'ro').read()
+    onion_url_raw = io.open(onion_url_filepath, 'r').read()
     onion_url = re.search("\w+\.onion", onion_url_raw).group()
 
     # Fetch Onion URL via curl to confirm interface is rendered correctly.
