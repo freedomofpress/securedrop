@@ -441,11 +441,6 @@ class TestIntegration(unittest.TestCase):
                 self.assertEqual(resp.status_code, 200)
                 self.assertIn("Reply deleted", resp.data)
 
-                # Make sure the reply is deleted from the filesystem
-                utils.async.wait_for_assertion(
-                    lambda: self.assertFalse(os.path.exists(
-                        current_app.storage.path(filesystem_id, msgid))))
-
             app.get('/logout')
 
     @patch('source_app.main.async_genkey')
