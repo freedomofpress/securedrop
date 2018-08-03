@@ -58,28 +58,12 @@
         dest: ../../apptest-results.xml
         flat: yes
 
-    - name: Run testinfra tests
-      command: "{{ molecule_scenario_directory }}/scripts/ci-tester.sh"
-      args:
-        chdir: ../../
-      environment:
-        MON_IP: "{{ molecule_instance_config_yml | selectattr('instance','match','^mon') | map(attribute='priv_address')|first }}"
-        APP_IP: "{{ molecule_instance_config_yml | selectattr('instance','match','^app') | map(attribute='priv_address')|first }}"
-        CI_SSH_CONFIG: "{{ molecule_instance_config_yml[0].identity_file }}-config"
-      register: testinfra_results
-      delegate_to: localhost
-      become: no
-      ignore_errors: true
-
     - name: Establish list of raw test results
       set_fact:
         raw_test_results:
           - type: app
             file: scripts/app-tests.sh
             result: "{{ app_test_register }}"
-          - type: testinfra
-            file: scripts/ci-tester.sh
-            result: "{{ testinfra_results }}"
 
     - name: Dump raw test output
       copy:
@@ -89,27 +73,11 @@
       become: no
       delegate_to: localhost
 
-    - name: Dump results into junit files
-      template:
-        src: junit.xml.j2
-        dest: "../../{{ item.type }}-results.xml"
-      with_items: "{{ raw_test_results }}"
-      become: no
-      # THIS NEEDS TO BE SKIPPED FOR THE TIME BEING.
-      # CAUSING PARSING FAILURES ON TEST COMBINE
-      # See pull/2796
-      when: false
-      delegate_to: localhost
-
-    - name: Combine tests for export
-      shell: ./testinfra/combine-junit.py ./*results.xml > ./junit/junit.xml
-      args:
-        chdir: ../../
-      delegate_to: localhost
-      become: no
-
-    - fail:
-      when: app_test_register|failed or testinfra_results|failed
+    - name: Fail if app tests exited non-zero
+      fail:
+        msg: >-
+          The application test suite failed. See test logs as CircleCI artifacts.
+      when: app_test_register|failed
   vars:
     ci_env: "{{ lookup('env', 'CI_SD_ENV') }}"
     # We must define this var at the play-level since the group/host vars
