@@ -319,7 +319,7 @@ class FunctionalTest(object):
             self.driver = self._create_webdriver()
         else:
             # We will use a normal firefox esr for the pages-layout tests
-            self.driver = self._create_webdriver2(self.new_profile)  # pylint: disable=no-member # noqa
+            self.driver = self._create_webdriver2(self.new_profile)  # noqa # pylint: disable=no-member 
             self._javascript_toggle()
 
         # Polls the DOM to wait for elements. To read more about why
