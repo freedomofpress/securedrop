@@ -150,7 +150,8 @@ class Source(db.Model):
             'add_star_url': url_for('api.add_star', source_uuid=self.uuid),
             'remove_star_url': url_for('api.remove_star',
                                        source_uuid=self.uuid),
-            'reply_url': url_for('api.post_reply', source_uuid=self.uuid)
+            'replies_url': url_for('api.all_source_replies',
+                                   source_uuid=self.uuid)
             }
         return json_source
 
@@ -230,6 +231,21 @@ class Reply(db.Model):
 
     def __repr__(self):
         return '<Reply %r>' % (self.filename)
+
+    def to_json(self):
+        json_submission = {
+            'source_url': url_for('api.single_source',
+                                  source_uuid=self.source.uuid),
+            'reply_url': url_for('api.single_reply',
+                                 source_uuid=self.source.uuid,
+                                 reply_uuid=self.uuid),
+            'filename': self.filename,
+            'size': self.size,
+            'journalist_username': self.journalist.username,
+            'uuid': self.uuid,
+            'is_deleted_by_source': self.deleted_by_source,
+        }
+        return json_submission
 
 
 class SourceStar(db.Model):

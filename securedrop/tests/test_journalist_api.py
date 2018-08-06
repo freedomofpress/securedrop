@@ -21,7 +21,8 @@ def test_unauthenticated_user_gets_all_endpoints(journalist_app):
 
         observed_endpoints = json.loads(response.data)
         expected_endpoints = [u'current_user_url', u'submissions_url',
-                              u'sources_url', u'auth_token_url']
+                              u'sources_url', u'auth_token_url',
+                              u'replies_url']
         assert expected_endpoints == observed_endpoints.keys()
 
 
@@ -135,18 +136,22 @@ def test_authorized_user_gets_all_sources(journalist_app, test_submissions,
 
 
 def test_user_without_token_cannot_get_protected_endpoints(journalist_app,
-                                                           test_submissions):
+                                                           test_files):
     with journalist_app.app_context():
-        uuid = test_submissions['source'].uuid
+        uuid = test_files['source'].uuid
         protected_routes = [
             url_for('api.get_all_sources'),
             url_for('api.single_source', source_uuid=uuid),
             url_for('api.all_source_submissions', source_uuid=uuid),
             url_for('api.single_submission', source_uuid=uuid,
-                    submission_uuid=test_submissions['submissions'][0].uuid),
+                    submission_uuid=test_files['submissions'][0].uuid),
             url_for('api.download_submission', source_uuid=uuid,
-                    submission_uuid=test_submissions['submissions'][0].uuid),
+                    submission_uuid=test_files['submissions'][0].uuid),
             url_for('api.get_all_submissions'),
+            url_for('api.get_all_replies'),
+            url_for('api.single_reply', source_uuid=uuid,
+                    reply_uuid=test_files['replies'][0].uuid),
+            url_for('api.all_source_replies', source_uuid=uuid),
             url_for('api.get_current_user')
             ]
 
@@ -220,7 +225,7 @@ def test_user_without_token_cannot_post_protected_endpoints(journalist_app,
     with journalist_app.app_context():
         uuid = test_source['source'].uuid
         protected_routes = [
-            url_for('api.post_reply', source_uuid=uuid),
+            url_for('api.all_source_replies', source_uuid=uuid),
             url_for('api.add_star', source_uuid=uuid),
             url_for('api.flag', source_uuid=uuid)
         ]
@@ -410,6 +415,68 @@ def test_authorized_user_can_get_single_submission(journalist_app,
             test_submissions['source'].submissions[0].size
 
 
+def test_authorized_user_can_get_all_replies(journalist_app, test_files,
+                                             journalist_api_token):
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.get_all_replies'),
+                           headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 200
+
+        json_response = json.loads(response.data)
+
+        observed_replies = [reply['filename'] for
+                            reply in json_response['replies']]
+
+        expected_replies = [reply.filename for
+                            reply in Reply.query.all()]
+        assert observed_replies == expected_replies
+
+
+def test_authorized_user_get_source_replies(journalist_app, test_files,
+                                            journalist_api_token):
+    with journalist_app.test_client() as app:
+        uuid = test_files['source'].uuid
+        response = app.get(url_for('api.all_source_replies',
+                                   source_uuid=uuid),
+                           headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 200
+
+        json_response = json.loads(response.data)
+
+        observed_replies = [reply['filename'] for
+                            reply in json_response['replies']]
+
+        expected_replies = [reply.filename for
+                            reply in test_files['source'].replies]
+        assert observed_replies == expected_replies
+
+
+def test_authorized_user_can_get_single_reply(journalist_app, test_files,
+                                              journalist_api_token):
+    with journalist_app.test_client() as app:
+        reply_uuid = test_files['source'].replies[0].uuid
+        uuid = test_files['source'].uuid
+        response = app.get(url_for('api.single_reply',
+                                   source_uuid=uuid,
+                                   reply_uuid=reply_uuid),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+        json_response = json.loads(response.data)
+
+        reply = Reply.query.filter(Reply.uuid == reply_uuid).one()
+
+        assert json_response['uuid'] == reply_uuid
+        assert json_response['journalist_username'] == \
+            reply.journalist.username
+        assert json_response['is_deleted_by_source'] is False
+        assert json_response['filename'] == \
+            test_files['source'].replies[0].filename
+        assert json_response['size'] == \
+            test_files['source'].replies[0].size
+
+
 def test_authorized_user_can_delete_single_submission(journalist_app,
                                                       test_submissions,
                                                       journalist_api_token):
@@ -508,7 +575,8 @@ def test_unencrypted_replies_get_rejected(journalist_app, journalist_api_token,
     with journalist_app.test_client() as app:
         uuid = test_source['source'].uuid
         reply_content = 'This is a plaintext reply'
-        response = app.post(url_for('api.post_reply', source_uuid=uuid),
+        response = app.post(url_for('api.all_source_replies',
+                                    source_uuid=uuid),
                             data=json.dumps({'reply': reply_content}),
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400
@@ -527,7 +595,8 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
         reply_content = current_app.crypto_util.gpg.encrypt(
             'This is a plaintext reply', source_key).data
 
-        response = app.post(url_for('api.post_reply', source_uuid=uuid),
+        response = app.post(url_for('api.all_source_replies',
+                                    source_uuid=uuid),
                             data=json.dumps({'reply': reply_content}),
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 201
@@ -557,7 +626,8 @@ def test_reply_without_content_400(journalist_app, journalist_api_token,
                                    test_source, test_journo):
     with journalist_app.test_client() as app:
         uuid = test_source['source'].uuid
-        response = app.post(url_for('api.post_reply', source_uuid=uuid),
+        response = app.post(url_for('api.all_source_replies',
+                                    source_uuid=uuid),
                             data=json.dumps({'reply': ''}),
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400
@@ -567,7 +637,8 @@ def test_reply_without_reply_field_400(journalist_app, journalist_api_token,
                                        test_source, test_journo):
     with journalist_app.test_client() as app:
         uuid = test_source['source'].uuid
-        response = app.post(url_for('api.post_reply', source_uuid=uuid),
+        response = app.post(url_for('api.all_source_replies',
+                                    source_uuid=uuid),
                             data=json.dumps({'other': 'stuff'}),
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400
@@ -577,7 +648,8 @@ def test_reply_without_json_400(journalist_app, journalist_api_token,
                                 test_source, test_journo):
     with journalist_app.test_client() as app:
         uuid = test_source['source'].uuid
-        response = app.post(url_for('api.post_reply', source_uuid=uuid),
+        response = app.post(url_for('api.all_source_replies',
+                                    source_uuid=uuid),
                             data='invalid',
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400
@@ -587,7 +659,8 @@ def test_reply_with_valid_curly_json_400(journalist_app, journalist_api_token,
                                          test_source, test_journo):
     with journalist_app.test_client() as app:
         uuid = test_source['source'].uuid
-        response = app.post(url_for('api.post_reply', source_uuid=uuid),
+        response = app.post(url_for('api.all_source_replies',
+                                    source_uuid=uuid),
                             data='{}',
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400
@@ -600,7 +673,8 @@ def test_reply_with_valid_square_json_400(journalist_app, journalist_api_token,
                                           test_source, test_journo):
     with journalist_app.test_client() as app:
         uuid = test_source['source'].uuid
-        response = app.post(url_for('api.post_reply', source_uuid=uuid),
+        response = app.post(url_for('api.all_source_replies',
+                                    source_uuid=uuid),
                             data='[]',
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400
@@ -616,7 +690,7 @@ def test_malformed_json_400(journalist_app, journalist_api_token, test_journo,
         uuid = test_source['source'].uuid
         protected_routes = [
             url_for('api.get_token'),
-            url_for('api.post_reply', source_uuid=uuid),
+            url_for('api.all_source_replies', source_uuid=uuid),
             url_for('api.add_star', source_uuid=uuid),
             url_for('api.flag', source_uuid=uuid),
         ]
@@ -639,7 +713,7 @@ def test_empty_json_400(journalist_app, journalist_api_token, test_journo,
         uuid = test_source['source'].uuid
         protected_routes = [
             url_for('api.get_token'),
-            url_for('api.post_reply', source_uuid=uuid),
+            url_for('api.all_source_replies', source_uuid=uuid),
         ]
     with journalist_app.test_client() as app:
         for protected_route in protected_routes:
