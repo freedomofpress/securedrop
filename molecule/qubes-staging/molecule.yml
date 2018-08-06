@@ -33,12 +33,9 @@ provisioner:
       callback_whitelist: "profile_tasks, timer"
   options:
     e: "@qubes-vars.yml"
-  inventory:
-    links:
-      group_vars: ../../install_files/ansible-base/group_vars
-      host_vars: ../../install_files/ansible-base/host_vars
+  playbooks:
+    converge: ../../install_files/ansible-base/securedrop-staging.yml
   env:
-    ANSIBLE_ROLES_PATH: ../../install_files/ansible-base/roles
     ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
 scenario:
   name: qubes-staging
@@ -56,3 +53,4 @@ verifier:
   directory: ../testinfra/staging/
   options:
     n: auto
+    v: 2

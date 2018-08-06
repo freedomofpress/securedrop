@@ -30,6 +30,8 @@ provisioner:
   config_options:
     defaults:
       callback_whitelist: "profile_tasks, timer"
+  env:
+    ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
 scenario:
   name: aws
   test_sequence:
