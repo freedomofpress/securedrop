@@ -192,6 +192,7 @@ def make_blueprint(config):
     @token_required
     def single_submission(source_uuid, submission_uuid):
         if request.method == 'GET':
+            source = get_or_404(Source, source_uuid, column=Source.uuid)
             submission = get_or_404(Submission, submission_uuid,
                                     column=Submission.uuid)
             return jsonify(submission.to_json()), 200
