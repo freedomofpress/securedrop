@@ -12,11 +12,6 @@ one.
 .. note:: If you plan to alter the configuration of any of these machines, make sure to
           review the :ref:`config_tests` documentation.
 
-.. note:: If you have errors with mounting shared folders in the Vagrant guest
-          machine, you should look at `GitHub #1381`_.
-
-.. _`GitHub #1381`: https://github.com/freedomofpress/securedrop/issues/1381
-
 .. note:: If you see test failures due to ``Too many levels of symbolic links``
           and you are using VirtualBox, try restarting VirtualBox.
 
