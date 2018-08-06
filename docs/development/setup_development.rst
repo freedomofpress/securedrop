@@ -141,6 +141,9 @@ can simply scan the following QR code:
 
 .. image:: ../images/devenv/test-users-totp-qrcode.png
 
+
+.. _multi_machine_environment:
+
 Setting Up a Multi-Machine Environment
 --------------------------------------
 

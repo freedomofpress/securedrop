@@ -105,7 +105,7 @@ Vagrant host's ``install_files/ansible-base`` directory, named:
 
 For working on OSSEC monitoring rules with most system hardening active, update
 the OSSEC-related configuration in
-``install_files/ansible-base/staging-specific.yml`` so you receive the OSSEC
+``install_files/ansible-base/staging.yml`` so you receive the OSSEC
 alert emails.
 
 Direct SSH access is available via Vagrant for staging hosts, so you can use
@@ -131,12 +131,12 @@ under Linux uses QEMU/KVM, which cannot run simultaneously with Virtualbox.
 
 Instructions for both installation methods follow.
 
-.. _prod_install_from_tails:
-
 Switch Vagrant provider to libvirt - Ubuntu 16.04
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Install libvirt and QEMU:
+Make sure you've already installed Vagrant, as described
+in the :ref:`multi-machine setup docs <multi_machine_environment>`.
+Then install libvirt and QEMU:
 
 .. code:: sh
 
@@ -163,9 +163,7 @@ Install Vagrant along with the required plugins for converting and using
 libvirt boxes:
 
 .. code:: sh
-   
-   wget https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1_x86_64.deb
-   sudo dpkg -i vagrant_1.9.1_x86_64.deb
+
    vagrant plugin install vagrant-libvirt
    vagrant plugin install vagrant-mutate
 
@@ -243,6 +241,8 @@ Set the default Vagrant provider to ``libvirt``:
 .. note:: To explicitly specify the ``libvirt``  provider, use the command      
    ``vagrant up --provider=libvirt /prod/``
    
+
+.. _prod_install_from_tails:
 
 Install from an Admin Workstation VM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
