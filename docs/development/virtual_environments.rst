@@ -12,11 +12,6 @@ one.
 .. note:: If you plan to alter the configuration of any of these machines, make sure to
           review the :ref:`config_tests` documentation.
 
-.. note:: If you have errors with mounting shared folders in the Vagrant guest
-          machine, you should look at `GitHub #1381`_.
-
-.. _`GitHub #1381`: https://github.com/freedomofpress/securedrop/issues/1381
-
 .. note:: If you see test failures due to ``Too many levels of symbolic links``
           and you are using VirtualBox, try restarting VirtualBox.
 
@@ -110,7 +105,7 @@ Vagrant host's ``install_files/ansible-base`` directory, named:
 
 For working on OSSEC monitoring rules with most system hardening active, update
 the OSSEC-related configuration in
-``install_files/ansible-base/staging-specific.yml`` so you receive the OSSEC
+``install_files/ansible-base/staging.yml`` so you receive the OSSEC
 alert emails.
 
 Direct SSH access is available via Vagrant for staging hosts, so you can use
@@ -129,7 +124,107 @@ virtualized, rather than running on hardware. You will need to
 playbook from running with Vagrant-specific info.
 
 You can provision production VMs from an Admin Workstation (most realistic),
-or from your host. Instructions for both follow.
+or from your host. If your host OS is Linux-based and you plan to use an Admin
+Workstation, you will need to switch Vagrant's default virtualization provider
+from ``virtualbox`` to  ``libvirt``.  The Admin Workstation VM configuration
+under Linux uses QEMU/KVM, which cannot run simultaneously with Virtualbox.
+
+Instructions for both installation methods follow.
+
+Switch Vagrant provider to libvirt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Make sure you've already installed Vagrant, as described
+in the :ref:`multi-machine setup docs <multi_machine_environment>`.
+
+Ubuntu 16.04 setup
+^^^^^^^^^^^^^^^^^^
+
+Install libvirt and QEMU:
+
+.. code:: sh
+
+   sudo apt-get update
+   sudo apt-get install libvirt-bin libvirt-dev qemu-utils qemu
+   sudo /etc/init.d/libvirt-bin restart
+
+Add your user to the libvirtd group:
+
+.. code:: sh
+
+   sudo addgroup libvirtd
+   sudo usermod -a -g libvirtd $USER
+
+Install Vagrant along with the required plugins for converting and using
+libvirt boxes:
+
+.. code:: sh
+
+   vagrant plugin install vagrant-libvirt
+   vagrant plugin install vagrant-mutate
+
+.. note:: If Vagrant is already installed it may not recognize libvirt as a
+   valid provider. In this case, remove Vagrant with ``sudo apt-get remove
+   vagrant`` and reinstall it.
+
+Debian 9 setup
+^^^^^^^^^^^^^^
+
+Install Vagrant, libvirt, QEMU, and their dependencies:
+
+.. code:: sh
+
+   sudo apt-get update
+   sudo apt-get install -y vagrant vagrant-libvirt libvirt-daemon-system qemu-kvm
+   sudo apt-get install -y ansible rsync
+   vagrant plugin install vagrant-libvirt
+   sudo usermod -a -G libvirt $USER
+   sudo systemctl restart libvirtd
+
+Add your user to the kvm group to give it permission to run KVM:
+
+.. code:: sh
+
+   sudo usermod -a -G kvm $USER
+   sudo rmmod kvm_intel
+   sudo rmmod kvm
+   sudo modprobe kvm
+   sudo modprobe kvm_intel
+
+
+Validate libvirt config
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Log out, then log in again. Verify that libvirt is installed and KVM is
+available:
+
+.. code:: sh
+
+   libvirtd --version
+   kvm-ok
+
+
+Set the default Vagrant provider to ``libvirt``:
+
+.. code:: sh
+
+   echo 'export VAGRANT_DEFAULT_PROVIDER=libvirt' >> ~/.bashrc
+   export VAGRANT_DEFAULT_PROVIDER=libvirt
+
+
+.. note:: To explicitly specify the ``libvirt``  provider below, use the command
+   ``vagrant up --provider=libvirt /prod/``
+
+Convert Vagrant boxes to libvirt
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Convert the bento/14.04 Vagrant box from ``virtualbox`` to ``libvirt`` format:
+
+.. code:: sh
+
+   vagrant box add --provider virtualbox bento/ubuntu-14.04
+   vagrant mutate bento/ubuntu-14.04 libvirt
+
+You can now use the libvirt-backed VM images to develop against
+the SecureDrop multi-machine environment.
 
 .. _prod_install_from_tails:
 
