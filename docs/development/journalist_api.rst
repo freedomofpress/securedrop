@@ -92,10 +92,11 @@ Response 200 (application/json):
 .. code:: sh
 
   {
-    "current_user_url": "/api/v1/user/",
-    "sources_url": "/api/v1/sources/",
-    "submissions_url": "/api/v1/submissions/"
-    "token_url": "/api/v1/token/"
+    "current_user_url": "/api/v1/user",
+    "sources_url": "/api/v1/sources",
+    "submissions_url": "/api/v1/submissions",
+    "replies_url": "/api/v1/replies",
+    "token_url": "/api/v1/token"
   }
 
 Sources ``[/sources]``
@@ -132,7 +133,7 @@ Response 200 (application/json):
               "number_of_documents": 0,
               "number_of_messages": 2,
               "remove_star_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/remove_star",
-              "reply_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/reply",
+              "replies_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/replies",
               "submissions_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions",
               "url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
               "uuid": "9b6df7c9-a6b1-461d-91f0-5b715fc7a47a"
@@ -151,7 +152,7 @@ Response 200 (application/json):
               "number_of_documents": 0,
               "number_of_messages": 2,
               "remove_star_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/remove_star",
-              "reply_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/reply",
+              "replies_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/replies",
               "submissions_url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce/submissions",
               "url": "/api/v1/sources/f086bd03-1c89-49fb-82d5-00084c17b4ce",
               "uuid": "f086bd03-1c89-49fb-82d5-00084c17b4ce"
@@ -184,7 +185,7 @@ Response 200 (application/json):
       "number_of_documents": 0,
       "number_of_messages": 2,
       "remove_star_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/remove_star",
-      "reply_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/reply",
+      "replies_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/replies",
       "submissions_url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a/submissions",
       "url": "/api/v1/sources/9b6df7c9-a6b1-461d-91f0-5b715fc7a47a",
       "uuid": "9b6df7c9-a6b1-461d-91f0-5b715fc7a47a"
@@ -247,6 +248,106 @@ Response 200 (application/json):
       "source_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241",
       "submission_url": "/api/v1/sources/598b859c-72c7-4e53-a68c-b725eb514241/submissions/4c2e701c-70d2-4cb5-87c0-de59c2ebbc62",
       "uuid": "4c2e701c-70d2-4cb5-87c0-de59c2ebbc62"
+  }
+
+Get all replies associated with a source [``GET``]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Requires authentication.
+
+.. code:: sh
+
+  GET /api/v1/sources/<source_uuid>/replies
+
+Response 200 (application/json):
+
+.. code:: sh
+
+  {
+      "replies": [
+          {
+              "filename": "3-famished_sheep-reply.gpg",
+              "is_deleted_by_source": false,
+              "journalist_username": "journalist",
+              "journalist_uuid": "a2405127-1c9e-4a3a-80ea-95f6a71e5738",
+              "reply_url": "/api/v1/sources/f381dbb4-4bb5-451a-801a-e961461af6e5/replies/98cc4ed6-6ac5-4867-b144-f97d0497f2c1",
+              "size": 1116,
+              "source_url": "/api/v1/sources/f381dbb4-4bb5-451a-801a-e961461af6e5",
+              "uuid": "98cc4ed6-6ac5-4867-b144-f97d0497f2c1"
+          },
+          {
+              "filename": "4-famished_sheep-reply.gpg",
+              "is_deleted_by_source": false,
+              "journalist_username": "journalist",
+              "journalist_uuid": "a2405127-1c9e-4a3a-80ea-95f6a71e5738",
+              "reply_url": "/api/v1/sources/f381dbb4-4bb5-451a-801a-e961461af6e5/replies/2863e3ec-66c8-4b74-ba43-615c805be4da",
+              "size": 1116,
+              "source_url": "/api/v1/sources/f381dbb4-4bb5-451a-801a-e961461af6e5",
+              "uuid": "2863e3ec-66c8-4b74-ba43-615c805be4da"
+          }
+      ]
+  }
+
+Get a single reply associated with a source [``GET``]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Requires authentication.
+
+.. code:: sh
+
+  GET /api/v1/sources/<source_uuid>/replies/<reply_uuid>
+
+Response 200 (application/json):
+
+.. code:: sh
+
+  {
+      "filename": "3-famished_sheep-reply.gpg",
+      "is_deleted_by_source": false,
+      "journalist_username": "journalist",
+      "journalist_uuid": "a2405127-1c9e-4a3a-80ea-95f6a71e5738",
+      "reply_url": "/api/v1/sources/f381dbb4-4bb5-451a-801a-e961461af6e5/replies/98cc4ed6-6ac5-4867-b144-f97d0497f2c1",
+      "size": 1116,
+      "source_url": "/api/v1/sources/f381dbb4-4bb5-451a-801a-e961461af6e5",
+      "uuid": "98cc4ed6-6ac5-4867-b144-f97d0497f2c1"
+  }
+
+Download a reply [``GET``]
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Requires authentication.
+
+.. code:: sh
+
+  GET /api/v1/sources/<source_uuid>/replies/<reply_uuid>/download
+
+Response 200 will have ``Content-Type: application/pgp-encrypted`` and is the
+content of the PGP encrypted reply.
+
+An ETag header is also present containing the SHA256 hash of the response data:
+
+.. code:: sh
+
+  "sha256:c757c5aa263dc4a5a2bca8e7fe973367dbd2c1a6c780d19c0ba499e6b1b81efa"
+
+Note that these are not intended for cryptographic purposes and are present
+for clients to check that downloads are not corrupted.
+
+Delete a reply [``DELETE``]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Requires authentication.
+
+.. code:: sh
+
+  DELETE /api/v1/sources/<source_uuid>/replies/<reply_uuid>
+
+Response 200:
+
+.. code:: sh
+
+  {
+    "message": "Reply deleted"
   }
 
 Add a reply to a source [``POST``]
@@ -449,6 +550,67 @@ Response 200:
       ]
   }
 
+Reply ``[/replies]``
+--------------------
+
+Get all replies [``GET``]
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Requires authentication. This gets details of all replies across sources.
+
+.. code:: sh
+
+  GET /api/v1/replies
+
+Response 200:
+
+.. code:: sh
+
+  {
+      "replies": [
+          {
+              "filename": "3-famished_sheep-reply.gpg",
+              "is_deleted_by_source": false,
+              "journalist_username": "journalist",
+              "journalist_uuid": "a2405127-1c9e-4a3a-80ea-95f6a71e5738",
+              "reply_url": "/api/v1/sources/f381dbb4-4bb5-451a-801a-e961461af6e5/replies/98cc4ed6-6ac5-4867-b144-f97d0497f2c1",
+              "size": 1116,
+              "source_url": "/api/v1/sources/f381dbb4-4bb5-451a-801a-e961461af6e5",
+              "uuid": "98cc4ed6-6ac5-4867-b144-f97d0497f2c1"
+          },
+          {
+              "filename": "4-famished_sheep-reply.gpg",
+              "is_deleted_by_source": false,
+              "journalist_username": "journalist",
+              "journalist_uuid": "a2405127-1c9e-4a3a-80ea-95f6a71e5738",
+              "reply_url": "/api/v1/sources/f381dbb4-4bb5-451a-801a-e961461af6e5/replies/2863e3ec-66c8-4b74-ba43-615c805be4da",
+              "size": 1116,
+              "source_url": "/api/v1/sources/f381dbb4-4bb5-451a-801a-e961461af6e5",
+              "uuid": "2863e3ec-66c8-4b74-ba43-615c805be4da"
+          },
+          {
+              "filename": "3-intermittent_proline-reply.gpg",
+              "is_deleted_by_source": false,
+              "journalist_username": "journalist",
+              "journalist_uuid": "a2405127-1c9e-4a3a-80ea-95f6a71e5738",
+              "reply_url": "/api/v1/sources/06bfd5ba-ed6a-4850-b713-4e6940b74931/replies/33b35f6e-b43e-4ad5-a24b-37fd1916ad75",
+              "size": 1116,
+              "source_url": "/api/v1/sources/06bfd5ba-ed6a-4850-b713-4e6940b74931",
+              "uuid": "33b35f6e-b43e-4ad5-a24b-37fd1916ad75"
+          },
+          {
+              "filename": "4-intermittent_proline-reply.gpg",
+              "is_deleted_by_source": false,
+              "journalist_username": "journalist",
+              "journalist_uuid": "a2405127-1c9e-4a3a-80ea-95f6a71e5738",
+              "reply_url": "/api/v1/sources/06bfd5ba-ed6a-4850-b713-4e6940b74931/replies/6fad52dd-bc55-42aa-96da-4636644fb3e2",
+              "size": 1116,
+              "source_url": "/api/v1/sources/06bfd5ba-ed6a-4850-b713-4e6940b74931",
+              "uuid": "6fad52dd-bc55-42aa-96da-4636644fb3e2"
+          }
+      ]
+  }
+
 User ``[/user]``
 ----------------
 
@@ -468,5 +630,6 @@ Response 200:
   {
     "is_admin": true,
     "last_login": "2018-07-09T20:29:41.696782Z",
-    "username": "journalist"
+    "username": "journalist",
+    "uuid": "a2405127-1c9e-4a3a-80ea-95f6a71e5738"
   }
