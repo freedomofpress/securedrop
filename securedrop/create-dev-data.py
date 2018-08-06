@@ -9,7 +9,7 @@ os.environ["SECUREDROP_ENV"] = "dev"  # noqa
 import journalist_app
 from sdconfig import config
 from db import db
-from models import Journalist, Source, Submission
+from models import Journalist, Reply, Source, Submission
 
 
 def add_test_user(username, password, otp_secret, is_admin=False):
@@ -33,7 +33,7 @@ def add_test_user(username, password, otp_secret, is_admin=False):
     context.pop()
 
 
-def create_source_and_submissions(num_submissions=2):
+def create_source_and_submissions(num_submissions=2, num_replies=2):
     app = journalist_app.create_app(config)
 
     with app.app_context():
@@ -63,10 +63,26 @@ def create_source_and_submissions(num_submissions=2):
             submission = Submission(source, fpath)
             db.session.add(submission)
 
+        # Generate some test replies
+        for _ in range(num_replies):
+            source.interaction_count += 1
+            fname = "{}-{}-reply.gpg".format(source.interaction_count,
+                                             source.journalist_filename)
+            app.crypto_util.encrypt(
+                str(os.urandom(1)),
+                [app.crypto_util.getkey(source.filesystem_id),
+                 config.JOURNALIST_KEY],
+                app.storage.path(source.filesystem_id, fname))
+
+            journalist = Journalist.query.first()
+            reply = Reply(journalist, source, fname)
+            db.session.add(reply)
+
         db.session.commit()
-        print("Test source '{}' added with {} submissions".format(
-            journalist_designation, num_submissions)
-        )
+
+        print("Test source '{}' added with {} submissions "
+              "and {} replies".format(journalist_designation, num_submissions,
+                                      num_replies))
 
 
 if __name__ == "__main__":  # pragma: no cover
