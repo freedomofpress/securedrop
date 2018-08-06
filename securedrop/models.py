@@ -200,6 +200,7 @@ class Submission(db.Model):
 class Reply(db.Model):
     __tablename__ = "replies"
     id = Column(Integer, primary_key=True)
+    uuid = Column(String(36), unique=True, nullable=False)
 
     journalist_id = Column(Integer, ForeignKey('journalists.id'))
     journalist = relationship(
@@ -222,6 +223,7 @@ class Reply(db.Model):
     def __init__(self, journalist, source, filename):
         self.journalist_id = journalist.id
         self.source_id = source.id
+        self.uuid = str(uuid.uuid4())
         self.filename = filename
         self.size = os.stat(current_app.storage.path(source.filesystem_id,
                                                      filename)).st_size
