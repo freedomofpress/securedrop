@@ -131,12 +131,15 @@ under Linux uses QEMU/KVM, which cannot run simultaneously with Virtualbox.
 
 Instructions for both installation methods follow.
 
-Switch Vagrant provider to libvirt - Ubuntu 16.04
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+Switch Vagrant provider to libvirt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Make sure you've already installed Vagrant, as described
 in the :ref:`multi-machine setup docs <multi_machine_environment>`.
-Then install libvirt and QEMU:
+
+Ubuntu 16.04 setup
+^^^^^^^^^^^^^^^^^^
+
+Install libvirt and QEMU:
 
 .. code:: sh
 
@@ -151,14 +154,6 @@ Add your user to the libvirtd group:
    sudo addgroup libvirtd
    sudo usermod -a -g libvirtd $USER
 
-Log out, then log in again. Verify that libvirt is installed and KVM is
-available:
-
-.. code:: sh
-
-   libvirtd --version
-   kvm-ok
-
 Install Vagrant along with the required plugins for converting and using
 libvirt boxes:
 
@@ -169,29 +164,10 @@ libvirt boxes:
 
 .. note:: If Vagrant is already installed it may not recognize libvirt as a
    valid provider. In this case, remove Vagrant with ``sudo apt-get remove
-   vagrant`` and reinstall it as above
+   vagrant`` and reinstall it.
 
-Convert the bento/14.04 Vagrant box from ``virtualbox`` to ``libvirt`` format:
-
-.. code:: sh
-
-   vagrant box add --provider virtualbox bento/ubuntu-14.04
-   vagrant mutate bento/ubuntu-14.04 libvirt
-
-Set the default Vagrant provider to ``libvirt``:
-
-.. code:: sh
-
-   echo 'export VAGRANT_DEFAULT_PROVIDER=libvirt' >> ~/.bashrc
-   export VAGRANT_DEFAULT_PROVIDER=libvirt
-
-
-.. note:: To explicitly specify the ``libvirt``  provider below, use the command
-   ``vagrant up --provider=libvirt /prod/``
-
-
-Switch Vagrant provider to libvirt - Debian 9
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Debian 9 setup
+^^^^^^^^^^^^^^
 
 Install Vagrant, libvirt, QEMU, and their dependencies:
 
@@ -215,6 +191,9 @@ Add your user to the kvm group to give it permission to run KVM:
    sudo modprobe kvm_intel
 
 
+Validate libvirt config
+^^^^^^^^^^^^^^^^^^^^^^^
+
 Log out, then log in again. Verify that libvirt is installed and KVM is
 available:
 
@@ -223,13 +202,6 @@ available:
    libvirtd --version
    kvm-ok
 
-Convert the bento/14.04 Vagrant box from ``virtualbox`` to ``libvirt`` format:
-
-.. code:: sh
-
-   sudo apt-get install -y vagrant-mutate
-   vagrant box add --provider virtualbox bento/ubuntu-14.04
-   vagrant mutate bento/ubuntu-14.04 libvirt
 
 Set the default Vagrant provider to ``libvirt``:
 
@@ -238,9 +210,21 @@ Set the default Vagrant provider to ``libvirt``:
    echo 'export VAGRANT_DEFAULT_PROVIDER=libvirt' >> ~/.bashrc
    export VAGRANT_DEFAULT_PROVIDER=libvirt
 
-.. note:: To explicitly specify the ``libvirt``  provider, use the command
+
+.. note:: To explicitly specify the ``libvirt``  provider below, use the command
    ``vagrant up --provider=libvirt /prod/``
 
+Convert Vagrant boxes to libvirt
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Convert the bento/14.04 Vagrant box from ``virtualbox`` to ``libvirt`` format:
+
+.. code:: sh
+
+   vagrant box add --provider virtualbox bento/ubuntu-14.04
+   vagrant mutate bento/ubuntu-14.04 libvirt
+
+You can now use the libvirt-backed VM images to develop against
+the SecureDrop multi-machine environment.
 
 .. _prod_install_from_tails:
 
