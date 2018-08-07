@@ -51,6 +51,17 @@ def export_ci_var_overrides():
     os.environ['APP_IP'] = app_ip
     os.environ['MON_IP'] = mon_ip
 
+    # Make SSH calls more resilient, as we're operating against remote hosts,
+    # and running from CI. We've observed flakey connections in CI at times.
+    os.environ['ANSIBLE_SSH_RETRIES'] = '5'
+    ssh_args = [
+        "-o ConnectTimeout=60s",
+        "-o ControlMaster=auto",
+        "-o ControlPersist=180s",
+        "-o StrictHostKeyChecking=no",
+    ]
+    os.environ['ANSIBLE_SSH_ARGS'] = " ".join(ssh_args)
+
 
 def lookup_aws_private_address(molecule_info, hostname):
     """
