@@ -247,12 +247,18 @@ def make_blueprint(config):
             db.session.commit()
             return jsonify({'message': 'Your reply has been stored'}), 201
 
-    @api.route('/sources/<source_uuid>/replies/<reply_uuid>', methods=['GET'])
+    @api.route('/sources/<source_uuid>/replies/<reply_uuid>',
+               methods=['GET', 'DELETE'])
     @token_required
     def single_reply(source_uuid, reply_uuid):
-        get_or_404(Source, source_uuid, column=Source.uuid)
+        source = get_or_404(Source, source_uuid, column=Source.uuid)
         reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
-        return jsonify(reply.to_json()), 200
+        if request.method == 'GET':
+            return jsonify(reply.to_json()), 200
+        elif request.method == 'DELETE':
+            utils.delete_file(source.filesystem_id, reply.filename,
+                              reply)
+            return jsonify({'message': 'Reply deleted'}), 200
 
     @api.route('/submissions', methods=['GET'])
     @token_required

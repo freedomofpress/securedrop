@@ -495,6 +495,22 @@ def test_authorized_user_can_delete_single_submission(journalist_app,
             Submission.uuid == submission_uuid).all() == []
 
 
+def test_authorized_user_can_delete_single_reply(journalist_app, test_files,
+                                                 journalist_api_token):
+    with journalist_app.test_client() as app:
+        reply_uuid = test_files['source'].replies[0].uuid
+        uuid = test_files['source'].uuid
+        response = app.delete(url_for('api.single_reply',
+                                      source_uuid=uuid,
+                                      reply_uuid=reply_uuid),
+                              headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+        # Reply should now be gone.
+        assert Reply.query.filter(Reply.uuid == reply_uuid).all() == []
+
+
 def test_authorized_user_can_delete_source_collection(journalist_app,
                                                       test_source,
                                                       journalist_api_token):
