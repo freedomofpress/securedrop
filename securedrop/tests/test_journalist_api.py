@@ -552,6 +552,27 @@ def test_authorized_user_can_download_submission(journalist_app,
             hashlib.sha256(response.data).hexdigest())
 
 
+def test_authorized_user_can_download_reply(journalist_app, test_files,
+                                            journalist_api_token):
+    with journalist_app.test_client() as app:
+        reply_uuid = test_files['source'].replies[0].uuid
+        uuid = test_files['source'].uuid
+
+        response = app.get(url_for('api.download_reply',
+                                   source_uuid=uuid,
+                                   reply_uuid=reply_uuid),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+        # Response should be a PGP encrypted download
+        assert response.mimetype == 'application/pgp-encrypted'
+
+        # Response should have Etag field with hash
+        assert response.headers['ETag'] == '"sha256:{}"'.format(
+            hashlib.sha256(response.data).hexdigest())
+
+
 def test_authorized_user_can_get_current_user_endpoint(journalist_app,
                                                        test_journo,
                                                        journalist_api_token):

@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
 from functools import wraps
-import hashlib
 import json
 from werkzeug.exceptions import default_exceptions  # type: ignore
 
-from flask import abort, Blueprint, current_app, jsonify, request, send_file
+from flask import abort, Blueprint, current_app, jsonify, request
 
 from db import db
 from journalist_app import utils
@@ -177,16 +176,16 @@ def make_blueprint(config):
         submission.downloaded = True
         db.session.commit()
 
-        response = send_file(current_app.storage.path(source.filesystem_id,
-                                                      submission.filename),
-                             mimetype="application/pgp-encrypted",
-                             as_attachment=True,
-                             add_etags=False)  # Disable Flask default ETag
+        return utils.serve_file_with_etag(source, submission.filename)
 
-        response.direct_passthrough = False
-        response.headers['Etag'] = '"sha256:{}"'.format(
-            hashlib.sha256(response.get_data()).hexdigest())
-        return response
+    @api.route('/sources/<source_uuid>/replies/<reply_uuid>/download',
+               methods=['GET'])
+    @token_required
+    def download_reply(source_uuid, reply_uuid):
+        source = get_or_404(Source, source_uuid, column=Source.uuid)
+        reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
+
+        return utils.serve_file_with_etag(source, reply.filename)
 
     @api.route('/sources/<source_uuid>/submissions/<submission_uuid>',
                methods=['GET', 'DELETE'])
