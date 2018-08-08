@@ -217,6 +217,8 @@ class Reply(db.Model):
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
 
+    deleted_by_source = Column(Boolean, default=False, nullable=False)
+
     def __init__(self, journalist, source, filename):
         self.journalist_id = journalist.id
         self.source_id = source.id

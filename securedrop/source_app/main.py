@@ -10,7 +10,6 @@ from sqlalchemy.exc import IntegrityError
 
 from db import db
 from models import Source, Submission, Reply, get_one_or_else
-from rm import srm
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
                               async_genkey, normalize_timestamps,
@@ -76,7 +75,10 @@ def make_blueprint(config):
     @login_required
     def lookup():
         replies = []
-        for reply in g.source.replies:
+        source_inbox = Reply.query.filter(Reply.source_id == g.source.id) \
+                                  .filter(Reply.deleted_by_source == False).all()  # noqa
+
+        for reply in source_inbox:
             reply_path = current_app.storage.path(
                 g.filesystem_id,
                 reply.filename,
@@ -203,11 +205,16 @@ def make_blueprint(config):
     @view.route('/delete', methods=('POST',))
     @login_required
     def delete():
+        """This deletes the reply from the source's inbox, but preserves
+        the history for journalists such that they can view conversation
+        history.
+        """
+
         query = Reply.query.filter(
             Reply.filename == request.form['reply_filename'])
         reply = get_one_or_else(query, current_app.logger, abort)
-        srm(current_app.storage.path(g.filesystem_id, reply.filename))
-        db.session.delete(reply)
+        reply.deleted_by_source = True
+        db.session.add(reply)
         db.session.commit()
 
         flash(gettext("Reply deleted"), "notification")
@@ -216,15 +223,16 @@ def make_blueprint(config):
     @view.route('/delete-all', methods=('POST',))
     @login_required
     def batch_delete():
-        replies = g.source.replies
+        replies = Reply.query.filter(Reply.source_id == g.source.id) \
+                             .filter(Reply.deleted_by_source == False).all()  # noqa
         if len(replies) == 0:
             current_app.logger.error("Found no replies when at least one was "
                                      "expected")
             return redirect(url_for('.lookup'))
 
         for reply in replies:
-            srm(current_app.storage.path(g.filesystem_id, reply.filename))
-            db.session.delete(reply)
+            reply.deleted_by_source = True
+            db.session.add(reply)
         db.session.commit()
 
         flash(gettext("All replies have been deleted"), "notification")

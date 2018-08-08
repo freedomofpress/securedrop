@@ -75,7 +75,7 @@ Journalist Interface <yubikey_setup>`.)
 
 Reset Passphrase or Two-factor Authentication Token
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-If necessary journalists may reset their user passphrase or two-factor authentication token in their user profile. To navigate to your user profile, log in to the *Journalist Interface* and click on the link in the upper right of the screen where it says **Logged on as <your user name>.** 
+If necessary journalists may reset their user passphrase or two-factor authentication token in their user profile. To navigate to your user profile, log in to the *Journalist Interface* and click on the link in the upper right of the screen where it says **Logged on as <your user name>.**
 
 If you have lost or forgotten your passphrase or two-factor authentication device, you will need to contact your SecureDrop admin for assistance.
 
@@ -130,15 +130,23 @@ field and click **Submit**.
 Once your reply has been successfully submitted, you will be returned
 to the source page and see a message confirming that the reply was
 stored. The source will see your reply the next time they log in with
-their unique codename. To minimize sensitive data retention, the
-source interface encourages the source to delete the reply after
-reading it. If you notice one or more replies disappear from the list
-of documents, you may infer that the source read and deleted them. You
-may also delete replies if you change your mind after sending them.
+their unique codename. To minimize the impact of a source codename
+being compromised, the source interface encourages the source to delete
+the reply after reading it. Once a source has read your reply and deleted
+it from their inbox, a checkmark will appear next to the reply in the interface.
+
+.. note:: Prior to SecureDrop 0.9.0, replies when deleted from the source inbox
+  would also disappear from the journalist inbox. As such, if there are older
+  conversations, there may be discontinuities in the conversation.
+
+You may also delete replies if you change your mind after sending them.
 
 Documents and messages are encrypted to the SecureDrop installation's
 GPG public key. In order to read the messages or look at the documents
-you will need to transfer them to the *Secure Viewing Station*.
+you will need to transfer them to the *Secure Viewing Station*. To recall
+the conversation history between your organization and sources, you can also
+download replies and transfer them to the *Secure Viewing Station* for
+decryption.
 
 Flag for Reply
 ~~~~~~~~~~~~~~
