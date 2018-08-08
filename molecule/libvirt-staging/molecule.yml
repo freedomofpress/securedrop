@@ -37,15 +37,12 @@ provisioner:
   name: ansible
   lint:
     name: ansible-lint
-  inventory:
-    links:
-      group_vars: ../../install_files/ansible-base/group_vars
-      host_vars: ../../install_files/ansible-base/host_vars
-  env:
-    ANSIBLE_ROLES_PATH: ../../install_files/ansible-base/roles
-    ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
   options:
     e: "@ansible-override-vars.yml"
+  playbooks:
+    converge: ../../install_files/ansible-base/securedrop-staging.yml
+  env:
+    ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
 
 scenario:
   name: libvirt-staging
@@ -53,7 +50,12 @@ scenario:
     - destroy
     - create
     - converge
+    - verify
 verifier:
   name: testinfra
   lint:
     name: flake8
+  directory: ../testinfra/staging/
+  options:
+    n: auto
+    v: 2
