@@ -9,4 +9,4 @@ mkdir -p junit
 
 # Combine tests for export as artifacts. There are at least two XML files,
 # one from the application tests, and another from the config tests.
-./molecule/testinfra/combine-junit.py ./*results.xml > ./junit/junit.xml
+./devops/scripts/combine-junit.py ./*results.xml > ./junit/junit.xml
