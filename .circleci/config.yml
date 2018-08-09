@@ -167,6 +167,10 @@ jobs:
           command: molecule destroy -s aws
           when: on_fail
 
+      - run:
+          name: Collect JUnit test result files
+          command: ./devops/scripts/combine-junit-test-results.sh
+
       - store_test_results:
           path: /root/sd/junit
 
