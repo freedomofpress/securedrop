@@ -11,7 +11,6 @@ import socket
 import time
 import json
 import traceback
-import subprocess
 import shutil
 import requests
 
@@ -202,7 +201,6 @@ class FunctionalTest(object):
             gpg.import_keys(open(keyfile).read())
         return gpg
 
-
     def setup(self, session_expiration=30):
 
         self.localtesting = False
@@ -268,7 +266,8 @@ class FunctionalTest(object):
             # This user is required for our tests cases to login
             self.admin_user = {
                                 "name": "journalist",
-                                "password": "correct horse battery staple profanity oil chewy",
+                                "password": ("correct horse battery staple"
+                                             " profanity oil chewy"),
                                 "secret": "JHCOGO7VCER3EJ4L"}
             self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
             self.sleep_time = 2
