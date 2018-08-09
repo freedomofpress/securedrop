@@ -5,7 +5,7 @@ jobs:
     docker:
       - image: gcr.io/cloud-builders/docker
     steps:
-      - run: apt-get install -y make
+      - run: apt-get install -y make python
       - checkout
       - run:
           name: Rebase on-top of github target
