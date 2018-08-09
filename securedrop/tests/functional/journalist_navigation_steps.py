@@ -1,5 +1,4 @@
 import pytest
-import json
 import re
 import tempfile
 import gzip
@@ -8,7 +7,7 @@ import os
 import random
 import requests
 
-from os.path import abspath, realpath, dirname, join
+from os.path import dirname
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
@@ -55,9 +54,9 @@ class JournalistNavigationStepsMixin():
         proxies = None
         if ".onion" in url:
             proxies = {
-            'http': 'socks5h://127.0.0.1:9150',
-            'https': 'socks5h://127.0.0.1:9150'
-        }
+                'http': 'socks5h://127.0.0.1:9150',
+                'https': 'socks5h://127.0.0.1:9150'
+            }
         r = requests.get(url, cookies=cookies, proxies=proxies,  stream=True)
         if r.status_code != 200:
             raise Exception("Failed to download the data.")
@@ -651,7 +650,7 @@ class JournalistNavigationStepsMixin():
 
         # Downloading files with Selenium is tricky because it cannot automate
         # the browser's file download dialog. We can directly request the file
-        # using requests, but we need to pass the cookies for the logged in user
+        # using requests, but we need to pass the cookies for logged in user
         # for Flask to allow this.
         def cookie_string_from_selenium_cookies(cookies):
             result = {}
