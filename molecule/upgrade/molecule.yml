@@ -56,7 +56,7 @@ provisioner:
       group_vars: ../../install_files/ansible-base/group_vars
       host_vars: ../../install_files/ansible-base/host_vars
   env:
-    ANSIBLE_ROLES_PATH: ".molecule/sd-orig/install_files/ansible-base/roles:.molecule/roles"
+    ANSIBLE_ROLES_PATH: ".molecule/sd-orig/install_files/ansible-base/roles"
   options:
     e: "@ansible-override-vars.yml"
   config_options:
