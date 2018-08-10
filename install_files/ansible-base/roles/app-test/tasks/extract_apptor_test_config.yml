@@ -1,5 +1,19 @@
 ---
 
+- name: Create ansible fact directory
+  file:
+    path: /etc/ansible/facts.d
+    recurse: yes
+    state: directory
+    owner: root
+    group: root
+
+- name: Copy over tor application fact file
+  copy:
+    src: tor_app.fact
+    dest: /etc/ansible/facts.d/tor_app.fact
+    mode: 0755
+
 - name: Refresh remote "local facts" for glory
   setup:
     filter: ansible_local

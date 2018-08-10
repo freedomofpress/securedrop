@@ -32,21 +32,6 @@
   tags:
     - tor
 
-- name: Create ansible fact directory
-  file:
-    path: /etc/ansible/facts.d
-    recurse: yes
-    state: directory
-    owner: root
-    group: root
-
-- name: Drop tor application fact file
-  copy:
-    src: tor_app.fact
-    dest: /etc/ansible/facts.d/tor_app.fact
-    mode: 0755
-  when: inventory_hostname in groups['securedrop_application_server']
-
 - name: Flush handlers to restart Tor.
   meta: flush_handlers
   tags:
