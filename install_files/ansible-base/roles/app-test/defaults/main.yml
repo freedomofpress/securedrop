@@ -8,9 +8,3 @@ securedrop_app_test_apparmor_complain: False
 # Source Interface config to enable logging in the staging environment.
 apache_user: www-data
 
-# Additional apt packages required for running the application tests.
-test_apt_dependencies:
-  - xvfb
-
-# Additional Python dependencies required for running the application tests.
-test_pip_requirements: "{{ securedrop_code }}/requirements/test-requirements.txt"

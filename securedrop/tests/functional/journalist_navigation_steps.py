@@ -1,16 +1,32 @@
 import pytest
-import urllib2
 import re
 import tempfile
 import gzip
+import time
 import os
+import random
+import requests
+
+from os.path import dirname
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
-import tests.utils.db_helper as db_helper
-from models import Journalist
-from sdconfig import config
+
+# A generator to get unlimited user names for our tests.
+# The pages-layout tests require many users during
+# the test run, that is why have the following
+# implementation.
+def get_journalist_usernames():
+    yield "dellsberg"
+    yield "jpb"
+    yield "bassel"
+    while True:
+        num = random.randint(1000, 1000000)
+        yield "journalist" + str(num)
+
+
+journalist_usernames = get_journalist_usernames()
 
 
 class JournalistNavigationStepsMixin():
@@ -28,6 +44,27 @@ class JournalistNavigationStepsMixin():
 
             return content
 
+    def return_downloaded_content(self, url, cookies):
+        """
+        This downloads and returns the content to the caller
+        :param url: URL to download
+        :param cookies: the cookies to access
+        :return: Content of the URL
+        """
+        proxies = None
+        if ".onion" in url:
+            proxies = {
+                'http': 'socks5h://127.0.0.1:9150',
+                'https': 'socks5h://127.0.0.1:9150'
+            }
+        r = requests.get(url, cookies=cookies, proxies=proxies,  stream=True)
+        if r.status_code != 200:
+            raise Exception("Failed to download the data.")
+        data = b""
+        for chunk in r.iter_content(1024):
+            data += chunk
+        return data
+
     def _input_text_in_login_form(self, username, password, token):
         self.driver.get(self.journalist_location + "/login")
         username_field = self.driver.find_element_by_css_selector(
@@ -44,20 +81,37 @@ class JournalistNavigationStepsMixin():
 
     def _try_login_user(self, username, password, token):
         self._input_text_in_login_form(username, password, token)
-
         submit_button = self.driver.find_element_by_css_selector(
-            'button[type=submit]')
-        submit_button.click()
+            'button[type="submit"]')
+        submit_button.send_keys(u'\ue007')
 
-    def _login_user(self, username, password, token):
-        self._try_login_user(username, password, token)
-        # Successful login should redirect to the index
-        assert self.driver.current_url == self.journalist_location + '/'
+    def _login_user(self, username, password, otp, maxtries=3):
+        token = str(otp.now())
+        for i in range(maxtries):
+
+            self._try_login_user(username, password, token)
+            # Successful login should redirect to the index
+            time.sleep(self.sleep_time+10)
+            if self.driver.current_url != self.journalist_location + '/':
+                    new_token = str(otp.now())
+                    while token == new_token:
+                        time.sleep(1)
+                        new_token = str(otp.now())
+                        print("Token: {} New token: {}".format(token,
+                                                               new_token))
+                    token = new_token
+            else:
+                return
+
+        # If we reach here, assert the error
+        assert self.driver.current_url == self.journalist_location + '/',\
+            self.driver.current_url + " " + self.journalist_location
 
     def _journalist_logs_in(self):
         # Create a test user for logging in
-        self.user, self.user_pw = db_helper.init_journalist()
-        self._login_user(self.user.username, self.user_pw, 'mocked')
+        self.user = self.admin_user['name']
+        self.user_pw = self.admin_user['password']
+        self._login_user(self.user, self.user_pw, self.admin_user['totp'])
 
         headline = self.driver.find_element_by_css_selector('span.headline')
         if not hasattr(self, 'accept_languages'):
@@ -66,18 +120,15 @@ class JournalistNavigationStepsMixin():
     def _journalist_visits_col(self):
         self.driver.find_element_by_css_selector(
             '#un-starred-source-link-1').click()
+        time.sleep(self.sleep_time)
 
     def _journalist_selects_first_doc(self):
         self.driver.find_elements_by_name('doc_names_selected')[0].click()
+        time.sleep(self.sleep_time)
 
     def _journalist_clicks_on_modal(self, click_id):
         self.driver.find_element_by_id(click_id).click()
-
-        def link_not_displayed():
-            assert (
-                (not self.driver.find_elements_by_id(click_id)) or
-                (not self.driver.find_element_by_id(click_id).is_displayed()))
-        self.wait_for(link_not_displayed)
+        time.sleep(5)
 
     def _journalist_clicks_delete_collections_cancel_on_modal(self):
         self._journalist_clicks_on_modal('cancel-collections-deletions')
@@ -98,12 +149,8 @@ class JournalistNavigationStepsMixin():
         self._journalist_clicks_on_modal('delete-collection-button')
 
     def _journalist_clicks_delete_link(self, click_id, displayed_id):
-        assert not self.driver.find_element_by_id(displayed_id).is_displayed()
         self.driver.find_element_by_id(click_id).click()
-
-        def link_displayed():
-            assert self.driver.find_element_by_id(displayed_id).is_displayed()
-        self.wait_for(link_displayed)
+        time.sleep(self.sleep_time)
 
     def _journalist_clicks_delete_selected_link(self):
         self._journalist_clicks_delete_link(
@@ -128,11 +175,13 @@ class JournalistNavigationStepsMixin():
         self._journalist_selects_first_doc()
         self._journalist_clicks_delete_selected_link()
         self._journalist_clicks_delete_selected_cancel_on_modal()
+        time.sleep(5)
         assert selected_count == len(self.driver.find_elements_by_name(
             'doc_names_selected'))
 
         self._journalist_clicks_delete_selected_link()
         self._journalist_clicks_delete_selected_on_modal()
+        time.sleep(5)
         assert selected_count > len(self.driver.find_elements_by_name(
             'doc_names_selected'))
 
@@ -140,12 +189,7 @@ class JournalistNavigationStepsMixin():
         self._journalist_clicks_delete_collection_link()
         self._journalist_clicks_delete_collection_cancel_on_modal()
 
-        # After deletion the button will redirect us. Let's ensure we still
-        # see the delete collection button.
-        def delete_collection_link_displayed():
-            assert self.driver.find_element_by_id(
-                'delete-collection-link').is_displayed()
-        self.wait_for(delete_collection_link_displayed, timeout=60)
+        time.sleep(self.sleep_time)
 
         self._journalist_clicks_delete_collection_link()
         self._journalist_clicks_delete_collection_on_modal()
@@ -174,8 +218,9 @@ class JournalistNavigationStepsMixin():
         assert len(sources) == 0
 
     def _admin_logs_in(self):
-        self.admin, self.admin_pw = db_helper.init_journalist(is_admin=True)
-        self._login_user(self.admin.username, self.admin_pw, 'mocked')
+        self.admin = self.admin_user['name']
+        self.admin_pw = self.admin_user['password']
+        self._login_user(self.admin, self.admin_pw, self.admin_user['totp'])
 
         if not hasattr(self, 'accept_languages'):
             # Admin user should log in to the same interface as a
@@ -193,6 +238,7 @@ class JournalistNavigationStepsMixin():
         admin_interface_link = self.driver.find_element_by_id(
             'link-admin-index')
         admin_interface_link.click()
+        time.sleep(self.sleep_time)
         if not hasattr(self, 'accept_languages'):
             h1s = self.driver.find_elements_by_tag_name('h1')
             assert "Admin Interface" in [el.text for el in h1s]
@@ -202,18 +248,21 @@ class JournalistNavigationStepsMixin():
             'update-instance-config'
         )
         system_config_link.click()
+        time.sleep(self.sleep_time)
         if not hasattr(self, 'accept_languages'):
             h1 = self.driver.find_element_by_tag_name('h1')
             assert "Instance Configuration" in h1.text
 
     def _admin_updates_logo_image(self):
+        dir_name = dirname(dirname(dirname(os.path.abspath(__file__))))
+        image_path = os.path.abspath(os.path.join(dir_name,
+                                                  'static/i/logo.png'))
         logo_upload_input = self.driver.find_element_by_id('logo-upload')
-        logo_upload_input.send_keys(
-            os.path.join(config.SECUREDROP_ROOT, "static/i/logo.png")
-        )
+        logo_upload_input.send_keys(image_path)
 
         submit_button = self.driver.find_element_by_id('submit-logo-update')
         submit_button.click()
+        time.sleep(self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             flashed_msgs = self.driver.find_element_by_css_selector('.flash')
@@ -240,10 +289,11 @@ class JournalistNavigationStepsMixin():
             'button[type=submit]')
         submit_button.click()
 
-    def _admin_adds_a_user(self):
+    def _admin_adds_a_user(self, new_username=''):
         add_user_btn = self.driver.find_element_by_css_selector(
             'button#add-user')
         add_user_btn.click()
+        time.sleep(self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             # The add user page has a form with an "ADD USER" button
@@ -253,8 +303,10 @@ class JournalistNavigationStepsMixin():
         password = self.driver.find_element_by_css_selector('#password') \
             .text.strip()
 
+        if not new_username:
+            new_username = journalist_usernames.next()
         self.new_user = dict(
-                username='dellsberg',
+                username=new_username,
                 password=password,
             )
         self._add_user(self.new_user['username'])
@@ -265,19 +317,18 @@ class JournalistNavigationStepsMixin():
             h1s = self.driver.find_elements_by_tag_name('h1')
             assert "Enable FreeOTP" in [el.text for el in h1s]
 
-        # Retrieve the saved user object from the db and keep it around for
-        # further testing
-        self.new_user['orm_obj'] = Journalist.query.filter(
-            Journalist.username == self.new_user['username']).one()
+        shared_secret = self.driver.find_element_by_css_selector('#shared-secret').text.strip().replace(' ', '')  # noqa: E501
+        self.create_new_totp(shared_secret)
 
         # Verify the two-factor authentication
         token_field = self.driver.find_element_by_css_selector(
             'input[name="token"]')
-        token_field.send_keys('mocked')
+        token_field.send_keys(str(self.new_totp.now()))
         submit_button = self.driver.find_element_by_css_selector(
             'button[type=submit]')
         submit_button.click()
 
+        time.sleep(self.sleep_time)
         if not hasattr(self, 'accept_languages'):
             # Successfully verifying the code should redirect to the admin
             # interface, and flash a message indicating success
@@ -297,10 +348,12 @@ class JournalistNavigationStepsMixin():
 
         # Try to delete a user
         delete_buttons[0].click()
+        time.sleep(5)
 
         # Wait for JavaScript alert to pop up and accept it.
         self._alert_wait()
         self._alert_accept()
+        time.sleep(5)
 
         if not hasattr(self, 'accept_languages'):
             flashed_msg = self.driver.find_element_by_css_selector('.flash')
@@ -318,7 +371,9 @@ class JournalistNavigationStepsMixin():
     def _logout(self):
         # Click the logout link
         logout_link = self.driver.find_element_by_id('link-logout')
+        logout_link.send_keys(" ")
         logout_link.click()
+        time.sleep(60)  # Because this takes time
 
         # Logging out should redirect back to the login page
         def login_page():
@@ -338,10 +393,11 @@ class JournalistNavigationStepsMixin():
         # Log the admin user out
         self._logout()
 
+        time.sleep(31)
         # Log the new user in
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
-                         'mocked')
+                         self.new_totp)
 
         if not hasattr(self, 'accept_languages'):
             # Test that the new user was logged in successfully
@@ -356,6 +412,7 @@ class JournalistNavigationStepsMixin():
         edit_account_link = self.driver.find_element_by_id(
             'link-edit-account')
         edit_account_link.click()
+        time.sleep(self.sleep_time)
 
         # The header says "Edit your account"
         h1s = self.driver.find_elements_by_tag_name('h1')[0]
@@ -381,14 +438,14 @@ class JournalistNavigationStepsMixin():
         assert ('/account/reset-2fa-hotp' in
                 hotp_reset_button.get_attribute('action'))
 
-    def _edit_user(self, username):
-        user = Journalist.query.filter_by(username=username).one()
-
+    def _edit_user(self, username, is_admin=False):
+        # XXXX
         new_user_edit_links = filter(
             lambda el: el.get_attribute('data-username') == username,
             self.driver.find_elements_by_tag_name('a'))
         assert 1 == len(new_user_edit_links)
         new_user_edit_links[0].click()
+        time.sleep(self.sleep_time)
         # The header says "Edit user "username"".
         h1s = self.driver.find_elements_by_tag_name('h1')[0]
         assert 'Edit user "{}"'.format(username) == h1s.text
@@ -404,8 +461,7 @@ class JournalistNavigationStepsMixin():
         # it's already checked appropriately to reflect the current status of
         # our user.
         username_field = self.driver.find_element_by_css_selector('#is-admin')
-        assert (bool(username_field.get_attribute('checked')) ==
-                user.is_admin)
+        assert bool(username_field.get_attribute('checked')) == is_admin
         # 2FA reset buttons at the bottom point to the admin URLs for
         # resettting 2FA and include the correct user id in the hidden uid.
         totp_reset_button = self.driver.find_elements_by_css_selector(
@@ -413,7 +469,7 @@ class JournalistNavigationStepsMixin():
         assert '/admin/reset-2fa-totp' in totp_reset_button.get_attribute(
             'action')
         totp_reset_uid = totp_reset_button.find_element_by_name('uid')
-        assert int(totp_reset_uid.get_attribute('value')) == user.id
+
         assert totp_reset_uid.is_displayed() is False
         hotp_reset_button = self.driver.find_elements_by_css_selector(
             '#reset-two-factor-hotp')[0]
@@ -421,20 +477,22 @@ class JournalistNavigationStepsMixin():
             'action')
 
         hotp_reset_uid = hotp_reset_button.find_element_by_name('uid')
-        assert int(hotp_reset_uid.get_attribute('value')) == user.id
+
         assert hotp_reset_uid.is_displayed() is False
 
     def _admin_can_edit_new_user(self):
         # Log the new user out
         self._logout()
 
-        self._login_user(self.admin.username, self.admin_pw, 'mocked')
+        time.sleep(self.sleep_time)
+        self._login_user(self.admin, self.admin_pw, self.admin_user['totp'])
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_id(
             'link-admin-index')
         admin_interface_link.click()
 
+        time.sleep(self.sleep_time)
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
         new_user_edit_links = filter(
@@ -443,6 +501,7 @@ class JournalistNavigationStepsMixin():
             self.driver.find_elements_by_tag_name('a'))
         assert len(new_user_edit_links) == 1
         new_user_edit_links[0].click()
+        time.sleep(self.sleep_time)
 
         def can_edit_user():
             assert ('"{}"'.format(self.new_user['username']) in
@@ -457,6 +516,7 @@ class JournalistNavigationStepsMixin():
         update_user_btn = self.driver.find_element_by_css_selector(
             'button[type=submit]')
         update_user_btn.click()
+        time.sleep(self.sleep_time)
 
         def can_edit_user2():
             assert ('"{}"'.format(new_username) in self.driver.page_source)
@@ -467,9 +527,10 @@ class JournalistNavigationStepsMixin():
 
         # Log the new user in with their new username
         self._logout()
+        time.sleep(31)
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
-                         'mocked')
+                         self.new_totp)
         if not hasattr(self, 'accept_languages'):
             def found_sources():
                 assert 'Sources' in self.driver.page_source
@@ -477,15 +538,25 @@ class JournalistNavigationStepsMixin():
 
         # Log the admin user back in
         self._logout()
-        self._login_user(self.admin.username, self.admin_pw, 'mocked')
+        time.sleep(31)
+        self._login_user(self.admin, self.admin_pw, self.admin_user['totp'])
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_id(
             'link-admin-index')
         admin_interface_link.click()
+        time.sleep(self.sleep_time)
 
         # Edit the new user's password
-        self._edit_user(self.new_user['username'])
+
+        new_user_edit_links = filter(
+            lambda el: (el.get_attribute('data-username') ==
+                        self.new_user['username']),
+            self.driver.find_elements_by_tag_name('a'))
+        assert len(new_user_edit_links) == 1
+        new_user_edit_links[0].click()
+        time.sleep(self.sleep_time)
+
         new_password = self.driver.find_element_by_css_selector('#password') \
             .text.strip()
         self.new_user['password'] = new_password
@@ -493,6 +564,7 @@ class JournalistNavigationStepsMixin():
         reset_pw_btn = self.driver.find_element_by_css_selector(
             '#reset-password')
         reset_pw_btn.click()
+        time.sleep(self.sleep_time)
 
         def update_password_success():
             assert 'Password updated.' in self.driver.page_source
@@ -504,19 +576,16 @@ class JournalistNavigationStepsMixin():
         self._logout()
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
-                         'mocked')
+                         self.new_totp)
         self.wait_for(found_sources)
-
-        # Log back out and log back admin in for subsequent tests
-        self._logout()
-        self._login_user(self.admin.username, self.admin_pw, 'mocked')
 
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
 
         # There should be 1 collection in the list of collections
         code_names = self.driver.find_elements_by_class_name('code-name')
-        assert 1 == len(code_names)
+        assert 0 != len(code_names), code_names
+        assert 1 <= len(code_names), code_names
 
         if not hasattr(self, 'accept_languages'):
             # There should be a "1 unread" span in the sole collection entry
@@ -531,11 +600,13 @@ class JournalistNavigationStepsMixin():
 
         # Journalist stars the message
         self.driver.find_element_by_class_name('button-star').click()
+        time.sleep(self.sleep_time)
         starred = self.driver.find_elements_by_id('starred-source-link-1')
         assert 1 == len(starred)
 
         # Journalist unstars the message
         self.driver.find_element_by_class_name('button-star').click()
+        time.sleep(self.sleep_time)
         with pytest.raises(NoSuchElementException):
             self.driver.find_element_by_id('starred-source-link-1')
 
@@ -553,6 +624,7 @@ class JournalistNavigationStepsMixin():
     def _journalist_selects_the_first_source(self):
         self.driver.find_element_by_css_selector(
             '#un-starred-source-link-1').click()
+        time.sleep(self.sleep_time)
 
     def _journalist_selects_documents_to_download(self):
         self.driver.find_element_by_id('select_all').click()
@@ -568,21 +640,16 @@ class JournalistNavigationStepsMixin():
 
         # Downloading files with Selenium is tricky because it cannot automate
         # the browser's file download dialog. We can directly request the file
-        # using urllib2, but we need to pass the cookies for the logged in user
+        # using requests, but we need to pass the cookies for logged in user
         # for Flask to allow this.
         def cookie_string_from_selenium_cookies(cookies):
-            cookie_strs = []
+            result = {}
             for cookie in cookies:
-                cookie_str = "=".join([cookie['name'], cookie['value']]) + ';'
-                cookie_strs.append(cookie_str)
-            return ' '.join(cookie_strs)
+                result[cookie['name']] = cookie['value']
+            return result
 
-        submission_req = urllib2.Request(file_url)
-        submission_req.add_header(
-            'Cookie',
-            cookie_string_from_selenium_cookies(
-                self.driver.get_cookies()))
-        raw_content = urllib2.urlopen(submission_req).read()
+        cks = cookie_string_from_selenium_cookies(self.driver.get_cookies())
+        raw_content = self.return_downloaded_content(file_url, cks)
 
         decrypted_submission = self.gpg.decrypt(raw_content)
         submission = self._get_submission_content(file_url,
@@ -602,6 +669,7 @@ class JournalistNavigationStepsMixin():
     def _journalist_sends_reply_to_source(self):
         self._journalist_composes_reply()
         self.driver.find_element_by_id('reply-button').click()
+        time.sleep(self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             assert ("Thanks. Your reply has been stored." in
@@ -621,6 +689,8 @@ class JournalistNavigationStepsMixin():
         reset_button = self.driver.find_elements_by_css_selector(
             '#button-reset-two-factor-' + type)[0]
         reset_button.click()
+        self._alert_accept()
+        time.sleep(self.sleep_time)
 
     def _visit_edit_hotp_secret(self):
         self._visit_edit_secret('hotp')
@@ -632,6 +702,7 @@ class JournalistNavigationStepsMixin():
         submit_button = self.driver.find_element_by_css_selector(
             'button[type=submit]')
         submit_button.click()
+        time.sleep(self.sleep_time)
 
     def _visit_edit_totp_secret(self):
         self._visit_edit_secret('totp')
@@ -695,6 +766,7 @@ class JournalistNavigationStepsMixin():
         self.wait_for(
             lambda: self.driver.find_element_by_id('delete-selected'))
         confirm_btn = self.driver.find_element_by_id('delete-selected')
+
         confirm_btn.click()
 
     def _source_delete_key(self):
@@ -723,13 +795,12 @@ class JournalistNavigationStepsMixin():
         self.driver.get(self.journalist_location + "/admin")
 
     def _journalist_fail_login(self):
-        self.user, self.user_pw = db_helper.init_journalist()
-        self._try_login_user(self.user.username, 'worse', 'mocked')
+        self._try_login_user("root", 'worse', 'mocked')
 
     def _journalist_fail_login_many(self):
-        self.user, self.user_pw = db_helper.init_journalist()
-        for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD + 1):
-            self._try_login_user(self.user.username, 'worse', 'mocked')
+        self.user = ""
+        for _ in range(5 + 1):
+            self._try_login_user(self.user, 'worse', 'mocked')
 
     def _admin_enters_journalist_account_details_hotp(self, username,
                                                       hotp_secret):
@@ -755,7 +826,6 @@ class JournalistNavigationStepsMixin():
         assert len(sources) > 0
         for source in sources:
             assert source.is_displayed() is False
-
         filter_box.clear()
         filter_box.send_keys(Keys.RETURN)
 

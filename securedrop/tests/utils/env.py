@@ -29,6 +29,8 @@ def create_directories():
     """
     for d in (config.SECUREDROP_DATA_ROOT, config.STORE_DIR,
               config.GPG_KEY_DIR, config.TEMP_DIR):
+        if isdir(d):
+            shutil.rmtree(d)
         if not isdir(d):
             os.mkdir(d)
 
