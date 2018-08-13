@@ -3,7 +3,7 @@
 - `sudo -u www-data bash`
 - `cd /var/wwww/securedrop/`
 - `./manage.py reset`    # This will clean the DB for testing
-- `./create-demo-user.py`  
+- `./create-dev-data.py --staging`
 
 Update this information to the `tests/functional/instance_information.json file.
 
