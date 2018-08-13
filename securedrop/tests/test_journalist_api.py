@@ -470,6 +470,8 @@ def test_authorized_user_can_get_single_reply(journalist_app, test_files,
         assert json_response['uuid'] == reply_uuid
         assert json_response['journalist_username'] == \
             reply.journalist.username
+        assert json_response['journalist_uuid'] == \
+            reply.journalist.uuid
         assert json_response['is_deleted_by_source'] is False
         assert json_response['filename'] == \
             test_files['source'].replies[0].filename
