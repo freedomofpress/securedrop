@@ -10,6 +10,7 @@ import i18n_tool
 import journalist_app
 import source_app
 import template_filters
+from utils.env import TESTS_DIR
 
 from sh import pybabel
 
@@ -98,9 +99,9 @@ def do_test(config, create_app):
     i18n_tool.I18NTool().main([
         '--verbose',
         'translate-messages',
-        '--mapping', 'tests/i18n/babel.cfg',
+        '--mapping', os.path.join(TESTS_DIR, 'i18n/babel.cfg'),
         '--translations-dir', config.TEMP_DIR,
-        '--sources', 'tests/i18n/code.py',
+        '--sources', os.path.join(TESTS_DIR, 'i18n/code.py'),
         '--extract-update',
         '--compile',
     ])
