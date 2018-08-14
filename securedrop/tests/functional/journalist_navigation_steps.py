@@ -194,6 +194,8 @@ class JournalistNavigationStepsMixin():
         self._journalist_clicks_delete_collection_link()
         self._journalist_clicks_delete_collection_on_modal()
 
+        self.wait_for(lambda: self.driver.find_element_by_xpath(
+            "//*[contains(text(), 'Sources')]"), timeout=60)
         # Now we should be redirected to the index.
         if not hasattr(self, 'accept-languages'):
             assert "Sources" in self.driver.find_element_by_tag_name('h1').text
@@ -238,7 +240,9 @@ class JournalistNavigationStepsMixin():
         admin_interface_link = self.driver.find_element_by_id(
             'link-admin-index')
         admin_interface_link.click()
-        time.sleep(self.sleep_time)
+
+        self.wait_for(lambda: self.driver.find_element_by_xpath(
+            "//*[contains(text(), 'Admin Interface')]"), timeout=60)
         if not hasattr(self, 'accept_languages'):
             h1s = self.driver.find_elements_by_tag_name('h1')
             assert "Admin Interface" in [el.text for el in h1s]
@@ -248,7 +252,9 @@ class JournalistNavigationStepsMixin():
             'update-instance-config'
         )
         system_config_link.click()
-        time.sleep(self.sleep_time)
+        self.wait_for(lambda: self.driver.find_element_by_xpath(
+            "//*[contains(text(), 'Instance Configuration')]"), timeout=60)
+
         if not hasattr(self, 'accept_languages'):
             h1 = self.driver.find_element_by_tag_name('h1')
             assert "Instance Configuration" in h1.text
@@ -412,7 +418,8 @@ class JournalistNavigationStepsMixin():
         edit_account_link = self.driver.find_element_by_id(
             'link-edit-account')
         edit_account_link.click()
-        time.sleep(self.sleep_time)
+        self.wait_for(lambda: self.driver.find_element_by_xpath(
+            "//*[contains(text(), 'Edit your account')]"), timeout=60)
 
         # The header says "Edit your account"
         h1s = self.driver.find_elements_by_tag_name('h1')[0]
@@ -445,7 +452,9 @@ class JournalistNavigationStepsMixin():
             self.driver.find_elements_by_tag_name('a'))
         assert 1 == len(new_user_edit_links)
         new_user_edit_links[0].click()
-        time.sleep(self.sleep_time)
+        self.wait_for(lambda: self.driver.driver.find_element_by_xpath(
+            "//*[contains(text(), 'Edit user')]".format(username)),
+            timeout=60)
         # The header says "Edit user "username"".
         h1s = self.driver.find_elements_by_tag_name('h1')[0]
         assert 'Edit user "{}"'.format(username) == h1s.text
