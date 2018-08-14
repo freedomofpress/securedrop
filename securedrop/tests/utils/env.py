@@ -14,7 +14,8 @@ from sdconfig import config
 
 from db import db
 
-FILES_DIR = abspath(join(dirname(realpath(__file__)), '..', 'files'))
+TESTS_DIR = abspath(join(dirname(realpath(__file__)), '..'))
+FILES_DIR = join(TESTS_DIR, 'files')
 
 # The PID file for the redis worker is hard-coded below.  Ideally this
 # constant would be provided by a test harness.  It has been intentionally
