@@ -181,11 +181,4 @@ workflows:
   version: 2
   securedrop_ci:
     jobs:
-      - lint
       - tests
-      - admin-tests
-      - updater-gui-tests
-      - staging-test-with-rebase:
-          requires:
-            - lint
-            - updater-gui-tests
