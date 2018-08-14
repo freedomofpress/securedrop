@@ -573,7 +573,8 @@ class Journalist(db.Model):
         json_user = {
             'username': self.username,
             'last_login': self.last_access.isoformat() + 'Z',
-            'is_admin': self.is_admin
+            'is_admin': self.is_admin,
+            'uuid': self.uuid
         }
         return json_user
 

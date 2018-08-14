@@ -586,6 +586,7 @@ def test_authorized_user_can_get_current_user_endpoint(journalist_app,
         json_response = json.loads(response.data)
         assert json_response['is_admin'] is False
         assert json_response['username'] == test_journo['username']
+        assert json_response['uuid'] == test_journo['journalist'].uuid
 
 
 def test_request_with_missing_auth_header_triggers_403(journalist_app):
