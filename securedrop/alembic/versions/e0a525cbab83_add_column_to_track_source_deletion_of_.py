@@ -30,11 +30,10 @@ def upgrade():
         sa.text("SELECT * FROM replies_tmp")).fetchall()
 
     for reply in replies:
-        id = reply.id
         conn.execute(
-            sa.text("""UPDATE replies_tmp
-                       SET deleted_by_source=('0')
-                       WHERE id={}""".format(id)))
+            sa.text("""UPDATE replies_tmp SET deleted_by_source=0 WHERE
+                       id=:id""").bindparams(id=reply.id)
+            )
 
     # Now create new table with not null constraint applied to
     # deleted_by_source.

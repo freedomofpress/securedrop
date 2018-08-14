@@ -30,12 +30,11 @@ def upgrade():
         sa.text("SELECT * FROM replies_tmp")).fetchall()
 
     for reply in replies:
-        id = reply.id
-        reply_uuid = str(uuid.uuid4())
         conn.execute(
-            sa.text("""UPDATE replies_tmp
-                       SET uuid=('{}')
-                       WHERE id={}""".format(reply_uuid, id)))
+            sa.text("""UPDATE replies_tmp SET uuid=:reply_uuid WHERE
+                       id=:id""").bindparams(reply_uuid=str(uuid.uuid4()),
+                                             id=reply.id)
+            )
 
     # Now create new table with constraints applied to UUID column.
     op.create_table('replies',

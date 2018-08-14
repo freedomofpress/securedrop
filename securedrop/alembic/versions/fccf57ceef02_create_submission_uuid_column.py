@@ -30,12 +30,11 @@ def upgrade():
         sa.text("SELECT * FROM submissions_tmp")).fetchall()
 
     for submission in submissions:
-        id = submission.id
-        submission_uuid = str(uuid.uuid4())
         conn.execute(
-            sa.text("""UPDATE submissions_tmp
-                       SET uuid=('{}')
-                       WHERE id={}""".format(submission_uuid, id)))
+            sa.text("""UPDATE submissions_tmp SET uuid=:submission_uuid WHERE
+                       id=:id""").bindparams(submission_uuid=str(uuid.uuid4()),
+                                             id=submission.id)
+            )
 
     # Now create new table with unique constraint applied.
     op.create_table('submissions',

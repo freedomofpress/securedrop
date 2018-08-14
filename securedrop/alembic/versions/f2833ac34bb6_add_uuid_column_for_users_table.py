@@ -30,12 +30,11 @@ def upgrade():
         sa.text("SELECT * FROM journalists_tmp")).fetchall()
 
     for journalist in journalists:
-        id = journalist.id
-        journalist_uuid = str(uuid.uuid4())
         conn.execute(
-            sa.text("""UPDATE journalists_tmp
-                       SET uuid=('{}')
-                       WHERE id={}""".format(journalist_uuid, id)))
+            sa.text("""UPDATE journalists_tmp SET uuid=:journalist_uuid WHERE
+                       id=:id""").bindparams(journalist_uuid=str(uuid.uuid4()),
+                                             id=journalist.id)
+            )
 
     # Now create new table with unique constraint applied.
     op.create_table('journalists',
