@@ -45,11 +45,6 @@
   gather_facts: false
   tasks:
 
-    - name: Run application tests
-      script: scripts/app-tests.sh "{{ app_dir[ci_env] }}"
-      register: app_test_register
-      ignore_errors: true
-
       # The test results file will be posted as an artifact for the CI run,
       # so developers can download it and inspect it in detail.
     - name: Fetch JUnit test results XML file.
@@ -57,13 +52,6 @@
         src: /tmp/apptest.xml
         dest: ../../apptest-results.xml
         flat: yes
-
-    - name: Establish list of raw test results
-      set_fact:
-        raw_test_results:
-          - type: app
-            file: scripts/app-tests.sh
-            result: "{{ app_test_register }}"
 
     - name: Dump raw test output
       copy:
