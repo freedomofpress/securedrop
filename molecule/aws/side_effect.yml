@@ -45,11 +45,6 @@
   gather_facts: false
   tasks:
 
-    - name: Run application tests
-      script: scripts/app-tests.sh "{{ app_dir[ci_env] }}"
-      register: app_test_register
-      ignore_errors: true
-
       # The test results file will be posted as an artifact for the CI run,
       # so developers can download it and inspect it in detail.
     - name: Fetch JUnit test results XML file.
@@ -74,9 +69,6 @@
     - name: Establish list of raw test results
       set_fact:
         raw_test_results:
-          - type: app
-            file: scripts/app-tests.sh
-            result: "{{ app_test_register }}"
           - type: testinfra
             file: scripts/ci-tester.sh
             result: "{{ testinfra_results }}"
@@ -109,7 +101,7 @@
       become: no
 
     - fail:
-      when: app_test_register|failed or testinfra_results|failed
+      when: testinfra_results|failed
   vars:
     ci_env: "{{ lookup('env', 'CI_SD_ENV') }}"
     # We must define this var at the play-level since the group/host vars
