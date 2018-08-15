@@ -8,6 +8,9 @@ install_files/ansible-base/group_vars/all/site-specific
 # ignore securedrop-app-code wheelhouse archive
 wheelhouse
 
+# ignore the instance information JSON file to prevent commit of private info
+securedrop/tests/functional/instance_information.json
+
 # ignore the ATHS/THS hostname file ansible places
 app-ssh-aths
 app-document-aths # leave this here for historic reasons
@@ -152,3 +155,7 @@ raw-test-output/
 #Ignore vagrant staging files
 *.box
 *.img
+
+#Functional test logs
+securedrop/tests/functional/firefox.log
+securedrop/geckodriver.log

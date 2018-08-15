@@ -25,9 +25,7 @@ then
       git ls-remote --exit-code --quiet upstream 2>/dev/null || git remote add upstream https://github.com/freedomofpress/securedrop.git
 
       # Determine target branch via API
-      #
-      # (We are togglin' between two upstream containers here - the constant is both have python3)
-      target_branch="$(curl -s ${GITHUB_PR_URL} | python3 -c 'import sys, json; print(json.load(sys.stdin)["base"]["ref"])')"
+      target_branch="$(curl -s ${GITHUB_PR_URL} | python -c 'import sys, json; print(json.load(sys.stdin)["base"]["ref"])')"
 
       # Fetch and rebase onto the latest in develop
       git fetch upstream "${target_branch}"

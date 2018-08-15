@@ -9,10 +9,10 @@
   tags:
     - aa-complain
 
-- include: dev_setup_xvfb_for_functional_tests.yml
-
-- include: setup_firefox_for_selenium.yml
-
-- include: disable_mprotect_ff_plugin_container.yml
-
 - include: modern_gettext.yml
+  tags:
+    - modern_gettext
+
+- import_tasks: extract_apptor_test_config.yml
+  tags:
+    - functional_test
