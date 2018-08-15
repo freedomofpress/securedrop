@@ -78,7 +78,7 @@ if __name__ == "__main__":  # pragma: no cover
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--staging", help="Adding user for staging tests.",
-                    action="store_true")
+                        action="store_true")
     args = parser.parse_args()
     add_test_user("journalist",
                   test_password,
