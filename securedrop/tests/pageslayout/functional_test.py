@@ -44,7 +44,8 @@ class FunctionalTest(functional_test.FunctionalTest):
         if not os.path.exists(self.log_dir):
             os.makedirs(self.log_dir)
         self.new_profile = webdriver.FirefoxProfile()
-        self.new_profile.set_preference("intl.accept_languages", self.accept_languages)
+        self.new_profile.set_preference("intl.accept_languages",
+                                        self.accept_languages)
         self.override_driver = True
         yield None
 
