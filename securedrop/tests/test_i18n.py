@@ -30,6 +30,7 @@ import i18n_tool
 import journalist_app as journalist_app_module
 import pytest
 import source_app
+from utils.env import TESTS_DIR
 
 from sh import sed, pybabel
 
@@ -174,14 +175,14 @@ def test_i18n(journalist_app, config):
     del journalist_app
 
     sources = [
-        'tests/i18n/code.py',
-        'tests/i18n/template.html',
+        os.path.join(TESTS_DIR, 'i18n/code.py'),
+        os.path.join(TESTS_DIR, 'i18n/template.html'),
     ]
 
     i18n_tool.I18NTool().main([
         '--verbose',
         'translate-messages',
-        '--mapping', 'tests/i18n/babel.cfg',
+        '--mapping', os.path.join(TESTS_DIR, 'i18n/babel.cfg'),
         '--translations-dir', config.TEMP_DIR,
         '--sources', ",".join(sources),
         '--extract-update',
