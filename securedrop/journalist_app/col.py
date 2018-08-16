@@ -21,13 +21,13 @@ def make_blueprint(config):
     def add_star(filesystem_id):
         make_star_true(filesystem_id)
         db.session.commit()
-        return redirect(url_for('main.index'))
+        return redirect(request.referrer or url_for('main.index'))
 
     @view.route("/remove_star/<filesystem_id>", methods=('POST',))
     def remove_star(filesystem_id):
         make_star_false(filesystem_id)
         db.session.commit()
-        return redirect(url_for('main.index'))
+        return redirect(request.referrer or url_for('main.index'))
 
     @view.route('/<filesystem_id>')
     def col(filesystem_id):

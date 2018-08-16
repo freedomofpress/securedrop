@@ -2,7 +2,7 @@
 {% block body %}
 <div id="content" class="journalist-view-all">
   <h1><span class="headline">{{ gettext('Sources') }}</span></h1>
-  {% if unstarred or starred %}
+  {% if sources_paginated.items %}
     <div id="filter-container"></div>
     <form id="process-collections" action="{{ url_for('col.process') }}" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
@@ -17,27 +17,17 @@
         </a>
       </p>
 
-      {% if starred %}
-        <ul id="cols" class="plain starred">
-          {% for source in starred %}
-            {% with %}
-              {% set loop_index = loop.index %}
-              {% include '_source_row.html' %}
-            {% endwith %}
-          {% endfor %}
-        </ul>
-      {% endif %}
+      <ul id="cols" class="plain">
+        {% for source in sources_paginated.items %}
+          {% with %}
+            {% set loop_index = loop.index %}
+            {% include '_source_row.html' %}
+          {% endwith %}
+        {% endfor %}
+      </ul>
 
-      {% if unstarred %}
-        <ul id="cols" class="plain unstarred">
-          {% for source in unstarred %}
-            {% with %}
-              {% set loop_index = loop.index %}
-              {% include '_source_row.html' %}
-            {% endwith %}
-          {% endfor %}
-        </ul>
-      {% endif %}
+      {% from 'macros.html' import render_pagination %}
+      {{ render_pagination(sources_paginated, request.endpoint) }}
 
       <!-- Delete confirmation modal -->
       {% with %}

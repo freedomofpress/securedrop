@@ -9,7 +9,7 @@ from flask_babel import gettext
 from sqlalchemy.sql.expression import false
 
 from db import db
-from models import Source, SourceStar, Submission, Reply
+from models import Source, Submission, Reply
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (validate_user, bulk_delete, download,
                                   confirm_bulk_delete, get_source)
@@ -55,28 +55,23 @@ def make_blueprint(config):
 
     @view.route('/')
     def index():
-        unstarred = []
-        starred = []
-
         # Long SQLAlchemy statements look best when formatted according to
         # the Pocoo style guide, IMHO:
-        # http://www.pocoo.org/internal/styleguide/
-        sources = Source.query.filter_by(pending=False) \
-                              .order_by(Source.last_updated.desc()) \
-                              .all()
-        for source in sources:
-            star = SourceStar.query.filter_by(source_id=source.id).first()
-            if star and star.starred:
-                starred.append(source)
-            else:
-                unstarred.append(source)
+        # http://flask.pocoo.org/docs/dev/styleguide/
+        sources_paginated = Source.query.join(Source.star, isouter=True) \
+                              .filter(Source.pending is not True) \
+                              .order_by(Source.star.has(starred=1).desc(),
+                                        Source.last_updated.desc()) \
+                              .paginate(request.args.get("page", 1, type=int),
+                                        per_page=50,
+                                        error_out=True)
+        for source in sources_paginated.items:
             source.num_unread = len(
                 Submission.query.filter_by(source_id=source.id,
                                            downloaded=False).all())
 
         return render_template('index.html',
-                               unstarred=unstarred,
-                               starred=starred)
+                               sources_paginated=sources_paginated)
 
     @view.route('/reply', methods=('POST',))
     def reply():
