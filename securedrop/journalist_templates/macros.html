@@ -1,0 +1,59 @@
+{% macro render_pagination(pagination, endpoint) %}
+  <div class="pagination center">
+    <!-- {#
+    {% if pagination.pages > 1 and pagination.page > 1 %}
+      <a href="{{ url_for(endpoint, page=1) }}" class="btn small">
+        <i class="fa fa-angle-double-left"></i> {{ gettext('First') }}
+      </a>
+    {% else %}
+      <span class="btn btn-fake small">
+        <i class="fa fa-angle-double-left"></i> {{ gettext('First') }}
+      </span>
+    {% endif %}
+    {% if pagination.has_prev %}
+      <a href="{{ url_for(endpoint, page=pagination.page - 1) }}" class="btn small">
+        <i class="fa fa-angle-left"></i> {{ gettext('Previous') }}
+      </a>
+    {% else %}
+      <span class="btn btn-fake small">
+        <i class="fa fa-angle-left"></i> {{ gettext('Previous') }}
+      </span>
+    {% endif %}
+    #} -->
+    {%- for page in pagination.iter_pages(left_edge=2, left_current=2, right_current=5, right_edge=2) %}
+      {% if page %}
+        {% if page != pagination.page %}
+          <a href="{{ url_for(endpoint, page=page) }}" class="btn small">
+            {{ page }}
+          </a>
+        {% else %}
+          <span class="btn btn-fake small">
+            {{ page }}
+          </span>
+        {% endif %}
+      {% else %}
+        <span class="ellipsis">…</span>
+      {% endif %}
+    {%- endfor %}
+    <!-- {#
+    {% if pagination.has_next %}
+      <a href="{{ url_for(endpoint, page=pagination.page + 1) }}" class="btn small">
+        <i class="fa fa-angle-right"></i> {{ gettext('Next') }}
+      </a>
+    {% else %}
+      <span class="btn btn-fake small">
+        <i class="fa fa-angle-right"></i> {{ gettext('Next') }}
+      </span>
+    {% endif %}
+    {% if pagination.pages > 1 and pagination.page != pagination.pages %}
+      <a href="{{ url_for(endpoint, page=pagination.pages) }}" class="btn small">
+        <i class="fa fa-angle-double-right"></i> {{ gettext('Last') }}
+      </a>
+    {% else %}
+      <span class="btn btn-fake small">
+        <i class="fa fa-angle-double-right"></i> {{ gettext('Last') }}
+      </span>
+    {% endif %}
+    #} -->
+  </div>
+{% endmacro %}
