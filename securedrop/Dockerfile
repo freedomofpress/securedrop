@@ -54,6 +54,7 @@ RUN echo deb http://archive.ubuntu.com/ubuntu/ xenial main > /etc/apt/sources.li
     apt-get update
 
 COPY requirements requirements
+RUN paxctl -Cm /usr/bin/python
 RUN pip install -r requirements/securedrop-app-code-requirements.txt && \
     pip install -r requirements/test-requirements.txt
 
