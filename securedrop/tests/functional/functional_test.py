@@ -26,7 +26,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.remote_connection import LOGGER
 from tbselenium.tbdriver import TorBrowserDriver
-from tbselenium.utils import start_xvfb, stop_xvfb
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
@@ -313,7 +312,6 @@ class FunctionalTest(object):
         # Allow custom session expiration lengths
         self.session_expiration = session_expiration
 
-        self.xvfb_display = start_xvfb()
         if not hasattr(self, 'override_driver'):
             # Means this is not pages-layout tests
             self._create_secondary_firefox_driver()
@@ -347,7 +345,6 @@ class FunctionalTest(object):
             self.driver.quit()
         if self.second_driver:
             self.second_driver.quit()
-        stop_xvfb(self.xvfb_display)
         if self.localtesting:
             self.source_process.terminate()
             self.journalist_process.terminate()

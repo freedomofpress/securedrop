@@ -31,3 +31,6 @@ cd securedrop
 ```
 You may wish to append a pipe to less (i.e. `| less`), as a failure may generate
 many pages of output, making it difficult to scroll back.
+
+### Visually see the tests run
+Assuming you are on a supported OS that has a vnc client installed. You can run the following to pop open a vnc session to the running tests. This must be done after the tests have started.
