@@ -5,6 +5,7 @@ import errno
 import mock
 from multiprocessing import Process
 import os
+import logging
 from os.path import abspath, dirname, join, realpath, expanduser
 import signal
 import socket
@@ -23,6 +24,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.remote.remote_connection import LOGGER
 from tbselenium.tbdriver import TorBrowserDriver
 from tbselenium.utils import start_xvfb, stop_xvfb
 
@@ -44,6 +46,7 @@ FILES_DIR = abspath(join(dirname(realpath(__file__)), '../..', 'tests/files'))
 TBB_PATH = abspath(join(expanduser('~'), '.local/tbb/tor-browser_en-US/'))
 os.environ['TBB_PATH'] = TBB_PATH
 TBBRC = join(TBB_PATH, 'Browser/TorBrowser/Data/Tor/torrc')
+LOGGER.setLevel(logging.WARNING)
 
 
 # https://stackoverflow.com/a/34795883/837471
