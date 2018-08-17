@@ -11,7 +11,7 @@ function run_redis() {
 }
 
 function run_x11vnc() {
-    setsid x11vnc -display :1 -autoport 5901 -shared >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
+    setsid Xvnc -depth 24 -geometry 1024x768 -rfbport 5901 :1 >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
 }
 
 function urandom() {

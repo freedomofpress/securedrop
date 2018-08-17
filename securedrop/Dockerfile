@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get install -y devscripts \
                        python-pip libpython2.7-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server git xvfb haveged curl \
-                       gettext paxctl x11vnc enchant libffi-dev sqlite3 wget \
+                       gettext paxctl tightvncserver enchant libffi-dev sqlite3 wget \
                        libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
                        libcairo-gobject2 libgtk-3-0 libstartup-notification0
 
