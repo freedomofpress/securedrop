@@ -9,7 +9,7 @@ securedrop_app_test_apparmor_complain: False
 apache_user: www-data
 
 # Specify TBB functional_test.json file defaults
-tbb_sleep_time: 10
+tbb_sleep_time: 160
 tbb_selenium_user: journalist
 tbb_selenium_password: correct horse battery staple profanity oil chewy
 tbb_selenium_secret: JHCOGO7VCER3EJ4L

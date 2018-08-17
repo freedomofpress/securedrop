@@ -16,4 +16,21 @@
   roles:
     - role: app-test
       tags: app-test
+
+  tasks:
+    - name: Reset database
+      command: ./manage.py reset
+      args:
+        chdir: /var/www/securedrop
+
+    - name: Slap in latest create-dev-data script
+      copy:
+          src: ../../securedrop/create-dev-data.py
+          dest: /var/www/securedrop/create-dev-data.py
+          mode: 0555
+
+    - name: Insert journalist test user
+      command: /var/www/securedrop/create-dev-data.py --staging
+      args:
+        chdir: /var/www/securedrop
   become: yes
