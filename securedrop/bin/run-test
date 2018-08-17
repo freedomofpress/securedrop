@@ -6,6 +6,7 @@ set -euo pipefail
 source "${BASH_SOURCE%/*}/dev-deps"
 
 run_redis &
+run_x11vnc &
 urandom
 run_sass --force --update
 maybe_create_config_py
