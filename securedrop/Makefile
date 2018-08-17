@@ -48,6 +48,10 @@ translate: ## Update POT translation files from sources
 	./bin/dev-shell ./i18n_tool.py translate-messages --extract-update
 	./bin/dev-shell ./i18n_tool.py translate-desktop --extract-update
 
+.PHONY: func-vnc
+func-vnc: ## Open up a VNC connection to a running docker instance
+	../devops/scripts/vnc-docker-connect.sh
+
 # For an explanation of this shell magic, see the Makefile in the root of the repository
 .PHONY: help
 help: ## Print this message and exit.

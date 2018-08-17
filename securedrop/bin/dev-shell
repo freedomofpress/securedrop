@@ -24,7 +24,7 @@ function docker_run() {
 	   --user "${USER:-root}" \
 	   --volume "${TOPLEVEL}:${TOPLEVEL}" \
 	   --workdir "${TOPLEVEL}/securedrop" \
-	   -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-test "$@"
+	   -ti ${DOCKER_RUN_ARGUMENTS:---rm --name securedrop-dev} securedrop-test "$@"
 }
 
 if test -n "${CIRCLE_SHA1:-}" ; then
