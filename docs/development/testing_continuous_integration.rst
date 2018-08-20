@@ -3,37 +3,25 @@
 Testing: CI
 ===========
 
-The SecureDrop project uses CircleCI_ for running automated test suites on code changes:
+The SecureDrop project uses CircleCI_ for running automated test suites on code changes.
 
 .. _CircleCI: http://circleci.com/gh/freedomofpress/securedrop/
 
-CI Test Layout
---------------
-
-The relevant files for configuring the CI tests are: ::
-
-    ├── .circleci <--- folder contains config for CircleCI
-    ├── devops
-    │   ├── inventory <-- environment specific inventory
-    │   ├── playbooks <-- playbooks to start CI boxes
-    │   ├── scripts   <-- shell wrapper scripts
-    │   ├── templates <-- contains templates for ansible tasks
-    │   └── vars <-- environment specific variables
-    └── Makefile  <-- defines make task shortcuts
-
-The files under ``devops/`` are used to create a minimized staging environment
-on AWS EC2. The CircleCI host is used as the Ansible controller to provision
-the machines and run the :ref:`config_tests` against them.
+The relevant files for configuring the CI tests are the ``Makefile`` in
+the main repo, the configuration file at ``.circleci/config.yml``, and
+the scripts in ``devops/``. The files under ``devops/`` are used to create
+a minimized staging environment on AWS EC2. The CircleCI host is used as
+the Ansible controller to provision the machines and run the :ref:`tests
+<config_tests>` against them.
 
 Running the CI Staging Environment
 ----------------------------------
 
-The staging environment tests will run automatically in CircleCI,
-when changes are submitted by Freedom of the Press Foundation staff
-(i.e. members of the ``freedomofpress`` GitHub organization).
-
-It also performs basic linting and validation, e.g. checking for mistakes in
-the Sphinx documentation.
+The staging environment tests will run automatically in CircleCI, when
+changes are submitted by Freedom of the Press Foundation staff (i.e. members
+of the ``freedomofpress`` GitHub organization). The tests also perform
+basic linting and validation, like checking for formatting errors in the
+Sphinx documentation.
 
 .. tip:: You will need an Amazon Web Services EC2 account to proceed.
          See the `AWS Getting Started Guide`_ for detailed instructions.
@@ -70,9 +58,9 @@ You will be prompted for the values of the required environment variables. There
 are some defaults set that you may want to change. You will need to determine
 the value of your VPC ID to use which is outside the scope of this guide.
 
-
 Use Makefile to Provision Hosts
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Run ``make help`` to see the full list of CI commands in the Makefile:
 
 .. code:: sh
