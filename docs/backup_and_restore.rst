@@ -1,51 +1,46 @@
-Backup and Restore SecureDrop
-=============================
+Back Up, Restore, Migrate
+=========================
 
-There are a number of reasons why you might want to backup and restore your SecureDrop.
-You may want to move an existing SecureDrop installation to new hardware.
-Performing such a migration consists of:
+There are a number of reasons why you might want to backup and restore a
+SecureDrop installation. Maintaining periodic backups is generally a good
+practice to guard against data loss. In the event of hardware failure on
+the SecureDrop servers, having a recent backup will enable you to redeploy
+the system without changing Onion URLs, recreating journalist accounts,
+or losing previous submissions from sources.
 
-  1. *Backup* the existing installation.
-  2. Do a new install of the same version of SecureDrop on the new hardware.
-  3. *Restore* the backup to the new installation.
+.. note:: Only the *Application Server* is backed up and restored, including
+          historical submissions and both *Source Interface* and *Journalist
+          Interface* URLs. The *Monitor Server* needs to be configured from
+          scratch in the event of a hardware migration.
 
-Maintaining periodic backups is generally a good practice to guard against data loss.
-In the event of hardware failure on the SecureDrop servers, having a recent backup
-will enable you to redeploy the system without changing Onion URLs, recreating
-Journalist accounts, or losing historical submissions from sources.
-
-.. note:: Currently only the Application Server is backed up and restored,
-          including historical submissions and both *Source Interface* and
-          *Journalist Interface* URLs. The *Monitor Server* will be configured
-          from scratch in the event of a hardware migration.
-
-Minimizing Disk Space
----------------------
+Minimizing Disk Use
+-------------------
 
 Since the backup and restore operations both involve transferring *all* of
 your SecureDrop's stored submissions over Tor, the process can take a long time.
 To save time and improve reliability for the transfers, take a moment to clean up
 older submissions in the *Journalist Interface*. As a general practice, you should
-encourage your Journalists to delete submissions from the *Journalist Interface*
-regularly.
+encourage Journalists to delete regularly unneeded submissions from the *Journalist
+Interface*.
 
-.. tip:: The throughput of a Tor Hidden Service seems to average around 150 kB/s,
-         or roughly 4 hours for 2GB. Plan your backup and restore accordingly.
+.. tip:: Although it varies, the average throughput of a Tor Hidden Service is
+         about 150 kB/s, or roughly 4 hours for 2GB. Plan your backup and
+         restore accordingly.
 
 You can use the following command to determine the volume of submissions
-currently on the *Application Server* by SSHing in and running
+currently on the *Application Server*: log in over SSH and run
 ``sudo du -sh /var/lib/securedrop/store``.
 
 .. note:: Submissions are deleted asynchronously and one at a time, so if you
           delete a lot of submissions through the *Journalist Interface*, it may
-          take a while for all of the submissions to actually be deleted. This
-          is especially true because SecureDrop uses ``srm`` to securely erase
-          file submissions, which takes significantly more time than normal file
-          deletion. You can monitor the progress of queued deletion jobs with
-          ``sudo tail -f /var/log/securedrop_worker/err.log``.
+          take a while for all of the submissions to actually be
+          deleted. SecureDrop uses ``srm`` to securely erase files, which takes
+          significantly more time than normal file deletion. You can monitor the
+          progress of queued deletion jobs with ``sudo tail -f
+          /var/log/securedrop_worker/err.log``.
 
-If you find you cannot perform a backup or restore due to this
-constraint, and have already deleted old submissions from the *Journalist Interface*,
+If you find you cannot perform a backup or restore due to this constraint,
+and have already deleted old submissions from the *Journalist Interface*,
 contact us through the `SecureDrop Support Portal`_.
 
 .. _SecureDrop Support Portal: https://securedrop-support.readthedocs.io/en/latest/
@@ -53,19 +48,20 @@ contact us through the `SecureDrop Support Portal`_.
 Backing Up
 ----------
 
-Open a **Terminal** on the *Admin Workstation* and ``cd`` to your clone of the
-SecureDrop git repository (usually ``~/Persistent/securedrop``). Ensure you have
-SecureDrop version 0.4 or later checked out (you can run ``git describe
---exact-match`` to see what Git tag you've checked out).
+Open a **Terminal** on the *Admin Workstation* and ``cd`` to your clone
+of the SecureDrop git repository (usually ``~/Persistent/securedrop``).
+Ensure you have a tagged SecureDrop release checked out, version 0.4 or
+later. (You can run ``git describe --exact-match`` to verify that you have the
+right source checked out.)
 
-.. note:: The backups are stored in the *Admin Workstation*'s persistent volume.
-          **You should verify that you have enough space to store the backups
+.. note:: The backups are stored in the *Admin Workstation* persistent volume.
+          **Verify that you have enough space to store the backups
           before running the backup command.**
 
           You can use the ``du`` command described earlier to get the
           approximate size of the backup file (since the majority of the backup
-          archive is the stored submissions), and you can use Tails' **Disks**
-          utility to see how much free space you have on your persistent volume.
+          archive is the stored submissions), and Tails' **Disks** utility to
+          see how much free space you have on your persistent volume.
 
 Check Connectivity
 ''''''''''''''''''
@@ -81,32 +77,35 @@ If this command fails (usually with an error like "SSH Error: data could not be
 sent to the remote host. Make sure this host can be reached over ssh"), you need
 to debug your connectivity before proceeding further. Make sure:
 
-* Ansible is installed. If it is not, see
-  :doc:`configure_admin_workstation_post_install` for detailed instructions.
+* Ansible is installed
+* the *Admin Workstation* is connected to the Internet
+* Tor starts successfully
+* the ``HidServAuth`` values from ``install_files/ansible-base/app-ssh-aths``
+  and ``install_files/ansible-base/mon-ssh-aths`` are in Tails at
+  ``/etc/tor/torrc``
 
-* The *Admin Workstation* is connected to the Internet.
-* Tor started successfully.
-* The ``HidServAuth`` values from ``install_files/ansible-base/app-ssh-aths`` and ``install_files/ansible-base/mon-ssh-aths`` are in
-  Tails' ``/etc/tor/torrc``. If they are not, again, see 
-  :doc:`configure_admin_workstation_post_install` for detailed instructions.
+(If Ansible is not installed, or the ``HidServAuth`` values are missing
+or incorrect, see :doc:`configure_admin_workstation_post_install` for detailed
+instructions.)
 
 Create the Backup
 '''''''''''''''''
 
-Run:
+When you are ready to begin the backup, run
 
 .. code:: sh
 
    ./securedrop-admin backup
 
 The backup action will display itemized progress as the backup is created.
-Run time will vary depending on the number of submissions saved on
-the *Application Server*.
+Run time will vary depending on connectivity and the number of submissions
+saved on the *Application Server*.
 
-When the backup action is complete, the backup will be stored as a tar archive in
-``install_files/ansible-base``. The filename will start with ``sd-backup``, have
-a timestamp of when the backup was initiated, and end with ``.tar.gz``. You can
-find the full path to the backup archive in the output of backup action.
+When the backup action is complete, the backup will be stored as a compressed
+archive in ``install_files/ansible-base``. The filename will begin ``sd-backup``
+followed by a timestamp of when the backup was initiated, and end with
+``.tar.gz``. You can find the full path to the backup archive in the output
+of backup action.
 
 .. warning:: The backup file contains sensitive information! It should only
              be stored on the *Admin Workstation*, or on a
@@ -119,8 +118,8 @@ Prerequisites
 '''''''''''''
 
 The process for restoring a backup is very similar to the process of creating
-one. As before, to get started, boot the *Admin Workstation*, ``cd`` to the
-SecureDrop repository, and ensure that you have SecureDrop 0.4 or later
+one. As before, boot the *Admin Workstation* and ``cd`` to the
+SecureDrop repository. Ensure that you have SecureDrop 0.4 or later
 checked out.
 
 The restore command expects to find a ``.tar.gz`` backup archive in
@@ -149,14 +148,23 @@ Make sure to replace ``sd-backup-2017-07-22--01-06-25.tar.gz`` with the filename
 for your backup archive. The backup archives are located in
 ``install_files/ansible-base``.
 
-Once the restore is done, the Application Server will use the original Source and
-*Journalist Interface* Onion URLs. You will need to update the corresponding
-files on the Admin Workstation:
+Once the restore is done, the *Application Server* will use the original
+*Source Interface* and *Journalist Interface* Onion URLs. You will need
+to update the corresponding files on the *Admin Workstation*:
 
 * ``app-source-ths``
 * ``app-journalist-aths``
 * ``app-ssh-aths``
 
-Then rerun ``./securedrop-admin tailsconfig`` to update the Admin Workstation
+Then rerun ``./securedrop-admin tailsconfig`` to update the *Admin Workstation*
 to use the restored Onion URLs again. See :doc:`configure_admin_workstation_post_install`
 for detailed instructions.
+
+Migrating
+---------
+
+Moving a SecureDrop installation to new hardware consists of
+
+  1. *Backing up* the existing installation;
+  2. *Installing* the same version of SecureDrop on the new hardware;
+  3. *Restoring* the backup to the new installation.
