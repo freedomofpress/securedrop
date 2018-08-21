@@ -12,6 +12,14 @@ set -e
 set -u
 set -o pipefail
 
+# Support optional Xenial scenarios, for evaluating Xenial support
+# as we approach the LTS expiration for Trusty.
+
+if [[ "${1:-}" = "xenial" ]] ; then
+    securedrop_platform_suffix="-xenial"
+else
+    securedrop_platform_suffix=""
+fi
 
 # Respect explicit choice of Vagrant provider if set.
 if [[ -n "${VAGRANT_DEFAULT_PROVIDER:-}" ]] ; then
@@ -29,7 +37,7 @@ else
 fi
 
 # Expect the scenario to reside in the molecule/ directory.
-securedrop_staging_scenario="${securedrop_vm_provider}-staging"
+securedrop_staging_scenario="${securedrop_vm_provider}-staging${securedrop_platform_suffix}"
 
 # Check whether identified scenario actually exists
 if [[ ! -d "molecule/${securedrop_staging_scenario}" ]] ; then

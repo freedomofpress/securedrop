@@ -152,6 +152,10 @@ vagrant-package: ## Package up a vagrant box of the last stable SD release
 staging: ## Creates local staging environment in VM, autodetecting platform
 	@./devops/create-staging-env
 
+.PHONY: staging-xenial
+staging-xenial: ## Creates local staging VMs based on Xenial, autodetecting platform
+	@./devops/create-staging-env xenial
+
 .PHONY: clean
 clean: ## DANGER! Purges all site-specific info and developer files from project.
 	@./devops/clean
