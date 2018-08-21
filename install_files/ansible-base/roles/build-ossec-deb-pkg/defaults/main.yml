@@ -2,7 +2,7 @@
 build_ossec_deb_pkg_dependencies: []
 
 ossec_server_hostname: ossec-server
-ossec_version: 2.8.2
+ossec_version: 3.0.0
 # Parent directory for performing build operations. All files related
 # to build, including source tarball, will be created inside this dir.
 build_path: /tmp/build

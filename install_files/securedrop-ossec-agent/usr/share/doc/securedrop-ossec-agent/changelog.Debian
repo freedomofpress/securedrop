@@ -1,5 +1,11 @@
+securedrop-ossec-agent (3.0.0) unstable; urgency=low
+
+  * Upgrade to ossec 3.0
+
+ -- SecureDrop Team <securedrop@freedom.press>  Tue, 21 Aug 2018 11:43:47 -0700
+
 securedrop-ossec-agent (2.8.1) unstable; urgency=low
 
-  * Initial release 
+  * Initial release
 
  -- James Dolan <securedrop@pressfreedomfoundation.org>  Fri, 14 Mar 2014 15:46:57 -0700
