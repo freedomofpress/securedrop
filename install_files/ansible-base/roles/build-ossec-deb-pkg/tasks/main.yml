@@ -31,30 +31,23 @@
   get_url:
     url: "{{ ossec_tarball_url }}"
     dest: "{{ build_path }}/{{ ossec_tarball_filename }}"
+    checksum: "{{ ossec_source_checksum }}"
 
-- name: Gather checksum info for downloaded tarball.
-  stat:
-    path: "{{ build_path }}/{{ ossec_tarball_filename }}"
-    get_md5: yes
-  register: ossec_download
+- name: Download OSSEC signature.
+  get_url:
+    url: "{{ ossec_signature_url }}"
+    dest: "{{ build_path }}/{{ ossec_signature_filename }}"
 
-- name: Fail if MD5 and SHA1 checksums for tarball are not correct.
-  fail:
-    msg: >
-      The checksums for {{ ossec_tarball_filename }} do not match.
-      Both MD5 and SHA1 checksums were inspected. The checksums
-      used for the inspection where:
-        MD5: {{ ossec_md5_checksum }}
-        SHA1: {{ ossec_sha1_checksum }}
+- name: Copy OSSEC archive GPG key.
+  copy: src=../files/OSSEC-ARCHIVE-KEY.asc dest=/tmp/OSSEC-ARCHIVE-KEY.asc
 
-      The checksums found were:
-        MD5: {{ ossec_download.stat.md5 }}
-        SHA1: {{ ossec_download.stat.checksum }}
+- name: Import OSSEC archive GPG key.
+  shell: "gpg --import /tmp/OSSEC-ARCHIVE-KEY.asc"
 
-      Try rerunning the playbook to download the files again.
-  when: not (ossec_download.stat.exists and
-             ossec_download.stat.md5 == "{{ ossec_md5_checksum }}" and
-             ossec_download.stat.checksum == "{{ ossec_sha1_checksum }}")
+- name: Verify signature of OSSEC tarball.
+  shell: "gpg --verify {{ build_path }}/{{ ossec_signature_filename }}"
+  register: ossec_verification_return_code
+  failed_when: ossec_verification_return_code.rc != 0
 
 - name: Install apt dependencies for building OSSEC packages.
   apt:
@@ -97,7 +90,7 @@
 - name: Copy OSSEC DEBIAN package scripts to build directory.
   command: cp -R {{ repo_src_path }}/DEBIAN {{ ossec_build_dir }}
 
-- name: Copy OSEC DEBIAN/control template to build directory.
+- name: Copy OSSEC DEBIAN/control template to build directory.
   template:
     src: "{{ purpose }}_control.j2"
     dest: "{{ ossec_build_dir }}/DEBIAN/control"
@@ -126,6 +119,7 @@
     # config testing after the build is completed.
     # - "{{ ossec_build_dir }}"
     - /var/ossec
+    - /tmp/OSSEC-ARCHIVE-KEY.asc
 
 - name: Fetch newly built Debian packages back to localhost.
   fetch:
