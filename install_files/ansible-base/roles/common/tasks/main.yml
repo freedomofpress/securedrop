@@ -1,4 +1,6 @@
 ---
+- include: install_ntp.yml
+
 - include: post_ubuntu_install_checks.yml
 
 - include: create_users.yml
@@ -8,8 +10,6 @@
 - include: harden_dns.yml
 
 - include: install_tmux.yml
-
-- include: install_ntp.yml
 
 - include: cron_apt.yml
   tags:

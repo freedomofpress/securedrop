@@ -1,10 +1,11 @@
 ---
 - name: Install ntp for ntpd.
   apt:
-    pkg: ntp
-    state: latest
-    update_cache: yes
-    cache_valid_time: 3600
+    pkg: "{{ item }}"
+    state: present
   tags:
     - apt
     - ntp
+  with_items:
+    - ntp
+    - ntpdate
