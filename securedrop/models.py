@@ -150,7 +150,8 @@ class Source(db.Model):
             'add_star_url': url_for('api.add_star', source_uuid=self.uuid),
             'remove_star_url': url_for('api.remove_star',
                                        source_uuid=self.uuid),
-            'reply_url': url_for('api.post_reply', source_uuid=self.uuid)
+            'replies_url': url_for('api.all_source_replies',
+                                   source_uuid=self.uuid)
             }
         return json_source
 
@@ -200,6 +201,7 @@ class Submission(db.Model):
 class Reply(db.Model):
     __tablename__ = "replies"
     id = Column(Integer, primary_key=True)
+    uuid = Column(String(36), unique=True, nullable=False)
 
     journalist_id = Column(Integer, ForeignKey('journalists.id'))
     journalist = relationship(
@@ -222,12 +224,29 @@ class Reply(db.Model):
     def __init__(self, journalist, source, filename):
         self.journalist_id = journalist.id
         self.source_id = source.id
+        self.uuid = str(uuid.uuid4())
         self.filename = filename
         self.size = os.stat(current_app.storage.path(source.filesystem_id,
                                                      filename)).st_size
 
     def __repr__(self):
         return '<Reply %r>' % (self.filename)
+
+    def to_json(self):
+        json_submission = {
+            'source_url': url_for('api.single_source',
+                                  source_uuid=self.source.uuid),
+            'reply_url': url_for('api.single_reply',
+                                 source_uuid=self.source.uuid,
+                                 reply_uuid=self.uuid),
+            'filename': self.filename,
+            'size': self.size,
+            'journalist_username': self.journalist.username,
+            'journalist_uuid': self.journalist.uuid,
+            'uuid': self.uuid,
+            'is_deleted_by_source': self.deleted_by_source,
+        }
+        return json_submission
 
 
 class SourceStar(db.Model):
@@ -300,6 +319,7 @@ class NonDicewarePassword(PasswordError):
 class Journalist(db.Model):
     __tablename__ = "journalists"
     id = Column(Integer, primary_key=True)
+    uuid = Column(String(36), unique=True, nullable=False)
     username = Column(String(255), nullable=False, unique=True)
     pw_salt = Column(Binary(32))
     pw_hash = Column(Binary(256))
@@ -324,6 +344,7 @@ class Journalist(db.Model):
         self.username = username
         self.set_password(password)
         self.is_admin = is_admin
+        self.uuid = str(uuid.uuid4())
 
         if otp_secret:
             self.set_hotp_secret(otp_secret)
@@ -552,7 +573,8 @@ class Journalist(db.Model):
         json_user = {
             'username': self.username,
             'last_login': self.last_access.isoformat() + 'Z',
-            'is_admin': self.is_admin
+            'is_admin': self.is_admin,
+            'uuid': self.uuid
         }
         return json_user
 
