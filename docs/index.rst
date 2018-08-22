@@ -125,6 +125,7 @@ anonymous sources.
    development/release_management
    development/dockerbuildmaint
    development/qubes_staging
+   development/xenial_support
 
 .. toctree::
   :caption: Threat Model
