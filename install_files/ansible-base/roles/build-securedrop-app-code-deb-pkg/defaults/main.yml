@@ -16,3 +16,7 @@ securedrop_app_rsync_opts:
   - "--exclude=*.deb"
 
 securedrop_local_build: "../../build"
+
+# Whether to build packages targeting Xenial. Some of the dependency
+# logic changes, so we'll adjust the control file accordingly.
+securedrop_build_xenial_support: False

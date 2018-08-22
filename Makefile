@@ -107,6 +107,12 @@ docker-build-ubuntu: ## Builds SD Ubuntu docker container
 build-debs: ## Builds and tests debian packages
 	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s builder; else echo Not running on docs branch...; fi
 
+.PHONY: build-debs-xenial
+build-debs-xenial: ## Builds and tests debian packages (includes Xenial overrides, TESTING ONLY)
+	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
+		molecule converge -s builder -- -e securedrop_build_xenial_support=True; \
+		else echo Not running on docs branch...; fi
+
 .PHONY: safety
 safety: ## Runs `safety check` to check python dependencies for vulnerabilities
 	pip install --upgrade safety && \
