@@ -1383,6 +1383,20 @@ def test_too_long_user_password_change(journalist_app, test_journo):
                 'You submitted a bad password! Password not changed.', 'error')
 
 
+def test_valid_user_password_change(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        resp = app.post(url_for('account.new_password'),
+                        data=dict(password=VALID_PASSWORD_2,
+                                  token=TOTP(test_journo['otp_secret']).now(),
+                                  current_password=test_journo['password']),
+                        follow_redirects=True)
+
+        assert 'Password updated.' in resp.data.decode('utf-8')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1417,17 +1431,6 @@ class TestJournalistApp(TestCase):
     def _login_user(self):
         self._ctx.g.user = self.user
 
-    def test_valid_user_password_change(self):
-        self._login_user()
-        resp = self.client.post(
-            url_for('account.new_password'),
-            data=dict(password=VALID_PASSWORD_2,
-                      token='mocked',
-                      current_password=self.user_pw),
-            follow_redirects=True)
-
-        assert 'Password updated.' in \
-            resp.data.decode('utf-8')
 
     def test_regenerate_totp(self):
         self._login_user()
