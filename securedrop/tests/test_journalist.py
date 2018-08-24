@@ -1416,6 +1416,26 @@ def test_regenerate_totp(journalist_app, test_journo):
             ins.assert_redirects(resp, url_for('account.new_two_factor'))
 
 
+def test_edit_hotp(journalist_app, test_journo):
+    old_secret = test_journo['otp_secret']
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('account.reset_two_factor_hotp'),
+                            data=dict(otp_secret=123456))
+
+            new_secret = Journalist.query.get(test_journo['id']).otp_secret
+
+            # check that totp is different
+            assert new_secret != old_secret
+
+            # should redirect to verification page
+            ins.assert_redirects(resp, url_for('account.new_two_factor'))
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1449,23 +1469,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-
-    def test_edit_hotp(self):
-        self._login_user()
-        old_hotp = self.user.otp_secret
-
-        res = self.client.post(
-            url_for('account.reset_two_factor_hotp'),
-            data=dict(otp_secret=123456)
-            )
-        new_hotp = self.user.otp_secret
-
-        # check that hotp is different
-        self.assertNotEqual(old_hotp, new_hotp)
-
-        # should redirect to verification page
-        self.assertRedirects(res, url_for('account.new_two_factor'))
 
     def test_delete_source_deletes_submissions(self):
         """Verify that when a source is deleted, the submissions that
