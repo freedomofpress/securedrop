@@ -1456,6 +1456,34 @@ def test_delete_source_deletes_submissions(journalist_app,
         assert res is None
 
 
+def test_delete_collection_updates_db(journalist_app,
+                                      test_journo,
+                                      test_source):
+    """Verify that when a source is deleted, their Source identity
+    record, as well as Reply & Submission records associated with
+    that record are purged from the database."""
+
+    with journalist_app.app_context():
+        source = Source.query.get(test_source['id'])
+        journo = Journalist.query.get(test_journo['id'])
+
+        utils.db_helper.submit(source, 2)
+        utils.db_helper.reply(journo, source, 2)
+
+        journalist_app_module.utils.delete_collection(
+            test_source['filesystem_id'])
+        res = Source.query.filter_by(id=test_source['id']).one_or_none()
+        assert res is None
+
+        res = Submission.query.filter_by(source_id=test_source['id']) \
+            .one_or_none()
+        assert res is None
+
+        res = Reply.query.filter_by(source_id=test_source['id']) \
+            .one_or_none()
+        assert res is None
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1494,21 +1522,6 @@ class TestJournalistApp(TestCase):
         self.source, _ = utils.db_helper.init_source()
         utils.db_helper.submit(self.source, 2)
         utils.db_helper.reply(self.user, self.source, 2)
-
-    def test_delete_collection_updates_db(self):
-        """Verify that when a source is deleted, their Source identity
-        record, as well as Reply & Submission records associated with
-        that record are purged from the database."""
-        self._delete_collection_setup()
-        journalist_app_module.utils.delete_collection(
-            self.source.filesystem_id)
-        results = Source.query.filter(Source.id == self.source.id).all()
-        self.assertEqual(results, [])
-        results = db.session.query(
-            Submission.source_id == self.source.id).all()
-        self.assertEqual(results, [])
-        results = db.session.query(Reply.source_id == self.source.id).all()
-        self.assertEqual(results, [])
 
     def test_delete_source_deletes_source_key(self):
         """Verify that when a source is deleted, the PGP key that corresponds
