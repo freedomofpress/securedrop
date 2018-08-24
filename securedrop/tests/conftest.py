@@ -166,7 +166,8 @@ def test_source(journalist_app):
         return {'source': source,
                 'codename': codename,
                 'filesystem_id': source.filesystem_id,
-                'uuid': source.uuid}
+                'uuid': source.uuid,
+                'id': source.id}
 
 
 @pytest.fixture(scope='function')
