@@ -1436,6 +1436,26 @@ def test_edit_hotp(journalist_app, test_journo):
             ins.assert_redirects(resp, url_for('account.new_two_factor'))
 
 
+def test_delete_source_deletes_submissions(journalist_app,
+                                           test_journo,
+                                           test_source):
+    """Verify that when a source is deleted, the submissions that
+    correspond to them are also deleted."""
+
+    with journalist_app.app_context():
+        source = Source.query.get(test_source['id'])
+        journo = Journalist.query.get(test_journo['id'])
+
+        utils.db_helper.submit(source, 2)
+        utils.db_helper.reply(journo, source, 2)
+
+        journalist_app_module.utils.delete_collection(
+            test_source['filesystem_id'])
+
+        res = Source.query.filter_by(id=test_source['id']).one_or_none()
+        assert res is None
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1469,19 +1489,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_delete_source_deletes_submissions(self):
-        """Verify that when a source is deleted, the submissions that
-        correspond to them are also deleted."""
-
-        self._delete_collection_setup()
-        journalist_app_module.utils.delete_collection(
-            self.source.filesystem_id)
-
-        # Source should be gone
-        results = db.session.query(Source).filter(
-            Source.id == self.source.id).all()
-        self.assertEqual(results, [])
 
     def _delete_collection_setup(self):
         self.source, _ = utils.db_helper.init_source()
