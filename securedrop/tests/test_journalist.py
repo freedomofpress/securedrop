@@ -1484,6 +1484,33 @@ def test_delete_collection_updates_db(journalist_app,
         assert res is None
 
 
+def test_delete_source_deletes_source_key(journalist_app,
+                                          test_source,
+                                          test_journo):
+    """Verify that when a source is deleted, the PGP key that corresponds
+    to them is also deleted."""
+
+    with journalist_app.app_context():
+        source = Source.query.get(test_source['id'])
+        journo = Journalist.query.get(test_journo['id'])
+
+        utils.db_helper.submit(source, 2)
+        utils.db_helper.reply(journo, source, 2)
+
+        # Source key exists
+        source_key = current_app.crypto_util.getkey(
+            test_source['filesystem_id'])
+        assert source_key is not None
+
+        journalist_app_module.utils.delete_collection(
+            test_source['filesystem_id'])
+
+        # Source key no longer exists
+        source_key = current_app.crypto_util.getkey(
+            test_source['filesystem_id'])
+        assert source_key is None
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1522,22 +1549,6 @@ class TestJournalistApp(TestCase):
         self.source, _ = utils.db_helper.init_source()
         utils.db_helper.submit(self.source, 2)
         utils.db_helper.reply(self.user, self.source, 2)
-
-    def test_delete_source_deletes_source_key(self):
-        """Verify that when a source is deleted, the PGP key that corresponds
-        to them is also deleted."""
-        self._delete_collection_setup()
-
-        # Source key exists
-        source_key = current_app.crypto_util.getkey(self.source.filesystem_id)
-        self.assertNotEqual(source_key, None)
-
-        journalist_app_module.utils.delete_collection(
-            self.source.filesystem_id)
-
-        # Source key no longer exists
-        source_key = current_app.crypto_util.getkey(self.source.filesystem_id)
-        self.assertEqual(source_key, None)
 
     def test_delete_source_deletes_docs_on_disk(self):
         """Verify that when a source is deleted, the encrypted documents that
