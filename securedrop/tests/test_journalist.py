@@ -1364,6 +1364,25 @@ def test_journalist_reply_view(journalist_app, test_source, test_journo):
         assert resp.status_code == 302
 
 
+def test_too_long_user_password_change(journalist_app, test_journo):
+    overly_long_password = VALID_PASSWORD + \
+        'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('account.new_password'),
+                     data=dict(password=overly_long_password,
+                               token=TOTP(test_journo['otp_secret']).now(),
+                               current_password=test_journo['password']),
+                     follow_redirects=True)
+
+            ins.assert_message_flashed(
+                'You submitted a bad password! Password not changed.', 'error')
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1397,21 +1416,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_too_long_user_password_change(self):
-        self._login_user()
-
-        overly_long_password = VALID_PASSWORD + \
-            'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
-
-        self.client.post(url_for('account.new_password'),
-                         data=dict(password=overly_long_password,
-                                   token='mocked',
-                                   current_password=self.user_pw),
-                         follow_redirects=True)
-
-        self.assertMessageFlashed('You submitted a bad password! Password not '
-                                  'changed.', 'error')
 
     def test_valid_user_password_change(self):
         self._login_user()
