@@ -1511,6 +1511,35 @@ def test_delete_source_deletes_source_key(journalist_app,
         assert source_key is None
 
 
+def test_delete_source_deletes_docs_on_disk(journalist_app,
+                                            test_source,
+                                            test_journo,
+                                            config):
+    """Verify that when a source is deleted, the encrypted documents that
+    exist on disk is also deleted."""
+
+    with journalist_app.app_context():
+        source = Source.query.get(test_source['id'])
+        journo = Journalist.query.get(test_journo['id'])
+
+        utils.db_helper.submit(source, 2)
+        utils.db_helper.reply(journo, source, 2)
+
+        # Encrypted documents exists
+        dir_source_docs = os.path.join(config.STORE_DIR,
+                                       test_source['filesystem_id'])
+        assert os.path.exists(dir_source_docs)
+
+        job = journalist_app_module.utils.delete_collection(
+            test_source['filesystem_id'])
+
+        # Wait up to 5s to wait for Redis worker `srm` operation to complete
+        utils.async.wait_for_redis_worker(job)
+
+        # Encrypted documents no longer exist
+        assert not os.path.exists(dir_source_docs)
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1544,30 +1573,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def _delete_collection_setup(self):
-        self.source, _ = utils.db_helper.init_source()
-        utils.db_helper.submit(self.source, 2)
-        utils.db_helper.reply(self.user, self.source, 2)
-
-    def test_delete_source_deletes_docs_on_disk(self):
-        """Verify that when a source is deleted, the encrypted documents that
-        exist on disk is also deleted."""
-        self._delete_collection_setup()
-
-        # Encrypted documents exists
-        dir_source_docs = os.path.join(config.STORE_DIR,
-                                       self.source.filesystem_id)
-        self.assertTrue(os.path.exists(dir_source_docs))
-
-        job = journalist_app_module.utils.delete_collection(
-            self.source.filesystem_id)
-
-        # Wait up to 5s to wait for Redis worker `srm` operation to complete
-        utils.async.wait_for_redis_worker(job)
-
-        # Encrypted documents no longer exist
-        self.assertFalse(os.path.exists(dir_source_docs))
 
     def test_download_selected_submissions_from_source(self):
         source, _ = utils.db_helper.init_source()
