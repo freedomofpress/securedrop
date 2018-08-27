@@ -6,7 +6,7 @@ Flask-Assets
 Flask-Babel
 Flask-SQLAlchemy
 Flask-WTF
-Flask
+Flask>0.12.2
 gnupg
 Jinja2
 jsmin
@@ -20,4 +20,4 @@ scrypt
 sh
 SQLAlchemy
 typing
-Werkzeug==0.12.2
+Werkzeug
