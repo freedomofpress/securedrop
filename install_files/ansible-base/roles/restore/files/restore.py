@@ -45,6 +45,8 @@ def main():
     # If the process exits with a non-zero return code, raises an exception.
     subprocess.check_call(['service', 'apache2', 'restart'])
     subprocess.check_call(['service', 'tor', 'reload'])
+    # Apply database migrations (if backed-up version < version to restore)
+    subprocess.check_call(['dpkg-reconfigure', 'securedrop-app-code'])
 
 
 if __name__ == "__main__":
