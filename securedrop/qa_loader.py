@@ -225,9 +225,9 @@ def arg_parser():
     parser = ArgumentParser(
         path.basename(__file__),
         description='Loads data into the database for testing upgrades')
-    parser.add_argument('-m', '--multiplier', type=positive_int, default=100,
+    parser.add_argument('-m', '--multiplier', type=positive_int, default=25,
                         help=('Factor to multiply the loaded data by '
-                              '(default 100)'))
+                              '(default 25)'))
     return parser
 
 
