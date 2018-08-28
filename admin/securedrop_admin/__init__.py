@@ -36,6 +36,7 @@ import types
 import prompt_toolkit
 from prompt_toolkit.validation import Validator, ValidationError
 import yaml
+from pkg_resources import parse_version
 
 sdlog = logging.getLogger(__name__)
 RELEASE_KEY = '22245C81E3BAEB4138B36061310F561200F4AD77'
@@ -627,6 +628,9 @@ def check_for_updates(args):
 
     # Do not check out any release candidate tags
     all_prod_tags = [x for x in all_tags if 'rc' not in x]
+
+    # We want the tags to be sorted based on semver
+    all_prod_tags.sort(key=parse_version)
 
     latest_tag = all_prod_tags[-1]
 
