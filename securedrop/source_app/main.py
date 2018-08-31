@@ -124,7 +124,9 @@ def make_blueprint(config):
     @login_required
     def submit():
         msg = request.form['msg']
-        fh = request.files['fh']
+        fh = None
+        if 'fh' in request.files:
+            fh = request.files['fh']
 
         # Don't submit anything if it was an "empty" submission. #878
         if not (msg or fh):
