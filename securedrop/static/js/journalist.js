@@ -94,4 +94,17 @@ $(function () {
       return confirm(get_string("reset-user-mfa-confirm-string").supplant({ username: username }));
   });
 
+  // make show password checkbox visible if javascript enabled
+  $('.show-password-checkbox-container').css("display", "block");
+
+  // Set up listener for show password checkbox
+  $('#show-password-check').change(function(event) {
+    if(event.target.checked) {
+      $('#login-form-password').attr('type', 'text');
+    }
+    else {
+      $('#login-form-password').attr('type', 'password');
+    }
+  })
+
 });
