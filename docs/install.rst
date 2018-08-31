@@ -16,6 +16,13 @@ command:
 The package installation will take approximately 10 minutes, depending
 on network speed and computing power.
 
+.. note:: On Tails 3.9 or later, the apt persistence feature will prompt
+          to install the package automatically from persistent storage on
+          each boot. These apt packages don't need to persist, click on
+          `Install Only Once`:
+
+          |Tails Apt Persistence|
+
 .. note:: Occasionally this command times out due to network latency issues. You
           should be able to re-run the command and complete the setup. If you
           run into a problem, try removing the
@@ -176,3 +183,5 @@ Service will be available in the following files under
 The dynamic inventory file will automatically read the Onion URLs
 from the ``app-ssh-aths`` and ``mon-ssh-aths`` files and use them to connect
 to the servers over SSH during subsequent playbook runs.
+
+.. |Tails Apt Persistence| image:: images/tails-install-once-or-every-time.png
