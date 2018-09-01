@@ -9,10 +9,30 @@ The SecureDrop project uses CircleCI_ for running automated test suites on code 
 
 The relevant files for configuring the CI tests are the ``Makefile`` in
 the main repo, the configuration file at ``.circleci/config.yml``, and
-the scripts in ``devops/``. The files under ``devops/`` are used to create
-a minimized staging environment on AWS EC2. The CircleCI host is used as
-the Ansible controller to provision the machines and run the :ref:`tests
-<config_tests>` against them.
+the scripts in ``devops/``. You may want to consult the
+`CircleCI Configuration Reference <https://circleci.com/docs/2.0/configuration-reference/>`__
+to interpret the configuration file. Review the ``workflows`` section of the
+configuration file to understand which jobs are run by CircleCI.
+
+The files under ``devops/`` are used to create a minimized staging environment
+on AWS EC2. The CircleCI host is used as the Ansible controller to provision the
+machines and run the :ref:`tests <config_tests>` against them.
+
+.. note:: We skip unnecessary jobs, such as the staging run, for pull requests that only
+  affect the documentation; to do so, we check whether the branch name begins with
+  ``docs-``. These checks are enforced in different parts of the configuration,
+  mainly within the ``Makefile``.
+
+Limitations of the CI Staging Environment
+-----------------------------------------
+Our CI staging environment is currently directly provisioned to Xen-based
+virtual machines running on AWS, due to the lack of support for nested
+virtualization. This means that we cannot use the ``grsecurity`` kernel, and the
+environment differs from our locally run staging VMs in other ways. We may be
+able to overcome these limitations by
+`transitioning <https://github.com/freedomofpress/securedrop/issues/3702>`__ to
+running the CI staging environment on compute infrastructure that supports
+nested virtualization.
 
 Running the CI Staging Environment
 ----------------------------------
