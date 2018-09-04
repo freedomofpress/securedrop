@@ -1,0 +1,133 @@
+Upgrade from 0.8.0 to 0.9.0
+===========================
+
+Updating the Tails Workstations
+-------------------------------
+
+We recommend that you update all Tails drives to version 3.9, which was released
+concurrently with SecureDrop 0.9.0 on September 5, 2018. Follow the
+graphical prompts on your workstations to perform this upgrade.
+
+For the *Journalist Workstations* and the *Admin Workstation*, the graphical
+SecureDrop updater will also prompt you to update the SecureDrop code on your
+workstations. The updater was introduced in SecureDrop 0.7.0. It looks like
+this:
+
+.. |SecureDrop updater| image:: ../images/0.6.x_to_0.7/securedrop-updater.png
+
+|SecureDrop updater|
+
+If the updater does not appear, you may not have updated your workstation code
+since the release of SecureDrop 0.7.0 in May 2018. You can manually update your
+workstation by issuing the following commands on each workstation:
+
+.. code:: sh
+
+   cd ~/Persistent/securedrop
+   git fetch --tags
+   gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
+   git tag -v 0.9.0
+
+The output should include the following two lines:
+
+.. code:: sh
+
+   gpg:                using RSA key 22245C81E3BAEB4138B36061310F561200F4AD77
+   gpg: Good signature from "SecureDrop Release Signing Key"
+
+Please verify that each character of the fingerprint above matches what you see
+on the screen of your workstation. If it does, you can check out the new
+release:
+
+.. code:: sh
+
+  git checkout 0.9.0
+
+Please verify that the output of this command does not contain
+the text "warning: refname '0.9.0' is ambiguous".
+
+.. important:: If you do see the warning "refname '0.9.0' is ambiguous" in the
+  output, we recommend that you contact us immediately at securedrop@freedom.press
+  (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__).
+
+Finally, run the following command:
+
+.. code:: sh
+
+  ./securedrop-admin setup
+
+Please note that this only updates the SecureDrop code on the workstation.
+Tails upgrades still have to be performed separately.
+
+Database Migration May Take Time to Complete
+--------------------------------------------
+Some of the changes in this release require a database migration that can take
+additional time during the upgrade process, especially if you are not using an
+SSD on your *Application Server*, or if you store data about a large number of
+sources and submissions on the server. This is normal behavior during the
+automatic upgrade, and the *Source Interface* and *Journalist Interface* will
+become available again once the upgrade has been completed. In case of a service
+outage of more than two hours, please don't hesitate to reach out to us.
+
+New Dialogs in Tails 3.9
+------------------------
+When you run the ``securedrop-admin setup`` command, Tails as of version 3.9
+will prompt to install packages automatically from persistent storage on each
+boot. These apt packages don't need to persist; click on `Install Only Once`
+when you see this dialog:
+
+      |Tails Apt Persistence|
+
+.. |Tails Apt Persistence| image:: ../images/tails-install-once-or-every-time.png
+
+Troubleshooting Kernel Issues
+-----------------------------
+
+SecureDrop 0.9.0 ships with an update of the Linux kernel running on your
+*Application* and *Monitor Servers*, from version 4.4.135 to version 4.4.144.
+If you have not previously changed your default kernel, your server will
+boot into the new kernel automatically on its next reboot.
+
+We have tested this kernel extensively against :ref:`recommended hardware <Specific Hardware Recommendations>`
+and other common configurations. Please consult our :doc:`kernel troubleshooting guide <../kernel_troubleshooting>`
+for instructions on how to compare the differences between kernel versions and
+how to roll back to an earlier version if necessary.
+
+.. important::
+
+  It is of critical importance for the security and stability of your instance
+  that you :ref:`report kernel compatibility issues <Report Compatibility Issues>`
+  to us as soon as you become aware of them.
+
+Enabling the New Kernel After a Downgrade
+-----------------------------------------
+
+If you have previously downgraded your kernel to the 3.14.x series due to
+compatibility issues with the kernel that shipped with SecureDrop 0.7.0 or
+later, we urge you to test the latest kernel (version 4.4.144).
+
+You can test the new kernel without downtime by following
+:ref:`our instructions for testing and enabling a new kernel after a downgrade
+<Test and Enable an Updated Kernel>`. Please note that this is *only* necessary
+if you have manually downgraded the kernel; otherwise, the new kernel will be
+enabled automatically.
+
+.. important::
+
+  The next regular release of SecureDrop, version 0.10.0, will no longer
+  preserve a preference for a downgraded kernel. If you have downgraded your
+  kernel, testing the new kernel and :ref:`reporting compatibility issues <Report Compatibility Issues>`
+  is of critical importance to minimize the risk of an outage of your SecureDrop
+  instance.
+
+Getting Support
+---------------
+
+Should you require further support with your SecureDrop installation or upgrade,
+we are happy to help!
+
+-  Community support is available at https://forum.securedrop.club
+-  The Freedom of the Press Foundation offers training and priority support
+   services. See https://securedrop.org/priority-support/ for more information.
+   If you are already a member of our support portal, please don't hesitate to
+   open a ticket there.
