@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-06-26 15:10+0000\n"
+"PO-Revision-Date: 2018-09-03 17:28+0000\n"
 "Last-Translator: Drashti <drashtipandya37@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/hi/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} पहले"
 
-#: journalist_app/__init__.py:78 journalist_app/__init__.py:116
+#: journalist_app/__init__.py:80 journalist_app/__init__.py:119
 msgid "You have been logged out due to inactivity"
 msgstr "निष्क्रियता के कारण आपको लॉग आउट कर दिया गया है"
 
@@ -81,7 +81,7 @@ msgstr "{source_name} का संग्रह हटाया गया"
 msgid "No collections selected."
 msgstr "कोई संग्रह चयनित नहीं।"
 
-#: journalist_app/decorators.py:16
+#: journalist_app/decorators.py:15
 msgid "Only administrators can access this page."
 msgstr "केवल व्यवस्थापक ही पृष्ठ तक पहुंच सकते हैं।"
 
@@ -110,8 +110,8 @@ msgstr "आवश्यक फाइल।"
 msgid "You can only upload PNG image files."
 msgstr "आप केवल PNG छवि फ़ाइलों को अपलोड कर सकते हैं।"
 
-#: journalist_app/main.py:117 journalist_app/utils.py:47
-#: journalist_app/utils.py:137
+#: journalist_app/main.py:117 journalist_app/utils.py:48
+#: journalist_app/utils.py:138
 msgid "An unexpected error occurred! Please inform your administrator."
 msgstr "एक अप्रत्याशित त्रुटि हुई है ! कृपया अपने व्यवस्थापक को सूचित करें।"
 
@@ -123,7 +123,7 @@ msgstr "धन्यवाद। आपका उत्तर संग्रह
 msgid "No collections selected for download."
 msgstr "डाउनलोड के लिए कोई संग्रह नहीं चुना गया।"
 
-#: journalist_app/main.py:152 journalist_app/utils.py:231
+#: journalist_app/main.py:152 journalist_app/utils.py:236
 msgid "No collections selected for deletion."
 msgstr "हटाए जाने के लिए कोई संग्रह नहीं चुना गया।"
 
@@ -135,21 +135,21 @@ msgstr "स्रोत '{original_name}' का नाम बदलकर '{new
 msgid "No unread submissions for this source."
 msgstr "इस स्रोत के लिए कोई अपठित सबमिशन नहीं है |"
 
-#: journalist_app/utils.py:54
+#: journalist_app/utils.py:55
 msgid "Account updated."
 msgstr "खाता अपडेट किया गया।"
 
-#: journalist_app/utils.py:85
+#: journalist_app/utils.py:86
 msgid "Login failed."
 msgstr "लॉगिन विफल।"
 
-#: journalist_app/utils.py:93
+#: journalist_app/utils.py:94
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] "पुनः प्रवेश करने से पहले कृपया कम से कम {seconds} सेकंड प्रतीक्षा करें।"
 msgstr[1] "पुनः प्रवेश करने से पहले कृपया कम से कम {seconds} सेकंड प्रतीक्षा करें।"
 
-#: journalist_app/utils.py:104
+#: journalist_app/utils.py:105
 msgid ""
 "Please wait for a new code from your two-factor token or application before "
 "trying again."
@@ -157,31 +157,31 @@ msgstr ""
 "फिर से प्रयास करने से पहले कृपया अपने दो-कारक टोकन या ऐप्लिकेशन से एक नया कोड की "
 "प्रतीक्षा करें।"
 
-#: journalist_app/utils.py:125
+#: journalist_app/utils.py:126
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr "अमान्य गुप्त स्वरूप: कृपया केवल A-F और संख्याएँ 0- 9 ही जमा करें।"
 
-#: journalist_app/utils.py:131
+#: journalist_app/utils.py:132
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "अवैध गुप्त स्वरूप: विषम-लंबाई रहस्य| क्या आपने गुप्त टेक्स्ट को गलत तरीके से लिखा है?"
 
-#: journalist_app/utils.py:183
+#: journalist_app/utils.py:188
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "सबमिशन हटाया गया।"
 msgstr[1] "{num} सबमिशन हटाए गए।"
 
-#: journalist_app/utils.py:236
+#: journalist_app/utils.py:241
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} संग्रह हटाया गया"
 msgstr[1] "{num} संग्रह हटाए गए"
 
-#: journalist_app/utils.py:274
+#: journalist_app/utils.py:279
 msgid "You submitted a bad password! Password not changed."
 msgstr "आपने एक गलत पासवर्ड सबमिट किया है! पासवर्ड नहीं बदला गया।"
 
-#: journalist_app/utils.py:281
+#: journalist_app/utils.py:286
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -190,14 +190,14 @@ msgstr ""
 "एक त्रुटि थी, और नया पासवर्ड ठीक से सहेजा नहीं गया हो सकता है। आपको अपने खाते से बंद "
 "होने से रोकने के लिए, आपको अपना पासवर्ड दोबारा रीसेट करना चाहिए।"
 
-#: journalist_app/utils.py:290
+#: journalist_app/utils.py:295
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
 msgstr ""
 "पासवर्ड अपडेट किया गया। इसे अपने KeePassX डेटाबेस में सहेजने के लिए मत भूलना नया पासवर्ड:"
 
-#: journalist_app/utils.py:307
+#: journalist_app/utils.py:312
 msgid "No unread submissions in selected collections."
 msgstr "चयनित संग्रह में कोई अपठित सबमिशन नहीं है।"
 
@@ -312,7 +312,7 @@ msgstr "प्रमाणीकरण संख्या"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:100 source_templates/lookup.html:45
+#: journalist_templates/col.html:99 source_templates/lookup.html:45
 msgid "SUBMIT"
 msgstr "जमा करें"
 
@@ -335,8 +335,8 @@ msgstr "उपयोगकर्ता नाम"
 msgid "Edit"
 msgstr "संपादित करें"
 
-#: journalist_templates/admin.html:18 journalist_templates/col.html:76
-#: journalist_templates/col.html:134 journalist_templates/index.html:16
+#: journalist_templates/admin.html:18 journalist_templates/col.html:75
+#: journalist_templates/col.html:133 journalist_templates/index.html:16
 #: journalist_templates/index.html:51
 msgid "Delete"
 msgstr "हटाएं"
@@ -467,41 +467,50 @@ msgstr "डाउनलोड चयनित"
 msgid "Delete Selected"
 msgstr "चयनित मिटाएं"
 
-#: journalist_templates/col.html:57
-msgid "Uploaded Document"
-msgstr "अपलोड किए गए दस्तावेज़"
-
-#: journalist_templates/col.html:59 journalist_templates/col.html:92
+#: journalist_templates/col.html:38 journalist_templates/col.html:58
+#: journalist_templates/col.html:91
 msgid "Reply"
 msgstr "जवाब दें"
 
-#: journalist_templates/col.html:61
+#: journalist_templates/col.html:41 journalist_templates/col.html:48
+msgid "Read"
+msgstr "વાંચો"
+
+#: journalist_templates/col.html:45
+msgid "Unread"
+msgstr "अपठित"
+
+#: journalist_templates/col.html:56
+msgid "Uploaded Document"
+msgstr "अपलोड किए गए दस्तावेज़"
+
+#: journalist_templates/col.html:60
 msgid "Message"
 msgstr "संदेश"
 
-#: journalist_templates/col.html:71 journalist_templates/col.html:129
+#: journalist_templates/col.html:70 journalist_templates/col.html:128
 #: journalist_templates/index.html:46
 msgid "Delete Confirmation"
 msgstr "पुष्टिकरण हटाएं"
 
-#: journalist_templates/col.html:72
+#: journalist_templates/col.html:71
 msgid "Are you sure you want to delete the selected documents?"
 msgstr "क्या आप वाकई चयनित दस्तावेज़ हटाना चाहते हैं?"
 
-#: journalist_templates/col.html:87
+#: journalist_templates/col.html:86
 msgid "No documents to display."
 msgstr "प्रदर्शित करने के लिए कोई दस्तावेज़ नहीं |"
 
-#: journalist_templates/col.html:94
+#: journalist_templates/col.html:93
 msgid ""
 "You can write a secure reply to the person who submitted these documents:"
 msgstr "आप इन दस्तावेजों को सबमिट करने वाले व्यक्ति को एक सुरक्षित उत्तर लिख सकते हैं:"
 
-#: journalist_templates/col.html:103
+#: journalist_templates/col.html:102
 msgid "You've flagged this source for reply."
 msgstr "आपने उत्तर के लिए इस स्रोत को चिह्नित किया है |"
 
-#: journalist_templates/col.html:104
+#: journalist_templates/col.html:103
 msgid ""
 "An encryption key will be generated for the source the next time they log "
 "in, after which you will be able to reply to the source here."
@@ -509,15 +518,15 @@ msgstr ""
 "अगली बार जब वे लॉग इन करते हैं, तो स्रोत के लिए एक एन्क्रिप्शन कुंजी उत्पन्न होगी, जिसके "
 "बाद आप यहां स्रोत को जवाब दे पाएंगे।"
 
-#: journalist_templates/col.html:106
+#: journalist_templates/col.html:105
 msgid "Click below if you would like to write a reply to this source."
 msgstr "यदि आप इस स्रोत को उत्तर लिखना चाहते हैं तो नीचे क्लिक करें।"
 
-#: journalist_templates/col.html:110
+#: journalist_templates/col.html:109
 msgid "FLAG THIS SOURCE FOR REPLY"
 msgstr "उत्तर के लिए इस स्रोत को फ़्लैग करें"
 
-#: journalist_templates/col.html:115
+#: journalist_templates/col.html:114
 msgid ""
 "Click below to delete this source's collection. <em>Warning: If you do this, "
 "the files seen here will be unrecoverable and the source will no longer be "
@@ -527,11 +536,11 @@ msgstr ""
 "यहां देखी जाने वाली फ़ाइलें पुनर्प्राप्त नहीं हो सकेंगी और स्रोत अब उनके पिछले कोडनाम का "
 "उपयोग करके लॉगिन नहीं कर पाएगे।</em>"
 
-#: journalist_templates/col.html:122
+#: journalist_templates/col.html:121
 msgid "DELETE SOURCE AND SUBMISSIONS"
 msgstr "स्रोत और सबमिशन हटाएं"
 
-#: journalist_templates/col.html:130
+#: journalist_templates/col.html:129
 msgid "Are you sure you want to delete this collection?"
 msgstr "क्या आप इस संग्रह को मिटाना चाहते हैं?"
 
@@ -794,7 +803,7 @@ msgstr "फ़ील्ड 1 और {max_codename_len} वर्णों के
 msgid "Invalid input."
 msgstr "अमान्य निवेश।"
 
-#: source_app/main.py:31
+#: source_app/main.py:30
 msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
@@ -802,31 +811,31 @@ msgstr ""
 "आपको पुनर्निर्देशित किया गया था क्योंकि आप पहले ही लॉग इन हैं। यदि आप एक नया खाता "
 "बनाना चाहते हैं, तो आपको पहले लॉग आउट करना चाहिए।"
 
-#: source_app/main.py:129
+#: source_app/main.py:131
 msgid "You must enter a message or choose a file to submit."
 msgstr "सबमिट करने के लिए आपको कोई संदेश दर्ज करना होगा या एक फ़ाइल चुनें |"
 
-#: source_app/main.py:162
+#: source_app/main.py:164
 msgid "Thanks! We received your message."
 msgstr "धन्यवाद! हमें आपका संदेशा मिला|"
 
-#: source_app/main.py:164
+#: source_app/main.py:166
 msgid "Thanks! We received your document."
 msgstr "धन्यवाद! हमें आपका दस्तावेज़ मिला।"
 
-#: source_app/main.py:166
+#: source_app/main.py:168
 msgid "Thanks! We received your message and document."
 msgstr "धन्यवाद! हमें आपका संदेशा और दस्तावेज़ मिला।"
 
-#: source_app/main.py:213
+#: source_app/main.py:220
 msgid "Reply deleted"
 msgstr "जवाब हटा दिया गया"
 
-#: source_app/main.py:230
+#: source_app/main.py:238
 msgid "All replies have been deleted"
 msgstr "सभी उत्तर हटा दिए गए हैं"
 
-#: source_app/main.py:244
+#: source_app/main.py:252
 msgid "Sorry, that is not a recognized codename."
 msgstr "क्षमा करें, वह एक मान्यता प्राप्त कोडनाम नहीं है |"
 
@@ -1168,16 +1177,16 @@ msgstr "Tor2Web के बारे में चेतावनी क्यो
 #: source_templates/tor2web-warning.html:4
 msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgstr ""
-"SecureDrop से कनेक्ट करने के लिए Tor2Web का उपयोग करने से आपकी अनामिकता की "
-"रक्षा नहीं होगी।"
+"SecureDrop से कनेक्ट करने के लिए Tor2Web का उपयोग करने से आपकी अनामिकता की रक्षा नहीं "
+"होगी।"
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
 "It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
 msgstr ""
-"आपकी पहचान करने के लिए किसी भी व्यक्ति के लिए आपके इंटरनेट यातायात (आपकी सरका"
-"र, आपका इंटरनेट प्रदाता) की निगरानी करना संभव हो सकता है।"
+"आपकी पहचान करने के लिए किसी भी व्यक्ति के लिए आपके इंटरनेट यातायात (आपकी सरकार, आपका "
+"इंटरनेट प्रदाता) की निगरानी करना संभव हो सकता है।"
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
@@ -1221,9 +1230,9 @@ msgid ""
 "mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
-"यदि आशंका है कि Tor ब्राउज़र डाउनलोड करने से संदेह उठता है और आपके मेल "
-"प्रदाता पर नजर रखी जाने की संभावना कम है, तो आप एक मेल भेज सकते हैं इस पर "
-"<pre>gettor@torproject.org</pre> और एक बॉट निर्देशों के साथ जवाब देंगे|"
+"यदि आशंका है कि Tor ब्राउज़र डाउनलोड करने से संदेह उठता है और आपके मेल प्रदाता पर नजर "
+"रखी जाने की संभावना कम है, तो आप एक मेल भेज सकते हैं इस पर <pre>gettor@torproject."
+"org</pre> और एक बॉट निर्देशों के साथ जवाब देंगे|"
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
