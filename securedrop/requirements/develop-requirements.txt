@@ -38,7 +38,7 @@ docker-py==1.10.6
 docker-pycreds==0.2.1     # via docker-py
 docopt==0.6.2             # via html-linter, template-remover
 docutils==0.14            # via botocore, sphinx
-dparse==0.2.1             # via safety
+dparse==0.4.1             # via safety
 enum34==1.1.6             # via astroid, cryptography, flake8
 execnet==1.4.1            # via pytest-xdist
 fasteners==0.14.1         # via python-gilt
@@ -93,7 +93,7 @@ pytz==2017.2              # via babel
 pyyaml==3.12              # via ansible, ansible-lint, bandit, dparse, molecule, python-gilt, sphinx-autobuild, watchdog, yamllint
 requests==2.18.3          # via cookiecutter, docker-py, safety, sphinx
 s3transfer==0.1.12        # via boto3
-safety==1.6.1
+safety==1.8.4
 sh==1.12.14               # via molecule, python-gilt
 singledispatch==3.4.0.3   # via astroid, pylint, tornado
 six==1.10.0               # via ansible-lint, astroid, bandit, bcrypt, click-completion, cryptography, docker-py, docker-pycreds, dparse, fasteners, git-url-parse, livereload, packaging, pip-tools, pylint, pynacl, python-dateutil, singledispatch, sphinx, stevedore, testinfra, websocket-client

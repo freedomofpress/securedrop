@@ -11,7 +11,7 @@ click==6.7                # via flask, pip-tools
 coverage==4.4.2           # via pytest-cov
 first==2.0.1              # via pip-tools
 flask-testing==0.7.1
-flask==0.12.2             # via flask-testing
+flask==1.0.2              # via flask-testing
 funcsigs==1.0.2           # via mock, pytest
 itsdangerous==0.24        # via flask
 jinja2==2.10              # via flask
@@ -26,4 +26,4 @@ pytest-mock==1.7.1
 pytest==3.3.2
 selenium==2.53.6
 six==1.11.0               # via mock, pip-tools, pytest
-werkzeug==0.12.2          # via flask
+werkzeug==0.14.1          # via flask
