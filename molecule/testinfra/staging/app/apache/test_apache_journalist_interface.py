@@ -86,6 +86,7 @@ common_apache2_directory_declarations = """
       securedrop_test_vars.securedrop_code),
   'WSGIProcessGroup journalist',
   'WSGIScriptAlias / /var/www/journalist.wsgi',
+  'WSGIPassAuthorization On',
   'Header set Cache-Control "no-store"',
   "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),
   """
