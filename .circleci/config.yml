@@ -161,6 +161,7 @@ jobs:
       - run:
           name: Provision staging servers and run tests
           command: make ci-go
+          no_output_timeout: 20m
 
       - run:
           name: Ensure environment torn down
