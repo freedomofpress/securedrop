@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.0~rc5
+## 0.9.0
 
 ### Web Applications
 
