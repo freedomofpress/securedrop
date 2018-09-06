@@ -1,34 +1,52 @@
-Upgrade from 0.8.0 to 0.9.0
+Upgrade from 0.8.0 to 0.9.1
 ===========================
 
 Updating the Tails Workstations
 -------------------------------
 
 We recommend that you update all Tails drives to version 3.9, which was released
-concurrently with SecureDrop 0.9.0 on September 5, 2018. Follow the
+concurrently with SecureDrop 0.9.0 on September 5, 2018. Follow the Tails
 graphical prompts on your workstations to perform this upgrade.
 
-For the *Journalist Workstations* and the *Admin Workstation*, the graphical
-SecureDrop updater will also prompt you to update the SecureDrop code on your
-workstations. The updater was introduced in SecureDrop 0.7.0. It looks like
-this:
+Due to a bug in the graphical SecureDrop updater that was fixed in SecureDrop
+0.9.1 (released on September 6, 2018), attempting an update of your SecureDrop
+workstation code on your *Journalist* or  *Admin Workstations* using the
+graphical updater will fail with an error message: "WARNING: Signature
+verification failed." You need to update your workstations manually by
+following the steps below.
 
-.. |SecureDrop updater| image:: ../images/0.6.x_to_0.7/securedrop-updater.png
+1. Start the Journalist or Admin Workstation with Persistent Storage unlocked
+   and an
+   `administration password set <https://tails.boum.org/doc/first_steps/startup_options/administration_password/index.en.html>`__.
 
-|SecureDrop updater|
+2. Once you have a working Tor connection, open a Terminal by selecting from the
+   menu:
+   **Applications** ▸ **Favorites** ▸ **Terminal**
 
-If the updater does not appear, you may not have updated your workstation code
-since the release of SecureDrop 0.7.0 in May 2018. You can manually update your
-workstation by issuing the following commands on each workstation:
+3. Change your working directory to the SecureDrop installation directory using
+   the command:
+   ``cd ~/Persistent/securedrop/``
+
+4. Verify the installed version using the command:
+   ``git status``
+
+The command output will include the line "HEAD detached at <version>",
+where "<version>" is your current installed version.
+
+If the workstation code is at version 0.7.0 or earlier:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Update the workstation code to version 0.8.0 (not 0.9.0 or 0.9.1) manually
+before proceeding:
 
 .. code:: sh
 
-   cd ~/Persistent/securedrop
    git fetch --tags
    gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
-   git tag -v 0.9.0
+   git tag -v 0.8.0
 
 The output should include the following two lines:
+
 
 .. code:: sh
 
@@ -36,32 +54,47 @@ The output should include the following two lines:
    gpg: Good signature from "SecureDrop Release Signing Key"
 
 Please verify that each character of the fingerprint above matches what you see
-on the screen of your workstation. If it does, you can check out the new
-release:
+on the screen of your workstation. If it does, you can check out version 0.8.0:
 
 .. code:: sh
 
-  git checkout 0.9.0
+  git checkout 0.8.0
 
-Please verify that the output of this command does not contain
-the text "warning: refname '0.9.0' is ambiguous".
+Please verify that the output of this command does not contain the text
+"warning: refname '0.8.0' is ambiguous".
 
-.. important:: If you do see the warning "refname '0.9.0' is ambiguous" in the
+.. important:: If you do see the warning "refname '0.8.0' is ambiguous" in the
   output, we recommend that you contact us immediately at securedrop@freedom.press
   (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__).
 
-Finally, run the following command:
+Run the following command:
 
 .. code:: sh
 
   ./securedrop-admin setup
 
-Please note that this only updates the SecureDrop code on the workstation.
-Tails upgrades still have to be performed separately.
+Now, proceed with the 0.8.0 to 0.9.1 update as described below.
+
+If the workstation code is at version 0.8.0:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Complete the following steps to upgrade your workstation to version 0.9.1:
+
+1. Update the workstation code using the command:
+   ``./securedrop-admin update``
+2. Update the workstation dependencies using the command:
+   ``./securedrop-admin setup``
+3. Update your workstation Tails settings using the command:
+   ``./securedrop-admin tailsconfig``
+
+You will be prompted for the temporary administration password set on the Tails
+greeter screen.
+
+This should address the problem with the graphical updater for future releases.
 
 Database Migration May Take Time to Complete
 --------------------------------------------
-Some of the changes in this release require a database migration that can take
+Some of the changes in SecureDrop 0.9.0 require a database migration that can take
 additional time during the upgrade process, especially if you are not using an
 SSD on your *Application Server*, or if you store data about a large number of
 sources and submissions on the server. This is normal behavior during the
