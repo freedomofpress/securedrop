@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.1
+
+* Bugfix: Resolve error in SecureDrop Updater due to incorrect working directory (#3796)
+
+The issues for this release were tracked in the 0.9.1 milestone on GitHub:
+https://github.com/freedomofpress/securedrop/milestone/47
+
 ## 0.9.0
 
 ### Web Applications
