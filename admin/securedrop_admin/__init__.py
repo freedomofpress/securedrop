@@ -697,7 +697,8 @@ def update(args):
             try:
                 # We expect this to produce a non-zero exit code, which
                 # will produce a subprocess.CalledProcessError
-                subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+                subprocess.check_output(cmd, stderr=subprocess.STDOUT,
+                                        cwd=args.root)
                 sdlog.info("Signature verification failed.")
                 return 1
             except subprocess.CalledProcessError, e:
