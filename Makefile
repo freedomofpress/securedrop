@@ -109,18 +109,19 @@ build-debs: ## Builds and tests debian packages
 
 .PHONY: safety
 safety: ## Runs `safety check` to check python dependencies for vulnerabilities
-	@for req_file in `find . -type f -name '*requirements.txt'`; do \
-		echo "Checking file $$req_file" \
-		&& safety check --ignore 36351 --full-report -r $$req_file \
-		&& echo -e '\n' \
-		|| exit 1; \
-	done
-
+	pip install --upgrade safety && \
+		for req_file in `find . -type f -name '*requirements.txt'`; do \
+			echo "Checking file $$req_file" \
+			&& safety check --ignore 36351 --full-report -r $$req_file \
+			&& echo -e '\n' \
+			|| exit 1; \
+		done
 # Bandit is a static code analysis tool to detect security vulnerabilities in Python applications
 # https://wiki.openstack.org/wiki/Security/Projects/Bandit
 .PHONY: bandit
 bandit: ## Run bandit with medium level excluding test-related folders
-	@bandit --recursive . --exclude admin/.tox,admin/.venv,admin/.eggs,molecule,testinfra,securedrop/tests,.tox,.venv -ll
+	pip install --upgrade bandit && \
+		bandit --recursive . --exclude admin/.tox,admin/.venv,admin/.eggs,molecule,testinfra,securedrop/tests,.tox,.venv -ll
 
 .PHONY: update-pip-requirements
 update-pip-requirements: ## Updates all Python requirements files via pip-compile.
