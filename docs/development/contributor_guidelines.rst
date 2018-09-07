@@ -216,7 +216,7 @@ ask. The people who have the power to grant such privileges are
 committed to do so in a transparent way as follows:
 
 #. The contributor posts a message `in the forum
-   <https://forum.securedrop.club/>`__ asking for privileges (review or
+   <https://forum.securedrop.org/>`__ asking for privileges (review or
    merge, etc.).
 #. After at least a week someone with permissions to grant such
    privilege reviews the thread and either:

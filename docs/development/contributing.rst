@@ -17,7 +17,7 @@ are a variety of ways to help. We are always looking for help from
 You can always find a developer to answer any questions you may have on the
 `SecureDrop instant messaging channel
 <https://gitter.im/freedomofpress/securedrop>`__. You can also register on `the
-forum <https://forum.securedrop.club/>`__ for more information and to
+forum <https://forum.securedrop.org/>`__ for more information and to
 participate in longer discussions.
 
 .. note:: Not sure where to start? You can always ask for advice in the `chat
@@ -113,7 +113,7 @@ list of the pending tasks to improve the ``securedrop.club`` services in the
 `contribution guide
 <https://securedrop-club.readthedocs.io/en/latest/contribute.html>`__. If you're
 in doubt, feel free to reach out to the `DevOps section of the forum
-<https://forum.securedrop.club/c/devops>`__ or directly to `a team member
+<https://forum.securedrop.org/c/devops>`__ or directly to `a team member
 <https://securedrop-club.readthedocs.io/en/latest/team.html>`__.
 
 
@@ -143,7 +143,7 @@ All are kindly invited to help translate SecureDrop `using the Weblate interface
 <https://weblate.securedrop.club/>`__. We provide a :doc:`detailed guide <l10n>`
 to use as reference for details such as the meaning of placeholders, etc. Feel
 free to reach out on the `translation section of the forum
-<https://forum.securedrop.club/c/translations>`__ for help. Non-English forum
+<https://forum.securedrop.org/c/translations>`__ for help. Non-English forum
 discussions are welcome to help facilitate translations.
 
 As a developer or system administrator you can also help `maintain and improve
@@ -169,14 +169,14 @@ Those running a production instance of SecureDrop are encouraged to `read the
 support documentation <https://securedrop-support.readthedocs.io/>`__ to get
 help from the `Freedom of the Press Foundation <https://freedom.press>`__. For
 less sensitive topics such as running a demo or getting help to understand a
-concept, a `public forum section <https://forum.securedrop.club/c/support>`__ is
+concept, a `public forum section <https://forum.securedrop.org/c/support>`__ is
 better suited. To assist on the forum:
 
 * Look for `the latest unanswered questions in the
-  <https://forum.securedrop.club/c/support>`__ forum and answer them.
+  <https://forum.securedrop.org/c/support>`__ forum and answer them.
 * If you find questions `elsewhere in the forum
-  <https://forum.securedrop.club>`__ that have a better chance at
+  <https://forum.securedrop.org>`__ that have a better chance at
   getting an answer in the `support section
-  <https://forum.securedrop.club/c/support>`__, ask a `a team member
+  <https://forum.securedrop.org/c/support>`__, ask a `a team member
   <https://securedrop-club.readthedocs.io/en/latest/team.html>`__ for
   permissions to move topics from a category to another.
