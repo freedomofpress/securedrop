@@ -60,6 +60,7 @@
   apache2_module:
     state: absent
     name: "{{ item }}"
+    force: yes
   with_items: "{{ apache_disabled_modules }}"
   notify:
     - restart apache2
