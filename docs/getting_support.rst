@@ -6,7 +6,7 @@ There are a variety of support options available for people who need help instal
 Community Based Support
 -----------------------
 
-The `SecureDrop forum <https://forum.securedrop.club/>`_ is a great place to discuss SecureDrop and to get help from others. It is based on Discourse and creating an account is simple and easy.
+The `SecureDrop forum <https://forum.securedrop.org/>`_ is a great place to discuss SecureDrop and to get help from others. It is based on Discourse and creating an account is simple and easy.
 
 Additionally, the `SecureDrop Gitter channel <https://gitter.im/freedomofpress/securedrop>`_ is a great place to discuss SecureDrop in real-time chat. This is mostly a development focused channel, but occasionally support questions do come up from time to time.
 

@@ -109,7 +109,7 @@ Getting Support
 Should you require further support with your SecureDrop installation or upgrade,
 we are happy to help!
 
--  Community support is available at https://forum.securedrop.club
+-  Community support is available at https://forum.securedrop.org
 -  The Freedom of the Press Foundation offers training and priority support
    services. See https://securedrop.org/priority-support/ for more information. 
    If you are already a member of our support portal, please don't hesitate to 
