@@ -61,6 +61,31 @@
     - ossec_is_client
     - not ossec_agent_already_registered
 
+# Ossec 3.0 now defaults to requiring a shared secret for agent authentication.
+# Disabling authentication is broken for authd in ossec 3.0. Registering agents
+# requires a 32 hex character password with a line feed appended to the
+# password file (see: https://github.com/ossec/ossec-hids/issues/1472)
+- name: Generate authd shared secret
+  set_fact :
+    ossec_registration_secret: "{{ lookup('pipe', 'head -c 32 /dev/urandom | md5sum | tr -d \" -\" | sed \"$d\"') }}"
+  delegate_to: localhost
+  delegate_facts: True
+  when:
+    - not ossec_agent_already_registered
+
+- name: Copy authd shared secret
+  copy:
+    content: "{{ hostvars['localhost']['ossec_registration_secret'] }}"
+    dest: /var/ossec/etc/authd.pass
+    mode: 440
+  when:
+    - not ossec_agent_already_registered
+
+- name: Append carriage return to auth file
+  command: sed -ie 's/$/\n/' /var/ossec/etc/authd.pass
+  when:
+    - not ossec_agent_already_registered
+
 - name: Start authd.
   shell: /var/ossec/bin/ossec-authd -i {{ app_ip }} -p 1515 >/dev/null 2>&1 &
   async: 0
@@ -86,11 +111,14 @@
   with_items: "{{ authd_iprules }}"
   when: not ossec_agent_already_registered
 
+# agent-auth now returns 0 if registration fails (https://github.com/ossec/ossec-hids/issues/1491)
 - name: Register OSSEC agent.
-  command: /var/ossec/bin/agent-auth -m {{ monitor_ip }} -p 1515 -A {{ app_hostname }}
+  command: /var/ossec/bin/agent-auth -m {{ monitor_ip }} -p 1515 -A {{ app_hostname }} -P /var/ossec/etc/authd.pass
+  register: ossec_agent_registration_result
   when:
     - ossec_is_client
     - not ossec_agent_already_registered
+  failed_when: "'INFO: Valid key created. Finished.' not in ossec_agent_registration_result.stdout"
 
 # If the OSSEC agent auth iptable rule exemptions are in place remove them and
 # restart OSSEC. This order does matter. The app server's
