@@ -1640,6 +1640,102 @@ def test_download_selected_submissions_from_source(journalist_app,
                 ))
 
 
+def _bulk_download_setup(journo):
+    """Create a couple sources, make some submissions on their behalf,
+    mark some of them as downloaded"""
+
+    source0, _ = utils.db_helper.init_source()
+    source1, _ = utils.db_helper.init_source()
+
+    submissions0 = utils.db_helper.submit(source0, 2)
+    submissions1 = utils.db_helper.submit(source1, 3)
+
+    downloaded0 = random.sample(submissions0, 1)
+    utils.db_helper.mark_downloaded(*downloaded0)
+    not_downloaded0 = set(submissions0).difference(downloaded0)
+
+    downloaded1 = random.sample(submissions1, 2)
+    utils.db_helper.mark_downloaded(*downloaded1)
+    not_downloaded1 = set(submissions1).difference(downloaded1)
+
+    return {
+        'source0': source0,
+        'source1': source1,
+        'submissions0': submissions0,
+        'submissions1': submissions1,
+        'downloaded0': downloaded0,
+        'downloaded1': downloaded1,
+        'not_downloaded0': not_downloaded0,
+        'not_downloaded1': not_downloaded1,
+    }
+
+
+def test_download_unread_all_sources(journalist_app, test_journo):
+    bulk = _bulk_download_setup(Journalist.query.get(test_journo['id']))
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        # Download all unread messages from all sources
+        resp = app.post(
+            url_for('col.process'),
+            data=dict(action='download-unread',
+                      cols_selected=[bulk['source0'].filesystem_id,
+                                     bulk['source1'].filesystem_id]))
+
+    # The download request was succesful, and the app returned a zipfile
+    assert resp.status_code == 200
+    assert resp.content_type == 'application/zip'
+    assert zipfile.is_zipfile(StringIO(resp.data))
+
+    # All the not dowloaded submissions are in the zipfile
+    for submission in bulk['not_downloaded0']:
+        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    "unread",
+                    bulk['source0'].journalist_designation,
+                    "%s_%s" % (submission.filename.split('-')[0],
+                               bulk['source0'].last_updated.date()),
+                    submission.filename
+                ))
+        assert zipinfo
+
+    for submission in bulk['not_downloaded1']:
+        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+            os.path.join(
+                "unread",
+                bulk['source1'].journalist_designation,
+                "%s_%s" % (submission.filename.split('-')[0],
+                           bulk['source1'].last_updated.date()),
+                submission.filename
+            ))
+        assert zipinfo
+
+    # All the downloaded submissions are absent from the zipfile
+    for submission in bulk['downloaded0']:
+        with pytest.raises(KeyError):
+            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    "unread",
+                    bulk['source0'].journalist_designation,
+                    "%s_%s" % (submission.filename.split('-')[0],
+                               bulk['source0'].last_updated.date()),
+                    submission.filename
+                ))
+
+    for submission in bulk['downloaded1']:
+        with pytest.raises(KeyError):
+            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    "unread",
+                    bulk['source1'].journalist_designation,
+                    "%s_%s" % (submission.filename.split('-')[0],
+                               bulk['source1'].last_updated.date()),
+                    submission.filename
+                ))
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1691,69 +1787,6 @@ class TestJournalistApp(TestCase):
         utils.db_helper.mark_downloaded(*self.downloaded1)
         self.not_downloaded1 = set(self.submissions1).difference(
             self.downloaded1)
-
-    def test_download_unread_all_sources(self):
-        self._bulk_download_setup()
-        self._login_user()
-
-        # Download all unread messages from all sources
-        self.resp = self.client.post(
-            url_for('col.process'),
-            data=dict(action='download-unread',
-                      cols_selected=[self.source0.filesystem_id,
-                                     self.source1.filesystem_id]))
-
-        # The download request was succesful, and the app returned a zipfile
-        self.assertEqual(self.resp.status_code, 200)
-        self.assertEqual(self.resp.content_type, 'application/zip')
-        self.assertTrue(zipfile.is_zipfile(StringIO(self.resp.data)))
-
-        # All the not dowloaded submissions are in the zipfile
-        for submission in self.not_downloaded0:
-            self.assertTrue(
-                zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
-                    os.path.join(
-                        "unread",
-                        self.source0.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source0.last_updated.date()),
-                        submission.filename
-                    ))
-                )
-        for submission in self.not_downloaded1:
-            self.assertTrue(
-                zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
-                    os.path.join(
-                        "unread",
-                        self.source1.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source1.last_updated.date()),
-                        submission.filename
-                    ))
-                )
-
-        # All the downloaded submissions are absent from the zipfile
-        for submission in self.downloaded0:
-            with self.assertRaises(KeyError):
-                zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
-                    os.path.join(
-                        "unread",
-                        self.source0.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source0.last_updated.date()),
-                        submission.filename
-                    ))
-
-        for submission in self.downloaded1:
-            with self.assertRaises(KeyError):
-                zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
-                    os.path.join(
-                        "unread",
-                        self.source1.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source1.last_updated.date()),
-                        submission.filename
-                    ))
 
     def test_download_all_selected_sources(self):
         self._bulk_download_setup()
