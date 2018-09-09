@@ -1860,6 +1860,19 @@ def test_csrf_error_page(journalist_app):
         assert 'You have been logged out due to inactivity' in text
 
 
+def test_col_process_aborts_with_bad_action(journalist_app, test_journo):
+    """If the action is not a valid choice, a 500 should occur"""
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        form_data = {'cols_selected': 'does not matter',
+                     'action': 'this action does not exist'}
+
+        resp = app.post(url_for('col.process'), data=form_data)
+        assert resp.status_code == 500
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1893,17 +1906,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_col_process_aborts_with_bad_action(self):
-        """If the action is not a valid choice, a 500 should occur"""
-        self._login_user()
-
-        form_data = {'cols_selected': 'does not matter',
-                     'action': 'this action does not exist'}
-
-        resp = self.client.post(url_for('col.process'), data=form_data)
-
-        self.assert500(resp)
 
     def test_col_process_successfully_deletes_multiple_sources(self):
         # Create two sources with one submission each
