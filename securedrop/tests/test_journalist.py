@@ -1736,6 +1736,54 @@ def test_download_unread_all_sources(journalist_app, test_journo):
                 ))
 
 
+def test_download_all_selected_sources(journalist_app, test_journo):
+    bulk = _bulk_download_setup(Journalist.query.get(test_journo['id']))
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        # Dowload all messages from source1
+        resp = app.post(
+            url_for('col.process'),
+            data=dict(action='download-all',
+                      cols_selected=[bulk['source1'].filesystem_id]))
+
+        resp = app.post(
+            url_for('col.process'),
+            data=dict(action='download-all',
+                      cols_selected=[bulk['source1'].filesystem_id]))
+
+    # The download request was succesful, and the app returned a zipfile
+    assert resp.status_code == 200
+    assert resp.content_type == 'application/zip'
+    assert zipfile.is_zipfile(StringIO(resp.data))
+
+    # All messages from source1 are in the zipfile
+    for submission in bulk['submissions1']:
+        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+            os.path.join(
+                "all",
+                bulk['source1'].journalist_designation,
+                "%s_%s" % (submission.filename.split('-')[0],
+                           bulk['source1'].last_updated.date()),
+                submission.filename)
+            )
+        assert zipinfo
+
+    # All messages from source0 are absent from the zipfile
+    for submission in bulk['submissions0']:
+        with pytest.raises(KeyError):
+            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    "all",
+                    bulk['source0'].journalist_designation,
+                    "%s_%s" % (submission.filename.split('-')[0],
+                               bulk['source0'].last_updated.date()),
+                    submission.filename)
+                )
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1769,69 +1817,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def _bulk_download_setup(self):
-        """Create a couple sources, make some submissions on their behalf,
-        mark some of them as downloaded, and then perform *action* on all
-        sources."""
-        self.source0, _ = utils.db_helper.init_source()
-        self.source1, _ = utils.db_helper.init_source()
-        self.journo0, _ = utils.db_helper.init_journalist()
-        self.submissions0 = utils.db_helper.submit(self.source0, 2)
-        self.submissions1 = utils.db_helper.submit(self.source1, 3)
-        self.downloaded0 = random.sample(self.submissions0, 1)
-        utils.db_helper.mark_downloaded(*self.downloaded0)
-        self.not_downloaded0 = set(self.submissions0).difference(
-            self.downloaded0)
-        self.downloaded1 = random.sample(self.submissions1, 2)
-        utils.db_helper.mark_downloaded(*self.downloaded1)
-        self.not_downloaded1 = set(self.submissions1).difference(
-            self.downloaded1)
-
-    def test_download_all_selected_sources(self):
-        self._bulk_download_setup()
-        self._login_user()
-
-        # Dowload all messages from self.source1
-        self.resp = self.client.post(
-            url_for('col.process'),
-            data=dict(action='download-all',
-                      cols_selected=[self.source1.filesystem_id]))
-
-        resp = self.client.post(
-            url_for('col.process'),
-            data=dict(action='download-all',
-                      cols_selected=[self.source1.filesystem_id]))
-
-        # The download request was succesful, and the app returned a zipfile
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.content_type, 'application/zip')
-        self.assertTrue(zipfile.is_zipfile(StringIO(resp.data)))
-
-        # All messages from self.source1 are in the zipfile
-        for submission in self.submissions1:
-            self.assertTrue(
-                zipfile.ZipFile(StringIO(resp.data)).getinfo(
-                    os.path.join(
-                        "all",
-                        self.source1.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source1.last_updated.date()),
-                        submission.filename)
-                    )
-                )
-
-        # All messages from self.source0 are absent from the zipfile
-        for submission in self.submissions0:
-            with self.assertRaises(KeyError):
-                zipfile.ZipFile(StringIO(resp.data)).getinfo(
-                    os.path.join(
-                        "all",
-                        self.source0.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source0.last_updated.date()),
-                        submission.filename)
-                    )
 
     def test_single_source_is_successfully_starred(self):
         source, _ = utils.db_helper.init_source()
