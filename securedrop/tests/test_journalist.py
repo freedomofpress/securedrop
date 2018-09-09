@@ -1540,6 +1540,17 @@ def test_delete_source_deletes_docs_on_disk(journalist_app,
         assert not os.path.exists(dir_source_docs)
 
 
+def test_login_with_invalid_password_doesnt_call_argon2(mocker, test_journo):
+    mock_argon2 = mocker.patch('models.argon2.verify')
+    invalid_pw = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
+
+    with pytest.raises(InvalidPasswordLength):
+        Journalist.login(test_journo['username'],
+                         invalid_pw,
+                         TOTP(test_journo['otp_secret']).now())
+    assert not mock_argon2.called
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1966,13 +1977,3 @@ class TestJournalistLogin(unittest.TestCase):
         self.assertTrue(
             mock_scrypt_hash.called,
             "Failed to call _scrypt_hash for password w/ valid length")
-
-    @patch('models.Journalist._scrypt_hash')
-    def test_login_with_invalid_password_doesnt_call_scrypt(self,
-                                                            mock_scrypt_hash):
-        invalid_pw = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
-        with self.assertRaises(InvalidPasswordLength):
-            Journalist.login(self.user.username, invalid_pw, 'mocked')
-        self.assertFalse(
-            mock_scrypt_hash.called,
-            "Called _scrypt_hash for password w/ invalid length")
