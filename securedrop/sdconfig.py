@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import json
 import typing
 
 from os import path
@@ -15,9 +16,15 @@ if typing.TYPE_CHECKING:
     from typing import List, Dict  # noqa: F401
 
 
+CONFIG_FILE = '/etc/securedrop/config.json'
+
+
 class SDConfig(object):
     def __init__(self):
         # type: () -> None
+
+        with open(CONFIG_FILE) as f:
+            json_config = json.loads(f.read())
 
         self.SECUREDROP_DATA_ROOT = '/var/lib/securedrop/'
 
