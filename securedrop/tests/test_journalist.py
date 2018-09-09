@@ -3,7 +3,6 @@ import os
 import pytest
 import io
 import random
-import unittest
 import zipfile
 import base64
 
@@ -1551,6 +1550,14 @@ def test_login_with_invalid_password_doesnt_call_argon2(mocker, test_journo):
     assert not mock_argon2.called
 
 
+def test_valid_login_calls_argon2(mocker, test_journo):
+    mock_argon2 = mocker.patch('models.argon2.verify')
+    Journalist.login(test_journo['username'],
+                     test_journo['password'],
+                     TOTP(test_journo['otp_secret']).now())
+    assert mock_argon2.called
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1950,30 +1957,3 @@ class TestJournalistLocale(TestCase):
         resp = self.client.get(url + '?l=fr_FR')
         self.assertNotIn('?l=fr_FR', resp.data)
         self.assertIn(url + '?l=en_US', resp.data)
-
-
-class TestJournalistLogin(unittest.TestCase):
-
-    def setUp(self):
-        self.__context = journalist_app_module.create_app(config).app_context()
-        self.__context.push()
-        utils.env.setup()
-
-        # Patch the two-factor verification so it always succeeds
-        utils.db_helper.mock_verify_token(self)
-
-        self.user, self.user_pw = utils.db_helper.init_journalist()
-
-    def tearDown(self):
-        utils.env.teardown()
-        self.__context.pop()
-
-    @patch('models.Journalist._scrypt_hash')
-    @patch('models.Journalist.valid_password', return_value=True)
-    def test_valid_login_calls_scrypt(self,
-                                      mock_scrypt_hash,
-                                      mock_valid_password):
-        Journalist.login(self.user.username, self.user_pw, 'mocked')
-        self.assertTrue(
-            mock_scrypt_hash.called,
-            "Failed to call _scrypt_hash for password w/ valid length")
