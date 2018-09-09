@@ -1873,6 +1873,32 @@ def test_col_process_aborts_with_bad_action(journalist_app, test_journo):
         assert resp.status_code == 500
 
 
+def test_col_process_successfully_deletes_multiple_sources(journalist_app,
+                                                           test_journo):
+    # Create two sources with one submission each
+    source_1, _ = utils.db_helper.init_source()
+    utils.db_helper.submit(source_1, 1)
+    source_2, _ = utils.db_helper.init_source()
+    utils.db_helper.submit(source_2, 1)
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        form_data = {'cols_selected': [source_1.filesystem_id,
+                                       source_2.filesystem_id],
+                     'action': 'delete'}
+
+        resp = app.post(url_for('col.process'), data=form_data,
+                        follow_redirects=True)
+
+        assert resp.status_code == 200
+
+    # Verify there are no remaining sources
+    remaining_sources = Source.query.all()
+    assert not remaining_sources
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1906,28 +1932,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_col_process_successfully_deletes_multiple_sources(self):
-        # Create two sources with one submission each
-        source_1, _ = utils.db_helper.init_source()
-        utils.db_helper.submit(source_1, 1)
-        source_2, _ = utils.db_helper.init_source()
-        utils.db_helper.submit(source_2, 1)
-
-        self._login_user()
-
-        form_data = {'cols_selected': [source_1.filesystem_id,
-                                       source_2.filesystem_id],
-                     'action': 'delete'}
-
-        resp = self.client.post(url_for('col.process'), data=form_data,
-                                follow_redirects=True)
-
-        self.assert200(resp)
-
-        # Verify there are no remaining sources
-        remaining_sources = db.session.query(models.Source).all()
-        self.assertEqual(len(remaining_sources), 0)
 
     def test_col_process_successfully_stars_sources(self):
         source_1, _ = utils.db_helper.init_source()
