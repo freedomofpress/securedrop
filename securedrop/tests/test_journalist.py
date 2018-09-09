@@ -1822,6 +1822,31 @@ def test_single_source_is_successfully_unstarred(journalist_app,
         assert not source.star.starred
 
 
+def test_journalist_session_expiration(config, journalist_app, test_journo):
+    # set the expiration to ensure we trigger an expiration
+    config.SESSION_EXPIRATION_MINUTES = -1
+    with journalist_app.test_client() as app:
+        with InstrumentedApp(journalist_app) as ins:
+            login_data = {
+                'username': test_journo['username'],
+                'password': test_journo['password'],
+                'token': TOTP(test_journo['otp_secret']).now(),
+            }
+            resp = app.post(url_for('main.login'), data=login_data)
+            ins.assert_redirects(resp, url_for('main.index'))
+        assert 'uid' in session
+
+        resp = app.get(url_for('account.edit'), follow_redirects=True)
+
+        # check that the session was cleared (apart from 'expires'
+        # which is always present and 'csrf_token' which leaks no info)
+        session.pop('expires', None)
+        session.pop('csrf_token', None)
+        assert not session, session
+        assert ('You have been logged out due to inactivity' in
+                resp.data.decode('utf-8'))
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1855,43 +1880,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_journalist_session_expiration(self):
-        try:
-            old_expiration = config.SESSION_EXPIRATION_MINUTES
-            has_session_expiration = True
-        except AttributeError:
-            has_session_expiration = False
-
-        try:
-            with self.client as client:
-                # set the expiration to ensure we trigger an expiration
-                config.SESSION_EXPIRATION_MINUTES = -1
-
-                # do a real login to get a real session
-                # (none of the mocking `g` hacks)
-                resp = client.post(url_for('main.login'),
-                                   data=dict(username=self.user.username,
-                                             password=self.user_pw,
-                                             token='mocked'))
-                self.assertRedirects(resp, url_for('main.index'))
-                assert 'uid' in session
-
-                resp = client.get(url_for('account.edit'),
-                                  follow_redirects=True)
-
-                # check that the session was cleared (apart from 'expires'
-                # which is always present and 'csrf_token' which leaks no info)
-                session.pop('expires', None)
-                session.pop('csrf_token', None)
-                assert not session, session
-                assert ('You have been logged out due to inactivity' in
-                        resp.data.decode('utf-8'))
-        finally:
-            if has_session_expiration:
-                config.SESSION_EXPIRATION_MINUTES = old_expiration
-            else:
-                del config.SESSION_EXPIRATION_MINUTES
 
     def test_csrf_error_page(self):
         old_enabled = self.app.config['WTF_CSRF_ENABLED']
