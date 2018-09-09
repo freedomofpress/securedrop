@@ -1558,6 +1558,35 @@ def test_valid_login_calls_argon2(mocker, test_journo):
     assert mock_argon2.called
 
 
+def test_render_locales(config, journalist_app, test_journo, test_source):
+    """the locales.html template must collect both request.args (l=XX) and
+       request.view_args (/<filesystem_id>) to build the URL to
+       change the locale
+    """
+
+    # We use the `journalist_app` fixture to generate all our tables, but we
+    # don't use it during the test because we need to inject the i18n settings
+    # (which are only triggered during `create_app`
+    config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
+    app = journalist_app_module.create_app(config)
+    app.config['SERVER_NAME'] = 'localhost'  # needed for url_for
+    url = url_for('col.col', filesystem_id=test_source['filesystem_id'])
+
+    # we need the relative URL, not the full url including proto / localhost
+    url_end = url.replace('http://', '')
+    url_end = url_end[url_end.index('/')+1:]
+
+    with app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        resp = app.get(url + '?l=fr_FR')
+
+    # check that links to i18n URLs are/aren't present
+    text = resp.data.decode('utf-8')
+    assert '?l=fr_FR' not in text, text
+    assert url_end + '?l=en_US' in text, text
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1919,41 +1948,3 @@ class TestJournalistApp(TestCase):
 
         # Verify the source is not starred
         self.assertFalse(source_1.star.starred)
-
-
-class TestJournalistLocale(TestCase):
-
-    def setUp(self):
-        utils.env.setup()
-
-        # Patch the two-factor verification to avoid intermittent errors
-        utils.db_helper.mock_verify_token(self)
-
-        # Setup test user
-        self.user, self.user_pw = utils.db_helper.init_journalist()
-
-    def tearDown(self):
-        utils.env.teardown()
-
-    def get_fake_config(self):
-        return SDConfig()
-
-    # A method required by flask_testing.TestCase
-    def create_app(self):
-        fake_config = self.get_fake_config()
-        fake_config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
-        return journalist_app_module.create_app(fake_config)
-
-    def test_render_locales(self):
-        """the locales.html template must collect both request.args (l=XX) and
-        request.view_args (/<filesystem_id>) to build the URL to
-        change the locale
-
-        """
-        source, _ = utils.db_helper.init_source()
-        self._ctx.g.user = self.user
-
-        url = url_for('col.col', filesystem_id=source.filesystem_id)
-        resp = self.client.get(url + '?l=fr_FR')
-        self.assertNotIn('?l=fr_FR', resp.data)
-        self.assertIn(url + '?l=en_US', resp.data)
