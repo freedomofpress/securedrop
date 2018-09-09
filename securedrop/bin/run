@@ -10,7 +10,7 @@ run_redis &
 run_x11vnc &
 urandom
 run_sass --watch &
-maybe_create_config_py
+maybe_create_config
 reset_demo
 
 ./manage.py run

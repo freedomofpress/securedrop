@@ -32,22 +32,6 @@ translation-test: ## Run all pages-layout tests in all supported languages
 dev: ## Run the dev server
 	 DOCKER_RUN_ARGUMENTS='-p127.0.0.1:8080:8080 -p127.0.0.1:8081:8081 -p127.0.0.1:5901:5901' ./bin/dev-shell ./bin/run
 
-config.py: test-config
-
-.PHONY: test-config
-test-config: ## Generate the test config
-	@source_secret_key=$(shell head -c 32 /dev/urandom | base64) \
-	journalist_secret_key=$(shell head -c 32 /dev/urandom | base64) \
-	scrypt_id_pepper=$(shell head -c 32 /dev/urandom | base64) \
-	scrypt_gpg_pepper=$(shell head -c 32 /dev/urandom | base64) \
-	python -c 'import os; from jinja2 import Environment, FileSystemLoader; \
-         env = Environment(loader=FileSystemLoader(".")); \
-         ctx = {"securedrop_app_gpg_fingerprint": "65A1B5FF195B56353CC63DFFCC40EF1228271441"}; \
-         ctx.update(dict((k, {"stdout":v}) for k,v in os.environ.iteritems())); \
-         ctx = open("config.py", "w").write(env.get_template("config.py.example").render(ctx))'
-	@echo >> config.py
-	@echo "SUPPORTED_LOCALES = ['ar', 'de_DE', 'es_ES', 'en_US', 'el', 'fr_FR', 'it_IT', 'nb_NO', 'nl', 'pt_BR', 'tr', 'zh_Hant']"  >> config.py
-
 .PHONY: update-user-guides
 update-user-guides: ## Runs the page layout tests to regenerate screenshots
 	./bin/dev-shell ./bin/update-user-guides

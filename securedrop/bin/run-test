@@ -9,7 +9,7 @@ run_xvfb &
 run_redis &
 urandom
 run_sass --force --update
-maybe_create_config_py
+maybe_create_config
 
 if [ -n "${CIRCLE_BRANCH:-}" ] ; then
     touch tests/log/firefox.log

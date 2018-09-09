@@ -10,7 +10,7 @@ run_redis &
 run_x11vnc &
 urandom
 run_sass --force --update
-maybe_create_config_py
+maybe_create_config
 
 ./i18n_tool.py translate-messages --compile
 pytest -v --page-layout "${@:-tests/pageslayout}"

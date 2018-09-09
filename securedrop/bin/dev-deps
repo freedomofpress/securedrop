@@ -25,10 +25,33 @@ function append_to_exit() {
     trap "${existing:-true} ; $1" EXIT
 }
 
-function maybe_create_config_py() {
-    if ! test -f config.py ; then
-        append_to_exit "rm config.py"
-        make test-config
+function maybe_create_config() {
+    config=/etc/securedrop/config.json
+    sudo mkdir -p "$(dirname "$config")"
+    sudo chown "$(id -u)":"$(id -g)" "$(dirname "$config")"
+    if ! test -f "$config" ; then
+        append_to_exit "rm -f $config"
+        python - <<EOF
+import json
+
+
+cnf =  {
+    "secret_key": "j2IcwRt6A2IsUeNEChZqp66cn7cpf/oP6rxO9d8M2E8=",
+    "scrypt_id_pepper": "6KTTMPB+0RNV6TREDVD/7r8m/Pm5otK+7eyfaYWTm6s=",
+    "scrypt_gpg_pepper": "GlAWMF9rk6eH671IPiu9pBu06PmvKR+LnC+wQI/jqkM=",
+    "i18n": {
+        "default_locale": "en_US",
+        "supported_locales": ["ar", "de_DE", "es_ES", "en_US", "fr_FR", "it_IT", "nb_NO", "nl", "pt_BR", "tr", "zh_Hant"]
+    },
+    "journalist_key": "65A1B5FF195B56353CC63DFFCC40EF1228271441",
+}
+config = {
+    "journalist_interface": cnf,
+    "source_interface": cnf,
+}
+with open("$config", "w") as f:
+    f.write(json.dumps(config))
+EOF
     fi
 }
 
