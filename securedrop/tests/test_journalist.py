@@ -1784,6 +1784,22 @@ def test_download_all_selected_sources(journalist_app, test_journo):
                 )
 
 
+def test_single_source_is_successfully_starred(journalist_app,
+                                               test_journo,
+                                               test_source):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('col.add_star',
+                            filesystem_id=test_source['filesystem_id']))
+
+            ins.assert_redirects(resp, url_for('main.index'))
+
+    source = Source.query.get(test_source['id'])
+    assert source.star.starred
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1817,17 +1833,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_single_source_is_successfully_starred(self):
-        source, _ = utils.db_helper.init_source()
-        self._login_user()
-        resp = self.client.post(url_for('col.add_star',
-                                        filesystem_id=source.filesystem_id))
-
-        self.assertRedirects(resp, url_for('main.index'))
-
-        # Assert source is starred
-        self.assertTrue(source.star.starred)
 
     def test_single_source_is_successfully_unstarred(self):
         source, _ = utils.db_helper.init_source()
