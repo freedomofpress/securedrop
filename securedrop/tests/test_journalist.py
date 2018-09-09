@@ -1587,6 +1587,59 @@ def test_render_locales(config, journalist_app, test_journo, test_source):
     assert url_end + '?l=en_US' in text, text
 
 
+def test_download_selected_submissions_from_source(journalist_app,
+                                                   test_journo,
+                                                   test_source):
+    source = Source.query.get(test_source['id'])
+    submissions = utils.db_helper.submit(source, 4)
+    selected_submissions = random.sample(submissions, 2)
+    selected_fnames = [submission.filename
+                       for submission in selected_submissions]
+    selected_fnames.sort()
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        resp = app.post(
+            '/bulk', data=dict(action='download',
+                               filesystem_id=test_source['filesystem_id'],
+                               doc_names_selected=selected_fnames))
+
+    # The download request was succesful, and the app returned a zipfile
+    assert resp.status_code == 200
+    assert resp.content_type == 'application/zip'
+    assert zipfile.is_zipfile(StringIO(resp.data))
+
+    # The submissions selected are in the zipfile
+    for filename in selected_fnames:
+        # Check that the expected filename is in the zip file
+        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+            os.path.join(
+                source.journalist_filename,
+                "%s_%s" % (filename.split('-')[0],
+                           source.last_updated.date()),
+                filename
+            ))
+        assert zipinfo
+
+    # The submissions not selected are absent from the zipfile
+    not_selected_submissions = set(submissions).difference(
+        selected_submissions)
+    not_selected_fnames = [submission.filename
+                           for submission in not_selected_submissions]
+
+    for filename in not_selected_fnames:
+        with pytest.raises(KeyError):
+            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    source.journalist_filename,
+                    source.journalist_designation,
+                    "%s_%s" % (filename.split('-')[0],
+                               source.last_updated.date()),
+                    filename
+                ))
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1620,55 +1673,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_download_selected_submissions_from_source(self):
-        source, _ = utils.db_helper.init_source()
-        submissions = utils.db_helper.submit(source, 4)
-        selected_submissions = random.sample(submissions, 2)
-        selected_fnames = [submission.filename
-                           for submission in selected_submissions]
-        selected_fnames.sort()
-
-        self._login_user()
-        resp = self.client.post(
-            '/bulk', data=dict(action='download',
-                               filesystem_id=source.filesystem_id,
-                               doc_names_selected=selected_fnames))
-
-        # The download request was succesful, and the app returned a zipfile
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.content_type, 'application/zip')
-        self.assertTrue(zipfile.is_zipfile(StringIO(resp.data)))
-
-        # The submissions selected are in the zipfile
-        for filename in selected_fnames:
-            self.assertTrue(
-                # Check that the expected filename is in the zip file
-                zipfile.ZipFile(StringIO(resp.data)).getinfo(
-                    os.path.join(
-                        source.journalist_filename,
-                        "%s_%s" % (filename.split('-')[0],
-                                   source.last_updated.date()),
-                        filename
-                    ))
-                )
-
-        # The submissions not selected are absent from the zipfile
-        not_selected_submissions = set(submissions).difference(
-            selected_submissions)
-        not_selected_fnames = [submission.filename
-                               for submission in not_selected_submissions]
-
-        for filename in not_selected_fnames:
-            with self.assertRaises(KeyError):
-                zipfile.ZipFile(StringIO(resp.data)).getinfo(
-                    os.path.join(
-                        source.journalist_filename,
-                        source.journalist_designation,
-                        "%s_%s" % (filename.split('-')[0],
-                                   source.last_updated.date()),
-                        filename
-                    ))
 
     def _bulk_download_setup(self):
         """Create a couple sources, make some submissions on their behalf,
