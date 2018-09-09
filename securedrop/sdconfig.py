@@ -36,11 +36,6 @@ class SDConfig(object):
             pass
 
         try:
-            self.DATABASE_FILE = _config.DATABASE_FILE  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
             self.DATABASE_USERNAME = _config.DATABASE_USERNAME  # type: ignore
         except AttributeError:
             pass
@@ -157,6 +152,18 @@ class SDConfig(object):
             self.env = _config.env  # type: ignore
         except AttributeError:
             pass
+
+    @property
+    def DATABASE_FILE(self):
+        return path.join(self.SECUREDROP_DATA_ROOT, 'db.sqlite')
+
+    @DATABASE_FILE.setter
+    def DATABASE_FILE(self, value):
+        raise AttributeError('Cannot set DATABASE_FILE')
+
+    @DATABASE_FILE.deleter
+    def DATABASE_FILE(self):
+        raise AttributeError('Cannot delete DATABASE_FILE')
 
 
 config = SDConfig()  # type: SDConfig
