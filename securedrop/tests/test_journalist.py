@@ -1847,6 +1847,19 @@ def test_journalist_session_expiration(config, journalist_app, test_journo):
                 resp.data.decode('utf-8'))
 
 
+def test_csrf_error_page(journalist_app):
+    journalist_app.config['WTF_CSRF_ENABLED'] = True
+    with journalist_app.test_client() as app:
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('main.login'))
+            ins.assert_redirects(resp, url_for('main.login'))
+
+        resp = app.post(url_for('main.login'), follow_redirects=True)
+
+        text = resp.data.decode('utf-8')
+        assert 'You have been logged out due to inactivity' in text
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1880,21 +1893,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_csrf_error_page(self):
-        old_enabled = self.app.config['WTF_CSRF_ENABLED']
-        self.app.config['WTF_CSRF_ENABLED'] = True
-
-        try:
-            with self.app.test_client() as app:
-                resp = app.post(url_for('main.login'))
-                self.assertRedirects(resp, url_for('main.login'))
-
-                resp = app.post(url_for('main.login'), follow_redirects=True)
-                self.assertIn('You have been logged out due to inactivity',
-                              resp.data)
-        finally:
-            self.app.config['WTF_CSRF_ENABLED'] = old_enabled
 
     def test_col_process_aborts_with_bad_action(self):
         """If the action is not a valid choice, a 500 should occur"""
