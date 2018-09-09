@@ -1899,6 +1899,26 @@ def test_col_process_successfully_deletes_multiple_sources(journalist_app,
     assert not remaining_sources
 
 
+def test_col_process_successfully_stars_sources(journalist_app,
+                                                test_journo,
+                                                test_source):
+    utils.db_helper.submit(test_source['source'], 1)
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        form_data = {'cols_selected': [test_source['filesystem_id']],
+                     'action': 'star'}
+
+        resp = app.post(url_for('col.process'), data=form_data,
+                        follow_redirects=True)
+        assert resp.status_code == 200
+
+    source = Source.query.get(test_source['id'])
+    assert source.star.starred
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1932,23 +1952,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_col_process_successfully_stars_sources(self):
-        source_1, _ = utils.db_helper.init_source()
-        utils.db_helper.submit(source_1, 1)
-
-        self._login_user()
-
-        form_data = {'cols_selected': [source_1.filesystem_id],
-                     'action': 'star'}
-
-        resp = self.client.post(url_for('col.process'), data=form_data,
-                                follow_redirects=True)
-
-        self.assert200(resp)
-
-        # Verify the source is starred
-        self.assertTrue(source_1.star.starred)
 
     def test_col_process_successfully_unstars_sources(self):
         source_1, _ = utils.db_helper.init_source()
