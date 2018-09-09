@@ -10,7 +10,6 @@ from base64 import b64decode
 from cStringIO import StringIO
 from io import BytesIO
 from flask import url_for, escape, session, current_app, g
-from flask_testing import TestCase
 from mock import patch
 from pyotp import TOTP
 from sqlalchemy.sql.expression import func
@@ -19,7 +18,6 @@ from sqlalchemy.exc import IntegrityError
 
 import crypto_util
 import models
-import journalist
 import journalist_app as journalist_app_module
 import utils
 
@@ -1919,59 +1917,28 @@ def test_col_process_successfully_stars_sources(journalist_app,
     assert source.star.starred
 
 
-class TestJournalistApp(TestCase):
+def test_col_process_successfully_unstars_sources(journalist_app,
+                                                  test_journo,
+                                                  test_source):
+    utils.db_helper.submit(test_source['source'], 1)
 
-    # A method required by flask_testing.TestCase
-    def create_app(self):
-        return journalist.app
-
-    def setUp(self):
-        utils.env.setup()
-
-        # Patch the two-factor verification to avoid intermittent errors
-        utils.db_helper.mock_verify_token(self)
-
-        # Setup test users: user & admin
-        self.user, self.user_pw = utils.db_helper.init_journalist()
-        self.admin, self.admin_pw = utils.db_helper.init_journalist(
-            is_admin=True)
-
-    def tearDown(self):
-        utils.env.teardown()
-
-    # WARNING: we are purposely doing something that would not work in
-    # production in the _login_user and _login_admin methods. This is done as a
-    # reminder to the test developer that the flask_testing.TestCase only uses
-    # one request context per method (see
-    # https://github.com/freedomofpress/securedrop/issues/1444). By explicitly
-    # making a point of this, we hope to avoid the introduction of new tests,
-    # that do not truly prove their result because of this disconnect between
-    # request context in Flask Testing and production.
-    def _login_admin(self):
-        self._ctx.g.user = self.admin
-
-    def _login_user(self):
-        self._ctx.g.user = self.user
-
-    def test_col_process_successfully_unstars_sources(self):
-        source_1, _ = utils.db_helper.init_source()
-        utils.db_helper.submit(source_1, 1)
-
-        self._login_user()
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
 
         # First star the source
-        form_data = {'cols_selected': [source_1.filesystem_id],
+        form_data = {'cols_selected': [test_source['filesystem_id']],
                      'action': 'star'}
-        self.client.post(url_for('col.process'), data=form_data,
-                         follow_redirects=True)
+        app.post(url_for('col.process'), data=form_data,
+                 follow_redirects=True)
 
         # Now unstar the source
-        form_data = {'cols_selected': [source_1.filesystem_id],
+        form_data = {'cols_selected': [test_source['filesystem_id']],
                      'action': 'un-star'}
-        resp = self.client.post(url_for('col.process'), data=form_data,
-                                follow_redirects=True)
+        resp = app.post(url_for('col.process'), data=form_data,
+                        follow_redirects=True)
 
-        self.assert200(resp)
+    assert resp.status_code == 200
 
-        # Verify the source is not starred
-        self.assertFalse(source_1.star.starred)
+    source = Source.query.get(test_source['id'])
+    assert not source.star.starred
