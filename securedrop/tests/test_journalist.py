@@ -1800,6 +1800,28 @@ def test_single_source_is_successfully_starred(journalist_app,
     assert source.star.starred
 
 
+def test_single_source_is_successfully_unstarred(journalist_app,
+                                                 test_journo,
+                                                 test_source):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        # First star the source
+        app.post(url_for('col.add_star',
+                         filesystem_id=test_source['filesystem_id']))
+
+        with InstrumentedApp(journalist_app) as ins:
+            # Now unstar the source
+            resp = app.post(
+                url_for('col.remove_star',
+                        filesystem_id=test_source['filesystem_id']))
+
+            ins.assert_redirects(resp, url_for('main.index'))
+
+        source = Source.query.get(test_source['id'])
+        assert not source.star.starred
+
+
 class TestJournalistApp(TestCase):
 
     # A method required by flask_testing.TestCase
@@ -1833,23 +1855,6 @@ class TestJournalistApp(TestCase):
 
     def _login_user(self):
         self._ctx.g.user = self.user
-
-    def test_single_source_is_successfully_unstarred(self):
-        source, _ = utils.db_helper.init_source()
-        self._login_user()
-
-        # First star the source
-        self.client.post(url_for('col.add_star',
-                                 filesystem_id=source.filesystem_id))
-
-        # Now unstar the source
-        resp = self.client.post(url_for('col.remove_star',
-                                filesystem_id=source.filesystem_id))
-
-        self.assertRedirects(resp, url_for('main.index'))
-
-        # Assert source is not starred
-        self.assertFalse(source.star.starred)
 
     def test_journalist_session_expiration(self):
         try:
