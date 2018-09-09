@@ -282,17 +282,7 @@ def init_db(args):
 
 
 def were_there_submissions_today(args):
-    if config.DATABASE_ENGINE == "sqlite":
-        db_uri = (config.DATABASE_ENGINE + ":///" +
-                  config.DATABASE_FILE)
-    else:
-        db_uri = (
-            config.DATABASE_ENGINE + '://' +
-            config.DATABASE_USERNAME + ':' +
-            config.DATABASE_PASSWORD + '@' +
-            config.DATABASE_HOST + '/' +
-            config.DATABASE_NAME
-        )
+    db_uri = "sqlite:///{}".format(config.DATABASE_FILE)
     session = sessionmaker(bind=create_engine(db_uri))()
     something = session.query(Source).filter(
         Source.last_updated >

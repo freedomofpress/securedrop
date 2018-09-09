@@ -45,17 +45,7 @@ def create_app(config):
     app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60 * 24
     CSRFProtect(app)
 
-    if config.DATABASE_ENGINE == "sqlite":
-        db_uri = (config.DATABASE_ENGINE + ":///" +
-                  config.DATABASE_FILE)
-    else:
-        db_uri = (
-            config.DATABASE_ENGINE + '://' +
-            config.DATABASE_USERNAME + ':' +
-            config.DATABASE_PASSWORD + '@' +
-            config.DATABASE_HOST + '/' +
-            config.DATABASE_NAME
-        )
+    db_uri = "sqlite:///{}".format(config.DATABASE_FILE)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     db.init_app(app)
