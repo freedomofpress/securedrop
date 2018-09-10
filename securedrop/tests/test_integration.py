@@ -24,6 +24,7 @@ import utils
 
 from db import db
 from models import Journalist
+from utils.instrument import InstrumentedApp
 
 # Seed the RNG for deterministic testing
 random.seed('ಠ_ಠ')
@@ -636,6 +637,33 @@ def test_filenames_delete(journalist_app, source_app, test_journo):
         assert re.match(submission_filename_re.format(4), filename)
 
 
+def test_user_change_password(journalist_app, test_journo):
+    """Test that a journalist can successfully login after changing
+    their password"""
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo)
+        # change password
+        new_pw = 'another correct horse battery staply long password'
+        assert new_pw != test_journo['password']  # precondition
+        app.post('/account/new-password',
+                 data=dict(password=new_pw,
+                           current_password=test_journo['password'],
+                           token=TOTP(test_journo['otp_secret']).now()))
+        # logout
+        app.get('/logout')
+
+    # start a new client/context to be sure we've cleared the session
+    with journalist_app.test_client() as app:
+        # login with new credentials should redirect to index page
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post('/login', data=dict(
+                username=test_journo['username'],
+                password=new_pw,
+                token=TOTP(test_journo['otp_secret']).now()))
+            ins.assert_redirects(resp, '/')
+
+
 class TestIntegration(unittest.TestCase):
 
     def _login_user(self, app):
@@ -837,30 +865,6 @@ class TestIntegration(unittest.TestCase):
                 self.assertIn("Reply deleted", resp.data)
 
             app.get('/logout')
-
-    def test_user_change_password(self):
-        """Test that a journalist can successfully login after changing
-        their password"""
-
-        with self.journalist_app.test_client() as app:
-            self._login_user(app)
-            # change password
-            new_pw = 'another correct horse battery staply long password'
-            app.post('/account/new-password',
-                     data=dict(password=new_pw,
-                               current_password=self.user_pw,
-                               token='mocked'))
-
-            # logout
-            app.get('/logout')
-
-            # login with new credentials should redirect to index page
-            resp = app.post('/login', data=dict(
-                username=self.username,
-                password=new_pw,
-                token='mocked',
-                follow_redirects=True))
-            self.assertEqual(resp.status_code, 302)
 
     def test_login_after_regenerate_hotp(self):
         """Test that journalists can login after resetting their HOTP 2fa"""
