@@ -558,6 +558,48 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
         utils.async.wait_for_assertion(assertion)
 
 
+def _helper_filenames_submit(app):
+    app.post('/submit', data=dict(
+        msg="This is a test.",
+        fh=(StringIO(''), ''),
+    ), follow_redirects=True)
+    app.post('/submit', data=dict(
+        msg="This is a test.",
+        fh=(StringIO('This is a test'), 'test.txt'),
+    ), follow_redirects=True)
+    app.post('/submit', data=dict(
+        msg="",
+        fh=(StringIO('This is a test'), 'test.txt'),
+    ), follow_redirects=True)
+
+
+def test_filenames(source_app, journalist_app, test_journo):
+    """Test pretty, sequential filenames when source uploads messages
+    and files"""
+    # add a source and submit stuff
+    with source_app.test_client() as app:
+        app.get('/generate')
+        app.post('/create')
+        _helper_filenames_submit(app)
+
+    # navigate to the collection page
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo)
+        resp = app.get('/')
+        soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
+        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        resp = app.get(first_col_url)
+        assert resp.status_code == 200
+
+        # test filenames and sort order
+        soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
+        submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.gz)\.gpg$'
+        for i, submission_link in enumerate(
+                soup.select('ul#submissions li a .filename')):
+            filename = str(submission_link.contents[0])
+            assert re.match(submission_filename_re.format(i + 1), filename)
+
+
 class TestIntegration(unittest.TestCase):
 
     def _login_user(self, app):
@@ -759,33 +801,6 @@ class TestIntegration(unittest.TestCase):
                 self.assertIn("Reply deleted", resp.data)
 
             app.get('/logout')
-
-    def test_filenames(self):
-        """Test pretty, sequential filenames when source uploads messages
-        and files"""
-        # add a source and submit stuff
-        with self.source_app.test_client() as app:
-            app.get('/generate')
-            app.post('/create')
-            self.helper_filenames_submit(app)
-
-        # navigate to the collection page
-        with self.journalist_app.test_client() as app:
-            self._login_user(app)
-            resp = app.get('/')
-            soup = BeautifulSoup(resp.data, 'html.parser')
-            first_col_url = soup.select('ul#cols > li a')[0]['href']
-            resp = app.get(first_col_url)
-            self.assertEqual(resp.status_code, 200)
-
-            # test filenames and sort order
-            soup = BeautifulSoup(resp.data, 'html.parser')
-            submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.gz)\.gpg$'
-            for i, submission_link in enumerate(
-                    soup.select('ul#submissions li a .filename')):
-                filename = str(submission_link.contents[0])
-                self.assertTrue(re.match(submission_filename_re.format(i + 1),
-                                         filename))
 
     def test_filenames_delete(self):
         """Test pretty, sequential filenames when journalist deletes files"""
