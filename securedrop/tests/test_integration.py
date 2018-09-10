@@ -14,7 +14,6 @@ import zipfile
 from bs4 import BeautifulSoup
 from cStringIO import StringIO
 from flask import session, g, escape, current_app
-from mock import patch
 from pyotp import TOTP
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
@@ -516,6 +515,49 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
         utils.async.wait_for_assertion(assertion)
 
 
+def test_delete_collections(mocker, journalist_app, source_app, test_journo):
+    """Test the "delete selected" checkboxes on the index page that can be
+    used to delete multiple collections"""
+    async_genkey = mocker.patch('source_app.main.async_genkey')
+
+    # first, add some sources
+    with source_app.test_client() as app:
+        num_sources = 2
+        for i in range(num_sources):
+            app.get('/generate')
+            app.post('/create')
+            app.post('/submit', data=dict(
+                msg="This is a test " + str(i) + ".",
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            app.get('/logout')
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo)
+        resp = app.get('/')
+        # get all the checkbox values
+        soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
+        checkbox_values = [checkbox['value'] for checkbox in
+                           soup.select('input[name="cols_selected"]')]
+
+        resp = app.post('/col/process', data=dict(
+            action='delete',
+            cols_selected=checkbox_values
+        ), follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "{} collections deleted".format(num_sources) in text
+        assert async_genkey.called
+
+        # Make sure the collections are deleted from the filesystem
+        def assertion():
+            assert not (
+                any([os.path.exists(current_app.storage.path(filesystem_id))
+                    for filesystem_id in checkbox_values]))
+
+        utils.async.wait_for_assertion(assertion)
+
+
 class TestIntegration(unittest.TestCase):
 
     def _login_user(self, app):
@@ -717,43 +759,6 @@ class TestIntegration(unittest.TestCase):
                 self.assertIn("Reply deleted", resp.data)
 
             app.get('/logout')
-
-    @patch('source_app.main.async_genkey')
-    def test_delete_collections(self, async_genkey):
-        """Test the "delete selected" checkboxes on the index page that can be
-        used to delete multiple collections"""
-        # first, add some sources
-        with self.source_app.test_client() as app:
-            num_sources = 2
-            for i in range(num_sources):
-                app.get('/generate')
-                app.post('/create')
-                app.post('/submit', data=dict(
-                    msg="This is a test " + str(i) + ".",
-                    fh=(StringIO(''), ''),
-                ), follow_redirects=True)
-                app.get('/logout')
-
-        with self.journalist_app.test_client() as app:
-            self._login_user(app)
-            resp = app.get('/')
-            # get all the checkbox values
-            soup = BeautifulSoup(resp.data, 'html.parser')
-            checkbox_values = [checkbox['value'] for checkbox in
-                               soup.select('input[name="cols_selected"]')]
-
-            resp = app.post('/col/process', data=dict(
-                action='delete',
-                cols_selected=checkbox_values
-            ), follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("%s collections deleted" % (num_sources,), resp.data)
-            self.assertTrue(async_genkey.called)
-
-            # Make sure the collections are deleted from the filesystem
-            utils.async.wait_for_assertion(lambda: self.assertFalse(
-                any([os.path.exists(current_app.storage.path(filesystem_id))
-                    for filesystem_id in checkbox_values])))
 
     def test_filenames(self):
         """Test pretty, sequential filenames when source uploads messages
