@@ -23,15 +23,20 @@ def test_firefox_is_installed(Package, Command):
     assert c.stdout.rstrip() == "Mozilla Firefox 46.0.1"
 
 
-def test_xvfb_service_config(File, Sudo):
+def test_xvfb_service_config_trusty(host):
     """
     Ensure xvfb service configuration file is present.
     Using Sudo context manager because the expected mode is 700.
     Not sure it's really necessary to have this script by 700; 755
     sounds sufficient.
     """
-    with Sudo():
-        f = File("/etc/init.d/xvfb")
+    # We're checking the upstart/sysv-style init script, which is only
+    # relevant for Trusty.
+    if host.system_info.codename == "xenial":
+        return True
+
+    with host.sudo():
+        f = host.file("/etc/init.d/xvfb")
     assert f.is_file
     assert oct(f.mode) == "0700"
     assert f.user == "root"
@@ -67,14 +72,14 @@ esac
 
 exit 0
 """.lstrip().rstrip()  # noqa
-    with Sudo():
+    with host.sudo():
         assert f.contains('^XVFB=/usr/bin/Xvfb$')
         assert f.contains('^XVFBARGS=":1 -screen 0 1024x768x24 '
                           '-ac +extension GLX +render -noreset"$')
         assert f.content.rstrip() == xvfb_init_content
 
 
-def test_xvfb_service_enabled(Command, Sudo):
+def test_xvfb_service_enabled_trusty(host):
     """
     Ensure xvfb is configured to start on boot via update-rc.d.
     The `-n` option to update-rc.d is dry-run.
@@ -83,8 +88,13 @@ def test_xvfb_service_enabled(Command, Sudo):
     Not sure it's really necessary to have this script by 700; 755
     sounds sufficient.
     """
-    with Sudo():
-        c = Command('update-rc.d -n xvfb defaults')
+    # We're checking the upstart/sysv-style init script, which is only
+    # relevant for Trusty.
+    if host.system_info.codename == "xenial":
+        return True
+
+    with host.sudo():
+        c = host.command('update-rc.d -n xvfb defaults')
     assert c.rc == 0
     wanted_text = 'System start/stop links for /etc/init.d/xvfb already exist.'
     assert wanted_text in c.stdout
@@ -103,7 +113,7 @@ def test_xvfb_display_config(File):
     assert f.contains("export DISPLAY=:1\n")
 
 
-def test_xvfb_service_running(Process, Sudo):
+def test_xvfb_service_running_trusty(host):
     """
     Ensure that xvfb service is running.
 
@@ -111,14 +121,19 @@ def test_xvfb_service_running(Process, Sudo):
     subcommand for the init script, and our custom version doesn't have
     one. So let's make sure the process is running.
     """
+    # We're checking the upstart/sysv-style init script, which is only
+    # relevant for Trusty.
+    if host.system_info.codename == "xenial":
+        return True
+
     # Sudo isn't necessary to read out of /proc on development, but is
     # required when running under Grsecurity, which app-staging does.
     # So let's escalate privileges to ensure we can determine service state.
-    with Sudo():
-        p = Process.get(user="root", comm="Xvfb")
+    with host.sudo():
+        p = host.process.get(user="root", comm="Xvfb")
         wanted_args = str('/usr/bin/Xvfb :1 -screen 0 1024x768x24 '
                           '-ac +extension GLX +render -noreset')
         assert p.args == wanted_args
         # We only expect a single process, no children.
-        workers = Process.filter(ppid=p.pid)
+        workers = host.process.filter(ppid=p.pid)
         assert len(workers) == 0
