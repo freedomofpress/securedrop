@@ -74,7 +74,9 @@ def test_swap_disabled(Command):
         assert not re.search("^/", c, re.M)
         # Expect that ONLY the headers will be present in the output.
         rgx = re.compile("Filename\s*Type\s*Size\s*Used\s*Priority")
-        assert re.search(rgx, c)
+        # On Xenial, swapon 2.27.1 shows blank output, with no headers, so
+        # check for empty output as confirmation of no swap.
+        assert any((re.search(rgx, c), c == ""))
 
 
 def test_twofactor_disabled_on_tty(host):
