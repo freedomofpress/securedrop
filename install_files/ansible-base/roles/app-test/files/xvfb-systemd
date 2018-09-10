@@ -1,0 +1,9 @@
+[Unit]
+Description=X Virtual Frame Buffer Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset
+
+[Install]
+WantedBy=multi-user.target
