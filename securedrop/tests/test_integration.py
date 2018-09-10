@@ -470,6 +470,52 @@ def test_unicode_reply_with_ansi_env(journalist_app,
                        u"ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
 
 
+def test_delete_collection(mocker, source_app, journalist_app, test_journo):
+    """Test the "delete collection" button on each collection page"""
+    async_genkey = mocker.patch('source_app.main.async_genkey')
+
+    # first, add a source
+    with source_app.test_client() as app:
+        app.get('/generate')
+        app.post('/create')
+        resp = app.post('/submit', data=dict(
+            msg="This is a test.",
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
+        assert resp.status_code == 200
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo)
+        resp = app.get('/')
+        # navigate to the collection page
+        soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
+        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        resp = app.get(first_col_url)
+        assert resp.status_code == 200
+
+        # find the delete form and extract the post parameters
+        soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
+        delete_form_inputs = soup.select(
+            'form#delete-collection')[0]('input')
+        filesystem_id = delete_form_inputs[1]['value']
+        col_name = delete_form_inputs[2]['value']
+
+        resp = app.post('/col/delete/' + filesystem_id,
+                        follow_redirects=True)
+        assert resp.status_code == 200
+
+        text = resp.data.decode('utf-8')
+        assert escape("{}'s collection deleted".format(col_name)) in text
+        assert "No documents have been submitted!" in text
+        assert async_genkey.called
+
+        # Make sure the collection is deleted from the filesystem
+        def assertion():
+            assert not os.path.exists(current_app.storage.path(filesystem_id))
+
+        utils.async.wait_for_assertion(assertion)
+
+
 class TestIntegration(unittest.TestCase):
 
     def _login_user(self, app):
@@ -671,51 +717,6 @@ class TestIntegration(unittest.TestCase):
                 self.assertIn("Reply deleted", resp.data)
 
             app.get('/logout')
-
-    @patch('source_app.main.async_genkey')
-    def test_delete_collection(self, async_genkey):
-        """Test the "delete collection" button on each collection page"""
-        # first, add a source
-        with self.source_app.test_client() as app:
-            app.get('/generate')
-            app.post('/create')
-            resp = app.post('/submit', data=dict(
-                msg="This is a test.",
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
-
-            assert resp.status_code == 200, resp.data.decode('utf-8')
-
-        with self.journalist_app.test_client() as app:
-            self._login_user(app)
-            resp = app.get('/')
-            # navigate to the collection page
-            soup = BeautifulSoup(resp.data, 'html.parser')
-            first_col_url = soup.select('ul#cols > li a')[0]['href']
-            resp = app.get(first_col_url)
-            self.assertEqual(resp.status_code, 200)
-
-            # find the delete form and extract the post parameters
-            soup = BeautifulSoup(resp.data, 'html.parser')
-            delete_form_inputs = soup.select(
-                'form#delete-collection')[0]('input')
-            filesystem_id = delete_form_inputs[1]['value']
-            col_name = delete_form_inputs[2]['value']
-
-            resp = app.post('/col/delete/' + filesystem_id,
-                            follow_redirects=True)
-            self.assertEquals(resp.status_code, 200)
-
-            self.assertIn(escape("%s's collection deleted" % (col_name,)),
-                          resp.data)
-            self.assertIn("No documents have been submitted!", resp.data)
-            self.assertTrue(async_genkey.called)
-
-            # Make sure the collection is deleted from the filesystem
-            utils.async.wait_for_assertion(
-                lambda: self.assertFalse(
-                    os.path.exists(current_app.storage.path(filesystem_id)))
-            )
 
     @patch('source_app.main.async_genkey')
     def test_delete_collections(self, async_genkey):
