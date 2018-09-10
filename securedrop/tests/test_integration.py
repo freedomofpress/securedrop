@@ -239,6 +239,224 @@ def test_submit_file(source_app, journalist_app, test_journo):
         utils.async.wait_for_assertion(assertion)
 
 
+def _helper_test_reply(journalist_app, source_app, config, test_journo,
+                       test_reply, expected_success=True):
+    test_msg = "This is a test message."
+
+    with source_app.test_client() as app:
+        app.get('/generate')
+        app.post('/create', follow_redirects=True)
+        codename = session['codename']
+        filesystem_id = g.filesystem_id
+        # redirected to submission form
+        resp = app.post('/submit', data=dict(
+            msg=test_msg,
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
+        assert resp.status_code == 200
+        assert not g.source.flagged
+        app.get('/logout')
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo)
+        resp = app.get('/')
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Sources" in text
+        soup = BeautifulSoup(resp.data, 'html.parser')
+        col_url = soup.select('ul#cols > li a')[0]['href']
+
+        resp = app.get(col_url)
+        assert resp.status_code == 200
+
+    with source_app.test_client() as app:
+        resp = app.post('/login', data=dict(
+            codename=codename), follow_redirects=True)
+        assert resp.status_code == 200
+        assert not g.source.flagged
+        app.get('/logout')
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo)
+        resp = app.post('/flag', data=dict(
+            filesystem_id=filesystem_id))
+        assert resp.status_code == 200
+
+    with source_app.test_client() as app:
+        resp = app.post('/login', data=dict(
+            codename=codename), follow_redirects=True)
+        assert resp.status_code == 200
+        app.get('/lookup')
+        assert g.source.flagged
+        app.get('/logout')
+
+    # Block up to 15s for the reply keypair, so we can test sending a reply
+    def assertion():
+        assert current_app.crypto_util.getkey(filesystem_id) is not None
+    utils.async.wait_for_assertion(assertion, 15)
+
+    # Create 2 replies to test deleting on journalist and source interface
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo)
+        for i in range(2):
+            resp = app.post('/reply', data=dict(
+                filesystem_id=filesystem_id,
+                message=test_reply
+            ), follow_redirects=True)
+            assert resp.status_code == 200
+
+        if not expected_success:
+            pass
+        else:
+            text = resp.data.decode('utf-8')
+            assert "Thanks. Your reply has been stored." in text
+
+        resp = app.get(col_url)
+        text = resp.data.decode('utf-8')
+        assert "reply-" in text
+
+    soup = BeautifulSoup(text, 'html.parser')
+
+    # Download the reply and verify that it can be decrypted with the
+    # journalist's key as well as the source's reply key
+    filesystem_id = soup.select('input[name="filesystem_id"]')[0]['value']
+    checkbox_values = [
+        soup.select('input[name="doc_names_selected"]')[1]['value']]
+    resp = app.post('/bulk', data=dict(
+        filesystem_id=filesystem_id,
+        action='download',
+        doc_names_selected=checkbox_values
+    ), follow_redirects=True)
+    assert resp.status_code == 200
+
+    zf = zipfile.ZipFile(StringIO(resp.data), 'r')
+    data = zf.read(zf.namelist()[0])
+    _can_decrypt_with_key(journalist_app, data, config.JOURNALIST_KEY)
+    _can_decrypt_with_key(
+        journalist_app,
+        data,
+        current_app.crypto_util.getkey(filesystem_id),
+        codename)
+
+    # Test deleting reply on the journalist interface
+    last_reply_number = len(
+        soup.select('input[name="doc_names_selected"]')) - 1
+    _helper_filenames_delete(app, soup, last_reply_number)
+
+    with source_app.test_client() as app:
+        resp = app.post('/login', data=dict(codename=codename),
+                        follow_redirects=True)
+        assert resp.status_code == 200
+        resp = app.get('/lookup')
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+
+        if not expected_success:
+            # there should be no reply
+            assert "You have received a reply." not in text
+        else:
+            assert ("You have received a reply. To protect your identity"
+                    in text)
+            assert test_reply in text, text
+            soup = BeautifulSoup(text, 'html.parser')
+            msgid = soup.select(
+                'form.message > input[name="reply_filename"]')[0]['value']
+            resp = app.post('/delete', data=dict(
+                filesystem_id=filesystem_id,
+                reply_filename=msgid
+            ), follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Reply deleted" in text
+
+        app.get('/logout')
+
+
+def _helper_filenames_delete(journalist_app, soup, i):
+    filesystem_id = soup.select('input[name="filesystem_id"]')[0]['value']
+    checkbox_values = [
+        soup.select('input[name="doc_names_selected"]')[i]['value']]
+
+    # delete
+    resp = journalist_app.post('/bulk', data=dict(
+        filesystem_id=filesystem_id,
+        action='confirm_delete',
+        doc_names_selected=checkbox_values
+    ), follow_redirects=True)
+    assert resp.status_code == 200
+    text = resp.data.decode('utf-8')
+    assert (("The following file has been selected for"
+             " <strong>permanent deletion</strong>") in text)
+
+    # confirm delete
+    resp = journalist_app.post('/bulk', data=dict(
+        filesystem_id=filesystem_id,
+        action='delete',
+        doc_names_selected=checkbox_values
+    ), follow_redirects=True)
+    assert resp.status_code == 200
+    assert "Submission deleted." in resp.data.decode('utf-8')
+
+    # Make sure the files were deleted from the filesystem
+    def assertion():
+        assert not any([os.path.exists(current_app.storage.path(filesystem_id,
+                                                                doc_name))
+                        for doc_name in checkbox_values])
+    utils.async.wait_for_assertion(assertion)
+
+
+def _can_decrypt_with_key(journalist_app, msg, key_fpr, passphrase=None):
+    """
+    Test that the given GPG message can be decrypted with the given key
+    (identified by its fingerprint).
+    """
+    # GPG does not provide a way to specify which key to use to decrypt a
+    # message. Since the default keyring that we use has both the
+    # `config.JOURNALIST_KEY` and all of the reply keypairs, there's no way
+    # to use it to test whether a message is decryptable with a specific
+    # key.
+    gpg_tmp_dir = tempfile.mkdtemp()
+    gpg = gnupg.GPG(homedir=gpg_tmp_dir)
+
+    # Export the key of interest from the application's keyring
+    pubkey = journalist_app.crypto_util.gpg.export_keys(key_fpr)
+    seckey = journalist_app.crypto_util.gpg.export_keys(key_fpr, secret=True)
+    # Import it into our isolated temporary GPG directory
+    for key in (pubkey, seckey):
+        gpg.import_keys(key)
+
+    # Attempt decryption with the given key
+    if passphrase:
+        passphrase = journalist_app.crypto_util.hash_codename(
+            passphrase,
+            salt=journalist_app.crypto_util.scrypt_gpg_pepper)
+    decrypted_data = gpg.decrypt(msg, passphrase=passphrase)
+    assert decrypted_data.ok, \
+        "Could not decrypt msg with key, gpg says: {}" \
+        .format(decrypted_data.stderr)
+
+    # We have to clean up the temporary GPG dir
+    shutil.rmtree(gpg_tmp_dir)
+
+
+def test_unicode_reply_with_ansi_env(journalist_app,
+                                     source_app,
+                                     test_journo,
+                                     config):
+    # This makes python-gnupg handle encoding equivalent to if we were
+    # running SD in an environment where os.getenv("LANG") == "C".
+    # Unfortunately, with the way our test suite is set up simply setting
+    # that env var here will not have the desired effect. Instead we
+    # monkey-patch the GPG object that is called crypto_util to imitate the
+    # _encoding attribute it would have had it been initialized in a "C"
+    # environment. See
+    # https://github.com/freedomofpress/securedrop/issues/1360 for context.
+    journalist_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
+    source_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
+    _helper_test_reply(journalist_app, source_app, config, test_journo,
+                       u"ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
+
+
 class TestIntegration(unittest.TestCase):
 
     def _login_user(self, app):
@@ -280,24 +498,6 @@ class TestIntegration(unittest.TestCase):
     def test_reply_normal(self):
         self.__context.push()
         self.helper_test_reply("This is a test reply.", True)
-        self.__context.pop()
-
-    def test_unicode_reply_with_ansi_env(self):
-        # This makes python-gnupg handle encoding equivalent to if we were
-        # running SD in an environment where os.getenv("LANG") == "C".
-        # Unfortunately, with the way our test suite is set up simply setting
-        # that env var here will not have the desired effect. Instead we
-        # monkey-patch the GPG object that is called crypto_util to imitate the
-        # _encoding attribute it would have had it been initialized in a "C"
-        # environment. See
-        # https://github.com/freedomofpress/securedrop/issues/1360 for context.
-        self.__context.push()
-        old_encoding = current_app.crypto_util.gpg._encoding
-        current_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
-        try:
-            self.helper_test_reply("ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
-        finally:
-            current_app.crypto_util.gpg._encoding = old_encoding
         self.__context.pop()
 
     def _can_decrypt_with_key(self, msg, key_fpr, passphrase=None):
