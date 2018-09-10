@@ -15,6 +15,7 @@ from bs4 import BeautifulSoup
 from cStringIO import StringIO
 from flask import session, g, escape, current_app
 from mock import patch
+from pyotp import TOTP
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import config
@@ -27,6 +28,112 @@ from models import Journalist
 
 # Seed the RNG for deterministic testing
 random.seed('ಠ_ಠ')
+
+
+def _login_user(app, user_dict):
+    resp = app.post('/login',
+                    data={'username': user_dict['username'],
+                          'password': user_dict['password'],
+                          'token': TOTP(user_dict['otp_secret']).now()},
+                    follow_redirects=True)
+    assert resp.status_code == 200
+    assert hasattr(g, 'user')  # ensure logged in
+
+
+def test_submit_message(source_app, journalist_app, test_journo):
+    """When a source creates an account, test that a new entry appears
+    in the journalist interface"""
+    test_msg = "This is a test message."
+
+    with source_app.test_client() as app:
+        app.get('/generate')
+        app.post('/create', follow_redirects=True)
+        filesystem_id = g.filesystem_id
+        # redirected to submission form
+        resp = app.post('/submit', data=dict(
+            msg=test_msg,
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
+        assert resp.status_code == 200
+        app.get('/logout')
+
+    # Request the Journalist Interface index
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo)
+        resp = app.get('/')
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Sources" in text
+        soup = BeautifulSoup(text, 'html.parser')
+
+        # The source should have a "download unread" link that
+        # says "1 unread"
+        col = soup.select('ul#cols > li')[0]
+        unread_span = col.select('span.unread a')[0]
+        assert "1 unread" in unread_span.get_text()
+
+        col_url = soup.select('ul#cols > li a')[0]['href']
+        resp = app.get(col_url)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        soup = BeautifulSoup(text, 'html.parser')
+        submission_url = soup.select('ul#submissions li a')[0]['href']
+        assert "-msg" in submission_url
+        span = soup.select('ul#submissions li span.info span')[0]
+        assert re.compile('\d+ bytes').match(span['title'])
+
+        resp = app.get(submission_url)
+        assert resp.status_code == 200
+        decrypted_data = journalist_app.crypto_util.gpg.decrypt(resp.data)
+        assert decrypted_data.ok
+        assert decrypted_data.data == test_msg
+
+        # delete submission
+        resp = app.get(col_url)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        soup = BeautifulSoup(text, 'html.parser')
+        doc_name = soup.select(
+            'ul > li > input[name="doc_names_selected"]')[0]['value']
+        resp = app.post('/bulk', data=dict(
+            action='confirm_delete',
+            filesystem_id=filesystem_id,
+            doc_names_selected=doc_name
+        ))
+
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        soup = BeautifulSoup(text, 'html.parser')
+        assert "The following file has been selected for" in text
+
+        # confirm delete submission
+        doc_name = soup.select
+        doc_name = soup.select(
+            'ul > li > input[name="doc_names_selected"]')[0]['value']
+        resp = app.post('/bulk', data=dict(
+            action='delete',
+            filesystem_id=filesystem_id,
+            doc_names_selected=doc_name,
+        ), follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        soup = BeautifulSoup(text, 'html.parser')
+        assert "Submission deleted." in text
+
+        # confirm that submission deleted and absent in list of submissions
+        resp = app.get(col_url)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "No documents to display." in text
+
+        # the file should be deleted from the filesystem
+        # since file deletion is handled by a polling worker, this test
+        # needs to wait for the worker to get the job and execute it
+        def assertion():
+            assert not (
+                os.path.exists(current_app.storage.path(filesystem_id,
+                                                        doc_name)))
+        utils.async.wait_for_assertion(assertion)
 
 
 class TestIntegration(unittest.TestCase):
@@ -66,97 +173,6 @@ class TestIntegration(unittest.TestCase):
         self.__context.push()
         utils.env.teardown()
         self.__context.pop()
-
-    def test_submit_message(self):
-        """When a source creates an account, test that a new entry appears
-        in the journalist interface"""
-        test_msg = "This is a test message."
-
-        with self.source_app.test_client() as app:
-            resp = app.get('/generate')
-            resp = app.post('/create', follow_redirects=True)
-            filesystem_id = g.filesystem_id
-            # redirected to submission form
-            resp = app.post('/submit', data=dict(
-                msg=test_msg,
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            app.get('/logout')
-
-        # Request the Journalist Interface index
-        with self.journalist_app.test_client() as app:
-            self._login_user(app)
-            rv = app.get('/')
-            self.assertEqual(rv.status_code, 200)
-            self.assertIn("Sources", rv.data)
-            soup = BeautifulSoup(rv.data, 'html.parser')
-
-            # The source should have a "download unread" link that
-            # says "1 unread"
-            col = soup.select('ul#cols > li')[0]
-            unread_span = col.select('span.unread a')[0]
-            self.assertIn("1 unread", unread_span.get_text())
-
-            col_url = soup.select('ul#cols > li a')[0]['href']
-            resp = app.get(col_url)
-            self.assertEqual(resp.status_code, 200)
-            soup = BeautifulSoup(resp.data, 'html.parser')
-            submission_url = soup.select('ul#submissions li a')[0]['href']
-            self.assertIn("-msg", submission_url)
-            span = soup.select('ul#submissions li span.info span')[0]
-            self.assertRegexpMatches(span['title'], "\d+ bytes")
-
-            resp = app.get(submission_url)
-            self.assertEqual(resp.status_code, 200)
-            decrypted_data = self.gpg.decrypt(resp.data)
-            self.assertTrue(decrypted_data.ok)
-            self.assertEqual(decrypted_data.data, test_msg)
-
-            # delete submission
-            resp = app.get(col_url)
-            self.assertEqual(resp.status_code, 200)
-            soup = BeautifulSoup(resp.data, 'html.parser')
-            doc_name = soup.select(
-                'ul > li > input[name="doc_names_selected"]')[0]['value']
-            resp = app.post('/bulk', data=dict(
-                action='confirm_delete',
-                filesystem_id=filesystem_id,
-                doc_names_selected=doc_name
-            ))
-
-            self.assertEqual(resp.status_code, 200)
-            soup = BeautifulSoup(resp.data, 'html.parser')
-            self.assertIn("The following file has been selected for",
-                          resp.data)
-
-            # confirm delete submission
-            doc_name = soup.select
-            doc_name = soup.select(
-                'ul > li > input[name="doc_names_selected"]')[0]['value']
-            resp = app.post('/bulk', data=dict(
-                action='delete',
-                filesystem_id=filesystem_id,
-                doc_names_selected=doc_name,
-            ), follow_redirects=True)
-            self.assertEqual(resp.status_code, 200)
-            soup = BeautifulSoup(resp.data, 'html.parser')
-            self.assertIn("Submission deleted.", resp.data)
-
-            # confirm that submission deleted and absent in list of submissions
-            resp = app.get(col_url)
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("No documents to display.", resp.data)
-
-            # the file should be deleted from the filesystem
-            # since file deletion is handled by a polling worker, this test
-            # needs to wait for the worker to get the job and execute it
-            utils.async.wait_for_assertion(
-                lambda: self.assertFalse(
-                    os.path.exists(current_app.storage.path(filesystem_id,
-                                                            doc_name))
-                )
-            )
 
     def test_submit_file(self):
         """When a source creates an account, test that a new entry appears
