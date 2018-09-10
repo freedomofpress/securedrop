@@ -439,6 +439,19 @@ def _can_decrypt_with_key(journalist_app, msg, key_fpr, passphrase=None):
     shutil.rmtree(gpg_tmp_dir)
 
 
+def test_reply_normal(journalist_app,
+                      source_app,
+                      test_journo,
+                      config):
+    '''Test for regression on #1360 (failure to encode bytes before calling
+       gpg functions).
+    '''
+    journalist_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
+    source_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
+    _helper_test_reply(journalist_app, source_app, config, test_journo,
+                       "This is a test reply.", True)
+
+
 def test_unicode_reply_with_ansi_env(journalist_app,
                                      source_app,
                                      test_journo,
@@ -493,11 +506,6 @@ class TestIntegration(unittest.TestCase):
     def tearDown(self):
         self.__context.push()
         utils.env.teardown()
-        self.__context.pop()
-
-    def test_reply_normal(self):
-        self.__context.push()
-        self.helper_test_reply("This is a test reply.", True)
         self.__context.pop()
 
     def _can_decrypt_with_key(self, msg, key_fpr, passphrase=None):
