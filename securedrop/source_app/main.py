@@ -212,8 +212,9 @@ def make_blueprint(config):
         history.
         """
 
-        query = Reply.query.filter(
-            Reply.filename == request.form['reply_filename'])
+        query = Reply.query.filter_by(
+            filename=request.form['reply_filename'],
+            source_id=g.source.id)
         reply = get_one_or_else(query, current_app.logger, abort)
         reply.deleted_by_source = True
         db.session.add(reply)
