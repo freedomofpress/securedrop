@@ -16,29 +16,52 @@ def test_tor_packages(Package, package):
     assert Package(package).is_installed
 
 
-def test_tor_service_running(Command, File, Sudo):
+def test_tor_service_running_trusty(host):
     """
     Ensure tor is running and enabled. Tor is required for SSH access,
-    so it must be enabled to start on boot.
+    so it must be enabled to start on boot. Checks upstart/sysv-style
+    services, used by Trusty.
     """
     # TestInfra tries determine the service manager intelligently, and
     # inappropriately assumes Upstart on Trusty, due to presence of the
     # `initctl` command. The tor service is handled via a SysV-style init
     # script, so let's just shell out and verify the running and enabled
     # states explicitly.
-    with Sudo():
-        assert Command.check_output("service tor status") == \
+    if host.system_info.codename == "xenial":
+        return True
+
+    with host.sudo():
+        assert host.check_output("service tor status") == \
                " * tor is running"
-        tor_enabled = Command.check_output("find /etc/rc?.d -name S??tor")
+        tor_enabled = host.check_output("find /etc/rc?.d -name S??tor")
 
     assert tor_enabled != ""
 
     tor_targets = tor_enabled.split("\n")
     assert len(tor_targets) == 4
     for target in tor_targets:
-        t = File(target)
+        t = host.file(target)
         assert t.is_symlink
         assert t.linked_to == "/etc/init.d/tor"
+
+
+def test_tor_service_running_xenial(host):
+    """
+    Ensure tor is running and enabled. Tor is required for SSH access,
+    so it must be enabled to start on boot. Checks systemd-style services,
+    used by Xenial.
+    """
+    # TestInfra tries determine the service manager intelligently, and
+    # inappropriately assumes Upstart on Trusty, due to presence of the
+    # `initctl` command. The tor service is handled via a SysV-style init
+    # script, so let's just shell out and verify the running and enabled
+    # states explicitly.
+    if host.system_info.codename == "trusty":
+        return True
+
+    s = host.service("tor")
+    assert s.is_running
+    assert s.is_enabled
 
 
 @pytest.mark.parametrize('torrc_option', [
