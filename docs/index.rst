@@ -108,6 +108,7 @@ anonymous sources.
    development/journalist_api
    development/virtual_environments
    development/virtualizing_tails
+   development/upgrade_testing
    development/contributor_guidelines
    development/tips_and_tricks
    development/database_migrations
