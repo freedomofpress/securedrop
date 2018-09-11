@@ -1,7 +1,10 @@
 Virtual Environments: Servers
 =============================
 
-There are two predefined virtual environments in the Vagrantfile:
+SecureDrop is a multi-server system, and  you may need the full server
+stack available in order to develop and test some features. To make this easier, 
+the project includes a Vagrantfile that can be used to create two predefined 
+virtual environments:
 
 * :ref:`Staging <staging_vms>`
 * :ref:`Production <production_vms>`
@@ -131,8 +134,10 @@ under Linux uses QEMU/KVM, which cannot run simultaneously with Virtualbox.
 
 Instructions for both installation methods follow.
 
-Switch Vagrant provider to libvirt
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _libvirt_provider:
+
+Switching to the Vagrant libvirt provider
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Make sure you've already installed Vagrant, as described
 in the :ref:`multi-machine setup docs <multi_machine_environment>`.
 
@@ -315,3 +320,4 @@ By default, direct SSH access is not enabled in the prod environment. You will n
 in over Tor after initial provisioning or set ``enable_ssh_over_tor`` to "false"
 during ``./securedrop-admin tailsconfig``. See :ref:`ssh_over_tor` or :ref:`ssh_over_local`
 for more info.
+
