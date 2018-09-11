@@ -39,6 +39,11 @@ be installed via the official documentation links:
 .. _`Docker CE for Ubuntu`: https://docs.docker.com/install/linux/docker-ce/ubuntu/
 .. _`Docker CE for Debian`: https://docs.docker.com/install/linux/docker-ce/debian/
 
+.. warning::
+
+    The official documentation currently misses the detail that the user needs
+    to be in the ``docker`` group. This is easily achieved with
+    ``sudo adduser $USER docker`` and restarting your session.
 
 macOS
 ~~~~~
