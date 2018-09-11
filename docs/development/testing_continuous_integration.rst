@@ -23,6 +23,16 @@ machines and run the :ref:`tests <config_tests>` against them.
   ``docs-``. These checks are enforced in different parts of the configuration,
   mainly within the ``Makefile``.
 
+.. warning:: In CI, we rebase branches in PRs on HEAD of the target branch.
+  This rebase does not occur for branches that are not in PRs.
+  When a branch is pushed to the shared ``freedomofpress`` remote, CI will run,
+  a rebase will not occur, and since opening a
+  `PR does not trigger a re-build <https://discuss.circleci.com/t/pull-requests-not-triggering-build/1213>`_,
+  the CI build results are not shown rebased on the latest of the target branch.
+  This is important to maintain awareness of if your branch is behind the target
+  branch. Once your branch is in a PR, you can rebuild, push an additional
+  commit, or manually rebase your branch to update the CI results.
+
 Limitations of the CI Staging Environment
 -----------------------------------------
 Our CI staging environment is currently directly provisioned to Xen-based
