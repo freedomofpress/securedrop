@@ -36,4 +36,3 @@ six==1.11.0               # via mock, pip-tools, pytest
 werkzeug==0.14.1          # via flask
 tbselenium==0.3.3
 urllib3==1.23             # via requests
-werkzeug==0.12.2          # via flask
