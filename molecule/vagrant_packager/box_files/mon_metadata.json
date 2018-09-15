@@ -3,7 +3,7 @@
   "description": "This box contains securedrop monitor server.",
   "versions": [
     {
-      "version": "0.7",
+      "version": "0.7.0",
       "providers": [
         {
           "name": "libvirt",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "version": "0.8",
+      "version": "0.8.0",
       "providers": [
         {
           "name": "libvirt",

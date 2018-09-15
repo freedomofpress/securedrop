@@ -4,6 +4,9 @@
   hosts: localhost
   gather_facts: false
   tasks:
+    - debug:
+        msg="Starting scenario from baseline {{ ORIG_SECUREDROP_VER }}"
+
     - name: Ensure molecule ephemeral dir exists
       file:
         state: directory
@@ -16,5 +19,5 @@
         version: "{{ ORIG_SECUREDROP_VER }}"
         depth: 1
   vars:
-    ORIG_SECUREDROP_VER: "{{ lookup('file',playbook_dir+'/../shared/stable.ver',rstrip=True) }}"
+    ORIG_SECUREDROP_VER: "{{ sd_version|default(lookup('file',playbook_dir+'/stable.ver',rstrip=True)) }}"
     molecule_ephemeral_directory: "{{ playbook_dir }}/.molecule"
