@@ -30,11 +30,11 @@ def upgrade():
     sources = conn.execute(sa.text("SELECT * FROM sources_tmp")).fetchall()
 
     for source in sources:
-        id = source.id
-        source_uuid = str(uuid.uuid4())
         conn.execute(
-            sa.text("UPDATE sources_tmp SET uuid=('{}') WHERE id={}".format(
-                source_uuid, id)))
+            sa.text("""UPDATE sources_tmp SET uuid=:source_uuid WHERE
+                       id=:id""").bindparams(source_uuid=str(uuid.uuid4()),
+                                             id=source.id)
+            )
 
     # Now create new table with unique constraint applied.
     op.create_table(quoted_name('sources', quote=False),

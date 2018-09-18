@@ -17,7 +17,7 @@ flask-assets==0.12
 flask-babel==0.11.2
 flask-sqlalchemy==2.3.2
 flask-wtf==0.14.2
-flask==0.12.2
+flask==1.0.2
 gnupg==2.3.1
 idna==2.6                 # via cryptography
 ipaddress==1.0.22         # via cryptography
@@ -42,5 +42,5 @@ six==1.11.0               # via argon2-cffi, cryptography, python-dateutil, qrco
 sqlalchemy==1.2.0
 typing==3.6.4
 webassets==0.12.1         # via flask-assets
-werkzeug==0.12.2
+werkzeug==0.14.1
 wtforms==2.1              # via flask-wtf

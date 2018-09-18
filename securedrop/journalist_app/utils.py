@@ -4,6 +4,7 @@ from datetime import datetime
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
                    render_template, Markup)
 from flask_babel import gettext, ngettext
+import hashlib
 from sqlalchemy.sql.expression import false
 
 import i18n
@@ -323,3 +324,16 @@ def col_download_all(cols_selected):
         submissions += Submission.query.filter(
             Submission.source_id == id).all()
     return download("all", submissions)
+
+
+def serve_file_with_etag(source, filename):
+    response = send_file(current_app.storage.path(source.filesystem_id,
+                                                  filename),
+                         mimetype="application/pgp-encrypted",
+                         as_attachment=True,
+                         add_etags=False)  # Disable Flask default ETag
+
+    response.direct_passthrough = False
+    response.headers['Etag'] = '"sha256:{}"'.format(
+        hashlib.sha256(response.get_data()).hexdigest())
+    return response

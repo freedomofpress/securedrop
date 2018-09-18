@@ -166,7 +166,8 @@ def test_source(journalist_app):
         return {'source': source,
                 'codename': codename,
                 'filesystem_id': source.filesystem_id,
-                'uuid': source.uuid}
+                'uuid': source.uuid,
+                'id': source.id}
 
 
 @pytest.fixture(scope='function')
@@ -179,6 +180,20 @@ def test_submissions(journalist_app):
                 'filesystem_id': source.filesystem_id,
                 'uuid': source.uuid,
                 'submissions': source.submissions}
+
+
+@pytest.fixture(scope='function')
+def test_files(journalist_app, test_journo):
+    with journalist_app.app_context():
+        source, codename = utils.db_helper.init_source()
+        utils.db_helper.submit(source, 2)
+        utils.db_helper.reply(test_journo['journalist'], source, 1)
+        return {'source': source,
+                'codename': codename,
+                'filesystem_id': source.filesystem_id,
+                'uuid': source.uuid,
+                'submissions': source.submissions,
+                'replies': source.replies}
 
 
 @pytest.fixture(scope='function')

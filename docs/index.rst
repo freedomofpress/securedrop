@@ -86,6 +86,7 @@ anonymous sources.
    :name: upgradetoc
    :maxdepth: 2
 
+   upgrade/0.8.0_to_0.9.1.rst
    upgrade/0.7.x_to_0.8.rst
    upgrade/0.6.x_to_0.7.rst
    upgrade/0.5.x_to_0.6.rst
@@ -107,6 +108,7 @@ anonymous sources.
    development/journalist_api
    development/virtual_environments
    development/virtualizing_tails
+   development/upgrade_testing
    development/contributor_guidelines
    development/tips_and_tricks
    development/database_migrations

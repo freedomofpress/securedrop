@@ -115,7 +115,7 @@ jobs:
           name: Run tests
           command: |
             cd journalist_gui
-            xvfb-run pipenv run python3 test_gui.py
+            xvfb-run -a pipenv run python3 test_gui.py
 
   staging-test-with-rebase:
     docker:
@@ -161,6 +161,7 @@ jobs:
       - run:
           name: Provision staging servers and run tests
           command: make ci-go
+          no_output_timeout: 20m
 
       - run:
           name: Ensure environment torn down

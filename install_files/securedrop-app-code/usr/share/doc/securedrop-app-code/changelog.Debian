@@ -1,12 +1,24 @@
-securedrop-app-code (0.9.0~rc1) trusty; urgency=medium
+securedrop-app-code (0.10.0~rc1) trusty; urgency=medium
 
   * See changelog.md 
 
- -- SecureDrop Team <securedrop@freedom.press>  Wed, 27 Jun 2018 15:46:33 +0000
+ -- SecureDrop Team <securedrop@freedom.press>  Wed, 05 Sep 2018 23:39:46 +0000
+
+ securedrop-app-code (0.9.1) trusty; urgency=medium
+
+   * See changelog.md
+
+  -- SecureDrop Team <securedrop@freedom.press>  Thu, 06 Sep 2018 17:57:36 +0000
+
+securedrop-app-code (0.9.0) trusty; urgency=medium
+
+  * See changelog.md
+
+ -- SecureDrop Team <securedrop@freedom.press>  Wed, 22 Aug 2018 15:09:12 +0000
 
 securedrop-app-code (0.8.0) trusty; urgency=medium
 
-  * See changelog.md 
+  * See changelog.md
 
  -- SecureDrop Team <securedrop@freedom.press>  Tue, 26 Jun 2018 22:20:25 +0000
 

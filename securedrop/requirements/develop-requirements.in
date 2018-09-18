@@ -19,7 +19,7 @@ pip-tools>=1.10
 pylint
 pytest-xdist
 python-vagrant
-safety
+safety>=1.8.4
 sphinx
 sphinx-autobuild
 sphinx_rtd_theme

@@ -217,6 +217,6 @@ Getting Support
 Should you require further support with your SecureDrop installation or upgrade,
 we are happy to help!
 
--  Community support is available at https://forum.securedrop.club
+-  Community support is available at https://forum.securedrop.org
 -  Paid support options are provided by Freedom of the Press Foundation.
    Contact securedrop@freedom.press for more information.

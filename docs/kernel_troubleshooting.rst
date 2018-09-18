@@ -194,7 +194,7 @@ Once we get your information, we can try to provide assistance to
 resolve compatibility issues.
 
 If you are not a member of our Support Portal, we also encourage you to request
-help in the `SecureDrop Community Forums <https://forum.securedrop.club/>`__.
+help in the `SecureDrop Community Forums <https://forum.securedrop.org/>`__.
 Choose carefully what information to disclose publicly. For example, raw logs
 may contain sensitive information useful to potential attackers.
 

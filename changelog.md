@@ -1,7 +1,43 @@
 # Changelog
 
-## 0.9.0~rc1
+## 0.10.0~rc1
 
+## 0.9.1
+
+* Bugfix: Resolve error in SecureDrop Updater due to incorrect working directory (#3796)
+
+The issues for this release were tracked in the 0.9.1 milestone on GitHub:
+https://github.com/freedomofpress/securedrop/milestone/47
+
+## 0.9.0
+
+### Web Applications
+
+* Argon2 is now used to hash journalist passwords (#3506)
+* Preserve conversation history only for journalists (#3688, #3690)
+* Journalist interface can now be accessed via API (#3700)
+
+### Operations
+
+* Updated the grsecurity-hardened Linux Kernels to 4.4.144 for app and mon servers (#3662)
+* Updated tor to version 0.3.3.9 (#3624)
+* Updated Flask to 1.0.2 and Werkzeug to 0.14.1 (#3741)
+* Updated securedrop-keyring package to 0.1.2 (#3752)
+
+### Tails Environment
+
+* Updated cryptography to 2.3 (#3679)
+
+### Developer Workflow
+
+* Dev container: Docker ports are now mapped only to localhost (#3693)
+
+### Documentation
+
+* Miscellaneous documentation improvements (#3623, #3624, #3655, #3670, #3717, #3710)
+
+The issues for this release were tracked in the 0.9 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestone/44
 
 
 ## 0.8.0

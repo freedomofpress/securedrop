@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
 from functools import wraps
-import hashlib
 import json
 from werkzeug.exceptions import default_exceptions  # type: ignore
 
-from flask import abort, Blueprint, current_app, jsonify, request, send_file
+from flask import abort, Blueprint, current_app, jsonify, request
 
 from db import db
 from journalist_app import utils
@@ -62,6 +61,7 @@ def make_blueprint(config):
         endpoints = {'sources_url': '/api/v1/sources',
                      'current_user_url': '/api/v1/user',
                      'submissions_url': '/api/v1/submissions',
+                     'replies_url': '/api/v1/replies',
                      'auth_token_url': '/api/v1/token'}
         return jsonify(endpoints), 200
 
@@ -176,22 +176,23 @@ def make_blueprint(config):
         submission.downloaded = True
         db.session.commit()
 
-        response = send_file(current_app.storage.path(source.filesystem_id,
-                                                      submission.filename),
-                             mimetype="application/pgp-encrypted",
-                             as_attachment=True,
-                             add_etags=False)  # Disable Flask default ETag
+        return utils.serve_file_with_etag(source, submission.filename)
 
-        response.direct_passthrough = False
-        response.headers['Etag'] = '"sha256:{}"'.format(
-            hashlib.sha256(response.get_data()).hexdigest())
-        return response
+    @api.route('/sources/<source_uuid>/replies/<reply_uuid>/download',
+               methods=['GET'])
+    @token_required
+    def download_reply(source_uuid, reply_uuid):
+        source = get_or_404(Source, source_uuid, column=Source.uuid)
+        reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
+
+        return utils.serve_file_with_etag(source, reply.filename)
 
     @api.route('/sources/<source_uuid>/submissions/<submission_uuid>',
                methods=['GET', 'DELETE'])
     @token_required
     def single_submission(source_uuid, submission_uuid):
         if request.method == 'GET':
+            source = get_or_404(Source, source_uuid, column=Source.uuid)
             submission = get_or_404(Submission, submission_uuid,
                                     column=Submission.uuid)
             return jsonify(submission.to_json()), 200
@@ -203,40 +204,60 @@ def make_blueprint(config):
                               submission)
             return jsonify({'message': 'Submission deleted'}), 200
 
-    @api.route('/sources/<source_uuid>/reply', methods=['POST'])
+    @api.route('/sources/<source_uuid>/replies', methods=['GET', 'POST'])
     @token_required
-    def post_reply(source_uuid):
-        source = get_or_404(Source, source_uuid,
-                            column=Source.uuid)
-        if request.json is None:
-            abort(400, 'please send requests in valid JSON')
-
-        if 'reply' not in request.json:
-            abort(400, 'reply not found in request body')
-
-        user = get_user_object(request)
-
-        data = json.loads(request.data)
-        if not data['reply']:
-            abort(400, 'reply should not be empty')
-
-        source.interaction_count += 1
-        try:
-            filename = current_app.storage.save_pre_encrypted_reply(
-                source.filesystem_id,
-                source.interaction_count,
-                source.journalist_filename,
-                data['reply'])
-        except NotEncrypted:
+    def all_source_replies(source_uuid):
+        if request.method == 'GET':
+            source = get_or_404(Source, source_uuid, column=Source.uuid)
             return jsonify(
-                {'message': 'You must encrypt replies client side'}), 400
+                {'replies': [reply.to_json() for
+                             reply in source.replies]}), 200
+        elif request.method == 'POST':
+            source = get_or_404(Source, source_uuid,
+                                column=Source.uuid)
+            if request.json is None:
+                abort(400, 'please send requests in valid JSON')
 
-        reply = Reply(user, source,
-                      current_app.storage.path(source.filesystem_id, filename))
-        db.session.add(reply)
-        db.session.add(source)
-        db.session.commit()
-        return jsonify({'message': 'Your reply has been stored'}), 201
+            if 'reply' not in request.json:
+                abort(400, 'reply not found in request body')
+
+            user = get_user_object(request)
+
+            data = json.loads(request.data)
+            if not data['reply']:
+                abort(400, 'reply should not be empty')
+
+            source.interaction_count += 1
+            try:
+                filename = current_app.storage.save_pre_encrypted_reply(
+                    source.filesystem_id,
+                    source.interaction_count,
+                    source.journalist_filename,
+                    data['reply'])
+            except NotEncrypted:
+                return jsonify(
+                    {'message': 'You must encrypt replies client side'}), 400
+
+            reply = Reply(user, source,
+                          current_app.storage.path(source.filesystem_id,
+                                                   filename))
+            db.session.add(reply)
+            db.session.add(source)
+            db.session.commit()
+            return jsonify({'message': 'Your reply has been stored'}), 201
+
+    @api.route('/sources/<source_uuid>/replies/<reply_uuid>',
+               methods=['GET', 'DELETE'])
+    @token_required
+    def single_reply(source_uuid, reply_uuid):
+        source = get_or_404(Source, source_uuid, column=Source.uuid)
+        reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
+        if request.method == 'GET':
+            return jsonify(reply.to_json()), 200
+        elif request.method == 'DELETE':
+            utils.delete_file(source.filesystem_id, reply.filename,
+                              reply)
+            return jsonify({'message': 'Reply deleted'}), 200
 
     @api.route('/submissions', methods=['GET'])
     @token_required
@@ -244,6 +265,13 @@ def make_blueprint(config):
         submissions = Submission.query.all()
         return jsonify({'submissions': [submission.to_json() for
                                         submission in submissions]}), 200
+
+    @api.route('/replies', methods=['GET'])
+    @token_required
+    def get_all_replies():
+        replies = Reply.query.all()
+        return jsonify(
+            {'replies': [reply.to_json() for reply in replies]}), 200
 
     @api.route('/user', methods=['GET'])
     @token_required
