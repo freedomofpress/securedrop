@@ -72,7 +72,7 @@ def make_blueprint(config):
             Source.last_updated.desc()
         ).paginate(
             request.args.get("page", 1, type=int),
-            per_page=50,
+            per_page=15,
             error_out=True
         )
         for source in sources_paginated.items:
