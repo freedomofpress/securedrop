@@ -60,6 +60,8 @@ class SDConfig(object):
         self.SourceInterfaceFlaskConfig = \
             _SourceInterfaceFlaskConfig(source_secret)
 
+        self.SESSION_EXPIRATION_MINUTES = 120
+
         try:
             self.DEFAULT_LOCALE = _config.DEFAULT_LOCALE  # type: ignore
         except AttributeError:
@@ -82,12 +84,6 @@ class SDConfig(object):
 
         try:
             self.SCRYPT_PARAMS = _config.SCRYPT_PARAMS  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
-            self.SESSION_EXPIRATION_MINUTES = \
-                _config.SESSION_EXPIRATION_MINUTES  # type: ignore
         except AttributeError:
             pass
 
