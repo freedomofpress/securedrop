@@ -61,11 +61,6 @@ class SDConfig(object):
             _SourceInterfaceFlaskConfig(source_secret)
 
         try:
-            self.ADJECTIVES = _config.ADJECTIVES  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
             self.DEFAULT_LOCALE = _config.DEFAULT_LOCALE  # type: ignore
         except AttributeError:
             pass
@@ -164,6 +159,19 @@ class SDConfig(object):
     @DATABASE_FILE.deleter
     def DATABASE_FILE(self):
         raise AttributeError('Cannot delete DATABASE_FILE')
+
+    @property
+    def ADJECTIVES(self):
+        return path.join(self.SECUREDROP_ROOT, 'dictionaries',
+                         'adjectives.txt')
+
+    @ADJECTIVES.setter
+    def ADJECTIVES(self, value):
+        raise AttributeError('Cannot set ADJECTIVES')
+
+    @ADJECTIVES.deleter
+    def ADJECTIVES(self):
+        raise AttributeError('Cannot delete ADJECTIVES')
 
 
 config = SDConfig()  # type: SDConfig
