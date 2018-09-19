@@ -81,11 +81,6 @@ class SDConfig(object):
             pass
 
         try:
-            self.NOUNS = _config.NOUNS  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
             self.SCRYPT_GPG_PEPPER = _config.SCRYPT_GPG_PEPPER  # type: ignore
         except AttributeError:
             pass
@@ -172,6 +167,18 @@ class SDConfig(object):
     @ADJECTIVES.deleter
     def ADJECTIVES(self):
         raise AttributeError('Cannot delete ADJECTIVES')
+
+    @property
+    def NOUNS(self):
+        return path.join(self.SECUREDROP_ROOT, 'dictionaries', 'nouns.txt')
+
+    @NOUNS.setter
+    def NOUNS(self, value):
+        raise AttributeError('Cannot set NOUNS')
+
+    @NOUNS.deleter
+    def NOUNS(self):
+        raise AttributeError('Cannot delete NOUNS')
 
 
 config = SDConfig()  # type: SDConfig
