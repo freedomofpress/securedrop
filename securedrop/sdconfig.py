@@ -15,6 +15,9 @@ if typing.TYPE_CHECKING:
 class SDConfig(object):
     def __init__(self):
         # type: () -> None
+
+        self.SECUREDROP_DATA_ROOT = '/var/lib/securedrop/'
+
         try:
             self.JournalistInterfaceFlaskConfig = \
                 _config.JournalistInterfaceFlaskConfig  # type: ignore
@@ -99,11 +102,6 @@ class SDConfig(object):
 
         try:
             self.SCRYPT_PARAMS = _config.SCRYPT_PARAMS  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
-            self.SECUREDROP_DATA_ROOT = _config.SECUREDROP_DATA_ROOT  # type: ignore # noqa: E501
         except AttributeError:
             pass
 
