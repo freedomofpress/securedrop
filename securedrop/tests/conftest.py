@@ -85,8 +85,8 @@ def config(tmpdir):
     data = tmpdir.mkdir('data')
     cnf.SECUREDROP_DATA_ROOT = str(data)
 
-    keys = data.mkdir('keys')
-    os.chmod(str(keys), 0o700)
+    keys = data.mkdir('keys')  # for cnf.GPG_KEY_DIR
+    os.chmod(str(keys), 0o700)  # to pass app runtime checks
     store = data.mkdir('store')
     tmp = data.mkdir('tmp')
 
@@ -95,14 +95,13 @@ def config(tmpdir):
     with open(gpg_agent_config, 'w+') as f:
         f.write('allow-loopback-pinentry')
 
-    gpg = gnupg.GPG('gpg2', homedir=str(keys))
+    gpg = gnupg.GPG('gpg2', homedir=cnf.GPG_KEY_DIR)
     for ext in ['sec', 'pub']:
         with io.open(path.join(path.dirname(__file__),
                                'files',
                                'test_journalist_key.{}'.format(ext))) as f:
             gpg.import_keys(f.read())
 
-    cnf.GPG_KEY_DIR = str(keys)
     cnf.STORE_DIR = str(store)
     cnf.TEMP_DIR = str(tmp)
 
