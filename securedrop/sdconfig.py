@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import typing
+
+from os import path
+
 import config as _config
 
-import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
 if typing.TYPE_CHECKING:
     # flake8 can not understand type annotation yet.
@@ -17,6 +20,8 @@ class SDConfig(object):
         # type: () -> None
 
         self.SECUREDROP_DATA_ROOT = '/var/lib/securedrop/'
+
+        self.SECUREDROP_ROOT = path.abspath(path.dirname(__file__))
 
         try:
             self.JournalistInterfaceFlaskConfig = \
@@ -102,11 +107,6 @@ class SDConfig(object):
 
         try:
             self.SCRYPT_PARAMS = _config.SCRYPT_PARAMS  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
-            self.SECUREDROP_ROOT = _config.SECUREDROP_ROOT  # type: ignore
         except AttributeError:
             pass
 
