@@ -19,7 +19,29 @@ if typing.TYPE_CHECKING:
 CONFIG_FILE = '/etc/securedrop/config.json'
 
 
+class _FlaskConfig(object):
+
+    DEBUG = False
+    TESTING = False
+    WTF_CSRF_ENABLED = True
+
+    def __init__(self, secret_key):
+        # type: (str) -> None
+        self.SECRET_KEY = secret_key
+
+class _SourceInterfaceFlaskConfig(_FlaskConfig):
+
+    SESSION_COOKIE_NAME = "ss"
+
+
+class _JournalistInterfaceFlaskConfig(_FlaskConfig):
+
+    SESSION_COOKIE_NAME = "js"
+
+
 class SDConfig(object):
+
+
     def __init__(self):
         # type: () -> None
 
@@ -30,17 +52,13 @@ class SDConfig(object):
 
         self.SECUREDROP_ROOT = path.abspath(path.dirname(__file__))
 
-        try:
-            self.JournalistInterfaceFlaskConfig = \
-                _config.JournalistInterfaceFlaskConfig  # type: ignore
-        except AttributeError:
-            pass
+        journalist_secret = json_config['journalist_interface']['secret_key']  # type: ignore # noqa: 501
+        self.JournalistInterfaceFlaskConfig = \
+            _JournalistInterfaceFlaskConfig(journalist_secret)
 
-        try:
-            self.SourceInterfaceFlaskConfig = \
-                _config.SourceInterfaceFlaskConfig  # type: ignore
-        except AttributeError:
-            pass
+        source_secret = json_config['source_interface']['secret_key']  # type: ignore # noqa: 501
+        self.SourceInterfaceFlaskConfig = \
+            _SourceInterfaceFlaskConfig(source_secret)
 
         try:
             self.ADJECTIVES = _config.ADJECTIVES  # type: ignore
