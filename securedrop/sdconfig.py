@@ -99,11 +99,6 @@ class SDConfig(object):
             pass
 
         try:
-            self.TEMP_DIR = _config.TEMP_DIR  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
             self.WORD_LIST = _config.WORD_LIST  # type: ignore
         except AttributeError:
             pass
@@ -195,6 +190,18 @@ class SDConfig(object):
     @SOURCE_TEMPLATES_DIR.deleter
     def SOURCE_TEMPLATES_DIR(self):
         raise AttributeError('Cannot delete SOURCE_TEMPLATES_DIR')
+
+    @property
+    def TEMP_DIR(self):
+        return path.join(self.SECUREDROP_DATA_ROOT, 'tmp')
+
+    @TEMP_DIR.setter
+    def TEMP_DIR(self, value):
+        raise AttributeError('Cannot set TEMP_DIR')
+
+    @TEMP_DIR.deleter
+    def TEMP_DIR(self):
+        raise AttributeError('Cannot delete TEMP_DIR')
 
 
 config = SDConfig()  # type: SDConfig
