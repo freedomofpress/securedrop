@@ -66,11 +66,6 @@ class SDConfig(object):
             pass
 
         try:
-            self.GPG_KEY_DIR = _config.GPG_KEY_DIR  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
             self.JOURNALIST_KEY = _config.JOURNALIST_KEY  # type: ignore
         except AttributeError:
             pass
@@ -179,6 +174,18 @@ class SDConfig(object):
     @NOUNS.deleter
     def NOUNS(self):
         raise AttributeError('Cannot delete NOUNS')
+
+    @property
+    def GPG_KEY_DIR(self):
+        return path.join(self.SECUREDROP_DATA_ROOT, 'keys')
+
+    @GPG_KEY_DIR.setter
+    def GPG_KEY_DIR(self, value):
+        raise AttributeError('Cannot set GPG_KEY_DIR')
+
+    @GPG_KEY_DIR.deleter
+    def GPG_KEY_DIR(self):
+        raise AttributeError('Cannot delete GPG_KEY_DIR')
 
 
 config = SDConfig()  # type: SDConfig
