@@ -119,9 +119,7 @@ def create_app(config):
                   'error')
 
         session['expires'] = datetime.utcnow() + \
-            timedelta(minutes=getattr(config,
-                                      'SESSION_EXPIRATION_MINUTES',
-                                      120))
+            timedelta(minutes=config.SESSION_EXPIRATION_MINUTES)
 
         uid = session.get('uid', None)
         if uid:
