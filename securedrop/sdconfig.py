@@ -71,11 +71,6 @@ class SDConfig(object):
             pass
 
         try:
-            self.JOURNALIST_TEMPLATES_DIR = _config.JOURNALIST_TEMPLATES_DIR  # type: ignore # noqa: E501
-        except AttributeError:
-            pass
-
-        try:
             self.SCRYPT_GPG_PEPPER = _config.SCRYPT_GPG_PEPPER  # type: ignore
         except AttributeError:
             pass
@@ -93,12 +88,6 @@ class SDConfig(object):
         try:
             self.SESSION_EXPIRATION_MINUTES = \
                 _config.SESSION_EXPIRATION_MINUTES  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
-            self.SOURCE_TEMPLATES_DIR = \
-                _config.SOURCE_TEMPLATES_DIR  # type: ignore
         except AttributeError:
             pass
 
@@ -186,6 +175,30 @@ class SDConfig(object):
     @GPG_KEY_DIR.deleter
     def GPG_KEY_DIR(self):
         raise AttributeError('Cannot delete GPG_KEY_DIR')
+
+    @property
+    def JOURNALIST_TEMPLATES_DIR(self):
+        return path.join(self.SECUREDROP_ROOT, 'journalist_templates')
+
+    @JOURNALIST_TEMPLATES_DIR.setter
+    def JOURNALIST_TEMPLATES_DIR(self, value):
+        raise AttributeError('Cannot set JOURNALIST_TEMPLATES_DIR')
+
+    @JOURNALIST_TEMPLATES_DIR.deleter
+    def JOURNALIST_TEMPLATES_DIR(self):
+        raise AttributeError('Cannot delete JOURNALIST_TEMPLATES_DIR')
+
+    @property
+    def SOURCE_TEMPLATES_DIR(self):
+        return path.join(self.SECUREDROP_ROOT, 'source_templates')
+
+    @SOURCE_TEMPLATES_DIR.setter
+    def SOURCE_TEMPLATES_DIR(self, value):
+        raise AttributeError('Cannot set SOURCE_TEMPLATES_DIR')
+
+    @SOURCE_TEMPLATES_DIR.deleter
+    def SOURCE_TEMPLATES_DIR(self):
+        raise AttributeError('Cannot delete SOURCE_TEMPLATES_DIR')
 
 
 config = SDConfig()  # type: SDConfig
