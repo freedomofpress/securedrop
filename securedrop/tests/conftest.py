@@ -88,7 +88,7 @@ def config(tmpdir):
     keys = data.mkdir('keys')  # for cnf.GPG_KEY_DIR
     os.chmod(str(keys), 0o700)  # to pass app runtime checks
     store = data.mkdir('store')
-    tmp = data.mkdir('tmp')
+    data.mkdir('tmp')  # for cnf.TEMP_DIR
 
     # gpg 2.1+ requires gpg-agent, see #4013
     gpg_agent_config = str(keys.join('gpg-agent.conf'))
@@ -103,7 +103,6 @@ def config(tmpdir):
             gpg.import_keys(f.read())
 
     cnf.STORE_DIR = str(store)
-    cnf.TEMP_DIR = str(tmp)
 
     # create the db file
     subprocess.check_call(['sqlite3', cnf.DATABASE_FILE, '.databases'])
