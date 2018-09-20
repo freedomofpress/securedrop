@@ -88,11 +88,6 @@ class SDConfig(object):
             pass
 
         try:
-            self.STORE_DIR = _config.STORE_DIR  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
             self.SUPPORTED_LOCALES = \
                 _config.SUPPORTED_LOCALES  # type: ignore
         except AttributeError:
@@ -202,6 +197,18 @@ class SDConfig(object):
     @TEMP_DIR.deleter
     def TEMP_DIR(self):
         raise AttributeError('Cannot delete TEMP_DIR')
+
+    @property
+    def STORE_DIR(self):
+        return path.join(self.SECUREDROP_DATA_ROOT, 'store')
+
+    @STORE_DIR.setter
+    def STORE_DIR(self, value):
+        raise AttributeError('Cannot set STORE_DIR')
+
+    @STORE_DIR.deleter
+    def STORE_DIR(self):
+        raise AttributeError('Cannot delete STORE_DIR')
 
 
 config = SDConfig()  # type: SDConfig
