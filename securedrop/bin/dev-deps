@@ -10,8 +10,13 @@ function run_redis() {
     setsid redis-server >& /tmp/redis.out || cat /tmp/redis.out
 }
 
+function setup_vncauth {
+    
+    echo "freedom" | vncpasswd -f > /tmp/vncpasswd
+}
+
 function run_x11vnc() {
-    setsid Xvnc -depth 24 -geometry 1024x768 -rfbport 5901 :1 >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
+    setsid Xvnc -depth 24 -geometry 1024x768 -rfbauth /tmp/vncpasswd -rfbport 5901 :1 >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
 }
 
 function urandom() {
