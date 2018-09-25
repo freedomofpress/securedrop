@@ -27,13 +27,14 @@ RUN curl -LO https://launchpad.net/~mozillateam/+archive/ubuntu/ppa/+files/firef
 COPY ./tor_project_public.pub /opt/
 
 RUN gpg --import /opt/tor_project_public.pub && \
-    wget  https://www.torproject.org/dist/torbrowser/7.5.6/tor-browser-linux64-7.5.6_en-US.tar.xz && \
-    wget https://www.torproject.org/dist/torbrowser/7.5.6/tor-browser-linux64-7.5.6_en-US.tar.xz.asc && \
-    gpg --verify tor-browser-linux64-7.5.6_en-US.tar.xz.asc tor-browser-linux64-7.5.6_en-US.tar.xz
+    wget  https://www.torproject.org/dist/torbrowser/8.0/tor-browser-linux64-8.0_en-US.tar.xz && \
+    wget https://www.torproject.org/dist/torbrowser/8.0/tor-browser-linux64-8.0_en-US.tar.xz.asc && \
+    gpg --verify tor-browser-linux64-8.0_en-US.tar.xz.asc tor-browser-linux64-8.0_en-US.tar.xz
 
-RUN tar -xvJf tor-browser-linux64-7.5.6_en-US.tar.xz && \
+RUN tar -xvJf tor-browser-linux64-8.0_en-US.tar.xz && \
     mkdir -p /root/.local/tbb && mv tor-browser_en-US /root/.local/tbb &&\
-    paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/firefox && \
+    paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/firefox.real && \
+    paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/libnspr4.so && \
     paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/plugin-container
 
 ENV GECKODRIVER_CHECKSUM=3154274c050d724eb2f4e8986a58ed37c0138b48304692bf7eeed827a5e82319
