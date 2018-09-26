@@ -66,6 +66,9 @@ class SDConfig(object):
 
         self.WORKER_PIDFILE = '/tmp/securedrop_worker.pid'  # nosec: B108
 
+        # also accessible via .source_interface.journalist_key
+        self.JOURNALIST_KEY = json_config['journalist_interface']['journalist_key']  # noqa: 501
+
         try:
             # also accessible via .source_interface.i18n.default_locale
             self.DEFAULT_LOCALE = json_config['journalist_interface']['i18n']['default_locale'] # type: ignore # noqa: 501
@@ -77,11 +80,6 @@ class SDConfig(object):
             self.SUPPORTED_LOCALES = json_config['journalist_interface']['i18n']['supported_locales'] # type: ignore # noqa: 501
         except (KeyError, AttributeError):
             self.SUPPORTED_LOCALES = [self.DEFAULT_LOCALE]
-
-        try:
-            self.JOURNALIST_KEY = _config.JOURNALIST_KEY  # type: ignore
-        except AttributeError:
-            pass
 
         try:
             self.SCRYPT_GPG_PEPPER = _config.SCRYPT_GPG_PEPPER  # type: ignore
