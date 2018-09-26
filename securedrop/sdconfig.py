@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import os
 import typing
 
 from os import path
@@ -28,6 +29,7 @@ class _FlaskConfig(object):
     def __init__(self, secret_key):
         # type: (str) -> None
         self.SECRET_KEY = secret_key
+
 
 class _SourceInterfaceFlaskConfig(_FlaskConfig):
 
@@ -93,10 +95,21 @@ class SDConfig(object):
         except (KeyError, TypeError):
             self.SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
-        try:
-            self.env = _config.env  # type: ignore
-        except AttributeError:
-            pass
+        self.env = os.environ.get('SECUREDROP_ENV', 'prod')
+
+        if self.env == 'prod':
+            # This is recommended for performance, and also resolves #369
+            _FlaskConfig.USE_X_SENDFILE = True  # type: ignore
+        elif self.env == 'dev':
+            # Enable _Flask's debugger for development
+            _FlaskConfig.DEBUG = True
+            # Use MAX_CONTENT_LENGTH to mimic the behavior of Apache's LimitRequestBody  # noqa: 501
+            # in the development environment. See #1714.
+            _FlaskConfig.MAX_CONTENT_LENGTH = 524288000  # type: ignore
+        elif self.env == 'test':
+            _FlaskConfig.TESTING = True
+            # Disable CSRF checks to make writing tests easier
+            _FlaskConfig.WTF_CSRF_ENABLED = False
 
     @property
     def DATABASE_FILE(self):
