@@ -73,6 +73,12 @@ class SDConfig(object):
             self.DEFAULT_LOCALE = 'en_US'
 
         try:
+            # also accessible via .source_interface.i18n.supported_locales
+            self.SUPPORTED_LOCALES = json_config['journalist_interface']['i18n']['supported_locales'] # type: ignore # noqa: 501
+        except (KeyError, AttributeError):
+            self.SUPPORTED_LOCALES = [self.DEFAULT_LOCALE]
+
+        try:
             self.JOURNALIST_KEY = _config.JOURNALIST_KEY  # type: ignore
         except AttributeError:
             pass
@@ -92,11 +98,6 @@ class SDConfig(object):
         except AttributeError:
             pass
 
-        try:
-            self.SUPPORTED_LOCALES = \
-                _config.SUPPORTED_LOCALES  # type: ignore
-        except AttributeError:
-            pass
 
         try:
             self.env = _config.env  # type: ignore
