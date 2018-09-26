@@ -96,11 +96,6 @@ class SDConfig(object):
             pass
 
         try:
-            self.WORD_LIST = _config.WORD_LIST  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
             self.WORKER_PIDFILE = _config.WORKER_PIDFILE  # type: ignore
         except AttributeError:
             pass
@@ -207,5 +202,16 @@ class SDConfig(object):
     def STORE_DIR(self):
         raise AttributeError('Cannot delete STORE_DIR')
 
+    @property
+    def WORD_LIST(self):
+        return path.join(self.SECUREDROP_ROOT, 'wordlist')
+
+    @WORD_LIST.setter
+    def WORD_LIST(self, value):
+        raise AttributeError('Cannot set WORD_LIST')
+
+    @WORD_LIST.deleter
+    def WORD_LIST(self):
+        raise AttributeError('Cannot delete WORD_LIST')
 
 config = SDConfig()  # type: SDConfig
