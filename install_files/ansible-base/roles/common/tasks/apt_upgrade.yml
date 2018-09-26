@@ -10,6 +10,12 @@
   tags:
     - apt
 
+- name: Install aptitude.
+  apt:
+    name: aptitude
+    state: present
+  tags: apt
+
 - name: Check whether tor will be upgraded.
   command: aptitude search '~U' --display-format '%p' --disable-columns
   register: tor_upgradable_result

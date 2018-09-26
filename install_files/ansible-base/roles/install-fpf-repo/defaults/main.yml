@@ -21,3 +21,7 @@ install_local_packages: False
 # the Release file for which will *not* be signed with the prod key.
 apt_repo_pubkey_files:
   - fpf-signing-key.pub
+
+# Enabling support for trusty by default. Can be overridden to evaluate
+# xenial support.
+apt_repo_target_distro: "{{ ansible_distribution_release }}"

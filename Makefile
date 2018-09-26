@@ -107,6 +107,12 @@ docker-build-ubuntu: ## Builds SD Ubuntu docker container
 build-debs: ## Builds and tests debian packages
 	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s builder; else echo Not running on docs branch...; fi
 
+.PHONY: build-debs-xenial
+build-debs-xenial: ## Builds and tests debian packages (includes Xenial overrides, TESTING ONLY)
+	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
+		molecule converge -s builder -- -e securedrop_build_xenial_support=True; \
+		else echo Not running on docs branch...; fi
+
 .PHONY: safety
 safety: ## Runs `safety check` to check python dependencies for vulnerabilities
 	pip install --upgrade safety && \
@@ -151,6 +157,10 @@ vagrant-package: ## Package up a vagrant box of the last stable SD release
 .PHONY: staging
 staging: ## Creates local staging environment in VM, autodetecting platform
 	@./devops/create-staging-env
+
+.PHONY: staging-xenial
+staging-xenial: ## Creates local staging VMs based on Xenial, autodetecting platform
+	@./devops/create-staging-env xenial
 
 .PHONY: clean
 clean: ## DANGER! Purges all site-specific info and developer files from project.

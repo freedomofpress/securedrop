@@ -11,7 +11,9 @@
     _hostname_to_wait_for: "{{ remote_host_ref|default(ansible_ssh_host|default(ansible_host)) }}"
 
 - name: Reboot if required due to security updates.
-  command: shutdown -r now
+  shell: sleep 2 && shutdown -r now
+  async: 1
+  poll: 0
   tags:
     - reboot
 

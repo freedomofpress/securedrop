@@ -2,13 +2,13 @@
 driver:
   name: vagrant
   provider:
-    name: virtualbox
+    name: libvirt
 lint:
   name: yamllint
 
 platforms:
   - name: app-staging
-    box: bento/ubuntu-14.04
+    box: bento/ubuntu-16.04
     instance_raw_config_args:
       - "vm.synced_folder './', '/vagrant', disabled: true"
       - "vm.network 'private_network', ip: '10.0.1.2'"
@@ -21,7 +21,7 @@ platforms:
       - staging
 
   - name: mon-staging
-    box: bento/ubuntu-14.04
+    box: bento/ubuntu-16.04
     instance_raw_config_args:
       - "vm.synced_folder './', '/vagrant', disabled: true"
       - "vm.network 'private_network', ip: '10.0.1.3'"
@@ -48,7 +48,7 @@ provisioner:
     ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
 
 scenario:
-  name: virtualbox-staging
+  name: libvirt-staging-xenial
   test_sequence:
     - destroy
     - create
