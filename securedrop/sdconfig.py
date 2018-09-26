@@ -67,9 +67,10 @@ class SDConfig(object):
         self.WORKER_PIDFILE = '/tmp/securedrop_worker.pid'  # nosec: B108
 
         try:
-            self.DEFAULT_LOCALE = _config.DEFAULT_LOCALE  # type: ignore
-        except AttributeError:
-            pass
+            # also accessible via .source_interface.i18n.default_locale
+            self.DEFAULT_LOCALE = json_config['journalist_interface']['i18n']['default_locale'] # type: ignore # noqa: 501
+        except (KeyError, TypeError):
+            self.DEFAULT_LOCALE = 'en_US'
 
         try:
             self.JOURNALIST_KEY = _config.JOURNALIST_KEY  # type: ignore
