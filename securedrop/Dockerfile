@@ -15,14 +15,13 @@ RUN apt-get update && \
 
 RUN gem install sass -v 3.4.23
 
-
-ENV FIREFOX_CHECKSUM=3524a6e27ff8098a5a59d13b60e89d79b87cae4c63d84ddd041052f17de2430f
-RUN curl -LO https://launchpad.net/~mozillateam/+archive/ubuntu/ppa/+files/firefox-esr_52.9.0esr+build2-0ubuntu0.14.04.1_amd64.deb && \
-    shasum -a 256 firefox*deb && \
-    echo "${FIREFOX_CHECKSUM}  firefox-esr_52.9.0esr+build2-0ubuntu0.14.04.1_amd64.deb" | shasum -a 256 -c - && \
-    dpkg -i firefox*deb && apt-get install -f && \
-    paxctl -cm /usr/lib/firefox-esr/firefox-esr
-
+RUN curl -LO https://ftp.mozilla.org/pub/firefox/releases/60.0esr/linux-x86_64/en-US/firefox-60.0esr.tar.bz2 && \
+    curl -LO https://ftp.mozilla.org/pub/firefox/releases/60.0esr/linux-x86_64/en-US/firefox-60.0esr.tar.bz2.asc && \
+    gpg --recv-key --keyserver keys.gnupg.net 0x61B7B526D98F0353 && \
+    gpg --verify firefox-60.0esr.tar.bz2.asc && \
+    tar xjf firefox-*.tar.bz2 && \
+    mv firefox /usr/bin && \
+    paxctl -cm /usr/bin/firefox/firefox
 
 COPY ./tor_project_public.pub /opt/
 
@@ -37,10 +36,10 @@ RUN tar -xvJf tor-browser-linux64-8.0_en-US.tar.xz && \
     paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/libnspr4.so && \
     paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/plugin-container
 
-ENV GECKODRIVER_CHECKSUM=3154274c050d724eb2f4e8986a58ed37c0138b48304692bf7eeed827a5e82319
-RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz && \
+ENV GECKODRIVER_CHECKSUM=c9ae92348cf00aa719be6337a608fae8304691a95668e8e338d92623ba9e0ec6
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz && \
     shasum -a 256 geckodriver*tar.gz && \
-    echo "${GECKODRIVER_CHECKSUM}  geckodriver-v0.17.0-linux64.tar.gz" | shasum -a 256 -c - && \
+    echo "${GECKODRIVER_CHECKSUM}  geckodriver-v0.21.0-linux64.tar.gz" | shasum -a 256 -c - && \
     tar -zxvf geckodriver*tar.gz && chmod +x geckodriver && mv geckodriver /bin && \
     paxctl -cm /bin/geckodriver
 
