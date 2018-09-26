@@ -87,11 +87,11 @@ class SDConfig(object):
         # also accessible via .source_interface.scrypt_id_pepper
         self.SCRYPT_ID_PEPPER = json_config['journalist_interface']['scrypt_id_pepper'] # type: ignore # noqa: 501
 
+        # also accessible via .source_interface.scrypt_params
         try:
-            self.SCRYPT_PARAMS = _config.SCRYPT_PARAMS  # type: ignore
-        except AttributeError:
-            pass
-
+            self.SCRYPT_PARAMS = json_config['journalist_interface']['scrypt_params'] # type: ignore # noqa: 501
+        except (KeyError, TypeError):
+            self.SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
         try:
             self.env = _config.env  # type: ignore
