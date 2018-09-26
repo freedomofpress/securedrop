@@ -64,6 +64,8 @@ class SDConfig(object):
 
         self.TRANSLATION_DIRS = path.join(self.SECUREDROP_ROOT, 'translations')
 
+        self.WORKER_PIDFILE = '/tmp/securedrop_worker.pid'  # nosec: B108
+
         try:
             self.DEFAULT_LOCALE = _config.DEFAULT_LOCALE  # type: ignore
         except AttributeError:
@@ -92,11 +94,6 @@ class SDConfig(object):
         try:
             self.SUPPORTED_LOCALES = \
                 _config.SUPPORTED_LOCALES  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
-            self.WORKER_PIDFILE = _config.WORKER_PIDFILE  # type: ignore
         except AttributeError:
             pass
 
