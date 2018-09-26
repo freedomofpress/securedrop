@@ -42,6 +42,7 @@ from db import db
 FUNCTIONAL_TEST_DIR = abspath(dirname(__file__))
 LOGFILE_PATH = abspath(join(FUNCTIONAL_TEST_DIR, 'firefox.log'))
 FILES_DIR = abspath(join(dirname(realpath(__file__)), '../..', 'tests/files'))
+FIREFOX_PATH = '/usr/bin/firefox/firefox'
 
 TBB_PATH = abspath(join(expanduser('~'), '.local/tbb/tor-browser_en-US/'))
 os.environ['TBB_PATH'] = TBB_PATH
@@ -145,8 +146,7 @@ class FunctionalTest(object):
             profile.set_preference("network.proxy.socks_remote_dns", True)
             profile.set_preference("network.dns.blockDotOnion", False)
             profile.update_preferences()
-        binpath = '/usr/lib/firefox-esr/firefox-esr'
-        self.second_driver = webdriver.Firefox(firefox_binary=binpath,
+        self.second_driver = webdriver.Firefox(firefox_binary=FIREFOX_PATH,
                                                firefox_profile=profile)
         self.second_driver.implicitly_wait(15)
 
@@ -156,10 +156,9 @@ class FunctionalTest(object):
         # associated issues for background on why this is necessary
         connrefused_retry_count = 3
         connrefused_retry_interval = 5
-        binpath = '/usr/lib/firefox-esr/firefox-esr'
         for i in range(connrefused_retry_count + 1):
             try:
-                driver = webdriver.Firefox(firefox_binary=binpath,
+                driver = webdriver.Firefox(firefox_binary=FIREFOX_PATH,
                                            firefox_profile=profile)
                 if i > 0:
                     # i==0 is normal behavior without connection refused.
@@ -321,7 +320,7 @@ class FunctionalTest(object):
             self.driver = self._create_webdriver()
         else:
             # We will use a normal firefox esr for the pages-layout tests
-            self.driver = self._create_webdriver2(self.new_profile)  # noqa # pylint: disable=no-member 
+            self.driver = self._create_webdriver2(self.new_profile)  # noqa # pylint: disable=no-member
             self._javascript_toggle()
 
         # Polls the DOM to wait for elements. To read more about why
