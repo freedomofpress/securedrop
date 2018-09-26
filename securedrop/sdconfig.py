@@ -62,6 +62,8 @@ class SDConfig(object):
 
         self.SESSION_EXPIRATION_MINUTES = 120
 
+        self.TRANSLATION_DIRS = path.join(self.SECUREDROP_ROOT, 'translations')
+
         try:
             self.DEFAULT_LOCALE = _config.DEFAULT_LOCALE  # type: ignore
         except AttributeError:
@@ -100,11 +102,6 @@ class SDConfig(object):
 
         try:
             self.WORKER_PIDFILE = _config.WORKER_PIDFILE  # type: ignore
-        except AttributeError:
-            pass
-
-        try:
-            self.TRANSLATION_DIRS = _config.TRANSLATION_DIRS  # type: ignore
         except AttributeError:
             pass
 
