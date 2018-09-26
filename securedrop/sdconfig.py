@@ -81,15 +81,11 @@ class SDConfig(object):
         except (KeyError, AttributeError):
             self.SUPPORTED_LOCALES = [self.DEFAULT_LOCALE]
 
-        try:
-            self.SCRYPT_GPG_PEPPER = _config.SCRYPT_GPG_PEPPER  # type: ignore
-        except AttributeError:
-            pass
+        # also accessible via .source_interface.scrypt_gpg_pepper
+        self.SCRYPT_GPG_PEPPER = json_config['journalist_interface']['scrypt_gpg_pepper'] # type: ignore # noqa: 501
 
-        try:
-            self.SCRYPT_ID_PEPPER = _config.SCRYPT_ID_PEPPER  # type: ignore
-        except AttributeError:
-            pass
+        # also accessible via .source_interface.scrypt_id_pepper
+        self.SCRYPT_ID_PEPPER = json_config['journalist_interface']['scrypt_id_pepper'] # type: ignore # noqa: 501
 
         try:
             self.SCRYPT_PARAMS = _config.SCRYPT_PARAMS  # type: ignore
