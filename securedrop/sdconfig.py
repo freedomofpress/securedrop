@@ -6,8 +6,6 @@ import typing
 
 from os import path
 
-import config as _config
-
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
 if typing.TYPE_CHECKING:
     # flake8 can not understand type annotation yet.
@@ -15,7 +13,6 @@ if typing.TYPE_CHECKING:
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from typing import List, Dict  # noqa: F401
-
 
 CONFIG_FILE = '/etc/securedrop/config.json'
 
@@ -42,7 +39,6 @@ class _JournalistInterfaceFlaskConfig(_FlaskConfig):
 
 
 class SDConfig(object):
-
 
     def __init__(self):
         # type: () -> None
@@ -225,5 +221,6 @@ class SDConfig(object):
     @WORD_LIST.deleter
     def WORD_LIST(self):
         raise AttributeError('Cannot delete WORD_LIST')
+
 
 config = SDConfig()  # type: SDConfig
