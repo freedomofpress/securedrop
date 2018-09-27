@@ -15,22 +15,24 @@ RUN apt-get update && \
 
 RUN gem install sass -v 3.4.23
 
-RUN curl -LO https://ftp.mozilla.org/pub/firefox/releases/60.0esr/linux-x86_64/en-US/firefox-60.0esr.tar.bz2 && \
-    curl -LO https://ftp.mozilla.org/pub/firefox/releases/60.0esr/linux-x86_64/en-US/firefox-60.0esr.tar.bz2.asc && \
+ENV FF_ESR_VER 60.2.0esr
+RUN curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x86_64/en-US/firefox-${FF_ESR_VER}.tar.bz2 && \
+    curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x86_64/en-US/firefox-${FF_ESR_VER}.tar.bz2.asc && \
     gpg --recv-key --keyserver keys.gnupg.net 0x61B7B526D98F0353 && \
-    gpg --verify firefox-60.0esr.tar.bz2.asc && \
+    gpg --verify firefox-${FF_ESR_VER}.tar.bz2.asc && \
     tar xjf firefox-*.tar.bz2 && \
     mv firefox /usr/bin && \
     paxctl -cm /usr/bin/firefox/firefox
 
 COPY ./tor_project_public.pub /opt/
 
+ENV TBB_VERSION 8.0.1
 RUN gpg --import /opt/tor_project_public.pub && \
-    wget  https://www.torproject.org/dist/torbrowser/8.0/tor-browser-linux64-8.0_en-US.tar.xz && \
-    wget https://www.torproject.org/dist/torbrowser/8.0/tor-browser-linux64-8.0_en-US.tar.xz.asc && \
-    gpg --verify tor-browser-linux64-8.0_en-US.tar.xz.asc tor-browser-linux64-8.0_en-US.tar.xz
+    wget  https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
+    wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
+    gpg --verify tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz
 
-RUN tar -xvJf tor-browser-linux64-8.0_en-US.tar.xz && \
+RUN tar -xvJf tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     mkdir -p /root/.local/tbb && mv tor-browser_en-US /root/.local/tbb &&\
     paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/firefox.real && \
     paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/libnspr4.so && \
