@@ -6,6 +6,7 @@
   vars:
     molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
     molecule_instance_config: "{{ lookup('env',' MOLECULE_INSTANCE_CONFIG') }}"
+    molecule_scenario_dir: "{{ lookup('env','MOLECULE_SCENARIO_DIRECTORY') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | molecule_from_yaml }}"
     molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"
   tasks:
@@ -20,10 +21,10 @@
       register: server
       with_items: "{{ molecule_yml.platforms }}"
 
-    - name: Destroy locally cloned git folder
+    - name: Destroy local molecule ephemeral dir
       file:
         state: absent
-        path: "{{ molecule_ephemeral_directory }}/sd-orig"
+        path: "{{ molecule_scenario_dir }}/.molecule"
 
     # Mandatory configuration for Molecule to function.
 
