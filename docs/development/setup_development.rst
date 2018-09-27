@@ -36,9 +36,11 @@ be installed via the official documentation links:
 * `Docker CE for Ubuntu`_
 * `Docker CE for Debian`_
 
+Make sure to follow the `Post-installation steps for Linux`_, as well.
+
 .. _`Docker CE for Ubuntu`: https://docs.docker.com/install/linux/docker-ce/ubuntu/
 .. _`Docker CE for Debian`: https://docs.docker.com/install/linux/docker-ce/debian/
-
+.. _`Post-installation steps for Linux`: https://docs.docker.com/install/linux/linux-postinstall/
 
 macOS
 ~~~~~
