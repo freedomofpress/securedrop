@@ -38,10 +38,10 @@ RUN tar -xvJf tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/libnspr4.so && \
     paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/plugin-container
 
-ENV GECKODRIVER_CHECKSUM=c9ae92348cf00aa719be6337a608fae8304691a95668e8e338d92623ba9e0ec6
-RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz && \
+ENV GECKODRIVER_CHECKSUM=9d80799bff034eda2a233493a78e3250b7c6118c9010ec37a871783081963fda
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.22.0/geckodriver-v0.22.0-linux64.tar.gz && \
     shasum -a 256 geckodriver*tar.gz && \
-    echo "${GECKODRIVER_CHECKSUM}  geckodriver-v0.21.0-linux64.tar.gz" | shasum -a 256 -c - && \
+    echo "${GECKODRIVER_CHECKSUM}  geckodriver-v0.22.0-linux64.tar.gz" | shasum -a 256 -c - && \
     tar -zxvf geckodriver*tar.gz && chmod +x geckodriver && mv geckodriver /bin && \
     paxctl -cm /bin/geckodriver
 
