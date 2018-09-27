@@ -3,12 +3,14 @@ import shutil
 import source_navigation_steps
 import functional_test
 from selenium import webdriver
+import pytest
 
 
 class TestSourceInterfaceBannerWarnings(
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationStepsMixin):
 
+    @pytest.mark.xfail(reason="due to bug 3793")
     def test_warning_appears_if_tor_browser_not_in_use(self):
         self.swap_drivers()
         self.driver.get(self.source_location)
