@@ -46,9 +46,9 @@ class TestSourceInterfaceBannerWarnings(
             profile.set_preference("network.proxy.socks_remote_dns", True)
             profile.set_preference("network.dns.blockDotOnion", False)
         profile.update_preferences()
-        binpath = '/usr/lib/firefox-esr/firefox-esr'
-        self.driver2 = webdriver.Firefox(firefox_binary=binpath,
-                                         firefox_profile=profile)
+        self.driver2 = webdriver.Firefox(
+            firefox_binary=functional_test.FIREFOX_PATH,
+            firefox_profile=profile)
         self.driver2.get(self.source_location)
 
         currentAgent = self.driver2.execute_script(
