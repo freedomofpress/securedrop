@@ -3,7 +3,6 @@ import os
 import pytest
 import io
 import random
-import unittest
 import zipfile
 import base64
 
@@ -11,7 +10,6 @@ from base64 import b64decode
 from cStringIO import StringIO
 from io import BytesIO
 from flask import url_for, escape, session, current_app, g
-from flask_testing import TestCase
 from mock import patch
 from pyotp import TOTP
 from sqlalchemy.sql.expression import func
@@ -20,7 +18,6 @@ from sqlalchemy.exc import IntegrityError
 
 import crypto_util
 import models
-import journalist
 import journalist_app as journalist_app_module
 import utils
 
@@ -1540,439 +1537,408 @@ def test_delete_source_deletes_docs_on_disk(journalist_app,
         assert not os.path.exists(dir_source_docs)
 
 
-class TestJournalistApp(TestCase):
+def test_login_with_invalid_password_doesnt_call_argon2(mocker, test_journo):
+    mock_argon2 = mocker.patch('models.argon2.verify')
+    invalid_pw = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
 
-    # A method required by flask_testing.TestCase
-    def create_app(self):
-        return journalist.app
+    with pytest.raises(InvalidPasswordLength):
+        Journalist.login(test_journo['username'],
+                         invalid_pw,
+                         TOTP(test_journo['otp_secret']).now())
+    assert not mock_argon2.called
 
-    def setUp(self):
-        utils.env.setup()
 
-        # Patch the two-factor verification to avoid intermittent errors
-        utils.db_helper.mock_verify_token(self)
+def test_valid_login_calls_argon2(mocker, test_journo):
+    mock_argon2 = mocker.patch('models.argon2.verify')
+    Journalist.login(test_journo['username'],
+                     test_journo['password'],
+                     TOTP(test_journo['otp_secret']).now())
+    assert mock_argon2.called
 
-        # Setup test users: user & admin
-        self.user, self.user_pw = utils.db_helper.init_journalist()
-        self.admin, self.admin_pw = utils.db_helper.init_journalist(
-            is_admin=True)
 
-    def tearDown(self):
-        utils.env.teardown()
+def test_render_locales(config, journalist_app, test_journo, test_source):
+    """the locales.html template must collect both request.args (l=XX) and
+       request.view_args (/<filesystem_id>) to build the URL to
+       change the locale
+    """
 
-    # WARNING: we are purposely doing something that would not work in
-    # production in the _login_user and _login_admin methods. This is done as a
-    # reminder to the test developer that the flask_testing.TestCase only uses
-    # one request context per method (see
-    # https://github.com/freedomofpress/securedrop/issues/1444). By explicitly
-    # making a point of this, we hope to avoid the introduction of new tests,
-    # that do not truly prove their result because of this disconnect between
-    # request context in Flask Testing and production.
-    def _login_admin(self):
-        self._ctx.g.user = self.admin
+    # We use the `journalist_app` fixture to generate all our tables, but we
+    # don't use it during the test because we need to inject the i18n settings
+    # (which are only triggered during `create_app`
+    config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
+    app = journalist_app_module.create_app(config)
+    app.config['SERVER_NAME'] = 'localhost'  # needed for url_for
+    url = url_for('col.col', filesystem_id=test_source['filesystem_id'])
 
-    def _login_user(self):
-        self._ctx.g.user = self.user
+    # we need the relative URL, not the full url including proto / localhost
+    url_end = url.replace('http://', '')
+    url_end = url_end[url_end.index('/')+1:]
 
-    def test_download_selected_submissions_from_source(self):
-        source, _ = utils.db_helper.init_source()
-        submissions = utils.db_helper.submit(source, 4)
-        selected_submissions = random.sample(submissions, 2)
-        selected_fnames = [submission.filename
-                           for submission in selected_submissions]
-        selected_fnames.sort()
+    with app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        resp = app.get(url + '?l=fr_FR')
 
-        self._login_user()
-        resp = self.client.post(
+    # check that links to i18n URLs are/aren't present
+    text = resp.data.decode('utf-8')
+    assert '?l=fr_FR' not in text, text
+    assert url_end + '?l=en_US' in text, text
+
+
+def test_download_selected_submissions_from_source(journalist_app,
+                                                   test_journo,
+                                                   test_source):
+    source = Source.query.get(test_source['id'])
+    submissions = utils.db_helper.submit(source, 4)
+    selected_submissions = random.sample(submissions, 2)
+    selected_fnames = [submission.filename
+                       for submission in selected_submissions]
+    selected_fnames.sort()
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        resp = app.post(
             '/bulk', data=dict(action='download',
-                               filesystem_id=source.filesystem_id,
+                               filesystem_id=test_source['filesystem_id'],
                                doc_names_selected=selected_fnames))
 
-        # The download request was succesful, and the app returned a zipfile
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.content_type, 'application/zip')
-        self.assertTrue(zipfile.is_zipfile(StringIO(resp.data)))
+    # The download request was succesful, and the app returned a zipfile
+    assert resp.status_code == 200
+    assert resp.content_type == 'application/zip'
+    assert zipfile.is_zipfile(StringIO(resp.data))
 
-        # The submissions selected are in the zipfile
-        for filename in selected_fnames:
-            self.assertTrue(
-                # Check that the expected filename is in the zip file
-                zipfile.ZipFile(StringIO(resp.data)).getinfo(
-                    os.path.join(
-                        source.journalist_filename,
-                        "%s_%s" % (filename.split('-')[0],
-                                   source.last_updated.date()),
-                        filename
-                    ))
-                )
+    # The submissions selected are in the zipfile
+    for filename in selected_fnames:
+        # Check that the expected filename is in the zip file
+        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+            os.path.join(
+                source.journalist_filename,
+                "%s_%s" % (filename.split('-')[0],
+                           source.last_updated.date()),
+                filename
+            ))
+        assert zipinfo
 
-        # The submissions not selected are absent from the zipfile
-        not_selected_submissions = set(submissions).difference(
-            selected_submissions)
-        not_selected_fnames = [submission.filename
-                               for submission in not_selected_submissions]
+    # The submissions not selected are absent from the zipfile
+    not_selected_submissions = set(submissions).difference(
+        selected_submissions)
+    not_selected_fnames = [submission.filename
+                           for submission in not_selected_submissions]
 
-        for filename in not_selected_fnames:
-            with self.assertRaises(KeyError):
-                zipfile.ZipFile(StringIO(resp.data)).getinfo(
-                    os.path.join(
-                        source.journalist_filename,
-                        source.journalist_designation,
-                        "%s_%s" % (filename.split('-')[0],
-                                   source.last_updated.date()),
-                        filename
-                    ))
+    for filename in not_selected_fnames:
+        with pytest.raises(KeyError):
+            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    source.journalist_filename,
+                    source.journalist_designation,
+                    "%s_%s" % (filename.split('-')[0],
+                               source.last_updated.date()),
+                    filename
+                ))
 
-    def _bulk_download_setup(self):
-        """Create a couple sources, make some submissions on their behalf,
-        mark some of them as downloaded, and then perform *action* on all
-        sources."""
-        self.source0, _ = utils.db_helper.init_source()
-        self.source1, _ = utils.db_helper.init_source()
-        self.journo0, _ = utils.db_helper.init_journalist()
-        self.submissions0 = utils.db_helper.submit(self.source0, 2)
-        self.submissions1 = utils.db_helper.submit(self.source1, 3)
-        self.downloaded0 = random.sample(self.submissions0, 1)
-        utils.db_helper.mark_downloaded(*self.downloaded0)
-        self.not_downloaded0 = set(self.submissions0).difference(
-            self.downloaded0)
-        self.downloaded1 = random.sample(self.submissions1, 2)
-        utils.db_helper.mark_downloaded(*self.downloaded1)
-        self.not_downloaded1 = set(self.submissions1).difference(
-            self.downloaded1)
 
-    def test_download_unread_all_sources(self):
-        self._bulk_download_setup()
-        self._login_user()
+def _bulk_download_setup(journo):
+    """Create a couple sources, make some submissions on their behalf,
+    mark some of them as downloaded"""
+
+    source0, _ = utils.db_helper.init_source()
+    source1, _ = utils.db_helper.init_source()
+
+    submissions0 = utils.db_helper.submit(source0, 2)
+    submissions1 = utils.db_helper.submit(source1, 3)
+
+    downloaded0 = random.sample(submissions0, 1)
+    utils.db_helper.mark_downloaded(*downloaded0)
+    not_downloaded0 = set(submissions0).difference(downloaded0)
+
+    downloaded1 = random.sample(submissions1, 2)
+    utils.db_helper.mark_downloaded(*downloaded1)
+    not_downloaded1 = set(submissions1).difference(downloaded1)
+
+    return {
+        'source0': source0,
+        'source1': source1,
+        'submissions0': submissions0,
+        'submissions1': submissions1,
+        'downloaded0': downloaded0,
+        'downloaded1': downloaded1,
+        'not_downloaded0': not_downloaded0,
+        'not_downloaded1': not_downloaded1,
+    }
+
+
+def test_download_unread_all_sources(journalist_app, test_journo):
+    bulk = _bulk_download_setup(Journalist.query.get(test_journo['id']))
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
 
         # Download all unread messages from all sources
-        self.resp = self.client.post(
+        resp = app.post(
             url_for('col.process'),
             data=dict(action='download-unread',
-                      cols_selected=[self.source0.filesystem_id,
-                                     self.source1.filesystem_id]))
+                      cols_selected=[bulk['source0'].filesystem_id,
+                                     bulk['source1'].filesystem_id]))
 
-        # The download request was succesful, and the app returned a zipfile
-        self.assertEqual(self.resp.status_code, 200)
-        self.assertEqual(self.resp.content_type, 'application/zip')
-        self.assertTrue(zipfile.is_zipfile(StringIO(self.resp.data)))
+    # The download request was succesful, and the app returned a zipfile
+    assert resp.status_code == 200
+    assert resp.content_type == 'application/zip'
+    assert zipfile.is_zipfile(StringIO(resp.data))
 
-        # All the not dowloaded submissions are in the zipfile
-        for submission in self.not_downloaded0:
-            self.assertTrue(
-                zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
-                    os.path.join(
-                        "unread",
-                        self.source0.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source0.last_updated.date()),
-                        submission.filename
-                    ))
-                )
-        for submission in self.not_downloaded1:
-            self.assertTrue(
-                zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
-                    os.path.join(
-                        "unread",
-                        self.source1.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source1.last_updated.date()),
-                        submission.filename
-                    ))
-                )
+    # All the not dowloaded submissions are in the zipfile
+    for submission in bulk['not_downloaded0']:
+        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    "unread",
+                    bulk['source0'].journalist_designation,
+                    "%s_%s" % (submission.filename.split('-')[0],
+                               bulk['source0'].last_updated.date()),
+                    submission.filename
+                ))
+        assert zipinfo
 
-        # All the downloaded submissions are absent from the zipfile
-        for submission in self.downloaded0:
-            with self.assertRaises(KeyError):
-                zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
-                    os.path.join(
-                        "unread",
-                        self.source0.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source0.last_updated.date()),
-                        submission.filename
-                    ))
+    for submission in bulk['not_downloaded1']:
+        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+            os.path.join(
+                "unread",
+                bulk['source1'].journalist_designation,
+                "%s_%s" % (submission.filename.split('-')[0],
+                           bulk['source1'].last_updated.date()),
+                submission.filename
+            ))
+        assert zipinfo
 
-        for submission in self.downloaded1:
-            with self.assertRaises(KeyError):
-                zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
-                    os.path.join(
-                        "unread",
-                        self.source1.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source1.last_updated.date()),
-                        submission.filename
-                    ))
+    # All the downloaded submissions are absent from the zipfile
+    for submission in bulk['downloaded0']:
+        with pytest.raises(KeyError):
+            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    "unread",
+                    bulk['source0'].journalist_designation,
+                    "%s_%s" % (submission.filename.split('-')[0],
+                               bulk['source0'].last_updated.date()),
+                    submission.filename
+                ))
 
-    def test_download_all_selected_sources(self):
-        self._bulk_download_setup()
-        self._login_user()
+    for submission in bulk['downloaded1']:
+        with pytest.raises(KeyError):
+            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    "unread",
+                    bulk['source1'].journalist_designation,
+                    "%s_%s" % (submission.filename.split('-')[0],
+                               bulk['source1'].last_updated.date()),
+                    submission.filename
+                ))
 
-        # Dowload all messages from self.source1
-        self.resp = self.client.post(
+
+def test_download_all_selected_sources(journalist_app, test_journo):
+    bulk = _bulk_download_setup(Journalist.query.get(test_journo['id']))
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        # Dowload all messages from source1
+        resp = app.post(
             url_for('col.process'),
             data=dict(action='download-all',
-                      cols_selected=[self.source1.filesystem_id]))
+                      cols_selected=[bulk['source1'].filesystem_id]))
 
-        resp = self.client.post(
+        resp = app.post(
             url_for('col.process'),
             data=dict(action='download-all',
-                      cols_selected=[self.source1.filesystem_id]))
+                      cols_selected=[bulk['source1'].filesystem_id]))
 
-        # The download request was succesful, and the app returned a zipfile
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.content_type, 'application/zip')
-        self.assertTrue(zipfile.is_zipfile(StringIO(resp.data)))
+    # The download request was succesful, and the app returned a zipfile
+    assert resp.status_code == 200
+    assert resp.content_type == 'application/zip'
+    assert zipfile.is_zipfile(StringIO(resp.data))
 
-        # All messages from self.source1 are in the zipfile
-        for submission in self.submissions1:
-            self.assertTrue(
-                zipfile.ZipFile(StringIO(resp.data)).getinfo(
-                    os.path.join(
-                        "all",
-                        self.source1.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source1.last_updated.date()),
-                        submission.filename)
-                    )
+    # All messages from source1 are in the zipfile
+    for submission in bulk['submissions1']:
+        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+            os.path.join(
+                "all",
+                bulk['source1'].journalist_designation,
+                "%s_%s" % (submission.filename.split('-')[0],
+                           bulk['source1'].last_updated.date()),
+                submission.filename)
+            )
+        assert zipinfo
+
+    # All messages from source0 are absent from the zipfile
+    for submission in bulk['submissions0']:
+        with pytest.raises(KeyError):
+            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    "all",
+                    bulk['source0'].journalist_designation,
+                    "%s_%s" % (submission.filename.split('-')[0],
+                               bulk['source0'].last_updated.date()),
+                    submission.filename)
                 )
 
-        # All messages from self.source0 are absent from the zipfile
-        for submission in self.submissions0:
-            with self.assertRaises(KeyError):
-                zipfile.ZipFile(StringIO(resp.data)).getinfo(
-                    os.path.join(
-                        "all",
-                        self.source0.journalist_designation,
-                        "%s_%s" % (submission.filename.split('-')[0],
-                                   self.source0.last_updated.date()),
-                        submission.filename)
-                    )
 
-    def test_single_source_is_successfully_starred(self):
-        source, _ = utils.db_helper.init_source()
-        self._login_user()
-        resp = self.client.post(url_for('col.add_star',
-                                        filesystem_id=source.filesystem_id))
+def test_single_source_is_successfully_starred(journalist_app,
+                                               test_journo,
+                                               test_source):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('col.add_star',
+                            filesystem_id=test_source['filesystem_id']))
 
-        self.assertRedirects(resp, url_for('main.index'))
+            ins.assert_redirects(resp, url_for('main.index'))
 
-        # Assert source is starred
-        self.assertTrue(source.star.starred)
+    source = Source.query.get(test_source['id'])
+    assert source.star.starred
 
-    def test_single_source_is_successfully_unstarred(self):
-        source, _ = utils.db_helper.init_source()
-        self._login_user()
 
+def test_single_source_is_successfully_unstarred(journalist_app,
+                                                 test_journo,
+                                                 test_source):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
         # First star the source
-        self.client.post(url_for('col.add_star',
-                                 filesystem_id=source.filesystem_id))
+        app.post(url_for('col.add_star',
+                         filesystem_id=test_source['filesystem_id']))
 
-        # Now unstar the source
-        resp = self.client.post(url_for('col.remove_star',
-                                filesystem_id=source.filesystem_id))
+        with InstrumentedApp(journalist_app) as ins:
+            # Now unstar the source
+            resp = app.post(
+                url_for('col.remove_star',
+                        filesystem_id=test_source['filesystem_id']))
 
-        self.assertRedirects(resp, url_for('main.index'))
+            ins.assert_redirects(resp, url_for('main.index'))
 
-        # Assert source is not starred
-        self.assertFalse(source.star.starred)
+        source = Source.query.get(test_source['id'])
+        assert not source.star.starred
 
-    def test_journalist_session_expiration(self):
-        try:
-            old_expiration = config.SESSION_EXPIRATION_MINUTES
-            has_session_expiration = True
-        except AttributeError:
-            has_session_expiration = False
 
-        try:
-            with self.client as client:
-                # set the expiration to ensure we trigger an expiration
-                config.SESSION_EXPIRATION_MINUTES = -1
+def test_journalist_session_expiration(config, journalist_app, test_journo):
+    # set the expiration to ensure we trigger an expiration
+    config.SESSION_EXPIRATION_MINUTES = -1
+    with journalist_app.test_client() as app:
+        with InstrumentedApp(journalist_app) as ins:
+            login_data = {
+                'username': test_journo['username'],
+                'password': test_journo['password'],
+                'token': TOTP(test_journo['otp_secret']).now(),
+            }
+            resp = app.post(url_for('main.login'), data=login_data)
+            ins.assert_redirects(resp, url_for('main.index'))
+        assert 'uid' in session
 
-                # do a real login to get a real session
-                # (none of the mocking `g` hacks)
-                resp = client.post(url_for('main.login'),
-                                   data=dict(username=self.user.username,
-                                             password=self.user_pw,
-                                             token='mocked'))
-                self.assertRedirects(resp, url_for('main.index'))
-                assert 'uid' in session
+        resp = app.get(url_for('account.edit'), follow_redirects=True)
 
-                resp = client.get(url_for('account.edit'),
-                                  follow_redirects=True)
+        # check that the session was cleared (apart from 'expires'
+        # which is always present and 'csrf_token' which leaks no info)
+        session.pop('expires', None)
+        session.pop('csrf_token', None)
+        assert not session, session
+        assert ('You have been logged out due to inactivity' in
+                resp.data.decode('utf-8'))
 
-                # check that the session was cleared (apart from 'expires'
-                # which is always present and 'csrf_token' which leaks no info)
-                session.pop('expires', None)
-                session.pop('csrf_token', None)
-                assert not session, session
-                assert ('You have been logged out due to inactivity' in
-                        resp.data.decode('utf-8'))
-        finally:
-            if has_session_expiration:
-                config.SESSION_EXPIRATION_MINUTES = old_expiration
-            else:
-                del config.SESSION_EXPIRATION_MINUTES
 
-    def test_csrf_error_page(self):
-        old_enabled = self.app.config['WTF_CSRF_ENABLED']
-        self.app.config['WTF_CSRF_ENABLED'] = True
+def test_csrf_error_page(journalist_app):
+    journalist_app.config['WTF_CSRF_ENABLED'] = True
+    with journalist_app.test_client() as app:
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('main.login'))
+            ins.assert_redirects(resp, url_for('main.login'))
 
-        try:
-            with self.app.test_client() as app:
-                resp = app.post(url_for('main.login'))
-                self.assertRedirects(resp, url_for('main.login'))
+        resp = app.post(url_for('main.login'), follow_redirects=True)
 
-                resp = app.post(url_for('main.login'), follow_redirects=True)
-                self.assertIn('You have been logged out due to inactivity',
-                              resp.data)
-        finally:
-            self.app.config['WTF_CSRF_ENABLED'] = old_enabled
+        text = resp.data.decode('utf-8')
+        assert 'You have been logged out due to inactivity' in text
 
-    def test_col_process_aborts_with_bad_action(self):
-        """If the action is not a valid choice, a 500 should occur"""
-        self._login_user()
+
+def test_col_process_aborts_with_bad_action(journalist_app, test_journo):
+    """If the action is not a valid choice, a 500 should occur"""
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
 
         form_data = {'cols_selected': 'does not matter',
                      'action': 'this action does not exist'}
 
-        resp = self.client.post(url_for('col.process'), data=form_data)
+        resp = app.post(url_for('col.process'), data=form_data)
+        assert resp.status_code == 500
 
-        self.assert500(resp)
 
-    def test_col_process_successfully_deletes_multiple_sources(self):
-        # Create two sources with one submission each
-        source_1, _ = utils.db_helper.init_source()
-        utils.db_helper.submit(source_1, 1)
-        source_2, _ = utils.db_helper.init_source()
-        utils.db_helper.submit(source_2, 1)
+def test_col_process_successfully_deletes_multiple_sources(journalist_app,
+                                                           test_journo):
+    # Create two sources with one submission each
+    source_1, _ = utils.db_helper.init_source()
+    utils.db_helper.submit(source_1, 1)
+    source_2, _ = utils.db_helper.init_source()
+    utils.db_helper.submit(source_2, 1)
 
-        self._login_user()
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
 
         form_data = {'cols_selected': [source_1.filesystem_id,
                                        source_2.filesystem_id],
                      'action': 'delete'}
 
-        resp = self.client.post(url_for('col.process'), data=form_data,
-                                follow_redirects=True)
+        resp = app.post(url_for('col.process'), data=form_data,
+                        follow_redirects=True)
 
-        self.assert200(resp)
+        assert resp.status_code == 200
 
-        # Verify there are no remaining sources
-        remaining_sources = db.session.query(models.Source).all()
-        self.assertEqual(len(remaining_sources), 0)
+    # Verify there are no remaining sources
+    remaining_sources = Source.query.all()
+    assert not remaining_sources
 
-    def test_col_process_successfully_stars_sources(self):
-        source_1, _ = utils.db_helper.init_source()
-        utils.db_helper.submit(source_1, 1)
 
-        self._login_user()
+def test_col_process_successfully_stars_sources(journalist_app,
+                                                test_journo,
+                                                test_source):
+    utils.db_helper.submit(test_source['source'], 1)
 
-        form_data = {'cols_selected': [source_1.filesystem_id],
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        form_data = {'cols_selected': [test_source['filesystem_id']],
                      'action': 'star'}
 
-        resp = self.client.post(url_for('col.process'), data=form_data,
-                                follow_redirects=True)
+        resp = app.post(url_for('col.process'), data=form_data,
+                        follow_redirects=True)
+        assert resp.status_code == 200
 
-        self.assert200(resp)
+    source = Source.query.get(test_source['id'])
+    assert source.star.starred
 
-        # Verify the source is starred
-        self.assertTrue(source_1.star.starred)
 
-    def test_col_process_successfully_unstars_sources(self):
-        source_1, _ = utils.db_helper.init_source()
-        utils.db_helper.submit(source_1, 1)
+def test_col_process_successfully_unstars_sources(journalist_app,
+                                                  test_journo,
+                                                  test_source):
+    utils.db_helper.submit(test_source['source'], 1)
 
-        self._login_user()
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
 
         # First star the source
-        form_data = {'cols_selected': [source_1.filesystem_id],
+        form_data = {'cols_selected': [test_source['filesystem_id']],
                      'action': 'star'}
-        self.client.post(url_for('col.process'), data=form_data,
-                         follow_redirects=True)
+        app.post(url_for('col.process'), data=form_data,
+                 follow_redirects=True)
 
         # Now unstar the source
-        form_data = {'cols_selected': [source_1.filesystem_id],
+        form_data = {'cols_selected': [test_source['filesystem_id']],
                      'action': 'un-star'}
-        resp = self.client.post(url_for('col.process'), data=form_data,
-                                follow_redirects=True)
+        resp = app.post(url_for('col.process'), data=form_data,
+                        follow_redirects=True)
 
-        self.assert200(resp)
+    assert resp.status_code == 200
 
-        # Verify the source is not starred
-        self.assertFalse(source_1.star.starred)
-
-
-class TestJournalistLocale(TestCase):
-
-    def setUp(self):
-        utils.env.setup()
-
-        # Patch the two-factor verification to avoid intermittent errors
-        utils.db_helper.mock_verify_token(self)
-
-        # Setup test user
-        self.user, self.user_pw = utils.db_helper.init_journalist()
-
-    def tearDown(self):
-        utils.env.teardown()
-
-    def get_fake_config(self):
-        return SDConfig()
-
-    # A method required by flask_testing.TestCase
-    def create_app(self):
-        fake_config = self.get_fake_config()
-        fake_config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
-        return journalist_app_module.create_app(fake_config)
-
-    def test_render_locales(self):
-        """the locales.html template must collect both request.args (l=XX) and
-        request.view_args (/<filesystem_id>) to build the URL to
-        change the locale
-
-        """
-        source, _ = utils.db_helper.init_source()
-        self._ctx.g.user = self.user
-
-        url = url_for('col.col', filesystem_id=source.filesystem_id)
-        resp = self.client.get(url + '?l=fr_FR')
-        self.assertNotIn('?l=fr_FR', resp.data)
-        self.assertIn(url + '?l=en_US', resp.data)
-
-
-class TestJournalistLogin(unittest.TestCase):
-
-    def setUp(self):
-        self.__context = journalist_app_module.create_app(config).app_context()
-        self.__context.push()
-        utils.env.setup()
-
-        # Patch the two-factor verification so it always succeeds
-        utils.db_helper.mock_verify_token(self)
-
-        self.user, self.user_pw = utils.db_helper.init_journalist()
-
-    def tearDown(self):
-        utils.env.teardown()
-        self.__context.pop()
-
-    @patch('models.Journalist._scrypt_hash')
-    @patch('models.Journalist.valid_password', return_value=True)
-    def test_valid_login_calls_scrypt(self,
-                                      mock_scrypt_hash,
-                                      mock_valid_password):
-        Journalist.login(self.user.username, self.user_pw, 'mocked')
-        self.assertTrue(
-            mock_scrypt_hash.called,
-            "Failed to call _scrypt_hash for password w/ valid length")
-
-    @patch('models.Journalist._scrypt_hash')
-    def test_login_with_invalid_password_doesnt_call_scrypt(self,
-                                                            mock_scrypt_hash):
-        invalid_pw = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
-        with self.assertRaises(InvalidPasswordLength):
-            Journalist.login(self.user.username, invalid_pw, 'mocked')
-        self.assertFalse(
-            mock_scrypt_hash.called,
-            "Called _scrypt_hash for password w/ invalid length")
+    source = Source.query.get(test_source['id'])
+    assert not source.star.starred
