@@ -62,11 +62,6 @@
       delegate_to: localhost
       when: raw_test_results is defined
 
-    - name: Fail if app tests exited non-zero
-      fail:
-        msg: >-
-          The application test suite failed. See test logs as CircleCI artifacts.
-      when: app_test_register|failed
   vars:
     ci_env: "{{ lookup('env', 'CI_SD_ENV') }}"
     # We must define this var at the play-level since the group/host vars
