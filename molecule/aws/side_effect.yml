@@ -60,6 +60,7 @@
       with_items: "{{ raw_test_results }}"
       become: no
       delegate_to: localhost
+      when: raw_test_results is defined
 
     - name: Fail if app tests exited non-zero
       fail:
