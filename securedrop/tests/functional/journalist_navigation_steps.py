@@ -689,8 +689,6 @@ class JournalistNavigationStepsMixin():
         reset_button = self.driver.find_elements_by_css_selector(
             '#button-reset-two-factor-' + type)[0]
         reset_button.click()
-        self._alert_accept()
-        time.sleep(self.sleep_time)
 
     def _visit_edit_hotp_secret(self):
         self._visit_edit_secret('hotp')
