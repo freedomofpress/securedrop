@@ -64,7 +64,10 @@
   tasks:
     - name: Spit out tor details
       debug:
-        msg: "Source interface available at {{ lookup('file','.molecule/sd-orig/install_files/ansible-base/app-source-ths') }}"
+        msg: "Source interface available at {{ lookup('file', molecule_ephemeral_directory+'/sd-orig/'+source_ths_path) }}"
       tags:
         - onion
         - always
+  vars:
+    molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"
+    source_ths_path: /install_files/ansible-base/app-source-ths

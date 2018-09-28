@@ -3,7 +3,7 @@
   "description": "This box contains securedrop app server.",
   "versions": [
     {
-      "version": "0.7",
+      "version": "0.7.0",
       "providers": [
         {
           "name": "libvirt",
@@ -14,13 +14,24 @@
       ]
     },
     {
-      "version": "0.8",
+      "version": "0.8.0",
       "providers": [
         {
           "name": "libvirt",
           "url": "https://s3.amazonaws.com/securedrop-vagrant/app-staging_0.8.box",
           "checksum_type": "sha256",
           "checksum": "524056caec12a170132ed02f3b8727056d1aeb3ce7050c074be34f259dc6beed"
+        }
+      ]
+    },
+    {
+      "version": "0.9.1",
+      "providers": [
+        {
+          "name": "libvirt",
+          "url": "https://s3.amazonaws.com/securedrop-vagrant/app-staging_0.9.1.box",
+          "checksum_type": "sha256",
+          "checksum": "6fb8c12821b902b0905f967d7405c620443f4f4345b18d05b59005f798a08e50"
         }
       ]
     }

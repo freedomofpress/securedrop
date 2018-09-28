@@ -2,6 +2,7 @@ DEFAULT_GOAL: help
 SHELL := /bin/bash
 PWD := $(shell pwd)
 TAG ?= $(shell git rev-parse HEAD)
+STABLE_VER := $(shell cat molecule/shared/stable.ver)
 
 .PHONY: ci-spinup
 ci-spinup: ## Creates AWS EC2 hosts for testing staging environment.
@@ -165,6 +166,22 @@ staging-xenial: ## Creates local staging VMs based on Xenial, autodetecting plat
 .PHONY: clean
 clean: ## DANGER! Purges all site-specific info and developer files from project.
 	@./devops/clean
+
+.PHONY: upgrade_start
+upgrade_start: ## Boot up an upgrade test base environment using libvirt
+	@SD_UPGRADE_BASE=$(STABLE_VER) molecule converge -s upgrade
+
+.PHONY: upgrade_destroy
+upgrade_destroy: ## Destroy up an upgrade test base environment
+	@SD_UPGRADE_BASE=$(STABLE_VER) molecule destroy -s upgrade
+
+.PHONY: upgrade_test_local
+upgrade_test_local: ## Once an upgrade environment is running, force upgrade apt packages (local pkgs)
+	@molecule side-effect -s upgrade
+
+.PHONY: upgrade_test_qa
+upgrade_test_qa: ## Once an upgrade environment is running, force upgrade apt packages (from qa server)
+	@QA_APTTEST=yes molecule side-effect -s upgrade
 
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##

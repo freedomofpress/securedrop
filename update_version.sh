@@ -56,6 +56,12 @@ sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" molecule/b
 sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/set_up_admin_tails.rst
 sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/conf.py
 
+# If version doesnt have an rc designator, its considered stable
+# theres a few things that peg to that stable version like upgrade testing logic
+if [[ ! $NEW_VERSION == *~rc* ]]; then
+    echo "${NEW_VERSION}" > molecule/shared/stable.ver
+fi
+
 # Update the changelog
 sed -i "s/\(## ${OLD_VERSION}\)/## ${NEW_VERSION}\n\n\n\n\1/g" changelog.md
 vi +5 changelog.md

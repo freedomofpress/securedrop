@@ -1,5 +1,5 @@
 ---
-- import_playbook: sd_clone.yml
+- import_playbook: ../shared/sd_clone.yml sd_version="{{ lookup('env','SD_UPGRADE_BASE') }}"
 
 - name: Create
   hosts: localhost
@@ -17,7 +17,7 @@
         instance_raw_config_args: "{{ item.instance_raw_config_args | default(omit) }}"
 
         platform_box: "{{ item.box }}"
-        platform_box_version: "{{ item.box_version | default(omit) }}"
+        platform_box_version: "{{ omit if 'apt' in item.name else lookup('env','SD_UPGRADE_BASE') }}"
         platform_box_url: "{{ 'file://'+playbook_dir+'/' if item.box_url|default(false) else '' }}{{ item.box_url | default(omit) }}"
 
         provider_name: "{{ molecule_yml.driver.provider.name }}"

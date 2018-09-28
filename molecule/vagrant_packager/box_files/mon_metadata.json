@@ -3,7 +3,7 @@
   "description": "This box contains securedrop monitor server.",
   "versions": [
     {
-      "version": "0.7",
+      "version": "0.7.0",
       "providers": [
         {
           "name": "libvirt",
@@ -14,13 +14,24 @@
       ]
     },
     {
-      "version": "0.8",
+      "version": "0.8.0",
       "providers": [
         {
           "name": "libvirt",
           "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging_0.8.box",
           "checksum_type": "sha256",
           "checksum": "c18fe9dddf28cc70b858b878550c5ae202e4a2c752119528ab7d2062dab15842"
+        }
+      ]
+    },
+    {
+      "version": "0.9.1",
+      "providers": [
+        {
+          "name": "libvirt",
+          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging_0.9.1.box",
+          "checksum_type": "sha256",
+          "checksum": "9891c88aa7148129f2f91638d7dfed1e7815eb980bba1de8a9c075f14ae0ddeb"
         }
       ]
     }
