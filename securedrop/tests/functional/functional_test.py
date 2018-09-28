@@ -319,6 +319,12 @@ class FunctionalTest(object):
         else:
             # We will use a normal firefox esr for the pages-layout tests
             self.driver = self._create_webdriver2(self.new_profile)  # noqa # pylint: disable=no-member
+
+            # Set window size and position explicitly to avoid potential bugs
+            # due to discrepancies between environments.
+            self.driver.set_window_position(0, 0)
+            self.driver.set_window_size(1024, 768)
+
             self._javascript_toggle()
 
         # Polls the DOM to wait for elements. To read more about why
