@@ -24,7 +24,6 @@ from flask_babel import gettext
 from werkzeug.datastructures import Headers
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import SDConfig
 import i18n
 import i18n_tool
 import journalist_app as journalist_app_module
@@ -208,16 +207,15 @@ def test_i18n(journalist_app, config):
         '--compile',
     ])
 
-    fake_config = SDConfig()
-    fake_config.SUPPORTED_LOCALES = [
+    config.SUPPORTED_LOCALES = [
         'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
-    fake_config.TRANSLATION_DIRS = config.TEMP_DIR
+    config.TRANSLATION_DIRS = config.TEMP_DIR
 
     # Use our config (and not an app fixture) because the i18n module
     # grabs values at init time and we can't inject them later.
-    for app in (journalist_app_module.create_app(fake_config),
-                source_app.create_app(fake_config)):
-        assert i18n.LOCALES == fake_config.SUPPORTED_LOCALES
+    for app in (journalist_app_module.create_app(config),
+                source_app.create_app(config)):
+        assert i18n.LOCALES == config.SUPPORTED_LOCALES
         verify_i18n(app)
 
 
