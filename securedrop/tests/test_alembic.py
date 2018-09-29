@@ -104,12 +104,14 @@ def test_alembic_head_matches_db_models(journalist_app,
     '''
     models_schema = get_schema(journalist_app)
 
-    config.DATABASE_FILE = config.DATABASE_FILE + '.new'
+    # Delete the old database file and recreate it
+    os.remove(config.DATABASE_FILE)
+    subprocess.check_call(['sqlite3', config.DATABASE_FILE, '.databases'])
+
     # Use the fixture to rewrite the config with the new URI
     conftest.alembic_config(config)
 
-    # Create database file
-    subprocess.check_call(['sqlite3', config.DATABASE_FILE, '.databases'])
+    # Upgrade to the latest
     upgrade(alembic_config, 'head')
 
     # Recreate the app to get a new SQLALCHEMY_DATABASE_URI
