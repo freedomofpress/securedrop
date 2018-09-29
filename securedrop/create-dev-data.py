@@ -3,19 +3,41 @@
 
 import datetime
 import os
+
+from flask import current_app
 from sqlalchemy.exc import IntegrityError
 
 os.environ["SECUREDROP_ENV"] = "dev"  # noqa
 import journalist_app
+
 from sdconfig import config
 from db import db
 from models import Journalist, Reply, Source, Submission
 
 
-def add_test_user(username, password, otp_secret, is_admin=False):
-    context = journalist_app.create_app(config).app_context()
-    context.push()
+def main():
+    app = journalist_app.create_app(config)
+    with app.app_context():
+        # Add two test users
+        test_password = "correct horse battery staple profanity oil chewy"
+        test_otp_secret = "JHCOGO7VCER3EJ4L"
 
+        add_test_user("journalist",
+                      test_password,
+                      test_otp_secret,
+                      is_admin=True)
+        add_test_user("dellsberg",
+                      test_password,
+                      test_otp_secret,
+                      is_admin=False)
+
+        # Add test sources and submissions
+        num_sources = 2
+        for _ in range(num_sources):
+            create_source_and_submissions()
+
+
+def add_test_user(username, password, otp_secret, is_admin=False):
     try:
         user = Journalist(username=username,
                           password=password,
@@ -30,76 +52,55 @@ def add_test_user(username, password, otp_secret, is_admin=False):
         print("Test user already added")
         db.session.rollback()
 
-    context.pop()
-
 
 def create_source_and_submissions(num_submissions=2, num_replies=2):
-    app = journalist_app.create_app(config)
+    # Store source in database
+    codename = current_app.crypto_util.genrandomid()
+    filesystem_id = current_app.crypto_util.hash_codename(codename)
+    journalist_designation = current_app.crypto_util.display_id()
+    source = Source(filesystem_id, journalist_designation)
+    source.pending = False
+    db.session.add(source)
+    db.session.commit()
 
-    with app.app_context():
-        # Store source in database
-        codename = app.crypto_util.genrandomid()
-        filesystem_id = app.crypto_util.hash_codename(codename)
-        journalist_designation = app.crypto_util.display_id()
-        source = Source(filesystem_id, journalist_designation)
-        source.pending = False
-        db.session.add(source)
-        db.session.commit()
+    # Generate submissions directory and generate source key
+    os.mkdir(current_app.storage.path(source.filesystem_id))
+    current_app.crypto_util.genkeypair(source.filesystem_id, codename)
 
-        # Generate submissions directory and generate source key
-        os.mkdir(app.storage.path(source.filesystem_id))
-        app.crypto_util.genkeypair(source.filesystem_id, codename)
+    # Generate some test submissions
+    for _ in range(num_submissions):
+        source.interaction_count += 1
+        fpath = current_app.storage.save_message_submission(
+            source.filesystem_id,
+            source.interaction_count,
+            source.journalist_filename,
+            'test submission!'
+        )
+        source.last_updated = datetime.datetime.utcnow()
+        submission = Submission(source, fpath)
+        db.session.add(submission)
 
-        # Generate some test submissions
-        for _ in range(num_submissions):
-            source.interaction_count += 1
-            fpath = app.storage.save_message_submission(
-                source.filesystem_id,
-                source.interaction_count,
-                source.journalist_filename,
-                'test submission!'
-            )
-            source.last_updated = datetime.datetime.utcnow()
-            submission = Submission(source, fpath)
-            db.session.add(submission)
+    # Generate some test replies
+    for _ in range(num_replies):
+        source.interaction_count += 1
+        fname = "{}-{}-reply.gpg".format(source.interaction_count,
+                                         source.journalist_filename)
+        current_app.crypto_util.encrypt(
+            str(os.urandom(1)),
+            [current_app.crypto_util.getkey(source.filesystem_id),
+             config.JOURNALIST_KEY],
+            current_app.storage.path(source.filesystem_id, fname))
 
-        # Generate some test replies
-        for _ in range(num_replies):
-            source.interaction_count += 1
-            fname = "{}-{}-reply.gpg".format(source.interaction_count,
-                                             source.journalist_filename)
-            app.crypto_util.encrypt(
-                str(os.urandom(1)),
-                [app.crypto_util.getkey(source.filesystem_id),
-                 config.JOURNALIST_KEY],
-                app.storage.path(source.filesystem_id, fname))
+        journalist = Journalist.query.first()
+        reply = Reply(journalist, source, fname)
+        db.session.add(reply)
 
-            journalist = Journalist.query.first()
-            reply = Reply(journalist, source, fname)
-            db.session.add(reply)
+    db.session.commit()
 
-        db.session.commit()
-
-        print("Test source '{}' added with {} submissions "
-              "and {} replies".format(journalist_designation, num_submissions,
-                                      num_replies))
+    print("Test source '{}' added with {} submissions "
+          "and {} replies".format(journalist_designation, num_submissions,
+                                  num_replies))
 
 
 if __name__ == "__main__":  # pragma: no cover
-    # Add two test users
-    test_password = "correct horse battery staple profanity oil chewy"
-    test_otp_secret = "JHCOGO7VCER3EJ4L"
-
-    add_test_user("journalist",
-                  test_password,
-                  test_otp_secret,
-                  is_admin=True)
-    add_test_user("dellsberg",
-                  test_password,
-                  test_otp_secret,
-                  is_admin=False)
-
-    # Add test sources and submissions
-    num_sources = 2
-    for _ in range(num_sources):
-        create_source_and_submissions()
+    main()
