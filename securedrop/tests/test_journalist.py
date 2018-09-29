@@ -759,7 +759,7 @@ def test_admin_resets_user_hotp_error(mocker,
 
     bad_secret = '1234'
     error_message = 'SOMETHING WRONG!'
-    mocked_error_logger = mocker.patch('journalist.app.logger.error')
+    mocked_error_logger = mocker.patch.object(journalist_app.logger, 'error')
     old_secret = test_journo['otp_secret']
 
     with journalist_app.test_client() as app:
@@ -859,7 +859,7 @@ def test_user_resets_user_hotp_error(mocker,
     bad_secret = '1234'
     old_secret = test_journo['otp_secret']
     error_message = 'SOMETHING WRONG!'
-    mocked_error_logger = mocker.patch('journalist.app.logger.error')
+    mocked_error_logger = mocker.patch.object(journalist_app.logger, 'error')
 
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
@@ -1197,7 +1197,7 @@ def test_logo_upload_with_invalid_filetype_fails(journalist_app, test_admin):
 
 
 def test_creation_of_ossec_test_log_event(journalist_app, test_admin, mocker):
-    mocked_error_logger = mocker.patch('journalist.app.logger.error')
+    mocked_error_logger = mocker.patch.object(journalist_app.logger, 'error')
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])

@@ -9,7 +9,6 @@ from flask import session, escape, current_app, url_for, g
 from mock import patch, ANY
 
 import crypto_util
-import source
 import utils
 import version
 
@@ -139,7 +138,7 @@ def test_generate_too_long_codename(source_app):
 
 
 def test_create_duplicate_codename(source_app):
-    with patch.object(source.app.logger, 'error') as logger:
+    with patch.object(source_app.logger, 'error') as logger:
         with source_app.test_client() as app:
             resp = app.get(url_for('main.generate'))
             assert resp.status_code == 200
