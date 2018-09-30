@@ -18,19 +18,25 @@ from utils.instrument import InstrumentedApp
 
 @contextmanager
 def totp_window():
-    # To ensure we have enough time during a single TOTP window to do the
-    # whole test, optionally sleep.
-    now = datetime.now()
-    num_secs_elapsed_in_time_window = now.second % 30
-    num_secs_left_in_time_window = 30 - num_secs_elapsed_in_time_window
+    '''To ensure we have enough time during a single TOTP window to do the
+       whole test, optionally sleep.
+    '''
 
-    if num_secs_left_in_time_window < 5:
-        time.sleep(30 - num_secs_elapsed_in_time_window)
-        now = datetime.now()
-        window_end = now.replace(microsecond=0) + timedelta(seconds=30)
-    else:
-        window_end = now.replace(microsecond=0) + \
-            timedelta(seconds=(30 - num_secs_left_in_time_window))
+    now = datetime.now()
+    # `or 30` to ensure we don't have a zero-length window
+    seconds_left_in_window = ((30 - now.second) % 30) or 30
+
+    window_end = now.replace(microsecond=0) + \
+        timedelta(seconds=seconds_left_in_window)
+    window_end_delta = window_end - now
+
+    # if we have less than 5 seconds left in this window, sleep to wait for
+    # the next window
+    if window_end_delta < timedelta(seconds=5):
+        sleep_time = window_end_delta.seconds + \
+            window_end_delta.microseconds / 1000000.0
+        time.sleep(sleep_time)
+        window_end = window_end + timedelta(seconds=30)
 
     yield
 
