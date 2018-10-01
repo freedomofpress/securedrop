@@ -26,8 +26,29 @@ import source_app
 import tests.utils.env as env
 
 from db import db
+from tests.functional.source_navigation_steps import \
+    SourceNavigationStepsMixin
 
 LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
+
+
+class FunctionalHelper(SourceNavigationStepsMixin):
+
+    def __init__(self,
+                 driver,
+                 admin=None,
+                 journalist=None,
+                 live_journalist_app=None,
+                 live_source_app=None):
+        self.driver = driver
+        if admin:
+            self.admin = admin
+        if journalist:
+            self.journalist = journalist
+        if live_journalist_app:
+            self.journalist_location = live_journalist_app['location']
+        if live_source_app:
+            self.source_location = live_source_app['location']
 
 
 # https://stackoverflow.com/a/34795883/837471
