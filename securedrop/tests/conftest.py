@@ -109,6 +109,17 @@ def config(tmpdir):
 
 
 @pytest.fixture(scope='function')
+def pre_create_config(config):
+    '''This is so the configs can be altered on a per-test basis for tests
+       that use the live app fixutres. We need this "dependency injection"
+       because Python multithreading won't let us manipulate config values
+       of the `Process`'s while the apps are running.
+    '''
+    # In the default case we don't need to do anything.
+    pass
+
+
+@pytest.fixture(scope='function')
 def alembic_config(config):
     base_dir = path.join(path.dirname(__file__), '..')
     migrations_dir = path.join(base_dir, 'alembic')
@@ -223,7 +234,7 @@ def journalist_api_token(journalist_app, test_journo):
 
 
 @pytest.fixture(scope='function')
-def live_journalist_app(config, mocker):
+def live_journalist_app(config, mocker, pre_create_config):
     app = create_journalist_app(config)
     with app.app_context():
         db.create_all()
@@ -242,7 +253,7 @@ def live_journalist_app(config, mocker):
 
 
 @pytest.fixture(scope='function')
-def live_source_app(config, mocker):
+def live_source_app(config, mocker, pre_create_config):
     app = create_source_app(config)
     with app.app_context():
         db.create_all()
