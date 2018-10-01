@@ -7,13 +7,19 @@ import io
 import json
 import psutil
 import pytest
+import requests
 import shutil
 import signal
+import socket
 import subprocess
+import time
+import traceback
 
 from ConfigParser import SafeConfigParser
 from flask import url_for
+from multiprocessing import Process
 from pyotp import TOTP
+from requests.exceptions import ConnectionError
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config as original_config
@@ -210,6 +216,65 @@ def journalist_api_token(journalist_app, test_journo):
         return observed_response['token']
 
 
+@pytest.fixture(scope='function')
+def live_journalist_app(config, mocker):
+    app = create_journalist_app(config)
+    with app.app_context():
+        db.create_all()
+    # patch to avoid intermittent errors
+    mocker.patch('models.Journalist.verify_token', return_value=True)
+    signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
+    port = _unused_port()
+    location = 'http://localhost:{}'.format(port)
+    proc = Process(target=lambda: run_live_app(app, port))
+    proc.start()
+    _wait_for_app_liveness(location)
+    yield {'location': location,
+           'process': proc,
+           'app': app}
+    proc.terminate()
+
+
+@pytest.fixture(scope='function')
+def live_source_app(config, mocker):
+    app = create_source_app(config)
+    with app.app_context():
+        db.create_all()
+    # patch to avoid intermittent errors
+    mocker.patch('source_app.main.get_entropy_estimate', return_value=8192)
+    signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
+    port = _unused_port()
+    location = 'http://localhost:{}'.format(port)
+    proc = Process(target=lambda: run_live_app(app, port))
+    proc.start()
+    _wait_for_app_liveness(location)
+    yield {'location': location,
+           'process': proc,
+           'app': app}
+    proc.terminate()
+
+
+def _wait_for_app_liveness(location):
+    for tick in range(30):
+        try:
+            requests.get(location)
+        except ConnectionError:
+            time.sleep(1)
+        else:
+            return
+    raise Exception('Failed to reach live server at {} after 30 seconds.'
+                    .format(location))
+
+
+def run_live_app(app, port):
+    app.run(
+        port=port,
+        debug=True,
+        use_reloader=False,
+        threaded=True,
+    )
+
+
 def _start_test_rqworker(config):
     if not psutil.pid_exists(_get_pid_from_file(TEST_WORKER_PIDFILE)):
         tmp_logfile = io.open('/tmp/test_rqworker.log', 'w')
@@ -244,3 +309,11 @@ def _cleanup_test_securedrop_dataroot(config):
         shutil.rmtree(config.SECUREDROP_DATA_ROOT)
     except OSError:
         pass
+
+
+def _unused_port():
+    s = socket.socket()
+    s.bind(("localhost", 0))
+    port = s.getsockname()[1]
+    s.close()
+    return port
