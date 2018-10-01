@@ -1,19 +1,18 @@
-import source_navigation_steps
-import functional_test
+from functional_test import FunctionalHelper
 
 
-class TestSourceInterface(
-        functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin):
+def test_lookup_codename_hint(live_source_app, webdriver):
+    helper = FunctionalHelper(
+        driver=webdriver,
+        live_source_app=live_source_app)
 
-    def test_lookup_codename_hint(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_shows_codename()
-        self._source_hides_codename()
-        self._source_logs_out()
-        self._source_visits_source_homepage()
-        self._source_chooses_to_login()
-        self._source_proceeds_to_login()
-        self._source_sees_no_codename()
+    helper._source_visits_source_homepage()
+    helper._source_chooses_to_submit_documents()
+    helper._source_continues_to_submit_page()
+    helper._source_shows_codename()
+    helper._source_hides_codename()
+    helper._source_logs_out()
+    helper._source_visits_source_homepage()
+    helper._source_chooses_to_login()
+    helper._source_proceeds_to_login()
+    helper._source_sees_no_codename()
