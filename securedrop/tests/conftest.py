@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import errno
 import gnupg
 import logging
 import os
@@ -16,10 +17,13 @@ import time
 import traceback
 
 from ConfigParser import SafeConfigParser
+from datetime import datetime
 from flask import url_for
 from multiprocessing import Process
 from pyotp import TOTP
 from requests.exceptions import ConnectionError
+from selenium import webdriver as selenium_webdriver
+from selenium.webdriver.firefox import firefox_binary
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config as original_config
@@ -36,6 +40,8 @@ import utils
 # It has been intentionally omitted from `config.py.example`
 # in order to isolate the test vars from prod vars.
 TEST_WORKER_PIDFILE = '/tmp/securedrop_test_worker.pid'
+
+LOG_DIR = path.join(path.dirname(__file__), 'log')
 
 # Quiet down gnupg output. (See Issue #2595)
 gnupg_logger = logging.getLogger(gnupg.__name__)
@@ -252,6 +258,39 @@ def live_source_app(config, mocker):
            'process': proc,
            'app': app}
     proc.terminate()
+
+
+@pytest.fixture(scope='module')
+def driver_binary():
+    with open(path.join(LOG_DIR, 'firefox.log'), 'a') as log_file:
+        log_file.write('\n\n[{}] Running Functional Tests\n'
+                       .format(datetime.now()))
+        log_file.flush()
+        yield firefox_binary.FirefoxBinary(log_file=log_file)
+
+
+@pytest.fixture(scope='module')
+def webdriver(driver_binary):
+    # see https://review.openstack.org/#/c/375258/ and the
+    # associated issues for background on why this is necessary
+    connrefused_retry_count = 3
+    connrefused_retry_interval = 5
+
+    for i in range(connrefused_retry_count + 1):
+        try:
+            driver = selenium_webdriver.Firefox(firefox_binary=driver_binary,
+                                                firefox_profile=None)
+            if i > 0:
+                # i==0 is normal behavior without connection refused.
+                print('NOTE: Retried {} time(s) due to '
+                      'connection refused.'.format(i))
+            return driver
+        except socket.error as socket_error:
+            if (socket_error.errno == errno.ECONNREFUSED
+                    and i < connrefused_retry_count):
+                time.sleep(connrefused_retry_interval)
+                continue
+            raise
 
 
 def _wait_for_app_liveness(location):
