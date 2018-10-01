@@ -177,6 +177,7 @@ upgrade-test-local: ## Once an upgrade environment is running, force upgrade apt
 
 .PHONY: upgrade-test-qa
 upgrade-test-qa: ## Once an upgrade environment is running, force upgrade apt packages (from qa server)
+	@QA_APTTEST=yes molecule converge -s upgrade -- --diff -t apt
 	@QA_APTTEST=yes molecule side-effect -s upgrade
 
 # Explaination of the below shell command should it ever break.
