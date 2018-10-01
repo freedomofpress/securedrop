@@ -13,22 +13,42 @@ based on Xenial.
 Running the Xenial dev env
 --------------------------
 
+The Xenial staging environment uses libvirt as a VM provider. If you haven't 
+already done so, you should follow the instructions here: :ref:`libvirt_provider`.
+
+Once the libvirt Vagrant provider is available, you'll need a libvirt-format Xenial
+base image. To set one up, run the following commands.
+
+.. code:: sh
+
+   vagrant box add bento/ubuntu-16.04  # choose the virtualbox option
+   vagrant mutate bento/ubuntu-16.04 mutate libvirt
+
+
 Due to packaging logic changes, you'll need to build the Debian packages
 with overrides enabled for Xenial support. Then run the Xenial scenario.
 
-.. code::
+.. code:: sh
 
    make build-debs-xenial
    make staging-xenial
 
-The VMs will be available. Further debugging likely required; you can
+
+The VMs will be available.  You can
 log into the machines with e.g.:
 
-.. code::
+.. code:: sh
 
    molecule login -s libvirt-staging-xenial -h app-staging
 
-Depending on the error, simply re-running the ``make staging-xenial`` target
+To run the testinfra tests against the Xenial enviroment, you can use the command:
+
+.. code:: sh
+
+  molecule verify -s libbirt-staging-xenial
+
+
+If you encounter errors, re-running the ``make staging-xenial`` target
 may help. Naturally, we want the process to be error-free reliably.
 
 
@@ -59,11 +79,6 @@ PAM logic
     The PAM common-auth customizations include declarations for
     ``pam_ecryptfs.so`` which prove problematic; commenting out ostensibly
     resolves. More research required.
-
-Config tests
-    The testinfra config test suite expects Trusty throughout. We'll need
-    to update that logic to refer to LSB codename instead, and assert
-    that the target platform is one of either Trusty or Xenial.
 
 More detailed research notes on evaluating Xenial support can be found
 in the following GitHub issues:
