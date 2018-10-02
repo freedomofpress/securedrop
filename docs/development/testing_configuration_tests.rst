@@ -17,10 +17,6 @@ Installation
     pip install -r securedrop/requirements/develop-requirements.txt
 
 
-.. note:: The testinfra tests require support for libvirt VMs. To set up libvirt 
-  support, follow the instructions here: :ref:`libvirt_provider`.
-
-
 Running the Config Tests
 ------------------------
 
@@ -32,20 +28,34 @@ For the staging VMs:
 .. code:: sh
 
     make build-debs
-    molecule converge -s libvirt-staging
+    make staging
+
+The VMs will be set up using either the libvirt or virtualbox Vagrant VM provider,
+depending on your system settings. You'll need to use the appropriate commands below
+based on your choice of provider. 
 
 Then, to run the tests:
+
+libvirt:
+~~~~~~~~
 
 .. code:: sh
    
    molecule verify -s libvirt-staging
+
+virtualbox:
+~~~~~~~~~~~
+
+.. code:: sh
+
+   molecule verify -s virtualbox-staging
 
 Test failure against any host will generate a report with informative output
 about the specific test that triggered the error. Molecule
 will also exit with a non-zero status code.
 
 .. note:: To build and test the VMs with one command, use the Molecule ``test``
-  action: ``molecule test -s libvirt-staging``.
+  action: ``molecule test -s libvirt-staging --destroy=never``, or ``molecule test -s virtualbox-staging --destroy=never``. 
 
 Updating the Config Tests
 -------------------------

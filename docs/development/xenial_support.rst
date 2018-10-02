@@ -13,11 +13,8 @@ based on Xenial.
 Running the Xenial dev env
 --------------------------
 
-The Xenial staging environment uses libvirt as a VM provider. If you haven't 
-already done so, you should follow the instructions here: :ref:`libvirt_provider`.
-
-Once the libvirt Vagrant provider is available, you'll need a libvirt-format Xenial
-base image. To set one up, run the following commands.
+If you're using the libvirt Vagrant provider, you'll need a libvirt-format Xenial
+base image. To set one up, run the following commands:
 
 .. code:: sh
 
@@ -34,19 +31,38 @@ with overrides enabled for Xenial support. Then run the Xenial scenario.
    make staging-xenial
 
 
-The VMs will be available.  You can
-log into the machines with e.g.:
+The VMs will now be available.  Depending your choice of VM provider, you can
+log into the machines with the following commands:
+
+libvirt:
+~~~~~~~~
 
 .. code:: sh
 
    molecule login -s libvirt-staging-xenial -h app-staging
 
-To run the testinfra tests against the Xenial enviroment, you can use the command:
+virtualbox:
+~~~~~~~~~~~
+
+.. code:: sh
+ 
+   molecule login -s virtualbox-staging-xenial -h app-staging
+
+To run the testinfra tests against the Xenial enviroment, you can use the commands:
+
+libvirt:
+~~~~~~~~
 
 .. code:: sh
 
-  molecule verify -s libbirt-staging-xenial
+  molecule verify -s libvirt-staging-xenial
 
+virtualbox:
+~~~~~~~~~~~
+
+.. code:: sh
+
+  molecule verify -s virtualbox-staging-xenial
 
 If you encounter errors, re-running the ``make staging-xenial`` target
 may help. Naturally, we want the process to be error-free reliably.
@@ -79,6 +95,11 @@ PAM logic
     The PAM common-auth customizations include declarations for
     ``pam_ecryptfs.so`` which prove problematic; commenting out ostensibly
     resolves. More research required.
+
+Config tests
+    The testinfra config test suite runs slightly different checks for
+    Trusty and Xenial where appropriate. Care should be taken to preserve
+    functionality of the config tests against both distros.
 
 More detailed research notes on evaluating Xenial support can be found
 in the following GitHub issues:
