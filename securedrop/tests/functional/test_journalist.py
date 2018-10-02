@@ -16,10 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import source_navigation_steps
-import journalist_navigation_steps
-import functional_test
-
 from functional_test import FunctionalHelper
 
 
@@ -91,20 +87,26 @@ def test_journalist_uses_index_delete_collections_button_modal(
     helper._journalist_uses_delete_collections_button_confirmation()
 
 
-class TestJournalist(
-        functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
+def test_journalist_interface_ui_with_modal(
+        test_journo,
+        live_source_app,
+        live_journalist_app,
+        webdriver):
 
-    def test_journalist_interface_ui_with_modal(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_uses_js_filter_by_sources()
-        self._journalist_selects_all_sources_then_selects_none()
-        self._journalist_selects_the_first_source()
-        self._journalist_uses_js_buttons_to_download_unread()
-        self._journalist_delete_all_confirmation()
+    helper = FunctionalHelper(
+        driver=webdriver,
+        journalist=test_journo,
+        live_source_app=live_source_app,
+        live_journalist_app=live_journalist_app)
+
+    helper._source_visits_source_homepage()
+    helper._source_chooses_to_submit_documents()
+    helper._source_continues_to_submit_page()
+    helper._source_submits_a_file()
+    helper._source_logs_out()
+    helper._journalist_logs_in()
+    helper._journalist_uses_js_filter_by_sources()
+    helper._journalist_selects_all_sources_then_selects_none()
+    helper._journalist_selects_the_first_source()
+    helper._journalist_uses_js_buttons_to_download_unread()
+    helper._journalist_delete_all_confirmation()
