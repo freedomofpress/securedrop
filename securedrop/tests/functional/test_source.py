@@ -41,3 +41,11 @@ def test_source_session_timeout(live_source_app, webdriver, pre_create_config):
     helper._source_waits_for_session_to_timeout(EXPIRATION_MINS)
     helper._source_visits_source_homepage()
     helper._source_sees_session_timeout_message()
+
+
+def test_not_found(live_source_app, webdriver):
+    helper = FunctionalHelper(
+        driver=webdriver,
+        live_source_app=live_source_app)
+
+    helper._source_not_found()
