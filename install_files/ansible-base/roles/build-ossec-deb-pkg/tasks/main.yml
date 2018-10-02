@@ -84,6 +84,11 @@
     - "{{ ossec_build_dir }}"
     - "{{ ossec_build_dir }}/var"
 
+- name: Remove client.keys to avoid overwriting existing client.keys
+  file:
+    state: absent
+    dest: /var/ossec/etc/client.keys
+
 - name: Copy /var/ossec/ to OSSEC build directory.
   command: cp -R /var/ossec {{ ossec_build_dir }}/var/
 
