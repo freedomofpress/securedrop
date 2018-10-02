@@ -281,7 +281,13 @@ def driver_binary():
 
 
 @pytest.fixture(scope='module')
-def webdriver(driver_binary):
+def firefox_profile():
+    # return none to use the default profile
+    return None
+
+
+@pytest.fixture(scope='module')
+def webdriver(driver_binary, firefox_profile):
     # see https://review.openstack.org/#/c/375258/ and the
     # associated issues for background on why this is necessary
     connrefused_retry_count = 3
@@ -289,8 +295,9 @@ def webdriver(driver_binary):
 
     for i in range(connrefused_retry_count + 1):
         try:
-            driver = selenium_webdriver.Firefox(firefox_binary=driver_binary,
-                                                firefox_profile=None)
+            driver = selenium_webdriver.Firefox(
+                firefox_binary=driver_binary,
+                firefox_profile=firefox_profile)
             if i > 0:
                 # i==0 is normal behavior without connection refused.
                 print('NOTE: Retried {} time(s) due to '
