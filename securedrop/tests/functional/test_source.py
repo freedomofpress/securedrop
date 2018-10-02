@@ -49,3 +49,22 @@ def test_not_found(live_source_app, webdriver):
         live_source_app=live_source_app)
 
     helper._source_not_found()
+
+
+def test_warning_appears_if_tor_browser_not_in_use(live_source_app,
+                                                   webdriver):
+    helper = FunctionalHelper(
+        driver=webdriver,
+        live_source_app=live_source_app)
+    helper.driver.get(helper.source_location)
+
+    warning_banner = helper.driver.find_element_by_class_name(
+        'use-tor-browser')
+
+    assert ("It is recommended to use the Tor Browser" in
+            warning_banner.text)
+
+    # User should be able to dismiss the warning
+    warning_dismiss_button = helper.driver.find_element_by_id(
+        'use-tor-browser-close')
+    helper.banner_is_dismissed(warning_banner, warning_dismiss_button)
