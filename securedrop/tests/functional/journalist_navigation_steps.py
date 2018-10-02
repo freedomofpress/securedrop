@@ -591,7 +591,9 @@ class JournalistNavigationStepsMixin():
                 self.driver.get_cookies()))
         raw_content = urllib2.urlopen(submission_req).read()
 
-        decrypted_submission = self.gpg.decrypt(raw_content)
+        decrypted_submission = \
+            self.journalist_app.crypto_util.gpg.decrypt(raw_content)
+
         submission = self._get_submission_content(file_url,
                                                   decrypted_submission)
         assert self.secret_message == submission
