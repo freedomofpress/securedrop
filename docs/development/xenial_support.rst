@@ -38,10 +38,6 @@ Known bugs with Xenial support
 Below is a high-level overview of known problems to be addressed
 for delivering Xenial compatibility.
 
-Ansible provisioning
-    Changes required to support the "xenial" apt sources throughout
-    config logic, particularly in templates.
-
 Packaging
     Dependencies for the ``securedrop-app-code`` deb package have changed;
     ``apache2`` should be explicitly required; ``apache2-mpm-worker``
@@ -61,9 +57,9 @@ PAM logic
     resolves. More research required.
 
 Config tests
-    The testinfra config test suite expects Trusty throughout. We'll need
-    to update that logic to refer to LSB codename instead, and assert
-    that the target platform is one of either Trusty or Xenial.
+    The testinfra config test suite runs slightly different checks for
+    Trusty and Xenial where appropriate. Care should be taken to preserve
+    functionality of the config tests against both distros.
 
 More detailed research notes on evaluating Xenial support can be found
 in the following GitHub issues:

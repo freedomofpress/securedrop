@@ -1,4 +1,7 @@
 ---
+- name: Import apache packages vars for distro.
+  include_vars: "{{ ansible_distribution+'_'+ansible_distribution_release }}.yml"
+
 - name: Install apache packages.
   apt:
     pkg: "{{ item }}"
@@ -57,6 +60,7 @@
   apache2_module:
     state: absent
     name: "{{ item }}"
+    force: yes
   with_items: "{{ apache_disabled_modules }}"
   notify:
     - restart apache2

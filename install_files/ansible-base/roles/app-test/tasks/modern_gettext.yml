@@ -8,6 +8,7 @@
     repo: deb http://archive.ubuntu.com/ubuntu/ xenial main
     state: present
     update_cache: yes
+  when: ansible_distribution_release != "xenial"
   tags:
     - apt
 
@@ -23,5 +24,6 @@
     repo: deb http://archive.ubuntu.com/ubuntu/ xenial main
     state: absent
     update_cache: yes
+  when: ansible_distribution_release != "xenial"
   tags:
     - apt

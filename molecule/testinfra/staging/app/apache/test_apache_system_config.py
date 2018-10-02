@@ -6,7 +6,6 @@ securedrop_test_vars = pytest.securedrop_test_vars
 
 
 @pytest.mark.parametrize("package", [
-    "apache2-mpm-worker",
     "libapache2-mod-wsgi",
     "libapache2-mod-xsendfile",
 ])
@@ -15,6 +14,17 @@ def test_apache_apt_packages(Package, package):
     Ensure required Apache packages are installed.
     """
     assert Package(package).is_installed
+
+
+def test_apache_apt_packages_trusty(Package, SystemInfo):
+    """
+    Ensure required Apache packages are installed. Only checks Trusty-specific
+    packages; other tests handle more general apt dependencies for Apache.
+    """
+    # Skip if testing against Xenial
+    if SystemInfo.release != "trusty":
+        return True
+    assert Package("apache2-mpm-worker").is_installed
 
 
 def test_apache_security_config_deprecated(File):
