@@ -54,10 +54,12 @@ class FunctionalHelper(SourceNavigationStepsMixin,
         if live_journalist_app:
             self.journalist_app = live_journalist_app['app']
             self.journalist_location = live_journalist_app['location']
+            self.journalist_process = live_source_app['process']
 
         if live_source_app:
             self.source_app = live_source_app['app']
             self.source_location = live_source_app['location']
+            self.source_process = live_source_app['process']
 
         self.secret_message = ('These documents outline a major government '
                                'invasion of privacy.')
