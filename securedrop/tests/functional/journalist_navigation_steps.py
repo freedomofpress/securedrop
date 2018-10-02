@@ -56,8 +56,8 @@ class JournalistNavigationStepsMixin():
 
     def _journalist_logs_in(self):
         # Create a test user for logging in
-        self.user, self.user_pw = db_helper.init_journalist()
-        self._login_user(self.user.username, self.user_pw, 'mocked')
+        self._login_user(self.journalist['username'],
+                         self.journalist['password'], 'mocked')
 
         headline = self.driver.find_element_by_css_selector('span.headline')
         if not hasattr(self, 'accept_languages'):
@@ -174,8 +174,9 @@ class JournalistNavigationStepsMixin():
         assert len(sources) == 0
 
     def _admin_logs_in(self):
-        self.admin, self.admin_pw = db_helper.init_journalist(is_admin=True)
-        self._login_user(self.admin.username, self.admin_pw, 'mocked')
+        self._login_user(self.admin['username'],
+                         self.admin['password'],
+                         'mocked')
 
         if not hasattr(self, 'accept_languages'):
             # Admin user should log in to the same interface as a
@@ -428,7 +429,9 @@ class JournalistNavigationStepsMixin():
         # Log the new user out
         self._logout()
 
-        self._login_user(self.admin.username, self.admin_pw, 'mocked')
+        self._login_user(self.admin['username'],
+                         self.admin['password'],
+                         'mocked')
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_id(
@@ -477,7 +480,9 @@ class JournalistNavigationStepsMixin():
 
         # Log the admin user back in
         self._logout()
-        self._login_user(self.admin.username, self.admin_pw, 'mocked')
+        self._login_user(self.admin['username'],
+                         self.admin['password'],
+                         'mocked')
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_id(
@@ -509,7 +514,9 @@ class JournalistNavigationStepsMixin():
 
         # Log back out and log back admin in for subsequent tests
         self._logout()
-        self._login_user(self.admin.username, self.admin_pw, 'mocked')
+        self._login_user(self.admin['username'],
+                         self.admin['password'],
+                         'mocked')
 
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
@@ -724,12 +731,16 @@ class JournalistNavigationStepsMixin():
 
     def _journalist_fail_login(self):
         self.user, self.user_pw = db_helper.init_journalist()
-        self._try_login_user(self.user.username, 'worse', 'mocked')
+        self._try_login_user(self.user['username'],
+                             'worse',
+                             'mocked')
 
     def _journalist_fail_login_many(self):
         self.user, self.user_pw = db_helper.init_journalist()
         for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD + 1):
-            self._try_login_user(self.user.username, 'worse', 'mocked')
+            self._try_login_user(self.user['username'],
+                                 'worse',
+                                 'mocked')
 
     def _admin_enters_journalist_account_details_hotp(self, username,
                                                       hotp_secret):

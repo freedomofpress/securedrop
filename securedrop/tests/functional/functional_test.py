@@ -26,13 +26,16 @@ import source_app
 import tests.utils.env as env
 
 from db import db
+from tests.functional.journalist_navigation_steps import \
+    JournalistNavigationStepsMixin
 from tests.functional.source_navigation_steps import \
     SourceNavigationStepsMixin
 
 LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
 
 
-class FunctionalHelper(SourceNavigationStepsMixin):
+class FunctionalHelper(SourceNavigationStepsMixin,
+                       JournalistNavigationStepsMixin):
 
     def __init__(self,
                  driver,
