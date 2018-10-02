@@ -54,21 +54,34 @@ def test_admin_deletes_user(
         admin=test_admin,
         live_source_app=live_source_app,
         live_journalist_app=live_journalist_app)
+
     helper._admin_logs_in()
     helper._admin_visits_admin_interface()
     helper._admin_adds_a_user()
     helper._admin_deletes_user()
 
 
+def test_admin_updates_image(
+        test_admin,
+        live_source_app,
+        live_journalist_app,
+        webdriver):
+
+    helper = FunctionalHelper(
+        driver=webdriver,
+        admin=test_admin,
+        live_source_app=live_source_app,
+        live_journalist_app=live_journalist_app)
+
+    helper._admin_logs_in()
+    helper._admin_visits_admin_interface()
+    helper._admin_visits_system_config_page()
+    helper._admin_updates_logo_image()
+
+
 class TestAdminInterface(
         functional_test.FunctionalTest,
         journalist_navigation_steps.JournalistNavigationStepsMixin):
-
-    def test_admin_updates_image(self):
-        self._admin_logs_in()
-        self._admin_visits_admin_interface()
-        self._admin_visits_system_config_page()
-        self._admin_updates_logo_image()
 
     def test_ossec_alert_button(self):
         self._admin_logs_in()
