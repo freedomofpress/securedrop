@@ -1,6 +1,3 @@
-import functional_test
-import journalist_navigation_steps
-
 from functional_test import FunctionalHelper
 
 
@@ -79,12 +76,19 @@ def test_admin_updates_image(
     helper._admin_updates_logo_image()
 
 
-class TestAdminInterface(
-        functional_test.FunctionalTest,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
+def test_ossec_alert_button(
+        test_admin,
+        live_source_app,
+        live_journalist_app,
+        webdriver):
 
-    def test_ossec_alert_button(self):
-        self._admin_logs_in()
-        self._admin_visits_admin_interface()
-        self._admin_visits_system_config_page()
-        self._admin_can_send_test_alert()
+    helper = FunctionalHelper(
+        driver=webdriver,
+        admin=test_admin,
+        live_source_app=live_source_app,
+        live_journalist_app=live_journalist_app)
+
+    helper._admin_logs_in()
+    helper._admin_visits_admin_interface()
+    helper._admin_visits_system_config_page()
+    helper._admin_can_send_test_alert()
