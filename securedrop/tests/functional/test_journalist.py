@@ -69,20 +69,32 @@ def test_journalist_uses_col_delete_collection_button_modal(
     helper._journalist_uses_delete_collection_button_confirmation()
 
 
+def test_journalist_uses_index_delete_collections_button_modal(
+        test_journo,
+        live_source_app,
+        live_journalist_app,
+        webdriver):
+
+    helper = FunctionalHelper(
+        driver=webdriver,
+        journalist=test_journo,
+        live_source_app=live_source_app,
+        live_journalist_app=live_journalist_app)
+
+    # This deletion button is displayed on the index page
+    helper._source_visits_source_homepage()
+    helper._source_chooses_to_submit_documents()
+    helper._source_continues_to_submit_page()
+    helper._source_submits_a_file()
+    helper._source_logs_out()
+    helper._journalist_logs_in()
+    helper._journalist_uses_delete_collections_button_confirmation()
+
+
 class TestJournalist(
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationStepsMixin,
         journalist_navigation_steps.JournalistNavigationStepsMixin):
-
-    def test_journalist_uses_index_delete_collections_button_modal(self):
-        # This deletion button is displayed on the index page
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_uses_delete_collections_button_confirmation()
 
     def test_journalist_interface_ui_with_modal(self):
         self._source_visits_source_homepage()
