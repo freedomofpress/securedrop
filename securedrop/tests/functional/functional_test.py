@@ -50,6 +50,27 @@ class FunctionalHelper(SourceNavigationStepsMixin):
         if live_source_app:
             self.source_location = live_source_app['location']
 
+    def banner_is_dismissed(self, warning_banner, dismiss_button):
+        dismiss_button.click()
+
+        def warning_banner_is_hidden():
+            assert warning_banner.is_displayed() is False
+
+        self.wait_for(warning_banner_is_hidden)
+
+    def wait_for(self, function_with_assertion, timeout=5):
+        """Polling wait for an arbitrary assertion."""
+        # Thanks to
+        # http://chimera.labs.oreilly.com/books/1234000000754/ch20.html#_a_common_selenium_problem_race_conditions
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            try:
+                return function_with_assertion()
+            except (AssertionError, WebDriverException):
+                time.sleep(0.1)
+        # one more try, which will raise any errors if they are outstanding
+        return function_with_assertion()
+
 
 # https://stackoverflow.com/a/34795883/837471
 class alert_is_not_present(object):
