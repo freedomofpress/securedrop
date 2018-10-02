@@ -59,3 +59,14 @@ def test_source_cancels_at_login_page(live_source_app, webdriver):
     helper._source_visits_source_homepage()
     helper._source_chooses_to_login()
     helper._source_hits_cancel_at_login_page()
+
+
+def test_source_cancels_at_submit_page(live_source_app, webdriver):
+    helper = FunctionalHelper(
+        driver=webdriver,
+        live_source_app=live_source_app)
+
+    helper._source_visits_source_homepage()
+    helper._source_chooses_to_submit_documents()
+    helper._source_continues_to_submit_page()
+    helper._source_hits_cancel_at_submit_page()
