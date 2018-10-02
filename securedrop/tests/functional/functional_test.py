@@ -44,14 +44,23 @@ class FunctionalHelper(SourceNavigationStepsMixin,
                  live_journalist_app=None,
                  live_source_app=None):
         self.driver = driver
+
         if admin:
             self.admin = admin
+
         if journalist:
             self.journalist = journalist
+
         if live_journalist_app:
+            self.journalist_app = live_journalist_app['app']
             self.journalist_location = live_journalist_app['location']
+
         if live_source_app:
+            self.source_app = live_source_app['app']
             self.source_location = live_source_app['location']
+
+        self.secret_message = ('These documents outline a major government '
+                               'invasion of privacy.')
 
     def banner_is_dismissed(self, warning_banner, dismiss_button):
         dismiss_button.click()
@@ -73,6 +82,31 @@ class FunctionalHelper(SourceNavigationStepsMixin,
                 time.sleep(0.1)
         # one more try, which will raise any errors if they are outstanding
         return function_with_assertion()
+
+    def wait_for_source_key(self, source_name):
+        filesystem_id = self.source_app.crypto_util.hash_codename(source_name)
+
+        def key_available(filesystem_id):
+            assert self.source_app.crypto_util.getkey(filesystem_id)
+        self.wait_for(
+            lambda: key_available(filesystem_id), timeout=60)
+
+    def _alert_wait(self):
+        WebDriverWait(self.driver, 10).until(
+            expected_conditions.alert_is_present(),
+            'Timed out waiting for confirmation popup.')
+
+    def _alert_accept(self):
+        self.driver.switch_to.alert.accept()
+        WebDriverWait(self.driver, 10).until(
+            alert_is_not_present(),
+            'Timed out waiting for confirmation popup to disappear.')
+
+    def _alert_dismiss(self):
+        self.driver.switch_to.alert.dismiss()
+        WebDriverWait(self.driver, 10).until(
+            alert_is_not_present(),
+            'Timed out waiting for confirmation popup to disappear.')
 
 
 # https://stackoverflow.com/a/34795883/837471
