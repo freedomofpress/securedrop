@@ -9,11 +9,6 @@ class TestSubmitAndRetrieveFile(
         journalist_navigation_steps.JournalistNavigationStepsMixin):
 
 
-    def test_source_cancels_at_login_page(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_login()
-        self._source_hits_cancel_at_login_page()
-
     def test_source_cancels_at_submit_page(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()

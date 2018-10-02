@@ -49,3 +49,13 @@ def test_submit_and_retrieve_file_happy_path(
     helper._source_chooses_to_login()
     helper._source_proceeds_to_login()
     helper._source_deletes_a_journalist_reply()
+
+
+def test_source_cancels_at_login_page(live_source_app, webdriver):
+    helper = FunctionalHelper(
+        driver=webdriver,
+        live_source_app=live_source_app)
+
+    helper._source_visits_source_homepage()
+    helper._source_chooses_to_login()
+    helper._source_hits_cancel_at_login_page()
