@@ -21,3 +21,5 @@ securedrop/tests/pages-layout/
 build/*.deb
 **/*.box
 admin/.tox
+**/firefox.log
+junit/*.xml
