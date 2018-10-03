@@ -2,19 +2,15 @@
 version: 2
 jobs:
   lint:
-    docker:
-      - image: gcr.io/cloud-builders/docker
+    machine:
+      enabled: true
     steps:
-      - run: apt-get install -y make
       - checkout
       - run:
           name: Rebase on-top of github target
           command: ./devops/scripts/rebase-ci.sh
-      - setup_remote_docker
 
-      - run: TAG=${CIRCLE_SHA1} make ci-lint-image
-
-      - run: TAG=${CIRCLE_SHA1} make ci-lint
+      - run: make ci-lint
 
   tests:
     machine:
