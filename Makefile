@@ -20,13 +20,9 @@ ci-run: ## Provisions AWS EC2 hosts for testing staging environment.
 ci-go: ## Creates, provisions, tests, and destroys AWS EC2 hosts for testing staging environment.
 	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s aws; else echo Not running on docs branch...; fi
 
-.PHONY: ci-lint-image
-ci-lint-image: ## Builds linting container.
-	docker build $(DOCKER_BUILD_ARGUMENTS) -t securedrop-lint:${TAG} -f devops/docker/Dockerfile.linting .
-
 .PHONY: ci-lint
 ci-lint: ## Runs linting in linting container.
-	devops/scripts/dev-shell-ci sudo make --keep-going lint typelint
+	devops/scripts/dev-shell-ci run make --keep-going lint typelint
 
 .PHONY: install-mypy
 install-mypy: ## pip install mypy in a dedicated python3 virtualenv
