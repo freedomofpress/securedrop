@@ -75,19 +75,7 @@ yamllint: ## Lints YAML files (does not validate syntax!)
 
 .PHONY: shellcheck
 shellcheck: ## Lints Bash and sh scripts.
-# Omitting the `.git/` directory since its hooks won't pass validation, and we
-# don't maintain those scripts. Omitting the `.venv/` dir because we don't control
-# files in there. Omitting the ossec packages because there are a LOT of violations,
-# and we have a separate issue dedicated to cleaning those up.
-	@docker create -v /mnt --name shellcheck-targets circleci/python:2 /bin/true 2> /dev/null || true
-	@docker cp $(PWD)/. shellcheck-targets:/mnt/
-	@find "." \( -path "*/.venv" -o -path "./install_files/ossec-server" \
-		-o -path "./install_files/ossec-agent" \) -prune \
-		-o -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
-		| perl -F: -lanE '$$F[1] =~ /x-shellscript/ and say $$F[0]' \
-		| xargs docker run --rm --volumes-from shellcheck-targets \
-		-t koalaman/shellcheck:v0.4.6 \
-		-x --exclude=SC1091,SC2001,SC2064,SC2181
+	./devops/scripts/shellcheck.sh
 
 .PHONY: shellcheckclean
 shellcheckclean: ## Cleans up temporary container associated with shellcheck target.
