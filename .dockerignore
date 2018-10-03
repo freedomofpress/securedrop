@@ -1,5 +1,6 @@
 .git
 .vagrant
+.python3
 **/_build
 **/.mypy_cache
 **/.eggs
