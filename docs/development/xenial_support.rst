@@ -13,22 +13,58 @@ based on Xenial.
 Running the Xenial dev env
 --------------------------
 
+If you're using the libvirt Vagrant provider, you'll need a libvirt-format Xenial
+base image. To set one up, run the following commands:
+
+.. code:: sh
+
+   vagrant box add bento/ubuntu-16.04  # choose the virtualbox option
+   vagrant mutate bento/ubuntu-16.04 mutate libvirt
+
+
 Due to packaging logic changes, you'll need to build the Debian packages
 with overrides enabled for Xenial support. Then run the Xenial scenario.
 
-.. code::
+.. code:: sh
 
    make build-debs-xenial
    make staging-xenial
 
-The VMs will be available. Further debugging likely required; you can
-log into the machines with e.g.:
 
-.. code::
+The VMs will now be available.  Depending your choice of VM provider, you can
+log into the machines with the following commands:
+
+libvirt:
+~~~~~~~~
+
+.. code:: sh
 
    molecule login -s libvirt-staging-xenial -h app-staging
 
-Depending on the error, simply re-running the ``make staging-xenial`` target
+virtualbox:
+~~~~~~~~~~~
+
+.. code:: sh
+ 
+   molecule login -s virtualbox-staging-xenial -h app-staging
+
+To run the testinfra tests against the Xenial enviroment, you can use the commands:
+
+libvirt:
+~~~~~~~~
+
+.. code:: sh
+
+  molecule verify -s libvirt-staging-xenial
+
+virtualbox:
+~~~~~~~~~~~
+
+.. code:: sh
+
+  molecule verify -s virtualbox-staging-xenial
+
+If you encounter errors, re-running the ``make staging-xenial`` target
 may help. Naturally, we want the process to be error-free reliably.
 
 
