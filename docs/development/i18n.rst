@@ -137,7 +137,7 @@ with:
      $ securedrop/bin/dev-shell bash
      $ export PAGE_LAYOUT_LOCALES=en_US,fr_FR
      $ ./i18n_tool.py --verbose translate-messages --compile
-     $ pytest -v --page-layout tests/pages-layout
+     $ pytest -v --page-layout tests/pageslayout
      ...
      ...TestJournalistLayout::test_col_no_documents[en_US] PASSED
      ...TestJournalistLayout::test_col_no_documents[fr_FR] PASSED
@@ -146,10 +146,10 @@ with:
 .. note:: if unset, PAGE_LAYOUT_LOCALES defaults to en_US
 
 The screenshots for ``fr_FR`` are available in
-``securedrop/tests/pages-layout/screenshots/fr_FR`` and the name of
+``securedrop/tests/pageslayout/screenshots/fr_FR`` and the name of
 the file can be found in the function that created it in
-``securedrop/tests/pages-layout/test_journalist.py`` or
-``securedrop/tests/pages-layout/test_source.py``.
+``securedrop/tests/pageslayout/test_journalist.py`` or
+``securedrop/tests/pageslayout/test_source.py``.
 
 Merging Translations Back to Develop
 ------------------------------------
@@ -204,7 +204,7 @@ Verify the translations are not broken:
 
       $ securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-messages --compile
       $ PAGE_LAYOUT_LOCALES=$(echo $sm | tr ' ' ',') \
-          pytest -v --page-layout tests/pages-layout
+          pytest -v --page-layout tests/pageslayout
 
 Go to https://github.com/freedomofpress/securedrop and propose a pull request.
 

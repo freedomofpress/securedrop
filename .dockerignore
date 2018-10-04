@@ -17,7 +17,7 @@ securedrop/.sass-cache
 securedrop/static/gen
 securedrop/static/.webassets-cache
 securedrop/tests/log/*
-securedrop/tests/pages-layout/
+securedrop/tests/pageslayout/
 **/.molecule
 build/*.deb
 **/*.box
