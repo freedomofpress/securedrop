@@ -18,6 +18,7 @@ cd "${TOPLEVEL}"
 function gen_checksums() {
     rm "$CHECKSUM_FILE" 2> /dev/null || true
 
+        # shellcheck disable=SC2013
     for file in $(cat $DOCKERFILE.deps); do
         sha256sum "$file" >> "$CHECKSUM_FILE"
     done
@@ -50,6 +51,7 @@ case "${CMD}" in
     run)
         gen_checksums
         DOCKER_TAG="$(check_checksum)"
+        # shellcheck disable=SC2086
         if [[ "$(docker images -q securedrop-lint:$DOCKER_TAG 2> /dev/null)" == "" ]]; then
             ticker docker build ${DOCKER_BUILD_ARGS} --build-arg="USER_ID=$(id -u)" -t "securedrop-lint:$DOCKER_TAG" -f "$DOCKERFILE" .
         fi

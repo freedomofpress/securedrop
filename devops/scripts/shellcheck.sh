@@ -2,13 +2,15 @@
 
 set -e
 
+
 function run_native_or_in_docker () {
-    if [ $(command -v shellcheck) ]; then
-        shellcheck -x --exclude=SC1091,SC2001,SC2064,SC2181 "$1"
+    EXCLUDE_RULES="SC1091,SC2001,SC2064,SC2181,SC1117"
+    if [ "$(command -v shellcheck)" ]; then
+        shellcheck -x --exclude="$EXCLUDE_RULES" "$1"
     else
         docker run --rm -v "$(pwd):/sd" -w /sd \
             -t koalaman/shellcheck:v0.4.7 \
-            -x --exclude=SC1091,SC2001,SC2064,SC2181 "$1"
+            -x --exclude=$EXCLUDE_RULES "$1"
     fi
 }
 export -f run_native_or_in_docker
