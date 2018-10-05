@@ -1,5 +1,6 @@
 .git
 .vagrant
+.python3
 **/_build
 **/.mypy_cache
 **/.eggs
@@ -16,8 +17,10 @@ securedrop/.sass-cache
 securedrop/static/gen
 securedrop/static/.webassets-cache
 securedrop/tests/log/*
-securedrop/tests/pages-layout/
+securedrop/tests/pageslayout/
 **/.molecule
 build/*.deb
 **/*.box
 admin/.tox
+**/firefox.log
+junit/*.xml

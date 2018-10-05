@@ -152,3 +152,7 @@ raw-test-output/
 #Ignore vagrant staging files
 *.box
 *.img
+
+#These files are used in CI/dev env for determining whether to rebuild docker
+#images
+*.checksum
