@@ -67,7 +67,7 @@
 # password file (see: https://github.com/ossec/ossec-hids/issues/1472)
 - name: Generate authd shared secret
   set_fact :
-    ossec_registration_secret: "{{ lookup('pipe', 'head -c 32 /dev/urandom | md5sum | tr -d \" -\" | sed \"$d\"') }}"
+    ossec_registration_secret: "{{ range(10000000,99999999999) | random | hash('md5') }}\n"
   delegate_to: localhost
   delegate_facts: True
   when:
