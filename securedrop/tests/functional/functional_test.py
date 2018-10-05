@@ -83,6 +83,7 @@ class FunctionalTest(object):
         return firefox_binary.FirefoxBinary(log_file=log_file)
 
     def setup(self, session_expiration=30):
+        env.create_directories()
         self.__context = journalist_app.create_app(config).app_context()
         self.__context.push()
         # Patch the two-factor verification to avoid intermittent errors
@@ -96,7 +97,6 @@ class FunctionalTest(object):
 
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
-        env.create_directories()
         self.gpg = env.init_gpg()
         db.create_all()
 
