@@ -1,3 +1,4 @@
+import json
 import pytest
 
 
@@ -52,8 +53,7 @@ def test_securedrop_application_test_journalist_key(host):
 
     # Let's make sure the corresponding fingerprint is specified
     # in the SecureDrop app configuration.
-    securedrop_config = host.file("{}/config.py".format(
-        securedrop_test_vars.securedrop_code))
+    securedrop_config = File("/etc/securedrop/config.json")
     with host.sudo():
         assert securedrop_config.is_file
         assert securedrop_config.user == \
@@ -61,8 +61,14 @@ def test_securedrop_application_test_journalist_key(host):
         assert securedrop_config.group == \
             securedrop_test_vars.securedrop_user
         assert oct(securedrop_config.mode) == "0600"
-        assert securedrop_config.contains(
-            "^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$")
+
+        with open(securedrop_config) as f:
+            config_json = json.loads(f.read())
+
+    assert config_json['source_interface']['journalist_key'] == \
+        '65A1B5FF195B56353CC63DFFCC40EF1228271441'
+    assert config_json['journalist_interface']['journalist_key'] == \
+        '65A1B5FF195B56353CC63DFFCC40EF1228271441'
 
 
 def test_securedrop_application_sqlite_db(host):
