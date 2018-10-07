@@ -156,7 +156,8 @@ def test_deb_package_control_fields_homepage(host, deb):
 def test_deb_package_contains_no_config_file(host, deb):
     """
     Ensures the `securedrop-app-code` package does not ship a `config.py`
-    file. Doing so would clobber the site-specific changes made via Ansible.
+    file or a `config.json`. Doing so would clobber the site-specific changes
+    made via Ansible.
 
     Somewhat lazily checking all deb packages, rather than just the app-code
     package, but it accomplishes the same in a DRY manner.
@@ -164,7 +165,7 @@ def test_deb_package_contains_no_config_file(host, deb):
     deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
     c = host.run("dpkg-deb --contents {}".format(deb_package.path))
-    assert not re.search("^.*/config\.py$", c.stdout, re.M)
+    assert not re.search("^.*/config\.(py|json)$", c.stdout, re.M)
 
 
 @pytest.mark.parametrize("deb", deb_packages)
