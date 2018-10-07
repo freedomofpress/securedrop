@@ -6,10 +6,7 @@
     - pip
 
 - name: Compile PO to MO.
-  shell: >-
-    cp config.py.example config.py ;
-    trap 'rm config.py' EXIT ;
-    ./i18n_tool.py --verbose translate-messages --compile
+  shell: ./i18n_tool.py --verbose translate-messages --compile
   args:
     chdir: "{{ securedrop_code_filtered }}"
   environment:
