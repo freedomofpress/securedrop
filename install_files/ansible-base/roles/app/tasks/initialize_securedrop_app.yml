@@ -26,111 +26,121 @@
     - gpg
     - securedrop_config
 
-  # The securedrop-app-code apt package contains only 'config.py.example',
-  # not 'config.py'. This was done so the securedrop-app-code
-  # package would not overwrite the config.py on upgrades.
-  # If 'config.py' exists, then the SecureDrop application
-  # has already been configured, and most of the following tasks will be skipped.
-- name: Check whether SecureDrop config.py file already exists.
-  stat:
-    path: "{{ securedrop_code }}/config.py"
-  register: config
-  # Read-only task, so don't report as changed.
-  changed_when: false
+# This file is guaranteed to exist since migrate_config.py runs on `postinst`
+# and this task runs the Debian packages are installed.
+- name: Slurp existing config.json.
+  slurp:
+    path: "/etc/securedrop/config.json"
+  register: config_json
+
+- name: Parse slurped config.json.
+  set_fact:
+    config_json: '{{ config_json["content"] | b64decode | from_json }}'
+
+- name: Register config.json vars.
+  set_fact:
+    source_config: '{{ config_json["source_interface"] }}'
+    journalist_config: '{{ config_json["journalist_interface"] }}'
+
+- name: Ensure source interface has a secret key.
+  set_fact:
+    source_config: '{{ {"secret_key": lookup("pipe", "head -c 32 /dev/urandom | base64")} | combine(source_config) }}'
+  when: "'secret_key' in source_config"
   tags:
     - securedrop_config
 
-- name: Copy starter config.py template if missing.
-  command: cp {{ securedrop_code }}/config.py.example {{ securedrop_code }}/config.py
-  when: not config.stat.exists
-  tags:
-    - securedrop_config
-
-- name: Set ownership and permissions on config.py.
-  file:
-    dest: "{{ securedrop_code }}/config.py"
-    owner: "{{ securedrop_user }}"
-    group: "{{ securedrop_user }}"
-    mode: "0600"
-  tags:
-    - permissions
-    - securedrop_config
-
-# Note: we can also use register with with_items to cut down on repetition
-# here. See
-# http://docs.ansible.com/playbooks_loops.html#using-register-with-a-loop
-
-- name: Generate 32-byte value for "source secret key".
-  shell: "head -c 32 /dev/urandom | base64"
-  register: source_secret_key
-  when: not config.stat.exists
-  tags:
-    - securedrop_config
-
-- name: Add 32-byte value for "source secret key" to config.py.
-  lineinfile:
-    dest: "{{ securedrop_code }}/config.py"
-    regexp: "source_secret_key"
-    line: "    SECRET_KEY = '{{ source_secret_key.stdout}}'"
-  when: not config.stat.exists
-  tags:
-    - securedrop_config
-
-- name: Generate 32-byte value for "journalist secret key".
-  shell: "head -c 32 /dev/urandom | base64"
-  register: journalist_secret_key
-  when: not config.stat.exists
-  tags:
-    - securedrop_config
-
-- name: Add 32-byte value for "journalist secret key" to config.py.
-  lineinfile:
-    dest: "{{ securedrop_code }}/config.py"
-    regexp: "journalist_secret_key"
-    line: "    SECRET_KEY = '{{ journalist_secret_key.stdout }}'"
-  when: not config.stat.exists
+- name: Ensure journalist interface has a secret key.
+  set_fact:
+    journalist_config: '{{ {"secret_key": lookup("pipe", "head -c 32 /dev/urandom | base64")} | combine(journalist_config) }}'
+  when: "'secret_key' in journalist_config"
   tags:
     - securedrop_config
 
 - name: Generate 32-byte value for "scrypt id pepper".
   shell: "head -c 32 /dev/urandom | base64"
   register: scrypt_id_pepper
-  when: not config.stat.exists
+  when: "'scrypt_id_pepper' not in source_config"
   tags:
     - securedrop_config
 
-- name: Add 32-byte value for "scrypt id pepper" to config.py.
-  lineinfile:
-    dest: "{{ securedrop_code }}/config.py"
-    regexp: "scrypt_id_pepper"
-    line: "SCRYPT_ID_PEPPER = '{{ scrypt_id_pepper.stdout }}'"
-  when: not config.stat.exists
+- name: Add 32-byte value for "scrypt id pepper" to config.
+  set_fact:
+    source_config: '{{ {"scrypt_id_pepper": scrypt_id_pepper} | combine(source_config) }}'
+    journalist_config: '{{ {"scrypt_id_pepper": scrypt_id_pepper} | combine(journalist_config) }}'
+  when: scrypt_id_pepper is defined
   tags:
     - securedrop_config
 
 - name: Generate 32-byte value for "scrypt gpg pepper".
   shell: "head -c 32 /dev/urandom | base64"
   register: scrypt_gpg_pepper
-  when: not config.stat.exists
+  when: "'scrypt_gpg_pepper' not in source_config"
   tags:
     - securedrop_config
 
-- name: Add 32-byte value for "scrypt gpg pepper" to config.py.
-  lineinfile:
-    dest: "{{ securedrop_code }}/config.py"
-    regexp: "scrypt_gpg_pepper"
-    line: "SCRYPT_GPG_PEPPER = '{{ scrypt_gpg_pepper.stdout }}'"
-  when: not config.stat.exists
+- name: Add 32-byte value for "scrypt id pepper" to config.
+  set_fact:
+    source_config: '{{ {"scrypt_gpg_pepper": scrypt_gpg_pepper} | combine(source_config) }}'
+    journalist_config: '{{ {"scrypt_gpg_pepper": scrypt_gpg_pepper} | combine(journalist_config) }}'
+  when: scrypt_gpg_pepper is defined
   tags:
     - securedrop_config
 
-- name: Declare Application GPG fingerprint in config.py.
-  lineinfile:
-    dest: "{{ securedrop_code }}/config.py"
-    regexp: "^JOURNALIST_KEY = "
-    line: "JOURNALIST_KEY = '{{ securedrop_app_gpg_fingerprint }}'"
+- name: Declare Application GPG fingerprint in config.json.
+  set_fact:
+    source_config: '{{ source_config | combine({"journalist_key": securedrop_app_gpg_fingerprint}) }}'
+    journalist_config: '{{ source_config | combine({"journalist_key": securedrop_app_gpg_fingerprint}) }}'
   tags:
     - gpg
+    - securedrop_config
+
+# We start with an empty config and merge in values
+- name: Define base i18n configuration.
+  set_fact:
+    i18n_config: {}
+  when: securedrop_supported_locales is defined or securedrop_default_locale is defined
+  tags:
+    - securedrop_config
+
+- name: Add supported locales to config.
+  set_fact:
+    i18n_config: '{{ i18n_config | combine({"supported_locales": securedrop_supported_locales}) }}'
+  when: securedrop_supported_locales is defined
+  tags:
+    - securedrop_config
+
+- name: Add default locale to config.
+  set_fact:
+    i18n_config: '{{ i18n_config | combine({"default_locale": securedrop_default_locale}) }}'
+  when: securedrop_default_locale is defined
+  tags:
+    - securedrop_config
+
+- name: Add i18n values to config.
+  set_fact:
+    source_config: '{{ {"journalist_key": securedrop_app_gpg_fingerprint} | combine({"i18n": i18n_config}) }}'
+    journalist_config: '{{ {"journalist_key": securedrop_app_gpg_fingerprint} | combine({"i18n": i18n_config}) }}'
+  when: securedrop_supported_locales is defined or securedrop_default_locale is defined
+  tags:
+    - securedrop_config
+
+- name: Merge source and journalist configs.
+  set_fact:
+    config_json: '{{ {"source_interface": source_config, "journalist_interface": journalist_config} }}'
+
+- debug:
+    var: config_json
+
+- name: Write config.json
+  copy:
+    dest: "/etc/securedrop/config.json"
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
+    mode: "0600"
+    backup: true
+    content: '{{ config_json | to_nice_json }}'
+  tags:
+    - permissions
     - securedrop_config
 
 - name: Check whether sqlite database exists.
@@ -150,22 +160,4 @@
   when: not db.stat.exists
   tags:
     - database
-    - securedrop_config
-
-- name: Add DEFAULT_LOCALE to config.py if missing.
-  lineinfile:
-    dest: "{{ securedrop_code }}/config.py"
-    line: "DEFAULT_LOCALE = '{{ securedrop_default_locale }}'"
-    regexp: "^DEFAULT_LOCALE"
-  when: db.stat.exists
-  tags:
-    - securedrop_config
-
-- name: Update SUPPORTED_LOCALES in config.py
-  blockinfile:
-    content: "SUPPORTED_LOCALES = {{ securedrop_supported_locales + ['en_US'] }}"
-    path: "{{ securedrop_code }}/config.py"
-    marker: "# {mark} subset of the available locales that will be proposed to the user"
-  when: securedrop_supported_locales is defined
-  tags:
     - securedrop_config
