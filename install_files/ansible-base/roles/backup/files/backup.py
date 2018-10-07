@@ -18,13 +18,15 @@ def main():
     sd_data = '/var/lib/securedrop'
 
     sd_code = '/var/www/securedrop'
-    sd_config = os.path.join(sd_code, "config.py")
+    sd_config_py = os.path.join(sd_code, "config.py")
+    sd_config = os.path.join("/etc/securedrop/config.json")
     sd_custom_logo = os.path.join(sd_code, "static/i/logo.png")
 
     tor_hidden_services = "/var/lib/tor/services"
     torrc = "/etc/tor/torrc"
 
     with tarfile.open(backup_filename, 'w:gz') as backup:
+        backup.add(sd_config_py)
         backup.add(sd_config)
         backup.add(sd_custom_logo)
         backup.add(sd_data)
