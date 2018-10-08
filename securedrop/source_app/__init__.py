@@ -80,7 +80,7 @@ def create_app(config):
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals['version'] = version.__version__
-    if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
+    if config.CUSTOM_HEADER_IMAGE:
         app.jinja_env.globals['header_image'] = \
             config.CUSTOM_HEADER_IMAGE  # type: ignore
         app.jinja_env.globals['use_custom_header_image'] = True

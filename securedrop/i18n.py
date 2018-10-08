@@ -39,7 +39,7 @@ def setup_app(config, app):
     global LOCALES
     global babel
 
-    translation_dirs = getattr(config, 'TRANSLATION_DIRS', None)
+    translation_dirs = config.TRANSLATION_DIRS
 
     if translation_dirs is None:
             translation_dirs = \
@@ -63,8 +63,8 @@ def setup_app(config, app):
 
     LOCALES = _get_supported_locales(
         LOCALES,
-        getattr(config, 'SUPPORTED_LOCALES', None),
-        getattr(config, 'DEFAULT_LOCALE', None),
+        config.SUPPORTED_LOCALES,
+        config.DEFAULT_LOCALE,
         translation_directories)
 
     babel.localeselector(lambda: get_locale(config))
@@ -106,7 +106,7 @@ def get_locale(config):
     if locale:
         return locale
     else:
-        return getattr(config, 'DEFAULT_LOCALE', 'en_US')
+        return config.DEFAULT_LOCALE
 
 
 def get_text_direction(locale):
