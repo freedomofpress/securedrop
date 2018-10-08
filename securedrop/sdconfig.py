@@ -95,6 +95,12 @@ class SDConfig(object):
         except (KeyError, TypeError):
             self.SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
+        try:
+            # also accessible via .source_interface.custom_header_image
+            self.CUSTOM_HEADER_IMAGE = json_config['journalist_interface']['custom_header_image'] # type: ignore # noqa: 501
+        except (KeyError, TypeError):
+            self.CUSTOM_HEADER_IMAGE = None
+
         self.env = os.environ.get('SECUREDROP_ENV', 'prod')
 
         if self.env == 'prod':
