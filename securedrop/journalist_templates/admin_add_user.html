@@ -9,22 +9,36 @@
   <p>
     {{ form.password(value=password, id=False) }}
   </p>
+  <div class="container flex-end">
+    <div>
+      <p>{{gettext("Username")}}</p>
+      <p>
+        {{ form.username(placeholder=gettext('Username')) }}
+        {% for error in form.username.errors %}
+        <span class="form-validation-error">{{ error }}</span>
+        {% endfor %}
+      </p>
+    </div>
+    <div>
+      <ul class="journalist-username__notes">
+        <li>{{gettext("Username should not contain spaces")}}</li>
+        <li>{{gettext("Username should be unique and not easy to guess")}}</li>
+        <li>{{gettext("Username is case-sensitive")}}</li>
+      </ul>
+    </div>
+  </div>
 
-  <p>
-    {{ form.username(placeholder=gettext('Username')) }}
+  <p>{{ gettext("The user's password will be:") }}
     <br>
-    {% for error in form.username.errors %}
-      <span class="form-validation-error">{{ error }}</span>
-    {% endfor %}
+    <br>
+    <span class="password code" id="password">{{ password }}</span></style>
   </p>
-
-  <p>{{ gettext("The user's password will be:") }} <span class="password" id="password">{{ password }}</span></p>
   <p>
     {{ form.is_admin(id="is-admin") }}
     <label for="is_admin">{{ gettext('Is Administrator') }}</label>
     <br>
     {% for error in form.is_admin.errors %}
-      <span class="form-validation-error">{{ error }}</span>
+    <span class="form-validation-error">{{ error }}</span>
     {% endfor %}
   </p>
   <p>
@@ -33,9 +47,10 @@
     {{ form.otp_secret(placeholder=gettext('HOTP Secret'), size="60") }}
     <br>
     {% for error in form.is_hotp.errors + form.otp_secret.errors %}
-      <span class="form-validation-error">{{ error }}</span><br>
+    <span class="form-validation-error">{{ error }}</span><br>
     {% endfor %}
   </p>
   <button type="submit" class="sd-button"><i class="fa fa-plus"></i>{{ gettext('ADD USER') }}</button>
 </form>
-{% endblock %}
+
+{% endblock %}>
