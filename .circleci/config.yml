@@ -96,7 +96,9 @@ jobs:
 
       - run:
           name: Install pip==18.0 to work pipenv/pip bug
-          command: pipenv run pip install pip==18.0
+          command: |
+            cd journalist_gui
+            pipenv run pip install pip==18.0
 
       - run:
           name: Install requirements
