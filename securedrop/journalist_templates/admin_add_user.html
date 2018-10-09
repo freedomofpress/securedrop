@@ -21,17 +21,15 @@
     </div>
     <div>
       <ul class="journalist-username__notes">
-        <li>{{gettext("Username should not contain spaces")}}</li>
-        <li>{{gettext("Username should be unique and not easy to guess")}}</li>
+        <li>{{gettext("Username must not contain your original name")}}</li>
+        <li>{{gettext("Username must be unique")}}</li>
         <li>{{gettext("Username is case-sensitive")}}</li>
       </ul>
     </div>
   </div>
 
   <p>{{ gettext("The user's password will be:") }}
-    <br>
-    <br>
-    <span class="password code" id="password">{{ password }}</span></style>
+    <span class="password code_modified" id="password">{{ password }}</span>
   </p>
   <p>
     {{ form.is_admin(id="is-admin") }}
@@ -52,5 +50,4 @@
   </p>
   <button type="submit" class="sd-button"><i class="fa fa-plus"></i>{{ gettext('ADD USER') }}</button>
 </form>
-
-{% endblock %}>
+{% endblock %}
