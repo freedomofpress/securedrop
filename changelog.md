@@ -2,6 +2,20 @@
 
 ## 0.10.0~rc1
 
+### Web Applications
+
+* UX: modify size of input boxes to accommodate long passphrases (#3761)
+
+### Operations
+
+* Updated OSSEC to 3.0.0 and use GPG signatures for verifying sources (#3701)
+* Upgrade tor to 0.3.4.8 (#3813)
+
+### Development
+
+* Xenial transition: Enable clean install in Xenial staging environment (#3833)
+* Document Molecule upgrade scenario (#3720)
+
 ## 0.9.1
 
 * Bugfix: Resolve error in SecureDrop Updater due to incorrect working directory (#3796)
