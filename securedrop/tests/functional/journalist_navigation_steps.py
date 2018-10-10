@@ -234,13 +234,16 @@ class JournalistNavigationStepsMixin():
             hotp_secret.send_keys(hotp)
 
         if is_admin:
-            raise NotImplementedError("Admin's can't be added yet.")
+            is_admin_checkbox = self.driver.find_element_by_css_selector(
+                'input[name="is_admin"]'
+            )
+            is_admin_checkbox.click()
 
         submit_button = self.driver.find_element_by_css_selector(
             'button[type=submit]')
         submit_button.click()
 
-    def _admin_adds_a_user(self):
+    def _admin_adds_a_user(self, is_admin=False):
         add_user_btn = self.driver.find_element_by_css_selector(
             'button#add-user')
         add_user_btn.click()
@@ -257,7 +260,7 @@ class JournalistNavigationStepsMixin():
                 username='dellsberg',
                 password=password,
             )
-        self._add_user(self.new_user['username'])
+        self._add_user(self.new_user['username'], is_admin=is_admin)
 
         if not hasattr(self, 'accept_languages'):
             # Clicking submit on the add user form should redirect to
@@ -351,6 +354,13 @@ class JournalistNavigationStepsMixin():
         # interface link available
         with pytest.raises(NoSuchElementException):
             self.driver.find_element_by_id('link-admin-index')
+
+    def _new_admin_user_can_log_in(self):
+        # Test login with mocked token
+        self._check_login_with_otp('mocked')
+
+        # Newly added user who is an admin can visit admin interface
+        self._admin_visits_admin_interface()
 
     def _edit_account(self):
         edit_account_link = self.driver.find_element_by_id(
