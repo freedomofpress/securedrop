@@ -70,6 +70,10 @@ class QaLoader(object):
         self.app = create_app(config)
         self.multiplier = multiplier
 
+        self.journalists = []
+        self.sources = []
+        self.submissions = []
+
     def new_journalist(self):
         # Make a diceware-like password
         pw = ' '.join(
@@ -94,6 +98,8 @@ class QaLoader(object):
         journalist.last_access = random_datetime(nullable=True)
 
         db.session.add(journalist)
+        db.session.flush()
+        self.journalists.append(journalist.id)
 
     def new_source(self):
         fid_len = random.randint(4, 32)
@@ -102,10 +108,12 @@ class QaLoader(object):
                                      chars=string.ascii_lowercase),
                         random_chars(designation_len, nullable=False))
         source.flagged = bool_or_none()
-        source.last_updated = random_datetime(nullable=True)
+        source.last_updated = random_datetime(nullable=False)
         source.pending = False
 
         db.session.add(source)
+        db.session.flush()
+        self.sources.append(source.id)
 
     def new_submission(self, source_id):
         source = Source.query.get(source_id)
@@ -125,6 +133,8 @@ class QaLoader(object):
         submission.downloaded = bool_or_none()
 
         db.session.add(submission)
+        db.session.flush()
+        self.submissions.append(submission.id)
 
     def fake_file(self, source_fid):
         source_dir = path.join(self.config.STORE_DIR, source_fid)
@@ -197,28 +207,26 @@ class QaLoader(object):
                 self.new_source()
             db.session.commit()
 
-            for sid in range(1, self.SOURCE_COUNT * self.multiplier, 5):
+            for sid in self.sources[0::5]:
                 for _ in range(1, self.multiplier + 1):
                     self.new_submission(sid)
             db.session.commit()
 
-            for sid in range(1, self.SOURCE_COUNT * self.multiplier, 5):
+            for sid in self.sources[0::5]:
                 self.new_source_star(sid)
             db.session.commit()
 
-            for jid in range(1, self.JOURNALIST_COUNT * self.multiplier, 10):
-                for sid in range(1, self.SOURCE_COUNT * self.multiplier, 10):
+            for jid in self.journalists[0::10]:
+                for sid in self.sources[0::10]:
                     for _ in range(1, 3):
                         self.new_reply(jid, sid)
             db.session.commit()
 
-            for jid in range(1, self.JOURNALIST_COUNT * self.multiplier, 10):
+            for jid in self.journalists[0::10]:
                 self.new_journalist_login_attempt(jid)
             db.session.commit()
 
-            for sid in range(
-                    self.SOURCE_COUNT * self.multiplier,
-                    self.SOURCE_COUNT * self.multiplier + self.multiplier):
+            for sid in random.sample(self.sources, self.multiplier):
                 self.new_abandoned_submission(sid)
 
 
