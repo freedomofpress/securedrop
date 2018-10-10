@@ -36,7 +36,7 @@
     <label for="is_admin">{{ gettext('Is Administrator') }}</label>
     <br>
     {% for error in form.is_admin.errors %}
-    <span class="form-validation-error">{{ error }}</span>
+     <span class="form-validation-error">{{ error }}</span>
     {% endfor %}
   </p>
   <p>
@@ -45,7 +45,7 @@
     {{ form.otp_secret(placeholder=gettext('HOTP Secret'), size="60") }}
     <br>
     {% for error in form.is_hotp.errors + form.otp_secret.errors %}
-    <span class="form-validation-error">{{ error }}</span><br>
+     <span class="form-validation-error">{{ error }}</span><br>
     {% endfor %}
   </p>
   <button type="submit" class="sd-button"><i class="fa fa-plus"></i>{{ gettext('ADD USER') }}</button>
