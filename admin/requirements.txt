@@ -113,9 +113,9 @@ markupsafe==1.0 \
 netaddr==0.7.19 \
     --hash=sha256:38aeec7cdd035081d3a4c306394b19d677623bf76fa0913f6695127c7753aefd \
     --hash=sha256:56b3558bd71f3f6999e4c52e349f38660e54a7a8a9943335f73dfc96883e08ca
-paramiko==2.4.1 \
-    --hash=sha256:24fb31c947de85fbdeca09e222d41206781581fb0bdf118d2ef18f6e414cd388 \
-    --hash=sha256:33e36775a6c71790ba7692a73f948b329cf9295a72b0102144b031114bd2a4f3 \
+paramiko==2.4.2 \
+    --hash=sha256:3c16b2bfb4c0d810b24c40155dbfd113c0521e7e6ee593d704e84b4c658a1f3b \
+    --hash=sha256:a8975a7df3560c9f1e2b43dc54ebd40fd00a7017392ca5445ce7df409f900fcb
     # via ansible
 prompt-toolkit==1.0.15 \
     --hash=sha256:1df952620eccb399c53ebb359cc7d9a8d3a9538cb34c5a1344bdbeb29fbcc381 \
