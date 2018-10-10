@@ -38,3 +38,11 @@ class TestAdminInterface(
         self._admin_visits_admin_interface()
         self._admin_visits_system_config_page()
         self._admin_can_send_test_alert()
+
+    def test_admin_adds_admin_user(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        # Add an admin user
+        self._admin_adds_a_user(is_admin=True)
+        self._new_admin_user_can_log_in()
+        self._admin_can_edit_new_user()
