@@ -95,6 +95,12 @@ jobs:
           command: sudo apt-get update && sudo apt-get install -y libqt5designer5
 
       - run:
+          name: Install pip==18.0 to work pipenv/pip bug
+          command: |
+            cd journalist_gui
+            pipenv run pip install pip==18.0
+
+      - run:
           name: Install requirements
           command: |
             cd journalist_gui
@@ -128,6 +134,10 @@ jobs:
       - run:
           name: Installation apt pre-reqs
           command: apt-get install -y enchant
+
+      - run:
+          name: Install pip==18.0 to work pipenv/pip bug
+          command: pip install pip==18.0
 
       - run:
           name: Installation pre-reqs
