@@ -356,18 +356,11 @@ class JournalistNavigationStepsMixin():
             self.driver.find_element_by_id('link-admin-index')
 
     def _new_admin_user_can_log_in(self):
-        # Log out current admin user
-        self._logout()
+        # Test login with mocked token
+        self._check_login_with_otp('mocked')
 
-        self._login_user(self.new_user['username'],
-                         self.new_user['password'], 'mocked')
-
-        if not hasattr(self, 'accept_languages'):
-            # Test that the new user was logged in successfully
-            assert 'Sources' in self.driver.page_source
-
-        # New admin user should have admin interface link
-        assert 'link-admin-index' in self.driver.page_source
+        # Newly added user who is an admin can visit admin interface
+        self._admin_visits_admin_interface()
 
     def _edit_account(self):
         edit_account_link = self.driver.find_element_by_id(
