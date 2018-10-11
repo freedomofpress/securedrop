@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.0~rc1
+## 0.10.0~rc2
 
 ### Web Applications
 
@@ -9,7 +9,8 @@
 ### Operations
 
 * Updated OSSEC to 3.0.0 and use GPG signatures for verifying sources (#3701)
-* Upgrade tor to 0.3.4.8 (#3813)
+* Update paramiko to 2.4.2 (#3861)
+* Enforce use of the latest grsecurity-patched kernel on servers (#3842) 
 
 ### Development
 
