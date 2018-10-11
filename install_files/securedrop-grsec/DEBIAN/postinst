@@ -19,16 +19,11 @@ set -x
 case "$1" in
     configure)
 
-    # If the SecureDrop instance is running a rolled-back kernel, this will
-    # preserve the kernel boot priority specfied in its ordinal form by the
-    # canonical form. (In this specific case, 1>2 as GRUB_DEFAULT in
-    # /etc/default/grub indicates the instance is running 3.14.79-grsec)
-    # In any other case, we want to run the latest 4.4 series kernel.
-    if grep -qE "^GRUB_DEFAULT=[\"\' ]*1>2[\"\' ]*$" /etc/default/grub; then
-        sed -i "s/^\(GRUB_DEFAULT=\)[\"\' ]*1>2[\"\' ]*$/\1\"Advanced options for Ubuntu>Ubuntu, with Linux 3.14.79-grsec\"/" /etc/default/grub
-        # update grub to set the new default
-        update-grub2
-    fi
+    # Replace the default GRUB boot option with 0, which defaults to the
+    # highest kernel version. Any kernel provided by apt.freedom.press must
+    # suprecede the ones provided by Ubuntu.
+    sed -i '/^GRUB_DEFAULT=/s/=.*/=0/' /etc/default/grub
+    update-grub
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
