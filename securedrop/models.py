@@ -55,7 +55,7 @@ class Source(db.Model):
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
-    last_updated = Column(DateTime)
+    last_updated = Column(DateTime, nullable=False)
     star = relationship("SourceStar", uselist=False, backref="source")
 
     # sources are "pending" and don't get displayed to journalists until they
@@ -73,6 +73,7 @@ class Source(db.Model):
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
         self.uuid = str(uuid.uuid4())
+        self.last_updated = datetime.datetime.utcnow()
 
     def __repr__(self):
         return '<Source %r>' % (self.journalist_designation)
