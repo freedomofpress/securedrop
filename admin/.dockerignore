@@ -1,0 +1,4 @@
+.tox
+.venv
+**/__pycache__
+**/*.pyc
