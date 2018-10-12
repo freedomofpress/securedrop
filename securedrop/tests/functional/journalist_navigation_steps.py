@@ -1,4 +1,6 @@
 import pytest
+import urllib2
+import json
 import re
 import tempfile
 import gzip
@@ -8,6 +10,8 @@ import random
 import requests
 
 from os.path import dirname
+
+from os.path import abspath, realpath, dirname, join
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
@@ -28,6 +32,7 @@ def get_journalist_usernames():
 
 journalist_usernames = get_journalist_usernames()
 
+journalist_usernames = get_journalist_usernames()
 
 class JournalistNavigationStepsMixin():
 
@@ -91,7 +96,8 @@ class JournalistNavigationStepsMixin():
 
             self._try_login_user(username, password, token)
             # Successful login should redirect to the index
-            time.sleep(self.sleep_time+10)
+            self.wait_for(lambda: self.driver.find_element_by_id(
+               'logout'), timeout=self.sleep_time+10)
             if self.driver.current_url != self.journalist_location + '/':
                     new_token = str(otp.now())
                     while token == new_token:
@@ -113,18 +119,25 @@ class JournalistNavigationStepsMixin():
         self.user_pw = self.admin_user['password']
         self._login_user(self.user, self.user_pw, self.admin_user['totp'])
 
-        headline = self.driver.find_element_by_css_selector('span.headline')
-        if not hasattr(self, 'accept_languages'):
-            assert 'Sources' in headline.text
+        assert self.driver.find_element_by_css_selector(
+            'div.journalist-view-all')
 
     def _journalist_visits_col(self):
+        self.wait_for(lambda: self.driver.find_element_by_id(
+            'cols'), timeout=self.sleep_time)
         self.driver.find_element_by_css_selector(
             '#un-starred-source-link-1').click()
-        time.sleep(self.sleep_time)
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(
+            'ul#submissions'), timeout=self.sleep_time)
 
     def _journalist_selects_first_doc(self):
         self.driver.find_elements_by_name('doc_names_selected')[0].click()
-        time.sleep(self.sleep_time)
+
+        def doc_selected():
+            assert self.driver.find_elements_by_name(
+                'doc_names_selected')[0].is_selected()
+
+        self.wait_for(doc_selected, timeout=self.sleep_time)
 
     def _journalist_clicks_on_modal(self, click_id):
         self.driver.find_element_by_id(click_id).click()
@@ -140,17 +153,30 @@ class JournalistNavigationStepsMixin():
         self._journalist_clicks_on_modal('cancel-collection-deletions')
 
     def _journalist_clicks_delete_collections_on_modal(self):
-        self._journalist_clicks_on_modal('delete-collections')
+         self._journalist_clicks_on_modal('delete-collections')
+
+        def collection_deleted():
+            if not hasattr(self, 'accept_languages'):
+                flash_msg = self.driver.find_element_by_css_selector('.flash')
+                assert '1 collection deleted' in flash_msg.text
+        self.wait_for(collection_deleted, timeout=self.sleep_time)
 
     def _journalist_clicks_delete_selected_on_modal(self):
         self._journalist_clicks_on_modal('delete-selected')
+
+        def submission_deleted():
+            if not hasattr(self, 'accept_languages'):
+                flash_msg = self.driver.find_element_by_css_selector('.flash')
+                assert 'Submission deleted.' in flash_msg.text
+        self.wait_for(submission_deleted, timeout=self.sleep_time)
 
     def _journalist_clicks_delete_collection_on_modal(self):
         self._journalist_clicks_on_modal('delete-collection-button')
 
     def _journalist_clicks_delete_link(self, click_id, displayed_id):
         self.driver.find_element_by_id(click_id).click()
-        time.sleep(self.sleep_time)
+        self.wait_for(lambda: self.driver.find_element_by_id(displayed_id),
+                      timeout=self.sleep_time)
 
     def _journalist_clicks_delete_selected_link(self):
         self._journalist_clicks_delete_link(
@@ -181,7 +207,6 @@ class JournalistNavigationStepsMixin():
 
         self._journalist_clicks_delete_selected_link()
         self._journalist_clicks_delete_selected_on_modal()
-        time.sleep(5)
         assert selected_count > len(self.driver.find_elements_by_name(
             'doc_names_selected'))
 
@@ -189,7 +214,7 @@ class JournalistNavigationStepsMixin():
         self._journalist_clicks_delete_collection_link()
         self._journalist_clicks_delete_collection_cancel_on_modal()
 
-        time.sleep(self.sleep_time)
+        time.sleep(5)
 
         self._journalist_clicks_delete_collection_link()
         self._journalist_clicks_delete_collection_on_modal()
@@ -217,41 +242,43 @@ class JournalistNavigationStepsMixin():
         sources = self.driver.find_elements_by_class_name("code-name")
         assert len(sources) == 0
 
+
     def _admin_logs_in(self):
         self.admin = self.admin_user['name']
         self.admin_pw = self.admin_user['password']
         self._login_user(self.admin, self.admin_pw, self.admin_user['totp'])
 
-        if not hasattr(self, 'accept_languages'):
-            # Admin user should log in to the same interface as a
-            # normal user, since there may be users who wish to be
-            # both journalists and admins.
-            headline = self.driver.find_element_by_css_selector(
-                'span.headline')
-            assert 'Sources' in headline.text
+        # Admin user should log in to the same interface as a
+        # normal user, since there may be users who wish to be
+        # both journalists and admins.
+        assert self.driver.find_element_by_css_selector(
+            'div.journalist-view-all')
 
-            # Admin user should have a link that take them to the admin page
-            links = self.driver.find_elements_by_tag_name('a')
-            assert 'Admin' in [el.text for el in links]
+        # Admin user should have a link that take them to the admin page
+        assert self.driver.find_element_by_id(
+            'link-admin-index')
 
     def _admin_visits_admin_interface(self):
         admin_interface_link = self.driver.find_element_by_id(
             'link-admin-index')
-        admin_interface_link.click()
-        time.sleep(self.sleep_time)
-        if not hasattr(self, 'accept_languages'):
-            h1s = self.driver.find_elements_by_tag_name('h1')
-            assert "Admin Interface" in [el.text for el in h1s]
+        # admin_interface_link.click()
+        # replacing with Enter key as click() seems flaky
+        admin_interface_link.send_keys(Keys.ENTER)
+
+        self.wait_for(lambda: self.driver.find_element_by_id(
+            'add-user'), timeout=self.sleep_time)
 
     def _admin_visits_system_config_page(self):
         system_config_link = self.driver.find_element_by_id(
             'update-instance-config'
         )
         system_config_link.click()
-        time.sleep(self.sleep_time)
-        if not hasattr(self, 'accept_languages'):
-            h1 = self.driver.find_element_by_tag_name('h1')
-            assert "Instance Configuration" in h1.text
+
+        def config_page_loaded():
+            assert self.driver.find_element_by_id(
+                'test-ossec-alert')
+
+        self.wait_for(config_page_loaded, timeout=self.sleep_time)
 
     def _admin_updates_logo_image(self):
         dir_name = dirname(dirname(dirname(os.path.abspath(__file__))))
@@ -262,11 +289,14 @@ class JournalistNavigationStepsMixin():
 
         submit_button = self.driver.find_element_by_id('submit-logo-update')
         submit_button.click()
-        time.sleep(self.sleep_time)
 
-        if not hasattr(self, 'accept_languages'):
-            flashed_msgs = self.driver.find_element_by_css_selector('.flash')
-            assert 'Image updated.' in flashed_msgs.text
+        def updated_image():
+            if not hasattr(self, 'accept_languages'):
+                flash_msg = self.driver.find_element_by_css_selector('.flash')
+                assert 'Image updated.' in flash_msg.text
+
+        # giving extra time for upload to complete
+        self.wait_for(updated_image, timeout=self.sleep_time*3)
 
     def _add_user(self, username, is_admin=False, hotp=None):
         username_field = self.driver.find_element_by_css_selector(
@@ -296,7 +326,12 @@ class JournalistNavigationStepsMixin():
         add_user_btn = self.driver.find_element_by_css_selector(
             'button#add-user')
         add_user_btn.click()
-        time.sleep(self.sleep_time)
+
+        def on_useradd_page():
+            if not hasattr(self, 'accept_languages'):
+                assert 'The user\'s password will' in self.driver.page_source
+
+        self.wait_for(on_useradd_page, timeout=self.sleep_time)
 
         if not hasattr(self, 'accept_languages'):
             # The add user page has a form with an "ADD USER" button
@@ -331,15 +366,17 @@ class JournalistNavigationStepsMixin():
             'button[type=submit]')
         submit_button.click()
 
-        time.sleep(self.sleep_time)
-        if not hasattr(self, 'accept_languages'):
-            # Successfully verifying the code should redirect to the admin
-            # interface, and flash a message indicating success
-            flashed_msgs = self.driver.find_elements_by_css_selector('.flash')
-            assert (("Token in two-factor authentication "
-                     "accepted for user {}.").format(
-                         self.new_user['username']) in
-                    [el.text for el in flashed_msgs])
+        def user_token_added():
+            if not hasattr(self, 'accept_languages'):
+                # Successfully verifying the code should redirect to the admin
+                # interface, and flash a message indicating success
+                flash_msg = self.driver.find_elements_by_css_selector('.flash')
+                assert (("Token in two-factor authentication "
+                         "accepted for user {}.").format(
+                             self.new_user['username']) in
+                        [el.text for el in flash_msg])
+
+        self.wait_for(user_token_added, timeout=self.sleep_time)
 
     def _admin_deletes_user(self):
         self.wait_for(lambda: self.driver.find_element_by_css_selector(
@@ -358,25 +395,32 @@ class JournalistNavigationStepsMixin():
         self._alert_accept()
         time.sleep(5)
 
-        if not hasattr(self, 'accept_languages'):
-            flashed_msg = self.driver.find_element_by_css_selector('.flash')
-            assert "Deleted user" in flashed_msg.text
+        def user_deleted():
+            if not hasattr(self, 'accept_languages'):
+                flash_msg = self.driver.find_element_by_css_selector('.flash')
+                assert "Deleted user" in flash_msg.text
+
+        self.wait_for(user_deleted, timeout=self.sleep_time)
+
 
     def _admin_can_send_test_alert(self):
         alert_button = self.driver.find_element_by_id('test-ossec-alert')
         alert_button.click()
 
-        if not hasattr(self, 'accept_languages'):
-            flashed_msg = self.driver.find_element_by_css_selector('.flash')
-            assert ("Test alert sent. Please check your email."
-                    in flashed_msg.text)
+        def test_alert_sent():
+            if not hasattr(self, 'accept_languages'):
+                flash_msg = self.driver.find_element_by_css_selector('.flash')
+                assert ("Test alert sent. Please check your email."
+                        in flash_msg.text)
+        self.wait_for(test_alert_sent, timeout=self.sleep_time)
 
     def _logout(self):
         # Click the logout link
         logout_link = self.driver.find_element_by_id('link-logout')
         logout_link.send_keys(" ")
         logout_link.click()
-        time.sleep(60)  # Because this takes time
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(
+           '.login-form'), timeout=(self.sleep_time*2))
 
         # Logging out should redirect back to the login page
         def login_page():
@@ -396,7 +440,8 @@ class JournalistNavigationStepsMixin():
         # Log the admin user out
         self._logout()
 
-        time.sleep(31)
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(
+           '.login-form'), timeout=self.sleep_time)
         # Log the new user in
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
@@ -422,11 +467,13 @@ class JournalistNavigationStepsMixin():
         edit_account_link = self.driver.find_element_by_id(
             'link-edit-account')
         edit_account_link.click()
-        time.sleep(self.sleep_time)
 
         # The header says "Edit your account"
-        h1s = self.driver.find_elements_by_tag_name('h1')[0]
-        assert 'Edit your account' == h1s.text
+        def edit_page_loaded():
+            h1s = self.driver.find_elements_by_tag_name('h1')[0]
+            assert 'Edit your account' == h1s.text
+        self.wait_for(edit_page_loaded, timeout=self.sleep_time)
+
         # There's no link back to the admin interface.
         with pytest.raises(NoSuchElementException):
             self.driver.find_element_by_partial_link_text(
@@ -455,10 +502,12 @@ class JournalistNavigationStepsMixin():
             self.driver.find_elements_by_tag_name('a'))
         assert 1 == len(new_user_edit_links)
         new_user_edit_links[0].click()
-        time.sleep(self.sleep_time)
-        # The header says "Edit user "username"".
-        h1s = self.driver.find_elements_by_tag_name('h1')[0]
-        assert 'Edit user "{}"'.format(username) == h1s.text
+
+        def edit_user_page_loaded():
+            h1s = self.driver.find_elements_by_tag_name('h1')[0]
+            assert 'Edit user "{}"'.format(username) == h1s.text
+        self.wait_for(edit_user_page_loaded, timeout=self.sleep_time)
+
         # There's a convenient link back to the admin interface.
         admin_interface_link = self.driver.find_element_by_partial_link_text(
             'Back to admin interface')
@@ -479,7 +528,6 @@ class JournalistNavigationStepsMixin():
         assert '/admin/reset-2fa-totp' in totp_reset_button.get_attribute(
             'action')
         totp_reset_uid = totp_reset_button.find_element_by_name('uid')
-
         assert totp_reset_uid.is_displayed() is False
         hotp_reset_button = self.driver.find_elements_by_css_selector(
             '#reset-two-factor-hotp')[0]
@@ -487,14 +535,16 @@ class JournalistNavigationStepsMixin():
             'action')
 
         hotp_reset_uid = hotp_reset_button.find_element_by_name('uid')
-
         assert hotp_reset_uid.is_displayed() is False
+
 
     def _admin_can_edit_new_user(self):
         # Log the new user out
         self._logout()
 
-        time.sleep(self.sleep_time)
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(
+           '.login-form'), timeout=self.sleep_time)
+
         self._login_user(self.admin, self.admin_pw, self.admin_user['totp'])
 
         # Go to the admin interface
@@ -502,7 +552,9 @@ class JournalistNavigationStepsMixin():
             'link-admin-index')
         admin_interface_link.click()
 
-        time.sleep(self.sleep_time)
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(
+            'button#add-user'), timeout=self.sleep_time)
+
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
         new_user_edit_links = filter(
@@ -511,12 +563,11 @@ class JournalistNavigationStepsMixin():
             self.driver.find_elements_by_tag_name('a'))
         assert len(new_user_edit_links) == 1
         new_user_edit_links[0].click()
-        time.sleep(self.sleep_time)
 
         def can_edit_user():
-            assert ('"{}"'.format(self.new_user['username']) in
-                    self.driver.page_source)
-        self.wait_for(can_edit_user)
+            h = self.driver.find_elements_by_tag_name('h1')[0]
+            assert 'Edit user "{}"'.format(self.new_user['username']) == h.text
+        self.wait_for(can_edit_user, timeout=self.sleep_time)
 
         new_username = self.new_user['username'] + "2"
 
@@ -526,7 +577,13 @@ class JournalistNavigationStepsMixin():
         update_user_btn = self.driver.find_element_by_css_selector(
             'button[type=submit]')
         update_user_btn.click()
-        time.sleep(self.sleep_time)
+
+        def user_edited():
+            if not hasattr(self, 'accept_languages'):
+                flash_msg = self.driver.find_element_by_css_selector('.flash')
+                assert "Account updated." in flash_msg.text
+
+        self.wait_for(user_edited, timeout=self.sleep_time)
 
         def can_edit_user2():
             assert ('"{}"'.format(new_username) in self.driver.page_source)
@@ -537,7 +594,10 @@ class JournalistNavigationStepsMixin():
 
         # Log the new user in with their new username
         self._logout()
-        time.sleep(31)
+
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(
+           '.login-form'), timeout=self.sleep_time)
+
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
                          self.new_totp)
@@ -548,16 +608,18 @@ class JournalistNavigationStepsMixin():
 
         # Log the admin user back in
         self._logout()
-        time.sleep(31)
+
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(
+           '.login-form'), timeout=self.sleep_time)
+
         self._login_user(self.admin, self.admin_pw, self.admin_user['totp'])
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_id(
             'link-admin-index')
         admin_interface_link.click()
-        time.sleep(self.sleep_time)
-
-        # Edit the new user's password
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(
+            'button#add-user'), timeout=self.sleep_time)
 
         new_user_edit_links = filter(
             lambda el: (el.get_attribute('data-username') ==
@@ -565,7 +627,8 @@ class JournalistNavigationStepsMixin():
             self.driver.find_elements_by_tag_name('a'))
         assert len(new_user_edit_links) == 1
         new_user_edit_links[0].click()
-        time.sleep(self.sleep_time)
+
+        self.wait_for(can_edit_user, timeout=self.sleep_time)
 
         new_password = self.driver.find_element_by_css_selector('#password') \
             .text.strip()
@@ -574,20 +637,19 @@ class JournalistNavigationStepsMixin():
         reset_pw_btn = self.driver.find_element_by_css_selector(
             '#reset-password')
         reset_pw_btn.click()
-        time.sleep(self.sleep_time)
 
         def update_password_success():
             assert 'Password updated.' in self.driver.page_source
 
         # Wait until page refreshes to avoid causing a broken pipe error (#623)
-        self.wait_for(update_password_success)
+        self.wait_for(update_password_success, timeout=self.sleep_time)
 
         # Log the new user in with their new password
         self._logout()
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
                          self.new_totp)
-        self.wait_for(found_sources)
+        self.wait_for(found_sources, timeout=self.sleep_time)
 
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
@@ -610,15 +672,19 @@ class JournalistNavigationStepsMixin():
 
         # Journalist stars the message
         self.driver.find_element_by_class_name('button-star').click()
-        time.sleep(self.sleep_time)
-        starred = self.driver.find_elements_by_id('starred-source-link-1')
-        assert 1 == len(starred)
+
+        def message_starred():
+            starred = self.driver.find_elements_by_id('starred-source-link-1')
+            assert 1 == len(starred)
+        self.wait_for(message_starred, timeout=self.sleep_time)
 
         # Journalist unstars the message
         self.driver.find_element_by_class_name('button-star').click()
-        time.sleep(self.sleep_time)
-        with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_id('starred-source-link-1')
+
+        def message_unstarred():
+            with pytest.raises(NoSuchElementException):
+                self.driver.find_element_by_id('starred-source-link-1')
+        self.wait_for(message_unstarred, timeout=self.sleep_time)
 
     def _journalist_selects_all_sources_then_selects_none(self):
         self.driver.find_element_by_id('select_all').click()
@@ -634,13 +700,16 @@ class JournalistNavigationStepsMixin():
     def _journalist_selects_the_first_source(self):
         self.driver.find_element_by_css_selector(
             '#un-starred-source-link-1').click()
-        time.sleep(self.sleep_time)
 
     def _journalist_selects_documents_to_download(self):
         self.driver.find_element_by_id('select_all').click()
 
+
     def _journalist_downloads_message(self):
         self._journalist_selects_the_first_source()
+
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(
+            'ul#submissions'), timeout=self.sleep_time)
 
         submissions = self.driver.find_elements_by_css_selector(
             '#submissions a')
@@ -677,20 +746,30 @@ class JournalistNavigationStepsMixin():
         )
 
     def _journalist_sends_reply_to_source(self):
+        #self._journalist_selects_the_first_source()  # XXXX
         self._journalist_composes_reply()
         self.driver.find_element_by_id('reply-button').click()
-        time.sleep(self.sleep_time)
 
-        if not hasattr(self, 'accept_languages'):
-            assert ("Thanks. Your reply has been stored." in
-                    self.driver.page_source)
+        def reply_stored():
+            if not hasattr(self, 'accept_languages'):
+                assert ("Thanks. Your reply has been stored." in
+                        self.driver.page_source)
+        self.wait_for(reply_stored, timeout=self.sleep_time)
 
     def _visit_edit_account(self):
         edit_account_link = self.driver.find_element_by_id(
             'link-edit-account')
-        edit_account_link.click()
+        # edit_account_link.click()
+        # replacing above with Enter key as click() seems flaky
+        edit_account_link.send_keys(Keys.ENTER)
 
     def _visit_edit_secret(self, type):
+
+        def edit_self_loaded():
+            assert self.driver.find_element_by_id('reset-password')
+
+        self.wait_for(edit_self_loaded, timeout=self.sleep_time)
+
         reset_form = self.driver.find_elements_by_css_selector(
             '#reset-two-factor-' + type)[0]
         assert ('/account/reset-2fa-' + type in
@@ -700,10 +779,10 @@ class JournalistNavigationStepsMixin():
             '#button-reset-two-factor-' + type)[0]
         reset_button.click()
 
-    def _visit_edit_hotp_secret(self):
-        self._visit_edit_secret('hotp')
-
     def _set_hotp_secret(self):
+        self.wait_for(lambda: self.driver.find_elements_by_css_selector(
+            'input[name="otp_secret"]')[0], timeout=self.sleep_time)
+
         hotp_secret_field = self.driver.find_elements_by_css_selector(
             'input[name="otp_secret"]')[0]
         hotp_secret_field.send_keys('123456')
@@ -712,13 +791,21 @@ class JournalistNavigationStepsMixin():
         submit_button.click()
         time.sleep(self.sleep_time)
 
+    def _visit_edit_hotp_secret(self):
+        self._visit_edit_secret('hotp')
+
     def _visit_edit_totp_secret(self):
         self._visit_edit_secret('totp')
 
     def _admin_visits_add_user(self):
         add_user_btn = self.driver.find_element_by_css_selector(
             'button#add-user')
-        add_user_btn.click()
+        # add_user_btn.click()
+        # replacing above with Enter key as click() seems flaky
+        add_user_btn.send_keys(Keys.ENTER)
+
+        self.wait_for(lambda: self.driver.find_element_by_id(
+            'username'), timeout=self.sleep_time)
 
     def _admin_visits_edit_user(self):
         new_user_edit_links = filter(
@@ -731,7 +818,7 @@ class JournalistNavigationStepsMixin():
         def can_edit_user():
             assert ('"{}"'.format(self.new_user['username']) in
                     self.driver.page_source)
-        self.wait_for(can_edit_user)
+        self.wait_for(can_edit_user, timeout=self.sleep_time)
 
     def _admin_visits_reset_2fa_hotp(self):
         hotp_reset_button = self.driver.find_elements_by_css_selector(
@@ -743,6 +830,7 @@ class JournalistNavigationStepsMixin():
     def _admin_accepts_2fa_js_alert(self):
         self._alert_wait()
         self._alert_accept()
+
 
     def _admin_visits_reset_2fa_totp(self):
         totp_reset_button = self.driver.find_elements_by_css_selector(
@@ -776,12 +864,6 @@ class JournalistNavigationStepsMixin():
         confirm_btn = self.driver.find_element_by_id('delete-selected')
 
         confirm_btn.click()
-
-    def _source_delete_key(self):
-        filesystem_id = self.source_app.crypto_util.hash_codename(
-            self.source_name)
-        self.source_app.crypto_util.delete_reply_keypair(filesystem_id)
-
     def _journalist_continues_after_flagging(self):
         self.driver.find_element_by_id('continue-to-list').click()
 

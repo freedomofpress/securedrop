@@ -12,8 +12,10 @@ import socket
 import time
 import json
 import traceback
+import subprocess
 import shutil
 import requests
+import subprocess
 
 import pyotp
 import gnupg
@@ -27,6 +29,13 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.remote_connection import LOGGER
 from tbselenium.tbdriver import TorBrowserDriver
 
+TBB_PATH = abspath(join(expanduser('~'), '.local/tbb/tor-browser_en-US/'))
+os.environ['TBB_PATH'] = TBB_PATH
+TBBRC = join(TBB_PATH, 'Browser/TorBrowser/Data/Tor/torrc')
+
+from tbselenium.tbdriver import TorBrowserDriver
+from tbselenium.utils import start_xvfb, stop_xvfb
+
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 from sqlalchemy.exc import IntegrityError
@@ -36,7 +45,6 @@ import journalist_app
 import source_app
 import tests.utils.env as env
 
-from db import db
 
 FUNCTIONAL_TEST_DIR = abspath(dirname(__file__))
 LOGFILE_PATH = abspath(join(FUNCTIONAL_TEST_DIR, 'firefox.log'))
@@ -202,8 +210,17 @@ class FunctionalTest(object):
             gpg.import_keys(open(keyfile).read())
         return gpg
 
-    def setup(self, session_expiration=30):
+    def system(self, cmd):
+        """
+        Invoke a shell command. Primary replacement for os.system calls.
+        """
+        print(cmd)
+        ret = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+        out, err = ret.communicate()
+        return out
 
+    def setup(self, session_expiration=30):
         self.localtesting = False
         self.driver = None
         self.second_driver = None
@@ -223,7 +240,7 @@ class FunctionalTest(object):
             self.hidservauth = data.get('hidserv_token', '')
             self.admin_user = data.get('user')
             self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
-            self.sleep_time = data.get('sleep_time', 10)
+            self.sleep_time = data.get('sleep_time', 20)
             if self.hidservauth:
                 if self.journalist_location.startswith('http://'):
                     location = self.journalist_location[7:]
@@ -373,7 +390,7 @@ class FunctionalTest(object):
         return function_with_assertion()
 
     def _alert_wait(self):
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, 30).until(
             expected_conditions.alert_is_present(),
             'Timed out waiting for confirmation popup.')
 
