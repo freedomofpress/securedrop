@@ -314,6 +314,9 @@ class NonDicewarePassword(PasswordError):
 
     """Raised when attempting to validate a password that is not diceware-like
     """
+    def __str__(self):
+        return ("Password needs to be a passphrase of at least "
+                "{} words.").format(Journalist.MIN_PASSWORD_WORDS)
 
 
 class Journalist(db.Model):
@@ -361,6 +364,7 @@ class Journalist(db.Model):
 
     MAX_PASSWORD_LEN = 128
     MIN_PASSWORD_LEN = 14
+    MIN_PASSWORD_WORDS = 7
 
     def set_password(self, passphrase):
         self.check_password_acceptable(passphrase)
@@ -398,7 +402,7 @@ class Journalist(db.Model):
             raise InvalidPasswordLength(password)
 
         # Ensure all passwords are "diceware-like"
-        if len(password.split()) < 7:
+        if len(password.split()) < cls.MIN_PASSWORD_WORDS:
             raise NonDicewarePassword()
 
     def valid_password(self, passphrase):

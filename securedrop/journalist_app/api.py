@@ -9,7 +9,8 @@ from db import db
 from journalist_app import utils
 from models import (Journalist, Reply, Source, Submission,
                     LoginThrottledException, InvalidUsernameException,
-                    BadTokenException, WrongPasswordException)
+                    BadTokenException, WrongPasswordException,
+                    InvalidPasswordLength, NonDicewarePassword)
 from store import NotEncrypted
 
 
@@ -278,6 +279,26 @@ def make_blueprint(config):
     def get_current_user():
         user = get_user_object(request)
         return jsonify(user.to_json()), 200
+
+    @api.route('/account/new-password', methods=['POST'])
+    @token_required
+    def new_password():
+        user = get_user_object(request)
+        new_password = json.loads(request.data)['new_password']
+
+        try:
+            user.set_password(new_password)
+        except (InvalidPasswordLength, NonDicewarePassword) as e:
+            return jsonify({'message': str(e)}), 400
+        except Exception as e:
+            return jsonify({'message': 'An error occurred while setting the password. Password unchanged'}), 500
+
+        try:
+            db.session.commit()
+        except Exception as e:
+            return jsonify({'message': 'An error occurred on database commit. Password unchanged.'}), 500
+
+        return jsonify({'message': 'Password changed successfully'}), 200
 
     def _handle_http_exception(error):
         # Workaround for no blueprint-level 404/5 error handlers, see:

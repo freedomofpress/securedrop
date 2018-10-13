@@ -9,7 +9,8 @@ from flask import current_app, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer
 
 from db import db
-from models import Journalist, Reply, Source, SourceStar, Submission
+from models import (Journalist, Reply, Source, SourceStar, Submission,
+                   NonDicewarePassword, InvalidPasswordLength)
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from utils.api_helper import get_api_headers
@@ -660,6 +661,46 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
             saved_content = fh.read()
 
         assert reply_content == saved_content
+
+
+def test_new_password_unacceptable_400(journalist_app, journalist_api_token,
+                                       test_journo):
+    original_hash = test_journo['journalist'].passphrase_hash
+
+    with journalist_app.test_client() as app:
+        new_password = 'a' * (Journalist.MIN_PASSWORD_LEN - 1)
+        data = {'new_password': new_password}
+        response = app.post(url_for('api.new_password'),
+                            data=json.dumps(data),
+                            headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 400
+        assert (response.get_json()['message'] == str(NonDicewarePassword()) or
+                response.get_json()['message'] == str(InvalidPasswordLength(new_password))
+               )
+
+    with journalist_app.app_context():
+        user = Journalist.query.get(test_journo['id'])
+        assert original_hash == user.passphrase_hash
+
+
+def test_new_password_success_200(journalist_app, journalist_api_token,
+                                  test_journo):
+    original_hash = test_journo['journalist'].passphrase_hash
+
+    with journalist_app.test_client() as app:
+        new_password = 'a ' * max( (Journalist.MIN_PASSWORD_LEN+1) / 2,
+                                    Journalist.MIN_PASSWORD_WORDS)
+
+        data = {'new_password': new_password}
+        response = app.post(url_for('api.new_password'),
+                            data=json.dumps(data),
+                            headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 200
+
+    with journalist_app.app_context():
+        user = Journalist.query.get(test_journo['id'])
+        assert original_hash != user.passphrase_hash
 
 
 def test_reply_without_content_400(journalist_app, journalist_api_token,
