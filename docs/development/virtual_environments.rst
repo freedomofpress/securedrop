@@ -149,7 +149,7 @@ Install libvirt and QEMU:
 .. code:: sh
 
    sudo apt-get update
-   sudo apt-get install libvirt-bin libvirt-dev qemu-utils qemu
+   sudo apt-get install libvirt-bin libvirt-dev qemu-utils qemu virt-manager
    sudo /etc/init.d/libvirt-bin restart
 
 Add your user to the libvirtd group:
@@ -159,8 +159,7 @@ Add your user to the libvirtd group:
    sudo addgroup libvirtd
    sudo usermod -a -g libvirtd $USER
 
-Install Vagrant along with the required plugins for converting and using
-libvirt boxes:
+Install the required Vagrant plugins for converting and using libvirt boxes:
 
 .. code:: sh
 
@@ -171,6 +170,14 @@ libvirt boxes:
    valid provider. In this case, remove Vagrant with ``sudo apt-get remove
    vagrant`` and reinstall it.
 
+Log out, then log in again. Verify that libvirt is installed and KVM is available:
+
+.. code:: sh
+  
+   libvirtd --version
+   kvm-ok
+
+
 Debian 9 setup
 ^^^^^^^^^^^^^^
 
@@ -179,9 +186,10 @@ Install Vagrant, libvirt, QEMU, and their dependencies:
 .. code:: sh
 
    sudo apt-get update
-   sudo apt-get install -y vagrant vagrant-libvirt libvirt-daemon-system qemu-kvm
+   sudo apt-get install -y vagrant vagrant-libvirt libvirt-daemon-system qemu-kvm virt-manager
    sudo apt-get install -y ansible rsync
    vagrant plugin install vagrant-libvirt
+   vagrant plugin install vagrant-mutate
    sudo usermod -a -G libvirt $USER
    sudo systemctl restart libvirtd
 
@@ -195,18 +203,17 @@ Add your user to the kvm group to give it permission to run KVM:
    sudo modprobe kvm
    sudo modprobe kvm_intel
 
-
-Validate libvirt config
-^^^^^^^^^^^^^^^^^^^^^^^
-
-Log out, then log in again. Verify that libvirt is installed and KVM is
-available:
+Log out, then log in again. Verify that libvirt is installed and your system
+supports KVM:
 
 .. code:: sh
 
-   libvirtd --version
-   kvm-ok
+   sudo libvirtd --version
+   [ `egrep -c 'flags\s*:.*(vmx|svm)' /proc/cpuinfo` -gt 0 ] &&  \
+   echo "KVM supported!" || echo "KVM not supported..." 
 
+Set libvirt as the default provider
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Set the default Vagrant provider to ``libvirt``:
 
