@@ -62,6 +62,7 @@ def make_blueprint(config):
         # the Pocoo style guide, IMHO:
         # http://www.pocoo.org/internal/styleguide/
         sources = Source.query.filter_by(pending=False) \
+                              .filter(Source.last_updated.isnot(None)) \
                               .order_by(Source.last_updated.desc()) \
                               .all()
         for source in sources:

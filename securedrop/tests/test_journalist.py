@@ -1942,3 +1942,20 @@ def test_col_process_successfully_unstars_sources(journalist_app,
 
     source = Source.query.get(test_source['id'])
     assert not source.star.starred
+
+
+def test_source_with_null_last_updated(journalist_app,
+                                       test_journo,
+                                       test_files):
+    '''Regression test for issues #3862'''
+
+    source = test_files['source']
+    source.last_updated = None
+    db.session.add(source)
+    db.session.commit()
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        resp = app.get(url_for('main.index'))
+        assert resp.status_code == 200
