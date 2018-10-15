@@ -159,7 +159,7 @@ Add your user to the libvirtd group:
    sudo addgroup libvirtd
    sudo usermod -a -g libvirtd $USER
 
-Install  the  required Vagrant plugins for converting and using libvirt boxes:
+Install the required Vagrant plugins for converting and using libvirt boxes:
 
 .. code:: sh
 
@@ -203,12 +203,14 @@ Add your user to the kvm group to give it permission to run KVM:
    sudo modprobe kvm
    sudo modprobe kvm_intel
 
-Log out, then log in again. Verify that libvirt is installed:
+Log out, then log in again. Verify that libvirt is installed and your system
+supports KVM:
 
 .. code:: sh
 
    sudo libvirtd --version
-
+   [ `egrep -c 'flags\s*:.*(vmx|svm)' /proc/cpuinfo` -gt 0 ] &&  \
+   echo "KVM supported!" || echo "KVM not supported..." 
 
 Set libvirt as the default provider
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
