@@ -663,20 +663,68 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
         assert reply_content == saved_content
 
 
-def test_new_password_unacceptable_400(journalist_app, journalist_api_token,
-                                       test_journo):
+def test_set_passphrase_blank_request_400(journalist_app, journalist_api_token):
+    with journalist_app.test_client() as app:
+        response = app.post(url_for('api.set_passphrase'),
+                            data='{}',
+                            headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 400
+
+
+def test_set_passphrase_nonstring_request_400(journalist_app, journalist_api_token):
+    with journalist_app.test_client() as app:
+        data = {'new_passphrase': {}}
+        response = app.post(url_for('api.set_passphrase'),
+                            data=json.dumps(data),
+                            headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 400
+
+
+def test_set_passphrase_wrong_pass_403(journalist_app, journalist_api_token,
+                                         test_journo):
+    topt = test_journo['journalist'].totp
+    with journalist_app.test_client() as app:
+        data = {'old_passphrase': test_journo['password'] + 'a',
+                'two_factor_code': topt.now(),
+                'new_passphrase': 'aaaa'}
+        response = app.post(url_for('api.set_passphrase'),
+                            data=json.dumps(data),
+                            headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 403
+
+
+def test_set_passphrase_wrong_otp_403(journalist_app, journalist_api_token,
+                                         test_journo):
+    topt = test_journo['journalist'].totp
+    with journalist_app.test_client() as app:
+        data = {'old_passphrase': test_journo['password'],
+                'two_factor_code': topt.now() + '1',
+                'new_passphrase': 'aaaa'}
+        response = app.post(url_for('api.set_passphrase'),
+                            data=json.dumps(data),
+                            headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 403
+
+
+def test_set_passphrase_unacceptable_400(journalist_app, journalist_api_token,
+                                         test_journo):
     original_hash = test_journo['journalist'].passphrase_hash
+    topt = test_journo['journalist'].totp
 
     with journalist_app.test_client() as app:
-        new_password = 'a' * (Journalist.MIN_PASSWORD_LEN - 1)
-        data = {'new_password': new_password}
-        response = app.post(url_for('api.new_password'),
+        new_passphrase = 'a' * (Journalist.MIN_PASSWORD_LEN - 1)
+        data = {'old_passphrase': test_journo['password'],
+                'two_factor_code': topt.now(),
+                'new_passphrase': new_passphrase}
+        response = app.post(url_for('api.set_passphrase'),
                             data=json.dumps(data),
                             headers=get_api_headers(journalist_api_token))
 
         assert response.status_code == 400
         assert (response.get_json()['message'] == str(NonDicewarePassword()) or
-                response.get_json()['message'] == str(InvalidPasswordLength(new_password))
+                response.get_json()['message'] == str(InvalidPasswordLength(new_passphrase))
                )
 
     with journalist_app.app_context():
@@ -684,16 +732,21 @@ def test_new_password_unacceptable_400(journalist_app, journalist_api_token,
         assert original_hash == user.passphrase_hash
 
 
-def test_new_password_success_200(journalist_app, journalist_api_token,
-                                  test_journo):
+def test_set_passphrase_success_200(journalist_app, journalist_api_token,
+                                    test_journo):
     original_hash = test_journo['journalist'].passphrase_hash
+    topt = test_journo['journalist'].totp
 
     with journalist_app.test_client() as app:
-        new_password = 'a ' * max( (Journalist.MIN_PASSWORD_LEN+1) / 2,
-                                    Journalist.MIN_PASSWORD_WORDS)
+        new_passphrase = ('a ' * Journalist.MIN_PASSWORD_WORDS)[:-1]
+        pass_len_short = Journalist.MIN_PASSWORD_LEN - len(new_passphrase)
+        if pass_len_short > 0:
+            new_passphrase += 'a' * pass_len_short
 
-        data = {'new_password': new_password}
-        response = app.post(url_for('api.new_password'),
+        data = {'old_passphrase': test_journo['password'],
+                'two_factor_code': topt.now(),
+                'new_passphrase': new_passphrase}
+        response = app.post(url_for('api.set_passphrase'),
                             data=json.dumps(data),
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 200

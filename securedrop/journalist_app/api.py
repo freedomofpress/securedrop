@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from functools import wraps
+from six import string_types
 import json
 from werkzeug.exceptions import default_exceptions  # type: ignore
 
@@ -280,23 +281,38 @@ def make_blueprint(config):
         user = get_user_object(request)
         return jsonify(user.to_json()), 200
 
-    @api.route('/account/new-password', methods=['POST'])
+    @api.route('/user/new-passphrase', methods=['POST'])
     @token_required
-    def new_password():
+    def set_passphrase():
+        REQUIRED_ATTRIBUTES = ['old_passphrase', 'two_factor_code', 'new_passphrase']
+
         user = get_user_object(request)
-        new_password = json.loads(request.data)['new_password']
+        data = json.loads(request.data)
+
+        # Validate request
+        for attribute in REQUIRED_ATTRIBUTES:
+            if attribute not in data:
+                return jsonify({'message':
+                                'Invalid request: {} unspecified'.format(attribute)}), 400
+            elif not isinstance(data[attribute], string_types):
+                return jsonify({'message':
+                                'Invalid request: {} must be a string'}.format(attribute)), 400
 
         try:
-            user.set_password(new_password)
+            Journalist.login(user.username, data['old_passphrase'], data['two_factor_code'])
+        except (BadTokenException, WrongPasswordException):
+            return jsonify({'message':
+                            'Invalid credentials. Passphrase change denied'}), 403
+
+        # Set password
+        try:
+            user.set_password(data['new_passphrase'])
+            db.session.commit()
         except (InvalidPasswordLength, NonDicewarePassword) as e:
             return jsonify({'message': str(e)}), 400
-        except Exception as e:
-            return jsonify({'message': 'An error occurred while setting the password. Password unchanged'}), 500
-
-        try:
-            db.session.commit()
-        except Exception as e:
-            return jsonify({'message': 'An error occurred on database commit. Password unchanged.'}), 500
+        except Exception:
+            return jsonify({'message':
+                            'An error occurred while setting the passphrase. Passphrase unchanged'}), 500
 
         return jsonify({'message': 'Password changed successfully'}), 200
 

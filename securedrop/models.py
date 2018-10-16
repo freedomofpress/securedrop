@@ -578,7 +578,8 @@ class Journalist(db.Model):
             'username': self.username,
             'last_login': self.last_access.isoformat() + 'Z',
             'is_admin': self.is_admin,
-            'uuid': self.uuid
+            'uuid': self.uuid,
+            'new_passphrase_url': url_for('api.set_passphrase')
         }
         return json_user
 
