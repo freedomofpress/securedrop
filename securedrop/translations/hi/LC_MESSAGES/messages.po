@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-09-03 17:28+0000\n"
+"PO-Revision-Date: 2018-09-04 19:23+0000\n"
 "Last-Translator: Drashti <drashtipandya37@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.securedrop.club/projects/securedrop/"
 "securedrop/hi/>\n"
@@ -110,28 +110,28 @@ msgstr "आवश्यक फाइल।"
 msgid "You can only upload PNG image files."
 msgstr "आप केवल PNG छवि फ़ाइलों को अपलोड कर सकते हैं।"
 
-#: journalist_app/main.py:117 journalist_app/utils.py:48
+#: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
 msgid "An unexpected error occurred! Please inform your administrator."
 msgstr "एक अप्रत्याशित त्रुटि हुई है ! कृपया अपने व्यवस्थापक को सूचित करें।"
 
-#: journalist_app/main.py:128
+#: journalist_app/main.py:129
 msgid "Thanks. Your reply has been stored."
 msgstr "धन्यवाद। आपका उत्तर संग्रहीत किया गया है।"
 
-#: journalist_app/main.py:149
+#: journalist_app/main.py:150
 msgid "No collections selected for download."
 msgstr "डाउनलोड के लिए कोई संग्रह नहीं चुना गया।"
 
-#: journalist_app/main.py:152 journalist_app/utils.py:236
+#: journalist_app/main.py:153 journalist_app/utils.py:236
 msgid "No collections selected for deletion."
 msgstr "हटाए जाने के लिए कोई संग्रह नहीं चुना गया।"
 
-#: journalist_app/main.py:178
+#: journalist_app/main.py:179
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "स्रोत '{original_name}' का नाम बदलकर '{new_name}' कर दिया गया है"
 
-#: journalist_app/main.py:193
+#: journalist_app/main.py:194
 msgid "No unread submissions for this source."
 msgstr "इस स्रोत के लिए कोई अपठित सबमिशन नहीं है |"
 
@@ -474,7 +474,7 @@ msgstr "जवाब दें"
 
 #: journalist_templates/col.html:41 journalist_templates/col.html:48
 msgid "Read"
-msgstr "વાંચો"
+msgstr "पठित"
 
 #: journalist_templates/col.html:45
 msgid "Unread"
@@ -781,7 +781,7 @@ msgstr "पत्रकार इंटरफेस प्रवेशने क
 msgid "Password"
 msgstr "पासवर्ड"
 
-#: journalist_templates/login.html:12
+#: journalist_templates/login.html:11
 msgid "LOG IN"
 msgstr "लॉग इन"
 
@@ -811,31 +811,31 @@ msgstr ""
 "आपको पुनर्निर्देशित किया गया था क्योंकि आप पहले ही लॉग इन हैं। यदि आप एक नया खाता "
 "बनाना चाहते हैं, तो आपको पहले लॉग आउट करना चाहिए।"
 
-#: source_app/main.py:131
+#: source_app/main.py:133
 msgid "You must enter a message or choose a file to submit."
 msgstr "सबमिट करने के लिए आपको कोई संदेश दर्ज करना होगा या एक फ़ाइल चुनें |"
 
-#: source_app/main.py:164
+#: source_app/main.py:166
 msgid "Thanks! We received your message."
 msgstr "धन्यवाद! हमें आपका संदेशा मिला|"
 
-#: source_app/main.py:166
+#: source_app/main.py:168
 msgid "Thanks! We received your document."
 msgstr "धन्यवाद! हमें आपका दस्तावेज़ मिला।"
 
-#: source_app/main.py:168
+#: source_app/main.py:170
 msgid "Thanks! We received your message and document."
 msgstr "धन्यवाद! हमें आपका संदेशा और दस्तावेज़ मिला।"
 
-#: source_app/main.py:220
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "जवाब हटा दिया गया"
 
-#: source_app/main.py:238
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "सभी उत्तर हटा दिए गए हैं"
 
-#: source_app/main.py:252
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "क्षमा करें, वह एक मान्यता प्राप्त कोडनाम नहीं है |"
 
