@@ -113,28 +113,28 @@ msgstr "Fil krävs."
 msgid "You can only upload PNG image files."
 msgstr "Du kan endast ladda upp PNG-bildfiler."
 
-#: journalist_app/main.py:117 journalist_app/utils.py:48
+#: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
 msgid "An unexpected error occurred! Please inform your administrator."
 msgstr "Ett oväntat fel uppstod! Informera din administratör."
 
-#: journalist_app/main.py:128
+#: journalist_app/main.py:129
 msgid "Thanks. Your reply has been stored."
 msgstr "Tack. Ditt svar har sparats."
 
-#: journalist_app/main.py:149
+#: journalist_app/main.py:150
 msgid "No collections selected for download."
 msgstr "Inga samlingar valda för nedladdning."
 
-#: journalist_app/main.py:152 journalist_app/utils.py:236
+#: journalist_app/main.py:153 journalist_app/utils.py:236
 msgid "No collections selected for deletion."
 msgstr "Inga samlingar har markerats för radering."
 
-#: journalist_app/main.py:178
+#: journalist_app/main.py:179
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "Källan '{original_name}' har döpts om till '{new_name}'"
 
-#: journalist_app/main.py:193
+#: journalist_app/main.py:194
 msgid "No unread submissions for this source."
 msgstr "Det finns inga olästa inlämningar från denna källa."
 
@@ -793,7 +793,7 @@ msgstr "Logga in för att få tillgång till journalistgränssnittet"
 msgid "Password"
 msgstr "Lösenord"
 
-#: journalist_templates/login.html:12
+#: journalist_templates/login.html:11
 msgid "LOG IN"
 msgstr "LOGGA IN"
 
@@ -823,31 +823,31 @@ msgstr ""
 "Du omdirigerades eftersom du redan är inloggad. Ifall du vill skapa ett nytt "
 "konto, logga ut först."
 
-#: source_app/main.py:131
+#: source_app/main.py:133
 msgid "You must enter a message or choose a file to submit."
 msgstr "Du måste ange ett meddelande eller välja en fil att lämna in."
 
-#: source_app/main.py:164
+#: source_app/main.py:166
 msgid "Thanks! We received your message."
 msgstr "Tack! Vi har tagit emot ditt meddelande."
 
-#: source_app/main.py:166
+#: source_app/main.py:168
 msgid "Thanks! We received your document."
 msgstr "Tack! Vi har tagit emot ditt dokument."
 
-#: source_app/main.py:168
+#: source_app/main.py:170
 msgid "Thanks! We received your message and document."
 msgstr "Tack! Vi har tagit emot ditt meddelande och dokument."
 
-#: source_app/main.py:220
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "Svaret har tagits bort"
 
-#: source_app/main.py:238
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "Alla svar har tagits bort"
 
-#: source_app/main.py:252
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "Tyvärr, detta kodnamn är okänt."
 
