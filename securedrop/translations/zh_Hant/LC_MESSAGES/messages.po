@@ -109,28 +109,28 @@ msgstr "檔案欄為必要。"
 msgid "You can only upload PNG image files."
 msgstr "僅可上傳 PNG 格式的圖片檔。"
 
-#: journalist_app/main.py:117 journalist_app/utils.py:48
+#: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
 msgid "An unexpected error occurred! Please inform your administrator."
 msgstr "發生預期之外的錯誤！請通知系統管理員。"
 
-#: journalist_app/main.py:128
+#: journalist_app/main.py:129
 msgid "Thanks. Your reply has been stored."
 msgstr "謝謝，我們已儲存您的回覆。"
 
-#: journalist_app/main.py:149
+#: journalist_app/main.py:150
 msgid "No collections selected for download."
 msgstr "未選擇要下載的集件。"
 
-#: journalist_app/main.py:152 journalist_app/utils.py:236
+#: journalist_app/main.py:153 journalist_app/utils.py:236
 msgid "No collections selected for deletion."
 msgstr "未選擇要刪除的集件。"
 
-#: journalist_app/main.py:178
+#: journalist_app/main.py:179
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "線人 {original_name} 已重新命名為 {new_name}"
 
-#: journalist_app/main.py:193
+#: journalist_app/main.py:194
 msgid "No unread submissions for this source."
 msgstr "此位線人無未讀的提交。"
 
@@ -747,7 +747,7 @@ msgstr "登入記者使用介面"
 msgid "Password"
 msgstr "密碼"
 
-#: journalist_templates/login.html:12
+#: journalist_templates/login.html:11
 msgid "LOG IN"
 msgstr "登錄"
 
@@ -774,31 +774,31 @@ msgid ""
 "a new account, you should log out first."
 msgstr "你被重定向了， 因為已在登錄狀態。如果想創建一個新帳戶，請先登出。"
 
-#: source_app/main.py:131
+#: source_app/main.py:133
 msgid "You must enter a message or choose a file to submit."
 msgstr "你必须輸入一則訊息，或是選擇一個文件來提交。"
 
-#: source_app/main.py:164
+#: source_app/main.py:166
 msgid "Thanks! We received your message."
 msgstr "謝謝！我們已收到你的訊息。"
 
-#: source_app/main.py:166
+#: source_app/main.py:168
 msgid "Thanks! We received your document."
 msgstr "謝謝！我們已收到你的文件。"
 
-#: source_app/main.py:168
+#: source_app/main.py:170
 msgid "Thanks! We received your message and document."
 msgstr "謝謝！我們已收到你的訊息和文件。"
 
-#: source_app/main.py:220
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "回覆已刪除"
 
-#: source_app/main.py:238
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "所有的回覆都已被删除"
 
-#: source_app/main.py:252
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "對不起，無法識別這個代號。"
 
