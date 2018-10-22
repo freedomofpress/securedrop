@@ -1,0 +1,50 @@
+Upgrade from 0.9.1 to 0.10.0
+============================
+
+Updating the Tails Workstations
+-------------------------------
+
+We recommend that you update all Tails drives to version 3.10, which was released
+concurrently with SecureDrop 0.9.0 on October 23, 2018. Follow the Tails
+graphical prompts on your workstations to perform this upgrade.
+
+Due to a bug in the graphical SecureDrop updater that was fixed in SecureDrop
+0.9.1 (released on September 6, 2018), attempting an update of your SecureDrop
+workstation code on your *Journalist* or *Admin Workstations* using the
+graphical updater will fail with an error message: "WARNING: Signature
+verification failed."
+
+If you haven't already updated your workstations
+when SecureDrop 0.9.1 was released, you'll need to update your workstations
+manually. To do so, follow the instructions in the
+:doc:`Upgrade from 0.8.0 to 0.9.1<0.8.0_to_0.9.1>` guide.
+
+Troubleshooting Kernel Issues
+-----------------------------
+
+If you have previously downgraded your kernel, as part of the the upgrade
+process to SecureDrop 0.10.0, the default Linux kernel will change to the
+latest released kernel (version 4.4.144). 
+
+We have tested this kernel extensively against :ref:`recommended hardware <Specific Hardware Recommendations>`
+and other common configurations. Please consult our :doc:`kernel troubleshooting guide <../kernel_troubleshooting>`
+for instructions on how to compare the differences between kernel versions and
+how to roll back to an earlier version if necessary.
+
+.. important::
+
+  The 3.14.x series kernel will be removed with release 0.11.0 (scheduled
+  for December 11). Please :ref:`report kernel compatibility issues <Report Compatibility Issues>`
+  immediately to avoid extended downtime.
+
+Getting Support
+---------------
+
+Should you require further support with your SecureDrop installation or upgrade,
+we are happy to help!
+
+-  Community support is available at https://forum.securedrop.org
+-  The Freedom of the Press Foundation offers training and priority support
+   services. See https://securedrop.org/priority-support/ for more information.
+   If you are already a member of our support portal, please don't hesitate to
+   open a ticket there.
