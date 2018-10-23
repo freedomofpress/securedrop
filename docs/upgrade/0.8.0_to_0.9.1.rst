@@ -36,6 +36,8 @@ where "<version>" is your current installed version.
 If the workstation code is at version 0.7.0 or earlier:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. _update_workstation_code_from_070:
+
 Update the workstation code to version 0.8.0 (not 0.9.0 or 0.9.1) manually
 before proceeding:
 
