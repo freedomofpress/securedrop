@@ -1,6 +1,26 @@
 # Changelog
 
-## 0.10.0~rc1
+## 0.11.0~rc1
+
+
+
+## 0.10.0
+
+### Web Applications
+
+* UX: modify size of input boxes to accommodate long passphrases (#3761)
+* Security bugfix: sources can no longer delete replies for other sources if they know the target filename (#3892)
+
+### Operations
+
+* Updated OSSEC to 3.0.0 and use GPG signatures for verifying sources (#3701)
+* Update paramiko to 2.4.2 (#3861)
+* Enforce use of the latest grsecurity-patched kernel on servers (#3842) 
+
+### Development
+
+* Xenial transition: Enable clean install in Xenial staging environment (#3833)
+* Document Molecule upgrade scenario (#3720)
 
 ## 0.9.1
 
