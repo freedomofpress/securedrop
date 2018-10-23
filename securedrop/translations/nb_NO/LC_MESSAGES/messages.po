@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-08-28 09:18+0000\n"
-"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
+"PO-Revision-Date: 2018-09-04 19:23+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://weblate.securedrop.club/projects/"
 "securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -113,30 +113,30 @@ msgstr "Fil påkrevd."
 msgid "You can only upload PNG image files."
 msgstr "Du kan kun laste opp PNG-bildefiler."
 
-#: journalist_app/main.py:117 journalist_app/utils.py:48
+#: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
 msgid "An unexpected error occurred! Please inform your administrator."
 msgstr ""
 "En uventet feil oppstod! Gi administrator for din SecureDrop beskjed om at "
 "det skjedde."
 
-#: journalist_app/main.py:128
+#: journalist_app/main.py:129
 msgid "Thanks. Your reply has been stored."
 msgstr "Takk. Svaret ditt har blitt lagret."
 
-#: journalist_app/main.py:149
+#: journalist_app/main.py:150
 msgid "No collections selected for download."
 msgstr "Ingen kildedata valgt for nedlasting."
 
-#: journalist_app/main.py:152 journalist_app/utils.py:236
+#: journalist_app/main.py:153 journalist_app/utils.py:236
 msgid "No collections selected for deletion."
 msgstr "Ingen kildeoppføringer valgt for sletting."
 
-#: journalist_app/main.py:178
+#: journalist_app/main.py:179
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "Kilden '{original_name}' har endret navn til '{new_name}'"
 
-#: journalist_app/main.py:193
+#: journalist_app/main.py:194
 msgid "No unread submissions for this source."
 msgstr "Ingen uleste bidrag fra denne kilden."
 
@@ -230,7 +230,7 @@ msgstr[1] "{msg_num} meldinger"
 #: journalist_templates/_source_row.html:27
 msgid "1 unread"
 msgid_plural "{num_unread} unread"
-msgstr[0] "1 ulest"
+msgstr[0] "Én ulest"
 msgstr[1] "{num_unread} uleste"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
@@ -550,7 +550,7 @@ msgstr ""
 
 #: journalist_templates/col.html:121
 msgid "DELETE SOURCE AND SUBMISSIONS"
-msgstr "SLETT KILDEDATA OG INNSENDT INFO"
+msgstr "SLETT KILDEDATA OG INNSENDELSER"
 
 #: journalist_templates/col.html:129
 msgid "Are you sure you want to delete this collection?"
@@ -798,7 +798,7 @@ msgstr "Logg inn for å få tilgang til journalist-portalen"
 msgid "Password"
 msgstr "Passord"
 
-#: journalist_templates/login.html:12
+#: journalist_templates/login.html:11
 msgid "LOG IN"
 msgstr "LOGG INN"
 
@@ -828,31 +828,31 @@ msgstr ""
 "Du ble omdirigert fordi du allerede er logget inn. Om du ønsker å lage en ny "
 "konto må du først logge ut."
 
-#: source_app/main.py:131
+#: source_app/main.py:133
 msgid "You must enter a message or choose a file to submit."
 msgstr "Du må skrive inn en melding eller velge ei fil å sende inn."
 
-#: source_app/main.py:164
+#: source_app/main.py:166
 msgid "Thanks! We received your message."
 msgstr "Takk! Vi mottok meldingen din."
 
-#: source_app/main.py:166
+#: source_app/main.py:168
 msgid "Thanks! We received your document."
 msgstr "Takk! Vi har mottatt dokumentet ditt."
 
-#: source_app/main.py:168
+#: source_app/main.py:170
 msgid "Thanks! We received your message and document."
 msgstr "Takk! Vi mottok meldingen og dokumentet ditt."
 
-#: source_app/main.py:220
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "Svar slettet"
 
-#: source_app/main.py:238
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "Alle svar har blitt slettet"
 
-#: source_app/main.py:252
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "Beklager, det er ikke et gjenkjent kodenavn."
 
@@ -949,10 +949,10 @@ msgid ""
 "your anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it "
 "to Safest</a>, or ignore this warning to continue."
 msgstr ""
-"<strong>Det er anbefalt at sikkerhetsglidebryteren settes til \"Safest\" for "
-"å sikre din anonymitet:</strong><a id=\"disable-js\" href=\"\">Lær hvordan "
-"du setter den til \"Safest\"</a>, eller se bort fra denne advarselen for å "
-"fortsette uten."
+"<strong>Det er anbefalt at sikkerhetsglidebryteren settes til \"Tryggest\" "
+"for å sikre din anonymitet:</strong><a id=\"disable-js\" href=\"\">Lær "
+"hvordan du setter den til \"Tryggest\"</a>, eller se bort fra denne "
+"advarselen for å fortsette uten."
 
 #: source_templates/index.html:18
 msgid ""
@@ -1180,7 +1180,7 @@ msgstr "Beklager, men vi kunne ikke finne det du ba om."
 
 #: source_templates/screensaver.html:2
 msgid "Interface hidden. Move your cursor here to show."
-msgstr "Skjult grensesnitt. Beveg musepekeren for å vise."
+msgstr "Grensesnitt skjult. Beveg musepekeren for å vise."
 
 #: source_templates/session_timeout.html:6
 msgid ""
@@ -1256,9 +1256,9 @@ msgid ""
 "mail provider is less likely to be monitored, you can send a mail to "
 "<pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgstr ""
-"Det er mulig at det å laste ned Tor-nettleseren hever mistanke og at e-"
+"Hvis det er mulig at det å laste ned Tor-nettleseren hever mistanke, og at e-"
 "posttilbyderen din mindre sannsynlig er overvåket, du kan sende en e-post "
-"til <pre>gettor@otrproject.org</pre>og en robot vil svare med instruksjoner."
+"til <pre>gettor@otrproject.org</pre> og en robot vil svare med instruksjoner."
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"

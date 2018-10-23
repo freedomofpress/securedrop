@@ -119,30 +119,30 @@ msgstr "Un fichier est exigé."
 msgid "You can only upload PNG image files."
 msgstr "Vous ne pouvez téléverser que des fichiers images PNG."
 
-#: journalist_app/main.py:117 journalist_app/utils.py:48
+#: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
 msgid "An unexpected error occurred! Please inform your administrator."
 msgstr ""
 "Une erreur inattendue est survenue ! Veuillez la signaler à votre "
 "administrateur."
 
-#: journalist_app/main.py:128
+#: journalist_app/main.py:129
 msgid "Thanks. Your reply has been stored."
 msgstr "Merci. Votre réponse a été enregistrée."
 
-#: journalist_app/main.py:149
+#: journalist_app/main.py:150
 msgid "No collections selected for download."
 msgstr "Aucune collection n’a été sélectionnée pour être téléchargée."
 
-#: journalist_app/main.py:152 journalist_app/utils.py:236
+#: journalist_app/main.py:153 journalist_app/utils.py:236
 msgid "No collections selected for deletion."
 msgstr "Aucune collection n’a été sélectionnée pour être supprimée."
 
-#: journalist_app/main.py:178
+#: journalist_app/main.py:179
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "La source '{original_name}' a été renommée '{new_name}'"
 
-#: journalist_app/main.py:193
+#: journalist_app/main.py:194
 msgid "No unread submissions for this source."
 msgstr "Aucun envoi non lu pour cette source."
 
@@ -830,7 +830,7 @@ msgstr "Connectez-vous pour accéder à l'interface des journalistes"
 msgid "Password"
 msgstr "Mot de passe"
 
-#: journalist_templates/login.html:12
+#: journalist_templates/login.html:11
 msgid "LOG IN"
 msgstr "CONNEXION"
 
@@ -860,31 +860,31 @@ msgstr ""
 "Vous avez été redirigé, car vous êtes déjà connecté. Si vous souhaitez créer "
 "un nouveau compte, vous devriez d’abord vous déconnecter."
 
-#: source_app/main.py:131
+#: source_app/main.py:133
 msgid "You must enter a message or choose a file to submit."
 msgstr "Vous devez saisir un message ou sélectionner un fichier à envoyer."
 
-#: source_app/main.py:164
+#: source_app/main.py:166
 msgid "Thanks! We received your message."
 msgstr "Merci ! Nous avons reçu votre message."
 
-#: source_app/main.py:166
+#: source_app/main.py:168
 msgid "Thanks! We received your document."
 msgstr "Merci ! Nous avons reçu votre document."
 
-#: source_app/main.py:168
+#: source_app/main.py:170
 msgid "Thanks! We received your message and document."
 msgstr "Merci ! Nous avons reçu vos document et message."
 
-#: source_app/main.py:220
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "La réponse a été supprimée"
 
-#: source_app/main.py:238
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "Toutes les réponses ont été supprimées"
 
-#: source_app/main.py:252
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "Désolé, ce nom de code n’est pas reconnu."
 
