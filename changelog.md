@@ -1,10 +1,11 @@
 # Changelog
 
-## 0.10.0~rc3
+## 0.10.0~rc4
 
 ### Web Applications
 
 * UX: modify size of input boxes to accommodate long passphrases (#3761)
+* Security bugfix: sources can no longer delete replies for other sources if they know the target filename (#3892)
 
 ### Operations
 
