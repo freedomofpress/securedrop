@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
-"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 2.20\n"
 "Generated-By: Babel 2.4.0\n"
 
@@ -115,28 +115,28 @@ msgstr "Файл обязателен."
 msgid "You can only upload PNG image files."
 msgstr "Вы можете загружать изображения только в формате PNG."
 
-#: journalist_app/main.py:117 journalist_app/utils.py:48
+#: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
 msgid "An unexpected error occurred! Please inform your administrator."
 msgstr "Произошла непредвиденная ошибка! Сообщите об этом администратору."
 
-#: journalist_app/main.py:128
+#: journalist_app/main.py:129
 msgid "Thanks. Your reply has been stored."
 msgstr "Спасибо. Ваш ответ сохранен."
 
-#: journalist_app/main.py:149
+#: journalist_app/main.py:150
 msgid "No collections selected for download."
 msgstr "Коллекции для скачивания не выбраны."
 
-#: journalist_app/main.py:152 journalist_app/utils.py:236
+#: journalist_app/main.py:153 journalist_app/utils.py:236
 msgid "No collections selected for deletion."
 msgstr "Не выбраны коллекции для удаления."
 
-#: journalist_app/main.py:178
+#: journalist_app/main.py:179
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "Источник '{original_name}' был переименован в '{new_name}'"
 
-#: journalist_app/main.py:193
+#: journalist_app/main.py:194
 msgid "No unread submissions for this source."
 msgstr "Нет непрочитанных материалов для этого источника."
 
@@ -821,7 +821,7 @@ msgstr "Войдите, чтобы получить доступ к панели
 msgid "Password"
 msgstr "Пароль"
 
-#: journalist_templates/login.html:12
+#: journalist_templates/login.html:11
 msgid "LOG IN"
 msgstr "Войти"
 
@@ -851,31 +851,31 @@ msgstr ""
 "Вы были перенаправлены, так как уже выполнили вход в систему. Если вы хотите "
 "создать новый аккаунт, то сначала нужно выйти из системы."
 
-#: source_app/main.py:131
+#: source_app/main.py:133
 msgid "You must enter a message or choose a file to submit."
 msgstr "Вы должны ввести сообщение или выбрать файл для отправки."
 
-#: source_app/main.py:164
+#: source_app/main.py:166
 msgid "Thanks! We received your message."
 msgstr "Спасибо! Мы получили ваше сообщение."
 
-#: source_app/main.py:166
+#: source_app/main.py:168
 msgid "Thanks! We received your document."
 msgstr "Спасибо! Мы получили ваш документ."
 
-#: source_app/main.py:168
+#: source_app/main.py:170
 msgid "Thanks! We received your message and document."
 msgstr "Спасибо! Мы получили ваше сообщение и документ."
 
-#: source_app/main.py:220
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "Ответ удален"
 
-#: source_app/main.py:238
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "Все ответы были удалены"
 
-#: source_app/main.py:252
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "К сожалению, это кодовое имя не распознано."
 
