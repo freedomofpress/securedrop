@@ -5,19 +5,33 @@ Updating the Tails Workstations
 -------------------------------
 
 We recommend that you update all Tails drives to version 3.10, which was released
-concurrently with SecureDrop 0.9.0 on October 23, 2018. Follow the Tails
+concurrently with SecureDrop 0.10.0 on October 23, 2018. Follow the Tails
 graphical prompts on your workstations to perform this upgrade.
 
-Due to a bug in the graphical SecureDrop updater that was fixed in SecureDrop
-0.9.1 (released on September 6, 2018), attempting an update of your SecureDrop
-workstation code on your *Journalist* or *Admin Workstations* using the
-graphical updater will fail with an error message: "WARNING: Signature
-verification failed."
+For the *Journalist Workstation* and *Admin Workstation*, the graphical
+SecureDrop updater will also prompt you to update the SecureDrop code
+on your workstation. The updater was introduced in SecureDrop 0.7.0. It
+looks like this:
 
-If you haven't already updated your workstations
-when SecureDrop 0.9.1 was released, you'll need to update your workstations
-manually. To do so, follow the instructions in the
-:doc:`Upgrade from 0.8.0 to 0.9.1<0.8.0_to_0.9.1>` guide.
+.. image:: ../images/0.6.x_to_0.7/securedrop-updater.png
+
+If you don't see a graphical updater, you may be running an older
+version of the SecureDrop code on your workstation (earlier than
+0.7.0). If that is the case, refer to :ref:`this guide <update_workstation_code_from_070>`
+to get onto the latest workstation code.
+
+.. important:: 
+        If you haven't already updated your workstations when SecureDrop
+        0.9.1 was released, you'll need to update your workstations
+        manually. Due to a bug in the graphical SecureDrop updater that was
+        fixed in SecureDrop 0.9.1 (released on September 6, 2018),
+        attempting an update of your SecureDrop workstation code on your
+        *Journalist* or *Admin Workstations* using the graphical updater
+        may fail with an error message: "WARNING: Signature verification failed."
+
+        Should you encounter this message, follow the instructions in the
+        :doc:`Upgrade from 0.8.0 to 0.9.1<0.8.0_to_0.9.1>` guide.
+
 
 Troubleshooting Kernel Issues
 -----------------------------
@@ -30,7 +44,7 @@ We have tested this kernel extensively against :ref:`recommended hardware <Speci
 and other common configurations. Please consult our :doc:`kernel troubleshooting guide <../kernel_troubleshooting>`
 for instructions on how to compare the differences between kernel versions and
 how to roll back to an earlier version if necessary.
-
+ 
 .. important::
 
   The 3.14.x series kernel will be removed with release 0.11.0 (scheduled
