@@ -1,5 +1,6 @@
 DEFAULT_GOAL: help
 SHELL := /bin/bash
+GCLOUD_VERSION := 222.0.0-1
 PWD := $(shell pwd)
 TAG ?= $(shell git rev-parse HEAD)
 STABLE_VER := $(shell cat molecule/shared/stable.ver)
@@ -93,6 +94,13 @@ build-debs-xenial: ## Builds and tests debian packages (includes Xenial override
 	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
 		molecule converge -s builder -- -e securedrop_build_xenial_support=True; \
 		else echo Not running on docs branch...; fi
+
+.PHONY: build-gcloud-docker
+build-gcloud-docker: ## Build docker container for gcloud sdk
+	echo "${GCLOUD_VERSION}" > molecule/gce-nested/gcloud-container.ver && \
+	docker build --build-arg="GCLOUD_VERSION=${GCLOUD_VERSION}" \
+				 -f devops/docker/Dockerfile.gcloud \
+				 -t "quay.io/freedomofpress/gcloud-sdk:${GCLOUD_VERSION}" .
 
 .PHONY: safety
 safety: ## Runs `safety check` to check python dependencies for vulnerabilities
