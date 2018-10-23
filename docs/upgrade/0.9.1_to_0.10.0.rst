@@ -24,7 +24,7 @@ version of the SecureDrop code on your workstation (earlier than
     cd ~/Persistent/securedrop
     git fetch --tags
     gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
-    git tag -V 0.10.0
+    git tag -v 0.10.0
 
 The output should include the following two lines: ::
 
@@ -44,7 +44,7 @@ new release: ::
 Finally, run the following commands: ::
 
   ./securedrop-admin setup
-  ./securedrop-admin tails-config
+  ./securedrop-admin tailsconfig
 
 .. important:: 
         If you haven't already updated your workstations when SecureDrop
