@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.0~rc4
+## 0.10.0
 
 ### Web Applications
 
