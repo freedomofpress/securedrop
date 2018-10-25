@@ -25,7 +25,7 @@ SecureDrop application environment consists of three dedicated computers:
    hidden service, to send messages and documents to the journalist. The
    journalist connects to the *Journalist Interface*, an `authenticated Tor
    hidden service
-   <https://gitweb.torproject.org/torspec.git/tree/rend-spec.txt#n851>`__, to
+   <https://gitweb.torproject.org/torspec.git/tree/rend-spec-v2.txt#n851>`__, to
    download encrypted documents and respond to sources.
 - *Monitor Server*: Ubuntu server that monitors the *Application Server*
    with `OSSEC <https://ossec.github.io/>`__ and sends email alerts.
