@@ -1,0 +1,22 @@
+---
+driver:
+  name: gce
+lint:
+  name: yamllint
+platforms:
+  - name: ci-nested-virt
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+scenario:
+  name: gce-nested
+  test_sequence:
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

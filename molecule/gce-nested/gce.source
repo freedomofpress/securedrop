@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function gcloud_call() {
+    if ! (docker ps | grep -q gcloud_tool); then
+        docker run --rm \
+                --env="CLOUDSDK_COMPUTE_ZONE=${CLOUDSDK_COMPUTE_ZONE}" \
+                --volume "${MOLECULE_EPHEMERAL_DIRECTORY}/gce-ssh.pub:/gce-ssh.pub" \
+                --volume "$(realpath .gce.creds):/gce-svc-acct.json" \
+                --name gcloud_tool -d \
+                "quay.io/freedomofpress/gcloud-sdk:${GCLOUD_CONTAINER_VER}" \
+                background
+        # Give container a moment for gcloud tooling to authenticate
+        # Kept falling over on first calls without this
+        sleep 1
+    fi
+
+    docker exec -i gcloud_tool \
+        /usr/bin/gcloud --project "${PROJECT_ID}" "$@"
+}
