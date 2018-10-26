@@ -4,16 +4,18 @@ function gcloud_call() {
     if ! (docker ps | grep -q gcloud_tool); then
         docker run --rm \
                 --env="CLOUDSDK_COMPUTE_ZONE=${CLOUDSDK_COMPUTE_ZONE}" \
-                --volume "${MOLECULE_EPHEMERAL_DIRECTORY}/gce-ssh.pub:/gce-ssh.pub" \
+                --volume "${EPHEMERAL_DIRECTORY}/gce.pub:/gce.pub" \
                 --volume "$(realpath .gce.creds):/gce-svc-acct.json" \
                 --name gcloud_tool -d \
                 "quay.io/freedomofpress/gcloud-sdk:${GCLOUD_CONTAINER_VER}" \
-                background
+                background 2>&1 >/dev/null
         # Give container a moment for gcloud tooling to authenticate
         # Kept falling over on first calls without this
-        sleep 1
+        sleep 3
     fi
 
     docker exec -i gcloud_tool \
         /usr/bin/gcloud --project "${PROJECT_ID}" "$@"
 }
+
+export FULL_JOB_ID="${JOB_NAME}-${BUILD_NUM}"

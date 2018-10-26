@@ -97,7 +97,7 @@ build-debs-xenial: ## Builds and tests debian packages (includes Xenial override
 
 .PHONY: build-gcloud-docker
 build-gcloud-docker: ## Build docker container for gcloud sdk
-	echo "${GCLOUD_VERSION}" > molecule/gce-nested/gcloud-container.ver && \
+	echo "${GCLOUD_VERSION}" > devops/gce-nested/gcloud-container.ver && \
 	docker build --build-arg="GCLOUD_VERSION=${GCLOUD_VERSION}" \
 				 -f devops/docker/Dockerfile.gcloud \
 				 -t "quay.io/freedomofpress/gcloud-sdk:${GCLOUD_VERSION}" .

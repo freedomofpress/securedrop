@@ -1,5 +1,0 @@
----
-- name: Do nothing!
-  hosts: localhost
-  become: no
-  gather_facts: true
