@@ -29,8 +29,9 @@ if ! gcloud_call compute instances describe "${FULL_JOB_ID}" 2>&1 > /dev/null; t
         --image="${IMG_LOCATE}" \
         --network securedropci \
         --subnet ci-subnet \
+        --machine-type="${GCLOUD_MACHINE_TYPE}" \
         --metadata "ssh-keys=sdci:$(cat ${EPHEMERAL_DIRECTORY}/gce.pub)"
 
     # Give box a few more seconds for SSH to become available
-    sleep 10
+    sleep 20
 fi

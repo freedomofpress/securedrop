@@ -20,6 +20,7 @@ fi
 export BUILD_NUM="${CIRCLE_BUILD_NUM}"
 export PROJECT_ID=securedrop-ci
 export JOB_NAME=sd-ci-nested
+export GCLOUD_MACHINE_TYPE=n1-standard-2
 export GCLOUD_CONTAINER_VER="$(cat ${ROOTDIR}/devops/gce-nested/gcloud-container.ver)"
 export CLOUDSDK_COMPUTE_ZONE=us-west1-c
 export EPHEMERAL_DIRECTORY="/tmp/gce-nested"
