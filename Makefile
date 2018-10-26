@@ -87,7 +87,11 @@ docker-build-ubuntu: ## Builds SD Ubuntu docker container
 
 .PHONY: build-debs
 build-debs: ## Builds and tests debian packages
-	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s builder; else echo Not running on docs branch...; fi
+	@./devops/scripts/build-debs.sh
+
+.PHONY: build-debs-notest
+build-debs-notest: ## Builds and tests debian packages (sans tests)
+	@./devops/scripts/build-debs.sh notest
 
 .PHONY: build-debs-xenial
 build-debs-xenial: ## Builds and tests debian packages (includes Xenial overrides, TESTING ONLY)
