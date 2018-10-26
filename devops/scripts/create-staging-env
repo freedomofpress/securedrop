@@ -12,6 +12,8 @@ set -e
 set -u
 set -o pipefail
 
+. ./devops/scripts/boot-strap-venv.sh
+
 # Support optional Xenial scenarios, for evaluating Xenial support
 # as we approach the LTS expiration for Trusty.
 
@@ -49,4 +51,5 @@ else
 fi
 
 # Run it!
+virtualenv_bootstrap
 molecule converge -s "${securedrop_staging_scenario}"

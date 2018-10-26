@@ -145,7 +145,7 @@ vagrant-package: ## Package up a vagrant box of the last stable SD release
 
 .PHONY: staging
 staging: ## Creates local staging environment in VM, autodetecting platform
-	@./devops/create-staging-env
+	@./devops/scripts/create-staging-env
 
 .PHONY: staging-xenial
 staging-xenial: ## Creates local staging VMs based on Xenial, autodetecting platform
