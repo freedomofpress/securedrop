@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from functools import wraps
+from six import string_types
 import json
 from werkzeug.exceptions import default_exceptions  # type: ignore
 
@@ -9,7 +10,8 @@ from db import db
 from journalist_app import utils
 from models import (Journalist, Reply, Source, Submission,
                     LoginThrottledException, InvalidUsernameException,
-                    BadTokenException, WrongPasswordException)
+                    BadTokenException, WrongPasswordException,
+                    InvalidPasswordLength, NonDicewarePassword)
 from store import NotEncrypted
 
 
@@ -278,6 +280,41 @@ def make_blueprint(config):
     def get_current_user():
         user = get_user_object(request)
         return jsonify(user.to_json()), 200
+
+    @api.route('/user/new-passphrase', methods=['POST'])
+    @token_required
+    def set_passphrase():
+        REQUIRED_ATTRIBUTES = ['old_passphrase', 'two_factor_code', 'new_passphrase']
+
+        user = get_user_object(request)
+        data = json.loads(request.data)
+
+        # Validate request
+        for attribute in REQUIRED_ATTRIBUTES:
+            if attribute not in data:
+                return jsonify({'message':
+                                'Invalid request: {} unspecified'.format(attribute)}), 400
+            elif not isinstance(data[attribute], string_types):
+                return jsonify({'message':
+                                'Invalid request: {} must be a string'}.format(attribute)), 400
+
+        try:
+            Journalist.login(user.username, data['old_passphrase'], data['two_factor_code'])
+        except (BadTokenException, WrongPasswordException):
+            return jsonify({'message':
+                            'Invalid credentials. Passphrase change denied'}), 403
+
+        # Set password
+        try:
+            user.set_password(data['new_passphrase'])
+            db.session.commit()
+        except (InvalidPasswordLength, NonDicewarePassword) as e:
+            return jsonify({'message': str(e)}), 400
+        except Exception:
+            return jsonify({'message':
+                            'An error occurred while setting the passphrase. Passphrase unchanged'}), 500
+
+        return jsonify({'message': 'Password changed successfully'}), 200
 
     def _handle_http_exception(error):
         # Workaround for no blueprint-level 404/5 error handlers, see:
