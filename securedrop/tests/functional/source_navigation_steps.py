@@ -1,6 +1,5 @@
 import tempfile
 import time
-import os
 
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -38,6 +37,8 @@ class SourceNavigationStepsMixin():
         assert submit_button_icon.is_displayed() is False
         submit_button_hover_icon = self.driver.find_element_by_css_selector(
             'a#submit-documents-button > img.on-hover')
+        ActionChains(self.driver).move_to_element(
+                     submit_button_hover_icon).perform()
         assert submit_button_hover_icon.is_displayed()
 
         # The source clicks the submit button.
@@ -176,6 +177,9 @@ class SourceNavigationStepsMixin():
             # Allow extra time for file uploads
             self.wait_for(file_submitted, timeout=(self.sleep_time*3))
 
+            # allow time for reply key to be generated
+            time.sleep(5)
+
     def _source_submits_a_message(self):
         self._source_enters_text_in_message_field()
         self._source_clicks_submit_button_on_submission_page()
@@ -187,6 +191,9 @@ class SourceNavigationStepsMixin():
                 assert 'Thank' in notification.text
 
         self.wait_for(message_submitted, timeout=self.sleep_time)
+
+        # allow time for reply key to be generated
+        time.sleep(5)
 
     def _source_enters_text_in_message_field(self):
         text_box = self.driver.find_element_by_css_selector('[name=msg]')

@@ -12,10 +12,8 @@ import socket
 import time
 import json
 import traceback
-import subprocess
 import shutil
 import requests
-import subprocess
 
 import pyotp
 import gnupg
@@ -29,13 +27,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.remote_connection import LOGGER
 from tbselenium.tbdriver import TorBrowserDriver
 
-TBB_PATH = abspath(join(expanduser('~'), '.local/tbb/tor-browser_en-US/'))
-os.environ['TBB_PATH'] = TBB_PATH
-TBBRC = join(TBB_PATH, 'Browser/TorBrowser/Data/Tor/torrc')
-
-from tbselenium.tbdriver import TorBrowserDriver
-from tbselenium.utils import start_xvfb, stop_xvfb
-
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 from sqlalchemy.exc import IntegrityError
@@ -45,6 +36,13 @@ import journalist_app
 import source_app
 import tests.utils.env as env
 
+from db import db
+
+TBB_PATH = abspath(join(expanduser('~'), '.local/tbb/tor-browser_en-US/'))
+os.environ['TBB_PATH'] = TBB_PATH
+TBBRC = join(TBB_PATH, 'Browser/TorBrowser/Data/Tor/torrc')
+
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 FUNCTIONAL_TEST_DIR = abspath(dirname(__file__))
 LOGFILE_PATH = abspath(join(FUNCTIONAL_TEST_DIR, 'firefox.log'))
@@ -209,16 +207,6 @@ class FunctionalTest(object):
                         join(FILES_DIR, "test_journalist_key.sec")):
             gpg.import_keys(open(keyfile).read())
         return gpg
-
-    def system(self, cmd):
-        """
-        Invoke a shell command. Primary replacement for os.system calls.
-        """
-        print(cmd)
-        ret = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE,
-                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
-        out, err = ret.communicate()
-        return out
 
     def setup(self, session_expiration=30):
         self.localtesting = False
@@ -389,8 +377,22 @@ class FunctionalTest(object):
         # one more try, which will raise any errors if they are outstanding
         return function_with_assertion()
 
+    def safe_click_by_id(self, id):
+        self.wait_for(lambda: self.driver.find_element_by_id(id),
+                      timeout=self.sleep_time)
+
+        el = self.driver.find_element_by_id(id)
+
+        self.wait_for(lambda: el.is_enabled() and
+                      el.is_displayed,
+                      timeout=self.sleep_time)
+
+        actions = ActionChains(self.driver)
+        actions.move_to_element(el).perform()
+        el.click()
+
     def _alert_wait(self):
-        WebDriverWait(self.driver, 30).until(
+        WebDriverWait(self.driver, 60).until(
             expected_conditions.alert_is_present(),
             'Timed out waiting for confirmation popup.')
 

@@ -18,9 +18,9 @@ class TestMakeAccountChanges(
         # Admin view of admin user
         self._edit_user(self.admin, True)
         self._admin_visits_admin_interface()
-        self._admin_adds_a_user('privacyadvocate')
+        self._admin_adds_a_user()
         # Admin view of non-admin user
-        self._edit_user('privacyadvocate')
+        self._edit_user(self.new_user['username'])
         # User view of self
         self._edit_account()
         self._logout()
