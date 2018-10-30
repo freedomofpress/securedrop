@@ -16,10 +16,6 @@
     # in the root of the SecureDrop git repository.
     src: ../../../../ossec-{{ purpose }}/
     dest: "{{ repo_src_path }}"
-    # Ansible v1 does not support the `use_ssh_args`, which was added in 2.0.
-    # When resolving #1146, to upgrade Ansible, this option should be
-    # activated to permit builds in CI.
-    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
     recursive: yes
     rsync_opts: "{{ _rsync_opts | default(ossec_build_rsync_generic_opts) }}"
 

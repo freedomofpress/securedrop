@@ -5,10 +5,10 @@ function gcloud_call() {
         docker run --rm \
                 --env="CLOUDSDK_COMPUTE_ZONE=${CLOUDSDK_COMPUTE_ZONE}" \
                 --volume "${EPHEMERAL_DIRECTORY}/gce.pub:/gce.pub" \
-                --volume "$(realpath .gce.creds):/gce-svc-acct.json" \
+                --volume "$(pwd)/.gce.creds:/gce-svc-acct.json" \
                 --name gcloud_tool -d \
                 "quay.io/freedomofpress/gcloud-sdk:${GCLOUD_CONTAINER_VER}" \
-                background 2>&1 >/dev/null
+                background >/dev/null 2>&1
         # Give container a moment for gcloud tooling to authenticate
         # Kept falling over on first calls without this
         sleep 3

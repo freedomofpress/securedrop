@@ -5,16 +5,28 @@
 # nested virtualization tests
 
 ROOTDIR="$(git rev-parse --show-toplevel)"
-GCE_CREDS_FILE="${ROOTDIR}/ci-gce.creds"
+GCE_CREDS_FILE="${ROOTDIR}/.gce.creds"
 
-if [ -z "${CURCLE_BUILD_NUM}"]; then
-    export CIRCLE_BUILD_NUM="${USER}"
+# First check if there is an existing cred file
+if [ ! -f "${GCE_CREDS_FILE}" ]; then
+
+    # Oh there isnt one!? Well do we have a google cred env var?
+    if [ -z "${GOOGLE_CREDENTIALS}" ]; then
+        echo "ERROR: Make sure you set env var GOOGLE_CREDENTIALS"
+    # Oh we do!? Well then lets process it
+    else
+        # Does the env var have a google string it in.. assume we are a json
+        if [[ "${GOOGLE_CREDENTIALS}" =~ google ]]; then
+            printf "${GOOGLE_CREDENTIALS}" > "${GCE_CREDS_FILE}"
+        # otherwise assume we are a base64 string. Thats needed for CircleCI
+        else
+            printf "${GOOGLE_CREDENTIALS}" | base64 --decode > "${GCE_CREDS_FILE}"
+        fi
+    fi
 fi
 
-if [ -z "${GOOGLE_CREDENTIALS}" ]; then
-    export GOOGLE_CREDENTIALS="$(cat ${GCE_CREDS_FILE})"
-elif [ ! -f "${CURDIR}/ci-gce.creds" ]; then
-    echo "${GOOGLE_CREDENTIALS}" > "${GCE_CREDS_FILE}"
+if [ -z "${CIRCLE_BUILD_NUM:-}" ]; then
+    export CIRCLE_BUILD_NUM="${USER}"
 fi
 
 export BUILD_NUM="${CIRCLE_BUILD_NUM}"

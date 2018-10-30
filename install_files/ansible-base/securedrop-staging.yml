@@ -13,6 +13,7 @@
     - set_fact:
         expected_debs: "{{hostvars['app-staging']['local_deb_packages'] + hostvars['mon-staging']['local_deb_packages']}}"
         found_debs: "{{ search_deb_results.files | map(attribute='path') | list }}"
+        ci_builder: "{{ ansible_user_id }}"
 
     - name: Fail if package is missing from build dir
       fail:
@@ -26,7 +27,7 @@
   any_errors_fatal: yes
   roles:
     - role: ci-tweaks
-      when: amazon_builder
+      when: "'sdci' == hostvars['localhost']['ansible_user_id']"
     - { role: install-fpf-repo, tags: [fpfrepo] }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
     - { role: common, tags: common }
@@ -79,5 +80,4 @@
   any_errors_fatal: yes
   roles:
     - role: reboot-if-first-install
-      when: not amazon_builder
   become: yes
