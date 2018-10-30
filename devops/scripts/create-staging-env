@@ -52,4 +52,9 @@ fi
 
 # Run it!
 virtualenv_bootstrap
-molecule converge -s "${securedrop_staging_scenario}"
+# Are we in CI? Then lets do full testing post install!
+if [ "$USER" = "sdci" ]; then
+    molecule test -s "${securedrop_staging_scenario}"
+else
+    molecule converge -s "${securedrop_staging_scenario}"
+fi
