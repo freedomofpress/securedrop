@@ -116,6 +116,7 @@ jobs:
     machine:
       enabled: true
 
+    working_directory: ~/sd
     steps:
       - checkout
 
@@ -141,6 +142,12 @@ jobs:
             source devops/gce-nested/ci-env.sh
             devops/gce-nested/gce-stop.sh
           when: always
+
+      - store_test_results:
+          path: ~/sd/junit
+
+      - store_artifacts:
+          path: ~/sd/junit
 
 workflows:
   version: 2
