@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2209
 #
 # Wrapper around debian build logic to bootstrap virtualenv
 

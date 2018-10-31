@@ -1,6 +1,3 @@
-import os
-import pytest
-
 testinfra_hosts = ['docker://trusty-sd-sec-update']
 
 

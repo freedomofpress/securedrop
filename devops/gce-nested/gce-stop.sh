@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+# shellcheck disable=SC1090
 #
 #
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2162,SC2034
+# shellcheck disable=SC2162,SC2034,SC2059,SC2086,SC2155
 #
 # Mimic CI, set up the all the required environment variables to match the
 # nested virtualization tests
