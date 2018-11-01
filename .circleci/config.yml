@@ -126,21 +126,15 @@ jobs:
 
       - run:
           name: Start remote GCE instance
-          command: |
-            source devops/gce-nested/ci-env.sh
-            devops/gce-nested/gce-start.sh
+          command: ./devops/gce-nested/gce-start.sh
 
       - run:
           name: Start Test process
-          command: |
-            source devops/gce-nested/ci-env.sh
-            devops/gce-nested/gce-runner.sh
+          command: ./devops/gce-nested/gce-runner.sh
 
       - run:
           name: Ensure environment torn down
-          command: |
-            source devops/gce-nested/ci-env.sh
-            devops/gce-nested/gce-stop.sh
+          command: ./devops/gce-nested/gce-stop.sh
           when: always
 
       - store_test_results:

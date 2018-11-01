@@ -1,57 +1,64 @@
 #!/bin/bash
-# shellcheck disable=SC2162,SC2034,SC2059,SC2086,SC1090,SC2145,SC2035
-#
-
-set -u
+# Configure GCE instance to run the SecureDrop staging environment,
+# including configuration tests. Test results will be collected as XML
+# for storage as artifacts on the build, so devs can review via web.
 set -e
+set -u
+
 
 TOPLEVEL="$(git rev-parse --show-toplevel)"
-CURDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-. "${CURDIR}/gce.source"
+# shellcheck source=devops/gce-nested/ci-env.sh
+. "${TOPLEVEL}/devops/gce-nested/ci-env.sh"
 
-SSH_USER_NAME=sdci
-SSH_PRIV="${EPHEMERAL_DIRECTORY}/gce"
-REMOTE_IP=$(gcloud_call compute instances describe \
+REMOTE_IP="$(gcloud_call compute instances describe \
             "${JOB_NAME}-${BUILD_NUM}" \
-            --format="value(networkInterfaces[0].accessConfigs.natIP)")
+            --format="value(networkInterfaces[0].accessConfigs.natIP)")"
 SSH_TARGET="${SSH_USER_NAME}@${REMOTE_IP}"
-SSH_OPTS="-i ${SSH_PRIV} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+SSH_OPTS=(-i "$SSH_PRIVKEY" -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null")
 
+
+# Wrapper utility to run commands on remote GCE instance
 function ssh_gce {
-    eval "ssh ${SSH_OPTS} ${SSH_TARGET} \"cd ~/securedrop-source/ && $@\""
+    # We want all args to be evaluated locally, then passed to the remote
+    # host for execution, so we can safely disable shellcheck 2029.
+    # shellcheck disable=SC2029
+    ssh "${SSH_OPTS[@]}" "$SSH_TARGET" "cd ~/securedrop-source/ && $*"
 }
 
-function scp_gce {
-    eval "scp ${SSH_OPTS} ${SSH_TARGET}:~/securedrop-source/$1 $2"
+# Retrieve XML from test results, for posting as build artifact in CI.
+function fetch_junit_test_results() {
+    local remote_src
+    local local_dest
+    remote_src='junit/*xml'
+    local_dest='junit/'
+    scp "${SSH_OPTS[@]}" "${SSH_TARGET}:~/securedrop-source/${remote_src}" "$local_dest"
 }
 
 # Copy up securedrop repo to remote server
-rsync -a -e "ssh ${SSH_OPTS}" \
-    --exclude .git \
-    --exclude admin/.tox \
-    --exclude *.box \
-    --exclude *.deb \
-    --exclude *.pyc \
-    --exclude *.venv \
-    --exclude .python3 \
-    --exclude .mypy_cache \
-    --exclude securedrop/.sass-cache \
-    --exclude .gce.creds \
-    --exclude *.creds \
-    "${TOPLEVEL}/" "${SSH_TARGET}:~/securedrop-source"
+function copy_securedrop_repo() {
+  rsync -a -e "ssh ${SSH_OPTS[*]}" \
+      --exclude .git \
+      --exclude admin/.tox \
+      --exclude '*.box' \
+      --exclude '*.deb' \
+      --exclude '*.pyc' \
+      --exclude '*.venv' \
+      --exclude .python3 \
+      --exclude .mypy_cache \
+      --exclude securedrop/.sass-cache \
+      --exclude .gce.creds \
+      --exclude '*.creds' \
+      "${TOPLEVEL}/" "${SSH_TARGET}:~/securedrop-source"
+}
 
-# Run staging process
+# Main logic
+copy_securedrop_repo
+
 ssh_gce "make build-debs-notest"
 
-# Run staging process
-# This needs to always pass so test collection can be performed
-ssh_gce "make staging" || export EXIT_CODE="$?"
+# The test results should be collected regardless of pass/fail,
+# so register a trap to ensure the fetch always runs.
+trap fetch_junit_test_results EXIT
 
-# Pull test results back for analysis
-scp_gce 'junit/*xml' 'junit/'
-
-# not proficient with bash traps..
-# someone is welcome to hack this back in with traps
-if [ "${EXIT_CODE:-0}" -ne 0 ]; then
-    exit 1
-fi
+# Run staging environment
+ssh_gce "make staging"
