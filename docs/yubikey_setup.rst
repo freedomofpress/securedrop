@@ -44,7 +44,7 @@ Setting Up Hardware-Based Codes
 
 After opening the personalization tool, click the heading
 **OATH-HOTP**. This will bring you to a window called **Program in
-OATH-HTOP mode**.
+OATH-HOTP mode**.
 
 Click on the **Quick** button.
 
@@ -98,4 +98,4 @@ will insert the 6-digit code that you will need to log in.
           the YubiKey button for approximately 3 seconds.
 
 .. |YubiKey Overview| image:: images/yubikey_overview.png
-.. |YubiKey Config| image:: images/yubikey_oath_htop_configuration.png
+.. |YubiKey Config| image:: images/yubikey_oath_hotp_configuration.png
