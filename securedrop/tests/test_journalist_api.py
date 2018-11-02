@@ -4,6 +4,7 @@ import json
 import os
 
 from pyotp import TOTP
+from uuid import UUID
 
 from flask import current_app, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer
@@ -641,10 +642,14 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 201
 
-    with journalist_app.app_context():  # Now verify everything was saved.
-        # Get most recent reply in the database
-        reply = Reply.query.order_by(Reply.id.desc()).first()
+    # ensure the uuid is present and valid
+    reply_uuid = UUID(response.json['uuid'])
 
+    # check that the uuid has a matching db object
+    reply = Reply.query.filter_by(uuid=str(reply_uuid)).one_or_none()
+    assert reply is not None
+
+    with journalist_app.app_context():  # Now verify everything was saved.
         assert reply.journalist_id == test_journo['id']
         assert reply.source_id == source_id
 

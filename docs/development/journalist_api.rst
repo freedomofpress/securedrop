@@ -363,7 +363,7 @@ source.
 
 with the reply in the request body:
 
-.. code:: sh
+.. code:: json
 
   {
    "reply": "-----BEGIN PGP MESSAGE-----[...]-----END PGP MESSAGE-----"
@@ -371,17 +371,21 @@ with the reply in the request body:
 
 Response 201 created (application/json):
 
-.. code:: sh
+.. code:: json
 
   {
-    "message": "Your reply has been stored"
+    "message": "Your reply has been stored",
+    "uuid": "0bc588dd-f613-4999-b21e-1cebbd9adc2c"
   }
+
+The returned ``uuid`` field is the UUID of the reply and can be used to
+reference this reply later.
 
 Replies that do not contain a GPG encrypted message will be rejected:
 
 Response 400 (application/json):
 
-.. code:: sh
+.. code:: json
 
   {
       "message": "You must encrypt replies client side"
