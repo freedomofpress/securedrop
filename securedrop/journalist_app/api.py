@@ -244,7 +244,8 @@ def make_blueprint(config):
             db.session.add(reply)
             db.session.add(source)
             db.session.commit()
-            return jsonify({'message': 'Your reply has been stored'}), 201
+            return jsonify({'message': 'Your reply has been stored',
+                            'uuid': reply.uuid}), 201
 
     @api.route('/sources/<source_uuid>/replies/<reply_uuid>',
                methods=['GET', 'DELETE'])
