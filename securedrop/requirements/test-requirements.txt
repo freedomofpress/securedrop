@@ -12,7 +12,6 @@ coverage==4.4.2           # via pytest-cov
 first==2.0.1              # via pip-tools
 flask-testing==0.7.1
 flask==1.0.2              # via flask-testing
-funcsigs==1.0.2           # via mock, pytest
 itsdangerous==0.24        # via flask
 jinja2==2.10              # via flask
 markupsafe==1.0           # via jinja2
