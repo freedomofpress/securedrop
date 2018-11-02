@@ -653,6 +653,9 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
         assert reply.journalist_id == test_journo['id']
         assert reply.source_id == source_id
 
+        # regression test for #3918
+        assert '/' not in reply.filename
+
         source = Source.query.get(source_id)
 
         expected_filename = '{}-{}-reply.gpg'.format(
