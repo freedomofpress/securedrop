@@ -80,6 +80,7 @@ anonymous sources.
    backup_workstations
    kernel_troubleshooting
    getting_support
+   client
 
 .. toctree::
    :caption: Upgrade SecureDrop
