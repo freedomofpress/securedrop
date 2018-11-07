@@ -10,7 +10,7 @@ A short summary of the idea.
 
 ## User Research Evidence
 
-Is there user research evidence that supports this feature idea? This might be from your own experience using SecureDrop or from conversations with users. [Read more about SecureDrop user research evidence here](https://lab.securedrop.club/main/ux/wikis/User-research-evidence-in-feature-requests).
+Does evidence exist from user research to support this idea? Could research or design help validate or improve it? Has this idea been influenced by your conversations with users, or by your own experience as a SecureDrop user? If so, please note it here, and [take a look at our UX wiki](https://github.com/freedomofpress/securedrop-ux/wiki) for more information about our design and research efforts.
 
 ## User Stories
 
