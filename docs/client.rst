@@ -1,7 +1,7 @@
 The SecureDrop Client Application
 =================================
 
-As part of the ongoing work to make a user (journalist?) friendly workstation
+As part of the ongoing work to make a journalist-friendly workstation
 for SecureDrop we have created a native client application to be run within the
 Qubes operating system. It helps journalists with the most common activities
 associated with using SecureDrop in a user friendly manner.
@@ -18,20 +18,12 @@ Clone the repository::
 
     git clone git@github.com:freedomofpress/securedrop-client.git
 
-Create and enable a new Python3 virtualenv::
+Ensure you have ``pipenv`` installed::
 
-    python3 -m venv my_virtualenv
-    source my_virtualenv/bin/activate
+    pip install --user pipenv
 
-Set up the Python dependencies::
-
-    pip install pipenv
-    pipenv install --dev
-    pipenv shell
-
-Install the packaged dependencies::
-
-    sudo apt install python3-pyqt5 python3-pyqt5.qtsvg xvfb
+Next, follow the steps in the README of the project for setting up the
+development environment.
 
 Check you have everything working by running the complete test suite::
 
@@ -47,7 +39,7 @@ If you would like to report a problem `submit a new issue <https://github.com/fr
 If you'd like to chat with other developers working on the client drop
 into our `Gitter chat channel for the project <https://gitter.im/freedomofpress/securedrop>`_.
 
-Every week day at 10am (Pacific Time) we take part in a public daily stand-up,
+Every non-public holiday week day at 10am (Pacific Time) we take part in a public daily stand-up,
 usually via a `meeting on Jitsi <https://meet.jit.si/QuickWizardsDanceHigh>`_
 (although the details of each daily meeting are published on the Gitter channel
 five minutes before the start of the meeting). All are welcome to contribute.
@@ -81,8 +73,8 @@ Furthermore, we try equally hard to ensure the main GUI code always remains
 unblocked. For instance look at how the ``APICallRunner`` is used in
 ``logic.py`` to make unblocked network calls to the remote API.
 
-We expect all classes, methods and functions to have docstrings describing the
-intention behind the code. We expect such docstrings to **remain up to date**
+We encourage developers to make sure all classes, methods and functions have docstrings describing the
+intention behind the code. Obviously, it's important that such docstrings **remain up to date**
 as the code evolves. ;-)
 
 If possible, please use `Python type hints <https://docs.python.org/3.5/library/typing.html>`_
