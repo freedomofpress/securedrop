@@ -1,7 +1,7 @@
-The SecureDrop Client Application
-=================================
+Developing the SecureDrop Client Application
+============================================
 
-As part of the ongoing work to make a journalist-friendly workstation
+As part of the ongoing work to make an integrated journalist-friendly workstation
 for SecureDrop we have created a native client application to be run within the
 Qubes operating system. It helps journalists with the most common activities
 associated with using SecureDrop in a user friendly manner.
@@ -39,8 +39,9 @@ If you would like to report a problem `submit a new issue <https://github.com/fr
 If you'd like to chat with other developers working on the client drop
 into our `Gitter chat channel for the project <https://gitter.im/freedomofpress/securedrop>`_.
 
-Every non-public holiday week day at 10am (Pacific Time) we take part in a public daily stand-up,
-usually via a `meeting on Jitsi <https://meet.jit.si/QuickWizardsDanceHigh>`_
+Every non-public holiday weekday (except Fridays) at 10am (Pacific Time) we
+take part in a public daily stand-up, usually via a
+`meeting on Jitsi <https://meet.jit.si/QuickWizardsDanceHigh>`_
 (although the details of each daily meeting are published on the Gitter channel
 five minutes before the start of the meeting). All are welcome to contribute.
 
@@ -68,14 +69,14 @@ way:
 * ``utils.py`` - generic utility functions needed throughout the application.
 * ``gui`` - this namespace contains two modules: ``main.py`` (containing the ``Window`` class through which all interactions with the user interface should happen) and ``widgets.py`` (containing all the custom widgets used by the ``Window`` class to draw the user interface).
 
-We try very hard to leep the application logic and UI code cleanly separated.
+We try very hard to keep the application logic and UI code cleanly separated.
 Furthermore, we try equally hard to ensure the main GUI code always remains
 unblocked. For instance look at how the ``APICallRunner`` is used in
 ``logic.py`` to make unblocked network calls to the remote API.
 
 We encourage developers to make sure all classes, methods and functions have docstrings describing the
 intention behind the code. Obviously, it's important that such docstrings **remain up to date**
-as the code evolves. ;-)
+as the code evolves.
 
 If possible, please use `Python type hints <https://docs.python.org/3.5/library/typing.html>`_
 for new code. We're going to transition the code base to this style in the
@@ -98,9 +99,9 @@ report any errors.
 
 We use the `PyTest testing framework <https://docs.pytest.org/en/latest/>`_ for
 writing and running our unit tests. We expect every test to have an associated
-comment which describes the __intent__ of the test. As far as possible, tests
+comment which describes the *intent* of the test. As far as possible, tests
 should be self contained with all the context needed to understand them within
-each individual unit test (this makes is easier to debug things when the test
+each individual unit test (this makes it easier to debug things when the test
 suite fails as the codebase evolves).
 
 Take a look in any of the test files to see the sort of code we expect for
@@ -114,7 +115,7 @@ you submit.
 Contributing
 ------------
 
-Out open issues are `on GitHub <https://github.com/freedomofpress/securedrop-client/issues>`_.
+Our open issues are `on GitHub <https://github.com/freedomofpress/securedrop-client/issues>`_.
 
 Please remember that we have a code of conduct and expect all contributors to
 abide by it.
