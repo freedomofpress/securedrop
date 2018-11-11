@@ -359,7 +359,7 @@ source.
 
 .. code:: sh
 
-  POST /api/v1/sources/<source_uuid>/reply
+  POST /api/v1/sources/<source_uuid>/replies
 
 with the reply in the request body:
 
