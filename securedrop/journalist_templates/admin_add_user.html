@@ -3,13 +3,13 @@
 <p>
   <a href="/admin">« {{ gettext('Back to admin interface') }}</a>
 </p>
-
 <form method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <p>
     {{ form.password(value=password, id=False) }}
   </p>
-
+<div class="container flex-end">
+  <div>
   <p>
     {{ form.username(placeholder=gettext('Username')) }}
     <br>
@@ -17,7 +17,14 @@
       <span class="form-validation-error">{{ error }}</span>
     {% endfor %}
   </p>
-
+  </div>
+  <div>
+      <ul class="journalist-username__notes">
+          <li>{{gettext("Username can contain spaces")}}</li>
+          <li>{{gettext("Username is case-sensitive")}}</li>
+      </ul>
+  </div>
+</div>
   <p>{{ gettext("The user's password will be:") }} <span class="password" id="password">{{ password }}</span></p>
   <p>
     {{ form.is_admin(id="is-admin") }}
