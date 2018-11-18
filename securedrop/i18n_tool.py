@@ -26,7 +26,7 @@ class I18NTool(object):
     #
     # The database of support language, indexed by the language code
     # used by weblate (i.e. whatever shows as CODE in
-    # https://weblate.securedrop.club/projects/securedrop/securedrop/CODE/
+    # https://weblate.securedrop.org/projects/securedrop/securedrop/CODE/
     # is the index of the SUPPORTED_LANGUAGES database below.
     #
     # name: English name of the language to the documentation, not for
@@ -324,7 +324,7 @@ class I18NTool(object):
             default=root,
             help=('root of the SecureDrop git repository'
                   ' (default {})'.format(root)))
-        url = 'https://lab.securedrop.club/bot/securedrop.git'
+        url = 'https://github.com/freedomofpress/securedrop-i18n'
         parser.add_argument(
             '--url',
             default=url,
