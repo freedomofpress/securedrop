@@ -389,6 +389,23 @@ class FunctionalTest(object):
 
         actions = ActionChains(self.driver)
         actions.move_to_element(el).perform()
+
+        el.click()
+
+    def safe_click_by_css_selector(self, selector):
+        self.wait_for(lambda:
+                      self.driver.find_element_by_css_selector(selector),
+                      timeout=self.sleep_time)
+
+        el = self.driver.find_element_by_css_selector(selector)
+
+        self.wait_for(lambda: el.is_enabled() and
+                      el.is_displayed,
+                      timeout=self.sleep_time)
+
+        actions = ActionChains(self.driver)
+        actions.move_to_element(el).perform()
+
         el.click()
 
     def _alert_wait(self):

@@ -137,7 +137,8 @@ class JournalistNavigationStepsMixin():
         self.wait_for(doc_selected, timeout=self.sleep_time)
 
     def _journalist_clicks_on_modal(self, click_id):
-        self.driver.find_element_by_id(click_id).click()
+        # self.driver.find_element_by_id(click_id).click()
+        self.safe_click_by_id(click_id)
         time.sleep(5)
 
     def _journalist_clicks_delete_collections_cancel_on_modal(self):
@@ -171,16 +172,16 @@ class JournalistNavigationStepsMixin():
         self._journalist_clicks_on_modal('delete-collection-button')
 
     def _journalist_clicks_delete_link(self, click_id, displayed_id):
-        self.wait_for(lambda: self.driver.find_element_by_id(
-                      click_id).is_enabled(), timeout=self.sleep_time)
-        self.driver.find_element_by_id(click_id).click()
+        self.safe_click_by_id(click_id)
         self.wait_for(lambda: self.driver.find_element_by_id(displayed_id),
                       timeout=self.sleep_time)
 
     def _journalist_clicks_delete_selected_link(self):
-        self._journalist_clicks_delete_link(
-            'delete-selected-link',
-            'delete-selected-confirmation-modal')
+        self.safe_click_by_css_selector(
+            'a#delete-selected-link > button.danger')
+        self.wait_for(lambda: self.driver.find_element_by_id(
+                      'delete-selected-confirmation-modal'),
+                      timeout=self.sleep_time)
 
     def _journalist_clicks_delete_collections_link(self):
         self._journalist_clicks_delete_link(
@@ -816,7 +817,10 @@ class JournalistNavigationStepsMixin():
             '#reset-two-factor-hotp')[0]
         assert ('/admin/reset-2fa-hotp' in
                 hotp_reset_button.get_attribute('action'))
+        self.wait_for(lambda: hotp_reset_button.is_enabled(), 
+                      timeout=self.sleep_time)
         hotp_reset_button.click()
+        
 
     def _admin_accepts_2fa_js_alert(self):
         self._alert_wait()
@@ -882,8 +886,9 @@ class JournalistNavigationStepsMixin():
         self.driver.find_element_by_id('delete-selected-link').click()
 
     def _journalist_delete_all_confirmation(self):
-        self.driver.find_element_by_id('select_all').click()
-        self.driver.find_element_by_id('delete-selected-link').click()
+        self.safe_click_by_id('select_all')
+        self.safe_click_by_css_selector(
+            'a#delete-selected-link > button.danger')
 
     def _journalist_delete_one(self):
         self.driver.find_elements_by_name('doc_names_selected')[0].click()
