@@ -3,7 +3,7 @@ import os
 import re
 
 
-KERNEL_VERSION = "4.4.162"
+KERNEL_VERSION = pytest.securedrop_test_vars.grsec_version
 
 
 def test_ssh_motd_disabled(File):
