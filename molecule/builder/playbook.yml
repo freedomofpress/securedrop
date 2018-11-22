@@ -2,7 +2,7 @@
 - name: Build SecureDrop application Debian package from local repository.
   hosts: builders
   # Build as fast as possible with each host going individually
-  strategy: free
+  strategy: linear
   become: yes
   tasks:
     - name: Update apt-cache for our security checker
