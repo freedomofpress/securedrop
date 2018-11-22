@@ -6,7 +6,7 @@
 #
 alabaster==0.7.10         # via sphinx
 ansible-lint==3.4.21      # via molecule
-ansible==2.4.2
+ansible==2.7.2
 anyconfig==0.9.4          # via molecule
 apipkg==1.4               # via execnet
 argh==0.26.2              # via sphinx-autobuild, watchdog
