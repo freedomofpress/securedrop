@@ -41,14 +41,14 @@
     - name: Ensure tor is running
       service:
         name: tor
-        state: running
+        state: started
         enabled: yes
       tags: always
 
     - name: Ensure supervisor is running
       service:
         name: supervisor
-        state: running
+        state: started
       delegate_to: app-staging
       runonce: yes
       tags: always
