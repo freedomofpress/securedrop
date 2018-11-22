@@ -28,7 +28,7 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <div class="snippet">
     <div class="attachment grid-item center">
-      <img class="center" src="{{ url_for('static', filename='i/server_upload.png') }}" width="73px" height="62px">
+      <img class="center" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue-large.png') }}" width="80px" height="80px">
       <input type="file" name="fh" autocomplete="off">
       <p class="center" id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
     </div>
@@ -40,11 +40,16 @@
   <hr class="no-line">
   <div class="pull-right">
     <button type="submit" class="sd-button btn primary" id="submit-doc-button">
-      <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" height="14px">
-      <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" height="14px">
+      <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/checkmark-white.png') }}" width="20px" height="20px">
+      <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/checkmark-blue.png') }}" width="20px" height="20px">
       {{ gettext('SUBMIT') }}
     </button>
-    <a href="{{ url_for('main.lookup') }}" class="btn secondary" id="cancel">{{ gettext('CANCEL') }}</a>
+
+
+
+    <a href="{{ url_for('main.lookup') }}" class="btn secondary" id="cancel">
+      <img class="icon" src="{{ url_for('static', filename='i/font-awesome/cancel-blue.png') }}" width="20px" height="20px"> {{ gettext('CANCEL') }}
+    </a>
   </div>
 </form>
 
