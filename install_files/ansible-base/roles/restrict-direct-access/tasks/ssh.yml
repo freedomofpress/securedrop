@@ -35,6 +35,6 @@
 - name: Ensure sshd is running.
   service:
     name: ssh
-    state: running
+    state: started
   tags:
     - ssh
