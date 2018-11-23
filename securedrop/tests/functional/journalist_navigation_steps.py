@@ -377,7 +377,7 @@ class JournalistNavigationStepsMixin():
         # There's no field to change your username.
         with pytest.raises(NoSuchElementException):
             self.driver.find_element_by_css_selector('#username')
-        # There's no checkbox to change the administrator status of your
+        # There's no checkbox to change the admin status of your
         # account.
         with pytest.raises(NoSuchElementException):
             self.driver.find_element_by_css_selector('#is-admin')
@@ -410,7 +410,7 @@ class JournalistNavigationStepsMixin():
         # out with the user's username.
         username_field = self.driver.find_element_by_css_selector('#username')
         assert username_field.get_attribute('placeholder') == username
-        # There's a checkbox to change the administrator status of the user and
+        # There's a checkbox to change the admin status of the user and
         # it's already checked appropriately to reflect the current status of
         # our user.
         username_field = self.driver.find_element_by_css_selector('#is-admin')
