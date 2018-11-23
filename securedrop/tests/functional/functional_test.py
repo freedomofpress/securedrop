@@ -387,8 +387,10 @@ class FunctionalTest(object):
                       el.is_displayed,
                       timeout=self.sleep_time)
 
+        el.location_once_scrolled_into_view
         actions = ActionChains(self.driver)
-        actions.move_to_element(el).perform()
+        actions.move_to_element(el)
+        actions.perform()
 
         el.click()
 
@@ -403,6 +405,7 @@ class FunctionalTest(object):
                       el.is_displayed,
                       timeout=self.sleep_time)
 
+        el.location_once_scrolled_into_view
         actions = ActionChains(self.driver)
         actions.move_to_element(el).perform()
 

@@ -227,11 +227,11 @@ class JournalistNavigationStepsMixin():
         sources = self.driver.find_elements_by_class_name("code-name")
         assert len(sources) > 0
 
-        self.driver.find_element_by_id('select_all').click()
+        self.safe_click_by_id('select_all')
         self._journalist_clicks_delete_collections_link()
         self._journalist_clicks_delete_collections_cancel_on_modal()
 
-        self.driver.find_element_by_id('select_all').click()
+        self.safe_click_by_id('select_all')
         sources = self.driver.find_elements_by_class_name("code-name")
         assert len(sources) > 0
 
@@ -279,8 +279,7 @@ class JournalistNavigationStepsMixin():
         logo_upload_input = self.driver.find_element_by_id('logo-upload')
         logo_upload_input.send_keys(image_path)
 
-        submit_button = self.driver.find_element_by_id('submit-logo-update')
-        submit_button.click()
+        self.safe_click_by_id('submit-logo-update')
 
         def updated_image():
             if not hasattr(self, 'accept_languages'):
@@ -305,27 +304,14 @@ class JournalistNavigationStepsMixin():
             hotp_secret.send_keys(hotp)
 
         if is_admin:
-            is_admin_checkbox = self.driver.find_element_by_css_selector(
-                'input[name="is_admin"]'
-            )
-            is_admin_checkbox.click()
+            self.safe_click_by_css_selector('input[name="is_admin"]')
 
-        submit_button = self.driver.find_element_by_css_selector(
-            'button[type=submit]')
-        self.wait_for(lambda: submit_button.is_enabled(),
-                      timeout=self.sleep_time)
-        submit_button.click()
+        self.safe_click_by_css_selector('button[type=submit]')
 
     def _admin_adds_a_user(self, is_admin=False, new_username=''):
         self.wait_for(lambda: self.driver.find_element_by_id(
             'add-user').is_enabled(), timeout=self.sleep_time)
-        add_user_btn = self.driver.find_element_by_css_selector(
-            'button#add-user')
-        self.wait_for(lambda: add_user_btn.is_enabled(),
-                      timeout=self.sleep_time)
-        actions = ActionChains(self.driver)
-        actions.move_to_element(add_user_btn).perform()
-        add_user_btn.click()
+        self.safe_click_by_css_selector('button#add-user')
 
         self.wait_for(lambda: self.driver.find_element_by_id(
             'username'), timeout=self.sleep_time)
@@ -359,9 +345,7 @@ class JournalistNavigationStepsMixin():
         token_field = self.driver.find_element_by_css_selector(
             'input[name="token"]')
         token_field.send_keys(str(self.new_totp.now()))
-        submit_button = self.driver.find_element_by_css_selector(
-            'button[type=submit]')
-        submit_button.click()
+        self.safe_click_by_css_selector('button[type=submit]')
 
         def user_token_added():
             if not hasattr(self, 'accept_languages'):
@@ -817,10 +801,14 @@ class JournalistNavigationStepsMixin():
             '#reset-two-factor-hotp')[0]
         assert ('/admin/reset-2fa-hotp' in
                 hotp_reset_button.get_attribute('action'))
-        self.wait_for(lambda: hotp_reset_button.is_enabled(), 
+        self.wait_for(lambda: hotp_reset_button.is_enabled(),
                       timeout=self.sleep_time)
+
+        hotp_reset_button.location_once_scrolled_into_view
+        actions = ActionChains(self.driver)
+        actions.move_to_element(hotp_reset_button)
+        actions.perform()
         hotp_reset_button.click()
-        
 
     def _admin_accepts_2fa_js_alert(self):
         self._alert_wait()
