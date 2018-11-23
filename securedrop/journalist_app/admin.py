@@ -84,7 +84,7 @@ def make_blueprint(config):
                 else:
                     flash(gettext("An error occurred saving this user"
                                   " to the database."
-                                  " Please inform your administrator."),
+                                  " Please inform your admin."),
                           "error")
                     current_app.logger.error("Adding user "
                                              "'{}' failed: {}".format(
