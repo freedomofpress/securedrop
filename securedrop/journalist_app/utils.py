@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
-                   render_template, Markup)
+                   render_template, Markup, sessions, request)
 from flask_babel import gettext, ngettext
 import hashlib
 from sqlalchemy.sql.expression import false
@@ -337,3 +337,16 @@ def serve_file_with_etag(source, filename):
     response.headers['Etag'] = '"sha256:{}"'.format(
         hashlib.sha256(response.get_data()).hexdigest())
     return response
+
+
+class JournalistInterfaceSessionInterface(
+        sessions.SecureCookieSessionInterface):
+    """A custom session interface that skips storing sessions for api requests but
+    otherwise just uses the default behaviour."""
+    def save_session(self, app, session, response):
+        # If this is an api request do not save the session
+        if request.path.split("/")[1] == "api":
+            return
+        else:
+            super(JournalistInterfaceSessionInterface, self).save_session(
+                app, session, response)

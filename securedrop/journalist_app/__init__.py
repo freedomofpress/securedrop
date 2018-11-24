@@ -16,7 +16,8 @@ import version
 from crypto_util import CryptoUtil
 from db import db
 from journalist_app import account, admin, api, main, col
-from journalist_app.utils import get_source, logged_in
+from journalist_app.utils import (get_source, logged_in,
+                                  JournalistInterfaceSessionInterface)
 from models import Journalist
 from store import Storage
 
@@ -40,6 +41,7 @@ def create_app(config):
 
     app.config.from_object(config.JournalistInterfaceFlaskConfig)
     app.sdconfig = config
+    app.session_interface = JournalistInterfaceSessionInterface()
 
     csrf = CSRFProtect(app)
     Environment(app)
