@@ -241,7 +241,7 @@ The ``develop`` branch can now be merged into ``i18n`` as follows:
 
       $ git clone https://github.com/freedomofpress/securedrop
       $ cd securedrop
-      $ git remote add lab http://lab.securedrop.club/bot/securedrop/tree/i18n
+      $ git remote add lab git@github.com:freedomofpress/securedrop-i18n.git
       $ git fetch lab
       $ git checkout -b i18n lab/i18n
       $ git merge origin/develop
@@ -292,7 +292,7 @@ index from scratch with:
 
 .. code:: sh
 
-      $ ssh debian@weblate.securedrop.club
+      $ ssh debian@weblate.securedrop.org
       $ cd /app/weblate
       $ sudo docker-compose run weblate rebuild_index --all --clean
 
@@ -346,7 +346,7 @@ Verify the names and emails look ok, otherwise add to `.mailmap
 
       $ git clone https://github.com/freedomofpress/securedrop
       $ cd securedrop
-      $ git remote add lab http://lab.securedrop.club/bot/securedrop/tree/i18n
+      $ git remote add lab git@github.com:freedomofpress/securedrop-i18n.git
       $ git fetch lab
       $ previous_version=0.4.4
       $ git log --pretty='%aN <%aE>' $previous_version..lab/i18n -- \
@@ -396,14 +396,14 @@ Admin Permissions
 An admin may not need or want all permissions but they are
 entitled to have all of them.
 
-* https://weblate.securedrop.club/admin/auth/user/ grant staff and superuser status
+* https://weblate.securedrop.org/admin/auth/user/ grant staff and superuser status
 * https://forum.securedrop.org/admin/users/list/active click on the user and ``Grant Moderation``
-* https://lab.securedrop.club/bot/securedrop/project_members add as a ``Master`` member
+* https://github.com/freedomofpress/securedrop-i18n make sure that the user has commit access
 
 Granting Reviewer Privileges in Weblate
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* visit https://weblate.securedrop.club/admin/auth/user/
+* visit https://weblate.securedrop.org/admin/auth/user/
 * click on the user name
 * in the ``Groups`` block
     * select ``Localizationlab`` in the ``Available groups`` list and
@@ -415,15 +415,15 @@ Granting Reviewer Privileges in Weblate
 
 .. _`gettext`: https://www.gnu.org/software/gettext/
 .. _`pybabel`: http://babel.pocoo.org/
-.. _`Weblate`: http://weblate.securedrop.club/
+.. _`Weblate`: http://weblate.securedrop.org/
 .. _`SecureDrop git repository`: https://github.com/freedomofpress/securedrop
-.. _`Weblate SecureDrop branch`: http://lab.securedrop.club/bot/securedrop/tree/i18n
+.. _`Weblate SecureDrop branch`: https://github.com/freedomofpress/securedrop-i18n
 .. _`patch they contain is unique`: https://git-scm.com/docs/git-patch-id
-.. _`Weblate commit page for SecureDrop`: https://weblate.securedrop.club/projects/securedrop/securedrop/#repository
-.. _`Weblate translation creation page`: https://weblate.securedrop.club/new-lang/securedrop/securedrop/
-.. _`Weblate desktop translation creation page`: https://weblate.securedrop.club/new-lang/securedrop/desktop/
+.. _`Weblate commit page for SecureDrop`: https://weblate.securedrop.org/projects/securedrop/securedrop/#repository
+.. _`Weblate translation creation page`: https://weblate.securedrop.org/new-lang/securedrop/securedrop/
+.. _`Weblate desktop translation creation page`: https://weblate.securedrop.org/new-lang/securedrop/desktop/
 .. _`i18n timeline`: https://forum.securedrop.org/t/about-the-translations-category/16
-.. _`Weblate whiteboard`: https://weblate.securedrop.club/admin/trans/whiteboardmessage/5/change/
+.. _`Weblate whiteboard`: https://weblate.securedrop.org/admin/trans/whiteboardmessage/5/change/
 
 .. |Weblate commit Lock| image:: ../images/weblate/admin-lock.png
 .. |Weblate commit Locked| image:: ../images/weblate/admin-locked.png

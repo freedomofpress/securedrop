@@ -4,10 +4,9 @@ Contributing to SecureDrop
 Thank you for your interest in contributing to SecureDrop! We welcome both new
 and experienced open-source contributors and are committed to making it as easy
 as possible to contribute. Whether you have a few minutes or many hours, there
-are a variety of ways to help. We are always looking for help from
+are a variety of ways to help. We are always looking for help from:
 
 * `programmers`_, to help us develop SecureDrop;
-* `DevOps`_ people, to work on the community-maintained SecureDrop infrastructure;
 * `release managers`_, to create and maintain Debian GNU/Linux packages and repositories;
 * `writers`_, to help improve the documentation;
 * `translators`_, to translate SecureDrop;
@@ -105,16 +104,7 @@ DevOps
 
 The `SecureDrop web site <https://securedrop.org>`__ and the `GitHub repository
 <https://github.com/freedomofpress>`__ are controlled and maintained by `Freedom
-of the Press Foundation employees <https://freedom.press/about/staff>`__. The
-resources under the ``securedrop.club`` domain name are financed, controlled,
-and maintained by a horizontally organized `community of volunteers
-<https://securedrop-club.readthedocs.io/en/latest/team.html>`__. You will find a
-list of the pending tasks to improve the ``securedrop.club`` services in the
-`contribution guide
-<https://securedrop-club.readthedocs.io/en/latest/contribute.html>`__. If you're
-in doubt, feel free to reach out to the `DevOps section of the forum
-<https://forum.securedrop.org/c/devops>`__ or directly to `a team member
-<https://securedrop-club.readthedocs.io/en/latest/team.html>`__.
+of the Press Foundation employees <https://freedom.press/about/staff>`__.
 
 
 Release Managers
@@ -123,10 +113,7 @@ Release Managers
 All software deployed with SecureDrop is installed via Debian GNU/Linux packages
 via Ansible. The `primary repository <https://apt.freedom.press/>`__ is
 controlled, maintained, and signed by `Freedom of the Press Foundation employees
-<https://freedom.press/about/staff>`__. An `alternative repository
-<https://packages.securedrop.club/>`__ signed by a `community of volunteers
-<https://securedrop-club.readthedocs.io/en/latest/team.html>`__ is used only for
-tests and demonstrations. The current responsibilities of the release manager
+<https://freedom.press/about/staff>`__. The current responsibilities of the release manager
 are covered in :doc:`detailed documentation <release_management>`.
 
 If you are a `Debian developer <https://www.debian.org/devel/>`__ you can help
@@ -140,16 +127,11 @@ Translators
 ~~~~~~~~~~~
 
 All are kindly invited to help translate SecureDrop `using the Weblate interface
-<https://weblate.securedrop.club/>`__. We provide a :doc:`detailed guide <l10n>`
+<https://weblate.securedrop.org/>`__. We provide a :doc:`detailed guide <l10n>`
 to use as reference for details such as the meaning of placeholders, etc. Feel
 free to reach out on the `translation section of the forum
 <https://forum.securedrop.org/c/translations>`__ for help. Non-English forum
 discussions are welcome to help facilitate translations.
-
-As a developer or system administrator you can also help `maintain and improve
-<http://securedrop-club.readthedocs.io/en/latest/weblate.html>`__ the
-self-hosted `Weblate <https://weblate.org/>`__ infrastructure used by the
-community of translators.
 
 
 Designers
@@ -177,6 +159,5 @@ better suited. To assist on the forum:
 * If you find questions `elsewhere in the forum
   <https://forum.securedrop.org>`__ that have a better chance at
   getting an answer in the `support section
-  <https://forum.securedrop.org/c/support>`__, ask a `a team member
-  <https://securedrop-club.readthedocs.io/en/latest/team.html>`__ for
-  permissions to move topics from a category to another.
+  <https://forum.securedrop.org/c/support>`__, suggest in Gitter
+  to move topics from a category to another.

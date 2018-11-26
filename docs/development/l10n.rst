@@ -26,7 +26,7 @@ background. Journalists using SecureDrop have all received proper
 training and know what a PGP public key is, they understand the basic
 workflow of SecureDrop.
 
-.. _`Weblate registration page`: https://weblate.securedrop.club/accounts/register/
+.. _`Weblate registration page`: https://weblate.securedrop.org/accounts/register/
 
 Register for Weblate
 --------------------
@@ -55,12 +55,12 @@ Go to the `Weblate registration page`_
 
 Fill the form and click **Register** and check your email for a message 
 with the subject **[Weblate] Your registration on Weblate** containing a
-confirmation link from **admin@securedrop.club**
+confirmation link from **admin@securedrop.org**
 Confirming by clicking the first link will redirect you to the `Weblate dashboard`_:
 
 |Weblate dashboard screenshot|
 
-.. _`Weblate dashboard`: https://weblate.securedrop.club/
+.. _`Weblate dashboard`: https://weblate.securedrop.org/
 
 Choose a Language
 -----------------
