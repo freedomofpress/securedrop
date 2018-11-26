@@ -3,6 +3,9 @@ import os
 import re
 
 
+KERNEL_VERSION = pytest.securedrop_test_vars.grsec_version
+
+
 def test_ssh_motd_disabled(File):
     """
     Ensure the SSH MOTD (Message of the Day) is disabled.
@@ -16,6 +19,9 @@ def test_ssh_motd_disabled(File):
 @pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
                     reason="Need to skip in environment w/o grsec")
 @pytest.mark.parametrize("package", [
+    'intel-microcode',
+    'linux-firmware-image-{}-grsec'.format(KERNEL_VERSION),
+    'linux-image-{}-grsec'.format(KERNEL_VERSION),
     'paxctl',
     'securedrop-grsec',
 ])
@@ -76,7 +82,7 @@ def test_grsecurity_kernel_is_running(Command):
     """
     c = Command('uname -r')
     assert c.stdout.endswith('-grsec')
-    assert c.stdout == '4.4.144-grsec'
+    assert c.stdout == '{}-grsec'.format(KERNEL_VERSION)
 
 
 @pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
