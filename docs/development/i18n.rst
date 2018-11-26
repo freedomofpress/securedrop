@@ -292,7 +292,7 @@ index from scratch with:
 
 .. code:: sh
 
-      $ ssh debian@weblate.securedrop.club
+      $ ssh debian@weblate.securedrop.org
       $ cd /app/weblate
       $ sudo docker-compose run weblate rebuild_index --all --clean
 
