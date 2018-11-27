@@ -413,7 +413,7 @@ languages:
 
 .. include:: includes/l10n.txt
 
-At any time during and after initial setup, you can chose from a list of
+At any time during and after initial setup, you can choose from a list of
 supported languages to display using the codes shown in parentheses.
 
 .. note:: With a *Source Interface* displayed in French (for example), sources
@@ -431,7 +431,8 @@ codes. For example: ::
 
     Space separated list of additional locales to support (ru nl pt_BR fr_FR tr it_IT zh_Hant sv hi ar en_US de_DE es_ES nb_NO): nl fr_FR es_ES
 
-Locales will be applied after the next reboot.
+You'll need to list all languages you now want to support, adding or removing
+languages as needed. Locale changes will be applied after the next reboot.
 
 Frequently Asked Questions
 --------------------------
