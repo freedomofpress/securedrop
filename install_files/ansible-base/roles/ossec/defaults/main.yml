@@ -21,3 +21,9 @@ ossec_is_client: False
 journalist_alert_gpg_public_key: ""
 journalist_gpg_fpr: ""
 journalist_alert_email: ""
+
+# These files should be created once an OSSEC key is imported.
+gpg_keyring_files:
+  - pubring.gpg
+  - secring.gpg
+  - trustdb.gpg
