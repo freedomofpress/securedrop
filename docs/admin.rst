@@ -351,6 +351,8 @@ You should see a message appear indicating the change was a success:
 Updating System Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. _update-system-configuration:
+
 If you want to update the system configuration, you should use the
 ``securedrop-admin`` tool on the *Admin Workstation*. From
 ``~/Persistent/securedrop``, run:
@@ -402,6 +404,35 @@ by monitoring OSSEC alerts. (Please note that while an OSSEC alert can notify yo
 occurrence of an update to the server, it may not reveal the content of the change.) Another
 management option would be SSHing into the server and manually inspecting the configuration to
 identify any discrepancies.
+
+Configuring Localization for the *Source Interface* and the *Journalist Interface*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The *Source Interface* and *Journalist Interface* are translated in the following
+languages:
+
+.. include:: includes/l10n.txt
+
+At any time during and after initial setup, you can choose from a list of
+supported languages to display using the codes shown in parentheses.
+
+.. note:: With a *Source Interface* displayed in French (for example), sources
+          submitting documents are likely to expect a journalist fluent in
+          French to be available to read the documents and follow up in that
+          language.
+
+To add or remove locales from your instance, you'll need to :ref:`update your
+system configuration <update-system-configuration>` as outlined above.
+
+When you reach the prompt starting with "Space separated list of additional
+locales to support", you will see a list of languages currently supported.
+Refer to the list above to see which languages correspond to which language
+codes. For example: ::
+
+    Space separated list of additional locales to support (ru nl pt_BR fr_FR tr it_IT zh_Hant sv hi ar en_US de_DE es_ES nb_NO): nl fr_FR es_ES
+
+You'll need to list all languages you now want to support, adding or removing
+languages as needed. Locale changes will be applied after the next reboot.
 
 Frequently Asked Questions
 --------------------------
