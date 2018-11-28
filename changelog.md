@@ -2,6 +2,27 @@
 
 ## 0.11.0~rc1
 
+### Web application
+
+* UX improvement: Add username constraints to admin user addition page text (#3746)
+* UX improvement: Removed screensaver from the source interface (#3722)
+* Update icons on source interface (#2508, #3809)
+* API: Posting replies returns uuid (#3915)
+* Bugfix: Save only the base filename in DB for replies using API (#3918)
+
+### Operations
+
+* Bugfix: resolve OSSEC GPG key import issue in Ansible (#3928)
+* Update grsecurity kernels to 4.4.162 (#3913)
+* Added intel-microcode package to include microcode updates (#3913)
+* Removes 3.14.x grsecurity kernels (#3913)
+
+### Developer Workflow
+
+* Updated instruction to merge translations to & from the new Weblate (#3929)
+* Updated requests module to 2.20.0 (#3908)
+* Updated copyright statement to acknowledge all contributors (#3930)
+* Added initial client documentation (#3922)
 
 
 ## 0.10.0
