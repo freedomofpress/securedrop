@@ -40,6 +40,6 @@
 - name: Ensure tor is running.
   service:
     name: tor
-    state: running
+    state: started
   tags:
     - tor
