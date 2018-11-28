@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.0~rc2
+
+* Updated Ansible to 2.6.8 (#3945)
+
 ## 0.11.0~rc1
 
 ### Web application
