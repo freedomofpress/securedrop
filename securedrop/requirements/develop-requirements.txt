@@ -5,9 +5,9 @@
 #    pip-compile --output-file securedrop/requirements/develop-requirements.txt admin/requirements-ansible.in securedrop/requirements/develop-requirements.in
 #
 alabaster==0.7.10         # via sphinx
-ansible-lint==3.4.21      # via molecule
-ansible==2.4.2
-anyconfig==0.9.4          # via molecule
+ansible-lint==3.4.23      # via molecule
+ansible==2.6.8
+anyconfig==0.9.7          # via molecule
 apipkg==1.4               # via execnet
 argh==0.26.2              # via sphinx-autobuild, watchdog
 arrow==0.10.0             # via jinja2-time
@@ -23,7 +23,7 @@ binaryornot==0.4.4        # via cookiecutter
 boto3==1.5.24
 boto==2.48.0
 botocore==1.8.38          # via boto3, s3transfer
-cerberus==1.1             # via molecule
+cerberus==1.2             # via molecule
 certifi==2017.7.27.1      # via requests, tornado
 cffi==1.10.0              # via bcrypt, cryptography, pynacl
 chardet==3.0.4            # via binaryornot, requests
@@ -61,19 +61,19 @@ lazy-object-proxy==1.3.1  # via astroid
 livereload==2.5.1         # via sphinx-autobuild
 markupsafe==1.0           # via jinja2
 mccabe==0.6.1             # via flake8, pylint
-molecule==2.13.1
+molecule==2.19.0
 monotonic==1.4            # via fasteners
 netaddr==0.7.19
 packaging==16.8           # via dparse, safety
 paramiko==2.4.2           # via ansible
 pathspec==0.5.5           # via yamllint
 pathtools==0.1.2          # via sphinx-autobuild, watchdog
-pbr==3.0.1                # via git-url-parse, molecule, python-gilt, stevedore
-pexpect==4.2.1            # via molecule
+pbr==4.1.0                # via git-url-parse, molecule, python-gilt, stevedore
+pexpect==4.6.0            # via molecule
 pip-tools==1.10.1
 port-for==0.3.1           # via sphinx-autobuild
 poyo==0.4.1               # via cookiecutter
-psutil==5.2.2             # via molecule
+psutil==5.4.6             # via molecule
 ptyprocess==0.5.2         # via pexpect
 py==1.4.34                # via pytest
 pyasn1==0.3.1             # via paramiko
@@ -90,13 +90,13 @@ python-dateutil==2.6.1    # via arrow, botocore
 python-gilt==1.2.1        # via molecule
 python-vagrant==0.5.15
 pytz==2017.2              # via babel
-pyyaml==3.12              # via ansible, ansible-lint, bandit, dparse, molecule, python-gilt, sphinx-autobuild, watchdog, yamllint
+pyyaml==3.13              # via ansible, ansible-lint, bandit, dparse, molecule, python-gilt, sphinx-autobuild, watchdog, yamllint
 requests==2.20.0          # via cookiecutter, docker-py, safety, sphinx
 s3transfer==0.1.12        # via boto3
 safety==1.8.4
 sh==1.12.14               # via molecule, python-gilt
 singledispatch==3.4.0.3   # via astroid, pylint, tornado
-six==1.10.0               # via ansible-lint, astroid, bandit, bcrypt, click-completion, cryptography, docker-py, docker-pycreds, dparse, fasteners, git-url-parse, livereload, packaging, pip-tools, pylint, pynacl, python-dateutil, singledispatch, sphinx, stevedore, testinfra, websocket-client
+six==1.11.0               # via ansible-lint, astroid, bandit, bcrypt, click-completion, cryptography, docker-py, docker-pycreds, dparse, fasteners, git-url-parse, livereload, molecule, packaging, pip-tools, pylint, pynacl, python-dateutil, singledispatch, sphinx, stevedore, testinfra, websocket-client
 smmap2==2.0.3             # via gitdb2
 snowballstemmer==1.2.1    # via sphinx
 sphinx-autobuild==0.7.1
@@ -106,7 +106,7 @@ sphinxcontrib-websupport==1.0.1  # via sphinx
 stevedore==1.28.0         # via bandit
 tabulate==0.8.2           # via molecule
 template-remover==0.1.9   # via html-linter
-testinfra==1.12.0
+testinfra==1.16.0
 tornado==4.5.1            # via livereload, sphinx-autobuild
 tree-format==0.1.2        # via molecule
 typing==3.6.6             # via sphinx
