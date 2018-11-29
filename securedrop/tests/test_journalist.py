@@ -120,7 +120,7 @@ def test_reply_error_flashed_message(journalist_app, test_journo, test_source):
 
             ins.assert_message_flashed(
                 'An unexpected error occurred! Please '
-                'inform your administrator.', 'error')
+                'inform your admin.', 'error')
 
 
 def test_empty_replies_are_rejected(journalist_app, test_journo, test_source):
@@ -772,7 +772,7 @@ def test_admin_resets_user_hotp_error(mocker,
             app.post(url_for('admin.reset_two_factor_hotp'),
                      data=dict(uid=test_journo['id'], otp_secret=bad_secret))
             ins.assert_message_flashed("An unexpected error occurred! "
-                                       "Please inform your administrator.",
+                                       "Please inform your admin.",
                                        "error")
 
     # Re-fetch journalist to get fresh DB instance
@@ -872,7 +872,7 @@ def test_user_resets_user_hotp_error(mocker,
                      data=dict(otp_secret=bad_secret))
             ins.assert_message_flashed(
                 "An unexpected error occurred! Please inform your "
-                "administrator.", "error")
+                "admin.", "error")
 
     # Re-fetch journalist to get fresh DB instance
     user = Journalist.query.get(test_journo['id'])
@@ -1140,7 +1140,7 @@ def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
                                is_admin=None))
             ins.assert_message_flashed(
                 "An error occurred saving this user to the database."
-                " Please inform your administrator.",
+                " Please inform your admin.",
                 "error")
 
     log_event = mocked_error_logger.call_args[0][0]

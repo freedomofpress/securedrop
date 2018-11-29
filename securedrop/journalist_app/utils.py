@@ -47,7 +47,7 @@ def commit_account_changes(user):
         except Exception as e:
             flash(gettext(
                 "An unexpected error occurred! Please "
-                  "inform your administrator."), "error")
+                  "inform your admin."), "error")
             current_app.logger.error("Account changes for '{}' failed: {}"
                                      .format(user, e))
             db.session.rollback()
@@ -137,7 +137,7 @@ def validate_hotp_secret(user, otp_secret):
         else:
             flash(gettext(
                 "An unexpected error occurred! "
-                "Please inform your administrator."), "error")
+                "Please inform your admin."), "error")
             current_app.logger.error(
                 "set_hotp_secret '{}' (id {}) failed: {}".format(
                     otp_secret, user.id, e))

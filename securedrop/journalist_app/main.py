@@ -117,7 +117,7 @@ def make_blueprint(config):
         except Exception as exc:
             flash(gettext(
                 "An unexpected error occurred! Please "
-                "inform your administrator."), "error")
+                "inform your admin."), "error")
             # We take a cautious approach to logging here because we're dealing
             # with responses to sources. It's possible the exception message
             # could contain information we don't want to write to disk.
