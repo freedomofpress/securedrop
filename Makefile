@@ -6,20 +6,24 @@ TAG ?= $(shell git rev-parse HEAD)
 STABLE_VER := $(shell cat molecule/shared/stable.ver)
 
 .PHONY: ci-spinup
-ci-spinup: ## Creates AWS EC2 hosts for testing staging environment.
-	./devops/scripts/ci-spinup.sh
+ci-spinup: ## Creates GCE host for testing staging environment.
+	./devops/gce-nested/gce-start.sh
 
 .PHONY: ci-teardown
-ci-teardown: ## Destroy AWS EC2 hosts for testing staging environment.
-	./devops/scripts/ci-teardown.sh
+ci-teardown: ## Destroys GCE host for testing staging environment.
+	./devops/gce-nested/gce-stop.sh
 
 .PHONY: ci-run
-ci-run: ## Provisions AWS EC2 hosts for testing staging environment.
-	./devops/scripts/ci-runner.sh
+ci-run: ## Provisions GCE host for testing staging environment.
+	./devops/gce-nested/gce-runner.sh
 
 .PHONY: ci-go
-ci-go: ## Creates, provisions, tests, and destroys AWS EC2 hosts for testing staging environment.
-	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s aws; else echo Not running on docs branch...; fi
+ci-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment.
+	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
+		make ci-spinup; \
+		make ci-run; \
+		make ci-teardown; \
+	fi
 
 .PHONY: ci-lint
 ci-lint: ## Runs linting in linting container.

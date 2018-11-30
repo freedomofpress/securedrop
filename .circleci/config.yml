@@ -125,16 +125,12 @@ jobs:
           command: ./devops/scripts/rebase-ci.sh
 
       - run:
-          name: Start remote GCE instance
-          command: ./devops/gce-nested/gce-start.sh
-
-      - run:
-          name: Start Test process
-          command: ./devops/gce-nested/gce-runner.sh
+          name: Run Staging tests on GCE
+          command: make ci-go
 
       - run:
           name: Ensure environment torn down
-          command: ./devops/gce-nested/gce-stop.sh
+          command: make ci-teardown
           when: always
 
       - store_test_results:
