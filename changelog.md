@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.0~rc3
+
+* Removes intel microcode (#3955)
+
 ## 0.11.0~rc2
 
 * Updated Ansible to 2.6.8 (#3945)
