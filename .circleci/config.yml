@@ -130,7 +130,9 @@ jobs:
 
       - run:
           name: Ensure environment torn down
-          command: make ci-teardown
+          # Always report true, since env should will destroyed already
+          # if all tests passed.
+          command: make ci-teardown || true
           when: always
 
       - store_test_results:
