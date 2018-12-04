@@ -2,9 +2,10 @@
 import hashlib
 import json
 import os
+import random
 
 from pyotp import TOTP
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from flask import current_app, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer
@@ -14,6 +15,8 @@ from models import Journalist, Reply, Source, SourceStar, Submission
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from utils.api_helper import get_api_headers
+
+random.seed('◔ ⌣ ◔')
 
 
 def test_unauthenticated_user_gets_all_endpoints(journalist_app):
@@ -792,3 +795,58 @@ def test_empty_json_20X(journalist_app, journalist_api_token, test_journo,
                                 headers=get_api_headers(journalist_api_token))
 
             assert response.status_code in (200, 201)
+
+
+def test_set_reply_uuid(journalist_app, journalist_api_token, test_source):
+    msg = '-----BEGIN PGP MESSAGE-----\nwat\n-----END PGP MESSAGE-----'
+    reply_uuid = str(uuid4())
+    req_data = {'uuid': reply_uuid, 'reply': msg}
+
+    with journalist_app.test_client() as app:
+        # first check that we can set a valid UUID
+        source_uuid = test_source['uuid']
+        resp = app.post(url_for('api.all_source_replies',
+                                source_uuid=source_uuid),
+                        data=json.dumps(req_data),
+                        headers=get_api_headers(journalist_api_token))
+        assert resp.status_code == 201
+        assert resp.json['uuid'] == reply_uuid
+
+        reply = Reply.query.filter_by(uuid=reply_uuid).one_or_none()
+        assert reply is not None
+
+        len_of_replies = len(Source.query.get(test_source['id']).replies)
+
+        # next check that requesting with the same UUID does not succeed
+        source_uuid = test_source['uuid']
+        resp = app.post(url_for('api.all_source_replies',
+                                source_uuid=source_uuid),
+                        data=json.dumps(req_data),
+                        headers=get_api_headers(journalist_api_token))
+        assert resp.status_code == 409
+
+        new_len_of_replies = len(Source.query.get(test_source['id']).replies)
+
+        assert new_len_of_replies == len_of_replies
+
+        # check setting null for the uuid field doesn't break
+        req_data['uuid'] = None
+        source_uuid = test_source['uuid']
+        resp = app.post(url_for('api.all_source_replies',
+                                source_uuid=source_uuid),
+                        data=json.dumps(req_data),
+                        headers=get_api_headers(journalist_api_token))
+        assert resp.status_code == 201
+
+        new_uuid = resp.json['uuid']
+        reply = Reply.query.filter_by(uuid=new_uuid).one_or_none()
+        assert reply is not None
+
+        # check setting invalid values for the uuid field doesn't break
+        req_data['uuid'] = 'not a uuid'
+        source_uuid = test_source['uuid']
+        resp = app.post(url_for('api.all_source_replies',
+                                source_uuid=source_uuid),
+                        data=json.dumps(req_data),
+                        headers=get_api_headers(journalist_api_token))
+        assert resp.status_code == 400
