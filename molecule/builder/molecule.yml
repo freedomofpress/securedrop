@@ -48,6 +48,11 @@ provisioner:
     name: ansible-lint
 scenario:
   name: builder
+  converge_sequence:
+    - destroy
+    - create
+    - converge
+    - destroy
   test_sequence:
     - destroy
     - create

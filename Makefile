@@ -1,24 +1,29 @@
 DEFAULT_GOAL: help
 SHELL := /bin/bash
+GCLOUD_VERSION := 222.0.0-1
 PWD := $(shell pwd)
 TAG ?= $(shell git rev-parse HEAD)
 STABLE_VER := $(shell cat molecule/shared/stable.ver)
 
 .PHONY: ci-spinup
-ci-spinup: ## Creates AWS EC2 hosts for testing staging environment.
-	./devops/scripts/ci-spinup.sh
+ci-spinup: ## Creates GCE host for testing staging environment.
+	./devops/gce-nested/gce-start.sh
 
 .PHONY: ci-teardown
-ci-teardown: ## Destroy AWS EC2 hosts for testing staging environment.
-	./devops/scripts/ci-teardown.sh
+ci-teardown: ## Destroys GCE host for testing staging environment.
+	./devops/gce-nested/gce-stop.sh
 
 .PHONY: ci-run
-ci-run: ## Provisions AWS EC2 hosts for testing staging environment.
-	./devops/scripts/ci-runner.sh
+ci-run: ## Provisions GCE host for testing staging environment.
+	./devops/gce-nested/gce-runner.sh
 
 .PHONY: ci-go
-ci-go: ## Creates, provisions, tests, and destroys AWS EC2 hosts for testing staging environment.
-	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s aws; else echo Not running on docs branch...; fi
+ci-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment.
+	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
+		make ci-spinup; \
+		make ci-run; \
+		make ci-teardown; \
+	fi
 
 .PHONY: ci-lint
 ci-lint: ## Runs linting in linting container.
@@ -86,13 +91,24 @@ docker-build-ubuntu: ## Builds SD Ubuntu docker container
 
 .PHONY: build-debs
 build-debs: ## Builds and tests debian packages
-	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s builder; else echo Not running on docs branch...; fi
+	@./devops/scripts/build-debs.sh
+
+.PHONY: build-debs-notest
+build-debs-notest: ## Builds and tests debian packages (sans tests)
+	@./devops/scripts/build-debs.sh notest
 
 .PHONY: build-debs-xenial
 build-debs-xenial: ## Builds and tests debian packages (includes Xenial overrides, TESTING ONLY)
 	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
 		molecule converge -s builder -- -e securedrop_build_xenial_support=True; \
 		else echo Not running on docs branch...; fi
+
+.PHONY: build-gcloud-docker
+build-gcloud-docker: ## Build docker container for gcloud sdk
+	echo "${GCLOUD_VERSION}" > devops/gce-nested/gcloud-container.ver && \
+	docker build --build-arg="GCLOUD_VERSION=${GCLOUD_VERSION}" \
+				 -f devops/docker/Dockerfile.gcloud \
+				 -t "quay.io/freedomofpress/gcloud-sdk:${GCLOUD_VERSION}" .
 
 .PHONY: safety
 safety: ## Runs `safety check` to check python dependencies for vulnerabilities
@@ -137,7 +153,7 @@ vagrant-package: ## Package up a vagrant box of the last stable SD release
 
 .PHONY: staging
 staging: ## Creates local staging environment in VM, autodetecting platform
-	@./devops/create-staging-env
+	@./devops/scripts/create-staging-env
 
 .PHONY: staging-xenial
 staging-xenial: ## Creates local staging VMs based on Xenial, autodetecting platform

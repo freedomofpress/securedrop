@@ -10,7 +10,6 @@
     dest: "{{ securedrop_app_code_deb_dir }}"
     delete: yes
     recursive: yes
-    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
 
 - debug: var=securedrop_code
 
@@ -20,7 +19,6 @@
     dest: "{{ securedrop_code_filtered }}"
     recursive: yes
     delete: yes
-    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
     rsync_opts: "{{ securedrop_app_rsync_opts }}"
 
 - include: sass.yml

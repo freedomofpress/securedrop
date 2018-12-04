@@ -89,5 +89,4 @@
     reboot_wait: no
   roles:
     - role: reboot-if-first-install
-      when: not amazon_builder
   become: yes

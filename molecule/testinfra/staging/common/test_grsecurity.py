@@ -1,5 +1,4 @@
 import pytest
-import os
 import re
 
 
@@ -16,8 +15,6 @@ def test_ssh_motd_disabled(File):
     assert not f.contains("pam\.motd")
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
-                    reason="Need to skip in environment w/o grsec")
 @pytest.mark.parametrize("package", [
     'linux-firmware-image-{}-grsec'.format(KERNEL_VERSION),
     'linux-image-{}-grsec'.format(KERNEL_VERSION),
@@ -33,8 +30,6 @@ def test_grsecurity_apt_packages(Package, package):
     assert Package(package).is_installed
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
-                    reason="Need to skip in environment w/o grsec")
 @pytest.mark.parametrize("package", [
     'linux-signed-image-generic-lts-utopic',
     'linux-signed-image-generic',
@@ -60,8 +55,6 @@ def test_generic_kernels_absent(Command, package):
     assert c.stderr == error_text
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
-                    reason="Need to skip in environment w/o grsec")
 def test_grsecurity_lock_file(File):
     """
     Ensure system is rerunning a grsecurity kernel by testing for the
@@ -73,8 +66,6 @@ def test_grsecurity_lock_file(File):
     assert f.size == 0
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
-                    reason="Need to skip in environment w/o grsec")
 def test_grsecurity_kernel_is_running(Command):
     """
     Make sure the currently running kernel is specific grsec kernel.
@@ -84,8 +75,6 @@ def test_grsecurity_kernel_is_running(Command):
     assert c.stdout == '{}-grsec'.format(KERNEL_VERSION)
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
-                    reason="Need to skip in environment w/o grsec")
 @pytest.mark.parametrize('sysctl_opt', [
   ('kernel.grsecurity.grsec_lock', 1),
   ('kernel.grsecurity.rwxmap_logging', 0),
@@ -100,8 +89,6 @@ def test_grsecurity_sysctl_options(Sysctl, Sudo, sysctl_opt):
         assert Sysctl(sysctl_opt[0]) == sysctl_opt[1]
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
-                    reason="Need to skip in environment w/o grsec")
 @pytest.mark.parametrize('paxtest_check', [
   "Executable anonymous mapping",
   "Executable bss",
@@ -136,8 +123,6 @@ def test_grsecurity_paxtest(Command, Sudo, paxtest_check):
             assert re.search(regex, c.stdout)
 
 
-@pytest.mark.skipif(os.environ.get('FPF_CI', 'false') == "true",
-                    reason="Not needed in CI environment")
 def test_grub_pc_marked_manual(Command):
     """
     Ensure the `grub-pc` packaged is marked as manually installed.
@@ -148,8 +133,6 @@ def test_grub_pc_marked_manual(Command):
     assert c.stdout == "grub-pc"
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
-                    reason="Need to skip in environment w/o grsec")
 def test_apt_autoremove(Command):
     """
     Ensure old packages have been autoremoved.
@@ -159,8 +142,8 @@ def test_apt_autoremove(Command):
     assert "The following packages will be REMOVED" not in c.stdout
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
-                    reason="Need to skip in environment w/o grsec")
+@pytest.mark.xfail(strict=True,
+                   reason="PaX flags unset at install time, see issue #3916")
 @pytest.mark.parametrize("binary", [
     "/usr/sbin/grub-probe",
     "/usr/sbin/grub-mkdevicemap",

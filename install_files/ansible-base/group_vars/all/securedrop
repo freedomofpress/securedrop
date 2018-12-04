@@ -7,8 +7,8 @@ securedrop_app_code_version: "0.11.0~rc1"
 grsecurity: true
 install_local_packages: false
 
-# Establish if we are in CI environment
-amazon_builder: "{{ true if ( 'amazon' in ansible_product_version and ansible_virtualization_type != 'docker' ) else false }}"
+# Are we in CI environment?
+ci_builder: false
 
 # Ansible v1 default reference to remote host
 remote_host_ref: "{{ ansible_ssh_host|default(inventory_hostname) }}"

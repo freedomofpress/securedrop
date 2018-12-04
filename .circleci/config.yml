@@ -113,18 +113,11 @@ jobs:
             xvfb-run -a pipenv run python3 test_gui.py
 
   staging-test-with-rebase:
-    docker:
-      - image: quay.io/freedomofpress/circleci-docker:latest
-        environment:
-          FPF_CI: true
-          CI_SD_ENV: staging
-          CI_AWS_TYPE: t2.medium
-          FPF_GRSEC: false
-          TEST_REPORTS: /root/sd
+    machine:
+      enabled: true
+
     working_directory: ~/sd
-
     steps:
-
       - checkout
 
       - run:
@@ -132,56 +125,21 @@ jobs:
           command: ./devops/scripts/rebase-ci.sh
 
       - run:
-          name: Installation apt pre-reqs
-          command: apt-get install -y enchant
-
-      - run:
-          name: Install pip==18.0 to work pipenv/pip bug
-          command: pip install pip==18.0
-
-      - run:
-          name: Installation pre-reqs
-          command: pip install -U -r securedrop/requirements/develop-requirements.txt
-
-      - run:
-          name: Check Python dependencies for CVEs
-          command: make safety
-
-      - run:
-          name: Run static security testing on source code
-          command: make bandit
-
-      - setup_remote_docker
-
-      - run:
-          name: Run Debian builds
-          command: make build-debs
-
-      - run:
-          name: Provision staging servers and run tests
+          name: Run Staging tests on GCE
           command: make ci-go
-          no_output_timeout: 20m
 
       - run:
           name: Ensure environment torn down
-          command: molecule destroy -s aws
-          when: on_fail
-
-      - run:
-          name: Collect JUnit test result files
-          command: ./devops/scripts/combine-junit-test-results.sh
+          # Always report true, since env should will destroyed already
+          # if all tests passed.
+          command: make ci-teardown || true
+          when: always
 
       - store_test_results:
-          path: /root/sd/junit
+          path: ~/sd/junit
 
       - store_artifacts:
-          path: /root/sd/junit
-
-      - store_artifacts:
-          path: /root/sd/raw-test-output
-
-      - store_artifacts:
-          path: /root/sd/.tor_version
+          path: ~/sd/junit
 
 workflows:
   version: 2

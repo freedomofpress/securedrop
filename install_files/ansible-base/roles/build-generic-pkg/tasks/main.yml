@@ -17,7 +17,6 @@
     dest: "{{ build_path }}/"
     recursive: yes
     delete: yes
-    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
     rsync_opts: "{{ securedrop_app_rsync_opts }}"
 
 - name: Find any jinja templates

@@ -12,6 +12,8 @@ set -e
 set -u
 set -o pipefail
 
+. ./devops/scripts/boot-strap-venv.sh
+
 # Support optional Xenial scenarios, for evaluating Xenial support
 # as we approach the LTS expiration for Trusty.
 
@@ -49,4 +51,10 @@ else
 fi
 
 # Run it!
-molecule converge -s "${securedrop_staging_scenario}"
+virtualenv_bootstrap
+# Are we in CI? Then lets do full testing post install!
+if [ "$USER" = "sdci" ]; then
+    molecule test -s "${securedrop_staging_scenario}"
+else
+    molecule converge -s "${securedrop_staging_scenario}"
+fi
