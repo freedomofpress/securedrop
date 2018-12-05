@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.0~rc4
+
+* Replace 'administrator' with 'admin' in the journalist interface (#3940)
+
 ## 0.11.0~rc3
 
 * Removes intel microcode (#3955)
