@@ -219,7 +219,7 @@ def _get_delete_confirmation(user):
 
 
 def delete_user(args):
-    """Deletes a journalist or administrator from the application."""
+    """Deletes a journalist or admin from the application."""
     with app_context():
         username = _get_username_to_delete()
         try:

@@ -28,7 +28,7 @@
   <p>{{ gettext("The user's password will be:") }} <span class="password" id="password">{{ password }}</span></p>
   <p>
     {{ form.is_admin(id="is-admin") }}
-    <label for="is_admin">{{ gettext('Is Administrator') }}</label>
+    <label for="is_admin">{{ gettext('Is Admin') }}</label>
     <br>
     {% for error in form.is_admin.errors %}
       <span class="form-validation-error">{{ error }}</span>
