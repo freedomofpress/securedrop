@@ -21,6 +21,19 @@ remove_2fa_tty_req() {
     service ssh restart
 }
 
+allow_apt_user_in_iptables() {
+    rules_v4="/etc/network/iptables/rules_v4"
+    # During initial install, file won't exist on disk, so skip.
+    if [ -f "$rules_v4" ]; then
+        # Find already configured apt allow line, targeting root uid, and
+        # subsitute entire line, dropping the uid targeting entirely,
+        # so both Trusty and Xenial continue to work well when invoking apt.
+        perl -npi -e \
+            's/^.*--uid-owner root.*apt updates.*$/-A OUTPUT -p tcp --match multiport --dports 80,8080,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"/' \
+           "$rules_v4"
+    fi
+}
+
 case "$1" in
     configure)
 
@@ -34,11 +47,14 @@ case "$1" in
     fi
     remove_2fa_tty_req
     disable_upgrade_prompt
+
     # Remove cron-apt action should occur after security upgrades to avoid breaking
     # automatic upgrades (see issue #4003)
     if [ -f "/etc/cron-apt/action.d/1-remove" ]; then
         rm /etc/cron-apt/action.d/1-remove
     fi
+
+    allow_apt_user_in_iptables
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
