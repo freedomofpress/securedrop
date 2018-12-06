@@ -343,6 +343,12 @@ before it can be used. We recommend:
     attempts to suspend. This has `since been fixed <https://communities.intel.com/message/432692#432692>`__
     in a BIOS update. See these `release notes <https://downloadmirror.intel.com/26263/eng/RY_0359_ReleaseNotes.pdf>`__ (PDF) for more details.
 
+Later NUC revisions (the NUC7 and NUC8 series) typically include onboard WiFi
+and Bluetooth, and may use an Ethernet chipset not supported by the default Ubuntu 
+14.04.5 kernel. We are investigating workarounds for both issues. If you are 
+having trouble sourcing the NUC5i5MYHE, please `contact us <https://securedrop.org/help/>`__
+for more information on how to safely configure and use more recent NUCs.  
+
 Mac Minis
 ~~~~~~~~~
 
@@ -350,6 +356,8 @@ Other than the NUCs we also recommend the 2014 Apple Mac Minis (part number MGEM
 for installing SecureDrop. Mac Minis have removable wireless cards that you
 should remove. This requires a screwdriver for non-standard
 `TR6 Torx security screws <https://www.amazon.com/Mini-Torx-Security-Screwdriver-Tool/dp/B01BG8P2Q6>`__.
+
+.. caution:: The 2018 Apple Mac Mini (part number MRTR2 or MRTT2) is not a viable candidate for installing SecureDrop, due to hardware support issues.
 
 However, on the first install of Ubuntu Server
 the Mac Minis will not boot: this is a known and
@@ -491,7 +499,7 @@ Network Firewall
 ^^^^^^^^^^^^^^^^
 
 We recommend the `pfSense SG-3100
-<https://store.netgate.com/SG-3100.aspx>`__,.
+<https://store.netgate.com/SG-3100.aspx>`__.
 
 Network Switch
 ^^^^^^^^^^^^^^
