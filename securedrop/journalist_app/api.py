@@ -3,7 +3,9 @@ import json
 from datetime import datetime, timedelta
 from flask import abort, Blueprint, current_app, jsonify, request
 from functools import wraps
+from sqlalchemy.exc import IntegrityError
 from os import path
+from uuid import UUID
 from werkzeug.exceptions import default_exceptions  # type: ignore
 
 from db import db
@@ -243,9 +245,27 @@ def make_blueprint(config):
             filename = path.basename(filename)
 
             reply = Reply(user, source, filename)
-            db.session.add(reply)
-            db.session.add(source)
-            db.session.commit()
+
+            reply_uuid = data.get('uuid', None)
+            if reply_uuid is not None:
+                # check that is is parseable
+                try:
+                    UUID(reply_uuid)
+                except ValueError:
+                    abort(400, "'uuid' was not a valid UUID")
+                reply.uuid = reply_uuid
+
+            try:
+                db.session.add(reply)
+                db.session.add(source)
+                db.session.commit()
+            except IntegrityError as e:
+                db.session.rollback()
+                if 'UNIQUE constraint failed: replies.uuid' in str(e):
+                    abort(409, 'That UUID is already in use.')
+                else:
+                    raise e
+
             return jsonify({'message': 'Your reply has been stored',
                             'uuid': reply.uuid}), 201
 

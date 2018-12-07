@@ -357,6 +357,9 @@ Requires authentication. Clients are expected to encrypt replies prior to
 submission to the server. Replies should be encrypted to the public key of the
 source.
 
+Including the ``uuid`` field in the request is optional. Clients may want to
+pre-set the ``uuid`` so they can track in-flight messages.
+
 .. code:: sh
 
   POST /api/v1/sources/<source_uuid>/replies
@@ -366,6 +369,7 @@ with the reply in the request body:
 .. code:: json
 
   {
+   "uuid": "0bc588dd-f613-4999-b21e-1cebbd9adc2c",
    "reply": "-----BEGIN PGP MESSAGE-----[...]-----END PGP MESSAGE-----"
   }
 
@@ -379,7 +383,8 @@ Response 201 created (application/json):
   }
 
 The returned ``uuid`` field is the UUID of the reply and can be used to
-reference this reply later.
+reference this reply later. If the client set the ``uuid`` in the request,
+this will have the same value.
 
 Replies that do not contain a GPG encrypted message will be rejected:
 
