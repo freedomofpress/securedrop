@@ -850,3 +850,13 @@ def test_set_reply_uuid(journalist_app, journalist_api_token, test_source):
                         data=json.dumps(req_data),
                         headers=get_api_headers(journalist_api_token))
         assert resp.status_code == 400
+
+
+def test_api_does_not_set_cookie_headers(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.get_endpoints'))
+
+        observed_headers = response.headers
+        assert 'Set-Cookie' not in observed_headers.keys()
+        if 'Vary' in observed_headers.keys():
+            assert 'Cookie' not in observed_headers['Vary']

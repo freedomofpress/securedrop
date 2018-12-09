@@ -1959,3 +1959,12 @@ def test_source_with_null_last_updated(journalist_app,
                     test_journo['otp_secret'])
         resp = app.get(url_for('main.index'))
         assert resp.status_code == 200
+
+
+def test_does_set_cookie_headers(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('main.login'))
+
+        observed_headers = response.headers
+        assert 'Set-Cookie' in observed_headers.keys()
+        assert 'Cookie' in observed_headers['Vary']
