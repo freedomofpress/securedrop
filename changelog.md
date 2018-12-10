@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.0~rc5
+
+* Security bugfix: Disable unecessary sshd config options (#3979)
+
 ## 0.11.0~rc4
 
 * Replace 'administrator' with 'admin' in the journalist interface (#3940)

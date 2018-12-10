@@ -13,6 +13,12 @@ remove_2fa_tty_req() {
     # Lets prevent this from bombing out the install though if it fails
     auth_file=/etc/pam.d/common-auth
     sed -i "/^auth\ required\ pam_google.*/d" ${auth_file} || true
+    # Since we are removing the pam_google module, we must ensure password
+    # authentication for sshd is disabled to ensure only key authentication is used.
+    grep -qF "PasswordAuthentication no" /etc/ssh/sshd_config || echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
+    sed -i "/^UsePAM\ /s/\ .*/\ no/" /etc/ssh/sshd_config
+    sed -i "/^ChallengeResponseAuthentication\ /s/\ .*/\ no/" /etc/ssh/sshd_config
+    service ssh restart
 }
 
 case "$1" in

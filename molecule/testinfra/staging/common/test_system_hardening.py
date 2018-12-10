@@ -88,3 +88,21 @@ def test_twofactor_disabled_on_tty(host):
     pam_auth_file = host.file("/etc/pam.d/common-auth").content_string
 
     assert "auth required pam_google_authenticator.so" not in pam_auth_file
+
+
+@pytest.mark.parametrize('sshd_opts', [
+  ('UsePAM', 'no'),
+  ('ChallengeResponseAuthentication', 'no'),
+  ('PasswordAuthentication', 'no'),
+  ('PubkeyAuthentication', 'yes'),
+  ('RSAAuthentication', 'yes'),
+])
+def test_sshd_config(host, sshd_opts):
+    """
+    Let's ensure sshd does not fall back to password-based authentication
+    """
+
+    sshd_config_file = host.file("/etc/ssh/sshd_config").content_string
+
+    line = "{} {}".format(sshd_opts[0], sshd_opts[1])
+    assert line in sshd_config_file
