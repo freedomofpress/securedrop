@@ -2,6 +2,7 @@
 
 * Arabic (``ar``)
 * German (``de_DE``)
+* Greek (``el``)
 * Spanish (``es_ES``)
 * French (``fr_FR``)
 * Hindi (``hi``)
