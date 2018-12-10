@@ -18,8 +18,7 @@ IgnoreRhosts yes
 RhostsRSAAuthentication no
 HostbasedAuthentication no
 PermitEmptyPasswords no
-# This is needed for libpam-google-authenticator package for 2fa SSH access.
-ChallengeResponseAuthentication yes
+ChallengeResponseAuthentication no
 KerberosAuthentication no
 KerberosGetAFSToken no
 GSSAPIAuthentication no
@@ -29,7 +28,7 @@ PrintMotd no
 PrintLastLog yes
 TCPKeepAlive yes
 AcceptEnv LANG LC_*
-UsePAM yes
+UsePAM no
 UseDNS no
 ClientAliveInterval 300
 ClientAliveCountMax 0
@@ -39,3 +38,4 @@ MACs hmac-sha2-256,hmac-sha2-512
 GatewayPorts no
 AllowGroups ssh
 AllowTcpForwarding no
+PasswordAuthentication no
