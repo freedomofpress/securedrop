@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-09-04 19:23+0000\n"
+"PO-Revision-Date: 2018-12-09 10:44+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
-"Language-Team: Norwegian Bokmål <https://weblate.securedrop.club/projects/"
+"Language-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/"
 "securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
@@ -58,11 +58,8 @@ msgstr "Brukernavnet \"{user}\" er allerede i bruk."
 
 #: journalist_app/admin.py:85
 msgid ""
-"An error occurred saving this user to the database. Please inform your "
-"administrator."
-msgstr ""
-"En feil oppstod ved forsøk på lagring av brukeren i databasen. Gi "
-"administrator for din SecureDrop beskjed om at det skjedde."
+"An error occurred saving this user to the database. Please inform your admin."
+msgstr "Kunne ikke lagre brukeren i databasen. Gi din administrator beskjed."
 
 #: journalist_app/admin.py:109
 msgid "Token in two-factor authentication accepted for user {user}."
@@ -85,8 +82,8 @@ msgid "No collections selected."
 msgstr "Ingen kildeoppføringer valgt."
 
 #: journalist_app/decorators.py:15
-msgid "Only administrators can access this page."
-msgstr "Bare administratorer har tilgang til denne siden."
+msgid "Only admins can access this page."
+msgstr "Kun administratorer har tilgang til denne siden."
 
 #: journalist_app/forms.py:19
 msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
@@ -115,10 +112,8 @@ msgstr "Du kan kun laste opp PNG-bildefiler."
 
 #: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
-msgid "An unexpected error occurred! Please inform your administrator."
-msgstr ""
-"En uventet feil oppstod! Gi administrator for din SecureDrop beskjed om at "
-"det skjedde."
+msgid "An unexpected error occurred! Please inform your admin."
+msgstr "En uventet feil oppstod! Gi din administrator beskjed."
 
 #: journalist_app/main.py:129
 msgid "Thanks. Your reply has been stored."
@@ -211,7 +206,7 @@ msgid "Close"
 msgstr "Lukk"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:72
+#: journalist_templates/col.html:15 source_templates/lookup.html:77
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -239,7 +234,7 @@ msgid "Change Secret"
 msgstr "Endre hemmelighet"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
-#: journalist_templates/admin_add_user.html:33
+#: journalist_templates/admin_add_user.html:40
 #: journalist_templates/admin_edit_hotp_secret.html:8
 msgid "HOTP Secret"
 msgstr "HOTP-hemmelighet"
@@ -330,7 +325,7 @@ msgid "Admin Interface"
 msgstr "Administrasjon"
 
 #: journalist_templates/admin.html:6
-#: journalist_templates/admin_add_user.html:39
+#: journalist_templates/admin_add_user.html:46
 msgid "ADD USER"
 msgstr "LEGG TIL BRUKER"
 
@@ -383,16 +378,24 @@ msgstr "INSTANS-KONFIGURASJON"
 msgid "Back to admin interface"
 msgstr "Tilbake til administrasjonsgrensesnittet"
 
-#: journalist_templates/admin_add_user.html:21
+#: journalist_templates/admin_add_user.html:23
+msgid "Username can contain spaces"
+msgstr "Brukernavnet kan inneholde mellomrom"
+
+#: journalist_templates/admin_add_user.html:24
+msgid "Username is case-sensitive"
+msgstr "Brukernavnet skiller mellom små og store bokstaver"
+
+#: journalist_templates/admin_add_user.html:28
 msgid "The user's password will be:"
 msgstr "Brukerens passord vil være:"
 
-#: journalist_templates/admin_add_user.html:24
+#: journalist_templates/admin_add_user.html:31
 #: journalist_templates/edit_account.html:17
-msgid "Is Administrator"
+msgid "Is Admin"
 msgstr "Er administrator"
 
-#: journalist_templates/admin_add_user.html:32
+#: journalist_templates/admin_add_user.html:39
 msgid "Is using a YubiKey [HOTP]"
 msgstr "Bruker en YubiKey [HOTP]"
 
@@ -844,15 +847,15 @@ msgstr "Takk! Vi har mottatt dokumentet ditt."
 msgid "Thanks! We received your message and document."
 msgstr "Takk! Vi mottok meldingen og dokumentet ditt."
 
-#: source_app/main.py:222
+#: source_app/main.py:223
 msgid "Reply deleted"
 msgstr "Svar slettet"
 
-#: source_app/main.py:240
+#: source_app/main.py:241
 msgid "All replies have been deleted"
 msgstr "Alle svar har blitt slettet"
 
-#: source_app/main.py:254
+#: source_app/main.py:255
 msgid "Sorry, that is not a recognized codename."
 msgstr "Beklager, det er ikke et gjenkjent kodenavn."
 
@@ -860,8 +863,8 @@ msgstr "Beklager, det er ikke et gjenkjent kodenavn."
 msgid "Protecting Journalists and Sources"
 msgstr "Sikkerhet for journalister og kilder"
 
-#: source_templates/base.html:25 source_templates/base.html:47
-#: source_templates/index.html:33 source_templates/index.html:88
+#: source_templates/base.html:25 source_templates/base.html:45
+#: source_templates/index.html:33 source_templates/index.html:85
 msgid "Powered by"
 msgstr "Drevet av"
 
@@ -869,7 +872,7 @@ msgstr "Drevet av"
 msgid "LOG OUT"
 msgstr "LOGG UT"
 
-#: source_templates/base.html:47 source_templates/index.html:88
+#: source_templates/base.html:45 source_templates/index.html:85
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -1002,7 +1005,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "SE ETTER SVAR"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:93
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -1010,24 +1013,24 @@ msgstr ""
 "Det ser ut som du bruker Tor-nettleseren. Du kan stille inn "
 "sikkerhetsbryteren til Safest i fire enkle steg."
 
-#: source_templates/index.html:98
+#: source_templates/index.html:95
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Klikk på <img src=\"{icon}\" alt=\"Tor icon\"> den grønne løken i "
 "verktøylinjen oppe til venstre"
 
-#: source_templates/index.html:99
+#: source_templates/index.html:96
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Klikk <strong>Sikkerhetsinnstillinger…</strong>"
 
-#: source_templates/index.html:100
+#: source_templates/index.html:97
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Beveg glidebryteren til <strong>Safest</strong>, klikk så <strong>OK</strong>"
 
-#: source_templates/index.html:101
+#: source_templates/index.html:98
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">Klikk her</a> for å oppdatere siden"
 
@@ -1039,7 +1042,7 @@ msgstr "Skriv inn kodenavn"
 msgid "Enter your codename"
 msgstr "Skriv inn ditt kodenavn"
 
-#: source_templates/login.html:25 source_templates/lookup.html:47
+#: source_templates/login.html:25 source_templates/lookup.html:51
 msgid "CANCEL"
 msgstr "AVBRYT"
 
@@ -1114,11 +1117,11 @@ msgstr "Maksimal opplastningsstørrelse: 500MB"
 msgid "Write a message."
 msgstr "Skriv en melding."
 
-#: source_templates/lookup.html:53
+#: source_templates/lookup.html:58
 msgid "Read Replies"
 msgstr "Les svar"
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:63
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1130,43 +1133,43 @@ msgstr ""
 "gjør også at vi enklere kan se at du har lest dem. Du kan fortsette "
 "kommunikasjonen ved å sende inn nye filer eller meldinger ovenfor."
 
-#: source_templates/lookup.html:71
+#: source_templates/lookup.html:76
 msgid "Delete this reply?"
 msgstr "Slett dette svaret?"
 
-#: source_templates/lookup.html:73
+#: source_templates/lookup.html:78
 msgid "DELETE"
 msgstr "SLETT"
 
-#: source_templates/lookup.html:82
+#: source_templates/lookup.html:87
 msgid "DELETE ALL REPLIES"
 msgstr "SLETT ALLE SVAR"
 
-#: source_templates/lookup.html:85
+#: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
 msgstr "Er du ferdig med svarene?"
 
-#: source_templates/lookup.html:86
+#: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
 msgstr "JA, SLETT ALLE SVAR"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:92
 msgid "NO, NOT YET"
 msgstr "NEI, IKKE ENDA"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:96
 msgid "There are no replies at this time."
 msgstr "Ingen svar til nå."
 
-#: source_templates/lookup.html:100
+#: source_templates/lookup.html:105
 msgid "Remember, your codename is:"
 msgstr "Husk, kodenavnet ditt er:"
 
-#: source_templates/lookup.html:101
+#: source_templates/lookup.html:106
 msgid "Show"
 msgstr "Vis"
 
-#: source_templates/lookup.html:103
+#: source_templates/lookup.html:108
 msgid "Hide"
 msgstr "Skjul"
 
@@ -1177,10 +1180,6 @@ msgstr "Fant ikke siden"
 #: source_templates/notfound.html:5
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Beklager, men vi kunne ikke finne det du ba om."
-
-#: source_templates/screensaver.html:2
-msgid "Interface hidden. Move your cursor here to show."
-msgstr "Grensesnitt skjult. Beveg musepekeren for å vise."
 
 #: source_templates/session_timeout.html:6
 msgid ""
@@ -1361,6 +1360,12 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
+
+#~ msgid "Is Administrator"
+#~ msgstr "Er administrator"
+
+#~ msgid "Interface hidden. Move your cursor here to show."
+#~ msgstr "Grensesnitt skjult. Beveg musepekeren for å vise."
 
 #~ msgid "{num_unread} unread"
 #~ msgstr "{num_unread} uleste"
