@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-09-04 19:23+0000\n"
-"Last-Translator: erinm <erinm@benespace.org>\n"
-"Language-Team: Turkish <https://weblate.securedrop.club/projects/securedrop/"
+"PO-Revision-Date: 2018-12-09 16:23+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Language-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -57,11 +57,10 @@ msgstr "\"{user}\" kullanıcı adı halihazırda alınmış."
 
 #: journalist_app/admin.py:85
 msgid ""
-"An error occurred saving this user to the database. Please inform your "
-"administrator."
+"An error occurred saving this user to the database. Please inform your admin."
 msgstr ""
-"Bu kullanıcıyı veritabanına kaydederken bir hata oluştu. Lütfen yöneticinize "
-"haber verin."
+"Bu kullanıcı veritabanına kaydedilirken bir sorun çıktı. Lütfen yöneticinize "
+"bilgi verin."
 
 #: journalist_app/admin.py:109
 msgid "Token in two-factor authentication accepted for user {user}."
@@ -85,8 +84,8 @@ msgid "No collections selected."
 msgstr "Herhangi bir derleme seçilmedi."
 
 #: journalist_app/decorators.py:15
-msgid "Only administrators can access this page."
-msgstr "Yalnızca yöneticiler bu sayfaya erişebilir."
+msgid "Only admins can access this page."
+msgstr "Bu sayfaya yalnız yöneticiler erişebilir."
 
 #: journalist_app/forms.py:19
 msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
@@ -119,8 +118,8 @@ msgstr "Yalnızca PNG resim dosyalarını yükleyebilirsiniz."
 
 #: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
-msgid "An unexpected error occurred! Please inform your administrator."
-msgstr "Beklenmeyen bir hata oluştu! Lütfen sistem yöneticinize haber verin."
+msgid "An unexpected error occurred! Please inform your admin."
+msgstr "Beklenmeyen bir sorun çıktı! Lütfen sistem yöneticinize bilgi verin."
 
 #: journalist_app/main.py:129
 msgid "Thanks. Your reply has been stored."
@@ -216,7 +215,7 @@ msgid "Close"
 msgstr "Kapat"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:72
+#: journalist_templates/col.html:15 source_templates/lookup.html:77
 msgid "Cancel"
 msgstr "İptal"
 
@@ -244,7 +243,7 @@ msgid "Change Secret"
 msgstr "Gizli Kodu Değiştir"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
-#: journalist_templates/admin_add_user.html:33
+#: journalist_templates/admin_add_user.html:40
 #: journalist_templates/admin_edit_hotp_secret.html:8
 msgid "HOTP Secret"
 msgstr "HOTP Gizli Kodu"
@@ -334,7 +333,7 @@ msgid "Admin Interface"
 msgstr "Yönetici Arayüzü"
 
 #: journalist_templates/admin.html:6
-#: journalist_templates/admin_add_user.html:39
+#: journalist_templates/admin_add_user.html:46
 msgid "ADD USER"
 msgstr "KULLANICI EKLE"
 
@@ -387,16 +386,24 @@ msgstr "ÖRNEK YAPILANDIRMASI"
 msgid "Back to admin interface"
 msgstr "Yönetici arayüzüne geri dön"
 
-#: journalist_templates/admin_add_user.html:21
+#: journalist_templates/admin_add_user.html:23
+msgid "Username can contain spaces"
+msgstr "Kullanıcı adında boşluk karakteri kullanılabilir"
+
+#: journalist_templates/admin_add_user.html:24
+msgid "Username is case-sensitive"
+msgstr "Kullanıcı adı büyük-küçük harflere duyarlıdır"
+
+#: journalist_templates/admin_add_user.html:28
 msgid "The user's password will be:"
 msgstr "Kullanıcının parolası şu olacak:"
 
-#: journalist_templates/admin_add_user.html:24
+#: journalist_templates/admin_add_user.html:31
 #: journalist_templates/edit_account.html:17
-msgid "Is Administrator"
-msgstr "Bir yöneticidir"
+msgid "Is Admin"
+msgstr "Yönetici"
 
-#: journalist_templates/admin_add_user.html:32
+#: journalist_templates/admin_add_user.html:39
 msgid "Is using a YubiKey [HOTP]"
 msgstr "Bir YubiKey [HOTP] kullanıyor"
 
@@ -851,15 +858,15 @@ msgstr "Teşekkürler! Belgeniz alındı."
 msgid "Thanks! We received your message and document."
 msgstr "Teşekkürler! İletiniz ve belgeniz alındı."
 
-#: source_app/main.py:222
+#: source_app/main.py:223
 msgid "Reply deleted"
 msgstr "Yanıt silindi"
 
-#: source_app/main.py:240
+#: source_app/main.py:241
 msgid "All replies have been deleted"
 msgstr "Bütün yanıtlar silindi"
 
-#: source_app/main.py:254
+#: source_app/main.py:255
 msgid "Sorry, that is not a recognized codename."
 msgstr "Üzgünüz, kod adı bilinmiyor."
 
@@ -867,8 +874,8 @@ msgstr "Üzgünüz, kod adı bilinmiyor."
 msgid "Protecting Journalists and Sources"
 msgstr "Gazetecileri ve Kaynakları Korumak"
 
-#: source_templates/base.html:25 source_templates/base.html:47
-#: source_templates/index.html:33 source_templates/index.html:88
+#: source_templates/base.html:25 source_templates/base.html:45
+#: source_templates/index.html:33 source_templates/index.html:85
 msgid "Powered by"
 msgstr "Destekleyen"
 
@@ -876,7 +883,7 @@ msgstr "Destekleyen"
 msgid "LOG OUT"
 msgstr "OTURUMU KAPAT"
 
-#: source_templates/base.html:47 source_templates/index.html:88
+#: source_templates/base.html:45 source_templates/index.html:85
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -1014,7 +1021,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "YANITLARI KONTROL EDİN"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:93
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -1022,25 +1029,25 @@ msgstr ""
 "Tor Tarayıcı kullanıyor gibi gözüküyorsunuz. Dört kolay adımda Güvenlik "
 "Kaydırma düğmesini En Güvenli yapabilirsiniz."
 
-#: source_templates/index.html:98
+#: source_templates/index.html:95
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Yukarıdaki araç çubuğundaki <img src=\"{icon}\" alt=\"Tor simgesi\"> Tor "
 "simgesine tıklayın"
 
-#: source_templates/index.html:99
+#: source_templates/index.html:96
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "<strong>Güvenlik Ayarları...</strong>'na tıklayın"
 
-#: source_templates/index.html:100
+#: source_templates/index.html:97
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Kaydırma düğmesini <strong>En Güvenli</strong> seçeneğine getirin ve daha "
 "sonra <strong>Tamam</strong> düğmesine tıklayın"
 
-#: source_templates/index.html:101
+#: source_templates/index.html:98
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "Sayfayı yenilemek için <a href=\"/\">buraya tıklayın</a>"
 
@@ -1052,7 +1059,7 @@ msgstr "Kod Adını Girin"
 msgid "Enter your codename"
 msgstr "Kod Adınızı Girin"
 
-#: source_templates/login.html:25 source_templates/lookup.html:47
+#: source_templates/login.html:25 source_templates/lookup.html:51
 msgid "CANCEL"
 msgstr "İPTAL"
 
@@ -1127,11 +1134,11 @@ msgstr "Azami yükleme boyutu: 500 MB"
 msgid "Write a message."
 msgstr "Bir ileti yazın."
 
-#: source_templates/lookup.html:53
+#: source_templates/lookup.html:58
 msgid "Read Replies"
 msgstr "Yanıtları Oku"
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:63
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1144,43 +1151,43 @@ msgstr ""
 "sağlayacaktır. Yukarıdan yeni bir ileti ve dosya göndererek yanıt "
 "verebilirsiniz."
 
-#: source_templates/lookup.html:71
+#: source_templates/lookup.html:76
 msgid "Delete this reply?"
 msgstr "Bu yanıtı sil?"
 
-#: source_templates/lookup.html:73
+#: source_templates/lookup.html:78
 msgid "DELETE"
 msgstr "SİL"
 
-#: source_templates/lookup.html:82
+#: source_templates/lookup.html:87
 msgid "DELETE ALL REPLIES"
 msgstr "TÜM YANITLARI SİL"
 
-#: source_templates/lookup.html:85
+#: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
 msgstr "Yanıtlarla işiniz bitti mi?"
 
-#: source_templates/lookup.html:86
+#: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
 msgstr "EVET, TÜM YANITLARI SİL"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:92
 msgid "NO, NOT YET"
 msgstr "HAYIR, DAHA DEĞİL"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:96
 msgid "There are no replies at this time."
 msgstr "Henüz bir yanıt yok."
 
-#: source_templates/lookup.html:100
+#: source_templates/lookup.html:105
 msgid "Remember, your codename is:"
 msgstr "Unutmayın, kod adınız:"
 
-#: source_templates/lookup.html:101
+#: source_templates/lookup.html:106
 msgid "Show"
 msgstr "Göster"
 
-#: source_templates/lookup.html:103
+#: source_templates/lookup.html:108
 msgid "Hide"
 msgstr "Gizle"
 
@@ -1191,10 +1198,6 @@ msgstr "Sayfa bulunamadı"
 #: source_templates/notfound.html:5
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Üzgünüz, isteğinizi yerine getiremiyoruz."
-
-#: source_templates/screensaver.html:2
-msgid "Interface hidden. Move your cursor here to show."
-msgstr "Arayüz gizlendi. Görüntülemek için imleci buraya sürükleyin."
 
 #: source_templates/session_timeout.html:6
 msgid ""
@@ -1376,6 +1379,12 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"
+
+#~ msgid "Is Administrator"
+#~ msgstr "Bir yöneticidir"
+
+#~ msgid "Interface hidden. Move your cursor here to show."
+#~ msgstr "Arayüz gizlendi. Görüntülemek için imleci buraya sürükleyin."
 
 #~ msgid "{num_unread} unread"
 #~ msgstr "{num_unread} okunmamış"
