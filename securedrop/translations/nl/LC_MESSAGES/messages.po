@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-09-04 19:23+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
-"Language-Team: Dutch <https://weblate.securedrop.club/projects/securedrop/"
+"PO-Revision-Date: 2018-12-11 17:30+0000\n"
+"Last-Translator: Nick Bouwhuis <github@nickbouwhuis.nl>\n"
+"Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -58,8 +58,7 @@ msgstr "Gebruikersnaam \"{user}\" is al in gebruik."
 
 #: journalist_app/admin.py:85
 msgid ""
-"An error occurred saving this user to the database. Please inform your "
-"administrator."
+"An error occurred saving this user to the database. Please inform your admin."
 msgstr ""
 "Er trad een fout op bij het opslaan van deze gebruiker naar de database. "
 "Neem contact op met uw beheerder."
@@ -86,7 +85,7 @@ msgid "No collections selected."
 msgstr "Geen collecties geselecteerd."
 
 #: journalist_app/decorators.py:15
-msgid "Only administrators can access this page."
+msgid "Only admins can access this page."
 msgstr "Alleen beheerders hebben toegang tot deze pagina."
 
 #: journalist_app/forms.py:19
@@ -118,7 +117,7 @@ msgstr "U kunt alleen PNG-afbeeldingen uploaden."
 
 #: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
-msgid "An unexpected error occurred! Please inform your administrator."
+msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Er trad een onverwachte fout op! Neem contact op met uw beheerder."
 
 #: journalist_app/main.py:129
@@ -219,7 +218,7 @@ msgid "Close"
 msgstr "Sluiten"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:72
+#: journalist_templates/col.html:15 source_templates/lookup.html:77
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -247,7 +246,7 @@ msgid "Change Secret"
 msgstr "Verander geheim"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
-#: journalist_templates/admin_add_user.html:33
+#: journalist_templates/admin_add_user.html:40
 #: journalist_templates/admin_edit_hotp_secret.html:8
 msgid "HOTP Secret"
 msgstr "HOTP Geheim"
@@ -339,7 +338,7 @@ msgid "Admin Interface"
 msgstr "Beheerdersinterface"
 
 #: journalist_templates/admin.html:6
-#: journalist_templates/admin_add_user.html:39
+#: journalist_templates/admin_add_user.html:46
 msgid "ADD USER"
 msgstr "GEBRUIKER TOEVOEGEN"
 
@@ -392,16 +391,24 @@ msgstr "CONFIGURATIE INSTANTIE"
 msgid "Back to admin interface"
 msgstr "Terug naar beheerdersinterface"
 
-#: journalist_templates/admin_add_user.html:21
+#: journalist_templates/admin_add_user.html:23
+msgid "Username can contain spaces"
+msgstr "Gebruikersnaam kan spaties bevatten"
+
+#: journalist_templates/admin_add_user.html:24
+msgid "Username is case-sensitive"
+msgstr "Gebruikersnaam is hoofdlettergevoelig"
+
+#: journalist_templates/admin_add_user.html:28
 msgid "The user's password will be:"
 msgstr "Het wachtwoord van de gebruiker zal zijn:"
 
-#: journalist_templates/admin_add_user.html:24
+#: journalist_templates/admin_add_user.html:31
 #: journalist_templates/edit_account.html:17
-msgid "Is Administrator"
-msgstr "Is Beheerder"
+msgid "Is Admin"
+msgstr "Beheerder"
 
-#: journalist_templates/admin_add_user.html:32
+#: journalist_templates/admin_add_user.html:39
 msgid "Is using a YubiKey [HOTP]"
 msgstr "Gebruikt een YubiKey [HOTP]"
 
@@ -855,15 +862,15 @@ msgstr "Bedankt! We hebben uw document ontvangen."
 msgid "Thanks! We received your message and document."
 msgstr "Bedankt! We hebben uw bericht en document ontvangen."
 
-#: source_app/main.py:222
+#: source_app/main.py:223
 msgid "Reply deleted"
 msgstr "Reactie verwijderd"
 
-#: source_app/main.py:240
+#: source_app/main.py:241
 msgid "All replies have been deleted"
 msgstr "Alle reacties zijn verwijderd"
 
-#: source_app/main.py:254
+#: source_app/main.py:255
 msgid "Sorry, that is not a recognized codename."
 msgstr "Helaas is dit een onbekende codenaam."
 
@@ -871,8 +878,8 @@ msgstr "Helaas is dit een onbekende codenaam."
 msgid "Protecting Journalists and Sources"
 msgstr "Journalisten en bronnen beschermen"
 
-#: source_templates/base.html:25 source_templates/base.html:47
-#: source_templates/index.html:33 source_templates/index.html:88
+#: source_templates/base.html:25 source_templates/base.html:45
+#: source_templates/index.html:33 source_templates/index.html:85
 msgid "Powered by"
 msgstr "Mogelijk gemaakt door"
 
@@ -880,7 +887,7 @@ msgstr "Mogelijk gemaakt door"
 msgid "LOG OUT"
 msgstr "UITLOGGEN"
 
-#: source_templates/base.html:47 source_templates/index.html:88
+#: source_templates/base.html:45 source_templates/index.html:85
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -1020,7 +1027,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "CHECK OF U ANTWOORD HEEFT"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:93
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -1028,25 +1035,25 @@ msgstr ""
 "Het lijkt erop dat u de Tor Browser gebruikt. U kunt de "
 "beveiligingsschuifbalk op Veiligste zetten in 4 stappen."
 
-#: source_templates/index.html:98
+#: source_templates/index.html:95
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Klik op het <img src=\"{icon}\" alt=\"Tor icon\"> Tor-icoon in de werkbalk "
 "hierboven"
 
-#: source_templates/index.html:99
+#: source_templates/index.html:96
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Klik op <strong>Veiligheidsinstellingen...</strong>"
 
-#: source_templates/index.html:100
+#: source_templates/index.html:97
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Beweeg de schuifbalk naar <strong>Veiligste</strong> en klik vervolgens op "
 "<strong>OK</strong>"
 
-#: source_templates/index.html:101
+#: source_templates/index.html:98
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">Klik hier</a> om de pagina te verversen"
 
@@ -1058,7 +1065,7 @@ msgstr "Codenaam invoeren"
 msgid "Enter your codename"
 msgstr "Voer uw codenaam in"
 
-#: source_templates/login.html:25 source_templates/lookup.html:47
+#: source_templates/login.html:25 source_templates/lookup.html:51
 msgid "CANCEL"
 msgstr "ANNULEREN"
 
@@ -1133,11 +1140,11 @@ msgstr "Maximale bestandsgrootte: 500 MB"
 msgid "Write a message."
 msgstr "Schrijf een bericht."
 
-#: source_templates/lookup.html:53
+#: source_templates/lookup.html:58
 msgid "Read Replies"
 msgstr "Reacties lezen"
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:63
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1150,43 +1157,43 @@ msgstr ""
 "dat u onze reactie heeft gezien. U kunt reageren door hierboven nieuwe "
 "bestanden en berichten te versturen."
 
-#: source_templates/lookup.html:71
+#: source_templates/lookup.html:76
 msgid "Delete this reply?"
 msgstr "Deze reactie verwijderen?"
 
-#: source_templates/lookup.html:73
+#: source_templates/lookup.html:78
 msgid "DELETE"
 msgstr "VERWIJDER"
 
-#: source_templates/lookup.html:82
+#: source_templates/lookup.html:87
 msgid "DELETE ALL REPLIES"
 msgstr "VERWIJDER ALLE REACTIES"
 
-#: source_templates/lookup.html:85
+#: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
 msgstr "Heeft u de reacties gelezen?"
 
-#: source_templates/lookup.html:86
+#: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
 msgstr "JA, VERWIJDER ALLE REACTIES"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:92
 msgid "NO, NOT YET"
 msgstr "NEE, NOG NIET"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:96
 msgid "There are no replies at this time."
 msgstr "Op dit moment zijn er geen reacties."
 
-#: source_templates/lookup.html:100
+#: source_templates/lookup.html:105
 msgid "Remember, your codename is:"
 msgstr "Vergeet niet, uw codenaam is:"
 
-#: source_templates/lookup.html:101
+#: source_templates/lookup.html:106
 msgid "Show"
 msgstr "Tonen"
 
-#: source_templates/lookup.html:103
+#: source_templates/lookup.html:108
 msgid "Hide"
 msgstr "Verbergen"
 
@@ -1197,10 +1204,6 @@ msgstr "Pagina niet gevonden"
 #: source_templates/notfound.html:5
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Sorry, we kunnen niet vinden wat u zoekt."
-
-#: source_templates/screensaver.html:2
-msgid "Interface hidden. Move your cursor here to show."
-msgstr "Interface verborgen. Beweeg uw muis hier om te tonen."
 
 #: source_templates/session_timeout.html:6
 msgid ""
@@ -1381,6 +1384,12 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
+
+#~ msgid "Is Administrator"
+#~ msgstr "Is Beheerder"
+
+#~ msgid "Interface hidden. Move your cursor here to show."
+#~ msgstr "Interface verborgen. Beweeg uw muis hier om te tonen."
 
 #~ msgid "{num_unread} unread"
 #~ msgstr "{num_unread} ongelezen"

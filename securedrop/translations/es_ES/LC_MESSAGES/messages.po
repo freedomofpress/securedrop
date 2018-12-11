@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-09-04 19:23+0000\n"
-"Last-Translator: Pablo Di Noto <pdinoto@gmail.com>\n"
-"Language-Team: Spanish <https://weblate.securedrop.club/projects/securedrop/"
+"PO-Revision-Date: 2018-12-10 09:11+0000\n"
+"Last-Translator: erinm <erinm@riseup.net>\n"
+"Language-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/es/>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
@@ -58,8 +58,7 @@ msgstr "El nombre de usuario \"{user}\" ya se encuentra en uso."
 
 #: journalist_app/admin.py:85
 msgid ""
-"An error occurred saving this user to the database. Please inform your "
-"administrator."
+"An error occurred saving this user to the database. Please inform your admin."
 msgstr ""
 "Ocurrió un error al guardar este usuario en la base de datos. Por favor "
 "informe a su administrador."
@@ -86,8 +85,8 @@ msgid "No collections selected."
 msgstr "No hay colecciones seleccionadas."
 
 #: journalist_app/decorators.py:15
-msgid "Only administrators can access this page."
-msgstr "Solo administradores pueden entrar a esta página."
+msgid "Only admins can access this page."
+msgstr "Solo administradores pueden acceder a esta página."
 
 #: journalist_app/forms.py:19
 msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
@@ -120,7 +119,7 @@ msgstr "Solo puede subir archivos de imágenes PNG."
 
 #: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
-msgid "An unexpected error occurred! Please inform your administrator."
+msgid "An unexpected error occurred! Please inform your admin."
 msgstr "¡Ocurrió un error inesperado! Por favor informe a su administrador."
 
 #: journalist_app/main.py:129
@@ -223,7 +222,7 @@ msgid "Close"
 msgstr "Cerrar"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:72
+#: journalist_templates/col.html:15 source_templates/lookup.html:77
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -251,7 +250,7 @@ msgid "Change Secret"
 msgstr "Cambiar Secreto"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
-#: journalist_templates/admin_add_user.html:33
+#: journalist_templates/admin_add_user.html:40
 #: journalist_templates/admin_edit_hotp_secret.html:8
 msgid "HOTP Secret"
 msgstr "Secreto HOTP"
@@ -346,7 +345,7 @@ msgid "Admin Interface"
 msgstr "Interfaz de Administración"
 
 #: journalist_templates/admin.html:6
-#: journalist_templates/admin_add_user.html:39
+#: journalist_templates/admin_add_user.html:46
 msgid "ADD USER"
 msgstr "AGREGAR USUARIO"
 
@@ -399,16 +398,24 @@ msgstr "CONFIGURACIÓN DE INSTANCIA"
 msgid "Back to admin interface"
 msgstr "Volver a la interfaz de administración"
 
-#: journalist_templates/admin_add_user.html:21
+#: journalist_templates/admin_add_user.html:23
+msgid "Username can contain spaces"
+msgstr "El nombre de usuario puede contener espacios"
+
+#: journalist_templates/admin_add_user.html:24
+msgid "Username is case-sensitive"
+msgstr "El nombre de usuario distingue mayúsculas de minúsculas"
+
+#: journalist_templates/admin_add_user.html:28
 msgid "The user's password will be:"
 msgstr "La contraseña del usuario será:"
 
-#: journalist_templates/admin_add_user.html:24
+#: journalist_templates/admin_add_user.html:31
 #: journalist_templates/edit_account.html:17
-msgid "Is Administrator"
-msgstr "Es Administrador"
+msgid "Is Admin"
+msgstr "Es Admin"
 
-#: journalist_templates/admin_add_user.html:32
+#: journalist_templates/admin_add_user.html:39
 msgid "Is using a YubiKey [HOTP]"
 msgstr "Está utilizando un dispositivo YubiKey [HOTP]"
 
@@ -869,15 +876,15 @@ msgstr "¡Gracias! Recibimos su documento."
 msgid "Thanks! We received your message and document."
 msgstr "¡Gracias! Recibimos su mensaje y documento."
 
-#: source_app/main.py:222
+#: source_app/main.py:223
 msgid "Reply deleted"
 msgstr "Respuesta eliminada"
 
-#: source_app/main.py:240
+#: source_app/main.py:241
 msgid "All replies have been deleted"
 msgstr "Todas las repuestas han sido eliminadas"
 
-#: source_app/main.py:254
+#: source_app/main.py:255
 msgid "Sorry, that is not a recognized codename."
 msgstr "Lo sentimos, ese nombre clave no es reconocido."
 
@@ -885,8 +892,8 @@ msgstr "Lo sentimos, ese nombre clave no es reconocido."
 msgid "Protecting Journalists and Sources"
 msgstr "Protegiendo Periodistas y Fuentes"
 
-#: source_templates/base.html:25 source_templates/base.html:47
-#: source_templates/index.html:33 source_templates/index.html:88
+#: source_templates/base.html:25 source_templates/base.html:45
+#: source_templates/index.html:33 source_templates/index.html:85
 msgid "Powered by"
 msgstr "Con tecnología de"
 
@@ -894,7 +901,7 @@ msgstr "Con tecnología de"
 msgid "LOG OUT"
 msgstr "CERRAR SESIÓN"
 
-#: source_templates/base.html:47 source_templates/index.html:88
+#: source_templates/base.html:45 source_templates/index.html:85
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -1033,7 +1040,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "VERIFICAR SI HAY RESPUESTAS"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:93
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -1041,25 +1048,25 @@ msgstr ""
 "Parece que usted esta usando el navegador de Tor (Tor Browser). Usted puede "
 "mover el Control Deslizante de Seguridad a lo Mas Seguro en 4 pasos."
 
-#: source_templates/index.html:98
+#: source_templates/index.html:95
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Haga clic en el <img src=\"{icon}\" alt=\"Tor icon\"> icono de Tor en la "
 "barra de herramientas arriba"
 
-#: source_templates/index.html:99
+#: source_templates/index.html:96
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Haga clic <strong>Configuración de Seguridad...</strong>"
 
-#: source_templates/index.html:100
+#: source_templates/index.html:97
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Mueva el control deslizante hacia <strong>Mas Seguro</strong>, luego haga "
 "clic en <strong>OK</strong>"
 
-#: source_templates/index.html:101
+#: source_templates/index.html:98
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">Haga clic aquí</a> para actualizar la página"
 
@@ -1071,7 +1078,7 @@ msgstr "Introduzca Nombre Clave"
 msgid "Enter your codename"
 msgstr "Ingrese su Nombre Clave"
 
-#: source_templates/login.html:25 source_templates/lookup.html:47
+#: source_templates/login.html:25 source_templates/lookup.html:51
 msgid "CANCEL"
 msgstr "CANCELAR"
 
@@ -1147,11 +1154,11 @@ msgstr "Tamaño máximo de carga: 500 MB"
 msgid "Write a message."
 msgstr "Escriba un mensaje."
 
-#: source_templates/lookup.html:53
+#: source_templates/lookup.html:58
 msgid "Read Replies"
 msgstr "Leer Respuestas"
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:63
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1164,43 +1171,43 @@ msgstr ""
 "que usted es ha recibido nuestra respuesta. Usted puede responder enviando "
 "nuevos archivos y mensajes arriba."
 
-#: source_templates/lookup.html:71
+#: source_templates/lookup.html:76
 msgid "Delete this reply?"
 msgstr "¿Desea eliminar esta respuesta?"
 
-#: source_templates/lookup.html:73
+#: source_templates/lookup.html:78
 msgid "DELETE"
 msgstr "ELIMINAR"
 
-#: source_templates/lookup.html:82
+#: source_templates/lookup.html:87
 msgid "DELETE ALL REPLIES"
 msgstr "ELIMINAR TODAS LAS RESPUESTAS"
 
-#: source_templates/lookup.html:85
+#: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
 msgstr "¿Ha terminado con las respuestas?"
 
-#: source_templates/lookup.html:86
+#: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
 msgstr "SI, ELIMINE TODAS LAS RESPUESTAS"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:92
 msgid "NO, NOT YET"
 msgstr "NO, TODAVÍA NO"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:96
 msgid "There are no replies at this time."
 msgstr "No hay respuestas en este momento."
 
-#: source_templates/lookup.html:100
+#: source_templates/lookup.html:105
 msgid "Remember, your codename is:"
 msgstr "Recuerde que su nombre clave es:"
 
-#: source_templates/lookup.html:101
+#: source_templates/lookup.html:106
 msgid "Show"
 msgstr "Mostrar"
 
-#: source_templates/lookup.html:103
+#: source_templates/lookup.html:108
 msgid "Hide"
 msgstr "Esconder"
 
@@ -1211,10 +1218,6 @@ msgstr "Página no encontrada"
 #: source_templates/notfound.html:5
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Lo sentimos, no pudimos localizar lo que pidió."
-
-#: source_templates/screensaver.html:2
-msgid "Interface hidden. Move your cursor here to show."
-msgstr "Interfaz oculta. Mueve el cursor aquí para mostrarla."
 
 #: source_templates/session_timeout.html:6
 msgid ""
@@ -1392,6 +1395,12 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Regresar a la pagina de envío"
+
+#~ msgid "Is Administrator"
+#~ msgstr "Es Administrador"
+
+#~ msgid "Interface hidden. Move your cursor here to show."
+#~ msgstr "Interfaz oculta. Mueve el cursor aquí para mostrarla."
 
 #~ msgid "{num_unread} unread"
 #~ msgstr "{num_unread} sin leer"

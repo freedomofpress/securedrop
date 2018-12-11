@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-09-04 19:23+0000\n"
-"Last-Translator: Drashti <drashtipandya37@gmail.com>\n"
-"Language-Team: Hindi <https://weblate.securedrop.club/projects/securedrop/"
+"PO-Revision-Date: 2018-12-11 05:55+0000\n"
+"Last-Translator: Chandan Kumar <chkumar246@gmail.com>\n"
+"Language-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/hi/>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
@@ -56,10 +56,10 @@ msgstr "उपयोगकर्ता नाम \"{user}\" पहले से 
 
 #: journalist_app/admin.py:85
 msgid ""
-"An error occurred saving this user to the database. Please inform your "
-"administrator."
+"An error occurred saving this user to the database. Please inform your admin."
 msgstr ""
-"इस उपयोगकर्ता को डेटाबेस में सहेजने में एक त्रुटि हुई है। कृपया अपने व्यवस्थापक को सूचित करें।"
+"इस उपयोगकर्ता को डेटाबेस में सहेजने समय त्रुटि हुई। कृपया अपने व्यवस्थापक को "
+"सूचित करें।"
 
 #: journalist_app/admin.py:109
 msgid "Token in two-factor authentication accepted for user {user}."
@@ -82,8 +82,8 @@ msgid "No collections selected."
 msgstr "कोई संग्रह चयनित नहीं।"
 
 #: journalist_app/decorators.py:15
-msgid "Only administrators can access this page."
-msgstr "केवल व्यवस्थापक ही पृष्ठ तक पहुंच सकते हैं।"
+msgid "Only admins can access this page."
+msgstr "केवल व्यवस्थापक ही इस पृष्ठ को एक्सेस कर सकते हैं।"
 
 #: journalist_app/forms.py:19
 msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
@@ -112,8 +112,8 @@ msgstr "आप केवल PNG छवि फ़ाइलों को अपल
 
 #: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
-msgid "An unexpected error occurred! Please inform your administrator."
-msgstr "एक अप्रत्याशित त्रुटि हुई है ! कृपया अपने व्यवस्थापक को सूचित करें।"
+msgid "An unexpected error occurred! Please inform your admin."
+msgstr "अप्रत्याशित त्रुटि हुई ! कृपया अपने व्यवस्थापक को सूचित करें।"
 
 #: journalist_app/main.py:129
 msgid "Thanks. Your reply has been stored."
@@ -206,7 +206,7 @@ msgid "Close"
 msgstr "बंद करे"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:72
+#: journalist_templates/col.html:15 source_templates/lookup.html:77
 msgid "Cancel"
 msgstr "रद्द करें"
 
@@ -234,7 +234,7 @@ msgid "Change Secret"
 msgstr "गुप्त बदलें"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
-#: journalist_templates/admin_add_user.html:33
+#: journalist_templates/admin_add_user.html:40
 #: journalist_templates/admin_edit_hotp_secret.html:8
 msgid "HOTP Secret"
 msgstr "गुप्त HOTP"
@@ -321,7 +321,7 @@ msgid "Admin Interface"
 msgstr "व्यवस्थापक अंतराफलक"
 
 #: journalist_templates/admin.html:6
-#: journalist_templates/admin_add_user.html:39
+#: journalist_templates/admin_add_user.html:46
 msgid "ADD USER"
 msgstr "उपयोगकर्ता जोड़ें"
 
@@ -374,16 +374,24 @@ msgstr "इंस्टैंस कॉन्फिग"
 msgid "Back to admin interface"
 msgstr "व्यवस्थापक अंतराफलक पर वापस जाएं"
 
-#: journalist_templates/admin_add_user.html:21
+#: journalist_templates/admin_add_user.html:23
+msgid "Username can contain spaces"
+msgstr "उपयोगकर्ता के नाम में रिक्त स्थान हो सकते हैं"
+
+#: journalist_templates/admin_add_user.html:24
+msgid "Username is case-sensitive"
+msgstr "उपयोगकर्ता के नाम केस-संवेदी है"
+
+#: journalist_templates/admin_add_user.html:28
 msgid "The user's password will be:"
 msgstr "उपयोगकर्ता का पासवर्ड होगा:"
 
-#: journalist_templates/admin_add_user.html:24
+#: journalist_templates/admin_add_user.html:31
 #: journalist_templates/edit_account.html:17
-msgid "Is Administrator"
-msgstr "प्रशासक है"
+msgid "Is Admin"
+msgstr "व्यवस्थापक हैं"
 
-#: journalist_templates/admin_add_user.html:32
+#: journalist_templates/admin_add_user.html:39
 msgid "Is using a YubiKey [HOTP]"
 msgstr "एक YubiKey [HOTP] का उपयोग कर रहा है"
 
@@ -827,15 +835,15 @@ msgstr "धन्यवाद! हमें आपका दस्तावे�
 msgid "Thanks! We received your message and document."
 msgstr "धन्यवाद! हमें आपका संदेशा और दस्तावेज़ मिला।"
 
-#: source_app/main.py:222
+#: source_app/main.py:223
 msgid "Reply deleted"
 msgstr "जवाब हटा दिया गया"
 
-#: source_app/main.py:240
+#: source_app/main.py:241
 msgid "All replies have been deleted"
 msgstr "सभी उत्तर हटा दिए गए हैं"
 
-#: source_app/main.py:254
+#: source_app/main.py:255
 msgid "Sorry, that is not a recognized codename."
 msgstr "क्षमा करें, वह एक मान्यता प्राप्त कोडनाम नहीं है |"
 
@@ -843,8 +851,8 @@ msgstr "क्षमा करें, वह एक मान्यता प्
 msgid "Protecting Journalists and Sources"
 msgstr "पत्रकारों और स्रोतों की रक्षा करते हुए"
 
-#: source_templates/base.html:25 source_templates/base.html:47
-#: source_templates/index.html:33 source_templates/index.html:88
+#: source_templates/base.html:25 source_templates/base.html:45
+#: source_templates/index.html:33 source_templates/index.html:85
 msgid "Powered by"
 msgstr "द्वारा संचालित"
 
@@ -852,7 +860,7 @@ msgstr "द्वारा संचालित"
 msgid "LOG OUT"
 msgstr "लोग आउट"
 
-#: source_templates/base.html:47 source_templates/index.html:88
+#: source_templates/base.html:45 source_templates/index.html:85
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -982,7 +990,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "जवाब के लिए जाँच करें"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:93
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -990,22 +998,22 @@ msgstr ""
 "आप Tor ब्राउज़र का उपयोग करते हुए दिखाई देते हैं| आप सुरक्षा स्लाइडर को 4 चरणों में सबसे "
 "सुरक्षित बना सकते हैं!"
 
-#: source_templates/index.html:98
+#: source_templates/index.html:95
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr "<img src=\"{icon}\" alt=\"Tor icon\"> उपरोक्त टूलबार में Tor आइकन पर दबाएँ"
 
-#: source_templates/index.html:99
+#: source_templates/index.html:96
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "<strong>सुरक्षा सेटिंग..</strong>पर दबाएँ"
 
-#: source_templates/index.html:100
+#: source_templates/index.html:97
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "स्लाइडर को <strong>सबसे सुरक्षित</strong> चालऐ, फिर <strong>Ok</strong> पर दबाएँ"
 
-#: source_templates/index.html:101
+#: source_templates/index.html:98
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "पृष्ठ को ताज़ा करने के लिए <a href=\"/\">यहां दबाएँ</a>"
 
@@ -1017,7 +1025,7 @@ msgstr "संकेत नाम दर्ज करें"
 msgid "Enter your codename"
 msgstr "आपका संकेत नाम दर्ज करें"
 
-#: source_templates/login.html:25 source_templates/lookup.html:47
+#: source_templates/login.html:25 source_templates/lookup.html:51
 msgid "CANCEL"
 msgstr "रद्द करें"
 
@@ -1091,11 +1099,11 @@ msgstr "अधिकतम अपलोड माप: 500 MB"
 msgid "Write a message."
 msgstr "सन्देश लिखिए।"
 
-#: source_templates/lookup.html:53
+#: source_templates/lookup.html:58
 msgid "Read Replies"
 msgstr "उत्तर पढ़ें"
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:63
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1106,43 +1114,43 @@ msgstr ""
 "जाये, कृपया पढ़े जा चुके उत्तरों तो मिटा दें| यह इस बात की भी पुष्टि कर देता है की आपको "
 "हमारा उत्तर मिल गया है| आप नई फाइलें और संदेश भी जमा कर सकते हैं|"
 
-#: source_templates/lookup.html:71
+#: source_templates/lookup.html:76
 msgid "Delete this reply?"
 msgstr "यह उत्तर हटाएं?"
 
-#: source_templates/lookup.html:73
+#: source_templates/lookup.html:78
 msgid "DELETE"
 msgstr "हटाएँ"
 
-#: source_templates/lookup.html:82
+#: source_templates/lookup.html:87
 msgid "DELETE ALL REPLIES"
 msgstr "सभी उत्तर हटाएं"
 
-#: source_templates/lookup.html:85
+#: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
 msgstr "क्या आपने सभी उत्तर पढ़ लिए?"
 
-#: source_templates/lookup.html:86
+#: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
 msgstr "हाँ, सभी उत्तर हटाएं"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:92
 msgid "NO, NOT YET"
 msgstr "नहीं, अभी तक नहीं"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:96
 msgid "There are no replies at this time."
 msgstr "इस समय कोई जवाब नहीं है|"
 
-#: source_templates/lookup.html:100
+#: source_templates/lookup.html:105
 msgid "Remember, your codename is:"
 msgstr "याद रखें, आपका संकेत नाम है:"
 
-#: source_templates/lookup.html:101
+#: source_templates/lookup.html:106
 msgid "Show"
 msgstr "दिखाएं"
 
-#: source_templates/lookup.html:103
+#: source_templates/lookup.html:108
 msgid "Hide"
 msgstr "छुपाएं"
 
@@ -1153,10 +1161,6 @@ msgstr "पृष्ठ नहीं मिला"
 #: source_templates/notfound.html:5
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "क्षमा करें, हम आपके द्वारा अनुरोध किए गए स्थान का पता नहीं लगा सके।"
-
-#: source_templates/screensaver.html:2
-msgid "Interface hidden. Move your cursor here to show."
-msgstr "इंटरफ़ेस छिपा हुआ है। दिखाने के लिए यहां अपने कर्सर को ले जाएं।"
 
 #: source_templates/session_timeout.html:6
 msgid ""
@@ -1331,6 +1335,12 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
+
+#~ msgid "Is Administrator"
+#~ msgstr "प्रशासक है"
+
+#~ msgid "Interface hidden. Move your cursor here to show."
+#~ msgstr "इंटरफ़ेस छिपा हुआ है। दिखाने के लिए यहां अपने कर्सर को ले जाएं।"
 
 #~ msgid "{num_unread} unread"
 #~ msgstr "{num_unread} अपठित"
