@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-09-04 00:08+0000\n"
+"PO-Revision-Date: 2018-12-11 05:02+0000\n"
 "Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
-"Language-Team: Chinese (Traditional) <https://weblate.securedrop.club/"
+"Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/"
 "projects/securedrop/securedrop/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
@@ -56,8 +56,7 @@ msgstr "用户名「{user}」已存在。"
 
 #: journalist_app/admin.py:85
 msgid ""
-"An error occurred saving this user to the database. Please inform your "
-"administrator."
+"An error occurred saving this user to the database. Please inform your admin."
 msgstr "保存此用户到資料庫時出錯。請通知管理員。"
 
 #: journalist_app/admin.py:109
@@ -81,7 +80,7 @@ msgid "No collections selected."
 msgstr "並未選擇任何的集件。"
 
 #: journalist_app/decorators.py:15
-msgid "Only administrators can access this page."
+msgid "Only admins can access this page."
 msgstr "本頁面僅限管理員訪問。"
 
 #: journalist_app/forms.py:19
@@ -111,7 +110,7 @@ msgstr "僅可上傳 PNG 格式的圖片檔。"
 
 #: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
-msgid "An unexpected error occurred! Please inform your administrator."
+msgid "An unexpected error occurred! Please inform your admin."
 msgstr "發生預期之外的錯誤！請通知系統管理員。"
 
 #: journalist_app/main.py:129
@@ -197,7 +196,7 @@ msgid "Close"
 msgstr "關閉"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:72
+#: journalist_templates/col.html:15 source_templates/lookup.html:77
 msgid "Cancel"
 msgstr "取消"
 
@@ -222,7 +221,7 @@ msgid "Change Secret"
 msgstr "更改動能態密碼"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
-#: journalist_templates/admin_add_user.html:33
+#: journalist_templates/admin_add_user.html:40
 #: journalist_templates/admin_edit_hotp_secret.html:8
 msgid "HOTP Secret"
 msgstr "HOTP 動態密碼"
@@ -307,7 +306,7 @@ msgid "Admin Interface"
 msgstr "管理員介面"
 
 #: journalist_templates/admin.html:6
-#: journalist_templates/admin_add_user.html:39
+#: journalist_templates/admin_add_user.html:46
 msgid "ADD USER"
 msgstr "增加用户"
 
@@ -360,16 +359,24 @@ msgstr "架設主機設定"
 msgid "Back to admin interface"
 msgstr "返回管理員介面"
 
-#: journalist_templates/admin_add_user.html:21
+#: journalist_templates/admin_add_user.html:23
+msgid "Username can contain spaces"
+msgstr "用戶名可包含空白字元"
+
+#: journalist_templates/admin_add_user.html:24
+msgid "Username is case-sensitive"
+msgstr "用戶名須區分小大寫"
+
+#: journalist_templates/admin_add_user.html:28
 msgid "The user's password will be:"
 msgstr "用户的密碼將為："
 
-#: journalist_templates/admin_add_user.html:24
+#: journalist_templates/admin_add_user.html:31
 #: journalist_templates/edit_account.html:17
-msgid "Is Administrator"
-msgstr "是管理員"
+msgid "Is Admin"
+msgstr "管理員"
 
-#: journalist_templates/admin_add_user.html:32
+#: journalist_templates/admin_add_user.html:39
 msgid "Is using a YubiKey [HOTP]"
 msgstr "正在使用 YubiKey [HOTP]"
 
@@ -790,15 +797,15 @@ msgstr "謝謝！我們已收到你的文件。"
 msgid "Thanks! We received your message and document."
 msgstr "謝謝！我們已收到你的訊息和文件。"
 
-#: source_app/main.py:222
+#: source_app/main.py:223
 msgid "Reply deleted"
 msgstr "回覆已刪除"
 
-#: source_app/main.py:240
+#: source_app/main.py:241
 msgid "All replies have been deleted"
 msgstr "所有的回覆都已被删除"
 
-#: source_app/main.py:254
+#: source_app/main.py:255
 msgid "Sorry, that is not a recognized codename."
 msgstr "對不起，無法識別這個代號。"
 
@@ -806,8 +813,8 @@ msgstr "對不起，無法識別這個代號。"
 msgid "Protecting Journalists and Sources"
 msgstr "保護新聞記者與消息來源線人"
 
-#: source_templates/base.html:25 source_templates/base.html:47
-#: source_templates/index.html:33 source_templates/index.html:88
+#: source_templates/base.html:25 source_templates/base.html:45
+#: source_templates/index.html:33 source_templates/index.html:85
 msgid "Powered by"
 msgstr "使用版本"
 
@@ -815,7 +822,7 @@ msgstr "使用版本"
 msgid "LOG OUT"
 msgstr "登出"
 
-#: source_templates/base.html:47 source_templates/index.html:88
+#: source_templates/base.html:45 source_templates/index.html:85
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -937,28 +944,28 @@ msgstr "如果您已提交過文件，您可在此登入來查閱回覆。"
 msgid "CHECK FOR A RESPONSE"
 msgstr "檢查回應"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:93
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
 msgstr "您似乎正在使用 Tor 瀏覽器。用 4 個步驟可將安全滑桿移動到最高安全層級。"
 
-#: source_templates/index.html:98
+#: source_templates/index.html:95
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr "在上方的工具條中，點擊<img src=\"{icon}\" alt=\"Tor 圖標\">Tor 圖標"
 
-#: source_templates/index.html:99
+#: source_templates/index.html:96
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "點擊 <strong>安全性設置...</strong>"
 
-#: source_templates/index.html:100
+#: source_templates/index.html:97
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "將安全滑桿移動到<strong>最高安全層級</strong>，然後點擊 <strong>確認</strong>"
 
-#: source_templates/index.html:101
+#: source_templates/index.html:98
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">點擊此處</a> 以刷新頁面"
 
@@ -970,7 +977,7 @@ msgstr "輸入代號"
 msgid "Enter your codename"
 msgstr "請輸入您的代號"
 
-#: source_templates/login.html:25 source_templates/lookup.html:47
+#: source_templates/login.html:25 source_templates/lookup.html:51
 msgid "CANCEL"
 msgstr "取消"
 
@@ -1039,11 +1046,11 @@ msgstr "檔案上傳限制：500 MB"
 msgid "Write a message."
 msgstr "撰寫一則訊息。"
 
-#: source_templates/lookup.html:53
+#: source_templates/lookup.html:58
 msgid "Read Replies"
 msgstr "閱讀回覆"
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:63
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1054,43 +1061,43 @@ msgstr ""
 "之全部刪除。這也讓我們知道您有看到我們的回覆。您可以在上面發送一份新檔案與訊"
 "息作回應。"
 
-#: source_templates/lookup.html:71
+#: source_templates/lookup.html:76
 msgid "Delete this reply?"
 msgstr "刪除這條回覆嗎？"
 
-#: source_templates/lookup.html:73
+#: source_templates/lookup.html:78
 msgid "DELETE"
 msgstr "删除"
 
-#: source_templates/lookup.html:82
+#: source_templates/lookup.html:87
 msgid "DELETE ALL REPLIES"
 msgstr "删除所有回覆"
 
-#: source_templates/lookup.html:85
+#: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
 msgstr "您已完成了這些回覆嗎？"
 
-#: source_templates/lookup.html:86
+#: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
 msgstr "是的，删除所有回覆"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:92
 msgid "NO, NOT YET"
 msgstr "不，尚未"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:96
 msgid "There are no replies at this time."
 msgstr "此時尚無回覆。"
 
-#: source_templates/lookup.html:100
+#: source_templates/lookup.html:105
 msgid "Remember, your codename is:"
 msgstr "記住，您的代號是："
 
-#: source_templates/lookup.html:101
+#: source_templates/lookup.html:106
 msgid "Show"
 msgstr "顯示"
 
-#: source_templates/lookup.html:103
+#: source_templates/lookup.html:108
 msgid "Hide"
 msgstr "隱藏"
 
@@ -1101,10 +1108,6 @@ msgstr "找不到網頁"
 #: source_templates/notfound.html:5
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "對不起，未能處置您的請求。"
-
-#: source_templates/screensaver.html:2
-msgid "Interface hidden. Move your cursor here to show."
-msgstr "界面已隱藏，在此移動滑鼠可使其顯現。"
 
 #: source_templates/session_timeout.html:6
 msgid ""
@@ -1265,6 +1268,12 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#~ msgid "Is Administrator"
+#~ msgstr "是管理員"
+
+#~ msgid "Interface hidden. Move your cursor here to show."
+#~ msgstr "界面已隱藏，在此移動滑鼠可使其顯現。"
 
 #~ msgid "{num_unread} unread"
 #~ msgstr "{num_unread} 未讀"
