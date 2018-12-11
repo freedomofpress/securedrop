@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-08-28 06:55+0000\n"
+"PO-Revision-Date: 2018-12-09 10:45+0000\n"
 "Last-Translator: Jonas Franzén <jonas.franzen@schibsted.se>\n"
-"Language-Team: Swedish <https://weblate.securedrop.club/projects/securedrop/"
+"Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -57,8 +57,7 @@ msgstr "Användarnamnet \"{user}\" är redan använt."
 
 #: journalist_app/admin.py:85
 msgid ""
-"An error occurred saving this user to the database. Please inform your "
-"administrator."
+"An error occurred saving this user to the database. Please inform your admin."
 msgstr ""
 "Det uppstod ett fel när användaren skulle sparas till databasen. Vänligen "
 "kontakta din administratör."
@@ -84,7 +83,7 @@ msgid "No collections selected."
 msgstr "Inga samlingar är valda."
 
 #: journalist_app/decorators.py:15
-msgid "Only administrators can access this page."
+msgid "Only admins can access this page."
 msgstr "Endast administratörer har tillgång till denna sida."
 
 #: journalist_app/forms.py:19
@@ -115,7 +114,7 @@ msgstr "Du kan endast ladda upp PNG-bildfiler."
 
 #: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
-msgid "An unexpected error occurred! Please inform your administrator."
+msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Ett oväntat fel uppstod! Informera din administratör."
 
 #: journalist_app/main.py:129
@@ -215,7 +214,7 @@ msgid "Close"
 msgstr "Stäng"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:72
+#: journalist_templates/col.html:15 source_templates/lookup.html:77
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -243,7 +242,7 @@ msgid "Change Secret"
 msgstr "Ändra hemlighet"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
-#: journalist_templates/admin_add_user.html:33
+#: journalist_templates/admin_add_user.html:40
 #: journalist_templates/admin_edit_hotp_secret.html:8
 msgid "HOTP Secret"
 msgstr "HOTP hemlighet"
@@ -330,7 +329,7 @@ msgid "Admin Interface"
 msgstr "Administratörsgränssnitt"
 
 #: journalist_templates/admin.html:6
-#: journalist_templates/admin_add_user.html:39
+#: journalist_templates/admin_add_user.html:46
 msgid "ADD USER"
 msgstr "LÄGG TILL ANVÄNDARE"
 
@@ -383,16 +382,24 @@ msgstr "INSTANS-KONFIGURATION"
 msgid "Back to admin interface"
 msgstr "Tillbaka till administratörsgränssnittet"
 
-#: journalist_templates/admin_add_user.html:21
+#: journalist_templates/admin_add_user.html:23
+msgid "Username can contain spaces"
+msgstr "Användarnamn kan innehålla mellanslag"
+
+#: journalist_templates/admin_add_user.html:24
+msgid "Username is case-sensitive"
+msgstr "Användarnamnet är skiftlägeskänsligt"
+
+#: journalist_templates/admin_add_user.html:28
 msgid "The user's password will be:"
 msgstr "Användarens lösenord blir:"
 
-#: journalist_templates/admin_add_user.html:24
+#: journalist_templates/admin_add_user.html:31
 #: journalist_templates/edit_account.html:17
-msgid "Is Administrator"
-msgstr "Är Administratör"
+msgid "Is Admin"
+msgstr "Är admin"
 
-#: journalist_templates/admin_add_user.html:32
+#: journalist_templates/admin_add_user.html:39
 msgid "Is using a YubiKey [HOTP]"
 msgstr "Använder en YubiKey [HOTP]"
 
@@ -839,15 +846,15 @@ msgstr "Tack! Vi har tagit emot ditt dokument."
 msgid "Thanks! We received your message and document."
 msgstr "Tack! Vi har tagit emot ditt meddelande och dokument."
 
-#: source_app/main.py:222
+#: source_app/main.py:223
 msgid "Reply deleted"
 msgstr "Svaret har tagits bort"
 
-#: source_app/main.py:240
+#: source_app/main.py:241
 msgid "All replies have been deleted"
 msgstr "Alla svar har tagits bort"
 
-#: source_app/main.py:254
+#: source_app/main.py:255
 msgid "Sorry, that is not a recognized codename."
 msgstr "Tyvärr, detta kodnamn är okänt."
 
@@ -855,8 +862,8 @@ msgstr "Tyvärr, detta kodnamn är okänt."
 msgid "Protecting Journalists and Sources"
 msgstr "Skyddar journalister och källor"
 
-#: source_templates/base.html:25 source_templates/base.html:47
-#: source_templates/index.html:33 source_templates/index.html:88
+#: source_templates/base.html:25 source_templates/base.html:45
+#: source_templates/index.html:33 source_templates/index.html:85
 msgid "Powered by"
 msgstr "Körs på"
 
@@ -864,7 +871,7 @@ msgstr "Körs på"
 msgid "LOG OUT"
 msgstr "LOGGA UT"
 
-#: source_templates/base.html:47 source_templates/index.html:88
+#: source_templates/base.html:45 source_templates/index.html:85
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -1004,7 +1011,7 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr "KONTROLLERA OM DU FÅTT ETT SVAR"
 
-#: source_templates/index.html:96
+#: source_templates/index.html:93
 msgid ""
 "You appear to be using the Tor Browser. You can move the Security Slider to "
 "Safest in four steps."
@@ -1012,25 +1019,25 @@ msgstr ""
 "Det ser ut som att du använder Tor Browser. Du kan ändra dina \"Security\"-"
 "inställningar till \"Safest\" i fyra enkla steg."
 
-#: source_templates/index.html:98
+#: source_templates/index.html:95
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
 "Klicka på <img src=\"{icon}\" alt=\"Tor icon\"> Tor-ikonen i verktygsraden "
 "ovanför"
 
-#: source_templates/index.html:99
+#: source_templates/index.html:96
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Klicka på <strong>Security Settings...</strong>"
 
-#: source_templates/index.html:100
+#: source_templates/index.html:97
 msgid ""
 "Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>"
 msgstr ""
 "Flytta \"Security\"-inställningen till <strong> Safest</strong>, och tryck "
 "sedan på<strong> OK</strong>"
 
-#: source_templates/index.html:101
+#: source_templates/index.html:98
 msgid "<a href=\"/\">Click here</a> to refresh the page"
 msgstr "<a href=\"/\">Klicka här </a> för att uppdatera sidan"
 
@@ -1042,7 +1049,7 @@ msgstr "Ange kodnamn"
 msgid "Enter your codename"
 msgstr "Ange ditt kodnamn"
 
-#: source_templates/login.html:25 source_templates/lookup.html:47
+#: source_templates/login.html:25 source_templates/lookup.html:51
 msgid "CANCEL"
 msgstr "AVBRYT"
 
@@ -1115,11 +1122,11 @@ msgstr "Maximal storlek för uppladdningar: 500 MB"
 msgid "Write a message."
 msgstr "Skriv ett meddelande."
 
-#: source_templates/lookup.html:53
+#: source_templates/lookup.html:58
 msgid "Read Replies"
 msgstr "Läs svar"
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:63
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1131,43 +1138,43 @@ msgstr ""
 "är klar med dem. Därmed får vi också bekräftat att du har sett vårt svar. Du "
 "kan svara genom att skicka in nya filer eller meddelanden ovan."
 
-#: source_templates/lookup.html:71
+#: source_templates/lookup.html:76
 msgid "Delete this reply?"
 msgstr "Ta bort detta svar?"
 
-#: source_templates/lookup.html:73
+#: source_templates/lookup.html:78
 msgid "DELETE"
 msgstr "TA BORT"
 
-#: source_templates/lookup.html:82
+#: source_templates/lookup.html:87
 msgid "DELETE ALL REPLIES"
 msgstr "TA BORT ALLA SVAR"
 
-#: source_templates/lookup.html:85
+#: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
 msgstr "Är du klar med svaren?"
 
-#: source_templates/lookup.html:86
+#: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
 msgstr "JA, TA BORT ALLA SVAR"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:92
 msgid "NO, NOT YET"
 msgstr "NEJ, INTE ÄN"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:96
 msgid "There are no replies at this time."
 msgstr "Det finns inga svar för tillfället."
 
-#: source_templates/lookup.html:100
+#: source_templates/lookup.html:105
 msgid "Remember, your codename is:"
 msgstr "Kom ihåg, ditt kodnamn är:"
 
-#: source_templates/lookup.html:101
+#: source_templates/lookup.html:106
 msgid "Show"
 msgstr "Visa"
 
-#: source_templates/lookup.html:103
+#: source_templates/lookup.html:108
 msgid "Hide"
 msgstr "Göm"
 
@@ -1178,10 +1185,6 @@ msgstr "Sidan kunde inte hittas"
 #: source_templates/notfound.html:5
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Förlåt, vi kunde inte hitta det du begärde."
-
-#: source_templates/screensaver.html:2
-msgid "Interface hidden. Move your cursor here to show."
-msgstr "Gränssnittet är gömt. Flytta muspekaren hit för att visa det."
 
 #: source_templates/session_timeout.html:6
 msgid ""
@@ -1362,6 +1365,12 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Tillbaka till inlämningssidan"
+
+#~ msgid "Is Administrator"
+#~ msgstr "Är Administratör"
+
+#~ msgid "Interface hidden. Move your cursor here to show."
+#~ msgstr "Gränssnittet är gömt. Flytta muspekaren hit för att visa det."
 
 #~ msgid "{num_unread} unread"
 #~ msgstr "{num_unread} olästa"

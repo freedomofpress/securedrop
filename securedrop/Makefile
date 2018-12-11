@@ -37,7 +37,7 @@ test-config: ## Generate the test config
          ctx.update(dict((k, {"stdout":v}) for k,v in os.environ.iteritems())); \
          ctx = open("config.py", "w").write(env.get_template("config.py.example").render(ctx))'
 	@echo >> config.py
-	@echo "SUPPORTED_LOCALES = ['ar', 'de_DE', 'es_ES', 'en_US', 'fr_FR', 'it_IT', 'nb_NO', 'nl', 'pt_BR', 'tr', 'zh_Hant']"  >> config.py
+	@echo "SUPPORTED_LOCALES = ['ar', 'de_DE', 'es_ES', 'en_US', 'el', 'fr_FR', 'it_IT', 'nb_NO', 'nl', 'pt_BR', 'tr', 'zh_Hant']"  >> config.py
 
 .PHONY: update-user-guides
 update-user-guides: ## Runs the page layout tests to regenerate screenshots
