@@ -1,8 +1,34 @@
 # Changelog
 
-## 0.11.0~rc1
+## 0.12.0~rc1
 
 
+
+## 0.11.0
+
+### Web application
+
+* UX improvement: Add username constraints to admin user addition page text (#3746)
+* UX improvement: Removed screensaver from the source interface (#3722)
+* Update icons on source interface (#2508, #3809)
+* Replace 'administrator' with 'admin' in the journalist interface (#3940)
+* API: Posting replies returns uuid (#3915)
+* Bugfix: Save only the base filename in DB for replies using API (#3918)
+
+### Operations
+
+* Bugfix: resolve OSSEC GPG key import issue in Ansible (#3928)
+* Updated Ansible to 2.6.8 (#3945)
+* Update grsecurity kernels to 4.4.162 (#3913)
+* Security bugfix: Disable unecessary sshd config options (#3979)
+* Removes 3.14.x grsecurity kernels (#3913)
+
+### Developer Workflow
+
+* Updated instruction to merge translations to & from the new Weblate (#3929)
+* Updated requests module to 2.20.0 (#3908)
+* Updated copyright statement to acknowledge all contributors (#3930)
+* Added initial client documentation (#3922)
 
 ## 0.10.0
 
