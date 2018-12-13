@@ -9,3 +9,5 @@ pytest
 requests
 tox
 pexpect
+# Needed for requests. Minimum version due to CVE-2018-20060
+urllib3>=1.23

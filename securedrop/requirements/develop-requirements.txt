@@ -110,7 +110,7 @@ testinfra==1.16.0
 tornado==4.5.1            # via livereload, sphinx-autobuild
 tree-format==0.1.2        # via molecule
 typing==3.6.6             # via sphinx
-urllib3==1.22             # via requests
+urllib3==1.23
 watchdog==0.8.3           # via sphinx-autobuild
 websocket-client==0.44.0  # via docker-py
 whichcraft==0.4.1         # via cookiecutter

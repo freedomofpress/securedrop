@@ -24,4 +24,6 @@ sphinx
 sphinx-autobuild
 sphinx_rtd_theme
 testinfra
+# Needed for requests. Minimum version due to CVE-2018-20060
+urllib3>=1.23
 yamllint
