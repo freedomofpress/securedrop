@@ -8,29 +8,48 @@ import os
 import sys
 
 from argparse import ArgumentParser
+from contextlib import contextmanager
 from os import path
 
-
+LOCK_FILE = '/var/lib/securedrop/securedrop-config-migrate.lock'
 CONFIG_FILE = '/etc/securedrop/config.json'
 TMP_CONFIG_FILE = '/etc/securedrop/config.json.tmp'
 
 
+@contextmanager
 def acquire_lock():
-    lock = open('/var/lib/securedrop/securedrop-config-migrate.lock', 'w')
+    lock = open(LOCK_FILE, 'w')
     try:
-        fcntl.flock(lock, fcntl.LOCK_EX)
+        # an exclusive, non-blocking file lock
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except (OSError, IOError):
         print('Failed to acquire lock.')
         sys.exit(1)
+    else:
+        yield
+    finally:
+        # unlock it (to make testing easier)
+        fcntl.flock(lock, fcntl.LOCK_UN)
 
 
 def main(force):
     # Acquire an exclusive lock because clobbering the config file would be
     # very bad
-    acquire_lock()
+    with acquire_lock():
+        do_migration(force)
 
+
+def import_config():
+    '''Helper function to make mocking in tests easier.'''
+    import config  # noqa
+    return config
+
+
+def do_migration(force,
+                 config_json=CONFIG_FILE,
+                 config_json_tmp=TMP_CONFIG_FILE):
     try:
-        import config  # noqa
+        config = import_config()
         HAS_CONFIG = True
         print('Python config imported.')
     except ImportError:
@@ -38,7 +57,7 @@ def main(force):
         HAS_CONFIG = False
         print('Python config unable to be imported.')
 
-    if path.exists(CONFIG_FILE):
+    if path.exists(config_json):
         if force:
             print('JSON config already exists, but --force was specified. '
                   'Overwriting config.')
@@ -146,20 +165,20 @@ def main(force):
         out['source_interface']['custom_header_image'] = \
             custom_header_image
 
-    if not path.exists(CONFIG_FILE):
+    if not path.exists(config_json):
         # ensure file exists
-        open(CONFIG_FILE, 'w').close()
+        open(config_json, 'w').close()
         # set safe permissions on it before we write secret values
-        os.chmod(CONFIG_FILE, 0o600)
+        os.chmod(config_json, 0o600)
 
     # Use a temp file to not clobber original in the event of an IO error
-    with open(TMP_CONFIG_FILE, 'w') as f:
+    with open(config_json_tmp, 'w') as f:
         f.write(json.dumps(out))
 
-    os.rename(TMP_CONFIG_FILE, CONFIG_FILE)
+    os.rename(config_json_tmp, config_json)
 
     try:
-        os.remove(TMP_CONFIG_FILE)
+        os.remove(config_json_tmp)
     except OSError:
         pass
 
