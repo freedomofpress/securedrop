@@ -10,7 +10,6 @@ from selenium.webdriver.common.keys import Keys
 
 import tests.utils.db_helper as db_helper
 from models import Journalist
-from sdconfig import config
 
 
 class JournalistNavigationStepsMixin():
@@ -209,7 +208,7 @@ class JournalistNavigationStepsMixin():
     def _admin_updates_logo_image(self):
         logo_upload_input = self.driver.find_element_by_id('logo-upload')
         logo_upload_input.send_keys(
-            os.path.join(config.SECUREDROP_ROOT, "static/i/logo.png")
+            os.path.join(self.config.SECUREDROP_ROOT, "static/i/logo.png")
         )
 
         submit_button = self.driver.find_element_by_id('submit-logo-update')

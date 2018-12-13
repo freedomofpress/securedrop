@@ -23,7 +23,7 @@ fi
 mkdir -p "/tmp/test-results/logs"
 
 DATA_DIR='/var/lib/securedrop/'
-sudo mkdir "$DATA_DIR"
+sudo mkdir -p "$DATA_DIR"
 sudo chown "$(id -u):$(id -g)" "$DATA_DIR"
 
 : "${PAGE_LAYOUT_LOCALES:=en_US,ar,fr_FR}"

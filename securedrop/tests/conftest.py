@@ -16,7 +16,7 @@ from flask import url_for
 from pyotp import TOTP
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import SDConfig, config as original_config
+from sdconfig import SDConfig
 
 from os import path
 
@@ -70,10 +70,11 @@ def hardening(request):
 
 @pytest.fixture(scope='session')
 def setUpTearDown():
-    _start_test_rqworker(original_config)
+    default_config = SDConfig()
+    _start_test_rqworker(default_config)
     yield
     _stop_test_rqworker()
-    _cleanup_test_securedrop_dataroot(original_config)
+    _cleanup_test_securedrop_dataroot(default_config)
 
 
 @pytest.fixture(scope='function')
@@ -196,11 +197,11 @@ def test_submissions(journalist_app):
 
 
 @pytest.fixture(scope='function')
-def test_files(journalist_app, test_journo):
+def test_files(journalist_app, test_journo, config):
     with journalist_app.app_context():
         source, codename = utils.db_helper.init_source()
         utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(test_journo['journalist'], source, 1)
+        utils.db_helper.reply(test_journo['journalist'], source, 1, config)
         return {'source': source,
                 'codename': codename,
                 'filesystem_id': source.filesystem_id,

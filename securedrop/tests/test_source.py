@@ -390,12 +390,12 @@ def test_submit_message_with_enough_entropy(source_app):
                 assert async_genkey.called
 
 
-def test_delete_all_successfully_deletes_replies(source_app):
+def test_delete_all_successfully_deletes_replies(source_app, config):
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
         source, codename = utils.db_helper.init_source()
         source_id = source.id
-        utils.db_helper.reply(journalist, source, 1)
+        utils.db_helper.reply(journalist, source, 1, config)
 
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
@@ -414,13 +414,14 @@ def test_delete_all_successfully_deletes_replies(source_app):
             assert reply.deleted_by_source is True
 
 
-def test_delete_all_replies_deleted_by_source_but_not_journalist(source_app):
+def test_delete_all_replies_deleted_by_source_but_not_journalist(source_app,
+                                                                 config):
     """Replies can be deleted by a source, but not by journalists. As such,
     replies may still exist in the replies table, but no longer be visible."""
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
         source, codename = utils.db_helper.init_source()
-        utils.db_helper.reply(journalist, source, 1)
+        utils.db_helper.reply(journalist, source, 1, config)
         replies = Reply.query.filter(Reply.source_id == source.id).all()
         for reply in replies:
             reply.deleted_by_source = True
@@ -661,14 +662,14 @@ def test_csrf_error_page(config, source_app):
         assert 'Your session timed out due to inactivity' in text
 
 
-def test_source_can_only_delete_own_replies(source_app):
+def test_source_can_only_delete_own_replies(source_app, config):
     '''This test checks for a bug an authenticated source A could delete
        replies send to source B by "guessing" the filename.
     '''
     source0, codename0 = utils.db_helper.init_source()
     source1, codename1 = utils.db_helper.init_source()
     journalist, _ = utils.db_helper.init_journalist()
-    replies = utils.db_helper.reply(journalist, source0, 1)
+    replies = utils.db_helper.reply(journalist, source0, 1, config)
     filename = replies[0].filename
     confirmation_msg = 'Reply deleted'
 

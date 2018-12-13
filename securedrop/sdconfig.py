@@ -40,10 +40,10 @@ class _JournalistInterfaceFlaskConfig(_FlaskConfig):
 
 class SDConfig(object):
 
-    def __init__(self):
-        # type: () -> None
+    def __init__(self, config_file=CONFIG_FILE):
+        # type: (str) -> None
 
-        with open(CONFIG_FILE) as f:
+        with open(config_file) as f:
             json_config = json.loads(f.read())
 
         self.SECUREDROP_DATA_ROOT = '/var/lib/securedrop/'
@@ -221,6 +221,3 @@ class SDConfig(object):
     @WORD_LIST.deleter
     def WORD_LIST(self):
         raise AttributeError('Cannot delete WORD_LIST')
-
-
-config = SDConfig()  # type: SDConfig

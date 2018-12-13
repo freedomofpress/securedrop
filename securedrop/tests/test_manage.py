@@ -22,20 +22,20 @@ YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
                 'cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc d7']
 
 
-def test_parse_args():
+def test_parse_args(config):
     # just test that the arg parser is stable
-    manage.get_args()
+    manage.get_args(config)
 
 
-def test_not_verbose(caplog):
-    args = manage.get_args().parse_args(['run'])
+def test_not_verbose(caplog, config):
+    args = manage.get_args(config).parse_args(['run'])
     manage.setup_verbosity(args)
     manage.log.debug('INVISIBLE')
     assert 'INVISIBLE' not in caplog.text
 
 
-def test_verbose(caplog):
-    args = manage.get_args().parse_args(['--verbose', 'run'])
+def test_verbose(caplog, config):
+    args = manage.get_args(config).parse_args(['--verbose', 'run'])
     manage.setup_verbosity(args)
     manage.log.debug('VISIBLE')
     assert 'VISIBLE' in caplog.text
@@ -72,20 +72,12 @@ def test_handle_invalid_secret(journalist_app, config, mocker):
     mocker.patch("__builtin__.raw_input", side_effect=YUBIKEY_HOTP),
     mocker.patch("sys.stdout", new_callable=StringIO),
 
-    original_config = manage.config
+    # We will try to provide one invalid and one valid secret
+    return_value = manage._add_user(config)
 
-    try:
-        # We need to override the config to point at the per-test DB
-        manage.config = config
-
-        # We will try to provide one invalid and one valid secret
-        return_value = manage._add_user()
-
-        assert return_value == 0
-        assert 'Try again.' in sys.stdout.getvalue()
-        assert 'successfully added' in sys.stdout.getvalue()
-    finally:
-        manage.config = original_config
+    assert return_value == 0
+    assert 'Try again.' in sys.stdout.getvalue()
+    assert 'successfully added' in sys.stdout.getvalue()
 
 
 # Note: we use the `journalist_app` fixture because it creates the DB
@@ -98,24 +90,16 @@ def test_exception_handling_when_duplicate_username(journalist_app,
     mocker.patch("manage._get_yubikey_usage", return_value=False)
     mocker.patch("sys.stdout", new_callable=StringIO)
 
-    original_config = manage.config
+    # Inserting the user for the first time should succeed
+    return_value = manage._add_user(config)
+    assert return_value == 0
+    assert 'successfully added' in sys.stdout.getvalue()
 
-    try:
-        # We need to override the config to point at the per-test DB
-        manage.config = config
-
-        # Inserting the user for the first time should succeed
-        return_value = manage._add_user()
-        assert return_value == 0
-        assert 'successfully added' in sys.stdout.getvalue()
-
-        # Inserting the user for a second time should fail
-        return_value = manage._add_user()
-        assert return_value == 1
-        assert ('ERROR: That username is already taken!' in
-                sys.stdout.getvalue())
-    finally:
-        manage.config = original_config
+    # Inserting the user for a second time should fail
+    return_value = manage._add_user(config)
+    assert return_value == 1
+    assert ('ERROR: That username is already taken!' in
+            sys.stdout.getvalue())
 
 
 # Note: we use the `journalist_app` fixture because it creates the DB
@@ -126,19 +110,11 @@ def test_delete_user(journalist_app, config, mocker):
                  return_value='test-user-56789')
     mocker.patch('manage._get_delete_confirmation', return_value=True)
 
-    original_config = manage.config
+    return_value = manage._add_user(config)
+    assert return_value == 0
 
-    try:
-        # We need to override the config to point at the per-test DB
-        manage.config = config
-
-        return_value = manage._add_user()
-        assert return_value == 0
-
-        return_value = manage.delete_user(args=None)
-        assert return_value == 0
-    finally:
-        manage.config = original_config
+    return_value = manage.delete_user(None, config)
+    assert return_value == 0
 
 
 # Note: we use the `journalist_app` fixture because it creates the DB
@@ -148,16 +124,9 @@ def test_delete_non_existent_user(journalist_app, config, mocker):
     mocker.patch('manage._get_delete_confirmation', return_value=True)
     mocker.patch("sys.stdout", new_callable=StringIO)
 
-    original_config = manage.config
-
-    try:
-        # We need to override the config to point at the per-test DB
-        manage.config = config
-        return_value = manage.delete_user(args=None)
-        assert return_value == 0
-        assert 'ERROR: That user was not found!' in sys.stdout.getvalue()
-    finally:
-        manage.config = original_config
+    return_value = manage.delete_user(None, config)
+    assert return_value == 0
+    assert 'ERROR: That user was not found!' in sys.stdout.getvalue()
 
 
 def test_get_username_to_delete(mocker):
@@ -167,28 +136,21 @@ def test_get_username_to_delete(mocker):
 
 
 def test_reset(journalist_app, test_journo, alembic_config, config):
-    original_config = manage.config
-    try:
-        # We need to override the config to point at the per-test DB
-        manage.config = config
+    # Override the hardcoded alembic.ini value
+    config.TEST_ALEMBIC_INI = alembic_config
 
-        # Override the hardcoded alembic.ini value
-        manage.config.TEST_ALEMBIC_INI = alembic_config
+    args = argparse.Namespace(store_dir=config.STORE_DIR)
+    return_value = manage.reset(args, config)
 
-        args = argparse.Namespace(store_dir=config.STORE_DIR)
-        return_value = manage.reset(args=args)
+    assert return_value == 0
+    assert os.path.exists(config.DATABASE_FILE)
+    assert os.path.exists(config.STORE_DIR)
 
-        assert return_value == 0
-        assert os.path.exists(config.DATABASE_FILE)
-        assert os.path.exists(config.STORE_DIR)
-
-        # Verify journalist user present in the database is gone
-        with journalist_app.app_context():
-            res = Journalist.query \
-                .filter_by(username=test_journo['username']).one_or_none()
-            assert res is None
-    finally:
-        manage.config = original_config
+    # Verify journalist user present in the database is gone
+    with journalist_app.app_context():
+        res = Journalist.query \
+            .filter_by(username=test_journo['username']).one_or_none()
+        assert res is None
 
 
 def test_get_username(mocker):
@@ -196,12 +158,12 @@ def test_get_username(mocker):
     assert manage._get_username() == 'foo-bar-baz'
 
 
-def test_clean_tmp_do_nothing(caplog):
+def test_clean_tmp_do_nothing(caplog, config):
     args = argparse.Namespace(days=0,
                               directory=' UNLIKELY::::::::::::::::: ',
                               verbose=logging.DEBUG)
     manage.setup_verbosity(args)
-    manage.clean_tmp(args)
+    manage.clean_tmp(args, config)
     assert 'does not exist, do nothing' in caplog.text
 
 
@@ -213,7 +175,7 @@ def test_clean_tmp_too_young(config, caplog):
     io.open(os.path.join(config.TEMP_DIR, 'FILE'), 'a').close()
 
     manage.setup_verbosity(args)
-    manage.clean_tmp(args)
+    manage.clean_tmp(args, config)
     assert 'modified less than' in caplog.text
 
 
@@ -226,30 +188,24 @@ def test_clean_tmp_removed(config, caplog):
         old = time.time() - 24*60*60
         os.utime(fname, (old, old))
     manage.setup_verbosity(args)
-    manage.clean_tmp(args)
+    manage.clean_tmp(args, config)
     assert 'FILE removed' in caplog.text
 
 
 def test_were_there_submissions_today(source_app, config):
-    original_config = manage.config
-    try:
-        # We need to override the config to point at the per-test DB
-        manage.config = config
-        data_root = config.SECUREDROP_DATA_ROOT
-        args = argparse.Namespace(data_root=data_root,
-                                  verbose=logging.DEBUG)
+    data_root = config.SECUREDROP_DATA_ROOT
+    args = argparse.Namespace(data_root=data_root,
+                              verbose=logging.DEBUG)
 
-        with source_app.app_context():
-            count_file = os.path.join(data_root, 'submissions_today.txt')
-            source, codename = db_helper.init_source_without_keypair()
-            source.last_updated = (datetime.datetime.utcnow() -
-                                   datetime.timedelta(hours=24*2))
-            db.session.commit()
-            manage.were_there_submissions_today(args)
-            assert io.open(count_file).read() == "0"
-            source.last_updated = datetime.datetime.utcnow()
-            db.session.commit()
-            manage.were_there_submissions_today(args)
-            assert io.open(count_file).read() == "1"
-    finally:
-        manage.config = original_config
+    with source_app.app_context():
+        count_file = os.path.join(data_root, 'submissions_today.txt')
+        source, codename = db_helper.init_source_without_keypair()
+        source.last_updated = (datetime.datetime.utcnow() -
+                               datetime.timedelta(hours=24*2))
+        db.session.commit()
+        manage.were_there_submissions_today(args, config)
+        assert io.open(count_file).read() == "0"
+        source.last_updated = datetime.datetime.utcnow()
+        db.session.commit()
+        manage.were_there_submissions_today(args, config)
+        assert io.open(count_file).read() == "1"

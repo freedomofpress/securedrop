@@ -10,12 +10,13 @@ from sqlalchemy.exc import IntegrityError
 os.environ["SECUREDROP_ENV"] = "dev"  # noqa
 import journalist_app
 
-from sdconfig import config
 from db import db
 from models import Journalist, Reply, Source, Submission
+from sdconfig import SDConfig
 
 
 def main():
+    config = SDConfig()
     app = journalist_app.create_app(config)
     with app.app_context():
         # Add two test users
@@ -34,7 +35,7 @@ def main():
         # Add test sources and submissions
         num_sources = int(os.getenv('NUM_SOURCES', 2))
         for _ in range(num_sources):
-            create_source_and_submissions()
+            create_source_and_submissions(config)
 
 
 def add_test_user(username, password, otp_secret, is_admin=False):
@@ -53,7 +54,7 @@ def add_test_user(username, password, otp_secret, is_admin=False):
         db.session.rollback()
 
 
-def create_source_and_submissions(num_submissions=2, num_replies=2):
+def create_source_and_submissions(config, num_submissions=2, num_replies=2):
     # Store source in database
     codename = current_app.crypto_util.genrandomid()
     filesystem_id = current_app.crypto_util.hash_codename(codename)

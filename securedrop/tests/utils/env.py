@@ -12,7 +12,6 @@ import threading
 from os.path import abspath, dirname, join, realpath
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import config
 
 from db import db
 
@@ -26,7 +25,7 @@ FILES_DIR = abspath(join(dirname(realpath(__file__)), '..', 'files'))
 TEST_WORKER_PIDFILE = "/tmp/securedrop_test_worker.pid"
 
 
-def create_directories():
+def create_directories(config):
     """Create directories for the file store and the GPG keyring.
     """
     for d in (config.SECUREDROP_DATA_ROOT, config.STORE_DIR,
@@ -37,7 +36,7 @@ def create_directories():
         subprocess.check_call(['sudo', 'chown', id_str, d])
 
 
-def init_gpg():
+def init_gpg(config):
     """Initialize the GPG keyring and import the journalist key for
     testing.
     """
@@ -62,14 +61,14 @@ def init_gpg():
     return gpg
 
 
-def setup():
+def setup(config):
     """Set up the file system, GPG, and database."""
-    create_directories()
-    init_gpg()
+    create_directories(config)
+    init_gpg(config)
     db.create_all()
 
 
-def teardown():
+def teardown(config):
     # make sure threads launched by tests complete before
     # teardown, otherwise they may fail because resources
     # they need disappear

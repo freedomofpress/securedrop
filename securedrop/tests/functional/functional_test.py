@@ -21,10 +21,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import config
 import journalist_app
 import source_app
 import tests.utils.env as env
+from sdconfig import SDConfig
 
 from db import db
 
@@ -83,8 +83,9 @@ class FunctionalTest(object):
         return firefox_binary.FirefoxBinary(log_file=log_file)
 
     def setup(self, session_expiration=30):
-        env.create_directories()
-        self.__context = journalist_app.create_app(config).app_context()
+        self.config = SDConfig()
+        env.create_directories(self.config)
+        self.__context = journalist_app.create_app(self.config).app_context()
         self.__context.push()
         # Patch the two-factor verification to avoid intermittent errors
         self.patcher = mock.patch('models.Journalist.verify_token')
@@ -97,7 +98,7 @@ class FunctionalTest(object):
 
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
-        self.gpg = env.init_gpg()
+        self.gpg = env.init_gpg(self.config)
         db.create_all()
 
         source_port = self._unused_port()
@@ -109,11 +110,11 @@ class FunctionalTest(object):
         # Allow custom session expiration lengths
         self.session_expiration = session_expiration
 
-        self.source_app = source_app.create_app(config)
-        self.journalist_app = journalist_app.create_app(config)
+        self.source_app = source_app.create_app(self.config)
+        self.journalist_app = journalist_app.create_app(self.config)
 
         def start_source_server(app):
-            config.SESSION_EXPIRATION_MINUTES = self.session_expiration
+            self.config.SESSION_EXPIRATION_MINUTES = self.session_expiration
 
             app.run(
                 port=source_port,
@@ -189,7 +190,7 @@ class FunctionalTest(object):
 
     def teardown(self):
         self.patcher.stop()
-        env.teardown()
+        env.teardown(self.config)
         if hasattr(self, 'driver') and not hasattr(self, 'override_driver'):
             self.driver.quit()
         self.source_process.terminate()

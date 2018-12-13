@@ -18,7 +18,7 @@ from db import db
 from journalist_app import create_app
 from models import (Journalist, Source, Submission, SourceStar, Reply,
                     JournalistLoginAttempt)
-from sdconfig import config as sdconfig
+from sdconfig import SDConfig
 
 random.seed('~(=^–^)')  # mrow?
 
@@ -241,9 +241,10 @@ def arg_parser():
 
 
 def main():
+    config = SDConfig()
     args = arg_parser().parse_args()
     print('Loading data. This make take a while.')
-    QaLoader(sdconfig, args.multiplier).load()
+    QaLoader(config, args.multiplier).load()
 
 
 if __name__ == '__main__':

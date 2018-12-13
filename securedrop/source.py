@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-
-from sdconfig import config
-
+from sdconfig import SDConfig
 from source_app import create_app
 
+config = SDConfig()
 app = create_app(config)
 
 

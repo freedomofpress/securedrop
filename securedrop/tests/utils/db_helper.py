@@ -9,7 +9,6 @@ import os
 from flask import current_app
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import config
 import models
 
 from db import db
@@ -35,7 +34,7 @@ def init_journalist(is_admin=False):
     return user, user_pw
 
 
-def reply(journalist, source, num_replies):
+def reply(journalist, source, num_replies, config):
     """Generates and submits *num_replies* replies to *source*
     from *journalist*. Returns reply objects as a list.
 
