@@ -179,10 +179,9 @@ six==1.11.0 \
 tox==2.9.1 \
     --hash=sha256:752f5ec561c6c08c5ecb167d3b20f4f4ffc158c0ab78855701a75f5cef05f4b8 \
     --hash=sha256:8af30fd835a11f3ff8e95176ccba5a4e60779df4d96a9dfefa1a1704af263225
-urllib3==1.22 \
-    --hash=sha256:06330f386d6e4b195fbfc736b297f58c5a892e4440e54d294d7004e3a9bbea1b \
-    --hash=sha256:cc44da8e1145637334317feebd728bd869a35285b93cbb4cca2577da7e62db4f \
-    # via requests
+urllib3==1.23 \
+    --hash=sha256:a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf \
+    --hash=sha256:b5725a0bd4ba422ab0e66e89e030c806576753ea3ee08554382c14e685d117b5
 virtualenv==15.1.0 \
     --hash=sha256:02f8102c2436bb03b3ee6dede1919d1dac8a427541652e5ec95171ec8adbc93a \
     --hash=sha256:39d88b533b422825d644087a21e78c45cf5af0ef7a99a1fc9fbb7b481e5c85b0 \
