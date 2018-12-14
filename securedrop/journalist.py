@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from journalist_app import create_app
-from sdconfig import SDConfig
+from sdconfig import JournalistInterfaceConfig
 
-config = SDConfig()
+config = JournalistInterfaceConfig()
 app = create_app(config)
 
 

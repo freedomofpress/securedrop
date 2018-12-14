@@ -27,7 +27,7 @@ import journalist_app
 from db import db
 from models import Source, Journalist, PasswordError, InvalidUsernameException
 from management.run import run
-from sdconfig import SDConfig
+from sdconfig import JournalistInterfaceConfig
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
@@ -383,7 +383,7 @@ def app_context(config):
 
 def _run_from_commandline():  # pragma: no cover
     try:
-        config = SDConfig()
+        config = JournalistInterfaceConfig()
         args = get_args(config).parse_args()
         setup_verbosity(args)
         rc = args.func(args, config)

@@ -12,11 +12,11 @@ import journalist_app
 
 from db import db
 from models import Journalist, Reply, Source, Submission
-from sdconfig import SDConfig
+from sdconfig import JournalistInterfaceConfig
 
 
 def main():
-    config = SDConfig()
+    config = JournalistInterfaceConfig()
     app = journalist_app.create_app(config)
     with app.app_context():
         # Add two test users

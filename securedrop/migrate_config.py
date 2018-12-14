@@ -12,8 +12,7 @@ from contextlib import contextmanager
 from os import path
 
 LOCK_FILE = '/var/lib/securedrop/securedrop-config-migrate.lock'
-CONFIG_FILE = '/etc/securedrop/config.json'
-TMP_CONFIG_FILE = '/etc/securedrop/config.json.tmp'
+CONFIG_DIR = '/etc/securedrop'
 
 
 @contextmanager
@@ -45,9 +44,10 @@ def import_config():
     return config
 
 
-def do_migration(force,
-                 config_json=CONFIG_FILE,
-                 config_json_tmp=TMP_CONFIG_FILE):
+def do_migration(force, config_dir=CONFIG_DIR):
+    source_config_file = path.join(config_dir, 'source-config.json')
+    journalist_config_file = path.join(config_dir, 'journalist-config.json')
+
     try:
         config = import_config()
         HAS_CONFIG = True
@@ -57,9 +57,9 @@ def do_migration(force,
         HAS_CONFIG = False
         print('Python config unable to be imported.')
 
-    if path.exists(config_json):
+    if path.exists(source_config_file) or path.exists(journalist_config_file):
         if force:
-            print('JSON config already exists, but --force was specified. '
+            print('JSON configs already exist, but --force was specified. '
                   'Overwriting config.')
         else:
             print('JSON config already exists. Exiting.')
@@ -128,59 +128,57 @@ def do_migration(force,
     except AttributeError:
         custom_header_image = None
 
-    # Then we assemble them into a config.
-    # We allow a partial config to be assembled in case of a partial
+    # Then we assemble them into a configs.
+    # We allow a partial configs to be assembled in case of a partial
     # configuration of SecureDrop. Ansible will fill in the rest.
 
-    out = {
-        'source_interface': {},
-        'journalist_interface': {},
-    }
+    source_config = {}
+    journalist_config = {}
 
     if id_pepper is not None:
-        out['source_interface']['scrypt_id_pepper'] = id_pepper
-        out['journalist_interface']['scrypt_id_pepper'] = id_pepper
+        source_config['scrypt_id_pepper'] = id_pepper
+        journalist_config['scrypt_id_pepper'] = id_pepper
 
     if gpg_pepper is not None:
-        out['source_interface']['scrypt_gpg_pepper'] = gpg_pepper
-        out['journalist_interface']['scrypt_gpg_pepper'] = gpg_pepper
+        source_config['scrypt_gpg_pepper'] = gpg_pepper
+        journalist_config['scrypt_gpg_pepper'] = gpg_pepper
 
     if i18n is not None:
-        out['source_interface']['i18n'] = i18n
-        out['journalist_interface']['i18n'] = i18n
+        source_config['i18n'] = i18n
+        journalist_config['i18n'] = i18n
 
     if scrypt_params is not None:
-        out['source_interface']['scrypt_params'] = scrypt_params
-        out['journalist_interface']['scrypt_params'] = scrypt_params
+        source_config['scrypt_params'] = scrypt_params
+        journalist_config['scrypt_params'] = scrypt_params
 
     if source_key is not None:
-        out['source_interface']['secret_key'] = source_key
+        source_config['secret_key'] = source_key
 
     if journalist_key is not None:
-        out['journalist_interface']['secret_key'] = journalist_key
+        journalist_config['secret_key'] = journalist_key
 
     if custom_header_image is not None:
-        out['journalist_interface']['custom_header_image'] = \
-            custom_header_image
-        out['source_interface']['custom_header_image'] = \
-            custom_header_image
+        source_config['custom_header_image'] = custom_header_image
+        journalist_config['custom_header_image'] = custom_header_image
 
-    if not path.exists(config_json):
+    safe_write_file(source_config, source_config_file)
+    safe_write_file(journalist_config, journalist_config_file)
+
+
+def safe_write_file(data, dest_file):
+    temp_file = dest_file + '.tmp'
+
+    if not path.exists(temp_file):
         # ensure file exists
-        open(config_json, 'w').close()
+        open(temp_file, 'w').close()
         # set safe permissions on it before we write secret values
-        os.chmod(config_json, 0o600)
+        os.chmod(temp_file, 0o600)
 
     # Use a temp file to not clobber original in the event of an IO error
-    with open(config_json_tmp, 'w') as f:
-        f.write(json.dumps(out))
+    with open(temp_file, 'w') as f:
+        f.write(json.dumps(data))
 
-    os.rename(config_json_tmp, config_json)
-
-    try:
-        os.remove(config_json_tmp)
-    except OSError:
-        pass
+    os.rename(temp_file, dest_file)
 
 
 if __name__ == '__main__':

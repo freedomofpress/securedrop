@@ -29,18 +29,18 @@ if typing.TYPE_CHECKING:
     # That is why all type annotation relative import
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
-    from sdconfig import SDConfig  # noqa: F401
+    from sdconfig import JournalistInterfaceConfig  # noqa: F401
 
 _insecure_views = ['main.login', 'main.select_logo', 'static']
 
 
 def create_app(config):
-    # type: (SDConfig) -> Flask
+    # type: (JournalistInterfaceConfig) -> Flask
     app = Flask(__name__,
                 template_folder=config.JOURNALIST_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
 
-    app.config.from_object(config.JournalistInterfaceFlaskConfig)  # type: ignore
+    app.config.from_object(config.flask_config)
     app.sdconfig = config
     app.session_interface = JournalistInterfaceSessionInterface()
 

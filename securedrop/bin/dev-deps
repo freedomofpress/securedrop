@@ -26,11 +26,13 @@ function append_to_exit() {
 }
 
 function maybe_create_config() {
-    config=/etc/securedrop/config.json
-    sudo mkdir -p "$(dirname "$config")"
-    sudo chown "$(id -u)":"$(id -g)" "$(dirname "$config")"
-    if ! test -f "$config" ; then
-        append_to_exit "rm -f $config"
+    journalist_config=/etc/securedrop/journalist-config.json
+    source_config=/etc/securedrop/source-config.json
+    sudo mkdir -p "$(dirname "$journalist_config")"
+    sudo chown "$(id -u)":"$(id -g)" "$(dirname "$journalist_config")"
+    if ! test -f "$journalist_config" ; then
+        append_to_exit "rm -f $journalist_config"
+        append_to_exit "rm -f $source_config"
         python - <<EOF
 import json
 
@@ -45,12 +47,10 @@ cnf =  {
     },
     "journalist_key": "65A1B5FF195B56353CC63DFFCC40EF1228271441",
 }
-config = {
-    "journalist_interface": cnf,
-    "source_interface": cnf,
-}
-with open("$config", "w") as f:
-    f.write(json.dumps(config))
+
+for config in ["$journalist_config", "$source_config"]:
+    with open(config, "w") as f:
+        f.write(json.dumps(cnf))
 EOF
     fi
 }

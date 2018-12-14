@@ -28,16 +28,16 @@ if typing.TYPE_CHECKING:
     # That is why all type annotation relative import
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
-    from sdconfig import SDConfig  # noqa: F401
+    from sdconfig import SourceInterfaceConfig  # noqa: F401
 
 
 def create_app(config):
-    # type: (SDConfig) -> Flask
+    # type: (SourceInterfaceConfig) -> Flask
     app = Flask(__name__,
                 template_folder=config.SOURCE_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
     app.request_class = RequestThatSecuresFileUploads
-    app.config.from_object(config.SourceInterfaceFlaskConfig)  # type: ignore
+    app.config.from_object(config.flask_config)
     app.sdconfig = config
 
     # The default CSRF token expiration is 1 hour. Since large uploads can

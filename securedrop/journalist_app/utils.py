@@ -24,7 +24,7 @@ if typing.TYPE_CHECKING:
     # That is why all type annotation relative import
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
-    from sdconfig import SDConfig  # noqa: F401
+    from sdconfig import JournalistInterfaceConfig  # noqa: F401
 
 
 def logged_in():
@@ -246,7 +246,7 @@ def col_delete(cols_selected):
 
 
 def make_password(config):
-    # type: (SDConfig) -> str
+    # type: (JournalistInterfaceConfig) -> str
     while True:
         password = current_app.crypto_util.genrandomid(
             7,
