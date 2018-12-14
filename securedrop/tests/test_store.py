@@ -12,9 +12,9 @@ import utils
 from store import Storage
 
 
-def create_file_in_source_dir(config, filesystem_id, filename):
+def create_file_in_source_dir(journalist_config, filesystem_id, filename):
     """Helper function for simulating files"""
-    source_directory = os.path.join(config.STORE_DIR,
+    source_directory = os.path.join(journalist_config.STORE_DIR,
                                     filesystem_id)
     os.makedirs(source_directory)
 
@@ -25,38 +25,40 @@ def create_file_in_source_dir(config, filesystem_id, filename):
     return source_directory, file_path
 
 
-def test_path_returns_filename_of_folder(journalist_app, config):
+def test_path_returns_filename_of_folder(journalist_app, journalist_config):
     """`Storage.path` is called in this way in
         journalist.delete_collection
     """
     filesystem_id = 'example'
     generated_absolute_path = journalist_app.storage.path(filesystem_id)
 
-    expected_absolute_path = os.path.join(config.STORE_DIR, filesystem_id)
+    expected_absolute_path = os.path.join(journalist_config.STORE_DIR,
+                                          filesystem_id)
     assert generated_absolute_path == expected_absolute_path
 
 
-def test_path_returns_filename_of_items_within_folder(journalist_app, config):
+def test_path_returns_filename_of_items_within_folder(journalist_app,
+                                                      journalist_config):
     """`Storage.path` is called in this way in journalist.bulk_delete"""
     filesystem_id = 'example'
     item_filename = '1-quintuple_cant-msg.gpg'
     generated_absolute_path = journalist_app.storage.path(filesystem_id,
                                                           item_filename)
 
-    expected_absolute_path = os.path.join(config.STORE_DIR,
+    expected_absolute_path = os.path.join(journalist_config.STORE_DIR,
                                           filesystem_id, item_filename)
     assert generated_absolute_path == expected_absolute_path
 
 
-def test_verify_path_not_absolute(journalist_app, config):
+def test_verify_path_not_absolute(journalist_app, journalist_config):
     with pytest.raises(store.PathException):
         journalist_app.storage.verify(
-            os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
+            os.path.join(journalist_config.STORE_DIR, '..', 'etc', 'passwd'))
 
 
-def test_verify_in_store_dir(journalist_app, config):
+def test_verify_in_store_dir(journalist_app, journalist_config):
     with pytest.raises(store.PathException) as e:
-        journalist_app.storage.verify(config.STORE_DIR + "_backup")
+        journalist_app.storage.verify(journalist_config.STORE_DIR + "_backup")
 
     assert 'Invalid directory' in str(e)
 
@@ -84,19 +86,20 @@ def test_verify_store_temp_dir_not_absolute():
     assert re.compile('temp_dir.*is not absolute').match(msg)
 
 
-def test_verify_flagged_file_in_sourcedir_returns_true(journalist_app, config):
+def test_verify_flagged_file_in_sourcedir_returns_true(journalist_app,
+                                                       journalist_config):
     source_directory, file_path = create_file_in_source_dir(
-        config, 'example-filesystem-id', '_FLAG'
+        journalist_config, 'example-filesystem-id', '_FLAG'
     )
 
     assert journalist_app.storage.verify(file_path)
 
 
 def test_verify_invalid_file_extension_in_sourcedir_raises_exception(
-        journalist_app, config):
+        journalist_app, journalist_config):
 
     source_directory, file_path = create_file_in_source_dir(
-        config, 'example-filesystem-id', 'not_valid.txt'
+        journalist_config, 'example-filesystem-id', 'not_valid.txt'
     )
 
     with pytest.raises(store.PathException) as e:
@@ -106,10 +109,10 @@ def test_verify_invalid_file_extension_in_sourcedir_raises_exception(
 
 
 def test_verify_invalid_filename_in_sourcedir_raises_exception(
-        journalist_app, config):
+        journalist_app, journalist_config):
 
     source_directory, file_path = create_file_in_source_dir(
-        config, 'example-filesystem-id', 'NOTVALID.gpg'
+        journalist_config, 'example-filesystem-id', 'NOTVALID.gpg'
     )
 
     with pytest.raises(store.PathException) as e:
@@ -118,11 +121,11 @@ def test_verify_invalid_filename_in_sourcedir_raises_exception(
     assert 'Invalid filename NOTVALID.gpg' in str(e)
 
 
-def test_get_zip(journalist_app, test_source, config):
+def test_get_zip(journalist_app, test_source, journalist_config):
     with journalist_app.app_context():
         submissions = utils.db_helper.submit(
             test_source['source'], 2)
-        filenames = [os.path.join(config.STORE_DIR,
+        filenames = [os.path.join(journalist_config.STORE_DIR,
                                   test_source['filesystem_id'],
                                   submission.filename)
                      for submission in submissions]

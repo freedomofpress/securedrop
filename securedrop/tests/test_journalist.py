@@ -25,7 +25,7 @@ import utils
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 from db import db
-from sdconfig import SDConfig
+from sdconfig import JournalistInterfaceConfig
 from models import (InvalidPasswordLength, Journalist, Reply, Source,
                     Submission)
 from utils.instrument import InstrumentedApp
@@ -72,7 +72,7 @@ def test_user_with_whitespace_in_username_can_login(journalist_app):
 def test_make_password(journalist_app):
     with patch.object(crypto_util.CryptoUtil, 'genrandomid',
                       side_effect=['bad', VALID_PASSWORD]):
-        fake_config = SDConfig()
+        fake_config = JournalistInterfaceConfig()
         with journalist_app.test_request_context('/'):
             password = journalist_app_module.utils.make_password(fake_config)
             assert password == VALID_PASSWORD
@@ -1151,9 +1151,9 @@ def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
 
 def test_logo_upload_with_valid_image_succeeds(journalist_app,
                                                test_admin,
-                                               config):
+                                               journalist_config):
     # Save original logo to restore after test run
-    logo_image_location = os.path.join(config.SECUREDROP_ROOT,
+    logo_image_location = os.path.join(journalist_config.SECUREDROP_ROOT,
                                        "static/i/logo.png")
     with io.open(logo_image_location, 'rb') as logo_file:
         original_image = logo_file.read()
@@ -1347,11 +1347,11 @@ def test_passphrase_migration_on_reset(journalist_app):
 def test_journalist_reply_view(journalist_app,
                                test_source,
                                test_journo,
-                               config):
+                               journalist_config):
     source, _ = utils.db_helper.init_source()
     journalist, _ = utils.db_helper.init_journalist()
     submissions = utils.db_helper.submit(source, 1)
-    replies = utils.db_helper.reply(journalist, source, 1, config)
+    replies = utils.db_helper.reply(journalist, source, 1, journalist_config)
 
     subm_url = url_for('col.download_single_file',
                        filesystem_id=submissions[0].source.filesystem_id,
@@ -1442,7 +1442,7 @@ def test_edit_hotp(journalist_app, test_journo):
 def test_delete_source_deletes_submissions(journalist_app,
                                            test_journo,
                                            test_source,
-                                           config):
+                                           journalist_config):
     """Verify that when a source is deleted, the submissions that
     correspond to them are also deleted."""
 
@@ -1451,7 +1451,7 @@ def test_delete_source_deletes_submissions(journalist_app,
         journo = Journalist.query.get(test_journo['id'])
 
         utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(journo, source, 2, config)
+        utils.db_helper.reply(journo, source, 2, journalist_config)
 
         journalist_app_module.utils.delete_collection(
             test_source['filesystem_id'])
@@ -1463,7 +1463,7 @@ def test_delete_source_deletes_submissions(journalist_app,
 def test_delete_collection_updates_db(journalist_app,
                                       test_journo,
                                       test_source,
-                                      config):
+                                      journalist_config):
     """Verify that when a source is deleted, their Source identity
     record, as well as Reply & Submission records associated with
     that record are purged from the database."""
@@ -1473,7 +1473,7 @@ def test_delete_collection_updates_db(journalist_app,
         journo = Journalist.query.get(test_journo['id'])
 
         utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(journo, source, 2, config)
+        utils.db_helper.reply(journo, source, 2, journalist_config)
 
         journalist_app_module.utils.delete_collection(
             test_source['filesystem_id'])
@@ -1492,7 +1492,7 @@ def test_delete_collection_updates_db(journalist_app,
 def test_delete_source_deletes_source_key(journalist_app,
                                           test_source,
                                           test_journo,
-                                          config):
+                                          journalist_config):
     """Verify that when a source is deleted, the PGP key that corresponds
     to them is also deleted."""
 
@@ -1501,7 +1501,7 @@ def test_delete_source_deletes_source_key(journalist_app,
         journo = Journalist.query.get(test_journo['id'])
 
         utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(journo, source, 2, config)
+        utils.db_helper.reply(journo, source, 2, journalist_config)
 
         # Source key exists
         source_key = current_app.crypto_util.getkey(
@@ -1520,7 +1520,7 @@ def test_delete_source_deletes_source_key(journalist_app,
 def test_delete_source_deletes_docs_on_disk(journalist_app,
                                             test_source,
                                             test_journo,
-                                            config):
+                                            journalist_config):
     """Verify that when a source is deleted, the encrypted documents that
     exist on disk is also deleted."""
 
@@ -1529,10 +1529,10 @@ def test_delete_source_deletes_docs_on_disk(journalist_app,
         journo = Journalist.query.get(test_journo['id'])
 
         utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(journo, source, 2, config)
+        utils.db_helper.reply(journo, source, 2, journalist_config)
 
         # Encrypted documents exists
-        dir_source_docs = os.path.join(config.STORE_DIR,
+        dir_source_docs = os.path.join(journalist_config.STORE_DIR,
                                        test_source['filesystem_id'])
         assert os.path.exists(dir_source_docs)
 
@@ -1565,7 +1565,10 @@ def test_valid_login_calls_argon2(mocker, test_journo):
     assert mock_argon2.called
 
 
-def test_render_locales(config, journalist_app, test_journo, test_source):
+def test_render_locales(journalist_config,
+                        journalist_app,
+                        test_journo,
+                        test_source):
     """the locales.html template must collect both request.args (l=XX) and
        request.view_args (/<filesystem_id>) to build the URL to
        change the locale
@@ -1574,8 +1577,8 @@ def test_render_locales(config, journalist_app, test_journo, test_source):
     # We use the `journalist_app` fixture to generate all our tables, but we
     # don't use it during the test because we need to inject the i18n settings
     # (which are only triggered during `create_app`
-    config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
-    app = journalist_app_module.create_app(config)
+    journalist_config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
+    app = journalist_app_module.create_app(journalist_config)
     app.config['SERVER_NAME'] = 'localhost'  # needed for url_for
     url = url_for('col.col', filesystem_id=test_source['filesystem_id'])
 
@@ -1884,9 +1887,11 @@ def test_single_source_is_successfully_unstarred(journalist_app,
         assert not source.star.starred
 
 
-def test_journalist_session_expiration(config, journalist_app, test_journo):
+def test_journalist_session_expiration(journalist_config,
+                                       journalist_app,
+                                       test_journo):
     # set the expiration to ensure we trigger an expiration
-    config.SESSION_EXPIRATION_MINUTES = -1
+    journalist_config.SESSION_EXPIRATION_MINUTES = -1
     with journalist_app.test_client() as app:
         with InstrumentedApp(journalist_app) as ins:
             login_data = {

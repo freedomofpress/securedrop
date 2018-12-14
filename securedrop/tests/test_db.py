@@ -88,12 +88,12 @@ def test_submission_string_representation(journalist_app, test_source):
 def test_reply_string_representation(journalist_app,
                                      test_journo,
                                      test_source,
-                                     config):
+                                     journalist_config):
     with journalist_app.app_context():
         db_helper.reply(test_journo['journalist'],
                         test_source['source'],
                         2,
-                        config)
+                        journalist_config)
         test_reply = Reply.query.first()
         test_reply.__repr__()
 

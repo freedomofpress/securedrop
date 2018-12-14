@@ -24,7 +24,7 @@ os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import journalist_app
 import source_app
 import tests.utils.env as env
-from sdconfig import SDConfig
+from sdconfig import JournalistInterfaceConfig, SourceInterfaceConfig
 
 from db import db
 
@@ -83,9 +83,12 @@ class FunctionalTest(object):
         return firefox_binary.FirefoxBinary(log_file=log_file)
 
     def setup(self, session_expiration=30):
-        self.config = SDConfig()
-        env.create_directories(self.config)
-        self.__context = journalist_app.create_app(self.config).app_context()
+        self.journalist_config = JournalistInterfaceConfig()
+        self.source_config = SourceInterfaceConfig()
+
+        env.create_directories(self.journalist_config)
+        self.__context = \
+            journalist_app.create_app(self.journalist_config).app_context()
         self.__context.push()
         # Patch the two-factor verification to avoid intermittent errors
         self.patcher = mock.patch('models.Journalist.verify_token')
@@ -98,7 +101,7 @@ class FunctionalTest(object):
 
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
-        self.gpg = env.init_gpg(self.config)
+        self.gpg = env.init_gpg(self.journalist_config)
         db.create_all()
 
         source_port = self._unused_port()
@@ -110,11 +113,14 @@ class FunctionalTest(object):
         # Allow custom session expiration lengths
         self.session_expiration = session_expiration
 
-        self.source_app = source_app.create_app(self.config)
-        self.journalist_app = journalist_app.create_app(self.config)
+        self.source_app = source_app.create_app(self.source_config)
+        self.journalist_app = journalist_app.create_app(self.journalist_config)
 
         def start_source_server(app):
-            self.config.SESSION_EXPIRATION_MINUTES = self.session_expiration
+            self.journalist_config.SESSION_EXPIRATION_MINUTES = \
+                self.session_expiration
+            self.source_config.SESSION_EXPIRATION_MINUTES = \
+                self.session_expiration
 
             app.run(
                 port=source_port,
@@ -190,7 +196,7 @@ class FunctionalTest(object):
 
     def teardown(self):
         self.patcher.stop()
-        env.teardown(self.config)
+        env.teardown(self.journalist_config)
         if hasattr(self, 'driver') and not hasattr(self, 'override_driver'):
             self.driver.quit()
         self.source_process.terminate()

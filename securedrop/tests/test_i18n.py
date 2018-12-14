@@ -168,7 +168,7 @@ def test_get_supported_locales():
 
 
 # Grab the journalist_app fixture to trigger creation of resources
-def test_i18n(journalist_app, config):
+def test_i18n(journalist_app, journalist_config, source_config):
     # Then delete it because using it won't test what we want
     del journalist_app
 
@@ -181,21 +181,22 @@ def test_i18n(journalist_app, config):
         '--verbose',
         'translate-messages',
         '--mapping', 'tests/i18n/babel.cfg',
-        '--translations-dir', config.TEMP_DIR,
+        '--translations-dir', journalist_config.TEMP_DIR,
         '--sources', ",".join(sources),
         '--extract-update',
     ])
 
-    pot = os.path.join(config.TEMP_DIR, 'messages.pot')
-    pybabel('init', '-i', pot, '-d', config.TEMP_DIR, '-l', 'en_US')
+    pot = os.path.join(journalist_config.TEMP_DIR, 'messages.pot')
+    pybabel('init', '-i', pot, '-d', journalist_config.TEMP_DIR, '-l', 'en_US')
 
     for (l, s) in (('fr_FR', 'code bonjour'),
                    ('zh_Hans_CN', 'code chinese'),
                    ('ar', 'code arabic'),
                    ('nb_NO', 'code norwegian'),
                    ('es_ES', 'code spanish')):
-        pybabel('init', '-i', pot, '-d', config.TEMP_DIR, '-l', l)
-        po = os.path.join(config.TEMP_DIR, l, 'LC_MESSAGES/messages.po')
+        pybabel('init', '-i', pot, '-d', journalist_config.TEMP_DIR, '-l', l)
+        po = os.path.join(journalist_config.TEMP_DIR, l,
+                          'LC_MESSAGES/messages.po')
         sed('-i', '-e',
             '/code hello i18n/,+1s/msgstr ""/msgstr "{}"/'.format(s),
             po)
@@ -203,20 +204,24 @@ def test_i18n(journalist_app, config):
     i18n_tool.I18NTool().main([
         '--verbose',
         'translate-messages',
-        '--translations-dir', config.TEMP_DIR,
+        '--translations-dir', journalist_config.TEMP_DIR,
         '--compile',
     ])
 
-    config.SUPPORTED_LOCALES = [
-        'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
-    config.TRANSLATION_DIRS = config.TEMP_DIR
+    for cnf in [journalist_config, source_config]:
+        cnf.SUPPORTED_LOCALES = [
+            'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
+        cnf.TRANSLATION_DIRS = cnf.TEMP_DIR
 
     # Use our config (and not an app fixture) because the i18n module
     # grabs values at init time and we can't inject them later.
-    for app in (journalist_app_module.create_app(config),
-                source_app.create_app(config)):
-        assert i18n.LOCALES == config.SUPPORTED_LOCALES
-        verify_i18n(app)
+    app = journalist_app_module.create_app(journalist_config)
+    assert i18n.LOCALES == journalist_config.SUPPORTED_LOCALES
+    verify_i18n(app)
+
+    app = source_app.create_app(journalist_config)
+    assert i18n.LOCALES == source_config.SUPPORTED_LOCALES
+    verify_i18n(app)
 
 
 def test_locale_to_rfc_5646():
@@ -228,16 +233,18 @@ def test_locale_to_rfc_5646():
 
 
 # Grab the journalist_app fixture to trigger creation of resources
-def test_html_en_lang_correct(journalist_app, config):
+def test_html_en_lang_correct(journalist_app,
+                              journalist_config,
+                              source_config):
     # Then delete it because using it won't test what we want
     del journalist_app
 
-    app = journalist_app_module.create_app(config).test_client()
+    app = journalist_app_module.create_app(journalist_config).test_client()
     resp = app.get('/', follow_redirects=True)
     html = resp.data.decode('utf-8')
     assert re.compile('<html .*lang="en".*>').search(html), html
 
-    app = source_app.create_app(config).test_client()
+    app = source_app.create_app(source_config).test_client()
     resp = app.get('/', follow_redirects=True)
     html = resp.data.decode('utf-8')
     assert re.compile('<html .*lang="en".*>').search(html), html
@@ -249,19 +256,23 @@ def test_html_en_lang_correct(journalist_app, config):
 
 
 # Grab the journalist_app fixture to trigger creation of resources
-def test_html_fr_lang_correct(journalist_app, config):
+def test_html_fr_lang_correct(journalist_app,
+                              journalist_config,
+                              source_config):
     """Check that when the locale is fr_FR the lang property is correct"""
 
     # Then delete it because using it won't test what we want
     del journalist_app
 
-    config.SUPPORTED_LOCALES = ['fr_FR', 'en_US']
-    app = journalist_app_module.create_app(config).test_client()
+    for cnf in [journalist_config, source_config]:
+        cnf.SUPPORTED_LOCALES = ['fr_FR', 'en_US']
+
+    app = journalist_app_module.create_app(journalist_config).test_client()
     resp = app.get('/?l=fr_FR', follow_redirects=True)
     html = resp.data.decode('utf-8')
     assert re.compile('<html .*lang="fr".*>').search(html), html
 
-    app = source_app.create_app(config).test_client()
+    app = source_app.create_app(source_config).test_client()
     resp = app.get('/?l=fr_FR', follow_redirects=True)
     html = resp.data.decode('utf-8')
     assert re.compile('<html .*lang="fr".*>').search(html), html

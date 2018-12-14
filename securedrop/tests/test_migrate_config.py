@@ -26,8 +26,7 @@ def test_migrate_empty_case(tmpdir):
     '''
     The migration should not break even if the config
     '''
-    config_json = str(tmpdir.join("config.json"))
-    config_json_tmp = str(tmpdir.join("config.json.tmp"))
+    config_dir = str(tmpdir)
 
     # dummy class with none of the `config.py` attributes
     class Dummy():
@@ -38,11 +37,14 @@ def test_migrate_empty_case(tmpdir):
 
     with mock.patch("migrate_config.import_config",
                     return_value=dummy) as mock_import:
-        migrate_config.do_migration(True, config_json, config_json_tmp)
+        migrate_config.do_migration(True, config_dir)
 
     assert mock_import.called_once_with()
-    assert not path.exists(config_json_tmp)
 
-    with open(config_json) as f:
-        read_config = json.loads(f.read())
-    assert read_config  # TODO
+    journalist_json = path.join(config_dir, 'journalist-config.json')
+    source_json = path.join(config_dir, 'source-config.json')
+
+    for config_file in [journalist_json, source_json]:
+        with open(config_file) as f:
+            json_config = json.loads(f.read())
+            assert json_config  # TODO

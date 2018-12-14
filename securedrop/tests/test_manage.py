@@ -22,20 +22,20 @@ YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
                 'cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc d7']
 
 
-def test_parse_args(config):
+def test_parse_args(journalist_config):
     # just test that the arg parser is stable
-    manage.get_args(config)
+    manage.get_args(journalist_config)
 
 
-def test_not_verbose(caplog, config):
-    args = manage.get_args(config).parse_args(['run'])
+def test_not_verbose(caplog, journalist_config):
+    args = manage.get_args(journalist_config).parse_args(['run'])
     manage.setup_verbosity(args)
     manage.log.debug('INVISIBLE')
     assert 'INVISIBLE' not in caplog.text
 
 
-def test_verbose(caplog, config):
-    args = manage.get_args(config).parse_args(['--verbose', 'run'])
+def test_verbose(caplog, journalist_config):
+    args = manage.get_args(journalist_config).parse_args(['--verbose', 'run'])
     manage.setup_verbosity(args)
     manage.log.debug('VISIBLE')
     assert 'VISIBLE' in caplog.text
@@ -64,7 +64,7 @@ def test_get_yubikey_usage_no():
 
 
 # Note: we use the `journalist_app` fixture because it creates the DB
-def test_handle_invalid_secret(journalist_app, config, mocker):
+def test_handle_invalid_secret(journalist_app, journalist_config, mocker):
     """Regression test for bad secret logic in manage.py"""
 
     mocker.patch("manage._get_username", return_value='ntoll'),
@@ -73,7 +73,7 @@ def test_handle_invalid_secret(journalist_app, config, mocker):
     mocker.patch("sys.stdout", new_callable=StringIO),
 
     # We will try to provide one invalid and one valid secret
-    return_value = manage._add_user(config)
+    return_value = manage._add_user(journalist_config)
 
     assert return_value == 0
     assert 'Try again.' in sys.stdout.getvalue()
@@ -82,7 +82,7 @@ def test_handle_invalid_secret(journalist_app, config, mocker):
 
 # Note: we use the `journalist_app` fixture because it creates the DB
 def test_exception_handling_when_duplicate_username(journalist_app,
-                                                    config,
+                                                    journalist_config,
                                                     mocker):
     """Regression test for duplicate username logic in manage.py"""
 
@@ -91,40 +91,40 @@ def test_exception_handling_when_duplicate_username(journalist_app,
     mocker.patch("sys.stdout", new_callable=StringIO)
 
     # Inserting the user for the first time should succeed
-    return_value = manage._add_user(config)
+    return_value = manage._add_user(journalist_config)
     assert return_value == 0
     assert 'successfully added' in sys.stdout.getvalue()
 
     # Inserting the user for a second time should fail
-    return_value = manage._add_user(config)
+    return_value = manage._add_user(journalist_config)
     assert return_value == 1
     assert ('ERROR: That username is already taken!' in
             sys.stdout.getvalue())
 
 
 # Note: we use the `journalist_app` fixture because it creates the DB
-def test_delete_user(journalist_app, config, mocker):
+def test_delete_user(journalist_app, journalist_config, mocker):
     mocker.patch("manage._get_username", return_value='test-user-56789')
     mocker.patch("manage._get_yubikey_usage", return_value=False)
     mocker.patch("manage._get_username_to_delete",
                  return_value='test-user-56789')
     mocker.patch('manage._get_delete_confirmation', return_value=True)
 
-    return_value = manage._add_user(config)
+    return_value = manage._add_user(journalist_config)
     assert return_value == 0
 
-    return_value = manage.delete_user(None, config)
+    return_value = manage.delete_user(None, journalist_config)
     assert return_value == 0
 
 
 # Note: we use the `journalist_app` fixture because it creates the DB
-def test_delete_non_existent_user(journalist_app, config, mocker):
+def test_delete_non_existent_user(journalist_app, journalist_config, mocker):
     mocker.patch("manage._get_username_to_delete",
                  return_value='does-not-exist')
     mocker.patch('manage._get_delete_confirmation', return_value=True)
     mocker.patch("sys.stdout", new_callable=StringIO)
 
-    return_value = manage.delete_user(None, config)
+    return_value = manage.delete_user(None, journalist_config)
     assert return_value == 0
     assert 'ERROR: That user was not found!' in sys.stdout.getvalue()
 
@@ -135,16 +135,16 @@ def test_get_username_to_delete(mocker):
     assert return_value == 'test-user-12345'
 
 
-def test_reset(journalist_app, test_journo, alembic_config, config):
+def test_reset(journalist_app, test_journo, alembic_config, journalist_config):
     # Override the hardcoded alembic.ini value
-    config.TEST_ALEMBIC_INI = alembic_config
+    journalist_config.TEST_ALEMBIC_INI = alembic_config
 
-    args = argparse.Namespace(store_dir=config.STORE_DIR)
-    return_value = manage.reset(args, config)
+    args = argparse.Namespace(store_dir=journalist_config.STORE_DIR)
+    return_value = manage.reset(args, journalist_config)
 
     assert return_value == 0
-    assert os.path.exists(config.DATABASE_FILE)
-    assert os.path.exists(config.STORE_DIR)
+    assert os.path.exists(journalist_config.DATABASE_FILE)
+    assert os.path.exists(journalist_config.STORE_DIR)
 
     # Verify journalist user present in the database is gone
     with journalist_app.app_context():
@@ -158,42 +158,42 @@ def test_get_username(mocker):
     assert manage._get_username() == 'foo-bar-baz'
 
 
-def test_clean_tmp_do_nothing(caplog, config):
+def test_clean_tmp_do_nothing(caplog, journalist_config):
     args = argparse.Namespace(days=0,
                               directory=' UNLIKELY::::::::::::::::: ',
                               verbose=logging.DEBUG)
     manage.setup_verbosity(args)
-    manage.clean_tmp(args, config)
+    manage.clean_tmp(args, journalist_config)
     assert 'does not exist, do nothing' in caplog.text
 
 
-def test_clean_tmp_too_young(config, caplog):
+def test_clean_tmp_too_young(journalist_config, caplog):
     args = argparse.Namespace(days=24*60*60,
-                              directory=config.TEMP_DIR,
+                              directory=journalist_config.TEMP_DIR,
                               verbose=logging.DEBUG)
     # create a file
-    io.open(os.path.join(config.TEMP_DIR, 'FILE'), 'a').close()
+    io.open(os.path.join(journalist_config.TEMP_DIR, 'FILE'), 'a').close()
 
     manage.setup_verbosity(args)
-    manage.clean_tmp(args, config)
+    manage.clean_tmp(args, journalist_config)
     assert 'modified less than' in caplog.text
 
 
-def test_clean_tmp_removed(config, caplog):
+def test_clean_tmp_removed(journalist_config, caplog):
     args = argparse.Namespace(days=0,
-                              directory=config.TEMP_DIR,
+                              directory=journalist_config.TEMP_DIR,
                               verbose=logging.DEBUG)
-    fname = os.path.join(config.TEMP_DIR, 'FILE')
+    fname = os.path.join(journalist_config.TEMP_DIR, 'FILE')
     with io.open(fname, 'a'):
         old = time.time() - 24*60*60
         os.utime(fname, (old, old))
     manage.setup_verbosity(args)
-    manage.clean_tmp(args, config)
+    manage.clean_tmp(args, journalist_config)
     assert 'FILE removed' in caplog.text
 
 
-def test_were_there_submissions_today(source_app, config):
-    data_root = config.SECUREDROP_DATA_ROOT
+def test_were_there_submissions_today(source_app, journalist_config):
+    data_root = journalist_config.SECUREDROP_DATA_ROOT
     args = argparse.Namespace(data_root=data_root,
                               verbose=logging.DEBUG)
 
@@ -203,9 +203,9 @@ def test_were_there_submissions_today(source_app, config):
         source.last_updated = (datetime.datetime.utcnow() -
                                datetime.timedelta(hours=24*2))
         db.session.commit()
-        manage.were_there_submissions_today(args, config)
+        manage.were_there_submissions_today(args, journalist_config)
         assert io.open(count_file).read() == "0"
         source.last_updated = datetime.datetime.utcnow()
         db.session.commit()
-        manage.were_there_submissions_today(args, config)
+        manage.were_there_submissions_today(args, journalist_config)
         assert io.open(count_file).read() == "1"

@@ -82,14 +82,14 @@ def verify_filesizeformat(app):
 
 # We can't use fixtures because these options are set at app init time, and we
 # can't modify them after.
-def test_source_filters(config):
-    do_test(config, source_app.create_app)
+def test_source_filters(source_config):
+    do_test(source_config, source_app.create_app)
 
 
 # We can't use fixtures because these options are set at app init time, and we
 # can't modify them after.
-def test_journalist_filters(config):
-    do_test(config, journalist_app.create_app)
+def test_journalist_filters(journalist_config):
+    do_test(journalist_config, journalist_app.create_app)
 
 
 def do_test(config, create_app):

@@ -232,8 +232,8 @@ def test_submit_file(source_app, journalist_app, test_journo):
         utils.async.wait_for_assertion(assertion)
 
 
-def _helper_test_reply(journalist_app, source_app, config, test_journo,
-                       test_reply, expected_success=True):
+def _helper_test_reply(journalist_app, source_app, journalist_config,
+                       test_journo, test_reply, expected_success=True):
     test_msg = "This is a test message."
 
     with source_app.test_client() as app:
@@ -423,20 +423,20 @@ def _can_decrypt_with_key(journalist_app, msg, passphrase=None):
 def test_reply_normal(journalist_app,
                       source_app,
                       test_journo,
-                      config):
+                      journalist_config):
     '''Test for regression on #1360 (failure to encode bytes before calling
        gpg functions).
     '''
     journalist_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
     source_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
-    _helper_test_reply(journalist_app, source_app, config, test_journo,
-                       "This is a test reply.", True)
+    _helper_test_reply(journalist_app, source_app, journalist_config,
+                       test_journo, "This is a test reply.", True)
 
 
 def test_unicode_reply_with_ansi_env(journalist_app,
                                      source_app,
                                      test_journo,
-                                     config):
+                                     journalist_config):
     # This makes python-gnupg handle encoding equivalent to if we were
     # running SD in an environment where os.getenv("LANG") == "C".
     # Unfortunately, with the way our test suite is set up simply setting
@@ -447,8 +447,8 @@ def test_unicode_reply_with_ansi_env(journalist_app,
     # https://github.com/freedomofpress/securedrop/issues/1360 for context.
     journalist_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
     source_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
-    _helper_test_reply(journalist_app, source_app, config, test_journo,
-                       u"ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
+    _helper_test_reply(journalist_app, source_app, journalist_config,
+                       test_journo, u"ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
 
 
 def test_delete_collection(mocker, source_app, journalist_app, test_journo):

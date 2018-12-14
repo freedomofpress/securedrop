@@ -390,12 +390,12 @@ def test_submit_message_with_enough_entropy(source_app):
                 assert async_genkey.called
 
 
-def test_delete_all_successfully_deletes_replies(source_app, config):
+def test_delete_all_successfully_deletes_replies(source_app, source_config):
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
         source, codename = utils.db_helper.init_source()
         source_id = source.id
-        utils.db_helper.reply(journalist, source, 1, config)
+        utils.db_helper.reply(journalist, source, 1, source_config)
 
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
@@ -414,14 +414,15 @@ def test_delete_all_successfully_deletes_replies(source_app, config):
             assert reply.deleted_by_source is True
 
 
-def test_delete_all_replies_deleted_by_source_but_not_journalist(source_app,
-                                                                 config):
+def test_delete_all_replies_deleted_by_source_but_not_journalist(
+        source_app,
+        source_config):
     """Replies can be deleted by a source, but not by journalists. As such,
     replies may still exist in the replies table, but no longer be visible."""
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
         source, codename = utils.db_helper.init_source()
-        utils.db_helper.reply(journalist, source, 1, config)
+        utils.db_helper.reply(journalist, source, 1, source_config)
         replies = Reply.query.filter(Reply.source_id == source.id).all()
         for reply in replies:
             reply.deleted_by_source = True
@@ -628,12 +629,12 @@ def test_login_with_invalid_codename(source_app):
         assert "Invalid input." in text
 
 
-def test_source_session_expiration(config, source_app):
+def test_source_session_expiration(source_config, source_app):
     with source_app.test_client() as app:
         codename = new_codename(app, session)
 
         # set the expiration to ensure we trigger an expiration
-        config.SESSION_EXPIRATION_MINUTES = -1
+        source_config.SESSION_EXPIRATION_MINUTES = -1
 
         resp = app.post(url_for('main.login'),
                         data=dict(codename=codename),
@@ -650,7 +651,7 @@ def test_source_session_expiration(config, source_app):
         assert 'Your session timed out due to inactivity' in text
 
 
-def test_csrf_error_page(config, source_app):
+def test_csrf_error_page(source_config, source_app):
     source_app.config['WTF_CSRF_ENABLED'] = True
     with source_app.test_client() as app:
         with InstrumentedApp(source_app) as ins:
@@ -662,14 +663,14 @@ def test_csrf_error_page(config, source_app):
         assert 'Your session timed out due to inactivity' in text
 
 
-def test_source_can_only_delete_own_replies(source_app, config):
+def test_source_can_only_delete_own_replies(source_app, source_config):
     '''This test checks for a bug an authenticated source A could delete
        replies send to source B by "guessing" the filename.
     '''
     source0, codename0 = utils.db_helper.init_source()
     source1, codename1 = utils.db_helper.init_source()
     journalist, _ = utils.db_helper.init_journalist()
-    replies = utils.db_helper.reply(journalist, source0, 1, config)
+    replies = utils.db_helper.reply(journalist, source0, 1, source_config)
     filename = replies[0].filename
     confirmation_msg = 'Reply deleted'
 

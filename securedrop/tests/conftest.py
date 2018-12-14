@@ -16,7 +16,7 @@ from flask import url_for
 from pyotp import TOTP
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import SDConfig
+from sdconfig import JournalistInterfaceConfig, SourceInterfaceConfig
 
 from os import path
 
@@ -70,57 +70,85 @@ def hardening(request):
 
 @pytest.fixture(scope='session')
 def setUpTearDown():
-    default_config = SDConfig()
+    default_config = JournalistInterfaceConfig()
     _start_test_rqworker(default_config)
     yield
     _stop_test_rqworker()
     _cleanup_test_securedrop_dataroot(default_config)
 
 
-@pytest.fixture(scope='function')
-def config(tmpdir):
-    '''Clone the module so we can modify it per test.'''
-
-    cnf = SDConfig()
-
-    data = tmpdir.mkdir('data')
-    cnf.SECUREDROP_DATA_ROOT = str(data)
-
-    keys = data.mkdir('keys')  # for cnf.GPG_KEY_DIR
-    os.chmod(str(keys), 0o700)  # to pass app runtime checks
-    data.mkdir('store')  # for cnf.STORE_DIR
-    data.mkdir('tmp')  # for cnf.TEMP_DIR
+@pytest.fixture(scope='session')
+def gpg_key_dir():
+    '''
+    Create one "master" keyring that we copy on a per-config basis. We do this
+    because importing keys with GPG is *slow* and this massively speeds up
+    tests.
+    '''
+    gpg_home = '/tmp/sd-test-gpg-home'
+    if not path.exists(gpg_home):
+        os.mkdir(gpg_home)
 
     # gpg 2.1+ requires gpg-agent, see #4013
-    gpg_agent_config = str(keys.join('gpg-agent.conf'))
+    gpg_agent_config = path.join(gpg_home, 'gpg-agent.conf')
     with open(gpg_agent_config, 'w+') as f:
         f.write('allow-loopback-pinentry')
 
-    gpg = gnupg.GPG('gpg2', homedir=cnf.GPG_KEY_DIR)
+    gpg = gnupg.GPG('gpg2', homedir=gpg_home)
     for ext in ['sec', 'pub']:
         with io.open(path.join(path.dirname(__file__),
                                'files',
                                'test_journalist_key.{}'.format(ext))) as f:
             gpg.import_keys(f.read())
 
-    # create the db file
-    subprocess.check_call(['sqlite3', cnf.DATABASE_FILE, '.databases'])
-
-    return cnf
+    return gpg_home
 
 
 @pytest.fixture(scope='function')
-def alembic_config(config):
+def _config(tmpdir, gpg_key_dir):
+    j_cnf = JournalistInterfaceConfig()
+    s_cnf = SourceInterfaceConfig()
+
+    data = tmpdir.mkdir('data')
+    j_cnf.SECUREDROP_DATA_ROOT = str(data)
+    s_cnf.SECUREDROP_DATA_ROOT = str(data)
+
+    data.mkdir('store')  # for cnf.STORE_DIR
+    data.mkdir('tmp')  # for cnf.TEMP_DIR
+
+    keys = str(data.join('keys'))  # for cnf.GPG_KEY_DIR
+    shutil.copytree(gpg_key_dir, keys)
+    os.chmod(str(keys), 0o700)  # to pass app runtime checks
+
+    # create the db file
+    subprocess.check_call(['sqlite3', j_cnf.DATABASE_FILE, '.databases'])
+
+    return (j_cnf, s_cnf)
+
+
+@pytest.fixture(scope='function')
+def journalist_config(_config):
+    return _config[0]
+
+
+@pytest.fixture(scope='function')
+def source_config(_config):
+    return _config[1]
+
+
+@pytest.fixture(scope='function')
+def alembic_config(journalist_config):
     base_dir = path.join(path.dirname(__file__), '..')
     migrations_dir = path.join(base_dir, 'alembic')
     ini = SafeConfigParser()
     ini.read(path.join(base_dir, 'alembic.ini'))
 
     ini.set('alembic', 'script_location', path.join(migrations_dir))
-    ini.set('alembic', 'sqlalchemy.url', 'sqlite:///' + config.DATABASE_FILE)
+    ini.set('alembic', 'sqlalchemy.url',
+            'sqlite:///' + journalist_config.DATABASE_FILE)
 
-    alembic_path = path.join(config.SECUREDROP_DATA_ROOT, 'alembic.ini')
-    config.TESTING_ALEMBIC_PATH = alembic_path
+    alembic_path = path.join(journalist_config.SECUREDROP_DATA_ROOT,
+                             'alembic.ini')
+    journalist_config.TESTING_ALEMBIC_PATH = alembic_path
 
     with open(alembic_path, 'w') as f:
         ini.write(f)
@@ -129,8 +157,8 @@ def alembic_config(config):
 
 
 @pytest.fixture(scope='function')
-def source_app(config):
-    app = create_source_app(config)
+def source_app(source_config):
+    app = create_source_app(source_config)
     app.config['SERVER_NAME'] = 'localhost'
     with app.app_context():
         db.create_all()
@@ -138,8 +166,8 @@ def source_app(config):
 
 
 @pytest.fixture(scope='function')
-def journalist_app(config):
-    app = create_journalist_app(config)
+def journalist_app(journalist_config):
+    app = create_journalist_app(journalist_config)
     app.config['SERVER_NAME'] = 'localhost'
     with app.app_context():
         db.create_all()
@@ -197,11 +225,12 @@ def test_submissions(journalist_app):
 
 
 @pytest.fixture(scope='function')
-def test_files(journalist_app, test_journo, config):
+def test_files(journalist_app, test_journo, journalist_config):
     with journalist_app.app_context():
         source, codename = utils.db_helper.init_source()
         utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(test_journo['journalist'], source, 1, config)
+        utils.db_helper.reply(test_journo['journalist'], source, 1,
+                              journalist_config)
         return {'source': source,
                 'codename': codename,
                 'filesystem_id': source.filesystem_id,

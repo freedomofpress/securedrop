@@ -32,14 +32,14 @@ def test_clean():
         assert 'invalid input: {}'.format(invalid) in str(err)
 
 
-def test_encrypt_success(source_app, config, test_source):
+def test_encrypt_success(source_app, journalist_config, test_source):
     message = 'test'
 
     with source_app.app_context():
         ciphertext = source_app.crypto_util.encrypt(
             message,
             [source_app.crypto_util.getkey(test_source['filesystem_id']),
-             config.JOURNALIST_KEY],
+             journalist_config.JOURNALIST_KEY],
             source_app.storage.path(test_source['filesystem_id'],
                                     'somefile.gpg'))
 
@@ -59,7 +59,7 @@ def test_encrypt_failure(source_app, test_source):
         assert 'no terminal at all requested' in str(err)
 
 
-def test_encrypt_without_output(source_app, config, test_source):
+def test_encrypt_without_output(source_app, journalist_config, test_source):
     """We simply do not specify the option output keyword argument
     to crypto_util.encrypt() here in order to confirm encryption
     works when it defaults to `None`.
@@ -69,7 +69,7 @@ def test_encrypt_without_output(source_app, config, test_source):
         ciphertext = source_app.crypto_util.encrypt(
             message,
             [source_app.crypto_util.getkey(test_source['filesystem_id']),
-             config.JOURNALIST_KEY])
+             journalist_config.JOURNALIST_KEY])
         plaintext = source_app.crypto_util.decrypt(
             test_source['codename'],
             ciphertext)
@@ -77,7 +77,7 @@ def test_encrypt_without_output(source_app, config, test_source):
     assert plaintext == message
 
 
-def test_encrypt_binary_stream(source_app, config, test_source):
+def test_encrypt_binary_stream(source_app, journalist_config, test_source):
     """Generally, we pass unicode strings (the type form data is
     returned as) as plaintext to crypto_util.encrypt(). These have
     to be converted to "binary stream" types (such as `file`) before
@@ -95,7 +95,7 @@ def test_encrypt_binary_stream(source_app, config, test_source):
             ciphertext = source_app.crypto_util.encrypt(
                 fh,
                 [source_app.crypto_util.getkey(test_source['filesystem_id']),
-                 config.JOURNALIST_KEY],
+                 journalist_config.JOURNALIST_KEY],
                 source_app.storage.path(test_source['filesystem_id'],
                                         'somefile.gpg'))
         plaintext = source_app.crypto_util.decrypt(test_source['codename'],
@@ -124,7 +124,7 @@ def test_encrypt_fingerprints_not_a_list_or_tuple(source_app, test_source):
 
 
 def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
-                                                        config,
+                                                        journalist_config,
                                                         test_source):
     message = 'test'
 
@@ -132,7 +132,7 @@ def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
         ciphertext = source_app.crypto_util.encrypt(
             message,
             [source_app.crypto_util.getkey(test_source['filesystem_id']),
-             config.JOURNALIST_KEY],
+             journalist_config.JOURNALIST_KEY],
             source_app.storage.path(test_source['filesystem_id'],
                                     'somefile.gpg'))
         plaintext = source_app.crypto_util.decrypt(test_source['codename'],
@@ -142,7 +142,7 @@ def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
 
         # Since there's no way to specify which key to use for
         # decryption to python-gnupg, we delete the `source`'s key and
-        # ensure we can decrypt with the `config.JOURNALIST_KEY`.
+        # ensure we can decrypt with the `journalist_config.JOURNALIST_KEY`.
         source_app.crypto_util.delete_reply_keypair(
             test_source['filesystem_id'])
         plaintext = source_app.crypto_util.gpg.decrypt(ciphertext).data
@@ -165,9 +165,11 @@ def test_genrandomid_default_locale_is_en(source_app):
     verify_genrandomid(source_app, 'en')
 
 
-def test_get_wordlist(source_app, config):
+def test_get_wordlist(source_app, journalist_config):
     locales = []
-    wordlists_path = os.path.join(config.SECUREDROP_ROOT, 'wordlists')
+    wordlists_path = os.path.join(
+        journalist_config.SECUREDROP_ROOT, 'wordlists')
+
     for f in os.listdir(wordlists_path):
         if f.endswith('.txt') and f != 'en.txt':
             locales.append(f.split('.')[0])
