@@ -14,7 +14,7 @@ if typing.TYPE_CHECKING:
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from typing import List, Dict  # noqa: F401
 
-CONFIG_FILE = '/etc/securedrop/config.json'
+CONFIG_DIR = '/etc/securedrop'
 
 
 class _FlaskConfig(object):
@@ -23,40 +23,37 @@ class _FlaskConfig(object):
     TESTING = False
     WTF_CSRF_ENABLED = True
 
-    def __init__(self, secret_key):
-        # type: (str) -> None
+    def __init__(self, secret_key, cookie_name, env):
+        # type: (str, str, str) -> None
         self.SECRET_KEY = secret_key
+        self.SESSION_COOKIE_NAME = cookie_name
 
-
-class _SourceInterfaceFlaskConfig(_FlaskConfig):
-
-    SESSION_COOKIE_NAME = "ss"
-
-
-class _JournalistInterfaceFlaskConfig(_FlaskConfig):
-
-    SESSION_COOKIE_NAME = "js"
+        if env == 'prod':
+            # This is recommended for performance, and also resolves #369
+            self.USE_X_SENDFILE = True  # type: ignore
+        elif env == 'dev':
+            # Enable _Flask's debugger for development
+            self.DEBUG = True
+            # Use MAX_CONTENT_LENGTH to mimic the behavior of Apache's LimitRequestBody  # noqa: 501
+            # in the development environment. See #1714.
+            self.MAX_CONTENT_LENGTH = 524288000  # type: ignore
+        elif env == 'test':
+            self.TESTING = True
+            # Disable CSRF checks to make writing tests easier
+            self.WTF_CSRF_ENABLED = False
 
 
 class SDConfig(object):
 
-    def __init__(self, config_file=CONFIG_FILE):
+    def __init__(self, config_file):
         # type: (str) -> None
 
         with open(config_file) as f:
-            json_config = json.loads(f.read())
+            self._json_config = json.loads(f.read())
 
         self.SECUREDROP_DATA_ROOT = '/var/lib/securedrop/'
 
         self.SECUREDROP_ROOT = path.abspath(path.dirname(__file__))
-
-        journalist_secret = json_config['journalist_interface']['secret_key']  # type: ignore # noqa: 501
-        self.JournalistInterfaceFlaskConfig = \
-            _JournalistInterfaceFlaskConfig(journalist_secret)
-
-        source_secret = json_config['source_interface']['secret_key']  # type: ignore # noqa: 501
-        self.SourceInterfaceFlaskConfig = \
-            _SourceInterfaceFlaskConfig(source_secret)
 
         self.SESSION_EXPIRATION_MINUTES = 120
 
@@ -64,54 +61,33 @@ class SDConfig(object):
 
         self.WORKER_PIDFILE = '/tmp/securedrop_worker.pid'  # nosec: B108
 
-        # also accessible via .source_interface.journalist_key
-        self.JOURNALIST_KEY = json_config['journalist_interface']['journalist_key']  # noqa: 501
+        self.JOURNALIST_KEY = self._json_config['journalist_key']
 
         try:
-            # also accessible via .source_interface.i18n.default_locale
-            self.DEFAULT_LOCALE = json_config['journalist_interface']['i18n']['default_locale'] # type: ignore # noqa: 501
+            self.DEFAULT_LOCALE = self._json_config['i18n']['default_locale'] # type: ignore # noqa: 501
         except (KeyError, TypeError):
             self.DEFAULT_LOCALE = 'en_US'
 
         try:
-            # also accessible via .source_interface.i18n.supported_locales
-            self.SUPPORTED_LOCALES = json_config['journalist_interface']['i18n']['supported_locales'] # type: ignore # noqa: 501
+            self.SUPPORTED_LOCALES = self._json_config['i18n']['supported_locales'] # type: ignore # noqa: 501
         except (KeyError, AttributeError):
             self.SUPPORTED_LOCALES = [self.DEFAULT_LOCALE]
 
-        # also accessible via .source_interface.scrypt_gpg_pepper
-        self.SCRYPT_GPG_PEPPER = json_config['journalist_interface']['scrypt_gpg_pepper'] # type: ignore # noqa: 501
+        self.SCRYPT_GPG_PEPPER = self._json_config['scrypt_gpg_pepper'] # type: ignore # noqa: 501
 
-        # also accessible via .source_interface.scrypt_id_pepper
-        self.SCRYPT_ID_PEPPER = json_config['journalist_interface']['scrypt_id_pepper'] # type: ignore # noqa: 501
+        self.SCRYPT_ID_PEPPER = self._json_config['scrypt_id_pepper'] # type: ignore # noqa: 501
 
-        # also accessible via .source_interface.scrypt_params
         try:
-            self.SCRYPT_PARAMS = json_config['journalist_interface']['scrypt_params'] # type: ignore # noqa: 501
+            self.SCRYPT_PARAMS = self._json_config['scrypt_params'] # type: ignore # noqa: 501
         except (KeyError, TypeError):
             self.SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
         try:
-            # also accessible via .source_interface.custom_header_image
-            self.CUSTOM_HEADER_IMAGE = json_config['journalist_interface']['custom_header_image'] # type: ignore # noqa: 501
+            self.CUSTOM_HEADER_IMAGE = self._json_config['custom_header_image'] # type: ignore # noqa: 501
         except (KeyError, TypeError):
             self.CUSTOM_HEADER_IMAGE = None
 
         self.env = os.environ.get('SECUREDROP_ENV', 'prod')
-
-        if self.env == 'prod':
-            # This is recommended for performance, and also resolves #369
-            _FlaskConfig.USE_X_SENDFILE = True  # type: ignore
-        elif self.env == 'dev':
-            # Enable _Flask's debugger for development
-            _FlaskConfig.DEBUG = True
-            # Use MAX_CONTENT_LENGTH to mimic the behavior of Apache's LimitRequestBody  # noqa: 501
-            # in the development environment. See #1714.
-            _FlaskConfig.MAX_CONTENT_LENGTH = 524288000  # type: ignore
-        elif self.env == 'test':
-            _FlaskConfig.TESTING = True
-            # Disable CSRF checks to make writing tests easier
-            _FlaskConfig.WTF_CSRF_ENABLED = False
 
     @property
     def DATABASE_FILE(self):
@@ -221,3 +197,33 @@ class SDConfig(object):
     @WORD_LIST.deleter
     def WORD_LIST(self):
         raise AttributeError('Cannot delete WORD_LIST')
+
+
+class JournalistInterfaceConfig(SDConfig):
+
+    _CONFIG_FILE = 'journalist-config.json'
+    _SESSION_COOKIE_NAME = "ss"
+
+    def __init__(self, config_dir=CONFIG_DIR):
+        # type (str) -> None
+        super(JournalistInterfaceConfig, self).__init__(
+            path.join(config_dir, self._CONFIG_FILE))
+        secret_key = self._json_config['secret_key']  # type: ignore
+        self.flask_config = \
+            _FlaskConfig(secret_key, self._SESSION_COOKIE_NAME, self.env)
+        del self._json_config
+
+
+class SourceInterfaceConfig(SDConfig):
+
+    _CONFIG_FILE = 'source-config.json'
+    _SESSION_COOKIE_NAME = "ss"
+
+    def __init__(self, config_dir=CONFIG_DIR):
+        # type (str) -> None
+        super(SourceInterfaceConfig, self).__init__(
+            path.join(config_dir, self._CONFIG_FILE))
+        secret_key = self._json_config['secret_key']  # type: ignore
+        self.flask_config = \
+            _FlaskConfig(secret_key, self._SESSION_COOKIE_NAME, self.env)
+        del self._json_config
