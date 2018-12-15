@@ -96,3 +96,34 @@ def test_migration_idempotence(tmpdir):
 
     assert new_journo_conf == journo_conf
     assert new_source_conf == source_conf
+
+
+def test_migration_no_config_py(tmpdir):
+    config_dir = str(tmpdir)
+
+    key_fpr = 'abc123'
+    default_locale = 'de_DE'
+    supported_locales = ['en_US', 'de_DE']
+
+    # return None to simulate an `ImportError` within the function
+    with mock.patch("populate_config.import_config",
+                    return_value=None):
+        populate_config.migrate_and_populate_configs(
+            key_fpr, default_locale, supported_locales, config_dir)
+
+    journalist_json = path.join(config_dir, 'journalist-config.json')
+    source_json = path.join(config_dir, 'source-config.json')
+
+    for config_file in [journalist_json, source_json]:
+        with open(config_file) as f:
+            json_config = json.loads(f.read())
+
+            # check that secret generation succeeded
+            assert len(json_config['scrypt_id_pepper']) >= 32
+            assert len(json_config['scrypt_id_pepper']) >= 32
+            assert len(json_config['secret_key']) >= 32
+
+            # check that CLI args were set
+            assert json_config['i18n']['default_locale'] == default_locale
+            assert json_config['i18n']['supported_locales'] == \
+                supported_locales
