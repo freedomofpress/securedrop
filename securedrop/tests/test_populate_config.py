@@ -62,3 +62,37 @@ def test_migrate_empty_case(tmpdir):
             assert json_config['i18n']['default_locale'] == default_locale
             assert json_config['i18n']['supported_locales'] == \
                 supported_locales
+
+
+def test_migration_idempotence(tmpdir):
+    config_dir = str(tmpdir)
+
+    # dummy class with none of the `config.py` attributes
+    class Dummy():
+
+        pass
+
+    dummy = Dummy()
+
+    journalist_file = path.join(config_dir, 'journalist-config.json')
+    source_file = path.join(config_dir, 'source-config.json')
+
+    def migrate_and_read_files():
+        with mock.patch("populate_config.import_config",
+                        return_value=dummy):
+            populate_config.migrate_and_populate_configs(
+                None, None, None, config_dir)
+
+        with open(journalist_file) as f:
+            j_data = json.loads(f.read())
+
+        with open(source_file) as f:
+            s_data = json.loads(f.read())
+
+        return (j_data, s_data)
+
+    journo_conf, source_conf = migrate_and_read_files()
+    new_journo_conf, new_source_conf = migrate_and_read_files()
+
+    assert new_journo_conf == journo_conf
+    assert new_source_conf == source_conf
