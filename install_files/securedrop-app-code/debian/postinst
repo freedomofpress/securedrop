@@ -98,7 +98,7 @@ case "$1" in
     set_paxctld_config
 
     # Ensure SecureDrop's necessary directories are created
-    for dir in /etc/securedrop /var/lib/securedrop/{,tmp,store,keys,/keys/private-keys-v1.d,/keys/openpgp-revocs.d,backups} /var/www/securedrop; do
+    for dir in /var/lib/securedrop/{,tmp,store,keys,/keys/private-keys-v1.d,/keys/openpgp-revocs.d,backups} /var/www/securedrop; do
       mkdir -p "$dir"
       chmod 0700 "$dir"
     done
@@ -122,7 +122,10 @@ case "$1" in
         gpg2 --homedir=/var/lib/securedrop/keys --batch --import < /var/lib/securedrop/keys/secring.gpg
     fi
 
-    chown -R www-data:www-data /etc/securedrop /var/lib/securedrop /var/www/securedrop
+    chown -R www-data:www-data /var/lib/securedrop /var/www/securedrop
+
+    mkdir -p /etc/securedrop
+    chmod 0750 /etc/securedrop
 
     pip install --no-index --find-links=/var/securedrop/wheelhouse --upgrade \
       -r /var/www/securedrop/requirements/securedrop-app-code-requirements.txt
@@ -133,7 +136,7 @@ case "$1" in
 
     # Migrate the python-based config to JSON
     /var/www/securedrop/populate_config.py
-    chown -R www-data:www-data /etc/securedrop
+    chown -R root:www-data /etc/securedrop
 
     # Apache's default sites are not allowed by the securedrop apparmor profile
     # disable the site before putting the apache apparmor profile in enforce
