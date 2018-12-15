@@ -35,9 +35,14 @@ def test_migrate_empty_case(tmpdir):
 
     dummy = Dummy()
 
+    key_fpr = 'abc123'
+    default_locale = 'de_DE'
+    supported_locales = ['en_US', 'de_DE']
+
     with mock.patch("populate_config.import_config",
                     return_value=dummy) as mock_import:
-        populate_config.do_migration(True, config_dir)
+        populate_config.migrate_and_populate_configs(
+            key_fpr, default_locale, supported_locales, config_dir)
 
     assert mock_import.called_once_with()
 
@@ -47,4 +52,13 @@ def test_migrate_empty_case(tmpdir):
     for config_file in [journalist_json, source_json]:
         with open(config_file) as f:
             json_config = json.loads(f.read())
-            assert json_config  # TODO
+
+            # check that secret generation succeeded
+            assert len(json_config['scrypt_id_pepper']) >= 32
+            assert len(json_config['scrypt_id_pepper']) >= 32
+            assert len(json_config['secret_key']) >= 32
+
+            # check that CLI args were set
+            assert json_config['i18n']['default_locale'] == default_locale
+            assert json_config['i18n']['supported_locales'] == \
+                supported_locales
