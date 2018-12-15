@@ -26,7 +26,7 @@
     - gpg
     - securedrop_config
 
-# This file is guaranteed to exist since migrate_config.py runs on `postinst`
+# This file is guaranteed to exist since populate_config.py runs on `postinst`
 # and this task runs the Debian packages are installed.
 - name: Slurp existing config.json.
   slurp:

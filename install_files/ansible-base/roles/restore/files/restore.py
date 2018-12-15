@@ -48,7 +48,7 @@ def main():
     subprocess.check_call(['dpkg-reconfigure', 'securedrop-config'])
 
     # Ensure that old backups are migrated to the new config format
-    subprocess.check_call(['/var/www/securedrop/migrate_config.py'])
+    subprocess.check_call(['/var/www/securedrop/populate_config.py'])
 
     # Reload Tor and the web server so they pick up the new configuration
     # If the process exits with a non-zero return code, raises an exception.

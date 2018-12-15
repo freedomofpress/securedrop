@@ -132,7 +132,7 @@ case "$1" in
     chown www-data:www-data /var/www/source.wsgi
 
     # Migrate the python-based config to JSON
-    /var/www/securedrop/migrate_config.py
+    /var/www/securedrop/populate_config.py
     chown -R www-data:www-data /etc/securedrop
 
     # Apache's default sites are not allowed by the securedrop apparmor profile
