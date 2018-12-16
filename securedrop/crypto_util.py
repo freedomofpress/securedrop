@@ -9,6 +9,7 @@ import subprocess
 from random import SystemRandom
 
 from base64 import b32encode
+from datetime import date
 from flask import current_app
 from gnupg._util import _is_stream, _make_binary_stream
 
@@ -42,6 +43,11 @@ class CryptoUtil:
 
     GPG_KEY_TYPE = "RSA"
     DEFAULT_WORDS_IN_RANDOM_ID = 8
+
+    # All reply keypairs will be "created" on the same day SecureDrop (then
+    # Strongbox) was publicly released for the first time.
+    # https://www.newyorker.com/news/news-desk/strongbox-and-aaron-swartz
+    DEFAULT_KEY_CREATION_DATE = date(2013, 5, 14)
 
     def __init__(self,
                  scrypt_params,
@@ -170,7 +176,11 @@ class CryptoUtil:
             key_type=self.GPG_KEY_TYPE,
             key_length=self.__gpg_key_length,
             passphrase=secret,
-            name_email=name
+            name_email=name,
+            creation_date=self.DEFAULT_KEY_CREATION_DATE.isoformat(),
+            # "0" is the magic value that tells GPG's batch key generation not
+            # to set an expiration date.
+            expire_date="0"
         ))
 
     def delete_reply_keypair(self, source_filesystem_id):
