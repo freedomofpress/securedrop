@@ -126,3 +126,4 @@ anonymous sources.
 
   threat_model/threat_model.rst
   threat_model/dataflow.rst
+  threat_model/mitigations.rst
