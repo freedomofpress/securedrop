@@ -79,7 +79,7 @@ function permit_wsgi_authorization() {
 case "$1" in
     configure)
     # Ensure SecureDrop's necessary directories are created
-    for dir in /var/lib/securedrop/{,tmp,store,keys,backups} /var/www/securedrop; do
+    for dir in /var/lib/securedrop/{,tmp,store,keys,/keys/private-keys-v1.d,/keys/openpgp-revocs.d,backups} /var/www/securedrop; do
       mkdir -p "$dir"
       chmod 0700 "$dir"
     done
