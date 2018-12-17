@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 import io
 import os
 import pytest
@@ -207,6 +208,57 @@ def test_genkeypair(source_app):
 
         assert source_app.crypto_util.getkey(filesystem_id) is not None
 
+def parse_gpg_date_string(date_string):
+    """Parse a date string returned from `gpg --with-colons --list-keys` into a
+    datetime.
+
+    The format of the date strings is complicated; see gnupg doc/DETAILS for a
+    full explanation.
+
+    Key details:
+    - The creation date of the key is given in UTC.
+    - the date is usually printed in seconds since epoch, however, we are
+    migrating to an ISO 8601 format (e.g. "19660205T091500"). A simple
+    way to detect the new format is to scan for the 'T'.
+    """
+    if 'T' in date_string:
+        dt = datetime.strptime(date_string, "%Y%m%dT%H%M%S")
+    else:
+        dt = datetime.utcfromtimestamp(int(date_string))
+    return dt
+
+def test_genkeypair_should_use_obfuscated_creation_and_expiration_dates(source_app):
+    # TODO: setup copied from test_genkeypair. DRY?
+    with source_app.app_context():
+        codename = source_app.crypto_util.genrandomid()
+        filesystem_id = source_app.crypto_util.hash_codename(codename)
+        journalist_filename = source_app.crypto_util.display_id()
+        source = models.Source(filesystem_id, journalist_filename)
+        db.session.add(source)
+        db.session.commit()
+        source_app.crypto_util.genkeypair(source.filesystem_id, codename)
+
+        # crypto_util.getkey only returns the fingerprint of the key. We need
+        # the full output of gpg.list_keys() to check the creation and
+        # expire dates.
+        #
+        # TODO: it might be generally useful to refactor crypto_util.getkey so
+        # it always returns the entire key dictionary instead of just the
+        # fingerprint (which is always easily extracted from the entire key
+        # dictionary).
+        new_key_fingerprint = source_app.crypto_util.getkey(filesystem_id)
+        new_key = [key for key in source_app.crypto_util.gpg.list_keys()
+                   if new_key_fingerprint == key['fingerprint']][0]
+
+        # All keys should share the same creation date to avoid leaking
+        # information about when sources first created accounts.
+        creation_date = parse_gpg_date_string(new_key['date'])
+        assert (creation_date.date() ==
+                CryptoUtil.DEFAULT_KEY_CREATION_DATE)
+
+        # Reply keypairs should not expire
+        expire_date = new_key['expires']
+        assert expire_date == ''
 
 def test_delete_reply_keypair(source_app, test_source):
     fid = test_source['filesystem_id']
