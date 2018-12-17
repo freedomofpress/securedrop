@@ -208,6 +208,7 @@ def test_genkeypair(source_app):
 
         assert source_app.crypto_util.getkey(filesystem_id) is not None
 
+
 def parse_gpg_date_string(date_string):
     """Parse a date string returned from `gpg --with-colons --list-keys` into a
     datetime.
@@ -227,7 +228,8 @@ def parse_gpg_date_string(date_string):
         dt = datetime.utcfromtimestamp(int(date_string))
     return dt
 
-def test_genkeypair_should_use_obfuscated_creation_and_expiration_dates(source_app):
+
+def test_reply_keypair_creation_and_expiration_dates(source_app):
     # TODO: setup copied from test_genkeypair. DRY?
     with source_app.app_context():
         codename = source_app.crypto_util.genrandomid()
@@ -259,6 +261,7 @@ def test_genkeypair_should_use_obfuscated_creation_and_expiration_dates(source_a
         # Reply keypairs should not expire
         expire_date = new_key['expires']
         assert expire_date == ''
+
 
 def test_delete_reply_keypair(source_app, test_source):
     fid = test_source['filesystem_id']
