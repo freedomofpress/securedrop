@@ -230,7 +230,6 @@ def parse_gpg_date_string(date_string):
 
 
 def test_reply_keypair_creation_and_expiration_dates(source_app):
-    # TODO: setup copied from test_genkeypair. DRY?
     with source_app.app_context():
         codename = source_app.crypto_util.genrandomid()
         filesystem_id = source_app.crypto_util.hash_codename(codename)

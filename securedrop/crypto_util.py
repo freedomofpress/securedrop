@@ -49,6 +49,10 @@ class CryptoUtil:
     # https://www.newyorker.com/news/news-desk/strongbox-and-aaron-swartz
     DEFAULT_KEY_CREATION_DATE = date(2013, 5, 14)
 
+    # '0' is the magic value that tells GPG's batch key generation not
+    # to set an expiration date.
+    DEFAULT_KEY_EXPIRATION_DATE = '0'
+
     def __init__(self,
                  scrypt_params,
                  scrypt_id_pepper,
@@ -178,9 +182,7 @@ class CryptoUtil:
             passphrase=secret,
             name_email=name,
             creation_date=self.DEFAULT_KEY_CREATION_DATE.isoformat(),
-            # "0" is the magic value that tells GPG's batch key generation not
-            # to set an expiration date.
-            expire_date="0"
+            expire_date=self.DEFAULT_KEY_EXPIRATION_DATE
         ))
 
     def delete_reply_keypair(self, source_filesystem_id):
