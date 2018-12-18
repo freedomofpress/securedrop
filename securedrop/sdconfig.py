@@ -51,17 +51,17 @@ class SDConfig(object):
         with open(config_file) as f:
             self._json_config = json.loads(f.read())
 
-        self.SECUREDROP_DATA_ROOT = '/var/lib/securedrop/'
+        self.SECUREDROP_DATA_ROOT = '/var/lib/securedrop/'  # type: str
 
-        self.SECUREDROP_ROOT = path.abspath(path.dirname(__file__))
+        self.SECUREDROP_ROOT = path.abspath(path.dirname(__file__))  # type: str # noqa: 501
 
-        self.SESSION_EXPIRATION_MINUTES = 120
+        self.SESSION_EXPIRATION_MINUTES = 120  # type: int
 
-        self.TRANSLATION_DIRS = path.join(self.SECUREDROP_ROOT, 'translations')
+        self.TRANSLATION_DIRS = path.join(self.SECUREDROP_ROOT, 'translations')  # type: str # noqa: 501
 
-        self.WORKER_PIDFILE = '/tmp/securedrop_worker.pid'  # nosec: B108
+        self.WORKER_PIDFILE = '/tmp/securedrop_worker.pid'  # type: str # nosec: B108 # noqa: 501
 
-        self.JOURNALIST_KEY = self._json_config['journalist_key']
+        self.JOURNALIST_KEY = self._json_config['journalist_key']  # type: ignore # noqa: 501
 
         try:
             self.DEFAULT_LOCALE = self._json_config['i18n']['default_locale'] # type: ignore # noqa: 501
@@ -87,7 +87,7 @@ class SDConfig(object):
         except (KeyError, TypeError):
             self.CUSTOM_HEADER_IMAGE = None
 
-        self.env = os.environ.get('SECUREDROP_ENV', 'prod')
+        self.env = os.environ.get('SECUREDROP_ENV', 'prod')  # type: str
 
     @property
     def DATABASE_FILE(self):
