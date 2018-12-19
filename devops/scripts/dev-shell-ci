@@ -14,20 +14,27 @@ CHECKSUM_FILE=./.linting.checksum
 
 cd "${TOPLEVEL}"
 
+# sha256sum is not included with macOS, but we can achieve the same result by
+# aliasing it to shasum, which is included by default.
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sha256sum="shasum -a 256"
+else
+    sha256sum="sha256sum"
+fi
 
 function gen_checksums() {
     rm "$CHECKSUM_FILE" 2> /dev/null || true
 
         # shellcheck disable=SC2013
     for file in $(cat $DOCKERFILE.deps); do
-        sha256sum "$file" >> "$CHECKSUM_FILE"
+        $sha256sum "$file" >> "$CHECKSUM_FILE"
     done
 
-    sha256sum "$DOCKERFILE" >> "$CHECKSUM_FILE"
+    $sha256sum "$DOCKERFILE" >> "$CHECKSUM_FILE"
 }
 
 function check_checksum {
-    sha256sum .linting.checksum | awk '{ print $1 }'
+    $sha256sum .linting.checksum | awk '{ print $1 }'
 }
 
 function docker_run() {
