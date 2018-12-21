@@ -1,6 +1,7 @@
 coverage
 d2to1
 flake8
+flaky
 mock
 pbr
 pip-tools>2.0.0
