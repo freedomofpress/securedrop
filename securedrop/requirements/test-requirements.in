@@ -7,7 +7,7 @@ py
 pytest
 pytest-cov
 pytest-mock
-requests[socks]
+requests[socks]>2.19.1
 selenium
 tbselenium
 pyvirtualdisplay
