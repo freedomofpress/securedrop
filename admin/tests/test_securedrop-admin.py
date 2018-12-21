@@ -19,6 +19,7 @@
 
 import io
 import argparse
+from flaky import flaky
 from os.path import dirname, join, basename, exists
 import mock
 from prompt_toolkit.validation import ValidationError
@@ -36,6 +37,7 @@ class Document(object):
         self.text = text
 
 
+@flaky
 class TestSecureDropAdmin(object):
 
     def test_verbose(self, capsys):
