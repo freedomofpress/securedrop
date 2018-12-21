@@ -18,7 +18,7 @@ RUN gem install sass -v 3.4.23
 ENV FF_ESR_VER 60.2.0esr
 RUN curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x86_64/en-US/firefox-${FF_ESR_VER}.tar.bz2 && \
     curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x86_64/en-US/firefox-${FF_ESR_VER}.tar.bz2.asc && \
-    gpg --recv-key --keyserver keys.gnupg.net 0x61B7B526D98F0353 && \
+    gpg --recv-key --keyserver gpg.mozilla.org 0x61B7B526D98F0353 && \
     gpg --verify firefox-${FF_ESR_VER}.tar.bz2.asc && \
     tar xjf firefox-*.tar.bz2 && \
     mv firefox /usr/bin && \
