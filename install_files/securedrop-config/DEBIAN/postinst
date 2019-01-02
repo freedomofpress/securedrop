@@ -34,6 +34,11 @@ case "$1" in
     fi
     remove_2fa_tty_req
     disable_upgrade_prompt
+    # Remove cron-apt action should occur after security upgrades to avoid breaking
+    # automatic upgrades (see issue #4003)
+    if [ -f "/etc/cron-apt/action.d/1-remove" ]; then
+        rm /etc/cron-apt/action.d/1-remove
+    fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
