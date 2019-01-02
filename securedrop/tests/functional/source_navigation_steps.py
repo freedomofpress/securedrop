@@ -39,6 +39,8 @@ class SourceNavigationStepsMixin():
             'a#submit-documents-button > img.on-hover')
         ActionChains(self.driver).move_to_element(
                      submit_button_hover_icon).perform()
+        self.wait_for(lambda: submit_button_hover_icon.is_displayed(),
+                      timeout=self.sleep_time)
         assert submit_button_hover_icon.is_displayed()
 
         # The source clicks the submit button.
