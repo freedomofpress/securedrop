@@ -137,9 +137,7 @@ class JournalistNavigationStepsMixin():
         self.wait_for(doc_selected, timeout=self.sleep_time)
 
     def _journalist_clicks_on_modal(self, click_id):
-        # self.driver.find_element_by_id(click_id).click()
         self.safe_click_by_id(click_id)
-        time.sleep(5)
 
     def _journalist_clicks_delete_collections_cancel_on_modal(self):
         self._journalist_clicks_on_modal('cancel-collections-deletions')
@@ -201,7 +199,6 @@ class JournalistNavigationStepsMixin():
         self._journalist_selects_first_doc()
         self._journalist_clicks_delete_selected_link()
         self._journalist_clicks_delete_selected_cancel_on_modal()
-        time.sleep(5)
         assert selected_count == len(self.driver.find_elements_by_name(
             'doc_names_selected'))
 
@@ -213,9 +210,6 @@ class JournalistNavigationStepsMixin():
     def _journalist_uses_delete_collection_button_confirmation(self):
         self._journalist_clicks_delete_collection_link()
         self._journalist_clicks_delete_collection_cancel_on_modal()
-
-        time.sleep(5)
-
         self._journalist_clicks_delete_collection_link()
         self._journalist_clicks_delete_collection_on_modal()
 
@@ -911,7 +905,8 @@ class JournalistNavigationStepsMixin():
         hotp_checkbox.click()
 
     def _journalist_uses_js_filter_by_sources(self):
-        self.wait_for(lambda: self.driver.find_element_by_id("filter"))
+        self.wait_for(lambda: self.driver.find_element_by_id("filter"),
+                      timeout=self.sleep_time)
 
         filter_box = self.driver.find_element_by_id("filter")
         filter_box.send_keys("thiswordisnotinthewordlist")
