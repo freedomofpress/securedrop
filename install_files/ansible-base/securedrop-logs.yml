@@ -8,9 +8,11 @@
     log_paths_reference:
       app:
         - '/var/log/apt' # dir
+        - '/var/log/cron-apt' # dir
         - '/var/log/aptitude*'
       mon:
         - '/var/log/apt' # dir
+        - '/var/log/cron-apt' # dir
         - '/var/log/aptitude*'
         # syscheck contains the file integrity checking data store
         - '/var/ossec/queue/syscheck'
