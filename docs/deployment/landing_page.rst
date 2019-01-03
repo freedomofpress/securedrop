@@ -226,6 +226,7 @@ Here's a similar example for nginx:
     ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
 
 Here's a similar example for nginx if the system supports TLS 1.3:
+
 ::
 
     add_header Strict-Transport-Security max-age=16070400;
