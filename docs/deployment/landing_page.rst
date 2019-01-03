@@ -225,6 +225,15 @@ Here's a similar example for nginx:
     ssl_prefer_server_ciphers on;
     ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
 
+Here's a similar example for nginx if the system supports TLS 1.3:
+
+::
+
+    add_header Strict-Transport-Security max-age=16070400;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers "TLS-CHACHA20-POLY1305-SHA256:TLS-AES-256-GCM-SHA384:TLS-AES-128-GCM-SHA256:EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+
 .. note:: We have prioritized security in selecting these cipher suites, so if
           you choose to use them then your site might not be compatible with
           legacy or outdated browsers and operating systems. For a good
