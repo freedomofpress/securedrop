@@ -9,7 +9,8 @@ lint: ## Run the python linter with the project's default error settings
 	   --disable=no-name-in-module \
 	   --disable=unexpected-keyword-arg \
 	   --disable=too-many-function-args \
-	   --disable=import-error
+	   --disable=import-error \
+	   --max-line-length=100
 
 .PHONY: lint-full
 lint-full:  ## Run the python linter with nothing disabled
