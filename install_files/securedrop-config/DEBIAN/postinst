@@ -31,6 +31,12 @@ allow_apt_user_in_iptables() {
         perl -npi -e \
             's/^.*--uid-owner root.*apt updates.*$/-A OUTPUT -p tcp --match multiport --dports 80,8080,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"/' \
            "$rules_v4"
+
+        # Remove root restriction for general DNS calls. Using matching
+        # groups to preserve custom DNS settings via site-specific info.
+        perl -npi -e \
+            's/^(.*--dport 53) -m owner --uid-owner root(.*)$/$1$2/' \
+           "$rules_v4"
     fi
 }
 
