@@ -25,8 +25,7 @@ class SourceNavigationStepsMixin():
 
         submit_button_icon = self.driver.find_element_by_css_selector(
             'a#submit-documents-button > img.off-hover')
-        self.wait_for(lambda: submit_button_icon.is_displayed(),
-                      timeout=self.sleep_time)
+        self.wait_for(lambda: submit_button_icon.is_displayed())
 
         # The source hovers their cursor over the button, and the visual style
         # of the button changes to encourage them to click it.
@@ -39,8 +38,7 @@ class SourceNavigationStepsMixin():
             'a#submit-documents-button > img.on-hover')
         ActionChains(self.driver).move_to_element(
                      submit_button_hover_icon).perform()
-        self.wait_for(lambda: submit_button_hover_icon.is_displayed(),
-                      timeout=self.sleep_time)
+        self.wait_for(lambda: submit_button_hover_icon.is_displayed())
         assert submit_button_hover_icon.is_displayed()
 
         # The source clicks the submit button.
@@ -81,7 +79,7 @@ class SourceNavigationStepsMixin():
         self.driver.find_element_by_id('login-button').click()
 
         self.wait_for(lambda: self.driver.find_elements_by_id(
-            'login-with-existing-codename'), timeout=self.sleep_time)
+            'login-with-existing-codename'))
 
     def _source_hits_cancel_at_login_page(self):
         self.driver.find_element_by_id('cancel').click()
@@ -145,7 +143,7 @@ class SourceNavigationStepsMixin():
                 headline = self.driver.find_element_by_class_name('headline')
                 assert 'Submit Files or Messages' == headline.text
 
-        self.wait_for(submit_page_loaded, timeout=self.sleep_time)
+        self.wait_for(submit_page_loaded)
 
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
@@ -192,7 +190,7 @@ class SourceNavigationStepsMixin():
                     '.success')
                 assert 'Thank' in notification.text
 
-        self.wait_for(message_submitted, timeout=self.sleep_time)
+        self.wait_for(message_submitted)
 
         # allow time for reply key to be generated
         time.sleep(5)
@@ -221,7 +219,7 @@ class SourceNavigationStepsMixin():
             confirm_button = self.driver.find_element_by_id(confirm_button_id)
             assert confirm_button.is_displayed()
 
-        self.wait_for(confirm_displayed, timeout=self.sleep_time)
+        self.wait_for(confirm_displayed)
 
         confirm_button_id = 'confirm-delete-reply-button-{}'.format(
             reply_filename)
@@ -234,7 +232,7 @@ class SourceNavigationStepsMixin():
                     'notification')
                 assert 'Reply deleted' in notification.text
 
-        self.wait_for(reply_deleted, timeout=self.sleep_time)
+        self.wait_for(reply_deleted)
 
     def _source_logs_out(self):
         # New thing to delete XXX
@@ -242,8 +240,7 @@ class SourceNavigationStepsMixin():
         logout.send_keys(" ")
         logout.click()
         self.wait_for(lambda:
-                      ("Submit for the first time" in self.driver.page_source),
-                      timeout=self.sleep_time)
+                      ("Submit for the first time" in self.driver.page_source))
 
     def _source_not_found(self):
         self.driver.get(self.source_location + "/unlikely")
