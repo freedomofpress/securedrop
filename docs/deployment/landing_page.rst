@@ -228,7 +228,7 @@ Here's a similar example for nginx:
 Here's a similar example for nginx if the system supports TLS 1.3:
 ::
     add_header Strict-Transport-Security max-age=16070400;
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+    ssl_protocols TLSv1.2 TLSv1.3;
     ssl_prefer_server_ciphers on;
     ssl_ciphers "TLS-CHACHA20-POLY1305-SHA256:TLS-AES-256-GCM-SHA384:TLS-AES-128-GCM-SHA256:EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
 
