@@ -363,12 +363,10 @@ class JournalistNavigationStepsMixin():
 
         # Try to delete a user
         delete_buttons[0].click()
-        time.sleep(5)
 
         # Wait for JavaScript alert to pop up and accept it.
         self._alert_wait()
         self._alert_accept()
-        time.sleep(5)
 
         def user_deleted():
             if not hasattr(self, 'accept_languages'):

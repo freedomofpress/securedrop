@@ -418,12 +418,12 @@ class FunctionalTest(object):
 
     def _alert_accept(self):
         self.driver.switch_to.alert.accept()
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, self.sleep_time).until(
             alert_is_not_present(),
             'Timed out waiting for confirmation popup to disappear.')
 
     def _alert_dismiss(self):
         self.driver.switch_to.alert.dismiss()
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, self.sleep_time).until(
             alert_is_not_present(),
             'Timed out waiting for confirmation popup to disappear.')
