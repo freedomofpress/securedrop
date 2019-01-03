@@ -55,9 +55,10 @@ class SourceNavigationStepsMixin():
     def _source_shows_codename(self):
         content = self.driver.find_element_by_id('codename-hint-content')
         assert not content.is_displayed()
-        time.sleep(5)  # Long waits
-        self.driver.find_element_by_id('codename-hint-show').click()
-        time.sleep(5)  # Long waits
+
+        self.safe_click_by_id('codename-hint-show')
+
+        self.wait_for(lambda: content.is_displayed())
         assert content.is_displayed()
         content_content = self.driver.find_element_by_css_selector(
                 '#codename-hint-content p')
@@ -66,9 +67,10 @@ class SourceNavigationStepsMixin():
     def _source_hides_codename(self):
         content = self.driver.find_element_by_id('codename-hint-content')
         assert content.is_displayed()
-        time.sleep(5)  # Long waits
-        self.driver.find_element_by_id('codename-hint-hide').click()
-        time.sleep(5)  # Long waits
+
+        self.safe_click_by_id('codename-hint-hide')
+
+        self.wait_for(lambda: not content.is_displayed())
         assert not content.is_displayed()
 
     def _source_sees_no_codename(self):
@@ -95,9 +97,7 @@ class SourceNavigationStepsMixin():
             'login-with-existing-codename')
         codename_input.send_keys(self.source_name)
 
-        continue_button = self.driver.find_element_by_id('login')
-        continue_button.click()
-        time.sleep(5)  # Long waits
+        self.safe_click_by_id('login')
 
         if not hasattr(self, 'accept_languages'):
             assert ("SecureDrop | Protecting Journalists and Sources" ==
