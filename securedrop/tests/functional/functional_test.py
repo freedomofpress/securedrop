@@ -38,6 +38,12 @@ import tests.utils.env as env
 
 from db import db
 
+TBB_PATH = abspath(join(expanduser('~'), '.local/tbb/tor-browser_en-US/'))
+os.environ['TBB_PATH'] = TBB_PATH
+TBBRC = join(TBB_PATH, 'Browser/TorBrowser/Data/Tor/torrc')
+
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
+
 FUNCTIONAL_TEST_DIR = abspath(dirname(__file__))
 LOGFILE_PATH = abspath(join(FUNCTIONAL_TEST_DIR, 'firefox.log'))
 FILES_DIR = abspath(join(dirname(realpath(__file__)), '../..', 'tests/files'))
@@ -203,7 +209,6 @@ class FunctionalTest(object):
         return gpg
 
     def setup(self, session_expiration=30):
-
         self.localtesting = False
         self.driver = None
         self.second_driver = None
@@ -223,7 +228,7 @@ class FunctionalTest(object):
             self.hidservauth = data.get('hidserv_token', '')
             self.admin_user = data.get('user')
             self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
-            self.sleep_time = data.get('sleep_time', 10)
+            self.sleep_time = data.get('sleep_time', 20)
             if self.hidservauth:
                 if self.journalist_location.startswith('http://'):
                     location = self.journalist_location[7:]
@@ -271,7 +276,7 @@ class FunctionalTest(object):
                                              " profanity oil chewy"),
                                 "secret": "JHCOGO7VCER3EJ4L"}
             self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
-            self.sleep_time = 2
+            self.sleep_time = 10
 
             def start_source_server(app):
                 config.SESSION_EXPIRATION_MINUTES = self.session_expiration
@@ -359,10 +364,13 @@ class FunctionalTest(object):
     def create_new_totp(self, secret):
         self.new_totp = pyotp.TOTP(secret)
 
-    def wait_for(self, function_with_assertion, timeout=5):
+    def wait_for(self, function_with_assertion, timeout=None):
         """Polling wait for an arbitrary assertion."""
         # Thanks to
         # http://chimera.labs.oreilly.com/books/1234000000754/ch20.html#_a_common_selenium_problem_race_conditions
+        if not timeout:
+            timeout = self.sleep_time
+
         start_time = time.time()
         while time.time() - start_time < timeout:
             try:
@@ -372,19 +380,49 @@ class FunctionalTest(object):
         # one more try, which will raise any errors if they are outstanding
         return function_with_assertion()
 
+    def safe_click_by_id(self, id):
+        self.wait_for(lambda: self.driver.find_element_by_id(id))
+
+        el = self.driver.find_element_by_id(id)
+
+        self.wait_for(lambda: el.is_enabled() and
+                      el.is_displayed)
+
+        el.location_once_scrolled_into_view
+        actions = ActionChains(self.driver)
+        actions.move_to_element(el)
+        actions.perform()
+
+        el.click()
+
+    def safe_click_by_css_selector(self, selector):
+        self.wait_for(lambda:
+                      self.driver.find_element_by_css_selector(selector))
+
+        el = self.driver.find_element_by_css_selector(selector)
+
+        self.wait_for(lambda: el.is_enabled() and
+                      el.is_displayed)
+
+        el.location_once_scrolled_into_view
+        actions = ActionChains(self.driver)
+        actions.move_to_element(el).perform()
+
+        el.click()
+
     def _alert_wait(self):
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, self.sleep_time * 6).until(
             expected_conditions.alert_is_present(),
             'Timed out waiting for confirmation popup.')
 
     def _alert_accept(self):
         self.driver.switch_to.alert.accept()
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, self.sleep_time).until(
             alert_is_not_present(),
             'Timed out waiting for confirmation popup to disappear.')
 
     def _alert_dismiss(self):
         self.driver.switch_to.alert.dismiss()
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, self.sleep_time).until(
             alert_is_not_present(),
             'Timed out waiting for confirmation popup to disappear.')

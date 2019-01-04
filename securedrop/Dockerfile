@@ -18,7 +18,7 @@ RUN gem install sass -v 3.4.23
 ENV FF_ESR_VER 60.2.0esr
 RUN curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x86_64/en-US/firefox-${FF_ESR_VER}.tar.bz2 && \
     curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x86_64/en-US/firefox-${FF_ESR_VER}.tar.bz2.asc && \
-    gpg --recv-key --keyserver keys.gnupg.net 0x61B7B526D98F0353 && \
+    gpg --recv-key --keyserver gpg.mozilla.org 0x61B7B526D98F0353 && \
     gpg --verify firefox-${FF_ESR_VER}.tar.bz2.asc && \
     tar xjf firefox-*.tar.bz2 && \
     mv firefox /usr/bin && \
@@ -26,7 +26,7 @@ RUN curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x8
 
 COPY ./tor_project_public.pub /opt/
 
-ENV TBB_VERSION 8.0.1
+ENV TBB_VERSION 8.0.3
 RUN gpg --import /opt/tor_project_public.pub && \
     wget  https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
