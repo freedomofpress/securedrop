@@ -278,3 +278,19 @@ def test_delete_reply_keypair_no_key(source_app):
 def test_getkey(source_app, test_source):
     assert (source_app.crypto_util.getkey(test_source['filesystem_id'])
             is not None)
+
+    # check that a non-existent key returns None
+    assert source_app.crypto_util.getkey('x' * 50) is None
+
+
+def test_export_pubkey(source_app, test_source):
+    begin_pgp = '-----BEGIN PGP PUBLIC KEY BLOCK----'
+
+    # check that a filesystem_id exports the pubkey
+    exported = source_app.crypto_util.export_pubkey(
+        test_source['filesystem_id'])
+    assert exported.startswith(begin_pgp)
+
+    # check that a non-existent identifer exports None
+    exported = source_app.crypto_util.export_pubkey('x' * 50)
+    assert exported is None

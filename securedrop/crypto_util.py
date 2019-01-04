@@ -205,7 +205,10 @@ class CryptoUtil:
 
     def export_pubkey(self, name):
         fingerprint = self.getkey(name)
-        return self.gpg.export_keys(fingerprint)
+        if fingerprint:
+            return self.gpg.export_keys(fingerprint)
+        else:
+            return None
 
     def encrypt(self, plaintext, fingerprints, output=None):
         # Verify the output path
