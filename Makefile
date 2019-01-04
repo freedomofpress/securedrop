@@ -167,6 +167,10 @@ clean: ## DANGER! Purges all site-specific info and developer files from project
 upgrade-start: ## Boot up an upgrade test base environment using libvirt
 	@SD_UPGRADE_BASE=$(STABLE_VER) molecule converge -s upgrade
 
+.PHONY: upgrade-start-qa
+upgrade-start-qa: ## Boot up an upgrade test base env using libvirt in remote apt mode
+	@SD_UPGRADE_BASE=$(STABLE_VER) QA_APTTEST=yes molecule converge -s upgrade
+
 .PHONY: upgrade-destroy
 upgrade-destroy: ## Destroy up an upgrade test base environment
 	@SD_UPGRADE_BASE=$(STABLE_VER) molecule destroy -s upgrade

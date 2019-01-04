@@ -79,7 +79,7 @@ create the environment:
 
 .. code:: sh
 
-   make upgrade-start
+   make upgrade-start-qa
 
 Then, log into the *Application Server*:
 
