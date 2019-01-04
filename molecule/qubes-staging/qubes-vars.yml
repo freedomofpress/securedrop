@@ -18,6 +18,7 @@ remote_host_ref: >-
   {{ lookup('file', lookup('env', 'MOLECULE_INSTANCE_CONFIG'))
      | from_yaml
      | selectattr('instance', 'eq', ansible_host)
-     |map(attribute='address')
-     |first
+     | map(attribute='address')
+     | first
+     | default (ansible_host)
   }}
