@@ -110,3 +110,23 @@ Log back into the *Application Server*, and repeat the previous commands:
 
 Navigate to the Source Interface URL again, and confirm you see the upgraded
 version in the footer. Then proceed with testing the new version.
+
+Updating the base boxes used for upgrade testing
+------------------------------------------------
+
+When a new version of SecureDrop is released, we must create and upload
+new VM images, to enable testing against that base version in future upgrade
+testing. The procedure is as follows:
+
+1. ``git checkout <version>``
+2. ``make vagrant-package``
+3. ``mv molecule/vagrant_packager/build/app-staging{,_<version>}.box``
+4. ``mv molecule/vagrant_packager/build/mon-staging{,_<version>}.box``
+5. ``sha256sum molecule/vagrant_packager/build/*.box``
+6. Manually update ``molecule/vagrant_packager/box_files/*.json`` with new
+   version information, including URL and checksum.
+7. ``cd molecule/vagrant_packager && ./push.yml`` to upload to S3
+8. Commit the local changes to JSON files and open a PR.
+
+Subsequent invocations of ``make upgrade-start`` will pull the latest
+version of the box.
