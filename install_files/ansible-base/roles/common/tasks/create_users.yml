@@ -38,8 +38,6 @@
 # for forcing a terminal multiplexer during interactive login sessions were
 # added to ~/.bashrc for each admin user account. It's cleaner to add the
 # config lines to /etc/profile.d, so all accounts get them by default.
-# Post 0.4, we can remove this task, which is here to clean up the local
-# bashrc files so that the additions are only sourced once.
 - name: Clean up local bashrc config for admin accounts.
   lineinfile:
     dest: /home/{{ item }}/.bashrc
