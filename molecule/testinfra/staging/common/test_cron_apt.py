@@ -76,7 +76,7 @@ def test_cron_apt_delete_vanilla_kernels(File):
     Ensure cron-apt removes generic linux image packages when installed.
     """
 
-    f = File('/etc/cron-apt/action.d/1-remove')
+    f = File('/etc/cron-apt/action.d/9-remove')
     assert f.is_file
     assert f.user == "root"
     assert oct(f.mode) == "0644"
