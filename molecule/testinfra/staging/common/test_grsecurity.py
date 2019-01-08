@@ -170,3 +170,26 @@ def test_pax_flags(Command, File, binary):
     # the "p" and "m" flags.
     assert "PAGEEXEC is disabled" not in c.stdout
     assert "MPROTECT is disabled" not in c.stdout
+
+
+@pytest.mark.parametrize('kernel_opts', [
+  'WLAN',
+  'NFC',
+  'WIMAX',
+  'WIRELESS',
+  'HAMRADIO',
+  'IRDA',
+  'BT',
+])
+def test_wireless_disabled_in_kernel_config(host, kernel_opts):
+    """
+    Kernel modules for wireless are blacklisted, but we go one step further and
+    remove wireless support from the kernel. Let's make sure wireless is
+    disabled in the running kernel config!
+    """
+
+    kernel_config_path = "/boot/config-{}-grsec".format(KERNEL_VERSION)
+    kernel_config = host.file(kernel_config_path).content_string
+
+    line = "# CONFIG_{} is not set".format(kernel_opts)
+    assert line in kernel_config

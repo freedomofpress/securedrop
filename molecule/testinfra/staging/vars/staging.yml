@@ -169,4 +169,4 @@ log_events_with_ossec_alerts:
     rule_id: "400503"
 
 fpf_apt_repo_url: "https://apt-test.freedom.press"
-grsec_version: "4.4.162"
+grsec_version: "4.4.167"
