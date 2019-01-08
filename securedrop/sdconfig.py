@@ -28,15 +28,22 @@ class _FlaskConfig(object):
         self.SECRET_KEY = secret_key
         self.SESSION_COOKIE_NAME = cookie_name
 
+        # defaults (taken from Flask)
+        self.USE_X_SENDFILE = False
+        self.DEBUG = False
+        self.MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+        self.TESTING = False
+        self.WTF_CSRF_ENABLED = True
+
         if env == 'prod':
             # This is recommended for performance, and also resolves #369
-            self.USE_X_SENDFILE = True  # type: ignore
+            self.USE_X_SENDFILE = True
         elif env == 'dev':
             # Enable _Flask's debugger for development
             self.DEBUG = True
             # Use MAX_CONTENT_LENGTH to mimic the behavior of Apache's LimitRequestBody  # noqa: 501
             # in the development environment. See #1714.
-            self.MAX_CONTENT_LENGTH = 524288000  # type: ignore
+            self.MAX_CONTENT_LENGTH = 524288000
         elif env == 'test':
             self.TESTING = True
             # Disable CSRF checks to make writing tests easier
