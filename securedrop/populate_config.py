@@ -112,8 +112,8 @@ def migrate_and_populate_configs(journalist_key_fpr,
             supported_locales = None
     supported_locales = (
         supported_locales or
-        journalist_config.get('i18n', {}).get('default_locale', None) or
-        source_config.get('i18n', {}).get('default_locale', None))
+        [journalist_config.get('i18n', {}).get('default_locale', None)] or
+        [source_config.get('i18n', {}).get('default_locale', None)])
 
     if default_locale and supported_locales:
         i18n = {}
