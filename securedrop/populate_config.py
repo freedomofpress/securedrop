@@ -231,7 +231,7 @@ def random_b64(byte_count):
 
 
 def comma_separated_list(arg):
-    return [x.strip() for x in arg.split(',')]
+    return [x.strip() for x in arg.split(',') if x.strip()]
 
 
 def arg_parser():

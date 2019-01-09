@@ -30,7 +30,7 @@
   command: >
     /var/www/securedrop/populate_config.py \
       --journalist-key-fpr {{ journalist_gpg_fpr }} \
-      --supported-locales {{ securedrop_supported_locales }} \
+      --supported-locales '{{ securedrop_supported_locales|join(",") }}' \
       --default-locale {{ securedrop_default_locale }}
   tags:
     - securedrop_config
