@@ -16,6 +16,18 @@
   async: 3600
   poll: 10
 
+# We do this here to ensure that if there was an error between config file
+# generation and permissions setting before the backup was run, we correct it.
+- name: Ensure correct permissions on the config files
+  file:
+    path: "/etc/securedrop/{{ item }}"
+    owner: root
+    group: www-data
+    mode: "0750"
+  with_items:
+    - source-config.json
+    - journalist-config.json
+
 - name: Delete the restore file to save disk space.
   file:
     path: /tmp/{{ restore_file }}

@@ -35,6 +35,16 @@
   tags:
     - securedrop_config
 
+- name: Set permissions on the config files
+  file:
+    path: "/etc/securedrop/{{ item }}"
+    owner: root
+    group: www-data
+    mode: "0750"
+  with_items:
+    - source-config.json
+    - journalist-config.json
+
 - name: Check whether sqlite database exists.
   stat:
     path: "{{ securedrop_data }}/db.sqlite"
