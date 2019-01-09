@@ -59,6 +59,7 @@ def test_migrate_empty_case(tmpdir):
             assert len(json_config['secret_key']) >= 32
 
             # check that CLI args were set
+            assert json_config['journalist_key'] == key_fpr
             assert json_config['i18n']['default_locale'] == default_locale
             assert json_config['i18n']['supported_locales'] == \
                 supported_locales
@@ -124,6 +125,7 @@ def test_migration_no_config_py(tmpdir):
             assert len(json_config['secret_key']) >= 32
 
             # check that CLI args were set
+            assert json_config['journalist_key'] == key_fpr
             assert json_config['i18n']['default_locale'] == default_locale
             assert json_config['i18n']['supported_locales'] == \
                 supported_locales

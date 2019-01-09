@@ -167,6 +167,9 @@ def migrate_and_populate_configs(journalist_key_fpr,
     # We allow a partial configs to be assembled in case of a partial
     # configuration of SecureDrop. Ansible will fill in the rest.
 
+    journalist_config['journalist_key'] = journalist_key_fpr
+    source_config['journalist_key'] = journalist_key_fpr
+
     journalist_config['scrypt_id_pepper'] = id_pepper
     source_config['scrypt_id_pepper'] = id_pepper
 
