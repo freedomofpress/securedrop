@@ -10,7 +10,6 @@ from os.path import abspath, dirname, join, realpath, expanduser
 import signal
 import socket
 import time
-import json
 import traceback
 import shutil
 import requests
@@ -75,26 +74,6 @@ class FunctionalTest(object):
         port = s.getsockname()[1]
         s.close()
         return port
-
-    def add_hidservauth(self, address, token):
-        if not os.path.exists(TBBRC):
-            return False
-        found_flag = False
-        entry = "HidServAuth {0} {1}\n".format(address, token)
-        lines = []
-        with open(TBBRC) as fobj:
-            lines = fobj.readlines()
-        for line in lines:
-            if entry.strip() == line.strip():
-                found_flag = True
-
-        if found_flag:  # We already have the information in the torrc file
-            return True
-        lines.append(entry)
-
-        with open(TBBRC, 'w') as fobj:
-            fobj.write(''.join(lines))
-        return True
 
     def _create_webdriver(self,  profile=None):
         log_file = open(LOGFILE_PATH, 'a')
@@ -221,18 +200,9 @@ class FunctionalTest(object):
         self.gpg = env.init_gpg()
 
         if os.path.exists(instance_information_path):
-            with open(instance_information_path) as fobj:
-                data = json.load(fobj)
-            self.source_location = data.get('source_location')
-            self.journalist_location = data.get('journalist_location')
-            self.hidservauth = data.get('hidserv_token', '')
-            self.admin_user = data.get('user')
-            self.admin_user['totp'] = pyotp.TOTP(self.admin_user['secret'])
-            self.sleep_time = data.get('sleep_time', 20)
-            if self.hidservauth:
-                if self.journalist_location.startswith('http://'):
-                    location = self.journalist_location[7:]
-                self.add_hidservauth(location, self.hidservauth)
+            # Blocked by an upstream tbselenium issue, see:
+            # https://github.com/webfp/tor-browser-selenium/issues/105
+            raise NotImplementedError('External server testing is unsupported')
         else:
             self.localtesting = True
             self.__context = journalist_app.create_app(config).app_context()
