@@ -25,10 +25,10 @@
 -A OUTPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -o lo -p tcp -m owner --uid-owner {{ securedrop_user_id }} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "for redis worker all application user local loopback user" -j ACCEPT
 -A OUTPUT -m owner --uid-owner {{ securedrop_user_id }} -m comment --comment "Drop all other traffic by the securedrop user" -j LOGNDROP
 -A OUTPUT -m owner --gid-owner {{ ssh_group_gid }} -m comment --comment "Drop all other outbound traffic for ssh user" -j LOGNDROP
--A OUTPUT -d {{ dns_server }}/32 -p tcp -m tcp --dport 53 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
--A OUTPUT -d {{ dns_server }}/32 -p udp -m udp --dport 53 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
+-A OUTPUT -d {{ dns_server }}/32 -p tcp -m tcp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
+-A OUTPUT -d {{ dns_server }}/32 -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
 -A OUTPUT -p udp -m udp --sport 123 --dport 123 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT
--A OUTPUT -p tcp -m multiport --dports 80,8080,443 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT
+-A OUTPUT -p tcp -m multiport --dports 80,8080,443 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT
 -A OUTPUT -d {{ mon_ip }}/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT
 -A OUTPUT -o eth0 -p tcp -m owner --uid-owner 0 -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
 -A OUTPUT -o lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT
