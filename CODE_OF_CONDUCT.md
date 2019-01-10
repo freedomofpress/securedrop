@@ -135,9 +135,6 @@ assist with resolving conflicts within the community.
 Currently the Community Team consists of:
 
 - Jen Helsby (`@redshiftzero`) - Lead Engineer - [jen@freedom.press](mailto:jen@freedom.press)
-- Loic Dachary (`@dachary`) - Maintainer - [loic@dachary.org](mailto:loic@dachary.org)
-
-You can contact the whole Community Team or members individually.
 
 You should contact the Community Team if you have questions or concerns about
 the Code of Conduct (including improvements) or if you feel that you have
