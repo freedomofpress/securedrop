@@ -309,7 +309,7 @@ def make_blueprint(config):
         user = get_user_object(request)
         return jsonify(user.to_json()), 200
 
-    def _handle_http_exception(error):
+    def _handle_api_http_exception(error):
         # Workaround for no blueprint-level 404/5 error handlers, see:
         # https://github.com/pallets/flask/issues/503#issuecomment-71383286
         response = jsonify({'error': error.name,
@@ -318,6 +318,6 @@ def make_blueprint(config):
         return response, error.code
 
     for code in default_exceptions:
-        api.errorhandler(code)(_handle_http_exception)
+        api.errorhandler(code)(_handle_api_http_exception)
 
     return api

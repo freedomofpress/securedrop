@@ -244,7 +244,16 @@ def test_user_without_token_cannot_post_protected_endpoints(journalist_app,
             assert response.status_code == 403
 
 
-def test_api_404(journalist_app, journalist_api_token):
+def test_api_error_handlers_defined(journalist_app):
+    """Ensure the expected error handler is defined in the API blueprint"""
+    for status_code in [400, 401, 403, 404, 500]:
+        result = journalist_app.error_handler_spec['api'][status_code]
+
+        expected_error_handler = '_handle_api_http_exception'
+        assert result.values()[0].__name__ == expected_error_handler
+
+
+def test_api_error_handler_404(journalist_app, journalist_api_token):
     with journalist_app.test_client() as app:
         response = app.get('/api/v1/invalidendpoint',
                            headers=get_api_headers(journalist_api_token))
