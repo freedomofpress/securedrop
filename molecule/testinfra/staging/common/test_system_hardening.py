@@ -88,6 +88,7 @@ def test_twofactor_disabled_on_tty(host):
     pam_auth_file = host.file("/etc/pam.d/common-auth").content_string
 
     assert "auth required pam_google_authenticator.so" not in pam_auth_file
+    assert "pam_ecryptfs.so unwrap" not in pam_auth_file
 
 
 @pytest.mark.parametrize('sshd_opts', [
@@ -106,3 +107,18 @@ def test_sshd_config(host, sshd_opts):
 
     line = "{} {}".format(sshd_opts[0], sshd_opts[1])
     assert line in sshd_config_file
+
+
+@pytest.mark.parametrize('filenames', [
+    '/var/log/auth.log',
+    '/var/log/syslog',
+])
+def test_pam_(host, filenames, Command, Sudo):
+    """
+    Ensure pam_ecryptfs is removed from /etc/pam.d/common-auth : not only is
+    no longer needed, it causes error messages (see issue #3963)
+    """
+    error_message = "pam_ecryptfs.so: cannot open shared object file"
+    with Sudo():
+        log_file = host.file(filenames).content_string
+        assert error_message not in log_file
