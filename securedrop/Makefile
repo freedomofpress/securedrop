@@ -17,8 +17,12 @@ lint-full:  ## Run the python linter with nothing disabled
 	find . -name '*.py' | xargs pylint
 
 .PHONY: test
-test: ## Run the test suite in a dockerized environment
+test: ## Run the test suite in a Ubuntu 14.04 (Trusty) dockerized environment
 	./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
+
+.PHONY: test-xenial
+test-xenial: ## Run the test suite in a Ubuntu 16.04 (Xenial) dockerized environment
+	BASE_OS=xenial ./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
 
 .PHONY: dev
 dev: ## Run the dev server
