@@ -110,12 +110,11 @@ def migrate_and_populate_configs(journalist_key_fpr,
             supported_locales = config.SUPPORTED_LOCALES
         except AttributeError:
             supported_locales = None
-    supported_locales = (
-        supported_locales or
-        [journalist_config.get('i18n', {}).get('default_locale', None)] or
-        [source_config.get('i18n', {}).get('default_locale', None)])
 
-    if default_locale and supported_locales:
+    if not supported_locales and default_locale:
+        supported_locales = [default_locale]
+
+    if default_locale or supported_locales:
         i18n = {}
         if default_locale:
             i18n['default_locale'] = default_locale
@@ -135,33 +134,45 @@ def migrate_and_populate_configs(journalist_key_fpr,
 
     if not journalist_key_fpr:
         try:
-            journalist_key_fpr = config.JOURNALIST_KEY
+            old_journalist_key_fpr = config.JOURNALIST_KEY
         except AttributeError:
-            journalist_key_fpr = None
+            old_journalist_key_fpr = None
 
-    try:
-        source_key = config.SourceInterfaceFlaskConfig.SECRET_KEY
-    except AttributeError:
-        source_key = source_config.get('secret_key', None)
-    if not source_key:
-        source_key = random_b64(32)
-
-    try:
-        journalist_key = config.JournalistInterfaceFlaskConfig.SECRET_KEY
-    except AttributeError:
-        journalist_key = journalist_config.get('secret_key', None)
-    if not journalist_key:
-        journalist_key = random_b64(32)
-
-    try:
-        custom_header_image = config.CUSTOM_HEADER_IMAGE
-    except AttributeError:
-        custom_header_image = None
-    if not custom_header_image:
-        custom_header_image = (
-            journalist_config.get('custom_header_image', None) or
-            source_config.get('custom_header_image', None)
+        journalist_key_fpr = (
+            journalist_config.get('journalist_key', None) or
+            source_config.get('journalist_key', None) or
+            old_journalist_key_fpr
         )
+
+    try:
+        old_source_key = config.SourceInterfaceFlaskConfig.SECRET_KEY
+    except AttributeError:
+        old_source_key = None
+    source_key = (
+        source_config.get('secret_key', None) or
+        old_source_key or
+        random_b64(32)
+    )
+
+    try:
+        old_journalist_key = config.JournalistInterfaceFlaskConfig.SECRET_KEY
+    except AttributeError:
+        old_journalist_key = None
+    journalist_key = (
+        journalist_config.get('secret_key', None) or
+        old_journalist_key or
+        random_b64(32)
+    )
+
+    custom_header_image = (
+        journalist_config.get('custom_header_image', None) or
+        source_config.get('custom_header_image', None)
+    )
+    if not custom_header_image:
+        try:
+            custom_header_image = config.CUSTOM_HEADER_IMAGE
+        except AttributeError:
+            custom_header_image = None
 
     # Then we assemble them into a configs.
     # We allow a partial configs to be assembled in case of a partial
