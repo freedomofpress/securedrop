@@ -1,4 +1,30 @@
 ---
+- name: Confirm local debs present if required
+  hosts: localhost
+  gather_facts: no
+  vars:
+    molecule_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
+  tasks:
+      # Before running apt-server logic, confirm we have local
+      # debs built.
+    - name: Establish QA strategy
+      set_fact:
+        QA_APTTEST: "{{ lookup('env','QA_APTTEST')|bool }}"
+
+    - name: Find local deb files
+      find:
+        paths: "{{ molecule_dir }}/../../build/"
+        patterns: "*.deb"
+      register: _upgrade_scenario_find_debs_result
+      when: not QA_APTTEST
+
+    - name: Ensure debs were found
+      assert:
+        that:
+          - "_upgrade_scenario_find_debs_result.files|length >= 8"
+        msg: "No local debs found, run 'make build-debs'"
+      when: not QA_APTTEST
+
 - name: Re-run original tor role
   hosts: securedrop
   max_fail_percentage: 0

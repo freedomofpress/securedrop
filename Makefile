@@ -163,20 +163,25 @@ staging-xenial: ## Creates local staging VMs based on Xenial, autodetecting plat
 clean: ## DANGER! Purges all site-specific info and developer files from project.
 	@./devops/clean
 
-.PHONY: upgrade_start
-upgrade_start: ## Boot up an upgrade test base environment using libvirt
+.PHONY: upgrade-start
+upgrade-start: ## Boot up an upgrade test base environment using libvirt
 	@SD_UPGRADE_BASE=$(STABLE_VER) molecule converge -s upgrade
 
-.PHONY: upgrade_destroy
-upgrade_destroy: ## Destroy up an upgrade test base environment
+.PHONY: upgrade-start-qa
+upgrade-start-qa: ## Boot up an upgrade test base env using libvirt in remote apt mode
+	@SD_UPGRADE_BASE=$(STABLE_VER) QA_APTTEST=yes molecule converge -s upgrade
+
+.PHONY: upgrade-destroy
+upgrade-destroy: ## Destroy up an upgrade test base environment
 	@SD_UPGRADE_BASE=$(STABLE_VER) molecule destroy -s upgrade
 
-.PHONY: upgrade_test_local
-upgrade_test_local: ## Once an upgrade environment is running, force upgrade apt packages (local pkgs)
+.PHONY: upgrade-test-local
+upgrade-test-local: ## Once an upgrade environment is running, force upgrade apt packages (local pkgs)
 	@molecule side-effect -s upgrade
 
-.PHONY: upgrade_test_qa
-upgrade_test_qa: ## Once an upgrade environment is running, force upgrade apt packages (from qa server)
+.PHONY: upgrade-test-qa
+upgrade-test-qa: ## Once an upgrade environment is running, force upgrade apt packages (from qa server)
+	@QA_APTTEST=yes molecule converge -s upgrade -- --diff -t apt
 	@QA_APTTEST=yes molecule side-effect -s upgrade
 
 # Explaination of the below shell command should it ever break.
