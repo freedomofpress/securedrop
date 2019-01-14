@@ -20,6 +20,15 @@
   <body>
 
     {% if g.user %}
+
+        {% if g.show_xenial_warning %}
+    <div class="xenial-upgrade critical">
+        <img class="critical-skull" src="{{ url_for('static', filename='i/font-awesome/skull-crossbones-white.png') }}" 
+             width="14px" height="16px">
+        {{ gettext ('<strong>Critical Security:</strong> The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is urgently required to remain safe - <a href="//securedrop.org/xenial-upgrade" rel="noreferrer">Learn More</a>') }}
+    </div>
+        {% endif %}
+
     <div id="logout">
       {{ gettext('Logged on as') }} <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ g.user.username }}</a> |
       {% if g.user and g.user.is_admin %}

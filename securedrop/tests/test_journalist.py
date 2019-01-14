@@ -5,6 +5,7 @@ import io
 import random
 import zipfile
 import base64
+import datetime
 
 from base64 import b64decode
 from cStringIO import StringIO
@@ -1583,6 +1584,39 @@ def test_render_locales(config, journalist_app, test_journo, test_source):
     text = resp.data.decode('utf-8')
     assert '?l=fr_FR' not in text, text
     assert url_end + '?l=en_US' in text, text
+
+
+def test_render_xenial_positive(config, journalist_app, test_journo):
+    yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+    journalist_app.config.update(
+        XENIAL_WARNING_DATE=yesterday,
+        XENIAL_VER='16.04'
+    )
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        resp = app.get(url_for('main.index'))
+
+    text = resp.data.decode('utf-8')
+    assert "critical-skull" in text, text
+
+
+def test_render_xenial_negative(config, journalist_app, test_journo):
+    yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+    journalist_app.config.update(
+        XENIAL_WARNING_DATE=yesterday,
+        XENIAL_VER='14.04'
+    )
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        resp = app.get('/')
+
+    text = resp.data.decode('utf-8')
+    assert "critical-skull" not in text, text
 
 
 def test_download_selected_submissions_from_source(journalist_app,
