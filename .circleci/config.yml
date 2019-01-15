@@ -112,6 +112,19 @@ jobs:
             cd journalist_gui
             xvfb-run -a pipenv run python3 test_gui.py
 
+  static-analysis-and-no-known-cves:
+    machine:
+      enabled: true
+    steps:
+      - checkout
+      - run:
+          name: Check Python dependencies for CVEs
+          command: make safety
+
+      - run:
+          name: Run static security testing on source code
+          command: make bandit
+
   staging-test-with-rebase:
     machine:
       enabled: true
@@ -149,6 +162,7 @@ workflows:
       - tests
       - admin-tests
       - updater-gui-tests
+      - static-analysis-and-no-known-cves
       - staging-test-with-rebase:
           requires:
             - lint
