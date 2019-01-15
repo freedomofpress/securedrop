@@ -130,3 +130,10 @@ def test_aastatus_unconfined(host):
     with host.sudo():
         aa_status_output = host.check_output("aa-status")
         assert unconfined_chk in aa_status_output
+
+
+def test_aa_no_denies_in_syslog(host, File, Sudo):
+    """ Ensure that there are no apparmor denials in syslog """
+    with Sudo():
+        f = File("/var/log/syslog")
+        assert 'apparmor="DENIED"' not in f.content_string
