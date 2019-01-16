@@ -9,28 +9,48 @@ set -eu
 TOPLEVEL=$(git rev-parse --show-toplevel)
 source "${BASH_SOURCE%/*}/../../devops/scripts/ticker"
 
+if ! test -n "${BASE_OS:-}" ; then
+    # If no base OS was specified, then we use Trusty
+    BASE_OS=trusty
+fi
+
+function exit_if_not_supported_base_image() {
+    # Currently we only support Xenial or Trusty.
+    if [[ "$1" != "xenial" && "$1" != "trusty" ]]
+    then
+        echo "BASE_OS must be trusty or xenial"
+        exit 1
+    fi
+}
+
 function docker_image() {
+    exit_if_not_supported_base_image $1
+
     docker build \
            ${DOCKER_BUILD_ARGUMENTS:-} \
 	   --build-arg=USER_ID="$(id -u)" \
 	   --build-arg=USER_NAME="${USER:-root}" \
-           -t securedrop-test "${TOPLEVEL}/securedrop"
+           -t "securedrop-test-${1}" \
+       --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/Dockerfile" \
+       "${TOPLEVEL}/securedrop"
 }
 
 function docker_run() {
+    exit_if_not_supported_base_image $1
+
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
     docker run \
 	   --rm \
 	   --user "${USER:-root}" \
 	   --volume "${TOPLEVEL}:${TOPLEVEL}" \
 	   --workdir "${TOPLEVEL}/securedrop" \
-	   -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-test "$@"
+	   -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}" "${@:2}"
 }
 
 if test -n "${CIRCLE_SHA1:-}" ; then
-   docker_image
+   docker_image $BASE_OS
 else
-   ticker docker_image
+   ticker docker_image $BASE_OS
 fi
 
-docker_run "$@"
+docker_run $BASE_OS "$@"
