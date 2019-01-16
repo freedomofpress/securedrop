@@ -20,7 +20,7 @@ build_directories:
   - /tmp/build
 
 build_deb_packages:
-  - /tmp/build/securedrop-app-code-{securedrop_version}-amd64.deb
+  - /tmp/build/securedrop-app-code-{securedrop_version}_amd64.deb
   - /tmp/build/securedrop-ossec-agent-{ossec_version}+{securedrop_version}-amd64.deb
   - /tmp/build/securedrop-ossec-server-{ossec_version}+{securedrop_version}-amd64.deb
   - /tmp/build/ossec-server-{ossec_version}-amd64.deb

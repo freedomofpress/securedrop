@@ -1,7 +1,11 @@
 import pytest
+import os
 
 
-testinfra_hosts = ['docker://trusty-sd-app']
+SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM", "trusty")
+testinfra_hosts = [
+        "docker://{}-sd-app".format(SECUREDROP_TARGET_PLATFORM)
+]
 
 
 def test_pip_wheel_installed(Command):

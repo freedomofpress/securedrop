@@ -11,8 +11,12 @@ set -o pipefail
 
 virtualenv_bootstrap
 
+RUN_TESTS="${1:-test}"
+TARGET_PLATFORM="${2:-trusty}"
+SCENARIO_NAME="builder-${TARGET_PLATFORM}"
+
 if [[ "${CIRCLE_BRANCH:-}" != docs-* ]]; then
-    case "${1:-test}" in
+    case "$RUN_TESTS" in
         notest)
             molecule_action=converge
             ;;
@@ -21,12 +25,7 @@ if [[ "${CIRCLE_BRANCH:-}" != docs-* ]]; then
             ;;
     esac
 
-    if [[ "${1:-trusty}" = "xenial" ]]; then
-	molecule converge -s builder -- -e securedrop_build_xenial_support=True;
-    else
-    	molecule "${molecule_action}" -s builder
-    fi
-
+    molecule "${molecule_action}" -s "${SCENARIO_NAME}"
 else
     echo Not running on docs branch...
 fi

@@ -3,7 +3,10 @@ import os
 import re
 
 
-testinfra_hosts = ['docker://trusty-sd-dpkg-verification']
+SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM", "trusty")
+testinfra_hosts = [
+        "docker://{}-sd-dpkg-verification".format(SECUREDROP_TARGET_PLATFORM)
+]
 securedrop_test_vars = pytest.securedrop_test_vars
 
 
@@ -291,6 +294,46 @@ def test_grsec_metapackage(host, deb):
         # Post-install kernel hook for managing PaX flags must exist.
         assert re.search("^.*\./etc/kernel/postinst.d/paxctl-grub$",
                          c.stdout, re.M)
+
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_control_helper_files_are_present(host, deb):
+    """
+    Inspect the package info to get a list of helper scripts
+    that should be shipped with the package, e.g. postinst, prerm, etc.
+    Necessary due to package build logic retooling.
+
+    Example output from package info, for reference:
+
+      $ dpkg-deb --info securedrop-app-code_0.12.0~rc1_amd64.deb
+      new debian package, version 2.0.
+      size 13583186 bytes: control archive=11713 bytes.
+           62 bytes,     2 lines      conffiles
+          657 bytes,    10 lines      control
+        26076 bytes,   298 lines      md5sums
+         5503 bytes,   159 lines   *  postinst             #!/bin/bash
+
+    Note that the actual output will have trailing whitespace, removed
+    from this text description to satisfy linters.
+    """
+    deb_package = host.file(deb.format(
+        securedrop_test_vars.securedrop_version))
+    # Only relevant for the securedrop-app-code package:
+    if "securedrop-app-code" in deb_package.path:
+        wanted_files = [
+            "conffiles",
+            "config",
+            "control",
+            "postinst",
+            "postrm",
+            "preinst",
+            "prerm",
+            "templates",
+        ]
+        c = host.run("dpkg-deb --info {}".format(deb_package.path))
+        for wanted_file in wanted_files:
+            assert re.search("^\s+?\d+ bytes,\s+\d+ lines[\s*]+"+wanted_file+"\s+.*$",
+                             c.stdout, re.M)
 
 
 @pytest.mark.parametrize("deb", deb_packages)
