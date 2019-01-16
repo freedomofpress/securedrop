@@ -53,12 +53,20 @@ function copy_securedrop_repo() {
 
 # Main logic
 copy_securedrop_repo
-
-ssh_gce "make build-debs-notest"
+if [[ "${1:-trusty}" = "xenial" ]]; then
+    ssh_gce "make build-debs-xenial"
+else
+    ssh_gce "make build-debs-notest"
+fi
 
 # The test results should be collected regardless of pass/fail,
 # so register a trap to ensure the fetch always runs.
 trap fetch_junit_test_results EXIT
 
-# Run staging environment
-ssh_gce "make staging"
+# Run staging environment. If xenial is passed as an argument, run the
+# staging environment for xenial.
+if [[ "${1:-trusty}" = "xenial" ]]; then
+    ssh_gce "make staging-xenial"
+else
+    ssh_gce "make staging"
+fi

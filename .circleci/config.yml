@@ -208,7 +208,7 @@ jobs:
 
       - run:
           name: Run Staging tests on GCE
-          command: make ci-go
+          command: make ci-xenial-go
 
       - run:
           name: Ensure environment torn down

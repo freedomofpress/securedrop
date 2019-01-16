@@ -17,11 +17,23 @@ ci-teardown: ## Destroys GCE host for testing staging environment.
 ci-run: ## Provisions GCE host for testing staging environment.
 	./devops/gce-nested/gce-runner.sh
 
+.PHONY: ci-run-xenial
+ci-run-xenial: ## Provisions GCE host for testing staging environment.
+	./devops/gce-nested/gce-runner.sh xenial
+
 .PHONY: ci-go
 ci-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment.
 	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
 		make ci-spinup; \
 		make ci-run; \
+		make ci-teardown; \
+	fi
+
+.PHONY: ci-xenial-go
+ci-xenial-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment under xenial.
+	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
+		make ci-spinup; \
+		make ci-run-xenial; \
 		make ci-teardown; \
 	fi
 
@@ -99,9 +111,7 @@ build-debs-notest: ## Builds and tests debian packages (sans tests)
 
 .PHONY: build-debs-xenial
 build-debs-xenial: ## Builds and tests debian packages (includes Xenial overrides, TESTING ONLY)
-	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
-		molecule converge -s builder -- -e securedrop_build_xenial_support=True; \
-		else echo Not running on docs branch...; fi
+	@./devops/scripts/build-debs.sh xenial
 
 .PHONY: build-gcloud-docker
 build-gcloud-docker: ## Build docker container for gcloud sdk
@@ -157,7 +167,7 @@ staging: ## Creates local staging environment in VM, autodetecting platform
 
 .PHONY: staging-xenial
 staging-xenial: ## Creates local staging VMs based on Xenial, autodetecting platform
-	@./devops/create-staging-env xenial
+	@./devops/scripts/create-staging-env xenial
 
 .PHONY: clean
 clean: ## DANGER! Purges all site-specific info and developer files from project.

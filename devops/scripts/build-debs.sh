@@ -21,7 +21,12 @@ if [[ "${CIRCLE_BRANCH:-}" != docs-* ]]; then
             ;;
     esac
 
-    molecule "${molecule_action}" -s builder
+    if [[ "${1:-trusty}" = "xenial" ]]; then
+	molecule converge -s builder -- -e securedrop_build_xenial_support=True;
+    else
+    	molecule "${molecule_action}" -s builder
+    fi
+
 else
     echo Not running on docs branch...
 fi
