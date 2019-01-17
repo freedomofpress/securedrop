@@ -18,7 +18,6 @@ flask-babel==0.11.2
 flask-sqlalchemy==2.3.2
 flask-wtf==0.14.2
 flask==1.0.2
-gnupg==2.3.1
 idna==2.6                 # via cryptography
 ipaddress==1.0.22         # via cryptography
 itsdangerous==0.24        # via flask
@@ -27,6 +26,7 @@ jsmin==2.2.2
 mako==1.0.7               # via alembic
 markupsafe==1.0           # via jinja2, mako
 passlib==1.7.1
+pretty-bad-protocol==3.1.1
 psutil==5.4.3
 pycparser==2.18           # via cffi
 pyotp==2.2.6

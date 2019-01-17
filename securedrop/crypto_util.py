@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import gnupg
+from pretty_bad_protocol import gnupg
 import os
 import io
 import scrypt
@@ -11,7 +11,7 @@ from random import SystemRandom
 from base64 import b32encode
 from datetime import date
 from flask import current_app
-from gnupg._util import _is_stream, _make_binary_stream
+from pretty_bad_protocol._util import _is_stream, _make_binary_stream
 
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Testing utilities related to setup and teardown of test environment.
 """
-import gnupg
+from pretty_bad_protocol import gnupg
 import os
 import io
 import shutil

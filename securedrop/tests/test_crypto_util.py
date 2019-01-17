@@ -81,14 +81,14 @@ def test_encrypt_binary_stream(source_app, config, test_source):
     """Generally, we pass unicode strings (the type form data is
     returned as) as plaintext to crypto_util.encrypt(). These have
     to be converted to "binary stream" types (such as `file`) before
-    we can actually call gnupg.GPG.encrypt() on them. This is done
+    we can actually call pretty_bad_protocol.GPG.encrypt() on them. This is done
     in crypto_util.encrypt() with an `if` branch that uses
-    `gnupg._util._is_stream(plaintext)` as the predicate, and calls
-    `gnupg._util._make_binary_stream(plaintext)` if necessary. This
+    `pretty_bad_protocol._util._is_stream(plaintext)` as the predicate, and calls
+    `pretty_bad_protocol._util._make_binary_stream(plaintext)` if necessary. This
     test ensures our encrypt function works even if we provide
     inputs such that this `if` branch is skipped (i.e., the object
     passed for `plaintext` is one such that
-    `gnupg._util._is_stream(plaintext)` returns `True`).
+    `pretty_bad_protocol._util._is_stream(plaintext)` returns `True`).
     """
     with source_app.app_context():
         with io.open(os.path.realpath(__file__)) as fh:
