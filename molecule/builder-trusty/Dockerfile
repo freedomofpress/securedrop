@@ -7,23 +7,26 @@ LABEL image_name="trusty-sd-builder-app"
 
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         aptitude \
+        debhelper \
         devscripts \
-        git \
         gdb \
+        git \
         gnupg2 \
         haveged \
+        inotify-tools \
         libffi-dev \
         libssl-dev \
         make \
         ntp \
-        inotify-tools \
         paxctl \
         python \
         python-dev \
         python-pip \
+        python-requests \
         rsync \
         ruby \
         secure-delete \
+        sudo \
         sqlite \
         unzip \
         && apt-get clean \

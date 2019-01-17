@@ -7,24 +7,27 @@ LABEL image_name="xenial-sd-builder-app"
 
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         aptitude \
+        debhelper \
         devscripts \
-        git \
         gdb \
+        git \
         gnupg2 \
         haveged \
+        inotify-tools \
         libffi-dev \
         libssl-dev \
         make \
         ntp \
-        inotify-tools \
         paxctl \
         python \
         python-dev \
         python-pip \
+        python-requests \
         rsync \
         ruby \
         secure-delete \
         sqlite \
+        sudo \
         unzip \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/*
