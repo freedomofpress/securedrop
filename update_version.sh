@@ -70,7 +70,7 @@ export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
 
 # Update the changelog in the Debian package
-dch -b -v "${NEW_VERSION}" -D trusty -c install_files/securedrop-app-code/usr/share/doc/securedrop-app-code/changelog.Debian
+dch -b -v "${NEW_VERSION}" -D trusty -c install_files/securedrop-app-code/debian/changelog
 
 # Commit the change
 # Due to `set -e`, providing an empty commit message here will cause the script to abort early.

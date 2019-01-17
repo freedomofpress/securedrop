@@ -1,0 +1,23 @@
+#!/usr/bin/make -f
+
+DEB_DH_INSTALL_ARGS=-X .git
+
+# Set distro-specific packages here, for interpolation in Depends field.
+# All other deps can be reused, regardless of distro.
+TRUSTY_DEPS=apache2-mpm-worker
+XENIAL_DEPS=apache2
+
+SECUREDROP_BUILD_PLATFORM=$(shell lsb_release -sc)
+
+ifeq ($(SECUREDROP_BUILD_PLATFORM),trusty)
+	SUBSTVARS = -Vdist:Depends="$(TRUSTY_DEPS)"
+else
+	SUBSTVARS = -Vdist:Depends="$(XENIAL_DEPS)"
+endif
+
+
+%:
+	dh $@
+
+override_dh_gencontrol:
+	dh_gencontrol -- $(SUBSTVARS)
