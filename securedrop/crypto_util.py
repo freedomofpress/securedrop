@@ -5,6 +5,7 @@ import gnupg
 import os
 import io
 import scrypt
+import platform
 import subprocess
 from random import SystemRandom
 
@@ -79,7 +80,11 @@ class CryptoUtil:
 
         self.do_runtime_tests()
 
-        self.gpg = gnupg.GPG(binary='gpg2', homedir=gpg_key_dir)
+        os_details = platform.linux_distribution()
+        if os_details[1] == "16.04":
+            self.gpg = gnupg.GPG(binary='gpg', homedir=gpg_key_dir)
+        else:
+            self.gpg = gnupg.GPG(binary='gpg2', homedir=gpg_key_dir)
 
         # map code for a given language to a localized wordlist
         self.__language2words = {}  # type: Dict[Text, List[str]]
