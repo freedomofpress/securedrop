@@ -37,7 +37,7 @@ def init_gpg():
     """Initialize the GPG keyring and import the journalist key for
     testing.
     """
-    gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
+    gpg = gnupg.GPG('gpg2', homedir=config.GPG_KEY_DIR)
     # Faster to import a pre-generated key than to gen a new one every time.
     for keyfile in (join(FILES_DIR, "test_journalist_key.pub"),
                     join(FILES_DIR, "test_journalist_key.sec")):

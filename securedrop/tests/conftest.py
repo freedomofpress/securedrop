@@ -77,7 +77,7 @@ def config(tmpdir):
     tmp = data.mkdir('tmp')
     sqlite = data.join('db.sqlite')
 
-    gpg = gnupg.GPG(homedir=str(keys))
+    gpg = gnupg.GPG('gpg2', homedir=str(keys))
     for ext in ['sec', 'pub']:
         with io.open(path.join(path.dirname(__file__),
                                'files',
