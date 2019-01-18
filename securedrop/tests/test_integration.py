@@ -411,7 +411,7 @@ def _can_decrypt_with_key(journalist_app, msg, key_fpr, passphrase=None):
     # to use it to test whether a message is decryptable with a specific
     # key.
     gpg_tmp_dir = tempfile.mkdtemp()
-    gpg = gnupg.GPG(homedir=gpg_tmp_dir)
+    gpg = gnupg.GPG('gpg2', homedir=gpg_tmp_dir)
 
     # Export the key of interest from the application's keyring
     pubkey = journalist_app.crypto_util.gpg.export_keys(key_fpr)
