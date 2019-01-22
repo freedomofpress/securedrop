@@ -39,6 +39,8 @@ provisioner:
   inventory:
     links:
       group_vars: ../../install_files/ansible-base/group_vars
+  options:
+    e: "@ansible-override-vars.yml"
   env:
     ANSIBLE_ROLES_PATH: ../../install_files/ansible-base/roles
     ANSIBLE_ACTION_PLUGINS: ../../install_files/ansible-base/action_plugins

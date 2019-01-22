@@ -7,7 +7,7 @@
   tasks:
     - name: Establish list of files in build/
       find:
-        paths: "../../build"
+        paths: "../../build/{{ securedrop_staging_install_target_distro }}"
       register: search_deb_results
 
     - set_fact:
@@ -17,8 +17,8 @@
 
     - name: Fail if package is missing from build dir
       fail:
-        msg: "run 'make build-debs' - ../../build/{{item}} missing"
-      when: "'../../build/'+item not in found_debs"
+        msg: "run 'make build-debs' - ../../build/{{ securedrop_staging_install_target_distro }}/{{item}} missing"
+      when: "'../../build/'+securedrop_staging_install_target_distro+'/'+item not in found_debs"
       with_items: "{{ expected_debs }}"
 
 - name: Add FPF apt repository and install base packages.

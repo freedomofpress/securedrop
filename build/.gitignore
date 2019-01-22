@@ -1,2 +1,4 @@
 *.deb
+trusty/*.deb
+xenial/*.deb
 *.tar.gz
