@@ -863,3 +863,24 @@ def test_api_does_not_set_cookie_headers(journalist_app, test_journo):
         assert 'Set-Cookie' not in observed_headers.keys()
         if 'Vary' in observed_headers.keys():
             assert 'Cookie' not in observed_headers['Vary']
+
+
+# regression test for #4053
+def test_malformed_auth_token(journalist_app, journalist_api_token):
+    with journalist_app.app_context():
+        # we know this endpoint requires an auth header
+        url = url_for('api.get_all_sources')
+
+    with journalist_app.test_client() as app:
+        # precondition to ensure token is even valid
+        resp = app.get(url, headers={'Authorization': 'Token {}'.format(journalist_api_token)})
+        assert resp.status_code == 200
+
+        resp = app.get(url, headers={'Authorization': 'not-token {}'.format(journalist_api_token)})
+        assert resp.status_code == 403
+
+        resp = app.get(url, headers={'Authorization': journalist_api_token})
+        assert resp.status_code == 403
+
+        resp = app.get(url, headers={'Authorization': 'too many {}'.format(journalist_api_token)})
+        assert resp.status_code == 403
