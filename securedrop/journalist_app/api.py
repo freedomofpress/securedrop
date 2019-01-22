@@ -267,7 +267,8 @@ def make_blueprint(config):
                     raise e
 
             return jsonify({'message': 'Your reply has been stored',
-                            'uuid': reply.uuid}), 201
+                            'uuid': reply.uuid,
+                            'filename': reply.filename}), 201
 
     @api.route('/sources/<source_uuid>/replies/<reply_uuid>',
                methods=['GET', 'DELETE'])

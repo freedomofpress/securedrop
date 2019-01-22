@@ -652,6 +652,9 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
     reply = Reply.query.filter_by(uuid=str(reply_uuid)).one_or_none()
     assert reply is not None
 
+    # check that the filename is present and correct (#4047)
+    assert response.json['filename'] == reply.filename
+
     with journalist_app.app_context():  # Now verify everything was saved.
         assert reply.journalist_id == test_journo['id']
         assert reply.source_id == source_id
