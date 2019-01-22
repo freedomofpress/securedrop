@@ -23,7 +23,11 @@ Each of these steps are described below.
 Checking your Server Securedrop version
 ---------------------------------------
 
-The simplest way to check your SecureDrop version is to load the .onion address of your Source Interface in the Tor Browser. The version number will be in the footer of the Source Interface. You can also check the application version from the command line on the *Application Server* by running the command:
+The simplest way to check your SecureDrop version is to load the .onion address of your Source Interface in the Tor Browser. The version number will be in the footer of the Source Interface. 
+
+.. image:: ../images/sdsource.png       
+ 
+If you have already confirmed that you have :ref:`SSH access <verify_ssh_access>` to the servers,  you can also check the application version from the command line on the *Application Server* by running the command:
 
 .. code:: sh
 
@@ -102,7 +106,8 @@ Please verify that each character of the fingerprint above matches what is on th
 
   git checkout 0.11.0
 
-Important: If you see the warning ``refname ‘0.11.0’ is ambiguous`` in the output, we recommend that you contact us immediately at securedrop@freedom.press (GPG encrypted).
+.. important::
+  If you see the warning ``refname ‘0.11.0’ is ambiguous`` in the output, we recommend that you contact us immediately at securedrop@freedom.press (GPG encrypted).
 
 Finally, run the following commands:
 
@@ -134,6 +139,8 @@ Open a terminal and run the following commands to install the SecureDrop app cod
   cd ~Persistent/securedrop
   git tag -v 0.11.0
 
+.. note:: 
+  The SecureDrop application code must be installed in the `~/Persistent/securedrop` directory in order to complete the reprovisioning process successfully. Do not install it in a different location.
 
 The output should include the following two lines:                              
                                                                                 
@@ -169,13 +176,13 @@ Next, copy the files that you’ll need for the new *Admin Workstation*. Open a 
 
   cp /media/amnesia/TailsData/openssh-client/* ~/.ssh/
 
-  export SRC="/media/amnesia/TailsData/install_files/ansible_base"
+  export SRC="/media/amnesia/TailsData/Persistent/securedrop/install_files/ansible_base"
   export DST="~/Persistent/securedrop/install_files/ansible-base"
 
   cp $SRC/{app,mon}* $DST/
   cp $SRC/prod-specific.yml $DST/
 
-  # Next, you’ll need to copy over the instance’s submission key and OSSEC 
+  # Next, you’ll need to copy over the instance’s submission public key and OSSEC 
   # public key. Their filenames may vary, but you can check them in the 
   # instance configuration file using the following command:
 
