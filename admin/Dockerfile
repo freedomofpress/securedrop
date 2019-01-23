@@ -1,5 +1,5 @@
-# debian:stretch Thu Jan 25 08:58:24 CET 2018
-FROM debian@sha256:0a5fcee6f52d5170f557ee2447d7a10a5bdcf715dd7f0250be0b678c556a501b
+# debian:stretch 2019-01-22
+FROM debian@sha256:21ac5961a3038a839f6fa92ec4583c90f9eb6ca8f580598cde19d35d0f4d8fa6
 ARG USER_NAME
 ENV USER_NAME ${USER_NAME:-root}
 ARG USER_ID
