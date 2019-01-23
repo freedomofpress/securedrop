@@ -223,6 +223,35 @@ jobs:
       - store_artifacts:
           path: ~/sd/junit
 
+  staging-test-with-rebase-xenial:
+    machine:
+      enabled: true
+
+    working_directory: ~/sd
+    steps:
+      - checkout
+
+      - run:
+          name: Rebase on-top of github target
+          command: ./devops/scripts/rebase-ci.sh
+
+      - run:
+          name: Run Staging tests on GCE
+          command: make ci-xenial-go
+
+      - run:
+          name: Ensure environment torn down
+          # Always report true, since env should will destroyed already
+          # if all tests passed.
+          command: make ci-teardown || true
+          when: always
+
+      - store_test_results:
+          path: ~/sd/junit
+
+      - store_artifacts:
+          path: ~/sd/junit
+
 workflows:
   version: 2
   securedrop_ci:
@@ -236,3 +265,14 @@ workflows:
       - staging-test-with-rebase:
           requires:
             - lint
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - develop
+    jobs:
+      - static-analysis-and-no-known-cves
+      - staging-test-with-rebase-xenial

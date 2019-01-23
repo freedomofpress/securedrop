@@ -9,6 +9,8 @@ lint:
 platforms:
   - name: app-staging
     box: bento/ubuntu-16.04
+    raw_config_args:
+      - "cpu_mode = 'host-passthrough'"
     instance_raw_config_args:
       - "vm.synced_folder './', '/vagrant', disabled: true"
       - "vm.network 'private_network', ip: '10.0.1.2'"
@@ -22,6 +24,8 @@ platforms:
 
   - name: mon-staging
     box: bento/ubuntu-16.04
+    raw_config_args:
+      - "cpu_mode = 'host-passthrough'"
     instance_raw_config_args:
       - "vm.synced_folder './', '/vagrant', disabled: true"
       - "vm.network 'private_network', ip: '10.0.1.3'"
