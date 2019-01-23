@@ -56,7 +56,7 @@ function copy_securedrop_repo() {
 # Main logic
 copy_securedrop_repo
 if [[ "$target_platform" = "xenial" ]]; then
-    ssh_gce "make build-debs-xenial"
+    ssh_gce "make build-debs-xenial-notest"
 else
     ssh_gce "make build-debs-notest"
 fi
