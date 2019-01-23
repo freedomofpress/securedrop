@@ -1,5 +1,5 @@
-# ubuntu:xenial-20181218
-FROM ubuntu@sha256:b967b9f2a5625231a22db642609e61b7b1a5481128f51fe771e91bb92e0a35d0
+# ubuntu:xenial-20190122
+FROM ubuntu@sha256:e4a134999bea4abb4a27bc437e6118fdddfb172e1b9d683129b74d254af51675
 
 # additional meta-data makes it easier to clean up, find
 LABEL org="Freedom of the Press"
@@ -22,12 +22,12 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         python \
         python-dev \
         python-pip \
-        python-requests \
         rsync \
         ruby \
         secure-delete \
         sqlite \
         sudo \
+        tzdata \
         unzip \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/*
