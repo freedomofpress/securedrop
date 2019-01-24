@@ -63,7 +63,8 @@ def test_user_cannot_get_an_api_token_with_wrong_password(journalist_app,
 
 
 def test_user_cannot_get_an_api_token_with_wrong_2fa_token(journalist_app,
-                                                           test_journo):
+                                                           test_journo,
+                                                           hardening):
     with journalist_app.test_client() as app:
         response = app.post(url_for('api.get_token'),
                             data=json.dumps(
