@@ -2,9 +2,9 @@ Ubuntu 16.04 LTS (Xenial) migration - Preparatory steps
 =======================================================
 On 30 April 2019, Ubuntu 14.04 LTS (Trusty) will reach End of Life. After this date, no new security updates to the base operating system will be provided. It is therefore of critical importance for the security of all SecureDrop instances to upgrade to Ubuntu 16.04 LTS (Xenial) before April 30.
 
-SecureDrop servers provisioned before February 19 use Ubuntu 14.04 LTS as the base operating system. Support for Ubuntu 16.04 LTS (which will receive security updates until April 2021) is scheduled to be included with the next release of SecureDrop, version 0.12.0, on February 19. The operating system update itself must be performed manually.
+SecureDrop servers provisioned before February 26 use Ubuntu 14.04 LTS as the base operating system. Support for Ubuntu 16.04 LTS (which will receive security updates until April 2021) is scheduled to be included with the next release of SecureDrop, version 0.12.0, on February 26. The operating system update itself must be performed manually.
 
-We recommend that you plan two working days (after your instance has been updated to SecureDrop 0.12.0) to backup your instance, perform the upgrade, and test your instance once it is upgraded. We recommend scheduling this maintenance window no earlier than February 27.
+We recommend that you plan two working days (after your instance has been updated to SecureDrop 0.12.0) to backup your instance, perform the upgrade, and test your instance once it is upgraded. We recommend scheduling this maintenance window no earlier than March 6.
 
 Anytime before then, we suggest taking some simple preparatory steps to ensure your SecureDrop instance can be upgraded smoothly.
 
