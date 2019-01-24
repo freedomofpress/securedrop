@@ -1,4 +1,9 @@
 # Changelog
+## 0.11.1
+
+### Operations
+
+* Security bugfix: Upgrade apt without following redirects on first install, addresses CVE-2019-3462 (#4061)
 
 ## 0.11.0
 

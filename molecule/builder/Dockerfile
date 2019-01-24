@@ -1,5 +1,5 @@
-# ubuntu:trusty-20180531
-FROM ubuntu@sha256:885bb6705b01d99544ddb98cbe4e4555d1efe1d052cef90832e72a0688ac6b37
+# ubuntu:trusty-20190122
+FROM ubuntu@sha256:cac55e5d97fad634d954d00a5c2a56d80576a08dcc01036011f26b88263f1578
 
 # additional meta-data makes it easier to clean up, find
 LABEL org="Freedom of the Press"
