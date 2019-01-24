@@ -1603,11 +1603,27 @@ def test_render_xenial_positive(config, journalist_app, test_journo):
     assert "critical-skull" in text, text
 
 
-def test_render_xenial_negative(config, journalist_app, test_journo):
+def test_render_xenial_negative_version(config, journalist_app, test_journo):
     yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
     journalist_app.config.update(
         XENIAL_WARNING_DATE=yesterday,
         XENIAL_VER='14.04'
+    )
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+        resp = app.get('/')
+
+    text = resp.data.decode('utf-8')
+    assert "critical-skull" not in text, text
+
+
+def test_render_xenial_negative_date(config, journalist_app, test_journo):
+    tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
+    journalist_app.config.update(
+        XENIAL_WARNING_DATE=tomorrow,
+        XENIAL_VER='16.04'
     )
 
     with journalist_app.test_client() as app:
