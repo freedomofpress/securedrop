@@ -25,7 +25,8 @@ apparmor_profiles:
   - usr.sbin.apache2
 
 # Installing the securedrop-app-code.deb package
-securedrop_app_code_deb: "securedrop-app-code_{{ securedrop_app_code_version }}+xenial_amd64" # do not enter .deb extension
+securedrop_staging_install_target_distro: trusty
+securedrop_app_code_deb: "securedrop-app-code_{{ securedrop_app_code_version }}+{{ securedrop_staging_install_target_distro }}_amd64" # do not enter .deb extension
 
 # Apt package dependencies for running the SecureDrop application.
 appserver_dependencies:

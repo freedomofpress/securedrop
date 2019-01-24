@@ -44,10 +44,6 @@
   with_items: "{{ apparmor_profiles }}"
   tags: apparmor
 
-- name: Get distribution version
-  set_fact:
-    securedrop_package_dist: "{% if 'xenial in {{ansible_host}}' %}xenial{% else %}trusty{% endif %}"
-
 - name: Replace placeholder changelog to dist-specific changelog
   copy:
     src: "changelog-{{ securedrop_package_dist }}"

@@ -1,6 +1,3 @@
 ---
 # Permit direct access via SSH
 ssh_net_in_override: 0.0.0.0/0
-
-securedrop_staging_install_target_distro: trusty
-securedrop_app_code_deb: "securedrop-app-code_{{ securedrop_app_code_version }}+trusty_amd64"

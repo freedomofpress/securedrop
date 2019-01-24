@@ -42,7 +42,8 @@ def get_deb_packages():
             ossec_version=securedrop_test_vars.ossec_version,
             keyring_version=securedrop_test_vars.keyring_version,
             config_version=securedrop_test_vars.config_version,
-            grsec_version=securedrop_test_vars.grsec_version
+            grsec_version=securedrop_test_vars.grsec_version,
+            securedrop_target_platform=securedrop_test_vars.securedrop_target_platform,
             )
 
     deb_packages = [d.format(**substitutions) for d
