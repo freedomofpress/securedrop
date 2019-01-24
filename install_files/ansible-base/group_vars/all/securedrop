@@ -2,7 +2,7 @@
 # Variables that apply to both the app and monitor server go in this file
 # If the monitor or app server need different values define the variable in
 # hosts_vars/app.yml or host_vars/mon.yml
-securedrop_app_code_version: "0.11.0"
+securedrop_app_code_version: "0.11.1"
 
 grsecurity: true
 install_local_packages: false
