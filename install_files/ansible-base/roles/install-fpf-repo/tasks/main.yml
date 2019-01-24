@@ -1,4 +1,6 @@
 ---
+- include: upgrade_apt.yml
+
 - name: Install SecureDrop apt repo GPG signing key.
   apt_key:
     state: present
