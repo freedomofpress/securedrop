@@ -3,6 +3,7 @@
 import errno
 import mock
 import os
+import pytest
 import signal
 import socket
 import time
@@ -146,7 +147,14 @@ class FunctionalTest(object):
                 break
 
         if not hasattr(self, 'override_driver'):
-            self.driver = self._create_webdriver(self._prepare_webdriver())
+            try:
+                self.driver = self._create_webdriver(self._prepare_webdriver())
+            except WebDriverException as e:
+                # Exceptions during driver setup will result in the teardown not being called.
+                # Let's teardown and _then_ fail the test so that the patchers are cleaned
+                # up for the subsequent tests.
+                self.teardown()
+                pytest.fail(e)
 
         # Polls the DOM to wait for elements. To read more about why
         # this is necessary:
@@ -182,7 +190,7 @@ class FunctionalTest(object):
     def teardown(self):
         self.patcher.stop()
         env.teardown()
-        if not hasattr(self, 'override_driver'):
+        if hasattr(self, 'driver') and not hasattr(self, 'override_driver'):
             self.driver.quit()
         self.source_process.terminate()
         self.journalist_process.terminate()
