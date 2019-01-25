@@ -34,7 +34,7 @@ If you have already confirmed that you have :ref:`SSH access <verify_ssh_access>
  apt-cache policy securedrop-app-code
 
 
-SecureDrop servers are updated automatically with the latest release version (0.11.0 as of 17 Jan 2019). Recently, some long-running SecureDrop instances were affected by a bug which will cause any updates after 0.10.0 to fail. If your instance is still running 0.10.0, please `consult our advisory <https://securedrop.org/news/advisory-automatic-update-failure-version-0100-0110-some-securedrop-instances/>`_ to update to the latest version.
+SecureDrop servers are updated automatically with the latest release version (0.11.1 as of January 24, 2019). Recently, some long-running SecureDrop instances were affected by a bug which will cause any updates after 0.10.0 to fail. If your instance is still running 0.10.0, please `consult our advisory <https://securedrop.org/news/advisory-automatic-update-failure-version-0100-0110-some-securedrop-instances/>`_ to update to the latest version.
 
 .. important::
  If your instance is affected by this bug, it will no longer receive automatic updates. This is a major security risk and we urge you to take manual action as soon as possible to update SecureDrop. Please do not hesitate to :ref:`contact us <contact_us>` if we can help.
@@ -62,7 +62,7 @@ The output from ``git status`` should include the following text:
 
 where ``<version>`` is  the version of the workstation code that is installed.
 
-If the *Admin Workstation* is at version 0.11.0, it is up-to-date, and you can proceed with :ref:`making a backup of the instance <backup_instance>` and :ref:`verifying SSH connectivity <verify_ssh_access>`. If the *Admin Workstation* is running an earlier version, you will need to upgrade it, using the appropriate steps for your version:
+If the *Admin Workstation* is at version 0.11.1, it is up-to-date, and you can proceed with :ref:`making a backup of the instance <backup_instance>` and :ref:`verifying SSH connectivity <verify_ssh_access>`. If the *Admin Workstation* is running an earlier version, you will need to upgrade it, using the appropriate steps for your version:
 
  - 0.9.1 to 0.10.0: `Upgrading from version 0.9.1 or later`_.
  - 0.4 to 0.9.0: `Upgrading from versions 0.4-0.9.0`_.
@@ -91,7 +91,7 @@ If your workstation code version is between 0.4 and 0.9.0, then you will need to
   cd ~/Persistent/securedrop
   git fetch --tags
   gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
-  git tag -v 0.11.0
+  git tag -v 0.11.1
 
 The output should include the following two lines:
 
@@ -104,10 +104,10 @@ Please verify that each character of the fingerprint above matches what is on th
 
 .. code:: sh
 
-  git checkout 0.11.0
+  git checkout 0.11.1
 
 .. important::
-  If you see the warning ``refname ‘0.11.0’ is ambiguous`` in the output, we recommend that you contact us immediately at securedrop@freedom.press (GPG encrypted).
+  If you see the warning ``refname ‘0.11.1’ is ambiguous`` in the output, we recommend that you contact us immediately at securedrop@freedom.press (GPG encrypted).
 
 Finally, run the following commands:
 
@@ -137,7 +137,7 @@ Open a terminal and run the following commands to install the SecureDrop app cod
   cd ~/Persistent
   git clone https://github.com/freedomofpress/securedrop.git
   cd ~Persistent/securedrop
-  git tag -v 0.11.0
+  git tag -v 0.11.1
 
 .. note:: 
   The SecureDrop application code must be installed in the `~/Persistent/securedrop` directory in order to complete the reprovisioning process successfully. Do not install it in a different location.
@@ -156,7 +156,7 @@ Now, check out the current release with the following command:
 
 .. code:: sh
   
-  git checkout 0.11.0
+  git checkout 0.11.1
 
 Next, mount the persistent volume of the old *Admin Workstation* in order to retrieve instance-specific files that you’ll need to set up the new workstation. To do so:
 
