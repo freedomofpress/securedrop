@@ -54,14 +54,14 @@ sed -i "s/^\(securedrop_app_code_version: \"\).*/\1$NEW_VERSION\"/" install_file
 # Update the version in molecule testinfra vars
 sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" molecule/builder-trusty/tests/vars.yml
 
-# Update the version that we tell people to check out in the install doc
-sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/set_up_admin_tails.rst
-sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/conf.py
-
 # If version doesnt have an rc designator, its considered stable
 # theres a few things that peg to that stable version like upgrade testing logic
+# and strings inside the documentation
+OLD_RELEASE=$(cat molecule/shared/stable.ver)
 if [[ ! $NEW_VERSION == *~rc* ]]; then
     echo "${NEW_VERSION}" > molecule/shared/stable.ver
+    sed -i "s@$(echo "${OLD_RELEASE}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/set_up_admin_tails.rst
+    sed -i "s@$(echo "${OLD_RELEASE}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/conf.py
 fi
 
 # Update the changelog
