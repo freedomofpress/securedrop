@@ -21,19 +21,6 @@ import functional_test
 import pytest
 import time
 
-import models
-
-
-@pytest.fixture
-def hardening(request):
-    hardening = models.LOGIN_HARDENING
-
-    def finalizer():
-        models.LOGIN_HARDENING = hardening
-    request.addfinalizer(finalizer)
-    models.LOGIN_HARDENING = True
-    return None
-
 
 @pytest.mark.pagelayout
 class TestJournalistLayout(

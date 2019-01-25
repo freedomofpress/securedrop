@@ -60,7 +60,11 @@ def teardown():
         if t.is_alive() and not isinstance(t, threading._MainThread):
             t.join()
     db.session.remove()
-    shutil.rmtree(config.TEMP_DIR)
+    try:
+        shutil.rmtree(config.TEMP_DIR)
+    except OSError:
+        # Then check the directory was already deleted
+        assert not os.path.exists(config.TEMP_DIR)
     try:
         shutil.rmtree(config.SECUREDROP_DATA_ROOT)
         # safeguard for #844
