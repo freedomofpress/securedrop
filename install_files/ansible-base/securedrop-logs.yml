@@ -10,6 +10,7 @@
         - '/var/log/apt' # dir
         - '/var/log/cron-apt' # dir
         - '/var/log/aptitude*'
+        - '/tmp/generated-logs' # dir
       mon:
         - '/var/log/apt' # dir
         - '/var/log/cron-apt' # dir
@@ -19,12 +20,31 @@
         - '/var/ossec/queue/rootcheck'
         # OSSEC alerts archives
         - '/var/ossec/logs'
+        - '/tmp/generated-logs' # dir
     fpf_support_gpg_fingerprint: "734F6E707434ECA6C007E1AE82BD6C9616DABB79"
 
   tasks:
     - name: Set tarball filename.
       set_fact:
         log_tarball_filename: "securedrop-logs-{{ inventory_hostname }}-{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
+
+    - name: Clean directory for generated logs from previous runs
+      file:
+        path: /tmp/generated-logs
+        state: absent
+
+    - name: Create directory for generated logs
+      file:
+        path: /tmp/generated-logs
+        state: directory
+        mode: 0700
+        owner: root
+        group: root
+
+    - name: Generate additional log files
+      shell: |
+        set -e
+        apt list --installed > /tmp/generated-logs/installed-packages.txt
 
     - name: Set logfiles to collect.
       set_fact:
@@ -66,3 +86,8 @@
       debug:
         msg: >-
           Logs copied successfully, find them at {{ (playbook_dir +'/'+ log_tarball_filename )|realpath }}.gpg .
+
+    - name: Clean directory for generated logs to save disk space
+      file:
+        path: /tmp/generated-logs
+        state: absent
