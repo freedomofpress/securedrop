@@ -13,8 +13,8 @@ def test_pip_wheel_installed(Command):
     Ensure `wheel` is installed via pip, for packaging Python
     dependencies into a Debian package.
     """
-    c = Command("pip freeze")
-    assert "wheel==0.24.0" in c.stdout
+    c = Command("pip list installed")
+    assert "wheel" in c.stdout
     assert c.rc == 0
 
 
