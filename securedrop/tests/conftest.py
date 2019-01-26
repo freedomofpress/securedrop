@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import gnupg
+import pretty_bad_protocol as gnupg
 import logging
 import os
 import io

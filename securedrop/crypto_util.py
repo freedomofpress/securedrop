@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import gnupg
+import pretty_bad_protocol as gnupg
 import os
 import io
 import scrypt
@@ -11,7 +11,7 @@ from random import SystemRandom
 from base64 import b32encode
 from datetime import date
 from flask import current_app
-from gnupg._util import _is_stream, _make_binary_stream
+from pretty_bad_protocol._util import _is_stream, _make_binary_stream
 
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
@@ -79,7 +79,9 @@ class CryptoUtil:
 
         self.do_runtime_tests()
 
-        self.gpg = gnupg.GPG(binary='gpg2', homedir=gpg_key_dir)
+        self.gpg = gnupg.GPG(binary='gpg2',
+                             homedir=gpg_key_dir,
+                             options=['--pinentry-mode loopback'])
 
         # map code for a given language to a localized wordlist
         self.__language2words = {}  # type: Dict[Text, List[str]]
@@ -176,7 +178,7 @@ class CryptoUtil:
         """
         name = clean(name)
         secret = self.hash_codename(secret, salt=self.scrypt_gpg_pepper)
-        return self.gpg.gen_key(self.gpg.gen_key_input(
+        genkey_obj = self.gpg.gen_key(self.gpg.gen_key_input(
             key_type=self.GPG_KEY_TYPE,
             key_length=self.__gpg_key_length,
             passphrase=secret,
@@ -184,6 +186,7 @@ class CryptoUtil:
             creation_date=self.DEFAULT_KEY_CREATION_DATE.isoformat(),
             expire_date=self.DEFAULT_KEY_EXPIRATION_DATE
         ))
+        return genkey_obj
 
     def delete_reply_keypair(self, source_filesystem_id):
         key = self.getkey(source_filesystem_id)

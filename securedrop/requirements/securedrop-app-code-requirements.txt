@@ -18,7 +18,7 @@ flask-babel==0.11.2
 flask-sqlalchemy==2.3.2
 flask-wtf==0.14.2
 flask==1.0.2
-gnupg==2.3.1
+pretty-bad-protocol==3.1.1
 idna==2.6                 # via cryptography
 ipaddress==1.0.22         # via cryptography
 itsdangerous==0.24        # via flask

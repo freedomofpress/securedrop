@@ -4,7 +4,7 @@ import os
 import io
 from tempfile import _TemporaryFileWrapper
 
-from gnupg._util import _STREAMLIKE_TYPES
+from pretty_bad_protocol._util import _STREAMLIKE_TYPES
 from cryptography.exceptions import AlreadyFinalized
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers.algorithms import AES
