@@ -41,18 +41,25 @@ Debian packages on the staging machines:
 .. code:: sh
 
    make build-debs
-   vagrant up /staging/
-   vagrant ssh app-staging
+   make staging
+   # Use the proper backend for your developer environment:
+   molecule login -s virtualbox-staging -h app-staging
+   # or:
+   molecule login -s libvirt-staging -h app-staging
    sudo su
    cd /var/www/securedrop
    ./manage.py add-admin
    pytest -v tests/
 
-To rebuild the local packages for the app code and update on staging: ::
+To rebuild the local packages for the app code and update on Trusty staging: ::
 
    make build-debs
-   vagrant up /staging/
-   vagrant provision
+   make staging
+
+To rebuild the local packages for the app code and update on Xenial staging: ::
+
+   make build-debs-xenial
+   make staging-xenial
 
 The Debian packages will be rebuilt from the current state of your
 local git repository and then installed on the staging servers.
@@ -111,9 +118,10 @@ the OSSEC-related configuration in
 ``install_files/ansible-base/staging.yml`` so you receive the OSSEC
 alert emails.
 
-Direct SSH access is available via Vagrant for staging hosts, so you can use
-``vagrant ssh app-staging`` and ``vagrant ssh mon-staging`` to start an
-interactive session on either server.
+Direct SSH access is available for staging hosts, so you can use
+``molecule login -s <scenario> -h app-staging``, where ``<scenario>``
+is either ``virtualbox-staging`` or ``libvirt-staging``, depending
+on your environment.
 
 .. _production_vms:
 
@@ -173,7 +181,7 @@ Install the required Vagrant plugins for converting and using libvirt boxes:
 Log out, then log in again. Verify that libvirt is installed and KVM is available:
 
 .. code:: sh
-  
+
    libvirtd --version
    kvm-ok
 
@@ -228,12 +236,15 @@ Set the default Vagrant provider to ``libvirt``:
 
 Convert Vagrant boxes to libvirt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Convert the bento/14.04 Vagrant box from ``virtualbox`` to ``libvirt`` format:
+Convert the VirtualBox images for both Trusty & Xenial from ``virtualbox`` to ``libvirt`` format:
 
 .. code:: sh
 
    vagrant box add --provider virtualbox bento/ubuntu-14.04
    vagrant mutate bento/ubuntu-14.04 libvirt
+
+   vagrant box add --provider virtualbox bento/ubuntu-16.04
+   vagrant mutate bento/ubuntu-16.04 libvirt
 
 You can now use the libvirt-backed VM images to develop against
 the SecureDrop multi-machine environment.
