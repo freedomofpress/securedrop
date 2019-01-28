@@ -272,7 +272,7 @@ Specific Hardware Recommendations
 Application and Monitor Servers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We currently recommend the Intel NUC or Mac Mini for SecureDrop servers.
+We currently recommend the Intel NUC for SecureDrop servers.
 
 .. note:: If using non-recommended hardware, ensure you remove as much
     extraneous hardware as physically possible from your servers. This
@@ -326,12 +326,16 @@ for more information on how to safely configure and use more recent NUCs.
 Mac Minis
 ~~~~~~~~~
 
-Other than the NUCs we also recommend the 2014 Apple Mac Minis (part number MGEM2)
-for installing SecureDrop. Mac Minis have removable wireless cards that you
-should remove. This requires a screwdriver for non-standard
-`TR6 Torx security screws <https://www.amazon.com/Mini-Torx-Security-Screwdriver-Tool/dp/B01BG8P2Q6>`__.
+.. caution:: We have previously recommended the 2014 Apple Mac Minis (part
+  number MGEM2) for installing SecureDrop. The 2018 Apple Mac Mini (part number
+  MRTR2 or MRTT2) is not a viable candidate for installing SecureDrop, due to
+  hardware support issues. The instructions below apply if you want to
+  (re-)install SecureDrop on the 2014 version.
 
-.. caution:: The 2018 Apple Mac Mini (part number MRTR2 or MRTT2) is not a viable candidate for installing SecureDrop, due to hardware support issues.
+
+The 2014 Apple Mac Minis have removable wireless cards that you should remove.
+This requires a screwdriver for non-standard
+`TR6 Torx security screws <https://www.amazon.com/Mini-Torx-Security-Screwdriver-Tool/dp/B01BG8P2Q6>`__.
 
 However, on the first install of Ubuntu Server
 the Mac Minis will not boot: this is a known and
