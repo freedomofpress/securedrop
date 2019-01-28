@@ -44,6 +44,7 @@ provisioner:
     ANSIBLE_ACTION_PLUGINS: ../../install_files/ansible-base/action_plugins
     ANSIBLE_CALLBACK_WHITELIST: skippy
     ANSIBLE_STDOUT_CALLBACK: skippy
+    ANSIBLE_GATHER_TIMEOUT: "120"
   lint:
     name: ansible-lint
 scenario:
