@@ -155,7 +155,8 @@ def test_journo(journalist_app):
                 'username': username,
                 'password': password,
                 'otp_secret': otp_secret,
-                'id': user.id}
+                'id': user.id,
+                'uuid': user.uuid}
 
 
 @pytest.fixture(scope='function')
