@@ -41,22 +41,21 @@ def test_cron_apt_config(File):
   'deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security universe',
   'deb-src http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security universe',
   'deb [arch=amd64] {fpf_apt_repo_url} {securedrop_target_platform} main',
-  'deb https://tor-apt.freedom.press {securedrop_target_platform} main',
 ])
 def test_cron_apt_repo_list(host, repo):
     """
     Ensure the correct apt repositories are specified
     in the security list for apt.
     """
-    # Add target platform to test_vars for substitution.
-    test_vars.update(securedrop_target_platform=host.system_info.codename)
-    repo_config = repo.format(**test_vars)
-
+    repo_config = repo.format(
+        fpf_apt_repo_url=test_vars.fpf_apt_repo_url,
+        securedrop_target_platform=host.system_info.codename
+    )
     f = host.file('/etc/apt/security.list')
     assert f.is_file
     assert f.user == "root"
     assert oct(f.mode) == "0644"
-    repo_regex = '^{}$'.format(re.escape(repo))
+    repo_regex = '^{}$'.format(re.escape(repo_config))
     assert f.contains(repo_regex)
 
 

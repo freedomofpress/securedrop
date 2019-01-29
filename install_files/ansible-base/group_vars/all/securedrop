@@ -41,8 +41,6 @@ appserver_dependencies:
   - supervisor
   - libpython2.7-dev
 
-tor_apt_repo_url: https://tor-apt.freedom.press
-
 # Enable Tor over SSH by default
 enable_ssh_over_tor: true
 

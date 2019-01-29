@@ -1,20 +1,17 @@
-import os
 import pytest
 
 
-@pytest.mark.skipif(
-        os.environ.get('CIRCLE_BRANCH', 'na').startswith('release'),
-        reason="Release branches will use tor-apt-test repo")
-def test_tor_mirror_present(host):
+@pytest.mark.parametrize('repo_file', [
+    "/etc/apt/sources.list.d/deb_torproject_org_torproject_org.list",
+])
+def test_tor_mirror_absent(host, repo_file):
     """
-    Ensure the FPF mirror of the Tor apt repo, tor-apt.freedom.press,
-    is configured. This repository required manual updating with current
-    tor releases, to avoid breakage of untested updates.
+    Ensure that neither the Tor Project repo, nor the FPF mirror of the
+    Tor Project repo, tor-apt.freedom.press, are configured. We've moved
+    to hosting Tor packages inside the primary FPF apt repo.
     """
-    f = '/etc/apt/sources.list.d/tor_apt_freedom_press.list'
-
-    regex = ('^deb https:\/\/tor-apt\.freedom\.press trusty main$')
-    assert host.file(f).contains(regex)
+    f = host.file(repo_file)
+    assert not f.exists
 
 
 def test_tor_keyring_absent(host):
@@ -54,42 +51,20 @@ def test_tor_mirror_fingerprint(host, tor_key_info):
     assert tor_key_info not in c.stdout
 
 
-@pytest.mark.parametrize('filename', [
-    '/etc/apt/security.list',
-    '/etc/apt/sources.list.d',
+@pytest.mark.parametrize('repo_pattern', [
+    'deb.torproject.org',
+    'tor-apt.freedom.press',
+    'tor-apt-test.freedom.press',
 ])
-def test_tor_project_repo_absent(host, filename):
+def test_tor_repo_absent(host, repo_pattern):
     """
     Ensure that no apt source list files contain the entry for
     the official Tor apt repo, since we don't control issuing updates
     in that repo. We're mirroring it to avoid breakage caused by
     untested updates (which has broken prod twice to date).
     """
-    c = host.run("grep -riP 'deb\.torproject\.org' {}".format(filename))
+    cmd = "grep -rF '{}' /etc/apt/".format(repo_pattern)
+    c = host.run(cmd)
     # Grep returns non-zero when no matches, and we want no matches.
     assert c.rc != 0
     assert c.stdout == ""
-
-
-def test_tor_project_repo_files_absent(host):
-    """
-    Ensure that specific apt source list files are absent,
-    having been 'hidden' via the securedrop-config package.
-    """
-    f = "/etc/apt/sources.list.d/deb_torproject_org_torproject_org.list"
-    assert not host.file(f).exists
-
-
-def test_tor_mirror_repo_declared_only_once(host):
-    """
-    The apt repo config is written both via the `securedrop-config`
-    package and via Ansible at install time. The filename logic
-    was slightly different for both between 0.5 and 0.6, so let's
-    ensure that we've cleaned up adequately, and the tor-apt mirror
-    is declared on the system only once.
-    """
-    c = host.command("grep -rl tor-apt /etc/apt/")
-    assert c.rc == 0
-    files_found = c.stdout.rstrip("\n").split("\n")
-    # Two files are expected, cron-apt and one apt repo
-    assert len(files_found) == 2

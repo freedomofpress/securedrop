@@ -40,17 +40,25 @@ allow_apt_user_in_iptables() {
     fi
 }
 
-case "$1" in
-    configure)
-
+manage_tor_repo_config() {
     # Ensure official Tor repo entry is removed, so that only FPF mirror is used.
     rm -f /etc/apt/sources.list.d/deb_torproject_org_torproject_org.list
 
-    # Repoint tor repositories to FPF mirror
+    # Ensure FPF mirror config is removed, so that only primary FPF repo is used
+    rm -f /etc/apt/sources.list.d/tor_apt_freedom_press.list
+
+    # Remove references to separate Tor-specific repositories
     apt_security_list="/etc/apt/security.list"
     if [ -f "$apt_security_list" ]; then
-        sed -i 's/deb\.torproject\.org\/torproject\.org/tor-apt.freedom.press/g' "$apt_security_list"
+        sed -i '/deb\.torproject\.org\/torproject\.org/d' "$apt_security_list"
+        sed -i '/tor-apt\.freedom\.press/d' "$apt_security_list"
     fi
+}
+
+case "$1" in
+    configure)
+
+    manage_tor_repo_config
     remove_2fa_tty_req
     disable_upgrade_prompt
 
