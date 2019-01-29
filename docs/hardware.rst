@@ -272,38 +272,12 @@ Specific Hardware Recommendations
 Application and Monitor Servers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We currently recommend the Gigabyte BRIX, Intel NUC, or Mac Mini for
-SecureDrop servers.
+We currently recommend the Intel NUC for SecureDrop servers.
 
 .. note:: If using non-recommended hardware, ensure you remove as much
     extraneous hardware as physically possible from your servers. This
     could include: speakers, cameras, microphones, fingerprint readers,
     wireless, and Bluetooth cards.
-
-Gigabyte BRIX
-~~~~~~~~~~~~~
-
-The Gigabyte BRIX series is an inexpensive, quiet, low-power device that
-can be used for SecureDrop servers. There are a
-`variety of models <http://www.gigabyte.us/Mini-PcBarebone/BRIX>`__ to choose
-from; we recommend the GB-BXi5-5575. It has a mid-range CPU (the 5th
-generation Intel i5), a full-size HDMI port for a monitor, and four USB 2 ports.
-If you select a different model series (such as the GB-BSi5H) carefully
-verify that it uses the 5th generation Intel i5. Newer generation CPUs will
-**not** work with SecureDrop.
-
-The GB-BXi5-5575 supports wireless and Bluetooth through a removable card. This
-removable card is preferable, since you want neither WiFi nor Bluetooth. You
-can open the BRIX by removing the screws from the underside of the computer; the
-wireless card has one small screw you need to remove and two small connectors.
-
-The BRIXs come as kits, and some assembly is required. You will need to purchase
-the RAM and hard drive separately for each BRIX and insert both into the machine
-before it can be used. We recommend:
-
--  2x 240 GB SSDs (2.5")
--  1x memory kit of 2x4GB sticks (DIMM DDR3 1866MHz)
-   -  You can put one 4GB memory stick in each of the servers.
 
 Intel NUC
 ~~~~~~~~~
@@ -352,12 +326,16 @@ for more information on how to safely configure and use more recent NUCs.
 Mac Minis
 ~~~~~~~~~
 
-Other than the NUCs we also recommend the 2014 Apple Mac Minis (part number MGEM2)
-for installing SecureDrop. Mac Minis have removable wireless cards that you
-should remove. This requires a screwdriver for non-standard
-`TR6 Torx security screws <https://www.amazon.com/Mini-Torx-Security-Screwdriver-Tool/dp/B01BG8P2Q6>`__.
+.. caution:: We have previously recommended the 2014 Apple Mac Minis (part
+  number MGEM2) for installing SecureDrop. The 2018 Apple Mac Mini (part number
+  MRTR2 or MRTT2) is not a viable candidate for installing SecureDrop, due to
+  hardware support issues. The instructions below apply if you want to
+  (re-)install SecureDrop on the 2014 version.
 
-.. caution:: The 2018 Apple Mac Mini (part number MRTR2 or MRTT2) is not a viable candidate for installing SecureDrop, due to hardware support issues.
+
+The 2014 Apple Mac Minis have removable wireless cards that you should remove.
+This requires a screwdriver for non-standard
+`TR6 Torx security screws <https://www.amazon.com/Mini-Torx-Security-Screwdriver-Tool/dp/B01BG8P2Q6>`__.
 
 However, on the first install of Ubuntu Server
 the Mac Minis will not boot: this is a known and
