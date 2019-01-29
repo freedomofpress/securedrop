@@ -5,7 +5,7 @@ import re
 test_vars = pytest.securedrop_test_vars
 
 
-def test_fpf_apt_repo_present(File):
+def test_fpf_apt_repo_present(host):
     """
     Ensure the FPF apt repo, apt.freedom.press, is configured.
     This repository is necessary for the SecureDrop Debian packages,
@@ -23,11 +23,13 @@ def test_fpf_apt_repo_present(File):
     # If the var fpf_apt_repo_url test var is apt-test, validate that the
     # apt repository is configured on the host
     if test_vars.fpf_apt_repo_url == "https://apt-test.freedom.press":
-        f = File('/etc/apt/sources.list.d/apt_test_freedom_press.list')
+        f = host.file('/etc/apt/sources.list.d/apt_test_freedom_press.list')
     else:
-        f = File('/etc/apt/sources.list.d/apt_freedom_press.list')
-    assert f.contains('^deb \[arch=amd64\] {} trusty main$'.format(
-                      re.escape(test_vars.fpf_apt_repo_url)))
+        f = host.file('/etc/apt/sources.list.d/apt_freedom_press.list')
+    repo_regex = '^deb \[arch=amd64\] {} {} main$'.format(
+                      re.escape(test_vars.fpf_apt_repo_url),
+                      re.escape(host.system_info.codename))
+    assert f.contains(repo_regex)
 
 
 def test_fpf_apt_repo_fingerprint(Command):
