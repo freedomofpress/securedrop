@@ -236,8 +236,8 @@ jobs:
           command: ./devops/scripts/rebase-ci.sh
 
       - run:
-          name: Run Staging tests on GCE
-          command: make ci-xenial-go
+          name: Run Staging tests on GCE (Xenial)
+          command: make ci-go-xenial
 
       - run:
           name: Ensure environment torn down

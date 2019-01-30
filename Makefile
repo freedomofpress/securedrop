@@ -5,37 +5,17 @@ PWD := $(shell pwd)
 TAG ?= $(shell git rev-parse HEAD)
 STABLE_VER := $(shell cat molecule/shared/stable.ver)
 
-.PHONY: ci-spinup
-ci-spinup: ## Creates GCE host for testing staging environment.
-	./devops/gce-nested/gce-start.sh
+.PHONY: ci-go
+ci-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment.
+	./devops/gce-nested/ci-go.sh
+
+.PHONY: ci-go-xenial
+ci-go-xenial: ## Creates, provisions, tests, and destroys GCE host for testing staging environment under xenial.
+	./devops/gce-nested/ci-go.sh xenial
 
 .PHONY: ci-teardown
 ci-teardown: ## Destroys GCE host for testing staging environment.
 	./devops/gce-nested/gce-stop.sh
-
-.PHONY: ci-run
-ci-run: ## Provisions GCE host for testing staging environment.
-	./devops/gce-nested/gce-runner.sh
-
-.PHONY: ci-run-xenial
-ci-run-xenial: ## Provisions GCE host for testing staging environment.
-	./devops/gce-nested/gce-runner.sh xenial
-
-.PHONY: ci-go
-ci-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment.
-	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
-		make ci-spinup; \
-		make ci-run; \
-		make ci-teardown; \
-	fi
-
-.PHONY: ci-xenial-go
-ci-xenial-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment under xenial.
-	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
-		make ci-spinup; \
-		make ci-run-xenial; \
-		make ci-teardown; \
-	fi
 
 .PHONY: ci-lint
 ci-lint: ## Runs linting in linting container.
