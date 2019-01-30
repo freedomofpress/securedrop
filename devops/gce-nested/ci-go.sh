@@ -14,7 +14,7 @@ set -o pipefail
 
 
 # Assume we're running against Trusty; Xenial also supported.
-target_platform="${1:trusty}"
+target_platform="${1:-trusty}"
 
 # Skip full CI run on docs branches, since code shouldn't change.
 if [[ "${CIRCLE_BRANCH:-}" != docs-* ]]; then
