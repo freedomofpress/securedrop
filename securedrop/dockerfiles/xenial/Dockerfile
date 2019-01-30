@@ -9,12 +9,14 @@ RUN apt-get update && \
     apt-get install -y devscripts \
                        python-pip libpython2.7-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server firefox git xvfb haveged curl \
-                       gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo
+                       gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo \
+                       libgtk2.0
 
-ENV FIREFOX_CHECKSUM=179647c2d47e2acf2cf3596f21c8cbea8eda4b271d4d09d7b18be55553751912
-RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/+build/11952510/+files/firefox-locale-en_51.0.1+build2-0ubuntu0.16.04.2_amd64.deb && \
+
+ENV FIREFOX_CHECKSUM=88d25053306d33658580973b063cd459a56e3596a3a298c1fb8ab1d52171d860
+RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/+build/9727836/+files/firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb && \
     shasum -a 256 firefox*deb && \
-    echo "${FIREFOX_CHECKSUM}  firefox-locale-en_51.0.1+build2-0ubuntu0.16.04.2_amd64.deb" | shasum -a 256 -c - && \
+    echo "${FIREFOX_CHECKSUM}  firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb" | shasum -a 256 -c - && \
     dpkg -i firefox*deb && apt-get install -f && \
     paxctl -cm /usr/lib/firefox/firefox
 
