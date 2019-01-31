@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from distutils.version import StrictVersion
 import pretty_bad_protocol as gnupg
 import os
 import io
@@ -79,9 +80,15 @@ class CryptoUtil:
 
         self.do_runtime_tests()
 
-        self.gpg = gnupg.GPG(binary='gpg2',
-                             homedir=gpg_key_dir,
-                             options=['--pinentry-mode loopback'])
+        # --pinentry-mode, required for SecureDrop on gpg 2.1.x+, was
+        # added in gpg 2.1.
+        gpg_binary = gnupg.GPG(binary='gpg2', homedir=gpg_key_dir)
+        if StrictVersion(gpg_binary.binary_version) >= StrictVersion('2.1'):
+            self.gpg = gnupg.GPG(binary='gpg2',
+                                 homedir=gpg_key_dir,
+                                 options=['--pinentry-mode loopback'])
+        else:
+            self.gpg = gpg_binary
 
         # map code for a given language to a localized wordlist
         self.__language2words = {}  # type: Dict[Text, List[str]]
@@ -194,10 +201,9 @@ class CryptoUtil:
         # keypair
         if not key:
             return
-        # The private key needs to be deleted before the public key can be
-        # deleted. http://pythonhosted.org/python-gnupg/#deleting-keys
-        self.gpg.delete_keys(key, True)  # private key
-        self.gpg.delete_keys(key)  # public key
+
+        # The subkeys keyword argument deletes both secret and public keys.
+        self.gpg.delete_keys(key, secret=True, subkeys=True)
 
     def getkey(self, name):
         for key in self.gpg.list_keys():
