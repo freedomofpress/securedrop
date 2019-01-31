@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Testing utilities related to setup and teardown of test environment.
 """
+from distutils.version import StrictVersion
 import pretty_bad_protocol as gnupg
 import os
 import io
@@ -37,7 +38,20 @@ def init_gpg():
     """Initialize the GPG keyring and import the journalist key for
     testing.
     """
-    gpg = gnupg.GPG('gpg2', homedir=config.GPG_KEY_DIR)
+
+    # gpg 2.1+ requires gpg-agent, see #4013
+    gpg_agent_config = os.path.join(config.GPG_KEY_DIR, 'gpg-agent.conf')
+    with open(gpg_agent_config, 'w+') as f:
+        f.write('allow-loopback-pinentry')
+
+    gpg_binary = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
+    if StrictVersion(gpg_binary.binary_version) >= StrictVersion('2.1'):
+        gpg = gnupg.GPG(binary='gpg2',
+                        homedir=config.GPG_KEY_DIR,
+                        options=['--pinentry-mode loopback'])
+    else:
+        gpg = gpg_binary
+
     # Faster to import a pre-generated key than to gen a new one every time.
     for keyfile in (join(FILES_DIR, "test_journalist_key.pub"),
                     join(FILES_DIR, "test_journalist_key.sec")):

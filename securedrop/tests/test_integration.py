@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from distutils.version import StrictVersion
 import pretty_bad_protocol as gnupg
 import gzip
 import os
@@ -411,7 +412,18 @@ def _can_decrypt_with_key(journalist_app, msg, key_fpr, passphrase=None):
     # to use it to test whether a message is decryptable with a specific
     # key.
     gpg_tmp_dir = tempfile.mkdtemp()
-    gpg = gnupg.GPG('gpg2', homedir=gpg_tmp_dir)
+    # gpg 2.1+ requires gpg-agent, see #4013
+    gpg_agent_config = os.path.join(gpg_tmp_dir, 'gpg-agent.conf')
+    with open(gpg_agent_config, 'w+') as f:
+        f.write('allow-loopback-pinentry')
+
+    gpg_binary = gnupg.GPG(binary='gpg2', homedir=gpg_tmp_dir)
+    if StrictVersion(gpg_binary.binary_version) >= StrictVersion('2.1'):
+        gpg = gnupg.GPG(binary='gpg2',
+                        homedir=gpg_tmp_dir,
+                        options=['--pinentry-mode loopback'])
+    else:
+        gpg = gpg_binary
 
     # Export the key of interest from the application's keyring
     pubkey = journalist_app.crypto_util.gpg.export_keys(key_fpr)
