@@ -89,6 +89,11 @@ def config(tmpdir):
     tmp = data.mkdir('tmp')
     sqlite = data.join('db.sqlite')
 
+    # gpg 2.1+ requires gpg-agent, see #4013
+    gpg_agent_config = str(keys.join('gpg-agent.conf'))
+    with open(gpg_agent_config, 'w+') as f:
+        f.write('allow-loopback-pinentry')
+
     gpg = gnupg.GPG('gpg2', homedir=str(keys))
     for ext in ['sec', 'pub']:
         with io.open(path.join(path.dirname(__file__),
