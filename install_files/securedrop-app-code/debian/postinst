@@ -84,6 +84,19 @@ case "$1" in
       chmod 0700 "$dir"
     done
 
+    # Ensure required gpg-agent.conf is in place, see #4013.
+    if [ -e "/var/lib/securedrop/keys/gpg-agent.conf" ]; then
+
+        # gpg-agent.conf does exist, update it if needed.
+        if ! grep -qE '^allow-loopback-pinentry$' /var/lib/securedrop/keys/gpg-agent.conf; then
+            echo allow-loopback-pinentry >> /var/lib/securedrop/keys/gpg-agent.conf
+        fi
+
+    else
+        # gpg-agent.conf does not yet exist, create it.
+        echo allow-loopback-pinentry > /var/lib/securedrop/keys/gpg-agent.conf
+    fi
+
     chown -R www-data:www-data /var/lib/securedrop /var/www/securedrop
 
     pip install --no-index --find-links=/var/securedrop/wheelhouse --upgrade \
