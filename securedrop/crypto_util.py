@@ -82,7 +82,8 @@ class CryptoUtil:
 
         # --pinentry-mode, required for SecureDrop on gpg 2.1.x+, was
         # added in gpg 2.1.
-        gpg_binary = gnupg.GPG(binary='gpg2', homedir=gpg_key_dir)
+        self.gpg_key_dir = gpg_key_dir
+        gpg_binary = gnupg.GPG(binary='gpg2', homedir=self.gpg_key_dir)
         if StrictVersion(gpg_binary.binary_version) >= StrictVersion('2.1'):
             self.gpg = gnupg.GPG(binary='gpg2',
                                  homedir=gpg_key_dir,
@@ -202,8 +203,11 @@ class CryptoUtil:
         if not key:
             return
 
+        # Always delete keys without invoking pinentry-mode = loopback
+        # see: https://lists.gnupg.org/pipermail/gnupg-users/2016-May/055965.html
+        temp_gpg = gnupg.GPG(binary='gpg2', homedir=self.gpg_key_dir)
         # The subkeys keyword argument deletes both secret and public keys.
-        self.gpg.delete_keys(key, secret=True, subkeys=True)
+        temp_gpg.delete_keys(key, secret=True, subkeys=True)
 
     def getkey(self, name):
         for key in self.gpg.list_keys():
