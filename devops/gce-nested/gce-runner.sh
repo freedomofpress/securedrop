@@ -16,6 +16,8 @@ REMOTE_IP="$(gcloud_call compute instances describe \
 SSH_TARGET="${SSH_USER_NAME}@${REMOTE_IP}"
 SSH_OPTS=(-i "$SSH_PRIVKEY" -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null")
 
+# Assume we're testing Trusty. Xenial is also supported
+target_platform="${1:-trusty}"
 
 # Wrapper utility to run commands on remote GCE instance
 function ssh_gce {
@@ -53,7 +55,7 @@ function copy_securedrop_repo() {
 
 # Main logic
 copy_securedrop_repo
-if [[ "${1:-trusty}" = "xenial" ]]; then
+if [[ "$target_platform" = "xenial" ]]; then
     ssh_gce "make build-debs-xenial"
 else
     ssh_gce "make build-debs-notest"
@@ -65,7 +67,7 @@ trap fetch_junit_test_results EXIT
 
 # Run staging environment. If xenial is passed as an argument, run the
 # staging environment for xenial.
-if [[ "${1:-trusty}" = "xenial" ]]; then
+if [[ "$target_platform" = "xenial" ]]; then
     ssh_gce "make staging-xenial"
 else
     ssh_gce "make staging"
