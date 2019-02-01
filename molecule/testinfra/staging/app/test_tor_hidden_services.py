@@ -54,7 +54,7 @@ def test_tor_service_hostnames(File, Sudo, tor_service):
 
 
 @pytest.mark.parametrize('tor_service', sdvars.tor_services)
-def test_tor_services_config(File, tor_service):
+def test_tor_services_config(host, tor_service):
     """
     Ensure torrc file contains relevant lines for Hidden Service declarations.
     All hidden services must include:
@@ -68,7 +68,7 @@ def test_tor_services_config(File, tor_service):
 
     Check for each as appropriate.
     """
-    f = File("/etc/tor/torrc")
+    f = host.file("/etc/tor/torrc")
     dir_regex = "HiddenServiceDir /var/lib/tor/services/{}".format(
         tor_service['name'])
     # We need at least one port, but it may be used for both config values.
@@ -80,13 +80,23 @@ def test_tor_services_config(File, tor_service):
     except IndexError:
         local_port = remote_port
 
+    # Ensure that service is hardcoded to v2, for compatibility
+    # with newer versions of Tor, which default to v3.
+    version_string = "HiddenServiceVersion 2"
+
     port_regex = "HiddenServicePort {} 127.0.0.1:{}".format(
             remote_port, local_port)
 
     assert f.contains("^{}$".format(dir_regex))
     assert f.contains("^{}$".format(port_regex))
 
+    service_regex = "\n".join([dir_regex, version_string, port_regex])
+
     if tor_service['authenticated']:
         auth_regex = "HiddenServiceAuthorizeClient stealth {}".format(
                 tor_service['client'])
         assert f.contains("^{}$".format(auth_regex))
+        service_regex += "\n{}".format(auth_regex)
+
+    # Check for block in file, to ensure declaration order
+    assert service_regex in f.content_string
