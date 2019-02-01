@@ -1586,12 +1586,15 @@ def test_render_locales(config, journalist_app, test_journo, test_source):
     assert url_end + '?l=en_US' in text, text
 
 
-def test_render_xenial_positive(config, journalist_app, test_journo):
+def test_render_xenial_positive(config, journalist_app, test_journo, mocker):
     yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
     journalist_app.config.update(
         XENIAL_WARNING_DATE=yesterday,
         XENIAL_VER='16.04'
     )
+
+    mocked_error_platform = mocker.patch('platform.linux_distribution')
+    mocked_error_platform.return_value = ('Ubuntu', '14.04', 'trusty')
 
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
@@ -1603,12 +1606,15 @@ def test_render_xenial_positive(config, journalist_app, test_journo):
     assert "critical-skull" in text, text
 
 
-def test_render_xenial_negative_version(config, journalist_app, test_journo):
+def test_render_xenial_negative_version(config, journalist_app, test_journo, mocker):
     yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
     journalist_app.config.update(
         XENIAL_WARNING_DATE=yesterday,
-        XENIAL_VER='14.04'
+        XENIAL_VER='16.04'
     )
+
+    mocked_error_platform = mocker.patch('platform.linux_distribution')
+    mocked_error_platform.return_value = ('Ubuntu', '16.04', 'xenial')
 
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
