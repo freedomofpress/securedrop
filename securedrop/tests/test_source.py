@@ -522,6 +522,7 @@ def test_metadata_route(source_app):
         assert resp.headers.get('Content-Type') == 'application/json'
         assert json.loads(resp.data.decode('utf-8')).get('sd_version') \
             == version.__version__
+        assert resp.get('server_os') == 16.04
 
 
 def test_login_with_overly_long_codename(source_app):
