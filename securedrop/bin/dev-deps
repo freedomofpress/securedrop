@@ -46,8 +46,8 @@ function reset_demo() {
     # Create gpg-agent.conf
     echo allow-loopback-pinentry > /var/lib/securedrop/keys/gpg-agent.conf
 
-    # Kill gpg-agent(s) so it picks up the new config on restart.
-    pkill -f gpg-agent
+    # Kill gpg-agent(s) if they exist so it picks up the new config on restart.
+    pkill -f gpg-agent || true
     # Note that we should avoid `gpgconf --kill gpg-agent` since the pkill command will
     # handle killing multiple gpg-agent processes if they exist (this is what we want).
 
