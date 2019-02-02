@@ -1,7 +1,11 @@
 import pytest
+import os
 
 
-testinfra_hosts = ['docker://trusty-sd-app']
+SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM", "trusty")
+testinfra_hosts = [
+        "docker://{}-sd-app".format(SECUREDROP_TARGET_PLATFORM)
+]
 
 
 def test_pip_wheel_installed(Command):
@@ -9,8 +13,8 @@ def test_pip_wheel_installed(Command):
     Ensure `wheel` is installed via pip, for packaging Python
     dependencies into a Debian package.
     """
-    c = Command("pip freeze")
-    assert "wheel==0.24.0" in c.stdout
+    c = Command("pip list installed")
+    assert "wheel" in c.stdout
     assert c.rc == 0
 
 

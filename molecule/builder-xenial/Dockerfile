@@ -1,22 +1,23 @@
-# ubuntu:trusty-20190122
-FROM ubuntu@sha256:cac55e5d97fad634d954d00a5c2a56d80576a08dcc01036011f26b88263f1578
+# ubuntu:xenial-20190122
+FROM ubuntu@sha256:e4a134999bea4abb4a27bc437e6118fdddfb172e1b9d683129b74d254af51675
 
 # additional meta-data makes it easier to clean up, find
 LABEL org="Freedom of the Press"
-LABEL image_name="trusty-sd-builder-app"
+LABEL image_name="xenial-sd-builder-app"
 
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         aptitude \
+        debhelper \
         devscripts \
-        git \
         gdb \
+        git \
         gnupg2 \
         haveged \
+        inotify-tools \
         libffi-dev \
         libssl-dev \
         make \
         ntp \
-        inotify-tools \
         paxctl \
         python \
         python-dev \
@@ -25,6 +26,8 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         ruby \
         secure-delete \
         sqlite \
+        sudo \
+        tzdata \
         unzip \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/*

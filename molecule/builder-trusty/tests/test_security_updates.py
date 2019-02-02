@@ -1,4 +1,8 @@
-testinfra_hosts = ['docker://trusty-sd-sec-update']
+import os
+SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM", "trusty")
+testinfra_hosts = [
+        "docker://{}-sd-sec-update".format(SECUREDROP_TARGET_PLATFORM)
+]
 
 
 def test_ensure_no_updates_avail(host):

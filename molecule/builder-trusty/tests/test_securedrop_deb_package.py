@@ -3,7 +3,10 @@ import os
 import re
 
 
-testinfra_hosts = ['docker://trusty-sd-dpkg-verification']
+SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM", "trusty")
+testinfra_hosts = [
+        "docker://{}-sd-dpkg-verification".format(SECUREDROP_TARGET_PLATFORM)
+]
 securedrop_test_vars = pytest.securedrop_test_vars
 
 
@@ -39,7 +42,8 @@ def get_deb_packages():
             ossec_version=securedrop_test_vars.ossec_version,
             keyring_version=securedrop_test_vars.keyring_version,
             config_version=securedrop_test_vars.config_version,
-            grsec_version=securedrop_test_vars.grsec_version
+            grsec_version=securedrop_test_vars.grsec_version,
+            securedrop_target_platform=securedrop_test_vars.securedrop_target_platform,
             )
 
     deb_packages = [d.format(**substitutions) for d
@@ -294,6 +298,46 @@ def test_grsec_metapackage(host, deb):
 
 
 @pytest.mark.parametrize("deb", deb_packages)
+def test_control_helper_files_are_present(host, deb):
+    """
+    Inspect the package info to get a list of helper scripts
+    that should be shipped with the package, e.g. postinst, prerm, etc.
+    Necessary due to package build logic retooling.
+
+    Example output from package info, for reference:
+
+      $ dpkg-deb --info securedrop-app-code_0.12.0~rc1_amd64.deb
+      new debian package, version 2.0.
+      size 13583186 bytes: control archive=11713 bytes.
+           62 bytes,     2 lines      conffiles
+          657 bytes,    10 lines      control
+        26076 bytes,   298 lines      md5sums
+         5503 bytes,   159 lines   *  postinst             #!/bin/bash
+
+    Note that the actual output will have trailing whitespace, removed
+    from this text description to satisfy linters.
+    """
+    deb_package = host.file(deb.format(
+        securedrop_test_vars.securedrop_version))
+    # Only relevant for the securedrop-app-code package:
+    if "securedrop-app-code" in deb_package.path:
+        wanted_files = [
+            "conffiles",
+            "config",
+            "control",
+            "postinst",
+            "postrm",
+            "preinst",
+            "prerm",
+            "templates",
+        ]
+        c = host.run("dpkg-deb --info {}".format(deb_package.path))
+        for wanted_file in wanted_files:
+            assert re.search("^\s+?\d+ bytes,\s+\d+ lines[\s*]+"+wanted_file+"\s+.*$",
+                             c.stdout, re.M)
+
+
+@pytest.mark.parametrize("deb", deb_packages)
 def test_jinja_files_not_present(host, deb):
     """
     Make sure that jinja (.j2) files were not copied over
@@ -306,3 +350,74 @@ def test_jinja_files_not_present(host, deb):
     c = host.run("dpkg-deb --contents {}".format(deb_package.path))
     # There shouldn't be any files with a .j2 ending
     assert not re.search("^.*\.j2$", c.stdout, re.M)
+
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_ossec_binaries_are_present_agent(host, deb):
+    """
+    Inspect the package contents to ensure all ossec agent binaries are properly
+    included in the package.
+    """
+    deb_package = host.file(deb.format(
+        securedrop_test_vars.ossec_version))
+    # Only relevant for the ossec-agent package and not securedrop-ossec-agent:
+    if "ossec-agent" in deb_package.path and "securedrop" not in deb_package.path:
+        wanted_files = [
+            "/var/ossec/bin/agent-auth",
+            "/var/ossec/bin/ossec-syscheckd",
+            "/var/ossec/bin/ossec-agentd",
+            "/var/ossec/bin/manage_agents",
+            "/var/ossec/bin/ossec-lua",
+            "/var/ossec/bin/ossec-control",
+            "/var/ossec/bin/ossec-luac",
+            "/var/ossec/bin/ossec-logcollector",
+            "/var/ossec/bin/util.sh",
+            "/var/ossec/bin/ossec-execd",
+        ]
+        c = host.run("dpkg-deb -c {}".format(deb_package.path))
+        for wanted_file in wanted_files:
+            assert wanted_file in c.stdout
+
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_ossec_binaries_are_present_server(host, deb):
+    """
+    Inspect the package contents to ensure all ossec server binaries are properly
+    included in the package.
+    """
+    deb_package = host.file(deb.format(
+        securedrop_test_vars.ossec_version))
+    # Only relevant for the ossec-agent package and not securedrop-ossec-agent:
+    if "ossec-server" in deb_package.path and "securedrop" not in deb_package.path:
+        wanted_files = [
+            "/var/ossec/bin/ossec-maild",
+            "/var/ossec/bin/ossec-remoted",
+            "/var/ossec/bin/ossec-syscheckd",
+            "/var/ossec/bin/ossec-makelists",
+            "/var/ossec/bin/ossec-logtest",
+            "/var/ossec/bin/syscheck_update",
+            "/var/ossec/bin/ossec-reportd",
+            "/var/ossec/bin/ossec-agentlessd",
+            "/var/ossec/bin/manage_agents",
+            "/var/ossec/bin/ossec-lua",
+            "/var/ossec/bin/rootcheck_control",
+            "/var/ossec/bin/ossec-control",
+            "/var/ossec/bin/ossec-dbd",
+            "/var/ossec/bin/ossec-csyslogd",
+            "/var/ossec/bin/ossec-regex",
+            "/var/ossec/bin/ossec-luac",
+            "/var/ossec/bin/agent_control",
+            "/var/ossec/bin/ossec-monitord",
+            "/var/ossec/bin/clear_stats",
+            "/var/ossec/bin/ossec-logcollector",
+            "/var/ossec/bin/list_agents",
+            "/var/ossec/bin/verify-agent-conf",
+            "/var/ossec/bin/syscheck_control",
+            "/var/ossec/bin/util.sh",
+            "/var/ossec/bin/ossec-analysisd",
+            "/var/ossec/bin/ossec-execd",
+            "/var/ossec/bin/ossec-authd",
+        ]
+        c = host.run("dpkg-deb --contents {}".format(deb_package.path))
+        for wanted_file in wanted_files:
+            assert wanted_file in c.stdout

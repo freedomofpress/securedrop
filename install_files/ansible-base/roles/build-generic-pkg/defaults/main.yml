@@ -1,7 +1,7 @@
 ---
 # Destination directory on Ansible controller where built deb packages
 # will be stored after fetching from build host.
-securedrop_local_build: "../../build"
+securedrop_local_build: "../../build/{{ ansible_distribution_release }}/"
 
 securedrop_generic_build_path: "/tmp/build/"
 

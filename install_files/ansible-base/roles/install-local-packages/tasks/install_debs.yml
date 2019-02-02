@@ -3,7 +3,7 @@
 # why the parent dirs ("..") are necessary.
 - name: Copy locally built deb packages to server (Staging only).
   copy:
-    src: ../../build/{{ item }}
+    src: ../../build/{{ securedrop_staging_install_target_distro }}/{{ item }}
     dest: /root/
   with_items: "{{ local_deb_packages }}"
 

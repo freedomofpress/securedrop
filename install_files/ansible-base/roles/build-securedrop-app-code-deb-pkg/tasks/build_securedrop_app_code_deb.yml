@@ -11,8 +11,6 @@
     delete: yes
     recursive: yes
 
-- debug: var=securedrop_code
-
 - name: Copy app code to build directory.
   synchronize:
     src: "{{ role_path }}/../../../../securedrop/"
@@ -46,20 +44,28 @@
   with_items: "{{ apparmor_profiles }}"
   tags: apparmor
 
-# Admittedly, this is a hack. It's off by default, but provides a toggle
-# for enabling Xenial support. So far, evaluation of Xenial has identified
-# package dependency logic as a blocker for installing the locally built
-# deb packages.
-- name: Support Xenial apache dependencies.
-  command: sed -i -e 's/apache2-mpm-worker,/apache2,/' {{ securedrop_app_code_deb_dir }}/DEBIAN/control
-  when: securedrop_build_xenial_support
+- name: Replace placeholder changelog to dist-specific changelog
+  copy:
+    src: "changelog-{{ securedrop_package_dist }}"
+    dest: "{{ securedrop_app_code_deb_dir }}/debian/changelog"
 
 - name: Build securedrop-app-code Debian package.
-  command: dpkg-deb --build {{ securedrop_app_code_deb_dir }}
+  command: dpkg-buildpackage -us -uc
+  args:
+    chdir: "{{ securedrop_app_code_deb_dir }}"
+
+- name: Find newly built Debian package
+  find:
+    paths:
+      - "{{ securedrop_app_code_deb_dir }}/../"
+    patterns:
+      - '*.deb'
+  register: securedrop_deb_package_find_results
 
 - name: Fetch newly built Debian packages back to localhost.
   fetch:
-    src: "{{ securedrop_app_code_deb_dir }}.deb"
+    src: "{{ item.path }}"
     dest: "{{ ossec_build_deb_package_local_dest_dir }}"
     flat: yes
     fail_on_missing: yes
+  with_items: "{{ securedrop_deb_package_find_results.files }}"

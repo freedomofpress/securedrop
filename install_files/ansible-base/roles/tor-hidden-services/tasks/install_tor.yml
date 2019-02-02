@@ -7,12 +7,10 @@
     - apt
     - tor
 
-- name: Setup Tor apt repo.
-  apt_repository:
-    filename: tor_apt_freedom_press
-    repo: deb {{ tor_apt_repo_url }} {{ tor_apt_target_distro }} main
-    state: present
-  register: add_tor_apt_repo
+- name: Remove Tor apt repo, so FPF repo is used.
+  file:
+    path: /etc/apt/sources.list.d/tor_apt_freedom_press.list
+    state: absent
   tags:
     - apt
     - tor

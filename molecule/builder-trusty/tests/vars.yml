@@ -2,7 +2,7 @@
 securedrop_version: "0.12.0~rc1"
 ossec_version: "3.0.0"
 keyring_version: "0.1.2"
-config_version: "0.1.1"
+config_version: "0.1.2"
 grsec_version: "4.4.167"
 
 # These values will be interpolated with values populated above
@@ -10,7 +10,7 @@ grsec_version: "4.4.167"
 build_directories:
   # The build scripts for securedrop-app-code run separate from the others,
   # i.e. lacking the `/tmp/build` pardir.
-  - /tmp/securedrop-app-code-{securedrop_version}-amd64/
+  - /tmp/securedrop-app-code-{securedrop_version}_amd64/
   - /tmp/build/securedrop-keyring-{keyring_version}+{securedrop_version}-amd64/
   - /tmp/build/securedrop-config-{config_version}+{securedrop_version}-amd64/
   - /tmp/build/securedrop-ossec-agent-{ossec_version}+{securedrop_version}-amd64/
@@ -20,7 +20,7 @@ build_directories:
   - /tmp/build
 
 build_deb_packages:
-  - /tmp/build/securedrop-app-code-{securedrop_version}-amd64.deb
+  - /tmp/build/securedrop-app-code_{securedrop_version}+{securedrop_target_platform}_amd64.deb
   - /tmp/build/securedrop-ossec-agent-{ossec_version}+{securedrop_version}-amd64.deb
   - /tmp/build/securedrop-ossec-server-{ossec_version}+{securedrop_version}-amd64.deb
   - /tmp/build/ossec-server-{ossec_version}-amd64.deb

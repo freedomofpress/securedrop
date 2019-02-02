@@ -36,23 +36,26 @@ def test_cron_apt_config(File):
 
 
 @pytest.mark.parametrize('repo', [
-  'deb http://security.ubuntu.com/ubuntu trusty-security main',
-  'deb-src http://security.ubuntu.com/ubuntu trusty-security main',
-  'deb http://security.ubuntu.com/ubuntu trusty-security universe',
-  'deb-src http://security.ubuntu.com/ubuntu trusty-security universe',
-  'deb [arch=amd64] {} trusty main'.format(test_vars.fpf_apt_repo_url),
-  'deb https://tor-apt.freedom.press trusty main',
+  'deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security main',
+  'deb-src http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security main',
+  'deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security universe',
+  'deb-src http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security universe',
+  'deb [arch=amd64] {fpf_apt_repo_url} {securedrop_target_platform} main',
 ])
-def test_cron_apt_repo_list(File, repo):
+def test_cron_apt_repo_list(host, repo):
     """
     Ensure the correct apt repositories are specified
     in the security list for apt.
     """
-    f = File('/etc/apt/security.list')
+    repo_config = repo.format(
+        fpf_apt_repo_url=test_vars.fpf_apt_repo_url,
+        securedrop_target_platform=host.system_info.codename
+    )
+    f = host.file('/etc/apt/security.list')
     assert f.is_file
     assert f.user == "root"
     assert oct(f.mode) == "0644"
-    repo_regex = '^{}$'.format(re.escape(repo))
+    repo_regex = '^{}$'.format(re.escape(repo_config))
     assert f.contains(repo_regex)
 
 
