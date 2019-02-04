@@ -72,7 +72,7 @@ def test_tor_service_running(host):
     'SafeLogging 1',
     'RunAsDaemon 1',
 ])
-def test_tor_torrc_options(File, torrc_option):
+def test_tor_torrc_options(host, torrc_option):
     """
     Check for required options in the system Tor config file.
     These options should be present regardless of machine role,
@@ -80,21 +80,21 @@ def test_tor_torrc_options(File, torrc_option):
 
     Separate tests will check for specific hidden services.
     """
-    f = File("/etc/tor/torrc")
+    f = host.file("/etc/tor/torrc")
     assert f.is_file
     assert f.user == "debian-tor"
     assert oct(f.mode) == "0644"
     assert f.contains("^{}$".format(torrc_option))
 
 
-def test_tor_torrc_sandbox(File):
+def test_tor_torrc_sandbox(host):
     """
     Check that the `Sandbox 1` declaration is not present in the torrc.
     The torrc manpage states this option is experimental, and although we
     use it already on Tails workstations, further testing is required
     before we push it out to servers. See issues #944 and #1969.
     """
-    f = File("/etc/tor/torrc")
+    f = host.file("/etc/tor/torrc")
     # Only `Sandbox 1` will enable, but make sure there are zero occurrances
     # of "Sandbox", otherwise we may have a regression somewhere.
     assert not f.contains("^.*Sandbox.*$")

@@ -6,11 +6,11 @@ securedrop_test_vars = pytest.securedrop_test_vars
 
 
 @pytest.mark.parametrize("header", securedrop_test_vars.wanted_apache_headers)
-def test_apache_headers_source_interface(File, header):
+def test_apache_headers_source_interface(host, header):
     """
     Test for expected headers in Source Interface vhost config.
     """
-    f = File("/etc/apache2/sites-available/source.conf")
+    f = host.file("/etc/apache2/sites-available/source.conf")
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
@@ -46,7 +46,7 @@ def test_apache_headers_source_interface(File, header):
     'ErrorDocument 500 /notfound',
     "ErrorLog {}".format(securedrop_test_vars.apache_source_log),
 ])
-def test_apache_config_source_interface(File, apache_opt):
+def test_apache_config_source_interface(host, apache_opt):
     """
     Ensure the necessary Apache settings for serving the application
     are in place. Some values will change according to the host,
@@ -55,7 +55,7 @@ def test_apache_config_source_interface(File, apache_opt):
 
     These checks apply only to the Source Interface, used by Sources.
     """
-    f = File("/etc/apache2/sites-available/source.conf")
+    f = host.file("/etc/apache2/sites-available/source.conf")
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"

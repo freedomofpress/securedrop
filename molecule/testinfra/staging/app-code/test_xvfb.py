@@ -1,23 +1,23 @@
 testinfra_hosts = ["app-staging"]
 
 
-def test_xvfb_is_installed(Package):
+def test_xvfb_is_installed(host):
     """
     Ensure apt requirements for Xvfb are present.
     """
-    assert Package("xvfb").is_installed
+    assert host.package("xvfb").is_installed
 
 
-def test_firefox_is_installed(Package, Command):
+def test_firefox_is_installed(host):
     """
     The app test suite requires a very specific version of Firefox, for
     compatibility with Selenium. Make sure to check the explicit
     version of Firefox, not just that any version of Firefox is installed.
     """
-    p = Package("firefox")
+    p = host.package("firefox")
     assert p.is_installed
 
-    c = Command("firefox --version")
+    c = host.run("firefox --version")
     # Reminder: the rstrip is only necessary for local-context actions,
     # but it's a fine practice in all contexts.
     assert c.stdout.rstrip() == "Mozilla Firefox 46.0.1"
@@ -113,7 +113,7 @@ def _xvfb_service_enabled_trusty(host):
     Ensure xvfb is configured to start on boot via update-rc.d.
     The `-n` option to update-rc.d is dry-run.
 
-    Using Sudo context manager because the service file is mode 700.
+    Using sudo context manager because the service file is mode 700.
     Not sure it's really necessary to have this script by 700; 755
     sounds sufficient.
     """
@@ -145,12 +145,12 @@ def test_xvfb_service_enabled(host):
         _xvfb_service_enabled_xenial(host)
 
 
-def test_xvfb_display_config(File):
+def test_xvfb_display_config(host):
     """
     Ensure DISPLAY environment variable is set on boot, for running
     headless tests via Xvfb.
     """
-    f = File('/etc/profile.d/xvfb_display.sh')
+    f = host.file('/etc/profile.d/xvfb_display.sh')
     assert f.is_file
     assert oct(f.mode) == "0444"
     assert f.user == "root"

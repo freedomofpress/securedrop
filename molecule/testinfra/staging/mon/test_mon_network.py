@@ -9,16 +9,16 @@ testinfra_hosts = ["mon-staging"]
 securedrop_test_vars = pytest.securedrop_test_vars
 
 
-def test_mon_iptables_rules(SystemInfo, Command, Sudo):
+def test_mon_iptables_rules(host):
 
     # Build a dict of variables to pass to jinja for iptables comparison
     kwargs = dict(
         app_ip=os.environ.get('APP_IP', securedrop_test_vars.app_ip),
-        default_interface=Command.check_output(
+        default_interface=host.check_output(
             "ip r | head -n 1 | awk '{ print $5 }'"),
-        tor_user_id=Command.check_output("id -u debian-tor"),
-        ssh_group_gid=Command.check_output("getent group ssh | cut -d: -f3"),
-        postfix_user_id=Command.check_output("id -u postfix"),
+        tor_user_id=host.check_output("id -u debian-tor"),
+        ssh_group_gid=host.check_output("getent group ssh | cut -d: -f3"),
+        postfix_user_id=host.check_output("id -u postfix"),
         dns_server=securedrop_test_vars.dns_server)
 
     # Build iptables scrape cmd, purge comments + counters
@@ -32,9 +32,9 @@ def test_mon_iptables_rules(SystemInfo, Command, Sudo):
     jinja_iptables = Template(io.open(iptables_file, 'r').read())
     iptables_expected = jinja_iptables.render(**kwargs)
 
-    with Sudo():
+    with host.sudo():
         # Actually run the iptables scrape command
-        iptables = Command.check_output(iptables)
+        iptables = host.check_output(iptables)
         # print diff comparison (only shows up in pytests if test fails or
         # verbosity turned way up)
         for iptablesdiff in difflib.context_diff(iptables_expected.split('\n'),

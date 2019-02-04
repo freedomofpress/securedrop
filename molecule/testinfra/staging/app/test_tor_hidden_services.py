@@ -7,12 +7,12 @@ sdvars = pytest.securedrop_test_vars
 
 
 @pytest.mark.parametrize('tor_service', sdvars.tor_services)
-def test_tor_service_directories(File, Sudo, tor_service):
+def test_tor_service_directories(host, tor_service):
     """
     Check mode and ownership on Tor service directories.
     """
-    with Sudo():
-        f = File("/var/lib/tor/services/{}".format(tor_service['name']))
+    with host.sudo():
+        f = host.file("/var/lib/tor/services/{}".format(tor_service['name']))
         assert f.is_directory
         assert oct(f.mode) == "0700"
         assert f.user == "debian-tor"
@@ -20,19 +20,18 @@ def test_tor_service_directories(File, Sudo, tor_service):
 
 
 @pytest.mark.parametrize('tor_service', sdvars.tor_services)
-def test_tor_service_hostnames(File, Sudo, tor_service):
+def test_tor_service_hostnames(host, tor_service):
     """
     Check contents of tor service hostname file. For normal Hidden Services,
     the file should contain only hostname (.onion URL). For Authenticated
     Hidden Services, it should also contain the HidServAuth cookie.
     """
-
     # Declare regex only for THS; we'll build regex for ATHS only if
     # necessary, since we won't have the required values otherwise.
     ths_hostname_regex = "[a-z0-9]{16}\.onion"
 
-    with Sudo():
-        f = File("/var/lib/tor/services/{}/hostname".format(
+    with host.sudo():
+        f = host.file("/var/lib/tor/services/{}/hostname".format(
             tor_service['name']))
         assert f.is_file
         assert oct(f.mode) == "0600"

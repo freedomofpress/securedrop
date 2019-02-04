@@ -9,12 +9,12 @@ securedrop_test_vars = pytest.securedrop_test_vars
     "source",
     "journalist",
 ])
-def test_apache_enabled_sites(Command, Sudo, apache_site):
+def test_apache_enabled_sites(host, apache_site):
     """
     Ensure the Source and Journalist interfaces are enabled.
     """
-    with Sudo():
-        c = Command("/usr/sbin/a2query -s {}".format(apache_site))
+    with host.sudo():
+        c = host.run("/usr/sbin/a2query -s {}".format(apache_site))
         assert "{} (enabled".format(apache_site) in c.stdout
         assert c.rc == 0
 
@@ -22,32 +22,32 @@ def test_apache_enabled_sites(Command, Sudo, apache_site):
 @pytest.mark.parametrize("apache_site", [
     "000-default",
 ])
-def test_apache_disabled_sites(Command, apache_site):
+def test_apache_disabled_sites(host, apache_site):
     """
     Ensure the default HTML document root is disabled.
     """
-    c = Command("a2query -s {}".format(apache_site))
+    c = host.run("a2query -s {}".format(apache_site))
     assert "No site matches {} (disabled".format(apache_site) in c.stderr
     assert c.rc == 32
 
 
-def test_apache_service(Service, Sudo):
+def test_apache_service(host):
     """
     Ensure Apache service is running.
     """
-    # Sudo is necessary to run `service apache2 status`, otherwise
+    # sudo is necessary to run `service apache2 status`, otherwise
     # the service is falsely reported as not running.
-    with Sudo():
-        s = Service("apache2")
+    with host.sudo():
+        s = host.service("apache2")
         assert s.is_running
         assert s.is_enabled
 
 
-def test_apache_user(User):
+def test_apache_user(host):
     """
     Ensure user account for running application code is configured correctly.
     """
-    u = User("www-data")
+    u = host.user("www-data")
     assert u.exists
     assert u.home == "/var/www"
     assert u.shell == "/usr/sbin/nologin"
@@ -57,14 +57,14 @@ def test_apache_user(User):
     "80",
     "8080",
 ])
-def test_apache_listening(Socket, Sudo, port):
+def test_apache_listening(host, port):
     """
     Ensure Apache is listening on proper ports and interfaces.
     In staging, expect the service to be bound to 0.0.0.0,
     but in prod, it should be restricted to 127.0.0.1.
     """
-    # Sudo is necessary to read from /proc/net/tcp.
-    with Sudo():
-        s = Socket("tcp://{}:{}".format(
+    # sudo is necessary to read from /proc/net/tcp.
+    with host.sudo():
+        s = host.socket("tcp://{}:{}".format(
             securedrop_test_vars.apache_listening_address, port))
         assert s.is_listening
