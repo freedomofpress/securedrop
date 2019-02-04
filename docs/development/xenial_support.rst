@@ -1,5 +1,5 @@
-Evaluating Xenial support
-=========================
+Targeting Xenial support
+========================
 
 The SecureDrop project has always recommended Ubuntu Trusty for
 the server operating system. In April 2019, the Long-Term Support (LTS)
@@ -68,19 +68,12 @@ If you encounter errors, re-running the ``make staging-xenial`` target
 may help. Naturally, we want the process to be error-free reliably.
 
 
-Known bugs with Xenial support
-------------------------------
-
-Below is a high-level overview of known problems to be addressed
-for delivering Xenial compatibility.
-
-Config tests
-    The testinfra config test suite runs slightly different checks for
-    Trusty and Xenial where appropriate. Care should be taken to preserve
-    functionality of the config tests against both distros.
+Further reading
+---------------
 
 More detailed research notes on evaluating Xenial support can be found
 in the following GitHub issues:
 
   * `#3207 - [xenial] Perform timeboxed install attempt of SecureDrop against Ubuntu 16.04 <https://github.com/freedomofpress/securedrop/issues/3207>`__
   * `#3491 - [xenial] Perform timeboxed upgrade attempt of SecureDrop from Ubuntu 14.04 to 16.04 <https://github.com/freedomofpress/securedrop/issues/3491>`__
+  * `#3204 - Migrate SecureDrop servers to Ubuntu 16.04 (Xenial) <https://github.com/freedomofpress/securedrop/issues/3204>`__

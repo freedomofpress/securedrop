@@ -16,7 +16,7 @@ def test_tor_packages(Package, package):
     assert Package(package).is_installed
 
 
-def test_tor_service_running_trusty(host):
+def _tor_service_running_trusty(host):
     """
     Ensure tor is running and enabled. Tor is required for SSH access,
     so it must be enabled to start on boot. Checks upstart/sysv-style
@@ -27,9 +27,6 @@ def test_tor_service_running_trusty(host):
     # `initctl` command. The tor service is handled via a SysV-style init
     # script, so let's just shell out and verify the running and enabled
     # states explicitly.
-    if host.system_info.codename == "xenial":
-        return True
-
     with host.sudo():
         assert host.check_output("service tor status") == \
                " * tor is running"
@@ -45,23 +42,29 @@ def test_tor_service_running_trusty(host):
         assert t.linked_to == "/etc/init.d/tor"
 
 
-def test_tor_service_running_xenial(host):
+def _tor_service_running_xenial(host):
     """
     Ensure tor is running and enabled. Tor is required for SSH access,
     so it must be enabled to start on boot. Checks systemd-style services,
     used by Xenial.
     """
-    # TestInfra tries determine the service manager intelligently, and
-    # inappropriately assumes Upstart on Trusty, due to presence of the
-    # `initctl` command. The tor service is handled via a SysV-style init
-    # script, so let's just shell out and verify the running and enabled
-    # states explicitly.
-    if host.system_info.codename == "trusty":
-        return True
-
     s = host.service("tor")
     assert s.is_running
     assert s.is_enabled
+
+
+def test_tor_service_running(host):
+    """
+    Ensure tor is running and enabled. Tor is required for SSH access,
+    so it must be enabled to start on boot.
+
+    Calls a separate function depending on platform, to handle nuances
+    of upstart vs sysv init systems.
+    """
+    if host.system_info.codename == "trusty":
+        _tor_service_running_trusty(host)
+    else:
+        _tor_service_running_xenial(host)
 
 
 @pytest.mark.parametrize('torrc_option', [

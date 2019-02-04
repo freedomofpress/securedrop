@@ -23,18 +23,13 @@ def test_firefox_is_installed(Package, Command):
     assert c.stdout.rstrip() == "Mozilla Firefox 46.0.1"
 
 
-def test_xvfb_service_config_trusty(host):
+def _xvfb_service_config_trusty(host):
     """
     Ensure xvfb service configuration file is present.
-    Using Sudo context manager because the expected mode is 700.
+    Using sudo context manager because the expected mode is 700.
     Not sure it's really necessary to have this script by 700; 755
     sounds sufficient.
     """
-    # We're checking the upstart/sysv-style init script, which is only
-    # relevant for Trusty.
-    if host.system_info.codename == "xenial":
-        return True
-
     with host.sudo():
         f = host.file("/etc/init.d/xvfb")
     assert f.is_file
@@ -79,7 +74,41 @@ exit 0
         assert f.content.rstrip() == xvfb_init_content
 
 
-def test_xvfb_service_enabled_trusty(host):
+def _xvfb_service_config_xenial(host):
+    """
+    Validate the service config for xvfb under Xenial, using
+    systemd unit files.
+    """
+    f = host.file("/etc/systemd/system/xvfb.service")
+    assert f.exists
+    xvfb_systemd_config = """
+[Unit]
+Description=X Virtual Frame Buffer Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset
+
+[Install]
+WantedBy=multi-user.target
+""".lstrip().rstrip()
+    assert f.content.rstrip() == xvfb_systemd_config
+
+
+def test_xvfb_service_config(host):
+    """
+    Validate the service config for Xvfb.
+
+    Calls separate functions per platform, to accommodate for init
+    script system divergence on e.g. Trusty & Xenial.
+    """
+    if host.system_info.codename == "trusty":
+        _xvfb_service_config_trusty(host)
+    else:
+        _xvfb_service_config_xenial(host)
+
+
+def _xvfb_service_enabled_trusty(host):
     """
     Ensure xvfb is configured to start on boot via update-rc.d.
     The `-n` option to update-rc.d is dry-run.
@@ -88,16 +117,32 @@ def test_xvfb_service_enabled_trusty(host):
     Not sure it's really necessary to have this script by 700; 755
     sounds sufficient.
     """
-    # We're checking the upstart/sysv-style init script, which is only
-    # relevant for Trusty.
-    if host.system_info.codename == "xenial":
-        return True
-
     with host.sudo():
         c = host.command('update-rc.d -n xvfb defaults')
     assert c.rc == 0
     wanted_text = 'System start/stop links for /etc/init.d/xvfb already exist.'
     assert wanted_text in c.stdout
+
+
+def _xvfb_service_enabled_xenial(host):
+    """
+    Ensure xvfb is configured to start on boot, under Xenial.
+    """
+    s = host.service("xvfb")
+    assert s.is_enabled
+
+
+def test_xvfb_service_enabled(host):
+    """
+    Ensure the xvfb service is configured to start on boot.
+
+    Calls separate functions per platform, to accommodate upstart vs
+    sysv style init scripts.
+    """
+    if host.system_info.codename == "trusty":
+        _xvfb_service_enabled_trusty(host)
+    else:
+        _xvfb_service_enabled_xenial(host)
 
 
 def test_xvfb_display_config(File):
@@ -113,20 +158,36 @@ def test_xvfb_display_config(File):
     assert f.contains("export DISPLAY=:1\n")
 
 
-def test_xvfb_service_running_trusty(host):
+def test_xvfb_service_running(host):
     """
     Ensure that xvfb service is running.
+
+    Calls separate functions per platform, to accommodate for upstart/sysv
+    style init scripts.
+    """
+    if host.system_info.codename == "trusty":
+        _xvfb_service_running_trusty(host)
+    else:
+        _xvfb_service_running_xenial(host)
+
+
+def _xvfb_service_running_xenial(host):
+    """
+    Ensure xvfb is running under Xenial.
+    """
+    s = host.service("xvfb")
+    assert s.is_running
+
+
+def _xvfb_service_running_trusty(host):
+    """
+    Ensure xvfb is running under Trusty.
 
     We can't use the Service module because it expects a "status"
     subcommand for the init script, and our custom version doesn't have
     one. So let's make sure the process is running.
     """
-    # We're checking the upstart/sysv-style init script, which is only
-    # relevant for Trusty.
-    if host.system_info.codename == "xenial":
-        return True
-
-    # Sudo isn't necessary to read out of /proc on development, but is
+    # sudo isn't necessary to read out of /proc on development, but is
     # required when running under Grsecurity, which app-staging does.
     # So let's escalate privileges to ensure we can determine service state.
     with host.sudo():
