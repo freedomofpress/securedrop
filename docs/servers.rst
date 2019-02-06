@@ -275,7 +275,7 @@ When the packages are finished installing, Ubuntu will automatically
 install the bootloader (GRUB). If it asks to install the bootloader to
 the Master Boot Record, choose **Yes**. When everything is done, reboot.
 
-.. |Ubuntu Server| image:: images/install/ubuntu_server.png
+.. |Ubuntu Server| image:: images/install/ubuntu_server.png 
 
 Save the Configurations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
