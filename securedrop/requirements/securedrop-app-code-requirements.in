@@ -7,7 +7,7 @@ Flask-Babel
 Flask-SQLAlchemy
 Flask-WTF
 Flask>0.12.2
-gnupg
+pretty-bad-protocol>=3.1.1
 Jinja2
 jsmin
 passlib

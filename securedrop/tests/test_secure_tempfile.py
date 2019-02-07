@@ -3,7 +3,7 @@ import io
 import os
 import pytest
 
-from gnupg._util import _is_stream
+from pretty_bad_protocol._util import _is_stream
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from secure_tempfile import SecureTemporaryFile
