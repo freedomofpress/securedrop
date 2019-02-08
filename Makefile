@@ -178,6 +178,10 @@ upgrade-test-qa: ## Once an upgrade environment is running, force upgrade apt pa
 	@QA_APTTEST=yes molecule converge -s upgrade -- --diff -t apt
 	@QA_APTTEST=yes molecule side-effect -s upgrade
 
+.PHONY: fetch-tor-packages
+fetch-tor-packages: ## Retrieves the most recent Tor packages for Xenial, for apt repo
+	molecule test -s fetch-tor-packages
+
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
 # 2. Use sed-like syntax to remove the make targets
