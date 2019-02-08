@@ -94,8 +94,8 @@ build-debs-xenial: ## Builds and tests debian packages (includes Xenial override
 	@./devops/scripts/build-debs.sh test xenial
 
 .PHONY: build-debs-xenial-notest
-	build-debs-xenial-notest: ## Builds and tests debian packages (includes Xenial overrides, sans tests, TESTING ONLY)
-		@./devops/scripts/build-debs.sh notest xenial
+build-debs-xenial-notest: ## Builds and tests debian packages (includes Xenial overrides, sans tests, TESTING ONLY)
+	@./devops/scripts/build-debs.sh notest xenial
 
 .PHONY: build-gcloud-docker
 build-gcloud-docker: ## Build docker container for gcloud sdk
