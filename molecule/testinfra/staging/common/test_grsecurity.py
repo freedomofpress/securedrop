@@ -142,8 +142,7 @@ def test_apt_autoremove(host):
     assert "The following packages will be REMOVED" not in c.stdout
 
 
-@pytest.mark.xfail(strict=True,
-                   reason="PaX flags unset at install time, see issue #3916")
+@pytest.mark.xfail(reason="PaX flags unset at install time, see issue #3916")
 @pytest.mark.parametrize("binary", [
     "/usr/sbin/grub-probe",
     "/usr/sbin/grub-mkdevicemap",
