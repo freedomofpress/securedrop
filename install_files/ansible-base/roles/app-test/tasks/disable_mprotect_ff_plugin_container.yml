@@ -8,7 +8,9 @@
   # We'll catch that error and respond accordingly in the next task.
   failed_when: false
   register: paxctl_firefox_header_check
-  when: ansible_kernel.endswith('-grsec')
+  when:
+    - ansible_kernel.endswith('-grsec')
+    - ansible_distribution_release == "trusty"
   with_items:
     - /usr/lib/firefox/firefox
     - /usr/lib/firefox/plugin-container
@@ -20,4 +22,5 @@
   when:
     # Chained conditional; only inspect command results if running under grsecurity.
     - ansible_kernel.endswith('-grsec')
+    - ansible_distribution_release == "trusty"
     - "item.stdout != '- PaX flags: -----m-x---- [{{ item.item }}]' or item.rc != 0"
