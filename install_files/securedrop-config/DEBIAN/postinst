@@ -4,10 +4,28 @@
 set -e
 set -x
 
-disable_upgrade_prompt() {
-    # Disable do-release-upgrade notification
-    sed -i 's/Prompt=.*/Prompt=never/' /etc/update-manager/release-upgrades || true
+
+# Issue #4104
+# Set Prompt=never on Xenial
+# Set Prompt=lts on Trusty
+update_release_prompt() {
+    set -e
+
+    declare -r upgrade_config='/etc/update-manager/release-upgrades'
+
+    declare -r release="$(lsb_release -sc)"
+    if [ "$?" -ne 0 ]; then
+        echo 'Unable to detect LSB codename' >&2
+        return 1
+    fi
+
+    if [[ "$release"  == trusty ]]; then
+        sed -i 's/Prompt=.*/Prompt=lts/' "$upgrade_config"
+    else
+        sed -i 's/Prompt=.*/Prompt=never/' "$upgrade_config"
+    fi
 }
+
 remove_2fa_tty_req() {
     # The goal here is to remove legacy 2FA req on TTY logins
     # Lets prevent this from bombing out the install though if it fails
@@ -70,7 +88,7 @@ case "$1" in
 
     manage_tor_repo_config
     remove_2fa_tty_req
-    disable_upgrade_prompt
+    update_release_prompt
 
     # Remove cron-apt action should occur after security upgrades to avoid breaking
     # automatic upgrades (see issue #4003)
