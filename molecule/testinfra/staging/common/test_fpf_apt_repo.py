@@ -32,7 +32,7 @@ def test_fpf_apt_repo_present(host):
     assert f.contains(repo_regex)
 
 
-def test_fpf_apt_repo_fingerprint(Command):
+def test_fpf_apt_repo_fingerprint(host):
     """
     Ensure the FPF apt repo has the correct fingerprint on the associated
     signing pubkey. The key changed in October 2016, so test for the
@@ -40,7 +40,7 @@ def test_fpf_apt_repo_fingerprint(Command):
     `securedrop-keyring` package.
     """
 
-    c = Command('apt-key finger')
+    c = host.run('apt-key finger')
 
     fpf_gpg_pub_key_info = """/etc/apt/trusted.gpg.d/securedrop-keyring.gpg
 ---------------------------------------------
@@ -59,12 +59,12 @@ uid                  SecureDrop Release Signing Key"""
     'uid                  Freedom of the Press Foundation Master Signing Key',
     'B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818',
 ])
-def test_fpf_apt_repo_old_pubkeys_absent(Command, old_pubkey):
+def test_fpf_apt_repo_old_pubkeys_absent(host, old_pubkey):
     """
     Ensure that expired (or about-to-expire) public keys for the FPF
     apt repo are NOT present. Updates to the securedrop-keyring package
     should enforce clobbering of old pubkeys, and this check will confirm
     absence.
     """
-    c = Command('apt-key finger')
+    c = host.run('apt-key finger')
     assert old_pubkey not in c.stdout

@@ -1,12 +1,12 @@
 import re
 
 
-def test_sudoers_config(File, Sudo):
+def test_sudoers_config(host):
     """
     Check sudoers config for passwordless sudo via group membership,
     as well as environment-related hardening.
     """
-    f = File("/etc/sudoers")
+    f = host.file("/etc/sudoers")
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
@@ -14,7 +14,7 @@ def test_sudoers_config(File, Sudo):
 
     # Restrictive file mode requires sudo for reading, so let's
     # read once and store the content in a var.
-    with Sudo():
+    with host.sudo():
         sudoers_config = f.content
 
     # Using re.search rather than `f.contains` since the basic grep
@@ -30,7 +30,7 @@ def test_sudoers_config(File, Sudo):
     assert re.search('Defaults:%sudo\s+!requiretty', sudoers_config, re.M)
 
 
-def test_sudoers_tmux_env(File):
+def test_sudoers_tmux_env(host):
     """
     Ensure SecureDrop-specific bashrc additions are present.
     This checks for automatic tmux start on interactive shells.
@@ -38,7 +38,7 @@ def test_sudoers_tmux_env(File):
     the corresponding settings there.
     """
 
-    f = File('/etc/profile.d/securedrop_additions.sh')
+    f = host.file('/etc/profile.d/securedrop_additions.sh')
     non_interactive_str = re.escape('[[ $- != *i* ]] && return')
     tmux_check = re.escape('test -z "$TMUX" && (tmux attach ||'
                            ' tmux new-session)')
@@ -50,7 +50,7 @@ def test_sudoers_tmux_env(File):
     assert f.contains(tmux_check)
 
 
-def test_tmux_installed(Package):
+def test_tmux_installed(host):
     """
     Ensure the `tmux` package is present, since it's required for the user env.
     When running an interactive SSH session over Tor, tmux should be started
@@ -58,10 +58,10 @@ def test_tmux_installed(Package):
     unexpectedly, as sometimes happens over Tor. The Admin will be able to
     reconnect to the running tmux session and review command output.
     """
-    assert Package("tmux").is_installed
+    assert host.package("tmux").is_installed
 
 
-def test_sudoers_tmux_env_deprecated(File):
+def test_sudoers_tmux_env_deprecated(host):
     """
     Previous version of the Ansible config set the tmux config
     in per-user ~/.bashrc, which was redundant. The config has
@@ -72,5 +72,5 @@ def test_sudoers_tmux_env_deprecated(File):
 
     admin_user = "vagrant"
 
-    f = File("/home/{}/.bashrc".format(admin_user))
+    f = host.file("/home/{}/.bashrc".format(admin_user))
     assert not f.contains("^. \/etc\/bashrc\.securedrop_additions$")

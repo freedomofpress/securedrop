@@ -23,11 +23,11 @@ wanted_apache_headers = [
 # Test is not DRY; haven't figured out how to parametrize on
 # multiple inputs, so explicitly redeclaring test logic.
 @pytest.mark.parametrize("header", wanted_apache_headers)
-def test_apache_headers_journalist_interface(File, header):
+def test_apache_headers_journalist_interface(host, header):
     """
     Test for expected headers in Document Interface vhost config.
     """
-    f = File("/etc/apache2/sites-available/journalist.conf")
+    f = host.file("/etc/apache2/sites-available/journalist.conf")
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
@@ -104,7 +104,7 @@ common_apache2_directory_declarations = """
   'ErrorLog /var/log/apache2/journalist-error.log',
   'CustomLog /var/log/apache2/journalist-access.log combined',
 ])
-def test_apache_config_journalist_interface(File, apache_opt):
+def test_apache_config_journalist_interface(host, apache_opt):
     """
     Ensure the necessary Apache settings for serving the application
     are in place. Some values will change according to the host,
@@ -113,7 +113,7 @@ def test_apache_config_journalist_interface(File, apache_opt):
 
     These checks apply only to the Document Interface, used by Journalists.
     """
-    f = File("/etc/apache2/sites-available/journalist.conf")
+    f = host.file("/etc/apache2/sites-available/journalist.conf")
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
@@ -122,16 +122,16 @@ def test_apache_config_journalist_interface(File, apache_opt):
     assert re.search(regex, f.content, re.M)
 
 
-def test_apache_journalist_interface_vhost(File):
+def test_apache_journalist_interface_vhost(host):
     """
     Ensure the document root is configured with correct access restrictions
     for serving Journalist Interface application code.
     """
-    f = File("/etc/apache2/sites-available/journalist.conf")
+    f = host.file("/etc/apache2/sites-available/journalist.conf")
     assert common_apache2_directory_declarations in f.content
 
 
-def test_apache_logging_journalist_interface(File, Command, Sudo):
+def test_apache_logging_journalist_interface(host):
     """
     Check that logging is configured correctly for the Journalist Interface.
     The actions of Journalists are logged by the system, so that an Admin can
@@ -140,15 +140,15 @@ def test_apache_logging_journalist_interface(File, Command, Sudo):
     Logs were broken for some period of time, logging only "combined" to
     the logfile, rather than the combined LogFormat intended.
     """
-    # Sudo is necessary because /var/log/apache2 is mode 0750.
-    with Sudo():
-        f = File("/var/log/apache2/journalist-access.log")
+    # sudo is necessary because /var/log/apache2 is mode 0750.
+    with host.sudo():
+        f = host.file("/var/log/apache2/journalist-access.log")
         assert f.is_file
         if f.size == 0:
             # If the file is empty, the Journalist Interface hasn't been used
             # yet, so make a quick GET request local to the host so we can
             # validate the log entry.
-            Command.check_output("curl http://127.0.0.1:8080")
+            host.check_output("curl http://127.0.0.1:8080")
 
         assert f.size > 0  # Make sure something was logged.
         # LogFormat declaration was missing, so track regressions that log

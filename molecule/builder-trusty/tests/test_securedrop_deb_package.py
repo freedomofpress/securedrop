@@ -72,18 +72,18 @@ deb_tags = get_deb_tags()
 
 
 @pytest.mark.parametrize("deb", deb_packages)
-def test_build_deb_packages(File, deb):
+def test_build_deb_packages(host, deb):
     """
     Sanity check the built Debian packages for Control field
     values and general package structure.
     """
-    deb_package = File(deb.format(
+    deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
     assert deb_package.is_file
 
 
 @pytest.mark.parametrize("deb", deb_packages)
-def test_deb_packages_appear_installable(File, Command, Sudo, deb):
+def test_deb_packages_appear_installable(host, deb):
     """
     Confirms that a dry-run of installation reports no errors.
     Simple check for valid Debian package structure, but not thorough.
@@ -94,16 +94,16 @@ def test_deb_packages_appear_installable(File, Command, Sudo, deb):
     Testing application behavior is left to the functional tests.
     """
 
-    deb_package = File(deb.format(
+    deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
 
     deb_basename = os.path.basename(deb_package.path)
     package_name = extract_package_name_from_filepath(deb_package.path)
     assert deb_basename.startswith(package_name)
 
-    # Sudo is required to call `dpkg --install`, even as dry-run.
-    with Sudo():
-        c = Command("dpkg --install --dry-run {}".format(deb_package.path))
+    # sudo is required to call `dpkg --install`, even as dry-run.
+    with host.sudo():
+        c = host.run("dpkg --install --dry-run {}".format(deb_package.path))
         assert "Selecting previously unselected package {}".format(
             package_name) in c.stdout
         regex = "Preparing to unpack [./]+{} ...".format(
@@ -113,18 +113,18 @@ def test_deb_packages_appear_installable(File, Command, Sudo, deb):
 
 
 @pytest.mark.parametrize("deb", deb_packages)
-def test_deb_package_control_fields(File, Command, deb):
+def test_deb_package_control_fields(host, deb):
     """
     Ensure Debian Control fields are populated as expected in the package.
     These checks are rather superficial, and don't actually confirm that the
     .deb files are not broken. At a later date, consider integration tests
     that actually use these built files during an Ansible provisioning run.
     """
-    deb_package = File(deb.format(
+    deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
     package_name = extract_package_name_from_filepath(deb_package.path)
     # The `--field` option will display all fields if none are specified.
-    c = Command("dpkg-deb --field {}".format(deb_package.path))
+    c = host.run("dpkg-deb --field {}".format(deb_package.path))
 
     assert "Maintainer: SecureDrop Team <securedrop@freedom.press>" in c.stdout
     # The securedrop-config package is architecture indepedent
@@ -138,11 +138,11 @@ def test_deb_package_control_fields(File, Command, deb):
 
 
 @pytest.mark.parametrize("deb", deb_packages)
-def test_deb_package_control_fields_homepage(File, Command, deb):
-    deb_package = File(deb.format(
+def test_deb_package_control_fields_homepage(host, deb):
+    deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
     # The `--field` option will display all fields if none are specified.
-    c = Command("dpkg-deb --field {}".format(deb_package.path))
+    c = host.run("dpkg-deb --field {}".format(deb_package.path))
     # The OSSEC source packages will have a different homepage;
     # all other packages should set securedrop.org as homepage.
     if os.path.basename(deb_package.path).startswith('ossec-'):
@@ -152,7 +152,7 @@ def test_deb_package_control_fields_homepage(File, Command, deb):
 
 
 @pytest.mark.parametrize("deb", deb_packages)
-def test_deb_package_contains_no_config_file(File, Command, deb):
+def test_deb_package_contains_no_config_file(host, deb):
     """
     Ensures the `securedrop-app-code` package does not ship a `config.py`
     file. Doing so would clobber the site-specific changes made via Ansible.
@@ -160,53 +160,53 @@ def test_deb_package_contains_no_config_file(File, Command, deb):
     Somewhat lazily checking all deb packages, rather than just the app-code
     package, but it accomplishes the same in a DRY manner.
     """
-    deb_package = File(deb.format(
+    deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
-    c = Command("dpkg-deb --contents {}".format(deb_package.path))
+    c = host.run("dpkg-deb --contents {}".format(deb_package.path))
     assert not re.search("^.*/config\.py$", c.stdout, re.M)
 
 
 @pytest.mark.parametrize("deb", deb_packages)
-def test_deb_package_contains_pot_file(File, Command, deb):
+def test_deb_package_contains_pot_file(host, deb):
     """
     Ensures the `securedrop-app-code` package has the
     messages.pot file
     """
-    deb_package = File(deb.format(
+    deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
-    c = Command("dpkg-deb --contents {}".format(deb_package.path))
+    c = host.run("dpkg-deb --contents {}".format(deb_package.path))
     # Only relevant for the securedrop-app-code package:
     if "securedrop-app-code" in deb_package.path:
         assert re.search("^.*messages.pot$", c.stdout, re.M)
 
 
 @pytest.mark.parametrize("deb", deb_packages)
-def test_deb_package_contains_mo_file(File, Command, deb):
+def test_deb_package_contains_mo_file(host, deb):
     """
     Ensures the `securedrop-app-code` package has at least one
     compiled mo file.
     """
-    deb_package = File(deb.format(
+    deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
-    c = Command("dpkg-deb --contents {}".format(deb_package.path))
+    c = host.run("dpkg-deb --contents {}".format(deb_package.path))
     # Only relevant for the securedrop-app-code package:
     if "securedrop-app-code" in deb_package.path:
         assert re.search("^.*messages\.mo$", c.stdout, re.M)
 
 
 @pytest.mark.parametrize("deb", deb_packages)
-def test_deb_package_contains_no_generated_assets(File, Command, deb):
+def test_deb_package_contains_no_generated_assets(host, deb):
     """
     Ensures the `securedrop-app-code` package does not ship a minified
     static assets, which are built automatically via Flask-Assets, and may be
     present in the source directory used to build from.
     """
-    deb_package = File(deb.format(
+    deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
 
     # Only relevant for the securedrop-app-code package:
     if "securedrop-app-code" in deb_package.path:
-        c = Command("dpkg-deb --contents {}".format(deb_package.path))
+        c = host.run("dpkg-deb --contents {}".format(deb_package.path))
         # static/gen/ directory should exist
         assert re.search("^.*\./var/www/securedrop"
                          "/static/gen/$", c.stdout, re.M)
@@ -229,17 +229,17 @@ def test_deb_package_contains_no_generated_assets(File, Command, deb):
 
 
 @pytest.mark.parametrize("deb", deb_packages)
-def test_deb_package_contains_css(File, Command, deb):
+def test_deb_package_contains_css(host, deb):
     """
     Ensures the `securedrop-app-code` package contains files that
     are generated during the `sass` build process.
     """
-    deb_package = File(deb.format(
+    deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
 
     # Only relevant for the securedrop-app-code package:
     if "securedrop-app-code" in deb_package.path:
-        c = Command("dpkg-deb --contents {}".format(deb_package.path))
+        c = host.run("dpkg-deb --contents {}".format(deb_package.path))
 
         for css_type in ['journalist', 'source']:
             assert re.search("^.*\./var/www/securedrop/static/"
@@ -247,13 +247,13 @@ def test_deb_package_contains_css(File, Command, deb):
 
 
 @pytest.mark.parametrize("deb, tag", deb_tags)
-def test_deb_package_lintian(File, Command, deb, tag):
+def test_deb_package_lintian(host, deb, tag):
     """
     Ensures lintian likes our  Debian packages.
     """
-    deb_package = File(deb.format(
+    deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
-    c = Command("""lintian --tags {} --no-tag-display-limit {}""".format(
+    c = host.run("lintian --tags {} --no-tag-display-limit {}".format(
         tag, deb_package.path))
     assert len(c.stdout) == 0
 

@@ -1,40 +1,35 @@
 testinfra_hosts = ["app-staging"]
 
 
-def test_xvfb_is_installed(Package):
+def test_xvfb_is_installed(host):
     """
     Ensure apt requirements for Xvfb are present.
     """
-    assert Package("xvfb").is_installed
+    assert host.package("xvfb").is_installed
 
 
-def test_firefox_is_installed(Package, Command):
+def test_firefox_is_installed(host):
     """
     The app test suite requires a very specific version of Firefox, for
     compatibility with Selenium. Make sure to check the explicit
     version of Firefox, not just that any version of Firefox is installed.
     """
-    p = Package("firefox")
+    p = host.package("firefox")
     assert p.is_installed
 
-    c = Command("firefox --version")
+    c = host.run("firefox --version")
     # Reminder: the rstrip is only necessary for local-context actions,
     # but it's a fine practice in all contexts.
     assert c.stdout.rstrip() == "Mozilla Firefox 46.0.1"
 
 
-def test_xvfb_service_config_trusty(host):
+def _xvfb_service_config_trusty(host):
     """
     Ensure xvfb service configuration file is present.
-    Using Sudo context manager because the expected mode is 700.
+    Using sudo context manager because the expected mode is 700.
     Not sure it's really necessary to have this script by 700; 755
     sounds sufficient.
     """
-    # We're checking the upstart/sysv-style init script, which is only
-    # relevant for Trusty.
-    if host.system_info.codename == "xenial":
-        return True
-
     with host.sudo():
         f = host.file("/etc/init.d/xvfb")
     assert f.is_file
@@ -79,20 +74,49 @@ exit 0
         assert f.content.rstrip() == xvfb_init_content
 
 
-def test_xvfb_service_enabled_trusty(host):
+def _xvfb_service_config_xenial(host):
+    """
+    Validate the service config for xvfb under Xenial, using
+    systemd unit files.
+    """
+    f = host.file("/etc/systemd/system/xvfb.service")
+    assert f.exists
+    xvfb_systemd_config = """
+[Unit]
+Description=X Virtual Frame Buffer Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset
+
+[Install]
+WantedBy=multi-user.target
+""".lstrip().rstrip()
+    assert f.content.rstrip() == xvfb_systemd_config
+
+
+def test_xvfb_service_config(host):
+    """
+    Validate the service config for Xvfb.
+
+    Calls separate functions per platform, to accommodate for init
+    script system divergence on e.g. Trusty & Xenial.
+    """
+    if host.system_info.codename == "trusty":
+        _xvfb_service_config_trusty(host)
+    else:
+        _xvfb_service_config_xenial(host)
+
+
+def _xvfb_service_enabled_trusty(host):
     """
     Ensure xvfb is configured to start on boot via update-rc.d.
     The `-n` option to update-rc.d is dry-run.
 
-    Using Sudo context manager because the service file is mode 700.
+    Using sudo context manager because the service file is mode 700.
     Not sure it's really necessary to have this script by 700; 755
     sounds sufficient.
     """
-    # We're checking the upstart/sysv-style init script, which is only
-    # relevant for Trusty.
-    if host.system_info.codename == "xenial":
-        return True
-
     with host.sudo():
         c = host.command('update-rc.d -n xvfb defaults')
     assert c.rc == 0
@@ -100,12 +124,33 @@ def test_xvfb_service_enabled_trusty(host):
     assert wanted_text in c.stdout
 
 
-def test_xvfb_display_config(File):
+def _xvfb_service_enabled_xenial(host):
+    """
+    Ensure xvfb is configured to start on boot, under Xenial.
+    """
+    s = host.service("xvfb")
+    assert s.is_enabled
+
+
+def test_xvfb_service_enabled(host):
+    """
+    Ensure the xvfb service is configured to start on boot.
+
+    Calls separate functions per platform, to accommodate upstart vs
+    sysv style init scripts.
+    """
+    if host.system_info.codename == "trusty":
+        _xvfb_service_enabled_trusty(host)
+    else:
+        _xvfb_service_enabled_xenial(host)
+
+
+def test_xvfb_display_config(host):
     """
     Ensure DISPLAY environment variable is set on boot, for running
     headless tests via Xvfb.
     """
-    f = File('/etc/profile.d/xvfb_display.sh')
+    f = host.file('/etc/profile.d/xvfb_display.sh')
     assert f.is_file
     assert oct(f.mode) == "0444"
     assert f.user == "root"
@@ -113,20 +158,36 @@ def test_xvfb_display_config(File):
     assert f.contains("export DISPLAY=:1\n")
 
 
-def test_xvfb_service_running_trusty(host):
+def test_xvfb_service_running(host):
     """
     Ensure that xvfb service is running.
+
+    Calls separate functions per platform, to accommodate for upstart/sysv
+    style init scripts.
+    """
+    if host.system_info.codename == "trusty":
+        _xvfb_service_running_trusty(host)
+    else:
+        _xvfb_service_running_xenial(host)
+
+
+def _xvfb_service_running_xenial(host):
+    """
+    Ensure xvfb is running under Xenial.
+    """
+    s = host.service("xvfb")
+    assert s.is_running
+
+
+def _xvfb_service_running_trusty(host):
+    """
+    Ensure xvfb is running under Trusty.
 
     We can't use the Service module because it expects a "status"
     subcommand for the init script, and our custom version doesn't have
     one. So let's make sure the process is running.
     """
-    # We're checking the upstart/sysv-style init script, which is only
-    # relevant for Trusty.
-    if host.system_info.codename == "xenial":
-        return True
-
-    # Sudo isn't necessary to read out of /proc on development, but is
+    # sudo isn't necessary to read out of /proc on development, but is
     # required when running under Grsecurity, which app-staging does.
     # So let's escalate privileges to ensure we can determine service state.
     with host.sudo():
