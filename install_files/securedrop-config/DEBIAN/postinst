@@ -4,23 +4,32 @@
 set -e
 set -x
 
+update_release_available_script() {
+    # The script /etc/cron.weekly/update-notifier-common runs the command
+    # /usr/lib/ubuntu-release-upgrader/release-upgrade-motd which runs the command
+    # /usr/lib/ubuntu-release-upgrader/check-new-release whose output is written to the "stamp" file
+    # /var/lib/ubuntu-release-upgrader/release-upgrade-available which is picked up by OSSEC.
+    #
+    # To prevent the OSSEC alerts from from telling the user to run 'do-release-upgrade' which
+    # may break their system, we update both the script and the existing "stamp" file.
+
+    for file in /usr/lib/ubuntu-release-upgrader/check-new-release /var/lib/ubuntu-release-upgrader/release-upgrade-available; do
+        if [ -f $file ]; then
+            sed -i "s|Run 'do-release-upgrade' to upgrade to it\\.|Visit https://securedrop.org/xenial-upgrade for more information|" "$file"
+        fi
+    done
+}
 
 # Issue #4104
 # Set Prompt=never on Xenial
 # Set Prompt=lts on Trusty
 update_release_prompt() {
     set -e
+    upgrade_config='/etc/update-manager/release-upgrades'
 
-    declare -r upgrade_config='/etc/update-manager/release-upgrades'
-
-    declare -r release="$(lsb_release -sc)"
-    if [ "$?" -ne 0 ]; then
-        echo 'Unable to detect LSB codename' >&2
-        return 1
-    fi
-
-    if [[ "$release"  == trusty ]]; then
+    if [ "$(lsb_release -sc)" = trusty ]; then
         sed -i 's/Prompt=.*/Prompt=lts/' "$upgrade_config"
+        update_release_available_script
     else
         sed -i 's/Prompt=.*/Prompt=never/' "$upgrade_config"
     fi
