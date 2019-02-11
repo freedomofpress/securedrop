@@ -37,7 +37,7 @@ def create_app(config):
                 template_folder=config.SOURCE_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
     app.request_class = RequestThatSecuresFileUploads
-    app.config.from_object(config.SourceInterfaceFlaskConfig)
+    app.config.from_object(config.SourceInterfaceFlaskConfig)  # type: ignore
     app.sdconfig = config
 
     # The default CSRF token expiration is 1 hour. Since large uploads can

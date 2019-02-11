@@ -40,7 +40,7 @@ def create_app(config):
                 template_folder=config.JOURNALIST_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
 
-    app.config.from_object(config.JournalistInterfaceFlaskConfig)
+    app.config.from_object(config.JournalistInterfaceFlaskConfig)  # type: ignore
     app.sdconfig = config
     app.session_interface = JournalistInterfaceSessionInterface()
 
