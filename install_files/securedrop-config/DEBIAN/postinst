@@ -20,6 +20,14 @@ update_release_available_script() {
     done
 }
 
+revert_update_release_available_script() {
+    for file in /usr/lib/ubuntu-release-upgrader/check-new-release /var/lib/ubuntu-release-upgrader/release-upgrade-available; do
+        if [ -f $file ]; then
+            sed -i "s|Visit https://securedrop\\.org/xenial-upgrade for more information|Run 'do-release-upgrade' to upgrade to it.|" "$file"
+        fi
+    done
+}
+
 # Issue #4104
 # Set Prompt=never on Xenial
 # Set Prompt=lts on Trusty
@@ -32,6 +40,7 @@ update_release_prompt() {
         update_release_available_script
     else
         sed -i 's/Prompt=.*/Prompt=never/' "$upgrade_config"
+        revert_update_release_available_script
     fi
 }
 
