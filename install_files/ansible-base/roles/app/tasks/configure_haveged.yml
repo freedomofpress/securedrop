@@ -39,8 +39,18 @@
     - haveged
     - hardening
 
-# The following two tasks resolve haveged AppArmor issues described in
+# The following three tasks resolve haveged AppArmor issues on Xenial described in
 # https://github.com/freedomofpress/securedrop/issues/4098.
+
+- name: Check whether haveged AppArmor profile exists in expected location for Xenial.
+  stat:
+    path: "/etc/apparmor.d/usr.sbin.haveged"
+  register: haveged_apparmor
+  # Do not report changed, this task does not modify state.
+  changed_when: false
+  tags:
+    - haveged
+    - hardening
 
 # This temporary fix ensures that the pid file haveged uses is whitelisted
 # by AppArmor.
@@ -50,11 +60,12 @@
     dest: /etc/apparmor.d/usr.sbin.haveged
     insertafter: "  #include <abstractions/base>"
     line: "  /run/haveged.pid rw,"
+  when: haveged_apparmor.stat.exists
   tags:
     - haveged
     - hardening
 
-# This temporary fix resolves a race condition where havaged would start
+# This temporary fix resolves a race condition where haveged would start
 # prior to AppArmor, in which case haveged would be running unconfined.
 # Bug described in: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=824179
 - name: Start apparmor prior to haveged process.
@@ -63,6 +74,7 @@
     regexp: "^After=systemd-random-seed.service"
     line: "After=apparmor.service systemd-random-seed.service"
     backrefs: yes
+  when: haveged_apparmor.stat.exists
   tags:
     - haveged
     - hardening
