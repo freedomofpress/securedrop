@@ -116,12 +116,8 @@ def test_aastatus_unconfined(host):
     """ Ensure that there are no processes that are unconfined but have
         a profile """
 
-    # Trusty should show 0 unconfined processes. In Xenial, haveged
-    # is unconfined by default, due to introduction of a new profile.
-    # We should consider enforcing that, too.
+    # Trusty and Xenial should show 0 unconfined processes.
     expected_unconfined = 0
-    if host.system_info.codename == "xenial":
-        expected_unconfined = 1
 
     unconfined_chk = str("{} processes are unconfined but have"
                          " a profile defined".format(expected_unconfined))
