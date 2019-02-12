@@ -10,6 +10,7 @@ monitor_ip: "{{ hostvars['mon-staging']['ansible_'+primary_network_iface].ipv4.a
 monitor_hostname: "{{ hostvars['mon-staging'].ansible_hostname }}"
 app_ip: "{{ hostvars['app-staging']['ansible_'+primary_network_iface].ipv4.address }}"
 app_hostname: "{{ hostvars['app-staging'].ansible_hostname }}"
+tor_apt_repo_url: "https://tor-apt.freedom.press"
 
 etc_hosts:
   app-staging:
