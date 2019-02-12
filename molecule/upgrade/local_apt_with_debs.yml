@@ -6,7 +6,7 @@
 
 - name: Copy over debs
   synchronize:
-    src: "{{ molecule_dir }}/../../build/"
+    src: "{{ molecule_dir }}/../../build/trusty/"
     dest: /var/repos/debs/
     delete: yes
 
