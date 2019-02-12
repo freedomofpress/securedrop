@@ -18,6 +18,11 @@ update_release_available_script() {
             sed -i "s|Run 'do-release-upgrade' to upgrade to it\\.|Visit https://securedrop.org/xenial-upgrade for more information|" "$file"
         fi
     done
+
+    # remove the file in case it's empty
+    rm -f /var/lib/ubuntu-release-upgrader/release-upgrade-available
+    # force re-run the update script to trigger an OSSEC alert
+    /usr/lib/ubuntu-release-upgrader/check-new-release -q > /var/lib/ubuntu-release-upgrader/release-upgrade-available &
 }
 
 revert_update_release_available_script() {
