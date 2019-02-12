@@ -13,7 +13,7 @@
 
     - name: Find local deb files
       find:
-        paths: "{{ molecule_dir }}/../../build/"
+        paths: "{{ molecule_dir }}/../../build/trusty/"
         patterns: "*.deb"
       register: _upgrade_scenario_find_debs_result
       when: not QA_APTTEST
