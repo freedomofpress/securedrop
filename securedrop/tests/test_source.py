@@ -16,6 +16,7 @@ import version
 from db import db
 from models import Source, Reply
 from source_app import main as source_app_main
+from source_app import api as source_app_api
 from utils.db_helper import new_codename
 from utils.instrument import InstrumentedApp
 
@@ -516,12 +517,16 @@ def test_why_journalist_key(source_app):
 
 
 def test_metadata_route(source_app):
-    with source_app.test_client() as app:
-        resp = app.get(url_for('api.metadata'))
-        assert resp.status_code == 200
-        assert resp.headers.get('Content-Type') == 'application/json'
-        assert json.loads(resp.data.decode('utf-8')).get('sd_version') \
-            == version.__version__
+    with patch.object(source_app_api.platform, "linux_distribution") as mocked_platform:
+        mocked_platform.return_value = ("Ubuntu", "16.04", "xenial")
+        with source_app.test_client() as app:
+            resp = app.get(url_for('api.metadata'))
+            assert resp.status_code == 200
+            assert resp.headers.get('Content-Type') == 'application/json'
+            assert json.loads(resp.data.decode('utf-8')).get('sd_version') \
+                == version.__version__
+            assert json.loads(resp.data.decode('utf-8')).get('server_os') \
+                == '16.04'
 
 
 def test_login_with_overly_long_codename(source_app):
