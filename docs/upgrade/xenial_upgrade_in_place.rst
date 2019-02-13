@@ -71,9 +71,9 @@ prompts that follow:
 .. note:: The ``do-release-upgrade`` script displays some dialogs using
   ``ncurses``, a library for rendering GUI elements in text-only displays. It
   may display incorrectly within your terminal window. To force a redraw, adjust
-  the terminal's size to approximately 150 columns by 40 rows. If it still does
-  not display correctly, make small adjustments to the terminal size to force
-  successive redraws.
+  the terminal window's size to approximately 150 columns by 40 rows, by
+  dragging the corners. If it still does not display correctly, make small
+  adjustments to the terminal size to force successive redraws.
 
 - Choose **OK** to close the Postfix information dialog
 - Choose **No Configuration** and **OK** on the "General type of mail
@@ -110,6 +110,8 @@ To confirm that the upgrade succeeded, connect from a terminal using the command
 .. code:: sh
 
   sudo lsb_release -a
+
+The output should include the text "Ubuntu 16.04.5 LTS".
 
 Exit the SSH session to the *Monitor Server*. Next, you will upgrade the
 *Application Server* using a a similar procedure.
@@ -183,6 +185,8 @@ To confirm that the upgrade succeeded, connect from a terminal using the command
 
   sudo lsb_release -a
 
+The output should include the text "Ubuntu 16.04.5 LTS".
+
 Disconnect the SSH session to the Application Server. You are now ready to move
 on to the next step: updating to the Ubuntu 16.04 version of the application
 code and configuration using ``./securedrop-admin install``
@@ -213,14 +217,77 @@ configuration:
 You will be prompted for the admin user's passphrase on the servers. Type it in
 and press Enter.
 
-Test the instance after upgrading
----------------------------------
+Perform additional tests
+------------------------
+While we have extensively tested the upgrade on recommended hardware, we
+recommend performing the following tests yourself to identify potential issues
+specific to your system configuration.
 
-[ TBD - either a bunch of shell commands that check installed versions and stuff
-like grsec and Apparmor, or a single script provided with the release to do
-basic server tests ]
+Validate the kernel version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Ensure you are logged out, and then type the commands ``ssh app uname -r`` and
+``ssh mon uname -r`` in your terminal window.
 
-[ Also a checklist for basic functionality - connectivity to the 4 services, and
-a run through the submission-to-decryption workflow ]
+The output for both commands should be ``4.4.167-grsec``, which indicates that
+the latest available kernel for SecureDrop is installed on your *Application
+Server* and your *Monitor Server*.
 
-[ Anything else? ]
+Validate the application version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To confirm that you are running SecureDrop 0.12.0 for Xenial, on the Tails
+desktop, you should find a shortcut called **SecureDrop Source Interface**.
+Double-click it to launch the Tor browser.
+
+After the *Source Interface* loads, add the path ``/metadata`` to the URL in
+your address bar. If your *Source Interface* can be found at
+``examplenot4real.onion``, then the address you should visit is
+``examplenot4real.onion/metadata``. That page should show you key/value pairs,
+including ``0.12.0`` for ``sd_version`` and ``16.04`` for ``server_os``.
+
+End-to-end test
+^^^^^^^^^^^^^^^
+We recommend an end-to-end test of document submission, reply and decryption.
+First, confirm that you can log into the *Journalist Interface*. On the Tails
+desktop, you should find a shortcut called **SecureDrop Journalist Interface**.
+Double-click it to launch the Tor browser.
+
+Once the page has finished loading, sign in using your SecureDrop login
+credentials. Confirm that you can view the list of submissions as expected.
+
+Keep the browser window open, and launch the **SecureDrop Source Interface**
+using its shortcut on the Tails desktop. The *Source Interface* should load in
+another browser tab.
+
+Once the page has finished loading, click **Submit Documents**. On the subsequent
+page, click **Submit Documents** again (you may want to write down your codename
+in case you need it for further testing).On the following screen, choose a
+simple file to upload, and enter a message to go along with it, then press
+**Submit**.
+
+Switch to the tab with the *Journalist Interface*, reload it, and confirm that
+you can see your new submission. Write a reply, and switch back to the
+*Source Interface*. Reload it, and confirm that you can see the reply.
+
+Now, from the *Journalist Interface*, download the submission you just made.
+Copy it to your *Transfer Device* and boot into your *Secure Viewing Station*.
+Confirm that you can open the encrypted document.
+
+Just in case you picked the wrong submission, we strongly recommend following
+standard precautions, e.g., do not open the document directly from the *Transfer
+Device* but copy it onto the *Secure Viewing Station* first.
+
+Contact us
+==========
+If you have questions or comments regarding this process, or if you
+encounter any issues, you can always contact us by the following means:
+
+- via our `Support Portal <https://support.freedom.press>`_, if you are a member
+  (membership is approved on a case-by-case basis);
+- via securedrop@freedom.press
+  (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__)
+  for sensitive security issues (please use judiciously);
+- via our `community forums <https://forum.securedrop.org>`_.
+
+If you encounter problems that are not security-sensitive, we also encourage you
+to `file an issue <https://github.com/freedomofpress/securedrop/issues/new/>`
+in our public GitHub repository.
