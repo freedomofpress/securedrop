@@ -2,6 +2,65 @@
 
 ## 0.12.0~rc1
 
+### Web Application
+
+* Added toggle to show password for journalists on login (#3713)
+* Prevented setting session cookies on API endpoints (#3876)
+* Updated API to allow clients to set a reply's UUID (#3957)
+* Changed GPG key generation to avoid leaking key creation date (#3912)
+* Fixed race condition that caused all public keys to be exported by API (#4005)
+* Added `filename` to payload when creating a reply via the API (#4047)
+* Fix bug that caused internal server errors on malformed auth tokens (#4053)
+* Added alert on journalist interface to alert when the operating system is out of date (#4027)
+* Added journalist UUID to payload when creating an auth token via the API (#4081)
+* Added GPG 2.1+ compatibility (#3622, #4013, #4038, #4035)
+* Added OS information to metadata endpoint (#4059)
+
+### Operations
+
+* Removed hardcoded Ansible plugin `profile_tasks` (#2943)
+* Removed `iptables` UID restrictions to allow `apt` to work correctly (#3952)
+* Updated kernels to 4.4.167 and removed wireless support (#2726)
+* Updated `cron-apt` remove action to occur after security (#4003)
+* Updated AppArmor profile for Xenial (#3962)
+* Removed common-auth PAM customizations (#3963)
+* Prevent `apt` from following redirects on first install (#4058)
+* Updated `./securedrop-admin logs` command to log installed packages (#3967) and `cron-apt` logs (#4000)
+* Explicitly declared onion services as v2 (#4092)
+* Added ability to store both Trusty and Xenial Debian packages (#3961)
+* Added ability to fetch upstream Tor Debian packages for inclusion in FPF repo (#4101)
+* Run `haveged` confined on Xenial (#4098)
+* Updated PaX flag management for on Apache on Xenial (#4110)
+
+### Developer Workflow
+
+* Fixed the QA data loader to prevent clobbering data (#3793)
+* Added nested virtualized to CI (#3702)
+* Moved to Vagrant 2.1.x (#3350)
+* Fixed linting tasks on macOS (#3996)
+* Added automatic re-running of flaky admin tests (#4004)
+* Increased max line to 100 characters for Python files (#4006)
+* Re-added static analysis and Python dependency checking to CI (#4033)
+* Updated setuptools in CI (#4036)
+* Added Trusty and Xenial test targets to CI (#3966)
+* Moved CI nightly jobs to 4AM UTC (#4067)
+* Fixed bug where failed CI runs were reported as successes (#4066)
+* Fixed Xenial-specific errors in tests (#4037, #4039)
+* Added 0.11.1 upgrade testing boxes (#4093)
+* Ensured config test coverage on Xenial (#3964)
+
+### Documentation
+
+* Added documentation on how to test upgrades (#3832)
+* Added documentation on how to set the locales (#3846)
+* Added documentation for upgrading from 0.10.0 to 0.11.x (#3982)
+* Added documentation on how to prepare the app and mon servers for upgrade to Xenial (#4044)
+* Updated date where SecureDrop uses Ubuntu Trusty as default OS (#4062)
+* Updated list of hardware recommendations to remove Gigabyte BRIX (#3197, #4075) and added updates to NUCs and Mac Minis (#3976)
+* Added note about how dev can generate 2FA tokens (#4095)
+* Removed old markdown redirect (#4097)
+* Updated SecureDrop client references (#4102)
+
 ## 0.11.1
 
 ### Operations
