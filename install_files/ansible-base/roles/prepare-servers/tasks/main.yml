@@ -9,13 +9,7 @@
   raw: 'apt -o Acquire::http::AllowRedirect=false update &&
     apt -o Acquire::http::AllowRedirect=false --only-upgrade -y install apt'
   register: _apt_upgrade_command_output_results
-  changed_when: "'1 upgraded, 0 newly installed, 0 to remove' in _apt_upgrade_command_output_results.stdout"
-
-- name: 'install python'
-  raw: 'apt -o Acquire::http::AllowRedirect=false -y install python'
-
-- name: 'install packages required by installer'
-  raw: 'apt -o Acquire::http::AllowRedirect=false -y install apt-transport-https dnsutils'
+  changed_when: "'0 upgraded, 0 newly installed, 0 to remove' not in _apt_upgrade_command_output_results.stdout"
 
 - name: Inform user that apt traffic is being redirected
   assert:
@@ -26,3 +20,8 @@
       It appears your apt traffic is being redirected.
       SecureDrop cannot be installed. For details, see
       https://github.com/freedomofpress/securedrop/issues/4058
+
+- name: Install python and packages required by installer
+  raw: apt install -y python apt-transport-https dnsutils
+  register: _apt_install_prereqs_results
+  changed_when: "'0 upgraded, 0 newly installed, 0 to remove' not in _apt_install_prereqs_results.stdout"
