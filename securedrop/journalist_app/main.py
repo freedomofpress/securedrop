@@ -158,13 +158,6 @@ def make_blueprint(config):
         original_journalist_designation = g.source.journalist_designation
         g.source.journalist_designation = crypto_util.display_id()
 
-        for item in g.source.collection:
-            item.filename = store.rename_submission(
-                g.filesystem_id,
-                item.filename,
-                g.source.journalist_filename)
-        db_session.commit()
-
         flash(gettext(
             "The source '{original_name}' has been renamed to '{new_name}'")
               .format(original_name=original_journalist_designation,
