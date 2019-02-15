@@ -21,6 +21,15 @@
       when: "'../../build/'+securedrop_staging_install_target_distro+'/'+item not in found_debs"
       with_items: "{{ expected_debs }}"
 
+- name: Prepare servers for installation
+  hosts: staging
+  gather_facts: no
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  become: yes
+  roles:
+    - { role: prepare-servers }
+
 - name: Add FPF apt repository and install base packages.
   hosts: staging
   max_fail_percentage: 0

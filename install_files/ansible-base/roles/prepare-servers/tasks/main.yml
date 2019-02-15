@@ -1,0 +1,27 @@
+---
+# Ensures that prequisite packages for anssible and securedrop-admin install
+# are present
+#
+# Fix for CVE-2019-3462 (see https://justi.cz/security/2019/01/22/apt-rce.html)
+# If apt < 1.4.9, it is vulnerable to CVE-2019-3462 and we must ensure no
+# redirects are followed when updating apt via apt.
+- name: Ensure apt has been updated without following redirects
+  raw: 'apt -o Acquire::http::AllowRedirect=false update &&
+    apt -o Acquire::http::AllowRedirect=false --only-upgrade -y install apt'
+  register: _apt_upgrade_command_output_results
+  changed_when: "'0 upgraded, 0 newly installed, 0 to remove' not in _apt_upgrade_command_output_results.stdout"
+
+- name: Inform user that apt traffic is being redirected
+  assert:
+    that:
+      - "'302 Found' not in _apt_upgrade_command_output_results.stdout"
+      - "'302 Found' not in _apt_upgrade_command_output_results.stderr"
+    fail_msg: >-
+      It appears your apt traffic is being redirected.
+      SecureDrop cannot be installed. For details, see
+      https://github.com/freedomofpress/securedrop/issues/4058
+
+- name: Install python and packages required by installer
+  raw: apt install -y python apt-transport-https dnsutils
+  register: _apt_install_prereqs_results
+  changed_when: "'0 upgraded, 0 newly installed, 0 to remove' not in _apt_install_prereqs_results.stdout"
