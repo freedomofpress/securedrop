@@ -1,4 +1,4 @@
-securedrop-app-code (0.12.0~rc1-xenial) xenial; urgency=medium
+securedrop-app-code (0.12.0~rc1+xenial) xenial; urgency=medium
 
   * See changelog.md
 
