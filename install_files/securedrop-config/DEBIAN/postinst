@@ -4,10 +4,51 @@
 set -e
 set -x
 
-disable_upgrade_prompt() {
-    # Disable do-release-upgrade notification
-    sed -i 's/Prompt=.*/Prompt=never/' /etc/update-manager/release-upgrades || true
+update_release_available_script() {
+    # The script /etc/cron.weekly/update-notifier-common runs the command
+    # /usr/lib/ubuntu-release-upgrader/release-upgrade-motd which runs the command
+    # /usr/lib/ubuntu-release-upgrader/check-new-release whose output is written to the "stamp" file
+    # /var/lib/ubuntu-release-upgrader/release-upgrade-available which is picked up by OSSEC.
+    #
+    # To prevent the OSSEC alerts from from telling the user to run 'do-release-upgrade' which
+    # may break their system, we update both the script and the existing "stamp" file.
+
+    for file in /usr/lib/ubuntu-release-upgrader/check-new-release /var/lib/ubuntu-release-upgrader/release-upgrade-available; do
+        if [ -f $file ]; then
+            sed -i "s|Run 'do-release-upgrade' to upgrade to it\\.|Visit https://securedrop.org/xenial-upgrade for more information|" "$file"
+        fi
+    done
+
+    # remove the file in case it's empty
+    rm -f /var/lib/ubuntu-release-upgrader/release-upgrade-available
+    # force re-run the update script to trigger an OSSEC alert
+    /usr/lib/ubuntu-release-upgrader/check-new-release -q > /var/lib/ubuntu-release-upgrader/release-upgrade-available &
 }
+
+revert_update_release_available_script() {
+    for file in /usr/lib/ubuntu-release-upgrader/check-new-release /var/lib/ubuntu-release-upgrader/release-upgrade-available; do
+        if [ -f $file ]; then
+            sed -i "s|Visit https://securedrop\\.org/xenial-upgrade for more information|Run 'do-release-upgrade' to upgrade to it.|" "$file"
+        fi
+    done
+}
+
+# Issue #4104
+# Set Prompt=never on Xenial
+# Set Prompt=lts on Trusty
+update_release_prompt() {
+    set -e
+    upgrade_config='/etc/update-manager/release-upgrades'
+
+    if [ "$(lsb_release -sc)" = trusty ]; then
+        sed -i 's/Prompt=.*/Prompt=lts/' "$upgrade_config"
+        update_release_available_script
+    else
+        sed -i 's/Prompt=.*/Prompt=never/' "$upgrade_config"
+        revert_update_release_available_script
+    fi
+}
+
 remove_2fa_tty_req() {
     # The goal here is to remove legacy 2FA req on TTY logins
     # Lets prevent this from bombing out the install though if it fails
@@ -70,7 +111,7 @@ case "$1" in
 
     manage_tor_repo_config
     remove_2fa_tty_req
-    disable_upgrade_prompt
+    update_release_prompt
 
     # Remove cron-apt action should occur after security upgrades to avoid breaking
     # automatic upgrades (see issue #4003)
