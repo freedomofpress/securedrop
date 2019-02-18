@@ -119,7 +119,7 @@ case "$1" in
     # Migrate private keyring to gpg2.1 if needed
     if [ ! -d "/var/lib/securedrop/keys/private-keys-v1.d" ]; then
         # Then we should migrate the keyring
-        gpg2 --homedir=/var/lib/securedrop/keys --import < /var/lib/securedrop/keys/secring.gpg
+        gpg2 --homedir=/var/lib/securedrop/keys --batch --import < /var/lib/securedrop/keys/secring.gpg
     fi
 
     chown -R www-data:www-data /var/lib/securedrop /var/www/securedrop
