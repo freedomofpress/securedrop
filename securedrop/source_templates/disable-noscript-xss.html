@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ gettext("Turn off NoScript's cross-site request sanitization setting") }}</h1>
+
+<p>{{ gettext('Due to a browser issue (<a href="{url}">more details</a>), uploads do not currently work reliably in Tor Browser while cross-site request sanitization is turned on. It is safe to turn off this feature while your Security Slider is set to "Safest". Here\'s how:').format(url="https://github.com/hackademix/noscript/issues/64#issuecomment-462709129") }}</p>
+
+<p>{{ gettext('You should find a blue "S" icon in the Tor browser\'s toolbar: <img class="inline" src="{noscript_plain_icon_url}"> or <img class="inline" src="{noscript_icon_url}">. This is the NoScript button.').format(noscript_plain_icon_url=url_for('static', filename='i/noscript-xss/noscript-icon-plain.png'), noscript_icon_url=url_for('static', filename='i/noscript-xss/noscript-icon.png')) }}</p>
+
+<hr class="dotted">
+
+<h2>{{ gettext("1. Click on the NoScript button.") }}</h2>
+<p>{{ gettext("The NoScript pane should appear. It looks like this:") }}</p>
+
+<img class="constrained" src="{{ url_for('static', filename='i/noscript-xss/noscript-pane.png') }}">
+
+<hr class="dotted">
+
+<h2>{{ gettext('2. In the NoScript pane, click on the Settings icon: <img class="inline" src="{url}">').format(url=url_for('static', filename='i/noscript-xss/noscript-settings-icon.png')) }}</h2>
+
+<p>{{ gettext("The settings page should appear in a new browser tab. It looks like this:") }}</p>
+
+<img class="constrained" src="{{ url_for('static', filename='i/noscript-xss/settings-pane.png') }}">
+
+<hr class="dotted">
+
+<h2>{{ gettext('3. Click the "Advanced" tab.') }}</h2>
+
+<p>{{ gettext("The advanced settings tab should come into view. It looks like this:") }}</p>
+
+<img class="constrained" src="{{ url_for('static', filename='i/noscript-xss/advanced-settings.png') }}">
+
+<hr class="dotted">
+
+<h2>{{ gettext('4. Un-check "Sanitize cross-site suspicious requests".') }}</h2>
+
+<p>{{ gettext("Due to a browser issue, this is required for uploads to work reliably. As soon as the browser issue is resolved, we will remove this recommendation.") }}</p>
+
+<hr class="dotted">
+
+<h2>{{ gettext("5. Close the <i>NoScript Settings</i> browser tab and return to the SecureDrop tab.") }}</h2>
+
+<p>{{ gettext("You can now upload your files. Please keep in mind that each file requires its own submission.") }}</p>
+
+<hr class="dotted">
+
+<h2>{{ gettext('6. Re-check "Sanitize cross-site suspicious requests".') }}</h2>
+
+<p>{{ gettext('Repeat steps 1-3 from above and re-check the setting. The setting has no effect while your Security Slider is set to "Safest", but we recommend enabling it during normal Tor usage.') }}</p>
+
+
+{% endblock %}
