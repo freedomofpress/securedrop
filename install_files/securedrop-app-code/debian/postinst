@@ -116,6 +116,12 @@ case "$1" in
         echo allow-loopback-pinentry > /var/lib/securedrop/keys/gpg-agent.conf
     fi
 
+    # Migrate private keyring to gpg2.1 if needed
+    if [ ! -d "/var/lib/securedrop/keys/private-keys-v1.d" ]; then
+        # Then we should migrate the keyring
+        gpg2 --homedir=/var/lib/securedrop/keys --batch --import < /var/lib/securedrop/keys/secring.gpg
+    fi
+
     chown -R www-data:www-data /var/lib/securedrop /var/www/securedrop
 
     pip install --no-index --find-links=/var/securedrop/wheelhouse --upgrade \
