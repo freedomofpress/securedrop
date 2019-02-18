@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.12.0~rc2
+
+### Web Application
+
+* Updated language referenceing Tor button (#4131, #4141)
+
+### Developer Workflow
+
+* Fixed updated version script (#4146)
+
+### Operations
+
+* Fixed restore logic to ensure recreation of onion services (#3960, #4136)
+* Added logic to conditionally update the `release-upgrades` prompt (#4104, #4142)
+* Added logic to ensure packages required by Ansible are present on Xenial systems (#4109, #4143)
+
 ## 0.12.0~rc1
 
 ### Web Application
