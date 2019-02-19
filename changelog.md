@@ -4,7 +4,7 @@
 
 ### Web Application
 
-* Updated language referenceing Tor button (#4131, #4141)
+* Updated language referencing Tor button (#4131, #4141)
 
 ### Developer Workflow
 
@@ -40,7 +40,6 @@
 * Updated `cron-apt` remove action to occur after security (#4003)
 * Updated AppArmor profile for Xenial (#3962)
 * Removed common-auth PAM customizations (#3963)
-* Prevent `apt` from following redirects on first install (#4058)
 * Updated `./securedrop-admin logs` command to log installed packages (#3967) and `cron-apt` logs (#4000)
 * Explicitly declared onion services as v2 (#4092)
 * Added ability to store both Trusty and Xenial Debian packages (#3961)
