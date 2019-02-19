@@ -257,7 +257,6 @@ workflows:
   securedrop_ci:
     jobs:
       - lint
-      - trusty-app-tests
       - xenial-app-tests
       - admin-tests
       - updater-gui-tests
@@ -276,3 +275,4 @@ workflows:
     jobs:
       - static-analysis-and-no-known-cves
       - staging-test-with-rebase-xenial
+      - trusty-app-tests
