@@ -17,3 +17,6 @@ class TestSourceInterface(
         self._source_chooses_to_login()
         self._source_proceeds_to_login()
         self._source_sees_no_codename()
+
+    def test_disable_noscript_xss(self):
+        self._source_disable_noscript_xss()

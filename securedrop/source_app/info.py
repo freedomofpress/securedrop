@@ -7,6 +7,10 @@ from flask import Blueprint, render_template, send_file, current_app
 def make_blueprint(config):
     view = Blueprint('info', __name__)
 
+    @view.route('/disable-noscript-xss')
+    def disable_noscript_xss():
+        return render_template("disable-noscript-xss.html")
+
     @view.route('/tor2web-warning')
     def tor2web_warning():
         return render_template("tor2web-warning.html")

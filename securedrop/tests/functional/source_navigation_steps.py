@@ -223,6 +223,9 @@ class SourceNavigationStepsMixin():
     def _source_why_journalist_key(self):
         self.driver.get(self.source_location + "/why-journalist-key")
 
+    def _source_disable_noscript_xss(self):
+        self.driver.get(self.source_location + "/disable-noscript-xss")
+
     def _source_waits_for_session_to_timeout(self, session_length_minutes):
         time.sleep(session_length_minutes * 60 + 0.1)
 
