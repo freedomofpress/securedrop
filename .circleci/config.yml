@@ -273,7 +273,7 @@ workflows:
               ignore:
                 - /docs-.*/
       - static-analysis-and-no-known-cves
-      - staging-test-with-rebase:
+      - staging-test-with-rebase-xenial:
           filters:
             branches:
               ignore:
@@ -290,5 +290,5 @@ workflows:
                 - develop
     jobs:
       - static-analysis-and-no-known-cves
-      - staging-test-with-rebase-xenial
+      - staging-test-with-rebase
       - trusty-app-tests
