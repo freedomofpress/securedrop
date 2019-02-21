@@ -277,7 +277,7 @@ standard precautions, e.g., do not open the document directly from the *Transfer
 Device* but copy it onto the *Secure Viewing Station* first.
 
 Contact us
-==========
+----------
 If you have questions or comments regarding this process, or if you
 encounter any issues, you can always contact us by the following means:
 
