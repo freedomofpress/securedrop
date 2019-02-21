@@ -1,31 +1,29 @@
 Ubuntu 16.04 LTS (Xenial) - Upgrading in Place
 ==============================================
 
+The SecureDrop *Application* and *Monitor* servers may be upgraded-in-place to 
+Xenial using the procedure described here. This procedure does not require 
+physical access to the servers, but it will result in downtime for your instance
+- on the order of 8 hours if no issues are encountered, and longer if anything 
+goes wrong.
+
+The process is less complex than the alternative 
+:doc:`xenial_backup_install_restore` procedure however, and if you are using 
+supported hardware and the downtime described is acceptable, it is the preferred
+option for upgrading your instance.
+
 .. caution::
-  You can perform an upgrade from Ubuntu 14.04 to Ubuntu 16.04 in place, but
-  please be advised that this may result in prolonged downtime of your SecureDrop
-  instance, especially in the event of problems during the upgrade process.
+  We have tested the upgrade-in-place procedure on officially supported hardware, 
+  but cannot guarantee that the Ubuntu ``do-release-upgrade`` command will 
+  complete successfully on other hardware configurations.
 
-  If you have access to backup hardware, we recommend following the procedure
-  described in :doc:`xenial_backup_install_restore` instead.
-
-Communicating with users before the change
-------------------------------------------
-
-The process of upgrading in place will result in downtime for your instance. Our
-testing indicates that the upgrade may take up to 8 hours, assuming no issues.
-We recommend that you plan for 2 days of work, during which the instance will be
-unavailable.
-
-In addition to placing a maintenance notice on your instance's *Landing Page*,
-we recommend coordinating the upgrade schedule with the internal users of the
-system responsible for checking for submissions. If they have ongoing
-conversations with sources, or are expecting submissions, it may be necessary to
-reschedule the upgrade.
+  If your instance uses unsupported hardware and you have access to backup 
+  hardware, we recommend following the procedure documented in 
+  :doc:`xenial_backup_install_restore` instead.
 
 
-Preparatory steps
------------------
+Before you begin
+----------------
 Before performing the upgrade, please perform all the steps outlined in
 :doc:`xenial_prep`.
 
@@ -34,16 +32,23 @@ Before performing the upgrade, please perform all the steps outlined in
   importance that your *Admin Workstation* and your servers use SecureDrop
   0.12.0. Older releases of SecureDrop do not not support Ubuntu 16.04.
 
-Upgrade and validate the *Monitor Server*
------------------------------------------
+                                                                                
+We expect that the upgrade should take under 8 hours to complete, but recommend 
+that you plan for 2 days of downtime for your instance, in case of error. You
+should coordinate the timing of the upgrade with the people responsible for 
+checking for submissions. If they have ongoing conversations with sources, or 
+are expecting submissions, it may be necessary to reschedule the upgrade. You 
+should also consider communicating the planned downtime and the reason for it 
+on your instance's landing page.
 
-On your *Admin Workstation*, open a terminal by selecting
-**Applications > Favorites > Terminal**. Then connect to the *Monitor Server*
-with the command ``ssh mon``.
 
-Before running the ``do-release-upgrade`` command, you must edit the
-``/etc/update-manager/release-upgrades``, changing `Prompt=never` to
-`Prompt=lts`. **[ED - this won't be necessary when #4104 lands]**
+Step 1: Upgrade the *Monitor Server*
+------------------------------------
+
+Start up the *Admin Workstation* with persistence unlocked and an adminstration 
+password set. When you are connected to the Tor network, open a terminal by 
+selecting **Applications > Favorites > Terminal**. Then connect to the *Monitor 
+Server* with the command ``ssh mon``.
 
 The operating system upgrade process for the *Monitor Server* will take
 approximately 30-60 minutes, depending on your server specifications and
@@ -116,18 +121,12 @@ The output should include the text "Ubuntu 16.04.5 LTS".
 Exit the SSH session to the *Monitor Server*. Next, you will upgrade the
 *Application Server* using a a similar procedure.
 
-Upgrade and validate the *Application Server*
----------------------------------------------
+Step 2: Upgrade the *Application Server*
+-----------------------------------------
+
 On your *Admin Workstation*, open a terminal by selecting
 **Applications > Favorites > Terminal**. Then connect to the
 *Application Server* with the command ``ssh app``.
-
-First, open a terminal by selecting **Applications > Favorites > Terminal**.
-Then connect to the Application Server with the command ``ssh app``.
-
-Before running the ``do-release-upgrade`` command, you must edit the
-``/etc/update-manager/release-upgrades``, changing `Prompt=never` to
-`Prompt=lts`. **[ED - this won't be necessary when #4104 lands]**
 
 The operating system upgrade process should take a similar amount of time as
 the upgrade of the *Monitor Server*, and should not be interrupted once begun.
@@ -188,20 +187,41 @@ To confirm that the upgrade succeeded, connect from a terminal using the command
 The output should include the text "Ubuntu 16.04.5 LTS".
 
 Disconnect the SSH session to the Application Server. You are now ready to move
-on to the next step: updating to the Ubuntu 16.04 version of the application
-code and configuration using ``./securedrop-admin install``
+on to the next step: reinstalling SecureDrop on the Xenial servers.
 
-Reinstall the SecureDrop application
-------------------------------------
+Step 3: Reinstall SecureDrop 
+----------------------------
 
-Open a new Terminal, and run the following commands to set up the SecureDrop admin environment:
+First, you'll need make sure your *Admin Workstation*'s SecureDrop application
+code is up-to-date and validated. From a terminal, run the following commands:
+                                                                                
+.. code:: sh                                                                    
+                                                                                
+ cd ~/Persistent/securedrop                                                     
+ git checkout 0.12.0                                                            
+ git tag -v 0.12.0                                                              
+                                                                                
+You should see ``Good signature from "SecureDrop Release Signing Key"`` in the 
+output of that last command, along with the fingerprint 
+``"2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"``
+                                                                                
+.. caution::                                                                    
+                                                                                
+ If you do not, signature verification has failed and you should not proceed 
+ with the installation. If this happens, please contact us at 
+ securedrop@freedom.press.
+                                                                                
+If the command above returns the expected value, you may proceed with the installation.
+
+In the terminal, run the following command to set up the SecureDrop 
+admin environment:
 
 .. code:: sh
 
-  cd ~/Persistent/securedrop
   ./securedrop-admin setup
 
-Next, verify that the SecureDrop configuration matches expected values, by stepping through the configuration using:
+Next, verify that the SecureDrop configuration matches expected values, by 
+stepping through the configuration using:
 
 .. code:: sh
 
@@ -217,14 +237,16 @@ configuration:
 You will be prompted for the admin user's passphrase on the servers. Type it in
 and press Enter.
 
-Perform additional tests
-------------------------
+Step 4: Validate the Instance
+-----------------------------
+
 While we have extensively tested the upgrade on recommended hardware, we
 recommend performing the following tests yourself to identify potential issues
 specific to your system configuration.
 
 Validate the kernel version
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Ensure you are logged out, and then type the commands ``ssh app uname -r`` and
 ``ssh mon uname -r`` in your terminal window.
 
@@ -234,6 +256,7 @@ Server* and your *Monitor Server*.
 
 Validate the application version
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 To confirm that you are running SecureDrop 0.12.0 for Xenial, on the Tails
 desktop, you should find a shortcut called **SecureDrop Source Interface**.
 Double-click it to launch the Tor browser.
@@ -246,6 +269,7 @@ including ``0.12.0`` for ``sd_version`` and ``16.04`` for ``server_os``.
 
 End-to-end test
 ^^^^^^^^^^^^^^^
+
 We recommend an end-to-end test of document submission, reply and decryption.
 First, confirm that you can log into the *Journalist Interface*. On the Tails
 desktop, you should find a shortcut called **SecureDrop Journalist Interface**.
@@ -289,5 +313,5 @@ encounter any issues, you can always contact us by the following means:
 - via our `community forums <https://forum.securedrop.org>`_.
 
 If you encounter problems that are not security-sensitive, we also encourage you
-to `file an issue <https://github.com/freedomofpress/securedrop/issues/new/>`
+to `file an issue <https://github.com/freedomofpress/securedrop/issues/new/>`_
 in our public GitHub repository.
