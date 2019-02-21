@@ -1,6 +1,7 @@
 import pytest
 import os
 import re
+import tempfile
 
 
 SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM", "trusty")
@@ -226,6 +227,33 @@ def test_deb_package_contains_no_generated_assets(host, deb):
 
         # no .map files should exist; only the generated CSS files.
         assert not re.search("^.*css.map$", c.stdout, re.M)
+
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_deb_package_contains_no_generated_assets(host, deb):
+    """
+    Ensures the `securedrop-app-code` package declares only whitelisted
+    `conffiles`. Several files in `/etc/` would automatically be marked
+    conffiles, which would break unattended updates to critical package
+    functionality such as AppArmor profiles. This test validates overrides
+    in the build logic to unset those conffiles.
+    """
+    deb_package = host.file(deb.format(
+        securedrop_test_vars.securedrop_version))
+
+    # Only relevant for the securedrop-app-code package:
+    if "securedrop-app-code" in deb_package.path:
+        tmpdir = tempfile.mkdtemp()
+        # The `--raw-extract` flag includes `DEBIAN/` dir with control files
+        host.run("dpkg-deb --raw-extract {} {}".format(deb, tmpdir))
+        conffiles_path = os.path.join(tmpdir, "DEBIAN", "conffiles")
+        f = host.file(conffiles_path)
+
+        assert f.is_file
+        # Ensure that the entirety of the file lists only the logo as conffile;
+        # effectively ensures e.g. AppArmor profiles are not conffiles.
+        conffiles = f.content_string.rstrip()
+        assert conffiles == "/var/www/securedrop/static/i/logo.png"
 
 
 @pytest.mark.parametrize("deb", deb_packages)
