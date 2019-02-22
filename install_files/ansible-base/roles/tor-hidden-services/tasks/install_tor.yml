@@ -37,7 +37,15 @@
     apt-cache policy tor | sed -e 's/^\s*Installed:\ \(\S*\)/\1/g;tx;d;:x'
   changed_when: false
   register: extract_tor_version
-  when: "'amazon' in ansible_product_version"
+
+# Ubuntu upstream repositories serve a version of tor that is very old. Since
+# FPF apt servers host this same package, let's ensure that the FPF-provided
+# Tor package is installed by checking we are using a recent version.
+
+- name: Ensure correct Tor version installed.
+  assert:
+    that: extract_tor_version.stdout is version('0.3.4.9', '>=')
+    fail_msg: "Tor package was not found on FPF apt server."
 
 - name: Dump Tor version to file (for reporting)
   copy:
