@@ -230,7 +230,7 @@ def test_deb_package_contains_no_generated_assets(host, deb):
 
 
 @pytest.mark.parametrize("deb", deb_packages)
-def test_deb_package_contains_no_generated_assets(host, deb):
+def test_deb_package_contains_expected_conffiles(host, deb):
     """
     Ensures the `securedrop-app-code` package declares only whitelisted
     `conffiles`. Several files in `/etc/` would automatically be marked
