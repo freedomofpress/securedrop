@@ -7,10 +7,6 @@ set -e
 # but let's be certain.
 mkdir -p junit
 
-if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then
-  # Combine tests for export as artifacts. There are at least two XML files,
-  # one from the application tests, and another from the config tests.
-  ./devops/scripts/combine-junit.py ./*results.xml > ./junit/junit.xml
-else
-  echo Not running on docs branch...
-fi
+# Combine tests for export as artifacts. There are at least two XML files,
+# one from the application tests, and another from the config tests.
+./devops/scripts/combine-junit.py ./*results.xml > ./junit/junit.xml

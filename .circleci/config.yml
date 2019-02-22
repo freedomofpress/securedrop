@@ -257,12 +257,27 @@ workflows:
   securedrop_ci:
     jobs:
       - lint
-      - trusty-app-tests
-      - xenial-app-tests
-      - admin-tests
-      - updater-gui-tests
+      - xenial-app-tests:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+      - admin-tests:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+      - updater-gui-tests:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
       - static-analysis-and-no-known-cves
-      - staging-test-with-rebase:
+      - staging-test-with-rebase-xenial:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
           requires:
             - lint
   nightly:
@@ -275,4 +290,5 @@ workflows:
                 - develop
     jobs:
       - static-analysis-and-no-known-cves
-      - staging-test-with-rebase-xenial
+      - staging-test-with-rebase
+      - trusty-app-tests
