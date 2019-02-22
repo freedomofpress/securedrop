@@ -24,6 +24,10 @@ test: ## Run the test suite in a Ubuntu 14.04 (Trusty) dockerized environment
 test-xenial: ## Run the test suite in a Ubuntu 16.04 (Xenial) dockerized environment
 	BASE_OS=xenial ./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
 
+.PHONY: translation-test
+translation-test: ## Run all pages-layout tests in all supported languages
+	BASE_OS=xenial ./bin/dev-shell ./bin/translation-test
+
 .PHONY: dev
 dev: ## Run the dev server
 	 DOCKER_RUN_ARGUMENTS='-p127.0.0.1:8080:8080 -p127.0.0.1:8081:8081 -p127.0.0.1:5901:5901' ./bin/dev-shell ./bin/run

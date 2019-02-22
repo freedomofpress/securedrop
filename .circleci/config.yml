@@ -144,6 +144,24 @@ jobs:
       - store_artifacts:
           path: ~/test-results
 
+  translation-tests:
+    machine:
+      enabled: true
+    environment:
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: xenial
+    parallelism: 3
+    steps:
+      - checkout
+      - run:
+          name: Rebase ontop of github target
+          command: ./devops/scripts/rebase-ci.sh
+
+      - run:
+          name: Run tests
+          command: |
+            cd securedrop && make translation-test
+
   admin-tests:
     docker:
       - image: gcr.io/cloud-builders/docker
@@ -262,24 +280,39 @@ workflows:
             branches:
               ignore:
                 - /docs-.*/
+                - /i18n-.*/
       - admin-tests:
           filters:
             branches:
               ignore:
                 - /docs-.*/
+                - /i18n-.*/
       - updater-gui-tests:
           filters:
             branches:
               ignore:
                 - /docs-.*/
-      - static-analysis-and-no-known-cves
+                - /i18n-.*/
+      - static-analysis-and-no-known-cves:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+                - /i18n-.*/
       - staging-test-with-rebase-xenial:
           filters:
             branches:
               ignore:
                 - /docs-.*/
+                - /i18n-.*/
           requires:
             - lint
+      - translation-tests:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+
   nightly:
     triggers:
       - schedule:
