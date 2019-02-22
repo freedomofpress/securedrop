@@ -4,11 +4,6 @@
   tags:
     - apache
 
-- include: apparmor_complain.yml
-  when: securedrop_app_test_apparmor_complain
-  tags:
-    - aa-complain
-
 - include: dev_setup_xvfb_for_functional_tests.yml
 
 - include: setup_firefox_for_selenium.yml
