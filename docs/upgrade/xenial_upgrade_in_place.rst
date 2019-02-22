@@ -8,13 +8,13 @@ physical access to the servers, but it will result in downtime for your instance
 goes wrong.
 
 The process is less complex than the alternative 
-:doc:`xenial_backup_install_restore` procedure however, and if you are using 
-supported hardware and the downtime described is acceptable, it is the preferred
-option for upgrading your instance.
+:doc:`xenial_backup_install_restore` procedure however. If you are using 
+supported hardware and the downtime described is acceptable, we recommend using
+the upgrade-in-place procedure to upgrade your instance.
 
 .. caution::
   We have tested the upgrade-in-place procedure on officially supported hardware, 
-  but cannot guarantee that the Ubuntu ``do-release-upgrade`` command will 
+  but cannot guarantee that that Ubuntu automated upgrade application will 
   complete successfully on other hardware configurations.
 
   If your instance uses unsupported hardware and you have access to backup 
@@ -187,10 +187,10 @@ To confirm that the upgrade succeeded, connect from a terminal using the command
 The output should include the text "Ubuntu 16.04.5 LTS".
 
 Disconnect the SSH session to the Application Server. You are now ready to move
-on to the next step: reinstalling SecureDrop on the Xenial servers.
+on to the next step: reprovisioning SecureDrop on the Xenial servers.
 
-Step 3: Reinstall SecureDrop 
-----------------------------
+Step 3: Reprovision SecureDrop 
+------------------------------
 
 First, you'll need make sure your *Admin Workstation*'s SecureDrop application
 code is up-to-date and validated. From a terminal, run the following commands:
@@ -198,7 +198,7 @@ code is up-to-date and validated. From a terminal, run the following commands:
 .. code:: sh                                                                    
                                                                                 
  cd ~/Persistent/securedrop                                                     
- git checkout 0.12.0                                                            
+ git fetch --tags
  git tag -v 0.12.0                                                              
                                                                                 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the 
@@ -213,7 +213,13 @@ output of that last command, along with the fingerprint
                                                                                 
 If the command above returns the expected value, you may proceed with the installation.
 
-In the terminal, run the following command to set up the SecureDrop 
+First, check out the release tag that you validated above:
+
+.. code:: sh
+ 
+ git checkout 0.12.0                                                            
+
+Next, in the terminal, run the following command to set up the SecureDrop 
 admin environment:
 
 .. code:: sh
@@ -300,6 +306,12 @@ Just in case you picked the wrong submission, we strongly recommend following
 standard precautions, e.g., do not open the document directly from the *Transfer
 Device* but copy it onto the *Secure Viewing Station* first.
 
+Check OSSEC alerts
+^^^^^^^^^^^^^^^^^^
+You should continue to receive OSSEC alerts after the upgrade is complete. If 
+you do not, follow the :ref:`troubleshooting guide <troubleshooting_ossec>` to 
+diagnose the problem, or contact us using one of the methods listed below.
+
 Contact us
 ----------
 If you have questions or comments regarding this process, or if you
@@ -315,3 +327,10 @@ encounter any issues, you can always contact us by the following means:
 If you encounter problems that are not security-sensitive, we also encourage you
 to `file an issue <https://github.com/freedomofpress/securedrop/issues/new/>`_
 in our public GitHub repository.
+
+.. caution::                                                                    
+                                                                                
+ If you include log snippets or error output in any communications via the      
+ methods described above, make sure to first redact sensitive data, such as     
+ Onion URLs or authentication information.                                       
+                                            
