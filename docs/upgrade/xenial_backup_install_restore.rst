@@ -26,7 +26,7 @@ the servers and firewall, and you will need a monitor and keyboard to connect to
 the servers during the OS installation.
 
 If you are planning to install the Xenial instance on new hardware, make sure
-that you have all the necessary hardware to hand and configured. This guide
+that you have all the necessary hardware on hand and configured. This guide
 assumes that you are either using the existing hardware firewall, or a new
 firewall configured with the same settings as your existing one.
 
@@ -52,6 +52,11 @@ and run the following commands:
 This will create a backup named ``sd-backup-<date>.tar.gz`` in the
 ``~/Persistent/securedrop/install_files/ansible-base`` directory. Make a note of
 the exact name, as you'll need it later.
+
+.. note:: 
+ The backup files are not encrypted by default. If you copy them to a USB stick
+ or other media you should ensure that the device uses encrypted storage, or
+ that you encrypt the backup files themselves using a strong encryption method. 
 
 You should also make a copy of the configuration files that allow the *Admin
 Workstation* to connect to the hidden services on the *Application Server*. To
@@ -151,7 +156,7 @@ code is up-to-date and validated. From a terminal, run the following commands:
 .. code:: sh
 
  cd ~/Persistent/securedrop
- git checkout 0.12.0
+ git fetch --tags
  git tag -v 0.12.0
 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the
@@ -166,7 +171,13 @@ output of that last command, along with the fingerprint ``"2224 5C81 E3BA EB41
 
 If the command above returns the expected value, you may proceed with the installation.
 
-First, run the following command to set up the SecureDrop administration environment:
+First, check out the release tag that you validated above:
+
+.. code:: sh
+ 
+ git checkout 0.12.0
+
+Next, run the following command to set up the SecureDrop administration environment:
 
 .. code:: sh
 
@@ -232,7 +243,7 @@ Workstation*. From a terminal, run the following commands:
 .. code:: sh
 
  cd ~/Persistent
- cp app_services/app*ths securedrop/install_files/ansible-base/
+ cp app_service/app*ths securedrop/install_files/ansible-base/
 
 Finally, run the ``tailsconfig`` command again to update the *Admin
 Workstation*'s SSH configuration and desktop shortcuts:
@@ -282,3 +293,9 @@ encounter any issues, you can always contact us by the following means:
 If you encounter problems that are not security-sensitive, we also encourage you
 to `file an issue <https://github.com/freedomofpress/securedrop/issues/new/>`
 in our public GitHub repository.
+
+.. caution:: 
+
+ If you include log snippets or error output in any communications via the 
+ methods described above, make sure to first redact sensitive data, such as
+ Onion URLs or authentication information.
