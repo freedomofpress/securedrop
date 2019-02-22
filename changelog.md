@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.12.0~rc3
+
+### Web Application
+
+* Added instructions for disabling NoScript XSS because upload problem (#4078, #4159)
+
+### Operations
+
+* Ensured Tor is installed from FPF repo (#4175, #4169)
+* Set Debian packages to only use explicitly declared conffiles (#4176, #4161)
+
 ## 0.12.0~rc2
 
 ### Web Application
