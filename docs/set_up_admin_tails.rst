@@ -114,8 +114,8 @@ key:
 .. code:: sh
 
     cd ~/Persistent/securedrop/
-    git checkout 0.12.0~rc2
-    git tag -v 0.12.0~rc2
+    git checkout 0.12.0~rc3
+    git tag -v 0.12.0~rc3
 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the
 output of that last command along with the fingerprint above.
