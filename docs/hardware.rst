@@ -318,7 +318,7 @@ before it can be used. We recommend:
     in a BIOS update. See these `release notes <https://downloadmirror.intel.com/26263/eng/RY_0359_ReleaseNotes.pdf>`__ (PDF) for more details.
 
 Later NUC revisions (the NUC7 and NUC8 series) typically include onboard WiFi
-and Bluetooth, and may use an Ethernet chipset not supported by Securedrop's 
+and Bluetooth, and may use an Ethernet chipset not supported by SecureDrop's
 custom kernel. We are investigating workarounds for both issues. If you are 
 having trouble sourcing the NUC5i5MYHE, please `contact us <https://securedrop.org/help/>`__
 for more information on how to safely configure and use more recent NUCs.  
