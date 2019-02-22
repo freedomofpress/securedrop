@@ -156,7 +156,9 @@ to update the corresponding files on the *Admin Workstation*:
 * ``app-journalist-aths``
 * ``app-ssh-aths``
 
-The Onion URLs above can be fetched using the installer:
+Once ssh access to the servers has been established (or if using ssh over
+local network), Onion URLs for the *Source Interface* and *Journalist Interfaces*
+can be fetched using the installer:
 
 .. code:: sh
 
