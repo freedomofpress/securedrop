@@ -1,4 +1,46 @@
 ---
+common-steps:
+  - &createcachedir
+    run:
+      name: Ensure cache dir exists and permissions are good
+      command: |
+        sudo mkdir -p /caches && sudo chown circleci: -R /caches
+
+  - &restorecache
+    restore_cache:
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
+      paths:
+        - /caches/layers.tar.gz
+
+  - &loadimagelayers
+    run:
+      name: Load image layer cache
+      command: |
+        set +o pipefail
+        docker load -i /caches/layers.tar |true
+
+  - &dockerimagebuild
+    run:
+      name: Build Docker images
+      command: |
+        set +o pipefail
+        docker images
+        fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
+        cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" ./bin/dev-shell true
+
+  - &saveimagelayers
+    run:
+      name: Save Docker image layer cache
+      command: |
+        docker images
+        docker save -o /caches/layers.tar securedrop-test-xenial:latest
+
+  - &savecache
+    save_cache:
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
+      paths:
+        - /caches/layers.tar
+
 version: 2
 jobs:
   lint:
@@ -91,40 +133,12 @@ jobs:
           name: Rebase on-top of github target
           command: ./devops/scripts/rebase-ci.sh
 
-      - run:
-          name: Ensure cache dir exists and permissions are good
-          command: |
-            sudo mkdir -p /caches && sudo chown circleci: -R /caches
-
-      - restore_cache:
-          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
-          paths:
-            - /caches/layers.tar.gz
-
-      - run:
-          name: Load image layer cache
-          command: |
-            set +o pipefail
-            docker load -i /caches/layers.tar |true
-
-      - run:
-          name: Build Docker images
-          command: |
-            set +o pipefail
-            docker images
-            fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
-            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" ./bin/dev-shell true
-
-      - run:
-          name: Save Docker image layer cache
-          command: |
-            docker images
-            docker save -o /caches/layers.tar securedrop-test-xenial:latest
-
-      - save_cache:
-          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
-          paths:
-            - /caches/layers.tar
+      - *createcachedir
+      - *restorecache
+      - *loadimagelayers
+      - *dockerimagebuild
+      - *saveimagelayers
+      - *savecache
 
       - run:
           name: Make test results directory
