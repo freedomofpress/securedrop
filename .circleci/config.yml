@@ -1,5 +1,10 @@
 ---
 common-steps:
+  - &rebaseontarget
+    run:
+      name: Rebase on top of GitHub target branch
+      command: ./devops/scripts/rebase-ci.sh
+
   - &createcachedir
     run:
       name: Ensure cache dir exists and permissions are good
@@ -48,10 +53,7 @@ jobs:
       enabled: true
     steps:
       - checkout
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
-
+      - *rebaseontarget
       - run: make ci-lint
 
   trusty-app-tests:
@@ -63,9 +65,7 @@ jobs:
     parallelism: 3
     steps:
       - checkout
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
+      - *rebaseontarget
 
       - run:
           name: Ensure cache dir exists and permissions are good
@@ -129,10 +129,7 @@ jobs:
     parallelism: 3
     steps:
       - checkout
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
-
+      - *rebaseontarget
       - *createcachedir
       - *restorecache
       - *loadimagelayers
@@ -167,10 +164,7 @@ jobs:
     parallelism: 3
     steps:
       - checkout
-      - run:
-          name: Rebase ontop of github target
-          command: ./devops/scripts/rebase-ci.sh
-
+      - *rebaseontarget
       - *createcachedir
       - *restorecache
       - *loadimagelayers
@@ -242,10 +236,7 @@ jobs:
     working_directory: ~/sd
     steps:
       - checkout
-
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
+      - *rebaseontarget
 
       - run:
           name: Run Staging tests on GCE
@@ -271,10 +262,7 @@ jobs:
     working_directory: ~/sd
     steps:
       - checkout
-
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
+      - *rebaseontarget
 
       - run:
           name: Run Staging tests on GCE (Xenial)
