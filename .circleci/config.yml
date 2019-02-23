@@ -324,8 +324,8 @@ workflows:
       - translation-tests:
           filters:
             branches:
-              ignore:
-                - /docs-.*/
+              only:
+                - /i18n-.*/
 
   nightly:
     triggers:
