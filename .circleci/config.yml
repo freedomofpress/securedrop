@@ -161,7 +161,7 @@ jobs:
     environment:
       DOCKER_API_VERSION: 1.23
       BASE_OS: xenial
-    parallelism: 3
+    parallelism: 2
     steps:
       - checkout
       - *rebaseontarget
@@ -173,11 +173,19 @@ jobs:
       - *savecache
 
       - run:
+          name: Make test results directory
+          command: mkdir -p ~/test-results
+
+      - run:
           name: Run tests
           command: |
+            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/pageslayout/test*py' |circleci tests split --split-by=timings |xargs echo)
             docker rm -f securedrop-test-xenial || true
             fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
             cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" make translation-test
+
+      - store_test_results:
+          path: ~/test-results
 
   admin-tests:
     docker:

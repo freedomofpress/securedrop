@@ -26,7 +26,7 @@ test-xenial: ## Run the test suite in a Ubuntu 16.04 (Xenial) dockerized environ
 
 .PHONY: translation-test
 translation-test: ## Run all pages-layout tests in all supported languages
-	BASE_OS=xenial ./bin/dev-shell ./bin/translation-test
+	BASE_OS=xenial ./bin/dev-shell ./bin/translation-test $${TESTFILES:-tests/pageslayout}
 
 .PHONY: dev
 dev: ## Run the dev server
