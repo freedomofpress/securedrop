@@ -171,10 +171,19 @@ jobs:
           name: Rebase ontop of github target
           command: ./devops/scripts/rebase-ci.sh
 
+      - *createcachedir
+      - *restorecache
+      - *loadimagelayers
+      - *dockerimagebuild
+      - *saveimagelayers
+      - *savecache
+
       - run:
           name: Run tests
           command: |
-            cd securedrop && make translation-test
+            docker rm -f securedrop-test-xenial || true
+            fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
+            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" make translation-test
 
   admin-tests:
     docker:
