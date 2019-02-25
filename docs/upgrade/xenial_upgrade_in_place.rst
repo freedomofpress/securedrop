@@ -76,9 +76,10 @@ prompts that follow:
 .. note:: The ``do-release-upgrade`` script displays some dialogs using
   ``ncurses``, a library for rendering GUI elements in text-only displays. It
   may display incorrectly within your terminal window. To force a redraw, adjust
-  the terminal window's size to approximately 150 columns by 40 rows, by
-  dragging the corners. If it still does not display correctly, make small
-  adjustments to the terminal size to force successive redraws.
+  the terminal window's size by toggling between the **Terminal > 80x43** and 
+  **Terminal > 132x43** items in the terminal window's menu bar. If the dialog 
+  still does not display correctly, try resizing the window by dragging the 
+  resize widget in the lower right corner.
 
 - Choose **OK** to close the Postfix information dialog
 - Choose **No Configuration** and **OK** on the "General type of mail

@@ -67,7 +67,7 @@ do so, run the following commands from the terminal:
   cd ~/Persistent/
   mkdir app_service
   cp securedrop/install_files/ansible-base/app-*ths app_service/
-  cp securedrop/install_files/ansible-base/site-specific app_service/
+  cp securedrop/install_files/ansible-base/group_vars/all/site-specific app_service/
 
 Once you have completed the backup process, you may shut down the *Admin
 Workstation* and move to the next step: installing a Xenial-based instance.
