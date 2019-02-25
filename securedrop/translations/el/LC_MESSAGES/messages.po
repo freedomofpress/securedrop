@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.8.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-12-10 17:51+0000\n"
-"Last-Translator: Dimitris Maroulidis <dmaroulidis@dimitrismaroulidis.com>\n"
+"PO-Revision-Date: 2019-02-24 16:13+0000\n"
+"Last-Translator: Adrian <pappasadrian@gmail.com>\n"
 "Language-Team: Greek <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/el/>\n"
 "Language: el\n"
@@ -16,14 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.20\n"
+"X-Generator: Weblate 3.4\n"
 "Generated-By: Babel 2.5.1\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "πριν από {time}"
 
-#: journalist_app/__init__.py:80 journalist_app/__init__.py:119
+#: journalist_app/__init__.py:89 journalist_app/__init__.py:128
 msgid "You have been logged out due to inactivity"
 msgstr "Αποσυνδεθήκατε λόγω αδράνειας"
 
@@ -220,7 +220,7 @@ msgid "Close"
 msgstr "Κλείσιμο"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:77
+#: journalist_templates/col.html:15 source_templates/lookup.html:81
 msgid "Cancel"
 msgstr "Άκυρο"
 
@@ -333,7 +333,7 @@ msgstr "Κωδικός επιβεβαίωσης"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:45
+#: journalist_templates/col.html:99 source_templates/lookup.html:49
 msgid "SUBMIT"
 msgstr "ΥΠΟΒΟΛΗ"
 
@@ -431,19 +431,32 @@ msgstr ""
 "εξαψήφιους κωδικούς από την εφαρμογή για να επιβεβαιώσουν ότι η πιστοποίηση "
 "δύο παραγόντων έχει ρυθμιστεί σωστά."
 
-#: journalist_templates/base.html:24
+#: journalist_templates/base.html:28
+msgid ""
+"<strong>Critical Security:</strong> The operating system used by your "
+"SecureDrop servers has reached its end-of-life. A manual update is urgently "
+"required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
+"\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>Κρίσιμο ζήτημα ασφάλειας:</strong> Το λειτουργικό σύστημα που "
+"χρησιμοποιούν οι σέρβερ του SecureDrop σου έχει φτάσει στο τέλος του κύκλου "
+"ζωής του. Χρειάζεται επειγόντως μια χειροκίνητη αναβάθμιση για να "
+"παραμείνετε ασφαλείς - <a href=\"//securedrop.org/xenial-upgrade\" rel=\""
+"noreferrer\">Μάθετε περισσότερα</a>"
+
+#: journalist_templates/base.html:33
 msgid "Logged on as"
 msgstr "Συνδεδεμένος/η ώς"
 
-#: journalist_templates/base.html:26
+#: journalist_templates/base.html:35
 msgid "Admin"
 msgstr "Διαχείριση"
 
-#: journalist_templates/base.html:28
+#: journalist_templates/base.html:37
 msgid "Log Out"
 msgstr "Αποσύνδεση"
 
-#: journalist_templates/base.html:41
+#: journalist_templates/base.html:50
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -451,7 +464,7 @@ msgstr ""
 "Με την υποστήριξη του <br> <img src=\"/static/i/securedrop_small.png\" alt="
 "\"SecureDrop\">"
 
-#: journalist_templates/base.html:56
+#: journalist_templates/base.html:65
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Με την υποστήριξη του <em>SecureDrop {version}</em>."
 
@@ -683,7 +696,7 @@ msgstr ""
 msgid "Current Password"
 msgstr "Τρέχων κωδικός"
 
-#: journalist_templates/edit_account.html:41 journalist_templates/login.html:10
+#: journalist_templates/edit_account.html:41 journalist_templates/login.html:11
 msgid "Two-factor Code"
 msgstr "Κωδικός πιστοποίησης δύο παραγόντων"
 
@@ -829,7 +842,7 @@ msgstr "Συνδεθείτε για να έχετε πρόσβαση στην δ
 msgid "Password"
 msgstr "Κωδικός πρόσβασης"
 
-#: journalist_templates/login.html:11
+#: journalist_templates/login.html:12
 msgid "LOG IN"
 msgstr "ΣΥΝΔΕΣΗ"
 
@@ -860,33 +873,33 @@ msgstr ""
 "Ανακατευθυνθήκατε επειδή είστε ήδη συνδεδεμένος. Αν θέλετε να δημιουργήσετε "
 "έναν νέο λογαριασμό, πρέπει πρώτα να αποσυνδεθείτε."
 
-#: source_app/main.py:133
+#: source_app/main.py:132
 msgid "You must enter a message or choose a file to submit."
 msgstr ""
 "Πρέπει να πληκτρολογήσετε ένα μήνυμα ή να επιλέξετε ένα αρχείο για "
 "καταχώρηση."
 
-#: source_app/main.py:166
+#: source_app/main.py:165
 msgid "Thanks! We received your message."
 msgstr "Ευχαριστώ! Λάβαμε το μήνυμά σας."
 
-#: source_app/main.py:168
+#: source_app/main.py:167
 msgid "Thanks! We received your document."
 msgstr "Ευχαριστώ! Λάβαμε το έγγραφό σας."
 
-#: source_app/main.py:170
+#: source_app/main.py:169
 msgid "Thanks! We received your message and document."
 msgstr "Ευχαριστώ! Λάβαμε το μήνυμά σας και το έγγραφό σας."
 
-#: source_app/main.py:223
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "Η απάντηση διαγράφτηκε"
 
-#: source_app/main.py:241
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "Όλες οι απαντήσεις διαγράφτηκαν"
 
-#: source_app/main.py:255
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "Συγγνώμη, δεν αναγνωρίζεται αυτό το κωδικό όνομα."
 
@@ -910,6 +923,115 @@ msgid ""
 msgstr ""
 "Όπως όλα τα λογισμικά, το SecureDrop ίσως περιέχει κενά ασφαλείας. "
 "Χρησιμοποιήστε το με δική σας ευθύνη."
+
+#: source_templates/disable-noscript-xss.html:3
+msgid "Turn off NoScript's cross-site request sanitization setting"
+msgstr ""
+"Απενεργοποιήστε την επιλογή για εκκαθάριση cross-site αιτημάτων του NoScript"
+
+#: source_templates/disable-noscript-xss.html:5
+msgid ""
+"Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do not "
+"currently work reliably in Tor Browser while cross-site request sanitization "
+"is turned on. It is safe to turn off this feature while your Security Slider "
+"is set to \"Safest\". Here's how:"
+msgstr ""
+"Λόγω ενός ζητήματος με τον περιηγητή (<a href=\"{url}\">περισσότερες "
+"λεπτομέρειες</a>), το ανέβασμα αρχείων δεν δουλεύει αξιόπιστα στον Tor "
+"Browser όσο είναι ενεργοποιημένη η εκκαθάριση cross-site αιτημάτων. Είναι "
+"ασφαλές να απενεργοποιήσετε αυτή την επιλογή όσο ο slider ασφαλείας είναι "
+"τοποθετημένος στο \"Ασφαλέστατο\". Δείτε πως:"
+
+#: source_templates/disable-noscript-xss.html:7
+msgid ""
+"You should find a blue \"S\" icon in the Tor browser's toolbar: <img class="
+"\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
+"\"{noscript_icon_url}\">. This is the NoScript button."
+msgstr ""
+"Πρέπει να βλέπετε ένα μπλέ εικονίδιο με το γράμμα \"S\" στη γραμμή εργαλείων "
+"του Tor Browser: <img class=\"inline\" src=\"{noscript_plain_icon_url}\"> ή <"
+"img class=\"inline\" src=\"{noscript_icon_url}\">. Αυτό είναι το κουμπί του "
+"NoScript."
+
+#: source_templates/disable-noscript-xss.html:11
+msgid "1. Click on the NoScript button."
+msgstr "1. Πατήστε το κουμπί του NoScript."
+
+#: source_templates/disable-noscript-xss.html:12
+msgid "The NoScript pane should appear. It looks like this:"
+msgstr "Θα πρέπει να εμφανιστεί το παράθυρο του NoScript. Φαίνεται κάπως έτσι:"
+
+#: source_templates/disable-noscript-xss.html:18
+msgid ""
+"2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
+"src=\"{url}\">"
+msgstr ""
+"2. Στο παράθυρο του NoScript, πατήστε το εικονίδιο των Ρυθμίσεων: <img class="
+"\"inline\" src=\"{url}\">"
+
+#: source_templates/disable-noscript-xss.html:20
+msgid ""
+"The settings page should appear in a new browser tab. It looks like this:"
+msgstr ""
+"Η σελίδα των ρυθμίσεων θα εμφανιστεί σε μία νέα καρτέλα του περιηγητή. "
+"Φαίνεται κάπως έτσι:"
+
+#: source_templates/disable-noscript-xss.html:26
+msgid "3. Click the \"Advanced\" tab."
+msgstr "3. Πατήστε την καρτέλα \"Για προχωρημένους\"."
+
+#: source_templates/disable-noscript-xss.html:28
+msgid "The advanced settings tab should come into view. It looks like this:"
+msgstr ""
+"Η καρτέλα με τις ρυθμίσεις για προχωρημένους χρήστες θα πρέπει να "
+"εμφανιστεί. Μοιάζει κάπως έτσι:"
+
+#: source_templates/disable-noscript-xss.html:34
+msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
+msgstr ""
+"4. Απεπιλέξτε το \"Να γίνεται εκκαθάριση ύποπτων cross-site αιτημάτων\"."
+
+#: source_templates/disable-noscript-xss.html:36
+msgid ""
+"Due to a browser issue, this is required for uploads to work reliably. As "
+"soon as the browser issue is resolved, we will remove this recommendation."
+msgstr ""
+"Λόγω ενός θέματος με τον περιηγητή, αυτό απαιτείται για την αξιόπιστη "
+"λειτουργία του ανεβάσματος αρχείων. Μόλις επιλυθεί αυτό το θέμα του "
+"περιηγητή. θα αφαιρέσουμε αυτή την οδηγία."
+
+#: source_templates/disable-noscript-xss.html:40
+msgid ""
+"5. Close the <i>NoScript Settings</i> browser tab and return to the "
+"SecureDrop tab."
+msgstr ""
+"5. Κλείστε την καρτέλα <i>Ρυθμίσεις του Noscript</i> και επιστρέψτε στην "
+"καρτέλα του SecureDrop."
+
+#: source_templates/disable-noscript-xss.html:42
+msgid ""
+"You can now upload your files. Please keep in mind that each file requires "
+"its own submission."
+msgstr ""
+"Μπορείτε πλέον να ανεβάσετε τα αρχεία σας. Παρακαλώ έχετε υπόψιν σας ότι το "
+"κάθε αρχείο απαιτεί τη δική του ξεχωριστή καταχώριση."
+
+#: source_templates/disable-noscript-xss.html:46
+msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
+msgstr ""
+"6. Επανεπιλέξτε την επιλογη \"Να γίνεται εκκαθάριση ύποπτων cross-site "
+"αιτημάτων\"."
+
+#: source_templates/disable-noscript-xss.html:48
+msgid ""
+"Repeat steps 1-3 from above and re-check the setting. The setting has no "
+"effect while your Security Slider is set to \"Safest\", but we recommend "
+"enabling it during normal Tor usage."
+msgstr ""
+"Επαναλάβετε τα βήματα 1-3 παραπάνω για να επανεπιλέξετε την ρύθμιση. Αυτή η "
+"ρύθμιση δεν έχει καμία επίπτωση όταν ο Slider ασφαλείας σας είναι ορισμένος "
+"στο \"Ασφαλέστατο\", αλλά προτείνουμε να την ενεργοποιήσετε κατά την "
+"διάρκεια κανονικής χρήσης του Tor."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1083,7 +1205,7 @@ msgstr "Εισαγωγή κωδικού ονόματος"
 msgid "Enter your codename"
 msgstr "Γράψτε το κωδικό όνομά σας"
 
-#: source_templates/login.html:25 source_templates/lookup.html:51
+#: source_templates/login.html:25 source_templates/lookup.html:55
 msgid "CANCEL"
 msgstr "ΆΚΥΡΟ"
 
@@ -1095,12 +1217,13 @@ msgstr "Σημαντικό!"
 #: source_templates/logout_flashed_message.html:5
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
-"green onion button in the Tor browser to clear all history of your "
+"onion button in the Tor browser's toolbar to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
 "Ευχαριστούμε που αποσυνδεθήκατε από τη συνεδρία σας. Παρακαλώ επιλέξτε \"Νέα "
-"ταυτότητα\" από το πράσινο εικονίδιο του Tor browser για να εκκαθαρίσετε όλο "
-"το ιστορικό της χρήσης του SecureDrop που κάνατε από αυτή τη συσκευή."
+"ταυτότητα\" από το εικονίδιο με σχήμα κρεμμύδι στην γραμμή εργαλείων του Tor "
+"browser, για να εκκαθαρίσετε όλο το ιστορικό της χρήσης του SecureDrop από "
+"αυτή τη συσκευή."
 
 #: source_templates/lookup.html:11
 msgid "Whew, it’s you! Now, the embarrassing part..."
@@ -1130,7 +1253,23 @@ msgstr ""
 msgid "Submit Files or Messages"
 msgstr "Υποβολή αρχείων ή  μηνυμάτων"
 
-#: source_templates/lookup.html:21
+#: source_templates/lookup.html:22
+msgid ""
+"Before you begin, turn off cross-site request sanitization in NoScript. This "
+"is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
+"\"text-link\">Show me how.</a>"
+msgstr ""
+"Πρίν ξεκινήσετε, απενεργοποιήστε την επιλογή για εκκαθάριση ύποπτων cross-"
+"site αιτημάτων του NoScript. Αυτό <strong>είναι απαραίτητο</strong> για την "
+"λειτουργία του ανεβάσματος αρχείων. <a href=\"{url}\" class=\"text-link\">"
+"Δείτε πως.</a>"
+
+#: source_templates/lookup.html:24
+msgid "You can submit any kind of file, a message, or both."
+msgstr ""
+"Μπορείτε να υποβάλετε οποιουδήποτε τύπου αρχεία, ένα μήνυμα ή και τα δύο."
+
+#: source_templates/lookup.html:26
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1141,28 +1280,23 @@ msgstr ""
 "μας</a> πριν τα υποβάλλετε. Τα αρχεία κρυπτογραφούνται κατά τη λήψη από το "
 "SecureDrop."
 
-#: source_templates/lookup.html:22
+#: source_templates/lookup.html:27
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">Μάθετε περισσότερα</a>."
 
-#: source_templates/lookup.html:24
-msgid "You can submit any kind of file, a message, or both."
-msgstr ""
-"Μπορείτε να υποβάλετε οποιουδήποτε τύπου αρχεία, ένα μήνυμα ή και τα δύο."
-
-#: source_templates/lookup.html:33
+#: source_templates/lookup.html:37
 msgid "Maximum upload size: 500 MB"
 msgstr "Μέγιστο μέγεθος υποβολής: 500 MB"
 
-#: source_templates/lookup.html:36
+#: source_templates/lookup.html:40
 msgid "Write a message."
 msgstr "Γράψτε ένα μήνυμα."
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:62
 msgid "Read Replies"
 msgstr "Ανάγνωση απαντήσεων"
 
-#: source_templates/lookup.html:63
+#: source_templates/lookup.html:67
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1175,43 +1309,43 @@ msgstr ""
 "επίσης να ξέρουμε πως είστε ενήμερος για την απάντησή μας. Μπορείτε επίσης "
 "να απαντήσετε υποβάλλοντας νέα αρχεία και μηνύματα παραπάνω."
 
-#: source_templates/lookup.html:76
+#: source_templates/lookup.html:80
 msgid "Delete this reply?"
 msgstr "Διαγραφή αυτής της απάντησης;"
 
-#: source_templates/lookup.html:78
+#: source_templates/lookup.html:82
 msgid "DELETE"
 msgstr "ΔΙΑΓΡΑΦΗ"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:91
 msgid "DELETE ALL REPLIES"
 msgstr "ΔΙΑΓΡΑΦΗ ΟΛΩΝ ΤΩΝ ΑΠΑΝΤΗΣΕΩΝ"
 
-#: source_templates/lookup.html:90
+#: source_templates/lookup.html:94
 msgid "Are you finished with the replies?"
 msgstr "Τελειώσατε με τις απαντήσεις;"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:95
 msgid "YES, DELETE ALL REPLIES"
 msgstr "ΝΑΙ, ΝΑ ΔΙΑΓΡΑΦΟΥΝ ΟΛΕΣ ΟΙ ΑΠΑΝΤΗΣΕΙΣ"
 
-#: source_templates/lookup.html:92
+#: source_templates/lookup.html:96
 msgid "NO, NOT YET"
 msgstr "ΟΧΙ ΑΚΟΜΑ"
 
-#: source_templates/lookup.html:96
+#: source_templates/lookup.html:100
 msgid "There are no replies at this time."
 msgstr "Δεν υπάρχουν απαντήσεις προς το παρόν."
 
-#: source_templates/lookup.html:105
+#: source_templates/lookup.html:109
 msgid "Remember, your codename is:"
 msgstr "Θυμήσου, το κωδικό όνομά σου είναι:"
 
-#: source_templates/lookup.html:106
+#: source_templates/lookup.html:110
 msgid "Show"
 msgstr "Εμφάνιση"
 
-#: source_templates/lookup.html:108
+#: source_templates/lookup.html:112
 msgid "Hide"
 msgstr "Απόκρυψη"
 
@@ -1224,11 +1358,18 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "Συγγνώμη, δεν μπορέσαμε να εντοπίσουμε αυτό που ζητήσατε."
 
 #: source_templates/session_timeout.html:6
+#, fuzzy
+#| msgid ""
+#| "Your session timed out due to inactivity. Please login again if you want "
+#| "to continue using SecureDrop, or select \"New Identity\" from the green "
+#| "onion button in the Tor browser to clear all history of your SecureDrop "
+#| "usage from this device. If you are not using Tor Browser, restart your "
+#| "browser."
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
-"continue using SecureDrop, or select \"New Identity\" from the green onion "
-"button in the Tor browser to clear all history of your SecureDrop usage from "
-"this device. If you are not using Tor Browser, restart your browser."
+"continue using SecureDrop, or select \"New Identity\" from the onion button "
+"in the Tor browser's toolbar to clear all history of your SecureDrop usage "
+"from this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
 "Η συνεδρία σας έληξε λόγω αδράνειας. Παρακαλώ συνδεθείτε ξανά αν θέλετε να "
 "συνεχίσετε να χρησιμοποιείτε το SecureDrop, ή επιλέξτε \"Νέα ταυτότητα\" από "
