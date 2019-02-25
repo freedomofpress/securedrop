@@ -1,4 +1,51 @@
 ---
+common-steps:
+  - &rebaseontarget
+    run:
+      name: Rebase on top of GitHub target branch
+      command: ./devops/scripts/rebase-ci.sh
+
+  - &createcachedir
+    run:
+      name: Ensure cache dir exists and permissions are good
+      command: |
+        sudo mkdir -p /caches && sudo chown circleci: -R /caches
+
+  - &restorecache
+    restore_cache:
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
+      paths:
+        - /caches/layers.tar.gz
+
+  - &loadimagelayers
+    run:
+      name: Load image layer cache
+      command: |
+        set +o pipefail
+        docker load -i /caches/layers.tar |true
+
+  - &dockerimagebuild
+    run:
+      name: Build Docker images
+      command: |
+        set +o pipefail
+        docker images
+        fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
+        cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" ./bin/dev-shell true
+
+  - &saveimagelayers
+    run:
+      name: Save Docker image layer cache
+      command: |
+        docker images
+        docker save -o /caches/layers.tar securedrop-test-xenial:latest
+
+  - &savecache
+    save_cache:
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
+      paths:
+        - /caches/layers.tar
+
 version: 2
 jobs:
   lint:
@@ -6,10 +53,7 @@ jobs:
       enabled: true
     steps:
       - checkout
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
-
+      - *rebaseontarget
       - run: make ci-lint
 
   trusty-app-tests:
@@ -21,9 +65,7 @@ jobs:
     parallelism: 3
     steps:
       - checkout
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
+      - *rebaseontarget
 
       - run:
           name: Ensure cache dir exists and permissions are good
@@ -87,44 +129,13 @@ jobs:
     parallelism: 3
     steps:
       - checkout
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
-
-      - run:
-          name: Ensure cache dir exists and permissions are good
-          command: |
-            sudo mkdir -p /caches && sudo chown circleci: -R /caches
-
-      - restore_cache:
-          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
-          paths:
-            - /caches/layers.tar.gz
-
-      - run:
-          name: Load image layer cache
-          command: |
-            set +o pipefail
-            docker load -i /caches/layers.tar |true
-
-      - run:
-          name: Build Docker images
-          command: |
-            set +o pipefail
-            docker images
-            fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
-            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" ./bin/dev-shell true
-
-      - run:
-          name: Save Docker image layer cache
-          command: |
-            docker images
-            docker save -o /caches/layers.tar securedrop-test-xenial:latest
-
-      - save_cache:
-          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
-          paths:
-            - /caches/layers.tar
+      - *rebaseontarget
+      - *createcachedir
+      - *restorecache
+      - *loadimagelayers
+      - *dockerimagebuild
+      - *saveimagelayers
+      - *savecache
 
       - run:
           name: Make test results directory
@@ -142,6 +153,38 @@ jobs:
           path: ~/test-results
 
       - store_artifacts:
+          path: ~/test-results
+
+  translation-tests:
+    machine:
+      enabled: true
+    environment:
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: xenial
+    parallelism: 2
+    steps:
+      - checkout
+      - *rebaseontarget
+      - *createcachedir
+      - *restorecache
+      - *loadimagelayers
+      - *dockerimagebuild
+      - *saveimagelayers
+      - *savecache
+
+      - run:
+          name: Make test results directory
+          command: mkdir -p ~/test-results
+
+      - run:
+          name: Run tests
+          command: |
+            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/pageslayout/test*py' |circleci tests split --split-by=timings |xargs echo)
+            docker rm -f securedrop-test-xenial || true
+            fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
+            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" make translation-test
+
+      - store_test_results:
           path: ~/test-results
 
   admin-tests:
@@ -201,10 +244,7 @@ jobs:
     working_directory: ~/sd
     steps:
       - checkout
-
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
+      - *rebaseontarget
 
       - run:
           name: Run Staging tests on GCE
@@ -230,10 +270,7 @@ jobs:
     working_directory: ~/sd
     steps:
       - checkout
-
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
+      - *rebaseontarget
 
       - run:
           name: Run Staging tests on GCE (Xenial)
@@ -262,24 +299,39 @@ workflows:
             branches:
               ignore:
                 - /docs-.*/
+                - /i18n-.*/
       - admin-tests:
           filters:
             branches:
               ignore:
                 - /docs-.*/
+                - /i18n-.*/
       - updater-gui-tests:
           filters:
             branches:
               ignore:
                 - /docs-.*/
-      - static-analysis-and-no-known-cves
+                - /i18n-.*/
+      - static-analysis-and-no-known-cves:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+                - /i18n-.*/
       - staging-test-with-rebase-xenial:
           filters:
             branches:
               ignore:
                 - /docs-.*/
+                - /i18n-.*/
           requires:
             - lint
+      - translation-tests:
+          filters:
+            branches:
+              only:
+                - /i18n-.*/
+
   nightly:
     triggers:
       - schedule:
