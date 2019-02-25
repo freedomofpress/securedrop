@@ -126,7 +126,7 @@ class I18NTool(object):
         if args.compile:
             pos = filter(lambda f: f.endswith('.po'),
                          os.listdir(args.translations_dir))
-            linguas = map(lambda l: l.rstrip('.po'), pos)
+            linguas = map(lambda l: l[:-3], pos)
             content = "\n".join(linguas) + "\n"
             open(join(args.translations_dir, 'LINGUAS'), 'w').write(content)
 
