@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-12-11 17:30+0000\n"
-"Last-Translator: Nick Bouwhuis <github@nickbouwhuis.nl>\n"
+"PO-Revision-Date: 2019-02-21 17:11+0000\n"
+"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
 "Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/nl/>\n"
 "Language: nl\n"
@@ -17,14 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.20\n"
+"X-Generator: Weblate 3.4\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "{time} geleden"
 
-#: journalist_app/__init__.py:80 journalist_app/__init__.py:119
+#: journalist_app/__init__.py:89 journalist_app/__init__.py:128
 msgid "You have been logged out due to inactivity"
 msgstr "U bent uitgelogd wegens inactiviteit"
 
@@ -218,7 +218,7 @@ msgid "Close"
 msgstr "Sluiten"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:77
+#: journalist_templates/col.html:15 source_templates/lookup.html:81
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -329,7 +329,7 @@ msgstr "Verificatiecode"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:45
+#: journalist_templates/col.html:99 source_templates/lookup.html:49
 msgid "SUBMIT"
 msgstr "VERSTUREN"
 
@@ -426,19 +426,31 @@ msgstr ""
 "hem/haar vervolgens de zescijferige code uit de app invoeren om te "
 "bevestigen dat de tweestapsauthenticatie succesvol is ingericht."
 
-#: journalist_templates/base.html:24
+#: journalist_templates/base.html:28
+msgid ""
+"<strong>Critical Security:</strong> The operating system used by your "
+"SecureDrop servers has reached its end-of-life. A manual update is urgently "
+"required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
+"\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>Kritiek veiligheidsprobleem:</strong> het besturingssysteem op uw "
+"SecureDrop servers is aan het zijn levensduur. Een handmatige upgrade is "
+"dringend vereist om veilig te blijven — <a href=\"//securedrop.org/xenial-"
+"upgrade\" rel=\"noreferrer\">meer informatie.</a>"
+
+#: journalist_templates/base.html:33
 msgid "Logged on as"
 msgstr "Aangemeld als"
 
-#: journalist_templates/base.html:26
+#: journalist_templates/base.html:35
 msgid "Admin"
 msgstr "Beheerder"
 
-#: journalist_templates/base.html:28
+#: journalist_templates/base.html:37
 msgid "Log Out"
 msgstr "Uitloggen"
 
-#: journalist_templates/base.html:41
+#: journalist_templates/base.html:50
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -446,7 +458,7 @@ msgstr ""
 "Mogelijk gemaakt door <br> <img src=\"/static/i/securedrop_small.png\" alt="
 "\"SecureDrop\">"
 
-#: journalist_templates/base.html:56
+#: journalist_templates/base.html:65
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Mogelijk gemaakt door <em>SecureDrop {version}</em>."
 
@@ -673,7 +685,7 @@ msgstr "Gelieve je huidige wachtwoord en tweestapstoken in te geven."
 msgid "Current Password"
 msgstr "Huidig wachtwoord"
 
-#: journalist_templates/edit_account.html:41 journalist_templates/login.html:10
+#: journalist_templates/edit_account.html:41 journalist_templates/login.html:11
 msgid "Two-factor Code"
 msgstr "Tweestapstoken"
 
@@ -816,7 +828,7 @@ msgstr "Inloggen om de interface voor journalisten te openen"
 msgid "Password"
 msgstr "Wachtwoord"
 
-#: journalist_templates/login.html:11
+#: journalist_templates/login.html:12
 msgid "LOG IN"
 msgstr "INLOGGEN"
 
@@ -846,31 +858,31 @@ msgstr ""
 "U bent omgeleid omdat u al ingelogd bent. Indien u een nieuw account wilt "
 "aanmaken, moet u eerst uitloggen."
 
-#: source_app/main.py:133
+#: source_app/main.py:132
 msgid "You must enter a message or choose a file to submit."
 msgstr "U moet een bericht invoeren of een bestand selecteren om te versturen."
 
-#: source_app/main.py:166
+#: source_app/main.py:165
 msgid "Thanks! We received your message."
 msgstr "Bedankt! We hebben uw bericht ontvangen."
 
-#: source_app/main.py:168
+#: source_app/main.py:167
 msgid "Thanks! We received your document."
 msgstr "Bedankt! We hebben uw document ontvangen."
 
-#: source_app/main.py:170
+#: source_app/main.py:169
 msgid "Thanks! We received your message and document."
 msgstr "Bedankt! We hebben uw bericht en document ontvangen."
 
-#: source_app/main.py:223
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "Reactie verwijderd"
 
-#: source_app/main.py:241
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "Alle reacties zijn verwijderd"
 
-#: source_app/main.py:255
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "Helaas is dit een onbekende codenaam."
 
@@ -894,6 +906,85 @@ msgid ""
 msgstr ""
 "Mogelijk bevat SecureDrop zoals alle software beveiligingsfouten. Gebruik "
 "het op eigen risico."
+
+#: source_templates/disable-noscript-xss.html:3
+msgid "Turn off NoScript's cross-site request sanitization setting"
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:5
+msgid ""
+"Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do not "
+"currently work reliably in Tor Browser while cross-site request sanitization "
+"is turned on. It is safe to turn off this feature while your Security Slider "
+"is set to \"Safest\". Here's how:"
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:7
+msgid ""
+"You should find a blue \"S\" icon in the Tor browser's toolbar: <img class="
+"\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
+"\"{noscript_icon_url}\">. This is the NoScript button."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:11
+msgid "1. Click on the NoScript button."
+msgstr "1. Klik op het NoScript pictogram."
+
+#: source_templates/disable-noscript-xss.html:12
+msgid "The NoScript pane should appear. It looks like this:"
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:18
+msgid ""
+"2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
+"src=\"{url}\">"
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:20
+msgid ""
+"The settings page should appear in a new browser tab. It looks like this:"
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:26
+msgid "3. Click the \"Advanced\" tab."
+msgstr "3. Klik op het tabblad \"Geavanceerd.\""
+
+#: source_templates/disable-noscript-xss.html:28
+msgid "The advanced settings tab should come into view. It looks like this:"
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:34
+msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:36
+msgid ""
+"Due to a browser issue, this is required for uploads to work reliably. As "
+"soon as the browser issue is resolved, we will remove this recommendation."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:40
+msgid ""
+"5. Close the <i>NoScript Settings</i> browser tab and return to the "
+"SecureDrop tab."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:42
+msgid ""
+"You can now upload your files. Please keep in mind that each file requires "
+"its own submission."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:46
+msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:48
+msgid ""
+"Repeat steps 1-3 from above and re-check the setting. The setting has no "
+"effect while your Security Slider is set to \"Safest\", but we recommend "
+"enabling it during normal Tor usage."
+msgstr ""
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1065,7 +1156,7 @@ msgstr "Codenaam invoeren"
 msgid "Enter your codename"
 msgstr "Voer uw codenaam in"
 
-#: source_templates/login.html:25 source_templates/lookup.html:51
+#: source_templates/login.html:25 source_templates/lookup.html:55
 msgid "CANCEL"
 msgstr "ANNULEREN"
 
@@ -1075,9 +1166,14 @@ msgid "Important!"
 msgstr "Belangrijk!"
 
 #: source_templates/logout_flashed_message.html:5
+#, fuzzy
+#| msgid ""
+#| "Thank you for exiting your session! Please select \"New Identity\" from "
+#| "the green onion button in the Tor browser to clear all history of your "
+#| "SecureDrop usage from this device."
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
-"green onion button in the Tor browser to clear all history of your "
+"onion button in the Tor browser's toolbar to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
 "Bedankt voor het uitloggen! Klik nu op \"New Identity\" onder de knop met de "
@@ -1113,7 +1209,18 @@ msgstr ""
 msgid "Submit Files or Messages"
 msgstr "Verstuur bestanden of berichten"
 
-#: source_templates/lookup.html:21
+#: source_templates/lookup.html:22
+msgid ""
+"Before you begin, turn off cross-site request sanitization in NoScript. This "
+"is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
+"\"text-link\">Show me how.</a>"
+msgstr ""
+
+#: source_templates/lookup.html:24
+msgid "You can submit any kind of file, a message, or both."
+msgstr "U kunt elk soort bestand, een bericht of beide versturen."
+
+#: source_templates/lookup.html:26
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1124,27 +1231,23 @@ msgstr ""
 "\">publieke sleutel</a> alvorens deze te versturen. Bestanden worden "
 "versleuteld ontvangen door SecureDrop."
 
-#: source_templates/lookup.html:22
+#: source_templates/lookup.html:27
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">Lees meer</a>."
 
-#: source_templates/lookup.html:24
-msgid "You can submit any kind of file, a message, or both."
-msgstr "U kunt elk soort bestand, een bericht of beide versturen."
-
-#: source_templates/lookup.html:33
+#: source_templates/lookup.html:37
 msgid "Maximum upload size: 500 MB"
 msgstr "Maximale bestandsgrootte: 500 MB"
 
-#: source_templates/lookup.html:36
+#: source_templates/lookup.html:40
 msgid "Write a message."
 msgstr "Schrijf een bericht."
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:62
 msgid "Read Replies"
 msgstr "Reacties lezen"
 
-#: source_templates/lookup.html:63
+#: source_templates/lookup.html:67
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1157,43 +1260,43 @@ msgstr ""
 "dat u onze reactie heeft gezien. U kunt reageren door hierboven nieuwe "
 "bestanden en berichten te versturen."
 
-#: source_templates/lookup.html:76
+#: source_templates/lookup.html:80
 msgid "Delete this reply?"
 msgstr "Deze reactie verwijderen?"
 
-#: source_templates/lookup.html:78
+#: source_templates/lookup.html:82
 msgid "DELETE"
 msgstr "VERWIJDER"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:91
 msgid "DELETE ALL REPLIES"
 msgstr "VERWIJDER ALLE REACTIES"
 
-#: source_templates/lookup.html:90
+#: source_templates/lookup.html:94
 msgid "Are you finished with the replies?"
 msgstr "Heeft u de reacties gelezen?"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:95
 msgid "YES, DELETE ALL REPLIES"
 msgstr "JA, VERWIJDER ALLE REACTIES"
 
-#: source_templates/lookup.html:92
+#: source_templates/lookup.html:96
 msgid "NO, NOT YET"
 msgstr "NEE, NOG NIET"
 
-#: source_templates/lookup.html:96
+#: source_templates/lookup.html:100
 msgid "There are no replies at this time."
 msgstr "Op dit moment zijn er geen reacties."
 
-#: source_templates/lookup.html:105
+#: source_templates/lookup.html:109
 msgid "Remember, your codename is:"
 msgstr "Vergeet niet, uw codenaam is:"
 
-#: source_templates/lookup.html:106
+#: source_templates/lookup.html:110
 msgid "Show"
 msgstr "Tonen"
 
-#: source_templates/lookup.html:108
+#: source_templates/lookup.html:112
 msgid "Hide"
 msgstr "Verbergen"
 
@@ -1206,11 +1309,18 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "Sorry, we kunnen niet vinden wat u zoekt."
 
 #: source_templates/session_timeout.html:6
+#, fuzzy
+#| msgid ""
+#| "Your session timed out due to inactivity. Please login again if you want "
+#| "to continue using SecureDrop, or select \"New Identity\" from the green "
+#| "onion button in the Tor browser to clear all history of your SecureDrop "
+#| "usage from this device. If you are not using Tor Browser, restart your "
+#| "browser."
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
-"continue using SecureDrop, or select \"New Identity\" from the green onion "
-"button in the Tor browser to clear all history of your SecureDrop usage from "
-"this device. If you are not using Tor Browser, restart your browser."
+"continue using SecureDrop, or select \"New Identity\" from the onion button "
+"in the Tor browser's toolbar to clear all history of your SecureDrop usage "
+"from this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
 "Je sessie  is verlopen als gevolg van inactiviteit. Log opnieuw in als je "
 "SecureDrop verder wilt gebruiken of selecteer \"New Identity\" onder de "
