@@ -1,0 +1,27 @@
+#!/bin/bash
+# shellcheck disable=SC1090
+
+set -euo pipefail
+
+source "${BASH_SOURCE%/*}/dev-deps"
+
+run_xvfb &
+run_redis &
+urandom
+run_sass --force --update
+maybe_create_config_py
+./i18n_tool.py translate-messages --compile
+
+mkdir -p "/tmp/test-results/logs"
+
+# Taking screenshots for consumes a lot of memory
+# and can result in OOM errors in CI. Running each locale
+# separately avoids this.
+for locale in ar de_DE es_ES fr_FR nb_NO nl pt_BR zh_Hant it_IT tr hi ru sv ro is
+do
+  PAGE_LAYOUT_LOCALES=$locale pytest \
+    -v \
+    --page-layout \
+    --durations 10 \
+    "$@"
+done
