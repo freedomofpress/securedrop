@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-12-11 05:02+0000\n"
+"PO-Revision-Date: 2019-02-21 17:11+0000\n"
 "Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/"
 "projects/securedrop/securedrop/zh_Hant/>\n"
@@ -17,14 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.20\n"
+"X-Generator: Weblate 3.4\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "{time} 之前"
 
-#: journalist_app/__init__.py:80 journalist_app/__init__.py:119
+#: journalist_app/__init__.py:89 journalist_app/__init__.py:128
 msgid "You have been logged out due to inactivity"
 msgstr "您因閒置太久已被登出"
 
@@ -196,7 +196,7 @@ msgid "Close"
 msgstr "關閉"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:77
+#: journalist_templates/col.html:15 source_templates/lookup.html:81
 msgid "Cancel"
 msgstr "取消"
 
@@ -297,7 +297,7 @@ msgstr "驗證碼"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:45
+#: journalist_templates/col.html:99 source_templates/lookup.html:49
 msgid "SUBMIT"
 msgstr "提交"
 
@@ -392,26 +392,36 @@ msgstr ""
 "旦此帳戶記錄加入到應用程式，請輸入應用程式提供的 6 位數字碼，以確認雙因素驗證"
 "設置正確。"
 
-#: journalist_templates/base.html:24
+#: journalist_templates/base.html:28
+msgid ""
+"<strong>Critical Security:</strong> The operating system used by your "
+"SecureDrop servers has reached its end-of-life. A manual update is urgently "
+"required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
+"\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>重要安全課題:</strong> SecureDrop 伺服器作業系統已逾使用年限，亟需手動更新以維持安全。 - <a href=\""
+"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">進一步了解</a>"
+
+#: journalist_templates/base.html:33
 msgid "Logged on as"
 msgstr "登入為"
 
-#: journalist_templates/base.html:26
+#: journalist_templates/base.html:35
 msgid "Admin"
 msgstr "管理員"
 
-#: journalist_templates/base.html:28
+#: journalist_templates/base.html:37
 msgid "Log Out"
 msgstr "登出"
 
-#: journalist_templates/base.html:41
+#: journalist_templates/base.html:50
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 msgstr ""
 "由<br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">搭建"
 
-#: journalist_templates/base.html:56
+#: journalist_templates/base.html:65
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "由 <em> SecureDrop {version}</em> 搭建。"
 
@@ -619,7 +629,7 @@ msgstr "請輸入目前使用的密碼與雙因素認證碼。"
 msgid "Current Password"
 msgstr "目前的密碼"
 
-#: journalist_templates/edit_account.html:41 journalist_templates/login.html:10
+#: journalist_templates/edit_account.html:41 journalist_templates/login.html:11
 msgid "Two-factor Code"
 msgstr "雙因素驗證碼"
 
@@ -754,7 +764,7 @@ msgstr "登入記者使用介面"
 msgid "Password"
 msgstr "密碼"
 
-#: journalist_templates/login.html:11
+#: journalist_templates/login.html:12
 msgid "LOG IN"
 msgstr "登錄"
 
@@ -781,31 +791,31 @@ msgid ""
 "a new account, you should log out first."
 msgstr "你被重定向了， 因為已在登錄狀態。如果想創建一個新帳戶，請先登出。"
 
-#: source_app/main.py:133
+#: source_app/main.py:132
 msgid "You must enter a message or choose a file to submit."
 msgstr "你必须輸入一則訊息，或是選擇一個文件來提交。"
 
-#: source_app/main.py:166
+#: source_app/main.py:165
 msgid "Thanks! We received your message."
 msgstr "謝謝！我們已收到你的訊息。"
 
-#: source_app/main.py:168
+#: source_app/main.py:167
 msgid "Thanks! We received your document."
 msgstr "謝謝！我們已收到你的文件。"
 
-#: source_app/main.py:170
+#: source_app/main.py:169
 msgid "Thanks! We received your message and document."
 msgstr "謝謝！我們已收到你的訊息和文件。"
 
-#: source_app/main.py:223
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "回覆已刪除"
 
-#: source_app/main.py:241
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "所有的回覆都已被删除"
 
-#: source_app/main.py:255
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "對不起，無法識別這個代號。"
 
@@ -827,6 +837,87 @@ msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr "如同所有的軟體，SecureDrop 可能含有安全漏洞。使用請自顧風險。"
+
+#: source_templates/disable-noscript-xss.html:3
+msgid "Turn off NoScript's cross-site request sanitization setting"
+msgstr "關閉 NoScript 禁止跨站請求的設置"
+
+#: source_templates/disable-noscript-xss.html:5
+msgid ""
+"Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do not "
+"currently work reliably in Tor Browser while cross-site request sanitization "
+"is turned on. It is safe to turn off this feature while your Security Slider "
+"is set to \"Safest\". Here's how:"
+msgstr ""
+"由於瀏覽器的原因 (<a href=\"{url}\">詳情說明</a>)，當開啟跨站請求禁止功能時，上傳功能無法穩定地在 Tor "
+"瀏覽器執行。若關閉此功能時，可將安全設置為\"最高級\"。作法如下："
+
+#: source_templates/disable-noscript-xss.html:7
+msgid ""
+"You should find a blue \"S\" icon in the Tor browser's toolbar: <img class="
+"\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
+"\"{noscript_icon_url}\">. This is the NoScript button."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:11
+msgid "1. Click on the NoScript button."
+msgstr "1. 點擊  NoScript 按鈕。"
+
+#: source_templates/disable-noscript-xss.html:12
+msgid "The NoScript pane should appear. It looks like this:"
+msgstr "應出現 NoScript 面板，大概像這樣："
+
+#: source_templates/disable-noscript-xss.html:18
+msgid ""
+"2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
+"src=\"{url}\">"
+msgstr "2. 在 NoScript 面板，點擊 Setting 設置圖示: <img class=\"inline\" src=\"{url}\">"
+
+#: source_templates/disable-noscript-xss.html:20
+msgid ""
+"The settings page should appear in a new browser tab. It looks like this:"
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:26
+msgid "3. Click the \"Advanced\" tab."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:28
+msgid "The advanced settings tab should come into view. It looks like this:"
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:34
+msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:36
+msgid ""
+"Due to a browser issue, this is required for uploads to work reliably. As "
+"soon as the browser issue is resolved, we will remove this recommendation."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:40
+msgid ""
+"5. Close the <i>NoScript Settings</i> browser tab and return to the "
+"SecureDrop tab."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:42
+msgid ""
+"You can now upload your files. Please keep in mind that each file requires "
+"its own submission."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:46
+msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
+msgstr ""
+
+#: source_templates/disable-noscript-xss.html:48
+msgid ""
+"Repeat steps 1-3 from above and re-check the setting. The setting has no "
+"effect while your Security Slider is set to \"Safest\", but we recommend "
+"enabling it during normal Tor usage."
+msgstr ""
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -977,7 +1068,7 @@ msgstr "輸入代號"
 msgid "Enter your codename"
 msgstr "請輸入您的代號"
 
-#: source_templates/login.html:25 source_templates/lookup.html:51
+#: source_templates/login.html:25 source_templates/lookup.html:55
 msgid "CANCEL"
 msgstr "取消"
 
@@ -987,9 +1078,14 @@ msgid "Important!"
 msgstr "重要！"
 
 #: source_templates/logout_flashed_message.html:5
+#, fuzzy
+#| msgid ""
+#| "Thank you for exiting your session! Please select \"New Identity\" from "
+#| "the green onion button in the Tor browser to clear all history of your "
+#| "SecureDrop usage from this device."
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
-"green onion button in the Tor browser to clear all history of your "
+"onion button in the Tor browser's toolbar to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
 "感谢退出此段期間！請從 Tor 瀏覽器中選擇綠色按鈕的“新身份”，來清除此設備上訪"
@@ -1021,7 +1117,18 @@ msgstr ""
 msgid "Submit Files or Messages"
 msgstr "提交檔案和訊息"
 
-#: source_templates/lookup.html:21
+#: source_templates/lookup.html:22
+msgid ""
+"Before you begin, turn off cross-site request sanitization in NoScript. This "
+"is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
+"\"text-link\">Show me how.</a>"
+msgstr ""
+
+#: source_templates/lookup.html:24
+msgid "You can submit any kind of file, a message, or both."
+msgstr "您可以提交任何類型的檔案，撰寫訊息或兩者都作。"
+
+#: source_templates/lookup.html:26
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1030,27 +1137,23 @@ msgstr ""
 "如果你熟悉 GPG，可以在提交之前選擇使用我們的<a href=\"{url}\" class=\"text-"
 "link\">公鑰</a> 來加密。透過 SecureDrop 收到的文檔都會經過加密。"
 
-#: source_templates/lookup.html:22
+#: source_templates/lookup.html:27
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">了解更多</a>."
 
-#: source_templates/lookup.html:24
-msgid "You can submit any kind of file, a message, or both."
-msgstr "您可以提交任何類型的檔案，撰寫訊息或兩者都作。"
-
-#: source_templates/lookup.html:33
+#: source_templates/lookup.html:37
 msgid "Maximum upload size: 500 MB"
 msgstr "檔案上傳限制：500 MB"
 
-#: source_templates/lookup.html:36
+#: source_templates/lookup.html:40
 msgid "Write a message."
 msgstr "撰寫一則訊息。"
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:62
 msgid "Read Replies"
 msgstr "閱讀回覆"
 
-#: source_templates/lookup.html:63
+#: source_templates/lookup.html:67
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1061,43 +1164,43 @@ msgstr ""
 "之全部刪除。這也讓我們知道您有看到我們的回覆。您可以在上面發送一份新檔案與訊"
 "息作回應。"
 
-#: source_templates/lookup.html:76
+#: source_templates/lookup.html:80
 msgid "Delete this reply?"
 msgstr "刪除這條回覆嗎？"
 
-#: source_templates/lookup.html:78
+#: source_templates/lookup.html:82
 msgid "DELETE"
 msgstr "删除"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:91
 msgid "DELETE ALL REPLIES"
 msgstr "删除所有回覆"
 
-#: source_templates/lookup.html:90
+#: source_templates/lookup.html:94
 msgid "Are you finished with the replies?"
 msgstr "您已完成了這些回覆嗎？"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:95
 msgid "YES, DELETE ALL REPLIES"
 msgstr "是的，删除所有回覆"
 
-#: source_templates/lookup.html:92
+#: source_templates/lookup.html:96
 msgid "NO, NOT YET"
 msgstr "不，尚未"
 
-#: source_templates/lookup.html:96
+#: source_templates/lookup.html:100
 msgid "There are no replies at this time."
 msgstr "此時尚無回覆。"
 
-#: source_templates/lookup.html:105
+#: source_templates/lookup.html:109
 msgid "Remember, your codename is:"
 msgstr "記住，您的代號是："
 
-#: source_templates/lookup.html:106
+#: source_templates/lookup.html:110
 msgid "Show"
 msgstr "顯示"
 
-#: source_templates/lookup.html:108
+#: source_templates/lookup.html:112
 msgid "Hide"
 msgstr "隱藏"
 
@@ -1110,15 +1213,21 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "對不起，未能處置您的請求。"
 
 #: source_templates/session_timeout.html:6
+#, fuzzy
+#| msgid ""
+#| "Your session timed out due to inactivity. Please login again if you want "
+#| "to continue using SecureDrop, or select \"New Identity\" from the green "
+#| "onion button in the Tor browser to clear all history of your SecureDrop "
+#| "usage from this device. If you are not using Tor Browser, restart your "
+#| "browser."
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
-"continue using SecureDrop, or select \"New Identity\" from the green onion "
-"button in the Tor browser to clear all history of your SecureDrop usage from "
-"this device. If you are not using Tor Browser, restart your browser."
+"continue using SecureDrop, or select \"New Identity\" from the onion button "
+"in the Tor browser's toolbar to clear all history of your SecureDrop usage "
+"from this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
-"由於聞置過久您的期間已經逾時。如果想繼續使用 SecureDrop，請再次登錄，或者在 "
-"Tor 瀏覽器的綠色洋葱按鈕中選擇“新身份”以清除設備上所有 SecureDrop 的歷史記"
-"錄。 如果您没使用 Tor 瀏覽器，則請重啟您的瀏覽器。"
+"由於聞置過久您的期間已經逾時。如果想繼續使用 SecureDrop，請再次登錄，或者在 Tor 瀏覽器工具列的洋葱按鈕中選擇“新身份”以清除設備上所有 "
+"SecureDrop 的歷史記錄。 如果您没使用 Tor 瀏覽器，則請重啟您的瀏覽器。"
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
