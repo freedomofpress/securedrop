@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2019-02-21 01:25+0000\n"
-"Last-Translator: Zuhualime Akoochimoya <zakooch@protonmail.ch>\n"
+"PO-Revision-Date: 2019-02-26 17:19+0000\n"
+"Last-Translator: Pablo Di Noto <pdinoto@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/es/>\n"
 "Language: es_ES\n"
@@ -413,7 +413,7 @@ msgstr "La contraseña del usuario será:"
 #: journalist_templates/admin_add_user.html:31
 #: journalist_templates/edit_account.html:17
 msgid "Is Admin"
-msgstr "Es Admin"
+msgstr "Es Administrador"
 
 #: journalist_templates/admin_add_user.html:39
 msgid "Is using a YubiKey [HOTP]"
@@ -441,8 +441,8 @@ msgid ""
 "required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
 "\"noreferrer\">Learn More</a>"
 msgstr ""
-"<strong>Seguridad en Estado Crítico:</strong> El sistema operativo usado por "
-"sus servidores SecureDrop ha alcanzado el final de su ciclo de vida. Se "
+"<strong>Situación crítica de Seguridad:</strong> El sistema operativo usado "
+"en sus servidores SecureDrop ha alcanzado el final de su ciclo de vida. Se "
 "necesita urgentemente una actualización manual para permanecer seguro - <a "
 "href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Aprender Más</a>"
 
@@ -923,9 +923,7 @@ msgstr ""
 
 #: source_templates/disable-noscript-xss.html:3
 msgid "Turn off NoScript's cross-site request sanitization setting"
-msgstr ""
-"Desactivar el ajuste de solicitud de sanitización para sitios cruzados de "
-"NoScript"
+msgstr "Desactivar la opción de limpieza de scripts inter-sitio de NoScript"
 
 #: source_templates/disable-noscript-xss.html:5
 msgid ""
@@ -935,10 +933,10 @@ msgid ""
 "is set to \"Safest\". Here's how:"
 msgstr ""
 "Debido a una cuestión con el Navegador Tor (<a href=\"{url}\">más "
-"detalles</a>), al momento las subidas no funcionan confiablemente mientras "
-"que la sanitización de solicitudes de sitios cruzados está activada. Es "
-"seguro desactivar esta característica mientras tu Regla Deslizante de "
-"Seguridad está en la posición \"Más Seguro\". He aquí cómo:"
+"detalles</a>), al momento las subidas no funcionan de forma confiable si la "
+"opción de limpieza de scripts inter-sitio está activada. Es seguro "
+"desactivar esta opción siempre y cuando el Deslizador de Seguridad se "
+"encuentre en la posición \"Más Seguro\". He aquí cómo:"
 
 #: source_templates/disable-noscript-xss.html:7
 msgid ""
@@ -946,9 +944,9 @@ msgid ""
 "\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
 "\"{noscript_icon_url}\">. This is the NoScript button."
 msgstr ""
-"Debieras encontrar el ícono de una \"S\" azul en la barra de herramientas "
-"del navegador Tor: <img class=\"inline\" src=\"{noscript_plain_icon_url}\"> "
-"o <img class=\"inline\" src=\"{noscript_icon_url}\">. Este es el botón de "
+"Debieras encontrar el icono de una \"S\" azul en la barra de herramientas "
+"del Navegador Tor: <img class=\"inline\" src=\"{noscript_plain_icon_url}\"> "
+"o <img class=\"inline\" src=\"{noscript_icon_url}\">. Ese es el botón de "
 "NoScript."
 
 #: source_templates/disable-noscript-xss.html:11
@@ -957,7 +955,7 @@ msgstr "1. Hacer clic en el botón de NoScript."
 
 #: source_templates/disable-noscript-xss.html:12
 msgid "The NoScript pane should appear. It looks like this:"
-msgstr "Debiera aparecer el panel de NoScript. Luce cómo ésto:"
+msgstr "Debiera aparecer el panel de NoScript. Se ve así:"
 
 #: source_templates/disable-noscript-xss.html:18
 msgid ""
@@ -971,8 +969,8 @@ msgstr ""
 msgid ""
 "The settings page should appear in a new browser tab. It looks like this:"
 msgstr ""
-"La página de ajustes debiera aparecer en una nueva pestaña del navegador. "
-"Luce cómo ésto:"
+"La página de ajustes debiera aparecer en una nueva pestaña del navegador. Se "
+"ve así:"
 
 #: source_templates/disable-noscript-xss.html:26
 msgid "3. Click the \"Advanced\" tab."
@@ -980,14 +978,11 @@ msgstr "3. Hacer clic en la pestaña \"Avanzado\"."
 
 #: source_templates/disable-noscript-xss.html:28
 msgid "The advanced settings tab should come into view. It looks like this:"
-msgstr ""
-"La pestaña de ajustes avanzados debiera aparecer a la vista. Luce cómo ésto:"
+msgstr "La pestaña de ajustes avanzados debiera aparecer a la vista. Se ve así:"
 
 #: source_templates/disable-noscript-xss.html:34
 msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
-"4. Hacer desaparecer el tilde en \"Sanitizar solicitudes sospechosas de "
-"sitios cruzados\"."
+msgstr "4. Quita el tilde en \"Limpieza de scripts sospechosos inter-sitios\"."
 
 #: source_templates/disable-noscript-xss.html:36
 msgid ""
@@ -995,8 +990,8 @@ msgid ""
 "soon as the browser issue is resolved, we will remove this recommendation."
 msgstr ""
 "Debido a una cuestión con el navegador, esto es requerido para que las "
-"subidas funcionen confiablemente. Tan pronto como sea resuelta, removeremos "
-"ésta recomendación."
+"subidas funcionen de forma confiable. Tan pronto como se resuelva este "
+"inconveniente, removeremos ésta recomendación."
 
 #: source_templates/disable-noscript-xss.html:40
 msgid ""
@@ -1016,8 +1011,7 @@ msgstr ""
 
 #: source_templates/disable-noscript-xss.html:46
 msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
-"6. Vuelve a tildar \"Sanitizar solicitudes sospechosas de sitios cruzados\"."
+msgstr "6. Vuelve a tildar \"Limpieza de scripts sospechosos inter-sitios\"."
 
 #: source_templates/disable-noscript-xss.html:48
 msgid ""
@@ -1025,9 +1019,9 @@ msgid ""
 "effect while your Security Slider is set to \"Safest\", but we recommend "
 "enabling it during normal Tor usage."
 msgstr ""
-"Repite los pasos 1-3 como arriba y vuelve a tildar el ajuste. El ajuste no "
-"tiene efecto mientras tu Regla Deslizante de Seguridad está en la posición \""
-"Más Seguro\", pero recomendamos habilitarlo durante el uso normal de Tor."
+"Repite los pasos 1 a 3 más arriba y vuelve a tildar el ajuste. El ajuste no "
+"tiene efecto mientras el Deslizador de Seguridad se encuentre en la posición "
+"\"Más Seguro\", pero recomendamos habilitarlo durante el uso normal de Tor."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1252,9 +1246,9 @@ msgid ""
 "is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
 "\"text-link\">Show me how.</a>"
 msgstr ""
-"Antes de empezar, desactiva la sanitización de solicitudes de sitios "
-"cruzados en NoScript. Esto es <strong>requerido</strong> para que funcionen "
-"las subidas. <a href=\"{url}\" class=\"text-link\">Muéstrame cómo.</a>"
+"Antes de empezar, desactiva la limpieza de scripts inter-sitios en NoScript. "
+"Esto es <strong>requerido</strong> para que funcionen las subidas. <a href=\""
+"{url}\" class=\"text-link\">Muéstrame cómo.</a>"
 
 #: source_templates/lookup.html:24
 msgid "You can submit any kind of file, a message, or both."
