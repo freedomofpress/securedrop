@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-12-07 10:17+0000\n"
+"PO-Revision-Date: 2019-02-26 17:19+0000\n"
 "Last-Translator: Adham Kurbanov <uz@zu.uz>\n"
 "Language-Team: Russian <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/ru/>\n"
@@ -15,9 +15,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2.20\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
+"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.4\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
@@ -438,6 +438,10 @@ msgid ""
 "required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
 "\"noreferrer\">Learn More</a>"
 msgstr ""
+"<strong>Критическое предупреждение:</strong> Операционная система которая "
+"использовалась серверами SecureDrop отслужила своё. Для безопасного "
+"сохранения данных требуется срочное ручное обновление - <a href=\""
+"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Подробнее</a>"
 
 #: journalist_templates/base.html:33
 msgid "Logged on as"
@@ -918,7 +922,7 @@ msgstr ""
 
 #: source_templates/disable-noscript-xss.html:3
 msgid "Turn off NoScript's cross-site request sanitization setting"
-msgstr ""
+msgstr "Отключить проверку меж-сайтовых запросов NoScript"
 
 #: source_templates/disable-noscript-xss.html:5
 msgid ""
@@ -927,6 +931,10 @@ msgid ""
 "is turned on. It is safe to turn off this feature while your Security Slider "
 "is set to \"Safest\". Here's how:"
 msgstr ""
+"Изза браузерной ошибки (<a href=\"{url}\">подробнее</a>), загрузки в "
+"браузере TOR на данный момент могут не сработать пока включена опция "
+"проверка меж-сайтовых запросов. Для безопасной работы рекомендуется "
+"выключить эту опцию. Вот инструкции:"
 
 #: source_templates/disable-noscript-xss.html:7
 msgid ""
@@ -934,59 +942,70 @@ msgid ""
 "\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
 "\"{noscript_icon_url}\">. This is the NoScript button."
 msgstr ""
+"Вы увидете синюю иконку \"S\" в панели инструментов браузера Tor: <img class="
+"\"inline\" src=\"{noscript_plain_icon_url}\"> или <img class=\"inline\" src="
+"\"{noscript_icon_url}\">. Это кнопка NoScript."
 
 #: source_templates/disable-noscript-xss.html:11
 msgid "1. Click on the NoScript button."
-msgstr ""
+msgstr "1. Нажмите на кнопку NoScript."
 
 #: source_templates/disable-noscript-xss.html:12
 msgid "The NoScript pane should appear. It looks like this:"
-msgstr ""
+msgstr "Появится панель NoScript. Оно выглядит вот так:"
 
 #: source_templates/disable-noscript-xss.html:18
 msgid ""
 "2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
 "src=\"{url}\">"
 msgstr ""
+"2. В панели NoScript нажмите на значек Настроек: <img class=\"inline\" src=\""
+"{url}\">"
 
 #: source_templates/disable-noscript-xss.html:20
 msgid ""
 "The settings page should appear in a new browser tab. It looks like this:"
-msgstr ""
+msgstr "В новой вкладке откроются настройки браузера. Примерно так:"
 
 #: source_templates/disable-noscript-xss.html:26
 msgid "3. Click the \"Advanced\" tab."
-msgstr ""
+msgstr "3. Нажмите на вкладку \"Расширенные\"."
 
 #: source_templates/disable-noscript-xss.html:28
 msgid "The advanced settings tab should come into view. It looks like this:"
-msgstr ""
+msgstr "Появятся расширенные настройки. Далее:"
 
 #: source_templates/disable-noscript-xss.html:34
 msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
+msgstr "4. Отключите \"Проверку подозрительных меж-сайтовых запросов\"."
 
 #: source_templates/disable-noscript-xss.html:36
 msgid ""
 "Due to a browser issue, this is required for uploads to work reliably. As "
 "soon as the browser issue is resolved, we will remove this recommendation."
 msgstr ""
+"Изза ошибки в браузере, это необходимо для корректной работы загрузок. Это "
+"предупреждение исчезнет, как только проблема будет устранена."
 
 #: source_templates/disable-noscript-xss.html:40
 msgid ""
 "5. Close the <i>NoScript Settings</i> browser tab and return to the "
 "SecureDrop tab."
 msgstr ""
+"5. Закройте вкладку <i>настроек NoScript</i> и вернитесь во вкладку "
+"SecureDrop."
 
 #: source_templates/disable-noscript-xss.html:42
 msgid ""
 "You can now upload your files. Please keep in mind that each file requires "
 "its own submission."
 msgstr ""
+"Теперь вы сможете загружать файлы. Только учтите что каждый файл должен "
+"загружаться отдельно."
 
 #: source_templates/disable-noscript-xss.html:46
 msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
+msgstr "6. Ещё раз проверьте \"Проверку подозрительных меж-сайтовых запросов\"."
 
 #: source_templates/disable-noscript-xss.html:48
 msgid ""
@@ -994,6 +1013,9 @@ msgid ""
 "effect while your Security Slider is set to \"Safest\", but we recommend "
 "enabling it during normal Tor usage."
 msgstr ""
+"Повторите выше указанные 1-3 шаги и ещё раз проверьте настройку. Настройка "
+"не появлияет на \"Самый безопасный\" показатель, но мы рекомендуем его "
+"включать во время обычного использования Tor."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1171,11 +1193,6 @@ msgid "Important!"
 msgstr "Важно!"
 
 #: source_templates/logout_flashed_message.html:5
-#, fuzzy
-#| msgid ""
-#| "Thank you for exiting your session! Please select \"New Identity\" from "
-#| "the green onion button in the Tor browser to clear all history of your "
-#| "SecureDrop usage from this device."
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
 "onion button in the Tor browser's toolbar to clear all history of your "
@@ -1219,6 +1236,9 @@ msgid ""
 "is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
 "\"text-link\">Show me how.</a>"
 msgstr ""
+"Сначала необходимо отключить проверку меж-сайтовых запросов NoScript. Это "
+"<strong>нужно</strong> для нормальной работы загрузок. <a href=\"{url}\" "
+"class=\"text-link\">Посмотреть как.</a>"
 
 #: source_templates/lookup.html:24
 msgid "You can submit any kind of file, a message, or both."
@@ -1312,13 +1332,6 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "К сожалению, мы не смогли найти то, что вы просили."
 
 #: source_templates/session_timeout.html:6
-#, fuzzy
-#| msgid ""
-#| "Your session timed out due to inactivity. Please login again if you want "
-#| "to continue using SecureDrop, or select \"New Identity\" from the green "
-#| "onion button in the Tor browser to clear all history of your SecureDrop "
-#| "usage from this device. If you are not using Tor Browser, restart your "
-#| "browser."
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
 "continue using SecureDrop, or select \"New Identity\" from the onion button "
