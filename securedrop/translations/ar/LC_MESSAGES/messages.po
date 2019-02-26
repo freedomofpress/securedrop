@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2019-02-25 14:50+0000\n"
+"PO-Revision-Date: 2019-02-26 17:18+0000\n"
 "Last-Translator: Ahmad Gharbeia <gharbeia@gmail.com>\n"
 "Language-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/ar/>\n"
@@ -58,7 +58,8 @@ msgstr "الاسم {user} سبق تخصيصه لمستخدم آخر."
 #: journalist_app/admin.py:85
 msgid ""
 "An error occurred saving this user to the database. Please inform your admin."
-msgstr "حدث عطل أثناء تسجيل المستخدم في قاعدة البيانات. الرجاء إبلاغ الإداري."
+msgstr ""
+"حدث عطل أثناء حفظ حساب المستخدم في قاعدة البيانات. الرجاء إبلاغ الإداري."
 
 #: journalist_app/admin.py:109
 msgid "Token in two-factor authentication accepted for user {user}."
@@ -82,7 +83,7 @@ msgstr "لم يتم اختيار أي مجموعة."
 
 #: journalist_app/decorators.py:15
 msgid "Only admins can access this page."
-msgstr "النّفاذ إلى هذه الصفحة متاح للإداريين وحدهم."
+msgstr "الإداريون وحدهم بوسعهم النّفاذ إلى هذه الصفحة."
 
 #: journalist_app/forms.py:19
 msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
@@ -115,7 +116,7 @@ msgstr "لا يمكن رفع ملفات غير PNG."
 #: journalist_app/main.py:118 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
 msgid "An unexpected error occurred! Please inform your admin."
-msgstr "حدث عطل غير متوقع. رجاء إبلاغ الإداري."
+msgstr "حدث عطل غير متوقع. الرجاء إبلاغ الإداري."
 
 #: journalist_app/main.py:129
 msgid "Thanks. Your reply has been stored."
@@ -405,11 +406,11 @@ msgstr "الرجوع إلى واجهة الإدارة"
 
 #: journalist_templates/admin_add_user.html:23
 msgid "Username can contain spaces"
-msgstr "يمكن أن يضم أسم المستخدم مسافات"
+msgstr "يمكن أن يحوي اسم المستخدم مسافات"
 
 #: journalist_templates/admin_add_user.html:24
 msgid "Username is case-sensitive"
-msgstr "حالة الأحرف (كبيرة\\صغيرة) تنطبق على اسم المستخدم"
+msgstr "اسم المستخدم يمايو ما بين الأحرف اللاتينية الكبيرة و الصغيرة"
 
 #: journalist_templates/admin_add_user.html:28
 msgid "The user's password will be:"
@@ -418,7 +419,7 @@ msgstr "كلمة سر المستخدم:"
 #: journalist_templates/admin_add_user.html:31
 #: journalist_templates/edit_account.html:17
 msgid "Is Admin"
-msgstr "من الإدارة"
+msgstr "إداري"
 
 #: journalist_templates/admin_add_user.html:39
 msgid "Is using a YubiKey [HOTP]"
@@ -444,10 +445,9 @@ msgid ""
 "required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
 "\"noreferrer\">Learn More</a>"
 msgstr ""
-"<strong>تنبيه أمنى حرج</strong>نظام التشغيل المستخدم فى خوادم SecureDrop "
-"الخاصة بك قد وصلت الى نهاية مدة الخدمة. التحديث الغير تلقائى العاجل ضرورى "
-"للبقاء آمنا - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">"
-"لمعرفة المزيد</a>"
+"<strong>تنبيه أمنى حرج</strong>نظام التشغيل المستخدم فى خواديم SecureDrop "
+"الخاصة بك قد بلغ نهاية مدة الخدمة. يجب تحديثه يدويًّا لإبقائه آمنا - <a href="
+"\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">لمعرفة المزيد</a>"
 
 #: journalist_templates/base.html:33
 msgid "Logged on as"
@@ -909,7 +909,7 @@ msgstr ""
 
 #: source_templates/disable-noscript-xss.html:3
 msgid "Turn off NoScript's cross-site request sanitization setting"
-msgstr "قم بوقف خاصية تطهير الطلبات من المواقع الأخرى الخاصة ب NoScript"
+msgstr "عطِّل وظيفة تطهير الطلبات من المواقع الأخرى في NoScript"
 
 #: source_templates/disable-noscript-xss.html:5
 msgid ""
@@ -918,11 +918,10 @@ msgid ""
 "is turned on. It is safe to turn off this feature while your Security Slider "
 "is set to \"Safest\". Here's how:"
 msgstr ""
-"نتيجة لمشكلة فى المتصفح <a href=\"{url}\">المزيد من التفاصيل</a>، رفع "
-"الملفات لا يعمل بصورة يعتمد عليها فى متصفح تور أثناء تشغيل خاصية تطهير "
-"الطلبات من المواقع الأخرى. من الآمن وقف هذه الخاصية عندما تكون اعدادات "
-"الأمان مضبوطة على \"الأكثر أمانا\".\n"
-"هذه هى الطريقة:"
+"بسبب علّة فى المتصفح <a href=\"{url}\">المزيد من التفاصيل</a> فإن رفع "
+"الملفات لا يعمل كما ينبغي في متصفح تور عند تفعيل وظيفة تطهير الطلبات من "
+"المواقع الأخرى. وقف هذه الوظيفة يُعدُّ آمنا طالما كانت إعدادات الأمان مضبوطة "
+"على \"الأكثر أمانا\". و ذلك كما يلي:"
 
 #: source_templates/disable-noscript-xss.html:7
 msgid ""
@@ -930,43 +929,43 @@ msgid ""
 "\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
 "\"{noscript_icon_url}\">. This is the NoScript button."
 msgstr ""
-"المفروض أن تجد ايقونة \"S\" زرقاء فى شريط الأدوات الخاص بتور: <img class=\""
+"توجد ايقونة \"S\" زرقاء فى شريط الأدوات الخاص بالمتصفّح تور: <img class=\""
 "inline\" src=\"{noscript_plain_icon_url}\"> أو <img class=\"inline\" src=\""
-"{noscript_icon_url}\">. هذا هو زرر NoScript."
+"{noscript_icon_url}\">. هذا هو زرّ NoScript."
 
 #: source_templates/disable-noscript-xss.html:11
 msgid "1. Click on the NoScript button."
-msgstr "1. اضغط على زرر NoScript."
+msgstr "1. اضغط زرّ NoScript."
 
 #: source_templates/disable-noscript-xss.html:12
 msgid "The NoScript pane should appear. It looks like this:"
-msgstr "ستظهر قائمة NoScript. تبدو كالشكل الآتى:"
+msgstr "ستظهر قائمة NoScript و هي تبدو كما يلي:"
 
 #: source_templates/disable-noscript-xss.html:18
 msgid ""
 "2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
 "src=\"{url}\">"
 msgstr ""
-"2. فى قائمة NoScript، اضغط على ايقونة الاعدادات: <img class=\"inline\" src=\""
+"2. فى قائمة NoScript، اضغط ايقونة الاعدادات: <img class=\"inline\" src=\""
 "{url}\">"
 
 #: source_templates/disable-noscript-xss.html:20
 msgid ""
 "The settings page should appear in a new browser tab. It looks like this:"
-msgstr "صفحة الاعدادات ستظهر فى تبويب جديد فى المتصفح. تبدو بالشكل الآتى:"
+msgstr "صفحة الإعدادات ستظهر في لسان جديد في المتصفح. تبدو كالتالي:"
 
 #: source_templates/disable-noscript-xss.html:26
 msgid "3. Click the \"Advanced\" tab."
-msgstr "3. اضغط على تبويب \"Advanced\"."
+msgstr "3. افتح لسان \"Advanced\"."
 
 #: source_templates/disable-noscript-xss.html:28
 msgid "The advanced settings tab should come into view. It looks like this:"
-msgstr "تبويب الاعدادات المتقدمة سيظهر فى الواجهة. يبدو بالشكل الآتى:"
+msgstr "سيظهر لسان الإعدادات المتقدمة في الواجهة. يبدو كالتالي:"
 
 #: source_templates/disable-noscript-xss.html:34
 msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
 msgstr ""
-"قم بالغاء اختيار تطهير طلبات المواقع الأخرى \"Sanitize cross-site suspicious "
+"عطِّل خيار تطهير طلبات المواقع الأخرى \"Sanitize cross-site suspicious "
 "requests\"."
 
 #: source_templates/disable-noscript-xss.html:36
@@ -974,26 +973,26 @@ msgid ""
 "Due to a browser issue, this is required for uploads to work reliably. As "
 "soon as the browser issue is resolved, we will remove this recommendation."
 msgstr ""
-"نتيجة لمشكلة فى المتصفح، هذا الأمر لازم لعمل رفع الملفات على نحو موثوق منه. "
-"بمجرد حل مشكلة المتصفح، سنقوم بحذف هذه التوصية."
+"بسبب علَّة في المتصفح، فإن هذا الأمر لازم ليعمل رفع الملفات كما ينبغي. فور "
+"تدارك علّة المتصفح سنحذف هذه التوصية."
 
 #: source_templates/disable-noscript-xss.html:40
 msgid ""
 "5. Close the <i>NoScript Settings</i> browser tab and return to the "
 "SecureDrop tab."
 msgstr ""
-"5. أغلق تبويب المتصفح ل<i>إعدادات NoScript</i> و إرجع إلى تبويب SecureDrop."
+"5. أغلق لسان <i>إعدادات NoScript</i> في المتصفّح و ارجع إلى لسان SecureDrop."
 
 #: source_templates/disable-noscript-xss.html:42
 msgid ""
 "You can now upload your files. Please keep in mind that each file requires "
 "its own submission."
-msgstr "الآن يمكنك رفع ملفاتك. من فضلك تذكر أن كل ملف يستلزم رفعه على حدة."
+msgstr "الآن يمكنك رفع الملفات. تذكَّر أن كل ملف يستلزم رفعه على حدة."
 
 #: source_templates/disable-noscript-xss.html:46
 msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
 msgstr ""
-"6. قم باعادة اختيار تطهير طلبات المواقع الأخرى \"Sanitize cross-site "
+"6. أعد تفعيل خيار تطهير طلبات المواقع الأخرى \"Sanitize cross-site "
 "suspicious requests\"."
 
 #: source_templates/disable-noscript-xss.html:48
@@ -1002,9 +1001,9 @@ msgid ""
 "effect while your Security Slider is set to \"Safest\", but we recommend "
 "enabling it during normal Tor usage."
 msgstr ""
-"أعد الخطوات من 1-3 بالأعلى و أعد تشغيل الخاصية. الخاصية ليس لها نأثير عندما "
-"تكون اعدادات الأمان مضبوطة على الأكثر أمانا \"Safest\"، و لكننا نوصى "
-"بتفعيلها اثناء الأستخدام العادى لتور."
+"أعد الخطوات من 1-3 المبيّنة أعلاه و أعد تفعيل الخيار. الوظيفة ليس لها تأثير "
+"عندما تكون إعدادات الأمان مضبوطة على الأكثر أمانا \"Safest\"، لكننا نوصى "
+"بتفعيلها أثناء الاستخدام الاعتيادي لتور."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1177,8 +1176,8 @@ msgid ""
 "onion button in the Tor browser's toolbar to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
-"شكرا للخروج من الجلسة. الآن اختر \"هوية جديدة\" بضغط زرر البصلة من شريط "
-"الأدوات الخاص بمتصفح تور لطمس أثر استخدامك SecureDrop من هذا الجهاز."
+"شكرًا لخروجك من الجلسة. الآن اختر \"هوية جديدة\" بضغط زرّ البصلة من شريط "
+"الأدوات في متصفح تور لطمس أثر استخدامك SecureDrop من هذا الجهاز."
 
 #: source_templates/lookup.html:11
 msgid "Whew, it’s you! Now, the embarrassing part..."
@@ -1213,9 +1212,9 @@ msgid ""
 "is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
 "\"text-link\">Show me how.</a>"
 msgstr ""
-"قبل البدء، قم بوقف خاصية تطهير طلبات المواقع الأخرى \"cross-site request "
+"قبل البدء عطّل وظيفة تطهير طلبات المواقع الأخرى \"cross-site request "
 "sanitization\" فى NoScript. هذا الأمر <strong>لازم</strong> لكى يعمل رفع "
-"الملفات. <a href=\"{url}\" class=\"text-link\">أرنى الطريقة.</a>"
+"الملفات. <a href=\"{url}\" class=\"text-link\">طالع: كيفية عمل ذلك.</a>"
 
 #: source_templates/lookup.html:24
 msgid "You can submit any kind of file, a message, or both."
@@ -1314,10 +1313,10 @@ msgid ""
 "in the Tor browser's toolbar to clear all history of your SecureDrop usage "
 "from this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
-"تم الخروج من الحساب بسبب انعدام التفاعل. تمكنك معاودة الولوج لمواصلة استخدام "
-"SecureDrop إن أردت، أو إذا كنت قد فرغت من استخدامه فاختر \"هوية جديدة\" من "
-"خلال الضغط على زرر البصلة في شريط أدوات متصفح تور لطمس أثر استخدامك "
-"SecureDrop من هذا الجهاز. أما إذا كنت لا تستخدم تور فينبغي عليك إغلاق و&nbsp;"
+"تم الخروج من الجلسة بسبب انعدام التفاعل. تمكنك معاودة الولوج لمواصلة استخدام "
+"SecureDrop إن أردت، أو إذا كنت قد فرغت من استخدامه فاختر \"هوية جديدة\" "
+"بالضغط على زرّ البصلة في شريط أدوات متصفح تور لطمس أثر استخدامك SecureDrop "
+"من هذا الجهاز. أما إذا كنت لا تستخدم متصفّح تور فينبغي عليك إغلاق و&nbsp;"
 "إعادة تشغيل المتصفّح."
 
 #: source_templates/tor2web-warning.html:3
