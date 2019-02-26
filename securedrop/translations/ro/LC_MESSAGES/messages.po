@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-02-25 19:01+0000\n"
-"Last-Translator: robbpa <robbpaun@gmail.com>\n"
+"PO-Revision-Date: 2019-02-26 17:19+0000\n"
+"Last-Translator: Jobava <jobaval10n@gmail.com>\n"
 "Language-Team: Romanian <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/ro/>\n"
 "Language: ro\n"
@@ -140,7 +140,7 @@ msgstr "Sursa „{original_name}” a fost redenumită „{new_name}”"
 
 #: journalist_app/main.py:194
 msgid "No unread submissions for this source."
-msgstr "Nu sunt transmisii necitite de la această sursă."
+msgstr "Nu sunt trimiteri necitite de la această sursă."
 
 #: journalist_app/utils.py:55
 msgid "Account updated."
@@ -215,7 +215,7 @@ msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
 msgstr ""
-"Parola a fost actualizată. Nu uita să o salvezi în baza de ta date KeePassX. "
+"Parola a fost actualizată. Nu uita să o salvezi în baza ta de date KeePassX. "
 "Parola nouă:"
 
 #: journalist_app/utils.py:312
@@ -445,10 +445,11 @@ msgid ""
 "required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
 "\"noreferrer\">Learn More</a>"
 msgstr ""
-"<strong>Alertă de securitate:</strong> Sistemul de operare folosit de "
-"serverele SecureDrop este învechit. Este necesară de urgență actualizarea "
-"manuală a sistemului pentru a rămâne în siguranță - <a href=\"//securedrop."
-"org/xenial-upgrade\" rel=\"noreferrer\">Aflați mai multe</a>"
+"<strong>Alertă critică de securitate:</strong> Sistemul de operare folosit "
+"de serverele SecureDrop a ajuns la sfârșitul duratei de viață. Este necesară "
+"de urgență actualizarea manuală a sistemului pentru a rămâne în siguranță - <"
+"a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Află mai "
+"multe</a>"
 
 #: journalist_templates/base.html:33
 msgid "Logged on as"
@@ -934,10 +935,10 @@ msgid ""
 "is set to \"Safest\". Here's how:"
 msgstr ""
 "Din cauza unei probleme de browser (<a href=\"{url}\">mai multe detalii</a>)"
-", încărcările pot să nu meargă în mod consistent din browserul Tor în timp "
-"ce este activată funcția „cross-site request sanitization”. Această funcție "
-"poate fi dezactivată în siguranță atât timp cât este menținut glisorul de "
-"securitate la nivelul „Cel mai sigur”. Iată cum:"
+", este posibil ca încărcările de fișiere să nu meargă fiabil în browserul "
+"Tor cât timp este activă funcția „cross-site request sanitization”. Funcția "
+"poate fi dezactivată în siguranță dacă securitatea este setată pe nivelul „"
+"Cel mai sigur”. Iată cum:"
 
 #: source_templates/disable-noscript-xss.html:7
 msgid ""
@@ -952,7 +953,7 @@ msgstr ""
 
 #: source_templates/disable-noscript-xss.html:11
 msgid "1. Click on the NoScript button."
-msgstr "1. Clic pe butonul NoScript."
+msgstr "1. Dă clic pe butonul NoScript."
 
 #: source_templates/disable-noscript-xss.html:12
 msgid "The NoScript pane should appear. It looks like this:"
@@ -1007,12 +1008,11 @@ msgid ""
 "You can now upload your files. Please keep in mind that each file requires "
 "its own submission."
 msgstr ""
-"Acum poți încărca fișierele tale. Fiecare fișier are nevoie de propria "
-"trimitere."
+"Acum poți încărca fișiere. Reține că fiecare fișier trebuie trimis separat."
 
 #: source_templates/disable-noscript-xss.html:46
 msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
-msgstr "6. Reverifică „Sanitize cross-site suspicious requests”."
+msgstr "6. Verifică din nou „Sanitize cross-site suspicious requests”."
 
 #: source_templates/disable-noscript-xss.html:48
 msgid ""
@@ -1021,9 +1021,8 @@ msgid ""
 "enabling it during normal Tor usage."
 msgstr ""
 "Repetă pașii 1-3 de mai sus și verifică din nou setarea. Setarea nu are "
-"efect în timp ce glisorul de securitate este setat la nivelul „Cel mai sigur”"
-", dar recomandăm activarea setării în timpul utilizării normale a "
-"browserului Tor."
+"efect cât timp securitatea este pe nivelul „Cel mai sigur”, dar recomandăm "
+"activarea ei în timpul utilizării normale a browserului Tor."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1246,8 +1245,8 @@ msgid ""
 "is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
 "\"text-link\">Show me how.</a>"
 msgstr ""
-"Înainte de a începe, dezactivează dezinfectarea solicitărilor între site-uri "
-"în NoScript. Acest lucru este <strong>necesar</strong> pentru funcționarea "
+"Înainte de a începe, dezactivează „cross-site request sanitization” în "
+"NoScript. Acest lucru este <strong>necesar</strong> pentru funcționarea "
 "încărcărilor de fișiere. <a href=\"{url}\" class=\"text-link\">Arată-mi "
 "cum.</a>"
 
