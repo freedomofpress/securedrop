@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-12-11 05:55+0000\n"
+"PO-Revision-Date: 2019-02-26 17:19+0000\n"
 "Last-Translator: Chandan Kumar <chkumar246@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/hi/>\n"
@@ -16,14 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.20\n"
+"X-Generator: Weblate 3.4\n"
 "Generated-By: Babel 2.5.1\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "{time} पहले"
 
-#: journalist_app/__init__.py:80 journalist_app/__init__.py:119
+#: journalist_app/__init__.py:89 journalist_app/__init__.py:128
 msgid "You have been logged out due to inactivity"
 msgstr "निष्क्रियता के कारण आपको लॉग आउट कर दिया गया है"
 
@@ -58,8 +58,7 @@ msgstr "उपयोगकर्ता नाम \"{user}\" पहले से 
 msgid ""
 "An error occurred saving this user to the database. Please inform your admin."
 msgstr ""
-"इस उपयोगकर्ता को डेटाबेस में सहेजने समय त्रुटि हुई। कृपया अपने व्यवस्थापक को "
-"सूचित करें।"
+"इस उपयोगकर्ता को डेटाबेस में सहेजने समय त्रुटि हुई। कृपया अपने व्यवस्थापक को सूचित करें।"
 
 #: journalist_app/admin.py:109
 msgid "Token in two-factor authentication accepted for user {user}."
@@ -206,7 +205,7 @@ msgid "Close"
 msgstr "बंद करे"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:77
+#: journalist_templates/col.html:15 source_templates/lookup.html:81
 msgid "Cancel"
 msgstr "रद्द करें"
 
@@ -312,7 +311,7 @@ msgstr "प्रमाणीकरण संख्या"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:45
+#: journalist_templates/col.html:99 source_templates/lookup.html:49
 msgid "SUBMIT"
 msgstr "जमा करें"
 
@@ -409,19 +408,31 @@ msgstr ""
 "दर्ज करने को कहें ताकि यह पुष्टि हो सके की दो कारक प्रमाणीकरण को सही तरीके से सेटअप "
 "किया गया है|"
 
-#: journalist_templates/base.html:24
+#: journalist_templates/base.html:28
+msgid ""
+"<strong>Critical Security:</strong> The operating system used by your "
+"SecureDrop servers has reached its end-of-life. A manual update is urgently "
+"required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
+"\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>गंभीर सिक्यूरिटी समस्या:</strong>आपके SecureDrop सर्वर द्वारा उपयोग "
+"किए जाने वाला ऑपरेटिंग सिस्टम बहुत पुरानी हो चुकी है। सुरक्षित रहने के लिए "
+"मैन्युअल अपडेट की तत्काल आवश्यकता है - <a href=\"//securedrop.org/xenial-"
+"upgrade\" rel=\"noreferrer\">और जानें</a>"
+
+#: journalist_templates/base.html:33
 msgid "Logged on as"
 msgstr "जैसे लॉग ऑन"
 
-#: journalist_templates/base.html:26
+#: journalist_templates/base.html:35
 msgid "Admin"
 msgstr "व्यवस्थापक"
 
-#: journalist_templates/base.html:28
+#: journalist_templates/base.html:37
 msgid "Log Out"
 msgstr "लोग आउट"
 
-#: journalist_templates/base.html:41
+#: journalist_templates/base.html:50
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -429,7 +440,7 @@ msgstr ""
 "<br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\"> द्वारा "
 "संचालित"
 
-#: journalist_templates/base.html:56
+#: journalist_templates/base.html:65
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "<em>SecureDrop {version}</em> दवारा संचालित।"
 
@@ -649,7 +660,7 @@ msgstr "कृपया अपना वर्तमान पासवर्ड
 msgid "Current Password"
 msgstr "वर्तमान पासवर्ड"
 
-#: journalist_templates/edit_account.html:41 journalist_templates/login.html:10
+#: journalist_templates/edit_account.html:41 journalist_templates/login.html:11
 msgid "Two-factor Code"
 msgstr "दो-कारक कोड"
 
@@ -789,7 +800,7 @@ msgstr "पत्रकार इंटरफेस प्रवेशने क
 msgid "Password"
 msgstr "पासवर्ड"
 
-#: journalist_templates/login.html:11
+#: journalist_templates/login.html:12
 msgid "LOG IN"
 msgstr "लॉग इन"
 
@@ -819,31 +830,31 @@ msgstr ""
 "आपको पुनर्निर्देशित किया गया था क्योंकि आप पहले ही लॉग इन हैं। यदि आप एक नया खाता "
 "बनाना चाहते हैं, तो आपको पहले लॉग आउट करना चाहिए।"
 
-#: source_app/main.py:133
+#: source_app/main.py:132
 msgid "You must enter a message or choose a file to submit."
 msgstr "सबमिट करने के लिए आपको कोई संदेश दर्ज करना होगा या एक फ़ाइल चुनें |"
 
-#: source_app/main.py:166
+#: source_app/main.py:165
 msgid "Thanks! We received your message."
 msgstr "धन्यवाद! हमें आपका संदेशा मिला|"
 
-#: source_app/main.py:168
+#: source_app/main.py:167
 msgid "Thanks! We received your document."
 msgstr "धन्यवाद! हमें आपका दस्तावेज़ मिला।"
 
-#: source_app/main.py:170
+#: source_app/main.py:169
 msgid "Thanks! We received your message and document."
 msgstr "धन्यवाद! हमें आपका संदेशा और दस्तावेज़ मिला।"
 
-#: source_app/main.py:223
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "जवाब हटा दिया गया"
 
-#: source_app/main.py:241
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "सभी उत्तर हटा दिए गए हैं"
 
-#: source_app/main.py:255
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "क्षमा करें, वह एक मान्यता प्राप्त कोडनाम नहीं है |"
 
@@ -867,6 +878,104 @@ msgid ""
 msgstr ""
 "सभी सॉफ़्टवेयर की तरह, SecureDrop में सुरक्षा की खामियां हो सकती हैं। अपने जोखिम पर "
 "इस्तेमाल करें।"
+
+#: source_templates/disable-noscript-xss.html:3
+msgid "Turn off NoScript's cross-site request sanitization setting"
+msgstr "NoScript की क्रॉस-साइट अनुरोध सैनिटाइजेशन सेटिंग को बंद करें"
+
+#: source_templates/disable-noscript-xss.html:5
+msgid ""
+"Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do not "
+"currently work reliably in Tor Browser while cross-site request sanitization "
+"is turned on. It is safe to turn off this feature while your Security Slider "
+"is set to \"Safest\". Here's how:"
+msgstr ""
+"ब्राउज़र में समस्या के कारण (<a href=\"{url}\">अधिक जानकारी </a>), क्रॉस-सा"
+"इट अनुरोध सैनिटाइजेशन ऑन होने के कारण Tor ब्राउज़र में अभी अपलोड काम नहीं कर "
+"रहा है. अपने सुरक्षा स्लाइडर को \"सबसे सुरक्षित\" पर सेट करके इस फीचर को "
+"आसानी से बंद कर सकते है. यहां जानिए कैसे:"
+
+#: source_templates/disable-noscript-xss.html:7
+msgid ""
+"You should find a blue \"S\" icon in the Tor browser's toolbar: <img class="
+"\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
+"\"{noscript_icon_url}\">. This is the NoScript button."
+msgstr ""
+"आपको Tor ब्राउज़र के टूलबार में नीला \"S\" आइकन मिलना चाहिए: <img class=\""
+"inline\" src=\"{noscript_plain_icon_url}\"> और  <img class=\"inline\" src=\""
+"{noscript_icon_url}\">. यह NoScript बटन है."
+
+#: source_templates/disable-noscript-xss.html:11
+msgid "1. Click on the NoScript button."
+msgstr "1. NoScript बटन पर क्लिक करें."
+
+#: source_templates/disable-noscript-xss.html:12
+msgid "The NoScript pane should appear. It looks like this:"
+msgstr "NoScript पैन दिखाई देना चाहिए. यह इस तरह दिखता है:"
+
+#: source_templates/disable-noscript-xss.html:18
+msgid ""
+"2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
+"src=\"{url}\">"
+msgstr ""
+"2. NoScript पैन में, सेटिंग्स आइकन पर क्लिक करें: <img class=\"inline\" src="
+"\"{url}\">"
+
+#: source_templates/disable-noscript-xss.html:20
+msgid ""
+"The settings page should appear in a new browser tab. It looks like this:"
+msgstr "नए ब्राउज़र टैब में सेटिंग्स पेज दिखेगा. यह इस तरह दिखता है:"
+
+#: source_templates/disable-noscript-xss.html:26
+msgid "3. Click the \"Advanced\" tab."
+msgstr "3.\"एडवांस्ड\" टैब पर क्लिक करें."
+
+#: source_templates/disable-noscript-xss.html:28
+msgid "The advanced settings tab should come into view. It looks like this:"
+msgstr "एडवांस्ड सेटिंग्स टैब व्यू में दिखेगा. यह ऐसा दिखता है :"
+
+#: source_templates/disable-noscript-xss.html:34
+msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
+msgstr "4.\"क्रॉस-साइट संदिग्ध अनुरोधों को संचित करें\" को अनचेक करें."
+
+#: source_templates/disable-noscript-xss.html:36
+msgid ""
+"Due to a browser issue, this is required for uploads to work reliably. As "
+"soon as the browser issue is resolved, we will remove this recommendation."
+msgstr ""
+"ब्राउज़र समस्या के कारण, अपलोड को सही रूप से कार्य करने के लिए यह जरुरी है. "
+"जैसे ही ब्राउज़र समस्या हल हो जाएगी, हम इस सिफारिश को हटा देंगे."
+
+#: source_templates/disable-noscript-xss.html:40
+msgid ""
+"5. Close the <i>NoScript Settings</i> browser tab and return to the "
+"SecureDrop tab."
+msgstr ""
+"5. <i>NoScript सेटिंग</i> ब्राउज़र टैब बंद करें और SecureDrop टैब पर वापस "
+"लौटें."
+
+#: source_templates/disable-noscript-xss.html:42
+msgid ""
+"You can now upload your files. Please keep in mind that each file requires "
+"its own submission."
+msgstr ""
+"अब आप अपनी फ़ाइलें अपलोड कर सकते हैं. कृपया ध्यान रखें कि प्रत्येक फ़ाइल को "
+"अपनी सबमिशन की आवश्यकता होती है."
+
+#: source_templates/disable-noscript-xss.html:46
+msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
+msgstr "6.  \"क्रॉस-साइट संदिग्ध अनुरोधों को संचित करें\" को  फिर से टिक करें."
+
+#: source_templates/disable-noscript-xss.html:48
+msgid ""
+"Repeat steps 1-3 from above and re-check the setting. The setting has no "
+"effect while your Security Slider is set to \"Safest\", but we recommend "
+"enabling it during normal Tor usage."
+msgstr ""
+"ऊपर से 1-3 स्टेप्स को पुनः दोहराएं और सेटिंग को फिर से जांचें. आपके सुरक्षा "
+"स्लाइडर को \"सबसे सुरक्षित\" पर सेट होने कर कारण आपके सेटिंग्स में कुछ बदलाब "
+"नहीं आएगा, लेकिन हम इसे सामान्य Tor उपयोग के दौरान इसे सक्षम करने की सलाह "
+"देते हैं।"
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1025,7 +1134,7 @@ msgstr "संकेत नाम दर्ज करें"
 msgid "Enter your codename"
 msgstr "आपका संकेत नाम दर्ज करें"
 
-#: source_templates/login.html:25 source_templates/lookup.html:51
+#: source_templates/login.html:25 source_templates/lookup.html:55
 msgid "CANCEL"
 msgstr "रद्द करें"
 
@@ -1037,12 +1146,12 @@ msgstr "जरूरी!"
 #: source_templates/logout_flashed_message.html:5
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
-"green onion button in the Tor browser to clear all history of your "
+"onion button in the Tor browser's toolbar to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
-"अपने सत्र से बाहर निकलने के लिए धन्यवाद! कृपया इस उपकरण से आपके SecureDrop उपयोग के "
-"सभी इतिहास को साफ़ करने के लिए Tor ब्राउज़र में हरी प्याज बटन पे जाकर \"New Identity"
-"\" चुनें|"
+"अपने सत्र से बाहर निकलने के लिए धन्यवाद! कृपया इस उपकरण से आपके SecureDrop "
+"उपयोग के सभी इतिहास को साफ़ करने के लिए Tor ब्राउज़र के टूलबार में हरी प्याज "
+"बटन पे जाकर \"New Identity\" चुनें|"
 
 #: source_templates/lookup.html:11
 msgid "Whew, it’s you! Now, the embarrassing part..."
@@ -1072,7 +1181,21 @@ msgstr ""
 msgid "Submit Files or Messages"
 msgstr "फ़ाइलें या संदेश जमा करें"
 
-#: source_templates/lookup.html:21
+#: source_templates/lookup.html:22
+msgid ""
+"Before you begin, turn off cross-site request sanitization in NoScript. This "
+"is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
+"\"text-link\">Show me how.</a>"
+msgstr ""
+"शुरू करने से पहले, NoScript में क्रॉस-साइट रिक्वेस्ट सैनिटाइजेशन को बंद कर "
+"दें। उपलोड को काम करने के लिए यह <strong>जरुरी</strong> है. <a href=\"{url}\""
+" class=\"text-link\">जानने के लिए यहाँ देखें.</a>"
+
+#: source_templates/lookup.html:24
+msgid "You can submit any kind of file, a message, or both."
+msgstr "आप किसी भी तरह की फाइल, एक संदेश, या दोनों जमा कर सकते हैं।"
+
+#: source_templates/lookup.html:26
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1083,27 +1206,23 @@ msgstr ""
 "\">सार्वजनिक  कुंजी</a> का प्रयोग करके| फ़ाइलों को एन्क्रिप्ट किया गया है क्योंकि वे "
 "SecureDrop के द्वारा प्राप्त की जाती हैं।"
 
-#: source_templates/lookup.html:22
+#: source_templates/lookup.html:27
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">अधिक जानें</a>|"
 
-#: source_templates/lookup.html:24
-msgid "You can submit any kind of file, a message, or both."
-msgstr "आप किसी भी तरह की फाइल, एक संदेश, या दोनों जमा कर सकते हैं।"
-
-#: source_templates/lookup.html:33
+#: source_templates/lookup.html:37
 msgid "Maximum upload size: 500 MB"
 msgstr "अधिकतम अपलोड माप: 500 MB"
 
-#: source_templates/lookup.html:36
+#: source_templates/lookup.html:40
 msgid "Write a message."
 msgstr "सन्देश लिखिए।"
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:62
 msgid "Read Replies"
 msgstr "उत्तर पढ़ें"
 
-#: source_templates/lookup.html:63
+#: source_templates/lookup.html:67
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1114,43 +1233,43 @@ msgstr ""
 "जाये, कृपया पढ़े जा चुके उत्तरों तो मिटा दें| यह इस बात की भी पुष्टि कर देता है की आपको "
 "हमारा उत्तर मिल गया है| आप नई फाइलें और संदेश भी जमा कर सकते हैं|"
 
-#: source_templates/lookup.html:76
+#: source_templates/lookup.html:80
 msgid "Delete this reply?"
 msgstr "यह उत्तर हटाएं?"
 
-#: source_templates/lookup.html:78
+#: source_templates/lookup.html:82
 msgid "DELETE"
 msgstr "हटाएँ"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:91
 msgid "DELETE ALL REPLIES"
 msgstr "सभी उत्तर हटाएं"
 
-#: source_templates/lookup.html:90
+#: source_templates/lookup.html:94
 msgid "Are you finished with the replies?"
 msgstr "क्या आपने सभी उत्तर पढ़ लिए?"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:95
 msgid "YES, DELETE ALL REPLIES"
 msgstr "हाँ, सभी उत्तर हटाएं"
 
-#: source_templates/lookup.html:92
+#: source_templates/lookup.html:96
 msgid "NO, NOT YET"
 msgstr "नहीं, अभी तक नहीं"
 
-#: source_templates/lookup.html:96
+#: source_templates/lookup.html:100
 msgid "There are no replies at this time."
 msgstr "इस समय कोई जवाब नहीं है|"
 
-#: source_templates/lookup.html:105
+#: source_templates/lookup.html:109
 msgid "Remember, your codename is:"
 msgstr "याद रखें, आपका संकेत नाम है:"
 
-#: source_templates/lookup.html:106
+#: source_templates/lookup.html:110
 msgid "Show"
 msgstr "दिखाएं"
 
-#: source_templates/lookup.html:108
+#: source_templates/lookup.html:112
 msgid "Hide"
 msgstr "छुपाएं"
 
@@ -1165,14 +1284,15 @@ msgstr "क्षमा करें, हम आपके द्वारा अ
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
-"continue using SecureDrop, or select \"New Identity\" from the green onion "
-"button in the Tor browser to clear all history of your SecureDrop usage from "
-"this device. If you are not using Tor Browser, restart your browser."
+"continue using SecureDrop, or select \"New Identity\" from the onion button "
+"in the Tor browser's toolbar to clear all history of your SecureDrop usage "
+"from this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
-"निष्क्रियता के कारण आपका सत्र समाप्त हो गया। यदि आप SecureDrop का उपयोग करना जारी "
-"रखना चाहते हैं तोह लॉग इन करें, या फिर इस ब्राउज़र से आपके SecureDrop उपयोग के सभी "
-"इतिहास को साफ करने के लिए Tor ब्राउज़र में हरी प्याज बटन से \"New Identity\" का चयन "
-"करें। यदि आप Tor ब्राउज़र का उपयोग नहीं कर रहे हैं, तो अपने ब्राउज़र को पुनः आरंभ करें।"
+"निष्क्रियता के कारण आपका सत्र समाप्त हो गया। यदि आप SecureDrop का उपयोग करना "
+"जारी रखना चाहते हैं तोह लॉग इन करें, या फिर इस ब्राउज़र से आपके SecureDrop "
+"उपयोग के सभी इतिहास को साफ करने के लिए Tor ब्राउज़र के टूलबार में प्याज बटन "
+"से \"New Identity\" का चयन करें। यदि आप Tor ब्राउज़र का उपयोग नहीं कर रहे हैं"
+", तो अपने ब्राउज़र को पुनः आरंभ करें।"
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
