@@ -22,9 +22,9 @@ Download Ubuntu Trusty server ISO
 ---------------------------------
 
 On ``sd-dev``, download the Ubuntu Trusty server ISO, along with corresponding
-checksum and signature files. See the :ref:`hardware installation docs <download_trusty>`
-for detailed instructions. If you opt for the command line instructions,
-omit the ``torify`` prepended to the ``curl`` command.
+checksum and signature files. See the :ref:`hardware installation docs <download_ubuntu>`
+for detailed instructions, replacing Xenial with Trusty (``16.04`` with ``14.04``). If you opt for the command line
+instructions, omit the ``torify`` prepended to the ``curl`` command.
 
 Create the Trusty base VM
 -------------------------
@@ -58,7 +58,7 @@ In ``dom0``:
 You may need to edit the filepath above if you downloaded the ISO to a
 different location within the ``sd-dev`` VM. Choose **Install Ubuntu**.
 For the most part, the install process matches the
-:ref:`hardware install flow <install_trusty>`, with a few exceptions:
+:ref:`hardware install flow <install_ubuntu>`, with a few exceptions:
 
   -  Server IP address: use value returned by ``qvm-prefs sd-trusty-base ip``, with ``/24`` netmask suffix
   -  Gateway: use value returned by ``qvm-prefs sd-trusty-base visible_gateway``
