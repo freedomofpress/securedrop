@@ -1,13 +1,15 @@
 Set Up the Servers
 ==================
 
-Now that the firewall is set up, you can plug the *Application Server*
-and the *Monitor Server* into the firewall. If you are using a setup
-where there is a switch on the LAN port, plug the *Application Server*
-into the switch and plug the *Monitor Server* into the OPT1 port.
 
 Install Ubuntu
 --------------
+
+.. caution:: As of this writing (2019-02-26), Ubuntu ISO images ship a version of
+    the `apt` package that is vulnerable to CVE-2019-3462. The SecureDrop installer
+    has mitigations in place to ensure the package is safely upgraded. We
+    recommend you perform the initial Ubuntu install on servers that do not have
+    Internet connectivity.
 
 .. note:: Installing Ubuntu is simple and may even be something you are very familiar
   with, but we **strongly** encourage you to read and follow this documentation
@@ -292,8 +294,13 @@ When you are done, make sure you save the following information:
 Test Connectivity
 -----------------
 
-Now that both the network firewall and the servers are connected and
-configured, you should make sure you can connect from the Admin
+
+Now that the firewall is set up, you can plug the *Application Server*
+and the *Monitor Server* into the firewall. If you are using a setup
+where there is a switch on the LAN port, plug the *Application Server*
+into the switch and plug the *Monitor Server* into the OPT1 port.
+
+You should make sure you can connect from the Admin
 Workstation to both of the servers before continuing with the
 installation.
 
