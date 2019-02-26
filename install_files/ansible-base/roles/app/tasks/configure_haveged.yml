@@ -75,6 +75,9 @@
     line: "After=apparmor.service systemd-random-seed.service"
     backrefs: yes
   when: haveged_apparmor.stat.exists
+  notify:
+    - restart apparmor
+    - restart haveged
   tags:
     - haveged
     - hardening
