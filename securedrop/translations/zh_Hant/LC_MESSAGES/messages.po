@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2019-02-21 17:11+0000\n"
+"PO-Revision-Date: 2019-02-26 17:18+0000\n"
 "Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/"
 "projects/securedrop/securedrop/zh_Hant/>\n"
@@ -858,6 +858,9 @@ msgid ""
 "\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
 "\"{noscript_icon_url}\">. This is the NoScript button."
 msgstr ""
+"可在 Tor 瀏覽器工具列找到 \"S\" 圖標：<img class=\"inline\" src=\""
+"{noscript_plain_icon_url}\"> 或 <img class=\"inline\" src=\""
+"{noscript_icon_url}\">。 這是 NoScript 按鈕。"
 
 #: source_templates/disable-noscript-xss.html:11
 msgid "1. Click on the NoScript button."
@@ -876,48 +879,48 @@ msgstr "2. 在 NoScript 面板，點擊 Setting 設置圖示: <img class=\"inlin
 #: source_templates/disable-noscript-xss.html:20
 msgid ""
 "The settings page should appear in a new browser tab. It looks like this:"
-msgstr ""
+msgstr "設置頁面應會顯示在新的瀏覽器標籤分頁，大概像這樣："
 
 #: source_templates/disable-noscript-xss.html:26
 msgid "3. Click the \"Advanced\" tab."
-msgstr ""
+msgstr "3. 點擊 \"進階 Advanced\" 標籤頁。"
 
 #: source_templates/disable-noscript-xss.html:28
 msgid "The advanced settings tab should come into view. It looks like this:"
-msgstr ""
+msgstr "進階的設置標籤分頁會出現，大概像這樣："
 
 #: source_templates/disable-noscript-xss.html:34
 msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
+msgstr "4. 取消勾選 \"禁止跨站可疑的請求 Sanitize cross-site suspicious requests\"。"
 
 #: source_templates/disable-noscript-xss.html:36
 msgid ""
 "Due to a browser issue, this is required for uploads to work reliably. As "
 "soon as the browser issue is resolved, we will remove this recommendation."
-msgstr ""
+msgstr "由於瀏覽器問題，為了可靠地上傳必須如此。一旦瀏覽器問題解決了，就會移除此項推薦。"
 
 #: source_templates/disable-noscript-xss.html:40
 msgid ""
 "5. Close the <i>NoScript Settings</i> browser tab and return to the "
 "SecureDrop tab."
-msgstr ""
+msgstr "5. 關閉瀏覽器標籤分頁的 <i>NoScript 設置</i>，回到 SecureDrop 分頁。"
 
 #: source_templates/disable-noscript-xss.html:42
 msgid ""
 "You can now upload your files. Please keep in mind that each file requires "
 "its own submission."
-msgstr ""
+msgstr "現在可以上傳檔案，請記住每個檔案需要它本身的提交。"
 
 #: source_templates/disable-noscript-xss.html:46
 msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
+msgstr "6. 重新勾選 \"禁止跨站可疑的請求 Sanitize cross-site suspicious requests\"。"
 
 #: source_templates/disable-noscript-xss.html:48
 msgid ""
 "Repeat steps 1-3 from above and re-check the setting. The setting has no "
 "effect while your Security Slider is set to \"Safest\", but we recommend "
 "enabling it during normal Tor usage."
-msgstr ""
+msgstr "重覆上述 1-3 步驟並重新勾選設置。這個設定不會影響安全等級設為最高，但建議在正常使用 Tor  時即啟用最高安全等級。"
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1078,18 +1081,11 @@ msgid "Important!"
 msgstr "重要！"
 
 #: source_templates/logout_flashed_message.html:5
-#, fuzzy
-#| msgid ""
-#| "Thank you for exiting your session! Please select \"New Identity\" from "
-#| "the green onion button in the Tor browser to clear all history of your "
-#| "SecureDrop usage from this device."
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
 "onion button in the Tor browser's toolbar to clear all history of your "
 "SecureDrop usage from this device."
-msgstr ""
-"感谢退出此段期間！請從 Tor 瀏覽器中選擇綠色按鈕的“新身份”，來清除此設備上訪"
-"問 SecureDrop 的所有記錄。"
+msgstr "感谢退出此段期間！請從 Tor 瀏覽器中選擇綠色按鈕的“新身份”，來清除此設備上訪問 SecureDrop 的所有記錄。"
 
 #: source_templates/lookup.html:11
 msgid "Whew, it’s you! Now, the embarrassing part..."
@@ -1123,6 +1119,8 @@ msgid ""
 "is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
 "\"text-link\">Show me how.</a>"
 msgstr ""
+"開始前，請關閉 NoScript 的跨站請求禁止。這是為了能夠上傳檔案<strong>所需</strong>。<a href=\"{url}\" "
+"class=\"text-link\">操作示範</a>"
 
 #: source_templates/lookup.html:24
 msgid "You can submit any kind of file, a message, or both."
@@ -1213,13 +1211,6 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "對不起，未能處置您的請求。"
 
 #: source_templates/session_timeout.html:6
-#, fuzzy
-#| msgid ""
-#| "Your session timed out due to inactivity. Please login again if you want "
-#| "to continue using SecureDrop, or select \"New Identity\" from the green "
-#| "onion button in the Tor browser to clear all history of your SecureDrop "
-#| "usage from this device. If you are not using Tor Browser, restart your "
-#| "browser."
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
 "continue using SecureDrop, or select \"New Identity\" from the onion button "
