@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-02-22 10:32+0000\n"
-"Last-Translator: EBonsi <webmaster@beart.com>\n"
+"PO-Revision-Date: 2019-02-26 17:19+0000\n"
+"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.securedrop.org/projects/"
 "securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -284,12 +284,12 @@ msgstr "Instale o FreeOTP no seu telefone"
 #: journalist_templates/account_new_two_factor.html:9
 #: journalist_templates/admin_new_user_two_factor.html:10
 msgid "Open the FreeOTP app"
-msgstr "Abrir o app FreeOTP"
+msgstr "Abrir o aplicativo FreeOTP"
 
 #: journalist_templates/account_new_two_factor.html:10
 #: journalist_templates/admin_new_user_two_factor.html:11
 msgid "Tap the QR code symbol at the top"
-msgstr "Toque no símbolo do código QR no alto da tela"
+msgstr "Clique no símbolo do código QR no alto da tela"
 
 #: journalist_templates/account_new_two_factor.html:11
 #: journalist_templates/admin_new_user_two_factor.html:12
@@ -304,8 +304,8 @@ msgstr ""
 #: journalist_templates/admin_new_user_two_factor.html:15
 msgid "Can't scan the barcode? Enter the following code manually:"
 msgstr ""
-"Não está conseguindo escanear o código de barras? Insira manualmente o "
-"código abaixo:"
+"Não está conseguindo escanear o código de barras? Insira o código abaixo "
+"manualmente:"
 
 #: journalist_templates/account_new_two_factor.html:15
 #: journalist_templates/admin_new_user_two_factor.html:18
@@ -572,9 +572,9 @@ msgid ""
 "the files seen here will be unrecoverable and the source will no longer be "
 "able to login using their previous codename.</em>"
 msgstr ""
-"Clique abaixo para excluir a coleção desta fonte. <em> Cuidado: não será "
-"possível recuperar os arquivos da coleção, e a fonte não poderá mais se "
-"conectar com o codinome atual. </em>"
+"Clique abaixo para excluir a coleção desta fonte. <em> Cuidado: Se você "
+"fizer isso, os arquivos serão irrecuperáveis e a fonte não poderá mais usar "
+"o codinome atual para se conectar. </em>"
 
 #: journalist_templates/col.html:121
 msgid "DELETE SOURCE AND SUBMISSIONS"
@@ -712,10 +712,10 @@ msgid ""
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
 "Se as credenciais de autenticação de dois fatores de um usuário forem "
-"perdidas ou comprometidas, você pode redefini-las aqui. <em>Ao fazê-lo, essa "
-"pessoa deve estar presente e preparada para configurar o aparelho dela com "
-"as novas credenciais. Caso contrário, ela não poderá mais acessar a própria "
-"conta."
+"perdidas ou comprometidas, você poderá redefini-las aqui. <em>Ao fazê-lo, "
+"essa pessoa deverá estar presente e preparada para configurar o aparelho "
+"dela com as novas credenciais. Caso contrário, ela não poderá mais acessar a "
+"própria conta."
 
 #: journalist_templates/edit_account.html:63
 msgid ""
@@ -724,10 +724,10 @@ msgid ""
 "this, make sure you are ready to set up your new device, otherwise you will "
 "be locked out of your account.</em>"
 msgstr ""
-"Se suas credenciais de autenticação de dois fatores foram perdidas ou "
-"comprometidas - ou se você mudou de aparelho -, é possível redefini-las "
-"aqui. <em>Caso deseje fazê-lo, tenha seu aparelho à mão para configurá-lo. "
-"Caso contrário, não será mais possível acessar a sua conta.</em>"
+"Se suas credenciais de autenticação de dois fatores tiverem sido perdidas ou "
+"comprometidas - ou se você tiver mudado de aparelho -, é possível redefini-"
+"las aqui. <em>Caso deseje fazê-lo, tenha seu aparelho à mão para configurá-"
+"lo. Caso contrário, não será mais possível acessar a sua conta.</em>"
 
 #: journalist_templates/edit_account.html:65
 msgid ""
@@ -784,7 +784,7 @@ msgstr "Marcar"
 
 #: journalist_templates/index.html:14
 msgid "Un-star"
-msgstr "Retirar marcação"
+msgstr "Desmarcar"
 
 #: journalist_templates/index.html:47
 msgid "Are you sure you want to delete the selected collections?"
@@ -831,7 +831,7 @@ msgstr "Senha"
 
 #: journalist_templates/login.html:12
 msgid "LOG IN"
-msgstr "ENTRAR"
+msgstr "ACESSAR"
 
 #: source_app/__init__.py:115
 msgid ""
@@ -910,9 +910,7 @@ msgstr ""
 
 #: source_templates/disable-noscript-xss.html:3
 msgid "Turn off NoScript's cross-site request sanitization setting"
-msgstr ""
-"Desativar o No-Script entre sites na requisição de configuração de "
-"sanitização"
+msgstr "Desativar a opção de sanitização de scripts entre sites no NoScript."
 
 #: source_templates/disable-noscript-xss.html:5
 msgid ""
@@ -921,11 +919,11 @@ msgid ""
 "is turned on. It is safe to turn off this feature while your Security Slider "
 "is set to \"Safest\". Here's how:"
 msgstr ""
-"Devido a um problema no navegador (<a href=\"{url}\">mais detalhes</a>), os "
-"uploads atualmente não funcionam de maneira confiável no Navegador Tor, "
-"quando a requisição de sanitização entre sites está ativada. Você pode "
-"desativar esse recurso enquanto o seu Slider de Segurança estiver definido "
-"como \"Mais Seguro\". Veja como:"
+"Devido a um problema no navegador (<a href=\"{url}\">mais detalhes</a>), "
+"neste momento não é possível carregar dados de maneira confiável no "
+"Navegador Tor, quando a requisição de sanitização de scripts entre sites "
+"estiver ativada. Você pode desativar este recurso enquanto a sua Barra de "
+"Segurança estiver definida como \"O Mais Seguro\". Veja como:"
 
 #: source_templates/disable-noscript-xss.html:7
 msgid ""
@@ -935,30 +933,30 @@ msgid ""
 msgstr ""
 "Você deve encontrar um ícone azul \"S\" na barra de ferramentas do navegador "
 "Tor: <img class=\"inline\" src=\"{noscript_plain_icon_url}\"> ou <img class="
-"\"inline\" src=\"{noscript_icon_url}\">. Este é o botão No-Script."
+"\"inline\" src=\"{noscript_icon_url}\">. Este é o botão NoScript."
 
 #: source_templates/disable-noscript-xss.html:11
 msgid "1. Click on the NoScript button."
-msgstr "1. Clique no botão No-Script."
+msgstr "1. Clique no ícone NoScript."
 
 #: source_templates/disable-noscript-xss.html:12
 msgid "The NoScript pane should appear. It looks like this:"
-msgstr "O painel No-Script deve aparecer. Se parece com isso:"
+msgstr "O painel NoScript deve aparecer. Ele parece assim:"
 
 #: source_templates/disable-noscript-xss.html:18
 msgid ""
 "2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
 "src=\"{url}\">"
 msgstr ""
-"2. No painel No-Script, clique no ícone Configurações: <img class=\"inline\" "
-"src=\"{url}\">"
+"2. No painel NoScript, clique no ícone Opções: <img class=\"inline\" src=\""
+"{url}\">"
 
 #: source_templates/disable-noscript-xss.html:20
 msgid ""
 "The settings page should appear in a new browser tab. It looks like this:"
 msgstr ""
-"A página de configurações deve aparecer em uma nova aba do navegador. Se "
-"parece com isso:"
+"A página de opções deve aparecer em uma nova aba do navegador. Ella parece "
+"assim:"
 
 #: source_templates/disable-noscript-xss.html:26
 msgid "3. Click the \"Advanced\" tab."
@@ -966,27 +964,27 @@ msgstr "3. Clique na aba \"Avançado\"."
 
 #: source_templates/disable-noscript-xss.html:28
 msgid "The advanced settings tab should come into view. It looks like this:"
-msgstr "A aba de configurações avançadas deve aparecer. Se parece com isso:"
+msgstr "A aba de opções avançadas deve aparecer. Ela parece assim:"
 
 #: source_templates/disable-noscript-xss.html:34
 msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
-msgstr "4. Desmarque a opção \"Sanitize solicitações suspeitas entre sites\"."
+msgstr "4. Desmarque a opção \"Sanitizar solicitações entre sites suspeitas\"."
 
 #: source_templates/disable-noscript-xss.html:36
 msgid ""
 "Due to a browser issue, this is required for uploads to work reliably. As "
 "soon as the browser issue is resolved, we will remove this recommendation."
 msgstr ""
-"Devido a um problema no navegador, isso é necessário para que os envios "
-"funcionem de maneira confiável. Assim que o problema do navegador for "
-"resolvido, removeremos essa recomendação."
+"Devido a um problema no navegador, isso é necessário para que os "
+"carregamentos funcionem de maneira confiável. Assim que o problema do "
+"navegador for resolvido, removeremos esta recomendação."
 
 #: source_templates/disable-noscript-xss.html:40
 msgid ""
 "5. Close the <i>NoScript Settings</i> browser tab and return to the "
 "SecureDrop tab."
 msgstr ""
-"5. Fechar o <i>NoScript Settings</i> na aba do navegador e retorne à aba do "
+"5. Fechar as <i>Opções NoScript </i> na aba do navegador e retornar à aba do "
 "SecureDrop."
 
 #: source_templates/disable-noscript-xss.html:42
@@ -994,13 +992,12 @@ msgid ""
 "You can now upload your files. Please keep in mind that each file requires "
 "its own submission."
 msgstr ""
-"Agora você pode fazer o upload de seus arquivos. Por favor, tenha em mente "
-"que cada arquivo requer o seu próprio envio."
+"Agora você pode carregar arquivos. Por favor, lembre-se que cada arquivo "
+"requer o seu próprio envio."
 
 #: source_templates/disable-noscript-xss.html:46
 msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
-"6. Verificar novamente a \"Requisição suspeita de sanitização entre sites\"."
+msgstr "6. Reverificar  \"Sanitizar solicitações entre sites suspeitas\"."
 
 #: source_templates/disable-noscript-xss.html:48
 msgid ""
@@ -1008,10 +1005,9 @@ msgid ""
 "effect while your Security Slider is set to \"Safest\", but we recommend "
 "enabling it during normal Tor usage."
 msgstr ""
-"Repetir as etapas de 1 a 3 acima e verifique novamente a configuração. A "
-"configuração não tem efeito quando o Slider de Segurança estiver definido "
-"como \"Mais Seguro\", mas nós recomendamos ativá-lo durante o uso normal do "
-"Tor."
+"Repita as etapas de 1 a 3 acima e reverifique a configuração. A configuração "
+"não tem efeito quando a Barra de Segurança estiver definida como \"O Mais "
+"Seguro\", mas nós recomendamos ativá-la durante o uso normal do Tor."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1021,7 +1017,7 @@ msgstr "Erro no servidor"
 msgid ""
 "Sorry, the website encountered an error and was unable to complete your "
 "request."
-msgstr "Desculpe, o sistema encontrou um erro e não pôde completar a operação."
+msgstr "Desculpe, o website encontrou um erro e não pôde completar a operação."
 
 #: source_templates/error.html:7 source_templates/notfound.html:7
 msgid "Look up a codename..."
@@ -1331,11 +1327,11 @@ msgid ""
 "in the Tor browser's toolbar to clear all history of your SecureDrop usage "
 "from this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
-"Sua sessão foi encerrada por inatividade. Por favor, faça login novamente se "
-"quiser continuar usando o SecureDrop ou clique no ícone da cebola - na barra "
-"de ferramentas do navegador Tor - e selecione \"Nova Identidade\" para "
-"limpar o seu histórico de atividades do SecureDrop neste aparelho. Se não "
-"estiver usando o Tor, reinicie o navegador."
+"Sua sessão foi encerrada por inatividade. Para continuar usando o "
+"SecureDrop, faça login novamente ou clique no ícone da cebola - na barra de "
+"ferramentas do navegador Tor - e selecione \"Nova Identidade\" para limpar o "
+"seu histórico de atividades do SecureDrop neste aparelho. Se não estiver "
+"usando o Tor, reinicie o navegador."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
