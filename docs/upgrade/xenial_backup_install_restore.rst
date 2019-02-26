@@ -291,7 +291,7 @@ encounter any issues, you can always contact us by the following means:
 - via our `community forums <https://forum.securedrop.org>`_.
 
 If you encounter problems that are not security-sensitive, we also encourage you
-to `file an issue <https://github.com/freedomofpress/securedrop/issues/new/>`
+to `file an issue <https://github.com/freedomofpress/securedrop/issues/new/>`_
 in our public GitHub repository.
 
 .. caution:: 
