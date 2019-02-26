@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-02-18 09:14+0000\n"
-"Last-Translator: Jobava <jobaval10n@gmail.com>\n"
+"PO-Revision-Date: 2019-02-25 19:01+0000\n"
+"Last-Translator: robbpa <robbpaun@gmail.com>\n"
 "Language-Team: Romanian <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/ro/>\n"
 "Language: ro\n"
@@ -778,7 +778,7 @@ msgstr ""
 
 #: journalist_templates/flag.html:10
 msgid "Continue to the list of documents for {codename}..."
-msgstr "Continuă la lista de documente pentru {codename}..."
+msgstr "Deschide lista de documente pentru {codename}..."
 
 #: journalist_templates/index.html:4
 msgid "Sources"
@@ -924,6 +924,7 @@ msgstr ""
 #: source_templates/disable-noscript-xss.html:3
 msgid "Turn off NoScript's cross-site request sanitization setting"
 msgstr ""
+"Dezactivează setarea din NoScript pentru „cross-site request sanitization”"
 
 #: source_templates/disable-noscript-xss.html:5
 msgid ""
@@ -932,6 +933,11 @@ msgid ""
 "is turned on. It is safe to turn off this feature while your Security Slider "
 "is set to \"Safest\". Here's how:"
 msgstr ""
+"Din cauza unei probleme de browser (<a href=\"{url}\">mai multe detalii</a>)"
+", încărcările pot să nu meargă în mod consistent din browserul Tor în timp "
+"ce este activată funcția „cross-site request sanitization”. Această funcție "
+"poate fi dezactivată în siguranță atât timp cât este menținut glisorul de "
+"securitate la nivelul „Cel mai sigur”. Iată cum:"
 
 #: source_templates/disable-noscript-xss.html:7
 msgid ""
@@ -939,59 +945,74 @@ msgid ""
 "\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
 "\"{noscript_icon_url}\">. This is the NoScript button."
 msgstr ""
+"Ar trebui să găsești o pictogramă albastră de forma literei „S” în bara de "
+"instrumente a browserului Tor: <img class = \"inline\" src = \""
+"{noscript_plain_icon_url}\"> sau <img class = \"inline\" src = \""
+"{noscript_icon_url}\">. Acesta este butonul NoScript."
 
 #: source_templates/disable-noscript-xss.html:11
 msgid "1. Click on the NoScript button."
-msgstr ""
+msgstr "1. Clic pe butonul NoScript."
 
 #: source_templates/disable-noscript-xss.html:12
 msgid "The NoScript pane should appear. It looks like this:"
-msgstr ""
+msgstr "Ar trebui să apară panoul NoScript. Arată astfel:"
 
 #: source_templates/disable-noscript-xss.html:18
 msgid ""
 "2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
 "src=\"{url}\">"
 msgstr ""
+"2. În panoul NoScript, dă clic pe pictograma Setări: <img class=\"inline\" "
+"src=\"{url}\">"
 
 #: source_templates/disable-noscript-xss.html:20
 msgid ""
 "The settings page should appear in a new browser tab. It looks like this:"
 msgstr ""
+"Pagina cu setări ar trebui să apară într-o filă nouă de browser. Arată "
+"astfel:"
 
 #: source_templates/disable-noscript-xss.html:26
 msgid "3. Click the \"Advanced\" tab."
-msgstr ""
+msgstr "3. Dă clic pe fila „Avansat”."
 
 #: source_templates/disable-noscript-xss.html:28
 msgid "The advanced settings tab should come into view. It looks like this:"
-msgstr ""
+msgstr "Va fi afișată eticheta cu setările avansate. Arată astfel:"
 
 #: source_templates/disable-noscript-xss.html:34
 msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
+msgstr "4. Debifează „Sanitize cross-site suspicious requests”."
 
 #: source_templates/disable-noscript-xss.html:36
 msgid ""
 "Due to a browser issue, this is required for uploads to work reliably. As "
 "soon as the browser issue is resolved, we will remove this recommendation."
 msgstr ""
+"Din cauza unei probleme de browser, acest lucru este necesar pentru ca "
+"încărcările să funcționeze corect. De îndată ce rezolvăm problema "
+"browserului, vom elimina această recomandare."
 
 #: source_templates/disable-noscript-xss.html:40
 msgid ""
 "5. Close the <i>NoScript Settings</i> browser tab and return to the "
 "SecureDrop tab."
 msgstr ""
+"5. Închide fila cu <i>setări NoScript</i> din browser și revino la fila cu "
+"SecureDrop."
 
 #: source_templates/disable-noscript-xss.html:42
 msgid ""
 "You can now upload your files. Please keep in mind that each file requires "
 "its own submission."
 msgstr ""
+"Acum poți încărca fișierele tale. Fiecare fișier are nevoie de propria "
+"trimitere."
 
 #: source_templates/disable-noscript-xss.html:46
 msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
+msgstr "6. Reverifică „Sanitize cross-site suspicious requests”."
 
 #: source_templates/disable-noscript-xss.html:48
 msgid ""
@@ -999,6 +1020,10 @@ msgid ""
 "effect while your Security Slider is set to \"Safest\", but we recommend "
 "enabling it during normal Tor usage."
 msgstr ""
+"Repetă pașii 1-3 de mai sus și verifică din nou setarea. Setarea nu are "
+"efect în timp ce glisorul de securitate este setat la nivelul „Cel mai sigur”"
+", dar recomandăm activarea setării în timpul utilizării normale a "
+"browserului Tor."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1178,18 +1203,13 @@ msgid "Important!"
 msgstr "Important!"
 
 #: source_templates/logout_flashed_message.html:5
-#, fuzzy
-#| msgid ""
-#| "Thank you for exiting your session! Please select \"New Identity\" from "
-#| "the green onion button in the Tor browser to clear all history of your "
-#| "SecureDrop usage from this device."
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
 "onion button in the Tor browser's toolbar to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
 "Îți mulțumim că ai închis sesiunea! Te rugăm să selectezi „Identitate nouă” "
-"din butonul ca un bulb de ceapă verde din browserul Tor pentru a șterge tot "
+"din butonul ca un bulb de ceapă din browserul Tor pentru a șterge tot "
 "istoricul de utilizare SecureDrop de pe acest dispozitiv."
 
 #: source_templates/lookup.html:11
@@ -1226,6 +1246,10 @@ msgid ""
 "is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
 "\"text-link\">Show me how.</a>"
 msgstr ""
+"Înainte de a începe, dezactivează dezinfectarea solicitărilor între site-uri "
+"în NoScript. Acest lucru este <strong>necesar</strong> pentru funcționarea "
+"încărcărilor de fișiere. <a href=\"{url}\" class=\"text-link\">Arată-mi "
+"cum.</a>"
 
 #: source_templates/lookup.html:24
 msgid "You can submit any kind of file, a message, or both."
@@ -1319,24 +1343,18 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "Ne pare rău, nu am găsit ce căutai."
 
 #: source_templates/session_timeout.html:6
-#, fuzzy
-#| msgid ""
-#| "Your session timed out due to inactivity. Please login again if you want "
-#| "to continue using SecureDrop, or select \"New Identity\" from the green "
-#| "onion button in the Tor browser to clear all history of your SecureDrop "
-#| "usage from this device. If you are not using Tor Browser, restart your "
-#| "browser."
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
 "continue using SecureDrop, or select \"New Identity\" from the onion button "
 "in the Tor browser's toolbar to clear all history of your SecureDrop usage "
 "from this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
-"Sesiunea ta s-a terminat din cauza inactivității. Trebuie să te autentifici "
-"din nou dacă vrei să continui utilizarea SecureDrop sau poți alege "
-"„Identitate nouă” din butonul cu ceapă verde din browserul Tor pentru a "
-"șterge tot istoricul de folosire SecureDrop de pe acest dispozitiv. Dacă nu "
-"folosești browserul Tor, repornește browserul."
+"Sesiunea ta a fost închisă din cauza inactivității. Te rugăm să te "
+"autentifici din nou dacă vrei să continui utilizarea SecureDrop sau poți "
+"alege „Identitate nouă” din butonul ca un bulb de ceapă din bara cu "
+"instrumente a browserului Tor pentru a șterge tot istoricul tău de "
+"SecureDrop de pe acest dispozitiv. Dacă nu folosești browserul Tor, "
+"repornește browserul."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
