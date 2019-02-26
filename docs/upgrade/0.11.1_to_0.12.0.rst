@@ -93,7 +93,8 @@ As part of planning the upgrade, choose which upgrade method you want to follow:
 - :doc:`Upgrading in place <xenial_upgrade_in_place>`.
   This method can be performed remotely without physical access to the servers.
   It requires significant downtime, and you may encounter upgrade-related prompts
-  specific to your configuration which we have not documented.
+  specific to your configuration which we have not documented, especially if you
+  are using hardware not in our set of :ref:`hardware recommendations <Specific Hardware Recommendations>`.
 
 - :doc:`Backing up your data and restoring it to a new installation <xenial_backup_install_restore>`.
   This method requires that you have physical access to the servers and hardware
