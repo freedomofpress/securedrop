@@ -85,6 +85,21 @@ class TestI18NTool(object):
             po_file)
         assert exists(po_file)
 
+        # Regression test to trigger bug introduced when adding
+        # Romanian as an accepted language.
+        locale = 'ro'
+        po_file = join(str(tmpdir), locale + ".po")
+        msginit(
+            '--no-translator',
+            '--locale', locale,
+            '--output', po_file,
+            '--input', messages_file)
+        source = 'SecureDrop Source Interfaces'
+        sed('-i', '-e',
+            '/{}/,+1s/msgstr ""/msgstr "SOURCE RO"/'.format(source),
+            po_file)
+        assert exists(po_file)
+
         #
         # Compile but do not extract+update
         #
