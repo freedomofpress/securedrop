@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-12-11 05:55+0000\n"
+"PO-Revision-Date: 2019-02-26 17:19+0000\n"
 "Last-Translator: Chandan Kumar <chkumar246@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/hi/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.20\n"
+"X-Generator: Weblate 3.4\n"
 "Generated-By: Babel 2.5.1\n"
 
 #: template_filters.py:14
@@ -415,6 +415,10 @@ msgid ""
 "required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
 "\"noreferrer\">Learn More</a>"
 msgstr ""
+"<strong>गंभीर सिक्यूरिटी समस्या:</strong>आपके SecureDrop सर्वर द्वारा उपयोग "
+"किए जाने वाला ऑपरेटिंग सिस्टम बहुत पुरानी हो चुकी है। सुरक्षित रहने के लिए "
+"मैन्युअल अपडेट की तत्काल आवश्यकता है - <a href=\"//securedrop.org/xenial-"
+"upgrade\" rel=\"noreferrer\">और जानें</a>"
 
 #: journalist_templates/base.html:33
 msgid "Logged on as"
@@ -877,7 +881,7 @@ msgstr ""
 
 #: source_templates/disable-noscript-xss.html:3
 msgid "Turn off NoScript's cross-site request sanitization setting"
-msgstr ""
+msgstr "NoScript की क्रॉस-साइट अनुरोध सैनिटाइजेशन सेटिंग को बंद करें"
 
 #: source_templates/disable-noscript-xss.html:5
 msgid ""
@@ -886,6 +890,10 @@ msgid ""
 "is turned on. It is safe to turn off this feature while your Security Slider "
 "is set to \"Safest\". Here's how:"
 msgstr ""
+"ब्राउज़र में समस्या के कारण (<a href=\"{url}\">अधिक जानकारी </a>), क्रॉस-सा"
+"इट अनुरोध सैनिटाइजेशन ऑन होने के कारण Tor ब्राउज़र में अभी अपलोड काम नहीं कर "
+"रहा है. अपने सुरक्षा स्लाइडर को \"सबसे सुरक्षित\" पर सेट करके इस फीचर को "
+"आसानी से बंद कर सकते है. यहां जानिए कैसे:"
 
 #: source_templates/disable-noscript-xss.html:7
 msgid ""
@@ -893,59 +901,70 @@ msgid ""
 "\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
 "\"{noscript_icon_url}\">. This is the NoScript button."
 msgstr ""
+"आपको Tor ब्राउज़र के टूलबार में नीला \"S\" आइकन मिलना चाहिए: <img class=\""
+"inline\" src=\"{noscript_plain_icon_url}\"> और  <img class=\"inline\" src=\""
+"{noscript_icon_url}\">. यह NoScript बटन है."
 
 #: source_templates/disable-noscript-xss.html:11
 msgid "1. Click on the NoScript button."
-msgstr ""
+msgstr "1. NoScript बटन पर क्लिक करें."
 
 #: source_templates/disable-noscript-xss.html:12
 msgid "The NoScript pane should appear. It looks like this:"
-msgstr ""
+msgstr "NoScript पैन दिखाई देना चाहिए. यह इस तरह दिखता है:"
 
 #: source_templates/disable-noscript-xss.html:18
 msgid ""
 "2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
 "src=\"{url}\">"
 msgstr ""
+"2. NoScript पैन में, सेटिंग्स आइकन पर क्लिक करें: <img class=\"inline\" src="
+"\"{url}\">"
 
 #: source_templates/disable-noscript-xss.html:20
 msgid ""
 "The settings page should appear in a new browser tab. It looks like this:"
-msgstr ""
+msgstr "नए ब्राउज़र टैब में सेटिंग्स पेज दिखेगा. यह इस तरह दिखता है:"
 
 #: source_templates/disable-noscript-xss.html:26
 msgid "3. Click the \"Advanced\" tab."
-msgstr ""
+msgstr "3.\"एडवांस्ड\" टैब पर क्लिक करें."
 
 #: source_templates/disable-noscript-xss.html:28
 msgid "The advanced settings tab should come into view. It looks like this:"
-msgstr ""
+msgstr "एडवांस्ड सेटिंग्स टैब व्यू में दिखेगा. यह ऐसा दिखता है :"
 
 #: source_templates/disable-noscript-xss.html:34
 msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
+msgstr "4.\"क्रॉस-साइट संदिग्ध अनुरोधों को संचित करें\" को अनचेक करें."
 
 #: source_templates/disable-noscript-xss.html:36
 msgid ""
 "Due to a browser issue, this is required for uploads to work reliably. As "
 "soon as the browser issue is resolved, we will remove this recommendation."
 msgstr ""
+"ब्राउज़र समस्या के कारण, अपलोड को सही रूप से कार्य करने के लिए यह जरुरी है. "
+"जैसे ही ब्राउज़र समस्या हल हो जाएगी, हम इस सिफारिश को हटा देंगे."
 
 #: source_templates/disable-noscript-xss.html:40
 msgid ""
 "5. Close the <i>NoScript Settings</i> browser tab and return to the "
 "SecureDrop tab."
 msgstr ""
+"5. <i>NoScript सेटिंग</i> ब्राउज़र टैब बंद करें और SecureDrop टैब पर वापस "
+"लौटें."
 
 #: source_templates/disable-noscript-xss.html:42
 msgid ""
 "You can now upload your files. Please keep in mind that each file requires "
 "its own submission."
 msgstr ""
+"अब आप अपनी फ़ाइलें अपलोड कर सकते हैं. कृपया ध्यान रखें कि प्रत्येक फ़ाइल को "
+"अपनी सबमिशन की आवश्यकता होती है."
 
 #: source_templates/disable-noscript-xss.html:46
 msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
+msgstr "6.  \"क्रॉस-साइट संदिग्ध अनुरोधों को संचित करें\" को  फिर से टिक करें."
 
 #: source_templates/disable-noscript-xss.html:48
 msgid ""
@@ -953,6 +972,10 @@ msgid ""
 "effect while your Security Slider is set to \"Safest\", but we recommend "
 "enabling it during normal Tor usage."
 msgstr ""
+"ऊपर से 1-3 स्टेप्स को पुनः दोहराएं और सेटिंग को फिर से जांचें. आपके सुरक्षा "
+"स्लाइडर को \"सबसे सुरक्षित\" पर सेट होने कर कारण आपके सेटिंग्स में कुछ बदलाब "
+"नहीं आएगा, लेकिन हम इसे सामान्य Tor उपयोग के दौरान इसे सक्षम करने की सलाह "
+"देते हैं।"
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1121,19 +1144,14 @@ msgid "Important!"
 msgstr "जरूरी!"
 
 #: source_templates/logout_flashed_message.html:5
-#, fuzzy
-#| msgid ""
-#| "Thank you for exiting your session! Please select \"New Identity\" from "
-#| "the green onion button in the Tor browser to clear all history of your "
-#| "SecureDrop usage from this device."
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
 "onion button in the Tor browser's toolbar to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
-"अपने सत्र से बाहर निकलने के लिए धन्यवाद! कृपया इस उपकरण से आपके SecureDrop उपयोग के "
-"सभी इतिहास को साफ़ करने के लिए Tor ब्राउज़र में हरी प्याज बटन पे जाकर \"New Identity"
-"\" चुनें|"
+"अपने सत्र से बाहर निकलने के लिए धन्यवाद! कृपया इस उपकरण से आपके SecureDrop "
+"उपयोग के सभी इतिहास को साफ़ करने के लिए Tor ब्राउज़र के टूलबार में हरी प्याज "
+"बटन पे जाकर \"New Identity\" चुनें|"
 
 #: source_templates/lookup.html:11
 msgid "Whew, it’s you! Now, the embarrassing part..."
@@ -1169,6 +1187,9 @@ msgid ""
 "is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
 "\"text-link\">Show me how.</a>"
 msgstr ""
+"शुरू करने से पहले, NoScript में क्रॉस-साइट रिक्वेस्ट सैनिटाइजेशन को बंद कर "
+"दें। उपलोड को काम करने के लिए यह <strong>जरुरी</strong> है. <a href=\"{url}\""
+" class=\"text-link\">जानने के लिए यहाँ देखें.</a>"
 
 #: source_templates/lookup.html:24
 msgid "You can submit any kind of file, a message, or both."
@@ -1261,23 +1282,17 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "क्षमा करें, हम आपके द्वारा अनुरोध किए गए स्थान का पता नहीं लगा सके।"
 
 #: source_templates/session_timeout.html:6
-#, fuzzy
-#| msgid ""
-#| "Your session timed out due to inactivity. Please login again if you want "
-#| "to continue using SecureDrop, or select \"New Identity\" from the green "
-#| "onion button in the Tor browser to clear all history of your SecureDrop "
-#| "usage from this device. If you are not using Tor Browser, restart your "
-#| "browser."
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
 "continue using SecureDrop, or select \"New Identity\" from the onion button "
 "in the Tor browser's toolbar to clear all history of your SecureDrop usage "
 "from this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
-"निष्क्रियता के कारण आपका सत्र समाप्त हो गया। यदि आप SecureDrop का उपयोग करना जारी "
-"रखना चाहते हैं तोह लॉग इन करें, या फिर इस ब्राउज़र से आपके SecureDrop उपयोग के सभी "
-"इतिहास को साफ करने के लिए Tor ब्राउज़र में हरी प्याज बटन से \"New Identity\" का चयन "
-"करें। यदि आप Tor ब्राउज़र का उपयोग नहीं कर रहे हैं, तो अपने ब्राउज़र को पुनः आरंभ करें।"
+"निष्क्रियता के कारण आपका सत्र समाप्त हो गया। यदि आप SecureDrop का उपयोग करना "
+"जारी रखना चाहते हैं तोह लॉग इन करें, या फिर इस ब्राउज़र से आपके SecureDrop "
+"उपयोग के सभी इतिहास को साफ करने के लिए Tor ब्राउज़र के टूलबार में प्याज बटन "
+"से \"New Identity\" का चयन करें। यदि आप Tor ब्राउज़र का उपयोग नहीं कर रहे हैं"
+", तो अपने ब्राउज़र को पुनः आरंभ करें।"
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
