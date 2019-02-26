@@ -6,14 +6,14 @@
     {% if source.star.starred %}
       <button class="button-star starred" type="submit"
               formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}"><i class="fa fa-star"></i></button>
-      <input id="checkbox" type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
+      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
       <a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
         {{ source.journalist_designation }}
       </a>
     {% else %}
       <button class="button-star un-starred" type="submit"
         formaction="{{ url_for('col.add_star', filesystem_id=source.filesystem_id) }}"><i class="fa fa-star"></i></button>
-      <input id="checkbox" type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
+      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
       <a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
         {{ source.journalist_designation }}
       </a>

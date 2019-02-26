@@ -246,6 +246,7 @@
   /var/www/securedrop/static/i/un-star.png r,
   /var/www/securedrop/static/i/delete_red.png r,
   /var/www/securedrop/static/i/securedrop_small.png r,
+  /var/www/securedrop/static/i/font-awesome/black/times.svg r,
   /var/www/securedrop/static/i/font-awesome/cancel-blue.png r,
   /var/www/securedrop/static/i/font-awesome/checkmark-white.png r,
   /var/www/securedrop/static/i/font-awesome/checkmark-blue.png r,

@@ -9,8 +9,9 @@
 
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
 
-    {% assets filters="jsmin", output="gen/journalist.js", "js/journalist.js" %}
+    {% include 'js-strings.html' %}
 
+    {% assets filters="jsmin", output="gen/journalist.js", "js/journalist.js" %}
       <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
     {% block extrahead %}{% endblock %}

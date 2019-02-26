@@ -65,6 +65,7 @@ class TestJournalist(
         self._source_logs_out()
         self._journalist_logs_in()
         self._journalist_uses_js_filter_by_sources()
+        self._journalist_source_selection_honors_filter()
         self._journalist_selects_all_sources_then_selects_none()
         self._journalist_selects_the_first_source()
         self._journalist_uses_js_buttons_to_download_unread()
