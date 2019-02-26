@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-12-09 10:45+0000\n"
+"PO-Revision-Date: 2019-02-21 17:11+0000\n"
 "Last-Translator: Jonas Franzén <jonas.franzen@schibsted.se>\n"
 "Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/sv/>\n"
@@ -16,14 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.20\n"
+"X-Generator: Weblate 3.4\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "{time} sedan"
 
-#: journalist_app/__init__.py:80 journalist_app/__init__.py:119
+#: journalist_app/__init__.py:89 journalist_app/__init__.py:128
 msgid "You have been logged out due to inactivity"
 msgstr "Du har blivit utloggad på grund av inaktivitet"
 
@@ -88,7 +88,7 @@ msgstr "Endast administratörer har tillgång till denna sida."
 
 #: journalist_app/forms.py:19
 msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
-msgstr "HOTP hemligheter är 40 tecken långa - du har fyllt i {num_chars}."
+msgstr "HOTP-hemligheter är 40 tecken långa - du har fyllt i {num_chars}."
 
 #: journalist_app/forms.py:30
 msgid ""
@@ -214,7 +214,7 @@ msgid "Close"
 msgstr "Stäng"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:77
+#: journalist_templates/col.html:15 source_templates/lookup.html:81
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -320,7 +320,7 @@ msgstr "Verifikationskod"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:45
+#: journalist_templates/col.html:99 source_templates/lookup.html:49
 msgid "SUBMIT"
 msgstr "SKICKA IN"
 
@@ -416,26 +416,38 @@ msgstr ""
 "När det här kontot har lagts till i appen, mata in den sexsiffriga koden "
 "från appen för att bekräfta tvåfaktorsautentiseringen."
 
-#: journalist_templates/base.html:24
+#: journalist_templates/base.html:28
+msgid ""
+"<strong>Critical Security:</strong> The operating system used by your "
+"SecureDrop servers has reached its end-of-life. A manual update is urgently "
+"required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
+"\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>Kritisk sårbarhet:</strong> Operativsystemet som används av dina "
+"SecureDrop-servrar har passerat sin livslängd. En manuell uppdatering krävs "
+"snarast för att skydda systemet - <a href=\"//securedrop.org/xenial-upgrade\""
+" rel=\"noreferrer\">Läs mer</a>"
+
+#: journalist_templates/base.html:33
 msgid "Logged on as"
 msgstr "Inloggad som"
 
-#: journalist_templates/base.html:26
+#: journalist_templates/base.html:35
 msgid "Admin"
 msgstr "Admin"
 
-#: journalist_templates/base.html:28
+#: journalist_templates/base.html:37
 msgid "Log Out"
 msgstr "Logga ut"
 
-#: journalist_templates/base.html:41
+#: journalist_templates/base.html:50
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 msgstr ""
 "Körs på <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 
-#: journalist_templates/base.html:56
+#: journalist_templates/base.html:65
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Körs på <em>SecureDrop {version}</em>."
 
@@ -656,7 +668,7 @@ msgstr ""
 msgid "Current Password"
 msgstr "Nuvarande lösenord"
 
-#: journalist_templates/edit_account.html:41 journalist_templates/login.html:10
+#: journalist_templates/edit_account.html:41 journalist_templates/login.html:11
 msgid "Two-factor Code"
 msgstr "Tvåfaktorsautentiseringskod"
 
@@ -800,7 +812,7 @@ msgstr "Logga in för att få tillgång till journalistgränssnittet"
 msgid "Password"
 msgstr "Lösenord"
 
-#: journalist_templates/login.html:11
+#: journalist_templates/login.html:12
 msgid "LOG IN"
 msgstr "LOGGA IN"
 
@@ -830,31 +842,31 @@ msgstr ""
 "Du omdirigerades eftersom du redan är inloggad. Ifall du vill skapa ett nytt "
 "konto, logga ut först."
 
-#: source_app/main.py:133
+#: source_app/main.py:132
 msgid "You must enter a message or choose a file to submit."
 msgstr "Du måste ange ett meddelande eller välja en fil att lämna in."
 
-#: source_app/main.py:166
+#: source_app/main.py:165
 msgid "Thanks! We received your message."
 msgstr "Tack! Vi har tagit emot ditt meddelande."
 
-#: source_app/main.py:168
+#: source_app/main.py:167
 msgid "Thanks! We received your document."
 msgstr "Tack! Vi har tagit emot ditt dokument."
 
-#: source_app/main.py:170
+#: source_app/main.py:169
 msgid "Thanks! We received your message and document."
 msgstr "Tack! Vi har tagit emot ditt meddelande och dokument."
 
-#: source_app/main.py:223
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "Svaret har tagits bort"
 
-#: source_app/main.py:241
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "Alla svar har tagits bort"
 
-#: source_app/main.py:255
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "Tyvärr, detta kodnamn är okänt."
 
@@ -878,6 +890,101 @@ msgid ""
 msgstr ""
 "Precis som all mjukvara kan SecureDrop innehålla säkerhetshål. Använd på "
 "egen risk."
+
+#: source_templates/disable-noscript-xss.html:3
+msgid "Turn off NoScript's cross-site request sanitization setting"
+msgstr "Stäng av \"NoScript's cross-site request sanitization\" inställningen"
+
+#: source_templates/disable-noscript-xss.html:5
+msgid ""
+"Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do not "
+"currently work reliably in Tor Browser while cross-site request sanitization "
+"is turned on. It is safe to turn off this feature while your Security Slider "
+"is set to \"Safest\". Here's how:"
+msgstr ""
+"På grund av ett webbläsarproblem (<a href=\"{url}\">mer detaljer</a>), så "
+"fungerar inte uppladdningar stabilt i Tor Browser när \"cross-site request "
+"sanitization\" är påslagen. Det är säkert att stänga av denna funktion när "
+"din \"Security Slider\" är satt till \"Safest\". Så här gör du:"
+
+#: source_templates/disable-noscript-xss.html:7
+msgid ""
+"You should find a blue \"S\" icon in the Tor browser's toolbar: <img class="
+"\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
+"\"{noscript_icon_url}\">. This is the NoScript button."
+msgstr ""
+"Du ska hitta en blå \"S\" ikon i Tor browserns meny: <img class=\"inline\" "
+"src=\"{noscript_plain_icon_url}\"> eller <img class=\"inline\" src=\""
+"{noscript_icon_url}\">. Detta är NoScript-knappen."
+
+#: source_templates/disable-noscript-xss.html:11
+msgid "1. Click on the NoScript button."
+msgstr "1. Tryck på NoScript-knappen."
+
+#: source_templates/disable-noscript-xss.html:12
+msgid "The NoScript pane should appear. It looks like this:"
+msgstr "NoScript-panelen ska nu dyka upp. Den ser ut så här:"
+
+#: source_templates/disable-noscript-xss.html:18
+msgid ""
+"2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
+"src=\"{url}\">"
+msgstr ""
+"2. Tryck på \"Settings\"-ikonen <img class=\"inline\" src=\"{url}\"> i "
+"NoScript-panelen"
+
+#: source_templates/disable-noscript-xss.html:20
+msgid ""
+"The settings page should appear in a new browser tab. It looks like this:"
+msgstr "Inställningssidan ska öppnas i en ny flik. Den ser ut så här:"
+
+#: source_templates/disable-noscript-xss.html:26
+msgid "3. Click the \"Advanced\" tab."
+msgstr "3. Klicka på \"Advanced\" fliken."
+
+#: source_templates/disable-noscript-xss.html:28
+msgid "The advanced settings tab should come into view. It looks like this:"
+msgstr "Advanced-fliken ska nu visas. Den ser ut så här:"
+
+#: source_templates/disable-noscript-xss.html:34
+msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
+msgstr "4. Avmarkera \"Sanitize cross-site suspicious requests\"."
+
+#: source_templates/disable-noscript-xss.html:36
+msgid ""
+"Due to a browser issue, this is required for uploads to work reliably. As "
+"soon as the browser issue is resolved, we will remove this recommendation."
+msgstr ""
+"På grund av ett webbläsar-problem, så behövs det här för att uppladdningar "
+"ska fungera stabilt. Så snart som webbläsar-problemet är löst, kommer vi att "
+"ta bort denna rekommendation."
+
+#: source_templates/disable-noscript-xss.html:40
+msgid ""
+"5. Close the <i>NoScript Settings</i> browser tab and return to the "
+"SecureDrop tab."
+msgstr ""
+"5. Stäng <i> NoScript Settings</i> fliken och gå tillbaka till SecureDrop."
+
+#: source_templates/disable-noscript-xss.html:42
+msgid ""
+"You can now upload your files. Please keep in mind that each file requires "
+"its own submission."
+msgstr "Nu kan du ladda upp filer. Varje fil kräver en separat inskickning."
+
+#: source_templates/disable-noscript-xss.html:46
+msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
+msgstr "6. Dubbelkolla \"Sanitize cross-site suspicious requests\"."
+
+#: source_templates/disable-noscript-xss.html:48
+msgid ""
+"Repeat steps 1-3 from above and re-check the setting. The setting has no "
+"effect while your Security Slider is set to \"Safest\", but we recommend "
+"enabling it during normal Tor usage."
+msgstr ""
+"Repetera steg 1-3 ovan för att dubbelkolla inställningen. Inställningen har "
+"ingen effekt när \"Security Slider\" är satt till \"Safest\", men vi "
+"rekommenderar att du aktiverar den när du använder Tor i normala fall."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1049,7 +1156,7 @@ msgstr "Ange kodnamn"
 msgid "Enter your codename"
 msgstr "Ange ditt kodnamn"
 
-#: source_templates/login.html:25 source_templates/lookup.html:51
+#: source_templates/login.html:25 source_templates/lookup.html:55
 msgid "CANCEL"
 msgstr "AVBRYT"
 
@@ -1061,11 +1168,11 @@ msgstr "Viktigt!"
 #: source_templates/logout_flashed_message.html:5
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
-"green onion button in the Tor browser to clear all history of your "
+"onion button in the Tor browser's toolbar to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
 "Tack för att du avslutat din session! Var snäll och välj \"New Identity\" "
-"från knappen med en grön lökikon i Tor Browser för att rensa all historik av "
+"från knappen med en lökikon i Tor Browser för att rensa all historik av "
 "SecureDrop-användning på den här enheten."
 
 #: source_templates/lookup.html:11
@@ -1096,7 +1203,21 @@ msgstr ""
 msgid "Submit Files or Messages"
 msgstr "Skicka filer eller meddelanden"
 
-#: source_templates/lookup.html:21
+#: source_templates/lookup.html:22
+msgid ""
+"Before you begin, turn off cross-site request sanitization in NoScript. This "
+"is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
+"\"text-link\">Show me how.</a>"
+msgstr ""
+"Innan du börjar, stäng av \"cross-site request sanitization\" i NoScript. "
+"Detta är <strong> ett krav</strong> för att uppladdningar ska fungera. <a "
+"href=\"{url}\" class=\"text-link\">Visa mig hur.</a>"
+
+#: source_templates/lookup.html:24
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Du kan skicka alla typer av filer, ett meddelande, eller både och."
+
+#: source_templates/lookup.html:26
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1106,27 +1227,23 @@ msgstr ""
 "och meddelanden med vår <a href=\"{url}\" class=\"text-link\"> publika "
 "nyckel </a> före inlämningen. Filer krypteras när de tas emot av SecureDrop."
 
-#: source_templates/lookup.html:22
+#: source_templates/lookup.html:27
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">Fortsätt läsa</a>."
 
-#: source_templates/lookup.html:24
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Du kan skicka alla typer av filer, ett meddelande, eller både och."
-
-#: source_templates/lookup.html:33
+#: source_templates/lookup.html:37
 msgid "Maximum upload size: 500 MB"
 msgstr "Maximal storlek för uppladdningar: 500 MB"
 
-#: source_templates/lookup.html:36
+#: source_templates/lookup.html:40
 msgid "Write a message."
 msgstr "Skriv ett meddelande."
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:62
 msgid "Read Replies"
 msgstr "Läs svar"
 
-#: source_templates/lookup.html:63
+#: source_templates/lookup.html:67
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1138,43 +1255,43 @@ msgstr ""
 "är klar med dem. Därmed får vi också bekräftat att du har sett vårt svar. Du "
 "kan svara genom att skicka in nya filer eller meddelanden ovan."
 
-#: source_templates/lookup.html:76
+#: source_templates/lookup.html:80
 msgid "Delete this reply?"
 msgstr "Ta bort detta svar?"
 
-#: source_templates/lookup.html:78
+#: source_templates/lookup.html:82
 msgid "DELETE"
 msgstr "TA BORT"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:91
 msgid "DELETE ALL REPLIES"
 msgstr "TA BORT ALLA SVAR"
 
-#: source_templates/lookup.html:90
+#: source_templates/lookup.html:94
 msgid "Are you finished with the replies?"
 msgstr "Är du klar med svaren?"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:95
 msgid "YES, DELETE ALL REPLIES"
 msgstr "JA, TA BORT ALLA SVAR"
 
-#: source_templates/lookup.html:92
+#: source_templates/lookup.html:96
 msgid "NO, NOT YET"
 msgstr "NEJ, INTE ÄN"
 
-#: source_templates/lookup.html:96
+#: source_templates/lookup.html:100
 msgid "There are no replies at this time."
 msgstr "Det finns inga svar för tillfället."
 
-#: source_templates/lookup.html:105
+#: source_templates/lookup.html:109
 msgid "Remember, your codename is:"
 msgstr "Kom ihåg, ditt kodnamn är:"
 
-#: source_templates/lookup.html:106
+#: source_templates/lookup.html:110
 msgid "Show"
 msgstr "Visa"
 
-#: source_templates/lookup.html:108
+#: source_templates/lookup.html:112
 msgid "Hide"
 msgstr "Göm"
 
@@ -1189,13 +1306,13 @@ msgstr "Förlåt, vi kunde inte hitta det du begärde."
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
-"continue using SecureDrop, or select \"New Identity\" from the green onion "
-"button in the Tor browser to clear all history of your SecureDrop usage from "
-"this device. If you are not using Tor Browser, restart your browser."
+"continue using SecureDrop, or select \"New Identity\" from the onion button "
+"in the Tor browser's toolbar to clear all history of your SecureDrop usage "
+"from this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
 "Din session avslutades ut på grund av inaktivitet. Var snäll och logga in "
 "igen ifall du vill fortsätta använda SecureDrop, eller välj \"New Identity\" "
-"från knappen med en grön lökikon i Tor Browser för att rensa all historik av "
+"från knappen med en lökikon i Tor Browser för att rensa all historik av "
 "SecureDrop på den här enheten. Ifall du inte använder Tor Browser, starta om "
 "din webbläsare."
 
