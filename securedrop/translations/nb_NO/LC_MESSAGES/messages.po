@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2019-02-23 12:08+0000\n"
+"PO-Revision-Date: 2019-02-26 17:19+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/"
 "securedrop/securedrop/nb_NO/>\n"
@@ -34,7 +34,7 @@ msgstr "Feil passord eller tofaktor-kode."
 
 #: journalist_app/account.py:42
 msgid "Token in two-factor authentication verified."
-msgstr "Tofaktor-koden er kontrollert og verifisert."
+msgstr "Tofaktor-koden er kontrollert og bekreftet."
 
 #: journalist_app/account.py:46 journalist_app/admin.py:116
 msgid "Could not verify token in two-factor authentication."
@@ -121,7 +121,7 @@ msgstr "Takk. Svaret ditt har blitt lagret."
 
 #: journalist_app/main.py:150
 msgid "No collections selected for download."
-msgstr "Ingen kildedata valgt for nedlasting."
+msgstr "Ingen kildeoppføringer valgt for nedlasting."
 
 #: journalist_app/main.py:153 journalist_app/utils.py:236
 msgid "No collections selected for deletion."
@@ -129,11 +129,11 @@ msgstr "Ingen kildeoppføringer valgt for sletting."
 
 #: journalist_app/main.py:179
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
-msgstr "Kilden '{original_name}' har endret navn til '{new_name}'"
+msgstr "Kilden ved navn '{original_name}' har endret navn til '{new_name}'"
 
 #: journalist_app/main.py:194
 msgid "No unread submissions for this source."
-msgstr "Ingen uleste bidrag fra denne kilden."
+msgstr "Ingen uleste innsendelser fra denne kilden."
 
 #: journalist_app/utils.py:55
 msgid "Account updated."
@@ -158,7 +158,7 @@ msgstr ""
 
 #: journalist_app/utils.py:126
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
-msgstr "Ugyldig hemmelighetsformat: Bare bruk bokstavene A-F og tall fra 0-9."
+msgstr "Ugyldig hemmelighetsformat: Kun bruk bokstavene A-F og tall fra 0-9."
 
 #: journalist_app/utils.py:132
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
@@ -167,8 +167,8 @@ msgstr "Feil hemmelighet, du har lagt til eller glemt noe."
 #: journalist_app/utils.py:188
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
-msgstr[0] "Bidrag slettet."
-msgstr[1] "{num} bidrag slettet."
+msgstr[0] "Innsendelse slettet."
+msgstr[1] "{num} innsendelser slettet."
 
 #: journalist_app/utils.py:241
 msgid "{num} collection deleted"
@@ -199,7 +199,7 @@ msgstr ""
 
 #: journalist_app/utils.py:312
 msgid "No unread submissions in selected collections."
-msgstr "Ingen uleste innsendte bidrag i valgte kildeoppføringer."
+msgstr "Ingen uleste innsendelser i valgte kildeoppføringer."
 
 #: journalist_templates/_confirmation_modal.html:4
 msgid "Close"
@@ -558,10 +558,10 @@ msgid ""
 "the files seen here will be unrecoverable and the source will no longer be "
 "able to login using their previous codename.</em>"
 msgstr ""
-"Klikk under for å slette kildedata for denne kilden. <em>Advarsel: Om du "
-"gjør dette, vil alle filene under bli slettet for godt og kilden vil ikke "
-"lenger kunne logge seg inn med kodenavnet for å fortsette kommunikasjonen.</"
-"em>"
+"Klikk nedenfor for å slette kildeoppføringer fra denne kilden. <em>Advarsel: "
+"Om du gjør dette, vil alle filene under bli slettet for godt og kilden vil "
+"ikke lenger kunne logge seg inn med kodenavnet for å fortsette "
+"kommunikasjonen.</em>"
 
 #: journalist_templates/col.html:121
 msgid "DELETE SOURCE AND SUBMISSIONS"
@@ -569,11 +569,12 @@ msgstr "SLETT KILDEDATA OG INNSENDELSER"
 
 #: journalist_templates/col.html:129
 msgid "Are you sure you want to delete this collection?"
-msgstr "Er du sikker på at du vil slette kildedata for denne kilden?"
+msgstr ""
+"Er du sikker på at du vil slette alle kildeoppføringer fra denne kilden?"
 
 #: journalist_templates/config.html:7
 msgid "Instance Configuration"
-msgstr "Instans-konfigurasjon"
+msgstr "Instans-oppsett"
 
 #: journalist_templates/config.html:9
 msgid "Alerts"
@@ -743,12 +744,12 @@ msgid ""
 msgstr ""
 "SecureDrop vil generere en sikker krypteringsnøkkel for denne kilden neste "
 "gang de logger inn. Når nøkkelen har blitt opprettet, vil en svarboks bli "
-"synlig under listen med innsendte bidrag. Du kan da bruke denne boksen for å "
-"sende krypterte tilbakemeldinger til dem."
+"synlig i kildeoppføringene av innsendelsene deres. Du kan da bruke denne "
+"boksen for å sende krypterte tilbakemeldinger til dem."
 
 #: journalist_templates/flag.html:10
 msgid "Continue to the list of documents for {codename}..."
-msgstr "Fortsett til listen med innsendte bidrag fra {codename}…"
+msgstr "Fortsett til listen over innsendelser fra {codename}…"
 
 #: journalist_templates/index.html:4
 msgid "Sources"
@@ -953,7 +954,7 @@ msgstr "Avanserte innstillinger skal da vises. Det ser omtrent slik ut:"
 
 #: source_templates/disable-noscript-xss.html:34
 msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
-msgstr "4. Fjern haken ved  \"Vask mistenkelige mellomsidige forespørsler\"."
+msgstr "4. Fjern haken ved \"Vask mistenkelige mellomsidige forespørsler\"."
 
 #: source_templates/disable-noscript-xss.html:36
 msgid ""
@@ -973,7 +974,6 @@ msgstr ""
 "fanen der du har SecureDrop oppe."
 
 #: source_templates/disable-noscript-xss.html:42
-#, fuzzy
 msgid ""
 "You can now upload your files. Please keep in mind that each file requires "
 "its own submission."
@@ -1196,10 +1196,9 @@ msgid ""
 "submission into the hands of a journalist straight away. We’re sorry for the "
 "delay. Please do check back again in a week or so."
 msgstr ""
-"Nå som vi vet at du faktisk er et ekte menneske, vil vi se til at det du "
-"sendte inn kommer fram til en av våre journalister med en gang. Vi beklager "
-"forsinkelsen. Kom gjerne tilbake om en uke for å se om du har fått noen svar "
-"fra journalistene."
+"Nå som vi vet at du faktisk er et ekte menneske, vil vi se til at din "
+"innsendelse havner hos én av våre journalister omgående. Kom gjerne tilbake "
+"om en uke for å se om du har fått svar fra journalistene."
 
 #: source_templates/lookup.html:20
 msgid "Submit Files or Messages"
@@ -1211,7 +1210,7 @@ msgid ""
 "is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
 "\"text-link\">Show me how.</a>"
 msgstr ""
-"Før du starter, skru av  renhetsopprettholdelse på tvers av sidebesøk i "
+"Før du starter, skru av Vask mistenkelige mellomsidige forespørsler i "
 "NoScript. Dette er <strong>nødvendig</strong> for at filoppastinger skal "
 "virke. <a href=\"{url}\" class=\"text-link\">Hvis meg hvordan.</a>"
 
@@ -1395,8 +1394,8 @@ msgid ""
 "before your data reaches the SecureDrop server."
 msgstr ""
 "SecureDrop krypterer alle filer og meldinger når de kommer inn via systemet. "
-"Kryptering av filer eller meldinger før de sendes inn kan gi et ekstra lag "
-"med beskyttelse for informasjonen før den når vår SecureDrop-server."
+"Kryptering av filer eller meldinger de avhendes som innsendelse kan gi et "
+"ekstra lag beskyttelse for informasjonen før den når vår SecureDrop-tjener."
 
 #: source_templates/why-journalist-key.html:5
 msgid ""
@@ -1404,7 +1403,7 @@ msgid ""
 "to encrypt your submissions yourself. To do so:"
 msgstr ""
 "Om du allerede er komfortabel med programvare for GPG-kryptering, kan du "
-"velge å kryptere det du sender inn selv. Gjør da følgende:"
+"velge å kryptere din innsendelse selv. Gjør da følgende:"
 
 #: source_templates/why-journalist-key.html:7
 msgid ""
@@ -1467,9 +1466,9 @@ msgid ""
 "unencrypted file, with .gpg at the end (e.g. <code>roswell_photos.pdf.gpg</"
 "code>)"
 msgstr ""
-"Last så opp ditt krypterte bidrag. Det vil ha det samme filnavnet som den "
-"ukrypterte filen, men med .gpg på slutten (f.eks. <code>roswell_photos.pdf."
-"gpg</code>)"
+"Last så opp din krypterte innsendelse. Det vil ha samme filnavnet som den "
+"ukrypterte filen, men med .gpg-filendelse (f.eks. "
+"<code>roswell_photos.pdf.gpg</code>)"
 
 #: source_templates/why-journalist-key.html:23
 msgid ""
