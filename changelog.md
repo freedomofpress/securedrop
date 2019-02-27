@@ -1,37 +1,13 @@
 # Changelog
 
-## 0.12.0~rc3
+## 0.12.0
 
 ### Web Application
 
-* Added instructions for disabling NoScript XSS because upload problem (#4078, #4159)
-
-### Operations
-
-* Ensured Tor is installed from FPF repo (#4175, #4169)
-* Set Debian packages to only use explicitly declared conffiles (#4176, #4161)
-
-## 0.12.0~rc2
-
-### Web Application
-
-* Updated language referenceing Tor button (#4131, #4141)
-
-### Developer Workflow
-
-* Fixed updated version script (#4146)
-
-### Operations
-
-* Fixed restore logic to ensure recreation of onion services (#3960, #4136)
-* Added logic to conditionally update the `release-upgrades` prompt (#4104, #4142)
-* Added logic to ensure packages required by Ansible are present on Xenial systems (#4109, #4143)
-
-## 0.12.0~rc1
-
-### Web Application
-
+* Add Romanian and Icelandic as supported languages (#4187)
 * Added toggle to show password for journalists on login (#3713)
+* Updated language referencing Tor button (#4131, #4141)
+* Added instructions for disabling NoScript XSS because of upload problem (#4078, #4159)
 * Prevented setting session cookies on API endpoints (#3876)
 * Updated API to allow clients to set a reply's UUID (#3957)
 * Changed GPG key generation to avoid leaking key creation date (#3912)
@@ -46,6 +22,11 @@
 ### Operations
 
 * Removed hardcoded Ansible plugin `profile_tasks` (#2943)
+* Fixed restore logic to ensure recreation of onion services (#3960, #4136)
+* Added logic to conditionally update the `release-upgrades` prompt (#4104, #4142)
+* Added logic to ensure packages required by Ansible are present on Xenial systems (#4109, #4143)
+* Ensured Tor is installed from FPF repo (#4175, #4169)
+* Set Debian packages to only use explicitly declared conffiles (#4176, #4161)
 * Removed `iptables` UID restrictions to allow `apt` to work correctly (#3952)
 * Updated kernels to 4.4.167 and removed wireless support (#2726)
 * Updated `cron-apt` remove action to occur after security (#4003)
@@ -61,6 +42,7 @@
 ### Developer Workflow
 
 * Fixed the QA data loader to prevent clobbering data (#3793)
+* Fixed updated version script (#4146)
 * Added nested virtualized to CI (#3702)
 * Moved to Vagrant 2.1.x (#3350)
 * Fixed linting tasks on macOS (#3996)
