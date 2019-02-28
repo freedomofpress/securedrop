@@ -1,4 +1,13 @@
 ---
+- name: Prepare servers for installation
+  hosts: securedrop
+  gather_facts: no
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  become: yes
+  roles:
+    - { role: prepare-servers }
+
 - name: Add FPF apt repository and install base packages.
   hosts: securedrop
   max_fail_percentage: 0
