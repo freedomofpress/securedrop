@@ -22,3 +22,5 @@
 - include: disable_swap.yml
 
 - include: remove_kernel_modules.yml
+
+- include: remove_unused_packages.yml
