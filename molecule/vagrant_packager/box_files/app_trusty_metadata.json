@@ -1,5 +1,5 @@
 {
-  "name": "fpf/securedrop-app",
+  "name": "fpf/securedrop-app-trusty",
   "description": "This box contains securedrop app server.",
   "versions": [
     {

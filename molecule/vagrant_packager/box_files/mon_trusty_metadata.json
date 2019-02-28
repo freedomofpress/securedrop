@@ -1,5 +1,5 @@
 {
-  "name": "fpf/securedrop-mon",
+  "name": "fpf/securedrop-mon-trusty",
   "description": "This box contains securedrop monitor server.",
   "versions": [
     {
