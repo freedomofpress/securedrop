@@ -1,6 +1,8 @@
 import pytest
 import re
 
+testinfra_hosts = ["app", "app-staging", "mon", "mon-staging"]
+
 
 @pytest.mark.parametrize('sysctl_opt', [
   ('net.ipv4.conf.all.accept_redirects', 0),
@@ -133,3 +135,13 @@ def test_no_ecrypt_messages_in_logs(host, logfile):
         # string to make it into syslog as a side-effect of the testinfra
         # invocation, causing subsequent test runs to report failure.
         assert error_message not in f.content_string
+
+
+@pytest.mark.parametrize('package', [
+    'libiw30',
+    'wpasupplicant',
+    'wireless-tools',
+])
+def test_unused_packages_are_removed(host, package):
+    """ Check if unused package is present """
+    assert host.package(package).is_installed is False

@@ -44,3 +44,8 @@ sysctl_flags:
     value: "1"
   - name: "net.ipv6.conf.lo.disable_ipv6"
     value: "1"
+
+unused_packages:
+  - libiw30
+  - wireless-tools
+  - wpasupplicant
