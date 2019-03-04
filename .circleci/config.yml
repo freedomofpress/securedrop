@@ -249,6 +249,7 @@ jobs:
       - run:
           name: Run Staging tests on GCE
           command: make ci-go
+          no_output_timeout: 20m
 
       - run:
           name: Ensure environment torn down
@@ -275,6 +276,7 @@ jobs:
       - run:
           name: Run Staging tests on GCE (Xenial)
           command: make ci-go-xenial
+          no_output_timeout: 20m
 
       - run:
           name: Ensure environment torn down
