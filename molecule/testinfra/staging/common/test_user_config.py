@@ -1,3 +1,5 @@
+import hashlib
+import os
 import re
 
 
@@ -38,16 +40,19 @@ def test_sudoers_tmux_env(host):
     the corresponding settings there.
     """
 
-    f = host.file('/etc/profile.d/securedrop_additions.sh')
-    non_interactive_str = re.escape('[[ $- != *i* ]] && return')
-    tmux_check = re.escape('test -z "$TMUX" && (tmux attach ||'
-                           ' tmux new-session)')
+    host_file = host.file('/etc/profile.d/securedrop_additions.sh')
+    source_file = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            '../../../../install_files/securedrop-config/etc/profile.d',
+            'securedrop_additions.sh'
+        )
+    )
+    expected_content = open(source_file).read()
+    h = hashlib.sha256()
+    h.update(expected_content)
 
-    assert f.contains("^{}$".format(non_interactive_str))
-    assert f.contains("^if which tmux >\/dev\/null 2>&1; then$")
-
-    assert 'test -z "$TMUX" && (tmux attach || tmux new-session)' in f.content
-    assert f.contains(tmux_check)
+    assert host_file.sha256sum == h.hexdigest()
 
 
 def test_tmux_installed(host):
