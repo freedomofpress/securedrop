@@ -12,7 +12,7 @@ set -o pipefail
 virtualenv_bootstrap
 
 RUN_TESTS="${1:-test}"
-TARGET_PLATFORM="${2:-trusty}"
+TARGET_PLATFORM="${2:-xenial}"
 SCENARIO_NAME="builder-${TARGET_PLATFORM}"
 
 case "$RUN_TESTS" in
