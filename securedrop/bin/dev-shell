@@ -10,8 +10,8 @@ TOPLEVEL=$(git rev-parse --show-toplevel)
 source "${BASH_SOURCE%/*}/../../devops/scripts/ticker"
 
 if ! test -n "${BASE_OS:-}" ; then
-    # If no base OS was specified, then we use Trusty
-    BASE_OS=trusty
+    # If no base OS was specified, then we use Xenial
+    BASE_OS=xenial
 fi
 
 function exit_if_not_supported_base_image() {
