@@ -1,7 +1,6 @@
 alembic
 argon2_cffi
 cryptography==2.0.3
-cssmin
 Flask-Assets
 Flask-Babel
 Flask-SQLAlchemy
