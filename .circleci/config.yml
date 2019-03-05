@@ -120,7 +120,7 @@ jobs:
       - store_artifacts:
           path: ~/test-results
 
-  xenial-app-tests:
+  app-tests:
     machine:
       enabled: true
     environment:
@@ -296,7 +296,7 @@ workflows:
   securedrop_ci:
     jobs:
       - lint
-      - xenial-app-tests:
+      - app-tests:
           filters:
             branches:
               ignore:
