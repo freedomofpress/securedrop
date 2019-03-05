@@ -22,3 +22,5 @@ remote_host_ref: >-
      | first
      | default (ansible_host)
   }}
+
+securedrop_staging_install_target_distro: xenial
