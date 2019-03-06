@@ -40,10 +40,10 @@ test-config: ## Generate the test config
 	journalist_secret_key=$(shell head -c 32 /dev/urandom | base64) \
 	scrypt_id_pepper=$(shell head -c 32 /dev/urandom | base64) \
 	scrypt_gpg_pepper=$(shell head -c 32 /dev/urandom | base64) \
-	python -c 'import os; from jinja2 import Environment, FileSystemLoader; \
+	python3 -c 'import os; from jinja2 import Environment, FileSystemLoader; \
          env = Environment(loader=FileSystemLoader(".")); \
          ctx = {"securedrop_app_gpg_fingerprint": "65A1B5FF195B56353CC63DFFCC40EF1228271441"}; \
-         ctx.update(dict((k, {"stdout":v}) for k,v in os.environ.iteritems())); \
+         ctx.update(dict((k, {"stdout":v}) for k,v in os.environ.items())); \
          ctx = open("config.py", "w").write(env.get_template("config.py.example").render(ctx))'
 	@echo >> config.py
 	@echo "SUPPORTED_LOCALES = ['ar', 'de_DE', 'es_ES', 'en_US', 'el', 'fr_FR', 'it_IT', 'nb_NO', 'nl', 'pt_BR', 'tr', 'zh_Hant']"  >> config.py
