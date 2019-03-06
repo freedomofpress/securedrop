@@ -18,7 +18,7 @@ def rel_datetime_format(dt, fmt=None, relative=False):
 
 
 def nl2br(context, value):
-    formatted = u'<br>\n'.join(escape(value).split('\n'))
+    formatted = '<br>\n'.join(escape(value).split('\n'))
     if context.autoescape:
         formatted = Markup(formatted)
     return formatted

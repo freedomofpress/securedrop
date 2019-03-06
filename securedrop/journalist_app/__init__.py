@@ -94,7 +94,7 @@ def create_app(config):
     def _handle_http_exception(error):
         # Workaround for no blueprint-level 404/5 error handlers, see:
         # https://github.com/pallets/flask/issues/503#issuecomment-71383286
-        handler = app.error_handler_spec['api'][error.code].values()[0]
+        handler = list(app.error_handler_spec['api'][error.code].values())[0]
         if request.path.startswith('/api/') and handler:
             return handler(error)
 
