@@ -7,7 +7,7 @@ import store
 import zipfile
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import utils
+from . import utils
 
 from store import Storage
 

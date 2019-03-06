@@ -5,7 +5,7 @@ import os
 from flask import session
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import i18n
+from . import i18n
 import i18n_tool
 import journalist_app
 import source_app

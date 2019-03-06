@@ -25,7 +25,7 @@ from werkzeug.datastructures import Headers
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig
-import i18n
+from . import i18n
 import i18n_tool
 import journalist_app as journalist_app_module
 import pytest

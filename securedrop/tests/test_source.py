@@ -4,21 +4,21 @@ import json
 import re
 import subprocess
 
-from cStringIO import StringIO
+from io import StringIO
 from flask import session, escape, current_app, url_for, g
 from mock import patch, ANY
 
 import crypto_util
 import source
-import utils
+from . import utils
 import version
 
 from db import db
 from models import Source, Reply
 from source_app import main as source_app_main
 from source_app import api as source_app_api
-from utils.db_helper import new_codename
-from utils.instrument import InstrumentedApp
+from .utils.db_helper import new_codename
+from .utils.instrument import InstrumentedApp
 
 overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
 

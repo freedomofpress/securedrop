@@ -10,7 +10,7 @@ from alembic.script import ScriptDirectory
 from os import path
 from sqlalchemy import text
 
-import conftest
+from . import conftest
 
 from db import db
 from journalist_app import create_app
@@ -55,7 +55,7 @@ def get_schema(app):
 
 
 def assert_schemas_equal(left, right):
-    for (k, v) in left.items():
+    for (k, v) in list(left.items()):
         if k not in right:
             raise AssertionError(
                 'Left contained {} but right did not'.format(k))
@@ -67,7 +67,7 @@ def assert_schemas_equal(left, right):
 
     if right:
         raise AssertionError(
-            'Right had additional tables: {}'.format(right.keys()))
+            'Right had additional tables: {}'.format(list(right.keys())))
 
 
 def ddl_equal(left, right):
@@ -118,7 +118,7 @@ def test_alembic_head_matches_db_models(journalist_app,
 
     # The initial migration creates the table 'alembic_version', but this is
     # not present in the schema created by `db.create_all()`.
-    alembic_schema = {k: v for k, v in alembic_schema.items()
+    alembic_schema = {k: v for k, v in list(alembic_schema.items())
                       if k[2] != 'alembic_version'}
 
     assert_schemas_equal(alembic_schema, models_schema)
@@ -171,7 +171,7 @@ def test_schema_unchanged_after_up_then_downgrade(alembic_config,
     # The initial migration is a degenerate case because it creates the table
     # 'alembic_version', but rolling back the migration doesn't clear it.
     if len(migrations) == 1:
-        reverted_schema = {k: v for k, v in reverted_schema.items()
+        reverted_schema = {k: v for k, v in list(reverted_schema.items())
                            if k[2] != 'alembic_version'}
 
     assert_schemas_equal(reverted_schema, original_schema)
