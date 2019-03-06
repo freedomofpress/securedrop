@@ -5,11 +5,10 @@ Set Up the Servers
 Install Ubuntu
 --------------
 
-.. caution:: As of this writing (2019-02-26), Ubuntu ISO images ship a version of
-    the `apt` package that is vulnerable to CVE-2019-3462. The SecureDrop installer
-    has mitigations in place to ensure the package is safely upgraded. We
-    recommend you perform the initial Ubuntu install on servers that do not have
-    Internet connectivity.
+.. caution:: Please ensure you are using Ubuntu Xenial ISO images 16.04.6 or greater.
+    Ubuntu Xenial ISO images 16.04.5 and lower ship with a version of the `apt` package
+    vulnerable to CVE-2019-3462. If you are using 16.04.5 or lower, the initial base OS
+    must be installed without Internet connectivity.
 
 .. note:: Installing Ubuntu is simple and may even be something you are very familiar
   with, but we **strongly** encourage you to read and follow this documentation
