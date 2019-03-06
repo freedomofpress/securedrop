@@ -162,7 +162,7 @@ class CryptoUtil:
             salt = self.scrypt_id_pepper
         return b32encode(scrypt.hash(clean(codename),
                          salt,
-                         **self.scrypt_params))
+                         **self.scrypt_params)).decode('utf-8')
 
     def genkeypair(self, name, secret):
         """Generate a GPG key through batch file key generation. A source's
