@@ -3,9 +3,9 @@
 from flask import g
 from pyotp import TOTP
 
-import async  # noqa
-import db_helper  # noqa
-import env  # noqa
+from . import async  # noqa
+from . import db_helper  # noqa
+from . import env  # noqa
 
 
 def login_user(app, test_user):

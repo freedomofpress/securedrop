@@ -65,7 +65,7 @@ class TestI18NTool(object):
             '--verbose',
             'translate-desktop',
             '--translations-dir', str(tmpdir),
-            '--sources', ",".join(in_files.values()),
+            '--sources', ",".join(list(in_files.values())),
             '--extract-update',
         ])
         assert not exists(i18n_file)
@@ -108,7 +108,7 @@ class TestI18NTool(object):
             '--verbose',
             'translate-desktop',
             '--translations-dir', str(tmpdir),
-            '--sources', ",".join(in_files.values() + ['BOOM']),
+            '--sources', ",".join(list(in_files.values()) + ['BOOM']),
             '--compile',
         ])
         assert old_messages_mtime == getmtime(messages_file)
@@ -253,7 +253,7 @@ class TestI18NTool(object):
             k = {'_cwd': join(d, repo)}
             git.init(**k)
             git.config('user.email', 'you@example.com', **k)
-            git.config('user.name',  u'Loïc Nordhøy', **k)
+            git.config('user.name',  'Loïc Nordhøy', **k)
             touch('README.md', **k)
             git.add('README.md', **k)
             git.commit('-m', 'README', 'README.md', **k)
@@ -314,9 +314,9 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' not in r()
         assert 'l10n: updated de_DE' not in r()
-        message = unicode(git('--no-pager', '-C', 'securedrop', 'show',
+        message = str(git('--no-pager', '-C', 'securedrop', 'show',
                               _cwd=d, _encoding='utf-8'))
-        assert u"Loïc" in message
+        assert "Loïc" in message
 
         #
         # an update is done to nl in weblate
@@ -347,7 +347,7 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' in r()
         assert 'l10n: updated de_DE' not in r()
-        message = unicode(git('--no-pager', '-C', 'securedrop', 'show',
+        message = str(git('--no-pager', '-C', 'securedrop', 'show',
                               _cwd=d))
         assert "Someone Else" in message
-        assert u"Loïc" not in message
+        assert "Loïc" not in message

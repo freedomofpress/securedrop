@@ -5,13 +5,13 @@ import platform
 import re
 import subprocess
 
-from cStringIO import StringIO
+from io import StringIO
 from flask import session, escape, current_app, url_for, g
 from mock import patch, ANY
 
 import crypto_util
 import source
-import utils
+from . import utils
 import version
 
 from datetime import date
@@ -20,8 +20,8 @@ from models import Source, Reply
 from source_app import main as source_app_main
 from source_app import api as source_app_api
 from source_app import disable as source_app_disable
-from utils.db_helper import new_codename
-from utils.instrument import InstrumentedApp
+from .utils.db_helper import new_codename
+from .utils.instrument import InstrumentedApp
 
 overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
 TRUSTY_DISABLED_ENDPOINTS = ['main.index', 'main.lookup', 'main.generate', 'main.login',

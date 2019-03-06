@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import source_navigation_steps
-import journalist_navigation_steps
-import functional_test
+from . import source_navigation_steps
+from . import journalist_navigation_steps
+from . import functional_test
 
 
 class TestJournalist(

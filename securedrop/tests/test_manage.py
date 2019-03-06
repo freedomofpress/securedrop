@@ -10,12 +10,12 @@ import mock
 import sys
 import time
 
-from StringIO import StringIO
+from io import StringIO
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 from models import Journalist, db
-from utils import db_helper
+from .utils import db_helper
 
 
 YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
