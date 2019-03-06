@@ -117,17 +117,23 @@ class LibVirtPackager(object):
 
 
 def main():
+    # Current script is symlinked into adjacent scenario, for Trusty compatibility.
+    # Look up "name" for scenario from real path (relative to symlink), but store
+    # all artifacts in primary scenario (via realpath).
+    SCENARIO_NAME = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
     SCENARIO_PATH = os.path.dirname(os.path.realpath(__file__))
     BOX_PATH = join(SCENARIO_PATH, "build")
     EPHEMERAL_DIRS = {}
     TARGET_VERSION_FILE = os.path.join(SCENARIO_PATH, os.path.pardir, "shared", "stable.ver")
+
     with open(TARGET_VERSION_FILE, 'r') as f:
         TARGET_VERSION = f.read().strip()
-    try:
-        TARGET_PLATFORM = os.environ['SECUREDROP_TARGET_PLATFORM']
-    except KeyError:
-        msg = "Set SECUREDROP_TARGET_PLATFORM env var to 'trusty' or 'xenial'"
-        raise Exception(msg)
+
+    # Default to Xenial as base OS, but detect if script was invoked from the
+    # Trusty-specific scenario, and use Trusty if so.
+    TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM", "xenial")
+    if SCENARIO_NAME.endswith("-trusty"):
+        TARGET_PLATFORM = "trusty"
 
     for srv in ["app-staging", "mon-staging"]:
 
@@ -141,7 +147,7 @@ def main():
             except OSError:
                 pass
 
-        vm = LibVirtPackager("vagrant-packager_"+srv)
+        vm = LibVirtPackager("{}_{}".format(SCENARIO_NAME, srv))
 
         tmp_img_file = join(EPHEMERAL_DIRS["tmp"], "wip.img")
         packaged_img_file = join(EPHEMERAL_DIRS["build"], "box.img")
