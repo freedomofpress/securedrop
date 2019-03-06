@@ -259,7 +259,7 @@ class CryptoUtil:
         """
         hashed_codename = self.hash_codename(secret,
                                              salt=self.scrypt_gpg_pepper)
-        return self.gpg.decrypt(ciphertext, passphrase=hashed_codename).data
+        return self.gpg.decrypt(ciphertext, passphrase=hashed_codename).data.decode('utf-8')
 
 
 def clean(s, also=''):
