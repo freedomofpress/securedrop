@@ -15,7 +15,6 @@
   vars:
     molecule_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
     dpkg_dir: /var/repos/debs
-    rep_dist: trusty
     rep_component: main
     rep_arch: i386 amd64
     release_file: "/var/repos/base/dists/{{ rep_dist }}/Release"
