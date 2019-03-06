@@ -89,6 +89,13 @@ prompts that follow:
   *Monitor Server*
 - Close the terminal window, open a new one, and reconnect with the command
   ``ssh mon``
+
+.. note:: The upgrade process uses ``tmux``, a terminal multiplexer, to keep your 
+ session open even if your SSH connection is broken. When you reconnect, if your 
+ tmux session fails to reattach with an error like ``protocol version
+ mismatch (client 8, server 7)``, you may be able to reattach to the existing
+ tmux session with the following command: ``/proc/$(pgrep --newest tmux)/exe attach``.
+
 - Choose **No** to overriding local changes on the "PAM configuration" dialog
 - Choose the default action (keep local version) when prompted about
   ``blacklist.conf`` changes
@@ -117,7 +124,7 @@ To confirm that the upgrade succeeded, connect from a terminal using the command
 
   sudo lsb_release -a
 
-The output should include the text "Ubuntu 16.04.5 LTS".
+The output should include the text "Ubuntu 16.04.6 LTS".
 
 Exit the SSH session to the *Monitor Server*. Next, you will upgrade the
 *Application Server* using a a similar procedure.
@@ -157,6 +164,11 @@ below to the prompts that follow.
   *Application Server*
 - Close the terminal window, open a new one, and reconnect with the command
   ``ssh app``
+
+.. note:: If your tmux session fails to reattach with an error like ``protocol 
+ version mismatch (client 8, server 7)``, you may be able to reattach to the 
+ existing session with the following command: ``/proc/$(pgrep --newest tmux)/exe attach``.
+
 - Choose **No** to overriding local changes on the "PAM configuration" dialog
 - Choose the default action (keep local version) when prompted about
   ``blacklist.conf`` changes
@@ -185,7 +197,7 @@ To confirm that the upgrade succeeded, connect from a terminal using the command
 
   sudo lsb_release -a
 
-The output should include the text "Ubuntu 16.04.5 LTS".
+The output should include the text "Ubuntu 16.04.6 LTS".
 
 Disconnect the SSH session to the Application Server. You are now ready to move
 on to the next step: reprovisioning SecureDrop on the Xenial servers.
