@@ -117,7 +117,7 @@ To confirm that the upgrade succeeded, connect from a terminal using the command
 
   sudo lsb_release -a
 
-The output should include the text "Ubuntu 16.04.5 LTS".
+The output should include the text "Ubuntu 16.04.6 LTS".
 
 Exit the SSH session to the *Monitor Server*. Next, you will upgrade the
 *Application Server* using a a similar procedure.
@@ -185,7 +185,7 @@ To confirm that the upgrade succeeded, connect from a terminal using the command
 
   sudo lsb_release -a
 
-The output should include the text "Ubuntu 16.04.5 LTS".
+The output should include the text "Ubuntu 16.04.6 LTS".
 
 Disconnect the SSH session to the Application Server. You are now ready to move
 on to the next step: reprovisioning SecureDrop on the Xenial servers.
