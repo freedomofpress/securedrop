@@ -1,4 +1,11 @@
 ---
+- name: Wait a bit to make sure hosts are fully booted
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Pause for a while
+      pause:
+        seconds: 120
 
 - name: Strip away configured tor hidden services files
   hosts: securedrop
