@@ -17,7 +17,7 @@
 #
 from tests.functional import journalist_navigation_steps
 from tests.functional import source_navigation_steps
-import functional_test
+from . import functional_test
 import pytest
 
 

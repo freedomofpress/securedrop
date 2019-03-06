@@ -14,7 +14,7 @@ from db import db
 from models import Journalist, Reply, Source, SourceStar, Submission
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from utils.api_helper import get_api_headers
+from .utils.api_helper import get_api_headers
 
 random.seed('◔ ⌣ ◔')
 
@@ -24,10 +24,10 @@ def test_unauthenticated_user_gets_all_endpoints(journalist_app):
         response = app.get(url_for('api.get_endpoints'))
 
         observed_endpoints = json.loads(response.data)
-        expected_endpoints = [u'current_user_url', u'submissions_url',
-                              u'sources_url', u'auth_token_url',
-                              u'replies_url']
-        assert expected_endpoints == observed_endpoints.keys()
+        expected_endpoints = ['current_user_url', 'submissions_url',
+                              'sources_url', 'auth_token_url',
+                              'replies_url']
+        assert expected_endpoints == list(observed_endpoints.keys())
 
 
 def test_valid_user_can_get_an_api_token(journalist_app, test_journo):
@@ -871,8 +871,8 @@ def test_api_does_not_set_cookie_headers(journalist_app, test_journo):
         response = app.get(url_for('api.get_endpoints'))
 
         observed_headers = response.headers
-        assert 'Set-Cookie' not in observed_headers.keys()
-        if 'Vary' in observed_headers.keys():
+        assert 'Set-Cookie' not in list(observed_headers.keys())
+        if 'Vary' in list(observed_headers.keys()):
             assert 'Cookie' not in observed_headers['Vary']
 
 

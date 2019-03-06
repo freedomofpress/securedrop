@@ -1,5 +1,5 @@
 import pytest
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import re
 import tempfile
 import gzip
@@ -227,7 +227,7 @@ class JournalistNavigationStepsMixin():
         if hotp:
             hotp_checkbox = self.driver.find_element_by_css_selector(
                 'input[name="is_hotp"]')
-            print(str(hotp_checkbox.__dict__))
+            print((str(hotp_checkbox.__dict__)))
             hotp_checkbox.click()
             hotp_secret = self.driver.find_element_by_css_selector(
                 'input[name="otp_secret"]')
@@ -394,9 +394,7 @@ class JournalistNavigationStepsMixin():
     def _edit_user(self, username):
         user = Journalist.query.filter_by(username=username).one()
 
-        new_user_edit_links = filter(
-            lambda el: el.get_attribute('data-username') == username,
-            self.driver.find_elements_by_tag_name('a'))
+        new_user_edit_links = [el for el in self.driver.find_elements_by_tag_name('a') if el.get_attribute('data-username') == username]
         assert 1 == len(new_user_edit_links)
         new_user_edit_links[0].click()
         # The header says "Edit user "username"".
@@ -447,10 +445,8 @@ class JournalistNavigationStepsMixin():
 
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
-        new_user_edit_links = filter(
-            lambda el: (el.get_attribute('data-username') ==
-                        self.new_user['username']),
-            self.driver.find_elements_by_tag_name('a'))
+        new_user_edit_links = [el for el in self.driver.find_elements_by_tag_name('a') if (el.get_attribute('data-username') ==
+                        self.new_user['username'])]
         assert len(new_user_edit_links) == 1
         new_user_edit_links[0].click()
 
@@ -587,12 +583,12 @@ class JournalistNavigationStepsMixin():
                 cookie_strs.append(cookie_str)
             return ' '.join(cookie_strs)
 
-        submission_req = urllib2.Request(file_url)
+        submission_req = urllib.request.Request(file_url)
         submission_req.add_header(
             'Cookie',
             cookie_string_from_selenium_cookies(
                 self.driver.get_cookies()))
-        raw_content = urllib2.urlopen(submission_req).read()
+        raw_content = urllib.request.urlopen(submission_req).read()
 
         decrypted_submission = self.gpg.decrypt(raw_content)
         submission = self._get_submission_content(file_url,
@@ -652,10 +648,8 @@ class JournalistNavigationStepsMixin():
         add_user_btn.click()
 
     def _admin_visits_edit_user(self):
-        new_user_edit_links = filter(
-            lambda el: (el.get_attribute('data-username') ==
-                        self.new_user['username']),
-            self.driver.find_elements_by_tag_name('a'))
+        new_user_edit_links = [el for el in self.driver.find_elements_by_tag_name('a') if (el.get_attribute('data-username') ==
+                        self.new_user['username'])]
         assert len(new_user_edit_links) == 1
         new_user_edit_links[0].click()
 

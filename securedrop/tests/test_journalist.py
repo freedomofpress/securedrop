@@ -8,7 +8,7 @@ import base64
 import datetime
 
 from base64 import b64decode
-from cStringIO import StringIO
+from io import StringIO
 from io import BytesIO
 from flask import url_for, escape, session, current_app, g
 from mock import patch
@@ -20,7 +20,7 @@ from sqlalchemy.exc import IntegrityError
 import crypto_util
 import models
 import journalist_app as journalist_app_module
-import utils
+from . import utils
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config
@@ -28,7 +28,7 @@ from sdconfig import SDConfig, config
 from db import db
 from models import (InvalidPasswordLength, Journalist, Reply, Source,
                     Submission)
-from utils.instrument import InstrumentedApp
+from .utils.instrument import InstrumentedApp
 
 # Smugly seed the RNG for deterministic testing
 random.seed('¯\_(ツ)_/¯')
@@ -2022,7 +2022,7 @@ def test_does_set_cookie_headers(journalist_app, test_journo):
         response = app.get(url_for('main.login'))
 
         observed_headers = response.headers
-        assert 'Set-Cookie' in observed_headers.keys()
+        assert 'Set-Cookie' in list(observed_headers.keys())
         assert 'Cookie' in observed_headers['Vary']
 
 

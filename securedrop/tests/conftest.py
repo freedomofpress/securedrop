@@ -11,7 +11,7 @@ import shutil
 import signal
 import subprocess
 
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 from flask import url_for
 from pyotp import TOTP
 
@@ -24,7 +24,7 @@ from db import db
 from journalist_app import create_app as create_journalist_app
 import models
 from source_app import create_app as create_source_app
-import utils
+from . import utils
 
 # The PID file for the redis worker is hard-coded below.
 # Ideally this constant would be provided by a test harness.
@@ -252,7 +252,7 @@ def _get_pid_from_file(pid_file_name):
     try:
         return int(io.open(pid_file_name).read())
     except IOError:
-        return None
+        return -1
 
 
 def _cleanup_test_securedrop_dataroot(config):

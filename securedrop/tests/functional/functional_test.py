@@ -64,8 +64,8 @@ class FunctionalTest(object):
                                            firefox_profile=profile)
                 if i > 0:
                     # i==0 is normal behavior without connection refused.
-                    print('NOTE: Retried {} time(s) due to '
-                          'connection refused.'.format(i))
+                    print(('NOTE: Retried {} time(s) due to '
+                          'connection refused.'.format(i)))
                 return driver
             except socket.error as socket_error:
                 if (socket_error.errno == errno.ECONNREFUSED

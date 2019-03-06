@@ -10,14 +10,14 @@ import zipfile
 from base64 import b32encode
 from binascii import unhexlify
 from bs4 import BeautifulSoup
-from cStringIO import StringIO
+from io import StringIO
 from flask import session, g, escape, current_app
 from pyotp import TOTP, HOTP
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import utils
+from . import utils
 
-from utils.instrument import InstrumentedApp
+from .utils.instrument import InstrumentedApp
 
 # Seed the RNG for deterministic testing
 random.seed('ಠ_ಠ')
@@ -448,7 +448,7 @@ def test_unicode_reply_with_ansi_env(journalist_app,
     journalist_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
     source_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
     _helper_test_reply(journalist_app, source_app, config, test_journo,
-                       u"ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
+                       "ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
 
 
 def test_delete_collection(mocker, source_app, journalist_app, test_journo):

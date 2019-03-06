@@ -3,7 +3,7 @@ import pytest
 
 from mock import MagicMock
 
-from utils import db_helper
+from .utils import db_helper
 from models import (Journalist, Submission, Reply, Source, get_one_or_else,
                     LoginThrottledException)
 
