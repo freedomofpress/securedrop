@@ -42,7 +42,7 @@ def make_blueprint(config):
             finally:
                 return redirect(url_for("admin.manage_config"))
         else:
-            for field, errors in form.errors.items():
+            for field, errors in list(form.errors.items()):
                 for error in errors:
                     flash(error, "logo-error")
             return render_template("config.html", form=form)
