@@ -7,7 +7,7 @@ ENV USER_ID ${USER_ID:-0}
 
 RUN apt-get update && \
     apt-get install -y devscripts \
-                       python-pip libpython2.7-dev libssl-dev secure-delete \
+                       python3-pip libpython3.5-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server firefox git xvfb haveged curl \
                        gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo \
                        libgtk2.0
@@ -23,11 +23,11 @@ RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/
 RUN gem install sass -v 3.4.23
 
 COPY requirements requirements
-RUN pip install -r requirements/securedrop-app-code-requirements.txt && \
-    pip install -r requirements/test-requirements.txt
+RUN pip3 install -r requirements/securedrop-app-code-requirements.txt && \
+    pip3 install -r requirements/test-requirements.txt
 
 # Fixes #4036 pybabel requires latest version of setuptools
-RUN pip install --upgrade setuptools
+RUN pip3 install --upgrade setuptools
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
 
