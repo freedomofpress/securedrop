@@ -47,7 +47,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         """
         self.last_action = 'init'
         self.create_key()
-        self.tmp_file_id = base64.urlsafe_b64encode(os.urandom(32)).strip('=')
+        self.tmp_file_id = base64.urlsafe_b64encode(os.urandom(32)).decode('utf-8').strip('=')
         self.filepath = os.path.join(store_dir,
                                      '{}.aes'.format(self.tmp_file_id))
         self.file = io.open(self.filepath, 'w+b')
@@ -61,8 +61,8 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         grsecurity-patched kernel it uses (for further details consult
         https://github.com/freedomofpress/securedrop/pull/477#issuecomment-168445450).
         """
-        self.key = os.urandom(self.AES_key_size / 8)
-        self.iv = os.urandom(self.AES_block_size / 8)
+        self.key = os.urandom(int(self.AES_key_size / 8))
+        self.iv = os.urandom(int(self.AES_block_size / 8))
         self.initialize_cipher()
 
     def initialize_cipher(self):
@@ -83,7 +83,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
             raise AssertionError('You cannot write after reading!')
         self.last_action = 'write'
 
-        if isinstance(data, unicode):  # noqa
+        if isinstance(data, str):  # noqa
             data = data.encode('utf-8')
 
         self.file.write(self.encryptor.update(data))
