@@ -11,23 +11,23 @@ Follow the the Qubes platform instructions in :doc:`setup_development`
 to create an ``sd-dev`` Standalone VM. Once done, we'll create three new
 Standalone (HVM) Qubes VMs for use with staging:
 
-- ``sd-trusty-base``, a base VM for cloning reusable staging VMs
+- ``sd-staging-base``, a base VM for cloning reusable staging VMs
 - ``sd-app-base``, a base VM for the *SecureDrop Application Server*
 - ``sd-mon-base``, a base VM for the *SecureDrop Monitor Server*
 
 While the development VM, ``sd-dev``, is based on Debian 9, the other VMs
-will be based on Ubuntu Trusty.
+will be based on Ubuntu Xenial.
 
-Download Ubuntu Trusty server ISO
+Download Ubuntu Xenial server ISO
 ---------------------------------
 
-On ``sd-dev``, download the Ubuntu Trusty server ISO, along with corresponding
+On ``sd-dev``, download the Ubuntu Xenial server ISO, along with corresponding
 checksum and signature files. See the :ref:`hardware installation docs <download_ubuntu>`
-for detailed instructions, replacing Xenial with Trusty (``16.04`` with ``14.04``). If you opt for the command line
-instructions, omit the ``torify`` prepended to the ``curl`` command.
+for detailed instructions. If you opt for the command line instructions, omit
+the ``torify`` prepended to the ``curl`` command.
 
-Create the Trusty base VM
--------------------------
+Create the base VM
+------------------
 
 We're going to build a single, minimally configured Ubuntu VM.
 Once it's bootable, we'll clone it for the application and monitoring VMs.
@@ -36,11 +36,11 @@ In ``dom0``, do the following:
 
 .. code:: sh
 
-   qvm-create sd-trusty-base --class StandaloneVM --property virt_mode=hvm --label green
-   qvm-volume extend sd-trusty-base:root 20g
-   qvm-prefs sd-trusty-base memory 2000
-   qvm-prefs sd-trusty-base maxmem 2000
-   qvm-prefs sd-trusty-base kernel ''
+   qvm-create sd-staging-base --class StandaloneVM --property virt_mode=hvm --label green
+   qvm-volume extend sd-staging-base:root 20g
+   qvm-prefs sd-staging-base memory 2000
+   qvm-prefs sd-staging-base maxmem 2000
+   qvm-prefs sd-staging-base kernel ''
 
 The commands above will create a new StandaloneVM, expand the storage space
 and memory available to it, as well as disable the integrated kernel support.
@@ -53,17 +53,17 @@ In ``dom0``:
 
 .. code:: sh
 
-   qvm-start sd-trusty-base --cdrom=sd-dev:/home/user/ubuntu-14.04.5-server-amd64.iso
+   qvm-start sd-staging-base --cdrom=sd-dev:/home/user/ubuntu-16.04.6-server-amd64.iso
 
 You may need to edit the filepath above if you downloaded the ISO to a
 different location within the ``sd-dev`` VM. Choose **Install Ubuntu**.
 For the most part, the install process matches the
 :ref:`hardware install flow <install_ubuntu>`, with a few exceptions:
 
-  -  Server IP address: use value returned by ``qvm-prefs sd-trusty-base ip``, with ``/24`` netmask suffix
-  -  Gateway: use value returned by ``qvm-prefs sd-trusty-base visible_gateway``
+  -  Server IP address: use value returned by ``qvm-prefs sd-staging-base ip``, with ``/24`` netmask suffix
+  -  Gateway: use value returned by ``qvm-prefs sd-staging-base visible_gateway``
   -  For DNS, use Qubes's DNS servers: ``10.139.1.1`` and ``10.139.1.2``.
-  -  Hostname: ``sd-trusty-base``
+  -  Hostname: ``sd-staging-base``
   -  Domain name should be left blank
 
 Make sure to configure LVM and use **Virtual disk 1 (xvda 20.0GB Xen Virtual Block device)**
@@ -77,7 +77,7 @@ Once installation is done, let the machine shut down and then restart it with
 
 .. code:: sh
 
-   qvm-start sd-trusty-base
+   qvm-start sd-staging-base
 
 in ``dom0``. You should get a login prompt.
 
@@ -85,7 +85,7 @@ Initial VM configuration
 ------------------------
 
 Before cloning this machine, we'll update software to reduce provisioning time
-on the staging VMs. In the new ``sd-trusty-base`` VM's console, do:
+on the staging VMs. In the new ``sd-staging-base`` VM's console, do:
 
 .. code:: sh
 
@@ -99,7 +99,7 @@ Edit ``/etc/sudoers`` using ``visudo`` to make the sudo group line look like
 
    %sudo    ALL=(ALL) NOPASSWD: ALL
 
-When initial configuration is done, run ``qvm-shutdown sd-trusty-base`` to shut it down.
+When initial configuration is done, run ``qvm-shutdown sd-staging-base`` to shut it down.
 
 Clone VMs
 ---------
@@ -111,8 +111,8 @@ documented below. Run the following in ``dom0``:
 
 .. code:: sh
 
-   qvm-clone sd-trusty-base sd-app-base
-   qvm-clone sd-trusty-base sd-mon-base
+   qvm-clone sd-staging-base sd-app-base
+   qvm-clone sd-staging-base sd-mon-base
    qvm-prefs sd-app-base ip 10.137.0.50
    qvm-prefs sd-mon-base ip 10.137.0.51
    qvm-tags sd-app-base add created-by-sd-dev
@@ -224,7 +224,7 @@ Once finished, build the Debian packages for installation on the staging VMs.
 
 .. code::
 
-   make build-debs
+   make build-debs-xenial
 
 The ``.deb`` files will be available in ``build/``.
 
@@ -269,7 +269,7 @@ Creating staging instance
 After creating the StandaloneVMs as described above:
 
 * ``sd-dev``
-* ``sd-trusty-base``
+* ``sd-staging-base``
 * ``sd-app-base``
 * ``sd-mon-base``
 
@@ -278,21 +278,37 @@ environment. In from the root of the SecureDrop project in ``sd-dev``, run:
 
 .. code:: sh
 
-   molecule test -s qubes-staging
+   make staging
+
+One limitation of Qubes is that the reboot handlers which run during 
+provisioning can shut down the VMs, but not start them again. When you see the
+message ``RUNNING HANDLER [common : Wait for server to come back.]`` you must 
+start the VMs again manually from ``dom0`` with the command 
+``qvm-start sd-app && qvm-start sd-mon``.
 
 .. note::
-   The reboot actions run against the VMs during provisioning will only shutdown
-   the VMs, not start them again, since these are Standalone VMs. Therefore
-   the ``test`` action will fail by default, unless you judiciously run
-   ``qvm-start <vm>`` for each VM after they've shut down.
 
-You can use the smaller constituent Molecule actions, rather than the bundled
-``test`` action:
+ When you run ``make staging`` for the first time, after the installation of the 
+ grsec kernel the ``eth0`` interfaces on ``sd-app`` and ``sd-mon`` may be 
+ renamed to ``ens5``. In this case, you will need to update ``/etc/networking/interfaces``
+ accordingly, restart the VMs, and run ``make staging`` again.
+
+The ``make staging`` command invokes the ``qubes-staging`` Molecule scenario. 
+You can also run constituent Molecule actions directly, rather than using
+the Makefile target: 
 
 .. code:: sh
 
    molecule create -s qubes-staging
    molecule converge -s qubes-staging
+   molecule test -s qubes-staging
+
+.. note:: 
+
+  If the Molecule converge scenario fails with an error like ``"stderr": 
+  "app: Failed to clone appmenus, qvm-appmenus missing\`` you may be running 
+  into a bug in Qubes that prevents non-dom0 VMs from cloning new VMs. A 
+  workaround is described `here <https://github.com/freedomofpress/securedrop/issues/3936>`_.
 
 That's it. You should now have a running, configured SecureDrop staging instance
 running on your Qubes machine. For day-to-day operation, you should run
