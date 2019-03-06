@@ -25,7 +25,7 @@ mkdir -p "/tmp/test-results/logs"
 : "${PAGE_LAYOUT_LOCALES:=en_US,ar,fr_FR}"
 export PAGE_LAYOUT_LOCALES
 
-pytest \
+py.test \
   --page-layout \
   --durations 10 \
   --junitxml=/tmp/test-results/junit.xml \
