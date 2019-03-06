@@ -141,7 +141,7 @@ def main():
             except OSError:
                 pass
 
-        vm = LibVirtPackager("vagrant_packager_"+srv)
+        vm = LibVirtPackager("vagrant-packager_"+srv)
 
         tmp_img_file = join(EPHEMERAL_DIRS["tmp"], "wip.img")
         packaged_img_file = join(EPHEMERAL_DIRS["build"], "box.img")

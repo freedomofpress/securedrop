@@ -1,6 +1,4 @@
 ---
-dependency:
-  name: galaxy
 driver:
   name: vagrant
   provider:
@@ -10,12 +8,11 @@ lint:
 
 platforms:
   - name: app-staging
-    box: fpf/securedrop-app-xenial
-    box_url: "../vagrant-packager/box_files/app_xenial_metadata.json"
+    box: bento/ubuntu-14.04
     instance_raw_config_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true"
+      - "vm.network 'private_network', ip: '10.0.1.2'"
       - "ssh.insert_key = false"
-    provider_override_args:
-      - "vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
     memory: 1024
     private_ip: 10.0.1.2
     groups:
@@ -24,26 +21,17 @@ platforms:
       - staging
 
   - name: mon-staging
-    box: fpf/securedrop-mon-xenial
-    box_url: "../vagrant-packager/box_files/mon_xenial_metadata.json"
+    box: bento/ubuntu-14.04
     instance_raw_config_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true"
+      - "vm.network 'private_network', ip: '10.0.1.3'"
       - "ssh.insert_key = false"
-    provider_override_args:
-      - "vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
     memory: 1024
     private_ip: 10.0.1.3
     groups:
       - securedrop_monitor_server
       - securedrop
       - staging
-
-  - name: apt
-    box: bento/ubuntu-16.04
-    provider_override_args:
-      - "vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
-    memory: 256
-    groups:
-      - aptservers
 
 provisioner:
   name: ansible
@@ -56,6 +44,7 @@ provisioner:
   env:
     ANSIBLE_ROLES_PATH: ".molecule/roles"
   options:
+    skip-tags: "local_build"
     e: "@ansible-override-vars.yml"
   config_options:
     ssh_connection:
@@ -64,14 +53,12 @@ provisioner:
     side_effect: side_effect.yml
 
 scenario:
-  name: upgrade
-  create_sequence:
+  name: vagrant-packager-trusty
+  test_sequence:
+    - destroy
     - create
-    - dependency
-  converge_sequence:
-    - create
-    - dependency
     - converge
+    - side_effect
 verifier:
   name: testinfra
   lint:

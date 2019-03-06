@@ -120,12 +120,12 @@ testing. The procedure is as follows:
 
 1. ``git checkout <version>``
 2. ``make vagrant-package``
-3. ``mv molecule/vagrant_packager/build/app-staging{,_<version>}.box``
-4. ``mv molecule/vagrant_packager/build/mon-staging{,_<version>}.box``
-5. ``sha256sum molecule/vagrant_packager/build/*.box``
-6. Manually update ``molecule/vagrant_packager/box_files/*.json`` with new
+3. ``mv molecule/vagrant-packager/build/app-staging{,_<version>}.box``
+4. ``mv molecule/vagrant-packager/build/mon-staging{,_<version>}.box``
+5. ``sha256sum molecule/vagrant-packager/build/*.box``
+6. Manually update ``molecule/vagrant-packager/box_files/*.json`` with new
    version information, including URL and checksum.
-7. ``cd molecule/vagrant_packager && ./push.yml`` to upload to S3
+7. ``cd molecule/vagrant-packager && ./push.yml`` to upload to S3
 8. Commit the local changes to JSON files and open a PR.
 
 Subsequent invocations of ``make upgrade-start`` will pull the latest
