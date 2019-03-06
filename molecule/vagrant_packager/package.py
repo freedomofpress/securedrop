@@ -120,6 +120,14 @@ def main():
     SCENARIO_PATH = os.path.dirname(os.path.realpath(__file__))
     BOX_PATH = join(SCENARIO_PATH, "build")
     EPHEMERAL_DIRS = {}
+    TARGET_VERSION_FILE = os.path.join(SCENARIO_PATH, os.path.pardir, "shared", "stable.ver")
+    with open(TARGET_VERSION_FILE, 'r') as f:
+        TARGET_VERSION = f.read().strip()
+    try:
+        TARGET_PLATFORM = os.environ['SECUREDROP_TARGET_PLATFORM']
+    except KeyError:
+        msg = "Set SECUREDROP_TARGET_PLATFORM env var to 'trusty' or 'xenial'"
+        raise Exception(msg)
 
     for srv in ["app-staging", "mon-staging"]:
 
@@ -174,7 +182,7 @@ def main():
                         join(EPHEMERAL_DIRS['build'], 'Vagrantfile'))
 
         print("Creating tar file")
-        box_file = join(BOX_PATH, srv+".box")
+        box_file = join(BOX_PATH, "{}-{}_{}.box".format(srv, TARGET_PLATFORM, TARGET_VERSION))
         with tarfile.open(box_file, "w|gz") as tar:
             for boxfile in ["box.img", "Vagrantfile", "metadata.json"]:
                 tar.add(join(EPHEMERAL_DIRS["build"], boxfile),

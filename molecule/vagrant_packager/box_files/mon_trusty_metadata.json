@@ -1,5 +1,5 @@
 {
-  "name": "fpf/securedrop-mon",
+  "name": "fpf/securedrop-mon-trusty",
   "description": "This box contains securedrop monitor server.",
   "versions": [
     {
@@ -54,6 +54,17 @@
           "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging_0.11.1.box",
           "checksum_type": "sha256",
           "checksum": "bbc8ed55fab20ed96c3b090126b69baabbd41e95faa60676dff72bc69af67376"
+        }
+      ]
+    },
+    {
+      "version": "0.12.0",
+      "providers": [
+        {
+          "name": "libvirt",
+          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging-trusty_0.12.0.box",
+          "checksum_type": "sha256",
+          "checksum": "0ac7538f52b3450a1791a06b8a02fe81b65637da92bb00a61b669beccef87f8d"
         }
       ]
     }
