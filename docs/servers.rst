@@ -15,7 +15,7 @@ Install Ubuntu
   exactly as there are some "gotchas" that may cause your SecureDrop set up to break.
 
 The SecureDrop *Application Server* and *Monitor Server* run **Ubuntu Server
-16.04.5 LTS (Xenial Xerus)**. To install Ubuntu on the servers, you must first
+16.04.6 LTS (Xenial Xerus)**. To install Ubuntu on the servers, you must first
 download and verify the Ubuntu installation media. You should use the *Admin
 Workstation* to download and verify the Ubuntu installation media.
 
@@ -27,7 +27,7 @@ Download the Ubuntu Installation Media
 The installation media and the files required to verify it are available on the
 `Ubuntu Releases page`_. You will need to download the following files:
 
-* `ubuntu-16.04.5-server-amd64.iso`_
+* `ubuntu-16.04.6-server-amd64.iso`_
 * `SHA256SUMS`_
 * `SHA256SUMS.gpg`_
 
@@ -43,16 +43,16 @@ Alternatively, you can use the command line:
 .. code:: sh
 
    cd ~/Persistent
-   torify curl -OOO http://releases.ubuntu.com/16.04.5/{ubuntu-16.04.5-server-amd64.iso,SHA256SUMS{,.gpg}}
+   torify curl -OOO http://releases.ubuntu.com/16.04.6/{ubuntu-16.04.6-server-amd64.iso,SHA256SUMS{,.gpg}}
 
 .. note:: Downloading Ubuntu on the *Admin Workstation* can take a while
    because Tails does everything over Tor, and Tor is typically slow relative
    to the speed of your upstream Internet connection.
 
 .. _Ubuntu Releases page: http://releases.ubuntu.com/
-.. _ubuntu-16.04.5-server-amd64.iso: http://releases.ubuntu.com/16.04.5/ubuntu-16.04.5-server-amd64.iso
-.. _SHA256SUMS: http://releases.ubuntu.com/16.04.5/SHA256SUMS
-.. _SHA256SUMS.gpg: http://releases.ubuntu.com/16.04.5/SHA256SUMS.gpg
+.. _ubuntu-16.04.6-server-amd64.iso: http://releases.ubuntu.com/16.04.6/ubuntu-16.04.6-server-amd64.iso
+.. _SHA256SUMS: http://releases.ubuntu.com/16.04.6/SHA256SUMS
+.. _SHA256SUMS.gpg: http://releases.ubuntu.com/16.04.6/SHA256SUMS.gpg
 
 Verify the Ubuntu Installation Media
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,13 +86,13 @@ Verify the ``SHA256SUMS`` file and move on to the next step if you see
 
 The next and final step is to verify the Ubuntu image. ::
 
-    sha256sum -c <(grep ubuntu-16.04.5-server-amd64.iso SHA256SUMS)
+    sha256sum -c <(grep ubuntu-16.04.6-server-amd64.iso SHA256SUMS)
 
 
 If the final verification step is successful, you should see the
 following output in your terminal. ::
 
-    ubuntu-16.04.5-server-amd64.iso: OK
+    ubuntu-16.04.6-server-amd64.iso: OK
 
 .. caution:: If you do not see the line above it is not safe to proceed with the
              installation. If this happens, please contact us at
@@ -120,7 +120,7 @@ Ubuntu installer.
 If your USB is mapped to /dev/sdX and you are currently in the directory that
 contains the Ubuntu ISO, you would use dd like so: ::
 
-   sudo dd conv=fdatasync if=ubuntu-16.04.5-server-amd64.iso of=/dev/sdX
+   sudo dd conv=fdatasync if=ubuntu-16.04.6-server-amd64.iso of=/dev/sdX
 
 .. _install_ubuntu:
 
