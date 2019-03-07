@@ -3,6 +3,7 @@
 #
 #
 #
+import hashlib
 import json
 import os
 from os.path import join
@@ -11,6 +12,17 @@ import shutil
 import subprocess
 import tarfile
 import xml.etree.ElementTree as ET
+
+
+# Current script is symlinked into adjacent scenario, for Trusty compatibility.
+# Look up "name" for scenario from real path (relative to symlink), but store
+# all artifacts in primary scenario (via realpath).
+SCENARIO_NAME = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
+SCENARIO_PATH = os.path.dirname(os.path.realpath(__file__))
+BOX_BUILD_DIR = join(SCENARIO_PATH, "build")
+BOX_METADATA_DIR = join(SCENARIO_PATH, "box_files")
+EPHEMERAL_DIRS = {}
+TARGET_VERSION_FILE = os.path.join(SCENARIO_PATH, os.path.pardir, "shared", "stable.ver")
 
 
 class LibVirtPackager(object):
@@ -117,15 +129,6 @@ class LibVirtPackager(object):
 
 
 def main():
-    # Current script is symlinked into adjacent scenario, for Trusty compatibility.
-    # Look up "name" for scenario from real path (relative to symlink), but store
-    # all artifacts in primary scenario (via realpath).
-    SCENARIO_NAME = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
-    SCENARIO_PATH = os.path.dirname(os.path.realpath(__file__))
-    BOX_PATH = join(SCENARIO_PATH, "build")
-    EPHEMERAL_DIRS = {}
-    TARGET_VERSION_FILE = os.path.join(SCENARIO_PATH, os.path.pardir, "shared", "stable.ver")
-
     with open(TARGET_VERSION_FILE, 'r') as f:
         TARGET_VERSION = f.read().strip()
 
@@ -184,11 +187,11 @@ def main():
                 mdata)
 
         # Copy in appropriate vagrant file to build dir
-        shutil.copyfile(join(SCENARIO_PATH, "box_files", "Vagrantfile."+srv),
+        shutil.copyfile(join(BOX_METADATA_DIR, "Vagrantfile."+srv),
                         join(EPHEMERAL_DIRS['build'], 'Vagrantfile'))
 
         print("Creating tar file")
-        box_file = join(BOX_PATH, "{}-{}_{}.box".format(srv, TARGET_PLATFORM, TARGET_VERSION))
+        box_file = join(BOX_BUILD_DIR, "{}-{}_{}.box".format(srv, TARGET_PLATFORM, TARGET_VERSION))
         with tarfile.open(box_file, "w|gz") as tar:
             for boxfile in ["box.img", "Vagrantfile", "metadata.json"]:
                 tar.add(join(EPHEMERAL_DIRS["build"], boxfile),
@@ -196,8 +199,67 @@ def main():
 
         print("Box created at {}".format(box_file))
 
+        print("Updating box metadata")
+        update_box_metadata(srv, box_file, TARGET_PLATFORM, TARGET_VERSION)
+
         print("Clean-up tmp space")
         shutil.rmtree(EPHEMERAL_DIRS['tmp'])
+
+
+def sha256_checksum(filepath):
+    """
+    Returns a SHA256 checksum for a given filepath.
+    """
+    checksum = hashlib.sha256()
+    with open(filepath, 'rb') as f:
+        # Read by chunks, to avoid slurping the entire file into memory.
+        # Box files range from 500MB to 1.5GB.
+        for block in iter(lambda: f.read(checksum.block_size), b''):
+            checksum.update(block)
+    return checksum.hexdigest()
+
+
+def update_box_metadata(server_name, box_file, platform, version):
+    """
+    Updates the JSON file of Vagrant box metadata, including remote URL,
+    version number, and SHA256 checksum.
+    """
+    # Strip off "staging" suffix from box names
+    server_name_short = re.sub('\-staging$', '', server_name)
+    json_file_basename = "{}_{}_metadata.json".format(server_name_short, platform)
+    json_file = os.path.join(BOX_METADATA_DIR, json_file_basename)
+
+    # Read in current JSON metadata, so we can append the new info to it.
+    with open(json_file, "r") as f:
+        metadata_config = json.loads(f.read())
+
+    base_url = "https://s3.amazonaws.com/securedrop-vagrant"
+    box_name = os.path.basename(box_file)
+    box_url = "{}/{}".format(base_url, box_name)
+    box_checksum = sha256_checksum(box_file)
+    box_config = dict(
+        name="libvirt",
+        url=box_url,
+        checksum_type="sha256",
+        checksum=box_checksum,
+    )
+    # Creating list of dicts to adhere to JSON format of Vagrant box metadata
+    providers_list = []
+    providers_list.append(box_config)
+    version_config = dict(
+        version=version,
+        providers=providers_list,
+    )
+    box_versions = metadata_config['versions']
+    box_versions.append(version_config)
+    metadata_config['versions'] = box_versions
+
+    # Write out final, modified data. Does not validate for uniqueness,
+    # so repeated runs on the same version will duplicate version info,
+    # which'll likely break the box fetching. Target file is version-controlled,
+    # though, so easy enough to correct in the event of a mistake.
+    with open(json_file, "w") as f:
+        f.write(json.dumps(metadata_config, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":
