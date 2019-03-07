@@ -120,7 +120,7 @@ jobs:
       - store_artifacts:
           path: ~/test-results
 
-  xenial-app-tests:
+  app-tests:
     machine:
       enabled: true
     environment:
@@ -237,7 +237,7 @@ jobs:
           name: Run static security testing on source code
           command: make bandit
 
-  staging-test-with-rebase:
+  staging-test-with-rebase-trusty:
     machine:
       enabled: true
 
@@ -248,7 +248,7 @@ jobs:
 
       - run:
           name: Run Staging tests on GCE
-          command: make ci-go
+          command: make ci-go-trusty
           no_output_timeout: 20m
 
       - run:
@@ -264,7 +264,7 @@ jobs:
       - store_artifacts:
           path: ~/sd/junit
 
-  staging-test-with-rebase-xenial:
+  staging-test-with-rebase:
     machine:
       enabled: true
 
@@ -275,7 +275,7 @@ jobs:
 
       - run:
           name: Run Staging tests on GCE (Xenial)
-          command: make ci-go-xenial
+          command: make ci-go
           no_output_timeout: 20m
 
       - run:
@@ -296,7 +296,7 @@ workflows:
   securedrop_ci:
     jobs:
       - lint
-      - xenial-app-tests:
+      - app-tests:
           filters:
             branches:
               ignore:
@@ -320,7 +320,7 @@ workflows:
               ignore:
                 - /docs-.*/
                 - /i18n-.*/
-      - staging-test-with-rebase-xenial:
+      - staging-test-with-rebase:
           filters:
             branches:
               ignore:
@@ -344,5 +344,5 @@ workflows:
                 - develop
     jobs:
       - static-analysis-and-no-known-cves
-      - staging-test-with-rebase
+      - staging-test-with-rebase-trusty
       - trusty-app-tests

@@ -9,9 +9,9 @@ STABLE_VER := $(shell cat molecule/shared/stable.ver)
 ci-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment.
 	./devops/gce-nested/ci-go.sh
 
-.PHONY: ci-go-xenial
-ci-go-xenial: ## Creates, provisions, tests, and destroys GCE host for testing staging environment under xenial.
-	./devops/gce-nested/ci-go.sh xenial
+.PHONY: ci-go-trusty
+ci-go-trusty: ## Creates, provisions, tests, and destroys GCE host for testing staging environment under trusty.
+	./devops/gce-nested/ci-go.sh trusty
 
 .PHONY: ci-teardown
 ci-teardown: ## Destroys GCE host for testing staging environment.
@@ -89,13 +89,13 @@ build-debs: ## Builds and tests debian packages
 build-debs-notest: ## Builds and tests debian packages (sans tests)
 	@./devops/scripts/build-debs.sh notest
 
-.PHONY: build-debs-xenial
-build-debs-xenial: ## Builds and tests debian packages (includes Xenial overrides, TESTING ONLY)
-	@./devops/scripts/build-debs.sh test xenial
+.PHONY: build-debs-trusty
+build-debs-trusty: ## Builds and tests debian packages (for Trusty)
+	@./devops/scripts/build-debs.sh test trusty
 
-.PHONY: build-debs-xenial-notest
-build-debs-xenial-notest: ## Builds and tests debian packages (includes Xenial overrides, sans tests, TESTING ONLY)
-	@./devops/scripts/build-debs.sh notest xenial
+.PHONY: build-debs-trusty-notest
+build-debs-trusty-notest: ## Builds and tests debian packages (for Trusty)
+	@./devops/scripts/build-debs.sh notest trusty
 
 .PHONY: build-gcloud-docker
 build-gcloud-docker: ## Build docker container for gcloud sdk
@@ -147,11 +147,11 @@ vagrant-package: ## Package up a vagrant box of the last stable SD release
 
 .PHONY: staging
 staging: ## Creates local staging environment in VM, autodetecting platform
-	@./devops/scripts/create-staging-env
-
-.PHONY: staging-xenial
-staging-xenial: ## Creates local staging VMs based on Xenial, autodetecting platform
 	@./devops/scripts/create-staging-env xenial
+
+.PHONY: staging-trusty
+staging-trusty: ## Creates local staging VMs based on Trusty, autodetecting platform
+	@./devops/scripts/create-staging-env
 
 .PHONY: clean
 clean: ## DANGER! Purges all site-specific info and developer files from project.

@@ -13,8 +13,8 @@ set -u
 set -o pipefail
 
 
-# Assume we're running against Trusty; Xenial also supported.
-target_platform="${1:-trusty}"
+# Assume we're running against Xenial; Trusty also supported.
+target_platform="${1:-xenial}"
 
 ./devops/gce-nested/gce-start.sh
 ./devops/gce-nested/gce-runner.sh "$target_platform"
