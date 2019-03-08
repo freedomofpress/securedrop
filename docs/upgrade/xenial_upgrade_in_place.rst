@@ -246,6 +246,24 @@ stepping through the configuration using:
 
   ./securedrop-admin sdconfig
 
+Next, you may need to update your servers' default locale settings. This step is
+required if your servers were installed with language and locale settings that
+are incompatible with the SecureDrop installer's Ansible playbook. You can check
+your settings as follows:
+
+.. code:: sh
+ 
+  ssh app sudo locale | grep LANG=
+  ssh mon sudo locale | grep LANG=
+
+If the ``LANG`` variable is set to anything other than a blank value or an 
+English variant, you must change it using the following commands:
+
+.. code:: sh
+ 
+  ssh app sudo update-locale --reset LANG=  
+  ssh mon sudo update-locale --reset LANG=  
+
 Finally, install the Ubuntu 16.04 version of the server application code and
 configuration:
 
