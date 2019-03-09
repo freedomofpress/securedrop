@@ -157,6 +157,7 @@ staging-trusty: ## Creates local staging VMs based on Trusty, autodetecting plat
 clean: ## DANGER! Purges all site-specific info and developer files from project.
 	@./devops/clean
 
+# Xenial upgrade targets
 .PHONY: upgrade-start
 upgrade-start: ## Boot up an upgrade test base environment using libvirt
 	@SD_UPGRADE_BASE=$(STABLE_VER) molecule converge -s upgrade
@@ -177,6 +178,28 @@ upgrade-test-local: ## Once an upgrade environment is running, force upgrade apt
 upgrade-test-qa: ## Once an upgrade environment is running, force upgrade apt packages (from qa server)
 	@QA_APTTEST=yes molecule converge -s upgrade -- --diff -t apt
 	@QA_APTTEST=yes molecule side-effect -s upgrade
+
+# Trusty upgrade targets (deprecated)
+.PHONY: upgrade-trusty-start
+upgrade-trusty-start: ## Boot up an upgrade test base environment (Trusty) using libvirt
+	@SD_UPGRADE_BASE=$(STABLE_VER) molecule converge -s upgrade-trusty
+
+.PHONY: upgrade-trusty-start-qa
+upgrade-trusty-start-qa: ## Boot up an upgrade test base env (Trusty) using libvirt in remote apt mode
+	@SD_UPGRADE_BASE=$(STABLE_VER) QA_APTTEST=yes molecule converge -s upgrade-trusty
+
+.PHONY: upgrade-trusty-destroy
+upgrade-trusty-destroy: ## Destroy up an upgrade test base (Trusty) environment
+	@SD_UPGRADE_BASE=$(STABLE_VER) molecule destroy -s upgrade-trusty
+
+.PHONY: upgrade-trusty-test-local
+upgrade-trusty-test-local: ## Once an upgrade environment (Trusty) is running, force upgrade apt packages (local pkgs)
+	@molecule side-effect -s upgrade-trusty
+
+.PHONY: upgrade-trusty-test-qa
+upgrade-trusty-test-qa: ## Once an upgrade environment (Trusty) is running, force upgrade apt packages (from qa server)
+	@QA_APTTEST=yes molecule converge -s upgrade-trusty -- --diff -t apt
+	@QA_APTTEST=yes molecule side-effect -s upgrade-trusty
 
 .PHONY: fetch-tor-packages
 fetch-tor-packages: ## Retrieves the most recent Tor packages for Xenial, for apt repo

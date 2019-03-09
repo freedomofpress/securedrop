@@ -29,6 +29,12 @@ https://apt-test.freedom.press/. Both options are described below.
 Upgrade testing using locally-built packages
 --------------------------------------------
 
+.. note::
+   As of ``0.12.1``, the default platform for upgrade testing
+   boxes is Ubuntu Xenial 16.04. For a limited time, we will also support
+   upgrade boxes based on Ubuntu Trusty 14.04. Substitute ``upgrade-trusty``
+   for ``upgrade`` in the actions documented below to force use of Trusty.
+
 First, build the app code packages and create the environment:
 
 .. code:: sh
