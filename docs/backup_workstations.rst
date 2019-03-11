@@ -94,43 +94,35 @@ mounted and ready to access.
 
 |Backup and TailsData Mounted|
 
-Open a Nautilus window with administrative privileges by first going to
+Open a terminal with administrative privileges by going to
 **Applications** ▸ **System Tools** ▸ **Root Terminal**.
 
 |Root Terminal|
 
-Type ``nautilus`` at the terminal prompt and hit enter. You'll need to type in
-your administrative passphrase you set at the Tails login screen.
-
-|Start Nautilus|
-
-.. note:: When you run ``nautilus``, you may run into an error where Nautilus
- complains that it can't create a required folder. If that happens, just
- click OK and continue normally.
-
+.. note:: 
  If you can't find the "Root Terminal" window, it might be because an
  administrator passphrase wasn't set when you logged in to Tails. If
  that's the case, you'll need to restart Tails and set one at the login screen.
 
-.. warning:: Make sure you use keep the `Root Terminal` window open while
- you perform the backups. Otherwise, the `Nautilus` window will close.
+Next, create a directory on the Backup USB for the device to be backed up - the
+command below creates a directory named ``admin-backup``:
 
-Make sure you create a directory on the backup drive to store the data from the
-drive you are backing up:
+.. code:: sh
+ 
+  mkdir /media/amnesia/Backup/admin-backup
 
-|Make Folders for All Drives|
+Then, copy the contents of the device's persistent volume to the directory using 
+``rsync``:
 
-Copy over everything in the TailsData partition to the relevant folder on the
-Backup drive. You can simply drag to select all the files and then copy and
-paste them to the relevant folder on the Backup drive.
+.. code:: sh
 
-In particular, ensure ``gnupg`` and ``Persistent`` have been successfully
-copied over. These files are critical for decrypting submissions.
+  rsync -avzh --no-specials --no-devices \
+      /media/amnesia/TailsData/ /media/amnesia/Backup/admin-backup
 
 Once complete, unmount the TailsData partition.
 
 Repeat these steps for every device, making a new folder on the backup device
-for each device you backup.
+for each device you back up.
 
 Finally, once you have completed the steps described in this section for each
 USB drive, unmount the Backup partition and store the drive somewhere safely.
