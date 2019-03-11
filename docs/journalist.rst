@@ -165,10 +165,9 @@ displays that source's documents and replies.
 |Flag for reply notification|
 
 You will not be able to reply until after the source logs in again and
-sees that you would like to talk to him or her. So you may have to sit
-and wait. After the source sees that you'd like to reply, a GPG key pair
-will automatically be generated and you can log back in and send a
-reply.
+sees that you would like to talk to them. So you may have to sit and wait. After
+the source sees that you'd like to reply, a GPG key pair will automatically be
+generated and you can log back in and send a reply.
 
 Moving Documents to the *Secure Viewing Station*
 ------------------------------------------------
