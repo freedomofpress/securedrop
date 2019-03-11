@@ -258,11 +258,11 @@ that includes a file integrity monitor. More information can be found
 **Don't log access to the *Landing Page* in the webserver**
 
 Here's an Apache example that would exclude the *Landing Page* from
-logging:
+logging. However you still need to make sure no other assets get logged!
 
 ::
 
-    SetEnvIf Request_URI "^/securedrop$" dontlog
+    SetEnvIf Request_URI "^/securedrop($|(\/.*))" dontlog
     CustomLog logs/access_log common env=!dontlog
 
 In nginx, logging can be disabled like so:
