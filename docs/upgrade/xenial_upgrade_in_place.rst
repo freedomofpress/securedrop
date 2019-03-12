@@ -257,12 +257,13 @@ your settings as follows:
   ssh mon sudo locale | grep LANG=
 
 If the ``LANG`` variable is set to anything other than a blank value or an 
-English variant, you must change it using the following commands:
+English variant, you must change your locale settings using the following 
+commands:
 
 .. code:: sh
  
-  ssh app sudo update-locale --reset LANG=  
-  ssh mon sudo update-locale --reset LANG=  
+  ssh app sudo update-locale --reset LC_ALL=C 
+  ssh mon sudo update-locale --reset LC_ALL=C
 
 Finally, install the Ubuntu 16.04 version of the server application code and
 configuration:
