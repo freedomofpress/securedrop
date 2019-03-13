@@ -241,7 +241,7 @@ def test_deb_package_contains_expected_conffiles(host, deb):
     deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
 
-    # Only relevant for the securedrop-app-code package:
+    # For the securedrop-app-code package:
     if "securedrop-app-code" in deb_package.path:
         tmpdir = tempfile.mkdtemp()
         # The `--raw-extract` flag includes `DEBIAN/` dir with control files
@@ -254,6 +254,12 @@ def test_deb_package_contains_expected_conffiles(host, deb):
         # effectively ensures e.g. AppArmor profiles are not conffiles.
         conffiles = f.content_string.rstrip()
         assert conffiles == "/var/www/securedrop/static/i/logo.png"
+
+    # For the securedrop-config package, we want to ensure there are no
+    # conffiles so securedrop_additions.sh is squashed every time
+    if "securedrop-config" in deb_package.path:
+        c = host.run("dpkg-deb -I {}".format(deb))
+        assert "conffiles" not in c.stdout
 
 
 @pytest.mark.parametrize("deb", deb_packages)
@@ -445,6 +451,24 @@ def test_ossec_binaries_are_present_server(host, deb):
             "/var/ossec/bin/ossec-analysisd",
             "/var/ossec/bin/ossec-execd",
             "/var/ossec/bin/ossec-authd",
+        ]
+        c = host.run("dpkg-deb --contents {}".format(deb_package.path))
+        for wanted_file in wanted_files:
+            assert wanted_file in c.stdout
+
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_config_package_contains_expected_files(host, deb):
+    """
+    Inspect the package contents to ensure all config files are included in
+    the package.
+    """
+    deb_package = host.file(deb.format(
+        securedrop_test_vars.securedrop_version))
+    if "securedrop-config" in deb_package.path:
+        wanted_files = [
+            "/etc/cron-apt/action.d/9-remove",
+            "/etc/profile.d/securedrop_additions.sh",
         ]
         c = host.run("dpkg-deb --contents {}".format(deb_package.path))
         for wanted_file in wanted_files:
