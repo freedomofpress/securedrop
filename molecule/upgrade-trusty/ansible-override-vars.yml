@@ -24,5 +24,5 @@ etc_hosts:
     - reg: app-staging$
       line: "{{ app_ip }}  app-staging"
 
-# Set Xenial as apt repo channel for hosting deb packages
-rep_dist: xenial
+# Set Trusty as apt repo channel for hosting deb packages
+rep_dist: trusty

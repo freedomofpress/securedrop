@@ -18,7 +18,7 @@ function remove_unwanted_files() {
     # Remove extraneous copies of the git repos, pulled in
     # via the Molecule upgrade testing scenario.
     rm -rf molecule/upgrade/.molecule/sd-orig \
-        molecule/vagrant_packager/.molecule/sd-orig
+        molecule/vagrant-packager/.molecule/sd-orig
 
     # Python bytecode, left over from tests or local app runs.
     find "$PWD" -type f -iname '*.pyc' -delete

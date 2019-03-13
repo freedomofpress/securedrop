@@ -64,6 +64,7 @@
   max_fail_percentage: 0
   any_errors_fatal: yes
   tasks:
-    - import_tasks: reboot_and_wait.yml
+    # Reuse existing "reboot-and-wait" logic from site config
+    - import_tasks: ../../install_files/ansible-base/tasks/reboot.yml
       tags: reboot
   become: yes

@@ -1,0 +1,17 @@
+{
+  "description": "Testing VM image for SecureDrop Application Server running Ubuntu Xenial.",
+  "name": "fpf/securedrop-app-xenial",
+  "versions": [
+    {
+      "providers": [
+        {
+          "checksum": "79cfa415df0bc83891dab59832564a89815f144ff1248995add90bc84e167ca5",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://s3.amazonaws.com/securedrop-vagrant/app-staging-xenial_0.12.0.box"
+        }
+      ],
+      "version": "0.12.0"
+    }
+  ]
+}

@@ -29,6 +29,12 @@ https://apt-test.freedom.press/. Both options are described below.
 Upgrade testing using locally-built packages
 --------------------------------------------
 
+.. note::
+   As of ``0.12.1``, the default platform for upgrade testing
+   boxes is Ubuntu Xenial 16.04. For a limited time, we will also support
+   upgrade boxes based on Ubuntu Trusty 14.04. Substitute ``upgrade-trusty``
+   for ``upgrade`` in the actions documented below to force use of Trusty.
+
 First, build the app code packages and create the environment:
 
 .. code:: sh
@@ -120,13 +126,8 @@ testing. The procedure is as follows:
 
 1. ``git checkout <version>``
 2. ``make vagrant-package``
-3. ``mv molecule/vagrant_packager/build/app-staging{,_<version>}.box``
-4. ``mv molecule/vagrant_packager/build/mon-staging{,_<version>}.box``
-5. ``sha256sum molecule/vagrant_packager/build/*.box``
-6. Manually update ``molecule/vagrant_packager/box_files/*.json`` with new
-   version information, including URL and checksum.
-7. ``cd molecule/vagrant_packager && ./push.yml`` to upload to S3
-8. Commit the local changes to JSON files and open a PR.
+3. ``cd molecule/vagrant-packager && ./push.yml`` to upload to S3
+4. Commit the local changes to JSON files and open a PR.
 
 Subsequent invocations of ``make upgrade-start`` will pull the latest
 version of the box.

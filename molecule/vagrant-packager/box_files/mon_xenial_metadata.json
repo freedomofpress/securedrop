@@ -1,0 +1,17 @@
+{
+  "description": "Testing VM image for SecureDrop Monitor Server running Ubuntu Xenial.",
+  "name": "fpf/securedrop-mon-xenial",
+  "versions": [
+    {
+      "providers": [
+        {
+          "checksum": "efa3c6aa38279c3c9caadea0480ac5d1e855ccbac7afe54aeb56d9075b0874e9",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging-xenial_0.12.0.box"
+        }
+      ],
+      "version": "0.12.0"
+    }
+  ]
+}
