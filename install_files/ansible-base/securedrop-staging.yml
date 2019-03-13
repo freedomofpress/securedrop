@@ -2,6 +2,8 @@
 ---
 - name: Scrape build directory
   hosts: localhost
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   tasks:
@@ -23,6 +25,8 @@
 
 - name: Prepare servers for installation
   hosts: staging
+  environment:
+    LC_ALL: C
   gather_facts: no
   max_fail_percentage: 0
   any_errors_fatal: yes
@@ -32,6 +36,8 @@
 
 - name: Add FPF apt repository and install base packages.
   hosts: staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
@@ -47,6 +53,8 @@
 
 - name: Configure OSSEC.
   hosts: staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
@@ -56,6 +64,8 @@
 
 - name: Configure mailing utilities.
   hosts: mon-staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
@@ -65,6 +75,8 @@
 
 - name: Configure SecureDrop Application Server.
   hosts: app-staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
@@ -77,6 +89,8 @@
   # and default false in production environments, in order to force SSH traffic over Tor.
 - name: Configure host firewalls (with direct access for staging).
   hosts: staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
@@ -85,6 +99,8 @@
 
 - name: Reboot Application and Monitor Servers.
   hosts: staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
