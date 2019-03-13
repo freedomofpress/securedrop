@@ -116,7 +116,7 @@ Then, copy the contents of the device's persistent volume to the directory using
 
 .. code:: sh
 
-  rsync -avzh --no-specials --no-devices \
+  rsync -a --info=progress2 --no-specials --no-devices \
       /media/amnesia/TailsData/ /media/amnesia/Backup/admin-backup
 
 Once complete, unmount the TailsData partition.
