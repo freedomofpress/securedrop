@@ -21,6 +21,8 @@ fi
 
 readonly NEW_VERSION=$1
 
+export EDITOR=vim
+
 if [ -z "$NEW_VERSION" ]; then
   echo "You must specify the new version!"
   exit 1
@@ -64,7 +66,7 @@ fi
 
 # Update the changelog
 sed -i "s/\(## ${OLD_VERSION}\)/## ${NEW_VERSION}\n\n\n\n\1/g" changelog.md
-vi +5 changelog.md
+"$EDITOR" +5 changelog.md
 
 export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
