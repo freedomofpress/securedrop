@@ -1,4 +1,5 @@
 import re
+import textwrap
 
 
 def test_sudoers_config(host):
@@ -38,16 +39,33 @@ def test_sudoers_tmux_env(host):
     the corresponding settings there.
     """
 
-    f = host.file('/etc/profile.d/securedrop_additions.sh')
-    non_interactive_str = re.escape('[[ $- != *i* ]] && return')
-    tmux_check = re.escape('test -z "$TMUX" && (tmux attach ||'
-                           ' tmux new-session)')
+    host_file = host.file('/etc/profile.d/securedrop_additions.sh')
+    expected_content = textwrap.dedent(
+        """\
+        [[ $- != *i* ]] && return
 
-    assert f.contains("^{}$".format(non_interactive_str))
-    assert f.contains("^if which tmux >\/dev\/null 2>&1; then$")
+        which tmux >/dev/null 2>&1 || return
 
-    assert 'test -z "$TMUX" && (tmux attach || tmux new-session)' in f.content
-    assert f.contains(tmux_check)
+        tmux_attach_via_proc() {
+            # If the tmux package is upgraded during the lifetime of a
+            # session, attaching with the new binary can fail due to different
+            # protocol versions. This function attaches using the reference to
+            # the old executable found in the /proc tree of an existing
+            # session.
+            pid=$(pgrep --newest tmux)
+            if test -n "$pid"
+            then
+                /proc/$pid/exe attach
+            fi
+            return 1
+        }
+
+        if test -z "$TMUX"
+        then
+            (tmux attach || tmux_attach_via_proc || tmux new-session)
+        fi"""
+    )
+    assert host_file.content_string == expected_content
 
 
 def test_tmux_installed(host):
