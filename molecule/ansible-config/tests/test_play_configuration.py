@@ -80,14 +80,11 @@ def test_any_errors_fatal(host, playbook):
             assert play['any_errors_fatal']
 
 
-@pytest.mark.parametrize('playbook', ['securedrop-prod.yml', 'securedrop-staging.yml'])
+@pytest.mark.parametrize('playbook', find_ansible_playbooks())
 def test_locale(host, playbook):
     """
     The securedrop-prod and securedrop-staging playbooks should
     control the locale in the host environment by setting LC_ALL=C.
-
-    TODO: evaluate whether to do the same for the rest of the
-    playbooks.
     """
     with io.open(os.path.join(ANSIBLE_BASE, playbook), 'r') as f:
         playbook_yaml = yaml.safe_load(f)
