@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.12.1~rc1
+
+### Web Application
+
+* Add "Back to submission page" link to NoScript docs (#4208)
+
+### Operations
+
+* Ensured WiFi related packages are not installed on Xenial on upgrade (#4163)
+* Try harder to attach to a `tmux` session on upgrade (#4221) 
+* Control locale during Ansible runs (#4252)
+
+### Tails Environment
+
+* Resolved error in GUI updater due to flaky keyservers (#4100)
+
 ## 0.12.0
 
 ### Web Application
