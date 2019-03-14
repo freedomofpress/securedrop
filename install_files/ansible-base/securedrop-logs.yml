@@ -4,6 +4,8 @@
   become: yes
   max_fail_percentage: 0
   any_errors_fatal: yes
+  environment:
+    LC_ALL: C
   vars:
     log_paths_reference:
       app:

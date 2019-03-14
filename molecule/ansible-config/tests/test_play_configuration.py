@@ -78,3 +78,16 @@ def test_any_errors_fatal(host, playbook):
             assert 'any_errors_fatal' in play
             # Ansible coerces booleans, so bare assert is sufficient
             assert play['any_errors_fatal']
+
+
+@pytest.mark.parametrize('playbook', find_ansible_playbooks())
+def test_locale(host, playbook):
+    """
+    The securedrop-prod and securedrop-staging playbooks should
+    control the locale in the host environment by setting LC_ALL=C.
+    """
+    with io.open(os.path.join(ANSIBLE_BASE, playbook), 'r') as f:
+        playbook_yaml = yaml.safe_load(f)
+        for play in playbook_yaml:
+            assert 'environment' in play
+            assert play['environment']['LC_ALL'] == 'C'

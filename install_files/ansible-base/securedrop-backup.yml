@@ -3,6 +3,8 @@
   hosts: securedrop_application_server
   max_fail_percentage: 0
   any_errors_fatal: yes
+  environment:
+    LC_ALL: C
   roles:
     - role: backup
       tags: backup
