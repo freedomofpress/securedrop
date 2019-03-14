@@ -642,7 +642,8 @@ def check_for_updates(args):
 
 
 def get_release_key_from_keyserver(args, keyserver=None, timeout=45):
-    gpg_recv = ['timeout', str(timeout), 'gpg', '--recv-key']
+    gpg_recv = ['timeout', str(timeout), 'gpg', '--batch', '--no-tty',
+                '--recv-key']
     release_key = [RELEASE_KEY]
 
     # We construct the gpg --recv-key command based on optional keyserver arg.

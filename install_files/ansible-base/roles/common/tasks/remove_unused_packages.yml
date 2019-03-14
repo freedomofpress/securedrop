@@ -1,0 +1,16 @@
+---
+- name: Remove unused packages
+  apt:
+    name: "{{ item }}"
+    state: absent
+  with_items: "{{ unused_packages }}"
+  tags:
+    - apt
+    - hardening
+
+- name: Remove dependencies that are no longer required
+  apt:
+    autoremove: yes
+  tags:
+    - apt
+    - hardening

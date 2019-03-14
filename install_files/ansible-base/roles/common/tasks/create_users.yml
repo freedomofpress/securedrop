@@ -23,17 +23,6 @@
     - users
     - sudoers
 
-- name: Set SecureDrop bash profile additions.
-  copy:
-    src: bashrc_securedrop_additions
-    dest: /etc/profile.d/securedrop_additions.sh
-    owner: root
-    group: root
-    mode: "0644"
-  tags:
-    - users
-    - environment
-
 # Backwards-compatibility. Previously, the SecureDrop bashrc additions
 # for forcing a terminal multiplexer during interactive login sessions were
 # added to ~/.bashrc for each admin user account. It's cleaner to add the
