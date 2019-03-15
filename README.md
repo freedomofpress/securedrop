@@ -2,6 +2,7 @@
   <img src="/docs/images/logo.png" width="350" height="350">
 </p>
 
+Here is the first change
 
 [![CircleCI branch](https://img.shields.io/circleci/project/github/freedomofpress/securedrop/develop.svg)](https://circleci.com/gh/freedomofpress/workflows/securedrop/tree/develop)
 [![codecov](https://codecov.io/gh/freedomofpress/securedrop/branch/develop/graph/badge.svg)](https://codecov.io/gh/freedomofpress/securedrop)
