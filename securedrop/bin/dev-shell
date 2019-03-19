@@ -41,6 +41,7 @@ function docker_run() {
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
     docker run \
 	   --rm \
+       -e NUM_SOURCES \
 	   --user "${USER:-root}" \
 	   --volume "${TOPLEVEL}:${TOPLEVEL}" \
 	   --workdir "${TOPLEVEL}/securedrop" \
