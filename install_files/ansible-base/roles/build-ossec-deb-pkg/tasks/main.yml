@@ -10,6 +10,13 @@
     - "{{ repo_src_path }}"
     - "{{ build_path }}"
 
+- name: Install python-requests for URL fetching
+  apt:
+    name: python-requests
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+
 - name: Copy over current directory for repo build
   synchronize:
     # All Debian package source trees are located in `install_files/<package>`

@@ -64,7 +64,7 @@ way:
 
 * ``app.py`` - starts and configures the application.
 * ``logic.py`` - contains the application logic, encapsulated in the ``Client`` class.
-* ``models.py`` - holds all the `SQLAlchemy ORM model definitions <https://www.sqlalchemy.org/>`_ for interacting with the local Sqlite database.
+* ``db.py`` - holds all the `SQLAlchemy ORM model definitions <https://www.sqlalchemy.org/>`_ for interacting with the local Sqlite database.
 * ``storage.py`` - contains the functions needed for interacting with a remote SecureDrop API and the local database.
 * ``utils.py`` - generic utility functions needed throughout the application.
 * ``gui`` - this namespace contains two modules: ``main.py`` (containing the ``Window`` class through which all interactions with the user interface should happen) and ``widgets.py`` (containing all the custom widgets used by the ``Window`` class to draw the user interface).

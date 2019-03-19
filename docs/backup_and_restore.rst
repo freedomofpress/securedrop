@@ -156,6 +156,14 @@ to update the corresponding files on the *Admin Workstation*:
 * ``app-journalist-aths``
 * ``app-ssh-aths``
 
+Once ssh access to the servers has been established (or if using ssh over
+local network), Onion URLs for the *Source Interface* and *Journalist Interfaces*
+can be fetched using the installer:
+
+.. code:: sh
+
+   ./securedrop-admin install
+
 Then rerun ``./securedrop-admin tailsconfig`` to update the *Admin Workstation*
 to use the restored Onion URLs again. See :doc:`configure_admin_workstation_post_install`
 for detailed instructions.

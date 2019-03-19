@@ -1,0 +1,7 @@
+---
+- name: Bootstrap Ansible for containers
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Install python
+      raw: apt-get update && apt-get install -qq python-minimal apt-transport-https

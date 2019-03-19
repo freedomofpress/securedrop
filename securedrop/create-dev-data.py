@@ -38,7 +38,7 @@ def main(staging=False):
                       is_admin=False)
 
         # Add test sources and submissions
-        num_sources = 2
+        num_sources = int(os.getenv('NUM_SOURCES', 2))
         for _ in range(num_sources):
             create_source_and_submissions()
 

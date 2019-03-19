@@ -9,31 +9,31 @@ securedrop_test_vars = pytest.securedrop_test_vars
     "libapache2-mod-wsgi",
     "libapache2-mod-xsendfile",
 ])
-def test_apache_apt_packages(Package, package):
+def test_apache_apt_packages(host, package):
     """
     Ensure required Apache packages are installed.
     """
-    assert Package(package).is_installed
+    assert host.package(package).is_installed
 
 
-def test_apache_apt_packages_trusty(Package, SystemInfo):
+def test_apache_apt_packages_trusty(host):
     """
     Ensure required Apache packages are installed. Only checks Trusty-specific
     packages; other tests handle more general apt dependencies for Apache.
     """
     # Skip if testing against Xenial
-    if SystemInfo.release != "trusty":
+    if host.system_info.codename == "xenial":
         return True
-    assert Package("apache2-mpm-worker").is_installed
+    assert host.package("apache2-mpm-worker").is_installed
 
 
-def test_apache_security_config_deprecated(File):
+def test_apache_security_config_deprecated(host):
     """
     Ensure that /etc/apache2/security is absent, since it was setting
     redundant options already presentin /etc/apache2/apache2.conf.
     See #643 for discussion.
     """
-    assert not File("/etc/apache2/security").exists
+    assert not host.file("/etc/apache2/security").exists
 
 
 @pytest.mark.parametrize("apache_opt", [
@@ -58,14 +58,14 @@ def test_apache_security_config_deprecated(File):
     'ServerSignature Off',
     'TraceEnable Off',
 ])
-def test_apache_config_settings(File, apache_opt):
+def test_apache_config_settings(host, apache_opt):
     """
     Check required Apache config settings for general server.
     These checks do not target individual interfaces, e.g.
     Source versus Document Interface, and instead apply to
     Apache more generally.
     """
-    f = File("/etc/apache2/apache2.conf")
+    f = host.file("/etc/apache2/apache2.conf")
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
@@ -77,7 +77,7 @@ def test_apache_config_settings(File, apache_opt):
     "80",
     "8080",
 ])
-def test_apache_ports_config(File, SystemInfo, port):
+def test_apache_ports_config(host, port):
     """
     Ensure Apache ports config items, which specify how the
     Source and Document Interfaces are configured to be served
@@ -85,7 +85,7 @@ def test_apache_ports_config(File, SystemInfo, port):
     to permit port forwarding for local testing, but in production,
     they're restricted to localhost, for use over Tor.
     """
-    f = File("/etc/apache2/ports.conf")
+    f = host.file("/etc/apache2/ports.conf")
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
@@ -115,14 +115,14 @@ def test_apache_ports_config(File, SystemInfo, port):
   'wsgi',
   'xsendfile',
 ])
-def test_apache_modules_present(Command, Sudo, apache_module):
+def test_apache_modules_present(host, apache_module):
     """
     Ensure presence of required Apache modules. Application will not work
     correctly if these are missing. A separate test will check for
     disabled modules.
     """
-    with Sudo():
-        c = Command("/usr/sbin/a2query -m {}".format(apache_module))
+    with host.sudo():
+        c = host.run("/usr/sbin/a2query -m {}".format(apache_module))
         assert "{} (enabled".format(apache_module) in c.stdout
         assert c.rc == 0
 
@@ -134,14 +134,14 @@ def test_apache_modules_present(Command, Sudo, apache_module):
   'env',
   'status',
 ])
-def test_apache_modules_absent(Command, Sudo, apache_module):
+def test_apache_modules_absent(host, apache_module):
     """
     Ensure absence of unwanted Apache modules. Application does not require
     these modules, so they should be disabled to reduce attack surface.
     A separate test will check for disabled modules.
     """
-    with Sudo():
-        c = Command("/usr/sbin/a2query -m {}".format(apache_module))
+    with host.sudo():
+        c = host.run("/usr/sbin/a2query -m {}".format(apache_module))
         assert "No module matches {} (disabled".format(apache_module) in \
             c.stderr
         assert c.rc == 32
@@ -149,7 +149,7 @@ def test_apache_modules_absent(Command, Sudo, apache_module):
 
 @pytest.mark.parametrize("logfile",
                          securedrop_test_vars.allowed_apache_logfiles)
-def test_apache_logfiles_present(File, Command, Sudo, logfile):
+def test_apache_logfiles_present(host, logfile):
     """"
     Ensure that whitelisted Apache log files for the Source and Journalist
     Interfaces are present. In staging, we permit a "source-error" log,
@@ -158,13 +158,13 @@ def test_apache_logfiles_present(File, Command, Sudo, logfile):
     Apache log directory.
     """
     # We need elevated privileges to read files inside /var/log/apache2
-    with Sudo():
-        f = File(logfile)
+    with host.sudo():
+        f = host.file(logfile)
         assert f.is_file
         assert f.user == "root"
 
 
-def test_apache_logfiles_no_extras(Command, Sudo):
+def test_apache_logfiles_no_extras(host):
     """
     Ensure that no unwanted Apache logfiles are present. Complements the
     `test_apache_logfiles_present` config test. Here, we confirm that the
@@ -172,7 +172,7 @@ def test_apache_logfiles_no_extras(Command, Sudo):
     on the Application Server, whether staging or prod.
     """
     # We need elevated privileges to read files inside /var/log/apache2
-    with Sudo():
-        c = Command("find /var/log/apache2 -mindepth 1 | wc -l")
+    with host.sudo():
+        c = host.run("find /var/log/apache2 -mindepth 1 | wc -l")
         assert int(c.stdout) == \
             len(securedrop_test_vars.allowed_apache_logfiles)

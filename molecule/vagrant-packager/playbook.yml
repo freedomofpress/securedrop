@@ -1,0 +1,70 @@
+---
+- name: Prepare servers for installation
+  hosts: securedrop
+  gather_facts: no
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  become: yes
+  roles:
+    - { role: prepare-servers }
+
+- name: Add FPF apt repository and install base packages.
+  hosts: securedrop
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  roles:
+    - { role: install-fpf-repo, tags: fpf }
+    - { role: common, tags: common }
+    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
+    - { role: tor-hidden-services, tags: tor }
+  become: yes
+
+- name: Configure OSSEC.
+  hosts: securedrop
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  roles:
+    - role: ossec
+      tags: ossec
+  become: yes
+
+- name: Configure mailing utilities.
+  hosts: securedrop_monitor_server
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  roles:
+    - role: postfix
+      tags: postfix
+  become: yes
+
+- name: Configure SecureDrop Application Server.
+  hosts: securedrop_application_server
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  roles:
+    - { role: app, tags: app }
+  become: yes
+
+  # This section will put the ssh and iptables rules in place
+  # It will then add any staging exemptions required
+  # at the end of each host section is when the handlers are run.
+  # So iptables will not be reloaded until the exemptions are applied
+  # for production the last task is apply iptables. This will break their
+  # connection. After that point the admin will to proxy traffic over tor.
+- name: Lock down firewall configuration for Application and Monitor Servers.
+  hosts: securedrop
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  roles:
+    - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
+  become: yes
+
+- name: Reboot Application and Monitor Servers.
+  hosts: securedrop
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  tasks:
+    # Reuse existing "reboot-and-wait" logic from site config
+    - import_tasks: ../../install_files/ansible-base/tasks/reboot.yml
+      tags: reboot
+  become: yes

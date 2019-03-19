@@ -1,0 +1,24 @@
+---
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
+    molecule_scenario_directory: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
+    molecule_yml: "{{ lookup('file', molecule_file) | molecule_from_yaml }}"
+    # Use same container image as the Xenial build scenario
+    image_hash: "{{ lookup('pipe', 'egrep -v ^# ../builder-xenial/image_hash') }}"
+  tasks:
+    - name: Create molecule instance(s)
+      docker_container:
+        name: "{{ item.name }}"
+        # Use same container image as the Xenial build scenario
+        image: "quay.io/freedomofpress/sd-docker-builder-xenial@sha256:{{ image_hash }}"
+        state: started
+        recreate: False
+        command: "{{ item.command | default('sleep infinity') }}"
+        privileged: "{{ item.privileged | default(omit) }}"
+        volumes: "{{ item.volumes | default(omit) }}"
+        capabilities: "{{ item.capabilities | default(omit) }}"
+      with_items: "{{ molecule_yml.platforms }}"

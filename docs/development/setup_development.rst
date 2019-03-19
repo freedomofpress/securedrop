@@ -130,9 +130,6 @@ development.
 * **Password:** ``correct horse battery staple profanity oil chewy``
 * **TOTP secret:** ``JHCO GO7V CER3 EJ4L``
 
-.. tip:: We're hosting a demonstration instance of SecureDrop so that anyone can see how   
-    it works. The demo site generates Time-based One-time Password (TOTP) that you can use with the password above. To get a generated token, go to: http://demo.securedrop.club/
-
 If you need to generate the six digit token, use the TOTP secret in
 combination with an authenticator application that implements
 `RFC 6238 <https://tools.ietf.org/html/rfc6238>`__, such as
@@ -143,6 +140,13 @@ can simply scan the following QR code:
 
 .. image:: ../images/devenv/test-users-totp-qrcode.png
 
+You can also generate the 2FA code using the Python interpreter:
+
+.. code:: python
+
+  >>> import pyotp
+  >>> pyotp.TOTP('JHCOGO7VCER3EJ4L').now()
+  u'422038'
 
 .. _multi_machine_environment:
 

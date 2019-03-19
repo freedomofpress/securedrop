@@ -37,7 +37,10 @@ def token_required(f):
             return abort(403, 'API token not found in Authorization header.')
 
         if auth_header:
-            auth_token = auth_header.split(" ")[1]
+            split = auth_header.split(" ")
+            if len(split) != 2 or split[0] != 'Token':
+                abort(403, 'Malformed authorization header.')
+            auth_token = split[1]
         else:
             auth_token = ''
         if not Journalist.validate_api_token_and_get_user(auth_token):
@@ -102,9 +105,12 @@ def make_blueprint(config):
             journalist = Journalist.login(username, passphrase, one_time_code)
             token_expiry = datetime.utcnow() + timedelta(
                 seconds=TOKEN_EXPIRATION_MINS * 60)
-            response = jsonify({'token': journalist.generate_api_token(
-                 expiration=TOKEN_EXPIRATION_MINS * 60),
-                 'expiration': token_expiry.isoformat() + 'Z'})
+
+            response = jsonify({
+                'token': journalist.generate_api_token(expiration=TOKEN_EXPIRATION_MINS * 60),
+                'expiration': token_expiry.isoformat() + 'Z',
+                'journalist_uuid': journalist.uuid,
+            })
 
             # Update access metadata
             journalist.last_access = datetime.utcnow()
@@ -267,7 +273,8 @@ def make_blueprint(config):
                     raise e
 
             return jsonify({'message': 'Your reply has been stored',
-                            'uuid': reply.uuid}), 201
+                            'uuid': reply.uuid,
+                            'filename': reply.filename}), 201
 
     @api.route('/sources/<source_uuid>/replies/<reply_uuid>',
                methods=['GET', 'DELETE'])

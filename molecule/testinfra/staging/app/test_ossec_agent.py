@@ -6,9 +6,9 @@ sdvars = pytest.securedrop_test_vars
 testinfra_hosts = ["app", "app-staging"]
 
 
-def test_hosts_files(File, SystemInfo):
+def test_hosts_files(host):
     """ Ensure host files mapping are in place """
-    f = File('/etc/hosts')
+    f = host.file('/etc/hosts')
 
     mon_ip = os.environ.get('MON_IP', sdvars.mon_ip)
     mon_host = sdvars.monitor_hostname
@@ -19,27 +19,27 @@ def test_hosts_files(File, SystemInfo):
                                                                     mon_host))
 
 
-def test_hosts_duplicate(Command):
+def test_hosts_duplicate(host):
     """ Regression test for duplicate entries """
-    assert Command.check_output("uniq --repeated /etc/hosts") == ""
+    assert host.check_output("uniq --repeated /etc/hosts") == ""
 
 
-def test_ossec_agent_installed(Package):
+def test_ossec_agent_installed(host):
     """ Check that ossec-agent package is present """
-    assert Package("securedrop-ossec-agent").is_installed
+    assert host.package("securedrop-ossec-agent").is_installed
 
 
 # Permissions don't match between Ansible and OSSEC deb packages postinst.
 @pytest.mark.xfail
-def test_ossec_keyfile_present(File, Command, Sudo, SystemInfo):
+def test_ossec_keyfile_present(host):
     """ ensure client keyfile for ossec-agent is present """
     pattern = "^1024 {} {} [0-9a-f]{{64}}$".format(
                                     sdvars.app_hostname,
                                     os.environ.get('APP_IP', sdvars.app_ip))
     regex = re.compile(pattern)
 
-    with Sudo():
-        f = File("/var/ossec/etc/client.keys")
+    with host.sudo():
+        f = host.file("/var/ossec/etc/client.keys")
         assert f.exists
         assert oct(f.mode) == "0644"
         assert f.user == "root"

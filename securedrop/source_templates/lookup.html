@@ -18,10 +18,14 @@
 </div>
 
 <h1 class="headline">{{ gettext('Submit Files or Messages') }}</h1>
-<p class="explanation">{{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_journalist_pubkey')) }}
-{{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_journalist_pubkey')) }}</p>
 
-<p class="explanation">{{ gettext('You can submit any kind of file, a message, or both.') }}</p>
+<p class="explanation"><b>1.</b> {{ gettext('Before you begin, turn off cross-site request sanitization in NoScript. This is <strong>required</strong> for uploads to work. <a href="{url}" class="text-link">Show me how.</a>').format(url=url_for('info.disable_noscript_xss'))}}</p>
+
+<p class="explanation"><b>2.</b> {{ gettext('You can submit any kind of file, a message, or both.') }}</p>
+
+<p class="explanation"><b>3.</b> {{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_journalist_pubkey')) }}
+        {{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_journalist_pubkey')) }}</p>
+
 <hr class="no-line">
 
 <form id="upload" method="post" action="{{ url_for('main.submit') }}" enctype="multipart/form-data" autocomplete="off">

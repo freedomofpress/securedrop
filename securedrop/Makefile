@@ -9,15 +9,24 @@ lint: ## Run the python linter with the project's default error settings
 	   --disable=no-name-in-module \
 	   --disable=unexpected-keyword-arg \
 	   --disable=too-many-function-args \
-	   --disable=import-error
+	   --disable=import-error \
+	   --max-line-length=100
 
 .PHONY: lint-full
 lint-full:  ## Run the python linter with nothing disabled
 	find . -name '*.py' | xargs pylint
 
 .PHONY: test
-test: ## Run the test suite in a dockerized environment
+test: ## Run the test suite in a Ubuntu 16.04 (Xenial) dockerized environment
 	./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
+
+.PHONY: test-trusty
+test-trusty: ## Run the test suite in a Ubuntu 14.04 (Trusty) dockerized environment (to be removed April 30, 2019)
+	BASE_OS=trusty ./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
+
+.PHONY: translation-test
+translation-test: ## Run all pages-layout tests in all supported languages
+	./bin/dev-shell ./bin/translation-test $${TESTFILES:-tests/pageslayout}
 
 .PHONY: dev
 dev: ## Run the dev server

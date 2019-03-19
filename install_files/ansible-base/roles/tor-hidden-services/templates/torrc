@@ -4,18 +4,21 @@ RunAsDaemon 1
 
 {% if 'securedrop_application_server' in group_names %}
 HiddenServiceDir /var/lib/tor/services/source
+HiddenServiceVersion 2
 HiddenServicePort 80 127.0.0.1:80
 {% if securedrop_app_https_on_source_interface|default(False) %}
 HiddenServicePort 443 127.0.0.1:443
 {% endif %}
 
 HiddenServiceDir /var/lib/tor/services/journalist
+HiddenServiceVersion 2
 HiddenServicePort 80 127.0.0.1:8080
 HiddenServiceAuthorizeClient stealth journalist
 {% endif %}
 
 {% if enable_ssh_over_tor %}
 HiddenServiceDir /var/lib/tor/services/ssh
+HiddenServiceVersion 2
 HiddenServicePort 22 127.0.0.1:22
 HiddenServiceAuthorizeClient stealth admin
 {% endif %}

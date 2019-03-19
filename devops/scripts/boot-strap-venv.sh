@@ -7,7 +7,7 @@ function virtualenv_bootstrap() {
     if [ -z "${VIRTUAL_ENV:-}" ]; then
 
         if [ ! -d ".venv" ]; then
-            virtualenv .venv
+            virtualenv -p "$(which python2)" .venv
         fi
 
         # https://github.com/pypa/virtualenv/issues/1029

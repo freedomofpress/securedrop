@@ -1,0 +1,76 @@
+---
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: xenial-sd-app
+    groups:
+      - builders
+  - name: xenial-sd-generic-ossec-agent
+    groups:
+      - builders
+  - name: xenial-sd-generic-ossec-server
+    groups:
+      - builders
+  - name: xenial-sd-generic-ossec-agent2
+    groups:
+      - builders
+  - name: xenial-sd-generic-ossec-server2
+    groups:
+      - builders
+  - name: xenial-sd-grsec
+    groups:
+      - builders
+  - name: xenial-sd-config
+    groups:
+      - builders
+  - name: xenial-sd-keyring
+    groups:
+      - builders
+  - name: xenial-sd-sec-update
+    groups:
+      - builders
+  - name: xenial-sd-dpkg-verification
+    groups:
+      - testers
+provisioner:
+  name: ansible
+  inventory:
+    links:
+      group_vars: ../../install_files/ansible-base/group_vars
+  options:
+    e: "@ansible-override-vars.yml"
+  env:
+    ANSIBLE_ROLES_PATH: ../../install_files/ansible-base/roles
+    ANSIBLE_ACTION_PLUGINS: ../../install_files/ansible-base/action_plugins
+    ANSIBLE_CALLBACK_WHITELIST: skippy
+    ANSIBLE_STDOUT_CALLBACK: skippy
+    ANSIBLE_GATHER_TIMEOUT: "120"
+  lint:
+    name: ansible-lint
+  playbooks:
+    converge: ../builder-trusty/playbook.yml
+scenario:
+  name: builder-xenial
+  converge_sequence:
+    - destroy
+    - create
+    - converge
+    - destroy
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  options:
+    # provided by pytest-xdist
+    n: auto
+  env:
+    SECUREDROP_TARGET_PLATFORM: xenial
+  directory: ../builder-trusty/tests/
+  lint:
+    name: flake8

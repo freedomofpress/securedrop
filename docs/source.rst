@@ -103,6 +103,15 @@ limit, we recommend that you send a message to the journalist explaining
 this, so that they can set up another method for transferring the
 documents.
 
+.. note:: The Tor Browser currently suffers from a Firefox bug that
+          can cause uploads to fail unpredictably. You can avoid this
+          bug by disabling the NoScript browser extension's cross-site
+          request sanitization. This is safe to do if you have set
+          your Tor Browser security slider to our recommended setting,
+          "Safest". The instructions for the first step of submission
+          include a link to a page explaining how to adjust your
+          settings.
+
 When your submission is ready, click **Submit**.
 
 |Submit a document|

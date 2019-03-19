@@ -10,6 +10,7 @@ monitor_ip: "{{ hostvars['mon-staging']['ansible_'+primary_network_iface].ipv4.a
 monitor_hostname: "{{ hostvars['mon-staging'].ansible_hostname }}"
 app_ip: "{{ hostvars['app-staging']['ansible_'+primary_network_iface].ipv4.address }}"
 app_hostname: "{{ hostvars['app-staging'].ansible_hostname }}"
+tor_apt_repo_url: "https://tor-apt.freedom.press"
 
 etc_hosts:
   app-staging:
@@ -22,3 +23,6 @@ etc_hosts:
       line: 127.0.0.1   mon-staging localhost
     - reg: app-staging$
       line: "{{ app_ip }}  app-staging"
+
+# Set Xenial as apt repo channel for hosting deb packages
+rep_dist: xenial

@@ -18,19 +18,19 @@ securedrop_test_vars = pytest.securedrop_test_vars
   "user={}".format(securedrop_test_vars.securedrop_user),
   'environment=HOME="/tmp/python-gnupg"',
 ])
-def test_redis_worker_configuration(File, config_line):
+def test_redis_worker_configuration(host, config_line):
     """
     Ensure SecureDrop Redis worker config for supervisor service
     management is configured correctly.
     """
-    f = File('/etc/supervisor/conf.d/securedrop_worker.conf')
+    f = host.file('/etc/supervisor/conf.d/securedrop_worker.conf')
     # Config lines may have special characters such as [] which will
     # throw off the regex matching, so let's escape those chars.
     regex = re.escape(config_line)
     assert f.contains('^{}$'.format(regex))
 
 
-def test_redis_worker_config_file(File):
+def test_redis_worker_config_file(host):
     """
     Ensure SecureDrop Redis worker config for supervisor service
     management has proper ownership and mode.
@@ -38,7 +38,7 @@ def test_redis_worker_config_file(File):
     Using separate test so that the parametrization doesn't rerun
     the file mode checks, which would be useless.
     """
-    f = File('/etc/supervisor/conf.d/securedrop_worker.conf')
+    f = host.file('/etc/supervisor/conf.d/securedrop_worker.conf')
     assert f.is_file
     assert oct(f.mode) == '0644'
     assert f.user == "root"

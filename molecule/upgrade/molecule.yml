@@ -10,8 +10,8 @@ lint:
 
 platforms:
   - name: app-staging
-    box: fpf/securedrop-app
-    box_url: "../vagrant_packager/box_files/app_metadata.json"
+    box: fpf/securedrop-app-xenial
+    box_url: "../vagrant-packager/box_files/app_xenial_metadata.json"
     instance_raw_config_args:
       - "ssh.insert_key = false"
     provider_override_args:
@@ -24,8 +24,8 @@ platforms:
       - staging
 
   - name: mon-staging
-    box: fpf/securedrop-mon
-    box_url: "../vagrant_packager/box_files/mon_metadata.json"
+    box: fpf/securedrop-mon-xenial
+    box_url: "../vagrant-packager/box_files/mon_xenial_metadata.json"
     instance_raw_config_args:
       - "ssh.insert_key = false"
     provider_override_args:
@@ -38,7 +38,7 @@ platforms:
       - staging
 
   - name: apt
-    box: bento/ubuntu-14.04
+    box: bento/ubuntu-16.04
     provider_override_args:
       - "vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
     memory: 256

@@ -1,6 +1,8 @@
 import pytest
 import re
 
+testinfra_hosts = ["app", "app-staging", "mon", "mon-staging"]
+
 
 @pytest.mark.parametrize('sysctl_opt', [
   ('net.ipv4.conf.all.accept_redirects', 0),
@@ -21,21 +23,21 @@ import re
   ('net.ipv6.conf.default.disable_ipv6', 1),
   ('net.ipv6.conf.lo.disable_ipv6', 1),
 ])
-def test_sysctl_options(Sysctl, Sudo, sysctl_opt):
+def test_sysctl_options(host, sysctl_opt):
     """
     Ensure sysctl flags are set correctly. Most of these checks
     are disabling IPv6 and hardening IPv4, which is appropriate
     due to the heavy use of Tor.
     """
-    with Sudo():
-        assert Sysctl(sysctl_opt[0]) == sysctl_opt[1]
+    with host.sudo():
+        assert host.sysctl(sysctl_opt[0]) == sysctl_opt[1]
 
 
-def test_dns_setting(File):
+def test_dns_setting(host):
     """
     Ensure DNS service is hard-coded in resolv.conf config.
     """
-    f = File('/etc/resolvconf/resolv.conf.d/base')
+    f = host.file('/etc/resolvconf/resolv.conf.d/base')
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
@@ -47,36 +49,44 @@ def test_dns_setting(File):
     'bluetooth',
     'iwlwifi',
 ])
-def test_blacklisted_kernel_modules(Command, File, Sudo, kernel_module):
+def test_blacklisted_kernel_modules(host, kernel_module):
     """
     Test that unwanted kernel modules are blacklisted on the system.
     Mostly these checks are defense-in-depth approaches to ensuring
     that wireless interfaces will not work.
     """
-    with Sudo():
-        assert kernel_module not in Command("lsmod").stdout
+    with host.sudo():
+        c = host.run("lsmod")
+        assert kernel_module not in c.stdout
 
-    f = File("/etc/modprobe.d/blacklist.conf")
+    f = host.file("/etc/modprobe.d/blacklist.conf")
     assert f.contains("^blacklist {}$".format(kernel_module))
 
 
-def test_swap_disabled(Command):
+def test_swap_disabled(host):
     """
     Ensure swap space is disabled. Prohibit writing memory to swapfiles
     to reduce the threat of forensic analysis leaking any sensitive info.
     """
-    hostname = Command.check_output('hostname')
+    hostname = host.check_output('hostname')
 
     # Mon doesn't have swap disabled yet
-    if not hostname.startswith('mon'):
-        c = Command.check_output('swapon --summary')
-        # A leading slash will indicate full path to a swapfile.
-        assert not re.search("^/", c, re.M)
+    if hostname.startswith('mon'):
+        return True
+
+    c = host.check_output('swapon --summary')
+    # A leading slash will indicate full path to a swapfile.
+    assert not re.search("^/", c, re.M)
+
+    if host.system_info.codename == "trusty":
         # Expect that ONLY the headers will be present in the output.
         rgx = re.compile("Filename\s*Type\s*Size\s*Used\s*Priority")
+    else:
         # On Xenial, swapon 2.27.1 shows blank output, with no headers, so
         # check for empty output as confirmation of no swap.
-        assert any((re.search(rgx, c), c == ""))
+        rgx = re.compile("^$")
+
+    assert re.search(rgx, c)
 
 
 def test_twofactor_disabled_on_tty(host):
@@ -88,6 +98,7 @@ def test_twofactor_disabled_on_tty(host):
     pam_auth_file = host.file("/etc/pam.d/common-auth").content_string
 
     assert "auth required pam_google_authenticator.so" not in pam_auth_file
+    assert "pam_ecryptfs.so unwrap" not in pam_auth_file
 
 
 @pytest.mark.parametrize('sshd_opts', [
@@ -106,3 +117,31 @@ def test_sshd_config(host, sshd_opts):
 
     line = "{} {}".format(sshd_opts[0], sshd_opts[1])
     assert line in sshd_config_file
+
+
+@pytest.mark.parametrize('logfile', [
+    '/var/log/auth.log',
+    '/var/log/syslog',
+])
+def test_no_ecrypt_messages_in_logs(host, logfile):
+    """
+    Ensure pam_ecryptfs is removed from /etc/pam.d/common-auth : not only is
+    no longer needed, it causes error messages (see issue #3963)
+    """
+    error_message = "pam_ecryptfs.so: cannot open shared object file"
+    with host.sudo():
+        f = host.file(logfile)
+        # Not using `f.contains(<pattern>)` because that'd cause the sought
+        # string to make it into syslog as a side-effect of the testinfra
+        # invocation, causing subsequent test runs to report failure.
+        assert error_message not in f.content_string
+
+
+@pytest.mark.parametrize('package', [
+    'libiw30',
+    'wpasupplicant',
+    'wireless-tools',
+])
+def test_unused_packages_are_removed(host, package):
+    """ Check if unused package is present """
+    assert host.package(package).is_installed is False

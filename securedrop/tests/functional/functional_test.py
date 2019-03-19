@@ -7,6 +7,7 @@ from multiprocessing import Process
 import os
 import logging
 from os.path import abspath, dirname, join, realpath, expanduser
+import pytest
 import signal
 import socket
 import time
@@ -15,7 +16,7 @@ import shutil
 import requests
 
 import pyotp
-import gnupg
+import pretty_bad_protocol as gnupg
 from selenium import webdriver
 from selenium.common.exceptions import (WebDriverException,
                                         NoAlertPresentException)
@@ -290,7 +291,14 @@ class FunctionalTest(object):
         if not hasattr(self, 'override_driver'):
             # Means this is not pages-layout tests
             self._create_secondary_firefox_driver()
-            self.driver = self._create_webdriver()
+            try:
+                self.driver = self._create_webdriver(self._prepare_webdriver())
+            except WebDriverException as e:
+                # Exceptions during driver setup will result in the teardown not being called.
+                # Let's teardown and _then_ fail the test so that the patchers are cleaned
+                # up for the subsequent tests.
+                self.teardown()
+                pytest.fail(e)
         else:
             # We will use a normal firefox esr for the pages-layout tests
             self.driver = self._create_webdriver2(self.new_profile)  # noqa # pylint: disable=no-member
@@ -299,8 +307,6 @@ class FunctionalTest(object):
             # due to discrepancies between environments.
             self.driver.set_window_position(0, 0)
             self.driver.set_window_size(1024, 768)
-
-            self._javascript_toggle()
 
         # Polls the DOM to wait for elements. To read more about why
         # this is necessary:
@@ -321,8 +327,9 @@ class FunctionalTest(object):
                                'invasion of privacy.')
 
     def teardown(self):
-
-        if self.driver:
+        self.patcher.stop()
+        env.teardown()
+        if hasattr(self, 'driver') and not hasattr(self, 'override_driver'):
             self.driver.quit()
         if self.second_driver:
             self.second_driver.quit()

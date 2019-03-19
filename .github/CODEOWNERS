@@ -1,10 +1,18 @@
 # application code
-/securedrop/ @redshiftzero @heartsucker @dachary
+/securedrop/ @redshiftzero @heartsucker @kushaldas
+
+# updater GUI
+/journalist_gui/ @redshiftzero @kushaldas
+
+# admin CLI
+/admin/ @redshiftzero @kushaldas @emkll @heartsucker @msheiny
+
+# docs
+/docs/ @redshiftzero @kushaldas @emkll
 
 # ansible / deployment
-/build/         @conorsch @msheiny
-/devops/        @conorsch @msheiny
-/install_files/ @conorsch @msheiny
-/molecule/      @conorsch @msheiny
-/testinfra/     @conorsch @msheiny
-/tails_files/   @conorsch @msheiny
+/devops/        @conorsch @msheiny @kushaldas @emkll
+/install_files/ @conorsch @msheiny @kushaldas @emkll
+/molecule/      @conorsch @msheiny @kushaldas @emkll
+/testinfra/     @conorsch @msheiny @kushaldas @emkll
+/tails_files/   @conorsch @msheiny @kushaldas @emkll

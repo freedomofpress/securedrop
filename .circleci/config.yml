@@ -1,4 +1,51 @@
 ---
+common-steps:
+  - &rebaseontarget
+    run:
+      name: Rebase on top of GitHub target branch
+      command: ./devops/scripts/rebase-ci.sh
+
+  - &createcachedir
+    run:
+      name: Ensure cache dir exists and permissions are good
+      command: |
+        sudo mkdir -p /caches && sudo chown circleci: -R /caches
+
+  - &restorecache
+    restore_cache:
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
+      paths:
+        - /caches/layers.tar.gz
+
+  - &loadimagelayers
+    run:
+      name: Load image layer cache
+      command: |
+        set +o pipefail
+        docker load -i /caches/layers.tar |true
+
+  - &dockerimagebuild
+    run:
+      name: Build Docker images
+      command: |
+        set +o pipefail
+        docker images
+        fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
+        cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" ./bin/dev-shell true
+
+  - &saveimagelayers
+    run:
+      name: Save Docker image layer cache
+      command: |
+        docker images
+        docker save -o /caches/layers.tar securedrop-test-xenial:latest
+
+  - &savecache
+    save_cache:
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
+      paths:
+        - /caches/layers.tar
+
 version: 2
 jobs:
   lint:
@@ -6,23 +53,19 @@ jobs:
       enabled: true
     steps:
       - checkout
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
-
+      - *rebaseontarget
       - run: make ci-lint
 
-  tests:
+  trusty-app-tests:
     machine:
       enabled: true
     environment:
-      DOCKER_API_VERSION=1.23
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: trusty
     parallelism: 3
     steps:
       - checkout
-      - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
+      - *rebaseontarget
 
       - run:
           name: Ensure cache dir exists and permissions are good
@@ -30,7 +73,7 @@ jobs:
             sudo mkdir -p /caches && sudo chown circleci: -R /caches
 
       - restore_cache:
-          key: v1-sd-layers-{{ checksum "securedrop/Dockerfile" }}
+          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/trusty/Dockerfile" }}
           paths:
             - /caches/layers.tar.gz
 
@@ -41,39 +84,108 @@ jobs:
             docker load -i /caches/layers.tar |true
 
       - run:
-          name: Build Docker images
+          name: Build Docker image
           command: |
             set +o pipefail
             docker images
-            fromtag=$(docker images |grep securedrop-test |head -n1 |awk '{print $2}')
-            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test:${fromtag:-latest}" ./bin/dev-shell true
+            fromtag=$(docker images |grep securedrop-test-trusty |head -n1 |awk '{print $2}')
+            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-trusty:${fromtag:-latest}" ./bin/dev-shell true
 
       - run:
           name: Save Docker image layer cache
           command: |
             docker images
-            docker save -o /caches/layers.tar securedrop-test:latest
+            docker save -o /caches/layers.tar securedrop-test-trusty:latest
 
       - save_cache:
-          key: v1-sd-layers-{{ checksum "securedrop/Dockerfile" }}
+          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/trusty/Dockerfile" }}
           paths:
             - /caches/layers.tar
 
-      - run: mkdir -p ~/test-results
+      - run:
+          name: Make test results directory
+          command: mkdir -p ~/test-results
+
+      - run:
+          name: Run tests
+          command: |
+            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
+            docker rm -f securedrop-test-trusty || true
+            fromtag=$(docker images |grep securedrop-test-trusty |head -n1 |awk '{print $2}')
+            cd securedrop && DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-trusty:${fromtag:-latest}" make test
+
+      - store_test_results:
+          path: ~/test-results
+
+      - store_artifacts:
+          path: ~/test-results
+
+  app-tests:
+    machine:
+      enabled: true
+    environment:
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: xenial
+    parallelism: 3
+    steps:
+      - checkout
+      - *rebaseontarget
+      - *createcachedir
+      - *restorecache
+      - *loadimagelayers
+      - *dockerimagebuild
+      - *saveimagelayers
+      - *savecache
+
+      - run:
+          name: Make test results directory
+          command: mkdir -p ~/test-results
 
       - run:
           name: Run tests
           no_output_timeout: 20m
           command: |
             export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
-            docker rm -f securedrop-test || true
-            fromtag=$(docker images |grep securedrop-test |head -n1 |awk '{print $2}')
-            cd securedrop && DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test:${fromtag:-latest}" make test
+            docker rm -f securedrop-test-xenial || true
+            fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
+            cd securedrop && DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" make test
 
       - store_test_results:
           path: ~/test-results
 
       - store_artifacts:
+          path: ~/test-results
+
+  translation-tests:
+    machine:
+      enabled: true
+    environment:
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: xenial
+    parallelism: 2
+    steps:
+      - checkout
+      - *rebaseontarget
+      - *createcachedir
+      - *restorecache
+      - *loadimagelayers
+      - *dockerimagebuild
+      - *saveimagelayers
+      - *savecache
+
+      - run:
+          name: Make test results directory
+          command: mkdir -p ~/test-results
+
+      - run:
+          name: Run tests
+          command: |
+            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/pageslayout/test*py' |circleci tests split --split-by=timings |xargs echo)
+            docker rm -f securedrop-test-xenial || true
+            fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
+            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" make translation-test
+
+      - store_test_results:
           path: ~/test-results
 
   admin-tests:
@@ -113,6 +225,46 @@ jobs:
             cd journalist_gui
             xvfb-run -a pipenv run python3 test_gui.py
 
+  static-analysis-and-no-known-cves:
+    machine:
+      enabled: true
+    steps:
+      - checkout
+      - run:
+          name: Check Python dependencies for CVEs
+          command: make safety
+
+      - run:
+          name: Run static security testing on source code
+          command: make bandit
+
+  staging-test-with-rebase-trusty:
+    machine:
+      enabled: true
+
+    working_directory: ~/sd
+    steps:
+      - checkout
+      - *rebaseontarget
+
+      - run:
+          name: Run Staging tests on GCE
+          command: make ci-go-trusty
+          no_output_timeout: 20m
+
+      - run:
+          name: Ensure environment torn down
+          # Always report true, since env should will destroyed already
+          # if all tests passed.
+          command: make ci-teardown || true
+          when: always
+
+      - store_test_results:
+          path: ~/sd/junit
+
+      - store_artifacts:
+          path: ~/sd/junit
+
   staging-test-with-rebase:
     machine:
       enabled: true
@@ -120,14 +272,12 @@ jobs:
     working_directory: ~/sd
     steps:
       - checkout
+      - *rebaseontarget
 
       - run:
-          name: Rebase on-top of github target
-          command: ./devops/scripts/rebase-ci.sh
-
-      - run:
-          name: Run Staging tests on GCE
+          name: Run Staging tests on GCE (Xenial)
           command: make ci-go
+          no_output_timeout: 20m
 
       - run:
           name: Ensure environment torn down
@@ -147,10 +297,53 @@ workflows:
   securedrop_ci:
     jobs:
       - lint
-      - tests
-      - admin-tests
-      - updater-gui-tests
+      - app-tests:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+                - /i18n-.*/
+      - admin-tests:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+                - /i18n-.*/
+      - updater-gui-tests:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+                - /i18n-.*/
+      - static-analysis-and-no-known-cves:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+                - /i18n-.*/
       - staging-test-with-rebase:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+                - /i18n-.*/
           requires:
             - lint
-            - updater-gui-tests
+      - translation-tests:
+          filters:
+            branches:
+              only:
+                - /i18n-.*/
+
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 4 * * *"
+          filters:
+            branches:
+              only:
+                - develop
+    jobs:
+      - static-analysis-and-no-known-cves
+      - staging-test-with-rebase-trusty
+      - trusty-app-tests

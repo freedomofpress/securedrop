@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import gnupg
+from distutils.version import StrictVersion
 import gzip
 import os
 import random
 import re
-import shutil
-import tempfile
 import zipfile
 
 from base64 import b32encode
@@ -326,11 +324,10 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
 
     zf = zipfile.ZipFile(StringIO(resp.data), 'r')
     data = zf.read(zf.namelist()[0])
-    _can_decrypt_with_key(journalist_app, data, config.JOURNALIST_KEY)
+    _can_decrypt_with_key(journalist_app, data)
     _can_decrypt_with_key(
         journalist_app,
         data,
-        current_app.crypto_util.getkey(filesystem_id),
         codename)
 
     # Test deleting reply on the journalist interface
@@ -400,38 +397,27 @@ def _helper_filenames_delete(journalist_app, soup, i):
     utils.async.wait_for_assertion(assertion)
 
 
-def _can_decrypt_with_key(journalist_app, msg, key_fpr, passphrase=None):
+def _can_decrypt_with_key(journalist_app, msg, passphrase=None):
     """
-    Test that the given GPG message can be decrypted with the given key
-    (identified by its fingerprint).
+    Test that the given GPG message can be decrypted.
     """
-    # GPG does not provide a way to specify which key to use to decrypt a
-    # message. Since the default keyring that we use has both the
-    # `config.JOURNALIST_KEY` and all of the reply keypairs, there's no way
-    # to use it to test whether a message is decryptable with a specific
-    # key.
-    gpg_tmp_dir = tempfile.mkdtemp()
-    gpg = gnupg.GPG(homedir=gpg_tmp_dir)
 
-    # Export the key of interest from the application's keyring
-    pubkey = journalist_app.crypto_util.gpg.export_keys(key_fpr)
-    seckey = journalist_app.crypto_util.gpg.export_keys(key_fpr, secret=True)
-    # Import it into our isolated temporary GPG directory
-    for key in (pubkey, seckey):
-        gpg.import_keys(key)
+    # For gpg 2.1+, a non null passphrase _must_ be passed to decrypt()
+    using_gpg_2_1 = StrictVersion(
+        journalist_app.crypto_util.gpg.binary_version) >= StrictVersion('2.1')
 
-    # Attempt decryption with the given key
     if passphrase:
         passphrase = journalist_app.crypto_util.hash_codename(
             passphrase,
             salt=journalist_app.crypto_util.scrypt_gpg_pepper)
-    decrypted_data = gpg.decrypt(msg, passphrase=passphrase)
+    elif using_gpg_2_1:
+        passphrase = 'dummy passphrase'
+
+    decrypted_data = journalist_app.crypto_util.gpg.decrypt(
+        msg, passphrase=passphrase)
     assert decrypted_data.ok, \
         "Could not decrypt msg with key, gpg says: {}" \
         .format(decrypted_data.stderr)
-
-    # We have to clean up the temporary GPG dir
-    shutil.rmtree(gpg_tmp_dir)
 
 
 def test_reply_normal(journalist_app,

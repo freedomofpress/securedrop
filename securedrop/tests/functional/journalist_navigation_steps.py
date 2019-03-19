@@ -910,6 +910,76 @@ class JournalistNavigationStepsMixin():
         for source in sources:
             assert source.is_displayed() is True
 
+    def _journalist_source_selection_honors_filter(self):
+        """Check that select all/none honors the filter in effect."""
+
+        self.wait_for(lambda: self.driver.find_element_by_id("filter"), 60)
+
+        # make sure the list is not filtered
+        filter_box = self.driver.find_element_by_id("filter")
+        filter_box.clear()
+        filter_box.send_keys(Keys.RETURN)
+
+        # get the journalist designation of the first source
+        sources = self.driver.find_elements_by_class_name("code-name")
+        assert len(sources) > 0
+        first_source_designation = sources[0].text
+
+        # filter the source list so only the first is visible
+        filter_box.send_keys(first_source_designation)
+        for source in sources:
+            assert (
+                source.text == first_source_designation or
+                source.is_displayed() is False
+            )
+
+        # clicking "select all" should only select the visible source
+        select_all = self.driver.find_element_by_id("select_all")
+        select_all.click()
+
+        source_rows = self.driver.find_elements_by_css_selector("#cols li.source")
+        for source_row in source_rows:
+            source_designation = source_row.get_attribute("data-source-designation")
+            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            if source_designation == first_source_designation:
+                assert checkbox.is_selected()
+            else:
+                assert not checkbox.is_selected()
+
+        # clear the filter
+        filter_box.clear()
+        filter_box.send_keys(Keys.RETURN)
+
+        # select all sources
+        select_all.click()
+        for source_row in source_rows:
+            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            assert checkbox.is_selected()
+
+        # now filter again
+        filter_box.send_keys(first_source_designation)
+
+        # clicking "select none" should only deselect the visible source
+        select_none = self.driver.find_element_by_id("select_none")
+        select_none.click()
+        for source_row in source_rows:
+            source_designation = source_row.get_attribute("data-source-designation")
+            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            if source_designation == first_source_designation:
+                assert not checkbox.is_selected()
+            else:
+                assert checkbox.is_selected()
+
+        # clear the filter and leave none selected
+        filter_box.clear()
+        filter_box.send_keys(Keys.RETURN)
+        select_none.click()
+
+        for source_row in source_rows:
+            assert source_row.is_displayed()
+            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            assert not checkbox.is_selected()
+
     def _journalist_uses_js_buttons_to_download_unread(self):
         self.driver.find_element_by_id('select_all').click()
         checkboxes = self.driver.find_elements_by_name('doc_names_selected')

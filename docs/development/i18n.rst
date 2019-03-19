@@ -155,10 +155,12 @@ Merging Translations Back to Develop
 ------------------------------------
 
 `Weblate`_ automatically pushes the translations done via the web
-interface as a series of commit to the ``i18n`` branch in the `Weblate
+interface as a series of commits to the ``i18n`` branch in the `Weblate
 SecureDrop branch`_ which is a fork of the ``develop`` branch of the
 `SecureDrop git repository`_. These translations need to be submitted
 to the ``develop`` branch via pull requests for merge on a regular basis.
+Branches to merge translations should be prefixed with ``i18n-`` so that
+the translation tests will run in CircleCI.
 
 SecureDrop only supports a subset of all the languages being worked on
 in `Weblate`_: some of them are partially translated or not fully
@@ -172,12 +174,12 @@ file must be manually edited to add this new language to the
 
       $ git clone https://github.com/freedomofpress/securedrop
       $ cd securedrop
-      $ git checkout -b wip-i18n origin/develop
+      $ git checkout -b i18n-merge origin/develop
       $ securedrop/bin/dev-shell ./i18n_tool.py --verbose update-from-weblate
       $ securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-desktop --compile
       $ securedrop/bin/dev-shell ./i18n_tool.py --verbose update-docs
       $ git commit -m 'l10n: compile desktop files' translations # if needed
-      $ git push wip-i18n # and make a pull request from the branch
+      $ git push i18n-merge # and make a pull request from the branch
 
 .. warning::
 
@@ -205,6 +207,9 @@ Verify the translations are not broken:
       $ securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-messages --compile
       $ PAGE_LAYOUT_LOCALES=$(echo $sm | tr ' ' ',') \
           pytest -v --page-layout tests/pageslayout
+
+.. note:: The CI job ``translation-tests`` will run the above page layout tests
+          in all supported languages on branches named with the prefix ``i18n-``.
 
 Go to https://github.com/freedomofpress/securedrop and propose a pull request.
 

@@ -8,6 +8,8 @@
   any_errors_fatal: yes
   connection: local
   gather_facts: yes
+  environment:
+    LC_ALL: C
   roles:
     - role: tails-config
       tags: tails-config

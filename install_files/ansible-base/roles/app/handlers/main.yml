@@ -19,6 +19,13 @@
     name: securedrop_worker
     state: present
 
+## Here, we list apparmor before haveged to ensure the correct AppArmor
+## profile is loaded prior to restarting haveged
+- name: restart apparmor
+  service:
+    name: apparmor
+    state: restarted
+
 - name: restart haveged
   service:
     name: haveged

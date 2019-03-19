@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import gnupg
+from distutils.version import StrictVersion
+import pretty_bad_protocol as gnupg
 import os
 import io
 import scrypt
@@ -11,7 +12,7 @@ from random import SystemRandom
 from base64 import b32encode
 from datetime import date
 from flask import current_app
-from gnupg._util import _is_stream, _make_binary_stream
+from pretty_bad_protocol._util import _is_stream, _make_binary_stream
 
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
@@ -79,7 +80,16 @@ class CryptoUtil:
 
         self.do_runtime_tests()
 
-        self.gpg = gnupg.GPG(binary='gpg2', homedir=gpg_key_dir)
+        # --pinentry-mode, required for SecureDrop on gpg 2.1.x+, was
+        # added in gpg 2.1.
+        self.gpg_key_dir = gpg_key_dir
+        gpg_binary = gnupg.GPG(binary='gpg2', homedir=self.gpg_key_dir)
+        if StrictVersion(gpg_binary.binary_version) >= StrictVersion('2.1'):
+            self.gpg = gnupg.GPG(binary='gpg2',
+                                 homedir=gpg_key_dir,
+                                 options=['--pinentry-mode loopback'])
+        else:
+            self.gpg = gpg_binary
 
         # map code for a given language to a localized wordlist
         self.__language2words = {}  # type: Dict[Text, List[str]]
@@ -176,7 +186,7 @@ class CryptoUtil:
         """
         name = clean(name)
         secret = self.hash_codename(secret, salt=self.scrypt_gpg_pepper)
-        return self.gpg.gen_key(self.gpg.gen_key_input(
+        genkey_obj = self.gpg.gen_key(self.gpg.gen_key_input(
             key_type=self.GPG_KEY_TYPE,
             key_length=self.__gpg_key_length,
             passphrase=secret,
@@ -184,6 +194,7 @@ class CryptoUtil:
             creation_date=self.DEFAULT_KEY_CREATION_DATE.isoformat(),
             expire_date=self.DEFAULT_KEY_EXPIRATION_DATE
         ))
+        return genkey_obj
 
     def delete_reply_keypair(self, source_filesystem_id):
         key = self.getkey(source_filesystem_id)
@@ -191,10 +202,12 @@ class CryptoUtil:
         # keypair
         if not key:
             return
-        # The private key needs to be deleted before the public key can be
-        # deleted. http://pythonhosted.org/python-gnupg/#deleting-keys
-        self.gpg.delete_keys(key, True)  # private key
-        self.gpg.delete_keys(key)  # public key
+
+        # Always delete keys without invoking pinentry-mode = loopback
+        # see: https://lists.gnupg.org/pipermail/gnupg-users/2016-May/055965.html
+        temp_gpg = gnupg.GPG(binary='gpg2', homedir=self.gpg_key_dir)
+        # The subkeys keyword argument deletes both secret and public keys.
+        temp_gpg.delete_keys(key, secret=True, subkeys=True)
 
     def getkey(self, name):
         for key in self.gpg.list_keys():
@@ -205,7 +218,10 @@ class CryptoUtil:
 
     def export_pubkey(self, name):
         fingerprint = self.getkey(name)
-        return self.gpg.export_keys(fingerprint)
+        if fingerprint:
+            return self.gpg.export_keys(fingerprint)
+        else:
+            return None
 
     def encrypt(self, plaintext, fingerprints, output=None):
         # Verify the output path

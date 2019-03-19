@@ -5,25 +5,17 @@ PWD := $(shell pwd)
 TAG ?= $(shell git rev-parse HEAD)
 STABLE_VER := $(shell cat molecule/shared/stable.ver)
 
-.PHONY: ci-spinup
-ci-spinup: ## Creates GCE host for testing staging environment.
-	./devops/gce-nested/gce-start.sh
+.PHONY: ci-go
+ci-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment.
+	./devops/gce-nested/ci-go.sh
+
+.PHONY: ci-go-trusty
+ci-go-trusty: ## Creates, provisions, tests, and destroys GCE host for testing staging environment under trusty.
+	./devops/gce-nested/ci-go.sh trusty
 
 .PHONY: ci-teardown
 ci-teardown: ## Destroys GCE host for testing staging environment.
 	./devops/gce-nested/gce-stop.sh
-
-.PHONY: ci-run
-ci-run: ## Provisions GCE host for testing staging environment.
-	./devops/gce-nested/gce-runner.sh
-
-.PHONY: ci-go
-ci-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment.
-	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
-		make ci-spinup; \
-		make ci-run; \
-		make ci-teardown; \
-	fi
 
 .PHONY: ci-lint
 ci-lint: ## Runs linting in linting container.
@@ -97,11 +89,13 @@ build-debs: ## Builds and tests debian packages
 build-debs-notest: ## Builds and tests debian packages (sans tests)
 	@./devops/scripts/build-debs.sh notest
 
-.PHONY: build-debs-xenial
-build-debs-xenial: ## Builds and tests debian packages (includes Xenial overrides, TESTING ONLY)
-	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then \
-		molecule converge -s builder -- -e securedrop_build_xenial_support=True; \
-		else echo Not running on docs branch...; fi
+.PHONY: build-debs-trusty
+build-debs-trusty: ## Builds and tests debian packages (for Trusty)
+	@./devops/scripts/build-debs.sh test trusty
+
+.PHONY: build-debs-trusty-notest
+build-debs-trusty-notest: ## Builds and tests debian packages (for Trusty)
+	@./devops/scripts/build-debs.sh notest trusty
 
 .PHONY: build-gcloud-docker
 build-gcloud-docker: ## Build docker container for gcloud sdk
@@ -149,35 +143,67 @@ self-signed-https-certs: ## Generates self-signed certs for TESTING the HTTPS co
 
 .PHONY: vagrant-package
 vagrant-package: ## Package up a vagrant box of the last stable SD release
-	@devops/scripts/vagrant_package.sh
+	@devops/scripts/vagrant-package
 
 .PHONY: staging
 staging: ## Creates local staging environment in VM, autodetecting platform
-	@./devops/scripts/create-staging-env
+	@./devops/scripts/create-staging-env xenial
 
-.PHONY: staging-xenial
-staging-xenial: ## Creates local staging VMs based on Xenial, autodetecting platform
-	@./devops/create-staging-env xenial
+.PHONY: staging-trusty
+staging-trusty: ## Creates local staging VMs based on Trusty, autodetecting platform
+	@./devops/scripts/create-staging-env
 
 .PHONY: clean
 clean: ## DANGER! Purges all site-specific info and developer files from project.
 	@./devops/clean
 
-.PHONY: upgrade_start
-upgrade_start: ## Boot up an upgrade test base environment using libvirt
+# Xenial upgrade targets
+.PHONY: upgrade-start
+upgrade-start: ## Boot up an upgrade test base environment using libvirt
 	@SD_UPGRADE_BASE=$(STABLE_VER) molecule converge -s upgrade
 
-.PHONY: upgrade_destroy
-upgrade_destroy: ## Destroy up an upgrade test base environment
+.PHONY: upgrade-start-qa
+upgrade-start-qa: ## Boot up an upgrade test base env using libvirt in remote apt mode
+	@SD_UPGRADE_BASE=$(STABLE_VER) QA_APTTEST=yes molecule converge -s upgrade
+
+.PHONY: upgrade-destroy
+upgrade-destroy: ## Destroy up an upgrade test base environment
 	@SD_UPGRADE_BASE=$(STABLE_VER) molecule destroy -s upgrade
 
-.PHONY: upgrade_test_local
-upgrade_test_local: ## Once an upgrade environment is running, force upgrade apt packages (local pkgs)
+.PHONY: upgrade-test-local
+upgrade-test-local: ## Once an upgrade environment is running, force upgrade apt packages (local pkgs)
 	@molecule side-effect -s upgrade
 
-.PHONY: upgrade_test_qa
-upgrade_test_qa: ## Once an upgrade environment is running, force upgrade apt packages (from qa server)
+.PHONY: upgrade-test-qa
+upgrade-test-qa: ## Once an upgrade environment is running, force upgrade apt packages (from qa server)
+	@QA_APTTEST=yes molecule converge -s upgrade -- --diff -t apt
 	@QA_APTTEST=yes molecule side-effect -s upgrade
+
+# Trusty upgrade targets (deprecated)
+.PHONY: upgrade-trusty-start
+upgrade-trusty-start: ## Boot up an upgrade test base environment (Trusty) using libvirt
+	@SD_UPGRADE_BASE=$(STABLE_VER) molecule converge -s upgrade-trusty
+
+.PHONY: upgrade-trusty-start-qa
+upgrade-trusty-start-qa: ## Boot up an upgrade test base env (Trusty) using libvirt in remote apt mode
+	@SD_UPGRADE_BASE=$(STABLE_VER) QA_APTTEST=yes molecule converge -s upgrade-trusty
+
+.PHONY: upgrade-trusty-destroy
+upgrade-trusty-destroy: ## Destroy up an upgrade test base (Trusty) environment
+	@SD_UPGRADE_BASE=$(STABLE_VER) molecule destroy -s upgrade-trusty
+
+.PHONY: upgrade-trusty-test-local
+upgrade-trusty-test-local: ## Once an upgrade environment (Trusty) is running, force upgrade apt packages (local pkgs)
+	@molecule side-effect -s upgrade-trusty
+
+.PHONY: upgrade-trusty-test-qa
+upgrade-trusty-test-qa: ## Once an upgrade environment (Trusty) is running, force upgrade apt packages (from qa server)
+	@QA_APTTEST=yes molecule converge -s upgrade-trusty -- --diff -t apt
+	@QA_APTTEST=yes molecule side-effect -s upgrade-trusty
+
+.PHONY: fetch-tor-packages
+fetch-tor-packages: ## Retrieves the most recent Tor packages for Xenial, for apt repo
+	molecule test -s fetch-tor-packages
 
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##

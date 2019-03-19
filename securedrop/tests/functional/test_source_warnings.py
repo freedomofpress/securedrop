@@ -15,8 +15,7 @@ class TestSourceInterfaceBannerWarnings(
         self.swap_drivers()
         self.driver.get(self.source_location)
 
-        warning_banner = self.driver.find_element_by_class_name(
-            'use-tor-browser')
+        warning_banner = self.driver.find_element_by_id('use-tor-browser')
 
         assert ("It is recommended to use the Tor Browser" in
                 warning_banner.text)
@@ -55,8 +54,7 @@ class TestSourceInterfaceBannerWarnings(
             "return navigator.userAgent")
         assert currentAgent == orbotUserAgent
 
-        warning_banner = self.driver2.find_element_by_class_name(
-            'orfox-browser')
+        warning_banner = self.driver2.find_element_by_id('orfox-browser')
 
         assert ("It is recommended you use the desktop version of Tor Browser"
                 in warning_banner.text)

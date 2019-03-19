@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2018-12-10 09:11+0000\n"
-"Last-Translator: erinm <erinm@riseup.net>\n"
+"PO-Revision-Date: 2019-02-26 17:19+0000\n"
+"Last-Translator: Pablo Di Noto <pdinoto@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/es/>\n"
 "Language: es_ES\n"
@@ -17,14 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.20\n"
+"X-Generator: Weblate 3.4\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "hace {time}"
 
-#: journalist_app/__init__.py:80 journalist_app/__init__.py:119
+#: journalist_app/__init__.py:89 journalist_app/__init__.py:128
 msgid "You have been logged out due to inactivity"
 msgstr "Su sesión ha sido terminada debido a inactividad"
 
@@ -222,7 +222,7 @@ msgid "Close"
 msgstr "Cerrar"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:77
+#: journalist_templates/col.html:15 source_templates/lookup.html:81
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -336,7 +336,7 @@ msgstr "Código de verificación"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:45
+#: journalist_templates/col.html:99 source_templates/lookup.html:49
 msgid "SUBMIT"
 msgstr "ENVIAR"
 
@@ -413,7 +413,7 @@ msgstr "La contraseña del usuario será:"
 #: journalist_templates/admin_add_user.html:31
 #: journalist_templates/edit_account.html:17
 msgid "Is Admin"
-msgstr "Es Admin"
+msgstr "Es Administrador"
 
 #: journalist_templates/admin_add_user.html:39
 msgid "Is using a YubiKey [HOTP]"
@@ -434,19 +434,31 @@ msgstr ""
 "dígitos de la aplicación para confirmar que la autenticación de dos factores "
 "esta configurada correctamente."
 
-#: journalist_templates/base.html:24
+#: journalist_templates/base.html:28
+msgid ""
+"<strong>Critical Security:</strong> The operating system used by your "
+"SecureDrop servers has reached its end-of-life. A manual update is urgently "
+"required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
+"\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>Situación crítica de Seguridad:</strong> El sistema operativo usado "
+"en sus servidores SecureDrop ha alcanzado el final de su ciclo de vida. Se "
+"necesita urgentemente una actualización manual para permanecer seguro - <a "
+"href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Aprender Más</a>"
+
+#: journalist_templates/base.html:33
 msgid "Logged on as"
 msgstr "Conectado como"
 
-#: journalist_templates/base.html:26
+#: journalist_templates/base.html:35
 msgid "Admin"
 msgstr "Admin"
 
-#: journalist_templates/base.html:28
+#: journalist_templates/base.html:37
 msgid "Log Out"
 msgstr "Cerrar Sesión"
 
-#: journalist_templates/base.html:41
+#: journalist_templates/base.html:50
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -454,7 +466,7 @@ msgstr ""
 "Con tecnología de <br> <img src=\"/static/i/securedrop_small.png\" alt="
 "\"SecureDrop\">"
 
-#: journalist_templates/base.html:56
+#: journalist_templates/base.html:65
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Con tecnología de <em>SecureDrop {version}</em>."
 
@@ -683,7 +695,7 @@ msgstr "Por favor ingrese su contraseña actual y el código de dos factores."
 msgid "Current Password"
 msgstr "Contraseña Actual"
 
-#: journalist_templates/edit_account.html:41 journalist_templates/login.html:10
+#: journalist_templates/edit_account.html:41 journalist_templates/login.html:11
 msgid "Two-factor Code"
 msgstr "Código de Dos Factores"
 
@@ -829,7 +841,7 @@ msgstr "Login para acceder la interfaz de periodista"
 msgid "Password"
 msgstr "Contraseña"
 
-#: journalist_templates/login.html:11
+#: journalist_templates/login.html:12
 msgid "LOG IN"
 msgstr "INICIAR SESIÓN"
 
@@ -860,31 +872,31 @@ msgstr ""
 "Usted fue redirigido porque ya estaba en sesión. Si desea crear una cuenta "
 "nueva, debe cerrar la sesión primero."
 
-#: source_app/main.py:133
+#: source_app/main.py:132
 msgid "You must enter a message or choose a file to submit."
 msgstr "Debe escribir un mensaje o elegir un archivo para enviar."
 
-#: source_app/main.py:166
+#: source_app/main.py:165
 msgid "Thanks! We received your message."
 msgstr "¡Gracias! Recibimos su mensaje."
 
-#: source_app/main.py:168
+#: source_app/main.py:167
 msgid "Thanks! We received your document."
 msgstr "¡Gracias! Recibimos su documento."
 
-#: source_app/main.py:170
+#: source_app/main.py:169
 msgid "Thanks! We received your message and document."
 msgstr "¡Gracias! Recibimos su mensaje y documento."
 
-#: source_app/main.py:223
+#: source_app/main.py:222
 msgid "Reply deleted"
 msgstr "Respuesta eliminada"
 
-#: source_app/main.py:241
+#: source_app/main.py:240
 msgid "All replies have been deleted"
 msgstr "Todas las repuestas han sido eliminadas"
 
-#: source_app/main.py:255
+#: source_app/main.py:254
 msgid "Sorry, that is not a recognized codename."
 msgstr "Lo sentimos, ese nombre clave no es reconocido."
 
@@ -908,6 +920,108 @@ msgid ""
 msgstr ""
 "Al igual que todo software, SecureDrop puede contener errores de seguridad. "
 "Úselo bajo su propio riesgo."
+
+#: source_templates/disable-noscript-xss.html:3
+msgid "Turn off NoScript's cross-site request sanitization setting"
+msgstr "Desactivar la opción de limpieza de scripts inter-sitio de NoScript"
+
+#: source_templates/disable-noscript-xss.html:5
+msgid ""
+"Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do not "
+"currently work reliably in Tor Browser while cross-site request sanitization "
+"is turned on. It is safe to turn off this feature while your Security Slider "
+"is set to \"Safest\". Here's how:"
+msgstr ""
+"Debido a una cuestión con el Navegador Tor (<a href=\"{url}\">más "
+"detalles</a>), al momento las subidas no funcionan de forma confiable si la "
+"opción de limpieza de scripts inter-sitio está activada. Es seguro "
+"desactivar esta opción siempre y cuando el Deslizador de Seguridad se "
+"encuentre en la posición \"Más Seguro\". He aquí cómo:"
+
+#: source_templates/disable-noscript-xss.html:7
+msgid ""
+"You should find a blue \"S\" icon in the Tor browser's toolbar: <img class="
+"\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
+"\"{noscript_icon_url}\">. This is the NoScript button."
+msgstr ""
+"Debieras encontrar el icono de una \"S\" azul en la barra de herramientas "
+"del Navegador Tor: <img class=\"inline\" src=\"{noscript_plain_icon_url}\"> "
+"o <img class=\"inline\" src=\"{noscript_icon_url}\">. Ese es el botón de "
+"NoScript."
+
+#: source_templates/disable-noscript-xss.html:11
+msgid "1. Click on the NoScript button."
+msgstr "1. Hacer clic en el botón de NoScript."
+
+#: source_templates/disable-noscript-xss.html:12
+msgid "The NoScript pane should appear. It looks like this:"
+msgstr "Debiera aparecer el panel de NoScript. Se ve así:"
+
+#: source_templates/disable-noscript-xss.html:18
+msgid ""
+"2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
+"src=\"{url}\">"
+msgstr ""
+"2. En el panel de NoScript, hacer clic en el ícono Ajustes: <img class=\""
+"inline\" src=\"{url}\">"
+
+#: source_templates/disable-noscript-xss.html:20
+msgid ""
+"The settings page should appear in a new browser tab. It looks like this:"
+msgstr ""
+"La página de ajustes debiera aparecer en una nueva pestaña del navegador. Se "
+"ve así:"
+
+#: source_templates/disable-noscript-xss.html:26
+msgid "3. Click the \"Advanced\" tab."
+msgstr "3. Hacer clic en la pestaña \"Avanzado\"."
+
+#: source_templates/disable-noscript-xss.html:28
+msgid "The advanced settings tab should come into view. It looks like this:"
+msgstr "La pestaña de ajustes avanzados debiera aparecer a la vista. Se ve así:"
+
+#: source_templates/disable-noscript-xss.html:34
+msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
+msgstr "4. Quita el tilde en \"Limpieza de scripts sospechosos inter-sitios\"."
+
+#: source_templates/disable-noscript-xss.html:36
+msgid ""
+"Due to a browser issue, this is required for uploads to work reliably. As "
+"soon as the browser issue is resolved, we will remove this recommendation."
+msgstr ""
+"Debido a una cuestión con el navegador, esto es requerido para que las "
+"subidas funcionen de forma confiable. Tan pronto como se resuelva este "
+"inconveniente, removeremos ésta recomendación."
+
+#: source_templates/disable-noscript-xss.html:40
+msgid ""
+"5. Close the <i>NoScript Settings</i> browser tab and return to the "
+"SecureDrop tab."
+msgstr ""
+"5. Cierra la pestaña del navegador <i>Ajustes de NoScript</i> y regresa a la "
+"pestaña SecureDrop."
+
+#: source_templates/disable-noscript-xss.html:42
+msgid ""
+"You can now upload your files. Please keep in mind that each file requires "
+"its own submission."
+msgstr ""
+"Ahora puedes subir tus archivos. Por favor ten en cuenta que cada archivo "
+"requiere su propio envío."
+
+#: source_templates/disable-noscript-xss.html:46
+msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
+msgstr "6. Vuelve a tildar \"Limpieza de scripts sospechosos inter-sitios\"."
+
+#: source_templates/disable-noscript-xss.html:48
+msgid ""
+"Repeat steps 1-3 from above and re-check the setting. The setting has no "
+"effect while your Security Slider is set to \"Safest\", but we recommend "
+"enabling it during normal Tor usage."
+msgstr ""
+"Repite los pasos 1 a 3 más arriba y vuelve a tildar el ajuste. El ajuste no "
+"tiene efecto mientras el Deslizador de Seguridad se encuentre en la posición "
+"\"Más Seguro\", pero recomendamos habilitarlo durante el uso normal de Tor."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1078,7 +1192,7 @@ msgstr "Introduzca Nombre Clave"
 msgid "Enter your codename"
 msgstr "Ingrese su Nombre Clave"
 
-#: source_templates/login.html:25 source_templates/lookup.html:51
+#: source_templates/login.html:25 source_templates/lookup.html:55
 msgid "CANCEL"
 msgstr "CANCELAR"
 
@@ -1090,12 +1204,12 @@ msgstr "¡Importante!"
 #: source_templates/logout_flashed_message.html:5
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
-"green onion button in the Tor browser to clear all history of your "
+"onion button in the Tor browser's toolbar to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
-"¡Gracias por salir de su sesión! Por favor, seleccione \"Nueva Identidad\" "
-"en el botón cebolla verde en el navegador Tor para borrar todo el historial "
-"de uso de SecureDrop de este dispositivo."
+"¡Gracias por salir de tu sesión! Por favor, selecciona \"Nueva Identidad\" "
+"en el botón cebolla en la barra de herramientas del navegador Tor para "
+"borrar todo el historial de uso de SecureDrop de este dispositivo."
 
 #: source_templates/lookup.html:11
 msgid "Whew, it’s you! Now, the embarrassing part..."
@@ -1126,7 +1240,21 @@ msgstr ""
 msgid "Submit Files or Messages"
 msgstr "Enviar Archivos o Mensajes"
 
-#: source_templates/lookup.html:21
+#: source_templates/lookup.html:22
+msgid ""
+"Before you begin, turn off cross-site request sanitization in NoScript. This "
+"is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
+"\"text-link\">Show me how.</a>"
+msgstr ""
+"Antes de empezar, desactiva la limpieza de scripts inter-sitios en NoScript. "
+"Esto es <strong>requerido</strong> para que funcionen las subidas. <a href=\""
+"{url}\" class=\"text-link\">Muéstrame cómo.</a>"
+
+#: source_templates/lookup.html:24
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Usted puede enviar cualquier tipo de archivo, un mensaje, o ambos."
+
+#: source_templates/lookup.html:26
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1138,27 +1266,23 @@ msgstr ""
 "mensajes con GPG o no, todos los archivos son cifrados tan pronto son "
 "recibidos por SecureDrop."
 
-#: source_templates/lookup.html:22
+#: source_templates/lookup.html:27
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">Aprender más</a>."
 
-#: source_templates/lookup.html:24
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Usted puede enviar cualquier tipo de archivo, un mensaje, o ambos."
-
-#: source_templates/lookup.html:33
+#: source_templates/lookup.html:37
 msgid "Maximum upload size: 500 MB"
 msgstr "Tamaño máximo de carga: 500 MB"
 
-#: source_templates/lookup.html:36
+#: source_templates/lookup.html:40
 msgid "Write a message."
 msgstr "Escriba un mensaje."
 
-#: source_templates/lookup.html:58
+#: source_templates/lookup.html:62
 msgid "Read Replies"
 msgstr "Leer Respuestas"
 
-#: source_templates/lookup.html:63
+#: source_templates/lookup.html:67
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1171,43 +1295,43 @@ msgstr ""
 "que usted es ha recibido nuestra respuesta. Usted puede responder enviando "
 "nuevos archivos y mensajes arriba."
 
-#: source_templates/lookup.html:76
+#: source_templates/lookup.html:80
 msgid "Delete this reply?"
 msgstr "¿Desea eliminar esta respuesta?"
 
-#: source_templates/lookup.html:78
+#: source_templates/lookup.html:82
 msgid "DELETE"
 msgstr "ELIMINAR"
 
-#: source_templates/lookup.html:87
+#: source_templates/lookup.html:91
 msgid "DELETE ALL REPLIES"
 msgstr "ELIMINAR TODAS LAS RESPUESTAS"
 
-#: source_templates/lookup.html:90
+#: source_templates/lookup.html:94
 msgid "Are you finished with the replies?"
 msgstr "¿Ha terminado con las respuestas?"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:95
 msgid "YES, DELETE ALL REPLIES"
 msgstr "SI, ELIMINE TODAS LAS RESPUESTAS"
 
-#: source_templates/lookup.html:92
+#: source_templates/lookup.html:96
 msgid "NO, NOT YET"
 msgstr "NO, TODAVÍA NO"
 
-#: source_templates/lookup.html:96
+#: source_templates/lookup.html:100
 msgid "There are no replies at this time."
 msgstr "No hay respuestas en este momento."
 
-#: source_templates/lookup.html:105
+#: source_templates/lookup.html:109
 msgid "Remember, your codename is:"
 msgstr "Recuerde que su nombre clave es:"
 
-#: source_templates/lookup.html:106
+#: source_templates/lookup.html:110
 msgid "Show"
 msgstr "Mostrar"
 
-#: source_templates/lookup.html:108
+#: source_templates/lookup.html:112
 msgid "Hide"
 msgstr "Esconder"
 
@@ -1222,15 +1346,15 @@ msgstr "Lo sentimos, no pudimos localizar lo que pidió."
 #: source_templates/session_timeout.html:6
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
-"continue using SecureDrop, or select \"New Identity\" from the green onion "
-"button in the Tor browser to clear all history of your SecureDrop usage from "
-"this device. If you are not using Tor Browser, restart your browser."
+"continue using SecureDrop, or select \"New Identity\" from the onion button "
+"in the Tor browser's toolbar to clear all history of your SecureDrop usage "
+"from this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
-"La sesión se ha cerrado debido a inactividad. Por favor, entre de nuevo si "
-"desea continuar usando SecureDrop, o seleccione \"Nueva Identidad\" desde el "
-"botón cebolla verde en el navegador Tor para borrar todo el historial de su "
-"uso de SecureDrop de este dispositivo. Si no utiliza el navegador Tor, "
-"reinicie el navegador."
+"La sesión se ha cerrado debido a inactividad. Por favor, entra de nuevo si "
+"deseas continuar usando SecureDrop, o selecciona \"Nueva Identidad\" desde "
+"el botón cebolla en la barra de herramientas del navegador Tor para borrar "
+"todo el historial de tu uso de SecureDrop de este dispositivo. Si no utiliza "
+"el navegador Tor, reinicie el navegador."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"

@@ -86,6 +86,10 @@ anonymous sources.
    :name: upgradetoc
    :maxdepth: 2
 
+   upgrade/xenial_prep.rst
+   upgrade/xenial_upgrade_in_place.rst
+   upgrade/xenial_backup_install_restore.rst
+   upgrade/0.11.1_to_0.12.0.rst
    upgrade/0.10.0_to_0.11.0.rst
    upgrade/0.9.1_to_0.10.0.rst
    upgrade/0.8.0_to_0.9.1.rst

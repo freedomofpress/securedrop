@@ -39,6 +39,8 @@
 @import modules/panel
 // Warning - Messages to user e.g. about protecting your security by turning Tor settings to high
 @import modules/warning
+// Critical - Messages to admin about issues that compromise security of instance
+@import modules/critical
 // Confirm prompt - When deleting something this prompt is shown
 @import modules/confirm-prompt
 // 'Serious' text - Seems to be unused. Delete?
@@ -69,6 +71,10 @@
 @import "modules/grid-item"
 // Option - might be unused. Delete?
 @import "modules/option"
+// Flexbox - support for flexbox layouts
+@import "modules/flexbox"
+// Image - general image styling
+@import "modules/img"
 // Logo - Small and large versions of the branding; can also be the journalist org brand (not SD).
 @import "modules/logo"
 // Submissions - container for all of the submissions
@@ -121,6 +127,7 @@
   +cols
   +panel
   +warning
+  +critical
   +confirm-prompt
   +serious-text
   +code
@@ -136,6 +143,8 @@
   +document-actions-button
   +grid-item
   +option
+  +flexbox
+  +img
   +logo
   +submissions
   +submission

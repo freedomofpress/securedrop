@@ -5,12 +5,12 @@ import re
 KERNEL_VERSION = pytest.securedrop_test_vars.grsec_version
 
 
-def test_ssh_motd_disabled(File):
+def test_ssh_motd_disabled(host):
     """
     Ensure the SSH MOTD (Message of the Day) is disabled.
     Grsecurity balks at Ubuntu's default MOTD.
     """
-    f = File("/etc/pam.d/sshd")
+    f = host.file("/etc/pam.d/sshd")
     assert f.is_file
     assert not f.contains("pam\.motd")
 
@@ -21,13 +21,13 @@ def test_ssh_motd_disabled(File):
     'paxctl',
     'securedrop-grsec',
 ])
-def test_grsecurity_apt_packages(Package, package):
+def test_grsecurity_apt_packages(host, package):
     """
     Ensure the grsecurity-related apt packages are present on the system.
     Includes the FPF-maintained metapackage, as well as paxctl, for managing
     PaX flags on binaries.
     """
-    assert Package(package).is_installed
+    assert host.package(package).is_installed
 
 
 @pytest.mark.parametrize("package", [
@@ -38,7 +38,7 @@ def test_grsecurity_apt_packages(Package, package):
     '^linux-image-.*generic$',
     '^linux-headers-.*',
 ])
-def test_generic_kernels_absent(Command, package):
+def test_generic_kernels_absent(host, package):
     """
     Ensure the default Ubuntu-provided kernel packages are absent.
     In the past, conflicting version numbers have caused machines
@@ -49,28 +49,28 @@ def test_generic_kernels_absent(Command, package):
     # Can't use the TestInfra Package module to check state=absent,
     # so let's check by shelling out to `dpkg -l`. Dpkg will automatically
     # honor simple regex in package names.
-    c = Command("dpkg -l {}".format(package))
+    c = host.run("dpkg -l {}".format(package))
     assert c.rc == 1
     error_text = "dpkg-query: no packages found matching {}".format(package)
     assert c.stderr == error_text
 
 
-def test_grsecurity_lock_file(File):
+def test_grsecurity_lock_file(host):
     """
     Ensure system is rerunning a grsecurity kernel by testing for the
     `grsec_lock` file, which is automatically created by grsecurity.
     """
-    f = File("/proc/sys/kernel/grsecurity/grsec_lock")
+    f = host.file("/proc/sys/kernel/grsecurity/grsec_lock")
     assert oct(f.mode) == "0600"
     assert f.user == "root"
     assert f.size == 0
 
 
-def test_grsecurity_kernel_is_running(Command):
+def test_grsecurity_kernel_is_running(host):
     """
     Make sure the currently running kernel is specific grsec kernel.
     """
-    c = Command('uname -r')
+    c = host.run('uname -r')
     assert c.stdout.endswith('-grsec')
     assert c.stdout == '{}-grsec'.format(KERNEL_VERSION)
 
@@ -80,13 +80,13 @@ def test_grsecurity_kernel_is_running(Command):
   ('kernel.grsecurity.rwxmap_logging', 0),
   ('vm.heap_stack_gap', 1048576),
 ])
-def test_grsecurity_sysctl_options(Sysctl, Sudo, sysctl_opt):
+def test_grsecurity_sysctl_options(host, sysctl_opt):
     """
     Check that the grsecurity-related sysctl options are set correctly.
     In production the RWX logging is disabled, to reduce log noise.
     """
-    with Sudo():
-        assert Sysctl(sysctl_opt[0]) == sysctl_opt[1]
+    with host.sudo():
+        assert host.sysctl(sysctl_opt[0]) == sysctl_opt[1]
 
 
 @pytest.mark.parametrize('paxtest_check', [
@@ -108,48 +108,47 @@ def test_grsecurity_sysctl_options(Sysctl, Sudo, sysctl_opt):
   "Return to function (memcpy)",
   "Return to function (memcpy, PIE)",
 ])
-def test_grsecurity_paxtest(Command, Sudo, paxtest_check):
+def test_grsecurity_paxtest(host, paxtest_check):
     """
     Check that paxtest does not report anything vulnerable
     Requires the package paxtest to be installed.
     The paxtest package is currently being installed in the app-test role.
     """
-    if Command.exists("/usr/bin/paxtest"):
-        with Sudo():
-            c = Command("paxtest blackhat")
+    if host.exists("/usr/bin/paxtest"):
+        with host.sudo():
+            c = host.run("paxtest blackhat")
             assert c.rc == 0
             assert "Vulnerable" not in c.stdout
             regex = "^{}\s*:\sKilled$".format(re.escape(paxtest_check))
             assert re.search(regex, c.stdout)
 
 
-def test_grub_pc_marked_manual(Command):
+def test_grub_pc_marked_manual(host):
     """
     Ensure the `grub-pc` packaged is marked as manually installed.
     This is necessary for VirtualBox with Vagrant.
     """
-    c = Command('apt-mark showmanual grub-pc')
+    c = host.run('apt-mark showmanual grub-pc')
     assert c.rc == 0
     assert c.stdout == "grub-pc"
 
 
-def test_apt_autoremove(Command):
+def test_apt_autoremove(host):
     """
     Ensure old packages have been autoremoved.
     """
-    c = Command('apt-get --dry-run autoremove')
+    c = host.run('apt-get --dry-run autoremove')
     assert c.rc == 0
     assert "The following packages will be REMOVED" not in c.stdout
 
 
-@pytest.mark.xfail(strict=True,
-                   reason="PaX flags unset at install time, see issue #3916")
+@pytest.mark.xfail(reason="PaX flags unset at install time, see issue #3916")
 @pytest.mark.parametrize("binary", [
     "/usr/sbin/grub-probe",
     "/usr/sbin/grub-mkdevicemap",
     "/usr/bin/grub-script-check",
 ])
-def test_pax_flags(Command, File, binary):
+def test_pax_flags(host, binary):
     """
     Ensure PaX flags are set correctly on critical Grub binaries.
     These flags are maintained as part of a post-install kernel hook
@@ -157,11 +156,11 @@ def test_pax_flags(Command, File, binary):
     the machine may fail to boot into a new kernel.
     """
 
-    f = File("/etc/kernel/postinst.d/paxctl-grub")
+    f = host.file("/etc/kernel/postinst.d/paxctl-grub")
     assert f.is_file
     assert f.contains("^paxctl -zCE {}".format(binary))
 
-    c = Command("paxctl -v {}".format(binary))
+    c = host.run("paxctl -v {}".format(binary))
     assert c.rc == 0
 
     assert "- PaX flags: --------E--- [{}]".format(binary) in c.stdout
@@ -170,3 +169,26 @@ def test_pax_flags(Command, File, binary):
     # the "p" and "m" flags.
     assert "PAGEEXEC is disabled" not in c.stdout
     assert "MPROTECT is disabled" not in c.stdout
+
+
+@pytest.mark.parametrize('kernel_opts', [
+  'WLAN',
+  'NFC',
+  'WIMAX',
+  'WIRELESS',
+  'HAMRADIO',
+  'IRDA',
+  'BT',
+])
+def test_wireless_disabled_in_kernel_config(host, kernel_opts):
+    """
+    Kernel modules for wireless are blacklisted, but we go one step further and
+    remove wireless support from the kernel. Let's make sure wireless is
+    disabled in the running kernel config!
+    """
+
+    kernel_config_path = "/boot/config-{}-grsec".format(KERNEL_VERSION)
+    kernel_config = host.file(kernel_config_path).content_string
+
+    line = "# CONFIG_{} is not set".format(kernel_opts)
+    assert line in kernel_config

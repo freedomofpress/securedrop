@@ -1,0 +1,10 @@
+Source: securedrop-app-code
+Section: web
+Priority: optional
+Maintainer: SecureDrop Team <securedrop@freedom.press>
+Homepage: https://securedrop.org
+
+Package: securedrop-app-code
+Architecture: amd64
+Depends: python-pip,apparmor-utils,gnupg2,haveged,python,secure-delete,sqlite3,${dist:Depends},libapache2-mod-wsgi,libapache2-mod-xsendfile,redis-server,supervisor,securedrop-keyring,securedrop-config,libpython2.7-dev
+Description: Packages the SecureDrop application code pip dependencies and apparmor profiles. This package will put the apparmor profiles in enforce mode. This package does use pip to install the pip wheelhouse

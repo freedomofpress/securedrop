@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import gnupg
+import pretty_bad_protocol as gnupg
 import logging
 import os
 import io
@@ -22,6 +22,7 @@ from os import path
 
 from db import db
 from journalist_app import create_app as create_journalist_app
+import models
 from source_app import create_app as create_source_app
 import utils
 
@@ -56,6 +57,17 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(skip_page_layout)
 
 
+@pytest.fixture
+def hardening(request):
+    hardening = models.LOGIN_HARDENING
+
+    def finalizer():
+        models.LOGIN_HARDENING = hardening
+    request.addfinalizer(finalizer)
+    models.LOGIN_HARDENING = True
+    return None
+
+
 @pytest.fixture(scope='session')
 def setUpTearDown():
     _start_test_rqworker(original_config)
@@ -77,7 +89,12 @@ def config(tmpdir):
     tmp = data.mkdir('tmp')
     sqlite = data.join('db.sqlite')
 
-    gpg = gnupg.GPG(homedir=str(keys))
+    # gpg 2.1+ requires gpg-agent, see #4013
+    gpg_agent_config = str(keys.join('gpg-agent.conf'))
+    with open(gpg_agent_config, 'w+') as f:
+        f.write('allow-loopback-pinentry')
+
+    gpg = gnupg.GPG('gpg2', homedir=str(keys))
     for ext in ['sec', 'pub']:
         with io.open(path.join(path.dirname(__file__),
                                'files',
@@ -143,7 +160,8 @@ def test_journo(journalist_app):
                 'username': username,
                 'password': password,
                 'otp_secret': otp_secret,
-                'id': user.id}
+                'id': user.id,
+                'uuid': user.uuid}
 
 
 @pytest.fixture(scope='function')

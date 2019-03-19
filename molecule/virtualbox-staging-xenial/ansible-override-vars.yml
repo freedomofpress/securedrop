@@ -6,7 +6,4 @@ ssh_net_in_override: 0.0.0.0/0
 # inter-VM communication for OSSEC.
 ssh_ip: "{{ ansible_default_ipv4.address }}"
 
-# Override "xenial" target with trusty, since we don't have a xenial
-# channel in the apt repo yet.
-apt_repo_target_distro: trusty
-tor_apt_target_distro: trusty
+securedrop_staging_install_target_distro: xenial

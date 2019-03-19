@@ -34,8 +34,8 @@
   # this logic for existing installs.
 - name: Configure cron-apt to remove vanilla kernels if they are installed.
   copy:
-    src: 1-remove
-    dest: /etc/cron-apt/action.d/1-remove
+    src: 9-remove
+    dest: /etc/cron-apt/action.d/9-remove
   tags:
     - apt
     - cron-apt

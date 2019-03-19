@@ -1,4 +1,30 @@
 ---
+- name: Confirm local debs present if required
+  hosts: localhost
+  gather_facts: no
+  vars:
+    molecule_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
+  tasks:
+      # Before running apt-server logic, confirm we have local
+      # debs built.
+    - name: Establish QA strategy
+      set_fact:
+        QA_APTTEST: "{{ lookup('env','QA_APTTEST')|bool }}"
+
+    - name: Find local deb files
+      find:
+        paths: "{{ molecule_dir }}/../../build/{{ rep_dist }}/"
+        patterns: "*.deb"
+      register: _upgrade_scenario_find_debs_result
+      when: not QA_APTTEST
+
+    - name: Ensure debs were found
+      assert:
+        that:
+          - "_upgrade_scenario_find_debs_result.files|length >= 8"
+        msg: "No local debs found, run 'make build-debs'"
+      when: not QA_APTTEST
+
 - name: Re-run original tor role
   hosts: securedrop
   max_fail_percentage: 0
@@ -26,8 +52,13 @@
       with_items:
         - securedrop_worker
         - cron-apt
-    - import_tasks: reboot_and_wait.yml
+    # Reuse existing "reboot-and-wait" logic from site config
+    - import_tasks: ../../install_files/ansible-base/tasks/reboot.yml
       tags: reboot
+
+    - name: Wait longer for machines to reboot
+      pause:
+        seconds: 60
   become: yes
 
 - name: Re-run OSSEC role
