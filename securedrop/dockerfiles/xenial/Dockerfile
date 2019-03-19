@@ -5,13 +5,16 @@ ENV USER_NAME ${USER_NAME:-root}
 ARG USER_ID
 ENV USER_ID ${USER_ID:-0}
 
+# If running grsecurity kernel on the host, Memprotect must be disabled on mono-sgen in the container
 RUN apt-get update && \
-    apt-get install -y devscripts vim \
+    apt-get install -y paxctl && \
+    { apt-get install -y libgtk2.0 || echo 'libgtk2.0 was not installed'; } && \
+    paxctl -cm /usr/bin/mono-sgen && dpkg-reconfigure mono-runtime-sgen
+
+RUN apt-get install -y devscripts vim \
                        python-pip libpython2.7-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server firefox git xvfb haveged curl \
-                       gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo \
-                       libgtk2.0
-
+                       gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo
 
 ENV FIREFOX_CHECKSUM=88d25053306d33658580973b063cd459a56e3596a3a298c1fb8ab1d52171d860
 RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/+build/9727836/+files/firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb && \
