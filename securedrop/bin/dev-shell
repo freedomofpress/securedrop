@@ -28,8 +28,8 @@ function docker_image() {
 
     docker build \
            ${DOCKER_BUILD_ARGUMENTS:-} \
-	   --build-arg=USER_ID="$(id -u)" \
-	   --build-arg=USER_NAME="${USER:-root}" \
+       --build-arg=USER_ID="$(id -u)" \
+       --build-arg=USER_NAME="${USER:-root}" \
            -t "securedrop-test-${1}" \
        --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/Dockerfile" \
        "${TOPLEVEL}/securedrop"
@@ -40,12 +40,13 @@ function docker_run() {
 
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
     docker run \
-	   --rm \
+       --rm \
        -e NUM_SOURCES \
-	   --user "${USER:-root}" \
-	   --volume "${TOPLEVEL}:${TOPLEVEL}" \
-	   --workdir "${TOPLEVEL}/securedrop" \
-	   -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}" "${@:2}"
+       --user "${USER:-root}" \
+       --volume "${TOPLEVEL}:${TOPLEVEL}" \
+       --workdir "${TOPLEVEL}/securedrop" \
+       --name securedrop-dev
+       -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}" "${@:2}"
 }
 
 if test -n "${CIRCLE_SHA1:-}" ; then
