@@ -89,6 +89,7 @@ anonymous sources.
    upgrade/xenial_prep.rst
    upgrade/xenial_upgrade_in_place.rst
    upgrade/xenial_backup_install_restore.rst
+   upgrade/0.12.0_to_0.12.1.rst
    upgrade/0.11.1_to_0.12.0.rst
    upgrade/0.10.0_to_0.11.0.rst
    upgrade/0.9.1_to_0.10.0.rst
