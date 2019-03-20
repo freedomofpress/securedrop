@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.12.1~rc1
+## 0.12.1
 
 ### Web Application
 
@@ -15,6 +15,10 @@
 ### Tails Environment
 
 * Resolved error in GUI updater due to flaky keyservers (#4100)
+
+### Documentation
+
+* Add documentation indicating fresh installs should be done on the Ubuntu 16.04.6 iso (#4234)
 
 ## 0.12.0
 
