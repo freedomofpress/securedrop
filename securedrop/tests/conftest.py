@@ -224,7 +224,7 @@ def journalist_api_token(journalist_app, test_journo):
                                  'passphrase': test_journo['password'],
                                  'one_time_code': valid_token}),
                             headers=utils.api_helper.get_api_headers())
-        observed_response = json.loads(response.data)
+        observed_response = json.loads(response.data.decode('utf-8'))
         return observed_response['token']
 
 

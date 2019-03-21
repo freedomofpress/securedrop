@@ -82,13 +82,13 @@ def make_blueprint(config):
             # other requests must have valid JSON payload
             else:
                 try:
-                    json.loads(request.data)
+                    json.loads(request.data.decode('utf-8'))
                 except (ValueError):
                     return abort(400, 'malformed request')
 
     @api.route('/token', methods=['POST'])
     def get_token():
-        creds = json.loads(request.data)
+        creds = json.loads(request.data.decode('utf-8'))
 
         username = creds.get('username', None)
         passphrase = creds.get('passphrase', None)
@@ -232,7 +232,7 @@ def make_blueprint(config):
 
             user = get_user_object(request)
 
-            data = json.loads(request.data)
+            data = json.loads(request.data.decode('utf-8'))
             if not data['reply']:
                 abort(400, 'reply should not be empty')
 
