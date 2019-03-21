@@ -27,14 +27,8 @@ mon_ip: 10.0.1.3
 app_ip: 10.0.1.2
 
 pip_deps:
-  - name: 'Flask-Testing'
-    version: '0.7.1'
-  - name: 'mock'
-    version: '2.0.0'
-  - name: 'pytest'
-    version: '3.3.2'
-  - name: 'selenium'
-    version: '2.53.6'
+  - name: 'Flask'
+    version: '1.0.2'
 
 apparmor_complain: []
 
