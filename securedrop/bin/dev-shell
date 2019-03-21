@@ -44,6 +44,8 @@ function docker_run() {
 	   --user "${USER:-root}" \
 	   --volume "${TOPLEVEL}:${TOPLEVEL}" \
 	   --workdir "${TOPLEVEL}/securedrop" \
+       -e LC_ALL=C.UTF-8 \
+       -e LANG=C.UTF-8 \
 	   -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}" "${@:2}"
 }
 
