@@ -139,7 +139,7 @@ class SourceNavigationStepsMixin():
 
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
-            file.write(self.secret_message)
+            file.write(self.secret_message.encode('utf-8'))
             file.seek(0)
 
             filename = file.name

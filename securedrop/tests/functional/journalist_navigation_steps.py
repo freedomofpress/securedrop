@@ -593,6 +593,9 @@ class JournalistNavigationStepsMixin():
         decrypted_submission = self.gpg.decrypt(raw_content)
         submission = self._get_submission_content(file_url,
                                                   decrypted_submission)
+        if type(submission) == bytes:
+            submission = submission.decode('utf-8')
+
         assert self.secret_message == submission
 
     def _journalist_composes_reply(self):
