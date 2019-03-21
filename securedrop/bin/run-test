@@ -5,7 +5,7 @@ set -euo pipefail
 
 source "${BASH_SOURCE%/*}/dev-deps"
 
-run_xvfb &
+setup_vncauth
 run_redis &
 run_x11vnc &
 urandom

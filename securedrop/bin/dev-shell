@@ -40,6 +40,7 @@ function docker_run() {
 
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
     docker run \
+       -p 127.0.0.1:5901:5901 \
        --rm \
        -e NUM_SOURCES \
        --user "${USER:-root}" \
