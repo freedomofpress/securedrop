@@ -58,7 +58,7 @@ class I18NTool(object):
 
     def ensure_i18n_remote(self, args):
         k = {'_cwd': args.root}
-        if 'i18n' not in git.remote(**k).stdout:
+        if b'i18n' not in git.remote(**k).stdout:
             git.remote.add('i18n', args.url, **k)
         git.fetch('i18n', **k)
 
@@ -284,8 +284,8 @@ class I18NTool(object):
     def upstream_commit(self, args, code):
         self.require_git_email_name(args.root)
         authors = set()
-        diffs = git('--no-pager', '-C', args.root,
-                    'diff', '--name-only', '--cached').stdout
+        diffs = str(git('--no-pager', '-C', args.root,
+                    'diff', '--name-only', '--cached').stdout)
         for path in diffs.strip().split('\n'):
             previous_message = str(git(
                 '--no-pager', '-C', args.root, 'log', '-n', '1', path,
