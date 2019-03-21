@@ -25,7 +25,7 @@ from werkzeug.datastructures import Headers
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig
-from . import i18n
+import i18n
 import i18n_tool
 import journalist_app as journalist_app_module
 import pytest
@@ -93,15 +93,15 @@ def verify_i18n(app):
         page = c.get('/login')
         assert session.get('locale') is None
         assert not_translated == gettext(not_translated)
-        assert '?l=fr_FR' in page.data
-        assert '?l=en_US' not in page.data
+        assert b'?l=fr_FR' in page.data
+        assert b'?l=en_US' not in page.data
 
         page = c.get('/login?l=fr_FR',
                      headers=Headers([('Accept-Language', 'en_US')]))
         assert session.get('locale') == 'fr_FR'
         assert translated_fr == gettext(not_translated)
-        assert '?l=fr_FR' not in page.data
-        assert '?l=en_US' in page.data
+        assert b'?l=fr_FR' not in page.data
+        assert b'?l=en_US' in page.data
 
         c.get('/', headers=Headers([('Accept-Language', 'en_US')]))
         assert session.get('locale') == 'fr_FR'
