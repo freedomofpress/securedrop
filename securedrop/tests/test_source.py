@@ -4,7 +4,7 @@ import json
 import re
 import subprocess
 
-from io import StringIO
+from io import StringIO, BytesIO
 from flask import session, escape, current_app, url_for, g
 from mock import patch, ANY
 
@@ -88,7 +88,7 @@ def test_generate(source_app):
     text = resp.data.decode('utf-8')
     assert "This codename is what you will use in future visits" in text
 
-    codename = _find_codename(resp.data)
+    codename = _find_codename(resp.data.decode('utf-8'))
     assert len(codename.split()) == Source.NUM_WORDS
     # codename is also stored in the session - make sure it matches the
     # codename displayed to the source
@@ -267,7 +267,7 @@ def _dummy_submission(app):
     return app.post(
         url_for('main.submit'),
         data=dict(msg="Pay no attention to the man behind the curtain.",
-                  fh=(StringIO(''), '')),
+                  fh=(BytesIO(b''), '')),
         follow_redirects=True)
 
 
@@ -335,7 +335,7 @@ def test_submit_file(source_app):
         _dummy_submission(app)
         resp = app.post(
             url_for('main.submit'),
-            data=dict(msg="", fh=(StringIO('This is a test'), 'test.txt')),
+            data=dict(msg="", fh=(BytesIO(b'This is a test'), 'test.txt')),
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -350,7 +350,7 @@ def test_submit_both(source_app):
             url_for('main.submit'),
             data=dict(
                 msg="This is a test",
-                fh=(StringIO('This is a test'), 'test.txt')),
+                fh=(BytesIO(b'This is a test'), 'test.txt')),
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -474,7 +474,7 @@ def test_submit_sanitizes_filename(source_app):
                 url_for('main.submit'),
                 data=dict(
                     msg="",
-                    fh=(StringIO('This is a test'), insecure_filename)),
+                    fh=(BytesIO(b'This is a test'), insecure_filename)),
                 follow_redirects=True)
             assert resp.status_code == 200
             gzipfile.assert_called_with(filename=sanitized_filename,
