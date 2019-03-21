@@ -87,7 +87,7 @@ def make_blueprint(config):
                 with io.open(reply_path, "rb") as f:
                     contents = f.read()
                 reply_obj = current_app.crypto_util.decrypt(g.codename, contents)
-                reply.decrypted = reply_obj.decode('utf-8')
+                reply.decrypted = reply_obj
             except UnicodeDecodeError:
                 current_app.logger.error("Could not decode reply %s" %
                                          reply.filename)
