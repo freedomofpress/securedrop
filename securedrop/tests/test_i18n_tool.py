@@ -137,10 +137,10 @@ class TestI18NTool(object):
         i18n_tool.I18NTool().main(args)
         messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
-        with io.open(messages_file) as fobj:
+        with io.open(messages_file, 'rb') as fobj:
             pot = fobj.read()
-            assert 'code hello i18n' in pot
-            assert 'template hello i18n' in pot
+            assert b'code hello i18n' in pot
+            assert b'template hello i18n' in pot
 
         locale = 'en_US'
         locale_dir = join(str(tmpdir), locale)
@@ -151,8 +151,8 @@ class TestI18NTool(object):
         assert exists(mo_file)
         with io.open(mo_file, mode='rb') as fobj:
             mo = fobj.read()
-            assert 'code hello i18n' in mo
-            assert 'template hello i18n' in mo
+            assert b'code hello i18n' in mo
+            assert b'template hello i18n' in mo
 
     def test_translate_messages_compile_arg(self, tmpdir):
         args = [
@@ -210,15 +210,15 @@ class TestI18NTool(object):
         assert old_po_mtime == getmtime(po_file)
         with io.open(mo_file, mode='rb') as fobj:
             mo = fobj.read()
-            assert 'code hello i18n' in mo
-            assert 'template hello i18n' not in mo
+            assert b'code hello i18n' in mo
+            assert b'template hello i18n' not in mo
 
     def test_require_git_email_name(self, tmpdir):
         k = {'_cwd': str(tmpdir)}
         git('init', **k)
         with pytest.raises(Exception) as excinfo:
             i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
-        assert 'please set name' in excinfo.value.message
+        assert 'please set name' in str(excinfo.value)
 
         git.config('user.email', "you@example.com", **k)
         git.config('user.name', "Your Name", **k)
