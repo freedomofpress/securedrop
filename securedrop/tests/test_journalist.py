@@ -6,9 +6,9 @@ import random
 import zipfile
 import base64
 import datetime
+import binascii
 
 from base64 import b64decode
-from io import StringIO
 from io import BytesIO
 from flask import url_for, escape, session, current_app, g
 from mock import patch
@@ -767,7 +767,7 @@ def test_admin_resets_user_hotp_error(mocker,
                     test_admin['otp_secret'])
 
         mocker.patch('models.Journalist.set_hotp_secret',
-                     side_effect=TypeError(error_message))
+                     side_effect=binascii.Error(error_message))
 
         with InstrumentedApp(journalist_app) as ins:
             app.post(url_for('admin.reset_two_factor_hotp'),
@@ -866,7 +866,7 @@ def test_user_resets_user_hotp_error(mocker,
                     test_journo['otp_secret'])
 
         mocker.patch('models.Journalist.set_hotp_secret',
-                     side_effect=TypeError(error_message))
+                     side_effect=binascii.Error(error_message))
 
         with InstrumentedApp(journalist_app) as ins:
             app.post(url_for('account.reset_two_factor_hotp'),
@@ -1145,7 +1145,7 @@ def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
                 "error")
 
     log_event = mocked_error_logger.call_args[0][0]
-    assert ("Adding user 'username' failed: (__builtin__.NoneType) "
+    assert ("Adding user 'username' failed: (builtins.NoneType) "
             "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']") in log_event
 
 
@@ -1163,8 +1163,8 @@ def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
             # Create 1px * 1px 'white' PNG file from its base64 string
             form = journalist_app_module.forms.LogoForm(
                 logo=(BytesIO(base64.decodestring
-                      ("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
-                       "VR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=")), 'test.png')
+                      (b"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
+                       b"VR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=")), 'test.png')
             )
             with InstrumentedApp(journalist_app) as ins:
                 app.post(url_for('admin.manage_config'),
@@ -1184,7 +1184,7 @@ def test_logo_upload_with_invalid_filetype_fails(journalist_app, test_admin):
                     test_admin['otp_secret'])
 
         form = journalist_app_module.forms.LogoForm(
-            logo=(StringIO('filedata'), 'bad.exe')
+            logo=(BytesIO(b'filedata'), 'bad.exe')
         )
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(url_for('admin.manage_config'),
@@ -1214,7 +1214,7 @@ def test_logo_upload_with_empty_input_field_fails(journalist_app, test_admin):
                     test_admin['otp_secret'])
 
         form = journalist_app_module.forms.LogoForm(
-            logo=(StringIO(''), '')
+            logo=(BytesIO(b''), '')
         )
 
         with InstrumentedApp(journalist_app) as ins:
@@ -1662,12 +1662,12 @@ def test_download_selected_submissions_from_source(journalist_app,
     # The download request was succesful, and the app returned a zipfile
     assert resp.status_code == 200
     assert resp.content_type == 'application/zip'
-    assert zipfile.is_zipfile(StringIO(resp.data))
+    assert zipfile.is_zipfile(BytesIO(resp.data))
 
     # The submissions selected are in the zipfile
     for filename in selected_fnames:
         # Check that the expected filename is in the zip file
-        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+        zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
             os.path.join(
                 source.journalist_filename,
                 "%s_%s" % (filename.split('-')[0],
@@ -1684,7 +1684,7 @@ def test_download_selected_submissions_from_source(journalist_app,
 
     for filename in not_selected_fnames:
         with pytest.raises(KeyError):
-            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+            zipfile.ZipFile(BytesIO(resp.data)).getinfo(
                 os.path.join(
                     source.journalist_filename,
                     source.journalist_designation,
@@ -1741,11 +1741,11 @@ def test_download_unread_all_sources(journalist_app, test_journo):
     # The download request was succesful, and the app returned a zipfile
     assert resp.status_code == 200
     assert resp.content_type == 'application/zip'
-    assert zipfile.is_zipfile(StringIO(resp.data))
+    assert zipfile.is_zipfile(BytesIO(resp.data))
 
     # All the not dowloaded submissions are in the zipfile
     for submission in bulk['not_downloaded0']:
-        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+        zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
                 os.path.join(
                     "unread",
                     bulk['source0'].journalist_designation,
@@ -1756,7 +1756,7 @@ def test_download_unread_all_sources(journalist_app, test_journo):
         assert zipinfo
 
     for submission in bulk['not_downloaded1']:
-        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+        zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
             os.path.join(
                 "unread",
                 bulk['source1'].journalist_designation,
@@ -1769,7 +1769,7 @@ def test_download_unread_all_sources(journalist_app, test_journo):
     # All the downloaded submissions are absent from the zipfile
     for submission in bulk['downloaded0']:
         with pytest.raises(KeyError):
-            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+            zipfile.ZipFile(BytesIO(resp.data)).getinfo(
                 os.path.join(
                     "unread",
                     bulk['source0'].journalist_designation,
@@ -1780,7 +1780,7 @@ def test_download_unread_all_sources(journalist_app, test_journo):
 
     for submission in bulk['downloaded1']:
         with pytest.raises(KeyError):
-            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+            zipfile.ZipFile(BytesIO(resp.data)).getinfo(
                 os.path.join(
                     "unread",
                     bulk['source1'].journalist_designation,
@@ -1811,11 +1811,11 @@ def test_download_all_selected_sources(journalist_app, test_journo):
     # The download request was succesful, and the app returned a zipfile
     assert resp.status_code == 200
     assert resp.content_type == 'application/zip'
-    assert zipfile.is_zipfile(StringIO(resp.data))
+    assert zipfile.is_zipfile(BytesIO(resp.data))
 
     # All messages from source1 are in the zipfile
     for submission in bulk['submissions1']:
-        zipinfo = zipfile.ZipFile(StringIO(resp.data)).getinfo(
+        zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
             os.path.join(
                 "all",
                 bulk['source1'].journalist_designation,
@@ -1828,7 +1828,7 @@ def test_download_all_selected_sources(journalist_app, test_journo):
     # All messages from source0 are absent from the zipfile
     for submission in bulk['submissions0']:
         with pytest.raises(KeyError):
-            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+            zipfile.ZipFile(BytesIO(resp.data)).getinfo(
                 os.path.join(
                     "all",
                     bulk['source0'].journalist_designation,
