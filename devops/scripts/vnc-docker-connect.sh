@@ -21,13 +21,13 @@ SD_DOCKER_IP="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddre
 # Quit if the VNC port not found
 nc -w5 -z "$SD_DOCKER_IP" 5901 || (echo "ERROR: VNC server not found"; exit 1)
 
-if [ ! $(which remote-viewer) ]
+if [ ! "$(which remote-viewer)" ]
 then
     printf "\nError: We use the remote-viewer utility to reach Docker via VNC,\n"
     printf "and it is not installed. On Debian or Ubuntu, install it with\n"
     printf "'sudo apt install virt-viewer', or if you use another VNC client,\n"
     printf "consider adding it to this script:\n"
-    printf "\n$(realpath $0)\n\n"
+    printf "\n%s\n\n" "$(realpath $0)"
     printf "and submitting a pull request.\n\n"
     exit 1
 fi
