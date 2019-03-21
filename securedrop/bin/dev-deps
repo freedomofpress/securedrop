@@ -10,8 +10,18 @@ function run_redis() {
     setsid redis-server >& /tmp/redis.out || cat /tmp/redis.out
 }
 
-function setup_vncauth {
+function write_vncpw {
     echo "freedom" | vncpasswd -f > /tmp/vncpasswd
+}
+
+function setup_vncauth {
+    # vncpasswd can seg fault, so we'll retry a few times if necessary
+    tries=0
+    while [ $tries -lt 10 ]
+    do
+        write_vncpw && return 0
+        echo "Retrying write of VNC credentials"
+    done
 }
 
 function run_x11vnc() {

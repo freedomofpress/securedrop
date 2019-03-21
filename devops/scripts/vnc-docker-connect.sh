@@ -21,14 +21,17 @@ SD_DOCKER_IP="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddre
 # Quit if the VNC port not found
 nc -w5 -z "$SD_DOCKER_IP" 5901 || (echo "ERROR: VNC server not found"; exit 1)
 
-# Are we running on gnome desktop?
-if [ "$(echo \"$XDG_DATA_DIRS\" | sed 's/.*\(gnome\).*/\1/')" = "gnome" ]; then
-    echo -e "[virt-viewer]\ntype=vnc\nhost=${SD_DOCKER_IP}\nport=5901\npassword=freedom" > /tmp/func-vnc.ini
-    remote-viewer /tmp/func-vnc.ini 2>/dev/null &
-elif [ "$(echo \"$XDG_DATA_DIRS\" | sed 's/.*\(ubuntu\).*/\1/')" = "ubuntu" ]; then
-    echo -e "[virt-viewer]\ntype=vnc\nhost=${SD_DOCKER_IP}\nport=5901\npassword=freedom" > /tmp/func-vnc.ini
-    remote-viewer /tmp/func-vnc.ini 2>/dev/null &
-else
-    echo "Not sure what the VNC terminal cli arguments are for your OS."
-    echo "Please add to $0 and make a pull-request"
+if [ ! $(which remote-viewer) ]
+then
+    printf "\nError: We use the remote-viewer utility to reach Docker via VNC,\n"
+    printf "and it is not installed. On Debian or Ubuntu, install it with\n"
+    printf "'sudo apt install virt-viewer', or if you use another VNC client,\n"
+    printf "consider adding it to this script:\n"
+    printf "\n$(realpath $0)\n\n"
+    printf "and submitting a pull request.\n\n"
+    exit 1
 fi
+
+rv_config="${TMPDIR:-/tmp}/func-vnc.ini"
+echo -e "[virt-viewer]\ntype=vnc\nhost=${SD_DOCKER_IP}\nport=5901\npassword=freedom" > "${rv_config}"
+remote-viewer "${rv_config}" 2>/dev/null &

@@ -46,7 +46,7 @@ function docker_run() {
        --user "${USER:-root}" \
        --volume "${TOPLEVEL}:${TOPLEVEL}" \
        --workdir "${TOPLEVEL}/securedrop" \
-       --name securedrop-dev
+       --name securedrop-dev \
        -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}" "${@:2}"
 }
 
