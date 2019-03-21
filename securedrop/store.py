@@ -162,7 +162,7 @@ class Storage:
                                                          journalist_filename)
         encrypted_file_path = self.path(filesystem_id, encrypted_file_name)
 
-        with open(encrypted_file_path, 'wb') as fh:
+        with open(encrypted_file_path, 'w') as fh:
             fh.write(content)
 
         return encrypted_file_path
