@@ -42,24 +42,24 @@ def test_verbose(caplog):
 
 
 def test_get_username_success():
-    with mock.patch("__builtin__.raw_input", return_value='jen'):
+    with mock.patch("builtins.input", return_value='jen'):
         assert manage._get_username() == 'jen'
 
 
 def test_get_username_fail():
     bad_username = 'a' * (Journalist.MIN_USERNAME_LEN - 1)
-    with mock.patch("__builtin__.raw_input",
+    with mock.patch("builtins.input",
                     side_effect=[bad_username, 'jen']):
         assert manage._get_username() == 'jen'
 
 
 def test_get_yubikey_usage_yes():
-    with mock.patch("__builtin__.raw_input", return_value='y'):
+    with mock.patch("builtins.input", return_value='y'):
         assert manage._get_yubikey_usage()
 
 
 def test_get_yubikey_usage_no():
-    with mock.patch("__builtin__.raw_input", return_value='n'):
+    with mock.patch("builtins.input", return_value='n'):
         assert not manage._get_yubikey_usage()
 
 
@@ -69,7 +69,7 @@ def test_handle_invalid_secret(journalist_app, config, mocker):
 
     mocker.patch("manage._get_username", return_value='ntoll'),
     mocker.patch("manage._get_yubikey_usage", return_value=True),
-    mocker.patch("__builtin__.raw_input", side_effect=YUBIKEY_HOTP),
+    mocker.patch("builtins.input", side_effect=YUBIKEY_HOTP),
     mocker.patch("sys.stdout", new_callable=StringIO),
 
     original_config = manage.config
@@ -161,7 +161,7 @@ def test_delete_non_existent_user(journalist_app, config, mocker):
 
 
 def test_get_username_to_delete(mocker):
-    mocker.patch("__builtin__.raw_input", return_value='test-user-12345')
+    mocker.patch("builtins.input", return_value='test-user-12345')
     return_value = manage._get_username_to_delete()
     assert return_value == 'test-user-12345'
 
@@ -192,7 +192,7 @@ def test_reset(journalist_app, test_journo, alembic_config, config):
 
 
 def test_get_username(mocker):
-    mocker.patch("__builtin__.raw_input", return_value='foo-bar-baz')
+    mocker.patch("builtins.input", return_value='foo-bar-baz')
     assert manage._get_username() == 'foo-bar-baz'
 
 
