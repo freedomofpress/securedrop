@@ -23,11 +23,14 @@ def test_unauthenticated_user_gets_all_endpoints(journalist_app):
     with journalist_app.test_client() as app:
         response = app.get(url_for('api.get_endpoints'))
 
-        observed_endpoints = json.loads(response.data)
+        observed_endpoints = json.loads(response.data.decode('utf-8'))
         expected_endpoints = ['current_user_url', 'submissions_url',
                               'sources_url', 'auth_token_url',
                               'replies_url']
-        assert expected_endpoints == list(observed_endpoints.keys())
+        expected_endpoints.sort()
+        sorted_observed_endpoints = list(observed_endpoints.keys())
+        sorted_observed_endpoints.sort()
+        assert expected_endpoints == sorted_observed_endpoints
 
 
 def test_valid_user_can_get_an_api_token(journalist_app, test_journo):
@@ -39,7 +42,7 @@ def test_valid_user_can_get_an_api_token(journalist_app, test_journo):
                                  'passphrase': test_journo['password'],
                                  'one_time_code': valid_token}),
                             headers=get_api_headers())
-        observed_response = json.loads(response.data)
+        observed_response = json.loads(response.data.decode('utf-8'))
 
         assert observed_response['journalist_uuid'] == test_journo['uuid']
         assert isinstance(Journalist.validate_api_token_and_get_user(
@@ -57,7 +60,7 @@ def test_user_cannot_get_an_api_token_with_wrong_password(journalist_app,
                                  'passphrase': 'wrong password',
                                  'one_time_code': valid_token}),
                             headers=get_api_headers())
-        observed_response = json.loads(response.data)
+        observed_response = json.loads(response.data.decode('utf-8'))
 
         assert response.status_code == 403
         assert observed_response['error'] == 'Forbidden'
@@ -73,7 +76,7 @@ def test_user_cannot_get_an_api_token_with_wrong_2fa_token(journalist_app,
                                  'passphrase': test_journo['password'],
                                  'one_time_code': '123456'}),
                             headers=get_api_headers())
-        observed_response = json.loads(response.data)
+        observed_response = json.loads(response.data.decode('utf-8'))
 
         assert response.status_code == 403
         assert observed_response['error'] == 'Forbidden'
@@ -88,7 +91,7 @@ def test_user_cannot_get_an_api_token_with_no_passphase_field(journalist_app,
                                 {'username': test_journo['username'],
                                  'one_time_code': valid_token}),
                             headers=get_api_headers())
-        observed_response = json.loads(response.data)
+        observed_response = json.loads(response.data.decode('utf-8'))
 
         assert response.status_code == 400
         assert observed_response['error'] == 'Bad Request'
@@ -104,7 +107,7 @@ def test_user_cannot_get_an_api_token_with_no_username_field(journalist_app,
                                 {'passphrase': test_journo['password'],
                                  'one_time_code': valid_token}),
                             headers=get_api_headers())
-        observed_response = json.loads(response.data)
+        observed_response = json.loads(response.data.decode('utf-8'))
 
         assert response.status_code == 400
         assert observed_response['error'] == 'Bad Request'
@@ -119,7 +122,7 @@ def test_user_cannot_get_an_api_token_with_no_otp_field(journalist_app,
                                 {'username': test_journo['username'],
                                  'passphrase': test_journo['password']}),
                             headers=get_api_headers())
-        observed_response = json.loads(response.data)
+        observed_response = json.loads(response.data.decode('utf-8'))
 
         assert response.status_code == 400
         assert observed_response['error'] == 'Bad Request'
@@ -132,7 +135,7 @@ def test_authorized_user_gets_all_sources(journalist_app, test_submissions,
         response = app.get(url_for('api.get_all_sources'),
                            headers=get_api_headers(journalist_api_token))
 
-        data = json.loads(response.data)
+        data = json.loads(response.data.decode('utf-8'))
 
         assert response.status_code == 200
 
@@ -257,7 +260,7 @@ def test_api_error_handler_404(journalist_app, journalist_api_token):
     with journalist_app.test_client() as app:
         response = app.get('/api/v1/invalidendpoint',
                            headers=get_api_headers(journalist_api_token))
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
 
         assert response.status_code == 404
         assert json_response['error'] == 'Not Found'
@@ -270,7 +273,7 @@ def test_trailing_slash_cleanly_404s(journalist_app, test_source,
         response = app.get(url_for('api.single_source',
                                    source_uuid=uuid) + '/',
                            headers=get_api_headers(journalist_api_token))
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
 
         assert response.status_code == 404
         assert json_response['error'] == 'Not Found'
@@ -285,7 +288,7 @@ def test_authorized_user_gets_single_source(journalist_app, test_source,
 
         assert response.status_code == 200
 
-        data = json.loads(response.data)
+        data = json.loads(response.data.decode('utf-8'))
         assert data['uuid'] == test_source['source'].uuid
         assert 'BEGIN PGP PUBLIC KEY' in data['key']['public']
 
@@ -329,7 +332,7 @@ def test_authorized_user_can_star_a_source(journalist_app, test_source,
         # API should also report is_starred is true
         response = app.get(url_for('api.single_source', source_uuid=uuid),
                            headers=get_api_headers(journalist_api_token))
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
         assert json_response['is_starred'] is True
 
 
@@ -353,7 +356,7 @@ def test_authorized_user_can_unstar_a_source(journalist_app, test_source,
         # API should also report is_starred is false
         response = app.get(url_for('api.single_source', source_uuid=uuid),
                            headers=get_api_headers(journalist_api_token))
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
         assert json_response['is_starred'] is False
 
 
@@ -363,7 +366,7 @@ def test_disallowed_methods_produces_405(journalist_app, test_source,
         uuid = test_source['source'].uuid
         response = app.delete(url_for('api.add_star', source_uuid=uuid),
                               headers=get_api_headers(journalist_api_token))
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
 
         assert response.status_code == 405
         assert json_response['error'] == 'Method Not Allowed'
@@ -377,7 +380,7 @@ def test_authorized_user_can_get_all_submissions(journalist_app,
                            headers=get_api_headers(journalist_api_token))
         assert response.status_code == 200
 
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
 
         observed_submissions = [submission['filename'] for
                                 submission in json_response['submissions']]
@@ -397,7 +400,7 @@ def test_authorized_user_get_source_submissions(journalist_app,
                            headers=get_api_headers(journalist_api_token))
         assert response.status_code == 200
 
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
 
         observed_submissions = [submission['filename'] for
                                 submission in json_response['submissions']]
@@ -420,7 +423,7 @@ def test_authorized_user_can_get_single_submission(journalist_app,
 
         assert response.status_code == 200
 
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
 
         assert json_response['uuid'] == submission_uuid
         assert json_response['is_read'] is False
@@ -437,7 +440,7 @@ def test_authorized_user_can_get_all_replies(journalist_app, test_files,
                            headers=get_api_headers(journalist_api_token))
         assert response.status_code == 200
 
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
 
         observed_replies = [reply['filename'] for
                             reply in json_response['replies']]
@@ -456,7 +459,7 @@ def test_authorized_user_get_source_replies(journalist_app, test_files,
                            headers=get_api_headers(journalist_api_token))
         assert response.status_code == 200
 
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
 
         observed_replies = [reply['filename'] for
                             reply in json_response['replies']]
@@ -478,7 +481,7 @@ def test_authorized_user_can_get_single_reply(journalist_app, test_files,
 
         assert response.status_code == 200
 
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
 
         reply = Reply.query.filter(Reply.uuid == reply_uuid).one()
 
@@ -598,7 +601,7 @@ def test_authorized_user_can_get_current_user_endpoint(journalist_app,
                            headers=get_api_headers(journalist_api_token))
         assert response.status_code == 200
 
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
         assert json_response['is_admin'] is False
         assert json_response['username'] == test_journo['username']
         assert json_response['uuid'] == test_journo['journalist'].uuid
@@ -652,7 +655,7 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
 
         response = app.post(url_for('api.all_source_replies',
                                     source_uuid=uuid),
-                            data=json.dumps({'reply': reply_content}),
+                            data=json.dumps({'reply': reply_content.decode('utf-8')}),
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 201
 
@@ -730,7 +733,7 @@ def test_reply_with_valid_curly_json_400(journalist_app, journalist_api_token,
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400
 
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
         assert json_response['message'] == 'reply not found in request body'
 
 
@@ -744,7 +747,7 @@ def test_reply_with_valid_square_json_400(journalist_app, journalist_api_token,
                             headers=get_api_headers(journalist_api_token))
         assert response.status_code == 400
 
-        json_response = json.loads(response.data)
+        json_response = json.loads(response.data.decode('utf-8'))
         assert json_response['message'] == 'reply not found in request body'
 
 
@@ -765,7 +768,7 @@ def test_malformed_json_400(journalist_app, journalist_api_token, test_journo,
             response = app.post(protected_route,
                                 data="{this is invalid {json!",
                                 headers=get_api_headers(journalist_api_token))
-            observed_response = json.loads(response.data)
+            observed_response = json.loads(response.data.decode('utf-8'))
 
             assert response.status_code == 400
             assert observed_response['error'] == 'Bad Request'
@@ -786,7 +789,7 @@ def test_empty_json_400(journalist_app, journalist_api_token, test_journo,
             response = app.post(protected_route,
                                 data="",
                                 headers=get_api_headers(journalist_api_token))
-            observed_response = json.loads(response.data)
+            observed_response = json.loads(response.data.decode('utf-8'))
 
             assert response.status_code == 400
             assert observed_response['error'] == 'Bad Request'
