@@ -1,7 +1,7 @@
 ### To test in prod vms
 
 - `sudo -u www-data bash`
-- `cd /var/wwww/securedrop/`
+- `cd /var/www/securedrop/`
 - `./manage.py reset`    # This will clean the DB for testing
 - `./create-dev-data.py --staging`
 
