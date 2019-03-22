@@ -13,7 +13,7 @@ common-steps:
 
   - &restorecache
     restore_cache:
-      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/python2/Dockerfile" }}
       paths:
         - /caches/layers.tar.gz
 
@@ -42,7 +42,7 @@ common-steps:
 
   - &savecache
     save_cache:
-      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/Dockerfile" }}
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/python2/Dockerfile" }}
       paths:
         - /caches/layers.tar
 
@@ -66,14 +66,10 @@ jobs:
     steps:
       - checkout
       - *rebaseontarget
-
-      - run:
-          name: Ensure cache dir exists and permissions are good
-          command: |
-            sudo mkdir -p /caches && sudo chown circleci: -R /caches
+      - *createcachedir
 
       - restore_cache:
-          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/trusty/Dockerfile" }}
+          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/trusty/python2/Dockerfile" }}
           paths:
             - /caches/layers.tar.gz
 
@@ -98,7 +94,7 @@ jobs:
             docker save -o /caches/layers.tar securedrop-test-trusty:latest
 
       - save_cache:
-          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/trusty/Dockerfile" }}
+          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/trusty/python2/Dockerfile" }}
           paths:
             - /caches/layers.tar
 
@@ -148,6 +144,67 @@ jobs:
             docker rm -f securedrop-test-xenial || true
             fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
             cd securedrop && DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" make test
+
+      - store_test_results:
+          path: ~/test-results
+
+      - store_artifacts:
+          path: ~/test-results
+
+  python3-app-tests:
+    machine:
+      enabled: true
+    environment:
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: xenial
+      PYTHON_VERSION: 3
+    parallelism: 3
+    steps:
+      - checkout
+      - *rebaseontarget
+      - *createcachedir
+
+      - restore_cache:
+          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/python3/Dockerfile" }}
+          paths:
+            - /caches/layers.tar.gz
+
+      - run:
+          name: Load image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/layers.tar |true
+
+      - run:
+          name: Build Docker images
+          command: |
+            set +o pipefail
+            docker images
+            fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
+            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" ./bin/dev-shell true
+
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            docker images
+            docker save -o /caches/layers.tar securedrop-test-xenial-py3:latest
+
+      - save_cache:
+          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/python3/Dockerfile" }}
+          paths:
+            - /caches/layers.tar
+
+      - run:
+          name: Make test results directory
+          command: mkdir -p ~/test-results
+
+      - run:
+          name: Run tests
+          command: |
+            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
+            docker rm -f securedrop-test-xenial-py3 || true
+            fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
+            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" make test
 
       - store_test_results:
           path: ~/test-results
@@ -297,6 +354,12 @@ workflows:
     jobs:
       - lint
       - xenial-app-tests:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+                - /i18n-.*/
+      - python3-app-tests:
           filters:
             branches:
               ignore:
