@@ -21,8 +21,12 @@ test: ## Run the test suite in a Ubuntu 14.04 (Trusty) dockerized environment
 	./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
 
 .PHONY: test-xenial
-test-xenial: ## Run the test suite in a Ubuntu 16.04 (Xenial) dockerized environment
+test-xenial: ## Run the Python 2 test suite in a Ubuntu 16.04 (Xenial) dockerized environment
 	BASE_OS=xenial ./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
+
+.PHONY: test-python3
+test-python3: ## Run the Python 3 test suite in a Ubuntu 16.04 (Xenial) dockerized environment
+	PYTHON_VERSION=3 BASE_OS=xenial ./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
 
 .PHONY: translation-test
 translation-test: ## Run all pages-layout tests in all supported languages
