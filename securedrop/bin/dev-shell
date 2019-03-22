@@ -14,6 +14,10 @@ if ! test -n "${BASE_OS:-}" ; then
     BASE_OS=xenial
 fi
 
+if ! test -n "${PYTHON_VERSION:-}" ; then
+    PYTHON_VERSION=2
+fi
+
 function exit_if_not_supported_base_image() {
     # Currently we only support Xenial or Trusty.
     if [[ "$1" != "xenial" && "$1" != "trusty" ]]
@@ -23,20 +27,37 @@ function exit_if_not_supported_base_image() {
     fi
 }
 
+function validate_python_version() {
+    # Trusty will be EOL April 2019. Orgs must be on Xenial to upgrade to Python 3.
+    if [[ "$1" != "xenial" && "$2" != "2" ]]
+    then
+        echo "For Ubuntu Trusty, PYTHON_VERSION must be 2"
+        exit 1
+    fi
+
+    if [[ "$2" != "2" && "$2" != "3" ]]
+    then
+        echo "PYTHON_VERSION must be 2 or 3"
+        exit 1
+    fi
+}
+
 function docker_image() {
     exit_if_not_supported_base_image $1
+    validate_python_version $1 $2
 
     docker build \
            ${DOCKER_BUILD_ARGUMENTS:-} \
-       --build-arg=USER_ID="$(id -u)" \
-       --build-arg=USER_NAME="${USER:-root}" \
-           -t "securedrop-test-${1}" \
-       --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/Dockerfile" \
+	   --build-arg=USER_ID="$(id -u)" \
+	   --build-arg=USER_NAME="${USER:-root}" \
+           -t "securedrop-test-${1}-py${2}" \
+       --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/python${2}/Dockerfile" \
        "${TOPLEVEL}/securedrop"
 }
 
 function docker_run() {
     exit_if_not_supported_base_image $1
+    validate_python_version $1 $2
 
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
     docker run \
@@ -49,13 +70,13 @@ function docker_run() {
        -e LC_ALL=C.UTF-8 \
        -e LANG=C.UTF-8 \
        --name securedrop-dev \
-	   -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}" "${@:2}"
+	   -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py${2}" "${@:3}"
 }
 
 if test -n "${CIRCLE_SHA1:-}" ; then
-   docker_image $BASE_OS
+   docker_image $BASE_OS $PYTHON_VERSION
 else
-   ticker docker_image $BASE_OS
+   ticker docker_image $BASE_OS $PYTHON_VERSION
 fi
 
-docker_run $BASE_OS "$@"
+docker_run $BASE_OS $PYTHON_VERSION "$@"
