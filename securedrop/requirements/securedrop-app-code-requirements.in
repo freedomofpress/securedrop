@@ -1,15 +1,15 @@
 alembic
 argon2_cffi
-cryptography==2.0.3
+cryptography>2.3
 Flask-Assets
 Flask-Babel
 Flask-SQLAlchemy
 Flask-WTF
 Flask>0.12.2
-pretty-bad-protocol>=3.1.1
 Jinja2
 jsmin
 passlib
+pretty-bad-protocol>=3.1.1
 psutil
 pyotp
 qrcode
