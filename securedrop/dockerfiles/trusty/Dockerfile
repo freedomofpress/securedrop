@@ -30,7 +30,8 @@ RUN echo deb http://archive.ubuntu.com/ubuntu/ xenial main > /etc/apt/sources.li
     apt-get update
 
 COPY requirements requirements
-RUN pip install -r requirements/securedrop-app-code-requirements.txt && \
+RUN pip install -U setuptools==40.8.0 && \
+    pip install -r requirements/securedrop-app-code-requirements.txt && \
     pip install -r requirements/test-requirements.txt
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
