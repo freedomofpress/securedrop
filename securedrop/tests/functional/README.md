@@ -5,7 +5,7 @@
 - `./manage.py reset`    # This will clean the DB for testing
 - `./create-dev-data.py --staging`
 
-Update this information to the `tests/functional/instance_information.json file.
+Update this information to the `tests/functional/instance_information.json` file.
 
 The content of the file looks like below.
 
