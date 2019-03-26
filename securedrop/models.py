@@ -164,6 +164,12 @@ class Submission(db.Model):
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
     downloaded = Column(Boolean, default=False)
+    '''
+    The checksum of the encrypted file on disk.
+    Format: $hash_name:$hex_encoded_hash_value
+    Example: sha256:05fa5efd7d1b608ac1fbdf19a61a5a439d05b05225e81faa63fdd188296b614a
+    '''
+    checksum = Column(String(255))
 
     def __init__(self, source, filename):
         self.source_id = source.id
@@ -213,6 +219,12 @@ class Reply(db.Model):
 
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
+    '''
+    The checksum of the encrypted file on disk.
+    Format: $hash_name:$hex_encoded_hash_value
+    Example: sha256:05fa5efd7d1b608ac1fbdf19a61a5a439d05b05225e81faa63fdd188296b614a
+    '''
+    checksum = Column(String(255))
 
     deleted_by_source = Column(Boolean, default=False, nullable=False)
 
