@@ -1,5 +1,4 @@
 ---
-
 - name: Perform apt upgrades
   hosts: securedrop
   become: yes
@@ -8,3 +7,29 @@
       apt:
         update_cache: yes
         upgrade: yes
+
+- name: Lay out app testing deps
+  hosts: securedrop_application_server
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  roles:
+    - role: app-test
+      tags: app-test
+
+  tasks:
+    - name: Reset database
+      command: ./manage.py reset
+      args:
+        chdir: /var/www/securedrop
+
+    - name: Slap in latest create-dev-data script
+      copy:
+          src: ../../securedrop/create-dev-data.py
+          dest: /var/www/securedrop/create-dev-data.py
+          mode: 0555
+
+    - name: Insert journalist test user
+      command: /var/www/securedrop/create-dev-data.py --staging
+      args:
+        chdir: /var/www/securedrop
+  become: yes
