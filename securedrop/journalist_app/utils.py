@@ -9,7 +9,7 @@ import hashlib
 from sqlalchemy.sql.expression import false
 
 import i18n
-import worker
+from worker import rq_worker_queue
 
 from db import db
 from models import (get_one_or_else, Source, Journalist,
@@ -174,7 +174,7 @@ def download(zip_basename, submissions):
 
 def delete_file(filesystem_id, filename, file_object):
     file_path = current_app.storage.path(filesystem_id, filename)
-    worker.enqueue(srm, file_path)
+    rq_worker_queue.enqueue(srm, file_path)
     db.session.delete(file_object)
     db.session.commit()
 
@@ -261,7 +261,7 @@ def make_password(config):
 
 def delete_collection(filesystem_id):
     # Delete the source's collection of submissions
-    job = worker.enqueue(srm, current_app.storage.path(filesystem_id))
+    job = rq_worker_queue.enqueue(srm, current_app.storage.path(filesystem_id))
 
     # Delete the source's reply keypair
     current_app.crypto_util.delete_reply_keypair(filesystem_id)

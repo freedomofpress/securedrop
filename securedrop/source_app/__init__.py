@@ -20,6 +20,7 @@ from source_app import main, info, api, disable
 from source_app.decorators import ignore_static
 from source_app.utils import logged_in
 from store import Storage
+from worker import rq_worker_queue
 
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
@@ -74,6 +75,9 @@ def create_app(config):
         adjectives_file=config.ADJECTIVES,
         gpg_key_dir=config.GPG_KEY_DIR,
     )
+
+    app.config['RQ_WORKER_NAME'] = config.RQ_WORKER_NAME
+    rq_worker_queue.init_app(app)
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
