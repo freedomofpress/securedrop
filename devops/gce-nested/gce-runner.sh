@@ -59,6 +59,9 @@ if [[ "$target_platform" = "trusty" ]]; then
     ssh_gce "make build-debs-trusty-notest"
 else
     ssh_gce "make build-debs-notest"
+    # Also pull tor packages, even though they aren't used in staging.
+    # Will alert us to upstream changes in the Tor apt repo.
+    ssh_gce "make fetch-tor-packages"
 fi
 
 # The test results should be collected regardless of pass/fail,

@@ -11,6 +11,8 @@
     tor_download_dest: "{{ sd_repo_root + '/build/' + ansible_distribution_release }}"
     tor_repo_pubkey: "{{ sd_repo_root + '/install_files/ansible-base/roles/tor-hidden-services/files/tor-signing-key.pub' }}"
     tor_repo_url: "deb https://deb.torproject.org/torproject.org {{ ansible_distribution_release }} main"
+    # Used to fetch a precise version; must also be updated in the test vars
+    tor_version: "0.3.5.8-1~xenial+1"
 
   tasks:
     - name: Add Tor apt repo pubkey
@@ -29,7 +31,7 @@
         path: "{{ tor_download_dir }}"
 
     - name: Download tor debs
-      command: apt-get download "{{ item }}"
+      command: apt-get download "{{ item }}={{ tor_version }}"
       args:
         chdir: "{{ tor_download_dir }}"
         # apt module doesn't support download, so silence warnings,
