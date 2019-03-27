@@ -1,3 +1,5 @@
+.. _backup_workstations:
+
 Backup the Workstations
 =======================
 
@@ -99,7 +101,7 @@ Open a terminal with administrative privileges by going to
 
 |Root Terminal|
 
-.. note:: 
+.. note::
  If you can't find the "Root Terminal" window, it might be because an
  administrator passphrase wasn't set when you logged in to Tails. If
  that's the case, you'll need to restart Tails and set one at the login screen.
@@ -108,10 +110,10 @@ Next, create a directory on the Backup USB for the device to be backed up - the
 command below creates a directory named ``admin-backup``:
 
 .. code:: sh
- 
+
   mkdir /media/amnesia/Backup/admin-backup
 
-Then, copy the contents of the device's persistent volume to the directory using 
+Then, copy the contents of the device's persistent volume to the directory using
 ``rsync``:
 
 .. code:: sh
