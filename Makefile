@@ -203,7 +203,7 @@ upgrade-trusty-test-qa: ## Once an upgrade environment (Trusty) is running, forc
 
 .PHONY: fetch-tor-packages
 fetch-tor-packages: ## Retrieves the most recent Tor packages for Xenial, for apt repo
-	molecule test -s fetch-tor-packages
+	@./devops/scripts/fetch-tor-packages.sh
 
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
