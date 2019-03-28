@@ -237,33 +237,6 @@ jobs:
           name: Run static security testing on source code
           command: make bandit
 
-  staging-test-with-rebase-trusty:
-    machine:
-      enabled: true
-
-    working_directory: ~/sd
-    steps:
-      - checkout
-      - *rebaseontarget
-
-      - run:
-          name: Run Staging tests on GCE
-          command: make ci-go-trusty
-          no_output_timeout: 20m
-
-      - run:
-          name: Ensure environment torn down
-          # Always report true, since env should will destroyed already
-          # if all tests passed.
-          command: make ci-teardown || true
-          when: always
-
-      - store_test_results:
-          path: ~/sd/junit
-
-      - store_artifacts:
-          path: ~/sd/junit
-
   staging-test-with-rebase:
     machine:
       enabled: true
@@ -344,5 +317,4 @@ workflows:
                 - develop
     jobs:
       - static-analysis-and-no-known-cves
-      - staging-test-with-rebase-trusty
       - trusty-app-tests
