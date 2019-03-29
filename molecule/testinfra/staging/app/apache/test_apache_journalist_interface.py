@@ -16,7 +16,6 @@ wanted_apache_headers = [
   "Header set X-Content-Security-Policy: \"default-src 'self'\"",
   "Header set Content-Security-Policy: \"default-src 'self'\"",
   'Header set Referrer-Policy "no-referrer"',
-  'Header unset Etag',
 ]
 
 
@@ -51,11 +50,11 @@ common_apache2_directory_declarations = """
 <Directory /var/www/>
   Options None
   AllowOverride None
-  <Limit GET POST HEAD>
+  <Limit GET POST HEAD DELETE>
     Order allow,deny
     allow from {apache_allow_from}
   </Limit>
-  <LimitExcept GET POST HEAD>
+  <LimitExcept GET POST HEAD DELETE>
     Order deny,allow
     Deny from all
   </LimitExcept>
@@ -64,11 +63,11 @@ common_apache2_directory_declarations = """
 <Directory {securedrop_code}>
   Options None
   AllowOverride None
-  <Limit GET POST HEAD>
+  <Limit GET POST HEAD DELETE>
     Order allow,deny
     allow from {apache_allow_from}
   </Limit>
-  <LimitExcept GET POST HEAD>
+  <LimitExcept GET POST HEAD DELETE>
     Order deny,allow
     Deny from all
   </LimitExcept>

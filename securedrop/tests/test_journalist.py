@@ -2024,3 +2024,9 @@ def test_does_set_cookie_headers(journalist_app, test_journo):
         observed_headers = response.headers
         assert 'Set-Cookie' in observed_headers.keys()
         assert 'Cookie' in observed_headers['Vary']
+
+
+def test_app_error_handlers_defined(journalist_app):
+    for status_code in [400, 401, 403, 404, 500]:
+        # This will raise KeyError if an app-wide error handler is not defined
+        assert journalist_app.error_handler_spec[None][status_code]
