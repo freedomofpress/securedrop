@@ -1,5 +1,5 @@
-# ubuntu:14.04 as of 2019-01-22
-FROM ubuntu@sha256:cac55e5d97fad634d954d00a5c2a56d80576a08dcc01036011f26b88263f1578
+# ubuntu 14.04 image from 2019-03-12
+FROM ubuntu@sha256:6612de24437f6f01d6a2988ed9a36b3603df06e8d2c0493678f3ee696bc4bb2d
 ARG USER_NAME
 ENV USER_NAME ${USER_NAME:-root}
 ARG USER_ID
@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get install -y devscripts vim \
                        python-pip libpython2.7-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server firefox git xvfb haveged curl \
-                       gettext paxctl tightvncserver enchant libffi-dev sqlite3
+                       gettext paxctl x11vnc enchant libffi-dev sqlite3
 
 RUN gem install sass -v 3.4.23
 

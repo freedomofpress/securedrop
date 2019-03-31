@@ -10,22 +10,12 @@ function run_redis() {
     setsid redis-server >& /tmp/redis.out || cat /tmp/redis.out
 }
 
-function write_vncpw {
-    echo "freedom" | vncpasswd -f > /tmp/vncpasswd
-}
-
 function setup_vncauth {
-    # vncpasswd can seg fault, so we'll retry a few times if necessary
-    tries=0
-    while [ $tries -lt 10 ]
-    do
-        write_vncpw && return 0
-        echo "Retrying write of VNC credentials"
-    done
+    x11vnc -storepasswd freedom /tmp/vncpasswd
 }
 
 function run_x11vnc() {
-    setsid Xvnc -depth 24 -geometry 1024x768 -rfbauth /tmp/vncpasswd -rfbport 5901 :1 >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
+    setsid x11vnc -display :1 -geometry 1024x768 -rfbauth /tmp/vncpasswd -rfbport 5901 -shared >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
 }
 
 function urandom() {
