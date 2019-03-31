@@ -1,16 +1,34 @@
 #!/usr/bin/python
-from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication, QMessageBox
 import sys
+import socket
 
 from journalist_gui.SecureDropUpdater import UpdaterApp
 
+def prevent_second_instance(app: QApplication) -> None:
+
+    # Null byte triggers abstract namespace
+    IDENTIFIER = '\0' + "Securedrop Updater"
+    ALREADY_BOUND_ERRNO = 98
+
+    app.instance_binding = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+    try:
+        app.instance_binding.bind(IDENTIFIER)
+    except OSError as e:
+        if e.errno == ALREADY_BOUND_ERRNO:
+            err_dialog = QMessageBox()
+            err_dialog.setText('SecureDrop Updater is already running.')
+            err_dialog.exec()
+            sys.exit()
+        else:
+            raise
 
 def main():
-    app = QtWidgets.QApplication(sys.argv)
+    app = QApplication(sys.argv)
+    prevent_second_instance(app)
     form = UpdaterApp()
     form.show()
     app.exec_()
-
 
 if __name__ == '__main__':
     main()
