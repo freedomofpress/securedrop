@@ -185,8 +185,3 @@ the admin template are:
 
 .. |Terminal| image:: images/terminal.png
 .. |KeePassX| image:: images/keepassx.png
-
-Back Up the Admin Workstation
-------------------------------------
-
-USB drives can wear out, get lost, or otherwise become corrupted, making it very important to be sure to keep current backups. Follow the :ref:`Backup the Workstations <backup_workstations>` document to create a backup of your workstation after you've completed the installation.
