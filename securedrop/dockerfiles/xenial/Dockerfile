@@ -26,6 +26,7 @@ RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/
 RUN gem install sass -v 3.4.23
 
 COPY requirements requirements
+
 RUN pip install -r requirements/securedrop-app-code-requirements.txt && \
     pip install -r requirements/test-requirements.txt
 
