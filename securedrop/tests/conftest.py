@@ -76,33 +76,72 @@ def setUpTearDown():
     _cleanup_test_securedrop_dataroot(original_config)
 
 
-@pytest.fixture(scope='function')
-def config(tmpdir):
-    '''Clone the module so we can modify it per test.'''
+def kill_gpg_agent(homedir):
+    '''
+    Open a subprocess to "asynchronously" kill a gpg-agent process. We do this because otherwise too
+    many agent processes remain open indefinitely.
+    '''
+    DEVNULL = io.open(os.devnull, 'w')
+    subprocess.Popen(
+        ('ps -ef |'
+         'grep -E "gpg-agent .*{}" |'
+         'grep -v grep |'
+         "awk '{{print $2}}' |"
+         'xargs -r kill').format(homedir),
+        stdout=DEVNULL,
+        stderr=DEVNULL,
+        shell=True)  # nosec
 
-    cnf = SDConfig()
 
-    data = tmpdir.mkdir('data')
-    keys = data.mkdir('keys')
-    os.chmod(str(keys), 0o700)
-    store = data.mkdir('store')
-    tmp = data.mkdir('tmp')
-    sqlite = data.join('db.sqlite')
+@pytest.fixture(scope='session')
+def gpg_key_dir():
+    '''
+    Create one "master" keyring that we copy on a per-config basis. We do this because importing
+    keys with GPG is *slow* and this massively speeds up tests.
+    '''
+    gpg_home = '/tmp/sd-test-gpg-home'
+    if not path.exists(gpg_home):
+        os.mkdir(gpg_home)
+    os.chmod(gpg_home, 0o700)  # to pass app runtime checks
 
     # gpg 2.1+ requires gpg-agent, see #4013
-    gpg_agent_config = str(keys.join('gpg-agent.conf'))
+    gpg_agent_config = path.join(gpg_home, 'gpg-agent.conf')
     with open(gpg_agent_config, 'w+') as f:
         f.write('allow-loopback-pinentry')
 
-    gpg = gnupg.GPG('gpg2', homedir=str(keys))
+    gpg = gnupg.GPG('gpg2', homedir=gpg_home)
     for ext in ['sec', 'pub']:
         with io.open(path.join(path.dirname(__file__),
                                'files',
                                'test_journalist_key.{}'.format(ext))) as f:
             gpg.import_keys(f.read())
 
+    # we have to remove this or the shutil.copytree() cmd later fails with "no such device"
+    agent_socket = path.join(gpg_home, 'S.gpg-agent')
+    if path.exists(agent_socket):
+        os.remove(agent_socket)
+
+    kill_gpg_agent(gpg_home)
+
+    return gpg_home
+
+
+@pytest.fixture(scope='function')
+def config(tmpdir, gpg_key_dir):
+    '''Clone the module so we can modify it per test.'''
+
+    cnf = SDConfig()
+
+    data = tmpdir.mkdir('data')
+    keys = str(data.join('keys'))
+    store = data.mkdir('store')
+    tmp = data.mkdir('tmp')
+    sqlite = data.join('db.sqlite')
+
+    shutil.copytree(gpg_key_dir, keys)
+
     cnf.SECUREDROP_DATA_ROOT = str(data)
-    cnf.GPG_KEY_DIR = str(keys)
+    cnf.GPG_KEY_DIR = keys
     cnf.STORE_DIR = str(store)
     cnf.TEMP_DIR = str(tmp)
     cnf.DATABASE_FILE = str(sqlite)
@@ -112,7 +151,9 @@ def config(tmpdir):
     subprocess.check_call(['sqlite3', cnf.DATABASE_FILE, '.databases'],
                           stdout=DEVNULL)
 
-    return cnf
+    yield cnf
+
+    kill_gpg_agent(keys)
 
 
 @pytest.fixture(scope='function')
