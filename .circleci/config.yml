@@ -196,6 +196,15 @@ jobs:
       - setup_remote_docker
       - run: cd admin ; make test
 
+  fetch-tor-debs:
+    docker:
+      - image: gcr.io/cloud-builders/docker
+    steps:
+      - run: apt-get install -y make virtualenv python-pip
+      - checkout
+      - setup_remote_docker
+      - run: make fetch-tor-packages
+
   updater-gui-tests:
     docker:
       - image: circleci/python:3.5
@@ -276,6 +285,12 @@ workflows:
                 - /docs-.*/
                 - /i18n-.*/
       - admin-tests:
+          filters:
+            branches:
+              ignore:
+                - /docs-.*/
+                - /i18n-.*/
+      - fetch-tor-debs:
           filters:
             branches:
               ignore:
