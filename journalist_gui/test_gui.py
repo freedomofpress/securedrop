@@ -1,6 +1,7 @@
 import unittest
 import subprocess
 import pexpect
+import pytest
 from unittest import mock
 from unittest.mock import MagicMock
 from PyQt5.QtCore import Qt
@@ -8,6 +9,54 @@ from PyQt5.QtWidgets import (QApplication, QSizePolicy, QInputDialog)
 from PyQt5.QtTest import QTest
 
 from journalist_gui.SecureDropUpdater import UpdaterApp, strings, FLAG_LOCATION
+from journalist_gui.SecureDropUpdater import prevent_second_instance
+
+
+@mock.patch('journalist_gui.SecureDropUpdater.sys.exit')
+@mock.patch('journalist_gui.SecureDropUpdater.QtWidgets.QMessageBox')
+class TestSecondInstancePrevention(unittest.TestCase):
+    def setUp(self):
+        self.mock_app = mock.MagicMock()
+        self.mock_app.applicationName = mock.MagicMock(return_value='sd')
+
+    @staticmethod
+    def socket_mock_generator(already_bound_errno=98):
+        namespace = set()
+
+        def kernel_bind(addr):
+            if addr in namespace:
+                error = OSError()
+                error.errno = already_bound_errno
+                raise error
+            else:
+                namespace.add(addr)
+
+        socket_mock = mock.MagicMock()
+        socket_mock.socket().bind = mock.MagicMock(side_effect=kernel_bind)
+        return socket_mock
+
+    def test_diff_name(self, mock_msgbox, mock_exit):
+        mock_socket = self.socket_mock_generator()
+        with mock.patch('journalist_gui.SecureDropUpdater.socket', new=mock_socket):
+            prevent_second_instance(self.mock_app, 'name1')
+            prevent_second_instance(self.mock_app, 'name2')
+
+            mock_exit.assert_not_called()
+
+    def test_same_name(self, mock_msgbox, mock_exit):
+        mock_socket = self.socket_mock_generator()
+        with mock.patch('journalist_gui.SecureDropUpdater.socket', new=mock_socket):
+            prevent_second_instance(self.mock_app, 'name1')
+            prevent_second_instance(self.mock_app, 'name1')
+
+            mock_exit.assert_any_call()
+
+    def test_unknown_kernel_error(self, mock_msgbox, mock_exit):
+        mock_socket = self.socket_mock_generator(131)  # crazy unexpected error
+        with mock.patch('journalist_gui.SecureDropUpdater.socket', new=mock_socket):
+            with pytest.raises(OSError):
+                prevent_second_instance(self.mock_app, 'name1')
+                prevent_second_instance(self.mock_app, 'name1')
 
 
 class AppTestCase(unittest.TestCase):
@@ -184,7 +233,7 @@ class WindowTestCase(AppTestCase):
                   'failure_reason': ''}
 
         with mock.patch('os.remove') as mock_remove:
-                    self.window.tails_status(result)
+            self.window.tails_status(result)
 
         # We do remove the flag file if the update does finish
         mock_remove.assert_called_once_with(FLAG_LOCATION)
@@ -195,7 +244,7 @@ class WindowTestCase(AppTestCase):
                   'failure_reason': '42'}
 
         with mock.patch('os.remove') as mock_remove:
-                    self.window.tails_status(result)
+            self.window.tails_status(result)
 
         # We do not remove the flag file if the update does not finish
         mock_remove.assert_not_called()
