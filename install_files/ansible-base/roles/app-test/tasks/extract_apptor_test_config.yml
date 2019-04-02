@@ -24,11 +24,11 @@
       hidserv_token: "{{ ansible_local.tor_app.hidserv_token }}"
       journalist_location: "{{ ansible_local.tor_app.journalist_location  }}"
       source_location: "{{ ansible_local.tor_app.source_location  }}"
-      sleep_time: "{{ tbb_sleep_time }}"
+      timeout: "{{ tbb_timeout }}"
       user:
         name: "{{ tbb_selenium_user }}"
         password: "{{ tbb_selenium_password }}"
-        secret: "{{ tbb_selenium_secret }}"
+        secret: "{{ tbb_selenium_totp_secret }}"
 
 - name: Dump facts to local json for in-take
   copy:

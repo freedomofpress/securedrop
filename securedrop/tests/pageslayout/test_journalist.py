@@ -15,16 +15,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import time
+
+import pytest
+
 from tests.functional import journalist_navigation_steps
 from tests.functional import source_navigation_steps
-from . import functional_test
-import pytest
-import time
+import tests.pageslayout.functional_test as pft
 
 
 @pytest.mark.pagelayout
 class TestJournalistLayout(
-        functional_test.FunctionalTest,
+        pft.FunctionalTest,
         source_navigation_steps.SourceNavigationStepsMixin,
         journalist_navigation_steps.JournalistNavigationStepsMixin):
 
@@ -157,7 +159,6 @@ class TestJournalistLayout(
         self._screenshot('journalist-col.png')
 
     def test_col_javascript(self):
-        self._javascript_toggle()
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
         self._source_continues_to_submit_page()
@@ -200,7 +201,6 @@ class TestJournalistLayout(
         self._screenshot('journalist-delete_none.png')
 
     def test_delete_one_confirmation(self):
-        self._javascript_toggle()
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
         self._source_continues_to_submit_page()
@@ -215,7 +215,6 @@ class TestJournalistLayout(
         self._screenshot('journalist-delete_one_confirmation.png')
 
     def test_delete_all_confirmation(self):
-        self._javascript_toggle()
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
         self._source_continues_to_submit_page()
@@ -302,7 +301,6 @@ class TestJournalistLayout(
         self._screenshot('journalist-index.png')
 
     def test_index_javascript(self):
-        self._javascript_toggle()
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
         self._source_continues_to_submit_page()
@@ -312,7 +310,7 @@ class TestJournalistLayout(
         self._journalist_logs_in()
         self._screenshot('journalist-index_javascript.png')
         self._journalist_selects_the_first_source()
-        self._journalist_selects_documents_to_download()
+        self._journalist_selects_all_documents()
         self._screenshot(
             'journalist-clicks_on_source_and_selects_documents.png'
         )

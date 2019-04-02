@@ -31,9 +31,9 @@ def totp_window():
     # if we have less than 5 seconds left in this window, sleep to wait for
     # the next window
     if window_end_delta < timedelta(seconds=5):
-        sleep_time = window_end_delta.seconds + \
+        timeout = window_end_delta.seconds + \
             window_end_delta.microseconds / 1000000.0
-        time.sleep(sleep_time)
+        time.sleep(timeout)
         window_end = window_end + timedelta(seconds=30)
 
     yield

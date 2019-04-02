@@ -38,12 +38,8 @@ from . import utils
 TEST_WORKER_PIDFILE = '/tmp/securedrop_test_worker.pid'
 
 # Quiet down gnupg output. (See Issue #2595)
-gnupg_logger = logging.getLogger(gnupg.__name__)
-gnupg_logger.setLevel(logging.ERROR)
-valid_levels = {'INFO': logging.INFO, 'DEBUG': logging.DEBUG}
-gnupg_logger.setLevel(
-   valid_levels.get(os.environ.get('GNUPG_LOG_LEVEL', ""), logging.ERROR)
-)
+GNUPG_LOG_LEVEL = os.environ.get('GNUPG_LOG_LEVEL', "ERROR")
+gnupg._util.log.setLevel(getattr(logging, GNUPG_LOG_LEVEL, logging.ERROR))
 
 # `hypothesis` sets a default deadline of 200 milliseconds before failing tests,
 # which doesn't work for integration tests. Turn off deadlines.

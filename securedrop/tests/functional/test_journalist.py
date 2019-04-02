@@ -21,9 +21,10 @@ from . import functional_test
 
 
 class TestJournalist(
-        functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
+    functional_test.FunctionalTest,
+    source_navigation_steps.SourceNavigationStepsMixin,
+    journalist_navigation_steps.JournalistNavigationStepsMixin,
+):
 
     def test_journalist_verifies_deletion_of_one_submission_modal(self):
         # This deletion button is displayed on the individual source page

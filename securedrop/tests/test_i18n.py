@@ -31,9 +31,18 @@ import i18n_tool
 import journalist_app as journalist_app_module
 import pytest
 import source_app
+from flask import render_template
+from flask import render_template_string
+from flask import request
+from flask import session
+from flask_babel import gettext
+from sdconfig import SDConfig
+from sh import pybabel
+from sh import sed
 from utils.env import TESTS_DIR
+from werkzeug.datastructures import Headers
 
-from sh import sed, pybabel
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 
 def verify_i18n(app):

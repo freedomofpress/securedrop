@@ -173,7 +173,6 @@ max-nested-blocks=5
 
 # List of note tags to take in consideration, separated by a comma.
 notes=FIXME,
-      XXX,
       TODO
 
 

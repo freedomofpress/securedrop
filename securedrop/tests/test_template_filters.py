@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, timedelta
 import os
+from datetime import datetime
+from datetime import timedelta
 
 from flask import session
 
@@ -11,9 +12,11 @@ import i18n_tool
 import journalist_app
 import source_app
 import template_filters
+from flask import session
+from sh import pybabel
 from utils.env import TESTS_DIR
 
-from sh import pybabel
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 
 def verify_rel_datetime_format(app):

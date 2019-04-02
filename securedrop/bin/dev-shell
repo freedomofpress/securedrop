@@ -26,28 +26,32 @@ function docker_image() {
 
     docker build \
            ${DOCKER_BUILD_ARGUMENTS:-} \
-	   --build-arg=USER_ID="$(id -u)" \
-	   --build-arg=USER_NAME="${USER:-root}" \
+           --build-arg=USER_ID="$(id -u)" \
+           --build-arg=USER_NAME="${USER:-root}" \
            -t "securedrop-test-${1}-py${2}" \
-       --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/python${2}/Dockerfile" \
-       "${TOPLEVEL}/securedrop"
+           --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/python${2}/Dockerfile" \
+           "${TOPLEVEL}/securedrop"
 }
 
 function docker_run() {
     validate_python_version $1 $2
 
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
+
+    # The --shm-size argument sets up dedicated shared memory for the
+    # container. Our tests can fail with the default of 64m.
     docker run \
-       -p 127.0.0.1:5901:5901 \
-	   --rm \
-	   --user "${USER:-root}" \
-	   --volume "${TOPLEVEL}:${TOPLEVEL}" \
-	   --workdir "${TOPLEVEL}/securedrop" \
-       -e NUM_SOURCES \
-       -e LC_ALL=C.UTF-8 \
-       -e LANG=C.UTF-8 \
-       --name securedrop-dev \
-	   -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py${2}" "${@:3}"
+           --shm-size 2g \
+           -p 127.0.0.1:5909:5909 \
+           --rm \
+           -e NUM_SOURCES \
+           -e LC_ALL=C.UTF-8 \
+           -e LANG=C.UTF-8 \
+           --user "${USER:-root}" \
+           --volume "${TOPLEVEL}:${TOPLEVEL}" \
+           --workdir "${TOPLEVEL}/securedrop" \
+           --name securedrop-dev \
+           -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py${2}" "${@:3}"
 }
 
 docker_image $BASE_OS $PYTHON_VERSION
