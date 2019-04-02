@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import os
 
 from datetime import datetime
@@ -7,6 +6,8 @@ from flask import (Blueprint, request, current_app, session, url_for, redirect,
                    render_template, g, flash, abort)
 from flask_babel import gettext
 from sqlalchemy.sql.expression import false
+
+import store
 
 from db import db
 from models import Source, SourceStar, Submission, Reply
@@ -114,6 +115,7 @@ def make_blueprint(config):
         try:
             db.session.add(reply)
             db.session.commit()
+            store.async_add_checksum_for_file(reply)
         except Exception as exc:
             flash(gettext(
                 "An unexpected error occurred! Please "
