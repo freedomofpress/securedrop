@@ -9,6 +9,8 @@ from flask import (Blueprint, render_template, flash, redirect, url_for, g,
 from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
 
+import store
+
 from db import db
 from models import Source, Submission, Reply, get_one_or_else
 from source_app.decorators import login_required
@@ -177,9 +179,11 @@ def make_blueprint(config):
                                   html_contents=html_contents)
             flash(Markup(msg), "success")
 
+        new_submissions = []
         for fname in fnames:
             submission = Submission(g.source, fname)
             db.session.add(submission)
+            new_submissions.append(submission)
 
         if g.source.pending:
             g.source.pending = False
@@ -203,6 +207,10 @@ def make_blueprint(config):
 
         g.source.last_updated = datetime.utcnow()
         db.session.commit()
+
+        for sub in new_submissions:
+            store.async_add_checksum_for_file(sub)
+
         normalize_timestamps(g.filesystem_id)
 
         return redirect(url_for('main.lookup'))
