@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
-
 import binascii
+
 from datetime import datetime
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
                    render_template, Markup, sessions, request)
 from flask_babel import gettext, ngettext
-import hashlib
 from sqlalchemy.sql.expression import false
 
 import i18n
-from worker import rq_worker_queue
 
 from db import db
 from models import (get_one_or_else, Source, Journalist,
@@ -17,6 +15,8 @@ from models import (get_one_or_else, Source, Journalist,
                     LoginThrottledException, BadTokenException, SourceStar,
                     PasswordError, Submission)
 from rm import srm
+from store import add_checksum_for_file
+from worker import rq_worker_queue
 
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
@@ -327,16 +327,18 @@ def col_download_all(cols_selected):
     return download("all", submissions)
 
 
-def serve_file_with_etag(source, filename):
-    response = send_file(current_app.storage.path(source.filesystem_id,
-                                                  filename),
+def serve_file_with_etag(db_obj):
+    file_path = current_app.storage.path(db_obj.source.filesystem_id, db_obj.filename)
+    response = send_file(file_path,
                          mimetype="application/pgp-encrypted",
                          as_attachment=True,
                          add_etags=False)  # Disable Flask default ETag
 
+    if not db_obj.checksum:
+        add_checksum_for_file(db.session, db_obj, file_path)
+
     response.direct_passthrough = False
-    response.headers['Etag'] = '"sha256:{}"'.format(
-        hashlib.sha256(response.get_data()).hexdigest())
+    response.headers['Etag'] = db_obj.checksum
     return response
 
 
