@@ -5,12 +5,33 @@ import subprocess
 import os
 import re
 import pexpect
+import socket
+import sys
 
 from journalist_gui import updaterUI, strings, resources_rc  # noqa
 
 
 FLAG_LOCATION = "/home/amnesia/Persistent/.securedrop/securedrop_update.flag"  # noqa
 ESCAPE_POD = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+
+
+def prevent_second_instance(app: QtWidgets.QApplication, name: str) -> None:  # noqa
+
+    # Null byte triggers abstract namespace
+    IDENTIFIER = '\0' + name
+    ALREADY_BOUND_ERRNO = 98
+
+    app.instance_binding = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+    try:
+        app.instance_binding.bind(IDENTIFIER)
+    except OSError as e:
+        if e.errno == ALREADY_BOUND_ERRNO:
+            err_dialog = QtWidgets.QMessageBox()
+            err_dialog.setText(name + ' is already running.')
+            err_dialog.exec()
+            sys.exit()
+        else:
+            raise
 
 
 class SetupThread(QThread):
