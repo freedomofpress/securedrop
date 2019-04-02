@@ -216,6 +216,7 @@ def queued_add_checksum_for_file(db_model, model_id, file_path, db_uri):
     session = sessionmaker(bind=create_engine(db_uri))()
     db_obj = session.query(db_model).filter_by(id=model_id).one()
     add_checksum_for_file(session, db_obj, file_path)
+    # We need to return a non-`None` value so the rq worker writes this back to Redis
     return "success"
 
 
