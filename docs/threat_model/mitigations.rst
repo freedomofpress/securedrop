@@ -59,18 +59,42 @@ Countermeasures on both *Source* and *Journalist Interfaces*
 -  *Interface* sessions are invalidated after a user logs out or inactivity over 120 minutes
 -  Session control on *Interface* includes CSRF token in Flask Framework
 -  All *Interface* session data (except language and locale selection) is discarded at logout, and fully deleted upon exiting the Tor Browser
--  *A number of mitigations are in place as protection against malicious input vulnerabilities on the Source and Journalist Interfaces*:  X-XSS-PROTECTION is enabled and Content-Security-Policy is set to self; SQLAlchemy is used as ORM for all database queries; and Application does not execute uploaded submission data
--  A number of mitigations are in place as protection against the risk of an HTTP misconfiguration on the *Source* and *Journalist Interfaces*: Cache control header is set to “no store;” Only HTTP GET, POST and HEAD are allowed; HTTP headers do not expose version information of system components; X-Content-Type is set to "nosniff;" Content-Security-Policy is set to "self;" and X-XSS-Protection is set to "1"
+-  A number of mitigations are in place as protection against malicious input vulnerabilities on the Source and Journalist Interfaces:
+
+    - X-XSS-PROTECTION is enabled
+    - Content-Security-Policy is set to self
+    - SQLAlchemy is used as ORM for all database queries
+    - Application does not execute uploaded submission data
+-  A number of mitigations are in place as protection against the risk of an HTTP misconfiguration on the *Source* and *Journalist Interfaces*:
+
+    - Cache control header is set to “no store;”
+    - Only HTTP GET, POST and HEAD are allowed
+    - HTTP headers do not expose version information of system components
+    - X-Content-Type is set to "nosniff;"
+    - Content-Security-Policy is set to "self;"
+    - X-XSS-Protection is set to "1"
 
 Countermeasures unique to *Source Interface*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -  TLS on *Source Interface* is opt-in with an EV cert
--  A number of mitigations are in place as protection against access control vulnerabilities on the *Source Interface*: Source codenames are long and automatically generated, and stored in a database hashed with a unique salt; Source codename reset functionality is not available; Source login does not display information about prior submissions; and Souce login requires 7-word codename to check *Source Interface* for replies
+-  A number of mitigations are in place as protection against access control vulnerabilities on the *Source Interface*:
+
+    - Source codenames are long and automatically generated
+    - Hashed codenames are stored in a database hashed with a unique salt
+    - Source codename reset functionality is not available
+    - Source login does not display information about prior submissions
+    - Source login requires 7-word codename to check *Source Interface* for replies
 
 Countermeasures unique to *Journalist Interface*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -  *Journalist Interface* is located behind an authenticated hidden service and only privileged users have required authorization token
--  A number of mitigations are in place as protection against access control vulnerabilities on the *Journalist Interface*: Apache autoindex module is disabled; Journalist/Admin passphrases are long and automatically generated; Passphrases are stored in a database hashed with a unique salt; account generation/revocation/reset is restricted to Admin role; and Two-factor authentication is required through a TOTP token or a Yubikey
+-  A number of mitigations are in place as protection against access control vulnerabilities on the *Journalist Interface*:
+
+    - Apache autoindex module is disabled
+    - Journalist/Admin passphrases are long and automatically generated
+    - Passphrases are stored in a database hashed with a unique salt
+    - Account generation/revocation/reset is restricted to Admin role
+    - Two-factor authentication is required through a TOTP token or a Yubikey
 
 *Application Server* and *Monitor Server*
 -----------------------------------------
@@ -204,8 +228,8 @@ Countermeasures in User Behavior Recommendations
 -  `Source Guide <https://docs.securedrop.org/en/stable/source.html>`__ gives instructructions on best practices for the entire submission workflow
 -  Source interface banner suggests that user disables JS (high security settings in Tor Browser)
 -  `Journalist Guide <https://docs.securedrop.org/en/stable/journalist.html>`__ informs users of malware risks, the importance of strict comparmentalization of SecureDrop-related activities
--  `Securedrop Deployment Guide <https://docs.securedrop.org/en/stable/deployment_practices.html>`__ gives best practices for proper administration of the SecureDrop system, and its public-facing properties like the Landing Page
+-  `SecureDrop Deployment Guide <https://docs.securedrop.org/en/stable/deployment_practices.html>`__ gives best practices for proper administration of the SecureDrop system, and its public-facing properties like the Landing Page
 -  `Admin Guide <https://docs.securedrop.org/en/stable/admin.html>`__ gives instructions for long-term maintenance of the technical properties of the SecureDrop system, as well as operations to support Journalists
 -  All Admin tasks are completed over Tor/Tor authenticated hidden services after installation
 -  Any Journalist/Admin password/2FA token resets can only be done by an Admin with password-protected SSH capability or authenticated hidden service credentials.
--  Persistent storage on the Admin Workstation is protected with LUKs/dm-crypt encryption
+-  Persistent storage on the Admin Workstation is protected with LUKS/dm-crypt encryption
