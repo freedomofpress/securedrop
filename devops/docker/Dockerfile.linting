@@ -1,6 +1,6 @@
 FROM koalaman/shellcheck:v0.4.7 as shellcheck
 
-FROM gcr.io/google-containers/python:2.7.11-slim
+FROM python:2.7.16-slim-stretch
 LABEL MAINTAINER="Freedom of the Press Foundation"
 LABEL APP="SDLinter"
 
