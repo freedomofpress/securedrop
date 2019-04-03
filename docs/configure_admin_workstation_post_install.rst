@@ -1,5 +1,5 @@
-Configure the Admin Workstation Post-Install
-============================================
+Configure the Admin Workstation Post-Install and Create Backups
+===============================================================
 
 .. _auto-connect ATHS:
 
@@ -63,3 +63,8 @@ of the authenticated hidden services, restart Tails and make
 sure to enable persistence.
 
 .. _Authenticated Tor Hidden Services: https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient
+
+Back Up the Workstations
+------------------------
+
+USB drives can wear out, get lost, or otherwise become corrupted, making it very important to be sure to keep current backups. Follow the :ref:`Backup the Workstations <backup_workstations>` document to create a backup of your *Secure Viewing Station*, *Admin Workstation*, and *Journalist Workstations* after you've completed the installation and post-installation steps.
