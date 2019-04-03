@@ -2,15 +2,14 @@
 from PyQt5 import QtWidgets
 import sys
 
-from journalist_gui.SecureDropUpdater import UpdaterApp
-
+from journalist_gui.SecureDropUpdater import UpdaterApp, prevent_second_instance
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
+    prevent_second_instance(app, "Securedrop Workstation Updater")
     form = UpdaterApp()
     form.show()
     app.exec_()
-
 
 if __name__ == '__main__':
     main()
