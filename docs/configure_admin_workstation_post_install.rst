@@ -64,7 +64,7 @@ sure to enable persistence.
 
 .. _Authenticated Tor Hidden Services: https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient
 
-Back Up The Workstations
-------------------------------------
+Back Up the Workstations
+------------------------
 
-USB drives can wear out, get lost, or otherwise become corrupted, making it very important to be sure to keep current backups. Follow the :ref:`Backup the Workstations <backup_workstations>` document to create a backup of your Secure Viewing Station, Admin Workstation, and Journalist Workstations after you've completed the installation and post-installation steps.
+USB drives can wear out, get lost, or otherwise become corrupted, making it very important to be sure to keep current backups. Follow the :ref:`Backup the Workstations <backup_workstations>` document to create a backup of your *Secure Viewing Station*, *Admin Workstation*, and *Journalist Workstations* after you've completed the installation and post-installation steps.
