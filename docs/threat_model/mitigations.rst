@@ -68,7 +68,6 @@ Countermeasures on both *Source* and *Journalist Interfaces*
 -  A number of mitigations are in place as protection against the risk of an HTTP misconfiguration on the *Source* and *Journalist Interfaces*:
 
     - Cache control header is set to “no store;”
-    - Only HTTP GET, POST and HEAD are allowed
     - HTTP headers do not expose version information of system components
     - X-Content-Type is set to "nosniff;"
     - Content-Security-Policy is set to "self;"
@@ -77,6 +76,7 @@ Countermeasures on both *Source* and *Journalist Interfaces*
 Countermeasures unique to *Source Interface*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -  TLS on *Source Interface* is opt-in with an EV cert
+-  Only HTTP GET, POST and HEAD methods are allowed
 -  A number of mitigations are in place as protection against access control vulnerabilities on the *Source Interface*:
 
     - Source codenames are long and automatically generated
@@ -88,6 +88,7 @@ Countermeasures unique to *Source Interface*
 Countermeasures unique to *Journalist Interface*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -  *Journalist Interface* is located behind an authenticated hidden service and only privileged users have required authorization token
+-  Only HTTP GET, POST, HEAD and DELETE methods are allowed
 -  A number of mitigations are in place as protection against access control vulnerabilities on the *Journalist Interface*:
 
     - Apache autoindex module is disabled
