@@ -8,8 +8,9 @@ to upgrade to Ubuntu 16.04 LTS (Xenial) before April 30, 2019.
 
 SecureDrop servers provisioned before February 26, 2019 use Ubuntu 14.04 LTS as
 the base operating system. Support for Ubuntu 16.04 LTS (which will receive
-security updates until April 2021) is included with SecureDrop 0.12.0, released
-on February 26. The operating system update itself must be performed manually.
+security updates until April 2021) is included starting with the SecureDrop 0.12
+release series on February 26. The operating system update itself must be
+performed manually.
 
 We recommend that you plan two working days (after your instance has been
 updated to SecureDrop 0.12.1) to backup your instance, perform the upgrade, and
@@ -50,10 +51,9 @@ from the command line on the *Application Server* by running the command:
 
 
 SecureDrop servers are updated automatically with the latest release version
-(0.12.1 as of March 20, 2019). Recently, some long-running SecureDrop
-instances were affected by a bug which will cause any updates after 0.10.0 to
-fail. If your instance is still running 0.10.0, please `consult our advisory
-<https://securedrop.org/news/advisory-automatic-update-failure-version-0100-0110-some-securedrop-instances/>`_
+(0.12.1). Recently, some long-running SecureDrop instances were affected by a 
+bug which will cause any updates after 0.10.0 to fail. If your instance is still
+running 0.10.0, please `consult our advisory <https://securedrop.org/news/advisory-automatic-update-failure-version-0100-0110-some-securedrop-instances/>`_
 to update to the latest version.
 
 .. important:: If your instance is affected by this bug, it will no longer

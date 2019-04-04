@@ -52,14 +52,20 @@ sed -i "s/^\(securedrop_app_code_version: \"\).*/\1$NEW_VERSION\"/" install_file
 # Update the version in molecule testinfra vars
 sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" molecule/builder-trusty/tests/vars.yml
 
-# Update the version that we tell people to check out in the install doc
-sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/set_up_admin_tails.rst
-sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/conf.py
-
 # If version doesnt have an rc designator, its considered stable
 # theres a few things that peg to that stable version like upgrade testing logic
+# and strings inside the documentation
+OLD_RELEASE=$(cat molecule/shared/stable.ver)
 if [[ ! $NEW_VERSION == *~rc* ]]; then
     echo "${NEW_VERSION}" > molecule/shared/stable.ver
+    sed -i "s@$(echo "${OLD_RELEASE}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/set_up_admin_tails.rst
+    sed -i "s@$(echo "${OLD_RELEASE}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/conf.py
+    # Upgrade docs to Ubuntu 16.04 reference current stable version explicitly.
+    # Where we're talking about the 0.12 _series_ (the first to support Xenial),
+    # the phrase "0.12 series" is used, so this regex is safe to run.
+    sed -i "s@$(echo "${OLD_RELEASE}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/upgrade/xenial_upgrade_in_place.rst
+    sed -i "s@$(echo "${OLD_RELEASE}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/upgrade/xenial_prep.rst
+    sed -i "s@$(echo "${OLD_RELEASE}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/upgrade/xenial_backup_install_restore.rst
 fi
 
 # Update the changelog
