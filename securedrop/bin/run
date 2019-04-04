@@ -7,7 +7,6 @@ source "${BASH_SOURCE%/*}/dev-deps"
 
 run_xvfb &
 run_redis &
-run_x11vnc &
 urandom
 run_sass --watch &
 maybe_create_config_py

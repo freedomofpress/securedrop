@@ -3,15 +3,27 @@
 export DISPLAY=:1
 
 function run_xvfb() {
-    setsid Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset >& /tmp/xvfb.out || cat /tmp/xvfb.out
+    (setsid Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset >& /tmp/xvfb.out || cat /tmp/xvfb.out) &
+
+    # give it time to start
+    for _ in {1..10}
+    do
+        xdpyinfo -display :1 >/dev/null 2>&1 && return 0
+        sleep 1
+    done
+    xdpyinfo -display :1 >/dev/null 2>&1 || (echo "Xvfb is not available"; exit 1)
 }
 
 function run_redis() {
     setsid redis-server >& /tmp/redis.out || cat /tmp/redis.out
 }
 
+function setup_vncauth {
+    x11vnc -storepasswd freedom /tmp/vncpasswd
+}
+
 function run_x11vnc() {
-    setsid x11vnc -display :1 -autoport 5901 -shared >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
+    setsid x11vnc -display :1 -geometry 1024x768 -rfbauth /tmp/vncpasswd -rfbport 5901 -shared >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
 }
 
 function urandom() {

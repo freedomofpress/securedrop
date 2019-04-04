@@ -1,5 +1,5 @@
-# ubuntu 16.04 image - 2019-01-22
-FROM ubuntu@sha256:e4a134999bea4abb4a27bc437e6118fdddfb172e1b9d683129b74d254af51675
+# ubuntu 16.04 image from 2019-03-12
+FROM ubuntu@sha256:58d0da8bc2f434983c6ca4713b08be00ff5586eb5cdff47bcde4b2e88fd40f88
 ARG USER_NAME
 ENV USER_NAME ${USER_NAME:-root}
 ARG USER_ID
@@ -14,7 +14,8 @@ RUN apt-get update && \
 RUN apt-get install -y devscripts vim \
                        python-pip libpython2.7-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server firefox git xvfb haveged curl \
-                       gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo
+                       gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo \
+                       libgtk2.0
 
 ENV FIREFOX_CHECKSUM=88d25053306d33658580973b063cd459a56e3596a3a298c1fb8ab1d52171d860
 RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/+build/9727836/+files/firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb && \
