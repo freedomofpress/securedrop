@@ -68,11 +68,11 @@ First, back up your *Admin Workstation*. using the process described here:
 :doc:`Back up the Workstations <../backup_workstations>`.
 
 Next, ensure you are running the latest version of the Tails OS. You can do this
-by starting up your *Admin Workstation*. and selecting **Activities > Tails >
-About Tails**. If you are running a version prior to 3.11, you will need to
-upgrade to version 3.11. For more information on upgrading your Tails USB, see
-`Upgrading a Tails USB stick
-<https://tails.boum.org/doc/first_steps/upgrade/index.en.html>`_.
+by starting up your *Admin Workstation* and selecting **Activities > Tails >
+About Tails**. Compare the version number with the current release highlighted
+on the `Tails website <https://tails.boum.org/index.en.html>`_. If you are
+running an older version, you will need to upgrade. For more information on
+upgrading your Tails USB, see `Upgrading a Tails USB stick <https://tails.boum.org/doc/first_steps/upgrade/index.en.html>`_.
 
 To check the version of the SecureDrop code installed on your *Admin
 Workstation*, start the *Admin Workstation* with its persistent volume unlocked
