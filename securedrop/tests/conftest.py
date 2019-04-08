@@ -13,7 +13,7 @@ import subprocess
 
 try:
     import configparser
-except:
+except ImportError:
     from six.moves import configparser  # renamed in Python 3
 
 from flask import url_for
