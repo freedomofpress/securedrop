@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import codecs
 import datetime
 import logging
 import os
@@ -123,7 +122,7 @@ def _get_yubikey_usage():
     '''Function used to allow for test suite mocking'''
     while True:
         answer = input('Will this user be using a YubiKey [HOTP]? '
-                           '(y/N): ').lower().strip()
+                       '(y/N): ').lower().strip()
         if answer in ('y', 'yes'):
             return True
         elif answer in ('', 'n', 'no'):
@@ -161,8 +160,8 @@ def _add_user(is_admin=False):
                     tmp_str = otp_secret.replace(" ", "")
                     if len(tmp_str) != 40:
                         print(("The length of the secret is not correct. "
-                              "Expected 40 characters, but received {0}. "
-                              "Try again.".format(len(tmp_str))))
+                               "Expected 40 characters, but received {0}. "
+                               "Try again.".format(len(tmp_str))))
                         continue
                 if otp_secret:
                     break
@@ -181,7 +180,7 @@ def _add_user(is_admin=False):
             else:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 print((repr(traceback.format_exception(exc_type, exc_value,
-                                                      exc_traceback))))
+                                                       exc_traceback))))
             return 1
         else:
             print(('User "{}" successfully added'.format(username)))
@@ -194,12 +193,12 @@ def _add_user(is_admin=False):
                 qr.add_data(uri)
                 qr.print_ascii(tty=sys.stdout.isatty())
                 print(('\nIf the barcode does not render correctly, try '
-                      "changing your terminal's font (Monospace for Linux, "
-                      'Menlo for OS X). If you are using iTerm on Mac OS X, '
-                      'you will need to change the "Non-ASCII Font", which '
-                      "is your profile\'s Text settings.\n\nCan't scan the "
-                      'barcode? Enter following shared secret manually:'
-                      '\n{}\n'.format(user.formatted_otp_secret)))
+                       "changing your terminal's font (Monospace for Linux, "
+                       'Menlo for OS X). If you are using iTerm on Mac OS X, '
+                       'you will need to change the "Non-ASCII Font", which '
+                       "is your profile\'s Text settings.\n\nCan't scan the "
+                       'barcode? Enter following shared secret manually:'
+                       '\n{}\n'.format(user.formatted_otp_secret)))
         return 0
 
 
@@ -209,7 +208,7 @@ def _get_username_to_delete():
 
 def _get_delete_confirmation(user):
     confirmation = input('Are you sure you want to delete user '
-                             '"{}" (y/n)?'.format(user))
+                         '"{}" (y/n)?'.format(user))
     if confirmation.lower() != 'y':
         print(('Confirmation not received: user "{}" was NOT '
               'deleted'.format(user)))

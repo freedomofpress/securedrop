@@ -399,7 +399,8 @@ class JournalistNavigationStepsMixin():
     def _edit_user(self, username):
         user = Journalist.query.filter_by(username=username).one()
 
-        new_user_edit_links = [el for el in self.driver.find_elements_by_tag_name('a') if el.get_attribute('data-username') == username]
+        new_user_edit_links = [el for el in self.driver.find_elements_by_tag_name('a')
+                               if el.get_attribute('data-username') == username]
         assert 1 == len(new_user_edit_links)
         new_user_edit_links[0].click()
         # The header says "Edit user "username"".
@@ -450,8 +451,9 @@ class JournalistNavigationStepsMixin():
 
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
-        new_user_edit_links = [el for el in self.driver.find_elements_by_tag_name('a') if (el.get_attribute('data-username') ==
-                        self.new_user['username'])]
+        new_user_edit_links = [el for el in self.driver.find_elements_by_tag_name('a')
+                               if (el.get_attribute('data-username') ==
+                               self.new_user['username'])]
         assert len(new_user_edit_links) == 1
         new_user_edit_links[0].click()
 
@@ -656,8 +658,9 @@ class JournalistNavigationStepsMixin():
         add_user_btn.click()
 
     def _admin_visits_edit_user(self):
-        new_user_edit_links = [el for el in self.driver.find_elements_by_tag_name('a') if (el.get_attribute('data-username') ==
-                        self.new_user['username'])]
+        new_user_edit_links = [el for el in self.driver.find_elements_by_tag_name('a')
+                               if (el.get_attribute('data-username') ==
+                               self.new_user['username'])]
         assert len(new_user_edit_links) == 1
         new_user_edit_links[0].click()
 

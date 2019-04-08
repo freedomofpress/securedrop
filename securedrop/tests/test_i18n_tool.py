@@ -315,7 +315,7 @@ class TestI18NTool(object):
         assert 'l10n: updated nl' not in r()
         assert 'l10n: updated de_DE' not in r()
         message = str(git('--no-pager', '-C', 'securedrop', 'show',
-                              _cwd=d, _encoding='utf-8'))
+                          _cwd=d, _encoding='utf-8'))
         assert "Loïc" in message
 
         #
@@ -348,6 +348,6 @@ class TestI18NTool(object):
         assert 'l10n: updated nl' in r()
         assert 'l10n: updated de_DE' not in r()
         message = str(git('--no-pager', '-C', 'securedrop', 'show',
-                              _cwd=d))
+                      _cwd=d))
         assert "Someone Else" in message
         assert "Loïc" not in message
