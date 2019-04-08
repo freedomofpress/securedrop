@@ -1,5 +1,10 @@
 import pytest
-import urllib.request, urllib.error, urllib.parse
+
+try:
+    from urllib.request import urlopen, Request
+except ImportError:  # Python 2/3 compatibility
+    from urllib2 import urlopen, Request
+
 import re
 import tempfile
 import gzip
@@ -583,12 +588,12 @@ class JournalistNavigationStepsMixin():
                 cookie_strs.append(cookie_str)
             return ' '.join(cookie_strs)
 
-        submission_req = urllib.request.Request(file_url)
+        submission_req = Request(file_url)
         submission_req.add_header(
             'Cookie',
             cookie_string_from_selenium_cookies(
                 self.driver.get_cookies()))
-        raw_content = urllib.request.urlopen(submission_req).read()
+        raw_content = urlopen(submission_req).read()
 
         decrypted_submission = self.gpg.decrypt(raw_content)
         submission = self._get_submission_content(file_url,

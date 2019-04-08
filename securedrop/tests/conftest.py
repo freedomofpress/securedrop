@@ -11,7 +11,11 @@ import shutil
 import signal
 import subprocess
 
-from configparser import SafeConfigParser
+try:
+    import configparser
+except:
+    from six.moves import configparser  # renamed in Python 3
+
 from flask import url_for
 from pyotp import TOTP
 
@@ -117,7 +121,7 @@ def config(tmpdir):
 def alembic_config(config):
     base_dir = path.join(path.dirname(__file__), '..')
     migrations_dir = path.join(base_dir, 'alembic')
-    ini = SafeConfigParser()
+    ini = configparser.SafeConfigParser()
     ini.read(path.join(base_dir, 'alembic.ini'))
 
     ini.set('alembic', 'script_location', path.join(migrations_dir))

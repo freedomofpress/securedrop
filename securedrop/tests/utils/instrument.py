@@ -13,7 +13,7 @@ try:
     from urllib.parse import urlparse, urljoin
 except ImportError:
     # Python 2 urlparse fallback
-    from urllib.parse import urlparse, urljoin
+    from urlparse import urlparse, urljoin
 
 import pytest
 
