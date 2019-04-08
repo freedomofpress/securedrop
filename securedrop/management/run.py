@@ -157,10 +157,10 @@ def run(args):  # pragma: no cover
 
     procs = [
         lambda: DevServerProcess('Source Interface',
-                                 ['python3', 'source.py'],
+                                 ['python', 'source.py'],
                                  'blue'),
         lambda: DevServerProcess('Journalist Interface',
-                                 ['python3', 'journalist.py'],
+                                 ['python', 'journalist.py'],
                                  'cyan'),
         lambda: DevServerProcess('SASS Compiler',
                                  ['sass', '--watch', 'sass:static/css'],
