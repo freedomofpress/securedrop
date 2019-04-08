@@ -22,11 +22,11 @@
     backup_filename: "{{ backup_script_result.stdout }}"
 
 - name: Fetch the backup tarball back to the Admin Workstation.
-  fetch:
+  synchronize:
+    checksum: yes
+    mode: pull
     src: /tmp/{{ backup_filename }}
     dest: ./{{ backup_filename }}
-    flat: yes
-    fail_on_missing: yes
 
 - name: Delete backup tarball from Application Server (to save disk space).
   file:
