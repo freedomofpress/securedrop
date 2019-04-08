@@ -33,6 +33,9 @@ RUN pip3 install -r requirements/securedrop-app-code-requirements.txt && \
 # Fixes #4036 pybabel requires latest version of setuptools
 RUN pip3 install --upgrade setuptools
 
+# Temporary workaround: Revert when python 3 is deployed to prod
+RUN sudo rm /usr/bin/python && sudo ln -s /usr/bin/python3 /usr/bin/python
+
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
 
 STOPSIGNAL SIGKILL
