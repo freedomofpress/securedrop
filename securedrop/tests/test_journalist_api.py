@@ -253,7 +253,7 @@ def test_api_error_handlers_defined(journalist_app):
         result = journalist_app.error_handler_spec['api'][status_code]
 
         expected_error_handler = '_handle_api_http_exception'
-        assert result.values()[0].__name__ == expected_error_handler
+        assert list(result.values())[0].__name__ == expected_error_handler
 
 
 def test_api_error_handler_404(journalist_app, journalist_api_token):
