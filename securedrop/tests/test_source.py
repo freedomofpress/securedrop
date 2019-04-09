@@ -4,8 +4,9 @@ import json
 import platform
 import re
 import subprocess
+import six
 
-from io import StringIO, BytesIO
+from io import BytesIO
 from flask import session, escape, current_app, url_for, g
 from mock import patch, ANY
 
@@ -274,7 +275,7 @@ def _dummy_submission(app):
     """
     return app.post(
         url_for('main.submit'),
-        data=dict(msg="Pay no attention to the man behind the curtain.",
+        data=dict(msg=six.u("Pay no attention to the man behind the curtain."),
                   fh=(BytesIO(b''), '')),
         follow_redirects=True)
 
@@ -299,7 +300,7 @@ def test_submit_message(source_app):
         _dummy_submission(app)
         resp = app.post(
             url_for('main.submit'),
-            data=dict(msg="This is a test.", fh=(StringIO(''), '')),
+            data=dict(msg=six.u("This is a test."), fh=(six.StringIO(six.u('')), '')),
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -311,7 +312,7 @@ def test_submit_empty_message(source_app):
         new_codename(app, session)
         resp = app.post(
             url_for('main.submit'),
-            data=dict(msg="", fh=(StringIO(''), '')),
+            data=dict(msg="", fh=(six.StringIO(six.u('')), '')),
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -330,7 +331,7 @@ def test_submit_big_message(source_app):
         _dummy_submission(app)
         resp = app.post(
             url_for('main.submit'),
-            data=dict(msg="AA" * (1024 * 512), fh=(StringIO(''), '')),
+            data=dict(msg="AA" * (1024 * 512), fh=(six.StringIO(six.u('')), '')),
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -376,7 +377,7 @@ def test_submit_message_with_low_entropy(source_app):
                 _dummy_submission(app)
                 resp = app.post(
                     url_for('main.submit'),
-                    data=dict(msg="This is a test.", fh=(StringIO(''), '')),
+                    data=dict(msg="This is a test.", fh=(six.StringIO(six.u('')), '')),
                     follow_redirects=True)
                 assert resp.status_code == 200
                 assert not async_genkey.called
@@ -393,7 +394,7 @@ def test_submit_message_with_enough_entropy(source_app):
                 _dummy_submission(app)
                 resp = app.post(
                     url_for('main.submit'),
-                    data=dict(msg="This is a test.", fh=(StringIO(''), '')),
+                    data=dict(msg="This is a test.", fh=(six.StringIO(six.u('')), '')),
                     follow_redirects=True)
                 assert resp.status_code == 200
                 assert async_genkey.called
@@ -569,7 +570,7 @@ def test_failed_normalize_timestamps_logs_warning(source_app):
                     url_for('main.submit'),
                     data=dict(
                         msg="This is a test.",
-                        fh=(StringIO(''), '')),
+                        fh=(six.StringIO(six.u('')), '')),
                     follow_redirects=True)
                 assert resp.status_code == 200
                 text = resp.data.decode('utf-8')
