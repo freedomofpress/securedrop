@@ -2,6 +2,7 @@
 import base64
 import os
 import io
+import six
 from tempfile import _TemporaryFileWrapper
 
 from pretty_bad_protocol._util import _STREAMLIKE_TYPES
@@ -47,7 +48,12 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         """
         self.last_action = 'init'
         self.create_key()
-        self.tmp_file_id = base64.urlsafe_b64encode(os.urandom(32)).decode('utf-8').strip('=')
+        self.temp_file_id = ""
+        if six.PY2:
+            self.tmp_file_id = base64.urlsafe_b64encode(os.urandom(32)).strip('=')
+        else:
+            self.tmp_file_id = base64.urlsafe_b64encode(os.urandom(32)).decode('utf-8').strip('=')
+
         self.filepath = os.path.join(store_dir,
                                      '{}.aes'.format(self.tmp_file_id))
         self.file = io.open(self.filepath, 'w+b')
@@ -83,7 +89,12 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
             raise AssertionError('You cannot write after reading!')
         self.last_action = 'write'
 
-        if isinstance(data, str):  # noqa
+        # This is the old Python related code
+        if six.PY2:  # noqa
+            if isinstance(data, unicode):
+                data = data.encode('utf-8')
+        elif isinstance(data, str):  # noqa
+            # For Python 3
             data = data.encode('utf-8')
 
         self.file.write(self.encryptor.update(data))

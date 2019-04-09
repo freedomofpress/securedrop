@@ -1,6 +1,7 @@
 import operator
 import os
 import io
+import six
 
 from datetime import datetime
 from flask import (Blueprint, render_template, flash, redirect, url_for, g,
@@ -87,7 +88,10 @@ def make_blueprint(config):
                 with io.open(reply_path, "rb") as f:
                     contents = f.read()
                 reply_obj = current_app.crypto_util.decrypt(g.codename, contents)
-                reply.decrypted = reply_obj
+                if six.PY2:  # Python2
+                    reply.decrypted = reply_obj.decode('utf-8')
+                else:
+                    reply.decrypted = reply_obj
             except UnicodeDecodeError:
                 current_app.logger.error("Could not decode reply %s" %
                                          reply.filename)

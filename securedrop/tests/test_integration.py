@@ -10,7 +10,10 @@ import zipfile
 from base64 import b32encode
 from binascii import unhexlify
 from bs4 import BeautifulSoup
-from io import BytesIO
+import six
+if six.PY2:
+    import cStringIO
+from io import BytesIO, StringIO
 from flask import session, g, escape, current_app
 from pyotp import TOTP, HOTP
 
@@ -132,7 +135,7 @@ def test_submit_message(source_app, journalist_app, test_journo):
 def test_submit_file(source_app, journalist_app, test_journo):
     """When a source creates an account, test that a new entry appears
     in the journalist interface"""
-    test_file_contents = b"This is a test file."
+    test_file_contents = six.b("This is a test file.")
     test_filename = "test.txt"
 
     with source_app.test_client() as app:
@@ -142,7 +145,7 @@ def test_submit_file(source_app, journalist_app, test_journo):
         # redirected to submission form
         resp = app.post('/submit', data=dict(
             msg="",
-            fh=(BytesIO(test_file_contents), test_filename),
+            fh=(six.BytesIO(test_file_contents), test_filename),
         ), follow_redirects=True)
         assert resp.status_code == 200
         app.get('/logout')
@@ -176,7 +179,10 @@ def test_submit_file(source_app, journalist_app, test_journo):
         decrypted_data = journalist_app.crypto_util.gpg.decrypt(resp.data)
         assert decrypted_data.ok
 
-        sio = BytesIO(decrypted_data.data)
+        if six.PY2:  # Python2
+            sio = cStringIO.StringIO(decrypted_data.data)
+        else:
+            sio = BytesIO(decrypted_data.data)
         with gzip.GzipFile(mode='rb', fileobj=sio) as gzip_file:
             unzipped_decrypted_data = gzip_file.read()
             mtime = gzip_file.mtime
@@ -244,7 +250,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
         # redirected to submission form
         resp = app.post('/submit', data=dict(
             msg=test_msg,
-            fh=(BytesIO(b''), ''),
+            fh=(six.BytesIO(six.b('')), ''),
         ), follow_redirects=True)
         assert resp.status_code == 200
         assert not g.source.flagged
@@ -322,7 +328,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
     ), follow_redirects=True)
     assert resp.status_code == 200
 
-    zf = zipfile.ZipFile(BytesIO(resp.data), 'r')
+    zf = zipfile.ZipFile(six.BytesIO(resp.data), 'r')
     data = zf.read(zf.namelist()[0])
     _can_decrypt_with_key(journalist_app, data)
     _can_decrypt_with_key(
@@ -448,7 +454,7 @@ def test_unicode_reply_with_ansi_env(journalist_app,
     journalist_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
     source_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
     _helper_test_reply(journalist_app, source_app, config, test_journo,
-                       "ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
+                       six.u("ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ"), True)
 
 
 def test_delete_collection(mocker, source_app, journalist_app, test_journo):

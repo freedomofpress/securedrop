@@ -5,6 +5,7 @@ from distutils.version import StrictVersion
 import pretty_bad_protocol as gnupg
 import os
 import io
+import six
 import scrypt
 import subprocess
 from random import SystemRandom
@@ -259,6 +260,8 @@ class CryptoUtil:
         """
         hashed_codename = self.hash_codename(secret,
                                              salt=self.scrypt_gpg_pepper)
+        if six.PY2:  # Python2
+            return self.gpg.decrypt(ciphertext, passphrase=hashed_codename).data
         return self.gpg.decrypt(ciphertext, passphrase=hashed_codename).data.decode('utf-8')
 
 
