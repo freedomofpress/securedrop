@@ -6,14 +6,13 @@ import os
 import random
 import re
 import zipfile
-
+import six
+if six.PY2:  # noqa
+    import cStringIO
 from base64 import b32encode
 from binascii import unhexlify
 from bs4 import BeautifulSoup
-import six
-if six.PY2:
-    import cStringIO
-from io import BytesIO, StringIO
+from io import BytesIO
 from flask import session, g, escape, current_app
 from pyotp import TOTP, HOTP
 

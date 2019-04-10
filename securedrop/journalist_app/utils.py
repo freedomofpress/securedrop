@@ -122,7 +122,7 @@ def validate_hotp_secret(user, otp_secret):
     """
     try:
         user.set_hotp_secret(otp_secret)
-    except (binascii.Error,TypeError) as e:
+    except (binascii.Error, TypeError) as e:
         if "Non-hexadecimal digit found" in str(e):
             flash(gettext(
                 "Invalid secret format: "
