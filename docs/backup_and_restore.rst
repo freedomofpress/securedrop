@@ -111,6 +111,8 @@ of backup action.
              be stored on the *Admin Workstation*, or on a
              :doc:`dedicated encrypted backup USB <backup_workstations>`.
 
+.. include:: includes/backup-warning.txt
+
 Restoring
 ---------
 
