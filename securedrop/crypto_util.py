@@ -260,9 +260,11 @@ class CryptoUtil:
         """
         hashed_codename = self.hash_codename(secret,
                                              salt=self.scrypt_gpg_pepper)
-        if six.PY2:  # Python2
-            return self.gpg.decrypt(ciphertext, passphrase=hashed_codename).data
-        return self.gpg.decrypt(ciphertext, passphrase=hashed_codename).data.decode('utf-8')
+        data = self.gpg.decrypt(ciphertext, passphrase=hashed_codename).data
+
+        if not six.PY2:  # Python3
+            return data.decode('utf-8')
+        return data
 
 
 def clean(s, also=''):

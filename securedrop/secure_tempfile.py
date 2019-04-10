@@ -49,10 +49,12 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         self.last_action = 'init'
         self.create_key()
         self.temp_file_id = ""
-        if six.PY2:
-            self.tmp_file_id = base64.urlsafe_b64encode(os.urandom(32)).strip('=')
+        data = base64.urlsafe_b64encode(os.urandom(32))
+
+        if not six.PY2:  # For Python3
+            self.tmp_file_id = data.decode('utf-8').strip('=')
         else:
-            self.tmp_file_id = base64.urlsafe_b64encode(os.urandom(32)).decode('utf-8').strip('=')
+            self.tmp_file_id = data.strip('=')
 
         self.filepath = os.path.join(store_dir,
                                      '{}.aes'.format(self.tmp_file_id))
