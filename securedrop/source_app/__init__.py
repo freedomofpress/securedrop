@@ -108,6 +108,15 @@ def create_app(config):
 
     @app.before_request
     @ignore_static
+    def setup_i18n():
+        """Store i18n-related values in Flask's special g object"""
+        g.locale = i18n.get_locale(config)
+        g.text_direction = i18n.get_text_direction(g.locale)
+        g.html_lang = i18n.locale_to_rfc_5646(g.locale)
+        g.locales = i18n.get_locale2name()
+
+    @app.before_request
+    @ignore_static
     def check_tor2web():
         # ignore_static here so we only flash a single message warning
         # about Tor2Web, corresponding to the initial page load.
@@ -125,10 +134,6 @@ def create_app(config):
     @ignore_static
     def setup_g():
         """Store commonly used values in Flask's special g object"""
-        g.locale = i18n.get_locale(config)
-        g.text_direction = i18n.get_text_direction(g.locale)
-        g.html_lang = i18n.locale_to_rfc_5646(g.locale)
-        g.locales = i18n.get_locale2name()
 
         if 'expires' in session and datetime.utcnow() >= session['expires']:
             msg = render_template('session_timeout.html')
