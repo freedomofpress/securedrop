@@ -72,6 +72,8 @@ do so, run the following commands from the terminal:
 Once you have completed the backup process, you may shut down the *Admin
 Workstation* and move to the next step: installing a Xenial-based instance.
 
+.. include:: ../includes/backup-warning.txt
+
 Step 2: Install Xenial
 ----------------------
 

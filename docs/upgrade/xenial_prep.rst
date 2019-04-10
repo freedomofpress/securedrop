@@ -309,6 +309,8 @@ that you store those on an encrypted volume on a separate USB stick for safe
 keeping. For more information on the backup process, see
 :doc:`Backup, Restore, Migrate <../backup_and_restore>`.
 
+.. include:: ../includes/backup-warning.txt
+
 
 .. _verify_ssh_access:
 
