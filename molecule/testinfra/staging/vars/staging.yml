@@ -162,5 +162,20 @@ log_events_with_ossec_alerts:
     level: "1"
     rule_id: "400503"
 
+  - name: test_ossec_server_apache_error_log_alert
+    alert: >
+      [Fri Apr 12 14:39:25.596318 2019] [wsgi:error]
+      [pid 1480:tid 4201987876608] ERROR:flask.app:Login for 'user' failed:
+      invalid username 'user'
+    level: "7"
+    rule_id: "400700"
+
+  - name: test_ossec_server_test_notification_alert
+    alert: >
+      [Fri Apr 12 15:45:05.310796 2019] [wsgi:error]
+      [pid 1479:tid 4201988093696] ERROR:flask.app:This is a test OSSEC alert
+    level: "7"
+    rule_id: "400700"
+
 fpf_apt_repo_url: "https://apt-test.freedom.press"
 grsec_version: "4.4.177"

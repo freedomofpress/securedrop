@@ -200,4 +200,10 @@
   </rule>
 </group>
 
+<group name="Apache logs">
+  <rule id="400700" level="7">
+    <if_sid>30301</if_sid>
+    <description>Apache application error.</description>
+  </rule>
+</group>
 
