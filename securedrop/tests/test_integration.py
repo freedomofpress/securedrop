@@ -7,8 +7,7 @@ import random
 import re
 import zipfile
 import six
-if six.PY2:  # noqa
-    import cStringIO
+
 from base64 import b32encode
 from binascii import unhexlify
 from bs4 import BeautifulSoup
@@ -178,10 +177,7 @@ def test_submit_file(source_app, journalist_app, test_journo):
         decrypted_data = journalist_app.crypto_util.gpg.decrypt(resp.data)
         assert decrypted_data.ok
 
-        if six.PY2:  # Python2
-            sio = cStringIO.StringIO(decrypted_data.data)
-        else:
-            sio = BytesIO(decrypted_data.data)
+        sio = six.BytesIO(decrypted_data.data)
         with gzip.GzipFile(mode='rb', fileobj=sio) as gzip_file:
             unzipped_decrypted_data = gzip_file.read()
             mtime = gzip_file.mtime
