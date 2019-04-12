@@ -315,12 +315,8 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' not in r()
         assert 'l10n: updated de_DE' not in r()
-        if six.PY2:
-            message = unicode(git('--no-pager', '-C', 'securedrop', 'show',
-                                  _cwd=d, _encoding='utf-8'))
-        else:
-            message = str(git('--no-pager', '-C', 'securedrop', 'show',
-                              _cwd=d, _encoding='utf-8'))
+        message = six.text_type(git('--no-pager', '-C', 'securedrop', 'show',
+                                    _cwd=d, _encoding='utf-8'))
         assert six.u("Loïc") in message
 
         #
@@ -352,11 +348,7 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' in r()
         assert 'l10n: updated de_DE' not in r()
-        if six.PY2:
-            message = unicode(git('--no-pager', '-C', 'securedrop', 'show',
-                                  _cwd=d))
-        else:
-            message = str(git('--no-pager', '-C', 'securedrop', 'show',
-                              _cwd=d))
+        message = six.text_type(git('--no-pager', '-C', 'securedrop', 'show',
+                                    _cwd=d))
         assert "Someone Else" in message
         assert six.u("Loïc") not in message
