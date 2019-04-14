@@ -139,8 +139,24 @@ Edit ``/etc/hosts`` on each host to include the hostname and IP for itself.
 Use ``sd-app`` and ``sd-mon``, omitting the ``-base`` suffix, since the cloned VMs
 will not have the suffix.
 
-Finally, on each host edit ``/etc/hostname`` to reflect the machine's name.
+Next, on each host edit ``/etc/hostname`` to reflect the machine's name.
 Again, omit the ``-base`` suffix.
+
+Finally, update the machine's Grub configuration to use a consistent Ethernet device
+name across kernel versions. Edit the file ``/etc/default/grub``, changing the line:
+
+.. code:: sh
+
+   GRUB_CMDLINE_LINUX=""
+
+to
+
+.. code:: sh
+
+   GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"
+
+Then, run ``sudo update-grub``.
+
 
 Halt each machine, then restart each from ``dom0``. The prompt in each console
 should reflect the correct name of the VM. Confirm you have network access by
@@ -286,13 +302,6 @@ message ``RUNNING HANDLER [common : Wait for server to come back.]`` you must
 start the VMs again manually from ``dom0`` with the command 
 ``qvm-start sd-app && qvm-start sd-mon``.
 
-.. note::
-
- When you run ``make staging`` for the first time, after the installation of the 
- grsec kernel the ``eth0`` interfaces on ``sd-app`` and ``sd-mon`` may be 
- renamed to ``ens5``. In this case, you will need to update ``/etc/networking/interfaces``
- accordingly, restart the VMs, and run ``make staging`` again.
-
 The ``make staging`` command invokes the ``qubes-staging`` Molecule scenario. 
 You can also run constituent Molecule actions directly, rather than using
 the Makefile target: 
@@ -313,4 +322,9 @@ the Makefile target:
 That's it. You should now have a running, configured SecureDrop staging instance
 running on your Qubes machine. For day-to-day operation, you should run
 ``sd-dev`` in order to make code changes, and use the Molecule commands above
-to provision staging VMs on-demand.
+to provision staging VMs on-demand. To remove the staging instance, use the Molecule command:
+
+.. code:: sh
+
+   molecule destroy -s qubes-staging
+

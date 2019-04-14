@@ -1,9 +1,8 @@
 ---
 # Support dynamic lookups for Qubes host IPs. The staging vars
 # in the Ansible config still assume hardcoded Vagrant-only IPs.
-primary_network_iface: eth0
-app_ip: "{{ hostvars['app-staging']['ansible_'+primary_network_iface].ipv4.address }}"
-monitor_ip: "{{ hostvars['mon-staging']['ansible_'+primary_network_iface].ipv4.address }}"
+app_ip: "{{ hostvars['app-staging']['ansible_default_ipv4'].address }}"
+monitor_ip: "{{ hostvars['mon-staging']['ansible_default_ipv4'].address }}"
 
 # Use hardcoded username from the manual VM provisioning step.
 ssh_users: sdadmin
