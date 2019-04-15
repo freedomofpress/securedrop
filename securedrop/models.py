@@ -574,6 +574,11 @@ class Journalist(db.Model):
             data = s.loads(token)
         except BadData:
             return None
+
+        revoked_token = RevokedToken.query.filter_by(token=token).one_or_none()
+        if revoked_token is not None:
+            return None
+
         return Journalist.query.get(data['id'])
 
     def to_json(self):
@@ -598,3 +603,16 @@ class JournalistLoginAttempt(db.Model):
 
     def __init__(self, journalist):
         self.journalist_id = journalist.id
+
+
+class RevokedToken(db.Model):
+
+    """
+    API tokens that have been revoked either through a logout or other revocation mechanism.
+    """
+
+    __tablename__ = 'revoked_tokens'
+
+    id = Column(Integer, primary_key=True)
+    journalist_id = Column(Integer, ForeignKey('journalists.id'))
+    token = db.Column(db.Text, nullable=False, unique=True)
