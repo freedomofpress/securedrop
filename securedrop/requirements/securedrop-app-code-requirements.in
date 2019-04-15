@@ -8,7 +8,7 @@ Flask-SQLAlchemy
 Flask-WTF
 Flask>0.12.2
 pretty-bad-protocol>=3.1.1
-Jinja2
+Jinja2>=2.10.1
 jsmin
 passlib
 psutil

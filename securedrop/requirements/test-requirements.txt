@@ -17,7 +17,7 @@ flask==1.0.2              # via flask-testing
 funcsigs==1.0.2           # via mock, pytest
 idna==2.8                 # via requests
 itsdangerous==0.24        # via flask
-jinja2==2.10              # via flask
+jinja2==2.10.1            # via flask
 markupsafe==1.0           # via jinja2
 mock==2.0.0
 pbr==3.1.1                # via mock
