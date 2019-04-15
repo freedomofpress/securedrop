@@ -1,29 +1,7 @@
 ---
-#
-# This can be removed when VM against which this is run are more
-# recent than trusty
-#
-- name: Add gettext xenial apt repository
-  apt_repository:
-    repo: deb http://archive.ubuntu.com/ubuntu/ xenial main
-    state: present
-    update_cache: yes
-  when: ansible_distribution_release != "xenial"
-  tags:
-    - apt
-
-- name: Install modern gettext
+- name: Install gettext
   apt:
     name: gettext
     state: latest
-  tags:
-    - apt
-
-- name: Remove gettext xenial apt repository
-  apt_repository:
-    repo: deb http://archive.ubuntu.com/ubuntu/ xenial main
-    state: absent
-    update_cache: yes
-  when: ansible_distribution_release != "xenial"
   tags:
     - apt
