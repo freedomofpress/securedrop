@@ -99,6 +99,21 @@ Edit ``/etc/sudoers`` using ``visudo`` to make the sudo group line look like
 
    %sudo    ALL=(ALL) NOPASSWD: ALL
 
+
+Finally, update the machine's Grub configuration to use a consistent Ethernet device
+name across kernel versions. Edit the file ``/etc/default/grub``, changing the line:
+
+.. code:: sh
+
+   GRUB_CMDLINE_LINUX=""
+
+to
+
+.. code:: sh
+
+   GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"
+
+
 When initial configuration is done, run ``qvm-shutdown sd-staging-base`` to shut it down.
 
 Clone VMs
@@ -141,22 +156,6 @@ will not have the suffix.
 
 Next, on each host edit ``/etc/hostname`` to reflect the machine's name.
 Again, omit the ``-base`` suffix.
-
-Finally, update the machine's Grub configuration to use a consistent Ethernet device
-name across kernel versions. Edit the file ``/etc/default/grub``, changing the line:
-
-.. code:: sh
-
-   GRUB_CMDLINE_LINUX=""
-
-to
-
-.. code:: sh
-
-   GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"
-
-Then, run ``sudo update-grub``.
-
 
 Halt each machine, then restart each from ``dom0``. The prompt in each console
 should reflect the correct name of the VM. Confirm you have network access by
@@ -240,7 +239,7 @@ Once finished, build the Debian packages for installation on the staging VMs.
 
 .. code::
 
-   make build-debs-xenial
+   make build-debs
 
 The ``.deb`` files will be available in ``build/``.
 
