@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import codecs
 import datetime
 import logging
 import os
@@ -15,6 +14,7 @@ import sys
 import time
 import traceback
 
+from six.moves import input
 from contextlib import contextmanager
 from flask import current_app
 from sqlalchemy import create_engine
@@ -31,6 +31,12 @@ from management.run import run
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
+
+
+def obtain_input(text):
+    """Wrapper for testability as suggested in
+    https://github.com/pytest-dev/pytest/issues/1598#issuecomment-224761877"""
+    return input(text)
 
 
 def reset(args):
@@ -110,7 +116,7 @@ def add_journalist(args):
 
 def _get_username():
     while True:
-        username = raw_input('Username: ')
+        username = obtain_input('Username: ')
         try:
             Journalist.check_username_acceptable(username)
         except InvalidUsernameException as e:
@@ -122,8 +128,8 @@ def _get_username():
 def _get_yubikey_usage():
     '''Function used to allow for test suite mocking'''
     while True:
-        answer = raw_input('Will this user be using a YubiKey [HOTP]? '
-                           '(y/N): ').lower().strip()
+        answer = obtain_input('Will this user be using a YubiKey [HOTP]? '
+                              '(y/N): ').lower().strip()
         if answer in ('y', 'yes'):
             return True
         elif answer in ('', 'n', 'no'):
@@ -154,7 +160,7 @@ def _add_user(is_admin=False):
         otp_secret = None
         if is_hotp:
             while True:
-                otp_secret = raw_input(
+                otp_secret = obtain_input(
                     "Please configure this user's YubiKey and enter the "
                     "secret: ")
                 if otp_secret:
@@ -192,7 +198,6 @@ def _add_user(is_admin=False):
                                                  issuer_name='SecureDrop')
                 qr = qrcode.QRCode()
                 qr.add_data(uri)
-                sys.stdout = codecs.getwriter("utf-8")(sys.stdout)
                 qr.print_ascii(tty=sys.stdout.isatty())
                 print('\nIf the barcode does not render correctly, try '
                       "changing your terminal's font (Monospace for Linux, "
@@ -205,12 +210,12 @@ def _add_user(is_admin=False):
 
 
 def _get_username_to_delete():
-    return raw_input('Username to delete: ')
+    return obtain_input('Username to delete: ')
 
 
 def _get_delete_confirmation(user):
-    confirmation = raw_input('Are you sure you want to delete user '
-                             '"{}" (y/n)?'.format(user))
+    confirmation = obtain_input('Are you sure you want to delete user '
+                                '"{}" (y/n)?'.format(user))
     if confirmation.lower() != 'y':
         print('Confirmation not received: user "{}" was NOT '
               'deleted'.format(user))

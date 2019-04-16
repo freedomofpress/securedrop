@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import binascii
 from datetime import datetime
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
                    render_template, Markup, sessions, request)
@@ -121,7 +122,7 @@ def validate_hotp_secret(user, otp_secret):
     """
     try:
         user.set_hotp_secret(otp_secret)
-    except TypeError as e:
+    except (binascii.Error, TypeError) as e:
         if "Non-hexadecimal digit found" in str(e):
             flash(gettext(
                 "Invalid secret format: "

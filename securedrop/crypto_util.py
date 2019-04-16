@@ -5,6 +5,7 @@ from distutils.version import StrictVersion
 import pretty_bad_protocol as gnupg
 import os
 import io
+import six
 import scrypt
 import subprocess
 from random import SystemRandom
@@ -162,7 +163,7 @@ class CryptoUtil:
             salt = self.scrypt_id_pepper
         return b32encode(scrypt.hash(clean(codename),
                          salt,
-                         **self.scrypt_params))
+                         **self.scrypt_params)).decode('utf-8')
 
     def genkeypair(self, name, secret):
         """Generate a GPG key through batch file key generation. A source's
@@ -259,7 +260,11 @@ class CryptoUtil:
         """
         hashed_codename = self.hash_codename(secret,
                                              salt=self.scrypt_gpg_pepper)
-        return self.gpg.decrypt(ciphertext, passphrase=hashed_codename).data
+        data = self.gpg.decrypt(ciphertext, passphrase=hashed_codename).data
+
+        if not six.PY2:  # Python3
+            return data.decode('utf-8')
+        return data
 
 
 def clean(s, also=''):

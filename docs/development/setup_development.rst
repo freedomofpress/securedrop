@@ -106,6 +106,16 @@ To get started, you can try the following:
    bin/dev-shell bin/run-test tests/functional # functional tests only
    bin/dev-shell bash                          # shell inside the container
 
+To specify the version of Python you want to use, set the ``PYTHON_VERSION``
+environmental variable, like so:
+
+.. code:: sh
+
+    PYTHON_VERSION=3 make test    # Run tests on Python 3
+    PYTHON_VERSION=2 make test    # Run tests on Python 2
+    PYTHON_VERSION=3 make dev     # Run dev container on Python 3
+    PYTHON_VERSION=2 make dev     # Run dev container on Python 2
+
 .. tip:: The interactive shell in the container does not run
          ``redis``, ``Xvfb`` etc.  However you can import shell helper
          functions with ``source bin/dev-deps`` and call ``run_xvfb``,

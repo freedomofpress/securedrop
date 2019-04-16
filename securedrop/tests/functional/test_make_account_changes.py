@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import journalist_navigation_steps
-import functional_test
+from . import journalist_navigation_steps
+from . import functional_test
 
 
 class TestMakeAccountChanges(

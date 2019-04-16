@@ -1,6 +1,6 @@
-import source_navigation_steps
-import journalist_navigation_steps
-import functional_test
+from . import source_navigation_steps
+from . import journalist_navigation_steps
+from . import functional_test
 
 
 class TestSubmitAndRetrieveFile(

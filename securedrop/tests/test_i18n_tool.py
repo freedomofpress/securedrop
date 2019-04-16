@@ -2,6 +2,7 @@
 
 import io
 import os
+import six
 from os.path import abspath, dirname, exists, getmtime, join, realpath
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import i18n_tool
@@ -65,7 +66,7 @@ class TestI18NTool(object):
             '--verbose',
             'translate-desktop',
             '--translations-dir', str(tmpdir),
-            '--sources', ",".join(in_files.values()),
+            '--sources', ",".join(list(in_files.values())),
             '--extract-update',
         ])
         assert not exists(i18n_file)
@@ -108,7 +109,7 @@ class TestI18NTool(object):
             '--verbose',
             'translate-desktop',
             '--translations-dir', str(tmpdir),
-            '--sources', ",".join(in_files.values() + ['BOOM']),
+            '--sources', ",".join(list(in_files.values()) + ['BOOM']),
             '--compile',
         ])
         assert old_messages_mtime == getmtime(messages_file)
@@ -137,10 +138,10 @@ class TestI18NTool(object):
         i18n_tool.I18NTool().main(args)
         messages_file = join(str(tmpdir), 'messages.pot')
         assert exists(messages_file)
-        with io.open(messages_file) as fobj:
+        with io.open(messages_file, 'rb') as fobj:
             pot = fobj.read()
-            assert 'code hello i18n' in pot
-            assert 'template hello i18n' in pot
+            assert b'code hello i18n' in pot
+            assert b'template hello i18n' in pot
 
         locale = 'en_US'
         locale_dir = join(str(tmpdir), locale)
@@ -151,8 +152,8 @@ class TestI18NTool(object):
         assert exists(mo_file)
         with io.open(mo_file, mode='rb') as fobj:
             mo = fobj.read()
-            assert 'code hello i18n' in mo
-            assert 'template hello i18n' in mo
+            assert b'code hello i18n' in mo
+            assert b'template hello i18n' in mo
 
     def test_translate_messages_compile_arg(self, tmpdir):
         args = [
@@ -210,15 +211,15 @@ class TestI18NTool(object):
         assert old_po_mtime == getmtime(po_file)
         with io.open(mo_file, mode='rb') as fobj:
             mo = fobj.read()
-            assert 'code hello i18n' in mo
-            assert 'template hello i18n' not in mo
+            assert b'code hello i18n' in mo
+            assert b'template hello i18n' not in mo
 
     def test_require_git_email_name(self, tmpdir):
         k = {'_cwd': str(tmpdir)}
         git('init', **k)
         with pytest.raises(Exception) as excinfo:
             i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
-        assert 'please set name' in excinfo.value.message
+        assert 'please set name' in str(excinfo.value)
 
         git.config('user.email', "you@example.com", **k)
         git.config('user.name', "Your Name", **k)
@@ -253,7 +254,7 @@ class TestI18NTool(object):
             k = {'_cwd': join(d, repo)}
             git.init(**k)
             git.config('user.email', 'you@example.com', **k)
-            git.config('user.name',  u'Loïc Nordhøy', **k)
+            git.config('user.name',  six.u('Loïc Nordhøy'), **k)
             touch('README.md', **k)
             git.add('README.md', **k)
             git.commit('-m', 'README', 'README.md', **k)
@@ -314,9 +315,9 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' not in r()
         assert 'l10n: updated de_DE' not in r()
-        message = unicode(git('--no-pager', '-C', 'securedrop', 'show',
-                              _cwd=d, _encoding='utf-8'))
-        assert u"Loïc" in message
+        message = six.text_type(git('--no-pager', '-C', 'securedrop', 'show',
+                                    _cwd=d, _encoding='utf-8'))
+        assert six.u("Loïc") in message
 
         #
         # an update is done to nl in weblate
@@ -347,7 +348,7 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated nl' in r()
         assert 'l10n: updated de_DE' not in r()
-        message = unicode(git('--no-pager', '-C', 'securedrop', 'show',
-                              _cwd=d))
+        message = six.text_type(git('--no-pager', '-C', 'securedrop', 'show',
+                                    _cwd=d))
         assert "Someone Else" in message
-        assert u"Loïc" not in message
+        assert six.u("Loïc") not in message

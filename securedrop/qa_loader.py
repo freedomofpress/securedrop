@@ -86,8 +86,8 @@ class QaLoader(object):
         if random_bool():
             # to add legacy passwords back in
             journalist.passphrase_hash = None
-            journalist.pw_salt = random_chars(32, nullable=False)
-            journalist.pw_hash = random_chars(64, nullable=False)
+            journalist.pw_salt = random_chars(32, nullable=False).encode('utf-8')
+            journalist.pw_hash = random_chars(64, nullable=False).encode('utf-8')
 
         journalist.is_admin = bool_or_none()
 

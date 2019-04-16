@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import io
 import os
+import six
 import pytest
 
 from pretty_bad_protocol._util import _is_stream
@@ -21,21 +22,21 @@ def test_read_before_writing():
 def test_write_then_read_once():
     f = SecureTemporaryFile('/tmp')
     f.write(MESSAGE)
-    assert f.read() == MESSAGE
+    assert f.read().decode('utf-8') == MESSAGE
 
 
 def test_write_twice_then_read_once():
     f = SecureTemporaryFile('/tmp')
     f.write(MESSAGE)
     f.write(MESSAGE)
-    assert f.read() == MESSAGE * 2
+    assert f.read().decode('utf-8') == MESSAGE * 2
 
 
 def test_write_then_read_twice():
     f = SecureTemporaryFile('/tmp')
     f.write(MESSAGE)
-    assert f.read() == MESSAGE
-    assert f.read() == ''
+    assert f.read().decode('utf-8') == MESSAGE
+    assert f.read() == b''
 
 
 def test_write_then_read_then_write():
@@ -50,7 +51,7 @@ def test_write_then_read_then_write():
 
 def test_read_write_unicode():
     f = SecureTemporaryFile('/tmp')
-    unicode_msg = u'鬼神 Kill Em All 1989'
+    unicode_msg = six.u('鬼神 Kill Em All 1989')
     f.write(unicode_msg)
     assert f.read().decode('utf-8') == unicode_msg
 
@@ -90,7 +91,7 @@ def test_buffered_read():
     f = SecureTemporaryFile('/tmp')
     msg = MESSAGE * 1000
     f.write(msg)
-    out = ''
+    out = b''
     while True:
         chars = f.read(1024)
         if chars:
@@ -98,7 +99,7 @@ def test_buffered_read():
         else:
             break
 
-    assert out == msg
+    assert out.decode('utf-8') == msg
 
 
 def test_tmp_file_id_omits_invalid_chars():

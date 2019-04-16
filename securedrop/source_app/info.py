@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from cStringIO import StringIO
+from io import StringIO
 from flask import Blueprint, render_template, send_file, current_app
 
 

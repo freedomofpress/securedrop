@@ -9,12 +9,7 @@ import qrcode
 # Using svg because it doesn't require additional dependencies
 import qrcode.image.svg
 import uuid
-
-# Find the best implementation available on this platform
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO  # type: ignore
+from io import BytesIO
 
 from flask import current_app, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer, BadData
@@ -470,9 +465,9 @@ class Journalist(db.Model):
         qr.add_data(uri)
         img = qr.make_image()
 
-        svg_out = StringIO()
+        svg_out = BytesIO()
         img.save(svg_out)
-        return Markup(svg_out.getvalue())
+        return Markup(svg_out.getvalue().decode('utf-8'))
 
     @property
     def formatted_otp_secret(self):

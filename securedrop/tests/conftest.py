@@ -11,7 +11,11 @@ import shutil
 import signal
 import subprocess
 
-from ConfigParser import SafeConfigParser
+try:
+    import configparser
+except ImportError:
+    from six.moves import configparser  # renamed in Python 3
+
 from flask import url_for
 from pyotp import TOTP
 
@@ -24,7 +28,7 @@ from db import db
 from journalist_app import create_app as create_journalist_app
 import models
 from source_app import create_app as create_source_app
-import utils
+from . import utils
 
 # The PID file for the redis worker is hard-coded below.
 # Ideally this constant would be provided by a test harness.
@@ -117,7 +121,7 @@ def config(tmpdir):
 def alembic_config(config):
     base_dir = path.join(path.dirname(__file__), '..')
     migrations_dir = path.join(base_dir, 'alembic')
-    ini = SafeConfigParser()
+    ini = configparser.SafeConfigParser()
     ini.read(path.join(base_dir, 'alembic.ini'))
 
     ini.set('alembic', 'script_location', path.join(migrations_dir))
@@ -224,8 +228,7 @@ def journalist_api_token(journalist_app, test_journo):
                                  'passphrase': test_journo['password'],
                                  'one_time_code': valid_token}),
                             headers=utils.api_helper.get_api_headers())
-        observed_response = json.loads(response.data)
-        return observed_response['token']
+        return response.json['token']
 
 
 def _start_test_rqworker(config):
@@ -252,7 +255,7 @@ def _get_pid_from_file(pid_file_name):
     try:
         return int(io.open(pid_file_name).read())
     except IOError:
-        return None
+        return -1
 
 
 def _cleanup_test_securedrop_dataroot(config):

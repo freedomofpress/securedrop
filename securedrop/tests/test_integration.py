@@ -6,18 +6,19 @@ import os
 import random
 import re
 import zipfile
+import six
 
 from base64 import b32encode
 from binascii import unhexlify
 from bs4 import BeautifulSoup
-from cStringIO import StringIO
+from io import BytesIO
 from flask import session, g, escape, current_app
 from pyotp import TOTP, HOTP
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import utils
+from . import utils
 
-from utils.instrument import InstrumentedApp
+from .utils.instrument import InstrumentedApp
 
 # Seed the RNG for deterministic testing
 random.seed('ಠ_ಠ')
@@ -45,7 +46,7 @@ def test_submit_message(source_app, journalist_app, test_journo):
         # redirected to submission form
         resp = app.post('/submit', data=dict(
             msg=test_msg,
-            fh=(StringIO(''), ''),
+            fh=(BytesIO(b''), ''),
         ), follow_redirects=True)
         assert resp.status_code == 200
         app.get('/logout')
@@ -79,7 +80,7 @@ def test_submit_message(source_app, journalist_app, test_journo):
         assert resp.status_code == 200
         decrypted_data = journalist_app.crypto_util.gpg.decrypt(resp.data)
         assert decrypted_data.ok
-        assert decrypted_data.data == test_msg
+        assert decrypted_data.data.decode('utf-8') == test_msg
 
         # delete submission
         resp = app.get(col_url)
@@ -132,7 +133,7 @@ def test_submit_message(source_app, journalist_app, test_journo):
 def test_submit_file(source_app, journalist_app, test_journo):
     """When a source creates an account, test that a new entry appears
     in the journalist interface"""
-    test_file_contents = "This is a test file."
+    test_file_contents = six.b("This is a test file.")
     test_filename = "test.txt"
 
     with source_app.test_client() as app:
@@ -142,7 +143,7 @@ def test_submit_file(source_app, journalist_app, test_journo):
         # redirected to submission form
         resp = app.post('/submit', data=dict(
             msg="",
-            fh=(StringIO(test_file_contents), test_filename),
+            fh=(six.BytesIO(test_file_contents), test_filename),
         ), follow_redirects=True)
         assert resp.status_code == 200
         app.get('/logout')
@@ -176,7 +177,7 @@ def test_submit_file(source_app, journalist_app, test_journo):
         decrypted_data = journalist_app.crypto_util.gpg.decrypt(resp.data)
         assert decrypted_data.ok
 
-        sio = StringIO(decrypted_data.data)
+        sio = six.BytesIO(decrypted_data.data)
         with gzip.GzipFile(mode='rb', fileobj=sio) as gzip_file:
             unzipped_decrypted_data = gzip_file.read()
             mtime = gzip_file.mtime
@@ -244,7 +245,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
         # redirected to submission form
         resp = app.post('/submit', data=dict(
             msg=test_msg,
-            fh=(StringIO(''), ''),
+            fh=(six.BytesIO(six.b('')), ''),
         ), follow_redirects=True)
         assert resp.status_code == 200
         assert not g.source.flagged
@@ -322,7 +323,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
     ), follow_redirects=True)
     assert resp.status_code == 200
 
-    zf = zipfile.ZipFile(StringIO(resp.data), 'r')
+    zf = zipfile.ZipFile(six.BytesIO(resp.data), 'r')
     data = zf.read(zf.namelist()[0])
     _can_decrypt_with_key(journalist_app, data)
     _can_decrypt_with_key(
@@ -448,7 +449,7 @@ def test_unicode_reply_with_ansi_env(journalist_app,
     journalist_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
     source_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
     _helper_test_reply(journalist_app, source_app, config, test_journo,
-                       u"ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
+                       six.u("ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ"), True)
 
 
 def test_delete_collection(mocker, source_app, journalist_app, test_journo):
@@ -461,7 +462,7 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
         app.post('/create')
         resp = app.post('/submit', data=dict(
             msg="This is a test.",
-            fh=(StringIO(''), ''),
+            fh=(BytesIO(b''), ''),
         ), follow_redirects=True)
         assert resp.status_code == 200
 
@@ -510,7 +511,7 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
             app.post('/create')
             app.post('/submit', data=dict(
                 msg="This is a test " + str(i) + ".",
-                fh=(StringIO(''), ''),
+                fh=(BytesIO(b''), ''),
             ), follow_redirects=True)
             app.get('/logout')
 
@@ -543,15 +544,15 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
 def _helper_filenames_submit(app):
     app.post('/submit', data=dict(
         msg="This is a test.",
-        fh=(StringIO(''), ''),
+        fh=(BytesIO(b''), ''),
     ), follow_redirects=True)
     app.post('/submit', data=dict(
         msg="This is a test.",
-        fh=(StringIO('This is a test'), 'test.txt'),
+        fh=(BytesIO(b'This is a test'), 'test.txt'),
     ), follow_redirects=True)
     app.post('/submit', data=dict(
         msg="",
-        fh=(StringIO('This is a test'), 'test.txt'),
+        fh=(BytesIO(b'This is a test'), 'test.txt'),
     ), follow_redirects=True)
 
 

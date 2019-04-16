@@ -46,7 +46,7 @@ class NewUserForm(FlaskForm):
 
 class ReplyForm(FlaskForm):
     message = TextAreaField(
-        u'Message',
+        'Message',
         id="content-area",
         validators=[
             InputRequired(message=gettext(

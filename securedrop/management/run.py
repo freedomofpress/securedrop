@@ -99,7 +99,7 @@ class DevServerProcessMonitor(object):  # pragma: no cover
                     self.last_proc = proc
 
                 line = proc.stdout.readline()
-                sys.stdout.write(line)
+                sys.stdout.write(line.decode('utf-8'))
                 sys.stdout.flush()
 
             if any(proc.poll() is not None for proc in self.procs):
@@ -143,8 +143,7 @@ def run(args):  # pragma: no cover
     * https://stackoverflow.com/q/22565606/837471
 
     """
-    print \
-"""
+    print("""
  ____                                        ____                           
 /\\  _`\\                                     /\\  _`\\                         
 \\ \\,\\L\\_\\     __    ___   __  __  _ __    __\\ \\ \\/\\ \\  _ __   ___   _____   
@@ -154,7 +153,7 @@ def run(args):  # pragma: no cover
     \\/_____/\\/____/\\/____/ \\/___/  \\/_/ \\/____/ \\/___/  \\/_/ \\/___/  \\ \\ \\/ 
                                                                       \\ \\_\\ 
                                                                        \\/_/ 
-"""  # noqa
+""")  # noqa
 
     procs = [
         lambda: DevServerProcess('Source Interface',

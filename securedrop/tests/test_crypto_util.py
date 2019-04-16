@@ -43,8 +43,8 @@ def test_encrypt_success(source_app, config, test_source):
             source_app.storage.path(test_source['filesystem_id'],
                                     'somefile.gpg'))
 
-        assert isinstance(ciphertext, str)
-        assert ciphertext != message
+        assert isinstance(ciphertext, bytes)
+        assert ciphertext.decode('utf-8') != message
         assert len(ciphertext) > 0
 
 
@@ -145,7 +145,7 @@ def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
         # ensure we can decrypt with the `config.JOURNALIST_KEY`.
         source_app.crypto_util.delete_reply_keypair(
             test_source['filesystem_id'])
-        plaintext = source_app.crypto_util.gpg.decrypt(ciphertext).data
+        plaintext = source_app.crypto_util.gpg.decrypt(ciphertext).data.decode('utf-8')
 
         assert plaintext == message
 
