@@ -728,13 +728,10 @@ class JournalistNavigationStepsMixin:
         self.wait_for(lambda: self.driver.find_element_by_id("username"))
 
     def _admin_visits_edit_user(self):
-        new_user_edit_links = [
-            el
-            for el in self.driver.find_elements_by_tag_name("a")
-            if (el.get_attribute("data-username") == self.new_user["username"])
-        ]
+        selector = 'a[data-username="{}"]'.format(self.new_user["username"])
+        new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
         assert len(new_user_edit_links) == 1
-        self.safe_click_by_css_selector('a[data-username="{}"]'.format(self.new_user["username"]))
+        self.safe_click_by_css_selector(selector)
         self.wait_for(lambda: self.driver.find_element_by_id("new-password"))
 
     def _admin_visits_reset_2fa_hotp(self):
