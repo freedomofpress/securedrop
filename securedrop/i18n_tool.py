@@ -285,8 +285,8 @@ class I18NTool(object):
     def upstream_commit(self, args, code):
         self.require_git_email_name(args.root)
         authors = set()
-        diffs = str(git('--no-pager', '-C', args.root,
-                    'diff', '--name-only', '--cached').stdout)
+        diffs = six.text_type(git('--no-pager', '-C', args.root,
+                                  'diff', '--name-only', '--cached').stdout)
         for path in diffs.strip().split('\n'):
             previous_message = str(git(
                 '--no-pager', '-C', args.root, 'log', '-n', '1', path,

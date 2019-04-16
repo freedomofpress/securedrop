@@ -1,5 +1,5 @@
-# ubuntu 16.04 image - 2019-01-22
-FROM ubuntu@sha256:e4a134999bea4abb4a27bc437e6118fdddfb172e1b9d683129b74d254af51675
+# ubuntu 16.04 image from 2019-03-12
+FROM ubuntu@sha256:58d0da8bc2f434983c6ca4713b08be00ff5586eb5cdff47bcde4b2e88fd40f88
 ARG USER_NAME
 ENV USER_NAME ${USER_NAME:-root}
 ARG USER_ID

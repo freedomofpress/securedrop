@@ -48,9 +48,8 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         """
         self.last_action = 'init'
         self.create_key()
-        self.temp_file_id = ""
-        data = base64.urlsafe_b64encode(os.urandom(32))
 
+        data = base64.urlsafe_b64encode(os.urandom(32))
         if not six.PY2:  # For Python3
             self.tmp_file_id = data.decode('utf-8').strip('=')
         else:
@@ -69,8 +68,8 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         grsecurity-patched kernel it uses (for further details consult
         https://github.com/freedomofpress/securedrop/pull/477#issuecomment-168445450).
         """
-        self.key = os.urandom(int(self.AES_key_size / 8))
-        self.iv = os.urandom(int(self.AES_block_size / 8))
+        self.key = os.urandom(self.AES_key_size // 8)
+        self.iv = os.urandom(self.AES_block_size // 8)
         self.initialize_cipher()
 
     def initialize_cipher(self):

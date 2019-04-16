@@ -232,7 +232,7 @@ def make_blueprint(config):
 
             user = get_user_object(request)
 
-            data = json.loads(request.data.decode('utf-8'))
+            data = request.json
             if not data['reply']:
                 abort(400, 'reply should not be empty')
 

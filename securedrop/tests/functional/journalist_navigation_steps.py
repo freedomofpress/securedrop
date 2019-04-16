@@ -232,7 +232,7 @@ class JournalistNavigationStepsMixin():
         if hotp:
             hotp_checkbox = self.driver.find_element_by_css_selector(
                 'input[name="is_hotp"]')
-            print((str(hotp_checkbox.__dict__)))
+            print(str(hotp_checkbox.__dict__))
             hotp_checkbox.click()
             hotp_secret = self.driver.find_element_by_css_selector(
                 'input[name="otp_secret"]')

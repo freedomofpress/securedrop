@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import gzip
-import json
 import platform
 import re
 import subprocess
@@ -532,10 +531,8 @@ def test_metadata_route(source_app):
             resp = app.get(url_for('api.metadata'))
             assert resp.status_code == 200
             assert resp.headers.get('Content-Type') == 'application/json'
-            assert json.loads(resp.data.decode('utf-8')).get('sd_version') \
-                == version.__version__
-            assert json.loads(resp.data.decode('utf-8')).get('server_os') \
-                == '16.04'
+            assert resp.json.get('sd_version') == version.__version__
+            assert resp.json.get('server_os') == '16.04'
 
 
 def test_login_with_overly_long_codename(source_app):
