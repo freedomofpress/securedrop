@@ -18,6 +18,6 @@ redis
 rq
 scrypt
 sh
-SQLAlchemy
+SQLAlchemy>=1.3.0
 typing
 Werkzeug

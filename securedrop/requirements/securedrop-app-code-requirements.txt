@@ -39,7 +39,7 @@ rq==0.10.0
 scrypt==0.8.0
 sh==1.12.14
 six==1.11.0               # via argon2-cffi, cryptography, python-dateutil, qrcode
-sqlalchemy==1.2.0
+sqlalchemy==1.3.3
 typing==3.6.4
 webassets==0.12.1         # via flask-assets
 werkzeug==0.14.1
