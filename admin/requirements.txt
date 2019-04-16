@@ -4,8 +4,8 @@
 #
 #    pip-compile --generate-hashes --output-file requirements.txt requirements.in requirements-ansible.in
 #
-ansible==2.6.8 \
-    --hash=sha256:012649806427e630ef8e8b71d42483af882bc39ade3b19e1f369b14c0afd5b87
+ansible==2.6.14 \
+    --hash=sha256:412f130f4c5d1953ccd95f01b5a4675cbff4ba225762bafb74a2f3bb6c807827
 asn1crypto==0.24.0 \
     --hash=sha256:2f1adbb7546ed199e3c90ef23ec95c5cf3585bac7d11fb7eb562a3fe89c64e87 \
     --hash=sha256:9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49 \
@@ -103,10 +103,9 @@ idna==2.6 \
 ipaddress==1.0.19 \
     --hash=sha256:200d8686011d470b5e4de207d803445deee427455cd0cb7c982b68cf82524f81 \
     # via cryptography
-jinja2==2.10 \
-    --hash=sha256:74c935a1b8bb9a3947c50a54766a969d4846290e1e788ea44c1392163723c3bd \
-    --hash=sha256:f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4 \
-    # via ansible
+jinja2==2.10.1 \
+    --hash=sha256:065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013 \
+    --hash=sha256:14dd6caf1527abb21f08f86c784eac40853ba93edb79552aa1e4b8aef1b61c7b
 markupsafe==1.0 \
     --hash=sha256:a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665 \
     # via jinja2
