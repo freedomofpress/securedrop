@@ -30,15 +30,15 @@ common-steps:
       command: |
         set +o pipefail
         docker images
-        fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
-        cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" ./bin/dev-shell true
+        fromtag=$(docker images |grep securedrop-test-xenial-py2 |head -n1 |awk '{print $2}')
+        cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py2:${fromtag:-latest}" ./bin/dev-shell true
 
   - &saveimagelayers
     run:
       name: Save Docker image layer cache
       command: |
         docker images
-        docker save -o /caches/layers.tar securedrop-test-xenial:latest
+        docker save -o /caches/layers.tar securedrop-test-xenial-py2:latest
 
   - &savecache
     save_cache:
@@ -73,11 +73,7 @@ jobs:
           paths:
             - /caches/layers.tar.gz
 
-      - run:
-          name: Load image layer cache
-          command: |
-            set +o pipefail
-            docker load -i /caches/layers.tar |true
+      - *loadimagelayers
 
       - run:
           name: Build Docker image
@@ -141,9 +137,9 @@ jobs:
           name: Run tests
           command: |
             export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
-            docker rm -f securedrop-test-xenial || true
-            fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
-            cd securedrop && DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" make test
+            docker rm -f securedrop-test-xenial-py2 || true
+            fromtag=$(docker images |grep securedrop-test-xenial-py2 |head -n1 |awk '{print $2}')
+            cd securedrop && DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py2:${fromtag:-latest}" make test
 
       - store_test_results:
           path: ~/test-results
@@ -169,11 +165,7 @@ jobs:
           paths:
             - /caches/layers.tar.gz
 
-      - run:
-          name: Load image layer cache
-          command: |
-            set +o pipefail
-            docker load -i /caches/layers.tar |true
+      - *loadimagelayers
 
       - run:
           name: Build Docker images
@@ -237,9 +229,9 @@ jobs:
           name: Run tests
           command: |
             export TESTFILES=$(cd securedrop; circleci tests glob 'tests/pageslayout/test*py' |circleci tests split --split-by=timings |xargs echo)
-            docker rm -f securedrop-test-xenial || true
-            fromtag=$(docker images |grep securedrop-test-xenial |head -n1 |awk '{print $2}')
-            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial:${fromtag:-latest}" make translation-test
+            docker rm -f securedrop-test-xenial-py2 || true
+            fromtag=$(docker images |grep securedrop-test-xenial-py2 |head -n1 |awk '{print $2}')
+            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py2:${fromtag:-latest}" make translation-test
 
       - store_test_results:
           path: ~/test-results
