@@ -19,12 +19,6 @@
 import os
 import re
 
-from flask import request, session, render_template_string, render_template
-from flask_babel import gettext
-from werkzeug.datastructures import Headers
-
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import SDConfig
 from db import db
 import i18n
 import i18n_tool

@@ -80,8 +80,7 @@ class JournalistNavigationStepsMixin:
 
     def _try_login_user(self, username, password, token):
         self._input_text_in_login_form(username, password, token)
-        submit_button = self.driver.find_element_by_css_selector('button[type="submit"]')
-        submit_button.send_keys(u"\ue007")
+        self.safe_click_by_css_selector('button[type="submit"]')
 
     def _login_user(self, username, password, otp, maxtries=3):
         token = str(otp.now())
@@ -90,7 +89,7 @@ class JournalistNavigationStepsMixin:
             self._try_login_user(username, password, token)
             # Successful login should redirect to the index
             self.wait_for(
-                lambda: self.driver.find_element_by_id("logout"), timeout=self.timeout + 10
+                lambda: self.driver.find_element_by_id("logout"), timeout=self.timeout * 2
             )
             if self.driver.current_url != self.journalist_location + "/":
                 new_token = str(otp.now())
@@ -117,7 +116,6 @@ class JournalistNavigationStepsMixin:
         self.user = self.admin_user["name"]
         self.user_pw = self.admin_user["password"]
         self._login_user(self.user, self.user_pw, self.admin_user["totp"])
-
         assert self._is_on_journalist_homepage()
 
     def _journalist_visits_col(self):
@@ -730,7 +728,12 @@ class JournalistNavigationStepsMixin:
         new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
         assert len(new_user_edit_links) == 1
         self.safe_click_by_css_selector(selector)
-        self.wait_for(lambda: self.driver.find_element_by_id("new-password"))
+        try:
+            self.wait_for(lambda: self.driver.find_element_by_id("new-password"))
+        except NoSuchElementException:
+            # try once more
+            self.safe_click_by_css_selector(selector)
+            self.wait_for(lambda: self.driver.find_element_by_id("new-password"))
 
     def _admin_visits_reset_2fa_hotp(self):
         for i in range(3):
@@ -821,7 +824,7 @@ class JournalistNavigationStepsMixin:
         hotp_checkbox.click()
 
     def _journalist_uses_js_filter_by_sources(self):
-        self.wait_for(lambda: self.driver.find_element_by_id("filter"), timeout=self.timeout * 6)
+        self.wait_for(lambda: self.driver.find_element_by_id("filter"), timeout=self.timeout * 30)
 
         filter_box = self.driver.find_element_by_id("filter")
         filter_box.send_keys("thiswordisnotinthewordlist")

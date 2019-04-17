@@ -3,9 +3,6 @@ import os
 from datetime import datetime
 from datetime import timedelta
 
-from flask import session
-
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from db import db
 import i18n
 import i18n_tool

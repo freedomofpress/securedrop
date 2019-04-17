@@ -15,9 +15,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from . import source_navigation_steps
-from . import journalist_navigation_steps
+import logging
+
+from selenium.common.exceptions import NoSuchElementException
+
 from . import functional_test
+from . import journalist_navigation_steps
+from . import source_navigation_steps
 
 
 class TestJournalist(
@@ -25,7 +29,6 @@ class TestJournalist(
     source_navigation_steps.SourceNavigationStepsMixin,
     journalist_navigation_steps.JournalistNavigationStepsMixin,
 ):
-
     def test_journalist_verifies_deletion_of_one_submission_modal(self):
         # This deletion button is displayed on the individual source page
         self._source_visits_source_homepage()
@@ -64,8 +67,21 @@ class TestJournalist(
         self._source_continues_to_submit_page()
         self._source_submits_a_file()
         self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_uses_js_filter_by_sources()
+
+        tries = 10
+        for i in range(tries):
+            try:
+                self._journalist_logs_in()
+                self._journalist_uses_js_filter_by_sources()
+                break
+            except NoSuchElementException:
+                if i < tries:
+                    logging.error(
+                        "Journalist home page JS stymied Selenium again. Retrying login."
+                    )
+                else:
+                    raise
+
         self._journalist_source_selection_honors_filter()
         self._journalist_selects_all_sources_then_selects_none()
         self._journalist_selects_the_first_source()
