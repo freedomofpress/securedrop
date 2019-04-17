@@ -319,7 +319,7 @@ class JournalistNavigationStepsMixin:
         password = self.driver.find_element_by_css_selector("#password").text.strip()
 
         if not new_username:
-            new_username = journalist_usernames.next()
+            new_username = next(journalist_usernames)
         self.new_user = dict(username=new_username, password=password)
         self._add_user(self.new_user["username"], is_admin=is_admin)
 
@@ -563,12 +563,10 @@ class JournalistNavigationStepsMixin:
 
         self.wait_for(lambda: self.driver.find_element_by_css_selector("button#add-user"))
 
-        new_user_edit_links = filter(
-            lambda el: (el.get_attribute("data-username") == self.new_user["username"]),
-            self.driver.find_elements_by_tag_name("a"),
-        )
+        selector = 'a[data-username="{}"]'.format(self.new_user["username"])
+        new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
         assert len(new_user_edit_links) == 1
-        new_user_edit_links[0].click()
+        self.safe_click_by_css_selector(selector)
 
         self.wait_for(can_edit_user)
 
@@ -823,7 +821,7 @@ class JournalistNavigationStepsMixin:
         hotp_checkbox.click()
 
     def _journalist_uses_js_filter_by_sources(self):
-        self.wait_for(lambda: self.driver.find_element_by_id("filter"), timeout=self.timeout * 3)
+        self.wait_for(lambda: self.driver.find_element_by_id("filter"), timeout=self.timeout * 6)
 
         filter_box = self.driver.find_element_by_id("filter")
         filter_box.send_keys("thiswordisnotinthewordlist")

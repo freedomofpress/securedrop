@@ -14,7 +14,7 @@ import source_app
 import template_filters
 from flask import session
 from sh import pybabel
-from utils.env import TESTS_DIR
+from .utils.env import TESTS_DIR
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 

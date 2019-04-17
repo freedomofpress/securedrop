@@ -153,14 +153,10 @@ class FunctionalTest(object):
         self.mock_get_entropy_estimate = self.patcher2.start()
         self.mock_get_entropy_estimate.return_value = 8192
 
-        logging.info("mocks set up")
-
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
         env.create_directories()
         db.create_all()
-
-        logging.info("db created")
 
         # Add our test user
         try:
@@ -181,8 +177,6 @@ class FunctionalTest(object):
         }
 
         self.admin_user["totp"] = pyotp.TOTP(self.admin_user["secret"])
-
-        logging.info("users created")
 
         source_port = self._unused_port()
         journalist_port = self._unused_port()
@@ -213,8 +207,6 @@ class FunctionalTest(object):
         self.source_process.start()
         self.journalist_process.start()
 
-        logging.info("servers created")
-
         for tick in range(30):
             try:
                 requests.get(self.source_location, timeout=1)
@@ -224,16 +216,12 @@ class FunctionalTest(object):
             else:
                 break
 
-        logging.info("servers responding")
-
         self._create_torbrowser_driver()
         self._create_firefox_driver()
 
         if self.use_firefox:
-            logging.debug("Using Firefox")
             self.switch_to_firefox_driver()
         else:
-            logging.debug("Using Tor Browser")
             self.switch_to_torbrowser_driver()
 
         # Polls the DOM to wait for elements. To read more about why
@@ -250,8 +238,6 @@ class FunctionalTest(object):
         # for quickly debuging.
         #
         self.driver.implicitly_wait(self.timeout)
-
-        logging.info("setup complete")
 
     def wait_for_source_key(self, source_name):
         filesystem_id = self.source_app.crypto_util.hash_codename(source_name)
