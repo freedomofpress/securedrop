@@ -103,8 +103,8 @@ def create_source_and_submissions(num_submissions=2, num_replies=2):
     db.session.commit()
 
     print("Test source (codename: '{}', journalist designation '{}') "
-          "added with {} submissions and {} replies").format(
-              codename, journalist_designation, num_submissions, num_replies)
+          "added with {} submissions and {} replies".format(
+              codename, journalist_designation, num_submissions, num_replies))
 
 
 if __name__ == "__main__":  # pragma: no cover
