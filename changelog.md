@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.12.2~rc1
+
+### Web Application
+
+* Remove NoScript upload instructions on Source Interface (#4160)
+* Disable Source Interface on instances running Trusty after April 30th (#4325)
+* SecureDrop application dependencies have been updated (#4346)
+
+### Operations
+
+* SecureDrop grsec kernels have been updated to 4.4.177 and provide support for Intel e1000e series NICs (#4308)
+* OSSEC test notifications will now generate ossec alerts (#4340)
+
+### Tails Environment
+
+* Backup script should now more reliably download large backups from the app server (#4326)
+* SecureDrop GUI updater should now be limited to a single running instance (#4309)
+
+### Documentation
+
+* Instruct admin to look up latest Tails version for Xenial upgrade (#4325)
+
+
 ## 0.12.1
 
 ### Web Application
