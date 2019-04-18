@@ -22,7 +22,10 @@ class RqWorkerQueue(object):
         self.__app = app
         self.__app.config.setdefault('RQ_WORKER_NAME', 'default')
 
-        if not hasattr(self.__app, 'extensions'):
+        try:
+            # check for presence of existing extension dict
+            self.__app.extensions
+        except AttributeError:
             self.__app.extensions = {}
 
         queue_name = self.__app.config['RQ_WORKER_NAME']
