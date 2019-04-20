@@ -250,19 +250,11 @@ Rebooting the Servers
 Investigating Logs
 ^^^^^^^^^^^^^^^^^^^
 
-Refer to the :doc:`Useful Logs <logging>` documentation to see the locations of
-files that contain relevant information while debugging issues on your SecureDrop
-servers.
+Consult our :doc:`Investigating Logs <logging>` topic guide for locations of the
+most relevant log files you may want to examine as part of troubleshooting, and
+for how to enable error logging for the *Source Interface*.
 
-.. note:: You can also use the ``securedrop-admin`` tool to extract logs to
-  send to Freedom of the Press Foundation for analysis:
-
-    .. code:: sh
-
-      cd ~/Persistent/securedrop
-      ./securedrop-admin logs
-
-  This command will produce encrypted tarballs containing logs from each server.
+.. include:: includes/get-logs.txt
 
 Immediately Apply a SecureDrop Update
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
