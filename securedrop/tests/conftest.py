@@ -234,9 +234,11 @@ def journalist_api_token(journalist_app, test_journo):
 def _start_test_rqworker(config):
     if not psutil.pid_exists(_get_pid_from_file(TEST_WORKER_PIDFILE)):
         tmp_logfile = io.open('/tmp/test_rqworker.log', 'w')
-        subprocess.Popen(['rqworker', 'test',
+        subprocess.Popen(['rqworker', config.RQ_WORKER_NAME,
                           '-P', config.SECUREDROP_ROOT,
-                          '--pid', TEST_WORKER_PIDFILE],
+                          '--pid', TEST_WORKER_PIDFILE,
+                          '--logging_level', 'debug',
+                          '-v'],
                          stdout=tmp_logfile,
                          stderr=subprocess.STDOUT)
 

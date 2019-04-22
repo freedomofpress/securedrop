@@ -177,7 +177,7 @@ def make_blueprint(config):
                methods=['GET'])
     @token_required
     def download_submission(source_uuid, submission_uuid):
-        source = get_or_404(Source, source_uuid, column=Source.uuid)
+        get_or_404(Source, source_uuid, column=Source.uuid)
         submission = get_or_404(Submission, submission_uuid,
                                 column=Submission.uuid)
 
@@ -185,16 +185,16 @@ def make_blueprint(config):
         submission.downloaded = True
         db.session.commit()
 
-        return utils.serve_file_with_etag(source, submission.filename)
+        return utils.serve_file_with_etag(submission)
 
     @api.route('/sources/<source_uuid>/replies/<reply_uuid>/download',
                methods=['GET'])
     @token_required
     def download_reply(source_uuid, reply_uuid):
-        source = get_or_404(Source, source_uuid, column=Source.uuid)
+        get_or_404(Source, source_uuid, column=Source.uuid)
         reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
 
-        return utils.serve_file_with_etag(source, reply.filename)
+        return utils.serve_file_with_etag(reply)
 
     @api.route('/sources/<source_uuid>/submissions/<submission_uuid>',
                methods=['GET', 'DELETE'])

@@ -21,4 +21,5 @@ import subprocess
 
 def srm(fn):
     subprocess.check_call(['srm', '-r', fn])
+    # We need to return a non-`None` value so the rq worker writes this back to Redis
     return "success"

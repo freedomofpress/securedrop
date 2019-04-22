@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import hashlib
 import json
 import os
 import random
@@ -541,8 +540,7 @@ def test_authorized_user_can_download_submission(journalist_app,
         assert response.mimetype == 'application/pgp-encrypted'
 
         # Response should have Etag field with hash
-        assert response.headers['ETag'] == '"sha256:{}"'.format(
-            hashlib.sha256(response.data).hexdigest())
+        assert response.headers['ETag'].startswith('sha256:')
 
 
 def test_authorized_user_can_download_reply(journalist_app, test_files,
@@ -562,8 +560,7 @@ def test_authorized_user_can_download_reply(journalist_app, test_files,
         assert response.mimetype == 'application/pgp-encrypted'
 
         # Response should have Etag field with hash
-        assert response.headers['ETag'] == '"sha256:{}"'.format(
-            hashlib.sha256(response.data).hexdigest())
+        assert response.headers['ETag'].startswith('sha256:')
 
 
 def test_authorized_user_can_get_current_user_endpoint(journalist_app,
@@ -866,3 +863,73 @@ def test_malformed_auth_token(journalist_app, journalist_api_token):
 
         resp = app.get(url, headers={'Authorization': 'too many {}'.format(journalist_api_token)})
         assert resp.status_code == 403
+
+
+def test_submission_download_generates_checksum(journalist_app,
+                                                journalist_api_token,
+                                                test_source,
+                                                test_submissions,
+                                                mocker):
+    submission = test_submissions['submissions'][0]
+    assert submission.checksum is None  # precondition
+
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.download_submission',
+                                   source_uuid=test_source['uuid'],
+                                   submission_uuid=submission.uuid),
+                           headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 200
+        assert response.headers['ETag']
+
+    # check that the submission checksum was added
+    fetched_submission = Submission.query.get(submission.id)
+    assert fetched_submission.checksum
+
+    mock_add_checksum = mocker.patch('journalist_app.utils.add_checksum_for_file')
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.download_submission',
+                                   source_uuid=test_source['uuid'],
+                                   submission_uuid=submission.uuid),
+                           headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 200
+        assert response.headers['ETag']
+
+    fetched_submission = Submission.query.get(submission.id)
+    assert fetched_submission.checksum
+    # we don't want to recalculat this value
+    assert not mock_add_checksum.called
+
+
+def test_reply_download_generates_checksum(journalist_app,
+                                           journalist_api_token,
+                                           test_source,
+                                           test_files,
+                                           mocker):
+    reply = test_files['replies'][0]
+    assert reply.checksum is None  # precondition
+
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.download_reply',
+                                   source_uuid=test_source['uuid'],
+                                   reply_uuid=reply.uuid),
+                           headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 200
+        assert response.headers['ETag']
+
+    # check that the reply checksum was added
+    fetched_reply = Reply.query.get(reply.id)
+    assert fetched_reply.checksum
+
+    mock_add_checksum = mocker.patch('journalist_app.utils.add_checksum_for_file')
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.download_reply',
+                                   source_uuid=test_source['uuid'],
+                                   reply_uuid=reply.uuid),
+                           headers=get_api_headers(journalist_api_token))
+        assert response.status_code == 200
+        assert response.headers['ETag']
+
+    fetched_reply = Reply.query.get(reply.id)
+    assert fetched_reply.checksum
+    # we don't want to recalculat this value
+    assert not mock_add_checksum.called

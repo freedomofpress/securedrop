@@ -160,5 +160,10 @@ class SDConfig(object):
         except AttributeError:
             pass
 
+        if getattr(self, 'env', 'prod') == 'test':
+            self.RQ_WORKER_NAME = 'test'
+        else:
+            self.RQ_WORKER_NAME = 'default'
+
 
 config = SDConfig()  # type: SDConfig

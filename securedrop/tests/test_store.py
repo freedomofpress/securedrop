@@ -9,7 +9,10 @@ import zipfile
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from . import utils
 
-from store import Storage
+from db import db
+from journalist_app import create_app
+from models import Submission, Reply
+from store import Storage, queued_add_checksum_for_file, async_add_checksum_for_file
 
 
 def create_file_in_source_dir(config, filesystem_id, filename):
@@ -163,3 +166,86 @@ def test_rename_submission_with_invalid_filename(journalist_app):
     # None of the above files exist, so we expect the attempt to rename
     # the submission to fail and the original filename to be returned.
     assert original_filename == returned_filename
+
+
+@pytest.mark.parametrize('db_model', [Submission, Reply])
+def test_add_checksum_for_file(config, db_model):
+    '''
+    Check that when we execute the `add_checksum_for_file` function, the database object is
+    correctly updated with the actual hash of the file.
+
+    We have to create our own app in order to have more control over the SQLAlchemy sessions. The
+    fixture pushes a single app context that forces us to work within a single transaction.
+    '''
+    app = create_app(config)
+
+    with app.app_context():
+        db.create_all()
+        source, _ = utils.db_helper.init_source_without_keypair()
+        target_file_path = app.storage.path(source.filesystem_id, '1-foo-msg.gpg')
+        test_message = b'hash me!'
+        expected_hash = 'f1df4a6d8659471333f7f6470d593e0911b4d487856d88c83d2d187afa195927'
+
+        with open(target_file_path, 'wb') as f:
+            f.write(test_message)
+
+        if db_model == Submission:
+            db_obj = Submission(source, target_file_path)
+        else:
+            journalist, _ = utils.db_helper.init_journalist()
+            db_obj = Reply(journalist, source, target_file_path)
+
+        db.session.add(db_obj)
+        db.session.commit()
+        db_obj_id = db_obj.id
+
+    queued_add_checksum_for_file(db_model,
+                                 db_obj_id,
+                                 target_file_path,
+                                 app.config['SQLALCHEMY_DATABASE_URI'])
+
+    with app.app_context():
+        # requery to get a new object
+        db_obj = db_model.query.filter_by(id=db_obj_id).one()
+        assert db_obj.checksum == 'sha256:' + expected_hash
+
+
+@pytest.mark.parametrize('db_model', [Submission, Reply])
+def test_async_add_checksum_for_file(config, db_model):
+    '''
+    Check that when we execute the `add_checksum_for_file` function, the database object is
+    correctly updated with the actual hash of the file.
+
+    We have to create our own app in order to have more control over the SQLAlchemy sessions. The
+    fixture pushes a single app context that forces us to work within a single transaction.
+    '''
+    app = create_app(config)
+
+    with app.app_context():
+        db.create_all()
+        source, _ = utils.db_helper.init_source_without_keypair()
+        target_file_path = app.storage.path(source.filesystem_id, '1-foo-msg.gpg')
+        test_message = b'hash me!'
+        expected_hash = 'f1df4a6d8659471333f7f6470d593e0911b4d487856d88c83d2d187afa195927'
+
+        with open(target_file_path, 'wb') as f:
+            f.write(test_message)
+
+        if db_model == Submission:
+            db_obj = Submission(source, target_file_path)
+        else:
+            journalist, _ = utils.db_helper.init_journalist()
+            db_obj = Reply(journalist, source, target_file_path)
+
+        db.session.add(db_obj)
+        db.session.commit()
+        db_obj_id = db_obj.id
+
+        job = async_add_checksum_for_file(db_obj)
+
+    utils.async.wait_for_redis_worker(job, timeout=5)
+
+    with app.app_context():
+        # requery to get a new object
+        db_obj = db_model.query.filter_by(id=db_obj_id).one()
+        assert db_obj.checksum == 'sha256:' + expected_hash

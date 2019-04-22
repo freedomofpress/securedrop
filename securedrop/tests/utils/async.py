@@ -4,6 +4,7 @@ timeout of asynchronous processes.
 """
 import time
 
+# This is an arbitarily defined value in the SD codebase and not something from rqworker
 REDIS_SUCCESS_RETURN_VALUE = 'success'
 
 
