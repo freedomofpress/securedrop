@@ -204,11 +204,8 @@ class CryptoUtil:
         if not key:
             return
 
-        # Always delete keys without invoking pinentry-mode = loopback
-        # see: https://lists.gnupg.org/pipermail/gnupg-users/2016-May/055965.html
-        temp_gpg = gnupg.GPG(binary='gpg2', homedir=self.gpg_key_dir)
         # The subkeys keyword argument deletes both secret and public keys.
-        temp_gpg.delete_keys(key, secret=True, subkeys=True)
+        self.gpg.delete_keys(key, secret=True, subkeys=True)
 
     def getkey(self, name):
         for key in self.gpg.list_keys():
