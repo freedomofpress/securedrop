@@ -36,6 +36,23 @@ DICEWARE_SAFE_CHARS = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzA'
                        'BCDEFGHIJKLMNOPQRSTUVWXYZ')
 
 
+def monkey_patch_delete_handle_status(self, key, value):
+        """Parse a status code from the attached GnuPG process.
+        :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
+        """
+        if key in ("DELETE_PROBLEM", "KEY_CONSIDERED"):
+            self.status = self.problem_reason.get(value, "Unknown error: %r"
+                                                  % value)
+        elif key in ("PINENTRY_LAUNCHED"):
+            self.status = key.replace("_", " ").lower()
+        else:
+            raise ValueError("Unknown status message: %r" % key)
+
+
+# Monkey patching to resolve https://github.com/freedomofpress/securedrop/issues/4294
+gnupg._parsers.DeleteResult._handle_status = monkey_patch_delete_handle_status
+
+
 class CryptoException(Exception):
     pass
 
