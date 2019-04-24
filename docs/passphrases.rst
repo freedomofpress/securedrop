@@ -21,21 +21,23 @@ Admin
 
 The admin will be using the *Admin Workstation* with Tails to connect to
 the *Application Server* and the *Monitor Server* using Tor and SSH. The tasks
-performed by the admin will require the following set of passphrases:
+performed by the admin will require the following set of credentials and 
+passphrases:
 
 -  A passphrase for the persistent volume on the Admin Live USB.
--  A master passphrase for the KeePassX password manager, which unlocks
-   passphrases to:
+-  Additional credentials, which we recommend adding to Tails' KeePassX password
+   manager during the installation:
 
-   -  The *Application Server* and the *Monitor Server* (required to be the same).
-   -  The network firewall.
+   -  The *Application Server* and *Monitor Server* admin username and password
+      (required to be the same for both servers).
+   -  The network firewall username and password.
    -  The SSH private key and, if set, the key's passphrase.
    -  The GPG key that OSSEC will encrypt alerts to.
    -  The admin's personal GPG key.
-   -  The credentials for the email account that OSSEC will send alerts
-      to.
-   -  The Hidden Services values required to connect to the App and
-      *Monitor Server*.
+   -  The account details for the destination email address for OSSEC alerts.
+   -  The Hidden Services values required to connect to the *Application* and
+      *Monitor Servers*.
+
 
 The admin will also need to have a way to generate two-factor
 authentication tokens.
