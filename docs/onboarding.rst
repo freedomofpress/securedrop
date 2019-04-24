@@ -90,9 +90,10 @@ Workstation. Refer to the docs for :ref:`cloning the SecureDrop
 repository <Download the SecureDrop repository>`, then return here to
 continue setting up the *Journalist Workstation*.
 
-Once you've done this, run the install script to configure the
+Once you've done this, use the ``securedrop-admin`` script to configure the
 shortcuts for the Source and *Journalist Interfaces*: ::
 
+  ./securedrop-admin setup
   ./securedrop-admin tailsconfig
 
 If you did not copy over the ``app-source-ths`` and ``app-journalist-aths``
