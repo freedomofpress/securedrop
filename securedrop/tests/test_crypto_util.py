@@ -268,6 +268,24 @@ def test_delete_reply_keypair(source_app, test_source):
     assert source_app.crypto_util.getkey(fid) is None
 
 
+def test_delete_reply_keypair_pinentry_status_is_handled(source_app, test_source,
+                                                         mocker, capsys):
+    """
+    Regression test for https://github.com/freedomofpress/securedrop/issues/4294
+    """
+    fid = test_source['filesystem_id']
+
+    # Patch private python-gnupg method to reproduce the issue in #4294
+    mocker.patch('pretty_bad_protocol._util._separate_keyword',
+                 return_value=('PINENTRY_LAUNCHED', 'does not matter'))
+
+    source_app.crypto_util.delete_reply_keypair(fid)
+
+    captured = capsys.readouterr()
+    assert "ValueError: Unknown status message: 'PINENTRY_LAUNCHED'" not in captured.err
+    assert source_app.crypto_util.getkey(fid) is None
+
+
 def test_delete_reply_keypair_no_key(source_app):
     """No exceptions should be raised when provided a filesystem id that
     does not exist.
