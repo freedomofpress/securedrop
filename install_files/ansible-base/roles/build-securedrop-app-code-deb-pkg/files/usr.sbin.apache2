@@ -89,6 +89,7 @@
   /usr/bin/gpg-agent rix,
   /usr/bin/gpg2 rix,
   /usr/bin/pinentry-curses rix,
+  /usr/bin/pinentry-gtk-2 rix,
   /usr/bin/python2.7 r,
   /usr/bin/srm rix,
   /usr/lib/python2.7/uuid.py r,
