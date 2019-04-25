@@ -322,6 +322,15 @@ jobs:
       - store_artifacts:
           path: ~/sd/junit
 
+  deb-tests:
+    docker:
+      - image: gcr.io/cloud-builders/docker
+    steps:
+      - run: apt-get install -y make virtualenv python-pip
+      - checkout
+      - setup_remote_docker
+      - run: make ci-deb-tests
+
 workflows:
   version: 2
   securedrop_ci:
@@ -376,6 +385,11 @@ workflows:
             branches:
               only:
                 - /i18n-.*/
+      - deb-tests:
+          filters:
+            branches:
+              only:
+                - /update-builder-.*/
 
   nightly:
     triggers:

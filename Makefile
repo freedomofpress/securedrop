@@ -21,6 +21,10 @@ ci-teardown: ## Destroys GCE host for testing staging environment.
 ci-lint: ## Runs linting in linting container.
 	devops/scripts/dev-shell-ci run make --keep-going lint typelint
 
+.PHONY: ci-deb-tests
+ci-deb-tests: ## Runs deb tests in ci
+	@./devops/scripts/test-built-packages.sh
+
 .PHONY: install-mypy
 install-mypy: ## pip install mypy in a dedicated python3 virtualenv
 	if [[ ! -d .python3/.venv ]] ; then \
