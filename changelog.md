@@ -1,9 +1,6 @@
 # Changelog
 
-## 0.12.2~rc2
-
-
-## 0.12.2~rc1
+## 0.12.2
 
 ### Web Application
 
@@ -15,6 +12,7 @@
 
 * SecureDrop grsec kernels have been updated to 4.4.177 and provide support for Intel e1000e series NICs (#4308)
 * OSSEC test notifications will now generate ossec alerts (#4340)
+* Updated AppArmor for Apache2 (#4362)
 
 ### Tails Environment
 
