@@ -257,6 +257,8 @@ configuration:
 You will be prompted for the admin user's passphrase on the servers. Type it in
 and press Enter.
 
+.. include:: ../includes/rerun-install-is-safe.txt
+
 Step 4: Validate the Instance
 -----------------------------
 
