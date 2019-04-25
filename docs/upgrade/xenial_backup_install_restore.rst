@@ -205,8 +205,9 @@ using the following command:
  ./securedrop-admin install
 
 This command will take several minutes to complete, and will reboot the
-*Application* and *Monitor* servers as part of the process. If it fails, try
-running it again. If it fails repeatedly, :ref:`contact us. <bir_contact_us>`
+*Application* and *Monitor* servers as part of the process.
+
+.. include:: ../includes/rerun-install-is-safe.txt
 
 When the server installation completes successfully, you should set up the
 *Admin Workstation* to connect to the new servers over Tor. To do so, run the
