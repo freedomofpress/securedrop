@@ -141,8 +141,12 @@ Release Process
 13. Put signed Debian packages on ``apt.freedom.press``. The release is now live.
 14. Make sure that the default branch of documentation is being built off the tip
     of the release branch.
-15. Make sure that release notes are written and posted on the SecureDrop blog.
-16. Make sure that the release is announced from the SecureDrop Twitter account.
+15. Create a `release <https://github.com/freedomofpress/securedrop/releases>`_
+    on GitHub with a brief summary of the changes in this release.
+16. Make sure that release notes are written and posted on the SecureDrop blog.
+17. Make sure that the release is announced from the SecureDrop Twitter account.
+18. Make sure that members of `the support portal <https://support.freedom.press>`_
+    are notified about the release.
 
 Post-Release
 ------------
