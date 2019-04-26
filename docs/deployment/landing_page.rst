@@ -265,12 +265,14 @@ logging. However you still need to make sure no other assets get logged!
     SetEnvIf Request_URI "^/securedrop($|(\/.*))" dontlog
     CustomLog logs/access_log common env=!dontlog
 
-In nginx, logging can be disabled like so:
+In nginx, logging can be disabled by adding the following directives within the
+*Landing Page* ``location {}`` block:
 
 ::
 
     access_log off;
     error_log /dev/null;
+
 
 Further Security Considerations
 -------------------------------
