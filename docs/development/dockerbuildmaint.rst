@@ -41,4 +41,4 @@ You can now test the container by going back to the SecureDrop repository root:
     cd ../..
     make build-debs
 
-Assuming no errors here, commit the changes in ``molecule/builder/image_hash``.
+Assuming no errors here, commit the changes in ``molecule/builder/image_hash`` in a branch containing the prefix ``update-builder-``.
