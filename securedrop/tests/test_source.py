@@ -146,7 +146,31 @@ def test_generate_too_long_codename(source_app):
     )
 
 
-def test_create_duplicate_codename(source_app):
+def test_create_duplicate_codename_logged_in_not_in_session(source_app):
+    with patch.object(source.app.logger, 'error') as logger:
+        with source_app.test_client() as app:
+            resp = app.get(url_for('main.generate'))
+            assert resp.status_code == 200
+
+            # Create a source the first time
+            resp = app.post(url_for('main.create'), follow_redirects=True)
+            assert resp.status_code == 200
+            codename = session['codename']
+
+        with source_app.test_client() as app:
+            # Attempt to add the same source
+            with app.session_transaction() as sess:
+                sess['codename'] = codename
+            resp = app.post(url_for('main.create'), follow_redirects=True)
+            logger.assert_called_once()
+            assert ("Attempt to create a source with duplicate codename"
+                    in logger.call_args[0][0])
+            assert resp.status_code == 500
+            assert 'codename' not in session
+            assert 'logged_in' not in session
+
+
+def test_create_duplicate_codename_logged_in_in_session(source_app):
     with patch.object(source.app.logger, 'error') as logger:
         with source_app.test_client() as app:
             resp = app.get(url_for('main.generate'))
@@ -157,11 +181,16 @@ def test_create_duplicate_codename(source_app):
             assert resp.status_code == 200
 
             # Attempt to add the same source
-            app.post(url_for('main.create'), follow_redirects=True)
+            resp = app.post(url_for('main.create'), follow_redirects=True)
             logger.assert_called_once()
             assert ("Attempt to create a source with duplicate codename"
                     in logger.call_args[0][0])
+            assert resp.status_code == 500
             assert 'codename' not in session
+
+            # Reproducer for bug #4361
+            resp = app.post(url_for('main.index'), follow_redirects=True)
+            assert 'logged_in' not in session
 
 
 def test_lookup(source_app):

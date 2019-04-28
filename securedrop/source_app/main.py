@@ -67,6 +67,13 @@ def make_blueprint(config):
 
             # Issue 2386: don't log in on duplicates
             del session['codename']
+
+            # Issue 4361: Delete 'logged_in' if it's in the session
+            try:
+                del session['logged_in']
+            except KeyError:
+                pass
+
             abort(500)
         else:
             os.mkdir(current_app.storage.path(filesystem_id))
