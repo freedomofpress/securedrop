@@ -78,6 +78,17 @@
         }
       ],
       "version": "0.12.1"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "17b9b65d795ff11df9f236740dd2a797c7a1b709cd319fe974ce0dc3c98c27a6",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://s3.amazonaws.com/securedrop-vagrant/app-staging-trusty_0.12.2.box"
+        }
+      ],
+      "version": "0.12.2"
     }
   ]
 }
