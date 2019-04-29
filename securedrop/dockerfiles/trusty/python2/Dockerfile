@@ -34,6 +34,8 @@ RUN pip install -U setuptools==40.8.0 && \
     pip install -r requirements/securedrop-app-code-requirements.txt && \
     pip install -r requirements/test-requirements.txt
 
+RUN pip install supervisor
+
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
 
 STOPSIGNAL SIGKILL

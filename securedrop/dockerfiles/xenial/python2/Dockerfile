@@ -25,11 +25,14 @@ RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/
 RUN gem install sass -v 3.4.23
 
 COPY requirements requirements
+
 RUN pip install -r requirements/securedrop-app-code-requirements.txt && \
     pip install -r requirements/test-requirements.txt
 
 # Fixes #4036 pybabel requires latest version of setuptools
 RUN pip install --upgrade setuptools
+
+RUN pip install supervisor
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
 
