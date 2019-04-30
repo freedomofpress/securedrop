@@ -1,6 +1,8 @@
 Ubuntu 16.04 LTS (Xenial) migration - Preparatory steps
 =======================================================
 
+.. include:: ../includes/trusty-warning.txt
+
 On 30 April 2019, Ubuntu 14.04 LTS (Trusty) will reach End of Life. After this
 date, no new security updates to the base operating system will be provided. It
 is therefore of critical importance for the security of all SecureDrop instances
