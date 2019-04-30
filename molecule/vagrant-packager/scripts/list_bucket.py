@@ -9,6 +9,7 @@
 import boto3
 import os
 
+
 class S3_Bucket_IndexCreator(object):
     """ Class to initialize s3 bucket connection, grab contents, publish index """
 
@@ -22,14 +23,14 @@ class S3_Bucket_IndexCreator(object):
         """ Get bucket file listings and return python list """
 
         return [obj.key.split('/')[-1] for obj in
-                    self.vagrant_bucket.objects.filter(Prefix=self.path) if
-                    "index.html" not in obj.key]
+                self.vagrant_bucket.objects.filter(Prefix=self.path) if
+                "index.html" not in obj.key]
 
     def generate_html_index(self):
         """Build a simple HTML index string from bucket listings"""
 
-        str_files = ["""<a href="{file}">{file}</a>""".format(file=f) for f in 
-                        self.bucket_get_list()]
+        str_files = ["""<a href="{file}">{file}</a>""".format(file=f) for f in
+                     self.bucket_get_list()]
 
         index_string = """
             <html><head><title>Index of /{path}/</title></head><body bgcolor="white">
