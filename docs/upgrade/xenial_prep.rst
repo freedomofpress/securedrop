@@ -13,7 +13,7 @@ release series on February 26. The operating system update itself must be
 performed manually.
 
 We recommend that you plan two working days (after your instance has been
-updated to SecureDrop 0.12.1) to backup your instance, perform the upgrade, and
+updated to SecureDrop 0.12.2) to backup your instance, perform the upgrade, and
 test your instance once it is upgraded. We recommend scheduling this maintenance
 window no earlier than March 6.
 
@@ -51,7 +51,7 @@ from the command line on the *Application Server* by running the command:
 
 
 SecureDrop servers are updated automatically with the latest release version
-(0.12.1). Recently, some long-running SecureDrop instances were affected by a 
+(0.12.2). Recently, some long-running SecureDrop instances were affected by a 
 bug which will cause any updates after 0.10.0 to fail. If your instance is still
 running 0.10.0, please `consult our advisory <https://securedrop.org/news/advisory-automatic-update-failure-version-0100-0110-some-securedrop-instances/>`_
 to update to the latest version.
@@ -92,7 +92,7 @@ The output from ``git status`` should include the following text:
 
 where ``<version>`` is  the version of the workstation code that is installed.
 
-If the *Admin Workstation* is at version 0.12.1, it is up-to-date, and you can
+If the *Admin Workstation* is at version 0.12.2, it is up-to-date, and you can
 proceed with :ref:`making a backup of the instance <backup_instance>` and
 :ref:`verifying SSH connectivity <verify_ssh_access>`. If the *Admin
 Workstation* is running an earlier version, you will need to upgrade it, using
@@ -105,7 +105,7 @@ the appropriate steps for your version:
 Upgrading from version 0.9.1 or later
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If the workstation is at least at version 0.9.1 and up to version 0.12.1, you
+If the workstation is at least at version 0.9.1 and up to version 0.12.2, you
 should see a graphical updater informing you about the availability of a new
 version. The graphical updater looks like this:
 
@@ -133,7 +133,7 @@ following commands:
   cd ~/Persistent/securedrop
   git fetch --tags
   gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
-  git tag -v 0.12.1
+  git tag -v 0.12.2
 
 The output should include the following two lines:
 
@@ -147,9 +147,9 @@ the screen of your workstation. If it does, you can check out the new release:
 
 .. code:: sh
 
-  git checkout 0.12.1
+  git checkout 0.12.2
 
-.. important:: If you see the warning ``refname ‘0.12.1’ is ambiguous`` in the
+.. important:: If you see the warning ``refname ‘0.12.2’ is ambiguous`` in the
   output, we recommend that you contact us immediately at securedrop@freedom.press
   (GPG encrypted).
 
@@ -188,7 +188,7 @@ code:
   cd ~/Persistent
   git clone https://github.com/freedomofpress/securedrop.git
   cd ~Persistent/securedrop
-  git tag -v 0.12.1
+  git tag -v 0.12.2
 
 .. note::  The SecureDrop application code must be installed in the
   `~/Persistent/securedrop` directory in order to complete the reprovisioning
@@ -211,7 +211,7 @@ Now, check out the current release with the following command:
 
 .. code:: sh
 
-  git checkout 0.12.1
+  git checkout 0.12.2
 
 Next, mount the persistent volume of the old *Admin Workstation* in order to
 retrieve instance-specific files that you’ll need to set up the new workstation.
