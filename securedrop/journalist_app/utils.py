@@ -13,7 +13,7 @@ from db import db
 from models import (get_one_or_else, Source, Journalist,
                     InvalidUsernameException, WrongPasswordException,
                     LoginThrottledException, BadTokenException, SourceStar,
-                    PasswordError, Submission)
+                    PasswordError, Submission, RevokedToken)
 from rm import srm
 from store import add_checksum_for_file
 from worker import rq_worker_queue
@@ -353,3 +353,18 @@ class JournalistInterfaceSessionInterface(
         else:
             super(JournalistInterfaceSessionInterface, self).save_session(
                 app, session, response)
+
+
+def cleanup_expired_revoked_tokens():
+    """Remove tokens that have now expired from the revoked token table."""
+
+    revoked_tokens = db.session.query(RevokedToken).all()
+
+    for revoked_token in revoked_tokens:
+        if Journalist.validate_token_is_not_expired_or_invalid(revoked_token.token):
+            pass  # The token has not expired, we must keep in the revoked token table.
+        else:
+            # The token is no longer valid, remove from the revoked token table.
+            db.session.delete(revoked_token)
+
+    db.session.commit()

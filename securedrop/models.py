@@ -568,6 +568,16 @@ class Journalist(db.Model):
         return s.dumps({'id': self.id}).decode('ascii')
 
     @staticmethod
+    def validate_token_is_not_expired_or_invalid(token):
+        s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
+        try:
+            s.loads(token)
+        except BadData:
+            return None
+
+        return True
+
+    @staticmethod
     def validate_api_token_and_get_user(token):
         s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
         try:
