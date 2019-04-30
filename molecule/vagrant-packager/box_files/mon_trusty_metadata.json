@@ -85,7 +85,7 @@
           "checksum": "c62d2b9f4e54c381dec0fd774cb40c7ab8d96506668961441338d8eb18b6d71c",
           "checksum_type": "sha256",
           "name": "libvirt",
-          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging-trusty_0.12.2.box"
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-trusty_0.12.2.box"
         }
       ],
       "version": "0.12.2"

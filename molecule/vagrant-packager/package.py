@@ -233,7 +233,7 @@ def update_box_metadata(server_name, box_file, platform, version):
     with open(json_file, "r") as f:
         metadata_config = json.loads(f.read())
 
-    base_url = "https://s3.amazonaws.com/securedrop-vagrant"
+    base_url = "https://dev-bin.ops.securedrop.org/vagrant"
     box_name = os.path.basename(box_file)
     box_url = "{}/{}".format(base_url, box_name)
     box_checksum = sha256_checksum(box_file)
