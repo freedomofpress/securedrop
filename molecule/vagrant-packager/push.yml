@@ -5,11 +5,11 @@
   hosts: localhost
   become: no
   tasks:
-    - name: Create vagrant bucket
-      aws_s3:
-        bucket: "{{ bucket_name }}"
-        mode: create
-        region: us-east-1
+    - name: Assume role
+      sts_assume_role:
+        role_arn: "arn:aws:iam::601214233086:role/sdroppackager"
+        role_session_name: "vagrantupload-{{ ansible_hostname | to_uuid }}"
+      register: assumed_role
 
     - name: Find boxes to push up
       find:
@@ -19,11 +19,15 @@
 
     - name: Push boxes up
       aws_s3:
+        aws_access_key: "{{ assumed_role.sts_creds.access_key }}"
+        aws_secret_key: "{{ assumed_role.sts_creds.secret_key }}"
+        security_token: "{{ assumed_role.sts_creds.session_token }}"
         bucket: "{{ bucket_name }}"
-        object: "{{ item.path | basename }}"
+        object: "/{{ bucket_path }}/{{ item.path | basename }}"
         permission: "public-read"
         src: "{{ item.path }}"
         mode: put
       with_items: "{{ local_boxes.files }}"
   vars:
-    bucket_name: securedrop-vagrant
+    bucket_name: dev-bin.ops.securedrop.org
+    bucket_path: vagrant
