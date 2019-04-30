@@ -28,6 +28,16 @@
         src: "{{ item.path }}"
         mode: put
       with_items: "{{ local_boxes.files }}"
+
+    - name: Generate index
+      script: ./scripts/list_bucket.py
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ assumed_role.sts_creds.access_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ assumed_role.sts_creds.secret_key }}"
+        AWS_SESSION_TOKEN: "{{ assumed_role.sts_creds.session_token }}"
+        BUCKET: "{{ bucket_name }}"
+        BUCKET_PATH: "{{ bucket_path }}"
+
   vars:
     bucket_name: dev-bin.ops.securedrop.org
     bucket_path: vagrant
