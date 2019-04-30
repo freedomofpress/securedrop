@@ -8,7 +8,7 @@
           "checksum": "4358d2e31ee5dcfe4098fd2bedba3122967992de4c9b2dfb773805141d5ad633",
           "checksum_type": "sha256",
           "name": "libvirt",
-          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging_0.7.box"
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging_0.7.box"
         }
       ],
       "version": "0.7.0"
@@ -19,7 +19,7 @@
           "checksum": "c18fe9dddf28cc70b858b878550c5ae202e4a2c752119528ab7d2062dab15842",
           "checksum_type": "sha256",
           "name": "libvirt",
-          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging_0.8.box"
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging_0.8.box"
         }
       ],
       "version": "0.8.0"
@@ -30,7 +30,7 @@
           "checksum": "9891c88aa7148129f2f91638d7dfed1e7815eb980bba1de8a9c075f14ae0ddeb",
           "checksum_type": "sha256",
           "name": "libvirt",
-          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging_0.9.1.box"
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging_0.9.1.box"
         }
       ],
       "version": "0.9.1"
@@ -41,7 +41,7 @@
           "checksum": "baba21e8799fe2093d902b332b45d7a8342adf019fa195382011fbdfa54cd1d5",
           "checksum_type": "sha256",
           "name": "libvirt",
-          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging_0.11.0.box"
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging_0.11.0.box"
         }
       ],
       "version": "0.11.0"
@@ -52,7 +52,7 @@
           "checksum": "bbc8ed55fab20ed96c3b090126b69baabbd41e95faa60676dff72bc69af67376",
           "checksum_type": "sha256",
           "name": "libvirt",
-          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging_0.11.1.box"
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging_0.11.1.box"
         }
       ],
       "version": "0.11.1"
@@ -63,7 +63,7 @@
           "checksum": "0ac7538f52b3450a1791a06b8a02fe81b65637da92bb00a61b669beccef87f8d",
           "checksum_type": "sha256",
           "name": "libvirt",
-          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging-trusty_0.12.0.box"
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-trusty_0.12.0.box"
         }
       ],
       "version": "0.12.0"
@@ -74,7 +74,7 @@
           "checksum": "56d1fee8e1b5f27e69a6aa2159e38340dbb3b33326977428cf43af0fc74ae0ba",
           "checksum_type": "sha256",
           "name": "libvirt",
-          "url": "https://s3.amazonaws.com/securedrop-vagrant/mon-staging-trusty_0.12.1.box"
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-trusty_0.12.1.box"
         }
       ],
       "version": "0.12.1"
