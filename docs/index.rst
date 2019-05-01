@@ -86,6 +86,7 @@ anonymous sources.
    :name: upgradetoc
    :maxdepth: 2
 
+   upgrade/xenial_after_april_30.rst
    upgrade/xenial_prep.rst
    upgrade/xenial_upgrade_in_place.rst
    upgrade/xenial_backup_install_restore.rst
