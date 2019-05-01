@@ -2,7 +2,7 @@
 build_ossec_deb_pkg_dependencies: []
 
 ossec_server_hostname: ossec-server
-ossec_version: 3.0.0
+ossec_version: 3.3.0
 # Parent directory for performing build operations. All files related
 # to build, including source tarball, will be created inside this dir.
 build_path: /tmp/build
@@ -22,4 +22,4 @@ ossec_build_rsync_generic_opts:
 ossec_build_rsync_ansible_hack_opt:
   - "--rsync-path='sudo rsync'"
 
-ossec_source_checksum: sha256:a271d665ed502b3df4ff055a177159dfc0bc8a69dd44eab1f7c57fe8fff42a98
+ossec_source_checksum: sha256:34fac7664548ddfeea96cb0567df4eda7515cc107625eb25315a5c3522954197
