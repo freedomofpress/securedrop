@@ -5,6 +5,7 @@ import os
 from flask import session
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
+from db import db
 import i18n
 import i18n_tool
 import journalist_app
@@ -110,6 +111,8 @@ def do_test(config, create_app):
         pybabel('init', '-i', pot, '-d', config.TEMP_DIR, '-l', l)
 
     app = create_app(config)
+    with app.app_context():
+        db.create_all()
 
     assert i18n.LOCALES == config.SUPPORTED_LOCALES
     verify_filesizeformat(app)

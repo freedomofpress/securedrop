@@ -25,6 +25,7 @@ from werkzeug.datastructures import Headers
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig
+from db import db
 import i18n
 import i18n_tool
 import journalist_app as journalist_app_module
@@ -217,6 +218,8 @@ def test_i18n(journalist_app, config):
     # grabs values at init time and we can't inject them later.
     for app in (journalist_app_module.create_app(fake_config),
                 source_app.create_app(fake_config)):
+        with app.app_context():
+            db.create_all()
         assert i18n.LOCALES == fake_config.SUPPORTED_LOCALES
         verify_i18n(app)
 
