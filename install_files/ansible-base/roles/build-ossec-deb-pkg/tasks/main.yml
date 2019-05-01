@@ -10,12 +10,15 @@
     - "{{ repo_src_path }}"
     - "{{ build_path }}"
 
-- name: Install python-requests for URL fetching
+- name: Install python-requests for URL fetching and libpcre2 for building
   apt:
-    name: python-requests
-    state: present
+    name: "{{ item }}"
+    state: installed
     update_cache: yes
     cache_valid_time: 3600
+  with_items:
+    - python-requests
+    - libpcre2-dev
 
 - name: Copy over current directory for repo build
   synchronize:
@@ -78,6 +81,8 @@
 
 - name: Run OSSEC installer script on extracted source.
   command: /tmp/ossec-hids-{{ ossec_version }}/install.sh
+  environment:
+    PCRE2_SYSTEM: y
 
 - name: Create OSSEC build directory.
   file:
