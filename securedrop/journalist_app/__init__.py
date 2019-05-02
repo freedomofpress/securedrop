@@ -125,10 +125,6 @@ def create_app(config):
         template_filters.rel_datetime_format
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
-    @app.before_first_request
-    def expire_blacklisted_tokens():
-        return cleanup_expired_revoked_tokens()
-
     @app.before_request
     def setup_g():
         """Store commonly used values in Flask's special g object"""
@@ -173,6 +169,13 @@ def create_app(config):
     app.register_blueprint(admin.make_blueprint(config), url_prefix='/admin')
     app.register_blueprint(col.make_blueprint(config), url_prefix='/col')
     api_blueprint = api.make_blueprint(config)
+
+    def run_token_cleanup(app_state):
+        raise Exception
+        with app.app_context():
+            cleanup_expired_revoked_tokens()
+
+    api_blueprint.record_once(run_token_cleanup)
     app.register_blueprint(api_blueprint, url_prefix='/api/v1')
     csrf.exempt(api_blueprint)
 
