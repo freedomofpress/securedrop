@@ -744,11 +744,25 @@ class JournalistNavigationStepsMixin:
     def _visit_edit_account(self):
         self.safe_click_by_id("link-edit-account")
 
-    def _visit_edit_secret(self, otp_type):
+    def _visit_edit_secret(self, otp_type, tooltip_text=''):
         reset_form = self.wait_for(
             lambda: self.driver.find_element_by_id("reset-two-factor-" + otp_type)
         )
         assert "/account/reset-2fa-" + otp_type in reset_form.get_attribute("action")
+        reset_button = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-' + type)[0]
+
+        # 2FA reset buttons show a tooltip with explanatory text on hover.
+        # Also, confirm the text on the tooltip is the correct one.
+        ActionChains(self.driver).move_to_element(reset_button).perform()
+        time.sleep(1)
+        explanatory_tooltip_opacity = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-' + type + ' span')[0].value_of_css_property('opacity')
+        explanatory_tooltip_content = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-' + type + ' span')[0].text
+
+        assert explanatory_tooltip_opacity == '1'
+        assert explanatory_tooltip_content == tooltip_text
         reset_form.submit()
 
         alert = self.driver.switch_to_alert()
@@ -764,10 +778,14 @@ class JournalistNavigationStepsMixin:
         submit_button.click()
 
     def _visit_edit_hotp_secret(self):
-        self._visit_edit_secret("hotp")
+        self._visit_edit_secret(
+            "hotp",
+            "Reset 2FA for hardware tokens like Yubikey")
 
     def _visit_edit_totp_secret(self):
-        self._visit_edit_secret("totp")
+        self._visit_edit_secret(
+            "totp",
+            "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator")
 
     def _admin_visits_add_user(self):
         add_user_btn = self.driver.find_element_by_css_selector("button#add-user")
@@ -788,6 +806,7 @@ class JournalistNavigationStepsMixin:
             self.safe_click_by_css_selector(selector)
             self.wait_for(lambda: self.driver.find_element_by_id("new-password"))
 
+<<<<<<< HEAD
     def _admin_visits_reset_2fa_hotp(self):
         for i in range(3):
             try:
@@ -797,22 +816,13 @@ class JournalistNavigationStepsMixin:
                     '#button-reset-two-factor-hotp')[0]
                 ActionChains(self.driver).move_to_element(hotp_reset_button).perform()
                 time.sleep(1)
-                explanatory_hotp_tooltip_opacity = self.driver.execute_script(
-                    'return \
-                        window.getComputedStyle(\
-                            document.querySelector("#button-reset-two-factor-hotp"), \
-                            ":after"\
-                        ).getPropertyValue("opacity")'
-                )
-                explanatory_hotp_tooltip_content = self.driver.execute_script(
-                    'return \
-                        window.getComputedStyle(\
-                            document.querySelector("#button-reset-two-factor-hotp"), \
-                            ":after"\
-                        ).getPropertyValue("content")'
-                )
-                assert explanatory_hotp_tooltip_opacity == "1"
-                assert explanatory_hotp_tooltip_content == "attr(tooltip)"
+                explanatory_tooltip_opacity = self.driver.find_elements_by_css_selector(
+                    '#button-reset-two-factor-hotp span')[0].value_of_css_property('opacity')
+                explanatory_tooltip_content = self.driver.find_elements_by_css_selector(
+                    '#button-reset-two-factor-hotp span')[0].text
+
+                assert explanatory_tooltip_opacity == "1"
+                assert explanatory_tooltip_content == "Reset 2FA for hardware tokens like Yubikey"
                 self.safe_click_by_id("button-reset-two-factor-hotp")
                 self._alert_wait()
                 self._alert_accept()
@@ -834,23 +844,51 @@ class JournalistNavigationStepsMixin:
             '#button-reset-two-factor-totp')[0]
         ActionChains(self.driver).move_to_element(totp_reset_button).perform()
         time.sleep(1)
-        explanatory_totp_tooltip_opacity = self.driver.execute_script(
-            'return \
-                window.getComputedStyle(\
-                    document.querySelector("#button-reset-two-factor-totp"), \
-                    ":after"\
-                ).getPropertyValue("opacity")'
-        )
-        explanatory_totp_tooltip_content = self.driver.execute_script(
-            'return \
-                window.getComputedStyle(\
-                    document.querySelector("#button-reset-two-factor-totp"), \
-                    ":after"\
-                ).getPropertyValue("content")'
-        )
-        assert explanatory_totp_tooltip_opacity == "1"
-        assert explanatory_totp_tooltip_content == "attr(tooltip)"
+        explanatory_tooltip_opacity = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-' + type + ' span')[0].value_of_css_property('opacity')
+        explanatory_tooltip_content = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-' + type + ' span')[0].text
+
+        assert explanatory_tooltip_opacity == '1'
+        assert explanatory_tooltip_content == 'Reset 2FA for mobile apps such as FreeOTP or Google Authenticator'
         totp_reset_button.click()
+=======
+    def _admin_visits_reset_secret(self, type, tooltip_text=''):
+        reset_form = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-' + type)[0]
+        assert ('/admin/reset-2fa-' + type in
+                reset_form.get_attribute('action'))
+
+        # 2FA reset buttons show a tooltip with explanatory text on hover.
+        # Also, confirm the text on the tooltip is the correct one.
+        reset_button = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-' + type)[0]
+
+        ActionChains(self.driver).move_to_element(reset_button).perform()
+        time.sleep(1)
+        explanatory_tooltip_opacity = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-' + type + ' span')[0].value_of_css_property('opacity')
+        explanatory_tooltip_content = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-' + type + ' span')[0].text
+
+        assert explanatory_tooltip_opacity == '1'
+        assert explanatory_tooltip_content == tooltip_text
+        reset_button.click()
+
+    def _admin_visits_reset_2fa_hotp(self):
+        self._admin_visits_reset_secret(
+            'hotp',
+            'Reset 2FA for hardware tokens like Yubikey')
+
+    def _admin_accepts_2fa_js_alert(self):
+        self._alert_wait()
+        self._alert_accept()
+
+    def _admin_visits_reset_2fa_totp(self):
+        self._admin_visits_reset_secret(
+            'totp',
+            'Reset 2FA for mobile apps such as FreeOTP or Google Authenticator')
+>>>>>>> Tests: Fixes functional tests based on the new tooltip SASS
 
     def _admin_creates_a_user(self, hotp):
         self.safe_click_by_id("add-user")
