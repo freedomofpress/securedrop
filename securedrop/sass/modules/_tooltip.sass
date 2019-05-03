@@ -21,8 +21,6 @@
       z-index: 1001
 
     .tooltip
-      content: attr(tooltip)
-      /* most of the rest of this is opinion */
       font-family: Helvetica, sans-serif
       text-align: center
       min-width: 3em
@@ -37,17 +35,19 @@
       color: #fff
       z-index: 1000
 
-
     /* Make the tooltips respond to hover */
     &:hover::before,
     &:hover .tooltip
       display: block
 
+    @media only screen and (max-width: 768px)
+      .tooltip
+        white-space: unset
+
   /* don't show empty tooltips */
   [tooltip='']::before,
   [tooltip=''] .tooltip
     display: none !important
-
 
   /* FLOW: UP */
   [tooltip]:not([flow])::before,
