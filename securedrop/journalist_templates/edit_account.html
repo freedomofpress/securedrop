@@ -105,7 +105,7 @@
   <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button class="sd-button" id="button-reset-two-factor-{{ type }}" tooltip="{{ tooltip_text }}" type="submit" class="pull-right"><i class="fas fa-sync"></i> {{ button_text }}</button>
+  <button class="sd-button" id="button-reset-two-factor-{{ type }}" tooltip="{{ tooltip_text }}" type="submit" class="pull-right"><i class="fas fa-sync"></i> {{ button_text }}<span class="tooltip">{{ tooltip_text }}</span></button>
 </form>
 {%- endmacro %}
 

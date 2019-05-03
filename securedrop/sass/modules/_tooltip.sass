@@ -5,7 +5,7 @@
 
     /* Applies to all tooltips */
     &:before,
-    &:after
+    .tooltip
       text-transform: none
       font-size: .9em
       line-height: 1
@@ -20,7 +20,7 @@
       border: 5px solid transparent
       z-index: 1001
 
-    &:after
+    .tooltip
       content: attr(tooltip)
       /* most of the rest of this is opinion */
       font-family: Helvetica, sans-serif
@@ -40,12 +40,12 @@
 
     /* Make the tooltips respond to hover */
     &:hover::before,
-    &:hover::after
+    &:hover .tooltip
       display: block
 
   /* don't show empty tooltips */
   [tooltip='']::before,
-  [tooltip='']::after
+  [tooltip=''] .tooltip
     display: none !important
 
 
@@ -56,21 +56,21 @@
     border-bottom-width: 0
     border-top-color: #333
 
-  [tooltip]:not([flow])::after,
-  [tooltip][flow^="up"]::after
+  [tooltip]:not([flow]) .tooltip,
+  [tooltip][flow^="up"] .tooltip
     bottom: calc(100% + 0.3em)
 
   [tooltip]:not([flow])::before,
-  [tooltip]:not([flow])::after,
+  [tooltip]:not([flow]) .tooltip,
   [tooltip][flow^="up"]::before,
-  [tooltip][flow^="up"]::after
+  [tooltip][flow^="up"] .tooltip
     left: 50%
     transform: translate(-50%, -.5em)
 
   [tooltip]:not([flow]):hover::before,
-  [tooltip]:not([flow]):hover::after,
+  [tooltip]:not([flow]):hover .tooltip,
   [tooltip][flow^="up"]:hover::before,
-  [tooltip][flow^="up"]:hover::after
+  [tooltip][flow^="up"]:hover .tooltip
     animation: tooltips-vert 300ms ease-out forwards
 
   /* KEYFRAMES */
