@@ -35,6 +35,7 @@ install-mypy: ## pip install mypy in a dedicated python3 virtualenv
 .PHONY: typelint
 typelint: install-mypy ## Runs type linting
 	.python3/.venv/bin/mypy ./securedrop ./admin
+	.python3/.venv/bin/mypy --disallow-incomplete-defs --disallow-untyped-defs ./securedrop/rm.py
 
 .PHONY: ansible-config-lint
 ansible-config-lint: ## Runs custom Ansible env linting tasks.
