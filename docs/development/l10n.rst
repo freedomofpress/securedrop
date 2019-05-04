@@ -162,7 +162,7 @@ and comment if they disagree.
 Glossary
 --------
 
-A :doc:`glossary <../terminology>` is available, explaining terms specific
+A :doc:`glossary <../glossary>` is available, explaining terms specific
 to SecureDrop. It is also important that key
 terms are understood and precisely translated.
 

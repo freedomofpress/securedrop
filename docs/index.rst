@@ -26,7 +26,7 @@ anonymous sources.
    :maxdepth: 2
 
    overview
-   terminology
+   glossary
    passphrases
    hardware
    before_you_begin

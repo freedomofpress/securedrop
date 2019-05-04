@@ -116,10 +116,10 @@ published, decrypted documents are never accessed on an Internet-connected
 computer.
 
 .. note:: The terms in italics are terms of art specific to SecureDrop. The
-	  :doc:`Terminology Guide <terminology>` provides more-precise
+	  :doc:`Glossary <glossary>` provides more-precise
           definitions of these and other terms. SecureDrop is designed against
           a comprehensive :doc:`threat_model/threat_model`, and has a specific
-          notion of the :doc:`roles <terminology>` that are involved in its
+          notion of the :doc:`roles <glossary>` that are involved in its
           operation.
 
 Operation

@@ -95,14 +95,14 @@ Line Wrapping
 Lines in the plain-text documentation files should wrap at 80 characters. (Some
 exceptions: complex code blocks showing example commands, or long URLs.)
 
-Terminology
-^^^^^^^^^^^
+Glossary
+^^^^^^^^
 
 Text taken directly from a user interface is in **bold face**.
 
     "Once you’re sure you have the right drive, click **Format Drive**."
 
-SecureDrop-specific :doc:`terminology <../terminology>` is in *italics*.
+SecureDrop-specific :doc:`glossary <../glossary>` is in *italics*.
 
     "To get started, you’ll need two Tails drives: one for the *Admin
     Workstation* and one for the *Secure Viewing Station*."
