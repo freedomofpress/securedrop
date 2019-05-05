@@ -1,5 +1,5 @@
-Terminology
-===========
+Glossary
+========
 
 A number of terms used in this guide, and in the `SecureDrop workflow
 diagram <https://docs.securedrop.org/en/latest/overview.html#infrastructure>`__,
