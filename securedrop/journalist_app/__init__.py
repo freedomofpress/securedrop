@@ -31,6 +31,9 @@ if typing.TYPE_CHECKING:
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from sdconfig import SDConfig  # noqa: F401
+    from typing import Optional, Tuple, Any
+    from werkzeug import Response
+    from flask_wrf import Error
 
 _insecure_views = ['main.login', 'main.select_logo', 'static']
 
@@ -89,6 +92,7 @@ def create_app(config):
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
+        # type: (CSRFError) -> Response
         # render the message first to ensure it's localized.
         msg = gettext('You have been logged out due to inactivity')
         session.clear()
@@ -96,6 +100,7 @@ def create_app(config):
         return redirect(url_for('main.login'))
 
     def _handle_http_exception(error):
+        # type: (Error) -> Tuple[Any, Any]
         # Workaround for no blueprint-level 404/5 error handlers, see:
         # https://github.com/pallets/flask/issues/503#issuecomment-71383286
         handler = list(app.error_handler_spec['api'][error.code].values())[0]
@@ -126,6 +131,7 @@ def create_app(config):
 
     @app.before_request
     def setup_g():
+        # type: () -> Optional[Response]
         """Store commonly used values in Flask's special g object"""
         if 'expires' in session and datetime.utcnow() >= session['expires']:
             session.clear()
@@ -161,6 +167,9 @@ def create_app(config):
             if filesystem_id:
                 g.filesystem_id = filesystem_id
                 g.source = get_source(filesystem_id)
+
+        return None
+
 
     app.register_blueprint(main.make_blueprint(config))
     app.register_blueprint(account.make_blueprint(config),
