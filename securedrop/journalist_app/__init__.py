@@ -31,9 +31,9 @@ if typing.TYPE_CHECKING:
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from sdconfig import SDConfig  # noqa: F401
-    from typing import Optional, Tuple, Any
-    from werkzeug import Response
-    from flask_wrf import Error
+    from typing import Optional, Tuple, Any  # noqa: F401
+    from werkzeug import Response  # noqa: F401
+    from flask_wrf import Error  # noqa: F401
 
 _insecure_views = ['main.login', 'main.select_logo', 'static']
 
@@ -169,7 +169,6 @@ def create_app(config):
                 g.source = get_source(filesystem_id)
 
         return None
-
 
     app.register_blueprint(main.make_blueprint(config))
     app.register_blueprint(account.make_blueprint(config),
