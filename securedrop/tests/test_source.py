@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import gzip
-import platform
 import re
 import subprocess
 import six
@@ -14,21 +13,14 @@ import source
 from . import utils
 import version
 
-from datetime import date
 from db import db
 from models import Source, Reply
 from source_app import main as source_app_main
 from source_app import api as source_app_api
-from source_app import disable as source_app_disable
 from .utils.db_helper import new_codename
 from .utils.instrument import InstrumentedApp
 
 overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
-TRUSTY_DISABLED_ENDPOINTS = ['main.index', 'main.lookup', 'main.generate', 'main.login',
-                             'info.download_journalist_pubkey', 'info.tor2web_warning',
-                             'info.recommend_tor_browser', 'info.why_download_journalist_pubkey']
-STATIC_ASSETS = ['css/source.css', 'i/custom_logo.png', 'i/font-awesome/fa-globe-black.png',
-                 'i/favicon.png']
 
 
 def test_page_not_found(source_app):
@@ -731,53 +723,3 @@ def test_source_can_only_delete_own_replies(source_app):
 
     reply = Reply.query.filter_by(filename=filename).one()
     assert reply.deleted_by_source
-
-
-def test_source_disabled_when_trusty_is_eol(config, source_app):
-    with patch.object(source_app_api.platform, "linux_distribution") as mocked_platform:
-        mocked_platform.return_value = ("Ubuntu", "14.04", "Trusty")
-
-        with source_app.test_client() as app:
-            source_app_disable.TRUSTY_DISABLE_DATE = date(2001, 1, 1)
-
-            assert platform.linux_distribution()[1] == "14.04"
-            for endpoint in TRUSTY_DISABLED_ENDPOINTS:
-                resp = app.get(url_for(endpoint))
-                assert resp.status_code == 200
-                text = resp.data.decode('utf-8')
-                assert "We're sorry, our SecureDrop is currently offline." in text
-            # Ensure static assets are properly served
-            for asset in STATIC_ASSETS:
-                resp = app.get(url_for('static', filename=asset))
-                assert resp.status_code == 200
-                text = resp.data.decode('utf-8')
-                assert "We're sorry, our SecureDrop is currently offline." not in text
-
-
-def test_source_not_disabled_before_trusty_eol(config, source_app):
-    with patch.object(source_app_api.platform, "linux_distribution") as mocked_platform:
-        mocked_platform.return_value = ("Ubuntu", "14.04", "Trusty")
-
-        with source_app.test_client() as app:
-            source_app_disable.TRUSTY_DISABLE_DATE = date(2097, 1, 1)
-            assert platform.linux_distribution()[1] == "14.04"
-            for endpoint in TRUSTY_DISABLED_ENDPOINTS:
-                resp = app.get(url_for(endpoint), follow_redirects=True)
-                assert resp.status_code == 200
-                text = resp.data.decode('utf-8')
-                assert "We're sorry, our SecureDrop is currently offline." not in text
-
-
-def test_source_not_disabled_xenial(config, source_app):
-    with patch.object(source_app_api.platform, "linux_distribution") as mocked_platform:
-        mocked_platform.return_value = ("Ubuntu", "16.04", "Xenial")
-
-        with source_app.test_client() as app:
-            source_app_disable.TRUSTY_DISABLE_DATE = date(2001, 1, 1)
-
-            assert platform.linux_distribution()[1] == "16.04"
-            for endpoint in TRUSTY_DISABLED_ENDPOINTS:
-                resp = app.get(url_for(endpoint), follow_redirects=True)
-                assert resp.status_code == 200
-                text = resp.data.decode('utf-8')
-                assert "We're sorry, our SecureDrop is currently offline." not in text
