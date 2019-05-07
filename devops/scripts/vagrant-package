@@ -15,9 +15,3 @@ molecule test -s vagrant-packager
 molecule/vagrant-packager/package.py
 molecule destroy -s vagrant-packager
 
-echo '######################'
-echo 'Building Trusty boxes'
-echo '######################'
-molecule test -s vagrant-packager-trusty
-molecule/vagrant-packager-trusty/package.py
-molecule destroy -s vagrant-packager-trusty
