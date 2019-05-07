@@ -32,8 +32,9 @@ if typing.TYPE_CHECKING:
     from typing import Callable, Optional, Union, Dict, List, Any  # noqa: F401
     from tempfile import _TemporaryFileWrapper  # noqa: F401
     from io import BufferedIOBase  # noqa: F401
-    from sqlalchemy import query  # noqa: F401
-    from logging import Logger # noqa: F401
+    from logging import Logger  # noqa: F401
+    from sqlalchemy import Model, Query  # noqa: F401
+    from pyotp import OTP  # noqa: F401
 
 LOGIN_HARDENING = True
 if os.environ.get('SECUREDROP_ENV') == 'test':
@@ -43,7 +44,7 @@ ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
 
 
 def get_one_or_else(query, logger, failure_method):
-    # type: (query, Logger, Callable[[int], None]) -> None
+    # type: (Query, Logger, Callable[[int], None]) -> None
     try:
         return query.one()
     except MultipleResultsFound as e:
@@ -107,10 +108,10 @@ class Source(db.Model):
 
     @property
     def collection(self):
-        # type: () -> List[Union[Submissions, Replies]]
+        # type: () -> List[Union[Submission, Reply]]
         """Return the list of submissions and replies for this source, sorted
         in ascending order by the filename/interaction count."""
-        collection = []
+        collection = []  # type: List[Union[Submission, Reply]]
         collection.extend(self.submissions)
         collection.extend(self.replies)
         collection.sort(key=lambda x: int(x.filename.split('-')[0]))
@@ -130,17 +131,21 @@ class Source(db.Model):
 
     @property
     def public_key(self):
+        # type: () -> str
         return current_app.crypto_util.export_pubkey(self.filesystem_id)
 
     @public_key.setter
     def public_key(self, value):
+        # type: (str) -> None
         raise NotImplementedError
 
     @public_key.deleter
     def public_key(self):
+        # type: () -> None
         raise NotImplementedError
 
     def to_json(self):
+        # type: () -> Dict[str, Union[str, bool, int, DateTime]]
         docs_msg_count = self.documents_messages_count()
 
         if self.last_updated:
@@ -200,6 +205,7 @@ class Submission(db.Model):
     checksum = Column(String(255))
 
     def __init__(self, source, filename):
+        # type: (Source, str) -> None
         self.source_id = source.id
         self.filename = filename
         self.uuid = str(uuid.uuid4())
@@ -207,9 +213,11 @@ class Submission(db.Model):
                                                      filename)).st_size
 
     def __repr__(self):
+        # type: () -> str
         return '<Submission %r>' % (self.filename)
 
     def to_json(self):
+        # type: () -> Dict[str, Union[str, int, bool]]
         json_submission = {
             'source_url': url_for('api.single_source',
                                   source_uuid=self.source.uuid),
@@ -257,6 +265,7 @@ class Reply(db.Model):
     deleted_by_source = Column(Boolean, default=False, nullable=False)
 
     def __init__(self, journalist, source, filename):
+        # type: (Journalist, Source, str) -> None
         self.journalist_id = journalist.id
         self.source_id = source.id
         self.uuid = str(uuid.uuid4())
@@ -265,9 +274,11 @@ class Reply(db.Model):
                                                      filename)).st_size
 
     def __repr__(self):
+        # type: () -> str
         return '<Reply %r>' % (self.filename)
 
     def to_json(self):
+        # type: () -> Dict[str, Union[str, int, bool]]
         json_submission = {
             'source_url': url_for('api.single_source',
                                   source_uuid=self.source.uuid),
@@ -291,12 +302,14 @@ class SourceStar(db.Model):
     starred = Column("starred", Boolean, default=True)
 
     def __eq__(self, other):
+        # type: (Any) -> bool
         if isinstance(other, SourceStar):
             return (self.source_id == other.source_id and
                     self.id == other.id and self.starred == other.starred)
-        return NotImplemented
+        return False
 
     def __init__(self, source, starred=True):
+        # type: (Source, bool) -> None
         self.source_id = source.id
         self.starred = starred
 
@@ -352,15 +365,18 @@ class InvalidPasswordLength(PasswordError):
     """
 
     def __init__(self, passphrase):
+        # type: (str) -> None
         self.passphrase_len = len(passphrase)
 
     def __str__(self):
+        # type: () -> str
         if self.passphrase_len > Journalist.MAX_PASSWORD_LEN:
             return "Password too long (len={})".format(self.passphrase_len)
         if self.passphrase_len < Journalist.MIN_PASSWORD_LEN:
             return "Password needs to be at least {} characters".format(
                 Journalist.MIN_PASSWORD_LEN
             )
+        return ""   # return empty string that can be appended harmlessly
 
 
 class NonDicewarePassword(PasswordError):
@@ -398,6 +414,8 @@ class Journalist(db.Model):
 
     def __init__(self, username, password, first_name=None, last_name=None, is_admin=False,
                  otp_secret=None):
+        # type: (str, str, Optional[str], Optional[str], bool, Optional[str]) -> None
+
         self.check_username_acceptable(username)
         self.username = username
         if first_name:
@@ -414,6 +432,7 @@ class Journalist(db.Model):
             self.set_hotp_secret(otp_secret)
 
     def __repr__(self):
+        # type: () -> str
         return "<Journalist {0}{1}>".format(
             self.username,
             " [admin]" if self.is_admin else "")
@@ -421,12 +440,14 @@ class Journalist(db.Model):
     _LEGACY_SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
     def _scrypt_hash(self, password, salt):
+        # type: (str, Binary) -> Binary
         return scrypt.hash(str(password), salt, **self._LEGACY_SCRYPT_PARAMS)
 
     MAX_PASSWORD_LEN = 128
     MIN_PASSWORD_LEN = 14
 
     def set_password(self, passphrase):
+        # type: (str) -> None
         self.check_password_acceptable(passphrase)
 
         # "migrate" from the legacy case
@@ -454,6 +475,7 @@ class Journalist(db.Model):
 
     @classmethod
     def check_username_acceptable(cls, username):
+        # type: (str) -> None
         if len(username) < cls.MIN_USERNAME_LEN:
             raise InvalidUsernameException(
                         'Username "{}" must be at least {} characters long.'
@@ -467,6 +489,7 @@ class Journalist(db.Model):
 
     @classmethod
     def check_password_acceptable(cls, password):
+        # type: (str) -> None
         # Enforce a reasonable maximum length for passwords to avoid DoS
         if len(password) > cls.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(password)
@@ -480,6 +503,7 @@ class Journalist(db.Model):
             raise NonDicewarePassword()
 
     def valid_password(self, passphrase):
+        # type: (str) -> Union[Binary, bool]
         # Avoid hashing passwords that are over the maximum length
         if len(passphrase) > self.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(passphrase)
@@ -510,9 +534,11 @@ class Journalist(db.Model):
         return is_valid
 
     def regenerate_totp_shared_secret(self):
+        # type: () -> None
         self.otp_secret = pyotp.random_base32()
 
     def set_hotp_secret(self, otp_secret):
+        # type: (str) -> None
         self.otp_secret = base64.b32encode(
             binascii.unhexlify(
                 otp_secret.replace(
@@ -523,6 +549,7 @@ class Journalist(db.Model):
 
     @property
     def totp(self):
+        # type: () -> OTP
         if self.is_totp:
             return pyotp.TOTP(self.otp_secret)
         else:
@@ -530,6 +557,7 @@ class Journalist(db.Model):
 
     @property
     def hotp(self):
+        # type: () -> OTP
         if not self.is_totp:
             return pyotp.HOTP(self.otp_secret)
         else:
@@ -537,6 +565,7 @@ class Journalist(db.Model):
 
     @property
     def shared_secret_qrcode(self):
+        # type: () -> Markup
         uri = self.totp.provisioning_uri(
             self.username,
             issuer_name="SecureDrop")
@@ -554,6 +583,7 @@ class Journalist(db.Model):
 
     @property
     def formatted_otp_secret(self):
+        # type: () -> str
         """The OTP secret is easier to read and manually enter if it is all
         lowercase and split into four groups of four characters. The secret is
         base32-encoded, so it is case insensitive."""
@@ -562,11 +592,13 @@ class Journalist(db.Model):
         return ' '.join(chunks).lower()
 
     def _format_token(self, token):
+        # type: (str) -> str
         """Strips from authentication tokens the whitespace
         that many clients add for readability"""
         return ''.join(token.split())
 
     def verify_token(self, token):
+        # type: (str) -> bool
         token = self._format_token(token)
 
         # Store latest token to prevent OTP token reuse
@@ -594,6 +626,7 @@ class Journalist(db.Model):
 
     @classmethod
     def throttle_login(cls, user):
+        # type: (Journalist) -> None
         # Record the login attempt...
         login_attempt = JournalistLoginAttempt(user)
         db.session.add(login_attempt)
@@ -613,6 +646,7 @@ class Journalist(db.Model):
 
     @classmethod
     def login(cls, username, password, token):
+        # type: (str, str, str) -> Journalist
         try:
             user = Journalist.query.filter_by(username=username).one()
         except NoResultFound:
@@ -634,6 +668,7 @@ class Journalist(db.Model):
         return user
 
     def generate_api_token(self, expiration):
+        # type: (int) -> unicode
         s = TimedJSONWebSignatureSerializer(
             current_app.config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'id': self.id}).decode('ascii')
@@ -650,6 +685,7 @@ class Journalist(db.Model):
 
     @staticmethod
     def validate_api_token_and_get_user(token):
+        # type: (str) -> Union[Journalist, None]
         s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
@@ -663,6 +699,7 @@ class Journalist(db.Model):
         return Journalist.query.get(data['id'])
 
     def to_json(self):
+        # type: () -> Dict[str, Union[str, bool, DateTime]]
         json_user = {
             'username': self.username,
             'last_login': self.last_access.isoformat() + 'Z',
@@ -683,6 +720,7 @@ class JournalistLoginAttempt(db.Model):
     journalist_id = Column(Integer, ForeignKey('journalists.id'))
 
     def __init__(self, journalist):
+        # type: (Journalist) -> None
         self.journalist_id = journalist.id
 
 
