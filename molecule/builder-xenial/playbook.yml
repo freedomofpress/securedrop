@@ -57,7 +57,7 @@
   gather_facts: false
   vars:
     sd_build_root: "{{ playbook_dir + '/../../build' }}"
-    sd_target_distro: "{{ 'xenial' if securedrop_build_xenial_support|default(False)|bool else 'trusty' }}"
+    sd_target_distro: xenial
     sd_build_dest: "{{ sd_build_root + '/' + sd_target_distro }}"
 
   tasks:
