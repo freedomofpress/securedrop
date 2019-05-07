@@ -6,7 +6,6 @@ import six
 import random
 import zipfile
 import base64
-import datetime
 import binascii
 
 from base64 import b64decode
