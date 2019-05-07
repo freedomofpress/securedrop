@@ -20,13 +20,9 @@ lint-full:  ## Run the python linter with nothing disabled
 test: ## Run the test suite in a Ubuntu 16.04 (Xenial) dockerized environment
 	./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
 
-.PHONY: test-trusty
-test-trusty: ## Run the test suite in a Ubuntu 14.04 (Trusty) dockerized environment (to be removed April 30, 2019)
-	BASE_OS=trusty ./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
-
 .PHONY: test-python3
 test-python3: ## Run the Python 3 test suite in a Ubuntu 16.04 (Xenial) dockerized environment
-	PYTHON_VERSION=3 BASE_OS=xenial ./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
+	PYTHON_VERSION=3 ./bin/dev-shell ./bin/run-test -v $${TESTFILES:-tests}
 
 .PHONY: translation-test
 translation-test: ## Run all pages-layout tests in all supported languages

@@ -7,33 +7,13 @@
 set -eu
 
 TOPLEVEL=$(git rev-parse --show-toplevel)
-
-if ! test -n "${BASE_OS:-}" ; then
-    # If no base OS was specified, then we use Xenial
-    BASE_OS=xenial
-fi
+BASE_OS=xenial
 
 if ! test -n "${PYTHON_VERSION:-}" ; then
     PYTHON_VERSION=2
 fi
 
-function exit_if_not_supported_base_image() {
-    # Currently we only support Xenial or Trusty.
-    if [[ "$1" != "xenial" && "$1" != "trusty" ]]
-    then
-        echo "BASE_OS must be trusty or xenial"
-        exit 1
-    fi
-}
-
 function validate_python_version() {
-    # Trusty will be EOL April 2019. Orgs must be on Xenial to upgrade to Python 3.
-    if [[ "$1" != "xenial" && "$2" != "2" ]]
-    then
-        echo "For Ubuntu Trusty, PYTHON_VERSION must be 2"
-        exit 1
-    fi
-
     if [[ "$2" != "2" && "$2" != "3" ]]
     then
         echo "PYTHON_VERSION must be 2 or 3"
