@@ -383,7 +383,7 @@ Currently, when one admin pushes changes in ``site-specific`` to the server, the
 changes will not sync to the local ``site-specific`` file on the remaining admin workstations.
 Without being aware of changes made to ``site-specific``, admins run the risk of pushing old
 information to the servers. This can affect the receipt of OSSEC alerts, viability of the
-Submission Key, among other critical components of the SecureDrop environment.
+*Submission Key*, among other critical components of the SecureDrop environment.
 
 There are multiple ways to avoid pushing out-of-date information to the servers.
 We recommend admins establish a secure communication pipeline to alert fellow admins

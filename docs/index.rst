@@ -33,7 +33,7 @@ anonymous sources.
    set_up_tails
    set_up_svs
    set_up_transfer_device
-   generate_securedrop_application_key
+   generate_submission_key
    set_up_admin_tails
    network_firewall
    servers
