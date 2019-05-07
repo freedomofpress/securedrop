@@ -22,6 +22,18 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from db import db
 
+import typing
+
+if typing.TYPE_CHECKING:
+    # flake8 can not understand type annotation yet.
+    # That is why all type annotation relative import
+    # statements has to be marked as noqa.
+    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
+    from typing import Callable, Optional, Union, Dict, List, Any  # noqa: F401
+    from tempfile import _TemporaryFileWrapper  # noqa: F401
+    from io import BufferedIOBase  # noqa: F401
+    from sqlalchemy import query  # noqa: F401
+    from logging import Logger # noqa: F401
 
 LOGIN_HARDENING = True
 if os.environ.get('SECUREDROP_ENV') == 'test':
@@ -31,6 +43,7 @@ ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
 
 
 def get_one_or_else(query, logger, failure_method):
+    # type: (query, Logger, Callable[[int], None]) -> None
     try:
         return query.one()
     except MultipleResultsFound as e:
@@ -65,34 +78,36 @@ class Source(db.Model):
     MAX_CODENAME_LEN = 128
 
     def __init__(self, filesystem_id=None, journalist_designation=None):
+        # type: (str, str) -> None
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
         self.uuid = str(uuid.uuid4())
 
     def __repr__(self):
+        # type: () -> str
         return '<Source %r>' % (self.journalist_designation)
 
     @property
     def journalist_filename(self):
+        # type: () -> str
         valid_chars = 'abcdefghijklmnopqrstuvwxyz1234567890-_'
         return ''.join([c for c in self.journalist_designation.lower().replace(
             ' ', '_') if c in valid_chars])
 
     def documents_messages_count(self):
-        try:
-            return self.docs_msgs_count
-        except AttributeError:
-            self.docs_msgs_count = {'messages': 0, 'documents': 0}
-            for submission in self.submissions:
-                if submission.filename.endswith('msg.gpg'):
-                    self.docs_msgs_count['messages'] += 1
-                elif (submission.filename.endswith('doc.gz.gpg') or
-                      submission.filename.endswith('doc.zip.gpg')):
-                    self.docs_msgs_count['documents'] += 1
-            return self.docs_msgs_count
+        # type: () -> Dict[str, int]
+        self.docs_msgs_count = {'messages': 0, 'documents': 0}
+        for submission in self.submissions:
+            if submission.filename.endswith('msg.gpg'):
+                self.docs_msgs_count['messages'] += 1
+            elif (submission.filename.endswith('doc.gz.gpg') or
+                  submission.filename.endswith('doc.zip.gpg')):
+                self.docs_msgs_count['documents'] += 1
+        return self.docs_msgs_count
 
     @property
     def collection(self):
+        # type: () -> List[Union[Submissions, Replies]]
         """Return the list of submissions and replies for this source, sorted
         in ascending order by the filename/interaction count."""
         collection = []
