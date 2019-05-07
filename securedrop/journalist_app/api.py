@@ -10,7 +10,7 @@ from werkzeug.exceptions import default_exceptions  # type: ignore
 
 from db import db
 from journalist_app import utils
-from models import (Journalist, Reply, Source, Submission,
+from models import (Journalist, Reply, Source, Submission, RevokedToken,
                     LoginThrottledException, InvalidUsernameException,
                     BadTokenException, WrongPasswordException)
 from store import NotEncrypted
@@ -75,10 +75,18 @@ def make_blueprint(config):
     @api.before_request
     def validate_data():
         if request.method == 'POST':
-            # flag and star can have empty payloads
+            # flag, star, and logout can have empty payloads
             if not request.data:
-                if ('flag' not in request.path and 'star' not in request.path):
-                    return abort(400, 'malformed request')
+                dataless_endpoints = [
+                    'add_star',
+                    'remove_star',
+                    'flag',
+                    'logout',
+                ]
+                for endpoint in dataless_endpoints:
+                    if request.endpoint == 'api.' + endpoint:
+                        return
+                return abort(400, 'malformed request')
             # other requests must have valid JSON payload
             else:
                 try:
@@ -308,6 +316,16 @@ def make_blueprint(config):
     def get_current_user():
         user = get_user_object(request)
         return jsonify(user.to_json()), 200
+
+    @api.route('/logout', methods=['POST'])
+    @token_required
+    def logout():
+        user = get_user_object(request)
+        auth_token = request.headers.get('Authorization').split(" ")[1]
+        revoked_token = RevokedToken(token=auth_token, journalist_id=user.id)
+        db.session.add(revoked_token)
+        db.session.commit()
+        return jsonify({'message': 'Your token has been revoked.'}), 200
 
     def _handle_api_http_exception(error):
         # Workaround for no blueprint-level 404/5 error handlers, see:

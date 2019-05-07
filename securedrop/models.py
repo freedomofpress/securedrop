@@ -568,12 +568,27 @@ class Journalist(db.Model):
         return s.dumps({'id': self.id}).decode('ascii')
 
     @staticmethod
+    def validate_token_is_not_expired_or_invalid(token):
+        s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
+        try:
+            s.loads(token)
+        except BadData:
+            return None
+
+        return True
+
+    @staticmethod
     def validate_api_token_and_get_user(token):
         s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
         except BadData:
             return None
+
+        revoked_token = RevokedToken.query.filter_by(token=token).one_or_none()
+        if revoked_token is not None:
+            return None
+
         return Journalist.query.get(data['id'])
 
     def to_json(self):
@@ -598,3 +613,16 @@ class JournalistLoginAttempt(db.Model):
 
     def __init__(self, journalist):
         self.journalist_id = journalist.id
+
+
+class RevokedToken(db.Model):
+
+    """
+    API tokens that have been revoked either through a logout or other revocation mechanism.
+    """
+
+    __tablename__ = 'revoked_tokens'
+
+    id = Column(Integer, primary_key=True)
+    journalist_id = Column(Integer, ForeignKey('journalists.id'))
+    token = db.Column(db.Text, nullable=False, unique=True)

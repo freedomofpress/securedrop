@@ -151,6 +151,8 @@ class UpgradeTester(Helper):
         and without being able to inject this config, the checksum function won't succeed. The above
         `load_data` function provides data that can be manually verified by checking the `rqworker`
         log file in `/tmp/`.
+
+        The other part of the migration, creating a table, cannot be tested regardless.
         '''
         pass
 
@@ -175,9 +177,15 @@ class DowngradeTester(Helper):
             self.create_submission(checksum=True)
             self.create_reply(checksum=True)
 
+            # add a revoked token for enable a foreign key connection
+            self.add_revoked_token()
+
     def check_downgrade(self):
         '''
         Verify that the checksum column is now gone.
+
+        The dropping of the revoked_tokens table cannot be checked. If the migration completes,
+        then it wokred correctly.
         '''
         with self.app.app_context():
             sql = "SELECT * FROM submissions"
@@ -197,3 +205,13 @@ class DowngradeTester(Helper):
                     submission['checksum']
                 except NoSuchColumnError:
                     pass
+
+    def add_revoked_token(self):
+        params = {
+            'journalist_id': self.journalist_id,
+            'token': 'abc123',
+        }
+        sql = '''INSERT INTO revoked_tokens (journalist_id, token)
+                 VALUES (:journalist_id, :token)
+              '''
+        db.engine.execute(text(sql), **params)

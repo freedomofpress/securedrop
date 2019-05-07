@@ -1,4 +1,4 @@
-"""add checksum columns
+"""add checksum columns and revoke token table
 
 Revision ID: b58139cfdc8c
 Revises: f2833ac34bb6
@@ -35,6 +35,16 @@ def upgrade():
 
     with op.batch_alter_table('submissions', schema=None) as batch_op:
         batch_op.add_column(sa.Column('checksum', sa.String(length=255), nullable=True))
+
+    op.create_table(
+        'revoked_tokens',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('journalist_id', sa.Integer(), nullable=True),
+        sa.Column('token', sa.Text(), nullable=False),
+        sa.ForeignKeyConstraint(['journalist_id'], ['journalists.id'], ),
+        sa.PrimaryKeyConstraint('id'),
+        sa.UniqueConstraint('token')
+    )
 
     try:
         app = create_app(config)
@@ -77,6 +87,8 @@ def upgrade():
 
 
 def downgrade():
+    op.drop_table('revoked_tokens')
+
     with op.batch_alter_table('submissions', schema=None) as batch_op:
         batch_op.drop_column('checksum')
 

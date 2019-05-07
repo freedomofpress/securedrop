@@ -18,7 +18,8 @@ from crypto_util import CryptoUtil
 from db import db
 from journalist_app import account, admin, api, main, col
 from journalist_app.utils import (get_source, logged_in,
-                                  JournalistInterfaceSessionInterface)
+                                  JournalistInterfaceSessionInterface,
+                                  cleanup_expired_revoked_tokens)
 from models import Journalist
 from store import Storage
 from worker import rq_worker_queue
@@ -123,6 +124,10 @@ def create_app(config):
     app.jinja_env.filters['rel_datetime_format'] = \
         template_filters.rel_datetime_format
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
+
+    @app.before_first_request
+    def expire_blacklisted_tokens():
+        return cleanup_expired_revoked_tokens()
 
     @app.before_request
     def setup_g():
