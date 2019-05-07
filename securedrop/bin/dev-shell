@@ -22,7 +22,6 @@ function validate_python_version() {
 }
 
 function docker_image() {
-    exit_if_not_supported_base_image $1
     validate_python_version $1 $2
 
     docker build \
@@ -35,7 +34,6 @@ function docker_image() {
 }
 
 function docker_run() {
-    exit_if_not_supported_base_image $1
     validate_python_version $1 $2
 
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
