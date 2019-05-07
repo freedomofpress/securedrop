@@ -35,13 +35,11 @@ The `Tails website <https://tails.boum.org/>`__ has detailed and up-to-date
 instructions on how to download and verify Tails, and how to create a Tails USB
 stick. Here are some links to help you out:
 
--  `Download and verify the Tails .iso`_
--  `Install onto a USB stick or SD card`_
+-  `Download and verify the Tails .iso and install onto a USB stick or SD card`_
 -  `Create & configure the persistent volume`_
 
-.. _`Download and verify the Tails .iso`: https://tails.boum.org/download/index.en.html
-.. _`Install onto a USB stick or SD card`: https://tails.boum.org/doc/first_steps/installation/index.en.html
-.. _`Create & configure the persistent volume`: https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html
+.. _`Download and verify the Tails .iso and install onto a USB stick or SD card`: https://tails.boum.org/install/index.en.html
+.. _`Create & configure the persistent volume`: https://tails.boum.org/install/linux/usb/index.en.html#create-persistence
 
 Note for macOS Users Manually Installing Tails
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
