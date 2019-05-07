@@ -9,3 +9,4 @@ pytest-cov
 pytest-mock
 requests
 selenium < 3
+hypothesis
