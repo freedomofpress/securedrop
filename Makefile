@@ -9,10 +9,6 @@ STABLE_VER := $(shell cat molecule/shared/stable.ver)
 ci-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment.
 	./devops/gce-nested/ci-go.sh
 
-.PHONY: ci-go-trusty
-ci-go-trusty: ## Creates, provisions, tests, and destroys GCE host for testing staging environment under trusty.
-	./devops/gce-nested/ci-go.sh trusty
-
 .PHONY: ci-teardown
 ci-teardown: ## Destroys GCE host for testing staging environment.
 	./devops/gce-nested/gce-stop.sh
@@ -82,10 +78,6 @@ shellcheckclean: ## Cleans up temporary container associated with shellcheck tar
 .PHONY: lint
 lint: docs-lint app-lint flake8 html-lint yamllint shellcheck ansible-config-lint ## Runs all linting tools (docs, pylint, flake8, HTML, YAML, shell, ansible-config).
 
-.PHONY: docker-build-ubuntu
-docker-build-ubuntu: ## Builds SD Ubuntu docker container
-	@docker build -t quay.io/freedomofpress/ubuntu:trusty -f molecule/builder/Dockerfile molecule/builder
-
 .PHONY: build-debs
 build-debs: ## Builds and tests debian packages
 	@./devops/scripts/build-debs.sh
@@ -93,14 +85,6 @@ build-debs: ## Builds and tests debian packages
 .PHONY: build-debs-notest
 build-debs-notest: ## Builds and tests debian packages (sans tests)
 	@./devops/scripts/build-debs.sh notest
-
-.PHONY: build-debs-trusty
-build-debs-trusty: ## Builds and tests debian packages (for Trusty)
-	@./devops/scripts/build-debs.sh test trusty
-
-.PHONY: build-debs-trusty-notest
-build-debs-trusty-notest: ## Builds and tests debian packages (for Trusty)
-	@./devops/scripts/build-debs.sh notest trusty
 
 .PHONY: build-gcloud-docker
 build-gcloud-docker: ## Build docker container for gcloud sdk
@@ -153,10 +137,6 @@ vagrant-package: ## Package up a vagrant box of the last stable SD release
 .PHONY: staging
 staging: ## Creates local staging environment in VM, autodetecting platform
 	@./devops/scripts/create-staging-env xenial
-
-.PHONY: staging-trusty
-staging-trusty: ## Creates local staging VMs based on Trusty, autodetecting platform
-	@./devops/scripts/create-staging-env
 
 .PHONY: clean
 clean: ## DANGER! Purges all site-specific info and developer files from project.

@@ -56,62 +56,6 @@ jobs:
       - *rebaseontarget
       - run: make ci-lint
 
-  trusty-app-tests:
-    machine:
-      enabled: true
-    environment:
-      DOCKER_API_VERSION: 1.23
-      BASE_OS: trusty
-    parallelism: 3
-    steps:
-      - checkout
-      - *rebaseontarget
-      - *createcachedir
-
-      - restore_cache:
-          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/trusty/python2/Dockerfile" }}
-          paths:
-            - /caches/layers.tar.gz
-
-      - *loadimagelayers
-
-      - run:
-          name: Build Docker image
-          command: |
-            set +o pipefail
-            docker images
-            fromtag=$(docker images |grep securedrop-test-trusty |head -n1 |awk '{print $2}')
-            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-trusty:${fromtag:-latest}" ./bin/dev-shell true
-
-      - run:
-          name: Save Docker image layer cache
-          command: |
-            docker images
-            docker save -o /caches/layers.tar securedrop-test-trusty:latest
-
-      - save_cache:
-          key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/trusty/python2/Dockerfile" }}
-          paths:
-            - /caches/layers.tar
-
-      - run:
-          name: Make test results directory
-          command: mkdir -p ~/test-results
-
-      - run:
-          name: Run tests
-          command: |
-            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
-            docker rm -f securedrop-test-trusty || true
-            fromtag=$(docker images |grep securedrop-test-trusty |head -n1 |awk '{print $2}')
-            cd securedrop && DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-trusty:${fromtag:-latest}" make test
-
-      - store_test_results:
-          path: ~/test-results
-
-      - store_artifacts:
-          path: ~/test-results
-
   app-tests:
     machine:
       enabled: true
@@ -401,4 +345,3 @@ workflows:
                 - develop
     jobs:
       - static-analysis-and-no-known-cves
-      - trusty-app-tests
