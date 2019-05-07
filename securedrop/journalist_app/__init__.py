@@ -7,7 +7,7 @@ from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
-from werkzeug.exceptions import default_exceptions  # type: ignore
+from werkzeug.exceptions import default_exceptions
 
 import i18n
 import template_filters
@@ -33,7 +33,7 @@ if typing.TYPE_CHECKING:
     from sdconfig import SDConfig  # noqa: F401
     from typing import Optional, Union, Tuple, Any  # noqa: F401
     from werkzeug import Response  # noqa: F401
-    from flask_wrf import HttpException  # noqa: F401
+    from werkzeug.exceptions import HTTPException  # noqa: F401
 
 _insecure_views = ['main.login', 'main.select_logo', 'static']
 
@@ -100,7 +100,7 @@ def create_app(config):
         return redirect(url_for('main.login'))
 
     def _handle_http_exception(error):
-        # type: (HttpException) -> Tuple[Union[Response, str], int]
+        # type: (HTTPException) -> Tuple[Union[Response, str], Optional[int]]
         # Workaround for no blueprint-level 404/5 error handlers, see:
         # https://github.com/pallets/flask/issues/503#issuecomment-71383286
         handler = list(app.error_handler_spec['api'][error.code].values())[0]
