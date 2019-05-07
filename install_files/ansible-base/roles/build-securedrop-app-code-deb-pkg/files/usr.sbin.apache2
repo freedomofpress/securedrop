@@ -63,7 +63,6 @@
   /etc/apache2/sites-enabled/ r,
   /etc/ld.so.cache r,
   /etc/localtime r,
-  /etc/lsb-release r,
   /etc/magic r,
   /etc/mime.types r,
   /etc/services r,
