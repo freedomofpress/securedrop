@@ -1590,61 +1590,6 @@ def test_render_locales(config, journalist_app, test_journo, test_source):
     assert url_end + '?l=en_US' in text, text
 
 
-def test_render_xenial_positive(config, journalist_app, test_journo, mocker):
-    yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
-    journalist_app.config.update(
-        XENIAL_WARNING_DATE=yesterday,
-        XENIAL_VER='16.04'
-    )
-
-    mocked_error_platform = mocker.patch('platform.linux_distribution')
-    mocked_error_platform.return_value = ('Ubuntu', '14.04', 'trusty')
-
-    with journalist_app.test_client() as app:
-        _login_user(app, test_journo['username'], test_journo['password'],
-                    test_journo['otp_secret'])
-
-        resp = app.get(url_for('main.index'))
-
-    text = resp.data.decode('utf-8')
-    assert "critical-skull" in text, text
-
-
-def test_render_xenial_negative_version(config, journalist_app, test_journo, mocker):
-    yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
-    journalist_app.config.update(
-        XENIAL_WARNING_DATE=yesterday,
-        XENIAL_VER='16.04'
-    )
-
-    mocked_error_platform = mocker.patch('platform.linux_distribution')
-    mocked_error_platform.return_value = ('Ubuntu', '16.04', 'xenial')
-
-    with journalist_app.test_client() as app:
-        _login_user(app, test_journo['username'], test_journo['password'],
-                    test_journo['otp_secret'])
-        resp = app.get('/')
-
-    text = resp.data.decode('utf-8')
-    assert "critical-skull" not in text, text
-
-
-def test_render_xenial_negative_date(config, journalist_app, test_journo):
-    tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
-    journalist_app.config.update(
-        XENIAL_WARNING_DATE=tomorrow,
-        XENIAL_VER='16.04'
-    )
-
-    with journalist_app.test_client() as app:
-        _login_user(app, test_journo['username'], test_journo['password'],
-                    test_journo['otp_secret'])
-        resp = app.get('/')
-
-    text = resp.data.decode('utf-8')
-    assert "critical-skull" not in text, text
-
-
 def test_download_selected_submissions_from_source(journalist_app,
                                                    test_journo,
                                                    test_source):
