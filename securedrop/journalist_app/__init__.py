@@ -16,14 +16,15 @@ import platform
 
 from crypto_util import CryptoUtil
 from db import db
-from journalist_app import account, admin, api, main, col
+from journalist_app import account, admin, api, main, metrics, col
 from journalist_app.utils import (get_source, logged_in,
                                   JournalistInterfaceSessionInterface,
                                   cleanup_expired_revoked_tokens)
+
 from models import Journalist
 from store import Storage
 from worker import rq_worker_queue
-
+from prometheus_flask_exporter import PrometheusMetrics
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
 if typing.TYPE_CHECKING:
@@ -84,7 +85,8 @@ def create_app(config):
         adjectives_file=config.ADJECTIVES,
         gpg_key_dir=config.GPG_KEY_DIR,
     )
-
+    internal_metrics = PrometheusMetrics(app)
+    internal_metrics.info('securedrop_version', 'SecureDrop version', version=version.__version__)
     app.config['RQ_WORKER_NAME'] = config.RQ_WORKER_NAME
     rq_worker_queue.init_app(app)
 
@@ -174,6 +176,7 @@ def create_app(config):
     app.register_blueprint(col.make_blueprint(config), url_prefix='/col')
     api_blueprint = api.make_blueprint(config)
     app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+    app.register_blueprint(metrics.make_blueprint(config), url_prefix='/metrics')
     csrf.exempt(api_blueprint)
 
     return app

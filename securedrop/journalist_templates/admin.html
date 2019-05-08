@@ -46,6 +46,10 @@
 
 <a href="{{ url_for('admin.manage_config') }}" class="btn sd-button" id="update-instance-config">
   <i class="fas fa-pencil-alt"></i>{{ gettext('INSTANCE CONFIG') }}
+</a> &nbsp; &nbsp; &nbsp; &nbsp;
+
+<a href="{{ url_for('metrics.index') }}" class="btn sd-button" id="view-metrics">
+  <i class="fas fa-chart-bar"></i>{{ gettext('METRICS') }}
 </a>
 
 <hr class="no-line">
