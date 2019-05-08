@@ -16,5 +16,5 @@ RUN python bootstrap.py -v
 ENV VIRTUAL_ENV /opt/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 COPY requirements-dev.txt .
-RUN pip install -r requirements-dev.txt
+RUN pip install --require-hashes -r requirements-dev.txt
 RUN chown -R $USER_NAME /opt
