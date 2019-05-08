@@ -17,7 +17,6 @@ securedrop_app_rsync_opts:
 
 securedrop_local_build: "../../build"
 
-# Whether to build packages targeting Xenial. Some of the dependency
-# logic changes, so we'll adjust the control file accordingly.
-securedrop_build_xenial_support: False
-securedrop_package_dist: "{{ 'xenial' if securedrop_build_xenial_support else 'trusty' }}"
+# Always build packages targeting Xenial.
+securedrop_build_xenial_support: True
+securedrop_package_dist: xenial
