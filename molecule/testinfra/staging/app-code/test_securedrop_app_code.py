@@ -36,7 +36,7 @@ def test_securedrop_application_apt_dependencies(host, package):
 
 def test_securedrop_application_test_locale(host):
     """
-    Ensure SecureDrop DEFAULT_LOCALE is present.
+    Ensure both SecureDrop DEFAULT_LOCALE and SUPPORTED_LOCALES are present.
     """
     securedrop_config = host.file("{}/config.py".format(
         securedrop_test_vars.securedrop_code))
@@ -44,6 +44,8 @@ def test_securedrop_application_test_locale(host):
         assert securedrop_config.is_file
         assert securedrop_config.contains("^DEFAULT_LOCALE")
         assert securedrop_config.content.count("DEFAULT_LOCALE") == 1
+        assert securedrop_config.contains("^SUPPORTED_LOCALES = \[u'el', u'ar', 'en_US'\]")
+        assert securedrop_config.content.count("SUPPORTED_LOCALES") == 1
 
 
 def test_securedrop_application_test_journalist_key(host):

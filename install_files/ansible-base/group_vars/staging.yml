@@ -24,7 +24,9 @@ securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 
 source_apache_log_location: "/var/log/apache2/source-error.log"
 apache_logging_level: "info"
-
+securedrop_supported_locales:
+- el
+- ar
 ### Used by the mon role ###
 # The OSSEC alert GPG public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory
