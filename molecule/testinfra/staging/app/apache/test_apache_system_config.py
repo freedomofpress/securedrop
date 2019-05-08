@@ -16,17 +16,6 @@ def test_apache_apt_packages(host, package):
     assert host.package(package).is_installed
 
 
-def test_apache_apt_packages_trusty(host):
-    """
-    Ensure required Apache packages are installed. Only checks Trusty-specific
-    packages; other tests handle more general apt dependencies for Apache.
-    """
-    # Skip if testing against Xenial
-    if host.system_info.codename == "xenial":
-        return True
-    assert host.package("apache2-mpm-worker").is_installed
-
-
 def test_apache_security_config_deprecated(host):
     """
     Ensure that /etc/apache2/security is absent, since it was setting

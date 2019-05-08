@@ -78,13 +78,9 @@ def test_swap_disabled(host):
     # A leading slash will indicate full path to a swapfile.
     assert not re.search("^/", c, re.M)
 
-    if host.system_info.codename == "trusty":
-        # Expect that ONLY the headers will be present in the output.
-        rgx = re.compile("Filename\s*Type\s*Size\s*Used\s*Priority")
-    else:
-        # On Xenial, swapon 2.27.1 shows blank output, with no headers, so
-        # check for empty output as confirmation of no swap.
-        rgx = re.compile("^$")
+    # On Xenial, swapon 2.27.1 shows blank output, with no headers, so
+    # check for empty output as confirmation of no swap.
+    rgx = re.compile("^$")
 
     assert re.search(rgx, c)
 

@@ -1,11 +1,10 @@
 def test_release_manager_upgrade_channel(host):
     """
-    Ensures that the `do-release-upgrade` command will honor
-    upgrades from Trusty to Xenial, but not suggest upgrades
-    from Xenial to Bionic (which is untested and unsupported.)
+    Ensures that the `do-release-upgrade` command will not
+    suggest upgrades from Xenial to Bionic (which is untested
+    and unsupported.)
     """
     expected_channels = {
-        "trusty": "lts",
         "xenial": "never",
     }
 
