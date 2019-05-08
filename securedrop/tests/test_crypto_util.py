@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from hypothesis import given
+from hypothesis.strategies import text
 import io
 import os
 import pytest
 import re
+import six
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import crypto_util
@@ -312,3 +315,38 @@ def test_export_pubkey(source_app, test_source):
     # check that a non-existent identifer exports None
     exported = source_app.crypto_util.export_pubkey('x' * 50)
     assert exported is None
+
+
+@given(
+    name=text(alphabet=crypto_util.DICEWARE_SAFE_CHARS),
+    secret=text(alphabet=crypto_util.DICEWARE_SAFE_CHARS),
+    message=text()
+)
+def test_encrypt_then_decrypt_gives_same_result(
+        source_app,
+        test_source,
+        name,
+        secret,
+        message
+):
+    """Test that encrypting, then decrypting a string gives the original string.
+
+    This is the first test case using `hypothesis`:
+    https://hypothesis.readthedocs.io
+    """
+    crypto = source_app.crypto_util
+
+    key = crypto.genkeypair(
+        name,
+        secret
+    )
+    ciphertext = crypto.encrypt(message, str(key))
+    decrypted_text = crypto.decrypt(secret, ciphertext)
+
+    # `hypothesis.strategies.text()` generates `unicode` char sequences; use
+    # decode('utf-8') in order to decode decrypted ciphertext as `unicode` for
+    # correct type comparisons. Only decode on Python 2.
+    if six.PY2:
+        decrypted_text = decrypted_text.decode('utf-8')
+
+    assert decrypted_text == message

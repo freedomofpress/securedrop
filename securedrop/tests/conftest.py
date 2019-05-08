@@ -2,6 +2,7 @@
 
 import pretty_bad_protocol as gnupg
 import logging
+from hypothesis import settings
 import os
 import io
 import json
@@ -43,6 +44,11 @@ valid_levels = {'INFO': logging.INFO, 'DEBUG': logging.DEBUG}
 gnupg_logger.setLevel(
    valid_levels.get(os.environ.get('GNUPG_LOG_LEVEL', ""), logging.ERROR)
 )
+
+# `hypothesis` sets a default deadline of 200 milliseconds before failing tests,
+# which doesn't work for integration tests. Turn off deadlines.
+settings.register_profile("securedrop", deadline=None)
+settings.load_profile("securedrop")
 
 
 def pytest_addoption(parser):
