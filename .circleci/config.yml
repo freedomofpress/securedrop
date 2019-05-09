@@ -56,6 +56,10 @@ jobs:
       - *rebaseontarget
 
       - run:
+          name: Install enchant
+          command: sudo apt-get install enchant
+
+      - run:
           name: Install development dependencies
           command: pip install -U -r securedrop/requirements/develop-requirements.txt
 
@@ -204,7 +208,7 @@ jobs:
     docker:
       - image: gcr.io/cloud-builders/docker
     steps:
-      - run: apt-get install -y make virtualenv python-pip
+      - run: apt-get install -y make virtualenv python-pip enchant
       - checkout
       - setup_remote_docker
       - run: make fetch-tor-packages
