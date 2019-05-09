@@ -43,23 +43,18 @@ Debian packages on the staging machines:
    make build-debs
    make staging
    # Use the proper backend for your developer environment:
-   molecule login -s virtualbox-staging -h app-staging
+   molecule login -s virtualbox-staging-xenial -h app-staging
    # or:
-   molecule login -s libvirt-staging -h app-staging
+   molecule login -s libvirt-staging-xenial -h app-staging
    sudo su
    cd /var/www/securedrop
    ./manage.py add-admin
    pytest -v tests/
 
-To rebuild the local packages for the app code and update on Trusty staging: ::
+To rebuild the local packages for the app code and update on Xenial staging: ::
 
    make build-debs
    make staging
-
-To rebuild the local packages for the app code and update on Xenial staging: ::
-
-   make build-debs-xenial
-   make staging-xenial
 
 The Debian packages will be rebuilt from the current state of your
 local git repository and then installed on the staging servers.
@@ -120,7 +115,7 @@ alert emails.
 
 Direct SSH access is available for staging hosts, so you can use
 ``molecule login -s <scenario> -h app-staging``, where ``<scenario>``
-is either ``virtualbox-staging`` or ``libvirt-staging``, depending
+is either ``virtualbox-staging-xenial`` or ``libvirt-staging-xenial``, depending
 on your environment.
 
 .. _production_vms:
@@ -236,12 +231,9 @@ Set the default Vagrant provider to ``libvirt``:
 
 Convert Vagrant boxes to libvirt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Convert the VirtualBox images for both Trusty & Xenial from ``virtualbox`` to ``libvirt`` format:
+Convert the VirtualBox images for Xenial from ``virtualbox`` to ``libvirt`` format:
 
 .. code:: sh
-
-   vagrant box add --provider virtualbox bento/ubuntu-14.04
-   vagrant mutate bento/ubuntu-14.04 libvirt
 
    vagrant box add --provider virtualbox bento/ubuntu-16.04
    vagrant mutate bento/ubuntu-16.04 libvirt
