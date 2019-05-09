@@ -24,7 +24,7 @@ Any special considerations for deployment? Consider both:
 
 ### If you made changes to the server application code:
 
-- [ ] Linting (`make ci-lint`) and tests (`make -C securedrop test`) pass in the development container
+- [ ] Linting (`make lint`) and tests (`make -C securedrop test`) pass in the development container
 
 ### If you made changes to `securedrop-admin`:
 
