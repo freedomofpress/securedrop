@@ -12,13 +12,5 @@
 - name: Verify that the version of apt installed is not vulnerable to 2019-3462 (Xenial)
   assert:
     that: _apt_query_command_output_result.stdout is version('1.2.29ubuntu0.1', '>=')
-  when: ansible_distribution_release == 'xenial'
-  tags:
-    - apt
-
-- name: Verify that the version of apt installed is not vulnerable to 2019-3462 (Trusty)
-  assert:
-    that: _apt_query_command_output_result.stdout is version('1.0.1ubuntu2.19', '>=')
-  when: ansible_distribution_release == 'trusty'
   tags:
     - apt
