@@ -28,9 +28,9 @@ Determine Access Protocol for the *Secure Viewing Station*
 ----------------------------------------------------------
 
 Currently, SecureDrop only supports encrypting submissions to a single
-public/private key pair - the *SecureDrop Submission Key*. As a
-result, each journalist needs a way to access the Secure Viewing
-Station with a Tails USB that includes the submission private key.
+public/private key pair - the *Submission Key*. As a result, each journalist
+needs a way to access the *Secure Viewing Station* with a Tails USB that
+includes the *Submission Private Key*.
 
 The access protocol for the *Secure Viewing Station* depends on the
 structure and distribution of your organization. If your organization
@@ -69,8 +69,8 @@ to access the servers over SSH.
          the *Admin Workstation* via the Transfer Device. Place these files
          in ``~/Persistent/securedrop/install_files/ansible-base`` on the
          *Journalist Workstation*, and the ``./securedrop-admin tailsconfig``
-         tool will automatically use them. Don't forget to securely delete 
-         these files from the *Transfer Device* when you're done, by 
+         tool will automatically use them. Don't forget to securely delete
+         these files from the *Transfer Device* when you're done, by
          right-clicking them in the file manager and selecting **Wipe**.
 
 .. warning:: Do **not** copy the files ``app-ssh-aths`` and ``mon-ssh-aths``
@@ -78,9 +78,9 @@ to access the servers over SSH.
              and only the *Admin Workstation* should have shell access to the
              servers.
 
-.. warning:: The ``app-journalist-aths`` file contains a password for the 
-             authenticated hidden service used by the *Journalist Interface*, 
-             and should not be shared except through the onboarding process. 
+.. warning:: The ``app-journalist-aths`` file contains a password for the
+             authenticated hidden service used by the *Journalist Interface*,
+             and should not be shared except through the onboarding process.
 
 Since you need will the Tails setup scripts (``securedrop/tails_files``) that
 you used to :doc:`Configure the *Admin Workstation* Post-Install
@@ -163,7 +163,7 @@ The journalist should verify that they:
 .. note:: Again, it is important that they test on the same *SVS Tails USB* and
    the same *Secure Viewing Station* they will be using on a day to day basis.
 
-6. Verify the submission private key is present in the *Secure Viewing Station*
+6. Verify the *Submission Private Key* is present in the *Secure Viewing Station*
    persistent volume by clicking the clipboard icon |gpgApplet| in the top right
    corner of the Tails desktop and selecting “Manage Keys”. When clicking
    “GnuPG keys” the key should be present.

@@ -12,15 +12,15 @@ to securedrop@freedom.press.
 Actors
 ------
 
-The SecureDrop ecosystem comprises a host of actors, organzed by the following high-level categories: :ref:`Users <users>`, :ref:`Adversaries <adversaries>`, and :ref:`Systems <systems>`. 
+The SecureDrop ecosystem comprises a host of actors, organzed by the following high-level categories: :ref:`Users <users>`, :ref:`Adversaries <adversaries>`, and :ref:`Systems <systems>`.
 
 .. _users:
 
 Users
 ~~~~~
 
-The following table of the users who interact with the SecureDrop web application. 
-Note that the airgapped SVS with the GPG submission key is required to decrypt
+The following table of the users who interact with the SecureDrop web application.
+Note that the airgapped SVS with the GPG *Submission Key* is required to decrypt
 submissions or messages.
 
 +------------------+----------+-------------------------------------------------+
@@ -102,12 +102,12 @@ deployment, please visit the :doc:`hardware section <../hardware>`.
 +------------------+------------------------------------------------------------+
 | Secure Viewing   | * Airgapped and stripped-down laptop                       |
 | Station (SVS)    | * Tails USB with persistence volume                        |
-+------------------+------------------------------------------------------------+   
++------------------+------------------------------------------------------------+
 
 Assumptions
 -----------
 
-The following assumptions are accepted in the threat model of every SecureDrop project: 
+The following assumptions are accepted in the threat model of every SecureDrop project:
 
 Assumptions About the Source
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -229,7 +229,7 @@ Assets
 +------------------+----------+-------------------------------------------------+
 
 Implications of SecureDrop Area Compromise
------------------------------------------- 
+------------------------------------------
 
 What a Compromise of the *Application Server* Can Surrender
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

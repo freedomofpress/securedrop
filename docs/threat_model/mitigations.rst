@@ -1,4 +1,4 @@
-Attacks and Countermeasures on the SecureDrop Environment  
+Attacks and Countermeasures on the SecureDrop Environment
 =========================================================
 
 SecureDrop is a complex ecosystem comprised of various pieces of hardware, a
@@ -55,7 +55,7 @@ Countermeasures on both *Source* and *Journalist Interfaces*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -  *Interfaces* run on an end-to-end encrypted Tor hidden service
 -  Sensitive source and submission data is sent through HTTP POST
--  All source submissions are encrypted with GPG at rest using the airgapped submission key
+-  All source submissions are encrypted with GPG at rest using the airgapped *Submission Key*
 -  *Interface* sessions are invalidated after a user logs out or inactivity over 120 minutes
 -  Session control on *Interface* includes CSRF token in Flask Framework
 -  All *Interface* session data (except language and locale selection) is discarded at logout, and fully deleted upon exiting the Tor Browser
@@ -146,7 +146,7 @@ Attacks on SecureDrop Dependencies
 
 Countermeasures Against Vulnerabilities in Python or Libraries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--  FPF performs vulnerability management for all Python packages used by SecureDrop 
+-  FPF performs vulnerability management for all Python packages used by SecureDrop
 -  CI will run safety check to ensure dependencies do not have a CVE associated with the `version <https://github.com/freedomofpress/securedrop/commit/e9c13ff3d09dfc446bc28da4347f627b5533b150>`__
 
 Countermeasures Against Vulnerabilities in Tor
@@ -166,7 +166,7 @@ Countermeasures Against Malicious Tails or Ubuntu ISOs
 
 Countermeasures Against Vulnerabilities in the Hardware Firewall
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--  SecureDrop `Admin Guide <https://docs.securedrop.org/en/stable/admin.html>`__ informs administrators to update the hardware firewall and provides a very restrictive policy for accessing the administrative interface (blocked on app and mon ports of the firewall). 
+-  SecureDrop `Admin Guide <https://docs.securedrop.org/en/stable/admin.html>`__ informs administrators to update the hardware firewall and provides a very restrictive policy for accessing the administrative interface (blocked on app and mon ports of the firewall).
 -  Alert emails are sent out to admins when there are critical pfSense vulnerabilities.
 -  *Application* and *Monitor Servers* use IPTables as host-based firewall for defense-in-depth
 -  All application traffic is over Tor Hidden services (end-to-end encrypted) and all software packages are signed. Only DNS and NTP are transmitted over HTTP (unauthenticated and in cleartext)

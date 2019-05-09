@@ -61,9 +61,8 @@ continuing:
 
 -  the *Application Server* local IP address
 -  the *Monitor Server* local IP address
--  the SecureDrop Submission Key (from the *Transfer
-   Device*)
--  the SecureDrop Submission Key fingerprint
+-  the *Submission Public Key* (from the *Transfer Device*)
+-  the *Submission Key* fingerprint
 -  the email address that will receive alerts from OSSEC
 -  the GPG public key and fingerprint for the email address that will
    receive the alerts
@@ -93,10 +92,10 @@ will need:
 Before proceeding, you will need to copy the following files to
 ``install_files/ansible-base``:
 
--  the SecureDrop Submission Key public key file
+-  the *Submission Public Key* file
 -  the admin's GPG public key file (for encrypting OSSEC alerts)
 
-The SecureDrop Submission Key should be located on your *Transfer
+The *Submission Public Key* should be located on your *Transfer
 Device* from earlier. Its exact path will depend on the location where the USB stick
 is mounted. From the root of the SecureDrop repository, run: ::
 
@@ -173,11 +172,11 @@ Service will be available in the following files under
 - ``mon-ssh-aths`` contains the ``HidServAuth`` for SSH access to the
   *Monitor Server*.
 
-.. warning:: The ``app-journalist-aths``, ``app-ssh-aths``, and 
-             ``mon-ssh-aths`` files contain passwords for their corresponding 
-             authenticated hidden services. They should not be shared with 
-             third parties or copied from the *Admin Workstation* for any 
-             reason other than well-defined administrative tasks such as 
+.. warning:: The ``app-journalist-aths``, ``app-ssh-aths``, and
+             ``mon-ssh-aths`` files contain passwords for their corresponding
+             authenticated hidden services. They should not be shared with
+             third parties or copied from the *Admin Workstation* for any
+             reason other than well-defined administrative tasks such as
              onboarding new users or performing backups.
 
 The dynamic inventory file will automatically read the Onion URLs

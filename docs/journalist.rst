@@ -142,11 +142,11 @@ it from their inbox, a checkmark will appear next to the reply in the interface.
 You may also delete replies if you change your mind after sending them.
 
 Documents and messages are encrypted to the SecureDrop installation's
-GPG public key. In order to read the messages or look at the documents
-you will need to transfer them to the *Secure Viewing Station*. To recall
-the conversation history between your organization and sources, you can also
-download replies and transfer them to the *Secure Viewing Station* for
-decryption.
+*Submission Public Key*. In order to read the messages or look at the documents
+you will need to transfer them to the *Secure Viewing Station*, which holds
+the *Submission Private Key*. To recall the conversation history between your
+organization and sources, you can also download replies and transfer them to the
+*Secure Viewing Station* for decryption.
 
 Flag for Reply
 ~~~~~~~~~~~~~~
@@ -233,8 +233,8 @@ Decrypting on the *Secure Viewing Station*
 
 To decrypt documents, return to your **Persistent** folder and
 double-click on the zipped file folder. After you extract the files,
-click on each file individually. A prompt will ask you for the
-application PGP key passphrase to decrypt the document.
+click on each file individually. If you have configured a passphrase during
+the generation of your *Submission Key*, you will be prompted for it.
 
 |Decrypting|
 

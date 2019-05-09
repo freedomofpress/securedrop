@@ -98,19 +98,40 @@ device with the FreeOTP app installed.
 Secure Viewing Station
 ----------------------
 
-The *Secure Viewing Station* (or *SVS* for short) is a machine that is
-kept offline and only ever used together with the Tails operating system
-on the *offline* USB stick. This machine will be used to generate GPG
-keys for all journalists with access to SecureDrop, as well as to
-decrypt and view submitted documents.
+The *Secure Viewing Station* (or *SVS* for short) is the computer you use to
+decrypt and view documents and messages submitted to your SecureDrop. This
+computer is permanently kept offline. It is "air-gapped", meaning that there
+is a gap between it and any computer connected to the Internet.
+
+You will boot the *SVS* from a designated USB stick running the Tails operating
+system. Once you have created it, you should never attach this USB stick to any
+Internet-connected device.
+
+During the installation, the *SVS* is used to generate the *Submission Key*
+for encrypting and decrypting documents and messages submitted to SecureDrop.
+In addition, we recommend importing the public keys of individual journalists to
+the *SVS*, so you can securely encrypt files to their keys before exporting them.
 
 Since this machine will never touch the Internet or run an operating
 system other than Tails on a USB, it does not need a hard drive or
 network device. We recommend physically removing the drive and any
 networking cards (wireless, Bluetooth, etc.) from this machine.
 
-This is also referred to as the "air-gapped computer," meaning there is a
-gap between it and a computer connected to the Internet.
+Submission Key
+--------------
+
+The *Submission Key* is the GPG keypair used to encrypt and decrypt documents
+and messages sent to your SecureDrop. Because the public key and private key
+must be treated very differently, we sometimes refer to them explicitly as the
+*Submission Public Key* and the *Submission Private Key*.
+
+The *Submission Public Key* is uploaded to your SecureDrop servers as part of
+the installation process. Once your SecureDrop is online, anyone will be able
+to download it.
+
+The *Submission Private Key* should never be accessible to a computer with
+Internet connectivity. Instead, it should remain on the *Secure Viewing Station*
+and on offline backup storage.
 
 Two-Factor Authenticator
 ------------------------

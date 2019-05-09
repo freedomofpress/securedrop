@@ -1,15 +1,15 @@
-Generate the SecureDrop Submission Key
-======================================
+Generate the *Submission Key*
+=============================
 
 When a document or message is submitted to SecureDrop by a source, it is
-automatically encrypted with the *SecureDrop Submission Key*. The private part
+automatically encrypted with the *Submission Key*. The private part
 of this key is only stored on the *Secure Viewing Station* which is never
 connected to the Internet. SecureDrop submissions can only be decrypted and
 read on the *Secure Viewing Station*.
 
-We will now generate the *SecureDrop Submission Key*. If you aren't still
-logged into your *Secure Viewing Station* from the previous step, boot it using
-its Tails USB stick, with persistence enabled.
+We will now generate the *Submission Key*. If you aren't still logged into your
+*Secure Viewing Station* from the previous step, boot it using its Tails USB
+stick, with persistence enabled.
 
 .. important:: Do not follow these steps before you have fully configured the
   *Secure Viewing Station* according to the :doc:`instructions <set_up_svs>`.
@@ -53,8 +53,8 @@ Create the Key
    needed**.
 #. Wait for the key to finish generating.
 
-Export the Public Key
----------------------
+Export the *Submission Public Key*
+----------------------------------
 
 To manage GPG keys using the graphical interface (a program called Seahorse),
 click the clipboard icon |gpgApplet| in the top right corner and select
