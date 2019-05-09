@@ -54,7 +54,18 @@ jobs:
     steps:
       - checkout
       - *rebaseontarget
-      - run: make ci-lint
+
+      - run:
+          name: Install development dependencies
+          command: pip install -U -r securedrop/requirements/develop-requirements.txt
+
+      - run:
+          name: Run code linting
+          command: make lint
+
+      - run:
+          name: Run documentation linting
+          command: make docs-lint
 
   app-tests:
     machine:
