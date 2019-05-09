@@ -279,35 +279,67 @@ We currently recommend the Intel NUC for SecureDrop servers.
     could include: speakers, cameras, microphones, fingerprint readers,
     wireless, and Bluetooth cards.
 
-Intel NUC
-~~~~~~~~~
+.. _nuc7_recommendation:
+
+Intel 7th-gen NUC
+~~~~~~~~~~~~~~~~~
 
 The Intel NUC (Next Unit of Computing) is an inexpensive, quiet, low-power
 device that can be used for the SecureDrop servers. There are a
-`variety of models <https://www-ssl.intel.com/content/www/us/en/nuc/products-overview.html>`__
-to choose from. We recommend the
-`NUC5i5MYHE <https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc5i5myhe.html>`__
-because it has a mid-range CPU (the 5th generation Intel i5), a Mini
-DisplayPort port for a monitor, and two USB 3.0 ports for faster OS
-installation and data transfer.
+`variety of models <https://www.intel.com/content/www/us/en/products/boards-kits/nuc.html>`__
+to choose from. 
+
+The NUCs typically come as kits, and some assembly is required. You will need to
+purchase the RAM and hard drive separately for each NUC and insert both into the
+NUC before it can be used. We recommend:
+
+-  2x 240GB SSDs (2.5")
+-  1x memory kit of compatible 2x4GB sticks
+   -  You can put one 4GB memory stick in each of the servers.
+
+We have tested and can recommend the `NUC7i5BNH <https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc7i5bnh.html>`__ - these tend to be readily available in 
+retail stores.
+
+The NUC7i5BNH has soldered-on wireless components, which cannot easily be
+removed. For security reasons, we recommend that you take the following steps
+to disable wireless functionality:
+
+- before installation of the RAM and storage, disconnect the wireless antennae 
+  leads.
+
+|NUC7 leads|
+
+- before the initial OS installation, boot into the BIOS by pressing **F2** at
+  startup, navigate to **Advanced > Devices > Onboard Devices**, and disable
+  unwanted hardware - everything except **LAN**.
+
+|Visual Bios|
+  
+
+.. |NUC7 leads| image:: images/hardware/nuc7-leads.jpg
+.. |Visual BIOS| image:: images/hardware/visualbios.png
+
+Other 7th-generation NUCs have also been reported to work, although we have not 
+tested them. For example, the `NUC7i5DNHE <https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc7i5dnhe.html>`__ uses the same Ethernet chipset as the NUC7i5BNH,
+and also has a removable wireless card, simplifying the server setup process. 
+However, it may be harder to find a retail source for this model.
+
+Previous Server Recommendations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Intel 5th-gen NUC
+~~~~~~~~~~~~~~~~~
+
+We previously recommended the
+`NUC5i5MYHE <https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc5i5myhe.html>`__, however, it has now reached end-of-life. We will continue to support and
+test SecureDrop on this hardware, but if you are building a new SecureDrop
+instance we recommend using 7th-generation NUCs instead.
 
 The NUC5i5MYHE supports wireless through *optionally-purchased* expansion cards.
 This means the wireless components aren't soldered on which would make them
 nearly impossible to remove without inflicting damage to the NUC. This optional
 support is preferable, since you want neither WiFi nor Bluetooth.
 
-The NUCs come as kits, and some assembly is required. You will need to purchase
-the RAM and hard drive separately for each NUC and insert both into the NUC
-before it can be used. We recommend:
-
--  2x 240 GB SSDs (2.5")
--  1x memory kit of 2x4GB sticks
-   -  You can put one 4GB memory stick in each of the servers.
-
-.. note:: The D54250WYK we previously recommended has now entered `End of Life`
-    and `End of Interactive Support` statuses. If you're currently using this
-    model for your SecureDrop setup, and need hardware support, you'll need to
-    consult the `support community <https://communities.intel.com/community/tech/nuc>`__ forum.
 
 .. note:: If you encounter issues booting Ubuntu on the NUCs, try
 	  updating the BIOS according to `these instructions
@@ -317,24 +349,19 @@ before it can be used. We recommend:
     attempts to suspend. This has `since been fixed <https://communities.intel.com/message/432692#432692>`__
     in a BIOS update. See these `release notes <https://downloadmirror.intel.com/26263/eng/RY_0359_ReleaseNotes.pdf>`__ (PDF) for more details.
 
-Later NUC revisions (the NUC7 and NUC8 series) typically include onboard WiFi
-and Bluetooth, and may use an Ethernet chipset not supported by SecureDrop's
-custom kernel. We are investigating workarounds for both issues. If you are 
-having trouble sourcing the NUC5i5MYHE, please `contact us <https://securedrop.org/help/>`__
-for more information on how to safely configure and use more recent NUCs.  
+2014 Mac Minis
+~~~~~~~~~~~~~~
 
-Mac Minis
-~~~~~~~~~
+We previously recommended the 2014 Apple Mac Minis (part number MGEM2)
+for installing SecureDrop. These will soon be `officially obsolete <https://support.apple.com/en-us/HT201624>`__. Unfortunately
+the 2018 revision of the Mac Mini is not a viable candidate for use with 
+SecureDrop, as security features of the device prevent Linux from being 
+installed on its internal storage. We will continue to support existing 
+instances using 2014 Mac Minis, but if you are building a new instance we 
+recommend using the 7th-gen Intel NUCs.
 
-.. caution:: We have previously recommended the 2014 Apple Mac Minis (part
-  number MGEM2) for installing SecureDrop. The 2018 Apple Mac Mini (part number
-  MRTR2 or MRTT2) is not a viable candidate for installing SecureDrop, due to
-  hardware support issues. The instructions below apply if you want to
-  (re-)install SecureDrop on the 2014 version.
-
-
-The 2014 Apple Mac Minis have removable wireless cards that you should remove.
-This requires a screwdriver for non-standard
+2014 Mac Minis have removable wireless cards that you
+should remove. This requires a screwdriver for non-standard
 `TR6 Torx security screws <https://www.amazon.com/Mini-Torx-Security-Screwdriver-Tool/dp/B01BG8P2Q6>`__.
 
 However, on the first install of Ubuntu Server
@@ -477,16 +504,16 @@ Network Firewall
 ^^^^^^^^^^^^^^^^
 
 We recommend the `pfSense SG-3100
-<https://store.netgate.com/SG-3100.aspx>`__.
+<https://store.netgate.com/SG-3100.aspx>`__. It has 3 NICs and an internal 
+switch, increasing the number of available ports to 6.
 
 Network Switch
 ^^^^^^^^^^^^^^
 
 This is optional, for people who are using a firewall with less than 4
-ports (the recommended firewall has 4 ports). Any old switch with more
-than 3 ports will do, such as the `5-port Netgear ProSafe Ethernet
-Switch <http://www.amazon.com/NETGEAR-ProSafe-Gigabit-Ethernet-Desktop/dp/B0000BVYT3/>`__.
-The SG-3100 sells with an internal switch on the LAN interface.
+ports.  Any old switch with more than 3 ports will do, such as the
+`5-port Netgear ProSafe Ethernet Switch
+<http://www.amazon.com/NETGEAR-ProSafe-Gigabit-Ethernet-Desktop/dp/B0000BVYT3/>`__.
 
 .. _printers_tested_by_fpf:
 
