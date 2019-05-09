@@ -16,7 +16,7 @@ from crypto_util import CryptoUtil
 from db import db
 from models import Source
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
-from source_app import main, info, api, disable
+from source_app import main, info, api
 from source_app.decorators import ignore_static
 from source_app.utils import logged_in
 from store import Storage
@@ -118,9 +118,6 @@ def create_app(config):
         g.text_direction = i18n.get_text_direction(g.locale)
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
-
-    # Disables the app if the server is running Trusty past its EOL date.
-    disable.disable_app(app)
 
     @app.before_request
     @ignore_static

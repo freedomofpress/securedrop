@@ -1,7 +1,7 @@
 # We expect Ubuntu, either Trusty or Xenial, the two LTSes
 # currently targeted for support.
-SUPPORTED_CODENAMES = ('trusty', 'xenial')
-SUPPORTED_RELEASES = ('14.04', '16.04')
+SUPPORTED_CODENAMES = ('xenial')
+SUPPORTED_RELEASES = ('16.04')
 
 
 def test_ansible_version(host):

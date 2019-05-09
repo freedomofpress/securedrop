@@ -12,7 +12,6 @@ from werkzeug.exceptions import default_exceptions
 import i18n
 import template_filters
 import version
-import platform
 
 from crypto_util import CryptoUtil
 from db import db
@@ -66,12 +65,6 @@ def create_app(config):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     db.init_app(app)
-
-    # Magic values for Xenial upgrade message
-    app.config.update(
-        XENIAL_WARNING_DATE=datetime.strptime('Mar 4 2019', '%b %d %Y'),
-        XENIAL_VER='16.04'
-    )
 
     app.storage = Storage(config.STORE_DIR,
                           config.TEMP_DIR,
@@ -156,10 +149,6 @@ def create_app(config):
         g.text_direction = i18n.get_text_direction(g.locale)
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
-
-        if (platform.linux_distribution()[1] != app.config['XENIAL_VER'] and
-                datetime.now() >= app.config['XENIAL_WARNING_DATE']):
-            g.show_xenial_warning = True
 
         if request.path.split('/')[1] == 'api':
             pass  # We use the @token_required decorator for the API endpoints

@@ -16,8 +16,7 @@ def pytest_namespace():
         securedrop_test_vars = yaml.safe_load(f)
 
     # Tack on target OS for use in tests
-    securedrop_target_platform = os.environ.get("SECUREDROP_TARGET_PLATFORM",
-                                                "trusty")
+    securedrop_target_platform = os.environ.get("SECUREDROP_TARGET_PLATFORM")
     securedrop_test_vars["securedrop_target_platform"] = securedrop_target_platform
     # Wrapping the return value to accommodate for pytest namespacing
     return dict(securedrop_test_vars=securedrop_test_vars)

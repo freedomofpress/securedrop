@@ -45,9 +45,9 @@ provisioner:
     e: "@ansible-override-vars.yml"
   playbooks:
     converge: ../../install_files/ansible-base/securedrop-staging.yml
-    create: ../libvirt-staging/create.yml
-    destroy: ../libvirt-staging/destroy.yml
-    prepare: ../libvirt-staging/prepare.yml
+    create: create.yml
+    destroy: destroy.yml
+    prepare: prepare.yml
   env:
     ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
 

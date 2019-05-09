@@ -9,10 +9,6 @@ STABLE_VER := $(shell cat molecule/shared/stable.ver)
 ci-go: ## Creates, provisions, tests, and destroys GCE host for testing staging environment.
 	./devops/gce-nested/ci-go.sh
 
-.PHONY: ci-go-trusty
-ci-go-trusty: ## Creates, provisions, tests, and destroys GCE host for testing staging environment under trusty.
-	./devops/gce-nested/ci-go.sh trusty
-
 .PHONY: ci-teardown
 ci-teardown: ## Destroys GCE host for testing staging environment.
 	./devops/gce-nested/gce-stop.sh
@@ -82,10 +78,6 @@ shellcheckclean: ## Cleans up temporary container associated with shellcheck tar
 .PHONY: lint
 lint: docs-lint app-lint flake8 html-lint yamllint shellcheck ansible-config-lint ## Runs all linting tools (docs, pylint, flake8, HTML, YAML, shell, ansible-config).
 
-.PHONY: docker-build-ubuntu
-docker-build-ubuntu: ## Builds SD Ubuntu docker container
-	@docker build -t quay.io/freedomofpress/ubuntu:trusty -f molecule/builder/Dockerfile molecule/builder
-
 .PHONY: build-debs
 build-debs: ## Builds and tests debian packages
 	@./devops/scripts/build-debs.sh
@@ -93,14 +85,6 @@ build-debs: ## Builds and tests debian packages
 .PHONY: build-debs-notest
 build-debs-notest: ## Builds and tests debian packages (sans tests)
 	@./devops/scripts/build-debs.sh notest
-
-.PHONY: build-debs-trusty
-build-debs-trusty: ## Builds and tests debian packages (for Trusty)
-	@./devops/scripts/build-debs.sh test trusty
-
-.PHONY: build-debs-trusty-notest
-build-debs-trusty-notest: ## Builds and tests debian packages (for Trusty)
-	@./devops/scripts/build-debs.sh notest trusty
 
 .PHONY: build-gcloud-docker
 build-gcloud-docker: ## Build docker container for gcloud sdk
@@ -152,10 +136,6 @@ vagrant-package: ## Package up a vagrant box of the last stable SD release
 
 .PHONY: staging
 staging: ## Creates local staging environment in VM, autodetecting platform
-	@./devops/scripts/create-staging-env xenial
-
-.PHONY: staging-trusty
-staging-trusty: ## Creates local staging VMs based on Trusty, autodetecting platform
 	@./devops/scripts/create-staging-env
 
 .PHONY: clean
@@ -183,28 +163,6 @@ upgrade-test-local: ## Once an upgrade environment is running, force upgrade apt
 upgrade-test-qa: ## Once an upgrade environment is running, force upgrade apt packages (from qa server)
 	@QA_APTTEST=yes molecule converge -s upgrade -- --diff -t apt
 	@QA_APTTEST=yes molecule side-effect -s upgrade
-
-# Trusty upgrade targets (deprecated)
-.PHONY: upgrade-trusty-start
-upgrade-trusty-start: ## Boot up an upgrade test base environment (Trusty) using libvirt
-	@SD_UPGRADE_BASE=$(STABLE_VER) molecule converge -s upgrade-trusty
-
-.PHONY: upgrade-trusty-start-qa
-upgrade-trusty-start-qa: ## Boot up an upgrade test base env (Trusty) using libvirt in remote apt mode
-	@SD_UPGRADE_BASE=$(STABLE_VER) QA_APTTEST=yes molecule converge -s upgrade-trusty
-
-.PHONY: upgrade-trusty-destroy
-upgrade-trusty-destroy: ## Destroy up an upgrade test base (Trusty) environment
-	@SD_UPGRADE_BASE=$(STABLE_VER) molecule destroy -s upgrade-trusty
-
-.PHONY: upgrade-trusty-test-local
-upgrade-trusty-test-local: ## Once an upgrade environment (Trusty) is running, force upgrade apt packages (local pkgs)
-	@molecule side-effect -s upgrade-trusty
-
-.PHONY: upgrade-trusty-test-qa
-upgrade-trusty-test-qa: ## Once an upgrade environment (Trusty) is running, force upgrade apt packages (from qa server)
-	@QA_APTTEST=yes molecule converge -s upgrade-trusty -- --diff -t apt
-	@QA_APTTEST=yes molecule side-effect -s upgrade-trusty
 
 .PHONY: fetch-tor-packages
 fetch-tor-packages: ## Retrieves the most recent Tor packages for Xenial, for apt repo

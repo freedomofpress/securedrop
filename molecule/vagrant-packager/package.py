@@ -135,8 +135,6 @@ def main():
     # Default to Xenial as base OS, but detect if script was invoked from the
     # Trusty-specific scenario, and use Trusty if so.
     TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM", "xenial")
-    if SCENARIO_NAME.endswith("-trusty"):
-        TARGET_PLATFORM = "trusty"
 
     for srv in ["app-staging", "mon-staging"]:
 

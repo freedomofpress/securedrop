@@ -4,7 +4,7 @@ import re
 import tempfile
 
 
-SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM", "trusty")
+SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM")
 testinfra_hosts = [
         "docker://{}-sd-dpkg-verification".format(SECUREDROP_TARGET_PLATFORM)
 ]

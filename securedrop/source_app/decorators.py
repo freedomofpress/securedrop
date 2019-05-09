@@ -18,7 +18,7 @@ def ignore_static(f):
     a static resource."""
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if request.path.startswith('/static') or request.path == '/org-logo':
+        if request.path.startswith('/static'):
             return  # don't execute the decorated function
         return f(*args, **kwargs)
     return decorated_function

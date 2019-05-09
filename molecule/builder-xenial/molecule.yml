@@ -50,7 +50,7 @@ provisioner:
   lint:
     name: ansible-lint
   playbooks:
-    converge: ../builder-trusty/playbook.yml
+    converge: playbook.yml
 scenario:
   name: builder-xenial
   converge_sequence:
@@ -71,6 +71,6 @@ verifier:
     n: auto
   env:
     SECUREDROP_TARGET_PLATFORM: xenial
-  directory: ../builder-trusty/tests/
+  directory: tests/
   lint:
     name: flake8
