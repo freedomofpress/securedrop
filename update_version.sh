@@ -52,7 +52,7 @@ sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-co
 sed -i "s/^\(securedrop_app_code_version: \"\).*/\1$NEW_VERSION\"/" install_files/ansible-base/group_vars/all/securedrop
 
 # Update the version in molecule testinfra vars
-sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" molecule/builder-trusty/tests/vars.yml
+sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" molecule/builder-xenial/tests/vars.yml
 
 # If version doesnt have an rc designator, its considered stable
 # theres a few things that peg to that stable version like upgrade testing logic
@@ -78,7 +78,6 @@ export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
 
 # Update the changelog in the Debian package
-dch -b -v "${NEW_VERSION}+trusty" -D trusty -c install_files/ansible-base/roles/build-securedrop-app-code-deb-pkg/files/changelog-trusty
 dch -b -v "${NEW_VERSION}+xenial" -D xenial -c install_files/ansible-base/roles/build-securedrop-app-code-deb-pkg/files/changelog-xenial
 # Commit the change
 # Due to `set -e`, providing an empty commit message here will cause the script to abort early.
