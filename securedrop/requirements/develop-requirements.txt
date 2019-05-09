@@ -78,6 +78,7 @@ py==1.4.34                # via pytest
 pyasn1==0.3.1             # via paramiko
 pycodestyle==2.3.1        # via flake8
 pycparser==2.18           # via cffi
+pyenchant==2.0.0
 pyflakes==1.5.0           # via flake8
 pygments==2.2.0           # via sphinx
 pylint==1.8.1
