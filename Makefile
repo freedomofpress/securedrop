@@ -106,6 +106,7 @@ safety: ## Runs `safety check` to check python dependencies for vulnerabilities
 # https://wiki.openstack.org/wiki/Security/Projects/Bandit
 .PHONY: bandit
 bandit: ## Run bandit with medium level excluding test-related folders
+	pip install --upgrade pip && \
 	pip install --upgrade bandit && \
 		bandit --recursive . --exclude admin/.tox,admin/.venv,admin/.eggs,molecule,testinfra,securedrop/tests,.tox,.venv -ll
 
