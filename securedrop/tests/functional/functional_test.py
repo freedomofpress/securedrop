@@ -300,8 +300,8 @@ class FunctionalTest(object):
             root = self.driver
         els = self.wait_for(lambda: root.find_elements_by_css_selector(selector))
         for el in els:
-            self.wait_for(lambda: el.is_enabled() and el.is_displayed())
             el.location_once_scrolled_into_view
+            self.wait_for(lambda: el.is_enabled() and el.is_displayed())
             ActionChains(self.driver).move_to_element(el).click().perform()
 
     def _alert_wait(self, timeout=None):

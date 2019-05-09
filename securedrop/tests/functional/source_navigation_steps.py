@@ -210,6 +210,7 @@ class SourceNavigationStepsMixin:
         def confirm_displayed():
             confirm_button_id = "confirm-delete-reply-button-{}".format(reply_filename)
             confirm_button = self.driver.find_element_by_id(confirm_button_id)
+            confirm_button.location_once_scrolled_into_view
             assert confirm_button.is_displayed()
 
         self.wait_for(confirm_displayed)
