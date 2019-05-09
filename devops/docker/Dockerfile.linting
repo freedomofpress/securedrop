@@ -22,13 +22,6 @@ COPY Makefile /tmp/Makefile
 
 RUN pip install -r /tmp/requirements/develop-requirements.txt
 
-#
-# temporary fix (see https://github.com/freedomofpress/securedrop/issues/2906)
-# should be moved to securedrop/requirements/develop-requirements.in when it
-# no longer is a problem
-#
-RUN pip install pyenchant==2.0.0
-
 RUN make -f /tmp/Makefile install-mypy
 
 WORKDIR /sd
