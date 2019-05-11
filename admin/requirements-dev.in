@@ -4,7 +4,7 @@ flake8
 flaky
 mock
 pbr
-pip-tools>2.0.0
+pip-tools>=3.5.0,<4
 pylint
 pytest
 requests

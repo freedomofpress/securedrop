@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, timedelta
 import os
+from datetime import datetime
+from datetime import timedelta
 
-from flask import session
-
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from db import db
 import i18n
 import i18n_tool
 import journalist_app
 import source_app
 import template_filters
-
+from flask import session
 from sh import pybabel
+from .utils.env import TESTS_DIR
+
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 
 def verify_rel_datetime_format(app):
@@ -99,9 +100,9 @@ def do_test(config, create_app):
     i18n_tool.I18NTool().main([
         '--verbose',
         'translate-messages',
-        '--mapping', 'tests/i18n/babel.cfg',
+        '--mapping', os.path.join(TESTS_DIR, 'i18n/babel.cfg'),
         '--translations-dir', config.TEMP_DIR,
-        '--sources', 'tests/i18n/code.py',
+        '--sources', os.path.join(TESTS_DIR, 'i18n/code.py'),
         '--extract-update',
         '--compile',
     ])

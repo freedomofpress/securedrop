@@ -11,7 +11,7 @@ molecule>2.13
 # Needed for ansible network filter
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
-pip-tools>=1.10
+pip-tools>=3.5.0,<4
 #
 # pyenchant should be included here but is in Dockerfile.linting
 # because of https://github.com/freedomofpress/securedrop/issues/2906

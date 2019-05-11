@@ -14,7 +14,7 @@ The content of the file looks like below.
     "hidserv_token": "asfjsdfag",
     "journalist_location": "http://thejournalistfqb.onion",
     "source_location": "http://thesourceadsfa.onion",
-    "sleep_time": 10,
+    "timeout": 10,
     "user": {
         "name": "journalist",
         "password": "WEjwn8ZyczDhQSK24YKM8C9a",

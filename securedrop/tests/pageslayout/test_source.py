@@ -31,11 +31,6 @@ class TestSourceLayout(
         self._source_visits_source_homepage()
         self._screenshot('source-index.png')
 
-    def test_index_javascript(self):
-        self._javascript_toggle()
-        self._source_visits_source_homepage()
-        self._screenshot('source-index_javascript.png')
-
     def test_lookup(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()

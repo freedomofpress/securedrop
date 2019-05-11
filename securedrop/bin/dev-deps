@@ -2,6 +2,10 @@
 
 export DISPLAY=:1
 
+function run_tor {
+    tor > /tmp/tor.out 2>&1 || cat /tmp/tor.out
+}
+
 function run_xvfb() {
     (setsid Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset >& /tmp/xvfb.out || cat /tmp/xvfb.out) &
 
@@ -29,7 +33,7 @@ function setup_vncauth {
 }
 
 function run_x11vnc() {
-    setsid x11vnc -display :1 -geometry 1024x768 -rfbauth /tmp/vncpasswd -rfbport 5901 -shared >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
+    setsid x11vnc -display :1 -geometry 1024x768 -rfbauth /tmp/vncpasswd -rfbport 5909 -shared >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
 }
 
 function urandom() {

@@ -5,7 +5,6 @@ set -eu
 
 source "${BASH_SOURCE%/*}/dev-deps"
 
-run_xvfb &
 run_redis &
 run_supervisor &
 urandom

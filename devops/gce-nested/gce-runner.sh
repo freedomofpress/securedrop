@@ -36,7 +36,6 @@ function fetch_junit_test_results() {
 # Copy up securedrop repo to remote server
 function copy_securedrop_repo() {
   rsync -a -e "ssh ${SSH_OPTS[*]}" \
-      --exclude .git \
       --exclude admin/.tox \
       --exclude '*.box' \
       --exclude '*.deb' \

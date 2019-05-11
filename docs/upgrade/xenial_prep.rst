@@ -53,7 +53,7 @@ from the command line on the *Application Server* by running the command:
 
 
 SecureDrop servers are updated automatically with the latest release version
-(0.12.2). Recently, some long-running SecureDrop instances were affected by a 
+(0.12.2). Recently, some long-running SecureDrop instances were affected by a
 bug which will cause any updates after 0.10.0 to fail. If your instance is still
 running 0.10.0, please `consult our advisory <https://securedrop.org/news/advisory-automatic-update-failure-version-0100-0110-some-securedrop-instances/>`_
 to update to the latest version.

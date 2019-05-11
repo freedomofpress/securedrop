@@ -2,11 +2,13 @@ beautifulsoup4
 blinker
 Flask-Testing
 mock
-pip-tools
+pip-tools>=3.5.0,<4
 py
 pytest
 pytest-cov
 pytest-mock
-requests
-selenium < 3
 hypothesis
+requests[socks]>2.21.0
+selenium>=3.141.0
+tbselenium>=0.4.2
+pyvirtualdisplay

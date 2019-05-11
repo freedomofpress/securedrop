@@ -1,21 +1,26 @@
 # -*- coding: utf-8 -*-
 """Testing utilities related to setup and teardown of test environment.
 """
-from distutils.version import StrictVersion
-import pretty_bad_protocol as gnupg
-import os
 import io
+import os
 import shutil
 import threading
+from distutils.version import StrictVersion
+from os.path import abspath
+from os.path import dirname
+from os.path import isdir
+from os.path import join
+from os.path import realpath
 
-from os.path import abspath, dirname, isdir, join, realpath
-
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
+import pretty_bad_protocol as gnupg
+from db import db
 from sdconfig import config
 
-from db import db
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
-FILES_DIR = abspath(join(dirname(realpath(__file__)), '..', 'files'))
+
+TESTS_DIR = abspath(join(dirname(realpath(__file__)), '..'))
+FILES_DIR = join(TESTS_DIR, 'files')
 
 # The PID file for the redis worker is hard-coded below.  Ideally this
 # constant would be provided by a test harness.  It has been intentionally

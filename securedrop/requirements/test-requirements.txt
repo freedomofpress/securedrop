@@ -12,7 +12,7 @@ chardet==3.0.4            # via requests
 click==6.7                # via flask, pip-tools
 coverage==4.4.2           # via pytest-cov
 enum34==1.1.6             # via hypothesis
-first==2.0.1              # via pip-tools
+easyprocess==0.2.3        # via pyvirtualdisplay
 flask-testing==0.7.1
 flask==1.0.2              # via flask-testing
 funcsigs==1.0.2           # via mock, pytest
@@ -23,14 +23,17 @@ jinja2==2.10.1            # via flask
 markupsafe==1.0           # via jinja2
 mock==2.0.0
 pbr==3.1.1                # via mock
-pip-tools==1.11.0
+pip-tools==3.5.0
 pluggy==0.6.0             # via pytest
 py==1.5.2
+pysocks==1.6.8            # via requests
 pytest-cov==2.5.1
 pytest-mock==1.7.1
 pytest==3.3.2
-requests==2.21.0
-selenium==2.53.6
+pyvirtualdisplay==0.2.1
+requests[socks]==2.21.0
+selenium==3.141.0
 six==1.11.0               # via mock, pip-tools, pytest
-urllib3==1.24.1           # via requests
+tbselenium==0.4.2
+urllib3==1.24.1           # via requests, selenium
 werkzeug==0.14.1          # via flask

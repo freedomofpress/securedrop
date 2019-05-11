@@ -19,20 +19,24 @@
 import os
 import re
 
-from flask import request, session, render_template_string, render_template
-from flask_babel import gettext
-from werkzeug.datastructures import Headers
-
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import SDConfig
 from db import db
 import i18n
 import i18n_tool
 import journalist_app as journalist_app_module
 import pytest
 import source_app
+from flask import render_template
+from flask import render_template_string
+from flask import request
+from flask import session
+from flask_babel import gettext
+from sdconfig import SDConfig
+from sh import pybabel
+from sh import sed
+from .utils.env import TESTS_DIR
+from werkzeug.datastructures import Headers
 
-from sh import sed, pybabel
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 
 def verify_i18n(app):
@@ -175,14 +179,14 @@ def test_i18n(journalist_app, config):
     del journalist_app
 
     sources = [
-        'tests/i18n/code.py',
-        'tests/i18n/template.html',
+        os.path.join(TESTS_DIR, 'i18n/code.py'),
+        os.path.join(TESTS_DIR, 'i18n/template.html'),
     ]
 
     i18n_tool.I18NTool().main([
         '--verbose',
         'translate-messages',
-        '--mapping', 'tests/i18n/babel.cfg',
+        '--mapping', os.path.join(TESTS_DIR, 'i18n/babel.cfg'),
         '--translations-dir', config.TEMP_DIR,
         '--sources', ",".join(sources),
         '--extract-update',
