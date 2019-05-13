@@ -4,13 +4,29 @@
 {% if user %}
   {# Only admins may edit usernames and admin status #}
   <h1>{{ gettext('Edit user "{user}"').format(user=user.username) }}</h1>
-  <p><a href="/admin">« {{ gettext('Back to admin interface') }}</a></p>
-  <h2>{{ gettext('Change Username &amp; Admin Status') }}</h2>
+  <p><a href="/admin">{{ gettext('Back to admin interface') }}</a></p>
+  <h2>{{ gettext('Change Name &amp; Admin Status') }}</h2>
   <form method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <p>
-      <label for="username">{{ gettext('Change username') }}</label>
+      <label for="username">{{ gettext('Username') }}</label>
       <input name="username" id="username" type="text" placeholder="{{ user.username }}">
+    </p>
+    <p>
+      <label for="first_name">{{ gettext('First name') }}</label>
+      {% if not user.first_name %}
+        {% set first_name = '' %}
+      {% else %}
+        {% set first_name = user.first_name %}
+      {% endif %}
+      <input name="first_name" id="first_name" type="text" value="{{ first_name }}">
+      <label for="last_name">{{ gettext('Last name') }}</label>
+      {% if not user.last_name %}
+        {% set last_name = '' %}
+      {% else %}
+        {% set last_name = user.last_name %}
+      {% endif %}
+      <input name="last_name" id="last_name" type="text" value="{{ last_name }}">
     </p>
     <p>
       <input name="is_admin" id="is-admin" type="checkbox" {% if user.is_admin %}checked{% endif %}>
@@ -20,6 +36,28 @@
   </form>
 {% else %}
   <h1>{{ gettext('Edit your account') }}</h1>
+  <h2>{{ gettext('Change Name') }}</h2>
+  {% set change_name_url = url_for('account.change_name') %}
+  <form action="{{ change_name_url }}" method="post" id="change-name">
+    <p>
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+      <label for="first_name">{{ gettext('First name') }}</label>
+      {% if not g.user.first_name %}
+        {% set first_name = '' %}
+      {% else %}
+        {% set first_name = g.user.first_name %}
+      {% endif %}
+      <input name="first_name" id="first_name" value = '{{ first_name }}'>
+      <label for="last_name">{{ gettext('Last name') }}</label>
+      {% if not g.user.last_name %}
+        {% set last_name = '' %}
+      {% else %}
+        {% set last_name = g.user.last_name %}
+      {% endif %}
+      <input name="last_name" id="last_name" value = '{{ last_name }}'>
+    </p>
+    <button class="sd-button" type="submit" id="change-name">{{ gettext('UPDATE') }}</button>
+  </form>
 {% endif %}
 
 <h2>{{ gettext('Reset Password') }}</h2>
@@ -35,8 +73,7 @@
 {% endif %}
 
 <form action="{{ password_reset_url }}" method="post" id="new-password" class="login-form">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  {% if not user or g.user == user %}
+   {% if not user or g.user == user %}
   <p><input type="password" name="current_password" placeholder="{{ gettext('Current Password') }}"></p>
   <p><input name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}"></p>
   {% endif %}

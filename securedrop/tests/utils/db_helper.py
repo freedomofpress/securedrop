@@ -17,7 +17,7 @@ from db import db
 # models.{Journalist, Reply}
 
 
-def init_journalist(is_admin=False):
+def init_journalist(first_name=None, last_name=None, is_admin=False):
     """Initialize a journalist into the database. Return their
     :class:`models.Journalist` object and password string.
 
@@ -29,7 +29,7 @@ def init_journalist(is_admin=False):
     """
     username = current_app.crypto_util.genrandomid()
     user_pw = current_app.crypto_util.genrandomid()
-    user = models.Journalist(username, user_pw, is_admin)
+    user = models.Journalist(username, user_pw, first_name, last_name, is_admin)
     db.session.add(user)
     db.session.commit()
     return user, user_pw

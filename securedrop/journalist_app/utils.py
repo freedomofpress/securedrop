@@ -10,10 +10,9 @@ from sqlalchemy.sql.expression import false
 import i18n
 
 from db import db
-from models import (get_one_or_else, Source, Journalist,
-                    InvalidUsernameException, WrongPasswordException,
-                    LoginThrottledException, BadTokenException, SourceStar,
-                    PasswordError, Submission, RevokedToken)
+from models import (get_one_or_else, Source, Journalist, InvalidUsernameException,
+                    WrongPasswordException, FirstOrLastNameError, LoginThrottledException,
+                    BadTokenException, SourceStar, PasswordError, Submission, RevokedToken)
 from rm import srm
 from store import add_checksum_for_file
 from worker import rq_worker_queue
@@ -271,6 +270,18 @@ def delete_collection(filesystem_id):
     db.session.delete(source)
     db.session.commit()
     return job
+
+
+def set_name(user, first_name, last_name):
+    try:
+        user.set_name(first_name, last_name)
+        db.session.commit()
+        flash(gettext('Name updated.'), "success")
+    except FirstOrLastNameError as e:
+        flash(gettext('You submitted an invalid name: {}'.format(e)), "error")
+    except Exception as ex:
+        flash(gettext('An unexpected error occurred.'), "error")
+        current_app.logger.error("Account changes for '{}' failed: {}".format(user, ex))
 
 
 def set_diceware_password(user, password):

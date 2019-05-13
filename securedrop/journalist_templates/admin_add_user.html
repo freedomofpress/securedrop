@@ -8,23 +8,48 @@
   <p>
     {{ form.password(value=password, id=False) }}
   </p>
-<div class="container flex-end">
-  <div>
-  <p>
-    {{ form.username(placeholder=gettext('Username')) }}
-    <br>
-    {% for error in form.username.errors %}
-      <span class="form-validation-error">{{ error }}</span>
-    {% endfor %}
-  </p>
+  <div class="container flex-end">
+    <div>
+      <p>
+        {{ form.username(placeholder=gettext('Username')) }}
+        <br>
+        {% for error in form.username.errors %}
+          <span class="form-validation-error">{{ error }}</span>
+        {% endfor %}
+      </p>
+    </div>
+    <div>
+        <ul class="journalist-username__notes">
+            <li>{{gettext("Username can contain spaces")}}</li>
+            <li>{{gettext("Username is case-sensitive")}}</li>
+        </ul>
+    </div>
   </div>
-  <div>
-      <ul class="journalist-username__notes">
-          <li>{{gettext("Username can contain spaces")}}</li>
-          <li>{{gettext("Username is case-sensitive")}}</li>
-      </ul>
+  <div class="container flex-end">
+    <div>
+      <p>
+        {{ form.first_name(placeholder=gettext('First name')) }}
+        <br>
+        {% for error in form.first_name.errors %}
+          <span class="form-validation-error">{{ error }}</span>
+        {% endfor %}
+      </p>
+    </div>
+    <div>
+      <p>
+        {{ form.last_name(placeholder=gettext('Last name')) }}
+        <br>
+        {% for error in form.last_name.errors %}
+          <span class="form-validation-error">{{ error }}</span>
+        {% endfor %}
+      </p>
+    </div>
+    <div>
+        <ul class="journalist-username__notes">
+            <li>{{gettext("First name and last name are optional")}}</li>
+        </ul>
+    </div>
   </div>
-</div>
   <p>{{ gettext("The user's password will be:") }} <span class="password" id="password">{{ password }}</span></p>
   <p>
     {{ form.is_admin(id="is-admin") }}

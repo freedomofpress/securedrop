@@ -36,6 +36,10 @@ def upgrade():
     with op.batch_alter_table('submissions', schema=None) as batch_op:
         batch_op.add_column(sa.Column('checksum', sa.String(length=255), nullable=True))
 
+    with op.batch_alter_table('journalists', schema=None) as batch_op:
+        batch_op.add_column(sa.Column('first_name', sa.String(length=255), nullable=True))
+        batch_op.add_column(sa.Column('last_name', sa.String(length=255), nullable=True))
+
     op.create_table(
         'revoked_tokens',
         sa.Column('id', sa.Integer(), nullable=False),
@@ -94,3 +98,7 @@ def downgrade():
 
     with op.batch_alter_table('replies', schema=None) as batch_op:
         batch_op.drop_column('checksum')
+
+    with op.batch_alter_table('journalists', schema=None) as batch_op:
+        batch_op.drop_column('last_name')
+        batch_op.drop_column('first_name')

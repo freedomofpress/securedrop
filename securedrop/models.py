@@ -291,6 +291,23 @@ class InvalidUsernameException(Exception):
     """Raised when a user logs in with an invalid username"""
 
 
+class FirstOrLastNameError(Exception):
+    """Generic error for names that are invalid."""
+
+
+class InvalidNameLength(FirstOrLastNameError):
+    """Raised when attempting to create a Journalist with an invalid name length."""
+
+    def __init__(self, name):
+        self.name_len = len(name)
+
+    def __str__(self):
+        if self.name_len > Journalist.MAX_NAME_LEN:
+            return "Name too long (len={})".format(self.name_len)
+        if self.name_len < Journalist.MIN_NAME_LEN:
+            return "Name needs to be at least {} characters".format(Journalist.MIN_NAME_LEN)
+
+
 class LoginThrottledException(Exception):
 
     """Raised when a user attempts to log in
@@ -341,6 +358,8 @@ class Journalist(db.Model):
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), unique=True, nullable=False)
     username = Column(String(255), nullable=False, unique=True)
+    first_name = Column(String(255))
+    last_name = Column(String(255))
     pw_salt = Column(Binary(32))
     pw_hash = Column(Binary(256))
     is_admin = Column(Boolean)
@@ -358,10 +377,19 @@ class Journalist(db.Model):
         backref="journalist")
 
     MIN_USERNAME_LEN = 3
+    MIN_NAME_LEN = 0
+    MAX_NAME_LEN = 100
 
-    def __init__(self, username, password, is_admin=False, otp_secret=None):
+    def __init__(self, username, password, first_name=None, last_name=None, is_admin=False,
+                 otp_secret=None):
         self.check_username_acceptable(username)
         self.username = username
+        if first_name:
+            self.check_name_acceptable(first_name)
+        self.first_name = first_name
+        if last_name:
+            self.check_name_acceptable(last_name)
+        self.last_name = last_name
         self.set_password(password)
         self.is_admin = is_admin
         self.uuid = str(uuid.uuid4())
@@ -400,12 +428,30 @@ class Journalist(db.Model):
 
         self.passphrase_hash = argon2.using(**ARGON2_PARAMS).hash(passphrase)
 
+    def set_name(self, first_name, last_name):
+        if first_name:
+            self.check_name_acceptable(first_name)
+        if last_name:
+            self.check_name_acceptable(last_name)
+        self.first_name = first_name
+        self.last_name = last_name
+
     @classmethod
     def check_username_acceptable(cls, username):
         if len(username) < cls.MIN_USERNAME_LEN:
             raise InvalidUsernameException(
                         'Username "{}" must be at least {} characters long.'
                         .format(username, cls.MIN_USERNAME_LEN))
+
+    @classmethod
+    def check_name_acceptable(cls, name):
+        # Enforce a reasonable maximum length for names to avoid DoS
+        if len(name) > cls.MAX_NAME_LEN:
+            raise InvalidNameLength(name)
+
+        # Enforce a reasonable minimum length for names
+        if len(name) < cls.MIN_NAME_LEN:
+            raise InvalidNameLength(name)
 
     @classmethod
     def check_password_acceptable(cls, password):
