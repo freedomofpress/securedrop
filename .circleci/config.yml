@@ -46,6 +46,11 @@ common-steps:
       paths:
         - /caches/layers.tar
 
+  - &installenchant
+    run:
+      name: Install enchant
+      command: sudo apt-get install enchant
+
 version: 2
 jobs:
   lint:
@@ -54,10 +59,7 @@ jobs:
     steps:
       - checkout
       - *rebaseontarget
-
-      - run:
-          name: Install enchant
-          command: sudo apt-get install enchant
+      - *installenchant
 
       - run:
           name: Install development dependencies
@@ -263,6 +265,7 @@ jobs:
     steps:
       - checkout
       - *rebaseontarget
+      - *installenchant
 
       - run:
           name: Run Staging tests on GCE (Xenial)
