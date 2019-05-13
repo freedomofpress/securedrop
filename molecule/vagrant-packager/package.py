@@ -14,9 +14,6 @@ import tarfile
 import xml.etree.ElementTree as ET
 
 
-# Current script is symlinked into adjacent scenario, for Trusty compatibility.
-# Look up "name" for scenario from real path (relative to symlink), but store
-# all artifacts in primary scenario (via realpath).
 SCENARIO_NAME = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
 SCENARIO_PATH = os.path.dirname(os.path.realpath(__file__))
 BOX_BUILD_DIR = join(SCENARIO_PATH, "build")
@@ -132,8 +129,7 @@ def main():
     with open(TARGET_VERSION_FILE, 'r') as f:
         TARGET_VERSION = f.read().strip()
 
-    # Default to Xenial as base OS, but detect if script was invoked from the
-    # Trusty-specific scenario, and use Trusty if so.
+    # Default to Xenial as base OS.
     TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM", "xenial")
 
     for srv in ["app-staging", "mon-staging"]:

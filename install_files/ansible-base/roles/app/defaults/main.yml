@@ -45,9 +45,10 @@ securedrop_app_https_ssl_ciphers:
   - ECDHE-ECDSA-AES128-SHA256
   - ECDHE-RSA-AES128-SHA256
 
-# Distro-specific vars to be included dynamically for
-# Trusty and Xenial support.
-apache_packages: []
+apache_packages:
+  - apache2
+  - libapache2-mod-wsgi
+  - libapache2-mod-xsendfile
 
 apache_templates:
   - ports.conf
