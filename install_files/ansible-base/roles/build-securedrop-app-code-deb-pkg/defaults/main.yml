@@ -8,6 +8,10 @@ securedrop_code_filtered: "{{ securedrop_app_code_deb_dir }}/var/www/securedrop"
 
 securedrop_pip_requirements: "{{ securedrop_code_filtered }}/requirements/securedrop-app-code-requirements.txt"
 
+securedrop_pip_requirements_generated: "{{ securedrop_code_filtered }}/requirements/securedrop-app-code-requirements-packaged.txt"
+
+securedrop_wheelhouse: "{{ securedrop_app_code_deb_dir }}/var/securedrop/wheelhouse"
+
 securedrop_app_rsync_opts:
   - "--chmod=u=rwX,g=rX,o=rX"
   - "--chown=root:root"

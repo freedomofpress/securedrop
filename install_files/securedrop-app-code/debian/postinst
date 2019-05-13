@@ -125,7 +125,7 @@ case "$1" in
     chown -R www-data:www-data /var/lib/securedrop /var/www/securedrop
 
     pip install --no-index --find-links=/var/securedrop/wheelhouse --upgrade \
-      -r /var/www/securedrop/requirements/securedrop-app-code-requirements.txt
+      -r /var/www/securedrop/requirements/securedrop-app-code-requirements-packaged.txt
 
     chown -R www-data:www-data /var/www/securedrop
     chown www-data:www-data /var/www/journalist.wsgi
