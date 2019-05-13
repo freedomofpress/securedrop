@@ -6,12 +6,10 @@
 
   {% if flagged and not haskey %}
     <div class="flash notification">
-      <img src="{{ url_for('static', filename='i/relieved_face.png')  }}" alt="relieved-face" class="icon">
       <div class="message">
-        <strong>{{ gettext('Whew, it’s you! Now, the embarrassing part...') }}</strong>
-        <p>{{ gettext('Our servers experienced an unusual surge of new activity, when you last visited. To err on the side of caution, we put a hold on sending all files and messages from that day through to our journalists.') }}</p>
-
-        <p>{{ gettext('Now that we know you’re really a human, though, we’ll get your previous submission into the hands of a journalist straight away. We’re sorry for the delay. Please do check back again in a week or so.') }}</p>
+        <strong>{{ gettext('Sorry we haven\'t responded yet!') }}</strong>
+        <p>{{ gettext('Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again.') }}</p>
+        <p>{{ gettext('Please rest assured that we were able to download your submission, and check back again later for a reply.') }}</p>
       </div>
     </div>
   {% endif %}
