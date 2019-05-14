@@ -246,8 +246,8 @@ class SourceNavigationStepsMixin:
     def _source_why_journalist_key(self):
         self.driver.get(self.source_location + "/why-journalist-key")
 
-    def _source_waits_for_session_to_timeout(self, session_length_minutes):
-        time.sleep(session_length_minutes * 60 + 0.1)
+    def _source_waits_for_session_to_timeout(self):
+        time.sleep(self.session_expiration + 2)
 
     def _source_sees_session_timeout_message(self):
         notification = self.driver.find_element_by_css_selector(".important")

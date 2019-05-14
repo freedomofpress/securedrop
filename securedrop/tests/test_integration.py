@@ -1,27 +1,43 @@
 # -*- coding: utf-8 -*-
 
-from distutils.version import StrictVersion
 import gzip
 import os
 import random
 import re
 import zipfile
-import six
-
 from base64 import b32encode
 from binascii import unhexlify
-from bs4 import BeautifulSoup
+from distutils.version import StrictVersion
 from io import BytesIO
-from flask import session, g, escape, current_app
-from pyotp import TOTP, HOTP
+
+import six
+
+import mock
+import pytest
+from bs4 import BeautifulSoup
+from flask import current_app, escape, g, session
+from pyotp import HOTP, TOTP
+
+from . import utils
+from .utils.instrument import InstrumentedApp
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from . import utils
 
-from .utils.instrument import InstrumentedApp
 
 # Seed the RNG for deterministic testing
 random.seed('ಠ_ಠ')
+
+
+@pytest.fixture(autouse=True, scope="module")
+def patch_get_entropy_estimate():
+    mock_get_entropy_estimate = mock.patch(
+        "source_app.main.get_entropy_estimate",
+        return_value=8192
+    ).start()
+
+    yield
+
+    mock_get_entropy_estimate.stop()
 
 
 def _login_user(app, user_dict):

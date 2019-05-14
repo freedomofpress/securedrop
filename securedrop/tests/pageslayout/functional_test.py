@@ -39,7 +39,10 @@ class FunctionalTest(functional_test.FunctionalTest):
     def i18n_fixture(self, request):
         logging.debug("i18n_fixture: setting accept_languages to '%s'", request.param)
         self.accept_languages = request.param
-        self.use_firefox = True
+
+    @pytest.fixture(autouse=True)
+    def use_firefox(self):
+        self.switch_to_firefox_driver()
 
     def _screenshot(self, filename):
         log_dir = abspath(

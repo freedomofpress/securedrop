@@ -579,25 +579,26 @@ def test_failed_normalize_timestamps_logs_warning(source_app):
     still occur, but a warning should be logged (this will trigger an
     OSSEC alert)."""
 
-    with patch.object(source_app.logger, 'warning') as logger:
-        with patch.object(subprocess, 'call', return_value=1):
-            with source_app.test_client() as app:
-                new_codename(app, session)
-                _dummy_submission(app)
-                resp = app.post(
-                    url_for('main.submit'),
-                    data=dict(
-                        msg="This is a test.",
-                        fh=(six.StringIO(six.u('')), '')),
-                    follow_redirects=True)
-                assert resp.status_code == 200
-                text = resp.data.decode('utf-8')
-                assert "Thanks! We received your message" in text
+    with patch("source_app.main.get_entropy_estimate", return_value=8192):
+        with patch.object(source_app.logger, 'warning') as logger:
+            with patch.object(subprocess, 'call', return_value=1):
+                with source_app.test_client() as app:
+                    new_codename(app, session)
+                    _dummy_submission(app)
+                    resp = app.post(
+                        url_for('main.submit'),
+                        data=dict(
+                            msg="This is a test.",
+                            fh=(six.StringIO(six.u('')), '')),
+                        follow_redirects=True)
+                    assert resp.status_code == 200
+                    text = resp.data.decode('utf-8')
+                    assert "Thanks! We received your message" in text
 
-                logger.assert_called_once_with(
-                    "Couldn't normalize submission "
-                    "timestamps (touch exited with 1)"
-                )
+                    logger.assert_called_once_with(
+                        "Couldn't normalize submission "
+                        "timestamps (touch exited with 1)"
+                    )
 
 
 def test_source_is_deleted_while_logged_in(source_app):

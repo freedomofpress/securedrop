@@ -135,7 +135,7 @@ class InstrumentedApp:
         if parts.netloc:
             expected_location = location
         else:
-            server_name = self.app.config.get('SERVER_NAME') or 'localhost'
+            server_name = self.app.config.get('SERVER_NAME') or 'localhost.localdomain'
             expected_location = urljoin("http://%s" % server_name, location)
 
         valid_status_codes = (301, 302, 303, 305, 307)

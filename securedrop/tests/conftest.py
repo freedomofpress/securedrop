@@ -141,7 +141,7 @@ def alembic_config(config):
 @pytest.fixture(scope='function')
 def source_app(config):
     app = create_source_app(config)
-    app.config['SERVER_NAME'] = 'localhost'
+    app.config['SERVER_NAME'] = 'localhost.localdomain'
     with app.app_context():
         db.create_all()
         yield app
@@ -150,7 +150,7 @@ def source_app(config):
 @pytest.fixture(scope='function')
 def journalist_app(config):
     app = create_journalist_app(config)
-    app.config['SERVER_NAME'] = 'localhost'
+    app.config['SERVER_NAME'] = 'localhost.localdomain'
     with app.app_context():
         db.create_all()
         yield app
