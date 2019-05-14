@@ -102,6 +102,18 @@ class Source(db.Model):
         return collection
 
     @property
+    def fingerprint(self):
+        return current_app.crypto_util.getkey(self.filesystem_id)
+
+    @fingerprint.setter
+    def fingerprint(self, value):
+        raise NotImplementedError
+
+    @fingerprint.deleter
+    def fingerprint(self):
+        raise NotImplementedError
+
+    @property
     def public_key(self):
         return current_app.crypto_util.export_pubkey(self.filesystem_id)
 
@@ -136,7 +148,8 @@ class Source(db.Model):
             'interaction_count': self.interaction_count,
             'key': {
               'type': 'PGP',
-              'public': self.public_key
+              'public': self.public_key,
+              'fingerprint': self.fingerprint
             },
             'number_of_documents': docs_msg_count['documents'],
             'number_of_messages': docs_msg_count['messages'],
