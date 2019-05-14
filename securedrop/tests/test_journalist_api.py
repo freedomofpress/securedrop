@@ -277,6 +277,8 @@ def test_authorized_user_gets_single_source(journalist_app, test_source,
         assert response.status_code == 200
 
         assert response.json['uuid'] == test_source['source'].uuid
+        assert response.json['key']['fingerprint'] == \
+            test_source['source'].fingerprint
         assert 'BEGIN PGP PUBLIC KEY' in response.json['key']['public']
 
 
