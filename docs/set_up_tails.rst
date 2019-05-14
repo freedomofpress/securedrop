@@ -20,6 +20,8 @@ As soon as you create a new Tails drive, *label it immediately*. USB
 drives all look alike and you're going to be juggling a whole bunch of
 them throughout this installation. Label immediately. Always.
 
+.. _setup_install_tails:
+
 Install Tails
 -------------
 

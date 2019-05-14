@@ -1,6 +1,8 @@
 Set up the *Admin Workstation*
 ==============================
 
+.. _set_up_admin_tails:
+
 Earlier, you should have created the *Admin Workstation* Tails USB along with a
 persistence volume for it. Now, we are going to add a couple more features to
 the *Admin Workstation* to facilitate SecureDrop's setup.
