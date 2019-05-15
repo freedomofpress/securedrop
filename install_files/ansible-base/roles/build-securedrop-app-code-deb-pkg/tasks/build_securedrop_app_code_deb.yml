@@ -1,9 +1,4 @@
 ---
-- name: Install pip wheel.
-  pip:
-    name: wheel
-  tags: pip
-
 - name: Copy install_files/securedrop-app-code dir to build path.
   synchronize:
     src: "{{ role_path }}/../../../securedrop-app-code/"
