@@ -24,7 +24,12 @@
       --requirement {{ securedrop_pip_requirements }} \
       --wheel-dir {{ securedrop_wheelhouse }} 2>&1 | tee /tmp/w.out
       ! grep -i --quiet 'Failed to build' /tmp/w.out
+  register: wheel_build_output
   tags: pip
+
+- name: Ensure source hash sums matched at wheel build-time
+  fail: msg="Source hash sum mismatch, build cannot continue."
+  failed_when: "'THESE PACKAGES DO NOT MATCH THE HASHES' in wheel_build_output.stdout"
 
 # Here we need to regenerate a new securedrop-app-code-requirements.txt file
 # *without* hashes to bundle in the .deb package, for reasons that follow:
