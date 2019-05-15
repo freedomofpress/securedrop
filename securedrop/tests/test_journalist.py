@@ -610,7 +610,7 @@ def test_admin_edits_user_password_too_long_warning(journalist_app,
                           last_name='',
                           is_admin=None,
                           password=overly_long_password),
-                          follow_redirects=True)
+                follow_redirects=True)
 
             ins.assert_message_flashed('You submitted a bad password! '
                                        'Password not changed.', 'error')
@@ -966,8 +966,7 @@ def test_http_get_on_admin_new_user_two_factor_page(
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.get(
-                url_for('admin.new_user_two_factor', uid=test_journo['id']))
+        resp = app.get(url_for('admin.new_user_two_factor', uid=test_journo['id']))
     # any GET req should take a user to the admin.new_user_two_factor page
     assert 'FreeOTP' in resp.data.decode('utf-8')
 
@@ -1025,9 +1024,8 @@ def test_admin_add_user_too_short_username(journalist_app, test_admin):
                                   password='pentagonpapers',
                                   password_again='pentagonpapers',
                                   is_admin=None))
-        assert ('Field must be at least {} characters long'.format(
-                      Journalist.MIN_USERNAME_LEN) in
-                resp.data.decode('utf-8'))
+        msg = 'Field must be at least {} characters long'
+        assert (msg.format(Journalist.MIN_USERNAME_LEN) in resp.data.decode('utf-8'))
 
 
 def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin):
@@ -1063,7 +1061,7 @@ def test_admin_add_user_yubikey_valid_length(journalist_app, test_admin):
                                   is_admin=None,
                                   is_hotp=True,
                                   otp_secret=otp),
-                                  follow_redirects=True)
+                        follow_redirects=True)
 
     # Should redirect to the token verification page
     assert 'Enable YubiKey (OATH-HOTP)' in resp.data.decode('utf-8')
@@ -1148,8 +1146,7 @@ def test_admin_renames_user(journalist_app, test_admin):
 
 
 def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
-    mocked_error_logger = mocker.patch(
-            'journalist_app.admin.current_app.logger.error')
+    mocked_error_logger = mocker.patch('journalist_app.admin.current_app.logger.error')
     mocker.patch('journalist_app.admin.Journalist',
                  side_effect=IntegrityError('STATEMENT', 'PARAMETERS', None))
 
@@ -1602,7 +1599,7 @@ def test_render_locales(config, journalist_app, test_journo, test_source):
 
     # we need the relative URL, not the full url including proto / localhost
     url_end = url.replace('http://', '')
-    url_end = url_end[url_end.index('/')+1:]
+    url_end = url_end[url_end.index('/') + 1:]
 
     with app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
@@ -1719,14 +1716,11 @@ def test_download_unread_all_sources(journalist_app, test_journo):
 
     # All the not dowloaded submissions are in the zipfile
     for submission in bulk['not_downloaded0']:
-        zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
-                os.path.join(
-                    "unread",
-                    bulk['source0'].journalist_designation,
-                    "%s_%s" % (submission.filename.split('-')[0],
-                               bulk['source0'].last_updated.date()),
-                    submission.filename
-                ))
+        zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(os.path.join(
+            "unread",
+            bulk['source0'].journalist_designation,
+            "%s_%s" % (submission.filename.split('-')[0], bulk['source0'].last_updated.date()),
+            submission.filename))
         assert zipinfo
 
     for submission in bulk['not_downloaded1']:

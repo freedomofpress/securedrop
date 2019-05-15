@@ -47,14 +47,14 @@
       {% else %}
         {% set first_name = g.user.first_name %}
       {% endif %}
-      <input name="first_name" id="first_name" value = '{{ first_name }}'>
+      <input name="first_name" id="first_name" value = "{{ first_name }}">
       <label for="last_name">{{ gettext('Last name') }}</label>
       {% if not g.user.last_name %}
         {% set last_name = '' %}
       {% else %}
         {% set last_name = g.user.last_name %}
       {% endif %}
-      <input name="last_name" id="last_name" value = '{{ last_name }}'>
+      <input name="last_name" id="last_name" value = "{{ last_name }}"">
     </p>
     <button class="sd-button" type="submit" id="change-name">{{ gettext('UPDATE') }}</button>
   </form>

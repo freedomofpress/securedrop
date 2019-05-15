@@ -5,9 +5,8 @@ from flask import (Blueprint, render_template, request, g, redirect, url_for,
 from flask_babel import gettext
 
 from db import db
-from models import Journalist
 from journalist_app.utils import (make_password, set_diceware_password, set_name, validate_user,
-                                  validate_hotp_secret, commit_account_changes)
+                                  validate_hotp_secret)
 
 
 def make_blueprint(config):
