@@ -29,7 +29,11 @@ def init_journalist(first_name=None, last_name=None, is_admin=False):
     """
     username = current_app.crypto_util.genrandomid()
     user_pw = current_app.crypto_util.genrandomid()
-    user = models.Journalist(username, user_pw, first_name, last_name, is_admin)
+    user = models.Journalist(username=username,
+                             password=user_pw,
+                             first_name=first_name,
+                             last_name=last_name,
+                             is_admin=is_admin)
     db.session.add(user)
     db.session.commit()
     return user, user_pw

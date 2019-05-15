@@ -316,8 +316,11 @@ class JournalistNavigationStepsMixin:
 
         if not new_username:
             new_username = next(journalist_usernames)
-        self.new_user = dict(username=new_username, password=password)
-        self._add_user(self.new_user["username"], is_admin=is_admin)
+        self.new_user = dict(username=new_username, first_name='', last_name='', password=password)
+        self._add_user(self.new_user["username"],
+                       first_name=self.new_user['first_name'],
+                       last_name=self.new_user['last_name'],
+                       is_admin=is_admin)
 
         if not hasattr(self, "accept_languages"):
             # Clicking submit on the add user form should redirect to
@@ -756,8 +759,15 @@ class JournalistNavigationStepsMixin:
     def _admin_creates_a_user(self, hotp):
         self.safe_click_by_id("add-user")
         self.wait_for(lambda: self.driver.find_element_by_id("username"))
-        self.new_user = dict(username="dellsberg", password="pentagonpapers")
-        self._add_user(self.new_user["username"], is_admin=False, hotp=hotp)
+        self.new_user = dict(username="dellsberg",
+                             first_name='',
+                             last_name='',
+                             password="pentagonpapers")
+        self._add_user(self.new_user["username"],
+                       first_name=self.new_user['first_name'],
+                       last_name=self.new_user['last_name'],
+                       is_admin=False,
+                       hotp=hotp)
 
     def _journalist_delete_all(self):
         for checkbox in self.driver.find_elements_by_name("doc_names_selected"):

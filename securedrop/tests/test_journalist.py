@@ -562,8 +562,10 @@ def test_admin_add_user_when_username_already_taken(journalist_app, test_admin):
         _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
         resp = app.post(url_for('admin.add_user'),
                         data=dict(username=test_admin['username'],
-                        password=VALID_PASSWORD,
-                        is_admin=None))
+                                  first_name='',
+                                  last_name='',
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
         text = resp.data.decode('utf-8')
         assert 'already taken' in text
 
@@ -604,9 +606,11 @@ def test_admin_edits_user_password_too_long_warning(journalist_app,
             app.post(
                 url_for('admin.new_password', user_id=test_journo['id']),
                 data=dict(username=test_journo['username'],
+                          first_name='',
+                          last_name='',
                           is_admin=None,
                           password=overly_long_password),
-                follow_redirects=True)
+                          follow_redirects=True)
 
             ins.assert_message_flashed('You submitted a bad password! '
                                        'Password not changed.', 'error')
@@ -624,6 +628,8 @@ def test_user_edits_password_too_long_warning(journalist_app, test_journo):
             app.post(
                 url_for('account.new_password'),
                 data=dict(username=test_journo['username'],
+                          first_name='',
+                          last_name='',
                           is_admin=None,
                           token=TOTP(test_journo['otp_secret']).now(),
                           current_password=test_journo['password'],
@@ -645,6 +651,8 @@ def test_admin_add_user_password_too_long_warning(journalist_app, test_admin):
             app.post(
                 url_for('admin.add_user'),
                 data=dict(username='dellsberg',
+                          first_name='',
+                          last_name='',
                           password=overly_long_password,
                           is_admin=None))
 
@@ -665,7 +673,10 @@ def test_admin_edits_user_invalid_username(
         with InstrumentedApp(journalist_app) as ins:
             app.post(
                 url_for('admin.edit_user', user_id=test_admin['id']),
-                data=dict(username=new_username, is_admin=None))
+                data=dict(username=new_username,
+                          first_name='',
+                          last_name='',
+                          is_admin=None))
 
             ins.assert_message_flashed(
                 'Username "{}" already taken.'.format(new_username),
@@ -974,12 +985,13 @@ def test_admin_add_user(journalist_app, test_admin):
     username = 'dellsberg'
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin['username'], test_admin['password'],
-                    test_admin['otp_secret'])
+        _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(url_for('admin.add_user'),
                             data=dict(username=username,
+                                      first_name='',
+                                      last_name='',
                                       password=VALID_PASSWORD,
                                       is_admin=None))
 
@@ -1025,6 +1037,8 @@ def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin):
 
         resp = app.post(url_for('admin.add_user'),
                         data=dict(username='dellsberg',
+                                  first_name='',
+                                  last_name='',
                                   password=VALID_PASSWORD,
                                   password_again=VALID_PASSWORD,
                                   is_admin=None,
@@ -1042,12 +1056,14 @@ def test_admin_add_user_yubikey_valid_length(journalist_app, test_admin):
 
         resp = app.post(url_for('admin.add_user'),
                         data=dict(username='dellsberg',
+                                  first_name='',
+                                  last_name='',
                                   password=VALID_PASSWORD,
                                   password_again=VALID_PASSWORD,
                                   is_admin=None,
                                   is_hotp=True,
                                   otp_secret=otp),
-                        follow_redirects=True)
+                                  follow_redirects=True)
 
     # Should redirect to the token verification page
     assert 'Enable YubiKey (OATH-HOTP)' in resp.data.decode('utf-8')
@@ -1064,6 +1080,8 @@ def test_admin_add_user_yubikey_correct_length_with_whitespace(
 
         resp = app.post(url_for('admin.add_user'),
                         data=dict(username='dellsberg',
+                                  first_name='',
+                                  last_name='',
                                   password=VALID_PASSWORD,
                                   password_again=VALID_PASSWORD,
                                   is_admin=None,
@@ -1079,11 +1097,12 @@ def test_admin_sets_user_to_admin(journalist_app, test_admin):
     new_user = 'admin-set-user-to-admin-test'
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin['username'], test_admin['password'],
-                    test_admin['otp_secret'])
+        _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
 
         resp = app.post(url_for('admin.add_user'),
                         data=dict(username=new_user,
+                                  first_name='',
+                                  last_name='',
                                   password=VALID_PASSWORD,
                                   is_admin=None))
         assert resp.status_code in (200, 302)
@@ -1093,7 +1112,7 @@ def test_admin_sets_user_to_admin(journalist_app, test_admin):
         assert journo.is_admin is False
 
         resp = app.post(url_for('admin.edit_user', user_id=journo.id),
-                        data=dict(is_admin=True))
+                        data=dict(first_name='', last_name='', is_admin=True))
         assert resp.status_code in (200, 302)
 
         journo = Journalist.query.filter_by(username=new_user).one()
@@ -1109,6 +1128,8 @@ def test_admin_renames_user(journalist_app, test_admin):
 
         resp = app.post(url_for('admin.add_user'),
                         data=dict(username=new_user,
+                                  first_name='',
+                                  last_name='',
                                   password=VALID_PASSWORD,
                                   is_admin=None))
         assert resp.status_code in (200, 302)
@@ -1116,7 +1137,9 @@ def test_admin_renames_user(journalist_app, test_admin):
 
         new_user = new_user + 'a'
         resp = app.post(url_for('admin.edit_user', user_id=journo.id),
-                        data=dict(username=new_user))
+                        data=dict(username=new_user,
+                                  first_name='',
+                                  last_name=''))
     assert resp.status_code in (200, 302), resp.data.decode('utf-8')
 
     # the following will throw an exception if new_user is not found
@@ -1137,6 +1160,8 @@ def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
         with InstrumentedApp(journalist_app) as ins:
             app.post(url_for('admin.add_user'),
                      data=dict(username='username',
+                               first_name='',
+                               last_name='',
                                password=VALID_PASSWORD,
                                is_admin=None))
             ins.assert_message_flashed(

@@ -79,10 +79,9 @@ class QaLoader(object):
         pw = ' '.join(
             [random_chars(3, nullable=False, chars=DICEWARE_SAFE_CHARS)
              for _ in range(7)])
-        journalist = Journalist(random_chars(random.randint(3, 32),
-                                             nullable=False),
-                                pw,
-                                random_bool())
+        journalist = Journalist(username=random_chars(random.randint(3, 32), nullable=False),
+                                password=pw,
+                                is_admin=random_bool())
         if random_bool():
             # to add legacy passwords back in
             journalist.passphrase_hash = None
