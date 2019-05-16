@@ -46,6 +46,11 @@ common-steps:
       paths:
         - /caches/layers.tar
 
+  - &installenchant
+    run:
+      name: Install enchant
+      command: sudo apt-get install enchant
+
 version: 2
 jobs:
   lint:
@@ -54,7 +59,19 @@ jobs:
     steps:
       - checkout
       - *rebaseontarget
-      - run: make ci-lint
+      - *installenchant
+
+      - run:
+          name: Install development dependencies
+          command: pip install -U -r securedrop/requirements/develop-requirements.txt
+
+      - run:
+          name: Run code linting
+          command: make lint
+
+      - run:
+          name: Run documentation linting
+          command: make docs-lint
 
   app-tests:
     machine:
@@ -194,7 +211,7 @@ jobs:
     docker:
       - image: gcr.io/cloud-builders/docker
     steps:
-      - run: apt-get install -y make virtualenv python-pip
+      - run: apt-get install -y make virtualenv python-pip enchant
       - checkout
       - setup_remote_docker
       - run: make fetch-tor-packages
@@ -248,6 +265,7 @@ jobs:
     steps:
       - checkout
       - *rebaseontarget
+      - *installenchant
 
       - run:
           name: Run Staging tests on GCE (Xenial)
