@@ -89,7 +89,7 @@ Technical writers and editors are invited to review the `documentation
 If this is your first time helping with SecureDrop documentation, consider
 working on `low-hanging fruit`_ to become familiar with the process.
 
-.. _`low-hanging fruit`: https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3Adocs+label%3AP-easy
+.. _`low-hanging fruit`: https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+label%3A%22good+first+issue%22+label%3Adocs
 
 Documentation Issues
 --------------------
