@@ -13,10 +13,6 @@ ci-go: ## Creates, provisions, tests, and destroys GCE host for testing staging 
 ci-teardown: ## Destroys GCE host for testing staging environment.
 	./devops/gce-nested/gce-stop.sh
 
-.PHONY: ci-lint
-ci-lint: ## Runs linting in linting container.
-	devops/scripts/dev-shell-ci run make --keep-going lint typelint
-
 .PHONY: ci-deb-tests
 ci-deb-tests: ## Runs deb tests in ci
 	@./devops/scripts/test-built-packages.sh
@@ -76,7 +72,7 @@ shellcheckclean: ## Cleans up temporary container associated with shellcheck tar
 	@docker rm -f shellcheck-targets
 
 .PHONY: lint
-lint: docs-lint app-lint flake8 html-lint yamllint shellcheck ansible-config-lint ## Runs all linting tools (docs, pylint, flake8, HTML, YAML, shell, ansible-config).
+lint: app-lint flake8 html-lint yamllint shellcheck ansible-config-lint ## Runs all linting tools (pylint, flake8, HTML, YAML, shell, ansible-config).
 
 .PHONY: build-debs
 build-debs: ## Builds and tests debian packages

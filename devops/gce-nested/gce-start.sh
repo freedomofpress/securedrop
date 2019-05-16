@@ -22,7 +22,7 @@ function create_gce_ssh_key() {
 # Value will be used in the create call.
 function find_latest_ci_image() {
     gcloud_call compute images list \
-        --filter="family:fpf-securedrop AND name ~ ^ci-nested-virt" \
+        --filter="family:fpf-securedrop AND name ~ ^ci-nested-virt-stretch" \
         --sort-by=~Name --limit=1 --format="value(Name)"
 }
 
