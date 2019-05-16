@@ -305,36 +305,48 @@ workflows:
               ignore:
                 - /docs-.*/
                 - /i18n-.*/
+          requires:
+            - lint
       - python3-app-tests:
           filters:
             branches:
               ignore:
                 - /docs-.*/
                 - /i18n-.*/
+          requires:
+            - lint
       - admin-tests:
           filters:
             branches:
               ignore:
                 - /docs-.*/
                 - /i18n-.*/
+          requires:
+            - lint
       - fetch-tor-debs:
           filters:
             branches:
               ignore:
                 - /docs-.*/
                 - /i18n-.*/
+          requires:
+            - lint
       - updater-gui-tests:
           filters:
             branches:
               ignore:
                 - /docs-.*/
                 - /i18n-.*/
+          requires:
+            - lint
       - static-analysis-and-no-known-cves:
           filters:
             branches:
               ignore:
                 - /docs-.*/
                 - /i18n-.*/
+          requires:
+            - lint
       - staging-test-with-rebase:
           filters:
             branches:
@@ -348,11 +360,15 @@ workflows:
             branches:
               only:
                 - /i18n-.*/
+          requires:
+            - lint
       - deb-tests:
           filters:
             branches:
               only:
                 - /update-builder-.*/
+          requires:
+            - lint
 
   nightly:
     triggers:
