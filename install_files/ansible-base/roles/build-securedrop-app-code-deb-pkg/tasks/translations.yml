@@ -1,9 +1,4 @@
 ---
-- name: Install pip dependencies for SecureDrop.
-  pip:
-    requirements: "{{ securedrop_code_filtered }}/requirements/securedrop-app-code-requirements.txt"
-  tags:
-    - pip
 
 - name: Compile PO to MO.
   shell: >-
