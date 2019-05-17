@@ -1,9 +1,4 @@
 ---
-- name: Install pip wheel.
-  pip:
-    name: wheel
-  tags: pip
-
 - name: Copy install_files/securedrop-app-code dir to build path.
   synchronize:
     src: "{{ role_path }}/../../../securedrop-app-code/"
@@ -24,10 +19,37 @@
 - name: Create pip wheel archive for Debian package requirements.
   shell: |
     pip wheel \
-      -r {{ securedrop_code_filtered }}/requirements/securedrop-app-code-requirements.txt \
-      -w {{ securedrop_app_code_deb_dir }}/var/securedrop/wheelhouse 2>&1 | tee /tmp/w.out
+      --no-binary :all: \
+      --require-hashes \
+      --requirement {{ securedrop_pip_requirements }} \
+      --wheel-dir {{ securedrop_wheelhouse }} 2>&1 | tee /tmp/w.out
       ! grep -i --quiet 'Failed to build' /tmp/w.out
+  register: wheel_build_output
   tags: pip
+
+- name: Ensure source hash sums matched at wheel build-time
+  fail: msg="Source hash sum mismatch, build cannot continue."
+  failed_when: "'THESE PACKAGES DO NOT MATCH THE HASHES' in wheel_build_output.stdout"
+
+# Here we need to regenerate a new securedrop-app-code-requirements.txt file
+# *without* hashes to bundle in the .deb package, for reasons that follow:
+# If requirements hashes are in the requirments file, pip will automatically
+# use hash checking mode to install the dependencies (which is done in postinst
+# of securedrop-app-code package).
+# dpkg-buildpackage modifies the wheel archive such that the hashes of those
+# built wheels change. Since the deb package itself is signed (providing
+# integrity, we can defer to a later time.
+- name: Install built pip wheels for SecureDrop.
+  shell: |
+    pip install {{ securedrop_wheelhouse }}/*.whl
+  tags:
+    - pip
+
+- name: Create new requirements based on build/installed wheels without hashes
+  shell:
+    pip freeze > {{ securedrop_pip_requirements_generated }}
+  tags:
+    - pip
 
 - include: translations.yml
 

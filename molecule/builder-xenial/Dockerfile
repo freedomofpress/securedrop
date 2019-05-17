@@ -22,6 +22,7 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         python \
         python-dev \
         python-pip \
+        python-wheel \
         rsync \
         ruby \
         secure-delete \
