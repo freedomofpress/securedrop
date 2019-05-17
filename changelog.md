@@ -2,6 +2,66 @@
 
 ## 0.13.0~rc1
 
+### Web Application
+
+* Added fingerprint of GPG reply key to Source object in Journalist API (#4436)
+* Updated message for flagged sources in Source Interface (#4428)
+* Added type hinting in Journalist Interface (#4404, #4407)
+* Added a /logout endpoint to the Journalist API (#4349)
+* Fixed 500 error caused by inconsistent session (#4391)
+* Added submission file sha256 hash as Etag on downloads in Journalist Interface (#4314)
+* Added Python3 compliance for Source and Journalist Interface (#4239)
+* Updated Python cryptography dependency, updated safety check (#4297)
+* Added support for HTTP DELETE method on Journalist Interface for use by API (#4023)
+* Removed cssmin dependency (#4227)
+* Removed jQuery dependency from Journalist and Source Interface (#4211)
+
+### Operations
+* Removed support for Ubuntu 14.04 LTS (Trusty) (#4422, #4416, #4348, #4311, #4224)
+
+### Developer Workflow
+
+* Updated functional tests to run against the Tor Browser (#4347)
+* Consolidated CI lint Makefile targets (#4435)
+* Added 0.12.2  boxes for use with the Molecule upgrade scenario (#4393)
+* Added deb tests to builder image update (#4388)
+* Removed unused Jenkins configuration (#4337)
+* Added version pinning for Tor package fetch CI job (#4300)
+* Updated Tor version check to 0.3.5.8 (#4258)
+* Updated staging CI job timeout to 20 minutes (#4218)
+* Added CI job to run page layout tests in all supported languages for i18n-\* branches (#4184)
+* Fixed `bandit` Makefile target (#4429)
+* Added multiple locale settings in staging environment (#4419)
+* Added hypothesis support and example hypothesis test on encrypt/decrypt functionality (#4412)
+* Added support for asynchronous jobs in dev container (#4392)
+* Updated Qubes staging environment to use Xenial by default (#4344, #4228)
+* Updated dev environment to use Xenial by default (#4213)
+* Fixed Dockerfile apt caching error, fixed error in create\_dev\_data.py (#4353)
+* Added support for use of VNC during functional tests (#4288, #4324)
+* Added support for staging-specific data to create-dev-data.py (#4298)
+* Removed firefox and other packages from app-test Ansible role (#4277)
+* Added option to control number of sources created in a dev environment (#4274)
+* Added check to ensure dev virtualenv uses Python 2 (#4127)
+
+### Documentation
+
+* Added instructions on backing up and restoring workstations with rsync (#4402)
+* Updated references to 4-port firewall in server setup docs (#4430)
+* Standardized references to Submission Key (#4413)
+* Updated links to Tails documentation (#4409)
+* Clarified use of KeePassX in passphrases documentation (#4368)
+* Renamed "Terminology" section to "Glossary" (#4405)
+* Added instructions for upgrading to Xenial after Trusty EOL (#4395)
+* Clarified workstation hardware requirements (#4369)
+* Updated logging documentation (#4359)
+* Updated release management documentation (#4386)
+* Updated nginx landing page example and journalist onboarding guide (#4370)
+* Added attacks and countermeasures to SecureDrop threat model document (#4244)
+* Added recommendation to backup workstations (#4302)
+* Updated recommended Apache configuration in landing page guide (#4238)
+* Updated pronouns in journalist guide (#4254)
+* Updated README to make it easier to credit i18n contributors (#4243)
+
 ## 0.12.2
 
 ### Web Application
