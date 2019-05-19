@@ -28,15 +28,17 @@ Foundation <https://securedrop.org/help>`__.
 You should have a Tails drive clearly labeled “SecureDrop Secure Viewing
 Station”. If it's not labeled, label it right now, then boot it on the
 *Secure Viewing Station*. After it loads, you should see a "Welcome to
-Tails" screen with two options. Select *Yes* to enable the persistent
-volume and enter your password, but do NOT click Login yet. Under 'More
-Options,' select *Yes* and click *Forward*.
+Tails" screen, also known as the `Tails Greeter <https://tails.boum.org/doc/first_steps/startup_options/index.en.html#index2h1>`__.
 
-Enter an *Administration password* for use with this specific Tails
-session and click *Login*.
+Enter your passphrase to unlock the persistent storage, then press **Unlock**.
+Before starting Tails, set an administration password for use with this Tails
+session. To do so, click the **+** button under "Additional Settings". Click
+**Administration Password** in the list of settings. Enter the password twice,
+click **Add**, then click **Start Tails**.
 
-.. note:: The *Administration password* is a one-time password. It
-          is reset every time you shut down Tails.
+.. note:: The Tail administration password is a one-time password. It
+          is reset every time you shut down Tails. Pick a password you will be
+          able to remember for the length of this session.
 
 We will now prepare the *Secure Viewing Station*.
 
@@ -53,10 +55,8 @@ Correct the System Time
 
 After booting up Tails on the *Secure Viewing Station*, you will need to
 manually set the system time before you create the *SecureDrop Submission
-Key*. Be sure to enable admin privileges before you do this. In Tails 3.x, you
-enable admin privileges by clicking the **+** button under **Additional
-Settings**, then navigating to **Administration Password**. Enter an
-administration password and then click **Start Tails**.
+Key*. This operation requires the Tails administration password to be set
+(see above).
 
 To set the system time:
 
