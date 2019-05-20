@@ -131,3 +131,21 @@ class TestSourceLayout(
     def test_why_journalist_key(self):
         self._source_why_journalist_key()
         self._screenshot('source-why_journalist_key.png')
+
+
+@pytest.mark.pagelayout
+class TestSourceSessionLayout(
+        functional_test.FunctionalTest,
+        source_navigation_steps.SourceNavigationStepsMixin,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
+
+    session_expiration = 5
+
+    def test_source_session_timeout(self):
+        self._source_visits_source_homepage()
+        self._source_clicks_submit_documents_on_homepage()
+        self._source_continues_to_submit_page()
+        self._source_waits_for_session_to_timeout()
+        self._source_enters_text_in_message_field()
+        self._source_visits_source_homepage()
+        self._screenshot('source-session_timeout.png')
