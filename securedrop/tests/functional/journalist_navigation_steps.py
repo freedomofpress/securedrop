@@ -284,9 +284,17 @@ class JournalistNavigationStepsMixin:
         # giving extra time for upload to complete
         self.wait_for(updated_image, timeout=self.timeout * 6)
 
-    def _add_user(self, username, is_admin=False, hotp=None):
+    def _add_user(self, username, first_name="", last_name="", is_admin=False, hotp=None):
         username_field = self.driver.find_element_by_css_selector('input[name="username"]')
         username_field.send_keys(username)
+
+        if first_name:
+            first_name_field = self.driver.find_element_by_id("first_name")
+            first_name_field.send_keys(first_name)
+
+        if last_name:
+            last_name_field = self.driver.find_element_by_id("last_name")
+            last_name_field.send_keys(last_name)
 
         if hotp:
             hotp_checkbox = self.driver.find_element_by_css_selector('input[name="is_hotp"]')
