@@ -96,7 +96,6 @@ class JournalistNavigationStepsMixin:
                 while token == new_token:
                     time.sleep(1)
                     new_token = str(otp.now())
-                    print("Token: {} New token: {}".format(token, new_token))
                 token = new_token
             else:
                 return
@@ -291,7 +290,6 @@ class JournalistNavigationStepsMixin:
 
         if hotp:
             hotp_checkbox = self.driver.find_element_by_css_selector('input[name="is_hotp"]')
-            print(str(hotp_checkbox.__dict__))
             hotp_checkbox.click()
             hotp_secret = self.driver.find_element_by_css_selector('input[name="otp_secret"]')
             hotp_secret.send_keys(hotp)

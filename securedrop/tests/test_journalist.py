@@ -160,6 +160,7 @@ def test_unauthorized_access_redirects_to_login(journalist_app):
 
 def test_login_throttle(journalist_app, test_journo):
     # Overwrite the default value used during testing
+    original_hardening = models.LOGIN_HARDENING
     models.LOGIN_HARDENING = True
     try:
         with journalist_app.test_client() as app:
@@ -183,13 +184,14 @@ def test_login_throttle(journalist_app, test_journo):
             assert ("Please wait at least {} seconds".format(
                 Journalist._LOGIN_ATTEMPT_PERIOD) in text)
     finally:
-        models.LOGIN_HARDENING = False
+        models.LOGIN_HARDENING = original_hardening
 
 
 def test_login_throttle_is_not_global(journalist_app, test_journo, test_admin):
     """The login throttling should be per-user, not global. Global login
     throttling can prevent all users logging into the application."""
 
+    original_hardening = models.LOGIN_HARDENING
     # Overwrite the default value used during testing
     # Note that this may break other tests if doing parallel testing
     models.LOGIN_HARDENING = True
@@ -226,7 +228,7 @@ def test_login_throttle_is_not_global(journalist_app, test_journo, test_admin):
             text = resp.data.decode('utf-8')
             assert "Sources" in text
     finally:
-        models.LOGIN_HARDENING = False
+        models.LOGIN_HARDENING = original_hardening
 
 
 def test_login_invalid_credentials(journalist_app, test_journo):
@@ -474,7 +476,7 @@ def test_admin_edits_user_password_error_response(journalist_app,
 def test_user_edits_password_success_response(journalist_app, test_journo):
     original_hardening = models.LOGIN_HARDENING
     try:
-        # Set this to false because we login then immedialtey reuse the same
+        # Set this to false because we login then immediately reuse the same
         # token when authenticating to change the password. This triggers login
         # hardening measures.
         models.LOGIN_HARDENING = False
@@ -499,7 +501,7 @@ def test_user_edits_password_success_response(journalist_app, test_journo):
 def test_user_edits_password_expires_session(journalist_app, test_journo):
     original_hardening = models.LOGIN_HARDENING
     try:
-        # Set this to false because we login then immedialtey reuse the same
+        # Set this to false because we login then immediately reuse the same
         # token when authenticating to change the password. This triggers login
         # hardening measures.
         models.LOGIN_HARDENING = False
@@ -527,7 +529,7 @@ def test_user_edits_password_expires_session(journalist_app, test_journo):
 def test_user_edits_password_error_reponse(journalist_app, test_journo):
     original_hardening = models.LOGIN_HARDENING
     try:
-        # Set this to false because we login then immedialtey reuse the same
+        # Set this to false because we login then immediately reuse the same
         # token when authenticating to change the password. This triggers login
         # hardening measures.
         models.LOGIN_HARDENING = False
@@ -1572,7 +1574,7 @@ def test_render_locales(config, journalist_app, test_journo, test_source):
     # (which are only triggered during `create_app`
     config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
     app = journalist_app_module.create_app(config)
-    app.config['SERVER_NAME'] = 'localhost'  # needed for url_for
+    app.config['SERVER_NAME'] = 'localhost.localdomain'  # needed for url_for
     url = url_for('col.col', filesystem_id=test_source['filesystem_id'])
 
     # we need the relative URL, not the full url including proto / localhost

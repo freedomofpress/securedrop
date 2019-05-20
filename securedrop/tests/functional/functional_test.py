@@ -18,6 +18,7 @@ from os.path import realpath
 
 import mock
 import pyotp
+import pytest
 import requests
 import tbselenium.common as cm
 from selenium import webdriver
@@ -40,9 +41,7 @@ from sdconfig import config
 
 os.environ["SECUREDROP_ENV"] = "test"
 
-FUNCTIONAL_TEST_DIR = abspath(dirname(__file__))
-LOGFILE_PATH = abspath(join(FUNCTIONAL_TEST_DIR, "firefox.log"))
-FILES_DIR = abspath(join(dirname(realpath(__file__)), "../..", "tests/files"))
+LOGFILE_PATH = abspath(join(dirname(realpath(__file__)), "../log/driver.log"))
 FIREFOX_PATH = "/usr/bin/firefox/firefox"
 
 TBB_PATH = abspath(join(expanduser("~"), ".local/tbb/tor-browser_en-US/"))
@@ -51,32 +50,20 @@ TBBRC = join(TBB_PATH, "Browser/TorBrowser/Data/Tor/torrc")
 LOGGER.setLevel(logging.WARNING)
 
 
-# https://stackoverflow.com/a/34795883/837471
-class alert_is_not_present(object):
-    """ Expect an alert to not be present."""
-
-    def __call__(self, driver):
-        try:
-            alert = driver.switch_to.alert
-            alert.text
-            return False
-        except NoAlertPresentException:
-            return True
-
-
 class FunctionalTest(object):
-    use_firefox = False
-    driver = None
-    accept_languages = None
-    _firefox_driver = None
-    _torbrowser_driver = None
     gpg = None
-
     new_totp = None
-
+    session_expiration = 30
+    secret_message = "These documents outline a major government invasion of privacy."
     timeout = 10
 
-    secret_message = "These documents outline a major government invasion of privacy."
+    accept_languages = None
+    driver = None
+    firefox_driver = None
+    torbrowser_driver = None
+
+    driver_retry_count = 3
+    driver_retry_interval = 5
 
     def _unused_port(self):
         s = socket.socket()
@@ -85,7 +72,7 @@ class FunctionalTest(object):
         s.close()
         return port
 
-    def _create_torbrowser_driver(self):
+    def create_torbrowser_driver(self):
         logging.info("Creating TorBrowserDriver")
         log_file = open(LOGFILE_PATH, "a")
         log_file.write("\n\n[%s] Running Functional Tests\n" % str(datetime.now()))
@@ -104,125 +91,64 @@ class FunctionalTest(object):
         if self.accept_languages is not None:
             pref_dict["intl.accept_languages"] = self.accept_languages
 
-        self._torbrowser_driver = TorBrowserDriver(
-            TBB_PATH, tor_cfg=cm.USE_RUNNING_TOR, pref_dict=pref_dict, tbb_logfile_path=LOGFILE_PATH
-        )
-        logging.info("Created Tor Browser driver")
+        for i in range(self.driver_retry_count):
+            try:
+                self.torbrowser_driver = TorBrowserDriver(
+                    TBB_PATH,
+                    tor_cfg=cm.USE_RUNNING_TOR,
+                    pref_dict=pref_dict,
+                    tbb_logfile_path=LOGFILE_PATH,
+                )
+                logging.info("Created Tor Browser web driver")
+                break
+            except Exception as e:
+                logging.error("Error creating Tor Browser web driver: %s", e)
+                if i < self.driver_retry_count:
+                    time.sleep(self.driver_retry_interval)
 
-    def _create_firefox_driver(self, profile=None):
-        logging.info("Creating Firefox driver")
-        if profile is None:
-            profile = webdriver.FirefoxProfile()
-            if self.accept_languages is not None:
-                profile.set_preference("intl.accept_languages", self.accept_languages)
-                profile.update_preferences()
+        if not self.torbrowser_driver:
+            raise Exception("Could not create Tor Browser web driver")
 
-        self._firefox_driver = webdriver.Firefox(
-            firefox_binary=FIREFOX_PATH, firefox_profile=profile
-        )
-        self._firefox_driver.set_window_position(0, 0)
-        self._firefox_driver.set_window_size(1024, 768)
-        self._firefox_driver.implicitly_wait(self.timeout)
-        logging.info("Created Firefox driver")
+    def create_firefox_driver(self):
+        logging.info("Creating Firefox web driver")
 
-    def disable_javascript(self):
-        self.driver.profile.set_preference("javascript.enabled", False)
+        profile = webdriver.FirefoxProfile()
+        if self.accept_languages is not None:
+            profile.set_preference("intl.accept_languages", self.accept_languages)
+            profile.update_preferences()
 
-    def enable_javascript(self):
-        self.driver.profile.set_preference("javascript.enabled", True)
+        for i in range(self.driver_retry_count):
+            try:
+                self.firefox_driver = webdriver.Firefox(
+                    firefox_binary=FIREFOX_PATH, firefox_profile=profile
+                )
+                self.firefox_driver.set_window_position(0, 0)
+                self.firefox_driver.set_window_size(1024, 768)
+                self.firefox_driver.implicitly_wait(self.timeout)
+                logging.info("Created Firefox web driver")
+                break
+            except Exception as e:
+                logging.error("Error creating Firefox web driver: %s", e)
+                if i < self.driver_retry_count:
+                    time.sleep(self.driver_retry_interval)
+        if not self.firefox_driver:
+            raise Exception("Could not create Firefox web driver")
 
     def switch_to_firefox_driver(self):
-        self.driver = self._firefox_driver
+        self.driver = self.firefox_driver
+        logging.info("Switched %s to Firefox driver: %s", self, self.driver)
 
     def switch_to_torbrowser_driver(self):
-        self.driver = self._torbrowser_driver
+        self.driver = self.torbrowser_driver
+        logging.info("Switched %s to TorBrowser driver: %s", self, self.driver)
 
-    def setup(self, session_expiration=30):
-        env.create_directories()
-        self.gpg = env.init_gpg()
+    @pytest.fixture(autouse=True)
+    def drivers(self):
+        logging.info("Creating web drivers")
+        self.create_torbrowser_driver()
+        self.create_firefox_driver()
 
-        self.__context = journalist_app.create_app(config).app_context()
-        self.__context.push()
-
-        # Patch the two-factor verification to avoid intermittent errors
-        self.patcher = mock.patch("models.Journalist.verify_token")
-        self.mock_journalist_verify_token = self.patcher.start()
-        self.mock_journalist_verify_token.return_value = True
-
-        self.patcher2 = mock.patch("source_app.main.get_entropy_estimate")
-        self.mock_get_entropy_estimate = self.patcher2.start()
-        self.mock_get_entropy_estimate.return_value = 8192
-
-        signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
-
-        env.create_directories()
-        db.create_all()
-
-        # Add our test user
-        try:
-            valid_password = "correct horse battery staple profanity oil chewy"
-            user = Journalist(username="journalist", password=valid_password, is_admin=True)
-            user.otp_secret = "JHCOGO7VCER3EJ4L"
-            db.session.add(user)
-            db.session.commit()
-        except IntegrityError:
-            logging.error("Test user already added")
-            db.session.rollback()
-
-        # This user is required for our tests cases to login
-        self.admin_user = {
-            "name": "journalist",
-            "password": ("correct horse battery staple" " profanity oil chewy"),
-            "secret": "JHCOGO7VCER3EJ4L",
-        }
-
-        self.admin_user["totp"] = pyotp.TOTP(self.admin_user["secret"])
-
-        source_port = self._unused_port()
-        journalist_port = self._unused_port()
-
-        self.source_location = "http://127.0.0.1:%d" % source_port
-        self.journalist_location = "http://127.0.0.1:%d" % journalist_port
-
-        # Allow custom session expiration lengths
-        self.session_expiration = session_expiration
-
-        self.source_app = source_app.create_app(config)
-        self.journalist_app = journalist_app.create_app(config)
-
-        def start_source_server(app):
-            config.SESSION_EXPIRATION_MINUTES = self.session_expiration
-
-            app.run(port=source_port, debug=True, use_reloader=False, threaded=True)
-
-        def start_journalist_server(app):
-            app.run(port=journalist_port, debug=True, use_reloader=False, threaded=True)
-
-        self.source_process = Process(target=lambda: start_source_server(self.source_app))
-
-        self.journalist_process = Process(
-            target=lambda: start_journalist_server(self.journalist_app)
-        )
-
-        self.source_process.start()
-        self.journalist_process.start()
-
-        for tick in range(30):
-            try:
-                requests.get(self.source_location, timeout=1)
-                requests.get(self.journalist_location, timeout=1)
-            except Exception:
-                time.sleep(0.5)
-            else:
-                break
-
-        self._create_torbrowser_driver()
-        self._create_firefox_driver()
-
-        if self.use_firefox:
-            self.switch_to_firefox_driver()
-        else:
-            self.switch_to_torbrowser_driver()
+        self.switch_to_torbrowser_driver()
 
         # Polls the DOM to wait for elements. To read more about why
         # this is necessary:
@@ -239,6 +165,113 @@ class FunctionalTest(object):
         #
         self.driver.implicitly_wait(self.timeout)
 
+        yield
+
+        try:
+            self.torbrowser_driver.quit()
+        except Exception as e:
+            logging.error("Error stopping TorBrowser driver: %s", e)
+
+        try:
+            self.firefox_driver.quit()
+        except Exception as e:
+            logging.error("Error stopping Firefox driver: %s", e)
+
+    @pytest.fixture(autouse=True)
+    def sd_servers(self):
+        logging.info(
+            "Starting SecureDrop servers (session expiration = %s)", self.session_expiration
+        )
+
+        # Patch the two-factor verification to avoid intermittent errors
+        logging.info("Mocking models.Journalist.verify_token")
+        with mock.patch("models.Journalist.verify_token", return_value=True):
+            logging.info("Mocking source_app.main.get_entropy_estimate")
+            with mock.patch("source_app.main.get_entropy_estimate", return_value=8192):
+
+                try:
+                    signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
+
+                    source_port = self._unused_port()
+                    journalist_port = self._unused_port()
+
+                    self.source_location = "http://127.0.0.1:%d" % source_port
+                    self.journalist_location = "http://127.0.0.1:%d" % journalist_port
+
+                    self.source_app = source_app.create_app(config)
+                    self.journalist_app = journalist_app.create_app(config)
+
+                    self.__context = self.journalist_app.app_context()
+                    self.__context.push()
+
+                    env.create_directories()
+                    db.create_all()
+                    self.gpg = env.init_gpg()
+
+                    # Add our test user
+                    try:
+                        valid_password = "correct horse battery staple profanity oil chewy"
+                        user = Journalist(
+                            username="journalist", password=valid_password, is_admin=True
+                        )
+                        user.otp_secret = "JHCOGO7VCER3EJ4L"
+                        db.session.add(user)
+                        db.session.commit()
+                    except IntegrityError:
+                        logging.error("Test user already added")
+                        db.session.rollback()
+
+                    # This user is required for our tests cases to login
+                    self.admin_user = {
+                        "name": "journalist",
+                        "password": ("correct horse battery staple" " profanity oil chewy"),
+                        "secret": "JHCOGO7VCER3EJ4L",
+                    }
+
+                    self.admin_user["totp"] = pyotp.TOTP(self.admin_user["secret"])
+
+                    def start_source_server(app):
+                        config.SESSION_EXPIRATION_MINUTES = self.session_expiration / 60.0
+
+                        app.run(port=source_port, debug=True, use_reloader=False, threaded=True)
+
+                    def start_journalist_server(app):
+                        app.run(port=journalist_port, debug=True, use_reloader=False, threaded=True)
+
+                    self.source_process = Process(
+                        target=lambda: start_source_server(self.source_app)
+                    )
+
+                    self.journalist_process = Process(
+                        target=lambda: start_journalist_server(self.journalist_app)
+                    )
+
+                    self.source_process.start()
+                    self.journalist_process.start()
+
+                    for tick in range(30):
+                        try:
+                            requests.get(self.source_location, timeout=1)
+                            requests.get(self.journalist_location, timeout=1)
+                        except Exception:
+                            time.sleep(0.25)
+                        else:
+                            break
+                    yield
+                finally:
+                    try:
+                        self.source_process.terminate()
+                    except Exception as e:
+                        logging.error("Error stopping source app: %s", e)
+
+                    try:
+                        self.journalist_process.terminate()
+                    except Exception as e:
+                        logging.error("Error stopping source app: %s", e)
+
+                    env.teardown()
+                    self.__context.pop()
+
     def wait_for_source_key(self, source_name):
         filesystem_id = self.source_app.crypto_util.hash_codename(source_name)
 
@@ -246,17 +279,6 @@ class FunctionalTest(object):
             assert self.source_app.crypto_util.getkey(filesystem_id)
 
         self.wait_for(lambda: key_available(filesystem_id), timeout=60)
-
-    def teardown(self):
-        if self._torbrowser_driver:
-            self._torbrowser_driver.quit()
-        if self._firefox_driver:
-            self._firefox_driver.quit()
-        self.patcher.stop()
-        env.teardown()
-        self.source_process.terminate()
-        self.journalist_process.terminate()
-        self.__context.pop()
 
     def create_new_totp(self, secret):
         self.new_totp = pyotp.TOTP(secret)
@@ -312,13 +334,17 @@ class FunctionalTest(object):
         )
 
     def _alert_accept(self):
+        # adapted from https://stackoverflow.com/a/34795883/837471
+        def alert_is_not_present(object):
+            """ Expect an alert to not be present."""
+            try:
+                alert = self.driver.switch_to.alert
+                alert.text
+                return False
+            except NoAlertPresentException:
+                return True
+
         self.driver.switch_to.alert.accept()
         WebDriverWait(self.driver, self.timeout).until(
-            alert_is_not_present(), "Timed out waiting for confirmation popup to disappear."
-        )
-
-    def _alert_dismiss(self):
-        self.driver.switch_to.alert.dismiss()
-        WebDriverWait(self.driver, self.timeout).until(
-            alert_is_not_present(), "Timed out waiting for confirmation popup to disappear."
+            alert_is_not_present, "Timed out waiting for confirmation popup to disappear."
         )
