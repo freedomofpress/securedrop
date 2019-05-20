@@ -73,7 +73,7 @@ following:
 
 |printer installing|
 
-This indicates the Tails is attempting to install the USB printer; assuming you
+This indicates that Tails is attempting to install the USB printer. Assuming you
 receive no errors in this process, you will then see the following screen,
 which indicates that the printer is "ready" for printing.
 
