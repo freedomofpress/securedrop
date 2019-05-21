@@ -279,9 +279,6 @@ def set_name(user, first_name, last_name):
         flash(gettext('Name updated.'), "success")
     except FirstOrLastNameError as e:
         flash(gettext('Name not updated: {}'.format(e)), "error")
-    except Exception as ex:
-        flash(gettext('An unexpected error occurred.'), "error")
-        current_app.logger.error("Account changes for '{}' failed: {}".format(user, ex))
 
 
 def set_diceware_password(user, password):
