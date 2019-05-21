@@ -294,18 +294,19 @@ class InvalidUsernameException(Exception):
 class FirstOrLastNameError(Exception):
     """Generic error for names that are invalid."""
 
+    def __init__(self, msg):
+        msg = 'Invalid first or last name.'
+        super(FirstOrLastNameError, self).__init__(msg)
+
 
 class InvalidNameLength(FirstOrLastNameError):
     """Raised when attempting to create a Journalist with an invalid name length."""
 
     def __init__(self, name):
         self.name_len = len(name)
-
-    def __str__(self):
         if self.name_len > Journalist.MAX_NAME_LEN:
-            return "Name too long (len={})".format(self.name_len)
-        if self.name_len < Journalist.MIN_NAME_LEN:
-            return "Name needs to be at least {} characters".format(Journalist.MIN_NAME_LEN)
+            msg = "Name too long (len={})".format(self.name_len)
+        super(InvalidNameLength, self).__init__(msg)
 
 
 class LoginThrottledException(Exception):
@@ -445,12 +446,8 @@ class Journalist(db.Model):
 
     @classmethod
     def check_name_acceptable(cls, name):
-        # Enforce a reasonable maximum length for names to avoid DoS
+        # Enforce a reasonable maximum length for names
         if len(name) > cls.MAX_NAME_LEN:
-            raise InvalidNameLength(name)
-
-        # Enforce a reasonable minimum length for names
-        if len(name) < cls.MIN_NAME_LEN:
             raise InvalidNameLength(name)
 
     @classmethod

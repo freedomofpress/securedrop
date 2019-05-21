@@ -179,19 +179,17 @@ def make_blueprint(config):
             try:
                 first_name = request.form['first_name']
                 Journalist.check_name_acceptable(first_name)
-                if first_name != user.first_name:
-                    user.first_name = first_name
+                user.first_name = first_name
             except FirstOrLastNameError as e:
-                flash('Invalid name: ' + str(e), 'error')
+                flash(gettext('Name not updated: {}'.format(e)), "error")
                 return redirect(url_for("admin.edit_user", user_id=user_id))
 
             try:
                 last_name = request.form['last_name']
                 Journalist.check_name_acceptable(last_name)
-                if last_name != user.last_name:
-                    user.last_name = last_name
+                user.last_name = last_name
             except FirstOrLastNameError as e:
-                flash('Invalid name: ' + str(e), 'error')
+                flash(gettext('Name not updated: {}'.format(e)), "error")
                 return redirect(url_for("admin.edit_user", user_id=user_id))
 
             user.is_admin = bool(request.form.get('is_admin'))

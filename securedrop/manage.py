@@ -26,7 +26,7 @@ from sdconfig import config
 import journalist_app
 
 from db import db
-from models import Source, Journalist, PasswordError, InvalidUsernameException
+from models import Source, Journalist, PasswordError, InvalidUsernameException, FirstOrLastNameError
 from management.run import run
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
@@ -133,7 +133,7 @@ def _get_first_name():
         try:
             Journalist.check_name_acceptable(first_name)
             return first_name
-        except NameError as e:
+        except FirstOrLastNameError as e:
             print('Invalid name: ' + str(e))
 
 
@@ -145,7 +145,7 @@ def _get_last_name():
         try:
             Journalist.check_name_acceptable(last_name)
             return last_name
-        except NameError as e:
+        except FirstOrLastNameError as e:
             print('Invalid name: ' + str(e))
 
 

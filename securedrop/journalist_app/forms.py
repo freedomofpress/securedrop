@@ -33,12 +33,8 @@ def minimum_length_validation(form, field):
 def name_length_validation(form, field):
     if len(field.data) > Journalist.MAX_NAME_LEN:
         raise ValidationError(gettext(
-            'Field cannont be more than {max_chars} characters.'
+            'Field can not be more than {max_chars} characters.'
             .format(max_chars=Journalist.MAX_NAME_LEN)))
-    if len(field.data) < Journalist.MIN_NAME_LEN:
-        raise ValidationError(gettext(
-            'Field must be at least {min_chars} characters long but only got {num_chars}.'
-            .format(min_chars=Journalist.MIN_NAME_LEN, num_chars=len(field.data))))
 
 
 class NewUserForm(FlaskForm):

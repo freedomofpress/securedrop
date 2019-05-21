@@ -10,22 +10,14 @@
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <p>
       <label for="username">{{ gettext('Username') }}</label>
-      <input name="username" id="username" type="text" placeholder="{{ user.username }}">
+      <input name="username" id="username" type="text" value="{{ user.username }}">
     </p>
     <p>
       <label for="first_name">{{ gettext('First name') }}</label>
-      {% if not user.first_name %}
-        {% set first_name = '' %}
-      {% else %}
-        {% set first_name = user.first_name %}
-      {% endif %}
+      {% set first_name = user.first_name or '' %}
       <input name="first_name" id="first_name" type="text" value="{{ first_name }}">
       <label for="last_name">{{ gettext('Last name') }}</label>
-      {% if not user.last_name %}
-        {% set last_name = '' %}
-      {% else %}
-        {% set last_name = user.last_name %}
-      {% endif %}
+      {% set last_name = user.last_name or '' %}
       <input name="last_name" id="last_name" type="text" value="{{ last_name }}">
     </p>
     <p>
@@ -42,18 +34,10 @@
     <p>
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <label for="first_name">{{ gettext('First name') }}</label>
-      {% if not g.user.first_name %}
-        {% set first_name = '' %}
-      {% else %}
-        {% set first_name = g.user.first_name %}
-      {% endif %}
+      {% set first_name = g.user.first_name or '' %}
       <input name="first_name" id="first_name" value = "{{ first_name }}">
       <label for="last_name">{{ gettext('Last name') }}</label>
-      {% if not g.user.last_name %}
-        {% set last_name = '' %}
-      {% else %}
-        {% set last_name = g.user.last_name %}
-      {% endif %}
+      {% set last_name = g.user.last_name or '' %}
       <input name="last_name" id="last_name" value = "{{ last_name }}"">
     </p>
     <button class="sd-button" type="submit" id="change-name">{{ gettext('UPDATE') }}</button>
