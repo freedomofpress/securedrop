@@ -661,6 +661,34 @@ def test_admin_add_user_password_too_long_warning(journalist_app, test_admin):
                 'created. Please try again.', 'error')
 
 
+def test_admin_add_user_first_name_too_long_warning(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        overly_long_name = 'a' * (Journalist.MAX_NAME_LEN + 1)
+        _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=test_admin['username'],
+                                  first_name=overly_long_name,
+                                  last_name='',
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+        text = resp.data.decode('utf-8')
+        assert 'Field can not be more than' in text
+
+
+def test_admin_add_user_last_name_too_long_warning(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        overly_long_name = 'a' * (Journalist.MAX_NAME_LEN + 1)
+        _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=test_admin['username'],
+                                  first_name='',
+                                  last_name=overly_long_name,
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+        text = resp.data.decode('utf-8')
+        assert 'Field can not be more than' in text
+
+
 def test_admin_edits_user_invalid_username(
         journalist_app, test_admin, test_journo):
     """Test expected error message when admin attempts to change a user's
@@ -1145,6 +1173,60 @@ def test_admin_renames_user(journalist_app, test_admin):
     Journalist.query.filter(Journalist.username == new_user).one()
 
 
+def test_admin_adds_first_name_last_name_to_user(journalist_app, test_admin):
+    new_user = 'admin-first-name-last-name-user-test'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=new_user,
+                                  first_name='',
+                                  last_name='',
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+        assert resp.status_code in (200, 302)
+        journo = Journalist.query.filter(Journalist.username == new_user).one()
+
+        resp = app.post(url_for('admin.edit_user', user_id=journo.id),
+                        data=dict(username=new_user,
+                                  first_name='test name',
+                                  last_name='test name'))
+    assert resp.status_code in (200, 302)
+
+    # the following will throw an exception if new_user is not found
+    # therefore asserting it has been created
+    Journalist.query.filter(Journalist.username == new_user).one()
+
+
+def test_admin_adds_invalid_first_last_name_to_user(journalist_app, test_admin):
+    new_user = 'admin-invalid-first-name-last-name-user-test'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=new_user,
+                                  first_name='',
+                                  last_name='',
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+        assert resp.status_code in (200, 302)
+        journo = Journalist.query.filter(Journalist.username == new_user).one()
+
+        overly_long_name = 'a' * (Journalist.MAX_NAME_LEN + 1)
+        resp = app.post(url_for('admin.edit_user', user_id=journo.id),
+                        data=dict(username=overly_long_name,
+                                  first_name=overly_long_name,
+                                  last_name='test name'),
+                        follow_redirects=True)
+    assert resp.status_code in (200, 302)
+    text = resp.data.decode('utf-8')
+    assert 'Name not updated' in text
+
+
 def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
     mocked_error_logger = mocker.patch('journalist_app.admin.current_app.logger.error')
     mocker.patch('journalist_app.admin.Journalist',
@@ -1303,7 +1385,8 @@ def test_user_authorization_for_posts(journalist_app):
             url_for('main.bulk'),
             url_for('account.new_two_factor'),
             url_for('account.reset_two_factor_totp'),
-            url_for('account.reset_two_factor_hotp')]
+            url_for('account.reset_two_factor_hotp'),
+            url_for('account.change_name')]
     with journalist_app.test_client() as app:
         for url in urls:
             resp = app.post(url)
@@ -1419,6 +1502,33 @@ def test_valid_user_password_change(journalist_app, test_journo):
                         follow_redirects=True)
 
         assert 'Password updated.' in resp.data.decode('utf-8')
+
+
+def test_valid_user_first_last_name_change(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        resp = app.post(url_for('account.change_name'),
+                        data=dict(first_name='test',
+                                  last_name='test'),
+                        follow_redirects=True)
+
+        assert 'Name updated.' in resp.data.decode('utf-8')
+
+
+def test_valid_user_invalid_first_last_name_change(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        overly_long_name = 'a' * (Journalist.MAX_NAME_LEN + 1)
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        resp = app.post(url_for('account.change_name'),
+                        data=dict(first_name=overly_long_name,
+                                  last_name=overly_long_name),
+                        follow_redirects=True)
+
+        assert 'Name not updated' in resp.data.decode('utf-8')
 
 
 def test_regenerate_totp(journalist_app, test_journo):

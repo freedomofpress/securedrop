@@ -480,7 +480,7 @@ class JournalistNavigationStepsMixin:
         # There's a field to change the user's username and it's already filled
         # out with the user's username.
         username_field = self.driver.find_element_by_css_selector("#username")
-        assert username_field.get_attribute("placeholder") == username
+        assert username_field.get_attribute("value") == username
         # There's a checkbox to change the admin status of the user and
         # it's already checked appropriately to reflect the current status of
         # our user.
@@ -527,10 +527,11 @@ class JournalistNavigationStepsMixin:
 
         self.wait_for(can_edit_user)
 
-        new_username = self.new_user["username"] + "2"
+        new_characters = "2"
+        new_username = self.new_user["username"] + new_characters
 
         username_field = self.driver.find_element_by_css_selector('input[name="username"]')
-        username_field.send_keys(new_username)
+        username_field.send_keys(new_characters)
         update_user_btn = self.driver.find_element_by_css_selector("button[type=submit]")
         update_user_btn.click()
 
