@@ -1,9 +1,7 @@
 """add checksum columns and revoke token table
-
 Revision ID: b58139cfdc8c
 Revises: f2833ac34bb6
 Create Date: 2019-04-02 10:45:05.178481
-
 """
 import os
 from alembic import op
@@ -35,10 +33,6 @@ def upgrade():
 
     with op.batch_alter_table('submissions', schema=None) as batch_op:
         batch_op.add_column(sa.Column('checksum', sa.String(length=255), nullable=True))
-
-    with op.batch_alter_table('journalists', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('first_name', sa.String(length=255), nullable=True))
-        batch_op.add_column(sa.Column('last_name', sa.String(length=255), nullable=True))
 
     op.create_table(
         'revoked_tokens',
@@ -98,7 +92,3 @@ def downgrade():
 
     with op.batch_alter_table('replies', schema=None) as batch_op:
         batch_op.drop_column('checksum')
-
-    with op.batch_alter_table('journalists', schema=None) as batch_op:
-        batch_op.drop_column('last_name')
-        batch_op.drop_column('first_name')

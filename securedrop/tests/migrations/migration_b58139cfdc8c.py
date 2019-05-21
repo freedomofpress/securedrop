@@ -12,7 +12,7 @@ from db import db
 from journalist_app import create_app
 from .helpers import random_chars, random_datetime
 
-random.seed('⎦˚◡˚⎣')
+random.seed('ᕕ( ᐛ )ᕗ')
 
 DATA = b'wat'
 DATA_CHECKSUM = 'sha256:f00a787f7492a95e165b470702f4fe9373583fbdc025b2c8bdf0262cc48fcff4'
@@ -41,22 +41,6 @@ class Helper:
         sql = '''INSERT INTO journalists (uuid, username)
                  VALUES (:uuid, :username)
               '''
-        self.journalist_id = db.engine.execute(text(sql), **params).lastrowid
-
-    def create_journalist_after_migration(self):
-        if self.journalist_id is not None:
-            raise RuntimeError('Journalist already created')
-
-        params = {
-            'uuid': str(uuid.uuid4()),
-            'username': random_chars(50),
-            'first_name': random_chars(50),
-            'last_name': random_chars(50)
-        }
-        sql = '''
-        INSERT INTO journalists (uuid, username, first_name, last_name)
-        VALUES (:uuid, :username, :first_name, :last_name)
-        '''
         self.journalist_id = db.engine.execute(text(sql), **params).lastrowid
 
     def create_source(self):
@@ -167,7 +151,6 @@ class UpgradeTester(Helper):
         and without being able to inject this config, the checksum function won't succeed. The above
         `load_data` function provides data that can be manually verified by checking the `rqworker`
         log file in `/tmp/`.
-
         The other part of the migration, creating a table, cannot be tested regardless.
         '''
         pass
@@ -182,7 +165,7 @@ class DowngradeTester(Helper):
 
     def load_data(self):
         with self.app.app_context():
-            self.create_journalist_after_migration()
+            self.create_journalist()
             self.create_source()
 
             # create a submission and a reply that we don't add checksums to
@@ -198,11 +181,7 @@ class DowngradeTester(Helper):
 
     def check_downgrade(self):
         '''
-        - Verify that the checksum column is now gone.
-        - Verify that the migration worked by checking that the journalist added in load_data has
-          a first and last name.
-        - Verify that Journalist first and last names are gone after downgrade.
-
+        Verify that the checksum column is now gone.
         The dropping of the revoked_tokens table cannot be checked. If the migration completes,
         then it wokred correctly.
         '''
@@ -222,18 +201,6 @@ class DowngradeTester(Helper):
                 try:
                     # this should produce an exception since the column is gone
                     submission['checksum']
-                except NoSuchColumnError:
-                    pass
-
-            journalists_sql = "SELECT * FROM journalists"
-            journalists = db.engine.execute(text(journalists_sql)).fetchall()
-            for journalist in journalists:
-                try:
-                    assert journalist['first_name'] is None
-                except NoSuchColumnError:
-                    pass
-                try:
-                    assert journalist['last_name'] is None
                 except NoSuchColumnError:
                     pass
 
