@@ -11,7 +11,8 @@
   <div class="container flex-end">
     <div>
       <p>
-        {{ form.username(placeholder=gettext('Username')) }}
+        <label for="first_name">{{ gettext('Username') }}</label>
+        {{ form.username() }}
         <br>
         {% for error in form.username.errors %}
           <span class="form-validation-error">{{ error }}</span>
@@ -28,7 +29,8 @@
   <div class="container flex-end">
     <div>
       <p>
-        {{ form.first_name(placeholder=gettext('First name')) }}
+        <label for="first_name">{{ gettext('First name') }}</label>
+        {{ form.first_name() }}
         <br>
         {% for error in form.first_name.errors %}
           <span class="form-validation-error">{{ error }}</span>
@@ -37,7 +39,8 @@
     </div>
     <div>
       <p>
-        {{ form.last_name(placeholder=gettext('Last name')) }}
+        <label for="last_name">{{ gettext('Last name') }}</label>
+        {{ form.last_name() }}
         <br>
         {% for error in form.last_name.errors %}
           <span class="form-validation-error">{{ error }}</span>
