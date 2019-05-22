@@ -33,7 +33,7 @@ if typing.TYPE_CHECKING:
     from tempfile import _TemporaryFileWrapper  # noqa: F401
     from io import BufferedIOBase  # noqa: F401
     from logging import Logger  # noqa: F401
-    from sqlalchemy import Model, Query  # noqa: F401
+    from sqlalchemy import Query  # noqa: F401
     from pyotp import OTP  # noqa: F401
 
 LOGIN_HARDENING = True
@@ -145,7 +145,7 @@ class Source(db.Model):
         raise NotImplementedError
 
     def to_json(self):
-        # type: () -> Dict[str, Union[str, bool, int, DateTime]]
+        # type: () -> Dict[str, Union[str, bool, int, str]]
         docs_msg_count = self.documents_messages_count()
 
         if self.last_updated:
@@ -440,7 +440,7 @@ class Journalist(db.Model):
     _LEGACY_SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
     def _scrypt_hash(self, password, salt):
-        # type: (str, Binary) -> Binary
+        # type: (str, str) -> str
         return scrypt.hash(str(password), salt, **self._LEGACY_SCRYPT_PARAMS)
 
     MAX_PASSWORD_LEN = 128
@@ -503,7 +503,7 @@ class Journalist(db.Model):
             raise NonDicewarePassword()
 
     def valid_password(self, passphrase):
-        # type: (str) -> Union[Binary, bool]
+        # type: (str) -> bool
         # Avoid hashing passwords that are over the maximum length
         if len(passphrase) > self.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(passphrase)
@@ -699,7 +699,7 @@ class Journalist(db.Model):
         return Journalist.query.get(data['id'])
 
     def to_json(self):
-        # type: () -> Dict[str, Union[str, bool, DateTime]]
+        # type: () -> Dict[str, Union[str, bool, str]]
         json_user = {
             'username': self.username,
             'last_login': self.last_access.isoformat() + 'Z',

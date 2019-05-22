@@ -24,11 +24,12 @@ if typing.TYPE_CHECKING:
     # That is why all type annotation relative import
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
-    from typing import Optional, Union, List, Any  # noqa: F401
+    from typing import List, Type, Union  # noqa: F401
     from tempfile import _TemporaryFileWrapper  # noqa: F401
     from io import BufferedIOBase  # noqa: F401
-    from sqlalchemy import model  # noqa: F401
-    from flask_sqlalchemy import Submission, Reply, Session  # noqa: F401
+    from sqlalchemy.orm import Session  # noqa: F401
+    from models import Reply, Submission  # noqa: F401
+
 
 VALIDATE_FILENAME = re.compile(
     "^(?P<index>\d+)\-[a-z0-9-_]*"
@@ -235,7 +236,7 @@ def async_add_checksum_for_file(db_obj):
 
 
 def queued_add_checksum_for_file(db_model, model_id, file_path, db_uri):
-    # type: (model, int, str, str) -> str
+    # type: (Union[Type[Submission], Type[Reply]], int, str, str) -> str
     # we have to create our own DB session because there is no app context
     session = sessionmaker(bind=create_engine(db_uri))()
     db_obj = session.query(db_model).filter_by(id=model_id).one()
