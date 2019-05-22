@@ -30,11 +30,20 @@ def minimum_length_validation(form, field):
                         num_chars=len(field.data))))
 
 
+def name_length_validation(form, field):
+    if len(field.data) > Journalist.MAX_NAME_LEN:
+        raise ValidationError(gettext(
+            'Field can not be more than {max_chars} characters.'
+            .format(max_chars=Journalist.MAX_NAME_LEN)))
+
+
 class NewUserForm(FlaskForm):
     username = TextField('username', validators=[
         InputRequired(message=gettext('This field is required.')),
         minimum_length_validation
     ])
+    first_name = TextField('first_name', validators=[name_length_validation, Optional()])
+    last_name = TextField('last_name', validators=[name_length_validation, Optional()])
     password = HiddenField('password')
     is_admin = BooleanField('is_admin')
     is_hotp = BooleanField('is_hotp')

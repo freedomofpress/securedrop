@@ -65,6 +65,8 @@ def test_handle_invalid_secret(journalist_app, config, mocker, capsys):
     """Regression test for bad secret logic in manage.py"""
 
     mocker.patch("manage._get_username", return_value='ntoll'),
+    mocker.patch("manage._get_first_name", return_value=''),
+    mocker.patch("manage._get_last_name", return_value=''),
     mocker.patch("manage._get_yubikey_usage", return_value=True),
     mocker.patch("manage.obtain_input", side_effect=YUBIKEY_HOTP),
 
@@ -92,6 +94,8 @@ def test_exception_handling_when_duplicate_username(journalist_app,
     """Regression test for duplicate username logic in manage.py"""
 
     mocker.patch("manage._get_username", return_value='foo-bar-baz')
+    mocker.patch("manage._get_first_name", return_value='')
+    mocker.patch("manage._get_last_name", return_value='')
     mocker.patch("manage._get_yubikey_usage", return_value=False)
 
     original_config = manage.config
@@ -119,6 +123,8 @@ def test_exception_handling_when_duplicate_username(journalist_app,
 # Note: we use the `journalist_app` fixture because it creates the DB
 def test_delete_user(journalist_app, config, mocker):
     mocker.patch("manage._get_username", return_value='test-user-56789')
+    mocker.patch("manage._get_first_name", return_value='')
+    mocker.patch("manage._get_last_name", return_value='')
     mocker.patch("manage._get_yubikey_usage", return_value=False)
     mocker.patch("manage._get_username_to_delete",
                  return_value='test-user-56789')
@@ -192,6 +198,16 @@ def test_reset(journalist_app, test_journo, alembic_config, config):
 def test_get_username(mocker):
     mocker.patch("manage.obtain_input", return_value='foo-bar-baz')
     assert manage._get_username() == 'foo-bar-baz'
+
+
+def test_get_first_name(mocker):
+    mocker.patch("manage.obtain_input", return_value='foo-bar-baz')
+    assert manage._get_first_name() == 'foo-bar-baz'
+
+
+def test_get_last_name(mocker):
+    mocker.patch("manage.obtain_input", return_value='foo-bar-baz')
+    assert manage._get_last_name() == 'foo-bar-baz'
 
 
 def test_clean_tmp_do_nothing(caplog):

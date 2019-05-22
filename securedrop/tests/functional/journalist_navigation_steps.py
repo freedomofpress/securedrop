@@ -284,9 +284,17 @@ class JournalistNavigationStepsMixin:
         # giving extra time for upload to complete
         self.wait_for(updated_image, timeout=self.timeout * 6)
 
-    def _add_user(self, username, is_admin=False, hotp=None):
+    def _add_user(self, username, first_name="", last_name="", is_admin=False, hotp=None):
         username_field = self.driver.find_element_by_css_selector('input[name="username"]')
         username_field.send_keys(username)
+
+        if first_name:
+            first_name_field = self.driver.find_element_by_id("first_name")
+            first_name_field.send_keys(first_name)
+
+        if last_name:
+            last_name_field = self.driver.find_element_by_id("last_name")
+            last_name_field.send_keys(last_name)
 
         if hotp:
             hotp_checkbox = self.driver.find_element_by_css_selector('input[name="is_hotp"]')
@@ -316,8 +324,11 @@ class JournalistNavigationStepsMixin:
 
         if not new_username:
             new_username = next(journalist_usernames)
-        self.new_user = dict(username=new_username, password=password)
-        self._add_user(self.new_user["username"], is_admin=is_admin)
+        self.new_user = dict(username=new_username, first_name='', last_name='', password=password)
+        self._add_user(self.new_user["username"],
+                       first_name=self.new_user['first_name'],
+                       last_name=self.new_user['last_name'],
+                       is_admin=is_admin)
 
         if not hasattr(self, "accept_languages"):
             # Clicking submit on the add user form should redirect to
@@ -469,7 +480,7 @@ class JournalistNavigationStepsMixin:
         # There's a field to change the user's username and it's already filled
         # out with the user's username.
         username_field = self.driver.find_element_by_css_selector("#username")
-        assert username_field.get_attribute("placeholder") == username
+        assert username_field.get_attribute("value") == username
         # There's a checkbox to change the admin status of the user and
         # it's already checked appropriately to reflect the current status of
         # our user.
@@ -516,10 +527,11 @@ class JournalistNavigationStepsMixin:
 
         self.wait_for(can_edit_user)
 
-        new_username = self.new_user["username"] + "2"
+        new_characters = "2"
+        new_username = self.new_user["username"] + new_characters
 
         username_field = self.driver.find_element_by_css_selector('input[name="username"]')
-        username_field.send_keys(new_username)
+        username_field.send_keys(new_characters)
         update_user_btn = self.driver.find_element_by_css_selector("button[type=submit]")
         update_user_btn.click()
 
@@ -756,8 +768,15 @@ class JournalistNavigationStepsMixin:
     def _admin_creates_a_user(self, hotp):
         self.safe_click_by_id("add-user")
         self.wait_for(lambda: self.driver.find_element_by_id("username"))
-        self.new_user = dict(username="dellsberg", password="pentagonpapers")
-        self._add_user(self.new_user["username"], is_admin=False, hotp=hotp)
+        self.new_user = dict(username="dellsberg",
+                             first_name='',
+                             last_name='',
+                             password="pentagonpapers")
+        self._add_user(self.new_user["username"],
+                       first_name=self.new_user['first_name'],
+                       last_name=self.new_user['last_name'],
+                       is_admin=False,
+                       hotp=hotp)
 
     def _journalist_delete_all(self):
         for checkbox in self.driver.find_elements_by_name("doc_names_selected"):

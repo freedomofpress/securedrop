@@ -1,9 +1,7 @@
 """add checksum columns and revoke token table
-
 Revision ID: b58139cfdc8c
 Revises: f2833ac34bb6
 Create Date: 2019-04-02 10:45:05.178481
-
 """
 import os
 from alembic import op

@@ -5,8 +5,8 @@ from flask import (Blueprint, render_template, request, g, redirect, url_for,
 from flask_babel import gettext
 
 from db import db
-from journalist_app.utils import (make_password, set_diceware_password,
-                                  validate_user, validate_hotp_secret)
+from journalist_app.utils import (make_password, set_diceware_password, set_name, validate_user,
+                                  validate_hotp_secret)
 
 
 def make_blueprint(config):
@@ -17,6 +17,13 @@ def make_blueprint(config):
         password = make_password(config)
         return render_template('edit_account.html',
                                password=password)
+
+    @view.route('/change-name', methods=('POST',))
+    def change_name():
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        set_name(g.user, first_name, last_name)
+        return redirect(url_for('account.edit'))
 
     @view.route('/new-password', methods=('POST',))
     def new_password():

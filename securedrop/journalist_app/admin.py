@@ -9,10 +9,10 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
 from db import db
-from models import Journalist, InvalidUsernameException, PasswordError
+from models import Journalist, InvalidUsernameException, FirstOrLastNameError, PasswordError
 from journalist_app.decorators import admin_required
-from journalist_app.utils import (make_password, commit_account_changes,
-                                  set_diceware_password, validate_hotp_secret)
+from journalist_app.utils import (make_password, commit_account_changes, set_diceware_password,
+                                  validate_hotp_secret)
 from journalist_app.forms import LogoForm, NewUserForm
 
 
@@ -54,6 +54,8 @@ def make_blueprint(config):
         if form.validate_on_submit():
             form_valid = True
             username = request.form['username']
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
             password = request.form['password']
             is_admin = bool(request.form.get('is_admin'))
 
@@ -63,6 +65,8 @@ def make_blueprint(config):
                     otp_secret = request.form.get('otp_secret', '')
                 new_user = Journalist(username=username,
                                       password=password,
+                                      first_name=first_name,
+                                      last_name=last_name,
                                       is_admin=is_admin,
                                       otp_secret=otp_secret)
                 db.session.add(new_user)
@@ -171,6 +175,22 @@ def make_blueprint(config):
                                             user_id=user_id))
                 else:
                     user.username = new_username
+
+            try:
+                first_name = request.form['first_name']
+                Journalist.check_name_acceptable(first_name)
+                user.first_name = first_name
+            except FirstOrLastNameError as e:
+                flash(gettext('Name not updated: {}'.format(e)), "error")
+                return redirect(url_for("admin.edit_user", user_id=user_id))
+
+            try:
+                last_name = request.form['last_name']
+                Journalist.check_name_acceptable(last_name)
+                user.last_name = last_name
+            except FirstOrLastNameError as e:
+                flash(gettext('Name not updated: {}'.format(e)), "error")
+                return redirect(url_for("admin.edit_user", user_id=user_id))
 
             user.is_admin = bool(request.form.get('is_admin'))
 
