@@ -166,7 +166,7 @@ During QA, the release manager should follow these steps to test the migrations.
 2. Build Debian packages locally
 3. Provision staging VMs
 4. ``vagrant ssh app-staging``
-5. ``sudo su``
+5. ``sudo -u www-data bash``
 6. ``cd /var/www/securedrop && ./qa_loader.py``
 7. Checkout the release candidate
 8. Re-provision the staging VMs

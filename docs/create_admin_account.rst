@@ -33,7 +33,7 @@ If you are installing SecureDrop yourself, to create the first admin account, :d
 
 .. code:: sh
 
-   sudo su
+   sudo -u www-data bash
    cd /var/www/securedrop
    ./manage.py add-admin
 

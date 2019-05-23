@@ -46,7 +46,7 @@ Debian packages on the staging machines:
    molecule login -s virtualbox-staging-xenial -h app-staging
    # or:
    molecule login -s libvirt-staging-xenial -h app-staging
-   sudo su
+   sudo -u www-data bash
    cd /var/www/securedrop
    ./manage.py add-admin
    pytest -v tests/
@@ -310,7 +310,7 @@ To create the prod servers, run:
 
    vagrant up /prod/
    vagrant ssh app-prod
-   sudo su
+   sudo -u www-data bash
    cd /var/www/securedrop/
    ./manage.py add-admin
 
