@@ -288,6 +288,8 @@ class Reply(db.Model):
             'filename': self.filename,
             'size': self.size,
             'journalist_username': self.journalist.username,
+            'journalist_first_name': self.journalist.first_name,
+            'journalist_last_name': self.journalist.last_name,
             'journalist_uuid': self.journalist.uuid,
             'uuid': self.uuid,
             'is_deleted_by_source': self.deleted_by_source,
@@ -704,7 +706,9 @@ class Journalist(db.Model):
             'username': self.username,
             'last_login': self.last_access.isoformat() + 'Z',
             'is_admin': self.is_admin,
-            'uuid': self.uuid
+            'uuid': self.uuid,
+            'first_name': self.first_name,
+            'last_name': self.last_name
         }
         return json_user
 
