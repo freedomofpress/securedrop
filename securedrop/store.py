@@ -13,7 +13,22 @@ from sqlalchemy.orm import sessionmaker
 from werkzeug.utils import secure_filename
 
 from secure_tempfile import SecureTemporaryFile
+
 from worker import rq_worker_queue
+
+
+import typing
+
+if typing.TYPE_CHECKING:
+    # flake8 can not understand type annotation yet.
+    # That is why all type annotation relative import
+    # statements has to be marked as noqa.
+    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
+    from typing import List, Type, Union  # noqa: F401
+    from tempfile import _TemporaryFileWrapper  # noqa: F401
+    from io import BufferedIOBase  # noqa: F401
+    from sqlalchemy.orm import Session  # noqa: F401
+    from models import Reply, Submission  # noqa: F401
 
 
 VALIDATE_FILENAME = re.compile(
@@ -22,7 +37,6 @@ VALIDATE_FILENAME = re.compile(
 
 
 class PathException(Exception):
-
     """An exception raised by `util.verify` when it encounters a bad path. A path
     can be bad when it is not absolute or not normalized.
     """
@@ -39,6 +53,7 @@ class NotEncrypted(Exception):
 class Storage:
 
     def __init__(self, storage_path, temp_dir, gpg_key):
+        # type: (str, str, str) -> None
         if not os.path.isabs(storage_path):
             raise PathException("storage_path {} is not absolute".format(
                 storage_path))
@@ -52,6 +67,7 @@ class Storage:
         self.__gpg_key = gpg_key
 
     def verify(self, p):
+        # type: (str) -> bool
         """Assert that the path is absolute, normalized, inside
            `self.__storage_path`, and matches the filename format.
         """
@@ -79,7 +95,10 @@ class Storage:
             if not VALIDATE_FILENAME(filename):
                 raise PathException("Invalid filename %s" % (filename, ))
 
+        return False
+
     def path(self, *s):
+        # type: (*str) -> str
         """Get the normalized, absolute file path, within
            `self.__storage_path`.
         """
@@ -89,6 +108,7 @@ class Storage:
         return absolute
 
     def get_bulk_archive(self, selected_submissions, zip_directory=''):
+        # type: (List, str) -> _TemporaryFileWrapper
         """Generate a zip file from the selected submissions"""
         zip_file = tempfile.NamedTemporaryFile(
             prefix='tmp_securedrop_bulk_dl_',
@@ -122,6 +142,7 @@ class Storage:
 
     def save_file_submission(self, filesystem_id, count, journalist_filename,
                              filename, stream):
+        # type: (str, int, str, str, BufferedIOBase) -> str
         sanitized_filename = secure_filename(filename)
 
         # We store file submissions in a .gz file for two reasons:
@@ -159,7 +180,7 @@ class Storage:
 
     def save_pre_encrypted_reply(self, filesystem_id, count,
                                  journalist_filename, content):
-
+        # type: (str, int, str, str) -> str
         if '-----BEGIN PGP MESSAGE-----' not in content.split('\n')[0]:
             raise NotEncrypted
 
@@ -174,6 +195,7 @@ class Storage:
 
     def save_message_submission(self, filesystem_id, count,
                                 journalist_filename, message):
+        # type: (str, int, str, str) -> str
         filename = "{0}-{1}-msg.gpg".format(count, journalist_filename)
         msg_loc = self.path(filesystem_id, filename)
         current_app.crypto_util.encrypt(message, self.__gpg_key, msg_loc)
@@ -183,6 +205,7 @@ class Storage:
                           filesystem_id,
                           orig_filename,
                           journalist_filename):
+        # type: (str, str, str) -> str
         check_submission_name = VALIDATE_FILENAME(orig_filename)
         if check_submission_name:
             parsed_filename = check_submission_name.groupdict()
@@ -202,6 +225,7 @@ class Storage:
 
 
 def async_add_checksum_for_file(db_obj):
+    # type: (Union[Submission, Reply]) -> str
     return rq_worker_queue.enqueue(
         queued_add_checksum_for_file,
         type(db_obj),
@@ -212,6 +236,7 @@ def async_add_checksum_for_file(db_obj):
 
 
 def queued_add_checksum_for_file(db_model, model_id, file_path, db_uri):
+    # type: (Union[Type[Submission], Type[Reply]], int, str, str) -> str
     # we have to create our own DB session because there is no app context
     session = sessionmaker(bind=create_engine(db_uri))()
     db_obj = session.query(db_model).filter_by(id=model_id).one()
@@ -221,6 +246,7 @@ def queued_add_checksum_for_file(db_model, model_id, file_path, db_uri):
 
 
 def add_checksum_for_file(session, db_obj, file_path):
+    # type: (Session, Union[Submission, Reply], str) -> None
     hasher = sha256()
     with open(file_path, 'rb') as f:
         while True:
