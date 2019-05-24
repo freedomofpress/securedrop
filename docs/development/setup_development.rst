@@ -130,9 +130,7 @@ following ports:
 * Source Interface: `localhost:8080 <http://localhost:8080>`__
 * *Journalist Interface*: `localhost:8081 <http://localhost:8081>`__
 
-If you are using Tor to connect to your local Docker instance, make sure to set 
-"No Proxy" for 0.0.0.0, otherwise Tor will not be able to connect (make sure you 
-understand the security implications for your setup before doing so).
+You should use Tor Browser to test web application changes, `see here for instructions <https://docs.securedrop.org/en/release-0.12.2/development/tips_and_tricks.html#using-tor-browser-with-the-development-environment>`.
 
 A test administrator (``journalist``) and non-admin user (``dellsberg``) are
 created by default when running ``make dev``. In addition, sources and
