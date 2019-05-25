@@ -1,3 +1,4 @@
+from flaky import flaky
 import os
 import io
 import pexpect
@@ -468,11 +469,13 @@ def securedrop_git_repo(tmpdir):
 
     # Save coverage information in same directory as unit test coverage
     test_name = str(tmpdir).split('/')[-1]
-    subprocess.check_call(['cp',
-                           '{}/securedrop/admin/.coverage'.format(
-                               str(tmpdir)),
-                           '{}/../.coverage.{}'.format(CURRENT_DIR,
-                                                       test_name)])
+    try:
+        subprocess.check_call(
+            ['cp', '{}/securedrop/admin/.coverage'.format(str(tmpdir)),
+             '{}/../.coverage.{}'.format(CURRENT_DIR, test_name)])
+    except subprocess.CalledProcessError:
+        # It means the coverage file may not exist, don't error
+        pass
 
 
 def set_reliable_keyserver(gpgdir):
@@ -488,124 +491,129 @@ def set_reliable_keyserver(gpgdir):
         os.chmod(gpgdir, 0700)
 
 
-# This class is to test all the git related operations.
-class TestGitOperations:
-    def test_check_for_update_when_updates_needed(self, securedrop_git_repo):
-        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
-                           'securedrop_admin/__init__.py')
-        ansible_base = os.path.join(str(securedrop_git_repo),
-                                    'securedrop/install_files/ansible-base')
-        fullcmd = 'coverage run {0} --root {1} check_for_updates'.format(
-                  cmd, ansible_base)
-        child = pexpect.spawn(fullcmd)
-        child.expect('Update needed', timeout=20)
+@flaky(max_runs=3)
+def test_check_for_update_when_updates_needed(securedrop_git_repo):
+    cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                       'securedrop_admin/__init__.py')
+    ansible_base = os.path.join(str(securedrop_git_repo),
+                                'securedrop/install_files/ansible-base')
+    fullcmd = 'coverage run {0} --root {1} check_for_updates'.format(
+                cmd, ansible_base)
+    child = pexpect.spawn(fullcmd)
+    child.expect('Update needed', timeout=20)
 
-        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
-        child.close()
-        assert child.exitstatus == 0
-        assert child.signalstatus is None
+    child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+    child.close()
+    assert child.exitstatus == 0
+    assert child.signalstatus is None
 
-    def test_check_for_update_when_updates_not_needed(self,
-                                                      securedrop_git_repo):
-        # Determine latest production tag using GitHub release object
-        github_url = 'https://api.github.com/repos/freedomofpress/securedrop/releases/latest'  # noqa: E501
-        latest_release = requests.get(github_url).json()
-        latest_tag = str(latest_release["tag_name"])
 
-        subprocess.check_call(["git", "checkout", latest_tag])
+@flaky(max_runs=3)
+def test_check_for_update_when_updates_not_needed(securedrop_git_repo):
+    # Determine latest production tag using GitHub release object
+    github_url = 'https://api.github.com/repos/freedomofpress/securedrop/releases/latest'  # noqa: E501
+    latest_release = requests.get(github_url).json()
+    latest_tag = str(latest_release["tag_name"])
 
-        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
-                           'securedrop_admin/__init__.py')
-        ansible_base = os.path.join(str(securedrop_git_repo),
-                                    'securedrop/install_files/ansible-base')
-        fullcmd = 'coverage run {0} --root {1} check_for_updates'.format(
-                  cmd, ansible_base)
-        child = pexpect.spawn(fullcmd)
-        child.expect('All updates applied', timeout=20)
+    subprocess.check_call(["git", "checkout", latest_tag])
 
-        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
-        child.close()
-        assert child.exitstatus == 0
-        assert child.signalstatus is None
+    cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                       'securedrop_admin/__init__.py')
+    ansible_base = os.path.join(str(securedrop_git_repo),
+                                'securedrop/install_files/ansible-base')
+    fullcmd = 'coverage run {0} --root {1} check_for_updates'.format(
+        cmd, ansible_base)
+    child = pexpect.spawn(fullcmd)
+    child.expect('All updates applied', timeout=20)
 
-    def test_update(self, securedrop_git_repo):
-        gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
-        set_reliable_keyserver(gpgdir)
+    child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+    child.close()
+    assert child.exitstatus == 0
+    assert child.signalstatus is None
 
-        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
-                           'securedrop_admin/__init__.py')
-        ansible_base = os.path.join(str(securedrop_git_repo),
-                                    'securedrop/install_files/ansible-base')
-        child = pexpect.spawn('coverage run {0} --root {1} update'.format(
-                              cmd, ansible_base))
 
-        output = child.read()
-        assert 'Updated to SecureDrop' in output
-        assert 'Signature verification successful' in output
+@flaky(max_runs=3)
+def test_update(securedrop_git_repo):
+    gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
+    set_reliable_keyserver(gpgdir)
 
-        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
-        child.close()
-        assert child.exitstatus == 0
-        assert child.signalstatus is None
+    cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                       'securedrop_admin/__init__.py')
+    ansible_base = os.path.join(str(securedrop_git_repo),
+                                'securedrop/install_files/ansible-base')
+    child = pexpect.spawn('coverage run {0} --root {1} update'.format(
+        cmd, ansible_base))
 
-    def test_update_fails_when_no_signature_present(self, securedrop_git_repo):
-        gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
-        set_reliable_keyserver(gpgdir)
+    output = child.read()
+    assert 'Updated to SecureDrop' in output
+    assert 'Signature verification successful' in output
 
-        # First we make a very high version tag of SecureDrop so that the
-        # updater will try to update to it. Since the tag is unsigned, it
-        # should fail.
-        subprocess.check_call('git checkout develop'.split())
-        subprocess.check_call('git tag 9999999.0.0'.split())
+    child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+    child.close()
+    assert child.exitstatus == 0
+    assert child.signalstatus is None
 
-        # Switch back to an older branch for the test
-        subprocess.check_call('git checkout 0.6'.split())
 
-        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
-                           'securedrop_admin/__init__.py')
-        ansible_base = os.path.join(str(securedrop_git_repo),
-                                    'securedrop/install_files/ansible-base')
-        child = pexpect.spawn('coverage run {0} --root {1} update'.format(
-                              cmd, ansible_base))
-        output = child.read()
-        assert 'Updated to SecureDrop' not in output
-        assert 'Signature verification failed' in output
+@flaky(max_runs=3)
+def test_update_fails_when_no_signature_present(securedrop_git_repo):
+    gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
+    set_reliable_keyserver(gpgdir)
 
-        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
-        child.close()
+    # First we make a very high version tag of SecureDrop so that the
+    # updater will try to update to it. Since the tag is unsigned, it
+    # should fail.
+    subprocess.check_call('git checkout develop'.split())
+    subprocess.check_call('git tag 9999999.0.0'.split())
 
-        # Failures should eventually exit non-zero.
-        assert child.exitstatus != 0
-        assert child.signalstatus != 0
+    # Switch back to an older branch for the test
+    subprocess.check_call('git checkout 0.6'.split())
 
-    def test_update_with_duplicate_branch_and_tag(self,
-                                                  securedrop_git_repo):
-        gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
-        set_reliable_keyserver(gpgdir)
+    cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                       'securedrop_admin/__init__.py')
+    ansible_base = os.path.join(str(securedrop_git_repo),
+                                'securedrop/install_files/ansible-base')
+    child = pexpect.spawn('coverage run {0} --root {1} update'.format(
+                          cmd, ansible_base))
+    output = child.read()
+    assert 'Updated to SecureDrop' not in output
+    assert 'Signature verification failed' in output
 
-        github_url = 'https://api.github.com/repos/freedomofpress/securedrop/releases/latest'  # noqa: E501
-        latest_release = requests.get(github_url).json()
-        latest_tag = str(latest_release["tag_name"])
+    child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+    child.close()
 
-        # Create a branch with the same name as a tag.
-        subprocess.check_call(['git', 'checkout', '-b', latest_tag])
-        # Checkout the older tag again in preparation for the update.
-        subprocess.check_call('git checkout 0.6'.split())
+    # Failures should eventually exit non-zero.
+    assert child.exitstatus != 0
+    assert child.signalstatus != 0
 
-        cmd = os.path.join(os.path.dirname(CURRENT_DIR),
-                           'securedrop_admin/__init__.py')
-        ansible_base = os.path.join(str(securedrop_git_repo),
-                                    'securedrop/install_files/ansible-base')
 
-        child = pexpect.spawn('coverage run {0} --root {1} update'.format(
-                              cmd, ansible_base))
-        output = child.read()
-        # Verify that we do not falsely check out a branch instead of a tag.
-        assert 'Switched to branch' not in output
-        assert 'Updated to SecureDrop' not in output
-        assert 'Signature verification failed' in output
+@flaky(max_runs=3)
+def test_update_with_duplicate_branch_and_tag(securedrop_git_repo):
+    gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
+    set_reliable_keyserver(gpgdir)
 
-        child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
-        child.close()
-        assert child.exitstatus != 0
-        assert child.signalstatus != 0
+    github_url = 'https://api.github.com/repos/freedomofpress/securedrop/releases/latest'  # noqa: E501
+    latest_release = requests.get(github_url).json()
+    latest_tag = str(latest_release["tag_name"])
+
+    # Create a branch with the same name as a tag.
+    subprocess.check_call(['git', 'checkout', '-b', latest_tag])
+    # Checkout the older tag again in preparation for the update.
+    subprocess.check_call('git checkout 0.6'.split())
+
+    cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                       'securedrop_admin/__init__.py')
+    ansible_base = os.path.join(str(securedrop_git_repo),
+                                'securedrop/install_files/ansible-base')
+
+    child = pexpect.spawn('coverage run {0} --root {1} update'.format(
+                          cmd, ansible_base))
+    output = child.read()
+    # Verify that we do not falsely check out a branch instead of a tag.
+    assert 'Switched to branch' not in output
+    assert 'Updated to SecureDrop' not in output
+    assert 'Signature verification failed' in output
+
+    child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
+    child.close()
+    assert child.exitstatus != 0
+    assert child.signalstatus != 0
