@@ -130,7 +130,8 @@ following ports:
 * Source Interface: `localhost:8080 <http://localhost:8080>`__
 * *Journalist Interface*: `localhost:8081 <http://localhost:8081>`__
 
-You should use Tor Browser to test web application changes, `see here for instructions <https://docs.securedrop.org/en/release-0.12.2/development/tips_and_tricks.html#using-tor-browser-with-the-development-environment>`.
+You should use Tor Browser to test web application changes, `see here for instructions
+<tips_and_tricks.html#using-tor-browser-with-the-development-environment>`__.
 
 A test administrator (``journalist``) and non-admin user (``dellsberg``) are
 created by default when running ``make dev``. In addition, sources and
