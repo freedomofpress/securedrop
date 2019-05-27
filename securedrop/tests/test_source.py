@@ -545,7 +545,7 @@ def test_why_journalist_key(source_app):
         assert "Why download the journalist's public key?" in text
 
 
-def test_metadata_route(source_app):
+def test_metadata_route(config, source_app):
     with patch.object(source_app_api.platform, "linux_distribution") as mocked_platform:
         mocked_platform.return_value = ("Ubuntu", "16.04", "xenial")
         with source_app.test_client() as app:
@@ -554,6 +554,8 @@ def test_metadata_route(source_app):
             assert resp.headers.get('Content-Type') == 'application/json'
             assert resp.json.get('sd_version') == version.__version__
             assert resp.json.get('server_os') == '16.04'
+            assert resp.json.get('supported_languages') ==\
+                config.SUPPORTED_LOCALES
 
 
 def test_login_with_overly_long_codename(source_app):
