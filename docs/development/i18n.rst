@@ -236,7 +236,10 @@ The translations must be suspended in `Weblate`_ to avoid conflicts.
 
 |Weblate commit Lock|
 
-* Click ``Lock``
+* Click ``Commit``
+* Click ``Push`` (we do these two steps, so that uncommitted changes
+  in the repo do not create merge conflicts.)
+* And finally, click ``Lock``
 
 |Weblate commit Locked|
 
