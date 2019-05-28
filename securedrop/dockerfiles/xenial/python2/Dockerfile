@@ -50,10 +50,11 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckod
 
 COPY requirements requirements
 
+# #4036: pybabel requires latest version of setuptools
 RUN pip install --require-hashes -r requirements/securedrop-app-code-requirements.txt && \
     pip install -r requirements/test-requirements.txt && \
-    pip install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools
-
+    pip install --upgrade setuptools && \
+    pip install -r requirements/develop-requirements.txt
 
 RUN pip install supervisor
 
@@ -63,4 +64,4 @@ RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp -
 
 STOPSIGNAL SIGKILL
 
-EXPOSE 8080 8081 5909
+EXPOSE 8000 8080 8081 5909

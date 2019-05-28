@@ -48,9 +48,12 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckod
     paxctl -cm /bin/geckodriver
 
 COPY requirements requirements
+
+# Fixes #4036 pybabel requires latest version of setuptools
 RUN pip3 install --require-hashes -r requirements/securedrop-app-code-requirements.txt && \
     pip3 install -r requirements/test-requirements.txt && \
-    pip3 install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools
+    pip3 install --upgrade setuptools && \
+    pip3 install -r requirements/develop-requirements.txt
 
 RUN pip3 install supervisor
 
@@ -63,4 +66,4 @@ RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp -
 
 STOPSIGNAL SIGKILL
 
-EXPOSE 8080 8081 5909
+EXPOSE 8000 8080 8081 5909
