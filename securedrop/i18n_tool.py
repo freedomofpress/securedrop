@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import collections
 import io
 import six
 import logging
@@ -300,7 +301,7 @@ class I18NTool(object):
         )
         path_changes = u"{}".format(path_changes)
         path_changes = [c.split('\x1e') for c in path_changes.strip().split('\n')]
-        path_changes = [c for c in path_changes if translation_re.match(c[1])]
+        path_changes = [c for c in path_changes if len(c) > 1 and translation_re.match(c[1])]
 
         path_authors = [c[0] for c in path_changes]
         return set(path_authors)
@@ -368,6 +369,59 @@ class I18NTool(object):
             help='comma separated list of supported languages')
         parser.set_defaults(func=self.update_from_weblate)
 
+    def set_list_translators_parser(self, subps):
+        parser = subps.add_parser('list-translators',
+                                  help=('List contributing translators'))
+        root = join(dirname(realpath(__file__)), '..')
+        parser.add_argument(
+            '--root',
+            default=root,
+            help=('root of the SecureDrop git repository'
+                  ' (default {})'.format(root)))
+        url = 'https://github.com/freedomofpress/securedrop-i18n'
+        parser.add_argument(
+            '--url',
+            default=url,
+            help=('URL of the weblate repository'
+                  ' (default {})'.format(url)))
+        parser.add_argument(
+            '--all',
+            action="store_true",
+            help="List everyone who's ever contributed."
+        )
+        parser.set_defaults(func=self.list_translators)
+
+    def list_translators(self, args):
+        self.ensure_i18n_remote(args)
+        codes = list(I18NTool.SUPPORTED_LANGUAGES.keys())
+        path_templates = [
+            "install_files/ansible-base/roles/tails-config/templates/{}.po",
+            "securedrop/translations/{}/LC_MESSAGES/messages.po",
+        ]
+        update_re = re.compile(r'(?:copied from|  revision:) (\w+)')
+        for code in sorted(codes):
+            translators = set([])
+            info = I18NTool.SUPPORTED_LANGUAGES[code]
+            paths = [t.format(code) for t in path_templates]
+            for path in paths:
+                try:
+                    range = "i18n/i18n"
+                    if not args.all:
+                        previous_message = u"{}".format(git(
+                            '--no-pager', '-C', args.root, 'log', '-n', '1', path,
+                            _encoding='utf-8'))
+                        m = update_re.search(previous_message)
+                        if m:
+                            origin = m.group(1)
+                        else:
+                            origin = ''
+                        range = '{}..i18n/i18n'.format(origin)
+                    t = self.translators(args, path, range)
+                    translators.update(t)
+                except:
+                    pass
+            print(u"{} ({}):\n  {}".format(code, info["name"], "\n  ".join(sorted(translators))))
+
     def get_args(self):
         parser = argparse.ArgumentParser(
             prog=__file__,
@@ -379,6 +433,7 @@ class I18NTool(object):
         self.set_translate_desktop_parser(subps)
         self.set_update_docs_parser(subps)
         self.set_update_from_weblate_parser(subps)
+        self.set_list_translators_parser(subps)
 
         return parser
 

@@ -28,6 +28,14 @@ test-python3: ## Run the Python 3 test suite in a Ubuntu 16.04 (Xenial) dockeriz
 translation-test: ## Run all pages-layout tests in all supported languages
 	./bin/dev-shell ./bin/translation-test $${TESTFILES:-tests/pageslayout}
 
+.PHONY: list-translators
+list-translators: ## Collect the names of translators since the last merge from Weblate
+	@./bin/dev-shell ./i18n_tool.py list-translators
+
+.PHONY: list-all-translators
+list-all-translators: ## Collect the names of all translators in the project's history
+	@./bin/dev-shell ./i18n_tool.py list-translators --all
+
 .PHONY: dev
 dev: ## Run the dev server
 	 DOCKER_RUN_ARGUMENTS='-p127.0.0.1:8080:8080 -p127.0.0.1:8081:8081' ./bin/dev-shell ./bin/run
