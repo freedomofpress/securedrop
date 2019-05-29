@@ -161,7 +161,7 @@ code is up-to-date and validated. From a terminal, run the following commands:
 
  cd ~/Persistent/securedrop
  git fetch --tags
- git tag -v 0.12.2
+ git tag -v 0.13.0
 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the
 output of that last command, along with the fingerprint ``"2224 5C81 E3BA EB41
@@ -179,7 +179,7 @@ First, check out the release tag that you validated above:
 
 .. code:: sh
  
- git checkout 0.12.2
+ git checkout 0.13.0
 
 Next, run the following command to set up the SecureDrop administration environment:
 
