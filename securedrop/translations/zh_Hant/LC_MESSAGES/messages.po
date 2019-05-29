@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2019-02-26 17:18+0000\n"
+"PO-Revision-Date: 2019-05-28 12:55+0000\n"
 "Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/"
 "projects/securedrop/securedrop/zh_Hant/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} 之前"
 
-#: journalist_app/__init__.py:89 journalist_app/__init__.py:128
+#: journalist_app/__init__.py:91 journalist_app/__init__.py:136
 msgid "You have been logged out due to inactivity"
 msgstr "您因閒置太久已被登出"
 
@@ -108,86 +108,86 @@ msgstr "檔案欄為必要。"
 msgid "You can only upload PNG image files."
 msgstr "僅可上傳 PNG 格式的圖片檔。"
 
-#: journalist_app/main.py:118 journalist_app/utils.py:48
-#: journalist_app/utils.py:138
+#: journalist_app/main.py:120 journalist_app/utils.py:49
+#: journalist_app/utils.py:139
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "發生預期之外的錯誤！請通知系統管理員。"
 
-#: journalist_app/main.py:129
+#: journalist_app/main.py:131
 msgid "Thanks. Your reply has been stored."
 msgstr "謝謝，我們已儲存您的回覆。"
 
-#: journalist_app/main.py:150
+#: journalist_app/main.py:152
 msgid "No collections selected for download."
 msgstr "未選擇要下載的集件。"
 
-#: journalist_app/main.py:153 journalist_app/utils.py:236
+#: journalist_app/main.py:155 journalist_app/utils.py:237
 msgid "No collections selected for deletion."
 msgstr "未選擇要刪除的集件。"
 
-#: journalist_app/main.py:179
+#: journalist_app/main.py:181
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "線人 {original_name} 已重新命名為 {new_name}"
 
-#: journalist_app/main.py:194
+#: journalist_app/main.py:196
 msgid "No unread submissions for this source."
 msgstr "此位線人無未讀的提交。"
 
-#: journalist_app/utils.py:55
+#: journalist_app/utils.py:56
 msgid "Account updated."
 msgstr "帳戶已更新。"
 
-#: journalist_app/utils.py:86
+#: journalist_app/utils.py:87
 msgid "Login failed."
 msgstr "登錄失敗。"
 
-#: journalist_app/utils.py:94
+#: journalist_app/utils.py:95
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] "請等待至少 {seconds} 秒後再次登錄。"
 
-#: journalist_app/utils.py:105
+#: journalist_app/utils.py:106
 msgid ""
 "Please wait for a new code from your two-factor token or application before "
 "trying again."
 msgstr "請等待産生新的雙因素認證碼或新的應用認證碼後再重試一遍。"
 
-#: journalist_app/utils.py:126
+#: journalist_app/utils.py:127
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr "無效的動態密碼格式：只可提交 A-F 之間的字母和 0-9 之間的數字。"
 
-#: journalist_app/utils.py:132
+#: journalist_app/utils.py:133
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "動態密碼格式不符：輸入長度為奇數。是否輸入錯誤？"
 
-#: journalist_app/utils.py:188
+#: journalist_app/utils.py:189
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "{num} 個提交已删除。"
 
-#: journalist_app/utils.py:241
+#: journalist_app/utils.py:242
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} 集件已删除"
 
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:280
 msgid "You submitted a bad password! Password not changed."
 msgstr "你提交的密碼不對！原密碼未更改。"
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:287
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
 "should reset your password again."
 msgstr "出錯了，新密碼可能未正確地保存。为了防止帳戶被鎖定，請再次重置密碼。"
 
-#: journalist_app/utils.py:295
+#: journalist_app/utils.py:296
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
 msgstr "密碼已更新。別忘了將它保存在你的 KeePassX 數據庫中。新的密碼是："
 
-#: journalist_app/utils.py:312
+#: journalist_app/utils.py:313
 msgid "No unread submissions in selected collections."
 msgstr "在所選擇的集件中，並無未讀的提交資訊。"
 
@@ -196,7 +196,7 @@ msgid "Close"
 msgstr "關閉"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:81
+#: journalist_templates/col.html:15 source_templates/lookup.html:75
 msgid "Cancel"
 msgstr "取消"
 
@@ -297,7 +297,7 @@ msgstr "驗證碼"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:49
+#: journalist_templates/col.html:99 source_templates/lookup.html:43
 msgid "SUBMIT"
 msgstr "提交"
 
@@ -392,36 +392,26 @@ msgstr ""
 "旦此帳戶記錄加入到應用程式，請輸入應用程式提供的 6 位數字碼，以確認雙因素驗證"
 "設置正確。"
 
-#: journalist_templates/base.html:28
-msgid ""
-"<strong>Critical Security:</strong> The operating system used by your "
-"SecureDrop servers has reached its end-of-life. A manual update is urgently "
-"required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
-"\"noreferrer\">Learn More</a>"
-msgstr ""
-"<strong>重要安全課題:</strong> SecureDrop 伺服器作業系統已逾使用年限，亟需手動更新以維持安全。 - <a href=\""
-"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">進一步了解</a>"
-
-#: journalist_templates/base.html:33
+#: journalist_templates/base.html:23
 msgid "Logged on as"
 msgstr "登入為"
 
-#: journalist_templates/base.html:35
+#: journalist_templates/base.html:25
 msgid "Admin"
 msgstr "管理員"
 
-#: journalist_templates/base.html:37
+#: journalist_templates/base.html:27
 msgid "Log Out"
 msgstr "登出"
 
-#: journalist_templates/base.html:50
+#: journalist_templates/base.html:40
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 msgstr ""
 "由<br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">搭建"
 
-#: journalist_templates/base.html:65
+#: journalist_templates/base.html:55
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "由 <em> SecureDrop {version}</em> 搭建。"
 
@@ -768,7 +758,7 @@ msgstr "密碼"
 msgid "LOG IN"
 msgstr "登錄"
 
-#: source_app/__init__.py:115
+#: source_app/__init__.py:128
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -785,37 +775,37 @@ msgstr "此處字段長度必須在 1 和 {max_codename_len} 個字符之間。"
 msgid "Invalid input."
 msgstr "無效輸入。"
 
-#: source_app/main.py:30
+#: source_app/main.py:33
 msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
 msgstr "你被重定向了， 因為已在登錄狀態。如果想創建一個新帳戶，請先登出。"
 
-#: source_app/main.py:132
+#: source_app/main.py:145
 msgid "You must enter a message or choose a file to submit."
 msgstr "你必须輸入一則訊息，或是選擇一個文件來提交。"
 
-#: source_app/main.py:165
+#: source_app/main.py:178
 msgid "Thanks! We received your message."
 msgstr "謝謝！我們已收到你的訊息。"
 
-#: source_app/main.py:167
+#: source_app/main.py:180
 msgid "Thanks! We received your document."
 msgstr "謝謝！我們已收到你的文件。"
 
-#: source_app/main.py:169
+#: source_app/main.py:182
 msgid "Thanks! We received your message and document."
 msgstr "謝謝！我們已收到你的訊息和文件。"
 
-#: source_app/main.py:222
+#: source_app/main.py:241
 msgid "Reply deleted"
 msgstr "回覆已刪除"
 
-#: source_app/main.py:240
+#: source_app/main.py:259
 msgid "All replies have been deleted"
 msgstr "所有的回覆都已被删除"
 
-#: source_app/main.py:254
+#: source_app/main.py:273
 msgid "Sorry, that is not a recognized codename."
 msgstr "對不起，無法識別這個代號。"
 
@@ -824,7 +814,7 @@ msgid "Protecting Journalists and Sources"
 msgstr "保護新聞記者與消息來源線人"
 
 #: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/index.html:32 source_templates/index.html:84
 msgid "Powered by"
 msgstr "使用版本"
 
@@ -832,95 +822,11 @@ msgstr "使用版本"
 msgid "LOG OUT"
 msgstr "登出"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:45 source_templates/index.html:84
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr "如同所有的軟體，SecureDrop 可能含有安全漏洞。使用請自顧風險。"
-
-#: source_templates/disable-noscript-xss.html:3
-msgid "Turn off NoScript's cross-site request sanitization setting"
-msgstr "關閉 NoScript 禁止跨站請求的設置"
-
-#: source_templates/disable-noscript-xss.html:5
-msgid ""
-"Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do not "
-"currently work reliably in Tor Browser while cross-site request sanitization "
-"is turned on. It is safe to turn off this feature while your Security Slider "
-"is set to \"Safest\". Here's how:"
-msgstr ""
-"由於瀏覽器的原因 (<a href=\"{url}\">詳情說明</a>)，當開啟跨站請求禁止功能時，上傳功能無法穩定地在 Tor "
-"瀏覽器執行。若關閉此功能時，可將安全設置為\"最高級\"。作法如下："
-
-#: source_templates/disable-noscript-xss.html:7
-msgid ""
-"You should find a blue \"S\" icon in the Tor browser's toolbar: <img class="
-"\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
-"\"{noscript_icon_url}\">. This is the NoScript button."
-msgstr ""
-"可在 Tor 瀏覽器工具列找到 \"S\" 圖標：<img class=\"inline\" src=\""
-"{noscript_plain_icon_url}\"> 或 <img class=\"inline\" src=\""
-"{noscript_icon_url}\">。 這是 NoScript 按鈕。"
-
-#: source_templates/disable-noscript-xss.html:11
-msgid "1. Click on the NoScript button."
-msgstr "1. 點擊  NoScript 按鈕。"
-
-#: source_templates/disable-noscript-xss.html:12
-msgid "The NoScript pane should appear. It looks like this:"
-msgstr "應出現 NoScript 面板，大概像這樣："
-
-#: source_templates/disable-noscript-xss.html:18
-msgid ""
-"2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
-"src=\"{url}\">"
-msgstr "2. 在 NoScript 面板，點擊 Setting 設置圖示: <img class=\"inline\" src=\"{url}\">"
-
-#: source_templates/disable-noscript-xss.html:20
-msgid ""
-"The settings page should appear in a new browser tab. It looks like this:"
-msgstr "設置頁面應會顯示在新的瀏覽器標籤分頁，大概像這樣："
-
-#: source_templates/disable-noscript-xss.html:26
-msgid "3. Click the \"Advanced\" tab."
-msgstr "3. 點擊 \"進階 Advanced\" 標籤頁。"
-
-#: source_templates/disable-noscript-xss.html:28
-msgid "The advanced settings tab should come into view. It looks like this:"
-msgstr "進階的設置標籤分頁會出現，大概像這樣："
-
-#: source_templates/disable-noscript-xss.html:34
-msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
-msgstr "4. 取消勾選 \"禁止跨站可疑的請求 Sanitize cross-site suspicious requests\"。"
-
-#: source_templates/disable-noscript-xss.html:36
-msgid ""
-"Due to a browser issue, this is required for uploads to work reliably. As "
-"soon as the browser issue is resolved, we will remove this recommendation."
-msgstr "由於瀏覽器問題，為了可靠地上傳必須如此。一旦瀏覽器問題解決了，就會移除此項推薦。"
-
-#: source_templates/disable-noscript-xss.html:40
-msgid ""
-"5. Close the <i>NoScript Settings</i> browser tab and return to the "
-"SecureDrop tab."
-msgstr "5. 關閉瀏覽器標籤分頁的 <i>NoScript 設置</i>，回到 SecureDrop 分頁。"
-
-#: source_templates/disable-noscript-xss.html:42
-msgid ""
-"You can now upload your files. Please keep in mind that each file requires "
-"its own submission."
-msgstr "現在可以上傳檔案，請記住每個檔案需要它本身的提交。"
-
-#: source_templates/disable-noscript-xss.html:46
-msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
-msgstr "6. 重新勾選 \"禁止跨站可疑的請求 Sanitize cross-site suspicious requests\"。"
-
-#: source_templates/disable-noscript-xss.html:48
-msgid ""
-"Repeat steps 1-3 from above and re-check the setting. The setting has no "
-"effect while your Security Slider is set to \"Safest\", but we recommend "
-"enabling it during normal Tor usage."
-msgstr "重覆上述 1-3 步驟並重新勾選設置。這個設定不會影響安全等級設為最高，但建議在正常使用 Tor  時即啟用最高安全等級。"
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -980,11 +886,11 @@ msgstr ""
 "\n"
 "代號和密碼不同，一旦遺失便無法再恢復獲取。"
 
-#: source_templates/generate.html:44 source_templates/index.html:66
+#: source_templates/generate.html:44 source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
 msgstr "提交文件"
 
-#: source_templates/index.html:17
+#: source_templates/index.html:16
 msgid ""
 "<strong>It is recommended to move the Security Slider to Safest to protect "
 "your anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it "
@@ -994,7 +900,7 @@ msgstr ""
 "id=\"disable-js\" href=\"\">學習如何將此設置為最高安全層級保護</a>，或者忽略"
 "此項警告，繼續操作。"
 
-#: source_templates/index.html:18
+#: source_templates/index.html:17
 msgid ""
 "<strong>It is recommended to use the Tor Browser to access SecureDrop:</"
 "strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to "
@@ -1004,7 +910,7 @@ msgstr ""
 "tor\" href=\"{tor_browser_url}\"> 學習如何安裝 Tor</a>，或忽略這則警告繼續操"
 "作。"
 
-#: source_templates/index.html:19
+#: source_templates/index.html:18
 msgid ""
 "<strong>It is recommended you use the desktop version of Tor Browser to "
 "access SecureDrop, as Orfox does not provide the same level of security and "
@@ -1016,25 +922,25 @@ msgstr ""
 "與匿名保護程度遠不如桌面版:</strong> <a id=\"recommend-tor\" href="
 "\"{tor_browser_url}\"> 學習如何安裝 Tor</a>，或忽略這則警告繼續操作。"
 
-#: source_templates/index.html:42
+#: source_templates/index.html:41
 msgid "Submit for the first time"
 msgstr "第一次提交"
 
-#: source_templates/index.html:49
+#: source_templates/index.html:48
 msgid "Already submitted something?"
 msgstr "已曾提交過文件？"
 
-#: source_templates/index.html:55
+#: source_templates/index.html:54
 msgid "If this is your first time submitting to journalists, start here."
 msgstr "如果是第一次要提交資訊給記者，請從這裡開始。"
 
-#: source_templates/index.html:59
+#: source_templates/index.html:58
 msgid ""
 "If you have already submitted to journalists, log in here to check for "
 "responses."
 msgstr "如果您已提交過文件，您可在此登入來查閱回覆。"
 
-#: source_templates/index.html:74
+#: source_templates/index.html:73
 msgid "CHECK FOR A RESPONSE"
 msgstr "檢查回應"
 
@@ -1071,7 +977,7 @@ msgstr "輸入代號"
 msgid "Enter your codename"
 msgstr "請輸入您的代號"
 
-#: source_templates/login.html:25 source_templates/lookup.html:55
+#: source_templates/login.html:25 source_templates/lookup.html:49
 msgid "CANCEL"
 msgstr "取消"
 
@@ -1085,48 +991,32 @@ msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
 "onion button in the Tor browser's toolbar to clear all history of your "
 "SecureDrop usage from this device."
-msgstr "感谢退出此段期間！請從 Tor 瀏覽器中選擇綠色按鈕的“新身份”，來清除此設備上訪問 SecureDrop 的所有記錄。"
+msgstr ""
+"感谢退出此段期間！請從 Tor 瀏覽器中選擇綠色按鈕的“新身份”，來清除此設備上訪"
+"問 SecureDrop 的所有記錄。"
+
+#: source_templates/lookup.html:10
+msgid "Sorry we haven't responded yet!"
+msgstr "抱歉，我們尚無回應！"
 
 #: source_templates/lookup.html:11
-msgid "Whew, it’s you! Now, the embarrassing part..."
-msgstr "哎呀，是您！ 現在遇上尷尬的狀況..."
+msgid ""
+"Our SecureDrop recently experienced a surge of activity. For security "
+"reasons, the creation of a two-way communication channel was delayed until "
+"you checked in again."
+msgstr "SecureDrop 近期遭逢一陣亂流，因安全考量，雙向的交流頻道暫且停止直到用戶再重新登入。"
 
 #: source_templates/lookup.html:12
 msgid ""
-"Our servers experienced an unusual surge of new activity, when you last "
-"visited. To err on the side of caution, we put a hold on sending all files "
-"and messages from that day through to our journalists."
-msgstr ""
-"在您上次訪問後，我們的伺服器經歷了一次不尋常的新活動。基於謹慎考量，我們會標"
-"記錯誤，並扣住當天起原本要發送給記者的所有檔案和訊息。"
+"Please rest assured that we were able to download your submission, and check "
+"back again later for a reply."
+msgstr "請放心，我們能夠下載您的提交內容。請稍後回來檢查回覆。"
 
-#: source_templates/lookup.html:14
-msgid ""
-"Now that we know you’re really a human, though, we’ll get your previous "
-"submission into the hands of a journalist straight away. We’re sorry for the "
-"delay. Please do check back again in a week or so."
-msgstr ""
-"現在我們知道您是真人操作，所以，我們將把您的上次提交直接交到記者手上。很抱歉"
-"有所延遲。請大約在一週後左右再次檢查。"
-
-#: source_templates/lookup.html:20
+#: source_templates/lookup.html:18
 msgid "Submit Files or Messages"
 msgstr "提交檔案和訊息"
 
-#: source_templates/lookup.html:22
-msgid ""
-"Before you begin, turn off cross-site request sanitization in NoScript. This "
-"is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
-"\"text-link\">Show me how.</a>"
-msgstr ""
-"開始前，請關閉 NoScript 的跨站請求禁止。這是為了能夠上傳檔案<strong>所需</strong>。<a href=\"{url}\" "
-"class=\"text-link\">操作示範</a>"
-
-#: source_templates/lookup.html:24
-msgid "You can submit any kind of file, a message, or both."
-msgstr "您可以提交任何類型的檔案，撰寫訊息或兩者都作。"
-
-#: source_templates/lookup.html:26
+#: source_templates/lookup.html:19
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1135,23 +1025,27 @@ msgstr ""
 "如果你熟悉 GPG，可以在提交之前選擇使用我們的<a href=\"{url}\" class=\"text-"
 "link\">公鑰</a> 來加密。透過 SecureDrop 收到的文檔都會經過加密。"
 
-#: source_templates/lookup.html:27
+#: source_templates/lookup.html:20
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">了解更多</a>."
 
-#: source_templates/lookup.html:37
+#: source_templates/lookup.html:22
+msgid "You can submit any kind of file, a message, or both."
+msgstr "您可以提交任何類型的檔案，撰寫訊息或兩者都作。"
+
+#: source_templates/lookup.html:31
 msgid "Maximum upload size: 500 MB"
 msgstr "檔案上傳限制：500 MB"
 
-#: source_templates/lookup.html:40
+#: source_templates/lookup.html:34
 msgid "Write a message."
 msgstr "撰寫一則訊息。"
 
-#: source_templates/lookup.html:62
+#: source_templates/lookup.html:56
 msgid "Read Replies"
 msgstr "閱讀回覆"
 
-#: source_templates/lookup.html:67
+#: source_templates/lookup.html:61
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1162,43 +1056,43 @@ msgstr ""
 "之全部刪除。這也讓我們知道您有看到我們的回覆。您可以在上面發送一份新檔案與訊"
 "息作回應。"
 
-#: source_templates/lookup.html:80
+#: source_templates/lookup.html:74
 msgid "Delete this reply?"
 msgstr "刪除這條回覆嗎？"
 
-#: source_templates/lookup.html:82
+#: source_templates/lookup.html:76
 msgid "DELETE"
 msgstr "删除"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:85
 msgid "DELETE ALL REPLIES"
 msgstr "删除所有回覆"
 
-#: source_templates/lookup.html:94
+#: source_templates/lookup.html:88
 msgid "Are you finished with the replies?"
 msgstr "您已完成了這些回覆嗎？"
 
-#: source_templates/lookup.html:95
+#: source_templates/lookup.html:89
 msgid "YES, DELETE ALL REPLIES"
 msgstr "是的，删除所有回覆"
 
-#: source_templates/lookup.html:96
+#: source_templates/lookup.html:90
 msgid "NO, NOT YET"
 msgstr "不，尚未"
 
-#: source_templates/lookup.html:100
+#: source_templates/lookup.html:94
 msgid "There are no replies at this time."
 msgstr "此時尚無回覆。"
 
-#: source_templates/lookup.html:109
+#: source_templates/lookup.html:103
 msgid "Remember, your codename is:"
 msgstr "記住，您的代號是："
 
-#: source_templates/lookup.html:110
+#: source_templates/lookup.html:104
 msgid "Show"
 msgstr "顯示"
 
-#: source_templates/lookup.html:112
+#: source_templates/lookup.html:106
 msgid "Hide"
 msgstr "隱藏"
 
@@ -1217,8 +1111,9 @@ msgid ""
 "in the Tor browser's toolbar to clear all history of your SecureDrop usage "
 "from this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
-"由於聞置過久您的期間已經逾時。如果想繼續使用 SecureDrop，請再次登錄，或者在 Tor 瀏覽器工具列的洋葱按鈕中選擇“新身份”以清除設備上所有 "
-"SecureDrop 的歷史記錄。 如果您没使用 Tor 瀏覽器，則請重啟您的瀏覽器。"
+"由於聞置過久您的期間已經逾時。如果想繼續使用 SecureDrop，請再次登錄，或者在 "
+"Tor 瀏覽器工具列的洋葱按鈕中選擇“新身份”以清除設備上所有 SecureDrop 的歷史記"
+"錄。 如果您没使用 Tor 瀏覽器，則請重啟您的瀏覽器。"
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
@@ -1368,6 +1263,124 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#~ msgid ""
+#~ "<strong>Critical Security:</strong> The operating system used by your "
+#~ "SecureDrop servers has reached its end-of-life. A manual update is "
+#~ "urgently required to remain safe - <a href=\"//securedrop.org/xenial-"
+#~ "upgrade\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr ""
+#~ "<strong>重要安全課題:</strong> SecureDrop 伺服器作業系統已逾使用年限，亟需"
+#~ "手動更新以維持安全。 - <a href=\"//securedrop.org/xenial-upgrade\" rel="
+#~ "\"noreferrer\">進一步了解</a>"
+
+#~ msgid "Turn off NoScript's cross-site request sanitization setting"
+#~ msgstr "關閉 NoScript 禁止跨站請求的設置"
+
+#~ msgid ""
+#~ "Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do "
+#~ "not currently work reliably in Tor Browser while cross-site request "
+#~ "sanitization is turned on. It is safe to turn off this feature while your "
+#~ "Security Slider is set to \"Safest\". Here's how:"
+#~ msgstr ""
+#~ "由於瀏覽器的原因 (<a href=\"{url}\">詳情說明</a>)，當開啟跨站請求禁止功能"
+#~ "時，上傳功能無法穩定地在 Tor 瀏覽器執行。若關閉此功能時，可將安全設置為"
+#~ "\"最高級\"。作法如下："
+
+#~ msgid ""
+#~ "You should find a blue \"S\" icon in the Tor browser's toolbar: <img "
+#~ "class=\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline"
+#~ "\" src=\"{noscript_icon_url}\">. This is the NoScript button."
+#~ msgstr ""
+#~ "可在 Tor 瀏覽器工具列找到 \"S\" 圖標：<img class=\"inline\" src="
+#~ "\"{noscript_plain_icon_url}\"> 或 <img class=\"inline\" src="
+#~ "\"{noscript_icon_url}\">。 這是 NoScript 按鈕。"
+
+#~ msgid "1. Click on the NoScript button."
+#~ msgstr "1. 點擊  NoScript 按鈕。"
+
+#~ msgid "The NoScript pane should appear. It looks like this:"
+#~ msgstr "應出現 NoScript 面板，大概像這樣："
+
+#~ msgid ""
+#~ "2. In the NoScript pane, click on the Settings icon: <img class=\"inline"
+#~ "\" src=\"{url}\">"
+#~ msgstr ""
+#~ "2. 在 NoScript 面板，點擊 Setting 設置圖示: <img class=\"inline\" src="
+#~ "\"{url}\">"
+
+#~ msgid ""
+#~ "The settings page should appear in a new browser tab. It looks like this:"
+#~ msgstr "設置頁面應會顯示在新的瀏覽器標籤分頁，大概像這樣："
+
+#~ msgid "3. Click the \"Advanced\" tab."
+#~ msgstr "3. 點擊 \"進階 Advanced\" 標籤頁。"
+
+#~ msgid "The advanced settings tab should come into view. It looks like this:"
+#~ msgstr "進階的設置標籤分頁會出現，大概像這樣："
+
+#~ msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
+#~ msgstr ""
+#~ "4. 取消勾選 \"禁止跨站可疑的請求 Sanitize cross-site suspicious requests"
+#~ "\"。"
+
+#~ msgid ""
+#~ "Due to a browser issue, this is required for uploads to work reliably. As "
+#~ "soon as the browser issue is resolved, we will remove this recommendation."
+#~ msgstr ""
+#~ "由於瀏覽器問題，為了可靠地上傳必須如此。一旦瀏覽器問題解決了，就會移除此項"
+#~ "推薦。"
+
+#~ msgid ""
+#~ "5. Close the <i>NoScript Settings</i> browser tab and return to the "
+#~ "SecureDrop tab."
+#~ msgstr ""
+#~ "5. 關閉瀏覽器標籤分頁的 <i>NoScript 設置</i>，回到 SecureDrop 分頁。"
+
+#~ msgid ""
+#~ "You can now upload your files. Please keep in mind that each file "
+#~ "requires its own submission."
+#~ msgstr "現在可以上傳檔案，請記住每個檔案需要它本身的提交。"
+
+#~ msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
+#~ msgstr ""
+#~ "6. 重新勾選 \"禁止跨站可疑的請求 Sanitize cross-site suspicious requests"
+#~ "\"。"
+
+#~ msgid ""
+#~ "Repeat steps 1-3 from above and re-check the setting. The setting has no "
+#~ "effect while your Security Slider is set to \"Safest\", but we recommend "
+#~ "enabling it during normal Tor usage."
+#~ msgstr ""
+#~ "重覆上述 1-3 步驟並重新勾選設置。這個設定不會影響安全等級設為最高，但建議"
+#~ "在正常使用 Tor  時即啟用最高安全等級。"
+
+#~ msgid "Whew, it’s you! Now, the embarrassing part..."
+#~ msgstr "哎呀，是您！ 現在遇上尷尬的狀況..."
+
+#~ msgid ""
+#~ "Our servers experienced an unusual surge of new activity, when you last "
+#~ "visited. To err on the side of caution, we put a hold on sending all "
+#~ "files and messages from that day through to our journalists."
+#~ msgstr ""
+#~ "在您上次訪問後，我們的伺服器經歷了一次不尋常的新活動。基於謹慎考量，我們會"
+#~ "標記錯誤，並扣住當天起原本要發送給記者的所有檔案和訊息。"
+
+#~ msgid ""
+#~ "Now that we know you’re really a human, though, we’ll get your previous "
+#~ "submission into the hands of a journalist straight away. We’re sorry for "
+#~ "the delay. Please do check back again in a week or so."
+#~ msgstr ""
+#~ "現在我們知道您是真人操作，所以，我們將把您的上次提交直接交到記者手上。很抱"
+#~ "歉有所延遲。請大約在一週後左右再次檢查。"
+
+#~ msgid ""
+#~ "Before you begin, turn off cross-site request sanitization in NoScript. "
+#~ "This is <strong>required</strong> for uploads to work. <a href=\"{url}\" "
+#~ "class=\"text-link\">Show me how.</a>"
+#~ msgstr ""
+#~ "開始前，請關閉 NoScript 的跨站請求禁止。這是為了能夠上傳檔案<strong>所需</"
+#~ "strong>。<a href=\"{url}\" class=\"text-link\">操作示範</a>"
 
 #~ msgid "Is Administrator"
 #~ msgstr "是管理員"

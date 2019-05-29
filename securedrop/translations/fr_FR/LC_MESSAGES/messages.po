@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2019-02-20 17:36+0000\n"
+"PO-Revision-Date: 2019-05-28 18:25+0000\n"
 "Last-Translator: AO <ao@localizationlab.org>\n"
 "Language-Team: French <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/fr/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "{time} ago"
 msgstr "il y a {time}"
 
-#: journalist_app/__init__.py:89 journalist_app/__init__.py:128
+#: journalist_app/__init__.py:91 journalist_app/__init__.py:136
 msgid "You have been logged out due to inactivity"
 msgstr "Vous avez été déconnecté pour cause d’inactivité"
 
@@ -118,42 +118,42 @@ msgstr "Un fichier est exigé."
 msgid "You can only upload PNG image files."
 msgstr "Vous ne pouvez téléverser que des fichiers images PNG."
 
-#: journalist_app/main.py:118 journalist_app/utils.py:48
-#: journalist_app/utils.py:138
+#: journalist_app/main.py:120 journalist_app/utils.py:49
+#: journalist_app/utils.py:139
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr ""
 "Une erreur inattendue est survenue ! Veuillez la signaler à votre "
 "administrateur."
 
-#: journalist_app/main.py:129
+#: journalist_app/main.py:131
 msgid "Thanks. Your reply has been stored."
 msgstr "Merci. Votre réponse a été enregistrée."
 
-#: journalist_app/main.py:150
+#: journalist_app/main.py:152
 msgid "No collections selected for download."
 msgstr "Aucune collection n’a été sélectionnée pour être téléchargée."
 
-#: journalist_app/main.py:153 journalist_app/utils.py:236
+#: journalist_app/main.py:155 journalist_app/utils.py:237
 msgid "No collections selected for deletion."
 msgstr "Aucune collection n’a été sélectionnée pour être supprimée."
 
-#: journalist_app/main.py:179
+#: journalist_app/main.py:181
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "La source '{original_name}' a été renommée '{new_name}'"
 
-#: journalist_app/main.py:194
+#: journalist_app/main.py:196
 msgid "No unread submissions for this source."
 msgstr "Aucun envoi non lu pour cette source."
 
-#: journalist_app/utils.py:55
+#: journalist_app/utils.py:56
 msgid "Account updated."
 msgstr "Le compte a été mis à jour."
 
-#: journalist_app/utils.py:86
+#: journalist_app/utils.py:87
 msgid "Login failed."
 msgstr "Échec de connexion."
 
-#: journalist_app/utils.py:94
+#: journalist_app/utils.py:95
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] ""
@@ -161,7 +161,7 @@ msgstr[0] ""
 msgstr[1] ""
 "Veuillez patienter au moins {seconds} secondes avant de vous reconnecter."
 
-#: journalist_app/utils.py:105
+#: journalist_app/utils.py:106
 msgid ""
 "Please wait for a new code from your two-factor token or application before "
 "trying again."
@@ -169,36 +169,36 @@ msgstr ""
 "Veuillez attendre un nouveau code de votre jeton ou application "
 "d’authentification à deux facteurs avant de ressayer."
 
-#: journalist_app/utils.py:126
+#: journalist_app/utils.py:127
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "Le format du secret est invalide : veuillez n’utiliser que des lettres de A "
 "à F et des chiffres de 0 à 9."
 
-#: journalist_app/utils.py:132
+#: journalist_app/utils.py:133
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "Le format du secret est invalide : le nombre de caractères est impair. Le "
 "secret serait-il mal orthographié ?"
 
-#: journalist_app/utils.py:188
+#: journalist_app/utils.py:189
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "L’envoi a été supprimé."
 msgstr[1] "{num} envois ont été supprimés."
 
-#: journalist_app/utils.py:241
+#: journalist_app/utils.py:242
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} collection a été supprimée"
 msgstr[1] "{num} collections ont été supprimées"
 
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:280
 msgid "You submitted a bad password! Password not changed."
 msgstr ""
 "Le mot de passe saisi est erroné ! Le mot de passe n’a pas été modifié."
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:287
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -208,7 +208,7 @@ msgstr ""
 "enregistré correctement. Pour éviter de perdre l’accès à votre compte, vous "
 "devriez réinitialiser votre mot de passe de nouveau."
 
-#: journalist_app/utils.py:295
+#: journalist_app/utils.py:296
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -216,7 +216,7 @@ msgstr ""
 "Le mot de passe a été mis à jour. N’oubliez pas de l’enregistrer dans votre "
 "base de données KeePassX. Le nouveau mot de passe est :"
 
-#: journalist_app/utils.py:312
+#: journalist_app/utils.py:313
 msgid "No unread submissions in selected collections."
 msgstr "Aucun envoi non lu dans les collections sélectionnées."
 
@@ -225,7 +225,7 @@ msgid "Close"
 msgstr "Fermer"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:81
+#: journalist_templates/col.html:15 source_templates/lookup.html:75
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -338,7 +338,7 @@ msgstr "Code de vérification"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:49
+#: journalist_templates/col.html:99 source_templates/lookup.html:43
 msgid "SUBMIT"
 msgstr "ENVOYER"
 
@@ -436,32 +436,19 @@ msgstr ""
 "l’appli pour confirmer que l’authentification à deux facteurs est configurée "
 "correctement."
 
-#: journalist_templates/base.html:28
-msgid ""
-"<strong>Critical Security:</strong> The operating system used by your "
-"SecureDrop servers has reached its end-of-life. A manual update is urgently "
-"required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
-"\"noreferrer\">Learn More</a>"
-msgstr ""
-"<strong>Problème critique de sécurité :</strong> Le système d’exploitation "
-"utilisé par vos serveurs SecureDrop est arrivé en fin de vie. Il est urgent "
-"d’appliquer une mise à niveau manuelle pour assurer la sécurité - <a href=\""
-"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">En apprendre "
-"davantage</a>"
-
-#: journalist_templates/base.html:33
+#: journalist_templates/base.html:23
 msgid "Logged on as"
 msgstr "Connecté en tant que"
 
-#: journalist_templates/base.html:35
+#: journalist_templates/base.html:25
 msgid "Admin"
 msgstr "Administration"
 
-#: journalist_templates/base.html:37
+#: journalist_templates/base.html:27
 msgid "Log Out"
 msgstr "Déconnexion"
 
-#: journalist_templates/base.html:50
+#: journalist_templates/base.html:40
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -469,7 +456,7 @@ msgstr ""
 "Propulsée par <br> <img src=\"/static/i/securedrop_small.png\" alt="
 "\"SecureDrop\">"
 
-#: journalist_templates/base.html:65
+#: journalist_templates/base.html:55
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Propulsée par <em>SecureDrop {version}</em>."
 
@@ -854,7 +841,7 @@ msgstr "Mot de passe"
 msgid "LOG IN"
 msgstr "CONNEXION"
 
-#: source_app/__init__.py:115
+#: source_app/__init__.py:128
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -872,7 +859,7 @@ msgstr "Le champ doit comprendre entre 1 et {max_codename_len} caractères."
 msgid "Invalid input."
 msgstr "L’entrée est invalide."
 
-#: source_app/main.py:30
+#: source_app/main.py:33
 msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
@@ -880,31 +867,31 @@ msgstr ""
 "Vous avez été redirigé, car vous êtes déjà connecté. Si vous souhaitez créer "
 "un nouveau compte, vous devriez d’abord vous déconnecter."
 
-#: source_app/main.py:132
+#: source_app/main.py:145
 msgid "You must enter a message or choose a file to submit."
 msgstr "Vous devez saisir un message ou sélectionner un fichier à envoyer."
 
-#: source_app/main.py:165
+#: source_app/main.py:178
 msgid "Thanks! We received your message."
 msgstr "Merci ! Nous avons reçu votre message."
 
-#: source_app/main.py:167
+#: source_app/main.py:180
 msgid "Thanks! We received your document."
 msgstr "Merci ! Nous avons reçu votre document."
 
-#: source_app/main.py:169
+#: source_app/main.py:182
 msgid "Thanks! We received your message and document."
 msgstr "Merci ! Nous avons reçu vos document et message."
 
-#: source_app/main.py:222
+#: source_app/main.py:241
 msgid "Reply deleted"
 msgstr "La réponse a été supprimée"
 
-#: source_app/main.py:240
+#: source_app/main.py:259
 msgid "All replies have been deleted"
 msgstr "Toutes les réponses ont été supprimées"
 
-#: source_app/main.py:254
+#: source_app/main.py:273
 msgid "Sorry, that is not a recognized codename."
 msgstr "Désolé, ce nom de code n’est pas reconnu."
 
@@ -913,7 +900,7 @@ msgid "Protecting Journalists and Sources"
 msgstr "Protège les journalistes et les sources"
 
 #: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/index.html:32 source_templates/index.html:84
 msgid "Powered by"
 msgstr "Propulsée par"
 
@@ -921,116 +908,13 @@ msgstr "Propulsée par"
 msgid "LOG OUT"
 msgstr "DÉCONNEXION"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:45 source_templates/index.html:84
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr ""
 "Comme tout logiciel, SecureDrop peut contenir des bogues de sécurité. À "
 "utiliser à vos propres risques."
-
-#: source_templates/disable-noscript-xss.html:3
-msgid "Turn off NoScript's cross-site request sanitization setting"
-msgstr "Désactiver l’option de nettoyage des requêtes intersites de NoScript"
-
-#: source_templates/disable-noscript-xss.html:5
-msgid ""
-"Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do not "
-"currently work reliably in Tor Browser while cross-site request sanitization "
-"is turned on. It is safe to turn off this feature while your Security Slider "
-"is set to \"Safest\". Here's how:"
-msgstr ""
-"En raison d’un problème de navigateur (<a href=\"{url}\">plus de détails</a>)"
-", les téléversements ne fonctionnent actuellement pas de façon fiable dans "
-"le Navigateur Tor si le nettoyage des requêtes intersites est activé. Vous "
-"pouvez désactiver cette option en toute sécurité si votre curseur de "
-"sécurité est réglé sur « Le plus sûr ». Voici comment faire :"
-
-#: source_templates/disable-noscript-xss.html:7
-msgid ""
-"You should find a blue \"S\" icon in the Tor browser's toolbar: <img class="
-"\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
-"\"{noscript_icon_url}\">. This is the NoScript button."
-msgstr ""
-"Vous devriez trouver une icône « S » bleue dans la barre d’outils du "
-"Navigateur Tor : <img class=\"inline\" src=\"{noscript_plain_icon_url}\"> ou "
-"<img class=\"inline\" src=\"{noscript_icon_url}\">. C’est l’icône de "
-"NoScript."
-
-#: source_templates/disable-noscript-xss.html:11
-msgid "1. Click on the NoScript button."
-msgstr "1. Cliquez sur l’icône de NoScript."
-
-#: source_templates/disable-noscript-xss.html:12
-msgid "The NoScript pane should appear. It looks like this:"
-msgstr "La sous-fenêtre de NoScript devrait apparaître. Elle ressemble à ceci :"
-
-#: source_templates/disable-noscript-xss.html:18
-msgid ""
-"2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
-"src=\"{url}\">"
-msgstr ""
-"2. Dans la sous-fenêtre de NoScript, cliquez sur l’icône Options : <img "
-"class=\"inline\" src=\"{url}\">"
-
-#: source_templates/disable-noscript-xss.html:20
-msgid ""
-"The settings page should appear in a new browser tab. It looks like this:"
-msgstr ""
-"La page des options devrait apparaître dans un nouvel onglet du navigateur. "
-"Elle ressemble à ceci :"
-
-#: source_templates/disable-noscript-xss.html:26
-msgid "3. Click the \"Advanced\" tab."
-msgstr "3. Cliquez sur l’onglet « Avancé »."
-
-#: source_templates/disable-noscript-xss.html:28
-msgid "The advanced settings tab should come into view. It looks like this:"
-msgstr "L’onglet des options avancées devrait apparaître. Il ressemble à ceci :"
-
-#: source_templates/disable-noscript-xss.html:34
-msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
-msgstr "4. Décochez « Nettoyer les requêtes suspectes intersites »."
-
-#: source_templates/disable-noscript-xss.html:36
-msgid ""
-"Due to a browser issue, this is required for uploads to work reliably. As "
-"soon as the browser issue is resolved, we will remove this recommendation."
-msgstr ""
-"En raison d’un problème de navigateur, cela est exigé afin que les "
-"téléversements fonctionnent de façon fiable. Dès que le problème de "
-"navigateur sera réglé, nous annulerons cette recommandation."
-
-#: source_templates/disable-noscript-xss.html:40
-msgid ""
-"5. Close the <i>NoScript Settings</i> browser tab and return to the "
-"SecureDrop tab."
-msgstr ""
-"5. Fermez l’onglet <i>Options de NoScript</i> du navigateur et retournez "
-"dans l’onglet de SecureDrop."
-
-#: source_templates/disable-noscript-xss.html:42
-msgid ""
-"You can now upload your files. Please keep in mind that each file requires "
-"its own submission."
-msgstr ""
-"Vous pouvez maintenant téléverser vos fichiers. Veuillez garder à l’esprit "
-"que chaque fichier doit être envoyé séparément."
-
-#: source_templates/disable-noscript-xss.html:46
-msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
-msgstr "6. Cochez de nouveau « Nettoyer les requêtes suspectes intersites »."
-
-#: source_templates/disable-noscript-xss.html:48
-msgid ""
-"Repeat steps 1-3 from above and re-check the setting. The setting has no "
-"effect while your Security Slider is set to \"Safest\", but we recommend "
-"enabling it during normal Tor usage."
-msgstr ""
-"Répétez les étapes de 1 à 3 ci-dessus et cochez l’option de nouveau. L’"
-"option n’a aucun effet tant que le curseur de sécurité est réglé sur « Le "
-"plus sûr », mais nous recommandons de l’activer durant une utilisation "
-"normale de Tor."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1101,11 +985,11 @@ msgstr ""
 "informations. Contrairement aux mots de passe,\n"
 "un nom de code perdu ne peut pas être récupéré."
 
-#: source_templates/generate.html:44 source_templates/index.html:66
+#: source_templates/generate.html:44 source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
 msgstr "ENVOYER DES DOCUMENTS"
 
-#: source_templates/index.html:17
+#: source_templates/index.html:16
 msgid ""
 "<strong>It is recommended to move the Security Slider to Safest to protect "
 "your anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it "
@@ -1116,7 +1000,7 @@ msgstr ""
 "\"\">Apprenez à le régler sur « Le plus sûr »</a> ou ignorez ce message pour "
 "poursuivre."
 
-#: source_templates/index.html:18
+#: source_templates/index.html:17
 msgid ""
 "<strong>It is recommended to use the Tor Browser to access SecureDrop:</"
 "strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to "
@@ -1126,7 +1010,7 @@ msgstr ""
 "SecureDrop : </strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\"> "
 "Apprenez à l’installer</a> ou ignorez cet avertissement pour poursuivre."
 
-#: source_templates/index.html:19
+#: source_templates/index.html:18
 msgid ""
 "<strong>It is recommended you use the desktop version of Tor Browser to "
 "access SecureDrop, as Orfox does not provide the same level of security and "
@@ -1140,19 +1024,19 @@ msgstr ""
 "<a id=\"recommend-tor\" href=\"{tor_browser_url}\">Apprenez à l’installer</"
 "a> ou ignorez cet avertissement pour poursuivre."
 
-#: source_templates/index.html:42
+#: source_templates/index.html:41
 msgid "Submit for the first time"
 msgstr "Effectuer un premier envoi"
 
-#: source_templates/index.html:49
+#: source_templates/index.html:48
 msgid "Already submitted something?"
 msgstr "Avez-vous déjà envoyé quelque chose ?"
 
-#: source_templates/index.html:55
+#: source_templates/index.html:54
 msgid "If this is your first time submitting to journalists, start here."
 msgstr "Si cela est votre premier envoi à des journalistes, commencez ici."
 
-#: source_templates/index.html:59
+#: source_templates/index.html:58
 msgid ""
 "If you have already submitted to journalists, log in here to check for "
 "responses."
@@ -1160,7 +1044,7 @@ msgstr ""
 "Si vous avez déjà effectué des envois à des journalistes, connectez-vous ici "
 "pour consulter les réponses."
 
-#: source_templates/index.html:74
+#: source_templates/index.html:73
 msgid "CHECK FOR A RESPONSE"
 msgstr "CONSULTER LES RÉPONSES"
 
@@ -1202,7 +1086,7 @@ msgstr "Saisir le nom de code"
 msgid "Enter your codename"
 msgstr "Saisissez votre nom de code"
 
-#: source_templates/login.html:25 source_templates/lookup.html:55
+#: source_templates/login.html:25 source_templates/lookup.html:49
 msgid "CANCEL"
 msgstr "ANNULER"
 
@@ -1222,52 +1106,33 @@ msgstr ""
 "Navigateur Tor pour effacer entièrement votre historique d’utilisation de "
 "SecureDrop de cet appareil."
 
+#: source_templates/lookup.html:10
+msgid "Sorry we haven't responded yet!"
+msgstr "Nous sommes désolés de ne pas avoir encore répondu."
+
 #: source_templates/lookup.html:11
-msgid "Whew, it’s you! Now, the embarrassing part..."
-msgstr "C’est bien vous ! Maintenant, la partie délicate…"
+msgid ""
+"Our SecureDrop recently experienced a surge of activity. For security "
+"reasons, the creation of a two-way communication channel was delayed until "
+"you checked in again."
+msgstr ""
+"Notre SecureDrop a récemment connu une poussée d’activité. Pour des raisons "
+"de sécurité, la création d’une voie de communication bidirectionnelle a été "
+"retardée jusqu’à ce que vous vous reconnectiez."
 
 #: source_templates/lookup.html:12
 msgid ""
-"Our servers experienced an unusual surge of new activity, when you last "
-"visited. To err on the side of caution, we put a hold on sending all files "
-"and messages from that day through to our journalists."
+"Please rest assured that we were able to download your submission, and check "
+"back again later for a reply."
 msgstr ""
-"Nos serveurs ont connu une augmentation inhabituelle d’activités nouvelles "
-"lors de votre dernière visite. Par mesure de précaution, nous avons suspendu "
-"l’envoi de tous les fichiers et messages de cette journée à nos journalistes."
+"Soyez assuré que nous avons pu télécharger votre envoi. Veuillez vérifier la "
+"présence d’une réponse ultérieurement."
 
-#: source_templates/lookup.html:14
-msgid ""
-"Now that we know you’re really a human, though, we’ll get your previous "
-"submission into the hands of a journalist straight away. We’re sorry for the "
-"delay. Please do check back again in a week or so."
-msgstr ""
-"Maintenant que nous savons que vous êtes vraiment un être humain, nous "
-"remettrons sans délai votre envoi précédent à un journaliste. Nous sommes "
-"désolés de ce retard. Veuillez consulter ce site de nouveau dans à peu près "
-"une semaine."
-
-#: source_templates/lookup.html:20
+#: source_templates/lookup.html:18
 msgid "Submit Files or Messages"
 msgstr "Envoyer des fichiers ou des messages"
 
-#: source_templates/lookup.html:22
-msgid ""
-"Before you begin, turn off cross-site request sanitization in NoScript. This "
-"is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
-"\"text-link\">Show me how.</a>"
-msgstr ""
-"Avant de commencer, désactivez le nettoyage des requêtes intersites dans "
-"NoScript. Cela est <strong>exigé</strong> afin que les téléversements "
-"fonctionnent. <a href=\"{url}\" class=\"text-link\">Me montrer comment "
-"faire.</a>"
-
-#: source_templates/lookup.html:24
-msgid "You can submit any kind of file, a message, or both."
-msgstr ""
-"Vous pouvez envoyer n’importe quel type de fichier, un message ou les deux."
-
-#: source_templates/lookup.html:26
+#: source_templates/lookup.html:19
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1278,23 +1143,28 @@ msgstr ""
 "avant de les envoyer. Les fichiers sont chiffrés lorsqu'ils sont reçus par "
 "SecureDrop."
 
-#: source_templates/lookup.html:27
+#: source_templates/lookup.html:20
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">En apprendre davantage</a>."
 
-#: source_templates/lookup.html:37
+#: source_templates/lookup.html:22
+msgid "You can submit any kind of file, a message, or both."
+msgstr ""
+"Vous pouvez envoyer n’importe quel type de fichier, un message ou les deux."
+
+#: source_templates/lookup.html:31
 msgid "Maximum upload size: 500 MB"
 msgstr "Taille maximale de téléversement : 500 Mo"
 
-#: source_templates/lookup.html:40
+#: source_templates/lookup.html:34
 msgid "Write a message."
 msgstr "Rédiger un message."
 
-#: source_templates/lookup.html:62
+#: source_templates/lookup.html:56
 msgid "Read Replies"
 msgstr "Consulter les réponses"
 
-#: source_templates/lookup.html:67
+#: source_templates/lookup.html:61
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1307,43 +1177,43 @@ msgstr ""
 "avez pris connaissance de notre réponse. Vous pouvez y réagir en envoyant de "
 "nouveaux fichiers et messages ci-dessus."
 
-#: source_templates/lookup.html:80
+#: source_templates/lookup.html:74
 msgid "Delete this reply?"
 msgstr "Supprimer cette réponse ?"
 
-#: source_templates/lookup.html:82
+#: source_templates/lookup.html:76
 msgid "DELETE"
 msgstr "SUPPRIMER"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:85
 msgid "DELETE ALL REPLIES"
 msgstr "SUPPRIMER TOUTES LES RÉPONSES"
 
-#: source_templates/lookup.html:94
+#: source_templates/lookup.html:88
 msgid "Are you finished with the replies?"
 msgstr "Avez-vous terminé de consulter les réponses ?"
 
-#: source_templates/lookup.html:95
+#: source_templates/lookup.html:89
 msgid "YES, DELETE ALL REPLIES"
 msgstr "OUI, SUPPRIMER TOUTES LES RÉPONSES"
 
-#: source_templates/lookup.html:96
+#: source_templates/lookup.html:90
 msgid "NO, NOT YET"
 msgstr "NON, PAS ENCORE"
 
-#: source_templates/lookup.html:100
+#: source_templates/lookup.html:94
 msgid "There are no replies at this time."
 msgstr "Il n’y a aucune réponse pour l’instant."
 
-#: source_templates/lookup.html:109
+#: source_templates/lookup.html:103
 msgid "Remember, your codename is:"
 msgstr "Souvenez-vous que votre nom de code est :"
 
-#: source_templates/lookup.html:110
+#: source_templates/lookup.html:104
 msgid "Show"
 msgstr "Afficher"
 
-#: source_templates/lookup.html:112
+#: source_templates/lookup.html:106
 msgid "Hide"
 msgstr "Cacher"
 
@@ -1364,9 +1234,9 @@ msgid ""
 msgstr ""
 "Votre session est arrivée au bout de son délai pour cause d’inactivité. "
 "Veuillez vous reconnecter si vous souhaitez continuer à utiliser SecureDrop "
-"ou sélectionnez « Nouvelle identité » dans le bouton oignon de la barre d’"
-"outils du Navigateur Tor pour effacer entièrement votre historique d’"
-"utilisation de SecureDrop de cet appareil. Si vous n’utilisez pas le "
+"ou sélectionnez « Nouvelle identité » dans le bouton oignon de la barre "
+"d’outils du Navigateur Tor pour effacer entièrement votre historique "
+"d’utilisation de SecureDrop de cet appareil. Si vous n’utilisez pas le "
 "Navigateur Tor, redémarrez votre navigateur."
 
 #: source_templates/tor2web-warning.html:3
@@ -1536,6 +1406,143 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Revenir à la page d'envoi"
+
+#~ msgid ""
+#~ "<strong>Critical Security:</strong> The operating system used by your "
+#~ "SecureDrop servers has reached its end-of-life. A manual update is "
+#~ "urgently required to remain safe - <a href=\"//securedrop.org/xenial-"
+#~ "upgrade\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr ""
+#~ "<strong>Problème critique de sécurité :</strong> Le système "
+#~ "d’exploitation utilisé par vos serveurs SecureDrop est arrivé en fin de "
+#~ "vie. Il est urgent d’appliquer une mise à niveau manuelle pour assurer la "
+#~ "sécurité - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer"
+#~ "\">En apprendre davantage</a>"
+
+#~ msgid "Turn off NoScript's cross-site request sanitization setting"
+#~ msgstr ""
+#~ "Désactiver l’option de nettoyage des requêtes intersites de NoScript"
+
+#~ msgid ""
+#~ "Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do "
+#~ "not currently work reliably in Tor Browser while cross-site request "
+#~ "sanitization is turned on. It is safe to turn off this feature while your "
+#~ "Security Slider is set to \"Safest\". Here's how:"
+#~ msgstr ""
+#~ "En raison d’un problème de navigateur (<a href=\"{url}\">plus de détails</"
+#~ "a>), les téléversements ne fonctionnent actuellement pas de façon fiable "
+#~ "dans le Navigateur Tor si le nettoyage des requêtes intersites est "
+#~ "activé. Vous pouvez désactiver cette option en toute sécurité si votre "
+#~ "curseur de sécurité est réglé sur « Le plus sûr ». Voici comment faire :"
+
+#~ msgid ""
+#~ "You should find a blue \"S\" icon in the Tor browser's toolbar: <img "
+#~ "class=\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline"
+#~ "\" src=\"{noscript_icon_url}\">. This is the NoScript button."
+#~ msgstr ""
+#~ "Vous devriez trouver une icône « S » bleue dans la barre d’outils du "
+#~ "Navigateur Tor : <img class=\"inline\" src=\"{noscript_plain_icon_url}\"> "
+#~ "ou <img class=\"inline\" src=\"{noscript_icon_url}\">. C’est l’icône de "
+#~ "NoScript."
+
+#~ msgid "1. Click on the NoScript button."
+#~ msgstr "1. Cliquez sur l’icône de NoScript."
+
+#~ msgid "The NoScript pane should appear. It looks like this:"
+#~ msgstr ""
+#~ "La sous-fenêtre de NoScript devrait apparaître. Elle ressemble à ceci :"
+
+#~ msgid ""
+#~ "2. In the NoScript pane, click on the Settings icon: <img class=\"inline"
+#~ "\" src=\"{url}\">"
+#~ msgstr ""
+#~ "2. Dans la sous-fenêtre de NoScript, cliquez sur l’icône Options : <img "
+#~ "class=\"inline\" src=\"{url}\">"
+
+#~ msgid ""
+#~ "The settings page should appear in a new browser tab. It looks like this:"
+#~ msgstr ""
+#~ "La page des options devrait apparaître dans un nouvel onglet du "
+#~ "navigateur. Elle ressemble à ceci :"
+
+#~ msgid "3. Click the \"Advanced\" tab."
+#~ msgstr "3. Cliquez sur l’onglet « Avancé »."
+
+#~ msgid "The advanced settings tab should come into view. It looks like this:"
+#~ msgstr ""
+#~ "L’onglet des options avancées devrait apparaître. Il ressemble à ceci :"
+
+#~ msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
+#~ msgstr "4. Décochez « Nettoyer les requêtes suspectes intersites »."
+
+#~ msgid ""
+#~ "Due to a browser issue, this is required for uploads to work reliably. As "
+#~ "soon as the browser issue is resolved, we will remove this recommendation."
+#~ msgstr ""
+#~ "En raison d’un problème de navigateur, cela est exigé afin que les "
+#~ "téléversements fonctionnent de façon fiable. Dès que le problème de "
+#~ "navigateur sera réglé, nous annulerons cette recommandation."
+
+#~ msgid ""
+#~ "5. Close the <i>NoScript Settings</i> browser tab and return to the "
+#~ "SecureDrop tab."
+#~ msgstr ""
+#~ "5. Fermez l’onglet <i>Options de NoScript</i> du navigateur et retournez "
+#~ "dans l’onglet de SecureDrop."
+
+#~ msgid ""
+#~ "You can now upload your files. Please keep in mind that each file "
+#~ "requires its own submission."
+#~ msgstr ""
+#~ "Vous pouvez maintenant téléverser vos fichiers. Veuillez garder à "
+#~ "l’esprit que chaque fichier doit être envoyé séparément."
+
+#~ msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
+#~ msgstr ""
+#~ "6. Cochez de nouveau « Nettoyer les requêtes suspectes intersites »."
+
+#~ msgid ""
+#~ "Repeat steps 1-3 from above and re-check the setting. The setting has no "
+#~ "effect while your Security Slider is set to \"Safest\", but we recommend "
+#~ "enabling it during normal Tor usage."
+#~ msgstr ""
+#~ "Répétez les étapes de 1 à 3 ci-dessus et cochez l’option de nouveau. "
+#~ "L’option n’a aucun effet tant que le curseur de sécurité est réglé sur "
+#~ "« Le plus sûr », mais nous recommandons de l’activer durant une "
+#~ "utilisation normale de Tor."
+
+#~ msgid "Whew, it’s you! Now, the embarrassing part..."
+#~ msgstr "C’est bien vous ! Maintenant, la partie délicate…"
+
+#~ msgid ""
+#~ "Our servers experienced an unusual surge of new activity, when you last "
+#~ "visited. To err on the side of caution, we put a hold on sending all "
+#~ "files and messages from that day through to our journalists."
+#~ msgstr ""
+#~ "Nos serveurs ont connu une augmentation inhabituelle d’activités "
+#~ "nouvelles lors de votre dernière visite. Par mesure de précaution, nous "
+#~ "avons suspendu l’envoi de tous les fichiers et messages de cette journée "
+#~ "à nos journalistes."
+
+#~ msgid ""
+#~ "Now that we know you’re really a human, though, we’ll get your previous "
+#~ "submission into the hands of a journalist straight away. We’re sorry for "
+#~ "the delay. Please do check back again in a week or so."
+#~ msgstr ""
+#~ "Maintenant que nous savons que vous êtes vraiment un être humain, nous "
+#~ "remettrons sans délai votre envoi précédent à un journaliste. Nous sommes "
+#~ "désolés de ce retard. Veuillez consulter ce site de nouveau dans à peu "
+#~ "près une semaine."
+
+#~ msgid ""
+#~ "Before you begin, turn off cross-site request sanitization in NoScript. "
+#~ "This is <strong>required</strong> for uploads to work. <a href=\"{url}\" "
+#~ "class=\"text-link\">Show me how.</a>"
+#~ msgstr ""
+#~ "Avant de commencer, désactivez le nettoyage des requêtes intersites dans "
+#~ "NoScript. Cela est <strong>exigé</strong> afin que les téléversements "
+#~ "fonctionnent. <a href=\"{url}\" class=\"text-link\">Me montrer comment "
+#~ "faire.</a>"
 
 #~ msgid "Is Administrator"
 #~ msgstr "Est administrateur"

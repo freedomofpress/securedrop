@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2019-02-26 17:18+0000\n"
+"PO-Revision-Date: 2019-05-28 12:58+0000\n"
 "Last-Translator: Ahmad Gharbeia <gharbeia@gmail.com>\n"
 "Language-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/ar/>\n"
@@ -25,21 +25,21 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} مضت"
 
-#: journalist_app/__init__.py:89 journalist_app/__init__.py:128
+#: journalist_app/__init__.py:91 journalist_app/__init__.py:136
 msgid "You have been logged out due to inactivity"
 msgstr "تم الخروج من الحساب بسبب انعدام النشاط"
 
 #: journalist_app/account.py:26
 msgid "Incorrect password or two-factor code."
-msgstr "كلمة السر أو رمز الاستيثاق في خطوتين غير صحيح."
+msgstr "كلمة السر أو رمز الاستيثاق ذي المعاملين غير صحيح."
 
 #: journalist_app/account.py:42
 msgid "Token in two-factor authentication verified."
-msgstr "تم التحقق من رمز الاستيثاق في خطوتين."
+msgstr "تم التحقق من رمز الاستيثاق ذي المعاملين."
 
 #: journalist_app/account.py:46 journalist_app/admin.py:116
 msgid "Could not verify token in two-factor authentication."
-msgstr "تعذّر التحقّق من رمز الاستيثاق في خطوتين."
+msgstr "تعذّر التحقّق من رمز الاستيثاق ذي المعاملين."
 
 #: journalist_app/admin.py:38
 msgid "Image updated."
@@ -63,7 +63,7 @@ msgstr ""
 
 #: journalist_app/admin.py:109
 msgid "Token in two-factor authentication accepted for user {user}."
-msgstr "تمّ قبول رمز الاستيثاق في خطوتين للمستخدم {user}."
+msgstr "تمّ قبول رمز الاستيثاق ذي المعاملين للمستخدم {user}."
 
 #: journalist_app/admin.py:208
 msgid "Deleted user '{user}'"
@@ -107,46 +107,46 @@ msgstr "لا يمكن إرسال ردّ فارغ."
 
 #: journalist_app/forms.py:60
 msgid "File required."
-msgstr "اِختَر ملف."
+msgstr "يجب اختيار ملفّ."
 
 #: journalist_app/forms.py:62
 msgid "You can only upload PNG image files."
-msgstr "لا يمكن رفع ملفات غير PNG."
+msgstr "الصيغة المقبولة لملفّات الصور هي PNG حصرًا."
 
-#: journalist_app/main.py:118 journalist_app/utils.py:48
-#: journalist_app/utils.py:138
+#: journalist_app/main.py:120 journalist_app/utils.py:49
+#: journalist_app/utils.py:139
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "حدث عطل غير متوقع. الرجاء إبلاغ الإداري."
 
-#: journalist_app/main.py:129
+#: journalist_app/main.py:131
 msgid "Thanks. Your reply has been stored."
 msgstr "شكرا. لقد حُفظ ردُّك."
 
-#: journalist_app/main.py:150
+#: journalist_app/main.py:152
 msgid "No collections selected for download."
-msgstr "لم يتم اختيار أيّ مجموعة للتنزيل."
+msgstr "لَمْ تُختَر أيّ مجموعة لتنزيلها."
 
-#: journalist_app/main.py:153 journalist_app/utils.py:236
+#: journalist_app/main.py:155 journalist_app/utils.py:237
 msgid "No collections selected for deletion."
-msgstr "لم تُحدّد مجموعات لحذفها."
+msgstr "لَمْ تُختَر أيّ مجموعة لحذفها."
 
-#: journalist_app/main.py:179
+#: journalist_app/main.py:181
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "تم تغيير اسم المصدر '{original_name}' إلى '{new_name}'"
 
-#: journalist_app/main.py:194
+#: journalist_app/main.py:196
 msgid "No unread submissions for this source."
 msgstr "لا توجد رسائل غير مقروءة من هذا المصدر."
 
-#: journalist_app/utils.py:55
+#: journalist_app/utils.py:56
 msgid "Account updated."
 msgstr "تم تحديث الحساب."
 
-#: journalist_app/utils.py:86
+#: journalist_app/utils.py:87
 msgid "Login failed."
 msgstr "فشل الولوج."
 
-#: journalist_app/utils.py:94
+#: journalist_app/utils.py:95
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] "ينبغي الانتظار {seconds} ثانية على الأقل قبل محاولة الولوج مجدّدا."
@@ -156,25 +156,27 @@ msgstr[3] "ينبغي الانتظار {seconds} ثوان على الأقل قب
 msgstr[4] "ينبغي الانتظار {seconds} ثانية على الأقل قبل محاولة الولوج مجدّدا."
 msgstr[5] "ينبغي الانتظار {seconds} ثانية على الأقل قبل محاولة الولوج مجدّدا."
 
-#: journalist_app/utils.py:105
+#: journalist_app/utils.py:106
 msgid ""
 "Please wait for a new code from your two-factor token or application before "
 "trying again."
-msgstr "استخدم رمز استيثاق جديد للمحاولة مجدّدًا."
+msgstr ""
+"انتظر حتّى يظهر رمز استيثاق جديد في تطبيق الاستيثاق ذي المعاملين ثم عاود "
+"المحاولة."
 
-#: journalist_app/utils.py:126
+#: journalist_app/utils.py:127
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "صيغة البيانات السرية غير صحيحة: المقبولة هي الأحرف من A-F و&nbsp;الأرقام من "
-"9-0 فقط."
+"0-9 فقط."
 
-#: journalist_app/utils.py:132
+#: journalist_app/utils.py:133
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "صيغة البيانات السرية غير صحيحة: عدد كلمات العبارة السرية يجب أن يكون زوجيًّا "
 "لا فرديًّا. تلزم مراجعة الإدخال."
 
-#: journalist_app/utils.py:188
+#: journalist_app/utils.py:189
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "لَمْ تُحذف أي رسالة."
@@ -184,7 +186,7 @@ msgstr[3] "حُذِفَت بعض الرسائل."
 msgstr[4] "حُذِفَت العديد من الرسائل."
 msgstr[5] "حُذِفَت كلّ الرسائل."
 
-#: journalist_app/utils.py:241
+#: journalist_app/utils.py:242
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "لم تُحذَف أي مجموعة"
@@ -194,11 +196,11 @@ msgstr[3] "حُذِفَت {num} مجموعات"
 msgstr[4] "حُذِفَت {num} مجموعة"
 msgstr[5] "حُذِفَت {num} مجموعة"
 
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:280
 msgid "You submitted a bad password! Password not changed."
 msgstr "كلمة السّرّ المُدخلة غير صحيحة! لذا لا يمكنك تغييرها."
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:287
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -207,7 +209,7 @@ msgstr ""
 "حدث عطل و&nbsp;ربما لم تُحفَظ كلمة السر الجديدة كما ينبغي. لتلافي تعذّر ولوجك "
 "إلى الحساب لاحقا ينبغي عليك معاودة تعيين كلمة السر."
 
-#: journalist_app/utils.py:295
+#: journalist_app/utils.py:296
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -215,7 +217,7 @@ msgstr ""
 "تم تحديث كلمة السر. الرجاء حفظها في قاعدة بيانات KeePassX الخاصة بك . كلمة "
 "السر الجديدة:"
 
-#: journalist_app/utils.py:312
+#: journalist_app/utils.py:313
 msgid "No unread submissions in selected collections."
 msgstr "لا توجد رسائل غير مقروءة في المجموعات المختارة."
 
@@ -224,7 +226,7 @@ msgid "Close"
 msgstr "أغلق"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:81
+#: journalist_templates/col.html:15 source_templates/lookup.html:75
 msgid "Cancel"
 msgstr "إلغاء"
 
@@ -287,7 +289,7 @@ msgid ""
 "for your account in the app, enter one of the 6-digit codes from the app to "
 "confirm that two factor authentication is set up correctly."
 msgstr ""
-"أنت على وشك الانتهاء! لإتمام إعادة ضبط الاستيثاق في خطوتين يجب اتبّاع "
+"أنت على وشك الانتهاء! لإتمام تصفير الاستيثاق ذي المعاملين يجب اتبّاع "
 "التعليمات التالية لإعداد FreeOTP. بعد إضافة حسابك في التطبيق أدخل أحد الرموز "
 "المكونة من 6 أرقام للتأكد من سلامة الإعداد."
 
@@ -342,7 +344,7 @@ msgstr "رمز التحقّق"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:49
+#: journalist_templates/col.html:99 source_templates/lookup.html:43
 msgid "SUBMIT"
 msgstr "أودع"
 
@@ -410,7 +412,7 @@ msgstr "يمكن أن يحوي اسم المستخدم مسافات"
 
 #: journalist_templates/admin_add_user.html:24
 msgid "Username is case-sensitive"
-msgstr "اسم المستخدم يمايو ما بين الأحرف اللاتينية الكبيرة و الصغيرة"
+msgstr "حقل اسم المستخدم يمايز ما بين الأحرف اللاتينية الكبيرة و الصغيرة"
 
 #: journalist_templates/admin_add_user.html:28
 msgid "The user's password will be:"
@@ -434,34 +436,23 @@ msgid ""
 "set up correctly."
 msgstr ""
 "قاربت على الانتهاء! لإتمام إضافة الحساب على المستخدم الجديد اتّباع التعليمات "
-"التالية لضبط الاستيثاق في خطوتين بواسطة FreeOTP.\n"
+"التالية لضبط الاستيثاق ذي المعاملين بواسطة FreeOTP.\n"
 "و&nbsp;بعد إضافة مدخلة لهذا الحساب في التطبيق يجب إدخال أحد الرموز المؤلّفة "
 "من 6 أرقام للتأكد من صحّة الإعداد."
 
-#: journalist_templates/base.html:28
-msgid ""
-"<strong>Critical Security:</strong> The operating system used by your "
-"SecureDrop servers has reached its end-of-life. A manual update is urgently "
-"required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
-"\"noreferrer\">Learn More</a>"
-msgstr ""
-"<strong>تنبيه أمنى حرج</strong>نظام التشغيل المستخدم فى خواديم SecureDrop "
-"الخاصة بك قد بلغ نهاية مدة الخدمة. يجب تحديثه يدويًّا لإبقائه آمنا - <a href="
-"\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">لمعرفة المزيد</a>"
-
-#: journalist_templates/base.html:33
+#: journalist_templates/base.html:23
 msgid "Logged on as"
 msgstr "والج باسم"
 
-#: journalist_templates/base.html:35
+#: journalist_templates/base.html:25
 msgid "Admin"
 msgstr "الإدارة"
 
-#: journalist_templates/base.html:37
+#: journalist_templates/base.html:27
 msgid "Log Out"
 msgstr "اخرج من الحساب"
 
-#: journalist_templates/base.html:50
+#: journalist_templates/base.html:40
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -469,7 +460,7 @@ msgstr ""
 "هذه الخدمة تشغّلها <br> <img src=\"/static/i/securedrop_small.png\" alt="
 "\"SecureDrop\">"
 
-#: journalist_templates/base.html:65
+#: journalist_templates/base.html:55
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "تشغّله <em>SecureDrop {version} </em>."
 
@@ -684,7 +675,7 @@ msgstr ""
 
 #: journalist_templates/edit_account.html:34
 msgid "Please enter your current password and two-factor code."
-msgstr "أدخل كلمة السر الحالية و&nbsp;رمز الاستيثاق في خطوتين."
+msgstr "أدخل كلمة السر الحالية و&nbsp;رمز الاستيثاق ذي المعاملين."
 
 #: journalist_templates/edit_account.html:40
 msgid "Current Password"
@@ -708,7 +699,7 @@ msgstr "صفِّر كلمة السر"
 
 #: journalist_templates/edit_account.html:58
 msgid "Reset Two-Factor Authentication"
-msgstr "صفِّر وظيفة الاستيثاق في خطوتين"
+msgstr "صفِّر وظيفة الاستيثاق ذي المعاملين"
 
 #: journalist_templates/edit_account.html:61
 msgid ""
@@ -718,8 +709,8 @@ msgid ""
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
 "إذا فقد المستخدم بيانات الاستيثاق في خطوتين أو انكشفت فيمكن تصفيرها من هنا. "
-"<em> لفعل ذلك ينبغي أن يكون المستخدم حاضرًا و&nbsp;مستعدًّا بجهازه لضبط وظيفة "
-"الاستيثاق في خطوتين مجدّدًا و&nbsp;إلا لن يمكنه الولوج إلى الحساب."
+"<em> لفعل ذلك ينبغي أن يكون المستخدم حاضرًا و&nbsp;مستعدًّا بجهازه لضبط "
+"وظيفة الاستيثاق ذي المعاملين مجدّدًا و&nbsp;إلا لن يمكنه الولوج إلى الحساب."
 
 #: journalist_templates/edit_account.html:63
 msgid ""
@@ -728,25 +719,25 @@ msgid ""
 "this, make sure you are ready to set up your new device, otherwise you will "
 "be locked out of your account.</em>"
 msgstr ""
-"إذا فقدت بيانات الاستيثاق في خطوتين أو انكشفت فيمكنك تصفيرها هنا. <em>لفعل "
-"ذلك ينبغي عليك تحضير جهازك لضبطه و&nbsp;إلا فلن يمكنك الولوج إلى الحساب بعد "
-"الآن.</em>"
+"إذا فقدت بيانات الاستيثاق ذي المعاملين أو انكشفت فيمكنك تصفيرها هنا. <em>"
+"لفعل ذلك ينبغي عليك تحضير جهازك لضبطه و&nbsp;إلا فلن يمكنك الولوج إلى الحساب "
+"بعد الآن.</em>"
 
 #: journalist_templates/edit_account.html:65
 msgid ""
 "To reset two-factor authentication for mobile apps such as FreeOTP, choose "
 "the first option. For hardware tokens like the Yubikey, choose the second."
 msgstr ""
-"لتصفير الاستيثاق في خطوتين على تطبيقات الهاتف المحمول مثل FreeOTP اختَر "
+"لتصفير الاستيثاق ذي المعاملين على تطبيقات الهاتف المحمول مثل FreeOTP اختَر "
 "الخيار الأول. أما لاستخدام مفاتيح المصادقة مثل Yubikey فاختَر الخيار الثاني."
 
 #: journalist_templates/edit_account.html:90
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr "تصفير الاستيثاق في خطوتين (لتطبيق المحمول)"
+msgstr "تصفير الاستيثاق ذي المعاملين (لتطبيق المحمول)"
 
 #: journalist_templates/edit_account.html:92
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
-msgstr "تصفير الاستيثاق في خطوتين (لمفاتيح عتادي)"
+msgstr "تصفير الاستيثاق ذي المعاملين (لمفاتيح عتادي)"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -797,7 +788,7 @@ msgstr "لا توجد مستندات مودعة!"
 
 #: journalist_templates/js-strings.html:3
 msgid "filter by codename"
-msgstr "الترشيح وفق الاسم الرمزي"
+msgstr "الترشيح بالاسم الرمزي"
 
 #: journalist_templates/js-strings.html:4
 msgid "Select All"
@@ -819,7 +810,7 @@ msgstr "هل أنت متأكد من أنك تريد حذف المستخدم {use
 msgid ""
 "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr ""
-"هل أنت متأكد من أنّك تريد تصفير الاستيثاق في خطوتين للمستخدم {username}؟"
+"هل أنت متأكد من أنّك تريد تصفير الاستيثاق ذي المعاملين للمستخدم {username}؟"
 
 #: journalist_templates/login.html:4
 msgid "Login to access the journalist interface"
@@ -833,7 +824,7 @@ msgstr "كلمة السر"
 msgid "LOG IN"
 msgstr "لِج"
 
-#: source_app/__init__.py:115
+#: source_app/__init__.py:128
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -851,7 +842,7 @@ msgstr "يجب أن يتراوح طول الحقل بين محرف واحد و&n
 msgid "Invalid input."
 msgstr "دَخل غير صالح."
 
-#: source_app/main.py:30
+#: source_app/main.py:33
 msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
@@ -859,31 +850,31 @@ msgstr ""
 "تمت إعادة توجيهك إلى حسابك لأنّك والج إليه بالفعل. إنَ كنت تريد إنشاء حساب "
 "جديد فعليك الخروج من هذا الحساب أوّلا."
 
-#: source_app/main.py:132
+#: source_app/main.py:145
 msgid "You must enter a message or choose a file to submit."
 msgstr "يجب إدخال نصّ رسالة أو اختيار ملف لإيداعه."
 
-#: source_app/main.py:165
+#: source_app/main.py:178
 msgid "Thanks! We received your message."
 msgstr "شكرا! لقد تلقينا الرسالة."
 
-#: source_app/main.py:167
+#: source_app/main.py:180
 msgid "Thanks! We received your document."
 msgstr "شكرا! لقد تلقينا المستند."
 
-#: source_app/main.py:169
+#: source_app/main.py:182
 msgid "Thanks! We received your message and document."
 msgstr "شكرا! لقد تلقينا الرسالة و&nbsp;المستند."
 
-#: source_app/main.py:222
+#: source_app/main.py:241
 msgid "Reply deleted"
 msgstr "حُذِفَ الرد"
 
-#: source_app/main.py:240
+#: source_app/main.py:259
 msgid "All replies have been deleted"
 msgstr "حُذِفَت كُلّ الردود"
 
-#: source_app/main.py:254
+#: source_app/main.py:273
 msgid "Sorry, that is not a recognized codename."
 msgstr "عذرًا، لا يمكن التعرف على الاسم الرمزي."
 
@@ -892,7 +883,7 @@ msgid "Protecting Journalists and Sources"
 msgstr "لحماية الصحافيين و&nbsp;المصادر"
 
 #: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/index.html:32 source_templates/index.html:84
 msgid "Powered by"
 msgstr "تشغّله"
 
@@ -900,110 +891,12 @@ msgstr "تشغّله"
 msgid "LOG OUT"
 msgstr "الخروج"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:45 source_templates/index.html:84
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr ""
 "قد يتضمن SecureDrop ثغرات أمنية شأنه شأن كل البرمجيات. استخدمه على مسؤوليتك."
-
-#: source_templates/disable-noscript-xss.html:3
-msgid "Turn off NoScript's cross-site request sanitization setting"
-msgstr "عطِّل وظيفة تطهير الطلبات من المواقع الأخرى في NoScript"
-
-#: source_templates/disable-noscript-xss.html:5
-msgid ""
-"Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do not "
-"currently work reliably in Tor Browser while cross-site request sanitization "
-"is turned on. It is safe to turn off this feature while your Security Slider "
-"is set to \"Safest\". Here's how:"
-msgstr ""
-"بسبب علّة فى المتصفح <a href=\"{url}\">المزيد من التفاصيل</a> فإن رفع "
-"الملفات لا يعمل كما ينبغي في متصفح تور عند تفعيل وظيفة تطهير الطلبات من "
-"المواقع الأخرى. وقف هذه الوظيفة يُعدُّ آمنا طالما كانت إعدادات الأمان مضبوطة "
-"على \"الأكثر أمانا\". و ذلك كما يلي:"
-
-#: source_templates/disable-noscript-xss.html:7
-msgid ""
-"You should find a blue \"S\" icon in the Tor browser's toolbar: <img class="
-"\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
-"\"{noscript_icon_url}\">. This is the NoScript button."
-msgstr ""
-"توجد ايقونة \"S\" زرقاء فى شريط الأدوات الخاص بالمتصفّح تور: <img class=\""
-"inline\" src=\"{noscript_plain_icon_url}\"> أو <img class=\"inline\" src=\""
-"{noscript_icon_url}\">. هذا هو زرّ NoScript."
-
-#: source_templates/disable-noscript-xss.html:11
-msgid "1. Click on the NoScript button."
-msgstr "1. اضغط زرّ NoScript."
-
-#: source_templates/disable-noscript-xss.html:12
-msgid "The NoScript pane should appear. It looks like this:"
-msgstr "ستظهر قائمة NoScript و هي تبدو كما يلي:"
-
-#: source_templates/disable-noscript-xss.html:18
-msgid ""
-"2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
-"src=\"{url}\">"
-msgstr ""
-"2. فى قائمة NoScript، اضغط ايقونة الاعدادات: <img class=\"inline\" src=\""
-"{url}\">"
-
-#: source_templates/disable-noscript-xss.html:20
-msgid ""
-"The settings page should appear in a new browser tab. It looks like this:"
-msgstr "صفحة الإعدادات ستظهر في لسان جديد في المتصفح. تبدو كالتالي:"
-
-#: source_templates/disable-noscript-xss.html:26
-msgid "3. Click the \"Advanced\" tab."
-msgstr "3. افتح لسان \"Advanced\"."
-
-#: source_templates/disable-noscript-xss.html:28
-msgid "The advanced settings tab should come into view. It looks like this:"
-msgstr "سيظهر لسان الإعدادات المتقدمة في الواجهة. يبدو كالتالي:"
-
-#: source_templates/disable-noscript-xss.html:34
-msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
-"عطِّل خيار تطهير طلبات المواقع الأخرى \"Sanitize cross-site suspicious "
-"requests\"."
-
-#: source_templates/disable-noscript-xss.html:36
-msgid ""
-"Due to a browser issue, this is required for uploads to work reliably. As "
-"soon as the browser issue is resolved, we will remove this recommendation."
-msgstr ""
-"بسبب علَّة في المتصفح، فإن هذا الأمر لازم ليعمل رفع الملفات كما ينبغي. فور "
-"تدارك علّة المتصفح سنحذف هذه التوصية."
-
-#: source_templates/disable-noscript-xss.html:40
-msgid ""
-"5. Close the <i>NoScript Settings</i> browser tab and return to the "
-"SecureDrop tab."
-msgstr ""
-"5. أغلق لسان <i>إعدادات NoScript</i> في المتصفّح و ارجع إلى لسان SecureDrop."
-
-#: source_templates/disable-noscript-xss.html:42
-msgid ""
-"You can now upload your files. Please keep in mind that each file requires "
-"its own submission."
-msgstr "الآن يمكنك رفع الملفات. تذكَّر أن كل ملف يستلزم رفعه على حدة."
-
-#: source_templates/disable-noscript-xss.html:46
-msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
-msgstr ""
-"6. أعد تفعيل خيار تطهير طلبات المواقع الأخرى \"Sanitize cross-site "
-"suspicious requests\"."
-
-#: source_templates/disable-noscript-xss.html:48
-msgid ""
-"Repeat steps 1-3 from above and re-check the setting. The setting has no "
-"effect while your Security Slider is set to \"Safest\", but we recommend "
-"enabling it during normal Tor usage."
-msgstr ""
-"أعد الخطوات من 1-3 المبيّنة أعلاه و أعد تفعيل الخيار. الوظيفة ليس لها تأثير "
-"عندما تكون إعدادات الأمان مضبوطة على الأكثر أمانا \"Safest\"، لكننا نوصى "
-"بتفعيلها أثناء الاستخدام الاعتيادي لتور."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1066,11 +959,11 @@ msgstr ""
 "معك في حال وجود أسئلة أو اهتمام بمزيد من المعلومات. وعلى خلاف كلمات السر، لا "
 "توجد أيّة وسيلة لاسترجاع الاسم الرمزي في حال فقدانه."
 
-#: source_templates/generate.html:44 source_templates/index.html:66
+#: source_templates/generate.html:44 source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
 msgstr "أودع مستندات"
 
-#: source_templates/index.html:17
+#: source_templates/index.html:16
 msgid ""
 "<strong>It is recommended to move the Security Slider to Safest to protect "
 "your anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it "
@@ -1080,7 +973,7 @@ msgstr ""
 "مجهوليتك : </strong> <a id=\"disable-js\" href=\"\">طالع كيفية ضبط المتصفّح "
 "على الوضع الأقصى</a> أو تجاهل هذا التحذير للمواصلة."
 
-#: source_templates/index.html:18
+#: source_templates/index.html:17
 msgid ""
 "<strong>It is recommended to use the Tor Browser to access SecureDrop:</"
 "strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to "
@@ -1090,7 +983,7 @@ msgstr ""
 "\"recommend-tor\" href=\"{tor_browser_url}\">طالع خطوات التنصيب</a> أو تجاهل "
 "هذا التحذير للمواصلة."
 
-#: source_templates/index.html:19
+#: source_templates/index.html:18
 msgid ""
 "<strong>It is recommended you use the desktop version of Tor Browser to "
 "access SecureDrop, as Orfox does not provide the same level of security and "
@@ -1103,26 +996,26 @@ msgstr ""
 "strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">طالع خطوات "
 "التنصيب</a> أو تجاهل هذا التحذير للمواصلة."
 
-#: source_templates/index.html:42
+#: source_templates/index.html:41
 msgid "Submit for the first time"
 msgstr "الإيداع لأول مرة"
 
-#: source_templates/index.html:49
+#: source_templates/index.html:48
 msgid "Already submitted something?"
 msgstr "هل سبق لك إيداع شيء؟"
 
-#: source_templates/index.html:55
+#: source_templates/index.html:54
 msgid "If this is your first time submitting to journalists, start here."
 msgstr "ابدأ هنا إن كانت هذه المرة الأولى التي تودع فيها مستندات لدى صحافيينا."
 
-#: source_templates/index.html:59
+#: source_templates/index.html:58
 msgid ""
 "If you have already submitted to journalists, log in here to check for "
 "responses."
 msgstr ""
 "إذا كنت قد أودعت مسبقًا مستندات لدى صحافيينا فلِج هنا لترى إن وصلتك منهم ردود."
 
-#: source_templates/index.html:74
+#: source_templates/index.html:73
 msgid "CHECK FOR A RESPONSE"
 msgstr "تَفحَّص إنْ وصلك رَدّ منّا"
 
@@ -1161,7 +1054,7 @@ msgstr "أدخل الاسم الرمزي"
 msgid "Enter your codename"
 msgstr "أدخل اسمك الرمزي"
 
-#: source_templates/login.html:25 source_templates/lookup.html:55
+#: source_templates/login.html:25 source_templates/lookup.html:49
 msgid "CANCEL"
 msgstr "ألغ"
 
@@ -1179,48 +1072,32 @@ msgstr ""
 "شكرًا لخروجك من الجلسة. الآن اختر \"هوية جديدة\" بضغط زرّ البصلة من شريط "
 "الأدوات في متصفح تور لطمس أثر استخدامك SecureDrop من هذا الجهاز."
 
+#: source_templates/lookup.html:10
+msgid "Sorry we haven't responded yet!"
+msgstr "معذرة لأننا لم نردّ حتّى الآن!"
+
 #: source_templates/lookup.html:11
-msgid "Whew, it’s you! Now, the embarrassing part..."
-msgstr "ها أنت ذا قد عدت! ثمّة أمر محرج..."
+msgid ""
+"Our SecureDrop recently experienced a surge of activity. For security "
+"reasons, the creation of a two-way communication channel was delayed until "
+"you checked in again."
+msgstr ""
+"تعرّضت منصتنا هذه مؤخّرا إلى طفرة في الزيارات، فلأجل الحيطة عطّلنا إنشاء "
+"قنوات التواصل ثنائي الاتجاه إلى حين زيارتك التالية."
 
 #: source_templates/lookup.html:12
 msgid ""
-"Our servers experienced an unusual surge of new activity, when you last "
-"visited. To err on the side of caution, we put a hold on sending all files "
-"and messages from that day through to our journalists."
+"Please rest assured that we were able to download your submission, and check "
+"back again later for a reply."
 msgstr ""
-"عندما زرتنا آخر مرة شهدت خواديمنا ارتفاعًا حادًّا في مستوى النشاط. و من باب "
-"الاحتياط علّقنا تمرير الملفات والرسائل إلى صحافيينا منذ ذلك اليوم."
+"اطمئن إلى أنّنا اتمكنّا من تنزيل الوثائق التي أودعتها، و راجعنا لاحقًا "
+"لالتماس ردّ."
 
-#: source_templates/lookup.html:14
-msgid ""
-"Now that we know you’re really a human, though, we’ll get your previous "
-"submission into the hands of a journalist straight away. We’re sorry for the "
-"delay. Please do check back again in a week or so."
-msgstr ""
-"أما الآن و&nbsp;قد تبيّن لنا أنّك إنسان حقّا فسوف نمرّر إيداعك السابق إلى "
-"صحافيينا. نأسف على التأخير و&nbsp;نثق أنّك تتفهّم الوضع. ترقّب رسالة منّا بعد "
-"أسبوع."
-
-#: source_templates/lookup.html:20
+#: source_templates/lookup.html:18
 msgid "Submit Files or Messages"
 msgstr "إيداع ملفات أو رسائل"
 
-#: source_templates/lookup.html:22
-msgid ""
-"Before you begin, turn off cross-site request sanitization in NoScript. This "
-"is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
-"\"text-link\">Show me how.</a>"
-msgstr ""
-"قبل البدء عطّل وظيفة تطهير طلبات المواقع الأخرى \"cross-site request "
-"sanitization\" فى NoScript. هذا الأمر <strong>لازم</strong> لكى يعمل رفع "
-"الملفات. <a href=\"{url}\" class=\"text-link\">طالع: كيفية عمل ذلك.</a>"
-
-#: source_templates/lookup.html:24
-msgid "You can submit any kind of file, a message, or both."
-msgstr "يمكنك إيداع أي نوع من الملفات أو الرسائل، أو كليهما."
-
-#: source_templates/lookup.html:26
+#: source_templates/lookup.html:19
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1231,23 +1108,27 @@ msgstr ""
 "إيداعها. و في كلّ الأحوال فإنّ الملفات تُعمّى تلقائيّا أثناء إيداعها عبر "
 "SecureDrop."
 
-#: source_templates/lookup.html:27
+#: source_templates/lookup.html:20
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">لمعرفة المزيد</a>."
 
-#: source_templates/lookup.html:37
+#: source_templates/lookup.html:22
+msgid "You can submit any kind of file, a message, or both."
+msgstr "يمكنك إيداع أي نوع من الملفات أو الرسائل، أو كليهما."
+
+#: source_templates/lookup.html:31
 msgid "Maximum upload size: 500 MB"
 msgstr "الحجم الأقصى الممكن رفعه: 500 ميجابايت"
 
-#: source_templates/lookup.html:40
+#: source_templates/lookup.html:34
 msgid "Write a message."
 msgstr "اكتب رسالة."
 
-#: source_templates/lookup.html:62
+#: source_templates/lookup.html:56
 msgid "Read Replies"
 msgstr "قراءة الردود"
 
-#: source_templates/lookup.html:67
+#: source_templates/lookup.html:61
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1255,46 +1136,46 @@ msgid ""
 "respond by submitting new files and messages above."
 msgstr ""
 "لقد تلقيت ردّا. لدواعي حماية هويتك إذا حدث و انكشف اسمك الرمزي في المستقبل، "
-"فإننا ننصحك بحذف كُلّ الرسائل بعد قراءتها. هذا سيُعلمنا أيضا أنك تلقيّت ردّنا. "
-"يمكنك الرّدّ بكتابة رسائل و إيداع ملفات جديدة."
+"فإننا ننصحك بحذف كُلّ الرسائل بعد قراءتها. هذا سيُعلمنا أيضا أنك تلقيّت ردّ"
+"نا. يمكنك الرّدّ بكتابة رسائل و&nbsp;إيداع ملفات جديدة."
 
-#: source_templates/lookup.html:80
+#: source_templates/lookup.html:74
 msgid "Delete this reply?"
 msgstr "أتريد حذف هذا الرد؟"
 
-#: source_templates/lookup.html:82
+#: source_templates/lookup.html:76
 msgid "DELETE"
 msgstr "احذف"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:85
 msgid "DELETE ALL REPLIES"
 msgstr "احذف كُلّ الردود"
 
-#: source_templates/lookup.html:94
+#: source_templates/lookup.html:88
 msgid "Are you finished with the replies?"
 msgstr "هل انتهيت من قراءة الردود؟"
 
-#: source_templates/lookup.html:95
+#: source_templates/lookup.html:89
 msgid "YES, DELETE ALL REPLIES"
 msgstr "نعم، احذف كُلّ الردود"
 
-#: source_templates/lookup.html:96
+#: source_templates/lookup.html:90
 msgid "NO, NOT YET"
 msgstr "لا، ليس بَعْد"
 
-#: source_templates/lookup.html:100
+#: source_templates/lookup.html:94
 msgid "There are no replies at this time."
 msgstr "لا توجد ردود حاليا."
 
-#: source_templates/lookup.html:109
+#: source_templates/lookup.html:103
 msgid "Remember, your codename is:"
 msgstr "تذكر أنّ اسمك الرمزي:"
 
-#: source_templates/lookup.html:110
+#: source_templates/lookup.html:104
 msgid "Show"
 msgstr "أظهر"
 
-#: source_templates/lookup.html:112
+#: source_templates/lookup.html:106
 msgid "Hide"
 msgstr "اخفِ"
 
@@ -1315,9 +1196,9 @@ msgid ""
 msgstr ""
 "تم الخروج من الجلسة بسبب انعدام التفاعل. تمكنك معاودة الولوج لمواصلة استخدام "
 "SecureDrop إن أردت، أو إذا كنت قد فرغت من استخدامه فاختر \"هوية جديدة\" "
-"بالضغط على زرّ البصلة في شريط أدوات متصفح تور لطمس أثر استخدامك SecureDrop "
-"من هذا الجهاز. أما إذا كنت لا تستخدم متصفّح تور فينبغي عليك إغلاق و&nbsp;"
-"إعادة تشغيل المتصفّح."
+"بالضغط على زرّ البصلة في شريط أدوات متصفح تور لطمس أثر استخدامك SecureDrop من "
+"هذا الجهاز. أما إذا كنت لا تستخدم متصفّح تور فينبغي عليك إغلاق و&nbsp;إعادة "
+"تشغيل المتصفّح."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
@@ -1332,8 +1213,8 @@ msgid ""
 "It could be possible for anyone monitoring your Internet traffic (your "
 "government, your Internet provider), to identify you."
 msgstr ""
-"من الممكن لأي جهة تراقب الإنترنت (مثل مقدم خدمة الاتصال بالإنترنت أو "
-"السلطات) تحديد هويتك."
+"بوسع أي جهة تراقب الإنترنت (مثل مقدم خدمة الاتصال بالإنترنت أو السُّلطات) "
+"معرفة هويتك."
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
@@ -1359,7 +1240,7 @@ msgid ""
 "anonymously."
 msgstr ""
 "إن أردت إيداع معلومات في SecureDrop فإننا <strong> نحثّك بشدة</strong> على "
-"استخدام متصفح تور من أجل النفاذ إلى موقعنا بأمان و&nbsp;مجهولية."
+"استخدام متصفح تور للنفاذ إلى موقعنا بأمان و&nbsp;مجهولية."
 
 #: source_templates/use-tor-browser.html:6
 msgid ""
@@ -1478,6 +1359,130 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "الرجوع إلى صفحة الإيداع"
+
+#~ msgid ""
+#~ "<strong>Critical Security:</strong> The operating system used by your "
+#~ "SecureDrop servers has reached its end-of-life. A manual update is "
+#~ "urgently required to remain safe - <a href=\"//securedrop.org/xenial-"
+#~ "upgrade\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr ""
+#~ "<strong>تنبيه أمنى حرج</strong>نظام التشغيل المستخدم فى خواديم SecureDrop "
+#~ "الخاصة بك قد بلغ نهاية مدة الخدمة. يجب تحديثه يدويًّا لإبقائه آمنا - <a "
+#~ "href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">لمعرفة "
+#~ "المزيد</a>"
+
+#~ msgid "Turn off NoScript's cross-site request sanitization setting"
+#~ msgstr "عطِّل وظيفة تطهير الطلبات من المواقع الأخرى في NoScript"
+
+#~ msgid ""
+#~ "Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do "
+#~ "not currently work reliably in Tor Browser while cross-site request "
+#~ "sanitization is turned on. It is safe to turn off this feature while your "
+#~ "Security Slider is set to \"Safest\". Here's how:"
+#~ msgstr ""
+#~ "بسبب علّة فى المتصفح <a href=\"{url}\">المزيد من التفاصيل</a> فإن رفع "
+#~ "الملفات لا يعمل كما ينبغي في متصفح تور عند تفعيل وظيفة تطهير الطلبات من "
+#~ "المواقع الأخرى. وقف هذه الوظيفة يُعدُّ آمنا طالما كانت إعدادات الأمان مضبوطة "
+#~ "على \"الأكثر أمانا\". و ذلك كما يلي:"
+
+#~ msgid ""
+#~ "You should find a blue \"S\" icon in the Tor browser's toolbar: <img "
+#~ "class=\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline"
+#~ "\" src=\"{noscript_icon_url}\">. This is the NoScript button."
+#~ msgstr ""
+#~ "توجد ايقونة \"S\" زرقاء فى شريط الأدوات الخاص بالمتصفّح تور: <img class="
+#~ "\"inline\" src=\"{noscript_plain_icon_url}\"> أو <img class=\"inline\" "
+#~ "src=\"{noscript_icon_url}\">. هذا هو زرّ NoScript."
+
+#~ msgid "1. Click on the NoScript button."
+#~ msgstr "1. اضغط زرّ NoScript."
+
+#~ msgid "The NoScript pane should appear. It looks like this:"
+#~ msgstr "ستظهر قائمة NoScript و هي تبدو كما يلي:"
+
+#~ msgid ""
+#~ "2. In the NoScript pane, click on the Settings icon: <img class=\"inline"
+#~ "\" src=\"{url}\">"
+#~ msgstr ""
+#~ "2. فى قائمة NoScript، اضغط ايقونة الاعدادات: <img class=\"inline\" src="
+#~ "\"{url}\">"
+
+#~ msgid ""
+#~ "The settings page should appear in a new browser tab. It looks like this:"
+#~ msgstr "صفحة الإعدادات ستظهر في لسان جديد في المتصفح. تبدو كالتالي:"
+
+#~ msgid "3. Click the \"Advanced\" tab."
+#~ msgstr "3. افتح لسان \"Advanced\"."
+
+#~ msgid "The advanced settings tab should come into view. It looks like this:"
+#~ msgstr "سيظهر لسان الإعدادات المتقدمة في الواجهة. يبدو كالتالي:"
+
+#~ msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
+#~ msgstr ""
+#~ "عطِّل خيار تطهير طلبات المواقع الأخرى \"Sanitize cross-site suspicious "
+#~ "requests\"."
+
+#~ msgid ""
+#~ "Due to a browser issue, this is required for uploads to work reliably. As "
+#~ "soon as the browser issue is resolved, we will remove this recommendation."
+#~ msgstr ""
+#~ "بسبب علَّة في المتصفح، فإن هذا الأمر لازم ليعمل رفع الملفات كما ينبغي. فور "
+#~ "تدارك علّة المتصفح سنحذف هذه التوصية."
+
+#~ msgid ""
+#~ "5. Close the <i>NoScript Settings</i> browser tab and return to the "
+#~ "SecureDrop tab."
+#~ msgstr ""
+#~ "5. أغلق لسان <i>إعدادات NoScript</i> في المتصفّح و ارجع إلى لسان "
+#~ "SecureDrop."
+
+#~ msgid ""
+#~ "You can now upload your files. Please keep in mind that each file "
+#~ "requires its own submission."
+#~ msgstr "الآن يمكنك رفع الملفات. تذكَّر أن كل ملف يستلزم رفعه على حدة."
+
+#~ msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
+#~ msgstr ""
+#~ "6. أعد تفعيل خيار تطهير طلبات المواقع الأخرى \"Sanitize cross-site "
+#~ "suspicious requests\"."
+
+#~ msgid ""
+#~ "Repeat steps 1-3 from above and re-check the setting. The setting has no "
+#~ "effect while your Security Slider is set to \"Safest\", but we recommend "
+#~ "enabling it during normal Tor usage."
+#~ msgstr ""
+#~ "أعد الخطوات من 1-3 المبيّنة أعلاه و أعد تفعيل الخيار. الوظيفة ليس لها "
+#~ "تأثير عندما تكون إعدادات الأمان مضبوطة على الأكثر أمانا \"Safest\"، لكننا "
+#~ "نوصى بتفعيلها أثناء الاستخدام الاعتيادي لتور."
+
+#~ msgid "Whew, it’s you! Now, the embarrassing part..."
+#~ msgstr "ها أنت ذا قد عدت! ثمّة أمر محرج..."
+
+#~ msgid ""
+#~ "Our servers experienced an unusual surge of new activity, when you last "
+#~ "visited. To err on the side of caution, we put a hold on sending all "
+#~ "files and messages from that day through to our journalists."
+#~ msgstr ""
+#~ "عندما زرتنا آخر مرة شهدت خواديمنا ارتفاعًا حادًّا في مستوى النشاط. و من باب "
+#~ "الاحتياط علّقنا تمرير الملفات والرسائل إلى صحافيينا منذ ذلك اليوم."
+
+#~ msgid ""
+#~ "Now that we know you’re really a human, though, we’ll get your previous "
+#~ "submission into the hands of a journalist straight away. We’re sorry for "
+#~ "the delay. Please do check back again in a week or so."
+#~ msgstr ""
+#~ "أما الآن و&nbsp;قد تبيّن لنا أنّك إنسان حقّا فسوف نمرّر إيداعك السابق إلى "
+#~ "صحافيينا. نأسف على التأخير و&nbsp;نثق أنّك تتفهّم الوضع. ترقّب رسالة منّا بعد "
+#~ "أسبوع."
+
+#~ msgid ""
+#~ "Before you begin, turn off cross-site request sanitization in NoScript. "
+#~ "This is <strong>required</strong> for uploads to work. <a href=\"{url}\" "
+#~ "class=\"text-link\">Show me how.</a>"
+#~ msgstr ""
+#~ "قبل البدء عطّل وظيفة تطهير طلبات المواقع الأخرى \"cross-site request "
+#~ "sanitization\" فى NoScript. هذا الأمر <strong>لازم</strong> لكى يعمل رفع "
+#~ "الملفات. <a href=\"{url}\" class=\"text-link\">طالع: كيفية عمل ذلك.</a>"
 
 #~ msgid "Is Administrator"
 #~ msgstr "هو إداري"
