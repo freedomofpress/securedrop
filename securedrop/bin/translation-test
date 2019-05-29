@@ -5,8 +5,11 @@ set -euo pipefail
 
 source "${BASH_SOURCE%/*}/dev-deps"
 
-run_xvfb &
+run_xvfb
+run_tor &
 run_redis &
+setup_vncauth
+run_x11vnc &
 urandom
 run_sass --force --update
 maybe_create_config_py
