@@ -20,7 +20,7 @@ mkdir -p "/tmp/test-results/logs"
 # Taking screenshots for consumes a lot of memory
 # and can result in OOM errors in CI. Running each locale
 # separately avoids this.
-for locale in ar de_DE es_ES fr_FR nb_NO nl pt_BR zh_Hant it_IT tr hi ru sv ro is
+for locale in ar de_DE es_ES fr_FR hi is it_IT nb_NO nl pt_BR ro ru sv tr zh_Hant
 do
   PAGE_LAYOUT_LOCALES=$locale pytest \
     -v \

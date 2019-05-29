@@ -48,6 +48,9 @@ os.environ["TBB_PATH"] = TBB_PATH
 TBBRC = join(TBB_PATH, "Browser/TorBrowser/Data/Tor/torrc")
 LOGGER.setLevel(logging.WARNING)
 
+FIREFOX = "firefox"
+TORBROWSER = "torbrowser"
+
 
 class FunctionalTest(object):
     gpg = None
@@ -58,6 +61,7 @@ class FunctionalTest(object):
     poll_frequency = 0.1
 
     accept_languages = None
+    default_driver_name = TORBROWSER
     driver = None
     firefox_driver = None
     torbrowser_driver = None
@@ -134,31 +138,36 @@ class FunctionalTest(object):
             raise Exception("Could not create Firefox web driver")
 
     def switch_to_firefox_driver(self):
+        if not self.firefox_driver:
+            self.create_firefox_driver()
         self.driver = self.firefox_driver
         logging.info("Switched %s to Firefox driver: %s", self, self.driver)
 
     def switch_to_torbrowser_driver(self):
+        if self.torbrowser_driver is None:
+            self.create_torbrowser_driver()
         self.driver = self.torbrowser_driver
         logging.info("Switched %s to TorBrowser driver: %s", self, self.driver)
 
     @pytest.fixture(autouse=True)
-    def drivers(self):
-        logging.info("Creating web drivers")
-        self.create_torbrowser_driver()
-        self.create_firefox_driver()
-
-        self.switch_to_torbrowser_driver()
-        self.driver.implicitly_wait(0)
+    def set_default_driver(self):
+        logging.info("Creating default web driver: %s", self.default_driver_name)
+        if self.default_driver_name == FIREFOX:
+            self.switch_to_firefox_driver()
+        else:
+            self.switch_to_torbrowser_driver()
 
         yield
 
         try:
-            self.torbrowser_driver.quit()
+            if self.torbrowser_driver:
+                self.torbrowser_driver.quit()
         except Exception as e:
             logging.error("Error stopping TorBrowser driver: %s", e)
 
         try:
-            self.firefox_driver.quit()
+            if self.firefox_driver:
+                self.firefox_driver.quit()
         except Exception as e:
             logging.error("Error stopping Firefox driver: %s", e)
 

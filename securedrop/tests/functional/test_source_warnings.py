@@ -11,8 +11,8 @@ class TestSourceInterfaceBannerWarnings(
     functional_test.FunctionalTest, source_navigation_steps.SourceNavigationStepsMixin
 ):
     def test_warning_appears_if_tor_browser_not_in_use(self):
-        self.switch_to_firefox_driver()
         try:
+            self.switch_to_firefox_driver()
             self.driver.get(self.source_location)
 
             warning_banner = self.driver.find_element_by_id("use-tor-browser")
