@@ -33,16 +33,20 @@ typelint: install-mypy ## Runs type linting
 ansible-config-lint: ## Runs custom Ansible env linting tasks.
 	molecule verify -s ansible-config
 
+.PHONY: docs
+docs: ## Build project documentation in live reload for editing
+# Spins up livereload environment for editing; blocks.
+	make -C docs/ clean && sphinx-autobuild docs/ docs/_build/html
+
 .PHONY: docs-lint
 docs-lint: ## Check documentation for common syntax errors.
 # The `-W` option converts warnings to errors.
 # The `-n` option enables "nit-picky" mode.
 	make -C docs/ clean && sphinx-build -Wn docs/ docs/_build/html
 
-.PHONY: docs
-docs: ## Build project documentation in live reload for editing
-# Spins up livereload environment for editing; blocks.
-	make -C docs/ clean && sphinx-autobuild docs/ docs/_build/html
+.PHONY: docs-linkcheck
+docs-linkcheck: ## Check documentation for broken links
+	make -C docs/ clean && sphinx-build -b linkcheck -Wn docs/ docs/_build/html
 
 .PHONY: flake8
 flake8: ## Validates PEP8 compliance for Python source files.

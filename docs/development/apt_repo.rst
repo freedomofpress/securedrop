@@ -41,6 +41,6 @@ securedrop-keyring
    with the grsecurity patch set. Only binary images are hosted in the apt
    repo. For source packages, see the `Source Offer`_.
 
-.. _SecureDrop 0.3.10: https://github.com/freedomofpress/securedrop/blob/c5b4220e04e3c81ad6f92d5e8a92798f07f0aca2/changelog.md#0310
+.. _SecureDrop 0.3.10: https://github.com/freedomofpress/securedrop/blob/c5b4220e04e3c81ad6f92d5e8a92798f07f0aca2/changelog.md
 .. _apt.freedom.press: https://apt.freedom.press
 .. _`Source Offer`: https://github.com/freedomofpress/securedrop/blob/develop/SOURCE_OFFER
