@@ -1,0 +1,82 @@
+Upgrade from 0.12.2 to 0.13.0
+=============================
+
+.. important:: SecureDrop 0.12.2 was the last version of SecureDrop compatible
+  with Ubuntu 14.04 (Trusty). If you are still running Ubuntu 14.04 on your
+  *Application* and *Monitor Server*, your servers will *not* receive the update
+  to SecureDrop 0.13.0, and we recommend that you reinstall SecureDrop as soon
+  as possible. See :doc:`xenial_after_april_30`.
+
+Updating the Tails Workstations
+-------------------------------
+If you have not already done so, we recommend that you update all Tails drives
+to version 3.14, which was `released <https://tails.boum.org/news/version_3.14/index.en.html>`_
+on May 21, 2019. Follow the Tails graphical prompts on your workstations to
+perform this upgrade.
+
+On a subsequent boot of your SecureDrop *Journalist* and *Admin Workstations*,
+the *SecureDrop Workstation Updater* will alert you to workstation updates. You
+must have `configured an administrator password <https://tails.boum.org/doc/first_steps/startup_options/administration_password/>`_
+on the Tails welcome screen in order to use the graphical updater.
+
+Choose "Update Now" on each of the workstations:
+
+.. image:: ../images/0.6.x_to_0.7/securedrop-updater.png
+
+Please note that this only updates the SecureDrop code on your Tails
+workstations. Tails upgrades must be performed separately.
+
+If you don't see the graphical updater, or if the automated update fails, you
+can perform a manual update by running the following commands: ::
+
+    cd ~/Persistent/securedrop
+    git fetch --tags
+    gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
+    git tag -v 0.13.0
+
+.. note:: You may have to run the ``--recv-key`` command repeatedly for it to
+  work.
+
+The output should include the following two lines: ::
+
+    gpg:                using RSA key 22245C81E3BAEB4138B36061310F561200F4AD77
+    gpg: Good signature from "SecureDrop Release Signing Key"
+
+Please verify that each character of the fingerprint above matches what
+on the screen of your workstation. If it does, you can check out the
+new release: ::
+
+    git checkout 0.13.0
+
+.. important:: If you do see the warning "refname '0.13.0' is ambiguous" in the
+  output, we recommend that you contact us immediately at securedrop@freedom.press
+  (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__).
+
+Finally, run the following commands: ::
+
+  ./securedrop-admin setup
+  ./securedrop-admin tailsconfig
+
+Backing Up the Tails Workstations
+---------------------------------
+USB flash drives degrade over time and vary in quality. To ensure continued
+access to SecureDrop by administrators and journalists, we recommend backing up
+the Tails Workstations on the occasion of a new SecureDrop release, after you
+have completed the upgrade process for each drive.
+
+You can use a single storage device for backups of multiple workstations. See
+our :doc:`Workstation Backup Guide <../backup_workstations>` for more information.
+
+Getting Support
+---------------
+
+Should you require further support with your SecureDrop installation or the
+upgrade to Ubuntu 16.04, we are happy to help!
+
+- Community support is available at https://forum.securedrop.org
+- If you are already a member of our support portal, please don't hesitate to
+  open a ticket there. If you would like to request access, please contact us
+  at securedrop@freedom.press
+  (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__).
+- The Freedom of the Press Foundation offers training and priority support
+  services. See https://securedrop.org/priority-support/ for more information.

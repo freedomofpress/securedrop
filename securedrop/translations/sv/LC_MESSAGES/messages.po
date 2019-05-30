@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-02-21 17:11+0000\n"
-"Last-Translator: Jonas Franzén <jonas.franzen@schibsted.se>\n"
+"PO-Revision-Date: 2019-05-28 18:25+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/sv/>\n"
 "Language: sv\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} sedan"
 
-#: journalist_app/__init__.py:89 journalist_app/__init__.py:128
+#: journalist_app/__init__.py:91 journalist_app/__init__.py:136
 msgid "You have been logged out due to inactivity"
 msgstr "Du har blivit utloggad på grund av inaktivitet"
 
@@ -112,40 +112,40 @@ msgstr "Fil krävs."
 msgid "You can only upload PNG image files."
 msgstr "Du kan endast ladda upp PNG-bildfiler."
 
-#: journalist_app/main.py:118 journalist_app/utils.py:48
-#: journalist_app/utils.py:138
+#: journalist_app/main.py:120 journalist_app/utils.py:49
+#: journalist_app/utils.py:139
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Ett oväntat fel uppstod! Informera din administratör."
 
-#: journalist_app/main.py:129
+#: journalist_app/main.py:131
 msgid "Thanks. Your reply has been stored."
 msgstr "Tack. Ditt svar har sparats."
 
-#: journalist_app/main.py:150
+#: journalist_app/main.py:152
 msgid "No collections selected for download."
 msgstr "Inga samlingar valda för nedladdning."
 
-#: journalist_app/main.py:153 journalist_app/utils.py:236
+#: journalist_app/main.py:155 journalist_app/utils.py:237
 msgid "No collections selected for deletion."
 msgstr "Inga samlingar har markerats för radering."
 
-#: journalist_app/main.py:179
+#: journalist_app/main.py:181
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "Källan '{original_name}' har döpts om till '{new_name}'"
 
-#: journalist_app/main.py:194
+#: journalist_app/main.py:196
 msgid "No unread submissions for this source."
 msgstr "Det finns inga olästa inlämningar från denna källa."
 
-#: journalist_app/utils.py:55
+#: journalist_app/utils.py:56
 msgid "Account updated."
 msgstr "Kontot uppdaterat."
 
-#: journalist_app/utils.py:86
+#: journalist_app/utils.py:87
 msgid "Login failed."
 msgstr "Inloggningen misslyckades."
 
-#: journalist_app/utils.py:94
+#: journalist_app/utils.py:95
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] ""
@@ -153,7 +153,7 @@ msgstr[0] ""
 msgstr[1] ""
 "Var snäll och vänta åtminstone {seconds} sekunder innan du loggar in igen."
 
-#: journalist_app/utils.py:105
+#: journalist_app/utils.py:106
 msgid ""
 "Please wait for a new code from your two-factor token or application before "
 "trying again."
@@ -161,33 +161,33 @@ msgstr ""
 "Var snäll och vänta på en ny kod från din tvåfaktorsautentiseringsnyckel "
 "eller program innan du försöker på nytt."
 
-#: journalist_app/utils.py:126
+#: journalist_app/utils.py:127
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "Ogiltigt format i hemlighet: vänligen använd endast bokstäverna A-F och "
 "siffrorna 0-9."
 
-#: journalist_app/utils.py:132
+#: journalist_app/utils.py:133
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Ogiltigt format i hemlighet: ojämn längd. Skrev du fel?"
 
-#: journalist_app/utils.py:188
+#: journalist_app/utils.py:189
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Inlämningen har tagits bort."
 msgstr[1] "{num} inlämningar har tagits bort."
 
-#: journalist_app/utils.py:241
+#: journalist_app/utils.py:242
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} samling har tagits bort"
 msgstr[1] "{num} samlingar har tagits bort"
 
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:280
 msgid "You submitted a bad password! Password not changed."
 msgstr "Du angav ett ogiltigt lösenord! Lösenordet har inte ändrats."
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:287
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -197,7 +197,7 @@ msgstr ""
 "korrekt. För att undvika att du blir utelåst från ditt konto, bör du "
 "återställa ditt lösenord en gång till."
 
-#: journalist_app/utils.py:295
+#: journalist_app/utils.py:296
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -205,7 +205,7 @@ msgstr ""
 "Lösenord uppdaterat. Glöm inte att spara det i din KeePassX databas. Det nya "
 "lösenordet är:"
 
-#: journalist_app/utils.py:312
+#: journalist_app/utils.py:313
 msgid "No unread submissions in selected collections."
 msgstr "Inga olästa inlämningar i valda samlingar."
 
@@ -214,7 +214,7 @@ msgid "Close"
 msgstr "Stäng"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:81
+#: journalist_templates/col.html:15 source_templates/lookup.html:75
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -320,7 +320,7 @@ msgstr "Verifikationskod"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:49
+#: journalist_templates/col.html:99 source_templates/lookup.html:43
 msgid "SUBMIT"
 msgstr "SKICKA IN"
 
@@ -416,38 +416,26 @@ msgstr ""
 "När det här kontot har lagts till i appen, mata in den sexsiffriga koden "
 "från appen för att bekräfta tvåfaktorsautentiseringen."
 
-#: journalist_templates/base.html:28
-msgid ""
-"<strong>Critical Security:</strong> The operating system used by your "
-"SecureDrop servers has reached its end-of-life. A manual update is urgently "
-"required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel="
-"\"noreferrer\">Learn More</a>"
-msgstr ""
-"<strong>Kritisk sårbarhet:</strong> Operativsystemet som används av dina "
-"SecureDrop-servrar har passerat sin livslängd. En manuell uppdatering krävs "
-"snarast för att skydda systemet - <a href=\"//securedrop.org/xenial-upgrade\""
-" rel=\"noreferrer\">Läs mer</a>"
-
-#: journalist_templates/base.html:33
+#: journalist_templates/base.html:23
 msgid "Logged on as"
 msgstr "Inloggad som"
 
-#: journalist_templates/base.html:35
+#: journalist_templates/base.html:25
 msgid "Admin"
 msgstr "Admin"
 
-#: journalist_templates/base.html:37
+#: journalist_templates/base.html:27
 msgid "Log Out"
 msgstr "Logga ut"
 
-#: journalist_templates/base.html:50
+#: journalist_templates/base.html:40
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 msgstr ""
 "Körs på <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 
-#: journalist_templates/base.html:65
+#: journalist_templates/base.html:55
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Körs på <em>SecureDrop {version}</em>."
 
@@ -816,7 +804,7 @@ msgstr "Lösenord"
 msgid "LOG IN"
 msgstr "LOGGA IN"
 
-#: source_app/__init__.py:115
+#: source_app/__init__.py:128
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -834,7 +822,7 @@ msgstr "Fältet måste innehålla mellan 1 och {max_codename_len} tecken."
 msgid "Invalid input."
 msgstr "Ogiltigt innehåll."
 
-#: source_app/main.py:30
+#: source_app/main.py:33
 msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
@@ -842,31 +830,31 @@ msgstr ""
 "Du omdirigerades eftersom du redan är inloggad. Ifall du vill skapa ett nytt "
 "konto, logga ut först."
 
-#: source_app/main.py:132
+#: source_app/main.py:145
 msgid "You must enter a message or choose a file to submit."
 msgstr "Du måste ange ett meddelande eller välja en fil att lämna in."
 
-#: source_app/main.py:165
+#: source_app/main.py:178
 msgid "Thanks! We received your message."
 msgstr "Tack! Vi har tagit emot ditt meddelande."
 
-#: source_app/main.py:167
+#: source_app/main.py:180
 msgid "Thanks! We received your document."
 msgstr "Tack! Vi har tagit emot ditt dokument."
 
-#: source_app/main.py:169
+#: source_app/main.py:182
 msgid "Thanks! We received your message and document."
 msgstr "Tack! Vi har tagit emot ditt meddelande och dokument."
 
-#: source_app/main.py:222
+#: source_app/main.py:241
 msgid "Reply deleted"
 msgstr "Svaret har tagits bort"
 
-#: source_app/main.py:240
+#: source_app/main.py:259
 msgid "All replies have been deleted"
 msgstr "Alla svar har tagits bort"
 
-#: source_app/main.py:254
+#: source_app/main.py:273
 msgid "Sorry, that is not a recognized codename."
 msgstr "Tyvärr, detta kodnamn är okänt."
 
@@ -875,7 +863,7 @@ msgid "Protecting Journalists and Sources"
 msgstr "Skyddar journalister och källor"
 
 #: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:33 source_templates/index.html:85
+#: source_templates/index.html:32 source_templates/index.html:84
 msgid "Powered by"
 msgstr "Körs på"
 
@@ -883,108 +871,13 @@ msgstr "Körs på"
 msgid "LOG OUT"
 msgstr "LOGGA UT"
 
-#: source_templates/base.html:45 source_templates/index.html:85
+#: source_templates/base.html:45 source_templates/index.html:84
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr ""
 "Precis som all mjukvara kan SecureDrop innehålla säkerhetshål. Använd på "
 "egen risk."
-
-#: source_templates/disable-noscript-xss.html:3
-msgid "Turn off NoScript's cross-site request sanitization setting"
-msgstr "Stäng av \"NoScript's cross-site request sanitization\" inställningen"
-
-#: source_templates/disable-noscript-xss.html:5
-msgid ""
-"Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do not "
-"currently work reliably in Tor Browser while cross-site request sanitization "
-"is turned on. It is safe to turn off this feature while your Security Slider "
-"is set to \"Safest\". Here's how:"
-msgstr ""
-"På grund av ett webbläsarproblem (<a href=\"{url}\">mer detaljer</a>), så "
-"fungerar inte uppladdningar stabilt i Tor Browser när \"cross-site request "
-"sanitization\" är påslagen. Det är säkert att stänga av denna funktion när "
-"din \"Security Slider\" är satt till \"Safest\". Så här gör du:"
-
-#: source_templates/disable-noscript-xss.html:7
-msgid ""
-"You should find a blue \"S\" icon in the Tor browser's toolbar: <img class="
-"\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline\" src="
-"\"{noscript_icon_url}\">. This is the NoScript button."
-msgstr ""
-"Du ska hitta en blå \"S\" ikon i Tor browserns meny: <img class=\"inline\" "
-"src=\"{noscript_plain_icon_url}\"> eller <img class=\"inline\" src=\""
-"{noscript_icon_url}\">. Detta är NoScript-knappen."
-
-#: source_templates/disable-noscript-xss.html:11
-msgid "1. Click on the NoScript button."
-msgstr "1. Tryck på NoScript-knappen."
-
-#: source_templates/disable-noscript-xss.html:12
-msgid "The NoScript pane should appear. It looks like this:"
-msgstr "NoScript-panelen ska nu dyka upp. Den ser ut så här:"
-
-#: source_templates/disable-noscript-xss.html:18
-msgid ""
-"2. In the NoScript pane, click on the Settings icon: <img class=\"inline\" "
-"src=\"{url}\">"
-msgstr ""
-"2. Tryck på \"Settings\"-ikonen <img class=\"inline\" src=\"{url}\"> i "
-"NoScript-panelen"
-
-#: source_templates/disable-noscript-xss.html:20
-msgid ""
-"The settings page should appear in a new browser tab. It looks like this:"
-msgstr "Inställningssidan ska öppnas i en ny flik. Den ser ut så här:"
-
-#: source_templates/disable-noscript-xss.html:26
-msgid "3. Click the \"Advanced\" tab."
-msgstr "3. Klicka på \"Advanced\" fliken."
-
-#: source_templates/disable-noscript-xss.html:28
-msgid "The advanced settings tab should come into view. It looks like this:"
-msgstr "Advanced-fliken ska nu visas. Den ser ut så här:"
-
-#: source_templates/disable-noscript-xss.html:34
-msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
-msgstr "4. Avmarkera \"Sanitize cross-site suspicious requests\"."
-
-#: source_templates/disable-noscript-xss.html:36
-msgid ""
-"Due to a browser issue, this is required for uploads to work reliably. As "
-"soon as the browser issue is resolved, we will remove this recommendation."
-msgstr ""
-"På grund av ett webbläsar-problem, så behövs det här för att uppladdningar "
-"ska fungera stabilt. Så snart som webbläsar-problemet är löst, kommer vi att "
-"ta bort denna rekommendation."
-
-#: source_templates/disable-noscript-xss.html:40
-msgid ""
-"5. Close the <i>NoScript Settings</i> browser tab and return to the "
-"SecureDrop tab."
-msgstr ""
-"5. Stäng <i> NoScript Settings</i> fliken och gå tillbaka till SecureDrop."
-
-#: source_templates/disable-noscript-xss.html:42
-msgid ""
-"You can now upload your files. Please keep in mind that each file requires "
-"its own submission."
-msgstr "Nu kan du ladda upp filer. Varje fil kräver en separat inskickning."
-
-#: source_templates/disable-noscript-xss.html:46
-msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
-msgstr "6. Dubbelkolla \"Sanitize cross-site suspicious requests\"."
-
-#: source_templates/disable-noscript-xss.html:48
-msgid ""
-"Repeat steps 1-3 from above and re-check the setting. The setting has no "
-"effect while your Security Slider is set to \"Safest\", but we recommend "
-"enabling it during normal Tor usage."
-msgstr ""
-"Repetera steg 1-3 ovan för att dubbelkolla inställningen. Inställningen har "
-"ingen effekt när \"Security Slider\" är satt till \"Safest\", men vi "
-"rekommenderar att du aktiverar den när du använder Tor i normala fall."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -1053,11 +946,11 @@ msgstr ""
 "frågor eller är intresserade av mer information. Till skillnad från "
 "lösenord, finns det inget sätt att återställa ett försvunnet kodnamn."
 
-#: source_templates/generate.html:44 source_templates/index.html:66
+#: source_templates/generate.html:44 source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
 msgstr "LÄMNA IN DOKUMENT"
 
-#: source_templates/index.html:17
+#: source_templates/index.html:16
 msgid ""
 "<strong>It is recommended to move the Security Slider to Safest to protect "
 "your anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it "
@@ -1068,7 +961,7 @@ msgstr ""
 "\"\">Lär dig hur du ställer den till \"Safest\"</a>, eller ignorera denna "
 "varning och fortsätt."
 
-#: source_templates/index.html:18
+#: source_templates/index.html:17
 msgid ""
 "<strong>It is recommended to use the Tor Browser to access SecureDrop:</"
 "strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to "
@@ -1078,7 +971,7 @@ msgstr ""
 "SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\"> Lär "
 "dig hur den installeras</a>, eller ignorera denna varning och fortsätt."
 
-#: source_templates/index.html:19
+#: source_templates/index.html:18
 msgid ""
 "<strong>It is recommended you use the desktop version of Tor Browser to "
 "access SecureDrop, as Orfox does not provide the same level of security and "
@@ -1092,21 +985,21 @@ msgstr ""
 "\"{tor_browser_url}\"> Lär dig hur den installeras</a> eller ignorera denna "
 "varning och fortsätt."
 
-#: source_templates/index.html:42
+#: source_templates/index.html:41
 msgid "Submit for the first time"
 msgstr "Skicka in information för första gången"
 
-#: source_templates/index.html:49
+#: source_templates/index.html:48
 msgid "Already submitted something?"
 msgstr "Har du redan skickat in information?"
 
-#: source_templates/index.html:55
+#: source_templates/index.html:54
 msgid "If this is your first time submitting to journalists, start here."
 msgstr ""
 "Ifall det här är första gången du skickar in information till "
 "journalisterna, börja här."
 
-#: source_templates/index.html:59
+#: source_templates/index.html:58
 msgid ""
 "If you have already submitted to journalists, log in here to check for "
 "responses."
@@ -1114,7 +1007,7 @@ msgstr ""
 "Ifall du redan har skickat in information till journalisterna, logga in här "
 "för att kontrollera om du fått svar."
 
-#: source_templates/index.html:74
+#: source_templates/index.html:73
 msgid "CHECK FOR A RESPONSE"
 msgstr "KONTROLLERA OM DU FÅTT ETT SVAR"
 
@@ -1156,7 +1049,7 @@ msgstr "Ange kodnamn"
 msgid "Enter your codename"
 msgstr "Ange ditt kodnamn"
 
-#: source_templates/login.html:25 source_templates/lookup.html:55
+#: source_templates/login.html:25 source_templates/lookup.html:49
 msgid "CANCEL"
 msgstr "AVBRYT"
 
@@ -1175,49 +1068,32 @@ msgstr ""
 "från knappen med en lökikon i Tor Browser för att rensa all historik av "
 "SecureDrop-användning på den här enheten."
 
+#: source_templates/lookup.html:10
+msgid "Sorry we haven't responded yet!"
+msgstr "Tyvärr har vi inte svarat ännu."
+
 #: source_templates/lookup.html:11
-msgid "Whew, it’s you! Now, the embarrassing part..."
-msgstr "Ok, det är du! Nu, till det pinsamma..."
+msgid ""
+"Our SecureDrop recently experienced a surge of activity. For security "
+"reasons, the creation of a two-way communication channel was delayed until "
+"you checked in again."
+msgstr ""
+"Vår SecureDrop såg nyligen ökad aktivitet. Av säkerhetsskäl kan du inte "
+"upprätta en tvåvägskommunikation innan du checkar in igen."
 
 #: source_templates/lookup.html:12
 msgid ""
-"Our servers experienced an unusual surge of new activity, when you last "
-"visited. To err on the side of caution, we put a hold on sending all files "
-"and messages from that day through to our journalists."
+"Please rest assured that we were able to download your submission, and check "
+"back again later for a reply."
 msgstr ""
-"Våra servrar utsattes för en ovanlig ökning av ny aktivitet den senaste "
-"gången du besökte oss. För att vara på den säkra sidan har vi fryst alla "
-"filer och meddelanden som skickades till våra journalister under den dagen."
+"Du kan vara säker på att vi kan läsa ditt meddelande, logga in igen lite "
+"senare för att se vårt svar."
 
-#: source_templates/lookup.html:14
-msgid ""
-"Now that we know you’re really a human, though, we’ll get your previous "
-"submission into the hands of a journalist straight away. We’re sorry for the "
-"delay. Please do check back again in a week or so."
-msgstr ""
-"Nu när vi verkligen vet att du är en människa ska vi se till att din "
-"inlämning kommer till en journalist så fort som möjligt. Vi ber om ursäkt "
-"för fördröjningen. Vänligen återkom om en vecka eller liknande."
-
-#: source_templates/lookup.html:20
+#: source_templates/lookup.html:18
 msgid "Submit Files or Messages"
 msgstr "Skicka filer eller meddelanden"
 
-#: source_templates/lookup.html:22
-msgid ""
-"Before you begin, turn off cross-site request sanitization in NoScript. This "
-"is <strong>required</strong> for uploads to work. <a href=\"{url}\" class="
-"\"text-link\">Show me how.</a>"
-msgstr ""
-"Innan du börjar, stäng av \"cross-site request sanitization\" i NoScript. "
-"Detta är <strong> ett krav</strong> för att uppladdningar ska fungera. <a "
-"href=\"{url}\" class=\"text-link\">Visa mig hur.</a>"
-
-#: source_templates/lookup.html:24
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Du kan skicka alla typer av filer, ett meddelande, eller både och."
-
-#: source_templates/lookup.html:26
+#: source_templates/lookup.html:19
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1227,23 +1103,27 @@ msgstr ""
 "och meddelanden med vår <a href=\"{url}\" class=\"text-link\"> publika "
 "nyckel </a> före inlämningen. Filer krypteras när de tas emot av SecureDrop."
 
-#: source_templates/lookup.html:27
+#: source_templates/lookup.html:20
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">Fortsätt läsa</a>."
 
-#: source_templates/lookup.html:37
+#: source_templates/lookup.html:22
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Du kan skicka alla typer av filer, ett meddelande, eller både och."
+
+#: source_templates/lookup.html:31
 msgid "Maximum upload size: 500 MB"
 msgstr "Maximal storlek för uppladdningar: 500 MB"
 
-#: source_templates/lookup.html:40
+#: source_templates/lookup.html:34
 msgid "Write a message."
 msgstr "Skriv ett meddelande."
 
-#: source_templates/lookup.html:62
+#: source_templates/lookup.html:56
 msgid "Read Replies"
 msgstr "Läs svar"
 
-#: source_templates/lookup.html:67
+#: source_templates/lookup.html:61
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1255,43 +1135,43 @@ msgstr ""
 "är klar med dem. Därmed får vi också bekräftat att du har sett vårt svar. Du "
 "kan svara genom att skicka in nya filer eller meddelanden ovan."
 
-#: source_templates/lookup.html:80
+#: source_templates/lookup.html:74
 msgid "Delete this reply?"
 msgstr "Ta bort detta svar?"
 
-#: source_templates/lookup.html:82
+#: source_templates/lookup.html:76
 msgid "DELETE"
 msgstr "TA BORT"
 
-#: source_templates/lookup.html:91
+#: source_templates/lookup.html:85
 msgid "DELETE ALL REPLIES"
 msgstr "TA BORT ALLA SVAR"
 
-#: source_templates/lookup.html:94
+#: source_templates/lookup.html:88
 msgid "Are you finished with the replies?"
 msgstr "Är du klar med svaren?"
 
-#: source_templates/lookup.html:95
+#: source_templates/lookup.html:89
 msgid "YES, DELETE ALL REPLIES"
 msgstr "JA, TA BORT ALLA SVAR"
 
-#: source_templates/lookup.html:96
+#: source_templates/lookup.html:90
 msgid "NO, NOT YET"
 msgstr "NEJ, INTE ÄN"
 
-#: source_templates/lookup.html:100
+#: source_templates/lookup.html:94
 msgid "There are no replies at this time."
 msgstr "Det finns inga svar för tillfället."
 
-#: source_templates/lookup.html:109
+#: source_templates/lookup.html:103
 msgid "Remember, your codename is:"
 msgstr "Kom ihåg, ditt kodnamn är:"
 
-#: source_templates/lookup.html:110
+#: source_templates/lookup.html:104
 msgid "Show"
 msgstr "Visa"
 
-#: source_templates/lookup.html:112
+#: source_templates/lookup.html:106
 msgid "Hide"
 msgstr "Göm"
 
@@ -1482,6 +1362,130 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Tillbaka till inlämningssidan"
+
+#~ msgid ""
+#~ "<strong>Critical Security:</strong> The operating system used by your "
+#~ "SecureDrop servers has reached its end-of-life. A manual update is "
+#~ "urgently required to remain safe - <a href=\"//securedrop.org/xenial-"
+#~ "upgrade\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr ""
+#~ "<strong>Kritisk sårbarhet:</strong> Operativsystemet som används av dina "
+#~ "SecureDrop-servrar har passerat sin livslängd. En manuell uppdatering "
+#~ "krävs snarast för att skydda systemet - <a href=\"//securedrop.org/xenial-"
+#~ "upgrade\" rel=\"noreferrer\">Läs mer</a>"
+
+#~ msgid "Turn off NoScript's cross-site request sanitization setting"
+#~ msgstr ""
+#~ "Stäng av \"NoScript's cross-site request sanitization\" inställningen"
+
+#~ msgid ""
+#~ "Due to a browser issue (<a href=\"{url}\">more details</a>), uploads do "
+#~ "not currently work reliably in Tor Browser while cross-site request "
+#~ "sanitization is turned on. It is safe to turn off this feature while your "
+#~ "Security Slider is set to \"Safest\". Here's how:"
+#~ msgstr ""
+#~ "På grund av ett webbläsarproblem (<a href=\"{url}\">mer detaljer</a>), så "
+#~ "fungerar inte uppladdningar stabilt i Tor Browser när \"cross-site "
+#~ "request sanitization\" är påslagen. Det är säkert att stänga av denna "
+#~ "funktion när din \"Security Slider\" är satt till \"Safest\". Så här gör "
+#~ "du:"
+
+#~ msgid ""
+#~ "You should find a blue \"S\" icon in the Tor browser's toolbar: <img "
+#~ "class=\"inline\" src=\"{noscript_plain_icon_url}\"> or <img class=\"inline"
+#~ "\" src=\"{noscript_icon_url}\">. This is the NoScript button."
+#~ msgstr ""
+#~ "Du ska hitta en blå \"S\" ikon i Tor browserns meny: <img class=\"inline"
+#~ "\" src=\"{noscript_plain_icon_url}\"> eller <img class=\"inline\" src="
+#~ "\"{noscript_icon_url}\">. Detta är NoScript-knappen."
+
+#~ msgid "1. Click on the NoScript button."
+#~ msgstr "1. Tryck på NoScript-knappen."
+
+#~ msgid "The NoScript pane should appear. It looks like this:"
+#~ msgstr "NoScript-panelen ska nu dyka upp. Den ser ut så här:"
+
+#~ msgid ""
+#~ "2. In the NoScript pane, click on the Settings icon: <img class=\"inline"
+#~ "\" src=\"{url}\">"
+#~ msgstr ""
+#~ "2. Tryck på \"Settings\"-ikonen <img class=\"inline\" src=\"{url}\"> i "
+#~ "NoScript-panelen"
+
+#~ msgid ""
+#~ "The settings page should appear in a new browser tab. It looks like this:"
+#~ msgstr "Inställningssidan ska öppnas i en ny flik. Den ser ut så här:"
+
+#~ msgid "3. Click the \"Advanced\" tab."
+#~ msgstr "3. Klicka på \"Advanced\" fliken."
+
+#~ msgid "The advanced settings tab should come into view. It looks like this:"
+#~ msgstr "Advanced-fliken ska nu visas. Den ser ut så här:"
+
+#~ msgid "4. Un-check \"Sanitize cross-site suspicious requests\"."
+#~ msgstr "4. Avmarkera \"Sanitize cross-site suspicious requests\"."
+
+#~ msgid ""
+#~ "Due to a browser issue, this is required for uploads to work reliably. As "
+#~ "soon as the browser issue is resolved, we will remove this recommendation."
+#~ msgstr ""
+#~ "På grund av ett webbläsar-problem, så behövs det här för att "
+#~ "uppladdningar ska fungera stabilt. Så snart som webbläsar-problemet är "
+#~ "löst, kommer vi att ta bort denna rekommendation."
+
+#~ msgid ""
+#~ "5. Close the <i>NoScript Settings</i> browser tab and return to the "
+#~ "SecureDrop tab."
+#~ msgstr ""
+#~ "5. Stäng <i> NoScript Settings</i> fliken och gå tillbaka till SecureDrop."
+
+#~ msgid ""
+#~ "You can now upload your files. Please keep in mind that each file "
+#~ "requires its own submission."
+#~ msgstr "Nu kan du ladda upp filer. Varje fil kräver en separat inskickning."
+
+#~ msgid "6. Re-check \"Sanitize cross-site suspicious requests\"."
+#~ msgstr "6. Dubbelkolla \"Sanitize cross-site suspicious requests\"."
+
+#~ msgid ""
+#~ "Repeat steps 1-3 from above and re-check the setting. The setting has no "
+#~ "effect while your Security Slider is set to \"Safest\", but we recommend "
+#~ "enabling it during normal Tor usage."
+#~ msgstr ""
+#~ "Repetera steg 1-3 ovan för att dubbelkolla inställningen. Inställningen "
+#~ "har ingen effekt när \"Security Slider\" är satt till \"Safest\", men vi "
+#~ "rekommenderar att du aktiverar den när du använder Tor i normala fall."
+
+#~ msgid "Whew, it’s you! Now, the embarrassing part..."
+#~ msgstr "Ok, det är du! Nu, till det pinsamma..."
+
+#~ msgid ""
+#~ "Our servers experienced an unusual surge of new activity, when you last "
+#~ "visited. To err on the side of caution, we put a hold on sending all "
+#~ "files and messages from that day through to our journalists."
+#~ msgstr ""
+#~ "Våra servrar utsattes för en ovanlig ökning av ny aktivitet den senaste "
+#~ "gången du besökte oss. För att vara på den säkra sidan har vi fryst alla "
+#~ "filer och meddelanden som skickades till våra journalister under den "
+#~ "dagen."
+
+#~ msgid ""
+#~ "Now that we know you’re really a human, though, we’ll get your previous "
+#~ "submission into the hands of a journalist straight away. We’re sorry for "
+#~ "the delay. Please do check back again in a week or so."
+#~ msgstr ""
+#~ "Nu när vi verkligen vet att du är en människa ska vi se till att din "
+#~ "inlämning kommer till en journalist så fort som möjligt. Vi ber om ursäkt "
+#~ "för fördröjningen. Vänligen återkom om en vecka eller liknande."
+
+#~ msgid ""
+#~ "Before you begin, turn off cross-site request sanitization in NoScript. "
+#~ "This is <strong>required</strong> for uploads to work. <a href=\"{url}\" "
+#~ "class=\"text-link\">Show me how.</a>"
+#~ msgstr ""
+#~ "Innan du börjar, stäng av \"cross-site request sanitization\" i NoScript. "
+#~ "Detta är <strong> ett krav</strong> för att uppladdningar ska fungera. <a "
+#~ "href=\"{url}\" class=\"text-link\">Visa mig hur.</a>"
 
 #~ msgid "Is Administrator"
 #~ msgstr "Är Administratör"

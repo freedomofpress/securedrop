@@ -92,9 +92,9 @@
         <div class="row-reverse"> <img id="security-slider-info-close" class="close" src="{{ url_for('static', filename='i/font-awesome/black/times.svg') }}" width="20px" height="20px"></div>
       <p>{{ gettext('You appear to be using the Tor Browser. You can move the Security Slider to Safest in four steps.') }}</p>
       <ol>
-        <li>{{ gettext('Click the <img src="{icon}" alt="Tor icon"> Tor icon in the toolbar above').format(icon=url_for("static", filename="i/toronion.png"))  }}</li>
-        <li>{{ gettext('Click <strong>Security Settings...</strong>') }}</li>
-        <li>{{ gettext('Move the Slider to <strong>Safest</strong>, then click <strong>OK</strong>') }}</li>
+        <li>{{ gettext('Click the <img src="{icon}" alt="shield icon"> shield icon in the toolbar above').format(icon=url_for("static", filename="i/shield.png"))  }}</li>
+        <li>{{ gettext('Click <strong>Advanced Security Settings...</strong>') }}</li>
+        <li>{{ gettext('Click <strong>Safest</strong>') }}</li>
         <li>{{ gettext('<a href="/">Click here</a> to refresh the page') }}</li>
       </ol>
     </div>
