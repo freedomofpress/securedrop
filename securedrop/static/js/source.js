@@ -83,15 +83,12 @@ function looksLikeOrfox() {
 
 /**
    If the source is using Tor Browser, encourage them to turn Tor
-   Browser's Security Slider to "Safest".
+   Browser's Security Setting to "Safest".
 */
 function showTorSuggestions() {
   show("#js-warning");
-  addFadingClose("js-warning-close", document.getElementById("js-warning"));
-
-  let infoBubble = document.getElementById("security-slider-info");
-
-  addFadingClose("security-slider-info-close", infoBubble);
+  
+  let infoBubble = document.getElementById("security-setting-info");
 
   // show the instruction popup when the link is clicked
   document.getElementById("disable-js").addEventListener(
