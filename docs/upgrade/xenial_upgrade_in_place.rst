@@ -32,7 +32,7 @@ Before performing the upgrade, please perform all the steps outlined in
 .. warning::
   In order to successfully upgrade your SecureDrop instance, it is of critical
   importance that your *Admin Workstation* and your servers use SecureDrop
-  0.12.2. Releases prior to the 0.12 series of SecureDrop do not not support
+  0.13.0. Releases prior to the 0.12 series of SecureDrop do not not support
   Ubuntu 16.04.
 
                                                                                 
@@ -215,7 +215,7 @@ code is up-to-date and validated. From a terminal, run the following commands:
                                                                                 
  cd ~/Persistent/securedrop                                                     
  git fetch --tags
- git tag -v 0.12.2                                                              
+ git tag -v 0.13.0                                                              
                                                                                 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the 
 output of that last command, along with the fingerprint 
@@ -233,7 +233,7 @@ First, check out the release tag that you validated above:
 
 .. code:: sh
  
- git checkout 0.12.2                                                            
+ git checkout 0.13.0                                                            
 
 Next, in the terminal, run the following command to set up the SecureDrop 
 admin environment:
@@ -281,7 +281,7 @@ Server* and your *Monitor Server*.
 Validate the application version
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To confirm that you are running SecureDrop 0.12.2 for Xenial, on the Tails
+To confirm that you are running SecureDrop 0.13.0 for Xenial, on the Tails
 desktop, you should find a shortcut called **SecureDrop Source Interface**.
 Double-click it to launch the Tor browser.
 
@@ -289,7 +289,7 @@ After the *Source Interface* loads, add the path ``/metadata`` to the URL in
 your address bar. If your *Source Interface* can be found at
 ``examplenot4real.onion``, then the address you should visit is
 ``examplenot4real.onion/metadata``. That page should show you key/value pairs,
-including ``0.12.2`` for ``sd_version`` and ``16.04`` for ``server_os``.
+including ``0.13.0`` for ``sd_version`` and ``16.04`` for ``server_os``.
 
 End-to-end test
 ^^^^^^^^^^^^^^^
