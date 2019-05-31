@@ -145,7 +145,9 @@ def create_app(config):
             # clear the session after we render the message so it's localized
             session.clear()
 
+            # Redirect to index with flashed message
             flash(Markup(msg), "important")
+            return redirect(url_for('main.index'))
 
         session['expires'] = datetime.utcnow() + \
             timedelta(minutes=getattr(config,
