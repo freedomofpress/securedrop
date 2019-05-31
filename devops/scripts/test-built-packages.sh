@@ -11,4 +11,4 @@ set -o pipefail
 
 virtualenv_bootstrap
 
-make build-debs
+molecule test -s builder-xenial
