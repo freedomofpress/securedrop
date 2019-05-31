@@ -3,6 +3,7 @@ import gzip
 import re
 import subprocess
 import six
+import time
 
 from io import BytesIO
 from flask import session, escape, current_app, url_for, g
@@ -667,7 +668,33 @@ def test_source_session_expiration(config, source_app):
         # which is always present and 'csrf_token' which leaks no info)
         session.pop('expires', None)
         session.pop('csrf_token', None)
-        assert not session, session
+        assert not session
+
+        text = resp.data.decode('utf-8')
+        assert 'Your session timed out due to inactivity' in text
+
+
+def test_source_session_expiration_create(config, source_app):
+    with source_app.test_client() as app:
+
+        seconds_session_expire = 1
+        config.SESSION_EXPIRATION_MINUTES = seconds_session_expire / 60.
+
+        # Make codename, and then wait for session to expire.
+        resp = app.get(url_for('main.generate'))
+        assert resp.status_code == 200
+
+        time.sleep(seconds_session_expire + 0.1)
+
+        # Now when we click create, the session will have expired.
+        resp = app.post(url_for('main.create'), follow_redirects=True)
+
+        # check that the session was cleared (apart from 'expires'
+        # which is always present and 'csrf_token' which leaks no info)
+        session.pop('expires', None)
+        session.pop('csrf_token', None)
+        assert not session
+
         text = resp.data.decode('utf-8')
         assert 'Your session timed out due to inactivity' in text
 
