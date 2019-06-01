@@ -54,7 +54,9 @@
         log_paths: "{{ log_paths_reference[inventory_hostname] }}"
 
     - name: Create tar archive.
-      shell: tar -czf "{{ log_tarball_filename|escape }}" {{ log_paths|join(' ') }}
+      archive:
+        path: "{{ log_paths }}"
+        dest: "{{ log_tarball_filename }}"
 
     - name: Fetch tarball back to Admin Workstation.
       fetch:
