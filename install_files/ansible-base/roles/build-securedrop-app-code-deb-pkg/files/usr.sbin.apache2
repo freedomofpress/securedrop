@@ -266,6 +266,7 @@
   /var/www/securedrop/static/i/font-awesome/trash-black.png r,
   /var/www/securedrop/static/i/font-awesome/black/guard.svg r,
   /var/www/securedrop/static/i/font-awesome/white/guard.svg r,
+  /var/www/securedrop/static/i/font-awesome/white/exclamation-circle.svg r,  
   /var/www/securedrop/static/i/hand_with_fingerprint.png r,
   /var/www/securedrop/static/i/success_checkmark.png r,
   /var/www/securedrop/static/i/server_upload.png r,
