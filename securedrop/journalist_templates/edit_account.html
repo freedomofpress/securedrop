@@ -61,6 +61,7 @@
   <p><input type="password" name="current_password" placeholder="{{ gettext('Current Password') }}"></p>
   <p><input name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}"></p>
   {% endif %}
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input name="password" type="hidden" value="{{ password }}">
   <p>
     {% if user %}

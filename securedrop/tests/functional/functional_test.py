@@ -200,6 +200,7 @@ class FunctionalTest(object):
 
                     self.source_app = source_app.create_app(config)
                     self.journalist_app = journalist_app.create_app(config)
+                    self.journalist_app.config['WTF_CSRF_ENABLED'] = True
 
                     self.__context = self.journalist_app.app_context()
                     self.__context.push()
