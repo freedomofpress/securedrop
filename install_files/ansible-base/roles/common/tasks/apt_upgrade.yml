@@ -44,7 +44,7 @@
   # Not using a conditional `when` to control task execution because
   # we want to ensure the hold is removed, otherwise nightly upgrades
   # will not install security patches.
-  changed_when: tor_hold_package_result|changed
+  changed_when: tor_hold_package_result is changed
 
 
   # Ansible doesn't support notifying handlers based on file existence, results,
