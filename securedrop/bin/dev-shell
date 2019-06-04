@@ -47,6 +47,7 @@ function docker_run() {
            -e NUM_SOURCES \
            -e LC_ALL=C.UTF-8 \
            -e LANG=C.UTF-8 \
+           -e PAGE_LAYOUT_LOCALES \
            --user "${USER:-root}" \
            --volume "${TOPLEVEL}:${TOPLEVEL}" \
            --workdir "${TOPLEVEL}/securedrop" \

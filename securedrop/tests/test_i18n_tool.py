@@ -284,8 +284,8 @@ class TestI18NTool(object):
             '--url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl',
         ])
-        assert 'l10n: updated nl' in r()
-        assert 'l10n: updated de_DE' not in r()
+        assert 'l10n: updated Dutch (nl)' in r()
+        assert 'l10n: updated German (de_DE)' not in r()
 
         #
         # de_DE is added but there is no change in the nl translation
@@ -299,8 +299,8 @@ class TestI18NTool(object):
             '--url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl,de_DE',
         ])
-        assert 'l10n: updated nl' not in r()
-        assert 'l10n: updated de_DE' in r()
+        assert 'l10n: updated Dutch (nl)' not in r()
+        assert 'l10n: updated German (de_DE)' in r()
 
         #
         # nothing new for nl or de_DE: nothing is done
@@ -313,8 +313,8 @@ class TestI18NTool(object):
             '--url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl,de_DE',
         ])
-        assert 'l10n: updated nl' not in r()
-        assert 'l10n: updated de_DE' not in r()
+        assert 'l10n: updated Dutch (nl)' not in r()
+        assert 'l10n: updated German (de_DE)' not in r()
         message = six.text_type(git('--no-pager', '-C', 'securedrop', 'show',
                                     _cwd=d, _encoding='utf-8'))
         assert six.u("Loïc") in message
@@ -346,8 +346,8 @@ class TestI18NTool(object):
             '--url', join(str(tmpdir), 'i18n'),
             '--supported-languages', 'nl,de_DE',
         ])
-        assert 'l10n: updated nl' in r()
-        assert 'l10n: updated de_DE' not in r()
+        assert 'l10n: updated Dutch (nl)' in r()
+        assert 'l10n: updated German (de_DE)' not in r()
         message = six.text_type(git('--no-pager', '-C', 'securedrop', 'show',
                                     _cwd=d))
         assert "Someone Else" in message
