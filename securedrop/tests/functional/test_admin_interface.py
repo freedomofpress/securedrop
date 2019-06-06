@@ -27,7 +27,6 @@ class TestAdminInterface(
         self._admin_adds_a_user()
         self._admin_visits_edit_user()
         self._admin_visits_reset_2fa_totp()
-        self._admin_accepts_2fa_js_alert()
 
     def test_admin_deletes_user(self):
         self._admin_logs_in()
