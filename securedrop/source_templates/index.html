@@ -13,7 +13,7 @@
     {% endassets %}
   </head>
   <body id="source-index">
-    <div id="js-warning" class="warning">{{ gettext('<strong>It is recommended to move the Security Slider to Safest to protect your anonymity:</strong> <a id="disable-js" href="">Learn how to set it to Safest</a>, or ignore this warning to continue.') }} <img id="js-warning-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
+    <div id="js-warning" class="warning"><img src="{{ url_for('static', filename='i/font-awesome/white/exclamation-circle.svg') }}" height="12px" alt="warning icon">&nbsp; {{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><strong>Security Setting</strong></a> is too low. Use the <img src="{icon}" alt="shield icon"> &nbsp;button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg"))  }} </div>
     <div id="use-tor-browser" class="warning">{{ gettext('<strong>It is recommended to use the Tor Browser to access SecureDrop:</strong> <a id="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }} <img id="use-tor-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
     <div id="orfox-browser" class="warning">{{ gettext('<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop versions.</strong> <a id="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }} <img id="orfox-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
 
@@ -88,15 +88,14 @@
     {# Warning bubble to help TB users disable JavaScript with NoScript.
     Included here so the images can preload while the user is first
     reading the page. Hidden by default. #}
-    <div class="bubble" id="security-slider-info" class="info">
-        <div class="row-reverse"> <img id="security-slider-info-close" class="close" src="{{ url_for('static', filename='i/font-awesome/black/times.svg') }}" width="20px" height="20px"></div>
-      <p>{{ gettext('You appear to be using the Tor Browser. You can move the Security Slider to Safest in four steps.') }}</p>
+    <div class="bubble" id="security-setting-info" class="info">
       <ol>
-        <li>{{ gettext('Click the <img src="{icon}" alt="shield icon"> shield icon in the toolbar above').format(icon=url_for("static", filename="i/shield.png"))  }}</li>
-        <li>{{ gettext('Click <strong>Advanced Security Settings...</strong>') }}</li>
-        <li>{{ gettext('Click <strong>Safest</strong>') }}</li>
-        <li>{{ gettext('<a href="/">Click here</a> to refresh the page') }}</li>
+        <li>{{ gettext('Click the <img src="{icon}" alt="shield icon"> in the toolbar above').format(icon=url_for("static", filename="i/font-awesome/black/guard.svg"))  }}</li>
+        <li>{{ gettext('Select <strong>Advanced Security Settings</strong>') }}</li>
+        <li>{{ gettext('Select <strong>Safest</strong>') }}</li>
       </ol>
+      <p>{{ gettext('<a href="/">Refresh this page</a>, and you\'re done!') }}</p>
+
     </div>
 
   </body>

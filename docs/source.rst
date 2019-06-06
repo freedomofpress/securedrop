@@ -51,21 +51,20 @@ organization you are submitting to.
 
 |Source Interface with Javascript Disabled|
 
-If this is the first time you're using the Tor browser, it's likely that you
-have JavaScript enabled and that the Security Slider that Tor browser provides
+If this is the first time you're using the Tor Browser, it's likely that you
+have JavaScript enabled and that the Security Setting that the Tor Browser provides
 is set to "Low". If you do, there will be a purple warning banner at the top of
-the page that encourages you to disable JavaScript and turn up the **Security Slider** to **Safest**:
+the page that encourages you to disable JavaScript and turn up the **Security Setting** to **Safest**:
 
 |Source Interface Security Slider Warning|
 
-Click the **Learn how to set it to Safest** link in the warning banner and a
-message bubble will pop up explaining how to disable JavaScript and turn up the
-Slider:
+Click the **Security Setting** link in the warning banner and a
+message bubble will pop up explaining how to disable JavaScript and configure your security properly:
 
 |Fix Javascript warning|
 
 Follow the instructions and the page should refresh automatically. Note
-that this will change the slider and disable JavaScript for every page in your
+that this will change your security settings and disable JavaScript for every page in your
 Tor Browser, and this setting will persist across browser sessions.
 
 |Security Slider|
@@ -170,8 +169,8 @@ Repeat these steps to continue communicating with the journalist.
 
 
 .. |Source Interface Security Slider Warning| image:: images/manual/securedrop-security-slider-warning.png
-.. |Security Slider| image:: images/manual/security-slider-high.png
-.. |Fix Javascript warning| image:: images/manual/source-turn-slider-to-high.png
+.. |Security Slider| image:: images/manual/source-turn-slider-to-high.png
+.. |Fix Javascript warning| image:: images/manual/security-slider-high.png
 .. |Source Interface with Javascript Disabled|
   image:: images/manual/screenshots/source-index.png
 .. |Memorizing your codename|
