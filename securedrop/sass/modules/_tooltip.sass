@@ -1,0 +1,80 @@
+=tooltip
+
+  [tooltip]
+    position: relative
+
+    /* Applies to all tooltips */
+    &:before,
+    .tooltip
+      text-transform: none
+      font-size: .9em
+      line-height: 1
+      user-select: none
+      pointer-events: none
+      position: absolute
+      display: none
+      opacity: 0
+
+    &:before
+      content: ''
+      border: 5px solid transparent
+      z-index: 1001
+
+    .tooltip
+      font-family: Helvetica, sans-serif
+      text-align: center
+      min-width: 3em
+      max-width: 45em
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+      padding: 1ch 1.5ch
+      border-radius: .3ch
+      box-shadow: 0 1em 2em -.5em rgba(0, 0, 0, 0.35)
+      background: #333
+      color: #fff
+      z-index: 1000
+
+    /* Make the tooltips respond to hover */
+    &:hover::before,
+    &:hover .tooltip
+      display: block
+
+    @media only screen and (max-width: 768px)
+      .tooltip
+        white-space: unset
+
+  /* don't show empty tooltips */
+  [tooltip='']::before,
+  [tooltip=''] .tooltip
+    display: none !important
+
+  /* FLOW: UP */
+  [tooltip]:not([flow])::before,
+  [tooltip][flow^="up"]::before
+    bottom: 100%
+    border-bottom-width: 0
+    border-top-color: #333
+
+  [tooltip]:not([flow]) .tooltip,
+  [tooltip][flow^="up"] .tooltip
+    bottom: calc(100% + 0.3em)
+
+  [tooltip]:not([flow])::before,
+  [tooltip]:not([flow]) .tooltip,
+  [tooltip][flow^="up"]::before,
+  [tooltip][flow^="up"] .tooltip
+    left: 50%
+    transform: translate(-50%, -.5em)
+
+  [tooltip]:not([flow]):hover::before,
+  [tooltip]:not([flow]):hover .tooltip,
+  [tooltip][flow^="up"]:hover::before,
+  [tooltip][flow^="up"]:hover .tooltip
+    animation: tooltips-vert 300ms ease-out forwards
+
+  /* KEYFRAMES */
+  @keyframes tooltips-vert
+    to
+      opacity: 1
+      transform: translate(-50%, 0)

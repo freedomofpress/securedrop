@@ -21,6 +21,13 @@ class TestAdminInterface(
         self._admin_visits_reset_2fa_hotp()
         self._admin_visits_edit_hotp()
 
+    def test_admin_edits_totp_secret(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_adds_a_user()
+        self._admin_visits_edit_user()
+        self._admin_visits_reset_2fa_totp()
+
     def test_admin_deletes_user(self):
         self._admin_logs_in()
         self._admin_visits_admin_interface()
