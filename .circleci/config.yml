@@ -321,7 +321,7 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-          name: Test Debian package build
+          name: Test Debian package building
           command: |
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^update-builder")
             echo "match-ci-branch.sh said: ${BRANCH_MATCH}"
