@@ -62,7 +62,7 @@ output as shown below:
     This message shows that your installation appears to be working correctly.
     ...
 
-.. _Docker installation: https://www.docker.com/community-edition#/download
+.. _Docker installation: https://docs.docker.com/install/
 
 Setup Environment Parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

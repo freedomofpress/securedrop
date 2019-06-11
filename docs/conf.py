@@ -299,3 +299,14 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 # texinfo_no_detailmenu = False
+
+# -- Options for linkcheck --
+
+linkcheck_retries = 3
+
+linkcheck_ignore = [
+  r'http://127.0.0.1(:\d+)?/?',
+  r'http://localhost(:\d+)?/?',
+  'https://forum.securedrop.org/admin/users/list/active',
+  'https://weblate.securedrop.org/projects/securedrop/securedrop/#repository',
+]

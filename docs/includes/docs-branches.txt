@@ -1,7 +1,7 @@
 .. note:: SecureDrop maintains two versions of documentation: `stable
-          <https://docs.securedrop.org/en/stable/development/getting_started.html>`_
+          <https://docs.securedrop.org/en/stable/development/contributing.html>`_
           and `latest
-          <https://docs.securedrop.org/en/latest/development/getting_started.html>`_.
+          <https://docs.securedrop.org/en/latest/development/contributing.html>`_.
           ``stable`` is the default used by our Read the Docs site, and is built
           from our latest signed git tag. ``latest`` is built from the head of
           the ``develop`` git branch. In almost all cases involving development
