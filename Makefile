@@ -103,16 +103,16 @@ safety: ## Runs `safety check` to check python dependencies for vulnerabilities
 .PHONY: bandit
 bandit: ## Run bandit with medium level excluding test-related folders
 	pip install --upgrade pip && \
-        pip install --upgrade bandit!=1.6.0 && \
+		pip install --upgrade bandit!=1.6.0 && \
 	bandit --recursive . --exclude admin/.tox,admin/.venv,admin/.eggs,molecule,testinfra,securedrop/tests,.tox,.venv -ll
 
 .PHONY: update-pip-requirements
 update-pip-requirements: ## Updates all Python requirements files via pip-compile.
 	make -C admin update-pip-requirements
-	pip-compile --output-file securedrop/requirements/develop-requirements.txt \
+	pip-compile --generate-hashes --output-file securedrop/requirements/develop-requirements.txt \
 		admin/requirements-ansible.in \
 		securedrop/requirements/develop-requirements.in
-	pip-compile --output-file securedrop/requirements/test-requirements.txt \
+	pip-compile --generate-hashes --output-file securedrop/requirements/test-requirements.txt \
 		securedrop/requirements/test-requirements.in
 	pip-compile --generate-hashes --output-file securedrop/requirements/securedrop-app-code-requirements.txt \
 		securedrop/requirements/securedrop-app-code-requirements.in

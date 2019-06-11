@@ -7,7 +7,7 @@ sdvars = pytest.securedrop_test_vars
 @pytest.mark.parametrize('exp_pip_pkg', sdvars.pip_deps)
 def test_app_pip_deps(host, exp_pip_pkg):
     """ Ensure pip dependencies are installed """
-    pip = host.pip_package.get_packages()
+    pip = host.pip_package.get_packages(pip_path="pip3")
     assert pip[exp_pip_pkg['name']]['version'] == exp_pip_pkg['version']
 
 

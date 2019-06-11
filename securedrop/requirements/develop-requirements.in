@@ -5,13 +5,16 @@ boto3
 docker-py
 # Needed for dig ansible lookup
 dnspython
+enum34==1.1.6; python_version < "3.4"
 flake8
+futures; python_version < "3.0"
 html-linter
+ipaddress==1.0.22; python_version < "3.3"
 molecule>2.13
 # Needed for ansible network filter
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
-pip-tools>=3.5.0,<4
+pip-tools>=3.8.0,<4
 pyenchant
 pylint
 pytest-xdist

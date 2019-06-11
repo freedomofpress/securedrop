@@ -63,7 +63,9 @@ jobs:
 
       - run:
           name: Install development dependencies
-          command: pip install -U -r securedrop/requirements/develop-requirements.txt
+          command: |
+            pip install -U pip
+            pip install -U -r securedrop/requirements/develop-requirements.txt
 
       - run:
           name: Run code linting

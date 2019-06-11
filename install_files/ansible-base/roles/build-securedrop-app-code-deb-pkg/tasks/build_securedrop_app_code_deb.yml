@@ -16,9 +16,21 @@
 
 - include: sass.yml
 
+- name: Install Debian packages required to build wheels
+  apt:
+    name:
+      - apache2-dev
+      - python3-dev
+      - python3-pip
+      - python3-wheel
+    state: present
+
+- name: Upgrade pip
+  shell: pip3 install --upgrade pip
+
 - name: Create pip wheel archive for Debian package requirements.
   shell: |
-    pip wheel \
+    pip3 wheel --verbose \
       --no-binary :all: \
       --require-hashes \
       --requirement {{ securedrop_pip_requirements }} \
@@ -41,13 +53,14 @@
 # integrity, we can defer to a later time.
 - name: Install built pip wheels for SecureDrop.
   shell: |
-    pip install {{ securedrop_wheelhouse }}/*.whl
+    ls -al {{ securedrop_wheelhouse }}
+    pip3 install {{ securedrop_wheelhouse }}/*.whl
   tags:
     - pip
 
 - name: Create new requirements based on build/installed wheels without hashes
   shell:
-    pip freeze > {{ securedrop_pip_requirements_generated }}
+    pip3 freeze > {{ securedrop_pip_requirements_generated }}
   tags:
     - pip
 

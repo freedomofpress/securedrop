@@ -11,16 +11,16 @@ Vagrant.configure("2") do |config|
   # so the key insertion feature should be disabled.
   config.ssh.insert_key = false
 
+  config.ssh.port = 22
+
   # The staging hosts are just like production but allow non-tor access
   # for the web interfaces and ssh.
   config.vm.define 'mon-staging', autostart: false do |staging|
     if ENV['SECUREDROP_SSH_OVER_TOR']
-      config.ssh.host = find_ssh_aths("mon-ssh-aths")
-      config.ssh.proxy_command = tor_ssh_proxy_command
-      config.ssh.port = 22
-    elsif ARGV[0] == "ssh"
-      config.ssh.host = "10.0.1.3"
-      config.ssh.port = 22
+      staging.ssh.host = find_ssh_aths("mon-ssh-aths")
+      staging.ssh.proxy_command = tor_ssh_proxy_command
+    elsif ARGV[0].start_with? "ssh"
+      staging.ssh.host = "10.0.1.3"
     end
     staging.vm.hostname = "mon-staging"
     staging.vm.box = "bento/ubuntu-16.04"
@@ -30,12 +30,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.define 'app-staging', autostart: false do |staging|
     if ENV['SECUREDROP_SSH_OVER_TOR']
-      config.ssh.host = find_ssh_aths("app-ssh-aths")
-      config.ssh.proxy_command = tor_ssh_proxy_command
-      config.ssh.port = 22
-    elsif ARGV[0] == "ssh"
-      config.ssh.host = "10.0.1.2"
-      config.ssh.port = 22
+      staging.ssh.host = find_ssh_aths("app-ssh-aths")
+      staging.ssh.proxy_command = tor_ssh_proxy_command
+    elsif ARGV[0].start_with? "ssh"
+      staging.ssh.host = "10.0.1.2"
     end
     staging.vm.hostname = "app-staging"
     staging.vm.box = "bento/ubuntu-16.04"
@@ -62,9 +60,10 @@ Vagrant.configure("2") do |config|
   # All access to SSH and the web interfaces is only over Tor.
   config.vm.define 'mon-prod', autostart: false do |prod|
     if ENV['SECUREDROP_SSH_OVER_TOR']
-      config.ssh.host = find_ssh_aths("mon-ssh-aths")
-      config.ssh.proxy_command = tor_ssh_proxy_command
-      config.ssh.port = 22
+      prod.ssh.host = find_ssh_aths("mon-ssh-aths")
+      prod.ssh.proxy_command = tor_ssh_proxy_command
+    elsif ARGV[0].start_with? "ssh"
+      prod.ssh.host = "10.0.1.5"
     end
     prod.vm.hostname = "mon-prod"
     prod.vm.box = "bento/ubuntu-16.04"
@@ -74,9 +73,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.define 'app-prod', autostart: false do |prod|
     if ENV['SECUREDROP_SSH_OVER_TOR']
-      config.ssh.host = find_ssh_aths("app-ssh-aths")
-      config.ssh.proxy_command = tor_ssh_proxy_command
-      config.ssh.port = 22
+      prod.ssh.host = find_ssh_aths("app-ssh-aths")
+      prod.ssh.proxy_command = tor_ssh_proxy_command
+    elsif ARGV[0].start_with? "ssh"
+      prod.ssh.host = "10.0.1.4"
     end
     prod.vm.hostname = "app-prod"
     prod.vm.box = "bento/ubuntu-16.04"

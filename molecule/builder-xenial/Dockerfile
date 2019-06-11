@@ -6,6 +6,8 @@ LABEL org="Freedom of the Press"
 LABEL image_name="xenial-sd-builder-app"
 
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
+        apache2 \
+        apache2-dev \
         aptitude \
         debhelper \
         devscripts \
@@ -19,10 +21,10 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         make \
         ntp \
         paxctl \
-        python \
-        python-dev \
-        python-pip \
-        python-wheel \
+        python3 \
+        python3-dev \
+        python3-pip \
+        python3-wheel \
         rsync \
         ruby \
         secure-delete \

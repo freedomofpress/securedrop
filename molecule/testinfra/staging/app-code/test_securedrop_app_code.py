@@ -15,15 +15,21 @@ def test_apache_default_docroot_is_absent(host):
 
 
 @pytest.mark.parametrize('package', [
-  'apparmor-utils',
-  'gnupg2',
-  'haveged',
-  'python',
-  'python-pip',
-  'redis-server',
-  'secure-delete',
-  'sqlite3',
-  'supervisor',
+    "apache2",
+    "apparmor-utils",
+    "devscripts",
+    "gnupg2",
+    "haveged",
+    "libapache2-mod-xsendfile",
+    "paxctld",
+    "python3",
+    "python3-pip",
+    "redis-server",
+    "secure-delete",
+    "securedrop-config",
+    "securedrop-keyring",
+    "sqlite3",
+    "supervisor",
 ])
 def test_securedrop_application_apt_dependencies(host, package):
     """
@@ -32,6 +38,16 @@ def test_securedrop_application_apt_dependencies(host, package):
     due to specification in Depends in package control file.
     """
     assert host.package(package).is_installed
+
+
+def test_mod_wsgi_is_ours(host):
+    mod_wsgi_load = host.file("/etc/apache2/mods-enabled/wsgi.load").content_string
+    assert mod_wsgi_load == (
+        '''LoadModule wsgi_module '''
+        '''"/usr/local/lib/python3.5/dist-packages/mod_wsgi/server/'''
+        '''mod_wsgi-py35.cpython-35m-x86_64-linux-gnu.so"\n'''
+        '''WSGIPythonHome "/usr"'''
+    )
 
 
 def test_securedrop_application_test_locale(host):
