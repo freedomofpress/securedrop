@@ -30,7 +30,7 @@ almost every manufacturer.
 With that in mind, this database is arguably the best resource for researching
 the compatibility of printers with Linux. As a tip for narrowing down your
 search, look for printers that are compatible with Debian, or Debian-based
-distributions like Ubuntu, since Tails itself, is also Debian-based. This might
+distributions like Ubuntu, since Tails itself is also Debian-based. This might
 increase the chances for a seamless installation experience in Tails.
 
 In any case, this document outlines the usual set of steps that we follow when
