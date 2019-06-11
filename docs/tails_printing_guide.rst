@@ -3,7 +3,7 @@
 Setting Up a Printer in Tails
 =============================
 
-Because Tails is supposed to be as "amnesiac" as possible, you want to
+Because Tails is supposed to be as **amnesiac** as possible, you want to
 shield your Tails stick from any extra inputs from, and outputs to, a
 potentially untrusted network. This is why **we strongly recommend using
 a printer that does not have WiFi or Bluetooth**, and hooking up to it
@@ -18,7 +18,7 @@ personally tested and gotten to work with Tails, in the Hardware guide; if
 possible, we recommend using one of those printers. The Linux Foundation also
 maintains the `OpenPrinting database <https://www.openprinting.org/printers>`_,
 which documents the compatibility, or lack thereof, of numerous printers from
-most every manufacturer.
+almost every manufacturer.
 
 .. note:: The latest generations of printers might or might not be represented
           by the OpenPrinting database; also, the database does not document
