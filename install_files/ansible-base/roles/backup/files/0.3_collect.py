@@ -74,7 +74,7 @@ def main():
         collect_custom_header_image(zf)
         collect_tor_files(zf)
     encrypt_zip_file(zf_fn)
-    print zf_fn
+    print(zf_fn)
 
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ def test_fpf_apt_repo_present(host):
         f = host.file('/etc/apt/sources.list.d/apt_test_freedom_press.list')
     else:
         f = host.file('/etc/apt/sources.list.d/apt_freedom_press.list')
-    repo_regex = '^deb \[arch=amd64\] {} {} main$'.format(
+    repo_regex = r'^deb \[arch=amd64\] {} {} main$'.format(
                       re.escape(test_vars.fpf_apt_repo_url),
                       re.escape(host.system_info.codename))
     assert f.contains(repo_regex)

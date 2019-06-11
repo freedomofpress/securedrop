@@ -65,18 +65,18 @@ def get_entropy_estimate():
         return int(f.read())
 
 
-def async(f):
+def asynchronous(f):
     def wrapper(*args, **kwargs):
         thread = Thread(target=f, args=args, kwargs=kwargs)
         thread.start()
     return wrapper
 
 
-@async
+@asynchronous
 def async_genkey(crypto_util_, db_uri, filesystem_id, codename):
     # We pass in the `crypto_util_` so we don't have to reference `current_app`
     # here. The app might not have a pushed context during testing which would
-    # cause this async function to break.
+    # cause this asynchronous function to break.
     crypto_util_.genkeypair(filesystem_id, codename)
 
     # Register key generation as update to the source, so sources will

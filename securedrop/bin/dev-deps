@@ -48,9 +48,10 @@ function append_to_exit() {
 }
 
 function maybe_create_config_py() {
-    if ! test -f config.py ; then
-        append_to_exit "rm config.py"
-        make test-config
+    REPOROOT=$(git rev-parse --show-toplevel)
+    if ! test -f "${REPOROOT}/securedrop/config.py" ; then
+        append_to_exit "rm ${REPOROOT}/securedrop/config.py"
+        (cd "$REPOROOT" && make test-config)
     fi
 }
 

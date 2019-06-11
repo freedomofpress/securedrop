@@ -30,5 +30,5 @@
   changed_when: false
 
 - name: Sign release file
-  command:  "gpg -b -u C5D5CD3B6D65484B -o {{ release_file }}.gpg {{ release_file }}"
+  command: "gpg -b -u C5D5CD3B6D65484B -o {{ release_file }}.gpg {{ release_file }}"
   changed_when: false

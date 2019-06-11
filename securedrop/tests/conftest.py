@@ -12,10 +12,7 @@ import shutil
 import signal
 import subprocess
 
-try:
-    import configparser
-except ImportError:
-    from six.moves import configparser  # renamed in Python 3
+from six.moves import configparser
 
 from flask import url_for
 from pyotp import TOTP

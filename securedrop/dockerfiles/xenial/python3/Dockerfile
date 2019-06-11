@@ -48,8 +48,8 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckod
     paxctl -cm /bin/geckodriver
 
 COPY requirements requirements
-RUN pip3 install --require-hashes -r requirements/securedrop-app-code-requirements.txt && \
-    pip3 install -r requirements/test-requirements.txt && \
+RUN pip3 install --require-hashes -r requirements/python3/securedrop-app-code-requirements.txt && \
+    pip3 install -r requirements/python3/test-requirements.txt && \
     pip3 install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools
 
 RUN pip3 install supervisor

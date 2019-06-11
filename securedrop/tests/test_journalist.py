@@ -31,7 +31,7 @@ from models import (InvalidPasswordLength, Journalist, Reply, Source,
 from .utils.instrument import InstrumentedApp
 
 # Smugly seed the RNG for deterministic testing
-random.seed('¯\_(ツ)_/¯')
+random.seed(r'¯\_(ツ)_/¯')
 
 VALID_PASSWORD = 'correct horse battery staple generic passphrase hooray'
 VALID_PASSWORD_2 = 'another correct horse battery staple generic passphrase'
@@ -1668,7 +1668,7 @@ def test_delete_source_deletes_docs_on_disk(journalist_app,
             test_source['filesystem_id'])
 
         # Wait up to 5s to wait for Redis worker `srm` operation to complete
-        utils.async.wait_for_redis_worker(job)
+        utils.asynchronous.wait_for_redis_worker(job)
 
         # Encrypted documents no longer exist
         assert not os.path.exists(dir_source_docs)

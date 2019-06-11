@@ -3,6 +3,9 @@
 
 set -eu
 
+REPOROOT=$(git rev-parse --show-toplevel)
+cd "${REPOROOT}/securedrop"
+
 source "${BASH_SOURCE%/*}/dev-deps"
 
 run_redis &

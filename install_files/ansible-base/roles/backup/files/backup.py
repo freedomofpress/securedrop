@@ -31,7 +31,7 @@ def main():
         backup.add(tor_hidden_services)
         backup.add(torrc)
 
-    print backup_filename
+    print(backup_filename)
 
 
 if __name__ == "__main__":

@@ -28,15 +28,15 @@ apache2_capabilities = [
 @pytest.mark.parametrize('cap', apache2_capabilities)
 def test_apparmor_apache_capabilities(host, cap):
     """ check for exact list of expected app-armor capabilities for apache2 """
-    c = host.run("perl -nE \'/^\s+capability\s+(\w+),$/ && say $1\' "
-                 "/etc/apparmor.d/usr.sbin.apache2")
+    c = host.run(
+        r"perl -nE '/^\s+capability\s+(\w+),$/ && say $1' /etc/apparmor.d/usr.sbin.apache2"
+    )
     assert cap in c.stdout
 
 
 def test_apparmor_apache_exact_capabilities(host):
     """ ensure no extra capabilities are defined for apache2 """
-    c = host.check_output("grep -ic capability "
-                          "/etc/apparmor.d/usr.sbin.apache2")
+    c = host.check_output("grep -ic capability /etc/apparmor.d/usr.sbin.apache2")
     assert str(len(apache2_capabilities)) == c
 
 
@@ -46,8 +46,7 @@ tor_capabilities = ['setgid']
 @pytest.mark.parametrize('cap', tor_capabilities)
 def test_apparmor_tor_capabilities(host, cap):
     """ check for exact list of expected app-armor capabilities for tor """
-    c = host.run("perl -nE \'/^\s+capability\s+(\w+),$/ && "
-                 "say $1\' /etc/apparmor.d/usr.sbin.tor")
+    c = host.run(r"perl -nE '/^\s+capability\s+(\w+),$/ && say $1' /etc/apparmor.d/usr.sbin.tor")
     assert cap in c.stdout
 
 

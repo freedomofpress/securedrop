@@ -66,7 +66,7 @@
 # requires a 32 hex character password with a line feed appended to the
 # password file (see: https://github.com/ossec/ossec-hids/issues/1472)
 - name: Generate authd shared secret
-  set_fact :
+  set_fact:
     ossec_registration_secret: "{{ range(10000000,99999999999) | random | hash('md5') }}\n"
   delegate_to: localhost
   delegate_facts: True

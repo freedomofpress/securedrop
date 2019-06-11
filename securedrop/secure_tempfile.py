@@ -3,7 +3,7 @@ import base64
 import os
 import io
 import six
-from tempfile import _TemporaryFileWrapper
+from tempfile import _TemporaryFileWrapper  # type: ignore
 
 from pretty_bad_protocol._util import _STREAMLIKE_TYPES
 from cryptography.exceptions import AlreadyFinalized
@@ -91,11 +91,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         self.last_action = 'write'
 
         # This is the old Python related code
-        if six.PY2:  # noqa
-            if isinstance(data, unicode):
-                data = data.encode('utf-8')
-        elif isinstance(data, str):  # noqa
-            # For Python 3
+        if isinstance(data, six.text_type):
             data = data.encode('utf-8')
 
         self.file.write(self.encryptor.update(data))

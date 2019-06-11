@@ -30,7 +30,7 @@ if typing.TYPE_CHECKING:
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from typing import Callable, Optional, Union, Dict, List, Any  # noqa: F401
-    from tempfile import _TemporaryFileWrapper  # noqa: F401
+    from tempfile import _TemporaryFileWrapper  # type: ignore # noqa: F401
     from io import BufferedIOBase  # noqa: F401
     from logging import Logger  # noqa: F401
     from sqlalchemy import Query  # noqa: F401
@@ -670,10 +670,10 @@ class Journalist(db.Model):
         return user
 
     def generate_api_token(self, expiration):
-        # type: (int) -> unicode
+        # type: (int) -> str
         s = TimedJSONWebSignatureSerializer(
             current_app.config['SECRET_KEY'], expires_in=expiration)
-        return s.dumps({'id': self.id}).decode('ascii')
+        return s.dumps({'id': self.id}).decode('ascii')  # type:ignore
 
     @staticmethod
     def validate_token_is_not_expired_or_invalid(token):

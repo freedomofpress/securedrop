@@ -3,7 +3,7 @@
 from flask import g
 from pyotp import TOTP
 
-from . import async  # noqa
+from . import asynchronous  # noqa
 from . import db_helper  # noqa
 from . import env  # noqa
 

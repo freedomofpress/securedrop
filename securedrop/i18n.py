@@ -42,9 +42,7 @@ def setup_app(config, app):
     translation_dirs = getattr(config, 'TRANSLATION_DIRS', None)
 
     if translation_dirs is None:
-            translation_dirs = \
-                    path.join(path.dirname(path.realpath(__file__)),
-                              'translations')
+        translation_dirs = path.join(path.dirname(path.realpath(__file__)), 'translations')
 
     # `babel.translation_directories` is a nightmare
     # We need to set this manually via an absolute path

@@ -42,4 +42,3 @@
   with_items:
     - apt-test.pub
     - apt-test-fpf.pub
-

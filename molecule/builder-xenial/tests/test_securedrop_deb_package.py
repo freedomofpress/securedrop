@@ -25,7 +25,7 @@ def extract_package_name_from_filepath(filepath):
     which can then be used for comparisons in dpkg output.
     """
     deb_basename = os.path.basename(filepath)
-    package_name = re.search('^([a-z\-]+(?!\d))', deb_basename).groups()[0]
+    package_name = re.search(r'^([a-z\-]+(?!\d))', deb_basename).groups()[0]
     assert deb_basename.startswith(package_name)
     return package_name
 
@@ -164,7 +164,7 @@ def test_deb_package_contains_no_config_file(host, deb):
     deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
     c = host.run("dpkg-deb --contents {}".format(deb_package.path))
-    assert not re.search("^.*/config\.py$", c.stdout, re.M)
+    assert not re.search(r"^.*/config\.py$", c.stdout, re.M)
 
 
 @pytest.mark.parametrize("deb", deb_packages)
@@ -192,7 +192,7 @@ def test_deb_package_contains_mo_file(host, deb):
     c = host.run("dpkg-deb --contents {}".format(deb_package.path))
     # Only relevant for the securedrop-app-code package:
     if "securedrop-app-code" in deb_package.path:
-        assert re.search("^.*messages\.mo$", c.stdout, re.M)
+        assert re.search(r"^.*messages\.mo$", c.stdout, re.M)
 
 
 @pytest.mark.parametrize("deb", deb_packages)
@@ -209,17 +209,17 @@ def test_deb_package_contains_no_generated_assets(host, deb):
     if "securedrop-app-code" in deb_package.path:
         c = host.run("dpkg-deb --contents {}".format(deb_package.path))
         # static/gen/ directory should exist
-        assert re.search("^.*\./var/www/securedrop"
+        assert re.search(r"^.*\./var/www/securedrop"
                          "/static/gen/$", c.stdout, re.M)
         # static/gen/ directory should be empty
-        assert not re.search("^.*\./var/www/securedrop"
+        assert not re.search(r"^.*\./var/www/securedrop"
                              "/static/gen/.+$", c.stdout, re.M)
 
         # static/.webassets-cache/ directory should exist
-        assert re.search("^.*\./var/www/securedrop"
+        assert re.search(r"^.*\./var/www/securedrop"
                          "/static/.webassets-cache/$", c.stdout, re.M)
         # static/.webassets-cache/ directory should be empty
-        assert not re.search("^.*\./var/www/securedrop"
+        assert not re.search(r"^.*\./var/www/securedrop"
                              "/static/.webassets-cache/.+$", c.stdout, re.M)
 
         # no SASS files should exist; only the generated CSS files.
@@ -276,7 +276,7 @@ def test_deb_package_contains_css(host, deb):
         c = host.run("dpkg-deb --contents {}".format(deb_package.path))
 
         for css_type in ['journalist', 'source']:
-            assert re.search("^.*\./var/www/securedrop/static/"
+            assert re.search(r"^.*\./var/www/securedrop/static/"
                              "css/{}.css$".format(css_type), c.stdout, re.M)
 
 
@@ -305,7 +305,7 @@ def test_deb_app_package_contains_https_validate_dir(host, deb):
     if "securedrop-app-code" in deb_package.path:
         c = host.run("dpkg-deb --contents {}".format(deb_package.path))
         # well-known/pki-validation directory should exist
-        assert re.search("^.*\./var/www/securedrop/"
+        assert re.search(r"^.*\./var/www/securedrop/"
                          ".well-known/pki-validation/$", c.stdout, re.M)
 
 
@@ -323,11 +323,11 @@ def test_grsec_metapackage(host, deb):
     if "securedrop-grsec" in deb_package.path:
         c = host.run("dpkg-deb --contents {}".format(deb_package.path))
         # Custom sysctl options should be present
-        assert re.search("^.*\./etc/sysctl.d/30-securedrop.conf$",
+        assert re.search(r"^.*\./etc/sysctl.d/30-securedrop.conf$",
                          c.stdout, re.M)
         c = host.run("dpkg-deb --contents {}".format(deb_package.path))
         # Post-install kernel hook for managing PaX flags must exist.
-        assert re.search("^.*\./etc/kernel/postinst.d/paxctl-grub$",
+        assert re.search(r"^.*\./etc/kernel/postinst.d/paxctl-grub$",
                          c.stdout, re.M)
 
 
@@ -367,7 +367,7 @@ def test_control_helper_files_are_present(host, deb):
         ]
         c = host.run("dpkg-deb --info {}".format(deb_package.path))
         for wanted_file in wanted_files:
-            assert re.search("^\s+?\d+ bytes,\s+\d+ lines[\s*]+"+wanted_file+"\s+.*$",
+            assert re.search(r"^\s+?\d+ bytes,\s+\d+ lines[\s*]+"+wanted_file+r"\s+.*$",
                              c.stdout, re.M)
 
 
@@ -383,7 +383,7 @@ def test_jinja_files_not_present(host, deb):
 
     c = host.run("dpkg-deb --contents {}".format(deb_package.path))
     # There shouldn't be any files with a .j2 ending
-    assert not re.search("^.*\.j2$", c.stdout, re.M)
+    assert not re.search(r"^.*\.j2$", c.stdout, re.M)
 
 
 @pytest.mark.parametrize("deb", deb_packages)

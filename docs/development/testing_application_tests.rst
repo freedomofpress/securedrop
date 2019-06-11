@@ -110,7 +110,7 @@ tests are stored in the functional test directory::
     ├── utils
     │   ├── db_helper.py
     │   ├── env.py
-    │   └── async.py
+    │   └── asynchronous.py
     ├── test_journalist.py
     ├── test_source.py
     │        ...

@@ -90,7 +90,7 @@ def test_submit_message(source_app, journalist_app, test_journo):
         submission_url = soup.select('ul#submissions li a')[0]['href']
         assert "-msg" in submission_url
         span = soup.select('ul#submissions li span.info span')[0]
-        assert re.compile('\d+ bytes').match(span['title'])
+        assert re.compile(r'\d+ bytes').match(span['title'])
 
         resp = app.get(submission_url)
         assert resp.status_code == 200
@@ -143,7 +143,7 @@ def test_submit_message(source_app, journalist_app, test_journo):
             assert not (
                 os.path.exists(current_app.storage.path(filesystem_id,
                                                         doc_name)))
-        utils.async.wait_for_assertion(assertion)
+        utils.asynchronous.wait_for_assertion(assertion)
 
 
 def test_submit_file(source_app, journalist_app, test_journo):
@@ -186,7 +186,7 @@ def test_submit_file(source_app, journalist_app, test_journo):
         submission_url = soup.select('ul#submissions li a')[0]['href']
         assert "-doc" in submission_url
         span = soup.select('ul#submissions li span.info span')[0]
-        assert re.compile('\d+ bytes').match(span['title'])
+        assert re.compile(r'\d+ bytes').match(span['title'])
 
         resp = app.get(submission_url)
         assert resp.status_code == 200
@@ -246,7 +246,7 @@ def test_submit_file(source_app, journalist_app, test_journo):
             assert not (
                 os.path.exists(current_app.storage.path(filesystem_id,
                                                         doc_name)))
-        utils.async.wait_for_assertion(assertion)
+        utils.asynchronous.wait_for_assertion(assertion)
 
 
 def _helper_test_reply(journalist_app, source_app, config, test_journo,
@@ -303,7 +303,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
     # Block up to 15s for the reply keypair, so we can test sending a reply
     def assertion():
         assert current_app.crypto_util.getkey(filesystem_id) is not None
-    utils.async.wait_for_assertion(assertion, 15)
+    utils.asynchronous.wait_for_assertion(assertion, 15)
 
     # Create 2 replies to test deleting on journalist and source interface
     with journalist_app.test_client() as app:
@@ -411,7 +411,7 @@ def _helper_filenames_delete(journalist_app, soup, i):
         assert not any([os.path.exists(current_app.storage.path(filesystem_id,
                                                                 doc_name))
                         for doc_name in checkbox_values])
-    utils.async.wait_for_assertion(assertion)
+    utils.asynchronous.wait_for_assertion(assertion)
 
 
 def _can_decrypt_with_key(journalist_app, msg, passphrase=None):
@@ -511,7 +511,7 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
         def assertion():
             assert not os.path.exists(current_app.storage.path(filesystem_id))
 
-        utils.async.wait_for_assertion(assertion)
+        utils.asynchronous.wait_for_assertion(assertion)
 
 
 def test_delete_collections(mocker, journalist_app, source_app, test_journo):
@@ -554,7 +554,7 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
                 any([os.path.exists(current_app.storage.path(filesystem_id))
                     for filesystem_id in checkbox_values]))
 
-        utils.async.wait_for_assertion(assertion)
+        utils.asynchronous.wait_for_assertion(assertion)
 
 
 def _helper_filenames_submit(app):

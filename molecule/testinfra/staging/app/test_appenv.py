@@ -16,11 +16,11 @@ def test_app_wsgi(host):
     f = host.file("/var/www/source.wsgi")
     with host.sudo():
         assert f.is_file
-        assert oct(f.mode) == "0640"
+        assert oct(f.mode) == "0o640"
         assert f.user == 'www-data'
         assert f.group == 'www-data'
         assert f.contains("^import logging$")
-        assert f.contains("^logging\.basicConfig(stream=sys\.stderr)$")
+        assert f.contains(r"^logging\.basicConfig(stream=sys\.stderr)$")
 
 
 def test_pidfile(host):
@@ -37,7 +37,7 @@ def test_app_directories(host, app_dir):
         assert f.is_directory
         assert f.user == sdvars.securedrop_user
         assert f.group == sdvars.securedrop_user
-        assert oct(f.mode) == "0700"
+        assert oct(f.mode) == "0o700"
 
 
 def test_app_code_pkg(host):
@@ -57,7 +57,7 @@ def test_ensure_logo(host):
     """ ensure default logo header file exists """
     f = host.file("{}/static/i/logo.png".format(sdvars.securedrop_code))
     with host.sudo():
-        assert oct(f.mode) == "0644"
+        assert oct(f.mode) == "0o644"
         assert f.user == sdvars.securedrop_user
         assert f.group == sdvars.securedrop_user
 
@@ -77,4 +77,4 @@ def test_app_workerlog_dir(host):
         assert f.is_directory
         assert f.user == "root"
         assert f.group == "root"
-        assert oct(f.mode) == "0644"
+        assert oct(f.mode) == "0o644"

@@ -50,8 +50,8 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckod
 
 COPY requirements requirements
 
-RUN pip install --require-hashes -r requirements/securedrop-app-code-requirements.txt && \
-    pip install -r requirements/test-requirements.txt && \
+RUN pip install --require-hashes -r requirements/python2/securedrop-app-code-requirements.txt && \
+    pip install -r requirements/python2/test-requirements.txt && \
     pip install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools
 
 

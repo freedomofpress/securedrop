@@ -6,9 +6,9 @@ securedrop_app_code_deb_dir: "/tmp/{{ securedrop_app_code_deb }}"
 # are "filtered" via an `.rsync-filter` file in the src directory.
 securedrop_code_filtered: "{{ securedrop_app_code_deb_dir }}/var/www/securedrop"
 
-securedrop_pip_requirements: "{{ securedrop_code_filtered }}/requirements/securedrop-app-code-requirements.txt"
+securedrop_pip_requirements: "{{ securedrop_code_filtered }}/requirements/python2/securedrop-app-code-requirements.txt"
 
-securedrop_pip_requirements_generated: "{{ securedrop_code_filtered }}/requirements/securedrop-app-code-requirements-packaged.txt"
+securedrop_pip_requirements_generated: "{{ securedrop_code_filtered }}/requirements/python2/securedrop-app-code-requirements-packaged.txt"
 
 securedrop_wheelhouse: "{{ securedrop_app_code_deb_dir }}/var/securedrop/wheelhouse"
 

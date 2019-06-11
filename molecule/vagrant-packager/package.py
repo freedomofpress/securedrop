@@ -115,10 +115,10 @@ class LibVirtPackager(object):
 
         info_output = subprocess.check_output(["qemu-img", "info",
                                                img_location]).decode('utf-8')
-        json['virtual_size'] = int((re.search("virtual size: (?P<size>\d+)G",
+        json['virtual_size'] = int((re.search(r"virtual size: (?P<size>\d+)G",
                                     info_output)).group("size"))
 
-        json['format'] = (re.search("file format: (?P<format>\w+)",
+        json['format'] = (re.search(r"file format: (?P<format>\w+)",
                                     info_output)).group("format")
         json['provider'] = 'libvirt'
 
@@ -219,7 +219,7 @@ def update_box_metadata(server_name, box_file, platform, version):
     version number, and SHA256 checksum.
     """
     # Strip off "staging" suffix from box names
-    server_name_short = re.sub('\-staging$', '', server_name)
+    server_name_short = re.sub(r'\-staging$', '', server_name)
     json_file_basename = "{}_{}_metadata.json".format(server_name_short, platform)
     json_file = os.path.join(BOX_METADATA_DIR, json_file_basename)
 
