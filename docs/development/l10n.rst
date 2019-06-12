@@ -399,7 +399,7 @@ Should you need help, you can do one of the following:
 
 .. _`translation category of the SecureDrop forum`: https://forum.securedrop.org/c/translations
 .. _`SecureDrop instant messenging channel`: https://gitter.im/freedomofpress/securedrop
-.. _`Weblate documentation`: http://docs.weblate.org/en/latest/user/index.html
+.. _`Weblate documentation`: http://docs.weblate.org/en/latest/index.html
 
 
 Frequently Asked Questions

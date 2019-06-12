@@ -50,6 +50,13 @@ will convert any warnings to errors, causing the build to fail.
 The :ref:`CI tests<ci_tests>` will automatically perform linting via the same
 command.
 
+To test the documentation for broken links, run the following command from
+a reliable internet connection:
+
+   .. code:: sh
+
+      make docs-linkcheck
+
 The :ref:`CI tests<ci_tests>` by default create staging servers to test the
 application code. If your PR only makes documentation changes, you should
 prefix the branch name with ``docs-`` to skip the staging run. Project

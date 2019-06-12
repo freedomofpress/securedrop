@@ -71,7 +71,7 @@ jobs:
 
       - run:
           name: Run documentation linting
-          command: make docs-lint
+          command: make docs-lint && make docs-linkcheck
 
   app-tests:
     machine:

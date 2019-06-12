@@ -115,7 +115,7 @@ are covered in :doc:`detailed documentation <release_management>`.
 If you are a `Debian developer <https://www.debian.org/devel/>`__ you can help
 improve packaging and the release process:
 
-* `Building SecureDrop application and OSSEC packages <https://github.com/freedomofpress/securedrop/blob/develop/install_files/ansible-base/build-deb-pkgs.yml>`__ and `pending bugs and tasks <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+package+label%3A%22goals%3A+packaging%22>`__
+* `Building SecureDrop application and OSSEC packages <https://github.com/freedomofpress/securedrop/tree/develop/molecule/builder-xenial>`__ and `pending bugs and tasks <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+package+label%3A%22goals%3A+packaging%22>`__
 * Building `grsecurity kernels <https://github.com/freedomofpress/ansible-role-grsecurity>`__ and `pending bugs and tasks <https://github.com/freedomofpress/ansible-role-grsecurity/issues>`__
 
 

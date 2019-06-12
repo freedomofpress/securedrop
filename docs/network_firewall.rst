@@ -39,10 +39,10 @@ recommend the following resources:
 
 If you're using the recommended SG-3100 firewall, then you may find the
 following resource useful. In particular, you can find instructions on factory
-resetting the firewall in ``Section 1.3``.
+resetting the firewall in ``Chapter 8``.
 
 -  `SG-3100
-   Product Manual <https://www.netgate.com/docs/manuals/sg-3100-product-manual.pdf>`__
+   Product Manual <https://docs.netgate.com/manuals/pfsense/en/latest/sg-3100-security-gateway-manual.pdf>`__
 
 Before You Begin
 ----------------
