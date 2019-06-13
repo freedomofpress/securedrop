@@ -114,8 +114,9 @@ update-pip-requirements: ## Updates all Python requirements files via pip-compil
 		securedrop/requirements/develop-requirements.in
 	pip-compile --generate-hashes --output-file securedrop/requirements/test-requirements.txt \
 		securedrop/requirements/test-requirements.in
-	pip-compile --generate-hashes --output-file securedrop/requirements/securedrop-app-code-requirements.txt \
-		securedrop/requirements/securedrop-app-code-requirements.in
+	PYTHON_VERSION=3 securedrop/bin/dev-shell pip-compile --generate-hashes \
+		 --output-file requirements/securedrop-app-code-requirements.txt \
+		requirements/securedrop-app-code-requirements.in
 
 .PHONY: libvirt-share
 libvirt-share: ## Configure ACLs to allow RWX for libvirt VM (e.g. Admin Workstation)

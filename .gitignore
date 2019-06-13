@@ -50,6 +50,7 @@ __pycache__/
 .Python
 env/
 build/*.deb
+build/xenial
 develop-eggs/
 dist/
 downloads/
@@ -99,7 +100,7 @@ docs/_build/
 .env
 
 # virtualenv
-.venv/
+.venv*/
 venv/
 ENV/
 

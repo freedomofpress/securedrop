@@ -1,13 +1,11 @@
 alembic
 argon2_cffi
 cryptography>2.3
-enum34==1.1.6; python_version < "3.4"
 Flask-Assets
 Flask-Babel
 Flask-SQLAlchemy
 Flask-WTF
 Flask>0.12.2
-ipaddress==1.0.22; python_version < "3.3"
 Jinja2>=2.10.1
 jsmin
 mod_wsgi
