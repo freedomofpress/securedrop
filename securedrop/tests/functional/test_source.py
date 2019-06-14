@@ -1,5 +1,6 @@
-from . import source_navigation_steps
+from . import source_navigation_steps, journalist_navigation_steps
 from . import functional_test
+import six
 
 
 class TestSourceInterface(
@@ -17,3 +18,16 @@ class TestSourceInterface(
         self._source_chooses_to_login()
         self._source_proceeds_to_login()
         self._source_sees_no_codename()
+
+
+class TestDownloadKey(
+        functional_test.FunctionalTest,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
+
+    def test_journalist_key_from_source_interface(self):
+        data = self.return_downloaded_content(self.source_location +
+                                              "/journalist-key", None)
+
+        if six.PY3:
+            data = data.decode('utf-8')
+        assert "BEGIN PGP PUBLIC KEY BLOCK" in data
