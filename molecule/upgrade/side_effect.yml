@@ -1,12 +1,12 @@
 ---
-- name: Perform apt upgrades
+- name: Simulate cron-apt upgrade
   hosts: securedrop
   become: yes
   tasks:
-    - name: Perform safe upgrade
-      apt:
-        update_cache: yes
-        upgrade: yes
+    - name: Run cron-apt
+      shell: cron-apt -i -s
+    - name: Update apt cache
+      shell: apt update
 
 - name: Lay out app testing deps
   hosts: securedrop_application_server
