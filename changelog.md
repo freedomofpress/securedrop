@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.13.1~rc1
+## 0.13.1
 
 * Fix download of Journalist GPG key via Source Interface (#4523)
 
