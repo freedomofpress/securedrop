@@ -289,7 +289,7 @@ jobs:
     docker:
       - image: gcr.io/cloud-builders/docker
     steps:
-      - run: apt-get install -y make virtualenv python-pip
+      - run: apt-get install -y make virtualenv python-pip enchant
       - checkout
       - setup_remote_docker
       - run: make ci-deb-tests
