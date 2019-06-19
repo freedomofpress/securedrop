@@ -237,7 +237,7 @@ Here's a similar example for nginx if the system supports TLS 1.3:
 .. note:: We have prioritized security in selecting these cipher suites, so if
           you choose to use them then your site might not be compatible with
           legacy or outdated browsers and operating systems. For a good
-          reference check out `Cipherli.st <https://cipherli.st/>`__.
+          reference check out `Mozilla's recommendations <https://wiki.mozilla.org/Security/Server_Side_TLS>`__.
 
 You'll need to run ``a2enmod headers ssl rewrite`` for all these to
 work. You should also set ``ServerSignature Off`` and
