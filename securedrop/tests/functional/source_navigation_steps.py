@@ -7,14 +7,10 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 class SourceNavigationStepsMixin:
     def _is_on_source_homepage(self):
-        return self.wait_for(
-            lambda: self.driver.find_element_by_id("source-index")
-        )
+        return self.wait_for(lambda: self.driver.find_element_by_id("source-index"))
 
     def _is_logged_in(self):
-        return self.wait_for(
-            lambda: self.driver.find_element_by_id("logout")
-        )
+        return self.wait_for(lambda: self.driver.find_element_by_id("logout"))
 
     def _is_on_lookup_page(self):
         return self.wait_for(lambda: self.driver.find_element_by_id("upload"))
@@ -27,7 +23,7 @@ class SourceNavigationStepsMixin:
         self.driver.get(self.source_location + "/metadata")
         j = json.loads(self.driver.find_element_by_tag_name("body").text)
         assert j["server_os"] == "16.04"
-        assert j["sd_version"] == self.source_app.jinja_env.globals['version']
+        assert j["sd_version"] == self.source_app.jinja_env.globals["version"]
         assert j["gpg_fpr"] != ""
 
     def _source_clicks_submit_documents_on_homepage(self):
@@ -102,9 +98,7 @@ class SourceNavigationStepsMixin:
         assert self._is_on_source_homepage()
 
     def _source_proceeds_to_login(self):
-        codename_input = self.driver.find_element_by_id("login-with-existing-codename")
-        codename_input.send_keys(self.source_name)
-
+        self.safe_send_keys_by_id("login-with-existing-codename", self.source_name)
         self.safe_click_by_id("login")
 
         # Check that we've logged in
@@ -114,8 +108,9 @@ class SourceNavigationStepsMixin:
         assert len(replies) == 1
 
     def _source_enters_codename_in_login_form(self):
-        codename_input = self.driver.find_element_by_id("login-with-existing-codename")
-        codename_input.send_keys("ascension hypertext concert synopses")
+        self.safe_send_keys_by_id(
+            "login-with-existing-codename", "ascension hypertext concert synopses"
+        )
 
     def _source_hits_cancel_at_submit_page(self):
         self.driver.find_element_by_id("cancel").click()
@@ -153,13 +148,12 @@ class SourceNavigationStepsMixin:
 
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
-            file.write(self.secret_message.encode('utf-8'))
+            file.write(self.secret_message.encode("utf-8"))
             file.seek(0)
 
             filename = file.name
 
-            file_upload_box = self.driver.find_element_by_css_selector("[name=fh]")
-            file_upload_box.send_keys(filename)
+            self.safe_send_keys_by_css_selector("[name=fh]", filename)
 
             submit_button = self.driver.find_element_by_id("submit-doc-button")
             ActionChains(self.driver).move_to_element(submit_button).perform()
@@ -199,8 +193,7 @@ class SourceNavigationStepsMixin:
         time.sleep(self.timeout)
 
     def _source_enters_text_in_message_field(self):
-        text_box = self.driver.find_element_by_css_selector("[name=msg]")
-        text_box.send_keys(self.secret_message)
+        self.safe_send_keys_by_css_selector("[name=msg]", self.secret_message)
 
     def _source_clicks_submit_button_on_submission_page(self):
         submit_button = self.driver.find_element_by_id("submit-doc-button")
@@ -235,9 +228,7 @@ class SourceNavigationStepsMixin:
         self.wait_for(reply_deleted)
 
     def _source_logs_out(self):
-        logout = self.driver.find_element_by_id("logout")
-        logout.send_keys(" ")
-        logout.click()
+        self.safe_click_by_id("logout")
         self.wait_for(lambda: ("Submit for the first time" in self.driver.page_source))
 
     def _source_not_found(self):
