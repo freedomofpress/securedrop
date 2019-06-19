@@ -21,9 +21,15 @@ rebuilding an *Admin Workstation* is as follows:
  #. Set up SSH access for the new *Admin Workstation*.
  #. Retrieve SecureDrop configuration settings from the  *Application* and *Monitor Server*.
  #. Back up and configure the SecureDrop application.
- #. Run the ``./securedrop-admin install`` and ``./securedrop-admintailsconfig``
+ #. Run the ``./securedrop-admin tailsconfig`` and ``./securedrop-admin install``
     commands from the new *Admin Workstation*.
  #. Complete post-rebuild tasks.
+
+
+.. important:: The rebuild process involves temporarily removing ``iptables`` 
+               rules on the *Application* and *Monitor Servers*, weakening their
+               security. Because of this, it's important to complete the rebuild
+               process promptly, to avoid leaving the servers in an insecure state.
 
 
 Step 1: Prepare the USB sticks
@@ -376,9 +382,14 @@ Once complete, configure the *Admin Workstation* using the command:
 This will set up desktop shortcuts for the *Source* and *Journalist Interfaces*,
 and configure adminstrative access to the servers.
 
-Once the ``./securedrop-admin tailsconfig`` command is complete, verify that you can connect to 
-the servers using ``ssh app`` and ``ssh mon``, accepting the host verification
-prompt if necessary.
+Once the ``./securedrop-admin tailsconfig`` command is complete: 
+ - verify that the ``Hostname`` references in ``~/.ssh/config`` have been updated 
+   to refer to Onion URLs instead of direct IP addresses,
+ - verify that you can connect to 
+   the servers using ``ssh app`` and ``ssh mon``, accepting the host verification
+   prompt if necessary,
+ - and verify that the desktop shortcuts for the *Source* and *Journalist Interfaces*
+   work correctly, opening their respective homepages in the Tor Browser.
 
 Next, back up the servers by running the following command in the terminal:
 
@@ -390,8 +401,8 @@ Next, back up the servers by running the following command in the terminal:
 Step 6: Run the ``./securedrop-admin install`` command
 ======================================================
 
-After the ``./securedrop-admin backup`` command completes successfully, you should  undo the
-changes made to enable temporary local SSH access, by running the following 
+After the ``./securedrop-admin backup`` command completes successfully, you should
+undo the changes made to enable temporary local SSH access, by running the following 
 command:
 
 .. code:: sh
@@ -419,5 +430,22 @@ We recommend completing the following tasks after the rebuild:
  - Back up your *Admin Workstation* using the process 
    :ref:`documented here <backup_workstations>`.
  - Delete invalid admin accounts in the *Journalist Interface*.
- - Delete invalid SSH public keys from the administration shell account on the
-   *Application* and *Monitor Servers*.
+ - Restrict SSH access to the *Application* and *Monitor Servers* to valid 
+   *Admin Workstions*. If your new *Admin Workstation* USB stick
+   is the only one that should have SSH access to the servers, you can remove 
+   access for any previous *Admin Workstations* from the terminal,  using the 
+   commands:
+
+   .. code:: sh
+
+     cd ~/Persistent/securedrop
+     ./securedrop-admin reset_admin_access
+
+   You can also selectively remove invalid keys by logging on to the *Application*
+   and *Monitor Servers* and editing the file ``~/.ssh/authorized_keys``, making 
+   sure not to remove the public key belonging to your new *Admin Workstation*.
+ - Optionally, set up :ref:`daily journalist alerts <daily_journalist_alerts>`, 
+   by running ``./securedrop-admin sdconfig`` and providing a valid
+   GPG key and fingerprint, along with the corresponding destination email address, then
+   running ``./securedrop-admin install`` again to update the server configuration.
+     

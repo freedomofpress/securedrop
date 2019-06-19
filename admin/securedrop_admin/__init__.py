@@ -761,6 +761,17 @@ def set_default_paths(args):
     return args
 
 
+def reset_admin_access(args):
+    """Resets SSH access to the SecureDrop servers, locking it to
+    this Admin Workstation."""
+    sdlog.info("Resetting SSH access to the SecureDrop servers")
+    ansible_cmd = [
+        'ansible-playbook',
+        os.path.join(args.ansible_path, 'securedrop-reset-ssh-key.yml'),
+    ]
+    return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
+
+
 def parse_argv(argv):
     class ArgParseFormatterCombo(argparse.ArgumentDefaultsHelpFormatter,
                                  argparse.RawTextHelpFormatter):
@@ -813,6 +824,10 @@ def parse_argv(argv):
     parse_logs = subparsers.add_parser('logs',
                                        help=get_logs.__doc__)
     parse_logs.set_defaults(func=get_logs)
+
+    parse_reset_ssh = subparsers.add_parser('reset_admin_access',
+                                            help=reset_admin_access.__doc__)
+    parse_reset_ssh.set_defaults(func=reset_admin_access)
 
     return set_default_paths(parser.parse_args(argv))
 

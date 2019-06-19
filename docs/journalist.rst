@@ -81,6 +81,9 @@ If you have lost or forgotten your passphrase or two-factor authentication devic
 
 |Journalist account profile|
 
+.. _daily_journalist_alerts:
+
+
 Daily Journalist Alerts About Submissions
 -----------------------------------------
 
