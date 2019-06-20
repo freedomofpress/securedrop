@@ -153,7 +153,6 @@ jobs:
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|docs|update-builder)")
             if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
-            docker rm -f securedrop-test-xenial-py2 || true
             fromtag=$(docker images |grep securedrop-test-xenial-py2 |head -n1 |awk '{print $2}')
             PYTHON_VERSION=2 DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py2:${fromtag:-latest}" make test
 
@@ -191,7 +190,6 @@ jobs:
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|docs|update-builder)")
             if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
-            docker rm -f securedrop-test-xenial-py3 || true
             fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" make test
 
@@ -228,7 +226,6 @@ jobs:
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^i18n")
             if ! [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             export TESTFILES=$(cd securedrop; circleci tests glob 'tests/pageslayout/test*py' |circleci tests split --split-by=timings |xargs echo)
-            docker rm -f securedrop-test-xenial-py3 || true
             fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" make translation-test
 
