@@ -1,9 +1,9 @@
 DEFAULT_GOAL: help
 
 .PHONY: lint
-lint: ## Run the python linter with the project's default error settings
-	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make app-lint' in the repo root. ◀◀◀\n"
-	make -C .. app-lint
+lint: ## Run all linters
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make lint' in the repo root. ◀◀◀\n"
+	make -C .. lint
 
 .PHONY: lint-full
 lint-full:  ## Run the python linter with nothing disabled

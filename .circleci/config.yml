@@ -72,12 +72,15 @@ jobs:
       - *installenchant
 
       - run:
-          name: Install development dependencies
-          command: sudo apt-get install -y make
+          name: Run all linters but shellcheck
+          command: |
+            fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" securedrop/bin/dev-shell make -C .. ansible-config-lint app-lint docs-lint flake8 html-lint typelint yamllint
 
       - run:
-          name: Run full lint
-          command: make lint
+          name: Run shellcheck
+          command: make shellcheck
+
 
   python2-app-tests:
     machine:
@@ -109,7 +112,7 @@ jobs:
             export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
             docker rm -f securedrop-test-xenial-py2 || true
             fromtag=$(docker images |grep securedrop-test-xenial-py2 |head -n1 |awk '{print $2}')
-            cd securedrop && PYTHON_VERSION=2 DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py2:${fromtag:-latest}" make test
+            PYTHON_VERSION=2 DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py2:${fromtag:-latest}" make test
 
       - store_test_results:
           path: ~/test-results
@@ -147,7 +150,7 @@ jobs:
             export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
             docker rm -f securedrop-test-xenial-py3 || true
             fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
-            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" make test
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" make test
 
       - store_test_results:
           path: ~/test-results
@@ -184,7 +187,7 @@ jobs:
             export TESTFILES=$(cd securedrop; circleci tests glob 'tests/pageslayout/test*py' |circleci tests split --split-by=timings |xargs echo)
             docker rm -f securedrop-test-xenial-py3 || true
             fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
-            cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" make translation-test
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" make translation-test
 
       - store_test_results:
           path: ~/test-results
@@ -254,11 +257,16 @@ jobs:
       - checkout
       - run:
           name: Check Python dependencies for CVEs
-          command: make safety
+          command: |
+            fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" securedrop/bin/dev-shell make -C .. safety
 
       - run:
           name: Run static security testing on source code
-          command: make bandit
+          command: |
+            fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" securedrop/bin/dev-shell make -C .. bandit
+
 
   staging-test-with-rebase:
     machine:

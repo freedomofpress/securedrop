@@ -2,6 +2,8 @@
 # shellcheck disable=SC1090
 # Shared logic to be sourced for bootstrapping a development virtualenv
 
+set -eo pipefail
+
 PYTHON_VERSION="${PYTHON_VERSION:-3}"
 VENV=".venv"
 if [[ $PYTHON_VERSION != "3" ]]

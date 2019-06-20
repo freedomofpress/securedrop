@@ -1,14 +1,14 @@
 DEFAULT_GOAL: help
 SHELL := /bin/bash
 GCLOUD_VERSION := 222.0.0-1
-REPOROOT := $(shell pwd)
+SDROOT := $(shell pwd)
 TAG ?= $(shell git rev-parse HEAD)
 STABLE_VER := $(shell cat molecule/shared/stable.ver)
 VENV := $(shell readlink -m .venv)
 VENV2 := $(shell readlink -m .venv2)
 
-DEVSHELL := $(REPOROOT)/securedrop/bin/dev-shell
-SDBIN := $(REPOROOT)/securedrop/bin
+SDBIN := $(SDROOT)/securedrop/bin
+DEVSHELL := $(SDBIN)/dev-shell
 
 
 ######################################
@@ -20,13 +20,13 @@ SDBIN := $(REPOROOT)/securedrop/bin
 .PHONY: venv
 venv: ## Provision a Python 3 virtualenv for development.
 	@echo "███ Preparing Python 3 virtual environment..."
-	@PYTHON_VERSION=3 $(REPOROOT)/devops/scripts/boot-strap-venv.sh
+	@PYTHON_VERSION=3 $(SDROOT)/devops/scripts/boot-strap-venv.sh
 	@echo
 
 .PHONY: venv2
 venv2: ## Provision a virtualenv for compiling Python 2 requirements.
 	@echo "███ Preparing Python 2 virtual environment..."
-	@PYTHON_VERSION=2 $(REPOROOT)/devops/scripts/boot-strap-venv.sh
+	@PYTHON_VERSION=2 $(SDROOT)/devops/scripts/boot-strap-venv.sh
 	@echo
 
 .PHONY: update-admin-pip-requirements
@@ -74,7 +74,7 @@ update-pip-requirements: update-admin-pip-requirements update-python3-requiremen
 .PHONY: ansible-config-lint
 ansible-config-lint: venv ## Run custom Ansible linting tasks.
 	@echo "███ Linting Ansible configuration..."
-	@$(VENV)/bin/molecule verify -s ansible-config
+	@. $(VENV)/bin/activate && $(VENV)/bin/molecule verify -s ansible-config
 	@echo
 
 .PHONY: app-lint
@@ -125,12 +125,12 @@ html-lint: ## Validate HTML in web application template files.
 .PHONY: shellcheck
 shellcheck: ## Lint shell scripts.
 	@echo "███ Linting shell scripts..."
-	@$(REPOROOT)/devops/scripts/shellcheck.sh
+	@$(SDROOT)/devops/scripts/shellcheck.sh
 	@echo
 
 .PHONY: shellcheckclean
 shellcheckclean: ## Clean up temporary container associated with shellcheck target.
-	@docker rm -f $(REPOROOT)/shellcheck-targets
+	@docker rm -f $(SDROOT)/shellcheck-targets
 
 .PHONY: typelint
 typelint: venv ## Run mypy type linting.
@@ -142,7 +142,7 @@ typelint: venv ## Run mypy type linting.
 .PHONY: yamllint
 yamllint: ## Lint YAML files (does not validate syntax!).
 	@echo "███ Linting YAML files..."
-	@$(REPOROOT)/devops/scripts/yaml-lint.sh
+	@. $(VENV)/bin/activate && $(SDROOT)/devops/scripts/yaml-lint.sh
 	@echo
 
 .PHONY: lint
@@ -212,25 +212,25 @@ docs: ## Build project documentation with live reload for editing.
 .PHONY: staging
 staging: ## Create a local staging environment in virtual machines.
 	@echo "███ Creating staging environment..."
-	@$(REPOROOT)/devops/scripts/create-staging-env
+	@$(SDROOT)/devops/scripts/create-staging-env
 	@echo
 
 .PHONY: libvirt-share
 libvirt-share: ## Configure ACLs to allow RWX for libvirt VM (e.g. Admin Workstation).
 	@echo "███ Configuring ACLs for admin workstation..."
-	@find "$(REPOROOT)" -type d -and -user $$USER -exec setfacl -m u:libvirt-qemu:rwx {} +
-	@find "$(REPOROOT)" -type f -and -user $$USER -exec setfacl -m u:libvirt-qemu:rw {} +
+	@find "$(SDROOT)" -type d -and -user $$USER -exec setfacl -m u:libvirt-qemu:rwx {} +
+	@find "$(SDROOT)" -type f -and -user $$USER -exec setfacl -m u:libvirt-qemu:rw {} +
 	@echo
 
 .PHONY: self-signed-https-certs
 self-signed-https-certs: ## Generate self-signed certs for testing the HTTPS config.
 	@echo "███ Generating self-signed HTTPS certs for testing..."
-	@$(REPOROOT)/devops/generate-self-signed-https-certs.sh
+	@$(SDROOT)/devops/generate-self-signed-https-certs.sh
 	@echo
 
 .PHONY: clean
 clean: ## DANGER! Delete all uncommitted files, virtual machines, Onion addresses, etc.
-	@$(REPOROOT)/devops/clean
+	@$(SDROOT)/devops/clean
 	@echo
 
 
@@ -249,7 +249,7 @@ test: ## Run the test suite in a Docker container.
 .PHONY: docker-vnc
 docker-vnc: ## Open a VNC connection to a running Docker instance.
 	@echo "███ Opening VNC connection to dev container..."
-	@$(REPOROOT)/devops/scripts/vnc-docker-connect.sh
+	@$(SDROOT)/devops/scripts/vnc-docker-connect.sh
 	@echo
 
 # Xenial upgrade targets
@@ -305,11 +305,11 @@ translation-test: ## Run page layout tests in all supported languages.
 
 .PHONY: list-translators
 list-translators: ## Collect the names of translators since the last merge from Weblate.
-	@$(DEVSHELL) $(REPOROOT)/securedrop/i18n_tool.py list-translators
+	@$(DEVSHELL) $(SDROOT)/securedrop/i18n_tool.py list-translators
 
 .PHONY: list-all-translators
 list-all-translators: ## Collect the names of all translators in the project's history.
-	@$(DEVSHELL) $(REPOROOT)/securedrop/i18n_tool.py list-translators --all
+	@$(DEVSHELL) $(SDROOT)/securedrop/i18n_tool.py list-translators --all
 
 # TODO: test this to make sure the paths in update-user-guides work
 .PHONY: update-user-guides
@@ -328,13 +328,13 @@ update-user-guides: ## Run the page layout tests to regenerate screenshots.
 .PHONY: build-debs
 build-debs: venv2 ## Build and test SecureDrop Debian packages.
 	@echo "Building SecureDrop Debian packages..."
-	@. $(VENV2)/bin/activate && PYTHON_VERSION=2 $(REPOROOT)/devops/scripts/build-debs.sh
+	@. $(VENV2)/bin/activate && PYTHON_VERSION=2 $(SDROOT)/devops/scripts/build-debs.sh
 	@echo
 
 .PHONY: build-debs-notest
 build-debs-notest: venv2 ## Build SecureDrop Debian packages without running tests.
 	@echo "Building SecureDrop Debian packages; skipping tests..."
-	@. $(VENV2)/bin/activate && PYTHON_VERSION=2 $(REPOROOT)/devops/scripts/build-debs.sh notest
+	@. $(VENV2)/bin/activate && PYTHON_VERSION=2 $(SDROOT)/devops/scripts/build-debs.sh notest
 	@echo
 
 
@@ -347,19 +347,19 @@ build-debs-notest: venv2 ## Build SecureDrop Debian packages without running tes
 .PHONY: ci-go
 ci-go: ## Create, provision, test, and destroy GCE host for testing staging environment.
 	@echo "███ Creating GCE host for testing staging environment..."
-	@$(REPOROOT)/devops/gce-nested/ci-go.sh
+	@$(SDROOT)/devops/gce-nested/ci-go.sh
 	@echo
 
 .PHONY: ci-teardown
 ci-teardown: ## Destroy GCE host for testing staging environment.
 	@echo "███ Destroying GCE host for testing staging environment..."
-	@$(REPOROOT)/devops/gce-nested/gce-stop.sh
+	@$(SDROOT)/devops/gce-nested/gce-stop.sh
 	@echo
 
 .PHONY: ci-deb-tests
 ci-deb-tests: ## Test SecureDrop Debian packages in CI environment.
 	@echo "███ Running Debian package tests in CI..."
-	@(REPOROOT)/devops/scripts/test-built-packages.sh
+	@(SDROOT)/devops/scripts/test-built-packages.sh
 	@echo
 
 .PHONY: build-gcloud-docker
@@ -380,7 +380,7 @@ vagrant-package: ## Package a Vagrant box of the last stable SecureDrop release.
 .PHONY: fetch-tor-packages
 fetch-tor-packages: ## Retrieves the most recent Tor packages for Xenial, for apt repo.
 	@echo "Fetching most recent Tor packages..."
-	@$(REPOROOT)/devops/scripts/fetch-tor-packages.sh
+	@$(SDROOT)/devops/scripts/fetch-tor-packages.sh
 	@echo
 
 # Explanation of the below shell command should it ever break.

@@ -11,7 +11,7 @@ RUN apt-get update && \
     { apt-get install -y libgtk2.0 || echo 'libgtk2.0 was not installed'; } && \
     paxctl -cm /usr/bin/mono-sgen && dpkg-reconfigure mono-runtime-sgen && \
     apt-get install -y devscripts vim \
-                       python-pip libpython2.7-dev libssl-dev secure-delete \
+                       python-pip virtualenv libpython2.7-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server git xvfb haveged curl wget \
                        gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo \
                        libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
