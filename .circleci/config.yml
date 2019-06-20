@@ -5,6 +5,12 @@ common-steps:
       name: Rebase on top of GitHub target branch
       command: ./devops/scripts/rebase-ci.sh
 
+  - &installenchant
+    run:
+      name: Install enchant
+      command: sudo apt-get install enchant
+
+  # Python 3 (default) Docker layer caching
   - &createcachedir
     run:
       name: Ensure cache dir exists and permissions are good
@@ -46,10 +52,47 @@ common-steps:
       paths:
         - /caches/layers.tar
 
-  - &installenchant
+  # Python 2 Docker layer caching
+  - &p2createcachedir
     run:
-      name: Install enchant
-      command: sudo apt-get install enchant
+      name: Ensure Python 2 cache dir exists and permissions are good
+      command: |
+        sudo mkdir -p /p2caches && sudo chown circleci: -R /p2caches
+
+  - &p2restorecache
+    restore_cache:
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/python2/Dockerfile" }}
+      paths:
+        - /p2caches/layers.tar.gz
+
+  - &p2loadimagelayers
+    run:
+      name: Load Python 2 image layer cache
+      command: |
+        set +o pipefail
+        docker load -i /p2caches/layers.tar |true
+
+  - &p2dockerimagebuild
+    run:
+      name: Build Python 2 Docker images
+      command: |
+        set +o pipefail
+        docker images
+        fromtag=$(docker images |grep securedrop-test-xenial-py2 |head -n1 |awk '{print $2}')
+        cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py2:${fromtag:-latest}" ./bin/dev-shell true
+
+  - &p2saveimagelayers
+    run:
+      name: Save Docker image layer cache
+      command: |
+        docker images
+        docker save -o /p2caches/layers.tar securedrop-test-xenial-py2:latest
+
+  - &p2savecache
+    save_cache:
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/python2/Dockerfile" }}
+      paths:
+        - /p2caches/layers.tar
 
 version: 2
 jobs:
@@ -92,12 +135,12 @@ jobs:
     steps:
       - checkout
       - *rebaseontarget
-      - *createcachedir
-      - *restorecache
-      - *loadimagelayers
-      - *dockerimagebuild
-      - *saveimagelayers
-      - *savecache
+      - *p2createcachedir
+      - *p2restorecache
+      - *p2loadimagelayers
+      - *p2dockerimagebuild
+      - *p2saveimagelayers
+      - *p2savecache
 
       - run:
           name: Make test results directory
@@ -210,7 +253,7 @@ jobs:
     docker:
       - image: gcr.io/cloud-builders/docker
     steps:
-      - run: apt-get install -y make virtualenv enchant jq
+      - run: apt-get install -y make virtualenv python3-pip enchant jq
       - checkout
       - setup_remote_docker
       - run:
@@ -234,7 +277,7 @@ jobs:
           name: Install pip==18.0 to work pipenv/pip bug
           command: |
             cd journalist_gui
-            pipenv run pip3 install pip==18.0
+            pipenv run pip install pip==18.0
 
       - run:
           name: Install requirements
@@ -253,8 +296,20 @@ jobs:
   static-analysis-and-no-known-cves:
     machine:
       enabled: true
+    environment:
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: xenial
+      PYTHON_VERSION: 3
     steps:
       - checkout
+      - *rebaseontarget
+      - *createcachedir
+      - *restorecache
+      - *loadimagelayers
+      - *dockerimagebuild
+      - *saveimagelayers
+      - *savecache
+
       - run:
           name: Check Python dependencies for CVEs
           command: |
