@@ -261,6 +261,7 @@ jobs:
           command: |
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|docs|update-builder)")
             if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
+            export LC_ALL="C.UTF-8"
             make fetch-tor-packages
 
   updater-gui-tests:
