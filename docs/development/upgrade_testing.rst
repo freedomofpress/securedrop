@@ -123,10 +123,11 @@ When a new version of SecureDrop is released, we must create and upload
 new VM images, to enable testing against that base version in future upgrade
 testing. The procedure is as follows:
 
-1. ``git checkout <version>``
-2. ``make vagrant-package``
-3. ``cd molecule/vagrant-packager && ./push.yml`` to upload to S3
-4. Commit the local changes to JSON files and open a PR.
+1. ``make clean`` to remove any previous artifacts (which would also be pushed)
+2. ``git checkout <version>`` (if a point release, ``git checkout develop``)
+3. ``make vagrant-package``
+4. ``cd molecule/vagrant-packager && ./push.yml`` to upload to S3
+5. Commit the local changes to JSON files and open a PR.
 
 Subsequent invocations of ``make upgrade-start`` will pull the latest
 version of the box.
