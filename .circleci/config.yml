@@ -28,7 +28,7 @@ common-steps:
       name: Load image layer cache
       command: |
         set +o pipefail
-        docker load -i /caches/layers.tar |true
+        docker load -i /caches/layers.tar || true
 
   - &dockerimagebuild
     run:
@@ -70,7 +70,7 @@ common-steps:
       name: Load Python 2 image layer cache
       command: |
         set +o pipefail
-        docker load -i /p2caches/layers.tar |true
+        docker load -i /p2caches/layers.tar || true
 
   - &p2dockerimagebuild
     run:
