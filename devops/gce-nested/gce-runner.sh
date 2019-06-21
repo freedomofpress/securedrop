@@ -57,4 +57,4 @@ ssh_gce "make build-debs-notest"
 # so register a trap to ensure the fetch always runs.
 trap fetch_junit_test_results EXIT
 
-ssh_gce "make staging"
+ssh_gce "PYTHON_VERSION=2 make staging"
