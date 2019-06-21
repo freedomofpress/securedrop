@@ -30,7 +30,6 @@ if typing.TYPE_CHECKING:
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from typing import Callable, Optional, Union, Dict, List, Any  # noqa: F401
-    from tempfile import _TemporaryFileWrapper  # type: ignore # noqa: F401
     from io import BufferedIOBase  # noqa: F401
     from logging import Logger  # noqa: F401
     from sqlalchemy import Query  # noqa: F401
