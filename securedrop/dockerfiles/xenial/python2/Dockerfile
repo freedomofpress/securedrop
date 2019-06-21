@@ -50,12 +50,11 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckod
 
 COPY requirements requirements
 
-RUN pip install --require-hashes -r requirements/python2/securedrop-app-code-requirements.txt && \
+RUN pip install pip-tools && \
+    pip install --require-hashes -r requirements/python2/securedrop-app-code-requirements.txt && \
     pip install -r requirements/python2/test-requirements.txt && \
-    pip install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools
-
-
-RUN pip install supervisor
+    pip install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools && \
+    pip install supervisor
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi && \
     cp -r /root/.local /tmp/ && chmod +x /tmp/.local/tbb/tor-browser_en-US/Browser/firefox && chmod -R 777 /tmp/.local && \

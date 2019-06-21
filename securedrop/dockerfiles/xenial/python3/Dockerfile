@@ -48,11 +48,11 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckod
     paxctl -cm /bin/geckodriver
 
 COPY requirements requirements
-RUN pip3 install --require-hashes -r requirements/python3/securedrop-app-code-requirements.txt && \
+RUN pip3 install pip-tools && \
+    pip3 install --require-hashes -r requirements/python3/securedrop-app-code-requirements.txt && \
     pip3 install -r requirements/python3/test-requirements.txt && \
-    pip3 install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools
-
-RUN pip3 install supervisor
+    pip3 install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools && \
+    pip3 install supervisor
 
 # Temporary workaround: Revert when python 3 is deployed to prod
 RUN sudo rm /usr/bin/python && sudo ln -s /usr/bin/python3 /usr/bin/python
