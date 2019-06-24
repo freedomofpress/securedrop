@@ -62,7 +62,7 @@ def test_securedrop_application_test_journalist_key(host):
         assert pubkey_file.is_file
         assert pubkey_file.user == "root"
         assert pubkey_file.group == "root"
-        assert oct(pubkey_file.mode) == "0o644"
+        assert pubkey_file.mode == 0o644
 
     # Let's make sure the corresponding fingerprint is specified
     # in the SecureDrop app configuration.
@@ -74,7 +74,7 @@ def test_securedrop_application_test_journalist_key(host):
             securedrop_test_vars.securedrop_user
         assert securedrop_config.group == \
             securedrop_test_vars.securedrop_user
-        assert oct(securedrop_config.mode) == "0o600"
+        assert securedrop_config.mode == 0o600
         assert securedrop_config.contains(
             "^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$")
 
@@ -91,4 +91,4 @@ def test_securedrop_application_sqlite_db(host):
         assert f.is_file
         assert f.user == securedrop_test_vars.securedrop_user
         assert f.group == securedrop_test_vars.securedrop_user
-        assert oct(f.mode) == "0o640"
+        assert f.mode == 0o640

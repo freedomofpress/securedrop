@@ -21,7 +21,7 @@ def test_postfix_headers(host, header):
     """
     f = host.file("/etc/postfix/header_checks")
     assert f.is_file
-    assert oct(f.mode) == "0o644"
+    assert f.mode == 0o644
     regex = '^{}$'.format(re.escape(header))
     assert re.search(regex, f.content_string, re.M)
 

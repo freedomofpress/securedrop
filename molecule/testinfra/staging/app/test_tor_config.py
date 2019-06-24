@@ -43,7 +43,7 @@ def test_tor_torrc_options(host, torrc_option):
     f = host.file("/etc/tor/torrc")
     assert f.is_file
     assert f.user == "debian-tor"
-    assert oct(f.mode) == "0o644"
+    assert f.mode == 0o644
     assert f.contains("^{}$".format(torrc_option))
 
 

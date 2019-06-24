@@ -11,7 +11,7 @@ def test_sudoers_config(host):
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
-    assert oct(f.mode) == "0o440"
+    assert f.mode == 0o440
 
     # Restrictive file mode requires sudo for reading, so let's
     # read once and store the content in a var.

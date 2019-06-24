@@ -14,7 +14,7 @@ def test_tor_service_directories(host, tor_service):
     with host.sudo():
         f = host.file("/var/lib/tor/services/{}".format(tor_service['name']))
         assert f.is_directory
-        assert oct(f.mode) == "0o700"
+        assert f.mode == 0o700
         assert f.user == "debian-tor"
         assert f.group == "debian-tor"
 
@@ -34,7 +34,7 @@ def test_tor_service_hostnames(host, tor_service):
         f = host.file("/var/lib/tor/services/{}/hostname".format(
             tor_service['name']))
         assert f.is_file
-        assert oct(f.mode) == "0o600"
+        assert f.mode == 0o600
         assert f.user == "debian-tor"
         assert f.group == "debian-tor"
 

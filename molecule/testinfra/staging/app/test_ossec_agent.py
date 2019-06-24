@@ -41,7 +41,7 @@ def test_ossec_keyfile_present(host):
     with host.sudo():
         f = host.file("/var/ossec/etc/client.keys")
         assert f.exists
-        assert oct(f.mode) == "0o644"
+        assert f.mode == 0o644
         assert f.user == "root"
         assert f.group == "ossec"
         assert f.content_string

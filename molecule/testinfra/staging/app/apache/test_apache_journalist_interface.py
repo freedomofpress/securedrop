@@ -30,7 +30,7 @@ def test_apache_headers_journalist_interface(host, header):
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
-    assert oct(f.mode) == "0o644"
+    assert f.mode == 0o644
     header_regex = "^{}$".format(re.escape(header))
     assert re.search(header_regex, f.content_string, re.M)
 
@@ -116,7 +116,7 @@ def test_apache_config_journalist_interface(host, apache_opt):
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
-    assert oct(f.mode) == "0o644"
+    assert f.mode == 0o644
     regex = "^{}$".format(re.escape(apache_opt))
     assert re.search(regex, f.content_string, re.M)
 

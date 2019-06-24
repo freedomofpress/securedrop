@@ -40,6 +40,6 @@ def test_redis_worker_config_file(host):
     """
     f = host.file('/etc/supervisor/conf.d/securedrop_worker.conf')
     assert f.is_file
-    assert oct(f.mode) == "0o644"
+    assert f.mode == 0o644
     assert f.user == "root"
     assert f.group == "root"

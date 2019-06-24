@@ -61,7 +61,7 @@ def test_grsecurity_lock_file(host):
     `grsec_lock` file, which is automatically created by grsecurity.
     """
     f = host.file("/proc/sys/kernel/grsecurity/grsec_lock")
-    assert oct(f.mode) == "0o600"
+    assert f.mode == 0o600
     assert f.user == "root"
     assert f.size == 0
 
