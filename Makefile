@@ -1,11 +1,9 @@
 DEFAULT_GOAL: help
 SHELL := /bin/bash
 GCLOUD_VERSION := 222.0.0-1
-SDROOT := $(shell pwd)
+SDROOT := $(shell git rev-parse --show-toplevel)
 TAG ?= $(shell git rev-parse HEAD)
 STABLE_VER := $(shell cat molecule/shared/stable.ver)
-VENV := $(shell readlink -m .venv)
-VENV2 := $(shell readlink -m .venv2)
 
 SDBIN := $(SDROOT)/securedrop/bin
 DEVSHELL := $(SDBIN)/dev-shell
@@ -72,15 +70,15 @@ update-pip-requirements: update-admin-pip-requirements update-python3-requiremen
 #################
 
 .PHONY: ansible-config-lint
-ansible-config-lint: venv ## Run custom Ansible linting tasks.
+ansible-config-lint: ## Run custom Ansible linting tasks.
 	@echo "███ Linting Ansible configuration..."
-	@. $(VENV)/bin/activate && $(VENV)/bin/molecule verify -s ansible-config
+	@molecule verify -s ansible-config
 	@echo
 
 .PHONY: app-lint
-app-lint: venv ## Test pylint compliance.
+app-lint:  ## Test pylint compliance.
 	@echo "███ Linting application code..."
-	@cd securedrop && find . -name '*.py' | xargs $(VENV)/bin/pylint --reports=no --errors-only \
+	@cd securedrop && find . -name '*.py' | xargs pylint --reports=no --errors-only \
 	   --disable=no-name-in-module \
 	   --disable=unexpected-keyword-arg \
 	   --disable=too-many-function-args \
@@ -90,27 +88,27 @@ app-lint: venv ## Test pylint compliance.
 	@echo
 
 .PHONY: app-lint-full
-app-lint-full: venv ## Test pylint compliance, with no checks disabled.
+app-lint-full: ## Test pylint compliance, with no checks disabled.
 	@echo "███ Linting application code with no checks disabled..."
-	@cd securedrop && find . -name '*.py' | xargs $(VENV)/bin/pylint
+	@cd securedrop && find . -name '*.py' | xargs pylint
 	@echo
 
 .PHONY: docs-lint
-docs-lint: venv ## Check documentation for common syntax errors.
+docs-lint:  ## Check documentation for common syntax errors.
 	@echo "███ Linting documentation..."
 # The `-W` option converts warnings to errors.
 # The `-n` option enables "nit-picky" mode.
-	@. $(VENV)/bin/activate && make -C docs/ clean && sphinx-build -Wn docs/ docs/_build/html
+	@make -C docs/ clean && sphinx-build -Wn docs/ docs/_build/html
 	@echo
 
 .PHONY: docs-linkcheck
 docs-linkcheck:  ## Check documentation for broken links.
-	@. $(VENV)/bin/activate && make -C docs/ clean && sphinx-build -b linkcheck -Wn docs/ docs/_build/html
+	@make -C docs/ clean && sphinx-build -b linkcheck -Wn docs/ docs/_build/html
 
 .PHONY: flake8
-flake8: venv ## Validate PEP8 compliance for Python source files.
+flake8:  ## Validate PEP8 compliance for Python source files.
 	@echo "███ Running flake8..."
-	@$(VENV)/bin/flake8
+	@flake8
 	@echo
 
 # The --disable=names is required to use the BEM syntax
@@ -118,7 +116,7 @@ flake8: venv ## Validate PEP8 compliance for Python source files.
 .PHONY: html-lint
 html-lint:  ## Validate HTML in web application template files.
 	@echo "███ Linting application templates..."
-	@$(VENV)/bin/html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation,names \
+	@html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation,names \
 		securedrop/source_templates/*.html securedrop/journalist_templates/*.html
 	@echo
 
@@ -133,28 +131,28 @@ shellcheckclean:  ## Clean up temporary container associated with shellcheck tar
 	@docker rm -f $(SDROOT)/shellcheck-targets
 
 .PHONY: typelint
-typelint: venv ## Run mypy type linting.
+typelint:  ## Run mypy type linting.
 	@echo "███ Running mypy type checking..."
-	@$(VENV)/bin/mypy ./securedrop ./admin
-	@$(VENV)/bin/mypy --disallow-incomplete-defs --disallow-untyped-defs ./securedrop/rm.py
+	@mypy ./securedrop ./admin
+	@mypy --disallow-incomplete-defs --disallow-untyped-defs ./securedrop/rm.py
 	@echo
 
 .PHONY: yamllint
 yamllint:  ## Lint YAML files (does not validate syntax!).
 	@echo "███ Linting YAML files..."
-	@. $(VENV)/bin/activate && $(SDROOT)/devops/scripts/yaml-lint.sh
+	@$(SDROOT)/devops/scripts/yaml-lint.sh
 	@echo
 
 .PHONY: lint
 lint: ansible-config-lint app-lint docs-lint flake8 html-lint shellcheck typelint yamllint ## Runs all lint checks
 
 .PHONY: safety
-safety: venv ## Run `safety check` to check python dependencies for vulnerabilities.
+safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 	@echo "███ Running safety..."
-	@$(VENV)/bin/pip install -q --upgrade safety
+	@pip install -q --upgrade safety
 	@for req_file in `find . -type f -name '*requirements.txt'`; do \
 		echo "Checking file $$req_file" \
-		&& $(VENV)/bin/safety check --full-report -r $$req_file \
+		&& safety check --full-report -r $$req_file \
 		&& echo -e '\n' \
 		|| exit 1; \
 	done
@@ -164,13 +162,13 @@ safety: venv ## Run `safety check` to check python dependencies for vulnerabilit
 # https://wiki.openstack.org/wiki/Security/Projects/Bandit
 .PHONY: bandit
 
-bandit: venv config.py ## Run bandit with medium level excluding test-related folders.
+bandit: config.py ## Run bandit with medium level excluding test-related folders.
 	@echo "███ Updating bandit..."
-	@$(VENV)/bin/pip install -q --upgrade pip && $(VENV)/bin/pip install -q --upgrade bandit
+	@pip install -q --upgrade pip && pip install -q --upgrade bandit
 	@echo "███ Running bandit..."
-	@$(VENV)/bin/bandit -ll --exclude ./admin/.tox,./admin/.venv,./admin/.eggs,./molecule,./testinfra,./securedrop/tests,./.tox,./.venv*,securedrop/config.py --recursive .
+	@bandit -ll --exclude ./admin/.tox,./admin/.venv,./admin/.eggs,./molecule,./testinfra,./securedrop/tests,./.tox,./.venv*,securedrop/config.py --recursive .
 	@echo "███ Running bandit on securedrop/config.py..."
-	@$(VENV)/bin/bandit -ll --skip B108 securedrop/config.py
+	@bandit -ll --skip B108 securedrop/config.py
 	@echo
 
 #############
@@ -206,7 +204,7 @@ dev:  ## Run the development server in a Docker container.
 .PHONY: docs
 docs:  ## Build project documentation with live reload for editing.
 	@echo "███ Building docs and watching for changes..."
-	make -C docs/ clean && $(VENV)/bin/sphinx-autobuild docs/ docs/_build/html
+	make -C docs/ clean && sphinx-autobuild docs/ docs/_build/html
 	@echo
 
 .PHONY: staging
@@ -256,32 +254,32 @@ docker-vnc:  ## Open a VNC connection to a running Docker instance.
 .PHONY: upgrade-start
 upgrade-start:  ## Boot an upgrade test environment using libvirt.
 	@echo "███ Starting upgrade test environment..."
-	@SD_UPGRADE_BASE=$(STABLE_VER) $(VENV)/bin/molecule converge -s upgrade
+	@SD_UPGRADE_BASE=$(STABLE_VER) molecule converge -s upgrade
 	@echo
 
 .PHONY: upgrade-start-qa
 upgrade-start-qa:  ## Boot an upgrade test env using libvirt in remote apt mode.
 	@echo "███ Starting upgrade test environment for remote apt..."
-	@SD_UPGRADE_BASE=$(STABLE_VER) QA_APTTEST=yes $(VENV)/bin/molecule converge -s upgrade
+	@SD_UPGRADE_BASE=$(STABLE_VER) QA_APTTEST=yes molecule converge -s upgrade
 	@echo
 
 .PHONY: upgrade-destroy
 upgrade-destroy:  ## Destroy an upgrade test environment.
 	@echo "███ Destroying upgrade test environment..."
-	@SD_UPGRADE_BASE=$(STABLE_VER) $(VENV)/bin/molecule destroy -s upgrade
+	@SD_UPGRADE_BASE=$(STABLE_VER) molecule destroy -s upgrade
 	@echo
 
 .PHONY: upgrade-test-local
 upgrade-test-local:  ## Upgrade a running test environment with local apt packages.
 	@echo "Testing upgrade with local apt packages..."
-	@$(VENV)/bin/molecule side-effect -s upgrade
+	@molecule side-effect -s upgrade
 	@echo
 
 .PHONY: upgrade-test-qa
 upgrade-test-qa:  ## Upgrade a running test environment with apt packages from the QA repo.
 	@echo "Testing upgrade with packages from QA apt repo..."
-	@QA_APTTEST=yes $(VENV)/bin/molecule converge -s upgrade -- --diff -t apt
-	@QA_APTTEST=yes $(VENV)/bin/molecule side-effect -s upgrade
+	@QA_APTTEST=yes molecule converge -s upgrade -- --diff -t apt
+	@QA_APTTEST=yes molecule side-effect -s upgrade
 	@echo
 
 ##############
@@ -293,8 +291,8 @@ upgrade-test-qa:  ## Upgrade a running test environment with apt packages from t
 .PHONY: translate
 translate:  ## Update POT files from translated strings in source code.
 	@echo "Updating translations..."
-	@$(DEVSHELL) securedrop/i18n_tool.py translate-messages --extract-update
-	@$(DEVSHELL) securedrop/i18n_tool.py translate-desktop --extract-update
+	@securedrop/i18n_tool.py translate-messages --extract-update
+	@securedrop/i18n_tool.py translate-desktop --extract-update
 	@echo
 
 .PHONY: translation-test
@@ -326,15 +324,15 @@ update-user-guides:  ## Run the page layout tests to regenerate screenshots.
 ###########
 
 .PHONY: build-debs
-build-debs: venv2 ## Build and test SecureDrop Debian packages.
+build-debs: ## Build and test SecureDrop Debian packages.
 	@echo "Building SecureDrop Debian packages..."
-	@. $(VENV2)/bin/activate && PYTHON_VERSION=2 $(SDROOT)/devops/scripts/build-debs.sh
+	@PYTHON_VERSION=2 REQ=molecule $(SDROOT)/devops/scripts/build-debs.sh
 	@echo
 
 .PHONY: build-debs-notest
-build-debs-notest: venv2 ## Build SecureDrop Debian packages without running tests.
+build-debs-notest: ## Build SecureDrop Debian packages without running tests.
 	@echo "Building SecureDrop Debian packages; skipping tests..."
-	@. $(VENV2)/bin/activate && PYTHON_VERSION=2 $(SDROOT)/devops/scripts/build-debs.sh notest
+	@PYTHON_VERSION=2 $(SDROOT)/devops/scripts/build-debs.sh notest
 	@echo
 
 

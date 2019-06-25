@@ -7,6 +7,9 @@ set -e
 set -u
 set -o pipefail
 
+. ./devops/scripts/boot-strap-venv.sh
+
+virtualenv_bootstrap
 
 echo '######################'
 echo 'Building Xenial boxes'
@@ -14,4 +17,3 @@ echo '######################'
 molecule test -s vagrant-packager
 molecule/vagrant-packager/package.py
 molecule destroy -s vagrant-packager
-
