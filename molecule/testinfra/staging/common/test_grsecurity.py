@@ -192,3 +192,15 @@ def test_wireless_disabled_in_kernel_config(host, kernel_opts):
 
     line = "# CONFIG_{} is not set".format(kernel_opts)
     assert line in kernel_config
+
+
+def test_mds_mitigations_and_smt_disabled(host):
+    """
+    Ensure that full mitigations are in place for MDS
+    see https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/mds.html
+    """
+
+    grub_config_path = "/boot/grub/grub.cfg"
+    grub_config = host.file(grub_config_path)
+
+    assert grub_config.contains("mds=full,nosmt")
