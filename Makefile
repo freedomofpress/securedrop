@@ -149,7 +149,7 @@ lint: ansible-config-lint app-lint docs-lint flake8 html-lint shellcheck typelin
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 	@echo "███ Running safety..."
-	@pip install -q --upgrade safety
+	@pip3 install -q --upgrade safety
 	@for req_file in `find . -type f -name '*requirements.txt'`; do \
 		echo "Checking file $$req_file" \
 		&& safety check --full-report -r $$req_file \
@@ -164,7 +164,7 @@ safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 
 bandit: config.py ## Run bandit with medium level excluding test-related folders.
 	@echo "███ Updating bandit..."
-	@pip install -q --upgrade pip && pip install -q --upgrade bandit
+	@pip3 install -q --upgrade pip && pip install -q --upgrade bandit
 	@echo "███ Running bandit..."
 	@bandit -ll --exclude ./admin/.tox,./admin/.venv,./admin/.eggs,./molecule,./testinfra,./securedrop/tests,./.tox,./.venv*,securedrop/config.py --recursive .
 	@echo "███ Running bandit on securedrop/config.py..."
