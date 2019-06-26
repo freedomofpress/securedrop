@@ -1,0 +1,7 @@
+recursive-include securedrop/* *.py *.mako *.sass *.ini *.*
+include securedrop/alembic/*.ini
+include files/etc/apparmor.d/*
+include files/var/www/*
+include *.ini
+include requirements.txt
+include setup.py
