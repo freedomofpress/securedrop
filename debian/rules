@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ --with python-virtualenv --python /usr/bin/python3.5 --setuptools
+
+override_dh_strip_nondeterminism:
+	find ./debian/ -type f -name '*.pyc' -delete
+	find ./debian/ -type f -name 'pip-selfcheck.json' -delete
+	find -type f -name RECORD -exec sed -i -e '/.*\.pyc.*/d' {} +
+	dh_strip_nondeterminism $@
+

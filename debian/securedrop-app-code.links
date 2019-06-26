@@ -1,0 +1,1 @@
+opt/venvs/securedrop-proxy/bin/rqworker usr/local/bin/rqworker
