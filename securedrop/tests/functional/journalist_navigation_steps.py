@@ -69,14 +69,9 @@ class JournalistNavigationStepsMixin:
 
     def _input_text_in_login_form(self, username, password, token):
         self.driver.get(self.journalist_location + "/login")
-        username_field = self.driver.find_element_by_css_selector('input[name="username"]')
-        username_field.send_keys(username)
-
-        password_field = self.driver.find_element_by_css_selector('input[name="password"]')
-        password_field.send_keys(password)
-
-        token_field = self.driver.find_element_by_css_selector('input[name="token"]')
-        token_field.send_keys(token)
+        self.safe_send_keys_by_css_selector('input[name="username"]', username)
+        self.safe_send_keys_by_css_selector('input[name="password"]', password)
+        self.safe_send_keys_by_css_selector('input[name="token"]', token)
 
     def _try_login_user(self, username, password, token):
         self._input_text_in_login_form(username, password, token)
@@ -270,9 +265,7 @@ class JournalistNavigationStepsMixin:
         dir_name = dirname(dirname(dirname(os.path.abspath(__file__))))
         image_path = os.path.abspath(os.path.join(dir_name, "static/i/logo.png"))
 
-        logo_upload_input = self.wait_for(lambda: self.driver.find_element_by_id("logo-upload"))
-        logo_upload_input.location_once_scrolled_into_view
-        logo_upload_input.send_keys(image_path)
+        self.safe_send_keys_by_id("logo-upload", image_path)
 
         self.safe_click_by_id("submit-logo-update")
 
@@ -285,22 +278,17 @@ class JournalistNavigationStepsMixin:
         self.wait_for(updated_image, timeout=self.timeout * 6)
 
     def _add_user(self, username, first_name="", last_name="", is_admin=False, hotp=None):
-        username_field = self.driver.find_element_by_css_selector('input[name="username"]')
-        username_field.send_keys(username)
+        self.safe_send_keys_by_css_selector('input[name="username"]', username)
 
         if first_name:
-            first_name_field = self.driver.find_element_by_id("first_name")
-            first_name_field.send_keys(first_name)
+            self.safe_send_keys_by_id("first_name", first_name)
 
         if last_name:
-            last_name_field = self.driver.find_element_by_id("last_name")
-            last_name_field.send_keys(last_name)
+            self.safe_send_keys_by_id("last_name", last_name)
 
         if hotp:
-            hotp_checkbox = self.driver.find_element_by_css_selector('input[name="is_hotp"]')
-            hotp_checkbox.click()
-            hotp_secret = self.driver.find_element_by_css_selector('input[name="otp_secret"]')
-            hotp_secret.send_keys(hotp)
+            self.safe_click_all_by_css_selector('input[name="is_hotp"]')
+            self.safe_send_keys_by_css_selector('input[name="otp_secret"]', hotp)
 
         if is_admin:
             self.safe_click_by_css_selector('input[name="is_admin"]')
@@ -310,8 +298,7 @@ class JournalistNavigationStepsMixin:
         self.wait_for(lambda: self.driver.find_element_by_id("check-token"))
 
     def _admin_adds_a_user(self, is_admin=False, new_username=""):
-        self.wait_for(lambda: self.driver.find_element_by_id("add-user").is_enabled())
-        self.safe_click_by_css_selector("button#add-user")
+        self.safe_click_by_id("add-user")
 
         self.wait_for(lambda: self.driver.find_element_by_id("username"))
 
@@ -342,8 +329,7 @@ class JournalistNavigationStepsMixin:
         self.create_new_totp(shared_secret)
 
         # Verify the two-factor authentication
-        token_field = self.driver.find_element_by_css_selector('input[name="token"]')
-        token_field.send_keys(str(self.new_totp.now()))
+        self.safe_send_keys_by_css_selector('input[name="token"]', str(self.new_totp.now()))
         self.safe_click_by_css_selector("button[type=submit]")
 
         def user_token_added():
@@ -361,8 +347,8 @@ class JournalistNavigationStepsMixin:
         for i in range(3):
             try:
                 self.safe_click_by_css_selector(".delete-user")
-                self._alert_wait()
-                self._alert_accept()
+                self.alert_wait()
+                self.alert_accept()
                 break
             except TimeoutException:
                 # Selenium has failed to click, and the confirmation
@@ -389,9 +375,7 @@ class JournalistNavigationStepsMixin:
 
     def _logout(self):
         # Click the logout link
-        logout_link = self.driver.find_element_by_id("link-logout")
-        logout_link.send_keys(" ")
-        logout_link.click()
+        self.safe_click_by_id("link-logout")
         self.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
 
         # Logging out should redirect back to the login page
@@ -530,10 +514,8 @@ class JournalistNavigationStepsMixin:
         new_characters = "2"
         new_username = self.new_user["username"] + new_characters
 
-        username_field = self.driver.find_element_by_css_selector('input[name="username"]')
-        username_field.send_keys(new_characters)
-        update_user_btn = self.driver.find_element_by_css_selector("button[type=submit]")
-        update_user_btn.click()
+        self.safe_send_keys_by_css_selector('input[name="username"]', new_characters)
+        self.safe_click_by_css_selector("button[type=submit]")
 
         def user_edited():
             if not hasattr(self, "accept_languages"):
@@ -686,7 +668,7 @@ class JournalistNavigationStepsMixin:
             "Thanks for the documents. Can you submit more " "information about the main program?"
         )
         self.wait_for(lambda: self.driver.find_element_by_id("reply-text-field"))
-        self.driver.find_element_by_id("reply-text-field").send_keys(reply_text)
+        self.safe_send_keys_by_id("reply-text-field", reply_text)
 
     def _journalist_sends_reply_to_source(self):
         self._journalist_composes_reply()
@@ -728,13 +710,8 @@ class JournalistNavigationStepsMixin:
         alert.accept()
 
     def _set_hotp_secret(self):
-        def find_hotp_input():
-            return self.driver.find_element_by_css_selector('input[name="otp_secret"]')
-
-        hotp_input = self.wait_for(find_hotp_input)
-        hotp_input.send_keys("123456")
-        submit_button = self.driver.find_element_by_css_selector("button[type=submit]")
-        submit_button.click()
+        self.safe_send_keys_by_css_selector('input[name="otp_secret"]', "123456")
+        self.safe_click_by_css_selector("button[type=submit]")
 
     def _visit_edit_hotp_secret(self):
         self._visit_edit_secret(
@@ -786,8 +763,8 @@ class JournalistNavigationStepsMixin:
                 if not hasattr(self, "accept_languages"):
                     assert tip_text == "Reset 2FA for hardware tokens like Yubikey"
                 self.safe_click_by_id("button-reset-two-factor-hotp")
-                self._alert_wait()
-                self._alert_accept()
+                self.alert_wait()
+                self.alert_accept()
                 break
             except TimeoutException:
                 # Selenium has failed to click, and the confirmation
@@ -816,8 +793,8 @@ class JournalistNavigationStepsMixin:
         if not hasattr(self, "accept_languages"):
             assert tip_text == "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
         self.safe_click_by_id("button-reset-two-factor-totp")
-        self._alert_wait()
-        self._alert_accept()
+        self.alert_wait()
+        self.alert_accept()
 
     def _admin_creates_a_user(self, hotp):
         self.safe_click_by_id("add-user")
@@ -885,21 +862,12 @@ class JournalistNavigationStepsMixin:
             self._try_login_user(self.user, "worse", "mocked")
 
     def _admin_enters_journalist_account_details_hotp(self, username, hotp_secret):
-        username_field = self.driver.find_element_by_css_selector('input[name="username"]')
-        username_field.send_keys(username)
-
-        hotp_secret_field = self.driver.find_element_by_css_selector('input[name="otp_secret"]')
-        hotp_secret_field.send_keys(hotp_secret)
-
-        hotp_checkbox = self.driver.find_element_by_css_selector('input[name="is_hotp"]')
-        hotp_checkbox.click()
+        self.safe_send_keys_by_css_selector('input[name="username"]', username)
+        self.safe_send_keys_by_css_selector('input[name="otp_secret"]', hotp_secret)
+        self.safe_click_by_css_selector('input[name="is_hotp"]')
 
     def _journalist_uses_js_filter_by_sources(self):
-        self.wait_for(lambda: self.driver.find_element_by_id("filter"), timeout=self.timeout * 30)
-
-        filter_box = self.driver.find_element_by_id("filter")
-        filter_box.send_keys("thiswordisnotinthewordlist")
-
+        filter_box = self.safe_send_keys_by_id("filter", "thiswordisnotinthewordlist")
         sources = self.driver.find_elements_by_class_name("code-name")
         assert len(sources) > 0
         for source in sources:

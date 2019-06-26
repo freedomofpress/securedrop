@@ -24,7 +24,6 @@ import tbselenium.common as cm
 from selenium import webdriver
 from selenium.common.exceptions import NoAlertPresentException
 from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.remote_connection import LOGGER
 from selenium.webdriver.support import expected_conditions
@@ -56,6 +55,7 @@ class FunctionalTest(object):
     session_expiration = 30
     secret_message = "These documents outline a major government invasion of privacy."
     timeout = 10
+    poll_frequency = 0.1
 
     accept_languages = None
     driver = None
@@ -124,7 +124,6 @@ class FunctionalTest(object):
                 )
                 self.firefox_driver.set_window_position(0, 0)
                 self.firefox_driver.set_window_size(1024, 768)
-                self.firefox_driver.implicitly_wait(self.timeout)
                 logging.info("Created Firefox web driver")
                 break
             except Exception as e:
@@ -149,21 +148,7 @@ class FunctionalTest(object):
         self.create_firefox_driver()
 
         self.switch_to_torbrowser_driver()
-
-        # Polls the DOM to wait for elements. To read more about why
-        # this is necessary:
-        #
-        # http://www.obeythetestinggoat.com/how-to-get-selenium-to-wait-for-page-load-after-a-click.html
-        #
-        # A value of 5 is known to not be enough in some cases, when
-        # the machine hosting the tests is slow, reason why it was
-        # raised to 10. Setting the value to 60 or more would surely
-        # cover even the slowest of machine. However it also means
-        # that a test failing to find the desired element in the DOM
-        # will only report failure after 60 seconds which is painful
-        # for quickly debuging.
-        #
-        self.driver.implicitly_wait(self.timeout)
+        self.driver.implicitly_wait(0)
 
         yield
 
@@ -200,7 +185,7 @@ class FunctionalTest(object):
 
                     self.source_app = source_app.create_app(config)
                     self.journalist_app = journalist_app.create_app(config)
-                    self.journalist_app.config['WTF_CSRF_ENABLED'] = True
+                    self.journalist_app.config["WTF_CSRF_ENABLED"] = True
 
                     self.__context = self.journalist_app.app_context()
                     self.__context.push()
@@ -296,45 +281,107 @@ class FunctionalTest(object):
             try:
                 return function_with_assertion()
             except (AssertionError, WebDriverException):
-                time.sleep(0.1)
+                time.sleep(self.poll_frequency)
         # one more try, which will raise any errors if they are outstanding
         return function_with_assertion()
 
     def safe_click_by_id(self, element_id):
-        WebDriverWait(self.driver, self.timeout).until(
+        """
+        Clicks the element with the given ID attribute.
+
+        Returns:
+            el: The element, if found.
+
+        Raises:
+            selenium.common.exceptions.TimeoutException: If the element cannot be found in time.
+
+        """
+        el = WebDriverWait(self.driver, self.timeout, self.poll_frequency).until(
             expected_conditions.element_to_be_clickable((By.ID, element_id))
         )
-
-        el = self.wait_for(lambda: self.driver.find_element_by_id(element_id))
-        el.location_once_scrolled_into_view
-        ActionChains(self.driver).move_to_element(el).click().perform()
+        el.click()
+        return el
 
     def safe_click_by_css_selector(self, selector):
-        WebDriverWait(self.driver, self.timeout).until(
+        """
+        Clicks the first element with the given CSS selector.
+
+        Returns:
+            el: The element, if found.
+
+        Raises:
+            selenium.common.exceptions.TimeoutException: If the element cannot be found in time.
+
+        """
+        el = WebDriverWait(self.driver, self.timeout, self.poll_frequency).until(
             expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, selector))
         )
-
-        el = self.wait_for(lambda: self.driver.find_element_by_css_selector(selector))
-        el.location_once_scrolled_into_view
-        ActionChains(self.driver).move_to_element(el).click().perform()
+        el.click()
+        return el
 
     def safe_click_all_by_css_selector(self, selector, root=None):
+        """
+        Clicks each element that matches the given CSS selector.
+
+        Returns:
+            els (list): The list of elements that matched the selector.
+
+        Raises:
+            selenium.common.exceptions.TimeoutException: If the element cannot be found in time.
+
+        """
         if root is None:
             root = self.driver
         els = self.wait_for(lambda: root.find_elements_by_css_selector(selector))
         for el in els:
-            el.location_once_scrolled_into_view
-            self.wait_for(lambda: el.is_enabled() and el.is_displayed())
-            ActionChains(self.driver).move_to_element(el).click().perform()
+            clickable_el = WebDriverWait(self.driver, self.timeout, self.poll_frequency).until(
+                expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, selector))
+            )
+            clickable_el.click()
+        return els
 
-    def _alert_wait(self, timeout=None):
+    def safe_send_keys_by_id(self, element_id, text):
+        """
+        Sends the given text to the element with the specified ID.
+
+        Returns:
+            el: The element, if found.
+
+        Raises:
+            selenium.common.exceptions.TimeoutException: If the element cannot be found in time.
+
+        """
+        el = WebDriverWait(self.driver, self.timeout, self.poll_frequency).until(
+            expected_conditions.element_to_be_clickable((By.ID, element_id))
+        )
+        el.send_keys(text)
+        return el
+
+    def safe_send_keys_by_css_selector(self, selector, text):
+        """
+        Sends the given text to the first element with the given CSS selector.
+
+        Returns:
+            el: The element, if found.
+
+        Raises:
+            selenium.common.exceptions.TimeoutException: If the element cannot be found in time.
+
+        """
+        el = WebDriverWait(self.driver, self.timeout, self.poll_frequency).until(
+            expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, selector))
+        )
+        el.send_keys(text)
+        return el
+
+    def alert_wait(self, timeout=None):
         if timeout is None:
-            timeout = self.timeout
-        WebDriverWait(self.driver, timeout).until(
+            timeout = self.timeout * 2
+        WebDriverWait(self.driver, timeout, self.poll_frequency).until(
             expected_conditions.alert_is_present(), "Timed out waiting for confirmation popup."
         )
 
-    def _alert_accept(self):
+    def alert_accept(self):
         # adapted from https://stackoverflow.com/a/34795883/837471
         def alert_is_not_present(object):
             """ Expect an alert to not be present."""
@@ -346,6 +393,6 @@ class FunctionalTest(object):
                 return True
 
         self.driver.switch_to.alert.accept()
-        WebDriverWait(self.driver, self.timeout).until(
+        WebDriverWait(self.driver, self.timeout, self.poll_frequency).until(
             alert_is_not_present, "Timed out waiting for confirmation popup to disappear."
         )
