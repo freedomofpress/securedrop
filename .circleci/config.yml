@@ -71,7 +71,7 @@ jobs:
 
       - run:
           name: Run documentation linting
-          command: make docs-lint && make docs-linkcheck
+          command: make docs-lint
 
   app-tests:
     machine:
@@ -328,6 +328,22 @@ jobs:
             if ! [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             make ci-deb-tests
 
+  docs-linkcheck:
+    machine:
+      enabled: true
+    steps:
+      - checkout
+      - *rebaseontarget
+      - *installenchant
+
+      - run:
+          name: Install development dependencies
+          command: pip install -U -r securedrop/requirements/develop-requirements.txt
+
+      - run:
+          name: Run documentation linting
+          command: make docs-lint && make docs-linkcheck
+
 workflows:
   version: 2
   securedrop_ci:
@@ -422,3 +438,4 @@ workflows:
     jobs:
       - deb-tests
       - translation-tests
+      - docs-linkcheck
