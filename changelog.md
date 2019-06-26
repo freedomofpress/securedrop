@@ -2,6 +2,29 @@
 
 ## 0.14.0~rc1
 
+### Web Applications
+
+* Add support for setting journalist names, and expose via journalist API (#4425, #4459).
+* Update instructions for sources regarding Tor Browser 8.5 security settings (#4462,  #4494).
+* Replace cloud icon with download icon in source interface (#4548).
+* Expose supported locales in source interface metadata API (#4467).
+* Remove unnecessary FontAwesome CSS from source interface (#4464).
+* Bug fix: If sessions expire on /generate on the source interface, redirect to index (#4496).
+
+### Operations
+
+* Use archive module for securedrop-admin logs command (#4497).
+* Fix Ansible deprecation warnings (#4499).
+* Update grsecurity kernels to version 4.4.182 (#4543).
+* Add intel-microcode as dependency (#4543).
+
+### Developer Workflow
+
+* Add new functional test of /metadata endpoint (#4536).
+* Add workaround for Circle CI’s problems with branch filtering  (#4505).
+* Automatically rerun flaky admin tests (#4466).
+* Improve localization manager documentation and update script used for gathering translator names (#4493, #4482, #4469).
+
 ## 0.13.1
 
 * Fix download of Journalist GPG key via Source Interface (#4523)
