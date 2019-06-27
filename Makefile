@@ -148,8 +148,8 @@ lint: ansible-config-lint app-lint docs-lint flake8 html-lint shellcheck typelin
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
+	@command -v safety || (echo "Please run 'pip install -U safety'."; exit 1)
 	@echo "███ Running safety..."
-	@pip3 install -q --upgrade safety
 	@for req_file in `find . -type f -name '*requirements.txt'`; do \
 		echo "Checking file $$req_file" \
 		&& safety check --full-report -r $$req_file \
@@ -162,9 +162,8 @@ safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 # https://wiki.openstack.org/wiki/Security/Projects/Bandit
 .PHONY: bandit
 
-bandit: config.py ## Run bandit with medium level excluding test-related folders.
-	@echo "███ Updating bandit..."
-	@pip3 install -q --upgrade pip && pip install -q --upgrade bandit
+bandit: test-config ## Run bandit with medium level excluding test-related folders.
+	@command -v bandit || (echo "Please run 'pip install -U bandit'."; exit 1)
 	@echo "███ Running bandit..."
 	@bandit -ll --exclude ./admin/.tox,./admin/.venv,./admin/.eggs,./molecule,./testinfra,./securedrop/tests,./.tox,./.venv*,securedrop/config.py --recursive .
 	@echo "███ Running bandit on securedrop/config.py..."
@@ -177,10 +176,7 @@ bandit: config.py ## Run bandit with medium level excluding test-related folders
 #
 #############
 
-config.py: test-config
-
-.PHONY: test-config
-test-config:  ## Generate the test SecureDrop application config.
+securedrop/config.py: ## Generate the test SecureDrop application config.
 	@echo "███ Generating securedrop/config.py..."
 	@cd securedrop && source_secret_key=$(shell head -c 32 /dev/urandom | base64) \
 	journalist_secret_key=$(shell head -c 32 /dev/urandom | base64) \
@@ -194,6 +190,9 @@ test-config:  ## Generate the test SecureDrop application config.
 	@echo >> securedrop/config.py
 	@echo "SUPPORTED_LOCALES = ['ar', 'de_DE', 'es_ES', 'en_US', 'el', 'fr_FR', 'it_IT', 'nb_NO', 'nl', 'pt_BR', 'tr', 'zh_Hant']"  >> securedrop/config.py
 	@echo
+
+.PHONY: test-config
+test-config: securedrop/config.py
 
 .PHONY: dev
 dev:  ## Run the development server in a Docker container.
