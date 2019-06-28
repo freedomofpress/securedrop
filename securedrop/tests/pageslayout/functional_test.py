@@ -35,18 +35,22 @@ def list_locales():
 
 
 class FunctionalTest(functional_test.FunctionalTest):
-    @pytest.fixture(autouse=True, params=list_locales())
-    def i18n_fixture(self, request):
-        logging.debug("i18n_fixture: setting accept_languages to '%s'", request.param)
-        self.accept_languages = request.param
+    default_driver_name = functional_test.FIREFOX
 
-    @pytest.fixture(autouse=True)
-    def use_firefox(self):
-        self.switch_to_firefox_driver()
+    @pytest.fixture(autouse=True, params=list_locales())
+    def set_accept_languages(self, request):
+        accept_language_list = request.param.replace("_", "-")
+        logging.debug(
+            "accept_languages fixture: setting accept_languages to %s", accept_language_list
+        )
+        self.accept_languages = accept_language_list
 
     def _screenshot(self, filename):
+        # revert the HTTP Accept-Language format
+        locale = self.accept_languages.replace("-", "_")
+
         log_dir = abspath(
-            os.path.join(dirname(realpath(__file__)), "screenshots", self.accept_languages)
+            os.path.join(dirname(realpath(__file__)), "screenshots", locale)
         )
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
