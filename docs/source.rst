@@ -114,7 +114,7 @@ messages.
 |Confirmation page|
 
 Once you are finished submitting documents, be certain you have saved your
-secret codename and then click the **Exit** button:
+secret codename and then click the **Log out** button:
 
 |Logout|
 
