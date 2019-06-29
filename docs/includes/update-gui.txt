@@ -1,11 +1,11 @@
-For SecureDrop workstation updates, beginning with SecureDrop 0.7,
+For SecureDrop workstation updates, beginning with SecureDrop 0.7.0,
 your workstation will automatically check for updates on boot. An update
 window will pop up when updates are needed, and you should simply follow the prompts
 in the updater to perform the update.
 
 .. note:: Note that you will need to have a `Tails
   Administrator password`_ configured to complete the update. If you forget to
-  add the `Tails Administrator password`_, you will need to reboot to enable it.
+  do so, you will need to reboot to enable it.
 
 .. _`Tails Administrator
    password`: https://tails.boum.org/doc/first_steps/startup_options/administration_password/index.en.html
