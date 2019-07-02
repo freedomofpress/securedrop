@@ -25,15 +25,15 @@ if typing.TYPE_CHECKING:
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
     from typing import List, Type, Union  # noqa: F401
-    from tempfile import _TemporaryFileWrapper  # noqa: F401
+    from tempfile import _TemporaryFileWrapper  # type: ignore # noqa: F401
     from io import BufferedIOBase  # noqa: F401
     from sqlalchemy.orm import Session  # noqa: F401
     from models import Reply, Submission  # noqa: F401
 
 
 VALIDATE_FILENAME = re.compile(
-    "^(?P<index>\d+)\-[a-z0-9-_]*"
-    "(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$").match
+    r"^(?P<index>\d+)\-[a-z0-9-_]*"
+    r"(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$").match
 
 
 class PathException(Exception):

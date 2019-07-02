@@ -25,8 +25,8 @@ def test_paxctld_config(host):
     # Only relevant to Xenial installs
     if host.system_info.codename == "xenial":
         assert f.is_file
-        regex = "^/usr/sbin/apache2\s+m$"
-        assert re.search(regex, f.content, re.M)
+        regex = r"^/usr/sbin/apache2\s+m$"
+        assert re.search(regex, f.content_string, re.M)
 
 
 def test_paxctld_service(host):

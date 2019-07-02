@@ -7,11 +7,12 @@ docker-py
 dnspython
 flake8
 html-linter
-molecule>2.13
+molecule>=2.20.1
+mypy
 # Needed for ansible network filter
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
-pip-tools>=3.5.0,<4
+pip-tools>=3.8.0,<4
 pyenchant
 pylint
 pytest-xdist

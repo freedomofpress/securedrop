@@ -12,8 +12,12 @@ specific type of development task. We use Vagrant, VirtualBox, and
 Docker and our Ansible playbooks can provision these environments on
 either virtual machines or physical hardware.
 
-.. note:: SecureDrop is written in Python 2. We plan to migrate to Python 3
-          in a future release. 
+.. note:: SecureDrop is written in Python 2. We plan to migrate to
+          Python 3 in a future release. Please use a Python 3
+          virtualenv for development, while ensuring that your changes
+          are compatible with both Python 3 and Python 2, to ensure
+          they work in production and CI, both of which use Python
+          2.7.
 
 Quick Start
 -----------
@@ -266,7 +270,7 @@ different version, the path to ``virtualenvwrapper.sh`` will differ. Running
           to your ``~/.bashrc`` (or whatever your default shell configuration
           file is) so that the command-line utilities ``virtualenvwrapper``
           provides are automatically available in the future.
-          
+
 The version of rsync installed by default on macOS is extremely out-of-date, as is Apple's custom. We recommend using Homebrew_ to install a modern version (3.1.0 or greater): ``brew install rsync``.
 
 .. _Vagrant: http://www.vagrantup.com/downloads.html
@@ -296,6 +300,6 @@ Ensure your virtualenv is activated and install the packages.
 
 .. code:: sh
 
-    pip install -r securedrop/requirements/develop-requirements.txt
+    pip install -r securedrop/requirements/python3/develop-requirements.txt
 
 .. note:: You will need to run this everytime new packages are added.

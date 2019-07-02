@@ -5,10 +5,6 @@
 # the top level of the SecureDrop repository
 d=$(dirname "$0")
 if test "$1" = "setup" || test "$2" = "setup"; then
-   # the .venv symlink is to not confuse devs used to
-   # finding the directory at the top-level, prior to 0.6
-   rm -fr "$d/.venv"
-   ln -s "$d/admin/.venv" "$d/.venv"
    if test "$1" = "setup"; then
      shift
      exec python "$d/admin/bootstrap.py" "$@"

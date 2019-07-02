@@ -9,11 +9,7 @@ Flask unittest integration.
 """
 
 
-try:
-    from urllib.parse import urlparse, urljoin
-except ImportError:
-    # Python 2 urlparse fallback
-    from urlparse import urlparse, urljoin
+from six.moves.urllib.parse import urlparse, urljoin
 
 import pytest
 

@@ -18,15 +18,15 @@
 # a `securedrop_force_reboot` flag for over-riding reboot check
 - name: Check for existence of reboot file
   stat:
-      path: "{{ securedrop_cond_reboot_file }}"
-      get_checksum: no
-      get_attributes: no
+    path: "{{ securedrop_cond_reboot_file }}"
+    get_checksum: no
+    get_attributes: no
   register: sd_reboot_file_check
 
 - name: Delete reboot file from intereferring with future runs
   file:
-      path: "{{ securedrop_cond_reboot_file }}"
-      state: absent
+    path: "{{ securedrop_cond_reboot_file }}"
+    state: absent
 
 - name: Store whether this is a first-time installation.
   set_fact:

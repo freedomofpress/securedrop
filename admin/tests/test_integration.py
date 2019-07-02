@@ -132,34 +132,34 @@ def verify_username_prompt(child):
 
 def verify_reboot_prompt(child):
     child.expect(
-        "Daily reboot time of the server \(24\-hour clock\):", timeout=2)
+        r"Daily reboot time of the server \(24\-hour clock\):", timeout=2)
     assert ANSI_ESCAPE.sub('', child.buffer) == ' 4'  # Expected default
 
 
 def verify_ipv4_appserver_prompt(child):
-    child.expect('Local IPv4 address for the Application Server\:', timeout=2)
+    child.expect(r'Local IPv4 address for the Application Server\:', timeout=2)
     # Expected default
     assert ANSI_ESCAPE.sub('', child.buffer) == ' 10.20.2.2'
 
 
 def verify_ipv4_monserver_prompt(child):
-    child.expect('Local IPv4 address for the Monitor Server\:', timeout=2)
+    child.expect(r'Local IPv4 address for the Monitor Server\:', timeout=2)
     # Expected default
     assert ANSI_ESCAPE.sub('', child.buffer) == ' 10.20.3.2'
 
 
 def verify_hostname_app_prompt(child):
-    child.expect('Hostname for Application Server\:', timeout=2)
+    child.expect(r'Hostname for Application Server\:', timeout=2)
     assert ANSI_ESCAPE.sub('', child.buffer) == ' app'  # Expected default
 
 
 def verify_hostname_mon_prompt(child):
-    child.expect('Hostname for Monitor Server\:', timeout=2)
+    child.expect(r'Hostname for Monitor Server\:', timeout=2)
     assert ANSI_ESCAPE.sub('', child.buffer) == ' mon'  # Expected default
 
 
 def verify_dns_prompt(child):
-    child.expect('DNS server specified during installation\:', timeout=2)
+    child.expect(r'DNS server specified during installation\:', timeout=2)
     assert ANSI_ESCAPE.sub('', child.buffer) == ' 8.8.8.8'  # Expected default
 
 
@@ -172,15 +172,15 @@ def verify_https_prompt(child):
 
 
 def verify_https_cert_prompt(child):
-    child.expect('Local filepath to HTTPS certificate\:', timeout=2)
+    child.expect(r'Local filepath to HTTPS certificate\:', timeout=2)
 
 
 def verify_https_cert_key_prompt(child):
-    child.expect('Local filepath to HTTPS certificate key\:', timeout=2)
+    child.expect(r'Local filepath to HTTPS certificate key\:', timeout=2)
 
 
 def verify_https_cert_chain_file_prompt(child):
-    child.expect('Local filepath to HTTPS certificate chain file\:', timeout=2)
+    child.expect(r'Local filepath to HTTPS certificate chain file\:', timeout=2)  # noqa: E501
 
 
 def verify_app_gpg_fingerprint_prompt(child):
@@ -212,32 +212,32 @@ def verify_journalist_email_prompt(child):
 
 
 def verify_smtp_relay_prompt(child):
-    child.expect('SMTP relay for sending OSSEC alerts\:', timeout=2)
+    child.expect(r'SMTP relay for sending OSSEC alerts\:', timeout=2)
     # Expected default
     assert ANSI_ESCAPE.sub('', child.buffer) == ' smtp.gmail.com'
 
 
 def verify_smtp_port_prompt(child):
-    child.expect('SMTP port for sending OSSEC alerts\:', timeout=2)
+    child.expect(r'SMTP port for sending OSSEC alerts\:', timeout=2)
     assert ANSI_ESCAPE.sub('', child.buffer) == ' 587'  # Expected default
 
 
 def verify_sasl_domain_prompt(child):
-    child.expect('SASL domain for sending OSSEC alerts\:', timeout=2)
+    child.expect(r'SASL domain for sending OSSEC alerts\:', timeout=2)
     # Expected default
     assert ANSI_ESCAPE.sub('', child.buffer) == ' gmail.com'
 
 
 def verify_sasl_username_prompt(child):
-    child.expect('SASL username for sending OSSEC alerts\:', timeout=2)
+    child.expect(r'SASL username for sending OSSEC alerts\:', timeout=2)
 
 
 def verify_sasl_password_prompt(child):
-    child.expect('SASL password for sending OSSEC alerts\:', timeout=2)
+    child.expect(r'SASL password for sending OSSEC alerts\:', timeout=2)
 
 
 def verify_ssh_over_lan_prompt(child):
-    child.expect('will be available over LAN only\:', timeout=2)
+    child.expect(r'will be available over LAN only\:', timeout=2)
     assert ANSI_ESCAPE.sub('', child.buffer) == ' yes'  # Expected default
 
 
@@ -488,7 +488,7 @@ def set_reliable_keyserver(gpgdir):
             f.write('keyserver hkp://ipv4.pool.sks-keyservers.net')
 
         # Ensure correct permissions on .gnupg home directory.
-        os.chmod(gpgdir, 0700)
+        os.chmod(gpgdir, 0o700)
 
 
 @flaky(max_runs=3)

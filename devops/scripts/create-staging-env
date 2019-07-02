@@ -9,7 +9,6 @@
 # Set the VAGRANT_DEFAULT_PROVIDER env var to override autodetection.
 
 set -e
-set -u
 set -o pipefail
 
 . ./devops/scripts/boot-strap-venv.sh

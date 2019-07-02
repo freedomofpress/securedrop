@@ -24,9 +24,9 @@
 
     - name: Slap in latest create-dev-data script
       copy:
-          src: ../../securedrop/create-dev-data.py
-          dest: /var/www/securedrop/create-dev-data.py
-          mode: 0555
+        src: ../../securedrop/create-dev-data.py
+        dest: /var/www/securedrop/create-dev-data.py
+        mode: 0555
 
     - name: Insert journalist test user
       command: /var/www/securedrop/create-dev-data.py --staging

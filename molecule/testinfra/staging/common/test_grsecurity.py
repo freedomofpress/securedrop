@@ -12,7 +12,7 @@ def test_ssh_motd_disabled(host):
     """
     f = host.file("/etc/pam.d/sshd")
     assert f.is_file
-    assert not f.contains("pam\.motd")
+    assert not f.contains(r"pam\.motd")
 
 
 @pytest.mark.parametrize("package", [
@@ -61,7 +61,7 @@ def test_grsecurity_lock_file(host):
     `grsec_lock` file, which is automatically created by grsecurity.
     """
     f = host.file("/proc/sys/kernel/grsecurity/grsec_lock")
-    assert oct(f.mode) == "0600"
+    assert f.mode == 0o600
     assert f.user == "root"
     assert f.size == 0
 
@@ -119,7 +119,7 @@ def test_grsecurity_paxtest(host, paxtest_check):
             c = host.run("paxtest blackhat")
             assert c.rc == 0
             assert "Vulnerable" not in c.stdout
-            regex = "^{}\s*:\sKilled$".format(re.escape(paxtest_check))
+            regex = r"^{}\s*:\sKilled$".format(re.escape(paxtest_check))
             assert re.search(regex, c.stdout)
 
 

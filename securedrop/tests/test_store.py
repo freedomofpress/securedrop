@@ -243,7 +243,7 @@ def test_async_add_checksum_for_file(config, db_model):
 
         job = async_add_checksum_for_file(db_obj)
 
-    utils.async.wait_for_redis_worker(job, timeout=5)
+    utils.asynchronous.wait_for_redis_worker(job, timeout=5)
 
     with app.app_context():
         # requery to get a new object

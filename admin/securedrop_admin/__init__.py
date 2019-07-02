@@ -79,7 +79,7 @@ class SiteConfig(object):
 
     class ValidateIP(Validator):
         def validate(self, document):
-            if re.match('((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}$',
+            if re.match(r'((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}$',
                         document.text):
                 return True
             raise ValidationError(
@@ -176,7 +176,7 @@ class SiteConfig(object):
 
     class ValidateInt(Validator):
         def validate(self, document):
-            if re.match('\d+$', document.text):
+            if re.match(r'\d+$', document.text):
                 return True
             raise ValidationError(message="Must be an integer")
 
@@ -443,7 +443,7 @@ class SiteConfig(object):
         if validator:
             kwargs['validator'] = validator
         value = prompt_toolkit.prompt(prompt,
-                                      default=unicode(default, 'utf-8'),
+                                      default=default.decode('utf-8'),
                                       **kwargs)
         if transform:
             return transform(value)
@@ -702,7 +702,7 @@ def update(args):
                                         cwd=args.root)
                 sdlog.info("Signature verification failed.")
                 return 1
-            except subprocess.CalledProcessError, e:
+            except subprocess.CalledProcessError as e:
                 if 'not a valid ref' in e.output:
                     # Then there is no duplicate branch.
                     sdlog.info("Signature verification successful.")

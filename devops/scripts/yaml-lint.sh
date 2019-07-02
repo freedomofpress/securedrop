@@ -7,7 +7,7 @@
 
 # Using grep to filter filepaths since
 # `-regextype=posix-extended` is not cross-platform.
-find . -path "*/.venv" -prune -o \
+find . -path "*/.venv*" -prune -o \
                  -path "*admin/.tox" -prune -o \
                  -path "**/.molecule" -prune -o \
                  -type f | \

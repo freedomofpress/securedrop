@@ -13,8 +13,8 @@ def test_hosts_files(host):
     mon_ip = os.environ.get('MON_IP', sdvars.mon_ip)
     mon_host = sdvars.monitor_hostname
 
-    assert f.contains('^127.0.0.1\s*localhost')
-    assert f.contains('^{}\s*{}\s*securedrop-monitor-server-alias$'.format(
+    assert f.contains(r'^127.0.0.1\s*localhost')
+    assert f.contains(r'^{}\s*{}\s*securedrop-monitor-server-alias$'.format(
                                                                     mon_ip,
                                                                     mon_host))
 
@@ -41,7 +41,7 @@ def test_ossec_keyfile_present(host):
     with host.sudo():
         f = host.file("/var/ossec/etc/client.keys")
         assert f.exists
-        assert oct(f.mode) == "0644"
+        assert f.mode == 0o644
         assert f.user == "root"
         assert f.group == "ossec"
         assert f.content_string

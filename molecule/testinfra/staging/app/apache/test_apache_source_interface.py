@@ -14,9 +14,9 @@ def test_apache_headers_source_interface(host, header):
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
-    assert oct(f.mode) == "0644"
+    assert f.mode == 0o644
     header_regex = "^{}$".format(re.escape(header))
-    assert re.search(header_regex, f.content, re.M)
+    assert re.search(header_regex, f.content_string, re.M)
 
 
 @pytest.mark.parametrize("apache_opt", [
@@ -59,6 +59,6 @@ def test_apache_config_source_interface(host, apache_opt):
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
-    assert oct(f.mode) == "0644"
+    assert f.mode == 0o644
     regex = "^{}$".format(re.escape(apache_opt))
-    assert re.search(regex, f.content, re.M)
+    assert re.search(regex, f.content_string, re.M)

@@ -99,7 +99,7 @@ docs/_build/
 .env
 
 # virtualenv
-.venv/
+.venv*/
 venv/
 ENV/
 
@@ -139,9 +139,6 @@ securedrop/static/.webassets-cache
 junit/
 raw-test-output/
 *results.xml
-
-# Virtualenv on tails
-.venv
 
 # molecule
 .molecule

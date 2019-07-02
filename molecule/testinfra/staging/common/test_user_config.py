@@ -11,24 +11,24 @@ def test_sudoers_config(host):
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
-    assert oct(f.mode) == "0440"
+    assert f.mode == 0o440
 
     # Restrictive file mode requires sudo for reading, so let's
     # read once and store the content in a var.
     with host.sudo():
-        sudoers_config = f.content
+        sudoers_config = f.content_string
 
     # Using re.search rather than `f.contains` since the basic grep
     # matching doesn't support PCRE, so `\s` won't work.
-    assert re.search('^Defaults\s+env_reset$', sudoers_config, re.M)
-    assert re.search('^Defaults\s+env_reset$', sudoers_config, re.M)
-    assert re.search('^Defaults\s+mail_badpass$', sudoers_config, re.M)
-    assert re.search('Defaults\s+secure_path="/usr/local/sbin:'
-                     '/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"',
+    assert re.search(r'^Defaults\s+env_reset$', sudoers_config, re.M)
+    assert re.search(r'^Defaults\s+env_reset$', sudoers_config, re.M)
+    assert re.search(r'^Defaults\s+mail_badpass$', sudoers_config, re.M)
+    assert re.search(r'Defaults\s+secure_path="/usr/local/sbin:'
+                     r'/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"',
                      sudoers_config, re.M)
-    assert re.search('^%sudo\s+ALL=\(ALL\)\s+NOPASSWD:\s+ALL$',
+    assert re.search(r'^%sudo\s+ALL=\(ALL\)\s+NOPASSWD:\s+ALL$',
                      sudoers_config, re.M)
-    assert re.search('Defaults:%sudo\s+!requiretty', sudoers_config, re.M)
+    assert re.search(r'Defaults:%sudo\s+!requiretty', sudoers_config, re.M)
 
 
 def test_sudoers_tmux_env(host):
@@ -91,4 +91,4 @@ def test_sudoers_tmux_env_deprecated(host):
     admin_user = "vagrant"
 
     f = host.file("/home/{}/.bashrc".format(admin_user))
-    assert not f.contains("^. \/etc\/bashrc\.securedrop_additions$")
+    assert not f.contains(r"^. \/etc\/bashrc\.securedrop_additions$")

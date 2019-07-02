@@ -2,7 +2,7 @@ beautifulsoup4
 blinker
 Flask-Testing
 mock
-pip-tools>=3.5.0,<4
+pip-tools>=3.8.0,<4
 py
 pytest
 pytest-cov

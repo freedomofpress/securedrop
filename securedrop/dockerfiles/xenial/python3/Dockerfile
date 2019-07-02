@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y paxctl && \
     { apt-get install -y libgtk2.0 || echo 'libgtk2.0 was not installed'; } && \
     paxctl -cm /usr/bin/mono-sgen && dpkg-reconfigure mono-runtime-sgen && \
     apt-get install -y devscripts vim \
-                       python3-pip libpython3.5-dev libssl-dev secure-delete \
+                       python3-pip virtualenv libpython3.5-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server git xvfb haveged curl wget \
                        gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo \
                        libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
@@ -48,11 +48,11 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckod
     paxctl -cm /bin/geckodriver
 
 COPY requirements requirements
-RUN pip3 install --require-hashes -r requirements/securedrop-app-code-requirements.txt && \
-    pip3 install -r requirements/test-requirements.txt && \
-    pip3 install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools
-
-RUN pip3 install supervisor
+RUN pip3 install pip-tools && \
+    pip3 install --require-hashes -r requirements/python3/securedrop-app-code-requirements.txt && \
+    pip3 install -r requirements/python3/test-requirements.txt && \
+    pip3 install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools && \
+    pip3 install supervisor
 
 # Temporary workaround: Revert when python 3 is deployed to prod
 RUN sudo rm /usr/bin/python && sudo ln -s /usr/bin/python3 /usr/bin/python

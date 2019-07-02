@@ -89,5 +89,5 @@ def teardown():
         # safeguard for #844
         assert not os.path.exists(config.SECUREDROP_DATA_ROOT)
     except OSError as exc:
-        if 'No such file or directory' not in exc:
+        if 'No such file or directory' != exc.strerror:
             raise

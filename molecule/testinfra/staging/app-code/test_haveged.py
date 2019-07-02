@@ -9,7 +9,7 @@ def test_haveged_config(host):
     assert f.is_file
     assert f.user == 'root'
     assert f.group == 'root'
-    assert oct(f.mode) == '0644'
+    assert f.mode == 0o644
     assert f.contains('^DAEMON_ARGS="-w 2400"$')
 
 

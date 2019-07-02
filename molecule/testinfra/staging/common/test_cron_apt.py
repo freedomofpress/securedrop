@@ -30,7 +30,7 @@ def test_cron_apt_config(host):
     f = host.file('/etc/cron-apt/config')
     assert f.is_file
     assert f.user == "root"
-    assert oct(f.mode) == "0644"
+    assert f.mode == 0o644
     assert f.contains('^SYSLOGON="always"$')
     assert f.contains('^EXITON=error$')
 
@@ -54,7 +54,7 @@ def test_cron_apt_repo_list(host, repo):
     f = host.file('/etc/apt/security.list')
     assert f.is_file
     assert f.user == "root"
-    assert oct(f.mode) == "0644"
+    assert f.mode == 0o644
     repo_regex = '^{}$'.format(re.escape(repo_config))
     assert f.contains(repo_regex)
 
@@ -67,7 +67,7 @@ def test_cron_apt_repo_config_update(host):
     f = host.file('/etc/cron-apt/action.d/0-update')
     assert f.is_file
     assert f.user == "root"
-    assert oct(f.mode) == "0644"
+    assert f.mode == 0o644
     repo_config = str('update -o quiet=2'
                       ' -o Dir::Etc::SourceList=/etc/apt/security.list'
                       ' -o Dir::Etc::SourceParts=""')
@@ -82,7 +82,7 @@ def test_cron_apt_delete_vanilla_kernels(host):
     f = host.file('/etc/cron-apt/action.d/9-remove')
     assert f.is_file
     assert f.user == "root"
-    assert oct(f.mode) == "0644"
+    assert f.mode == 0o644
     command = str('remove -y'
                   ' linux-image-generic-lts-xenial linux-image-.*generic'
                   ' -o quiet=2')
@@ -96,7 +96,7 @@ def test_cron_apt_repo_config_upgrade(host):
     f = host.file('/etc/cron-apt/action.d/5-security')
     assert f.is_file
     assert f.user == "root"
-    assert oct(f.mode) == "0644"
+    assert f.mode == 0o644
     assert f.contains('^autoclean -y$')
     repo_config = str('dist-upgrade -y -o APT::Get::Show-Upgraded=true'
                       ' -o Dir::Etc::SourceList=/etc/apt/security.list'
@@ -130,7 +130,7 @@ def test_cron_apt_cron_jobs(host, cron_job):
     f = host.file('/etc/cron.d/cron-apt')
     assert f.is_file
     assert f.user == "root"
-    assert oct(f.mode) == "0644"
+    assert f.mode == 0o644
 
     regex_job = '^{}$'.format(re.escape(cron_job['job']))
     if cron_job['state'] == 'present':

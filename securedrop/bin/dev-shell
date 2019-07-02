@@ -10,7 +10,7 @@ TOPLEVEL=$(git rev-parse --show-toplevel)
 BASE_OS=xenial
 
 if ! test -n "${PYTHON_VERSION:-}" ; then
-    PYTHON_VERSION=2
+    PYTHON_VERSION=3
 fi
 
 function validate_python_version() {

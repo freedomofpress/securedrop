@@ -14,7 +14,7 @@ def test_tor_service_directories(host, tor_service):
     with host.sudo():
         f = host.file("/var/lib/tor/services/{}".format(tor_service['name']))
         assert f.is_directory
-        assert oct(f.mode) == "0700"
+        assert f.mode == 0o700
         assert f.user == "debian-tor"
         assert f.group == "debian-tor"
 
@@ -28,18 +28,18 @@ def test_tor_service_hostnames(host, tor_service):
     """
     # Declare regex only for THS; we'll build regex for ATHS only if
     # necessary, since we won't have the required values otherwise.
-    ths_hostname_regex = "[a-z0-9]{16}\.onion"
+    ths_hostname_regex = r"[a-z0-9]{16}\.onion"
 
     with host.sudo():
         f = host.file("/var/lib/tor/services/{}/hostname".format(
             tor_service['name']))
         assert f.is_file
-        assert oct(f.mode) == "0600"
+        assert f.mode == 0o600
         assert f.user == "debian-tor"
         assert f.group == "debian-tor"
 
         # All hostnames should contain at *least* the hostname.
-        assert re.search(ths_hostname_regex, f.content)
+        assert re.search(ths_hostname_regex, f.content_string)
 
         if tor_service['authenticated']:
             # HidServAuth regex is approximately [a-zA-Z0-9/+], but validating
@@ -47,9 +47,9 @@ def test_tor_service_hostnames(host, tor_service):
             # charset.
             aths_hostname_regex = ths_hostname_regex + " .{22} # client: " + \
                                   tor_service['client']
-            assert re.search("^{}$".format(aths_hostname_regex), f.content)
+            assert re.search("^{}$".format(aths_hostname_regex), f.content_string)
         else:
-            assert re.search("^{}$".format(ths_hostname_regex), f.content)
+            assert re.search("^{}$".format(ths_hostname_regex), f.content_string)
 
 
 @pytest.mark.parametrize('tor_service', sdvars.tor_services)

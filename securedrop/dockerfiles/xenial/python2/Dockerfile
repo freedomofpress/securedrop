@@ -11,7 +11,7 @@ RUN apt-get update && \
     { apt-get install -y libgtk2.0 || echo 'libgtk2.0 was not installed'; } && \
     paxctl -cm /usr/bin/mono-sgen && dpkg-reconfigure mono-runtime-sgen && \
     apt-get install -y devscripts vim \
-                       python-pip libpython2.7-dev libssl-dev secure-delete \
+                       python-pip virtualenv libpython2.7-dev libssl-dev secure-delete \
                        gnupg2 ruby redis-server git xvfb haveged curl wget \
                        gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo \
                        libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
@@ -50,12 +50,11 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckod
 
 COPY requirements requirements
 
-RUN pip install --require-hashes -r requirements/securedrop-app-code-requirements.txt && \
-    pip install -r requirements/test-requirements.txt && \
-    pip install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools
-
-
-RUN pip install supervisor
+RUN pip install pip-tools && \
+    pip install --require-hashes -r requirements/python2/securedrop-app-code-requirements.txt && \
+    pip install -r requirements/python2/test-requirements.txt && \
+    pip install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools && \
+    pip install supervisor
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi && \
     cp -r /root/.local /tmp/ && chmod +x /tmp/.local/tbb/tor-browser_en-US/Browser/firefox && chmod -R 777 /tmp/.local && \
