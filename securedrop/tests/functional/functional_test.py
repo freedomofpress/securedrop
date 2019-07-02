@@ -385,7 +385,7 @@ class FunctionalTest(object):
 
     def alert_wait(self, timeout=None):
         if timeout is None:
-            timeout = self.timeout * 2
+            timeout = self.timeout * 10
         WebDriverWait(self.driver, timeout, self.poll_frequency).until(
             expected_conditions.alert_is_present(), "Timed out waiting for confirmation popup."
         )
