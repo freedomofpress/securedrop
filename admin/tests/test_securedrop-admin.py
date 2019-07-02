@@ -138,47 +138,6 @@ class TestSecureDropAdmin(object):
             assert "Updated to SecureDrop" not in caplog.text
             assert ret_code == 0
 
-    def test_update_gpg_recv_primary_key_failure(self, tmpdir, caplog):
-        """We should try a secondary keyserver if for some reason the primary
-        keyserver is not available."""
-
-        git_repo_path = str(tmpdir)
-        args = argparse.Namespace(root=git_repo_path)
-
-        git_output = ('gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
-                      'gpg:                using RSA key '
-                      '22245C81E3BAEB4138B36061310F561200F4AD77\n'
-                      'gpg: Good signature from "SecureDrop Release '
-                      'Signing Key" [unknown]\n')
-
-        patchers = [
-            mock.patch('securedrop_admin.check_for_updates',
-                       return_value=(True, "0.6.1")),
-            mock.patch('subprocess.check_call'),
-            mock.patch('subprocess.check_output',
-                       side_effect=[
-                           git_output,
-                           subprocess.CalledProcessError(1, 'cmd',
-                                                         'not a valid ref')]),
-            mock.patch('securedrop_admin.get_release_key_from_keyserver',
-                       side_effect=[
-                           subprocess.CalledProcessError(1, 'cmd', 'BANG'),
-                           None])
-            ]
-
-        for patcher in patchers:
-            patcher.start()
-
-        try:
-            ret_code = securedrop_admin.update(args)
-            assert "Applying SecureDrop updates..." in caplog.text
-            assert "Signature verification successful." in caplog.text
-            assert "Updated to SecureDrop" in caplog.text
-            assert ret_code == 0
-        finally:
-            for patcher in patchers:
-                patcher.stop()
-
     def test_get_release_key_from_valid_keyserver(self, tmpdir, caplog):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
