@@ -485,7 +485,7 @@ def set_reliable_keyserver(gpgdir):
     if not os.path.exists(gpgconf_path):
         os.mkdir(gpgdir)
         with open(gpgconf_path, 'a') as f:
-            f.write('keyserver hkp://ipv4.pool.sks-keyservers.net')
+            f.write('keyserver hkps://keys.openpgp.org')
 
         # Ensure correct permissions on .gnupg home directory.
         os.chmod(gpgdir, 0o700)
