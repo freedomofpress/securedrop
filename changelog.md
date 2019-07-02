@@ -6,7 +6,7 @@
 
 * Add support for setting journalist names, and expose via journalist API (#4425, #4459).
 * Update instructions for sources regarding Tor Browser 8.5 security settings (#4462,  #4494).
-* Replace cloud icon with download icon in source interface (#4548).
+* Replace cloud icon with more neutral upload icon in source interface (#4548).
 * Expose supported locales in source interface metadata API (#4467).
 * Remove unnecessary FontAwesome CSS from source interface (#4464).
 * Bug fix: If sessions expire on /generate on the source interface, redirect to index (#4496).
