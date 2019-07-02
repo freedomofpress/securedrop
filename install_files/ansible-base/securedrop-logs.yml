@@ -69,7 +69,7 @@
       become: no
       local_action: >-
         command
-        gpg --recv-key "{{ fpf_support_gpg_fingerprint }}"
+        gpg --keyserver hkps://keys.openpgp.org --recv-key "{{ fpf_support_gpg_fingerprint }}"
       register: fpf_gpg_key_fetch_result
       changed_when: "'imported: 1' in fpf_gpg_key_fetch_result.stderr"
       run_once: yes
