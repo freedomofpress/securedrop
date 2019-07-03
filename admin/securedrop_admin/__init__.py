@@ -40,6 +40,7 @@ from pkg_resources import parse_version
 
 sdlog = logging.getLogger(__name__)
 RELEASE_KEY = '22245C81E3BAEB4138B36061310F561200F4AD77'
+DEFAULT_KEYSERVER = 'hkps://keys.openpgp.org'
 EXIT_SUCCESS = 0
 EXIT_SUBPROCESS_ERROR = 1
 EXIT_INTERRUPT = 2
@@ -667,14 +668,9 @@ def update(args):
 
     sdlog.info("Verifying signature on latest update...")
 
-    try:
-        # First try to get the release key using Tails default keyserver
-        get_release_key_from_keyserver(args)
-    except subprocess.CalledProcessError:
-        # Now try to get the key from a secondary keyserver.
-        secondary_keyserver = 'hkps://hkps.pool.sks-keyservers.net'
-        get_release_key_from_keyserver(args,
-                                       keyserver=secondary_keyserver)
+    # Retrieve key from openpgp.org keyserver
+    get_release_key_from_keyserver(args,
+                                   keyserver=DEFAULT_KEYSERVER)
 
     git_verify_tag_cmd = ['git', 'tag', '-v', latest_tag]
     try:
@@ -682,14 +678,23 @@ def update(args):
                                              stderr=subprocess.STDOUT,
                                              cwd=args.root)
 
-        good_sig_text = 'Good signature from "SecureDrop Release Signing Key"'
+        good_sig_text = ['Good signature from "SecureDrop Release Signing ' +
+                         'Key"',
+                         'Good signature from "SecureDrop Release Signing ' +
+                         'Key <securedrop-release-key@freedom.press>"']
         bad_sig_text = 'BAD signature'
-        # To ensure that an adversary cannot name a malicious key good_sig_text
-        # we check that bad_sig_text does not appear and that the release key
-        # appears on the second line of the output.
         gpg_lines = sig_result.split('\n')
+
+        # Check if any strings in good_sig_text match against gpg_lines[]
+        good_sig_matches = [s for s in gpg_lines if
+                            any(xs in s for xs in good_sig_text)]
+
+        # To ensure that an adversary cannot name a malicious key good_sig_text
+        # we check that bad_sig_text does not appear, that the release key
+        # appears on the second line of the output, and that there is a single
+        # match from good_sig_text[]
         if RELEASE_KEY in gpg_lines[1] and \
-                sig_result.count(good_sig_text) == 1 and \
+                len(good_sig_matches) == 1 and \
                 bad_sig_text not in sig_result:
             # Finally, we check that there is no branch of the same name
             # prior to reporting success.
