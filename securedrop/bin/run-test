@@ -20,13 +20,13 @@ maybe_create_config_py
 if [ -n "${CIRCLE_BRANCH:-}" ] ; then
     touch tests/log/firefox.log
     function finish {
-        cp tests/log/firefox.log /tmp/test-results/logs/
+        cp tests/log/firefox.log ../test-results
         bash <(curl -s https://codecov.io/bash)
     }
     trap finish EXIT
 fi
 
-mkdir -p "/tmp/test-results/logs"
+mkdir -p "../test-results"
 
 : "${PAGE_LAYOUT_LOCALES:=en_US,ar}"
 export PAGE_LAYOUT_LOCALES
@@ -35,10 +35,10 @@ export TOR_FORCE_NET_CONFIG=0
 pytest \
     --page-layout \
     --durations 10 \
-    --junitxml=/tmp/test-results/junit.xml \
+    --junitxml=../test-results/junit.xml \
     --cov-report term-missing \
-    --cov-report html:/tmp/test-results/cov_html \
-    --cov-report xml:/tmp/test-results/cov.xml \
-    --cov-report annotate:/tmp/test-results/cov_annotate \
+    --cov-report html:../test-results/cov_html \
+    --cov-report xml:../test-results/cov.xml \
+    --cov-report annotate:../test-results/cov_annotate \
     --cov=. \
     "$@"
