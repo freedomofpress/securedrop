@@ -149,16 +149,35 @@ class TestSecureDropAdmin(object):
             securedrop_admin.get_release_key_from_keyserver(
                 args, keyserver='test.com')
 
-    def test_update_signature_verifies(self, tmpdir, caplog):
+    @pytest.mark.parametrize("git_output",
+                             ['gpg: Signature made Tue 13 Mar '
+                              '2018 01:14:11 AM UTC\n'
+                              'gpg:                using RSA key '
+                              '22245C81E3BAEB4138B36061310F561200F4AD77\n'
+                              'gpg: Good signature from "SecureDrop Release '
+                              'Signing Key" [unknown]\n',
+
+                              'gpg: Signature made Thu 20 Jul '
+                              '2017 08:12:25 PM EDT\n'
+                              'gpg:                using RSA key '
+                              '22245C81E3BAEB4138B36061310F561200F4AD77\n'
+                              'gpg: Good signature from "SecureDrop Release '
+                              'Signing Key '
+                              '<securedrop-release-key@freedom.press>"\n',
+
+                              'gpg: Signature made Thu 20 Jul '
+                              '2017 08:12:25 PM EDT\n'
+                              'gpg:                using RSA key '
+                              '22245C81E3BAEB4138B36061310F561200F4AD77\n'
+                              'gpg: Good signature from "SecureDrop Release '
+                              'Signing Key" [unknown]\n'
+                              'gpg:                 aka "SecureDrop Release '
+                              'Signing Key '
+                              '<securedrop-release-key@freedom.press>" '
+                              '[unknown]\n'])
+    def test_update_signature_verifies(self, tmpdir, caplog, git_output):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
-
-        git_output = ('gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
-                      'gpg:                using RSA key '
-                      '22245C81E3BAEB4138B36061310F561200F4AD77\n'
-                      'gpg: Good signature from "SecureDrop Release '
-                      'Signing Key" [unknown]\n')
-
         patchers = [
             mock.patch('securedrop_admin.check_for_updates',
                        return_value=(True, "0.6.1")),
