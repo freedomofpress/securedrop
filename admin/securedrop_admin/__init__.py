@@ -683,13 +683,18 @@ def update(args):
                          'Good signature from "SecureDrop Release Signing ' +
                          'Key <securedrop-release-key@freedom.press>"']
         bad_sig_text = 'BAD signature'
-        # To ensure that an adversary cannot name a malicious key good_sig_text
-        # we check that bad_sig_text does not appear and that the release key
-        # appears on the second line of the output.
         gpg_lines = sig_result.split('\n')
+
+        # Check if any strings in good_sig_text match against gpg_lines[]
+        good_sig_matches = [s for s in gpg_lines if
+                            any(xs in s for xs in good_sig_text)]
+
+        # To ensure that an adversary cannot name a malicious key good_sig_text
+        # we check that bad_sig_text does not appear, that the release key
+        # appears on the second line of the output, and that there is a single
+        # match from good_sig_text[]
         if RELEASE_KEY in gpg_lines[1] and \
-                len([s for s in gpg_lines if
-                    any(xs in s for xs in good_sig_text)]) == 1 and \
+                len(good_sig_matches) == 1 and \
                 bad_sig_text not in sig_result:
             # Finally, we check that there is no branch of the same name
             # prior to reporting success.
