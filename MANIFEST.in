@@ -1,7 +1,9 @@
-recursive-include securedrop/* *.py *.mako *.sass *.ini *.*
-include securedrop/alembic/*.ini
-include files/etc/apparmor.d/*
-include files/var/www/*
-include *.ini
+graft debian
+graft etc
+graft var
+prune var/www/securedrop/tests
 include requirements.txt
 include setup.py
+recursive-exclude . *.pyc
+recursive-exclude . .coverage
+recursive-exclude . .coverage.*

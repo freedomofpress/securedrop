@@ -38,6 +38,9 @@ old_version_regex="^__version__ = '(.*)'$"
 [[ "$(cat securedrop/version.py)" =~ $old_version_regex ]]
 OLD_VERSION=${BASH_REMATCH[1]}
 
+# Update setup.py
+sed -i "s@version=\"$(echo "${OLD_VERSION}" | sed 's/\./\\./g')\"@version=\"$NEW_VERSION\"@g" setup.py
+
 # Update the version shown to users of the web application.
 sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" securedrop/version.py
 

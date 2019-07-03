@@ -1,13 +1,16 @@
+import os.path
 import pytest
 
 testinfra_hosts = ["app-staging"]
 sdvars = pytest.securedrop_test_vars
 
+sdbin = "/opt/venvs/securedrop-app-code/bin"
+
 
 @pytest.mark.parametrize('exp_pip_pkg', sdvars.pip_deps)
 def test_app_pip_deps(host, exp_pip_pkg):
     """ Ensure pip dependencies are installed """
-    pip = host.pip_package.get_packages()
+    pip = host.pip_package.get_packages(pip_path=os.path.join(sdbin, "pip"))
     assert pip[exp_pip_pkg['name']]['version'] == exp_pip_pkg['version']
 
 

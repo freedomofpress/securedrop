@@ -8,6 +8,7 @@ Flask-WTF
 Flask>0.12.2
 Jinja2>=2.10.1
 jsmin
+mod_wsgi
 passlib
 pretty-bad-protocol>=3.1.1
 psutil

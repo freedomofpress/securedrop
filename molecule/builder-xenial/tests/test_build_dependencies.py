@@ -8,16 +8,6 @@ testinfra_hosts = [
 ]
 
 
-def test_pip_wheel_installed(host):
-    """
-    Ensure `wheel` is installed via pip, for packaging Python
-    dependencies into a Debian package.
-    """
-    c = host.run("pip list installed")
-    assert "wheel" in c.stdout
-    assert c.rc == 0
-
-
 def test_sass_gem_installed(host):
     """
     Ensure the `sass` Ruby gem is installed, for compiling SASS to CSS.
@@ -31,7 +21,7 @@ def test_pip_dependencies_installed(host):
     """
     Ensure the development pip dependencies are installed
     """
-    c = host.run("pip list installed")
+    c = host.run("pip3 list installed")
     assert "Flask-Babel" in c.stdout
     assert c.rc == 0
 

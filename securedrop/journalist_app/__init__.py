@@ -7,6 +7,7 @@ from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
+import sys
 from werkzeug.exceptions import default_exceptions
 
 import i18n
@@ -140,6 +141,17 @@ def create_app(config):
             timedelta(minutes=getattr(config,
                                       'SESSION_EXPIRATION_MINUTES',
                                       120))
+
+        # Work around https://github.com/lepture/flask-wtf/issues/275
+        # -- after upgrading from Python 2 to Python 3, any existing
+        # session's csrf_token value will be retrieved as bytes,
+        # causing a TypeError. This simple fix, deleting the existing
+        # token, was suggested in the issue comments. This code will
+        # be safe to remove after Python 2 reaches EOL in 2020, and no
+        # supported SecureDrop installations can still have this
+        # problem.
+        if sys.version_info.major > 2 and type(session.get('csrf_token')) is bytes:
+            del session['csrf_token']
 
         uid = session.get('uid', None)
         if uid:

@@ -325,13 +325,13 @@ update-user-guides:  ## Run the page layout tests to regenerate screenshots.
 .PHONY: build-debs
 build-debs: ## Build and test SecureDrop Debian packages.
 	@echo "Building SecureDrop Debian packages..."
-	@PYTHON_VERSION=2 REQ=molecule $(SDROOT)/devops/scripts/build-debs.sh
+	@PYTHON_VERSION=3 $(SDROOT)/devops/scripts/build-debs.sh
 	@echo
 
 .PHONY: build-debs-notest
 build-debs-notest: ## Build SecureDrop Debian packages without running tests.
 	@echo "Building SecureDrop Debian packages; skipping tests..."
-	@PYTHON_VERSION=2 $(SDROOT)/devops/scripts/build-debs.sh notest
+	@PYTHON_VERSION=3 $(SDROOT)/devops/scripts/build-debs.sh notest
 	@echo
 
 

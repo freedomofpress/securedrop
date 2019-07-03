@@ -124,6 +124,8 @@ mako==1.0.7 \
 markupsafe==1.0 \
     --hash=sha256:a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665 \
     # via jinja2, mako
+mod-wsgi==4.6.7 \
+    --hash=sha256:b788abaf0b903a64a7bb8dae609f2e4790c87e6f3d716aa6bc97936410fcbfcc
 passlib==1.7.1 \
     --hash=sha256:3d948f64138c25633613f303bcc471126eae67c04d5e3f6b7b8ce6242f8653e0 \
     --hash=sha256:43526aea08fa32c6b6dbbbe9963c4c767285b78147b7437597f992812f69d280

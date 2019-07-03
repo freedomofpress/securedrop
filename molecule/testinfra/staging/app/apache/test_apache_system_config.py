@@ -6,7 +6,6 @@ securedrop_test_vars = pytest.securedrop_test_vars
 
 
 @pytest.mark.parametrize("package", [
-    "libapache2-mod-wsgi",
     "libapache2-mod-xsendfile",
 ])
 def test_apache_apt_packages(host, package):

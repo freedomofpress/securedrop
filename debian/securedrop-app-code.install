@@ -1,4 +1,0 @@
-securedrop /var/www/
-files/var/www /var/
-files/etc/apparmor.d/usr.sbin.apache2 /etc/apparmor.d
-files/etc/apparmor.d/usr.sbin.tor /etc/apparmor.d
