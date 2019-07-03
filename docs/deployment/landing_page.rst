@@ -248,14 +248,15 @@ If you use nginx, `you can follow this
 link <https://gist.github.com/mtigas/8601685>`__ and use the
 configuration example provided by ProPublica.
 
-**Change detection monitoring for the web application configuration and
-*Landing Page* content**
+Change detection monitoring for the web application configuration and *Landing Page* content
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 OSSEC is a free and open source host-based intrusion detection suite
 that includes a file integrity monitor. More information can be found
 `here. <https://ossec.github.io/>`__
 
-**Don't log access to the *Landing Page* in the webserver**
+Don't log access to the *Landing Page* in the webserver
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Here's an Apache example that would exclude the *Landing Page* from
 logging. However you still need to make sure no other assets get logged!
