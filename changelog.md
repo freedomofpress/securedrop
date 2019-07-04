@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.14.0~rc2
+
+* Update SecureDrop screenshots for source, journalist and admin guides (#4564)
+* Update securedrop-keyring to 0.1.3: update expiration of signing key and add uid (#4578)
+* Switch to keys.openpgp.org as the default keyserver (#4576)
+* Update Admin Workstation setup instructions to use keys.openpgp.org (#4586)
+* Update securedrop-admin tool to use only hkps://keys.openpgp.org when retrieving release key (#4585)
+
 ## 0.14.0~rc1
 
 ### Web Applications
