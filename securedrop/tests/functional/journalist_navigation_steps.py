@@ -19,6 +19,10 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions
 
 
+# Number of times to try flaky clicks.
+CLICK_ATTEMPTS = 15
+
+
 # A generator to get unlimited user names for our tests.
 # The pages-layout tests require many users during
 # the test run, that is why have the following
@@ -344,7 +348,7 @@ class JournalistNavigationStepsMixin:
         self.wait_for(user_token_added)
 
     def _admin_deletes_user(self):
-        for i in range(3):
+        for i in range(CLICK_ATTEMPTS):
             try:
                 self.safe_click_by_css_selector(".delete-user")
                 self.alert_wait()
@@ -742,59 +746,89 @@ class JournalistNavigationStepsMixin:
             self.safe_click_by_css_selector(selector)
             self.wait_for(lambda: self.driver.find_element_by_id("new-password"))
 
-    def _admin_visits_reset_2fa_hotp(self):
-        for i in range(3):
-            try:
-                # 2FA reset buttons show a tooltip with explanatory text on hover.
-                # Also, confirm the text on the tooltip is the correct one.
-                self.wait_for(lambda: self.driver.find_elements_by_css_selector(
-                    "#button-reset-two-factor-hotp")[0])
-                hotp_reset_button = self.driver.find_elements_by_css_selector(
-                    "#button-reset-two-factor-hotp")[0]
-                hotp_reset_button.location_once_scrolled_into_view
-                ActionChains(self.driver).move_to_element(hotp_reset_button).perform()
-                time.sleep(1)
-                tip_opacity = self.driver.find_elements_by_css_selector(
-                    "#button-reset-two-factor-hotp span")[0].value_of_css_property('opacity')
-                tip_text = self.driver.find_elements_by_css_selector(
-                    "#button-reset-two-factor-hotp span")[0].text
+    def retry_2fa_pop_ups(self, navigation_step, button_to_click):
+        """Clicking on Selenium alerts can be flaky. We need to retry them if they timeout."""
 
-                assert tip_opacity == "1"
-                if not hasattr(self, "accept_languages"):
-                    assert tip_text == "Reset 2FA for hardware tokens like Yubikey"
-                self.safe_click_by_id("button-reset-two-factor-hotp")
+        for i in range(CLICK_ATTEMPTS):
+            try:
+                try:
+                    # This is the button we click to trigger the alert.
+                    self.wait_for(lambda: self.driver.find_elements_by_id(
+                        button_to_click)[0])
+                except IndexError:
+                    # If the button isn't there, then the alert is up from the last
+                    # time we attempted to run this test. Switch to it and accept it.
+                    self.alert_wait()
+                    self.alert_accept()
+                    break
+
+                # The alert isn't up. Run the rest of the logic.
+                navigation_step()
+
                 self.alert_wait()
                 self.alert_accept()
                 break
             except TimeoutException:
                 # Selenium has failed to click, and the confirmation
-                # alert didn't happen. Try once more.
-                logging.info("Selenium has failed to click yet again; retrying.")
+                # alert didn't happen. We'll try again.
+                logging.info("Selenium has failed to click; retrying.")
+
+    def _admin_visits_reset_2fa_hotp(self):
+        def _admin_visits_reset_2fa_hotp_step():
+            # 2FA reset buttons show a tooltip with explanatory text on hover.
+            # Also, confirm the text on the tooltip is the correct one.
+            hotp_reset_button = self.driver.find_elements_by_id(
+                "reset-two-factor-hotp")[0]
+            hotp_reset_button.location_once_scrolled_into_view
+            ActionChains(self.driver).move_to_element(hotp_reset_button).perform()
+
+            time.sleep(1)
+
+            tip_opacity = self.driver.find_elements_by_css_selector(
+                "#button-reset-two-factor-hotp span")[0].value_of_css_property('opacity')
+            tip_text = self.driver.find_elements_by_css_selector(
+                "#button-reset-two-factor-hotp span")[0].text
+
+            assert tip_opacity == "1"
+
+            if not hasattr(self, "accept_languages"):
+                assert tip_text == "Reset 2FA for hardware tokens like Yubikey"
+
+            self.safe_click_by_id("button-reset-two-factor-hotp")
+
+        # Run the above step in a retry loop
+        self.retry_2fa_pop_ups(_admin_visits_reset_2fa_hotp_step, "reset-two-factor-hotp")
 
     def _admin_visits_edit_hotp(self):
         self.wait_for(lambda: self.driver.find_element_by_css_selector('input[name="otp_secret"]'))
 
     def _admin_visits_reset_2fa_totp(self):
-        totp_reset_button = self.driver.find_elements_by_css_selector("#reset-two-factor-totp")[0]
-        assert "/admin/reset-2fa-totp" in totp_reset_button.get_attribute("action")
-        # 2FA reset buttons show a tooltip with explanatory text on hover.
-        # Also, confirm the text on the tooltip is the correct one.
-        totp_reset_button = self.driver.find_elements_by_css_selector(
-            "#button-reset-two-factor-totp")[0]
-        totp_reset_button.location_once_scrolled_into_view
-        ActionChains(self.driver).move_to_element(totp_reset_button).perform()
-        time.sleep(1)
-        tip_opacity = self.driver.find_elements_by_css_selector(
-            "#button-reset-two-factor-totp span")[0].value_of_css_property('opacity')
-        tip_text = self.driver.find_elements_by_css_selector(
-            "#button-reset-two-factor-totp span")[0].text
+        def _admin_visits_reset_2fa_totp_step():
+            totp_reset_button = self.driver.find_elements_by_id("reset-two-factor-totp")[0]
+            assert "/admin/reset-2fa-totp" in totp_reset_button.get_attribute("action")
+            # 2FA reset buttons show a tooltip with explanatory text on hover.
+            # Also, confirm the text on the tooltip is the correct one.
+            totp_reset_button = self.driver.find_elements_by_css_selector(
+                "#button-reset-two-factor-totp")[0]
+            totp_reset_button.location_once_scrolled_into_view
+            ActionChains(self.driver).move_to_element(totp_reset_button).perform()
 
-        assert tip_opacity == "1"
-        if not hasattr(self, "accept_languages"):
-            assert tip_text == "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
-        self.safe_click_by_id("button-reset-two-factor-totp")
-        self.alert_wait()
-        self.alert_accept()
+            time.sleep(1)
+
+            tip_opacity = self.driver.find_elements_by_css_selector(
+                "#button-reset-two-factor-totp span")[0].value_of_css_property('opacity')
+            tip_text = self.driver.find_elements_by_css_selector(
+                "#button-reset-two-factor-totp span")[0].text
+
+            assert tip_opacity == "1"
+            if not hasattr(self, "accept_languages"):
+                expected_text = "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
+                assert tip_text == expected_text
+
+            self.safe_click_by_id("button-reset-two-factor-totp")
+
+        # Run the above step in a retry loop
+        self.retry_2fa_pop_ups(_admin_visits_reset_2fa_totp_step, "reset-two-factor-totp")
 
     def _admin_creates_a_user(self, hotp):
         self.safe_click_by_id("add-user")
