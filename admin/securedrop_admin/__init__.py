@@ -41,6 +41,8 @@ from pkg_resources import parse_version
 sdlog = logging.getLogger(__name__)
 RELEASE_KEY = '22245C81E3BAEB4138B36061310F561200F4AD77'
 DEFAULT_KEYSERVER = 'hkps://keys.openpgp.org'
+SUPPORT_ONION_URL = 'http://support6kv2242qx.onion'
+SUPPORT_URL = 'https://support.freedom.press'
 EXIT_SUCCESS = 0
 EXIT_SUBPROCESS_ERROR = 1
 EXIT_INTERRUPT = 2
@@ -741,8 +743,8 @@ def get_logs(args):
         os.path.join(args.ansible_path, 'securedrop-logs.yml'),
     ]
     subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
-    sdlog.info("Encrypt logs and send to securedrop@freedom.press or upload "
-               "to the SecureDrop support portal.")
+    sdlog.info("Please send the encrypted logs to securedrop@freedom.press or "
+               "upload them to the SecureDrop support portal: " + SUPPORT_URL)
     return 0
 
 
