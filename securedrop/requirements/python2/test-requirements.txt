@@ -13,6 +13,7 @@ click==6.7                # via flask, pip-tools
 coverage==4.4.2           # via pytest-cov
 easyprocess==0.2.3        # via pyvirtualdisplay
 enum34==1.1.6             # via hypothesis
+flaky==3.6.0
 flask-testing==0.7.1
 flask==1.0.2              # via flask-testing
 funcsigs==1.0.2           # via mock, pytest
