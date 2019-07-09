@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2019-07-06 13:03+0000\n"
-"Last-Translator: Beatrice <mail@beatricemartini.it>\n"
+"PO-Revision-Date: 2019-07-09 00:16+0000\n"
+"Last-Translator: rmol <john@freedom.press>\n"
 "Language-Team: Italian <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/it/>\n"
 "Language: it_IT\n"
@@ -433,7 +433,7 @@ msgstr "Cognome"
 
 #: journalist_templates/admin_add_user.html:52
 msgid "First name and last name are optional"
-msgstr "Nome e cognome sono opzionali"
+msgstr "Nome e cognome non sono obbligatori"
 
 #: journalist_templates/admin_add_user.html:56
 msgid "The user's password will be:"
@@ -674,7 +674,7 @@ msgstr "Modifica utente \"{user}\""
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Name &amp; Admin Status"
-msgstr "Cambia Nome &amp;1 Status di Amministratore"
+msgstr "Cambia nome e stato di amministratore"
 
 #: journalist_templates/edit_account.html:27
 #: journalist_templates/edit_account.html:43
@@ -687,7 +687,7 @@ msgstr "Modifica il tuo account"
 
 #: journalist_templates/edit_account.html:31
 msgid "Change Name"
-msgstr "Cambia Nome"
+msgstr "Cambia nome"
 
 #: journalist_templates/edit_account.html:47
 msgid "Reset Password"
@@ -695,7 +695,7 @@ msgstr "Reimposta password"
 
 #: journalist_templates/edit_account.html:49
 msgid "SecureDrop uses automatically generated diceware passwords."
-msgstr "SecureDrop utilizza password Diceware generate automaticamente."
+msgstr "SecureDrop utilizza password “diceware” generate automaticamente."
 
 #: journalist_templates/edit_account.html:50
 msgid ""
@@ -768,19 +768,23 @@ msgstr ""
 
 #: journalist_templates/edit_account.html:112
 msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
-msgstr "Resetta 2FA per app mobile quali FreeOTP o Google Authenticator"
+msgstr ""
+"Ripristinla autenticazione a due fattori delle applicazioni per dispositivi "
+"mobili come FreeOTP o Google Authenticator"
 
 #: journalist_templates/edit_account.html:112
 msgid "RESET APP TOKEN"
-msgstr "RESETTA IL TOKEN DELL'APP"
+msgstr "RIPRISTINA IL TOKEN DELL'APP"
 
 #: journalist_templates/edit_account.html:113
 msgid "Reset 2FA for hardware tokens like Yubikey"
-msgstr "Resetta 2FA per token hardware come Yubikey"
+msgstr ""
+"Ripristinla autenticazione a due fattori per dispositivi hardware come "
+"Yubikey"
 
 #: journalist_templates/edit_account.html:113
 msgid "RESET HARDWARE TOKEN"
-msgstr "RESETTA IL TOKEN HARDWARE"
+msgstr "RIPRISTINA IL TOKEN HARDWARE"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -1022,10 +1026,10 @@ msgid ""
 "strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> "
 "&nbsp;button in your browser’s toolbar to change it."
 msgstr ""
-"L'<a id=\"disable-js\" href=\"\"><strong>Impostazione di "
-"Sicurezza</strong></a> del tuo Tor Browser è troppo bassa. Utilizza il <img "
-"src=\"{icon}\" alt=\"shield icon\"> &nbsp;bottone nella barra degli "
-"strumenti del tuo browser per modificarla."
+"L'<a id=\"disable-js\" href=\"\"><strong>impostazione di "
+"sicurezza</strong></a> del proprio browser Tor è troppo bassa. Utilizzare il "
+"<img src=\"{icon}\" alt=\"shield icon\"> &nbsp;pulsante nella barra degli "
+"strumenti del browser per modificarla."
 
 #: source_templates/index.html:17
 msgid ""
@@ -1079,20 +1083,20 @@ msgstr "CONTROLLA RIPOSTE"
 #: source_templates/index.html:93
 msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
 msgstr ""
-"Clicca <img src=\"{icon}\" alt=\"shield icon\"> nella barra degli strumenti "
-"qui sopra"
+"Fare clic <img src=\"{icon}\" alt=\"shield icon\"> nella barra degli "
+"strumenti qui sopra"
 
 #: source_templates/index.html:94
 msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "Seleziona <strong>1Impostazioni di Sicurezza Avanzata</strong>2"
+msgstr "Selezionare <strong>Impostazioni di sicurezza avanzate</strong>"
 
 #: source_templates/index.html:95
 msgid "Select <strong>Safest</strong>"
-msgstr "Seleziona <strong>1Massima Sicurezza</strong>2"
+msgstr "Selezionare <strong>Massima sicurezza</strong>"
 
 #: source_templates/index.html:97
 msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">1Aggiorna questa pagina</a>2, e hai finito!"
+msgstr "<a href=\"/\">Aggiorna questa pagina</a>, e hai finito!"
 
 #: source_templates/login.html:6
 msgid "Enter Codename"
