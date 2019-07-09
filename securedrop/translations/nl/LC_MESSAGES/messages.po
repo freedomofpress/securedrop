@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2019-07-03 22:33+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2019-07-09 00:16+0000\n"
+"Last-Translator: Thom <thom.pp9@gmail.com>\n"
 "Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/nl/>\n"
 "Language: nl\n"
@@ -685,7 +685,7 @@ msgstr "Herstel wachtwoord"
 
 #: journalist_templates/edit_account.html:49
 msgid "SecureDrop uses automatically generated diceware passwords."
-msgstr "SecureDrop gebruikt automatisch gegenereerde diceware-wachtwoorden."
+msgstr "SecureDrop gebruikt automatisch gegenereerde Diceware-wachtwoorden."
 
 #: journalist_templates/edit_account.html:50
 msgid ""
@@ -1014,7 +1014,7 @@ msgstr ""
 "De <a id=\"disable-js\" href=\"\""
 "><strong>veiligheidsinstellingen</strong></a> van je Tor-browser zijn niet "
 "strikt genoeg. Gebruik de <img src=\"{icon}\" alt=\"schildicoon\">-knop in "
-"de werkbalk van je browser om dit te veranderen."
+"de werkbalk van je browser om dit te wijzigen."
 
 #: source_templates/index.html:17
 msgid ""
