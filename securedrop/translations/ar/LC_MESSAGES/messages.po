@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2019-07-08 07:37+0000\n"
-"Last-Translator: Ahmad Gharbeia <gharbeia@gmail.com>\n"
+"PO-Revision-Date: 2019-07-09 00:16+0000\n"
+"Last-Translator: erinm <erinm@riseup.net>\n"
 "Language-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/ar/>\n"
 "Language: ar\n"
@@ -775,10 +775,9 @@ msgstr "تصفير أمارة التطبيق"
 
 #: journalist_templates/edit_account.html:113
 msgid "Reset 2FA for hardware tokens like Yubikey"
-msgstr "تصفير الاستيثاق ذي المعاملين للأمارات العتادية مثل يوبيكي Yubikey"
+msgstr "تصفير الاستيثاق ذي المعاملين للأمارات العتادية مثل يوبيكي YubiKey"
 
 #: journalist_templates/edit_account.html:113
-#, fuzzy
 msgid "RESET HARDWARE TOKEN"
 msgstr "تصفير أمارة عتادية"
 
@@ -1076,7 +1075,6 @@ msgid "Select <strong>Safest</strong>"
 msgstr "اختَر <strong>أقصى أمان</strong>"
 
 #: source_templates/index.html:97
-#, fuzzy
 msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\">أنعش هذه الصفحة</a> فتكون قد أنجزت!"
 
