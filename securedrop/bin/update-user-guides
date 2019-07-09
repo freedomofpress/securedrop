@@ -6,6 +6,7 @@ set -eu
 source "${BASH_SOURCE%/*}/dev-deps"
 
 run_xvfb &
+run_tor &
 run_redis &
 run_x11vnc &
 urandom
