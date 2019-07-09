@@ -39,9 +39,9 @@ class I18NTool(object):
         'ar': {'name': 'Arabic', 'desktop': 'ar', },
         'ca': {'name': 'Catalan', 'desktop': 'ca', },
         'de_DE': {'name': 'German', 'desktop': 'de_DE', },
+        'el': {'name': 'Greek', 'desktop': 'el', },
         'es_ES': {'name': 'Spanish', 'desktop': 'es_ES', },
         'fr_FR': {'name': 'French', 'desktop': 'fr', },
-        'el': {'name': 'Greek', 'desktop': 'el', },
         'hi': {'name': 'Hindi', 'desktop': 'hi', },
         'is': {'name': 'Icelandic', 'desktop': 'is', },
         'it_IT': {'name': 'Italian', 'desktop': 'it', },
@@ -370,6 +370,13 @@ class I18NTool(object):
             help='comma separated list of supported languages')
         parser.set_defaults(func=self.update_from_weblate)
 
+    def set_list_locales_parser(self, subps):
+        parser = subps.add_parser('list-locales', help='List supported locales')
+        parser.set_defaults(func=self.list_locales)
+
+    def list_locales(self, args):
+        print(sorted(list(self.SUPPORTED_LANGUAGES.keys()) + ['en_US']))
+
     def set_list_translators_parser(self, subps):
         parser = subps.add_parser('list-translators',
                                   help=('List contributing translators'))
@@ -438,6 +445,7 @@ class I18NTool(object):
         self.set_update_docs_parser(subps)
         self.set_update_from_weblate_parser(subps)
         self.set_list_translators_parser(subps)
+        self.set_list_locales_parser(subps)
 
         return parser
 
