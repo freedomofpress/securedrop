@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.12.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-07-04 10:53+0000\n"
+"PO-Revision-Date: 2019-07-09 00:16+0000\n"
 "Last-Translator: Oktavia <ojonsdottir@irex.org>\n"
 "Language-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/is/>\n"
@@ -1013,7 +1013,7 @@ msgid ""
 "&nbsp;button in your browser’s toolbar to change it."
 msgstr ""
 "<a id=\"disable-js\" href=\"\"><strong>Öryggisstillingar</strong></a> Tor-"
-"varfans þíns eru of vægt stilltar. Notaðu <img src=\"{icon}\" alt=\"shield "
+"vafrans þíns eru of vægt stilltar. Notaðu <img src=\"{icon}\" alt=\"shield "
 "icon\"> &nbsp;hnappinn í verkfærastiku vafrans þíns til að breyta þeim."
 
 #: source_templates/index.html:17
@@ -1082,7 +1082,7 @@ msgstr "Veldu <strong>Öruggast</strong>"
 
 #: source_templates/index.html:97
 msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">Endurlestu þessa síðu</a>, og þú ert klár í slaginn!"
+msgstr "<a href=\"/\">Endurlestu þessa síðu</a>, og þetta er komið!"
 
 #: source_templates/login.html:6
 msgid "Enter Codename"
