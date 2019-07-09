@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-07-04 09:36+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2019-07-09 00:16+0000\n"
+"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.securedrop.org/projects/"
 "securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -662,7 +662,7 @@ msgstr "Editar usuário \"{user}\""
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Name &amp; Admin Status"
-msgstr "Trocar nome e &amp; status de admin"
+msgstr "Mudar nome e &amp; status de admin"
 
 #: journalist_templates/edit_account.html:27
 #: journalist_templates/edit_account.html:43
@@ -675,7 +675,7 @@ msgstr "Editar sua conta"
 
 #: journalist_templates/edit_account.html:31
 msgid "Change Name"
-msgstr "Trocar nome"
+msgstr "Mudar nome"
 
 #: journalist_templates/edit_account.html:47
 msgid "Reset Password"
@@ -683,7 +683,7 @@ msgstr "Redefinir Senha"
 
 #: journalist_templates/edit_account.html:49
 msgid "SecureDrop uses automatically generated diceware passwords."
-msgstr "SecureDrop usa senhas Diceware, geradas automaticamente."
+msgstr "SecureDrop usa o método diceware para gerar senhas automaticamente."
 
 #: journalist_templates/edit_account.html:50
 msgid ""
@@ -767,11 +767,12 @@ msgstr "Redefinir código de autenticação do app"
 #: journalist_templates/edit_account.html:113
 msgid "Reset 2FA for hardware tokens like Yubikey"
 msgstr ""
-"Redefinir autenticação em dois fatores para token em hardware como YubiKey"
+"Reiniciar autenticação de dois fatores (2FA) para códigos de autenticação de "
+"hardwares, como Yubikey"
 
 #: journalist_templates/edit_account.html:113
 msgid "RESET HARDWARE TOKEN"
-msgstr "Redefinir código de autenticação de hardware"
+msgstr "Riniciar código de autenticação de hardware"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -1007,10 +1008,9 @@ msgid ""
 "strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> "
 "&nbsp;button in your browser’s toolbar to change it."
 msgstr ""
-"As <a id=\"disable-js\" href=\"\"><strong>configurações de "
-"segurança</strong></a> do seu navegador Tor estão muito baixas. Use o <img "
-"src=\"{icon}\" alt=\"ícone do escudo\"> &nbsp;no seu navegador para "
-"modificá-la."
+"Os <a id=\"disable-js\" href=\"\"><strong>níveis de segurança</strong></a> "
+"do seu navegador Tor estão muito baixas. Use o <img src=\"{icon}\" alt=\""
+"ícone do escudo\"> &nbsp;no seu navegador para modificá-la."
 
 #: source_templates/index.html:17
 msgid ""
