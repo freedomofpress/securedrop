@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.8.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-07-03 21:58+0000\n"
-"Last-Translator: Dimitris Maroulidis <dmaroulidis@dimitrismaroulidis.com>\n"
+"PO-Revision-Date: 2019-07-09 00:16+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Greek <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/el/>\n"
 "Language: el\n"
@@ -693,7 +693,7 @@ msgstr "Επαναφορά κωδικού πρόσβασης"
 msgid "SecureDrop uses automatically generated diceware passwords."
 msgstr ""
 "Το SecureDrop χρησιμοποιεί κωδικούς που παράγονται αυτόματα με τη μέθοδο "
-"diceware."
+"Diceware."
 
 #: journalist_templates/edit_account.html:50
 msgid ""
@@ -779,7 +779,7 @@ msgstr "ΕΠΑΝΑΦΟΡΑ ΚΩΔΙΚΩΝ ΠΡΟΣΒΑΣΗΣ ΕΦΑΡΜΟΓΗΣ"
 
 #: journalist_templates/edit_account.html:113
 msgid "Reset 2FA for hardware tokens like Yubikey"
-msgstr "Επαναφορά 2FA για κλειδιά ασφαλείας όπως το Yubikey"
+msgstr "Επαναφορά 2FA για κλειδιά ασφαλείας όπως το YubiKey"
 
 #: journalist_templates/edit_account.html:113
 msgid "RESET HARDWARE TOKEN"
