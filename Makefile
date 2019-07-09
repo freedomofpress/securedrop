@@ -188,7 +188,7 @@ securedrop/config.py: ## Generate the test SecureDrop application config.
 		 ctx.update(dict((k, {"stdout":v}) for k,v in os.environ.items())); \
 		 ctx = open("config.py", "w").write(env.get_template("config.py.example").render(ctx))'
 	@echo >> securedrop/config.py
-	@echo "SUPPORTED_LOCALES = ['ar', 'de_DE', 'es_ES', 'en_US', 'el', 'fr_FR', 'it_IT', 'nb_NO', 'nl', 'pt_BR', 'tr', 'zh_Hant']"  >> securedrop/config.py
+	@echo "SUPPORTED_LOCALES = $$(securedrop/i18n_tool.py list-locales)"  >> securedrop/config.py
 	@echo
 
 .PHONY: test-config
@@ -312,7 +312,7 @@ list-all-translators:  ## Collect the names of all translators in the project's 
 .PHONY: update-user-guides
 update-user-guides:  ## Run the page layout tests to regenerate screenshots.
 	@echo "Running page layout tests to update guide screenshots..."
-	@$(DEVSHELL) cd securedrop && $(SDBIN)/update-user-guides
+	@$(DEVSHELL) $(SDBIN)/update-user-guides
 	@echo
 
 
