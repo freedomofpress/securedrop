@@ -1,0 +1,75 @@
+Upgrade from 0.13.1 to 0.14.0
+=============================
+
+Updating the Tails Workstations
+-------------------------------
+We recommend that you update all Tails drives to version 3.15, which was
+`released <https://tails.boum.org/news/version_3.15/index.en.html>`_
+on July 9, 2019. Follow the Tails graphical prompts on your workstations to
+perform this upgrade.
+
+On a subsequent boot of your SecureDrop *Journalist* and *Admin Workstations*,
+the *SecureDrop Workstation Updater* will alert you to workstation updates.
+Due to a `recent surge in attacks against GPG keyservers <https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f>`_,
+we recommend against using the graphical updater for this release.
+
+We have uploaded the SecureDrop Release Key to the new *keys.openpgp.org*
+keyserver, which includes important mitigations against this type of attack. In
+the process, we have also updated the expiration date of the release key (the
+fingerprint remains the same).
+
+To update your workstations using the new keyserver, run the following
+commands: ::
+
+    cd ~/Persistent/securedrop
+    git fetch --tags
+    gpg --keyserver hkps://keys.openpgp.org --recv-key \
+     "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
+    git tag -v 0.14.0
+
+The output should include the following two lines: ::
+
+    gpg:                using RSA key 22245C81E3BAEB4138B36061310F561200F4AD77
+    gpg: Good signature from "SecureDrop Release Signing Key"
+
+Please verify that each character of the fingerprint above matches what
+on the screen of your workstation. If it does, you can check out the
+new release: ::
+
+    git checkout 0.14.0
+
+.. important:: If you do see the warning "refname '0.14.0' is ambiguous" in the
+  output, we recommend that you contact us immediately at securedrop@freedom.press
+  (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__).
+
+Finally, run the following commands: ::
+
+  ./securedrop-admin setup
+  ./securedrop-admin tailsconfig
+
+Once you have updated the workstation, the graphical updater will always use the
+new *keys.openpgp.org* keyserver.
+
+Backing Up the Tails Workstations
+---------------------------------
+USB flash drives degrade over time and vary in quality. To ensure continued
+access to SecureDrop by administrators and journalists, we recommend backing up
+the Tails Workstations on the occasion of a new SecureDrop release, after you
+have completed the upgrade process for each drive.
+
+You can use a single storage device for backups of multiple workstations. See
+our :doc:`Workstation Backup Guide <../backup_workstations>` for more information.
+
+Getting Support
+---------------
+
+Should you require further support with your SecureDrop installation, we are
+happy to help!
+
+- Community support is available at https://forum.securedrop.org
+- If you are already a member of our support portal, please don't hesitate to
+  open a ticket there. If you would like to request access, please contact us
+  at securedrop@freedom.press
+  (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__).
+- The Freedom of the Press Foundation offers training and priority support
+  services. See https://securedrop.org/priority-support/ for more information.
