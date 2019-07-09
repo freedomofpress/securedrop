@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-07-09 00:16+0000\n"
-"Last-Translator: Jonas Franzén <jonas.franzen@schibsted.se>\n"
+"PO-Revision-Date: 2019-07-09 02:10+0000\n"
+"Last-Translator: rmol <john@freedom.press>\n"
 "Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/sv/>\n"
 "Language: sv\n"
@@ -994,9 +994,10 @@ msgid ""
 "strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> "
 "&nbsp;button in your browser’s toolbar to change it."
 msgstr ""
-"Din Tor Browsers <a id=\"disable-js\" href=\"\"><strong>Security "
-"Setting</strong></a> är ställd för låg. Använd <img src=\"{icon}\" alt=\""
-"shield icon\"> &nbsp;-knappen i din Tor Browsers menyrad för att ändra det."
+"Din Tor Browsers <a id=\"disable-js\" href=\"\""
+"><strong>Säkerhetsnivå</strong></a> är ställd för låg. Använd <img src=\""
+"{icon}\" alt=\"shield icon\"> &nbsp;-knappen i din Tor Browsers menyrad för "
+"att ändra det."
 
 #: source_templates/index.html:17
 msgid ""
@@ -1050,15 +1051,15 @@ msgstr "KONTROLLERA OM DU FÅTT ETT SVAR"
 
 #: source_templates/index.html:93
 msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "KLicka på <img src=\"{icon}\" alt=\"shield icon\"> i menyraden ovan"
+msgstr "Klicka på <img src=\"{icon}\" alt=\"shield icon\"> i menyraden ovan"
 
 #: source_templates/index.html:94
 msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "Välj <strong>Advanced Security Settings</strong>"
+msgstr "Välj <strong>Avancerade säkerhetsinställningar</strong>"
 
 #: source_templates/index.html:95
 msgid "Select <strong>Safest</strong>"
-msgstr "Välj <strong>Safest</strong>"
+msgstr "Välj <strong>Säkrast</strong>"
 
 #: source_templates/index.html:97
 msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
