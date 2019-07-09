@@ -355,8 +355,11 @@ jobs:
   deb-tests:
     docker:
       - image: gcr.io/cloud-builders/docker
+    environment:
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
     steps:
-      - run: apt-get install -y make virtualenv enchant jq
+      - run: apt-get install -y make virtualenv enchant jq python3-dev build-essential
       - checkout
       - setup_remote_docker
       - run:
