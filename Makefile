@@ -312,7 +312,7 @@ list-all-translators:  ## Collect the names of all translators in the project's 
 .PHONY: update-user-guides
 update-user-guides:  ## Run the page layout tests to regenerate screenshots.
 	@echo "Running page layout tests to update guide screenshots..."
-	@$(DEVSHELL) cd securedrop && $(SDBIN)/update-user-guides
+	@$(DEVSHELL) $(SDBIN)/update-user-guides
 	@echo
 
 
