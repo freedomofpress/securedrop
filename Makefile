@@ -356,7 +356,7 @@ ci-teardown:  ## Destroy GCE host for testing staging environment.
 .PHONY: ci-deb-tests
 ci-deb-tests:  ## Test SecureDrop Debian packages in CI environment.
 	@echo "███ Running Debian package tests in CI..."
-	@(SDROOT)/devops/scripts/test-built-packages.sh
+	@$(SDROOT)/devops/scripts/test-built-packages.sh
 	@echo
 
 .PHONY: build-gcloud-docker
