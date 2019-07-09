@@ -12,11 +12,32 @@ TOPLEVEL=$(git rev-parse --show-toplevel)
 BASE_OS=xenial
 
 function docker_image() {
+
+## Get a short identifier for the working directory
+hashpath() {
+    pwd | sum | awk '{print $1}'
+}
+
+## Get an integer prefix for exposed ports, to support running dev and
+## test, or containers from different directories simultaneously
+get_port_prefix() {
+    port_prefix="${PORT_PREFIX:-}"
+    tries=0
+    while true
+    do
+        vnc="${port_prefix}5909"
+        nc -z localhost "$vnc" || break
+        tries=$(( tries + 1 ))
+        port_prefix="${tries}"
+    done
+    echo "$port_prefix"
+}
+
     docker build \
            ${DOCKER_BUILD_ARGUMENTS:-} \
            --build-arg=USER_ID="$(id -u)" \
            --build-arg=USER_NAME="${USER:-root}" \
-           -t "securedrop-test-${1}-py3" \
+           -t "sd-${1}-py${2}-$(hashpath)" \
            --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/python3/Dockerfile" \
            "${TOPLEVEL}/securedrop"
 }
@@ -24,12 +45,27 @@ function docker_image() {
 function docker_run() {
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
 
+    port_prefix="$(get_port_prefix)"
+
+    if [ -z "$port_prefix" ]
+    then
+        echo "Using no prefix for exposed Docker ports."
+    else
+        echo "************************************************************"
+        echo "Exposed Docker ports will be available on localhost prefixed"
+        echo "with \"${port_prefix}\", e.g. ${port_prefix}8080 for the source interface, and "
+        echo "${port_prefix}8081 for the journalist interface."
+        echo "************************************************************"
+    fi
+
     # The --shm-size argument sets up dedicated shared memory for the
     # container. Our tests can fail with the default of 64m.
     docker run \
            --shm-size 2g \
-           -p 127.0.0.1:5909:5909 \
            --rm \
+           -p "127.0.0.1:${port_prefix}5909:5909" \
+           -p "127.0.0.1:${port_prefix}8080:8080" \
+           -p "127.0.0.1:${port_prefix}8081:8081" \
            -e NUM_SOURCES \
            -e LC_ALL=C.UTF-8 \
            -e LANG=C.UTF-8 \
@@ -38,7 +74,7 @@ function docker_run() {
            --user "${USER:-root}" \
            --volume "${TOPLEVEL}:${TOPLEVEL}" \
            --workdir "${TOPLEVEL}/securedrop" \
-           --name securedrop-dev \
+           --name "sd-$(uuid)" \
            -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py3" "${@:2}"
 }
 
