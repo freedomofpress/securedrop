@@ -308,6 +308,7 @@ class FunctionalTest(object):
         el = WebDriverWait(self.driver, self.timeout, self.poll_frequency).until(
             expected_conditions.element_to_be_clickable((By.ID, element_id))
         )
+        el.location_once_scrolled_into_view
         el.click()
         return el
 
