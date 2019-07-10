@@ -27,7 +27,6 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.remote_connection import LOGGER
 from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from sqlalchemy.exc import IntegrityError
 from tbselenium.tbdriver import TorBrowserDriver
@@ -310,7 +309,7 @@ class FunctionalTest(object):
             expected_conditions.element_to_be_clickable((By.ID, element_id))
         )
         el.location_once_scrolled_into_view
-        ActionChains(self.driver).move_to_element(el).click().perform()
+        el.click()
         return el
 
     def safe_click_by_css_selector(self, selector):
