@@ -437,9 +437,8 @@ Generic Troubleshooting Tips
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When troubleshooting, ensure you are on the latest version of SecureDrop
-in your *Admin Workstation*. After :doc:`upgrading to SecureDrop 0.7.x <upgrade/0.6.x_to_0.7>`,
-this is done by simply accepting the update when prompted at boot in the GUI
-that appears.
+in your *Admin Workstation*. This is done by accepting the update
+when prompted at boot in the GUI that appears.
 
 I can't SSH into my servers over Tor from my Admin Workstation. What do I do?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

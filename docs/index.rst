@@ -86,25 +86,10 @@ anonymous sources.
    :name: upgradetoc
    :maxdepth: 2
 
+   upgrade/0.13.1_to_0.14.0.rst
    upgrade/0.13.0_to_0.13.1.rst
    upgrade/0.12.2_to_0.13.0.rst
    upgrade/xenial_after_april_30.rst
-   upgrade/xenial_prep.rst
-   upgrade/xenial_upgrade_in_place.rst
-   upgrade/xenial_backup_install_restore.rst
-   upgrade/0.12.1_to_0.12.2.rst
-   upgrade/0.12.0_to_0.12.1.rst
-   upgrade/0.11.1_to_0.12.0.rst
-   upgrade/0.10.0_to_0.11.0.rst
-   upgrade/0.9.1_to_0.10.0.rst
-   upgrade/0.8.0_to_0.9.1.rst
-   upgrade/0.7.x_to_0.8.rst
-   upgrade/0.6.x_to_0.7.rst
-   upgrade/0.5.x_to_0.6.rst
-   upgrade/0.4.x_to_0.5.rst
-   upgrade/0.3.x_to_0.4.rst
-   upgrade_to_tails_2x.rst
-   upgrade_to_tails_3x.rst
 
 .. toctree::
    :caption: Developer Documentation
