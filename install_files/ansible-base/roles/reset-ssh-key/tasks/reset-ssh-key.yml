@@ -1,0 +1,9 @@
+---
+- name: Replace authorized SSH keys on servers with the key for this workstation
+  authorized_key:
+    user: "{{ ssh_users }}"
+    key: "{{ lookup('file', '/home/amnesia/.ssh/id_rsa.pub') }}"
+    state: present
+    exclusive: True
+  tags:
+    - reset-ssh-key

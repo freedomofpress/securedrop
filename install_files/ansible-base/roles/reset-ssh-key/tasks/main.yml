@@ -1,0 +1,2 @@
+---
+- include: reset-ssh-key.yml

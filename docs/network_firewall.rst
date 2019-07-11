@@ -339,8 +339,11 @@ interface**, scroll down, and click the **Save** button.
 
 |Disable DHCP|
 
+.. _assign_static_ip_to_workstation:
+
 Assign a Static IP Address to the *Admin Workstation*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 Now you will need to assign a static IP to the *Admin Workstation*.
 
