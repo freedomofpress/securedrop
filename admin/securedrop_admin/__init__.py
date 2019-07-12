@@ -399,6 +399,12 @@ class SiteConfig(object):
              SiteConfig.ValidateLocales(self.args.app_path),
              string.split,
              lambda config: True],
+            ['v3_onions_only', False, bool,
+             u'Whether V3 only onions are supported '
+             '(recommended for new installs beginning in SecureDrop 1.0.0)',
+             SiteConfig.ValidateYesNo(),
+             lambda x: x.lower() == 'yes',
+             lambda config: True],
         ]
 
     def load_and_update_config(self):

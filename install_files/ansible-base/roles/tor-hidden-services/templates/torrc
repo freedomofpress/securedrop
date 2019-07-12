@@ -3,22 +3,47 @@ SafeLogging 1
 RunAsDaemon 1
 
 {% if 'securedrop_application_server' in group_names %}
+
+{% if not v3_onions_only %}
 HiddenServiceDir /var/lib/tor/services/source
 HiddenServiceVersion 2
 HiddenServicePort 80 127.0.0.1:80
 {% if securedrop_app_https_on_source_interface|default(False) %}
 HiddenServicePort 443 127.0.0.1:443
 {% endif %}
+{% endif %}
+HiddenServiceDir /var/lib/tor/services/source_v3
+HiddenServiceVersion 3
+HiddenServicePort 80 127.0.0.1:80
+{% if securedrop_app_https_on_source_interface|default(False) %}
+HiddenServicePort 443 127.0.0.1:443
+{% endif %}
 
+{% if not v3_onions_only %}
 HiddenServiceDir /var/lib/tor/services/journalist
 HiddenServiceVersion 2
 HiddenServicePort 80 127.0.0.1:8080
 HiddenServiceAuthorizeClient stealth journalist
 {% endif %}
+HiddenServiceDir /var/lib/tor/services/journalist_v3
+HiddenServiceVersion 3
+HiddenServicePort 80 127.0.0.1:8080
+#HiddenServiceAuthorizeClient stealth journalist
+
+{% endif %}
 
 {% if enable_ssh_over_tor %}
+
+{% if not v3_onions_only %}
 HiddenServiceDir /var/lib/tor/services/ssh
 HiddenServiceVersion 2
 HiddenServicePort 22 127.0.0.1:22
 HiddenServiceAuthorizeClient stealth admin
+{% endif %}
+
+HiddenServiceDir /var/lib/tor/services/ssh_v3
+HiddenServiceVersion 3
+HiddenServicePort 22 127.0.0.1:22
+#HiddenServiceAuthorizeClient stealth admin
+
 {% endif %}
