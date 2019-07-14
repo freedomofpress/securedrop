@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: SecureDrop Team <securedrop@freedom.press>
 Homepage: https://securedrop.org
 Package: securedrop-ossec-agent
-Version: 3.0.0+0.14.0~rc1
+Version: 3.0.0+1.0.0~rc1
 Architecture: amd64
 Depends: ossec-agent,securedrop-keyring,securedrop-config
 Replaces: ossec-agent

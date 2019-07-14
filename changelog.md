@@ -1,6 +1,42 @@
 # Changelog
 
-## 0.14.0~rc1
+## 1.0.0~rc1
+
+
+
+## 0.14.0
+
+### Web Applications
+
+* Add support for setting journalist names, and expose via journalist API (#4425, #4459).
+* Update instructions for sources regarding Tor Browser 8.5 security settings (#4462,  #4494).
+* Replace cloud icon with download icon in source interface (#4548).
+* Expose supported locales in source interface metadata API (#4467).
+* Remove unnecessary FontAwesome CSS from source interface (#4464).
+* Bug fix: If sessions expire on /generate on the source interface, redirect to index (#4496).
+* Add explanatory text for authenticator reset buttons in Journalist interface (#3274)
+
+### Operations
+
+* Use archive module for securedrop-admin logs command (#4497).
+* Fix Ansible deprecation warnings (#4499).
+* Update grsecurity kernels to version 4.4.182 (#4543).
+* Add intel-microcode as dependency (#4543).
+* Update securedrop-keyring to 0.1.3: update expiration of signing key and add uid (#4578)
+* Switch to keys.openpgp.org as the default keyserver (#4576)
+* Update securedrop-admin tool to use only hkps://keys.openpgp.org when retrieving release key (#4585)
+
+### Developer Workflow
+
+* Add new functional test of /metadata endpoint (#4536).
+* Add workaround for Circle CI’s problems with branch filtering  (#4505).
+* Automatically rerun flaky admin tests (#4466).
+* Improve localization manager documentation and update script used for gathering translator names (#4493, #4482, #4469).
+
+### Documentation
+
+* Update SecureDrop screenshots for source, journalist and admin guides (#4564)
+* Update Admin Workstation setup instructions to use keys.openpgp.org (#4586)
 
 ## 0.13.1
 

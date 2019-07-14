@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: SecureDrop Team <securedrop@freedom.press>
 Homepage: https://securedrop.org
 Package: securedrop-config
-Version: 0.1.3+0.14.0~rc1
+Version: 0.1.3+1.0.0~rc1
 Architecture: all
 Description: Establishes baseline system state for running SecureDrop.
  Configures apt repositories.
