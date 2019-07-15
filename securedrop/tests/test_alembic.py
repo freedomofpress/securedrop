@@ -10,8 +10,6 @@ from alembic.script import ScriptDirectory
 from os import path
 from sqlalchemy import text
 
-from . import conftest
-
 from db import db
 from journalist_app import create_app
 
@@ -104,9 +102,7 @@ def test_alembic_head_matches_db_models(journalist_app,
     '''
     models_schema = get_schema(journalist_app)
 
-    config.DATABASE_FILE = config.DATABASE_FILE + '.new'
-    # Use the fixture to rewrite the config with the new URI
-    conftest.alembic_config(config)
+    os.remove(config.DATABASE_FILE)
 
     # Create database file
     subprocess.check_call(['sqlite3', config.DATABASE_FILE, '.databases'])
