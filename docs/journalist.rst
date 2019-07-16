@@ -33,51 +33,58 @@ administrator if you have trouble.
 
 Creating a GPG Key
 ------------------
-
-Each journalist needs a personal GPG key for encrypting files. A GPG
-key has two parts: a *public key* and a *private key*. The private
-key, used for decryption, stays on the *Journalist Workstation*. The
-public key, used for encryption, is copied to the *Secure Viewing
-Station*.
+We recommend creating a personal GPG key for encrypting files before moving
+them from the *Secure Viewing Station* to your everyday workstation. A GPG key
+has two parts: a *public key* and a *private key*. The private key, used for
+decryption, stays on your everyday workstation. The public key, used for
+encryption, is copied to the *Secure Viewing Station*.
 
 If you do not yet have a GPG key, follow the instructions for your
 operating system to set one up:
 
-- `GNU/Linux <https://ssd.eff.org/en/module/how-use-pgp-linux>`__
 - `Windows <https://ssd.eff.org/en/module/how-use-pgp-windows>`__
 - `Mac OS <https://ssd.eff.org/en/module/how-use-pgp-mac-os-x>`__
+- `GNU/Linux <https://ssd.eff.org/en/module/how-use-pgp-linux>`__
 
 Connecting to the *Journalist Interface*
 ----------------------------------------
-
 Journalists viewing documents on SecureDrop must connect to the
 *Journalist Interface* using the `Tails operating system
-<https://tails.boum.org/>`__ on a USB drive. Your admin can
-help provide you with a Tails drive.
+<https://tails.boum.org/>`__ on a USB drive. As part of your on-boarding, your
+admin should have provided you with a Tails drive configured for this purpose,
+known as the *Journalist Workstation* USB drive.
 
-.. important:: See our guide on setting up :doc:`Tails for the Admin
-          and Journalist Workstation <tails_guide>` before continuing.
+If you do not have a USB drive clearly identified as the *Journalist
+Workstation*, ask your administrator for assistance before continuing.
 
 .. note:: The Tails OS makes using SecureDrop very different from
           other computing experiences. The added layers of security
           mean extra steps each time you want to login. With practice,
           you will become increasingly comfortable with the process.
 
-Each journalist has an authenticated Tor hidden service URL for
-logging in to the *Journalist Interface*. This must be done using the
-Tails operating system. Click the *Journalist Interface* icon on the
-desktop. This will open Tor Browser to a ".onion" page. Log in with
+To use the *Journalist Interface*, you will visit a Tor hidden service address
+in the Tor Browser. By design, this hidden service address is only accessible
+from your *Journalist Workstation*; it will not work in Tor Browser on another
+computer, unless explicitly configured with an access token.
+
+To visit the *Journalist Interface*, click the *Journalist Interface* icon on the
+desktop. This will open Tor Browser to an ".onion" address. Log in with
 your username, passphrase, and two-factor authentication token, as
-shown in the first screenshot below. (See :doc:`Using YubiKey with the
-Journalist Interface <yubikey_setup>`.)
+shown in the first screenshot below. (If you have been provided with a YubiKey,
+see :doc:`Using YubiKey with the Journalist Interface <yubikey_setup>` for
+detailed setup and usage information.)
 
 |Journalist Interface Login|
 
 Reset Passphrase or Two-factor Authentication Token
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-If necessary journalists may reset their user passphrase or two-factor authentication token in their user profile. To navigate to your user profile, log in to the *Journalist Interface* and click on the link in the upper right of the screen where it says **Logged on as <your user name>.**
+If necessary, journalists may reset their user passphrase or two-factor
+authentication token in their user profile. To navigate to your user profile,
+log in to the *Journalist Interface* and click on the link in the upper right of
+the screen where it says **Logged on as <your user name>.**
 
-If you have lost or forgotten your passphrase or two-factor authentication device, you will need to contact your SecureDrop admin for assistance.
+If you have lost or forgotten your passphrase or two-factor authentication
+device, you will need to contact your SecureDrop admin for assistance.
 
 |Journalist account profile|
 
@@ -98,7 +105,7 @@ connect to the *Journalist Interface* to get them.
 
 This is an optional feature that must be activated :doc:`by the
 administrator <admin>`. In the simplest case a journalist provides
-her/his email and GPG public key to the admin. If a team of journalist
+their email and GPG public key to the admin. If a team of journalist
 wants to receive these daily alerts, they should share a GPG key and
 ask the admin to setup a mail alias (SecureDrop does not provide that
 service) so they all receive the alerts and are able to decrypt them.
@@ -123,7 +130,8 @@ next to their current codename.
 |Cycle source codename|
 
 .. tip:: You can also **Star** interesting or promising sources to
-         easily return to them later.
+         easily return to them later. All starred sources will be bumped to the
+         top of the list of sources.
 
 If you want to reply to the source, write your message in the text
 field and click **Submit**.
@@ -133,10 +141,12 @@ field and click **Submit**.
 Once your reply has been successfully submitted, you will be returned
 to the source page and see a message confirming that the reply was
 stored. The source will see your reply the next time they log in with
-their unique codename. To minimize the impact of a source codename
-being compromised, the source interface encourages the source to delete
-the reply after reading it. Once a source has read your reply and deleted
-it from their inbox, a checkmark will appear next to the reply in the interface.
+their unique codename.
+
+To minimize the impact of a source codename being compromised, the *Source
+Interface* encourages the source to delete the reply after reading it. Once a
+source has read your reply and deleted it from their inbox, a checkmark will
+appear next to the reply in the interface.
 
 .. note:: Prior to SecureDrop 0.9.0, replies when deleted from the source inbox
   would also disappear from the journalist inbox. As such, if there are older
@@ -175,39 +185,82 @@ generated and you can log back in and send a reply.
 Moving Documents to the *Secure Viewing Station*
 ------------------------------------------------
 
-Documents sent by sources can only be viewed on the *Secure Viewing
-Station*. After clicking on an individual source, you will see the
-page below with any messages that source has sent you. Click on a
-document or message name to save it, or select a number of documents
+Step 1: Download the encrypted submission
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Documents and messages sent by sources can only be decrypted and viewed on the
+*Secure Viewing Station*. After clicking on an individual source, you will see the
+page below with any documents or messages the source has sent you. Documents
+always end with ``-doc.gz.gpg``, while messages always end with ``-msg.gpg``.
+
+Click on a document or message name to save it, or select a number of documents
 and save them all at once by clicking **Download Selected**.
 
 |Load external content|
 
-A dialog box will appear asking if you want to **Open** or **Save**
-the file. Select **Save File**:
+A dialog box with two choices will appear, **Cancel** and **Save file**:
 
 |Download selected|
 
-In order to protect you from malware, the browser in Tails will only
-allow you to download documents to a special persistent folder located
-at ``/home/amnesia/Tor Browser``.
+Click **Save file**. In the save dialog, select one
+of the two folders highlighted in red in the screenshot below:
 
 |Download to sandbox folder|
 
-.. tip:: The special folder mentioned here is called **Tor Browser**,
-         not "Persistent." Attempting to download directly into the
-         **Persistent** folder will only lead to frustration.
+The difference between these two folders is as follows:
 
-Once downloaded to this folder, move the document to the designated
+- **Tor Browser**. Downloads saved to this folder will be stored in memory,
+  which means that they will only be available for the duration of your current
+  Tails session. In the screenshot, this is the currently selected folder.
+  The full path to this folder is ``/home/amnesia/Tor Browser``.
+
+- **Tor Browser (persistent)**: Note that the name may be abbreviated, as shown
+  in the screenshot; you can view the full name by hovering the mouse over the
+  shortcut. Downloads saved to this folder will be stored
+  on your Tails USB drive in the special persistent volume that is only
+  available if you have unlocked it on the Tails welcome screen. The full path
+  to this folder is ``/home/amnesia/Persistent/Tor Browser``.
+
+Unless you have a reason to store encrypted submissions on the
+*Journalist Workstation*, we recommend using the non-persistent "Tor Browser"
+folder. In the recommended process, you will now move the submission to the
+*Secure Viewing Station*, and there is no need to leave a persistent copy
+behind.
+
+.. important:: Attempting to download files to any other folder will fail.
+  Tails only permits Tor Browser to access these two folders, so that
+  even if your browser is compromised by malware, attackers cannot easily gain
+  access to other data stored on the same computer.
+
+  See the Tails guide to `Browsing the web with Tor Browser <https://tails.boum.org/doc/anonymous_internet/Tor_Browser/index.en.html>`__
+  for more information.
+
+Step 2: Copy the encrypted submission to the *Transfer Device*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once downloaded to either folder, move the document to the designated
 USB stick you intend to use to transfer the documents from your
 *Journalist Workstation* to the *Secure Viewing Station*. This storage
-device will be known as your *Transfer Device*.
+device is known as your *Transfer Device*.
 
-|Move to transfer device 1|
+You can right-click the file and select **Copy to**, then select the *Transfer
+Device*, as shown in the screenshots below.
 
-|Move to transfer device 2|
+|Copy to transfer device 1|
 
-Eject the *Transfer Device* from the *Journalist Workstation*.
+|Copy to transfer device 2|
+
+This will leave a redundant copy behind in the Tor Browser folder. If you have
+downloaded the file to the non-persistent "Tor Browser" folder (as recommended),
+the redundant copy will disappear when the computer is shut down or rebooted.
+
+"Eject" the *Transfer Device* by clicking the eject icon next to its name in
+the file manager. Wait for this operation to complete (the eject icon will
+disappear), then unplug the *Transfer Device*. "Ejecting" the drive in this manner
+ensures that all write operations are completed before you physically unplug it.
+
+Step 3: Decrypt and view the submission on the *Secure Viewing Station*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Next, boot up the *Secure Viewing Station* using Tails and enter the
 passphrase for the *Secure Viewing Station* persistent volume. Once you
@@ -216,33 +269,68 @@ have logged in, plug in the *Transfer Device*.
 .. note:: The *Secure Viewing Station* and *Journalist Workstation*
           are on separate Tails USB drives.
 
-Click on the computer icon on your desktop, then on the *Transfer
-Device*. Drag and drop the file into your **Persistent** folder.
-
-.. important:: Copy these documents to the **Persistent** folder *before*
-             decrypting them. Otherwise you might accidentally decrypt
-             the documents on the USB stick, and they could be
-             recoverable in the future.
+Click on the **Home** icon on your desktop, then on the *Transfer
+Device*. Copy the file into your **Persistent** folder. You can do so by opening
+a new window with the **Persistent** folder and dragging the file from one
+window to another. A faster method is to drag the file to the **Persistent**
+shortcut, as in the screenshot below:
 
 |Copy files to persistent|
 
-After successfully copying, erase the files from your *Transfer
-Device* by returning to the *Transfer Device* folder. Right click on
-the files that need removal and click "Wipe" to securely delete the
-files from your device.
+.. important::
 
-Decrypting on the *Secure Viewing Station*
-------------------------------------------
+   Always copy submissions to the **Persistent** folder *before* decrypting
+   them. Otherwise you might accidentally decrypt them on the USB stick, and
+   they could be recoverable in the future.
 
-To decrypt documents, return to your **Persistent** folder and
-double-click on the zipped file folder. After you extract the files,
-click on each file individually. If you have configured a passphrase during
-the generation of your *Submission Key*, you will be prompted for it.
+After successfully copying them to the *Secure Viewing Station*, erase the files
+from your *Transfer Device*. Ensure you're viewing the *Transfer Device* folder,
+then right click on the files that need removal and click "Wipe" to securely
+delete the files from your device:
 
-|Decrypting|
+|Wiping documents|
 
-When you decrypt the file it will have the same filename, but without
-".gpg" at the end.
+To decrypt and view documents or messages, return to your **Persistent** folder.
+All key actions are initiated by double-clicking:
+
+- Double-clicking archives in ZIP or gzip format will open the "File Roller"
+  application, which allows you to extract the contents.
+
+- Double-clicking files that end in ``.gpg`` will attempt to decrypt the contents
+  to the same directory. If you have configured a passphrase for your
+  *Submission Key*, you will be prompted for it.
+
+- Double-clicking decrypted messages or documents will attempt to open them in a
+  default application suitable for the file type.
+
+If the default application does not work, you can right-click on the
+document and choose **Open with Other Application...** to try opening
+the document with LibreOffice Writer, Document Viewer, or another application.
+You might also need to right-click on a file and choose **Rename...** to rename
+a document with an incorrect or missing file extension.
+
+.. tip::
+
+   Always extract gzip archives with the "File Roller" application, which is
+   the default when double-clicking the archive. Other methods may not preserve
+   the filename contained in the archive.
+
+   For example, an archive called ``1-artful_elevation-doc.gz`` might contain a
+   file ``secrets.docx``, but if you extract the contents by right-clicking the
+   archive and selecting **Extract here**, the extracted file will be called
+   ``1-artful_elevation-doc`` instead of ``secrets.docx``. This may result in
+   problems when attempting to open the file due to the loss of its file
+   extension.
+
+When you double-click an archive to open it, you should see it in the "File
+Roller" application. It looks like this:
+
+|Opened archive|
+
+Click the **Extract** button to unpack the archive. Navigate to the folder
+containing the encrypted document message or document (ends with ``.gpg``)
+and double-click it to decrypt it. The decrypted file it will have the same
+filename, but without ``.gpg`` at the end.
 
 |Decrypted documents|
 
@@ -251,33 +339,75 @@ default application.
 
 |Opened document|
 
-If the default application does not work, you can right-click on the
-document and choose **Open with Other Application...** to try opening
-the document with OpenOffice Writer, or Document Viewer. You might
-also need to right-click on a file and choose **Rename...** to rename
-a document with a proper file extension (for example, ".jpg" instead
-of ".jpeg").
-
 Working with Documents
 ----------------------
 
-This section describes how to handle unusual file formats, safely research
-submissions, remove metadata, and mitigate risks from submitted malware.
+This section describes how to organize submissions, handle unusual file formats,
+safely research submissions, remove metadata, and mitigate risks from
+submitted malware.
+
+.. tip::
+
+   This is only a very limited introduction. Freedom of the Press Foundation
+   publishes and maintains `digital security guides for journalists <https://freedom.press/training/>`__,
+   many of which relate to these topics, and offers `digital security training <https://freedom.press/training/request-training/>`__
+   for news organization staff.
+
+Organizing submissions
+~~~~~~~~~~~~~~~~~~~~~~
+
+Whenever you download submissions using one of the **Download** buttons in the
+*Journalist Interface*, they will be organized as a ZIP archive with a built-in
+folder structure, which you can use as a template for organizing submissions on
+the *Secure Viewing Station*.
+
+Submissions downloaded in this manner from the *list of all sources* will
+contain a structure like the following:
+
+.. code:: sh
+
+    all
+    ├── recessive accreditation
+    │   ├── 1_2019-07-07
+    │   │   └── 1-recessive_accreditation-msg.gpg
+    │   └── 2_2019-07-07
+    │       └── 2-recessive_accreditation-msg.gpg
+    └── surviving authentication
+        ├── 1_2019-07-07
+        │   └── 1-surviving_authentication-doc.gz.gpg
+        └── 2_2019-07-07
+            └── 2-surviving_authentication-msg.gpg
+
+Submissions downloaded in this manner from the screen for an *individual source*
+will contain a similar structure, but without the parent folder ``all``.
+
+A folder like ``1_2019-07-07`` in the example above will always contain exactly
+one message or document. The numbers in the folder name (1, 2, etc.) correspond
+to the numbering in the *Journalist Interface*. The dates (2019-07-07 in the
+example above) are the day (in year/month/day format) of the last activity
+related to this source, at the time the archive was downloaded.
+
+If you download messages or documents one at a time in the *Journalist
+Interface*, they will not be contained in a ZIP file at all. Instead, you will
+be dealing with individual files like ``1-surviving_authentication-doc.gz.gpg``,
+without a folder structure.
 
 Handling File Formats
 ~~~~~~~~~~~~~~~~~~~~~
 
 SecureDrop accepts submissions of any file type. Tails comes with
-pre-installed applications for securely working with documents, including
-`the Tor Browser <https://www.torproject.org/>`__, an office suite, graphics
+`pre-installed applications <https://tails.boum.org/doc/about/features/index.en.html>`__
+for securely working with documents, including an office suite, graphics
 tools, desktop publishing tools, audio tools, and printing and scanning tools.
 
+For more information, visit the Tails guide to `working with sensitive documents`_.
+
 Pre-Encrypted Submissions
-`````````````````````````
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 SecureDrop sources can optionally encrypt prior to submitting to SecureDrop.
 This means that once you decrypt the document as you usually do by double
-clicking the document in the file navigator, there will be another layer of
+clicking the document in the file manager, there will be another layer of
 encryption.
 
 Most often, the file will be encrypted to the SecureDrop key. If the file is
@@ -307,9 +437,8 @@ Researching Submissions
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Journalists should take care to research submissions using the Tor
-Browser, ideally in a new Tails session for highly sensitive
-submissions. For more information, visit the Tails guide to `working
-with sensitive documents`_.
+Browser, ideally in a new Tails session on your *Journalist Workstation* for
+highly sensitive submissions.
 
 Removing Metadata
 ~~~~~~~~~~~~~~~~~
@@ -317,12 +446,12 @@ Removing Metadata
 .. tip:: For detailed information about removing metadata from documents, check out
          this in-depth `guide to removing metadata`_.
 
-Tails also comes with the `Metadata Anonymisation Toolkit`_ (MAT) that
+Tails comes with the `Metadata Anonymisation Toolkit`_ (MAT) that
 is used to help strip metadata from a variety of types of files,
 including png, jpg, OpenOffice/LibreOffice documents, Microsoft Office
 documents, pdf, tar, tar.bz2, tar.gz, zip, mp3, mp2, mp1, mpa, ogg,
-and flac. You can open MAT by clicking **Applications** in the top
-left corner, Accessories, Metadata Anonymisation Toolkit.
+and flac. You can open MAT by clicking **Applications** ▸ **System Tools** ▸
+**MAT**.
 
 We recommend always doing as much work as possible inside of Tails
 before copying documents back to your *Journalist Workstation*. This
@@ -349,6 +478,23 @@ files compromising the *Secure Viewing Station*. However, even if a
 compromise does occur, Tails is designed so that the next time you
 reboot, the malware will be gone.
 
+It is crucial, however, that you have a strategy for dealing with malware before
+you move documents off the *Secure Viewing Station* in electronic form.
+SecureDrop does not scan for or automatically remove malware. If you copy an
+original file you received via SecureDrop to your everyday workstation, and that
+file contains malware, you may still end up running the malware on your everyday
+workstation.
+
+For this reason, we recommend taking additional precautions. Printing a file
+is often safer than exchanging it electronically, and it has the additional
+benefits of removing embedded metadata (except for printer codes, watermarks,
+or similar identifiers that may not be visible to the naked eye).
+
+Alternatively, you can use the tools provided within Tails to examine
+documents, or convert files from one format to another (e.g., export a Word
+document as PDF). Fully mitigating the risks of malware is beyond the scope
+of this documentation.
+
 `Never scan QR codes`_ from the *Secure Viewing Station* using a network
 connected device. These QR codes can contain links that your connected device
 will automatically visit. In general, you should take care when opening any
@@ -360,11 +506,24 @@ digital security staff or Freedom of the Press Foundation for assistance.
 .. _`working with sensitive documents`: https://tails.boum.org/doc/sensitive_documents/index.en.html
 .. _`Metadata Anonymisation Toolkit`: https://mat.boum.org/
 
-Encrypting and Moving Documents to the *Journalist Workstation*
----------------------------------------------------------------
+Risks From Photography
+~~~~~~~~~~~~~~~~~~~~~~
+
+It may be tempting to use your smartphone to photograph a submission, in order
+to share it with another journalist for quick review. Please note that many
+smartphones are configured to back up photographs to cloud services, immediately
+or intermittently. Not all backup settings may be visible to you.
+
+Moreover, any digital photograph will include certain metadata
+by default, which may reveal sensitive information about your SecureDrop
+usage patterns (potentially including GPS coordinates) to anyone who gains access
+to the file.
+
+Encrypting and Moving Documents to Your Everyday Workstation
+------------------------------------------------------------
 
 Before moving documents back to the *Transfer Device* to copy them to
-your workstation, encrypt them to your personal GPG key that you
+your everyday workstation, encrypt them to your personal GPG key that you
 imported when setting up the *Secure Viewing Station*.
 
 To do this, right-click on the document you want to encrypt and choose
@@ -378,16 +537,25 @@ such as an editor's) and click **OK**.
 |Encrypting 2|
 
 When you are done encrypting, you will have another document with the
-same filename but ending in ".gpg". This file is encrypted to the GPG
-keys you selected. You can safely copy these encrypted files to the
-*Transfer Device* to transfer them to your workstation.
+same filename but ending in ``.pgp`` (not ``.gpg``; the ``.pgp`` extension is
+just another way to refer to the same format). This file is encrypted to the GPG
+keys you selected. You can now copy these encrypted files to the *Transfer
+Device* to transfer them to your everyday workstation.
 
 |Encrypted document|
+
+.. important::
+
+   As noted above, SecureDrop does not scan for or remove malware. If the file
+   you received contains malware targeting the operating system and applications
+   running on your everyday workstation, copying it in its original form carries
+   the risk of spreading malware to that computer. Make sure you understand the
+   risks, and consider other methods to export the document (e.g., print).
 
 Decrypting and Preparing to Publish
 -----------------------------------
 
-Plug the *Transfer Device* into your workstation computer and copy
+Plug the *Transfer Device* into your everyday workstation computer and copy
 over the encrypted documents. Decrypt them with GPG.
 
 You are now ready to write articles and blog posts, edit video and
@@ -402,9 +570,10 @@ audio, and begin publishing important, high-impact work!
 .. |Load external content| image:: images/manual/screenshots/journalist-clicks_on_source_and_selects_documents.png
 .. |Download selected| image:: images/manual/tbb_Document5.png
 .. |Download to sandbox folder| image:: images/manual/tbb_Document6.png
-.. |Move to transfer device 1| image:: images/manual/tbb_Document7.png
-.. |Move to transfer device 2| image:: images/manual/tbb_Document8.png
+.. |Copy to transfer device 1| image:: images/manual/copy-to-transfer-device-1.png
+.. |Copy to transfer device 2| image:: images/manual/copy-to-transfer-device-2.png
 .. |Copy files to persistent| image:: images/manual/viewing1.png
+.. |Opened archive| image:: images/manual/tails-archive.png
 .. |Decrypting| image:: images/manual/viewing2.png
 .. |Decrypted documents| image:: images/manual/viewing3.png
 .. |Opened document| image:: images/manual/viewing4.png
