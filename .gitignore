@@ -1,3 +1,7 @@
+# ignore the test-results directory which is used to share logs and
+# test files with the development containers
+test-results
+
 # ignore the production config files that don't end in .example
 securedrop-app-conf.yml
 securedrop-mon-conf.yml

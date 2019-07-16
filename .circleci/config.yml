@@ -143,10 +143,6 @@ jobs:
       - *p2savecache
 
       - run:
-          name: Make test results directory
-          command: mkdir -p ~/test-results
-
-      - run:
           name: Run tests
           no_output_timeout: 20m
           command: |
@@ -157,10 +153,10 @@ jobs:
             PYTHON_VERSION=2 DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py2:${fromtag:-latest}" make test
 
       - store_test_results:
-          path: ~/test-results
+          path: ~/project/test-results
 
       - store_artifacts:
-          path: ~/test-results
+          path: ~/project/test-results
 
   python3-app-tests:
     machine:
@@ -181,10 +177,6 @@ jobs:
       - *savecache
 
       - run:
-          name: Make test results directory
-          command: mkdir -p ~/test-results
-
-      - run:
           name: Run tests
           command: |
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|docs|update-builder)")
@@ -194,10 +186,10 @@ jobs:
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" make test
 
       - store_test_results:
-          path: ~/test-results
+          path: ~/project/test-results
 
       - store_artifacts:
-          path: ~/test-results
+          path: ~/project/test-results
 
   translation-tests:
     machine:
@@ -217,10 +209,6 @@ jobs:
       - *savecache
 
       - run:
-          name: Make test results directory
-          command: mkdir -p ~/test-results
-
-      - run:
           name: Run tests
           command: |
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^i18n")
@@ -230,7 +218,10 @@ jobs:
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" make translation-test
 
       - store_test_results:
-          path: ~/test-results
+          path: ~/project/test-results
+
+      - store_artifacts:
+          path: ~/project/test-results
 
   admin-tests:
     docker:
