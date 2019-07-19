@@ -26,60 +26,53 @@
            See _source_index.sass for a more full understanding. #}
         <div class="index-wrap">
           <div class="header">
-            <img src="{{ url_for('main.select_logo') }}" alt="SecureDrop">
+            <img src="{{ url_for('main.select_logo') }}" alt="SecureDrop" class="logo-image">
             {% if use_custom_header_image %}
             <div class="powered">
               {{ gettext('Powered by') }}<br>
               <img src="/static/i/securedrop_small.png" alt="SecureDrop">
             </div>
             {% endif %}
+            <div id="index-locales">
+              {% include 'locales.html' %}
+            </div>
           </div>
 
           <div class="index-row">
-            <div class="index-column index-left index-top">
+            <div class="index-column index-left">
+              <div class="index-column-top-container">
               <h2 class="welcome-text">
                 {{ gettext('Submit for the first time') }}
               </h2>
-              <hr class="cut-out">
+              <hr class="cut-out box-separator left-cut-out">
+              <p>{{ gettext('If this is your first time submitting to journalists, start here.') }}</p>
+              </div>
+              <div class="index-column-bottom-container">
+                <a href="{{ url_for('main.generate') }}" id="submit-documents-button" class="btn alt">
+                  <img class="icon" src="{{ url_for('static', filename='i/arrow-upload-white.png') }}" width="20" height="14">
+                  {{ gettext('SUBMIT DOCUMENTS') }}
+                </a>
+              </div>
             </div>
 
-            <div class="index-column index-top">
+            <div class="index-column index-right">
+              <div class="index-column-top-container">
               <h2 class="welcome-text">
                 {{ gettext('Already submitted something?') }}
               </h2>
-              <hr class="cut-out">
-            </div>
-
-            <div class="index-column index-left">
-              <p>{{ gettext('If this is your first time submitting to journalists, start here.') }}</p>
-            </div>
-
-            <div class="index-column">
+              <hr class="cut-out box-separator right-cut-out">
               <p>{{ gettext('If you have already submitted to journalists, log in here to check for responses.') }}</p>
+              </div>
+              <div class="index-column-bottom-container">
+                <a href="{{ url_for('main.login') }}" id="login-button" class="btn">
+                  <img class="icon" src="{{ url_for('static', filename='i/font-awesome/comments-white.png') }}" width="20" height="16">
+                  {{ gettext('CHECK FOR A RESPONSE') }}
+                </a>
+              </div>
             </div>
-
-            <div class="index-column index-left index-bottom">
-              <a href="{{ url_for('main.generate') }}" id="submit-documents-button" class="sd-button btn alt">
-                <img class="icon off-hover" src="{{ url_for('static', filename='i/arrow-upload-white.png') }}" width="20" height="14">
-                <img class="icon on-hover" src="{{ url_for('static', filename='i/arrow-upload-blue.png') }}" width="20" height="14">
-                {{ gettext('SUBMIT DOCUMENTS') }}
-              </a>
-            </div>
-
-            <div class="index-column index-bottom">
-              <a href="{{ url_for('main.login') }}" id="login-button" class="sd-button btn primary">
-                <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/comments-white.png') }}" width="20" height="16">
-                <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/comments-blue.png') }}" width="20" height="16">
-                {{ gettext('CHECK FOR A RESPONSE') }}
-              </a>
-            </div>
-          </div>
         </div>
       </div>
 
-      <div id="index-locales" class="center">
-        {% include 'locales.html' %}
-      </div>
       <footer>
         {{ gettext('Like all software, SecureDrop may contain security bugs. Use at your own risk.') }}<br>{{ gettext('Powered by') }} SecureDrop {{ version }}.
       </footer>

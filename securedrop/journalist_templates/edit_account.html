@@ -24,7 +24,7 @@
       <input name="is_admin" id="is-admin" type="checkbox" {% if user.is_admin %}checked{% endif %}>
       <label for="is_admin">{{ gettext('Is Admin') }}</label>
     </p>
-    <button class="sd-button" type="submit" id="update">{{ gettext('UPDATE') }}</button>
+    <button type="submit" id="update">{{ gettext('UPDATE') }}</button>
   </form>
 {% else %}
   <h1>{{ gettext('Edit your account') }}</h1>
@@ -40,7 +40,7 @@
       {% set last_name = g.user.last_name or '' %}
       <input name="last_name" id="last_name" value = "{{ last_name }}"">
     </p>
-    <button class="sd-button" type="submit" id="change-name">{{ gettext('UPDATE') }}</button>
+    <button type="submit" id="change-name">{{ gettext('UPDATE') }}</button>
   </form>
 {% endif %}
 
@@ -72,7 +72,7 @@
     <br>
     <span id="password" class="password">{{ password }}</span>
   </p>
-  <button class="sd-button btn" type="submit" id="reset-password"><i class="fas fa-sync"></i> {{ gettext('Reset Password') }}</button>
+  <button type="submit" id="reset-password"><i class="fas fa-sync"></i> {% filter upper %}{{ gettext('Reset Password') }}{% endfilter %}</button>
 </form>
 
 <hr class="no-line">
@@ -105,7 +105,7 @@
   <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button class="sd-button" id="button-reset-two-factor-{{ type }}" tooltip="{{ tooltip_text }}" type="submit" class="pull-right"><i class="fas fa-sync"></i> {{ button_text }}<span class="tooltip">{{ tooltip_text }}</span></button>
+  <button id="button-reset-two-factor-{{ type }}" tooltip="{{ tooltip_text }}" type="submit" class="pull-right"><i class="fas fa-sync"></i> {{ button_text }}<span class="tooltip">{{ tooltip_text }}</span></button>
 </form>
 {%- endmacro %}
 

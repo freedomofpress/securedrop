@@ -1,4 +1,9 @@
 =source_index_rules
+
+  #recommend-tor, #disable-js
+    text-decoration: underline
+    border: 0
+
   .index-wrap
     display: block
     text-align: center
@@ -13,7 +18,7 @@
       height: 100%
       align-self: center
 
-      img
+      img.logo-image
         width: 80%
 
     p
@@ -31,22 +36,60 @@
 
     .index-column
       padding: 1em
-      display: block
+      display: flex
+      flex-direction: column
+      justify-content: space-between
       width: 48%
-      border: 1px solid $color_purple_medium
       border-top-width: 0
       border-bottom-width: 0
 
     .index-left
-      background: $color_purple_medium
+      background-image: linear-gradient(140deg, #0096dc, #005db7)
       color: white
       border-style: none
 
-    .index-top
-      border-top-width: 1px
+    div.index-right
+      background: white
+      border-width: 1px
+      border-style: solid
+      border-image-source: linear-gradient(145deg, #0096dc, #005db7)
+      border-image-slice: 1
+      color: #0A7CDC
 
-    .index-bottom
-      border-bottom-width: 1px
+    .left-cut-out
+      border-color: white
+
+    .right-cut-out
+      border-color: #0A7CDC
+
+    .index-column-bottom-container
+      margin-top: 3em
+
+    #submit-documents-button, #login-button
+      padding: 10px 20px 10px 20px
+
+    #submit-documents-button
+      font-weight: bold
+      letter-spacing: 0
+      font-size: 90%
+      background: transparent
+      border: 1px solid white
+
+    #login-button
+      font-weight: bold
+      letter-spacing: 0
+      font-size: 90%
+      background-image: linear-gradient(111deg, #0082d9, #126ec8)
+
+    #login-button:hover
+      background-image: linear-gradient(72deg, $color_grimace_blue, #2d3273)
+      border-color: rgba(0, 0, 0, 0)
+      color: white
+
+    #submit-documents-button:hover
+      color: white
+      background-image: linear-gradient(72deg, $color_grimace_blue, #2d3273)
+      border-color: rgba(0, 0, 0, 0)
 
     // This query is to reorder the flex box elements so that they correctly form the
     // two boxes (submit/returning) when the screen is sized down
@@ -67,20 +110,14 @@
         width: 100%
 
       .index-column
-        order: 5
+        order: 4
         width: 100%
 
       .index-column.index-top
-        order: 4
-
-      .index-column.index-bottom
-        order: 6
+        order: 3
 
       .index-column.index-left
         order: 2
 
       .index-column.index-left.index-top
         order: 1
-
-      .index-column.index-left.index-bottom
-        order: 3

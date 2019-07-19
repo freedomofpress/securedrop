@@ -44,6 +44,7 @@
       padding: 0
       height: 0
       overflow: hidden
+      border: 0
 
     .hidden-codename
       margin: auto
@@ -144,10 +145,11 @@ p#codename
       float: right
       padding: 5px
       background-color: inherit
-      color: $color_warning_red_pale
+      color: $color_urgent_coral
       font-size: 14px
       clear: right
       text-decoration: none
+      border: 0
 
       &:hover
         color: #FA6E6E
@@ -183,6 +185,11 @@ p.explanation
 
   &:dir(rtl)
     text-align: right
+
+  &.extended-explanation
+    font-style: italic
+    font-size: small
+    line-height: 1.4
 
 #replies blockquote
   margin: 1em 1em

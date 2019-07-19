@@ -21,6 +21,6 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <label for="token">{{ gettext('Verification code') }}</label>
   <input name="token" id="token" type="text" placeholder="123456">
-  <button type="submit" class="sd-button">{{ gettext('SUBMIT') }}</button>
+  <button type="submit">{{ gettext('SUBMIT') }}</button>
 </form>
 {% endblock %}

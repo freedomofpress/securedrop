@@ -1,16 +1,22 @@
 =button
   button, a.btn, .btn
-    background: $color_purple_medium
+    background: $color_button_blue
     box-sizing: border-box
     -moz-box-sizing: border-box
-    padding: 10px 15px
+    padding: 10px 25px
     margin: 2px auto
     border: 1px solid transparent
     color: white
-    font-size: medium
+    font-size: .8em
     cursor: pointer
     text-align: center
     text-decoration: none
+    font-weight: bold
+    font-size: .8em
+    &:not([lang=ar])
+      letter-spacing: 0.2em
+    &:lang(ar)
+      letter-spacing: 0em
 
   button
     &.starred
@@ -19,7 +25,6 @@
       &:hover
         color: #FFC5AD
         border: none
-        background-color: $color_purple_medium
 
     &.un-starred
       color: lightgray
@@ -27,7 +32,6 @@
       &:hover
         color: lightsalmon
         border: none
-        background-color: $color_purple_medium
 
     &.button-star:focus
       outline: 0
@@ -35,34 +39,41 @@
   button
     &.plain
       background: none
-      color: #333
+      color: $color_button_blue
 
       &:hover
         background: none
-        color: #333
+        color: $color_grimace_blue
         border: 1px solid transparent
 
     &:hover
-      background: white
-      color: $color_purple_medium
-      border: 1px solid $color_purple_medium
+      background: $color_grimace_blue
+      color: white
+      border: 1px solid  $color_grimace_blue
+
+    &.delete-user
+      color: $color_urgent_coral
+
+      &:hover
+        color: #ce0083
+
 
   .btn
     &.small
       font-size: small
       padding: 3px 10px
 
-    &.primary
-      display: block
-      margin-top: 0
-      margin-right: auto
-      display: inline-block
-
     &.secondary
-      @extend .primary
       background: white
-      color: $color_purple_medium_darker
-      border: 1px solid $color_purple_medium_darker
+      color: $color_button_blue
+      border: 2px solid $color_button_blue
+      margin-left: 10px
+      padding: 10px 20px
+
+    &.secondary:hover
+      background: white
+      color: $color_grimace_blue
+      border: 2px solid $color_grimace_blue
 
     &.index
       display: block
@@ -79,27 +90,22 @@
   button.small, a.btn.small
     font-size: small
     padding: 3px 10px
+    font-weight: normal
+    letter-spacing: 0
 
   a.btn:hover, .btn:hover
-    background: white
-    color: $color_purple_medium
-    border: 1px solid $color_purple_medium
-
-  button.alt, a.btn.alt, .btn.alt
-    background: transparent
-    border: 1px solid white
-
-  button.alt:hover, a.btn.alt:hover, .btn.alt:hover
-    background: white
-    color: $color_purple_medium
+    background: $color_grimace_blue
+    color: white
 
   button.danger, a.danger, .btn.danger
-    background-color: $color_warning_red_pale
+    color: $color_urgent_coral
+    background: white
+    border: 1px solid $color_urgent_coral
 
   button.danger:hover, a.btn.danger:hover, .btn.danger:hover
-    background: white
-    border-color: $color_warning_red_pale
-    color: $color_warning_red_pale
+    background: $color_urgent_coral
+    border: 1px solid $color_urgent_coral
+    color: white
 
   .option a.btn.block
     margin-bottom: 0px
@@ -118,15 +124,26 @@
   a:hover > img.on-hover, button:hover > img.on-hover
     display: inline
 
-  a > img.icon, button > img.icon
+  a > img.icon, button > img.icon, button > i.fa, button > i.fas, a > i.fa, a >i.fas
     vertical-align: middle
+    margin-right: 3px
+    margin-bottom: 2px
+    opacity: .9
 
   .button-star
     padding: 0
-    background-color: $color_purple_medium
     color: orange
     border: none
 
   .btn--space
     margin-bottom: 5px
     margin-left: 5px
+
+  // Icons used as buttons in the Journalist UI
+  .disabled-delete-button
+    color: #c0c0c0
+    font-size: 0.8em
+    letter-spacing: 0.2em
+
+  .edit-user-button
+    font-size: 0.8em

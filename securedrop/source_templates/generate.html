@@ -20,7 +20,7 @@
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <button type="submit" id="regenerate-submit" class="small">
         <img class="icon pull-left off-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}" width="20" height="20">
-        <img class="icon pull-left on-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-blue.png') }}"  width="20" height="20">
+        <img class="icon pull-left on-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}"  width="20" height="20">
       </button>
     </form>
   </div>
@@ -38,9 +38,7 @@
 
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button type="submit" class="sd-button btn btn--space primary pull-right" id="continue-button">
-    <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="17" height="17">
-    <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="17" height="17">
+  <button type="submit" class="btn--space pull-right" id="continue-button">
      {{ gettext('SUBMIT DOCUMENTS') }}
   </button>
 </form>
