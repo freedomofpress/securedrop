@@ -408,15 +408,6 @@ workflows:
                 - /update-builder-.*/
           requires:
             - lint
-      - fetch-tor-debs:
-          filters:
-            branches:
-              ignore:
-                - /docs-.*/
-                - /i18n-.*/
-                - /update-builder-.*/
-          requires:
-            - lint
       - updater-gui-tests:
           filters:
             branches:
@@ -471,3 +462,4 @@ workflows:
       - deb-tests
       - translation-tests
       - docs-linkcheck
+      - fetch-tor-debs
