@@ -7,7 +7,7 @@
       pause:
         seconds: 120
 
-- name: Strip away configured tor hidden services files
+- name: Strip away configured tor Onion Services files
   hosts: securedrop
   become: yes
   tasks:
