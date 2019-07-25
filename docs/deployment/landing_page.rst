@@ -138,7 +138,7 @@ if a visitor visits these links without using the Tor browser, this generates
 traffic that an adversary may be able to use to identify SecureDrop-related
 behavior, regardless of the use of HTTPS.
 
-We suggest offering a reference to the SecureDrop hidden service in
+We suggest offering a reference to the SecureDrop Onion Service in
 plain text, without a hyperlink (as per the preceding section):
 **secrdrop5wyphb5x.onion**
 

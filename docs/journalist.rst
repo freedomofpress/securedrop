@@ -62,8 +62,8 @@ Workstation*, ask your administrator for assistance before continuing.
           mean extra steps each time you want to login. With practice,
           you will become increasingly comfortable with the process.
 
-To use the *Journalist Interface*, you will visit a Tor hidden service address
-in the Tor Browser. By design, this hidden service address is only accessible
+To use the *Journalist Interface*, you will visit a Tor Onion Service address
+in the Tor Browser. By design, this Onion Service address is only accessible
 from your *Journalist Workstation*; it will not work in Tor Browser on another
 computer, unless explicitly configured with an access token.
 

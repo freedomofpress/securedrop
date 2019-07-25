@@ -27,7 +27,7 @@ Suggested
 ---------
 
 -  For publicly advertised SecureDrop instances display the Source
-   Interface's hidden service onion address on all of the organization
+   Interface's Onion Service onion address on all of the organization
    public pages.
 -  Mirror the Tor Browser and Tails so sources do not have to
    visit `torproject.org <https://www.torproject.org>`__ to download it.

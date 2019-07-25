@@ -233,12 +233,12 @@ Step 4: Retrieve SecureDrop configuration info from the servers
 In addition to the account and networking information retrieved from the servers
 so far, you'll need to retrieve the following files and info:
 
- - Tor hidden service URLs and tokens
+ - Tor Onion Service URLs and tokens
  - GPG *Submission Public Key* and OSSEC public key
  - OSSEC alert configuration details
  - (Optional) HTTPS configuration details
 
-Retrieve Onion hidden service info
+Retrieve Onion Service info
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to connect to the Tor Onion Services used by your instance, you will
