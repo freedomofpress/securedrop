@@ -53,7 +53,7 @@ Attacks to the Application Code — *Source Interface* and *Journalist Interface
 
 Countermeasures on both *Source* and *Journalist Interfaces*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--  *Interfaces* run on an end-to-end encrypted Tor hidden service
+-  *Interfaces* run on an end-to-end encrypted Tor Onion Service
 -  Sensitive source and submission data is sent through HTTP POST
 -  All source submissions are encrypted with GPG at rest using the airgapped *Submission Key*
 -  *Interface* sessions are invalidated after a user logs out or inactivity over 120 minutes
@@ -115,7 +115,7 @@ Countermeasures on Both *Application* and *Monitor Servers*
 -  All SecureDrop infrastructure is provisioned via infrastructure-as-code (Ansible scripts)
 -  A cron job ensures that automatic nightly security updates are applied for OS packages
 -  *Journalist Interface* uses ATHS cookie
--  *Monitor Server* should only expose SSH via Tor hidden service. All other traffic should be blocked by firewall
+-  *Monitor Server* should only expose SSH via Tor Onion Service. All other traffic should be blocked by firewall
 
 Countermeasures Unique to *Application Server*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
