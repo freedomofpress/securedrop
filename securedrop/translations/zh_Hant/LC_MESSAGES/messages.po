@@ -1482,7 +1482,7 @@ msgstr "返回提交文件頁面"
 
 #~ msgid ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> is a proxy service that lets you "
-#~ "browse Tor Hidden Services (.onion sites) without installing Tor. It was "
+#~ "browse Tor Onion Services (.onion sites) without installing Tor. It was "
 #~ "designed to facilitate anonymous publishing."
 #~ msgstr ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> 是代理服務，可以不用安装 Tor 就可瀏覽 "

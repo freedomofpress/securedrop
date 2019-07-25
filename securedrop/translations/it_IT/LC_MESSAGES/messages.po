@@ -1633,7 +1633,7 @@ msgstr "Torna alla pagina di invio documenti e messaggi"
 
 #~ msgid ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> is a proxy service that lets you "
-#~ "browse Tor Hidden Services (.onion sites) without installing Tor. It was "
+#~ "browse Tor Onion Services (.onion sites) without installing Tor. It was "
 #~ "designed to facilitate anonymous publishing."
 #~ msgstr ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> è un servizio di proxy che ti "

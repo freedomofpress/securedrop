@@ -1640,11 +1640,11 @@ msgstr "Zurück zur Einreichungsseite"
 
 #~ msgid ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> is a proxy service that lets you "
-#~ "browse Tor Hidden Services (.onion sites) without installing Tor. It was "
+#~ "browse Tor Onion Services (.onion sites) without installing Tor. It was "
 #~ "designed to facilitate anonymous publishing."
 #~ msgstr ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> ist ein Proxy-Dienst, der Ihnen "
-#~ "ermöglicht, Tor Hidden Services (.onion-Seiten) zu besuchen, ohne Tor zu "
+#~ "ermöglicht, Tor Onion Services (.onion-Seiten) zu besuchen, ohne Tor zu "
 #~ "installieren. Es wurde entworfen, um anonymes Veröffentlichen zu "
 #~ "vereinfachen."
 
