@@ -95,6 +95,13 @@ set_paxctld_config() {
     fi
 }
 
+mkdir_rqworker_logs() {
+    worker_logs_dir="/var/log/securedrop_worker"
+    mkdir -p "$worker_logs_dir"
+    chown root:root "$worker_logs_dir"
+    chmod 0700 "$worker_logs_dir"
+}
+
 case "$1" in
     configure)
 
@@ -106,6 +113,8 @@ case "$1" in
       mkdir -p "$dir"
       chmod 0700 "$dir"
     done
+
+    mkdir_rqworker_logs
 
     # Ensure required gpg-agent.conf is in place, see #4013.
     if [ -e "/var/lib/securedrop/keys/gpg-agent.conf" ]; then

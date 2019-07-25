@@ -1,2 +1,126 @@
 ---
-- include: build_securedrop_app_code_deb.yml
+# Construct a staging area from which we can build the sdist tarball
+# which we'll then immediately extract for dh-virtualenv.
+- name: Copy install_files/securedrop-app-code to prep directory
+  synchronize:
+    src: "{{ role_path }}/../../../securedrop-app-code/"
+    dest: "{{ securedrop_app_code_prep_dir }}"
+    delete: yes
+    recursive: yes
+
+- name: Copy app code to prep directory under var/www/securedrop
+  synchronize:
+    src: "{{ role_path }}/../../../../securedrop/"
+    dest: "{{ securedrop_code_filtered }}"
+    recursive: yes
+    delete: yes
+    rsync_opts: "{{ securedrop_app_rsync_opts }}"
+
+- name: Copy setup.py to prep directory
+  copy:
+    src: "{{ role_path }}/../../../../setup.py"
+    dest: "{{ securedrop_app_code_prep_dir }}/setup.py"
+
+- name: Copy MANIFEST.in to prep directory
+  copy:
+    src: "{{ role_path }}/../../../../MANIFEST.in"
+    dest: "{{ securedrop_app_code_prep_dir }}/MANIFEST.in"
+
+- name: Copy requirements.txt to prep directory
+  command: cp "{{ securedrop_pip_requirements }}" "{{ securedrop_app_code_prep_dir }}/requirements.txt"
+
+- include: sass.yml
+
+- name: Install SecureDrop Python requirements in container
+  shell: |
+    pip3 install --require-hashes -r {{ securedrop_app_code_prep_dir }}/requirements.txt
+  tags:
+    - pip
+
+- include: translations.yml
+
+- name: Create apparmor.d directory in prep directory
+  file:
+    state: directory
+    dest: "{{ securedrop_app_code_prep_dir }}/etc/apparmor.d"
+  tags: apparmor
+
+- name: Copy AppArmor profiles to prep path
+  copy:
+    src: "{{ item }}"
+    dest: "{{ securedrop_app_code_prep_dir }}/etc/apparmor.d/{{ item }}"
+  with_items: "{{ apparmor_profiles }}"
+  tags: apparmor
+
+- name: Replace placeholder changelog to dist-specific changelog
+  copy:
+    src: "changelog-{{ securedrop_package_dist }}"
+    dest: "{{ securedrop_app_code_prep_dir }}/debian/changelog"
+
+- name: Create supervisor conf.d directory in prep directory
+  file:
+    state: directory
+    dest: "{{ securedrop_app_code_prep_dir }}/etc/supervisor/conf.d"
+  tags: supervisor
+
+- name: Copy supervisor program configurations to prep path
+  template:
+    src: "{{ item }}"
+    dest: "{{ securedrop_app_code_prep_dir }}/etc/supervisor/conf.d/{{ item }}"
+    mode: 0644
+  with_items: "{{ supervisor_programs }}"
+  tags: supervisor
+
+- name: Create sdist in prep dir
+  command: python3 setup.py sdist
+  args:
+    chdir: "{{ securedrop_app_code_prep_dir }}"
+
+- name: Create build dir
+  file:
+    state: directory
+    dest: "{{ securedrop_app_code_deb_dir }}"
+
+- name: Extract sdist to build dir
+  unarchive:
+    remote_src: yes
+    src: "{{ securedrop_app_code_prep_dir }}/dist/{{ securedrop_app_code_sdist_name }}"
+    dest: "{{ securedrop_app_code_deb_dir }}"
+    extra_opts:
+      - --strip-components=1
+
+# Because setup.py sdist refuses to include empty directories, and we
+# have to build from the sdist.
+- name: Create empty static asset directories in build dir
+  file:
+    state: directory
+    dest: "{{ item }}"
+  with_items:
+    - "{{ securedrop_app_code_deb_dir }}/var/www/securedrop/static/gen"
+    - "{{ securedrop_app_code_deb_dir }}/var/www/securedrop/static/.webassets-cache"
+    - "{{ securedrop_app_code_deb_dir }}/var/www/securedrop/.well-known/pki-validation"
+
+- name: Build securedrop-app-code Debian package
+  command: dpkg-buildpackage -us -uc
+  args:
+    chdir: "{{ securedrop_app_code_deb_dir }}"
+  environment:
+    DH_VIRTUALENV_INSTALL_ROOT: "/opt/venvs"
+
+- name: Find newly built Debian package
+  find:
+    paths:
+      - "{{ securedrop_app_code_deb_dir }}/../"
+      - "{{ securedrop_app_code_deb_dir }}"
+    patterns:
+      - '*.deb'
+      - '*.tar.gz'
+  register: securedrop_deb_package_find_results
+
+- name: Fetch newly built Debian packages back to localhost
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ ossec_build_deb_package_local_dest_dir }}"
+    flat: yes
+    fail_on_missing: yes
+  with_items: "{{ securedrop_deb_package_find_results.files }}"

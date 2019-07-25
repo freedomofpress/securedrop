@@ -12,8 +12,6 @@
 
 - include: install_and_harden_apache.yml
 
-- include: configure_securedrop_worker.yml
-
 - include: setup_cron.yml
 
 - include: configure_haveged.yml

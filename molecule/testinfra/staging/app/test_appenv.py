@@ -80,4 +80,4 @@ def test_app_workerlog_dir(host):
         assert f.is_directory
         assert f.user == "root"
         assert f.group == "root"
-        assert f.mode == 0o644
+        assert f.mode == 0o700

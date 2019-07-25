@@ -8,7 +8,7 @@ securedrop_test_vars = pytest.securedrop_test_vars
 
 @pytest.mark.parametrize('config_line', [
   '[program:securedrop_worker]',
-  'command=/usr/local/bin/rqworker',
+  'command=/opt/venvs/securedrop-app-code/bin/rqworker',
   "directory={}".format(securedrop_test_vars.securedrop_code),
   'autostart=true',
   'autorestart=true',
@@ -16,7 +16,6 @@ securedrop_test_vars = pytest.securedrop_test_vars
   'stderr_logfile=/var/log/securedrop_worker/err.log',
   'stdout_logfile=/var/log/securedrop_worker/out.log',
   "user={}".format(securedrop_test_vars.securedrop_user),
-  'environment=HOME="/tmp/python-gnupg"',
 ])
 def test_redis_worker_configuration(host, config_line):
     """
