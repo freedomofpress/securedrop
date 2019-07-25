@@ -5,7 +5,7 @@
 :LOGNDROP - [0:0]
 
 {% if enable_ssh_over_tor %}
-# Prod ssh connections happen through an authenticated tor hidden service
+# Prod ssh connections happen through an authenticated Tor Onion Service
 # The ssh connection is proxied on the server by the tor client to
 # the ssh dameon listening on the local loopback.
 # Limit the number of new tcp connections allowed by the tor user to the ssh dameon
