@@ -89,7 +89,7 @@ Admins
 The SecureDrop servers are managed by a systems admin; for larger
 newsrooms, there may be a team of systems admins. The admin
 uses a dedicated *Admin Workstation* running `Tails <https://tails.boum.org>`__,
-connects to the *Application* and *Monitor Servers* over authenticated `Tor Hidden Services
+connects to the *Application* and *Monitor Servers* over authenticated `Tor Onion Services
 <https://www.torproject.org/docs/hidden-services.html>`__, and manages them
 using `Ansible <http://www.ansible.com/>`__.
 

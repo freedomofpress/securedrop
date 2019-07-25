@@ -63,7 +63,7 @@ organization for both technical and legal reasons:
   the context of SecureDrop, this means that the provider could
   access extremely sensitive information, such as the plaintext of
   submissions or the encryption keys used to identify and access
-  the Tor Hidden Services.
+  the Tor Onion Services.
 
 * In addition, attackers with legal authority such as law
   enforcement agencies may (depending on the jurisdiction) be able
