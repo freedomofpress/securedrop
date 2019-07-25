@@ -56,12 +56,12 @@ def test_tor_service_hostnames(host, tor_service):
 def test_tor_services_config(host, tor_service):
     """
     Ensure torrc file contains relevant lines for Hidden Service declarations.
-    All hidden services must include:
+    All Onion Services must include:
 
       * HiddenServiceDir
       * HiddenServicePort
 
-    Only authenticated hidden services must also include:
+    Only authenticated Onion Services must also include:
 
       * HiddenServiceAuthorizeClient
 
