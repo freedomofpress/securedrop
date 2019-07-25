@@ -174,7 +174,7 @@ Service will be available in the following files under
 
 .. warning:: The ``app-journalist-aths``, ``app-ssh-aths``, and
              ``mon-ssh-aths`` files contain passwords for their corresponding
-             authenticated hidden services. They should not be shared with
+             authenticated Onion Services. They should not be shared with
              third parties or copied from the *Admin Workstation* for any
              reason other than well-defined administrative tasks such as
              onboarding new users or performing backups.

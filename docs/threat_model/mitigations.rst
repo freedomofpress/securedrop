@@ -231,6 +231,6 @@ Countermeasures in User Behavior Recommendations
 -  `Journalist Guide <https://docs.securedrop.org/en/stable/journalist.html>`__ informs users of malware risks, the importance of strict comparmentalization of SecureDrop-related activities
 -  `SecureDrop Deployment Guide <https://docs.securedrop.org/en/stable/deployment_practices.html>`__ gives best practices for proper administration of the SecureDrop system, and its public-facing properties like the Landing Page
 -  `Admin Guide <https://docs.securedrop.org/en/stable/admin.html>`__ gives instructions for long-term maintenance of the technical properties of the SecureDrop system, as well as operations to support Journalists
--  All Admin tasks are completed over Tor/Tor authenticated hidden services after installation
+-  All Admin tasks are completed over Tor/Tor authenticated Onion Services after installation
 -  Any Journalist/Admin password/2FA token resets can only be done by an Admin with password-protected SSH capability or authenticated hidden service credentials.
 -  Persistent storage on the Admin Workstation is protected with LUKS/dm-crypt encryption
