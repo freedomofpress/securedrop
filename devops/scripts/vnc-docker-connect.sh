@@ -6,10 +6,20 @@
 
 set -e
 
-# Bomb out if container not running
-docker inspect securedrop-dev >/dev/null 2>&1 || (echo "ERROR: SD container not running."; exit 1)
+## Get a short identifier for the working directory
+hashpath() {
+    pwd | sum | awk '{print $1}'
+}
 
-VNCPORT=5909
+PORT_PREFIX=${PORT_PREFIX:-""}
+SD_CONTAINER="sd-$(hashpath)${PORT_PREFIX:+-${PORT_PREFIX}}"
+
+# Bomb out if container not running
+docker inspect "${SD_CONTAINER}" >/dev/null 2>&1 || (echo "ERROR: SD container not running."; exit 1)
+
+VNCPORT=${PORT_PREFIX}5909
+
+echo "Connecting to container ${SD_CONTAINER}:${VNCPORT}..."
 
 # Maybe we are running macOS
 if [ "$(uname -s)" == "Darwin" ]; then
@@ -17,11 +27,8 @@ if [ "$(uname -s)" == "Darwin" ]; then
     exit 0
 fi
 
-# Find our securedrop docker ip
-SD_DOCKER_IP="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' securedrop-dev)"
-
 # Quit if the VNC port not found
-nc -w5 -z "$SD_DOCKER_IP" ${VNCPORT} || (echo "ERROR: VNC server not found"; exit 1)
+nc -w5 -z "127.0.0.1" ${VNCPORT} || (echo "ERROR: VNC server not found"; exit 1)
 
 if [ ! "$(which remote-viewer)" ]
 then
@@ -36,6 +43,6 @@ fi
 
 
 rv_config="${TMPDIR:-/tmp}/sd-vnc.ini"
-echo -e "[virt-viewer]\ntype=vnc\nhost=${SD_DOCKER_IP}\nport=${VNCPORT}\npassword=freedom" > "${rv_config}"
+echo -e "[virt-viewer]\ntype=vnc\nhost=127.0.0.1\nport=${VNCPORT}\npassword=freedom" > "${rv_config}"
 
-remote-viewer "${rv_config}" 2>/dev/null &
+remote-viewer "${rv_config}"
