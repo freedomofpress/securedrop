@@ -18,6 +18,7 @@
 #
 
 import io
+import os
 import argparse
 from flaky import flaky
 from os.path import dirname, join, basename, exists
@@ -616,6 +617,66 @@ class TestSiteConfig(object):
         var2: val2
         """)
         assert expected == io.open(site_config_path).read()
+
+    def test_old_v2_onion_services(self, tmpdir):
+        "Checks for exitsing v2 source address"
+        site_config_path = join(str(tmpdir), 'site_config')
+        args = argparse.Namespace(site_config=site_config_path,
+                                  ansible_path='.',
+                                  app_path=dirname(__file__))
+        site_config = securedrop_admin.SiteConfig(args)
+        with open("app-source-ths", "w") as fobj:
+            fobj.write("aaaaaaaaaaaaaaaa.onion\n")
+        site_config.update_onion_version_config()
+        site_config.save()
+        data = ""
+        with open(site_config_path) as fobj:
+            data = fobj.read()
+        expected = textwrap.dedent("""\
+        v2_onion_services: true
+        v3_onion_services: true
+        """)
+        os.remove("app-source-ths")
+        assert expected == data
+
+    def test_no_v2_onion_services(self, tmpdir):
+        "Checks for new installation for only v3"
+        site_config_path = join(str(tmpdir), 'site_config')
+        args = argparse.Namespace(site_config=site_config_path,
+                                  ansible_path='.',
+                                  app_path=dirname(__file__))
+        site_config = securedrop_admin.SiteConfig(args)
+        site_config.update_onion_version_config()
+        site_config.save()
+        data = ""
+        with open(site_config_path) as fobj:
+            data = fobj.read()
+        expected = textwrap.dedent("""\
+        v2_onion_services: false
+        v3_onion_services: true
+        """)
+        assert expected == data
+
+    def test_only_v3_onion_services(self, tmpdir):
+        "Checks for new installation for only v3 ths file"
+        site_config_path = join(str(tmpdir), 'site_config')
+        args = argparse.Namespace(site_config=site_config_path,
+                                  ansible_path='.',
+                                  app_path=dirname(__file__))
+        site_config = securedrop_admin.SiteConfig(args)
+        with open("app-source-ths", "w") as fobj:
+            fobj.write("a" * 56 + ".onion\n")
+        site_config.update_onion_version_config()
+        site_config.save()
+        data = ""
+        with open(site_config_path) as fobj:
+            data = fobj.read()
+        expected = textwrap.dedent("""\
+        v2_onion_services: false
+        v3_onion_services: true
+        """)
+        os.remove("app-source-ths")
+        assert expected == data
 
     def test_validate_gpg_key(self, caplog):
         args = argparse.Namespace(site_config='INVALID',

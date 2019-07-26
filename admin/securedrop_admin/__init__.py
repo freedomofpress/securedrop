@@ -409,10 +409,32 @@ class SiteConfig(object):
 
     def update_config(self):
         self.config.update(self.user_prompt_config())
+        self.update_onion_version_config()
         self.save()
         self.validate_gpg_keys()
         self.validate_journalist_alert_email()
         return True
+
+    def update_onion_version_config(self):
+        """
+        This method updates onion service related configurations.
+        """
+        v2 = False
+        v3 = True
+        source_ths = os.path.join(self.args.ansible_path, "app-source-ths")
+        if os.path.exists(source_ths):  # Means old installation
+            data = ""
+            with open(source_ths) as fobj:
+                data = fobj.read()
+
+            data = data.strip()
+            if len(data) < 56:  # Old v2 onion address
+                v2 = True
+
+        # Now update the configuration
+        config = {"v2_onion_services": v2,
+                  "v3_onion_services": v3}
+        self.config.update(config)
 
     def user_prompt_config(self):
         config = {}
