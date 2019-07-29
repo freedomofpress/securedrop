@@ -207,3 +207,20 @@
   </rule>
 </group>
 
+<group name="sd_data_problems">
+  <rule id="400800" level="1" >
+    <if_sid>530</if_sid>
+    <options>alert_by_email</options> <!-- force email to be sent -->
+    <match>ossec: output: '/opt/venvs/securedrop-app-code/bin/python3 /var/www/securedrop/manage.py check-disconnected-db-submissions'</match>
+    <regex>There are submissions in the database with no corresponding files\.</regex>
+    <description>Indicates that submissions in the database are missing their corresponding files.</description>
+  </rule>
+
+  <rule id="400801" level="1" >
+    <if_sid>530</if_sid>
+    <options>alert_by_email</options> <!-- force email to be sent -->
+    <match>ossec: output: '/opt/venvs/securedrop-app-code/bin/python3 /var/www/securedrop/manage.py check-disconnected-fs-submissions'</match>
+    <regex>There are files in the submission area with no corresponding records in the database\.</regex>
+    <description>Indicates that there are files in the submission area without corresponding submissions in the database.</description>
+  </rule>
+</group>

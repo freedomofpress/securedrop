@@ -17,7 +17,7 @@ set -o pipefail
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-SDBIN=/opt/venvs/securedrop-app-code/bin/
+SDBIN=/opt/venvs/securedrop-app-code/bin
 
 database_migration() {
     database_dir='/var/lib/securedrop'
@@ -192,6 +192,8 @@ case "$1" in
     if grep -qE 'MACs\s.*hmac-sha1' /etc/ssh/sshd_config; then
         sed -i 's/^\s*MACs\s.*/MACs hmac-sha2-256,hmac-sha2-512/' /etc/ssh/sshd_config;
     fi
+
+    service supervisor restart
 
     database_migration
     ;;

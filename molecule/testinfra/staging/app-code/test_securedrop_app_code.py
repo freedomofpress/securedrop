@@ -16,12 +16,12 @@ def test_apache_default_docroot_is_absent(host):
 
 @pytest.mark.parametrize('package', [
   'apparmor-utils',
+  'coreutils',
   'gnupg2',
   'haveged',
   'python',
   'python-pip',
   'redis-server',
-  'secure-delete',
   'sqlite3',
   'supervisor',
 ])

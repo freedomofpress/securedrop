@@ -3,6 +3,8 @@
 
 set -euo pipefail
 
+export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
+
 REPOROOT=$(git rev-parse --show-toplevel)
 cd "${REPOROOT}/securedrop"
 

@@ -36,7 +36,7 @@ appserver_dependencies:
   - haveged
   - python
   - python-pip
-  - secure-delete
+  - coreutils
   - sqlite3
   - apparmor-utils
   - redis-server

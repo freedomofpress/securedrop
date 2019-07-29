@@ -97,6 +97,7 @@
   /usr/bin/gpg2 rix,
   /usr/bin/pinentry-curses rix,
   /usr/bin/pinentry-gtk-2 rix,
+  /usr/bin/shred rix,
   /usr/bin/srm rix,
   /usr/lib{,32,64}/** mr,
   /usr/share/file/magic r,
