@@ -33,10 +33,14 @@ import string
 import subprocess
 import sys
 import types
+import json
+import base64
 import prompt_toolkit
 from prompt_toolkit.validation import Validator, ValidationError
 import yaml
 from pkg_resources import parse_version
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import x25519
 
 sdlog = logging.getLogger(__name__)
 RELEASE_KEY = '22245C81E3BAEB4138B36061310F561200F4AD77'
@@ -565,18 +569,73 @@ def sdconfig(args):
     SiteConfig(args).load_and_update_config()
     return 0
 
+def generate_new_v3_keys():
+    """This function generate new keys and returns them as tuple.
+
+    :returns: Tuple(public_key, private_key)
+    """
+
+    private_key = x25519.X25519PrivateKey.generate()
+    private_bytes = private_key.private_bytes(
+        encoding=serialization.Encoding.Raw	,
+        format=serialization.PrivateFormat.Raw,
+        encryption_algorithm=serialization.NoEncryption())
+    public_key = private_key.public_key()
+    public_bytes = public_key.public_bytes( 
+        encoding=serialization.Encoding.Raw	,
+        format=serialization.PublicFormat.Raw)
+
+    public = base64.b32encode(public_bytes)[:-4].decode("utf-8")
+    private = base64.b32encode(private_bytes)[:-4].decode("utf-8")
+    return public, private
+
+def save_v3_keys(public_key, private_key, filepath):
+    """
+    Store the keys on the ansible-base directory
+    """
+    with open(filepath, "w") as fobj:
+        json.dump({"public_key": public_key, "private_key": private_key},
+                 fobj)
+
+def get_v3_keys(filepath):
+    """
+    Returns the stored v3 public and private keys as Tuple.
+
+    :returns: Tuple(public_key, private_key)
+    """
+    with open(filepath) as fobj:
+        data = json.load(fobj)
+
+    return data["public_key"], data["private_key"]
+
+def find_or_generate_new_torv3_keys(args):
+    """
+    This method will either read the old keys or generate a new
+    public/private key pair.
+    """
+    secret_key_path = os.path.join(args.ansible_path,
+                                   "tor_v3secret_keys.json")
+    if os.path.exists(secret_key_path):
+        return get_v3_keys(secret_key_path)
+    # No old keys, generate and store them first
+    public_key, private_key = generate_new_v3_keys()
+    save_v3_keys(public_key, private_key, secret_key_path)
+    return public_key, private_key
 
 def install_securedrop(args):
     """Install/Update SecureDrop"""
     SiteConfig(args).load()
 
+    public, private = find_or_generate_new_torv3_keys(args)
     sdlog.info("Now installing SecureDrop on remote servers.")
     sdlog.info("You will be prompted for the sudo password on the "
                "servers.")
     sdlog.info("The sudo password is only necessary during initial "
                "installation.")
     return subprocess.check_call([os.path.join(args.ansible_path,
-                                 'securedrop-prod.yml'), '--ask-become-pass'],
+                                 'securedrop-prod.yml'), '--ask-become-pass',
+                                 '-e', 'publicv3={}'.format(public),
+                                 '-e', 'privatev3={}'.format(private)],
                                  cwd=args.ansible_path)
 
 
