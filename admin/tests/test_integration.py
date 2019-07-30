@@ -44,6 +44,8 @@ securedrop_supported_locales:
 smtp_relay: smtp.gmail.com
 smtp_relay_port: 587
 ssh_users: sd
+v2_onion_services: false
+v3_onion_services: true
 '''
 
 JOURNALIST_ALERT_OUTPUT = '''app_hostname: app
@@ -74,6 +76,8 @@ securedrop_supported_locales:
 smtp_relay: smtp.gmail.com
 smtp_relay_port: 587
 ssh_users: sd
+v2_onion_services: false
+v3_onion_services: true
 '''
 
 HTTPS_OUTPUT = '''app_hostname: app
@@ -104,6 +108,8 @@ securedrop_supported_locales:
 smtp_relay: smtp.gmail.com
 smtp_relay_port: 587
 ssh_users: sd
+v2_onion_services: false
+v3_onion_services: true
 '''
 
 
