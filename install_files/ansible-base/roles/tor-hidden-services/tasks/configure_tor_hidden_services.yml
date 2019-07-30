@@ -20,6 +20,18 @@
   tags:
     - tor
 
+- name: Create directories for Tor v3 onion services.
+  file:
+    state: directory
+    dest: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}"
+    owner: "{{ tor_user }}"
+    group: "{{ tor_user }}"
+    mode: "0700"
+  with_items: "{{ tor_instances_v3 }}"
+  when: "v3_onion_services|default(False)"
+  tags:
+    - tor
+
 - name: Copy torrc config file.
   template:
     src: torrc
@@ -41,5 +53,43 @@
   service:
     name: tor
     state: started
+  tags:
+    - tor
+
+# Find the current public key for the v3 onion service
+- name: Register the public key if found in the server
+  command: cat /var/lib/tor/services/publickey
+  register: tor_v3_public_key
+  when: "v3_onion_services|default(False)"
+  ignore_errors: yes
+
+- name: Get the exact key
+  set_fact:
+    tor_publicv3: "{{ tor_v3_public_key.stdout if (tor_v3_public_key.rc == 0) else publicv3 }}"
+
+- name: Create the client auth file on the server
+  template:
+    src: client_auth.j2
+    dest: /var/lib/tor/services/{{ item }}/authorized_clients/client.auth
+    owner: "{{ tor_user }}"
+    group: "{{ tor_user }}"
+    mode: "0700"
+  with_items: "{{ tor_auth_instances_v3 }}"
+  when: "v3_onion_services|default(False)"
+  tags:
+    - tor
+  
+
+- name: Flush handlers to restart Tor.
+  meta: flush_handlers
+  when: "v3_onion_services|default(False)"
+  tags:
+    - tor
+
+- name: Ensure tor is running.
+  service:
+    name: tor
+    state: started
+  when: "v3_onion_services|default(False)"
   tags:
     - tor
