@@ -20,6 +20,17 @@ tor_instances:
   - service: journalist
     filename: app-journalist-aths
 
+tor_instances_v3:
+  - "{{ {'service': 'sshv3', 'filename': 'app-sshv3-aths'} if enable_ssh_over_tor else [] }}"
+  - service: sourcev3
+    filename: app-sourcev3-ths
+  - service: journalistv3
+    filename: app-journalistv3-ths
+
+tor_auth_instances_v3:
+  - "{{ 'sshv3' if enable_ssh_over_tor  else [] }}"
+  - "journalistv3"
+
 authd_iprules:
   - chain: OUTPUT
     dest: "{{ monitor_ip  }}"
