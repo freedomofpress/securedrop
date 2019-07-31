@@ -11,8 +11,7 @@ an entry here:
   [SecureDrop website FAQ][]. Up to date at the time of this writing.
   A symbolic link to the English version of the diagram
   (`SecureDrop-en.png`).
-- `SecureDrop.svg`: Multi-lingual SVG source file used to generate
-  `SecureDrop-*.png` files for the corresponding languages.
+- `SecureDrop-en.svg`: SVG used to generate the English version
 - `SecureDrop.vsdx`: The Microsoft Visio source file used to generate
   `SecureDrop-visio.png`. For context, see [#274][].
 - `SecureDrop-0.3-DFD.png`: A WIP DFD (data flow diagram) created for

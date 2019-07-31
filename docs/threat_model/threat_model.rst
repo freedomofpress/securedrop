@@ -296,7 +296,7 @@ What a Compromise of the Workstations Can Surrender
    volume, which stores information such as the Hidden Service value
    required to connect to the *Journalist Interface*, as well as a :doc:`database
    with passphrases <../passphrases>` for the
-   *Journalist Interface* and the journalist's personal GPG key.
+   *Journalist Interface*.
 -  The *Secure Viewing Station* requires Tails with a persistent
    volume, which stores information such as the SecureDrop application's
    GPG key, as well as a :doc:`database with the
@@ -392,7 +392,7 @@ What Compromise of the Admin's Property Can Surrender
       alerts.
    -  Access the credentials for the account the encrypt alerts are sent
       to.
-   -  Access the admin's personal GPG key.
+   -  Access the admin's personal GPG public key, if stored there.
 
 -  An attacker with admin access to the *Journalist Interface* can:
 
@@ -473,7 +473,6 @@ What a Compromise of the Journalist's Property Can Achieve
    -  Access the Hidden Service values used by the *Journalist Interface*.
    -  Access SSH keys and passphrases for the *Application Server* and the
       *Monitor Server*.
-   -  Access the journalist's personal GPG key.
 
 -  An attacker with journalist access to the *Journalist Interface* can:
 
