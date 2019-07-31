@@ -30,22 +30,6 @@ administrator if you have trouble.
 .. _`Tails
    Upgrade Documentation`: https://tails.boum.org/doc/first_steps/upgrade/index.en.html
 
-
-Creating a GPG Key
-------------------
-We recommend creating a personal GPG key for encrypting files before moving
-them from the *Secure Viewing Station* to your everyday workstation. A GPG key
-has two parts: a *public key* and a *private key*. The private key, used for
-decryption, stays on your everyday workstation. The public key, used for
-encryption, is copied to the *Secure Viewing Station*.
-
-If you do not yet have a GPG key, follow the instructions for your
-operating system to set one up:
-
-- `Windows <https://ssd.eff.org/en/module/how-use-pgp-windows>`__
-- `Mac OS <https://ssd.eff.org/en/module/how-use-pgp-mac-os-x>`__
-- `GNU/Linux <https://ssd.eff.org/en/module/how-use-pgp-linux>`__
-
 Connecting to the *Journalist Interface*
 ----------------------------------------
 Journalists viewing documents on SecureDrop must connect to the
@@ -243,6 +227,15 @@ USB stick you intend to use to transfer the documents from your
 *Journalist Workstation* to the *Secure Viewing Station*. This storage
 device is known as your *Transfer Device*.
 
+.. note::
+
+   If the *Transfer Device* was set up according to our recommendations, you will
+   be prompted for a decryption passphrase on the *Journalist Workstation* and
+   the *Secure Viewing Station* before being able to use it in a given session.
+   We recommend storing this passphrase in your own personal password manager
+   (e.g., on your smartphone), so that it is readily accessible to you whenever
+   you need it.
+
 You can right-click the file and select **Copy to**, then select the *Transfer
 Device*, as shown in the screenshots below.
 
@@ -338,6 +331,8 @@ You can now double-click on the decrypted file to open it in its
 default application.
 
 |Opened document|
+
+.. _working_with_documents:
 
 Working with Documents
 ----------------------
@@ -454,8 +449,8 @@ and flac. You can open MAT by clicking **Applications** ▸ **System Tools** ▸
 **MAT**.
 
 We recommend always doing as much work as possible inside of Tails
-before copying documents back to your *Journalist Workstation*. This
-includes stripping metadata with MAT.
+before working with documents on your everyday workstation. This includes
+stripping metadata with MAT.
 
 .. warning:: MAT is no longer actively maintained and **will not**
              strip all metadata, even when the output claims the
@@ -469,80 +464,78 @@ choose **Wipe** to delete them.
 
 .. _`guide to removing metadata`: https://freedom.press/training/everything-you-wanted-know-about-media-metadata-were-afraid-ask/
 
+.. _malware_risks:
+
 Risks From Malware
 ~~~~~~~~~~~~~~~~~~
+SecureDrop does not scan for or remove malware in submissions you receive. There
+are important steps you can take to protect yourself:
 
-As long as you are using the latest version of Tails, you should be
-able to open submitted documents with a low risk of malicious
-files compromising the *Secure Viewing Station*. However, even if a
-compromise does occur, Tails is designed so that the next time you
-reboot, the malware will be gone.
+1. **Keep the version of Tails on your Secure Viewing Station up-to-date.**
 
-It is crucial, however, that you have a strategy for dealing with malware before
-you move documents off the *Secure Viewing Station* in electronic form.
-SecureDrop does not scan for or automatically remove malware. If you copy an
-original file you received via SecureDrop to your everyday workstation, and that
-file contains malware, you may still end up running the malware on your everyday
-workstation.
+   Tails offers more protection against compromise than your everyday computer,
+   and the air-gap prevents potential malware from "phoning home." But if the
+   version of Tails is outdated, an attacker can still attempt to exfiltrate
+   or destroy information.
+   |br| |br|
 
-For this reason, we recommend taking additional precautions. Printing a file
-is often safer than exchanging it electronically, and it has the additional
-benefits of removing embedded metadata (except for printer codes, watermarks,
-or similar identifiers that may not be visible to the naked eye).
+2. **Print documents from the Secure Viewing Station instead of exporting them
+   digitally, whenever possible.**
 
-Alternatively, you can use the tools provided within Tails to examine
-documents, or convert files from one format to another (e.g., export a Word
-document as PDF). Fully mitigating the risks of malware is beyond the scope
-of this documentation.
+   Printing documents prevents the proliferation of malware to your everyday
+   workstation, and eliminates most categories of embedded metadata. Note that
+   printing a document may still preserve watermarks, printer codes,
+   steganographically encoded data, or other information not visible to the
+   naked eye.
+   |br| |br|
 
-`Never scan QR codes`_ from the *Secure Viewing Station* using a network
-connected device. These QR codes can contain links that your connected device
-will automatically visit. In general, you should take care when opening any
-links provided in a SecureDrop submission, as this can leak information to third
-parties. If you are unsure if a link is safe to click, you should consult your
-digital security staff or Freedom of the Press Foundation for assistance.
+3. **Consult with your administrator or your digital security staff before
+   copying files digitally.**
 
-.. _`Never scan QR codes`: https://securedrop.org/news/security-advisory-do-not-scan-qr-codes-submitted-through-securedrop-connected-devices
+   If you must copy a file in digital form (because of its format, the volume
+   of information, or for other reasons), we recommend taking the time to
+   consult with technical experts within the organization.
+
+   .. tip::
+
+      Converting files to simpler formats (e.g., PDF to PNG) can help reduce the
+      risk of malware. Tails provides both graphical and command-line utilities
+      that can be used for this purpose.
+
+4. **Never scan QR codes embedded in documents using a network-connected
+   device.**
+
+   `QR codes can contain malicious links`_ that your device will automatically visit.
+   In general, be careful when opening any links provided in a SecureDrop
+   submission, as this can leak information to third parties. If you are unsure
+   if a link is safe to click, you should consult internally, or contact
+   Freedom of the Press Foundation for assistance.
+   |br| |br|
+
+5. **Don't photograph submissions using your smartphone, and be careful with all
+   digital photography**.
+
+   Many smartphones are configured to back up photographs to cloud services,
+   immediately or intermittently; newer digital cameras have similar
+   functionality. Not all backup settings may be visible to you.
+
+   Any digital photograph will include certain metadata by default, which may
+   reveal sensitive information about your SecureDrop usage patterns
+   (potentially including GPS coordinates) to anyone who gains access
+   to the file.
+
+Fully mitigating the risks of malware received via SecureDrop is beyond the
+scope of this documentation. If you have questions, you can contact us at
+securedrop@freedom.press (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__)
+or via the `support portal <https://support.freedom.press/>`__. Please do **NOT**
+disclose details about the contents of any submission you have received.
+
+.. _`QR codes can contain malicious links`: https://securedrop.org/news/security-advisory-do-not-scan-qr-codes-submitted-through-securedrop-connected-devices
 .. _`working with sensitive documents`: https://tails.boum.org/doc/sensitive_documents/index.en.html
 .. _`Metadata Anonymisation Toolkit`: https://mat.boum.org/
 
-Risks From Photography
-~~~~~~~~~~~~~~~~~~~~~~
-
-It may be tempting to use your smartphone to photograph a submission, in order
-to share it with another journalist for quick review. Please note that many
-smartphones are configured to back up photographs to cloud services, immediately
-or intermittently. Not all backup settings may be visible to you.
-
-Moreover, any digital photograph will include certain metadata
-by default, which may reveal sensitive information about your SecureDrop
-usage patterns (potentially including GPS coordinates) to anyone who gains access
-to the file.
-
-Encrypting and Moving Documents to Your Everyday Workstation
-------------------------------------------------------------
-
-Before moving documents back to the *Transfer Device* to copy them to
-your everyday workstation, encrypt them to your personal GPG key that you
-imported when setting up the *Secure Viewing Station*.
-
-To do this, right-click on the document you want to encrypt and choose
-**Encrypt...**.
-
-|Encrypting 1|
-
-Then choose your public key (and, if you choose, any additional keys,
-such as an editor's) and click **OK**.
-
-|Encrypting 2|
-
-When you are done encrypting, you will have another document with the
-same filename but ending in ``.pgp`` (not ``.gpg``; the ``.pgp`` extension is
-just another way to refer to the same format). This file is encrypted to the GPG
-keys you selected. You can now copy these encrypted files to the *Transfer
-Device* to transfer them to your everyday workstation.
-
-|Encrypted document|
+Moving Documents to Your Everyday Workstation
+---------------------------------------------
 
 .. important::
 
@@ -552,11 +545,82 @@ Device* to transfer them to your everyday workstation.
    the risk of spreading malware to that computer. Make sure you understand the
    risks, and consider other methods to export the document (e.g., print).
 
+If you must copy a file from your *Secure Viewing Station* to your everyday
+workstation in digital form, our :doc:`recommendation <set_up_transfer_device>`
+is that journalists are provided with an *Export Device*, typically a USB drive,
+which is encrypted using `VeraCrypt <https://www.veracrypt.fr/en/Home.html>`__.
+These instructions assume that you are following the recommended workflow.
+If you are unsure, ask your administrator.
+
+.. note::
+
+   VeraCrypt support was added to Tails in `version 3.9 <https://tails.boum.org/news/version_3.9/index.en.html>`__.
+   We strongly recommend keeping your *Secure Viewing Station* up-to-date with
+   each release of Tails.
+
+To open the *Export Device* on the *Secure Viewing Station*, follow these steps:
+
+1. If your *Export Device* has a physical write protection switch, make sure
+   it is in the *unlocked* position.
+2. Plug the *Export Device* into the *Secure Viewing Station*.
+3. Click **Applications ▶ Utilities ▶ Unlock VeraCrypt Volumes**
+4. Under "Partitions and Drives", select the *Export Device* and click
+   **Unlock**.
+5. Enter your passphrase, which we recommend keeping in your own personal
+   password manager (e.g., on your smartphone), not on KeePassX.
+6. Under "Partitions and Drives", open the encrypted drive by clicking
+   **Open**.
+
+Steps 3-6 are illustrated below:
+
+|Unlock VeraCrypt in Tails 1|
+
+|Unlock VeraCrypt in Tails 2|
+
+|Unlock VeraCrypt in Tails 3|
+
+|Unlock VeraCrypt in Tails 4|
+
+The *Export Device* should now open in the file manager. If there are still
+files on the *Export Device* from your last copy operation,
+`securely delete <https://tails.boum.org/doc/encryption_and_privacy/secure_deletion/index.en.html#index3h1>`__
+them now.
+
+Copy the file or files you want to access on your everyday workstation to the
+*Export Device* using the file manager.
+
+.. note:
+
 Decrypting and Preparing to Publish
 -----------------------------------
 
-Plug the *Transfer Device* into your everyday workstation computer and copy
-over the encrypted documents. Decrypt them with GPG.
+.. note::
+
+   To decrypt a VeraCrypt drive on a Windows or Mac workstation, you need
+   to have the VeraCrypt software installed. If you are unsure if you have the
+   software installed or how to use it, ask your administrator, or see
+   the `Freedom of the Press Foundation guide <https://freedom.press/training/encryption-toolkit-media-makers-veracrypt-guide/>`__
+   for working with VeraCrypt.
+
+To access the *Export Device* on your everyday workstation, follow these steps:
+
+1. If your *Export Device* has a physical write protection switch, make sure it
+   is in the *locked* position.
+2. Plug the *Export Device* into your everyday workstation.
+3. Launch the VeraCrypt application.
+4. Click **Select Device** and select the *Export Device*, then click **OK**.
+5. Click **Mount**.
+6. Enter the passphrase for your *Export Device*. You should find this in your
+   own personal password manager.
+7. Open the *Export Device* in your operating system's file manager, and copy
+   the contents of interest to your everyday workstation.
+
+As a security precaution, we recommend deleting the files on the *Export Device*
+after each copy operation. If you are using write protection, you have to perform
+this step on the *Secure Viewing Station* to get the security benefits of write
+protection.
+
+When you are done, switch back to the VeraCrypt window, and click **Dismount**.
 
 You are now ready to write articles and blog posts, edit video and
 audio, and begin publishing important, high-impact work!
@@ -582,7 +646,11 @@ audio, and begin publishing important, high-impact work!
 .. |Flag for reply button| image:: images/manual/screenshots/journalist-col_has_no_key.png
 .. |Flag for reply notification| image:: images/manual/screenshots/journalist-col_flagged.png
 .. |Wiping documents| image:: images/manual/viewing5.png
-.. |Encrypting 1| image:: images/manual/viewing6.png
-.. |Encrypting 2| image:: images/manual/viewing7.png
-.. |Encrypted document| image:: images/manual/viewing8.png
 .. |Journalist account profile| image:: images/manual/screenshots/journalist-edit_account_user.png
+.. |Unlock VeraCrypt in Tails 1| image:: images/manual/unlock-veracrypt-in-tails-1.png
+.. |Unlock VeraCrypt in Tails 2| image:: images/manual/unlock-veracrypt-in-tails-2.png
+.. |Unlock VeraCrypt in Tails 3| image:: images/manual/unlock-veracrypt-in-tails-3.png
+.. |Unlock VeraCrypt in Tails 4| image:: images/manual/unlock-veracrypt-in-tails-4.png
+.. |br| raw:: html
+
+    <br>

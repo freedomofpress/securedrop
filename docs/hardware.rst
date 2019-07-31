@@ -15,7 +15,41 @@ For an installation of SecureDrop, you must acquire:
 
 .. include:: includes/pre-install-hardware.txt
 
-In the sections that follow, we provide additional details on each item.
+Additionally, you may want to consider the following purchases:
+
+.. include:: includes/pre-install-hardware-optional.txt
+
+In the sections that follow, we provide additional details on most of these
+items.
+
+.. tip::
+
+    While a printer is not required, we highly recommend it. Printing documents
+    is generally far safer than copying them in digital form. See our
+    :ref:`guide to working with documents <working_with_documents>` for more information.
+
+Advice for users on a tight budget
+----------------------------------
+If you cannot afford to purchase new hardware for your
+SecureDrop instance, we encourage you to consider
+re-purposing existing hardware to use with SecureDrop. If
+you are comfortable working with hardware, this is a great
+way to set up a SecureDrop instance for cheap.
+
+Since SecureDrop's throughput is significantly limited by
+the use of Tor for all connections, there is no need to use
+top of the line hardware for any of the servers or the
+firewall. In our experience, relatively recent recycled Dell
+desktops or servers are adequate for the SecureDrop servers,
+and recycled ThinkPad laptops work well for the
+*Admin Workstation*/*Journalist Workstation*.
+
+Please note that very old laptops or desktops may not work for the workstations.
+Since the release of Tails 3.0, 32-bit computers are no longer supported.
+
+If you choose to use recycled hardware, you should of course
+consider whether or not it is trustworthy; making that
+determination is outside the scope of this document.
 
 .. _Hardware Recommendations:
 
@@ -86,15 +120,6 @@ our support or consent.
 
 Workstations
 ^^^^^^^^^^^^
-.. note:: SecureDrop depends on the Tails operating system for its bootable USB
-  drives.  Since the release of Tails 3.0, 32-bit computers are no longer
-  supported.
-
-  To see if you have a 64-bit machine, run ``uname -m`` from a terminal.  If you
-  see ``x86_64``, then Tails should work on your current machine.  If, on the
-  other hand, you see ``i686``, your current machine will not work with Tails
-  3.0 or greater.  For more details, see `the Tails website
-  <https://tails.boum.org/news/version_3.0/index.en.html#index3h3>`_.
 
 These components are necessary to do the initial installation of
 SecureDrop and to process submissions using the air-gapped workflow.
@@ -122,7 +147,7 @@ SecureDrop, whether they can share the same workstation due to availability
 requirements, geographic distribution, etc.
 
 USB Drive(s)
-~~~~~~~~~~~~
+^^^^^^^^^^^^
 
 *At least 2* USB drives to use as a bootable Tails USB for the *SVS* and the
 *Admin Workstation*/*Journalist Workstation*.
@@ -131,13 +156,19 @@ If only one person is maintaining the system, you may use the same Tails
 instance as both the *Admin Workstation* and the *Journalist Workstation*; otherwise, we
 recommend buying 1 drive for each admin and each journalist.
 
-We also recommend buying two additional USBs to use as bootable backups of the
-*SVS* and *Admin Workstation*.
+We also recommend buying an additional USB drive for making regular backups of
+your Tails workstations.
 
-**Two-factor authenticator**: Two-factor authentication is used when connecting
-to different parts of the SecureDrop system. Each admin and each journalist
-needs a two-factor authenticator. We currently support two options for
-two-factor authentication:
+One thing to consider is that you are going to have *a lot* of USB drives to
+keep track of, so you should consider how you will label or identify them and
+buy drives accordingly. Drives that are physically larger are often easier to
+label (e.g. with tape, printed sticker or a label from a labelmaker).
+
+Two-factor Authenticator
+^^^^^^^^^^^^^^^^^^^^^^^^
+Two-factor authentication is used when connecting to different parts of the
+SecureDrop system. Each admin and each journalist needs a two-factor
+authenticator. We currently support two options for two-factor authentication:
 
 * Your existing smartphone with an app that computes TOTP codes
   (e.g. FreeOTP `for Android <https://play.google.com/store/apps/details?id=org.fedorahosted.freeotp>`__ and `for iOS <https://itunes.apple.com/us/app/freeotp-authenticator/id872559395>`__).
@@ -147,40 +178,79 @@ two-factor authentication:
 
 .. include:: includes/otp-app.txt
 
-**Transfer Device(s)**: You need a mechanism to transfer encrypted submissions
-from the *Journalist Workstation* to the *SVS* to decrypt and view them. The
-most common transfer devices are DVD/CD-R discs and USB drives.
+Transfer Device(s) and Export Device(s)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Journalists need physical media (known as the *Transfer Device*) to transfer
+encrypted submissions from the *Journalist Workstation* to the
+*Secure Viewing Station*, to decrypt and view them there. If they deem a
+submission to be newsworthy, they may need physical media (known as the
+*Export Device*) to copy it to their everyday workstation.
 
-From a security perspective, it is preferable to use write-once media such as
-DVD/CD-R discs because it eliminates the risk of exfiltration by malware that
-persists on the Transfer Device (e.g. `BadUSB <https://srlabs.de/badusb/>`__).
+Our standard recommendation is to use USB drives, in combination with
+volume-level encryption and careful data hygiene. Our documentation, including
+the :doc:`journalist guide <journalist>`, is based on this approach. We also
+urge the use of a secure printer or similar analog conversions to export
+documents from the *Secure Viewing Station*, whenever possible.
 
-On the other hand, using write-once media to transfer data is typically
-inconvenient and time-consuming. You should consider your threat model and
-choose your transfer device accordingly.
+You may want to consider enforcing write protection on USB drives when only read
+access is needed, or you may want to implement a workflow based on CD-Rs or
+DVD-Rs instead. We encourage you to evaluate these options in the context of
+your own threat model.
 
-**Monitor, Keyboard, Mouse**: You will need these to do the initial installation
-of Ubuntu on the *Application* and *Monitor Servers*.
+Please find some notes regarding each of these methods below, and see our
+recommendations in the :doc:`setup guide <set_up_transfer_device>`
+for additional background.
+
+USB drives
+~~~~~~~~~~
+We recommend using one or multiple designated USB drives as the *Transfer
+Device(s)*, and one or multiple designated USB drives as the *Export
+Device(s)*. Whether one or multiple drives are appropriate depends on the number
+of journalists accessing the system, and on whether the team is distributed
+or not.
+
+Our documentation explains how the *Transfer Device* can be encrypted using
+LUKS, and how the *Export Device* can be encrypted using VeraCrypt (which works
+across platforms). We have not evaluated hardware-based encryption options; if
+you do select a hardware solution, make sure that both devices work in Tails,
+and that the *Export Device* also works on the operating system(s) used by
+journalists accessing the *Secure Viewing Station*.
+
+USB drives with write protection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+When it is consistently applied and correctly implemented in hardware, write
+protection can prevent the spread of malware to your *Secure Viewing Station*
+from the computers used to read files stored on a *Transfer Device* or an
+*Export Device*.
+
+The two main options to achieve write protection of USB drives are:
+
+- drives with a built-in physical write protection switch
+- a separate USB write blocker device as used in forensic applications.
+
+DVD-Rs or CD-Rs
+~~~~~~~~~~~~~~~
+Single-use, write-once media can be used to realize a transfer and export
+workflow that is always one-directional: files are transferred to the *Secure
+Viewing Station* and the media used to do so are destroyed; files are exported
+from the *Secure Viewing Station* and the media used to do so are destroyed.
+
+If you want to realize such a workflow, we recommend purchasing separate drives
+for each computer that will write to or read from the media, to minimize the
+risks from malware compromising any one drive's firmware.
+
+You will also need a stack of blank DVD/CD-Rs, which you can buy anywhere, and a
+method to securely destroy media after use. Depending on your threat model, this
+can be very expensive; a cheap shredder can be purchased for less than $50,
+while shredders designed for use in Sensitive Compartmented Information
+Facilities (SCIFs) sell for as much as $3,000.
+
+Monitor, Keyboard, Mouse
+^^^^^^^^^^^^^^^^^^^^^^^^
+You will need these to do the initial installation of Ubuntu on the
+*Application* and *Monitor Servers*.
 
 Depending on your setup, you may also need these to work on the *SVS*.
-
-.. note:: If you cannot afford to purchase new hardware for your
-	  SecureDrop instance, we encourage you to consider
-	  re-purposing existing hardware to use with SecureDrop. If
-	  you are comfortable working with hardware, this is a great
-	  way to set up a SecureDrop instance for cheap.
-
-	  Since SecureDrop's throughput is significantly limited by
-	  the use of Tor for all connections, there is no need to use
-	  top of the line hardware for any of the servers or the
-	  firewall. In our experience, relatively recent recycled Dell
-	  desktops or servers are adequate for the SecureDrop servers,
-	  and recycled ThinkPad laptops work well for the
-	  *Admin Workstation*/*Journalist Workstation*.
-
-	  If you choose to use recycled hardware, you should of course
-	  consider whether or not it is trustworthy; making that
-	  determination is outside the scope of this document.
 
 Optional Hardware
 -----------------
@@ -191,13 +261,26 @@ of it is still recommended.
 Offline Printer
 ^^^^^^^^^^^^^^^
 
-It is often useful to print submissions from the *Secure Viewing Station* for
-review and annotation.
+We highly recommend purchasing a printer for your *Secure Viewing Station* and
+using it as the preferred method to make copies of documents received via
+SecureDrop.
 
-.. warning:: To maintain the integrity of the air-gap, this printer should be
-             dedicated to use with the *Secure Viewing Station*, connected via
-             a wired connection, and should not have any wireless communication
-             capabilities.
+By printing a submission, even a non-technical user can effectively mitigate
+many of the complex risks associated with malware or hidden metadata embedded in
+files received via SecureDrop. Your organization may also already have robust
+procedures in place for destroying sensitive printed documents.
+
+.. important:: To maintain the integrity of the air-gap, this printer should be
+               dedicated to use with the *Secure Viewing Station*, connected via
+               a wired connection, and should not have any wireless communication
+               capabilities.
+
+While printing is notable for what it strips away, it is also important to
+remember what it preserves: QR codes or links that journalists may scan or type
+in; `printer tracking information <https://www.eff.org/issues/printers>`__
+included in a scanned document; other visually encoded information. See the
+:ref:`malware_risks` section in the Journalist Guide for further guidance on
+this subject.
 
 Offline Storage
 ^^^^^^^^^^^^^^^
@@ -205,29 +288,30 @@ Offline Storage
 The *SVS* is booted from a Tails USB drive, which has an encrypted persistent
 volume but typically has a fairly limited storage capacity since it's just a USB
 drive. For installations that expect to receive a large volume of submissions,
-we recommend buying an external hard drive that can be encrypted and used to
-store submissions that have been transferred from the *Application Server* to
-the *SVS*.
+we recommend buying an external hard drive that can be used to store submissions
+that have been transferred from the *Application Server* to the *SVS*.
+
+.. include:: includes/encrypting-drives.txt
 
 Backup Storage
 ^^^^^^^^^^^^^^
 
 It's useful to run periodic backups of the servers in case of failure. We
-recommend buying an external hard drive that can be encrypted and used to store
-server backups.
+recommend buying an external hard drive to store server backups.
 
-.. warning:: Since this drive will be connected to the *Admin Workstation* to
-             perform backups, it should *not* be the same drive used for
-             *Offline Storage*.
+Because this drive will be connected to the *Admin Workstation* to perform
+backups, it should *not* be the same drive used for *Offline Storage*.
+
+.. include:: includes/encrypting-drives.txt
 
 Network Switch
 ^^^^^^^^^^^^^^
+If you follow our firewall recommendations, you do not need to purchase a
+switch.
 
-If your firewall has fewer than **four** NICs, you will need an additional
-Ethernet switch to perform installation and maintenance tasks with the *Admin
-Workstation*. This switch is generally useful because it allows you to connect
-the *Admin Workstation* to your firewall's LAN port without taking down either
-of the SecureDrop servers.
+If you use a firewall with fewer than four ports, you will need an additional
+Ethernet switch to perform installation and maintenance tasks with the
+*Admin Workstation* without disconnecting one of your servers.
 
 Labeling Equipment
 ^^^^^^^^^^^^^^^^^^
@@ -287,7 +371,7 @@ Intel 7th-gen NUC
 The Intel NUC (Next Unit of Computing) is an inexpensive, quiet, low-power
 device that can be used for the SecureDrop servers. There are a
 `variety of models <https://www.intel.com/content/www/us/en/products/boards-kits/nuc.html>`__
-to choose from. 
+to choose from.
 
 The NUCs typically come as kits, and some assembly is required. You will need to
 purchase the RAM and hard drive separately for each NUC and insert both into the
@@ -297,14 +381,14 @@ NUC before it can be used. We recommend:
 -  1x memory kit of compatible 2x4GB sticks
    -  You can put one 4GB memory stick in each of the servers.
 
-We have tested and can recommend the `NUC7i5BNH <https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc7i5bnh.html>`__ - these tend to be readily available in 
+We have tested and can recommend the `NUC7i5BNH <https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc7i5bnh.html>`__ - these tend to be readily available in
 retail stores.
 
 The NUC7i5BNH has soldered-on wireless components, which cannot easily be
 removed. For security reasons, we recommend that you take the following steps
 to disable wireless functionality:
 
-- before installation of the RAM and storage, disconnect the wireless antennae 
+- before installation of the RAM and storage, disconnect the wireless antennae
   leads.
 
 |NUC7 leads|
@@ -314,14 +398,14 @@ to disable wireless functionality:
   unwanted hardware - everything except **LAN**.
 
 |Visual Bios|
-  
+
 
 .. |NUC7 leads| image:: images/hardware/nuc7-leads.jpg
 .. |Visual BIOS| image:: images/hardware/visualbios.png
 
-Other 7th-generation NUCs have also been reported to work, although we have not 
+Other 7th-generation NUCs have also been reported to work, although we have not
 tested them. For example, the `NUC7i5DNHE <https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc7i5dnhe.html>`__ uses the same Ethernet chipset as the NUC7i5BNH,
-and also has a removable wireless card, simplifying the server setup process. 
+and also has a removable wireless card, simplifying the server setup process.
 However, it may be harder to find a retail source for this model.
 
 Previous Server Recommendations
@@ -354,10 +438,10 @@ support is preferable, since you want neither WiFi nor Bluetooth.
 
 We previously recommended the 2014 Apple Mac Minis (part number MGEM2)
 for installing SecureDrop. These will soon be `officially obsolete <https://support.apple.com/en-us/HT201624>`__. Unfortunately
-the 2018 revision of the Mac Mini is not a viable candidate for use with 
-SecureDrop, as security features of the device prevent Linux from being 
-installed on its internal storage. We will continue to support existing 
-instances using 2014 Mac Minis, but if you are building a new instance we 
+the 2018 revision of the Mac Mini is not a viable candidate for use with
+SecureDrop, as security features of the device prevent Linux from being
+installed on its internal storage. We will continue to support existing
+instances using 2014 Mac Minis, but if you are building a new instance we
 recommend using the 7th-gen Intel NUCs.
 
 2014 Mac Minis have removable wireless cards that you
@@ -465,9 +549,6 @@ as advertised by the `NUC5i5MYHE` that we recommend.
 Tails USBs
 ^^^^^^^^^^
 
-.. note:: Tails no longer supports 32-bit computers.
-	Please see the note in the `Workstations`_ section for more details.
-
 We *strongly recommend* getting USB 3.0-compatible drives to run Tails
 from. The transfer speeds are significantly faster than USB 2.0, which
 means a live operating system booting from one will be much faster and
@@ -478,33 +559,23 @@ persistent partition. We recommend getting something in the 16-64GB
 range so you can handle large amounts of submissions without hassle.
 Anything more than that is probably overkill.
 
-Transfer Device
-^^^^^^^^^^^^^^^
+Transfer Device(s) and Export Device(s)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+For USB drives with physical write protection, we have tested the `Kanguru SS3 <https://www.kanguru.com/storage-accessories/kanguru-ss3.shtml>`__
+on Tails, and it works well with and without encryption.
 
-If you are using USBs for the transfer device, the same general
-recommendations for the Tails USBs also apply. One thing to consider is
-that you are going to have *a lot* of USB drives to keep track of, so
-you should consider how you will label or identify them and buy drives
-accordingly. Drives that are physically larger are often easier to label
-(e.g. with tape, printed sticker or a label from a labelmaker).
+If you want to use a setup based on CD-Rs or DVD-Rs, we've found the CDR/DVD
+writers from Samsung and LG to work reasonably well; you can find some examples
+`here <https://www.newegg.com/External-CD-DVD-Blu-Ray-Drives/SubCategory/ID-420>`__.
 
-If you are using DVD/CD-R's for the transfer device, you will need *two*
-DVD/CD writers: one for burning DVDs from the *Journalist
-Workstation*, and one for reading the burned DVDs on the *SVS*. We
-recommend using two separate drives instead of sharing the same drive to
-avoid the potential risk of malware exfiltrating data by compromising
-the drive's firmware. We've found the DVD/CD writers from Samsung and LG
-to work reasonably well, you can find some examples
-`here <http://www.newegg.com/External-CD-DVD-Blu-Ray-Drives/SubCategory/ID-420>`__.
-
-Finally, you will need a stack of blank DVD/CD-R's, which you can buy
-anywhere.
+Please see our recommendations in the :doc:`setup guide <set_up_transfer_device>`
+for additional background.
 
 Network Firewall
 ^^^^^^^^^^^^^^^^
 
 We recommend the `pfSense SG-3100
-<https://store.netgate.com/SG-3100.aspx>`__. It has 3 NICs and an internal 
+<https://store.netgate.com/SG-3100.aspx>`__. It has 3 NICs and an internal
 switch, increasing the number of available ports to 6.
 
 Network Switch

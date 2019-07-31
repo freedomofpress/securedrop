@@ -96,5 +96,4 @@ workstation.
 .. |Export Key| image:: images/install/exportkey.png
 .. |Export Key 2| image:: images/install/exportkey2.png
 .. |Fingerprint| image:: images/install/fingerprint.png
-.. |Nautilus| image:: images/nautilus.png
 .. |Terminal| image:: images/terminal.png
