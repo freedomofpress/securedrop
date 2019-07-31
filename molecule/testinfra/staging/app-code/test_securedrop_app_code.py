@@ -45,7 +45,7 @@ def test_securedrop_application_test_locale(host):
         assert securedrop_config.contains("^DEFAULT_LOCALE")
         assert securedrop_config.content_string.count("DEFAULT_LOCALE") == 1
         assert securedrop_config.content_string.count("SUPPORTED_LOCALES") == 1
-        assert "\nSUPPORTED_LOCALES = [u'el', u'ar', 'en_US']\n" in securedrop_config.content_string
+        assert "\nSUPPORTED_LOCALES = ['el', 'ar', 'en_US']\n" in securedrop_config.content_string
 
 
 def test_securedrop_application_test_journalist_key(host):

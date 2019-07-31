@@ -1,0 +1,9 @@
+graft debian
+graft etc
+graft var
+prune var/www/securedrop/tests
+include requirements.txt
+include setup.py
+recursive-exclude . *.pyc
+recursive-exclude . .coverage
+recursive-exclude . .coverage.*

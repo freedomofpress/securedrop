@@ -17,6 +17,8 @@ set -o pipefail
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+SDBIN=/opt/venvs/securedrop-app-code/bin/
+
 database_migration() {
     database_dir='/var/lib/securedrop'
     database_file="$database_dir/db.sqlite"
@@ -34,28 +36,28 @@ database_migration() {
 
     cd '/var/www/securedrop/'
 
-    # `alembic current` outputs nothing if the DB isn't under verion control.
-    if [ -z "$(alembic current)" ]; then
+    # `alembic current` outputs nothing if the DB isn't under version control.
+    if [ -z "$(${SDBIN}/alembic current)" ]; then
         sqlite_tables=$(sqlite3 "$database_file" .tables)
 
         if ! echo "$sqlite_tables" | grep -q journalists; then
             # This is a fresh install, run the full migrations.
-            alembic upgrade head
+            ${SDBIN}/alembic upgrade head
         else
             # This is an old install, so mark that the schema is up to date
             # as of the version of migration 15ac9509fc68_init.py when we first
             # started version controlling the database.
-            alembic stamp 15ac9509fc68
+            ${SDBIN}/alembic stamp 15ac9509fc68
         fi
     fi
 
     db_backup="/var/lib/securedrop/backups/$(date +%Y-%m-%d-%H-%M-%S)-db.sqlite"
 
-    if ! alembic current | grep -q '(head)'; then
+    if ! ${SDBIN}/alembic current | grep -q '(head)'; then
         cp /var/lib/securedrop/db.sqlite "$db_backup"
     fi
 
-    if alembic upgrade head; then
+    if ${SDBIN}/alembic upgrade head; then
         rm -f "$db_backup"
     else
         echo "Error migrating database: Backup saved to $db_backup" >&2
@@ -68,11 +70,13 @@ database_migration() {
 # to v0.9.0.
 function permit_wsgi_authorization() {
     journalist_conf="/etc/apache2/sites-available/journalist.conf"
-    # First we check whether the line is present.
-    # Next we find a target line to anchor the insertion.
-    # Then we insert the line, along with the target line that was matched.
-    if ! grep -qP '^WSGIPassAuthorization' "$journalist_conf"; then
-        perl -pi -e 's/^(WSGIScriptAlias .*)/$1\nWSGIPassAuthorization On/' "$journalist_conf"
+    if test -f $journalist_conf; then
+        # First we check whether the line is poresent.
+        # Next we find a target line to anchor the insertion.
+        # Then we insert the line, along with the target line that was matched.
+        if ! grep -qP '^WSGIPassAuthorization' "$journalist_conf"; then
+            perl -pi -e 's/^(WSGIScriptAlias .*)/$1\nWSGIPassAuthorization On/' "$journalist_conf"
+        fi
     fi
 }
 
@@ -91,6 +95,13 @@ set_paxctld_config() {
     fi
 }
 
+mkdir_rqworker_logs() {
+    worker_logs_dir="/var/log/securedrop_worker"
+    mkdir -p "$worker_logs_dir"
+    chown root:root "$worker_logs_dir"
+    chmod 0700 "$worker_logs_dir"
+}
+
 case "$1" in
     configure)
 
@@ -102,6 +113,8 @@ case "$1" in
       mkdir -p "$dir"
       chmod 0700 "$dir"
     done
+
+    mkdir_rqworker_logs
 
     # Ensure required gpg-agent.conf is in place, see #4013.
     if [ -e "/var/lib/securedrop/keys/gpg-agent.conf" ]; then
@@ -124,9 +137,6 @@ case "$1" in
 
     chown -R www-data:www-data /var/lib/securedrop /var/www/securedrop
 
-    pip install --no-index --find-links=/var/securedrop/wheelhouse --upgrade \
-      -r /var/www/securedrop/requirements/python2/securedrop-app-code-requirements-packaged.txt
-
     chown -R www-data:www-data /var/www/securedrop
     chown www-data:www-data /var/www/journalist.wsgi
     chown www-data:www-data /var/www/source.wsgi
@@ -141,6 +151,12 @@ case "$1" in
     # set to "enforce", then apache2 will fail to restart, since it lacks
     # the ability to send signals to unconfined peers.
     service apache2 stop
+
+    # Point Apache to our bundled mod_wsgi
+    ${SDBIN}/mod_wsgi-express module-config > /etc/apache2/mods-available/wsgi.load
+
+    # and make sure it's enabled
+    a2enmod wsgi
 
     # If the profile was disabled enabled it.
     if [ -e "/etc/apparmor.d/disable/usr.sbin.apache2" ]; then

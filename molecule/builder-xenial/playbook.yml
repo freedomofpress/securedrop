@@ -52,7 +52,7 @@
 
 # Typically we'd perform volume mounting here but to work around docker
 # remote calls (in CircleCI) we have to copy the files instead
-- name: Give dpkg verify container acccess to debs
+- name: Give dpkg verify container access to debs
   hosts: testers
   gather_facts: false
   vars:

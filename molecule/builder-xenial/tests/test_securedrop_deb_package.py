@@ -164,7 +164,7 @@ def test_deb_package_contains_no_config_file(host, deb):
     deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
     c = host.run("dpkg-deb --contents {}".format(deb_package.path))
-    assert not re.search(r"^.*/config\.py$", c.stdout, re.M)
+    assert not re.search(r"^ ./var/www/securedrop/config.py$", c.stdout, re.M)
 
 
 @pytest.mark.parametrize("deb", deb_packages)
@@ -198,9 +198,9 @@ def test_deb_package_contains_mo_file(host, deb):
 @pytest.mark.parametrize("deb", deb_packages)
 def test_deb_package_contains_no_generated_assets(host, deb):
     """
-    Ensures the `securedrop-app-code` package does not ship a minified
-    static assets, which are built automatically via Flask-Assets, and may be
-    present in the source directory used to build from.
+    Ensures the `securedrop-app-code` package does not ship minified
+    static assets, which are built automatically via Flask-Assets, and
+    may be present in the source directory used to build from.
     """
     deb_package = host.file(deb.format(
         securedrop_test_vars.securedrop_version))
@@ -223,7 +223,7 @@ def test_deb_package_contains_no_generated_assets(host, deb):
                              "/static/.webassets-cache/.+$", c.stdout, re.M)
 
         # no SASS files should exist; only the generated CSS files.
-        assert not re.search("^.*sass.*$", c.stdout, re.M)
+        assert not re.search("^.*sass$", c.stdout, re.M)
 
         # no .map files should exist; only the generated CSS files.
         assert not re.search("^.*css.map$", c.stdout, re.M)

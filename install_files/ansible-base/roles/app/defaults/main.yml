@@ -47,7 +47,6 @@ securedrop_app_https_ssl_ciphers:
 
 apache_packages:
   - apache2
-  - libapache2-mod-wsgi
   - libapache2-mod-xsendfile
 
 apache_templates:
@@ -83,9 +82,6 @@ apache_disabled_modules:
   - autoindex
   - env
   - status
-
-# Log file location for worker service, used in supervisor template.
-worker_logs_dir: /var/log/securedrop_worker
 
 # The locale used when the browser or the user do not have a preference
 securedrop_default_locale: en_US

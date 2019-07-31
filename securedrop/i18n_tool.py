@@ -4,7 +4,6 @@
 from __future__ import print_function
 import argparse
 import io
-import six
 import logging
 import os
 import glob
@@ -61,7 +60,7 @@ class I18NTool(object):
 
     def ensure_i18n_remote(self, args):
         k = {'_cwd': args.root}
-        if six.b('i18n') not in git.remote(**k).stdout:
+        if b'i18n' not in git.remote(**k).stdout:
             git.remote.add('i18n', args.url, **k)
         git.fetch('i18n', **k)
 
