@@ -1557,7 +1557,7 @@ msgstr "सबमिशन पृष्ठ पर वापस जाएं"
 
 #~ msgid ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> is a proxy service that lets you "
-#~ "browse Tor Onion Services (.onion sites) without installing Tor. It was "
+#~ "browse Tor Hidden Services (.onion sites) without installing Tor. It was "
 #~ "designed to facilitate anonymous publishing."
 #~ msgstr ""
 #~ "<a href=\"tor2web.org\"> 1Tor2Web</a> एक प्रॉक्सी सेवा है जो आपको टोर को "

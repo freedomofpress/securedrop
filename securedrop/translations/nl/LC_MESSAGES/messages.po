@@ -1524,11 +1524,11 @@ msgstr "Terug naar inzendingenpagina"
 
 #~ msgid ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> is a proxy service that lets you "
-#~ "browse Tor Onion Services (.onion sites) without installing Tor. It was "
+#~ "browse Tor Hidden Services (.onion sites) without installing Tor. It was "
 #~ "designed to facilitate anonymous publishing."
 #~ msgstr ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> is een proxy service waarmee u Tor "
-#~ "Onion Services (.onion sites) kunt gebruiken zonder dat u Tor hoeft te "
+#~ "Hidden Services (.onion sites) kunt gebruiken zonder dat u Tor hoeft te "
 #~ "installeren. Het is ontwikkeld om anoniem kunnen te publiceren."
 
 #~ msgid ""

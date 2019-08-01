@@ -1630,7 +1630,7 @@ msgstr "Înapoi la pagina de trimitere"
 
 #~ msgid ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> is a proxy service that lets you "
-#~ "browse Tor Onion Services (.onion sites) without installing Tor. It was "
+#~ "browse Tor Hidden Services (.onion sites) without installing Tor. It was "
 #~ "designed to facilitate anonymous publishing."
 #~ msgstr ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> este un serviciu de proxy care îți "
