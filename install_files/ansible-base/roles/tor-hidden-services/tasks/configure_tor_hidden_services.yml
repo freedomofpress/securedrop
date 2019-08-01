@@ -58,19 +58,19 @@
 
 # Find the current public key for the v3 onion service
 - name: Register the public key if found in the server
-  command: cat /var/lib/tor/services/publickey
+  command: "cat {{ tor_hidden_services_parent_dir }}/publickey"
   register: tor_v3_public_key
   when: "v3_onion_services|default(False)"
   ignore_errors: yes
 
-- name: Get the exact key
+- name: Get the exact public key
   set_fact:
     tor_publicv3: "{{ tor_v3_public_key.stdout if (tor_v3_public_key.rc == 0) else publicv3 }}"
 
 - name: Create the client auth file on the server
   template:
     src: client_auth.j2
-    dest: /var/lib/tor/services/{{ item }}/authorized_clients/client.auth
+    dest: "{{ tor_hidden_services_parent_dir }}/{{ item }}/authorized_clients/client.auth"
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"
     mode: "0700"
@@ -93,3 +93,50 @@
   when: "v3_onion_services|default(False)"
   tags:
     - tor
+
+# Find the private key in the server if available
+- name: Register the private key if found in the server
+  command: "cat {{ tor_hidden_services_parent_dir }}/privatekey"
+  register: tor_v3_private_key
+  when: "v3_onion_services|default(False)"
+  ignore_errors: yes
+
+- name: Get the exact private key
+  set_fact:
+    tor_privatev3: "{{ tor_v3_private_key.stdout if (tor_v3_private_key.rc == 0) else privatev3 }}"
+
+
+# Save the public key in the server
+- name: Save the public key on the server
+  template:
+    src: save_public_key.j2
+    dest: "{{ tor_hidden_services_parent_dir }}/publickey"
+    owner: "{{ tor_user }}"
+    group: "{{ tor_user }}"
+    mode: "0700"
+  when: "v3_onion_services|default(False)"
+  tags:
+    - tor
+
+- name: Save the private key on the server
+  template:
+    src: save_private_key.j2
+    dest: "{{ tor_hidden_services_parent_dir }}/privatekey"
+    owner: "{{ tor_user }}"
+    group: "{{ tor_user }}"
+    mode: "0700"
+  when: "v3_onion_services|default(False)"
+  tags:
+    - tor
+
+- name: Save Tor Onion v3 public and private key locally.
+  local_action:
+    module: template
+    dest: "{{ role_path }}/../../tor_v3secret_keys.json"
+    src: tor_v3secret_keys.j2
+  # Local action, so we don't want elevated privileges
+  become: no
+  when: "v3_onion_services|default(False)"
+  tags:
+    - tor
+    - admin
