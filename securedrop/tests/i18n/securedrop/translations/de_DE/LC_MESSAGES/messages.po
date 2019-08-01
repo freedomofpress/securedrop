@@ -1196,11 +1196,11 @@ msgstr "Warum gibt es eine Warnung über Tor2Web?"
 #: source_templates/tor2web-warning.html:4
 msgid ""
 "<a href=\"tor2web.org\">Tor2Web</a> is a proxy service that lets you browse "
-"Tor Onion Services (.onion sites) without installing Tor. It was designed "
+"Tor Hidden Services (.onion sites) without installing Tor. It was designed "
 "to facilitate anonymous publishing."
 msgstr ""
 "<a href=\"tor2web.org\">Tor2Web</a> ist ein Proxy-Dienst, der Ihnen "
-"ermöglicht, Tor Onion Services (.onion-Seiten) zu besuchen, ohne Tor zu "
+"ermöglicht, Tor Hidden Services (.onion-Seiten) zu besuchen, ohne Tor zu "
 "installieren. Es wurde entworfen, um anonymes Veröffentlichen zu "
 "vereinfachen."
 
