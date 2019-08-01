@@ -1585,11 +1585,11 @@ msgstr "Tillbaka till inlämningssidan"
 
 #~ msgid ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> is a proxy service that lets you "
-#~ "browse Tor Onion Services (.onion sites) without installing Tor. It was "
+#~ "browse Tor Hidden Services (.onion sites) without installing Tor. It was "
 #~ "designed to facilitate anonymous publishing."
 #~ msgstr ""
 #~ "<a href=\"tor2web.org\">Tor2Web</a> är en proxytjänst som låter dig "
-#~ "besöka Tor Onion Services (.onion sidor) utan att du har installerat "
+#~ "besöka Tor Hidden Services (.onion sidor) utan att du har installerat "
 #~ "Tor. Den har skapats för att underlätta anonym publicering."
 
 #~ msgid ""
