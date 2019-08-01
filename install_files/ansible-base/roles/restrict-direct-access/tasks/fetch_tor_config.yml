@@ -5,6 +5,7 @@
     path: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}/hostname"
     delay: 5
   with_items: "{{ tor_instances }}"
+  when: "v2_onion_services|default(True)"
   tags:
     - tor
 
@@ -14,6 +15,7 @@
   # Read-only task, so don't report changed.
   changed_when: false
   with_items: "{{ tor_instances }}"
+  when: "v2_onion_services|default(True)"
   tags:
     - tor
     - admin
@@ -26,6 +28,7 @@
   # Local action, so we don't want elevated privileges
   become: no
   with_items: "{{ tor_hidden_service_hostname_lookup.results }}"
+  when: "v2_onion_services|default(True)"
   tags:
     - tor
     - admin
