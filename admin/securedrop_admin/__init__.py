@@ -589,14 +589,6 @@ def generate_new_v3_keys():
     private = base64.b32encode(private_bytes)[:-4].decode("utf-8")
     return public, private
 
-def save_v3_keys(public_key, private_key, filepath):
-    """
-    Store the keys on the ansible-base directory
-    """
-    with open(filepath, "w") as fobj:
-        json.dump({"public_key": public_key, "private_key": private_key},
-                 fobj)
-
 def get_v3_keys(filepath):
     """
     Returns the stored v3 public and private keys as Tuple.
@@ -606,7 +598,7 @@ def get_v3_keys(filepath):
     with open(filepath) as fobj:
         data = json.load(fobj)
 
-    return data["public_key"], data["private_key"]
+    return data
 
 def find_or_generate_new_torv3_keys(args):
     """
@@ -614,28 +606,34 @@ def find_or_generate_new_torv3_keys(args):
     public/private key pair.
     """
     secret_key_path = os.path.join(args.ansible_path,
-                                   "tor_v3secret_keys.json")
+                                   "tor_v3_keys.json")
     if os.path.exists(secret_key_path):
         return get_v3_keys(secret_key_path)
     # No old keys, generate and store them first
     public_key, private_key = generate_new_v3_keys()
-    save_v3_keys(public_key, private_key, secret_key_path)
-    return public_key, private_key
+    # For app ssh service
+    app_ssh_key, app_ssh_private_key = generate_new_v3_keys()
+    # For mon ssh service
+    mon_ssh_key, mon_ssh_private_key = generate_new_v3_keys()
+    data = {"public_key": public_key, "private_key": private_key,
+            "app_ssh_key": app_ssh_key, "app_ssh_private_key": app_ssh_private_key,
+            "mon_ssh_key": mon_ssh_key, "mon_ssh_private_key": mon_ssh_private_key,}
+    with open(secret_key_path, 'w') as fobj:
+        json.dump(data, fobj)
+
 
 def install_securedrop(args):
     """Install/Update SecureDrop"""
     SiteConfig(args).load()
 
-    public, private = find_or_generate_new_torv3_keys(args)
+    find_or_generate_new_torv3_keys(args)
     sdlog.info("Now installing SecureDrop on remote servers.")
     sdlog.info("You will be prompted for the sudo password on the "
                "servers.")
     sdlog.info("The sudo password is only necessary during initial "
                "installation.")
     return subprocess.check_call([os.path.join(args.ansible_path,
-                                 'securedrop-prod.yml'), '--ask-become-pass',
-                                 '-e', 'publicv3={}'.format(public),
-                                 '-e', 'privatev3={}'.format(private)],
+                                 'securedrop-prod.yml'), '--ask-become-pass'],
                                  cwd=args.ansible_path)
 
 
