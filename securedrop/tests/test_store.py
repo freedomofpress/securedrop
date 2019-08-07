@@ -51,6 +51,49 @@ def test_path_returns_filename_of_items_within_folder(journalist_app, config):
     assert generated_absolute_path == expected_absolute_path
 
 
+def test_path_without_filesystem_id(journalist_app, config):
+    filesystem_id = 'example'
+    item_filename = '1-quintuple_cant-msg.gpg'
+
+    basedir = os.path.join(config.STORE_DIR, filesystem_id)
+    os.makedirs(basedir)
+
+    path_to_file = os.path.join(basedir, item_filename)
+    with open(path_to_file, 'a'):
+        os.utime(path_to_file, None)
+
+    generated_absolute_path = \
+        journalist_app.storage.path_without_filesystem_id(item_filename)
+
+    expected_absolute_path = os.path.join(config.STORE_DIR,
+                                          filesystem_id, item_filename)
+    assert generated_absolute_path == expected_absolute_path
+
+
+def test_path_without_filesystem_id_duplicate_files(journalist_app, config):
+    filesystem_id = 'example'
+    filesystem_id_duplicate = 'example2'
+    item_filename = '1-quintuple_cant-msg.gpg'
+
+    basedir = os.path.join(config.STORE_DIR, filesystem_id)
+    duplicate_basedir = os.path.join(config.STORE_DIR, filesystem_id_duplicate)
+
+    for directory in [basedir, duplicate_basedir]:
+        os.makedirs(directory)
+        path_to_file = os.path.join(directory, item_filename)
+        with open(path_to_file, 'a'):
+            os.utime(path_to_file, None)
+
+    with pytest.raises(store.PathException):
+        journalist_app.storage.path_without_filesystem_id(item_filename)
+
+
+def test_path_without_filesystem_id_no_file(journalist_app, config):
+    item_filename = 'not there'
+    with pytest.raises(store.PathException):
+        journalist_app.storage.path_without_filesystem_id(item_filename)
+
+
 def test_verify_path_not_absolute(journalist_app, config):
     with pytest.raises(store.PathException):
         journalist_app.storage.verify(

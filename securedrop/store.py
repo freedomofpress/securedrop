@@ -107,6 +107,29 @@ class Storage:
         self.verify(absolute)
         return absolute
 
+    def path_without_filesystem_id(self, filename):
+        # type: (str) -> str
+        """Get the normalized, absolute file path, within
+           `self.__storage_path` for a filename when the filesystem_id
+           is not known.
+        """
+
+        joined_paths = []
+        for rootdir, _, files in os.walk(os.path.abspath(self.__storage_path)):
+            for file_ in files:
+                if file_ in filename:
+                    joined_paths.append(os.path.join(rootdir, file_))
+
+        if len(joined_paths) > 1:
+            raise PathException('Found duplicate files!')
+        elif len(joined_paths) == 0:
+            raise PathException('File not found: {}'.format(filename))
+        else:
+            absolute = joined_paths[0]
+
+        self.verify(absolute)
+        return absolute
+
     def get_bulk_archive(self, selected_submissions, zip_directory=''):
         # type: (List, str) -> _TemporaryFileWrapper
         """Generate a zip file from the selected submissions"""
