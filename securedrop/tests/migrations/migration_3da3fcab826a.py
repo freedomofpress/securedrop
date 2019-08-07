@@ -1,34 +1,87 @@
 # -*- coding: utf-8 -*-
 
 import random
+import os
 from uuid import uuid4
 
 from sqlalchemy import text
 
 from db import db
 from journalist_app import create_app
-from .helpers import random_bool, random_chars, random_datetime, bool_or_none
+from .helpers import random_bool, random_chars, random_ascii_chars, random_datetime, bool_or_none
+
+
+TEST_DATA_DIR = '/tmp/securedrop/store'
+
+
+def create_file_in_dummy_source_dir(filename):
+    filesystem_id = 'dummy'
+    basedir = os.path.join(TEST_DATA_DIR, filesystem_id)
+
+    if not os.path.exists(basedir):
+        os.makedirs(basedir)
+
+    path_to_file = os.path.join(basedir, filename)
+    with open(path_to_file, 'a'):
+        os.utime(path_to_file, None)
 
 
 class UpgradeTester:
 
-    """This migration verifies that any orphaned submission data from deleted
-    sources is also deleted.
+    """This migration verifies that any orphaned submission or reply data from
+    deleted sources is also deleted.
     """
 
     def __init__(self, config):
         self.config = config
         self.app = create_app(config)
+        self.journalist_id = None
 
     def load_data(self):
         with self.app.app_context():
+            self.create_journalist()
             self.add_source()
 
-            # Add submissions with and without a source
+            # Add submissions and replies with and without a source
             self.add_submission(1)
             self.add_submission(None)
 
+            self.add_reply(self.journalist_id, 1)
+            self.add_reply(self.journalist_id, None)
+
             db.session.commit()
+
+    def create_journalist(self):
+        if self.journalist_id is not None:
+            raise RuntimeError('Journalist already created')
+
+        params = {
+            'uuid': str(uuid4()),
+            'username': random_chars(50),
+        }
+        sql = '''INSERT INTO journalists (uuid, username)
+                 VALUES (:uuid, :username)
+              '''
+        self.journalist_id = db.engine.execute(text(sql), **params).lastrowid
+
+    def add_reply(self, journalist_id, source_id):
+        filename = '1-' + random_ascii_chars(5) + '-' + random_ascii_chars(5) + '-reply.gpg'
+        params = {
+            'uuid': str(uuid4()),
+            'journalist_id': journalist_id,
+            'source_id': source_id,
+            'filename': filename,
+            'size': random.randint(0, 1024 * 1024 * 500),
+            'deleted_by_source': False,
+        }
+        sql = '''INSERT INTO replies (journalist_id, uuid, source_id, filename,
+                    size, deleted_by_source)
+                 VALUES (:journalist_id, :uuid, :source_id, :filename, :size,
+                         :deleted_by_source)
+              '''
+        db.engine.execute(text(sql), **params)
+
+        create_file_in_dummy_source_dir(filename)
 
     @staticmethod
     def add_source():
@@ -50,12 +103,12 @@ class UpgradeTester:
               '''
         db.engine.execute(text(sql), **params)
 
-    @staticmethod
-    def add_submission(source_id):
+    def add_submission(self, source_id):
+        filename = '1-' + random_ascii_chars(5) + '-' + random_ascii_chars(5) + '-doc.gz.gpg'
         params = {
             'uuid': str(uuid4()),
             'source_id': source_id,
-            'filename': random_chars(50),
+            'filename': filename,
             'size': random.randint(0, 1024 * 1024 * 500),
             'downloaded': bool_or_none(),
         }
@@ -65,17 +118,27 @@ class UpgradeTester:
               '''
         db.engine.execute(text(sql), **params)
 
+        create_file_in_dummy_source_dir(filename)
+
     def check_upgrade(self):
         with self.app.app_context():
             submissions = db.engine.execute(
                 text('SELECT * FROM submissions')).fetchall()
 
-            # Submission without a source should be deleted
+            # Submissions without a source should be deleted
             assert len(submissions) == 1
             assert submissions[0].source_id is not None
 
+            replies = db.engine.execute(
+                text('SELECT * FROM replies')).fetchall()
+
+            # Replies without a source should be deleted
+            assert len(replies) == 1
+            assert replies[0].source_id is not None
+
 
 class DowngradeTester:
+    # This is a destructive alembic migration, it cannot be downgraded
 
     def __init__(self, config):
         self.config = config
