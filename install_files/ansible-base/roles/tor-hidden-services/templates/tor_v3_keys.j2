@@ -1,1 +1,1 @@
-{"public_key": "{{ tor_publicv3 }}", "private_key": "{{ tor_privatev3 }}"}
+{"public_key": "{{ hostvars["app"]["tor_v3_app"]["public_key"] }}", "private_key": "{{ hostvars["app"]["tor_v3_app"]["private_key"] }}", "app_ssh_private_key": "{{ hostvars["app"]["tor_v3_app"]["app_ssh_private_key"] }}", "app_ssh_key": "{{ hostvars["app"]["tor_v3_app"]["app_ssh_key"] }}", "mon_ssh_private_key": "{{ hostvars["mon"]["tor_v3_mon"]["mon_ssh_private_key"] }}", "mon_ssh_key": "{{ hostvars["mon"]["tor_v3_mon"]["mon_ssh_key"] }}"}
