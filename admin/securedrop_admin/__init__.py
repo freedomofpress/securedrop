@@ -569,6 +569,7 @@ def sdconfig(args):
     SiteConfig(args).load_and_update_config()
     return 0
 
+
 def generate_new_v3_keys():
     """This function generate new keys and returns them as tuple.
 
@@ -581,13 +582,14 @@ def generate_new_v3_keys():
         format=serialization.PrivateFormat.Raw,
         encryption_algorithm=serialization.NoEncryption())
     public_key = private_key.public_key()
-    public_bytes = public_key.public_bytes( 
-        encoding=serialization.Encoding.Raw	,
+    public_bytes = public_key.public_bytes(
+        encoding=serialization.Encoding.Raw,
         format=serialization.PublicFormat.Raw)
 
     public = base64.b32encode(public_bytes)[:-4].decode("utf-8")
     private = base64.b32encode(private_bytes)[:-4].decode("utf-8")
     return public, private
+
 
 def get_v3_keys(filepath):
     """
@@ -599,6 +601,7 @@ def get_v3_keys(filepath):
         data = json.load(fobj)
 
     return data
+
 
 def find_or_generate_new_torv3_keys(args):
     """
@@ -616,8 +619,10 @@ def find_or_generate_new_torv3_keys(args):
     # For mon ssh service
     mon_ssh_key, mon_ssh_private_key = generate_new_v3_keys()
     data = {"public_key": public_key, "private_key": private_key,
-            "app_ssh_key": app_ssh_key, "app_ssh_private_key": app_ssh_private_key,
-            "mon_ssh_key": mon_ssh_key, "mon_ssh_private_key": mon_ssh_private_key,}
+            "app_ssh_key": app_ssh_key,
+            "app_ssh_private_key": app_ssh_private_key,
+            "mon_ssh_key": mon_ssh_key,
+            "mon_ssh_private_key": mon_ssh_private_key}
     with open(secret_key_path, 'w') as fobj:
         json.dump(data, fobj)
 
