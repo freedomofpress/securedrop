@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # appends HidServAuth values needed for SecureDrop
-# authenticated hidden services to /etc/tor/torrc
+# authenticated Onion Services to /etc/tor/torrc
 # and reloads Tor
 
 # Run only when the interace is not "lo":

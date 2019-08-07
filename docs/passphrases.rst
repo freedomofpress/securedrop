@@ -35,7 +35,7 @@ passphrases:
    -  The GPG key that OSSEC will encrypt alerts to.
    -  The admin's personal GPG key.
    -  The account details for the destination email address for OSSEC alerts.
-   -  The Hidden Services values required to connect to the *Application* and
+   -  The Onion Services values required to connect to the *Application* and
       *Monitor Servers*.
 
 

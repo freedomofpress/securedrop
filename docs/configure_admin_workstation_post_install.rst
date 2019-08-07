@@ -3,7 +3,7 @@ Configure the Admin Workstation Post-Install and Create Backups
 
 .. _auto-connect ATHS:
 
-Auto-connect to the Authenticated Tor Hidden Services
+Auto-connect to the Authenticated Tor Onion Services
 -----------------------------------------------------
 
 The SecureDrop installation process adds multiple layers of authentication to
@@ -16,8 +16,8 @@ protect access to the most sensitive assets in the SecureDrop system:
 #. SSH on the *Monitor Server*
 
 The installation process blocks direct access to each of these assets, and sets
-up `Authenticated Tor Hidden Services`_ (ATHS) to provide authenticated access
-instead. Authenticated Tor Hidden Services share the benefits of Tor Hidden
+up `Authenticated Tor Onion Services`_ (ATHS) to provide authenticated access
+instead. Authenticated Tor Onion Services share the benefits of Tor Hidden
 Services, but are only accessible to users who possess a shared secret
 (``auth-cookie`` in the Tor documentation) that is generated during the hidden
 service setup process.
@@ -59,10 +59,10 @@ beginning of every session, and sets up SSH host aliases for the servers.
 The only thing you need to remember to do is enable
 persistence when you boot the *Admin Workstation*. If you are
 using the *Admin Workstation* and are unable to connect to any
-of the authenticated hidden services, restart Tails and make
+of the authenticated Onion Services, restart Tails and make
 sure to enable persistence.
 
-.. _Authenticated Tor Hidden Services: https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient
+.. _Authenticated Tor Onion Services: https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient
 
 Back Up the Workstations
 ------------------------

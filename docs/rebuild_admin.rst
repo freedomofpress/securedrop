@@ -233,15 +233,15 @@ Step 4: Retrieve SecureDrop configuration info from the servers
 In addition to the account and networking information retrieved from the servers
 so far, you'll need to retrieve the following files and info:
 
- - Tor hidden service URLs and tokens
+ - Tor Onion Service URLs and tokens
  - GPG *Submission Public Key* and OSSEC public key
  - OSSEC alert configuration details
  - (Optional) HTTPS configuration details
 
-Retrieve Onion hidden service info
+Retrieve Onion Service info
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In order to connect to the Tor hidden services used by your instance, you will
+In order to connect to the Tor Onion Services used by your instance, you will
 need to copy their details to the *Admin Workstation*. To do so, run the following
 commands from a Terminal window:
 
@@ -253,7 +253,7 @@ commands from a Terminal window:
  echo "$(ssh app sudo cat /var/lib/tor/services/source/hostname)" > app-source-ths
 
 If your instance was set up to use SSH over TOR, you'll also need to copy over the details 
-of the SSH proxy hidden services, by running the following commands:
+of the SSH proxy Onion Services, by running the following commands:
 
 .. code:: sh
 

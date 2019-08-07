@@ -79,7 +79,7 @@ to access the servers over SSH.
              servers.
 
 .. warning:: The ``app-journalist-aths`` file contains a password for the
-             authenticated hidden service used by the *Journalist Interface*,
+             authenticated Onion Service used by the *Journalist Interface*,
              and should not be shared except through the onboarding process.
 
 Since you need will the Tails setup scripts (``securedrop/tails_files``) that

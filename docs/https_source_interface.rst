@@ -2,7 +2,7 @@ HTTPS on the *Source Interface*
 ===============================
 
 The SecureDrop *Source Interface* is served over a Tor Hidden Service,
-requiring a ``*.onion`` URL to access it. While Tor Hidden Services provide
+requiring a ``*.onion`` URL to access it. While Tor Onion Services provide
 end-to-end encryption by default, as well as strong anonymity, there are
 several reasons why you might want to consider deploying an additional layer of
 encryption and authentication via HTTPS:
@@ -15,9 +15,9 @@ encryption and authentication via HTTPS:
   they are communicating with the intended organization when they access a
   given Source Interface.
 
-* The cryptographic primitives used by Tor Hidden Services are considered to be
+* The cryptographic primitives used by Tor Onion Services are considered to be
   outdated, and while there are no known compromises of the security of Tor
-  Hidden Services due to this issue, you may wish to provide an additional
+  Onion Services due to this issue, you may wish to provide an additional
   layer of transport encryption using stronger cryptographic primitives, which
   is most easily achieved by setting up HTTPS on the Source Interface.
 

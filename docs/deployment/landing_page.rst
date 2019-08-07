@@ -3,9 +3,9 @@
 *Landing Page*
 ==============
 
-SecureDrop itself runs as a Tor hidden service. Organizations also need to
+SecureDrop itself runs as a Tor Onion Service. Organizations also need to
 create a SecureDrop *Landing Page* that will explain how SecureDrop works, give
-sources instructions on how to access the Tor hidden service, and disclose the
+sources instructions on how to access the Tor Onion Service, and disclose the
 risks. We also recommend including a privacy policy (see our :ref:`Sample
 Privacy Policy`) describing what data is collected and how it will be used by
 your organization.
@@ -138,7 +138,7 @@ if a visitor visits these links without using the Tor browser, this generates
 traffic that an adversary may be able to use to identify SecureDrop-related
 behavior, regardless of the use of HTTPS.
 
-We suggest offering a reference to the SecureDrop hidden service in
+We suggest offering a reference to the SecureDrop Onion Service in
 plain text, without a hyperlink (as per the preceding section):
 **secrdrop5wyphb5x.onion**
 

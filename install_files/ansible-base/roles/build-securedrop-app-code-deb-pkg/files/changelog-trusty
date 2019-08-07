@@ -189,7 +189,7 @@ computation (iSEC-15FTC-6, #1059)
  * Remove unnecessary capabilties from the Apache AppArmor profile (iSEC-15FTC-9, #1058).
  * Change postfix hostname to something generic to prevent fingerprinting via OSSEC email headers
 (iSEC-15FTC-10, #1057)
- * Ensure correct permissions for Tor hidden service directories so new installs won't break (#1052)
+ * Ensure correct permissions for Tor Onion Service directories so new installs won't break (#1052)
  * Clarify server setup steps in the install documentation (#1027, #1061)
  * Clarify that Tor ATHS setup is now automatic and does not require manual changes (#1030)
  * Explain that you can only download files to the "Tor Browser" folder on Tails as of Tails 1.3, due to the
