@@ -16,19 +16,24 @@
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"
     mode: "0700"
-  with_items: "{{ tor_instances }}"
+  with_flattened:
+    - "{{ tor_instances if v2_onion_services else [] }}"
+    - "{{ tor_instances_v3 if v3_onion_services else [] }}"
   tags:
     - tor
 
-- name: Create directories for Tor v3 onion services.
+- name: Create directories for Tor v3 authenticated onion services.
   file:
     state: directory
-    dest: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}"
+    dest: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}/authorized_clients"
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"
     mode: "0700"
-  with_items: "{{ tor_instances_v3 }}"
-  when: "v3_onion_services|default(False)"
+  with_items: "{{ tor_auth_instances_v3 }}"
+  when:
+    - v3_onion_services|default(False)
+    # Source Interface is always public, don't configure client auth
+    - "'source' not in item.service"
   tags:
     - tor
 
@@ -44,22 +49,10 @@
   tags:
     - tor
 
-- name: Flush handlers to restart Tor.
-  meta: flush_handlers
-  tags:
-    - tor
-
-- name: Ensure tor is running.
-  service:
-    name: tor
-    state: started
-  tags:
-    - tor
-
 - name: Get the v3 keys locally from the Tails admin system
-  command: "cat {{ role_path }}/../../tor_v3_keys.json"
-  register: localdata
-  delegate_to: 127.0.0.1
+  set_fact:
+    v3_local_key_info: "{{ lookup('file', role_path+'/../../tor_v3_keys.json')|from_json }}"
+  delegate_to: localhost
   # Local action, so we don't want elevated privileges
   become: no
   when: "v3_onion_services|default(False)"
@@ -67,60 +60,41 @@
     - tor
     - admin
 
-
-- name: Register the v3 keys if found in the server
-  command: "cat {{ tor_hidden_services_parent_dir }}/tor_v3_keys.json"
-  register: tor_v3_public_key
-  when: "v3_onion_services|default(False)"
-  ignore_errors: yes
-
-- name: Get the keys for app
+- name: Look up SSH v3 pubkey info.
   set_fact:
-    tor_v3_app: "{{ tor_v3_public_key.stdout | from_json if (tor_v3_public_key.rc == 0) else localdata.stdout | from_json }}"
-  when: inventory_hostname == 'app'
-
-- name: Get the keys for mon
-  set_fact:
-    tor_v3_mon: "{{ tor_v3_public_key.stdout | from_json if (tor_v3_public_key.rc == 0) else localdata.stdout | from_json }}"
-  when: inventory_hostname == 'mon'
+    tor_v3_ssh_pubkey: "{{ v3_local_key_info.app_ssh_public_key if 'securedrop_application_server' in group_names else v3_local_key_info.mon_ssh_public_key }}"
+  when:
+    - v3_onion_services|default(False)
+    - "'sshv3' in tor_auth_instances_v3"
+    - enable_ssh_over_tor
+  tags:
+    - tor
 
 - name: Create the client auth file for the app server for Journalist interface
-  template:
-    src: client_auth.j2
+  copy:
     dest: "{{ tor_hidden_services_parent_dir }}/journalistv3/authorized_clients/client.auth"
+    content: |
+      descriptor:x25519:{{ v3_local_key_info.app_journalist_public_key }}
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"
     mode: "0600"
   when:
-    - "v3_onion_services|default(False)"
-    - inventory_hostname == 'app'
+    - v3_onion_services|default(False)
+    - "'journalistv3' in tor_auth_instances_v3"
   tags:
     - tor
 
 - name: Create the client auth file for the app server for ssh interface
-  template:
-    src: client_auth_app_ssh.j2
+  copy:
     dest: "{{ tor_hidden_services_parent_dir }}/sshv3/authorized_clients/client.auth"
+    content: |
+      descriptor:x25519:{{ tor_v3_ssh_pubkey }}
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"
     mode: "0600"
   when:
-    - "v3_onion_services|default(False)"
-    - inventory_hostname == 'app'
-    - enable_ssh_over_tor
-  tags:
-    - tor
-
-- name: Create the client auth file for the mon server for ssh interface
-  template:
-    src: client_auth_mon_ssh.j2
-    dest: "{{ tor_hidden_services_parent_dir }}/sshv3/authorized_clients/client.auth"
-    owner: "{{ tor_user }}"
-    group: "{{ tor_user }}"
-    mode: "0600"
-  when:
-    - "v3_onion_services|default(False)"
-    - inventory_hostname == 'mon'
+    - v3_onion_services|default(False)
+    - "'sshv3' in tor_auth_instances_v3"
     - enable_ssh_over_tor
   tags:
     - tor
@@ -138,54 +112,3 @@
   when: "v3_onion_services|default(False)"
   tags:
     - tor
-
-
-- name: Save the v3 keys on the app server
-  template:
-    src: save_keys_app.j2
-    dest: "{{ tor_hidden_services_parent_dir }}/tor_v3_keys.json"
-    owner: "{{ tor_user }}"
-    group: "{{ tor_user }}"
-    mode: "0600"
-  when:
-    - "v3_onion_services|default(False)"
-    - inventory_hostname == 'app'
-  tags:
-    - tor
-
-- name: Save the v3 keys on the mon server
-  template:
-    src: save_keys_mon.j2
-    dest: "{{ tor_hidden_services_parent_dir }}/tor_v3_keys.json"
-    owner: "{{ tor_user }}"
-    group: "{{ tor_user }}"
-    mode: "0600"
-  when:
-    - "v3_onion_services|default(False)"
-    - inventory_hostname == 'mon'
-  tags:
-    - tor
-
-- name: Save Tor Onion v3 public and private key locally.
-  local_action:
-    module: template
-    dest: "{{ role_path }}/../../tor_v3_keys.json"
-    src: tor_v3_keys.j2
-  # Local action, so we don't want elevated privileges
-  become: no
-  when: "v3_onion_services|default(False)"
-  tags:
-    - tor
-    - admin
-
-- name: Save Tor Onion v3 journalist public and private keys locally.
-  local_action:
-    module: template
-    dest: "{{ role_path }}/../../journalist_keys.json"
-    src: journalist_keys.j2
-  # Local action, so we don't want elevated privileges
-  become: no
-  when: "v3_onion_services|default(False)"
-  tags:
-    - tor
-    - admin
