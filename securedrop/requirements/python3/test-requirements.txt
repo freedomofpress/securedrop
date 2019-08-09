@@ -38,7 +38,7 @@ requests[socks]==2.22.0
 selenium==3.141.0
 six==1.11.0               # via mock, pathlib2, pip-tools, pytest
 tbselenium==0.4.2
-urllib3==1.24.1           # via requests, selenium
+urllib3==1.25.3
 werkzeug==0.14.1          # via flask
 zipp==0.5.1               # via importlib-metadata
 
