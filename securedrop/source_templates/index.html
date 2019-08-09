@@ -72,10 +72,7 @@
             </div>
         </div>
       </div>
-
-      <footer>
-        {{ gettext('Like all software, SecureDrop may contain security bugs. Use at your own risk.') }}<br>{{ gettext('Powered by') }} SecureDrop {{ version }}.
-      </footer>
+      {% include 'footer.html' %}
     </div>
 
     {# Warning bubble to help TB users disable JavaScript with NoScript.
