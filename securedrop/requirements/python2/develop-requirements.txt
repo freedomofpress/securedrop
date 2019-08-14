@@ -32,7 +32,7 @@ click==6.7                # via click-completion, cookiecutter, git-url-parse, m
 colorama==0.3.9           # via molecule, python-gilt
 configparser==3.7.4       # via entrypoints, flake8, pylint
 cookiecutter==1.6.0       # via molecule
-cryptography==2.3.1
+cryptography==2.7
 dnspython==1.15.0
 docker-py==1.10.6
 docker-pycreds==0.2.1     # via docker-py

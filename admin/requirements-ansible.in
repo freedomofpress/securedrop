@@ -1,7 +1,3 @@
 ansible>2.6<2.7
-# We need cryptography equal or higher than 2.5 to generate
-# v3 authentication key pairs, the `private_bytes` method was introduced
-# in 2.5 release.
-# https://cryptography.io/en/latest/hazmat/primitives/asymmetric/x25519/?highlight=x25519#cryptography.hazmat.primitives.asymmetric.x25519.X25519PrivateKey.private_bytes
-cryptography>=2.5
+cryptography>=2.7
 netaddr

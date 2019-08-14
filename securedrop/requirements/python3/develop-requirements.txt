@@ -28,7 +28,7 @@ click-completion==0.3.1   # via molecule
 click==6.7                # via click-completion, cookiecutter, git-url-parse, molecule, pip-tools, python-gilt, safety
 colorama==0.3.9           # via molecule, python-gilt
 cookiecutter==1.6.0       # via molecule
-cryptography==2.3.1
+cryptography==2.7
 dnspython==1.15.0
 docker-py==1.10.6
 docker-pycreds==0.2.1     # via docker-py
@@ -44,7 +44,7 @@ git-url-parse==1.0.2      # via python-gilt
 gitdb2==2.0.3             # via gitpython
 gitpython==2.1.8          # via bandit
 html-linter==0.4.0
-idna==2.5                 # via cryptography, molecule, requests
+idna==2.5                 # via molecule, requests
 imagesize==0.7.1          # via sphinx
 isort==4.2.15             # via pylint
 jinja2-time==0.2.0        # via cookiecutter
