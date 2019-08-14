@@ -94,6 +94,8 @@
 @import "modules/footer"
 // Form validation error - text to help users correct errors
 @import "modules/form-validation-error"
+// Text transformation class to minimize i18n churn for capitalization changes
+@import "modules/upper"
 
 =base_rules
   // LIBRARIES
@@ -147,3 +149,4 @@
   +regenerate-codename-button
   +footer
   +form-validation-error
+  +upper
