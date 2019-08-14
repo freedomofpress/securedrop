@@ -46,6 +46,11 @@ appserver_dependencies:
 # Enable Tor over SSH by default
 enable_ssh_over_tor: true
 
+# v2 Tor onion services are on / v3 Tor onion services are off by default for backwards
+# compatibility. Note that new install after 1.0 will have v3 enabled by sdconfig which
+# will override these variables.
+v2_onion_services: true
+v3_onion_services: false
 
 # If file is present on system at the end of ansible run
 # force a reboot. Needed because of the de-coupled nature of
