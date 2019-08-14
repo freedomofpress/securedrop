@@ -43,6 +43,15 @@ class PathException(Exception):
     pass
 
 
+class WrongNumberOfFilesException(Exception):
+    """An exception raised by path_without_filesystem_id when an unexpected
+    number of files has been found for a given submission or reply.
+    This could be due to an admin manually deleting files from the server
+    or due to a extremely unlikely collision between journalist_designations.
+    """
+    pass
+
+
 class NotEncrypted(Exception):
     """An exception raised if a file expected to be encrypted client-side
     is actually plaintext.
@@ -121,9 +130,9 @@ class Storage:
                     joined_paths.append(os.path.join(rootdir, file_))
 
         if len(joined_paths) > 1:
-            raise PathException('Found duplicate files!')
+            raise WrongNumberOfFilesException('Found duplicate files!')
         elif len(joined_paths) == 0:
-            raise PathException('File not found: {}'.format(filename))
+            raise WrongNumberOfFilesException('File not found: {}'.format(filename))
         else:
             absolute = joined_paths[0]
 

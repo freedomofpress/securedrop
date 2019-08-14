@@ -13,6 +13,7 @@ from journalist_app import create_app
 from models import Submission, Reply
 from rm import srm
 from sdconfig import config
+from store import WrongNumberOfFilesException
 from worker import rq_worker_queue
 
 # revision identifiers, used by Alembic.
@@ -35,26 +36,32 @@ def upgrade():
     app = create_app(config)
     with app.app_context():
         for submission in submissions:
-            file_path = app.storage.path_without_filesystem_id(submission.filename)
-            rq_worker_queue.enqueue(srm, file_path)
+            try:
+                file_path = app.storage.path_without_filesystem_id(submission.filename)
+                rq_worker_queue.enqueue(srm, file_path)
 
-            conn.execute(
-            sa.text("""
-                DELETE FROM submissions
-                WHERE id=:id
-            """).bindparams(id=submission.id)
-            )
+                conn.execute(
+                sa.text("""
+                    DELETE FROM submissions
+                    WHERE id=:id
+                """).bindparams(id=submission.id)
+                )
+            except WrongNumberOfFilesException:
+                pass
 
         for reply in replies:
-            file_path = app.storage.path_without_filesystem_id(reply.filename)
-            rq_worker_queue.enqueue(srm, file_path)
+            try:
+                file_path = app.storage.path_without_filesystem_id(reply.filename)
+                rq_worker_queue.enqueue(srm, file_path)
 
-            conn.execute(
-                sa.text("""
-                    DELETE FROM replies
-                    WHERE id=:id
-                """).bindparams(id=reply.id)
-            )
+                conn.execute(
+                    sa.text("""
+                        DELETE FROM replies
+                        WHERE id=:id
+                    """).bindparams(id=reply.id)
+                )
+            except WrongNumberOfFilesException:
+                pass
 
 
 def downgrade():
