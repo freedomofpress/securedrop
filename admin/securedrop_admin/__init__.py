@@ -571,7 +571,8 @@ def sdconfig(args):
 
 
 def generate_new_v3_keys():
-    """This function generate new keys and returns them as tuple.
+    """This function generate new keys for Tor v3 onion
+    services and returns them as as tuple.
 
     :returns: Tuple(public_key, private_key)
     """
@@ -586,8 +587,9 @@ def generate_new_v3_keys():
         encoding=serialization.Encoding.Raw,
         format=serialization.PublicFormat.Raw)
 
-    public = base64.b32encode(public_bytes)[:-4].decode("utf-8")
-    private = base64.b32encode(private_bytes)[:-4].decode("utf-8")
+    # Base32 encode and remove base32 padding characters (`=`)
+    public = base64.b32encode(public_bytes).replace('=', '').decode("utf-8")
+    private = base64.b32encode(private_bytes).replace('=', '').decode("utf-8")
     return public, private
 
 
@@ -598,9 +600,9 @@ def get_v3_keys(filepath):
     :returns: Tuple(public_key, private_key)
     """
     with open(filepath) as fobj:
-        data = json.load(fobj)
+        v3_onion_service_keys = json.load(fobj)
 
-    return data
+    return v3_onion_service_keys
 
 
 def find_or_generate_new_torv3_keys(args):
@@ -613,7 +615,8 @@ def find_or_generate_new_torv3_keys(args):
     if os.path.exists(secret_key_path):
         return get_v3_keys(secret_key_path)
     # No old keys, generate and store them first
-    app_journalist_public_key, app_journalist_private_key = generate_new_v3_keys()
+    app_journalist_public_key, \
+        app_journalist_private_key = generate_new_v3_keys()
     # For app ssh service
     app_ssh_public_key, app_ssh_private_key = generate_new_v3_keys()
     # For mon ssh service
