@@ -2,10 +2,6 @@
 # Reuse validation logic.
 - include: "{{ role_path }}/../validate/tasks/validate_tails_environment.yml"
 
-- include: cleanup_legacy_artifacts.yml
-
-- include: migrate_existing_config.yml
-
 - include: copy_dotfiles.yml
 
 - include: configure_torrc_additions.yml
