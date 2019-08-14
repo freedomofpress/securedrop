@@ -23,14 +23,23 @@ branch_labels = None
 depends_on = None
 
 
+def raw_sql_grab_orphaned_objects(table_name):
+    """Objects that have a source ID that doesn't exist in the
+    sources table OR a NULL source ID should be deleted."""
+    return ('SELECT id, filename, source_id FROM {table} '
+            'WHERE source_id NOT IN (SELECT id FROM sources) '
+            'UNION SELECT id, filename, source_id FROM {table} '
+            'WHERE source_id IS NULL').format(table=table_name)
+
+
 def upgrade():
     conn = op.get_bind()
     submissions = conn.execute(
-        sa.text('SELECT id, filename, source_id FROM submissions WHERE source_id IS NULL')
+        sa.text(raw_sql_grab_orphaned_objects('submissions'))
     ).fetchall()
 
     replies = conn.execute(
-        sa.text('SELECT id, filename, source_id FROM replies WHERE source_id IS NULL')
+        sa.text(raw_sql_grab_orphaned_objects('replies'))
     ).fetchall()
 
     app = create_app(config)

@@ -41,13 +41,16 @@ class UpgradeTester:
         with self.app.app_context():
             self.create_journalist()
             self.add_source()
+            self.valid_source_id = 1
 
             # Add submissions and replies with and without a source
-            self.add_submission(1)
-            self.add_submission(None)
+            self.add_submission(self.valid_source_id)
+            self.add_submission(2)  # Not a real source
+            self.add_submission(None)  # NULL source
 
-            self.add_reply(self.journalist_id, 1)
-            self.add_reply(self.journalist_id, None)
+            self.add_reply(self.journalist_id, self.valid_source_id)
+            self.add_reply(self.journalist_id, 2)  # Not a real source
+            self.add_reply(self.journalist_id, None)  # NULL source
 
             db.session.commit()
 
@@ -127,14 +130,16 @@ class UpgradeTester:
 
             # Submissions without a source should be deleted
             assert len(submissions) == 1
-            assert submissions[0].source_id is not None
+            for submission in submissions:
+                assert submission.source_id == self.valid_source_id
 
             replies = db.engine.execute(
                 text('SELECT * FROM replies')).fetchall()
 
             # Replies without a source should be deleted
             assert len(replies) == 1
-            assert replies[0].source_id is not None
+            for reply in replies:
+                assert reply.source_id == self.valid_source_id
 
 
 class DowngradeTester:
