@@ -50,6 +50,9 @@ postfix_enable_service: no
 # Otherwise, all SSH connections would be forced over Tor.
 enable_ssh_over_tor: false
 
+# v3 onion services should be available in staging for testing.
+v3_onion_services: true
+
 ### Use for backup restores ###
 # If the `backup_zip` variable is defined ansible will copy the defined file to
 # the app server and run the 0.3_collect.py script to unzip and restore those
