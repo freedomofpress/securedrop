@@ -93,6 +93,8 @@ def test_tor_services_config(host, tor_service):
     # with newer versions of Tor, which default to v3.
     if tor_service['version'] == 2:
         version_string = "HiddenServiceVersion 2"
+    else:
+        version_string = ""
 
     port_regex = "HiddenServicePort {} 127.0.0.1:{}".format(
             remote_port, local_port)
@@ -100,7 +102,10 @@ def test_tor_services_config(host, tor_service):
     assert f.contains("^{}$".format(dir_regex))
     assert f.contains("^{}$".format(port_regex))
 
-    service_regex = "\n".join([dir_regex, version_string, port_regex])
+    if version_string:
+        service_regex = "\n".join([dir_regex, version_string, port_regex])
+    else:
+        service_regex = "\n".join([dir_regex, port_regex])
 
     if tor_service['authenticated'] and tor_service['version'] == 2:
         auth_regex = "HiddenServiceAuthorizeClient stealth {}".format(

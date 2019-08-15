@@ -75,7 +75,7 @@ tor_services:
   - name: sourcev3
     ports:
       - "80"
-    authenticated: yes
+    authenticated: no
     version: 3
 
 # Staging permits presence of "source-error.log".
