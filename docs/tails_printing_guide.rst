@@ -38,8 +38,7 @@ attempting to use a new printer with Tails.
 
 .. note:: While, as of Tails 3, it's no longer necessary to have admin
    privileges in order to install or configure printers, we recommend that you
-   set an admin passphrase along with
-   :ref:`enabling persistence <enable_persistence_in_tails>`; this ensures that
+   set an admin passphrase and unlock your persistent volume; this ensures that
    the printer's installation and configuration settings persist after every
    reboot, so you don't have to reinstall it each time you start Tails.
 

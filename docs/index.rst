@@ -70,7 +70,6 @@ anonymous sources.
    what_makes_securedrop_unique
    logging
    ossec_alerts
-   tails_guide
    tails_printing_guide
    https_source_interface
    ssh_over_local_net

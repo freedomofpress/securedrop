@@ -143,6 +143,8 @@ output of that last command along with the fingerprint above.
    and you should **not** proceed with the installation. If this happens,
    please contact us at securedrop@freedom.press.
 
+.. _keepassx_setup:
+
 Create the Admin Passphrase Database
 ------------------------------------
 
@@ -174,7 +176,7 @@ To use the template:
          file used to protect the database.
 
 In case you wish to manually create a database, the suggested password fields in
-the admin template are:
+the template are:
 
 **Admin**:
 

@@ -11,7 +11,9 @@ each role in a SecureDrop installation.
           password manager included in Tails, to generate and retain
           strong and unique passphrases. We have created a template
           passphrase database that you can use to get started. For more
-          information, see the :doc:`tails_guide`.
+          information, see the :ref:`KeePassX setup instructions <keepassx_setup>`,
+          which are identical for the *Admin Workstation* and the
+          *Journalist Workstation*.
 
 .. tip:: For best practices on managing passphrases, see
    :doc:`passphrase_best_practices`.
@@ -21,7 +23,7 @@ Admin
 
 The admin will be using the *Admin Workstation* with Tails to connect to
 the *Application Server* and the *Monitor Server* using Tor and SSH. The tasks
-performed by the admin will require the following set of credentials and 
+performed by the admin will require the following set of credentials and
 passphrases:
 
 -  A passphrase for the persistent volume on the Admin Live USB.
