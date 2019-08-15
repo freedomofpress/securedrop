@@ -95,6 +95,8 @@
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"
     mode: "0600"
+  notify:
+    - restart tor
   when:
     - v3_onion_services
     - "'journalistv3' in tor_auth_instances_v3"
@@ -109,6 +111,8 @@
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"
     mode: "0600"
+  notify:
+    - restart tor
   when:
     - v3_onion_services
     - "'sshv3' in tor_auth_instances_v3"
