@@ -13,7 +13,7 @@ from journalist_app import create_app
 from models import Submission, Reply
 from rm import srm
 from sdconfig import config
-from store import WrongNumberOfFilesException
+from store import NoFileFoundException, TooManyFilesException
 from worker import rq_worker_queue
 
 # revision identifiers, used by Alembic.
@@ -46,30 +46,46 @@ def upgrade():
     with app.app_context():
         for submission in submissions:
             try:
-                file_path = app.storage.path_without_filesystem_id(submission.filename)
-                rq_worker_queue.enqueue(srm, file_path)
-
                 conn.execute(
                 sa.text("""
                     DELETE FROM submissions
                     WHERE id=:id
                 """).bindparams(id=submission.id)
                 )
-            except WrongNumberOfFilesException:
+
+                file_path = app.storage.path_without_filesystem_id(submission.filename)
+                rq_worker_queue.enqueue(srm, file_path)
+            except NoFileFoundException:
+                # The file must have been deleted by the admin, remove the row
+                conn.execute(
+                sa.text("""
+                    DELETE FROM submissions
+                    WHERE id=:id
+                """).bindparams(id=submission.id)
+                )
+            except TooManyFilesException:
                 pass
 
         for reply in replies:
             try:
-                file_path = app.storage.path_without_filesystem_id(reply.filename)
-                rq_worker_queue.enqueue(srm, file_path)
-
                 conn.execute(
                     sa.text("""
                         DELETE FROM replies
                         WHERE id=:id
                     """).bindparams(id=reply.id)
                 )
-            except WrongNumberOfFilesException:
+
+                file_path = app.storage.path_without_filesystem_id(reply.filename)
+                rq_worker_queue.enqueue(srm, file_path)
+            except NoFileFoundException:
+                # The file must have been deleted by the admin, remove the row
+                conn.execute(
+                    sa.text("""
+                        DELETE FROM replies
+                        WHERE id=:id
+                    """).bindparams(id=reply.id)
+                )
+            except TooManyFilesException:
                 pass
 
 

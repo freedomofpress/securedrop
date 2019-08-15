@@ -84,13 +84,13 @@ def test_path_without_filesystem_id_duplicate_files(journalist_app, config):
         with open(path_to_file, 'a'):
             os.utime(path_to_file, None)
 
-    with pytest.raises(store.WrongNumberOfFilesException):
+    with pytest.raises(store.TooManyFilesException):
         journalist_app.storage.path_without_filesystem_id(item_filename)
 
 
 def test_path_without_filesystem_id_no_file(journalist_app, config):
     item_filename = 'not there'
-    with pytest.raises(store.WrongNumberOfFilesException):
+    with pytest.raises(store.NoFileFoundException):
         journalist_app.storage.path_without_filesystem_id(item_filename)
 
 

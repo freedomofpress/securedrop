@@ -42,14 +42,17 @@ class UpgradeTester:
             self.create_journalist()
             self.add_source()
             self.valid_source_id = 1
+            deleted_source_id = 2
 
-            # Add submissions and replies with and without a source
+            # Add submissions and replies with and without a valid source
             self.add_submission(self.valid_source_id)
-            self.add_submission(2)  # Not a real source
+            self.add_submission(deleted_source_id)
+            self.add_submission(deleted_source_id, with_file=False)
             self.add_submission(None)  # NULL source
 
             self.add_reply(self.journalist_id, self.valid_source_id)
-            self.add_reply(self.journalist_id, 2)  # Not a real source
+            self.add_reply(self.journalist_id, deleted_source_id)
+            self.add_reply(self.journalist_id, deleted_source_id, with_file=False)
             self.add_reply(self.journalist_id, None)  # NULL source
 
             db.session.commit()
@@ -67,7 +70,7 @@ class UpgradeTester:
               '''
         self.journalist_id = db.engine.execute(text(sql), **params).lastrowid
 
-    def add_reply(self, journalist_id, source_id):
+    def add_reply(self, journalist_id, source_id, with_file=True):
         filename = '1-' + random_ascii_chars(5) + '-' + random_ascii_chars(5) + '-reply.gpg'
         params = {
             'uuid': str(uuid4()),
@@ -84,7 +87,8 @@ class UpgradeTester:
               '''
         db.engine.execute(text(sql), **params)
 
-        create_file_in_dummy_source_dir(filename)
+        if with_file:
+            create_file_in_dummy_source_dir(filename)
 
     @staticmethod
     def add_source():
@@ -106,7 +110,7 @@ class UpgradeTester:
               '''
         db.engine.execute(text(sql), **params)
 
-    def add_submission(self, source_id):
+    def add_submission(self, source_id, with_file=True):
         filename = '1-' + random_ascii_chars(5) + '-' + random_ascii_chars(5) + '-doc.gz.gpg'
         params = {
             'uuid': str(uuid4()),
@@ -121,7 +125,8 @@ class UpgradeTester:
               '''
         db.engine.execute(text(sql), **params)
 
-        create_file_in_dummy_source_dir(filename)
+        if with_file:
+            create_file_in_dummy_source_dir(filename)
 
     def check_upgrade(self):
         with self.app.app_context():

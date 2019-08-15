@@ -43,11 +43,19 @@ class PathException(Exception):
     pass
 
 
-class WrongNumberOfFilesException(Exception):
-    """An exception raised by path_without_filesystem_id when an unexpected
-    number of files has been found for a given submission or reply.
-    This could be due to an admin manually deleting files from the server
-    or due to a extremely unlikely collision between journalist_designations.
+class TooManyFilesException(Exception):
+    """An exception raised by path_without_filesystem_id when too many
+    files has been found for a given submission or reply.
+    This could be due to a very unlikely collision between
+    journalist_designations.
+    """
+    pass
+
+
+class NoFileFoundException(Exception):
+    """An exception raised by path_without_filesystem_id when a file could
+    not be found for a given submission or reply.
+    This is likely due to an admin manually deleting files from the server.
     """
     pass
 
@@ -130,9 +138,9 @@ class Storage:
                     joined_paths.append(os.path.join(rootdir, file_))
 
         if len(joined_paths) > 1:
-            raise WrongNumberOfFilesException('Found duplicate files!')
+            raise TooManyFilesException('Found duplicate files!')
         elif len(joined_paths) == 0:
-            raise WrongNumberOfFilesException('File not found: {}'.format(filename))
+            raise NoFileFoundException('File not found: {}'.format(filename))
         else:
             absolute = joined_paths[0]
 
