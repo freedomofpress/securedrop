@@ -62,7 +62,7 @@ update-python2-requirements:  ## Update Python 2 requirements with pip-compile.
 		requirements/python2/securedrop-app-code-requirements.in
 
 .PHONY: update-pip-requirements
-update-pip-requirements: update-admin-pip-requirements update-python3-requirements ## Update all requirements with pip-compile.
+update-pip-requirements: update-admin-pip-requirements update-python2-requirements update-python3-requirements ## Update all requirements with pip-compile.
 
 
 #################
