@@ -17,7 +17,7 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}" autocomplete="off">
   <input type="hidden" name="confirm_delete" value="true">
-  <p><button class="sd-button" type="submit" name="action" value="delete" id="confirm-delete">{{ gettext('PERMANENTLY DELETE FILES') }}</button></p>
+  <p><button type="submit" name="action" value="delete" id="confirm-delete">{{ gettext('PERMANENTLY DELETE FILES') }}</button></p>
 </form>
 
 <p><a href="/col/{{ filesystem_id }}">{{ gettext('Return to the list of documents for {source_name}…').format(source_name=source.journalist_designation) }}</a></p>

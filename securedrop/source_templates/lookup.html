@@ -15,11 +15,12 @@
   {% endif %}
 </div>
 
-<h1 class="headline">{{ gettext('Submit Files or Messages') }}</h1>
-<p class="explanation">{{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_journalist_pubkey')) }}
+<h2 class="headline">{{ gettext('Submit Files or Messages') }}</h2>
+<p class="explanation">{{ gettext('You can submit any kind of file, a message, or both.') }}</p>
+
+<p class="explanation extended-explanation">{{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_journalist_pubkey')) }}
 {{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_journalist_pubkey')) }}</p>
 
-<p class="explanation">{{ gettext('You can submit any kind of file, a message, or both.') }}</p>
 <hr class="no-line">
 
 <form id="upload" method="post" action="{{ url_for('main.submit') }}" enctype="multipart/form-data" autocomplete="off">
@@ -37,16 +38,16 @@
 
   <hr class="no-line">
   <div class="pull-right">
-    <button type="submit" class="sd-button btn primary" id="submit-doc-button">
-      <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/checkmark-white.png') }}" width="20" height="20">
-      <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/checkmark-blue.png') }}" width="20" height="20">
+    <button type="submit" id="submit-doc-button">
       {{ gettext('SUBMIT') }}
     </button>
 
 
 
     <a href="{{ url_for('main.lookup') }}" class="btn secondary" id="cancel">
-      <img class="icon" src="{{ url_for('static', filename='i/font-awesome/cancel-blue.png') }}" width="20" height="20"> {{ gettext('CANCEL') }}
+      <img class="icon off-hover" src="{{ url_for('static', filename='i/x_icon-button_blue.png') }}" width="9" height="11">
+      <img class="icon on-hover" src="{{ url_for('static', filename='i/x_icon-grimace_blue.png') }}" width="9" height="11">
+      {{ gettext('CANCEL') }}
     </a>
   </div>
 </form>
@@ -68,12 +69,13 @@
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
           <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off">
           <a href="#confirm-delete-{{ reply.filename }}" class="delete">
-            <img id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/font-awesome/trash-black.png') }}" width="20" height="20">
+            <img class="icon off-hover" id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/trash-x-out.png') }}" width="16" height="20">
+            <img class="icon on-hover" id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/trash-x-solid.png') }}" width="16" height="20">
           </a>
           <div id="confirm-delete-{{ reply.filename }}" class="confirm-prompt">
             <p>{{ gettext('Delete this reply?') }}
               <a href="#delete">{{ gettext('Cancel') }}</a>
-              <button type="submit" class="sd-button btn danger" id="confirm-delete-reply-button-{{ reply.filename }}">{{ gettext('DELETE') }}</button>
+              <button type="submit" class="danger" id="confirm-delete-reply-button-{{ reply.filename }}">{{ gettext('DELETE') }}</button>
             </p>
           </div>
         </form>
@@ -82,12 +84,12 @@
       </div>
     {% endfor %}
     <form id="delete-all" method="post" action="{{ url_for('main.batch_delete') }}">
-      <a class="sd-button btn" href="#delete-all-confirm">{{ gettext('DELETE ALL REPLIES') }}</a>
+      <a class="btn danger" href="#delete-all-confirm">{{ gettext('DELETE ALL REPLIES') }}</a>
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <div id="delete-all-confirm" class="hidden-prompt">
         <p><strong>{{ gettext('Are you finished with the replies?') }}</strong></p>
-        <button class="sd-button danger" type="submit">{{ gettext('YES, DELETE ALL REPLIES') }}</button>
-        <a class="sd-button btn cancel" href="#delete-all">{{ gettext('NO, NOT YET') }}</a>
+        <button class="danger" type="submit">{{ gettext('YES, DELETE ALL REPLIES') }}</button>
+        <a class="btn" href="#delete-all">{{ gettext('NO, NOT YET') }}</a>
       </div>
     </form>
   {% else %}

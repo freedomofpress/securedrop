@@ -4,7 +4,7 @@
     <a href="#close" title="{{ gettext('Close') }}" class="close">X</a>
     <h2>{{ modal_data.modal_header }}</h2>
     <p>{{ modal_data.modal_body }}</p>
-    <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}" class="btn sd-button">{{ gettext('Cancel') }}</a>
-    <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete" class="sd-button {{ modal_data.submit_btn_type }}">{{ modal_data.submit_btn_text }}</button>
+    <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}" class="btn upper">{{ gettext('Cancel') }}</a>
+    <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete" class="{{ modal_data.submit_btn_type }} upper">{{ modal_data.submit_btn_text }}</button>
   </div>
 </div>

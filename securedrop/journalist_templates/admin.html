@@ -3,7 +3,7 @@
 <h1>{{ gettext('Admin Interface') }}</h1>
 
 <form action="{{ url_for('admin.add_user') }}">
-  <button class="sd-button" type="submit" class="btn" id="add-user"><i class="fa fa-plus"></i>{{ gettext('ADD USER') }}</button>
+  <button type="submit" id="add-user"><i class="fa fa-plus"></i>{{ gettext('ADD USER') }}</button>
 </form>
 
 <hr class="no-line">
@@ -22,9 +22,9 @@
     {% for user in users %}
       <tr class="user">
         <td>{{ user.username }}</td>
-        <td><a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}"><i class="fa fa-edit" title="{{ gettext('Edit user {username}').format(username=user.username) }}"></i></a></td>
+        <td><a href="/admin/edit/{{ user.id }}" class="plain edit-user-button" data-username="{{ user.username }}"><i class="fa fa-edit" title="{{ gettext('Edit user {username}').format(username=user.username) }}"></i></a></td>
 	{% if user.id == g.user.id %}
-        <td><i class="far fa-trash-alt"></i></button></td>
+        <td><i class="far fa-trash-alt disabled-delete-button"></i></td>
 	{% else %}
         <td><button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}"><i class="far fa-trash-alt" title="{{ gettext('Delete user {username}').format(username=user.username) }}"></i></button></td>
 	{% endif %}
@@ -44,8 +44,8 @@
 
 <hr class="no-line">
 
-<a href="{{ url_for('admin.manage_config') }}" class="btn sd-button" id="update-instance-config">
-  <i class="fas fa-pencil-alt"></i>{{ gettext('INSTANCE CONFIG') }}
+<a href="{{ url_for('admin.manage_config') }}" class="btn" id="update-instance-config">
+  <i class="fas fa-pencil-alt"></i> {{ gettext('INSTANCE CONFIG') }}
 </a>
 
 <hr class="no-line">

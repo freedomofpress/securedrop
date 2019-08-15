@@ -32,7 +32,7 @@
       float: right
       padding: 5px
       background-color: inherit
-      color: $color_warning_red_pale
+      color: $color_urgent_coral
       font-size: 14px
       border: 0
       clear: right
@@ -54,6 +54,7 @@ p#no-replies
 p.breadcrumbs
   text-align: left
   position: relative
+  color: #000c6c
 
   &:dir(rtl)
     text-align: right
@@ -80,14 +81,17 @@ p#max-file-size
   margin-bottom: 0
 
 button.small-danger, a.btn.small-danger, .btn.small-danger
-  background-color: $color_warning_red_pale
+  background-color: $color_urgent_coral
   font-size: small
   padding: 3px 10px
+
+#delete-collections
+  border-width: 2px
 
 .submission .icon
   display: inline-block
   width: 3.5%
-  color: $color_purple_medium
+  color: #3d3d3d
 
 #cols li.source
   .button-star
@@ -101,7 +105,7 @@ button.small-danger, a.btn.small-danger, .btn.small-danger
     width: 100%
 
 .journalist-reply__input
-  max-width: 700px
+  width: 100%
 
 .journalist-username__notes
   font: 12px Sans-Serif
@@ -123,3 +127,19 @@ button.small-danger, a.btn.small-danger, .btn.small-danger
 
 .reset-two-factor
   display: inline-block
+
+#select_all, #select_unread, #select_none
+  background: #034482
+
+  &:hover
+    background: $color_grimace_blue
+
+#select_none
+  margin-right: 15px
+
+#delete-selected-link, #delete-collections-link
+  & button
+    border-color: rgba(255, 51, 102, 0.6)
+
+    &:hover
+      border-color: $color_urgent_coral

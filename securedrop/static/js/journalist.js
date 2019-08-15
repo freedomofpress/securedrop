@@ -44,24 +44,24 @@ function enhance_ui() {
   let indexSelectContainer = document.getElementById("index-select-container");
   if (indexSelectContainer) {
     indexSelectContainer.outerHTML =
-      '<span id="select_all" class="select"><i class="far fa-check-square"></i> ' +
+      '<button id="select_all" type="button" class="small"> ' +
       get_string("select-all-string") +
-      '</span> <span id="select_none" class="select"><i class="far fa-square"></i> ' +
+      '</button> <button id="select_none" type="button" class="small"> ' +
       get_string("select-none-string") +
-      '</span>';
+      '</button>';
   }
 
   // Add the "select {all,unread,none}" buttons for the source collection
   let selectContainer = document.getElementById("select-container");
   if (selectContainer) {
     selectContainer.innerHTML =
-      '<span id="select_all" class="select"><i class="far fa-check-square"></i> ' +
+      '<button id="select_all" type="button" class="small"> ' +
       get_string("select-all-string") +
-      '</span> <span id="select_unread" class="select"><i class="far fa-check-square"></i> ' +
+      '</button> <button id="select_unread" type="button" class="small"> ' +
       get_string("select-unread-string") +
-      '</span> <span id="select_none" class="select"><i class="far fa-square"></i> ' +
+      '</button> <button id="select_none" type="button" class="small"> ' +
       get_string("select-none-string") +
-      '</span>';
+      '</button>';
   }
 
 }

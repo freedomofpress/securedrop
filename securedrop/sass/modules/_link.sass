@@ -1,9 +1,21 @@
 =link
+
+
   a
-    color: $color_purple_medium
+    text-decoration: none
+    color: $color_securedrop_blue
+    border-bottom: 1px solid rgba(0, 117, 247, 0.4)
+
+    &:hover
+      color: $color_grimace_blue
+      border-bottom: 1px solid rgba(42, 49, 157, 1)
 
     &.plain
-      color: #333
+      color: $color_button_blue
+      border: 0
 
       &:hover
-        color: $color_purple_medium
+        color: $color_grimace_blue
+
+    &.no-bottom-border
+      border: 0
