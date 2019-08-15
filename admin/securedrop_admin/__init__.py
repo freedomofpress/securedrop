@@ -621,7 +621,7 @@ def find_or_generate_new_torv3_keys(args):
                                    "tor_v3_keys.json")
     if os.path.exists(secret_key_path):
         print('Tor v3 onion service keys already exist in: {}'.format(secret_key_path))
-        sys.exit(0)
+        return 0
     # No old keys, generate and store them first
     app_journalist_public_key, \
         app_journalist_private_key = generate_new_v3_keys()
@@ -640,14 +640,13 @@ def find_or_generate_new_torv3_keys(args):
     with open(secret_key_path, 'w') as fobj:
         json.dump(tor_v3_service_info, fobj, indent=4)
     print('Tor v3 onion service keys generated and stored in: {}'.format(secret_key_path))
-    sys.exit(0)
+    return 0
 
 
 def install_securedrop(args):
     """Install/Update SecureDrop"""
     SiteConfig(args).load()
 
-    find_or_generate_new_torv3_keys(args)
     sdlog.info("Now installing SecureDrop on remote servers.")
     sdlog.info("You will be prompted for the sudo password on the "
                "servers.")
