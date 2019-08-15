@@ -21,3 +21,12 @@ admin_net_int:
   Darwin:
     cmd: "/sbin/route -n get "
     rgx: "(?<=interface: )\\w+"
+
+# Lookup table for querying keypair info from the local JSON
+# file on the Admin Workstation, required for configuring client
+# auth on Tor v3 Onion URLs. See the tor_v3_keys.json file for
+# reference on structure.
+tor_v3_service_map:
+  app-journalistv3-aths: "app_journalist_private_key"
+  app-sshv3-aths: "app_ssh_private_key"
+  mon-sshv3-aths: "mon_ssh_private_key"
