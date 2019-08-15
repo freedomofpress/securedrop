@@ -1,4 +1,6 @@
 ---
 - include: install_tor.yml
 
+- include: check_tor_service_config_for_admins.yml
+
 - include: configure_tor_hidden_services.yml
