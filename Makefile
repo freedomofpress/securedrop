@@ -37,6 +37,7 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 	@$(DEVSHELL) pip-compile \
 		--output-file requirements/python3/develop-requirements.txt \
 		../admin/requirements-ansible.in \
+		../admin/requirements.in \
 		requirements/python3/develop-requirements.in
 	@$(DEVSHELL) pip-compile \
 		--output-file requirements/python3/test-requirements.txt \
@@ -51,6 +52,7 @@ update-python2-requirements:  ## Update Python 2 requirements with pip-compile.
 	@PYTHON_VERSION=2 $(DEVSHELL) pip-compile \
 		--output-file requirements/python2/develop-requirements.txt \
 		../admin/requirements-ansible.in \
+		../admin/requirements.in \
 		requirements/python2/develop-requirements.in
 	@PYTHON_VERSION=2 $(DEVSHELL) pip-compile \
 		--output-file requirements/python2/test-requirements.txt \
