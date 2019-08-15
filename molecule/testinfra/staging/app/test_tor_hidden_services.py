@@ -29,6 +29,7 @@ def test_tor_service_hostnames(host, tor_service):
     # Declare regex only for THS; we'll build regex for ATHS only if
     # necessary, since we won't have the required values otherwise.
     ths_hostname_regex = r"[a-z0-9]{16}\.onion"
+    ths_hostname_regex_v3 = r"[a-z0-9]{56}\.onion"
 
     with host.sudo():
         f = host.file("/var/lib/tor/services/{}/hostname".format(
@@ -41,15 +42,24 @@ def test_tor_service_hostnames(host, tor_service):
         # All hostnames should contain at *least* the hostname.
         assert re.search(ths_hostname_regex, f.content_string)
 
-        if tor_service['authenticated']:
+        if tor_service['authenticated'] and tor_service['version'] == 2:
             # HidServAuth regex is approximately [a-zA-Z0-9/+], but validating
             # the entire entry is sane, and we don't need to nitpick the
             # charset.
             aths_hostname_regex = ths_hostname_regex + " .{22} # client: " + \
                                   tor_service['client']
             assert re.search("^{}$".format(aths_hostname_regex), f.content_string)
-        else:
+        elif tor_service['authenticated'] and tor_service['version'] == 3:
+            # For authenticated version 3 onion services, the authorized_client
+            # directory will exist and contain a file called client.auth.
+            client_auth = host.file(
+                "/var/lib/tor/services/{}/authorized_clients/client.auth".format(
+                    tor_service['name']))
+            assert client_auth.is_file
+        elif tor_service['version'] == 2:
             assert re.search("^{}$".format(ths_hostname_regex), f.content_string)
+        else:
+            assert re.search("^{}$".format(ths_hostname_regex_v3), f.content_string)
 
 
 @pytest.mark.parametrize('tor_service', sdvars.tor_services)
@@ -61,7 +71,7 @@ def test_tor_services_config(host, tor_service):
       * HiddenServiceDir
       * HiddenServicePort
 
-    Only authenticated Onion Services must also include:
+    Only v2 authenticated Onion Services must also include:
 
       * HiddenServiceAuthorizeClient
 
@@ -81,7 +91,8 @@ def test_tor_services_config(host, tor_service):
 
     # Ensure that service is hardcoded to v2, for compatibility
     # with newer versions of Tor, which default to v3.
-    version_string = "HiddenServiceVersion 2"
+    if tor_service['version'] == 2:
+        version_string = "HiddenServiceVersion 2"
 
     port_regex = "HiddenServicePort {} 127.0.0.1:{}".format(
             remote_port, local_port)
@@ -91,7 +102,7 @@ def test_tor_services_config(host, tor_service):
 
     service_regex = "\n".join([dir_regex, version_string, port_regex])
 
-    if tor_service['authenticated']:
+    if tor_service['authenticated'] and tor_service['version'] == 2:
         auth_regex = "HiddenServiceAuthorizeClient stealth {}".format(
                 tor_service['client'])
         assert f.contains("^{}$".format(auth_regex))
