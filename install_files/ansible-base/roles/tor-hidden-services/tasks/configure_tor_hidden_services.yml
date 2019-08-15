@@ -29,7 +29,7 @@
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"
     mode: "0700"
-  with_items: "{{ tor_auth_instances_v3 }}"
+  with_items: "{{ tor_instances_v3 }}"
   when:
     - v3_onion_services
     # Source Interface is always public, don't configure client auth
