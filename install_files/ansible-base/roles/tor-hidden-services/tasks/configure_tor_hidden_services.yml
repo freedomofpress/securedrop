@@ -70,6 +70,8 @@
   delegate_to: localhost
   # Local action, so we don't want elevated privileges
   become: no
+  # Suppress output since it contains Tor keys
+  no_log: true
   when: "v3_onion_services"
   tags:
     - tor
