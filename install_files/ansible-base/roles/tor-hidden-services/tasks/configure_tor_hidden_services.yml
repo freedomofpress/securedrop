@@ -49,6 +49,21 @@
   tags:
     - tor
 
+# TODO: While cryptography is available in the development requirements, this task does
+# requires the install of admin requirements in whatever virtualenv is activated for running
+# staging (this seems reasonable to me).
+- name: Generate Onion v3 keys if required the Tails admin system
+  command: "python {{ sd_root_dir }}/admin/securedrop_admin/__init__.py --root {{ sd_root_dir }} generate_v3_keys"
+  delegate_to: localhost
+  # Local action, so we don't want elevated privileges
+  become: no
+  when: "v3_onion_services"
+  register: onion_v3_generation
+  changed_when: "'onion service keys generated' in onion_v3_generation.stdout"
+  tags:
+    - tor
+    - admin
+
 - name: Get the v3 keys locally from the Tails admin system
   set_fact:
     v3_local_key_info: "{{ lookup('file', role_path+'/../../tor_v3_keys.json')|from_json }}"

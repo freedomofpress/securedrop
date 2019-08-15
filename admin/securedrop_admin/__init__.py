@@ -607,13 +607,14 @@ def get_v3_keys(filepath):
 
 def find_or_generate_new_torv3_keys(args):
     """
-    This method will either read the old keys or generate a new
-    public/private key pair.
+    This method will either read v3 Tor onion service keys if found or generate
+    a new public/private keypair.
     """
     secret_key_path = os.path.join(args.ansible_path,
                                    "tor_v3_keys.json")
     if os.path.exists(secret_key_path):
-        return get_v3_keys(secret_key_path)
+        print('Tor v3 onion service keys already exist in: {}'.format(secret_key_path))
+        sys.exit(0)
     # No old keys, generate and store them first
     app_journalist_public_key, \
         app_journalist_private_key = generate_new_v3_keys()
@@ -631,6 +632,8 @@ def find_or_generate_new_torv3_keys(args):
     }
     with open(secret_key_path, 'w') as fobj:
         json.dump(tor_v3_service_info, fobj, indent=4)
+    print('Tor v3 onion service keys generated and stored in: {}'.format(secret_key_path))
+    sys.exit(0)
 
 
 def install_securedrop(args):
@@ -894,6 +897,11 @@ def parse_argv(argv):
     parse_tailsconfig = subparsers.add_parser('tailsconfig',
                                               help=run_tails_config.__doc__)
     parse_tailsconfig.set_defaults(func=run_tails_config)
+
+    parse_generate_tor_keys = subparsers.add_parser(
+        'generate_v3_keys',
+        help=find_or_generate_new_torv3_keys.__doc__)
+    parse_generate_tor_keys.set_defaults(func=find_or_generate_new_torv3_keys)
 
     parse_backup = subparsers.add_parser('backup',
                                          help=backup_securedrop.__doc__)
