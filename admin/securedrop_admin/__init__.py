@@ -588,8 +588,15 @@ def generate_new_v3_keys():
         format=serialization.PublicFormat.Raw)
 
     # Base32 encode and remove base32 padding characters (`=`)
-    public = base64.b32encode(public_bytes).replace('=', '').decode("utf-8")
-    private = base64.b32encode(private_bytes).replace('=', '').decode("utf-8")
+    # Using try/except blocks for Python 2/3 support.
+    try:
+        public = base64.b32encode(public_bytes).replace('=', '').decode("utf-8")
+    except TypeError:
+        public = base64.b32encode(public_bytes).replace(b'=', b'').decode("utf-8")
+    try:
+        private = base64.b32encode(private_bytes).replace('=', '').decode("utf-8")
+    except TypeError:
+        private = base64.b32encode(private_bytes).replace(b'=', b'').decode("utf-8")
     return public, private
 
 
