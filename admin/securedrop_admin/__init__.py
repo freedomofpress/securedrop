@@ -590,13 +590,17 @@ def generate_new_v3_keys():
     # Base32 encode and remove base32 padding characters (`=`)
     # Using try/except blocks for Python 2/3 support.
     try:
-        public = base64.b32encode(public_bytes).replace('=', '').decode("utf-8")
+        public = base64.b32encode(public_bytes).replace('=', '') \
+                       .decode("utf-8")
     except TypeError:
-        public = base64.b32encode(public_bytes).replace(b'=', b'').decode("utf-8")
+        public = base64.b32encode(public_bytes).replace(b'=', b'') \
+                       .decode("utf-8")
     try:
-        private = base64.b32encode(private_bytes).replace('=', '').decode("utf-8")
+        private = base64.b32encode(private_bytes).replace('=', '') \
+                        .decode("utf-8")
     except TypeError:
-        private = base64.b32encode(private_bytes).replace(b'=', b'').decode("utf-8")
+        private = base64.b32encode(private_bytes).replace(b'=', b'') \
+                        .decode("utf-8")
     return public, private
 
 
@@ -620,7 +624,8 @@ def find_or_generate_new_torv3_keys(args):
     secret_key_path = os.path.join(args.ansible_path,
                                    "tor_v3_keys.json")
     if os.path.exists(secret_key_path):
-        print('Tor v3 onion service keys already exist in: {}'.format(secret_key_path))
+        print('Tor v3 onion service keys already exist in: {}'.format(
+            secret_key_path))
         return 0
     # No old keys, generate and store them first
     app_journalist_public_key, \
@@ -639,7 +644,8 @@ def find_or_generate_new_torv3_keys(args):
     }
     with open(secret_key_path, 'w') as fobj:
         json.dump(tor_v3_service_info, fobj, indent=4)
-    print('Tor v3 onion service keys generated and stored in: {}'.format(secret_key_path))
+    print('Tor v3 onion service keys generated and stored in: {}'.format(
+        secret_key_path))
     return 0
 
 

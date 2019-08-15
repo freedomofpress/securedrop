@@ -1008,3 +1008,12 @@ class TestSiteConfig(object):
         with pytest.raises(yaml.YAMLError) as e:
             site_config.load()
         assert 'issue processing' in caplog.text
+
+
+def test_generate_new_v3_keys():
+    public, private = securedrop_admin.generate_new_v3_keys()
+
+    for key in [public, private]:
+        # base32 padding characters should be removed
+        assert '=' not in key
+        assert len(key) == 52
