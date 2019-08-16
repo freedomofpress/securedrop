@@ -22,6 +22,7 @@ import os
 import argparse
 from flaky import flaky
 from os.path import dirname, join, basename, exists
+import json
 import mock
 from prompt_toolkit.validation import ValidationError
 import pytest
@@ -1017,3 +1018,49 @@ def test_generate_new_v3_keys():
         # base32 padding characters should be removed
         assert '=' not in key
         assert len(key) == 52
+
+
+def test_find_or_generate_new_torv3_keys_first_run(tmpdir, capsys):
+    args = argparse.Namespace(ansible_path=str(tmpdir))
+
+    return_code = securedrop_admin.find_or_generate_new_torv3_keys(args)
+
+    captured = capsys.readouterr()
+    assert 'Tor v3 onion service keys generated' in captured.out
+    assert return_code == 0
+
+    secret_key_path = os.path.join(args.ansible_path,
+                                   "tor_v3_keys.json")
+
+    with open(secret_key_path) as f:
+        v3_onion_service_keys = json.load(f)
+
+    expected_keys = ['app_journalist_public_key',
+                     'app_journalist_private_key',
+                     'app_ssh_public_key',
+                     'app_ssh_private_key',
+                     'mon_ssh_public_key',
+                     'mon_ssh_private_key']
+    for key in expected_keys:
+        assert key in v3_onion_service_keys.keys()
+
+
+def test_find_or_generate_new_torv3_keys_subsequent_run(tmpdir, capsys):
+    args = argparse.Namespace(ansible_path=str(tmpdir))
+
+    secret_key_path = os.path.join(args.ansible_path,
+                                   "tor_v3_keys.json")
+    old_keys = {'foo': 'bar'}
+    with open(secret_key_path, 'w') as f:
+        json.dump(old_keys, f)
+
+    return_code = securedrop_admin.find_or_generate_new_torv3_keys(args)
+
+    captured = capsys.readouterr()
+    assert 'Tor v3 onion service keys already exist' in captured.out
+    assert return_code == 0
+
+    with open(secret_key_path) as f:
+        v3_onion_service_keys = json.load(f)
+
+    assert v3_onion_service_keys == old_keys

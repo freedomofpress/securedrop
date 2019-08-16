@@ -604,18 +604,6 @@ def generate_new_v3_keys():
     return public, private
 
 
-def get_v3_keys(filepath):
-    """
-    Returns the stored v3 public and private keys as Tuple.
-
-    :returns: Tuple(public_key, private_key)
-    """
-    with open(filepath) as fobj:
-        v3_onion_service_keys = json.load(fobj)
-
-    return v3_onion_service_keys
-
-
 def find_or_generate_new_torv3_keys(args):
     """
     This method will either read v3 Tor onion service keys if found or generate
