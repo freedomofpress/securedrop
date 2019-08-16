@@ -1,4 +1,7 @@
 =source_index_rules
+  @media only screen and (min-width: 768px)
+    .header
+      padding: 0em 2em 1em 2em
 
   #recommend-tor, #disable-js
     text-decoration: underline
@@ -14,7 +17,7 @@
       display: inline-block
 
     .header
-      width: 33.3333%
+      width: 30%
       height: 100%
       align-self: center
 
@@ -28,14 +31,19 @@
       &:dir(rtl)
         text-align: right
 
+      &.extended-welcome-text
+        color: #626161
+        font-size: .9em
+        line-height: 1.4em
+
     .index-row
       display: flex
       justify-content: space-between
       flex-wrap: wrap
-      width: 66.6666%
+      width: 70%
 
     .index-column
-      padding: 1em
+      padding: 1em 2em 1em 2em
       display: flex
       flex-direction: column
       justify-content: space-between
@@ -44,17 +52,7 @@
       border-bottom-width: 0
 
     .index-left
-      background-image: linear-gradient(140deg, #0096dc, #005db7)
-      color: white
       border-style: none
-
-    div.index-right
-      background: white
-      border-width: 1px
-      border-style: solid
-      border-image-source: linear-gradient(145deg, #0096dc, #005db7)
-      border-image-slice: 1
-      color: #0A7CDC
 
     .left-cut-out
       border-color: white
@@ -65,31 +63,20 @@
     .index-column-bottom-container
       margin-top: 3em
 
+    #middle-separator
+      background: $color_grimace_grey
+      margin-top: 1.5em
+      margin-right: 1.2em
+      width: 3px
+
     #submit-documents-button, #login-button
-      padding: 10px 20px 10px 20px
-
-    #submit-documents-button
-      font-weight: bold
-      letter-spacing: 0
-      font-size: 90%
-      background: transparent
-      border: 1px solid white
-
-    #login-button
-      font-weight: bold
-      letter-spacing: 0
-      font-size: 90%
-      background-image: linear-gradient(111deg, #0082d9, #126ec8)
-
-    #login-button:hover
-      background-image: linear-gradient(72deg, $color_grimace_blue, #2d3273)
-      border-color: rgba(0, 0, 0, 0)
-      color: white
-
-    #submit-documents-button:hover
-      color: white
-      background-image: linear-gradient(72deg, $color_grimace_blue, #2d3273)
-      border-color: rgba(0, 0, 0, 0)
+      padding: 10px 15px 10px 15px
+      width: 90%
+      font-size: .9em
+      letter-spacing: .1em
+      // Standard secondary buttons have a margin to set them apart from the primary
+      margin-left: 0
+      margin-right: 10%
 
     // This query is to reorder the flex box elements so that they correctly form the
     // two boxes (submit/returning) when the screen is sized down
