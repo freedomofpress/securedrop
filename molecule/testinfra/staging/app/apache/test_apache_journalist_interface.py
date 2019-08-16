@@ -13,11 +13,20 @@ wanted_apache_headers = [
   'Header set X-XSS-Protection: "1; mode=block"',
   'Header set X-Content-Type-Options: nosniff',
   'Header set X-Download-Options: noopen',
-  "Header set X-Content-Security-Policy: \"default-src 'self'\"",
-  "Header set Content-Security-Policy: \"default-src 'self'\"",
+  'Header set X-Content-Security-Policy: "'
+  'default-src \'none\'; '
+  'script-src \'self\'; '
+  'style-src \'self\'; '
+  'img-src \'self\'; '
+  'font-src \'self\';"',
+  'Header set Content-Security-Policy: "'
+  'default-src \'none\'; '
+  'script-src \'self\'; '
+  'style-src \'self\'; '
+  'img-src \'self\'; '
+  'font-src \'self\';"',
   'Header set Referrer-Policy "no-referrer"',
 ]
-
 
 # Test is not DRY; haven't figured out how to parametrize on
 # multiple inputs, so explicitly redeclaring test logic.
