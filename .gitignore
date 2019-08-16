@@ -24,6 +24,10 @@ app-document-aths # leave this here for historic reasons
 app-journalist-aths
 app-source-ths
 mon-ssh-aths
+app-journalistv3-aths
+app-sourcev3-ths
+app-sshv3-aths
+mon-sshv3-aths
 *.key
 *.csr
 *.pem
