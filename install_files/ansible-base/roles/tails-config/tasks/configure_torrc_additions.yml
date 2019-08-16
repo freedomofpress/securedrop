@@ -17,7 +17,7 @@
       # Collect all files that end in `-v3aths` - if there are any present
       # then `torrc` will need a directive added
       - '*-v3aths'
-  register: find_v3_aths_info_result      
+  register: find_v3_aths_info_result
 
 # We need at least one v2 or v3 ATHS value, for the Journalist Interface.
 # If v2 is enabled, there will be 3 v2 `-aths` files on the Admin Interface.
@@ -52,4 +52,4 @@
     owner: root
     group: root
     mode: "0400"
-  when: find_v3_aths_info_result.matched >= 1  
+  when: find_v3_aths_info_result.matched >= 1

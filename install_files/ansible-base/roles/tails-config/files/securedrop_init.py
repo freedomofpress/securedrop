@@ -6,8 +6,6 @@ import io
 import pwd
 import sys
 import subprocess
-import stat
-import fileinput
 
 from shutil import copyfile
 
@@ -32,11 +30,11 @@ path_gui_updater = os.path.join(path_securedrop_root,
 
 paths_v3_authfiles = {
         "app-journalist": os.path.join(path_securedrop_root,
-            'install_files/ansible-base/app-journalist-v3aths'),
+                                       'install_files/ansible-base/app-journalist-v3aths'),
         "app-ssh": os.path.join(path_securedrop_root,
-            'install_files/ansible-base/app-ssh-v3aths'),
+                                'install_files/ansible-base/app-ssh-v3aths'),
         "mon-ssh": os.path.join(path_securedrop_root,
-            'install_files/ansible-base/mon-ssh-v3aths')
+                                'install_files/ansible-base/mon-ssh-v3aths')
 }
 path_onion_auth_dir = '/var/lib/tor/onion_auth'
 
@@ -90,7 +88,7 @@ for key, f in paths_v3_authfiles.items():
         os.chmod(new_f, 0o400)
         os.chown(new_f, debian_tor_uid, debian_tor_gid)
 
-# reload tor
+# restart tor
 try:
     subprocess.check_call(['systemctl', 'restart', 'tor@default.service'])
 except subprocess.CalledProcessError:

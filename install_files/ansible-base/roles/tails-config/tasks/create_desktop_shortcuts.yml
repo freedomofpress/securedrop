@@ -3,15 +3,43 @@
 # installation. On the Admin Workstation, these files will be present
 # after running the playbooks, but on the Journalist Workstation, they must
 # be copied manually by the Admin.
-- name: Look up Source Interface URL.
+# Desktop shortcuts default to v3 URLs when available - as `site-specific`
+# is not copied to Journalist Workstations, the {v2,v3}_onion_service
+# booleans can't be used to choose a preference.
+
+- name: Check for v3 Source Interface file
+  stat:
+    path: app-source-v3ths
+  register: v3_source_file
+
+- name: Check for v3 Journalist Interface file
+  stat:
+    path: app-journalist-v3aths
+  register: v3_journalist_file
+
+- name: Look up v2 Source Interface URL.
   command: grep -Po '.{16}\.onion' app-source-ths
   changed_when: false
   register: source_interface_lookup_result
+  when: v3_source_file.stat.exists == False
 
-- name: Look up Journalist Interface URL.
+- name: Look up v3 Source Interface URL.
+  command: grep -Po '.{56}\.onion' app-source-v3ths
+  changed_when: false
+  register: source_interface_lookup_result
+  when: v3_source_file.stat.exists == True
+
+- name: Look up v2 Journalist Interface URL.
   command: grep -Po '.{16}\.onion' app-journalist-aths
   changed_when: false
   register: journalist_interface_lookup_result
+  when: v3_source_file.stat.exists == False
+
+- name: Look up v3 Journalist Interface URL.
+  command: awk -F ':' '{print $1 ".onion"}' app-journalist-v3aths
+  changed_when: false
+  register: journalist_interface_lookup_result
+  when: v3_source_file.stat.exists == True
 
 - name: Create desktop shortcut parent directories.
   file:
