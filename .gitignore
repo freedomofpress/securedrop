@@ -26,10 +26,10 @@ app-journalist-aths
 app-source-ths
 mon-ssh-aths
 # Tor v3
-app-journalist.client_auth
+app-journalist.auth_private
 app-sourcev3-ths
-app-ssh.client_auth
-mon-ssh.client_auth
+app-ssh.auth_private
+mon-ssh.auth_private
 *.key
 *.csr
 *.pem

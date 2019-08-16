@@ -21,7 +21,7 @@ tor_instances:
     filename: app-journalist-aths
 
 tor_instances_v3:
-  - "{{ {'service': 'sshv3', 'filename': 'app-ssh.client_auth'} if enable_ssh_over_tor else [] }}"
+  - "{{ {'service': 'sshv3', 'filename': 'app-ssh.auth_private'} if enable_ssh_over_tor else [] }}"
   - service: sourcev3
     filename: app-sourcev3-ths
   - service: journalistv3

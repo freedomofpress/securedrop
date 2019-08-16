@@ -32,6 +32,6 @@ v3_onion_services: false
 # auth on Tor v3 Onion URLs. See the tor_v3_keys.json file for
 # reference on structure.
 tor_v3_service_map:
-  app-journalist.client_auth: "app_journalist_private_key"
-  app-ssh.client_auth: "app_ssh_private_key"
-  mon-ssh.client_auth: "mon_ssh_private_key"
+  app-journalist.auth_private: "app_journalist_private_key"
+  app-ssh.auth_private: "app_ssh_private_key"
+  mon-ssh.auth_private: "mon_ssh_private_key"
