@@ -19,15 +19,17 @@ securedrop/tests/functional/instance_information.json
 install_files/ansible-base/tor_v3_keys.json
 
 # ignore the ATHS/THS hostname file ansible places
+# Tor v2
 app-ssh-aths
 app-document-aths # leave this here for historic reasons
 app-journalist-aths
 app-source-ths
 mon-ssh-aths
-app-journalistv3-aths
+# Tor v3
+app-journalist.client_auth
 app-sourcev3-ths
-app-sshv3-aths
-mon-sshv3-aths
+app-ssh.client_auth
+mon-ssh.client_auth
 *.key
 *.csr
 *.pem

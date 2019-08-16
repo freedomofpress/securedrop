@@ -21,17 +21,17 @@ admin_net_int:
     cmd: "/sbin/route -n get "
     rgx: "(?<=interface: )\\w+"
 
-# Lookup table for querying keypair info from the local JSON
-# file on the Admin Workstation, required for configuring client
-# auth on Tor v3 Onion URLs. See the tor_v3_keys.json file for
-# reference on structure.
-tor_v3_service_map:
-  app-journalistv3-aths: "app_journalist_private_key"
-  app-sshv3-aths: "app_ssh_private_key"
-  mon-sshv3-aths: "mon_ssh_private_key"
-
 # v2 Tor onion services are on / v3 Tor onion services are off by default for backwards
 # compatibility. Note that new install after 1.0 will have v3 enabled by sdconfig which
 # will override these variables.
 v2_onion_services: true
 v3_onion_services: false
+
+# Lookup table for querying keypair info from the local JSON
+# file on the Admin Workstation, required for configuring client
+# auth on Tor v3 Onion URLs. See the tor_v3_keys.json file for
+# reference on structure.
+tor_v3_service_map:
+  app-journalist.client_auth: "app_journalist_private_key"
+  app-ssh.client_auth: "app_ssh_private_key"
+  mon-ssh.client_auth: "mon_ssh_private_key"
