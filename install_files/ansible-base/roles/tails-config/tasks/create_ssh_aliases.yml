@@ -12,7 +12,7 @@
 
 - name: Lookup v3 onion ssh files
   stat:
-    path: "{{ item }}-ssh-v3aths"
+    path: "{{ item }}-ssh.auth_private"
   register: "ssh_v3_onion_lookup"
   with_items:
     - app

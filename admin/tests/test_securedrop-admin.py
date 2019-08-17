@@ -665,7 +665,7 @@ class TestSiteConfig(object):
                                   ansible_path='.',
                                   app_path=dirname(__file__))
         site_config = securedrop_admin.SiteConfig(args)
-        with open("app-source-v3ths", "w") as fobj:
+        with open("app-sourcev3-ths", "w") as fobj:
             fobj.write("a" * 56 + ".onion\n")
         site_config.update_onion_version_config()
         site_config.save()
@@ -676,7 +676,7 @@ class TestSiteConfig(object):
         v2_onion_services: false
         v3_onion_services: true
         """)
-        os.remove("app-source-v3ths")
+        os.remove("app-sourcev3-ths")
         assert expected == data
 
     def test_validate_gpg_key(self, caplog):

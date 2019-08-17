@@ -9,12 +9,12 @@
 
 - name: Check for v3 Source Interface file
   stat:
-    path: app-source-v3ths
+    path: app-sourcev3-ths
   register: v3_source_file
 
 - name: Check for v3 Journalist Interface file
   stat:
-    path: app-journalist-v3aths
+    path: app-journalist.auth_private
   register: v3_journalist_file
 
 - name: Look up v2 Source Interface URL.
@@ -24,7 +24,7 @@
   when: v3_source_file.stat.exists == False
 
 - name: Look up v3 Source Interface URL.
-  command: grep -Po '.{56}\.onion' app-source-v3ths
+  command: grep -Po '.{56}\.onion' app-sourcev3-ths
   changed_when: false
   register: source_interface_lookup_result
   when: v3_source_file.stat.exists == True
@@ -36,7 +36,7 @@
   when: v3_source_file.stat.exists == False
 
 - name: Look up v3 Journalist Interface URL.
-  command: awk -F ':' '{print $1 ".onion"}' app-journalist-v3aths
+  command: awk -F ':' '{print $1 ".onion"}' app-journalist.auth_private
   changed_when: false
   register: journalist_interface_lookup_result
   when: v3_source_file.stat.exists == True

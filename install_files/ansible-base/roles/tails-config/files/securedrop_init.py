@@ -30,11 +30,11 @@ path_gui_updater = os.path.join(path_securedrop_root,
 
 paths_v3_authfiles = {
         "app-journalist": os.path.join(path_securedrop_root,
-                                       'install_files/ansible-base/app-journalist-v3aths'),
+                                       'install_files/ansible-base/app-journalist.auth_private'),
         "app-ssh": os.path.join(path_securedrop_root,
-                                'install_files/ansible-base/app-ssh-v3aths'),
+                                'install_files/ansible-base/app-ssh.auth_private'),
         "mon-ssh": os.path.join(path_securedrop_root,
-                                'install_files/ansible-base/mon-ssh-v3aths')
+                                'install_files/ansible-base/mon-ssh.auth_private')
 }
 path_onion_auth_dir = '/var/lib/tor/onion_auth'
 
@@ -83,7 +83,7 @@ os.chown(path_onion_auth_dir, debian_tor_uid, debian_tor_gid)
 for key, f in paths_v3_authfiles.items():
     if os.path.isfile(f):
         filename = os.path.basename(f)
-        new_f = os.path.join(path_onion_auth_dir, key + ".auth_private")
+        new_f = os.path.join(path_onion_auth_dir, filename)
         copyfile(f, new_f)
         os.chmod(new_f, 0o400)
         os.chown(new_f, debian_tor_uid, debian_tor_gid)
