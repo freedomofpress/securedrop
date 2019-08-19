@@ -7,14 +7,23 @@ Revises: a9fe328b053a
 Create Date: 2018-11-25 19:40:25.873292
 
 """
+import os
 from alembic import op
 import sqlalchemy as sa
 from journalist_app import create_app
-from models import Submission, Reply
 from rm import srm
-from sdconfig import config
 from store import NoFileFoundException, TooManyFilesException
 from worker import rq_worker_queue
+
+# raise the errors if we're not in production
+raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
+
+try:
+    from sdconfig import config
+except ImportError:
+    # This is a fresh install, and config.py has not been created yet.
+    if raise_errors:
+        raise
 
 # revision identifiers, used by Alembic.
 revision = '3da3fcab826a'
@@ -42,51 +51,55 @@ def upgrade():
         sa.text(raw_sql_grab_orphaned_objects('replies'))
     ).fetchall()
 
-    app = create_app(config)
-    with app.app_context():
-        for submission in submissions:
-            try:
-                conn.execute(
-                sa.text("""
-                    DELETE FROM submissions
-                    WHERE id=:id
-                """).bindparams(id=submission.id)
-                )
-
-                file_path = app.storage.path_without_filesystem_id(submission.filename)
-                rq_worker_queue.enqueue(srm, file_path)
-            except NoFileFoundException:
-                # The file must have been deleted by the admin, remove the row
-                conn.execute(
-                sa.text("""
-                    DELETE FROM submissions
-                    WHERE id=:id
-                """).bindparams(id=submission.id)
-                )
-            except TooManyFilesException:
-                pass
-
-        for reply in replies:
-            try:
-                conn.execute(
+    try:
+        app = create_app(config)
+        with app.app_context():
+            for submission in submissions:
+                try:
+                    conn.execute(
                     sa.text("""
-                        DELETE FROM replies
+                        DELETE FROM submissions
                         WHERE id=:id
-                    """).bindparams(id=reply.id)
-                )
+                    """).bindparams(id=submission.id)
+                    )
 
-                file_path = app.storage.path_without_filesystem_id(reply.filename)
-                rq_worker_queue.enqueue(srm, file_path)
-            except NoFileFoundException:
-                # The file must have been deleted by the admin, remove the row
-                conn.execute(
+                    file_path = app.storage.path_without_filesystem_id(submission.filename)
+                    rq_worker_queue.enqueue(srm, file_path)
+                except NoFileFoundException:
+                    # The file must have been deleted by the admin, remove the row
+                    conn.execute(
                     sa.text("""
-                        DELETE FROM replies
+                        DELETE FROM submissions
                         WHERE id=:id
-                    """).bindparams(id=reply.id)
-                )
-            except TooManyFilesException:
-                pass
+                    """).bindparams(id=submission.id)
+                    )
+                except TooManyFilesException:
+                    pass
+
+            for reply in replies:
+                try:
+                    conn.execute(
+                        sa.text("""
+                            DELETE FROM replies
+                            WHERE id=:id
+                        """).bindparams(id=reply.id)
+                    )
+
+                    file_path = app.storage.path_without_filesystem_id(reply.filename)
+                    rq_worker_queue.enqueue(srm, file_path)
+                except NoFileFoundException:
+                    # The file must have been deleted by the admin, remove the row
+                    conn.execute(
+                        sa.text("""
+                            DELETE FROM replies
+                            WHERE id=:id
+                        """).bindparams(id=reply.id)
+                    )
+                except TooManyFilesException:
+                    pass
+    except:  # noqa
+        if raise_errors:
+            raise
 
 
 def downgrade():
