@@ -287,7 +287,7 @@ def set_diceware_password(user, password):
     except PasswordError:
         flash(gettext(
             'You submitted a bad password! Password not changed.'), 'error')
-        return
+        return False
 
     try:
         db.session.commit()
@@ -298,7 +298,7 @@ def set_diceware_password(user, password):
             'out of your account, you should reset your password again.'),
             'error')
         current_app.logger.error('Failed to update a valid password.')
-        return
+        return False
 
     # using Markup so the HTML isn't escaped
     flash(Markup("<p>" + gettext(
@@ -306,6 +306,7 @@ def set_diceware_password(user, password):
         "save it in your KeePassX database. New password:") +
         ' <span><code>{}</code></span></p>'.format(password)),
         'success')
+    return True
 
 
 def col_download_unread(cols_selected):
@@ -375,4 +376,10 @@ def cleanup_expired_revoked_tokens():
             # The token is no longer valid, remove from the revoked token table.
             db.session.delete(revoked_token)
 
+    db.session.commit()
+
+
+def revoke_token(user, auth_token):
+    revoked_token = RevokedToken(token=auth_token, journalist_id=user.id)
+    db.session.add(revoked_token)
     db.session.commit()

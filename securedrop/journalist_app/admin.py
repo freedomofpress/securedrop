@@ -12,7 +12,7 @@ from db import db
 from models import Journalist, InvalidUsernameException, FirstOrLastNameError, PasswordError
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (make_password, commit_account_changes, set_diceware_password,
-                                  validate_hotp_secret)
+                                  validate_hotp_secret, revoke_token)
 from journalist_app.forms import LogoForm, NewUserForm
 
 
@@ -209,7 +209,12 @@ def make_blueprint(config):
             abort(404)
 
         password = request.form.get('password')
-        set_diceware_password(user, password)
+        if set_diceware_password(user, password) is not False:
+            if user.last_token is not None:
+                revoke_token(user, user.last_token)
+            user.session_nonce += 1
+            db.session.commit()
+
         return redirect(url_for('admin.edit_user', user_id=user_id))
 
     @view.route('/delete/<int:user_id>', methods=('POST',))
@@ -244,7 +249,11 @@ def make_blueprint(config):
             abort(404)
 
         password = request.form.get('password')
-        set_diceware_password(user, password)
+        if set_diceware_password(user, password) is not False:
+            if user.last_token is not None:
+                revoke_token(user, user.last_token)
+            user.session_nonce += 1
+            db.session.commit()
         return redirect(url_for('admin.edit_user', user_id=user_id))
 
     @view.route('/ossec-test')

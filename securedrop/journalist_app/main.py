@@ -36,6 +36,7 @@ def make_blueprint(config):
                 db.session.commit()
 
                 session['uid'] = user.id
+                session['nonce'] = user.session_nonce
                 return redirect(url_for('main.index'))
 
         return render_template("login.html")
@@ -44,6 +45,7 @@ def make_blueprint(config):
     def logout():
         session.pop('uid', None)
         session.pop('expires', None)
+        session.pop('nonce', None)
         return redirect(url_for('main.index'))
 
     @view.route('/org-logo')

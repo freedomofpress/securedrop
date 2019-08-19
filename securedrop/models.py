@@ -396,6 +396,7 @@ class Journalist(db.Model):
     pw_salt = Column(LargeBinary(32))
     pw_hash = Column(LargeBinary(256))
     is_admin = Column(Boolean)
+    session_nonce = Column(Integer, nullable=False, default=0)
 
     otp_secret = Column(String(16), default=pyotp.random_base32)
     is_totp = Column(Boolean, default=True)

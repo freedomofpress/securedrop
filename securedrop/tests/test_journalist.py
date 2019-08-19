@@ -427,13 +427,14 @@ def test_admin_cannot_delete_self(journalist_app, test_admin, test_journo):
 
 
 def test_admin_edits_user_password_success_response(journalist_app,
-                                                    test_admin):
+                                                    test_admin,
+                                                    test_journo):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
 
         resp = app.post(url_for('admin.new_password',
-                                user_id=test_admin['id']),
+                                user_id=test_journo['id']),
                         data=dict(password=VALID_PASSWORD_2),
                         follow_redirects=True)
         assert resp.status_code == 200
@@ -441,6 +442,40 @@ def test_admin_edits_user_password_success_response(journalist_app,
         text = resp.data.decode('utf-8')
         assert 'Password updated.' in text
         assert VALID_PASSWORD_2 in text
+
+
+def test_admin_edits_user_password_session_invalidate(journalist_app,
+                                                      test_admin,
+                                                      test_journo):
+    # Start the journalist session.
+    with journalist_app.test_client() as app:
+        _login_user(app, test_journo['username'], test_journo['password'],
+                    test_journo['otp_secret'])
+
+        # Change the journalist password via an admin session.
+        with journalist_app.test_client() as admin_app:
+            _login_user(admin_app, test_admin['username'], test_admin['password'],
+                        test_admin['otp_secret'])
+
+            resp = admin_app.post(url_for('admin.new_password',
+                                          user_id=test_journo['id']),
+                                  data=dict(password=VALID_PASSWORD_2),
+                                  follow_redirects=True)
+            assert resp.status_code == 200
+
+            text = resp.data.decode('utf-8')
+            assert 'Password updated.' in text
+            assert VALID_PASSWORD_2 in text
+
+        # Now verify the password change error is flashed.
+        resp = app.get(url_for('main.index'), follow_redirects=True)
+        text = resp.data.decode('utf-8')
+        assert 'You have been logged out due to password change' in text
+
+        # Also ensure that session is now invalid.
+        session.pop('expires', None)
+        session.pop('csrf_token', None)
+        assert not session, session
 
 
 def test_admin_deletes_invalid_user_404(journalist_app, test_admin):
