@@ -9,11 +9,10 @@ each role in a SecureDrop installation.
 
 .. note:: We encourage each end user to use KeePassX, an easy-to-use
           password manager included in Tails, to generate and retain
-          strong and unique passphrases. We have created a template
-          passphrase database that you can use to get started. For more
-          information, see the :ref:`KeePassX setup instructions <keepassx_setup>`,
-          which are identical for the *Admin Workstation* and the
-          *Journalist Workstation*.
+          strong and unique passphrases. The SecureDrop code repository includes
+          a template that you can use to initialize this database for an
+          *Admin Workstation* or a *Journalist Workstation*. For more
+          information, see the :ref:`KeePassX setup instructions <keepassx_setup>`.
 
 .. tip:: For best practices on managing passphrases, see
    :doc:`passphrase_best_practices`.

@@ -51,6 +51,15 @@ To create a *Journalist Interface* Tails USB, just follow the same procedure you
 used to create a Tails USB with persistence for the *Admin Workstation*,
 as documented in the :doc:`Tails Setup Guide <set_up_tails>`.
 
+.. note::
+
+   As with your *Admin Workstation*, you can use a fresh copy of the blank
+   KeePassX template in the repository to initialize the password database
+   on the *Journalist Workstation*. You can safely edit this copy to remove
+   sections or fields that are not relevant for the journalist you are
+   onboarding. For example, the admin section of the password database should
+   never be filled in on a *Journalist Workstation*.
+
 Once you're done, boot into the new Journalist Tails USB on the
 *Journalist Workstation*. Enable persistence and set an admin
 passphrase before continuing with the next section.
