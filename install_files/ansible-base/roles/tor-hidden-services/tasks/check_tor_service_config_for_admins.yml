@@ -23,8 +23,7 @@
 - name: Confirm service state matches declared config
   assert:
     that: >
-      (true in _v3_services_state_info and v3_onion_services) or
-      (true not in _v3_services_state_info and not v3_onion_services)
+      not (not v3_onion_services and true in _v3_services_state_info)
     msg: >
       ERROR. The 'sdconfig' settings do not specify v3 Onion Services,
       but v3 Onion Services were found on the server. If your SecureDrop
