@@ -65,7 +65,7 @@ pathspec==0.5.5           # via yamllint
 pathtools==0.1.2          # via sphinx-autobuild, watchdog
 pbr==5.1.1                # via git-url-parse, molecule, python-gilt, stevedore
 pexpect==4.6.0            # via molecule
-pip-tools==3.8.0
+pip-tools==4.0.0
 port_for==0.3.1           # via sphinx-autobuild
 poyo==0.4.1               # via cookiecutter
 psutil==5.4.6             # via molecule
@@ -114,5 +114,5 @@ wrapt==1.10.11            # via astroid
 yamllint==1.11.1
 
 # The following packages are considered to be unsafe in a requirements file:
-# pip==19.2.1               # via safety
-# setuptools==41.0.1        # via ansible, pytest, sphinx
+# pip==19.2.2               # via safety
+# setuptools==41.2.0        # via ansible, pytest, sphinx

@@ -3,7 +3,7 @@ blinker
 Flask-Testing
 flaky
 mock
-pip-tools>=3.8.0,<4
+pip-tools>=4.0.0
 py
 pytest
 pytest-cov
