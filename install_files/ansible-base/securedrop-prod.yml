@@ -37,6 +37,9 @@
     - name: Include restrict role early when using ssh over localnet
       include_role:
         name: restrict-direct-access
+      vars:
+        # Don't wait for tor client auth, might not exist yet
+        fetch_tor_client_auth_configs: false
       when:
         - not enable_ssh_over_tor
         - sd_dir_check.stat.exists

@@ -21,6 +21,11 @@ admin_net_int:
     cmd: "/sbin/route -n get "
     rgx: "(?<=interface: )\\w+"
 
+# Whether to fetch back client-auth settings from the remote hosts.
+# We make this conditional to support disabling during dynamic role includes,
+# required for the ssh-over-lan strategy.
+fetch_tor_client_auth_configs: true
+
 # v2 Tor onion services are on / v3 Tor onion services are off by default for backwards
 # compatibility. Note that new install after 1.0 will have v3 enabled by sdconfig which
 # will override these variables.

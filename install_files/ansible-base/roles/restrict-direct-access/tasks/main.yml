@@ -1,5 +1,6 @@
 ---
 - include: fetch_tor_config.yml
+  when: fetch_tor_client_auth_configs
 
 - include: dh_moduli.yml
 
