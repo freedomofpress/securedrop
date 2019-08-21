@@ -3,7 +3,7 @@ blinker
 Flask-Testing
 flaky
 mock
-pip-tools>=3.8.0,<4
+pip-tools>=4.0.0
 py
 pytest
 pytest-cov
@@ -13,3 +13,4 @@ requests[socks]>2.21.0
 selenium>=3.141.0
 tbselenium>=0.4.2
 pyvirtualdisplay
+urllib3>=1.25.3

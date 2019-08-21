@@ -24,7 +24,7 @@ jinja2==2.10.1            # via flask
 markupsafe==1.0           # via jinja2
 mock==2.0.0
 pbr==3.1.1                # via mock
-pip-tools==3.8.0
+pip-tools==4.0.0
 pluggy==0.6.0             # via pytest
 py==1.5.2
 pysocks==1.6.8            # via requests
@@ -36,8 +36,8 @@ requests[socks]==2.22.0
 selenium==3.141.0
 six==1.11.0               # via mock, pip-tools, pytest
 tbselenium==0.4.2
-urllib3==1.24.1           # via requests, selenium
+urllib3==1.25.3
 werkzeug==0.14.1          # via flask
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.0.1        # via pytest
+# setuptools==41.2.0        # via pytest
