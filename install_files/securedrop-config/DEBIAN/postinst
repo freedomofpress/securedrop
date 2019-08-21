@@ -53,16 +53,6 @@ allow_apt_user_in_iptables() {
            "$rules_v4"
     fi
 }
-# Tor 0.3.5.x series now defaults to v3 onion URLs, but SecureDrop currently
-# uses v2 onion URLs. We must explictly set this definition in torrc to avoid
-# breakage when upgrading from Tor 0.3.4.x to 0.3.5.x.
-set_v2_hidserv_in_torrc() {
-    if [ -f /etc/tor/torrc ]; then
-        if ! grep -q HiddenServiceVersion /etc/tor/torrc ; then
-            perl -pi -e 's/^(HiddenServiceDir.*)$/$1\nHiddenServiceVersion 2/' /etc/tor/torrc
-        fi
-    fi
-}
 
 manage_tor_repo_config() {
     # Ensure official Tor repo entry is removed, so that only FPF mirror is used.
@@ -93,7 +83,6 @@ case "$1" in
     fi
 
     allow_apt_user_in_iptables
-    set_v2_hidserv_in_torrc
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
