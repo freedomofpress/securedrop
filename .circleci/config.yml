@@ -361,8 +361,8 @@ jobs:
             make ci-deb-tests
 
   docs-linkcheck:
-    machine:
-      enabled: true
+    docker:
+      - image: circleci/python:3.5
     steps:
       - checkout
       - *rebaseontarget
@@ -370,7 +370,7 @@ jobs:
 
       - run:
           name: Install development dependencies
-          command: pip install -U -r securedrop/requirements/develop-requirements.txt
+          command: sudo pip3 install -U -r securedrop/requirements/python3/develop-requirements.txt
 
       - run:
           name: Run documentation linting
