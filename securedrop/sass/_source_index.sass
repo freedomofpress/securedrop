@@ -1,15 +1,9 @@
 =source_index_rules
-  // We don't want the logo to be too dominant in the desktop view
-  @media only screen and (min-width: 768px)
-    .header
-      padding: 0em 2em 1em 2em
 
-      img.logo-image
-        width: 80%
-
-  @media only screen and (max-width: 768px)
-    .header img.logo-image
-      width: 100%
+  h2.welcome-text
+    color: $color_deep_blue
+    text-align: left
+    letter-spacing: .02em
 
   #recommend-tor, #disable-js
     text-decoration: underline
@@ -52,8 +46,8 @@
       padding: .5em 2em 1em 2em
       display: flex
       flex-direction: column
-      justify-content: space-between
-      width: 48%
+      justify-content: center
+      width: 47%
       border-top-width: 0
       border-bottom-width: 0
 
@@ -65,9 +59,6 @@
 
     .right-cut-out
       border-color: #0A7CDC
-
-    .index-column-bottom-container
-      margin-top: 2em
 
     #middle-separator
       background: $color_grimace_grey
@@ -84,33 +75,54 @@
       margin-left: 0
       margin-right: 10%
 
-    // This query is to reorder the flex box elements so that they correctly form the
-    // two boxes (submit/returning) when the screen is sized down
+    // Desktop view
+    @media only screen and (min-width: 768px)
+
+      // Make logo a bit less dominant
+      .header
+        padding: 0em 2em 1em 2em
+
+        img.logo-image
+          width: 80%
+
+      // More room to breathe
+      .index-column-bottom-container
+        margin-top: 3em
+
+      h2.welcome-text
+        margin-bottom: .5em
+
+
+    // Mobile view
     @media only screen and (max-width: 768px)
+
+      // Less room to breathe
+      .index-column-bottom-container
+        margin-top: 1.5em
+
+      h2.welcome-text
+        margin-bottom: .2em
+
+      // Single column, not needed
+      #middle-separator
+        display: none
+
+      // Limit line length for readability
+      p, h2
+        max-width: 500px
+
+      // Reflow into a single column
       .header
         max-height: 250px
         max-width: 100%
-        margin: 20px auto 40px auto
+        min-width: 125px
+        margin: 20px auto 20px auto
 
         img
           width: 100%
-
-      p, h2
-        margin: auto
-        max-width: 500px
 
       .index-row
         width: 100%
 
       .index-column
-        order: 4
         width: 100%
-
-      .index-column.index-top
-        order: 3
-
-      .index-column.index-left
-        order: 2
-
-      .index-column.index-left.index-top
-        order: 1
