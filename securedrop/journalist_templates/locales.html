@@ -2,9 +2,15 @@
 <div class="menu">
   <input id="menu-1-checkbox" class="menu__checkbox visually-hidden" type="checkbox" >
   <label for="menu-1-checkbox" class="menu__trigger">
-    <img class="icon menu__trigger-icon" src="/static/i/font-awesome/fa-globe-black.png" width="18" height="16">
-    <span class="menu__trigger-text">{{ g.locales[g.locale] }}</span>
-    <span class="menu__trigger-arrow">▼</span>
+    <div class="menu-icon-container">
+      <img class="menu__trigger-icon" src="/static/i/languages_globe.png" width="18" height="18">
+    </div>
+    <div class="menu-text-container">
+      <span class="menu__trigger-text">{{ g.locales[g.locale] }}</span>
+    </div>
+    <div class="menu-trigger-container">
+      <img class="menu__trigger-icon" src="/static/i/languages_arrow.png" width="12" height="18">
+    </div>
   </label>
 
   <ul class="menu__items">

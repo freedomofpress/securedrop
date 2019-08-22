@@ -266,6 +266,8 @@
   /var/www/securedrop/static/i/font-awesome/white/exclamation-circle.svg r,
   /var/www/securedrop/static/i/font-awesome/white/guard.svg r,
   /var/www/securedrop/static/i/hand_with_fingerprint.png r,
+  /var/www/securedrop/static/i/languages_arrow.png r,
+  /var/www/securedrop/static/i/languages_globe.png r,
   /var/www/securedrop/static/i/logo.png rw,
   /var/www/securedrop/static/i/logo-footer.png r,
   /var/www/securedrop/static/i/no16-global.png r,

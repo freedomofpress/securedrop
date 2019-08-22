@@ -1,7 +1,15 @@
 =source_index_rules
+  // We don't want the logo to be too dominant in the desktop view
   @media only screen and (min-width: 768px)
     .header
       padding: 0em 2em 1em 2em
+
+      img.logo-image
+        width: 80%
+
+  @media only screen and (max-width: 768px)
+    .header img.logo-image
+      width: 100%
 
   #recommend-tor, #disable-js
     text-decoration: underline
@@ -21,9 +29,6 @@
       width: 30%
       height: 100%
       align-self: center
-
-      img.logo-image
-        width: 80%
 
     p
       text-align: left
