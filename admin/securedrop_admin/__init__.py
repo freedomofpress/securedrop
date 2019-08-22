@@ -33,10 +33,14 @@ import string
 import subprocess
 import sys
 import types
+import json
+import base64
 import prompt_toolkit
 from prompt_toolkit.validation import Validator, ValidationError
 import yaml
 from pkg_resources import parse_version
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import x25519
 
 sdlog = logging.getLogger(__name__)
 RELEASE_KEY = '22245C81E3BAEB4138B36061310F561200F4AD77'
@@ -566,6 +570,73 @@ def sdconfig(args):
     return 0
 
 
+def generate_new_v3_keys():
+    """This function generate new keys for Tor v3 onion
+    services and returns them as as tuple.
+
+    :returns: Tuple(public_key, private_key)
+    """
+
+    private_key = x25519.X25519PrivateKey.generate()
+    private_bytes = private_key.private_bytes(
+        encoding=serialization.Encoding.Raw	,
+        format=serialization.PrivateFormat.Raw,
+        encryption_algorithm=serialization.NoEncryption())
+    public_key = private_key.public_key()
+    public_bytes = public_key.public_bytes(
+        encoding=serialization.Encoding.Raw,
+        format=serialization.PublicFormat.Raw)
+
+    # Base32 encode and remove base32 padding characters (`=`)
+    # Using try/except blocks for Python 2/3 support.
+    try:
+        public = base64.b32encode(public_bytes).replace('=', '') \
+                       .decode("utf-8")
+    except TypeError:
+        public = base64.b32encode(public_bytes).replace(b'=', b'') \
+                       .decode("utf-8")
+    try:
+        private = base64.b32encode(private_bytes).replace('=', '') \
+                        .decode("utf-8")
+    except TypeError:
+        private = base64.b32encode(private_bytes).replace(b'=', b'') \
+                        .decode("utf-8")
+    return public, private
+
+
+def find_or_generate_new_torv3_keys(args):
+    """
+    This method will either read v3 Tor onion service keys if found or generate
+    a new public/private keypair.
+    """
+    secret_key_path = os.path.join(args.ansible_path,
+                                   "tor_v3_keys.json")
+    if os.path.exists(secret_key_path):
+        print('Tor v3 onion service keys already exist in: {}'.format(
+            secret_key_path))
+        return 0
+    # No old keys, generate and store them first
+    app_journalist_public_key, \
+        app_journalist_private_key = generate_new_v3_keys()
+    # For app ssh service
+    app_ssh_public_key, app_ssh_private_key = generate_new_v3_keys()
+    # For mon ssh service
+    mon_ssh_public_key, mon_ssh_private_key = generate_new_v3_keys()
+    tor_v3_service_info = {
+            "app_journalist_public_key": app_journalist_public_key,
+            "app_journalist_private_key": app_journalist_private_key,
+            "app_ssh_public_key": app_ssh_public_key,
+            "app_ssh_private_key": app_ssh_private_key,
+            "mon_ssh_public_key": mon_ssh_public_key,
+            "mon_ssh_private_key": mon_ssh_private_key,
+    }
+    with open(secret_key_path, 'w') as fobj:
+        json.dump(tor_v3_service_info, fobj, indent=4)
+    print('Tor v3 onion service keys generated and stored in: {}'.format(
+        secret_key_path))
+    return 0
+
+
 def install_securedrop(args):
     """Install/Update SecureDrop"""
     SiteConfig(args).load()
@@ -826,6 +897,11 @@ def parse_argv(argv):
     parse_tailsconfig = subparsers.add_parser('tailsconfig',
                                               help=run_tails_config.__doc__)
     parse_tailsconfig.set_defaults(func=run_tails_config)
+
+    parse_generate_tor_keys = subparsers.add_parser(
+        'generate_v3_keys',
+        help=find_or_generate_new_torv3_keys.__doc__)
+    parse_generate_tor_keys.set_defaults(func=find_or_generate_new_torv3_keys)
 
     parse_backup = subparsers.add_parser('backup',
                                          help=backup_securedrop.__doc__)

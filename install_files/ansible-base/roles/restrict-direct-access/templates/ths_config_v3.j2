@@ -1,0 +1,1 @@
+{% if item.item.filename.endswith('.auth_private') %}{{ item.stdout|truncate(56, True, '') }}:descriptor:x25519:{{ (lookup('file', role_path+'/../../tor_v3_keys.json')|from_json)[tor_v3_service_map[item.item.filename]] }}{% else %}{{ item.stdout }}{% endif %}

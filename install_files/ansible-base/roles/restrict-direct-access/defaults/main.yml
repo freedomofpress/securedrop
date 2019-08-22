@@ -11,7 +11,6 @@ ssh_listening_address: "{{ '127.0.0.1' if enable_ssh_over_tor else '0.0.0.0' }}"
 # the hostname files can be fetched back to the Admin Workstation.
 tor_hidden_services_parent_dir: /var/lib/tor/services
 
-
 # Platform specific command for inferring the local interface utilized
 # to route to a specific IP host
 admin_net_int:
@@ -21,3 +20,23 @@ admin_net_int:
   Darwin:
     cmd: "/sbin/route -n get "
     rgx: "(?<=interface: )\\w+"
+
+# Whether to fetch back client-auth settings from the remote hosts.
+# We make this conditional to support disabling during dynamic role includes,
+# required for the ssh-over-lan strategy.
+fetch_tor_client_auth_configs: true
+
+# v2 Tor onion services are on / v3 Tor onion services are off by default for backwards
+# compatibility. Note that new install after 1.0 will have v3 enabled by sdconfig which
+# will override these variables.
+v2_onion_services: true
+v3_onion_services: false
+
+# Lookup table for querying keypair info from the local JSON
+# file on the Admin Workstation, required for configuring client
+# auth on Tor v3 Onion URLs. See the tor_v3_keys.json file for
+# reference on structure.
+tor_v3_service_map:
+  app-journalist.auth_private: "app_journalist_private_key"
+  app-ssh.auth_private: "app_ssh_private_key"
+  mon-ssh.auth_private: "mon_ssh_private_key"

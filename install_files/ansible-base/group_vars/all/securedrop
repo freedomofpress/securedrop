@@ -46,7 +46,6 @@ appserver_dependencies:
 # Enable Tor over SSH by default
 enable_ssh_over_tor: true
 
-
 # If file is present on system at the end of ansible run
 # force a reboot. Needed because of the de-coupled nature of
 # the many roles of the current prod playbook

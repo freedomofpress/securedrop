@@ -1,0 +1,39 @@
+---
+# The migration from Tor v2 -> v3 services requires Admins to opt-in
+# via `securedrop-admin sdconfig`, then rerun the install action to enable
+# v3 services. If a *different* Admin Workstation is subsequently used,
+# without the corresponding sdconfig changes, we halt the play, otherwise
+# the v3 client auth config will be clobbered, locking out the first Admin.
+
+- name: Check whether v3 services exist on server
+  stat:
+    path: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}"
+  register: _v3_services_existence_check_result
+  with_items: "{{ tor_instances_v3 }}"
+
+  # Returns a list of booleans, one boolean for each v3 service, denoting whether
+  # a config currently exists for that service.
+- name: Store info about existing v3 service state
+  set_fact:
+    _v3_services_state_info: "{{ _v3_services_existence_check_result.results|map(attribute='stat')|map(attribute='exists')|list }}"
+
+  # Fail if v3 service configs exist, but v3_onion_services is not enabled.
+  # If v3 service configs do not exist, but v3_onion_services is enabled,
+  # we're configuring the v3 services for the first time, so don't fail.
+- name: Confirm service state matches declared config
+  assert:
+    that: >
+      not (not v3_onion_services and true in _v3_services_state_info)
+    msg: >
+      ERROR. The 'sdconfig' settings do not specify v3 Onion Services,
+      but v3 Onion Services were found on the server. If your SecureDrop
+      instance has multiple Administrators, contact the other Administrators
+      to request the Tor v3 Onion Service config information. You must copy
+      the 'tor_v3_keys.json' and '*.auth_private' files to this workstation,
+      then re-run the install action.
+  when:
+    # In staging, Monitor Server will have 0 (SSH-over-Tor disabled)
+    - tor_instances_v3|length > 0
+    # Only run if we're connected over Tor (i.e. enabling v3 after v2).
+    # If we're not connected over Tor, this is a first-run.
+    - (ansible_host|default(ansible_ssh_host)).endswith('.onion')

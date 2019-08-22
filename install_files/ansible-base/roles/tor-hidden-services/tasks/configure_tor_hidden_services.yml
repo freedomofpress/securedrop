@@ -16,7 +16,24 @@
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"
     mode: "0700"
-  with_items: "{{ tor_instances }}"
+  with_flattened:
+    - "{{ tor_instances if v2_onion_services else [] }}"
+    - "{{ tor_instances_v3 if v3_onion_services else [] }}"
+  tags:
+    - tor
+
+- name: Create directories for Tor v3 authenticated onion services.
+  file:
+    state: directory
+    dest: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}/authorized_clients"
+    owner: "{{ tor_user }}"
+    group: "{{ tor_user }}"
+    mode: "0700"
+  with_items: "{{ tor_instances_v3 }}"
+  when:
+    - v3_onion_services
+    # Source Interface is always public, don't configure client auth
+    - "'source' not in item.service"
   tags:
     - tor
 
@@ -32,8 +49,80 @@
   tags:
     - tor
 
+# TODO: While cryptography is available in the development requirements, this task does
+# requires the install of admin requirements in whatever virtualenv is activated for running
+# staging (this seems reasonable to me).
+- name: Generate Onion v3 keys if required the Tails admin system
+  command: "python {{ sd_root_dir }}/admin/securedrop_admin/__init__.py --root {{ sd_root_dir }} generate_v3_keys"
+  delegate_to: localhost
+  # Local action, so we don't want elevated privileges
+  become: no
+  when: "v3_onion_services"
+  register: onion_v3_generation
+  changed_when: "'onion service keys generated' in onion_v3_generation.stdout"
+  tags:
+    - tor
+    - admin
+
+- name: Get the v3 keys locally from the Tails admin system
+  set_fact:
+    v3_local_key_info: "{{ lookup('file', role_path+'/../../tor_v3_keys.json')|from_json }}"
+  delegate_to: localhost
+  # Local action, so we don't want elevated privileges
+  become: no
+  # Suppress output since it contains Tor keys
+  no_log: true
+  when: "v3_onion_services"
+  tags:
+    - tor
+    - admin
+
+- name: Look up SSH v3 pubkey info.
+  set_fact:
+    tor_v3_ssh_pubkey: "{{ v3_local_key_info.app_ssh_public_key if 'securedrop_application_server' in group_names else v3_local_key_info.mon_ssh_public_key }}"
+  when:
+    - v3_onion_services
+    - "'sshv3' in tor_auth_instances_v3"
+    - enable_ssh_over_tor
+  tags:
+    - tor
+
+- name: Create the client auth file for the app server for Journalist interface
+  copy:
+    dest: "{{ tor_hidden_services_parent_dir }}/journalistv3/authorized_clients/client.auth"
+    content: |
+      descriptor:x25519:{{ v3_local_key_info.app_journalist_public_key }}
+    owner: "{{ tor_user }}"
+    group: "{{ tor_user }}"
+    mode: "0600"
+  notify:
+    - restart tor
+  when:
+    - v3_onion_services
+    - "'journalistv3' in tor_auth_instances_v3"
+  tags:
+    - tor
+
+- name: Create the client auth file for the app server for ssh interface
+  copy:
+    dest: "{{ tor_hidden_services_parent_dir }}/sshv3/authorized_clients/client.auth"
+    content: |
+      descriptor:x25519:{{ tor_v3_ssh_pubkey }}
+    owner: "{{ tor_user }}"
+    group: "{{ tor_user }}"
+    mode: "0600"
+  notify:
+    - restart tor
+  when:
+    - v3_onion_services
+    - "'sshv3' in tor_auth_instances_v3"
+    - enable_ssh_over_tor
+  tags:
+    - tor
+
 - name: Flush handlers to restart Tor.
   meta: flush_handlers
+  when: "v3_onion_services"
   tags:
     - tor
 
@@ -41,5 +130,6 @@
   service:
     name: tor
     state: started
+  when: "v3_onion_services"
   tags:
     - tor

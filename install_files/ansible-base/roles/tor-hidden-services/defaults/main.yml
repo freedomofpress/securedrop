@@ -2,3 +2,10 @@
 tor_hidden_services_parent_dir: /var/lib/tor/services
 tor_user: debian-tor
 enable_ssh_over_tor: true
+sd_root_dir: "{{ lookup('pipe','git rev-parse --show-toplevel') }}"
+
+# v2 Tor onion services are on / v3 Tor onion services are off by default for backwards
+# compatibility. Note that new install after 1.0 will have v3 enabled by sdconfig which
+# will override these variables.
+v2_onion_services: true
+v3_onion_services: false

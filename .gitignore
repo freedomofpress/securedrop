@@ -15,12 +15,21 @@ wheelhouse
 # ignore the instance information JSON file to prevent commit of private info
 securedrop/tests/functional/instance_information.json
 
+# ignore v3 onion JSON file
+install_files/ansible-base/tor_v3_keys.json
+
 # ignore the ATHS/THS hostname file ansible places
+# Tor v2
 app-ssh-aths
 app-document-aths # leave this here for historic reasons
 app-journalist-aths
 app-source-ths
 mon-ssh-aths
+# Tor v3
+app-journalist.auth_private
+app-sourcev3-ths
+app-ssh.auth_private
+mon-ssh.auth_private
 *.key
 *.csr
 *.pem

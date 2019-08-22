@@ -56,6 +56,7 @@ tor_services:
     ports:
       - "80"
     authenticated: no
+    version: 2
 
   - name: journalist
     ports:
@@ -63,6 +64,19 @@ tor_services:
       - "8080"
     authenticated: yes
     client: journalist
+    version: 2
+
+  - name: journalistv3
+    ports:
+      - "80"
+    authenticated: yes
+    version: 3
+
+  - name: sourcev3
+    ports:
+      - "80"
+    authenticated: no
+    version: 3
 
 # Staging permits presence of "source-error.log".
 allowed_apache_logfiles:
