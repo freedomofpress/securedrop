@@ -20,8 +20,8 @@
           Successfully configured Tor and set up desktop bookmarks for SecureDrop!
           You will see a notification appear on your screen when Tor is ready.
 
-          The Journalist Interface's Tor onion URL is: http://{{ journalist_interface_lookup_result.stdout }}
-          The Source Interfaces's Tor onion URL is: http://{{ source_interface_lookup_result.stdout }}
+          The Journalist Interface's Tor onion URL is: http://{{ journalist_iface.stdout }}
+          The Source Interfaces's Tor onion URL is: http://{{ source_iface.stdout }}
           {% if find_aths_info_result.matched > 1 %}
           SSH aliases are set up. You can use them with 'ssh app' and 'ssh mon'.
           {% endif %}
