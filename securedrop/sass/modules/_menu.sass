@@ -1,28 +1,55 @@
+// We want to align the menu with the logo, but the logo width varies in desktop
+// vs. mobile. Note that this currently only aligns menu and logo perfectly on
+// the Source Interface index page, but it has no negative side effects
+// elsewhere.
+@media only screen and (max-width: 768px)
+  .menu
+    width: 100%
+
+  .menu-icon-container
+    display: none
+
+@media only screen and (min-width: 768px)
+  .menu
+    width: 80%
+
 .menu
-  display: flex
   margin: 0 auto
-  position: relative
-  width: auto
-  min-height: 54px //Because the menu trigger is position absolute
+  // Because the menu trigger is position absolute:
+  min-height: 54px
   margin-top: 2*$spacing-unit
-  text-align: start
-  justify-content: center
+  text-align: left
+  font-size: .9em
+  position: relative
+
+.menu-icon-container
+  width: 18px
+  padding-right: 1.4em
+
+.menu-text-container
+  width: auto
+  margin-left: 0.25em
+  width: 100%
+
+.menu-trigger-container
+  width: 12px
 
 .menu__trigger
   display: flex
   align-items: center
-  padding: 2*$spacing-unit
-  border: 1px solid $color_grey_light
+  padding: 0.7em
+  border: 1px solid $color_grey_hilight
   background-color: white
   &:hover, &:focus, &:active
-    background-color: $color_grey_xlight
+    background-color: $color_grey_hilight
 
 .menu__trigger-text
   display: inline-block
   text-transform: capitalize
 
 .menu__trigger-icon
-  padding-right: 0.15em
+  vertical-align: -17%
+  object-fit: contain
 
 .menu__items
   display: none
@@ -32,6 +59,7 @@
   background-color: white
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.25)
   list-style-type: none
+  width: 100%
 
 .menu__item a
   display: flex
@@ -41,7 +69,7 @@
   border-bottom: 1px solid $color_grey_light
   text-decoration: none
   &:hover, &:focus, &:active
-    background-color: $color_grey_xlight
+    background-color: #e8e8e8
 
 .menu__item a span
   text-transform: capitalize

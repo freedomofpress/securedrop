@@ -39,8 +39,8 @@ def test_index(source_app):
         resp = app.get(url_for('main.index'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert 'Submit for the first time' in text
-        assert 'Already submitted something?' in text
+        assert 'First submission' in text
+        assert 'Return visit' in text
 
 
 def test_all_words_in_wordlist_validate(source_app):
@@ -627,7 +627,7 @@ def test_source_is_deleted_while_logged_in(source_app):
             resp = app.post(url_for('main.lookup'), follow_redirects=True)
             assert resp.status_code == 200
             text = resp.data.decode('utf-8')
-            assert 'Submit for the first time' in text
+            assert 'First submission' in text
             assert 'logged_in' not in session
             assert 'codename' not in session
 
