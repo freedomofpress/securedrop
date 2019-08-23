@@ -87,3 +87,9 @@ apache_disabled_modules:
 securedrop_default_locale: en_US
 # The subset of the available locales that will be proposed to the user
 securedrop_supported_locales: []
+
+# v2 Tor onion services are on / v3 Tor onion services are off by default for backwards
+# compatibility. Note that new installs after 1.0 will have v3 enabled by sdconfig which
+# will override these variables.
+v2_onion_services: true
+v3_onion_services: false

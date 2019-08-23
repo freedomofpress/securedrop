@@ -31,6 +31,16 @@
   tags:
     - apache
 
+- name: Grab source interface v3 onion URL.
+  command: cat /var/lib/tor/services/sourcev3/hostname
+  # Read-only
+  changed_when: false
+  register: v3_source_hostname
+  when: "v3_onion_services"
+  tags:
+    - tor
+    - apache
+
 - name: Copy Apache ports and site configs.
   template:
     src: "{{ item }}"
