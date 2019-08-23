@@ -204,6 +204,7 @@
   /var/www/securedrop/source_templates/error.html r,
   /var/www/securedrop/source_templates/first_submission_flashed_message.html r,
   /var/www/securedrop/source_templates/flashed.html r,
+  /var/www/securedrop/source_templates/footer.html r,
   /var/www/securedrop/source_templates/generate.html r,
   /var/www/securedrop/source_templates/index.html r,
   /var/www/securedrop/source_templates/locales.html r,
