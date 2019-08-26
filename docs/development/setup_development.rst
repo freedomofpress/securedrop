@@ -234,7 +234,7 @@ development-related tooling. Using `virtualenvwrapper
 
     sudo apt-get install virtualenvwrapper
     source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-    mkvirtualenv -p /usr/bin/python2 securedrop
+    mkvirtualenv -p /usr/bin/python3 securedrop
 
 .. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
           to your ``~/.bashrc`` (or whatever your default shell configuration
