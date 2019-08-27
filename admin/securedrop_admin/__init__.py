@@ -160,6 +160,24 @@ class SiteConfig(object):
                 return True
             raise ValidationError(message="Must be either yes or no")
 
+    class ValidateYesNoForV3(Validator):
+
+        def __init__(self, *args, **kwargs):
+                Validator.__init__(*args, **kwargs)
+                self.caller = args[0]
+
+        def validate(self, document):
+            text = document.text.lower()
+
+            # Raise error if admin tries to disable v3 when v2
+            # is already disabled.
+            if text == 'no' and \
+                    not self.caller._config.get("v2_onion_service"):
+                raise ValidationError(message="Must be yes as you disbaled v2")
+            if text == 'yes' or text == 'no':
+                return True
+            raise ValidationError(message="Must be either yes or no")
+
     class ValidateFingerprint(Validator):
         def validate(self, document):
             text = document.text.replace(' ', '')
@@ -403,6 +421,16 @@ class SiteConfig(object):
              SiteConfig.ValidateLocales(self.args.app_path),
              string.split,
              lambda config: True],
+            ['v2_onion_services', self.check_for_v2_onion(), bool,
+             u'Do you want to enable v2 onion services?',
+             SiteConfig.ValidateYesNo(),
+             lambda x: x.lower() == 'yes',
+             lambda config: True],
+            ['v3_onion_services', self.check_for_v3_onion, bool,
+             u'Do you want to enable new v3 onion services?',
+             SiteConfig.ValidateYesNoForV3(self),
+             lambda x: x.lower() == 'yes',
+             lambda config: True],
         ]
 
     def load_and_update_config(self):
@@ -413,18 +441,15 @@ class SiteConfig(object):
 
     def update_config(self):
         self.config.update(self.user_prompt_config())
-        self.update_onion_version_config()
         self.save()
         self.validate_gpg_keys()
         self.validate_journalist_alert_email()
         return True
 
-    def update_onion_version_config(self):
+    def check_for_v2_onion(self):
         """
-        This method updates onion service related configurations.
+        Check if v2 onion services are already enabled or not.
         """
-        v2 = False
-        v3 = True
         source_ths = os.path.join(self.args.ansible_path, "app-source-ths")
         if os.path.exists(source_ths):  # Means old installation
             data = ""
@@ -433,30 +458,45 @@ class SiteConfig(object):
 
             data = data.strip()
             if len(data) < 56:  # Old v2 onion address
-                v2 = True
+                return True
+        return False
 
-        # Now update the configuration
-        config = {"v2_onion_services": v2,
-                  "v3_onion_services": v3}
-        self.config.update(config)
+    def check_for_v3_onion(self):
+        """
+        Check if v3 onion services should be enabled by default or not.
+        """
+        v2_value = self._config.get("v2_onion_services", False)
+        v3_value = self._config.get("v3_onion_services", False)
+        print("v2: {}, and v3: {}".format(v2_value, v3_value))
+        return v3_value or not v2_value
 
     def user_prompt_config(self):
-        config = {}
+        self._config = {}
         for desc in self.desc:
             (var, default, type, prompt, validator, transform,
                 condition) = desc
-            if not condition(config):
-                config[var] = ''
+            if not condition(self._config):
+                self._config[var] = ''
                 continue
-            config[var] = self.user_prompt_config_one(desc,
-                                                      self.config.get(var))
-        return config
+            self._config[var] = self.user_prompt_config_one(desc,
+                                                            self.config.get(var))
+        return self._config
 
     def user_prompt_config_one(self, desc, from_config):
         (var, default, type, prompt, validator, transform, condition) = desc
-        if from_config is not None:
+        if from_config is not None and var != "v3_onion_services":
+            # v3_onion_services must be true if v2 is disabled by the admin
+            # otherwise, we may end up in a situation where both v2 and v3
+            # are disabled by the admin (by mistake).
             default = from_config
         prompt += ': '
+
+        # The following is for the dynamic check of the user input
+        # for the previous question, as we are calling the default value
+        # function dynamically, we can get the right value based on the
+        # previous user input.
+        if callable(default):
+            default = default.__call__()
         return self.validated_input(prompt, default, validator, transform)
 
     def validated_input(self, prompt, default, validator, transform):
