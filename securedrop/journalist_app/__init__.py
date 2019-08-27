@@ -137,6 +137,15 @@ def create_app(config):
             flash(gettext('You have been logged out due to inactivity'),
                   'error')
 
+        uid = session.get('uid', None)
+        if uid:
+            user = Journalist.query.get(uid)
+            if user and 'nonce' in session and \
+               session['nonce'] != user.session_nonce:
+                session.clear()
+                flash(gettext('You have been logged out due to password change'),
+                      'error')
+
         session['expires'] = datetime.utcnow() + \
             timedelta(minutes=getattr(config,
                                       'SESSION_EXPIRATION_MINUTES',

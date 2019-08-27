@@ -10,7 +10,7 @@ from werkzeug.exceptions import default_exceptions  # type: ignore
 
 from db import db
 from journalist_app import utils
-from models import (Journalist, Reply, Source, Submission, RevokedToken,
+from models import (Journalist, Reply, Source, Submission,
                     LoginThrottledException, InvalidUsernameException,
                     BadTokenException, WrongPasswordException)
 from store import NotEncrypted
@@ -322,9 +322,7 @@ def make_blueprint(config):
     def logout():
         user = get_user_object(request)
         auth_token = request.headers.get('Authorization').split(" ")[1]
-        revoked_token = RevokedToken(token=auth_token, journalist_id=user.id)
-        db.session.add(revoked_token)
-        db.session.commit()
+        utils.revoke_token(user, auth_token)
         return jsonify({'message': 'Your token has been revoked.'}), 200
 
     def _handle_api_http_exception(error):
