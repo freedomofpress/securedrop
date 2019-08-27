@@ -2,10 +2,18 @@
 - name: Import variables
   include_vars: "group_vars/all/site-specific"
 
-- name: Lookup onion ssh files
+- name: Lookup v2 onion ssh files
   stat:
     path: "{{ item }}-ssh-aths"
   register: "ssh_onion_lookup"
+  with_items:
+    - app
+    - mon
+
+- name: Lookup v3 onion ssh files
+  stat:
+    path: "{{ item }}-ssh.auth_private"
+  register: "ssh_v3_onion_lookup"
   with_items:
     - app
     - mon
@@ -18,6 +26,13 @@
   assert:
     that: "item.stat.exists or {{item.item}}_ip is defined"
   with_items: "{{ ssh_onion_lookup.results }}"
+  when: v2_onion_services == True
+
+- name: Confirm that either the app v3 onion ssh file exists or site-specific file exists
+  assert:
+    that: "item.stat.exists or {{item.item}}_ip is defined"
+  with_items: "{{ ssh_v3_onion_lookup.results }}"
+  when: v3_onion_services == True
 
 - name: Create SSH config directory.
   become: yes
