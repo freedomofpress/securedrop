@@ -35,6 +35,19 @@ def test_apache_headers_journalist_interface(host, header):
     assert re.search(header_regex, f.content_string, re.M)
 
 
+def test_alt_svc_set_on_journalist_interface(host):
+    """
+    HTTP Alternative Service header should be set on journalist interface.
+    """
+    with host.sudo():
+        v3 = host.file("/var/lib/tor/services/journalistv3/hostname")
+
+        apache_config = host.file("/etc/apache2/sites-available/journalist.conf")
+        expected_alt_svc = 'Header set Alt-Svc: h2="{}:8080"'.format(
+            v3.content_string)
+        assert expected_alt_svc in apache_config.content_string
+
+
 # Block of directory declarations for Apache vhost is common
 # to both Source and Journalist interfaces. Hardcoding these values
 # across multiple test files to speed up development; they should be

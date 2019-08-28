@@ -19,6 +19,19 @@ def test_apache_headers_source_interface(host, header):
     assert re.search(header_regex, f.content_string, re.M)
 
 
+def test_alt_svc_set_on_source_interface(host):
+    """
+    HTTP Alternative Service header should be set on source interface.
+    """
+    with host.sudo():
+        v3 = host.file("/var/lib/tor/services/sourcev3/hostname")
+
+        apache_config = host.file("/etc/apache2/sites-available/source.conf")
+        expected_alt_svc = 'Header set Alt-Svc: h2="{}:80"'.format(
+            v3.content_string)
+        assert expected_alt_svc in apache_config.content_string
+
+
 @pytest.mark.parametrize("apache_opt", [
     "<VirtualHost {}:80>".format(
         securedrop_test_vars.apache_listening_address),
