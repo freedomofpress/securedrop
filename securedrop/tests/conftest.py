@@ -238,7 +238,7 @@ def _start_test_rqworker(config):
         subprocess.Popen(['rqworker', config.RQ_WORKER_NAME,
                           '-P', config.SECUREDROP_ROOT,
                           '--pid', TEST_WORKER_PIDFILE,
-                          '--logging_level', 'debug',
+                          '--logging_level', 'DEBUG',
                           '-v'],
                          stdout=tmp_logfile,
                          stderr=subprocess.STDOUT)

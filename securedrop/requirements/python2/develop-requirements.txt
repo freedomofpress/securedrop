@@ -93,7 +93,7 @@ python-dateutil==2.6.1    # via arrow, botocore
 python-gilt==1.2.1        # via molecule
 python-vagrant==0.5.15
 pytz==2017.2              # via babel
-pyyaml==3.13              # via ansible, ansible-lint, bandit, dparse, molecule, python-gilt, sphinx-autobuild, watchdog, yamllint
+pyyaml==3.13
 requests==2.22.0          # via cookiecutter, docker-py, safety, sphinx
 ruamel.ordereddict==0.4.13  # via ruamel.yaml
 ruamel.yaml==0.15.97      # via ansible-lint

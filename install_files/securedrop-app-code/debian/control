@@ -11,5 +11,5 @@ Package: securedrop-app-code
 Architecture: amd64
 Conflicts: libapache2-mod-wsgi
 Replaces: libapache2-mod-wsgi
-Depends: ${python3:Depends},${misc:Depends},apache2,paxctld,apparmor-utils,gnupg2,haveged,secure-delete,sqlite3,${dist:Depends},libapache2-mod-xsendfile,redis-server,supervisor,securedrop-keyring,securedrop-config
+Depends: ${python3:Depends},${misc:Depends},apache2,paxctld,apparmor-utils,gnupg2,haveged,coreutils,sqlite3,${dist:Depends},libapache2-mod-xsendfile,redis-server,supervisor,securedrop-keyring,securedrop-config
 Description: Packages the SecureDrop application code pip dependencies and apparmor profiles. This package will put the apparmor profiles in enforce mode. This package does use pip to install the pip wheelhouse

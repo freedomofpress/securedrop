@@ -22,7 +22,6 @@ from journalist_app.utils import (get_source, logged_in,
                                   cleanup_expired_revoked_tokens)
 from models import Journalist
 from store import Storage
-from worker import rq_worker_queue
 
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
@@ -81,9 +80,6 @@ def create_app(config):
         adjectives_file=config.ADJECTIVES,
         gpg_key_dir=config.GPG_KEY_DIR,
     )
-
-    app.config['RQ_WORKER_NAME'] = config.RQ_WORKER_NAME
-    rq_worker_queue.init_app(app)
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):

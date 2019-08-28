@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/opt/venvs/securedrop-app-code/bin/python
 
 import sys
 

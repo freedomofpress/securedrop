@@ -14,7 +14,7 @@ from werkzeug.utils import secure_filename
 
 from secure_tempfile import SecureTemporaryFile
 
-from worker import rq_worker_queue
+from worker import create_queue
 
 
 import typing
@@ -226,7 +226,7 @@ class Storage:
 
 def async_add_checksum_for_file(db_obj):
     # type: (Union[Submission, Reply]) -> str
-    return rq_worker_queue.enqueue(
+    return create_queue().enqueue(
         queued_add_checksum_for_file,
         type(db_obj),
         db_obj.id,

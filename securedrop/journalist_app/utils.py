@@ -13,9 +13,9 @@ from db import db
 from models import (get_one_or_else, Source, Journalist, InvalidUsernameException,
                     WrongPasswordException, FirstOrLastNameError, LoginThrottledException,
                     BadTokenException, SourceStar, PasswordError, Submission, RevokedToken)
-from rm import srm
+from rm import secure_delete
 from store import add_checksum_for_file
-from worker import rq_worker_queue
+from worker import create_queue
 
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
@@ -173,7 +173,7 @@ def download(zip_basename, submissions):
 
 def delete_file(filesystem_id, filename, file_object):
     file_path = current_app.storage.path(filesystem_id, filename)
-    rq_worker_queue.enqueue(srm, file_path)
+    create_queue().enqueue(secure_delete, file_path)
     db.session.delete(file_object)
     db.session.commit()
 
@@ -260,7 +260,7 @@ def make_password(config):
 
 def delete_collection(filesystem_id):
     # Delete the source's collection of submissions
-    job = rq_worker_queue.enqueue(srm, current_app.storage.path(filesystem_id))
+    job = create_queue().enqueue(secure_delete, current_app.storage.path(filesystem_id))
 
     # Delete the source's reply keypair
     current_app.crypto_util.delete_reply_keypair(filesystem_id)

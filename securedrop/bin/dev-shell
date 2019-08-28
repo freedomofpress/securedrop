@@ -6,6 +6,8 @@
 
 set -eu
 
+export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
+
 TOPLEVEL=$(git rev-parse --show-toplevel)
 BASE_OS=xenial
 
@@ -48,6 +50,7 @@ function docker_run() {
            -e LC_ALL=C.UTF-8 \
            -e LANG=C.UTF-8 \
            -e PAGE_LAYOUT_LOCALES \
+           -e PATH \
            --user "${USER:-root}" \
            --volume "${TOPLEVEL}:${TOPLEVEL}" \
            --workdir "${TOPLEVEL}/securedrop" \
