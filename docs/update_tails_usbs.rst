@@ -28,7 +28,7 @@ It usually takes some time for updates to download, so keep that in mind when ch
 Manual Updates
 --------------
 
-Because the *Secure Viewing Station (SVS)* is airgapped, it cannot
+Because the *Secure Viewing Station* (SVS) is airgapped, it cannot
 receive upgrade notifications, so it will need to be updated manually.
 
 .. important:: 
@@ -49,9 +49,9 @@ For simplicity, we'll refer to the Tails USB you want to upgrade as the *Secure 
 
 The process for manually updating the *Secure Viewing Station* USB is:
 
-  #. Recommended: :ref:`Make a backup of the *Secure Viewing Station* USB <Step 1>`. 
+  #. Recommended: :ref:`Make a backup of the Secure Viewing Station USB <Step 1>`. 
   #. Install the :ref:`latest version of Tails <Step 2>` on your *primary Tails USB*.
-  #. Use the primary Tails USB to :ref:`perform a manual update of the *Secure Viewing Station* USB <Step 3>` on your offline (airgapped) *Secure Viewing Station* computer.
+  #. Use the primary Tails USB to :ref:`perform a manual update of the Secure Viewing Station USB <Step 3>` on your offline (airgapped) *Secure Viewing Station* computer.
 
 What you need
 ^^^^^^^^^^^^^
