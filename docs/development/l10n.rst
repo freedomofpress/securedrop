@@ -1,122 +1,149 @@
-Getting Started with Weblate Translations
-=========================================
+Translating SecureDrop
+======================
 
-SecureDrop is a whistleblower submission system for media
-organizations to securely accept documents from and
-communicate with anonymous sources. For more information, you may be
-interested to:
+Putting SecureDrop in context for translation
+---------------------------------------------
 
-* watch `The Globe and Mail guide to using SecureDrop <https://www.youtube.com/watch?v=oSW2wMWtAMM>`_
-* read the `Localizationlab Ask me Anything on SecureDrop <https://www.localizationlab.org/blog/2018/4/20/4bp1j2olispup45z8o2mm5nb5snxm2>`_
-* learn about :doc:`what makes SecureDrop unique <../what_makes_securedrop_unique>`.
+What is SecureDrop?
+^^^^^^^^^^^^^^^^^^^
 
-SecureDrop uses the Weblate platform. This page lists detailed
-instructions for getting started with the Weblate platform as a
-translator. Before starting this guide, you should know which language
-you would like to translate.
+SecureDrop is a system that lets people share sensitive information
+with investigative journalists anonymously and securely. It's designed
+to protect its users with strong cryptography and network
+communications that hide locations and activity. For more information:
+
+* Learn about :doc:`what makes SecureDrop unique <../what_makes_securedrop_unique>`..
+* Watch `The Globe and Mail guide to using SecureDrop <https://www.youtube.com/watch?v=oSW2wMWtAMM>`_.
+* Read the `Localization Lab "Ask Me Anything" on SecureDrop <https://www.localizationlab.org/blog/2018/4/20/4bp1j2olispup45z8o2mm5nb5snxm2>`_.
+
 
 Who Uses SecureDrop?
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
-There are two kind of SecureDrop users: :doc:`Sources <../source>` and
-:doc:`Journalists <../journalist>`. A source is an individual who
+There are two kinds of SecureDrop users: :doc:`Sources <../source>`
+and :doc:`Journalists <../journalist>`. A source is an individual who
 wants to communicate securely and anonymously with a
-journalist. Sources are not expected to be have any technical
-background. Journalists using SecureDrop have all received proper
-training and know what a PGP public key is, they understand the basic
-workflow of SecureDrop.
+journalist. Sources are not expected to have any technical
+background. Journalists using SecureDrop have usually received proper
+training and understand the basic workflow of SecureDrop.
 
-.. _`Weblate registration page`: https://weblate.securedrop.org/accounts/register/
+How is SecureDrop translated?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Register for Weblate
---------------------
+SecureDrop is translated using the `Weblate`_ platform. Read on to
+find out how to use Weblate.
 
-Login via GitHub for the First Time
-...................................
+Using Weblate
+-------------
 
-If you already have a GitHub account, go to the `Weblate registration page`_:
+Registration
+^^^^^^^^^^^^
+
+The first step is registering an account on our Weblate server by
+visiting the `Weblate registration page`_.
 
 |Weblate registration page screenshot|
 
-Click on the octocat icon and agree to login via GitHub.
+You can choose to register with your email address, or by linking a
+GitHub account. If you already have a GitHub account to which you're
+usually logged in, that can be easier, but it's not required.
+
+Register with email
+"""""""""""""""""""
+
+If you want to just register with your email address, you'll use the
+**Register using email** form on the left side of the registration
+page.
+
+Fill the form and click **Register**, then check your email for a
+message from **weblate@securedrop.org** with the subject **[Weblate]
+Your registration on Weblate**. That message will contain a
+confirmation link. Clicking that link will complete your registration
+and redirect you to the `Weblate dashboard`_.
+
+Register with GitHub
+""""""""""""""""""""
+
+To register with your GitHub account, click on the GitHub icon on the
+right, under **Third party registration**. This should take you to a
+page on https://github.com asking you to authorize the SecureDrop
+Weblate server to ask GitHub to authenticate you. (If you're not
+already logged in to GitHub, you'll be asked to do that first.) The
+authorization request looks like this:
 
 |GitHub authorization page screenshot|
 
-You will then be redirected to the Weblate dashboard.
+Click the green **Authorize freedomofpress** button, and you will be
+redirected to the `Weblate dashboard`_.
+
+Choosing your preferred languages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can contribute to any language, but Weblate has some conveniences
+to make it easier to work with your preferred languages. You can
+manage those from the `Weblate dashboard`_:
 
 |Weblate dashboard screenshot|
 
-Register a Weblate Account
-..........................
+Click the **Manage your languages** button.
 
-Go to the `Weblate registration page`_
+|Weblate manage languages screenshot|
 
-|Weblate registration page screenshot|
+In each selection box, simply click on the languages you would like to
+translate. When you're done, click the **Save** button at the bottom
+of the page.
 
-Fill the form and click **Register** and check your email for a message 
-with the subject **[Weblate] Your registration on Weblate** containing a
-confirmation link from **admin@securedrop.org**
-Confirming by clicking the first link will redirect you to the `Weblate dashboard`_:
+The SecureDrop translation project
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-|Weblate dashboard screenshot|
+Weblate supports multiple projects. Our instance only contains one,
+SecureDrop, which has two translation components: the main SecureDrop
+web application (labeled "SecureDrop"), and the translations for the
+desktop icons of the admin and journalist workstations used by news
+organizations (labeled "desktop").
 
-.. _`Weblate dashboard`: https://weblate.securedrop.org/
+On the dashboard you will find links to both sets of translations. You
+can also drill down to them via the **Projects** menu in the top
+navigation bar.
 
-Choose a Language
------------------
+|Weblate project page screenshot|
 
-From your `Weblate dashboard`_:
+If you click on a component, you'll arrive at the list of languages into which it's translated:
 
-|Weblate dashboard screenshot|
+|Weblate translations screenshot|
 
-Click the **Watched translations** menu and select **Suggested
-translations**:
+To start translating a language, click the **Translate** button at the far right of its row.
 
-|Weblate suggested translations screenshot|
+Translating a phrase
+^^^^^^^^^^^^^^^^^^^^
 
-And click the **translate** button to the right on the line that shows
-your native language:
-
-|Weblate translate button screenshot|
-
-Translate a Phrase
-------------------
-
-Each translatable string is shown in a **Source** box and you can
-translate it right below in the **Translation** text area. When you
-are done, click **Save** and the next untranslated string will appear.
+Each translatable string is shown in the text area labeled
+**Source**. You can translate it right below in the **Translation**
+text area. When you are done, click **Save** and the next untranslated
+string will appear.
 
 |Weblate translate screenshot|
 
-For most strings a contextual screenshot is available on the right side showing
-how it looks in the software. Click to see it in full size.
+On the right of the page you can find helpful information about the
+source string. If the language glossary contains terms from the source
+string, their suggested translations will appear in the **Glossary**
+sidebar. In the **Source information** sidebar, you'll find contextual
+information about the source string, like its location in our source
+code. If a screenshot showing the string in context in the SecureDrop
+user interface is available, that might be linked here as well.
 
-|Weblate translate context screenshot|
-
-Instructions About a User Navigation
-------------------------------------
-
-Strings also come with instructions, further explaining them, 
-and detailing where they are to be found in the user interface of the software, in case
-you still aren't sure. When doing so, also verify that the steps needed to find it
-are correct.::
-
-  ...tap "Set up account"...
-
-To find this, navigate to the localized interface of FreeOTP to get a firmer grasp
-of what it does, and then translate the string displayed in place of **Set up
-account**.
 
 Placeholders
 ------------
 
-Strings may contain placeholders, seen as content in between braces:
-These pick in other names and functions of the software, and must be left
-unmodified, but they can be moved around in a string. For instance::
+Source strings may contain placeholder text in curly braces, for
+example ``{count}``. These represent variable content (like a
+username, as in the example below), and must be left unmodified, but
+they can be moved around in a string. For instance::
 
   Edit user {user}
 
-will be displayed to the user as::
+might be displayed to the user as::
 
   Edit user Jean-Claude
 
@@ -128,22 +155,46 @@ And it would be **incorrect** to translate the placeholder like so::
 
   Modifier l'utilisateur {utilisateur}
 
+HTML content
+^^^^^^^^^^^^
+
+Some source strings represent HTML that will be presented in the
+SecureDrop web interface. It can be hard to tell what to translate,
+since HTML is source code and changing the wrong thing can break the
+page layout.
+
+One thing you should always translate are ``alt`` attributes of image
+elements. Image elements (``<img>``) in HTML place a picture on the
+page. People with visual impairments rely on a special note on the
+image element -- the ``alt`` attribute -- to describe the image, so
+it's helpful to translate those. Here's an example that contains an
+image with both an ``alt`` attribute *and* a placeholder::
+
+  <img src="{icon}" alt="shield icon">
+
+As explained above, the placeholder ``{icon}`` in the ``src``
+attribute of the ``<img>`` element should not be translated. The
+``alt`` attribute text (``"shield icon"``) should be. The correctly
+translated HTML in Portuguese would be::
+
+  <img src="{icon}" alt="ícone do escudo">
+
 Reviews
 -------
 
-Translated strings are not put into SecureDrop before they are also reviewed.
-This is to make sure the source or journalist will not be confused
-by an incorrect translation.
+Translated strings must be approved by a reviewer before being
+accepted into SecureDrop. This is to make sure the source or
+journalist will not be confused by an incorrect translation.
 
 Anyone can contribute translations, just like anyone can edit
-Wikipedia. However the right to review translations, is only
-extended to trusted translators can. You can ask for your _translator_
-status to be elevated to _reviewer_ by posting a message in 
-the `translation category of the SecureDrop forum`_.
+Wikipedia. However the right to review translations is only extended
+to trusted translators. You can ask to become a reviewer for a
+language by posting a message in the `translation category of the
+SecureDrop forum`_.
 
-A reviewer sees ``Waiting for review`` and ``Approved`` radio buttons 
-next to strings, all of which are initially set to ``Waiting
-for review``.
+A reviewer sees a **Review state** section below the source string,
+including the ``Waiting for review`` and ``Approved`` radio buttons.
+All source strings are initially set to ``Waiting for review``.
 
 |Waiting for review screenshot|
 
@@ -152,241 +203,48 @@ When the translation is deemed correct, the reviewer should change it to
 
 |Approved screenshot|
 
-When in this state, only reviewers can modify the string.
-Translators can still suggest modifications if they notice something wrong,
-and comment if they disagree.
+Once a translation has been approved, only reviewers can modify
+it. Translators can still suggest modifications or make comments if
+they notice something wrong.
 
-|Not a reviewer screenshot|
+Glossaries
+----------
 
+Translating SecureDrop requires understanding some complicated
+security terminology, involving cryptography, networking, and threat
+models. If you are unfamiliar with terms you encounter in source
+strings, consult one of the following glossaries, or ask in the
+`translation category of the SecureDrop forum`_.
 
-Glossary
---------
-
-A :doc:`glossary <../glossary>` is available, explaining terms specific
-to SecureDrop. It is also important that key
-terms are understood and precisely translated.
-
-Adversary
-.........
-
-Your adversary is the person or organization attempting to undermine
-your security goals. Adversaries can be different, depending on the
-situation. For instance, you may worry about criminals spying on the
-network of a cafe, or your classmates at a school. Often the adversary
-is hypothetical.
-
-This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/adversary>`__
-
-Air gap
-.......
-
-If there are no networked means of communicating with a computer you own,
-meaning a computer or a whole network is physically isolated from all other
-networks, including by its very nature the Internet, is said to be air-gapped.
-
-This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/air-gap>`__
-
-Attack
-......
-
-In terms of computer security, an attack is a method used to
-attempt compromising security, or just gaining access to its actual use.
-An attacker is the person or organization carrying out an attack. An attack method, something targeting a 
-weakness in the security, is sometimes called an "exploit."
-
-This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/attack>`__
-
-Command Line Tool (command)
-...........................
-
-The "command line" works by way of giving a computer a series of
-small, self-contained orders (think of those science fiction movies
-where teenage geniuses type long strings of green text onto black
-screens). To use a command line tool, the user types a command into a
-window called a terminal emulator, hits the return or enter key, and
-then receives a textual response in the same window. Windows, Linux|GNU
-and Apple desktop computers still let you run software using this
-interface, as is the case on some mobile phones if you install the right app.
-The command line can be used to run software pre-packaged with
-your operating system, or install new ones. Some downloadable programs, especially
-technical utilities, use the command line instead of a more familiar
-"icons and buttons" user interface. The command line needn't be scary,
-but it does require you to type in exactly the right set of letters
-and numbers to get the correct result, and it's often unclear what to
-do if the responses don't match your expectations.
-
-This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/command-line-tool>`__
-
-
-Cryptography
-............
-
-The art of designing secret codes or ciphers that let you exchange messages
-with a recipient without others being able to understand the message.
-
-This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/cryptography>`__
-
-Decrypt
-.......
-
-Make a secret message or data intelligible. The idea behind encryption
-is to make messages that can only be decrypted by the person or people meant to receive them.
-
-This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/decrypt>`__
-
-Encryption
-..........
-
-A process that takes a message and makes it unreadable except to a
-person who knows how to decrypt it back into a readable form.
-
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/encryption>`__
-
-Encryption Key
-..............
-
-An encryption key is a piece of information that is used to convert a
-message into an unreadable form. In some cases, you need the same
-encryption key to decode the message. In others, the encryption key
-and decryption key are different.
-
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/encryption-key>`__
-
-Fingerprint
-...........
-
-The keys of public key cryptography are very large numbers, sometimes
-a thousand or more digits long. A fingerprint is a much smaller number
-or set of numbers and letters that can be used as a unique name for
-that key, without having to list all of the key's digits.  So, for
-instance, if you and a friend wished to make sure you both had the
-same key, you could either spend a long time reading off all the
-hundreds of digits in the key, or you could each calculate your key's
-fingerprint and compare those instead. The fingerprints presented by
-cryptographic software usually consist of around 40 letters and
-numbers. If you carefully check that a fingerprint has the right
-value, you should be safe against impersonation using a fake key. Some
-software tools may offer more convenient alternative ways to verify a
-friend's key, but some form of verification needs to happen to prevent
-communications providers from easily being able to listen in.
-
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/fingerprint>`__
-
-HTTPS
-.....
-
-If you've ever seen a web address spelled out as
-“http://www.example.com/”, you'll recognize the “http” bit of this
-term. HTTP (hypertext transfer protocol) is the way a web browser on
-your machine talks to a remote web server. Unfortunately, standard
-http sends text insecurely across the Internet. HTTPS (the S stands
-for “secure”) uses encryption to better protect the data you send to
-websites, and the information they return to you, from prying eyes.
-
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/https>`__
-
-Key
-...
-
-In cryptography, a piece of data which gives you the capability to
-encrypt or decrypt a message.
-
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/key>`__
-
-Keyring
-.......
-
-If you use public key cryptography, you'll need to keep track of many
-keys: your secret, private key, your public key, and the public keys
-of everyone you communicate with. The collection of these keys is
-often referred to as your keyring.
-
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/keyring>`__
-
-Man-in-the-Middle Attack (MITM)
-...............................
-
-Suppose you believe you were speaking to your friend, Bahram, via
-encrypted instant messager. To check it's really him, you ask him to
-tell you the city where you first met. "Istanbul" comes the
-reply. That's correct! Unfortunately, without you or Bahram knowing,
-someone else online has been intercepting all your
-communications. When you first connected to Bahram, you actually
-connected to this person, and she, in turn, connected to Bahram. When
-you think you are asking Bahram a question, she receives your message,
-relays the question to Bahram, receives his answer back , and then
-sends it to you. Even though you think you are communicating securely
-with Bahram, you are, in fact, only communicating securely with the
-spy, who is also communicating securely to Bahram! This is the
-man-in-the-middle attack. Men-in-the-middle can spy on communications
-or even insert false or misleading messages into your
-communications. Security-focused internet communications software
-needs to defend against the man-in-the-middle attack to be safe
-against attackers who have control of any part of the Internet between
-two communicators.
-
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/man-middle-attack>`__
-
-Public Key Encryption
-.....................
-
-Traditional encryption systems use the same secret, or key, to encrypt
-and decrypt a message. So if I encrypted a file with the password
-"bluetonicmonster", you would need both the file and the secret
-"bluetonicmonster" to decode it. Public key encryption uses two keys:
-one to encrypt, and another to decrypt. This has all kinds of useful
-consequences. For one, it means that you can hand out the key to
-encrypt messages to you, and as long as you keep the other key secret,
-anyone with that key can talk to you securely. The key you hand out
-widely is known as the "public key": hence the name of the
-technique. Public key encryption is used to encrypt email and files by
-Pretty Good Privacy (PGP), OTR for instant messaging, and SSL/TLS for
-web browsing.
-
-This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/public-key-encryption>`__
-
-Two-Factor Authentication
-.........................
-
-"Something you know, and something you have." Login systems that
-require only a username and password risk being broken when someone
-else can obtain (or guess) those pieces of information. Services that
-offer two-factor authentication also require you to provide a separate
-confirmation that you are who you say you are. The second factor could
-be a one-off secret code, a number generated by a program running on a
-mobile device, or a device that you carry and that you can use to
-confirm who you are. Companies like banks, and major internet services
-like Google, PayPal and Twitter now offer two-factor authentication.
-
-This definition is an edited version copied from `the EFF glossary <https://ssd.eff.org/en/glossary/two-factor-authentication>`__
+- The SecureDrop :doc:`glossary <../glossary>` explains terms specific
+  to SecureDrop.
+- The `EFF Surveillance Self-Defense glossary`_ explains many general
+  security concepts.
 
 Weblate Glossary
-----------------
+^^^^^^^^^^^^^^^^
 
-For each string to be translated, Weblate shows a glossary of terms
-and their translation to help unify their translations. For instance
-when translating `Please wait for a new two-factor token before
-logging in again`, Weblate notices the word `two-factor` is found in
-the glossary and displays the translation in the `glossary` to the
-right.
+Weblate also contains an internal glossary for each language, to which
+we can add suggested translations. If a source string contains terms
+from this glossary, the glossary entries will be displayed in a box on
+the right side of the translation page.
 
-|Weblate glossary show page screenshot|
+|Weblate glossary sidebar screenshot|
 
-Before translating strings, it is recommended to add all terms in the
-`SecureDrop localization glossary <#glossary>`_ by clicking on the pen
-in the right corner of the glossary displayed with each translated
-string and then `Add new word`:
+If you find that a source string contains terms from the
+:doc:`SecureDrop glossary <../glossary>` or the `EFF Surveillance
+Self-Defense glossary`_, but the glossary sidebar says ``No related
+strings found in the glossary.``, we'd really appreciate it if you
+could add those terms to the glossary of the language you're working
+with. Simply fill out the **Source** and **Translation** fields in the
+sidebar under **Add new word to glossary**, then click the **Add**
+button.
 
-|Weblate glossary add page screenshot|
+You can see the full glossary for a language by clicking the edit icon
+at the top right of the glossary sidebar. The glossary page contains
+all the terms that have been translated for the language:
 
-When all the terms are in the glossary, it is recommended to take
-another look at the full list of terms and verify there is no
-duplicate or other mistakes.
-
-|Weblate glossary list page screenshot|
-
-.. tip:: The terms copied from the EFF glossary already have a
-         translation in a number of languages.
+|Weblate glossary list screenshot|
 
 Getting Help
 ------------
@@ -394,33 +252,64 @@ Getting Help
 Should you need help, you can do one of the following:
 
 * Post a message in the `translation category of the SecureDrop forum`_
-* Chat in the `SecureDrop instant messenging channel`_
+* Chat in the `SecureDrop instant messaging channel`_
 * Read the `Weblate documentation`_
 
+Collaboration Guidelines
+------------------------
+
+Adding new languages
+^^^^^^^^^^^^^^^^^^^^
+
+We love seeing SecureDrop translated into new languages. Just ask us
+to add yours by posting in the `translation category of the SecureDrop
+forum`_.
+
+Suggesting changes to source strings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you notice errors in our source strings, or catch us using English
+idioms that are hard to translate, please add comments letting us
+know. At the beginning of every translation cycle in our release
+schedule, we have a few days for incorporating your feedback, and very
+much appreciate it.
+
+Changing an existing translation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you think a translation can be improved, please don't run roughshod
+over another translator's work. Make a suggestion or comment first, to
+allow discussion before saving your changes.
+
+Exceptions to this policy would be:
+
+- Obvious errors in spelling, grammar, or punctuation.
+
+- A string in our interface that is supposed to match another
+  project. For example, we include instructions for adjusting Tor
+  Browser settings, so if our wording is out of date, it has to be
+  corrected to reduce confusion for people using SecureDrop.
+
+In those cases, please feel free to correct the existing translation.
+
+.. _`Weblate`: https://weblate.org/
+.. _`SecureDrop Weblate instance`: https://weblate.securedrop.org/
+.. _`Weblate registration page`: https://weblate.securedrop.org/accounts/register/
+.. _`Weblate dashboard`: https://weblate.securedrop.org/
 .. _`translation category of the SecureDrop forum`: https://forum.securedrop.org/c/translations
-.. _`SecureDrop instant messenging channel`: https://gitter.im/freedomofpress/securedrop
-.. _`Weblate documentation`: http://docs.weblate.org/en/latest/index.html
+.. _`SecureDrop instant messaging channel`: https://gitter.im/freedomofpress/securedrop
+.. _`Weblate documentation`: http://docs.weblate.org/
+.. _`EFF Surveillance Self-Defense glossary`: https://ssd.eff.org/en/glossary/
 
 
-Frequently Asked Questions
---------------------------                                                  
-
-* What if the language I want to translate is not on the list?
-
-  You can send a request for a new language in the `translation
-  category of the SecureDrop forum`_. But please make sure the
-  language you want is not already present.
-
-.. |Weblate registration page screenshot| image:: ../images/weblate/weblate1.png
-.. |GitHub authorization page screenshot| image:: ../images/weblate/weblate2.png
-.. |Weblate dashboard screenshot| image:: ../images/weblate/weblate3.png
-.. |Weblate suggested translations screenshot| image:: ../images/weblate/weblate4.png
-.. |Weblate translate button screenshot| image:: ../images/weblate/weblate5.png
-.. |Weblate translate screenshot| image:: ../images/weblate/weblate6.png
-.. |Weblate translate context screenshot| image:: ../images/weblate/weblate7.png
-.. |Weblate glossary show page screenshot| image:: ../images/weblate/glossary1.png
-.. |Weblate glossary add page screenshot| image:: ../images/weblate/glossary2.png
-.. |Weblate glossary list page screenshot| image:: ../images/weblate/glossary3.png
-.. |Waiting for review screenshot| image:: ../images/weblate/review1.png
-.. |Approved screenshot| image:: ../images/weblate/review2.png
-.. |Not a reviewer screenshot| image:: ../images/weblate/review3.png
+.. |Weblate registration page screenshot| image:: ../images/weblate/registration.png
+.. |GitHub authorization page screenshot| image:: ../images/weblate/github-authorization.png
+.. |Weblate dashboard screenshot| image:: ../images/weblate/dashboard.png
+.. |Weblate manage languages screenshot| image:: ../images/weblate/manage-languages.png
+.. |Weblate project page screenshot| image:: ../images/weblate/project.png
+.. |Weblate translations screenshot| image:: ../images/weblate/translations.png
+.. |Weblate translate screenshot| image:: ../images/weblate/translate.png
+.. |Weblate glossary sidebar screenshot| image:: ../images/weblate/glossary-sidebar.png
+.. |Weblate glossary list screenshot| image:: ../images/weblate/glossary-list.png
+.. |Waiting for review screenshot| image:: ../images/weblate/waiting-for-review.png
+.. |Approved screenshot| image:: ../images/weblate/approved.png
