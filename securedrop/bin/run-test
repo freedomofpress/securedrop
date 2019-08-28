@@ -8,6 +8,9 @@ export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
 REPOROOT=$(git rev-parse --show-toplevel)
 cd "${REPOROOT}/securedrop"
 
+PYTHONPATH=".:${PYTHONPATH:-}"
+export PYTHONPATH
+
 source "${BASH_SOURCE%/*}/dev-deps"
 
 run_xvfb
