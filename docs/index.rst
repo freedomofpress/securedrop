@@ -78,7 +78,7 @@ anonymous sources.
    yubikey_setup
    backup_and_restore
    backup_workstations
-   upgrade_tails_usbs
+   update_tails_usbs
    rebuild_admin
    kernel_troubleshooting
    getting_support

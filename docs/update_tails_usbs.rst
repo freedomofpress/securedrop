@@ -53,7 +53,7 @@ The process for manually updating the *Secure Viewing Station* USB is:
   #. Install the :ref:`latest version of Tails <Step 2>` on your *primary Tails USB*.
   #. Use the primary Tails USB to :ref:`perform a manual update of the *Secure Viewing Station* USB <Step 3>` on your offline (airgapped) *Secure Viewing Station* computer.
 
-What you neednstall pro
+What you need
 ^^^^^^^^^^^^^
 
   #. Your *Admin Workstation* computer
