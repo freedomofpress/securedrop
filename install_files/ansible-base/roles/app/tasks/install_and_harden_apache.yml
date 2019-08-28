@@ -31,12 +31,18 @@
   tags:
     - apache
 
-- name: Grab source interface v3 onion URL.
-  command: cat /var/lib/tor/services/sourcev3/hostname
+- name: Grab web interface v3 onion URLs.
+  command: "cat /var/lib/tor/services/{{ item }}/hostname"
   # Read-only
   changed_when: false
-  register: v3_source_hostname
+  register: v3_hostname
   when: "v3_onion_services"
+  # Order is important here since the resulting variable
+  # v3_hostname will be accessed by index when the Apache
+  # templates are written.
+  loop:
+    - sourcev3
+    - journalistv3
   tags:
     - tor
     - apache
