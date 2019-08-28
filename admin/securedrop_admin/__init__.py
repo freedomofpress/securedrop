@@ -163,17 +163,16 @@ class SiteConfig(object):
     class ValidateYesNoForV3(Validator):
 
         def __init__(self, *args, **kwargs):
-                Validator.__init__(*args, **kwargs)
-                self.caller = args[0]
+            Validator.__init__(*args, **kwargs)
+            self.caller = args[0]
 
         def validate(self, document):
             text = document.text.lower()
-
             # Raise error if admin tries to disable v3 when v2
             # is already disabled.
             if text == 'no' and \
-                    not self.caller._config.get("v2_onion_service"):
-                raise ValidationError(message="Must be yes as you disbaled v2")
+                    not self.caller._config.get("v2_onion_services"):
+                raise ValidationError(message="Must be yes as you disabled v2")
             if text == 'yes' or text == 'no':
                 return True
             raise ValidationError(message="Must be either yes or no")
@@ -279,6 +278,8 @@ class SiteConfig(object):
     def __init__(self, args):
         self.args = args
         self.config = {}
+        # This is to hold runtime configuration before save
+        self._config = {}
         translations = SiteConfig.Locales(
             self.args.app_path).get_translations()
         translations = " ".join(translations)
@@ -466,8 +467,9 @@ class SiteConfig(object):
         Check if v3 onion services should be enabled by default or not.
         """
         v2_value = self._config.get("v2_onion_services", False)
-        v3_value = self._config.get("v3_onion_services", False)
-        print("v2: {}, and v3: {}".format(v2_value, v3_value))
+        # We need to see the value in the configuration file
+        # for v3_onion_services
+        v3_value = self.config.get("v3_onion_services", True)
         return v3_value or not v2_value
 
     def user_prompt_config(self):
@@ -479,7 +481,7 @@ class SiteConfig(object):
                 self._config[var] = ''
                 continue
             self._config[var] = self.user_prompt_config_one(desc,
-                                                            self.config.get(var))
+                                                            self.config.get(var))  # noqa: E501
         return self._config
 
     def user_prompt_config_one(self, desc, from_config):
@@ -496,7 +498,7 @@ class SiteConfig(object):
         # function dynamically, we can get the right value based on the
         # previous user input.
         if callable(default):
-            default = default.__call__()
+            default = default()
         return self.validated_input(prompt, default, validator, transform)
 
     def validated_input(self, prompt, default, validator, transform):

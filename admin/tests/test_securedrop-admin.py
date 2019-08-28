@@ -619,66 +619,6 @@ class TestSiteConfig(object):
         """)
         assert expected == io.open(site_config_path).read()
 
-    def test_old_v2_onion_services(self, tmpdir):
-        "Checks for exitsing v2 source address"
-        site_config_path = join(str(tmpdir), 'site_config')
-        args = argparse.Namespace(site_config=site_config_path,
-                                  ansible_path='.',
-                                  app_path=dirname(__file__))
-        site_config = securedrop_admin.SiteConfig(args)
-        with open("app-source-ths", "w") as fobj:
-            fobj.write("aaaaaaaaaaaaaaaa.onion\n")
-        site_config.update_onion_version_config()
-        site_config.save()
-        data = ""
-        with open(site_config_path) as fobj:
-            data = fobj.read()
-        expected = textwrap.dedent("""\
-        v2_onion_services: true
-        v3_onion_services: true
-        """)
-        os.remove("app-source-ths")
-        assert expected == data
-
-    def test_no_v2_onion_services(self, tmpdir):
-        "Checks for new installation for only v3"
-        site_config_path = join(str(tmpdir), 'site_config')
-        args = argparse.Namespace(site_config=site_config_path,
-                                  ansible_path='.',
-                                  app_path=dirname(__file__))
-        site_config = securedrop_admin.SiteConfig(args)
-        site_config.update_onion_version_config()
-        site_config.save()
-        data = ""
-        with open(site_config_path) as fobj:
-            data = fobj.read()
-        expected = textwrap.dedent("""\
-        v2_onion_services: false
-        v3_onion_services: true
-        """)
-        assert expected == data
-
-    def test_only_v3_onion_services(self, tmpdir):
-        "Checks for new installation for only v3 ths file"
-        site_config_path = join(str(tmpdir), 'site_config')
-        args = argparse.Namespace(site_config=site_config_path,
-                                  ansible_path='.',
-                                  app_path=dirname(__file__))
-        site_config = securedrop_admin.SiteConfig(args)
-        with open("app-sourcev3-ths", "w") as fobj:
-            fobj.write("a" * 56 + ".onion\n")
-        site_config.update_onion_version_config()
-        site_config.save()
-        data = ""
-        with open(site_config_path) as fobj:
-            data = fobj.read()
-        expected = textwrap.dedent("""\
-        v2_onion_services: false
-        v3_onion_services: true
-        """)
-        os.remove("app-sourcev3-ths")
-        assert expected == data
-
     def test_validate_gpg_key(self, caplog):
         args = argparse.Namespace(site_config='INVALID',
                                   ansible_path='tests/files',
@@ -817,6 +757,8 @@ class TestSiteConfig(object):
     def verify_desc_consistency_optional(self, site_config, desc):
         (var, default, etype, prompt, validator, transform, condition) = desc
         # verify the default passes validation
+        if callable(default):
+            default = default()
         assert site_config.user_prompt_config_one(desc, None) == default
         assert type(default) == etype
 
@@ -825,6 +767,12 @@ class TestSiteConfig(object):
         (var, default, etype, prompt, validator, transform, condition) = desc
         with pytest.raises(ValidationError):
             site_config.user_prompt_config_one(desc, '')
+            # If we are testing v3_onion_services, that will create a default
+            # value of 'yes', means it will not raise the ValidationError. We
+            # are generating it below for test to behave properly with all
+            # other test cases.
+            if var == "v3_onion_services":
+                raise ValidationError()
 
     def verify_prompt_boolean(
             self, site_config, desc):
@@ -833,6 +781,34 @@ class TestSiteConfig(object):
         assert site_config.user_prompt_config_one(desc, True) is True
         assert site_config.user_prompt_config_one(desc, False) is False
         assert site_config.user_prompt_config_one(desc, 'YES') is True
+        assert site_config.user_prompt_config_one(desc, 'NO') is False
+
+    def verify_prompt_boolean_for_v3(
+            self, site_config, desc):
+        """As v3_onion_services input depends on input of
+           v2_onion_service, the answers will change.
+        """
+        self.verify_desc_consistency(site_config, desc)
+        (var, default, etype, prompt, validator, transform, condition) = desc
+        assert site_config.user_prompt_config_one(desc, True) is True
+        # Because if no v2_onion_service, v3 will become True
+        assert site_config.user_prompt_config_one(desc, False) is True
+        assert site_config.user_prompt_config_one(desc, 'YES') is True
+        # Because if no v2_onion_service, v3 will become True
+        assert site_config.user_prompt_config_one(desc, 'NO') is True
+
+        # Now we will set v2_onion_services as True so that we
+        # can set v3_onion_service as False. This is the case
+        # when an admin particularly marked v3 as False.
+        site_config._config = {"v2_onion_services": True}
+        site_config.config = {"v3_onion_services": False}
+
+        # The next two tests should use the default from the above line,
+        # means it will return False value.
+        assert site_config.user_prompt_config_one(desc, True) is False
+        assert site_config.user_prompt_config_one(desc, 'YES') is False
+
+        assert site_config.user_prompt_config_one(desc, False) is False
         assert site_config.user_prompt_config_one(desc, 'NO') is False
 
     def test_desc_conditional(self):
@@ -887,6 +863,8 @@ class TestSiteConfig(object):
     verify_prompt_enable_ssh_over_tor = verify_prompt_boolean
 
     verify_prompt_securedrop_app_gpg_public_key = verify_desc_consistency
+    verify_prompt_v2_onion_services = verify_prompt_boolean
+    verify_prompt_v3_onion_services = verify_prompt_boolean_for_v3
 
     def verify_prompt_not_empty(self, site_config, desc):
         with pytest.raises(ValidationError):
