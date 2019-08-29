@@ -36,6 +36,10 @@ def random_chars(len, chars=string.printable):
     return ''.join([random.choice(chars) for _ in range(len)])
 
 
+def random_ascii_chars(len, chars=string.ascii_lowercase):
+    return ''.join([random.choice(chars) for _ in range(len)])
+
+
 def random_datetime(nullable):
     if nullable and random_bool():
         return None

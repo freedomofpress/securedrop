@@ -43,6 +43,23 @@ class PathException(Exception):
     pass
 
 
+class TooManyFilesException(Exception):
+    """An exception raised by path_without_filesystem_id when too many
+    files has been found for a given submission or reply.
+    This could be due to a very unlikely collision between
+    journalist_designations.
+    """
+    pass
+
+
+class NoFileFoundException(Exception):
+    """An exception raised by path_without_filesystem_id when a file could
+    not be found for a given submission or reply.
+    This is likely due to an admin manually deleting files from the server.
+    """
+    pass
+
+
 class NotEncrypted(Exception):
     """An exception raised if a file expected to be encrypted client-side
     is actually plaintext.
@@ -104,6 +121,29 @@ class Storage:
         """
         joined = os.path.join(os.path.abspath(self.__storage_path), *s)
         absolute = os.path.abspath(joined)
+        self.verify(absolute)
+        return absolute
+
+    def path_without_filesystem_id(self, filename):
+        # type: (str) -> str
+        """Get the normalized, absolute file path, within
+           `self.__storage_path` for a filename when the filesystem_id
+           is not known.
+        """
+
+        joined_paths = []
+        for rootdir, _, files in os.walk(os.path.abspath(self.__storage_path)):
+            for file_ in files:
+                if file_ in filename:
+                    joined_paths.append(os.path.join(rootdir, file_))
+
+        if len(joined_paths) > 1:
+            raise TooManyFilesException('Found duplicate files!')
+        elif len(joined_paths) == 0:
+            raise NoFileFoundException('File not found: {}'.format(filename))
+        else:
+            absolute = joined_paths[0]
+
         self.verify(absolute)
         return absolute
 
