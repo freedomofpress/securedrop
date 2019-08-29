@@ -1,4 +1,5 @@
 import pytest
+import re
 
 testinfra_hosts = ["app-staging"]
 sdvars = pytest.securedrop_test_vars
@@ -58,3 +59,23 @@ def test_tor_torrc_sandbox(host):
     # Only `Sandbox 1` will enable, but make sure there are zero occurrances
     # of "Sandbox", otherwise we may have a regression somewhere.
     assert not f.contains("^.*Sandbox.*$")
+
+
+def test_tor_v2_onion_url_readable_by_app(host):
+    v2_url_filepath = "/var/lib/securedrop/source_v2_url"
+    with host.sudo():
+        f = host.file(v2_url_filepath)
+        assert f.is_file
+        assert f.user == "www-data"
+        assert f.mode == 0o644
+        assert re.search(r"^[a-z0-9]{16}\.onion$", f.content_string)
+
+
+def test_tor_v3_onion_url_readable_by_app(host):
+    v3_url_filepath = "/var/lib/securedrop/source_v3_url"
+    with host.sudo():
+        f = host.file(v3_url_filepath)
+        assert f.is_file
+        assert f.user == "www-data"
+        assert f.mode == 0o644
+        assert re.search(r"^[a-z0-9]{56}\.onion$", f.content_string)

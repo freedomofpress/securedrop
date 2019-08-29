@@ -4,6 +4,8 @@
 
 - include: initialize_securedrop_app.yml
 
+- include: copy_tor_url_info_to_app_dir.yml
+
 # If HTTPS is enabled, certs must land before Apache vhost configs
 # are written, otherwise the Apache enmod tasks will fail.
 - include: copy_ssl_certs.yml
