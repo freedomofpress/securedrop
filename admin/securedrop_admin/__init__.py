@@ -172,7 +172,7 @@ class SiteConfig(object):
             # is already disabled.
             if text == 'no' and \
                     not self.caller._config.get("v2_onion_services"):
-                raise ValidationError(message="Must be yes as you disabled v2")
+                raise ValidationError(message="Since you disabled v2 onion services, you must enable v3 onion services.")  # noqa: E501
             if text == 'yes' or text == 'no':
                 return True
             raise ValidationError(message="Must be either yes or no")
@@ -423,12 +423,12 @@ class SiteConfig(object):
              string.split,
              lambda config: True],
             ['v2_onion_services', self.check_for_v2_onion(), bool,
-             u'Do you want to enable v2 onion services?',
+             u'Do you want to enable v2 onion services (recommended only for SecureDrop instances installed before 1.0.0)?',  # noqa: E501
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes',
              lambda config: True],
             ['v3_onion_services', self.check_for_v3_onion, bool,
-             u'Do you want to enable new v3 onion services?',
+             u'Do you want to enable v3 onion services (recommended)?',
              SiteConfig.ValidateYesNoForV3(self),
              lambda x: x.lower() == 'yes',
              lambda config: True],

@@ -316,17 +316,17 @@ def verify_locales_prompt(child):
 
 
 def verify_v2_onion_for_first_time(child):
-    child.expect(r'Do you want to enable v2 onion services\?\:', timeout=2)  # noqa: E501
+    child.expect(r' installed before 1.0.0\)\?\:', timeout=2)  # noqa: E501
     assert ANSI_ESCAPE.sub('', child.buffer) == ' no'  # Expected default
 
 
 def verify_v3_onion_for_first_time(child):
-    child.expect(r'Do you want to enable new v3 onion services\?\:', timeout=2)
+    child.expect(r'Do you want to enable v3 onion services \(recommended\)\?\:', timeout=2)  # noqa: E501
     assert ANSI_ESCAPE.sub('', child.buffer) == ' yes'  # Expected default
 
 
 def verify_v3_onion_when_v2_is_enabled(child):
-    child.expect(r'Do you want to enable new v3 onion services\?\:', timeout=2)
+    child.expect(r'Do you want to enable v3 onion services \(recommended\)\?\:', timeout=2)  # noqa: E501
     assert ANSI_ESCAPE.sub('', child.buffer) == ' yes'  # Expected default
 
 
