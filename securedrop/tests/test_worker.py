@@ -21,11 +21,13 @@ def start_rq_worker(config, queue_name=None):
     """
     if queue_name is None:
         queue_name = config.RQ_WORKER_NAME
+    print("os.getcwd: {}".format(os.getcwd()))
+    print("config.SECUREDROP_ROOT: {}".format(config.SECUREDROP_ROOT))
     return subprocess.Popen(
         [
             "/opt/venvs/securedrop-app-code/bin/rqworker",
             "--path",
-            config.SECUREDROP_ROOT,
+            os.getcwd(),
             queue_name
         ],
         preexec_fn=os.setsid
