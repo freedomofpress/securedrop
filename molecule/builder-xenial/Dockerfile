@@ -8,6 +8,7 @@ LABEL image_name="xenial-sd-builder-app"
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         apache2-dev \
         aptitude \
+        coreutils \
         debhelper \
         devscripts \
         dh-python \
@@ -27,7 +28,6 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         python3-setuptools \
         rsync \
         ruby \
-        secure-delete \
         sqlite \
         sudo \
         tzdata \

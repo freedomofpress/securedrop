@@ -1702,7 +1702,7 @@ def test_delete_source_deletes_docs_on_disk(journalist_app,
         job = journalist_app_module.utils.delete_collection(
             test_source['filesystem_id'])
 
-        # Wait up to 5s to wait for Redis worker `srm` operation to complete
+        # Wait up to 5s to wait for Redis worker secure deletion to complete
         utils.asynchronous.wait_for_redis_worker(job)
 
         # Encrypted documents no longer exist

@@ -1,12 +1,10 @@
-#!/usr/bin/env python
+#!/opt/venvs/securedrop-app-code/bin/python
 # -*- coding: utf-8 -*-
 
 import argparse
-import datetime
 import logging
 import os
 import pwd
-import qrcode
 import subprocess
 import shutil
 import signal
@@ -14,20 +12,33 @@ import sys
 import time
 import traceback
 
+sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
+
+import qrcode
 from six.moves import input
-from contextlib import contextmanager
 from flask import current_app
-from sqlalchemy import create_engine
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm import sessionmaker
 
 os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
-from sdconfig import config
-import journalist_app
 
 from db import db
-from models import Source, Journalist, PasswordError, InvalidUsernameException, FirstOrLastNameError
+from models import (
+    FirstOrLastNameError,
+    InvalidUsernameException,
+    Journalist,
+    PasswordError,
+)
+from management import app_context, config
 from management.run import run
+from management.submissions import (
+    add_check_db_disconnect_parser,
+    add_check_fs_disconnect_parser,
+    add_delete_db_disconnect_parser,
+    add_delete_fs_disconnect_parser,
+    add_list_db_disconnect_parser,
+    add_list_fs_disconnect_parser,
+    add_were_there_submissions_today,
+)
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
@@ -39,7 +50,7 @@ def obtain_input(text):
     return input(text)
 
 
-def reset(args):
+def reset(args, context=None):
     """Clears the SecureDrop development applications' state, restoring them to
     the way they were immediately after running `setup_dev.sh`. This command:
     1. Erases the development sqlite database file.
@@ -77,7 +88,7 @@ def reset(args):
         # 3. Create the DB from the metadata directly when in 'dev' so
         # developers can test application changes without first writing
         # alembic migration.
-        with journalist_app.create_app(config).app_context():
+        with context or app_context():
             db.create_all()
     else:
         # We have to override the hardcoded .ini file because during testing
@@ -172,8 +183,8 @@ def _make_password():
             continue
 
 
-def _add_user(is_admin=False):
-    with app_context():
+def _add_user(is_admin=False, context=None):
+    with context or app_context():
         username = _get_username()
         first_name = _get_first_name()
         last_name = _get_last_name()
@@ -251,9 +262,9 @@ def _get_delete_confirmation(user):
     return True
 
 
-def delete_user(args):
+def delete_user(args, context=None):
     """Deletes a journalist or admin from the application."""
-    with app_context():
+    with context or app_context():
         username = _get_username_to_delete()
         try:
             selected_user = Journalist.query.filter_by(username=username).one()
@@ -314,27 +325,6 @@ def init_db(args):
     subprocess.check_call(['alembic', 'upgrade', 'head'])
 
 
-def were_there_submissions_today(args):
-    if config.DATABASE_ENGINE == "sqlite":
-        db_uri = (config.DATABASE_ENGINE + ":///" +
-                  config.DATABASE_FILE)
-    else:
-        db_uri = (
-            config.DATABASE_ENGINE + '://' +
-            config.DATABASE_USERNAME + ':' +
-            config.DATABASE_PASSWORD + '@' +
-            config.DATABASE_HOST + '/' +
-            config.DATABASE_NAME
-        )
-    session = sessionmaker(bind=create_engine(db_uri))()
-    something = session.query(Source).filter(
-        Source.last_updated >
-        datetime.datetime.utcnow() - datetime.timedelta(hours=24)
-    ).count() > 0
-    count_file = os.path.join(args.data_root, 'submissions_today.txt')
-    open(count_file, 'w').write(something and '1' or '0')
-
-
 def get_args():
     parser = argparse.ArgumentParser(prog=__file__, description='Management '
                                      'and testing utility for SecureDrop.')
@@ -378,23 +368,21 @@ def get_args():
     set_clean_tmp_parser(subps, 'clean-tmp')
     set_clean_tmp_parser(subps, 'clean_tmp')
 
-    set_were_there_submissions_today(subps)
-
     init_db_subp = subps.add_parser('init-db', help='initialize the DB')
     init_db_subp.add_argument('-u', '--user',
                               help='Unix user for the DB',
                               required=True)
     init_db_subp.set_defaults(func=init_db)
 
+    add_check_db_disconnect_parser(subps)
+    add_check_fs_disconnect_parser(subps)
+    add_delete_db_disconnect_parser(subps)
+    add_delete_fs_disconnect_parser(subps)
+    add_list_db_disconnect_parser(subps)
+    add_list_fs_disconnect_parser(subps)
+    add_were_there_submissions_today(subps)
+
     return parser
-
-
-def set_were_there_submissions_today(subps):
-    parser = subps.add_parser(
-        'were-there-submissions-today',
-        help=('Update the file indicating '
-              'whether submissions were received in the past 24h'))
-    parser.set_defaults(func=were_there_submissions_today)
 
 
 def set_clean_tmp_parser(subps, name):
@@ -422,18 +410,17 @@ def setup_verbosity(args):
         logging.getLogger(__name__).setLevel(logging.INFO)
 
 
-@contextmanager
-def app_context():
-    with journalist_app.create_app(config).app_context():
-        yield
-
-
 def _run_from_commandline():  # pragma: no cover
     try:
-        args = get_args().parse_args()
+        parser = get_args()
+        args = parser.parse_args()
         setup_verbosity(args)
-        rc = args.func(args)
-        sys.exit(rc)
+        try:
+            rc = args.func(args)
+            sys.exit(rc)
+        except AttributeError:
+            parser.print_help()
+            parser.exit()
     except KeyboardInterrupt:
         sys.exit(signal.SIGINT)
 

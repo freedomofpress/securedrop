@@ -10,8 +10,8 @@ RUN apt-get update && \
     apt-get install -y paxctl && \
     { apt-get install -y libgtk2.0 || echo 'libgtk2.0 was not installed'; } && \
     paxctl -cm /usr/bin/mono-sgen && dpkg-reconfigure mono-runtime-sgen && \
-    apt-get install -y devscripts vim \
-                       python-pip virtualenv libpython2.7-dev libssl-dev secure-delete \
+    apt-get install -y coreutils devscripts vim \
+                       python-pip virtualenv libpython2.7-dev libssl-dev \
                        gnupg2 ruby redis-server git xvfb haveged curl wget \
                        gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo \
                        libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
@@ -50,11 +50,12 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckod
 
 COPY requirements requirements
 
-RUN pip install pip-tools && \
-    pip install --require-hashes -r requirements/python2/securedrop-app-code-requirements.txt && \
-    pip install -r requirements/python2/test-requirements.txt && \
-    pip install supervisor && \
-    pip install --upgrade setuptools  # Fixes #4036 pybabel requires latest version of setuptools
+RUN virtualenv /opt/venvs/securedrop-app-code && \
+    /opt/venvs/securedrop-app-code/bin/pip install pip-tools && \
+    /opt/venvs/securedrop-app-code/bin/pip install --require-hashes -r requirements/python2/securedrop-app-code-requirements.txt && \
+    /opt/venvs/securedrop-app-code/bin/pip install -r requirements/python2/test-requirements.txt && \
+    /opt/venvs/securedrop-app-code/bin/pip install supervisor && \
+    /opt/venvs/securedrop-app-code/bin/pip install setuptools==39.1.0  # See #4036, but now babel breaks under Python 2 with recent versions of setuptools
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi && \
     cp -r /root/.local /tmp/ && chmod +x /tmp/.local/tbb/tor-browser_en-US/Browser/firefox && chmod -R 777 /tmp/.local && \

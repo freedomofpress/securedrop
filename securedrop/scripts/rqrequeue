@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+import argparse
+import datetime
+import logging
+import sys
+import time
+
+sys.path.insert(0, "/opt/venvs/securedrop-app-code/lib/python3.5/site-packages")  # noqa: E402
+sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
+
+from worker import requeue_interrupted_jobs
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog=__file__, description="Utility for requeuing interrupted rq jobs."
+    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Report while working.")
+    parser.add_argument(
+        "-i",
+        "--interval",
+        type=int,
+        help="Keep running and requeuing jobs every 'interval' seconds.",
+    )
+
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    if args.verbose:
+        level = logging.DEBUG
+    else:
+        level = logging.INFO
+
+    logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=level)
+
+    if args.interval:
+        requeue_threshold = datetime.datetime.now()
+        logging.info("Running every %s seconds.", args.interval)
+        while True:
+            try:
+                requeue_interrupted_jobs()
+            except Exception as e:
+                logging.error("Error: %s", e)
+
+            time.sleep(args.interval)
+            requeue_threshold += datetime.timedelta(seconds=args.interval)
+    else:
+        logging.info("Running once.")
+        requeue_interrupted_jobs()
+
+
+if __name__ == "__main__":
+    main()

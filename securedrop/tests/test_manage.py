@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import io
 import datetime
+import io
 import logging
 import os
-import manage
-import mock
 import time
 
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-
+import manage
+import mock
+from management import submissions
 from models import Journalist, db
+
 from .utils import db_helper
 
+
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
                 'cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc d7']
@@ -70,21 +72,14 @@ def test_handle_invalid_secret(journalist_app, config, mocker, capsys):
     mocker.patch("manage._get_yubikey_usage", return_value=True),
     mocker.patch("manage.obtain_input", side_effect=YUBIKEY_HOTP),
 
-    original_config = manage.config
-
-    try:
-        # We need to override the config to point at the per-test DB
-        manage.config = config
-
+    with journalist_app.app_context() as context:
         # We will try to provide one invalid and one valid secret
-        return_value = manage._add_user()
+        return_value = manage._add_user(context=context)
         out, err = capsys.readouterr()
 
         assert return_value == 0
         assert 'Try again.' in out
         assert 'successfully added' in out
-    finally:
-        manage.config = original_config
 
 
 # Note: we use the `journalist_app` fixture because it creates the DB
@@ -98,14 +93,9 @@ def test_exception_handling_when_duplicate_username(journalist_app,
     mocker.patch("manage._get_last_name", return_value='')
     mocker.patch("manage._get_yubikey_usage", return_value=False)
 
-    original_config = manage.config
-
-    try:
-        # We need to override the config to point at the per-test DB
-        manage.config = config
-
+    with journalist_app.app_context() as context:
         # Inserting the user for the first time should succeed
-        return_value = manage._add_user()
+        return_value = manage._add_user(context=context)
         out, err = capsys.readouterr()
 
         assert return_value == 0
@@ -116,8 +106,6 @@ def test_exception_handling_when_duplicate_username(journalist_app,
         out, err = capsys.readouterr()
         assert return_value == 1
         assert 'ERROR: That username is already taken!' in out
-    finally:
-        manage.config = original_config
 
 
 # Note: we use the `journalist_app` fixture because it creates the DB
@@ -130,19 +118,12 @@ def test_delete_user(journalist_app, config, mocker):
                  return_value='test-user-56789')
     mocker.patch('manage._get_delete_confirmation', return_value=True)
 
-    original_config = manage.config
-
-    try:
-        # We need to override the config to point at the per-test DB
-        manage.config = config
-
-        return_value = manage._add_user()
+    with journalist_app.app_context() as context:
+        return_value = manage._add_user(context=context)
         assert return_value == 0
 
         return_value = manage.delete_user(args=None)
         assert return_value == 0
-    finally:
-        manage.config = original_config
 
 
 # Note: we use the `journalist_app` fixture because it creates the DB
@@ -151,17 +132,11 @@ def test_delete_non_existent_user(journalist_app, config, mocker, capsys):
                  return_value='does-not-exist')
     mocker.patch('manage._get_delete_confirmation', return_value=True)
 
-    original_config = manage.config
-
-    try:
-        # We need to override the config to point at the per-test DB
-        manage.config = config
-        return_value = manage.delete_user(args=None)
+    with journalist_app.app_context() as context:
+        return_value = manage.delete_user(args=None, context=context)
         out, err = capsys.readouterr()
         assert return_value == 0
         assert 'ERROR: That user was not found!' in out
-    finally:
-        manage.config = original_config
 
 
 def test_get_username_to_delete(mocker):
@@ -175,21 +150,19 @@ def test_reset(journalist_app, test_journo, alembic_config, config):
     try:
         # We need to override the config to point at the per-test DB
         manage.config = config
+        with journalist_app.app_context() as context:
+            # Override the hardcoded alembic.ini value
+            manage.config.TEST_ALEMBIC_INI = alembic_config
 
-        # Override the hardcoded alembic.ini value
-        manage.config.TEST_ALEMBIC_INI = alembic_config
+            args = argparse.Namespace(store_dir=config.STORE_DIR)
+            return_value = manage.reset(args=args, context=context)
 
-        args = argparse.Namespace(store_dir=config.STORE_DIR)
-        return_value = manage.reset(args=args)
+            assert return_value == 0
+            assert os.path.exists(config.DATABASE_FILE)
+            assert os.path.exists(config.STORE_DIR)
 
-        assert return_value == 0
-        assert os.path.exists(config.DATABASE_FILE)
-        assert os.path.exists(config.STORE_DIR)
-
-        # Verify journalist user present in the database is gone
-        with journalist_app.app_context():
-            res = Journalist.query \
-                .filter_by(username=test_journo['username']).one_or_none()
+            # Verify journalist user present in the database is gone
+            res = Journalist.query.filter_by(username=test_journo['username']).one_or_none()
             assert res is None
     finally:
         manage.config = original_config
@@ -245,25 +218,18 @@ def test_clean_tmp_removed(config, caplog):
 
 
 def test_were_there_submissions_today(source_app, config):
-    original_config = manage.config
-    try:
+    with source_app.app_context() as context:
         # We need to override the config to point at the per-test DB
-        manage.config = config
         data_root = config.SECUREDROP_DATA_ROOT
-        args = argparse.Namespace(data_root=data_root,
-                                  verbose=logging.DEBUG)
+        args = argparse.Namespace(data_root=data_root, verbose=logging.DEBUG)
 
-        with source_app.app_context():
-            count_file = os.path.join(data_root, 'submissions_today.txt')
-            source, codename = db_helper.init_source_without_keypair()
-            source.last_updated = (datetime.datetime.utcnow() -
-                                   datetime.timedelta(hours=24*2))
-            db.session.commit()
-            manage.were_there_submissions_today(args)
-            assert io.open(count_file).read() == "0"
-            source.last_updated = datetime.datetime.utcnow()
-            db.session.commit()
-            manage.were_there_submissions_today(args)
-            assert io.open(count_file).read() == "1"
-    finally:
-        manage.config = original_config
+        count_file = os.path.join(data_root, 'submissions_today.txt')
+        source, codename = db_helper.init_source_without_keypair()
+        source.last_updated = (datetime.datetime.utcnow() - datetime.timedelta(hours=24*2))
+        db.session.commit()
+        submissions.were_there_submissions_today(args, context)
+        assert io.open(count_file).read() == "0"
+        source.last_updated = datetime.datetime.utcnow()
+        db.session.commit()
+        submissions.were_there_submissions_today(args, context)
+        assert io.open(count_file).read() == "1"
