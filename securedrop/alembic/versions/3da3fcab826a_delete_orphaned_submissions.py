@@ -10,15 +10,15 @@ Create Date: 2018-11-25 19:40:25.873292
 import os
 from alembic import op
 import sqlalchemy as sa
-from journalist_app import create_app
 from rm import secure_delete
-from store import NoFileFoundException, TooManyFilesException
 
 # raise the errors if we're not in production
 raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
 
 try:
+    from journalist_app import create_app
     from sdconfig import config
+    from store import NoFileFoundException, TooManyFilesException
     from worker import create_queue
 except ImportError:
     # This is a fresh install, and config.py has not been created yet.
