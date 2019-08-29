@@ -171,7 +171,7 @@ class SiteConfig(object):
             # Raise error if admin tries to disable v3 when v2
             # is already disabled.
             if text == 'no' and \
-                    not self.caller._config.get("v2_onion_services"):
+                    not self.caller._config_in_progress.get("v2_onion_services"):  # noqa: E501
                 raise ValidationError(message="Since you disabled v2 onion services, you must enable v3 onion services.")  # noqa: E501
             if text == 'yes' or text == 'no':
                 return True
@@ -278,8 +278,9 @@ class SiteConfig(object):
     def __init__(self, args):
         self.args = args
         self.config = {}
-        # This is to hold runtime configuration before save
-        self._config = {}
+        # Hold runtime configuration before save, to support
+        # referencing other responses during validation
+        self._config_in_progress = {}
         translations = SiteConfig.Locales(
             self.args.app_path).get_translations()
         translations = " ".join(translations)
@@ -466,23 +467,23 @@ class SiteConfig(object):
         """
         Check if v3 onion services should be enabled by default or not.
         """
-        v2_value = self._config.get("v2_onion_services", False)
+        v2_value = self._config_in_progress.get("v2_onion_services", False)
         # We need to see the value in the configuration file
         # for v3_onion_services
         v3_value = self.config.get("v3_onion_services", True)
         return v3_value or not v2_value
 
     def user_prompt_config(self):
-        self._config = {}
+        self._config_in_progress = {}
         for desc in self.desc:
             (var, default, type, prompt, validator, transform,
                 condition) = desc
-            if not condition(self._config):
-                self._config[var] = ''
+            if not condition(self._config_in_progress):
+                self._config_in_progress[var] = ''
                 continue
-            self._config[var] = self.user_prompt_config_one(desc,
+            self._config_in_progress[var] = self.user_prompt_config_one(desc,
                                                             self.config.get(var))  # noqa: E501
-        return self._config
+        return self._config_in_progress
 
     def user_prompt_config_one(self, desc, from_config):
         (var, default, type, prompt, validator, transform, condition) = desc

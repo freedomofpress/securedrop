@@ -800,7 +800,7 @@ class TestSiteConfig(object):
         # Now we will set v2_onion_services as True so that we
         # can set v3_onion_service as False. This is the case
         # when an admin particularly marked v3 as False.
-        site_config._config = {"v2_onion_services": True}
+        site_config._config_in_progress = {"v2_onion_services": True}
         site_config.config = {"v3_onion_services": False}
 
         # The next two tests should use the default from the above line,
