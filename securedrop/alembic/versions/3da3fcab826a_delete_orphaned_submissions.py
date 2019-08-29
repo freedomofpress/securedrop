@@ -3,7 +3,7 @@
 Ref: https://github.com/freedomofpress/securedrop/issues/1189
 
 Revision ID: 3da3fcab826a
-Revises: a9fe328b053a
+Revises: 60f41bb14d98
 Create Date: 2018-11-25 19:40:25.873292
 
 """
@@ -11,9 +11,9 @@ import os
 from alembic import op
 import sqlalchemy as sa
 from journalist_app import create_app
-from rm import srm
+from rm import secure_delete
 from store import NoFileFoundException, TooManyFilesException
-from worker import rq_worker_queue
+from worker import create_queue
 
 # raise the errors if we're not in production
 raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
@@ -27,7 +27,7 @@ except ImportError:
 
 # revision identifiers, used by Alembic.
 revision = '3da3fcab826a'
-down_revision = 'a9fe328b053a'
+down_revision = '60f41bb14d98'
 branch_labels = None
 depends_on = None
 
@@ -64,7 +64,7 @@ def upgrade():
                     )
 
                     file_path = app.storage.path_without_filesystem_id(submission.filename)
-                    rq_worker_queue.enqueue(srm, file_path)
+                    create_queue().enqueue(secure_delete, file_path)
                 except NoFileFoundException:
                     # The file must have been deleted by the admin, remove the row
                     conn.execute(
@@ -86,7 +86,7 @@ def upgrade():
                     )
 
                     file_path = app.storage.path_without_filesystem_id(reply.filename)
-                    rq_worker_queue.enqueue(srm, file_path)
+                    create_queue().enqueue(secure_delete, file_path)
                 except NoFileFoundException:
                     # The file must have been deleted by the admin, remove the row
                     conn.execute(

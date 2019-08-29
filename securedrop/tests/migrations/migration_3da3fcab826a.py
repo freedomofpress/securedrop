@@ -64,9 +64,10 @@ class UpgradeTester:
         params = {
             'uuid': str(uuid4()),
             'username': random_chars(50),
+            'session_nonce': 0
         }
-        sql = '''INSERT INTO journalists (uuid, username)
-                 VALUES (:uuid, :username)
+        sql = '''INSERT INTO journalists (uuid, username, session_nonce)
+                 VALUES (:uuid, :username, :session_nonce)
               '''
         self.journalist_id = db.engine.execute(text(sql), **params).lastrowid
 
