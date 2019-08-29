@@ -13,13 +13,13 @@ import sqlalchemy as sa
 from journalist_app import create_app
 from rm import secure_delete
 from store import NoFileFoundException, TooManyFilesException
-from worker import create_queue
 
 # raise the errors if we're not in production
 raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
 
 try:
     from sdconfig import config
+    from worker import create_queue
 except ImportError:
     # This is a fresh install, and config.py has not been created yet.
     if raise_errors:
