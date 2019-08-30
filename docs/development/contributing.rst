@@ -122,12 +122,26 @@ improve packaging and the release process:
 Translators
 ~~~~~~~~~~~
 
-All are kindly invited to help translate SecureDrop `using the Weblate interface
-<https://weblate.securedrop.org/>`__. We provide a :doc:`detailed guide <l10n>`
-to use as reference for details such as the meaning of placeholders, etc. Feel
-free to reach out on the `translation section of the forum
-<https://forum.securedrop.org/c/translations>`__ for help. Non-English forum
-discussions are welcome to help facilitate translations.
+Translating SecureDrop is crucial to making it useful for
+investigative journalism around the world. If you know English and
+another language, we would welcome your help.
+
+SecureDrop is translated using `Weblate
+<https://weblate.securedrop.org/>`__. We provide a :doc:`detailed
+guide <l10n>` for translators, and feel free to contact us in the
+`translation section of the SecureDrop forum
+<https://forum.securedrop.org/c/translations>`__ for help. Non-English
+forum discussions are also welcome.
+
+|SecureDrop translation status|
+
+|SecureDrop language status|
+
+.. |SecureDrop translation status| image:: https://weblate.securedrop.org/widgets/securedrop/-/287x66-white.png
+   :alt: SecureDrop translation status
+
+.. |SecureDrop language status| image:: https://weblate.securedrop.org/widgets/securedrop/-/horizontal-auto.svg
+   :alt: SecureDrop language status
 
 
 Designers
