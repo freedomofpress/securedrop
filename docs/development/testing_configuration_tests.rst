@@ -32,7 +32,7 @@ For the staging VMs:
 
 The VMs will be set up using either the libvirt or virtualbox Vagrant VM provider,
 depending on your system settings. You'll need to use the appropriate commands below
-based on your choice of provider. 
+based on your choice of provider.
 
 Then, to run the tests:
 
@@ -40,7 +40,7 @@ libvirt:
 ~~~~~~~~
 
 .. code:: sh
-   
+
    molecule verify -s libvirt-staging
 
 virtualbox:
@@ -50,12 +50,15 @@ virtualbox:
 
    molecule verify -s virtualbox-staging
 
+.. tip:: To run only a single test, set ``PYTEST_ADDOPTS="-k name_of_test"``
+         in your environment.
+
 Test failure against any host will generate a report with informative output
 about the specific test that triggered the error. Molecule
 will also exit with a non-zero status code.
 
 .. note:: To build and test the VMs with one command, use the Molecule ``test``
-  action: ``molecule test -s libvirt-staging --destroy=never``, or ``molecule test -s virtualbox-staging --destroy=never``. 
+  action: ``molecule test -s libvirt-staging --destroy=never``, or ``molecule test -s virtualbox-staging --destroy=never``.
 
 Updating the Config Tests
 -------------------------
@@ -75,7 +78,7 @@ than the Ansible playbooks: ::
 
 Any variable changes in the Ansible config should have a corresponding
 entry in these vars files. These vars are dynamically loaded for each
-host via the ``molecule/testinfra/staging/conftest.py`` file. Make sure to add 
+host via the ``molecule/testinfra/staging/conftest.py`` file. Make sure to add
 your tests to the relevant location for the host you plan to test: ::
 
     molecule/testinfra/staging/app/
@@ -105,7 +108,7 @@ Molecule configuration: ::
     ├── app
     ├── app-code
     ├── common
-    ├── mon 
+    ├── mon
     ├── ossec
     └── vars
 
