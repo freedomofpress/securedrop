@@ -48,6 +48,70 @@ v2_onion_services: false
 v3_onion_services: true
 '''
 
+WHEN_BOTH_TRUE = '''app_hostname: app
+app_ip: 10.20.2.2
+daily_reboot_time: 5
+dns_server: 8.8.8.8
+enable_ssh_over_tor: true
+journalist_alert_email: ''
+journalist_alert_gpg_public_key: ''
+journalist_gpg_fpr: ''
+monitor_hostname: mon
+monitor_ip: 10.20.3.2
+ossec_alert_email: test@gmail.com
+ossec_alert_gpg_public_key: sd_admin_test.pub
+ossec_gpg_fpr: 1F544B31C845D698EB31F2FF364F1162D32E7E58
+sasl_domain: gmail.com
+sasl_password: testpassword
+sasl_username: testuser
+securedrop_app_gpg_fingerprint: 1F544B31C845D698EB31F2FF364F1162D32E7E58
+securedrop_app_gpg_public_key: sd_admin_test.pub
+securedrop_app_https_certificate_cert_src: ''
+securedrop_app_https_certificate_chain_src: ''
+securedrop_app_https_certificate_key_src: ''
+securedrop_app_https_on_source_interface: false
+securedrop_supported_locales:
+- de_DE
+- es_ES
+smtp_relay: smtp.gmail.com
+smtp_relay_port: 587
+ssh_users: sd
+v2_onion_services: true
+v3_onion_services: true
+'''
+
+WHEN_ONLY_V2 = '''app_hostname: app
+app_ip: 10.20.2.2
+daily_reboot_time: 5
+dns_server: 8.8.8.8
+enable_ssh_over_tor: true
+journalist_alert_email: ''
+journalist_alert_gpg_public_key: ''
+journalist_gpg_fpr: ''
+monitor_hostname: mon
+monitor_ip: 10.20.3.2
+ossec_alert_email: test@gmail.com
+ossec_alert_gpg_public_key: sd_admin_test.pub
+ossec_gpg_fpr: 1F544B31C845D698EB31F2FF364F1162D32E7E58
+sasl_domain: gmail.com
+sasl_password: testpassword
+sasl_username: testuser
+securedrop_app_gpg_fingerprint: 1F544B31C845D698EB31F2FF364F1162D32E7E58
+securedrop_app_gpg_public_key: sd_admin_test.pub
+securedrop_app_https_certificate_cert_src: ''
+securedrop_app_https_certificate_chain_src: ''
+securedrop_app_https_certificate_key_src: ''
+securedrop_app_https_on_source_interface: false
+securedrop_supported_locales:
+- de_DE
+- es_ES
+smtp_relay: smtp.gmail.com
+smtp_relay_port: 587
+ssh_users: sd
+v2_onion_services: true
+v3_onion_services: false
+'''
+
 JOURNALIST_ALERT_OUTPUT = '''app_hostname: app
 app_ip: 10.20.2.2
 daily_reboot_time: 5
@@ -251,6 +315,21 @@ def verify_locales_prompt(child):
     child.expect('Space separated list of additional locales to support')  # noqa: E501
 
 
+def verify_v2_onion_for_first_time(child):
+    child.expect(r' installed before 1.0.0\)\?\:', timeout=2)  # noqa: E501
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' no'  # Expected default
+
+
+def verify_v3_onion_for_first_time(child):
+    child.expect(r'Do you want to enable v3 onion services \(recommended\)\?\:', timeout=2)  # noqa: E501
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' yes'  # Expected default
+
+
+def verify_v3_onion_when_v2_is_enabled(child):
+    child.expect(r'Do you want to enable v3 onion services \(recommended\)\?\:', timeout=2)  # noqa: E501
+    assert ANSI_ESCAPE.sub('', child.buffer) == ' yes'  # Expected default
+
+
 def test_sdconfig_on_first_run():
     cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                        'securedrop_admin/__init__.py')
@@ -298,6 +377,10 @@ def test_sdconfig_on_first_run():
     child.sendline('')
     verify_locales_prompt(child)
     child.sendline('de_DE es_ES')
+    verify_v2_onion_for_first_time(child)
+    child.sendline('\b' * 3 + 'no')
+    verify_v3_onion_for_first_time(child)
+    child.sendline('\b' * 4 + 'yes')
 
     child.expect(pexpect.EOF, timeout=10)  # Wait for validation to occur
     child.close()
@@ -307,6 +390,130 @@ def test_sdconfig_on_first_run():
     with open(os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')) as fobj:    # noqa: E501
         data = fobj.read()
     assert data == OUTPUT1
+
+
+def test_sdconfig_both_v2_v3_true():
+    cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                       'securedrop_admin/__init__.py')
+    child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
+    verify_username_prompt(child)
+    child.sendline('')
+    verify_reboot_prompt(child)
+    child.sendline('\b5')  # backspace and put 5
+    verify_ipv4_appserver_prompt(child)
+    child.sendline('')
+    verify_ipv4_monserver_prompt(child)
+    child.sendline('')
+    verify_hostname_app_prompt(child)
+    child.sendline('')
+    verify_hostname_mon_prompt(child)
+    child.sendline('')
+    verify_dns_prompt(child)
+    child.sendline('')
+    verify_app_gpg_key_prompt(child)
+    child.sendline('\b' * 14 + 'sd_admin_test.pub')
+    verify_https_prompt(child)
+    # Default answer is no
+    child.sendline('')
+    verify_app_gpg_fingerprint_prompt(child)
+    child.sendline('1F544B31C845D698EB31F2FF364F1162D32E7E58')
+    verify_ossec_gpg_key_prompt(child)
+    child.sendline('\b' * 9 + 'sd_admin_test.pub')
+    verify_ossec_gpg_fingerprint_prompt(child)
+    child.sendline('1F544B31C845D698EB31F2FF364F1162D32E7E58')
+    verify_admin_email_prompt(child)
+    child.sendline('test@gmail.com')
+    verify_journalist_gpg_key_prompt(child)
+    child.sendline('')
+    verify_smtp_relay_prompt(child)
+    child.sendline('')
+    verify_smtp_port_prompt(child)
+    child.sendline('')
+    verify_sasl_domain_prompt(child)
+    child.sendline('')
+    verify_sasl_username_prompt(child)
+    child.sendline('testuser')
+    verify_sasl_password_prompt(child)
+    child.sendline('testpassword')
+    verify_ssh_over_lan_prompt(child)
+    child.sendline('')
+    verify_locales_prompt(child)
+    child.sendline('de_DE es_ES')
+    verify_v2_onion_for_first_time(child)
+    child.sendline('\b' * 3 + 'yes')
+    verify_v3_onion_when_v2_is_enabled(child)
+    child.sendline('\b' * 3 + 'yes')
+
+    child.expect(pexpect.EOF, timeout=10)  # Wait for validation to occur
+    child.close()
+    assert child.exitstatus == 0
+    assert child.signalstatus is None
+
+    with open(os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')) as fobj:    # noqa: E501
+        data = fobj.read()
+    assert data == WHEN_BOTH_TRUE
+
+
+def test_sdconfig_only_v2_true():
+    cmd = os.path.join(os.path.dirname(CURRENT_DIR),
+                       'securedrop_admin/__init__.py')
+    child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
+    verify_username_prompt(child)
+    child.sendline('')
+    verify_reboot_prompt(child)
+    child.sendline('\b5')  # backspace and put 5
+    verify_ipv4_appserver_prompt(child)
+    child.sendline('')
+    verify_ipv4_monserver_prompt(child)
+    child.sendline('')
+    verify_hostname_app_prompt(child)
+    child.sendline('')
+    verify_hostname_mon_prompt(child)
+    child.sendline('')
+    verify_dns_prompt(child)
+    child.sendline('')
+    verify_app_gpg_key_prompt(child)
+    child.sendline('\b' * 14 + 'sd_admin_test.pub')
+    verify_https_prompt(child)
+    # Default answer is no
+    child.sendline('')
+    verify_app_gpg_fingerprint_prompt(child)
+    child.sendline('1F544B31C845D698EB31F2FF364F1162D32E7E58')
+    verify_ossec_gpg_key_prompt(child)
+    child.sendline('\b' * 9 + 'sd_admin_test.pub')
+    verify_ossec_gpg_fingerprint_prompt(child)
+    child.sendline('1F544B31C845D698EB31F2FF364F1162D32E7E58')
+    verify_admin_email_prompt(child)
+    child.sendline('test@gmail.com')
+    verify_journalist_gpg_key_prompt(child)
+    child.sendline('')
+    verify_smtp_relay_prompt(child)
+    child.sendline('')
+    verify_smtp_port_prompt(child)
+    child.sendline('')
+    verify_sasl_domain_prompt(child)
+    child.sendline('')
+    verify_sasl_username_prompt(child)
+    child.sendline('testuser')
+    verify_sasl_password_prompt(child)
+    child.sendline('testpassword')
+    verify_ssh_over_lan_prompt(child)
+    child.sendline('')
+    verify_locales_prompt(child)
+    child.sendline('de_DE es_ES')
+    verify_v2_onion_for_first_time(child)
+    child.sendline('\b' * 3 + 'yes')
+    verify_v3_onion_when_v2_is_enabled(child)
+    child.sendline('\b' * 3 + 'no')
+
+    child.expect(pexpect.EOF, timeout=10)  # Wait for validation to occur
+    child.close()
+    assert child.exitstatus == 0
+    assert child.signalstatus is None
+
+    with open(os.path.join(SD_DIR, 'install_files/ansible-base/group_vars/all/site-specific')) as fobj:    # noqa: E501
+        data = fobj.read()
+    assert data == WHEN_ONLY_V2
 
 
 def test_sdconfig_enable_journalist_alerts():
@@ -361,6 +568,10 @@ def test_sdconfig_enable_journalist_alerts():
     child.sendline('')
     verify_locales_prompt(child)
     child.sendline('de_DE es_ES')
+    verify_v2_onion_for_first_time(child)
+    child.sendline('\b' * 3 + 'no')
+    verify_v3_onion_for_first_time(child)
+    child.sendline('\b' * 4 + 'yes')
 
     child.expect(pexpect.EOF, timeout=10)  # Wait for validation to occur
     child.close()
@@ -431,6 +642,10 @@ def test_sdconfig_enable_https_on_source_interface():
     child.sendline('')
     verify_locales_prompt(child)
     child.sendline('de_DE es_ES')
+    verify_v2_onion_for_first_time(child)
+    child.sendline('\b' * 3 + 'no')
+    verify_v3_onion_for_first_time(child)
+    child.sendline('\b' * 4 + 'yes')
 
     child.expect(pexpect.EOF, timeout=10)  # Wait for validation to occur
     child.close()
