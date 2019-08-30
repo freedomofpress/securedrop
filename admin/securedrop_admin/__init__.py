@@ -455,9 +455,15 @@ class SiteConfig(object):
 
         :returns: False if both v3 and https enabled, True otherwise.
         """
+        warning_msg = ("You have configured HTTPS on your source interface "
+                       "and v3 onion services. "
+                       "IMPORTANT: Ensure that you update your certificate "
+                       "to include your v3 source URL before advertising "
+                       "it to sources! ")
+
         if self.config.get("v3_onion_services", False) and \
                 self.config.get("securedrop_app_https_certificate_cert_src"):
-            print("Hello we need the message")
+            print(warning_msg)
             return False
         return True
 
