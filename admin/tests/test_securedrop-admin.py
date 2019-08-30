@@ -1042,3 +1042,22 @@ def test_find_or_generate_new_torv3_keys_subsequent_run(tmpdir, capsys):
         v3_onion_service_keys = json.load(f)
 
     assert v3_onion_service_keys == old_keys
+
+
+def test_v3_and_https_cert_message(tmpdir, capsys):
+    args = argparse.Namespace(site_config='UNKNOWN',
+                              ansible_path='tests/files',
+                              app_path=dirname(__file__))
+    site_config = securedrop_admin.SiteConfig(args)
+    site_config.config = {"v3_onion_services": False,
+                          "securedrop_app_https_certificate_cert_src": "ab.crt"}  # noqa: E501
+    # This should return True as v3 is not setup
+    assert site_config.validate_https_and_v3()
+
+    # This should return False as v3 and https are both setup
+    site_config.config.update({"v3_onion_services": True})
+    assert not site_config.validate_https_and_v3()
+
+    # This should return True as https is not setup
+    site_config.config.update({"securedrop_app_https_certificate_cert_src": ""})  # noqa: E501
+    assert site_config.validate_https_and_v3()
