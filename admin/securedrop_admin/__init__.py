@@ -446,6 +446,25 @@ class SiteConfig(object):
         self.save()
         self.validate_gpg_keys()
         self.validate_journalist_alert_email()
+        self.validate_https_and_v3()
+        return True
+
+    def validate_https_and_v3(self):
+        """
+        Checks if https is enabled with v3 onion service.
+
+        :returns: False if both v3 and https enabled, True otherwise.
+        """
+        warning_msg = ("You have configured HTTPS on your source interface "
+                       "and v3 onion services. "
+                       "IMPORTANT: Ensure that you update your certificate "
+                       "to include your v3 source URL before advertising "
+                       "it to sources! ")
+
+        if self.config.get("v3_onion_services", False) and \
+                self.config.get("securedrop_app_https_certificate_cert_src"):
+            print(warning_msg)
+            return False
         return True
 
     def check_for_v2_onion(self):
