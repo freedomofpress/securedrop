@@ -30,7 +30,7 @@ RUN curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x8
 
 COPY ./tor_project_public.pub /opt/
 
-ENV TBB_VERSION 8.5.3
+ENV TBB_VERSION 8.5.4
 RUN gpg --import /opt/tor_project_public.pub && \
     wget  https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
