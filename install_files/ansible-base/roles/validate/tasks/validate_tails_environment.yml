@@ -26,3 +26,43 @@
       The SecureDrop git repository should be cloned
       to `~/Persistent/securedrop`.
   with_items: "{{ tails_persistence_check_result.results }}"
+
+- name: Check for v3 client auth files
+  stat:
+    path: "/home/amnesia/Persistent/securedrop/install_files/ansible-base/{{ item }}"
+  register: v3_client_auth_files
+  with_items:
+    - app-ssh.auth_private
+    - app-journalist.auth_private
+    - mon-ssh.auth_private
+
+- name: Count the number of v3 client auth files
+  set_fact:
+    v3_client_auth_file_count: "{{ v3_client_auth_files.results | selectattr('stat.exists') | list | count }}"
+
+- name: Check for Tor v3 key file
+  stat:
+    path: "/home/amnesia/Persistent/securedrop/install_files/ansible-base/tor_v3_keys.json"
+  register: v3_tor_key
+
+- name: Confirm that all necessary v3 client auth files are present
+  assert:
+    that:
+      - v3_client_auth_file_count == "0" or v3_client_auth_file_count == "3"
+    msg: >-
+      Some v3 onion service client auth files are missing. Please add
+      all 3 `.client_auth` files under
+      `~/Persistent/securedrop/install_files/ansible-base`.
+  when: v3_onion_services == True
+
+- name: Confirm that a valid set of v3 configuration files is present
+  assert:
+    that:
+      - v3_tor_key.stat.exists
+    msg: >-
+      Authentication files for v3 onion services were found, but the
+      corresponding `tor_v3_keys.json` file is missing. To enable updates
+      to an existing SecureDrop instance, please add this file under
+      `~/Persistent/securedrop/install_files/ansible-base`.
+  when:
+    - v3_onion_services == True and v3_client_auth_file_count == "3"
