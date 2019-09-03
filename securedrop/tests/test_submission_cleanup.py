@@ -13,7 +13,7 @@ def test_delete_disconnected_db_submissions(journalist_app, config):
     Test that Submission records without corresponding files are deleted.
     """
     with journalist_app.app_context():
-        source, codename = utils.db_helper.init_source()
+        source, _ = utils.db_helper.init_source()
         source_id = source.id
 
         # make two submissions
@@ -43,13 +43,18 @@ def test_delete_disconnected_fs_submissions(journalist_app, config):
     """
     Test that files in the store without corresponding Submission records are deleted.
     """
-    source, codename = utils.db_helper.init_source()
+    source, _ = utils.db_helper.init_source()
 
     # make two submissions
     utils.db_helper.submit(source, 2)
     source_filesystem_id = source.filesystem_id
     submission_filename = source.submissions[0].filename
     disconnect_path = os.path.join(config.STORE_DIR, source_filesystem_id, submission_filename)
+
+    # make two replies, to make sure that their files are not seen
+    # as disconnects
+    journalist, _ = utils.db_helper.init_journalist("Mary", "Lane")
+    utils.db_helper.reply(journalist, source, 2)
 
     # delete the first Submission record
     db.session.delete(source.submissions[0])
