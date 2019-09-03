@@ -110,6 +110,6 @@
 {%- endmacro %}
 
 {{ twofa_reset(user, totp_reset_url, "totp", gettext("Reset two-factor authentication for mobile apps, such as FreeOTP"), gettext("RESET APP TOKEN"))}}
-{{ twofa_reset(user, hotp_reset_url, "hotp", gettext("Reset two-factor authentication for hardware tokens, like YubiKey"), gettext("RESET HARDWARE TOKEN"))}}
+{{ twofa_reset(user, hotp_reset_url, "hotp", gettext("Reset two-factor authentication for hardware tokens, like a YubiKey"), gettext("RESET HARDWARE TOKEN"))}}
 
 {% endblock %}
