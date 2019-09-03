@@ -380,64 +380,7 @@ workflows:
   version: 2
   securedrop_ci:
     jobs:
-      - lint
-      - python2-app-tests:
-          filters:
-            branches:
-              ignore:
-                - /docs-.*/
-                - /i18n-.*/
-                - /update-builder-.*/
-          requires:
-            - lint
-      - python3-app-tests:
-          filters:
-            branches:
-              ignore:
-                - /docs-.*/
-                - /i18n-.*/
-                - /update-builder-.*/
-          requires:
-            - lint
-      - admin-tests:
-          filters:
-            branches:
-              ignore:
-                - /docs-.*/
-                - /i18n-.*/
-                - /update-builder-.*/
-          requires:
-            - lint
-      - updater-gui-tests:
-          filters:
-            branches:
-              ignore:
-                - /docs-.*/
-                - /i18n-.*/
-                - /update-builder-.*/
-          requires:
-            - lint
-      - static-analysis-and-no-known-cves:
-          requires:
-            - lint
-      - staging-test-with-rebase:
-          filters:
-            branches:
-              ignore:
-                - /docs-.*/
-                - /i18n-.*/
-          requires:
-            - lint
-      - translation-tests:
-          requires:
-            - lint
-      - deb-tests:
-          filters:
-            branches:
-              only:
-                - /update-builder-.*/
-          requires:
-            - lint
+      - fetch-tor-debs
 
   nightly:
     triggers:
