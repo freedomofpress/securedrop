@@ -2,6 +2,33 @@
 
 ## 1.0.0~rc1
 
+### Web Applications
+
+* UI: refresh source and journalist interface design (#4634, #4666).
+* Update copyright dates (#4638).
+* Update language selector design in the menu to be more accessible (#4662).
+* Add commands to manage.py for admins to detect and correct deletion issues (#4713).
+* Use shred instead of srm to securely delete files (#4713).
+* Bug fix: Invalidate Session When Admin Resets Journalist Password (#2300).
+* Bug fix: Interrupted deletion jobs are now resumed on reboot (#4713).
+* Bug fix: Clean up any orphaned submissions/replies where source has already been deleted (#4712).
+* Bug fix: Resolve a bug with the “Select unread” feature on the journalist interface (#4654).
+
+### Operations
+
+* Use dh-virtualenv and mod_wsgi to create securedrop-app-code package, run Python 3 version of the web applications on instances (#4622).
+* Adds support for v3 onion services for SecureDrop source, journalist, and SSH interfaces (#4652, #4710, #4690, #4675).
+* Adds warning in securedrop-admin sdconfig if v3 onion services and HTTPS on the source interface are both enabled (#4720).
+* Uses latest Tor series (0.4.x) instead of LTS (0.3.x) series (#4658).
+* Move tasks removing old kernels to common Ansible role (#4641).
+
+### Documentation
+
+* Update translator documentation (#4719).
+* Fix incorrect alias name in firewall documentation, update screenshots (#4685).
+* Remove redundant Tails guide (#4673).
+* Remove old printer troubleshooting guide (#4651).
+
 ## 0.14.0
 
 ### Web Applications
