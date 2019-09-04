@@ -1,5 +1,7 @@
 # Changelog
 
+## 1.0.0~rc2
+
 ## 1.0.0~rc1
 
 ### Web Applications
