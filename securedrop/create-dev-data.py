@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/opt/venvs/securedrop-app-code/bin/python
 # -*- coding: utf-8 -*-
 
 import datetime

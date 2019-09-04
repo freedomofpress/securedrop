@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/opt/venvs/securedrop-app-code/bin/python
 """
 This script is copied to the App server and run by the Ansible playbook. When
 run (as root), it collects all of the necessary information to backup the 0.3
