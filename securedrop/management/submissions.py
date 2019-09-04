@@ -9,11 +9,14 @@ from six.moves import input
 
 from db import db
 from rm import secure_delete
-from models import Source, Submission
+from models import Reply, Source, Submission
 from management import app_context
 
 
 def find_disconnected_db_submissions(path):
+    """
+    Finds Submission records whose file does not exist.
+    """
     submissions = db.session.query(Submission).order_by(Submission.id, Submission.filename).all()
 
     files_in_fs = {}
@@ -50,7 +53,7 @@ def list_disconnected_db_submissions(args):
         if disconnected_submissions:
             print(
                 'Run "manage.py delete-disconnected-db-submissions" to delete these records.',
-                file=sys.stderr
+                file=sys.stderr,
             )
         for s in disconnected_submissions:
             print(s.id)
@@ -78,8 +81,14 @@ def delete_disconnected_db_submissions(args):
 
 
 def find_disconnected_fs_submissions(path):
+    """
+    Finds files in the store that lack a Submission or Reply record.
+    """
     submissions = Submission.query.order_by(Submission.id, Submission.filename).all()
-    files_in_db = {s.filename: s for s in submissions}
+    files_in_db = {s.filename: True for s in submissions}
+
+    replies = Reply.query.order_by(Reply.id, Reply.filename).all()
+    files_in_db.update({r.filename: True for r in replies})
 
     files_in_fs = {}
     for directory, subdirs, files in os.walk(path):
@@ -99,7 +108,7 @@ def find_disconnected_fs_submissions(path):
 
 def check_for_disconnected_fs_submissions(args):
     """
-    Check for files without a corresponding Submission record in the database.
+    Check for files without a corresponding Submission or Reply record in the database.
     """
     with app_context():
         disconnected = find_disconnected_fs_submissions(args.store_dir)
@@ -114,14 +123,14 @@ def check_for_disconnected_fs_submissions(args):
 
 def list_disconnected_fs_submissions(args):
     """
-    List files without a corresponding Submission record in the database.
+    List files without a corresponding Submission or Reply record in the database.
     """
     with app_context():
         disconnected_files = find_disconnected_fs_submissions(args.store_dir)
         if disconnected_files:
             print(
                 'Run "manage.py delete-disconnected-fs-submissions" to delete these files.',
-                file=sys.stderr
+                file=sys.stderr,
             )
         for f in disconnected_files:
             print(f)
