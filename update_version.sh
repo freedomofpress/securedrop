@@ -54,6 +54,10 @@ sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-co
 # Update the version used by Ansible for the filename of the output of the deb building role
 sed -i "s/^\(securedrop_app_code_version: \"\).*/\1$NEW_VERSION\"/" install_files/ansible-base/group_vars/all/securedrop
 
+# Update the version used for the sdist tarball
+NEW_SDIST_VERSION=$(echo "$NEW_VERSION" | sed -r -e 's/~/-/')
+sed -i "s/^\(securedrop_app_code_sdist_version: \"securedrop-app-code-\).*/\1${NEW_SDIST_VERSION}\"/" install_files/ansible-base/group_vars/all/securedrop
+
 # Update the version in molecule testinfra vars
 sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" molecule/builder-xenial/tests/vars.yml
 
