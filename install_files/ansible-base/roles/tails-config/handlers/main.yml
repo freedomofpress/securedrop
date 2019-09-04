@@ -1,7 +1,0 @@
----
-# Run the SecureDrop init script, which implements the torrc additions
-# so the ATHS Onion URLs are accessible. See `securedrop_init.py` for details.
-- name: run securedrop network hook
-  # Writes files to /etc, so elevated privileges are required.
-  become: yes
-  command: /usr/bin/python "{{ tails_config_securedrop_dotfiles }}/securedrop_init.py"
