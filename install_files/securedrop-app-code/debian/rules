@@ -29,4 +29,5 @@ override_dh_virtualenv:
 		--python=/usr/bin/python3.5 \
 		--setuptools \
 		--extra-pip-arg "--ignore-installed" \
+		--extra-pip-arg "--no-binary=:all:" \
 		--extra-pip-arg "--no-cache-dir"
