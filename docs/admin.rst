@@ -453,15 +453,31 @@ into your Admin Workstation, you should first perform the following troubleshoot
    your *Application Server* is online, and you can trigger a `test OSSEC alert`_
    to verify your *Monitor Server* is online.
 
-#. **Ensure that SSH aliases and the HidServAuth values are configured:** From
-   ``~/Persistent/securedrop``, run  ``./securedrop-admin tailsconfig``. This
-   will ensure your local Tails environment is configured properly.
+#. **Ensure that SSH aliases and onion service authentication are configured:**
 
-    .. note:: If you get an error during the Tails configuration step, as an Administrator,
-       you should ensure you have four files ``app-ssh-aths``, ``mon-ssh-aths``,
-       ``app-journalist-aths`` and ``app-source-ths`` in
-       ``~/Persistent/securedrop/install_files/ansible-base/``. These are used by
-       the Tails configuration scripts to configure Tor.
+   - First, ensure that the correct configuration files are present in 
+     ``~/Persistent/securedrop/install_files/ansible-base``. 
+
+     If v2 onion services
+     are configured, you should have 4 files:
+
+     - ``app-ssh-aths``
+     - ``mon-ssh-aths``
+     - ``app-journalist-aths``
+     - ``app-source-ths`` 
+
+
+     If v3 onion services are 
+     enabled, you should have the following 5 files:
+
+     - ``app-ssh.auth_private``
+     - ``mon-ssh.auth_private``
+     - ``app-journalist.auth_private``
+     - ``app-sourcev3-ths``
+     - ``tor_v3_keys.json``
+
+   - Then, from ``~/Persistent/securedrop``, run  ``./securedrop-admin tailsconfig``.
+     This will ensure your local Tails environment is configured properly.
 
 #. **Confirm that your SSH key is available**: During the install, you
    configured SSH public key authentication using ``ssh-copy-id``.
