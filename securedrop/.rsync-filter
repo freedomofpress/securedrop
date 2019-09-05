@@ -32,6 +32,7 @@ include static/fonts/
 include static/fonts/**
 include static/gen/
 include static/i/
+exclude static/i/custom_logo.png
 include static/i/**
 include static/i/font-awesome/
 include static/i/font-awesome/**
