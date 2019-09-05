@@ -473,3 +473,16 @@ def test_config_package_contains_expected_files(host, deb):
         c = host.run("dpkg-deb --contents {}".format(deb_package.path))
         for wanted_file in wanted_files:
             assert wanted_file in c.stdout
+
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_app_package_does_not_contain_custom_logo(host, deb):
+    """
+    Inspect the package contents to ensure custom_logo.png is not present. This
+    is because custom_logo.png superceeds logo.png.
+    """
+    deb_package = host.file(deb.format(
+        securedrop_test_vars.securedrop_version))
+    if "securedrop-app-code" in deb_package.path:
+        c = host.run("dpkg-deb --contents {}".format(deb_package.path))
+        assert "/var/www/static/i/custom_logo.png" not in c.stdout

@@ -93,9 +93,9 @@ Release Process
 
 1. If this is a regular release, work with the translation administrator
    responsible for this release cycle to review and merge the final translations
-   and screenshots (if necessary) they prepare. Refer to the 
-   :ref:`i18n documentation <i18n_release>` for more information about the i18n 
-   release process. Note that you *must* manually inspect each line in the diff 
+   and screenshots (if necessary) they prepare. Refer to the
+   :ref:`i18n documentation <i18n_release>` for more information about the i18n
+   release process. Note that you *must* manually inspect each line in the diff
    to ensure no malicious content is introduced.
 2. Prepare the final release commit and tag. Do not push the tag file.
 3. Step through the signing ceremony for the tag file. If you do not have
@@ -130,22 +130,38 @@ Release Process
 
     git push origin 0.x.y
 
-9. Build Debian packages. People building Debian packages should verify and build
-   off the signed tag.
-10. Step through the signing ceremony for the ``Release``
+9. Ensure there are no local changes (whether tracked, untracked or git ignored)
+   prior to building the debs. If you did not freshly clone the repository, you
+   can use git clean:
+
+   Dry run (it will list the files/folders that will be deleted):
+
+   ::
+
+      git clean -ndfx
+
+   Actually delete the files:
+
+   ::
+
+      git clean -dfx
+
+10. Build Debian packages. People building Debian packages should verify and build
+    off the signed tag.
+11. Step through the signing ceremony for the ``Release``
     file(s) (there may be multiple if Tor is also updated along
     with the SecureDrop release).
-11. Put signed Debian packages on ``apt-test.freedom.press``.
-12. Coordinate with one or more team members to confirm a successful clean install
+12. Put signed Debian packages on ``apt-test.freedom.press``.
+13. Coordinate with one or more team members to confirm a successful clean install
     in production VMs using the packages on ``apt-test.freedom.press``.
-13. Put signed Debian packages on ``apt.freedom.press``. The release is now live.
-14. Make sure that the default branch of documentation is being built off the tip
+14. Put signed Debian packages on ``apt.freedom.press``. The release is now live.
+15. Make sure that the default branch of documentation is being built off the tip
     of the release branch.
-15. Create a `release <https://github.com/freedomofpress/securedrop/releases>`_
+16. Create a `release <https://github.com/freedomofpress/securedrop/releases>`_
     on GitHub with a brief summary of the changes in this release.
-16. Make sure that release notes are written and posted on the SecureDrop blog.
-17. Make sure that the release is announced from the SecureDrop Twitter account.
-18. Make sure that members of `the support portal <https://support.freedom.press>`_
+17. Make sure that release notes are written and posted on the SecureDrop blog.
+18. Make sure that the release is announced from the SecureDrop Twitter account.
+19. Make sure that members of `the support portal <https://support.freedom.press>`_
     are notified about the release.
 
 Post-Release
