@@ -81,6 +81,7 @@ anonymous sources.
    rebuild_admin
    kernel_troubleshooting
    getting_support
+   v3_services
 
 .. toctree::
    :caption: Upgrade SecureDrop

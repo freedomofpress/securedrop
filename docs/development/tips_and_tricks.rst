@@ -121,6 +121,13 @@ to append values to your local ``torrc``, as in the ``cat`` example above.
 Note that the ``cat`` example above will also add the ATHS info for the
 *Journalist Interface*, as well, which is useful for testing.
 
+.. note:: The instructions above refer to VMs set up with v2 onion services. If
+          v3 onion services are configured instead, the steps required for the 
+          local ``tor`` setup will differ. You will need to add a 
+          ``ClientOnionAuthDir`` directive to ``torrc``, pointing to a directory
+          containing the ``*.auth_private`` files created during the installation
+          process under ``install_files/ansible-base``.
+
 Architecture Diagrams
 ---------------------
 

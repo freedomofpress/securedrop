@@ -1,6 +1,14 @@
 Rebuilding an *Admin Workstation* USB
 -------------------------------------
 
+.. note:: These instructions refer to a SecureDrop instance using v2 onion 
+          services. If your instance uses v3 onion services and you need to
+          rebuild your *Admin Workstation*, please contact FPF through the
+          `SecureDrop Support Portal`_.                            
+                                                                                
+.. _SecureDrop Support Portal: https://securedrop-support.readthedocs.io/en/latest/
+
+
 In cases where an *Admin Workstation* USB stick has been lost or destroyed, and no
 backup exists, it is possible to rebuild one. In order to do so, you'll need
  

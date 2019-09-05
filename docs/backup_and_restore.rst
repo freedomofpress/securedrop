@@ -1,6 +1,7 @@
 Back Up, Restore, Migrate
 =========================
 
+
 There are a number of reasons why you might want to backup and restore a
 SecureDrop installation. Maintaining periodic backups is generally a good
 practice to guard against data loss. In the event of hardware failure on
@@ -84,13 +85,12 @@ to debug your connectivity before proceeding further. Make sure:
 * Ansible is installed
 * the *Admin Workstation* is connected to the Internet
 * Tor starts successfully
-* the ``HidServAuth`` values from ``install_files/ansible-base/app-ssh-aths``
-  and ``install_files/ansible-base/mon-ssh-aths`` are in Tails at
-  ``/etc/tor/torrc``
+* The appropriate onion service configuration files are present in 
+  ``~/Persistent/securedrop/install_files/ansible-base`` and the 
+  ``./securedrop-admin tailsconfig`` command completes successfully
 
-(If Ansible is not installed, or the ``HidServAuth`` values are missing
-or incorrect, see :doc:`configure_admin_workstation_post_install` for detailed
-instructions.)
+If Ansible is not installed, or ``./securedrop-admin tailsconfig`` fails, see
+:doc:`configure_admin_workstation_post_install` for detailed setup instructions.
 
 Create the Backup
 '''''''''''''''''
@@ -142,6 +142,11 @@ command. Otherwise, you should copy the backup archive that you wish to restore 
 
 Restoring From a Backup File
 ''''''''''''''''''''''''''''
+
+.. important:: This documentation applies to a SecureDrop instance using
+               v2 onion services. If your instance uses v3 onion services,
+               you will need to follow additional steps depending on your
+               specific restore scenario.
 
 To perform a restore, you must already have a backup archive. Provide its
 filename in the following command:

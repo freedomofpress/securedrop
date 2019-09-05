@@ -15,16 +15,12 @@ encryption and authentication via HTTPS:
   they are communicating with the intended organization when they access a
   given Source Interface.
 
-* The cryptographic primitives used by Tor Onion Services are considered to be
-  outdated, and while there are no known compromises of the security of Tor
-  Onion Services due to this issue, you may wish to provide an additional
-  layer of transport encryption using stronger cryptographic primitives, which
-  is most easily achieved by setting up HTTPS on the Source Interface.
-
-  .. note:: This issue is being addressed by the Tor Project with their Next
-     Generation Onion Services design, but the implementation of the new design
-     is still a work in progress and is not expected to be deployed until
-     December 2017 at the earliest.
+* SecureDrop supports v3 onion services, which use updated cryptographic 
+  primitives that provide better transport-layer encryption than those used 
+  by v2 onion services. It is **strongly** recommended that you configure your
+  instance to use :doc:`v3 onion services <v3_services>`, but if you cannot 
+  switch your instance to v3, using HTTPS on the source interface will provide
+  an extra layer of encryption for data in transit.
 
 .. _`SecureDrop Directory`: https://securedrop.org/directory/
 
