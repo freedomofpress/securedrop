@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/opt/venvs/securedrop-app-code/bin/python
 """
 This script and backup archive should be copied to the App server and run by
 the Ansible playbook. When run (as root), it restores the contents of the 0.3
