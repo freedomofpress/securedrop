@@ -77,7 +77,7 @@ the sources, and the journalists.
 Servers
 ~~~~~~~
 
-At SecureDrop's heart is a pair of severs: the *Application (“App”) Server*,
+At SecureDrop's heart is a pair of servers: the *Application (“App”) Server*,
 which runs the core SecureDrop software, and the *Monitor (“Mon”) Server*,
 which keeps track of the *Application Server* and sends out alerts if there's a
 problem. These two servers run on dedicated hardware connected to a dedicated
