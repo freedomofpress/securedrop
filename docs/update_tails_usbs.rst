@@ -26,10 +26,9 @@ For Internet-connected Tails workstations, you'll see a notification when a new 
 
 |Update Notification| 
 
-We recommend that you back up your existing configuration and `update as soon as possible`_. It usually takes some time for updates to download, so keep that in mind when choosing when to update.
+We recommend that you :ref:`back up your existing configuration <backup_workstations>` and update as soon as possible. It usually takes some time for updates to download, so keep that in mind when choosing when to update.
 
 .. |Update Notification| image:: images/tails_update_notification.png
-.. _update as soon as possible: https://docs.securedrop.org/en/stable/backup_workstations.html
 
 Update Manually
 ---------------
@@ -54,9 +53,7 @@ What you need
 1. Back up your Tails USB
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`Follow the instructions`_ to back up your existing Tails USB.
-
-.. _Follow the instructions: https://docs.securedrop.org/en/stable/backup_workstations.html
+Follow the instructions to :ref:`back up your existing Tails USB <backup_workstations>`.
 
 .. _Step 2:
 
@@ -65,11 +62,9 @@ What you need
 
 If you have an existing *primary Tails USB*, boot into it on your *Admin Workstation* computer and follow the graphical updater prompts that guide you through the `update process`_.
 
-Alternatively, you can also download and `install the newest version of Tails from scratch`_ (as you did when you first installed SecureDrop). This may be faster if your *primary Tails USB* has not been updated in a while.
+Alternatively, you can also download and :ref:`install the newest version of Tails from scratch <setup_install_tails>` (as you did when you first installed SecureDrop). This may be faster if your *primary Tails USB* has not been updated in a while.
 
 .. _update process: https://tails.boum.org/doc/first_steps/upgrade/index.en.html
-
-.. _install the newest version of Tails from scratch: https://docs.securedrop.org/en/stable/set_up_tails.html#install-tails
 
 .. _Step 3:
 
@@ -80,7 +75,7 @@ In this step, use the up-to-date *primary Tails USB* to update your desired Tail
 
 .. warning::
         The entire *Secure Viewing Station* is designed to be airgapped, so
-        the *SVS* Tails USB should **never** be plugged into a computer with
+        the *SVS* Tails USB must **never** be plugged into a computer with
         a network connection.
 
         Use an airgapped computer, such as the *Secure Viewing Station* computer, to perform the steps in this section.
@@ -95,10 +90,8 @@ You can then perform the `manual update steps`_.
 If you encounter issues
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-If you run into issues, you can always restore your data from the backup device following the instructions `here`_.
+If you run into issues, you can always restore your data from the backup device following the instructions :ref:`here <restore_workstations>`.
 
 If you continue to have problems, you can contact us through the `SecureDrop Support Portal`_.
 
 .. _SecureDrop Support Portal: https://securedrop-support.readthedocs.io/en/latest/
-
-.. _here: https://docs.securedrop.org/en/release-0.14.0/backup_workstations.html#restoring-a-workstation-from-a-backup
