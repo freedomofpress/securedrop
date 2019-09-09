@@ -233,8 +233,8 @@ reboot. An admin will need to be on hand to enter the passphrase
 in order to decrypt the disks and complete the startup process, which
 will occur anytime there is an automatic software update, and also
 several times during SecureDrop's installation. We recommend that the
-servers be integrated with a monitoring solution that so that you
-receive an alert when the system becomes unavailable.
+servers be integrated with a monitoring solution so that you receive
+an alert when the system becomes unavailable.
 
 To enable FDE, select *Guided - use entire disk and set up encrypted
 LVM* during the disk partitioning step and write the changes to disk.
