@@ -26,6 +26,10 @@
       to `~/Persistent/securedrop`.
   with_items: "{{ tails_persistence_check_result.results }}"
 
+- name: Default v3_onion_services to false
+  set_fact:
+    v3_onion_services: "{{ v3_onion_services | default(False) }}"
+
 - name: Check for v3 SSH auth files
   stat:
     path: "/home/amnesia/Persistent/securedrop/install_files/ansible-base/{{ item }}"
