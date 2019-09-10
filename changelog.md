@@ -13,7 +13,7 @@
 * Use shred instead of srm to securely delete files (#4713).
 * Bug fix: Invalidate Session When Admin Resets Journalist Password (#2300).
 * Bug fix: Interrupted deletion jobs are now resumed on reboot (#4713).
-* Bug fix: Clean up any orphaned submissions/replies where source has already been deleted (#4712).
+* Bug fix: Clean up any orphaned submissions/replies where source has already been deleted (#4672).
 * Bug fix: Resolve a bug with the “Select unread” feature on the journalist interface (#4654).
 
 ### Operations
