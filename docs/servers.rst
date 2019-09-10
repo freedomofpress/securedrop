@@ -109,7 +109,7 @@ with an ISO image of Ubuntu on it, you may begin the Ubuntu installation on both
 SecureDrop servers.
 
 To use `dd` you first need to find where the USB device you wish to install
-Tails on has been mapped. Simply running the command ``lsblk`` in the terminal
+Ubuntu on has been mapped. Simply running the command ``lsblk`` in the terminal
 will give you a list of your block storage device mappings (this includes hard
 drives and USB). If the USB you are writing the Ubuntu installer to is of a
 different size or brand than the USB you are running Tails from, it should be
