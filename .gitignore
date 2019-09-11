@@ -112,7 +112,8 @@ docs/_build/
 .env
 
 # virtualenv
-.venv*/
+.venv/
+.venv3/
 venv/
 ENV/
 
