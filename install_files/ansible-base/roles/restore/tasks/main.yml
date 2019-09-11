@@ -1,22 +1,81 @@
 ---
-- name: Copy restore script to Application Server.
-  copy:
-    src: restore.py
-    dest: /tmp/
-    owner: root
-    mode: "0770"
+- name: Create temporary directory for Tor configuration check
+  connection: local
+  become: no
+  tempfile:
+    state: directory
+  register: torrc_check_dir
 
-- name: Copy backup tarball of config info to Application Server.
-  copy:
+- name: Fetch current Tor configuration from app server
+  become: no
+  fetch:
+    src: /etc/tor/torrc
+    dest: "{{ torrc_check_dir.path }}"
+
+- name: Create directory to hold the Tor configuration from the backup
+  connection: local
+  become: no
+  file:
+    path: "{{ torrc_check_dir.path }}/backup"
+    state: directory
+
+- name: Extract Tor configuration from backup
+  connection: local
+  become: no
+  unarchive:
+    dest: "{{ torrc_check_dir.path }}/backup/"
+    src: "{{ restore_file }}"
+    extra_opts:
+      - "etc/tor/torrc"
+
+- name: Check for Tor configuration differences between the backup and server
+  connection: local
+  become: no
+  command: "python {{ role_path }}/files/compare_torrc.py {{ torrc_check_dir.path }}"
+
+- name: Remove temporary directory for Tor configuration check
+  connection: local
+  become: no
+  file:
+    path: "{{ torrc_check_dir.path }}"
+    state: absent
+  when: torrc_check_dir.path is defined
+
+- name: Copy backup to application server
+  synchronize:
     src: "{{ restore_file }}"
     dest: /tmp/{{ restore_file }}
+    partial: yes
 
-- name: Run the restore script (can be slow).
-  command: /tmp/restore.py /tmp/{{ restore_file }}
-  async: 3600
-  poll: 10
+- name: Extract backup
+  unarchive:
+    dest: /
+    remote_src: yes
+    src: "/tmp/{{ restore_file}}"
 
-- name: Delete the restore file to save disk space.
-  file:
-    path: /tmp/{{ restore_file }}
-    state: absent
+- name: Reconfigure securedrop-app-code
+  command: dpkg-reconfigure securedrop-app-code
+
+- name: Reconfigure securedrop-config
+  command: dpkg-reconfigure securedrop-config
+
+- name: Reload Apache service
+  service:
+    name: apache2
+    state: reloaded
+
+- name: Reload Tor service
+  service:
+    name: tor
+    state: reloaded
+  async: 60
+  poll: 0
+  register: tor_reload_job
+
+- name: Wait for Tor reload
+  async_status:
+    jid: "{{ tor_reload_job.ansible_job_id }}"
+  register: tor_reload
+  until: tor_reload.finished
+  retries: 6
+  delay: 10
