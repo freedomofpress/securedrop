@@ -70,7 +70,7 @@ Tor Browser, and this setting will persist across browser sessions.
 |Security Slider|
 
 The page should look similar to the screenshot below. If this is the first
-time you are using SecureDrop, click the **Submit Documents** button.
+time you are using SecureDrop, click the **Get Started** button.
 
 |Source Interface with Javascript Disabled|
 
@@ -89,7 +89,7 @@ it, you should destroy the written copy.
    passphrase, check out :doc:`passphrase_best_practices`.
 
 Once you have generated a codename and put it somewhere safe, click
-**Continue**.
+**Submit Documents**.
 
 |Memorizing your codename|
 
@@ -131,7 +131,7 @@ Continuing the Conversation
 ---------------------------
 
 If you have already submitted a document and would like to check for
-responses, click the **Check for a Response** button on the media
+responses, click the **Log in** button on the media
 organization's SecureDrop homepage.
 
 |Source Interface with Javascript Disabled|
