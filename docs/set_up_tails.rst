@@ -34,7 +34,11 @@ drives which were created via the Tails Installer*.
 
 The `Tails website <https://tails.boum.org/>`__ has detailed and
 up-to-date instructions on how to download and verify Tails, and how to
-create a bootable Tails USB drive. Follow the instructions at these
+create a bootable Tails USB drive. 
+
+.. important:: Make sure you verify the Tails .iso using one of the methods described on the Tails website.
+
+Follow the instructions at these
 links and then return to this page:
 
 -  `Download and verify the Tails
