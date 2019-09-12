@@ -89,6 +89,13 @@ Workstation* with ``./securedrop-admin tailsconfig``.
  
     ./securedrop-admin update
 
+- After updating the latest SecureDrop version, use the following command to 
+  update ``securedrop-admin``'s dependencies:
+
+  .. code:: sh
+  
+    ./securedrop-admin setup
+
 - Next, enable v3 onion services (and optionally disable v2 services) using:
 
   .. code:: sh
