@@ -128,7 +128,7 @@ In small organizations, a team of journalists may want to share a single
 *Transfer Device* and a single *Export Device*. In larger organizations, you may
 want to provision a personal *Transfer Device* and *Export Device* for each
 journalist who may need to copy files off the *Secure Viewing Station*. Please
-see the :doc:`setup guide <set_up_transfer_device>` for more
+see the :doc:`setup guide <set_up_transfer_and_export_device>` for more
 information.
 
 Verify Journalist Setup
