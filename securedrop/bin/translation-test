@@ -24,6 +24,7 @@ for locale in ar de_DE es_ES fr_FR hi is it_IT nb_NO nl pt_BR ro ru sv tr zh_Han
 do
   PAGE_LAYOUT_LOCALES=$locale pytest \
     -v \
+    --force-flaky --max-runs=3 \
     --page-layout \
     --durations 10 \
     "$@"
