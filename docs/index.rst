@@ -32,7 +32,7 @@ anonymous sources.
    before_you_begin
    set_up_tails
    set_up_svs
-   set_up_transfer_device
+   set_up_transfer_and_export_device
    generate_submission_key
    set_up_admin_tails
    network_firewall

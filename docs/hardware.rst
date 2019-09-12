@@ -13,7 +13,7 @@ Hardware Overview
 
 For an installation of SecureDrop, you must acquire:
 
-.. include:: includes/pre-install-hardware.txt
+.. include:: includes/pre-install-hardware-required.txt
 
 Additionally, you may want to consider the following purchases:
 
@@ -198,7 +198,7 @@ DVD-Rs instead. We encourage you to evaluate these options in the context of
 your own threat model.
 
 Please find some notes regarding each of these methods below, and see our
-recommendations in the :doc:`setup guide <set_up_transfer_device>`
+recommendations in the :doc:`setup guide <set_up_transfer_and_export_device>`
 for additional background.
 
 USB drives
@@ -568,7 +568,7 @@ If you want to use a setup based on CD-Rs or DVD-Rs, we've found the CDR/DVD
 writers from Samsung and LG to work reasonably well; you can find some examples
 `here <https://www.newegg.com/External-CD-DVD-Blu-Ray-Drives/SubCategory/ID-420>`__.
 
-Please see our recommendations in the :doc:`setup guide <set_up_transfer_device>`
+Please see our recommendations in the :doc:`setup guide <set_up_transfer_and_export_device>`
 for additional background.
 
 Network Firewall

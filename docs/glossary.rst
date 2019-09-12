@@ -159,7 +159,7 @@ to transfer encrypted documents from the *Journalist Workstation* to the
 
 Please see the detailed security recommendations for the choice, configuration
 and use of your *Transfer Device* in the :doc:`journalist guide <journalist>`
-and in the :doc:`setup guide <set_up_transfer_device>`.
+and in the :doc:`setup guide <set_up_transfer_and_export_device>`.
 
 Export Device
 -------------
@@ -169,4 +169,4 @@ everyday workstation, or to another computer for additional processing.
 
 Please see the detailed security recommendations for the choice, configuration
 and use of your *Export Device* in the :doc:`journalist guide <journalist>`
-and in the :doc:`setup guide <set_up_transfer_device>` .
+and in the :doc:`setup guide <set_up_transfer_and_export_device>` .
