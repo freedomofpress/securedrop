@@ -299,7 +299,18 @@ Push your branch and create a pull request
 
 After you've checked the translations, you're ready to push your
 ``i18n-merge`` branch and create a pull request to get the
-translations merged to the SecureDrop ``develop`` branch:
+translations merged to the SecureDrop ``develop`` branch.
+
+.. note:: If there have been multiple commits per language, as can
+          happen if source strings need to be translated again after
+          being changed to correct critical errors, or to incorporate
+          suggestions from the source string feedback period, they
+          should be combined via an interactive rebase. Reorder the
+          commits to group them by language, then squash the commits
+          for each language into one. The goal is to end up with one
+          commit per supported language on the merge branch.
+
+When you're happy with the state of language commits on your merge branch:
 
 .. code:: sh
 
