@@ -48,8 +48,4 @@ Contact us
 If you have questions or comments regarding this process, please don't hesitate
 to reach out:
 
- - via our `Support Portal <https://support.freedom.press>`_, if you are a
-   member (membership is approved on a case-by-case basis);
- - via securedrop@freedom.press (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__)
-   for sensitive security issues (please use judiciously);
- - via our `community forums <https://forum.securedrop.org>`_.
+.. include:: ../includes/getting-support.txt
