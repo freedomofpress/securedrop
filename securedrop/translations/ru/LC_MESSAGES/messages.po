@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-07-07 16:50+0000\n"
-"Last-Translator: Andrey <andrey@mailbox.org>\n"
+"PO-Revision-Date: 2019-09-16 10:39+0000\n"
+"Last-Translator: erinm <erinm@riseup.net>\n"
 "Language-Team: Russian <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/ru/>\n"
 "Language: ru\n"
@@ -17,16 +17,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
 "4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.7.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "{time} назад"
 
-#: journalist_app/__init__.py:91 journalist_app/__init__.py:136
+#: journalist_app/__init__.py:88 journalist_app/__init__.py:133
 msgid "You have been logged out due to inactivity"
 msgstr "Ваша сессия была завершена из-за неактивности"
+
+#: journalist_app/__init__.py:142
+msgid "You have been logged out due to password change"
+msgstr "Ваша сессия была завершена из-за смены пароля"
 
 #: journalist_app/account.py:33
 msgid "Incorrect password or two-factor code."
@@ -72,11 +76,11 @@ msgstr "Токен двухфакторной аутентификации дл�
 msgid "Name not updated: {}"
 msgstr "Имя не обновлено: {}"
 
-#: journalist_app/admin.py:228
+#: journalist_app/admin.py:233
 msgid "Deleted user '{user}'"
 msgstr "Пользователь '{user}' удален"
 
-#: journalist_app/admin.py:254
+#: journalist_app/admin.py:263
 msgid "Test alert sent. Please check your email."
 msgstr "Отправлено тестовое предупреждение. Проверьте свою электронную почту."
 
@@ -123,28 +127,28 @@ msgstr "Файл обязателен."
 msgid "You can only upload PNG image files."
 msgstr "Вы можете загружать изображения только в формате PNG."
 
-#: journalist_app/main.py:120 journalist_app/utils.py:48
+#: journalist_app/main.py:122 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Произошла непредвиденная ошибка! Сообщите об этом администратору."
 
-#: journalist_app/main.py:131
+#: journalist_app/main.py:133
 msgid "Thanks. Your reply has been stored."
 msgstr "Спасибо. Ваш ответ сохранен."
 
-#: journalist_app/main.py:152
+#: journalist_app/main.py:154
 msgid "No collections selected for download."
 msgstr "Коллекции для скачивания не выбраны."
 
-#: journalist_app/main.py:155 journalist_app/utils.py:236
+#: journalist_app/main.py:157 journalist_app/utils.py:236
 msgid "No collections selected for deletion."
 msgstr "Не выбраны коллекции для удаления."
 
-#: journalist_app/main.py:181
+#: journalist_app/main.py:183
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "Источник '{original_name}' был переименован в '{new_name}'"
 
-#: journalist_app/main.py:196
+#: journalist_app/main.py:198
 msgid "No unread submissions for this source."
 msgstr "Нет непрочитанных материалов для этого источника."
 
@@ -225,7 +229,7 @@ msgstr ""
 "Пароль обновлен. Не забудьте сохранить его в базе данных KeePassX. Новый "
 "пароль:"
 
-#: journalist_app/utils.py:321
+#: journalist_app/utils.py:322
 msgid "No unread submissions in selected collections."
 msgstr "Нет непрочитанных материалов в выбранных коллекциях."
 
@@ -234,7 +238,7 @@ msgid "Close"
 msgstr "Закрыть"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:75
+#: journalist_templates/col.html:15 source_templates/lookup.html:77
 msgid "Cancel"
 msgstr "Отменить"
 
@@ -272,7 +276,7 @@ msgstr "Секрет HOTP"
 
 #: journalist_templates/account_edit_hotp_secret.html:9
 #: journalist_templates/admin_edit_hotp_secret.html:10
-#: source_templates/login.html:23
+#: source_templates/login.html:21
 msgid "CONTINUE"
 msgstr "ПРОДОЛЖИТЬ"
 
@@ -346,7 +350,7 @@ msgstr "Код подтверждения"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:43
+#: journalist_templates/col.html:99 source_templates/lookup.html:42
 msgid "SUBMIT"
 msgstr "ОТПРАВИТЬ"
 
@@ -369,9 +373,8 @@ msgstr "Имя пользователя"
 msgid "Edit"
 msgstr "Редактировать"
 
-#: journalist_templates/admin.html:18 journalist_templates/col.html:75
-#: journalist_templates/col.html:133 journalist_templates/index.html:16
-#: journalist_templates/index.html:51
+#: journalist_templates/admin.html:18 journalist_templates/col.html:135
+#: journalist_templates/index.html:16 journalist_templates/index.html:51
 msgid "Delete"
 msgstr "Удалить"
 
@@ -548,7 +551,7 @@ msgstr "Загруженный документ"
 msgid "Message"
 msgstr "Сообщение"
 
-#: journalist_templates/col.html:70 journalist_templates/col.html:128
+#: journalist_templates/col.html:70 journalist_templates/col.html:130
 #: journalist_templates/index.html:46
 msgid "Delete Confirmation"
 msgstr "Удалить подтверждение"
@@ -556,6 +559,10 @@ msgstr "Удалить подтверждение"
 #: journalist_templates/col.html:71
 msgid "Are you sure you want to delete the selected documents?"
 msgstr "Вы уверены, что хотите удалить выбранные документы?"
+
+#: journalist_templates/col.html:75 source_templates/lookup.html:78
+msgid "DELETE"
+msgstr "УДАЛИТЬ"
 
 #: journalist_templates/col.html:86
 msgid "No documents to display."
@@ -599,11 +606,11 @@ msgstr ""
 "удалены, и источник больше не сможет войти в систему, используя свое "
 "предыдущее кодовое имя.</em>"
 
-#: journalist_templates/col.html:121
+#: journalist_templates/col.html:122
 msgid "DELETE SOURCE AND SUBMISSIONS"
 msgstr "УДАЛИТЬ ИСТОЧНИК И ПРЕДЛОЖЕНИЯ"
 
-#: journalist_templates/col.html:129
+#: journalist_templates/col.html:131
 msgid "Are you sure you want to delete this collection?"
 msgstr "Вы уверены, что хотите удалить эту коллекцию?"
 
@@ -690,6 +697,7 @@ msgid "Change Name"
 msgstr "Изменить имя"
 
 #: journalist_templates/edit_account.html:47
+#: journalist_templates/edit_account.html:75
 msgid "Reset Password"
 msgstr "Сбросить пароль"
 
@@ -728,10 +736,6 @@ msgstr "Пароль пользователя будет изменен на:"
 msgid "Your password will be changed to:"
 msgstr "Ваш пароль будет изменен на:"
 
-#: journalist_templates/edit_account.html:75
-msgid "RESET PASSWORD"
-msgstr "СБРОСИТЬ ПАРОЛЬ"
-
 #: journalist_templates/edit_account.html:80
 msgid "Reset Two-Factor Authentication"
 msgstr "Сбросить двухэтапную аутентификацию"
@@ -763,24 +767,25 @@ msgstr ""
 #: journalist_templates/edit_account.html:87
 msgid ""
 "To reset two-factor authentication for mobile apps such as FreeOTP, choose "
-"the first option. For hardware tokens like the Yubikey, choose the second."
+"the first option. For hardware tokens like the YubiKey, choose the second "
+"one."
 msgstr ""
 "Для сброса двухэтапной аутентификации для мобильных приложений, таких как  "
-"FreeOTP, выберите первый вариант. Для аппаратных токенов, таких как Yubikey, "
+"FreeOTP, выберите первый вариант. Для аппаратных токенов, таких как YubiKey, "
 "выберите второй."
 
 #: journalist_templates/edit_account.html:112
-msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
+msgid "Reset two-factor authentication for mobile apps, such as FreeOTP"
 msgstr ""
-"Сбросить двухэтапную аутентификацию для мобильных приложений, таких как "
-"FreeOTP или Google Authenticator"
+"Сбросить двухэтапную аутентификацию для мобильных приложений, таких как  "
+"FreeOTP"
 
 #: journalist_templates/edit_account.html:112
 msgid "RESET APP TOKEN"
 msgstr "СБРОСИТЬ ТОКЕН ПРИЛОЖЕНИЯ"
 
 #: journalist_templates/edit_account.html:113
-msgid "Reset 2FA for hardware tokens like Yubikey"
+msgid "Reset two-factor authentication for hardware tokens, like a YubiKey"
 msgstr ""
 "Сбросить двухэтапную аутентификацию для аппаратных ключей безопасности, "
 "таких как YubiKey"
@@ -872,11 +877,11 @@ msgstr "Войдите, чтобы получить доступ к панели
 msgid "Password"
 msgstr "Пароль"
 
-#: journalist_templates/login.html:12
+#: journalist_templates/login.html:12 source_templates/index.html:65
 msgid "LOG IN"
 msgstr "Войти"
 
-#: source_app/__init__.py:128
+#: source_app/__init__.py:124
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -934,23 +939,14 @@ msgstr "К сожалению, это кодовое имя не распозн�
 msgid "Protecting Journalists and Sources"
 msgstr "Защита журналистов и источников"
 
-#: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:32 source_templates/index.html:84
+#: source_templates/base.html:25 source_templates/footer.html:4
+#: source_templates/index.html:32
 msgid "Powered by"
 msgstr "Основано на"
 
 #: source_templates/base.html:34
 msgid "LOG OUT"
 msgstr "ВЫЙТИ"
-
-#: source_templates/base.html:45 source_templates/index.html:84
-msgid ""
-"Like all software, SecureDrop may contain security bugs. Use at your own "
-"risk."
-msgstr ""
-"Как и любое другое программное обеспечение SecureDrop может содержать "
-"уязвимости безопасности. Вы используете данное программное обеспечение на "
-"свой страх и риск."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -981,6 +977,18 @@ msgstr ""
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
 msgstr "Забыли ваше кодовое имя?"
+
+#: source_templates/footer.html:7
+msgid ""
+"Please note: Sharing sensitive documents may put you at risk, even when "
+"using Tor and SecureDrop."
+msgstr ""
+"Пометка: выкладывать секретными документами может быть опасным, даже если "
+"используется Tor и SecureDrop."
+
+#: source_templates/footer.html:10
+msgid "SecureDrop is a project of Freedom of the Press Foundation."
+msgstr "SecureDrop - Это проект Фонда поддержки свободы прессы."
 
 #: source_templates/generate.html:4
 msgid "Welcome"
@@ -1018,7 +1026,7 @@ msgstr ""
 "вопросы или заинтересованость в дополнительной информации. Кодовое имя в "
 "отличие от пароля восстановить невозможно."
 
-#: source_templates/generate.html:44 source_templates/index.html:65
+#: source_templates/generate.html:42
 msgid "SUBMIT DOCUMENTS"
 msgstr "ОТПРАВИТЬ ДОКУМЕНТЫ"
 
@@ -1029,8 +1037,8 @@ msgid ""
 "&nbsp;button in your browser’s toolbar to change it."
 msgstr ""
 "Уровень настроек безопасности <a id=\"disable-js\" href=\"\"><strong>Tor "
-"Browser</strong></a> слишком низкий. Используйте <img src=\"{icon}\" alt=\""
-"shield icon\"> &nbsp;кнопку на панели инструментов для их изменения."
+"Browser</strong></a> слишком низкий. Используйте <img src=\"{icon}\" alt="
+"\"shield icon\"> &nbsp;кнопку на панели инструментов для их изменения."
 
 #: source_templates/index.html:17
 msgid ""
@@ -1056,44 +1064,40 @@ msgstr ""
 "tor\" href=\"{tor_browser_url}\">Узнайте, как его установить</a>, или "
 "проигнорируйте для продолжения."
 
-#: source_templates/index.html:41
-msgid "Submit for the first time"
-msgstr "Отправить в первый раз"
+#: source_templates/index.html:45
+msgid "First submission"
+msgstr "Первая отправка"
 
-#: source_templates/index.html:48
-msgid "Already submitted something?"
-msgstr "Уже что-то отправляли?"
-
-#: source_templates/index.html:54
-msgid "If this is your first time submitting to journalists, start here."
+#: source_templates/index.html:47
+msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Если вы впервые отправляете журналистам, начните здесь."
 
-#: source_templates/index.html:58
-msgid ""
-"If you have already submitted to journalists, log in here to check for "
-"responses."
-msgstr ""
-"Если вы уже отправляли журналистам, войдите в систему, чтобы проверить "
-"ответы."
+#: source_templates/index.html:51
+msgid "GET STARTED"
+msgstr "НАЧАТЬ"
 
-#: source_templates/index.html:73
-msgid "CHECK FOR A RESPONSE"
-msgstr "ПРОВЕРИТЬ ОТВЕТЫ"
+#: source_templates/index.html:59
+msgid "Return visit"
+msgstr "Повторый визит"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:61
+msgid "Already have a codename? Check for replies or submit something new."
+msgstr "Уже получали код? Введите для проверки ответов."
+
+#: source_templates/index.html:79
 msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
 msgstr ""
 "Нажмите <img src=\"{icon}\" alt=\"shield icon\"> на панели инструментов выше"
 
-#: source_templates/index.html:94
+#: source_templates/index.html:80
 msgid "Select <strong>Advanced Security Settings</strong>"
 msgstr "Выберите <strong>Дополнительные настройки безопасности</strong>"
 
-#: source_templates/index.html:95
+#: source_templates/index.html:81
 msgid "Select <strong>Safest</strong>"
 msgstr "Выберите <strong>Самый безопасный</strong>"
 
-#: source_templates/index.html:97
+#: source_templates/index.html:83
 msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\">Обновите эту страницу</a>, и готово!"
 
@@ -1105,7 +1109,7 @@ msgstr "Введите кодовое имя"
 msgid "Enter your codename"
 msgstr "Введите ваше кодовое имя"
 
-#: source_templates/login.html:25 source_templates/lookup.html:49
+#: source_templates/login.html:26 source_templates/lookup.html:50
 msgid "CANCEL"
 msgstr "ОТМЕНИТЬ"
 
@@ -1150,6 +1154,10 @@ msgid "Submit Files or Messages"
 msgstr "Отправить файлы или сообщения"
 
 #: source_templates/lookup.html:19
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Вы можете отправить любой файл, сообщение или и то, и другое."
+
+#: source_templates/lookup.html:21
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1160,27 +1168,23 @@ msgstr ""
 "\"text-link\">публичного ключа</a>. Файлы шифруются по мере их получения "
 "SecureDrop."
 
-#: source_templates/lookup.html:20
+#: source_templates/lookup.html:22
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">Подробнее</a>."
 
-#: source_templates/lookup.html:22
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Вы можете отправить любой файл, сообщение или и то, и другое."
-
-#: source_templates/lookup.html:31
+#: source_templates/lookup.html:32
 msgid "Maximum upload size: 500 MB"
 msgstr "Максимальный размер для загрузки: 500МБ"
 
-#: source_templates/lookup.html:34
+#: source_templates/lookup.html:35
 msgid "Write a message."
 msgstr "Написать сообщение."
 
-#: source_templates/lookup.html:56
+#: source_templates/lookup.html:57
 msgid "Read Replies"
 msgstr "Читать ответы"
 
-#: source_templates/lookup.html:61
+#: source_templates/lookup.html:62
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1192,43 +1196,39 @@ msgstr ""
 "с ними работу. Это также поможет нам понять, что вы видели ответ. Вы можете "
 "ответить, отправив новые файлы и сообщения выше."
 
-#: source_templates/lookup.html:74
+#: source_templates/lookup.html:76
 msgid "Delete this reply?"
 msgstr "Удалить этот ответ?"
 
-#: source_templates/lookup.html:76
-msgid "DELETE"
-msgstr "УДАЛИТЬ"
-
-#: source_templates/lookup.html:85
+#: source_templates/lookup.html:87
 msgid "DELETE ALL REPLIES"
 msgstr "УДАЛИТЬ ВСЕ ОТВЕТЫ"
 
-#: source_templates/lookup.html:88
+#: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
 msgstr "Вы закончили с ответами?"
 
-#: source_templates/lookup.html:89
+#: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
 msgstr "ДА, УДАЛИТЬ ВСЕ ОТВЕТЫ"
 
-#: source_templates/lookup.html:90
+#: source_templates/lookup.html:92
 msgid "NO, NOT YET"
 msgstr "НЕТ, НЕ СЕЙЧАС"
 
-#: source_templates/lookup.html:94
+#: source_templates/lookup.html:96
 msgid "There are no replies at this time."
 msgstr "Нет ответов на данный момент."
 
-#: source_templates/lookup.html:103
+#: source_templates/lookup.html:105
 msgid "Remember, your codename is:"
 msgstr "Запомните, что ваше кодовое имя:"
 
-#: source_templates/lookup.html:104
+#: source_templates/lookup.html:106
 msgid "Show"
 msgstr "Показать"
 
-#: source_templates/lookup.html:106
+#: source_templates/lookup.html:108
 msgid "Hide"
 msgstr "Скрыть"
 
@@ -1419,6 +1419,38 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Вернуться на страницу отправки"
+
+#~ msgid "RESET PASSWORD"
+#~ msgstr "СБРОСИТЬ ПАРОЛЬ"
+
+#~ msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
+#~ msgstr ""
+#~ "Сбросить двухэтапную аутентификацию для мобильных приложений, таких как "
+#~ "FreeOTP или Google Authenticator"
+
+#~ msgid ""
+#~ "Like all software, SecureDrop may contain security bugs. Use at your own "
+#~ "risk."
+#~ msgstr ""
+#~ "Как и любое другое программное обеспечение SecureDrop может содержать "
+#~ "уязвимости безопасности. Вы используете данное программное обеспечение на "
+#~ "свой страх и риск."
+
+#~ msgid "Submit for the first time"
+#~ msgstr "Отправить в первый раз"
+
+#~ msgid "Already submitted something?"
+#~ msgstr "Уже что-то отправляли?"
+
+#~ msgid ""
+#~ "If you have already submitted to journalists, log in here to check for "
+#~ "responses."
+#~ msgstr ""
+#~ "Если вы уже отправляли журналистам, войдите в систему, чтобы проверить "
+#~ "ответы."
+
+#~ msgid "CHECK FOR A RESPONSE"
+#~ msgstr "ПРОВЕРИТЬ ОТВЕТЫ"
 
 #~ msgid "Change Username &amp; Admin Status"
 #~ msgstr "Изменение имени пользователя и статуса администратора"
