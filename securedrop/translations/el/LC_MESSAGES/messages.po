@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.8.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-07-09 00:16+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2019-09-10 16:39+0000\n"
+"Last-Translator: Dimitris Maroulidis <dmaroulidis@dimitrismaroulidis.com>\n"
 "Language-Team: Greek <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/el/>\n"
 "Language: el\n"
@@ -16,16 +16,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.7.1\n"
 "Generated-By: Babel 2.5.1\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "πριν από {time}"
 
-#: journalist_app/__init__.py:91 journalist_app/__init__.py:136
+#: journalist_app/__init__.py:88 journalist_app/__init__.py:133
 msgid "You have been logged out due to inactivity"
 msgstr "Αποσυνδεθήκατε λόγω αδράνειας"
+
+#: journalist_app/__init__.py:142
+msgid "You have been logged out due to password change"
+msgstr "Αποσυνδεθήκατε λόγω αλλαγής κωδικού πρόσβασης"
 
 #: journalist_app/account.py:33
 msgid "Incorrect password or two-factor code."
@@ -72,11 +76,11 @@ msgstr ""
 msgid "Name not updated: {}"
 msgstr "Το όνομα δεν ενημερώθηκε: {}"
 
-#: journalist_app/admin.py:228
+#: journalist_app/admin.py:233
 msgid "Deleted user '{user}'"
 msgstr "Ο χρήστης «{user}» διαγράφηκε"
 
-#: journalist_app/admin.py:254
+#: journalist_app/admin.py:263
 msgid "Test alert sent. Please check your email."
 msgstr ""
 "Η δοκιμαστική ειδοποίηση στάλθηκε. Παρακαλώ δείτε το ηλεκτρονικό ταχυδρομείο "
@@ -125,28 +129,28 @@ msgstr "Απαιτείται αρχείο."
 msgid "You can only upload PNG image files."
 msgstr "Μπορείτε να ανεβάσετε μόνο αρχεία εικόνας τύπου PNG."
 
-#: journalist_app/main.py:120 journalist_app/utils.py:48
+#: journalist_app/main.py:122 journalist_app/utils.py:48
 #: journalist_app/utils.py:138
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Παρουσιάστηκε απρόσμενο σφάλμα! Παρακαλώ ειδοποιήστε τον διαχειριστή."
 
-#: journalist_app/main.py:131
+#: journalist_app/main.py:133
 msgid "Thanks. Your reply has been stored."
 msgstr "Ευχαριστώ. Η απάντησή σας αποθηκεύτηκε."
 
-#: journalist_app/main.py:152
+#: journalist_app/main.py:154
 msgid "No collections selected for download."
 msgstr "Δεν έχουν επιλεχθεί συλλογές για λήψη."
 
-#: journalist_app/main.py:155 journalist_app/utils.py:236
+#: journalist_app/main.py:157 journalist_app/utils.py:236
 msgid "No collections selected for deletion."
 msgstr "Δεν έχουν επιλεχθεί συλλογές για διαγραφή."
 
-#: journalist_app/main.py:181
+#: journalist_app/main.py:183
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "Η πηγή «{original_name}» μετονομάστηκε σε «{new_name}»"
 
-#: journalist_app/main.py:196
+#: journalist_app/main.py:198
 msgid "No unread submissions for this source."
 msgstr "Δεν υπάρχουν μη αναγνωσμένες υποβολές για αυτή την πηγή."
 
@@ -224,7 +228,7 @@ msgstr ""
 "Ο κωδικός ανανεώθηκε. Μη ξεχάσετε να τον αποθηκεύσετε στη βάση δεδομένων του "
 "KeePassX σας. Νέος κωδικός:"
 
-#: journalist_app/utils.py:321
+#: journalist_app/utils.py:322
 msgid "No unread submissions in selected collections."
 msgstr "Δεν υπάρχουν μη αναγνωσμένες καταχωρήσεις στις επιλεγμένες συλλογές."
 
@@ -233,7 +237,7 @@ msgid "Close"
 msgstr "Κλείσιμο"
 
 #: journalist_templates/_confirmation_modal.html:7
-#: journalist_templates/col.html:15 source_templates/lookup.html:75
+#: journalist_templates/col.html:15 source_templates/lookup.html:77
 msgid "Cancel"
 msgstr "Άκυρο"
 
@@ -268,7 +272,7 @@ msgstr "Μυστικό HOTP"
 
 #: journalist_templates/account_edit_hotp_secret.html:9
 #: journalist_templates/admin_edit_hotp_secret.html:10
-#: source_templates/login.html:23
+#: source_templates/login.html:21
 msgid "CONTINUE"
 msgstr "ΣΥΝΕΧΕΙΑ"
 
@@ -346,7 +350,7 @@ msgstr "Κωδικός επιβεβαίωσης"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
-#: journalist_templates/col.html:99 source_templates/lookup.html:43
+#: journalist_templates/col.html:99 source_templates/lookup.html:42
 msgid "SUBMIT"
 msgstr "ΥΠΟΒΟΛΗ"
 
@@ -369,9 +373,8 @@ msgstr "Όνομα χρήστη"
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: journalist_templates/admin.html:18 journalist_templates/col.html:75
-#: journalist_templates/col.html:133 journalist_templates/index.html:16
-#: journalist_templates/index.html:51
+#: journalist_templates/admin.html:18 journalist_templates/col.html:135
+#: journalist_templates/index.html:16 journalist_templates/index.html:51
 msgid "Delete"
 msgstr "Διαγραφή"
 
@@ -548,7 +551,7 @@ msgstr "Ανεβασμένο έγγραφο"
 msgid "Message"
 msgstr "Μήνυμα"
 
-#: journalist_templates/col.html:70 journalist_templates/col.html:128
+#: journalist_templates/col.html:70 journalist_templates/col.html:130
 #: journalist_templates/index.html:46
 msgid "Delete Confirmation"
 msgstr "Επιβεβαίωση Διαγραφής"
@@ -556,6 +559,10 @@ msgstr "Επιβεβαίωση Διαγραφής"
 #: journalist_templates/col.html:71
 msgid "Are you sure you want to delete the selected documents?"
 msgstr "Είστε σίγουροι πως θέλετε να διαγράψετε τα επιλεγμένα έγγραφα;"
+
+#: journalist_templates/col.html:75 source_templates/lookup.html:78
+msgid "DELETE"
+msgstr "ΔΙΑΓΡΑΦΗ"
 
 #: journalist_templates/col.html:86
 msgid "No documents to display."
@@ -599,11 +606,11 @@ msgstr ""
 "πηγή δεν θα μπορεί πλέον να συνδεθεί χρησιμοποιώντας το προηγούμενό κωδικό "
 "της όνομα.</em>"
 
-#: journalist_templates/col.html:121
+#: journalist_templates/col.html:122
 msgid "DELETE SOURCE AND SUBMISSIONS"
 msgstr "ΔΙΑΓΡΑΦΗ ΠΗΓΗΣ ΚΑΙ ΚΑΤΑΧΩΡΗΣΕΩΝ"
 
-#: journalist_templates/col.html:129
+#: journalist_templates/col.html:131
 msgid "Are you sure you want to delete this collection?"
 msgstr "Είστε σίγουροι πως θέλετε να διαγράψετε αυτή τη συλλογή;"
 
@@ -686,6 +693,7 @@ msgid "Change Name"
 msgstr "Αλλαγή ονόματος"
 
 #: journalist_templates/edit_account.html:47
+#: journalist_templates/edit_account.html:75
 msgid "Reset Password"
 msgstr "Επαναφορά κωδικού πρόσβασης"
 
@@ -725,10 +733,6 @@ msgstr "Ο κωδικός πρόσβασης του χρήστη θα αλλάξ
 msgid "Your password will be changed to:"
 msgstr "Ο κωδικός σας θα αλλάξει σε:"
 
-#: journalist_templates/edit_account.html:75
-msgid "RESET PASSWORD"
-msgstr "ΕΠΑΝΑΦΟΡΑ ΚΩΔΙΚΟΥ ΠΡΟΣΒΑΣΗΣ"
-
 #: journalist_templates/edit_account.html:80
 msgid "Reset Two-Factor Authentication"
 msgstr "Επαναφορά πιστοποίησης δύο παραγόντων"
@@ -761,25 +765,26 @@ msgstr ""
 #: journalist_templates/edit_account.html:87
 msgid ""
 "To reset two-factor authentication for mobile apps such as FreeOTP, choose "
-"the first option. For hardware tokens like the Yubikey, choose the second."
+"the first option. For hardware tokens like the YubiKey, choose the second "
+"one."
 msgstr ""
-"Για επαναφορα της πιστοποίησης δύο παραγόντων για εφαρμογές κινητού όπως το "
-"FreeOTP, επιλέξτε την πρώτη επιλογή. Για συσκευές όπως το Yubikey, επιλέξτε "
-"τη δεύτερη."
+"Για επαναφορά της πιστοποίησης δύο παραγόντων για εφαρμογές κινητού όπως το "
+"FreeOTP, επιλέξτε την πρώτη επιλογή. Για κλειδιά ασφαλείας όπως το YubiKey, "
+"επιλέξτε τη δεύτερη."
 
 #: journalist_templates/edit_account.html:112
-msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
+msgid "Reset two-factor authentication for mobile apps, such as FreeOTP"
 msgstr ""
-"Επαναφορά πιστοποίησης δυο παραγόντων για εφαρμογές όπως το FreeOTP ή το "
-"Google Authenticator"
+"Επαναφορά πιστοποιήσης δύο παραγόντων για εφαρμογές κινητού, όπως το FreeOTP"
 
 #: journalist_templates/edit_account.html:112
 msgid "RESET APP TOKEN"
 msgstr "ΕΠΑΝΑΦΟΡΑ ΚΩΔΙΚΩΝ ΠΡΟΣΒΑΣΗΣ ΕΦΑΡΜΟΓΗΣ"
 
 #: journalist_templates/edit_account.html:113
-msgid "Reset 2FA for hardware tokens like Yubikey"
-msgstr "Επαναφορά 2FA για κλειδιά ασφαλείας όπως το YubiKey"
+msgid "Reset two-factor authentication for hardware tokens, like a YubiKey"
+msgstr ""
+"Επαναφορά πιστοποίησης δύο παραγόντων για κλειδιά ασφαλείας, όπως το YubiKey"
 
 #: journalist_templates/edit_account.html:113
 msgid "RESET HARDWARE TOKEN"
@@ -869,11 +874,11 @@ msgstr "Συνδεθείτε για να έχετε πρόσβαση στην δ
 msgid "Password"
 msgstr "Κωδικός πρόσβασης"
 
-#: journalist_templates/login.html:12
+#: journalist_templates/login.html:12 source_templates/index.html:65
 msgid "LOG IN"
 msgstr "ΣΥΝΔΕΣΗ"
 
-#: source_app/__init__.py:128
+#: source_app/__init__.py:124
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -934,22 +939,14 @@ msgstr "Συγγνώμη, δεν αναγνωρίζεται αυτό το κωδ
 msgid "Protecting Journalists and Sources"
 msgstr "Προστατεύοντας δημοσιογράφους και πηγές"
 
-#: source_templates/base.html:25 source_templates/base.html:45
-#: source_templates/index.html:32 source_templates/index.html:84
+#: source_templates/base.html:25 source_templates/footer.html:4
+#: source_templates/index.html:32
 msgid "Powered by"
 msgstr "Με την υποστήριξη του"
 
 #: source_templates/base.html:34
 msgid "LOG OUT"
 msgstr "ΑΠΟΣΥΝΔΕΣΗ"
-
-#: source_templates/base.html:45 source_templates/index.html:84
-msgid ""
-"Like all software, SecureDrop may contain security bugs. Use at your own "
-"risk."
-msgstr ""
-"Όπως όλα τα λογισμικά, το SecureDrop ίσως περιέχει κενά ασφαλείας. "
-"Χρησιμοποιήστε το με δική σας ευθύνη."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -982,6 +979,18 @@ msgstr ""
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
 msgstr "Ξεχάσατε το κωδικό όνομά σας;"
+
+#: source_templates/footer.html:7
+msgid ""
+"Please note: Sharing sensitive documents may put you at risk, even when "
+"using Tor and SecureDrop."
+msgstr ""
+"Σημείωση: Η κοινοποίηση ευαίσθητων αρχείων μπορεί να εκθέσει σε κινδύνους, "
+"ακόμα και όταν χρησιμοποιείτε το Tor και το SecureDrop."
+
+#: source_templates/footer.html:10
+msgid "SecureDrop is a project of Freedom of the Press Foundation."
+msgstr "Το SecureDrop είναι έργο του ιδρύματος Freedom of the Press."
 
 #: source_templates/generate.html:4
 msgid "Welcome"
@@ -1019,7 +1028,7 @@ msgstr ""
 " αυτό το κωδικό όνομα. Σε αντίθεση με τους κωδικούς, δεν υπάρχει τρόπος να "
 "ανακτήσετε το κωδικό όνομα αν το χάσετε ή το ξεχάσετε."
 
-#: source_templates/generate.html:44 source_templates/index.html:65
+#: source_templates/generate.html:42
 msgid "SUBMIT DOCUMENTS"
 msgstr "ΥΠΟΒΟΛΗ ΕΓΓΡΑΦΩΝ"
 
@@ -1030,8 +1039,9 @@ msgid ""
 "&nbsp;button in your browser’s toolbar to change it."
 msgstr ""
 "Η <a id=\"disable-js\" href=\"\"><strong>Ρύθμιση ασφαλείας</strong></a> του "
-"Tor Browser σας είναι πολύ χαμηλή. Χρησιμοποιήστε το κουμπί <img src=\"{icon}"
-"\" alt=\"shield icon\"> &nbsp; στη γραμμή εργαλειών για να την αλλάξετε."
+"Tor Browser σας είναι πολύ χαμηλή. Χρησιμοποιήστε το κουμπί <img src="
+"\"{icon}\" alt=\"shield icon\"> &nbsp; στη γραμμή εργαλειών για να την "
+"αλλάξετε."
 
 #: source_templates/index.html:17
 msgid ""
@@ -1058,47 +1068,42 @@ msgstr ""
 "id=\"recommend-tor\" href=\"{tor_browser_url}\">Μάθετε πώς να τον "
 "εγκαταστήσετε</a>, ή αγνοήστε αυτή την προειδοποίηση για να συνεχίσετε."
 
-#: source_templates/index.html:41
-msgid "Submit for the first time"
-msgstr "Υποβολή για πρώτη φορά"
+#: source_templates/index.html:45
+msgid "First submission"
+msgstr "Πρώτη υποβολή"
 
-#: source_templates/index.html:48
-msgid "Already submitted something?"
-msgstr "Έχετε ήδη υποβάλλει κάτι;"
+#: source_templates/index.html:47
+msgid "First time submitting to our SecureDrop? Start here."
+msgstr "Υποβάλετε κάτι στο SecureDrop μας για πρώτη φορά; Ξεκινήστε από εδώ."
 
-#: source_templates/index.html:54
-msgid "If this is your first time submitting to journalists, start here."
+#: source_templates/index.html:51
+msgid "GET STARTED"
+msgstr "ΞΕΚΙΝΗΣΤΕ"
+
+#: source_templates/index.html:59
+msgid "Return visit"
+msgstr "Επιστροφή"
+
+#: source_templates/index.html:61
+msgid "Already have a codename? Check for replies or submit something new."
 msgstr ""
-"Αν είναι η πρώτη σας φορά που υποβάλετε κάτι στους δημοσιογράφους, ξεκινήστε "
-"από εδώ."
+"Έχετε ήδη κωδικό όνομα; Ελέγξτε για απαντήσεις ή υποβάλετε κάτι καινούριο."
 
-#: source_templates/index.html:58
-msgid ""
-"If you have already submitted to journalists, log in here to check for "
-"responses."
-msgstr ""
-"Αν έχετε ήδη υποβάλλει κάτι στους δημοσιογράφους, συνδεθείτε για να ελέγξετε "
-"για απαντήσεις."
-
-#: source_templates/index.html:73
-msgid "CHECK FOR A RESPONSE"
-msgstr "ΕΛΕΓΧΟΣ ΓΙΑ ΑΠΑΝΤΗΣΕΙΣ"
-
-#: source_templates/index.html:93
+#: source_templates/index.html:79
 msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
 msgstr ""
 "Πατήστε το <img src=\"{icon}\" alt=\"shield icon\"> στη γραμμή εργαλειών "
 "επάνω"
 
-#: source_templates/index.html:94
+#: source_templates/index.html:80
 msgid "Select <strong>Advanced Security Settings</strong>"
 msgstr "Επιλέξτε τις <strong>Ρυθμίσεις ασφαλείας για προχωρημένους</strong>"
 
-#: source_templates/index.html:95
+#: source_templates/index.html:81
 msgid "Select <strong>Safest</strong>"
 msgstr "Επιλέξτε <strong>Ασφαλέστατο</strong>"
 
-#: source_templates/index.html:97
+#: source_templates/index.html:83
 msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\">Ανανεώστε τη σελίδα</a> και τελειώσατε!"
 
@@ -1110,7 +1115,7 @@ msgstr "Εισαγωγή κωδικού ονόματος"
 msgid "Enter your codename"
 msgstr "Γράψτε το κωδικό όνομά σας"
 
-#: source_templates/login.html:25 source_templates/lookup.html:49
+#: source_templates/login.html:26 source_templates/lookup.html:50
 msgid "CANCEL"
 msgstr "ΆΚΥΡΟ"
 
@@ -1157,6 +1162,11 @@ msgid "Submit Files or Messages"
 msgstr "Υποβολή αρχείων ή  μηνυμάτων"
 
 #: source_templates/lookup.html:19
+msgid "You can submit any kind of file, a message, or both."
+msgstr ""
+"Μπορείτε να υποβάλετε οποιουδήποτε τύπου αρχεία, ένα μήνυμα ή και τα δύο."
+
+#: source_templates/lookup.html:21
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
@@ -1167,28 +1177,23 @@ msgstr ""
 "μας</a> πριν τα υποβάλλετε. Τα αρχεία κρυπτογραφούνται κατά τη λήψη από το "
 "SecureDrop."
 
-#: source_templates/lookup.html:20
+#: source_templates/lookup.html:22
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
 msgstr "<a href=\"{url}\" class=\"text-link\">Μάθετε περισσότερα</a>."
 
-#: source_templates/lookup.html:22
-msgid "You can submit any kind of file, a message, or both."
-msgstr ""
-"Μπορείτε να υποβάλετε οποιουδήποτε τύπου αρχεία, ένα μήνυμα ή και τα δύο."
-
-#: source_templates/lookup.html:31
+#: source_templates/lookup.html:32
 msgid "Maximum upload size: 500 MB"
 msgstr "Μέγιστο μέγεθος υποβολής: 500 MB"
 
-#: source_templates/lookup.html:34
+#: source_templates/lookup.html:35
 msgid "Write a message."
 msgstr "Γράψτε ένα μήνυμα."
 
-#: source_templates/lookup.html:56
+#: source_templates/lookup.html:57
 msgid "Read Replies"
 msgstr "Ανάγνωση απαντήσεων"
 
-#: source_templates/lookup.html:61
+#: source_templates/lookup.html:62
 msgid ""
 "You have received a reply. To protect your identity in the unlikely event "
 "someone learns your codename, please delete all replies when you're done "
@@ -1201,43 +1206,39 @@ msgstr ""
 "επίσης να ξέρουμε πως είστε ενήμερος για την απάντησή μας. Μπορείτε επίσης "
 "να απαντήσετε υποβάλλοντας νέα αρχεία και μηνύματα παραπάνω."
 
-#: source_templates/lookup.html:74
+#: source_templates/lookup.html:76
 msgid "Delete this reply?"
 msgstr "Διαγραφή αυτής της απάντησης;"
 
-#: source_templates/lookup.html:76
-msgid "DELETE"
-msgstr "ΔΙΑΓΡΑΦΗ"
-
-#: source_templates/lookup.html:85
+#: source_templates/lookup.html:87
 msgid "DELETE ALL REPLIES"
 msgstr "ΔΙΑΓΡΑΦΗ ΟΛΩΝ ΤΩΝ ΑΠΑΝΤΗΣΕΩΝ"
 
-#: source_templates/lookup.html:88
+#: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
 msgstr "Τελειώσατε με τις απαντήσεις;"
 
-#: source_templates/lookup.html:89
+#: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
 msgstr "ΝΑΙ, ΝΑ ΔΙΑΓΡΑΦΟΥΝ ΟΛΕΣ ΟΙ ΑΠΑΝΤΗΣΕΙΣ"
 
-#: source_templates/lookup.html:90
+#: source_templates/lookup.html:92
 msgid "NO, NOT YET"
 msgstr "ΟΧΙ ΑΚΟΜΑ"
 
-#: source_templates/lookup.html:94
+#: source_templates/lookup.html:96
 msgid "There are no replies at this time."
 msgstr "Δεν υπάρχουν απαντήσεις προς το παρόν."
 
-#: source_templates/lookup.html:103
+#: source_templates/lookup.html:105
 msgid "Remember, your codename is:"
 msgstr "Θυμήσου, το κωδικό όνομά σου είναι:"
 
-#: source_templates/lookup.html:104
+#: source_templates/lookup.html:106
 msgid "Show"
 msgstr "Εμφάνιση"
 
-#: source_templates/lookup.html:106
+#: source_templates/lookup.html:108
 msgid "Hide"
 msgstr "Απόκρυψη"
 
@@ -1431,6 +1432,37 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Πίσω στη σελίδα υποβολών"
+
+#~ msgid "RESET PASSWORD"
+#~ msgstr "ΕΠΑΝΑΦΟΡΑ ΚΩΔΙΚΟΥ ΠΡΟΣΒΑΣΗΣ"
+
+#~ msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
+#~ msgstr ""
+#~ "Επαναφορά πιστοποίησης δυο παραγόντων για εφαρμογές όπως το FreeOTP ή το "
+#~ "Google Authenticator"
+
+#~ msgid ""
+#~ "Like all software, SecureDrop may contain security bugs. Use at your own "
+#~ "risk."
+#~ msgstr ""
+#~ "Όπως όλα τα λογισμικά, το SecureDrop ίσως περιέχει κενά ασφαλείας. "
+#~ "Χρησιμοποιήστε το με δική σας ευθύνη."
+
+#~ msgid "Submit for the first time"
+#~ msgstr "Υποβολή για πρώτη φορά"
+
+#~ msgid "Already submitted something?"
+#~ msgstr "Έχετε ήδη υποβάλλει κάτι;"
+
+#~ msgid ""
+#~ "If you have already submitted to journalists, log in here to check for "
+#~ "responses."
+#~ msgstr ""
+#~ "Αν έχετε ήδη υποβάλλει κάτι στους δημοσιογράφους, συνδεθείτε για να "
+#~ "ελέγξετε για απαντήσεις."
+
+#~ msgid "CHECK FOR A RESPONSE"
+#~ msgstr "ΕΛΕΓΧΟΣ ΓΙΑ ΑΠΑΝΤΗΣΕΙΣ"
 
 #~ msgid "Change Username &amp; Admin Status"
 #~ msgstr "Αλλαγή ονόματος χρήστη &amp; Κατάστασης διαχειριστή"
