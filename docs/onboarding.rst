@@ -80,7 +80,7 @@ to access the servers over SSH.
   .. code-block:: none
  
     ~/Persistent/securedrop/install_files/ansible_base/app-source-ths
-    ~/Persistent/securedrop/install_files/ansible_base/app-journalist-ths
+    ~/Persistent/securedrop/install_files/ansible_base/app-journalist-aths
 
   If your instance was set up to use v3 services, copy the following files instead:
 
@@ -90,6 +90,13 @@ to access the servers over SSH.
     ~/Persistent/securedrop/install_files/ansible_base/app-journalist.auth_private
 
   Then, boot into the new *Journalist Workstation* USB.
+
+.. warning:: Do **not** copy the ``app-ssh-aths``, ``mon-ssh-aths``,
+             ``app-ssh.auth_private``, ``mon-ssh.auth_private``, or ``tor_v3_keys.json``
+             files to the *Journalist Workstation*. Those files contain private
+             keys and authentication information for SSH server access.
+             Only the *Admin Workstation* should have shell access to the
+             servers.
 
 - Install the SecureDrop application code on the workstation's persistent volume,
   following the documentation for :ref:`cloning the SecureDrop
@@ -115,12 +122,6 @@ to access the servers over SSH.
 - Securely wipe the files on the *Transfer Device*, by right-clicking them
   in the file manager and selecting **Wipe**.
 
-.. warning:: Do **not** copy the ``app-ssh-aths``, ``mon-ssh-aths``,
-             ``app-ssh.auth_private``, ``mon-ssh.auth_private``, or ``tor_v3_keys.json``
-             files to the *Journalist Workstation*. Those files contain private
-             keys and authentication information for SSH server access.
-             Only the *Admin Workstation* should have shell access to the
-             servers.
 
 .. warning:: The ``app-journalist-aths`` and ``app-journalist.auth_private`` 
              files contain secret authentication information for the
