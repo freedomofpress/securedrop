@@ -1,13 +1,13 @@
 Securedrop V3 Onion Services
 ============================
 Tor onion services provide anonymous inbound connections to websites and other
-servers over the Tor network. For example, SecureDrop uses onion services
+servers exclusively over the Tor network. For example, SecureDrop uses onion services
 for the *Journalist* and *Source Interface* websites, as well as for 
 adminstrative access to the servers in SSH-over-Tor mode.
 
 Previous to the release of SecureDrop 1.0.0, only v2 onion services were available,
 but administrators now have the option of enabling next-generation (v3) onion 
-services. V3 onion services use more secure cryptography than v2 onion 
+services. V3 onion services use stronger cryptographic primitives than v2 onion 
 services, and include redesigned protocols that guard against service 
 information leaks on the Tor network. The unique identifier in V3 onion 
 addresses is 56 characters long - for example:
@@ -73,7 +73,13 @@ Workstation* with ``./securedrop-admin tailsconfig``.
 
 - First, boot into the *Admin Workstation* with the persistent volume unlocked
   and an admin password set.
-- Next, open a terminal via **Applications > Favorites > Terminal**.
+- Next, open a terminal via **Applications > Favorites > Terminal** and change
+  the working directory to the Securedrop application directory:
+
+  .. code:: sh
+ 
+    cd ~/Persistent/securedrop
+
 - Verify that SecureDrop version 1.0.0 or greater is available or installed on
   your instance with the command:
 
@@ -164,20 +170,28 @@ Journalist Workstation:
 ~~~~~~~~~~~~~~~~~~~~~~~
 
  - In the *Admin Workstation* used to enable v3 onion services, copy the 
-   following files to a *Transfer Device*:
+   following files to an encrypted *Transfer Device*:
 
    .. code-block:: none
 
      ~/Persistent/securedrop/install_files/ansible-base/app-sourcev3-ths
      ~/Persistent/securedrop/install_files/ansible-base/app-journalist.auth_private
 
-   Then, boot into the *Journalist Workstation* to be updated.
+ - Then, boot into the *Journalist Workstation* to be updated, with the persistent 
+   volume unlocked and an admin password set.
+ - Next, open a terminal via **Applications > Favorites > Terminal** and change
+   the working directory to the Securedrop application directory:
 
- - In the *Journalist Workstation*,  first ensure that the 
-   SecureDrop application code has been updated to the latest version, using
-   either the GUI updater or the ``./securedrop-admin update`` command.
+   .. code:: sh
  
- - Copy the ``app-sourcev3-ths`` and ``app-journalist.auth_private`` files from
+     cd ~/Persistent/securedrop
+
+
+ - Ensure that the SecureDrop application code has been updated to the latest version,
+   using either the GUI updater or the ``./securedrop-admin update`` command.
+ 
+ - Insert the *Transfer Device*.
+   Copy the ``app-sourcev3-ths`` and ``app-journalist.auth_private`` files from
    the *Transfer Device* to ``~/Persistent/securedrop/install_files/ansible-base``.
  
  - Open a terminal and run ``./securedrop-admin tailsconfig`` to update the 
@@ -186,13 +200,14 @@ Journalist Workstation:
  - Verify that the new 56-character addresses are in use by visiting the *Source*
    and *Journalist Interfaces* via the SecureDrop desktop shortcuts.
 
- - Securely wipe the files on the *Transfer Device*.
+ - Securely wipe the files on the *Transfer Device*, by right-clicking them
+   in the file manager and selecting **Wipe**.
 
 Admin Workstation:
 ~~~~~~~~~~~~~~~~~~
 
  - In the *Admin Workstation* used to enable v3 onion services, copy the 
-   following files to a *Transfer Device*:
+   following files to an encrypted *Transfer Device*:
 
    .. code-block:: none
 
@@ -208,12 +223,20 @@ Admin Workstation:
      ~/Persistent/securedrop/install_files/ansible-base/app-ssh.auth_private
      ~/Persistent/securedrop/install_files/ansible-base/mon-ssh.auth_private
 
-   Then, boot into the *Admin Workstation* to be updated.
+ - Then, boot into the *Admin Workstation* to be updated, with the persistent 
+   volume unlocked and an admin password set.
+ - Next, open a terminal via **Applications > Favorites > Terminal** and change
+   the working directory to the Securedrop application directory:
 
-   First, ensure SecureDrop application code has been updated to the latest version, using
-   either the GUI updater or the ``./securedrop-admin update`` command.
+   .. code:: sh
  
- - Copy the ``app-sourcev3-ths``, ``*.auth_private``, and ``tor_v3_keys.json`` files from
+     cd ~/Persistent/securedrop
+
+ - Ensure that the SecureDrop application code has been updated to the latest version,
+   using either the GUI updater or the ``./securedrop-admin update`` command.
+
+ - Insert the *Transfer Device*.
+   Copy the ``app-sourcev3-ths``, ``*.auth_private``, and ``tor_v3_keys.json`` files from
    the *Transfer Device* to ``~/Persistent/securedrop/install_files/ansible-base``.
  
  - Copy the ``site-specific`` file from the *Transfer Device* to 
@@ -229,7 +252,8 @@ Admin Workstation:
    ``app`` and ``mon`` host entries, and that the *Application* and *Monitor
    Servers* are accessible via ``ssh app`` and ``ssh mon`` respectively.
 
- - Securely wipe the files on the *Transfer Device*.
+ - Securely wipe the files on the *Transfer Device*, by right-clicking them
+   in the file manager and selecting **Wipe**.
 
 
 Updating Source Interface references
@@ -252,13 +276,54 @@ Disabling v2 onion services
 Once you've successfully enabled v3 onion services, and updated your workstations,
 you should disable v2 onion services altogether.
 
-- First, it's recommended that you coordinate with the journalists using the 
-  instance to ensure that any ongoing source conversations are uninterrupted. They
-  can use SecureDrop's reply feature to give active sources advance notice of
-  the address change.
+First, it's recommended that you coordinate with the journalists using the 
+instance to ensure that any ongoing source conversations are uninterrupted. They
+can use SecureDrop's reply feature to give active sources advance notice of
+the address change.
 
-- When you're ready, follow the steps in `Enabling v3 onion services`_ again,
-  this time choosing ``no`` when asked to enable v2 services and ``yes`` to v3 services. 
+When you're ready, follow the steps below to transition to v3 services only:
+
+- First, boot into the *Admin Workstation* with the persistent volume unlocked
+  and an admin password set.
+
+- Open a terminal and change the working directory to the SecureDrop application
+  directory with the command:
+
+  .. code:: sh
+
+    cd ~/Persistent/securedrop
+
+
+- Next, update the application configuration using the command:
+
+  .. code:: sh
+    
+    ./securedrop-admin sdconfig
+
+  This command will step through the current instance configuration. When prompted
+  you should type ``no`` for v2 services and ``yes`` for v3 services to migrate to
+  v3 only. No other settings should be modified.
+
+- Once the configuration has been updated, run the installation playbook using 
+  the command:
+
+  .. code:: sh
+  
+    ./securedrop-admin install
+
+  This will disable v2 onion services on the *Application* and *Monitor Servers*.
+
+- When the installation playbook run is complete, update the *Admin Workstation*
+  to use v3 onion services only using the command:
+
+  .. code:: sh
+  
+    ./securedrop-admin tailsconfig
+
+- Next, verify connectivity between the *Admin Workstation* and the SecureDrop
+  instance, checking the desktop shortcuts and SSH access.
+
+- Then back up the instance and *Admin Workstation* USB.
 
 - Finally, update your other *Admin Workstations*: from a terminal, run:
 
