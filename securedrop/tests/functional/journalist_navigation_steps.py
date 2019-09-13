@@ -17,6 +17,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 # Number of times to try flaky clicks.
@@ -879,7 +880,12 @@ class JournalistNavigationStepsMixin:
 
     def _journalist_delete_one(self):
         self.safe_click_by_css_selector("[name=doc_names_selected]")
-        self.safe_click_by_id("delete-selected-link")
+
+        el = WebDriverWait(self.driver, self.timeout, self.poll_frequency).until(
+            expected_conditions.element_to_be_clickable((By.ID, "delete-selected-link"))
+        )
+        el.location_once_scrolled_into_view
+        ActionChains(self.driver).move_to_element(el).click().perform()
 
     def _journalist_flags_source(self):
         self.safe_click_by_id("flag-button")
