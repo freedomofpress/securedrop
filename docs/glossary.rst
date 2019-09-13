@@ -95,6 +95,8 @@ use to connect to the *Application Server* and the *Monitor Server* using Tor
 and SSH. The admin will also need to have an Android or iOS
 device with the FreeOTP app installed.
 
+.. _svs:
+
 Secure Viewing Station
 ----------------------
 
@@ -116,6 +118,8 @@ Since this machine will never touch the Internet or run an operating
 system other than Tails on a USB, it does not need a hard drive or
 network device. We recommend physically removing the drive and any
 networking cards (wireless, Bluetooth, etc.) from this machine.
+
+.. _submission-key:
 
 Submission Key
 --------------

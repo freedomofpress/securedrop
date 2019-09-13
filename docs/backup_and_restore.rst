@@ -31,13 +31,17 @@ You can use the following command to determine the volume of submissions
 currently on the *Application Server*: log in over SSH and run
 ``sudo du -sh /var/lib/securedrop/store``.
 
-.. note:: Submissions are deleted asynchronously and one at a time, so if you
-          delete a lot of submissions through the *Journalist Interface*, it may
-          take a while for all of the submissions to actually be
-          deleted. SecureDrop uses ``srm`` to securely erase files, which takes
-          significantly more time than normal file deletion. You can monitor the
-          progress of queued deletion jobs with ``sudo tail -f
-          /var/log/securedrop_worker/err.log``.
+.. note:: Submissions are deleted asynchronously and one at a time, so
+          if you delete a lot of submissions through the *Journalist
+          Interface*, it may take a while for all of the submissions
+          to actually be deleted. SecureDrop uses ``shred`` to
+          securely erase files, which takes significantly more time
+          than normal file deletion. You can monitor the progress of
+          queued deletion jobs by logging in to the *Application
+          Server* over SSH and running::
+
+            sudo tail -f /var/log/securedrop_worker/rqworker.err
+
 
 If you find you cannot perform a backup or restore due to this constraint,
 and have already deleted old submissions from the *Journalist Interface*,
