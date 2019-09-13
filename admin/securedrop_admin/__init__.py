@@ -736,6 +736,10 @@ def restore_securedrop(args):
     # but the securedrop-admin
     # script will be invoked from the repo root, so preceding dirs are likely.
     restore_file_basename = os.path.basename(args.restore_file)
+
+    # Would like readable output if there's a problem
+    os.environ["ANSIBLE_STDOUT_CALLBACK"] = "debug"
+
     ansible_cmd = [
         'ansible-playbook',
         os.path.join(args.ansible_path, 'securedrop-restore.yml'),
