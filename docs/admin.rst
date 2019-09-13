@@ -87,7 +87,7 @@ FPF through the `SecureDrop Support Portal`_. See the :doc:`OSSEC Guide <ossec_a
 for more information on common OSSEC alerts.
 
 .. warning:: Do not post logs or alerts to public forums without first carefully
-	     examining and redacting any sensitive information.
+         examining and redacting any sensitive information.
 
 .. _test OSSEC alert:
 
@@ -248,7 +248,7 @@ Rebooting the Servers
 .. _investigating_logs:
 
 Investigating Logs
-^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
 
 Consult our :doc:`Investigating Logs <logging>` topic guide for locations of the
 most relevant log files you may want to examine as part of troubleshooting, and
@@ -293,6 +293,65 @@ web server to apply the changes:
 .. code:: sh
 
   sudo service apache2 restart
+
+.. _submission-cleanup:
+
+Cleaning up deleted submissions
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+When submissions are deleted through the web interface, their database
+records are deleted and their encrypted files are securely wiped. For
+large files, secure removal can take some time, and it's possible,
+though unlikely, that it can be interrupted, for example by a server
+reboot. In older versions of SecureDrop this could leave a submission
+file present without a database record.
+
+As of SecureDrop 1.0.0, automated checks send OSSEC alerts when this
+situation is detected, recommending you run ``manage.py
+list-disconnected-fs-submissions`` to see the files affected. As with
+any ``manage.py`` usage, you would run the following on the admin
+workstation:
+
+.. code:: sh
+
+   ssh app
+   sudo -u www-data bash
+   cd /var/www/securedrop
+   ./manage.py list-disconnected-fs-submissions
+
+You then have the option of running:
+
+.. code:: sh
+
+   manage.py delete-disconnected-fs-submissions
+
+to clean them up. As with any potentially destructive operation, it's
+recommended that you :doc:`back the system up <backup_and_restore>`
+before doing so.
+
+There is also the inverse scenario, where a database record could
+point to a file that no longer exists. This would usually only have
+happened as a result of disaster recovery, where perhaps the database
+was recovered from a failed hard drive, but some submissions could not
+be. The OSSEC alert in this case would recommend running:
+
+.. code:: sh
+
+   manage.py list-disconnected-db-submissions
+
+
+To clean up the affected records you would run (again, preferably
+after a backup):
+
+.. code:: sh
+
+   manage.py delete-disconnected-db-submissions
+
+
+Even when submissions are completely removed from the application
+server, their encrypted files may still exist in backups. We recommend
+that you delete old backup files with ``shred``, which is available on
+Tails.
 
 Monitor Server
 ^^^^^^^^^^^^^^
