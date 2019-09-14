@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/docs/images/logo.png" width="350" height="350">
+  <img src="/securedrop/static/i/logo.png" width="350" height="314">
 </p>
 
 
