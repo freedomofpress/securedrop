@@ -102,11 +102,33 @@ local git repository and then installed on the staging servers.
           (last tested on 10.11.6).
 
 The web interfaces and SSH are available over Tor. A copy of the the Onion URLs
-for Source and Journalist Interfaces, as well as SSH access, are written to the
-Vagrant host's ``install_files/ansible-base`` directory, named:
+for *Source* and *Journalist Interfaces*, as well as SSH access, are written to the
+Vagrant host's ``install_files/ansible-base`` directory.
 
-* ``app-source-ths``
-* ``app-journalist-aths``
+To access the *Source Interface* from Tor Browser, use the v3 onion URL from the file 
+``install_files/ansible-base/app-sourcev3-ths``.
+
+To use the *Journalist Interface*, you will need to modify Tor Browser's 
+configuration to allow access to an authenticated onion service:
+
+- First, add the following line to your Tor Browser's ``torrc`` file, typically
+  found at ``tor-browser_en-US/Browser/TorBrowser/Data/Tor/torrc``:
+
+  .. code-block:: none
+
+    ClientOnionAuthDir TorBrowser/Data/Tor/onion_auth
+
+- Next, create the ``onion_auth`` directory:
+
+  .. code:: sh
+
+    mkdir tor-browser_en-US/Browser/TorBrowser/Data/Tor/onion_auth
+    chmod 0700 tor-browser_en-US/Browser/TorBrowser/Data/Tor/onion_auth
+
+- Finally, copy the file ``install_files/ansible-base/app-journalist.auth_private``
+  to the ``onion_auth`` directory and restart Tor Browser. You should now be able 
+  to visit the v3 onion address in ``app-journalist.auth_private`` from Tor Browser.
+
 
 For working on OSSEC monitoring rules with most system hardening active, update
 the OSSEC-related configuration in
@@ -318,10 +340,10 @@ A copy of the Onion URLs for Source and Journalist Interfaces, as well as
 SSH access, are written to the Vagrant host's ``install_files/ansible-base``
 directory, named:
 
-* ``app-source-ths``
-* ``app-journalist-aths``
-* ``app-ssh-aths``
-* ``mon-ssh-aths``
+* ``app-sourcev3-ths``
+* ``app-journalist.auth_private``
+* ``app-ssh.auth_private``
+* ``mon-ssh.auth_private``
 
 SSH Access
 ~~~~~~~~~~

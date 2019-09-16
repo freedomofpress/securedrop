@@ -22,8 +22,11 @@ try using the verbose command format to troubleshoot: ::
    ssh <username>@<app .onion>
    ssh <username>@<mon .onion>
 
-.. tip:: You can find the Onion URLs for SSH in ``app-ssh-aths`` and
-         ``mon-ssh-aths`` inside the ``install_files/ansible-base`` directory.
+.. tip:: If your instance uses v2 onion services, you can find the Onion
+         URLs for SSH in ``app-ssh-aths`` and ``mon-ssh-aths`` inside the 
+         ``install_files/ansible-base`` directory. If your instance uses v3
+         onion services, check the ``app-ssh.auth_private`` and
+         ``mon-ssh.auth_private`` files instead.
 
 Log in to Both Servers via TTY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,18 +60,18 @@ Test the Web Interfaces
 #. Make sure the *Source Interface* is available, and that you can make a
    submission.
 
-   - Do this by opening the Tor Browser and navigating to the onion
-     URL from ``app-source-ths``. Proceed through the codename
-     generation (copy this down somewhere) and you can submit a
-     message or attach any random unimportant file.
+   - Open the *Source Interface* in the Tor Browser by clicking on its desktop 
+     shortcut. Proceed through the codename
+     generation (copy this down somewhere) and submit a
+     test message or file.
    - Usage of the Source Interface is covered by our :doc:`Source User
      Manual <source>`.
 
 #. Test that you can access the *Journalist Interface*, and that you can log
    in as the admin user you just created.
 
-   - Open the Tor Browser and navigate to the onion URL from
-     ``app-journalist-aths``. Enter your passphrase and two-factor
+   - Open the *Journalist Interface* in the Tor Browser by clicking on its desktop 
+     shortcut.  Enter your passphrase and two-factor
      authentication code to log in.
    - If you have problems logging in to the *Admin/Journalist Interface*,
      SSH to the *Application Server* and restart the ntp daemon to synchronize
@@ -85,13 +88,10 @@ Test the Web Interfaces
 
 #. Test that the source received the reply.
 
-   - Within Tor Browser, navigate back to the ``app-source-ths`` URL and
+   - Within Tor Browser, navigate back to the *Source Interface* and
      use your previous test source codename to log in (or reload the
      page if it's still open) and check that the reply you just made
      is present.
-
-#. We highly recommend that you create persistent bookmarks for the
-   *Source Interface* and *Journalist Interface* Interface addresses within Tor Browser.
 
 #. Remove the test submissions you made prior to putting SecureDrop to
    real use. On the main *Journalist Interface* page, select all sources and
