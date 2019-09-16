@@ -323,7 +323,7 @@ You then have the option of running:
 
 .. code:: sh
 
-   manage.py delete-disconnected-fs-submissions
+   ./manage.py delete-disconnected-fs-submissions
 
 to clean them up. As with any potentially destructive operation, it's
 recommended that you :doc:`back the system up <backup_and_restore>`
@@ -337,7 +337,7 @@ be. The OSSEC alert in this case would recommend running:
 
 .. code:: sh
 
-   manage.py list-disconnected-db-submissions
+   ./manage.py list-disconnected-db-submissions
 
 
 To clean up the affected records you would run (again, preferably
@@ -345,7 +345,7 @@ after a backup):
 
 .. code:: sh
 
-   manage.py delete-disconnected-db-submissions
+   ./manage.py delete-disconnected-db-submissions
 
 
 Even when submissions are completely removed from the application
