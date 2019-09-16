@@ -530,6 +530,11 @@ securedrop@freedom.press for help.
 Uncommon OSSEC Alerts
 ~~~~~~~~~~~~~~~~~~~~~
 
+SecureDrop also runs automatic checks for submission data integrity
+problems. For example, secure deletion of large submissions could
+potentially be interrupted, resulting in an alert recommending steps
+to :ref:`clean them up <submission-cleanup>`.
+
 If you believe that the system is behaving abnormally, you should
 contact us at the `SecureDrop Support Portal`_ or securedrop@freedom.press for
 help.
