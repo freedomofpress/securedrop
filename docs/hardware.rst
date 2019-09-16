@@ -216,12 +216,17 @@ you do select a hardware solution, make sure that both devices work in Tails,
 and that the *Export Device* also works on the operating system(s) used by
 journalists accessing the *Secure Viewing Station*.
 
-USB drives with write protection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+USB drives with write protection (optional)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 When it is consistently applied and correctly implemented in hardware, write
-protection can prevent the spread of malware to your *Secure Viewing Station*
-from the computers used to read files stored on a *Transfer Device* or an
-*Export Device*.
+protection can prevent the spread of malware from the computers used to read
+files stored on a *Transfer Device* or an *Export Device*.
+
+It is especially advisable to enable write protection before attaching an
+*Export Device* to an everyday workstation that lacks the security protections
+of the Tails operating system. For defense in depth, you may also want to
+enable write protection before attaching a *Transfer Device* to the
+*Secure Viewing Station*.
 
 The two main options to achieve write protection of USB drives are:
 
