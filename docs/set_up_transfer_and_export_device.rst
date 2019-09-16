@@ -63,15 +63,21 @@ considerations, and you may want to modify it based on your threat model:
 
 - Encrypt the *Export Device* using VeraCrypt, which works across platforms.
 
-- Optionally, purchase a hardware USB `write blocker <https://www.forensicswiki.org/wiki/Write_Blockers>`__
-  as used in forensics, and enforce its usage whenever the *Export Device* is
-  attached to an Internet-connected workstation. This ensures that malware
-  cannot spread from infected computers in your network to the *Secure Viewing
-  Station*.
-
 If you follow this recommendation, it is important that the contents of the
 *Transfer Device* and the *Export Device* are always wiped after a copy operation
 is completed.
+
+.. note::
+
+   You may want to purchase a USB device with a physical write protection switch
+   for the *Export Device*, to enforce write protection whenever it is attached
+   to an Internet-connected everyday workstation. This ensures that malware
+   cannot spread from infected computers in your network to the *Secure Viewing
+   Station*.
+
+   Another option is to purchase a hardware USB `write blocker <https://www.forensicswiki.org/wiki/Write_Blockers>`__
+   as used in forensics, and enforce its usage whenever the *Export Device* is
+   attached to an Internet-connected workstation.
 
 Write-once media like CDs and DVDs can be a reasonable alternative to this
 setup. If you implement a workflow based on CDs or DVDs, it is crucial that they
@@ -178,14 +184,8 @@ Because the *Export Device* will need to be mounted on both Tails and the
 journalist's everyday workstation, you will need to use an encryption scheme
 that works on both operating systems.
 
-This is the case for many hardware-encrypted USB drives. When considering
-a hardware solution, we recommend selecting a vendor that has fully opened
-the source code and specifications of their devices and encouraged third party
-audits.
-
-VeraCrypt is a good alternative to hardware-based encryption. It is actively
-maintained cross-platform software that has been independently audited and is
-free to use.
+We recommend the use of VeraCrypt. It is actively maintained cross-platform
+software that has been independently audited and is free to use.
 
 VeraCrypt-encrypted media can be opened in the Tails operating system and on
 common Linux distributions without installing additional software. To open
@@ -198,7 +198,14 @@ Keep in mind that each journalist using a Windows or Mac workstation will need
 to have the VeraCrypt software installed on their computer to access the encrypted
 *Export Device*.
 
-.. tip::
+.. note::
+
+   We recommend against installing the VeraCrypt software on the
+   *Journalist Workstation*, the *Admin Workstation* or the *Secure Viewing Station*.
+   The software installed in the persistent volume of these Tails drives should
+   be kept to a minimum. You do not need to install the software to *decrypt*
+   VeraCrypt drives on these workstations, and you can *create* them from
+   another computer.
 
    Larger organizations may want to consider setting up a controlled environment
    for creating VeraCrypt-encrypted *Export Devices* and providing them to
@@ -206,6 +213,12 @@ to have the VeraCrypt software installed on their computer to access the encrypt
 
 As with the *Transfer Device*, we recommend storing the passphrase in the
 password manager of each user who will use a given *Export Device*.
+
+Hardware-encrypted USB drives can be a reasonable alternative to VeraCrypt.
+We cannot currently offer a specific recommendation, but please bear in mind
+that the drive must work across platforms (including Tails). We recommend
+selecting a vendor that has fully opened the source code and specifications of
+their devices and encouraged third party audits.
 
 Limiting write access
 ~~~~~~~~~~~~~~~~~~~~~
@@ -215,16 +228,21 @@ network. Depending on your threat model, there are steps you may want to take to
 mitigate that risk.
 
 One option is to restrict write access to the *Export Device* before it is
-plugged into a device other than the *Secure Viewing Station*. `Write blockers <https://www.forensicswiki.org/wiki/Write_Blockers>`__
+plugged into a device other than the *Secure Viewing Station*. Some USB flash
+drives come with a physical write protection switch, and `write blockers <https://www.forensicswiki.org/wiki/Write_Blockers>`__
 are used in forensics to ensure storage media are not modified during
-examination. At a lower cost, some USB flash drives come with a physical write
-protection switch, but it may be more difficult to consistently remember or
-enforce its usage.
+examination.
 
 Full-size SD cards also come with physical write protection switches. However,
 this write protection is fully host-based (the host operating system can choose
 to ignore it), and should therefore be considered less secure against
 sophisticated malware.
+
+.. tip::
+
+   For defense in depth, consider implementing a similar write protection
+   strategy for the *Transfer Device* (enabling write protection before
+   attaching the *Transfer Device* to the *Secure Viewing Station*).
 
 Please see our :ref:`guide to working with documents <working_with_documents>`
 for additional recommendations regarding malware mitigation.
