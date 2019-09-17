@@ -1,0 +1,9 @@
+.. important::
+
+   Like all storage media associated with SecureDrop, this drive should be
+   encrypted and protected with a secure passphrase. We recommend using the
+   tools built into Tails to `encrypt the drive using LUKS <https://tails.boum.org/doc/encryption_and_privacy/encrypted_volumes/index.en.html>`__.
+
+   If you are planning to use hardware RAID and/or hardware-based encryption,
+   we recommend that you research Tails compatibility before a procurement
+   decision.
