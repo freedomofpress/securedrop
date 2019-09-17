@@ -88,9 +88,9 @@ anonymous sources.
    :name: upgradetoc
    :maxdepth: 2
 
+   upgrade/0.14.0_to_1.0.0.rst
    upgrade/0.13.1_to_0.14.0.rst
    upgrade/0.13.0_to_0.13.1.rst
-   upgrade/0.12.2_to_0.13.0.rst
    upgrade/xenial_after_april_30.rst
 
 .. toctree::
