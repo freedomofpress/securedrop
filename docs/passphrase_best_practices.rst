@@ -80,3 +80,14 @@ user role in :doc:`passphrases`. We recommended using the KeePassX password
 manager included in Tails to store your credentials and minimize the passphrases
 that you need to memorize to just the passphrases for the persistent storage on
 your Tails USBs.
+
+For the *Transfer Device* and the *Export Device*, which are used to copy
+files to and from the air-gapped *Secure Viewing Station*, we recommend using
+encrypted USB drives with passphrases stored in the journalist's own password
+manager (preferably one which is accessible on their smartphone). This ensures
+that the journalist will have quick access to these passphrases when they need
+them.
+
+If your organization is not using a password manager already, please see
+the `Freedom of the Press Foundation guide <https://freedom.press/training/blog/choosing-password-manager/>`__
+to choosing one.

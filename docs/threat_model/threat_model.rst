@@ -296,7 +296,7 @@ What a Compromise of the Workstations Can Surrender
    volume, which stores information such as the Hidden Service value
    required to connect to the *Journalist Interface*, as well as a :doc:`database
    with passphrases <../passphrases>` for the
-   *Journalist Interface* and the journalist's personal GPG key.
+   *Journalist Interface*.
 -  The *Secure Viewing Station* requires Tails with a persistent
    volume, which stores information such as the SecureDrop application's
    GPG key, as well as a :doc:`database with the
@@ -392,7 +392,7 @@ What Compromise of the Admin's Property Can Surrender
       alerts.
    -  Access the credentials for the account the encrypt alerts are sent
       to.
-   -  Access the admin's personal GPG key.
+   -  Access the admin's personal GPG public key, if stored there.
 
 -  An attacker with admin access to the *Journalist Interface* can:
 
@@ -473,7 +473,6 @@ What a Compromise of the Journalist's Property Can Achieve
    -  Access the Hidden Service values used by the *Journalist Interface*.
    -  Access SSH keys and passphrases for the *Application Server* and the
       *Monitor Server*.
-   -  Access the journalist's personal GPG key.
 
 -  An attacker with journalist access to the *Journalist Interface* can:
 
@@ -599,39 +598,45 @@ What a Compromise of the *Secure Viewing Station* Can Achieve
 
 -  The *Secure Viewing Station* is only useful to an attacker while
    powered on and with the Tails persistent volume mounted. The attacker
-   may learn more if the Transfer device is in use at the time of
-   compromise or seizure. A physical seizure of this machine, the Tails
-   device or the Transfer device will also achieve nothing, assuming
-   that Tails' implementation of full-disk encryption works as expected.
+   may learn more if the *Transfer Device* or the *Export Device* are in use at
+   the time of compromise or seizure. A physical seizure of this machine, its
+   Tails device, the *Transfer Device* or the *Export Device* will also achieve
+   nothing, assuming that the Tails and VeraCrypt implementations of full-disk
+   encryption work as expected.
+
 -  A compromise of the *Secure Viewing Station* allows the attacker to:
 
    -  Run commands as the **amnesia** user.
    -  View, modify, and delete files owned by the **amnesia** user. This
-      includes the GPG private key used to encrypt and decrypt submitted
-      documents.
-   -  View, modify, and delete encrypted--and possibly also decrypted
-      submissions--if the Transfer device is in use.
-   -  Export the SecureDrop submissions GPG private key (unless there is a
-      passphrase set).
+      includes the *Submission Private Key* used to encrypt and decrypt
+      submitted documents.
+   -  View, modify, and delete submissions in encrypted form
+   -  View, modify, and delete decrypted submissions, if they are stored in
+      decrypted form on the *Secure Viewing Station*, or if the *Export Device*
+      is in use.
+   -  Export the *Submission Private Key* key (unless there is a passphrase
+      set).
 
 What a Physical Seizure of the *Secure Viewing Station* Can Achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The *Secure Viewing Station* is only useful to an attacker while
    powered on and with the Tails persistent volume mounted. The attacker
-   may learn more if the Transfer device is in use at the time of
-   compromise or seizure. A physical seizure of this machine, the Tails
-   device or the Transfer device will also achieve nothing, assuming
-   that Tails' implementation of full-disk encryption works as expected.
+   may learn more if the *Transfer Device* or the *Export Device* are in use at
+   the time of compromise or seizure. A physical seizure of this machine, its
+   Tails device, the *Transfer Device* or the *Export Device* will also achieve
+   nothing, assuming that the Tails and VeraCrypt implementations of full-disk
+   encryption work as expected.
 -  A physical seizure of the *Secure Viewing Station*, while on and with
    the persistent volume decrypted and mounted, allows the attacker to:
 
    -  Tamper with the hardware.
    -  Run commands as the **amnesia** user.
-   -  View, modify, and delete the GPG private key used to encrypt and
+   -  View, modify, and delete the *Submission Private Key* used to encrypt and
       decrypt submitted documents.
-   -  View, modify, and delete encrypted--and possibly also decrypted
-      submissions--if the Transfer device is in use.
+   -  View, modify, and delete decrypted submissions, if they are stored in
+      decrypted form on the *Secure Viewing Station*, or if the *Export Device*
+      is in use.
 
 What a Local Network Attacker Can Achieve Against the Source, Admin, or Journalist:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

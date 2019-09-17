@@ -153,21 +153,20 @@ authentication for devices. We recommend using one of:
 
 Transfer Device
 ---------------
+The *Transfer Device* is the physical media (e.g., designated USB drive) used
+to transfer encrypted documents from the *Journalist Workstation* to the
+*Secure Viewing Station*, where they can be decrypted.
 
-The *Transfer Device* is the physical media used to transfer encrypted
-documents from the *Journalist Workstation* to the *Secure Viewing
-Station*. Examples: a dedicated USB stick, CD-R, DVD-R, or SD card.
+Please see the detailed security recommendations for the choice, configuration
+and use of your *Transfer Device* in the :doc:`journalist guide <journalist>`
+and in the :doc:`setup guide <set_up_transfer_and_export_device>`.
 
-If you use a USB stick for the *Transfer Device*, we recommend using a
-small one (4GB or less). It will be necessary to securely wipe the entire
-device at times, and this process takes longer for larger devices.
+Export Device
+-------------
+The *Export Device* is the physical media (e.g., designated USB drive) used to
+transfer decrypted documents from the *Secure Viewing Station* to a journalist's
+everyday workstation, or to another computer for additional processing.
 
-Depending on your threat model, you may wish to only use one-time-use
-media (such as CD-R or DVD-R) for transferring files to and from the
-*SVS*. While doing so is cumbersome, it reduces the risk of malware (that
-could be run simply by opening a malicious submission) exfiltrating
-sensitive data, such as the private key used to decrypt submissions or
-the content of decrypted submissions.
-
-When we use the phrase "sneakernet" we mean physically moving documents
-with the *Transfer Device* from one computer to another.
+Please see the detailed security recommendations for the choice, configuration
+and use of your *Export Device* in the :doc:`journalist guide <journalist>`
+and in the :doc:`setup guide <set_up_transfer_and_export_device>` .

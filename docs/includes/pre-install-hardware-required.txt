@@ -1,0 +1,13 @@
+* 2 computers with memory and hard drives to use as the SecureDrop servers.
+* Mouse, keyboard, monitor (and necessary dongle or adapter) for
+  installing the servers.
+* At least 2 dedicated physical computers that can boot to Tails: one
+  computer for the *Secure Viewing Station*, and one or more computers for the
+  *Admin Workstation(s)/Journalist Workstation(s)*.
+* Dedicated airgapped hardware for the mouse, keyboard, and monitor (only if you
+  are using a desktop for the *Secure Viewing Station*).
+* Network firewall.
+* At least 3 ethernet cables.
+* Plenty of USB sticks: 1 drive for the master Tails stick, 1 drive for each
+  Secure Viewing Station, 1 drive for each *Transfer Device*, 1 drive for each
+  *Export Device*, and 1 drive for each admin and journalist.
