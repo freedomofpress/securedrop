@@ -1,0 +1,7 @@
+- Community support is available at https://forum.securedrop.org
+- If you are already a member of our support portal, please don't hesitate to
+  open a ticket there. If you would like to request access, please contact us
+  at securedrop@freedom.press
+  (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__).
+- The Freedom of the Press Foundation offers training and priority support
+  services. See https://securedrop.org/priority-support/ for more information.
