@@ -1,4 +1,4 @@
-Securedrop V3 Onion Services
+SecureDrop v3 Onion Services
 ============================
 Tor onion services provide anonymous inbound connections to websites and other
 servers exclusively over the Tor network. For example, SecureDrop uses onion services
@@ -51,12 +51,23 @@ URL changes will affect the following:
 - The *Source Interface* address will change - once the migration is complete, 
   you will need to update your landing page and other resources that reference
   the address, such as your SecureDrop directory entry.
-- If your instance uses HTTPS, you will need to provision a new certificate for
-  the v3 *Source Interface* address - this will need to be done `after` the new
-  address has been generated.
 - *Journalist* and *Admin Workstations* will need to be updated to use the v3
   addresses of the *Journalist* and *Source Interface*, and the SSH proxy 
   services if your instance is using SSH over Tor.
+- If your instance uses HTTPS, you will need to provision a new certificate for
+  the v3 *Source Interface* address - this will need to be done `after` the new
+  address has been generated.
+
+.. note:: If your certificate provisioning process requires validation of the
+          new v3 domain, you may not be able to complete the v3 migration process 
+          without first disabling HTTPS for v2. If your instance currently uses
+          HTTPS with an EV certificate, please contact us via the `SecureDrop
+          support portal`_ or via email to securedrop@freedom.press 
+          before proceeding with the migration. Please use `our GPG key`_ for 
+          any email communication.
+                                                                                
+.. _SecureDrop Support Portal: https://securedrop-support.readthedocs.io/en/latest/
+.. _our GPG key: https://securedrop.org/sites/default/files/fpf-email.asc
 
 Before proceeding with the migration, you should also back up the instance and
 *Admin Workstation* USB - for more information, see the following instructions:
