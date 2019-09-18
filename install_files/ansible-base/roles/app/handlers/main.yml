@@ -14,16 +14,6 @@
     name: apache2
     state: restarted
 
-- name: reload supervisor
-  supervisorctl:
-    name: securedrop_worker
-    state: present
-
-- name: reload supervisor
-  supervisorctl:
-    name: securedrop_rqrequeue
-    state: present
-
 ## Here, we list apparmor before haveged to ensure the correct AppArmor
 ## profile is loaded prior to restarting haveged
 - name: restart apparmor

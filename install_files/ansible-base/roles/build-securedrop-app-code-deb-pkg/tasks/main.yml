@@ -57,19 +57,19 @@
     src: "changelog-{{ securedrop_package_dist }}"
     dest: "{{ securedrop_app_code_prep_dir }}/debian/changelog"
 
-- name: Create supervisor conf.d directory in prep directory
+- name: Create lib/systemd/services directory in prep directory
   file:
     state: directory
-    dest: "{{ securedrop_app_code_prep_dir }}/etc/supervisor/conf.d"
-  tags: supervisor
+    dest: "{{ securedrop_app_code_prep_dir }}/lib/systemd/system"
+  tags: systemd
 
-- name: Copy supervisor program configurations to prep path
+- name: Copy systemd service configurations to prep path
   template:
     src: "{{ item }}"
-    dest: "{{ securedrop_app_code_prep_dir }}/etc/supervisor/conf.d/{{ item }}"
+    dest: "{{ securedrop_app_code_prep_dir }}/lib/systemd/system/{{ item }}"
     mode: 0644
-  with_items: "{{ supervisor_programs }}"
-  tags: supervisor
+  with_items: "{{ systemd_services }}"
+  tags: systemd
 
 - name: Create sdist in prep dir
   command: python3 setup.py sdist

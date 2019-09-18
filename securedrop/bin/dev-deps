@@ -22,12 +22,6 @@ function run_redis() {
     setsid redis-server >& /tmp/redis.out || cat /tmp/redis.out
 }
 
-function run_supervisor() {
-    mkdir -p /tmp/supervisor/log /tmp/supervisor/run && printf "[unix_http_server]\nfile=/tmp/supervisor/run/supervisor.sock\nchmod=0700\n\n[supervisord]logfile=/tmp/supervisor/log/supervisord.log\npidfile=/tmp/supervisor/run/supervisord.pid\nchildlogdir=/tmp/supervisor/log\n[rpcinterface:supervisor]\nsupervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface\n\n[supervisorctl]\nserverurl=unix:///tmp/supervisor/run/supervisor.sock\n\n[program:securedrop_worker]\ncommand=/opt/venvs/securedrop-app-code/bin/rqworker\ndirectory=$(pwd)\nautostart=true\nautorestart=true\nstartretries=3\nstderr_logfile=/tmp/supervisor/log/securedrop_worker.err\nstdout_logfile=/tmp/supervisor/log/securedrop_worker.out\nuser=%s\n" "$USER_NAME" > /tmp/supervisor/supervisor.conf
-
-    setsid supervisord -c /tmp/supervisor/supervisor.conf >& /tmp/supervisor/log/supervisor.out || cat /tmp/supervisor/log/supervisor.out
-}
-
 function setup_vncauth {
     x11vnc -storepasswd freedom /tmp/vncpasswd
 }

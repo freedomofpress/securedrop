@@ -1,5 +1,6 @@
 graft debian
 graft etc
+graft lib
 graft var
 prune var/www/securedrop/tests
 include requirements.txt

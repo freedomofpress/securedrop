@@ -9,7 +9,6 @@ cd "${REPOROOT}/securedrop"
 source "${BASH_SOURCE%/*}/dev-deps"
 
 run_redis &
-run_supervisor &
 urandom
 run_sass --watch &
 maybe_create_config_py

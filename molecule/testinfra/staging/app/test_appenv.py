@@ -48,6 +48,11 @@ def test_app_code_pkg(host):
     assert host.package("securedrop-app-code").is_installed
 
 
+def test_supervisor_not_installed(host):
+    """ ensure supervisor package is not installed """
+    assert host.package("supervisor").is_installed is False
+
+
 def test_gpg_key_in_keyring(host):
     """ ensure test gpg key is present in app keyring """
     with host.sudo(sdvars.securedrop_user):
@@ -71,13 +76,3 @@ def test_securedrop_tmp_clean_cron(host):
         cronlist = host.run("crontab -l").stdout
         cronjob = "@daily {}/manage.py clean-tmp".format(sdvars.securedrop_code)
         assert cronjob in cronlist
-
-
-def test_app_workerlog_dir(host):
-    """ ensure directory for worker logs is present """
-    f = host.file('/var/log/securedrop_worker')
-    with host.sudo():
-        assert f.is_directory
-        assert f.user == "root"
-        assert f.group == "root"
-        assert f.mode == 0o700
