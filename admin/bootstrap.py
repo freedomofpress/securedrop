@@ -66,6 +66,12 @@ def is_tails():
                                      shell=True).strip()
     except subprocess.CalledProcessError:
         id = None
+
+    # dirty hack to unreliably detect Tails 4.0~beta2
+    if id == 'Debian':
+        if os.uname()[1] == 'amnesia':
+            id = 'Tails'
+
     return id == 'Tails'
 
 
