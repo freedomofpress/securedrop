@@ -1,7 +1,14 @@
+- name: Check /etc/os-release for Tails string
+  find:
+    name: "/etc"
+    patterns: "os-release"
+    contains: "^TAILS_PRODUCT_NAME="
+  register: tails_os_string
+
 - name: Confirm host OS is Tails.
   assert:
     that:
-      - ansible_lsb.id == "Tails"
+      - ansible_lsb.id == "Tails" or tails_os_string.matched
       - ansible_lsb.major_release >= 9
     msg: >-
       SecureDrop requires Tails 3 or greater for workstation environments.
