@@ -65,7 +65,11 @@ Pre-Release
          git mktag < 0.x.y-rcN.tag > .git/refs/tags/0.x.y-rcN
 
 9. Push the branch and tags.
-10. Build Debian packages and place them on ``apt-test.freedom.press``.
+10. Build Debian packages and place them on ``apt-test.freedom.press``. This is currently done
+    by making a PR into `a git-lfs repo here <https://github.com/freedomofpress/securedrop-dev-packages-lfs>`_.
+    Changes merged to ``master`` in this repo will be published within 15 minutes. Build
+    logs should be saved and published according to the
+    `build log guidelines <https://github.com/freedomofpress/securedrop/wiki/Build-logs>`_.
 11. Write a test plan that focuses on the new functionality introduced in the release.
     Post for feedback and make changes based on suggestions from the community.
 12. Encourage QA participants to QA the release on production VMs and hardware. They
@@ -147,7 +151,8 @@ Release Process
       git clean -dfx
 
 10. Build Debian packages. People building Debian packages should verify and build
-    off the signed tag.
+    off the signed tag. Build logs should be saved and published according to the
+    `build log guidelines <https://github.com/freedomofpress/securedrop/wiki/Build-logs>`_.
 11. Step through the signing ceremony for the ``Release``
     file(s) (there may be multiple if Tor is also updated along
     with the SecureDrop release).
@@ -156,7 +161,17 @@ Release Process
     in production VMs using the packages on ``apt-test.freedom.press``.
 14. Put signed Debian packages on ``apt.freedom.press``. The release is now live.
 15. Make sure that the default branch of documentation is being built off the tip
-    of the release branch.
+    of the release branch. Building from the branch instead of a given tag enables
+    us to more easily add documentation changes after release. You should:
+
+  * Log into readthedocs.
+  * Navigate to **Projects** → **securedrop** → **Versions** → **Inactive Versions** → **release/branch** → **Edit**.
+  * Mark the branch as Active by checking the box and save your changes. This will kick off a new docs build.
+  * Once the documentation has built, it will appear in the version selector at the bottom of the column of the.
+  * Now set this new release as default by navigating to **Admin** → **Advanced Settings** → **Global Settings** → **Default Version**.
+  * Select ``release/branch`` from the dropdown menu and save the changes.
+  * Verify that docs.securedrop.org redirects users to the documentation built from the release branch.
+
 16. Create a `release <https://github.com/freedomofpress/securedrop/releases>`_
     on GitHub with a brief summary of the changes in this release.
 17. Make sure that release notes are written and posted on the SecureDrop blog.
