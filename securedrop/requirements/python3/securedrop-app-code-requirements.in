@@ -20,4 +20,4 @@ scrypt
 sh
 SQLAlchemy>=1.3.0
 typing
-Werkzeug
+Werkzeug>=0.15.3
