@@ -2,7 +2,6 @@
 import base64
 import os
 import io
-import six
 from tempfile import _TemporaryFileWrapper  # type: ignore
 
 from pretty_bad_protocol._util import _STREAMLIKE_TYPES
@@ -50,10 +49,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         self.create_key()
 
         data = base64.urlsafe_b64encode(os.urandom(32))
-        if not six.PY2:  # For Python3
-            self.tmp_file_id = data.decode('utf-8').strip('=')
-        else:
-            self.tmp_file_id = data.strip('=')
+        self.tmp_file_id = data.decode('utf-8').strip('=')
 
         self.filepath = os.path.join(store_dir,
                                      '{}.aes'.format(self.tmp_file_id))
@@ -90,8 +86,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
             raise AssertionError('You cannot write after reading!')
         self.last_action = 'write'
 
-        # This is the old Python related code
-        if isinstance(data, six.text_type):
+        if isinstance(data, str):
             data = data.encode('utf-8')
 
         self.file.write(self.encryptor.update(data))

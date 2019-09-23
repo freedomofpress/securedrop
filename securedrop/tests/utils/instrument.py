@@ -9,7 +9,7 @@ Flask unittest integration.
 """
 
 
-from six.moves.urllib.parse import urlparse, urljoin
+from urllib.parse import urlparse, urljoin
 
 import pytest
 

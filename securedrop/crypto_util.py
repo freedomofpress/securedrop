@@ -4,7 +4,6 @@ from distutils.version import StrictVersion
 import pretty_bad_protocol as gnupg
 import os
 import io
-import six
 import scrypt
 from random import SystemRandom
 
@@ -278,9 +277,7 @@ class CryptoUtil:
                                              salt=self.scrypt_gpg_pepper)
         data = self.gpg.decrypt(ciphertext, passphrase=hashed_codename).data
 
-        if not six.PY2:  # Python3
-            return data.decode('utf-8')
-        return data
+        return data.decode('utf-8')
 
 
 def clean(s, also=''):

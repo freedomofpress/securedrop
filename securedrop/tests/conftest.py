@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import configparser
 import pretty_bad_protocol as gnupg
 import logging
 from hypothesis import settings
@@ -11,8 +12,6 @@ import pytest
 import shutil
 import signal
 import subprocess
-
-from six.moves import configparser
 
 from flask import url_for
 from pyotp import TOTP
