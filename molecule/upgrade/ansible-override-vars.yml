@@ -26,3 +26,7 @@ etc_hosts:
 
 # Set Xenial as apt repo channel for hosting deb packages
 rep_dist: xenial
+
+# Override path to repo root, to use the nested repo on the previous version.
+# See molecule/shared/sd_clone.yml for details on the path structure.
+sd_root_dir: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/sd-orig"

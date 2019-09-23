@@ -14,8 +14,8 @@
   any_errors_fatal: yes
   roles:
     - { role: install-fpf-repo, tags: fpf }
-    - { role: common, tags: common }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
+    - { role: common, tags: common }
     - { role: tor-hidden-services, tags: tor }
   become: yes
 

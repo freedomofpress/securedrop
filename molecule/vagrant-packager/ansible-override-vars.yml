@@ -8,3 +8,7 @@ ssh_listening_address: 0.0.0.0
 app_ip: "{{ hostvars['app-staging']['ansible_'+primary_network_iface].ipv4.address }}"
 monitor_ip: "{{ hostvars['mon-staging']['ansible_'+primary_network_iface].ipv4.address }}"
 apt_repo_url: https://apt.freedom.press
+
+# Override path to repo root, to use the nested repo on the previous version.
+# See molecule/shared/sd_clone.yml for details on the path structure.
+sd_root_dir: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/sd-orig"
