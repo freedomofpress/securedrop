@@ -12,12 +12,7 @@ specific type of development task. We use Vagrant, VirtualBox, and
 Docker and our Ansible playbooks can provision these environments on
 either virtual machines or physical hardware.
 
-.. note:: SecureDrop is written in Python 2. We plan to migrate to
-          Python 3 in a future release. Please use a Python 3
-          virtualenv for development, while ensuring that your changes
-          are compatible with both Python 3 and Python 2, to ensure
-          they work in production and CI, both of which use Python
-          2.7.
+.. note:: SecureDrop is written in Python 3 only.
 
 Quick Start
 -----------
@@ -109,16 +104,6 @@ To get started, you can try the following:
    make test                                   # run tests
    bin/dev-shell bin/run-test tests/functional # functional tests only
    bin/dev-shell bash                          # shell inside the container
-
-To specify the version of Python you want to use, set the ``PYTHON_VERSION``
-environmental variable, like so:
-
-.. code:: sh
-
-    PYTHON_VERSION=3 make test    # Run tests on Python 3
-    PYTHON_VERSION=2 make test    # Run tests on Python 2
-    PYTHON_VERSION=3 make dev     # Run dev container on Python 3
-    PYTHON_VERSION=2 make dev     # Run dev container on Python 2
 
 .. tip:: The interactive shell in the container does not run
          ``redis``, ``Xvfb`` etc.  However you can import shell helper

@@ -9,21 +9,15 @@ get_venv_version() {
 }
 
 venv_instructions() {
-    PYTHON_VERSION="${1:-}"
     echo "If you need to create a virtualenv, you can run the following"
     echo "commands in the root directory of your SecureDrop working copy:"
     echo
-    if [ "${PYTHON_VERSION}" == "2" ]
-    then
-        echo "    make venv2 && . .venv2/bin/activate"
-    else
-        echo "    make venv && . .venv/bin/activate"
-    fi
+    echo "    make venv && . .venv/bin/activate"
     echo
 }
 
 function virtualenv_bootstrap() {
-    PYTHON_VERSION="${PYTHON_VERSION:-3}"
+    PYTHON_VERSION=3
     VIRTUAL_ENV="${VIRTUAL_ENV:-}"  # Just to get around all the "set -u"
     if [ -n "$VIRTUAL_ENV" ]
     then
@@ -40,10 +34,6 @@ function virtualenv_bootstrap() {
         fi
     else
         VENV=".venv"
-        if [[ "$PYTHON_VERSION" != "3" ]]
-        then
-            VENV=".venv${PYTHON_VERSION}"
-        fi
 
         if [ -d "${VENV}" ]
         then

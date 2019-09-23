@@ -11,33 +11,17 @@ export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
 TOPLEVEL=$(git rev-parse --show-toplevel)
 BASE_OS=xenial
 
-if ! test -n "${PYTHON_VERSION:-}" ; then
-    PYTHON_VERSION=3
-fi
-
-function validate_python_version() {
-    if [[ "$2" != "2" && "$2" != "3" ]]
-    then
-        echo "PYTHON_VERSION must be 2 or 3"
-        exit 1
-    fi
-}
-
 function docker_image() {
-    validate_python_version $1 $2
-
     docker build \
            ${DOCKER_BUILD_ARGUMENTS:-} \
            --build-arg=USER_ID="$(id -u)" \
            --build-arg=USER_NAME="${USER:-root}" \
-           -t "securedrop-test-${1}-py${2}" \
-           --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/python${2}/Dockerfile" \
+           -t "securedrop-test-${1}-py3" \
+           --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/python3/Dockerfile" \
            "${TOPLEVEL}/securedrop"
 }
 
 function docker_run() {
-    validate_python_version $1 $2
-
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
 
     # The --shm-size argument sets up dedicated shared memory for the
@@ -55,8 +39,8 @@ function docker_run() {
            --volume "${TOPLEVEL}:${TOPLEVEL}" \
            --workdir "${TOPLEVEL}/securedrop" \
            --name securedrop-dev \
-           -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py${2}" "${@:3}"
+           -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py3" "${@:2}"
 }
 
-docker_image $BASE_OS $PYTHON_VERSION
-docker_run $BASE_OS $PYTHON_VERSION "$@"
+docker_image $BASE_OS
+docker_run $BASE_OS "$@"
