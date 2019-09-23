@@ -242,6 +242,6 @@ def add_list_fs_disconnect_parser(subps):
 def add_were_there_submissions_today(subps):
     parser = subps.add_parser(
         "were-there-submissions-today",
-        help=("Update the file indicating " "whether submissions were received in the past 24h"),
+        help=("Update the file indicating " "whether submissions were received in the past 24h."),
     )
     parser.set_defaults(func=were_there_submissions_today)

@@ -337,12 +337,6 @@ def get_args():
                         default=config.STORE_DIR,
                         help=('directory in which the documents are stored'))
     subps = parser.add_subparsers()
-    # Run WSGI app
-    run_subp = subps.add_parser('run', help='Run the Werkzeug source & '
-                                'journalist WSGI apps. WARNING!!! For '
-                                'development only, not to be used in '
-                                'production.')
-    run_subp.set_defaults(func=run)
     # Add/remove journalists + admins
     admin_subp = subps.add_parser('add-admin', help='Add an admin to the '
                                   'application.')
@@ -360,29 +354,36 @@ def get_args():
     delete_user_subp_a = subps.add_parser('delete_user', help='^')
     delete_user_subp_a.set_defaults(func=delete_user)
 
-    # Reset application state
-    reset_subp = subps.add_parser('reset', help='DANGER!!! ONLY FOR DEVELOPMENT '
-                                  'USE. DO NOT USE IN PRODUCTION. Clears the '
-                                  "SecureDrop application\'s state.")
-    reset_subp.set_defaults(func=reset)
-    # Cleanup the SD temp dir
-    set_clean_tmp_parser(subps, 'clean-tmp')
-    set_clean_tmp_parser(subps, 'clean_tmp')
-
-    init_db_subp = subps.add_parser('init-db', help='initialize the DB')
-    init_db_subp.add_argument('-u', '--user',
-                              help='Unix user for the DB',
-                              required=True)
-    init_db_subp.set_defaults(func=init_db)
-
     add_check_db_disconnect_parser(subps)
     add_check_fs_disconnect_parser(subps)
     add_delete_db_disconnect_parser(subps)
     add_delete_fs_disconnect_parser(subps)
     add_list_db_disconnect_parser(subps)
     add_list_fs_disconnect_parser(subps)
+
+    # Cleanup the SD temp dir
+    set_clean_tmp_parser(subps, 'clean-tmp')
+    set_clean_tmp_parser(subps, 'clean_tmp')
+
+    init_db_subp = subps.add_parser('init-db', help='Initialize the database.\n')
+    init_db_subp.add_argument('-u', '--user',
+                              help='Unix user for the DB',
+                              required=True)
+    init_db_subp.set_defaults(func=init_db)
+
     add_were_there_submissions_today(subps)
 
+    # Run WSGI app
+    run_subp = subps.add_parser('run', help='DANGER!!! ONLY FOR DEVELOPMENT '
+                                'USE. DO NOT USE IN PRODUCTION. Run the '
+                                'Werkzeug source and journalist WSGI apps.\n')
+    run_subp.set_defaults(func=run)
+
+    # Reset application state
+    reset_subp = subps.add_parser('reset', help='DANGER!!! ONLY FOR DEVELOPMENT '
+                                  'USE. DO NOT USE IN PRODUCTION. Clear the '
+                                  'SecureDrop application\'s state.\n')
+    reset_subp.set_defaults(func=reset)
     return parser
 
 
