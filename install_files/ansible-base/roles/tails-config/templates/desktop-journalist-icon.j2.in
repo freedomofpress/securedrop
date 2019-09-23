@@ -4,6 +4,7 @@
 Version=1.0
 Type=Application
 Terminal=false
+StartupNotify=true
 Categories=Network;
 Name=SecureDrop Journalist Interface
 Icon={{ tails_config_securedrop_dotfiles }}/securedrop_icon.png
