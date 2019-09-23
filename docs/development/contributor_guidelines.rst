@@ -123,12 +123,11 @@ for all the functions. Type hints and function annotations are defined in
 tool in our CI to find bugs in our Python code.
 
 If you are new to Python type hinting, please read the above mentioned PEP documents,
-and then go through the examples in 
+and then go through the examples in the 
 `mypy documentation <https://mypy.readthedocs.io/en/stable/builtin_types.html>`_.
-SecureDrop uses Python2, that is why all type annotation/hints are mentioned as code
-comments. The `typing <https://pypi.python.org/pypi/typing>`_ module is also not 
-part of the standard library. It is being installed as part of the development
-and run-time dependency. 
+Some type annotations are included as code comments due to SecureDrop being Python 2 only when
+they were added, but any annotation syntax supported in Python 3.5 is allowed (i.e. function but not
+variable annotations which were added in Python 3.6).
 
 Example of Type Hint
 ~~~~~~~~~~~~~~~~~~~~
@@ -180,14 +179,14 @@ How to Use mypy?
 ~~~~~~~~~~~~~~~~~
 
 ``make lint`` already checks for any error using the ``mypy`` tool. In case you want
-to have a local installation, you can do that using a Python3 virtualenv.
+to have a local installation, you can do that using your Python 3 virtualenv.
 
 .. code:: shell
 
     $ python3 -m venv ../.py3
     $ source ../.py3/bin/activate
     $ pip install mypy
-    $ mypy --py2 securedrop
+    $ mypy securedrop
 
 Git History
 -----------

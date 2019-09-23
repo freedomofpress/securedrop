@@ -239,8 +239,8 @@ Install the dependencies for the development environment:
 If you use homebrew-cask_ to manage macOS apps, you can install Vagrant and
 VirtualBox that way. As for Ansible, we strongly recommend installing it
 in a virtual environment using ``virtualenvwrapper`` and ``pip``, so as not to
-install the older version we use system-wide. The following commands assume your
-default Python is the Python 2 that ships with macOS. If you are using a
+install the older version we use system-wide. You should create your virtualenv
+using the Python 3 install on your system. If you are using a
 different version, the path to ``virtualenvwrapper.sh`` will differ. Running
 ``pip show virtualenvwrapper`` should help you find it.
 
@@ -249,7 +249,7 @@ different version, the path to ``virtualenvwrapper.sh`` will differ. Running
     sudo easy_install pip # if you don't already have pip
     sudo -H pip install -U virtualenvwrapper --ignore-installed six
     source /usr/local/bin/virtualenvwrapper.sh
-    mkvirtualenv -p python securedrop
+    mkvirtualenv -p python3 securedrop
 
 .. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
           to your ``~/.bashrc`` (or whatever your default shell configuration
