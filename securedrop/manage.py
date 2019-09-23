@@ -361,8 +361,9 @@ def get_args():
     delete_user_subp_a.set_defaults(func=delete_user)
 
     # Reset application state
-    reset_subp = subps.add_parser('reset', help='DANGER!!! Clears the '
-                                  "SecureDrop application's state.")
+    reset_subp = subps.add_parser('reset', help='DANGER!!! ONLY FOR DEVELOPMENT '
+                                  'USE. DO NOT USE IN PRODUCTION. Clears the '
+                                  "SecureDrop application\'s state.")
     reset_subp.set_defaults(func=reset)
     # Cleanup the SD temp dir
     set_clean_tmp_parser(subps, 'clean-tmp')
