@@ -10,7 +10,6 @@ common-steps:
       name: Install enchant
       command: sudo apt-get update && sudo apt-get install -y enchant
 
-  # Python 3 (default) Docker layer caching
   - &createcachedir
     run:
       name: Ensure cache dir exists and permissions are good
@@ -52,48 +51,6 @@ common-steps:
       paths:
         - /caches/layers.tar
 
-  # Python 2 Docker layer caching
-  - &p2createcachedir
-    run:
-      name: Ensure Python 2 cache dir exists and permissions are good
-      command: |
-        sudo mkdir -p /p2caches && sudo chown circleci: -R /p2caches
-
-  - &p2restorecache
-    restore_cache:
-      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/python2/Dockerfile" }}
-      paths:
-        - /p2caches/layers.tar.gz
-
-  - &p2loadimagelayers
-    run:
-      name: Load Python 2 image layer cache
-      command: |
-        set +o pipefail
-        docker load -i /p2caches/layers.tar || true
-
-  - &p2dockerimagebuild
-    run:
-      name: Build Python 2 Docker images
-      command: |
-        set +o pipefail
-        docker images
-        fromtag=$(docker images |grep securedrop-test-xenial-py2 |head -n1 |awk '{print $2}')
-        cd securedrop && PYTHON_VERSION=2 DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py2:${fromtag:-latest}" ./bin/dev-shell true
-
-  - &p2saveimagelayers
-    run:
-      name: Save Python 2 Docker image layer cache
-      command: |
-        docker images
-        docker save -o /p2caches/layers.tar securedrop-test-xenial-py2:latest
-
-  - &p2savecache
-    save_cache:
-      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/xenial/python2/Dockerfile" }}
-      paths:
-        - /p2caches/layers.tar
-
 version: 2
 jobs:
   lint:
@@ -102,7 +59,6 @@ jobs:
     environment:
       DOCKER_API_VERSION: 1.23
       BASE_OS: xenial
-      PYTHON_VERSION: 3
     steps:
       - checkout
       - *rebaseontarget
@@ -124,47 +80,12 @@ jobs:
           name: Run shellcheck
           command: make shellcheck
 
-
-  python2-app-tests:
+  app-tests:
     machine:
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
       BASE_OS: xenial
-    parallelism: 3
-    steps:
-      - checkout
-      - *rebaseontarget
-      - *p2createcachedir
-      - *p2restorecache
-      - *p2loadimagelayers
-      - *p2dockerimagebuild
-      - *p2saveimagelayers
-      - *p2savecache
-
-      - run:
-          name: Run tests
-          no_output_timeout: 20m
-          command: |
-            BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|docs|update-builder)")
-            if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
-            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
-            fromtag=$(docker images |grep securedrop-test-xenial-py2 |head -n1 |awk '{print $2}')
-            PYTHON_VERSION=2 DOCKER_RUN_ARGUMENTS=$(bash <(curl -s https://codecov.io/env)) DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py2:${fromtag:-latest}" make test
-
-      - store_test_results:
-          path: ~/project/test-results
-
-      - store_artifacts:
-          path: ~/project/test-results
-
-  python3-app-tests:
-    machine:
-      enabled: true
-    environment:
-      DOCKER_API_VERSION: 1.23
-      BASE_OS: xenial
-      PYTHON_VERSION: 3
     parallelism: 3
     steps:
       - checkout
@@ -288,7 +209,6 @@ jobs:
     environment:
       DOCKER_API_VERSION: 1.23
       BASE_OS: xenial
-      PYTHON_VERSION: 3
     steps:
       - checkout
       - *rebaseontarget
@@ -381,16 +301,7 @@ workflows:
   securedrop_ci:
     jobs:
       - lint
-      - python2-app-tests:
-          filters:
-            branches:
-              ignore:
-                - /docs-.*/
-                - /i18n-.*/
-                - /update-builder-.*/
-          requires:
-            - lint
-      - python3-app-tests:
+      - app-tests:
           filters:
             branches:
               ignore:
