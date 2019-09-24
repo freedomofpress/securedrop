@@ -14,7 +14,7 @@ Installation
 
 .. code:: sh
 
-    pip install -r securedrop/requirements/develop-requirements.txt
+    pip install --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
 
 Running the Config Tests
