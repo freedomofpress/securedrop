@@ -65,7 +65,7 @@ def test_sudoers_tmux_env(host):
             (tmux attach || tmux_attach_via_proc || tmux new-session)
         fi"""
     )
-    assert host_file.content_string == expected_content
+    assert host_file.content_string.strip() == expected_content
 
 
 def test_tmux_installed(host):

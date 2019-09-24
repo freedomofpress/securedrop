@@ -52,7 +52,7 @@ def test_generic_kernels_absent(host, package):
     c = host.run("dpkg -l {}".format(package))
     assert c.rc == 1
     error_text = "dpkg-query: no packages found matching {}".format(package)
-    assert c.stderr == error_text
+    assert error_text in c.stderr.strip()
 
 
 def test_grsecurity_lock_file(host):
@@ -71,8 +71,8 @@ def test_grsecurity_kernel_is_running(host):
     Make sure the currently running kernel is specific grsec kernel.
     """
     c = host.run('uname -r')
-    assert c.stdout.endswith('-grsec')
-    assert c.stdout == '{}-grsec'.format(KERNEL_VERSION)
+    assert c.stdout.strip().endswith('-grsec')
+    assert c.stdout.strip() == '{}-grsec'.format(KERNEL_VERSION)
 
 
 @pytest.mark.parametrize('sysctl_opt', [
@@ -130,7 +130,7 @@ def test_grub_pc_marked_manual(host):
     """
     c = host.run('apt-mark showmanual grub-pc')
     assert c.rc == 0
-    assert c.stdout == "grub-pc"
+    assert c.stdout.strip() == "grub-pc"
 
 
 def test_apt_autoremove(host):
