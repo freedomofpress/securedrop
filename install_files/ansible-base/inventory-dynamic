@@ -160,6 +160,8 @@ def lookup_host_distro_id():
     cmd = ["lsb_release", "--id", "--short"]
     p = subprocess.check_output(cmd)
     distro_id = p.rstrip()
+    if distro_id == 'Debian' and os.uname()[1] == 'amnesia':
+        distro_id = 'Tails'
     return distro_id
 
 
