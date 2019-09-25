@@ -2,7 +2,6 @@
 
 import io
 import os
-import six
 from os.path import abspath, dirname, exists, getmtime, join, realpath
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import i18n_tool
@@ -254,7 +253,7 @@ class TestI18NTool(object):
             k = {'_cwd': join(d, repo)}
             git.init(**k)
             git.config('user.email', 'you@example.com', **k)
-            git.config('user.name',  six.u('Loïc Nordhøy'), **k)
+            git.config('user.name',  'Loïc Nordhøy', **k)
             touch('README.md', **k)
             git.add('README.md', **k)
             git.commit('-m', 'README', 'README.md', **k)
@@ -315,9 +314,9 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated Dutch (nl)' not in r()
         assert 'l10n: updated German (de_DE)' not in r()
-        message = six.text_type(git('--no-pager', '-C', 'securedrop', 'show',
-                                    _cwd=d, _encoding='utf-8'))
-        assert six.u("Loïc") in message
+        message = str(git('--no-pager', '-C', 'securedrop', 'show',
+                          _cwd=d, _encoding='utf-8'))
+        assert "Loïc" in message
 
         #
         # an update is done to nl in weblate
@@ -348,7 +347,7 @@ class TestI18NTool(object):
         ])
         assert 'l10n: updated Dutch (nl)' in r()
         assert 'l10n: updated German (de_DE)' not in r()
-        message = six.text_type(git('--no-pager', '-C', 'securedrop', 'show',
-                                    _cwd=d))
+        message = str(git('--no-pager', '-C', 'securedrop', 'show',
+                          _cwd=d))
         assert "Someone Else" in message
-        assert six.u("Loïc") not in message
+        assert "Loïc" not in message

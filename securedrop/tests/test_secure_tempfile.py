@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import io
 import os
-import six
 import pytest
 
 from pretty_bad_protocol._util import _is_stream
@@ -51,7 +50,7 @@ def test_write_then_read_then_write():
 
 def test_read_write_unicode():
     f = SecureTemporaryFile('/tmp')
-    unicode_msg = six.u('鬼神 Kill Em All 1989')
+    unicode_msg = '鬼神 Kill Em All 1989'
     f.write(unicode_msg)
     assert f.read().decode('utf-8') == unicode_msg
 

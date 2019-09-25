@@ -5,8 +5,6 @@ import os
 import sys
 import time
 
-from six.moves import input
-
 from db import db
 from rm import secure_delete
 from models import Reply, Source, Submission

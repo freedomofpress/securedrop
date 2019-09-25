@@ -2,7 +2,6 @@
 import os
 import pytest
 import io
-import six
 import random
 import zipfile
 import base64
@@ -1284,12 +1283,8 @@ def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
                 "error")
 
     log_event = mocked_error_logger.call_args[0][0]
-    if six.PY2:
-        assert ("Adding user 'username' failed: (__builtin__.NoneType) "
-                "None\n[SQL: STATEMENT]\n[parameters: 'PARAMETERS']") in log_event
-    else:
-        assert ("Adding user 'username' failed: (builtins.NoneType) "
-                "None\n[SQL: STATEMENT]\n[parameters: 'PARAMETERS']") in log_event
+    assert ("Adding user 'username' failed: (builtins.NoneType) "
+            "None\n[SQL: STATEMENT]\n[parameters: 'PARAMETERS']") in log_event
 
 
 def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):

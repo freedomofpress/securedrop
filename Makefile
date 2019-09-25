@@ -18,13 +18,7 @@ DEVSHELL := $(SDBIN)/dev-shell
 .PHONY: venv
 venv:  ## Provision a Python 3 virtualenv for development.
 	@echo "███ Preparing Python 3 virtual environment..."
-	@PYTHON_VERSION=3 $(SDROOT)/devops/scripts/boot-strap-venv.sh
-	@echo
-
-.PHONY: venv2
-venv2:  ## Provision a virtualenv for compiling Python 2 requirements.
-	@echo "███ Preparing Python 2 virtual environment..."
-	@PYTHON_VERSION=2 $(SDROOT)/devops/scripts/boot-strap-venv.sh
+	@$(SDROOT)/devops/scripts/boot-strap-venv.sh
 	@echo
 
 .PHONY: update-admin-pip-requirements
@@ -46,23 +40,8 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 		--output-file requirements/python3/securedrop-app-code-requirements.txt \
 		requirements/python3/securedrop-app-code-requirements.in
 
-.PHONY: update-python2-requirements
-update-python2-requirements:  ## Update Python 2 requirements with pip-compile.
-	@echo "███ Updating Python 2 requirements files..."
-	@PYTHON_VERSION=2 $(DEVSHELL) pip-compile \
-		--output-file requirements/python2/develop-requirements.txt \
-		../admin/requirements-ansible.in \
-		../admin/requirements.in \
-		requirements/python2/develop-requirements.in
-	@PYTHON_VERSION=2 $(DEVSHELL) pip-compile \
-		--output-file requirements/python2/test-requirements.txt \
-		requirements/python2/test-requirements.in
-	@PYTHON_VERSION=2 $(DEVSHELL) pip-compile --generate-hashes \
-		--output-file requirements/python2/securedrop-app-code-requirements.txt \
-		requirements/python2/securedrop-app-code-requirements.in
-
 .PHONY: update-pip-requirements
-update-pip-requirements: update-admin-pip-requirements update-python2-requirements update-python3-requirements ## Update all requirements with pip-compile.
+update-pip-requirements: update-admin-pip-requirements update-python3-requirements ## Update all requirements with pip-compile.
 
 
 #################
@@ -167,9 +146,9 @@ safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 bandit: test-config ## Run bandit with medium level excluding test-related folders.
 	@command -v bandit || (echo "Please run 'pip install -U bandit'."; exit 1)
 	@echo "███ Running bandit..."
-	@bandit -ll --exclude ./admin/.tox,./admin/.venv,./admin/.eggs,./molecule,./testinfra,./securedrop/tests,./.tox,./.venv*,securedrop/config.py --recursive .
+	@bandit -ll --skip B322 --exclude ./admin/.tox,./admin/.venv,./admin/.eggs,./molecule,./testinfra,./securedrop/tests,./.tox,./.venv*,securedrop/config.py --recursive .
 	@echo "███ Running bandit on securedrop/config.py..."
-	@bandit -ll --skip B108 securedrop/config.py
+	@bandit -ll --skip B108,B322 securedrop/config.py
 	@echo
 
 #############
@@ -327,13 +306,13 @@ update-user-guides:  ## Run the page layout tests to regenerate screenshots.
 .PHONY: build-debs
 build-debs: ## Build and test SecureDrop Debian packages.
 	@echo "Building SecureDrop Debian packages..."
-	@PYTHON_VERSION=3 $(SDROOT)/devops/scripts/build-debs.sh
+	@$(SDROOT)/devops/scripts/build-debs.sh
 	@echo
 
 .PHONY: build-debs-notest
 build-debs-notest: ## Build SecureDrop Debian packages without running tests.
 	@echo "Building SecureDrop Debian packages; skipping tests..."
-	@PYTHON_VERSION=3 $(SDROOT)/devops/scripts/build-debs.sh notest
+	@$(SDROOT)/devops/scripts/build-debs.sh notest
 	@echo
 
 

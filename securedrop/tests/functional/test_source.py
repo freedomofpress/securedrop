@@ -1,6 +1,5 @@
 from . import source_navigation_steps, journalist_navigation_steps
 from . import functional_test
-import six
 
 
 class TestSourceInterface(
@@ -28,6 +27,5 @@ class TestDownloadKey(
         data = self.return_downloaded_content(self.source_location +
                                               "/journalist-key", None)
 
-        if six.PY3:
-            data = data.decode('utf-8')
+        data = data.decode('utf-8')
         assert "BEGIN PGP PUBLIC KEY BLOCK" in data

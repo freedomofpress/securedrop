@@ -15,7 +15,6 @@ import traceback
 sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
 
 import qrcode
-from six.moves import input
 from flask import current_app
 from sqlalchemy.orm.exc import NoResultFound
 

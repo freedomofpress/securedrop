@@ -6,7 +6,6 @@ import io
 import os
 import pytest
 import re
-import six
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import crypto_util
@@ -342,11 +341,5 @@ def test_encrypt_then_decrypt_gives_same_result(
     )
     ciphertext = crypto.encrypt(message, str(key))
     decrypted_text = crypto.decrypt(secret, ciphertext)
-
-    # `hypothesis.strategies.text()` generates `unicode` char sequences; use
-    # decode('utf-8') in order to decode decrypted ciphertext as `unicode` for
-    # correct type comparisons. Only decode on Python 2.
-    if six.PY2:
-        decrypted_text = decrypted_text.decode('utf-8')
 
     assert decrypted_text == message
