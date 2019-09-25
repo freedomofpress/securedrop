@@ -1,5 +1,5 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: securedrop-proxy
+Upstream-Name: securedrop
 Source: https://github.com/freedomofpress/securedrop
 
 Files: *
