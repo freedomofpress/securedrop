@@ -1,9 +1,8 @@
 ---
 - name: Remove unused packages
   apt:
-    name: "{{ item }}"
+    name: "{{ unused_packages }}"
     state: absent
-  with_items: "{{ unused_packages }}"
   tags:
     - apt
     - hardening
