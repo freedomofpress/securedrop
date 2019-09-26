@@ -1,9 +1,9 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: securedrop-proxy
-Source: https://github.com/freedomofpress/securedrop-proxy
+Upstream-Name: securedrop
+Source: https://github.com/freedomofpress/securedrop
 
 Files: *
-Copyright: 2018 Freedom of the Press Foundation <securedrop@freedom.press>
+Copyright: 2019 Freedom of the Press Foundation <securedrop@freedom.press>
 License: GPLv3+
 
 Files: orderedmultidict*
