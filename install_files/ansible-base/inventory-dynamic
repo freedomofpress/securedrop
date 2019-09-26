@@ -158,7 +158,7 @@ def lookup_host_distro_id():
     whether host machine is Tails.
     """
     cmd = ["lsb_release", "--id", "--short"]
-    p = subprocess.check_output(cmd)
+    p = subprocess.check_output(cmd).decode("utf-8")
     distro_id = p.rstrip()
     if distro_id == 'Debian' and os.uname()[1] == 'amnesia':
         distro_id = 'Tails'
@@ -194,7 +194,7 @@ def build_inventory():
 
     # Append SSH extra args if NOT under Tails. Necessary for testing.
     if not host_is_tails():
-        for host, hostvars in inventory["_meta"]["hostvars"].iteritems():
+        for host, hostvars in inventory["_meta"]["hostvars"].items():
             (inventory["_meta"]
                       ["hostvars"]
                       [host]
