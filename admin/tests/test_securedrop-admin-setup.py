@@ -43,7 +43,7 @@ class TestSecureDropAdmin(object):
     def test_run_command(self):
         for output_line in bootstrap.run_command(
                 ['/bin/echo', 'something']):
-            assert output_line.strip() == 'something'
+            assert output_line.strip() == b'something'
 
         lines = []
         with pytest.raises(subprocess.CalledProcessError):
@@ -51,8 +51,8 @@ class TestSecureDropAdmin(object):
                     ['sh', '-c',
                      'echo in stdout ; echo in stderr >&2 ; false']):
                 lines.append(output_line.strip())
-        assert lines[0] == 'in stdout'
-        assert lines[1] == 'in stderr'
+        assert lines[0] == b'in stdout'
+        assert lines[1] == b'in stderr'
 
     def test_install_pip_dependencies_up_to_date(self, caplog):
         args = argparse.Namespace()

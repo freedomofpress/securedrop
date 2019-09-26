@@ -26,7 +26,7 @@ import sys
 sdlog = logging.getLogger(__name__)
 
 DIR = os.path.dirname(os.path.realpath(__file__))
-VENV_DIR = os.path.join(DIR, ".venv")
+VENV_DIR = os.path.join(DIR, ".venv3")
 
 
 def setup_logger(verbose=False):
@@ -52,7 +52,7 @@ def run_command(command):
     popen = subprocess.Popen(command,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
-    for stdout_line in iter(popen.stdout.readline, ""):
+    for stdout_line in iter(popen.stdout.readline, b""):
         yield stdout_line
     popen.stdout.close()
     return_code = popen.wait()
@@ -94,21 +94,21 @@ def install_apt_dependencies(args):
     apt_command = ['sudo', 'su', '-c',
                    "apt-get update && \
                    apt-get -q -o=Dpkg::Use-Pty=0 install -y \
-                   python-virtualenv \
-                   python-yaml \
-                   python-pip \
+                   python3-virtualenv \
+                   python3-yaml \
+                   python3-pip \
                    ccontrol \
                    virtualenv \
                    libffi-dev \
                    libssl-dev \
-                   libpython2.7-dev",
+                   libpython3.5-dev",
                    ]
 
     try:
         # Print command results in real-time, to keep Admin apprised
         # of progress during long-running command.
         for output_line in run_command(apt_command):
-            print(output_line.rstrip())
+            print(output_line.decode('utf-8').rstrip())
     except subprocess.CalledProcessError:
         # Tails supports apt persistence, which was used by SecureDrop
         # under Tails 2.x. If updates are being applied, don't try to pile
@@ -142,7 +142,7 @@ def envsetup(args):
         sdlog.info("Setting up virtualenv")
         try:
             sdlog.debug(subprocess.check_output(
-                maybe_torify() + ['virtualenv', VENV_DIR],
+                maybe_torify() + ['virtualenv', '--python=python3', VENV_DIR],
                 stderr=subprocess.STDOUT))
         except subprocess.CalledProcessError as e:
             sdlog.debug(e.output)
@@ -161,7 +161,7 @@ def envsetup(args):
 
 def install_pip_self(args):
     pip_install_cmd = [
-        os.path.join(VENV_DIR, 'bin', 'pip'),
+        os.path.join(VENV_DIR, 'bin', 'pip3'),
         'install', '-e', DIR
     ]
     try:
@@ -174,7 +174,7 @@ def install_pip_self(args):
 
 
 def install_pip_dependencies(args, pip_install_cmd=[
-        os.path.join(VENV_DIR, 'bin', 'pip'),
+        os.path.join(VENV_DIR, 'bin', 'pip3'),
         'install',
         # Specify requirements file.
         '-r', os.path.join(DIR, 'requirements.txt'),
@@ -197,7 +197,7 @@ def install_pip_dependencies(args, pip_install_cmd=[
         raise
 
     sdlog.debug(pip_output)
-    if "Successfully installed" in pip_output:
+    if "Successfully installed" in str(pip_output):
         sdlog.info("Python dependencies for securedrop-admin upgraded")
     else:
         sdlog.info("Python dependencies for securedrop-admin are up-to-date")

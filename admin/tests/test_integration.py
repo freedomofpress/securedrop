@@ -197,137 +197,137 @@ def teardown_function(function):
 
 
 def verify_username_prompt(child):
-    child.expect("Username for SSH access to the servers:")
+    child.expect(b"Username for SSH access to the servers:")
 
 
 def verify_reboot_prompt(child):
     child.expect(
-        r"Daily reboot time of the server \(24\-hour clock\):", timeout=2)
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' 4'  # Expected default
+        rb"Daily reboot time of the server \(24\-hour clock\):", timeout=2)
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == '4'  # noqa: E501
 
 
 def verify_ipv4_appserver_prompt(child):
-    child.expect(r'Local IPv4 address for the Application Server\:', timeout=2)
+    child.expect(rb'Local IPv4 address for the Application Server\:', timeout=2)  # noqa: E501
     # Expected default
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' 10.20.2.2'
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == '10.20.2.2'  # noqa: E501
 
 
 def verify_ipv4_monserver_prompt(child):
-    child.expect(r'Local IPv4 address for the Monitor Server\:', timeout=2)
+    child.expect(rb'Local IPv4 address for the Monitor Server\:', timeout=2)
     # Expected default
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' 10.20.3.2'
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == '10.20.3.2'  # noqa: E501
 
 
 def verify_hostname_app_prompt(child):
-    child.expect(r'Hostname for Application Server\:', timeout=2)
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' app'  # Expected default
+    child.expect(rb'Hostname for Application Server\:', timeout=2)
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == 'app'  # noqa: E501
 
 
 def verify_hostname_mon_prompt(child):
-    child.expect(r'Hostname for Monitor Server\:', timeout=2)
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' mon'  # Expected default
+    child.expect(rb'Hostname for Monitor Server\:', timeout=2)
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == 'mon'  # noqa: E501
 
 
 def verify_dns_prompt(child):
-    child.expect(r'DNS server specified during installation\:', timeout=2)
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' 8.8.8.8'  # Expected default
+    child.expect(rb'DNS server specified during installation\:', timeout=2)
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == '8.8.8.8'  # noqa: E501
 
 
 def verify_app_gpg_key_prompt(child):
-    child.expect('Local filepath to public key for SecureDrop Application GPG public key\:', timeout=2)  # noqa: E501
+    child.expect(rb'Local filepath to public key for SecureDrop Application GPG public key\:', timeout=2)  # noqa: E501
 
 
 def verify_https_prompt(child):
-    child.expect('Whether HTTPS should be enabled on Source Interface \(requires EV cert\)\:', timeout=2)  # noqa: E501
+    child.expect(rb'Whether HTTPS should be enabled on Source Interface \(requires EV cert\)\:', timeout=2)  # noqa: E501
 
 
 def verify_https_cert_prompt(child):
-    child.expect(r'Local filepath to HTTPS certificate\:', timeout=2)
+    child.expect(rb'Local filepath to HTTPS certificate\:', timeout=2)
 
 
 def verify_https_cert_key_prompt(child):
-    child.expect(r'Local filepath to HTTPS certificate key\:', timeout=2)
+    child.expect(rb'Local filepath to HTTPS certificate key\:', timeout=2)
 
 
 def verify_https_cert_chain_file_prompt(child):
-    child.expect(r'Local filepath to HTTPS certificate chain file\:', timeout=2)  # noqa: E501
+    child.expect(rb'Local filepath to HTTPS certificate chain file\:', timeout=2)  # noqa: E501
 
 
 def verify_app_gpg_fingerprint_prompt(child):
-    child.expect('Full fingerprint for the SecureDrop Application GPG Key\:', timeout=2)  # noqa: E501
+    child.expect(rb'Full fingerprint for the SecureDrop Application GPG Key\:', timeout=2)  # noqa: E501
 
 
 def verify_ossec_gpg_key_prompt(child):
-    child.expect('Local filepath to OSSEC alerts GPG public key\:', timeout=2)  # noqa: E501
+    child.expect(rb'Local filepath to OSSEC alerts GPG public key\:', timeout=2)  # noqa: E501
 
 
 def verify_ossec_gpg_fingerprint_prompt(child):
-    child.expect('Full fingerprint for the OSSEC alerts GPG public key\:', timeout=2)  # noqa: E501
+    child.expect(rb'Full fingerprint for the OSSEC alerts GPG public key\:', timeout=2)  # noqa: E501
 
 
 def verify_admin_email_prompt(child):
-    child.expect('Admin email address for receiving OSSEC alerts\:', timeout=2)  # noqa: E501
+    child.expect(rb'Admin email address for receiving OSSEC alerts\:', timeout=2)  # noqa: E501
 
 
 def verify_journalist_gpg_key_prompt(child):
-    child.expect('Local filepath to journalist alerts GPG public key \(optional\)\:', timeout=2)  # noqa: E501
+    child.expect(rb'Local filepath to journalist alerts GPG public key \(optional\)\:', timeout=2)  # noqa: E501
 
 
 def verify_journalist_fingerprint_prompt(child):
-    child.expect('Full fingerprint for the journalist alerts GPG public key \(optional\)\:', timeout=2)  # noqa: E501
+    child.expect(rb'Full fingerprint for the journalist alerts GPG public key \(optional\)\:', timeout=2)  # noqa: E501
 
 
 def verify_journalist_email_prompt(child):
-    child.expect('Email address for receiving journalist alerts \(optional\)\:', timeout=2)  # noqa: E501
+    child.expect(rb'Email address for receiving journalist alerts \(optional\)\:', timeout=2)  # noqa: E501
 
 
 def verify_smtp_relay_prompt(child):
-    child.expect(r'SMTP relay for sending OSSEC alerts\:', timeout=2)
+    child.expect(rb'SMTP relay for sending OSSEC alerts\:', timeout=2)
     # Expected default
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' smtp.gmail.com'
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == 'smtp.gmail.com'  # noqa: E501
 
 
 def verify_smtp_port_prompt(child):
-    child.expect(r'SMTP port for sending OSSEC alerts\:', timeout=2)
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' 587'  # Expected default
+    child.expect(rb'SMTP port for sending OSSEC alerts\:', timeout=2)
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == '587'  # noqa: E501
 
 
 def verify_sasl_domain_prompt(child):
-    child.expect(r'SASL domain for sending OSSEC alerts\:', timeout=2)
+    child.expect(rb'SASL domain for sending OSSEC alerts\:', timeout=2)
     # Expected default
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' gmail.com'
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == 'gmail.com'  # noqa: E501
 
 
 def verify_sasl_username_prompt(child):
-    child.expect(r'SASL username for sending OSSEC alerts\:', timeout=2)
+    child.expect(rb'SASL username for sending OSSEC alerts\:', timeout=2)
 
 
 def verify_sasl_password_prompt(child):
-    child.expect(r'SASL password for sending OSSEC alerts\:', timeout=2)
+    child.expect(rb'SASL password for sending OSSEC alerts\:', timeout=2)
 
 
 def verify_ssh_over_lan_prompt(child):
-    child.expect(r'will be available over LAN only\:', timeout=2)
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' yes'  # Expected default
+    child.expect(rb'will be available over LAN only\:', timeout=2)
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == 'yes'  # noqa: E501
 
 
 def verify_locales_prompt(child):
-    child.expect('Space separated list of additional locales to support')  # noqa: E501
+    child.expect(rb'Space separated list of additional locales to support')  # noqa: E501
 
 
 def verify_v2_onion_for_first_time(child):
-    child.expect(r' installed before 1.0.0\)\?\:', timeout=2)  # noqa: E501
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' no'  # Expected default
+    child.expect(rb' installed before 1.0.0\)\?\:', timeout=2)  # noqa: E501
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == 'no'  # noqa: E501
 
 
 def verify_v3_onion_for_first_time(child):
-    child.expect(r'Do you want to enable v3 onion services \(recommended\)\?\:', timeout=2)  # noqa: E501
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' yes'  # Expected default
+    child.expect(rb'Do you want to enable v3 onion services \(recommended\)\?\:', timeout=2)  # noqa: E501
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == 'yes'  # noqa: E501
 
 
 def verify_v3_onion_when_v2_is_enabled(child):
-    child.expect(r'Do you want to enable v3 onion services \(recommended\)\?\:', timeout=2)  # noqa: E501
-    assert ANSI_ESCAPE.sub('', child.buffer) == ' yes'  # Expected default
+    child.expect(rb'Do you want to enable v3 onion services \(recommended\)\?\:', timeout=2)  # noqa: E501
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == 'yes'  # noqa: E501
 
 
 def test_sdconfig_on_first_run():
@@ -709,7 +709,7 @@ def set_reliable_keyserver(gpgdir):
             f.write('keyserver hkps://keys.openpgp.org')
 
         # Ensure correct permissions on .gnupg home directory.
-        os.chmod(gpgdir, 0o700)
+        os.chmod(gpgdir, 0o0700)
 
 
 @flaky(max_runs=3)
@@ -721,7 +721,7 @@ def test_check_for_update_when_updates_needed(securedrop_git_repo):
     fullcmd = 'coverage run {0} --root {1} check_for_updates'.format(
                 cmd, ansible_base)
     child = pexpect.spawn(fullcmd)
-    child.expect('Update needed', timeout=20)
+    child.expect(b'Update needed', timeout=20)
 
     child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
     child.close()
@@ -745,7 +745,7 @@ def test_check_for_update_when_updates_not_needed(securedrop_git_repo):
     fullcmd = 'coverage run {0} --root {1} check_for_updates'.format(
         cmd, ansible_base)
     child = pexpect.spawn(fullcmd)
-    child.expect('All updates applied', timeout=20)
+    child.expect(b'All updates applied', timeout=20)
 
     child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
     child.close()
@@ -766,8 +766,8 @@ def test_update(securedrop_git_repo):
         cmd, ansible_base))
 
     output = child.read()
-    assert 'Updated to SecureDrop' in output
-    assert 'Signature verification successful' in output
+    assert b'Updated to SecureDrop' in output
+    assert b'Signature verification successful' in output
 
     child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
     child.close()
@@ -796,8 +796,8 @@ def test_update_fails_when_no_signature_present(securedrop_git_repo):
     child = pexpect.spawn('coverage run {0} --root {1} update'.format(
                           cmd, ansible_base))
     output = child.read()
-    assert 'Updated to SecureDrop' not in output
-    assert 'Signature verification failed' in output
+    assert b'Updated to SecureDrop' not in output
+    assert b'Signature verification failed' in output
 
     child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
     child.close()
@@ -830,9 +830,9 @@ def test_update_with_duplicate_branch_and_tag(securedrop_git_repo):
                           cmd, ansible_base))
     output = child.read()
     # Verify that we do not falsely check out a branch instead of a tag.
-    assert 'Switched to branch' not in output
-    assert 'Updated to SecureDrop' not in output
-    assert 'Signature verification failed' in output
+    assert b'Switched to branch' not in output
+    assert b'Updated to SecureDrop' not in output
+    assert b'Signature verification failed' in output
 
     child.expect(pexpect.EOF, timeout=10)  # Wait for CLI to exit
     child.close()

@@ -6,18 +6,18 @@ ARG USER_ID
 ENV USER_ID ${USER_ID:-0}
 
 RUN apt-get update && \
-    apt-get install -y python sudo lsb-release gnupg2 git
+    apt-get install -y python3 sudo lsb-release gnupg2 git
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
 
 WORKDIR /opt
 COPY bootstrap.py .
 COPY requirements.txt .
-RUN python bootstrap.py -v
+RUN python3 bootstrap.py -v
 ENV VIRTUAL_ENV /opt/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 COPY requirements-dev.txt .
-RUN pip install --require-hashes -r requirements-dev.txt
+RUN pip3 install --require-hashes -r requirements-dev.txt
 # Now also pin pip due to https://github.com/jazzband/pip-tools/issues/853
-RUN pip install pip==19.1
+RUN pip3 install pip==19.1
 
 RUN chown -R $USER_NAME /opt
