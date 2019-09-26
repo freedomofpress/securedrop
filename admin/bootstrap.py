@@ -101,7 +101,7 @@ def install_apt_dependencies(args):
                    virtualenv \
                    libffi-dev \
                    libssl-dev \
-                   libpython3.5-dev",
+                   libpython3-dev",
                    ]
 
     try:
