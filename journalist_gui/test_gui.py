@@ -250,6 +250,14 @@ class WindowTestCase(AppTestCase):
         mock_remove.assert_not_called()
         self.assertEqual(self.window.progressBar.value(), 0)
 
+    @mock.patch('journalist_gui.SecureDropUpdater.QtWidgets.QMessageBox')
+    def test_no_update_without_password(self, mock_msgbox):
+        with mock.patch('journalist_gui.SecureDropUpdater.password_is_set',
+                        return_value=False):
+            self.window.update_securedrop()
+        self.assertEqual(self.window.pushButton.isEnabled(), True)
+        self.assertEqual(self.window.pushButton_2.isEnabled(), False)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -15,6 +15,15 @@ FLAG_LOCATION = "/home/amnesia/Persistent/.securedrop/securedrop_update.flag"  #
 ESCAPE_POD = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
 
 
+def password_is_set():
+
+    pwd_flag = subprocess.check_output(['passwd', '--status']).decode('utf-8').split()[1]
+
+    if pwd_flag == 'NP':
+        return False
+    return True
+
+
 def prevent_second_instance(app: QtWidgets.QApplication, name: str) -> None:  # noqa
 
     # Null byte triggers abstract namespace
@@ -27,7 +36,7 @@ def prevent_second_instance(app: QtWidgets.QApplication, name: str) -> None:  # 
     except OSError as e:
         if e.errno == ALREADY_BOUND_ERRNO:
             err_dialog = QtWidgets.QMessageBox()
-            err_dialog.setText(name + ' is already running.')
+            err_dialog.setText(name + strings.app_is_already_running)
             err_dialog.exec()
             sys.exit()
         else:
@@ -280,11 +289,17 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         self.progressBar.setProperty("value", 0)
 
     def update_securedrop(self):
-        self.pushButton_2.setEnabled(False)
-        self.pushButton.setEnabled(False)
-        self.progressBar.setProperty("value", 10)
-        self.update_status_bar_and_output(strings.fetching_update)
-        self.update_thread.start()
+        if password_is_set():
+            self.pushButton_2.setEnabled(False)
+            self.pushButton.setEnabled(False)
+            self.progressBar.setProperty("value", 10)
+            self.update_status_bar_and_output(strings.fetching_update)
+            self.update_thread.start()
+        else:
+            self.pushButton_2.setEnabled(False)
+            pwd_err_dialog = QtWidgets.QMessageBox()
+            pwd_err_dialog.setText(strings.no_password_set_message)
+            pwd_err_dialog.exec()
 
     def alert_success(self):
         self.success_dialog = QtWidgets.QMessageBox()
