@@ -39,7 +39,7 @@ selenium==3.141.0
 six==1.11.0               # via mock, pathlib2, pip-tools, pytest
 tbselenium==0.4.2
 urllib3==1.25.3
-werkzeug==0.14.1          # via flask
+werkzeug==0.16.0          # via flask
 zipp==0.5.1               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:

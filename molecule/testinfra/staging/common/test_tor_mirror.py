@@ -28,7 +28,7 @@ def test_tor_keyring_absent(host):
     c = host.run("dpkg -l {}".format(package))
     assert c.rc == 1
     error_text = "dpkg-query: no packages found matching {}".format(package)
-    assert c.stderr.rstrip() == error_text
+    assert error_text in c.stderr.strip()
 
 
 @pytest.mark.parametrize('tor_key_info', [

@@ -1,2 +1,2 @@
 prompt_toolkit
-pyyaml
+pyyaml>=5.1.2

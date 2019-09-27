@@ -57,7 +57,8 @@ RUN python3 -m venv /opt/venvs/securedrop-app-code && \
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi && \
     cp -r /root/.local /tmp/ && chmod +x /tmp/.local/tbb/tor-browser_en-US/Browser/firefox && chmod -R 777 /tmp/.local && \
-    chown -R $USER_NAME.$USER_NAME /tmp/.local/
+    chown -R $USER_NAME.$USER_NAME /tmp/.local/ && \
+    chown -R $USER_NAME.$USER_NAME /opt/venvs/securedrop-app-code/
 
 STOPSIGNAL SIGKILL
 

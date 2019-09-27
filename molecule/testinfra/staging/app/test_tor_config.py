@@ -8,13 +8,13 @@ sdvars = pytest.securedrop_test_vars
 @pytest.mark.parametrize('package', [
     'tor',
 ])
-def test_tor_packages(Package, package):
+def test_tor_packages(host, package):
     """
     Ensure Tor packages are installed. Does not include the Tor keyring
     package, since we want only the SecureDrop Release Signing Key
     to be used even for Tor packages.
     """
-    assert Package(package).is_installed
+    assert host.package(package).is_installed
 
 
 def test_tor_service_running(host):
