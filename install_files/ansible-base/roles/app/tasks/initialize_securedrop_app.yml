@@ -1,12 +1,4 @@
 ---
-- name: Install SecureDrop Application Server dependencies.
-  apt:
-    pkg: "{{ item }}"
-    state: latest
-  with_items: "{{ appserver_dependencies }}"
-  tags:
-    - apt
-
 - name: Copy the SecureDrop Application GPG public key to the Application Server.
   copy:
     src: "{{ securedrop_app_gpg_public_key }}"
