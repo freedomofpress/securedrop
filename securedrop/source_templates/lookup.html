@@ -33,7 +33,7 @@
       <p class="center" id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
     </div>
 {% endif %}
-    <div class="message grid-item">
+    <div class="message grid-item{% if not allow_document_uploads %} wide{% endif %}">
       <textarea name="msg" class="fill-parent" placeholder="{{ gettext('Write a message.') }}"></textarea>
     </div>
   </div>
