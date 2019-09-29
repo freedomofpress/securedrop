@@ -552,6 +552,8 @@ def test_metadata_route(config, source_app):
             resp = app.get(url_for('api.metadata'))
             assert resp.status_code == 200
             assert resp.headers.get('Content-Type') == 'application/json'
+            assert resp.json.get('allow_document_uploads') ==\
+                source_app.config.get('ALLOW_DOCUMENT_UPLOADS', True)
             assert resp.json.get('sd_version') == version.__version__
             assert resp.json.get('server_os') == '16.04'
             assert resp.json.get('supported_languages') ==\
