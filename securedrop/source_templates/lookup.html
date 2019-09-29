@@ -15,8 +15,12 @@
   {% endif %}
 </div>
 
+{% if allow_document_uploads %}
 <h2 class="headline">{{ gettext('Submit Files or Messages') }}</h2>
 <p class="explanation">{{ gettext('You can submit any kind of file, a message, or both.') }}</p>
+{% else %}
+<h2 class="headline">{{ gettext('Submit Messages') }}</h2>
+{% endif %}
 
 <p class="explanation extended-explanation">{{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_journalist_pubkey')) }}
 {{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_journalist_pubkey')) }}</p>
