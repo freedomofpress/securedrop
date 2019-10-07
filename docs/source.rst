@@ -4,40 +4,84 @@ Source Guide
 Choosing the Right Location
 ---------------------------
 
-When national security is involved, we suggest you buy a new computer,
-a USB key and pay cash. In any case you must then find a busy
-coworking place or cyber cafe you don't regularly go to and sit at a
-place with your back to a wall to avoid cameras capturing information
-on your screen or keystrokes.
+When national security is involved, we suggest you buy a new computer and a
+USB flash drive, using cash. In any case you must then find a busy coworking
+place or cyber cafe you don't regularly go to and sit at a place with your back
+to a wall to avoid cameras capturing information on your screen or keystrokes.
 
 Get the Tor Browser
 -------------------
 
-Each SecureDrop instance has a publicly available *Source Interface*: a website where sources can create anonymous accounts, submit files and messages, and check back for replies.
+Each SecureDrop instance has a publicly available *Source Interface:* a website
+where sources can create anonymous accounts, submit files and messages, and
+check back for replies.
 
-Each Source Interface is only available as a *Tor Hidden Service*, which is a special type of website with an address ending in ".onion" that is only accessible through Tor. Tor is an anonymizing network that makes it difficult for anybody observing the network to associate a user's identity (e.g. their computer's IP address) with their activity (e.g. uploading information to SecureDrop).
+Each *Source Interface* is only available as an onion service, which is a
+special type of website with an address ending in ".onion" that is only
+accessible through Tor. Tor is an anonymizing network that makes it difficult
+for anybody observing the network to associate a user's identity (e.g., their
+computer's IP address) with their activity (e.g., uploading information to
+SecureDrop).
 
-The easiest and most secure way to use Tor is to download the Tor Browser from the `Tor Project website`_. The Tor Browser is a modified version of the Firefox web browser designed to protect your security and anonymity while using Tor. If there is a chance that downloading the Tor Browser raises suspicion, you have a few alternatives.
+The easiest and most secure way to use Tor is to download the Tor Browser from
+the `Tor Project website`_. The Tor Browser is a modified version of the Firefox
+web browser. It was designed to protect your security and anonymity while
+using Tor. If there is a chance that downloading the Tor Browser raises
+suspicion, you have a few alternatives, for example:
 
-* If your mail provider is less likely to be monitored, you can send a mail to gettor@torproject.org and a bot will answer with instructions
-* If you routinely use GitHub, you can use it to `download the Tor Browser <https://github.com/TheTorProject/gettorbrowser>`__
+* If your mail provider is less likely to be monitored, you can send a mail to
+  gettor@torproject.org with the text "linux", "windows" or "osx" in the body
+  (for your preferred operating system) and a bot will answer with instructions.
+* If you routinely use Git, you can use GitLab to
+  `download the Tor Browser <https://gitlab.com/thetorproject/gettorbrowser/tree/torbrowser-releases>`__.
 
-Once you have the Tor Browser, launch it and enter the ".onion" address for the Source Interface of the organization that you wish to submit to. You can find this address on the organization's *Landing Page*, or listed on the SecureDrop Directory.
-
-While using the Tor Browser on your personal computer helps hide your activity on the network, it leaves traces (of its own installation) on your local machine. For even more deniability, we recommend booting into a live system such as `Tails`_ for a higher level of security. Tails is specifically designed to run on your computer without leaving traces of your activity, and automatically routes all of your Internet browsing through Tor so you can easily access SecureDrop safely.
+While using the Tor Browser on your personal computer helps hide your activity
+on the network, it leaves traces of its own installation on your local
+machine. For even greater deniability and security, we recommend booting into the
+`Tails operating system`_ (typically from a USB stick). Tails is specifically
+designed to run on your computer without leaving traces of your activity, and
+automatically routes all of your Internet browsing through Tor so you can easily
+access SecureDrop safely.
 
 .. _`Tor Project website`: https://www.torproject.org/
-.. _`Tails`: https://tails.boum.org/
-
+.. _`Tails operating system`: https://tails.boum.org/
 
 Choose Who to Submit To
 -----------------------
+We recommend conducting all research related to your submission in Tor Browser.
+If you are unsure whether you are using Tor, you can visit the address
+https://check.torproject.org.
 
-Each SecureDrop instance is totally independent, and submissions to that instance are only available to journalists associated with that organization.
+All organizations operating SecureDrop have a *Landing Page* that provides their
+own organization-specific recommendations for using SecureDrop. We encourage you
+to consider an organization's *Landing Page* before submitting to them.
 
-All organizations have a *Landing Page* that provides their own organization-specific recommendations for using SecureDrop. We encourage you to consider an organization's *Landing Page* before submitting to them.
+.. note::
 
-Most organizations make their *Landing Page* prominently accessible from their main website's homepage. You can also find an incomplete list of organizations accepting submissions through SecureDrop on the `SecureDrop Directory`_ maintained by Freedom of the Press Foundation.
+   Each SecureDrop instance is totally independent, and submissions to that
+   instance are only available to journalists associated with that organization.
+
+Most organizations make their *Landing Page* prominently accessible from their
+main website's homepage (for news organizations, typically under sections called
+"Tips" or "Contact us"). You can also find an incomplete list of organizations
+accepting submissions through SecureDrop in the `SecureDrop Directory`_
+maintained by Freedom of the Press Foundation.
+
+Using the Tor Browser, find the ".onion" address for the *Source Interface* of
+the organization that you wish to submit to.
+
+.. tip::
+
+   If the organization does have an entry in the SecureDrop Directory, we
+   recommend comparing the address of the entry with the one on the
+   organization's own *Landing Page*. If the two addresses don't match, please
+   do not submit to this organization yet. Instead, please
+   `contact us <https://securedrop.org/report-an-error>`__  through th
+   SecureDrop Website, using the Tor Browser. We will update the directory entry
+   if it is incorrect.
+
+Once you have located the ".onion" address, copy it into the address bar in Tor
+Browser to visit the organization's *Source Interface*.
 
 .. _`SecureDrop Directory`: https://securedrop.org/directory
 
@@ -45,32 +89,42 @@ Making Your First Submission
 ----------------------------
 
 Open the Tor Browser and navigate to the .onion address for the SecureDrop
-Source Interface you wish to make a submission to. The page should look similar
+*Source Interface* you wish to make a submission to. The page should look similar
 to the screenshot below, although it will probably have a logo specific to the
-organization you are submitting to.
+organization you are submitting to:
 
 |Source Interface with Javascript Disabled|
 
 If this is the first time you're using the Tor Browser, it's likely that you
-have JavaScript enabled and that the Security Setting that the Tor Browser provides
-is set to "Low". If you do, there will be a purple warning banner at the top of
-the page that encourages you to disable JavaScript and turn up the **Security Setting** to **Safest**:
+have JavaScript enabled and that the Tor Browser's security setting is set
+to "Low". In this case, there will be a purple warning banner at the top of
+the page that encourages you to disable JavaScript and change the security
+setting to "Safest":
 
 |Source Interface Security Slider Warning|
 
-Click the **Security Setting** link in the warning banner and a
-message bubble will pop up explaining how to disable JavaScript and configure your security properly:
+Click the **Security Setting** link in the warning banner, and a message bubble
+will pop up explaining how to adjust this setting:
 
 |Fix Javascript warning|
 
-Follow the instructions and the page should refresh automatically. Note
-that this will change your security settings and disable JavaScript for every page in your
-Tor Browser, and this setting will persist across browser sessions.
+Follow the instructions, and the security setting in Tor Browser should look
+similar to this screenshot:
 
 |Security Slider|
 
-The page should look similar to the screenshot below. If this is the first
-time you are using SecureDrop, click the **Get Started** button.
+.. note::
+
+   The "Safest" setting disables the use of JavaScript on every page you visit
+   using Tor Browser, even after a browser restart. This may cause other
+   websites you visit using Tor Browser to no longer work correctly, until
+   you adjust the Security Setting again. We recommend keeping the setting at
+   "Safest" during the entirety of the session in which you access an
+   organization's SecureDrop instance.
+
+The SecureDrop *Source Interface* should now refresh automatically and look
+similar to the screenshot below. If this is the first time you are using
+SecureDrop, click the **Get Started** button.
 
 |Source Interface with Javascript Disabled|
 
@@ -96,7 +150,7 @@ Once you have generated a codename and put it somewhere safe, click
 You will next be brought to the submission interface, where you may
 upload a document, enter a message to send to journalists, or both. You
 can only submit one document at a time, so you may want to combine
-several files into a zip archive if necessary. The maximum submission
+several files into a ZIP archive if necessary. The maximum submission
 size is currently 500MB. If the files you wish to upload are over that
 limit, we recommend that you send a message to the journalist explaining
 this, so that they can set up another method for transferring the
@@ -132,7 +186,7 @@ Continuing the Conversation
 
 If you have already submitted a document and would like to check for
 responses, click the **Log in** button on the media
-organization's SecureDrop homepage.
+organization's *Source Interface*.
 
 |Source Interface with Javascript Disabled|
 
@@ -145,8 +199,8 @@ If a journalist has responded, their message will appear on the
 next page. This page also allows you to upload another document or send
 another message to the journalist. Before leaving the page, you should
 delete any replies. In the unlikely event that someone learns
-your codename, this will keep your identity secret as no one will be
-able to see the previous correspondences you had with journalists.
+your codename, this will ensure that they will not be able to see the previous
+correspondences you had with journalists.
 
 |Check for a reply|
 
@@ -156,17 +210,16 @@ below message.
 |Delete received messages|
 
 If the server experiences a large number of new sources signing up at
-once and is overloaded with submissions, the journalist will flag your
-message on their end and you will see the message below. They can't
-write a reply to you until you've seen this message for security
-reasons. This will only happen the first time a journalist replies and
-with subsequent replies you will skip this step. Click **Refresh** or
-log in again to see if a journalist has responded.
+once and is overloaded with submissions, you may see the message below:
 
 |Check for an initial response|
 
-Repeat these steps to continue communicating with the journalist.
+This will only happen once for a given codename. It means that the journalist
+wants to reply to your submission, but for security reasons, they cannot do so
+until you've seen this message. Log in again at a later time to see if the
+journalist has responded.
 
+Repeat these steps to continue communicating with the journalist.
 
 .. |Source Interface Security Slider Warning| image:: images/manual/securedrop-security-slider-warning.png
 .. |Security Slider| image:: images/manual/source-turn-slider-to-high.png
