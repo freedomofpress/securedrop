@@ -181,4 +181,4 @@ SecureDrop *Landing Page* and our guide to
 :doc:`promoting your SecureDrop instance <getting_the_most_out_of_securedrop>`.
 
 .. |SecureDrop architecture overview diagram| image:: ./diagrams/SecureDrop.png
-  :scale: 100%
+  :width: 100%
