@@ -23,16 +23,13 @@ For use by administrators to install, maintain, and manage their SD
 instances.
 """
 
-from __future__ import print_function
 import argparse
 import logging
 import os
 import io
 import re
-import string
 import subprocess
 import sys
-import types
 import json
 import base64
 import prompt_toolkit
@@ -417,11 +414,11 @@ class SiteConfig(object):
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes',
              lambda config: True],
-            ['securedrop_supported_locales', [], types.ListType,
+            ['securedrop_supported_locales', [], list,
              u'Space separated list of additional locales to support '
              '(' + translations + ')',
              SiteConfig.ValidateLocales(self.args.app_path),
-             string.split,
+             str.split,
              lambda config: True],
             ['v2_onion_services', self.check_for_v2_onion(), bool,
              u'Do you want to enable v2 onion services (recommended only for SecureDrop instances installed before 1.0.0)?',  # noqa: E501
@@ -526,7 +523,7 @@ class SiteConfig(object):
             default = default and 'yes' or 'no'
         if type(default) is int:
             default = str(default)
-        if isinstance(default, types.ListType):
+        if isinstance(default, list):
             default = " ".join(default)
         if type(default) is not str:
             default = str(default)
@@ -534,7 +531,7 @@ class SiteConfig(object):
         if validator:
             kwargs['validator'] = validator
         value = prompt_toolkit.prompt(prompt,
-                                      default=default.decode('utf-8'),
+                                      default=default,
                                       **kwargs)
         if transform:
             return transform(value)
@@ -777,7 +774,7 @@ def check_for_updates(args):
 
     # Determine what branch we are on
     current_tag = subprocess.check_output(['git', 'describe'],
-                                          cwd=args.root).rstrip('\n')
+                                          cwd=args.root).decode('utf-8').rstrip('\n')  # noqa: E501
 
     # Fetch all branches
     git_fetch_cmd = ['git', 'fetch', '--all']
@@ -786,7 +783,7 @@ def check_for_updates(args):
     # Get latest tag
     git_all_tags = ["git", "tag"]
     all_tags = subprocess.check_output(git_all_tags,
-                                       cwd=args.root).rstrip('\n').split('\n')
+                                       cwd=args.root).decode('utf-8').rstrip('\n').split('\n')  # noqa: E501
 
     # Do not check out any release candidate tags
     all_prod_tags = [x for x in all_tags if 'rc' not in x]
@@ -837,7 +834,7 @@ def update(args):
     try:
         sig_result = subprocess.check_output(git_verify_tag_cmd,
                                              stderr=subprocess.STDOUT,
-                                             cwd=args.root)
+                                             cwd=args.root).decode('utf-8')
 
         good_sig_text = ['Good signature from "SecureDrop Release Signing ' +
                          'Key"',
@@ -869,7 +866,7 @@ def update(args):
                 sdlog.info("Signature verification failed.")
                 return 1
             except subprocess.CalledProcessError as e:
-                if 'not a valid ref' in e.output:
+                if 'not a valid ref' in e.output.decode('utf-8'):
                     # Then there is no duplicate branch.
                     sdlog.info("Signature verification successful.")
                 else:  # If any other exception occurs, we bail.

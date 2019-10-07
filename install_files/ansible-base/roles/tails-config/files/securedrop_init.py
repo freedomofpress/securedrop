@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import grp
 import os
@@ -22,7 +22,7 @@ path_desktop = '/home/amnesia/Desktop/'
 path_persistent_desktop = '/lib/live/mount/persistence/TailsData_unlocked/dotfiles/Desktop/'  # noqa: E501
 path_securedrop_root = '/home/amnesia/Persistent/securedrop'
 path_securedrop_admin_venv = os.path.join(path_securedrop_root,
-                                          'admin/.venv/bin/python')
+                                          'admin/.venv3/bin/python')
 path_securedrop_admin_init = os.path.join(path_securedrop_root,
                                           'admin/securedrop_admin/__init__.py')
 path_gui_updater = os.path.join(path_securedrop_root,

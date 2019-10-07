@@ -26,7 +26,6 @@ import json
 import mock
 from prompt_toolkit.validation import ValidationError
 import pytest
-import string
 import subprocess
 import textwrap
 import yaml
@@ -59,8 +58,8 @@ class TestSecureDropAdmin(object):
     def test_check_for_updates_update_needed(self, tmpdir, caplog):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
-        current_tag = "0.6"
-        tags_available = "0.6\n0.6-rc1\n0.6.1\n"
+        current_tag = b"0.6"
+        tags_available = b"0.6\n0.6-rc1\n0.6.1\n"
 
         with mock.patch('subprocess.check_call'):
             with mock.patch('subprocess.check_output',
@@ -73,8 +72,8 @@ class TestSecureDropAdmin(object):
     def test_check_for_updates_higher_version(self, tmpdir, caplog):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
-        current_tag = "0.6"
-        tags_available = "0.1\n0.10.0\n0.6.2\n0.6\n0.6-rc1\n0.9.0\n"
+        current_tag = b"0.6"
+        tags_available = b"0.1\n0.10.0\n0.6.2\n0.6\n0.6-rc1\n0.9.0\n"
 
         with mock.patch('subprocess.check_call'):
             with mock.patch('subprocess.check_output',
@@ -88,8 +87,8 @@ class TestSecureDropAdmin(object):
         """Regression test for #3426"""
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
-        current_tag = "0.6.1\n"
-        tags_available = "0.6\n0.6-rc1\n0.6.1\n"
+        current_tag = b"0.6.1\n"
+        tags_available = b"0.6\n0.6-rc1\n0.6.1\n"
 
         with mock.patch('subprocess.check_call'):
             with mock.patch('subprocess.check_output',
@@ -102,8 +101,8 @@ class TestSecureDropAdmin(object):
     def test_check_for_updates_update_not_needed(self, tmpdir, caplog):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
-        current_tag = "0.6.1"
-        tags_available = "0.6\n0.6-rc1\n0.6.1\n"
+        current_tag = b"0.6.1"
+        tags_available = b"0.6\n0.6-rc1\n0.6.1\n"
 
         with mock.patch('subprocess.check_call'):
             with mock.patch('subprocess.check_output',
@@ -118,8 +117,8 @@ class TestSecureDropAdmin(object):
         verify that users will not accidentally check out this tag."""
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
-        current_tag = "0.6.1"
-        tags_available = "0.6\n0.6-rc1\n0.6.1\n0.6.1-rc1\n"
+        current_tag = b"0.6.1"
+        tags_available = b"0.6\n0.6-rc1\n0.6.1\n0.6.1-rc1\n"
 
         with mock.patch('subprocess.check_call'):
             with mock.patch('subprocess.check_output',
@@ -152,31 +151,31 @@ class TestSecureDropAdmin(object):
                 args, keyserver='test.com')
 
     @pytest.mark.parametrize("git_output",
-                             ['gpg: Signature made Tue 13 Mar '
-                              '2018 01:14:11 AM UTC\n'
-                              'gpg:                using RSA key '
-                              '22245C81E3BAEB4138B36061310F561200F4AD77\n'
-                              'gpg: Good signature from "SecureDrop Release '
-                              'Signing Key" [unknown]\n',
+                             [b'gpg: Signature made Tue 13 Mar '
+                              b'2018 01:14:11 AM UTC\n'
+                              b'gpg:                using RSA key '
+                              b'22245C81E3BAEB4138B36061310F561200F4AD77\n'
+                              b'gpg: Good signature from "SecureDrop Release '
+                              b'Signing Key" [unknown]\n',
 
-                              'gpg: Signature made Thu 20 Jul '
-                              '2017 08:12:25 PM EDT\n'
-                              'gpg:                using RSA key '
-                              '22245C81E3BAEB4138B36061310F561200F4AD77\n'
-                              'gpg: Good signature from "SecureDrop Release '
-                              'Signing Key '
-                              '<securedrop-release-key@freedom.press>"\n',
+                              b'gpg: Signature made Thu 20 Jul '
+                              b'2017 08:12:25 PM EDT\n'
+                              b'gpg:                using RSA key '
+                              b'22245C81E3BAEB4138B36061310F561200F4AD77\n'
+                              b'gpg: Good signature from "SecureDrop Release '
+                              b'Signing Key '
+                              b'<securedrop-release-key@freedom.press>"\n',
 
-                              'gpg: Signature made Thu 20 Jul '
-                              '2017 08:12:25 PM EDT\n'
-                              'gpg:                using RSA key '
-                              '22245C81E3BAEB4138B36061310F561200F4AD77\n'
-                              'gpg: Good signature from "SecureDrop Release '
-                              'Signing Key" [unknown]\n'
-                              'gpg:                 aka "SecureDrop Release '
-                              'Signing Key '
-                              '<securedrop-release-key@freedom.press>" '
-                              '[unknown]\n'])
+                              b'gpg: Signature made Thu 20 Jul '
+                              b'2017 08:12:25 PM EDT\n'
+                              b'gpg:                using RSA key '
+                              b'22245C81E3BAEB4138B36061310F561200F4AD77\n'
+                              b'gpg: Good signature from "SecureDrop Release '
+                              b'Signing Key" [unknown]\n'
+                              b'gpg:                 aka "SecureDrop Release '
+                              b'Signing Key '
+                              b'<securedrop-release-key@freedom.press>" '
+                              b'[unknown]\n'])
     def test_update_signature_verifies(self, tmpdir, caplog, git_output):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
@@ -188,7 +187,7 @@ class TestSecureDropAdmin(object):
                        side_effect=[
                            git_output,
                            subprocess.CalledProcessError(1, 'cmd',
-                                                         'not a valid ref')]),
+                                                         b'not a valid ref')]),
             ]
 
         for patcher in patchers:
@@ -208,11 +207,11 @@ class TestSecureDropAdmin(object):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
 
-        git_output = ('gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
-                      'gpg:                using RSA key '
-                      '22245C81E3BAEB4138B36061310F561200F4AD77\n'
-                      'gpg: Good signature from "SecureDrop Release '
-                      'Signing Key" [unknown]\n')
+        git_output = (b'gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
+                      b'gpg:                using RSA key '
+                      b'22245C81E3BAEB4138B36061310F561200F4AD77\n'
+                      b'gpg: Good signature from "SecureDrop Release '
+                      b'Signing Key" [unknown]\n')
 
         patchers = [
             mock.patch('securedrop_admin.check_for_updates',
@@ -222,7 +221,7 @@ class TestSecureDropAdmin(object):
                        side_effect=[
                            git_output,
                            subprocess.CalledProcessError(1, 'cmd',
-                                                         'a random error')]),
+                                                         b'a random error')]),
             ]
 
         for patcher in patchers:
@@ -242,11 +241,11 @@ class TestSecureDropAdmin(object):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
 
-        git_output = ('gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
-                      'gpg:                using RSA key '
-                      '22245C81E3BAEB4138B36061310F561200F4AD77\n'
-                      'gpg: BAD signature from "SecureDrop Release '
-                      'Signing Key" [unknown]\n')
+        git_output = (b'gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
+                      b'gpg:                using RSA key '
+                      b'22245C81E3BAEB4138B36061310F561200F4AD77\n'
+                      b'gpg: BAD signature from "SecureDrop Release '
+                      b'Signing Key" [unknown]\n')
 
         with mock.patch('securedrop_admin.check_for_updates',
                         return_value=(True, "0.6.1")):
@@ -263,11 +262,11 @@ class TestSecureDropAdmin(object):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
 
-        git_output = ('gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
-                      'gpg:                using RSA key '
-                      '1234567812345678123456781234567812345678\n'
-                      'gpg: Good signature from "22245C81E3BAEB4138'
-                      'B36061310F561200F4AD77" [unknown]\n')
+        git_output = (b'gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
+                      b'gpg:                using RSA key '
+                      b'1234567812345678123456781234567812345678\n'
+                      b'gpg: Good signature from "22245C81E3BAEB4138'
+                      b'B36061310F561200F4AD77" [unknown]\n')
 
         with mock.patch('securedrop_admin.check_for_updates',
                         return_value=(True, "0.6.1")):
@@ -284,11 +283,11 @@ class TestSecureDropAdmin(object):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
 
-        git_output = ('gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
-                      'gpg:                using RSA key '
-                      '1234567812345678123456781234567812345678\n'
-                      'gpg: Good signature from Good signature from '
-                      '"SecureDrop Release Signing Key" [unknown]\n')
+        git_output = (b'gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
+                      b'gpg:                using RSA key '
+                      b'1234567812345678123456781234567812345678\n'
+                      b'gpg: Good signature from Good signature from '
+                      b'"SecureDrop Release Signing Key" [unknown]\n')
 
         with mock.patch('securedrop_admin.check_for_updates',
                         return_value=(True, "0.6.1")):
@@ -306,12 +305,12 @@ class TestSecureDropAdmin(object):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
 
-        git_output = ('gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
-                      'gpg:                using RSA key '
-                      '1234567812345678123456781234567812345678\n'
-                      'gpg: Good signature from 22245C81E3BAEB4138'
-                      'B36061310F561200F4AD77 Good signature from '
-                      '"SecureDrop Release Signing Key" [unknown]\n')
+        git_output = (b'gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n'
+                      b'gpg:                using RSA key '
+                      b'1234567812345678123456781234567812345678\n'
+                      b'gpg: Good signature from 22245C81E3BAEB4138'
+                      b'B36061310F561200F4AD77 Good signature from '
+                      b'"SecureDrop Release Signing Key" [unknown]\n')
 
         with mock.patch('securedrop_admin.check_for_updates',
                         return_value=(True, "0.6.1")):
@@ -438,7 +437,7 @@ class TestSiteConfig(object):
         assert validator.validate(Document('good@mail.com'))
         with pytest.raises(ValidationError) as e:
             validator.validate(Document('ossec@ossec.test'))
-        assert 'something other than ossec@ossec.test' in e.value.message
+        assert 'something other than ossec@ossec.test' in str(e)
 
     def test_validate_optional_email(self):
         validator = securedrop_admin.SiteConfig.ValidateOptionalEmail()
@@ -555,22 +554,22 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError) as e:
             validator.validate(Document(
                 "65A1B5FF195B56353CC63DFFCC40EF1228271441"))
-        assert 'TEST journalist' in e.value.message
+        assert 'TEST journalist' in str(e)
 
         with pytest.raises(ValidationError) as e:
             validator.validate(Document(
                 "600BC6D5142C68F35DDBCEA87B597104EDDDC102"))
-        assert 'TEST admin' in e.value.message
+        assert 'TEST admin' in str(e)
 
         with pytest.raises(ValidationError) as e:
             validator.validate(Document(
                 "0000"))
-        assert '40 hexadecimal' in e.value.message
+        assert '40 hexadecimal' in str(e)
 
         with pytest.raises(ValidationError) as e:
             validator.validate(Document(
                 "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"))
-        assert '40 hexadecimal' in e.value.message
+        assert '40 hexadecimal' in str(e)
 
     def test_validate_optional_fingerprint(self):
         validator = securedrop_admin.SiteConfig.ValidateOptionalFingerprint()
@@ -603,7 +602,7 @@ class TestSiteConfig(object):
         assert validator.validate(Document('en_US  fr_FR '))
         with pytest.raises(ValidationError) as e:
             validator.validate(Document('BAD'))
-        assert 'BAD' in e.value.message
+        assert 'BAD' in str(e)
 
     def test_save(self, tmpdir):
         site_config_path = join(str(tmpdir), 'site_config')
@@ -654,7 +653,7 @@ class TestSiteConfig(object):
             site_config.config = bad_config
             with pytest.raises(securedrop_admin.FingerprintException) as e:
                 site_config.validate_gpg_keys()
-            assert 'FAIL does not match' in e.value.message
+            assert 'FAIL does not match' in str(e)
 
     def test_journalist_alert_email(self):
         args = argparse.Namespace(site_config='INVALID',
@@ -680,13 +679,13 @@ class TestSiteConfig(object):
         with pytest.raises(
                 securedrop_admin.JournalistAlertEmailException) as e:
             site_config.validate_journalist_alert_email()
-        assert 'not be empty' in e.value.message
+        assert 'not be empty' in str(e)
 
         site_config.config['journalist_alert_email'] = 'bademail'
         with pytest.raises(
                 securedrop_admin.JournalistAlertEmailException) as e:
             site_config.validate_journalist_alert_email()
-        assert 'Must contain a @' in e.value.message
+        assert 'Must contain a @' in str(e)
 
         site_config.config['journalist_alert_email'] = 'good@email.com'
         assert site_config.validate_journalist_alert_email()
@@ -952,7 +951,7 @@ class TestSiteConfig(object):
             assert value == site_config.validated_input(
                 '', value, lambda: True, None)
             assert value.lower() == site_config.validated_input(
-                '', value, lambda: True, string.lower)
+                '', value, lambda: True, str.lower)
             assert 'yes' == site_config.validated_input(
                 '', True, lambda: True, None)
             assert 'no' == site_config.validated_input(

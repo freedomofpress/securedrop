@@ -12,10 +12,10 @@ if test "$1" = "setup" || test "$2" = "setup"; then
      exec python "$d/admin/bootstrap.py" "$1"
    fi
 else
-   activate="$d/admin/.venv/bin/activate"
+   activate="$d/admin/.venv3/bin/activate"
    if test -f "$activate" ; then
       source "$activate"
-      exec "$d/admin/.venv/bin/securedrop-admin" --root "$d" "$@"
+      exec "$d/admin/.venv3/bin/securedrop-admin" --root "$d" "$@"
    else
       echo "please run '$0 setup' first"
    fi

@@ -8,9 +8,9 @@ tested on Debian GNU/Linux stretch with:
 
 .. code::
 
-   python bootstrap.py
-   source .venv/bin/activate
-   pip install -r requirements-dev.txt
+   python3 bootstrap.py
+   source .venv3/bin/activate
+   pip3 install -r requirements-dev.txt
    tox
 
 A Docker helper is provided to simplify the installation and make
@@ -26,7 +26,7 @@ Run only one test foobar with:
 
 .. code::
 
-   bin/dev-shell tox -e py2 -- -k foobar
+   bin/dev-shell tox -e py3 -- -k foobar
 
 Docker has the admin directory mounted from the host into the
 container, at the same location to avoid any trouble with hardcoded

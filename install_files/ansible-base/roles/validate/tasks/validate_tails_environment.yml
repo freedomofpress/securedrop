@@ -9,7 +9,7 @@
   assert:
     that:
       - ansible_lsb.id == "Tails" or tails_os_string.matched
-      - ansible_lsb.major_release >= 9
+      - ansible_lsb.major_release|int >= 9
     msg: >-
       SecureDrop requires Tails 3 or greater for workstation environments.
 
