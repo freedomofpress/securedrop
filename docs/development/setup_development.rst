@@ -170,7 +170,7 @@ Ubuntu or Debian GNU/Linux
 .. code:: sh
 
    sudo apt-get update
-   sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev \
+   sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev \
        dpkg-dev git linux-headers-$(uname -r) virtualbox
 
 We recommend using the latest stable version of Vagrant, ``1.8.5`` at the time
@@ -206,7 +206,7 @@ you have the latest stable version.
 
 .. code:: sh
 
-    sudo apt-get install python-pip
+    sudo apt-get install python3-pip
 
 The version of Ansible recommended to provision SecureDrop VMs may not be the
 same as the version in your distro's repos, or may at some point flux out of
@@ -280,7 +280,7 @@ Visit our repository_ fork it and clone it on you local machine:
 Install Python Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-SecureDrop uses many third-party open source packages from the python community.
+SecureDrop uses many third-party open source packages from the Python community.
 Ensure your virtualenv is activated and install the packages.
 
 .. code:: sh

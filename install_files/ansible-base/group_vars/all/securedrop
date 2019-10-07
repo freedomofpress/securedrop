@@ -30,19 +30,6 @@ apparmor_profiles:
 securedrop_staging_install_target_distro: xenial
 securedrop_app_code_deb: "securedrop-app-code_{{ securedrop_app_code_version }}+{{ securedrop_staging_install_target_distro }}_amd64" # do not enter .deb extension
 
-# Apt package dependencies for running the SecureDrop application.
-appserver_dependencies:
-  - gnupg2
-  - haveged
-  - python
-  - python-pip
-  - coreutils
-  - sqlite3
-  - apparmor-utils
-  - redis-server
-  - supervisor
-  - libpython2.7-dev
-
 # Enable Tor over SSH by default
 enable_ssh_over_tor: true
 

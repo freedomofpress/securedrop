@@ -15,15 +15,20 @@ def test_apache_default_docroot_is_absent(host):
 
 
 @pytest.mark.parametrize('package', [
-  'apparmor-utils',
-  'coreutils',
-  'gnupg2',
-  'haveged',
-  'python',
-  'python-pip',
-  'redis-server',
-  'sqlite3',
-  'supervisor',
+    'apache2',
+    'apparmor-utils',
+    'coreutils',
+    'gnupg2',
+    'haveged',
+    'libapache2-mod-xsendfile',
+    'libpython3.5',
+    'paxctld',
+    'python3',
+    'redis-server',
+    'securedrop-config',
+    'securedrop-keyring',
+    'sqlite3',
+    'supervisor',
 ])
 def test_securedrop_application_apt_dependencies(host, package):
     """
