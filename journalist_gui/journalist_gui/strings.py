@@ -42,3 +42,7 @@ output_tab = 'Detailed Update Progress'
 initial_text_box = ("When the update begins, this area will populate with "
                     "output.\n")
 doing_setup = "Checking dependencies are up to date... (2 mins remaining)"
+no_password_set_message = ("The Tails Administration Password was not set.\n\n"
+                           "Please reboot and set a password before updating "
+                           "SecureDrop.")
+app_is_already_running = " is already running."
