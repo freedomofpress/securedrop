@@ -1,9 +1,8 @@
 ---
 - name: Install mailing utilities.
   apt:
-    pkg: "{{ item }}"
+    pkg: "{{ postfix_dependencies }}"
     state: present
-  with_items: "{{ postfix_dependencies }}"
   tags:
     - apt
     - postfix

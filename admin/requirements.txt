@@ -4,8 +4,8 @@
 #
 #    pip-compile --generate-hashes --output-file=requirements.txt requirements-ansible.in requirements.in
 #
-ansible==2.6.19 \
-    --hash=sha256:dbcfc9ddf620d05e1147b4c713738045a67c32be7260b11cbdbd84e92b77ca06
+ansible==2.7.13 \
+    --hash=sha256:339c87a1bf9e8555ce1e1c1a9452d8ed1df240944ec1a3fc2e813e6c7d70aeae
 asn1crypto==0.24.0 \
     --hash=sha256:2f1adbb7546ed199e3c90ef23ec95c5cf3585bac7d11fb7eb562a3fe89c64e87 \
     --hash=sha256:9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49 \

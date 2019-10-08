@@ -1,11 +1,8 @@
 ---
 - name: Install ntp for ntpd.
   apt:
-    pkg: "{{ item }}"
+    pkg: ['ntp', 'ntpdate']
     state: present
   tags:
     - apt
     - ntp
-  with_items:
-    - ntp
-    - ntpdate
