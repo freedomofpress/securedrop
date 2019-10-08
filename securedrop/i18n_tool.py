@@ -37,6 +37,7 @@ class I18NTool(object):
     SUPPORTED_LANGUAGES = {
         'ar': {'name': 'Arabic', 'desktop': 'ar', },
         'ca': {'name': 'Catalan', 'desktop': 'ca', },
+        'cs': {'name': 'Czech', 'desktop': 'cs', },
         'de_DE': {'name': 'German', 'desktop': 'de_DE', },
         'el': {'name': 'Greek', 'desktop': 'el', },
         'es_ES': {'name': 'Spanish', 'desktop': 'es_ES', },
