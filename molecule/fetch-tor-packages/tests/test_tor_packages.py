@@ -8,7 +8,7 @@ TOR_PACKAGES = [
     {"name": "tor", "arch": "amd64"},
     {"name": "tor-geoipdb", "arch": "all"},
 ]
-TOR_VERSION = "0.4.1.5-1~xenial+1"
+TOR_VERSION = "0.4.1.6-1~xenial+1"
 
 
 def test_tor_apt_repo(host):
