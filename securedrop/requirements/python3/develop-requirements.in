@@ -12,15 +12,19 @@ mypy
 # Needed for ansible network filter
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
+# Now also pin pip due to https://github.com/jazzband/pip-tools/issues/853
+pip==19.1
 pip-tools>=4.0.0
 pyenchant
 pylint
 pytest-xdist
 python-vagrant
 safety>=1.8.4
+setuptools
 sphinx
 sphinx-autobuild
 sphinx_rtd_theme
+supervisor
 testinfra
 urllib3>=1.25.3
 yamllint
