@@ -34,7 +34,8 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 		../admin/requirements-ansible.in \
 		../admin/requirements.in \
 		requirements/python3/develop-requirements.in
-	@$(DEVSHELL) pip-compile \
+	@$(DEVSHELL) pip-compile --generate-hashes \
+		--allow-unsafe \
 		--output-file requirements/python3/test-requirements.txt \
 		requirements/python3/test-requirements.in
 	@$(DEVSHELL) pip-compile --generate-hashes \
