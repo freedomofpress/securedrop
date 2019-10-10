@@ -17,7 +17,5 @@ ENV VIRTUAL_ENV /opt/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 COPY requirements-dev.txt .
 RUN pip3 install --require-hashes -r requirements-dev.txt
-# Now also pin pip due to https://github.com/jazzband/pip-tools/issues/853
-RUN pip3 install pip==19.1
 
 RUN chown -R $USER_NAME /opt
