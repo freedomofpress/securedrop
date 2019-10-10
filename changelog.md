@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.0~rc2
+
+### Web Applications
+
+* Added Czech to supported languages (#4885).
+
+### Operations
+
+* Update Tor to 0.4.1.6 (#4848).
+
+### Documentation
+
+* Miscellaneous documentation fixes (#4886).
+
 ## 1.1.0~rc1
 
 ### Web Applications
