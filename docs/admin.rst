@@ -77,7 +77,7 @@ on how to upgrade the drives.
 
 .. _`Tails RSS Feed`: https://tails.boum.org/news/index.en.rss
 .. _`Tails
-   Upgrade Documentation`: https://tails.boum.org/doc/first_steps/upgrade/index.en.html
+   Upgrade Documentation`: https://tails.boum.org/doc/upgrade/index.en.html
 
 Monitoring OSSEC Alerts for Unusual Activity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -514,8 +514,8 @@ into your Admin Workstation, you should first perform the following troubleshoot
 
 #. **Ensure that SSH aliases and onion service authentication are configured:**
 
-   - First, ensure that the correct configuration files are present in 
-     ``~/Persistent/securedrop/install_files/ansible-base``. 
+   - First, ensure that the correct configuration files are present in
+     ``~/Persistent/securedrop/install_files/ansible-base``.
 
      If v2 onion services
      are configured, you should have 4 files:
@@ -523,10 +523,10 @@ into your Admin Workstation, you should first perform the following troubleshoot
      - ``app-ssh-aths``
      - ``mon-ssh-aths``
      - ``app-journalist-aths``
-     - ``app-source-ths`` 
+     - ``app-source-ths``
 
 
-     If v3 onion services are 
+     If v3 onion services are
      enabled, you should have the following 5 files:
 
      - ``app-ssh.auth_private``
