@@ -32,16 +32,28 @@ suspicion, you have a few alternatives, for example:
 * If your mail provider is less likely to be monitored, you can send a mail to
   gettor@torproject.org with the text "linux", "windows" or "osx" in the body
   (for your preferred operating system) and a bot will answer with instructions.
-* If you routinely use Git, you can use GitLab to
-  `download the Tor Browser <https://gitlab.com/thetorproject/gettorbrowser/tree/torbrowser-releases>`__.
+* You can download a copy of the Tor Browser for your operating system from the
+  `GitLab mirror <https://gitlab.com/thetorproject/gettorbrowser/tree/torbrowser-releases>`__.
+  maintained by the Tor team.
 
 While using the Tor Browser on your personal computer helps hide your activity
 on the network, it leaves traces of its own installation on your local
-machine. For even greater deniability and security, we recommend booting into the
+machine. Your operating system may keep additional logs, for example, of the
+last time you used Tor Browser.
+
+For greater deniability and security, we recommend booting into the
 `Tails operating system`_ (typically from a USB stick). Tails is specifically
-designed to run on your computer without leaving traces of your activity, and
-automatically routes all of your Internet browsing through Tor so you can easily
-access SecureDrop safely.
+designed to run on your computer without leaving traces of your activity or
+saving logs.  It automatically routes all of your Internet browsing through Tor
+so you can easily access SecureDrop safely.
+
+.. important::
+
+   Tor protects your anonymity, but third parties who can monitor your network
+   traffic can detect *that you are using Tor*. They may even be able to do so
+   long after your browser session, using network activity logs. This is why we
+   recommend using Tor Browser from a cybercafe or coworking space you do not
+   visit regularly.
 
 .. _`Tor Project website`: https://www.torproject.org/
 .. _`Tails operating system`: https://tails.boum.org/
@@ -58,8 +70,9 @@ to consider an organization's *Landing Page* before submitting to them.
 
 .. note::
 
-   Each SecureDrop instance is totally independent, and submissions to that
-   instance are only available to journalists associated with that organization.
+   Each SecureDrop instance is operated and administered independently by
+   the organization you are submitting to. Only the journalists associated
+   with that organization can see your submissions.
 
 Most organizations make their *Landing Page* prominently accessible from their
 main website's homepage (for news organizations, typically under sections called
@@ -74,11 +87,16 @@ the organization that you wish to submit to.
 
    If the organization does have an entry in the SecureDrop Directory, we
    recommend comparing the address of the entry with the one on the
-   organization's own *Landing Page*. If the two addresses don't match, please
-   do not submit to this organization yet. Instead, please
-   `contact us <https://securedrop.org/report-an-error>`__  through th
-   SecureDrop Website, using the Tor Browser. We will update the directory entry
-   if it is incorrect.
+   organization's own *Landing Page*.
+
+   If the two addresses don't match, please do not submit to this organization
+   yet. Instead, please `contact us <https://securedrop.org/report-an-error>`__
+   through the SecureDrop Website, using the Tor Browser. For additional
+   security, you can use our .onion service address in Tor:
+
+   ``secrdrop5wyphb5x.onion/report-an-error``
+
+   We will update the directory entry if the information in it is incorrect.
 
 Once you have located the ".onion" address, copy it into the address bar in Tor
 Browser to visit the organization's *Source Interface*.
@@ -209,8 +227,7 @@ below message.
 
 |Delete received messages|
 
-If the server experiences a large number of new sources signing up at
-once and is overloaded with submissions, you may see the message below:
+If the server is experiencing a surge in traffic, you may see the message below:
 
 |Check for an initial response|
 
