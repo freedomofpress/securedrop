@@ -39,6 +39,7 @@
     .index-row
       display: flex
       justify-content: space-between
+      align-self: flex-start
       flex-wrap: wrap
       width: 70%
 
@@ -46,7 +47,7 @@
       padding: .5em 2em 1em 2em
       display: flex
       flex-direction: column
-      justify-content: center
+      justify-content: space-between
       width: 47%
       border-top-width: 0
       border-bottom-width: 0
@@ -74,6 +75,12 @@
       // Standard secondary buttons have a margin to set them apart from the primary
       margin-left: 0
       margin-right: 10%
+      white-space: nowrap
+      text-transform: uppercase
+      border: 2px solid transparent
+
+    #login-button
+      border: 2px solid $color_button_blue
 
     // Desktop view
     @media only screen and (min-width: 768px)
