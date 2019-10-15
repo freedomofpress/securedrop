@@ -37,8 +37,7 @@
 
 ### Documentation
 
-* Transfer device and export recommendations (#4838).
-* Miscellaneous documentation fixes (#4844, #4853, #4874).
+* Miscellaneous documentation fixes (#4853, #4874).
 
 ## 1.0.0
 
@@ -57,7 +56,7 @@
 ### Operations
 
 * Use dh-virtualenv and mod_wsgi to create securedrop-app-code package, run Python 3 version of the web applications on instances (#4622).
-* Adds support for v3 onion services for SecureDrop source, journalist, and SSH interfaces (#4652, #4710, #4690, #4675).
+* Adds support for v3 onion services for SecureDrop source, journalist, and SSH interfaces (#4652, #4710, #4690, #4675, #4844).
 * Adds warning in securedrop-admin sdconfig if v3 onion services and HTTPS on the source interface are both enabled (#4720).
 * Uses latest Tor series (0.4.x) instead of LTS (0.3.x) series (#4658).
 * Move tasks removing old kernels to common Ansible role (#4641).
@@ -68,6 +67,7 @@
 * Fix incorrect alias name in firewall documentation, update screenshots (#4685).
 * Remove redundant Tails guide (#4673).
 * Remove old printer troubleshooting guide (#4651).
+* Updated transfer device and export recommendations (#4838).
 
 ## 0.14.0
 
@@ -201,7 +201,7 @@
 ### Operations
 
 * Ensured WiFi related packages are not installed on Xenial on upgrade (#4163)
-* Try harder to attach to a `tmux` session on upgrade (#4221) 
+* Try harder to attach to a `tmux` session on upgrade (#4221)
 * Control locale during Ansible runs (#4252)
 
 ### Tails Environment
@@ -324,7 +324,7 @@
 
 * Updated OSSEC to 3.0.0 and use GPG signatures for verifying sources (#3701)
 * Update paramiko to 2.4.2 (#3861)
-* Enforce use of the latest grsecurity-patched kernel on servers (#3842) 
+* Enforce use of the latest grsecurity-patched kernel on servers (#3842)
 
 ### Development
 
@@ -373,7 +373,7 @@ https://github.com/freedomofpress/securedrop/milestone/44
 
 ### Web Applications
 
-* Adds a new supported language: Swedish (#3570) 
+* Adds a new supported language: Swedish (#3570)
 * Replace PyCryptodome with pyca/cryptography (#3458)
 * Add explanatory text to source interface screensaver (#3439, #3455)
 * Rename "Delete collection" on journalist interface for clarity (#2419)
@@ -479,7 +479,7 @@ https://github.com/freedomofpress/securedrop/milestones/0.7.
 
 * Add commands to check for and apply updates to the securedrop-admin CLI (#2976).
 
-### Developer Workflow 
+### Developer Workflow
 
 * Make the Docker-based development environment the default (#2902).
 * Rebase branches prior to running CI jobs (#2934).
@@ -698,12 +698,12 @@ https://github.com/freedomofpress/securedrop/milestones/0.4.1.
 The issues for this release were tracked in the 0.4 milestone on Github:
 https://github.com/freedomofpress/securedrop/milestones/0.4.
 
-This changelog shows major changes below. Please diff the tags to see the full list of changes. 
+This changelog shows major changes below. Please diff the tags to see the full list of changes.
 
 ### Deployment
 
 * Enable optional HTTPS on the source interface (#1605).
-* Standardize SecureDrop server installation on a single username (#1796). 
+* Standardize SecureDrop server installation on a single username (#1796).
 * Add `securedrop-admin` script and update version of Ansible running in the workstation (#1146, #1885).
 * Add validation of user-provided values during SecureDrop installation (#1663, #749, #1257).
 * Removes `prod-specific.yml` configuration file (#1758).
@@ -716,10 +716,10 @@ This changelog shows major changes below. Please diff the tags to see the full l
 ### Developer Workflow
 
 * Reconciles divergent master and develop branches (#1559).
-* Increases unit test coverage to from 65% to 92%. 
-* Adds testinfra system configuration test suite (#1580). 
+* Increases unit test coverage to from 65% to 92%.
+* Adds testinfra system configuration test suite (#1580).
 * Removes unnecessary test wrappers (#1412).
-* Major improvements to SecureDrop CI and testing flow including adding the staging environment to CI (#1067). 
+* Major improvements to SecureDrop CI and testing flow including adding the staging environment to CI (#1067).
 
 ### Web App: Source
 
@@ -736,10 +736,10 @@ This changelog shows major changes below. Please diff the tags to see the full l
 * Adds minimum password length requirements for new journalist accounts (#980).
 * Delete submissions that have had their sources deleted (#1188).
 * Bugfix: Empty replies can no longer be sent to a source (#1715).
-* Bugfix: Handle non hexadecimal digits for the 2FA secret (#1869). 
+* Bugfix: Handle non hexadecimal digits for the 2FA secret (#1869).
 * Bugfix: Handle token reuse for the 2FA secret on /admin/2fa (#1687).
-* Bugfix: Handle attempts to make duplicate user accounts (#1693). 
-* Bugfix: Fix confusing UI on message/reply icons (#1258). 
+* Bugfix: Handle attempts to make duplicate user accounts (#1693).
+* Bugfix: Fix confusing UI on message/reply icons (#1258).
 
 ### Tails Environment
 
