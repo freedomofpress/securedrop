@@ -3,11 +3,11 @@ Updating Tails USBs
 
 You are responsible for keeping your Tails USBs updated.
 
-There are two ways to perform updates: via the Tails graphical installer and manually. The manual update process will work on any Tails USB. The graphical installer requires an Internet connection to notify you when updates are available, so it is only suitable for internet-connected Tails workstations (such as the *Admin Workstation* and the *Journalist Workstation*).   
+There are two ways to perform updates: via the Tails graphical installer and manually. The manual update process will work on any Tails USB. The graphical installer requires an Internet connection to notify you when updates are available, so it is only suitable for internet-connected Tails workstations (such as the *Admin Workstation* and the *Journalist Workstation*).
 
 Because the *Secure Viewing Station* (SVS) is airgapped, it cannot receive update notifications, so it will need to be updated manually.
 
-.. important:: 
+.. important::
         The *SVS* stores some of SecureDrop's most sensitive data (decrypted submissions, the *Submission Private Key*), so we **strongly** encourage you to manually update the *SVS* whenever a new version of Tails is released.
 
 The Tails project releases updates `every 6 to 8 weeks`_. Occasionally they
@@ -22,9 +22,9 @@ Tails `Security page`_ and subscribe to the Tails RSS/Atom feed.
 Update via Graphical Installer
 ------------------------------
 
-For Internet-connected Tails workstations, you'll see a notification when a new version of Tails is available. 
+For Internet-connected Tails workstations, you'll see a notification when a new version of Tails is available.
 
-|Update Notification| 
+|Update Notification|
 
 We recommend that you :ref:`back up your existing configuration <backup_workstations>` and update as soon as possible. It usually takes some time for updates to download, so keep that in mind when choosing when to update.
 
@@ -35,7 +35,7 @@ Update Manually
 
 The process for manually updating a Tails USB is:
 
-  #. Recommended: :ref:`Make a backup of the USB you want to update <Step 1>`. 
+  #. Recommended: :ref:`Make a backup of the USB you want to update <Step 1>`.
   #. Install the :ref:`latest version of Tails <Step 2>` on your *primary Tails USB* or a blank USB stick.
   #. Use the *primary Tails USB* to :ref:`perform a manual update of your desired Tails USB <Step 3>` on a fully offline (airgapped) computer, such as the computer used for the *Secure Viewing Station*.
 
@@ -64,7 +64,7 @@ If you have an existing *primary Tails USB*, boot into it on your *Admin Worksta
 
 Alternatively, you can also download and :ref:`install the newest version of Tails from scratch <setup_install_tails>` (as you did when you first installed SecureDrop). This may be faster if your *primary Tails USB* has not been updated in a while.
 
-.. _update process: https://tails.boum.org/doc/first_steps/upgrade/index.en.html
+.. _update process: https://tails.boum.org/doc/upgrade/index.en.html
 
 .. _Step 3:
 
