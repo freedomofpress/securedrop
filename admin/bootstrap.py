@@ -76,7 +76,7 @@ def is_tails():
     return id == 'Tails'
 
 
-def clean_up_tails3_venv():
+def clean_up_tails3_venv(VENV_DIR):
     """
     Tails 3.x, based on debian stretch uses libpython3.5, whereas Tails 4.x is
     based on Debian Buster and uses libpython3.7. This means that the Tails 3.x
@@ -100,6 +100,8 @@ def clean_up_tails3_venv():
                 shutil.rmtree(VENV_DIR)
                 sdlog.info("Tails 3 Python 3 virtualenv deleted. It will be "
                            "rebuilt to complete migration to Tails 4.x")
+            else:
+                sdlog.info("No Tails 3 Python 3 virtualenv detected.")
 
 
 def maybe_torify():
@@ -158,7 +160,7 @@ def envsetup(args):
     installation of packages again.
     """
     # clean up tails 3.x venv when migrating to tails 4.x
-    clean_up_tails3_venv()
+    clean_up_tails3_venv(VENV_DIR)
 
     # virtualenv doesnt exist? Install dependencies and create
     if not os.path.exists(VENV_DIR):
