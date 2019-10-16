@@ -990,7 +990,12 @@ def parse_argv(argv):
                                             help=reset_admin_access.__doc__)
     parse_reset_ssh.set_defaults(func=reset_admin_access)
 
-    return set_default_paths(parser.parse_args(argv))
+    args = parser.parse_args(argv)
+    if getattr(args, 'func', None) is None:
+        print('Please specify an operation.\n')
+        parser.print_help()
+        sys.exit(1)
+    return set_default_paths(args)
 
 
 def main(argv):
