@@ -82,7 +82,7 @@ class TestSecureDropAdmin(object):
         python_lib_path = os.path.join(str(tmpdir), 'lib/python3.5')
         os.makedirs(python_lib_path)
         with mock.patch('bootstrap.is_tails', return_value=True):
-            with mock.patch('subprocess.check_output', return_value="buster"):
+            with mock.patch('subprocess.check_output', return_value=b"buster"):
                 bootstrap.clean_up_tails3_venv(venv_path)
                 assert 'Tails 3 Python 3 virtualenv detected.' in caplog.text
                 assert 'Tails 3 Python 3 virtualenv deleted.' in caplog.text
@@ -95,7 +95,9 @@ class TestSecureDropAdmin(object):
         with mock.patch('bootstrap.is_tails', return_value=True):
             with mock.patch('subprocess.check_output', return_value="buster"):
                 bootstrap.clean_up_tails3_venv(venv_path)
-                assert 'No Tails 3 Python 3 virtualenv detected' in caplog.text
+                assert (
+                    'Tails 3 Python 3 virtualenv detected' not in caplog.text
+                )
                 assert os.path.exists(venv_path)
 
     def test_python3_stretch_venv_not_deleted_in_stretch(self, tmpdir, caplog):

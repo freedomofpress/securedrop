@@ -3,20 +3,17 @@
 # this is for backward compatibility and also because it
 # is more convenient for the admin to have the script at
 # the top level of the SecureDrop repository
+set -eo pipefail
+
 d=$(dirname "$0")
 if test "$1" = "setup" || test "$2" = "setup"; then
    if test "$1" = "setup"; then
      shift
-     exec python "$d/admin/bootstrap.py" "$@"
+     exec python3 "$d/admin/bootstrap.py" "$@"
    else
-     exec python "$d/admin/bootstrap.py" "$1"
+     exec python3 "$d/admin/bootstrap.py" "$1"
    fi
 else
-   activate="$d/admin/.venv3/bin/activate"
-   if test -f "$activate" ; then
-      source "$activate"
-      exec "$d/admin/.venv3/bin/securedrop-admin" --root "$d" "$@"
-   else
-      echo "please run '$0 setup' first"
-   fi
+   python3 "$d/admin/bootstrap.py" "checkenv"
+   exec "$d/admin/.venv3/bin/securedrop-admin" --root "$d" "$@"
 fi
