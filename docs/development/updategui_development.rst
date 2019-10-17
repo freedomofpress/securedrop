@@ -8,8 +8,8 @@ using Python3.
 Installing the Dependencies in a Virtual Environment
 -----------------------------------------------------
 
-You can use the `pipenv tool <https://docs.pipenv.org>`_ to create a virtualenv and install the dependencies. The first step
-is to `install pipenv <https://docs.pipenv.org/#install-pipenv-today>`_ itself. After that, the following commands can be
+You can use the `pipenv tool <https://pipenv.kennethreitz.org/>`_ to create a virtualenv and install the dependencies. The first step
+is to `install pipenv <https://pipenv.kennethreitz.org/#install-pipenv-today>`_ itself. After that, the following commands can be
 used to create the environment:
 
 ::
