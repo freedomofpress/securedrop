@@ -15,5 +15,6 @@ if test "$1" = "setup" || test "$2" = "setup"; then
    fi
 else
    python3 "$d/admin/bootstrap.py" "checkenv"
+   source "$d/admin/.venv3/bin/activate"
    exec "$d/admin/.venv3/bin/securedrop-admin" --root "$d" "$@"
 fi
