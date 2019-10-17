@@ -67,29 +67,31 @@ Pre-Release
 9. Push the branch and tags.
 10. Build Debian packages and place them on ``apt-test.freedom.press``. This is currently done
     by making a PR into `a git-lfs repo here <https://github.com/freedomofpress/securedrop-dev-packages-lfs>`_.
-    Changes merged to ``master`` in this repo will be published within 15 minutes. Build
-    logs should be saved and published according to the
+    Only commit packages with an incremented version number: do not clobber existing packages.
+    That is, if there is already a deb called e.g. ``ossec-agent-3.0.0-amd64.deb`` in ``master``, do
+    not commit a new version of this deb. Changes merged to ``master`` in this repo will be published within 15 minutes.
+11. Build logs from the above debian package builds should be saved and published according to the
     `build log guidelines <https://github.com/freedomofpress/securedrop/wiki/Build-logs>`_.
-11. Write a test plan that focuses on the new functionality introduced in the release.
+12. Write a test plan that focuses on the new functionality introduced in the release.
     Post for feedback and make changes based on suggestions from the community.
-12. Encourage QA participants to QA the release on production VMs and hardware. They
+13. Encourage QA participants to QA the release on production VMs and hardware. They
     should post their QA reports in the release issue such that it is clear what
     was and what was not tested. It is the responsibility of the release manager
     to ensure that sufficient QA is done on the release candidate prior to
     final release.
-13. Triage bugs as they are reported, if a bug is important to fix and does not
+14. Triage bugs as they are reported, if a bug is important to fix and does not
     receive attention, you should fix the bug yourself or find someone who agrees
     to work on a fix.
-14. Backport release QA fixes merged into ``develop`` into the
+15. Backport release QA fixes merged into ``develop`` into the
     release branch using ``git cherry-pick -x <commit>`` to clearly indicate
     where the commit originated from.
-15. At your discretion - for example when a significant fix is merged - prepare
+16. At your discretion - for example when a significant fix is merged - prepare
     additional release candidates and have fresh Debian packages prepared for
     testing.
-16. For a regular release, the string freeze will be declared by the
+17. For a regular release, the string freeze will be declared by the
     translation administrator one week prior to the release. After this is done, ensure
     that no changes involving string changes are backported into the release branch.
-17. Ensure that a draft of the release notes are prepared and shared with the
+18. Ensure that a draft of the release notes are prepared and shared with the
     community for feedback.
 
 Release Process
