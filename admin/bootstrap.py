@@ -20,6 +20,7 @@
 import argparse
 import logging
 import os
+import shutil
 import subprocess
 import sys
 
@@ -68,11 +69,46 @@ def is_tails():
         id = None
 
     # dirty hack to unreliably detect Tails 4.0~beta2
-    if id == 'Debian':
+    if id == b'Debian':
         if os.uname()[1] == 'amnesia':
             id = 'Tails'
 
     return id == 'Tails'
+
+
+def clean_up_tails3_venv(virtualenv_dir=VENV_DIR):
+    """
+    Tails 3.x, based on debian stretch uses libpython3.5, whereas Tails 4.x is
+    based on Debian Buster and uses libpython3.7. This means that the Tails 3.x
+    virtualenv will not work under Tails 4.x, and will need to be destroyed and
+    rebuilt. We can detect if the version of libpython is 3.5 in the
+    admin/.venv3/ folder, and delete it if that's the case. This will ensure a
+    smooth upgrade from Tails 3.x to Tails 4.x.
+    """
+    if is_tails():
+        try:
+            dist = subprocess.check_output('lsb_release --codename --short',
+                                           shell=True).strip()
+        except subprocess.CalledProcessError:
+            dist = None
+
+        # tails4 is based on buster
+        if dist == b'buster':
+            python_lib_path = os.path.join(virtualenv_dir, "lib/python3.5")
+            if os.path.exists(os.path.join(python_lib_path)):
+                sdlog.info(
+                    "Tails 3 Python 3 virtualenv detected. "
+                    "Removing it."
+                )
+                shutil.rmtree(virtualenv_dir)
+                sdlog.info("Tails 3 Python 3 virtualenv deleted.")
+
+
+def checkenv(args):
+    clean_up_tails3_venv(VENV_DIR)
+    if not os.path.exists(os.path.join(VENV_DIR, "bin/activate")):
+        sdlog.error('Please run "securedrop-admin setup".')
+        sys.exit(1)
 
 
 def maybe_torify():
@@ -130,6 +166,9 @@ def envsetup(args):
     Ansible is available to the Admin on subsequent boots without requiring
     installation of packages again.
     """
+    # clean up tails 3.x venv when migrating to tails 4.x
+    clean_up_tails3_venv(VENV_DIR)
+
     # virtualenv doesnt exist? Install dependencies and create
     if not os.path.exists(VENV_DIR):
 
@@ -209,18 +248,30 @@ def parse_argv(argv):
                         help="Increase verbosity on output")
     parser.set_defaults(func=envsetup)
 
+    subparsers = parser.add_subparsers()
+
+    envsetup_parser = subparsers.add_parser(
+        'envsetup',
+        help='Set up the admin virtualenv.'
+    )
+    envsetup_parser.set_defaults(func=envsetup)
+
+    checkenv_parser = subparsers.add_parser(
+        'checkenv',
+        help='Check that the admin virtualenv is properly set up.'
+    )
+    checkenv_parser.set_defaults(func=checkenv)
+
     return parser.parse_args(argv)
 
 
 if __name__ == "__main__":
     args = parse_argv(sys.argv[1:])
     setup_logger(args.v)
-    if args.v:
+
+    try:
         args.func(args)
+    except Exception:
+        sys.exit(1)
     else:
-        try:
-            args.func(args)
-        except Exception:
-            sys.exit(1)
-        else:
-            sys.exit(0)
+        sys.exit(0)
