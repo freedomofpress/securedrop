@@ -41,11 +41,22 @@ on the network, it leaves traces of its own installation on your local
 machine. Your operating system may keep additional logs, for example, of the
 last time you used Tor Browser.
 
+In general, when you are trying to stay anonymous, many time-saving features of
+your computer or phone turn into threats: bookmarks, recommendations,
+synchronization features, shortcuts to frequently opened files, and so on. It
+is very easy to make small mistakes that can endanger your anonymity, especially
+if you use the same device for any other purpose.
+
 For greater deniability and security, we recommend booting into the
 `Tails operating system`_ (typically from a USB stick). Tails is specifically
 designed to run on your computer without leaving traces of your activity or
-saving logs.  It automatically routes all of your Internet browsing through Tor
+saving logs. It automatically routes all of your Internet browsing through Tor
 so you can easily access SecureDrop safely.
+
+Even if you are using a dedicated computer for your SecureDrop activity that you
+have never used and will never use for anything else, we recommend also using
+Tails to avoid leaving traces of your activity on the computer's hard disk, in
+your ISP's logs, or on cloud services.
 
 .. important::
 
