@@ -64,12 +64,12 @@ def run_command(command):
 def is_tails():
     try:
         id = subprocess.check_output('lsb_release --id --short',
-                                     shell=True).strip()
+                                     shell=True).decode('utf-8').strip()
     except subprocess.CalledProcessError:
         id = None
 
     # dirty hack to unreliably detect Tails 4.0~beta2
-    if id == b'Debian':
+    if id == 'Debian':
         if os.uname()[1] == 'amnesia':
             id = 'Tails'
 
