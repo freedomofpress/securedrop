@@ -42,14 +42,6 @@ click **Add**, then click **Start Tails**.
 
 We will now prepare the *Secure Viewing Station*.
 
-Ensure Filenames are Preserved
-------------------------------
-
-In order to preserve filenames when you decrypt submissions, on each *Secure
-Viewing Station*, you should open a **Terminal** and type the following commands:
-
-.. include:: includes/tails-svs-nautilus.txt
-
 Correct the System Time
 -----------------------
 
@@ -62,7 +54,7 @@ To set the system time:
 
 #. Click the upper right down arrow in the menu bar and select the wrench icon:
    |select settings|
-#. Then click **Date & Time**.
+#. Select the **Details** section, then click **Date & Time**.
 #. Click **Unlock**. Type in the admin password you set when you
    started up Tails.
 #. Set the correct time, region and city.
