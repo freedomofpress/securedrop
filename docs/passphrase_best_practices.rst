@@ -76,7 +76,7 @@ the availability of the system, or compensate for the difficulty by using weak
 or reused credentials, potentially compromising the security of the system.
 
 There is a detailed list of the credentials that must be managed by each end
-user role in :doc:`passphrases`. We recommended using the KeePassX password
+user role in :doc:`passphrases`. We recommended using the KeePassXC password
 manager included in Tails to store your credentials and minimize the passphrases
 that you need to memorize to just the passphrases for the persistent storage on
 your Tails USBs.

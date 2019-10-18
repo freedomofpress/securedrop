@@ -567,7 +567,7 @@ To open the *Export Device* on the *Secure Viewing Station*, follow these steps:
 4. Under "Partitions and Drives", select the *Export Device* and click
    **Unlock**.
 5. Enter your passphrase, which we recommend keeping in your own personal
-   password manager (e.g., on your smartphone), not on KeePassX.
+   password manager (e.g., on your smartphone), not on KeePassXC.
 6. Under "Partitions and Drives", open the encrypted drive by clicking
    **Open**.
 

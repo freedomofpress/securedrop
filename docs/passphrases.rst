@@ -7,12 +7,12 @@ unique passphrases. The document is an overview of the passphrases,
 keys, two-factor secrets, and other credentials that are required for
 each role in a SecureDrop installation.
 
-.. note:: We encourage each end user to use KeePassX, an easy-to-use
+.. note:: We encourage each end user to use KeePassXC, an easy-to-use
           password manager included in Tails, to generate and retain
           strong and unique passphrases. The SecureDrop code repository includes
           a template that you can use to initialize this database for an
           *Admin Workstation* or a *Journalist Workstation*. For more
-          information, see the :ref:`KeePassX setup instructions <keepassx_setup>`.
+          information, see the :ref:`KeePassXC setup instructions <keepassxc_setup>`.
 
 .. tip:: For best practices on managing passphrases, see
    :doc:`passphrase_best_practices`.
@@ -26,7 +26,7 @@ performed by the admin will require the following set of credentials and
 passphrases:
 
 -  A passphrase for the persistent volume on the Admin Live USB.
--  Additional credentials, which we recommend adding to Tails' KeePassX password
+-  Additional credentials, which we recommend adding to Tails' KeePassXC password
    manager during the installation:
 
    -  The *Application Server* and *Monitor Server* admin username and password
@@ -59,7 +59,7 @@ connect to the *Journalist Interface*. The tasks performed by the journalist
 will require the following set of passphrases:
 
 -  A master passphrase for the persistent volume on the Tails device.
--  A master passphrase for the KeePassX password manager, which unlocks
+-  A master passphrase for the KeePassXC password manager, which unlocks
    passphrases to:
 
    -  The Hidden Service value required to connect to the Journalist
