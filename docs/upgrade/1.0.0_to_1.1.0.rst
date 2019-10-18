@@ -27,6 +27,8 @@ Perform the update to 1.1.0 by clicking "Update Now":
 
 .. image:: ../images/0.6.x_to_0.7/securedrop-updater.png
 
+.. _manual_upgrade_to_110:
+
 Performing a manual update
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 If the automated update fails, you can perform a manual update by running the
@@ -112,6 +114,49 @@ contact us using any of the methods below. If the upgrade failed and you need
 to restore from a backup, see our :ref:`guide for restoring workstations <restore_workstations>`.
 Make sure you restore to a Tails drive using Tails 3.16 before attempting
 another upgrade to Tails 4.
+
+Troubleshooting ``securedrop-admin``
+------------------------------------
+
+This release migrates the ``securedrop-admin`` command to Python 3, which is
+necessary because the Python 2 series reaches end-of-life on January 1, 2020.
+The ``securedrop-admin setup`` step normally should take care of all the
+required changes.
+
+If you see error messages when running ``securedrop-admin`` or
+``securedrop-admin setup``, we recommend the following:
+
+- Ensure that you are running version 1.1.0 of SecureDrop on your workstation,
+  by running the command ``git status`` in your ``~/Persistent/securedrop``
+  directory. If the output is not "HEAD detached at 1.1.0", perform a
+  :ref:`manual upgrade to SecureDrop 1.1.0 on your workstation <manual_upgrade_to_110>`.
+
+- Check your network connection on your workstation. The
+  ``securedrop-admin setup`` command requires a working Tor connection.
+
+- Make sure that you have `set an admin password <https://tails.boum.org/doc/first_steps/startup_options/administration_password/>`__
+  on the Tails welcome screen.
+
+If this does not solve the problem, clear out any existing Python environments
+on your workstation by following these steps:
+
+- Change into the directory ``~/Persistent/securedrop/admin``.
+
+- Run the following commands from within this directory (make sure to type them
+  exactly as shown, as this is a destructive operation):
+
+.. code:: bash
+
+  rm -r .venv
+  rm -r .venv3
+
+- Change back into the ``~/Persistent/securedrop`` directory.
+
+- Run ``./securedrop-admin setup``. If the command completes without errors,
+  run the ``./securedrop-admin tailsconfig`` command.
+
+If you continue to experience difficulties, please contact us using any of the
+methods below.
 
 Getting Support
 ---------------
