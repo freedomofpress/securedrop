@@ -154,7 +154,7 @@ def install_apt_dependencies(args):
         raise
 
 
-def envsetup(args):
+def envsetup(args, virtualenv_dir=VENV_DIR):
     """Installs Admin tooling required for managing SecureDrop. Specifically:
 
         * updates apt-cache
@@ -167,10 +167,10 @@ def envsetup(args):
     installation of packages again.
     """
     # clean up tails 3.x venv when migrating to tails 4.x
-    clean_up_tails3_venv(VENV_DIR)
+    clean_up_tails3_venv(virtualenv_dir)
 
     # virtualenv doesnt exist? Install dependencies and create
-    if not os.path.exists(VENV_DIR):
+    if not os.path.exists(virtualenv_dir):
 
         install_apt_dependencies(args)
 
@@ -181,12 +181,18 @@ def envsetup(args):
         sdlog.info("Setting up virtualenv")
         try:
             sdlog.debug(subprocess.check_output(
-                maybe_torify() + ['virtualenv', '--python=python3', VENV_DIR],
+                maybe_torify() + ['virtualenv',
+                                  '--python=python3',
+                                  virtualenv_dir
+                                  ],
                 stderr=subprocess.STDOUT))
         except subprocess.CalledProcessError as e:
             sdlog.debug(e.output)
             sdlog.error(("Unable to create virtualenv. Check network settings"
                          " and try again."))
+            sdlog.debug("Cleaning up virtualenv")
+            if os.path.exists(virtualenv_dir):
+                shutil.rmtree(virtualenv_dir)
             raise
     else:
         sdlog.info("Virtualenv already exists, not creating")
