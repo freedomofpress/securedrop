@@ -131,8 +131,8 @@ signed with the release signing key:
 .. code:: sh
 
     cd ~/Persistent/securedrop/
-    git checkout 1.0.0
-    git tag -v 1.0.0
+    git checkout 1.1.0
+    git tag -v 1.1.0
 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the
 output of that last command along with the fingerprint above.
@@ -143,12 +143,12 @@ output of that last command along with the fingerprint above.
    and you should **not** proceed with the installation. If this happens,
    please contact us at securedrop@freedom.press.
 
-.. _keepassx_setup:
+.. _keepassxc_setup:
 
 Create the Admin Passphrase Database
 ------------------------------------
 
-We provide a KeePassX password database template to make it easier for
+We provide a KeePassXC password database template to make it easier for
 admins and journalists to generate strong, unique passphrases and
 store them securely. Once you have set up Tails with persistence and
 have cloned the repo, you can set up your personal password database
@@ -157,9 +157,14 @@ using this template.
 You can find the template in ``tails_files/securedrop-keepassx.kdbx``
 in the SecureDrop repository that you just cloned.
 
+.. note::
+
+   Earlier versions of Tails used KeePassX instead of KeePassXC.
+   The provided template is compatible with both.
+
 To use the template:
 
--  Open the KeePassX program |KeePassX| which is already installed on
+-  Open the KeePassXC program |KeePassXC| which is already installed on
    Tails
 -  Select **Database**, **Open database**, and navigate to the location of
    **securedrop-keepassx.kdbx**, select it, and click **Open**
@@ -168,7 +173,7 @@ To use the template:
 -  Save the database in the Persistent folder
 
 .. tip:: If you would like to add a master password, navigate to **Database** and
-   **Change master key**. Note that since each KeePassX database is stored
+   **Change master key**. Note that since each KeePassXC database is stored
    on the encrypted persistent volume, this additional passphrase is not necessary.
 
 .. warning:: You will not be able to access your passwords if you
@@ -205,4 +210,4 @@ the template are:
   accidentally overwrites an entry.
 
 .. |Terminal| image:: images/terminal.png
-.. |KeePassX| image:: images/keepassx.png
+.. |KeePassXC| image:: images/keepassx.png

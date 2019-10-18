@@ -48,7 +48,7 @@ and set up a persistent volume with a strong passphrase.
 
 Once persistence has been set up, start up the *Admin Workstation* with 
 persistence enabled, :ref:`install the SecureDrop application code, and set up
-the KeePassX database <set_up_admin_tails>`.
+the KeePassXC database <set_up_admin_tails>`.
 
 The *Admin Workstation* uses SSH with key authentication to connect to the servers,
 so you'll need to create a new SSH keypair for your SecureDrop instance. To do so,
@@ -92,7 +92,7 @@ using the `passwd` command, for example:
 
 .. important::
  Make sure to select a strong password, and record it in the *Admin Workstation's*
- KeePassX database.
+ KeePassXC database.
 
 Finally, reboot the *Monitor Server* and verify that you can log in at the console
 using the new password.
