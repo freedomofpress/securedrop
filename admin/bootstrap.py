@@ -187,6 +187,9 @@ def envsetup(args):
             sdlog.debug(e.output)
             sdlog.error(("Unable to create virtualenv. Check network settings"
                          " and try again."))
+            sdlog.debug("Cleaning up virtualenv")
+            if os.path.exists(VENV_DIR):
+                shutil.rmtree(VENV_DIR)
             raise
     else:
         sdlog.info("Virtualenv already exists, not creating")
