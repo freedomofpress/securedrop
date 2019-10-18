@@ -6,7 +6,7 @@ Setting Up a Printer in Tails
 Because Tails is supposed to be as **amnesiac** as possible, you want to
 shield your Tails stick from any extra inputs from, and outputs to, a
 potentially untrusted network. This is why **we strongly recommend using
-a printer that does not have WiFi or Bluetooth**, and hooking up to it
+a printer that does not have WiFi or Bluetooth**, and connecting to it
 using a regular USB cable to print.
 
 Finding a printer that works with Tails can be challenging because Tails is
@@ -36,59 +36,52 @@ increase the chances for a seamless installation experience in Tails.
 In any case, this document outlines the usual set of steps that we follow when
 attempting to use a new printer with Tails.
 
-.. note:: While, as of Tails 3, it's no longer necessary to have admin
-   privileges in order to install or configure printers, we recommend that you
-   set an admin passphrase and unlock your persistent volume; this ensures that
-   the printer's installation and configuration settings persist after every
-   reboot, so you don't have to reinstall it each time you start Tails.
-
 Installing and Printing via the Tails GUI
 -----------------------------------------
 
-Let's look at Tails 3.0's typical flow for installing a USB-connected printer.
-If you've enabled persistence, boot with your persistent volume, and set an
-admin passphrase. Connect the printer to your Tails-booted computer via USB,
-then turn the printer on.
+Let's look at the flow in Tails 4 for installing a USB-connected printer.
+On the Tails welcome screen, unlock your persistent volume, and
+`set an admin password <https://tails.boum.org/doc/first_steps/startup_options/administration_password/index.en.html>`__.
+This ensures that you won't have to reinstall the printer each time you start
+Tails.
+
+Connect the printer to your Tails-booted computer via USB, then turn the printer
+on.
 
 Now, you'll want to single-click your way through **Applications** ▸
-**System Tools** ▸ **Settings** ▸ **Printers**.
+**System Tools** ▸ **Settings** ▸ **Devices** ▸ **Printers**. The screenshot
+below highlights the "Devices" section in which the printer settings can be
+found:
 
-|select printer from settings|
+|select devices from settings|
 
-In this example, we'll assume that this is the first time we've tried to install
-a printer, which will show the following:
+If this is the first time you've tried to install a printer, the "Printers"
+section will look like this:
 
 |add printer|
 
-Click **Add a Printer**. By doing so, you'll now get a list of printers that Tails
-has auto-detected. You should now see this:
+Click **Add a Printer**. After a brief period during which Tails searches for
+printers, you should see a list of printers that Tails has auto-detected:
 
 |select printer to add|
 
-In this example, we've connected an HP DeskJet F4200. Clicking on this printer
-will select it for installation, which, if successful, will display the
-following:
+In this example, we've connected an HP ENVY-5530 (not a model we recommend for
+production use). Clicking on this printer will select it for installation. The
+installation can take a few seconds, during which it looks like nothing is
+happening.
 
-|printer installing|
-
-This indicates that Tails is attempting to install the USB printer. Assuming you
-receive no errors in this process, you will then see the following screen,
-which indicates that the printer is "ready" for printing.
+Assuming you receive no errors in this process, you will then see a screen like
+the following one, which indicates that the printer is ready for printing.
 
 |printer ready|
-
-
-
-
-
 
 Printing from the Command Line
 ------------------------------
 
-You can also easily print from the command line using the ``lp`` command; if
-you haven't already set your installed printer as default in the GUI, you can
-quickly do so by adding this line to your ``~/.bashrc`` file, or entering this
-directly into the terminal:
+After you have configured your printer, you can also easily print from the
+command line using the ``lp`` command. If you haven't already set your installed
+printer as default in the GUI, you can quickly do so by adding this line to your
+``~/.bashrc`` file, or entering this directly into the terminal:
 
 .. code:: sh
 
@@ -113,7 +106,6 @@ it's equally straightforward from the command line, if you prefer that
 environment.
 
 .. |select printer to add| image:: images/printer_setup_guide/select_printer_to_add.png
-.. |select printer from settings| image:: images/printer_setup_guide/select_printer_from_settings.png
+.. |select devices from settings| image:: images/printer_setup_guide/select_devices_from_settings.png
 .. |printer ready| image:: images/printer_setup_guide/printer_ready.png
-.. |printer installing| image:: images/printer_setup_guide/printer_installing.png
 .. |add printer| image:: images/printer_setup_guide/add_printer.png
