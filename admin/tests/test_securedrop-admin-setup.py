@@ -119,3 +119,19 @@ class TestSecureDropAdmin(object):
                                                                       ':o')):
                 bootstrap.clean_up_tails3_venv(venv_path)
                 assert os.path.exists(venv_path)
+
+    def test_envsetup_cleanup(self, tmpdir, caplog):
+        venv = os.path.join(str(tmpdir), "empty_dir")
+        args = ""
+        with pytest.raises(subprocess.CalledProcessError):
+            with mock.patch('subprocess.check_output',
+                            side_effect=self.side_effect_venv_bootstrap(venv)):
+                bootstrap.envsetup(args, venv)
+                assert not os.path.exists(venv)
+                assert 'Cleaning up virtualenv' in caplog.text
+
+    def side_effect_venv_bootstrap(self, venv_path):
+        # emulate the venv being created, and raise exception to simulate
+        # failure in virtualenv creation
+        os.makedirs(venv_path)
+        raise subprocess.CalledProcessError(1, ':o')
