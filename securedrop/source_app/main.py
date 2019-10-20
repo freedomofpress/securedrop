@@ -83,6 +83,9 @@ def make_blueprint(config):
     @view.route('/lookup', methods=('GET',))
     @login_required
     def lookup():
+        allow_document_uploads = current_app.config.get(
+            'ALLOW_DOCUMENT_UPLOADS',
+            True)
         replies = []
         source_inbox = Reply.query.filter(Reply.source_id == g.source.id) \
                                   .filter(Reply.deleted_by_source == False).all()  # noqa
@@ -121,6 +124,7 @@ def make_blueprint(config):
 
         return render_template(
             'lookup.html',
+            allow_document_uploads=allow_document_uploads,
             codename=g.codename,
             replies=replies,
             flagged=g.source.flagged,
@@ -131,9 +135,12 @@ def make_blueprint(config):
     @view.route('/submit', methods=('POST',))
     @login_required
     def submit():
+        allow_document_uploads = current_app.config.get(
+            'ALLOW_DOCUMENT_UPLOADS',
+            True)
         msg = request.form['msg']
         fh = None
-        if 'fh' in request.files:
+        if allow_document_uploads and 'fh' in request.files:
             fh = request.files['fh']
 
         # Don't submit anything if it was an "empty" submission. #878
