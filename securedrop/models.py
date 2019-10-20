@@ -17,7 +17,7 @@ from jinja2 import Markup
 from passlib.hash import argon2
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, LargeBinary
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, LargeBinary, JSON
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from db import db
@@ -739,3 +739,15 @@ class RevokedToken(db.Model):
     id = Column(Integer, primary_key=True)
     journalist_id = Column(Integer, ForeignKey('journalists.id'))
     token = db.Column(db.Text, nullable=False, unique=True)
+
+
+class InstanceConfig(db.Model):
+    '''Key-value store of settings configurable from the journalist interface.
+    '''
+
+    __tablename__ = 'instance_config'
+    name = Column(String, primary_key=True)
+    value = Column(JSON)
+
+    def __repr__(self):
+        return "<InstanceConfig(name='%s', value='%s')>" % (self.name, self.value)
