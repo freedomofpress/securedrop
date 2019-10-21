@@ -131,8 +131,8 @@ signed with the release signing key:
 .. code:: sh
 
     cd ~/Persistent/securedrop/
-    git checkout 1.1.0
-    git tag -v 1.1.0
+    git checkout 1.0.0
+    git tag -v 1.0.0
 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the
 output of that last command along with the fingerprint above.
@@ -210,4 +210,4 @@ the template are:
   accidentally overwrites an entry.
 
 .. |Terminal| image:: images/terminal.png
-.. |KeePassXC| image:: images/keepassx.png
+.. |KeePassXC| image:: images/keepassxc.png
