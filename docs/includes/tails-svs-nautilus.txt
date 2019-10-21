@@ -1,7 +1,0 @@
-.. code:: sh
-
-  cd /live/persistence/TailsData_unlocked/dotfiles
-  echo "/usr/bin/dconf write /org/gnome/nautilus/preferences/automatic-decompression false" > .xsessionrc
-
-.. note:: This only needs to be done once on each *Secure Viewing Station*.
-          After a reboot it will persist.
