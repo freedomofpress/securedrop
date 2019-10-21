@@ -64,6 +64,10 @@ class ReplyForm(FlaskForm):
     )
 
 
+class AllowDocumentUploadsForm(FlaskForm):
+    allow_document_uploads = BooleanField('allow_document_uploads')
+
+
 class LogoForm(FlaskForm):
     logo = FileField(validators=[
         FileRequired(message=gettext('File required.')),

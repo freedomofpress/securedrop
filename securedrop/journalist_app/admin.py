@@ -9,11 +9,12 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
 from db import db
-from models import Journalist, InvalidUsernameException, FirstOrLastNameError, PasswordError
+from models import (InstanceConfig, Journalist, InvalidUsernameException,
+                    FirstOrLastNameError, PasswordError)
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (make_password, commit_account_changes, set_diceware_password,
                                   validate_hotp_secret, revoke_token)
-from journalist_app.forms import LogoForm, NewUserForm
+from journalist_app.forms import AllowDocumentUploadsForm, LogoForm, NewUserForm
 
 
 def make_blueprint(config):
@@ -28,9 +29,13 @@ def make_blueprint(config):
     @view.route('/config', methods=('GET', 'POST'))
     @admin_required
     def manage_config():
-        form = LogoForm()
-        if form.validate_on_submit():
-            f = form.logo.data
+        allow_document_uploads_form = AllowDocumentUploadsForm(
+            allow_document_uploads=current_app.config.get(
+                'ALLOW_DOCUMENT_UPLOADS',
+                True))
+        logo_form = LogoForm()
+        if logo_form.validate_on_submit():
+            f = logo_form.logo.data
             custom_logo_filepath = os.path.join(current_app.static_folder, 'i',
                                                 'custom_logo.png')
             try:
@@ -42,10 +47,27 @@ def make_blueprint(config):
             finally:
                 return redirect(url_for("admin.manage_config"))
         else:
-            for field, errors in list(form.errors.items()):
+            for field, errors in list(logo_form.errors.items()):
                 for error in errors:
                     flash(error, "logo-error")
-            return render_template("config.html", form=form)
+            return render_template("config.html",
+                                   allow_document_uploads_form=allow_document_uploads_form,
+                                   logo_form=logo_form)
+
+    @view.route('/set-allow-document-uploads', methods=['POST'])
+    @admin_required
+    def set_allow_document_uploads():
+        form = AllowDocumentUploadsForm()
+        if form.validate_on_submit():
+            # Upsert ALLOW_DOCUMENT_UPLOADS:
+            setting = InstanceConfig.query.get('ALLOW_DOCUMENT_UPLOADS')
+            if not setting:
+                setting = InstanceConfig(name='ALLOW_DOCUMENT_UPLOADS')
+            setting.value = bool(request.form.get('allow_document_uploads'))
+
+            db.session.add(setting)
+            db.session.commit()
+            return redirect(url_for('admin.manage_config'))
 
     @view.route('/add', methods=('GET', 'POST'))
     @admin_required
