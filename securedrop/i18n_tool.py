@@ -50,6 +50,7 @@ class I18NTool(object):
         'pt_BR': {'name': 'Portuguese, Brasil', 'desktop': 'pt_BR', },
         'ro': {'name': 'Romanian', 'desktop': 'ro', },
         'ru': {'name': 'Russian', 'desktop': 'ru', },
+        'sk': {'name': 'Slovak', 'desktop': 'sk', },
         'sv': {'name': 'Swedish', 'desktop': 'sv', },
         'tr': {'name': 'Turkish', 'desktop': 'tr', },
         'zh_Hant': {'name': 'Chinese, Traditional', 'desktop': 'zh_Hant', },
