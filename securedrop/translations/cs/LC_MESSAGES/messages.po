@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.14.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-09-16 23:39+0000\n"
-"Last-Translator: michaela-bot <michaela.rybickova@gmail.com>\n"
+"PO-Revision-Date: 2019-10-19 16:40+0000\n"
+"Last-Translator: 1000101 <jan.hrnko@satoshilabs.com>\n"
 "Language-Team: Czech <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/cs/>\n"
 "Language: cs\n"
@@ -222,7 +222,7 @@ msgstr ""
 
 #: journalist_app/utils.py:322
 msgid "No unread submissions in selected collections."
-msgstr "Ve vybraných kolekcích nejsou žádná nepřečtená podání."
+msgstr "Ve vybraných sadách nejsou žádná nepřečtená podání."
 
 #: journalist_templates/_confirmation_modal.html:4
 msgid "Close"
@@ -595,7 +595,7 @@ msgstr "SMAZAT ZDROJ A PODÁNÍ"
 
 #: journalist_templates/col.html:131
 msgid "Are you sure you want to delete this collection?"
-msgstr "Opravdu chcete smazat tuto kolekci?"
+msgstr "Opravdu chcete smazat tuto sadu?"
 
 #: journalist_templates/config.html:7
 msgid "Instance Configuration"
