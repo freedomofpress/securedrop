@@ -15,6 +15,7 @@
 * Portuguese, Brasil (``pt_BR``)
 * Romanian (``ro``)
 * Russian (``ru``)
+* Slovak (``sk``)
 * Swedish (``sv``)
 * Turkish (``tr``)
 * Chinese, Traditional (``zh_Hant``)
