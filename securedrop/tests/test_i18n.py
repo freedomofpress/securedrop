@@ -236,6 +236,8 @@ def test_verify_default_locale_en_us_if_not_defined_in_config(config):
             return getattr(config, name)
     not_translated = 'code hello i18n'
     with source_app.create_app(Config()).test_client() as c:
+        with c.application.app_context():
+            db.create_all()
         c.get('/')
         assert not_translated == gettext(not_translated)
 
