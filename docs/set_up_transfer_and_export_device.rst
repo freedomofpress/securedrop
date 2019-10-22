@@ -87,7 +87,7 @@ the $2,500 to $3,000 price range as of 2019.
 
 Decide how to manage encryption passphrases
 -------------------------------------------
-Because files are copied between multiple computers, KeePassX in Tails is not
+Because files are copied between multiple computers, KeePassXC in Tails is not
 necessarily the most convenient option for managing the encryption passphrases for
 your *Transfer Device* or your *Export Device*. While Tails itself gives you the
 option to "remember" passphrases, this option does not work across reboots.
@@ -149,14 +149,16 @@ application|
 Give the partition on your *Transfer Device* a descriptive name
 like “Transfer Device” and select the options as in the following screenshot:
 
+|screenshot of partition format options|
+
+You will then be prompted to set a password. As noted earlier, we recommend
+storing this passphrase in the password manager for every user who will copy files
+using the *Transfer Device*, not in KeePassXC. Because users will have to type in
+this passphrase every time they mount the *Transfer Device* in Tails, we recommend
+using a `diceware <https://en.wikipedia.org/wiki/Diceware>`__ passphrase.
+
 |screenshot of passphrase selection prompt in the Disk Utility
 application|
-
-As noted earlier, we recommend storing this passphrase in the password manager
-for every user who will copy files using the *Transfer Device*, not in KeePassX.
-Because users will have to type in this passphrase every time they mount the
-*Transfer Device* in Tails, we recommend using a `diceware <https://en.wikipedia.org/wiki/Diceware>`__
-passphrase.
 
 After typing in the passphrase, click **Format** to continue. The Disks utility
 will ask you if you are sure: click **Format** to continue. After a few seconds,
@@ -167,9 +169,10 @@ sure to label it.
 .. |screenshot of the Applications menu in Tails, highlighting Disk Utility| image:: images/screenshots/applications_accessories_disk-utility.png
 .. |screenshot of Disk Utility application| image:: images/screenshots/disk-utility.png
 .. |screenshot of the menu to create a new partition in the Disk Utility application| image:: images/screenshots/create-partition.png
+.. |screenshot of partition format options| image:: images/screenshots/disks_format_partition.png
 .. |screenshot of passphrase selection prompt in the Disk Utility application| image:: images/screenshots/create-passphrase.png
 
-.. [#] Tails screenshots were taken on Tails 3.0.1. Please make an issue on
+.. [#] Tails screenshots were taken on Tails 4.0.0-rc1. Please make an issue on
        GitHub if you are using the most recent version of Tails and the
        interface is different from what you see here.
 

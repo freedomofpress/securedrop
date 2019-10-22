@@ -196,7 +196,7 @@ Continue the Installation
 You can choose whatever username and passphrase you would like. To make
 things easier later you should use the same username and same passphrase
 on both servers (but not the same passphrase as username). Make sure to
-save this passphrase in your admin KeePassX database afterwards.
+save this passphrase in your admin KeePassXC database afterwards.
 
 Click 'no' when asked to encrypt the home directory. Then configure your
 time zone.
