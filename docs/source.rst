@@ -1,6 +1,16 @@
 Source Guide
 ============
 
+.. note::
+
+   This guide provides an introduction to using SecureDrop as a source.
+   It is not exhaustive, it does not address ethical or legal dimensions of
+   whistleblowing, and it does not speak to other methods for confidentially
+   communicating with journalists. Please proceed at your own risk. For additional
+   background, also see the Freedom of the Press Foundation guide, `How to Share Sensitive
+   Leaks With the Press <https://freedom.press/news/sharing-sensitive-leaks-press/>`__.
+
+
 Choosing the Right Location
 ---------------------------
 
