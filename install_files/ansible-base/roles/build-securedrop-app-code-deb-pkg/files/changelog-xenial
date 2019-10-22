@@ -1,8 +1,14 @@
-securedrop-app-code (1.1.0~rc1+xenial) xenial; urgency=medium
+securedrop-app-code (1.2.0~rc1+xenial) xenial; urgency=medium
 
   * See changelog.md
 
- -- Kushal Das <kushal@freedom.press>  Wed, 18 Sep 2019 21:32:57 +0530
+ -- SecureDrop Team <securedrop@freedom.press>  Tue, 22 Oct 2019 12:36:17 +0000
+
+securedrop-app-code (1.1.0+xenial) xenial; urgency=medium
+
+  * See changelog.md
+
+ -- SecureDrop Team <securedrop@freedom.press>  Mon, 21 Oct 2019 18:09:35 +0000
 
 securedrop-app-code (1.0.0+xenial) xenial; urgency=medium
 

@@ -1,6 +1,59 @@
 # Changelog
 
-## 1.1.0~rc1
+## 1.2.0~rc1
+
+## 1.1.0
+
+### Web Applications
+
+* Added Czech to supported languages (#4885).
+* Added Slovak to supported languages (#4940).
+* Reordered and updated wording of manage.py (#4850, #4858).
+* Remove python 2 support in SecureDrop server code (#4859).
+
+### Operations
+
+* Update Tor to 0.4.1.6 (#4848).
+* Updated dependencies for app server and admin workstation (#4865, #4884).
+* Fixes to packaging (#4870, #4871).
+* Improve specification of securedrop-app-code dependencies (#4876).
+
+### Admin Tails workstation
+
+* Added StartupNotify=true to desktop shortcuts (#4841).
+* Adds workarounds for Tails 4.0 detection (#4852).
+* Moves securedrop-admin into Python 3 (#4867).
+* Enables Source and Journalist desktop icons in Tails 4 (#4872).
+* Added check for admin password in GUI updater (#4877).
+
+### Documentation
+
+* Transfer device and export recommendations (#4838).
+* Miscellaneous documentation fixes (#4844, #4853, #4874, #4886).
+
+### Web Applications
+
+* Reordered and updated wording of manage.py (#4850, #4858).
+* Remove python 2 support in SecureDrop server code (#4859).
+
+### Operations
+
+* Updated dependencies for app server and admin workstation (#4865, #4884).
+* Fixes to packaging (#4870, #4871).
+* Improve specification of securedrop-app-code dependencies (#4876).
+
+### Admin Tails workstation
+
+* Added StartupNotify=true to desktop shortcuts (#4841).
+* Adds workarounds for Tails 4.0 detection (#4852).
+* Moves securedrop-admin into Python 3 (#4867).
+* Enables Source and Journalist desktop icons in Tails 4 (#4872).
+* Added check for admin password in GUI updater (#4877).
+
+### Documentation
+
+* Transfer device and export recommendations (#4838).
+* Miscellaneous documentation fixes (#4844, #4853, #4874).
 
 ## 1.0.0
 
