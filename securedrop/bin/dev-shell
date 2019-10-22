@@ -42,5 +42,11 @@ function docker_run() {
            -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py3" "${@:2}"
 }
 
-docker_image $BASE_OS
+if [ "${DOCKER_BUILD_VERBOSE:-'false'}" = "true" ]
+then
+   docker_image $BASE_OS
+else
+   docker_image $BASE_OS >/dev/null
+fi
+
 docker_run $BASE_OS "$@"
