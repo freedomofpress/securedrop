@@ -54,7 +54,7 @@ as documented in the :doc:`Tails Setup Guide <set_up_tails>`.
 .. note::
 
    As with your *Admin Workstation*, you can use a fresh copy of the blank
-   KeePassX template in the repository to initialize the password database
+   KeePassXC template in the repository to initialize the password database
    on the *Journalist Workstation*. You can safely edit this copy to remove
    sections or fields that are not relevant for the journalist you are
    onboarding. For example, the admin section of the password database should
@@ -186,7 +186,7 @@ The journalist should verify that they:
    “GnuPG keys” the key should be present.
 
 .. tip:: The journalist should have all the credentials used in this checklist
-   saved in the KeePassX database stored in the persistent volume of the *Journalist
+   saved in the KeePassXC database stored in the persistent volume of the *Journalist
    Workstation*.
 
 7. If you are using a printer, verify that they are able to print a document

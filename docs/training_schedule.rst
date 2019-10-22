@@ -134,7 +134,7 @@ Participants: admins
 -  Backups
 -  Disk space monitoring
 -  Updating SMTP and OSSEC alert configs
--  Changing passphrases (for FDE, persistent volumes, 2FA, KeePassX
+-  Changing passphrases (for FDE, persistent volumes, 2FA, KeePassXC
    managers...)
 -  What will happen to local modifications to prod system after updates
 -  Updating SecureDrop Application

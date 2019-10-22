@@ -11,7 +11,7 @@ software or hardware. However, if you have the necessary expertise, we
 provide `abstract firewall rules`_ that can be implemented with iptables, Cisco
 IOS etc. This guide is based on pfSense, and assumes your firewall hardware has
 at least three interfaces: WAN, LAN, and OPT1. For hardware, you can build
-your own network firewall (not covered in this guide) and `install pfSense 
+your own network firewall (not covered in this guide) and `install pfSense
 <https://doc.pfsense.org/index.php/Installing_pfSense>`__ on it. For most
 installations, we recommend buying a dedicated firewall appliance with
 pfSense pre-installed, such as the one recommended in the
@@ -277,8 +277,8 @@ Setup Wizard
    |3 NIC Configure LAN Interface|
 
 #. Set a strong admin passphrase. We recommend generating a strong passphrase
-   with KeePassX, and saving it in the Tails Persistent folder using the
-   provided KeePassX database template. Click **Next**.
+   with KeePassXC, and saving it in the Tails Persistent folder using the
+   provided KeePassXC database template. Click **Next**.
 
 #. Click Reload. Once the reload completes and the web page refreshes,
    click the corresponding "here" link to "continue on to the pfSense
@@ -353,7 +353,7 @@ Settings**.
 
 |Wired Settings|
 
-From here you can click on the cog in the lower right of the panel:
+From here you can click on the cog beside the wired network connection:
 
 |Tails Network Settings|
 
@@ -366,6 +366,7 @@ Change to the **IPv4 Settings** tab. Change **Addresses** from
 
 
 |IPv4 Settings|
+
 
 .. note:: The Unsafe Browser will not launch when using a manual
 	  network configuration if it does not have DNS servers
@@ -789,7 +790,7 @@ Once it is complete, you will see a notification of successful upgrade:
 .. |3 NIC Firewall Alias| image::  images/firewall/three_nic_add_firewall_alias.png
 .. |3 NIC Firewall IP Aliases Pre Save| image:: images/firewall/three_nic_ip_aliases_pre_save.png
 .. |3 NIC Firewall IP Aliases Post Save| image:: images/firewall/three_nic_ip_aliases_post_save.png
-.. |Disable Anti-Lockout Rule| image:: images/firewall/disable_anti_lockout.png 
+.. |Disable Anti-Lockout Rule| image:: images/firewall/disable_anti_lockout.png
 .. |Update available| image:: images/firewall/pfsense_update_available.png
 .. |3 NIC Firewall LAN Rules| image:: images/firewall/three_nic_firewall_rules.png
 .. |3 NIC Firewall OPT1 Rules| image:: images/firewall/three_nic_opt1_firewall_rules.png
@@ -811,7 +812,7 @@ Once it is complete, you will see a notification of successful upgrade:
 .. |Firewall Update Progress| image:: images/firewall/system_is_updating.png
 .. |Firewall Update Complete| image:: images/firewall/system_update_complete.png
 
-.. [#] Tails screenshots were taken on Tails 3.0~beta4. Please make an issue on
+.. [#] Tails screenshots were taken on Tails 4.0-rc1. Please make an issue on
        GitHub if you are using the most recent version of Tails and the
        interface is different from what you see here.
 
