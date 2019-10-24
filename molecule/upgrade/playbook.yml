@@ -81,7 +81,6 @@
         name: supervisor
         state: started
       delegate_to: app-staging
-      runonce: yes
       tags: always
   become: yes
 
