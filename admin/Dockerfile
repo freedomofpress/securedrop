@@ -5,6 +5,9 @@ ENV USER_NAME ${USER_NAME:-root}
 ARG USER_ID
 ENV USER_ID ${USER_ID:-0}
 
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+
 RUN apt-get update && \
     apt-get install -y python3 sudo lsb-release gnupg2 git
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
