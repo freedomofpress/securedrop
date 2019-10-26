@@ -127,7 +127,7 @@ class FunctionalTest(object):
                     firefox_binary=FIREFOX_PATH, firefox_profile=profile
                 )
                 self.firefox_driver.set_window_position(0, 0)
-                self.firefox_driver.set_window_size(1024, 768)
+                self.firefox_driver.set_window_size(1024, 1200)
                 logging.info("Created Firefox web driver")
                 break
             except Exception as e:
