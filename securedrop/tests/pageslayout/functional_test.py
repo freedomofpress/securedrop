@@ -41,7 +41,7 @@ def autocrop_btm(img, bottom_padding=12):
     """Automatically crop the bottom of a screenshot."""
     # Get the grayscale of img
     gray = img.convert('L')
-    # We start one row above the bottom since the "modal" windos screenshots
+    # We start one row above the bottom since the "modal" windows screenshots
     # have a bottom line color different than the background
     btm = img.height - 2
     # Get the background luminance value from the bottom-leftmost pixel
