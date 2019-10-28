@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import io
 import logging
 import os
 from os.path import abspath
@@ -25,6 +26,8 @@ import pytest
 
 from tests.functional import functional_test
 
+from PIL import Image
+
 
 def list_locales():
     if "PAGE_LAYOUT_LOCALES" in os.environ:
@@ -32,6 +35,25 @@ def list_locales():
     else:
         locales = ["en_US"]
     return locales
+
+
+def autocrop_btm(img, bottom_padding=12):
+    """Automatically crop the bottom of a screenshot."""
+    # Get the grayscale of img
+    gray = img.convert('L')
+    # We start one row above the bottom since the "modal" windows screenshots
+    # have a bottom line color different than the background
+    btm = img.height - 2
+    # Get the background luminance value from the bottom-leftmost pixel
+    bg = gray.getpixel((0, btm))
+
+    # Move up until the full row is not of the background luminance
+    while all([gray.getpixel((col, btm)) == bg for col in range(gray.width)]):
+        btm -= 1
+
+    btm = min(btm + bottom_padding, img.height)
+
+    return img.crop((0, 0, img.width, btm))
 
 
 class FunctionalTest(functional_test.FunctionalTest):
@@ -55,4 +77,6 @@ class FunctionalTest(functional_test.FunctionalTest):
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
 
-        self.driver.save_screenshot(os.path.join(log_dir, filename))
+        img = Image.open(io.BytesIO(self.driver.get_screenshot_as_png()))
+        cropped = autocrop_btm(img)
+        cropped.save(os.path.join(log_dir, filename))
