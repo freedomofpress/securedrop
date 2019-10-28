@@ -150,11 +150,11 @@ The ``develop`` branch can now be merged into ``i18n``:
     $ git fetch i18n
     $ git checkout -b i18n i18n/i18n
     $ git merge origin/develop
-    $ make -C securedrop translate
+    $ make translate
 
 The ``translate`` Makefile target uses the ``i18n_tool.py`` command to
 keep the ``*.pot`` and ``*.po`` files in sync with the SecureDrop
-source code. After running ``make -C securedrop translate``, carefully
+source code. After running ``make translate``, carefully
 review the output of ``git diff``. Check ``messages.pot`` first for
 updated strings, looking for formatting problems. Then review the
 ``messages.po`` of one existing translation, with a focus on ``fuzzy``
@@ -261,7 +261,7 @@ start the development servers with:
 
 .. code:: sh
 
-     $ make -C securedrop dev
+     $ make dev
 
 The translations can be checked automatically by running the
 SecureDrop page layout tests:
@@ -269,7 +269,7 @@ SecureDrop page layout tests:
 .. code:: sh
 
      $ export PAGE_LAYOUT_LOCALES="en_US,fr_FR"  # may be set to any supported languages
-     $ make -C securedrop test TESTFILES=tests/pageslayout
+     $ make test TESTFILES=tests/pageslayout
      [...]
      tests/pageslayout/test_journalist.py::TestJournalistLayout::test_account_edit_hotp_secret[en_US] PASSED
      tests/pageslayout/test_journalist.py::TestJournalistLayout::test_account_edit_hotp_secret[fr_FR] PASSED

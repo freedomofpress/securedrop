@@ -39,7 +39,7 @@ The tests can be run inside the development VM:
 
 .. code:: sh
 
-    make -C securedrop test
+    make test
 
 Or the app-staging VM:
 
