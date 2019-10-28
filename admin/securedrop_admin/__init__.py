@@ -89,45 +89,6 @@ class SiteConfig(object):
             raise ValidationError(
                 message="An IP address must be something like 10.240.20.83")
 
-    class ValidateDNS(Validator):
-        def validate(self):
-            raise Exception()  # pragma: no cover
-
-        def is_tails(self):
-            try:
-                id = subprocess.check_output('lsb_release --id --short',
-                                             shell=True).strip()
-            except subprocess.CalledProcessError:
-                id = None
-            return id == 'Tails'
-
-        def lookup_fqdn(self, fqdn, dns=None):
-            cmd = 'host -W=10 -T -4 ' + fqdn
-            if self.is_tails():
-                cmd = 'torify ' + cmd
-            cmd += ' ' + (dns and dns or '8.8.8.8')
-            try:
-                result = subprocess.check_output(cmd.split(' '),
-                                                 stderr=subprocess.STDOUT)
-            except subprocess.CalledProcessError as e:
-                result = e.output
-            sdlog.debug(cmd + ' => ' + result)
-            return 'has address' in result
-
-    class ValidateDNSServer(ValidateDNS):
-        def validate(self, document):
-            if self.lookup_fqdn('gnu.org', document.text):
-                return True
-            raise ValidationError(
-                message='Unable to resolve gnu.org using this DNS')
-
-    class ValidateFQDN(ValidateDNS):
-        def validate(self, document):
-            if self.lookup_fqdn(document.text):
-                return True
-            raise ValidationError(
-                message='Unable to resolve ' + document.text)
-
     class ValidatePath(Validator):
         def __init__(self, basedir):
             self.basedir = basedir
