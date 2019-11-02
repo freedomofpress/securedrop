@@ -145,9 +145,12 @@ def make_blueprint(config):
 
         # Don't submit anything if it was an "empty" submission. #878
         if not (msg or fh):
-            flash(gettext(
-                "You must enter a message or choose a file to submit."),
-                  "error")
+            if allow_document_uploads:
+                flash(gettext(
+                    "You must enter a message or choose a file to submit."),
+                      "error")
+            else:
+                flash(gettext("You must enter a message."), "error")
             return redirect(url_for('main.lookup'))
 
         fnames = []
