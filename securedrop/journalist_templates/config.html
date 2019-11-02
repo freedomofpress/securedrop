@@ -43,16 +43,16 @@
 
 <hr class="no-line">
 
-<h2>{{ gettext('Document Uploads') }}</h2>
+<h2>{{ gettext('Submission Preferences') }}</h2>
 
-<form action="{{ url_for('admin.set_allow_document_uploads') }}" method="post">
+<form action="{{ url_for('admin.update_submission_preferences') }}" method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <p>
-    {{ allow_document_uploads_form.allow_document_uploads() }}
-    <label for="allow_document_uploads">{{ gettext('Allow sources to submit documents as well as messages') }}</label>
+    {{ submission_preferences_form.prevent_document_uploads() }}
+    <label for="prevent_document_uploads">{{ gettext('Prevent sources from uploading documents.  Sources will still be able to send messages.') }}</label>
   </p>
-  <button type="submit" id="submit-allow-document-uploads">
-    <i class="fas fa-pencil-alt"></i> {{ gettext('UPDATE') }}
+  <button type="submit" id="submit-submission-preferences">
+    <i class="fas fa-pencil-alt"></i> {{ gettext('UPDATE SUBMISSION PREFERENCES') }}
   </button>
 </form>
 

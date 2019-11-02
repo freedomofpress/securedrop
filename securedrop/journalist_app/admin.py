@@ -14,7 +14,7 @@ from models import (InstanceConfig, Journalist, InvalidUsernameException,
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (make_password, commit_account_changes, set_diceware_password,
                                   validate_hotp_secret, revoke_token)
-from journalist_app.forms import AllowDocumentUploadsForm, LogoForm, NewUserForm
+from journalist_app.forms import LogoForm, NewUserForm, SubmissionPreferencesForm
 
 
 def make_blueprint(config):
@@ -29,8 +29,9 @@ def make_blueprint(config):
     @view.route('/config', methods=('GET', 'POST'))
     @admin_required
     def manage_config():
-        allow_document_uploads_form = AllowDocumentUploadsForm(
-            allow_document_uploads=current_app.config.get(
+        # The UI prompt ("prevent") is the opposite of the setting ("allow"):
+        submission_preferences_form = SubmissionPreferencesForm(
+            prevent_document_uploads=not current_app.config.get(
                 'ALLOW_DOCUMENT_UPLOADS',
                 True))
         logo_form = LogoForm()
@@ -51,19 +52,21 @@ def make_blueprint(config):
                 for error in errors:
                     flash(error, "logo-error")
             return render_template("config.html",
-                                   allow_document_uploads_form=allow_document_uploads_form,
+                                   submission_preferences_form=submission_preferences_form,
                                    logo_form=logo_form)
 
-    @view.route('/set-allow-document-uploads', methods=['POST'])
+    @view.route('/update-submission-preferences', methods=['POST'])
     @admin_required
-    def set_allow_document_uploads():
-        form = AllowDocumentUploadsForm()
+    def update_submission_preferences():
+        form = SubmissionPreferencesForm()
         if form.validate_on_submit():
             # Upsert ALLOW_DOCUMENT_UPLOADS:
             setting = InstanceConfig.query.get('ALLOW_DOCUMENT_UPLOADS')
             if not setting:
                 setting = InstanceConfig(name='ALLOW_DOCUMENT_UPLOADS')
-            setting.value = bool(request.form.get('allow_document_uploads'))
+
+            # The UI prompt ("prevent") is the opposite of the setting ("allow"):
+            setting.value = not bool(request.form.get('prevent_document_uploads'))
 
             db.session.add(setting)
             db.session.commit()

@@ -1287,25 +1287,25 @@ def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
             "None\n[SQL: STATEMENT]\n[parameters: 'PARAMETERS']") in log_event
 
 
-def test_allow_document_uploads(journalist_app, test_admin):
+def test_prevent_document_uploads(journalist_app, test_admin):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        form = journalist_app_module.forms.AllowDocumentUploadsForm(
-            allow_document_uploads=True)
-        app.post(url_for('admin.set_allow_document_uploads'),
+        form = journalist_app_module.forms.SubmissionPreferencesForm(
+            prevent_document_uploads=True)
+        app.post(url_for('admin.update_submission_preferences'),
                  data=form.data,
                  follow_redirects=True)
-        assert InstanceConfig.query.get('ALLOW_DOCUMENT_UPLOADS').value is True
+        assert InstanceConfig.query.get('ALLOW_DOCUMENT_UPLOADS').value is False
 
 
-def test_disallow_document_uploads(journalist_app, test_admin):
+def test_no_prevent_document_uploads(journalist_app, test_admin):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        app.post(url_for('admin.set_allow_document_uploads'),
+        app.post(url_for('admin.update_submission_preferences'),
                  follow_redirects=True)
-        assert InstanceConfig.query.get('ALLOW_DOCUMENT_UPLOADS').value is False
+        assert InstanceConfig.query.get('ALLOW_DOCUMENT_UPLOADS').value is True
 
 
 def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):

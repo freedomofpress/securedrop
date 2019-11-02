@@ -64,8 +64,8 @@ class ReplyForm(FlaskForm):
     )
 
 
-class AllowDocumentUploadsForm(FlaskForm):
-    allow_document_uploads = BooleanField('allow_document_uploads')
+class SubmissionPreferencesForm(FlaskForm):
+    prevent_document_uploads = BooleanField('prevent_document_uploads')
 
 
 class LogoForm(FlaskForm):
