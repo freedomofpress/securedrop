@@ -31,9 +31,7 @@ def make_blueprint(config):
     def manage_config():
         # The UI prompt ("prevent") is the opposite of the setting ("allow"):
         submission_preferences_form = SubmissionPreferencesForm(
-            prevent_document_uploads=not current_app.config.get(
-                'ALLOW_DOCUMENT_UPLOADS',
-                True))
+            prevent_document_uploads=not current_app.instance_config.allow_document_uploads)
         logo_form = LogoForm()
         if logo_form.validate_on_submit():
             f = logo_form.logo.data
@@ -60,16 +58,9 @@ def make_blueprint(config):
     def update_submission_preferences():
         form = SubmissionPreferencesForm()
         if form.validate_on_submit():
-            # Upsert ALLOW_DOCUMENT_UPLOADS:
-            setting = InstanceConfig.query.get('ALLOW_DOCUMENT_UPLOADS')
-            if not setting:
-                setting = InstanceConfig(name='ALLOW_DOCUMENT_UPLOADS')
-
             # The UI prompt ("prevent") is the opposite of the setting ("allow"):
-            setting.value = not bool(request.form.get('prevent_document_uploads'))
-
-            db.session.add(setting)
-            db.session.commit()
+            value = not bool(request.form.get('prevent_document_uploads'))
+            InstanceConfig.set('allow_document_uploads', value)
             return redirect(url_for('admin.manage_config'))
 
     @view.route('/add', methods=('GET', 'POST'))

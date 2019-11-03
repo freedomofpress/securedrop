@@ -133,11 +133,7 @@ def create_app(config):
     @app.before_request
     @ignore_static
     def load_instance_config():
-        """Update app.config from the InstanceConfig table."""
-
-        instance_config = InstanceConfig.query.all()
-        settings = dict(map(lambda x: (x.name, x.value), instance_config))
-        app.config.from_mapping(settings)
+        app.instance_config = InstanceConfig.get_current()
 
     @app.before_request
     @ignore_static

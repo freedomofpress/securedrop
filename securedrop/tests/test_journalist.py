@@ -1296,7 +1296,7 @@ def test_prevent_document_uploads(journalist_app, test_admin):
         app.post(url_for('admin.update_submission_preferences'),
                  data=form.data,
                  follow_redirects=True)
-        assert InstanceConfig.query.get('ALLOW_DOCUMENT_UPLOADS').value is False
+        assert InstanceConfig.get_current().allow_document_uploads is False
 
 
 def test_no_prevent_document_uploads(journalist_app, test_admin):
@@ -1305,7 +1305,7 @@ def test_no_prevent_document_uploads(journalist_app, test_admin):
                     test_admin['otp_secret'])
         app.post(url_for('admin.update_submission_preferences'),
                  follow_redirects=True)
-        assert InstanceConfig.query.get('ALLOW_DOCUMENT_UPLOADS').value is True
+        assert InstanceConfig.get_current().allow_document_uploads is True
 
 
 def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):

@@ -14,7 +14,7 @@ from . import utils
 import version
 
 from db import db
-from models import Source, Reply
+from models import InstanceConfig, Source, Reply
 from source_app import main as source_app_main
 from source_app import api as source_app_api
 from .utils.db_helper import new_codename
@@ -553,7 +553,7 @@ def test_metadata_route(config, source_app):
             assert resp.status_code == 200
             assert resp.headers.get('Content-Type') == 'application/json'
             assert resp.json.get('allow_document_uploads') ==\
-                source_app.config.get('ALLOW_DOCUMENT_UPLOADS', True)
+                InstanceConfig.get_current().allow_document_uploads
             assert resp.json.get('sd_version') == version.__version__
             assert resp.json.get('server_os') == '16.04'
             assert resp.json.get('supported_languages') ==\
