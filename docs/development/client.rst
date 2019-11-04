@@ -14,22 +14,7 @@ The source code, and related issues are `hosted on GitHub <https://github.com/fr
 Developer Setup
 ---------------
 
-Clone the repository::
-
-    git clone git@github.com:freedomofpress/securedrop-client.git
-
-Ensure you have ``pipenv`` installed::
-
-    pip install --user pipenv
-
-Next, follow the steps in the README of the project for setting up the
-development environment.
-
-Check you have everything working by running the complete test suite::
-
-    make check
-
-If you see a green report of 100% unit test coverage, you're good to go!
+You may find developer setup instructions in the `SecureDrop Client README <https://github.com/freedomofpress/securedrop-client/blob/master/README.md>`_.
 
 How to Find Help
 ----------------
