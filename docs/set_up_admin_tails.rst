@@ -154,23 +154,32 @@ store them securely. Once you have set up Tails with persistence and
 have cloned the repo, you can set up your personal password database
 using this template.
 
-You can find the template in ``tails_files/securedrop-keepassx.kdbx``
-in the SecureDrop repository that you just cloned.
-
 .. note::
 
    Earlier versions of Tails used KeePassX instead of KeePassXC.
    The provided template is compatible with both.
 
-To use the template:
+You can find the template in ``tails_files/securedrop-keepassx.kdbx``
+in the SecureDrop repository that you just cloned. To use the template:
+
+-  Copy the template to the Persistent folder - from a terminal, run the
+   command:
+
+   .. code:: sh
+
+     cp ~/Persistent/securedrop/tails_files/securedrop-keepassx.kdbx \ 
+        ~/Persistent/keepassx.kdbx
 
 -  Open the KeePassXC program |KeePassXC| which is already installed on
    Tails
 -  Select **Database**, **Open database**, and navigate to the location of
-   **securedrop-keepassx.kdbx**, select it, and click **Open**
+   **~/Persistent/keepassx.kdbx**, select it, and click **Open**
 -  Check the **password** box and hit **OK**
--  Click **Database** and **Save Database As**
--  Save the database in the Persistent folder
+-  Edit entries as required.
+-  Select **Database** and **Save Database** to save your changes.
+
+The next time you use KeepassXC, the database at ``~/Persistent/keepassx.kdbx``
+will be opened by default.
 
 .. tip:: If you would like to add a master password, navigate to **Database** and
    **Change master key**. Note that since each KeePassXC database is stored
