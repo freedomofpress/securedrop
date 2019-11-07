@@ -180,7 +180,7 @@ test-config: securedrop/config.py
 .PHONY: dev
 dev:  ## Run the development server in a Docker container.
 	@echo "███ Starting development server..."
-	@DOCKER_RUN_ARGUMENTS='-p127.0.0.1:8080:8080 -p127.0.0.1:8081:8081' $(DEVSHELL) $(SDBIN)/run
+	@DOCKER_RUN_ARGUMENTS='-p127.0.0.1:8080:8080 -p127.0.0.1:8081:8081' DOCKER_BUILD_VERBOSE='true' $(DEVSHELL) $(SDBIN)/run
 	@echo
 
 .PHONY: docs
