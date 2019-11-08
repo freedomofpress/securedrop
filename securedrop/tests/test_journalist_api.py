@@ -45,6 +45,8 @@ def test_valid_user_can_get_an_api_token(journalist_app, test_journo):
         assert isinstance(Journalist.validate_api_token_and_get_user(
             response.json['token']), Journalist) is True
         assert response.status_code == 200
+        assert response.json['journalist_first_name'] == test_journo['first_name']
+        assert response.json['journalist_last_name'] == test_journo['last_name']
 
 
 def test_user_cannot_get_an_api_token_with_wrong_password(journalist_app,

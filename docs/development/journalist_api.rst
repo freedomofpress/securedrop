@@ -45,7 +45,9 @@ This will produce a response with your Authorization token:
   {
       "expiration": "2018-07-10T04:29:41.696321Z",
       "token": "eyJhbGciOiJIUzI1NiIsImV4cCI6MTUzMTE5Njk4MSwiaWF0IjoxNTMxMTY4MTgxfQ.eyJpZCI6MX0.TBSvfrICMxtvWgpVZzqTl6wHYNQuGPOaZpuAKwwIXXo",
-      "journalist_uuid": "54d81dae-9d94-4145-8a57-4c804a04cfe0"
+      "journalist_uuid": "54d81dae-9d94-4145-8a57-4c804a04cfe0",
+      "journalist_first_name": "daniel",
+      "journalist_last_name": "ellsberg"
   }
 
 Thereafter in order to authenticate to protected endpoints, send the token in
