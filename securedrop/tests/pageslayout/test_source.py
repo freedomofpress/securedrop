@@ -152,7 +152,7 @@ class TestSourceLayoutTorbrowser(
         self.disable_js_torbrowser_driver()
         self._source_visits_source_homepage()
         self._screenshot('source-index.png')
-    
+
     def test_logout_flashed_message(self):
         self.disable_js_torbrowser_driver()
         self._source_visits_source_homepage()
