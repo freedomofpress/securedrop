@@ -15,7 +15,7 @@ SecureDrop is an open-source whistleblower submission system that media organiza
 
 SecureDrop's documentation is built and hosted by [Read the Docs](https://readthedocs.org) at https://docs.securedrop.org.
 
-There are multiple versions of the [SecureDrop documentation](https://docs.securedrop.org). The default documentation is the documentation for the most recent SecureDrop release. It is the best version of the documentation for end users (Sources, Journalists, or Administrators). The **latest** documentation is automatically built from the most recent commit to the SecureDrop development branch. It is most useful for developers and contributors to the project. You can switch between versions of the documentation by using the toolbar in the bottom left corner of the Read the Docs screen.
+There are multiple versions of the [SecureDrop documentation](https://docs.securedrop.org). By default, the documentation describes the most recent SecureDrop release. It is the best version of the documentation for end users (Sources, Journalists, or Administrators). The **latest** documentation is automatically built from the most recent commit to the SecureDrop development branch. It is most useful for developers and contributors to the project. You can switch between versions of the documentation by using the toolbar in the bottom left corner of the Read the Docs screen.
 
 ## Found an issue?
 
@@ -45,7 +45,7 @@ Ensure you have Docker installed and:
 make dev
 ```
 
-This will start the source interface on `127.0.0.1:8080` and the journalist interface on `127.0.0.1:8081`.
+This will start the source interface on `127.0.0.1:8080` and the journalist interface on `127.0.0.1:8081`. The credentials to login are printed in the Terminal.
 
 ## License
 
