@@ -17,6 +17,7 @@
 #
 from tests.functional import journalist_navigation_steps
 from tests.functional import source_navigation_steps
+from tests.functional.functional_test import TORBROWSER
 from . import functional_test
 import pytest
 
@@ -26,10 +27,6 @@ class TestSourceLayout(
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationStepsMixin,
         journalist_navigation_steps.JournalistNavigationStepsMixin):
-
-    def test_index(self):
-        self._source_visits_source_homepage()
-        self._screenshot('source-index.png')
 
     def test_lookup(self):
         self._source_visits_source_homepage()
@@ -64,14 +61,6 @@ class TestSourceLayout(
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
         self._screenshot('source-generate.png')
-
-    def test_logout_flashed_message(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._screenshot('source-logout_flashed_message.png')
 
     def test_submission_entered_text(self):
         self._source_visits_source_homepage()
@@ -138,10 +127,12 @@ class TestSourceSessionLayout(
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationStepsMixin,
         journalist_navigation_steps.JournalistNavigationStepsMixin):
+    default_driver_name = TORBROWSER
 
     session_expiration = 5
 
     def test_source_session_timeout(self):
+        self.disable_js_torbrowser_driver()
         self._source_visits_source_homepage()
         self._source_clicks_submit_documents_on_homepage()
         self._source_continues_to_submit_page()
@@ -149,3 +140,24 @@ class TestSourceSessionLayout(
         self._source_enters_text_in_message_field()
         self._source_visits_source_homepage()
         self._screenshot('source-session_timeout.png')
+
+
+class TestSourceLayoutTorbrowser(
+        functional_test.FunctionalTest,
+        source_navigation_steps.SourceNavigationStepsMixin,
+        journalist_navigation_steps.JournalistNavigationStepsMixin):
+    default_driver_name = TORBROWSER
+
+    def test_index(self):
+        self.disable_js_torbrowser_driver()
+        self._source_visits_source_homepage()
+        self._screenshot('source-index.png')
+
+    def test_logout_flashed_message(self):
+        self.disable_js_torbrowser_driver()
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_logs_out()
+        self._screenshot('source-logout_flashed_message.png')

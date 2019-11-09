@@ -30,6 +30,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 from sqlalchemy.exc import IntegrityError
 from tbselenium.tbdriver import TorBrowserDriver
+from tbselenium.utils import disable_js
 
 import journalist_app
 import source_app
@@ -104,6 +105,8 @@ class FunctionalTest(object):
                     tbb_logfile_path=LOGFILE_PATH,
                 )
                 logging.info("Created Tor Browser web driver")
+                self.torbrowser_driver.set_window_position(0, 0)
+                self.torbrowser_driver.set_window_size(1024, 1200)
                 break
             except Exception as e:
                 logging.error("Error creating Tor Browser web driver: %s", e)
@@ -148,6 +151,10 @@ class FunctionalTest(object):
             self.create_torbrowser_driver()
         self.driver = self.torbrowser_driver
         logging.info("Switched %s to TorBrowser driver: %s", self, self.driver)
+
+    def disable_js_torbrowser_driver(self):
+        if hasattr(self, 'torbrowser_driver'):
+            disable_js(self.torbrowser_driver)
 
     @pytest.fixture(autouse=True)
     def set_default_driver(self):
