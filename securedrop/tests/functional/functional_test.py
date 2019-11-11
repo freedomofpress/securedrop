@@ -28,6 +28,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.remote_connection import LOGGER
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 from sqlalchemy.exc import IntegrityError
 from tbselenium.tbdriver import TorBrowserDriver
 from tbselenium.utils import disable_js
@@ -76,6 +78,28 @@ class FunctionalTest(object):
         port = s.getsockname()[1]
         s.close()
         return port
+
+    def set_tbb_securitylevel(self, toLevel):
+        if self.torbrowser_driver is None:
+            self.create_torbrowser_driver()
+        driver = self.torbrowser_driver
+
+        driver.get("about:config")
+        accept_risk_button = driver.find_element_by_id("warningButton")
+        if accept_risk_button:
+            accept_risk_button.click()
+        ActionChains(driver).send_keys(Keys.RETURN).\
+            send_keys("extensions.torbutton.security_slider").perform()
+        time.sleep(2)
+        ActionChains(driver).send_keys(Keys.TAB).\
+            send_keys(Keys.RETURN).perform()
+        time.sleep(2)
+        alert = driver.switch_to.alert
+        time.sleep(2)
+        alert.send_keys(str(toLevel))
+        time.sleep(2)
+        alert.accept()
+        time.sleep(2)
 
     def create_torbrowser_driver(self):
         logging.info("Creating TorBrowserDriver")
