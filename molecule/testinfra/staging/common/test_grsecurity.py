@@ -176,7 +176,6 @@ def test_pax_flags(host, binary):
   'WIMAX',
   'WIRELESS',
   'HAMRADIO',
-  'IRDA',
   'BT',
 ])
 def test_wireless_disabled_in_kernel_config(host, kernel_opts):
