@@ -16,8 +16,7 @@ def test_ssh_motd_disabled(host):
 
 
 @pytest.mark.parametrize("package", [
-    'linux-firmware-image-{}-grsec'.format(KERNEL_VERSION),
-    'linux-image-{}-grsec'.format(KERNEL_VERSION),
+    'linux-image-{}-grsec-securedrop'.format(KERNEL_VERSION),
     'paxctl',
     'securedrop-grsec',
 ])
@@ -71,8 +70,8 @@ def test_grsecurity_kernel_is_running(host):
     Make sure the currently running kernel is specific grsec kernel.
     """
     c = host.run('uname -r')
-    assert c.stdout.strip().endswith('-grsec')
-    assert c.stdout.strip() == '{}-grsec'.format(KERNEL_VERSION)
+    assert c.stdout.strip().endswith('-grsec-securedrop')
+    assert c.stdout.strip() == '{}-grsec-securedrop'.format(KERNEL_VERSION)
 
 
 @pytest.mark.parametrize('sysctl_opt', [
@@ -177,7 +176,6 @@ def test_pax_flags(host, binary):
   'WIMAX',
   'WIRELESS',
   'HAMRADIO',
-  'IRDA',
   'BT',
 ])
 def test_wireless_disabled_in_kernel_config(host, kernel_opts):
@@ -187,7 +185,7 @@ def test_wireless_disabled_in_kernel_config(host, kernel_opts):
     disabled in the running kernel config!
     """
 
-    kernel_config_path = "/boot/config-{}-grsec".format(KERNEL_VERSION)
+    kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
     kernel_config = host.file(kernel_config_path).content_string
 
     line = "# CONFIG_{} is not set".format(kernel_opts)
