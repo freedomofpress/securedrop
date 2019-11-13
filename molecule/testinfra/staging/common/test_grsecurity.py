@@ -193,6 +193,23 @@ def test_wireless_disabled_in_kernel_config(host, kernel_opts):
     assert line in kernel_config
 
 
+@pytest.mark.parametrize('kernel_opts', [
+  'CONFIG_X86_INTEL_TSX_MODE_OFF',
+  'CONFIG_PAX',
+  'CONFIG_GRKERNSEC',
+])
+def test_kernel_options_enabled_config(host, kernel_opts):
+    """
+    Tests kernel config for options that should be enabled
+    """
+
+    kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
+    kernel_config = host.file(kernel_config_path).content_string
+
+    line = "{}=y".format(kernel_opts)
+    assert line in kernel_config
+
+
 def test_mds_mitigations_and_smt_disabled(host):
     """
     Ensure that full mitigations are in place for MDS
