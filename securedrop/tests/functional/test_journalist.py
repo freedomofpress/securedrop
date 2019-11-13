@@ -16,13 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from . import functional_test
+from . import functional_test as ft
 from . import journalist_navigation_steps
 from . import source_navigation_steps
 
 
 class TestJournalist(
-    functional_test.FunctionalTest,
+    ft.FunctionalTest,
     source_navigation_steps.SourceNavigationStepsMixin,
     journalist_navigation_steps.JournalistNavigationStepsMixin,
 ):
@@ -66,8 +66,8 @@ class TestJournalist(
         self._source_logs_out()
 
         # Toggle security slider to force prefs change
-        self.set_tbb_securitylevel(1)
-        self.set_tbb_securitylevel(4)
+        self.set_tbb_securitylevel(ft.TBB_SECURITY_HIGH)
+        self.set_tbb_securitylevel(ft.TBB_SECURITY_LOW)
 
         self._journalist_logs_in()
         self._journalist_uses_js_filter_by_sources()

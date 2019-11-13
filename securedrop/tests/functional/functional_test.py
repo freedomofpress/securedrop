@@ -54,6 +54,10 @@ LOGGER.setLevel(logging.WARNING)
 FIREFOX = "firefox"
 TORBROWSER = "torbrowser"
 
+TBB_SECURITY_HIGH = 1
+TBB_SECURITY_MEDIUM = 3  # '2' corresponds to deprecated TBB medium-high setting
+TBB_SECURITY_LOW = 4
+
 
 class FunctionalTest(object):
     gpg = None
@@ -79,7 +83,11 @@ class FunctionalTest(object):
         s.close()
         return port
 
-    def set_tbb_securitylevel(self, toLevel):
+    def set_tbb_securitylevel(self, level):
+
+        if level not in {TBB_SECURITY_HIGH, TBB_SECURITY_MEDIUM, TBB_SECURITY_LOW}:
+            raise ValueError("Invalid Tor Brouser security setting: " + str(level))
+
         if self.torbrowser_driver is None:
             self.create_torbrowser_driver()
         driver = self.torbrowser_driver
@@ -90,16 +98,13 @@ class FunctionalTest(object):
             accept_risk_button.click()
         ActionChains(driver).send_keys(Keys.RETURN).\
             send_keys("extensions.torbutton.security_slider").perform()
-        time.sleep(2)
+        time.sleep(1)
         ActionChains(driver).send_keys(Keys.TAB).\
             send_keys(Keys.RETURN).perform()
-        time.sleep(2)
-        alert = driver.switch_to.alert
-        time.sleep(2)
-        alert.send_keys(str(toLevel))
-        time.sleep(2)
-        alert.accept()
-        time.sleep(2)
+        alert = self.wait_for(lambda: driver.switch_to.alert)
+        alert.send_keys(str(level))
+        time.sleep(1)
+        self.wait_for(lambda: alert.accept())
 
     def create_torbrowser_driver(self):
         logging.info("Creating TorBrowserDriver")
