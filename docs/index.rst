@@ -82,6 +82,7 @@ anonymous sources.
    kernel_troubleshooting
    getting_support
    v3_services
+   update_bios
 
 .. toctree::
    :caption: Upgrade SecureDrop
