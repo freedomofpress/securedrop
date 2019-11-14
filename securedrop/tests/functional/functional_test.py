@@ -28,6 +28,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.remote_connection import LOGGER
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 from sqlalchemy.exc import IntegrityError
 from tbselenium.tbdriver import TorBrowserDriver
 from tbselenium.utils import disable_js
@@ -51,6 +53,10 @@ LOGGER.setLevel(logging.WARNING)
 
 FIREFOX = "firefox"
 TORBROWSER = "torbrowser"
+
+TBB_SECURITY_HIGH = 1
+TBB_SECURITY_MEDIUM = 3  # '2' corresponds to deprecated TBB medium-high setting
+TBB_SECURITY_LOW = 4
 
 
 class FunctionalTest(object):
@@ -76,6 +82,29 @@ class FunctionalTest(object):
         port = s.getsockname()[1]
         s.close()
         return port
+
+    def set_tbb_securitylevel(self, level):
+
+        if level not in {TBB_SECURITY_HIGH, TBB_SECURITY_MEDIUM, TBB_SECURITY_LOW}:
+            raise ValueError("Invalid Tor Brouser security setting: " + str(level))
+
+        if self.torbrowser_driver is None:
+            self.create_torbrowser_driver()
+        driver = self.torbrowser_driver
+
+        driver.get("about:config")
+        accept_risk_button = driver.find_element_by_id("warningButton")
+        if accept_risk_button:
+            accept_risk_button.click()
+        ActionChains(driver).send_keys(Keys.RETURN).\
+            send_keys("extensions.torbutton.security_slider").perform()
+        time.sleep(1)
+        ActionChains(driver).send_keys(Keys.TAB).\
+            send_keys(Keys.RETURN).perform()
+        alert = self.wait_for(lambda: driver.switch_to.alert)
+        alert.send_keys(str(level))
+        time.sleep(1)
+        self.wait_for(lambda: alert.accept())
 
     def create_torbrowser_driver(self):
         logging.info("Creating TorBrowserDriver")

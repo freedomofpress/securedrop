@@ -16,14 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from . import functional_test
+from . import functional_test as ft
 from . import journalist_navigation_steps
 from . import source_navigation_steps
-import pytest
 
 
 class TestJournalist(
-    functional_test.FunctionalTest,
+    ft.FunctionalTest,
     source_navigation_steps.SourceNavigationStepsMixin,
     journalist_navigation_steps.JournalistNavigationStepsMixin,
 ):
@@ -59,13 +58,16 @@ class TestJournalist(
         self._journalist_logs_in()
         self._journalist_uses_delete_collections_button_confirmation()
 
-    @pytest.mark.xfail(reason="Filter widget not displayed in TBB 9.0.1")
     def test_journalist_interface_ui_with_modal(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
         self._source_continues_to_submit_page()
         self._source_submits_a_file()
         self._source_logs_out()
+
+        # Toggle security slider to force prefs change
+        self.set_tbb_securitylevel(ft.TBB_SECURITY_HIGH)
+        self.set_tbb_securitylevel(ft.TBB_SECURITY_LOW)
 
         self._journalist_logs_in()
         self._journalist_uses_js_filter_by_sources()
