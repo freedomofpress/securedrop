@@ -287,11 +287,10 @@ delete the files from your device:
 To decrypt and view documents or messages, return to your **Persistent** folder.
 All key actions are initiated by double-clicking:
 
-- Double-clicking archives in ZIP or gzip format will open the "File Roller"
-  application, which allows you to extract the contents.
+- Double-clicking archives in ZIP or gzip format will open the "Archive Manager"
+  application (called "file-roller" on the command line), which allows you to extract the contents.
 
-- Double-clicking files that end in ``.gpg`` will attempt to decrypt the contents
-  to the same directory. If you have configured a passphrase for your
+- Double-clicking files that end in ``.gpg`` will attempt to decrypt the contents to the same directory. If you have configured a passphrase for your
   *Submission Key*, you will be prompted for it.
 
 - Double-clicking decrypted messages or documents will attempt to open them in a
@@ -305,7 +304,7 @@ a document with an incorrect or missing file extension.
 
 .. tip::
 
-   Always extract gzip archives with the "File Roller" application, which is
+   Always extract gzip archives with the "Archive Manager" application, which is
    the default when double-clicking the archive. Other methods may not preserve
    the filename contained in the archive.
 
@@ -439,27 +438,33 @@ highly sensitive submissions.
 Removing Metadata
 ~~~~~~~~~~~~~~~~~
 
-.. tip:: For detailed information about removing metadata from documents, check out
-         this in-depth `guide to removing metadata`_.
+.. tip:: For detailed information about removing metadata from documents, check out this in-depth `guide to removing metadata`_.
 
-Tails comes with the `Metadata Anonymisation Toolkit`_ (MAT) that
+Tails comes with the `Metadata Anonymisation Toolkit 2`_ (MAT2) that
 is used to help strip metadata from a variety of types of files,
 including png, jpg, OpenOffice/LibreOffice documents, Microsoft Office
 documents, pdf, tar, tar.bz2, tar.gz, zip, mp3, mp2, mp1, mpa, ogg,
-and flac. You can open MAT by clicking **Applications** ▸ **System Tools** ▸
-**MAT**.
+and flac. We recommend using this and other tools to work with documents within Tails for as much of your workflow as possible.
 
-We recommend always doing as much work as possible inside of Tails
-before working with documents on your everyday workstation. This includes
-stripping metadata with MAT.
+Tails 4 replaces MAT with MAT2, which is usable via the command line and via a context menu in the **Files** application (called "nautilus" on the command line).
 
-.. warning:: MAT is no longer actively maintained and **will not**
-             strip all metadata, even when the output claims the
-             document is clean. Some metadata are likely to persist:
-             you must **never** assume MAT has removed all metadata.
+You can use MAT2 via the **Files** application by browsing to **Places** ▸ **(Your file's location)** and right-clicking on your file. In the context menu, select **Remove metadata**.
 
-When you no longer need documents, you can right-click on them and
-choose **Wipe** to delete them.
+|mat2 context menu|
+
+Note that this does not alter the original file--it creates a clean copy.
+
+|mat2 cleaned|
+
+To use MAT2 on the command line, type ``man mat2`` to see a list of available actions you can take with MAT2. For example, you can view the metadata of a file with ``mat2 myfile --show``.
+
+|mat2 cli show|
+
+You can create a "clean" version of the document with ``mat2 myfile``, again noting that this does not erase the metadata on the original file. This is equivalent to the "Remove metadata" context menu option.
+
+Note that even after running MAT2, you should carefully inspect files to ensure that all metadata has been wiped, or convert them to a simpler file format (for example, converting a ``.xls`` file to a ``.csv``) to ensure that metadata is not left behind in error.
+
+When you no longer need documents, in the Files application, you can right-click on them and choose **Wipe** to securely delete them.
 
 |Wiping documents|
 
@@ -533,7 +538,7 @@ disclose details about the contents of any submission you have received.
 
 .. _`QR codes can contain malicious links`: https://securedrop.org/news/security-advisory-do-not-scan-qr-codes-submitted-through-securedrop-connected-devices
 .. _`working with sensitive documents`: https://tails.boum.org/doc/sensitive_documents/index.en.html
-.. _`Metadata Anonymisation Toolkit`: https://mat.boum.org/
+.. _`Metadata Anonymisation Toolkit 2`: https://mat.boum.org/
 
 Moving Documents to Your Everyday Workstation
 ---------------------------------------------
@@ -646,12 +651,17 @@ audio, and begin publishing important, high-impact work!
 .. |Sent reply| image:: images/manual/screenshots/journalist-composes_reply.png
 .. |Flag for reply button| image:: images/manual/screenshots/journalist-col_has_no_key.png
 .. |Flag for reply notification| image:: images/manual/screenshots/journalist-col_flagged.png
+
+.. |mat2 context menu| image:: images/manual/screenshots/mat2_context_menu.png
+.. |mat2 cleaned| image:: images/manual/screenshots/mat2_cleaned.png
+.. |mat2 cli show| image:: images/manual/screenshots/mat2_cli_show.png
+
 .. |Wiping documents| image:: images/manual/viewing5.png
 .. |Journalist account profile| image:: images/manual/screenshots/journalist-edit_account_user.png
-.. |Unlock VeraCrypt in Tails 1| image:: images/manual/unlock-veracrypt-in-tails-1.png
-.. |Unlock VeraCrypt in Tails 2| image:: images/manual/unlock-veracrypt-in-tails-2.png
-.. |Unlock VeraCrypt in Tails 3| image:: images/manual/unlock-veracrypt-in-tails-3.png
-.. |Unlock VeraCrypt in Tails 4| image:: images/manual/unlock-veracrypt-in-tails-4.png
+.. |Unlock VeraCrypt in Tails 1| image:: images/manual/unlock_veracrypt_in_tails_1.png
+.. |Unlock VeraCrypt in Tails 2| image:: images/manual/unlock_veracrypt_in_tails_2.png
+.. |Unlock VeraCrypt in Tails 3| image:: images/manual/unlock_veracrypt_in_tails_3.png
+.. |Unlock VeraCrypt in Tails 4| image:: images/manual/unlock_veracrypt_in_tails_4.png
 .. |br| raw:: html
 
     <br>
