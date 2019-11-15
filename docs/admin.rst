@@ -172,14 +172,13 @@ YubiKey
 
 If the journalist wishes to use a YubiKey for two-factor authentication,
 check the box next to "I'm using a YubiKey". You will then need to enter
-the OATH-HOTP Secret Key that your YubiKey is configured with. For more
+the OATH-HOTP Secret Key that their YubiKey is configured with. For more
 information, read the :doc:`YubiKey Setup Guide <yubikey_setup>`.
 
 |Enable YubiKey|
 
-Once you've configured your YubiKey and entered the Secret Key, click
-*Add user*. On the next page, enter a code from your YubiKey by
-inserting it into the workstation and pressing the button.
+Once you've configured the YubiKey and entered the Secret Key, click
+*Add user*. On the next page, have the journalist enter a code from their YubiKey by inserting it into the workstation and pressing the button.
 
 |Verify YubiKey|
 
