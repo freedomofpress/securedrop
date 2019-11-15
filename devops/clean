@@ -42,6 +42,14 @@ function remove_unwanted_files() {
         printf " done\n"
     fi
 
+    if hash molecule &> /dev/null
+    then
+        printf "Removing Molecule staging environment..."
+        staging_scenario_name="$(./devops/scripts/select-staging-env)"
+        molecule destroy -s "$staging_scenario_name" > /dev/null
+        printf " done\n"
+    fi
+
     # Any and all git-ignored files and directories, if present. Includes e.g.
     # deb packages in build/, and VM information stored locally.
     git clean -x -d -f
