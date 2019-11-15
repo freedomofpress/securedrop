@@ -36,6 +36,14 @@ def make_blueprint(config):
                   "notification")
             return redirect(url_for('.lookup'))
 
+        if request.method == 'GET' and 'codename' in session:
+            flash(gettext(
+                "A browser window or tab is already on the \"Get Started\" page. "
+                "Please continue using this window or tab or close all browser windows and "
+                "start over."),
+                  "notification")
+            return redirect(url_for('.index'))
+
         codename = generate_unique_codename(config)
         session['codename'] = codename
         session['new_user'] = True

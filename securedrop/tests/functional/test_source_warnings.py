@@ -76,3 +76,21 @@ class TestSourceInterfaceBannerWarnings(
 
         banner = self.driver.find_element_by_id("js-warning")
         assert "Security Slider to Safest", banner.text
+
+
+class TestSourceInterfaceFlashWarnings(
+    functional_test.FunctionalTest, source_navigation_steps.SourceNavigationStepsMixin
+):
+
+    def test_duplicate_get_started_windows(self):
+
+        assert len(self.driver.window_handles) == 1
+        main_window = self.driver.current_window_handle  # noqa F841
+        self._source_visits_source_homepage()
+        self._source_clicks_submit_documents_on_homepage()
+
+        self.driver.execute_script("window.open()")
+        new_window = self.driver.window_handles[1]  # noqa F841
+        self._source_visits_source_homepage()
+        self._source_clicks_submit_documents_on_homepage_duplicate_window()
+        self._source_sees_get_started_page_already_open_message()

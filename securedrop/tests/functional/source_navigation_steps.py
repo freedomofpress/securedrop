@@ -213,3 +213,15 @@ class SourceNavigationStepsMixin:
         if not hasattr(self, "accept_languages"):
             expected_text = "Your session timed out due to inactivity."
             assert expected_text in notification.text
+
+    def _source_clicks_submit_documents_on_homepage_duplicate_window(self):
+        # Similar to self._source_clicks_submit_documents_on_homepage except we do not check
+        # that the source is directed to the page showing the generated codename, ref. #4458.
+        self.safe_click_by_id("submit-documents-button")
+
+    def _source_sees_get_started_page_already_open_message(self):
+        notification = self.driver.find_element_by_css_selector(".notification")
+
+        if not hasattr(self, "accepted_languages"):
+            expected_text = "A browser window or tab is already on the \"Get Started\" page. "
+            assert expected_text in notification.text
