@@ -140,6 +140,12 @@ Direct SSH access is available for staging hosts, so you can use
 is either ``virtualbox-staging-xenial`` or ``libvirt-staging-xenial``, depending
 on your environment.
 
+When finished with the Staging environment, run ``molecule destroy -s <scenario>``
+to clean up the VMs. If the host machine has been rebooted since the Staging
+environment was created, Molecule will fail to find the VM info, as it's stored
+in ``/tmp``. If you use libvirt, run ``virt-manager`` and destroy the staging VMs
+manually, by right-clicking on the entries and choosing **Destroy**.
+
 .. _production_vms:
 
 Production
