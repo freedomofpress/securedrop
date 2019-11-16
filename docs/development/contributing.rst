@@ -8,16 +8,16 @@ are a variety of ways to help. We are always looking for help from:
 
 * `programmers`_, to help us develop SecureDrop;
 * `release managers`_, to create and maintain Debian GNU/Linux packages and repositories;
-* `writers`_, to help improve the documentation;
+* `technical writers`_, to help improve the documentation;
 * `translators`_, to translate SecureDrop;
-* `designers`_, to help improve the source and journalist web interfaces and Tails customization;
-* `moderators and support`_ volunteers, to help with the support forums.
+* `ux contributors`_, to help improve the product experience for end users;
+* `forum moderators and support`_ volunteers, to help with the support forums.
 
-You can always find a developer to answer any questions you may have on the
+You can always find a regular project contributor to answer any questions you may have on the
 `SecureDrop instant messaging channel
 <https://gitter.im/freedomofpress/securedrop>`__. You can also register on `the
 forum <https://forum.securedrop.org/>`__ for more information and to
-participate in longer discussions.
+participate in longer discussions. 
 
 .. note:: Not sure where to start? You can always ask for advice in the `chat
           room <https://gitter.im/freedomofpress/securedrop>`__.
@@ -75,17 +75,19 @@ If you would like to contribute on a regular basis, you'll want to read the
 development environment to preview changes, run tests locally, etc.
 
 
-Writers
+Technical Writers
 ~~~~~~~
 
 Technical writers and editors are invited to review the `documentation
 <https://docs.securedrop.org/>`__ and fix any mistakes in accordance with the
-:doc:`documentation guidelines <documentation_guidelines>`.
+`documentation guidelines <documentation_guidelines>`__.
 
 If this is your first time helping with SecureDrop documentation, consider
 working on `low-hanging fruit`_ to become familiar with the process.
 
 .. _`low-hanging fruit`: https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+label%3A%22good+first+issue%22+label%3Adocs
+
+If you're looking to contribute to copywriting user-facing text within the UI itself, see _`these issues <https://github.com/freedomofpress/securedrop-ux/labels/NeedsCopywriting>`__ in `our separate User Experience repo <https://github.com/freedomofpress/securedrop-ux/>`__.
 
 Documentation Issues
 --------------------
@@ -144,17 +146,19 @@ forum discussions are also welcome.
    :alt: SecureDrop language status
 
 
-Designers
+UX Contributors
 ~~~~~~~~~
 
-If you have web design or user experience design skills, take a look at these issues on GitHub:
+If you have interaction or visual design skills, copywriting for UI skills, or have user research skills, check out `our separate User Experience repo <https://github.com/freedomofpress/securedrop-ux/>`__ for SecureDrop here on GitHub. There is a wiki with notes from weekly meetings, design standards, design principles, links-out to past research synthesis efforts, and ongoing and past project efforts documented as Issues, there.
 
-* `User experience <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3AUX>`__
+If you have front-end development skills, take a look at these issues on the primary SecureDrop repo in GitHub:
+
+* `All issues labeled "UX" <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3AUX>`__
 * `CSS/SASS <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3ACSS%2FSASS>`__ and `HTML <https://github.com/freedomofpress/securedrop/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3AHTML>`__
-* `Journalist user experience <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3A%22goals%3A+journalist+experience%22>`__
+* `All issues labeled "Journalist Experience" <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3A%22goals%3A+journalist+experience%22>`__
 
 
-Moderators and Support
+Forum Moderators and Support
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Those running a production instance of SecureDrop are encouraged to `read the
