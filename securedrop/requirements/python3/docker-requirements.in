@@ -1,3 +1,7 @@
 pip==19.1
+<<<<<<< HEAD
 setuptools>=46.0.0
 wheel
+=======
+setuptools
+>>>>>>> Added a requirements file to update Docker pip version

@@ -125,7 +125,13 @@ wcwidth==0.1.7 \
     --hash=sha256:f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c \
     # via prompt-toolkit
 
+<<<<<<< HEAD
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==46.0.0 \
     --hash=sha256:2f00f25b780fbfd0787e46891dcccd805b08d007621f24629025f48afef444b5 \
     --hash=sha256:693e0504490ed8420522bf6bc3aa4b0da6a9f1c80c68acfb4e959275fd04cd82
+=======
+# WARNING: The following packages were not pinned, but pip requires them to be
+# pinned when the requirements file includes hashes. Consider using the --allow-unsafe flag.
+# setuptools==41.6.0        # via ansible
+>>>>>>> Added a requirements file to update Docker pip version
