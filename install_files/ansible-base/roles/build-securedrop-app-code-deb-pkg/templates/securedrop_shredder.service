@@ -3,12 +3,12 @@ Description=SecureDrop shredder
 
 [Service]
 Environment=PYTHONPATH="{{ securedrop_code }}:{{ securedrop_venv_site_packages }}"
-ExecStart={{ securedrop_venv_bin }}/python /var/www/securedrop/scripts/shredder --interval 60
+ExecStart={{ securedrop_venv_bin }}/python {{ securedrop_code }}/scripts/shredder --interval 60
 PrivateDevices=yes
 PrivateTmp=yes
 ProtectSystem=full
 ReadOnlyDirectories=/
-ReadWriteDirectories=/var/lib/securedrop
+ReadWriteDirectories={{ securedrop_data }}
 Restart=always
 RestartSec=10s
 UMask=077
