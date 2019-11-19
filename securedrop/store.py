@@ -168,7 +168,7 @@ class Storage:
 
         if not self.verify(absolute):
             raise PathException(
-                """Could not resolve ("{}") to a path within the store.""".format(filename)
+                """Could not resolve "{}" to a path within the store.""".format(filename)
             )
         return absolute
 
@@ -203,7 +203,7 @@ class Storage:
                     ))
         return zip_file
 
-    def move_to_shredder(self, filesystem_id: str, filename: str = ''):
+    def move_to_shredder(self, path: str):
         """
         Moves content from the store to the shredder for secure deletion.
 
@@ -217,7 +217,16 @@ class Storage:
         performed by an asynchronous process that monitors the
         shredder directory.
         """
-        path = self.path(filesystem_id, filename)
+        if not self.verify(path):
+            raise ValueError(
+                """Path is not within the store: "{}" """.format(path)
+            )
+
+        if not os.path.exists(path):
+            raise ValueError(
+                """Path does not exist: "{}" """.format(path)
+            )
+
         relpath = os.path.relpath(path, start=self.storage_path)
         dest = os.path.join(tempfile.mkdtemp(dir=self.__shredder_path), relpath)
         current_app.logger.info("Moving {} to shredder: {}".format(path, dest))

@@ -61,10 +61,8 @@ def upgrade():
                     """).bindparams(id=submission.id)
                     )
 
-                    app.storage.move_to_shredder(
-                        submission.source.filesystem_id,
-                        submission.filename
-                    )
+                    path = app.storage.path_without_filesystem_id(submission.filename)
+                    app.storage.move_to_shredder(path)
                 except NoFileFoundException:
                     # The file must have been deleted by the admin, remove the row
                     conn.execute(
@@ -85,10 +83,8 @@ def upgrade():
                         """).bindparams(id=reply.id)
                     )
 
-                    app.storage.move_to_shredder(
-                        reply.source.filesystem_id,
-                        reply.filename
-                    )
+                    path = app.storage.path_without_filesystem_id(reply.filename)
+                    app.storage.move_to_shredder(path)
                 except NoFileFoundException:
                     # The file must have been deleted by the admin, remove the row
                     conn.execute(

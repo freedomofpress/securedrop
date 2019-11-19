@@ -170,7 +170,8 @@ def download(zip_basename, submissions):
 
 
 def delete_file_object(file_object):
-    current_app.storage.move_to_shredder(file_object.source.filesystem_id, file_object.filename)
+    path = current_app.storage.path(file_object.source.filesystem_id, file_object.filename)
+    current_app.storage.move_to_shredder(path)
     db.session.delete(file_object)
     db.session.commit()
 
@@ -257,7 +258,8 @@ def make_password(config):
 
 def delete_collection(filesystem_id):
     # Delete the source's collection of submissions
-    current_app.storage.move_to_shredder(filesystem_id)
+    path = current_app.storage.path(filesystem_id)
+    current_app.storage.move_to_shredder(path)
 
     # Delete the source's reply keypair
     current_app.crypto_util.delete_reply_keypair(filesystem_id)
