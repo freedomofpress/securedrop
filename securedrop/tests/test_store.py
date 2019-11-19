@@ -380,6 +380,6 @@ def test_shredder_shreds(journalist_app, caplog):
         f.write("testdata\n")
 
     journalist_app.storage.clear_shredder()
-    assert "Securely deleted {}".format(testfile) in caplog.text
+    assert "Securely deleted file 1/1: {}".format(testfile) in caplog.text
     assert not os.path.isfile(testfile)
     assert not os.path.isdir(testdir)
