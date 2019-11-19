@@ -1689,19 +1689,15 @@ def test_delete_source_deletes_docs_on_disk(journalist_app,
         utils.db_helper.submit(source, 2)
         utils.db_helper.reply(journo, source, 2)
 
-        # Encrypted documents exists
-        dir_source_docs = os.path.join(config.STORE_DIR,
-                                       test_source['filesystem_id'])
+        dir_source_docs = os.path.join(config.STORE_DIR, test_source['filesystem_id'])
         assert os.path.exists(dir_source_docs)
 
-        job = journalist_app_module.utils.delete_collection(
-            test_source['filesystem_id'])
+        journalist_app_module.utils.delete_collection(test_source['filesystem_id'])
 
-        # Wait up to 5s to wait for Redis worker secure deletion to complete
-        utils.asynchronous.wait_for_redis_worker(job)
+        def assertion():
+            assert not os.path.exists(dir_source_docs)
 
-        # Encrypted documents no longer exist
-        assert not os.path.exists(dir_source_docs)
+        utils.asynchronous.wait_for_assertion(assertion)
 
 
 def test_login_with_invalid_password_doesnt_call_argon2(mocker, test_journo):

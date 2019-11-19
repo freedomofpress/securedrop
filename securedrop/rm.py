@@ -52,7 +52,7 @@ def shred(path, delete=True):
 
 
 def secure_delete(path):
-    # type: (str) -> str
+    # type: (str) -> None
     """
     Securely deletes the file at ``path``.
 
@@ -85,9 +85,6 @@ def secure_delete(path):
     directories_to_remove = set(directories)
     for d in reversed(sorted(directories_to_remove)):
         os.rmdir(d)
-
-    # We need to return a non-`None` value so the rq worker writes this back to Redis
-    return "success"
 
 
 def check_secure_delete_capability():

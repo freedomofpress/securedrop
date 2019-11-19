@@ -24,7 +24,6 @@ setuptools
 sphinx
 sphinx-autobuild
 sphinx_rtd_theme
-supervisor
 testinfra
 urllib3>=1.25.3
 yamllint

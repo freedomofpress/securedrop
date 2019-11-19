@@ -131,6 +131,8 @@
   /var/lib/securedrop/keys/secring.gpg.tmp rw,
   /var/lib/securedrop/keys/trustdb.gpg rw,
   /var/lib/securedrop/keys/trustdb.gpg.lock rwl,
+  /var/lib/securedrop/shredder/** rw,
+  /var/lib/securedrop/shredder/*/ w,
   /var/lib/securedrop/store/** rw,
   /var/lib/securedrop/store/*/ w,
   /var/lib/securedrop/tmp/** rw,
