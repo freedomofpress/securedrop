@@ -4,14 +4,20 @@ about: Suggest an idea for this project
 
 ---
 
-## Description
+## Problem
 
-A short summary of the idea.
+What is the user, security, system, or project sustainability need this Issue was created to address? Is there evidence to cite in feedback from users, contributors, or instance owners? Is there evidence to cite in a report from a domain expert, in ux or dev best practices, or in user research findings? Or, is this something you simply feel compelled to address?
 
-## User Research Evidence
+## Beneficiaries
 
-Does evidence exist from user research to support this idea? Could research or design help validate or improve it? Has this idea been influenced by your conversations with users, or by your own experience as a SecureDrop user? If so, please note it here, and [take a look at our UX wiki](https://github.com/freedomofpress/securedrop-ux/wiki) for more information about our design and research efforts.
+Who will directly benefit from the implementation of a solution? Users (Sources, Journalists, Admins, or Installers?), Instance owners, project contributors (FPF or volunteers), the project’s steward (FPF), or another group? Ref [SecureDrop Users](https://github.com/freedomofpress/securedrop-ux/wiki#SecureDrop_Users) if needed.
+
+## Solution
+
+If a solution has been devised, what is it? UX issue cross-link? Will end users experience anything new? Have UX, Security, or other domain-specific solutions been drafted? If a solution does not yet exist, what domain expertise should contribute to shaping it? Should  specific contributors be cc'd to call their attention to this?
 
 ## User Stories
+If relevant.
 
-If appropriate
+## Acceptance Criteria
+If known.
