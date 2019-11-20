@@ -2,6 +2,38 @@
 
 ## 1.2.0~rc1
 
+### Web Applications
+
+* Added option to disable document uploads on Source Interface (#4879).
+* Updated alt text for Source Interface logo image (#4980).
+* Added journalist name fields to API '/token' response (#4971).
+
+### Operations
+
+* Updated submission cleanup queues to be managed with systemd instead of supervisor (#4855).
+* Updated grsecurity kernels to version 4.14.154 to mitigate CVE-2019-11135 (#4962, #4990).
+
+### Admin Tails workstation
+
+* Cleaned up unused code in securedrop-admin tool (#4933).
+
+### Developer Workflow
+
+* Added SECURITY.md to the repository (#4994).
+* Fixed Journalist Interface functional tests that require specific Tor Browser security settings (#4987, #4995).
+* Added developer quickstart instructions to the repository README (#4983, #4984). 
+* Fixed admin pip requirements updater (#4955).
+* Added an environmental variable to control Docker build verbosity (#4943, #4974).
+* Increased libvirt prod VM memory to 1024MB (#4918).
+
+### Documentation
+
+* Updated automatic screenshots to use Tor Browser for Source Interface (#4975).
+* Added auto-cropping for automatic screenshots (#4958).
+* Updated Source Guide (#4880).
+* Updated documentation to refer to Tails 4.0 (#4937, #4942)
+* Miscellaneous documentation fixes (#4922, #4957, #4960, #4968, #4970, #4986, #5002).
+
 ## 1.1.0
 
 ### Web Applications
