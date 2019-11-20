@@ -28,7 +28,7 @@ administrator if you have trouble.
 .. include:: includes/update-gui.txt
 
 .. _`Tails
-   Upgrade Documentation`: https://tails.boum.org/doc/first_steps/upgrade/index.en.html
+   Upgrade Documentation`: https://tails.boum.org/doc/upgrade/index.en.html
 
 Connecting to the *Journalist Interface*
 ----------------------------------------
