@@ -88,7 +88,7 @@ def requeue_interrupted_jobs(queue_name=None):
     logging.debug("candidate job ids: {}".format(job_ids))
 
     if not job_ids:
-        logging.info("No interrupted jobs found in started job registry.")
+        logging.debug("No interrupted jobs found in started job registry.")
 
     for job_id in job_ids:
         logging.debug("Considering job %s", job_id)
