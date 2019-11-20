@@ -1,0 +1,57 @@
+#!/opt/venvs/securedrop-app-code/bin/python
+
+#
+# Clears the SecureDrop shredder directory, securely deleting its contents.
+#
+
+import argparse
+import logging
+import sys
+import time
+
+sys.path.insert(0, ".")  # noqa: E402
+sys.path.insert(0, "/opt/venvs/securedrop-app-code/lib/python3.5/site-packages")  # noqa: E402
+sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
+
+import journalist_app
+from sdconfig import config
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog=__file__, description="Utility for clearing deleted content in the SecureDrop store."
+    )
+    parser.add_argument(
+        "-i",
+        "--interval",
+        type=int,
+        help="Keep running every 'interval' seconds.",
+    )
+
+    return parser.parse_args()
+
+
+def clear_shredder():
+    try:
+        app.storage.clear_shredder()
+    except Exception as e:
+        logging.info("Error clearing shredder: {}".format(e))
+
+
+def main():
+    args = parse_args()
+    logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO)
+    if args.interval:
+        logging.info("Running every {} seconds.".format(args.interval))
+        while 1:
+            clear_shredder()
+            time.sleep(args.interval)
+    else:
+        logging.info("Running once.")
+        clear_shredder()
+
+
+if __name__ == "__main__":
+    app = journalist_app.create_app(config)
+    with app.app_context():
+        main()

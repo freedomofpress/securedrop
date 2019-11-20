@@ -211,16 +211,13 @@ def make_blueprint(config):
     @token_required
     def single_submission(source_uuid, submission_uuid):
         if request.method == 'GET':
-            source = get_or_404(Source, source_uuid, column=Source.uuid)
-            submission = get_or_404(Submission, submission_uuid,
-                                    column=Submission.uuid)
+            get_or_404(Source, source_uuid, column=Source.uuid)
+            submission = get_or_404(Submission, submission_uuid, column=Submission.uuid)
             return jsonify(submission.to_json()), 200
         elif request.method == 'DELETE':
-            submission = get_or_404(Submission, submission_uuid,
-                                    column=Submission.uuid)
-            source = get_or_404(Source, source_uuid, column=Source.uuid)
-            utils.delete_file(source.filesystem_id, submission.filename,
-                              submission)
+            get_or_404(Source, source_uuid, column=Source.uuid)
+            submission = get_or_404(Submission, submission_uuid, column=Submission.uuid)
+            utils.delete_file_object(submission)
             return jsonify({'message': 'Submission deleted'}), 200
 
     @api.route('/sources/<source_uuid>/replies', methods=['GET', 'POST'])
@@ -290,13 +287,12 @@ def make_blueprint(config):
                methods=['GET', 'DELETE'])
     @token_required
     def single_reply(source_uuid, reply_uuid):
-        source = get_or_404(Source, source_uuid, column=Source.uuid)
+        get_or_404(Source, source_uuid, column=Source.uuid)
         reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
         if request.method == 'GET':
             return jsonify(reply.to_json()), 200
         elif request.method == 'DELETE':
-            utils.delete_file(source.filesystem_id, reply.filename,
-                              reply)
+            utils.delete_file_object(reply)
             return jsonify({'message': 'Reply deleted'}), 200
 
     @api.route('/submissions', methods=['GET'])

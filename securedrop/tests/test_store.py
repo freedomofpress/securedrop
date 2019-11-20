@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+import logging
 import os
 import io
 import pytest
 import re
-import store
+import stat
 import zipfile
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
@@ -12,6 +13,7 @@ from . import utils
 from db import db
 from journalist_app import create_app
 from models import Submission, Reply
+import store
 from store import Storage, queued_add_checksum_for_file, async_add_checksum_for_file
 
 
@@ -102,16 +104,29 @@ def test_verify_path_not_absolute(journalist_app, config):
 
 def test_verify_in_store_dir(journalist_app, config):
     with pytest.raises(store.PathException) as e:
-        journalist_app.storage.verify(config.STORE_DIR + "_backup")
-
-    assert 'Invalid directory' in str(e)
+        path = config.STORE_DIR + "_backup"
+        journalist_app.storage.verify(path)
+        assert e.message == "Path not valid in store: {}".format(path)
 
 
 def test_verify_store_path_not_absolute(journalist_app):
     with pytest.raises(store.PathException) as e:
         journalist_app.storage.verify('..')
+        assert e.message == "Path not valid in store: .."
 
-    assert 'The path is not absolute and/or normalized' in str(e)
+
+def test_verify_rejects_symlinks(journalist_app):
+    """
+    Test that verify rejects paths involving links outside the store.
+    """
+    try:
+        link = os.path.join(journalist_app.storage.storage_path, "foo")
+        os.symlink("/foo", link)
+        with pytest.raises(store.PathException) as e:
+            journalist_app.storage.verify(link)
+            assert e.message == "Path not valid in store: {}".format(link)
+    finally:
+        os.unlink(link)
 
 
 def test_verify_store_dir_not_absolute():
@@ -130,9 +145,15 @@ def test_verify_store_temp_dir_not_absolute():
     assert re.compile('temp_dir.*is not absolute').match(msg)
 
 
-def test_verify_flagged_file_in_sourcedir_returns_true(journalist_app, config):
+def test_verify_regular_submission_in_sourcedir_returns_true(journalist_app, config):
+    """
+    Tests that verify is happy with a regular submission file.
+
+    Verify should return True for a regular file that matches the
+    naming scheme of submissions.
+    """
     source_directory, file_path = create_file_in_source_dir(
-        config, 'example-filesystem-id', '_FLAG'
+        config, 'example-filesystem-id', '1-regular-doc.gz.gpg'
     )
 
     assert journalist_app.storage.verify(file_path)
@@ -148,7 +169,7 @@ def test_verify_invalid_file_extension_in_sourcedir_raises_exception(
     with pytest.raises(store.PathException) as e:
         journalist_app.storage.verify(file_path)
 
-    assert 'Invalid file extension .txt' in str(e)
+    assert 'Path not valid in store: {}'.format(file_path) in str(e)
 
 
 def test_verify_invalid_filename_in_sourcedir_raises_exception(
@@ -160,8 +181,7 @@ def test_verify_invalid_filename_in_sourcedir_raises_exception(
 
     with pytest.raises(store.PathException) as e:
         journalist_app.storage.verify(file_path)
-
-    assert 'Invalid filename NOTVALID.gpg' in str(e)
+        assert e.message == 'Path not valid in store: {}'.format(file_path)
 
 
 def test_get_zip(journalist_app, test_source, config):
@@ -292,3 +312,74 @@ def test_async_add_checksum_for_file(config, db_model):
         # requery to get a new object
         db_obj = db_model.query.filter_by(id=db_obj_id).one()
         assert db_obj.checksum == 'sha256:' + expected_hash
+
+
+def test_path_configuration_is_immutable(journalist_app):
+    """
+    Check that the store's paths cannot be changed.
+
+    They're exposed via properties that are supposed to be
+    read-only. It is of course possible to change them via the mangled
+    attribute names, but we want to confirm that accidental changes
+    are prevented.
+    """
+    with pytest.raises(AttributeError):
+        journalist_app.storage.storage_path = "/foo"
+
+    original_storage_path = journalist_app.storage.storage_path[:]
+    journalist_app.storage.__storage_path = "/foo"
+    assert journalist_app.storage.storage_path == original_storage_path
+
+    with pytest.raises(AttributeError):
+        journalist_app.storage.shredder_path = "/foo"
+
+    original_shredder_path = journalist_app.storage.shredder_path[:]
+    journalist_app.storage.__shredder_path = "/foo"
+    assert journalist_app.storage.shredder_path == original_shredder_path
+
+
+def test_shredder_configuration(journalist_app):
+    """
+    Ensure we're creating the shredder directory correctly.
+
+    We want to ensure that it's a sibling of the store directory, with
+    mode 0700.
+    """
+    store_path = journalist_app.storage.storage_path
+    shredder_path = journalist_app.storage.shredder_path
+    assert os.path.dirname(shredder_path) == os.path.dirname(store_path)
+    s = os.stat(shredder_path)
+    assert stat.S_ISDIR(s.st_mode) is True
+    assert stat.S_IMODE(s.st_mode) == 0o700
+
+
+def test_shredder_deletes_symlinks(journalist_app, caplog):
+    """
+    Confirm that `store.clear_shredder` removes any symlinks in the shredder.
+    """
+    caplog.set_level(logging.DEBUG)
+
+    link_target = "/foo"
+    link = os.path.abspath(os.path.join(journalist_app.storage.shredder_path, "foo"))
+    os.symlink(link_target, link)
+    journalist_app.storage.clear_shredder()
+    assert "Deleting link {} to {}".format(link, link_target) in caplog.text
+    assert not os.path.exists(link)
+
+
+def test_shredder_shreds(journalist_app, caplog):
+    """
+    Confirm that `store.clear_shredder` removes files.
+    """
+    caplog.set_level(logging.DEBUG)
+
+    testdir = os.path.abspath(os.path.join(journalist_app.storage.shredder_path, "testdir"))
+    os.makedirs(testdir)
+    testfile = os.path.join(testdir, "testfile")
+    with open(testfile, "w") as f:
+        f.write("testdata\n")
+
+    journalist_app.storage.clear_shredder()
+    assert "Securely deleted file 1/1: {}".format(testfile) in caplog.text
+    assert not os.path.isfile(testfile)
+    assert not os.path.isdir(testdir)

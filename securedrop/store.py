@@ -14,6 +14,7 @@ from werkzeug.utils import secure_filename
 
 from secure_tempfile import SecureTemporaryFile
 
+import rm
 from worker import create_queue
 
 
@@ -32,8 +33,8 @@ if typing.TYPE_CHECKING:
 
 
 VALIDATE_FILENAME = re.compile(
-    r"^(?P<index>\d+)\-[a-z0-9-_]*"
-    r"(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$").match
+    r"^(?P<index>\d+)\-[a-z0-9-_]*(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$"
+).match
 
 
 class PathException(Exception):
@@ -83,45 +84,66 @@ class Storage:
 
         self.__gpg_key = gpg_key
 
-    def verify(self, p):
-        # type: (str) -> bool
-        """Assert that the path is absolute, normalized, inside
-           `self.__storage_path`, and matches the filename format.
+        # where files and directories are sent to be securely deleted
+        self.__shredder_path = os.path.abspath(os.path.join(self.__storage_path, "../shredder"))
+        if not os.path.exists(self.__shredder_path):
+            os.makedirs(self.__shredder_path, mode=0o700)
+
+    @property
+    def storage_path(self):
+        return self.__storage_path
+
+    @property
+    def shredder_path(self):
+        return self.__shredder_path
+
+    def shredder_contains(self, path: str) -> bool:
+        """
+        Returns True if the fully-resolved path lies within the shredder.
+        """
+        common_path = os.path.commonpath((os.path.realpath(path), self.__shredder_path))
+        return common_path == self.__shredder_path
+
+    def store_contains(self, path: str) -> bool:
+        """
+        Returns True if the fully-resolved path lies within the store.
+        """
+        common_path = os.path.commonpath((os.path.realpath(path), self.__storage_path))
+        return common_path == self.__storage_path
+
+    def verify(self, p: str) -> bool:
+        """
+        Verify that a given path is valid for the store.
         """
 
-        # os.path.abspath makes the path absolute and normalizes
-        # '/foo/../bar' to '/bar', etc. We have to check that the path is
-        # normalized before checking that it starts with the
-        # `self.__storage_path` or else a malicious actor could append a
-        # bunch of '../../..' to access files outside of the store.
-        if not p == os.path.abspath(p):
-            raise PathException("The path is not absolute and/or normalized")
-
-        # Check that the path p is in self.__storage_path
-        if os.path.relpath(p, self.__storage_path).startswith('..'):
-            raise PathException("Invalid directory %s" % (p, ))
-
-        if os.path.isfile(p):
-            filename = os.path.basename(p)
-            ext = os.path.splitext(filename)[-1]
-            if filename == '_FLAG':
+        if self.store_contains(p):
+            # verifying a hypothetical path
+            if not os.path.exists(p):
                 return True
-            if ext != '.gpg':
-                # if there's an extension, verify it's a GPG
-                raise PathException("Invalid file extension %s" % (ext, ))
-            if not VALIDATE_FILENAME(filename):
-                raise PathException("Invalid filename %s" % (filename, ))
 
-        return False
+            # extant paths must be directories or correctly-named plain files
+            if os.path.isdir(p):
+                return True
 
-    def path(self, *s):
-        # type: (*str) -> str
-        """Get the normalized, absolute file path, within
-           `self.__storage_path`.
+            if os.path.isfile(p) and VALIDATE_FILENAME(os.path.basename(p)):
+                return True
+
+        raise PathException("Path not valid in store: {}".format(p))
+
+    def path(self, filesystem_id: str, filename: str = '') -> str:
         """
-        joined = os.path.join(os.path.abspath(self.__storage_path), *s)
-        absolute = os.path.abspath(joined)
-        self.verify(absolute)
+        Returns the path resolved within `self.__storage_path`.
+
+        Raises PathException if `verify` doesn't like the path.
+        """
+        joined = os.path.join(os.path.realpath(self.__storage_path), filesystem_id, filename)
+        absolute = os.path.realpath(joined)
+        if not self.verify(absolute):
+            raise PathException(
+                """Could not resolve ("{}", "{}") to a path within the store.""".format(
+                    filesystem_id, filename
+                )
+            )
         return absolute
 
     def path_without_filesystem_id(self, filename):
@@ -132,7 +154,7 @@ class Storage:
         """
 
         joined_paths = []
-        for rootdir, _, files in os.walk(os.path.abspath(self.__storage_path)):
+        for rootdir, _, files in os.walk(os.path.realpath(self.__storage_path)):
             for file_ in files:
                 if file_ in filename:
                     joined_paths.append(os.path.join(rootdir, file_))
@@ -144,7 +166,10 @@ class Storage:
         else:
             absolute = joined_paths[0]
 
-        self.verify(absolute)
+        if not self.verify(absolute):
+            raise PathException(
+                """Could not resolve "{}" to a path within the store.""".format(filename)
+            )
         return absolute
 
     def get_bulk_archive(self, selected_submissions, zip_directory=''):
@@ -164,9 +189,7 @@ class Storage:
                 submissions = [s for s in selected_submissions
                                if s.source.journalist_designation == source]
                 for submission in submissions:
-                    filename = self.path(submission.source.filesystem_id,
-                                         submission.filename)
-                    self.verify(filename)
+                    filename = self.path(submission.source.filesystem_id, submission.filename)
                     document_number = submission.filename.split('-')[0]
                     if zip_directory == submission.source.journalist_filename:
                         fname = zip_directory
@@ -179,6 +202,79 @@ class Storage:
                         os.path.basename(filename)
                     ))
         return zip_file
+
+    def move_to_shredder(self, path: str):
+        """
+        Moves content from the store to the shredder for secure deletion.
+
+        Python's os.renames (and the underlying rename(2) calls) will
+        silently overwrite content, which could bypass secure
+        deletion, so we create a temporary directory under the
+        shredder directory and move the specified content there.
+
+        This function is intended to be atomic and quick, for use in
+        deletions via the UI and API. The actual secure deletion is
+        performed by an asynchronous process that monitors the
+        shredder directory.
+        """
+        if not self.verify(path):
+            raise ValueError(
+                """Path is not within the store: "{}" """.format(path)
+            )
+
+        if not os.path.exists(path):
+            raise ValueError(
+                """Path does not exist: "{}" """.format(path)
+            )
+
+        relpath = os.path.relpath(path, start=self.storage_path)
+        dest = os.path.join(tempfile.mkdtemp(dir=self.__shredder_path), relpath)
+        current_app.logger.info("Moving {} to shredder: {}".format(path, dest))
+        os.renames(path, dest)
+
+    def clear_shredder(self):
+        current_app.logger.info("Clearing shredder")
+        directories = []
+        targets = []
+        for directory, subdirs, files in os.walk(self.shredder_path):
+            for subdir in subdirs:
+                real_subdir = os.path.realpath(os.path.join(directory, subdir))
+                if self.shredder_contains(real_subdir):
+                    directories.append(real_subdir)
+            for f in files:
+                abs_file = os.path.abspath(os.path.join(directory, f))
+                if os.path.islink(abs_file):
+                    # Somehow, a symbolic link was created in the
+                    # store. This shouldn't happen in normal
+                    # operations. Just remove the link; don't try to
+                    # shred its target. Note that we only have special
+                    # handling for symlinks. Hard links -- which
+                    # again, shouldn't occur in the store -- will
+                    # result in the file data being shredded once for
+                    # each link.
+                    current_app.logger.info(
+                        "Deleting link {} to {}".format(
+                            abs_file, os.readlink(abs_file)
+                        )
+                    )
+                    os.unlink(abs_file)
+                    continue
+                if self.shredder_contains(abs_file):
+                    targets.append(abs_file)
+
+        target_count = len(targets)
+        current_app.logger.info("Files to delete: {}".format(target_count))
+        for i, t in enumerate(targets, 1):
+            current_app.logger.info("Securely deleting file {}/{}: {}".format(i, target_count, t))
+            rm.secure_delete(t)
+            current_app.logger.info("Securely deleted file {}/{}: {}".format(i, target_count, t))
+
+        directories_to_remove = set(directories)
+        dir_count = len(directories_to_remove)
+        for i, d in enumerate(reversed(sorted(directories_to_remove)), 1):
+            current_app.logger.debug("Removing directory {}/{}: {}".format(i, dir_count, d))
+            os.rmdir(d)
+            current_app.logger.debug("Removed directory {}/{}: {}".format(i, dir_count, d))
 
     def save_file_submission(self, filesystem_id, count, journalist_filename,
                              filename, stream):

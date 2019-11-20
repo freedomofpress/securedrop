@@ -12,6 +12,7 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         debhelper \
         devscripts \
         dh-python \
+        dh-systemd \
         dh-virtualenv \
         gdb \
         git \

@@ -41,7 +41,7 @@ currently on the *Application Server*: log in over SSH and run
           queued deletion jobs by logging in to the *Application
           Server* over SSH and running::
 
-            sudo tail -f /var/log/securedrop_worker/rqworker.err
+            sudo journalctl -u securedrop_rqworker
 
 
 If you find you cannot perform a backup or restore due to this constraint,
@@ -85,8 +85,8 @@ to debug your connectivity before proceeding further. Make sure:
 * Ansible is installed
 * the *Admin Workstation* is connected to the Internet
 * Tor starts successfully
-* The appropriate onion service configuration files are present in 
-  ``~/Persistent/securedrop/install_files/ansible-base`` and the 
+* The appropriate onion service configuration files are present in
+  ``~/Persistent/securedrop/install_files/ansible-base`` and the
   ``./securedrop-admin tailsconfig`` command completes successfully
 
 If Ansible is not installed, or ``./securedrop-admin tailsconfig`` fails, see

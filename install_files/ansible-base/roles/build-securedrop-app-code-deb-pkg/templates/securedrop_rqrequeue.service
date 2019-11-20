@@ -1,0 +1,21 @@
+[Unit]
+Description=SecureDrop rqrequeue process
+After=redis-server.service
+Wants=redis-server.service
+
+[Service]
+Environment=PYTHONPATH="{{ securedrop_code }}:{{ securedrop_venv_site_packages }}"
+ExecStart={{ securedrop_venv_bin }}/python {{ securedrop_code }}/scripts/rqrequeue --interval 60
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectSystem=full
+ReadOnlyDirectories=/
+ReadWriteDirectories={{ securedrop_data }}
+Restart=always
+RestartSec=10s
+UMask=077
+User=www-data
+WorkingDirectory={{ securedrop_code }}
+
+[Install]
+WantedBy=multi-user.target

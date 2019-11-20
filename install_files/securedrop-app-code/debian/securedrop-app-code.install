@@ -1,5 +1,6 @@
 var/www /var/
 etc/apparmor.d/usr.sbin.apache2 /etc/apparmor.d
 etc/apparmor.d/usr.sbin.tor /etc/apparmor.d
-etc/supervisor/conf.d/securedrop_rqrequeue.conf /etc/supervisor/conf.d
-etc/supervisor/conf.d/securedrop_worker.conf /etc/supervisor/conf.d
+lib/systemd/system/securedrop_rqrequeue.service /lib/systemd/system
+lib/systemd/system/securedrop_rqworker.service /lib/systemd/system
+lib/systemd/system/securedrop_shredder.service /lib/systemd/system

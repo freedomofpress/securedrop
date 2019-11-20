@@ -11,6 +11,9 @@ wanted_apache_headers:
   - "Header set Content-Security-Policy: \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';\""
   - 'Header unset Etag'
 
+securedrop_venv: /opt/venvs/securedrop-app-code
+securedrop_venv_bin: "/opt/venvs/securedrop-app-code/bin"
+securedrop_venv_site_packages: "/opt/venvs/securedrop-app-code/lib/python3.5/site-packages"
 securedrop_code: /var/www/securedrop
 securedrop_data: /var/lib/securedrop
 securedrop_user: www-data

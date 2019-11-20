@@ -16,10 +16,14 @@ securedrop_venv_site_packages: "{{ securedrop_venv }}/lib/python3.5/site-package
 # SecureDrop code installation directory
 securedrop_code: /var/www/securedrop
 
-# Configuration files for SecureDrop programs run under supervisord
-supervisor_programs:
-  - securedrop_rqrequeue.conf
-  - securedrop_worker.conf
+# Location of the application storage on disk, including database.
+securedrop_data: /var/lib/securedrop
+
+# Configuration files for SecureDrop systemd services
+systemd_services:
+  - securedrop_rqrequeue.service
+  - securedrop_rqworker.service
+  - securedrop_shredder.service
 
 # SecureDrop rq worker log directory
 securedrop_worker_log_dir: /var/log/securedrop_worker

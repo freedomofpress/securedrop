@@ -13,9 +13,7 @@ from db import db
 from models import (get_one_or_else, Source, Journalist, InvalidUsernameException,
                     WrongPasswordException, FirstOrLastNameError, LoginThrottledException,
                     BadTokenException, SourceStar, PasswordError, Submission, RevokedToken)
-from rm import secure_delete
 from store import add_checksum_for_file
-from worker import create_queue
 
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
@@ -171,16 +169,16 @@ def download(zip_basename, submissions):
                      as_attachment=True)
 
 
-def delete_file(filesystem_id, filename, file_object):
-    file_path = current_app.storage.path(filesystem_id, filename)
-    create_queue().enqueue(secure_delete, file_path)
+def delete_file_object(file_object):
+    path = current_app.storage.path(file_object.source.filesystem_id, file_object.filename)
+    current_app.storage.move_to_shredder(path)
     db.session.delete(file_object)
     db.session.commit()
 
 
 def bulk_delete(filesystem_id, items_selected):
     for item in items_selected:
-        delete_file(filesystem_id, item.filename, item)
+        delete_file_object(item)
 
     flash(ngettext("Submission deleted.",
                    "{num} submissions deleted.".format(
@@ -260,7 +258,8 @@ def make_password(config):
 
 def delete_collection(filesystem_id):
     # Delete the source's collection of submissions
-    job = create_queue().enqueue(secure_delete, current_app.storage.path(filesystem_id))
+    path = current_app.storage.path(filesystem_id)
+    current_app.storage.move_to_shredder(path)
 
     # Delete the source's reply keypair
     current_app.crypto_util.delete_reply_keypair(filesystem_id)
@@ -269,7 +268,6 @@ def delete_collection(filesystem_id):
     source = get_source(filesystem_id)
     db.session.delete(source)
     db.session.commit()
-    return job
 
 
 def set_name(user, first_name, last_name):

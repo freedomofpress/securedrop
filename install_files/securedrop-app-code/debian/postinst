@@ -95,13 +95,6 @@ set_paxctld_config() {
     fi
 }
 
-mkdir_rqworker_logs() {
-    worker_logs_dir="/var/log/securedrop_worker"
-    mkdir -p "$worker_logs_dir"
-    chown root:root "$worker_logs_dir"
-    chmod 0700 "$worker_logs_dir"
-}
-
 case "$1" in
     configure)
 
@@ -109,12 +102,10 @@ case "$1" in
     set_paxctld_config
 
     # Ensure SecureDrop's necessary directories are created
-    for dir in /var/lib/securedrop/{,tmp,store,keys,/keys/private-keys-v1.d,/keys/openpgp-revocs.d,backups} /var/www/securedrop; do
+    for dir in /var/lib/securedrop/{,tmp,shredder,store,keys,/keys/private-keys-v1.d,/keys/openpgp-revocs.d,backups} /var/www/securedrop; do
       mkdir -p "$dir"
       chmod 0700 "$dir"
     done
-
-    mkdir_rqworker_logs
 
     # Ensure required gpg-agent.conf is in place, see #4013.
     if [ -e "/var/lib/securedrop/keys/gpg-agent.conf" ]; then
@@ -186,16 +177,8 @@ case "$1" in
     # in versions prior to 0.5.1 a custom logo was installed with u-w
     chmod u+w /var/www/securedrop/static/i/logo.png
 
-    # This removes the MAC "hmac-sha1" from sshd_config.
-    # Ansible was updated, so future instances will not have this line present.
-    # This if-block may be removed from this script on 2019-01-01.
-    if grep -qE 'MACs\s.*hmac-sha1' /etc/ssh/sshd_config; then
-        sed -i 's/^\s*MACs\s.*/MACs hmac-sha2-256,hmac-sha2-512/' /etc/ssh/sshd_config;
-    fi
-
-    service supervisor restart
-
     database_migration
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

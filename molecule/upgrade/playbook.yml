@@ -50,7 +50,6 @@
         state: directory
         path: "/var/log/{{ item }}"
       with_items:
-        - securedrop_worker
         - cron-apt
     # Reuse existing "reboot-and-wait" logic from site config
     - import_tasks: ../../install_files/ansible-base/tasks/reboot.yml
@@ -74,13 +73,6 @@
         name: tor
         state: started
         enabled: yes
-      tags: always
-
-    - name: Ensure supervisor is running
-      service:
-        name: supervisor
-        state: started
-      delegate_to: app-staging
       tags: always
   become: yes
 

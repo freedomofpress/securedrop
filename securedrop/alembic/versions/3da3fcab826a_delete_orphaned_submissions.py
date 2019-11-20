@@ -10,7 +10,6 @@ Create Date: 2018-11-25 19:40:25.873292
 import os
 from alembic import op
 import sqlalchemy as sa
-from rm import secure_delete
 
 # raise the errors if we're not in production
 raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
@@ -19,7 +18,6 @@ try:
     from journalist_app import create_app
     from sdconfig import config
     from store import NoFileFoundException, TooManyFilesException
-    from worker import create_queue
 except ImportError:
     # This is a fresh install, and config.py has not been created yet.
     if raise_errors:
@@ -63,8 +61,8 @@ def upgrade():
                     """).bindparams(id=submission.id)
                     )
 
-                    file_path = app.storage.path_without_filesystem_id(submission.filename)
-                    create_queue().enqueue(secure_delete, file_path)
+                    path = app.storage.path_without_filesystem_id(submission.filename)
+                    app.storage.move_to_shredder(path)
                 except NoFileFoundException:
                     # The file must have been deleted by the admin, remove the row
                     conn.execute(
@@ -85,8 +83,8 @@ def upgrade():
                         """).bindparams(id=reply.id)
                     )
 
-                    file_path = app.storage.path_without_filesystem_id(reply.filename)
-                    create_queue().enqueue(secure_delete, file_path)
+                    path = app.storage.path_without_filesystem_id(reply.filename)
+                    app.storage.move_to_shredder(path)
                 except NoFileFoundException:
                     # The file must have been deleted by the admin, remove the row
                     conn.execute(

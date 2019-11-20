@@ -28,7 +28,6 @@ def test_apache_default_docroot_is_absent(host):
     'securedrop-config',
     'securedrop-keyring',
     'sqlite3',
-    'supervisor',
 ])
 def test_securedrop_application_apt_dependencies(host, package):
     """
