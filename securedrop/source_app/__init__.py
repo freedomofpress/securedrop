@@ -14,7 +14,7 @@ import version
 
 from crypto_util import CryptoUtil
 from db import db
-from models import Source
+from models import InstanceConfig, Source
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from source_app import main, info, api
 from source_app.decorators import ignore_static
@@ -129,6 +129,11 @@ def create_app(config):
                 '<a href="{url}">Why is this dangerous?</a>')
                 .format(url=url_for('info.tor2web_warning'))),
                   "banner-warning")
+
+    @app.before_request
+    @ignore_static
+    def load_instance_config():
+        app.instance_config = InstanceConfig.get_current()
 
     @app.before_request
     @ignore_static

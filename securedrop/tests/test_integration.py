@@ -16,6 +16,7 @@ from bs4 import BeautifulSoup
 from flask import current_app, escape, g, session
 from pyotp import HOTP, TOTP
 
+import journalist_app as journalist_app_module
 from . import utils
 from .utils.instrument import InstrumentedApp
 
@@ -692,3 +693,56 @@ def test_login_after_regenerate_hotp(journalist_app, test_journo):
                 password=test_journo['password'],
                 token=HOTP(b32_otp_secret).at(1)))
             ins.assert_redirects(resp, '/')
+
+
+def test_prevent_document_uploads(source_app, journalist_app, test_admin):
+    '''Test that the source interface accepts only messages when
+    allow_document_uploads == False.
+
+    '''
+
+    # Set allow_document_uploads = False:
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin)
+        form = journalist_app_module.forms.SubmissionPreferencesForm(
+            prevent_document_uploads=True)
+        resp = app.post('/admin/update-submission-preferences',
+                        data=form.data,
+                        follow_redirects=True)
+        assert resp.status_code == 200
+
+    # Check that the source interface accepts only messages:
+    with source_app.test_client() as app:
+        app.get('/generate')
+        resp = app.post('/create', follow_redirects=True)
+        assert resp.status_code == 200
+
+        text = resp.data.decode('utf-8')
+        soup = BeautifulSoup(text, 'html.parser')
+        assert 'Submit Messages' in text
+        assert len(soup.select('input[type="file"]')) == 0
+
+
+def test_no_prevent_document_uploads(source_app, journalist_app, test_admin):
+    '''Test that the source interface accepts both files and messages when
+    allow_document_uploads == True.
+
+    '''
+
+    # Set allow_document_uploads = True:
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin)
+        resp = app.post('/admin/update-submission-preferences',
+                        follow_redirects=True)
+        assert resp.status_code == 200
+
+    # Check that the source interface accepts both files and messages:
+    with source_app.test_client() as app:
+        app.get('/generate')
+        resp = app.post('/create', follow_redirects=True)
+        assert resp.status_code == 200
+
+        text = resp.data.decode('utf-8')
+        soup = BeautifulSoup(text, 'html.parser')
+        assert 'Submit Files or Messages' in text
+        assert len(soup.select('input[type="file"]')) == 1

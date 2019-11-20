@@ -15,10 +15,19 @@
   {% endif %}
 </div>
 
+{% if allow_document_uploads %}
 <h2 class="headline">{{ gettext('Submit Files or Messages') }}</h2>
 <p class="explanation">{{ gettext('You can submit any kind of file, a message, or both.') }}</p>
+{% else %}
+<h2 class="headline">{{ gettext('Submit Messages') }}</h2>
+{% endif %}
 
-<p class="explanation extended-explanation">{{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_journalist_pubkey')) }}
+<p class="explanation extended-explanation">
+{% if allow_document_uploads %}
+{{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_journalist_pubkey')) }}
+{% else %}
+{{ gettext('If you are already familiar with GPG, you can optionally encrypt your messages with our <a href="{url}" class="text-link">public key</a> before submission.').format(url=url_for('info.download_journalist_pubkey')) }}
+{% endif %}
 {{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_journalist_pubkey')) }}</p>
 
 <hr class="no-line">
@@ -26,12 +35,14 @@
 <form id="upload" method="post" action="{{ url_for('main.submit') }}" enctype="multipart/form-data" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <div class="snippet">
+{% if allow_document_uploads %}
     <div class="attachment grid-item center">
       <img class="center" id="upload-icon" src="{{ url_for('static', filename='i/arrow-upload-large.png') }}" width="56" height="56">
       <input type="file" name="fh" autocomplete="off">
       <p class="center" id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
     </div>
-    <div class="message grid-item">
+{% endif %}
+    <div class="message grid-item{% if not allow_document_uploads %} wide{% endif %}">
       <textarea name="msg" class="fill-parent" placeholder="{{ gettext('Write a message.') }}"></textarea>
     </div>
   </div>

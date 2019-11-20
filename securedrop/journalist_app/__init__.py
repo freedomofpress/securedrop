@@ -20,7 +20,7 @@ from journalist_app import account, admin, api, main, col
 from journalist_app.utils import (get_source, logged_in,
                                   JournalistInterfaceSessionInterface,
                                   cleanup_expired_revoked_tokens)
-from models import Journalist
+from models import InstanceConfig, Journalist
 from store import Storage
 
 import typing
@@ -123,6 +123,10 @@ def create_app(config):
     @app.before_first_request
     def expire_blacklisted_tokens():
         return cleanup_expired_revoked_tokens()
+
+    @app.before_request
+    def load_instance_config():
+        app.instance_config = InstanceConfig.get_current()
 
     @app.before_request
     def setup_g():

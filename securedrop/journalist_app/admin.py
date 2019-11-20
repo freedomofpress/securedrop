@@ -9,11 +9,12 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
 from db import db
-from models import Journalist, InvalidUsernameException, FirstOrLastNameError, PasswordError
+from models import (InstanceConfig, Journalist, InvalidUsernameException,
+                    FirstOrLastNameError, PasswordError)
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (make_password, commit_account_changes, set_diceware_password,
                                   validate_hotp_secret, revoke_token)
-from journalist_app.forms import LogoForm, NewUserForm
+from journalist_app.forms import LogoForm, NewUserForm, SubmissionPreferencesForm
 
 
 def make_blueprint(config):
@@ -28,9 +29,12 @@ def make_blueprint(config):
     @view.route('/config', methods=('GET', 'POST'))
     @admin_required
     def manage_config():
-        form = LogoForm()
-        if form.validate_on_submit():
-            f = form.logo.data
+        # The UI prompt ("prevent") is the opposite of the setting ("allow"):
+        submission_preferences_form = SubmissionPreferencesForm(
+            prevent_document_uploads=not current_app.instance_config.allow_document_uploads)
+        logo_form = LogoForm()
+        if logo_form.validate_on_submit():
+            f = logo_form.logo.data
             custom_logo_filepath = os.path.join(current_app.static_folder, 'i',
                                                 'custom_logo.png')
             try:
@@ -42,10 +46,22 @@ def make_blueprint(config):
             finally:
                 return redirect(url_for("admin.manage_config"))
         else:
-            for field, errors in list(form.errors.items()):
+            for field, errors in list(logo_form.errors.items()):
                 for error in errors:
                     flash(error, "logo-error")
-            return render_template("config.html", form=form)
+            return render_template("config.html",
+                                   submission_preferences_form=submission_preferences_form,
+                                   logo_form=logo_form)
+
+    @view.route('/update-submission-preferences', methods=['POST'])
+    @admin_required
+    def update_submission_preferences():
+        form = SubmissionPreferencesForm()
+        if form.validate_on_submit():
+            # The UI prompt ("prevent") is the opposite of the setting ("allow"):
+            value = not bool(request.form.get('prevent_document_uploads'))
+            InstanceConfig.set('allow_document_uploads', value)
+            return redirect(url_for('admin.manage_config'))
 
     @view.route('/add', methods=('GET', 'POST'))
     @admin_required

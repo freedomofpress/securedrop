@@ -29,7 +29,7 @@
 <form method="post" enctype="multipart/form-data">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <p>
-    {{ form.logo(id="logo-upload") }}
+    {{ logo_form.logo(id="logo-upload") }}
     <br>
   </p>
   <h5>
@@ -39,6 +39,21 @@
     <i class="fas fa-pencil-alt"></i> {{ gettext('UPDATE LOGO') }}
   </button>
   {% include 'logo_upload_flashed.html' %}
+</form>
+
+<hr class="no-line">
+
+<h2>{{ gettext('Submission Preferences') }}</h2>
+
+<form action="{{ url_for('admin.update_submission_preferences') }}" method="post">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <p>
+    {{ submission_preferences_form.prevent_document_uploads() }}
+    <label for="prevent_document_uploads">{{ gettext('Prevent sources from uploading documents.  Sources will still be able to send messages.') }}</label>
+  </p>
+  <button type="submit" id="submit-submission-preferences">
+    <i class="fas fa-pencil-alt"></i> {{ gettext('UPDATE SUBMISSION PREFERENCES') }}
+  </button>
 </form>
 
 {% endblock %}

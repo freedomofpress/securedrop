@@ -739,3 +739,68 @@ class RevokedToken(db.Model):
     id = Column(Integer, primary_key=True)
     journalist_id = Column(Integer, ForeignKey('journalists.id'))
     token = db.Column(db.Text, nullable=False, unique=True)
+
+
+class InstanceConfig(db.Model):
+    '''Versioned key-value store of settings configurable from the journalist
+    interface.  The current version has valid_until=None.
+    '''
+
+    __tablename__ = 'instance_config'
+    version = Column(Integer, primary_key=True)
+    valid_until = Column(DateTime, default=None, unique=True)
+
+    allow_document_uploads = Column(Boolean, default=True)
+
+    # Columns not listed here will be included by InstanceConfig.copy() when
+    # updating the configuration.
+    metadata_cols = ['version', 'valid_until']
+
+    def __repr__(self):
+        return "<InstanceConfig(version=%s, valid_until=%s)>" % (self.version, self.valid_until)
+
+    def copy(self):
+        '''Make a copy of only the configuration columns of the given
+        InstanceConfig object: i.e., excluding metadata_cols.
+        '''
+
+        new = type(self)()
+        for col in self.__table__.columns:
+            if col.name in self.metadata_cols:
+                continue
+
+            setattr(new, col.name, getattr(self, col.name))
+
+        return new
+
+    @classmethod
+    def get_current(cls):
+        '''If the database was created via db.create_all(), data migrations
+        weren't run, and the "instance_config" table is empty.  In this case,
+        save and return a base configuration derived from each setting's
+        column-level default.
+        '''
+
+        try:
+            return cls.query.filter(cls.valid_until == None).one()  # noqa: E711
+        except NoResultFound:
+            current = cls()
+            db.session.add(current)
+            db.session.commit()
+            return current
+
+    @classmethod
+    def set(cls, name, value):
+        '''Invalidate the current configuration and append a new one with the
+        requested change.
+        '''
+
+        old = cls.get_current()
+        old.valid_until = datetime.datetime.utcnow()
+        db.session.add(old)
+
+        new = old.copy()
+        setattr(new, name, value)
+        db.session.add(new)
+
+        db.session.commit()

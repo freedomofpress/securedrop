@@ -121,6 +121,7 @@ def make_blueprint(config):
 
         return render_template(
             'lookup.html',
+            allow_document_uploads=current_app.instance_config.allow_document_uploads,
             codename=g.codename,
             replies=replies,
             flagged=g.source.flagged,
@@ -131,16 +132,20 @@ def make_blueprint(config):
     @view.route('/submit', methods=('POST',))
     @login_required
     def submit():
+        allow_document_uploads = current_app.instance_config.allow_document_uploads
         msg = request.form['msg']
         fh = None
-        if 'fh' in request.files:
+        if allow_document_uploads and 'fh' in request.files:
             fh = request.files['fh']
 
         # Don't submit anything if it was an "empty" submission. #878
         if not (msg or fh):
-            flash(gettext(
-                "You must enter a message or choose a file to submit."),
-                  "error")
+            if allow_document_uploads:
+                flash(gettext(
+                    "You must enter a message or choose a file to submit."),
+                      "error")
+            else:
+                flash(gettext("You must enter a message."), "error")
             return redirect(url_for('main.lookup'))
 
         fnames = []

@@ -25,7 +25,7 @@ os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config
 
 from db import db
-from models import (InvalidPasswordLength, Journalist, Reply, Source,
+from models import (InvalidPasswordLength, InstanceConfig, Journalist, Reply, Source,
                     Submission)
 from .utils.instrument import InstrumentedApp
 
@@ -1285,6 +1285,27 @@ def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
     log_event = mocked_error_logger.call_args[0][0]
     assert ("Adding user 'username' failed: (builtins.NoneType) "
             "None\n[SQL: STATEMENT]\n[parameters: 'PARAMETERS']") in log_event
+
+
+def test_prevent_document_uploads(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        form = journalist_app_module.forms.SubmissionPreferencesForm(
+            prevent_document_uploads=True)
+        app.post(url_for('admin.update_submission_preferences'),
+                 data=form.data,
+                 follow_redirects=True)
+        assert InstanceConfig.get_current().allow_document_uploads is False
+
+
+def test_no_prevent_document_uploads(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        app.post(url_for('admin.update_submission_preferences'),
+                 follow_redirects=True)
+        assert InstanceConfig.get_current().allow_document_uploads is True
 
 
 def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
