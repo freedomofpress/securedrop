@@ -42,7 +42,7 @@ passphrases:
 
 
 The admin will also need to have a way to generate two-factor
-authentication tokens.
+authentication codes.
 
 .. include:: includes/otp-app.txt
 

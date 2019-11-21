@@ -5,7 +5,7 @@
 * an external hard drive for server backups.
 * a USB drive to store :ref:`backups of your Tails workstation drives <backup_workstations>`.
 * a network switch, if you use a firewall with fewer than four ports.
-* a hardware token for HOTP authentication, such as a YubiKey, if you want to
+* a security key for HOTP authentication, such as a YubiKey, if you want to
   use hardware-based two-factor authentication instead of a mobile app.
 * a USB drive with a physical write protection switch, or a USB write blocker,
   if you want to mitigate the risk of introducing malware from your network to

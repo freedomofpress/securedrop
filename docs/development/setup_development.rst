@@ -132,7 +132,7 @@ development.
 * **Password:** ``correct horse battery staple profanity oil chewy``
 * **TOTP secret:** ``JHCO GO7V CER3 EJ4L``
 
-If you need to generate the six digit token, use the TOTP secret in
+If you need to generate the six digit two-factor code, use the TOTP secret in
 combination with an authenticator application that implements
 `RFC 6238 <https://tools.ietf.org/html/rfc6238>`__, such as
 `FreeOTP <https://freeotp.github.io/>`__ (Android and iOS) or

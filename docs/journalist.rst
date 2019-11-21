@@ -53,22 +53,23 @@ computer, unless explicitly configured with an access token.
 
 To visit the *Journalist Interface*, click the *Journalist Interface* icon on the
 desktop. This will open Tor Browser to an ".onion" address. Log in with
-your username, passphrase, and two-factor authentication token, as
-shown in the first screenshot below. (If you have been provided with a YubiKey,
-see :doc:`Using YubiKey with the Journalist Interface <yubikey_setup>` for
+your username, passphrase, and two-factor code, as shown in the first screenshot
+below. (If you have been provided with a YubiKey, see
+:doc:`Using YubiKey with the Journalist Interface <yubikey_setup>` for
 detailed setup and usage information.)
 
 |Journalist Interface Login|
 
-Reset Passphrase or Two-factor Authentication Token
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Reset Passphrase or Two-factor Authentication Credentials
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If necessary, journalists may reset their user passphrase or two-factor
-authentication token in their user profile. To navigate to your user profile,
-log in to the *Journalist Interface* and click on the link in the upper right of
-the screen where it says **Logged on as <your user name>.**
+authentication credentials in their user profile. To navigate to your user
+profile, log in to the *Journalist Interface* and click on the link in the upper
+right of the screen where it says **Logged on as <your user name>.**
 
-If you have lost or forgotten your passphrase or two-factor authentication
-device, you will need to contact your SecureDrop admin for assistance.
+If you have lost or forgotten your passphrase or your two-factor device (i.e.
+your mobile phone or security key), you will need to contact your SecureDrop
+admin for assistance.
 
 |Journalist account profile|
 

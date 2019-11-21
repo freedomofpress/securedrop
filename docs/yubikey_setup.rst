@@ -12,7 +12,7 @@ requires some configuration steps using a separate software tool.
 What is a YubiKey?
 ------------------
 
-A YubiKey is a physical token used for two-factor authentication. They
+A YubiKey is a physical security key used for two-factor authentication. They
 are made by a company called Yubico and are `commercially available`_.
 
 .. _`commercially available`: https://www.yubico.com/products/yubikey-hardware/fido-u2f-security-key
@@ -28,7 +28,7 @@ Download and Launch the YubiKey Personalization Tool
 
    sudo apt-get update;
    sudo apt-get install yubikey-personalization-gui
-   
+
 #. Once you have downloaded and installed the personalization program,
    open a **Root Terminal** by choosing **Applications ▸ System Tools
    ▸ Root Terminal**.
