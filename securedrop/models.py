@@ -661,10 +661,10 @@ class Journalist(db.Model):
             # Prevent TOTP token reuse
             if user.last_token is not None:
                 if pyotp.utils.compare_digest(token, user.last_token):
-                    raise BadTokenException("previously used token "
+                    raise BadTokenException("previously used two-factor code "
                                             "{}".format(token))
         if not user.verify_token(token):
-            raise BadTokenException("invalid token")
+            raise BadTokenException("invalid two-factor code")
         if not user.valid_password(password):
             raise WrongPasswordException("invalid password")
         return user

@@ -142,7 +142,7 @@ can simply scan the following QR code:
 
 .. image:: ../images/devenv/test-users-totp-qrcode.png
 
-You can also generate the 2FA code using the Python interpreter:
+You can also generate the two-factor code using the Python interpreter:
 
 .. code:: python
 
