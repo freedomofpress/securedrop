@@ -175,7 +175,7 @@ Run the following commands via SSH from the *Admin Workstation*:
 .. code:: sh
 
   cd ~/Persistent/securedrop/
-  source .venv/bin/activate
+  source admin/.venv3/bin/activate
   cd install_files/ansible-base
   ansible all -b -m setup > server-facts.log
 
