@@ -83,7 +83,7 @@ class SiteConfig(object):
 
     class ValidateIP(Validator):
         def validate(self, document):
-            if re.match(r'((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}$',
+            if re.match(r'((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}$',  # lgtm [py/regex/unmatchable-dollar] # noqa: E501
                         document.text):
                 return True
             raise ValidationError(
@@ -279,13 +279,13 @@ class SiteConfig(object):
              None,
              lambda config: True],
             ['securedrop_app_gpg_public_key', 'SecureDrop.asc', str,
-             u'Local filepath to public key for '
+             u'Local filepath to public key for ' +
              'SecureDrop Application GPG public key',
              SiteConfig.ValidatePath(self.args.ansible_path),
              None,
              lambda config: True],
             ['securedrop_app_https_on_source_interface', False, bool,
-             u'Whether HTTPS should be enabled on '
+             u'Whether HTTPS should be enabled on ' +
              'Source Interface (requires EV cert)',
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes',
@@ -334,7 +334,7 @@ class SiteConfig(object):
              None,
              lambda config: True],
             ['journalist_gpg_fpr', '', str,
-             u'Full fingerprint for the journalist alerts '
+             u'Full fingerprint for the journalist alerts ' +
              u'GPG public key (optional)',
              SiteConfig.ValidateOptionalFingerprint(),
              self.sanitize_fingerprint,
@@ -370,7 +370,7 @@ class SiteConfig(object):
              None,
              lambda config: True],
             ['enable_ssh_over_tor', True, bool,
-             u'Enable SSH over Tor (recommended, disables SSH over LAN). '
+             u'Enable SSH over Tor (recommended, disables SSH over LAN). ' +
              u'If you respond no, SSH will be available over LAN only',
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes',
@@ -724,7 +724,7 @@ def run_tails_config(args):
 
 
 def check_for_updates_wrapper(args):
-    res, tag = check_for_updates(args)
+    check_for_updates(args)
     # Because the command worked properly exit with 0.
     return 0
 
