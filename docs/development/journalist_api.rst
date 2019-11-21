@@ -27,15 +27,15 @@ Clients shall send the following headers:
 Authentication
 ~~~~~~~~~~~~~~
 
-``POST /api/v1/token`` to get a token with the username, password, and 2FA
-token in the request body:
+``POST /api/v1/token`` to get a token with the username, password, and two-factor
+code in the request body:
 
 .. code:: sh
 
   {
-  	"username": "journalist",
-  	"passphrase": "monkey potato pizza quality silica growing deduce",
-  	"one_time_code": "123456"
+    "username": "journalist",
+    "passphrase": "monkey potato pizza quality silica growing deduce",
+    "one_time_code": "123456"
   }
 
 This will produce a response with your Authorization token:
@@ -58,7 +58,7 @@ HTTP Authorization header:
   Authorization: Token eyJhbGciOiJIUzI1NiIsImV4cCI6MTUzMDU4NjU4MiwifWF0IjoxNTMwNTc5MzgyfQ.eyJpZCI6MX0.P_PfcLMk1Dq5VCIANo-lJbu0ZyCL2VcT8qf9fIZsTCM
 
 This header will be checked with each API request to see if it is valid and
-not yet expired. Tokens currently expire after 8 hours. 
+not yet expired. Tokens currently expire after 8 hours.
 
 Logout
 ------

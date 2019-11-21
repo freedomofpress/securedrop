@@ -28,7 +28,7 @@ Countermeasures on the Application Code — SecureDrop Repository/Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -  Code (git tags) and releases (packages uploaded to apt) are signed with the airgapped signing key
 -  Protection is placed on master and develop branch on GitHub
--  For SecureDrop Developers, 2-factor authentication is mandated on GitHub
+-  For SecureDrop Developers, two-factor authentication is mandated on GitHub
 -  Community trust is built through 3 trusted code owners and code reviews
 
 Application Code — *Source Interface* and *Journalist Interface*
@@ -95,7 +95,8 @@ Countermeasures unique to *Journalist Interface*
     - Journalist/Admin passphrases are long and automatically generated
     - Passphrases are stored in a database hashed with a unique salt
     - Account generation/revocation/reset is restricted to Admin role
-    - Two-factor authentication is required through a TOTP token or a Yubikey
+    - Two-factor authentication is required (via a TOTP app, or an HOTP
+      device like a YubiKey)
 
 *Application Server* and *Monitor Server*
 -----------------------------------------
@@ -232,5 +233,5 @@ Countermeasures in User Behavior Recommendations
 -  `SecureDrop Deployment Guide <https://docs.securedrop.org/en/stable/deployment_practices.html>`__ gives best practices for proper administration of the SecureDrop system, and its public-facing properties like the Landing Page
 -  `Admin Guide <https://docs.securedrop.org/en/stable/admin.html>`__ gives instructions for long-term maintenance of the technical properties of the SecureDrop system, as well as operations to support Journalists
 -  All Admin tasks are completed over Tor/Tor authenticated Onion Services after installation
--  Any Journalist/Admin password/2FA token resets can only be done by an Admin with password-protected SSH capability or authenticated Onion Service credentials.
+-  Any Journalist/Admin password/2FA credentials resets can only be done by an Admin with password-protected SSH capability or authenticated Onion Service credentials.
 -  Persistent storage on the Admin Workstation is protected with LUKS/dm-crypt encryption

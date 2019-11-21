@@ -164,11 +164,11 @@ keep track of, so you should consider how you will label or identify them and
 buy drives accordingly. Drives that are physically larger are often easier to
 label (e.g. with tape, printed sticker or a label from a labelmaker).
 
-Two-factor Authenticator
-^^^^^^^^^^^^^^^^^^^^^^^^
+Two-factor Device
+^^^^^^^^^^^^^^^^^
 Two-factor authentication is used when connecting to different parts of the
 SecureDrop system. Each admin and each journalist needs a two-factor
-authenticator. We currently support two options for two-factor authentication:
+device. We currently support two options for two-factor authentication:
 
 * Your existing smartphone with an app that computes TOTP codes
   (e.g. FreeOTP `for Android <https://play.google.com/store/apps/details?id=org.fedorahosted.freeotp>`__ and `for iOS <https://itunes.apple.com/us/app/freeotp-authenticator/id872559395>`__).

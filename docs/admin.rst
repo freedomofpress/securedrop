@@ -163,7 +163,7 @@ enter.
 
 If FreeOTP was set up correctly, you will be redirected
 back to the Admin Interface and will see a confirmation that the
-two-factor token was verified.
+two-factor code was verified.
 
 .. include:: includes/otp-app.txt
 
@@ -184,12 +184,12 @@ inserting it into the workstation and pressing the button.
 |Verify YubiKey|
 
 If everything was set up correctly, you will be redirected back to the
-Admin Interface, where you should see a flashed message that says "Two
-factor token successfully verified for user *new username*!".
+Admin Interface, where you should see a flashed message that says "The
+two-factor code for user *new username* was verified successfully.".
 
 Congratulations! You have successfully set up a journalist on
 SecureDrop. Make sure the journalist remembers their username and
-passphrase and always has their 2 factor authentication device in their
+passphrase and always has their two-factor authentication device in their
 possession when they attempt to log in to SecureDrop.
 
 .. |SecureDrop main page|
