@@ -26,7 +26,7 @@ def make_blueprint(config):
                                  request.form['password'],
                                  request.form['token'])
             if user:
-                current_app.logger.info("'{}' logged in with the token {}"
+                current_app.logger.info("'{}' logged in with the two-factor code {}"
                                         .format(request.form['username'],
                                                 request.form['token']))
 

@@ -133,7 +133,7 @@ def make_blueprint(config):
                 return redirect(url_for("admin.index"))
             else:
                 flash(gettext(
-                    "There was a problem verifying the two-factor code. Please try again"),
+                    "There was a problem verifying the two-factor code. Please try again."),
                       "error")
 
         return render_template("admin_new_user_two_factor.html", user=user)

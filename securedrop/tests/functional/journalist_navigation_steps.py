@@ -342,7 +342,7 @@ class JournalistNavigationStepsMixin:
                 # Successfully verifying the code should redirect to the admin
                 # interface, and flash a message indicating success
                 flash_msg = self.driver.find_elements_by_css_selector(".flash")
-                assert ("Token in two-factor authentication accepted for user {}.").format(
+                assert "The two-factor code for user \"{user}\" was verified successfully.".format(
                     self.new_user["username"]
                 ) in [el.text for el in flash_msg]
 
@@ -721,12 +721,14 @@ class JournalistNavigationStepsMixin:
     def _visit_edit_hotp_secret(self):
         self._visit_edit_secret(
             "hotp",
-            "Reset 2FA for hardware tokens like Yubikey")
+            "Reset two-factor authentication for security keys like Yubikey")
 
     def _visit_edit_totp_secret(self):
         self._visit_edit_secret(
             "totp",
-            "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator")
+            "Reset two-factor authentication for mobile apps such as FreeOTP or "
+            "Google Authenticator"
+        )
 
     def _admin_visits_add_user(self):
         add_user_btn = self.driver.find_element_by_css_selector("button#add-user")
@@ -793,7 +795,7 @@ class JournalistNavigationStepsMixin:
             assert tip_opacity == "1"
 
             if not hasattr(self, "accept_languages"):
-                assert tip_text == "Reset 2FA for hardware tokens like Yubikey"
+                assert tip_text == "Reset two-factor authentication for security keys like Yubikey"
 
             self.safe_click_by_id("button-reset-two-factor-hotp")
 
@@ -823,7 +825,10 @@ class JournalistNavigationStepsMixin:
 
             assert tip_opacity == "1"
             if not hasattr(self, "accept_languages"):
-                expected_text = "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
+                expected_text = (
+                    "Reset two-factor authentication for mobile apps such as FreeOTP "
+                    "or Google Authenticator"
+                )
                 assert tip_text == expected_text
 
             self.safe_click_by_id("button-reset-two-factor-totp")
