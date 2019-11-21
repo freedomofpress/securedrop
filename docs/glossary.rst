@@ -137,14 +137,14 @@ The *Submission Private Key* should never be accessible to a computer with
 Internet connectivity. Instead, it should remain on the *Secure Viewing Station*
 and on offline backup storage.
 
-Two-Factor Authenticator
-------------------------
+Two-Factor Authentication
+-------------------------
 
 There are several places in the SecureDrop architecture where two-factor
 authentication is used to protect access to sensitive information or
 systems. These instances use the standard TOTP and/or HOTP algorithms,
-and so a variety of devices can be used to provide two-factor
-authentication for devices. We recommend using one of:
+and so a variety of devices can be used to generate 6-digit two-factor
+authentication codes. We recommend using one of:
 
 -  FreeOTP `for Android <https://play.google.com/store/apps/details?id=org.fedorahosted.freeotp>`__ or `for iOS <https://itunes.apple.com/us/app/freeotp-authenticator/id872559395>`__ installed
 -  A `YubiKey <https://www.yubico.com/products/yubikey-hardware/>`__

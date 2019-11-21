@@ -84,7 +84,7 @@
 {% else %}
 <p>{{ gettext('If your two-factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em>') }}</p>
 {% endif %}
-<p>{{ gettext('To reset two-factor authentication for mobile apps such as FreeOTP, choose the first option. For hardware tokens like the YubiKey, choose the second one.') }}</p>
+<p>{{ gettext('To reset two-factor authentication for mobile apps such as FreeOTP, choose the first option. For security keys like the YubiKey, choose the second one.') }}</p>
 
 {% if user %}
   {% set totp_reset_url = url_for('admin.reset_two_factor_totp') %}
@@ -109,7 +109,7 @@
 </form>
 {%- endmacro %}
 
-{{ twofa_reset(user, totp_reset_url, "totp", gettext("Reset two-factor authentication for mobile apps, such as FreeOTP"), gettext("RESET APP TOKEN"))}}
-{{ twofa_reset(user, hotp_reset_url, "hotp", gettext("Reset two-factor authentication for hardware tokens, like a YubiKey"), gettext("RESET HARDWARE TOKEN"))}}
+{{ twofa_reset(user, totp_reset_url, "totp", gettext("Reset two-factor authentication for mobile apps, such as FreeOTP"), gettext("RESET MOBILE APP CREDENTIALS"))}}
+{{ twofa_reset(user, hotp_reset_url, "hotp", gettext("Reset two-factor authentication for security keys, like a YubiKey"), gettext("RESET SECURITY KEY CREDENTIALS"))}}
 
 {% endblock %}

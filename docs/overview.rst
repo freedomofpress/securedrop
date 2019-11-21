@@ -154,7 +154,7 @@ Provisioning & Training
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Once SecureDrop is installed, journalists will need to be provided with
-accounts, two-factor tokens, workstations, and so on — and then
+accounts, two-factor credentials, workstations, and so on — and then
 :doc:`trained <training_schedule>` to use these tools safely and reliably. You
 will probably also need to train additional backup admins so that you
 can be sure that your SecureDrop setup keeps running even when your main
