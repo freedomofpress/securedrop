@@ -16,14 +16,14 @@ You should keep your SecureDrop workstations updated with:
 * **Tails updates**
 * **SecureDrop workstation updates**
 
-You should apply Tails updates to your Tails drive as they are released, as they
-often contain critical security fixes. The *Journalist Workstation* Tails drive, once booted and
-connected to Tor, will alert you if upgrades are available. For most Tails
-upgrades, you can simply follow the steps in the Tails Upgrader that appears on
-screen to update your Tails drive. However, sometimes Tails upgrades are "manual"
-which means that you should follow the instructions in
-`Tails Upgrade Documentation`_ to upgrade the drives. Talk to your SecureDrop
-administrator if you have trouble.
+You should apply Tails updates to your Tails drive as they are released, as
+they often contain critical security fixes. The *Journalist Workstation* Tails
+drive, once booted and connected to Tor, will alert you if upgrades are
+available. For most Tails upgrades, you can simply follow the steps in the
+Tails Upgrader that appears on screen to update your Tails drive. However,
+sometimes Tails upgrades are "manual," which means that you should follow the
+instructions in the `Tails Upgrade Documentation`_ to upgrade the drives. Talk
+to your SecureDrop administrator if you have trouble.
 
 .. include:: includes/update-gui.txt
 
@@ -51,11 +51,11 @@ in the Tor Browser. By design, this Onion Service address is only accessible
 from your *Journalist Workstation*; it will not work in Tor Browser on another
 computer, unless explicitly configured with an access token.
 
-To visit the *Journalist Interface*, click the *Journalist Interface* icon on the
-desktop. This will open Tor Browser to an ".onion" address. Log in with
-your username, passphrase, and two-factor code, as shown in the first screenshot
-below. (If you have been provided with a YubiKey, see
-:doc:`Using YubiKey with the Journalist Interface <yubikey_setup>` for
+To visit the *Journalist Interface*, click the *Journalist Interface* icon on
+the desktop. This will open Tor Browser to an ".onion" address. Log in with
+your username, passphrase, and two-factor authentication token, as
+shown in the first screenshot below. (If you have been provided with a YubiKey,
+see :doc:`Using YubiKey with the Journalist Interface <yubikey_setup>` for
 detailed setup and usage information.)
 
 |Journalist Interface Login|
@@ -63,9 +63,9 @@ detailed setup and usage information.)
 Reset Passphrase or Two-factor Authentication Credentials
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If necessary, journalists may reset their user passphrase or two-factor
-authentication credentials in their user profile. To navigate to your user
-profile, log in to the *Journalist Interface* and click on the link in the upper
-right of the screen where it says **Logged on as <your user name>.**
+authentication token in their user profile. To navigate to your user profile,
+log in to the *Journalist Interface* and click on the link in the upper right
+of the screen where it says **Logged on as <your user name>.**
 
 If you have lost or forgotten your passphrase or your two-factor device (i.e.
 your mobile phone or security key), you will need to contact your SecureDrop
@@ -143,8 +143,8 @@ Documents and messages are encrypted to the SecureDrop installation's
 *Submission Public Key*. In order to read the messages or look at the documents
 you will need to transfer them to the *Secure Viewing Station*, which holds
 the *Submission Private Key*. To recall the conversation history between your
-organization and sources, you can also download replies and transfer them to the
-*Secure Viewing Station* for decryption.
+organization and sources, you can also download replies and transfer them to
+the *Secure Viewing Station* for decryption.
 
 Flag for Reply
 ~~~~~~~~~~~~~~
@@ -163,9 +163,9 @@ displays that source's documents and replies.
 |Flag for reply notification|
 
 You will not be able to reply until after the source logs in again and
-sees that you would like to talk to them. So you may have to sit and wait. After
-the source sees that you'd like to reply, a GPG key pair will automatically be
-generated and you can log back in and send a reply.
+sees that you would like to talk to them. So you may have to sit and wait.
+After the source sees that you'd like to reply, a GPG key pair will
+automatically be generated and you can log back in and send a reply.
 
 Moving Documents to the *Secure Viewing Station*
 ------------------------------------------------
@@ -174,8 +174,8 @@ Step 1: Download the encrypted submission
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Documents and messages sent by sources can only be decrypted and viewed on the
-*Secure Viewing Station*. After clicking on an individual source, you will see the
-page below with any documents or messages the source has sent you. Documents
+*Secure Viewing Station*. After clicking on an individual source, you will see
+the page below with any documents or messages the source has sent you. Documents
 always end with ``-doc.gz.gpg``, while messages always end with ``-msg.gpg``.
 
 Click on a document or message name to save it, or select a number of documents
@@ -230,12 +230,12 @@ device is known as your *Transfer Device*.
 
 .. note::
 
-   If the *Transfer Device* was set up according to our recommendations, you will
-   be prompted for a decryption passphrase on the *Journalist Workstation* and
-   the *Secure Viewing Station* before being able to use it in a given session.
-   We recommend storing this passphrase in your own personal password manager
-   (e.g., on your smartphone), so that it is readily accessible to you whenever
-   you need it.
+   If the *Transfer Device* was set up according to our recommendations, you
+    will be prompted for a decryption passphrase on the *Journalist
+    Workstation* and the *Secure Viewing Station* before being able to use it
+    in a given session. We recommend storing this passphrase in your own
+    personal password manager (e.g., on your smartphone), so that it is readily
+    accessible to you whenever you need it.
 
 You can right-click the file and select **Copy to**, then select the *Transfer
 Device*, as shown in the screenshots below.
@@ -245,13 +245,15 @@ Device*, as shown in the screenshots below.
 |Copy to transfer device 2|
 
 This will leave a redundant copy behind in the Tor Browser folder. If you have
-downloaded the file to the non-persistent "Tor Browser" folder (as recommended),
-the redundant copy will disappear when the computer is shut down or rebooted.
+downloaded the file to the non-persistent "Tor Browser" folder (as
+recommended), the redundant copy will disappear when the computer is shut down
+or rebooted.
 
 "Eject" the *Transfer Device* by clicking the eject icon next to its name in
 the file manager. Wait for this operation to complete (the eject icon will
-disappear), then unplug the *Transfer Device*. "Ejecting" the drive in this manner
-ensures that all write operations are completed before you physically unplug it.
+disappear), then unplug the *Transfer Device*. "Ejecting" the drive in this
+manner ensures that all write operations are completed before you physically
+unplug it.
 
 Step 3: Decrypt and view the submission on the *Secure Viewing Station*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -264,10 +266,10 @@ have logged in, plug in the *Transfer Device*.
           are on separate Tails USB drives.
 
 Click on the **Home** icon on your desktop, then on the *Transfer
-Device*. Copy the file into your **Persistent** folder. You can do so by opening
-a new window with the **Persistent** folder and dragging the file from one
-window to another. A faster method is to drag the file to the **Persistent**
-shortcut, as in the screenshot below:
+Device*. Copy the file into your **Persistent** folder. You can do so by
+opening a new window with the **Persistent** folder and dragging the file from
+one window to another. A faster method is to drag the file to the
+**Persistent** shortcut, as in the screenshot below:
 
 |Copy files to persistent|
 
@@ -277,10 +279,9 @@ shortcut, as in the screenshot below:
    them. Otherwise you might accidentally decrypt them on the USB stick, and
    they could be recoverable in the future.
 
-After successfully copying them to the *Secure Viewing Station*, erase the files
-from your *Transfer Device*. Ensure you're viewing the *Transfer Device* folder,
-then right click on the files that need removal and click "Wipe" to securely
-delete the files from your device:
+After successfully copying them to the *Secure Viewing Station*, erase the
+files from your *Transfer Device*. Ensure you're viewing the *Transfer Device* folder, then right click on the files that need removal and click "Wipe" to
+securely delete the files from your device:
 
 |Wiping documents|
 
@@ -288,9 +289,10 @@ To decrypt and view documents or messages, return to your **Persistent** folder.
 All key actions are initiated by double-clicking:
 
 - Double-clicking archives in ZIP or gzip format will open the "Archive Manager"
-  application (called "file-roller" on the command line), which allows you to extract the contents.
+  application (called ``file-roller`` on the command line), which allows you to extract the contents.
 
-- Double-clicking files that end in ``.gpg`` will attempt to decrypt the contents to the same directory. If you have configured a passphrase for your
+- Double-clicking files that end in ``.gpg`` will attempt to decrypt the
+  contents to the same directory. If you have configured a passphrase for your
   *Submission Key*, you will be prompted for it.
 
 - Double-clicking decrypted messages or documents will attempt to open them in a
@@ -315,8 +317,7 @@ a document with an incorrect or missing file extension.
    problems when attempting to open the file due to the loss of its file
    extension.
 
-When you double-click an archive to open it, you should see it in the "File
-Roller" application. It looks like this:
+When you double-click an archive to open it, you should see it in the "Archive Manager" application. It looks like this:
 
 |Opened archive|
 
@@ -438,17 +439,23 @@ highly sensitive submissions.
 Removing Metadata
 ~~~~~~~~~~~~~~~~~
 
-.. tip:: For detailed information about removing metadata from documents, check out this in-depth `guide to removing metadata`_.
+.. tip:: For detailed information about removing metadata from documents, check
+   out this in-depth `guide to removing metadata`_.
 
 Tails comes with the `Metadata Anonymisation Toolkit 2`_ (MAT2) that
 is used to help strip metadata from a variety of types of files,
 including png, jpg, OpenOffice/LibreOffice documents, Microsoft Office
 documents, pdf, tar, tar.bz2, tar.gz, zip, mp3, mp2, mp1, mpa, ogg,
-and flac. We recommend using this and other tools to work with documents within Tails for as much of your workflow as possible.
+and flac. We recommend using this and other tools to work with documents within
+Tails for as much of your workflow as possible.
 
-Tails 4 replaces MAT with MAT2, which is usable via the command line and via a context menu in the **Files** application (called "nautilus" on the command line).
+Tails 4 replaces MAT with MAT2, which is usable via the command line and via a
+context menu in the **Files** application (called ``nautilus`` on the command
+line).
 
-You can use MAT2 via the **Files** application by browsing to **Places** ▸ **(Your file's location)** and right-clicking on your file. In the context menu, select **Remove metadata**.
+You can use MAT2 via the **Files** application by browsing to **Places** ▸
+**(Your file's location)** and right-clicking on your file. In the context
+menu, select **Remove metadata**.
 
 |mat2 context menu|
 
@@ -456,15 +463,23 @@ Note that this does not alter the original file--it creates a clean copy.
 
 |mat2 cleaned|
 
-To use MAT2 on the command line, type ``man mat2`` to see a list of available actions you can take with MAT2. For example, you can view the metadata of a file with ``mat2 myfile --show``.
+To use MAT2 on the command line, type ``man mat2`` to see a list of available
+actions you can take with MAT2. For example, you can view the metadata of a
+file with ``mat2 myfile --show``.
 
 |mat2 cli show|
 
-You can create a "clean" version of the document with ``mat2 myfile``, again noting that this does not erase the metadata on the original file. This is equivalent to the "Remove metadata" context menu option.
+You can create a "clean" version of the document with ``mat2 myfile``, again
+noting that this does not erase the metadata on the original file. This is
+equivalent to the "Remove metadata" context menu option.
 
-Note that even after running MAT2, you should carefully inspect files to ensure that all metadata has been wiped, or convert them to a simpler file format (for example, converting a ``.xls`` file to a ``.csv``) to ensure that metadata is not left behind in error.
+Note that even after running MAT2, you should carefully inspect files to ensure
+that all metadata has been wiped, or convert them to a simpler file format (for
+example, converting a ``.xls`` file to a ``.csv``) to ensure that metadata is
+not left behind in error.
 
-When you no longer need documents, in the Files application, you can right-click on them and choose **Wipe** to securely delete them.
+When you no longer need documents, right-click them in the Files application
+and choose **Wipe** to securely delete them.
 
 |Wiping documents|
 
@@ -511,7 +526,8 @@ are important steps you can take to protect yourself:
 4. **Never scan QR codes embedded in documents using a network-connected
    device.**
 
-   `QR codes can contain malicious links`_ that your device will automatically visit.
+   `QR codes can contain malicious links`_ that your device will automatically
+   visit.
    In general, be careful when opening any links provided in a SecureDrop
    submission, as this can leak information to third parties. If you are unsure
    if a link is safe to click, you should consult internally, or contact
@@ -621,10 +637,8 @@ To access the *Export Device* on your everyday workstation, follow these steps:
 7. Open the *Export Device* in your operating system's file manager, and copy
    the contents of interest to your everyday workstation.
 
-As a security precaution, we recommend deleting the files on the *Export Device*
-after each copy operation. If you are using write protection, you have to perform
-this step on the *Secure Viewing Station* to get the security benefits of write
-protection.
+As a security precaution, we recommend deleting the files on the *Export
+Device* after each copy operation. If you are using write protection, you have to perform this step on the *Secure Viewing Station* to get the security benefits of write protection.
 
 When you are done, switch back to the VeraCrypt window, and click **Dismount**.
 
