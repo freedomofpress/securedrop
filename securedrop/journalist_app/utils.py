@@ -101,8 +101,8 @@ def validate_user(username, password, token, error_message=None):
                 if user.is_totp:
                     login_flashed_msg += " "
                     login_flashed_msg += gettext(
-                        "Please wait for a new code from your two-factor device"
-                        " (mobile app or security key) before trying again.")
+                        "Please wait for a new code from your two-factor mobile"
+                        " app or security key before trying again.")
             except Exception:
                 pass
 
