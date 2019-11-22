@@ -26,12 +26,10 @@ EXAMPLES = '''
     ossec_version: "3.0.0"
 '''
 
-import re  # noqa: F401
-
 
 HAS_REQUESTS = True
 try:
-    import requests  # noqa: F401
+    import requests  # lgtm [py/unused-import] # noqa: F401
 except ImportError:
     HAS_REQUESTS = False
 
@@ -80,7 +78,7 @@ def main():
     ossec_version = module.params['ossec_version']
     try:
         ossec_config = OSSECURLs(ossec_version=ossec_version)
-    except:  # noqa: E722
+    except Exception:
         msg = ("Failed to find checksum information for OSSEC v{}."
                "Ensure you have the proper release specified, "
                "and check the download page to confirm: "
