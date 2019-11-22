@@ -15,7 +15,7 @@
 <p>{{ gettext("Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:") }}</p>
 <p class="center"><span id="shared-secret">{{ user.formatted_otp_secret }}</span></p>
 
-<p>{{ gettext('Once you have pair FreeOTP with this account, enter the 6-digit code below:') }}</p>
+<p>{{ gettext('Once you have paired FreeOTP with this account, enter the 6-digit code below:') }}</p>
 {% else %}
 <h1>{{ gettext('Enable YubiKey (OATH-HOTP)') }}</h1>
 <p>{{ gettext('Once you have configured your YubiKey, enter the 6-digit code below:') }}</p>
