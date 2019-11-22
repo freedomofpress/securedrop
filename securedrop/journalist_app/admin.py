@@ -127,14 +127,13 @@ def make_blueprint(config):
             token = request.form['token']
             if user.verify_token(token):
                 flash(gettext(
-                    "Token in two-factor authentication "
-                    "accepted for user {user}.").format(
-                        user=user.username),
+                    "The two-factor code for user \"{user}\" was verified "
+                    "successfully.").format(user=user.username),
                     "notification")
                 return redirect(url_for("admin.index"))
             else:
                 flash(gettext(
-                    "Could not verify token in two-factor authentication."),
+                    "There was a problem verifying the two-factor code. Please try again."),
                       "error")
 
         return render_template("admin_new_user_two_factor.html", user=user)

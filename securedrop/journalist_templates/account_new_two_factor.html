@@ -2,7 +2,7 @@
 {% block body %}
 {% if user.is_totp %}
 <h1>{{ gettext('Enable FreeOTP') }}</h1>
-<p>{{ gettext("You're almost done! To finish resetting your two-factor authentication, follow the instructions below to set up FreeOTP. Once you've added the entry for your account in the app, enter one of the 6-digit codes from the app to confirm that two factor authentication is set up correctly.") }}</p>
+<p>{{ gettext("You're almost done! To finish resetting your two-factor authentication, follow the instructions below to set up FreeOTP. Once you've added the entry for your account in the app, enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly.") }}</p>
 
 <ol>
   <li>{{ gettext('Install FreeOTP on your phone') }}</li>
@@ -11,11 +11,12 @@
   <li>{{ gettext('Your phone will now be in "scanning" mode. When you are in this mode, scan the barcode below:') }}</li>
 </ol>
 <div id="qrcode-container">{{ user.shared_secret_qrcode }}</div>
-<p>{{ gettext("Can't scan the barcode? Enter the following code manually:") }} <span id="shared-secret">{{ user.formatted_otp_secret }}</span></p>
-<p>{{ gettext("Once you have scanned the barcode, enter the 6-digit code below:") }}</p>
+<p>{{ gettext("Can't scan the barcode? You can manually pair FreeOTP with your SecureDrop account by entering the following two-factor secret into the app:") }}
+<p class="center"><span id="shared-secret">{{ user.formatted_otp_secret }}</span></p>
+<p>{{ gettext("Once you have paired FreeOTP with this account, enter the 6-digit verification code below:") }}</p>
 {% else %}
 <h1>{{ gettext('Enable YubiKey (OATH-HOTP)') }}</h1>
-<p>{{ gettext('Once you have configured your YubiKey, enter the 6-digit code below:') }}</p>
+<p>{{ gettext('Once you have configured your YubiKey, enter the 6-digit verification code below:') }}</p>
 {% endif %}
 <form id="check-token" method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">

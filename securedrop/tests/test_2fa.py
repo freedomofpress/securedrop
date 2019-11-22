@@ -102,7 +102,7 @@ def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
 
                 assert resp.status_code == 200
                 ins.assert_message_flashed(
-                    'Could not verify token in two-factor authentication.',
+                    'There was a problem verifying the two-factor code. Please try again.',
                     'error')
 
         # last_token should be set to the token we just tried to use
@@ -118,8 +118,9 @@ def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
                                         uid=test_admin['id']),
                                 data=dict(token=invalid_token))
                 ins.assert_message_flashed(
-                    'Could not verify token in two-factor authentication.',
-                    'error')
+                    'There was a problem verifying the two-factor code. Please try again.',
+                    'error'
+                )
 
 
 def test_bad_token_fails_to_verify_on_new_user_two_factor_page(
@@ -139,8 +140,9 @@ def test_bad_token_fails_to_verify_on_new_user_two_factor_page(
 
                 assert resp.status_code == 200
                 ins.assert_message_flashed(
-                    'Could not verify token in two-factor authentication.',
-                    'error')
+                    'There was a problem verifying the two-factor code. Please try again.',
+                    'error'
+                )
 
         # last_token should be set to the token we just tried to use
         with journalist_app.app_context():
@@ -155,5 +157,6 @@ def test_bad_token_fails_to_verify_on_new_user_two_factor_page(
                 resp = app.post(url_for('account.new_two_factor'),
                                 data=dict(token=invalid_token))
                 ins.assert_message_flashed(
-                    'Could not verify token in two-factor authentication.',
-                    'error')
+                    'There was a problem verifying the two-factor code. Please try again.',
+                    'error'
+                )
