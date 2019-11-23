@@ -1,0 +1,10 @@
+{# these are flashed messages for the logo upload file verifiaction #}
+{% with messages = get_flashed_messages(with_categories=True, category_filter=["submission-preferences-success"]) %}
+  {% for category, message in messages %}
+    {% set category_status = category[23:] %}
+      <div class="flash {{ category_status }}">
+        <img src="{{ url_for('static', filename='i/success_checkmark.png') }}" height="17" width="20">
+        {{ message }}
+      </div>
+  {% endfor %}
+{% endwith %}
