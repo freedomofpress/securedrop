@@ -144,7 +144,6 @@ def delete_disconnected_fs_submissions(args):
         time_elapsed = 0.0
         rate = 1.0
         filecount = len(disconnected_files)
-        eta = 1.0
         eta_msg = ""
         for i, f in enumerate(disconnected_files, 1):
             remove = args.force
