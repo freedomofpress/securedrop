@@ -3,7 +3,7 @@ import binascii
 import gzip
 import os
 import re
-import tempfile
+import tempfile  # lgtm [py/import-and-import-from]
 import zipfile
 
 from flask import current_app
@@ -18,7 +18,7 @@ import rm
 from worker import create_queue
 
 
-import typing
+import typing  # lgtm [py/import-and-import-from]
 
 if typing.TYPE_CHECKING:
     # flake8 can not understand type annotation yet.

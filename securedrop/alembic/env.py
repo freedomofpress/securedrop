@@ -1,6 +1,6 @@
 from __future__ import with_statement
 
-import os
+import os  # lgtm [py/import-and-import-from]
 import sys
 
 from alembic import context

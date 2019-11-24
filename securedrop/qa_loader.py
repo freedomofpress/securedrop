@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import math
-import os
+import os  # lgtm [py/import-and-import-from]
 import random
 import string
 import sys
