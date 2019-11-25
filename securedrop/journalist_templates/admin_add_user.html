@@ -56,7 +56,7 @@
   <p>{{ gettext("The user's password will be:") }} <span class="password" id="password">{{ password }}</span></p>
   <p>
     {{ form.is_admin(id="is-admin") }}
-    <label for="is_admin">{{ gettext('Is Admin') }}</label>
+    <label for="is-admin">{{ gettext('Is Admin') }}</label>
     <br>
     {% for error in form.is_admin.errors %}
       <span class="form-validation-error">{{ error }}</span>
@@ -64,7 +64,7 @@
   </p>
   <p>
     {{ form.is_hotp(id="is-hotp") }}
-    <label for="is_hotp">{{ gettext("Is using a YubiKey [HOTP]") }} </label>
+    <label for="is-hotp">{{ gettext("Is using a YubiKey [HOTP]") }} </label>
     {{ form.otp_secret(placeholder=gettext('HOTP Secret'), size="60") }}
     <br>
     {% for error in form.is_hotp.errors + form.otp_secret.errors %}
