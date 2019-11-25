@@ -23,7 +23,7 @@ from journalist_app.utils import (get_source, logged_in,
 from models import InstanceConfig, Journalist
 from store import Storage
 
-import typing
+import typing  # lgtm [py/import-and-import-from]
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
 if typing.TYPE_CHECKING:
     # flake8 can not understand type annotation yet.

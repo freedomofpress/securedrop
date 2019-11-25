@@ -22,7 +22,7 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from db import db
 
-import typing
+import typing  # lgtm [py/import-and-import-from]
 
 if typing.TYPE_CHECKING:
     # flake8 can not understand type annotation yet.
@@ -782,7 +782,7 @@ class InstanceConfig(db.Model):
         '''
 
         try:
-            return cls.query.filter(cls.valid_until == None).one()  # noqa: E711
+            return cls.query.filter(cls.valid_until == None).one()  # lgtm [py/test-equals-none]  # noqa: E711, E501
         except NoResultFound:
             current = cls()
             db.session.add(current)

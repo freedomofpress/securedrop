@@ -2,7 +2,7 @@
 
 import config as _config
 
-import typing
+import typing  # lgtm [py/import-and-import-from]
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
 if typing.TYPE_CHECKING:
     # flake8 can not understand type annotation yet.
