@@ -2,6 +2,9 @@ import tempfile
 import time
 import json
 
+import pytest
+from selenium.common.exceptions import NoSuchElementException
+
 
 class SourceNavigationStepsMixin:
     def _is_on_source_homepage(self):
@@ -213,3 +216,10 @@ class SourceNavigationStepsMixin:
         if not hasattr(self, "accept_languages"):
             expected_text = "Your session timed out due to inactivity."
             assert expected_text in notification.text
+
+    def _source_sees_document_attachment_item(self):
+        assert self.driver.find_element_by_class_name("attachment") is not None
+
+    def _source_does_not_sees_document_attachment_item(self):
+        with pytest.raises(NoSuchElementException):
+            self.driver.find_element_by_class_name("attachment")
