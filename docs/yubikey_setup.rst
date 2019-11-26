@@ -13,9 +13,13 @@ What is a YubiKey?
 ------------------
 
 A YubiKey is a physical security key used for two-factor authentication. They
-are made by a company called Yubico and are `commercially available`_.
+are made by a company called Yubico and are `commercially available`_. The 
+*Journalist Interface* uses a feature called OTP, which is supported by most
+types of Yubikey, but not the blue Security Key series. Before setting up
+journalist accounts with key-based two-factor authentication, ensure that their
+security key supports OTP.
 
-.. _`commercially available`: https://www.yubico.com/products/yubikey-hardware/fido-u2f-security-key
+.. _`commercially available`: https://www.yubico.com/products/yubikey-hardware/
 
 Download and Launch the YubiKey Personalization Tool
 ----------------------------------------------------
