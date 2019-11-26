@@ -68,6 +68,25 @@ class NotEncrypted(Exception):
     pass
 
 
+def safe_renames(old, new):
+    """safe_renames(old, new)
+
+    This is a modified version of Python's os.renames that does not
+    prune directories.
+    Super-rename; create directories as necessary without deleting any
+    left empty.  Works like rename, except creation of any intermediate
+    directories needed to make the new pathname good is attempted
+    first.
+    Note: this function can fail with the new directory structure made
+    if you lack permissions needed to unlink the leaf directory or
+    file.
+    """
+    head, tail = os.path.split(new)
+    if head and tail and not os.path.exists(head):
+        os.makedirs(head)
+    os.rename(old, new)
+
+
 class Storage:
 
     def __init__(self, storage_path, temp_dir, gpg_key):
@@ -207,7 +226,7 @@ class Storage:
         """
         Moves content from the store to the shredder for secure deletion.
 
-        Python's os.renames (and the underlying rename(2) calls) will
+        Python's safe_renames (and the underlying rename(2) calls) will
         silently overwrite content, which could bypass secure
         deletion, so we create a temporary directory under the
         shredder directory and move the specified content there.
@@ -230,7 +249,7 @@ class Storage:
         relpath = os.path.relpath(path, start=self.storage_path)
         dest = os.path.join(tempfile.mkdtemp(dir=self.__shredder_path), relpath)
         current_app.logger.info("Moving {} to shredder: {}".format(path, dest))
-        os.renames(path, dest)
+        safe_renames(path, dest)
 
     def clear_shredder(self):
         current_app.logger.info("Clearing shredder")
