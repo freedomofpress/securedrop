@@ -49,8 +49,9 @@ hub which may reduce transfer speeds.
 Preparing the Backup Device
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First you must boot the *primary Tails USB* drive. Ensure you set an administrator
-password set at the login screen. Then navigate to **Applications** ▸ **Utilities** ▸ **Disks**.
+First you must boot the *primary Tails USB* drive. Ensure you set an
+administrator password set at the login screen. Then navigate to
+**Applications** ▸ **Utilities** ▸ **Disks**.
 
 |Applications Utilities Disks|
 
@@ -69,8 +70,11 @@ Fill out the form as follows:
 |Format Backup Drive|
 
 * **Erase**: `Don't overwrite existing data (Quick)`
-* **Type**: `Encrypted, compatible with Linux systems (LUKS + Ext4)`
+* **Type**: `Internal disk for use with other Linux systems only (Ext4)`, and
+             make sure `Password protect volume (LUKS)` is checked
 * **Name**: `Backup`
+
+|Backup Drive Passphrase|
 
 .. warning:: Since this will serve as a long-term backup, **make sure to
  use a strong passphrase**.
@@ -123,12 +127,12 @@ Then, copy the contents of the device's persistent volume to the directory using
 
 
 .. note:: Please make sure to include the trailing ``/`` in the directory
-          paths in the command above, otherwise the files will not 
+          paths in the command above, otherwise the files will not
           be backed up correctly.
 
-Once complete, unmount the TailsData partition by clicking the Eject button 
-beside its entry in the lefthand column of the file manager. When its entry is 
-no longer shown in the lefthand column, it is save to remove the 
+Once complete, unmount the TailsData partition by clicking the Eject button
+beside its entry in the lefthand column of the file manager. When its entry is
+no longer shown in the lefthand column, it is save to remove the
 *Admin Workstation* USB.
 
 Repeat these steps for every device, making a new folder on the backup device
@@ -138,7 +142,7 @@ Finally, once you have completed the steps described in this section for each
 USB drive, unmount the Backup partition by clicking its Eject button. Wait until
 the Backup USB can be safely removed, and store it somewhere safely.
 
-.. note:: After the Eject button is clicked, it may be take some time before 
+.. note:: After the Eject button is clicked, it may be take some time before
           the drive can be safely removed. Wait until its entry  is removed from
           the lefthand column of the file manager.
 
@@ -147,13 +151,13 @@ the Backup USB can be safely removed, and store it somewhere safely.
 Restoring a Workstation from a Backup
 -------------------------------------
 
-To recreate a backed-up *Admin Workstation*, *Journalist Workstation*, or 
-*Secure Viewing Station* Tails USB,  you will need 
+To recreate a backed-up *Admin Workstation*, *Journalist Workstation*, or
+*Secure Viewing Station* Tails USB,  you will need
 
 - your Backup USB containing the persistent volume to be restored,
-- a blank USB stick to be set up as the new workstation USB,  
-- an airgapped machine and a USB with Tails already installed, referred to as 
-  the host Tails USB in this document. The host Tails USB is only used to 
+- a blank USB stick to be set up as the new workstation USB,
+- an airgapped machine and a USB with Tails already installed, referred to as
+  the host Tails USB in this document. The host Tails USB is only used to
   transfer files between the Backup USB and the new workstation USB.
 
 The process will require 3 USB ports - if necessary, you can use a USB hub. We
@@ -163,10 +167,10 @@ Prepare the new Tails USB
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Follow the guide to :ref:`creating a Tails USB <set_up_tails>` to install
-Tails and create a persistent volume on the blank USB stick to create the new 
+Tails and create a persistent volume on the blank USB stick to create the new
 workstation USB.
 
- 
+
 Open the Backup USB and new Tails Persistent Volume
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -178,42 +182,43 @@ the Backup USB. Click its entry in the lefthand column and enter its decryption
 passphrase when prompted. Its volume name (``Backup`` in the instructions above)
 will appear in place of the generic ``N.M GB Encrypted`` name.
 
-Next, insert the new workstation USB, and click its entry in the lefhand column. When
-prompted, enter its persistent volume's passphrase. The volume name ``TailsData``
-will appear in the lefthand column.
+Next, insert the new workstation USB, and click its entry in the lefthand
+column. When prompted, enter its persistent volume's passphrase. The volume
+name ``TailsData`` will appear in the lefthand column.
 
 Copy the Backup to the New Workstation USB's Persistent Volume
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Open a terminal by navigating to **Applications** ▸ **Favorites** 
+Open a terminal by navigating to **Applications** ▸ **Favorites**
 ▸ **Terminal** . Next, use the ``rsync`` command to copy the appropriate backup
-folder to the new workstation USB's persistent volume. For example, if the backup
-folder to be copied is named ``admin-backup``, run the following command:
+folder to the new workstation USB's persistent volume. For example, if the
+backup folder to be copied is named ``admin-backup``, run the following command:
 
 .. code:: sh
- 
+
   sudo bash -c "rsync -a --info=progress2 --no-specials --no-devices \
       /media/amnesia/Backup/admin-backup/ /media/amnesia/TailsData/ && sync"
 
 .. note:: Please make sure to include the trailing ``/`` in the directory
-          paths in the command above, otherwise the backup files will not 
+          paths in the command above, otherwise the backup files will not
           be restored correctly.
 
-Once the command is complete, click the Eject button for the ``TailsData`` volume
-in the lefthand column of the file manager, wait for the ``TailsData`` entry to
-disappear from the column, and remove the new workstation USB.
+Once the command is complete, click the Eject button for the ``TailsData``
+volume in the lefthand column of the file manager, wait for the ``TailsData``
+entry to disappear from the column, and remove the new workstation USB.
 
-You may now repeat the restore process for any other USBs that you wish to 
-restore, or shut down the host Tails USB and test your new workstation USB by 
+You may now repeat the restore process for any other USBs that you wish to
+restore, or shut down the host Tails USB and test your new workstation USB by
 booting it with persistence unlocked and verifying its functionality.
 
 .. |Browse to Places Computer| image:: images/upgrade_to_tails_3x/browse_to_places_computer.png
-.. |Click Cogs| image:: images/upgrade_to_tails_3x/click_the_button_with_cogs.png
+.. |Click Cogs| image:: images/tails_4x/disks_format_partition.png
 .. |Fill in Passphrase| image:: images/upgrade_to_tails_3x/fill_in_passphrase.png
-.. |Format Backup Drive| image:: images/upgrade_to_tails_3x/fill_out_as_follows.png
+.. |Format Backup Drive| image:: images/tails_4x/format_backup_drive.png
+.. |Backup Drive Passphrase| image:: images/tails_4x/backup_drive_passphrase.png
 .. |Start Nautilus| image:: images/screenshots/root_terminal_nautilus_cli.png
 .. |Make Folders for All Drives| image:: images/upgrade_to_tails_3x/make_folders_for_all_drives.png
 .. |Backup and TailsData Mounted| image:: images/upgrade_to_tails_3x/backup_and_tailsdata_mounted.png
 .. |Applications Utilities Disks| image:: images/upgrade_to_tails_3x/navigate_to_applications.png
-.. |Select the Disk| image:: images/upgrade_to_tails_3x/select_the_disk.png
-.. |Two Partitions Appear| image:: images/upgrade_to_tails_3x/two_partitions_appear.png
+.. |Select the Disk| image:: images/tails_4x/disks_select_drive.png
+.. |Two Partitions Appear| image:: images/tails_4x/two_partitions_appear.png

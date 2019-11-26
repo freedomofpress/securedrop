@@ -67,11 +67,11 @@ The admin should keep all SecureDrop workstations updated with
 * **SecureDrop workstation updates** for each *Admin Workstation* and
   *Journalist Workstation*.
 
-You should apply Tails updates to your Tails drives as they are released, as they
-often contain critical security fixes. Subscribe to the `Tails RSS Feed`_ to be
-alerted of new releases. The online Tails drives, once booted and connected to Tor,
-will alert you if upgrades are available. Follow the `Tails Upgrade Documentation`_
-on how to upgrade the drives.
+You should apply Tails updates to your Tails drives as they are released, as
+they often contain critical security fixes. Subscribe to the `Tails RSS Feed`_
+to be alerted of new releases. The online Tails drives, once booted and
+connected to Tor, will alert you if upgrades are available. Follow the `Tails
+Upgrade Documentation`_ on how to upgrade the drives.
 
 .. include:: includes/update-gui.txt
 
@@ -82,18 +82,18 @@ on how to upgrade the drives.
 Monitoring OSSEC Alerts for Unusual Activity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The admin should decrypt and read all OSSEC alerts. Report any suspicious events to
-FPF through the `SecureDrop Support Portal`_. See the :doc:`OSSEC Guide <ossec_alerts>`
-for more information on common OSSEC alerts.
+The admin should decrypt and read all OSSEC alerts. Report any suspicious
+events to FPF through the `SecureDrop Support Portal`_. See the :doc:`OSSEC
+Guide <ossec_alerts>` for more information on common OSSEC alerts.
 
 .. warning:: Do not post logs or alerts to public forums without first carefully
          examining and redacting any sensitive information.
 
 .. _test OSSEC alert:
 
-.. note:: You can send a test OSSEC alert to verify OSSEC and your email configuration
-          is working properly through the *Admin Interface* by clicking **Send
-          Test OSSEC Alert**:
+.. note:: You can send a test OSSEC alert to verify OSSEC and your email
+          configuration is working properly through the *Admin Interface* by
+          clicking **Send Test OSSEC Alert**:
 
           |Test Alert|
 
@@ -172,14 +172,14 @@ YubiKey
 
 If the journalist wishes to use a YubiKey for two-factor authentication,
 check the box next to "I'm using a YubiKey". You will then need to enter
-the OATH-HOTP Secret Key that your YubiKey is configured with. For more
+the OATH-HOTP Secret Key that their YubiKey is configured with. For more
 information, read the :doc:`YubiKey Setup Guide <yubikey_setup>`.
 
 |Enable YubiKey|
 
-Once you've configured your YubiKey and entered the Secret Key, click
-*Add user*. On the next page, enter a code from your YubiKey by
-inserting it into the workstation and pressing the button.
+Once you've configured the YubiKey and entered the Secret Key, click
+*Add user*. On the next page, have the journalist enter a code from their
+YubiKey by inserting it into the workstation and pressing the button.
 
 |Verify YubiKey|
 
