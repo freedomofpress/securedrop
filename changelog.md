@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0~rc1
+## 1.2.0~rc2
 
 ### Web Applications
 
@@ -10,12 +10,13 @@
 
 ### Operations
 
-* Updated submission cleanup queues to be managed with systemd instead of supervisor (#4855).
+* Updated submission cleanup queues to be managed with systemd instead of supervisor (#4855, #5037).
 * Updated grsecurity kernels to version 4.14.154 to mitigate CVE-2019-11135 (#4962, #4990).
 
 ### Admin Tails workstation
 
 * Cleaned up unused code in securedrop-admin tool (#4933).
+* Updated network hook to use Python 3 (#5039)
 
 ### Developer Workflow
 
@@ -31,7 +32,7 @@
 * Updated automatic screenshots to use Tor Browser for Source Interface (#4975).
 * Added auto-cropping for automatic screenshots (#4958).
 * Updated Source Guide (#4880).
-* Updated documentation to refer to Tails 4.0 (#4937, #4942)
+* Updated documentation to refer to Tails 4.0 (#4937, #4942, #4998, #5035)
 * Miscellaneous documentation fixes (#4922, #4957, #4960, #4968, #4970, #4986, #5002).
 
 ## 1.1.0
