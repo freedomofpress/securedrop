@@ -138,10 +138,10 @@ if distro_id == 'Debian' and os.uname()[1] == 'amnesia':
 # reacquire uid0 and notify the user
 os.setresuid(0, 0, -1)
 os.setresgid(0, 0, -1)
+success_message = 'You can now access the Journalist Interface.\nIf you are an admin, you can now SSH to the servers.'  # noqa: E501
 subprocess.call(['tails-notify-user',
                  'SecureDrop successfully auto-configured!',
-                 'You can now access the Journalist Interface.\n',
-                 'If you are an admin, you can now SSH to the servers.'])
+                 success_message])
 
 # As the amnesia user, check for SecureDrop workstation updates.
 os.setresgid(amnesia_gid, amnesia_gid, -1)
@@ -152,6 +152,6 @@ output = subprocess.check_output([path_securedrop_admin_venv,
                                   'check_for_updates'], env=env)
 
 flag_location = "/home/amnesia/Persistent/.securedrop/securedrop_update.flag"
-if 'Update needed' in output or os.path.exists(flag_location):
+if b'Update needed' in output or os.path.exists(flag_location):
     # Start the SecureDrop updater GUI.
     subprocess.Popen(['python3', path_gui_updater], env=env)
