@@ -205,6 +205,11 @@ possession when they attempt to log in to SecureDrop.
 .. |Verify YubiKey|
   image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
 
+Off-boarding Users
+~~~~~~~~~~~~~~~~~~
+
+See :doc:`our guide to off-boarding users from SecureDrop <offboarding>`.
+
 Server Command Line Use
 ~~~~~~~~~~~~~~~~~~~~~~~
 
