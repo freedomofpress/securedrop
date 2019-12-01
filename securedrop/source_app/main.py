@@ -36,6 +36,12 @@ def make_blueprint(config):
                   "notification")
             return redirect(url_for('.lookup'))
 
+        # Note if a codename was already generated
+        if 'codename' in session:
+            session['multiple_codenames'] = True
+        else:
+            session['multiple_codenames'] = False
+
         codename = generate_unique_codename(config)
         session['codename'] = codename
         session['new_user'] = True
@@ -51,34 +57,40 @@ def make_blueprint(config):
 
     @view.route('/create', methods=['POST'])
     def create():
-        filesystem_id = current_app.crypto_util.hash_codename(
-            session['codename'])
-
-        source = Source(filesystem_id, current_app.crypto_util.display_id())
-        db.session.add(source)
-        try:
-            db.session.commit()
-        except IntegrityError as e:
-            db.session.rollback()
-            current_app.logger.error(
-                "Attempt to create a source with duplicate codename: %s" %
-                (e,))
-
-            # Issue 2386: don't log in on duplicates
-            del session['codename']
-
-            # Issue 4361: Delete 'logged_in' if it's in the session
-            try:
-                del session['logged_in']
-            except KeyError:
-                pass
-
-            abort(500)
+        if logged_in():
+            flash(gettext("You have already logged-in from a different browser tab.\n"
+                          "Please verify your codename below as it may differ from "
+                          "the one displayed on the previous page"),
+                  'notification')
         else:
-            os.mkdir(current_app.storage.path(filesystem_id))
+            if session['multiple_codenames']:
+                flash(gettext("Multiple codenames have been generated in different browser "
+                              "tabs. Please verify your codename below as it may differ from "
+                              "the one displayed on the previous page."),
+                      'notification')
 
-        session['logged_in'] = True
-        return redirect(url_for('.lookup'))
+            filesystem_id = current_app.crypto_util.hash_codename(
+                session['codename'])
+
+            source = Source(filesystem_id, current_app.crypto_util.display_id())
+            db.session.add(source)
+            try:
+                db.session.commit()
+            except IntegrityError as e:
+                db.session.rollback()
+                current_app.logger.error(
+                    "Attempt to create a source with duplicate codename: %s" %
+                    (e,))
+
+            else:
+                os.mkdir(current_app.storage.path(filesystem_id))
+
+            session['logged_in'] = True
+
+        if session['multiple_codenames']:
+            return redirect(url_for('.lookup', _anchor='codename-hint-visible'))
+        else:
+            return redirect(url_for('.lookup'))
 
     @view.route('/lookup', methods=('GET',))
     @login_required
