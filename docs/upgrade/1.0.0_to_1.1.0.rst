@@ -101,6 +101,10 @@ commands: ::
  ./securedrop-admin setup
  ./securedrop-admin tailsconfig
 
+During the ``./securedrop-admin setup`` step, Tails will prompt you if you want
+to install a set of packages every time you start Tails. These packages are only
+required for the setup process, so you can safely click **Install Only Once**.
+
 .. important::
 
    Until you run these commands, the SecureDrop shortcuts on the Tails desktop
