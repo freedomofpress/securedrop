@@ -18,10 +18,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 2.20\n"
 
-#: desktop-journalist-icon.j2.in:9
+#: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"
 msgstr "Interface de Jornalista do SecureDrop"
 
-#: desktop-source-icon.j2.in:9
+#: desktop-source-icon.j2.in:10
 msgid "SecureDrop Source Interface"
 msgstr "Interface de Fontes do SecureDrop"
