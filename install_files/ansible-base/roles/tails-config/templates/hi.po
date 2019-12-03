@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "PO-Revision-Date: 2018-03-08 13:50+0000\n"
 "Last-Translator: Muhammad Usman <muhdusman98@gmail.com>\n"
-"Language-Team: Hindi "
-"<https://weblate.securedrop.org/projects/securedrop/desktop/hi/>\n"
+"Language-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/"
+"desktop/hi/>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,10 +18,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.18\n"
 
-#: desktop-journalist-icon.j2.in:9
+#: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"
 msgstr "SecureDrop पत्रकार अंतराफलक"
 
-#: desktop-source-icon.j2.in:9
+#: desktop-source-icon.j2.in:10
 msgid "SecureDrop Source Interface"
 msgstr "SecureDrop स्रोत अंतराफलक"
