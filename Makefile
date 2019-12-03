@@ -175,7 +175,7 @@ securedrop/config.py: ## Generate the test SecureDrop application config.
 		 ctx.update(dict((k, {"stdout":v}) for k,v in os.environ.items())); \
 		 ctx = open("config.py", "w").write(env.get_template("config.py.example").render(ctx))'
 	@echo >> securedrop/config.py
-	@echo "SUPPORTED_LOCALES = $$(if test -f /opt/venvs/securedrop-app-code/bin/python3; then ./securedrop/i18n_tool.py list-locales; else DOCKER_BUILD_VERBOSE=false $(DEVSHELL) ./i18n_tool.py list-locales; fi)" >> securedrop/config.py
+	@echo "SUPPORTED_LOCALES = $$(if test -f /opt/venvs/securedrop-app-code/bin/python3; then ./securedrop/i18n_tool.py list-locales --python; else DOCKER_BUILD_VERBOSE=false $(DEVSHELL) ./i18n_tool.py list-locales --python; fi)" >> securedrop/config.py
 	@echo
 
 .PHONY: test-config
@@ -284,7 +284,7 @@ translate:  ## Update POT files from translated strings in source code.
 .PHONY: translation-test
 translation-test:  ## Run page layout tests in all supported languages.
 	@echo "Running translation tests..."
-	@$(DEVSHELL) $(SDBIN)/translation-test $${TESTFILES:-tests/pageslayout}
+	@$(DEVSHELL) $(SDBIN)/translation-test "$${LOCALE:-$(./i18n_tool.py list-locales)}"
 	@echo
 
 .PHONY: list-translators

@@ -369,10 +369,26 @@ class I18NTool(object):
 
     def set_list_locales_parser(self, subps):
         parser = subps.add_parser('list-locales', help='List supported locales')
+        parser.add_argument(
+            '--python',
+            action='store_true',
+            help=('Print the locales as a Python list suitable for config.py')
+        )
+        parser.add_argument(
+            '--lines',
+            action='store_true',
+            help=('List one locale per line')
+        )
         parser.set_defaults(func=self.list_locales)
 
     def list_locales(self, args):
-        print(sorted(list(self.SUPPORTED_LANGUAGES.keys()) + ['en_US']))
+        if args.lines:
+            for l in sorted(list(self.SUPPORTED_LANGUAGES.keys()) + ['en_US']):
+                print(l)
+        elif args.python:
+            print(sorted(list(self.SUPPORTED_LANGUAGES.keys()) + ['en_US']))
+        else:
+            print(" ".join(sorted(list(self.SUPPORTED_LANGUAGES.keys()) + ['en_US'])))
 
     def set_list_translators_parser(self, subps):
         parser = subps.add_parser('list-translators',
