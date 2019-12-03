@@ -153,13 +153,18 @@ def test_create_duplicate_codename_logged_in_not_in_session(source_app):
             # Attempt to add the same source
             with app.session_transaction() as sess:
                 sess['codename'] = codename
+                sess['multiple_codenames'] = True
             resp = app.post(url_for('main.create'), follow_redirects=True)
             logger.assert_called_once()
             assert ("Attempt to create a source with duplicate codename"
                     in logger.call_args[0][0])
-            assert resp.status_code == 500
-            assert 'codename' not in session
-            assert 'logged_in' not in session
+            assert resp.status_code == 200
+            assert 'codename' in session
+            assert 'logged_in' in session
+            # Should be redirected to /lookup with a flashed message
+            text = resp.data.decode('utf-8')
+            assert "Multiple codenames have been generated in different browser" in text
+            assert "Submit Files" in text
 
 
 def test_create_duplicate_codename_logged_in_in_session(source_app):
@@ -171,18 +176,26 @@ def test_create_duplicate_codename_logged_in_in_session(source_app):
             # Create a source the first time
             resp = app.post(url_for('main.create'), follow_redirects=True)
             assert resp.status_code == 200
+            codename = session['codename']
+            multiple_codenames = session['multiple_codenames']
+            logged_in = session['logged_in']
 
+        with source_app.test_client() as app:
             # Attempt to add the same source
+            with app.session_transaction() as sess:
+                sess['codename'] = codename
+                sess['multiple_codenames'] = multiple_codenames
+                sess['logged_in'] = logged_in
             resp = app.post(url_for('main.create'), follow_redirects=True)
-            logger.assert_called_once()
-            assert ("Attempt to create a source with duplicate codename"
-                    in logger.call_args[0][0])
-            assert resp.status_code == 500
-            assert 'codename' not in session
-
-            # Reproducer for bug #4361
-            resp = app.post(url_for('main.index'), follow_redirects=True)
-            assert 'logged_in' not in session
+            # Since the user is logged-in we expect that they will be redirected
+            # and no attempt to create a soure with duplicate codename will be made.
+            # No error should therefore be logged.
+            assert logger.call_args is None
+            assert resp.status_code == 200
+            # Should be redirected to /lookup with a flashed message
+            text = resp.data.decode('utf-8')
+            assert "You have already logged-in from a different browser tab" in text
+            assert "Submit Files" in text
 
 
 def test_lookup(source_app):
