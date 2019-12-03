@@ -17,17 +17,29 @@ maybe_create_config_py
 
 mkdir -p "/tmp/test-results/logs"
 
+SUPPORTED_LOCALES=$(./i18n_tool.py list-locales)
+LOCALES="${*:-${SUPPORTED_LOCALES}}"
+
+function locale_is_supported {
+    echo "$SUPPORTED_LOCALES" | grep -q "$1"
+}
+
+for l in $LOCALES
+do
+    locale_is_supported "$l" || (printf "Unsupported locale \"%s\"\n" "$l"; exit 1 )
+done
+
+printf "Running tests in these locales: %s\n" "$LOCALES"
+
 # Taking screenshots for consumes a lot of memory
 # and can result in OOM errors in CI. Running each locale
 # separately avoids this.
-SUPPORTED_LOCALES=$(./i18n_tool.py list-locales | sed -r -e "s/[][',]//g")
-printf "Running tests in these locales: %s\n" "$SUPPORTED_LOCALES"
-for locale in $SUPPORTED_LOCALES
+for locale in $LOCALES
 do
   PAGE_LAYOUT_LOCALES=$locale pytest \
     -v \
     --force-flaky --max-runs=3 \
     --page-layout \
     --durations 10 \
-    "$@"
+    tests/pageslayout
 done
