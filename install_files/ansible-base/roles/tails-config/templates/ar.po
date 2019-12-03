@@ -19,10 +19,10 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Weblate 2.20\n"
 
-#: desktop-journalist-icon.j2.in:9
+#: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"
 msgstr "واجهة SecureDrop للصحفيين"
 
-#: desktop-source-icon.j2.in:9
+#: desktop-source-icon.j2.in:10
 msgid "SecureDrop Source Interface"
 msgstr "واجهة SecureDrop للمصدر"
