@@ -60,6 +60,8 @@ Finally, run the following commands: ::
   ./securedrop-admin setup
   ./securedrop-admin tailsconfig
 
+.. _upgrade_to_tails_4:
+
 Upgrading workstations to Tails 4
 ---------------------------------
 
