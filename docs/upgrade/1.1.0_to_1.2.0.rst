@@ -13,7 +13,7 @@ on the Tails welcome screen in order to use the graphical updater.
 
 Perform the update to 1.2.0 by clicking "Update Now":
 
-.. image:: ../images/0.6.x_to_0.7/securedrop-updater.png
+.. image:: ../images/securedrop-updater.png
 
 Performing a manual update
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
