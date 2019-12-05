@@ -11,7 +11,7 @@ coordinate with the person that does to make sure the task is completed.
 Pre-Release
 -----------
 
-1. Open a **Release SecureDrop 0.x.y** issue to track release-related activity.
+1. Open a **Release SecureDrop 1.x.y** issue to track release-related activity.
    Keep this issue updated as you proceed through the release process for
    transparency.
 2. Check if there is a new stable release of Tor that can be QAed and released
@@ -23,12 +23,12 @@ Pre-Release
    for feedback. Once the announcement is ready, coordinate with other team members to
    send them to current administrators, post on the SecureDrop blog, and tweet
    out a link.
-6. For a regular release for version 0.x.0, branch off ``develop``:
+6. For a regular release for version 1.x.0, branch off ``develop``:
 
   ::
 
      git checkout develop
-     git checkout -b release/0.x
+     git checkout -b release/1.x
 
 .. warning:: For new branches, please ask a ``freedomofpress`` organization
   administrator to enable branch protection on the release branch. We want to
@@ -40,7 +40,7 @@ Pre-Release
 
   ::
 
-     securedrop/bin/dev-shell ../update_version.sh 0.x.y~rcN
+     securedrop/bin/dev-shell ../update_version.sh 1.x.y~rcN
 
 8. If you would like to sign the release commit, you will need to do so manually:
 
@@ -54,17 +54,25 @@ Pre-Release
 
     b. Ensure the new commit is signed, take note of the commit hash.
 
-    c. Edit `0.x.y-rcN.tag` and replace the commit hash with the new (signed) commit
+    c. Edit ``1.x.y-rcN.tag`` and replace the commit hash with the new (signed) commit
        hash.
 
     d. Delete the old tag and create a new one based on the tag file edited above:
 
       ::
 
-         git tag -d 0.x.y-rcN
-         git mktag < 0.x.y-rcN.tag > .git/refs/tags/0.x.y-rcN
+         git tag -d 1.x.y-rcN
+         git mktag < 1.x.y-rcN.tag > .git/refs/tags/1.x.y-rcN
 
-9. Push the branch and tags.
+9. Push the branch and tags:
+
+    a. For ``1.x.y~rc1``, push the ``release/1.x.y`` branch and ``1.x.y-rc1``
+       tag directly.
+
+    b. For subsequent release candidates and the final release version, issue
+       a PR with changelog and version changes into the ``release/1.x.y`` branch,
+       and push the signed tag once the PR is merged.
+
 10. Build Debian packages and place them on ``apt-test.freedom.press``. This is currently done
     by making a PR into `a git-lfs repo here <https://github.com/freedomofpress/securedrop-dev-packages-lfs>`_.
     Only commit packages with an incremented version number: do not clobber existing packages.
@@ -110,31 +118,31 @@ Release Process
 
   ::
 
-    cat 0.x.y.tag.sig >> 0.x.y.tag
+    cat 1.x.y.tag.sig >> 1.x.y.tag
 
 5. Delete the original unsigned tag:
 
   ::
 
-    git tag -d 0.x.y
+    git tag -d 1.x.y
 
 6. Make the signed tag:
 
   ::
 
-    git mktag < 0.x.y.tag > .git/refs/tags/0.x.y
+    git mktag < 1.x.y.tag > .git/refs/tags/1.x.y
 
 7. Verify the signed tag:
 
   ::
 
-    git tag -v 0.x.y
+    git tag -v 1.x.y
 
 8. Push the signed tag:
 
   ::
 
-    git push origin 0.x.y
+    git push origin 1.x.y
 
 9. Ensure there are no local changes (whether tracked, untracked or git ignored)
    prior to building the debs. If you did not freshly clone the repository, you
@@ -158,10 +166,12 @@ Release Process
 11. Step through the signing ceremony for the ``Release``
     file(s) (there may be multiple if Tor is also updated along
     with the SecureDrop release).
-12. Put signed Debian packages on ``apt-test.freedom.press``.
+12. Coordinate with the Infrastructure team to put signed Debian packages on
+    ``apt-qa.freedom.press``.
 13. Coordinate with one or more team members to confirm a successful clean install
-    in production VMs using the packages on ``apt-test.freedom.press``.
-14. Put signed Debian packages on ``apt.freedom.press``. The release is now live.
+    in production VMs using the packages on ``apt-qa.freedom.press``.
+14. Ask Infrastructure to perform the DNS cutover to switch ``apt-qa.freedom.press`` to
+    ``apt.freedom.press``. Once complete, the release is live.
 15. Make sure that the default branch of documentation is being built off the tip
     of the release branch. Building from the branch instead of a given tag enables
     us to more easily add documentation changes after release. You should:
