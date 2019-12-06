@@ -13,7 +13,7 @@ from journalist_gui.SecureDropUpdater import prevent_second_instance
 
 
 @mock.patch('journalist_gui.SecureDropUpdater.sys.exit')
-@mock.patch('journalist_gui.SecureDropUpdater.QtWidgets.QMessageBox')
+@mock.patch('syslog.syslog')
 class TestSecondInstancePrevention(unittest.TestCase):
     def setUp(self):
         self.mock_app = mock.MagicMock()
