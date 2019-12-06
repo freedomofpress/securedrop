@@ -60,7 +60,7 @@ def make_blueprint(config):
         if logged_in():
             flash(gettext("You have already logged-in from a different browser tab.\n"
                           "Please verify your codename below as it may differ from "
-                          "the one displayed on the previous page"),
+                          "the one displayed on the previous page."),
                   'notification')
         else:
             if session['multiple_codenames']:
