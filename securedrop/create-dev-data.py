@@ -18,14 +18,14 @@ from models import Journalist, Reply, Source, Submission
 
 submissions = cycle([
     'This is a test submission without markup!',
-    'This is a test submission with markup and characters such as \, \\, \', "" and ". ' +  # noqa: W605, E501
+    'This is a test submission with markup and characters such as \, \\, \', \" and ". ' +  # noqa: W605, E501
     '<strong>This text should not be bold</strong>!'
 ])
 
 replies = cycle([
     'This is a test reply without markup!',
-    'This is a test reply with markup and characters such as \, \\, \', "" and ". ' +  # noqa: W605, E501
-    '<strong>This test should not be bold</strong>!'
+    'This is a test reply with markup and characters such as \, \\, \', \" and ". ' +  # noqa: W605, E501
+    '<strong>This text should not be bold</strong>!'
 ])
 
 
