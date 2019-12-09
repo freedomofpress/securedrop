@@ -4,6 +4,7 @@
 import datetime
 import os
 import argparse
+from itertools import cycle
 
 from flask import current_app
 from sqlalchemy.exc import IntegrityError
@@ -14,6 +15,18 @@ import journalist_app
 from sdconfig import config
 from db import db
 from models import Journalist, Reply, Source, Submission
+
+submissions = cycle([
+    'This is a test submission without markup!',
+    'This is a test submission with markup and characters such as \, \\, \', \" and ". ' +  # noqa: W605, E501
+    '<strong>This text should not be bold</strong>!'
+])
+
+replies = cycle([
+    'This is a test reply without markup!',
+    'This is a test reply with markup and characters such as \, \\, \', \" and ". ' +  # noqa: W605, E501
+    '<strong>This text should not be bold</strong>!'
+])
 
 
 def main(staging=False):
@@ -79,7 +92,7 @@ def create_source_and_submissions(num_submissions=2, num_replies=2):
             source.filesystem_id,
             source.interaction_count,
             source.journalist_filename,
-            'test submission!'
+            next(submissions)
         )
         source.last_updated = datetime.datetime.utcnow()
         submission = Submission(source, fpath)
@@ -91,7 +104,7 @@ def create_source_and_submissions(num_submissions=2, num_replies=2):
         fname = "{}-{}-reply.gpg".format(source.interaction_count,
                                          source.journalist_filename)
         current_app.crypto_util.encrypt(
-            'this is a test reply!',
+            next(replies),
             [current_app.crypto_util.getkey(source.filesystem_id),
              config.JOURNALIST_KEY],
             current_app.storage.path(source.filesystem_id, fname))
