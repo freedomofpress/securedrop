@@ -78,6 +78,11 @@ Pre-Release
     Only commit packages with an incremented version number: do not clobber existing packages.
     That is, if there is already a deb called e.g. ``ossec-agent-3.0.0-amd64.deb`` in ``master``, do
     not commit a new version of this deb. Changes merged to ``master`` in this repo will be published within 15 minutes.
+
+.. note:: If the release contains other packages not created by ``make build-debs``,
+          such as Tor or kernel updates, make sure that they also get pushed to 
+          ``apt-test.freedom.press``.
+
 11. Build logs from the above debian package builds should be saved and published according to the
     `build log guidelines <https://github.com/freedomofpress/securedrop/wiki/Build-logs>`_.
 12. Write a test plan that focuses on the new functionality introduced in the release.
@@ -166,8 +171,8 @@ Release Process
 11. Step through the signing ceremony for the ``Release``
     file(s) (there may be multiple if Tor is also updated along
     with the SecureDrop release).
-12. Coordinate with the Infrastructure team to put signed Debian packages on
-    ``apt-qa.freedom.press``.
+12. Coordinate with the Infrastructure team to put signed Debian packages, including
+    Tor and kernel packages if applicable,  on ``apt-qa.freedom.press``.
 13. Coordinate with one or more team members to confirm a successful clean install
     in production VMs using the packages on ``apt-qa.freedom.press``.
 14. Ask Infrastructure to perform the DNS cutover to switch ``apt-qa.freedom.press`` to
