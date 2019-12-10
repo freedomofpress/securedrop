@@ -7,6 +7,7 @@ import re
 import pexpect
 import socket
 import sys
+import syslog as log
 
 from journalist_gui import updaterUI, strings, resources_rc  # noqa
 
@@ -35,9 +36,7 @@ def prevent_second_instance(app: QtWidgets.QApplication, name: str) -> None:  # 
         app.instance_binding.bind(IDENTIFIER)
     except OSError as e:
         if e.errno == ALREADY_BOUND_ERRNO:
-            err_dialog = QtWidgets.QMessageBox()
-            err_dialog.setText(name + strings.app_is_already_running)
-            err_dialog.exec()
+            log.syslog(log.LOG_NOTICE, name + strings.app_is_already_running)
             sys.exit()
         else:
             raise
