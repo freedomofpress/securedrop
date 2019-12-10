@@ -9,6 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from threading import Thread
 
 import i18n
+import re
 
 from crypto_util import CryptoException
 from models import Source
@@ -112,3 +113,26 @@ def normalize_timestamps(filesystem_id):
                 "Couldn't normalize submission "
                 "timestamps (touch exited with %d)" %
                 rc)
+
+
+def check_url_file(path, regexp):
+    try:
+        f = open(path, "r")
+        contents = f.readline().strip()
+        f.close()
+        if re.match(regexp, contents):
+            return contents
+        else:
+            return None
+    except IOError:
+        return None
+
+
+def get_sourcev2_url():
+    return check_url_file("/var/lib/securedrop/source_v2_url",
+                          r"^[a-z0-9]{16}\.onion$")
+
+
+def get_sourcev3_url():
+    return check_url_file("/var/lib/securedrop/source_v3_url",
+                          r"^[a-z0-9]{56}\.onion$")

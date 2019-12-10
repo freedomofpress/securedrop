@@ -558,6 +558,32 @@ def test_metadata_route(config, source_app):
             assert resp.json.get('server_os') == '16.04'
             assert resp.json.get('supported_languages') ==\
                 config.SUPPORTED_LOCALES
+            assert resp.json.get('v2_source_url') is None
+            assert resp.json.get('v3_source_url') is None
+
+
+def test_metadata_v2_url(config, source_app):
+    onion_test_url = "abcdabcdabcdabcd.onion"
+    with patch.object(source_app_api, "get_sourcev2_url") as mocked_v2_url:
+        mocked_v2_url.return_value = (onion_test_url)
+        with source_app.test_client() as app:
+            resp = app.get(url_for('api.metadata'))
+            assert resp.status_code == 200
+            assert resp.headers.get('Content-Type') == 'application/json'
+            assert resp.json.get('v2_source_url') == onion_test_url
+            assert resp.json.get('v3_source_url') is None
+
+
+def test_metadata_v3_url(config, source_app):
+    onion_test_url = "abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion"
+    with patch.object(source_app_api, "get_sourcev3_url") as mocked_v3_url:
+        mocked_v3_url.return_value = (onion_test_url)
+        with source_app.test_client() as app:
+            resp = app.get(url_for('api.metadata'))
+            assert resp.status_code == 200
+            assert resp.headers.get('Content-Type') == 'application/json'
+            assert resp.json.get('v2_source_url') is None
+            assert resp.json.get('v3_source_url') == onion_test_url
 
 
 def test_login_with_overly_long_codename(source_app):
