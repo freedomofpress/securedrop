@@ -1,0 +1,43 @@
+#!/bin/bash
+# Wrapper script to determine which VM driver is appropriate for the staging
+# environment, given the host OS and available tooling. Supports:
+#
+#   * VirtualBox (the default)
+#   * Libvirt/KVM
+#   * Qubes (via Admin API)
+#
+# Set the VAGRANT_DEFAULT_PROVIDER env var to override autodetection.
+
+set -e
+set -o pipefail
+
+securedrop_platform_suffix="-xenial"
+
+# Respect explicit choice of Vagrant provider if set.
+if [[ -n "${VAGRANT_DEFAULT_PROVIDER:-}" ]] ; then
+    securedrop_vm_provider="${VAGRANT_DEFAULT_PROVIDER}"
+# Check whether it appears we're running in Qubes, in which case the standard Vagrant
+# logic will not work at all, due to lack of nested virt support. The Qubes staging
+# environment uses Xenial template VMs only, so we also suppress the platform suffix.
+elif printenv | grep -q ^QUBES_ ; then
+    securedrop_vm_provider="qubes"
+    securedrop_platform_suffix=""
+elif [[ "${OSTYPE:-}" == "linux-gnu" ]]; then
+    # Default to Libvirt for Linux users, which works well with Tails VM virtualization.
+    securedrop_vm_provider="libvirt"
+else
+    # Default to VirtualBox, since it's the safest bet.
+    securedrop_vm_provider="virtualbox"
+fi
+
+# Expect the scenario to reside in the molecule/ directory.
+securedrop_staging_scenario="${securedrop_vm_provider}-staging${securedrop_platform_suffix}"
+
+# Check whether identified scenario actually exists
+if [[ ! -d "molecule/${securedrop_staging_scenario}" ]] ; then
+    printf "Scenario '%s' not found\n" "${securedrop_staging_scenario}"
+    printf "Export VAGRANT_DEFAULT_PROVIDER with a supported scenario.\n"
+    exit 1
+fi
+
+echo "$securedrop_staging_scenario"
