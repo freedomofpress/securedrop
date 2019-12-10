@@ -135,6 +135,8 @@
   /var/lib/securedrop/shredder/*/ w,
   /var/lib/securedrop/store/** rw,
   /var/lib/securedrop/store/*/ w,
+  /var/lib/securedrop/source_v2_url r,
+  /var/lib/securedrop/source_v3_url r,
   /var/lib/securedrop/tmp/** rw,
   /var/lib/ssl/* r,
   /var/log/apache2/* w,
