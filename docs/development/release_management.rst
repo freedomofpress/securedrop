@@ -171,8 +171,15 @@ Release Process
 11. Step through the signing ceremony for the ``Release``
     file(s) (there may be multiple if Tor is also updated along
     with the SecureDrop release).
-12. Coordinate with the Infrastructure team to put signed Debian packages, including
-    Tor and kernel packages if applicable,  on ``apt-qa.freedom.press``.
+12. Coordinate with the Infrastructure team to put signed Debian packages on
+    ``apt-qa.freedom.press``:
+
+  * If the release includes a Tor update, make sure to include the new Tor
+    Debian packages.
+  * If the release includes a kernel update, make sure to add the
+    corresponding grsecurity-patched kernel packages, including both
+    ``linux-image-*`` and ``linux-firmware-image-*`` packages as appropriate.
+
 13. Coordinate with one or more team members to confirm a successful clean install
     in production VMs using the packages on ``apt-qa.freedom.press``.
 14. Ask Infrastructure to perform the DNS cutover to switch ``apt-qa.freedom.press`` to
