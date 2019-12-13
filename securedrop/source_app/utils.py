@@ -116,6 +116,11 @@ def normalize_timestamps(filesystem_id):
 
 
 def check_url_file(path, regexp):
+    """
+    Check that a file exists at the path given and contains a single line
+    matching the regexp. Used for checking the source interface address
+    files at /var/lib/securedrop/source_{v2,v3}_url.
+    """
     try:
         f = open(path, "r")
         contents = f.readline().strip()
