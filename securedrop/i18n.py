@@ -20,7 +20,7 @@ from flask_babel import Babel
 from babel import core
 
 import collections
-import os  # lgtm [py/import-and-import-from]
+import os
 import re
 
 from os import path

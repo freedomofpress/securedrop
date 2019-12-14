@@ -14,7 +14,7 @@ from pretty_bad_protocol._util import _is_stream, _make_binary_stream
 
 import rm
 
-import typing  # lgtm [py/import-and-import-from]
+import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
 if typing.TYPE_CHECKING:
     # flake8 can not understand type annotation yet.

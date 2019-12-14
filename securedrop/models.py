@@ -22,7 +22,7 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from db import db
 
-import typing  # lgtm [py/import-and-import-from]
+import typing
 
 if typing.TYPE_CHECKING:
     # flake8 can not understand type annotation yet.
