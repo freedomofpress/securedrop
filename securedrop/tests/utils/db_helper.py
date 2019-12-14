@@ -173,6 +173,6 @@ def new_codename(client, session):
     """Helper function to go through the "generate codename" flow.
     """
     client.get('/generate')
-    codename = session['codename']
-    client.post('/create')
+    tab_id, codename = next(iter(session['codenames'].items()))
+    client.post('/create', data={'tab_id': tab_id})
     return codename
