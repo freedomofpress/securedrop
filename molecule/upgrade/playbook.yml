@@ -51,7 +51,7 @@
         path: "/var/log/{{ item }}"
       with_items:
         - cron-apt
-    # Reuse existing "reboot-and-wait" logic from site config
+    # Reuse existing "reboot" logic from site config
     - import_tasks: ../../install_files/ansible-base/tasks/reboot.yml
       tags: reboot
 
