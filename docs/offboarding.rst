@@ -121,20 +121,20 @@ SSH key, you should rotate the key in the following manner.
 
 #.  Restrict SSH access to the new key.
 
-    .. important:: If you have other users who also have SSH access to the
-       *Application* and *Monitor Servers*, the next step will revoke their
-       access. Their public keys will have to be re-appended to the
-       ``authorized_keys`` file on each server, as in step 3.
+      .. important:: If you have other users who also have SSH access to the
+         *Application* and *Monitor Servers*, the next step will revoke their
+         access. Their public keys will have to be re-appended to the
+         ``authorized_keys`` file on each server, as in step 3.
 
-    From an *Admin Workstation*, run
+   From an *Admin Workstation*, run
 
     .. code:: sh
 
       ~/Persistent/securedrop/securedrop-admin reset_admin_access
 
-    This removes all other SSH keys, except for the new key that you are
-    currently using, from the list of authorized keys on the *Application* and
-    *Monitor Servers*.
+   This removes all other SSH keys, except for the new key that you are
+   currently using, from the list of authorized keys on the *Application* and
+   *Monitor Servers*.
 
 .. _rotate_submission_key:
 
@@ -205,6 +205,9 @@ On the Secure Viewing Station
 On the Admin Workstation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+ .. important:: Ensure that your *Admin Workstation* is
+    :doc:`up-to-date <update_tails_usbs>` before performing these steps.
+
 #. Take the *Transfer Device* with the new *Submission Public Key* and
    fingerprint to your *Admin Workstation*. As you did during the initial
    install, copy the public key, ``SecureDrop.asc``, to the
@@ -252,7 +255,7 @@ Return to the Secure Viewing Station
    **Revoke**. This also makes local-only changes and does not stop you or
    anyone else from using the key, but it is a reminder that your key has
    changed.
-   
+
 
    |revoke key|
 
