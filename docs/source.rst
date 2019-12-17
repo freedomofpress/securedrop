@@ -11,6 +11,13 @@ Source Guide
    Leaks With the Press <https://freedom.press/news/sharing-sensitive-leaks-press/>`__.
 
 
+.. warning:: Freedom of the Press Foundation has no access to any other
+   organization's SecureDrop instance, and cannot assist directly in your
+   communications with them. If you plan to use SecureDrop to maintain your
+   anonymity, you should not discuss your own use of it with others via unsafe
+   methods, including email to Freedom of the Press Foundation.
+
+
 Choosing the Right Location
 ---------------------------
 
