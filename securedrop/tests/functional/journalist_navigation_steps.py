@@ -287,10 +287,20 @@ class JournalistNavigationStepsMixin:
             self.safe_click_by_id("prevent_document_uploads")
             self.safe_click_by_id("submit-submission-preferences")
 
+        def preferences_saved():
+            flash_msg = self.driver.find_element_by_css_selector(".flash")
+            assert "Preferences saved." in flash_msg.text
+        self.wait_for(preferences_saved, timeout=self.timeout * 6)
+
     def _admin_allows_document_uploads(self):
         if self.driver.find_element_by_id("prevent_document_uploads").is_selected():
             self.safe_click_by_id("prevent_document_uploads")
             self.safe_click_by_id("submit-submission-preferences")
+
+        def preferences_saved():
+            flash_msg = self.driver.find_element_by_css_selector(".flash")
+            assert "Preferences saved." in flash_msg.text
+        self.wait_for(preferences_saved, timeout=self.timeout * 6)
 
     def _add_user(self, username, first_name="", last_name="", is_admin=False, hotp=None):
         self.safe_send_keys_by_css_selector('input[name="username"]', username)
