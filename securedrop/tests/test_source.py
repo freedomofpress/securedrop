@@ -189,7 +189,7 @@ def test_create_duplicate_codename_logged_in_in_session(source_app):
         assert resp.status_code == 200
         assert session['codename'] == codename
         text = resp.data.decode('utf-8')
-        assert "You have already logged-in" in text
+        assert "You are already logged in." in text
         assert "Submit Files" in text
 
 

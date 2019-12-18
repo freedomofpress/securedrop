@@ -61,10 +61,9 @@ def make_blueprint(config):
     @view.route('/create', methods=['POST'])
     def create():
         if session.get('logged_in', False):
-            flash(gettext("You have already logged-in from a different browser tab. " +
-                          "Please verify your codename below as it may differ from " +
-                          "the one displayed on the previous page."), 'notification')
-            return redirect(url_for('.lookup', _anchor='codename-hint-visible'))
+            flash(gettext("You are already logged in. Please verify your codename below as it " +
+                          "may differ from the one displayed on the previous page."),
+                  'notification')
         else:
             tab_id = request.form['tab_id']
             codename = session['codenames'][tab_id]
@@ -98,7 +97,7 @@ def make_blueprint(config):
                 os.mkdir(current_app.storage.path(filesystem_id))
 
             session['logged_in'] = True
-            return redirect(url_for('.lookup'))
+        return redirect(url_for('.lookup'))
 
     @view.route('/lookup', methods=('GET',))
     @login_required
