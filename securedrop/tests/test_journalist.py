@@ -1299,8 +1299,8 @@ def test_prevent_document_uploads(journalist_app, test_admin):
         assert InstanceConfig.get_current().allow_document_uploads is False
         with InstrumentedApp(journalist_app) as ins:
             app.post(url_for('admin.update_submission_preferences'),
-                    data=form.data,
-                    follow_redirects=True)
+                     data=form.data,
+                     follow_redirects=True)
             ins.assert_message_flashed('Preferences saved.', 'submission-preferences-success')
 
 
@@ -1313,8 +1313,9 @@ def test_no_prevent_document_uploads(journalist_app, test_admin):
         assert InstanceConfig.get_current().allow_document_uploads is True
         with InstrumentedApp(journalist_app) as ins:
             app.post(url_for('admin.update_submission_preferences'),
-                    follow_redirects=True)
+                     follow_redirects=True)
             ins.assert_message_flashed('Preferences saved.', 'submission-preferences-success')
+
 
 def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
     # Save original logo to restore after test run
