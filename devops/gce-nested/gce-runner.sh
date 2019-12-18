@@ -57,3 +57,5 @@ ssh_gce "make build-debs-notest"
 # so register a trap to ensure the fetch always runs.
 trap fetch_junit_test_results EXIT
 ssh_gce "make staging"
+# pause to allow for post-staging reboot
+sleep 30
