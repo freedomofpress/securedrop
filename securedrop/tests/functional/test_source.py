@@ -79,6 +79,7 @@ class TestDuplicateSourceInterface(
         self._source_continues_to_submit_page()
         assert self._is_on_lookup_page()
         self._source_sees_already_logged_in_in_other_tab_message()
+        self._source_shows_codename(verify_source_name=False)
         codename_lookup_b = self.get_codename_lookup()
         # We expect the codename to be the one from Tab A
         assert codename_lookup_b == codename_a

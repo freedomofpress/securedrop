@@ -229,5 +229,5 @@ class SourceNavigationStepsMixin:
         notification = self.driver.find_element_by_css_selector(".notification")
 
         if not hasattr(self, "accepted_languages"):
-            expected_text = "You have already logged-in from a different browser tab. "
+            expected_text = "You are already logged in."
             assert expected_text in notification.text
