@@ -1,4 +1,4 @@
-{# these are flashed messages for the logo upload file verifiaction #}
+{# these are flashed messages for the logo upload file verification #}
 {% with messages = get_flashed_messages(with_categories=True, category_filter=["logo-success", "logo-error"]) %}
   {% for category, message in messages %}
     {% set category_status = category[5:] %}
