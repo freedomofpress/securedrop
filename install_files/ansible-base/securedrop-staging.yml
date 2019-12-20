@@ -103,6 +103,7 @@
     LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
-  roles:
-    - role: reboot-if-first-install
+  tasks:
+    - name: Reboot using generic module
+      include_tasks: "tasks/reboot.yml"
   become: yes
