@@ -10,7 +10,6 @@
   capability net_bind_service,
   capability sys_ptrace,
 
-  /bin/dash rix,
   /bin/touch rix,
   /bin/uname rix,
   /dev/null w,
