@@ -29,7 +29,11 @@ RUN curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x8
 
 COPY ./tor_project_public.pub /opt/
 
+<<<<<<< HEAD
 ENV TBB_VERSION 9.0.9
+=======
+ENV TBB_VERSION 9.0.2
+>>>>>>> bump Tor Browser version to 9.0.2 (9.0.3 is not yet a signed build.)
 RUN gpg --import /opt/tor_project_public.pub && \
     wget  https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
