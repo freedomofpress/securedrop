@@ -3,46 +3,5 @@ Upstream-Name: securedrop
 Source: https://github.com/freedomofpress/securedrop
 
 Files: *
-Copyright: 2019 Freedom of the Press Foundation <securedrop@freedom.press>
-License: GPLv3+
-
-Files: orderedmultidict*
-Copyright: Please check the project's home page.
-License: Unlicense
-
-Files: idna*
-Copyright: Please check the project's home page.
-License: BSD-like
-
-Files: certifi*
-Copyright: Please check the project's home page.
-License: MPL-2.0
-
-Files: requests*
-Copyright: Please check the project's home page.
-License: Apache 2.0
-
-Files: urllib3*
-Copyright: Please check the project's home page.
-License: MIT
-
-Files: werkzeug*
-Copyright: Please check the project's home page.
-License: BSD
-
-Files: pyyaml*
-Copyright: Please check the project's home page.
-License: MIT
-
-Files: chardet*
-Copyright: Please check the project's home page.
-License: LGPL
-
-Files: six*
-Copyright: Please check the project's home page.
-License: MIT
-
-Files: furl*
-Copyright: Please check the project's home page.
-License: Unlicense
-
+Copyright: 2020 Freedom of the Press Foundation <securedrop@freedom.press>
+License: AGPL-3.0+
