@@ -1,4 +1,4 @@
-const TBB_UA_REGEX = /Mozilla\/5\.0 \((Windows NT 6\.1|X11; Linux x86_64|Macintosh; Intel Mac OS X 10\.13|Windows NT 6\.1; Win64; x64); rv:[0-9]{2}\.0\) Gecko\/20100101 Firefox\/([0-9]{2})\.0/;
+const TBB_UA_REGEX = /Mozilla\/5\.0 \((Windows NT 10\.0|X11; Linux x86_64|Macintosh; Intel Mac OS X 10\.14|Windows NT 10\.0; Win64; x64); rv:[0-9]{2}\.0\) Gecko\/20100101 Firefox\/([0-9]{2})\.0/;
 const ORFOX_UA_REGEX = /Mozilla\/5\.0 \(Android; Mobile; rv:[0-9]{2}\.0\) Gecko\/20100101 Firefox\/([0-9]{2})\.0/;
 
 function fadeIn(el, duration = 200, displayStyle = "block") {
@@ -64,8 +64,9 @@ function addFadingClose(id, elementToClose, fadeDuration = 200) {
 
 /**
    Tor Browser always reports a UTC timezone and window dimensions
-   that match the device dimensions, which is very unlikely in desktop
-   browsers.
+   that match the device dimensions. This is unlikely in desktop
+   browsers unless they implement anti-fingerprinting techniques
+   (such as Firefox privacy.resistFingerprinting).
 */
 function looksLikeTorBrowser() {
   return window.navigator.userAgent.match(TBB_UA_REGEX) &&
@@ -87,7 +88,7 @@ function looksLikeOrfox() {
 */
 function showTorSuggestions() {
   show("#js-warning");
-  
+
   let infoBubble = document.getElementById("security-setting-info");
 
   // show the instruction popup when the link is clicked
