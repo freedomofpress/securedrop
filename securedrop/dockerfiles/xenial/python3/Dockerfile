@@ -30,13 +30,17 @@ RUN curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x8
 COPY ./tor_project_public.pub /opt/
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ENV TBB_VERSION 9.0.9
 =======
 ENV TBB_VERSION 9.0.2
 >>>>>>> bump Tor Browser version to 9.0.2 (9.0.3 is not yet a signed build.)
+=======
+ENV TBB_VERSION 9.0.4
+>>>>>>> Bump Tor Browser from 9.0.2 to 9.0.4
 RUN gpg --import /opt/tor_project_public.pub && \
-    wget  https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
-    wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
+    wget  https://dist.torproject.org/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
+    wget https://dist.torproject.org/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
     gpg --verify tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     tar -xvJf tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     mkdir -p /root/.local/tbb && mv tor-browser_en-US /root/.local/tbb &&\
