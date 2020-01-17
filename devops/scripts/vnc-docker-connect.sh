@@ -6,20 +6,14 @@
 
 set -e
 
-## Get a short identifier for the working directory
-hashpath() {
-    pwd | sum | awk '{print $1}'
-}
-
 PORT_PREFIX=${PORT_PREFIX:-""}
-SD_CONTAINER="sd-$(hashpath)${PORT_PREFIX:+-${PORT_PREFIX}}"
 
 # Bomb out if container not running
-docker inspect "${SD_CONTAINER}" >/dev/null 2>&1 || (echo "ERROR: SD container not running."; exit 1)
+docker inspect securedrop-dev-${PORT_PREFIX} >/dev/null 2>&1 || (echo "ERROR: SD container not running."; exit 1)
 
 VNCPORT=${PORT_PREFIX}5909
 
-echo "Connecting to container ${SD_CONTAINER}:${VNCPORT}..."
+echo "Connecting to container securedrop-dev-${PORT_PREFIX}:${VNCPORT}..."
 
 # Maybe we are running macOS
 if [ "$(uname -s)" == "Darwin" ]; then
@@ -45,4 +39,4 @@ fi
 rv_config="${TMPDIR:-/tmp}/sd-vnc.ini"
 echo -e "[virt-viewer]\ntype=vnc\nhost=127.0.0.1\nport=${VNCPORT}\npassword=freedom" > "${rv_config}"
 
-remote-viewer "${rv_config}"
+remote-viewer "${rv_config}" 2>/dev/null &
