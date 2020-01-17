@@ -11,17 +11,15 @@ export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
 TOPLEVEL=$(git rev-parse --show-toplevel)
 BASE_OS=xenial
 
-function docker_image() {
-
 ## Get a short identifier for the working directory
 hashpath() {
     pwd | sum | awk '{print $1}'
 }
 
-## Get an integer prefix for exposed ports, to support running dev and
-## test, or containers from different directories simultaneously
+## Get an integer prefix for exposed ports, to support multiple containers
+
 get_port_prefix() {
-    port_prefix="${PORT_PREFIX:-}"
+    port_prefix="${PORT_PREFIX:-1}"
     tries=0
     while true
     do
@@ -33,21 +31,26 @@ get_port_prefix() {
     echo "$port_prefix"
 }
 
+function docker_image() {
     docker build \
            ${DOCKER_BUILD_ARGUMENTS:-} \
            --build-arg=USER_ID="$(id -u)" \
            --build-arg=USER_NAME="${USER:-root}" \
-           -t "sd-${1}-py${2}-$(hashpath)" \
+           -t "securedrop-test-${1}-py3-$(hashpath)" \
            --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/python3/Dockerfile" \
            "${TOPLEVEL}/securedrop"
 }
 
 function docker_run() {
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
+    if [ "${USE_PORT_PREFIX:-true}" = "true" ]
+    then
+       port_prefix="$(get_port_prefix)"
+    else
+       port_prefix=""
+    fi
 
-    port_prefix="$(get_port_prefix)"
-
-    SD_CONTAINER="sd-$(hashpath)${port_prefix:+-${port_prefix}}"
+    SD_CONTAINER="securedrop-dev-${port_prefix}"
     export SD_HOSTPORT_JI="${port_prefix}8081"
     export SD_HOSTPORT_SI="${port_prefix}8080"
     export SD_HOSTPORT_VNC="${port_prefix}5909"
@@ -73,9 +76,6 @@ function docker_run() {
            -e LANG=C.UTF-8 \
            -e PAGE_LAYOUT_LOCALES \
            -e PATH \
-           -e SD_HOSTPORT_JI \
-           -e SD_HOSTPORT_SI \
-           -e SD_HOSTPORT_VNC \
            --user "${USER:-root}" \
            --volume "${TOPLEVEL}:${TOPLEVEL}" \
            --workdir "${TOPLEVEL}/securedrop" \
