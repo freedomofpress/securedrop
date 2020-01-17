@@ -16,19 +16,18 @@ hashpath() {
     pwd | sum | awk '{print $1}'
 }
 
-## Get an integer prefix for exposed ports, to support multiple containers
 
-get_port_prefix() {
-    port_prefix="${PORT_PREFIX:-1}"
+## Get an integer offset for exposed ports, to support multiple containers
+get_port_offset() {
     tries=0
     while true
     do
-        vnc="${port_prefix}5909"
+        tries=$((tries + 1))
+	port_offset=$((tries * 100))
+        vnc=$((port_offset + 5909))
         nc -z localhost "$vnc" || break
-        tries=$(( tries + 1 ))
-        port_prefix="${tries}"
     done
-    echo "$port_prefix"
+    echo "$port_offset"
 }
 
 function docker_image() {
@@ -43,21 +42,21 @@ function docker_image() {
 
 function docker_run() {
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
-    if [ "${USE_PORT_PREFIX:-true}" = "true" ]
+    if [ "${OFFSET_PORTS:-true}" = "true" ]
     then
-       port_prefix="$(get_port_prefix)"
+       port_offset="$(get_port_offset)"
     else
-       port_prefix=""
+       port_offset=0
     fi
 
-    SD_CONTAINER="securedrop-dev-${port_prefix}"
-    export SD_HOSTPORT_JI="${port_prefix}8081"
-    export SD_HOSTPORT_SI="${port_prefix}8080"
-    export SD_HOSTPORT_VNC="${port_prefix}5909"
+    SD_CONTAINER="securedrop-dev-${port_offset}"
+    SD_HOSTPORT_JI=$((port_offset + 8081))
+    SD_HOSTPORT_SI=$((port_offset + 8080))
+    SD_HOSTPORT_VNC=$((port_offset + 5909))
 
     echo "************************************************************"
     echo "Exposed Docker ports will be available on localhost with"
-    echo "port prefix ${port_prefix}:"
+    echo "Port offset: $port_offset"
     echo "Source interface: $SD_HOSTPORT_SI"
     echo "Journalist interface: $SD_HOSTPORT_JI"
     echo "VNC: $SD_HOSTPORT_VNC"
