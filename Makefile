@@ -185,7 +185,7 @@ test-config: securedrop/config.py
 .PHONY: dev
 dev:  ## Run the development server in a Docker container.
 	@echo "███ Starting development server..."
-	@USE_PORT_PREFIX='false' DOCKER_BUILD_VERBOSE='true' $(DEVSHELL) $(SDBIN)/run
+	@OFFSET_PORTS='false' DOCKER_BUILD_VERBOSE='true' $(DEVSHELL) $(SDBIN)/run
 	@echo
 
 .PHONY: docs

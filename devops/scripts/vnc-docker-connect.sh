@@ -6,14 +6,14 @@
 
 set -e
 
-PORT_PREFIX=${PORT_PREFIX:-""}
+PORT_OFFSET=${PORT_OFFSET:-100}
 
 # Bomb out if container not running
-docker inspect securedrop-dev-${PORT_PREFIX} >/dev/null 2>&1 || (echo "ERROR: SD container not running."; exit 1)
+docker inspect securedrop-dev-${PORT_OFFSET} >/dev/null 2>&1 || (echo "ERROR: SD container not running."; exit 1)
 
-VNCPORT=${PORT_PREFIX}5909
+VNCPORT=$((PORT_OFFSET + 5909))
 
-echo "Connecting to container securedrop-dev-${PORT_PREFIX}:${VNCPORT}..."
+echo "Connecting to container securedrop-dev-${PORT_OFFSET}:${VNCPORT}..."
 
 # Maybe we are running macOS
 if [ "$(uname -s)" == "Darwin" ]; then
