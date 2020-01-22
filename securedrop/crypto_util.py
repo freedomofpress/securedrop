@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import collections
 from distutils.version import StrictVersion
 import pretty_bad_protocol as gnupg
 import os
@@ -71,6 +72,9 @@ class CryptoUtil:
     # '0' is the magic value that tells GPG's batch key generation not
     # to set an expiration date.
     DEFAULT_KEY_EXPIRATION_DATE = '0'
+
+    keycache = collections.OrderedDict()  # type: collections.OrderedDict
+    keycache_limit = 1000
 
     def __init__(self,
                  scrypt_params,
@@ -224,12 +228,21 @@ class CryptoUtil:
         temp_gpg = gnupg.GPG(binary='gpg2', homedir=self.gpg_key_dir)
         # The subkeys keyword argument deletes both secret and public keys.
         temp_gpg.delete_keys(key, secret=True, subkeys=True)
+        del self.keycache[source_filesystem_id]
 
     def getkey(self, name):
+        if name in self.keycache:
+            return self.keycache[name]
+
         for key in self.gpg.list_keys():
             for uid in key['uids']:
                 if name in uid:
-                    return key['fingerprint']
+                    fingerprint = key['fingerprint']
+                    self.keycache[name] = fingerprint
+                    if len(self.keycache) > self.keycache_limit:
+                        self.keycache.popitem(last=False)
+                    return fingerprint
+
         return None
 
     def export_pubkey(self, name):
