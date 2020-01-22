@@ -1,7 +1,7 @@
 ---
 - include: check_whether_reboot_needed.yml
 
-- include: "{{ role_path }}/../../tasks/reboot.yml"
+- include: reboot-no-check.yml
   # The conditional vars below are defined via set_fact
   # in the `check_whether_reboot_needed` task list.
   when: securedrop_initial_installation or securedrop_conditional_reboot

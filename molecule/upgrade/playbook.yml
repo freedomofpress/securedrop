@@ -51,8 +51,8 @@
         path: "/var/log/{{ item }}"
       with_items:
         - cron-apt
-    # Reuse existing "reboot-and-wait" logic from site config
-    - import_tasks: ../../install_files/ansible-base/tasks/reboot.yml
+    # Reuse existing "reboot" logic from site config
+    - import_tasks: ../../install_files/ansible-base/roles/reboot-if-first-install/tasks/reboot-no-check.yml
       tags: reboot
 
     - name: Wait longer for machines to reboot
