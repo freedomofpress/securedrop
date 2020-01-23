@@ -55,6 +55,32 @@ def monkey_patch_delete_handle_status(self, key, value):
 gnupg._parsers.DeleteResult._handle_status = monkey_patch_delete_handle_status
 
 
+class FIFOCache():
+    """
+    We implemented this simple cache instead of using functools.lru_cache
+    (this uses a different cache replacement policy (FIFO), but either
+    FIFO or LRU works for our key fingerprint cache)
+    due to the inability to remove an item from its cache.
+
+    See: https://bugs.python.org/issue28178
+    """
+    def __init__(self, maxsize: int):
+        self.maxsize = maxsize
+        self.cache = collections.OrderedDict()  # type: collections.OrderedDict
+
+    def get(self, item):
+        if item in self.cache:
+            return self.cache[item]
+
+    def put(self, item, value):
+        self.cache[item] = value
+        if len(self.cache) > self.maxsize:
+            self.cache.popitem(last=False)
+
+    def delete(self, item):
+        del self.cache[item]
+
+
 class CryptoException(Exception):
     pass
 
@@ -73,8 +99,8 @@ class CryptoUtil:
     # to set an expiration date.
     DEFAULT_KEY_EXPIRATION_DATE = '0'
 
-    keycache = collections.OrderedDict()  # type: collections.OrderedDict
     keycache_limit = 1000
+    keycache = FIFOCache(keycache_limit)
 
     def __init__(self,
                  scrypt_params,
@@ -228,20 +254,19 @@ class CryptoUtil:
         temp_gpg = gnupg.GPG(binary='gpg2', homedir=self.gpg_key_dir)
         # The subkeys keyword argument deletes both secret and public keys.
         temp_gpg.delete_keys(key, secret=True, subkeys=True)
-        del self.keycache[source_filesystem_id]
+        self.keycache.delete(source_filesystem_id)
 
     def getkey(self, name):
-        if name in self.keycache:
-            return self.keycache[name]
+        fingerprint = self.keycache.get(name)
+        if fingerprint:  # cache hit
+            return fingerprint
 
+        # cache miss
         for key in self.gpg.list_keys():
             for uid in key['uids']:
                 if name in uid:
-                    fingerprint = key['fingerprint']
-                    self.keycache[name] = fingerprint
-                    if len(self.keycache) > self.keycache_limit:
-                        self.keycache.popitem(last=False)
-                    return fingerprint
+                    self.keycache.put(name, key['fingerprint'])
+                    return key['fingerprint']
 
         return None
 
