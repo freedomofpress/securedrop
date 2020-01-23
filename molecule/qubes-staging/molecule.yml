@@ -11,15 +11,15 @@ driver:
 
 platforms:
   - name: app-staging
-    vm_base: sd-app-base
-    vm_name: sd-app
+    vm_base: sd-staging-app-base
+    vm_name: sd-staging-app
     groups:
       - securedrop_application_server
       - staging
 
   - name: mon-staging
-    vm_base: sd-mon-base
-    vm_name: sd-mon
+    vm_base: sd-staging-mon-base
+    vm_name: sd-staging-mon
     groups:
       - securedrop_monitor_server
       - staging
