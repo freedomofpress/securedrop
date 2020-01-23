@@ -61,10 +61,12 @@ You should verify the Ubuntu image you downloaded hasn't been modified by
 a malicious attacker or otherwise corrupted. We can do so by checking its
 integrity with cryptographic signatures and hashes.
 
-First, we will download *Ubuntu Image Signing Key* and verify its
-fingerprint. ::
+First, we will download both *Ubuntu Image Signing Keys* and verify their
+fingerprints. ::
 
-    gpg --recv-key "C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451"
+    gpg --recv-key --keyserver hkps://keyserver.ubuntu.com \
+    "C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451" \
+    "8439 38DF 228D 22F7 B374 2BC0 D94A A3F0 EFE2 1092"
 
 .. note:: It is important you type this out correctly. If you are not
           copy-pasting this command, we recommend you double-check you have
