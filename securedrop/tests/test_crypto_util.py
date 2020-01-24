@@ -11,7 +11,7 @@ os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import crypto_util
 import models
 
-from crypto_util import CryptoUtil, CryptoException
+from crypto_util import CryptoUtil, CryptoException, FIFOCache
 from db import db
 
 
@@ -343,3 +343,25 @@ def test_encrypt_then_decrypt_gives_same_result(
     decrypted_text = crypto.decrypt(secret, ciphertext)
 
     assert decrypted_text == message
+
+
+def test_fifo_cache():
+    cache = FIFOCache(3)
+
+    cache.put('item 1', 1)
+    cache.put('item 2', 2)
+    cache.put('item 3', 3)
+
+    assert cache.get('item 1') == 1
+    assert cache.get('item 2') == 2
+    assert cache.get('item 3') == 3
+
+    cache.put('item 4', 4)
+    # Maxsize is 3, so adding item 4 should kick out item 1
+    assert not cache.get('item 1')
+    assert cache.get('item 2') == 2
+    assert cache.get('item 3') == 3
+    assert cache.get('item 4') == 4
+
+    cache.delete('item 2')
+    assert not cache.get('item 2')
