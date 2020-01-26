@@ -1,10 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
 
-{% if 'logged_in' in session %}
-  <a href="{{ url_for('main.logout') }}" class="btn pull-right" id="logout">{{ gettext('LOG OUT') }}</a>
-{% endif %}
-
 {% if new_user %}
 <div class="code-reminder pull-left" id="codename-hint">
   <div id="codename-hint-visible">
