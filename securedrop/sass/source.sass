@@ -26,8 +26,14 @@
   background: rgba(0, 0, 0, 0.05)
   box-sizing: border-box
   -moz-box-sizing: border-box
+  margin-top: 5px
   padding: 5px 10px
   text-align: center
+  width: 80%
+
+@media only screen and (max-width: 880px)
+  #codename-hint
+    width: 100%
 
 #codename-hint-visible
   .visible-codename
@@ -181,8 +187,12 @@ p#codename
         margin: 0 2%
         padding: 5px 15px
 
-p#no-replies
+h4#no-replies
   text-align: center
+  color: $color_grey_medium
+  background: $color_grey_xlight
+  padding: 40px
+  margin: 0.5em 0
 
 p.explanation
   text-align: left

@@ -1,6 +1,22 @@
 {% extends "base.html" %}
 {% block body %}
 
+{% if new_user %}
+<div class="code-reminder pull-left" id="codename-hint">
+  <div id="codename-hint-visible">
+    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17" height="20"> {{ gettext('Remember, your codename is:') }}
+    <a id="codename-hint-show" class="show pull-right visible-codename" href="#codename-hint-visible">{{ gettext('Show') }}</a>
+    <div id="codename-hint-content" class="hidden-codename codename">
+      <a id="codename-hint-hide" class="pull-right" href="#codename-hint">{{ gettext('Hide') }}</a>
+      <p>{{ codename }}</p>
+    </div>
+  </div>
+</div>
+<hr class="header-separator-high">
+{% else %}
+  <hr class="no-line">
+{% endif %}
+
 <div class="center">
   {% include 'flashed.html' %}
 
@@ -104,23 +120,8 @@
       </div>
     </form>
   {% else %}
-    <p id="no-replies" class="explanation">{{ gettext('There are no replies at this time.') }}</p>
+    <h4 id="no-replies" class="explanation">{{ gettext('— No Messages —') }}</h4>
   {% endif %}
 </div>
-
-<hr class="no-line">
-
-{% if new_user %}
-<div class="code-reminder" id="codename-hint">
-  <div id="codename-hint-visible">
-    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17" height="20"> {{ gettext('Remember, your codename is:') }}
-    <a id="codename-hint-show" class="show pull-right visible-codename" href="#codename-hint-visible">{{ gettext('Show') }}</a>
-    <div id="codename-hint-content" class="hidden-codename codename">
-      <a id="codename-hint-hide" class="pull-right" href="#codename-hint">{{ gettext('Hide') }}</a>
-      <p>{{ codename }}</p>
-    </div>
-  </div>
-</div>
-{% endif %}
 
 {% endblock %}
