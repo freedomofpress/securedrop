@@ -26,6 +26,7 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         paxctl \
         python3-all \
         python3-pip \
+        python3-venv \
         python3-setuptools \
         rsync \
         ruby \
