@@ -11,12 +11,6 @@ export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
 TOPLEVEL=$(git rev-parse --show-toplevel)
 BASE_OS=xenial
 
-## Get a short identifier for the working directory
-hashpath() {
-    pwd | sum | awk '{print $1}'
-}
-
-
 ## Get an integer offset for exposed ports, to support multiple containers
 get_port_offset() {
     tries=0
@@ -35,7 +29,7 @@ function docker_image() {
            ${DOCKER_BUILD_ARGUMENTS:-} \
            --build-arg=USER_ID="$(id -u)" \
            --build-arg=USER_NAME="${USER:-root}" \
-           -t "securedrop-test-${1}-py3-$(hashpath)" \
+           -t "securedrop-test-${1}-py3" \
            --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/python3/Dockerfile" \
            "${TOPLEVEL}/securedrop"
 }

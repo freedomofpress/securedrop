@@ -36,7 +36,7 @@ common-steps:
         set +o pipefail
         docker images
         fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
-        cd securedrop && DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" ./bin/dev-shell true
+        cd securedrop && DOCKER_BUILD_VERBOSE=true DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" ./bin/dev-shell true
 
   - &saveimagelayers
     run:
