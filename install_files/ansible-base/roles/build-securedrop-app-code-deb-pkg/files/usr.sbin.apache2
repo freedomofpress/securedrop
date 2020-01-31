@@ -107,6 +107,7 @@
   /opt/venvs/securedrop-app-code/bin/python3 r,
   /opt/venvs/securedrop-app-code/lib/python3.5/ r,
   /opt/venvs/securedrop-app-code/lib/python3.5/** rm,
+  /opt/venvs/securedrop-app-code/pyvenv.cfg r,
   /var/lib/securedrop/ r,
   /var/lib/securedrop/db.sqlite kw,
   /var/lib/securedrop/db.sqlite rwk,
