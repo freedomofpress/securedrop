@@ -285,6 +285,6 @@ Ensure your virtualenv is activated and install the packages.
 
 .. code:: sh
 
-    pip install --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
+    pip install --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
 .. note:: You will need to run this everytime new packages are added.

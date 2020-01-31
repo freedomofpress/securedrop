@@ -10,7 +10,7 @@ tested on Debian GNU/Linux stretch with:
 
    python3 bootstrap.py
    source .venv3/bin/activate
-   pip3 install -r requirements-dev.txt
+   pip3 install --no-deps --require-hashes -r requirements-dev.txt
    tox
 
 A Docker helper is provided to simplify the installation and make
