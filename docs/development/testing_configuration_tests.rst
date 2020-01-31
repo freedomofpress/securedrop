@@ -27,12 +27,43 @@ provision the environment and run the tests, run the following commands:
 
     make build-debs
     make staging
+<<<<<<< HEAD
     make testinfra
+=======
+
+The VMs will be set up using either the libvirt or virtualbox Vagrant VM provider,
+depending on your system settings. You'll need to use the appropriate commands below
+based on your choice of provider.
+
+Then, to run the tests:
+
+libvirt:
+~~~~~~~~
+
+.. code:: sh
+
+   molecule verify -s libvirt-staging-xenial
+
+virtualbox:
+~~~~~~~~~~~
+
+.. code:: sh
+
+   molecule verify -s virtualbox-staging-xenial
+
+.. tip:: To run only a single test, set ``PYTEST_ADDOPTS="-k name_of_test"``
+         in your environment.
+>>>>>>> updated pip commands in scripts and docs to include --no-deps flag
 
 Test failure against any host will generate a report with informative output
 about the specific test that triggered the error. Molecule
 will also exit with a non-zero status code.
 
+<<<<<<< HEAD
+=======
+.. note:: To build and test the VMs with one command, use the Molecule ``test``
+  action: ``molecule test -s libvirt-staging-xenial --destroy=never``, or ``molecule test -s virtualbox-staging-xenial --destroy=never``.
+>>>>>>> updated pip commands in scripts and docs to include --no-deps flag
 
 Updating the Config Tests
 -------------------------
