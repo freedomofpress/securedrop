@@ -12,9 +12,7 @@ TOPLEVEL=$(git rev-parse --show-toplevel)
 BASE_OS=xenial
 
 ## Get a short identifier for the working directory
-hashpath() {
-    pwd | sum | awk '{print $1}'
-}
+PATHHASH=$(echo "$TOPLEVEL" | sum | awk '{print $1}')
 
 
 ## Get an integer offset for exposed ports, to support multiple containers
@@ -23,7 +21,7 @@ get_port_offset() {
     while true
     do
         tries=$((tries + 1))
-	port_offset=$((tries * 100))
+    port_offset=$((tries * 100))
         vnc=$((port_offset + 5909))
         nc -z localhost "$vnc" || break
     done
@@ -35,7 +33,7 @@ function docker_image() {
            ${DOCKER_BUILD_ARGUMENTS:-} \
            --build-arg=USER_ID="$(id -u)" \
            --build-arg=USER_NAME="${USER:-root}" \
-           -t "securedrop-test-${1}-py3-$(hashpath)" \
+           -t "securedrop-test-${1}-py3-${PATHHASH}" \
            --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/python3/Dockerfile" \
            "${TOPLEVEL}/securedrop"
 }
@@ -49,7 +47,7 @@ function docker_run() {
        port_offset=0
     fi
 
-    SD_CONTAINER="securedrop-dev-${port_offset}"
+    SD_CONTAINER="securedrop-dev-${PATHHASH}-${port_offset}"
     SD_HOSTPORT_JI=$((port_offset + 8081))
     SD_HOSTPORT_SI=$((port_offset + 8080))
     SD_HOSTPORT_VNC=$((port_offset + 5909))
@@ -79,7 +77,7 @@ function docker_run() {
            --volume "${TOPLEVEL}:${TOPLEVEL}" \
            --workdir "${TOPLEVEL}/securedrop" \
            --name "${SD_CONTAINER}" \
-           -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py3" "${@:2}"
+           -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py3-${PATHHASH}" "${@:2}"
 }
 
 if [ "${DOCKER_BUILD_VERBOSE:-'false'}" = "true" ]
