@@ -23,7 +23,7 @@ To get started editing the docs:
 
    .. code:: sh
 
-      pip install --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
+      pip install --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
 #. Build the docs for viewing in your web browser:
 
