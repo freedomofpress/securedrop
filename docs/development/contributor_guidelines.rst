@@ -58,7 +58,7 @@ root of the repository:
 
   .. code:: sh
 
-     pip install --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
+     pip install --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
 Python
 ~~~~~~

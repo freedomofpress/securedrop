@@ -19,6 +19,6 @@ RUN python3 bootstrap.py -v
 ENV VIRTUAL_ENV /opt/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 COPY requirements-dev.txt .
-RUN pip3 install --require-hashes -r requirements-dev.txt
+RUN pip3 install --no-deps --require-hashes -r requirements-dev.txt
 
 RUN chown -R $USER_NAME /opt
