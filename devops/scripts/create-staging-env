@@ -7,6 +7,8 @@
 #   * Qubes (via Admin API)
 #
 # Set the VAGRANT_DEFAULT_PROVIDER env var to override autodetection.
+#
+# Defaults to `converge` action - override with MOLECULE_ACTION env var
 
 set -e
 set -o pipefail
@@ -23,5 +25,5 @@ virtualenv_bootstrap
 if [ "$USER" = "sdci" ]; then
     molecule test -s "${securedrop_staging_scenario}"
 else
-    molecule converge -s "${securedrop_staging_scenario}"
+    molecule "${MOLECULE_ACTION:-converge}" -s "${securedrop_staging_scenario}"
 fi
