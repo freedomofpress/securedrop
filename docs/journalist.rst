@@ -108,11 +108,7 @@ listed on the homepage by codename.
 
 Click on a codename to see the dedicated page for that source. You
 will see all of the messages that they have written and documents that
-they have uploaded. If the name of a source is difficult to say or
-remember, you can rename a source using the **Change codename** link
-next to their current codename.
-
-|Cycle source codename|
+they have uploaded.
 
 .. tip:: You can also **Star** interesting or promising sources to
          easily return to them later. All starred sources will be bumped to the
@@ -661,7 +657,6 @@ audio, and begin publishing important, high-impact work!
 .. |Decrypting| image:: images/manual/viewing2.png
 .. |Decrypted documents| image:: images/manual/viewing3.png
 .. |Opened document| image:: images/manual/viewing4.png
-.. |Cycle source codename| image:: images/manual/change-codename.png
 .. |Sent reply| image:: images/manual/screenshots/journalist-composes_reply.png
 .. |Flag for reply button| image:: images/manual/screenshots/journalist-col_has_no_key.png
 .. |Flag for reply notification| image:: images/manual/screenshots/journalist-col_flagged.png

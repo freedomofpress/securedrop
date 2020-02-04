@@ -2,21 +2,11 @@
 {% block body %}
 <div id="content" class="journalist-view-single">
 
-  <form action="{{ url_for('main.regenerate_code') }}" method="post" id="regenerate-code">
-    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-    <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
-
-    <p class="breadcrumbs">
-      <a href="/">{{ gettext('All Sources') }}</a>
-      <i class="fa fa-chevron-right"></i>
-      <strong>{{ source.journalist_designation }}</strong>
-      <a href="#change-codename-{{ source.journalist_designation }}" title="{{ gettext('Generate a new random codename for this source. We recommend doing this if the first random codename is difficult to say or remember. You can generate new random codenames as many times as you like.') }}" class="plain" id="regenerate-codename-btn"><span id="regenerate-codename-btn-label">{{ gettext('Change codename') }}</span></a>
-      <div id="change-codename-{{ source.journalist_designation }}" class="confirm-prompt">{{ gettext('Are you sure you want to generate a new codename?') }}
-        <a href="#regenerate-code">{{ gettext('Cancel') }}</a>
-        <button class="small" type="submit">{{ gettext('CONFIRM') }}</button>
-      </div>
-    </p>
-  </form>
+  <p class="breadcrumbs">
+    <a href="/">{{ gettext('All Sources') }}</a>
+    <i class="fa fa-chevron-right"></i>
+    <strong>{{ source.journalist_designation }}</strong>
+  </p>
 
   {% if source.collection %}
     <p>{{ gettext('The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG.') }}</p>
