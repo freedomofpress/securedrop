@@ -108,11 +108,7 @@ listed on the homepage by codename.
 
 Click on a codename to see the dedicated page for that source. You
 will see all of the messages that they have written and documents that
-they have uploaded. If the name of a source is difficult to say or
-remember, you can rename a source using the **Change codename** link
-next to their current codename.
-
-|Cycle source codename|
+they have uploaded.
 
 .. tip:: You can also **Star** interesting or promising sources to
          easily return to them later. All starred sources will be bumped to the

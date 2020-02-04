@@ -1441,7 +1441,6 @@ def test_user_authorization_for_posts(journalist_app):
             url_for('col.process'),
             url_for('col.delete_single', filesystem_id='1'),
             url_for('main.reply'),
-            url_for('main.regenerate_code'),
             url_for('main.bulk'),
             url_for('account.new_two_factor'),
             url_for('account.reset_two_factor_totp'),

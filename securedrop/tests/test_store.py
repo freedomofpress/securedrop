@@ -204,33 +204,6 @@ def test_get_zip(journalist_app, test_source, config):
         assert zipped_file_content == actual_file_content
 
 
-def test_rename_valid_submission(journalist_app, test_source):
-    with journalist_app.app_context():
-        old_journalist_filename = test_source['source'].journalist_filename
-        old_filename = utils.db_helper.submit(
-            test_source['source'], 1)[0].filename
-
-        new_journalist_filename = 'nestor_makhno'
-        expected_filename = old_filename.replace(old_journalist_filename,
-                                                 new_journalist_filename)
-        actual_filename = journalist_app.storage.rename_submission(
-            test_source['source'].filesystem_id, old_filename,
-            new_journalist_filename)
-
-    assert actual_filename == expected_filename
-
-
-def test_rename_submission_with_invalid_filename(journalist_app):
-    original_filename = '1-quintuple_cant-msg.gpg'
-    returned_filename = journalist_app.storage.rename_submission(
-            'example-filesystem-id', original_filename,
-            'this-new-filename-should-not-be-returned')
-
-    # None of the above files exist, so we expect the attempt to rename
-    # the submission to fail and the original filename to be returned.
-    assert original_filename == returned_filename
-
-
 @pytest.mark.parametrize('db_model', [Submission, Reply])
 def test_add_checksum_for_file(config, db_model):
     '''
