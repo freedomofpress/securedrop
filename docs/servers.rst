@@ -81,10 +81,30 @@ argument passed.
              the installation. If this happens, please email us at
              securedrop@freedom.press.
 
-Verify the ``SHA256SUMS`` file and move on to the next step if you see
-"Good Signature" in the output. ::
+Next, verify the ``SHA256SUMS`` file. ::
 
-    gpg --verify SHA256SUMS.gpg SHA256SUMS
+    gpg --keyid-format long --verify SHA256SUMS.gpg SHA256SUMS
+
+Move on to the next step if you see "Good Signature" twice in the output, as
+below. Note that any other message (such as "Can't check signature: no public
+key") means that you are not ready to proceed. ::
+
+    gpg: Signature made Wed Nov 11 20:08:10 2015 GMT
+                    using DSA key ID 46181433FBB75451
+    gpg: Good signature from "Ubuntu CD Image Automatic Signing Key
+    <cdimage@ubuntu.com>"
+    gpg: WARNING: This key is not certified with a trusted signature!
+    gpg:          There is no indication that the signature belongs to the
+    owner.
+    Primary key fingerprint: C598 6B4F 1257 FFA8 6632  CBA7 4618 1433 FBB7 5451
+    gpg: Signature made Wed Nov 11 20:08:10 2015 GMT
+                    using RSA key ID D94AA3F0EFE21092
+    gpg: Good signature from "Ubuntu CD Image Automatic Signing Key (2012)
+    <cdimage@ubuntu.com>"
+    gpg: WARNING: This key is not certified with a trusted signature!
+    gpg:          There is no indication that the signature belongs to the
+    owner.
+    Primary key fingerprint: 8439 38DF 228D 22F7 B374  2BC0 D94A A3F0 EFE2 1092
 
 The next and final step is to verify the Ubuntu image. ::
 
