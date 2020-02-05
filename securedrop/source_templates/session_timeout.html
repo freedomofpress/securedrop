@@ -1,8 +1,6 @@
+<div class="flash important-header" dir="{{ g.text_direction }}">
+  <strong>{{ gettext('Important') }}</strong>
+</div>
 <div class="localized" dir="{{ g.text_direction }}">
-  <div class="icon">
-    <img src="{{ url_for('static', filename='i/hand_with_fingerprint.png') }}">
-  </div>
-  <div class="message"><strong>{{ gettext('Important!') }}</strong><br>
-  <p>{{ gettext('Your session timed out due to inactivity. Please login again if you want to continue using SecureDrop, or select "New Identity" from the onion button in the Tor browser\'s toolbar to clear all history of your SecureDrop usage from this device. If you are not using Tor Browser, restart your browser.') }}</p>
-  </div>
+    <p>{{ gettext('You were logged out due to inactivity. Click the <img src={icon} alt="broom icon" width="16" height="16">&nbsp;<strong>New Identity</strong> button in your Tor browser\'s toolbar before moving on. This will clear your Tor browser activity data on this device.').format(icon=url_for('static', filename='i/torbroom-coral.png'))  }}</p>
 </div>

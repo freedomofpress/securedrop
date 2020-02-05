@@ -296,8 +296,12 @@ def make_blueprint(config):
 
     @view.route('/logout')
     def logout():
+        """
+        If a user is logged in, show them a logout page that prompts them to
+        click the New Identity button in Tor Browser to complete their session.
+        Otherwise redirect to the main Source Interface page.
+        """
         if logged_in():
-            msg = render_template('logout_flashed_message.html')
 
             # Clear the session after we render the message so it's localized
             # If a user specified a locale, save it and restore it
@@ -305,7 +309,8 @@ def make_blueprint(config):
             session.clear()
             session['locale'] = user_locale
 
-            flash(Markup(msg), "important hide-if-not-tor-browser")
-        return redirect(url_for('.index'))
+            return render_template('logout.html')
+        else:
+            return redirect(url_for('.index'))
 
     return view

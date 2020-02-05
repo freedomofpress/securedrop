@@ -19,6 +19,9 @@ class SourceNavigationStepsMixin:
     def _is_on_generate_page(self):
         return self.wait_for(lambda: self.driver.find_element_by_id("create-form"))
 
+    def _is_on_logout_page(self):
+        return self.wait_for(lambda: self.driver.find_element_by_id("click-new-identity-tor"))
+
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
         assert self._is_on_source_homepage()
@@ -195,7 +198,7 @@ class SourceNavigationStepsMixin:
 
     def _source_logs_out(self):
         self.safe_click_by_id("logout")
-        self.wait_for(lambda: ("Submit for the first time" in self.driver.page_source))
+        assert self._is_on_logout_page()
 
     def _source_not_found(self):
         self.driver.get(self.source_location + "/unlikely")
@@ -218,7 +221,7 @@ class SourceNavigationStepsMixin:
         notification = self.driver.find_element_by_css_selector(".important")
 
         if not hasattr(self, "accept_languages"):
-            expected_text = "Your session timed out due to inactivity."
+            expected_text = "You were logged out due to inactivity."
             assert expected_text in notification.text
 
     def _source_sees_document_attachment_item(self):
