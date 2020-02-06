@@ -356,28 +356,6 @@ class Storage:
         current_app.crypto_util.encrypt(message, self.__gpg_key, msg_loc)
         return filename
 
-    def rename_submission(self,
-                          filesystem_id,
-                          orig_filename,
-                          journalist_filename):
-        # type: (str, str, str) -> str
-        check_submission_name = VALIDATE_FILENAME(orig_filename)
-        if check_submission_name:
-            parsed_filename = check_submission_name.groupdict()
-            if parsed_filename.get('file_type'):
-                new_filename = "{}-{}-{}.gpg".format(
-                    parsed_filename['index'], journalist_filename,
-                    parsed_filename['file_type'])
-                try:
-                    os.rename(self.path(filesystem_id, orig_filename),
-                              self.path(filesystem_id, new_filename))
-                except OSError:
-                    pass
-                else:
-                    # Only return new filename if successful
-                    return new_filename
-        return orig_filename
-
 
 def async_add_checksum_for_file(db_obj):
     # type: (Union[Submission, Reply]) -> str
