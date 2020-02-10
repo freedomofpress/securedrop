@@ -698,12 +698,25 @@ def restore_securedrop(args):
     # Would like readable output if there's a problem
     os.environ["ANSIBLE_STDOUT_CALLBACK"] = "debug"
 
-    ansible_cmd = [
+    ansible_cmd_full_restore = [
         'ansible-playbook',
         os.path.join(args.ansible_path, 'securedrop-restore.yml'),
         '-e',
         "restore_file='{}'".format(restore_file_basename),
     ]
+
+    ansible_cmd_skip_tor = [
+        'ansible-playbook',
+        os.path.join(args.ansible_path, 'securedrop-restore.yml'),
+        '-e',
+        "restore_file='{}' restore_skip_tor='True'".format(restore_file_basename),
+    ]
+
+    if args.restore_skip_tor:
+        ansible_cmd = ansible_cmd_skip_tor
+    else:
+        ansible_cmd = ansible_cmd_full_restore
+
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
@@ -935,6 +948,10 @@ def parse_argv(argv):
                                           help=restore_securedrop.__doc__)
     parse_restore.set_defaults(func=restore_securedrop)
     parse_restore.add_argument("restore_file")
+    parse_restore.add_argument("--preserve-tor-config", default=False,
+                               action='store_true',
+                               dest='restore_skip_tor',
+                               help="Preserve the server's current Tor config")
 
     parse_update = subparsers.add_parser('update', help=update.__doc__)
     parse_update.set_defaults(func=update)

@@ -52,6 +52,15 @@
     dest: /
     remote_src: yes
     src: "/tmp/{{ restore_file}}"
+  when: restore_skip_tor is not defined
+
+- name: Extract backup, skipping tor service configuration
+  unarchive:
+    dest: /
+    remote_src: yes
+    src: "/tmp/{{ restore_file}}"
+    exclude: "var/lib/tor,etc/tor/torrc"
+  when: restore_skip_tor is defined
 
 - name: Reconfigure securedrop-app-code
   command: dpkg-reconfigure securedrop-app-code
