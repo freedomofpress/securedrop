@@ -11,6 +11,7 @@ jsmin
 markupsafe>=1.1
 mod_wsgi
 passlib
+pip>=20.0.2
 pretty-bad-protocol>=3.1.1
 psutil>=5.6.6
 pyotp
