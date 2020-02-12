@@ -89,6 +89,14 @@
 ## 1.3.0~rc1
 >>>>>>> Backporting 1.2.0 changelog and updating version to 1.3.0~rc1
 
+## 1.2.1
+
+### Web Applications
+
+* Updated Tor Browser user agent detection (#5087)
+* Added caching of source keys (#5100)
+* Removed the ability to change source codenames/designations (#5119)
+
 ## 1.2.0
 
 ### Web Applications
