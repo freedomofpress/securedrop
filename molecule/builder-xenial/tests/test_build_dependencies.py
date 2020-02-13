@@ -21,7 +21,7 @@ def test_pip_dependencies_installed(host):
     """
     Ensure the development pip dependencies are installed
     """
-    c = host.run("pip3 list installed")
+    c = host.run("/opt/venvs/securedrop-app-code/bin/pip3 list installed")
     assert "Flask-Babel" in c.stdout
     assert c.rc == 0
 
