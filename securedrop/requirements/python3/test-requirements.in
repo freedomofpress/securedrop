@@ -1,5 +1,6 @@
 beautifulsoup4
 blinker
+click==7.0
 Flask-Testing
 flaky
 markupsafe>=1.1

@@ -2,6 +2,7 @@ bandit
 # yes, we need both boto and boto3
 boto
 boto3
+click == 7.0
 docker-py
 # Needed for dig ansible lookup
 dnspython

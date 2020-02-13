@@ -1,5 +1,6 @@
 alembic
 argon2_cffi
+click==7.0
 cryptography>2.3
 Flask-Assets
 Flask-Babel
