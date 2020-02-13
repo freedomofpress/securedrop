@@ -42,7 +42,7 @@ securedrop_app_rsync_opts:
   - "--exclude=*aths"
   - "--exclude=*.deb"
 
-securedrop_local_build: "../../build"
+securedrop_local_dest_dir: "../../build/{{ ansible_distribution_release }}/"
 
 # Always build packages targeting Xenial.
 securedrop_build_xenial_support: True

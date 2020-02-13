@@ -31,9 +31,19 @@
 
 - include: sass.yml
 
-- name: Install SecureDrop Python requirements in container
+- name: Create virtualenv to use for the build
   shell: |
-    pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_app_code_prep_dir }}/requirements.txt
+    virtualenv --python=python3 {{ securedrop_venv }}
+
+- name: Install SecureDrop Python requirements in container
+  shell: >
+    {{ securedrop_venv }}/bin/pip3 install
+    --verbose
+    --ignore-installed
+    --no-deps
+    --no-cache-dir
+    --require-hashes
+    -r {{ securedrop_app_code_prep_dir }}/requirements.txt
   tags:
     - pip
 
@@ -113,14 +123,14 @@
       - "{{ securedrop_app_code_deb_dir }}/../"
       - "{{ securedrop_app_code_deb_dir }}"
     patterns:
-      - '*.deb'
-      - '*.tar.gz'
+      - "*.deb"
+      - "*.tar.gz"
   register: securedrop_deb_package_find_results
 
-- name: Fetch newly built Debian packages back to localhost
+- name: Fetch newly built Debian package back to localhost
   fetch:
     src: "{{ item.path }}"
-    dest: "{{ ossec_build_deb_package_local_dest_dir }}"
+    dest: "{{ securedrop_local_dest_dir }}"
     flat: yes
     fail_on_missing: yes
   with_items: "{{ securedrop_deb_package_find_results.files }}"

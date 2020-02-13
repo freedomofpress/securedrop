@@ -32,8 +32,9 @@ override_dh_virtualenv:
 		--extra-pip-arg "--ignore-installed" \
 		--extra-pip-arg "--no-deps" \
 		--extra-pip-arg "--no-binary=:all:" \
-		--extra-pip-arg "--no-deps" \
-		--extra-pip-arg "--no-cache-dir"
+		--extra-pip-arg "--no-cache-dir" \
+		--extra-pip-arg "--require-hashes" \
+		--extra-pip-arg "--no-compile"
 
 #
 # Have to override the automatic service handling since we have more

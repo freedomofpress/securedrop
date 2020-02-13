@@ -25,3 +25,4 @@ sh
 SQLAlchemy>=1.3.0
 typing
 Werkzeug>=0.15.3
+wheel

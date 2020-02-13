@@ -244,6 +244,9 @@ werkzeug==1.0.1 \
 wtforms==2.3.1 \
     --hash=sha256:6ff8635f4caeed9f38641d48cfe019d0d3896f41910ab04494143fc027866e1b \
     --hash=sha256:861a13b3ae521d6700dac3b2771970bd354a63ba7043ecc3a82b5288596a1972 \
+wheel==0.34.2 \
+    --hash=sha256:8788e9155fe14f54164c1b9eb0a319d98ef02c160725587ad60f14ddc57b6f96 \
+    --hash=sha256:df277cb51e61359aba502208d680f90c0493adec6f0e848af94948778aed386e
     # via flask-wtf
 
 # The following packages are considered to be unsafe in a requirements file:

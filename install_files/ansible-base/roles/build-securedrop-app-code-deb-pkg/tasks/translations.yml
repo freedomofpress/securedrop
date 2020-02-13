@@ -8,4 +8,5 @@
   args:
     chdir: "{{ securedrop_code_filtered }}"
   environment:
+    PATH: "{{ securedrop_venv }}/bin:{{ ansible_env.PATH }}"
     PYTHONDONTWRITEBYTECODE: "true"
