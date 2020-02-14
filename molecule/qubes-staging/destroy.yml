@@ -9,6 +9,13 @@
     molecule_yml: "{{ lookup('file', molecule_file) | molecule_from_yaml }}"
     molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"
   tasks:
+    - name: Check that Qubes admin tools are installed
+      shell: >
+        which qvm-clone
+        || { echo 'qvm-clone not found, install qubes-core-admin-client';
+        exit 1; }
+      changed_when: false
+
     - name: Halt molecule instance(s)
       command: qvm-shutdown --wait "{{ item.vm_name }}"
       register: server
