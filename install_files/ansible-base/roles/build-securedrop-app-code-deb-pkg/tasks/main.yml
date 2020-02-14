@@ -33,7 +33,7 @@
 
 - name: Install SecureDrop Python requirements in container
   shell: |
-    pip3 install --no-binary :all: --require-hashes -r {{ securedrop_app_code_prep_dir }}/requirements.txt
+    pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_app_code_prep_dir }}/requirements.txt
   tags:
     - pip
 

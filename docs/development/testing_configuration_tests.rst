@@ -14,7 +14,7 @@ Installation
 
 .. code:: sh
 
-    pip install --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
+    pip install --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
 
 Running the Config Tests
@@ -41,14 +41,14 @@ libvirt:
 
 .. code:: sh
 
-   molecule verify -s libvirt-staging
+   molecule verify -s libvirt-staging-xenial
 
 virtualbox:
 ~~~~~~~~~~~
 
 .. code:: sh
 
-   molecule verify -s virtualbox-staging
+   molecule verify -s virtualbox-staging-xenial
 
 .. tip:: To run only a single test, set ``PYTEST_ADDOPTS="-k name_of_test"``
          in your environment.
@@ -58,7 +58,7 @@ about the specific test that triggered the error. Molecule
 will also exit with a non-zero status code.
 
 .. note:: To build and test the VMs with one command, use the Molecule ``test``
-  action: ``molecule test -s libvirt-staging --destroy=never``, or ``molecule test -s virtualbox-staging --destroy=never``.
+  action: ``molecule test -s libvirt-staging-xenial --destroy=never``, or ``molecule test -s virtualbox-staging-xenial --destroy=never``.
 
 Updating the Config Tests
 -------------------------

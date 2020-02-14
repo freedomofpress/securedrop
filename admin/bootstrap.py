@@ -221,6 +221,7 @@ def install_pip_self(args):
 def install_pip_dependencies(args, pip_install_cmd=[
         os.path.join(VENV_DIR, 'bin', 'pip3'),
         'install',
+        '--no-deps',
         # Specify requirements file.
         '-r', os.path.join(DIR, 'requirements.txt'),
         '--require-hashes',
