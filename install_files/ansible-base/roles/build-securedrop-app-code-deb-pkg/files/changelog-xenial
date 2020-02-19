@@ -24,6 +24,12 @@ securedrop-app-code (1.3.0~rc1+xenial) xenial; urgency=medium
  -- SecureDrop Team <securedrop@freedom.press>  Wed, 04 Dec 2019 00:32:49 +0000
 >>>>>>> Backporting 1.2.0 changelog and updating version to 1.3.0~rc1
 
+securedrop-app-code (1.2.1+xenial) xenial; urgency=medium
+
+  * See changelog.md
+
+ -- SecureDrop Team <securedrop@freedom.press>  Wed, 19 Feb 2020 14:40:43 +0000
+
 securedrop-app-code (1.2.0+xenial) xenial; urgency=medium
 
   * See changelog.md
