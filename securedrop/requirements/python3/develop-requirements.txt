@@ -36,9 +36,15 @@ aspy.yaml==1.3.0 \
     --hash=sha256:463372c043f70160a9ec950c3f1e4c3a82db5fca01d334b6bc89c7164d744bdc \
     --hash=sha256:e7c742382eff2caed61f87a39d13f99109088e5e93f04d76eb8d4b28aa143f45 \
     # via pre-commit
+<<<<<<< HEAD
 astroid==2.4.0 \
     --hash=sha256:29fa5d46a2404d01c834fcb802a3943685f1fc538eb2a02a161349f5505ac196 \
     --hash=sha256:2fecea42b20abb1922ed65c7b5be27edfba97211b04b2b6abc6a43549a024ea6 \
+=======
+astroid==2.3.3 \
+    --hash=sha256:71ea07f44df9568a75d0f354c49143a4575d90645e9fead6dfb52c26a85ed13a \
+    --hash=sha256:840947ebfa8b58f318d42301cf8c0a20fd794a33b61cc4638e28e9e61ba32f42 \
+>>>>>>> Update pylint, astroid, mypy
     # via pylint
 babel==2.4.0 \
     --hash=sha256:8c98f5e5f8f5f088571f2c6bd88d530e331cbbcb95a7311a0db69d3dca7ec563 \
@@ -455,9 +461,15 @@ pygments==2.2.0 \
     --hash=sha256:78f3f434bcc5d6ee09020f92ba487f95ba50f1e3ef83ae96b9d5ffa1bab25c5d \
     --hash=sha256:dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc \
     # via sphinx
+<<<<<<< HEAD
 pylint==2.5.0 \
     --hash=sha256:588e114e3f9a1630428c35b7dd1c82c1c93e1b0e78ee312ae4724c5e1a1e0245 \
     --hash=sha256:bd556ba95a4cf55a1fc0004c00cf4560b1e70598a54a74c6904d933c8f3bd5a8
+=======
+pylint==2.4.4 \
+    --hash=sha256:3db5468ad013380e987410a8d6956226963aed94ecb5f9d3a28acca6d9ac36cd \
+    --hash=sha256:886e6afc935ea2590b462664b161ca9a5e40168ea99e5300935f6591ad467df4
+>>>>>>> Update pylint, astroid, mypy
 pynacl==1.1.2 \
     --hash=sha256:123c41df1db119397f2e26e9c63ca2ea853d3663e26b1c389bd3859dc1b7178a \
     --hash=sha256:1b4938a557b32e5c6b27fac79a94cf1abb70753b5462a0b577bd2a77e09dacd0 \
