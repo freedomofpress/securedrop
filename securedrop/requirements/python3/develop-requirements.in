@@ -8,7 +8,7 @@ dnspython
 flake8
 html-linter
 molecule>=2.22
-mypy
+mypy>=0.761
 # Needed for ansible network filter
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
@@ -16,7 +16,7 @@ netaddr
 pip==19.1
 pip-tools>=4.0.0
 pyenchant
-pylint
+pylint>=2.4.4
 pytest-xdist
 python-vagrant
 safety>=1.8.4
