@@ -199,6 +199,13 @@ staging:  ## Create a local staging environment in virtual machines.
 	@$(SDROOT)/devops/scripts/create-staging-env
 	@echo
 
+
+.PHONY: testinfra
+testinfra:  ## Run infra tests against a local staging environment.
+	@echo "███ Creating staging environment..."
+	@MOLECULE_ACTION=verify $(SDROOT)/devops/scripts/create-staging-env
+	@echo
+
 .PHONY: libvirt-share
 libvirt-share:  ## Configure ACLs to allow RWX for libvirt VM (e.g. Admin Workstation).
 	@echo "███ Configuring ACLs for admin workstation..."

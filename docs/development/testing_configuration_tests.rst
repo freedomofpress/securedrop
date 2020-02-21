@@ -20,45 +20,19 @@ Installation
 Running the Config Tests
 ------------------------
 
-In order to run the tests, first create and provision the VM you intend
-to test.
-
-For the staging VMs:
+Testinfra tests are executed against a virtualized staging environment. To
+provision the environment and run the tests, run the following commands:
 
 .. code:: sh
 
     make build-debs
     make staging
-
-The VMs will be set up using either the libvirt or virtualbox Vagrant VM provider,
-depending on your system settings. You'll need to use the appropriate commands below
-based on your choice of provider.
-
-Then, to run the tests:
-
-libvirt:
-~~~~~~~~
-
-.. code:: sh
-
-   molecule verify -s libvirt-staging-xenial
-
-virtualbox:
-~~~~~~~~~~~
-
-.. code:: sh
-
-   molecule verify -s virtualbox-staging-xenial
-
-.. tip:: To run only a single test, set ``PYTEST_ADDOPTS="-k name_of_test"``
-         in your environment.
+    make testinfra
 
 Test failure against any host will generate a report with informative output
 about the specific test that triggered the error. Molecule
 will also exit with a non-zero status code.
 
-.. note:: To build and test the VMs with one command, use the Molecule ``test``
-  action: ``molecule test -s libvirt-staging-xenial --destroy=never``, or ``molecule test -s virtualbox-staging-xenial --destroy=never``.
 
 Updating the Config Tests
 -------------------------
