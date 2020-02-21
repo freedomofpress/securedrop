@@ -26,33 +26,8 @@ provision the environment and run the tests, run the following commands:
 .. code:: sh
 
     make build-debs
+    make staging
     make testinfra
-
-.. note:: The staging environmment will be destroyed after the tests complete. To keep 
-  the environment aroundm use the Molecule ``verify`` action directly instead,
-  as described below.
-
-The VMs will be set up using either the libvirt or virtualbox Vagrant VM provider,
-depending on your system settings. 
-To run the tests against an already-provisioned staging environment,
-use the `molecule` command below corresponding to your VM provider:
-
-libvirt:
-~~~~~~~~
-
-.. code:: sh
-
-   molecule verify -s libvirt-staging-xenial
-
-virtualbox:
-~~~~~~~~~~~
-
-.. code:: sh
-
-   molecule verify -s virtualbox-staging-xenial
-
-.. tip:: To run only a single test, set ``PYTEST_ADDOPTS="-k name_of_test"``
-         in your environment.
 
 Test failure against any host will generate a report with informative output
 about the specific test that triggered the error. Molecule
