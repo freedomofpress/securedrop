@@ -204,7 +204,7 @@ staging:  ## Create a local staging environment in virtual machines.
 .PHONY: testinfra
 testinfra:  ## Run infra tests against a local staging environment.
 	@echo "███ Creating staging environment..."
-	@MOLECULE_ACTION=test $(SDROOT)/devops/scripts/create-staging-env
+	@MOLECULE_ACTION=verify $(SDROOT)/devops/scripts/create-staging-env
 	@echo
 
 .PHONY: libvirt-share
