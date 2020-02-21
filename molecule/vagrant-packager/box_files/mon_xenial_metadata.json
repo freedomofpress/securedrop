@@ -109,7 +109,21 @@
         }
       ],
       "version": "1.2.0"
+<<<<<<< HEAD
 >>>>>>> Provide upgrade boxes for SecureDrop 1.2.0
+=======
+    },
+    {
+      "providers": [
+        {
+          "checksum": "78c6b5e777f5517315e44cbbfdeb527ef1f38369091432b8c1ce02653ce219dc",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-xenial_1.2.1.box"
+        }
+      ],
+      "version": "1.2.1"
+>>>>>>> Add 1.2.1 upgrade testing boxes
     }
   ]
 }
