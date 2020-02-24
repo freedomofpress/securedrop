@@ -116,6 +116,8 @@ Log back into the *Application Server*, and repeat the previous commands:
 Navigate to the Source Interface URL again, and confirm you see the upgraded
 version in the footer. Then proceed with testing the new version.
 
+.. _updating_upgrade_boxes:
+
 Updating the base boxes used for upgrade testing
 ------------------------------------------------
 
@@ -124,10 +126,10 @@ new VM images, to enable testing against that base version in future upgrade
 testing. The procedure is as follows:
 
 1. ``make clean`` to remove any previous artifacts (which would also be pushed)
-2. ``git checkout <version>`` (if a point release, ``git checkout develop``)
-3. ``make vagrant-package``
-4. ``cd molecule/vagrant-packager && ./push.yml`` to upload to S3
-5. Commit the local changes to JSON files and open a PR.
+#. ``git checkout <version>``
+#. ``make vagrant-package``
+#. ``cd molecule/vagrant-packager && ./push.yml`` to upload to S3
+#. Commit the local changes to JSON files and open a PR.
 
 Subsequent invocations of ``make upgrade-start`` will pull the latest
 version of the box.
