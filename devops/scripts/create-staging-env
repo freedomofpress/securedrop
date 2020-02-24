@@ -17,6 +17,16 @@ set -o pipefail
 
 securedrop_staging_scenario="$(./devops/scripts/select-staging-env)"
 
+if [ -z "$TEST_DATA_FILE" ]
+then
+    EXTRA_ANSIBLE_ARGS=()
+else
+    if [ "${MOLECULE_ACTION:-converge}" = 'converge' ]
+    then
+        EXTRA_ANSIBLE_ARGS=(-- --extra-vars test_data_file"=""${TEST_DATA_FILE}")
+    fi
+fi
+
 printf "Creating staging environment via '%s'...\n" "${securedrop_staging_scenario}"
 
 # Run it!
@@ -25,5 +35,5 @@ virtualenv_bootstrap
 if [ "$USER" = "sdci" ]; then
     molecule test -s "${securedrop_staging_scenario}"
 else
-    molecule "${MOLECULE_ACTION:-converge}" -s "${securedrop_staging_scenario}"
+    molecule "${MOLECULE_ACTION:-converge}" -s "${securedrop_staging_scenario}" "${EXTRA_ANSIBLE_ARGS[@]}"
 fi
