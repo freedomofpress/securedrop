@@ -362,7 +362,7 @@ class JournalistNavigationStepsMixin:
                 # Successfully verifying the code should redirect to the admin
                 # interface, and flash a message indicating success
                 flash_msg = self.driver.find_elements_by_css_selector(".flash")
-                assert "The two-factor code for user \"{user}\" was verified successfully.".format(
+                assert "The two-factor code for user \"{}\" was verified successfully.".format(
                     self.new_user["username"]
                 ) in [el.text for el in flash_msg]
 
