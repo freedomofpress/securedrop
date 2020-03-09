@@ -1,11 +1,11 @@
 # application code
-/securedrop/ @redshiftzero @heartsucker @kushaldas
+/securedrop/ @redshiftzero @kushaldas
 
 # updater GUI
 /journalist_gui/ @redshiftzero @kushaldas
 
 # admin CLI
-/admin/ @redshiftzero @kushaldas @emkll @heartsucker
+/admin/ @redshiftzero @kushaldas @emkll
 
 # docs
 /docs/ @zenmonkeykstop @redshiftzero @kushaldas @emkll
