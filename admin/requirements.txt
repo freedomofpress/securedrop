@@ -133,5 +133,9 @@ setuptools==46.0.0 \
 =======
 # WARNING: The following packages were not pinned, but pip requires them to be
 # pinned when the requirements file includes hashes. Consider using the --allow-unsafe flag.
+<<<<<<< HEAD
 # setuptools==41.6.0        # via ansible
 >>>>>>> Added a requirements file to update Docker pip version
+=======
+# setuptools==46.0.0        # via ansible
+>>>>>>> updated admin requiremets to upgrade marksupsafe to >=1.1
