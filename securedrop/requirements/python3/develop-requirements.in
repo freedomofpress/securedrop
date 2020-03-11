@@ -7,6 +7,7 @@ docker-py
 dnspython
 flake8
 html-linter
+markupsafe>=1.1
 molecule>=2.22
 mypy>=0.761
 # Needed for ansible network filter
