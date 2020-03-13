@@ -2,6 +2,16 @@
 
 ## 1.3.0~rc1
 
+## 1.2.2~rc1
+
+### Web Applications
+
+* Update psutil to 5.7.0
+
+### Admin Tails workstation
+
+* Pin setuptools to requirements file (#5159)
+
 ## 1.2.1
 
 ### Web Applications
