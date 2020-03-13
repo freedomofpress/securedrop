@@ -22,7 +22,7 @@ pylint>=2.4.4
 pytest-xdist
 python-vagrant
 safety>=1.8.4
-setuptools
+setuptools>=46.0.0
 sphinx
 sphinx-autobuild
 sphinx_rtd_theme
