@@ -1,5 +1,8 @@
 pip==19.1
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> adds --allow-unsafe flag to pip-compile and pins setuptools
 setuptools>=46.0.0
 wheel
 =======
