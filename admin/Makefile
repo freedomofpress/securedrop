@@ -7,8 +7,8 @@ test:  ## Run tox
 .PHONY: update-pip-requirements
 update-pip-requirements: ## Updates all Python requirements files via pip-compile.
 	@echo "███ Updating admin pip requirements..."
-	@bin/dev-shell pip-compile --generate-hashes --output-file requirements.txt requirements.in requirements-ansible.in
-	@bin/dev-shell pip-compile --generate-hashes --output-file requirements-dev.txt requirements-dev.in
+	@bin/dev-shell pip-compile --allow-unsafe --generate-hashes --output-file requirements.txt requirements.in requirements-ansible.in
+	@bin/dev-shell pip-compile --allow-unsafe --generate-hashes --output-file requirements-dev.txt requirements-dev.in
 
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##

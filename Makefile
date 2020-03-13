@@ -39,6 +39,7 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 		--output-file requirements/python3/test-requirements.txt \
 		requirements/python3/test-requirements.in
 	@$(DEVSHELL) pip-compile --generate-hashes \
+                --allow-unsafe \
 		--output-file requirements/python3/securedrop-app-code-requirements.txt \
 		requirements/python3/securedrop-app-code-requirements.in
 	@$(DEVSHELL) pip-compile --generate-hashes \
