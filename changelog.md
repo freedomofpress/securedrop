@@ -89,7 +89,7 @@
 ## 1.3.0~rc1
 >>>>>>> Backporting 1.2.0 changelog and updating version to 1.3.0~rc1
 
-## 1.2.2~rc1
+## 1.2.2
 
 ### Web Applications
 
