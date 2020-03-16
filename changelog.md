@@ -2,7 +2,7 @@
 
 ## 1.3.0~rc1
 
-## 1.2.2~rc1
+## 1.2.2
 
 ### Web Applications
 
