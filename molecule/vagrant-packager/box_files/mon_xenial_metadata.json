@@ -116,6 +116,9 @@
       ],
       "version": "1.2.1"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Add upgrade boxes for 1.2.2
     },
     {
       "providers": [
@@ -127,10 +130,13 @@
         }
       ],
       "version": "1.2.2"
+<<<<<<< HEAD
 =======
 >>>>>>> Provide upgrade boxes for SecureDrop 1.2.0
 =======
 >>>>>>> Add 1.2.1 upgrade testing boxes
+=======
+>>>>>>> Add upgrade boxes for 1.2.2
     }
   ]
 }
