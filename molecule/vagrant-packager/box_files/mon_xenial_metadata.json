@@ -111,6 +111,17 @@
         }
       ],
       "version": "1.2.1"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "156253981849acb027d4ec081c6ec42d0d3475e37ab936d389823d2d2fb8ef6f",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-xenial_1.2.2.box"
+        }
+      ],
+      "version": "1.2.2"
     }
   ]
 }
