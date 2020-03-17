@@ -123,7 +123,21 @@
         }
       ],
       "version": "1.2.1"
+<<<<<<< HEAD
 >>>>>>> Add 1.2.1 upgrade testing boxes
+=======
+    },
+    {
+      "providers": [
+        {
+          "checksum": "d38973ea121a96b40927cf6684812bac35ebcce17c5215e42874ad65a9b6ddd8",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/app-staging-xenial_1.2.2.box"
+        }
+      ],
+      "version": "1.2.2"
+>>>>>>> Add upgrade boxes for 1.2.2
     }
   ]
 }
