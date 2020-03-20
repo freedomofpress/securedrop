@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC1090
+# shellcheck disable=SC1090,SC2230
 # Shared logic to be sourced for bootstrapping a development virtualenv
 
 set -eo pipefail
