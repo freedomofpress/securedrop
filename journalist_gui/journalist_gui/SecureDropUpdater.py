@@ -128,12 +128,13 @@ class TailsconfigThread(QThread):
         tailsconfig_command = ("/home/amnesia/Persistent/"
                                "securedrop/securedrop-admin "
                                "tailsconfig")
+        self.failure_reason = ""
         try:
             child = pexpect.spawn(tailsconfig_command)
             child.expect('SUDO password:')
             self.output += child.before.decode('utf-8')
             child.sendline(self.sudo_password)
-            child.expect(pexpect.EOF)
+            child.expect(pexpect.EOF, timeout=120)
             self.output += child.before.decode('utf-8')
             child.close()
 
@@ -141,13 +142,15 @@ class TailsconfigThread(QThread):
             # failures in the Ansible output.
             if child.exitstatus:
                 self.update_success = False
-                self.failure_reason = strings.tailsconfig_failed_generic_reason  # noqa
+                if "[sudo via ansible" in self.output:
+                    self.failure_reason = strings.tailsconfig_failed_sudo_password
+                else:
+                    self.failure_reason = strings.tailsconfig_failed_generic_reason
             else:
                 self.update_success = True
         except pexpect.exceptions.TIMEOUT:
             self.update_success = False
-            self.failure_reason = strings.tailsconfig_failed_sudo_password
-
+            self.failure_reason = strings.tailsconfig_failed_timeout
         except subprocess.CalledProcessError:
             self.update_success = False
             self.failure_reason = strings.tailsconfig_failed_generic_reason
