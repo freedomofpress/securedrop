@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2086
+# shellcheck disable=SC2086,SC2230
 #
 #
 # Connect to a docker test instance's VNC session
