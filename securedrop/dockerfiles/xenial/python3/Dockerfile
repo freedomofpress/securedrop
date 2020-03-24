@@ -31,6 +31,7 @@ COPY ./tor_project_public.pub /opt/
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ENV TBB_VERSION 9.0.9
 =======
 ENV TBB_VERSION 9.0.2
@@ -38,6 +39,9 @@ ENV TBB_VERSION 9.0.2
 =======
 ENV TBB_VERSION 9.0.4
 >>>>>>> Bump Tor Browser from 9.0.2 to 9.0.4
+=======
+ENV TBB_VERSION 9.0.7
+>>>>>>> Update TBB version to 9.0.7
 RUN gpg --import /opt/tor_project_public.pub && \
     wget  https://dist.torproject.org/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     wget https://dist.torproject.org/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
