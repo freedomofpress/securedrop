@@ -10,4 +10,4 @@ pytest
 requests>=2.22.0
 tox
 pexpect
-urllib3>=1.25.3
+urllib3>=1.25.8
