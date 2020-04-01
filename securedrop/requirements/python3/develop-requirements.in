@@ -21,6 +21,7 @@ pyenchant
 pylint>=2.4.4
 pytest-xdist
 python-vagrant
+pyyaml>=5.3.1
 safety>=1.8.4
 setuptools>=46.0.0
 sphinx
