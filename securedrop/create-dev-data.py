@@ -58,12 +58,14 @@ def main(staging=False):
 
         # Add test sources and submissions
         num_sources = int(os.getenv('NUM_SOURCES', 2))
-        for i in range(num_sources):
+        for i in range(1, num_sources + 1):
             if i == 0:
                 # For the first source, the journalist who replied will be deleted
-                create_source_and_submissions(journalist_who_replied=journalist_tobe_deleted)
+                create_source_and_submissions(
+                    i, num_sources, journalist_who_replied=journalist_tobe_deleted
+                )
                 continue
-            create_source_and_submissions()
+            create_source_and_submissions(i, num_sources)
         # Now let us delete one journalist
         db.session.delete(journalist_tobe_deleted)
         db.session.commit()
@@ -89,8 +91,9 @@ def add_test_user(username, password, otp_secret, is_admin=False,
         db.session.rollback()
 
 
-def create_source_and_submissions(num_submissions=2, num_replies=2,
-                                  journalist_who_replied=None):
+def create_source_and_submissions(
+    source_index, source_count, num_submissions=2, num_replies=2, journalist_who_replied=None
+):
     # Store source in database
     codename = current_app.crypto_util.genrandomid()
     filesystem_id = current_app.crypto_util.hash_codename(codename)
@@ -137,9 +140,13 @@ def create_source_and_submissions(num_submissions=2, num_replies=2,
 
     db.session.commit()
 
-    print("Test source (codename: '{}', journalist designation '{}') "
-          "added with {} submissions and {} replies".format(
-              codename, journalist_designation, num_submissions, num_replies))
+    print(
+        "Test source {}/{} (codename: '{}', journalist designation '{}') "
+        "added with {} submissions and {} replies".format(
+            source_index, source_count, codename, journalist_designation,
+            num_submissions, num_replies
+        )
+    )
 
 
 if __name__ == "__main__":  # pragma: no cover
