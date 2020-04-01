@@ -307,7 +307,7 @@ class FunctionalTest(object):
         filesystem_id = self.source_app.crypto_util.hash_codename(source_name)
 
         def key_available(filesystem_id):
-            assert self.source_app.crypto_util.getkey(filesystem_id)
+            assert self.source_app.crypto_util.get_fingerprint(filesystem_id)
 
         self.wait_for(lambda: key_available(filesystem_id), timeout=60)
 

@@ -130,7 +130,7 @@ def make_blueprint(config):
         # Generate a keypair to encrypt replies from the journalist
         # Only do this if the journalist has flagged the source as one
         # that they would like to reply to. (Issue #140.)
-        if not current_app.crypto_util.getkey(g.filesystem_id) and \
+        if not current_app.crypto_util.get_fingerprint(g.filesystem_id) and \
                 g.source.flagged:
             db_uri = current_app.config['SQLALCHEMY_DATABASE_URI']
             async_genkey(current_app.crypto_util,
@@ -145,7 +145,7 @@ def make_blueprint(config):
             replies=replies,
             flagged=g.source.flagged,
             new_user=session.get('new_user', None),
-            haskey=current_app.crypto_util.getkey(
+            haskey=current_app.crypto_util.get_fingerprint(
                 g.filesystem_id))
 
     @view.route('/submit', methods=('POST',))

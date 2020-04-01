@@ -71,7 +71,7 @@ def reply(journalist, source, num_replies):
                                          source.journalist_filename)
         current_app.crypto_util.encrypt(
             str(os.urandom(1)),
-            [current_app.crypto_util.getkey(source.filesystem_id),
+            [current_app.crypto_util.get_fingerprint(source.filesystem_id),
              config.JOURNALIST_KEY],
             current_app.storage.path(source.filesystem_id, fname))
 

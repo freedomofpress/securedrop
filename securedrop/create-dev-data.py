@@ -124,7 +124,7 @@ def create_source_and_submissions(num_submissions=2, num_replies=2,
                                          source.journalist_filename)
         current_app.crypto_util.encrypt(
             next(replies),
-            [current_app.crypto_util.getkey(source.filesystem_id),
+            [current_app.crypto_util.get_fingerprint(source.filesystem_id),
              config.JOURNALIST_KEY],
             current_app.storage.path(source.filesystem_id, fname))
 

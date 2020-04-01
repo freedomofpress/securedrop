@@ -304,7 +304,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
 
     # Block up to 15s for the reply keypair, so we can test sending a reply
     def assertion():
-        assert current_app.crypto_util.getkey(filesystem_id) is not None
+        assert current_app.crypto_util.get_fingerprint(filesystem_id) is not None
     utils.asynchronous.wait_for_assertion(assertion, 15)
 
     # Create 2 replies to test deleting on journalist and source interface

@@ -243,7 +243,7 @@ class CryptoUtil:
         return genkey_obj
 
     def delete_reply_keypair(self, source_filesystem_id):
-        key = self.getkey(source_filesystem_id)
+        key = self.get_fingerprint(source_filesystem_id)
         # If this source was never flagged for review, they won't have a reply
         # keypair
         if not key:
@@ -256,7 +256,12 @@ class CryptoUtil:
         temp_gpg.delete_keys(key, secret=True, subkeys=True)
         self.keycache.delete(source_filesystem_id)
 
-    def getkey(self, name):
+    def get_fingerprint(self, name):
+        """
+        Returns the fingerprint of the GPG key for the given name.
+
+        The supplied name is usually a source filesystem ID.
+        """
         fingerprint = self.keycache.get(name)
         if fingerprint:  # cache hit
             return fingerprint
@@ -271,7 +276,7 @@ class CryptoUtil:
         return None
 
     def export_pubkey(self, name):
-        fingerprint = self.getkey(name)
+        fingerprint = self.get_fingerprint(name)
         if fingerprint:
             return self.gpg.export_keys(fingerprint)
         else:
