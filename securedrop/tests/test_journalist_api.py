@@ -491,8 +491,8 @@ def test_reply_of_deleted_journalist(journalist_app,
         assert response.status_code == 200
 
         assert response.json['uuid'] == reply_uuid
-        assert response.json['journalist_username'] == ""
-        assert response.json['journalist_uuid'] == ""
+        assert response.json['journalist_username'] == "deleted"
+        assert response.json['journalist_uuid'] == "deleted"
         assert response.json['journalist_first_name'] == ""
         assert response.json['journalist_last_name'] == ""
         assert response.json['is_deleted_by_source'] is False

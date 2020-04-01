@@ -278,10 +278,10 @@ class Reply(db.Model):
 
     def to_json(self):
         # type: () -> Dict[str, Union[str, int, bool]]
-        username = ""
+        username = "deleted"
         first_name = ""
         last_name = ""
-        uuid = ""
+        uuid = "deleted"
         if self.journalist:
             username = self.journalist.username
             first_name = self.journalist.first_name
