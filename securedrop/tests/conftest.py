@@ -219,6 +219,23 @@ def test_files(journalist_app, test_journo):
 
 
 @pytest.fixture(scope='function')
+def test_files_deleted_journalist(journalist_app, test_journo):
+    with journalist_app.app_context():
+        source, codename = utils.db_helper.init_source()
+        utils.db_helper.submit(source, 2)
+        test_journo['journalist']
+        juser, _ = utils.db_helper.init_journalist("f", "l", is_admin=False)
+        utils.db_helper.reply(juser, source, 1)
+        utils.db_helper.delete_journalist(juser)
+        return {'source': source,
+                'codename': codename,
+                'filesystem_id': source.filesystem_id,
+                'uuid': source.uuid,
+                'submissions': source.submissions,
+                'replies': source.replies}
+
+
+@pytest.fixture(scope='function')
 def journalist_api_token(journalist_app, test_journo):
     with journalist_app.test_client() as app:
         valid_token = TOTP(test_journo['otp_secret']).now()
