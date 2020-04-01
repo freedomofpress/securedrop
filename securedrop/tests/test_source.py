@@ -550,7 +550,7 @@ def test_why_journalist_key(source_app):
         resp = app.get(url_for('info.why_download_journalist_pubkey'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Why download the journalist's public key?" in text
+        assert "Why download the team's public key?" in text
 
 
 def test_metadata_route(config, source_app):
