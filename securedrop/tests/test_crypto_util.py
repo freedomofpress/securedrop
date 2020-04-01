@@ -303,17 +303,16 @@ def test_get_fingerprint(source_app, test_source):
     assert source_app.crypto_util.get_fingerprint('x' * 50) is None
 
 
-def test_export_pubkey(source_app, test_source):
+def test_get_pubkey(source_app, test_source):
     begin_pgp = '-----BEGIN PGP PUBLIC KEY BLOCK----'
 
     # check that a filesystem_id exports the pubkey
-    exported = source_app.crypto_util.export_pubkey(
-        test_source['filesystem_id'])
-    assert exported.startswith(begin_pgp)
+    pubkey = source_app.crypto_util.get_pubkey(test_source['filesystem_id'])
+    assert pubkey.startswith(begin_pgp)
 
     # check that a non-existent identifer exports None
-    exported = source_app.crypto_util.export_pubkey('x' * 50)
-    assert exported is None
+    pubkey = source_app.crypto_util.get_pubkey('x' * 50)
+    assert pubkey is None
 
 
 @given(
