@@ -22,7 +22,7 @@ pylint>=2.4.4
 pytest-xdist
 python-vagrant
 pyyaml>=5.3.1
-safety>=1.8.4
+safety>=1.8.7
 setuptools>=46.0.0
 sphinx
 sphinx-autobuild
