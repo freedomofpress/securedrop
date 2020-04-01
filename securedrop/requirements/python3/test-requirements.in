@@ -4,7 +4,7 @@ Flask-Testing
 flaky
 markupsafe>=1.1
 mock
-pillow
+pillow>=6.2.2
 pip-tools>=4.0.0
 py
 pytest
