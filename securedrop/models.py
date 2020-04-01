@@ -118,7 +118,7 @@ class Source(db.Model):
 
     @property
     def fingerprint(self):
-        return current_app.crypto_util.getkey(self.filesystem_id)
+        return current_app.crypto_util.get_fingerprint(self.filesystem_id)
 
     @fingerprint.setter
     def fingerprint(self, value):
