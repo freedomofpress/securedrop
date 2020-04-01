@@ -16,7 +16,7 @@ def prime_keycache():
     """
     with app.app_context():
         for source in Source.query.filter_by(pending=False).all():
-            app.crypto_util.get_fingerprint(source.filesystem_id)
+            app.crypto_util.get_pubkey(source.filesystem_id)
 
 
 prime_keycache()
