@@ -49,29 +49,48 @@ def main(staging=False):
                       test_otp_secret,
                       is_admin=False)
 
+        journalist_tobe_deleted = add_test_user("clarkkent",
+                                                test_password,
+                                                test_otp_secret,
+                                                is_admin=False,
+                                                first_name="Clark",
+                                                last_name="Kent")
+
         # Add test sources and submissions
         num_sources = int(os.getenv('NUM_SOURCES', 2))
-        for _ in range(num_sources):
+        for i in range(num_sources):
+            if i == 0:
+                # For the first source, the journalist who replied will be deleted
+                create_source_and_submissions(journalist_who_replied=journalist_tobe_deleted)
+                continue
             create_source_and_submissions()
+        # Now let us delete one journalist
+        db.session.delete(journalist_tobe_deleted)
+        db.session.commit()
 
 
-def add_test_user(username, password, otp_secret, is_admin=False):
+def add_test_user(username, password, otp_secret, is_admin=False,
+                  first_name="", last_name=""):
     try:
         user = Journalist(username=username,
                           password=password,
-                          is_admin=is_admin)
+                          is_admin=is_admin,
+                          first_name=first_name,
+                          last_name=last_name)
         user.otp_secret = otp_secret
         db.session.add(user)
         db.session.commit()
         print('Test user successfully added: '
               'username={}, password={}, otp_secret={}, is_admin={}'
               ''.format(username, password, otp_secret, is_admin))
+        return user
     except IntegrityError:
         print("Test user already added")
         db.session.rollback()
 
 
-def create_source_and_submissions(num_submissions=2, num_replies=2):
+def create_source_and_submissions(num_submissions=2, num_replies=2,
+                                  journalist_who_replied=None):
     # Store source in database
     codename = current_app.crypto_util.genrandomid()
     filesystem_id = current_app.crypto_util.hash_codename(codename)
@@ -109,7 +128,10 @@ def create_source_and_submissions(num_submissions=2, num_replies=2):
              config.JOURNALIST_KEY],
             current_app.storage.path(source.filesystem_id, fname))
 
-        journalist = Journalist.query.first()
+        if not journalist_who_replied:
+            journalist = Journalist.query.first()
+        else:
+            journalist = journalist_who_replied
         reply = Reply(journalist, source, fname)
         db.session.add(reply)
 

@@ -39,6 +39,17 @@ def init_journalist(first_name=None, last_name=None, is_admin=False):
     return user, user_pw
 
 
+def delete_journalist(journalist):
+    """Deletes a journalist from the database.
+
+    :param models.Journalist journalist: The journalist to delete
+
+    :returns: None
+    """
+    db.session.delete(journalist)
+    db.session.commit()
+
+
 def reply(journalist, source, num_replies):
     """Generates and submits *num_replies* replies to *source*
     from *journalist*. Returns reply objects as a list.
