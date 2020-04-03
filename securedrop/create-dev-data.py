@@ -59,7 +59,7 @@ def main(staging=False):
         # Add test sources and submissions
         num_sources = int(os.getenv('NUM_SOURCES', 2))
         for i in range(1, num_sources + 1):
-            if i == 0:
+            if i == 1:
                 # For the first source, the journalist who replied will be deleted
                 create_source_and_submissions(
                     i, num_sources, journalist_who_replied=journalist_tobe_deleted
