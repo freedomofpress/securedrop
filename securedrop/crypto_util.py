@@ -258,8 +258,8 @@ class CryptoUtil:
         temp_gpg = gnupg.GPG(binary='gpg2', homedir=self.gpg_key_dir)
         # The subkeys keyword argument deletes both secret and public keys.
         temp_gpg.delete_keys(key, secret=True, subkeys=True)
-        self.fprcache.delete(source_filesystem_id)
         self.keycache.delete(self.get_fingerprint(source_filesystem_id))
+        self.fprcache.delete(source_filesystem_id)
 
     def get_fingerprint(self, name):
         """
