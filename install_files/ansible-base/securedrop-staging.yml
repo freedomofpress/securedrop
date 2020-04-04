@@ -34,36 +34,6 @@
   roles:
     - { role: prepare-servers }
 
-- name: Extract test data
-  hosts: app-staging
-  environment:
-    LC_ALL: C
-  become: yes
-  max_fail_percentage: 0
-  any_errors_fatal: yes
-  tasks:
-    - name: Clear existing application data
-      file:
-        path: "{{ item }}"
-        state: absent
-      with_items:
-        - /var/lib/securedrop
-        - /var/www/securedrop
-      when: test_data_file is defined
-    - name: Copy test data to application server
-      synchronize:
-        src: "test-data/{{ test_data_file }}"
-        dest: /tmp/{{ test_data_file }}
-        partial: yes
-      when: test_data_file is defined
-    - name: Extract test data
-      unarchive:
-        dest: /
-        remote_src: yes
-        src: "/tmp/{{ test_data_file }}"
-        exclude: "var/lib/tor,etc/tor/torrc"
-      when: test_data_file is defined
-
 - name: Add FPF apt repository and install base packages.
   hosts: staging
   environment:
@@ -113,6 +83,60 @@
     - { role: app, tags: app }
     - { role: app-test, tags: app-test }
   become: yes
+
+- name: Extract test data
+  tags: extract-data
+  hosts: app-staging
+  environment:
+    LC_ALL: C
+  become: yes
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  tasks:
+    - name: Clear existing application data
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /var/lib/securedrop
+        - /var/www/securedrop/config.py
+        - /var/www/securedrop/static/i/logo.png
+      when: test_data_file is defined
+    - name: Copy test data to application server
+      synchronize:
+        src: "test-data/{{ test_data_file }}"
+        dest: /tmp/{{ test_data_file }}
+        partial: yes
+      when: test_data_file is defined
+    - name: Extract test data
+      unarchive:
+        dest: /
+        remote_src: yes
+        src: "/tmp/{{ test_data_file }}"
+        exclude: "var/lib/tor,etc/tor/torrc"
+      when: test_data_file is defined
+
+
+- name: Reconfigure application after data update
+  tags: extract-data
+  hosts: app-staging
+  environment:
+    LC_ALL: C
+  become: yes
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  tasks:
+    - name: Reconfigure securedrop-app-code
+      command: dpkg-reconfigure -fnoninteractive securedrop-app-code
+      when: test_data_file is defined
+    - name: Reconfigure securedrop-config
+      command: dpkg-reconfigure -fnoninteractive securedrop-config
+      when: test_data_file is defined
+    - name: Reload Apache service
+      service:
+        name: apache2
+        state: reloaded
+      when: test_data_file is defined
 
   # Set iptables rules with exemptions for staging that permit direct access for SSH.
   # The overrides that permit direct access are managed in group_vars/staging.yml,

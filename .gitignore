@@ -2,6 +2,9 @@
 # test files with the development containers
 test-results
 
+# ignore the test-data directory, used to store backup tarballs for testing
+install_files/ansible-base/test-data
+
 # ignore the production config files that don't end in .example
 securedrop-app-conf.yml
 securedrop-mon-conf.yml

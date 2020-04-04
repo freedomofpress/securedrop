@@ -152,7 +152,14 @@ By default, the staging environments are created with an empty submissions datab
 
 A staging environment will be created using the submissions and account data from the backup, but ignoring the backup file's Tor configuration data.
 
+You can also update the database in a running staging environment, without rebuilding it, using the ``UPDATE_DATA_FILE`` environmental variable as follows:
+
+  .. code:: sh
+  
+    UPDATE_DATA_FILE="sd-backup.tar.gz" make staging
+
 .. note:: It is not recommended to use backup data from a live SecureDrop installation in staging, as the backup may contain sensitive information and the staging environment should not be considered secure.
+
 
 
 When finished with the Staging environment, run ``molecule destroy -s <scenario>``
