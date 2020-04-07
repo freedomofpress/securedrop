@@ -65,17 +65,32 @@ database_migration() {
     fi
 }
 
-# Supports passing authorization headers for the SecureDrop API.
-# Only affects the Journalist Interface. Required for unattended upgrade
-# to v0.9.0.
-function permit_wsgi_authorization() {
+function adjust_wsgi_configuration {
     journalist_conf="/etc/apache2/sites-available/journalist.conf"
     if test -f $journalist_conf; then
-        # First we check whether the line is poresent.
+        # Supports passing authorization headers for the SecureDrop API.
+        # Only affects the Journalist Interface. Required for unattended upgrade
+        # to v0.9.0.
+        #
+        # First we check whether the line is present.
         # Next we find a target line to anchor the insertion.
         # Then we insert the line, along with the target line that was matched.
         if ! grep -qP '^WSGIPassAuthorization' "$journalist_conf"; then
             perl -pi -e 's/^(WSGIScriptAlias .*)/$1\nWSGIPassAuthorization On/' "$journalist_conf"
+        fi
+
+        # Add process-group and application-group to WSGIScriptAlias
+        # to ensure the application is initialized at process start
+        # instead of waiting for the first request. (See
+        # https://modwsgi.readthedocs.io/en/latest/configuration-directives/WSGIScriptAlias.html)
+        if grep -qP '^WSGIScriptAlias / /var/www/journalist.wsgi$' "$journalist_conf"; then
+            perl -pi -e 's/^(WSGIScriptAlias .*)/$1 process-group=journalist application-group=journalist/' "$journalist_conf"
+        fi
+
+        # Remove the WSGIProcessGroup directive; it's not needed if
+        # specified in WSGIScriptAlias.
+        if grep -qP '^WSGIProcessGroup journalist' "$journalist_conf"; then
+            perl -pi -e 's/^WSGIProcessGroup journalist.*\n//' "$journalist_conf"
         fi
     fi
 }
@@ -158,7 +173,7 @@ case "$1" in
     aa-enforce /etc/apparmor.d/usr.sbin.apache2
 
     # Munge Apache config while service is stopped.
-    permit_wsgi_authorization
+    adjust_wsgi_configuration
 
     # Restart apache so it loads with the apparmor profiles in enforce mode.
     service apache2 restart
