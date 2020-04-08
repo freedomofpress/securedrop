@@ -73,8 +73,8 @@ class CryptoUtil:
     # to set an expiration date.
     DEFAULT_KEY_EXPIRATION_DATE = '0'
 
-    REDIS_SOURCE_FINGERPRINT_HASH = "sd/crypto-util/source-fingerprints"
-    REDIS_SOURCE_KEY_HASH = "sd/crypto-util/source-keys"
+    REDIS_FINGERPRINT_HASH = "sd/crypto-util/fingerprints"
+    REDIS_KEY_HASH = "sd/crypto-util/keys"
 
     def __init__(self,
                  scrypt_params,
@@ -230,8 +230,8 @@ class CryptoUtil:
         temp_gpg = gnupg.GPG(binary='gpg2', homedir=self.gpg_key_dir)
         # The subkeys keyword argument deletes both secret and public keys.
         temp_gpg.delete_keys(key, secret=True, subkeys=True)
-        self.redis.hdel(self.REDIS_SOURCE_KEY_HASH, self.get_fingerprint(source_filesystem_id))
-        self.redis.hdel(self.REDIS_SOURCE_FINGERPRINT_HASH, source_filesystem_id)
+        self.redis.hdel(self.REDIS_KEY_HASH, self.get_fingerprint(source_filesystem_id))
+        self.redis.hdel(self.REDIS_FINGERPRINT_HASH, source_filesystem_id)
 
     def get_fingerprint(self, name):
         """
@@ -239,14 +239,14 @@ class CryptoUtil:
 
         The supplied name is usually a source filesystem ID.
         """
-        fingerprint = self.redis.hget(self.REDIS_SOURCE_FINGERPRINT_HASH, name)
+        fingerprint = self.redis.hget(self.REDIS_FINGERPRINT_HASH, name)
         if fingerprint:
             return fingerprint
 
         for key in self.gpg.list_keys():
             for uid in key['uids']:
                 if name in uid:
-                    self.redis.hset(self.REDIS_SOURCE_FINGERPRINT_HASH, name, key['fingerprint'])
+                    self.redis.hset(self.REDIS_FINGERPRINT_HASH, name, key['fingerprint'])
                     return key['fingerprint']
 
         return None
@@ -261,12 +261,12 @@ class CryptoUtil:
         if not fingerprint:
             return None
 
-        key = self.redis.hget(self.REDIS_SOURCE_KEY_HASH, fingerprint)
+        key = self.redis.hget(self.REDIS_KEY_HASH, fingerprint)
         if key:
             return key
 
         key = self.gpg.export_keys(fingerprint)
-        self.redis.hset(self.REDIS_SOURCE_KEY_HASH, fingerprint, key)
+        self.redis.hset(self.REDIS_KEY_HASH, fingerprint, key)
         return key
 
     def encrypt(self, plaintext, fingerprints, output=None):
