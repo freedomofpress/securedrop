@@ -185,12 +185,12 @@ def test_wireless_disabled_in_kernel_config(host, kernel_opts):
     remove wireless support from the kernel. Let's make sure wireless is
     disabled in the running kernel config!
     """
+    with host.sudo():
+        kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
+        kernel_config = host.file(kernel_config_path).content_string
 
-    kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
-    kernel_config = host.file(kernel_config_path).content_string
-
-    line = "# CONFIG_{} is not set".format(kernel_opts)
-    assert line in kernel_config
+        line = "# CONFIG_{} is not set".format(kernel_opts)
+        assert line in kernel_config
 
 
 @pytest.mark.parametrize('kernel_opts', [
@@ -203,11 +203,12 @@ def test_kernel_options_enabled_config(host, kernel_opts):
     Tests kernel config for options that should be enabled
     """
 
-    kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
-    kernel_config = host.file(kernel_config_path).content_string
+    with host.sudo():
+        kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
+        kernel_config = host.file(kernel_config_path).content_string
 
-    line = "{}=y".format(kernel_opts)
-    assert line in kernel_config
+        line = "{}=y".format(kernel_opts)
+        assert line in kernel_config
 
 
 def test_mds_mitigations_and_smt_disabled(host):
@@ -216,7 +217,8 @@ def test_mds_mitigations_and_smt_disabled(host):
     see https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/mds.html
     """
 
-    grub_config_path = "/boot/grub/grub.cfg"
-    grub_config = host.file(grub_config_path)
+    with host.sudo():
+        grub_config_path = "/boot/grub/grub.cfg"
+        grub_config = host.file(grub_config_path)
 
-    assert grub_config.contains("mds=full,nosmt")
+        assert grub_config.contains("mds=full,nosmt")
