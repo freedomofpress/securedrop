@@ -652,7 +652,7 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
 
         # First we must encrypt the reply, or it will get rejected
         # by the server.
-        source_key = current_app.crypto_util.getkey(
+        source_key = current_app.crypto_util.get_fingerprint(
             test_source['source'].filesystem_id)
         reply_content = current_app.crypto_util.gpg.encrypt(
             'This is a plaintext reply', source_key).data

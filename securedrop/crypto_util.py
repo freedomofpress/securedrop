@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import collections
 from distutils.version import StrictVersion
 import pretty_bad_protocol as gnupg
 import os
@@ -12,6 +11,7 @@ from base64 import b32encode
 from datetime import date
 from flask import current_app
 from pretty_bad_protocol._util import _is_stream, _make_binary_stream
+from redis import Redis
 
 import rm
 
@@ -55,32 +55,6 @@ def monkey_patch_delete_handle_status(self, key, value):
 gnupg._parsers.DeleteResult._handle_status = monkey_patch_delete_handle_status
 
 
-class FIFOCache():
-    """
-    We implemented this simple cache instead of using functools.lru_cache
-    (this uses a different cache replacement policy (FIFO), but either
-    FIFO or LRU works for our key fingerprint cache)
-    due to the inability to remove an item from its cache.
-
-    See: https://bugs.python.org/issue28178
-    """
-    def __init__(self, maxsize: int):
-        self.maxsize = maxsize
-        self.cache = collections.OrderedDict()  # type: collections.OrderedDict
-
-    def get(self, item):
-        if item in self.cache:
-            return self.cache[item]
-
-    def put(self, item, value):
-        self.cache[item] = value
-        if len(self.cache) > self.maxsize:
-            self.cache.popitem(last=False)
-
-    def delete(self, item):
-        del self.cache[item]
-
-
 class CryptoException(Exception):
     pass
 
@@ -99,8 +73,8 @@ class CryptoUtil:
     # to set an expiration date.
     DEFAULT_KEY_EXPIRATION_DATE = '0'
 
-    keycache_limit = 1000
-    keycache = FIFOCache(keycache_limit)
+    REDIS_FINGERPRINT_HASH = "sd/crypto-util/fingerprints"
+    REDIS_KEY_HASH = "sd/crypto-util/keys"
 
     def __init__(self,
                  scrypt_params,
@@ -114,7 +88,7 @@ class CryptoUtil:
         self.__securedrop_root = securedrop_root
         self.__word_list = word_list
 
-        if os.environ.get('SECUREDROP_ENV') == 'test':
+        if os.environ.get('SECUREDROP_ENV') in ('dev', 'test'):
             # Optimize crypto to speed up tests (at the expense of security
             # DO NOT use these settings in production)
             self.__gpg_key_length = 1024
@@ -147,6 +121,8 @@ class CryptoUtil:
 
         with io.open(adjectives_file) as f:
             self.adjectives = f.read().splitlines()
+
+        self.redis = Redis(decode_responses=True)
 
     # Make sure these pass before the app can run
     def do_runtime_tests(self):
@@ -243,7 +219,7 @@ class CryptoUtil:
         return genkey_obj
 
     def delete_reply_keypair(self, source_filesystem_id):
-        key = self.getkey(source_filesystem_id)
+        key = self.get_fingerprint(source_filesystem_id)
         # If this source was never flagged for review, they won't have a reply
         # keypair
         if not key:
@@ -254,28 +230,44 @@ class CryptoUtil:
         temp_gpg = gnupg.GPG(binary='gpg2', homedir=self.gpg_key_dir)
         # The subkeys keyword argument deletes both secret and public keys.
         temp_gpg.delete_keys(key, secret=True, subkeys=True)
-        self.keycache.delete(source_filesystem_id)
+        self.redis.hdel(self.REDIS_KEY_HASH, self.get_fingerprint(source_filesystem_id))
+        self.redis.hdel(self.REDIS_FINGERPRINT_HASH, source_filesystem_id)
 
-    def getkey(self, name):
-        fingerprint = self.keycache.get(name)
-        if fingerprint:  # cache hit
+    def get_fingerprint(self, name):
+        """
+        Returns the fingerprint of the GPG key for the given name.
+
+        The supplied name is usually a source filesystem ID.
+        """
+        fingerprint = self.redis.hget(self.REDIS_FINGERPRINT_HASH, name)
+        if fingerprint:
             return fingerprint
 
-        # cache miss
         for key in self.gpg.list_keys():
             for uid in key['uids']:
                 if name in uid:
-                    self.keycache.put(name, key['fingerprint'])
+                    self.redis.hset(self.REDIS_FINGERPRINT_HASH, name, key['fingerprint'])
                     return key['fingerprint']
 
         return None
 
-    def export_pubkey(self, name):
-        fingerprint = self.getkey(name)
-        if fingerprint:
-            return self.gpg.export_keys(fingerprint)
-        else:
+    def get_pubkey(self, name):
+        """
+        Returns the GPG public key for the given name.
+
+        The supplied name is usually a source filesystem ID.
+        """
+        fingerprint = self.get_fingerprint(name)
+        if not fingerprint:
             return None
+
+        key = self.redis.hget(self.REDIS_KEY_HASH, fingerprint)
+        if key:
+            return key
+
+        key = self.gpg.export_keys(fingerprint)
+        self.redis.hset(self.REDIS_KEY_HASH, fingerprint, key)
+        return key
 
     def encrypt(self, plaintext, fingerprints, output=None):
         # Verify the output path

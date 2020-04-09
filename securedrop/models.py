@@ -118,7 +118,7 @@ class Source(db.Model):
 
     @property
     def fingerprint(self):
-        return current_app.crypto_util.getkey(self.filesystem_id)
+        return current_app.crypto_util.get_fingerprint(self.filesystem_id)
 
     @fingerprint.setter
     def fingerprint(self, value):
@@ -131,7 +131,7 @@ class Source(db.Model):
     @property
     def public_key(self):
         # type: () -> str
-        return current_app.crypto_util.export_pubkey(self.filesystem_id)
+        return current_app.crypto_util.get_pubkey(self.filesystem_id)
 
     @public_key.setter
     def public_key(self, value):

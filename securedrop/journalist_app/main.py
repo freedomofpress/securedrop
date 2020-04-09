@@ -108,7 +108,7 @@ def make_blueprint(config):
                                               g.source.journalist_filename)
         current_app.crypto_util.encrypt(
             form.message.data,
-            [current_app.crypto_util.getkey(g.filesystem_id),
+            [current_app.crypto_util.get_fingerprint(g.filesystem_id),
              config.JOURNALIST_KEY],
             output=current_app.storage.path(g.filesystem_id, filename),
         )

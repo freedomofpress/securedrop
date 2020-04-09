@@ -92,8 +92,10 @@ common_apache2_directory_declarations = """
       securedrop_test_vars.apache_listening_address),
   "WSGIDaemonProcess journalist processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(  # noqa
       securedrop_test_vars.securedrop_code),
-  'WSGIProcessGroup journalist',
-  'WSGIScriptAlias / /var/www/journalist.wsgi',
+  (
+      'WSGIScriptAlias / /var/www/journalist.wsgi '
+      'process-group=journalist application-group=journalist'
+  ),
   'WSGIPassAuthorization On',
   'Header set Cache-Control "no-store"',
   "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),

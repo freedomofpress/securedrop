@@ -11,7 +11,7 @@ os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import crypto_util
 import models
 
-from crypto_util import CryptoUtil, CryptoException, FIFOCache
+from crypto_util import CryptoUtil, CryptoException
 from db import db
 
 
@@ -40,7 +40,7 @@ def test_encrypt_success(source_app, config, test_source):
     with source_app.app_context():
         ciphertext = source_app.crypto_util.encrypt(
             message,
-            [source_app.crypto_util.getkey(test_source['filesystem_id']),
+            [source_app.crypto_util.get_fingerprint(test_source['filesystem_id']),
              config.JOURNALIST_KEY],
             source_app.storage.path(test_source['filesystem_id'],
                                     'somefile.gpg'))
@@ -70,7 +70,7 @@ def test_encrypt_without_output(source_app, config, test_source):
     with source_app.app_context():
         ciphertext = source_app.crypto_util.encrypt(
             message,
-            [source_app.crypto_util.getkey(test_source['filesystem_id']),
+            [source_app.crypto_util.get_fingerprint(test_source['filesystem_id']),
              config.JOURNALIST_KEY])
         plaintext = source_app.crypto_util.decrypt(
             test_source['codename'],
@@ -96,7 +96,7 @@ def test_encrypt_binary_stream(source_app, config, test_source):
         with io.open(os.path.realpath(__file__)) as fh:
             ciphertext = source_app.crypto_util.encrypt(
                 fh,
-                [source_app.crypto_util.getkey(test_source['filesystem_id']),
+                [source_app.crypto_util.get_fingerprint(test_source['filesystem_id']),
                  config.JOURNALIST_KEY],
                 source_app.storage.path(test_source['filesystem_id'],
                                         'somefile.gpg'))
@@ -116,7 +116,7 @@ def test_encrypt_fingerprints_not_a_list_or_tuple(source_app, test_source):
     with source_app.app_context():
         ciphertext = source_app.crypto_util.encrypt(
             message,
-            source_app.crypto_util.getkey(test_source['filesystem_id']),
+            source_app.crypto_util.get_fingerprint(test_source['filesystem_id']),
             source_app.storage.path(test_source['filesystem_id'],
                                     'somefile.gpg'))
         plaintext = source_app.crypto_util.decrypt(test_source['codename'],
@@ -133,7 +133,7 @@ def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
     with source_app.app_context():
         ciphertext = source_app.crypto_util.encrypt(
             message,
-            [source_app.crypto_util.getkey(test_source['filesystem_id']),
+            [source_app.crypto_util.get_fingerprint(test_source['filesystem_id']),
              config.JOURNALIST_KEY],
             source_app.storage.path(test_source['filesystem_id'],
                                     'somefile.gpg'))
@@ -208,7 +208,7 @@ def test_genkeypair(source_app):
         db.session.commit()
         source_app.crypto_util.genkeypair(source.filesystem_id, codename)
 
-        assert source_app.crypto_util.getkey(filesystem_id) is not None
+        assert source_app.crypto_util.get_fingerprint(filesystem_id) is not None
 
 
 def parse_gpg_date_string(date_string):
@@ -241,15 +241,15 @@ def test_reply_keypair_creation_and_expiration_dates(source_app):
         db.session.commit()
         source_app.crypto_util.genkeypair(source.filesystem_id, codename)
 
-        # crypto_util.getkey only returns the fingerprint of the key. We need
+        # crypto_util.get_fingerprint only returns the fingerprint of the key. We need
         # the full output of gpg.list_keys() to check the creation and
         # expire dates.
         #
-        # TODO: it might be generally useful to refactor crypto_util.getkey so
+        # TODO: it might be generally useful to refactor crypto_util.get_fingerprint so
         # it always returns the entire key dictionary instead of just the
         # fingerprint (which is always easily extracted from the entire key
         # dictionary).
-        new_key_fingerprint = source_app.crypto_util.getkey(filesystem_id)
+        new_key_fingerprint = source_app.crypto_util.get_fingerprint(filesystem_id)
         new_key = [key for key in source_app.crypto_util.gpg.list_keys()
                    if new_key_fingerprint == key['fingerprint']][0]
 
@@ -267,7 +267,7 @@ def test_reply_keypair_creation_and_expiration_dates(source_app):
 def test_delete_reply_keypair(source_app, test_source):
     fid = test_source['filesystem_id']
     source_app.crypto_util.delete_reply_keypair(fid)
-    assert source_app.crypto_util.getkey(fid) is None
+    assert source_app.crypto_util.get_fingerprint(fid) is None
 
 
 def test_delete_reply_keypair_pinentry_status_is_handled(source_app, test_source,
@@ -285,7 +285,7 @@ def test_delete_reply_keypair_pinentry_status_is_handled(source_app, test_source
 
     captured = capsys.readouterr()
     assert "ValueError: Unknown status message: 'PINENTRY_LAUNCHED'" not in captured.err
-    assert source_app.crypto_util.getkey(fid) is None
+    assert source_app.crypto_util.get_fingerprint(fid) is None
 
 
 def test_delete_reply_keypair_no_key(source_app):
@@ -295,25 +295,24 @@ def test_delete_reply_keypair_no_key(source_app):
     source_app.crypto_util.delete_reply_keypair('Reality Winner')
 
 
-def test_getkey(source_app, test_source):
-    assert (source_app.crypto_util.getkey(test_source['filesystem_id'])
+def test_get_fingerprint(source_app, test_source):
+    assert (source_app.crypto_util.get_fingerprint(test_source['filesystem_id'])
             is not None)
 
     # check that a non-existent key returns None
-    assert source_app.crypto_util.getkey('x' * 50) is None
+    assert source_app.crypto_util.get_fingerprint('x' * 50) is None
 
 
-def test_export_pubkey(source_app, test_source):
+def test_get_pubkey(source_app, test_source):
     begin_pgp = '-----BEGIN PGP PUBLIC KEY BLOCK----'
 
     # check that a filesystem_id exports the pubkey
-    exported = source_app.crypto_util.export_pubkey(
-        test_source['filesystem_id'])
-    assert exported.startswith(begin_pgp)
+    pubkey = source_app.crypto_util.get_pubkey(test_source['filesystem_id'])
+    assert pubkey.startswith(begin_pgp)
 
     # check that a non-existent identifer exports None
-    exported = source_app.crypto_util.export_pubkey('x' * 50)
-    assert exported is None
+    pubkey = source_app.crypto_util.get_pubkey('x' * 50)
+    assert pubkey is None
 
 
 @given(
@@ -343,25 +342,3 @@ def test_encrypt_then_decrypt_gives_same_result(
     decrypted_text = crypto.decrypt(secret, ciphertext)
 
     assert decrypted_text == message
-
-
-def test_fifo_cache():
-    cache = FIFOCache(3)
-
-    cache.put('item 1', 1)
-    cache.put('item 2', 2)
-    cache.put('item 3', 3)
-
-    assert cache.get('item 1') == 1
-    assert cache.get('item 2') == 2
-    assert cache.get('item 3') == 3
-
-    cache.put('item 4', 4)
-    # Maxsize is 3, so adding item 4 should kick out item 1
-    assert not cache.get('item 1')
-    assert cache.get('item 2') == 2
-    assert cache.get('item 3') == 3
-    assert cache.get('item 4') == 4
-
-    cache.delete('item 2')
-    assert not cache.get('item 2')

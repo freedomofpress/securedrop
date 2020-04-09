@@ -1691,7 +1691,7 @@ def test_delete_source_deletes_source_key(journalist_app,
         utils.db_helper.reply(journo, source, 2)
 
         # Source key exists
-        source_key = current_app.crypto_util.getkey(
+        source_key = current_app.crypto_util.get_fingerprint(
             test_source['filesystem_id'])
         assert source_key is not None
 
@@ -1699,7 +1699,7 @@ def test_delete_source_deletes_source_key(journalist_app,
             test_source['filesystem_id'])
 
         # Source key no longer exists
-        source_key = current_app.crypto_util.getkey(
+        source_key = current_app.crypto_util.get_fingerprint(
             test_source['filesystem_id'])
         assert source_key is None
 
