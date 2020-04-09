@@ -3,3 +3,23 @@
   reboot:
   tags:
     - reboot
+  when: not securedrop_staging_qubes_env|default(False)
+
+- name: Gracefully halt Qubes staging VM
+  command: qvm-shutdown --wait {{ "sd-staging-app" if "app" in inventory_hostname else "sd-staging-mon" }}
+  become: no
+  delegate_to: localhost
+  when: securedrop_staging_qubes_env|default(False)
+  tags:
+    - reboot
+
+- name: Boot Qubes staging VM
+  shell: >
+    qvm-start
+    {{ "sd-staging-app" if "app" in inventory_hostname else "sd-staging-mon" }}
+    && sleep 30
+  become: no
+  delegate_to: localhost
+  when: securedrop_staging_qubes_env|default(False)
+  tags:
+    - reboot
