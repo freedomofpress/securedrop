@@ -23,3 +23,7 @@ remote_host_ref: >-
   }}
 
 securedrop_staging_install_target_distro: xenial
+
+# Inform the Ansible logic we're targeting Qubes staging VMs,
+# helps to customize the reboot logic.
+securedrop_staging_qubes_env: True

@@ -299,12 +299,6 @@ environment. In from the root of the SecureDrop project in ``sd-dev``, run:
 
    make staging
 
-One limitation of Qubes is that the reboot handlers which run during 
-provisioning can shut down the VMs, but not start them again. When you see the
-message ``RUNNING HANDLER [common : Wait for server to come back.]`` you must 
-start the VMs again manually from ``dom0`` with the command 
-``qvm-start sd-staging-app && qvm-start sd-staging-mon``.
-
 The ``make staging`` command invokes the ``qubes-staging`` Molecule scenario. 
 You can also run constituent Molecule actions directly, rather than using
 the Makefile target: 
