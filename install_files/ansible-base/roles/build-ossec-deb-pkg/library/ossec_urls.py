@@ -14,7 +14,7 @@ options:
   ossec_version:
     description:
       - version number of release to download
-    default: "3.0.0"
+    default: "3.6.0"
     required: no
 notes:
   - The OSSEC version to download is hardcoded to avoid surprises.
@@ -23,7 +23,7 @@ notes:
 '''
 EXAMPLES = '''
 - ossec_urls:
-    ossec_version: "3.0.0"
+    ossec_version: "3.6.0"
 '''
 
 
@@ -68,7 +68,7 @@ class OSSECURLs():
 def main():
     module = AnsibleModule(  # noqa: F405
         argument_spec=dict(
-            ossec_version=dict(default="3.0.0"),
+            ossec_version=dict(default="3.6.0"),
         ),
         supports_check_mode=False
     )

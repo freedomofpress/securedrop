@@ -18,6 +18,7 @@ set -x
 
 case "$1" in
     configure)
+
         GROUP="ossec"
         OSSEC_HOME="/var/ossec"
 

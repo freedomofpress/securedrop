@@ -1,6 +1,6 @@
 ---
 securedrop_version: "1.3.0~rc1"
-ossec_version: "3.0.0"
+ossec_version: "3.6.0"
 keyring_version: "0.1.3"
 config_version: "0.1.3"
 grsec_version: "4.14.175"
