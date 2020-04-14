@@ -7,9 +7,17 @@
     molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | molecule_from_yaml }}"
   tasks:
+    - name: Check that Qubes admin tools are installed
+      shell: >
+        which qvm-clone
+        || { echo 'qvm-clone not found, install qubes-core-admin-client';
+        exit 1; }
+      changed_when: false
 
     - name: Clone base image for staging VMs
-      command: qvm-clone {{ item.vm_base }} {{ item.vm_name }}
+      # The "ignore-errors" flag sidesteps an issue with qvm-sync-appmenus. We don't need
+      # app menus for the SD VMs, so an error there need not block provisioning.
+      command: qvm-clone {{ item.vm_base }} {{ item.vm_name }} --ignore-errors
       register: clone_result
       failed_when: >-
         clone_result.rc != 0 and "qvm-clone: error: VM "+item.vm_name+" already exists" not in clone_result.stderr_lines
