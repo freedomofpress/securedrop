@@ -7,6 +7,8 @@
         <img src="{{ url_for('static', filename='i/font-awesome/info-circle-black.png') }}" width="20" height="16">
         {% elif category == 'error' %}
         <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/exclamation-triangle-black.png') }}" width="20" height="17">
+        {% elif category == 'important' %}
+        <img src="{{ url_for('static', filename='i/bang-stop.png') }}" width="22" height="22">
         {% endif %}
         {{ message }}
       </div>

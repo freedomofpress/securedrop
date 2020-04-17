@@ -251,7 +251,10 @@ def test_login_and_logout(source_app):
         assert 'logged_in' not in session
         assert 'codename' not in session
         text = resp.data.decode('utf-8')
-        assert 'Thank you for exiting your session!' in text
+
+        # This is part of the logout page message instructing users
+        # to click the 'New Identity' icon
+        assert 'This will clear your Tor browser activity data' in text
 
 
 def test_user_must_log_in_for_protected_views(source_app):
@@ -706,7 +709,7 @@ def test_source_session_expiration(config, source_app):
         assert not session
 
         text = resp.data.decode('utf-8')
-        assert 'Your session timed out due to inactivity' in text
+        assert 'You were logged out due to inactivity' in text
 
 
 def test_source_session_expiration_create(config, source_app):
@@ -731,7 +734,7 @@ def test_source_session_expiration_create(config, source_app):
         assert not session
 
         text = resp.data.decode('utf-8')
-        assert 'Your session timed out due to inactivity' in text
+        assert 'You were logged out due to inactivity' in text
 
 
 def test_csrf_error_page(config, source_app):
@@ -743,7 +746,7 @@ def test_csrf_error_page(config, source_app):
 
         resp = app.post(url_for('main.create'), follow_redirects=True)
         text = resp.data.decode('utf-8')
-        assert 'Your session timed out due to inactivity' in text
+        assert 'You were logged out due to inactivity' in text
 
 
 def test_source_can_only_delete_own_replies(source_app):
