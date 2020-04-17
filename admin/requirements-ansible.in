@@ -1,3 +1,3 @@
-ansible>2.7<2.8
+ansible>2.9.7<2.10
 cryptography>=2.7
 netaddr
