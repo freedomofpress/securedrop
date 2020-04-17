@@ -12,8 +12,8 @@ ansible-lint==4.1.0 \
     --hash=sha256:9430ea6e654ba4bf5b9c6921efc040f46cda9c4fd2896a99ff71d21037bcb123 \
     --hash=sha256:c1b442b01091eca13ef11d98c3376e9489ba5b69a8467828ca86044f384bc0a1 \
     # via molecule
-ansible==2.7.13 \
-    --hash=sha256:339c87a1bf9e8555ce1e1c1a9452d8ed1df240944ec1a3fc2e813e6c7d70aeae
+ansible==2.9.7 \
+    --hash=sha256:7222ce925536a25b2912364e13b03a3e21dbf2f96799ebff304f48509324de7b
 anyconfig==0.9.7 \
     --hash=sha256:4d6016ae6eecc5e502bc7e99ae0639c5710c5c67bde5f21b06b9eaafd9ce0e7e \
     # via molecule
@@ -383,7 +383,7 @@ packaging==16.8 \
 paramiko==2.6.0 \
     --hash=sha256:99f0179bdc176281d21961a003ffdb2ec369daac1a1007241f53374e376576cf \
     --hash=sha256:f4b2edfa0d226b70bd4ca31ea7e389325990283da23465d572ed1f70a7583041 \
-    # via ansible, molecule
+    # via molecule
 pathspec==0.5.5 \
     --hash=sha256:72c495d1bbe76674219e307f6d1c6062f2e1b0b483a5e4886435127d0df3d0d3 \
     # via yamllint
