@@ -37,7 +37,7 @@
     - name: Wait for VMs to boot
       pause:
         seconds: 15
-      when: start_result|changed
+      when: start_result.changed
 
     - name: Get IP address for instances
       command: qvm-ls --raw-data --field ip {{ item.vm_name }}
