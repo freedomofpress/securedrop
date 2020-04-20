@@ -13,7 +13,7 @@ install_local_packages: false
 ci_builder: false
 
 # Ansible v1 default reference to remote host
-remote_host_ref: "{{ ansible_ssh_host|default(inventory_hostname) }}"
+remote_host_ref: "{{ ansible_host|default(inventory_hostname) }}"
 
 # Packages required for working on SecureDrop within development VM. Same list
 # is used on the build VM to pull in required packages.

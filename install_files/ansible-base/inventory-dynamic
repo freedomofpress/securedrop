@@ -182,8 +182,8 @@ def build_inventory():
         "_meta": {
             "hostvars": {
                 h: {
-                    "ansible_ssh_host": lookup_ssh_address(h),
-                    "ansible_ssh_user": lookup_admin_username(),
+                    "ansible_host": lookup_ssh_address(h),
+                    "ansible_user": lookup_admin_username(),
                 } for h in SECUREDROP_SUPPORTED_HOSTNAMES
             },
         },
