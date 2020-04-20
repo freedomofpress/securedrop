@@ -188,7 +188,10 @@ class QaLoader(object):
         fname = "{}-{}-reply.gpg".format(source.interaction_count, source.journalist_filename)
         current_app.crypto_util.encrypt(
             next(replies),
-            [current_app.crypto_util.getkey(source.filesystem_id), sdconfig.JOURNALIST_KEY],
+            [
+                current_app.crypto_util.get_fingerprint(source.filesystem_id),
+                sdconfig.JOURNALIST_KEY
+            ],
             current_app.storage.path(source.filesystem_id, fname),
         )
 
