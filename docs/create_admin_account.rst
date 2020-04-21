@@ -1,39 +1,39 @@
-Create an admin account on the Journalist Interface
-===================================================
+Create an Admin Account on the *Journalist Interface*
+=====================================================
 
 In order for any user (admin or journalist) to access the
-Journalist Interface, they need:
+*Journalist Interface*, they need:
 
-1. The ``auth-cookie`` for the Journalist Interface's ATHS
-2. An account on the Journalist Interface, which requires the following
+1. The ``auth-cookie`` for the *Journalist Interface*'s ATHS
+2. An account on the *Journalist Interface*, which requires the following
    credentials to log in:
 
    * Username
    * Passphrase
    * Two-factor authentication code
 
-You should create a separate account on the Journalist Interface for
+You should create a separate account on the *Journalist Interface* for
 each user who needs access. This makes it easy to enable or disable
-access to the Journalist Interface on an individual basis, so you can
+access to the *Journalist Interface* on an individual basis, so you can
 grant access to new users or revoke access for users who have left the
 organization or should no longer be allowed to access the Journalist
 Interface.
 
-There are two types of accounts on the Journalist Interface: admin
+There are two types of accounts on the *Journalist Interface*: admin
 accounts and normal accounts. Admins accounts are like normal
 accounts, but they are additionally allowed to manage (add, change,
 delete) other user accounts through the web interface.
 
-You must create the first admin account on the Journalist Interface by
+You must create the first admin account on the *Journalist Interface* by
 running a command on the *Application Server*. After that, the Journalist
 Interface admin can create additional accounts through the web
 interface.
 
-To create the first admin account, SSH to the *Application Server*, then:
+If you are installing SecureDrop yourself, to create the first admin account, :doc:`SSH to the Application Server <test_the_installation>`, then:
 
 .. code:: sh
 
-   sudo su
+   sudo -u www-data bash
    cd /var/www/securedrop
    ./manage.py add-admin
 
@@ -48,14 +48,11 @@ output like this:
     This journalist's passphrase is: delivery propose requisite stunner dragonfly unstamped stowaway
 
 Passphrases include the spaces between the words, but not leading or trailing
-whitespace. Be sure to save this passphrase in the appropriate KeePassX database.
-
-.. todo:: Clarify how to set up TOTP/HOTP through ``./manage.py
-          add-admin``.
+whitespace. Be sure to save this passphrase in the appropriate KeePassXC database.
 
 Once that's done, you should open the Tor Browser |TorBrowser| and
-navigate to the Journalist Interface's .onion address. Verify that you
-can log in to the Journalist Interface with the admin account you just
+navigate to the *Journalist Interface*'s .onion address. Verify that you
+can log in to the *Journalist Interface* with the admin account you just
 created.
 
 For adding more user accounts, please refer now to our :doc:`Admin
@@ -65,3 +62,4 @@ Interface Guide <admin>`.
            following the :ref:`Updating Logo Image` documentation.
 
 .. |TorBrowser| image:: images/torbrowser.png
+

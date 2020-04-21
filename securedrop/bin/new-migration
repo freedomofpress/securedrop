@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+set -u
+
+sudo mkdir -p /var/lib/securedrop/
+sudo chmod 0700 /var/lib/securedrop/
+sudo chown "$(id -u):$(id -g)" /var/lib/securedrop
+rm -f /var/lib/securedrop/db.sqlite
+sqlite3 /var/lib/securedrop/db.sqlite .databases > /dev/null
+alembic upgrade head
+export SECUREDROP_ENV='dev'
+alembic revision --autogenerate -m "$1"

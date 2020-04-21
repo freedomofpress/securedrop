@@ -1,0 +1,198 @@
+#!/bin/bash
+# postinst script for securedrop-app-code
+#
+# see: dh_installdeb(1)
+set -e
+set -x
+set -o pipefail
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+SDBIN=/opt/venvs/securedrop-app-code/bin
+
+database_migration() {
+    database_dir='/var/lib/securedrop'
+    database_file="$database_dir/db.sqlite"
+
+    # Ensure the database exists.
+    if [ ! -e "$database_file" ]; then
+        old_umask=$(umask)
+        umask 0027 # to get os 0640 permissions from the sqlite command
+
+        # Future-proof way to create an empty database.
+        sqlite3 "$database_file" '.databases'
+        umask "$old_umask"
+        chown www-data:www-data "$database_file"
+    fi
+
+    cd '/var/www/securedrop/'
+
+    # `alembic current` outputs nothing if the DB isn't under version control.
+    if [ -z "$(${SDBIN}/alembic current)" ]; then
+        sqlite_tables=$(sqlite3 "$database_file" .tables)
+
+        if ! echo "$sqlite_tables" | grep -q journalists; then
+            # This is a fresh install, run the full migrations.
+            ${SDBIN}/alembic upgrade head
+        else
+            # This is an old install, so mark that the schema is up to date
+            # as of the version of migration 15ac9509fc68_init.py when we first
+            # started version controlling the database.
+            ${SDBIN}/alembic stamp 15ac9509fc68
+        fi
+    fi
+
+    db_backup="/var/lib/securedrop/backups/$(date +%Y-%m-%d-%H-%M-%S)-db.sqlite"
+
+    if ! ${SDBIN}/alembic current | grep -q '(head)'; then
+        cp /var/lib/securedrop/db.sqlite "$db_backup"
+    fi
+
+    if ${SDBIN}/alembic upgrade head; then
+        rm -f "$db_backup"
+    else
+        echo "Error migrating database: Backup saved to $db_backup" >&2
+        return 1
+    fi
+}
+
+# Supports passing authorization headers for the SecureDrop API.
+# Only affects the Journalist Interface. Required for unattended upgrade
+# to v0.9.0.
+function permit_wsgi_authorization() {
+    journalist_conf="/etc/apache2/sites-available/journalist.conf"
+    if test -f $journalist_conf; then
+        # First we check whether the line is poresent.
+        # Next we find a target line to anchor the insertion.
+        # Then we insert the line, along with the target line that was matched.
+        if ! grep -qP '^WSGIPassAuthorization' "$journalist_conf"; then
+            perl -pi -e 's/^(WSGIScriptAlias .*)/$1\nWSGIPassAuthorization On/' "$journalist_conf"
+        fi
+    fi
+}
+
+# Manage PaX flags for web app, only required under Xenial.
+# paxctld will already be present on Xenial due to apt dependencies,
+# then we substitute the config inline
+set_paxctld_config() {
+    paxctld_config="/etc/paxctld.conf"
+    if [ -f "$paxctld_config" ]; then
+        if ! grep -q '^/usr/sbin/apache2' "$paxctld_config"; then
+            printf '%s\t%s\n' "/usr/sbin/apache2" "m" >> "$paxctld_config"
+            systemctl restart paxctld
+        fi
+        systemctl enable paxctld
+        systemctl start paxctld
+    fi
+}
+
+case "$1" in
+    configure)
+
+    # Ensure PaX flags are set appropriately
+    set_paxctld_config
+
+    # Ensure SecureDrop's necessary directories are created
+    for dir in /var/lib/securedrop/{,tmp,shredder,store,keys,/keys/private-keys-v1.d,/keys/openpgp-revocs.d,backups} /var/www/securedrop; do
+      mkdir -p "$dir"
+      chmod 0700 "$dir"
+    done
+
+    # Ensure required gpg-agent.conf is in place, see #4013.
+    if [ -e "/var/lib/securedrop/keys/gpg-agent.conf" ]; then
+
+        # gpg-agent.conf does exist, update it if needed.
+        if ! grep -qE '^allow-loopback-pinentry$' /var/lib/securedrop/keys/gpg-agent.conf; then
+            echo allow-loopback-pinentry >> /var/lib/securedrop/keys/gpg-agent.conf
+        fi
+
+    else
+        # gpg-agent.conf does not yet exist, create it.
+        echo allow-loopback-pinentry > /var/lib/securedrop/keys/gpg-agent.conf
+    fi
+
+    # Migrate private keyring to gpg2.1 if needed
+    if [ ! -d "/var/lib/securedrop/keys/private-keys-v1.d" ]; then
+        # Then we should migrate the keyring
+        gpg2 --homedir=/var/lib/securedrop/keys --batch --import < /var/lib/securedrop/keys/secring.gpg
+    fi
+
+    chown -R www-data:www-data /var/lib/securedrop /var/www/securedrop
+
+    chown -R www-data:www-data /var/www/securedrop
+    chown www-data:www-data /var/www/journalist.wsgi
+    chown www-data:www-data /var/www/source.wsgi
+
+    # Apache's default sites are not allowed by the securedrop apparmor profile
+    # disable the site before putting the apache apparmor profile in enforce
+    # mode.
+    a2dissite 000-default
+    a2dissite default-ssl
+    # Stop Apache service before making changes to its AppArmor profile.
+    # If the Apache service is running unconfined, and the profile is
+    # set to "enforce", then apache2 will fail to restart, since it lacks
+    # the ability to send signals to unconfined peers.
+    service apache2 stop
+
+    # Point Apache to our bundled mod_wsgi
+    ${SDBIN}/mod_wsgi-express module-config > /etc/apache2/mods-available/wsgi.load
+
+    # and make sure it's enabled
+    a2enmod wsgi
+
+    # If the profile was disabled enabled it.
+    if [ -e "/etc/apparmor.d/disable/usr.sbin.apache2" ]; then
+        rm /etc/apparmor.d/disable/usr.sbin.apache2
+    fi
+
+    aa-enforce /etc/apparmor.d/usr.sbin.tor
+    aa-enforce /etc/apparmor.d/usr.sbin.apache2
+
+    # Munge Apache config while service is stopped.
+    permit_wsgi_authorization
+
+    # Restart apache so it loads with the apparmor profiles in enforce mode.
+    service apache2 restart
+
+    # cleanup dynamically generated assets
+    rm -fr /var/www/securedrop/static/gen/*
+
+    # Version migrations
+
+    if [ -n "$2" ] && [ "$2" = "0.3" ] ; then
+      # Restore custom logo
+      cp /tmp/securedrop_custom_logo.png /var/www/securedrop/static/i/logo.png
+      rm /tmp/securedrop_custom_logo.png
+    fi
+
+    # in versions prior to 0.5.1 a custom logo was installed with u-w
+    chmod u+w /var/www/securedrop/static/i/logo.png
+
+    database_migration
+
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0

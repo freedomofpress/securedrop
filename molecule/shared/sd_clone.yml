@@ -1,0 +1,33 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Bring in SecureDrop production version
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - debug:
+        msg="Starting scenario from baseline {{ ORIG_SECUREDROP_VER }}"
+
+    - name: Ensure molecule local ephemeral dir exists
+      file:
+        state: directory
+        path: "{{ molecule_scenario_dir }}/.molecule"
+
+    - name: Clone in copy of original SD version
+      git:
+        repo: https://github.com/freedomofpress/securedrop.git
+        dest: "{{ molecule_ephemeral_directory }}/{{ sd_clone_dir }}"
+        version: "{{ ORIG_SECUREDROP_VER }}"
+        depth: 1
+
+    - name: Create hacky symlink for roles dir
+      file:
+        dest: "{{ molecule_scenario_dir }}/.molecule/roles"
+        src: "{{ molecule_ephemeral_directory }}/{{ sd_clone_dir }}/{{ sd_ansible_roles }}"
+        state: link
+        force: yes
+  vars:
+    sd_clone_dir: "sd-orig"
+    sd_ansible_roles: "install_files/ansible-base/roles"
+    molecule_scenario_dir: "{{lookup('env', 'MOLECULE_SCENARIO_DIRECTORY')}}"
+    ORIG_SECUREDROP_VER: "{{ sd_version|default(lookup('file',playbook_dir+'/stable.ver',rstrip=True)) }}"
+    molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"

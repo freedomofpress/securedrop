@@ -1,0 +1,67 @@
+#!/bin/bash
+# shellcheck disable=SC1090
+# we ignore SC1090 because "source" is validated independently
+
+set -e
+set -u
+
+source "${BASH_SOURCE%/*}/ticker"
+
+TOPLEVEL=$(git rev-parse --show-toplevel)
+DOCKERFILE=devops/docker/Dockerfile.linting
+DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGUMENTS:-}
+CHECKSUM_FILE=./.linting.checksum
+
+cd "${TOPLEVEL}"
+
+# sha256sum is not included with macOS, but we can achieve the same result by
+# aliasing it to shasum, which is included by default.
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sha256sum="shasum -a 256"
+else
+    sha256sum="sha256sum"
+fi
+
+function gen_checksums() {
+    rm "$CHECKSUM_FILE" 2> /dev/null || true
+
+        # shellcheck disable=SC2013
+    for file in $(cat $DOCKERFILE.deps); do
+        $sha256sum "$file" >> "$CHECKSUM_FILE"
+    done
+
+    $sha256sum "$DOCKERFILE" >> "$CHECKSUM_FILE"
+}
+
+function check_checksum {
+    $sha256sum .linting.checksum | awk '{ print $1 }'
+}
+
+function docker_run() {
+    # First arg = TAG
+    # Second+ args = commands passed to docker, provided by user
+    TAG="$1"
+    shift
+    docker run --rm -v "$(pwd):/sd" -ti securedrop-lint:"$TAG" "$@"
+}
+
+# User must provide a first-level argument
+CMD="${1}"
+# All others will be passed to docker
+shift
+
+case "${CMD}" in
+    checksum)
+        gen_checksums
+        ;;
+
+    run)
+        gen_checksums
+        DOCKER_TAG="$(check_checksum)"
+        # shellcheck disable=SC2086
+        if [[ "$(docker images -q securedrop-lint:$DOCKER_TAG 2> /dev/null)" == "" ]]; then
+            ticker docker build ${DOCKER_BUILD_ARGS} --build-arg="USER_ID=$(id -u)" -t "securedrop-lint:$DOCKER_TAG" -f "$DOCKERFILE" .
+        fi
+        docker_run "$DOCKER_TAG" "$@"
+        ;;
+esac

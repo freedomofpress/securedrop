@@ -1,0 +1,52 @@
+#!/bin/bash
+# shellcheck disable=SC2086,SC1090
+# we ignore SC2086 because ${DOCKER_BUILD_ARGUMENTS:-} is intended to
+# be evaluated into multiple strings, not a single argument.
+# we ignore SC1090 because "source" is validated independently
+
+set -eu
+
+export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
+
+TOPLEVEL=$(git rev-parse --show-toplevel)
+BASE_OS=xenial
+
+function docker_image() {
+    docker build \
+           ${DOCKER_BUILD_ARGUMENTS:-} \
+           --build-arg=USER_ID="$(id -u)" \
+           --build-arg=USER_NAME="${USER:-root}" \
+           -t "securedrop-test-${1}-py3" \
+           --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/python3/Dockerfile" \
+           "${TOPLEVEL}/securedrop"
+}
+
+function docker_run() {
+    find . \( -name '*.pyc' -o -name __pycache__ \) -delete
+
+    # The --shm-size argument sets up dedicated shared memory for the
+    # container. Our tests can fail with the default of 64m.
+    docker run \
+           --shm-size 2g \
+           -p 127.0.0.1:5909:5909 \
+           --rm \
+           -e NUM_SOURCES \
+           -e LC_ALL=C.UTF-8 \
+           -e LANG=C.UTF-8 \
+           -e PAGE_LAYOUT_LOCALES \
+           -e PATH \
+           --user "${USER:-root}" \
+           --volume "${TOPLEVEL}:${TOPLEVEL}" \
+           --workdir "${TOPLEVEL}/securedrop" \
+           --name securedrop-dev \
+           -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py3" "${@:2}"
+}
+
+if [ "${DOCKER_BUILD_VERBOSE:-'false'}" = "true" ]
+then
+   docker_image $BASE_OS
+else
+   docker_image $BASE_OS >/dev/null
+fi
+
+docker_run $BASE_OS "$@"

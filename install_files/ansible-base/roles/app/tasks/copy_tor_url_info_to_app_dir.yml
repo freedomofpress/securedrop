@@ -1,0 +1,36 @@
+---
+- name: Look up Tor v2 URL info
+  command: cat /var/lib/tor/services/source/hostname
+  changed_when: false
+  register: v2_onion_url_lookup_result
+  # File may not exist, depending on host config
+  failed_when: false
+  when: v2_onion_services
+
+- name: Look up Tor v3 URL info
+  command: cat /var/lib/tor/services/sourcev3/hostname
+  changed_when: false
+  register: v3_onion_url_lookup_result
+  # File may not exist, depending on host config
+  failed_when: false
+  when: v3_onion_services
+
+- name: Expose Tor v2 Onion URL info to app
+  copy:
+    dest: /var/lib/securedrop/source_v2_url
+    owner: www-data
+    group: www-data
+    mode: "0644"
+    content: |
+      {{ v2_onion_url_lookup_result.stdout|default('') }}
+  when: v2_onion_services
+
+- name: Expose Tor v3 Onion URL info to app
+  copy:
+    dest: /var/lib/securedrop/source_v3_url
+    owner: www-data
+    group: www-data
+    mode: "0644"
+    content: |
+      {{ v3_onion_url_lookup_result.stdout|default('') }}
+  when: v3_onion_services

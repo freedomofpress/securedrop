@@ -64,22 +64,23 @@ Next you will install Tails onto the Virtual Hard Disk Image. Start the VM, boot
 to Tails, and enter an administration password and start Tails.
 
 .. note:: For all the instructions that follow, you will need to configure an
-          administrator password each time you boot Tails.
+          administration password each time you boot Tails.
 
 1. Copy the following patch and save it as ``installer.patch`` in a folder in
    your Tails VM:
 
 .. code:: python
 
-  --- /usr/lib/python2.7/dist-packages/tails_installer/creator.py	2017-06-30 11:14:11.000000000 +0000
-  +++ /usr/lib/python2.7/dist-packages/tails_installer/creator.py.mod	2017-07-20 06:53:31.152000000 +0000
-  @@ -615,15 +615,6 @@
-               if not data['removable']:
-                   self.log.debug('Skipping non-removable device: %s' % data['device'])
+  --- /usr/lib/python2.7/dist-packages/tails_installer/creator.py      2018-01-22 14:59:40.000000000 +0100
+  +++ /usr/lib/python2.7/dist-packages/tails_installer/creator.py.mod  2018-03-05 05:15:00.000000000 -0800
+  @@ -595,16 +595,6 @@ class LinuxTailsInstallerCreator(TailsInstallerCreator):
+                   self.log.debug('Skipping non-removable device: %s'
+                                  % data['device'])
 
   -            # Only pay attention to USB and SDIO devices, unless --force'd
   -            iface = drive.props.connection_bus
-  -            if iface != 'usb' and iface != 'sdio' and self.opts.force != data['device']:
+  -            if iface != 'usb' and iface != 'sdio' \
+  -               and self.opts.force != data['device']:
   -                self.log.warning(
   -                    "Skipping device '%(device)s' connected to '%(interface)s' interface"
   -                    % {'device': data['udi'], 'interface': iface}
@@ -89,12 +90,12 @@ to Tails, and enter an administration password and start Tails.
                # Skip optical drives
                if data['is_optical'] and self.opts.force != data['device']:
                    self.log.debug('Skipping optical device: %s' % data['device'])
-  --- /usr/lib/python2.7/dist-packages/tails_installer/gui.py	2017-06-30 11:14:11.000000000 +0000
-  +++ /usr/lib/python2.7/dist-packages/tails_installer/gui.py.mod	2017-07-20 06:53:44.040000000 +0000
-  @@ -483,16 +483,6 @@
-                       'model':   info['model'],
-                       'details': details
-                   }
+  --- /usr/lib/python2.7/dist-packages/tails_installer/gui.py      2018-01-22 14:59:40.000000000 +0100
+  +++ /usr/lib/python2.7/dist-packages/tails_installer/gui.py.mod  2018-03-05 05:15:00.000000000 -0800
+  @@ -568,16 +568,6 @@ class TailsInstallerWindow(Gtk.ApplicationWindow):
+                       self.devices_with_persistence.append(info['parent'])
+                       continue
+                   pretty_name = self.get_device_pretty_name(info)
   -                # Skip devices with non-removable bit enabled
   -                if not info['removable']:
   -                    message =_('The USB stick "%(pretty_name)s"'
@@ -106,7 +107,7 @@ to Tails, and enter an administration password and start Tails.
   -                    self.status(message)
   -                    continue
                    # Skip too small devices, but inform the user
-                   if not info['is_device_big_enough']:
+                   if not info['is_device_big_enough_for_installation']:
                        message =_('The device "%(pretty_name)s"'
 
 2. Now run the following two commands in a Terminal in your Tails VM:
@@ -114,7 +115,7 @@ to Tails, and enter an administration password and start Tails.
 .. code:: sh
 
   sudo patch -p0 -d/ < installer.patch
-  sudo /usr/bin/python -tt /usr/lib/tails_installer/tails-installer -u -n --clone -P -m -x
+  sudo /usr/bin/python -tt /usr/bin/tails-installer -u -n --clone -P -m -x
 
 3. The **Tails Installer** will appear. Click **Install Tails**.
 4. Once complete, navigate to **Applications**, **Utilities** and open **Disks**.

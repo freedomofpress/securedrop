@@ -1,40 +1,107 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
-from flask import Flask, session, redirect, url_for, flash, g, request
+from flask import (Flask, session, redirect, url_for, flash, g, request,
+                   render_template)
 from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
+import sys
+from werkzeug.exceptions import default_exceptions
 
 import i18n
 import template_filters
 import version
 
-from db import db_session, Journalist
-from journalist_app import account, admin, main, col
-from journalist_app.utils import get_source, logged_in
+from crypto_util import CryptoUtil
+from db import db
+from journalist_app import account, admin, api, main, col
+from journalist_app.utils import (get_source, logged_in,
+                                  JournalistInterfaceSessionInterface,
+                                  cleanup_expired_revoked_tokens)
+from models import InstanceConfig, Journalist
+from store import Storage
 
-_insecure_views = ['main.login', 'static']
+import typing
+# https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
+if typing.TYPE_CHECKING:
+    # flake8 can not understand type annotation yet.
+    # That is why all type annotation relative import
+    # statements has to be marked as noqa.
+    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
+    from sdconfig import SDConfig  # noqa: F401
+    from typing import Optional, Union, Tuple, Any  # noqa: F401
+    from werkzeug import Response  # noqa: F401
+    from werkzeug.exceptions import HTTPException  # noqa: F401
+
+_insecure_views = ['main.login', 'main.select_logo', 'static']
 
 
 def create_app(config):
+    # type: (SDConfig) -> Flask
     app = Flask(__name__,
                 template_folder=config.JOURNALIST_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
 
-    app.config.from_object(config.JournalistInterfaceFlaskConfig)
+    app.config.from_object(config.JournalistInterfaceFlaskConfig)  # type: ignore
+    app.sdconfig = config
+    app.session_interface = JournalistInterfaceSessionInterface()
 
-    CSRFProtect(app)
+    csrf = CSRFProtect(app)
     Environment(app)
+
+    if config.DATABASE_ENGINE == "sqlite":
+        db_uri = (config.DATABASE_ENGINE + ":///" +
+                  config.DATABASE_FILE)
+    else:
+        db_uri = (
+            config.DATABASE_ENGINE + '://' +
+            config.DATABASE_USERNAME + ':' +
+            config.DATABASE_PASSWORD + '@' +
+            config.DATABASE_HOST + '/' +
+            config.DATABASE_NAME
+        )
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+    db.init_app(app)
+
+    app.storage = Storage(config.STORE_DIR,
+                          config.TEMP_DIR,
+                          config.JOURNALIST_KEY)
+
+    app.crypto_util = CryptoUtil(
+        scrypt_params=config.SCRYPT_PARAMS,
+        scrypt_id_pepper=config.SCRYPT_ID_PEPPER,
+        scrypt_gpg_pepper=config.SCRYPT_GPG_PEPPER,
+        securedrop_root=config.SECUREDROP_ROOT,
+        word_list=config.WORD_LIST,
+        nouns_file=config.NOUNS,
+        adjectives_file=config.ADJECTIVES,
+        gpg_key_dir=config.GPG_KEY_DIR,
+    )
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
+        # type: (CSRFError) -> Response
         # render the message first to ensure it's localized.
         msg = gettext('You have been logged out due to inactivity')
         session.clear()
         flash(msg, 'error')
         return redirect(url_for('main.login'))
+
+    def _handle_http_exception(error):
+        # type: (HTTPException) -> Tuple[Union[Response, str], Optional[int]]
+        # Workaround for no blueprint-level 404/5 error handlers, see:
+        # https://github.com/pallets/flask/issues/503#issuecomment-71383286
+        handler = list(app.error_handler_spec['api'][error.code].values())[0]
+        if request.path.startswith('/api/') and handler:
+            return handler(error)
+
+        return render_template('error.html', error=error), error.code
+
+    for code in default_exceptions:
+        app.errorhandler(code)(_handle_http_exception)
 
     i18n.setup_app(config, app)
 
@@ -42,7 +109,8 @@ def create_app(config):
     app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals['version'] = version.__version__
     if hasattr(config, 'CUSTOM_HEADER_IMAGE'):
-        app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
+        app.jinja_env.globals['header_image'] = \
+            config.CUSTOM_HEADER_IMAGE  # type: ignore
         app.jinja_env.globals['use_custom_header_image'] = True
     else:
         app.jinja_env.globals['header_image'] = 'logo.png'
@@ -52,35 +120,47 @@ def create_app(config):
         template_filters.rel_datetime_format
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
-    @app.template_filter('autoversion')
-    def autoversion_filter(filename):
-        """Use this template filter for cache busting"""
-        absolute_filename = path.join(config.SECUREDROP_ROOT, filename[1:])
-        if path.exists(absolute_filename):
-            timestamp = str(path.getmtime(absolute_filename))
-        else:
-            return filename
-        versioned_filename = "{0}?v={1}".format(filename, timestamp)
-        return versioned_filename
+    @app.before_first_request
+    def expire_blacklisted_tokens():
+        return cleanup_expired_revoked_tokens()
 
-    @app.teardown_appcontext
-    def shutdown_session(exception=None):
-        """Automatically remove database sessions at the end of the request, or
-        when the application shuts down"""
-        db_session.remove()
+    @app.before_request
+    def load_instance_config():
+        app.instance_config = InstanceConfig.get_current()
 
     @app.before_request
     def setup_g():
+        # type: () -> Optional[Response]
         """Store commonly used values in Flask's special g object"""
         if 'expires' in session and datetime.utcnow() >= session['expires']:
             session.clear()
             flash(gettext('You have been logged out due to inactivity'),
                   'error')
 
+        uid = session.get('uid', None)
+        if uid:
+            user = Journalist.query.get(uid)
+            if user and 'nonce' in session and \
+               session['nonce'] != user.session_nonce:
+                session.clear()
+                flash(gettext('You have been logged out due to password change'),
+                      'error')
+
         session['expires'] = datetime.utcnow() + \
             timedelta(minutes=getattr(config,
                                       'SESSION_EXPIRATION_MINUTES',
                                       120))
+
+        # Work around https://github.com/lepture/flask-wtf/issues/275
+        # -- after upgrading from Python 2 to Python 3, any existing
+        # session's csrf_token value will be retrieved as bytes,
+        # causing a TypeError. This simple fix, deleting the existing
+        # token, was suggested in the issue comments. This code will
+        # be safe to remove after Python 2 reaches EOL in 2020, and no
+        # supported SecureDrop installations can still have this
+        # problem.
+        if sys.version_info.major > 2 and type(session.get('csrf_token')) is bytes:
+            del session['csrf_token']
 
         uid = session.get('uid', None)
         if uid:
@@ -91,8 +171,11 @@ def create_app(config):
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
 
-        if request.endpoint not in _insecure_views and not logged_in():
-            return redirect(url_for('main.login'))
+        if request.path.split('/')[1] == 'api':
+            pass  # We use the @token_required decorator for the API endpoints
+        else:  # We are not using the API
+            if request.endpoint not in _insecure_views and not logged_in():
+                return redirect(url_for('main.login'))
 
         if request.method == 'POST':
             filesystem_id = request.form.get('filesystem_id')
@@ -100,10 +183,15 @@ def create_app(config):
                 g.filesystem_id = filesystem_id
                 g.source = get_source(filesystem_id)
 
+        return None
+
     app.register_blueprint(main.make_blueprint(config))
     app.register_blueprint(account.make_blueprint(config),
                            url_prefix='/account')
     app.register_blueprint(admin.make_blueprint(config), url_prefix='/admin')
     app.register_blueprint(col.make_blueprint(config), url_prefix='/col')
+    api_blueprint = api.make_blueprint(config)
+    app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+    csrf.exempt(api_blueprint)
 
     return app

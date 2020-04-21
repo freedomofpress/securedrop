@@ -42,9 +42,7 @@ def setup_app(config, app):
     translation_dirs = getattr(config, 'TRANSLATION_DIRS', None)
 
     if translation_dirs is None:
-            translation_dirs = \
-                    path.join(path.dirname(path.realpath(__file__)),
-                              'translations')
+        translation_dirs = path.join(path.dirname(path.realpath(__file__)), 'translations')
 
     # `babel.translation_directories` is a nightmare
     # We need to set this manually via an absolute path
@@ -80,14 +78,14 @@ def get_locale(config):
     """
     locale = None
     accept_languages = []
-    for l in request.accept_languages.values():
+    for l in list(request.accept_languages.values()):
         if '-' in l:
             sep = '-'
         else:
             sep = '_'
         try:
             accept_languages.append(str(core.Locale.parse(l, sep)))
-        except:
+        except Exception:
             pass
     if 'l' in request.args:
         if len(request.args['l']) == 0:

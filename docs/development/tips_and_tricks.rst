@@ -1,7 +1,7 @@
 Tips & Tricks
 =============
 
-Using Tor Browser with the development environment
+Using Tor Browser with the Development Environment
 --------------------------------------------------
 
 We strongly encourage sources to use the Tor Browser when they access
@@ -20,20 +20,20 @@ development. Unfortunately, it is not possible to access the local
 development servers by default, due to Tor Browser's proxy
 configuration.
 
-To test the development environment in Tor Browser, you need to add an
-exception to allow Tor Browser to access localhost:
+To test the development environment in Tor Browser, you need to modify Tor
+Browser's default settings to prevent localhost from being resolved by the
+proxy:
 
-#. Open the "Tor Browser" menu and click "Preferences..."
-#. Choose the "Advanced" section and the "Network" subtab under it
-#. In the "Connection" section, click "Settings..."
-#. In the text box labeled "No Proxy for:", enter ``127.0.0.1``
+#. In a new tab, navigate to ``about:config``.
+#. Click "I accept the Risk!"
+#. In the search bar, enter ``network.proxy.allow_hijacking_localhost``.
+#. The default value is true. Double-click to set it to false.
 
-   -  Note: for some reason, ``localhost`` doesn't work here.
+Now you should be able to navigate to ``127.0.0.1:8080`` and ``127.0.0.1:8081``
+in Tor Browser. For some reason, you have to use ``127.0.0.1`` -- ``localhost``
+doesn't work.
 
-#. Click "Ok" and close the Preferences window
-
-You should now be able to access the development server in the Tor
-Browser by navigating to ``127.0.0.1:8080`` and ``127.0.0.1:8081``.
+The modified value persists across restarts of Tor Browser.
 
 .. _updating_pip_dependencies:
 
@@ -51,21 +51,21 @@ directly, please:
 
      .. code:: sh
 
-        make update-pip-dependencies
+        make update-pip-requirements
 
   #. Commit both the ``securedrop/requirements/*.in`` and
      ``securedrop/requirements/*.txt`` files
 
 .. _ssh_over_tor:
 
-Connecting to VMs via SSH over Tor
+Connecting to VMs via SSH Over Tor
 ----------------------------------
 
-Ubuntu/Debian setup
+Ubuntu/Debian Setup
 ~~~~~~~~~~~~~~~~~~~
 You will need to install a specific variant of the ``nc`` tool
 in order to support the ``-x`` option for specifying a proxy host.
-Mac OS X already runs the OpenBSD variant by default.
+macOS already runs the OpenBSD variant by default.
 
 .. code:: sh
 
@@ -119,7 +119,14 @@ for each server by examining the contents of ``app-ssh-aths`` and ``mon-ssh-aths
 in ``./install_files/ansible-base``. You can manually inspect these files
 to append values to your local ``torrc``, as in the ``cat`` example above.
 Note that the ``cat`` example above will also add the ATHS info for the
-Journalist Interface, as well, which is useful for testing.
+*Journalist Interface*, as well, which is useful for testing.
+
+.. note:: The instructions above refer to VMs set up with v2 onion services. If
+          v3 onion services are configured instead, the steps required for the
+          local ``tor`` setup will differ. You will need to add a
+          ``ClientOnionAuthDir`` directive to ``torrc``, pointing to a directory
+          containing the ``*.auth_private`` files created during the installation
+          process under ``install_files/ansible-base``.
 
 Architecture Diagrams
 ---------------------

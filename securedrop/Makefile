@@ -1,77 +1,71 @@
-TAG ?= $(shell git rev-parse HEAD)
-IMAGE = securedrop
+DEFAULT_GOAL: help
 
 .PHONY: lint
-lint:
-	find . -name '*.py' | xargs pylint --reports=no --errors-only --disable=import-error
+lint: ## Run all linters
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make lint' in the repo root. ◀◀◀\n"
+	make -C .. lint
 
 .PHONY: lint-full
-lint-full:
-	find . -name '*.py' | xargs pylint
+lint-full:  ## Run the python linter with nothing disabled
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make app-lint-full' in the repo root. ◀◀◀\n"
+	make -C .. app-lint-full
 
-.PHONY: assets
-assets:
-	sass
-
-.PHONY: images
-images:
-	find . -name '*.pyc' | xargs --no-run-if-empty rm
-	docker build $(EXTRA_BUILD_ARGS) -f Dockerfile -t $(IMAGE)-test:$(TAG) .
-
-TESTFILES ?= tests
 .PHONY: test
-test:
-	docker run \
-		-e COMMIT_SHA=$(TAG) \
-		$(EXTRA_TEST_ARGS) \
-		--name $(IMAGE)-test \
-		-ti $(IMAGE)-test:$(TAG) \
-		./bin/test -v $(TESTFILES)
+test: ## Run the test suite in a Ubuntu 16.04 (Xenial) dockerized environment
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make $@' in the repo root. ◀◀◀\n"
+	make -C .. $@
 
-.PHONY: testclean
-testclean:
-	-docker rm -f $(IMAGE)-test
+.PHONY: translation-test
+translation-test: ## Run all pages-layout tests in all supported languages
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make $@' in the repo root. ◀◀◀\n"
+	make -C .. $@
+
+.PHONY: list-translators
+list-translators: ## Collect the names of translators since the last merge from Weblate
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make $@' in the repo root. ◀◀◀\n"
+	make -C .. $@
+
+
+.PHONY: list-all-translators
+list-all-translators: ## Collect the names of all translators in the project's history
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make $@' in the repo root. ◀◀◀\n"
+	make -C .. $@
+
 
 .PHONY: dev
-dev:
-	docker run \
-		-p8080:8080 -p8081:8081 \
-		$(EXTRA_DEV_ARGS) \
-		-v $(shell pwd):/app \
-		--rm \
-		-ti $(IMAGE)-test:$(TAG) \
-		./bin/dev
-
-.PHONY: dev-shell
-dev-shell:
-	docker run \
-		-p8080:8080 -p8081:8081 \
-		$(EXTRA_DEV_ARGS) \
-		-v $(shell pwd):/app \
-		-ti $(IMAGE)-test:$(TAG) \
-		bash
+dev: ## Run the dev server
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make $@' in the repo root. ◀◀◀\n"
+	make -C .. $@
 
 config.py: test-config
 
 .PHONY: test-config
-test-config:
-	source_secret_key=$(shell head -c 32 /dev/urandom | base64) \
-	journalist_secret_key=$(shell head -c 32 /dev/urandom | base64) \
-	scrypt_id_pepper=$(shell head -c 32 /dev/urandom | base64) \
-	scrypt_gpg_pepper=$(shell head -c 32 /dev/urandom | base64) \
-	python -c 'import os; from jinja2 import Environment, FileSystemLoader; \
-         env = Environment(loader=FileSystemLoader(".")); \
-         ctx = {"securedrop_app_gpg_fingerprint": "65A1B5FF195B56353CC63DFFCC40EF1228271441"}; \
-         ctx.update(dict((k, {"stdout":v}) for k,v in os.environ.iteritems())); \
-         ctx = open("config.py", "w").write(env.get_template("config.py.example").render(ctx))'
+test-config: ## Generate the test config
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make $@' in the repo root. ◀◀◀\n"
+	make -C .. $@
 
 .PHONY: update-user-guides
-update-user-guides:
-	docker run \
-		--name $(IMAGE)-update-user-guides \
-		--rm \
-		-e USER_ID=$(shell id -u) \
-		-v $(shell git rev-parse --show-toplevel):$(shell git rev-parse --show-toplevel) \
-		-w $(shell pwd) \
-		-ti $(IMAGE)-test:$(TAG) \
-		./bin/update-user-guides
+update-user-guides: ## Runs the page layout tests to regenerate screenshots
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make $@' in the repo root. ◀◀◀\n"
+	make -C .. $@
+
+.PHONY: translate
+translate: ## Update POT translation files from sources
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make $@' in the repo root. ◀◀◀\n"
+	make -C .. $@
+
+.PHONY: docker-vnc
+docker-vnc: ## Open up a VNC connection to a running docker instance
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make $@' in the repo root. ◀◀◀\n"
+	make -C .. $@
+
+# For an explanation of this shell magic, see the Makefile in the root of the repository
+.PHONY: help
+help: ## Print this message and exit.
+	@echo "\n    ►►► securedrop/Makefile is deprecated. Run 'make $@' in the repo root. ◀◀◀\n"
+
+	@printf "Makefile for developing and testing SecureDrop. ◀◀◀\n"
+	@printf "Subcommands:\n ◀◀◀\n"
+	@awk 'BEGIN {FS = ":.*?## "} /^[0-9a-zA-Z_-]+:.*?## / {printf "\033[36m%s\033[0m : %s ◀◀◀\n", $$1, $$2}' $(MAKEFILE_LIST) \
+		| sort \
+		| column -s ':' -t

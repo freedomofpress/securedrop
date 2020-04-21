@@ -1,0 +1,105 @@
+{
+  "description": "Testing VM image for SecureDrop Monitor Server running Ubuntu Xenial.",
+  "name": "fpf/securedrop-mon-xenial",
+  "versions": [
+    {
+      "providers": [
+        {
+          "checksum": "efa3c6aa38279c3c9caadea0480ac5d1e855ccbac7afe54aeb56d9075b0874e9",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-xenial_0.12.0.box"
+        }
+      ],
+      "version": "0.12.0"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "e38864cc63bf26c4423c45986ab06f16c5638615b5850f00c69153b456cbb3a9",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-xenial_0.12.1.box"
+        }
+      ],
+      "version": "0.12.1"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "648233f3f727b648a0f79e9d5a81473e2ca39b0d24e9184c51f8603160ce3232",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-xenial_0.12.2.box"
+        }
+      ],
+      "version": "0.12.2"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "6b8a4f2acec2453c79bec78e5dfa1d5a4045f1a322d33b8571b6d41bfa74ae28",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-xenial_0.13.0.box"
+        }
+      ],
+      "version": "0.13.0"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "cbe347281867def31e6f6383d40a072d1336bde1ead14fd886192bf548ef41f7",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-xenial_0.13.1.box"
+        }
+      ],
+      "version": "0.13.1"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "752106cb530810d39ac860dcaf6d1829266560a3b0c578898698983f41d4154a",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-xenial_0.14.0.box"
+        }
+      ],
+      "version": "0.14.0"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "5a2b003e4eb5f396f78efec5ac64257f1df32a0416564937d5bfc405f8f6f6b0",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-xenial_1.0.0.box"
+        }
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "54961b42d6213ddb9c196db2d51f5036bcbf625ccafd124153ad94f1e0d63ac5",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-xenial_1.1.0.box"
+        }
+      ],
+      "version": "1.1.0"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "78c6b5e777f5517315e44cbbfdeb527ef1f38369091432b8c1ce02653ce219dc",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-xenial_1.2.1.box"
+        }
+      ],
+      "version": "1.2.1"
+    }
+  ]
+}

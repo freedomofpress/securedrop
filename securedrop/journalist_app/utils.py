@@ -1,24 +1,32 @@
 # -*- coding: utf-8 -*-
+import binascii
 
 from datetime import datetime
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
-                   render_template, Markup)
+                   render_template, Markup, sessions, request)
 from flask_babel import gettext, ngettext
 from sqlalchemy.sql.expression import false
 
-import crypto_util
 import i18n
-import store
-import worker
 
-from db import (db_session, get_one_or_else, Source, Journalist,
-                InvalidUsernameException, WrongPasswordException,
-                LoginThrottledException, BadTokenException, SourceStar,
-                PasswordError, Submission)
-from rm import srm
+from db import db
+from models import (get_one_or_else, Source, Journalist, InvalidUsernameException,
+                    WrongPasswordException, FirstOrLastNameError, LoginThrottledException,
+                    BadTokenException, SourceStar, PasswordError, Submission, RevokedToken)
+from store import add_checksum_for_file
+
+import typing
+# https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
+if typing.TYPE_CHECKING:
+    # flake8 can not understand type annotation yet.
+    # That is why all type annotation relative import
+    # statements has to be marked as noqa.
+    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
+    from sdconfig import SDConfig  # noqa: F401
 
 
 def logged_in():
+    # type: () -> bool
     # When a user is logged in, we push their user ID (database primary key)
     # into the session. setup_g checks for this value, and if it finds it,
     # stores a reference to the user's Journalist object in g.
@@ -30,17 +38,17 @@ def logged_in():
 
 
 def commit_account_changes(user):
-    if db_session.is_modified(user):
+    if db.session.is_modified(user):
         try:
-            db_session.add(user)
-            db_session.commit()
+            db.session.add(user)
+            db.session.commit()
         except Exception as e:
             flash(gettext(
                 "An unexpected error occurred! Please "
-                  "inform your administrator."), "error")
+                  "inform your admin."), "error")
             current_app.logger.error("Account changes for '{}' failed: {}"
                                      .format(user, e))
-            db_session.rollback()
+            db.session.rollback()
         else:
             flash(gettext("Account updated."), "success")
 
@@ -93,13 +101,46 @@ def validate_user(username, password, token, error_message=None):
                 if user.is_totp:
                     login_flashed_msg += " "
                     login_flashed_msg += gettext(
-                        "Please wait for a new two-factor token"
-                        " before trying again.")
-            except:
+                        "Please wait for a new code from your two-factor mobile"
+                        " app or security key before trying again.")
+            except Exception:
                 pass
 
         flash(login_flashed_msg, "error")
         return None
+
+
+def validate_hotp_secret(user, otp_secret):
+    """
+    Validates and sets the HOTP provided by a user
+    :param user: the change is for this instance of the User object
+    :param otp_secret: the new HOTP secret
+    :return: True if it validates, False if it does not
+    """
+    try:
+        user.set_hotp_secret(otp_secret)
+    except (binascii.Error, TypeError) as e:
+        if "Non-hexadecimal digit found" in str(e):
+            flash(gettext(
+                "Invalid secret format: "
+                "please only submit letters A-F and numbers 0-9."),
+                  "error")
+            return False
+        elif "Odd-length string" in str(e):
+            flash(gettext(
+                "Invalid secret format: "
+                "odd-length secret. Did you mistype the secret?"),
+                  "error")
+            return False
+        else:
+            flash(gettext(
+                "An unexpected error occurred! "
+                "Please inform your admin."), "error")
+            current_app.logger.error(
+                "set_hotp_secret '{}' (id {}) failed: {}".format(
+                    otp_secret, user.id, e))
+            return False
+    return True
 
 
 def download(zip_basename, submissions):
@@ -110,30 +151,34 @@ def download(zip_basename, submissions):
 
     :param str zip_basename: The basename of the ZIP-file download.
 
-    :param list submissions: A list of :class:`db.Submission`s to
+    :param list submissions: A list of :class:`models.Submission`s to
                              include in the ZIP-file.
     """
-    zf = store.get_bulk_archive(submissions,
-                                zip_directory=zip_basename)
+    zf = current_app.storage.get_bulk_archive(submissions,
+                                              zip_directory=zip_basename)
     attachment_filename = "{}--{}.zip".format(
         zip_basename, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
 
     # Mark the submissions that have been downloaded as such
     for submission in submissions:
         submission.downloaded = True
-    db_session.commit()
+    db.session.commit()
 
     return send_file(zf.name, mimetype="application/zip",
                      attachment_filename=attachment_filename,
                      as_attachment=True)
 
 
+def delete_file_object(file_object):
+    path = current_app.storage.path(file_object.source.filesystem_id, file_object.filename)
+    current_app.storage.move_to_shredder(path)
+    db.session.delete(file_object)
+    db.session.commit()
+
+
 def bulk_delete(filesystem_id, items_selected):
     for item in items_selected:
-        item_path = store.path(filesystem_id, item.filename)
-        worker.enqueue(srm, item_path)
-        db_session.delete(item)
-    db_session.commit()
+        delete_file_object(item)
 
     flash(ngettext("Submission deleted.",
                    "{num} submissions deleted.".format(
@@ -155,15 +200,15 @@ def make_star_true(filesystem_id):
         source.star.starred = True
     else:
         source_star = SourceStar(source)
-        db_session.add(source_star)
+        db.session.add(source_star)
 
 
 def make_star_false(filesystem_id):
     source = get_source(filesystem_id)
     if not source.star:
         source_star = SourceStar(source)
-        db_session.add(source_star)
-        db_session.commit()
+        db.session.add(source_star)
+        db.session.commit()
     source.star.starred = False
 
 
@@ -171,7 +216,7 @@ def col_star(cols_selected):
     for filesystem_id in cols_selected:
         make_star_true(filesystem_id)
 
-    db_session.commit()
+    db.session.commit()
     return redirect(url_for('main.index'))
 
 
@@ -179,7 +224,7 @@ def col_un_star(cols_selected):
     for filesystem_id in cols_selected:
         make_star_false(filesystem_id)
 
-    db_session.commit()
+    db.session.commit()
     return redirect(url_for('main.index'))
 
 
@@ -199,8 +244,11 @@ def col_delete(cols_selected):
 
 
 def make_password(config):
+    # type: (SDConfig) -> str
     while True:
-        password = crypto_util.genrandomid(7, i18n.get_language(config))
+        password = current_app.crypto_util.genrandomid(
+            7,
+            i18n.get_language(config))
         try:
             Journalist.check_password_acceptable(password)
             return password
@@ -210,16 +258,25 @@ def make_password(config):
 
 def delete_collection(filesystem_id):
     # Delete the source's collection of submissions
-    job = worker.enqueue(srm, store.path(filesystem_id))
+    path = current_app.storage.path(filesystem_id)
+    current_app.storage.move_to_shredder(path)
 
     # Delete the source's reply keypair
-    crypto_util.delete_reply_keypair(filesystem_id)
+    current_app.crypto_util.delete_reply_keypair(filesystem_id)
 
     # Delete their entry in the db
     source = get_source(filesystem_id)
-    db_session.delete(source)
-    db_session.commit()
-    return job
+    db.session.delete(source)
+    db.session.commit()
+
+
+def set_name(user, first_name, last_name):
+    try:
+        user.set_name(first_name, last_name)
+        db.session.commit()
+        flash(gettext('Name updated.'), "success")
+    except FirstOrLastNameError as e:
+        flash(gettext('Name not updated: {}'.format(e)), "error")
 
 
 def set_diceware_password(user, password):
@@ -228,10 +285,10 @@ def set_diceware_password(user, password):
     except PasswordError:
         flash(gettext(
             'You submitted a bad password! Password not changed.'), 'error')
-        return
+        return False
 
     try:
-        db_session.commit()
+        db.session.commit()
     except Exception:
         flash(gettext(
             'There was an error, and the new password might not have been '
@@ -239,7 +296,7 @@ def set_diceware_password(user, password):
             'out of your account, you should reset your password again.'),
             'error')
         current_app.logger.error('Failed to update a valid password.')
-        return
+        return False
 
     # using Markup so the HTML isn't escaped
     flash(Markup("<p>" + gettext(
@@ -247,6 +304,7 @@ def set_diceware_password(user, password):
         "save it in your KeePassX database. New password:") +
         ' <span><code>{}</code></span></p>'.format(password)),
         'success')
+    return True
 
 
 def col_download_unread(cols_selected):
@@ -274,3 +332,52 @@ def col_download_all(cols_selected):
         submissions += Submission.query.filter(
             Submission.source_id == id).all()
     return download("all", submissions)
+
+
+def serve_file_with_etag(db_obj):
+    file_path = current_app.storage.path(db_obj.source.filesystem_id, db_obj.filename)
+    response = send_file(file_path,
+                         mimetype="application/pgp-encrypted",
+                         as_attachment=True,
+                         add_etags=False)  # Disable Flask default ETag
+
+    if not db_obj.checksum:
+        add_checksum_for_file(db.session, db_obj, file_path)
+
+    response.direct_passthrough = False
+    response.headers['Etag'] = db_obj.checksum
+    return response
+
+
+class JournalistInterfaceSessionInterface(
+        sessions.SecureCookieSessionInterface):
+    """A custom session interface that skips storing sessions for api requests but
+    otherwise just uses the default behaviour."""
+    def save_session(self, app, session, response):
+        # If this is an api request do not save the session
+        if request.path.split("/")[1] == "api":
+            return
+        else:
+            super(JournalistInterfaceSessionInterface, self).save_session(
+                app, session, response)
+
+
+def cleanup_expired_revoked_tokens():
+    """Remove tokens that have now expired from the revoked token table."""
+
+    revoked_tokens = db.session.query(RevokedToken).all()
+
+    for revoked_token in revoked_tokens:
+        if Journalist.validate_token_is_not_expired_or_invalid(revoked_token.token):
+            pass  # The token has not expired, we must keep in the revoked token table.
+        else:
+            # The token is no longer valid, remove from the revoked token table.
+            db.session.delete(revoked_token)
+
+    db.session.commit()
+
+
+def revoke_token(user, auth_token):
+    revoked_token = RevokedToken(token=auth_token, journalist_id=user.id)
+    db.session.add(revoked_token)
+    db.session.commit()

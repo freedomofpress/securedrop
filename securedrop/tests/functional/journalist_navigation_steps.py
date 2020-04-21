@@ -1,22 +1,46 @@
-import pytest
-import urllib2
+from __future__ import print_function
+
+import gzip
+import logging
+import os
+import random
 import re
 import tempfile
-import gzip
-import os
+import time
+from os.path import dirname
 
+import pytest
+import requests
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.ui import WebDriverWait
 
-import tests.utils.db_helper as db_helper
-import crypto_util
-from db import Journalist
-from step_helpers import screenshots
-import config
+
+# Number of times to try flaky clicks.
+CLICK_ATTEMPTS = 15
 
 
-class JournalistNavigationStepsMixin():
+# A generator to get unlimited user names for our tests.
+# The pages-layout tests require many users during
+# the test run, that is why have the following
+# implementation.
+def get_journalist_usernames():
+    yield "dellsberg"
+    yield "jpb"
+    yield "bassel"
+    while True:
+        num = random.randint(1000, 1000000)
+        yield "journalist" + str(num)
 
-    @screenshots
+
+journalist_usernames = get_journalist_usernames()
+
+
+class JournalistNavigationStepsMixin:
     def _get_submission_content(self, file_url, raw_content):
         if not file_url.endswith(".gz.gpg"):
             return str(raw_content)
@@ -25,626 +49,961 @@ class JournalistNavigationStepsMixin():
             fp.write(raw_content.data)
             fp.seek(0)
 
-            gzf = gzip.GzipFile(mode='rb', fileobj=fp)
+            gzf = gzip.GzipFile(mode="rb", fileobj=fp)
             content = gzf.read()
 
             return content
 
+    def return_downloaded_content(self, url, cookies):
+        """
+        This downloads and returns the content to the caller
+        :param url: URL to download
+        :param cookies: the cookies to access
+        :return: Content of the URL
+        """
+        proxies = None
+        if ".onion" in url:
+            proxies = {"http": "socks5h://127.0.0.1:9150", "https": "socks5h://127.0.0.1:9150"}
+        r = requests.get(url, cookies=cookies, proxies=proxies, stream=True)
+        if r.status_code != 200:
+            raise Exception("Failed to download the data.")
+        data = b""
+        for chunk in r.iter_content(1024):
+            data += chunk
+        return data
+
     def _input_text_in_login_form(self, username, password, token):
         self.driver.get(self.journalist_location + "/login")
-        username_field = self.driver.find_element_by_css_selector(
-            'input[name="username"]')
-        username_field.send_keys(username)
-
-        password_field = self.driver.find_element_by_css_selector(
-            'input[name="password"]')
-        password_field.send_keys(password)
-
-        token_field = self.driver.find_element_by_css_selector(
-            'input[name="token"]')
-        token_field.send_keys(token)
+        self.safe_send_keys_by_css_selector('input[name="username"]', username)
+        self.safe_send_keys_by_css_selector('input[name="password"]', password)
+        self.safe_send_keys_by_css_selector('input[name="token"]', token)
 
     def _try_login_user(self, username, password, token):
         self._input_text_in_login_form(username, password, token)
+        self.safe_click_by_css_selector('button[type="submit"]')
 
-        submit_button = self.driver.find_element_by_css_selector(
-            'button[type=submit]')
-        submit_button.click()
+    def _login_user(self, username, password, otp, maxtries=3):
+        token = str(otp.now())
+        for i in range(maxtries):
 
-    @screenshots
-    def _login_user(self, username, password, token):
-        self._try_login_user(username, password, token)
-        # Successful login should redirect to the index
-        assert self.driver.current_url == self.journalist_location + '/'
+            self._try_login_user(username, password, token)
+            # Successful login should redirect to the index
+            self.wait_for(
+                lambda: self.driver.find_element_by_id("logout"), timeout=self.timeout * 2
+            )
+            if self.driver.current_url != self.journalist_location + "/":
+                new_token = str(otp.now())
+                while token == new_token:
+                    time.sleep(1)
+                    new_token = str(otp.now())
+                token = new_token
+            else:
+                return
 
-    @screenshots
+        # If we reach here, assert the error
+        assert self.driver.current_url == self.journalist_location + "/", (
+            self.driver.current_url + " " + self.journalist_location
+        )
+
+    def _is_on_journalist_homepage(self):
+        return self.wait_for(
+            lambda: self.driver.find_element_by_css_selector("div.journalist-view-all")
+        )
+
     def _journalist_logs_in(self):
         # Create a test user for logging in
-        self.user, self.user_pw = db_helper.init_journalist()
-        self._login_user(self.user.username, self.user_pw, 'mocked')
-
-        headline = self.driver.find_element_by_css_selector('span.headline')
-        if not hasattr(self, 'accept_languages'):
-            assert 'Sources' in headline.text
+        self.user = self.admin_user["name"]
+        self.user_pw = self.admin_user["password"]
+        self._login_user(self.user, self.user_pw, self.admin_user["totp"])
+        assert self._is_on_journalist_homepage()
 
     def _journalist_visits_col(self):
-        self.driver.find_element_by_css_selector(
-            '#un-starred-source-link-1').click()
+        self.wait_for(lambda: self.driver.find_element_by_id("cols"))
+
+        self.safe_click_by_id("un-starred-source-link-1")
+
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("ul#submissions"))
 
     def _journalist_selects_first_doc(self):
-        self.driver.find_elements_by_name('doc_names_selected')[0].click()
+        self.safe_click_by_css_selector('input[type="checkbox"][name="doc_names_selected"]')
 
-    def _journalist_clicks_delete_selected_javascript(self):
-        self.driver.find_element_by_id('delete-selected').click()
-        self._alert_wait()
+        self.wait_for(
+            lambda: expected_conditions.element_located_to_be_selected(
+                (By.CSS_SELECTOR, 'input[type="checkbox"][name="doc_names_selected"]')
+            )
+        )
 
-    def _journalist_verifies_deletion_of_one_submission_javascript(self):
-        self._journalist_selects_first_doc()
-        self._journalist_clicks_delete_selected_javascript()
-        self._alert_dismiss()
-        selected_count = len(self.driver.find_elements_by_name(
-            'doc_names_selected'))
+        assert self.driver.find_element_by_css_selector(
+            'input[type="checkbox"][name="doc_names_selected"]'
+        ).is_selected()
+
+    def _journalist_clicks_on_modal(self, click_id):
+        self.safe_click_by_id(click_id)
+
+    def _journalist_clicks_delete_collections_cancel_on_modal(self):
+        self._journalist_clicks_on_modal("cancel-collections-deletions")
+
+    def _journalist_clicks_delete_selected_cancel_on_modal(self):
+        self._journalist_clicks_on_modal("cancel-selected-deletions")
+
+    def _journalist_clicks_delete_collection_cancel_on_modal(self):
+        self._journalist_clicks_on_modal("cancel-collection-deletions")
+
+    def _journalist_clicks_delete_collections_on_modal(self):
+        self._journalist_clicks_on_modal("delete-collections")
+
+        def collection_deleted():
+            if not hasattr(self, "accept_languages"):
+                flash_msg = self.driver.find_element_by_css_selector(".flash")
+                assert "1 collection deleted" in flash_msg.text
+
+        self.wait_for(collection_deleted)
+
+    def _journalist_clicks_delete_selected_on_modal(self):
+        self._journalist_clicks_on_modal("delete-selected")
+
+        def submission_deleted():
+            if not hasattr(self, "accept_languages"):
+                flash_msg = self.driver.find_element_by_css_selector(".flash")
+                assert "Submission deleted." in flash_msg.text
+
+        self.wait_for(submission_deleted)
+
+    def _journalist_clicks_delete_collection_on_modal(self):
+        self._journalist_clicks_on_modal("delete-collection-button")
+
+    def _journalist_clicks_delete_link(self, click_id, displayed_id):
+        self.safe_click_by_id(click_id)
+        self.wait_for(lambda: self.driver.find_element_by_id(displayed_id))
+
+    def _journalist_clicks_delete_selected_link(self):
+        self.safe_click_by_css_selector("a#delete-selected-link > button.danger")
+        self.wait_for(lambda: self.driver.find_element_by_id("delete-selected-confirmation-modal"))
+
+    def _journalist_clicks_delete_collections_link(self):
+        self._journalist_clicks_delete_link("delete-collections-link", "delete-confirmation-modal")
+
+    def _journalist_clicks_delete_collection_link(self):
+        self._journalist_clicks_delete_link(
+            "delete-collection-link", "delete-collection-confirmation-modal"
+        )
+
+    def _journalist_uses_delete_selected_button_confirmation(self):
+        selected_count = len(self.driver.find_elements_by_name("doc_names_selected"))
         assert selected_count > 0
-        self._journalist_clicks_delete_selected_javascript()
-        self._alert_accept()
-        assert selected_count > len(self.driver.find_elements_by_name(
-            'doc_names_selected'))
 
-    @screenshots
+        self._journalist_selects_first_doc()
+        self._journalist_clicks_delete_selected_link()
+        self._journalist_clicks_delete_selected_cancel_on_modal()
+        assert selected_count == len(self.driver.find_elements_by_name("doc_names_selected"))
+
+        self._journalist_clicks_delete_selected_link()
+        self._journalist_clicks_delete_selected_on_modal()
+
+        def docs_deleted():
+            assert selected_count > len(self.driver.find_elements_by_name("doc_names_selected"))
+
+        self.wait_for(docs_deleted)
+
+    def _journalist_uses_delete_collection_button_confirmation(self):
+        self._journalist_clicks_delete_collection_link()
+        self._journalist_clicks_delete_collection_cancel_on_modal()
+        self._journalist_clicks_delete_collection_link()
+        self._journalist_clicks_delete_collection_on_modal()
+
+        # Now we should be redirected to the index.
+        assert self._is_on_journalist_homepage()
+
+    def _journalist_uses_delete_collections_button_confirmation(self):
+        sources = self.driver.find_elements_by_class_name("code-name")
+        assert len(sources) > 0
+
+        try:
+            # If JavaScript is enabled, use the select_all button.
+            self.driver.find_element_by_id("select_all")
+            self.safe_click_by_id("select_all")
+        except NoSuchElementException:
+            self.safe_click_all_by_css_selector('input[type="checkbox"][name="cols_selected"]')
+
+        self._journalist_clicks_delete_collections_link()
+        self._journalist_clicks_delete_collections_cancel_on_modal()
+
+        sources = self.driver.find_elements_by_class_name("code-name")
+        assert len(sources) > 0
+
+        self._journalist_clicks_delete_collections_link()
+        self._journalist_clicks_delete_collections_on_modal()
+
+        # We should be redirected to the index without those boxes selected.
+        def no_sources():
+            assert len(self.driver.find_elements_by_class_name("code-name")) == 0
+
+        self.wait_for(no_sources)
+
     def _admin_logs_in(self):
-        self.admin, self.admin_pw = db_helper.init_journalist(is_admin=True)
-        self._login_user(self.admin.username, self.admin_pw, 'mocked')
+        self.admin = self.admin_user["name"]
+        self.admin_pw = self.admin_user["password"]
+        self._login_user(self.admin, self.admin_pw, self.admin_user["totp"])
 
-        if not hasattr(self, 'accept_languages'):
-            # Admin user should log in to the same interface as a
-            # normal user, since there may be users who wish to be
-            # both journalists and admins.
-            headline = self.driver.find_element_by_css_selector(
-                'span.headline')
-            assert 'Sources' in headline.text
+        # Admin user should log in to the same interface as a
+        # normal user, since there may be users who wish to be
+        # both journalists and admins.
+        assert self._is_on_journalist_homepage()
 
-            # Admin user should have a link that take them to the admin page
-            links = self.driver.find_elements_by_tag_name('a')
-            assert 'Admin' in [el.text for el in links]
+        # Admin user should have a link that take them to the admin page
+        assert self.driver.find_element_by_id("link-admin-index")
 
-    @screenshots
     def _admin_visits_admin_interface(self):
-        admin_interface_link = self.driver.find_element_by_id(
-            'link-admin-index')
-        admin_interface_link.click()
-        if not hasattr(self, 'accept_languages'):
-            h1s = self.driver.find_elements_by_tag_name('h1')
-            assert "Admin Interface" in [el.text for el in h1s]
+        self.safe_click_by_id("link-admin-index")
+
+        self.wait_for(lambda: self.driver.find_element_by_id("add-user"))
 
     def _admin_visits_system_config_page(self):
-        system_config_link = self.driver.find_element_by_id(
-            'update-instance-config'
-        )
-        system_config_link.click()
-        if not hasattr(self, 'accept_languages'):
-            h1 = self.driver.find_element_by_tag_name('h1')
-            assert "Instance Configuration" in h1.text
+        self.safe_click_by_id("update-instance-config")
+
+        def config_page_loaded():
+            assert self.driver.find_element_by_id("test-ossec-alert")
+
+        self.wait_for(config_page_loaded)
 
     def _admin_updates_logo_image(self):
-        logo_upload_input = self.driver.find_element_by_id('logo-upload')
-        logo_upload_input.send_keys(
-            os.path.join(config.SECUREDROP_ROOT, "static/i/logo.png")
-        )
+        dir_name = dirname(dirname(dirname(os.path.abspath(__file__))))
+        image_path = os.path.abspath(os.path.join(dir_name, "static/i/logo.png"))
 
-        submit_button = self.driver.find_element_by_id('submit-logo-update')
-        submit_button.click()
+        self.safe_send_keys_by_id("logo-upload", image_path)
 
-        if not hasattr(self, 'accept_languages'):
-            flashed_msgs = self.driver.find_element_by_css_selector('.flash')
-            assert 'Image updated.' in flashed_msgs.text
+        self.safe_click_by_id("submit-logo-update")
 
-    @screenshots
-    def _add_user(self, username, is_admin=False, hotp=None):
-        username_field = self.driver.find_element_by_css_selector(
-            'input[name="username"]')
-        username_field.send_keys(username)
+        def updated_image():
+            if not hasattr(self, "accept_languages"):
+                flash_msg = self.driver.find_element_by_css_selector(".flash")
+                assert "Image updated." in flash_msg.text
+
+        # giving extra time for upload to complete
+        self.wait_for(updated_image, timeout=self.timeout * 6)
+
+    def _add_user(self, username, first_name="", last_name="", is_admin=False, hotp=None):
+        self.safe_send_keys_by_css_selector('input[name="username"]', username)
+
+        if first_name:
+            self.safe_send_keys_by_id("first_name", first_name)
+
+        if last_name:
+            self.safe_send_keys_by_id("last_name", last_name)
 
         if hotp:
-            hotp_checkbox = self.driver.find_element_by_css_selector(
-                'input[name="is_hotp"]')
-            print(str(hotp_checkbox.__dict__))
-            hotp_checkbox.click()
-            hotp_secret = self.driver.find_element_by_css_selector(
-                'input[name="otp_secret"]')
-            hotp_secret.send_keys(hotp)
+            self.safe_click_all_by_css_selector('input[name="is_hotp"]')
+            self.safe_send_keys_by_css_selector('input[name="otp_secret"]', hotp)
 
         if is_admin:
-            # TODO implement (checkbox is unchecked by default)
-            pass
+            self.safe_click_by_css_selector('input[name="is_admin"]')
 
-        submit_button = self.driver.find_element_by_css_selector(
-            'button[type=submit]')
-        submit_button.click()
+        self.safe_click_by_css_selector("button[type=submit]")
 
-    @screenshots
-    def _admin_adds_a_user(self):
-        add_user_btn = self.driver.find_element_by_css_selector(
-            'button#add-user')
-        add_user_btn.click()
+        self.wait_for(lambda: self.driver.find_element_by_id("check-token"))
 
-        if not hasattr(self, 'accept_languages'):
+    def _admin_adds_a_user(self, is_admin=False, new_username=""):
+        self.safe_click_by_id("add-user")
+
+        self.wait_for(lambda: self.driver.find_element_by_id("username"))
+
+        if not hasattr(self, "accept_languages"):
             # The add user page has a form with an "ADD USER" button
-            btns = self.driver.find_elements_by_tag_name('button')
-            assert 'ADD USER' in [el.text for el in btns]
+            btns = self.driver.find_elements_by_tag_name("button")
+            assert "ADD USER" in [el.text for el in btns]
 
-        password = self.driver.find_element_by_css_selector('#password') \
-            .text.strip()
+        password = self.driver.find_element_by_css_selector("#password").text.strip()
 
-        self.new_user = dict(
-                username='dellsberg',
-                password=password,
-            )
-        self._add_user(self.new_user['username'])
+        if not new_username:
+            new_username = next(journalist_usernames)
+        self.new_user = dict(username=new_username, first_name='', last_name='', password=password)
+        self._add_user(self.new_user["username"],
+                       first_name=self.new_user['first_name'],
+                       last_name=self.new_user['last_name'],
+                       is_admin=is_admin)
 
-        if not hasattr(self, 'accept_languages'):
+        if not hasattr(self, "accept_languages"):
             # Clicking submit on the add user form should redirect to
             # the FreeOTP page
-            h1s = self.driver.find_elements_by_tag_name('h1')
-            assert "Enable FreeOTP" in [el.text for el in h1s]
+            h1s = [h1.text for h1 in self.driver.find_elements_by_tag_name("h1")]
+            assert "Enable FreeOTP" in h1s
 
-        # Retrieve the saved user object from the db and keep it around for
-        # further testing
-        self.new_user['orm_obj'] = Journalist.query.filter(
-            Journalist.username == self.new_user['username']).one()
+        shared_secret = (
+            self.driver.find_element_by_css_selector("#shared-secret").text.strip().replace(" ", "")
+        )
+        self.create_new_totp(shared_secret)
 
         # Verify the two-factor authentication
-        token_field = self.driver.find_element_by_css_selector(
-            'input[name="token"]')
-        token_field.send_keys('mocked')
-        submit_button = self.driver.find_element_by_css_selector(
-            'button[type=submit]')
-        submit_button.click()
+        self.safe_send_keys_by_css_selector('input[name="token"]', str(self.new_totp.now()))
+        self.safe_click_by_css_selector("button[type=submit]")
 
-        if not hasattr(self, 'accept_languages'):
-            # Successfully verifying the code should redirect to the admin
-            # interface, and flash a message indicating success
-            flashed_msgs = self.driver.find_elements_by_css_selector('.flash')
-            assert (("Token in two-factor authentication "
-                     "accepted for user {}.").format(
-                         self.new_user['username']) in
-                    [el.text for el in flashed_msgs])
+        def user_token_added():
+            if not hasattr(self, "accept_languages"):
+                # Successfully verifying the code should redirect to the admin
+                # interface, and flash a message indicating success
+                flash_msg = self.driver.find_elements_by_css_selector(".flash")
+                assert "The two-factor code for user \"{user}\" was verified successfully.".format(
+                    self.new_user["username"]
+                ) in [el.text for el in flash_msg]
+
+        self.wait_for(user_token_added)
+
+    def _admin_deletes_user(self):
+        for i in range(CLICK_ATTEMPTS):
+            try:
+                self.safe_click_by_css_selector(".delete-user")
+                self.alert_wait()
+                self.alert_accept()
+                break
+            except TimeoutException:
+                # Selenium has failed to click, and the confirmation
+                # alert didn't happen. Try once more.
+                logging.info("Selenium has failed to click yet again; retrying.")
+
+        def user_deleted():
+            if not hasattr(self, "accept_languages"):
+                flash_msg = self.driver.find_element_by_css_selector(".flash")
+                assert "Deleted user" in flash_msg.text
+
+        self.wait_for(user_deleted)
 
     def _admin_can_send_test_alert(self):
-        alert_button = self.driver.find_element_by_id('test-ossec-alert')
+        alert_button = self.driver.find_element_by_id("test-ossec-alert")
         alert_button.click()
 
-        if not hasattr(self, 'accept_languages'):
-            flashed_msg = self.driver.find_element_by_css_selector('.flash')
-            assert "Test alert sent. Check your email." in flashed_msg.text
+        def test_alert_sent():
+            if not hasattr(self, "accept_languages"):
+                flash_msg = self.driver.find_element_by_css_selector(".flash")
+                assert "Test alert sent. Please check your email." in flash_msg.text
 
-    @screenshots
+        self.wait_for(test_alert_sent)
+
     def _logout(self):
         # Click the logout link
-        logout_link = self.driver.find_element_by_id('link-logout')
-        logout_link.click()
+        self.safe_click_by_id("link-logout")
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
 
         # Logging out should redirect back to the login page
         def login_page():
-            assert ("Login to access the journalist interface" in
-                    self.driver.page_source)
+            assert "Login to access the journalist interface" in self.driver.page_source
+
         self.wait_for(login_page)
 
-    @screenshots
     def _check_login_with_otp(self, otp):
         self._logout()
-        self._login_user(self.new_user['username'],
-                         self.new_user['password'], otp)
-        if not hasattr(self, 'accept_languages'):
-            # Test that the new user was logged in successfully
-            assert 'Sources' in self.driver.page_source
+        self._login_user(self.new_user["username"], self.new_user["password"], otp)
+        assert self._is_on_journalist_homepage()
 
-    @screenshots
     def _new_user_can_log_in(self):
         # Log the admin user out
         self._logout()
 
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
         # Log the new user in
-        self._login_user(self.new_user['username'],
-                         self.new_user['password'],
-                         'mocked')
+        self._login_user(self.new_user["username"], self.new_user["password"], self.new_totp)
 
-        if not hasattr(self, 'accept_languages'):
-            # Test that the new user was logged in successfully
-            assert 'Sources' in self.driver.page_source
+        assert self._is_on_journalist_homepage()
 
         # The new user was not an admin, so they should not have the admin
         # interface link available
         with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_id('link-admin-index')
+            self.driver.find_element_by_id("link-admin-index")
 
-    @screenshots
+    def _new_admin_user_can_log_in(self):
+        # Test login with mocked token
+        self._check_login_with_otp(self.new_totp)
+
+        # Newly added user who is an admin can visit admin interface
+        self._admin_visits_admin_interface()
+
     def _edit_account(self):
-        edit_account_link = self.driver.find_element_by_id(
-            'link-edit-account')
+        edit_account_link = self.driver.find_element_by_id("link-edit-account")
         edit_account_link.click()
 
         # The header says "Edit your account"
-        h1s = self.driver.find_elements_by_tag_name('h1')[0]
-        assert 'Edit your account' == h1s.text
+        def edit_page_loaded():
+            h1s = self.driver.find_elements_by_tag_name("h1")[0]
+            assert "Edit your account" == h1s.text
+
+        self.wait_for(edit_page_loaded)
+
         # There's no link back to the admin interface.
         with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_partial_link_text(
-                'Back to admin interface')
+            self.driver.find_element_by_partial_link_text("Back to admin interface")
         # There's no field to change your username.
         with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_css_selector('#username')
-        # There's no checkbox to change the administrator status of your
+            self.driver.find_element_by_css_selector("#username")
+        # There's no checkbox to change the admin status of your
         # account.
         with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_css_selector('#is-admin')
+            self.driver.find_element_by_css_selector("#is-admin")
         # 2FA reset buttons at the bottom point to the user URLs for reset.
-        totp_reset_button = self.driver.find_elements_by_css_selector(
-            '#reset-two-factor-totp')[0]
-        assert ('/account/reset-2fa-totp' in
-                totp_reset_button.get_attribute('action'))
-        hotp_reset_button = self.driver.find_elements_by_css_selector(
-            '#reset-two-factor-hotp')[0]
-        assert ('/account/reset-2fa-hotp' in
-                hotp_reset_button.get_attribute('action'))
+        totp_reset_button = self.driver.find_elements_by_css_selector("#reset-two-factor-totp")[0]
+        assert "/account/reset-2fa-totp" in totp_reset_button.get_attribute("action")
+        hotp_reset_button = self.driver.find_elements_by_css_selector("#reset-two-factor-hotp")[0]
+        assert "/account/reset-2fa-hotp" in hotp_reset_button.get_attribute("action")
 
-    @screenshots
-    def _edit_user(self, username):
-        user = Journalist.query.filter_by(username=username).one()
+    def _edit_user(self, username, is_admin=False):
+        self.wait_for(lambda: self.driver.find_element_by_id("users"))
 
-        new_user_edit_links = filter(
-            lambda el: el.get_attribute('data-username') == username,
-            self.driver.find_elements_by_tag_name('a'))
+        new_user_edit_links = [
+            el
+            for el in self.driver.find_elements_by_tag_name("a")
+            if el.get_attribute("data-username") == username
+        ]
+
         assert 1 == len(new_user_edit_links)
         new_user_edit_links[0].click()
-        # The header says "Edit user "username"".
-        h1s = self.driver.find_elements_by_tag_name('h1')[0]
-        assert 'Edit user "{}"'.format(username) == h1s.text
+
+        def edit_user_page_loaded():
+            h1s = self.driver.find_elements_by_tag_name("h1")[0]
+            assert 'Edit user "{}"'.format(username) == h1s.text
+
+        self.wait_for(edit_user_page_loaded)
+
         # There's a convenient link back to the admin interface.
         admin_interface_link = self.driver.find_element_by_partial_link_text(
-            'Back to admin interface')
-        assert re.search('/admin$', admin_interface_link.get_attribute('href'))
+            "Back to admin interface"
+        )
+        assert re.search("/admin$", admin_interface_link.get_attribute("href"))
         # There's a field to change the user's username and it's already filled
         # out with the user's username.
-        username_field = self.driver.find_element_by_css_selector('#username')
-        assert username_field.get_attribute('placeholder') == username
-        # There's a checkbox to change the administrator status of the user and
+        username_field = self.driver.find_element_by_css_selector("#username")
+        assert username_field.get_attribute("value") == username
+        # There's a checkbox to change the admin status of the user and
         # it's already checked appropriately to reflect the current status of
         # our user.
-        username_field = self.driver.find_element_by_css_selector('#is-admin')
-        assert (bool(username_field.get_attribute('checked')) ==
-                user.is_admin)
+        username_field = self.driver.find_element_by_css_selector("#is-admin")
+        assert bool(username_field.get_attribute("checked")) == is_admin
         # 2FA reset buttons at the bottom point to the admin URLs for
         # resettting 2FA and include the correct user id in the hidden uid.
-        totp_reset_button = self.driver.find_elements_by_css_selector(
-            '#reset-two-factor-totp')[0]
-        assert '/admin/reset-2fa-totp' in totp_reset_button.get_attribute(
-            'action')
-        totp_reset_uid = totp_reset_button.find_element_by_name('uid')
-        assert int(totp_reset_uid.get_attribute('value')) == user.id
+        totp_reset_button = self.driver.find_elements_by_css_selector("#reset-two-factor-totp")[0]
+        assert "/admin/reset-2fa-totp" in totp_reset_button.get_attribute("action")
+        totp_reset_uid = totp_reset_button.find_element_by_name("uid")
         assert totp_reset_uid.is_displayed() is False
-        hotp_reset_button = self.driver.find_elements_by_css_selector(
-            '#reset-two-factor-hotp')[0]
-        assert '/admin/reset-2fa-hotp' in hotp_reset_button.get_attribute(
-            'action')
+        hotp_reset_button = self.driver.find_elements_by_css_selector("#reset-two-factor-hotp")[0]
+        assert "/admin/reset-2fa-hotp" in hotp_reset_button.get_attribute("action")
 
-        hotp_reset_uid = hotp_reset_button.find_element_by_name('uid')
-        assert int(hotp_reset_uid.get_attribute('value')) == user.id
+        hotp_reset_uid = hotp_reset_button.find_element_by_name("uid")
         assert hotp_reset_uid.is_displayed() is False
 
-    @screenshots
     def _admin_can_edit_new_user(self):
         # Log the new user out
         self._logout()
 
-        self._login_user(self.admin.username, self.admin_pw, 'mocked')
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
+
+        self._login_user(self.admin, self.admin_pw, self.admin_user["totp"])
 
         # Go to the admin interface
-        admin_interface_link = self.driver.find_element_by_id(
-            'link-admin-index')
-        admin_interface_link.click()
+        self.safe_click_by_id("link-admin-index")
+
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("button#add-user"))
 
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
-        new_user_edit_links = filter(
-            lambda el: (el.get_attribute('data-username') ==
-                        self.new_user['username']),
-            self.driver.find_elements_by_tag_name('a'))
+        new_user_edit_links = [
+            el
+            for el in self.driver.find_elements_by_tag_name("a")
+            if (el.get_attribute("data-username") == self.new_user["username"])
+        ]
         assert len(new_user_edit_links) == 1
         new_user_edit_links[0].click()
 
         def can_edit_user():
-            assert ('"{}"'.format(self.new_user['username']) in
-                    self.driver.page_source)
+            h = self.driver.find_elements_by_tag_name("h1")[0]
+            assert 'Edit user "{}"'.format(self.new_user["username"]) == h.text
+
         self.wait_for(can_edit_user)
 
-        new_username = self.new_user['username'] + "2"
+        new_characters = "2"
+        new_username = self.new_user["username"] + new_characters
 
-        username_field = self.driver.find_element_by_css_selector(
-            'input[name="username"]')
-        username_field.send_keys(new_username)
-        update_user_btn = self.driver.find_element_by_css_selector(
-            'button[type=submit]')
-        update_user_btn.click()
+        self.safe_send_keys_by_css_selector('input[name="username"]', new_characters)
+        self.safe_click_by_css_selector("button[type=submit]")
+
+        def user_edited():
+            if not hasattr(self, "accept_languages"):
+                flash_msg = self.driver.find_element_by_css_selector(".flash")
+                assert "Account updated." in flash_msg.text
+
+        self.wait_for(user_edited)
 
         def can_edit_user2():
-            assert ('"{}"'.format(new_username) in self.driver.page_source)
+            assert '"{}"'.format(new_username) in self.driver.page_source
+
         self.wait_for(can_edit_user2)
 
         # Update self.new_user with the new username for the future tests
-        self.new_user['username'] = new_username
+        self.new_user["username"] = new_username
 
         # Log the new user in with their new username
         self._logout()
-        self._login_user(self.new_user['username'],
-                         self.new_user['password'],
-                         'mocked')
-        if not hasattr(self, 'accept_languages'):
-            def found_sources():
-                assert 'Sources' in self.driver.page_source
-            self.wait_for(found_sources)
+
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
+
+        self._login_user(self.new_user["username"], self.new_user["password"], self.new_totp)
+
+        assert self._is_on_journalist_homepage()
 
         # Log the admin user back in
         self._logout()
-        self._login_user(self.admin.username, self.admin_pw, 'mocked')
+
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
+
+        self._login_user(self.admin, self.admin_pw, self.admin_user["totp"])
 
         # Go to the admin interface
-        admin_interface_link = self.driver.find_element_by_id(
-            'link-admin-index')
-        admin_interface_link.click()
+        self.safe_click_by_id("link-admin-index")
 
-        # Edit the new user's password
-        self._edit_user(self.new_user['username'])
-        new_password = self.driver.find_element_by_css_selector('#password') \
-            .text.strip()
-        self.new_user['password'] = new_password
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("button#add-user"))
 
-        reset_pw_btn = self.driver.find_element_by_css_selector(
-            '#reset-password')
+        selector = 'a[data-username="{}"]'.format(self.new_user["username"])
+        new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
+        assert len(new_user_edit_links) == 1
+        self.safe_click_by_css_selector(selector)
+
+        self.wait_for(can_edit_user)
+
+        new_password = self.driver.find_element_by_css_selector("#password").text.strip()
+        self.new_user["password"] = new_password
+
+        reset_pw_btn = self.driver.find_element_by_css_selector("#reset-password")
         reset_pw_btn.click()
 
         def update_password_success():
-            assert 'Password updated.' in self.driver.page_source
+            assert "Password updated." in self.driver.page_source
 
         # Wait until page refreshes to avoid causing a broken pipe error (#623)
         self.wait_for(update_password_success)
 
         # Log the new user in with their new password
         self._logout()
-        self._login_user(self.new_user['username'],
-                         self.new_user['password'],
-                         'mocked')
-        self.wait_for(found_sources)
+        self._login_user(self.new_user["username"], self.new_user["password"], self.new_totp)
 
-    @screenshots
+        assert self._is_on_journalist_homepage()
+
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
 
         # There should be 1 collection in the list of collections
-        code_names = self.driver.find_elements_by_class_name('code-name')
-        assert 1 == len(code_names)
+        code_names = self.driver.find_elements_by_class_name("code-name")
+        assert 0 != len(code_names), code_names
+        assert 1 <= len(code_names), code_names
 
-        if not hasattr(self, 'accept_languages'):
+        if not hasattr(self, "accept_languages"):
             # There should be a "1 unread" span in the sole collection entry
-            unread_span = self.driver.find_element_by_css_selector(
-                'span.unread')
+            unread_span = self.driver.find_element_by_css_selector("span.unread")
             assert "1 unread" in unread_span.text
 
-    @screenshots
     def _journalist_stars_and_unstars_single_message(self):
         # Message begins unstarred
         with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_id('starred-source-link-1')
+            self.driver.find_element_by_id("starred-source-link-1")
 
         # Journalist stars the message
-        self.driver.find_element_by_class_name('button-star').click()
-        starred = self.driver.find_elements_by_id('starred-source-link-1')
-        assert 1 == len(starred)
+        self.driver.find_element_by_class_name("button-star").click()
+
+        def message_starred():
+            starred = self.driver.find_elements_by_id("starred-source-link-1")
+            assert 1 == len(starred)
+
+        self.wait_for(message_starred)
 
         # Journalist unstars the message
-        self.driver.find_element_by_class_name('button-star').click()
-        with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_id('starred-source-link-1')
+        self.driver.find_element_by_class_name("button-star").click()
 
-    @screenshots
+        def message_unstarred():
+            with pytest.raises(NoSuchElementException):
+                self.driver.find_element_by_id("starred-source-link-1")
+
+        self.wait_for(message_unstarred)
+
     def _journalist_selects_all_sources_then_selects_none(self):
-        self.driver.find_element_by_id('select_all').click()
-        checkboxes = self.driver.find_elements_by_id('checkbox')
+        self.driver.find_element_by_id("select_all").click()
+        checkboxes = self.driver.find_elements_by_id("checkbox")
         for checkbox in checkboxes:
             assert checkbox.is_selected()
 
-        self.driver.find_element_by_id('select_none').click()
-        checkboxes = self.driver.find_elements_by_id('checkbox')
+        self.driver.find_element_by_id("select_none").click()
+        checkboxes = self.driver.find_elements_by_id("checkbox")
         for checkbox in checkboxes:
             assert checkbox.is_selected() is False
 
     def _journalist_selects_the_first_source(self):
-        self.driver.find_element_by_css_selector(
-            '#un-starred-source-link-1').click()
+        self.driver.find_element_by_css_selector("#un-starred-source-link-1").click()
 
-    def _journalist_selects_documents_to_download(self):
-        self.driver.find_element_by_id('select_all').click()
+    def _journalist_selects_all_documents(self):
+        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
+        for checkbox in checkboxes:
+            checkbox.click()
 
-    @screenshots
     def _journalist_downloads_message(self):
         self._journalist_selects_the_first_source()
 
-        submissions = self.driver.find_elements_by_css_selector(
-            '#submissions a')
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("ul#submissions"))
+
+        submissions = self.driver.find_elements_by_css_selector("#submissions a")
         assert 1 == len(submissions)
 
-        file_url = submissions[0].get_attribute('href')
+        file_url = submissions[0].get_attribute("href")
 
         # Downloading files with Selenium is tricky because it cannot automate
         # the browser's file download dialog. We can directly request the file
-        # using urllib2, but we need to pass the cookies for the logged in user
+        # using requests, but we need to pass the cookies for logged in user
         # for Flask to allow this.
         def cookie_string_from_selenium_cookies(cookies):
-            cookie_strs = []
+            result = {}
             for cookie in cookies:
-                cookie_str = "=".join([cookie['name'], cookie['value']]) + ';'
-                cookie_strs.append(cookie_str)
-            return ' '.join(cookie_strs)
+                result[cookie["name"]] = cookie["value"]
+            return result
 
-        submission_req = urllib2.Request(file_url)
-        submission_req.add_header(
-            'Cookie',
-            cookie_string_from_selenium_cookies(
-                self.driver.get_cookies()))
-        raw_content = urllib2.urlopen(submission_req).read()
+        cks = cookie_string_from_selenium_cookies(self.driver.get_cookies())
+        raw_content = self.return_downloaded_content(file_url, cks)
 
         decrypted_submission = self.gpg.decrypt(raw_content)
-        submission = self._get_submission_content(file_url,
-                                                  decrypted_submission)
+        submission = self._get_submission_content(file_url, decrypted_submission)
+        if type(submission) == bytes:
+            submission = submission.decode("utf-8")
+
         assert self.secret_message == submission
 
     def _journalist_composes_reply(self):
-        reply_text = ('Thanks for the documents. Can you submit more '
-                      'information about the main program?')
-        self.wait_for(lambda: self.driver.find_element_by_id(
-            'reply-text-field'
-        ), timeout=60)
-        self.driver.find_element_by_id('reply-text-field').send_keys(
-            reply_text
+        reply_text = (
+            "Thanks for the documents. Can you submit more " "information about the main program?"
         )
+        self.wait_for(lambda: self.driver.find_element_by_id("reply-text-field"))
+        self.safe_send_keys_by_id("reply-text-field", reply_text)
 
     def _journalist_sends_reply_to_source(self):
         self._journalist_composes_reply()
-        self.driver.find_element_by_id('reply-button').click()
+        self.driver.find_element_by_id("reply-button").click()
 
-        if not hasattr(self, 'accept_languages'):
-            assert ("Thanks. Your reply has been stored." in
-                    self.driver.page_source)
+        def reply_stored():
+            if not hasattr(self, "accept_languages"):
+                assert "Thanks. Your reply has been stored." in self.driver.page_source
+
+        self.wait_for(reply_stored)
 
     def _visit_edit_account(self):
-        edit_account_link = self.driver.find_element_by_id(
-            'link-edit-account')
-        edit_account_link.click()
+        self.safe_click_by_id("link-edit-account")
 
-    def _visit_edit_secret(self, type):
-        reset_form = self.driver.find_elements_by_css_selector(
-            '#reset-two-factor-' + type)[0]
-        assert ('/account/reset-2fa-' + type in
-                reset_form.get_attribute('action'))
-
+    def _visit_edit_secret(self, otp_type, tooltip_text=''):
+        reset_form = self.wait_for(
+            lambda: self.driver.find_element_by_id("reset-two-factor-" + otp_type)
+        )
+        assert "/account/reset-2fa-" + otp_type in reset_form.get_attribute("action")
         reset_button = self.driver.find_elements_by_css_selector(
-            '#button-reset-two-factor-' + type)[0]
-        reset_button.click()
+            "#button-reset-two-factor-" + otp_type)[0]
 
-    def _visit_edit_hotp_secret(self):
-        self._visit_edit_secret('hotp')
+        # 2FA reset buttons show a tooltip with explanatory text on hover.
+        # Also, confirm the text on the tooltip is the correct one.
+        reset_button.location_once_scrolled_into_view
+        ActionChains(self.driver).move_to_element(reset_button).perform()
+        time.sleep(1)
+        explanatory_tooltip_opacity = self.driver.find_elements_by_css_selector(
+            "#button-reset-two-factor-" + otp_type + " span")[0].value_of_css_property("opacity")
+        explanatory_tooltip_content = self.driver.find_elements_by_css_selector(
+            "#button-reset-two-factor-" + otp_type + " span")[0].text
+
+        assert explanatory_tooltip_opacity == "1"
+        if not hasattr(self, "accept_languages"):
+            assert explanatory_tooltip_content == tooltip_text
+        reset_form.submit()
+
+        alert = self.driver.switch_to_alert()
+        alert.accept()
 
     def _set_hotp_secret(self):
-        hotp_secret_field = self.driver.find_elements_by_css_selector(
-            'input[name="otp_secret"]')[0]
-        hotp_secret_field.send_keys('123456')
-        submit_button = self.driver.find_element_by_css_selector(
-            'button[type=submit]')
-        submit_button.click()
+        self.safe_send_keys_by_css_selector('input[name="otp_secret"]', "123456")
+        self.safe_click_by_css_selector("button[type=submit]")
+
+    def _visit_edit_hotp_secret(self):
+        self._visit_edit_secret(
+            "hotp",
+            "Reset two-factor authentication for security keys like Yubikey")
 
     def _visit_edit_totp_secret(self):
-        self._visit_edit_secret('totp')
+        self._visit_edit_secret(
+            "totp",
+            "Reset two-factor authentication for mobile apps such as FreeOTP or "
+            "Google Authenticator"
+        )
 
     def _admin_visits_add_user(self):
-        add_user_btn = self.driver.find_element_by_css_selector(
-            'button#add-user')
+        add_user_btn = self.driver.find_element_by_css_selector("button#add-user")
+        self.wait_for(lambda: add_user_btn.is_enabled() and add_user_btn.is_displayed())
         add_user_btn.click()
+
+        self.wait_for(lambda: self.driver.find_element_by_id("username"))
 
     def _admin_visits_edit_user(self):
-        new_user_edit_links = filter(
-            lambda el: (el.get_attribute('data-username') ==
-                        self.new_user['username']),
-            self.driver.find_elements_by_tag_name('a'))
+        selector = 'a[data-username="{}"]'.format(self.new_user["username"])
+        new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
         assert len(new_user_edit_links) == 1
-        new_user_edit_links[0].click()
+        self.safe_click_by_css_selector(selector)
+        try:
+            self.wait_for(lambda: self.driver.find_element_by_id("new-password"))
+        except NoSuchElementException:
+            # try once more
+            self.safe_click_by_css_selector(selector)
+            self.wait_for(lambda: self.driver.find_element_by_id("new-password"))
 
-        def can_edit_user():
-            assert ('"{}"'.format(self.new_user['username']) in
-                    self.driver.page_source)
-        self.wait_for(can_edit_user)
+    def retry_2fa_pop_ups(self, navigation_step, button_to_click):
+        """Clicking on Selenium alerts can be flaky. We need to retry them if they timeout."""
+
+        for i in range(CLICK_ATTEMPTS):
+            try:
+                try:
+                    # This is the button we click to trigger the alert.
+                    self.wait_for(lambda: self.driver.find_elements_by_id(
+                        button_to_click)[0])
+                except IndexError:
+                    # If the button isn't there, then the alert is up from the last
+                    # time we attempted to run this test. Switch to it and accept it.
+                    self.alert_wait()
+                    self.alert_accept()
+                    break
+
+                # The alert isn't up. Run the rest of the logic.
+                navigation_step()
+
+                self.alert_wait()
+                self.alert_accept()
+                break
+            except TimeoutException:
+                # Selenium has failed to click, and the confirmation
+                # alert didn't happen. We'll try again.
+                logging.info("Selenium has failed to click; retrying.")
 
     def _admin_visits_reset_2fa_hotp(self):
-        hotp_reset_button = self.driver.find_elements_by_css_selector(
-            '#reset-two-factor-hotp')[0]
-        assert ('/admin/reset-2fa-hotp' in
-                hotp_reset_button.get_attribute('action'))
-        hotp_reset_button.click()
+        def _admin_visits_reset_2fa_hotp_step():
+            # 2FA reset buttons show a tooltip with explanatory text on hover.
+            # Also, confirm the text on the tooltip is the correct one.
+            hotp_reset_button = self.driver.find_elements_by_id(
+                "reset-two-factor-hotp")[0]
+            hotp_reset_button.location_once_scrolled_into_view
+            ActionChains(self.driver).move_to_element(hotp_reset_button).perform()
+
+            time.sleep(1)
+
+            tip_opacity = self.driver.find_elements_by_css_selector(
+                "#button-reset-two-factor-hotp span")[0].value_of_css_property('opacity')
+            tip_text = self.driver.find_elements_by_css_selector(
+                "#button-reset-two-factor-hotp span")[0].text
+
+            assert tip_opacity == "1"
+
+            if not hasattr(self, "accept_languages"):
+                assert tip_text == "Reset two-factor authentication for security keys like Yubikey"
+
+            self.safe_click_by_id("button-reset-two-factor-hotp")
+
+        # Run the above step in a retry loop
+        self.retry_2fa_pop_ups(_admin_visits_reset_2fa_hotp_step, "reset-two-factor-hotp")
+
+    def _admin_visits_edit_hotp(self):
+        self.wait_for(lambda: self.driver.find_element_by_css_selector('input[name="otp_secret"]'))
 
     def _admin_visits_reset_2fa_totp(self):
-        totp_reset_button = self.driver.find_elements_by_css_selector(
-            '#reset-two-factor-totp')[0]
-        assert ('/admin/reset-2fa-totp' in
-                totp_reset_button.get_attribute('action'))
-        totp_reset_button.click()
+        def _admin_visits_reset_2fa_totp_step():
+            totp_reset_button = self.driver.find_elements_by_id("reset-two-factor-totp")[0]
+            assert "/admin/reset-2fa-totp" in totp_reset_button.get_attribute("action")
+            # 2FA reset buttons show a tooltip with explanatory text on hover.
+            # Also, confirm the text on the tooltip is the correct one.
+            totp_reset_button = self.driver.find_elements_by_css_selector(
+                "#button-reset-two-factor-totp")[0]
+            totp_reset_button.location_once_scrolled_into_view
+            ActionChains(self.driver).move_to_element(totp_reset_button).perform()
+
+            time.sleep(1)
+
+            tip_opacity = self.driver.find_elements_by_css_selector(
+                "#button-reset-two-factor-totp span")[0].value_of_css_property('opacity')
+            tip_text = self.driver.find_elements_by_css_selector(
+                "#button-reset-two-factor-totp span")[0].text
+
+            assert tip_opacity == "1"
+            if not hasattr(self, "accept_languages"):
+                expected_text = (
+                    "Reset two-factor authentication for mobile apps such as FreeOTP "
+                    "or Google Authenticator"
+                )
+                assert tip_text == expected_text
+
+            self.safe_click_by_id("button-reset-two-factor-totp")
+
+        # Run the above step in a retry loop
+        self.retry_2fa_pop_ups(_admin_visits_reset_2fa_totp_step, "reset-two-factor-totp")
 
     def _admin_creates_a_user(self, hotp):
-        add_user_btn = self.driver.find_element_by_css_selector(
-            'button#add-user')
-        add_user_btn.click()
-
-        self.new_user = dict(
-            username='dellsberg',
-            password='pentagonpapers')
-
-        self._add_user(self.new_user['username'],
+        self.safe_click_by_id("add-user")
+        self.wait_for(lambda: self.driver.find_element_by_id("username"))
+        self.new_user = dict(username="dellsberg",
+                             first_name='',
+                             last_name='',
+                             password="pentagonpapers")
+        self._add_user(self.new_user["username"],
+                       first_name=self.new_user['first_name'],
+                       last_name=self.new_user['last_name'],
                        is_admin=False,
                        hotp=hotp)
 
     def _journalist_delete_all(self):
-        for checkbox in self.driver.find_elements_by_name(
-                'doc_names_selected'):
+        for checkbox in self.driver.find_elements_by_name("doc_names_selected"):
             checkbox.click()
-        self.driver.find_element_by_id('delete-selected').click()
 
-    def _journalist_confirm_delete_all(self):
+        delete_selected_link = self.driver.find_element_by_id("delete-selected-link")
+        ActionChains(self.driver).move_to_element(delete_selected_link).click().perform()
+
+    def _journalist_confirm_delete_selected(self):
         self.wait_for(
-            lambda: self.driver.find_element_by_id('confirm-delete'))
-        confirm_btn = self.driver.find_element_by_id('confirm-delete')
-        confirm_btn.click()
+            lambda: expected_conditions.element_to_be_clickable((By.ID, "delete-selected"))
+        )
+        confirm_btn = self.driver.find_element_by_id("delete-selected")
+        confirm_btn.location_once_scrolled_into_view
+        ActionChains(self.driver).move_to_element(confirm_btn).click().perform()
 
     def _source_delete_key(self):
-        filesystem_id = crypto_util.hash_codename(self.source_name)
-        crypto_util.delete_reply_keypair(filesystem_id)
+        filesystem_id = self.source_app.crypto_util.hash_codename(self.source_name)
+        self.source_app.crypto_util.delete_reply_keypair(filesystem_id)
 
     def _journalist_continues_after_flagging(self):
-        self.driver.find_element_by_id('continue-to-list').click()
+        self.wait_for(lambda: self.driver.find_element_by_id("continue-to-list"))
+        continue_link = self.driver.find_element_by_id("continue-to-list")
+
+        actions = ActionChains(self.driver)
+        actions.move_to_element(continue_link).perform()
+        continue_link.click()
 
     def _journalist_delete_none(self):
-        self.driver.find_element_by_id('delete-selected').click()
+        self.driver.find_element_by_id("delete-selected-link").click()
 
-    def _journalist_delete_all_javascript(self):
-        self.driver.find_element_by_id('select_all').click()
-        self.driver.find_element_by_id('delete-selected').click()
-        self._alert_wait()
+    def _journalist_delete_all_confirmation(self):
+        self.safe_click_all_by_css_selector("[name=doc_names_selected]")
+        self.safe_click_by_css_selector("a#delete-selected-link > button.danger")
 
     def _journalist_delete_one(self):
-        self.driver.find_elements_by_name('doc_names_selected')[0].click()
-        self.driver.find_element_by_id('delete-selected').click()
+        self.safe_click_by_css_selector("[name=doc_names_selected]")
+
+        el = WebDriverWait(self.driver, self.timeout, self.poll_frequency).until(
+            expected_conditions.element_to_be_clickable((By.ID, "delete-selected-link"))
+        )
+        el.location_once_scrolled_into_view
+        ActionChains(self.driver).move_to_element(el).click().perform()
 
     def _journalist_flags_source(self):
-        self.driver.find_element_by_id('flag-button').click()
+        self.safe_click_by_id("flag-button")
 
     def _journalist_visits_admin(self):
         self.driver.get(self.journalist_location + "/admin")
 
     def _journalist_fail_login(self):
-        self.user, self.user_pw = db_helper.init_journalist()
-        self._try_login_user(self.user.username, 'worse', 'mocked')
+        self._try_login_user("root", "worse", "mocked")
 
     def _journalist_fail_login_many(self):
-        self.user, self.user_pw = db_helper.init_journalist()
-        for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD + 1):
-            self._try_login_user(self.user.username, 'worse', 'mocked')
+        self.user = ""
+        for _ in range(5 + 1):
+            self._try_login_user(self.user, "worse", "mocked")
 
-    def _admin_enters_journalist_account_details_hotp(self, username,
-                                                      hotp_secret):
-        username_field = self.driver.find_element_by_css_selector(
-            'input[name="username"]')
-        username_field.send_keys(username)
+    def _admin_enters_journalist_account_details_hotp(self, username, hotp_secret):
+        self.safe_send_keys_by_css_selector('input[name="username"]', username)
+        self.safe_send_keys_by_css_selector('input[name="otp_secret"]', hotp_secret)
+        self.safe_click_by_css_selector('input[name="is_hotp"]')
 
-        hotp_secret_field = self.driver.find_element_by_css_selector(
-            'input[name="otp_secret"]')
-        hotp_secret_field.send_keys(hotp_secret)
+    def _journalist_uses_js_filter_by_sources(self):
+        filter_box = self.safe_send_keys_by_id("filter", "thiswordisnotinthewordlist")
+        sources = self.driver.find_elements_by_class_name("code-name")
+        assert len(sources) > 0
+        for source in sources:
+            assert source.is_displayed() is False
+        filter_box.clear()
+        filter_box.send_keys(Keys.RETURN)
 
-        hotp_checkbox = self.driver.find_element_by_css_selector(
-            'input[name="is_hotp"]')
-        hotp_checkbox.click()
+        for source in sources:
+            assert source.is_displayed() is True
+
+    def _journalist_source_selection_honors_filter(self):
+        """Check that select all/none honors the filter in effect."""
+
+        self.wait_for(lambda: self.driver.find_element_by_id("filter"), 60)
+
+        # make sure the list is not filtered
+        filter_box = self.driver.find_element_by_id("filter")
+        filter_box.clear()
+        filter_box.send_keys(Keys.RETURN)
+
+        # get the journalist designation of the first source
+        sources = self.driver.find_elements_by_class_name("code-name")
+        assert len(sources) > 0
+        first_source_designation = sources[0].text
+
+        # filter the source list so only the first is visible
+        filter_box.send_keys(first_source_designation)
+        for source in sources:
+            assert source.text == first_source_designation or source.is_displayed() is False
+
+        # clicking "select all" should only select the visible source
+        select_all = self.driver.find_element_by_id("select_all")
+        select_all.click()
+
+        source_rows = self.driver.find_elements_by_css_selector("#cols li.source")
+        for source_row in source_rows:
+            source_designation = source_row.get_attribute("data-source-designation")
+            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            if source_designation == first_source_designation:
+                assert checkbox.is_selected()
+            else:
+                assert not checkbox.is_selected()
+
+        # clear the filter
+        filter_box.clear()
+        filter_box.send_keys(Keys.RETURN)
+
+        # select all sources
+        select_all.click()
+        for source_row in source_rows:
+            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            assert checkbox.is_selected()
+
+        # now filter again
+        filter_box.send_keys(first_source_designation)
+
+        # clicking "select none" should only deselect the visible source
+        select_none = self.driver.find_element_by_id("select_none")
+        select_none.click()
+        for source_row in source_rows:
+            source_designation = source_row.get_attribute("data-source-designation")
+            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            if source_designation == first_source_designation:
+                assert not checkbox.is_selected()
+            else:
+                assert checkbox.is_selected()
+
+        # clear the filter and leave none selected
+        filter_box.clear()
+        filter_box.send_keys(Keys.RETURN)
+        select_none.click()
+
+        for source_row in source_rows:
+            assert source_row.is_displayed()
+            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            assert not checkbox.is_selected()
+
+    def _journalist_uses_js_buttons_to_download_unread(self):
+        self.driver.find_element_by_id("select_all").click()
+        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
+        assert len(checkboxes) > 0
+        for checkbox in checkboxes:
+            assert checkbox.is_selected()
+
+        self.driver.find_element_by_id("select_none").click()
+        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
+        for checkbox in checkboxes:
+            assert checkbox.is_selected() is False
+
+        self.driver.find_element_by_id("select_unread").click()
+        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
+        for checkbox in checkboxes:
+            classes = checkbox.get_attribute("class")
+            assert "unread-cb" in classes

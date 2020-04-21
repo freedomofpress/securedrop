@@ -18,7 +18,11 @@ set -e
 
 case "$1" in
     configure)
-        service ossec restart
+	    # Replace monitor server domain name by ip address due to
+	    #  https://github.com/ossec/ossec-hids/issues/1145
+	    mon_ip=$(grep -oP "^\\d+\.\\d+\.\\d+\.\\d+(?=.*securedrop-monitor-server-alias)" /etc/hosts)
+	    sed -i -e "s/<server-hostname>securedrop-monitor-server-alias<\/server-hostname>/<server-ip>$mon_ip<\/server-ip>/g" /var/ossec/etc/ossec.conf
+	    service ossec restart
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
@@ -28,6 +32,7 @@ case "$1" in
         echo "postinst called with unknown argument \`$1'" >&2
         exit 1
     ;;
+
 esac
 
 # dh_installdeb will replace this with shell code automatically

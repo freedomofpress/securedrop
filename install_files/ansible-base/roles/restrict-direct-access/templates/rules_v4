@@ -4,7 +4,8 @@
 :OUTPUT DROP [0:0]
 :LOGNDROP - [0:0]
 
-# Prod ssh connections happen through an authenticated tor hidden service
+{% if enable_ssh_over_tor %}
+# Prod ssh connections happen through an authenticated Tor Onion Service
 # The ssh connection is proxied on the server by the tor client to
 # the ssh dameon listening on the local loopback.
 # Limit the number of new tcp connections allowed by the tor user to the ssh dameon
@@ -16,16 +17,15 @@
 -A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "Rate limit traffic from tor to the ssh dameon"
 -A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state NEW -j LOGNDROP -m comment --comment "Drop all other new connections from tor to the ssh dameon"
 -A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow the established traffic from tor to the ssh dameon"
+{% endif %}
 
 # Load before tor user drop rules
-# TODO: use ansible facts to populate the in use interface to further restrict
-# the rules.
--A OUTPUT -p tcp -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
+-A OUTPUT -p tcp -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow tor outbound"
 -A INPUT -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic back for tor"
 
 # Drop all other outbound traffic by the tor user.
 # Load before generic loopback rules
--A OUTPUT -m owner --uid-owner debian-tor -j LOGNDROP -m comment --comment "Drop all other traffic for the tor instance used for ssh"
+-A OUTPUT -m owner --uid-owner debian-tor -j LOGNDROP -m comment --comment "Drop all other traffic for tor"
 
 {% if 'securedrop_application_server' in group_names %}
 # Only allow inbound rules from loopback with a dport of 80 or 8080 respectively for apache user
@@ -52,9 +52,9 @@
 -A OUTPUT -m owner --gid-owner ssh -j LOGNDROP -m comment --comment "Drop all other outbound traffic for ssh user"
 
 # DNS rules
--A OUTPUT -d {{ dns_server }} -p tcp --dport 53 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+-A OUTPUT -d {{ dns_server }} -p tcp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
 -A INPUT -s {{ dns_server }} -p tcp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
--A OUTPUT -d {{ dns_server }} -p udp --dport 53 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+-A OUTPUT -d {{ dns_server }} -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
 -A INPUT -s {{ dns_server }} -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
 
 # NTP rules
@@ -62,18 +62,16 @@
 -A INPUT -p udp --sport 123 --dport 123 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
 
 # apt rules can't be restricted by destination address because iptables will only resolve FQDNs once at startup
--A OUTPUT -p tcp --match multiport --dports 80,8080,443 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"
+-A OUTPUT -p tcp --match multiport --dports 80,8080,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"
 -A INPUT -p tcp --match multiport --sports 80,8080,443 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"
 
 {% if 'securedrop_application_server' in group_names %}
 # OSSEC server-agent rules
-# TODO add owner to OUTPUT rule
 -A OUTPUT -d {{ monitor_hostname }} -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
 -A INPUT -s {{ monitor_hostname }} -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
 
 {% elif 'securedrop_monitor_server' in group_names %}
 # OSSEC server-agent rules
-# TODO add owner to OUTPUT rule
 -A INPUT -s {{ app_hostname }} -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
 -A OUTPUT -d {{ app_hostname }} -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
 
@@ -90,25 +88,22 @@
 {% endif %}
 
 
-# Permit direct SSH access for staging environment. Using a dual conditional here for safety;
-# the role default var "allow_direct_access" is false, and the "staging" name is not present in prod.
-# Both conditions must be satisfied to add these exemptions.
-{% if allow_direct_access == true and
-      'staging' in group_names %}
-
-{% if 'securedrop_application_server' in group_names %}
--A INPUT -i {{ ansible_default_ipv4.interface }}  -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A OUTPUT -o {{ ansible_default_ipv4.interface }}  -p tcp -m owner --uid-owner root --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
-
-{% elif 'securedrop_monitor_server' in group_names %}
--A INPUT -i {{ ansible_default_ipv4.interface }} -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A OUTPUT -o {{ ansible_default_ipv4.interface }} -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
-{% endif %}
-
+# Permit direct SSH access.
+# Allowed for staging and optionally for production (disables ssh over tor)
+{% if not enable_ssh_over_tor %}
+  {%- for interface in ansible_interfaces -%}
+    {%- if 'ipv4' in hostvars[inventory_hostname]['ansible_'+interface] -%}
+        {%- set int_details = hostvars[inventory_hostname]['ansible_'+interface].ipv4 -%}
+        {%- set net_string = '/'.join([int_details.network,int_details.netmask]) -%}
+        {%- if ssh_ip|ipaddr(net_string) -%}
+          {%- set ssh_int = interface -%}
+-A INPUT -s {{ adjacent_sd_ip }} -p tcp --dport 22 -j DROP -m comment --comment "Block explicitly SSH from the adjacent SD component"
+-A INPUT -i {{ ssh_int }} -s {{ ssh_net_in_override|default(admin_net_cidr) }} -p tcp --dport 22 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "Rate limit incoming ssh traffic"
+-A INPUT -i {{ ssh_int }} -s {{ ssh_net_in_override|default(admin_net_cidr) }} -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A OUTPUT -o {{ ssh_int }} -p tcp -m owner --uid-owner root --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+       {%- endif %}
+    {%- endif %}
+  {%- endfor %}
 {% endif %}
 
 # Allow generic loopback connections

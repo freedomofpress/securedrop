@@ -1,0 +1,13 @@
+coverage
+d2to1
+flake8
+flaky
+mock
+pbr
+pip-tools>=4.0.0
+pylint
+pytest
+requests>=2.22.0
+tox
+pexpect
+urllib3>=1.25.3

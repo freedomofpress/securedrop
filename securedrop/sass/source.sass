@@ -5,59 +5,16 @@
 
 +base_rules
 
-@keyframes fadein
-  from
-    opacity: 0
-
-  to
-    opacity: 1
-
-
-@-webkit-keyframes fadein
-  from
-    opacity: 0
-
-  to
-    opacity: 1
-
-
-@keyframes fadeout
-  0%
-    opacity: 1
-
-  98%
-    opacity: 1
-
-  100%
-    opacity: 0
-
-
-@-webkit-keyframes fadeout
-  0%
-    opacity: 1
-
-  98%
-    opacity: 1
-
-  100%
-    opacity: 0
-
-
-html
-  animation: fadeout 120s
-  -webkit-animation: fadeout 120s
-  opacity: 0
-
-  &:hover
-    animation: none
-    -webkit-animation: none
-    opacity: 1
-
 +source_index_rules
 
 .grid
   margin: 0 auto
   max-width: 921px
+  margin-top: 60px
+
+@media only screen and (max-width: 768px)
+  .grid
+    margin-top: 30px
 
 .option
   a.btn.block
@@ -92,6 +49,7 @@ html
       padding: 0
       height: 0
       overflow: hidden
+      border: 0
 
     .hidden-codename
       margin: auto
@@ -192,10 +150,11 @@ p#codename
       float: right
       padding: 5px
       background-color: inherit
-      color: $color_warning_red_pale
+      color: $color_urgent_coral
       font-size: 14px
       clear: right
       text-decoration: none
+      border: 0
 
       &:hover
         color: #FA6E6E
@@ -232,6 +191,11 @@ p.explanation
   &:dir(rtl)
     text-align: right
 
+  &.extended-explanation
+    font-style: italic
+    font-size: small
+    line-height: 1.4
+
 #replies blockquote
   margin: 1em 1em
 
@@ -246,32 +210,23 @@ p#max-file-size
   font-style: italic
   margin-bottom: 0
 
-
 div.bubble
   width: 415px
   position: absolute
   background-color: #ffffff
-  left: 28px
-  top: 58px
+  right: 28px
+  top: 10px
   border-radius: 10px
   border: 3px solid #666
   padding: 10px 25px
   display: none
 
-  &:before, &:after
-    content: ''
-    position: absolute
-    border-width: 25px
-    border-style: solid
-    width: 0px
-    height: 0px
+  .close
+    cursor: pointer
 
-  &:before
-    border-color: transparent transparent #666 #666
-    top: -50px
-    left: 30px
-
-  &:after
-    border-color: transparent transparent #fff #fff
-    left: 33px
-    top: -43px
+#upload-icon
+  // For forcing cleaner rendering of large PNG icons to smaller sizes
+  image-rendering: -moz-crisp-edges
+  image-rendering: crisp-edges
+  margin-bottom: 10px
+  margin-top: 5px

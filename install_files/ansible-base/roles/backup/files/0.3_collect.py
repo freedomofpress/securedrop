@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/opt/venvs/securedrop-app-code/bin/python
 """
 
 This script should be copied to the App server and ran by the anisble
@@ -9,15 +9,13 @@ to backup the 0.3 system and stores it in /tmp/sd-backup-0.3-TIME_STAMP.zip.gpg
 
 import sys
 import os
-import re
+import io
 import zipfile
 from datetime import datetime
-import functools
 # Import the application config.py file
 sys.path.append("/var/www/securedrop")
-import config
-import gnupg
-import subprocess
+import config  # noqa: F403
+import gnupg  # noqa: F403
 
 TOR_SERVICES = "/var/lib/tor/services"
 TOR_CONFIG = "/etc/tor/torrc"
@@ -41,7 +39,7 @@ def collect_custom_header_image(zf):
 
 
 def collect_tor_files(zf):
-    # All of the tor hidden service private keys are stored in the THS specific
+    # All of the tor Onion Service private keys are stored in the THS specific
     # subdirectory `/var/lib/tor/services` backing up this directory will back
     # up all of the THS and ATHS required keys needed to restore all the hidden
     # services on that system.
@@ -61,7 +59,7 @@ def encrypt_zip_file(zf_fn):
     gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
     e_fn = '{}.gpg'.format(zf_fn)
 
-    stream = open(zf_fn, "rb")
+    stream = io.open(zf_fn, "rb")
     gpg.encrypt_file(stream, config.JOURNALIST_KEY, always_trust='True',
                      output=e_fn)
 
@@ -76,7 +74,8 @@ def main():
         collect_custom_header_image(zf)
         collect_tor_files(zf)
     encrypt_zip_file(zf_fn)
-    print zf_fn
+    print(zf_fn)
+
 
 if __name__ == "__main__":
     main()

@@ -6,16 +6,18 @@ ip_info:
 
 ### Used by the install_local_deb_pkgs role ###
 local_deb_packages:
-  - "securedrop-keyring-0.1.1+{{ securedrop_app_code_version }}-amd64.deb"
-  - "securedrop-config-0.1.0+{{ securedrop_app_code_version }}-amd64.deb"
-  - "securedrop-ossec-server-2.8.2+{{ securedrop_app_code_version }}-amd64.deb"
-  - ossec-server-2.8.2-amd64.deb
+  - "securedrop-keyring-0.1.3+{{ securedrop_app_code_version }}-amd64.deb"
+  - "securedrop-config-0.1.3+{{ securedrop_app_code_version }}-amd64.deb"
+  - "securedrop-ossec-server-3.0.0+{{ securedrop_app_code_version }}-amd64.deb"
+  - ossec-server-3.0.0-amd64.deb
 
-# Configure the tor hidden services. The Monitor server has only one,
+# Configure the tor Onion Services. The Monitor server has only one,
 # for SSH, since no web interfaces.
-tor_instances:
-  - service: ssh
-    filename: mon-ssh-aths
+tor_instances: "{{ [{ 'service': 'ssh', 'filename': 'mon-ssh-aths'}] if enable_ssh_over_tor else [] }}"
+tor_instances_v3: "{{ [{ 'service': 'sshv3', 'filename': 'mon-ssh.auth_private'}] if enable_ssh_over_tor else [] }}"
+
+tor_auth_instances_v3:
+  - "{{ 'sshv3' if enable_ssh_over_tor else [] }}"
 
 authd_iprules:
   - chain: INPUT
@@ -36,3 +38,6 @@ authd_iprules:
 
 # Declare Monitor Server as OSSEC server role.
 ossec_is_server: yes
+
+ssh_ip: "{{ monitor_ip|default(ansible_default_ipv4.address) }}"
+adjacent_sd_ip: "{{ app_ip }}"

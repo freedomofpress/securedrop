@@ -7,15 +7,15 @@ from wtforms import (TextAreaField, TextField, BooleanField, HiddenField,
                      ValidationError)
 from wtforms.validators import InputRequired, Optional
 
-from db import Journalist
+from models import Journalist
 
 
 def otp_secret_validation(form, field):
     strip_whitespace = field.data.replace(' ', '')
     if len(strip_whitespace) != 40:
         raise ValidationError(gettext(
-            'Field must be 40 characters long but '
-            'got {num_chars}.'.format(
+            'HOTP secrets are 40 characters long - '
+            'you have entered {num_chars}.'.format(
                 num_chars=len(strip_whitespace)
             )))
 
@@ -30,11 +30,20 @@ def minimum_length_validation(form, field):
                         num_chars=len(field.data))))
 
 
+def name_length_validation(form, field):
+    if len(field.data) > Journalist.MAX_NAME_LEN:
+        raise ValidationError(gettext(
+            'Field can not be more than {max_chars} characters.'
+            .format(max_chars=Journalist.MAX_NAME_LEN)))
+
+
 class NewUserForm(FlaskForm):
     username = TextField('username', validators=[
         InputRequired(message=gettext('This field is required.')),
         minimum_length_validation
     ])
+    first_name = TextField('first_name', validators=[name_length_validation, Optional()])
+    last_name = TextField('last_name', validators=[name_length_validation, Optional()])
     password = HiddenField('password')
     is_admin = BooleanField('is_admin')
     is_hotp = BooleanField('is_hotp')
@@ -46,7 +55,7 @@ class NewUserForm(FlaskForm):
 
 class ReplyForm(FlaskForm):
     message = TextAreaField(
-        u'Message',
+        'Message',
         id="content-area",
         validators=[
             InputRequired(message=gettext(
@@ -55,9 +64,13 @@ class ReplyForm(FlaskForm):
     )
 
 
+class SubmissionPreferencesForm(FlaskForm):
+    prevent_document_uploads = BooleanField('prevent_document_uploads')
+
+
 class LogoForm(FlaskForm):
     logo = FileField(validators=[
         FileRequired(message=gettext('File required.')),
-        FileAllowed(['jpg', 'png', 'jpeg'],
-                    message=gettext('Upload images only.'))
+        FileAllowed(['png'],
+                    message=gettext("You can only upload PNG image files."))
     ])

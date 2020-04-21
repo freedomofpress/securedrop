@@ -1,20 +1,28 @@
 =source_index_rules
+
+  h2.welcome-text
+    color: $color_deep_blue
+    text-align: left
+    letter-spacing: .02em
+
+  #recommend-tor, #disable-js
+    text-decoration: underline
+    border: 0
+
   .index-wrap
     display: block
     text-align: center
     display: flex
     flex-wrap: wrap
+    margin-bottom: 4em
 
     a
       display: inline-block
 
     .header
-      width: 33.3333%
+      width: 30%
       height: 100%
       align-self: center
-
-      img
-        width: 80%
 
     p
       text-align: left
@@ -23,64 +31,105 @@
       &:dir(rtl)
         text-align: right
 
+      &.extended-welcome-text
+        color: #626161
+        font-size: .9em
+        line-height: 1.5em
+
     .index-row
       display: flex
       justify-content: space-between
+      align-self: flex-start
       flex-wrap: wrap
-      width: 66.6666%
+      width: 70%
 
     .index-column
-      padding: 1em
-      display: block
-      width: 48%
-      border: 1px solid $color_purple_medium
+      padding: .5em 2em 1em 2em
+      display: flex
+      flex-direction: column
+      justify-content: space-between
+      width: 47%
       border-top-width: 0
       border-bottom-width: 0
 
     .index-left
-      background: $color_purple_medium
-      color: white
       border-style: none
 
-    .index-top
-      border-top-width: 1px
+    .left-cut-out
+      border-color: white
 
-    .index-bottom
-      border-bottom-width: 1px
+    .right-cut-out
+      border-color: #0A7CDC
 
-    // This query is to reorder the flex box elements so that they correctly form the
-    // two boxes (submit/returning) when the screen is sized down
+    #middle-separator
+      background: $color_grimace_grey
+      margin-top: 1.5em
+      margin-right: 1.2em
+      width: 3px
+
+    #submit-documents-button, #login-button
+      padding: 10px 15px 10px 15px
+      width: 90%
+      font-size: .9em
+      letter-spacing: .1em
+      // Standard secondary buttons have a margin to set them apart from the primary
+      margin-left: 0
+      margin-right: 10%
+      white-space: nowrap
+      text-transform: uppercase
+      border: 2px solid transparent
+
+    #login-button
+      border: 2px solid $color_button_blue
+
+    // Desktop view
+    @media only screen and (min-width: 768px)
+
+      // Make logo a bit less dominant
+      .header
+        padding: 0em 2em 1em 2em
+
+        img.logo-image
+          width: 80%
+
+      // More room to breathe
+      .index-column-bottom-container
+        margin-top: 3em
+
+      h2.welcome-text
+        margin-bottom: .5em
+
+
+    // Mobile view
     @media only screen and (max-width: 768px)
+
+      // Less room to breathe
+      .index-column-bottom-container
+        margin-top: 1.5em
+
+      h2.welcome-text
+        margin-bottom: .2em
+
+      // Single column, not needed
+      #middle-separator
+        display: none
+
+      // Limit line length for readability
+      p, h2
+        max-width: 500px
+
+      // Reflow into a single column
       .header
         max-height: 250px
         max-width: 100%
-        margin: 20px auto 40px auto
+        min-width: 125px
+        margin: 20px auto 20px auto
 
         img
           width: 100%
-
-      p, h2
-        margin: auto
-        max-width: 500px
 
       .index-row
         width: 100%
 
       .index-column
-        order: 5
         width: 100%
-
-      .index-column.index-top
-        order: 4
-
-      .index-column.index-bottom
-        order: 6
-
-      .index-column.index-left
-        order: 2
-
-      .index-column.index-left.index-top
-        order: 1
-
-      .index-column.index-left.index-bottom
-        order: 3

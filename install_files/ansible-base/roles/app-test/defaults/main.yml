@@ -1,16 +1,12 @@
 ---
-# Whether to set the Apache AppArmor profiles to "complain".
-# Can aid in debugging the AppArmor profiles, but also permits
-# misconfigurations, and so should be used with caution.
-securedrop_app_test_apparmor_complain: False
-
 # Username for Apache service, used to set permissions on the
 # Source Interface config to enable logging in the staging environment.
 apache_user: www-data
 
-# Additional apt packages required for running the application tests.
-test_apt_dependencies:
-  - xvfb
-
-# Additional Python dependencies required for running the application tests.
-test_pip_requirements: "{{ securedrop_code }}/requirements/test-requirements.txt"
+# Specify TBB functional_test.json file defaults
+tbb_timeout: 160
+tbb_selenium_user: journalist
+tbb_selenium_password: correct horse battery staple profanity oil chewy
+tbb_selenium_totp_secret: JHCOGO7VCER3EJ4L
+test_sd_root_dir: "{{ lookup('pipe','git rev-parse --show-toplevel') }}"
+tbb_funcfolder: "{{ test_sd_root_dir }}/securedrop/tests/functional/instance_information.json"

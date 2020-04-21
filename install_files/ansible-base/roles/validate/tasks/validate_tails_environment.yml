@@ -1,9 +1,15 @@
----
+- name: Check /etc/os-release for Tails string
+  find:
+    name: "/etc"
+    patterns: "os-release"
+    contains: "^TAILS_PRODUCT_NAME="
+  register: tails_os_string
+
 - name: Confirm host OS is Tails.
   assert:
     that:
-      - ansible_lsb.id == "Tails"
-      - ansible_lsb.major_release >= 9
+      - ansible_lsb.id == "Tails" or tails_os_string.matched
+      - ansible_lsb.major_release|int >= 9
     msg: >-
       SecureDrop requires Tails 3 or greater for workstation environments.
 
@@ -26,3 +32,66 @@
       The SecureDrop git repository should be cloned
       to `~/Persistent/securedrop`.
   with_items: "{{ tails_persistence_check_result.results }}"
+
+- name: Default v3_onion_services to false
+  set_fact:
+    v3_onion_services: "{{ v3_onion_services | default(False) }}"
+
+- name: Check for v3 SSH auth files
+  stat:
+    path: "/home/amnesia/Persistent/securedrop/install_files/ansible-base/{{ item }}"
+  register: v3_ssh_auth_files
+  with_items:
+    - app-ssh.auth_private
+    - mon-ssh.auth_private
+
+- name: Count the number of v3 SSH auth files
+  set_fact:
+    v3_ssh_auth_file_count: "{{ v3_ssh_auth_files.results | selectattr('stat.exists') | list | count }}"
+
+- name: Check for Journalist client auth file
+  stat:
+    path: "/home/amnesia/Persistent/securedrop/install_files/ansible-base/app-journalist.auth_private"
+  register: v3_journalist_auth_file
+
+- name: Check for Tor v3 key file
+  stat:
+    path: "/home/amnesia/Persistent/securedrop/install_files/ansible-base/tor_v3_keys.json"
+  register: v3_tor_key
+
+- name: Confirm that a valid set of SSH auth files is present
+  assert:
+    that:
+      - v3_ssh_auth_file_count == "0" or v3_ssh_auth_file_count == "2"
+    msg: >-
+      One of the SSH `.auth_private` files is missing. Please add the missing
+      file under `~/Persistent/securedrop/install_files/ansible-base/ and
+      retry the install command.
+  when:
+    - v3_onion_services
+
+- name: Confirm that the Journalist auth file is present
+  assert:
+    that:
+      - v3_journalist_auth_file.stat.exists
+    msg: >-
+      The `app-journalist.auth_private` file is missing. Please add the missing
+      file under `~/Persistent/securedrop/install_files/ansible-base/ and
+      retry the install command.
+  when:
+    - v3_onion_services
+    - enable_ssh_over_tor
+    - v3_ssh_auth_file_count == "2"
+
+- name: Confirm that the Tor keys file is present
+  assert:
+    that:
+      - v3_tor_key.stat.exists
+    msg: >-
+      Authentication files for v3 onion services were found, but the
+      corresponding `tor_v3_keys.json` file is missing. To enable updates
+      to an existing SecureDrop instance, please add this file under
+      `~/Persistent/securedrop/install_files/ansible-base`.
+  when:
+    - v3_onion_services
+    - v3_journalist_auth_file.stat.exists

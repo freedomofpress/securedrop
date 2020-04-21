@@ -1,5 +1,12 @@
 # Don't version control config.py because it contains secret values
 config.py
 
+# compiled file
+securedrop-adminc
+
 .sass-cache
 static/css/*
+static/i/custom_logo.png
+
+# ruby debug (sass)
+*.rdb

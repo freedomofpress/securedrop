@@ -1,9 +1,0 @@
-beautifulsoup4
-blinker
-Flask-Testing
-mock
-pip-tools
-py
-pytest
-pytest-cov
-selenium < 3

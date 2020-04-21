@@ -1,0 +1,43 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Push boxes to s3 bucket
+  hosts: localhost
+  become: no
+  tasks:
+    - name: Assume role
+      sts_assume_role:
+        role_arn: "arn:aws:iam::601214233086:role/sdroppackager"
+        role_session_name: "vagrantupload-{{ ansible_hostname | to_uuid }}"
+      register: assumed_role
+
+    - name: Find boxes to push up
+      find:
+        paths: "{{ playbook_dir }}/build/"
+        patterns: '*.box'
+      register: local_boxes
+
+    - name: Push boxes up
+      aws_s3:
+        aws_access_key: "{{ assumed_role.sts_creds.access_key }}"
+        aws_secret_key: "{{ assumed_role.sts_creds.secret_key }}"
+        security_token: "{{ assumed_role.sts_creds.session_token }}"
+        bucket: "{{ bucket_name }}"
+        object: "/{{ bucket_path }}/{{ item.path | basename }}"
+        permission: "public-read"
+        src: "{{ item.path }}"
+        mode: put
+      with_items: "{{ local_boxes.files }}"
+
+    - name: Generate index
+      script: ./scripts/list_bucket.py
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ assumed_role.sts_creds.access_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ assumed_role.sts_creds.secret_key }}"
+        AWS_SESSION_TOKEN: "{{ assumed_role.sts_creds.session_token }}"
+        BUCKET: "{{ bucket_name }}"
+        BUCKET_PATH: "{{ bucket_path }}"
+
+  vars:
+    bucket_name: dev-bin.ops.securedrop.org
+    bucket_path: vagrant

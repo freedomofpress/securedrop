@@ -6,20 +6,30 @@ ip_info:
 
 ### Used by the install_local_deb_pkgs role ###
 local_deb_packages:
-  - "securedrop-keyring-0.1.1+{{ securedrop_app_code_version }}-amd64.deb"
-  - "securedrop-config-0.1.0+{{ securedrop_app_code_version }}-amd64.deb"
-  - "securedrop-ossec-agent-2.8.2+{{ securedrop_app_code_version }}-amd64.deb"
+  - "securedrop-keyring-0.1.3+{{ securedrop_app_code_version }}-amd64.deb"
+  - "securedrop-config-0.1.3+{{ securedrop_app_code_version }}-amd64.deb"
+  - "securedrop-ossec-agent-3.0.0+{{ securedrop_app_code_version }}-amd64.deb"
   - "{{ securedrop_app_code_deb }}.deb"
-  - "ossec-agent-2.8.2-amd64.deb"
+  - "ossec-agent-3.0.0-amd64.deb"
 
-# Configuring the tor hidden services
+# Configuring the tor Onion Services
 tor_instances:
-  - service: ssh
-    filename: app-ssh-aths
+  - "{{ {'service': 'ssh', 'filename': 'app-ssh-aths'} if enable_ssh_over_tor else [] }}"
   - service: source
     filename: app-source-ths
   - service: journalist
     filename: app-journalist-aths
+
+tor_instances_v3:
+  - "{{ {'service': 'sshv3', 'filename': 'app-ssh.auth_private'} if enable_ssh_over_tor else [] }}"
+  - service: sourcev3
+    filename: app-sourcev3-ths
+  - service: journalistv3
+    filename: app-journalist.auth_private
+
+tor_auth_instances_v3:
+  - "{{ 'sshv3' if enable_ssh_over_tor  else [] }}"
+  - "journalistv3"
 
 authd_iprules:
   - chain: OUTPUT
@@ -40,3 +50,6 @@ authd_iprules:
 
 # Declare Application Server as OSSEC agent role.
 ossec_is_client: yes
+
+ssh_ip: "{{ app_ip|default(ansible_default_ipv4.address) }}"
+adjacent_sd_ip: "{{ monitor_ip }}"

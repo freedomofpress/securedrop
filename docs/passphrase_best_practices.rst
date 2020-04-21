@@ -51,7 +51,7 @@ We have tried to minimize the number of credentials that Journalists and
 admins actually have to *remember* by automating the storage and entry
 of credentials on the Tails workstations wherever possible. For example,
 shortcut icons are created on the Desktop of each Tails workstation to make it
-easy to access the Tor Hidden Services without having to look up their
+easy to access the Tor Onion Services without having to look up their
 ``.onion`` addresses every time.
 
 Ideally, each admin would only have to:
@@ -76,7 +76,18 @@ the availability of the system, or compensate for the difficulty by using weak
 or reused credentials, potentially compromising the security of the system.
 
 There is a detailed list of the credentials that must be managed by each end
-user role in :doc:`passphrases`. We recommended using the KeePassX password
+user role in :doc:`passphrases`. We recommended using the KeePassXC password
 manager included in Tails to store your credentials and minimize the passphrases
 that you need to memorize to just the passphrases for the persistent storage on
 your Tails USBs.
+
+For the *Transfer Device* and the *Export Device*, which are used to copy
+files to and from the air-gapped *Secure Viewing Station*, we recommend using
+encrypted USB drives with passphrases stored in the journalist's own password
+manager (preferably one which is accessible on their smartphone). This ensures
+that the journalist will have quick access to these passphrases when they need
+them.
+
+If your organization is not using a password manager already, please see
+the `Freedom of the Press Foundation guide <https://freedom.press/training/blog/choosing-password-manager/>`__
+to choosing one.

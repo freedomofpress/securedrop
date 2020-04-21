@@ -1,0 +1,38 @@
+---
+
+- name: Create ansible fact directory
+  file:
+    path: /etc/ansible/facts.d
+    recurse: yes
+    state: directory
+    owner: root
+    group: root
+
+- name: Copy over tor application fact file
+  copy:
+    src: tor_app.fact
+    dest: /etc/ansible/facts.d/tor_app.fact
+    mode: 0755
+
+- name: Refresh remote "local facts" for glory
+  setup:
+    filter: ansible_local
+
+- name: Gather apptest facts to dict to prepare for output
+  set_fact:
+    _tbb_selenium_dict:
+      hidserv_token: "{{ ansible_local.tor_app.hidserv_token }}"
+      journalist_location: "{{ ansible_local.tor_app.journalist_location  }}"
+      source_location: "{{ ansible_local.tor_app.source_location  }}"
+      timeout: "{{ tbb_timeout }}"
+      user:
+        name: "{{ tbb_selenium_user }}"
+        password: "{{ tbb_selenium_password }}"
+        secret: "{{ tbb_selenium_totp_secret }}"
+
+- name: Dump facts to local json for in-take
+  copy:
+    content: "{{ _tbb_selenium_dict | to_nice_json }}"
+    dest: "{{ tbb_funcfolder }}"
+  become: no
+  delegate_to: localhost

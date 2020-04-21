@@ -1,1 +1,52 @@
-<interfaces><wan><enable/><if>igb0</if><ipaddr>dhcp</ipaddr><ipaddrv6>dhcp6</ipaddrv6><gateway/><blockpriv>on</blockpriv><blockbogons>on</blockbogons><media/><mediaopt/><dhcp6-duid/><dhcp6-ia-pd-len>0</dhcp6-ia-pd-len></wan><lan><enable/><if>igb1</if><ipaddr>10.20.1.1</ipaddr><subnet>24</subnet><ipaddrv6>track6</ipaddrv6><subnetv6>64</subnetv6><media/><mediaopt/><track6-interface>wan</track6-interface><track6-prefix-id>0</track6-prefix-id></lan><opt1><if>igb2</if><descr>OPT1</descr><enable/><ipaddr>10.20.2.1</ipaddr><subnet>24</subnet><spoofmac/></opt1><opt2><if>igb3</if><descr>OPT2</descr><enable/><spoofmac/><ipaddr>10.20.3.1</ipaddr><subnet>24</subnet></opt2></interfaces>
+
+<interfaces>
+	<wan>
+		<enable></enable>
+		<if>igb1</if>
+		<ipaddr>dhcp</ipaddr>
+		<ipaddrv6>dhcp6</ipaddrv6>
+		<gateway></gateway>
+		<blockpriv>on</blockpriv>
+		<blockbogons>on</blockbogons>
+		<media></media>
+		<mediaopt></mediaopt>
+		<dhcp6-duid></dhcp6-duid>
+		<dhcp6-ia-pd-len>0</dhcp6-ia-pd-len>
+	</wan>
+	<lan>
+		<enable></enable>
+		<if>igb0</if>
+		<ipaddr>10.20.1.1</ipaddr>
+		<subnet>24</subnet>
+		<ipaddrv6>track6</ipaddrv6>
+		<subnetv6>64</subnetv6>
+		<media></media>
+		<mediaopt></mediaopt>
+		<track6-interface>wan</track6-interface>
+		<track6-prefix-id>0</track6-prefix-id>
+	</lan>
+	<opt1>
+		<if>igb2</if>
+		<descr><![CDATA[OPT1]]></descr>
+		<enable></enable>
+		<ipaddr>10.20.2.1</ipaddr>
+		<subnet>24</subnet>
+		<spoofmac></spoofmac>
+	</opt1>
+	<opt2>
+		<if>igb3</if>
+		<descr><![CDATA[OPT2]]></descr>
+		<enable></enable>
+		<ipaddr>10.20.3.1</ipaddr>
+		<subnet>24</subnet>
+		<spoofmac></spoofmac>
+	</opt2>
+	<opt3>
+		<if>igb4</if>
+		<descr><![CDATA[OPT3]]></descr>
+	</opt3>
+	<opt4>
+		<if>igb5</if>
+		<descr><![CDATA[OPT4]]></descr>
+	</opt4>
+</interfaces>

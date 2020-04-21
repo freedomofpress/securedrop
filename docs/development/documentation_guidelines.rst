@@ -11,6 +11,8 @@ repository under the ``docs/`` directory.
 
 To get started editing the docs:
 
+.. _clone_the_rep:
+
 #. Clone the SecureDrop repository:
 
    .. code:: sh
@@ -21,28 +23,22 @@ To get started editing the docs:
 
    .. code:: sh
 
-      pip install -r securedrop/requirements/develop-requirements.txt
+      pip install --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
-#. Build the docs and open the index page in your web browser:
+#. Build the docs for viewing in your web browser:
 
    .. code:: sh
 
       make docs
 
-If you have the :ref:`Development VM <development_vm>` running, you should run
-``make docs`` from within the ``/vagrant`` directory inside the VM, otherwise
-the forwarded port on 8000 will collide with sphinx-autobuild process running
-on localhost.
-
-You can then can browse the documentation at http://127.0.0.1:8000/.
-As you make changes, the docs will automatically rebuild in the browser
+You can then browse the documentation at http://127.0.0.1:8000/. As you make
+changes, the documentation pages will automatically rebuild in the browser
 window, so you don't need to refresh the page manually.
 
-Testing documentation changes
+Testing Documentation Changes
 -----------------------------
 
-You can check the docs for formatting violations by running the linting
-option:
+You can check for formatting violations by running the linting option:
 
    .. code:: sh
 
@@ -54,13 +50,22 @@ will convert any warnings to errors, causing the build to fail.
 The :ref:`CI tests<ci_tests>` will automatically perform linting via the same
 command.
 
+To test the documentation for broken links, run the following command from
+a reliable internet connection:
+
+   .. code:: sh
+
+      make docs-linkcheck
+
 The :ref:`CI tests<ci_tests>` by default create staging servers to test the
 application code. If your PR only makes documentation changes, you should
 prefix the branch name with ``docs-`` to skip the staging run. Project
 maintainers will still need to approve the PR prior to merge, and the linting
 checks will also still run.
 
-Updating screenshots
+.. _updating_screenshots:
+
+Updating Screenshots
 --------------------
 
 The user guides for SecureDrop contain screenshots of the web applications.
@@ -68,9 +73,9 @@ To update these screenshots automatically you can run:
 
 .. code:: sh
 
-   make -C securedrop images update-user-guides
+   make update-user-guides
 
-This will generate screenshots for each image in the web application and copy
+This will generate screenshots for each page in the web application and copy
 them to the folder under ``docs/images/manual/screenshots`` where they will
 replace the existing screenshots. Stage for commit any screenshots you wish to
 update. If you wish to update all screenshots, simply stage for commit all
@@ -82,9 +87,8 @@ Integration with Read the Docs
 .. include:: ../includes/docs-branches.txt
 
 Our documentation is built and hosted by `Read the Docs`_ and is available at
-https://docs.securedrop.org. We use a
-`webhook`_ so the docs are rebuilt automatically when commits get pushed to the
-branch.
+https://docs.securedrop.org. We use a `webhook`_ to rebuild the documentation
+automatically when commits get pushed to the branch.
 
 .. _upstream Git repository: https://github.com/freedomofpress/securedrop
 .. _webhook: http://docs.readthedocs.org/en/latest/webhooks.html
@@ -92,41 +96,41 @@ branch.
 Style Guide
 -----------
 
-When specific elements from a user interface are mentioned by name or by label, **bold** it.
+Line Wrapping
+^^^^^^^^^^^^^
+
+Lines in the plain-text documentation files should wrap at 80 characters. (Some
+exceptions: complex code blocks showing example commands, or long URLs.)
+
+Glossary
+^^^^^^^^
+
+Text taken directly from a user interface is in **bold face**.
 
     "Once you’re sure you have the right drive, click **Format Drive**."
 
-When SecureDrop-specific :doc:`terminology <../terminology>` is used, *italicize* it.
+SecureDrop-specific :doc:`glossary <../glossary>` is in *italics*.
 
-    "To get started, you’ll need two Tails drives: one for the *Admin Workstation* and one for the *Secure Viewing Station*."
-
-  .. todo:: I don't love this convention for a couple of reasons:
-
-         1. If there are a lot of references to terminology in the
-            same area of text, all of the short bursts of italics
-            makes it hard to read.
-         2. The default style for document references is also
-            italicized, which is confusing when used near
-            references to the terminology.
-
-Try to keep your lines wrapped to near 80 characters when editing the docs.
-Some exceptions are warranted, such as complex code blocks showing example
-commands, or long URLs, but in general the docs should be tightly wrapped.
+    "To get started, you’ll need two Tails drives: one for the *Admin
+    Workstation* and one for the *Secure Viewing Station*."
 
 When referring to virtual machines in the development environment, use
 lowercase for the name:
 
     app-staging VM
 
-Ensure that example commands in codeblocks are easily copy/pasteable.
+Code Blocks
+^^^^^^^^^^^
+
+Ensure that example commands in codeblocks are easy to copy and paste.
 Do not prepend the ``$`` shell prompt indicator to example commands:
 
   .. code::
 
      echo hello
 
-In the context of a terminal session, with both typed commands and printed
-output text, then use ``$``, but only on the typed command lines:
+In the context of a terminal session with both typed commands and printed
+output text, use ``$`` before the typed commands:
 
   .. code::
 
@@ -135,12 +139,53 @@ output text, then use ``$``, but only on the typed command lines:
      $ echo sunshine
      sunshine
 
-Use absolute paths when referring to files outside the SecureDrop repository.
-Exceptions made for when it's clear from the surrounding context what the
-intended working directory is. For files inside the SecureDrop directory,
-write them as `./some_dir/file`, where `.` is the top level directory of the
-SecureDrop repo. Since by default the git repo will be cloned under the name
-`securedrop` and it also contains a `securedrop` subdirectory this is intended
-to avoid confusion.  Exceptions made for when it's clear from the context
-we're outside of the SecureDrop repo, but would like to somehow interact with
-it (e.g., we just cloned the repo and now we're going to `cd` into it).
+File Paths
+^^^^^^^^^^
+
+:ref:`Cloning<clone_the_rep>` the SecureDrop git repository creates a directory
+called ``securedrop``. This ``securedrop`` directory also contains a
+``securedrop`` subdirectory for app code.
+
+.. code::
+
+     .
+     ├── securedrop
+     │   │
+     │  ...
+     │   ├── securedrop
+    ... ...
+
+To avoid confusion, paths to files anywhere inside the SecureDrop git repository
+should be written as ``./some_dir/file``, where ``.`` is the top level directory
+of the SecureDrop repo.
+
+Use absolute paths when refering to files outside the SecureDrop repository:
+``/usr/local/bin/tor-browser``.
+
+Usage and Style
+^^^^^^^^^^^^^^^
+
+To avoid confusion, lists should include the so-called "Oxford comma":
+
+    "You will need an email address, a public GPG key for that address, and the
+    fingerprint for that key."
+
+Capitalize all section headings in title case:
+
+  .. code::
+
+     Before You Begin
+     ================
+
+     Read the Docs
+     -------------
+
+  not
+
+  .. code::
+
+     Before you begin
+     ================
+
+     Read the docs
+     -------------

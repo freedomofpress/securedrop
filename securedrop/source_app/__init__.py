@@ -8,31 +8,72 @@ from jinja2 import evalcontextfilter
 from os import path
 from sqlalchemy.orm.exc import NoResultFound
 
-import crypto_util
 import i18n
-import store
 import template_filters
 import version
 
-from db import Source, db_session
+from crypto_util import CryptoUtil
+from db import db
+from models import InstanceConfig, Source
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from source_app import main, info, api
 from source_app.decorators import ignore_static
 from source_app.utils import logged_in
+from store import Storage
+
+import typing
+# https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
+if typing.TYPE_CHECKING:
+    # flake8 can not understand type annotation yet.
+    # That is why all type annotation relative import
+    # statements has to be marked as noqa.
+    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
+    from sdconfig import SDConfig  # noqa: F401
 
 
 def create_app(config):
+    # type: (SDConfig) -> Flask
     app = Flask(__name__,
                 template_folder=config.SOURCE_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
     app.request_class = RequestThatSecuresFileUploads
-    app.config.from_object(config.SourceInterfaceFlaskConfig)
+    app.config.from_object(config.SourceInterfaceFlaskConfig)  # type: ignore
+    app.sdconfig = config
 
     # The default CSRF token expiration is 1 hour. Since large uploads can
     # take longer than an hour over Tor, we increase the valid window to 24h.
     app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60 * 24
-
     CSRFProtect(app)
+
+    if config.DATABASE_ENGINE == "sqlite":
+        db_uri = (config.DATABASE_ENGINE + ":///" +
+                  config.DATABASE_FILE)
+    else:
+        db_uri = (
+            config.DATABASE_ENGINE + '://' +
+            config.DATABASE_USERNAME + ':' +
+            config.DATABASE_PASSWORD + '@' +
+            config.DATABASE_HOST + '/' +
+            config.DATABASE_NAME
+        )
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+    db.init_app(app)
+
+    app.storage = Storage(config.STORE_DIR,
+                          config.TEMP_DIR,
+                          config.JOURNALIST_KEY)
+
+    app.crypto_util = CryptoUtil(
+        scrypt_params=config.SCRYPT_PARAMS,
+        scrypt_id_pepper=config.SCRYPT_ID_PEPPER,
+        scrypt_gpg_pepper=config.SCRYPT_GPG_PEPPER,
+        securedrop_root=config.SECUREDROP_ROOT,
+        word_list=config.WORD_LIST,
+        nouns_file=config.NOUNS,
+        adjectives_file=config.ADJECTIVES,
+        gpg_key_dir=config.GPG_KEY_DIR,
+    )
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
@@ -50,7 +91,8 @@ def create_app(config):
     app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals['version'] = version.__version__
     if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
-        app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
+        app.jinja_env.globals['header_image'] = \
+            config.CUSTOM_HEADER_IMAGE  # type: ignore
         app.jinja_env.globals['use_custom_header_image'] = True
     else:
         app.jinja_env.globals['header_image'] = 'logo.png'
@@ -62,7 +104,16 @@ def create_app(config):
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
     for module in [main, info, api]:
-        app.register_blueprint(module.make_blueprint(config))
+        app.register_blueprint(module.make_blueprint(config))  # type: ignore
+
+    @app.before_request
+    @ignore_static
+    def setup_i18n():
+        """Store i18n-related values in Flask's special g object"""
+        g.locale = i18n.get_locale(config)
+        g.text_direction = i18n.get_text_direction(g.locale)
+        g.html_lang = i18n.locale_to_rfc_5646(g.locale)
+        g.locales = i18n.get_locale2name()
 
     @app.before_request
     @ignore_static
@@ -81,12 +132,13 @@ def create_app(config):
 
     @app.before_request
     @ignore_static
+    def load_instance_config():
+        app.instance_config = InstanceConfig.get_current()
+
+    @app.before_request
+    @ignore_static
     def setup_g():
         """Store commonly used values in Flask's special g object"""
-        g.locale = i18n.get_locale(config)
-        g.text_direction = i18n.get_text_direction(g.locale)
-        g.html_lang = i18n.locale_to_rfc_5646(g.locale)
-        g.locales = i18n.get_locale2name()
 
         if 'expires' in session and datetime.utcnow() >= session['expires']:
             msg = render_template('session_timeout.html')
@@ -94,7 +146,9 @@ def create_app(config):
             # clear the session after we render the message so it's localized
             session.clear()
 
+            # Redirect to index with flashed message
             flash(Markup(msg), "important")
+            return redirect(url_for('main.index'))
 
         session['expires'] = datetime.utcnow() + \
             timedelta(minutes=getattr(config,
@@ -107,7 +161,7 @@ def create_app(config):
         # these common values.
         if logged_in():
             g.codename = session['codename']
-            g.filesystem_id = crypto_util.hash_codename(g.codename)
+            g.filesystem_id = app.crypto_util.hash_codename(g.codename)
             try:
                 g.source = Source.query \
                             .filter(Source.filesystem_id == g.filesystem_id) \
@@ -119,13 +173,7 @@ def create_app(config):
                 del session['logged_in']
                 del session['codename']
                 return redirect(url_for('main.index'))
-            g.loc = store.path(g.filesystem_id)
-
-    @app.teardown_appcontext
-    def shutdown_session(exception=None):
-        """Automatically remove database sessions at the end of the request, or
-        when the application shuts down"""
-        db_session.remove()
+            g.loc = app.storage.path(g.filesystem_id)
 
     @app.errorhandler(404)
     def page_not_found(error):

@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import base64
 import os
-from tempfile import _TemporaryFileWrapper
+import io
+from tempfile import _TemporaryFileWrapper  # type: ignore
 
-from gnupg._util import _STREAMLIKE_TYPES
-from Cryptodome.Cipher import AES
-from Cryptodome.Random import random
-from Cryptodome.Util import Counter
+from pretty_bad_protocol._util import _STREAMLIKE_TYPES
+from cryptography.exceptions import AlreadyFinalized
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers.algorithms import AES
+from cryptography.hazmat.primitives.ciphers.modes import CTR
+from cryptography.hazmat.primitives.ciphers import Cipher
 
 
 class SecureTemporaryFile(_TemporaryFileWrapper, object):
@@ -44,10 +47,13 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         """
         self.last_action = 'init'
         self.create_key()
-        self.tmp_file_id = base64.urlsafe_b64encode(os.urandom(32)).strip('=')
+
+        data = base64.urlsafe_b64encode(os.urandom(32))
+        self.tmp_file_id = data.decode('utf-8').strip('=')
+
         self.filepath = os.path.join(store_dir,
                                      '{}.aes'.format(self.tmp_file_id))
-        self.file = open(self.filepath, 'w+b')
+        self.file = io.open(self.filepath, 'w+b')
         super(SecureTemporaryFile, self).__init__(self.file, self.filepath)
 
     def create_key(self):
@@ -58,18 +64,17 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         grsecurity-patched kernel it uses (for further details consult
         https://github.com/freedomofpress/securedrop/pull/477#issuecomment-168445450).
         """
-        self.key = os.urandom(self.AES_key_size / 8)
-        self.iv = random.getrandbits(self.AES_block_size)
+        self.key = os.urandom(self.AES_key_size // 8)
+        self.iv = os.urandom(self.AES_block_size // 8)
         self.initialize_cipher()
 
     def initialize_cipher(self):
         """Creates the cipher-related objects needed for AES-CTR
         encryption and decryption.
         """
-        self.ctr_e = Counter.new(self.AES_block_size, initial_value=self.iv)
-        self.ctr_d = Counter.new(self.AES_block_size, initial_value=self.iv)
-        self.encryptor = AES.new(self.key, AES.MODE_CTR, counter=self.ctr_e)
-        self.decryptor = AES.new(self.key, AES.MODE_CTR, counter=self.ctr_d)
+        self.cipher = Cipher(AES(self.key), CTR(self.iv), default_backend())
+        self.encryptor = self.cipher.encryptor()
+        self.decryptor = self.cipher.decryptor()
 
     def write(self, data):
         """Write `data` to the secure temporary file. This method may be
@@ -81,10 +86,10 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
             raise AssertionError('You cannot write after reading!')
         self.last_action = 'write'
 
-        if isinstance(data, unicode):  # noqa
+        if isinstance(data, str):
             data = data.encode('utf-8')
 
-        self.file.write(self.encryptor.encrypt(data))
+        self.file.write(self.encryptor.update(data))
 
     def read(self, count=None):
         """Read `data` from the secure temporary file. This method may
@@ -111,9 +116,23 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
             self.last_action = 'read'
 
         if count:
-            return self.decryptor.decrypt(self.file.read(count))
+            return self.decryptor.update(self.file.read(count))
         else:
-            return self.decryptor.decrypt(self.file.read())
+            return self.decryptor.update(self.file.read())
+
+    def close(self):
+        """The __del__ method in tempfile._TemporaryFileWrapper (which
+        SecureTemporaryFile class inherits from) calls close() when the
+        temporary file is deleted.
+        """
+        try:
+            self.decryptor.finalize()
+        except AlreadyFinalized:
+            pass
+
+        # Since tempfile._TemporaryFileWrapper.close() does other cleanup,
+        # (i.e. deleting the temp file on disk), we need to call it also.
+        super(SecureTemporaryFile, self).close()
 
 
 # python-gnupg will not recognize our SecureTemporaryFile as a stream-like type

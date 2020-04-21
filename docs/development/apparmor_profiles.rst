@@ -1,4 +1,4 @@
-Generating AppArmor profiles for Tor and Apache
+Generating AppArmor Profiles for Tor and Apache
 ===============================================
 
 .. code:: sh

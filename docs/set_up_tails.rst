@@ -1,3 +1,5 @@
+.. _set_up_tails:
+
 Create Tails USBs
 =================
 
@@ -18,6 +20,8 @@ As soon as you create a new Tails drive, *label it immediately*. USB
 drives all look alike and you're going to be juggling a whole bunch of
 them throughout this installation. Label immediately. Always.
 
+.. _setup_install_tails:
+
 Install Tails
 -------------
 
@@ -30,13 +34,17 @@ drives which were created via the Tails Installer*.
 
 The `Tails website <https://tails.boum.org/>`__ has detailed and
 up-to-date instructions on how to download and verify Tails, and how to
-create a bootable Tails USB drive. Follow the instructions at these
+create a bootable Tails USB drive. 
+
+.. important:: Make sure you verify the Tails .iso using one of the methods described on the Tails website.
+
+Follow the instructions at these
 links and then return to this page:
 
 -  `Download and verify the Tails
-   .iso <https://tails.boum.org/download/index.en.html>`__
+   .iso <https://tails.boum.org/install/download/index.en.html>`__
 -  `Install onto a USB
-   drive <https://tails.boum.org/doc/first_steps/installation/index.en.html>`__
+   drive <https://tails.boum.org/install/index.en.html>`__
 
 You will need to create 3 Tails USBs to perform the SecureDrop installation:
 

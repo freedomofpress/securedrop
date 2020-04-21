@@ -1,8 +1,11 @@
 @import base
 @import modules/visually-hidden
 @import modules/menu
+@import modules/confirm-modal
+@import libraries/font-awesome-iconography
 
 +base_rules
++font-awesome-iconography
 
 .grid
   letter-spacing: -0.31em
@@ -29,7 +32,7 @@
       float: right
       padding: 5px
       background-color: inherit
-      color: $color_warning_red_pale
+      color: $color_urgent_coral
       font-size: 14px
       border: 0
       clear: right
@@ -51,25 +54,10 @@ p#no-replies
 p.breadcrumbs
   text-align: left
   position: relative
+  color: #000c6c
 
   &:dir(rtl)
     text-align: right
-
-#regenerate-code .confirm-prompt
-  font-size: 14px
-  font-style: italic
-  text-align: left
-
-  &:dir(rtl)
-    text-align: right
-
-  button
-    padding: 5px 15px
-
-  *
-    margin: 0 1%
-    font-size: inherit
-    font-style: normal
 
 p#max-file-size
   font-size: 10px
@@ -77,23 +65,65 @@ p#max-file-size
   margin-bottom: 0
 
 button.small-danger, a.btn.small-danger, .btn.small-danger
-  background-color: $color_warning_red_pale
+  background-color: $color_urgent_coral
   font-size: small
   padding: 3px 10px
+
+#delete-collections
+  border-width: 2px
 
 .submission .icon
   display: inline-block
   width: 3.5%
-  color: $color_purple_medium
+  color: #3d3d3d
 
 #cols li.source
   .button-star
-    background-color: $color_grey_light
+    background-color: transparent
 
 .login-form
-  max-width: 445px
-  input
+  max-width: 550px
+  .login-username, .login-token
+    width: 33%
+  .login-password
     width: 100%
 
 .journalist-reply__input
-  max-width: 700px
+  width: 100%
+
+.journalist-username__notes
+  font: 12px Sans-Serif
+  font-weight: normal
+  letter-spacing: 0.5px
+  padding-bottom: 4px
+
+#login-form-password
+  width: calc(100% - 30px)
+  display: inline-block
+
+#show-password-check
+  margin-right: 5px
+  vertical-align: middle
+  width: auto
+
+.show-password-checkbox-container
+  display: none
+
+.reset-two-factor
+  display: inline-block
+
+#select_all, #select_unread, #select_none
+  background: #034482
+
+  &:hover
+    background: $color_grimace_blue
+
+#select_none
+  margin-right: 15px
+
+#delete-selected-link, #delete-collections-link
+  & button
+    border-color: rgba(255, 51, 102, 0.6)
+
+    &:hover
+      border-color: $color_urgent_coral

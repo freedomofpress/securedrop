@@ -2,10 +2,6 @@
 # Reuse validation logic.
 - include: "{{ role_path }}/../validate/tasks/validate_tails_environment.yml"
 
-- include: cleanup_legacy_artifacts.yml
-
-- include: migrate_existing_config.yml
-
 - include: copy_dotfiles.yml
 
 - include: configure_torrc_additions.yml
@@ -14,7 +10,10 @@
 
 - include: configure_network_hook.yml
 
+- name: Check that we are on an admin workstation
+  stat:
+    path: group_vars/all/site-specific
+  register: site_specific_result
+
 - include: create_ssh_aliases.yml
-  # Only Admin Workstation will have ATHS values for SSH, in addition
-  # to ATHS value for the Journalist Interface.
-  when: find_aths_info_result.matched > 1
+  when: site_specific_result.stat.exists

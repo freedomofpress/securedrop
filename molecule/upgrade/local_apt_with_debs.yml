@@ -1,0 +1,34 @@
+---
+- name: Install server dependencies
+  apt:
+    name: reprepro
+  when: not QA_APTTEST
+
+- name: Copy over debs
+  synchronize:
+    src: "{{ molecule_dir }}/../../build/{{ rep_dist }}/"
+    dest: /var/repos/debs/
+    delete: yes
+
+- name: Establish config
+  template:
+    src: "distributions.j2"
+    dest: "/var/repos/conf/distributions"
+
+- name: Run reprepo
+  shell: |
+    find {{dpkg_dir}} -type f -name '*.deb' -exec reprepro includedeb "{{rep_dist}}" '{}' \;
+  environment:
+    REPO_DIR: /var/repos
+    REPREPRO_CONFIG_DIR: /var/repos/conf
+    REPREPRO_BASE_DIR: /var/repos/base
+
+- name: Delete existing signature
+  file:
+    state: absent
+    path: "{{ release_file }}.gpg"
+  changed_when: false
+
+- name: Sign release file
+  command: "gpg -b -u C5D5CD3B6D65484B -o {{ release_file }}.gpg {{ release_file }}"
+  changed_when: false

@@ -48,3 +48,7 @@
     search_regex: OpenSSH
     state: started
   become: no
+
+- name: Refresh ansible local facts
+  setup:
+    filter: ansible_local

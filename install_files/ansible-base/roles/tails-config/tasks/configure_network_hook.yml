@@ -18,4 +18,8 @@
   with_items:
     - "{{ tails_config_live_persistence }}/custom-nm-hooks"
     - "{{ tails_config_network_manager_dispatcher }}"
-  notify: run securedrop network hook
+
+- name: Run SecureDrop network hook
+  # Writes files to /etc, so elevated privileges are required.
+  become: yes
+  command: python "{{ tails_config_securedrop_dotfiles }}/securedrop_init.py"

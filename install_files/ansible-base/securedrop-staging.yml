@@ -2,31 +2,47 @@
 ---
 - name: Scrape build directory
   hosts: localhost
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   tasks:
     - name: Establish list of files in build/
       find:
-        paths: "../../build"
+        paths: "../../build/{{ securedrop_staging_install_target_distro }}"
       register: search_deb_results
 
     - set_fact:
         expected_debs: "{{hostvars['app-staging']['local_deb_packages'] + hostvars['mon-staging']['local_deb_packages']}}"
         found_debs: "{{ search_deb_results.files | map(attribute='path') | list }}"
+        ci_builder: "{{ ansible_user_id }}"
 
     - name: Fail if package is missing from build dir
       fail:
-        msg: "run 'make build-debs' - ../../build/{{item}} missing"
-      when: "'../../build/'+item not in found_debs"
+        msg: "run 'make build-debs' - ../../build/{{ securedrop_staging_install_target_distro }}/{{item}} missing"
+      when: "'../../build/'+securedrop_staging_install_target_distro+'/'+item not in found_debs"
       with_items: "{{ expected_debs }}"
+
+- name: Prepare servers for installation
+  hosts: staging
+  environment:
+    LC_ALL: C
+  gather_facts: no
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  become: yes
+  roles:
+    - { role: prepare-servers }
 
 - name: Add FPF apt repository and install base packages.
   hosts: staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
     - role: ci-tweaks
-      when: amazon_builder
+      when: "'sdci' == hostvars['localhost']['ansible_user_id']"
     - { role: install-fpf-repo, tags: [fpfrepo] }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
     - { role: common, tags: common }
@@ -37,6 +53,8 @@
 
 - name: Configure OSSEC.
   hosts: staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
@@ -46,6 +64,8 @@
 
 - name: Configure mailing utilities.
   hosts: mon-staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
@@ -55,6 +75,8 @@
 
 - name: Configure SecureDrop Application Server.
   hosts: app-staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
@@ -67,6 +89,8 @@
   # and default false in production environments, in order to force SSH traffic over Tor.
 - name: Configure host firewalls (with direct access for staging).
   hosts: staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
   roles:
@@ -75,9 +99,10 @@
 
 - name: Reboot Application and Monitor Servers.
   hosts: staging
+  environment:
+    LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
-  tasks:
-    - include: tasks/reboot_if_first_install.yml
-      when: not amazon_builder
+  roles:
+    - role: reboot-if-first-install
   become: yes

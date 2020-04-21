@@ -88,16 +88,6 @@ class DevServerProcessMonitor(object):  # pragma: no cover
 
     def monitor(self):
         while True:
-            # TODO: we currently don't handle input, which makes using an
-            # interactive debugger like pdb impossible. Since Flask provides
-            # a featureful in-browser debugger, I'll accept that pdb is
-            # broken for now. If someone really wants it, they should be
-            # able to change this function to make it work (although I'm not
-            # sure how hard that would be).
-            #
-            # If you really want to use pdb, you can just run the
-            # application scripts individually (`python source.py` or
-            # `python journalist.py`).
             rprocs, _, _ = select.select(self.procs, [], [])
 
             for proc in rprocs:
@@ -109,7 +99,7 @@ class DevServerProcessMonitor(object):  # pragma: no cover
                     self.last_proc = proc
 
                 line = proc.stdout.readline()
-                sys.stdout.write(line)
+                sys.stdout.write(line.decode('utf-8'))
                 sys.stdout.flush()
 
             if any(proc.poll() is not None for proc in self.procs):
@@ -153,8 +143,7 @@ def run(args):  # pragma: no cover
     * https://stackoverflow.com/q/22565606/837471
 
     """
-    print \
-"""
+    print("""
  ____                                        ____                           
 /\\  _`\\                                     /\\  _`\\                         
 \\ \\,\\L\\_\\     __    ___   __  __  _ __    __\\ \\ \\/\\ \\  _ __   ___   _____   
@@ -164,13 +153,13 @@ def run(args):  # pragma: no cover
     \\/_____/\\/____/\\/____/ \\/___/  \\/_/ \\/____/ \\/___/  \\/_/ \\/___/  \\ \\ \\/ 
                                                                       \\ \\_\\ 
                                                                        \\/_/ 
-"""  # noqa
+""")  # noqa
 
     procs = [
         lambda: DevServerProcess('Source Interface',
                                  ['python', 'source.py'],
                                  'blue'),
-        lambda: DevServerProcess('Document Interface',
+        lambda: DevServerProcess('Journalist Interface',
                                  ['python', 'journalist.py'],
                                  'cyan'),
         lambda: DevServerProcess('SASS Compiler',

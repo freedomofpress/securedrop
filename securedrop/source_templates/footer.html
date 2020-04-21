@@ -1,0 +1,12 @@
+<hr class="footer-separator">
+<footer>
+  <div id="footer-powered-by">
+    <img id="footer-logo" src="{{url_for('static', filename='i/logo-footer.png') }}" width="20" height="23">{{ gettext('Powered by') }} <strong>SecureDrop {{ version }}</strong>.
+  </div>
+  <div id="footer-advisory">
+    {{ gettext('Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop.') }}
+  </div>
+  <div id="footer-fpf">
+    {{ gettext('SecureDrop is a project of Freedom of the Press Foundation.') }}
+  </div>
+</footer>

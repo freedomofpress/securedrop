@@ -4,12 +4,7 @@
 # deb packages. Development will also skip entirely.
 securedrop_app_install_from_repo: True
 
-# Whether to configure the Apache service for the application. Required
-# in prod and staging, but not relevant for development.
-securedrop_app_configure_apache: True
-
-# Username for ownership of the app code document root. Permitting override
-# for the development environment, e.g. "vagrant" or "travis".
+# Username for ownership of the app code document root.
 securedrop_user: www-data
 
 # Location of the application code on disk. Defaults to Apache-friendly path,
@@ -50,10 +45,8 @@ securedrop_app_https_ssl_ciphers:
   - ECDHE-ECDSA-AES128-SHA256
   - ECDHE-RSA-AES128-SHA256
 
-# Apt packages for configuring Apache service.
 apache_packages:
-  - apache2-mpm-worker
-  - libapache2-mod-wsgi
+  - apache2
   - libapache2-mod-xsendfile
 
 apache_templates:
@@ -90,10 +83,13 @@ apache_disabled_modules:
   - env
   - status
 
-# Log file location for worker service, used in supervisor template.
-worker_logs_dir: /var/log/securedrop_worker
-
 # The locale used when the browser or the user do not have a preference
 securedrop_default_locale: en_US
 # The subset of the available locales that will be proposed to the user
 securedrop_supported_locales: []
+
+# v2 Tor onion services are on / v3 Tor onion services are off by default for backwards
+# compatibility. Note that new installs after 1.0 will have v3 enabled by sdconfig which
+# will override these variables.
+v2_onion_services: true
+v3_onion_services: false

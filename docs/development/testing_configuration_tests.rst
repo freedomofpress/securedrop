@@ -3,7 +3,7 @@
 Testing: Configuration Tests
 ============================
 
-Testinfra_ tests verify the end state of the Vagrant machines. Any
+Testinfra_ tests verify the end state of the staging VMs. Any
 changes to the Ansible configuration should have a corresponding
 spectest.
 
@@ -14,45 +14,53 @@ Installation
 
 .. code:: sh
 
-    pip install -r securedrop/requirements/develop-requirements.txt
+    pip install --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
-Running the config tests
+
+Running the Config Tests
 ------------------------
 
 In order to run the tests, first create and provision the VM you intend
-to test. For the development VM:
-
-.. code:: sh
-
-    vagrant up development
+to test.
 
 For the staging VMs:
 
 .. code:: sh
 
     make build-debs
-    vagrant up /staging/
+    make staging
 
-Running all VMs concurrently may cause performance
-problems if you have less than 8GB of RAM. You can isolate specific
-machines for faster testing:
+The VMs will be set up using either the libvirt or virtualbox Vagrant VM provider,
+depending on your system settings. You'll need to use the appropriate commands below
+based on your choice of provider.
+
+Then, to run the tests:
+
+libvirt:
+~~~~~~~~
 
 .. code:: sh
 
-    ./testinfra/test.py development
-    ./testinfra/test.py app-staging
-    ./testinfra/test.py mon-staging
+   molecule verify -s libvirt-staging-xenial
 
-.. note:: The config tests for the ``app-prod`` and ``mon-prod`` hosts are
-          incomplete. Further changes are necessary to run the tests via
-          SSH over Authenticated Tor Hidden Service (ATHS), for both local
-          testing via Vagrant and automated testing via CI.
+virtualbox:
+~~~~~~~~~~~
+
+.. code:: sh
+
+   molecule verify -s virtualbox-staging-xenial
+
+.. tip:: To run only a single test, set ``PYTEST_ADDOPTS="-k name_of_test"``
+         in your environment.
 
 Test failure against any host will generate a report with informative output
-about the specific test that triggered the error. The wrapper script
+about the specific test that triggered the error. Molecule
 will also exit with a non-zero status code.
 
-Updating the config tests
+.. note:: To build and test the VMs with one command, use the Molecule ``test``
+  action: ``molecule test -s libvirt-staging-xenial --destroy=never``, or ``molecule test -s virtualbox-staging-xenial --destroy=never``.
+
+Updating the Config Tests
 -------------------------
 
 Changes to the Ansible config should result in failing config tests, but
@@ -61,20 +69,19 @@ sure to add a corresponding spectest to validate that state after a
 new provisioning run. Tests import variables from separate YAML files
 than the Ansible playbooks: ::
 
-    testinfra/vars/
+    molecule/testinfra/staging/vars/
     ├── app-prod.yml
     ├── app-staging.yml
-    ├── build.yml
-    ├── development.yml
     ├── mon-prod.yml
-    └── mon-staging.yml
+    ├── mon-staging.yml
+    └── staging.yml
 
 Any variable changes in the Ansible config should have a corresponding
 entry in these vars files. These vars are dynamically loaded for each
-host via the ``testinfra/conftest.py`` file. Make sure to add your tests to
-relevant location for the host you plan to test: ::
+host via the ``molecule/testinfra/staging/conftest.py`` file. Make sure to add
+your tests to the relevant location for the host you plan to test: ::
 
-    testinfra/app/
+    molecule/testinfra/staging/app/
     ├── apache
     │   ├── test_apache_journalist_interface.py
     │   ├── test_apache_service.py
@@ -86,31 +93,31 @@ relevant location for the host you plan to test: ::
     └── test_ossec.py
 
 In the example above, to add a new test for the ``app-staging`` host,
-add a new file to the ``testinfra/spec/app-staging`` directory.
+add a new file to the ``testinfra/staging/app`` directory.
 
 .. tip:: Read :ref:`updating_ossec_rules` to learn how to write tests for the
          OSSEC rules.
 
-Config test layout
+Config Test Layout
 ------------------
 
-The config tests are mostly broken up according to machines in the
-Vagrantfile: ::
+With some exceptions, the config tests are broken up according to platform definitions in the
+Molecule configuration: ::
 
-    testinfra/
+    molecule/testinfra/staging
     ├── app
     ├── app-code
-    ├── build
     ├── common
-    ├── development
-    └── mon
+    ├── mon
+    ├── ossec
+    └── vars
 
 Ideally the config tests would be broken up according to roles,
 mirroring the Ansible configuration. Prior to the reorganization of
 the Ansible layout, the tests are rather tightly coupled to hosts. The
 layout of config tests is therefore subject to change.
 
-Config testing strategy
+Config Testing Strategy
 -----------------------
 
 The config tests currently emphasize testing implementation rather than

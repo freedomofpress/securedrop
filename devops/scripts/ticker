@@ -1,0 +1,37 @@
+#!/bin/bash
+
+function display_dots() {
+    echo -n "Docker image build in progress "
+    trap "echo ' done !' ; exit 0" USR1
+    trap "exit 0" USR2
+    while : ; do
+        sleep 5
+        echo -n .
+    done
+}
+
+function ticker() {
+    local pid
+    local out
+    local status
+
+    out="$(mktemp)"
+    display_dots &
+    pid="$!"
+    status=0
+    if test -n "${DOCKER_BUILD_VERBOSE:-}" ; then
+        "$@" || status=1
+    else
+        echo "Run with DOCKER_BUILD_VERBOSE=true for more information"
+        "$@" >& "$out" || status=1
+    fi
+
+    if test $status = 0 ; then
+        kill -USR1 $pid
+    else
+        cat "$out"
+        kill -USR2 $pid
+    fi
+    wait
+    return $status
+}

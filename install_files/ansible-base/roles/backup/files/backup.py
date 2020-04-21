@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/opt/venvs/securedrop-app-code/bin/python
 """
 This script is copied to the App server and run by the Ansible playbook. When
 run (as root), it collects all of the necessary information to backup the 0.3
@@ -8,6 +8,7 @@ system and stores it in /tmp/sd-backup-0.3-TIME_STAMP.tar.gz.
 from datetime import datetime
 import os
 import tarfile
+
 
 def main():
     backup_filename = 'sd-backup-{}.tar.gz'.format(
@@ -30,7 +31,8 @@ def main():
         backup.add(tor_hidden_services)
         backup.add(torrc)
 
-    print backup_filename
+    print(backup_filename)
+
 
 if __name__ == "__main__":
     main()

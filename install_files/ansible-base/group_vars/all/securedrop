@@ -1,34 +1,23 @@
 ---
 # Variables that apply to both the app and monitor server go in this file
 # If the monitor or app server need different values define the variable in
-# hosts_vars/app.yml or host_vars/mon.yml host_vars/development.yml
-securedrop_app_code_version: "0.5.2"
+# hosts_vars/app.yml or host_vars/mon.yml
+securedrop_app_code_version: "1.2.2"
+securedrop_app_code_sdist_version: "securedrop-app-code-1.2.2"
+securedrop_app_code_sdist_name: "{{ securedrop_app_code_sdist_version }}.tar.gz"
 
 grsecurity: true
 install_local_packages: false
 
-# Establish if we are in CI environment
-amazon_builder: "{{ true if ( 'amazon' in ansible_product_version and ansible_virtualization_type != 'docker' ) else false }}"
+# Are we in CI environment?
+ci_builder: false
 
 # Ansible v1 default reference to remote host
 remote_host_ref: "{{ ansible_ssh_host|default(inventory_hostname) }}"
 
 # Packages required for working on SecureDrop within development VM. Same list
 # is used on the build VM to pull in required packages.
-development_dependencies:
-  - ipython
-  - libssl-dev
-  - ntp
-  - python-dev
-  - python-ipdb
-  - python-pip
-  - ruby # to ensure `gem` command is available
-  - tmux
-  - vim
-  - libffi-dev # for sphinx
-  - git
-  - devscripts # for dch
-  - gdb # for gcore in TestSubmissionNotInMemory
+development_dependencies: []
 
 # These profiles are referenced by multiple machines, such as Application Server
 # for direct copying at install time, and the build machine for including them
@@ -38,18 +27,18 @@ apparmor_profiles:
   - usr.sbin.apache2
 
 # Installing the securedrop-app-code.deb package
-securedrop_app_code_deb: "securedrop-app-code-{{ securedrop_app_code_version }}-amd64" # do not enter .deb extension
+securedrop_staging_install_target_distro: xenial
+securedrop_app_code_deb: "securedrop-app-code_{{ securedrop_app_code_version }}+{{ securedrop_staging_install_target_distro }}_amd64" # do not enter .deb extension
 
-# Apt package dependencies for running the SecureDrop application.
-appserver_dependencies:
-  - gnupg2
-  - haveged
-  - python
-  - python-pip
-  - secure-delete
-  - sqlite
-  - apparmor-utils
-  - redis-server
-  - supervisor
+# Enable Tor over SSH by default
+enable_ssh_over_tor: true
 
-tor_apt_repo_url: https://tor-apt.freedom.press
+# If file is present on system at the end of ansible run
+# force a reboot. Needed because of the de-coupled nature of
+# the many roles of the current prod playbook
+securedrop_cond_reboot_file: /tmp/sd-reboot-now
+
+# If you bump this, also remember to bump in molecule/builder/tests/vars.yml
+securedrop_pkg_grsec:
+  ver: "4.14.154"
+  depends: "linux-image-4.14.154-grsec-securedrop,linux-image-4.4.182-grsec,linux-firmware-image-4.4.182-grsec,intel-microcode"

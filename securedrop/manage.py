@@ -1,76 +1,55 @@
-#!/usr/bin/env python
+#!/opt/venvs/securedrop-app-code/bin/python
 # -*- coding: utf-8 -*-
 
 import argparse
-import codecs
 import logging
 import os
-from os.path import dirname, join, realpath
+import pwd
+import subprocess
 import shutil
 import signal
-import subprocess
 import sys
 import time
 import traceback
-import version
+
+sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
 
 import qrcode
+from flask import current_app
 from sqlalchemy.orm.exc import NoResultFound
 
 os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
-import config
-import crypto_util
-from db import (db_session, init_db, Journalist, PasswordError,
-                InvalidUsernameException)
+
+from db import db
+from models import (
+    FirstOrLastNameError,
+    InvalidUsernameException,
+    Journalist,
+    PasswordError,
+)
+from management import app_context, config
 from management.run import run
+from management.submissions import (
+    add_check_db_disconnect_parser,
+    add_check_fs_disconnect_parser,
+    add_delete_db_disconnect_parser,
+    add_delete_fs_disconnect_parser,
+    add_list_db_disconnect_parser,
+    add_list_fs_disconnect_parser,
+    add_were_there_submissions_today,
+)
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
 
 
-def sh(command, input=None):
-    """Run the *command* which must be a shell snippet. The stdin is
-    either /dev/null or the *input* argument string.
-
-    The stderr/stdout of the snippet are captured and logged via
-    logging.debug(), one line at a time.
-    """
-    log.debug(":sh: " + command)
-    if input is None:
-        stdin = None
-    else:
-        stdin = subprocess.PIPE
-    proc = subprocess.Popen(
-        args=command,
-        stdin=stdin,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        shell=True,
-        bufsize=1)
-    if stdin is not None:
-        proc.stdin.write(input)
-        proc.stdin.close()
-    lines_of_command_output = []
-    loggable_line_list = []
-    with proc.stdout:
-        for line in iter(proc.stdout.readline, b''):
-            line = line.decode('utf-8')
-            lines_of_command_output.append(line)
-            loggable_line = line.strip().encode('ascii', 'ignore')
-            log.debug(loggable_line)
-            loggable_line_list.append(loggable_line)
-    if proc.wait() != 0:
-        if log.getEffectiveLevel() > logging.DEBUG:
-            for loggable_line in loggable_line_list:
-                log.error(loggable_line)
-        raise subprocess.CalledProcessError(
-            returncode=proc.returncode,
-            cmd=command
-        )
-    return "".join(lines_of_command_output)
+def obtain_input(text):
+    """Wrapper for testability as suggested in
+    https://github.com/pytest-dev/pytest/issues/1598#issuecomment-224761877"""
+    return input(text)
 
 
-def reset(args):
+def reset(args, context=None):
     """Clears the SecureDrop development applications' state, restoring them to
     the way they were immediately after running `setup_dev.sh`. This command:
     1. Erases the development sqlite database file.
@@ -79,27 +58,59 @@ def reset(args):
     """
     # Erase the development db file
     if not hasattr(config, 'DATABASE_FILE'):
-        raise Exception("TODO: ./manage.py doesn't know how to clear the db "
+        raise Exception("./manage.py doesn't know how to clear the db "
                         'if the backend is not sqlite')
+
+    # we need to save some data about the old DB file so we can recreate it
+    # with the same state
+    try:
+        stat_res = os.stat(config.DATABASE_FILE)
+        uid = stat_res.st_uid
+        gid = stat_res.st_gid
+    except OSError:
+        uid = os.getuid()
+        gid = os.getgid()
+
     try:
         os.remove(config.DATABASE_FILE)
     except OSError:
         pass
 
     # Regenerate the database
-    init_db()
+    # 1. Create it
+    subprocess.check_call(['sqlite3', config.DATABASE_FILE, '.databases'])
+    # 2. Set permissions on it
+    os.chown(config.DATABASE_FILE, uid, gid)
+    os.chmod(config.DATABASE_FILE, 0o0640)
+
+    if os.environ.get('SECUREDROP_ENV') == 'dev':
+        # 3. Create the DB from the metadata directly when in 'dev' so
+        # developers can test application changes without first writing
+        # alembic migration.
+        with context or app_context():
+            db.create_all()
+    else:
+        # We have to override the hardcoded .ini file because during testing
+        # the value in the .ini doesn't exist.
+        ini_dir = os.path.dirname(getattr(config,
+                                          'TEST_ALEMBIC_INI',
+                                          'alembic.ini'))
+
+        # 3. Migrate it to 'head'
+        subprocess.check_call('cd {} && alembic upgrade head'.format(ini_dir),
+                              shell=True)  # nosec
 
     # Clear submission/reply storage
     try:
-        os.stat(config.STORE_DIR)
+        os.stat(args.store_dir)
     except OSError:
         pass
     else:
-        for source_dir in os.listdir(config.STORE_DIR):
+        for source_dir in os.listdir(args.store_dir):
             try:
                 # Each entry in STORE_DIR is a directory corresponding
                 # to a source
-                shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
+                shutil.rmtree(os.path.join(args.store_dir, source_dir))
             except OSError:
                 pass
     return 0
@@ -115,7 +126,7 @@ def add_journalist(args):
 
 def _get_username():
     while True:
-        username = raw_input('Username: ')
+        username = obtain_input('Username: ')
         try:
             Journalist.check_username_acceptable(username)
         except InvalidUsernameException as e:
@@ -124,22 +135,46 @@ def _get_username():
             return username
 
 
+def _get_first_name():
+    while True:
+        first_name = obtain_input('First name: ')
+        if not first_name:
+            return None
+        try:
+            Journalist.check_name_acceptable(first_name)
+            return first_name
+        except FirstOrLastNameError as e:
+            print('Invalid name: ' + str(e))
+
+
+def _get_last_name():
+    while True:
+        last_name = obtain_input('Last name: ')
+        if not last_name:
+            return None
+        try:
+            Journalist.check_name_acceptable(last_name)
+            return last_name
+        except FirstOrLastNameError as e:
+            print('Invalid name: ' + str(e))
+
+
 def _get_yubikey_usage():
     '''Function used to allow for test suite mocking'''
     while True:
-        answer = raw_input('Will this user be using a YubiKey [HOTP]? '
-                           '(y/N): ').lower().strip()
+        answer = obtain_input('Will this user be using a YubiKey [HOTP]? '
+                              '(y/N): ').lower().strip()
         if answer in ('y', 'yes'):
             return True
         elif answer in ('', 'n', 'no'):
             return False
         else:
-            print 'Invalid answer. Please type "y" or "n"'
+            print('Invalid answer. Please type "y" or "n"')
 
 
 def _make_password():
     while True:
-        password = crypto_util.genrandomid(7)
+        password = current_app.crypto_util.genrandomid(7)
         try:
             Journalist.check_password_acceptable(password)
             return password
@@ -147,73 +182,78 @@ def _make_password():
             continue
 
 
-def _add_user(is_admin=False):
-    username = _get_username()
+def _add_user(is_admin=False, context=None):
+    with context or app_context():
+        username = _get_username()
+        first_name = _get_first_name()
+        last_name = _get_last_name()
 
-    print("Note: Passwords are now autogenerated.")
-    password = _make_password()
-    print("This user's password is: {}".format(password))
+        print("Note: Passwords are now autogenerated.")
+        password = _make_password()
+        print("This user's password is: {}".format(password))
 
-    is_hotp = _get_yubikey_usage()
-    otp_secret = None
-    if is_hotp:
-        while True:
-            otp_secret = raw_input(
-                "Please configure this user's YubiKey and enter the secret: ")
-            if otp_secret:
-                tmp_str = otp_secret.replace(" ", "")
-                if len(tmp_str) != 40:
-                    print("The length of the secret is not correct. "
-                          "Expected 40 characters, but received {0}. "
-                          "Try again.".format(len(tmp_str)))
-                    continue
-            if otp_secret:
-                break
+        is_hotp = _get_yubikey_usage()
+        otp_secret = None
+        if is_hotp:
+            while True:
+                otp_secret = obtain_input(
+                    "Please configure this user's YubiKey and enter the "
+                    "secret: ")
+                if otp_secret:
+                    tmp_str = otp_secret.replace(" ", "")
+                    if len(tmp_str) != 40:
+                        print("The length of the secret is not correct. "
+                              "Expected 40 characters, but received {0}. "
+                              "Try again.".format(len(tmp_str)))
+                        continue
+                if otp_secret:
+                    break
 
-    try:
-        user = Journalist(username=username,
-                          password=password,
-                          is_admin=is_admin,
-                          otp_secret=otp_secret)
-        db_session.add(user)
-        db_session.commit()
-    except Exception as exc:
-        db_session.rollback()
-        if "UNIQUE constraint failed: journalists.username" in str(exc):
-            print('ERROR: That username is already taken!')
+        try:
+            user = Journalist(username=username,
+                              first_name=first_name,
+                              last_name=last_name,
+                              password=password,
+                              is_admin=is_admin,
+                              otp_secret=otp_secret)
+            db.session.add(user)
+            db.session.commit()
+        except Exception as exc:
+            db.session.rollback()
+            if "UNIQUE constraint failed: journalists.username" in str(exc):
+                print('ERROR: That username is already taken!')
+            else:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                print(repr(traceback.format_exception(exc_type, exc_value,
+                                                      exc_traceback)))
+            return 1
         else:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            print(repr(traceback.format_exception(exc_type, exc_value,
-                                                  exc_traceback)))
-        return 1
-    else:
-        print('User "{}" successfully added'.format(username))
-        if not otp_secret:
-            # Print the QR code for FreeOTP
-            print('\nScan the QR code below with FreeOTP:\n')
-            uri = user.totp.provisioning_uri(username,
-                                             issuer_name='SecureDrop')
-            qr = qrcode.QRCode()
-            qr.add_data(uri)
-            sys.stdout = codecs.getwriter("utf-8")(sys.stdout)
-            qr.print_ascii(tty=sys.stdout.isatty())
-            print('\nIf the barcode does not render correctly, try changing '
-                  "your terminal's font (Monospace for Linux, Menlo for OS "
-                  'X). If you are using iTerm on Mac OS X, you will need to '
-                  'change the "Non-ASCII Font", which is your profile\'s Text '
-                  "settings.\n\nCan't scan the barcode? Enter following "
-                  'shared secret '
-                  'manually:\n{}\n'.format(user.formatted_otp_secret))
+            print('User "{}" successfully added'.format(username))
+            if not otp_secret:
+                # Print the QR code for FreeOTP
+                print('\nScan the QR code below with FreeOTP:\n')
+                uri = user.totp.provisioning_uri(username,
+                                                 issuer_name='SecureDrop')
+                qr = qrcode.QRCode()
+                qr.add_data(uri)
+                qr.print_ascii(tty=sys.stdout.isatty())
+                print('\nIf the barcode does not render correctly, try '
+                      "changing your terminal's font (Monospace for Linux, "
+                      'Menlo for OS X). If you are using iTerm on Mac OS X, '
+                      'you will need to change the "Non-ASCII Font", which '
+                      "is your profile\'s Text settings.\n\nCan't scan the "
+                      'barcode? Enter following shared secret manually:'
+                      '\n{}\n'.format(user.formatted_otp_secret))
         return 0
 
 
 def _get_username_to_delete():
-    return raw_input('Username to delete: ')
+    return obtain_input('Username to delete: ')
 
 
 def _get_delete_confirmation(user):
-    confirmation = raw_input('Are you sure you want to delete user '
-                             '"{}" (y/n)?'.format(user))
+    confirmation = obtain_input('Are you sure you want to delete user '
+                                '"{}" (y/n)?'.format(user))
     if confirmation.lower() != 'y':
         print('Confirmation not received: user "{}" was NOT '
               'deleted'.format(user))
@@ -221,40 +261,41 @@ def _get_delete_confirmation(user):
     return True
 
 
-def delete_user(args):
-    """Deletes a journalist or administrator from the application."""
-    username = _get_username_to_delete()
-    try:
-        selected_user = Journalist.query.filter_by(username=username).one()
-    except NoResultFound:
-        print('ERROR: That user was not found!')
-        return 0
-
-    # Confirm deletion if user is found
-    if not _get_delete_confirmation(selected_user.username):
-        return 0
-
-    # Try to delete user from the database
-    try:
-        db_session.delete(selected_user)
-        db_session.commit()
-    except Exception as e:
-        # If the user was deleted between the user selection and confirmation,
-        # (e.g., through the web app), we don't report any errors. If the user
-        # is still there, but there was a error deleting them from the
-        # database, we do report it.
+def delete_user(args, context=None):
+    """Deletes a journalist or admin from the application."""
+    with context or app_context():
+        username = _get_username_to_delete()
         try:
-            Journalist.query.filter_by(username=username).one()
+            selected_user = Journalist.query.filter_by(username=username).one()
         except NoResultFound:
-            pass
-        else:
-            raise e
+            print('ERROR: That user was not found!')
+            return 0
 
-    print('User "{}" successfully deleted'.format(username))
+        # Confirm deletion if user is found
+        if not _get_delete_confirmation(selected_user.username):
+            return 0
+
+        # Try to delete user from the database
+        try:
+            db.session.delete(selected_user)
+            db.session.commit()
+        except Exception as e:
+            # If the user was deleted between the user selection and
+            # confirmation, (e.g., through the web app), we don't report any
+            # errors. If the user is still there, but there was a error
+            # deleting them from the database, we do report it.
+            try:
+                Journalist.query.filter_by(username=username).one()
+            except NoResultFound:
+                pass
+            else:
+                raise e
+
+        print('User "{}" successfully deleted'.format(username))
     return 0
 
 
-def clean_tmp(args):  # pragma: no cover
+def clean_tmp(args):
     """Cleanup the SecureDrop temp directory. """
     if not os.path.exists(args.directory):
         log.debug('{} does not exist, do nothing'.format(args.directory))
@@ -275,121 +316,26 @@ def clean_tmp(args):  # pragma: no cover
     return 0
 
 
-def translate_messages(args):
-    messages_file = os.path.join(args.translations_dir, 'messages.pot')
-
-    if args.extract_update:
-        sh("""
-        set -xe
-
-        mkdir -p {translations_dir}
-
-        pybabel extract \
-        --charset=utf-8 \
-        --mapping={mapping} \
-        --output={messages_file} \
-        --project=SecureDrop \
-        --version={version} \
-        --msgid-bugs-address='securedrop@freedom.press' \
-        --copyright-holder='Freedom of the Press Foundation' \
-        {sources}
-
-        # remove this line so the file does not change if no
-        # strings are modified
-        sed -i '/^"POT-Creation-Date/d' {messages_file}
-        """.format(translations_dir=args.translations_dir,
-                   mapping=args.mapping,
-                   messages_file=messages_file,
-                   version=args.version,
-                   sources=" ".join(args.source)))
-
-        changed = subprocess.call("git diff --quiet {}".format(messages_file),
-                                  shell=True)
-
-        if changed and len(os.listdir(args.translations_dir)) > 1:
-            sh("""
-            set -xe
-            for translation in {translations_dir}/*/LC_MESSAGES/*.po ; do
-              msgmerge --previous --update $translation {messages_file}
-            done
-            """.format(translations_dir=args.translations_dir,
-                       messages_file=messages_file))
-            log.warning("messages translations updated in " + messages_file)
-        else:
-            log.warning("messages translations are already up to date")
-
-    if args.compile and len(os.listdir(args.translations_dir)) > 1:
-        sh("""
-        set -x
-        pybabel compile --directory {translations_dir}
-        """.format(translations_dir=args.translations_dir))
-
-
-def translate_desktop(args):
-    messages_file = os.path.join(args.translations_dir, 'desktop.pot')
-
-    if args.extract_update:
-        sh("""
-        set -xe
-        cd {translations_dir}
-        xgettext \
-           --output=desktop.pot \
-           --language=Desktop \
-           --keyword \
-           --keyword=Name \
-           --package-version={version} \
-           --msgid-bugs-address='securedrop@freedom.press' \
-           --copyright-holder='Freedom of the Press Foundation' \
-           {sources}
-
-        # remove this line so the file does not change if no
-        # strings are modified
-        sed -i '/^"POT-Creation-Date/d' {messages_file}
-        """.format(translations_dir=args.translations_dir,
-                   messages_file=messages_file,
-                   version=args.version,
-                   sources=" ".join(args.source)))
-
-        changed = subprocess.call("git diff --quiet {}".format(messages_file),
-                                  shell=True)
-
-        if changed:
-            for f in os.listdir(args.translations_dir):
-                if not f.endswith('.po'):
-                    continue
-                po_file = os.path.join(args.translations_dir, f)
-                sh("""
-                msgmerge --update {po_file} {messages_file}
-                """.format(po_file=po_file,
-                           messages_file=messages_file))
-            log.warning("messages translations updated in " + messages_file)
-        else:
-            log.warning("desktop translations are already up to date")
-
-    if args.compile:
-        sh("""
-        set -ex
-        cd {translations_dir}
-        find *.po | sed -e 's/\.po$//' > LINGUAS
-        for source in {sources} ; do
-           target=$(basename $source .in)
-           msgfmt --desktop --template $source -o $target -d .
-        done
-        """.format(translations_dir=args.translations_dir,
-                   sources=" ".join(args.source)))
+def init_db(args):
+    user = pwd.getpwnam(args.user)
+    subprocess.check_call(['sqlite3', config.DATABASE_FILE, '.databases'])
+    os.chown(config.DATABASE_FILE, user.pw_uid, user.pw_gid)
+    os.chmod(config.DATABASE_FILE, 0o0640)
+    subprocess.check_call(['alembic', 'upgrade', 'head'])
 
 
 def get_args():
     parser = argparse.ArgumentParser(prog=__file__, description='Management '
                                      'and testing utility for SecureDrop.')
     parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('--data-root',
+                        default=config.SECUREDROP_DATA_ROOT,
+                        help=('directory in which the securedrop '
+                              'data is stored'))
+    parser.add_argument('--store-dir',
+                        default=config.STORE_DIR,
+                        help=('directory in which the documents are stored'))
     subps = parser.add_subparsers()
-    # Run WSGI app
-    run_subp = subps.add_parser('run', help='Run the Werkzeug source & '
-                                'journalist WSGI apps. WARNING!!! For '
-                                'development only, not to be used in '
-                                'production.')
-    run_subp.set_defaults(func=run)
     # Add/remove journalists + admins
     admin_subp = subps.add_parser('add-admin', help='Add an admin to the '
                                   'application.')
@@ -407,64 +353,37 @@ def get_args():
     delete_user_subp_a = subps.add_parser('delete_user', help='^')
     delete_user_subp_a.set_defaults(func=delete_user)
 
-    # Reset application state
-    reset_subp = subps.add_parser('reset', help='DANGER!!! Clears the '
-                                  "SecureDrop application's state.")
-    reset_subp.set_defaults(func=reset)
+    add_check_db_disconnect_parser(subps)
+    add_check_fs_disconnect_parser(subps)
+    add_delete_db_disconnect_parser(subps)
+    add_delete_fs_disconnect_parser(subps)
+    add_list_db_disconnect_parser(subps)
+    add_list_fs_disconnect_parser(subps)
+
     # Cleanup the SD temp dir
     set_clean_tmp_parser(subps, 'clean-tmp')
     set_clean_tmp_parser(subps, 'clean_tmp')
 
-    set_translate_messages_parser(subps)
-    set_translate_desktop_parser(subps)
+    init_db_subp = subps.add_parser('init-db', help='Initialize the database.\n')
+    init_db_subp.add_argument('-u', '--user',
+                              help='Unix user for the DB',
+                              required=True)
+    init_db_subp.set_defaults(func=init_db)
 
+    add_were_there_submissions_today(subps)
+
+    # Run WSGI app
+    run_subp = subps.add_parser('run', help='DANGER!!! ONLY FOR DEVELOPMENT '
+                                'USE. DO NOT USE IN PRODUCTION. Run the '
+                                'Werkzeug source and journalist WSGI apps.\n')
+    run_subp.set_defaults(func=run)
+
+    # Reset application state
+    reset_subp = subps.add_parser('reset', help='DANGER!!! ONLY FOR DEVELOPMENT '
+                                  'USE. DO NOT USE IN PRODUCTION. Clear the '
+                                  'SecureDrop application\'s state.\n')
+    reset_subp.set_defaults(func=reset)
     return parser
-
-
-def set_translate_parser(subps,
-                         parser,
-                         translations_dir,
-                         sources):
-    parser.add_argument(
-        '--extract-update',
-        action='store_true',
-        help='extract strings to translate and update existing translations')
-    parser.add_argument(
-        '--compile',
-        action='store_true',
-        help='compile translations')
-    parser.add_argument(
-        '--translations-dir',
-        default=translations_dir,
-        help='Base directory for translation files (default {})'.format(
-            translations_dir))
-    parser.add_argument(
-        '--version',
-        default=version.__version__,
-        help='SecureDrop version to store in pot files (default {})'.format(
-            version.__version__))
-    parser.add_argument(
-        '--source',
-        default=sources,
-        action='append',
-        help='Source files and directories to extract (default {})'.format(
-            sources))
-
-
-def set_translate_messages_parser(subps):
-    parser = subps.add_parser('translate-messages',
-                              help=('Update and compile '
-                                    'source and template translations'))
-    translations_dir = join(dirname(realpath(__file__)), 'translations')
-    sources = ['.', 'source_templates', 'journalist_templates']
-    set_translate_parser(subps, parser, translations_dir, sources)
-    mapping = 'babel.cfg'
-    parser.add_argument(
-        '--mapping',
-        default=mapping,
-        help='Mapping of files to consider (default {})'.format(
-            mapping))
-    parser.set_defaults(func=translate_messages)
 
 
 def set_clean_tmp_parser(subps, name):
@@ -485,18 +404,6 @@ def set_clean_tmp_parser(subps, name):
     parser.set_defaults(func=clean_tmp)
 
 
-def set_translate_desktop_parser(subps):
-    parser = subps.add_parser('translate-desktop',
-                              help=('Update and compile '
-                                    'desktop icons translations'))
-    translations_dir = join(
-        dirname(realpath(__file__)),
-        '../install_files/ansible-base/roles/tails-config/templates')
-    sources = ['desktop-journalist-icon.j2.in', 'desktop-source-icon.j2.in']
-    set_translate_parser(subps, parser, translations_dir, sources)
-    parser.set_defaults(func=translate_desktop)
-
-
 def setup_verbosity(args):
     if args.verbose:
         logging.getLogger(__name__).setLevel(logging.DEBUG)
@@ -506,10 +413,15 @@ def setup_verbosity(args):
 
 def _run_from_commandline():  # pragma: no cover
     try:
-        args = get_args().parse_args()
+        parser = get_args()
+        args = parser.parse_args()
         setup_verbosity(args)
-        rc = args.func(args)
-        sys.exit(rc)
+        try:
+            rc = args.func(args)
+            sys.exit(rc)
+        except AttributeError:
+            parser.print_help()
+            parser.exit()
     except KeyboardInterrupt:
         sys.exit(signal.SIGINT)
 

@@ -4,9 +4,9 @@ from flask import (Blueprint, render_template, request, g, redirect, url_for,
                    flash, session)
 from flask_babel import gettext
 
-from db import db_session
-from journalist_app.utils import (make_password, set_diceware_password,
-                                  validate_user)
+from db import db
+from journalist_app.utils import (make_password, set_diceware_password, set_name, validate_user,
+                                  validate_hotp_secret)
 
 
 def make_blueprint(config):
@@ -17,6 +17,13 @@ def make_blueprint(config):
         password = make_password(config)
         return render_template('edit_account.html',
                                password=password)
+
+    @view.route('/change-name', methods=('POST',))
+    def change_name():
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        set_name(g.user, first_name, last_name)
+        return redirect(url_for('account.edit'))
 
     @view.route('/new-password', methods=('POST',))
     def new_password():
@@ -39,12 +46,12 @@ def make_blueprint(config):
         if request.method == 'POST':
             token = request.form['token']
             if g.user.verify_token(token):
-                flash(gettext("Token in two-factor authentication verified."),
+                flash(gettext("Your two-factor credentials have been reset successfully."),
                       "notification")
                 return redirect(url_for('account.edit'))
             else:
                 flash(gettext(
-                    "Could not verify token in two-factor authentication."),
+                    "There was a problem verifying the two-factor code. Please try again."),
                       "error")
 
         return render_template('account_new_two_factor.html', user=g.user)
@@ -53,15 +60,17 @@ def make_blueprint(config):
     def reset_two_factor_totp():
         g.user.is_totp = True
         g.user.regenerate_totp_shared_secret()
-        db_session.commit()
+        db.session.commit()
         return redirect(url_for('account.new_two_factor'))
 
     @view.route('/reset-2fa-hotp', methods=['POST'])
     def reset_two_factor_hotp():
         otp_secret = request.form.get('otp_secret', None)
         if otp_secret:
+            if not validate_hotp_secret(g.user, otp_secret):
+                return render_template('account_edit_hotp_secret.html')
             g.user.set_hotp_secret(otp_secret)
-            db_session.commit()
+            db.session.commit()
             return redirect(url_for('account.new_two_factor'))
         else:
             return render_template('account_edit_hotp_secret.html')

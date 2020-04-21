@@ -1,0 +1,11 @@
+---
+- name: Reset authorized_keys to restrict SSH access to this Admin Workstation
+  hosts: securedrop
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  environment:
+    LC_ALL: C
+  roles:
+    - role: reset-ssh-key
+      tags: reset-ssh-key
+  become: yes

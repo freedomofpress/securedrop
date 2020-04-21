@@ -1,30 +1,33 @@
-Set up the Servers
+Set Up the Servers
 ==================
 
-Now that the firewall is set up, you can plug the *Application Server*
-and the *Monitor Server* into the firewall. If you are using a setup
-where there is a switch on the LAN port, plug the *Application Server*
-into the switch and plug the *Monitor Server* into the OPT1 port.
 
 Install Ubuntu
 --------------
+
+.. caution:: Please ensure you are using Ubuntu Xenial ISO images 16.04.6 or greater.
+    Ubuntu Xenial ISO images 16.04.5 and lower ship with a version of the `apt` package
+    vulnerable to CVE-2019-3462. If you are using 16.04.5 or lower, the initial base OS
+    must be installed without Internet connectivity.
 
 .. note:: Installing Ubuntu is simple and may even be something you are very familiar
   with, but we **strongly** encourage you to read and follow this documentation
   exactly as there are some "gotchas" that may cause your SecureDrop set up to break.
 
 The SecureDrop *Application Server* and *Monitor Server* run **Ubuntu Server
-14.04.5 LTS (Trusty Tahr)**. To install Ubuntu on the servers, you must first
+16.04.6 LTS (Xenial Xerus)**. To install Ubuntu on the servers, you must first
 download and verify the Ubuntu installation media. You should use the *Admin
 Workstation* to download and verify the Ubuntu installation media.
 
-Download the Ubuntu installation media
+.. _download_ubuntu:
+
+Download the Ubuntu Installation Media
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The installation media and the files required to verify it are available on the
 `Ubuntu Releases page`_. You will need to download the following files:
 
-* `ubuntu-14.04.5-server-amd64.iso`_
+* `ubuntu-16.04.6-server-amd64.iso`_
 * `SHA256SUMS`_
 * `SHA256SUMS.gpg`_
 
@@ -40,28 +43,30 @@ Alternatively, you can use the command line:
 .. code:: sh
 
    cd ~/Persistent
-   torify curl -OOO http://releases.ubuntu.com/14.04.5/{ubuntu-14.04.5-server-amd64.iso,SHA256SUMS{,.gpg}}
+   torify curl -OOO http://releases.ubuntu.com/16.04.6/{ubuntu-16.04.6-server-amd64.iso,SHA256SUMS{,.gpg}}
 
 .. note:: Downloading Ubuntu on the *Admin Workstation* can take a while
    because Tails does everything over Tor, and Tor is typically slow relative
-   to the speed of your upstream Internet conenction.
+   to the speed of your upstream Internet connection.
 
 .. _Ubuntu Releases page: http://releases.ubuntu.com/
-.. _ubuntu-14.04.5-server-amd64.iso: http://releases.ubuntu.com/14.04.5/ubuntu-14.04.5-server-amd64.iso
-.. _SHA256SUMS: http://releases.ubuntu.com/14.04.5/SHA256SUMS
-.. _SHA256SUMS.gpg: http://releases.ubuntu.com/14.04.5/SHA256SUMS.gpg
+.. _ubuntu-16.04.6-server-amd64.iso: http://releases.ubuntu.com/16.04.6/ubuntu-16.04.6-server-amd64.iso
+.. _SHA256SUMS: http://releases.ubuntu.com/16.04.6/SHA256SUMS
+.. _SHA256SUMS.gpg: http://releases.ubuntu.com/16.04.6/SHA256SUMS.gpg
 
-Verify the Ubuntu installation media
+Verify the Ubuntu Installation Media
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You should verify the Ubuntu image you downloaded hasn't been modified by
 a malicious attacker or otherwise corrupted. We can do so by checking its
 integrity with cryptographic signatures and hashes.
 
-First, we will download *Ubuntu Image Signing Key* and verify its
-fingerprint. ::
+First, we will download both *Ubuntu Image Signing Keys* and verify their
+fingerprints. ::
 
-    gpg --recv-key "C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451"
+    gpg --recv-key --keyserver hkps://keyserver.ubuntu.com \
+    "C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451" \
+    "8439 38DF 228D 22F7 B374 2BC0 D94A A3F0 EFE2 1092"
 
 .. note:: It is important you type this out correctly. If you are not
           copy-pasting this command, we recommend you double-check you have
@@ -83,19 +88,19 @@ Verify the ``SHA256SUMS`` file and move on to the next step if you see
 
 The next and final step is to verify the Ubuntu image. ::
 
-    sha256sum -c <(grep ubuntu-14.04.5-server-amd64.iso SHA256SUMS)
+    sha256sum -c <(grep ubuntu-16.04.6-server-amd64.iso SHA256SUMS)
 
 
 If the final verification step is successful, you should see the
 following output in your terminal. ::
 
-    ubuntu-14.04.5-server-amd64.iso: OK
+    ubuntu-16.04.6-server-amd64.iso: OK
 
 .. caution:: If you do not see the line above it is not safe to proceed with the
              installation. If this happens, please contact us at
              securedrop@freedom.press.
 
-Create the Ubuntu installation media
+Create the Ubuntu Installation Media
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To create the Ubuntu installation media, you can either burn the ISO image to a
@@ -106,7 +111,7 @@ with an ISO image of Ubuntu on it, you may begin the Ubuntu installation on both
 SecureDrop servers.
 
 To use `dd` you first need to find where the USB device you wish to install
-Tails on has been mapped. Simply running the command ``lsblk`` in the terminal
+Ubuntu on has been mapped. Simply running the command ``lsblk`` in the terminal
 will give you a list of your block storage device mappings (this includes hard
 drives and USB). If the USB you are writing the Ubuntu installer to is of a
 different size or brand than the USB you are running Tails from, it should be
@@ -117,8 +122,9 @@ Ubuntu installer.
 If your USB is mapped to /dev/sdX and you are currently in the directory that
 contains the Ubuntu ISO, you would use dd like so: ::
 
-   sudo dd conv=fdatasync if=ubuntu-14.04.5-server-amd64.iso of=/dev/sdX
+   sudo dd conv=fdatasync if=ubuntu-16.04.6-server-amd64.iso of=/dev/sdX
 
+.. _install_ubuntu:
 
 Perform the Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,7 +148,7 @@ After booting the Ubuntu image, select **Install Ubuntu Server**.
 Follow the steps to select your language, country and keyboard settings.
 Once that's done, let the installation process continue.
 
-Configure the network manually
+Configure the Network Manually
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Ubuntu installer will try to autoconfigure networking for the server
@@ -165,8 +171,8 @@ remember to propagate your choices through the rest of the installation
 process.
 
 Below are the configurations you should enter, assuming you used the
-network settings from the network firewall guide for the recommended 4 NIC
-firewall. If you did not, adjust these settings accordingly.
+network settings from the network firewall guide for a 3 NIC or 4 NIC firewall.
+If you did not, adjust these settings accordingly.
 
 -  *Application Server*:
 
@@ -186,24 +192,24 @@ firewall. If you did not, adjust these settings accordingly.
   -  Hostname: mon
   -  Domain name should be left blank
 
-Continue the installation
+Continue the Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can choose whatever username and passphrase you would like. To make
 things easier later you should use the same username and same passphrase
 on both servers (but not the same passphrase as username). Make sure to
-save this passphrase in your admin KeePassX database afterwards.
+save this passphrase in your admin KeePassXC database afterwards.
 
 Click 'no' when asked to encrypt the home directory. Then configure your
 time zone.
 
-Partition the disks
+Partition the Disks
 ~~~~~~~~~~~~~~~~~~~
 
 Before setting up the server's disk partitions and filesystems in the
-next step, you will need to decide if you would like to enable `*Full
+next step, you will need to decide if you would like to enable `Full
 Disk Encryption
-(FDE)* <https://www.eff.org/deeplinks/2012/11/privacy-ubuntu-1210-full-disk-encryption>`__.
+(FDE) <https://www.eff.org/deeplinks/2012/11/privacy-ubuntu-1210-full-disk-encryption>`__.
 If the servers are ever powered down, FDE will ensure all of the
 information on them stays private in case they are seized or stolen.
 
@@ -229,8 +235,8 @@ reboot. An admin will need to be on hand to enter the passphrase
 in order to decrypt the disks and complete the startup process, which
 will occur anytime there is an automatic software update, and also
 several times during SecureDrop's installation. We recommend that the
-servers be integrated with a monitoring solution that so that you
-receive an alert when the system becomes unavailable.
+servers be integrated with a monitoring solution so that you receive
+an alert when the system becomes unavailable.
 
 To enable FDE, select *Guided - use entire disk and set up encrypted
 LVM* during the disk partitioning step and write the changes to disk.
@@ -244,7 +250,7 @@ about overwriting anything currently on the server you are using. Select
 yes. You do not need an HTTP proxy, so when asked, you can just click
 continue.
 
-Finish the installation
+Finish the Installation
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Wait for the base system to finish installing. When you get to the
@@ -258,8 +264,9 @@ regular software updates.
           :ref:`OSSEC guide <AnalyzingAlerts>` for example notifications
           generated by the reboots.
 
-When you get to the software selection screen, only choose **OpenSSH
-server** by hitting the space bar.
+When you get to the software selection screen, deselect the preselected
+**Standard system utilities** and select **OpenSSH server** by highlighting each
+option and pressing the space bar.
 
 .. caution:: Hitting enter before the space bar will force you to start the
              installation process over.
@@ -288,8 +295,13 @@ When you are done, make sure you save the following information:
 Test Connectivity
 -----------------
 
-Now that both the network firewall and the servers are connected and
-configured, you should make sure you can connect from the Admin
+
+Now that the firewall is set up, you can plug the *Application Server*
+and the *Monitor Server* into the firewall. If you are using a setup
+where there is a switch on the LAN port, plug the *Application Server*
+into the switch and plug the *Monitor Server* into the OPT1 port.
+
+You should make sure you can connect from the Admin
 Workstation to both of the servers before continuing with the
 installation.
 
@@ -306,7 +318,7 @@ authenticating with your passphrase:
 .. tip:: If you cannot connect, check the network firewall logs for
          clues.
 
-Set up SSH keys
+Set Up SSH Keys
 ---------------
 
 Ubuntu's default SSH configuration authenticates users with their
@@ -352,3 +364,7 @@ the below commands. You should not be prompted for a passphrase
     app
     $ ssh <username>@<Monitor IP address> hostname
     mon
+
+If you have successfully connected to the server via SSH, the terminal
+output will be name of the server to which you have connected ('app'
+or 'mon') as shown above.

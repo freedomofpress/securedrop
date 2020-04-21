@@ -1,3 +1,7 @@
+# ignore the test-results directory which is used to share logs and
+# test files with the development containers
+test-results
+
 # ignore the production config files that don't end in .example
 securedrop-app-conf.yml
 securedrop-mon-conf.yml
@@ -8,16 +12,29 @@ install_files/ansible-base/group_vars/all/site-specific
 # ignore securedrop-app-code wheelhouse archive
 wheelhouse
 
+# ignore the instance information JSON file to prevent commit of private info
+securedrop/tests/functional/instance_information.json
+
+# ignore v3 onion JSON file
+install_files/ansible-base/tor_v3_keys.json
+
 # ignore the ATHS/THS hostname file ansible places
+# Tor v2
 app-ssh-aths
 app-document-aths # leave this here for historic reasons
 app-journalist-aths
 app-source-ths
 mon-ssh-aths
+# Tor v3
+app-journalist.auth_private
+app-sourcev3-ths
+app-ssh.auth_private
+mon-ssh.auth_private
 *.key
 *.csr
 *.pem
 *.crt
+*.ca
 
 # ignore ansible retry files
 *.retry
@@ -37,6 +54,7 @@ secureDropConf.yml
 __pycache__/
 *.py[cod]
 *$py.class
+
 
 # C extensions
 *.so
@@ -59,6 +77,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+*.log
 
 # Installer logs
 pip-log.txt
@@ -74,6 +93,7 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
+.mypy_cache/
 
 # Translations
 *.mo
@@ -93,6 +113,7 @@ docs/_build/
 
 # virtualenv
 .venv/
+.venv3/
 venv/
 ENV/
 
@@ -133,11 +154,22 @@ junit/
 raw-test-output/
 *results.xml
 
-# Virtualenv on tails
-.venv
-
 # molecule
 .molecule
 
 #Used in CI for parsing out tor nightly version
 .tor_version
+
+# Ignore visual studio code folder
+.vscode
+
+#Ignore vagrant staging files
+*.box
+*.img
+
+#These files are used in CI/dev env for determining whether to rebuild docker
+#images
+*.checksum
+#Functional test logs
+securedrop/tests/functional/firefox.log
+securedrop/geckodriver.log

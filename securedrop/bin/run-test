@@ -1,0 +1,50 @@
+#!/bin/bash
+# shellcheck disable=SC1090
+
+set -euo pipefail
+
+export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
+
+REPOROOT=$(git rev-parse --show-toplevel)
+cd "${REPOROOT}/securedrop"
+
+PYTHONPATH=".:${PYTHONPATH:-}"
+export PYTHONPATH
+
+source "${BASH_SOURCE%/*}/dev-deps"
+
+run_xvfb
+run_tor &
+run_redis &
+setup_vncauth
+run_x11vnc &
+urandom
+run_sass --force --update
+maybe_create_config_py
+
+if [ -n "${CIRCLE_BRANCH:-}" ] ; then
+    touch tests/log/firefox.log
+    function finish {
+        cp tests/log/firefox.log ../test-results
+        bash <(curl -s https://codecov.io/bash)
+    }
+    trap finish EXIT
+fi
+
+mkdir -p "../test-results"
+
+: "${PAGE_LAYOUT_LOCALES:=en_US,ar}"
+export PAGE_LAYOUT_LOCALES
+export TOR_FORCE_NET_CONFIG=0
+
+pytest \
+    --force-flaky --max-runs=3 \
+    --page-layout \
+    --durations 10 \
+    --junitxml=../test-results/junit.xml \
+    --cov-report term-missing \
+    --cov-report html:../test-results/cov_html \
+    --cov-report xml:../test-results/cov.xml \
+    --cov-report annotate:../test-results/cov_annotate \
+    --cov=. \
+    "$@"

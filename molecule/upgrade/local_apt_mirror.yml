@@ -1,0 +1,44 @@
+---
+- name: Update cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Copy over certs
+  copy:
+    src: "{{ item.s }}"
+    dest: "{{ item.d }}"
+  with_items:
+    - s: apt_https.pub
+      d: /etc/ssl/certs/apt_freedom_press.pem
+    - s: apt_https.priv
+      d: /etc/ssl/private/apt_freedom_press.priv
+
+- name: Make repo directories
+  file:
+    state: directory
+    path: "/var/repos/{{ item }}"
+  with_items:
+    - base
+    - conf
+    - debs
+
+- name: Copy over apt priv key
+  copy:
+    dest: /tmp/apt-test.priv
+    src: apt-test.priv
+
+- name: Import apt-test key
+  command: gpg --import /tmp/apt-test.priv
+  ignore_errors: yes
+
+- include_role:
+    name: jdauphant.nginx
+
+- name: Copy pub key in-place
+  copy:
+    src: "{{ item }}"
+    dest: "/var/repos/base/{{ item }}"
+  with_items:
+    - apt-test.pub
+    - apt-test-fpf.pub

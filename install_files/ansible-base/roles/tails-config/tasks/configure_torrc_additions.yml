@@ -9,17 +9,29 @@
       - '*-aths'
   register: find_aths_info_result
 
-# We need at least one ATHS value, for the Journalist Interface.
-# Admin Workstations will have three, including the two SSH interfaces.
+- name: Find V3 Authenticated Onion Service info for SecureDrop interfaces.
+  find:
+    paths:
+      - "{{ tails_config_ansible_base }}"
+    patterns:
+      # Collect all files that end in `.auth_private` - if there are any present
+      # then `torrc` will need a directive added
+      - '*.auth_private'
+  register: find_v3_aths_info_result
+
+# We need at least one v2 or v3 ATHS value, for the Journalist Interface.
+# If v2 is enabled, there will be 3 v2 `-aths` files on the Admin Interface.
+# If v3 is enabled, there will be 3 v3 `.auth_private` files on the Admin Interface.
+# If both are enabled, the Admin Interface will have 6 files in total.
 # This task simply validates that at least one suitable file was found;
 # if not, then the playbooks haven't been run, so fail with instructions.
 - name: Confirm ATHS info was found.
   assert:
     that:
-      - find_aths_info_result.matched >= 1
+      - find_aths_info_result.matched + find_v3_aths_info_result.matched >= 1
     msg: >-
       Failed to find ATHS info locally. Make sure you've installed SecureDrop
-      on the servers, and that the `-aths` files are located in:
+      on the servers, and that the `-aths` and/or `.auth_private` files are located in:
       `{{ tails_config_ansible_base }}/`.
 
 - name: Assemble ATHS info into torrc additions.
@@ -31,3 +43,13 @@
     owner: root
     group: root
     mode: "0400"
+
+- name: Append ClientOnionAuthDir directive to torrc additions
+  become: yes
+  lineinfile:
+    dest: "{{ tails_config_torrc_additions }}"
+    line: "ClientOnionAuthDir /var/lib/tor/onion_auth"
+    owner: root
+    group: root
+    mode: "0400"
+  when: find_v3_aths_info_result.matched >= 1

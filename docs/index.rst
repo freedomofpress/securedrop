@@ -26,14 +26,14 @@ anonymous sources.
    :maxdepth: 2
 
    overview
-   terminology
+   glossary
    passphrases
    hardware
    before_you_begin
    set_up_tails
    set_up_svs
-   set_up_transfer_device
-   generate_securedrop_application_key
+   set_up_transfer_and_export_device
+   generate_submission_key
    set_up_admin_tails
    network_firewall
    servers
@@ -68,38 +68,50 @@ anonymous sources.
 
    getting_the_most_out_of_securedrop
    what_makes_securedrop_unique
-   servers_2fa
    logging
    ossec_alerts
-   tails_guide
    tails_printing_guide
    https_source_interface
+   ssh_over_local_net
    training_schedule
    yubikey_setup
    backup_and_restore
    backup_workstations
+   update_tails_usbs
+   rebuild_admin
+   kernel_troubleshooting
+   getting_support
+   v3_services
 
 .. toctree::
    :caption: Upgrade SecureDrop
    :name: upgradetoc
    :maxdepth: 2
 
-   upgrade/0.4.x_to_0.5.rst
-   upgrade/0.3.x_to_0.4.rst
-   upgrade_to_tails_2x.rst
-   upgrade_to_tails_3x.rst
+   upgrade/1.2.1_to_1.2.2.rst
+   upgrade/1.2.0_to_1.2.1.rst
+   upgrade/1.1.0_to_1.2.0.rst
+   upgrade/1.0.0_to_1.1.0.rst
+   upgrade/xenial_after_april_30.rst
 
 .. toctree::
    :caption: Developer Documentation
    :name: devdocs
    :maxdepth: 2
 
-   development/getting_started
+   development/contributing
    development/setup_development
+   development/making_pr
+   development/admin_development
+   development/updategui_development
+   development/client
+   development/journalist_api
    development/virtual_environments
    development/virtualizing_tails
+   development/upgrade_testing
    development/contributor_guidelines
    development/tips_and_tricks
+   development/database_migrations
    development/i18n
    development/l10n
    development/documentation_guidelines
@@ -110,6 +122,11 @@ anonymous sources.
    development/apt_repo
    development/updating_ossec
    development/apparmor_profiles
+   development/portable_demo
+   development/release_management
+   development/dockerbuildmaint
+   development/qubes_staging
+   development/xenial_support
 
 .. toctree::
   :caption: Threat Model
@@ -118,3 +135,4 @@ anonymous sources.
 
   threat_model/threat_model.rst
   threat_model/dataflow.rst
+  threat_model/mitigations.rst

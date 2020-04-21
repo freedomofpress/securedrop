@@ -1,26 +1,30 @@
 {% set docs = source.documents_messages_count()['documents'] %}
 {% set msgs = source.documents_messages_count()['messages'] %}
-<li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
+<li class="source {% if source.num_unread != 0 %}unread{% else %}read{% endif %}" data-source-designation="{{ source.journalist_designation|lower }}">
   <time class="date" title="{{ source.last_updated|rel_datetime_format }}" datetime="{{ source.last_updated|rel_datetime_format(fmt="%Y-%m-%d %H:%M:%S%Z") }}">{{ source.last_updated|rel_datetime_format(relative=True) }}</time>
   <div class="designation">
     {% if source.star.starred %}
       <button class="button-star starred" type="submit"
               formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}"><i class="fa fa-star"></i></button>
-      <input id="checkbox" type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
-      <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}">{{ source.journalist_designation }}</a></span>
+      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
+      <a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
+        {{ source.journalist_designation }}
+      </a>
     {% else %}
       <button class="button-star un-starred" type="submit"
         formaction="{{ url_for('col.add_star', filesystem_id=source.filesystem_id) }}"><i class="fa fa-star"></i></button>
-      <input id="checkbox" type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
-      <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}">{{ source.journalist_designation }}</a></span>
+      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
+      <a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
+        {{ source.journalist_designation }}
+      </a>
     {% endif %}
   </div>
   <div class="submission-count">
-    <span><i class="fa fa-file-archive-o"></i> {{ ngettext('1 doc', '{doc_num} docs', docs).format(doc_num=docs) }}</span>
-    <span><i class="fa fa-file-text-o"></i> {{ ngettext('1 message', '{msg_num} messages', msgs).format(msg_num=msgs) }}</span>
+    <span><i class="far fa-file-archive"></i> {{ ngettext('1 doc', '{doc_num} docs', docs).format(doc_num=docs) }}</span>
+    <span><i class="far fa-file-alt"></i> {{ ngettext('1 message', '{msg_num} messages', msgs).format(msg_num=msgs) }}</span>
     {% if source.num_unread > 0 %}
       <span class="unread">
-        <a class="btn small" href="/download_unread/{{ source.filesystem_id }}"><i class="fa fa-download"></i> {{ gettext('{num_unread} unread').format(num_unread=source.num_unread) }}</a>
+        <a class="btn small" href="/download_unread/{{ source.filesystem_id }}"><i class="fa fa-download"></i> {{ ngettext('1 unread', '{num_unread} unread', source.num_unread).format(num_unread=source.num_unread) }}</a>
       </span>
     {% endif %}
   </div>

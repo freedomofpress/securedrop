@@ -1,0 +1,9 @@
+[securedrop_application_server]
+app-staging ansible_host=10.0.1.2
+
+[securedrop_monitor_server]
+mon-staging ansible_host=10.0.1.3
+
+[staging:children]
+securedrop_monitor_server
+securedrop_application_server

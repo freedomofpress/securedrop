@@ -32,25 +32,28 @@ and app-staging VMs, based on the contents of
 ``securedrop/requirements/test-requirements.txt``.
 If you wish to change the dependencies, see :ref:`updating_pip_dependencies`.
 
-Running the application tests
+Running the Application Tests
 -----------------------------
 
 The tests can be run inside the development VM:
 
 .. code:: sh
 
-    vagrant ssh development
-    cd /vagrant/securedrop
-    pytest -v tests
+    make test
 
 Or the app-staging VM:
 
 .. code:: sh
 
     vagrant ssh app-staging
-    sudo su www-data -s /bin/bash
+    sudo bash
     cd /var/www/securedrop
     pytest -v tests
+    chown -R www-data /var/lib/securedrop /var/www/securedrop
+
+.. warning:: The ``chown`` is necessary because running the tests as
+             root will change ownership of some files, creating
+             problems with the source and journalist interfaces.
 
 For explanation of the difference between these machines, see
 :doc:`virtual_environments`.
@@ -59,18 +62,15 @@ If you just want to run the functional tests, you can use:
 
 .. code:: sh
 
-    pytest -v tests/functional/
+    securedrop/bin/dev-shell bin/run-test -v tests/functional
 
 Similarly, if you want to run a single test, you can specify it through the
 file, class, and test name:
 
 .. code:: sh
 
-    pytest tests/test_journalist.py::TestJournalistApp::test_invalid_credentials
-
-Some Selenium tests are decorated to produce before and after screenshots to aid
-in debugging. This behavior is enabled with the ``SCREENSHOTS_ENABLED`` environment
-variable. Output PNG files will be placed in the ``tests/log/`` directory.
+    securedrop/bin/dev-shell bin/run-test \
+        tests/test_journalist.py::TestJournalistApp::test_invalid_credentials
 
 The `gnupg
 <https://pythonhosted.org/python-gnupg>`_ library can be quite verbose in its
@@ -78,10 +78,6 @@ output. The default log level applied to this package is ``ERROR`` but this can
 be controlled via the ``GNUPG_LOG_LEVEL`` environment variable. It can have values
 such as ``INFO`` or ``DEBUG`` if some particular test case or test run needs
 greater verbosity.
-
-.. code:: sh
-
-    SCREENSHOTS_ENABLED=1 pytest tests/functional/
 
 Page Layout Tests
 ~~~~~~~~~~~~~~~~~
@@ -96,10 +92,10 @@ option:
 
 .. code:: sh
 
-    pytest tests/ --page-layout
+    securedrop/bin/dev-shell bin/run-test --page-layout tests
 
 
-Updating the application tests
+Updating the Application Tests
 ------------------------------
 
 Unit tests are stored in the ``securedrop/tests/`` directory and functional
@@ -114,7 +110,7 @@ tests are stored in the functional test directory::
     ├── utils
     │   ├── db_helper.py
     │   ├── env.py
-    │   └── async.py
+    │   └── asynchronous.py
     ├── test_journalist.py
     ├── test_source.py
     │        ...

@@ -1,23 +1,18 @@
 ---
-  # Repo and tor are installed in common role
-- include: create_app_dirs.yml
-
 - include: app_install_fpf_deb_pkgs.yml
   when: securedrop_app_install_from_repo
 
 - include: initialize_securedrop_app.yml
 
+- include: copy_tor_url_info_to_app_dir.yml
+
 # If HTTPS is enabled, certs must land before Apache vhost configs
 # are written, otherwise the Apache enmod tasks will fail.
 - include: copy_ssl_certs.yml
   when:
-    - securedrop_app_configure_apache
     - securedrop_app_https_on_source_interface
 
 - include: install_and_harden_apache.yml
-  when: securedrop_app_configure_apache
-
-- include: configure_securedrop_worker.yml
 
 - include: setup_cron.yml
 

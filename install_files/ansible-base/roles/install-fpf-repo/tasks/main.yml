@@ -1,16 +1,19 @@
 ---
+- include: validate_apt_version.yml
+
 - name: Install SecureDrop apt repo GPG signing key.
   apt_key:
     state: present
-    data: "{{ lookup('file', 'fpf-signing-key.pub') }}"
+    data: "{{ lookup('file', item) }}"
     keyring: /etc/apt/trusted.gpg.d/securedrop-keyring.gpg
+  with_items: "{{ apt_repo_pubkey_files }}"
   tags:
     - apt
     - fpf_repo
 
 - name: Setup FPF apt repo.
   apt_repository:
-    repo: deb [arch=amd64] {{ apt_repo_url }} {{ ansible_lsb.codename }} main
+    repo: deb [arch=amd64] {{ apt_repo_url }} {{ apt_repo_target_distro }} main
     state: present
     update_cache: yes
   tags:

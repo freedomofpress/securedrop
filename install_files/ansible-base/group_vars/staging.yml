@@ -5,12 +5,9 @@ dns_server: "8.8.8.8"
 ### Used by the common role ###
 ssh_users: "vagrant"
 
-# Vagrant reserves eth0 for host gateway at 10.0.2.15; use eth1 for internal IPs.
-# In production, the IPs are hardcoded, and must also be set in the firewall config.
-primary_network_iface: eth1
-monitor_ip: "{{ hostvars['mon-staging']['ansible_'+primary_network_iface].ipv4.address }}"
+monitor_ip: 10.0.1.3
 monitor_hostname: "{{ hostvars['mon-staging'].ansible_hostname }}"
-app_ip: "{{ hostvars['app-staging']['ansible_'+primary_network_iface].ipv4.address }}"
+app_ip: 10.0.1.2
 app_hostname: "{{ hostvars['app-staging'].ansible_hostname }}"
 
 ### Used by the app role ###
@@ -27,14 +24,19 @@ securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 
 source_apache_log_location: "/var/log/apache2/source-error.log"
 apache_logging_level: "info"
-
+securedrop_supported_locales:
+  - el
+  - ar
 ### Used by the mon role ###
 # The OSSEC alert GPG public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory
 ossec_alert_gpg_public_key: "test_admin_key.pub"
-ossec_gpg_fpr: "600BC6D5142C68F35DDBCEA87B597104EDDDC102"
+ossec_gpg_fpr: "53E1113AC1F25027BA5D475B1141E2BBB5E53711"
 ossec_alert_email: "ossec@ossec.test"
-smtp_relay: "smtp.gmail.com"
+journalist_alert_gpg_public_key: "test_admin_key.pub"
+journalist_gpg_fpr: "53E1113AC1F25027BA5D475B1141E2BBB5E53711"
+journalist_alert_email: "journalist@ossec.test"
+smtp_relay: "smtp.faketld"
 smtp_relay_port: "587"
 sasl_username: "test"
 sasl_domain: "ossec.test"
@@ -46,8 +48,10 @@ postfix_enable_service: no
 
 # Permit direct access for SSH in the staging environment.
 # Otherwise, all SSH connections would be forced over Tor.
-ssh_listening_address: 0.0.0.0
-allow_direct_access: true
+enable_ssh_over_tor: false
+
+# v3 onion services should be available in staging for testing.
+v3_onion_services: true
 
 ### Use for backup restores ###
 # If the `backup_zip` variable is defined ansible will copy the defined file to
@@ -64,4 +68,14 @@ install_local_packages: true
 # the application code directly out of the local repo. Do, however, make sure
 # the Apache service is configured correctly.
 securedrop_app_install_from_repo: False
-securedrop_app_configure_apache: True
+
+daily_reboot_time: 4 # An integer between 0 and 23
+
+# Apt-test repo is needed for testing new kernels in staging.
+apt_repo_url: "https://apt-test.freedom.press"
+
+# As of 0.7.0, we use separate repos for SecureDrop and Tor mirrors,
+# only one of which typically has a test/QA server configured.
+apt_repo_pubkey_files:
+  - apt-test-signing-key.pub
+  - fpf-signing-key.pub

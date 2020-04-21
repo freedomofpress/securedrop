@@ -11,26 +11,26 @@ In order to use SecureDrop, each journalist needs two things:
 
 1. A *Journalist Tails USB*.
 
-     The Journalist Interface is only accessible as an authenticated Tor
-     Hidden Service (ATHS). For ease of configuration and security, we
+     The *Journalist Interface* is only accessible as an authenticated
+     onion service. For ease of configuration and security, we
      require journalists to set up a Tails USB with persistence that
-     they are required to use to access the Journalist Interface.
+     they are required to use to access the *Journalist Interface*.
 
 2. Access to the *Secure Viewing Station*.
 
-     The Journalist Interface allows journalists to download submissions
+     The *Journalist Interface* allows journalists to download submissions
      from sources, but they are encrypted to the offline private key
      that is stored on the *Secure Viewing Station* Tails USB. In order
      for the journalist to decrypt and view submissions, they need
      access to a *Secure Viewing Station*.
 
-Determine access protocol for the *Secure Viewing Station*
+Determine Access Protocol for the *Secure Viewing Station*
 ----------------------------------------------------------
 
 Currently, SecureDrop only supports encrypting submissions to a single
-public/private key pair - the *SecureDrop Submission Key*. As a
-result, each journalist needs a way to access the Secure Viewing
-Station with a Tails USB that includes the submission private key.
+public/private key pair - the *Submission Key*. As a result, each journalist
+needs a way to access the *Secure Viewing Station* with a Tails USB that
+includes the *Submission Private Key*.
 
 The access protocol for the *Secure Viewing Station* depends on the
 structure and distribution of your organization. If your organization
@@ -41,92 +41,108 @@ you have a lot of journalists who wish to access SecureDrop
 concurrently, you will need to provision multiple *Secure Viewing
 Stations*.
 
-.. todo:: Describe best practices for provisioning multiple Secure
-          Viewing Stations.
-
 Create a Journalist Tails USB
--------------------------------------------
+-----------------------------
 
 Each journalist will need a Journalist Tails USB and a *Journalist
 Workstation*, which is the computer they use to boot their Tails USB.
 
-To create a Journalist Tails USB, just follow the same procedure you
-used to create a Tails USB with persistence for the Admin Tails USB,
+To create a *Journalist Interface* Tails USB, just follow the same procedure you
+used to create a Tails USB with persistence for the *Admin Workstation*,
 as documented in the :doc:`Tails Setup Guide <set_up_tails>`.
+
+.. note::
+
+   As with your *Admin Workstation*, you can use a fresh copy of the blank
+   KeePassXC template in the repository to initialize the password database
+   on the *Journalist Workstation*. You can safely edit this copy to remove
+   sections or fields that are not relevant for the journalist you are
+   onboarding. For example, the admin section of the password database should
+   never be filled in on a *Journalist Workstation*.
 
 Once you're done, boot into the new Journalist Tails USB on the
 *Journalist Workstation*. Enable persistence and set an admin
 passphrase before continuing with the next section.
 
-Set up automatic access to the Journalist Interface
----------------------------------------------------
 
-Since the Journalist Interface is an ATHS, we need to set up the
-Journalist Tails USB to auto-configure Tor just as we did with the
-Admin Tails USB. The procedure is essentially identical, except the
+Set Up Automatic Access to the *Journalist Interface*
+-----------------------------------------------------
+
+Since the *Journalist Interface* is an authenticated onion service, you must
+set up the *Journalist Workstation* to auto-configure Tor, similarly to 
+the *Admin Workstation*. The procedure is essentially identical, except the
 SSH configuration will be skipped, since only admins need
 to access the servers over SSH.
 
-.. tip:: Copy the files ``app-journalist-aths`` and ``app-source-ths`` from
-         the *Admin Workstation* via the Transfer Device. Place these files
-         in ``~/Persistent/securedrop/install_files/ansible-base`` on the
-         *Journalist Workstation*, and the ``./securedrop-admin tailsconfig``
-         tool will automatically use them.
+- First, boot into the *Admin Workstation*. If your instance has not been set up
+  to use v3 onion services, copy the following v2 service files to a *Transfer Device*:
 
-.. warning:: Do **not** copy the files ``app-ssh-aths`` and ``mon-ssh-aths``
-             to the *Journalist Workstation*. Those files grant access via SSH,
-             and only the *Admin Workstation* should have shell access to the
+  .. code-block:: none
+ 
+    ~/Persistent/securedrop/install_files/ansible_base/app-source-ths
+    ~/Persistent/securedrop/install_files/ansible_base/app-journalist-aths
+
+  If your instance was set up to use v3 services, copy the following files instead:
+
+  .. code-block:: none
+
+    ~/Persistent/securedrop/install_files/ansible_base/app-sourcev3-ths
+    ~/Persistent/securedrop/install_files/ansible_base/app-journalist.auth_private
+
+  Then, boot into the new *Journalist Workstation* USB.
+
+.. warning:: Do **not** copy the ``app-ssh-aths``, ``mon-ssh-aths``,
+             ``app-ssh.auth_private``, ``mon-ssh.auth_private``, or ``tor_v3_keys.json``
+             files to the *Journalist Workstation*. Those files contain private
+             keys and authentication information for SSH server access.
+             Only the *Admin Workstation* should have shell access to the
              servers.
 
-Since you need will the Tails setup scripts (``securedrop/tails_files``) that
-you used to :doc:`Configure the *Admin Workstation* Post-Install
-<configure_admin_workstation_post_install>`, clone (and verify) the SecureDrop
-repository on the *Journalist Workstation*, just like you did for the Admin
-Workstation. Refer to the docs for :ref:`cloning the SecureDrop
-repository <Download the SecureDrop repository>`, then return here to
-continue setting up the *Journalist Workstation*.
+- Install the SecureDrop application code on the workstation's persistent volume,
+  following the documentation for :ref:`cloning the SecureDrop
+  repository <Download the SecureDrop repository>`.
 
-Once you've done this, run the install script to configure the
-shortcuts for the Source and Journalist Interfaces: ::
+- Copy the files from the *Transfer Device* to ``~/Persistent/securedrop/install_files/ansible-base``
 
-  ./securedrop-admin tailsconfig
+- Open a terminal and run the following commands:
 
-If you did not copy over the ``app-source-ths`` and ``app-journalist-aths``
-files from the *Admin Workstation*, the script will prompt for the information.
-Make sure to type the information carefully, as any typos will break access
-for the *Journalist Workstation*.
+  .. code:: sh
+ 
+    cd ~/Persistent/securedrop
+    ./securedrop-admin setup
+    ./securedrop-admin tailsconfig
 
-Once the script is finished, you should be able to access the
-Journalist Interface. Open the Tor Browser and navigate to the .onion address for
-the Journalist Interface. You should be able to connect, and will be
-automatically taken to a login page.
+  .. note:: The ``setup`` command may take several minutes, and may fail partway
+            due to network issues. If so, run it again before proceeding.
 
-Add an account on the Journalist Interface
-------------------------------------------
+- Once the ``tailsconfig`` command is complete, verify that the *Source* and
+  *Journalist Interfaces* are accessible at their v2 addresses via the 
+  SecureDrop desktop shortcuts.
 
-Finally, you need to add an account on the Journalist Interface so the journalist
+- Securely wipe the files on the *Transfer Device*, by right-clicking them
+  in the file manager and selecting **Wipe**.
+
+
+.. warning:: The ``app-journalist-aths`` and ``app-journalist.auth_private`` 
+             files contain secret authentication information for the
+             authenticated onion service used by the *Journalist Interface*,
+             and should not be shared except through the onboarding process.
+
+Add an account on the *Journalist Interface*
+--------------------------------------------
+
+Finally, you need to add an account on the *Journalist Interface* so the journalist
 can log in and access submissions. See the section on :ref:`Adding Users` in
 the admin Guide.
 
-Import GPG keys for journalists with access to SecureDrop to the SVS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-While working on a story, journalists may need to transfer some documents or
-notes from the *Secure Viewing Station* to the journalist's work computer on
-the corporate network. To do this, the journalist should re-encrypt them with
-their own keys. If a journalist does not already have a personal GPG key,
-they can follow the same steps above to create one. The journalist should
-store the private key somewhere safe; the public key should be stored on the
-*Secure Viewing Station*.
-
-If the journalist does have a key, transfer their public key from wherever it
-is located to the *Secure Viewing Station*, using the *Transfer Device*. Open
-the file manager |Nautilus| and double-click on the public key to import it.
-
-|Importing Journalist GPG Keys|
-
-.. |Nautilus| image:: images/nautilus.png
-.. |Importing Journalist GPG Keys| image:: images/install/importkey.png
+Provision a personal *Transfer Device* and *Export Device*
+----------------------------------------------------------
+In small organizations, a team of journalists may want to share a single
+*Transfer Device* and a single *Export Device*. In larger organizations, you may
+want to provision a personal *Transfer Device* and *Export Device* for each
+journalist who may need to copy files off the *Secure Viewing Station*. Please
+see the :doc:`setup guide <set_up_transfer_and_export_device>` for more
+information.
 
 Verify Journalist Setup
 -----------------------
@@ -137,35 +153,45 @@ verify the journalist is set up for SecureDrop.
 
 The journalist should verify that they:
 
-1. Have their own *Journalist Tails USB* that they have verified they are able
-   to boot on the *Journalist Workstation*.
+1. Have their own *Journalist Workstation* USB drive that they are able to boot
+   on the computer designated for this purpose (which can be their everyday
+   laptop).
 
-.. note:: It is important that they test on the same *Journalist Tails USB* and
-   the same *Journalist Workstation* they will be using on a day to day basis.
-   Issues may arise due to differences in USB drives or laptop models.
+.. note::
+
+   It is important that they test exactly on the computer they will be using
+   as the *Journalist Workstation*, as there can be differences in Tails
+   compatibility between different laptop models.
 
 2. Verify they are able to decrypt the persistent volume on the *Journalist
-   Tails USB*.
+   Workstation*.
 
 3. Ensure that they can connect to and login to the *Journalist Interface*.
 
-4. Ensure that they have a *Data Transfer Device* with a saved passphrase.
+4. Ensure that they have a *Transfer Device*, and access to its passphrase.
 
-5. Verify they have access to the *Secure Viewing Station* they will be using by
-   plugging in the *SVS USB*, booting, and verifying they can decrypt the
-   persistent volume.
+5. Verify they have access to the *Secure Viewing Station* by plugging in the
+   *Secure Viewing Station* USB drive into the air-gapped computer designated
+   for this purpose, booting, and verifying they can decrypt the persistent
+   volume.
 
-.. note:: Again, it is important that they test on the same *SVS Tails USB* and
-   the same *Secure Viewing Station* they will be using on a day to day basis.
+.. note::
 
-6. Verify the submission private key is present in the *Secure Viewing Station*
+   It is especially important to only boot the *Secure Viewing Station* USB
+   drive on the air-gapped computer designated for this purpose.
+
+6. Verify the *Submission Private Key* is present in the *Secure Viewing Station*
    persistent volume by clicking the clipboard icon |gpgApplet| in the top right
    corner of the Tails desktop and selecting “Manage Keys”. When clicking
    “GnuPG keys” the key should be present.
 
 .. tip:: The journalist should have all the credentials used in this checklist
-   saved in the KeePassX database stored in the persistent volume of the *Journalist
+   saved in the KeePassXC database stored in the persistent volume of the *Journalist
    Workstation*.
+
+7. If you are using a printer, verify that they are able to print a document
+   from the *Secure Viewing Station*. If you are using an *Export Device*,
+   verify that they are able to unlock the encrypted volume.
 
 At this point, the journalist has verified they have the devices and credentials
 they need and can proceed to a walkthrough of the entire SecureDrop workflow.

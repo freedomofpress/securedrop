@@ -3,21 +3,11 @@
   when: "'staging' in group_names"
   tags:
     - apache
-    - non-development
-
-- include: apparmor_complain.yml
-  when: securedrop_app_test_apparmor_complain
-  tags:
-    - aa-complain
-    - non-development
-
-- include: dev_setup_xvfb_for_functional_tests.yml
-
-- include: setup_firefox_for_selenium.yml
-  # Travis provides custom versions of Firefox via YAML config,
-  # so skip configuring Firefox if we're in Travis.
-  when: "'TRAVIS' not in ansible_env"
-
-- include: disable_mprotect_ff_plugin_container.yml
 
 - include: modern_gettext.yml
+  tags:
+    - modern_gettext
+
+- import_tasks: extract_apptor_test_config.yml
+  tags:
+    - functional_test

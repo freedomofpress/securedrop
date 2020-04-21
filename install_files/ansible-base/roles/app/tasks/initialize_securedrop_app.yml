@@ -1,12 +1,4 @@
 ---
-- name: Install SecureDrop Application Server dependencies.
-  apt:
-    pkg: "{{ item }}"
-    state: latest
-  with_items: "{{ appserver_dependencies }}"
-  tags:
-    - apt
-
 - name: Copy the SecureDrop Application GPG public key to the Application Server.
   copy:
     src: "{{ securedrop_app_gpg_public_key }}"
@@ -55,14 +47,6 @@
   tags:
     - permissions
     - securedrop_config
-
-# TODO: config.py.example is already written using Jinja2 format, and should be
-# easy to template-ize. However, we cannot do this because when Ansible writes
-# a template, it re-does the entire thing. This would cause a problem in the
-# case where we want to re-provision a machine with an updated value (e.g. the
-# application key fingerprint). Blindly overwriting the entire file would cause
-# major problems. It would be nice to use templates here, assuming we find a
-# way to selectively update the file.
 
 # Note: we can also use register with with_items to cut down on repetition
 # here. See
@@ -152,11 +136,9 @@
     - securedrop_config
 
 - name: Initialize sqlite database.
-  shell: >
-    su -s /bin/bash -c
-    "PYTHONPATH={{ securedrop_code }}
-    python -c 'import db; db.init_db()'"
-    {{ securedrop_user }}
+  shell: './manage.py init-db --user {{ securedrop_user }}'
+  args:
+    chdir: '{{ securedrop_code }}'
   when: not db.stat.exists
   tags:
     - database

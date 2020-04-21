@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 
 from datetime import datetime
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
@@ -6,10 +7,10 @@ from flask import (Blueprint, request, current_app, session, url_for, redirect,
 from flask_babel import gettext
 from sqlalchemy.sql.expression import false
 
-import crypto_util
 import store
 
-from db import db_session, Source, SourceStar, Submission, Reply
+from db import db
+from models import Source, SourceStar, Submission, Reply
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (validate_user, bulk_delete, download,
                                   confirm_bulk_delete, get_source)
@@ -25,16 +26,17 @@ def make_blueprint(config):
                                  request.form['password'],
                                  request.form['token'])
             if user:
-                current_app.logger.info("'{}' logged in with the token {}"
+                current_app.logger.info("'{}' logged in with the two-factor code {}"
                                         .format(request.form['username'],
                                                 request.form['token']))
 
                 # Update access metadata
                 user.last_access = datetime.utcnow()
-                db_session.add(user)
-                db_session.commit()
+                db.session.add(user)
+                db.session.commit()
 
                 session['uid'] = user.id
+                session['nonce'] = user.session_nonce
                 return redirect(url_for('main.index'))
 
         return render_template("login.html")
@@ -43,7 +45,16 @@ def make_blueprint(config):
     def logout():
         session.pop('uid', None)
         session.pop('expires', None)
+        session.pop('nonce', None)
         return redirect(url_for('main.index'))
+
+    @view.route('/org-logo')
+    def select_logo():
+        if os.path.exists(os.path.join(current_app.static_folder, 'i',
+                          'custom_logo.png')):
+            return redirect(url_for('static', filename='i/custom_logo.png'))
+        else:
+            return redirect(url_for('static', filename='i/logo.png'))
 
     @view.route('/')
     def index():
@@ -54,6 +65,7 @@ def make_blueprint(config):
         # the Pocoo style guide, IMHO:
         # http://www.pocoo.org/internal/styleguide/
         sources = Source.query.filter_by(pending=False) \
+                              .filter(Source.last_updated.isnot(None)) \
                               .order_by(Source.last_updated.desc()) \
                               .all()
         for source in sources:
@@ -94,19 +106,22 @@ def make_blueprint(config):
         g.source.interaction_count += 1
         filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
                                               g.source.journalist_filename)
-        crypto_util.encrypt(form.message.data,
-                            [crypto_util.getkey(g.filesystem_id),
-                             config.JOURNALIST_KEY],
-                            output=store.path(g.filesystem_id, filename))
+        current_app.crypto_util.encrypt(
+            form.message.data,
+            [current_app.crypto_util.getkey(g.filesystem_id),
+             config.JOURNALIST_KEY],
+            output=current_app.storage.path(g.filesystem_id, filename),
+        )
         reply = Reply(g.user, g.source, filename)
 
         try:
-            db_session.add(reply)
-            db_session.commit()
+            db.session.add(reply)
+            db.session.commit()
+            store.async_add_checksum_for_file(reply)
         except Exception as exc:
             flash(gettext(
                 "An unexpected error occurred! Please "
-                "inform your administrator."), "error")
+                "inform your admin."), "error")
             # We take a cautious approach to logging here because we're dealing
             # with responses to sources. It's possible the exception message
             # could contain information we don't want to write to disk.
@@ -123,7 +138,7 @@ def make_blueprint(config):
     @view.route('/flag', methods=('POST',))
     def flag():
         g.source.flagged = True
-        db_session.commit()
+        db.session.commit()
         return render_template('flag.html', filesystem_id=g.filesystem_id,
                                codename=g.source.journalist_designation)
 
@@ -152,25 +167,6 @@ def make_blueprint(config):
             return confirm_bulk_delete(g.filesystem_id, selected_docs)
         else:
             abort(400)
-
-    @view.route('/regenerate-code', methods=('POST',))
-    def regenerate_code():
-        original_journalist_designation = g.source.journalist_designation
-        g.source.journalist_designation = crypto_util.display_id()
-
-        for item in g.source.collection:
-            item.filename = store.rename_submission(
-                g.filesystem_id,
-                item.filename,
-                g.source.journalist_filename)
-        db_session.commit()
-
-        flash(gettext(
-            "The source '{original_name}' has been renamed to '{new_name}'")
-              .format(original_name=original_journalist_designation,
-                      new_name=g.source.journalist_designation),
-              "notification")
-        return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
 
     @view.route('/download_unread/<filesystem_id>')
     def download_unread_filesystem_id(filesystem_id):

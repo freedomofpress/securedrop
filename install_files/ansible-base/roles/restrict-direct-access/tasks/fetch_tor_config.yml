@@ -1,24 +1,26 @@
 ---
-- name: Wait for all Tor hidden services hostname files.
+- name: Wait for all Tor Onion Services hostname files.
   wait_for:
     state: present
     path: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}/hostname"
     delay: 5
   with_items: "{{ tor_instances }}"
+  when: "v2_onion_services"
   tags:
     - tor
 
-- name: Collect Tor hidden service hostnames.
+- name: Collect Tor Onion Service hostnames.
   command: cat /var/lib/tor/services/{{ item.service }}/hostname
   register: tor_hidden_service_hostname_lookup
   # Read-only task, so don't report changed.
   changed_when: false
   with_items: "{{ tor_instances }}"
+  when: "v2_onion_services"
   tags:
     - tor
     - admin
 
-- name: Write Tor hidden service hostname files to Admin Workstation.
+- name: Write Tor Onion Service hostname files to Admin Workstation.
   local_action:
     module: template
     dest: "{{ role_path }}/../../{{ item.item.filename }}"
@@ -26,6 +28,42 @@
   # Local action, so we don't want elevated privileges
   become: no
   with_items: "{{ tor_hidden_service_hostname_lookup.results }}"
+  when: "v2_onion_services"
+  tags:
+    - tor
+    - admin
+
+
+- name: Wait for all Tor v3 onion services hostname files.
+  wait_for:
+    state: present
+    path: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}/hostname"
+    delay: 5
+  with_items: "{{ tor_instances_v3 }}"
+  when: "v3_onion_services"
+  tags:
+    - tor
+
+- name: Collect Tor v3 onion service hostnames.
+  command: cat /var/lib/tor/services/{{ item.service }}/hostname
+  register: tor_hidden_service_hostnamev3_lookup
+  # Read-only task, so don't report changed.
+  changed_when: false
+  with_items: "{{ tor_instances_v3 }}"
+  when: "v3_onion_services"
+  tags:
+    - tor
+    - admin
+
+- name: Write Tor v3 onion service hostname files to Admin Workstation.
+  local_action:
+    module: template
+    dest: "{{ role_path }}/../../{{ item.item.filename }}"
+    src: ths_config_v3.j2
+  # Local action, so we don't want elevated privileges
+  become: no
+  with_items: "{{ tor_hidden_service_hostnamev3_lookup.results }}"
+  when: "v3_onion_services"
   tags:
     - tor
     - admin

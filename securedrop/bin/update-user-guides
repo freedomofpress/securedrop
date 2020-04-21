@@ -1,21 +1,18 @@
 #!/bin/bash
+# shellcheck disable=SC1090
 
-set -e
-export DISPLAY=:1
-Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
-redis-server &
+set -eu
 
-rm /dev/random
-ln -s /dev/urandom /dev/random
+source "${BASH_SOURCE%/*}/dev-deps"
 
-if ! test -f config.py ; then
-    trap "rm config.py" EXIT
-    make test-config
-fi
+run_xvfb &
+run_tor &
+run_redis &
+run_x11vnc &
+urandom
+run_sass --force --update
+maybe_create_config_py
 
-sass --force --stop-on-error --update sass:static/css --style compressed
-chown -R "$USER_ID" static .sass-cache
-
-pytest -v tests/pages-layout --page-layout
-cp tests/pages-layout/screenshots/en_US/*.png ../docs/images/manual/screenshots
-chown -R "$USER_ID" tests/pages-layout/screenshots ../docs/images/manual/screenshots ./*/__pycache__ ./*/*/__pycache__ || true
+./i18n_tool.py translate-messages --compile
+pytest -v --page-layout "${@:-tests/pageslayout}"
+cp tests/pageslayout/screenshots/en_US/*.png ../docs/images/manual/screenshots

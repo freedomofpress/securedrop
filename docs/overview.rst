@@ -17,34 +17,50 @@ Technical Summary
 SecureDrop is a tool for sources to communicate securely with journalists. The
 SecureDrop application environment consists of three dedicated computers:
 
-- *Secure Viewing Station*: An air-gapped laptop running the
-   `Tails operating system`_ from a USB stick that journalists use to decrypt
-   and view submitted documents.
-- *Application Server*: Ubuntu server running two segmented Tor hidden
+- *Secure Viewing Station*:
+   A physically-secured and air-gapped laptop running
+   the `Tails operating system`_ from a USB stick, that journalists use to
+   decrypt and view submitted documents.
+- *Application Server*:
+   An Ubuntu server running two segmented Tor hidden
    services. The source connects to the *Source Interface*, a public-facing Tor
-   hidden service, to send messages and documents to the journalist. The
+   Onion Service, to send messages and documents to the journalist. The
    journalist connects to the *Journalist Interface*, an `authenticated Tor
-   hidden service
-   <https://gitweb.torproject.org/torspec.git/tree/rend-spec.txt#n851>`__, to
+   Onion Service
+   <https://gitweb.torproject.org/torspec.git/tree/rend-spec-v2.txt#n851>`__, to
    download encrypted documents and respond to sources.
-- *Monitor Server*: Ubuntu server that monitors the *Application Server*
+- *Monitor Server*:
+   An Ubuntu server that monitors the *Application Server*
    with `OSSEC <https://ossec.github.io/>`__ and sends email alerts.
 
-In addition to these dedicated computers, the journalist will also use their
-normal workstation computer:
+These computers should all physically be in your organization's office.
 
-- *Journalist Workstation*: The every-day laptop that the journalist uses for
-   their work. The journalist will use this computer to connect to the
-   *Application Server* to download encrypted documents that they will
+In addition to these dedicated computers, each journalist will also need a
+computer to connect to SecureDrop:
+
+- *Journalist Workstation:*
+   The computer used by the journalist to connect to
+   the *Journalist Interface* to download encrypted documents that they will
    transfer to the *Secure Viewing Station*. The *Journalist Workstation*
    is also used to respond to sources via the *Journalist Interface*.
 
-Depending on the news organization's threat model, it is recommended that
-journalists always use the `Tails operating system`_ on their
-*Journalist Workstation* when connecting to the *Application Server*.
-Alternatively, this can also be its own dedicated computer.
+Depending on the news organization's threat model, the *Journalist Workstation*
+can either be the journalist's every-day laptop or a dedicated computer. In
+either case, it is recommended that journalists always use the
+`Tails operating system`_ on their *Journalist Workstation* when connecting
+to the *Journalist Interface*.
 
-These computers should all physically be in your organization's office.
+SecureDrop administrators will also require a computer to connect to SecureDrop
+and perform administrative tasks via SSH or the *Journalist Interface*.
+This computer is referred to as the *Admin Workstation*, and must be capable of
+running the `Tails operating system`_. The *Admin Workstation* may also be used
+as a *Journalist Workstation* if necessary.
+
+.. note:: The SecureDrop installation guide includes documentation on setting up
+          Tails-based `Admin Workstation` and `Journalist Workstation` USB
+          sticks. It is strongly recommended that these be used in preference to
+          other undocumented solutions.
+
 
 .. _`Tails operating system`: https://tails.boum.org
 
@@ -58,13 +74,10 @@ the sources, and the journalists.
 
 |SecureDrop architecture overview diagram|
 
-.. todo:: A picture of an actual physical setup (e.g. the office
-          setup) with the components labeled would also be good here.
-
 Servers
 ~~~~~~~
 
-At SecureDrop's heart is a pair of severs: the *Application (“App”) Server*,
+At SecureDrop's heart is a pair of servers: the *Application (“App”) Server*,
 which runs the core SecureDrop software, and the *Monitor (“Mon”) Server*,
 which keeps track of the *Application Server* and sends out alerts if there's a
 problem. These two servers run on dedicated hardware connected to a dedicated
@@ -75,9 +88,9 @@ Admins
 
 The SecureDrop servers are managed by a systems admin; for larger
 newsrooms, there may be a team of systems admins. The admin
-uses a dedicated *Admin Workstation* running `Tails <https://tails.boum.org>`__
-and connects to the *Application* and *Monitor Servers* over authenticated `Tor Hidden Services
-<https://www.torproject.org/docs/hidden-services.html>`__ and manages them
+uses a dedicated *Admin Workstation* running `Tails <https://tails.boum.org>`__,
+connects to the *Application* and *Monitor Servers* over authenticated `Tor Onion Services
+<https://www.torproject.org/docs/hidden-services.html>`__, and manages them
 using `Ansible <http://www.ansible.com/>`__.
 
 Sources
@@ -103,10 +116,10 @@ published, decrypted documents are never accessed on an Internet-connected
 computer.
 
 .. note:: The terms in italics are terms of art specific to SecureDrop. The
-	  :doc:`Terminology Guide <terminology>` provides more-precise
+	  :doc:`Glossary <glossary>` provides more-precise
           definitions of these and other terms. SecureDrop is designed against
           a comprehensive :doc:`threat_model/threat_model`, and has a specific
-          notion of the :doc:`roles <terminology>` that are involved in its
+          notion of the :doc:`roles <glossary>` that are involved in its
           operation.
 
 Operation
@@ -119,7 +132,7 @@ Setting up SecureDrop is a multi-step process. Before getting started, you
 should make sure that you're prepared to operate and maintain it. You'll need
 a systems admin who's familiar with Linux, the GNU utilities, and the
 Bash shell. You'll need the :doc:`hardware <hardware>` on which SecureDrop
-runs — this will normally cost $2000-$3000 dollars. The journalists in your
+runs — this will normally cost $2000-$3000. The journalists in your
 organization will need to be trained in the operation of SecureDrop, and
 you'll need to publish and promote your new SecureDrop instance afterwards —
 using your existing websites, mailing lists, and social media.
@@ -141,7 +154,7 @@ Provisioning & Training
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Once SecureDrop is installed, journalists will need to be provided with
-accounts, two-factor tokens, workstations, and so on — and then
+accounts, two-factor credentials, workstations, and so on — and then
 :doc:`trained <training_schedule>` to use these tools safely and reliably. You
 will probably also need to train additional backup admins so that you
 can be sure that your SecureDrop setup keeps running even when your main
@@ -164,7 +177,8 @@ should test it thoroughly and then tell the world. The `Freedom of the Press
 Foundation <https://securedrop.org/help>`__ are happy to help you check that
 your SecureDrop setup is up-to-code and properly grounded. After that you'll want
 to check out the :ref:`best practices <Landing Page>` for your
-SecureDrop landing page and our guide to
+SecureDrop *Landing Page* and our guide to
 :doc:`promoting your SecureDrop instance <getting_the_most_out_of_securedrop>`.
 
 .. |SecureDrop architecture overview diagram| image:: ./diagrams/SecureDrop.png
+  :width: 100%

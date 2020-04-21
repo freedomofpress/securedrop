@@ -3,6 +3,11 @@ MAILDIR=/var/mail/
 DEFAULT=$MAILDIR
 LOGFILE=/var/log/procmail.log
 SUBJECT=`formail -xSubject:`
-:0 c
-*^To:.*root.*
-|/var/ossec/send_encrypted_alarm.sh
+
+:0 B
+* /var/lib/securedrop/submissions_today.txt
+|/var/ossec/process_submissions_today.sh
+
+:0 E
+* ^To:.*root.*
+|/var/ossec/send_encrypted_alarm.sh ossec

@@ -2,7 +2,6 @@
 
 // LIBRARIES
 @import libraries/normalize
-@import libraries/font-awesome-iconography
 
 // GLOBAL - order is significant
 @import global/border-box-size-everything
@@ -25,8 +24,8 @@
 @import modules/doc-check
 // Text link - make links purple in running text, possibly unnecessary.
 @import modules/text-link
-// Some kind of button possibly sd=standard button. Belongs in button module?
-@import modules/sd-button
+// Tooltips for showing informations
+@import modules/tooltip
 //variation on button for select all / none. In journalist interface only?
 @import modules/select
 // Pull - Quick layout helper classes
@@ -67,8 +66,8 @@
 @import "modules/document-actions-button"
 // Grid item - part of the grid. Doesnt seem to be used very much though.
 @import "modules/grid-item"
-// Option - might be unused. Delete?
-@import "modules/option"
+// Flexbox - support for flexbox layouts
+@import "modules/flexbox"
 // Logo - Small and large versions of the branding; can also be the journalist org brand (not SD).
 @import "modules/logo"
 // Submissions - container for all of the submissions
@@ -89,17 +88,16 @@
 @import "modules/shared-secret"
 // Users table - Admin area only?
 @import "modules/users-table"
-// Regenerate codename button - only used by journalist?
-@import "modules/regenerate-codename-button"
 // Footer containing disclaimer text
 @import "modules/footer"
 // Form validation error - text to help users correct errors
 @import "modules/form-validation-error"
+// Text transformation class to minimize i18n churn for capitalization changes
+@import "modules/upper"
 
 =base_rules
   // LIBRARIES
   +normalize
-  +font-awesome-iconography
 
   // GLOBAL - order is significant
   +border-box-size-everything
@@ -114,7 +112,7 @@
   +document-actions
   +doc-check
   +text-link
-  +sd-button
+  +tooltip
   +select
   +pull
   +header
@@ -135,7 +133,7 @@
   +select-container
   +document-actions-button
   +grid-item
-  +option
+  +flexbox
   +logo
   +submissions
   +submission
@@ -146,6 +144,6 @@
   +qr-code-container
   +shared-secret
   +users-table
-  +regenerate-codename-button
   +footer
   +form-validation-error
+  +upper

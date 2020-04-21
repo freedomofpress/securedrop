@@ -8,14 +8,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {% assets filters="jsmin", output="gen/source.js",
-      "js/libs/jquery-2.1.4.min.js", "js/source.js" %}
+    {% assets filters="jsmin", output="gen/source.js", "js/source.js" %}
       <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
   </head>
-  <body>
-    <div class="js-warning warning">{{ gettext('<strong>We recommend turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="">Learn how to set it to high</a>, or ignore this warning to continue.') }} <img id="js-warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
-    <div class="use-tor-browser warning">{{ gettext('<strong>We recommend using Tor Browser to access SecureDrop:</strong> <a id="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }} <img id="use-tor-browser-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
+  <body id="source-index">
+    <div id="js-warning" class="warning"><img src="{{ url_for('static', filename='i/font-awesome/white/exclamation-circle.svg') }}" height="12" alt="warning icon">&nbsp; {{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><strong>Security Setting</strong></a> is too low. Use the <img src="{icon}" alt="shield icon"> &nbsp;button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg"))  }} </div>
+    <div id="use-tor-browser" class="warning">{{ gettext('<strong>It is recommended to use the Tor Browser to access SecureDrop:</strong> <a id="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }} <img id="use-tor-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12" height="12"></div>
+    <div id="orfox-browser" class="warning">{{ gettext('<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop versions.</strong> <a id="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }} <img id="orfox-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12" height="12"></div>
 
     {% include 'banner_warning_flashed.html' %}
 
@@ -26,76 +26,62 @@
            See _source_index.sass for a more full understanding. #}
         <div class="index-wrap">
           <div class="header">
-            <img src="/static/i/{{ header_image }}" alt="SecureDrop">
+            <img src="{{ url_for('main.select_logo') }}" alt="{{ gettext('Logo Image') }}" class="logo-image">
             {% if use_custom_header_image %}
             <div class="powered">
               {{ gettext('Powered by') }}<br>
               <img src="/static/i/securedrop_small.png" alt="SecureDrop">
             </div>
             {% endif %}
+            <div id="index-locales">
+              {% include 'locales.html' %}
+            </div>
           </div>
 
           <div class="index-row">
-            <div class="index-column index-left index-top">
-              <h2 class="welcome-text">
-                {{ gettext('Submit documents for the first time') }}
-              </h2>
-              <hr class="cut-out">
-            </div>
-
-            <div class="index-column index-top">
-              <h2 class="welcome-text">
-                {{ gettext('Already submitted something?') }}
-              </h2>
-              <hr class="cut-out">
-            </div>
-
             <div class="index-column index-left">
-              <p>{{ gettext('If this is your first time submitting documents to journalists, start here.') }}</p>
+              <div class="index-column-top-container">
+              <h2 class="welcome-text">
+                {{ gettext('First submission') }}
+              </h2>
+              <p class="extended-welcome-text">{{ gettext('First time submitting to our SecureDrop? Start here.') }}</p>
+              </div>
+              <div class="index-column-bottom-container">
+                <a href="{{ url_for('main.generate') }}" id="submit-documents-button" class="btn alt">
+                  {{ gettext('GET STARTED') }}
+                </a>
+              </div>
             </div>
-
-            <div class="index-column">
-              <p>{{ gettext('If you have already submitted documents in the past, log in here to check for responses.') }}</p>
+            <div id="middle-separator"></div>
+            <div class="index-column index-right">
+              <div class="index-column-top-container">
+              <h2 class="welcome-text">
+                {{ gettext('Return visit') }}
+              </h2>
+              <p class="extended-welcome-text">{{ gettext('Already have a codename? Check for replies or submit something new.') }}</p>
+              </div>
+              <div class="index-column-bottom-container">
+                <a href="{{ url_for('main.login') }}" id="login-button" class="btn secondary">
+                  {{ gettext('LOG IN') }}
+                </a>
+              </div>
             </div>
-
-            <div class="index-column index-left index-bottom">
-              <a href="{{ url_for('main.generate') }}" id="submit-documents-button" class="sd-button btn alt">
-                <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" height="14px">
-                <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" height="14px">
-                {{ gettext('SUBMIT DOCUMENTS') }}
-              </a>
-            </div>
-
-            <div class="index-column index-bottom">
-              <a href="{{ url_for('main.login') }}" id="login-button" class="sd-button btn primary">
-                <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/comments-white.png') }}" width="20px" height="16px">
-                <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/comments-blue.png') }}" width="20px" height="16px">
-                {{ gettext('CHECK FOR A RESPONSE') }}
-              </a>
-            </div>
-          </div>
         </div>
       </div>
-
-      <div id="index-locales" class="center">
-        {% include 'locales.html' %}
-      </div>
-      <footer>
-        {{ gettext('Like all software, SecureDrop may contain security bugs. Use at your own risk.') }}<br>{{ gettext('Powered by') }} SecureDrop {{ version }}.
-      </footer>
+      {% include 'footer.html' %}
     </div>
 
     {# Warning bubble to help TB users disable JavaScript with NoScript.
     Included here so the images can preload while the user is first
     reading the page. Hidden by default. #}
-    <div class="bubble" id="security-slider-info-bubble">
-      <p>{{ gettext('You appear to be using the Tor Browser. You can turn the Security Slider to High in 4 easy steps!') }}</p>
+    <div class="bubble" id="security-setting-info" class="info">
       <ol>
-        <li>{{ gettext('Click the <img src="{icon}" alt="Tor icon"> Tor icon in the toolbar above').format(icon=url_for("static", filename="i/toronion.png"))  }}</li>
-        <li>{{ gettext('Click <strong>Security Settings...</strong>') }}</li>
-        <li>{{ gettext('Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>') }}</li>
-        <li>{{ gettext('<a href="/">Click here</a> to refresh the page') }}</li>
+        <li>{{ gettext('Click the <img src="{icon}" alt="shield icon"> in the toolbar above').format(icon=url_for("static", filename="i/font-awesome/black/guard.svg"))  }}</li>
+        <li>{{ gettext('Select <strong>Advanced Security Settings</strong>') }}</li>
+        <li>{{ gettext('Select <strong>Safest</strong>') }}</li>
       </ol>
+      <p>{{ gettext('<a href="/">Refresh this page</a>, and you\'re done!') }}</p>
+
     </div>
 
   </body>

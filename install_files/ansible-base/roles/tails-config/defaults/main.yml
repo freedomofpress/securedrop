@@ -41,3 +41,9 @@ tails_config_deprecated_directories:
 tails_config_deprecated_config_files:
   - 70-tor-reload.sh
   - 99-tor-reload.sh
+
+# v2 Tor onion services are on / v3 Tor onion services are off by default for backwards
+# compatibility. Note that new installs after 1.0 will have v3 enabled by sdconfig which
+# will override these variables.
+v2_onion_services: true
+v3_onion_services: false
