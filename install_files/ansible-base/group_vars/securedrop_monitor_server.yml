@@ -8,8 +8,8 @@ ip_info:
 local_deb_packages:
   - "securedrop-keyring-0.1.3+{{ securedrop_app_code_version }}-amd64.deb"
   - "securedrop-config-0.1.3+{{ securedrop_app_code_version }}-amd64.deb"
-  - "securedrop-ossec-server-3.0.0+{{ securedrop_app_code_version }}-amd64.deb"
-  - ossec-server-3.0.0-amd64.deb
+  - "securedrop-ossec-server-3.6.0+{{ securedrop_app_code_version }}-amd64.deb"
+  - ossec-server-3.6.0-amd64.deb
 
 # Configure the tor Onion Services. The Monitor server has only one,
 # for SSH, since no web interfaces.

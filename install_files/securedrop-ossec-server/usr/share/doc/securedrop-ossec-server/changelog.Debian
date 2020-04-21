@@ -1,3 +1,9 @@
+securedrop-ossec-agent (3.6.0) unstable; urgency=low
+
+  * Upgrade to ossec 3.6.0
+
+ -- SecureDrop Team <securedrop@freedom.press>  Mon, 13 Apr 2020 15:15:32 -0400
+
 securedrop-ossec-agent (3.0.0) unstable; urgency=low
 
   * Upgrade to ossec 3.0

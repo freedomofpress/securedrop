@@ -82,7 +82,7 @@ Pre-Release
    <https://github.com/freedomofpress/securedrop-dev-packages-lfs>`_.
    Only commit packages with an incremented version number: do not
    clobber existing packages.  That is, if there is already a deb
-   called e.g. ``ossec-agent-3.0.0-amd64.deb`` in ``master``, do not
+   called e.g. ``ossec-agent-3.6.0-amd64.deb`` in ``master``, do not
    commit a new version of this deb. Changes merged to ``master`` in
    this repo will be published within 15 minutes.
 
