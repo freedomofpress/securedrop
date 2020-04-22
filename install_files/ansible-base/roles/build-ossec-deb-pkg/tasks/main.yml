@@ -12,7 +12,7 @@
 
 - name: Install python-requests for URL fetching
   apt:
-    name: python-requests
+    name: python3-requests
     state: present
     update_cache: yes
     cache_valid_time: 3600
