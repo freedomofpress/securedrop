@@ -14,6 +14,7 @@ from models import (Journalist, Reply, Source, Submission,
                     LoginThrottledException, InvalidUsernameException,
                     BadTokenException, WrongPasswordException)
 from store import NotEncrypted
+import smallapi
 
 
 TOKEN_EXPIRATION_MINS = 60 * 8
@@ -135,9 +136,9 @@ def make_blueprint(config):
     @api.route('/sources', methods=['GET'])
     @token_required
     def get_all_sources():
-        sources = Source.query.filter_by(pending=False).all()
+        sources = smallapi.get_all_sources()
         return jsonify(
-            {'sources': [source.to_json() for source in sources]}), 200
+            {'sources': sources}), 200
 
     @api.route('/sources/<source_uuid>', methods=['GET', 'DELETE'])
     @token_required
