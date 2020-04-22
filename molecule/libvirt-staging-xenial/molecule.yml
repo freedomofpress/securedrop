@@ -43,6 +43,9 @@ provisioner:
   name: ansible
   lint:
     name: ansible-lint
+  config_options:
+    defaults:
+      interpreter_python: auto
   options:
     e: "@ansible-override-vars.yml"
   playbooks:

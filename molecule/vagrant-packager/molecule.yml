@@ -48,6 +48,8 @@ provisioner:
     skip-tags: "local_build"
     e: "@ansible-override-vars.yml"
   config_options:
+    defaults:
+      interpreter_python: auto
     ssh_connection:
       pipelining: True
   playbooks:
