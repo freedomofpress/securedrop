@@ -1,6 +1,6 @@
 ---
 
-- name: restart tor
+- name: restart tor service (async)
   shell: sleep 5 && service tor restart
   async: 3000
   poll: 0
