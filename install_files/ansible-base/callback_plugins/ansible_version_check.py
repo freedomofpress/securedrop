@@ -19,13 +19,18 @@ def print_red_bold(text):
 
 class CallbackModule(CallbackBase):
     def __init__(self):
-        # Can't use `on_X` because this isn't forwards compatible
-        # with Ansible 2.0+
-        required_version = '2.7.13'  # Keep synchronized with requirements files
-        if not ansible.__version__.startswith(required_version):
+        # The acceptable version range needs to be synchronized with
+        # requirements files.
+        viable_start = [2, 9, 7]
+        viable_end = [2, 10, 0]
+        ansible_version = [int(v) for v in ansible.__version__.split('.')]
+        if not (viable_start <= ansible_version < viable_end):
             print_red_bold(
-                "SecureDrop restriction: only Ansible {version}.*"
-                "is supported."
-                .format(version=required_version)
+                "SecureDrop restriction: Ansible version must be at least {viable_start} "
+                "and less than {viable_end}."
+                .format(
+                    viable_start='.'.join(str(v) for v in viable_start),
+                    viable_end='.'.join(str(v) for v in viable_end),
+                )
             )
             sys.exit(1)
