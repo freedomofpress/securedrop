@@ -135,10 +135,6 @@ more-itertools==7.1.0 \
     --hash=sha256:3ad685ff8512bf6dc5a8b82ebf73543999b657eded8c11803d9ba6b648986f4d \
     --hash=sha256:8bb43d1f51ecef60d81854af61a3a880555a14643691cc4b64a6ee269c78f09a \
     # via pytest
-pathlib2==2.3.5 \
-    --hash=sha256:0ec8205a157c80d7acc301c0b18fbd5d44fe655968f5d947b6ecef5290fc35db \
-    --hash=sha256:6cd9a47b597b37cc57de1c05e56fb1a1c9cc9fab04fe78c29acd090418529868 \
-    # via pytest
 pbr==3.1.1 \
     --hash=sha256:05f61c71aaefc02d8e37c0a3eeb9815ff526ea28b3b76324769e6158d7f95be1 \
     --hash=sha256:60c25b7dfd054ef9bb0ae327af949dd4676aa09ac3a9471cdc871d8a9213f9ac \
@@ -199,7 +195,7 @@ selenium==3.141.0 \
 six==1.11.0 \
     --hash=sha256:70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9 \
     --hash=sha256:832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb \
-    # via mock, pathlib2, pip-tools, pytest
+    # via mock, pip-tools, pytest
 tbselenium==0.4.2 \
     --hash=sha256:9f39b7285103442cc389623e1dedc3ef08b1475afd5076bba1d947d92a348d0b \
     --hash=sha256:e24ff69f610ca294093f399099407124c7ffc6a8325e7d9ca19e93ffc5eb91df
