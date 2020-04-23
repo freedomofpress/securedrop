@@ -4,7 +4,7 @@ FROM ubuntu@sha256:e4a134999bea4abb4a27bc437e6118fdddfb172e1b9d683129b74d254af51
 # additional meta-data makes it easier to clean up, find
 LABEL org="Freedom of the Press"
 LABEL image_name="xenial-sd-builder-app"
-
+RUN export DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         apache2-dev \
         aptitude \
@@ -33,7 +33,16 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         sudo \
         tzdata \
         unzip \
+        python3-venv \
+        python3-pip \
+        language-pack-en \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/*
+
+ADD wheels/*.whl /usr/share/python-wheels/
+
+RUN export LC_ALL="en_US.UTF-8" && \
+    export LC_CTYPE="en_US.UTF-8" && \
+    dpkg-reconfigure --frontend noninteractive locales
 
 RUN paxctl -cm /usr/bin/python3.5 && mkdir -p /tmp/build
