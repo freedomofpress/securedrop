@@ -89,6 +89,34 @@
 ## 1.3.0~rc1
 >>>>>>> Backporting 1.2.0 changelog and updating version to 1.3.0~rc1
 
+### Web Applications
+
+* Updated behavior of Logout button, adding a dedicated logout page with directions for sources on wiping Tor Browser session data (#5116)
+* Changed references to “journalists” in Source Interface text to “teams”  (#5175)
+
+### Journalist API
+
+* Improved response time of `/get_all_sources` endpoint by caching source public keys (#5184)
+* Bugfix: Updated `/replies` endpoint to correctly return replies associated with a deleted journalist account (#5178)
+
+### Operations
+
+* Updated Ansible version to 2.9.7 (#5199)
+* Updated OSSEC version to 3.6.0 (#5196)
+* Updated Tor version to 0.4.27 (#5192)
+* Updated Grsecurity-patched kernel version to 4.14.175 (#5178)
+
+### Admin Tails workstation
+
+* Bugfix: Updated GUI updater to return correct error when Tails configuration script times out (#5169)
+
+### Developer Workflow
+
+* Improved QA loader script to produce datasets more consistent with production data (#5174, #5200)
+* Improved the Qubes staging environment provisioning logic, removing requirement for manual reboots (#5190)
+* Dependency updates: pyyaml 5.3.1, urllib 1.25.8, safety 1.8.7, pillow 7.0.0 (#5182)
+* Updated Makefile lint target to ignore SC2230 shellcheck warnings (#5171)
+
 ## 1.2.2
 
 ### Web Applications
