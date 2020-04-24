@@ -16,8 +16,8 @@
 
 * Updated Ansible version to 2.9.7 (#5199)
 * Updated OSSEC version to 3.6.0 (#5196)
-* Updated Tor version to 0.4.27 (#5192)
-* Updated Grsecurity-patched kernel version to 4.14.175 (#5178)
+* Updated Tor version to 0.4.2.7 (#5192)
+* Updated Grsecurity-patched kernel version to 4.14.175 (#5188)
 
 ### Admin Tails workstation
 
