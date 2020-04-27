@@ -6,6 +6,13 @@
 
 * Updated behavior of Logout button, adding a dedicated logout page with directions for sources on wiping Tor Browser session data (#5116)
 * Changed references to “journalists” in Source Interface text to “teams”  (#5175)
+* Updated Source Interface to create a single source codename when multiple  “/generate” tabs are opened in a single session (#5075)
+* Bugfix: Added Journalist Interface error templates to Apache2 AppArmor profile (#5086)
+* Updated 2FA instructions to use consistent nomenclature across the Journalist Interface (#5049)
+* Added v2 and v3 Source Interface onion addresses to Source Interface `/metadata` endpoint (#5074)
+* Added confirmation message when document submission preference changed in Journalist Interface (#5046)
+* Updated Source Interface `/lookup` design (#5096)
+
 
 ### Journalist API
 
@@ -14,21 +21,50 @@
 
 ### Operations
 
-* Updated Ansible version to 2.9.7 (#5199)
-* Updated OSSEC version to 3.6.0 (#5196)
-* Updated Tor version to 0.4.27 (#5192)
-* Updated Grsecurity-patched kernel version to 4.14.175 (#5178)
+* Updated Ansible version from 2.7.13 to 2.9.7 (#5199)
+* Updated OSSEC version from 3.0.0 to 3.6.0 (#5196)
+* Updated Tor version to from 0.4.1.6 to 0.4.2.7 (#5192)
+* Updated default Grsecurity-patched kernel version from 4.14.154 to 4.14.175 (#5188)
+* Updated Ansible timeout value to 120 seconds and simplified server reboot handling (#5083)
 
 ### Admin Tails workstation
 
 * Bugfix: Updated GUI updater to return correct error when Tails configuration script times out (#5169)
+* Updated GUI updater to log and exit duplicate instances (#5067)
+* Added option to preserve Tor service configuration when restoring from backups (#5115)
+
 
 ### Developer Workflow
 
 * Improved QA loader script to produce datasets more consistent with production data (#5174, #5200)
-* Improved the Qubes staging environment provisioning logic, removing requirement for manual reboots (#5190)
-* Dependency updates: pyyaml 5.3.1, urllib 1.25.8, safety 1.8.7, pillow 7.0.0 (#5182)
-* Updated Makefile lint target to ignore SC2230 shellcheck warnings (#5171)
+* Updated SecureDrop Core’s Qubes staging environment provisioning, removing requirement for manual reboots and renaming VMs to avoid conflicts with SecureDrop Workstation (#5190, #5099)
+* Dependency updates: 
+  *  pyyaml from 5.1.2 to 5.3.1;
+  * urllib from 1.25.3 to  1.25.8;
+  * safety from 1.8.4 to 1.8.7;
+  * pillow from 6.2.1 to 7.0.0;
+  * astroid from 1.6.0 to 2.3.3;
+  * mypy from 0.701 to 0.761;
+  * pylint from 1.8.1 to 2.4.4;
+  * markupsafe from 1.0 to 1.1.1;
+  * setuptools from 41.6.0 to 46.0.0
+  (#5182, #5151, #5133)
+* Updated makefile lint target to ignore SC2230 shellcheck warnings (#5171)
+* CI: Updated translation tests to run in parallel across set of supported languages (#5062)
+* Added HTML markup to test submissions in dev environment (#5068)
+* Disabled `build-debs` builder update test for non-RC branches (#4988)
+* CI: Added LGTM configuration file (#5076)
+* Added support for running multiple simultaneous dev containers (#4633)
+* CI: Increased Docker verbosity, fixed image caching (#5113)
+* Added `testinfra` makefile target, to run infra tests against a staging instance (#5114)
+* Added functionality to load test datasets during staging provisioning (#5143)
+
+### Documentation
+
+* Updated Ubuntu verification instructions in install documentation (#5098, #5106)
+* Added journalist/admin off-boarding guide (#5012)
+* Added server BIOS update guide (#4991)
+* Miscellaneous documentation updates (#5059, #5063, #5066, #5072, #5078, #5138)
 
 ## 1.2.2
 
