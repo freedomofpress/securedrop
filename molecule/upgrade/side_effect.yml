@@ -3,6 +3,12 @@
   hosts: securedrop
   become: yes
   tasks:
+    - name: Add apt-test to install non-local packages referenced by metapackages (linux images)
+      lineinfile:
+        path: /etc/apt/security.list
+        line: "deb [arch=amd64] https://apt-test.freedom.press xenial main"
+      become: yes
+
     - name: Perform cron-apt upgrade
       command: cron-apt -i -s
       become: yes
