@@ -3,5 +3,6 @@
   apt:
     name: gettext
     state: latest
+    update_cache: yes
   tags:
     - apt

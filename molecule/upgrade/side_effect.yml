@@ -3,10 +3,17 @@
   hosts: securedrop
   become: yes
   tasks:
-    - name: Perform safe upgrade
-      apt:
-        update_cache: yes
-        upgrade: yes
+    - name: Perform cron-apt upgrade
+      command: cron-apt -i -s
+      become: yes
+
+    # cron-apt will always return 0, even if packages are held back.
+    # Here, we should manually check to see if packages were kept back with security.list
+    - name: Check to see if packages were kept back
+      command: "apt-get upgrade -y -o Dir::Etc::SourceList=security.list"
+      become: yes
+      register: apt_upgrade_output
+      failed_when: "'The following packages have been kept back' in apt_upgrade_output.stdout"
 
 - name: Lay out app testing deps
   hosts: securedrop_application_server
