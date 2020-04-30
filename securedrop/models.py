@@ -184,6 +184,8 @@ class Source(db.Model):
 
 
 class Submission(db.Model):
+    MAX_MESSAGE_LEN = 100000
+
     __tablename__ = 'submissions'
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), unique=True, nullable=False)
