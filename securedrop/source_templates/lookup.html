@@ -54,12 +54,12 @@
 {% if allow_document_uploads %}
     <div class="attachment grid-item center">
       <img class="center" id="upload-icon" src="{{ url_for('static', filename='i/arrow-upload-large.png') }}" width="56" height="56">
-      <input type="file" name="fh" autocomplete="off">
+      {{ form.fh() }}
       <p class="center" id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
     </div>
 {% endif %}
     <div class="message grid-item{% if not allow_document_uploads %} wide{% endif %}">
-      <textarea name="msg" class="fill-parent" placeholder="{{ gettext('Write a message.') }}"></textarea>
+        {{ form.msg(class="fill-parent") }}
     </div>
   </div>
 
