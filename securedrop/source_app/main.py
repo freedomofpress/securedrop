@@ -61,7 +61,7 @@ def make_blueprint(config):
     @view.route('/create', methods=['POST'])
     def create():
         if session.get('logged_in', False):
-            flash(gettext("You are already logged in. Please verify your codename below as it " +
+            flash(gettext("You are already logged in. Please verify your codename above as it " +
                           "may differ from the one displayed on the previous page."),
                   'notification')
         else:
