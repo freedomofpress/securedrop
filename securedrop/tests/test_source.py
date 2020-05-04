@@ -352,11 +352,9 @@ def test_submit_empty_message(source_app):
 
 
 def test_submit_big_message(source_app):
-    '''
-    When the message is larger than 512KB it's written to disk instead of
-    just residing in memory. Make sure the different return type of
-    SecureTemporaryFile is handled as well as BytesIO.
-    '''
+    """
+    Test the message size limit.
+    """
     with source_app.test_client() as app:
         new_codename(app, session)
         _dummy_submission(app)
@@ -366,7 +364,7 @@ def test_submit_big_message(source_app):
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Thanks! We received your message" in text
+        assert "Message text too long." in text
 
 
 def test_submit_file(source_app):

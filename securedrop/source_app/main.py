@@ -17,7 +17,7 @@ from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
                               async_genkey, normalize_timestamps,
                               valid_codename, get_entropy_estimate)
-from source_app.forms import LoginForm
+from source_app.forms import LoginForm, SubmissionForm
 
 
 def make_blueprint(config):
@@ -145,13 +145,21 @@ def make_blueprint(config):
             replies=replies,
             flagged=g.source.flagged,
             new_user=session.get('new_user', None),
-            haskey=current_app.crypto_util.get_fingerprint(
-                g.filesystem_id))
+            haskey=current_app.crypto_util.get_fingerprint(g.filesystem_id),
+            form=SubmissionForm(),
+        )
 
     @view.route('/submit', methods=('POST',))
     @login_required
     def submit():
         allow_document_uploads = current_app.instance_config.allow_document_uploads
+        form = SubmissionForm()
+        if not form.validate():
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash(error, "error")
+            return redirect(url_for('main.lookup'))
+
         msg = request.form['msg']
         fh = None
         if allow_document_uploads and 'fh' in request.files:
@@ -190,21 +198,23 @@ def make_blueprint(config):
                     fh.stream))
 
         if first_submission:
-            msg = render_template('first_submission_flashed_message.html')
-            flash(Markup(msg), "success")
+            flash_message = render_template('first_submission_flashed_message.html')
+            flash(Markup(flash_message), "success")
 
         else:
             if msg and not fh:
                 html_contents = gettext('Thanks! We received your message.')
-            elif not msg and fh:
+            elif fh and not msg:
                 html_contents = gettext('Thanks! We received your document.')
             else:
                 html_contents = gettext('Thanks! We received your message and '
                                         'document.')
 
-            msg = render_template('next_submission_flashed_message.html',
-                                  html_contents=html_contents)
-            flash(Markup(msg), "success")
+            flash_message = render_template(
+                'next_submission_flashed_message.html',
+                html_contents=html_contents
+            )
+            flash(Markup(flash_message), "success")
 
         new_submissions = []
         for fname in fnames:
