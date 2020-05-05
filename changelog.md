@@ -1,6 +1,7 @@
 # Changelog
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## 1.2.2
 
 ### Web Applications
@@ -19,6 +20,20 @@
 * Added caching of source keys (#5100)
 * Removed the ability to change source codenames/designations (#5119)
 =======
+=======
+## 1.3.0~rc2
+
+### Web Applications
+
+* Use WTForm for source interface submission form (#5226)
+
+### Developer Workflow
+
+* Dependency updates:
+  * pylint from 2.4.4 to 2.5.0 (#5219)
+  * astroid from 2.3.3 to 2.4.0 (#5219)
+
+>>>>>>> SecureDrop 1.3.0-rc2
 ## 1.3.0~rc1
 >>>>>>> Backporting 1.2.0 changelog and updating version to 1.3.0~rc1
 
