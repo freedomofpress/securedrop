@@ -6,6 +6,7 @@ Homepage: https://securedrop.org
 Package: securedrop-ossec-server
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Version: 3.6.0+1.3.0
 =======
 Version: 3.0.0+1.3.0~rc1
@@ -13,6 +14,9 @@ Version: 3.0.0+1.3.0~rc1
 =======
 Version: 3.6.0+1.3.0~rc1
 >>>>>>> updated OSSEC version to 3.6.0, built with JIT disabled for grsec kernel
+=======
+Version: 3.6.0+1.3.0~rc2
+>>>>>>> SecureDrop 1.3.0-rc2
 Architecture: amd64
 Depends: libevent-1.4-2,libpcre2-8-0,ossec-server,securedrop-keyring,securedrop-config
 Replaces: ossec-server
