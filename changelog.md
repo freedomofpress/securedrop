@@ -1,7 +1,23 @@
 # Changelog
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## 1.3.0
+=======
+## 1.3.0~rc2
+
+### Web Applications
+
+* Use WTForm for source interface submission form (#5226)
+
+### Developer Workflow
+
+* Dependency updates:
+  * pylint from 2.4.4 to 2.5.0 (#5219)
+  * astroid from 2.3.3 to 2.4.0 (#5219)
+
+## 1.3.0~rc1
+>>>>>>> SecureDrop 1.3.0-rc2
 
 ### Web Applications
 
