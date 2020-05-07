@@ -107,7 +107,7 @@ Create the backup using Rsync
 |Backup and TailsData Mounted|
 
 Open a terminal by going to
-**Applications** ▸ **Favorites** ▸ **Terminal**.
+**Applications** ▸ **System Tools** ▸ **Terminal**.
 
 
 Next, create a directory on the Backup USB for the device to be backed up - the
@@ -189,7 +189,7 @@ name ``TailsData`` will appear in the lefthand column.
 Copy the Backup to the New Workstation USB's Persistent Volume
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Open a terminal by navigating to **Applications** ▸ **Favorites**
+Open a terminal by navigating to **Applications** ▸ **System Tools**
 ▸ **Terminal** . Next, use the ``rsync`` command to copy the appropriate backup
 folder to the new workstation USB's persistent volume. For example, if the
 backup folder to be copied is named ``admin-backup``, run the following command:
