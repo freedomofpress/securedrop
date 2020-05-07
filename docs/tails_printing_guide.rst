@@ -48,8 +48,8 @@ Tails.
 Connect the printer to your Tails-booted computer via USB, then turn the printer
 on.
 
-Now, you'll want to single-click your way through **Applications** ▸
-**System Tools** ▸ **Settings** ▸ **Devices** ▸ **Printers**. The screenshot
+Now, you'll want to single-click your way through **Applications ▸
+System Tools ▸ Settings**, then select **Devices ▸ Printers**. The screenshot
 below highlights the "Devices" section in which the printer settings can be
 found:
 

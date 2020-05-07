@@ -51,7 +51,7 @@ Preparing the Backup Device
 
 First you must boot the *primary Tails USB* drive. Ensure you set an
 administrator password set at the login screen. Then navigate to
-**Applications** ▸ **Utilities** ▸ **Disks**.
+**Applications ▸ Utilities ▸ Disks**.
 
 |Applications Utilities Disks|
 
@@ -89,7 +89,7 @@ Once completed, you will see two partitions appear:
 |Two Partitions Appear|
 
 Now that you made the backup device, plug in the device you want to backup.
-Then, browse to **Places** ▸ **Computer**:
+Then, browse to **Places ▸ Computer**:
 
 |Browse to Places Computer|
 
@@ -107,7 +107,7 @@ Create the backup using Rsync
 |Backup and TailsData Mounted|
 
 Open a terminal by going to
-**Applications** ▸ **System Tools** ▸ **Terminal**.
+**Applications ▸ System Tools ▸ Terminal**.
 
 
 Next, create a directory on the Backup USB for the device to be backed up - the
@@ -177,7 +177,7 @@ Open the Backup USB and new Tails Persistent Volume
 First, boot up the host Tails USB on the airgapped machine, making sure to set
 an administration password on the Tails Greeter dialog.
 
-Then, navigate to **Places** ▸ **Computer** to open the file manager, and insert
+Then, navigate to **Places ▸ Computer** to open the file manager, and insert
 the Backup USB. Click its entry in the lefthand column and enter its decryption
 passphrase when prompted. Its volume name (``Backup`` in the instructions above)
 will appear in place of the generic ``N.M GB Encrypted`` name.
@@ -189,8 +189,8 @@ name ``TailsData`` will appear in the lefthand column.
 Copy the Backup to the New Workstation USB's Persistent Volume
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Open a terminal by navigating to **Applications** ▸ **System Tools**
-▸ **Terminal** . Next, use the ``rsync`` command to copy the appropriate backup
+Open a terminal by navigating to **Applications ▸ System Tools
+▸ Terminal** . Next, use the ``rsync`` command to copy the appropriate backup
 folder to the new workstation USB's persistent volume. For example, if the
 backup folder to be copied is named ``admin-backup``, run the following command:
 
