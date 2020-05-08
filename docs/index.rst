@@ -137,3 +137,8 @@ anonymous sources.
   threat_model/threat_model.rst
   threat_model/dataflow.rst
   threat_model/mitigations.rst
+
+Two versions of this documentation are available:
+
+- ``latest`` - built from the ``develop`` branch of the SecureDrop repository, containing updates that have been tested but not yet released.
+- ``master`` - built from the ``master`` branch of the SecureDrop repository, and up to date with the most recent release, |version|.
