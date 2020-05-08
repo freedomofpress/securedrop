@@ -4,3 +4,4 @@ etc/apparmor.d/usr.sbin.tor /etc/apparmor.d
 lib/systemd/system/securedrop_rqrequeue.service /lib/systemd/system
 lib/systemd/system/securedrop_rqworker.service /lib/systemd/system
 lib/systemd/system/securedrop_shredder.service /lib/systemd/system
+lib/systemd/system/securedrop_source_deleter.service /lib/systemd/system

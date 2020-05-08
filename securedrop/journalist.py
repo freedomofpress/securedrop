@@ -15,7 +15,7 @@ def prime_keycache():
     Preloads CryptoUtil.keycache.
     """
     with app.app_context():
-        for source in Source.query.filter_by(pending=False).all():
+        for source in Source.query.filter_by(pending=False, deleted_at=None).all():
             app.crypto_util.get_pubkey(source.filesystem_id)
 
 

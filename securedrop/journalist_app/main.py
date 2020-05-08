@@ -64,7 +64,7 @@ def make_blueprint(config):
         # Long SQLAlchemy statements look best when formatted according to
         # the Pocoo style guide, IMHO:
         # http://www.pocoo.org/internal/styleguide/
-        sources = Source.query.filter_by(pending=False) \
+        sources = Source.query.filter_by(pending=False, deleted_at=None) \
                               .filter(Source.last_updated.isnot(None)) \
                               .order_by(Source.last_updated.desc()) \
                               .all()
@@ -171,7 +171,7 @@ def make_blueprint(config):
     @view.route('/download_unread/<filesystem_id>')
     def download_unread_filesystem_id(filesystem_id):
         id = Source.query.filter(Source.filesystem_id == filesystem_id) \
-            .one().id
+                         .filter_by(deleted_at=None).one().id
         submissions = Submission.query.filter(
             Submission.source_id == id,
             Submission.downloaded == false()).all()
