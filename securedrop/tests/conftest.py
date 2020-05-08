@@ -119,7 +119,7 @@ def config(tmpdir):
 def alembic_config(config):
     base_dir = path.join(path.dirname(__file__), '..')
     migrations_dir = path.join(base_dir, 'alembic')
-    ini = configparser.SafeConfigParser()
+    ini = configparser.ConfigParser()
     ini.read(path.join(base_dir, 'alembic.ini'))
 
     ini.set('alembic', 'script_location', path.join(migrations_dir))

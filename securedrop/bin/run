@@ -18,5 +18,6 @@ reset_demo
 /opt/venvs/securedrop-app-code/bin/rqworker &
 PYTHONPATH="${REPOROOT}/securedrop" /opt/venvs/securedrop-app-code/bin/python "${REPOROOT}/securedrop/scripts/rqrequeue" --interval 60 &
 /opt/venvs/securedrop-app-code/bin/python "${REPOROOT}/securedrop/scripts/shredder" --interval 60 &
+/opt/venvs/securedrop-app-code/bin/python "${REPOROOT}/securedrop/scripts/source_deleter" --interval 10 &
 
 ./manage.py run

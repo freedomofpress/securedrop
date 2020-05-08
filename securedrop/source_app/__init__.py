@@ -165,6 +165,7 @@ def create_app(config):
             try:
                 g.source = Source.query \
                             .filter(Source.filesystem_id == g.filesystem_id) \
+                            .filter_by(deleted_at=None) \
                             .one()
             except NoResultFound as e:
                 app.logger.error(

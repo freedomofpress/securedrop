@@ -1,7 +1,7 @@
 #!/opt/venvs/securedrop-app-code/bin/python
 
 #
-# Clears the SecureDrop shredder directory, securely deleting its contents.
+# Purges deleted sources and their data.
 #
 
 import argparse
@@ -22,7 +22,7 @@ from sdconfig import config
 def parse_args():
     parser = argparse.ArgumentParser(
         prog=__file__,
-        description="Utility for clearing deleted content in the SecureDrop store.",
+        description="Utility for asynchronous deletion of SecureDrop sources and their data.",
     )
     parser.add_argument(
         "-i", "--interval", type=int, help="Keep running every 'interval' seconds.",
@@ -31,11 +31,11 @@ def parse_args():
     return parser.parse_args()
 
 
-def clear_shredder():
+def purge_deleted_sources():
     try:
-        app.storage.clear_shredder()
+        journalist_app.utils.purge_deleted_sources()
     except Exception as e:
-        logging.info("Error clearing shredder: {}".format(e))
+        logging.info("Error purging deleted sources: {}".format(e))
 
 
 def main():
@@ -44,13 +44,13 @@ def main():
         format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO
     )
     if args.interval:
-        logging.info("Clearing shredder every {} seconds.".format(args.interval))
+        logging.info("Purging deleted sources every {} seconds.".format(args.interval))
         while 1:
-            clear_shredder()
+            purge_deleted_sources()
             time.sleep(args.interval)
     else:
-        logging.info("Clearing shredder once.")
-        clear_shredder()
+        logging.info("Purging deleted sources once.")
+        purge_deleted_sources()
 
 
 if __name__ == "__main__":
