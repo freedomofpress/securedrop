@@ -84,14 +84,14 @@ Target Potential Whistleblowers with Advertising
 ------------------------------------------------
 
 Facebook and Twitter also allow for targeted advertising to users in specific
-locations, attributes, and sometimes even specific users. Gizmodo Media Group
-recently targeted online advertisements for their secure tips page at DC residents
+locations, attributes, and sometimes even specific users. For example, Gizmodo Media Group
+targeted online advertisements for their secure tips page at DC residents
 imploring them to `tell on trump`_. At Freedom of the Press Foundation, we ran a
 proof of concept Twitter advertisement aimed at EPA and NOAA employees to show
 how it can be done. You can read about `how you can do the same thing here`_.
 
 .. _`recently targeted online advertisements`: https://www.wsj.com/articles/gizmodo-ads-target-potential-trump-leakers-1487191482
-.. _`tell on trump`: http://tellontrump.com/
+.. _`tell on trump`: https://specialprojectsdesk.com/tell-on-trump-1792401813
 .. _`how you can do the same thing here`: https://freedom.press/news/we-targeted-securedrop-ad-potential-whistleblowers-trump-administration-you-can-too/
 
 Put an Advertisement in Your Physical Paper

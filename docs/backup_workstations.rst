@@ -175,7 +175,7 @@ Open the Backup USB and new Tails Persistent Volume
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First, boot up the host Tails USB on the airgapped machine, making sure to set
-an administration password on the Tails Greeter dialog.
+an administration password on the Tails Welcome Screen dialog.
 
 Then, navigate to **Places ▸ Computer** to open the file manager, and insert
 the Backup USB. Click its entry in the lefthand column and enter its decryption
