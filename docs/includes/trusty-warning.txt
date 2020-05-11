@@ -1,6 +1,0 @@
-.. warning:: Ubuntu 14.04 has reached End-of-Life on **May 1, 2019** and will
-  no longer receive security updates. If you are still running Ubuntu 14.04
-  on your SecureDrop servers, due to the increased risk of a server compromise,
-  we do not recommend following the procedure outlined below. Instead, we
-  recommend saving your existing submissions on your *Secure Viewing Station*,
-  and re-installing SecureDrop: :doc:`../upgrade/xenial_after_april_30`.
