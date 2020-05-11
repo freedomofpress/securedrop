@@ -70,13 +70,13 @@ Upgrading workstations to Tails 4
    Before upgrading your *Admin Workstation* and your *Journalist Workstation*
    to Tails 4, you must first ensure that the version of the SecureDrop code on
    the workstation (which is used for administrative tasks and for configuring
-   the Tails desktop) is at 1.1.0.
+   the Tails desktop) is at 1.1.0 or a later version.
 
    If unsure, you can always run the ``git status`` command in the
    ``~/Persistent/securedrop`` directory to determine the current version. If
-   the output is not  "HEAD detached at 1.1.0", you are *not* ready to proceed
-   with the upgrade to Tails 4, and you must first update the workstation using
-   the procedure described in the previous section.
+   the output is not  "HEAD detached at 1.1.0" or a later version, you are *not*
+   ready to proceed with the upgrade to Tails 4, and you must first update the
+   workstation using the procedure described in the previous section.
 
 As a precaution, we recommend backing up your workstations before the upgrade
 to Tails 4. See our :doc:`Workstation Backup Guide <../backup_workstations>` for
