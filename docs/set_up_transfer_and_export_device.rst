@@ -75,7 +75,7 @@ is completed.
    cannot spread from infected computers in your network to the *Secure Viewing
    Station*.
 
-   Another option is to purchase a hardware USB `write blocker <https://www.forensicswiki.org/wiki/Write_Blockers>`__
+   Another option is to purchase a hardware USB `write blocker <https://forensicswiki.xyz/wiki/index.php?title=Write_Blockers>`__
    as used in forensics, and enforce its usage whenever the *Export Device* is
    attached to an Internet-connected workstation.
 

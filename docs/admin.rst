@@ -372,7 +372,7 @@ restart OSSEC via `OSSEC's control script`_, ``ossec-control``:
    sudo /var/ossec/bin/ossec-control restart
 
 .. _`OSSEC's control script`:
-  https://ossec-docs.readthedocs.io/en/latest/programs/ossec-control.html
+  https://ossec-docs.readthedocs.io/en/latest/docs/programs/ossec-control.html
 
 .. _Updating the Servers:
 
