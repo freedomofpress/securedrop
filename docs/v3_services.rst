@@ -84,7 +84,7 @@ Workstation* with ``./securedrop-admin tailsconfig``.
 
 - First, boot into the *Admin Workstation* with the persistent volume unlocked
   and an admin password set.
-- Next, open a terminal via **Applications > Favorites > Terminal** and change
+- Next, open a terminal via **Applications ▸ System Tools ▸ Terminal** and change
   the working directory to the Securedrop application directory:
 
   .. code:: sh
@@ -190,7 +190,7 @@ Journalist Workstation:
 
  - Then, boot into the *Journalist Workstation* to be updated, with the persistent 
    volume unlocked and an admin password set.
- - Next, open a terminal via **Applications > Favorites > Terminal** and change
+ - Next, open a terminal via **Applications ▸ System Tools ▸ Terminal** and change
    the working directory to the Securedrop application directory:
 
    .. code:: sh
@@ -236,7 +236,7 @@ Admin Workstation:
 
  - Then, boot into the *Admin Workstation* to be updated, with the persistent 
    volume unlocked and an admin password set.
- - Next, open a terminal via **Applications > Favorites > Terminal** and change
+ - Next, open a terminal via **Applications ▸ System Tools ▸ Terminal** and change
    the working directory to the Securedrop application directory:
 
    .. code:: sh

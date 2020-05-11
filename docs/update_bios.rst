@@ -38,7 +38,7 @@ Proceed to the Intel Download Centre to download the correct file. Each make and
 
   .. warning:: Do not download BIOS updates from anywhere other than the manufacturer's website. Be sure that you are `on the correct website`_ and that it has a valid SSL Certificate. Intel's SSL Certificate is issued to \*.intel.com and signed by DigiCert. Be sure you download the files specific to the model of your servers.
 
-Intel provides an md5 checksum on the download page. Once you have downloaded the ``.bio file``, using the **Files** application, browse to the file, right click and select **Properties** ▸ **Digests**, select MD5, and click Hash. Compare the result in the Digest column to the md5 sum listed on Intel's website. If these two values do not match, do not proceed, and contact support@freedom.press. Tails `provides a detailed explanation of this process`_. (Note that the hash in the screenshot below is an example only, and will not match your specific ``.bio`` file.)
+Intel provides an md5 checksum on the download page. Once you have downloaded the ``.bio file``, using the **Files** application, browse to the file, right click and select **Properties ▸ Digests**, select MD5, and click Hash. Compare the result in the Digest column to the md5 sum listed on Intel's website. If these two values do not match, do not proceed, and contact support@freedom.press. Tails `provides a detailed explanation of this process`_. (Note that the hash in the screenshot below is an example only, and will not match your specific ``.bio`` file.)
 
 |gtkhash tails|
 
