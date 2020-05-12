@@ -90,11 +90,11 @@ anonymous sources.
    :name: upgradetoc
    :maxdepth: 2
 
+   upgrade/1.2.2_to_1.3.0.rst
    upgrade/1.2.1_to_1.2.2.rst
    upgrade/1.2.0_to_1.2.1.rst
    upgrade/1.1.0_to_1.2.0.rst
    upgrade/1.0.0_to_1.1.0.rst
-   upgrade/xenial_after_april_30.rst
 
 .. toctree::
    :caption: Developer Documentation
@@ -128,7 +128,6 @@ anonymous sources.
    development/release_management
    development/dockerbuildmaint
    development/qubes_staging
-   development/xenial_support
 
 .. toctree::
   :caption: Threat Model
