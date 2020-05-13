@@ -1,6 +1,7 @@
 ---
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 securedrop_version: "1.3.0"
 ossec_version: "3.6.0"
 =======
@@ -12,6 +13,9 @@ ossec_version: "3.0.0"
 =======
 securedrop_version: "1.3.0~rc2"
 >>>>>>> SecureDrop 1.3.0-rc2
+=======
+securedrop_version: "1.3.0"
+>>>>>>> SecureDrop release 1.3.0
 ossec_version: "3.6.0"
 >>>>>>> updated OSSEC version to 3.6.0, built with JIT disabled for grsec kernel
 keyring_version: "0.1.3"

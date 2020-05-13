@@ -6,6 +6,7 @@ setuptools.setup(
     name="securedrop-app-code",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     version="1.3.0",
 =======
     version="1.3.0~rc1",
@@ -13,6 +14,9 @@ setuptools.setup(
 =======
     version="1.3.0~rc2",
 >>>>>>> SecureDrop 1.3.0-rc2
+=======
+    version="1.3.0",
+>>>>>>> SecureDrop release 1.3.0
     author="Freedom of the Press Foundation",
     author_email="securedrop@freedom.press",
     description="SecureDrop Server",
