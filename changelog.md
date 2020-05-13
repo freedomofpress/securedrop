@@ -2,13 +2,18 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## 1.3.0
 =======
 ## 1.3.0~rc2
+=======
+## 1.3.0
+>>>>>>> SecureDrop release 1.3.0
 
 ### Web Applications
 
 * Use WTForm for source interface submission form (#5226)
+<<<<<<< HEAD
 
 ### Developer Workflow
 
@@ -22,6 +27,8 @@
 ### Web Applications
 
 * Use WTForm for source interface submission form (#5226)
+=======
+>>>>>>> SecureDrop release 1.3.0
 * Updated behavior of Logout button, adding a dedicated logout page with directions for sources on wiping Tor Browser session data (#5116)
 * Changed references to “journalists” in Source Interface text to “teams”  (#5175)
 * Updated Source Interface to create a single source codename when multiple  “/generate” tabs are opened in a single session (#5075)
