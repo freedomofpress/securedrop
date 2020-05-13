@@ -29,27 +29,7 @@ RUN curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x8
 
 COPY ./tor_project_public.pub /opt/
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-ENV TBB_VERSION 9.0.5
-=======
-ENV TBB_VERSION 9.0.2
->>>>>>> bump Tor Browser version to 9.0.2 (9.0.3 is not yet a signed build.)
-=======
-ENV TBB_VERSION 9.0.4
->>>>>>> Bump Tor Browser from 9.0.2 to 9.0.4
-=======
-ENV TBB_VERSION 9.0.7
->>>>>>> Update TBB version to 9.0.7
-=======
 ENV TBB_VERSION 9.0.9
->>>>>>> updated Tor Browser version
-=======
-ENV TBB_VERSION 9.0.9
->>>>>>> Update TBB version to 9.0.9
 RUN gpg --import /opt/tor_project_public.pub && \
     wget  https://dist.torproject.org/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     wget https://dist.torproject.org/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
@@ -69,20 +49,9 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckod
 
 COPY requirements requirements
 RUN python3 -m venv /opt/venvs/securedrop-app-code && \
-<<<<<<< HEAD
-<<<<<<< HEAD
-    /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/securedrop-app-code-requirements.txt && \
-    /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/test-requirements.txt
-=======
-    /opt/venvs/securedrop-app-code/bin/pip3 install --require-hashes -r requirements/python3/docker-requirements.txt && \
-    /opt/venvs/securedrop-app-code/bin/pip3 install --require-hashes -r requirements/python3/securedrop-app-code-requirements.txt && \
-    /opt/venvs/securedrop-app-code/bin/pip3 install --require-hashes -r requirements/python3/test-requirements.txt
->>>>>>> Added a requirements file to update Docker pip version
-=======
     /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/docker-requirements.txt && \
     /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/securedrop-app-code-requirements.txt && \
     /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/test-requirements.txt
->>>>>>> updated pip commands in scripts and docs to include --no-deps flag
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi && \
     cp -r /root/.local /tmp/ && chmod +x /tmp/.local/tbb/tor-browser_en-US/Browser/firefox && chmod -R 777 /tmp/.local && \

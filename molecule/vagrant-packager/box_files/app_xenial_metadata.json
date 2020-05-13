@@ -93,15 +93,6 @@
     {
       "providers": [
         {
-<<<<<<< HEAD
-          "checksum": "652d4b10825e2fa7d1f9cabdace79d842cd6b6b8a22dcb5668f9d33b24613f71",
-          "checksum_type": "sha256",
-          "name": "libvirt",
-          "url": "https://dev-bin.ops.securedrop.org/vagrant/app-staging-xenial_1.2.1.box"
-        }
-      ],
-      "version": "1.2.1"
-=======
           "checksum": "834debf3efea4f96b8527e3af1e6d79ae09c059365d1d0f1f26ebe3ee279439b",
           "checksum_type": "sha256",
           "name": "libvirt",
@@ -109,9 +100,6 @@
         }
       ],
       "version": "1.2.0"
-<<<<<<< HEAD
->>>>>>> Provide upgrade boxes for SecureDrop 1.2.0
-=======
     },
     {
       "providers": [
@@ -123,9 +111,6 @@
         }
       ],
       "version": "1.2.1"
-<<<<<<< HEAD
->>>>>>> Add 1.2.1 upgrade testing boxes
-=======
     },
     {
       "providers": [
@@ -137,7 +122,6 @@
         }
       ],
       "version": "1.2.2"
->>>>>>> Add upgrade boxes for 1.2.2
     }
   ]
 }

@@ -131,18 +131,8 @@ signed with the release signing key:
 .. code:: sh
 
     cd ~/Persistent/securedrop/
-<<<<<<< HEAD
-<<<<<<< HEAD
-    git checkout 1.2.2
-    git tag -v 1.2.2
-=======
-    git checkout 1.2.1
-    git tag -v 1.2.1
->>>>>>> Update version after 1.2.1
-=======
-    git checkout 1.2.2
-    git tag -v 1.2.2
->>>>>>> SecureDrop release 1.2.2
+    git checkout 1.3.0
+    git tag -v 1.3.0
 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the
 output of that last command along with the fingerprint above.
@@ -177,7 +167,7 @@ in the SecureDrop repository that you just cloned. To use the template:
 
    .. code:: sh
 
-     cp ~/Persistent/securedrop/tails_files/securedrop-keepassx.kdbx \ 
+     cp ~/Persistent/securedrop/tails_files/securedrop-keepassx.kdbx \
         ~/Persistent/keepassx.kdbx
 
 -  Open the KeePassXC program |KeePassXC| which is already installed on

@@ -1,44 +1,10 @@
 # Changelog
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-## 1.2.2
-
-### Web Applications
-
-* Update psutil to 5.7.0
-
-### Admin Tails workstation
-
-* Pin setuptools to requirements file (#5159)
-
-## 1.2.1
-
-### Web Applications
-
-* Updated Tor Browser user agent detection (#5087)
-* Added caching of source keys (#5100)
-* Removed the ability to change source codenames/designations (#5119)
-=======
-=======
-## 1.3.0~rc2
+## 1.3.0
 
 ### Web Applications
 
 * Use WTForm for source interface submission form (#5226)
-
-### Developer Workflow
-
-* Dependency updates:
-  * pylint from 2.4.4 to 2.5.0 (#5219)
-  * astroid from 2.3.3 to 2.4.0 (#5219)
-
->>>>>>> SecureDrop 1.3.0-rc2
-## 1.3.0~rc1
->>>>>>> Backporting 1.2.0 changelog and updating version to 1.3.0~rc1
-
-### Web Applications
-
 * Updated behavior of Logout button, adding a dedicated logout page with directions for sources on wiping Tor Browser session data (#5116)
 * Changed references to “journalists” in Source Interface text to “teams”  (#5175)
 * Updated Source Interface to create a single source codename when multiple  “/generate” tabs are opened in a single session (#5075)
@@ -47,7 +13,6 @@
 * Added v2 and v3 Source Interface onion addresses to Source Interface `/metadata` endpoint (#5074)
 * Added confirmation message when document submission preference changed in Journalist Interface (#5046)
 * Updated Source Interface `/lookup` design (#5096)
-
 
 ### Journalist API
 
@@ -68,22 +33,21 @@
 * Updated GUI updater to log and exit duplicate instances (#5067)
 * Added option to preserve Tor service configuration when restoring from backups (#5115)
 
-
 ### Developer Workflow
 
 * Improved QA loader script to produce datasets more consistent with production data (#5174, #5200)
 * Updated SecureDrop Core’s Qubes staging environment provisioning, removing requirement for manual reboots and renaming VMs to avoid conflicts with SecureDrop Workstation (#5190, #5099)
-* Dependency updates: 
+* Dependency updates:
   *  pyyaml from 5.1.2 to 5.3.1;
   * urllib from 1.25.3 to  1.25.8;
   * safety from 1.8.4 to 1.8.7;
   * pillow from 6.2.1 to 7.0.0;
-  * astroid from 1.6.0 to 2.3.3;
   * mypy from 0.701 to 0.761;
   * pylint from 1.8.1 to 2.4.4;
   * markupsafe from 1.0 to 1.1.1;
   * setuptools from 41.6.0 to 46.0.0
-  (#5182, #5151, #5133)
+  * astroid from 2.3.3 to 2.4.0
+  (#5182, #5151, #5133, #5219)
 * Updated makefile lint target to ignore SC2230 shellcheck warnings (#5171)
 * CI: Updated translation tests to run in parallel across set of supported languages (#5062)
 * Added HTML markup to test submissions in dev environment (#5068)
