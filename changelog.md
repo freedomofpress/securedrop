@@ -1,21 +1,10 @@
 # Changelog
 
-## 1.3.0~rc2
+## 1.3.0
 
 ### Web Applications
 
 * Use WTForm for source interface submission form (#5226)
-
-### Developer Workflow
-
-* Dependency updates:
-  * pylint from 2.4.4 to 2.5.0 (#5219)
-  * astroid from 2.3.3 to 2.4.0 (#5219)
-
-## 1.3.0~rc1
-
-### Web Applications
-
 * Updated behavior of Logout button, adding a dedicated logout page with directions for sources on wiping Tor Browser session data (#5116)
 * Changed references to “journalists” in Source Interface text to “teams”  (#5175)
 * Updated Source Interface to create a single source codename when multiple  “/generate” tabs are opened in a single session (#5075)
@@ -55,12 +44,12 @@
   * urllib from 1.25.3 to  1.25.8;
   * safety from 1.8.4 to 1.8.7;
   * pillow from 6.2.1 to 7.0.0;
-  * astroid from 1.6.0 to 2.3.3;
   * mypy from 0.701 to 0.761;
   * pylint from 1.8.1 to 2.4.4;
   * markupsafe from 1.0 to 1.1.1;
   * setuptools from 41.6.0 to 46.0.0
-  (#5182, #5151, #5133)
+  * astroid from 2.3.3 to 2.4.0 
+  (#5182, #5151, #5133, #5219)
 * Updated makefile lint target to ignore SC2230 shellcheck warnings (#5171)
 * CI: Updated translation tests to run in parallel across set of supported languages (#5062)
 * Added HTML markup to test submissions in dev environment (#5068)
