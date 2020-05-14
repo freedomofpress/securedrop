@@ -56,7 +56,8 @@ def test_submit_message(source_app, journalist_app, test_journo):
 
     with source_app.test_client() as app:
         app.get('/generate')
-        app.post('/create', follow_redirects=True)
+        tab_id = next(iter(session['codenames'].keys()))
+        app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
         filesystem_id = g.filesystem_id
         # redirected to submission form
         resp = app.post('/submit', data=dict(
@@ -153,7 +154,8 @@ def test_submit_file(source_app, journalist_app, test_journo):
 
     with source_app.test_client() as app:
         app.get('/generate')
-        app.post('/create', follow_redirects=True)
+        tab_id = next(iter(session['codenames'].keys()))
+        app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
         filesystem_id = g.filesystem_id
         # redirected to submission form
         resp = app.post('/submit', data=dict(
@@ -254,7 +256,8 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
 
     with source_app.test_client() as app:
         app.get('/generate')
-        app.post('/create', follow_redirects=True)
+        tab_id = next(iter(session['codenames'].keys()))
+        app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
         codename = session['codename']
         filesystem_id = g.filesystem_id
         # redirected to submission form
@@ -301,7 +304,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
 
     # Block up to 15s for the reply keypair, so we can test sending a reply
     def assertion():
-        assert current_app.crypto_util.getkey(filesystem_id) is not None
+        assert current_app.crypto_util.get_fingerprint(filesystem_id) is not None
     utils.asynchronous.wait_for_assertion(assertion, 15)
 
     # Create 2 replies to test deleting on journalist and source interface
@@ -474,7 +477,8 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
     # first, add a source
     with source_app.test_client() as app:
         app.get('/generate')
-        app.post('/create')
+        tab_id = next(iter(session['codenames'].keys()))
+        app.post('/create', data={'tab_id': tab_id})
         resp = app.post('/submit', data=dict(
             msg="This is a test.",
             fh=(BytesIO(b''), ''),
@@ -523,7 +527,8 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
         num_sources = 2
         for i in range(num_sources):
             app.get('/generate')
-            app.post('/create')
+            tab_id = next(iter(session['codenames'].keys()))
+            app.post('/create', data={'tab_id': tab_id})
             app.post('/submit', data=dict(
                 msg="This is a test " + str(i) + ".",
                 fh=(BytesIO(b''), ''),
@@ -577,7 +582,8 @@ def test_filenames(source_app, journalist_app, test_journo):
     # add a source and submit stuff
     with source_app.test_client() as app:
         app.get('/generate')
-        app.post('/create')
+        tab_id = next(iter(session['codenames'].keys()))
+        app.post('/create', data={'tab_id': tab_id})
         _helper_filenames_submit(app)
 
     # navigate to the collection page
@@ -603,7 +609,8 @@ def test_filenames_delete(journalist_app, source_app, test_journo):
     # add a source and submit stuff
     with source_app.test_client() as app:
         app.get('/generate')
-        app.post('/create')
+        tab_id = next(iter(session['codenames'].keys()))
+        app.post('/create', data={'tab_id': tab_id})
         _helper_filenames_submit(app)
 
     # navigate to the collection page
@@ -714,7 +721,8 @@ def test_prevent_document_uploads(source_app, journalist_app, test_admin):
     # Check that the source interface accepts only messages:
     with source_app.test_client() as app:
         app.get('/generate')
-        resp = app.post('/create', follow_redirects=True)
+        tab_id = next(iter(session['codenames'].keys()))
+        resp = app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
         assert resp.status_code == 200
 
         text = resp.data.decode('utf-8')
@@ -739,7 +747,8 @@ def test_no_prevent_document_uploads(source_app, journalist_app, test_admin):
     # Check that the source interface accepts both files and messages:
     with source_app.test_client() as app:
         app.get('/generate')
-        resp = app.post('/create', follow_redirects=True)
+        tab_id = next(iter(session['codenames'].keys()))
+        resp = app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
         assert resp.status_code == 200
 
         text = resp.data.decode('utf-8')

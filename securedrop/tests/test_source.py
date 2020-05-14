@@ -83,7 +83,7 @@ def test_generate(source_app):
     with source_app.test_client() as app:
         resp = app.get(url_for('main.generate'))
         assert resp.status_code == 200
-        session_codename = session['codename']
+        session_codename = next(iter(session['codenames'].values()))
 
     text = resp.data.decode('utf-8')
     assert "This codename is what you will use in future visits" in text
@@ -113,11 +113,13 @@ def test_create_new_source(source_app):
     with source_app.test_client() as app:
         resp = app.get(url_for('main.generate'))
         assert resp.status_code == 200
-        resp = app.post(url_for('main.create'), follow_redirects=True)
+        tab_id = next(iter(session['codenames'].keys()))
+        resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
         assert session['logged_in'] is True
         # should be redirected to /lookup
         text = resp.data.decode('utf-8')
         assert "Submit Files" in text
+        assert 'codenames' not in session
 
 
 def test_generate_too_long_codename(source_app):
@@ -143,17 +145,18 @@ def test_create_duplicate_codename_logged_in_not_in_session(source_app):
         with source_app.test_client() as app:
             resp = app.get(url_for('main.generate'))
             assert resp.status_code == 200
+            tab_id = next(iter(session['codenames'].keys()))
 
             # Create a source the first time
-            resp = app.post(url_for('main.create'), follow_redirects=True)
+            resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
             assert resp.status_code == 200
             codename = session['codename']
 
         with source_app.test_client() as app:
             # Attempt to add the same source
             with app.session_transaction() as sess:
-                sess['codename'] = codename
-            resp = app.post(url_for('main.create'), follow_redirects=True)
+                sess['codenames'] = {tab_id: codename}
+            resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
             logger.assert_called_once()
             assert ("Attempt to create a source with duplicate codename"
                     in logger.call_args[0][0])
@@ -163,26 +166,31 @@ def test_create_duplicate_codename_logged_in_not_in_session(source_app):
 
 
 def test_create_duplicate_codename_logged_in_in_session(source_app):
-    with patch.object(source.app.logger, 'error') as logger:
-        with source_app.test_client() as app:
-            resp = app.get(url_for('main.generate'))
-            assert resp.status_code == 200
+    with source_app.test_client() as app:
+        resp = app.get(url_for('main.generate'))
+        assert resp.status_code == 200
+        tab_id = next(iter(session['codenames'].keys()))
 
-            # Create a source the first time
-            resp = app.post(url_for('main.create'), follow_redirects=True)
-            assert resp.status_code == 200
+        # Create a source the first time
+        resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
+        assert resp.status_code == 200
+        codename = session['codename']
+        logged_in = session['logged_in']
 
-            # Attempt to add the same source
-            resp = app.post(url_for('main.create'), follow_redirects=True)
-            logger.assert_called_once()
-            assert ("Attempt to create a source with duplicate codename"
-                    in logger.call_args[0][0])
-            assert resp.status_code == 500
-            assert 'codename' not in session
-
-            # Reproducer for bug #4361
-            resp = app.post(url_for('main.index'), follow_redirects=True)
-            assert 'logged_in' not in session
+    # Attempt to add another source in the same session
+    with source_app.test_client() as app:
+        resp = app.get(url_for('main.generate'))
+        assert resp.status_code == 200
+        tab_id = next(iter(session['codenames'].keys()))
+        with app.session_transaction() as sess:
+            sess['codename'] = codename
+            sess['logged_in'] = logged_in
+        resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
+        assert resp.status_code == 200
+        assert session['codename'] == codename
+        text = resp.data.decode('utf-8')
+        assert "You are already logged in." in text
+        assert "Submit Files" in text
 
 
 def test_lookup(source_app):
@@ -243,7 +251,10 @@ def test_login_and_logout(source_app):
         assert 'logged_in' not in session
         assert 'codename' not in session
         text = resp.data.decode('utf-8')
-        assert 'Thank you for exiting your session!' in text
+
+        # This is part of the logout page message instructing users
+        # to click the 'New Identity' icon
+        assert 'This will clear your Tor browser activity data' in text
 
 
 def test_user_must_log_in_for_protected_views(source_app):
@@ -341,11 +352,9 @@ def test_submit_empty_message(source_app):
 
 
 def test_submit_big_message(source_app):
-    '''
-    When the message is larger than 512KB it's written to disk instead of
-    just residing in memory. Make sure the different return type of
-    SecureTemporaryFile is handled as well as BytesIO.
-    '''
+    """
+    Test the message size limit.
+    """
     with source_app.test_client() as app:
         new_codename(app, session)
         _dummy_submission(app)
@@ -355,7 +364,7 @@ def test_submit_big_message(source_app):
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Thanks! We received your message" in text
+        assert "Message text too long." in text
 
 
 def test_submit_file(source_app):
@@ -542,7 +551,7 @@ def test_why_journalist_key(source_app):
         resp = app.get(url_for('info.why_download_journalist_pubkey'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Why download the journalist's public key?" in text
+        assert "Why download the team's public key?" in text
 
 
 def test_metadata_route(config, source_app):
@@ -558,6 +567,32 @@ def test_metadata_route(config, source_app):
             assert resp.json.get('server_os') == '16.04'
             assert resp.json.get('supported_languages') ==\
                 config.SUPPORTED_LOCALES
+            assert resp.json.get('v2_source_url') is None
+            assert resp.json.get('v3_source_url') is None
+
+
+def test_metadata_v2_url(config, source_app):
+    onion_test_url = "abcdabcdabcdabcd.onion"
+    with patch.object(source_app_api, "get_sourcev2_url") as mocked_v2_url:
+        mocked_v2_url.return_value = (onion_test_url)
+        with source_app.test_client() as app:
+            resp = app.get(url_for('api.metadata'))
+            assert resp.status_code == 200
+            assert resp.headers.get('Content-Type') == 'application/json'
+            assert resp.json.get('v2_source_url') == onion_test_url
+            assert resp.json.get('v3_source_url') is None
+
+
+def test_metadata_v3_url(config, source_app):
+    onion_test_url = "abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion"
+    with patch.object(source_app_api, "get_sourcev3_url") as mocked_v3_url:
+        mocked_v3_url.return_value = (onion_test_url)
+        with source_app.test_client() as app:
+            resp = app.get(url_for('api.metadata'))
+            assert resp.status_code == 200
+            assert resp.headers.get('Content-Type') == 'application/json'
+            assert resp.json.get('v2_source_url') is None
+            assert resp.json.get('v3_source_url') == onion_test_url
 
 
 def test_login_with_overly_long_codename(source_app):
@@ -672,7 +707,7 @@ def test_source_session_expiration(config, source_app):
         assert not session
 
         text = resp.data.decode('utf-8')
-        assert 'Your session timed out due to inactivity' in text
+        assert 'You were logged out due to inactivity' in text
 
 
 def test_source_session_expiration_create(config, source_app):
@@ -697,7 +732,7 @@ def test_source_session_expiration_create(config, source_app):
         assert not session
 
         text = resp.data.decode('utf-8')
-        assert 'Your session timed out due to inactivity' in text
+        assert 'You were logged out due to inactivity' in text
 
 
 def test_csrf_error_page(config, source_app):
@@ -709,7 +744,7 @@ def test_csrf_error_page(config, source_app):
 
         resp = app.post(url_for('main.create'), follow_redirects=True)
         text = resp.data.decode('utf-8')
-        assert 'Your session timed out due to inactivity' in text
+        assert 'You were logged out due to inactivity' in text
 
 
 def test_source_can_only_delete_own_replies(source_app):

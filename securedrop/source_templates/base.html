@@ -30,10 +30,13 @@
         {% endblock %}
 
         <div class="panel selected">
-        {% if 'logged_in' in session %}
-          <a href="{{ url_for('main.logout') }}" class="btn pull-right" id="logout">{{ gettext('LOG OUT') }}</a>
-        {% endif %}
-          <hr class="no-line">
+          {% if 'logged_in' in session %}
+            <a href="{{ url_for('main.logout') }}" class="btn pull-right" id="logout">{{ gettext('LOG OUT') }}</a>
+          {% endif %}
+
+          {% if not new_user%}
+            <hr class="no-line">
+          {% endif %}
 
           {% block body %}{% endblock %}
 

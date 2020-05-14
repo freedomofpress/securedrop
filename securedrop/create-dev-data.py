@@ -4,6 +4,7 @@
 import datetime
 import os
 import argparse
+from itertools import cycle
 
 from flask import current_app
 from sqlalchemy.exc import IntegrityError
@@ -14,6 +15,18 @@ import journalist_app
 from sdconfig import config
 from db import db
 from models import Journalist, Reply, Source, Submission
+
+submissions = cycle([
+    'This is a test submission without markup!',
+    'This is a test submission with markup and characters such as \, \\, \', \" and ". ' +  # noqa: W605, E501
+    '<strong>This text should not be bold</strong>!'
+])
+
+replies = cycle([
+    'This is a test reply without markup!',
+    'This is a test reply with markup and characters such as \, \\, \', \" and ". ' +  # noqa: W605, E501
+    '<strong>This text should not be bold</strong>!'
+])
 
 
 def main(staging=False):
@@ -36,29 +49,51 @@ def main(staging=False):
                       test_otp_secret,
                       is_admin=False)
 
+        journalist_tobe_deleted = add_test_user("clarkkent",
+                                                test_password,
+                                                test_otp_secret,
+                                                is_admin=False,
+                                                first_name="Clark",
+                                                last_name="Kent")
+
         # Add test sources and submissions
         num_sources = int(os.getenv('NUM_SOURCES', 2))
-        for _ in range(num_sources):
-            create_source_and_submissions()
+        for i in range(1, num_sources + 1):
+            if i == 1:
+                # For the first source, the journalist who replied will be deleted
+                create_source_and_submissions(
+                    i, num_sources, journalist_who_replied=journalist_tobe_deleted
+                )
+                continue
+            create_source_and_submissions(i, num_sources)
+        # Now let us delete one journalist
+        db.session.delete(journalist_tobe_deleted)
+        db.session.commit()
 
 
-def add_test_user(username, password, otp_secret, is_admin=False):
+def add_test_user(username, password, otp_secret, is_admin=False,
+                  first_name="", last_name=""):
     try:
         user = Journalist(username=username,
                           password=password,
-                          is_admin=is_admin)
+                          is_admin=is_admin,
+                          first_name=first_name,
+                          last_name=last_name)
         user.otp_secret = otp_secret
         db.session.add(user)
         db.session.commit()
         print('Test user successfully added: '
               'username={}, password={}, otp_secret={}, is_admin={}'
               ''.format(username, password, otp_secret, is_admin))
+        return user
     except IntegrityError:
         print("Test user already added")
         db.session.rollback()
 
 
-def create_source_and_submissions(num_submissions=2, num_replies=2):
+def create_source_and_submissions(
+    source_index, source_count, num_submissions=2, num_replies=2, journalist_who_replied=None
+):
     # Store source in database
     codename = current_app.crypto_util.genrandomid()
     filesystem_id = current_app.crypto_util.hash_codename(codename)
@@ -79,7 +114,7 @@ def create_source_and_submissions(num_submissions=2, num_replies=2):
             source.filesystem_id,
             source.interaction_count,
             source.journalist_filename,
-            'test submission!'
+            next(submissions)
         )
         source.last_updated = datetime.datetime.utcnow()
         submission = Submission(source, fpath)
@@ -91,20 +126,27 @@ def create_source_and_submissions(num_submissions=2, num_replies=2):
         fname = "{}-{}-reply.gpg".format(source.interaction_count,
                                          source.journalist_filename)
         current_app.crypto_util.encrypt(
-            'this is a test reply!',
-            [current_app.crypto_util.getkey(source.filesystem_id),
+            next(replies),
+            [current_app.crypto_util.get_fingerprint(source.filesystem_id),
              config.JOURNALIST_KEY],
             current_app.storage.path(source.filesystem_id, fname))
 
-        journalist = Journalist.query.first()
+        if not journalist_who_replied:
+            journalist = Journalist.query.first()
+        else:
+            journalist = journalist_who_replied
         reply = Reply(journalist, source, fname)
         db.session.add(reply)
 
     db.session.commit()
 
-    print("Test source (codename: '{}', journalist designation '{}') "
-          "added with {} submissions and {} replies".format(
-              codename, journalist_designation, num_submissions, num_replies))
+    print(
+        "Test source {}/{} (codename: '{}', journalist designation '{}') "
+        "added with {} submissions and {} replies".format(
+            source_index, source_count, codename, journalist_designation,
+            num_submissions, num_replies
+        )
+    )
 
 
 if __name__ == "__main__":  # pragma: no cover

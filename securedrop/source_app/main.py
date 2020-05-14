@@ -2,6 +2,7 @@ import operator
 import os
 import io
 
+from base64 import urlsafe_b64encode
 from datetime import datetime
 from flask import (Blueprint, render_template, flash, redirect, url_for, g,
                    session, current_app, request, Markup, abort)
@@ -16,7 +17,7 @@ from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
                               async_genkey, normalize_timestamps,
                               valid_codename, get_entropy_estimate)
-from source_app.forms import LoginForm
+from source_app.forms import LoginForm, SubmissionForm
 
 
 def make_blueprint(config):
@@ -37,9 +38,17 @@ def make_blueprint(config):
             return redirect(url_for('.lookup'))
 
         codename = generate_unique_codename(config)
-        session['codename'] = codename
+
+        # Generate a unique id for each browser tab and associate the codename with this id.
+        # This will allow retrieval of the codename displayed in the tab from which the source has
+        # clicked to proceed to /generate (ref. issue #4458)
+        tab_id = urlsafe_b64encode(os.urandom(64)).decode()
+        codenames = session.get('codenames', {})
+        codenames[tab_id] = codename
+        session['codenames'] = codenames
+
         session['new_user'] = True
-        return render_template('generate.html', codename=codename)
+        return render_template('generate.html', codename=codename, tab_id=tab_id)
 
     @view.route('/org-logo')
     def select_logo():
@@ -51,33 +60,43 @@ def make_blueprint(config):
 
     @view.route('/create', methods=['POST'])
     def create():
-        filesystem_id = current_app.crypto_util.hash_codename(
-            session['codename'])
-
-        source = Source(filesystem_id, current_app.crypto_util.display_id())
-        db.session.add(source)
-        try:
-            db.session.commit()
-        except IntegrityError as e:
-            db.session.rollback()
-            current_app.logger.error(
-                "Attempt to create a source with duplicate codename: %s" %
-                (e,))
-
-            # Issue 2386: don't log in on duplicates
-            del session['codename']
-
-            # Issue 4361: Delete 'logged_in' if it's in the session
-            try:
-                del session['logged_in']
-            except KeyError:
-                pass
-
-            abort(500)
+        if session.get('logged_in', False):
+            flash(gettext("You are already logged in. Please verify your codename above as it " +
+                          "may differ from the one displayed on the previous page."),
+                  'notification')
         else:
-            os.mkdir(current_app.storage.path(filesystem_id))
+            tab_id = request.form['tab_id']
+            codename = session['codenames'][tab_id]
+            session['codename'] = codename
 
-        session['logged_in'] = True
+            del session['codenames']
+
+            filesystem_id = current_app.crypto_util.hash_codename(codename)
+
+            source = Source(filesystem_id, current_app.crypto_util.display_id())
+            db.session.add(source)
+            try:
+                db.session.commit()
+            except IntegrityError as e:
+                db.session.rollback()
+                current_app.logger.error(
+                    "Attempt to create a source with duplicate codename: %s" %
+                    (e,))
+
+                # Issue 2386: don't log in on duplicates
+                del session['codename']
+
+                # Issue 4361: Delete 'logged_in' if it's in the session
+                try:
+                    del session['logged_in']
+                except KeyError:
+                    pass
+
+                abort(500)
+            else:
+                os.mkdir(current_app.storage.path(filesystem_id))
+
+            session['logged_in'] = True
         return redirect(url_for('.lookup'))
 
     @view.route('/lookup', methods=('GET',))
@@ -111,7 +130,7 @@ def make_blueprint(config):
         # Generate a keypair to encrypt replies from the journalist
         # Only do this if the journalist has flagged the source as one
         # that they would like to reply to. (Issue #140.)
-        if not current_app.crypto_util.getkey(g.filesystem_id) and \
+        if not current_app.crypto_util.get_fingerprint(g.filesystem_id) and \
                 g.source.flagged:
             db_uri = current_app.config['SQLALCHEMY_DATABASE_URI']
             async_genkey(current_app.crypto_util,
@@ -126,13 +145,21 @@ def make_blueprint(config):
             replies=replies,
             flagged=g.source.flagged,
             new_user=session.get('new_user', None),
-            haskey=current_app.crypto_util.getkey(
-                g.filesystem_id))
+            haskey=current_app.crypto_util.get_fingerprint(g.filesystem_id),
+            form=SubmissionForm(),
+        )
 
     @view.route('/submit', methods=('POST',))
     @login_required
     def submit():
         allow_document_uploads = current_app.instance_config.allow_document_uploads
+        form = SubmissionForm()
+        if not form.validate():
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash(error, "error")
+            return redirect(url_for('main.lookup'))
+
         msg = request.form['msg']
         fh = None
         if allow_document_uploads and 'fh' in request.files:
@@ -171,21 +198,23 @@ def make_blueprint(config):
                     fh.stream))
 
         if first_submission:
-            msg = render_template('first_submission_flashed_message.html')
-            flash(Markup(msg), "success")
+            flash_message = render_template('first_submission_flashed_message.html')
+            flash(Markup(flash_message), "success")
 
         else:
             if msg and not fh:
                 html_contents = gettext('Thanks! We received your message.')
-            elif not msg and fh:
+            elif fh and not msg:
                 html_contents = gettext('Thanks! We received your document.')
             else:
                 html_contents = gettext('Thanks! We received your message and '
                                         'document.')
 
-            msg = render_template('next_submission_flashed_message.html',
-                                  html_contents=html_contents)
-            flash(Markup(msg), "success")
+            flash_message = render_template(
+                'next_submission_flashed_message.html',
+                html_contents=html_contents
+            )
+            flash(Markup(flash_message), "success")
 
         new_submissions = []
         for fname in fnames:
@@ -277,8 +306,12 @@ def make_blueprint(config):
 
     @view.route('/logout')
     def logout():
+        """
+        If a user is logged in, show them a logout page that prompts them to
+        click the New Identity button in Tor Browser to complete their session.
+        Otherwise redirect to the main Source Interface page.
+        """
         if logged_in():
-            msg = render_template('logout_flashed_message.html')
 
             # Clear the session after we render the message so it's localized
             # If a user specified a locale, save it and restore it
@@ -286,7 +319,8 @@ def make_blueprint(config):
             session.clear()
             session['locale'] = user_locale
 
-            flash(Markup(msg), "important hide-if-not-tor-browser")
-        return redirect(url_for('.index'))
+            return render_template('logout.html')
+        else:
+            return redirect(url_for('.index'))
 
     return view

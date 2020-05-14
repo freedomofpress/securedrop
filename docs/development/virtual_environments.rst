@@ -140,6 +140,27 @@ Direct SSH access is available for staging hosts, so you can use
 is either ``virtualbox-staging-xenial`` or ``libvirt-staging-xenial``, depending
 on your environment.
 
+By default, the staging environments are created with an empty submissions database. If you want to set up a staging environment with a preexisting submissions database, you can do so using a SecureDrop backup file as follows:
+
+- Create a directory ``install_files/ansible-base/test-data``.
+- Copy the backup file to the directory above.
+- Define an environmental variable ``TEST_DATA_FILE`` whose value is the name  of the backup file - for example ``sd-backup.tar.gz`` - and run ``make staging``:
+  
+  .. code:: sh
+
+    TEST_DATA_FILE="sd-backup.tar.gz" make staging
+
+A staging environment will be created using the submissions and account data from the backup, but ignoring the backup file's Tor configuration data.
+
+.. note:: It is not recommended to use backup data from a live SecureDrop installation in staging, as the backup may contain sensitive information and the staging environment should not be considered secure.
+
+
+When finished with the Staging environment, run ``molecule destroy -s <scenario>``
+to clean up the VMs. If the host machine has been rebooted since the Staging
+environment was created, Molecule will fail to find the VM info, as it's stored
+in ``/tmp``. If you use libvirt, run ``virt-manager`` and destroy the staging VMs
+manually, by right-clicking on the entries and choosing **Destroy**.
+
 .. _production_vms:
 
 Production

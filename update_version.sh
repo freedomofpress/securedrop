@@ -1,4 +1,6 @@
 #!/bin/bash
+# shellcheck disable=SC2230
+
 ## Usage: ./update_version.sh <version>
 
 set -e

@@ -1,0 +1,10 @@
+---
+# reboot without checking to see if server comes back - required
+# for final reboot in initial install, as connection switches from
+# IPv4 to Onion URLs
+- name: Reboot without checking, if required due to security updates.
+  shell: sleep 2 && shutdown -r now
+  async: 1
+  poll: 0
+  tags:
+    - reboot-no-check

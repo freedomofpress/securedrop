@@ -1,35 +1,25 @@
 ---
-# Registering a temporary host fact to store the remote address
-# (either IPv4 address for first-run, or Onion URL for prod instances),
-# to avoid problems with remote address resolution when using `local_action`
-# and `wait_for` together.
-- name: Register host name to wait for.
-  set_fact:
-    # The `remote_host_ref` var is declared at the site-level,
-    # intended to make IPv4 resolution accurate across backend
-    # providers (i.e. mostly useful for testing).
-    _hostname_to_wait_for: "{{ remote_host_ref|default(ansible_ssh_host|default(ansible_host)) }}"
-
 - name: Reboot if required due to security updates.
-  shell: sleep 2 && shutdown -r now
-  async: 1
-  poll: 0
+  reboot:
+  tags:
+    - reboot
+  when: not securedrop_staging_qubes_env|default(False)
+
+- name: Gracefully halt Qubes staging VM
+  command: qvm-shutdown --wait {{ "sd-staging-app" if "app" in inventory_hostname else "sd-staging-mon" }}
+  become: no
+  delegate_to: localhost
+  when: securedrop_staging_qubes_env|default(False)
   tags:
     - reboot
 
-- name: Wait for server to come back.
-  local_action: wait_for
-  args:
-    host: "{{ _hostname_to_wait_for }}"
-    port: "{{ ansible_ssh_port|default(ansible_port|default(22)) }}"
-    delay: 20
-    search_regex: OpenSSH
-    state: started
-  # Wait action runs on localhost, and does NOT require sudo.
-  become: false
-  # Provide opt-out ability for waiting for the host to come back.
-  # During initial installation, waiting won't work, since the connection
-  # switches from IPv4 to Onion URLs.
-  when: reboot_wait|default(True)
+- name: Boot Qubes staging VM
+  shell: >
+    qvm-start
+    {{ "sd-staging-app" if "app" in inventory_hostname else "sd-staging-mon" }}
+    && sleep 30
+  become: no
+  delegate_to: localhost
+  when: securedrop_staging_qubes_env|default(False)
   tags:
     - reboot

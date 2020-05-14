@@ -110,11 +110,6 @@
     LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
-  vars:
-    # Override the default behavior of waiting for the servers to come back.
-    # Won't work on initial installs because the connection addresses change
-    # from IPv4 to Onion URLs, so just reboot and don't wait.
-    reboot_wait: no
   roles:
     - role: reboot-if-first-install
   become: yes

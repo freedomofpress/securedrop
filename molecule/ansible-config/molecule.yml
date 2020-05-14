@@ -20,6 +20,7 @@ provisioner:
   config_options:
     defaults:
       callback_whitelist: "profile_tasks, timer"
+      interpreter_python: auto
   inventory:
     links:
       group_vars: ../../install_files/ansible-base/group_vars

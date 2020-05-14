@@ -39,6 +39,17 @@ def init_journalist(first_name=None, last_name=None, is_admin=False):
     return user, user_pw
 
 
+def delete_journalist(journalist):
+    """Deletes a journalist from the database.
+
+    :param models.Journalist journalist: The journalist to delete
+
+    :returns: None
+    """
+    db.session.delete(journalist)
+    db.session.commit()
+
+
 def reply(journalist, source, num_replies):
     """Generates and submits *num_replies* replies to *source*
     from *journalist*. Returns reply objects as a list.
@@ -60,7 +71,7 @@ def reply(journalist, source, num_replies):
                                          source.journalist_filename)
         current_app.crypto_util.encrypt(
             str(os.urandom(1)),
-            [current_app.crypto_util.getkey(source.filesystem_id),
+            [current_app.crypto_util.get_fingerprint(source.filesystem_id),
              config.JOURNALIST_KEY],
             current_app.storage.path(source.filesystem_id, fname))
 
@@ -173,6 +184,6 @@ def new_codename(client, session):
     """Helper function to go through the "generate codename" flow.
     """
     client.get('/generate')
-    codename = session['codename']
-    client.post('/create')
+    tab_id, codename = next(iter(session['codenames'].items()))
+    client.post('/create', data={'tab_id': tab_id})
     return codename

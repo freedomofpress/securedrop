@@ -449,8 +449,8 @@ Tails 4 replaces MAT with MAT2, which is usable via the command line and via a
 context menu in the **Files** application (called ``nautilus`` on the command
 line).
 
-You can use MAT2 via the **Files** application by browsing to **Places** ▸
-**(Your file's location)** and right-clicking on your file. In the context
+You can use MAT2 via the **Files** application by browsing to **Places ▸
+(Your file's location)** and right-clicking on your file. In the context
 menu, select **Remove metadata**.
 
 |mat2 context menu|

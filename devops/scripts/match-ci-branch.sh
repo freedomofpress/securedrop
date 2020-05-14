@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2230
 
 #
 # Checks the given regular expression against the branch names

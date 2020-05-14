@@ -29,7 +29,7 @@
     # We only want to prevent upgrades if we're connected over Tor; first-time
     # installs will happen over direct access SSH (to local IPv4 address).
     # If we're connecting to an Onion URL, then it's over Tor.
-    - (ansible_host|default(ansible_ssh_host)).endswith('.onion')
+    - (ansible_host|default(ansible_host)).endswith('.onion')
 
 - name: Perform safe upgrade to ensure all the packages are updated.
   apt:

@@ -8,9 +8,9 @@ ip_info:
 local_deb_packages:
   - "securedrop-keyring-0.1.3+{{ securedrop_app_code_version }}-amd64.deb"
   - "securedrop-config-0.1.3+{{ securedrop_app_code_version }}-amd64.deb"
-  - "securedrop-ossec-agent-3.0.0+{{ securedrop_app_code_version }}-amd64.deb"
+  - "securedrop-ossec-agent-3.6.0+{{ securedrop_app_code_version }}-amd64.deb"
   - "{{ securedrop_app_code_deb }}.deb"
-  - "ossec-agent-3.0.0-amd64.deb"
+  - "ossec-agent-3.6.0-amd64.deb"
 
 # Configuring the tor Onion Services
 tor_instances:

@@ -36,4 +36,4 @@
     - tor_instances_v3|length > 0
     # Only run if we're connected over Tor (i.e. enabling v3 after v2).
     # If we're not connected over Tor, this is a first-run.
-    - (ansible_host|default(ansible_ssh_host)).endswith('.onion')
+    - (ansible_host|default(ansible_host)).endswith('.onion')

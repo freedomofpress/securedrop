@@ -12,11 +12,15 @@ to create an ``sd-dev`` Standalone VM. Once done, we'll create three new
 Standalone (HVM) Qubes VMs for use with staging:
 
 - ``sd-staging-base``, a base VM for cloning reusable staging VMs
-- ``sd-app-base``, a base VM for the *SecureDrop Application Server*
-- ``sd-mon-base``, a base VM for the *SecureDrop Monitor Server*
+- ``sd-staging-app-base``, a base VM for the *SecureDrop Application Server*
+- ``sd-staging-mon-base``, a base VM for the *SecureDrop Monitor Server*
 
 While the development VM, ``sd-dev``, is based on Debian 9, the other VMs
 will be based on Ubuntu Xenial.
+
+.. note:: The staging server VM names were recently changed from ``sd-app`` and
+         ``sd-mon`` to account for a name change in the SecureDrop Workstation
+         project.
 
 Download Ubuntu Xenial server ISO
 ---------------------------------
@@ -126,19 +130,19 @@ documented below. Run the following in ``dom0``:
 
 .. code:: sh
 
-   qvm-clone sd-staging-base sd-app-base
-   qvm-clone sd-staging-base sd-mon-base
-   qvm-prefs sd-app-base ip 10.137.0.50
-   qvm-prefs sd-mon-base ip 10.137.0.51
-   qvm-tags sd-app-base add created-by-sd-dev
-   qvm-tags sd-mon-base add created-by-sd-dev
+   qvm-clone sd-staging-base sd-staging-app-base
+   qvm-clone sd-staging-base sd-staging-mon-base
+   qvm-prefs sd-staging-app-base ip 10.137.0.50
+   qvm-prefs sd-staging-mon-base ip 10.137.0.51
+   qvm-tags sd-staging-app-base add created-by-sd-dev
+   qvm-tags sd-staging-mon-base add created-by-sd-dev
 
 Now start both new VMs:
 
 .. code:: sh
 
-   qvm-start sd-app-base
-   qvm-start sd-mon-base
+   qvm-start sd-staging-app-base
+   qvm-start sd-staging-mon-base
 
 On the consoles which eventually appear, you should be able to log in with
 ``sdadmin/securedrop``.
@@ -151,7 +155,7 @@ machine, edit ``/etc/network/interfaces`` to update the ``address`` line with
 the machine's IP.
 
 Edit ``/etc/hosts`` on each host to include the hostname and IP for itself.
-Use ``sd-app`` and ``sd-mon``, omitting the ``-base`` suffix, since the cloned VMs
+Use ``sd-staging-app`` and ``sd-staging-mon``, omitting the ``-base`` suffix, since the cloned VMs
 will not have the suffix.
 
 Next, on each host edit ``/etc/hostname`` to reflect the machine's name.
@@ -159,7 +163,7 @@ Again, omit the ``-base`` suffix.
 
 Halt each machine, then restart each from ``dom0``. The prompt in each console
 should reflect the correct name of the VM. Confirm you have network access by
-running ``host freedom.press``. It should show no errors.
+running ``ping freedom.press``. It should show no errors.
 
 Inter-VM networking
 ~~~~~~~~~~~~~~~~~~~
@@ -225,13 +229,13 @@ a password. On ``sd-dev``:
    ssh-copy-id sdadmin@10.137.0.51
 
 Confirm that you're able to ssh as user ``sdadmin`` from ``sd-dev`` to
-``sd-mon-base`` and ``sd-app-base`` without being prompted for a password.
+``sd-staging-mon-base`` and ``sd-staging-app-base`` without being prompted for a password.
 
 SecureDrop Installation
 -----------------------
 
 We're going to configure ``sd-dev`` to build the SecureDrop ``.deb`` files,
-then we're going to build them, and provision ``sd-app`` and ``sd-mon``.
+then we're going to build them, and provision ``sd-staging-app`` and ``sd-staging-mon``.
 Follow the instructions in the :doc:`developer documentation <setup_development>`
 to set up the development environment.
 
@@ -285,8 +289,8 @@ After creating the StandaloneVMs as described above:
 
 * ``sd-dev``
 * ``sd-staging-base``
-* ``sd-app-base``
-* ``sd-mon-base``
+* ``sd-staging-app-base``
+* ``sd-staging-mon-base``
 
 And after building the SecureDrop .debs, we can finally provision the staging
 environment. In from the root of the SecureDrop project in ``sd-dev``, run:
@@ -294,12 +298,6 @@ environment. In from the root of the SecureDrop project in ``sd-dev``, run:
 .. code:: sh
 
    make staging
-
-One limitation of Qubes is that the reboot handlers which run during 
-provisioning can shut down the VMs, but not start them again. When you see the
-message ``RUNNING HANDLER [common : Wait for server to come back.]`` you must 
-start the VMs again manually from ``dom0`` with the command 
-``qvm-start sd-app && qvm-start sd-mon``.
 
 The ``make staging`` command invokes the ``qubes-staging`` Molecule scenario. 
 You can also run constituent Molecule actions directly, rather than using

@@ -65,6 +65,6 @@
   any_errors_fatal: yes
   tasks:
     # Reuse existing "reboot-and-wait" logic from site config
-    - import_tasks: ../../install_files/ansible-base/tasks/reboot.yml
-      tags: reboot
+    - import_tasks: ../../install_files/ansible-base/roles/reboot-if-first-install/tasks/reboot-no-check.yml
+      tags: reboot-no-check
   become: yes

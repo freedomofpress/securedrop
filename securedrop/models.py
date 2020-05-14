@@ -118,7 +118,7 @@ class Source(db.Model):
 
     @property
     def fingerprint(self):
-        return current_app.crypto_util.getkey(self.filesystem_id)
+        return current_app.crypto_util.get_fingerprint(self.filesystem_id)
 
     @fingerprint.setter
     def fingerprint(self, value):
@@ -131,7 +131,7 @@ class Source(db.Model):
     @property
     def public_key(self):
         # type: () -> str
-        return current_app.crypto_util.export_pubkey(self.filesystem_id)
+        return current_app.crypto_util.get_pubkey(self.filesystem_id)
 
     @public_key.setter
     def public_key(self, value):
@@ -184,6 +184,8 @@ class Source(db.Model):
 
 
 class Submission(db.Model):
+    MAX_MESSAGE_LEN = 100000
+
     __tablename__ = 'submissions'
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), unique=True, nullable=False)
@@ -278,6 +280,15 @@ class Reply(db.Model):
 
     def to_json(self):
         # type: () -> Dict[str, Union[str, int, bool]]
+        username = "deleted"
+        first_name = ""
+        last_name = ""
+        uuid = "deleted"
+        if self.journalist:
+            username = self.journalist.username
+            first_name = self.journalist.first_name
+            last_name = self.journalist.last_name
+            uuid = self.journalist.uuid
         json_submission = {
             'source_url': url_for('api.single_source',
                                   source_uuid=self.source.uuid),
@@ -286,10 +297,10 @@ class Reply(db.Model):
                                  reply_uuid=self.uuid),
             'filename': self.filename,
             'size': self.size,
-            'journalist_username': self.journalist.username,
-            'journalist_first_name': self.journalist.first_name,
-            'journalist_last_name': self.journalist.last_name,
-            'journalist_uuid': self.journalist.uuid,
+            'journalist_username': username,
+            'journalist_first_name': first_name,
+            'journalist_last_name': last_name,
+            'journalist_uuid': uuid,
             'uuid': self.uuid,
             'is_deleted_by_source': self.deleted_by_source,
         }
@@ -782,7 +793,7 @@ class InstanceConfig(db.Model):
         '''
 
         try:
-            return cls.query.filter(cls.valid_until == None).one()  # noqa: E711
+            return cls.query.filter(cls.valid_until == None).one()  # lgtm [py/test-equals-none]  # noqa: E711, E501
         except NoResultFound:
             current = cls()
             db.session.add(current)

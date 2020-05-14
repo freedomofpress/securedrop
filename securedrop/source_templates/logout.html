@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block body %}
+  <a href="{{ url_for('main.login') }}" class="btn pull-right"> {{ gettext('LOG IN') }}
+  </a>
+  <br class="clearfix">
+  <h1>{{ gettext('One more thing...') }}</h1>
+  <p id="click-new-identity-tor"> {{ gettext('Click the <img src={icon} alt="broom icon" width="16" height="16">&nbsp;<strong>New Identity</strong> button in your Tor browser\'s toolbar. This will clear your Tor browser activity data on this device.').format(icon=url_for('static', filename='i/torbroom-black.png'))  }}</p>
+{% endblock %}

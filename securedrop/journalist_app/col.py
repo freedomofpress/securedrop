@@ -33,7 +33,7 @@ def make_blueprint(config):
     def col(filesystem_id):
         form = ReplyForm()
         source = get_source(filesystem_id)
-        source.has_key = current_app.crypto_util.getkey(filesystem_id)
+        source.has_key = current_app.crypto_util.get_fingerprint(filesystem_id)
         return render_template("col.html", filesystem_id=filesystem_id,
                                source=source, form=form)
 

@@ -21,7 +21,7 @@ stick, with persistence enabled.
 Create the Key
 --------------
 
-#. Navigate to **Applications ▸ Terminal** to open a terminal |Terminal|.
+#. Navigate to **Applications ▸ System Tools ▸ Terminal** to open a terminal |Terminal|.
 #. In the terminal, run ``gpg --full-generate-key``:
 
    |GPG generate key|

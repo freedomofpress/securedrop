@@ -477,6 +477,31 @@ def test_authorized_user_can_get_single_reply(journalist_app, test_files,
             test_files['source'].replies[0].size
 
 
+def test_reply_of_deleted_journalist(journalist_app,
+                                     test_files_deleted_journalist,
+                                     journalist_api_token):
+    with journalist_app.test_client() as app:
+        reply_uuid = test_files_deleted_journalist['source'].replies[0].uuid
+        uuid = test_files_deleted_journalist['source'].uuid
+        response = app.get(url_for('api.single_reply',
+                                   source_uuid=uuid,
+                                   reply_uuid=reply_uuid),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+        assert response.json['uuid'] == reply_uuid
+        assert response.json['journalist_username'] == "deleted"
+        assert response.json['journalist_uuid'] == "deleted"
+        assert response.json['journalist_first_name'] == ""
+        assert response.json['journalist_last_name'] == ""
+        assert response.json['is_deleted_by_source'] is False
+        assert response.json['filename'] == \
+            test_files_deleted_journalist['source'].replies[0].filename
+        assert response.json['size'] == \
+            test_files_deleted_journalist['source'].replies[0].size
+
+
 def test_authorized_user_can_delete_single_submission(journalist_app,
                                                       test_submissions,
                                                       journalist_api_token):
@@ -627,7 +652,7 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
 
         # First we must encrypt the reply, or it will get rejected
         # by the server.
-        source_key = current_app.crypto_util.getkey(
+        source_key = current_app.crypto_util.get_fingerprint(
             test_source['source'].filesystem_id)
         reply_content = current_app.crypto_util.gpg.encrypt(
             'This is a plaintext reply', source_key).data

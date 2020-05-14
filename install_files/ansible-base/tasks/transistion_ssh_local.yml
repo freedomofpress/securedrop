@@ -24,7 +24,7 @@
   shell: sleep 2 && shutdown -r now
   async: 1
   poll: 0
-  when: aths_deletion_results|changed
+  when: aths_deletion_results.changed
 
 - name: Provide helpful user message and end early
   fail:
@@ -32,4 +32,4 @@
       Due to the transition from ssh-over-tor to ssh-over-localnet
       please run `./securedrop-admin tailsconfig` and then re-run
       `./securedrop-admin install` again to continue re-configuration.
-  when: aths_deletion_results|changed
+  when: aths_deletion_results.changed

@@ -42,6 +42,10 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
                 --allow-unsafe \
 		--output-file requirements/python3/securedrop-app-code-requirements.txt \
 		requirements/python3/securedrop-app-code-requirements.in
+	@$(DEVSHELL) pip-compile --generate-hashes \
+		--allow-unsafe \
+		--output-file requirements/python3/docker-requirements.txt \
+		requirements/python3/docker-requirements.in
 
 .PHONY: update-pip-requirements
 update-pip-requirements: update-admin-pip-requirements update-python3-requirements ## Update all requirements with pip-compile.
@@ -172,7 +176,7 @@ securedrop/config.py: ## Generate the test SecureDrop application config.
 		 ctx.update(dict((k, {"stdout":v}) for k,v in os.environ.items())); \
 		 ctx = open("config.py", "w").write(env.get_template("config.py.example").render(ctx))'
 	@echo >> securedrop/config.py
-	@echo "SUPPORTED_LOCALES = $$(if test -f /opt/venvs/securedrop-app-code/bin/python3; then ./securedrop/i18n_tool.py list-locales; else DOCKER_BUILD_VERBOSE=false $(DEVSHELL) ./i18n_tool.py list-locales; fi)" >> securedrop/config.py
+	@echo "SUPPORTED_LOCALES = $$(if test -f /opt/venvs/securedrop-app-code/bin/python3; then ./securedrop/i18n_tool.py list-locales --python; else DOCKER_BUILD_VERBOSE=false $(DEVSHELL) ./i18n_tool.py list-locales --python; fi)" >> securedrop/config.py
 	@echo
 
 .PHONY: test-config
@@ -181,7 +185,7 @@ test-config: securedrop/config.py
 .PHONY: dev
 dev:  ## Run the development server in a Docker container.
 	@echo "███ Starting development server..."
-	@DOCKER_RUN_ARGUMENTS='-p127.0.0.1:8080:8080 -p127.0.0.1:8081:8081' DOCKER_BUILD_VERBOSE='true' $(DEVSHELL) $(SDBIN)/run
+	@OFFSET_PORTS='false' DOCKER_BUILD_VERBOSE='true' $(DEVSHELL) $(SDBIN)/run
 	@echo
 
 .PHONY: docs
@@ -194,6 +198,13 @@ docs:  ## Build project documentation with live reload for editing.
 staging:  ## Create a local staging environment in virtual machines.
 	@echo "███ Creating staging environment..."
 	@$(SDROOT)/devops/scripts/create-staging-env
+	@echo
+
+
+.PHONY: testinfra
+testinfra:  ## Run infra tests against a local staging environment.
+	@echo "███ Creating staging environment..."
+	@MOLECULE_ACTION=verify $(SDROOT)/devops/scripts/create-staging-env
 	@echo
 
 .PHONY: libvirt-share
@@ -281,7 +292,7 @@ translate:  ## Update POT files from translated strings in source code.
 .PHONY: translation-test
 translation-test:  ## Run page layout tests in all supported languages.
 	@echo "Running translation tests..."
-	@$(DEVSHELL) $(SDBIN)/translation-test $${TESTFILES:-tests/pageslayout}
+	@$(DEVSHELL) $(SDBIN)/translation-test "$${LOCALE:-$(./i18n_tool.py list-locales)}"
 	@echo
 
 .PHONY: list-translators

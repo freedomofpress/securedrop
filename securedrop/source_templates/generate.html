@@ -7,7 +7,7 @@
   <p>{{ gettext('Please either write this codename down and keep it in a safe place, or memorize it.') }}</p>
 </aside>
 
-<p class="explanation">{{ gettext('This codename is what you will use in future visits to receive messages from our journalists in response to what you submit on the next screen.') }}</p>
+<p class="explanation">{{ gettext('This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen.') }}</p>
 
 <hr class="no-line">
 
@@ -38,6 +38,7 @@
 
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <input name="tab_id" type="hidden" value="{{ tab_id }}">
   <button type="submit" class="btn--space pull-right" id="continue-button">
      {{ gettext('SUBMIT DOCUMENTS') }}
   </button>

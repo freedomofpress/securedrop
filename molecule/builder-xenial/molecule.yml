@@ -39,6 +39,9 @@ provisioner:
   inventory:
     links:
       group_vars: ../../install_files/ansible-base/group_vars
+  config_options:
+    defaults:
+      interpreter_python: auto
   options:
     e: "@ansible-override-vars.yml"
   env:

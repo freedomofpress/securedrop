@@ -6,6 +6,5 @@
 # 1. Set up HidServAuth in your torrc with the values from app-ssh-aths and mon-ssh-aths
 # 2. Replace the IP addresses here with the corresponding .onion addresses
 #
-app ansible_ssh_host=10.20.1.2 ansible_ssh_port=22
-mon ansible_ssh_host=10.20.2.2 ansible_ssh_port=22
-
+app ansible_host=10.20.1.2 ansible_port=22
+mon ansible_host=10.20.2.2 ansible_port=22

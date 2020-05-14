@@ -1,10 +1,12 @@
 from . import functional_test as ft
 from . import journalist_navigation_steps
+from . import source_navigation_steps
 
 
 class TestAdminInterface(
         ft.FunctionalTest,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
+        journalist_navigation_steps.JournalistNavigationStepsMixin,
+        source_navigation_steps.SourceNavigationStepsMixin):
 
     def test_admin_interface(self):
         self._admin_logs_in()
@@ -61,3 +63,26 @@ class TestAdminInterface(
         self._admin_adds_a_user(is_admin=True)
         self._new_admin_user_can_log_in()
         self._admin_can_edit_new_user()
+
+    def test_disallow_file_submission(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_visits_system_config_page()
+        self._admin_disallows_document_uploads()
+
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_does_not_sees_document_attachment_item()
+
+    def test_allow_file_submission(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_visits_system_config_page()
+        self._admin_disallows_document_uploads()
+        self._admin_allows_document_uploads()
+
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_sees_document_attachment_item()

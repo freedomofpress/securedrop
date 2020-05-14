@@ -7,6 +7,7 @@ import re
 import pexpect
 import socket
 import sys
+import syslog as log
 
 from journalist_gui import updaterUI, strings, resources_rc  # noqa
 
@@ -35,9 +36,7 @@ def prevent_second_instance(app: QtWidgets.QApplication, name: str) -> None:  # 
         app.instance_binding.bind(IDENTIFIER)
     except OSError as e:
         if e.errno == ALREADY_BOUND_ERRNO:
-            err_dialog = QtWidgets.QMessageBox()
-            err_dialog.setText(name + strings.app_is_already_running)
-            err_dialog.exec()
+            log.syslog(log.LOG_NOTICE, name + strings.app_is_already_running)
             sys.exit()
         else:
             raise
@@ -129,12 +128,13 @@ class TailsconfigThread(QThread):
         tailsconfig_command = ("/home/amnesia/Persistent/"
                                "securedrop/securedrop-admin "
                                "tailsconfig")
+        self.failure_reason = ""
         try:
             child = pexpect.spawn(tailsconfig_command)
             child.expect('SUDO password:')
             self.output += child.before.decode('utf-8')
             child.sendline(self.sudo_password)
-            child.expect(pexpect.EOF)
+            child.expect(pexpect.EOF, timeout=120)
             self.output += child.before.decode('utf-8')
             child.close()
 
@@ -142,13 +142,15 @@ class TailsconfigThread(QThread):
             # failures in the Ansible output.
             if child.exitstatus:
                 self.update_success = False
-                self.failure_reason = strings.tailsconfig_failed_generic_reason  # noqa
+                if "[sudo via ansible" in self.output:
+                    self.failure_reason = strings.tailsconfig_failed_sudo_password
+                else:
+                    self.failure_reason = strings.tailsconfig_failed_generic_reason
             else:
                 self.update_success = True
         except pexpect.exceptions.TIMEOUT:
             self.update_success = False
-            self.failure_reason = strings.tailsconfig_failed_sudo_password
-
+            self.failure_reason = strings.tailsconfig_failed_timeout
         except subprocess.CalledProcessError:
             self.update_success = False
             self.failure_reason = strings.tailsconfig_failed_generic_reason

@@ -11,6 +11,19 @@ export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
 TOPLEVEL=$(git rev-parse --show-toplevel)
 BASE_OS=xenial
 
+## Get an integer offset for exposed ports, to support multiple containers
+get_port_offset() {
+    tries=0
+    while true
+    do
+        tries=$((tries + 1))
+	port_offset=$((tries * 100))
+        vnc=$((port_offset + 5909))
+        nc -z localhost "$vnc" || break
+    done
+    echo "$port_offset"
+}
+
 function docker_image() {
     docker build \
            ${DOCKER_BUILD_ARGUMENTS:-} \
@@ -23,13 +36,34 @@ function docker_image() {
 
 function docker_run() {
     find . \( -name '*.pyc' -o -name __pycache__ \) -delete
+    if [ "${OFFSET_PORTS:-true}" = "true" ]
+    then
+       port_offset="$(get_port_offset)"
+    else
+       port_offset=0
+    fi
+
+    SD_CONTAINER="securedrop-dev-${port_offset}"
+    SD_HOSTPORT_JI=$((port_offset + 8081))
+    SD_HOSTPORT_SI=$((port_offset + 8080))
+    SD_HOSTPORT_VNC=$((port_offset + 5909))
+
+    echo "************************************************************"
+    echo "Exposed Docker ports will be available on localhost with"
+    echo "Port offset: $port_offset"
+    echo "Source interface: $SD_HOSTPORT_SI"
+    echo "Journalist interface: $SD_HOSTPORT_JI"
+    echo "VNC: $SD_HOSTPORT_VNC"
+    echo "************************************************************"
 
     # The --shm-size argument sets up dedicated shared memory for the
     # container. Our tests can fail with the default of 64m.
     docker run \
            --shm-size 2g \
-           -p 127.0.0.1:5909:5909 \
            --rm \
+           -p "127.0.0.1:${SD_HOSTPORT_VNC}:5909" \
+           -p "127.0.0.1:${SD_HOSTPORT_SI}:8080" \
+           -p "127.0.0.1:${SD_HOSTPORT_JI}:8081" \
            -e NUM_SOURCES \
            -e LC_ALL=C.UTF-8 \
            -e LANG=C.UTF-8 \
@@ -38,7 +72,7 @@ function docker_run() {
            --user "${USER:-root}" \
            --volume "${TOPLEVEL}:${TOPLEVEL}" \
            --workdir "${TOPLEVEL}/securedrop" \
-           --name securedrop-dev \
+           --name "${SD_CONTAINER}" \
            -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py3" "${@:2}"
 }
 

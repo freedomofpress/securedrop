@@ -13,7 +13,7 @@ from journalist_gui.SecureDropUpdater import prevent_second_instance
 
 
 @mock.patch('journalist_gui.SecureDropUpdater.sys.exit')
-@mock.patch('journalist_gui.SecureDropUpdater.QtWidgets.QMessageBox')
+@mock.patch('syslog.syslog')
 class TestSecondInstancePrevention(unittest.TestCase):
     def setUp(self):
         self.mock_app = mock.MagicMock()
@@ -206,6 +206,18 @@ class WindowTestCase(AppTestCase):
     def test_tailsconfigThread_sudo_password_is_wrong(self, pt):
         child = pt()
         before = MagicMock()
+        before.decode.return_value = "stuff[sudo via ansible, key=blahblahblah"
+        child.before = before
+        self.window.tails_thread.run()
+        self.assertNotIn("failed=0", self.window.output)
+        self.assertEqual(self.window.update_success, False)
+        self.assertEqual(self.window.failure_reason,
+                         strings.tailsconfig_failed_sudo_password)
+
+    @mock.patch('pexpect.spawn')
+    def test_tailsconfigThread_timeout(self, pt):
+        child = pt()
+        before = MagicMock()
         before.decode.side_effect = ["some data",
                                      pexpect.exceptions.TIMEOUT(1)]
         child.before = before
@@ -213,7 +225,7 @@ class WindowTestCase(AppTestCase):
         self.assertNotIn("failed=0", self.window.output)
         self.assertEqual(self.window.update_success, False)
         self.assertEqual(self.window.failure_reason,
-                         strings.tailsconfig_failed_sudo_password)
+                         strings.tailsconfig_failed_timeout)
 
     @mock.patch('pexpect.spawn')
     def test_tailsconfigThread_some_other_subprocess_error(self, pt):

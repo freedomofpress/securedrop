@@ -1,29 +1,10 @@
 ---
-# Meta handler to bounce tor service sanely. If the SSH connection
-# for the remote host is over Tor (i.e. host ends in `.onion`), then
-# bounce the tor service via fire-and-forget, wait, then reestablish
-# the connection after polling for the service to come back up.
 
-# Registering a concise variable for use in conditionals, essentially
-# deciding "Are we connected via SSH over Tor or not?"
-- name: Register host name to wait for.
-  set_fact:
-    _hostname_to_wait_for: "{{ remote_host_ref|default(ansible_host) }}"
-
-# If we're not connected over Tor, bounce the service as usual.
-- name: restart tor (simple)
-  service:
-    name: tor
-    state: restarted
-  when: not _hostname_to_wait_for.endswith('.onion')
-
-# As of Ansible v2.2, the `service` module is not compatible with the `async`
-# parameter. This was changed in 2.3.
-- name: restart tor (async)
+- name: restart tor service (async)
   shell: sleep 5 && service tor restart
   async: 3000
   poll: 0
-  when: _hostname_to_wait_for.endswith('.onion')
+
 
 # It's critical that we eliminate existing SSH connections, otherwise Ansible
 # will try to reuse the stale ControlPersist files, which no longer have an
@@ -37,13 +18,12 @@
       state: absent
   run_once: yes
   become: no
-  when: _hostname_to_wait_for.endswith('.onion')
 
 - name: Waiting for SSH connection (slow)...
   local_action: wait_for
   args:
-    host: "{{ _hostname_to_wait_for }}"
-    port: "{{ ansible_ssh_port|default(ansible_port|default(22)) }}"
+    host: "{{ remote_host_ref|default(ansible_host) }}"
+    port: "{{ ansible_port|default(ansible_port|default(22)) }}"
     delay: 30
     search_regex: OpenSSH
     state: started

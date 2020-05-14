@@ -7,42 +7,27 @@
 #   * Qubes (via Admin API)
 #
 # Set the VAGRANT_DEFAULT_PROVIDER env var to override autodetection.
+#
+# Defaults to `converge` action - override with MOLECULE_ACTION env var
 
 set -e
 set -o pipefail
 
 . ./devops/scripts/boot-strap-venv.sh
 
-securedrop_platform_suffix="-xenial"
+securedrop_staging_scenario="$(./devops/scripts/select-staging-env)"
 
-# Respect explicit choice of Vagrant provider if set.
-if [[ -n "${VAGRANT_DEFAULT_PROVIDER:-}" ]] ; then
-    securedrop_vm_provider="${VAGRANT_DEFAULT_PROVIDER}"
-# Check whether it appears we're running in Qubes, in which case the standard Vagrant
-# logic will not work at all, due to lack of nested virt support. The Qubes staging
-# environment uses Xenial template VMs only, so we also suppress the platform suffix.
-elif printenv | grep -q ^QUBES_ ; then
-    securedrop_vm_provider="qubes"
-    securedrop_platform_suffix=""
-elif [[ "${OSTYPE:-}" == "linux-gnu" ]]; then
-    # Default to Libvirt for Linux users, which works well with Tails VM virtualization.
-    securedrop_vm_provider="libvirt"
+if [ -z "$TEST_DATA_FILE" ]
+then
+    EXTRA_ANSIBLE_ARGS=()
 else
-    # Default to VirtualBox, since it's the safest bet.
-    securedrop_vm_provider="virtualbox"
+    if [ "${MOLECULE_ACTION:-converge}" = 'converge' ]
+    then
+        EXTRA_ANSIBLE_ARGS=(-- --extra-vars test_data_file"=""${TEST_DATA_FILE}")
+    fi
 fi
 
-# Expect the scenario to reside in the molecule/ directory.
-securedrop_staging_scenario="${securedrop_vm_provider}-staging${securedrop_platform_suffix}"
-
-# Check whether identified scenario actually exists
-if [[ ! -d "molecule/${securedrop_staging_scenario}" ]] ; then
-    printf "Scenario '%s' not found\n" "${securedrop_staging_scenario}"
-    printf "Export VAGRANT_DEFAULT_PROVIDER with a supported scenario.\n"
-    exit 1
-else
-    printf "Creating staging environment via '%s'...\n" "${securedrop_staging_scenario}"
-fi
+printf "Creating staging environment via '%s'...\n" "${securedrop_staging_scenario}"
 
 # Run it!
 virtualenv_bootstrap
@@ -50,5 +35,5 @@ virtualenv_bootstrap
 if [ "$USER" = "sdci" ]; then
     molecule test -s "${securedrop_staging_scenario}"
 else
-    molecule converge -s "${securedrop_staging_scenario}"
+    molecule "${MOLECULE_ACTION:-converge}" -s "${securedrop_staging_scenario}" "${EXTRA_ANSIBLE_ARGS[@]}"
 fi

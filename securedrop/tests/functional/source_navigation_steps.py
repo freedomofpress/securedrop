@@ -2,6 +2,9 @@ import tempfile
 import time
 import json
 
+import pytest
+from selenium.common.exceptions import NoSuchElementException
+
 
 class SourceNavigationStepsMixin:
     def _is_on_source_homepage(self):
@@ -15,6 +18,9 @@ class SourceNavigationStepsMixin:
 
     def _is_on_generate_page(self):
         return self.wait_for(lambda: self.driver.find_element_by_id("create-form"))
+
+    def _is_on_logout_page(self):
+        return self.wait_for(lambda: self.driver.find_element_by_id("click-new-identity-tor"))
 
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
@@ -37,6 +43,9 @@ class SourceNavigationStepsMixin:
         # a diceware codename they can use for subsequent logins
         assert self._is_on_generate_page()
 
+    def _source_regenerates_codename(self):
+        self.safe_click_by_id("regenerate-submit")
+
     def _source_chooses_to_submit_documents(self):
         self._source_clicks_submit_documents_on_homepage()
 
@@ -45,7 +54,7 @@ class SourceNavigationStepsMixin:
         assert len(codename.text) > 0
         self.source_name = codename.text
 
-    def _source_shows_codename(self):
+    def _source_shows_codename(self, verify_source_name=True):
         content = self.driver.find_element_by_id("codename-hint-content")
         assert not content.is_displayed()
 
@@ -54,7 +63,8 @@ class SourceNavigationStepsMixin:
         self.wait_for(lambda: content.is_displayed())
         assert content.is_displayed()
         content_content = self.driver.find_element_by_css_selector("#codename-hint-content p")
-        assert content_content.text == self.source_name
+        if verify_source_name:
+            assert content_content.text == self.source_name
 
     def _source_hides_codename(self):
         content = self.driver.find_element_by_id("codename-hint-content")
@@ -188,7 +198,7 @@ class SourceNavigationStepsMixin:
 
     def _source_logs_out(self):
         self.safe_click_by_id("logout")
-        self.wait_for(lambda: ("Submit for the first time" in self.driver.page_source))
+        assert self._is_on_logout_page()
 
     def _source_not_found(self):
         self.driver.get(self.source_location + "/unlikely")
@@ -211,5 +221,26 @@ class SourceNavigationStepsMixin:
         notification = self.driver.find_element_by_css_selector(".important")
 
         if not hasattr(self, "accept_languages"):
-            expected_text = "Your session timed out due to inactivity."
+            expected_text = "You were logged out due to inactivity."
+            assert expected_text in notification.text
+
+    def _source_sees_document_attachment_item(self):
+        assert self.driver.find_element_by_class_name("attachment") is not None
+
+    def _source_does_not_sees_document_attachment_item(self):
+        with pytest.raises(NoSuchElementException):
+            self.driver.find_element_by_class_name("attachment")
+
+    def _source_sees_already_logged_in_in_other_tab_message(self):
+        notification = self.driver.find_element_by_css_selector(".notification")
+
+        if not hasattr(self, "accepted_languages"):
+            expected_text = "You are already logged in."
+            assert expected_text in notification.text
+
+    def _source_sees_redirect_already_logged_in_message(self):
+        notification = self.driver.find_element_by_css_selector(".notification")
+
+        if not hasattr(self, "accepted_languages"):
+            expected_text = "You were redirected because you are already logged in."
             assert expected_text in notification.text

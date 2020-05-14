@@ -34,6 +34,36 @@
   roles:
     - { role: prepare-servers }
 
+- name: Extract test data
+  hosts: app-staging
+  environment:
+    LC_ALL: C
+  become: yes
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  tasks:
+    - name: Clear existing application data
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /var/lib/securedrop
+        - /var/www/securedrop
+      when: test_data_file is defined
+    - name: Copy test data to application server
+      synchronize:
+        src: "test-data/{{ test_data_file }}"
+        dest: /tmp/{{ test_data_file }}
+        partial: yes
+      when: test_data_file is defined
+    - name: Extract test data
+      unarchive:
+        dest: /
+        remote_src: yes
+        src: "/tmp/{{ test_data_file }}"
+        exclude: "var/lib/tor,etc/tor/torrc"
+      when: test_data_file is defined
+
 - name: Add FPF apt repository and install base packages.
   hosts: staging
   environment:
@@ -103,6 +133,7 @@
     LC_ALL: C
   max_fail_percentage: 0
   any_errors_fatal: yes
-  roles:
-    - role: reboot-if-first-install
+  tasks:
+    - name: Reboot using generic module
+      include_tasks: "tasks/reboot.yml"
   become: yes

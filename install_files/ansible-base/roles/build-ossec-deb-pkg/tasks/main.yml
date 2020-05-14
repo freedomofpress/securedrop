@@ -12,10 +12,9 @@
 
 - name: Install python-requests for URL fetching
   apt:
-    name: python-requests
+    name: python3-requests
     state: present
     update_cache: yes
-    cache_valid_time: 3600
 
 - name: Copy over current directory for repo build
   synchronize:
@@ -75,6 +74,12 @@
   template:
     src: "{{ purpose }}-preloaded-vars.conf"
     dest: /tmp/ossec-hids-{{ ossec_version }}/etc/preloaded-vars.conf
+
+- name: Disable JIT in OSSEC Makefile
+  lineinfile:
+    path: /tmp/ossec-hids-{{ ossec_version }}/src/Makefile
+    regexp: '^USE_PCRE2_JIT=yes$'
+    line: 'USE_PCRE2_JIT=no'
 
 - name: Run OSSEC installer script on extracted source.
   command: /tmp/ossec-hids-{{ ossec_version }}/install.sh
