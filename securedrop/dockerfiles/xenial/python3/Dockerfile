@@ -31,8 +31,8 @@ COPY ./tor_project_public.pub /opt/
 
 ENV TBB_VERSION 9.0.9
 RUN gpg --import /opt/tor_project_public.pub && \
-    wget  https://dist.torproject.org/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
-    wget https://dist.torproject.org/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
+    wget  https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
+    wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
     gpg --verify tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     tar -xvJf tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     mkdir -p /root/.local/tbb && mv tor-browser_en-US /root/.local/tbb &&\

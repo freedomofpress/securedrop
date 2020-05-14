@@ -14,6 +14,7 @@
 * Added confirmation message when document submission preference changed in Journalist Interface (#5046)
 * Updated Source Interface `/lookup` design (#5096)
 
+
 ### Journalist API
 
 * Improved response time of `/get_all_sources` endpoint by caching source public keys (#5184)
@@ -32,6 +33,7 @@
 * Bugfix: Updated GUI updater to return correct error when Tails configuration script times out (#5169)
 * Updated GUI updater to log and exit duplicate instances (#5067)
 * Added option to preserve Tor service configuration when restoring from backups (#5115)
+
 
 ### Developer Workflow
 
