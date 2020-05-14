@@ -302,7 +302,7 @@ workflows:
             branches:
               only:
                 - master
-      - lint
+      - lint:
           filters:
             branches:
               ignore:
