@@ -15,7 +15,7 @@ Standalone (HVM) Qubes VMs for use with staging:
 - ``sd-staging-app-base``, a base VM for the *SecureDrop Application Server*
 - ``sd-staging-mon-base``, a base VM for the *SecureDrop Monitor Server*
 
-While the development VM, ``sd-dev``, is based on Debian 9, the other VMs
+While the development VM, ``sd-dev``, is based on Debian 10, the other VMs
 will be based on Ubuntu Xenial.
 
 .. note:: The staging server VM names were recently changed from ``sd-app`` and
