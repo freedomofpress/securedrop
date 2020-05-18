@@ -224,8 +224,8 @@ Log out, then log in again. Verify that libvirt is installed and KVM is availabl
    kvm-ok
 
 
-Debian 9 setup
-^^^^^^^^^^^^^^
+Debian stable setup
+^^^^^^^^^^^^^^^^^^^
 
 Install Vagrant, libvirt, QEMU, and their dependencies:
 

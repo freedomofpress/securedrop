@@ -52,19 +52,23 @@ Install Docker_.
 Qubes
 ~~~~~
 
-Create a StandaloneVM based on Debian 9, called ``sd-dev``.
+Create a StandaloneVM based on Debian 10, called ``sd-dev``.
 You can use the **Q** menu to configure a new VM, or run
 the following in ``dom0``:
 
 .. code:: sh
 
-   qvm-clone --class StandaloneVM debian-9 sd-dev
+   qvm-clone --class StandaloneVM debian-10 sd-dev
    qvm-start sd-dev
    qvm-sync-appmenus sd-dev
 
 The commands above will created a new StandaloneVM, boot it, then update
 the Qubes menus with applications within that VM. Open a terminal in
 ``sd-dev``, and proceed with installing `Docker CE for Debian`_.
+
+.. tip:: If you experience an error with the ``aufs-dkms`` dependency when
+   installing Docker CE, you can safely skip that package using the
+   ``--no-install-recommends`` argument for ``apt``.
 
 Fork & Clone the Repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
