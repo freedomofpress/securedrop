@@ -3,6 +3,13 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+## 1.4.0~rc1
+
+
+
+>>>>>>> Post-release version bump from 1.3.0 to 1.4.0~rc1
 ## 1.3.0
 =======
 ## 1.3.0~rc2
