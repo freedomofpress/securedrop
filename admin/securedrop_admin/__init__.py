@@ -24,6 +24,7 @@ instances.
 """
 
 import argparse
+import ipaddress
 import logging
 import os
 import io
@@ -33,6 +34,7 @@ import sys
 import json
 import base64
 import prompt_toolkit
+from prompt_toolkit.document import Document
 from prompt_toolkit.validation import Validator, ValidationError
 import yaml
 from pkg_resources import parse_version
@@ -47,6 +49,9 @@ SUPPORT_URL = 'https://support.freedom.press'
 EXIT_SUCCESS = 0
 EXIT_SUBPROCESS_ERROR = 1
 EXIT_INTERRUPT = 2
+
+MAX_NAMESERVERS = 3
+LIST_SPLIT_RE = re.compile(r"\s*,\s*|\s+")
 
 
 class FingerprintException(Exception):
@@ -83,11 +88,34 @@ class SiteConfig(object):
 
     class ValidateIP(Validator):
         def validate(self, document):
-            if re.match(r'((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}$',  # lgtm [py/regex/unmatchable-dollar] # noqa: E501
-                        document.text):
+            try:
+                ipaddress.ip_address(document.text)
                 return True
-            raise ValidationError(
-                message="An IP address must be something like 10.240.20.83")
+            except ValueError as e:
+                raise ValidationError(message=str(e))
+
+    class ValidateNameservers(Validator):
+        def validate(self, document):
+            candidates = LIST_SPLIT_RE.split(document.text)
+            if len(candidates) > MAX_NAMESERVERS:
+                raise ValidationError(message="Specify no more than three nameservers.")
+            try:
+                all(map(ipaddress.ip_address, candidates))
+            except ValueError:
+                raise ValidationError(
+                    message=(
+                        "DNS server(s) should be a space/comma-separated list "
+                        "of up to {} IP addresses"
+                    ).format(MAX_NAMESERVERS)
+                )
+            return True
+
+    @staticmethod
+    def split_list(text):
+        """
+        Splits a string containing a list of values separated by commas or whitespace.
+        """
+        return LIST_SPLIT_RE.split(text)
 
     class ValidatePath(Validator):
         def __init__(self, basedir):
@@ -273,10 +301,10 @@ class SiteConfig(object):
              SiteConfig.ValidateNotEmpty(),
              None,
              lambda config: True],
-            ['dns_server', '8.8.8.8', str,
-             'DNS server specified during installation',
-             SiteConfig.ValidateNotEmpty(),
-             None,
+            ['dns_server', ['8.8.8.8', '8.8.4.4'], list,
+             'DNS server(s)',
+             SiteConfig.ValidateNameservers(),
+             SiteConfig.split_list,
              lambda config: True],
             ['securedrop_app_gpg_public_key', 'SecureDrop.asc', str,
              'Local filepath to public key for ' +
@@ -393,14 +421,15 @@ class SiteConfig(object):
              lambda config: True],
         ]
 
-    def load_and_update_config(self):
+    def load_and_update_config(self, validate: bool = True, prompt: bool = True):
         if self.exists():
-            self.config = self.load()
+            self.config = self.load(validate)
 
-        return self.update_config()
+        return self.update_config(prompt)
 
-    def update_config(self):
-        self.config.update(self.user_prompt_config())
+    def update_config(self, prompt: bool = True):
+        if prompt:
+            self.config.update(self.user_prompt_config())
         self.save()
         self.validate_gpg_keys()
         self.validate_journalist_alert_email()
@@ -559,10 +588,56 @@ class SiteConfig(object):
                            site_config_file,
                            default_flow_style=False)
 
-    def load(self):
+    def clean_config(self, config: dict) -> dict:
+        """
+        Cleans a loaded config without prompting.
+
+        For every variable defined in self.desc, validate its value in
+        the supplied configuration dictionary, run the value through
+        its defined transformer, and add the result to a clean version
+        of the configuration.
+
+        If no configuration variable triggers a ValidationError, the
+        clean configuration will be returned.
+        """
+        clean_config = {}
+        clean_config.update(config)
+        for desc in self.desc:
+            var, default, vartype, prompt, validator, transform, condition = desc
+            if var in clean_config:
+                value = clean_config[var]
+                if isinstance(value, list):
+                    text = " ".join(str(v) for v in value)
+                elif isinstance(value, bool):
+                    text = "yes" if value else "no"
+                else:
+                    text = str(value)
+
+                if validator is not None:
+                    try:
+                        validator.validate(Document(text))
+                    except ValidationError as e:
+                        sdlog.error(e)
+                        sdlog.error(
+                            'Error loading configuration. '
+                            'Please run "securedrop-admin sdconfig" again.'
+                        )
+                        raise
+                clean_config[var] = transform(text) if transform else text
+        return clean_config
+
+    def load(self, validate=True):
+        """
+        Loads the site configuration file.
+
+        If validate is True, then each configuration variable that has
+        an entry in self.desc is validated and transformed according
+        to current specifications.
+        """
         try:
             with io.open(self.args.site_config) as site_config_file:
-                return yaml.safe_load(site_config_file)
+                c = yaml.safe_load(site_config_file)
+                return self.clean_config(c) if validate else c
         except IOError:
             sdlog.error("Config file missing, re-run with sdconfig")
             raise
@@ -586,7 +661,7 @@ def setup_logger(verbose=False):
 
 def sdconfig(args):
     """Configure SD site settings"""
-    SiteConfig(args).load_and_update_config()
+    SiteConfig(args).load_and_update_config(validate=False)
     return 0
 
 
@@ -659,7 +734,7 @@ def find_or_generate_new_torv3_keys(args):
 
 def install_securedrop(args):
     """Install/Update SecureDrop"""
-    SiteConfig(args).load()
+    SiteConfig(args).load_and_update_config(prompt=False)
 
     sdlog.info("Now installing SecureDrop on remote servers.")
     sdlog.info("You will be prompted for the sudo password on the "

@@ -25,7 +25,9 @@ apache_listening_address: 127.0.0.1
 apache_source_log: /var/log/apache2/source-error.log
 apache_allow_from: 127.0.0.1
 
-dns_server: "8.8.8.8"
+dns_server:
+  - 8.8.8.8
+  - 8.8.4.4
 mon_ip: 10.0.1.3
 app_ip: 10.0.1.2
 
