@@ -1,5 +1,7 @@
 ---
-dns_server: "8.8.8.8"
+dns_server:
+  - 8.8.8.8
+  - 8.8.4.4
 
 # Hardcoding the IPv4 addresses will ONLY work with local testing in Vagrant.
 app_ip: 10.0.1.2

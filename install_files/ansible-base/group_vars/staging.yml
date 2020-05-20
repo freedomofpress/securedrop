@@ -1,6 +1,8 @@
 ---
 ### General (used by more than one role) ###
-dns_server: "8.8.8.8"
+dns_server:
+  - 8.8.8.8
+  - 8.8.4.4
 
 ### Used by the common role ###
 ssh_users: "vagrant"
