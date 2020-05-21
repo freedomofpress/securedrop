@@ -235,8 +235,10 @@ Now you're ready to bump the SecureDrop version on your new branch. There are a 
 files that'll need to be updated in order to set up the upgrade test for the next release. We do
 this by running the version-updater script and specifying the new version number, which will be the
 next minor version with ``~rc1`` appended. For example, if the release is 1.3.0, then you'll run: 
-``./update_version.sh 1.4.0~rc1``. Accept all the default changes from the script. You'll only need
-to add your commit message. Once you're done, make a PR to merge these changes into ``develop``.
+``securedrop/bin/dev-shell ../update_version.sh 1.4.0~rc1``  (``dev-shell`` is a script that starts
+a container so that we can ensure ``dch`` is installed). Accept all the default changes from the
+``update_version.sh`` script. You'll only need to add your commit message. Once you're done, sign
+your commit and make a PR to merge these changes into ``develop``.
 
 The only thing left to do is to monitor the `FPF support portal <https://support.freedom.press>`_
 and the `SecureDrop community support forum <https://forum.securedrop.org/c/support>`_ for any new
