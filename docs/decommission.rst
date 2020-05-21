@@ -25,6 +25,7 @@ SecureDrop instance.
       have a non-standard setup, you may have more than one *SVS USB*. It is
       important that you locate all of these USBs, since they hold the most
       sensitive data.
+
 #. **Optional: Save a backup.**
    If you want to save a backup of the *Application Server* (for example, to reinstall SecureDrop in the future using the same `.onion` address), follow
    our :doc:`backup guidelines <backup_and_restore>`. Once the backup has been
@@ -38,12 +39,31 @@ SecureDrop instance.
    them on the *SVS*, be sure you maintain access to the *Submission Private
    Key* found on the *SVS* so that you can decrypt them at a later time.
 #. **Optional: Delete submissions on the server.**
+   Log into the *Journalist Interface* and delete all sources to take advantage
+   of SecureDrop's secure deletion properties. Note that depending on the
+   number of sources on your server, it may take anywhere from several minutes
+   to an hour or more for the submissions to be completely deleted from the
+   server.
 
-   Log into the *Journalist Interface* and delete all sources to take advantage of SecureDrop's secure deletion properties. Depending on the number of sources on the server, you may need to perform this deletion in batches; please contact Support for assistance.
+   You can either leave the server ample time to complete this operation, or
+   monitor the progress by SSHing to the Application server and running
+
+   .. code:: sh
+
+      sudo journalctl -f
+
+   You will see repeated log lines that contain the following:
+
+   .. code:: sh
+
+      [Timestamp] app python [...] INFO Clearing shredder
+      [Timestamp] app python [...] INFO Files to delete: <number>
+
+   When the number of files to delete reaches 0, the process is complete.
 #. **Disconnect the firewall and the servers from the internet.**
    Be sure to inform your network administrator of any changes to devices on
    your network.
-#. **Wipe or destroy the USB drives.**
+#. **Wipe and destroy the USB drives.**
    Because the USB drives used for SecureDrop are all LUKS-encrypted,
    reformatting the USB drives (in particular, overwriting a portion of internal
    storage called the **LUKS header**) should be sufficient to make any existing
@@ -61,7 +81,7 @@ SecureDrop instance.
 
    You may also choose to destroy the drives by physical means, such as using a
    hammer or purpose-built shredder to pulverize or destroy the drive.
-#. **Wipe or destroy the storage drives on the servers.**
+#. **Wipe and destroy the storage drives on the servers.**
    SecureDrop submissions are stored GPG-encrypted on the *Application Server*.
    Unless your SecureDrop *Submission Key* is compromised (or a significant
    vulnerability in GPG is discovered), access to the servers does not guarantee
@@ -70,10 +90,10 @@ SecureDrop instance.
    That said, there may still be some sensitive information on the servers,
    including system logs and the SecureDrop database, which would yield
    information on the number of submissions and replies stored on the server.
-   This risk is partially mitigated by securely deleting submissions from the server, as described in a previous step.
-
-   Physically destroying or encrypting the storage drives on the servers are the
-   best ways to ensure that data on the drives cannot be recovered.
+   This risk is partially mitigated by securely deleting submissions from the
+   server, as described in a previous step; however, physically destroying or
+   encrypting the storage drives on the servers are the best ways to ensure
+   that data on the drives cannot be recovered.
 
    Physically destroying SSD drives is not as straightforward as destroying
    older hard drives, but drives can be pulverized, shredded, or incinerated,
@@ -91,10 +111,10 @@ SecureDrop instance.
    select "yes."
 #. **Destroy other Transfer or Export media, if applicable.**
 #. **Optional: Factory-reset the firewall.**
+#. **Update your Landing Page (tips page) to reflect the fact that your organization no longer has SecureDrop.**
 #. **Notify the SecureDrop Support team that your instance is no longer active.**
    If you have any questions about the decommissioning process, or about other
    secure communications options, please feel free to contact us at
    securedrop@freedom.press
    (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__)
    or via the `support portal <https://support.freedom.press/>`__.
-#. Update your Landing Page (tips page) to reflect the fact that your organization no longer has SecureDrop.
