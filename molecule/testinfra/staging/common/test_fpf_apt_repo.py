@@ -44,7 +44,7 @@ def test_fpf_apt_repo_fingerprint(host):
 
     fpf_gpg_pub_key_info = """/etc/apt/trusted.gpg.d/securedrop-keyring.gpg
 ---------------------------------------------
-pub   4096R/00F4AD77 2016-10-20 [expires: 2020-06-30]
+pub   4096R/00F4AD77 2016-10-20 [expires: 2021-06-30]
       Key fingerprint = 2224 5C81 E3BA EB41 38B3  6061 310F 5612 00F4 AD77
 uid                  SecureDrop Release Signing Key"""
 
