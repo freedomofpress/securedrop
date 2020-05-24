@@ -12,7 +12,8 @@ import i18n
 from db import db
 from models import (get_one_or_else, Source, Journalist, InvalidUsernameException,
                     WrongPasswordException, FirstOrLastNameError, LoginThrottledException,
-                    BadTokenException, SourceStar, PasswordError, Submission, RevokedToken)
+                    BadTokenException, SourceStar, PasswordError, Submission, RevokedToken,
+                    InvalidPasswordLength)
 from store import add_checksum_for_file
 
 import typing
@@ -77,7 +78,8 @@ def validate_user(username, password, token, error_message=None):
     except (InvalidUsernameException,
             BadTokenException,
             WrongPasswordException,
-            LoginThrottledException) as e:
+            LoginThrottledException,
+            InvalidPasswordLength) as e:
         current_app.logger.error("Login for '{}' failed: {}".format(
             username, e))
         if not error_message:
