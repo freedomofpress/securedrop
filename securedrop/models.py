@@ -73,6 +73,9 @@ class Source(db.Model):
     # keep track of how many interactions have happened, for filenames
     interaction_count = Column(Integer, default=0, nullable=False)
 
+    # when deletion of the source was requested
+    deleted_at = Column(DateTime)
+
     # Don't create or bother checking excessively long codenames to prevent DoS
     NUM_WORDS = 7
     MAX_CODENAME_LEN = 128

@@ -14,6 +14,7 @@ from . import utils
 import version
 
 from db import db
+from journalist_app.utils import delete_collection
 from models import InstanceConfig, Source, Reply
 from source_app import main as source_app_main
 from source_app import api as source_app_api
@@ -653,11 +654,7 @@ def test_source_is_deleted_while_logged_in(source_app):
 
             # Now the journalist deletes the source
             filesystem_id = source_app.crypto_util.hash_codename(codename)
-            source_app.crypto_util.delete_reply_keypair(filesystem_id)
-            source = Source.query.filter_by(
-                filesystem_id=filesystem_id).one()
-            db.session.delete(source)
-            db.session.commit()
+            delete_collection(filesystem_id)
 
             # Source attempts to continue to navigate
             resp = app.post(url_for('main.lookup'), follow_redirects=True)
@@ -668,8 +665,8 @@ def test_source_is_deleted_while_logged_in(source_app):
             assert 'codename' not in session
 
         logger.assert_called_once_with(
-            "Found no Sources when one was expected: "
-            "No row was found for one()")
+            "Found no Sources when one was expected: No row was found for one()"
+        )
 
 
 def test_login_with_invalid_codename(source_app):
