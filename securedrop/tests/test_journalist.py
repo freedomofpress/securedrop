@@ -614,6 +614,21 @@ def test_max_password_length():
                    password=overly_long_password)
 
 
+def test_login_password_too_long(journalist_app, test_journo, mocker):
+    mocked_error_logger = mocker.patch('journalist.app.logger.error')
+    with journalist_app.test_client() as app:
+        resp = app.post(url_for('main.login'),
+                        data=dict(username=test_journo['username'],
+                                  password='a' * (Journalist.MAX_PASSWORD_LEN + 1),
+                                  token=TOTP(test_journo['otp_secret']).now()))
+    assert resp.status_code == 200
+    text = resp.data.decode('utf-8')
+    assert "Login failed" in text
+    mocked_error_logger.assert_called_once_with(
+        "Login for '{}' failed: Password too long (len={})".format(
+            test_journo['username'], Journalist.MAX_PASSWORD_LEN + 1))
+
+
 def test_min_password_length():
     """Creating a Journalist with a password that is smaller than the
        minimum password length should raise an exception. This uses the
