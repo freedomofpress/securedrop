@@ -22,8 +22,7 @@ import os
 import subprocess
 
 
-def shred(path, delete=True):
-    # type: (str, bool) -> None
+def shred(path: str, delete: bool = True) -> None:
     """
     Run shred on the file at the given path.
 
@@ -51,8 +50,7 @@ def shred(path, delete=True):
     subprocess.check_call(cmd)
 
 
-def secure_delete(path):
-    # type: (str) -> None
+def secure_delete(path: str) -> None:
     """
     Securely deletes the file at ``path``.
 
@@ -87,8 +85,7 @@ def secure_delete(path):
         os.rmdir(d)
 
 
-def check_secure_delete_capability():
-    # type: () -> bool
+def check_secure_delete_capability() -> bool:
     """
     Checks the availability of the program we use for secure deletion.
 
