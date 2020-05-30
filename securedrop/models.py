@@ -647,6 +647,10 @@ class Journalist(db.Model):
             raise InvalidUsernameException(
                 "invalid username '{}'".format(username))
 
+        if user.username == 'deleted' and user.uuid == 'deleted':
+            raise InvalidUsernameException(
+                "Invalid username '{}'".format(username))
+
         if LOGIN_HARDENING:
             cls.throttle_login(user)
 
