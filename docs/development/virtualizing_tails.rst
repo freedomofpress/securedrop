@@ -69,7 +69,7 @@ to Tails, and enter an administration password and start Tails.
 1. Copy the following patch and save it as ``installer.patch`` in a folder in
    your Tails VM:
 
-.. code:: python
+.. code:: Diff
 
   --- /usr/lib/python2.7/dist-packages/tails_installer/creator.py      2018-01-22 14:59:40.000000000 +0100
   +++ /usr/lib/python2.7/dist-packages/tails_installer/creator.py.mod  2018-03-05 05:15:00.000000000 -0800
@@ -144,7 +144,7 @@ Now in your booted Tails VM you should:
 1. Configure an admin password when prompted.
 2. Copy the following patch to the Tails VM and save it as ``persistence.patch``:
 
-.. code:: python
+.. code:: Diff
 
    --- /usr/share/perl5/Tails/Persistence/Setup.pm	2017-06-30 09:56:25.000000000 +0000
    +++ /usr/share/perl5/Tails/Persistence/Setup.pm.mod	2017-07-20 07:17:48.472000000 +0000
