@@ -8,6 +8,7 @@ docker-py
 dnspython
 flake8
 html-linter
+importlib-resources
 markupsafe>=1.1
 molecule>=2.22
 mypy>=0.761
