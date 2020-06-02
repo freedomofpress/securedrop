@@ -107,7 +107,7 @@ Roll Back to the Old Kernel
 Inspect the file ``/boot/grub/grub.cfg``. You should find a ``menuentry`` line
 with the same text that you selected during boot, e.g.:
 
-.. code:: sh
+.. code:: none
 
   submenu 'Advanced options for Ubuntu'…
 
