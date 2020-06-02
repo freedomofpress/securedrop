@@ -37,8 +37,9 @@ def name_length_validation(form, field):
             .format(max_chars=Journalist.MAX_NAME_LEN)))
 
 
-def check_username_deleted(form, field):
-    if field.data == 'deleted':
+def check_invalid_usernames(form, field):
+    invalid_usernames = ['deleted']
+    if field.data in invalid_usernames:
         raise ValidationError(gettext(
             "Invalid username '{}'".format(field.data)))
 
@@ -46,7 +47,7 @@ def check_username_deleted(form, field):
 class NewUserForm(FlaskForm):
     username = StringField('username', validators=[
         InputRequired(message=gettext('This field is required.')),
-        minimum_length_validation, check_username_deleted
+        minimum_length_validation, check_invalid_usernames
     ])
     first_name = StringField('first_name', validators=[name_length_validation, Optional()])
     last_name = StringField('last_name', validators=[name_length_validation, Optional()])
