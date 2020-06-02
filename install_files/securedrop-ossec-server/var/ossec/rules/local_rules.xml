@@ -224,3 +224,13 @@
     <description>Indicates that there are files in the submission area without corresponding submissions in the database.</description>
   </rule>
 </group>
+
+<group name="system_configuration">
+  <rule id="400900" level="12" >
+    <if_sid>530</if_sid>
+    <options>alert_by_email</options> <!-- force email to be sent -->
+    <match>ossec: output: '/var/ossec/checksdconfig.py'</match>
+    <regex>System configuration error:</regex>
+    <description>Indicates a problem with the configuration of the SecureDrop servers.</description>
+  </rule>
+</group>
