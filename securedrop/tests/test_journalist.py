@@ -1076,6 +1076,23 @@ def test_admin_add_user(journalist_app, test_admin):
                                                uid=new_user.id))
 
 
+def test_admin_add_user_with_invalid_username(journalist_app, test_admin):
+    username = 'deleted'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for('admin.add_user'),
+                            data=dict(username=username,
+                                      first_name='',
+                                      last_name='',
+                                      password=VALID_PASSWORD,
+                                      is_admin=None))
+
+    assert "Invalid username '{}'".format(username) in resp.data.decode('utf-8')
+
+
 def test_admin_add_user_without_username(journalist_app, test_admin):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
