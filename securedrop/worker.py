@@ -11,8 +11,7 @@ from rq.registry import StartedJobRegistry
 from sdconfig import config
 
 
-def create_queue(name=None, timeout=3600):
-    # type: (str, int) -> Queue
+def create_queue(name: str = None, timeout: int = 3600) -> Queue:
     """
     Create an rq ``Queue`` named ``name`` with default timeout ``timeout``.
 
@@ -24,8 +23,7 @@ def create_queue(name=None, timeout=3600):
     return q
 
 
-def rq_workers(queue=None):
-    # type: (Queue) -> List[Worker]
+def rq_workers(queue: Queue = None) -> List[Worker]:
     """
     Returns the list of current rq ``Worker``s.
     """
@@ -33,8 +31,7 @@ def rq_workers(queue=None):
     return Worker.all(connection=Redis(), queue=queue)
 
 
-def worker_for_job(job_id):
-    # type: (str) -> Optional[Worker]
+def worker_for_job(job_id: str) -> Optional[Worker]:
     """
     If the job is being run, return its ``Worker``.
     """
@@ -55,8 +52,7 @@ def worker_for_job(job_id):
     return None
 
 
-def requeue_interrupted_jobs(queue_name=None):
-    # type: (str) -> None
+def requeue_interrupted_jobs(queue_name: str = None) -> None:
     """
     Requeues jobs found in the given queue's started job registry.
 

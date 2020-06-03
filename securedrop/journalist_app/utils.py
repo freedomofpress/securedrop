@@ -27,8 +27,7 @@ if typing.TYPE_CHECKING:
     from sdconfig import SDConfig  # noqa: F401
 
 
-def logged_in():
-    # type: () -> bool
+def logged_in() -> bool:
     # When a user is logged in, we push their user ID (database primary key)
     # into the session. setup_g checks for this value, and if it finds it,
     # stores a reference to the user's Journalist object in g.
@@ -255,8 +254,7 @@ def col_delete(cols_selected):
     return redirect(url_for('main.index'))
 
 
-def make_password(config):
-    # type: (SDConfig) -> str
+def make_password(config: SDConfig) -> str:
     while True:
         password = current_app.crypto_util.genrandomid(
             7,
