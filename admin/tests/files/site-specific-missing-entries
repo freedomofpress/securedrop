@@ -1,6 +1,7 @@
 app_hostname: app
 app_ip: 10.20.2.2
-dns_server: 8.8.8.8
+dns_server:
+  - 8.8.8.8
 monitor_hostname: mon
 monitor_ip: 10.20.3.2
 ossec_alert_email: la@foo.com

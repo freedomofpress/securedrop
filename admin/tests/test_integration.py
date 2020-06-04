@@ -19,7 +19,9 @@ ANSI_ESCAPE = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
 OUTPUT1 = '''app_hostname: app
 app_ip: 10.20.2.2
 daily_reboot_time: 5
-dns_server: 8.8.8.8
+dns_server:
+- 8.8.8.8
+- 8.8.4.4
 enable_ssh_over_tor: true
 journalist_alert_email: ''
 journalist_alert_gpg_public_key: ''
@@ -51,7 +53,9 @@ v3_onion_services: true
 WHEN_BOTH_TRUE = '''app_hostname: app
 app_ip: 10.20.2.2
 daily_reboot_time: 5
-dns_server: 8.8.8.8
+dns_server:
+- 8.8.8.8
+- 8.8.4.4
 enable_ssh_over_tor: true
 journalist_alert_email: ''
 journalist_alert_gpg_public_key: ''
@@ -83,7 +87,9 @@ v3_onion_services: true
 WHEN_ONLY_V2 = '''app_hostname: app
 app_ip: 10.20.2.2
 daily_reboot_time: 5
-dns_server: 8.8.8.8
+dns_server:
+- 8.8.8.8
+- 8.8.4.4
 enable_ssh_over_tor: true
 journalist_alert_email: ''
 journalist_alert_gpg_public_key: ''
@@ -115,7 +121,9 @@ v3_onion_services: false
 JOURNALIST_ALERT_OUTPUT = '''app_hostname: app
 app_ip: 10.20.2.2
 daily_reboot_time: 5
-dns_server: 8.8.8.8
+dns_server:
+- 8.8.8.8
+- 8.8.4.4
 enable_ssh_over_tor: true
 journalist_alert_email: test@gmail.com
 journalist_alert_gpg_public_key: sd_admin_test.pub
@@ -147,7 +155,9 @@ v3_onion_services: true
 HTTPS_OUTPUT = '''app_hostname: app
 app_ip: 10.20.2.2
 daily_reboot_time: 5
-dns_server: 8.8.8.8
+dns_server:
+- 8.8.8.8
+- 8.8.4.4
 enable_ssh_over_tor: true
 journalist_alert_email: test@gmail.com
 journalist_alert_gpg_public_key: sd_admin_test.pub
@@ -229,8 +239,8 @@ def verify_hostname_mon_prompt(child):
 
 
 def verify_dns_prompt(child):
-    child.expect(rb'DNS server specified during installation\:', timeout=2)
-    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == '8.8.8.8'  # noqa: E501
+    child.expect(rb'DNS server\(s\):', timeout=2)
+    assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == '8.8.8.8 8.8.4.4'  # noqa: E501
 
 
 def verify_app_gpg_key_prompt(child):
@@ -674,6 +684,7 @@ GIT_CONFIG = u'''[core]
 
 @pytest.fixture
 def securedrop_git_repo(tmpdir):
+    cwd = os.getcwd()
     os.chdir(str(tmpdir))
     # Clone the SecureDrop repository into the temp directory.
     cmd = ['git', 'clone',
@@ -697,6 +708,8 @@ def securedrop_git_repo(tmpdir):
     except subprocess.CalledProcessError:
         # It means the coverage file may not exist, don't error
         pass
+
+    os.chdir(cwd)
 
 
 def set_reliable_keyserver(gpgdir):

@@ -1,7 +1,9 @@
 ---
 ### Used by the common role ###
 ssh_users: ""
-dns_server: "8.8.8.8"
+dns_server:
+  - 8.8.8.8
+  - 8.8.4.4
 daily_reboot_time: 4 # An integer between 0 and 23
 
 monitor_ip: ""
