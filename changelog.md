@@ -2,7 +2,11 @@
 
 ## 1.4.0~rc1
 
-
+* Update Tor from 0.4.2.7 to 0.4.3.5 (#5292)
+* Check that nameserver configuration loaded during install (#5288)
+* Add system configuration check script to securedrop-ossec packages (#5287)
+* Update SecureDrop Release signing key so that it doesn't expire until June 30, 2021 (#5277)
+* Move source deletion to a background process to get around timeout issue (#2527)
 
 ## 1.3.0
 
