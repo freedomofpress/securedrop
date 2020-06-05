@@ -222,10 +222,24 @@ Release Process
 Post-Release
 ------------
 
-After the release, carefully monitor the FPF support portal (or ask those that have access to
-monitor) and SecureDrop community support forum for any issues that users are
-having.
+Now it's time to backport the changelog from the release branch into the ``develop`` branch and bump
+the SecureDrop version so that it's ready for the next round of QA testing.
 
-Finally, in a PR back to develop, cherry-pick the release commits (thus ensuring a consistent
-changelog in the future) and bump the version numbers
-in preparation for the next release (this is required for the upgrade testing scenario).
+We backport the changelog by cherry-picking any commits that modified ``changelog.md`` during the
+release. You can look at the file history by checking out the release branch and running: 
+``git log --pretty=oneline changelog.md``. The output will contain the commit hashes associated with 
+the release. Create a new branch based on ``develop`` and cherry-pick these commits using the
+``-x`` flag.
+
+Now you're ready to bump the SecureDrop version on your new branch. There are a bunch of version
+files that'll need to be updated in order to set up the upgrade test for the next release. We do
+this by running the version-updater script and specifying the new version number, which will be the
+next minor version with ``~rc1`` appended. For example, if the release is 1.3.0, then you'll run: 
+``securedrop/bin/dev-shell ../update_version.sh 1.4.0~rc1``  (``dev-shell`` is a script that starts
+a container so that we can ensure ``dch`` is installed). Accept all the default changes from the
+``update_version.sh`` script. You'll only need to add your commit message. Once you're done, sign
+your commit and make a PR to merge these changes into ``develop``.
+
+The only thing left to do is to monitor the `FPF support portal <https://support.freedom.press>`_
+and the `SecureDrop community support forum <https://forum.securedrop.org/c/support>`_ for any new
+user issues related to the release. 
