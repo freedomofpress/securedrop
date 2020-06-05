@@ -143,14 +143,14 @@ just proceed to the next page:
 At this point, the journalist should make sure they have downloaded the
 FreeOTP app to their smartphone. It can be installed from
 the Apple Store for an iPhone or from the Google Play store for an
-Android phone. Once you download it and open it, the app does not
+Android phone. Once downloaded and opened, the app does not
 require setup. It should prompt you to scan a barcode. The journalist
 should use their phone's camera to scan the barcode on the screen.
 
 If they have difficulty scanning the barcode, they can tap on the icon
 at the top that shows a plus and the symbol of a key and use their
-phone's keyboard to input the random characters that are highlighted
-in yellow, in the ``Secret`` input field, without white space.
+phone's keyboard to input the two-factor secret (highlighted
+in yellow) into the ``Secret`` input field, without white space.
 
 Inside the FreeOTP app, a new entry for this account will
 appear on the main screen, with a six digit number that recycles to a
@@ -168,7 +168,7 @@ YubiKey
 ^^^^^^^
 
 If the journalist wishes to use a YubiKey for two-factor authentication,
-check the box next to "I'm using a YubiKey". You will then need to enter
+check the box next to "Is using a YubiKey". You will then need to enter
 the OATH-HOTP Secret Key that their YubiKey is configured with. For more
 information, read the :doc:`YubiKey Setup Guide <yubikey_setup>`.
 
@@ -194,23 +194,25 @@ Passphrases and Two-Factor Resets
 ---------------------------------
 
 .. warning:: Both of these operations will lock a user out of their
-   SecureDrop accounts. We recommend having them physically present when
-   resetting passphrases of two-factor authentication. If this is not
-   possible you should backup passphrases and/or QR codes into your
-   password manager before securely transmitting to your users.
+   SecureDrop accounts. We recommend having users be physically present when
+   resetting their passphrase or two-factor authentication. If this is not
+   possible, store passphrases and/or two-factor authentication secret in 
+   your own password manager before securely transmitting them to the user 
+   in question, and delete them once the user has confirmed they can 
+   successfully log in.
 
 While we publish some :ref:`passphrase best practices <passphrase_best_practices>`,
 your journalists may occasionally lock themselves out of their accounts. This
 can happen if, for example, they lose their two-factor device or if they
 forget the passphrase to their password manager. When this happens, you
-can reset  their account by logging in as an administrator to the
+can reset their account by logging in as an administrator to the
 *Journalist Interface* and selecting *Admin* at the top right. Find their
 username and select **Edit**. Next, you can either rotate their passphrase or
 reset their two-factor authentication. You should make sure the user's
 passphrase is saved in a password manager *before* selecting the "Reset
-Password" button. There are two options for resetting two-factor
-authentication depending on if you set up a hardware token like a Yubikey or
-a software-based application like FreeOTP.
+Password" button. To reset a user's two-factor authentication, choose the button
+that corresponds to the user's two-factor authentication method (hardware token,
+such as a Yubikey, or software-based application, such as FreeOTP).
 
 |Reset Passphrase|
 
