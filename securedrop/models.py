@@ -665,6 +665,7 @@ class Journalist(db.Model):
         # type: (str, str, str) -> Journalist
         try:
             user = Journalist.query.filter_by(username=username).one()
+            return user
         except NoResultFound:
             raise InvalidUsernameException(
                 "invalid username '{}'".format(username))

@@ -1,4 +1,4 @@
-Release Management
+`Release Management
 ==================
 
 The **Release Manager** is responsible for shepherding the release process to
@@ -11,21 +11,52 @@ coordinate with the person that does to make sure the task is completed.
 Pre-Release
 -----------
 
-1. Open a **Release SecureDrop 1.x.y** issue to track release-related activity.
-   Keep this issue updated as you proceed through the release process for
-   transparency.
-#. Check if there is a new stable release of Tor that can be QAed and released
-   as part of the SecureDrop release. If so, file an issue.
-#. Check if a release candidate for the Tails release is prepared. If so, request
+1. Open a **Release SecureDrop <major>.<minor>.<patch>** issue to track release-related activity.
+   Keep this issue updated as you proceed through the release process for transparency.
+
+#. Check if there is a new stable release of Tor that can be QAed and released as part of the
+   SecureDrop release. 
+
+   You can find stable releases by checking the `Tor blog 
+   <https://blog.torproject.org/category/tags/stable-release>`_. If a newer version of Tor exists, 
+   then:
+
+   a. Bump the version in ``fetch-tor-packages``
+   <https://github.com/freedomofpress/securedrop/blob/develop/molecule/fetch-tor-packages/
+   playbook.yml>`_.
+   #. Open a PR with this change in the ``securedrop`` repo.
+   #. Run ``make fetch-tor-packages`` to  download the new debs (this will use Secure apt under the 
+   hood to verify the Release file and package).
+   #. Copy the downloaded packages into the ``securedrop-dev-packages-lfs`` repo
+   #. Open a PR so that the packages can be verified once more before we host the packages on our
+   ``apt-test`` mirror which will use our own Release key, replacing Tor's. Using the ``sha256sum`` 
+   command, make sure the PR reviewer verifies that the checksums for packages in the 
+   ``securedrop-dev-packages-lfs`` repo match the checksums for the packages hosted on the `Tor apt
+   repo <https://deb.torproject.org/torproject.org/pool/main/>`_ matches the checksums for the
+   packages when they run ``make fetch-tor-packages`` on the branch from the first PR you opened on
+   step b.
+
+#. Check if a new release or release candidate for Tails has been added to the `Tails apt repo 
+   <https://deb.tails.boum.org/dists/>`_. If so, request
    people participating in QA to use the latest release candidate.
-#. Ensure that a pre-release announcement is prepared and shared with the community
-   for feedback. Once the announcement is ready, coordinate with other team members to
-   send them to current administrators, post on the SecureDrop blog, and tweet
-   out a link.
-#. For a regular release for version 1.x.0, branch off ``develop``::
+
+#. Work with the Communications Manager assigned for the release to prepare a pre-release 
+   announcement that will be shared on the support.freedom.press support portal, securedrop.org 
+   website, and Twitter. Wait until the day of the release before including an announcmement for a 
+   SecureDrop security update. For a point release, you may be able to skip the pre-release 
+   announcement depending on how small the point release is.
+
+#. Create a release branch
+
+     For a regular release, create a release branch off of ``develop``::
 
      git checkout develop
-     git checkout -b release/1.x
+     git checkout -b release/<major>.<minor>.0
+
+     For a point release, create a release branch off of the latest merged release branch::
+
+     git checkout release/<major>.<minor>.0
+     git checkout -b release/<major>.<minor>.1
 
    .. warning:: For new branches, please ask a ``freedomofpress``
                 organization administrator to enable branch protection
@@ -33,11 +64,11 @@ Pre-Release
                 passing as well as at least one approving review prior
                 to merging into the release branch.
 
-#. For each release candidate, update the version and
-   changelog. Collect a list of the important changes in the release,
-   including their GitHub issues or PR numbers, then run the
-   ``update_version.sh`` script, passing it the new version in the
-   format ``major.minor.patch~rcN``, e.g.::
+#. For each release candidate, update the version and changelog. Collect a list of the important 
+   changes in the release (see https://github.com/freedomofpress/securedrop/milestones) including 
+   GitHub issues or PR numbers for each change, then run the ``update_version.sh`` script, passing 
+   it the new version in the format ``<major>.<minor>.<patch>~rcN`` (note we use a tilde here 
+   instead of a dash), e.g.::
 
      securedrop/bin/dev-shell ../update_version.sh 1.3.0~rc1
 
@@ -47,34 +78,31 @@ Pre-Release
    the Debian changelog, we typically just refer the reader to the
    ``changelog.md`` file.
 
-#. If you would like to sign the release commit, you will need to do so manually:
+#. Sign the commit added by the ``update_version.sh`` script
 
-   a. Create a new signed commit and verify the signature::
+     ``git commit --all --amend --gpg-sign --no-edit``
 
-        git reset HEAD~1
-        git commit -aS
-        git log --show-signature
+   To verify that the commit is signed, run:
 
-   #. Ensure the new commit is signed, take note of the commit hash.
+     ``git log --show-signature``
 
-   #. Edit ``1.x.y-rcN.tag`` and replace the commit hash with the new
-      (signed) commit hash.
+#. Push the branch
 
-   #. Delete the old tag and create a new one based on the tag file
-      edited above::
+   ``git push origin release/<major>.<minor>.<patch>``
 
-         git tag -d 1.x.y-rcN
-         git mktag < 1.x.y-rcN.tag > .git/refs/tags/1.x.y-rcN
+#. Push the tag
 
-#. Push the branch and tags:
+   If the PR is still open, you can push the unsigned tag by running:
 
-   * For ``1.x.y~rc1``, push the ``release/1.x.y`` branch and
-     ``1.x.y-rc1`` tag directly.
+   ``git push origin <major>.<minor>.<patch>-rcN``
 
-   * For subsequent release candidates and the final release version,
-     issue a PR with changelog and version changes into the
-     ``release/1.x.y`` branch, and push the signed tag once the PR is
-     merged.
+   For the final release, edit ``<major>.<minor>.<patch>-rcN.tag`` and replace the commit 
+   hash with the new (signed) commit hash. Delete the old tag and create a new one based on the 
+   edited tag file::
+
+     git tag -d <major>.<minor>.<patch>-rcN
+     git mktag < <major>.<minor>.<patch>-rcN.tag > .git/refs/tags/<major>.<minor>.<patch>-rcN
+     git push origin <major>.<minor>.<patch>-rcN
 
 #. Build Debian packages and place them on
    ``apt-test.freedom.press``. This is currently done by making a PR
@@ -132,23 +160,23 @@ Release Process
    have permissions to do so, coordinate with someone that does.
 #. Once the tag is signed, append the detached signature to the unsigned tag::
 
-    cat 1.x.y.tag.sig >> 1.x.y.tag
+    cat <major>.<minor>.<patch>.tag.sig >> <major>.<minor>.<patch>.tag
 
 #. Delete the original unsigned tag::
 
-    git tag -d 1.x.y
+    git tag -d <major>.<minor>.<patch>
 
 #. Make the signed tag::
 
-    git mktag < 1.x.y.tag > .git/refs/tags/1.x.y
+    git mktag < <major>.<minor>.<patch>.tag > .git/refs/tags/<major>.<minor>.<patch>
 
 #. Verify the signed tag::
 
-    git tag -v 1.x.y
+    git tag -v <major>.<minor>.<patch>
 
 #. Push the signed tag::
 
-    git push origin 1.x.y
+    git push origin <major>.<minor>.<patch>
 
 #. Ensure there are no local changes (whether tracked, untracked or git ignored)
    prior to building the debs. If you did not freshly clone the repository, you
