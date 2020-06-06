@@ -1092,6 +1092,30 @@ def test_admin_add_user_with_invalid_username(journalist_app, test_admin):
     assert "Invalid username '{}'".format(username) in resp.data.decode('utf-8')
 
 
+def test_deleted_user_cannot_login(journalist_app):
+    username = 'deleted'
+    uuid = 'deleted'
+
+    # Create a user with username and uuid as deleted
+    with journalist_app.app_context():
+        user, password = utils.db_helper.init_journalist(is_admin=False)
+        otp_secret = user.otp_secret
+        user.username = username
+        user.uuid = uuid
+        db.session.add(user)
+        db.session.commit()
+
+    # Verify that deleted user is not able to login
+    with journalist_app.test_client() as app:
+        resp = app.post(url_for('main.login'),
+                        data=dict(username=username,
+                                  password=password,
+                                  token=otp_secret))
+    assert resp.status_code == 200
+    text = resp.data.decode('utf-8')
+    assert "Login failed" in text
+
+
 def test_admin_add_user_without_username(journalist_app, test_admin):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
