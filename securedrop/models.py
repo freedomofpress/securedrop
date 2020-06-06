@@ -641,13 +641,16 @@ class Journalist(db.Model):
               username: str,
               password: str,
               token: str) -> 'Journalist':
+
+        invalid_usernames = ['deleted']
+
         try:
             user = Journalist.query.filter_by(username=username).one()
         except NoResultFound:
             raise InvalidUsernameException(
                 "invalid username '{}'".format(username))
 
-        if user.username == 'deleted' and user.uuid == 'deleted':
+        if user.username in invalid_usernames and user.uuid in invalid_usernames:
             raise InvalidUsernameException(
                 "Invalid username '{}'".format(username))
 
