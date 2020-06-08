@@ -190,8 +190,8 @@ class Storage:
         return absolute
 
     def get_bulk_archive(self,
-                         selected_submissions: List,
-                         zip_directory: str = '') -> _TemporaryFileWrapper:
+                         selected_submissions: 'List',
+                         zip_directory: str = '') -> '_TemporaryFileWrapper':
         """Generate a zip file from the selected submissions"""
         zip_file = tempfile.NamedTemporaryFile(
             prefix='tmp_securedrop_bulk_dl_',
@@ -299,7 +299,7 @@ class Storage:
                              count: int,
                              journalist_filename: str,
                              filename: str,
-                             stream: BufferedIOBase) -> str:
+                             stream: 'BufferedIOBase') -> str:
         sanitized_filename = secure_filename(filename)
 
         # We store file submissions in a .gz file for two reasons:
@@ -363,7 +363,7 @@ class Storage:
         return filename
 
 
-def async_add_checksum_for_file(db_obj: Union[Submission, Reply]) -> str:
+def async_add_checksum_for_file(db_obj: 'Union[Submission, Reply]') -> str:
     return create_queue().enqueue(
         queued_add_checksum_for_file,
         type(db_obj),
@@ -373,7 +373,7 @@ def async_add_checksum_for_file(db_obj: Union[Submission, Reply]) -> str:
     )
 
 
-def queued_add_checksum_for_file(db_model: Union[Type[Submission], Type[Reply]],
+def queued_add_checksum_for_file(db_model: 'Union[Type[Submission], Type[Reply]]',
                                  model_id: int,
                                  file_path: str,
                                  db_uri: str) -> str:
@@ -385,8 +385,8 @@ def queued_add_checksum_for_file(db_model: Union[Type[Submission], Type[Reply]],
     return "success"
 
 
-def add_checksum_for_file(session: Session,
-                          db_obj: Union[Submission, Reply],
+def add_checksum_for_file(session: 'Session',
+                          db_obj: 'Union[Submission, Reply]',
                           file_path: str) -> None:
     hasher = sha256()
     with open(file_path, 'rb') as f:

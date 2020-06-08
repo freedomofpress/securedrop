@@ -42,9 +42,9 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
 ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
 
 
-def get_one_or_else(query: Query,
-                    logger: Logger,
-                    failure_method: Callable[[int], None]) -> None:
+def get_one_or_else(query: 'Query',
+                    logger: 'Logger',
+                    failure_method: 'Callable[[int], None]') -> None:
     try:
         return query.one()
     except MultipleResultsFound as e:
@@ -97,7 +97,7 @@ class Source(db.Model):
         return ''.join([c for c in self.journalist_designation.lower().replace(
             ' ', '_') if c in valid_chars])
 
-    def documents_messages_count(self) -> Dict[str, int]:
+    def documents_messages_count(self) -> 'Dict[str, int]':
         self.docs_msgs_count = {'messages': 0, 'documents': 0}
         for submission in self.submissions:
             if submission.filename.endswith('msg.gpg'):
@@ -108,7 +108,7 @@ class Source(db.Model):
         return self.docs_msgs_count
 
     @property
-    def collection(self) -> List[Union[Submission, Reply]]:
+    def collection(self) -> 'List[Union[Submission, Reply]]':
         """Return the list of submissions and replies for this source, sorted
         in ascending order by the filename/interaction count."""
         collection = []  # type: List[Union[Submission, Reply]]
@@ -141,7 +141,7 @@ class Source(db.Model):
     def public_key(self) -> None:
         raise NotImplementedError
 
-    def to_json(self) -> Dict[str, Union[str, bool, int, str]]:
+    def to_json(self) -> 'Dict[str, Union[str, bool, int, str]]':
         docs_msg_count = self.documents_messages_count()
 
         if self.last_updated:
@@ -212,7 +212,7 @@ class Submission(db.Model):
     def __repr__(self) -> str:
         return '<Submission %r>' % (self.filename)
 
-    def to_json(self) -> Dict[str, Union[str, int, bool]]:
+    def to_json(self) -> 'Dict[str, Union[str, int, bool]]':
         json_submission = {
             'source_url': url_for('api.single_source',
                                   source_uuid=self.source.uuid),
@@ -260,7 +260,7 @@ class Reply(db.Model):
     deleted_by_source = Column(Boolean, default=False, nullable=False)
 
     def __init__(self,
-                 journalist: Journalist,
+                 journalist: 'Journalist',
                  source: Source,
                  filename: str) -> None:
         self.journalist_id = journalist.id
@@ -273,7 +273,7 @@ class Reply(db.Model):
     def __repr__(self) -> str:
         return '<Reply %r>' % (self.filename)
 
-    def to_json(self) -> Dict[str, Union[str, int, bool]]:
+    def to_json(self) -> 'Dict[str, Union[str, int, bool]]':
         username = "deleted"
         first_name = ""
         last_name = ""
@@ -307,7 +307,7 @@ class SourceStar(db.Model):
     source_id = Column("source_id", Integer, ForeignKey('sources.id'))
     starred = Column("starred", Boolean, default=True)
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: 'Any') -> bool:
         if isinstance(other, SourceStar):
             return (self.source_id == other.source_id and
                     self.id == other.id and self.starred == other.starred)
@@ -418,10 +418,10 @@ class Journalist(db.Model):
     def __init__(self,
                  username: str,
                  password: str,
-                 first_name: Optional[str] = None,
-                 last_name: Optional[str] = None,
+                 first_name: 'Optional[str]' = None,
+                 last_name: 'Optional[str]' = None,
                  is_admin: bool = False,
-                 otp_secret: Optional[str] = None) -> None:
+                 otp_secret: 'Optional[str]' = None) -> None:
 
         self.check_username_acceptable(username)
         self.username = username
@@ -547,14 +547,14 @@ class Journalist(db.Model):
         self.hotp_counter = 0
 
     @property
-    def totp(self) -> OTP:
+    def totp(self) -> 'OTP':
         if self.is_totp:
             return pyotp.TOTP(self.otp_secret)
         else:
             raise ValueError('{} is not using TOTP'.format(self))
 
     @property
-    def hotp(self) -> OTP:
+    def hotp(self) -> 'OTP':
         if not self.is_totp:
             return pyotp.HOTP(self.otp_secret)
         else:
@@ -618,7 +618,7 @@ class Journalist(db.Model):
     _MAX_LOGIN_ATTEMPTS_PER_PERIOD = 5
 
     @classmethod
-    def throttle_login(cls, user: Journalist) -> None:
+    def throttle_login(cls, user: 'Journalist') -> None:
         # Record the login attempt...
         login_attempt = JournalistLoginAttempt(user)
         db.session.add(login_attempt)
@@ -640,7 +640,7 @@ class Journalist(db.Model):
     def login(cls,
               username: str,
               password: str,
-              token: str) -> Journalist:
+              token: str) -> 'Journalist':
         try:
             user = Journalist.query.filter_by(username=username).one()
         except NoResultFound:
@@ -677,7 +677,7 @@ class Journalist(db.Model):
         return True
 
     @staticmethod
-    def validate_api_token_and_get_user(token: str) -> Union[Journalist, None]:
+    def validate_api_token_and_get_user(token: str) -> 'Union[Journalist, None]':
         s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
@@ -690,7 +690,7 @@ class Journalist(db.Model):
 
         return Journalist.query.get(data['id'])
 
-    def to_json(self) -> Dict[str, Union[str, bool, str]]:
+    def to_json(self) -> 'Dict[str, Union[str, bool, str]]':
         json_user = {
             'username': self.username,
             'last_login': self.last_access.isoformat() + 'Z',
