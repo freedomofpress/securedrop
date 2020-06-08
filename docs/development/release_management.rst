@@ -188,26 +188,10 @@ Release Process
 #. Ask Infrastructure to perform the DNS cutover to switch
    ``apt-qa.freedom.press`` to ``apt.freedom.press``. Once complete,
    the release is live.
-#. Make sure that the default branch of documentation is being built
-   off the tip of the release branch. Building from the branch instead
-   of a given tag enables us to more easily add documentation changes
-   after release. You should:
-
-   a. Log into readthedocs.
-   #. Navigate to **Projects** → **securedrop** → **Versions** →
-      **Inactive Versions** → **release/branch** → **Edit**.
-   #. Mark the branch as Active by checking the box and save your
-      changes. This will kick off a new docs build.
-   #. Once the documentation has built, it will appear in the version
-      selector at the bottom of the column of the.
-   #. Now set this new release as default by navigating to **Admin** →
-      **Advanced Settings** → **Global Settings** → **Default
-      Version**.
-   #. Select ``release/branch`` from the dropdown menu and save the
-      changes.
-   #. Verify that docs.securedrop.org redirects users to the
-      documentation built from the release branch.
-
+#. Issue a PR to merge the release branch changes into ``master``. Once the PR is
+   merged, verify that the `public documentation <https://docs.securedrop.org/>`_
+   refers to the new release version. If not, log in to ReadTheDocs and start a
+   build of the ``master`` version.
 #. Create a `release
    <https://github.com/freedomofpress/securedrop/releases>`_ on GitHub
    with a brief summary of the changes in this release.
