@@ -38,7 +38,7 @@ if typing.TYPE_CHECKING:
 _insecure_views = ['main.login', 'main.select_logo', 'static']
 
 
-def create_app(config: SDConfig) -> Flask:
+def create_app(config: 'SDConfig') -> Flask:
     app = Flask(__name__,
                 template_folder=config.JOURNALIST_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
@@ -81,14 +81,16 @@ def create_app(config: SDConfig) -> Flask:
     )
 
     @app.errorhandler(CSRFError)
-    def handle_csrf_error(e: CSRFError) -> Response:
+    def handle_csrf_error(e: CSRFError) -> 'Response':
         # render the message first to ensure it's localized.
         msg = gettext('You have been logged out due to inactivity')
         session.clear()
         flash(msg, 'error')
         return redirect(url_for('main.login'))
 
-    def _handle_http_exception(error: HTTPException) -> Tuple[Union[Response, str], Optional[int]]:
+    def _handle_http_exception(
+        error: 'HTTPException'
+    ) -> 'Tuple[Union[Response, str], Optional[int]]':
         # Workaround for no blueprint-level 404/5 error handlers, see:
         # https://github.com/pallets/flask/issues/503#issuecomment-71383286
         handler = list(app.error_handler_spec['api'][error.code].values())[0]
@@ -126,7 +128,7 @@ def create_app(config: SDConfig) -> Flask:
         app.instance_config = InstanceConfig.get_current()
 
     @app.before_request
-    def setup_g() -> Optional[Response]:
+    def setup_g() -> 'Optional[Response]':
         """Store commonly used values in Flask's special g object"""
         if 'expires' in session and datetime.utcnow() >= session['expires']:
             session.clear()

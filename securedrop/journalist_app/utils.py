@@ -254,7 +254,7 @@ def col_delete(cols_selected):
     return redirect(url_for('main.index'))
 
 
-def make_password(config: SDConfig) -> str:
+def make_password(config: 'SDConfig') -> str:
     while True:
         password = current_app.crypto_util.genrandomid(
             7,
