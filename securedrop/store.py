@@ -89,8 +89,7 @@ def safe_renames(old, new):
 
 class Storage:
 
-    def __init__(self, storage_path, temp_dir, gpg_key):
-        # type: (str, str, str) -> None
+    def __init__(self, storage_path: str, temp_dir: str, gpg_key: str) -> None:
         if not os.path.isabs(storage_path):
             raise PathException("storage_path {} is not absolute".format(
                 storage_path))
@@ -165,8 +164,7 @@ class Storage:
             )
         return absolute
 
-    def path_without_filesystem_id(self, filename):
-        # type: (str) -> str
+    def path_without_filesystem_id(self, filename: str) -> str:
         """Get the normalized, absolute file path, within
            `self.__storage_path` for a filename when the filesystem_id
            is not known.
@@ -191,8 +189,9 @@ class Storage:
             )
         return absolute
 
-    def get_bulk_archive(self, selected_submissions, zip_directory=''):
-        # type: (List, str) -> _TemporaryFileWrapper
+    def get_bulk_archive(self,
+                         selected_submissions: 'List',
+                         zip_directory: str = '') -> '_TemporaryFileWrapper':
         """Generate a zip file from the selected submissions"""
         zip_file = tempfile.NamedTemporaryFile(
             prefix='tmp_securedrop_bulk_dl_',
@@ -295,9 +294,12 @@ class Storage:
             os.rmdir(d)
             current_app.logger.debug("Removed directory {}/{}: {}".format(i, dir_count, d))
 
-    def save_file_submission(self, filesystem_id, count, journalist_filename,
-                             filename, stream):
-        # type: (str, int, str, str, BufferedIOBase) -> str
+    def save_file_submission(self,
+                             filesystem_id: str,
+                             count: int,
+                             journalist_filename: str,
+                             filename: str,
+                             stream: 'BufferedIOBase') -> str:
         sanitized_filename = secure_filename(filename)
 
         # We store file submissions in a .gz file for two reasons:
@@ -333,9 +335,11 @@ class Storage:
 
         return encrypted_file_name
 
-    def save_pre_encrypted_reply(self, filesystem_id, count,
-                                 journalist_filename, content):
-        # type: (str, int, str, str) -> str
+    def save_pre_encrypted_reply(self,
+                                 filesystem_id: str,
+                                 count: int,
+                                 journalist_filename: str,
+                                 content: str) -> str:
         if '-----BEGIN PGP MESSAGE-----' not in content.split('\n')[0]:
             raise NotEncrypted
 
@@ -348,17 +352,18 @@ class Storage:
 
         return encrypted_file_path
 
-    def save_message_submission(self, filesystem_id, count,
-                                journalist_filename, message):
-        # type: (str, int, str, str) -> str
+    def save_message_submission(self,
+                                filesystem_id: str,
+                                count: int,
+                                journalist_filename: str,
+                                message: str) -> str:
         filename = "{0}-{1}-msg.gpg".format(count, journalist_filename)
         msg_loc = self.path(filesystem_id, filename)
         current_app.crypto_util.encrypt(message, self.__gpg_key, msg_loc)
         return filename
 
 
-def async_add_checksum_for_file(db_obj):
-    # type: (Union[Submission, Reply]) -> str
+def async_add_checksum_for_file(db_obj: 'Union[Submission, Reply]') -> str:
     return create_queue().enqueue(
         queued_add_checksum_for_file,
         type(db_obj),
@@ -368,8 +373,10 @@ def async_add_checksum_for_file(db_obj):
     )
 
 
-def queued_add_checksum_for_file(db_model, model_id, file_path, db_uri):
-    # type: (Union[Type[Submission], Type[Reply]], int, str, str) -> str
+def queued_add_checksum_for_file(db_model: 'Union[Type[Submission], Type[Reply]]',
+                                 model_id: int,
+                                 file_path: str,
+                                 db_uri: str) -> str:
     # we have to create our own DB session because there is no app context
     session = sessionmaker(bind=create_engine(db_uri))()
     db_obj = session.query(db_model).filter_by(id=model_id).one()
@@ -378,8 +385,9 @@ def queued_add_checksum_for_file(db_model, model_id, file_path, db_uri):
     return "success"
 
 
-def add_checksum_for_file(session, db_obj, file_path):
-    # type: (Session, Union[Submission, Reply], str) -> None
+def add_checksum_for_file(session: 'Session',
+                          db_obj: 'Union[Submission, Reply]',
+                          file_path: str) -> None:
     hasher = sha256()
     with open(file_path, 'rb') as f:
         while True:

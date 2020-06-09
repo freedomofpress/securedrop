@@ -135,8 +135,7 @@ class CryptoUtil:
         if not rm.check_secure_delete_capability():
             raise AssertionError("Secure file deletion is not possible.")
 
-    def get_wordlist(self, locale):
-        # type: (Text) -> List[str]
+    def get_wordlist(self, locale: 'Text') -> 'List[str]':
         """" Ensure the wordlist for the desired locale is read and available
         in the words global variable. If there is no wordlist for the
         desired local, fallback to the default english wordlist.

@@ -13,8 +13,7 @@ if typing.TYPE_CHECKING:
 
 
 class SDConfig(object):
-    def __init__(self):
-        # type: () -> None
+    def __init__(self) -> None:
         try:
             self.JournalistInterfaceFlaskConfig = \
                 _config.JournalistInterfaceFlaskConfig  # type: ignore
