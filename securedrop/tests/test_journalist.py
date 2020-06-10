@@ -26,7 +26,7 @@ from sdconfig import SDConfig, config
 
 from db import db
 from models import (InvalidPasswordLength, InstanceConfig, Journalist, Reply, Source,
-                    Submission)
+                    InvalidUsernameException, Submission)
 from .utils.instrument import InstrumentedApp
 
 # Smugly seed the RNG for deterministic testing
@@ -1114,6 +1114,25 @@ def test_deleted_user_cannot_login(journalist_app):
     assert resp.status_code == 200
     text = resp.data.decode('utf-8')
     assert "Login failed" in text
+
+
+def test_deleted_user_cannot_login_exception(journalist_app):
+    username = 'deleted'
+    uuid = 'deleted'
+
+    # Create a user with username and uuid as deleted
+    with journalist_app.app_context():
+        user, password = utils.db_helper.init_journalist(is_admin=False)
+        otp_secret = user.otp_secret
+        user.username = username
+        user.uuid = uuid
+        db.session.add(user)
+        db.session.commit()
+
+    with pytest.raises(InvalidUsernameException):
+        Journalist.login(username,
+                         password,
+                         TOTP(otp_secret).now())
 
 
 def test_admin_add_user_without_username(journalist_app, test_admin):
