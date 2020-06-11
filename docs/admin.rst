@@ -20,7 +20,7 @@ Maintaining Credentials
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 The admin should have her own username, passphrase, and two-factor
-authentication method (via smartphone app or YubiKey). Admins are also
+authentication method (via smartphone application or YubiKey). Admins are also
 responsible for managing user credentials and encouraging best practices. (See
 :doc:`passphrases` and :doc:`passphrase_best_practices`.)
 
@@ -97,8 +97,6 @@ Guide <ossec_alerts>` for more information on common OSSEC alerts.
 
           |Test Alert|
 
-.. |Test Alert| image:: images/manual/screenshots/journalist-admin_ossec_alert_button.png
-
 .. _`SecureDrop Support Portal`: https://securedrop-support.readthedocs.io/en/latest/
 
 Common Tasks
@@ -128,12 +126,11 @@ Once there, click ‘Add User’ button, which will take you to this page:
 |Add a new user|
 
 Here, you will hand the keyboard over to the journalist so they can
-create their own username. Once they’re done entering a
-username for themselves, have them write down their pre-generated diceware
-passphrase. Then, you will select whether you would like them
-to also be an admin (this allows them to add or delete other
-journalist accounts), and whether they will be using FreeOTP
-or a YubiKey for two-factor authentication.
+create their own username. Once they’re done entering a username for
+themselves, have them save their pre-generated diceware passphrase to their
+password manager. Then, you will select whether you would like them to also be
+an admin (this allows them to add or delete other journalist accounts), and
+whether they will be using FreeOTP or a YubiKey for two-factor authentication.
 
 FreeOTP
 ^^^^^^^
@@ -146,14 +143,14 @@ just proceed to the next page:
 At this point, the journalist should make sure they have downloaded the
 FreeOTP app to their smartphone. It can be installed from
 the Apple Store for an iPhone or from the Google Play store for an
-Android phone. Once you download it and open it, the app does not
+Android phone. Once downloaded and opened, the app does not
 require setup. It should prompt you to scan a barcode. The journalist
 should use their phone's camera to scan the barcode on the screen.
 
 If they have difficulty scanning the barcode, they can tap on the icon
 at the top that shows a plus and the symbol of a key and use their
-phone's keyboard to input the random characters that are highlighted
-in yellow, in the ``Secret`` input field, without white space.
+phone's keyboard to input the two-factor secret (highlighted
+in yellow) into the ``Secret`` input field, without white space.
 
 Inside the FreeOTP app, a new entry for this account will
 appear on the main screen, with a six digit number that recycles to a
@@ -171,7 +168,7 @@ YubiKey
 ^^^^^^^
 
 If the journalist wishes to use a YubiKey for two-factor authentication,
-check the box next to "I'm using a YubiKey". You will then need to enter
+check the box next to "Is using a YubiKey". You will then need to enter
 the OATH-HOTP Secret Key that their YubiKey is configured with. For more
 information, read the :doc:`YubiKey Setup Guide <yubikey_setup>`.
 
@@ -192,18 +189,32 @@ SecureDrop. Make sure the journalist remembers their username and
 passphrase and always has their two-factor authentication device in their
 possession when they attempt to log in to SecureDrop.
 
-.. |SecureDrop main page|
-  image:: images/manual/screenshots/journalist-admin_index_no_documents.png
-.. |SecureDrop admin home|
-  image:: images/manual/screenshots/journalist-admin_interface_index.png
-.. |Add a new user|
-  image:: images/manual/screenshots/journalist-admin_add_user_totp.png
-.. |Enable FreeOTP|
-  image:: images/manual/screenshots/journalist-admin_new_user_two_factor_totp.png
-.. |Enable YubiKey|
-  image:: images/manual/screenshots/journalist-admin_add_user_hotp.png
-.. |Verify YubiKey|
-  image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
+
+Passphrases and Two-Factor Resets
+---------------------------------
+
+.. warning:: Both of these operations will lock a user out of their
+   SecureDrop accounts. We recommend having users be physically present when
+   resetting their passphrase or two-factor authentication. If this is not
+   possible, store passphrases and/or two-factor authentication secret in 
+   your own password manager before securely transmitting them to the user 
+   in question, and delete them once the user has confirmed they can 
+   successfully log in.
+
+While we publish some :ref:`passphrase best practices <passphrase_best_practices>`,
+your journalists may occasionally lock themselves out of their accounts. This
+can happen if, for example, they lose their two-factor device or if they
+forget the passphrase to their password manager. When this happens, you
+can reset their account by logging in as an administrator to the
+*Journalist Interface* and selecting *Admin* at the top right. Find their
+username and select **Edit**. Next, you can either rotate their passphrase or
+reset their two-factor authentication. You should make sure the user's
+passphrase is saved in a password manager *before* selecting the "Reset
+Password" button. To reset a user's two-factor authentication, choose the button
+that corresponds to the user's two-factor authentication method (hardware token,
+such as a Yubikey, or software-based application, such as FreeOTP).
+
+|Reset Passphrase|
 
 Off-boarding Users
 ~~~~~~~~~~~~~~~~~~
@@ -401,8 +412,6 @@ You should see a message appear indicating the change was a success:
 
 |Logo Update|
 
-.. |System Config Page| image:: images/manual/screenshots/journalist-admin_system_config_page.png
-.. |Logo Update| image:: images/manual/screenshots/journalist-admin_changes_logo_image.png
 
 Updating System Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -558,3 +567,14 @@ impact of re-rerunning ``./securedrop-admin install`` more than once. The
 command will simply check which tasks have been completed, and pick up where it
 left off. However, if the same issue persists, you will need to investigate
 further.
+
+.. |Reset Passphrase| image:: images/manual/screenshots/journalist-edit_account_user.png
+.. |Test Alert| image:: images/manual/screenshots/journalist-admin_ossec_alert_button.png
+.. |SecureDrop main page| image:: images/manual/screenshots/journalist-admin_index_no_documents.png
+.. |SecureDrop admin home| image:: images/manual/screenshots/journalist-admin_interface_index.png
+.. |Add a new user| image:: images/manual/screenshots/journalist-admin_add_user_totp.png
+.. |Enable FreeOTP| image:: images/manual/screenshots/journalist-admin_new_user_two_factor_totp.png
+.. |Enable YubiKey| image:: images/manual/screenshots/journalist-admin_add_user_hotp.png
+.. |Verify YubiKey| image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
+.. |System Config Page| image:: images/manual/screenshots/journalist-admin_system_config_page.png
+.. |Logo Update| image:: images/manual/screenshots/journalist-admin_changes_logo_image.png
