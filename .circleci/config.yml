@@ -302,11 +302,13 @@ workflows:
             branches:
               only:
                 - master
+                - /docs-.*/
       - lint:
           filters:
             branches:
               ignore:
                 - master
+                - /docs-.*/
       - app-tests:
           filters:
             branches:
@@ -342,6 +344,7 @@ workflows:
             branches:
               ignore:
                 - master
+                - /docs-.*/
           requires:
             - lint
       - staging-test-with-rebase:
@@ -358,6 +361,7 @@ workflows:
             branches:
               ignore:
                 - master
+                - /docs-.*/
           requires:
             - lint
       - deb-tests:
