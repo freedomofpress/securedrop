@@ -61,7 +61,7 @@ verifier:
   name: testinfra
   lint:
     name: flake8
-  directory: ../testinfra/staging/
+  directory: ../testinfra
   options:
     n: auto
     v: 2
