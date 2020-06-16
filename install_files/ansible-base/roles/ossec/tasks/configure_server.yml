@@ -20,44 +20,6 @@
   tags:
     - gpg
 
-- name: Check if GPG homedir already exists.
-  stat:
-    path: /var/ossec/.gnupg
-  register: gpg_homedir_status
-  tags:
-    - gpg
-
-- name: Ensure correct permissions on OSSEC GPG homedir if it exists.
-  file:
-    state: directory
-    path: /var/ossec/.gnupg
-    mode: "0700"
-    owner: ossec
-    group: "{{ ossec_group }}"
-  when: gpg_homedir_status.stat.exists
-  tags:
-    - gpg
-
-- name: Check if .gpg files have been created yet in the GPG homedir.
-  stat:
-    path: "/var/ossec/.gnupg/{{ item }}"
-  with_items: "{{ gpg_keyring_files }}"
-  register: gpg_keyring_status
-  tags:
-    - gpg
-
-- name: Ensure correct permissions on contents of OSSEC GPG homedir.
-  file:
-    state: file
-    path: "/var/ossec/.gnupg/{{ item.item }}"
-    mode: "0600"
-    owner: ossec
-    group: "{{ ossec_group }}"
-  with_items: "{{ gpg_keyring_status.results }}"
-  when: item.stat.exists
-  tags:
-    - gpg
-
 - name: Add the OSSEC GPG public key to the OSSEC manager keyring.
   # multiline format for command module, since this is a long command
   command: >
