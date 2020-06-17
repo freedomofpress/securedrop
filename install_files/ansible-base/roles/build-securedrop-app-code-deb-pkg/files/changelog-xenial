@@ -1,58 +1,14 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-securedrop-app-code (1.4.0~rc1+xenial) xenial; urgency=medium
+securedrop-app-code (1.4.0+xenial) xenial; urgency=medium
 
   * See changelog.md 
 
- -- SecureDrop Team <securedrop@freedom.press>  Mon, 18 May 2020 09:48:39 -0700
+ -- SecureDrop Team <securedrop@freedom.press>  Wed, 17 Jun 2020 21:35:57 +0000
 
->>>>>>> Post-release version bump from 1.3.0 to 1.4.0~rc1
 securedrop-app-code (1.3.0+xenial) xenial; urgency=medium
 
   * See changelog.md
 
  -- SecureDrop Team <securedrop@freedom.press>  Tue, 12 May 2020 18:37:42 +0000
-
-securedrop-app-code (1.2.2+xenial) xenial; urgency=medium
-
-  * See changelog.md
-
- -- SecureDrop Team <securedrop@freedom.press>  Fri, 13 Mar 2020 19:43:29 +0000
-
-securedrop-app-code (1.2.1+xenial) xenial; urgency=medium
-
-  * See changelog.md
-
- -- SecureDrop Team <securedrop@freedom.press>  Wed, 19 Feb 2020 14:40:43 +0000
-=======
-=======
-securedrop-app-code (1.3.0~rc2+xenial) xenial; urgency=medium
-
-  * See changelog.md
-
- -- SecureDrop Team <securedrop@freedom.press>  Tue, 05 May 2020 12:51:01 +0000
-
->>>>>>> SecureDrop 1.3.0-rc2
-securedrop-app-code (1.3.0~rc1+xenial) xenial; urgency=medium
-
-  * See changelog.md
-
-<<<<<<< HEAD
- -- SecureDrop Team <securedrop@freedom.press>  Wed, 04 Dec 2019 00:32:49 +0000
->>>>>>> Backporting 1.2.0 changelog and updating version to 1.3.0~rc1
-=======
- -- SecureDrop Team <securedrop@freedom.press>  Fri, 24 Apr 2020 15:17:17 +0000
->>>>>>> SecureDrop 1.3.0~rc1
-=======
-securedrop-app-code (1.3.0+xenial) xenial; urgency=medium
-
-  * See changelog.md
-
- -- SecureDrop Team <securedrop@freedom.press>  Tue, 12 May 2020 18:37:42 +0000
->>>>>>> SecureDrop release 1.3.0
 
 securedrop-app-code (1.2.2+xenial) xenial; urgency=medium
 

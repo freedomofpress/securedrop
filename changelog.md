@@ -1,45 +1,26 @@
 # Changelog
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-## 1.4.0~rc1
+## 1.4.0
 
-* Update Tor from 0.4.2.7 to 0.4.3.5 (#5292)
-* Check that nameserver configuration loaded during install (#5288)
-* Add system configuration check script to securedrop-ossec packages (#5287)
-* Update SecureDrop Release signing key so that it doesn't expire until June 30, 2021 (#5277)
-* Move source deletion to a background process to get around timeout issue (#2527)
+### Web Applications
+* Moved source deletion to a background process to resolve timeout issue (#2527)
 
->>>>>>> Post-release version bump from 1.3.0 to 1.4.0~rc1
+### Operations
+* Updated Tor from 0.4.2.7 to 0.4.3.5 (#5292)
+* Added check for nameserver configuration loaded during install (#5288)
+* Added system configuration check script to securedrop-ossec packages (#5287)
+* Updated SecureDrop Release signing key so that it doesn't expire until June 30, 2021 (#5277)
+
+### Documentation
+* Added instructions for password rotation to Admin Guide (#5301)
+* Updated references to uncommon OSSEC alerts (#5316)
+
+
 ## 1.3.0
-=======
-## 1.3.0~rc2
-=======
-## 1.3.0
->>>>>>> SecureDrop release 1.3.0
 
 ### Web Applications
 
 * Use WTForm for source interface submission form (#5226)
-<<<<<<< HEAD
-
-### Developer Workflow
-
-* Dependency updates:
-  * pylint from 2.4.4 to 2.5.0 (#5219)
-  * astroid from 2.3.3 to 2.4.0 (#5219)
-
-## 1.3.0~rc1
->>>>>>> SecureDrop 1.3.0-rc2
-
-### Web Applications
-
-* Use WTForm for source interface submission form (#5226)
-=======
->>>>>>> SecureDrop release 1.3.0
 * Updated behavior of Logout button, adding a dedicated logout page with directions for sources on wiping Tor Browser session data (#5116)
 * Changed references to “journalists” in Source Interface text to “teams”  (#5175)
 * Updated Source Interface to create a single source codename when multiple  “/generate” tabs are opened in a single session (#5075)
@@ -101,55 +82,6 @@
 * Added journalist/admin off-boarding guide (#5012)
 * Added server BIOS update guide (#4991)
 * Miscellaneous documentation updates (#5059, #5063, #5066, #5072, #5078, #5138)
-
-## 1.2.2
-
-### Web Applications
-
-* Update psutil to 5.7.0
-
-### Admin Tails workstation
-
-* Pin setuptools to requirements file (#5159)
-
-## 1.2.1
-
-### Web Applications
-
-* Updated Tor Browser user agent detection (#5087)
-* Added caching of source keys (#5100)
-* Removed the ability to change source codenames/designations (#5119)
-=======
-## 1.3.0~rc1
->>>>>>> Backporting 1.2.0 changelog and updating version to 1.3.0~rc1
-
-### Web Applications
-
-* Updated behavior of Logout button, adding a dedicated logout page with directions for sources on wiping Tor Browser session data (#5116)
-* Changed references to “journalists” in Source Interface text to “teams”  (#5175)
-
-### Journalist API
-
-* Improved response time of `/get_all_sources` endpoint by caching source public keys (#5184)
-* Bugfix: Updated `/replies` endpoint to correctly return replies associated with a deleted journalist account (#5178)
-
-### Operations
-
-* Updated Ansible version to 2.9.7 (#5199)
-* Updated OSSEC version to 3.6.0 (#5196)
-* Updated Tor version to 0.4.27 (#5192)
-* Updated Grsecurity-patched kernel version to 4.14.175 (#5178)
-
-### Admin Tails workstation
-
-* Bugfix: Updated GUI updater to return correct error when Tails configuration script times out (#5169)
-
-### Developer Workflow
-
-* Improved QA loader script to produce datasets more consistent with production data (#5174, #5200)
-* Improved the Qubes staging environment provisioning logic, removing requirement for manual reboots (#5190)
-* Dependency updates: pyyaml 5.3.1, urllib 1.25.8, safety 1.8.7, pillow 7.0.0 (#5182)
-* Updated Makefile lint target to ignore SC2230 shellcheck warnings (#5171)
 
 ## 1.2.2
 
