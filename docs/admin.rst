@@ -194,9 +194,9 @@ Passphrases and Two-Factor Resets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. warning:: Both of these operations will lock a user out of their
-   SecureDrop accounts. We recommend having users be physically present when
+   SecureDrop account. We recommend having users be physically present when
    resetting their passphrase or two-factor authentication. If this is not
-   possible, store passphrases and/or two-factor authentication secret in
+   possible, store the passphrase and/or two-factor authentication secret in
    your own password manager before securely transmitting them to the user
    in question, and delete them once the user has confirmed they can
    successfully log in.
@@ -423,8 +423,9 @@ There are two primary reasons why you may want to update the system configuratio
 - to change SecureDrop server configuration options. **Example:** You want to change
   the time of day at which the servers are automatically rebooted (default: 4:00 AM).
 - to fix a problem with the configuration state of your *Application* and/or
-  *Monitor Server*. **Example:** An administrator has locally modified your iptables
-  rules, and you want to reinstate the SecureDrop defaults.
+  *Monitor Server*. **Example:** An administrator unfamiliar with the system has
+  directly modified the iptables rules, and you want to reinstate the correct
+  rules.
 
 In both cases, follow these steps:
 
