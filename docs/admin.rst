@@ -191,14 +191,14 @@ possession when they attempt to log in to SecureDrop.
 
 
 Passphrases and Two-Factor Resets
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. warning:: Both of these operations will lock a user out of their
-   SecureDrop accounts. We recommend having users be physically present when
+   SecureDrop account. We recommend having users be physically present when
    resetting their passphrase or two-factor authentication. If this is not
-   possible, store passphrases and/or two-factor authentication secret in 
-   your own password manager before securely transmitting them to the user 
-   in question, and delete them once the user has confirmed they can 
+   possible, store the passphrase and/or two-factor authentication secret in
+   your own password manager before securely transmitting them to the user
+   in question, and delete them once the user has confirmed they can
    successfully log in.
 
 While we publish some :ref:`passphrase best practices <passphrase_best_practices>`,
@@ -418,33 +418,42 @@ Updating System Configuration
 
 .. _update-system-configuration:
 
-If you want to update the system configuration, you should use the
-``securedrop-admin`` tool on the *Admin Workstation*. From
-``~/Persistent/securedrop``, run:
+There are two primary reasons why you may want to update the system configuration:
 
-.. code:: sh
+- to change SecureDrop server configuration options. **Example:** You want to change
+  the time of day at which the servers are automatically rebooted (default: 4:00 AM).
+- to restore a valid configuration state on your servers. **Example:** Another admin
+  has directly modified the iptables rules during troubleshooting, and you want
+  to reinstate the correct rules.
 
-  ./securedrop-admin sdconfig
+In both cases, follow these steps:
 
-This will give you the opportunity to edit any variable. Answer the prompts with values
-that match your environment. An example of one such prompt would be to set the ``daily reboot time``.
-To minimize the presence/duration of plaintext in memory, the servers are rebooted every 24 hours
-to periodically wipe the memory. As an admin, you can configure this automatic reboot time.
-By default, it is set at 4:00 a.m. and you can change it to suit your timing. Next, you will need to
-apply the changes to the servers. Again from ``~/Persistent/securedrop``:
+1. Boot the *Admin Workstation* and unlock its persistent volume.
+2. Open a terminal and type ``cd ~/Persistent/securedrop``.
+3. Run ``git status``. If the output includes ``HEAD detached at``
+   followed by the version number displayed in the footer of your *Source Interface*,
+   you are running the applicable version of the SecureDrop code on your
+   workstation, and can proceed to the next step.
 
-.. code:: sh
+   If not, **it is not not safe to proceed**. Follow the upgrade instructions
+   associated with the `release notes for the most recent release of
+   SecureDrop <https://securedrop.org/news/release-announcement/>`__. Apply all
+   available updates, including for the Tails operating system.
+4. Run ``./securedrop-admin sdconfig``. This will display the current
+   configuration, one line at a time, and allow you to change it. At this point,
+   any changes you make are only saved on this *Admin Workstation*, to the
+   following file:
 
-  ./securedrop-admin install
+   ``~/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific``
+
+5. Run ``./securedrop-admin install``. This will apply the configuration to your
+   *Application* and *Monitor Server*, and enforce the canonical state of the
+   server configuration.
+
+If there is more than one administrator on your team, please also see the
+following section.
 
 .. include:: includes/rerun-install-is-safe.txt
-
-Once the install command has successfully completed, the changes are applied.
-Read the next section if you have multiple admins.
-
-.. note::
-  Server configuration is stored on the *Admin Workstation* in
-  ``~/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific``.
 
 Managing ``site-specific`` Updates On Teams With Multiple Admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
