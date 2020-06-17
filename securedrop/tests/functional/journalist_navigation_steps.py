@@ -322,6 +322,25 @@ class JournalistNavigationStepsMixin:
 
         self.wait_for(lambda: self.driver.find_element_by_id("check-token"))
 
+    def _admin_adds_a_user_with_invalid_username(self):
+        self.safe_click_by_id("add-user")
+
+        self.wait_for(lambda: self.driver.find_element_by_id("username"))
+
+        if not hasattr(self, "accept_languages"):
+            # The add user page has a form with an "ADD USER" button
+            btns = self.driver.find_elements_by_tag_name("button")
+            assert "ADD USER" in [el.text for el in btns]
+
+        invalid_username = 'deleted'
+
+        self.safe_send_keys_by_css_selector('input[name="username"]', invalid_username)
+
+        self.safe_click_by_css_selector("button[type=submit]")
+
+        error_msg = self.driver.find_element_by_css_selector(".form-validation-error")
+        assert "Invalid username '{}'".format(invalid_username) in error_msg.text
+
     def _admin_adds_a_user(self, is_admin=False, new_username=""):
         self.safe_click_by_id("add-user")
 
