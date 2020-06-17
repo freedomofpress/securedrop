@@ -1,10 +1,6 @@
 securedrop-ossec-agent (3.6.0) unstable; urgency=low
 
-<<<<<<< HEAD
   * Upgrade to ossec 3.6.0
-=======
-  * Upgrade to ossec 3.60
->>>>>>> updated OSSEC version to 3.6.0, built with JIT disabled for grsec kernel
 
  -- SecureDrop Team <securedrop@freedom.press>  Mon, 13 Apr 2020 15:15:32 -0400
 

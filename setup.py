@@ -4,23 +4,7 @@ long_description = "The SecureDrop whistleblower platform."
 
 setuptools.setup(
     name="securedrop-app-code",
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    version="1.3.0",
-=======
-    version="1.3.0~rc1",
->>>>>>> Backporting 1.2.0 changelog and updating version to 1.3.0~rc1
-=======
-    version="1.3.0~rc2",
->>>>>>> SecureDrop 1.3.0-rc2
-=======
-    version="1.3.0",
->>>>>>> SecureDrop release 1.3.0
-=======
-    version="1.4.0~rc1",
->>>>>>> Post-release version bump from 1.3.0 to 1.4.0~rc1
+    version="1.4.0",
     author="Freedom of the Press Foundation",
     author_email="securedrop@freedom.press",
     description="SecureDrop Server",

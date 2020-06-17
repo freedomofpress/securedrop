@@ -1,8 +1,4 @@
 markupsafe>=1.1
 prompt_toolkit==2.0.9
-<<<<<<< HEAD
 pyyaml>=5.3.1
-=======
-pyyaml>=5.1.2
->>>>>>> adds --allow-unsafe flag to pip-compile and pins setuptools
 setuptools>=46.0.0
