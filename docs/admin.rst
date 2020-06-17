@@ -422,10 +422,9 @@ There are two primary reasons why you may want to update the system configuratio
 
 - to change SecureDrop server configuration options. **Example:** You want to change
   the time of day at which the servers are automatically rebooted (default: 4:00 AM).
-- to fix a problem with the configuration state of your *Application* and/or
-  *Monitor Server*. **Example:** An administrator unfamiliar with the system has
-  directly modified the iptables rules, and you want to reinstate the correct
-  rules.
+- to restore a valid configuration state on your servers. **Example:** Another admin
+  has directly modified the iptables rules during troubleshooting, and you want
+  to reinstate the correct rules.
 
 In both cases, follow these steps:
 
