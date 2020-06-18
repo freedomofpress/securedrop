@@ -24,6 +24,7 @@ systemd_services:
   - securedrop_rqrequeue.service
   - securedrop_rqworker.service
   - securedrop_shredder.service
+  - securedrop_source_deleter.service
 
 # SecureDrop rq worker log directory
 securedrop_worker_log_dir: /var/log/securedrop_worker

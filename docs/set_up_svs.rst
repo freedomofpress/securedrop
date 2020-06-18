@@ -27,8 +27,8 @@ Foundation <https://securedrop.org/help>`__.
 
 You should have a Tails drive clearly labeled “SecureDrop Secure Viewing
 Station”. If it's not labeled, label it right now, then boot it on the
-*Secure Viewing Station*. After it loads, you should see a "Welcome to
-Tails" screen, also known as the `Tails Greeter <https://tails.boum.org/doc/first_steps/startup_options/index.en.html#index2h1>`__.
+*Secure Viewing Station*. After it loads, you should see  the Tails
+`Welcome Screen <https://tails.boum.org/doc/first_steps/welcome_screen/index.en.html>`__.
 
 Enter your passphrase to unlock the persistent storage, then press **Unlock**.
 Before starting Tails, set an administration password for use with this Tails

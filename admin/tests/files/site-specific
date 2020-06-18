@@ -1,6 +1,7 @@
 app_hostname: app
 app_ip: 10.20.2.2
-dns_server: 8.8.8.8
+dns_server:
+- 8.8.8.8
 monitor_hostname: mon
 monitor_ip: 10.20.3.2
 ossec_alert_email: la@foo.com
@@ -13,7 +14,7 @@ securedrop_app_gpg_fingerprint: E99FFE83DF73E72FB6B264ED992D23B392F9E4F2
 securedrop_app_gpg_public_key: key.asc
 securedrop_app_https_on_source_interface: false
 securedrop_supported_locales:
-- en
+- en_US
 smtp_relay: smtp.gmail.com
 smtp_relay_port: 587
 ssh_users: sd

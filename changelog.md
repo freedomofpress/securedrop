@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.4.0
+
+### Web Applications
+* Moved source deletion to a background process to resolve timeout issue (#2527)
+
+### Operations
+* Updated Tor from 0.4.2.7 to 0.4.3.5 (#5292)
+* Added check for nameserver configuration loaded during install (#5288)
+* Added system configuration check script to securedrop-ossec packages (#5287)
+* Updated SecureDrop Release signing key so that it doesn't expire until June 30, 2021 (#5277)
+
+### Documentation
+* Added instructions for password rotation to Admin Guide (#5301)
+* Updated references to uncommon OSSEC alerts (#5316)
+
+
 ## 1.3.0
 
 ### Web Applications

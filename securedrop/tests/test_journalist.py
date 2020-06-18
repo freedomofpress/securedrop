@@ -614,6 +614,21 @@ def test_max_password_length():
                    password=overly_long_password)
 
 
+def test_login_password_too_long(journalist_app, test_journo, mocker):
+    mocked_error_logger = mocker.patch('journalist.app.logger.error')
+    with journalist_app.test_client() as app:
+        resp = app.post(url_for('main.login'),
+                        data=dict(username=test_journo['username'],
+                                  password='a' * (Journalist.MAX_PASSWORD_LEN + 1),
+                                  token=TOTP(test_journo['otp_secret']).now()))
+    assert resp.status_code == 200
+    text = resp.data.decode('utf-8')
+    assert "Login failed" in text
+    mocked_error_logger.assert_called_once_with(
+        "Login for '{}' failed: Password too long (len={})".format(
+            test_journo['username'], Journalist.MAX_PASSWORD_LEN + 1))
+
+
 def test_min_password_length():
     """Creating a Journalist with a password that is smaller than the
        minimum password length should raise an exception. This uses the
@@ -1330,7 +1345,7 @@ def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
                         test_admin['otp_secret'])
             # Create 1px * 1px 'white' PNG file from its base64 string
             form = journalist_app_module.forms.LogoForm(
-                logo=(BytesIO(base64.decodestring
+                logo=(BytesIO(base64.decodebytes
                       (b"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
                        b"VR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=")), 'test.png')
             )
@@ -2067,6 +2082,8 @@ def test_col_process_successfully_deletes_multiple_sources(journalist_app,
     utils.db_helper.submit(source_1, 1)
     source_2, _ = utils.db_helper.init_source()
     utils.db_helper.submit(source_2, 1)
+    source_3, _ = utils.db_helper.init_source()
+    utils.db_helper.submit(source_3, 1)
 
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
@@ -2081,9 +2098,13 @@ def test_col_process_successfully_deletes_multiple_sources(journalist_app,
 
         assert resp.status_code == 200
 
-    # Verify there are no remaining sources
+    # simulate the source_deleter's work
+    journalist_app_module.utils.purge_deleted_sources()
+
+    # Verify that all of the specified sources were deleted, but no others
     remaining_sources = Source.query.all()
-    assert not remaining_sources
+    assert len(remaining_sources) == 1
+    assert remaining_sources[0].uuid == source_3.uuid
 
 
 def test_col_process_successfully_stars_sources(journalist_app,

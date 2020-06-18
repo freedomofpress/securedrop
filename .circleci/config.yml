@@ -74,7 +74,7 @@ jobs:
           name: Run all linters but shellcheck
           command: |
             fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "/opt/venvs/securedrop-app-code/bin/pip3 install --require-hashes -r requirements/python3/develop-requirements.txt && make -C .. ansible-config-lint app-lint docs-lint flake8 html-lint typelint yamllint"
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "/opt/venvs/securedrop-app-code/bin/pip3 install --require-hashes -r requirements/python3/develop-requirements.txt && make -C .. ansible-config-lint app-lint flake8 html-lint typelint yamllint"
 
       - run:
           name: Run shellcheck
@@ -277,7 +277,7 @@ jobs:
             if ! [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             make ci-deb-tests
 
-  docs-linkcheck:
+  docs-lint-linkcheck:
     docker:
       - image: circleci/python:3.5
     steps:
@@ -297,11 +297,21 @@ workflows:
   version: 2
   securedrop_ci:
     jobs:
-      - lint
+      - docs-lint-linkcheck:
+          filters:
+            branches:
+              only:
+                - master
+      - lint:
+          filters:
+            branches:
+              ignore:
+                - master
       - app-tests:
           filters:
             branches:
               ignore:
+                - master
                 - /docs-.*/
                 - /i18n-.*/
                 - /update-builder-.*/
@@ -311,6 +321,7 @@ workflows:
           filters:
             branches:
               ignore:
+                - master
                 - /docs-.*/
                 - /i18n-.*/
                 - /update-builder-.*/
@@ -320,23 +331,33 @@ workflows:
           filters:
             branches:
               ignore:
+                - master
                 - /docs-.*/
                 - /i18n-.*/
                 - /update-builder-.*/
           requires:
             - lint
       - static-analysis-and-no-known-cves:
+          filters:
+            branches:
+              ignore:
+                - master
           requires:
             - lint
       - staging-test-with-rebase:
           filters:
             branches:
               ignore:
+                - master
                 - /docs-.*/
                 - /i18n-.*/
           requires:
             - lint
       - translation-tests:
+          filters:
+            branches:
+              ignore:
+                - master
           requires:
             - lint
       - deb-tests:
@@ -369,5 +390,5 @@ workflows:
     jobs:
       - deb-tests
       - translation-tests
-      - docs-linkcheck
+      - docs-lint-linkcheck
       - fetch-tor-debs

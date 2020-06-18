@@ -15,7 +15,7 @@ Standalone (HVM) Qubes VMs for use with staging:
 - ``sd-staging-app-base``, a base VM for the *SecureDrop Application Server*
 - ``sd-staging-mon-base``, a base VM for the *SecureDrop Monitor Server*
 
-While the development VM, ``sd-dev``, is based on Debian 9, the other VMs
+While the development VM, ``sd-dev``, is based on Debian 10, the other VMs
 will be based on Ubuntu Xenial.
 
 .. note:: The staging server VM names were recently changed from ``sd-app`` and
@@ -299,9 +299,9 @@ environment. In from the root of the SecureDrop project in ``sd-dev``, run:
 
    make staging
 
-The ``make staging`` command invokes the ``qubes-staging`` Molecule scenario. 
+The ``make staging`` command invokes the ``qubes-staging`` Molecule scenario.
 You can also run constituent Molecule actions directly, rather than using
-the Makefile target: 
+the Makefile target:
 
 .. code:: sh
 
@@ -309,11 +309,11 @@ the Makefile target:
    molecule converge -s qubes-staging
    molecule test -s qubes-staging
 
-.. note:: 
+.. note::
 
-  If the Molecule converge scenario fails with an error like ``"stderr": 
-  "app: Failed to clone appmenus, qvm-appmenus missing\`` you may be running 
-  into a bug in Qubes that prevents non-dom0 VMs from cloning new VMs. A 
+  If the Molecule converge scenario fails with an error like ``"stderr":
+  "app: Failed to clone appmenus, qvm-appmenus missing\`` you may be running
+  into a bug in Qubes that prevents non-dom0 VMs from cloning new VMs. A
   workaround is described `here <https://github.com/freedomofpress/securedrop/issues/3936>`_.
 
 That's it. You should now have a running, configured SecureDrop staging instance
@@ -324,4 +324,3 @@ to provision staging VMs on-demand. To remove the staging instance, use the Mole
 .. code:: sh
 
    molecule destroy -s qubes-staging
-

@@ -19,9 +19,6 @@ from models import Journalist, JournalistLoginAttempt, Reply, Source, SourceStar
 from sdconfig import config as sdconfig
 
 
-random.seed("~(=^–^)")  # mrow?
-
-
 def random_bool():
     return bool(random.getrandbits(1))
 

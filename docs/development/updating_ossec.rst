@@ -79,7 +79,7 @@ a failing test which you then can make pass with a patch to the OSSEC rules:
           coverage of alerts, please suggest them in ticket `2134`_ on GitHub.
 
 .. _Testinfra: https://testinfra.readthedocs.io/en/latest/
-.. _syscheck: https://ossec-docs.readthedocs.io/en/latest/manual/syscheck/
+.. _syscheck: https://ossec-docs.readthedocs.io/en/latest/docs/manual/syscheck/index.html
 .. _2134: https://github.com/freedomofpress/securedrop/issues/2134
 
 Deployment

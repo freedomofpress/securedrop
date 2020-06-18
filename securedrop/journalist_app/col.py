@@ -41,7 +41,12 @@ def make_blueprint(config):
     def delete_single(filesystem_id):
         """deleting a single collection from its /col page"""
         source = get_source(filesystem_id)
-        delete_collection(filesystem_id)
+        try:
+            delete_collection(filesystem_id)
+        except ValueError as e:
+            current_app.logger.error("error deleting collection: %s", e)
+            abort(500)
+
         flash(gettext("{source_name}'s collection deleted")
               .format(source_name=source.journalist_designation),
               "notification")

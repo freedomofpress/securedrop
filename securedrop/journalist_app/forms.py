@@ -3,7 +3,7 @@
 from flask_babel import lazy_gettext as gettext
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms import (TextAreaField, TextField, BooleanField, HiddenField,
+from wtforms import (TextAreaField, StringField, BooleanField, HiddenField,
                      ValidationError)
 from wtforms.validators import InputRequired, Optional
 
@@ -38,16 +38,16 @@ def name_length_validation(form, field):
 
 
 class NewUserForm(FlaskForm):
-    username = TextField('username', validators=[
+    username = StringField('username', validators=[
         InputRequired(message=gettext('This field is required.')),
         minimum_length_validation
     ])
-    first_name = TextField('first_name', validators=[name_length_validation, Optional()])
-    last_name = TextField('last_name', validators=[name_length_validation, Optional()])
+    first_name = StringField('first_name', validators=[name_length_validation, Optional()])
+    last_name = StringField('last_name', validators=[name_length_validation, Optional()])
     password = HiddenField('password')
     is_admin = BooleanField('is_admin')
     is_hotp = BooleanField('is_hotp')
-    otp_secret = TextField('otp_secret', validators=[
+    otp_secret = StringField('otp_secret', validators=[
         otp_secret_validation,
         Optional()
     ])
