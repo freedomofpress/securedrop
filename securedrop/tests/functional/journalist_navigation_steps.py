@@ -338,6 +338,8 @@ class JournalistNavigationStepsMixin:
 
         self.safe_click_by_css_selector("button[type=submit]")
 
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(".form-validation-error"))
+
         error_msg = self.driver.find_element_by_css_selector(".form-validation-error")
         assert "Invalid username '{}'".format(invalid_username) in error_msg.text
 
