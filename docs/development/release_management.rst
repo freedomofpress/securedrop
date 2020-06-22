@@ -24,13 +24,16 @@ Pre-Release
          <https://github.com/freedomofpress/securedrop/blob/develop/molecule/fetch-tor-packages/
          playbook.yml>`_ and open a PR.
 
-      b. Run ``make fetch-tor-packages`` to download the new debs (this will use Secure apt under 
-         the hood to verify the Release file and package), copy the downloaded packages into the 
-         ``securedrop-dev-packages-lfs`` repo, and open a PR so that a reviewer can verify that
-         the checksums match the checksums of the packages hosted on the `Tor apt 
-         repo <https://deb.torproject.org/torproject.org/pool/main/>`_. Once the PR is merged, the 
-         packages will be resigned with our own Release key, replacing Tor's, and hosted on 
-         ``apt-test.freedom.press``. 
+      b. Run ``make fetch-tor-packages`` to download the new debs. The script uses 
+         apt under the hood, so the Release file on the tor packages is verified according
+         to Tor's signature, ensuring package integrity.
+
+      c. Copy the downloaded packages into the ``securedrop-dev-packages-lfs`` repo,
+         and open a PR so that a reviewer can verify that the checksums match the checksums
+         of the packages hosted on the
+         `Tor apt repo <https://deb.torproject.org/torproject.org/pool/main/>`_. Once the PR is merged, the
+         packages will be resigned with our an FPF-managed test-only signing key, replacing the Tor
+         signature, and served from ``apt-test.freedom.press``.
 
 #. Check if a new release or release candidate for Tails has been added to the `Tails apt repo 
    <https://deb.tails.boum.org/dists/>`_. If so, request
