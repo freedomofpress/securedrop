@@ -14,14 +14,34 @@ Pre-Release
 1. Open a **Release SecureDrop 1.x.y** issue to track release-related activity.
    Keep this issue updated as you proceed through the release process for
    transparency.
-#. Check if there is a new stable release of Tor that can be QAed and released
-   as part of the SecureDrop release. If so, file an issue.
-#. Check if a release candidate for the Tails release is prepared. If so, request
+
+#. Check if there is a new stable release of Tor that can be QAed and released as part of the 
+   SecureDrop release. You can find stable releases by checking the `Tor blog 
+   <https://blog.torproject.org/category/tags/stable-release>`_. If we can upgrade, file an issue
+   and upgrade Tor following these steps:
+
+      a. Bump the version in `fetch-tor-packages
+         <https://github.com/freedomofpress/securedrop/blob/develop/molecule/fetch-tor-packages/
+         playbook.yml>`_ and open a PR.
+
+      b. Run ``make fetch-tor-packages`` to download the new debs (this will use Secure apt under 
+         the hood to verify the Release file and package), copy the downloaded packages into the 
+         ``securedrop-dev-packages-lfs`` repo, and open a PR so that a reviewer can verify that
+         the checksums match the checksums of the packages hosted on the `Tor apt 
+         repo <https://deb.torproject.org/torproject.org/pool/main/>`_. Once the PR is merged, the 
+         packages will be resigned with our own Release key, replacing Tor's, and hosted on 
+         ``apt-test.freedom.press``. 
+
+#. Check if a new release or release candidate for Tails has been added to the `Tails apt repo 
+   <https://deb.tails.boum.org/dists/>`_. If so, request
    people participating in QA to use the latest release candidate.
-#. Ensure that a pre-release announcement is prepared and shared with the community
-   for feedback. Once the announcement is ready, coordinate with other team members to
-   send them to current administrators, post on the SecureDrop blog, and tweet
-   out a link.
+
+#. Work with the Communications Manager assigned for the release to prepare a pre-release 
+   announcement that will be shared on the support.freedom.press support portal, securedrop.org 
+   website, and Twitter. Wait until the day of the release before including an announcmement for a 
+   SecureDrop security update. For a point release, you may be able to skip the pre-release 
+   announcement depending on how small the point release is.
+   
 #. For a regular release for version 1.x.0, branch off ``develop``::
 
      git checkout develop
