@@ -39,16 +39,23 @@ Pre-Release
    <https://deb.tails.boum.org/dists/>`_. If so, request
    people participating in QA to use the latest release candidate.
 
-#. Work with the Communications Manager assigned for the release to prepare a pre-release 
-   announcement that will be shared on the support.freedom.press support portal, securedrop.org 
-   website, and Twitter. Wait until the day of the release before including an announcmement for a 
-   SecureDrop security update. For a point release, you may be able to skip the pre-release 
-   announcement depending on how small the point release is.
-   
-#. For a regular release for version 1.x.0, branch off ``develop``::
+#. Ensure that a pre-release announcement is prepared and shared with the community
+   for feedback. Once the announcement is ready, coordinate with other team members to
+   send them to current administrators, post on the SecureDrop blog, and tweet
+   out a link.
+
+#. Create a release branch.
+
+   For a regular release, create a release branch off of ``develop``::
 
      git checkout develop
-     git checkout -b release/1.x
+     git checkout -b release/<major>.<minor>.0
+
+
+   For a point release, create a release branch off of the latest merged release branch::
+
+     git checkout release/<major>.<minor>.0
+     git checkout -b release/<major>.<minor>.1
 
    .. warning:: For new branches, please ask a ``freedomofpress``
                 organization administrator to enable branch protection
@@ -56,48 +63,28 @@ Pre-Release
                 passing as well as at least one approving review prior
                 to merging into the release branch.
 
-#. For each release candidate, update the version and
-   changelog. Collect a list of the important changes in the release,
-   including their GitHub issues or PR numbers, then run the
-   ``update_version.sh`` script, passing it the new version in the
-   format ``major.minor.patch~rcN``, e.g.::
+#. For each release candidate, update the version and changelog.
 
-     securedrop/bin/dev-shell ../update_version.sh 1.3.0~rc1
+   a. Collect a list of important changes in the release (see 
+      https://github.com/freedomofpress/securedrop/milestones) including GitHub issues or PR 
+      numbers for each change. You will add these changes to the changelog in the next step.
 
-   The script will open both the main repository changelog
-   (``changelog.md``) and the one used for Debian packaging in an
-   editor, giving you a chance to add the changes you collected. In
-   the Debian changelog, we typically just refer the reader to the
-   ``changelog.md`` file.
+   b. Run ``update_version.sh``, passing it the new version in the format 
+      ``<major>.<minor>.<patch>~rcN`` (note how we use a tilde here instead of a dash). The script 
+      will open both the main repository changelog (``changelog.md``) and the one used for Debian 
+      packaging in an editor, giving you a chance to add the changes you collected. In the Debian 
+      changelog, we typically just refer the reader to the ``changelog.md`` file:
+      ``securedrop/bin/dev-shell ../update_version.sh 1.3.0~rc1``
 
-#. If you would like to sign the release commit, you will need to do so manually:
+   c. Sign the commit added by the ``update_version.sh`` script:
+      ``git commit --all --amend --gpg-sign --no-edit``
 
-   a. Create a new signed commit and verify the signature::
+   d. Push the branch:
+      ``git push origin release/<major>.<minor>.<patch>``
 
-        git reset HEAD~1
-        git commit -aS
-        git log --show-signature
-
-   #. Ensure the new commit is signed, take note of the commit hash.
-
-   #. Edit ``1.x.y-rcN.tag`` and replace the commit hash with the new
-      (signed) commit hash.
-
-   #. Delete the old tag and create a new one based on the tag file
-      edited above::
-
-         git tag -d 1.x.y-rcN
-         git mktag < 1.x.y-rcN.tag > .git/refs/tags/1.x.y-rcN
-
-#. Push the branch and tags:
-
-   * For ``1.x.y~rc1``, push the ``release/1.x.y`` branch and
-     ``1.x.y-rc1`` tag directly.
-
-   * For subsequent release candidates and the final release version,
-     issue a PR with changelog and version changes into the
-     ``release/1.x.y`` branch, and push the signed tag once the PR is
-     merged.
+   e. Push the unsigned tag (you'll sign the <major>.<minor>.<patch> tag before the release goes 
+      out):
+      ``git push origin <major>.<minor>.<patch>-rcN``
 
 #. Build Debian packages and place them on
    ``apt-test.freedom.press``. This is currently done by making a PR
