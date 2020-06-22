@@ -84,6 +84,7 @@ anonymous sources.
    v3_services
    update_bios
    offboarding
+   decommission
 
 .. toctree::
    :caption: Upgrade SecureDrop
