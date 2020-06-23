@@ -637,6 +637,7 @@ class SiteConfig(object):
         try:
             with io.open(self.args.site_config) as site_config_file:
                 c = yaml.safe_load(site_config_file)
+                self._config_in_progress = c
                 return self.clean_config(c) if validate else c
         except IOError:
             sdlog.error("Config file missing, re-run with sdconfig")
