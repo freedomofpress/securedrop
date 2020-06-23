@@ -424,6 +424,9 @@ class SiteConfig(object):
     def load_and_update_config(self, validate: bool = True, prompt: bool = True):
         if self.exists():
             self.config = self.load(validate)
+        elif not prompt:
+            sdlog.error('Please run "securedrop-admin sdconfig" first.')
+            sys.exit(1)
 
         return self.update_config(prompt)
 
