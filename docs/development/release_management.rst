@@ -44,60 +44,58 @@ Pre-Release
    website, and Twitter. Wait until the day of the release before including an announcmement for a 
    SecureDrop security update. For a point release, you may be able to skip the pre-release 
    announcement depending on how small the point release is.
-   
-#. For a regular release for version 1.x.0, branch off ``develop``::
+
+#. Create a release branch.
+
+   For a regular release, create a release branch off of ``develop``::
 
      git checkout develop
-     git checkout -b release/1.x
+     git checkout -b release/<major>.<minor>.0
 
-   .. warning:: For new branches, please ask a ``freedomofpress``
-                organization administrator to enable branch protection
-                on the release branch. We want to require CI to be
-                passing as well as at least one approving review prior
-                to merging into the release branch.
 
-#. For each release candidate, update the version and
-   changelog. Collect a list of the important changes in the release,
-   including their GitHub issues or PR numbers, then run the
-   ``update_version.sh`` script, passing it the new version in the
-   format ``major.minor.patch~rcN``, e.g.::
+   For a point release, create a release branch off of the latest merged release branch::
 
-     securedrop/bin/dev-shell ../update_version.sh 1.3.0~rc1
+     git checkout release/<major>.<minor>.0
+     git checkout -b release/<major>.<minor>.1
 
-   The script will open both the main repository changelog
-   (``changelog.md``) and the one used for Debian packaging in an
-   editor, giving you a chance to add the changes you collected. In
-   the Debian changelog, we typically just refer the reader to the
-   ``changelog.md`` file.
+#. For each release candidate, update the version and changelog.
 
-#. If you would like to sign the release commit, you will need to do so manually:
+   a. Collect a list of important changes from the `SecureDrop milestones
+      <https://github.com/freedomofpress/securedrop/milestones>`_ for the release, including 
+      GitHub issues or PR numbers for each change. You will add these changes to the changelog in 
+      the next step.
 
-   a. Create a new signed commit and verify the signature::
+   #. Run ``update_version.sh`` in the dev shell to update the version and changelog. The script
+      will open both the main repository changelog (``changelog.md``) and the one used for Debian 
+      packaging in an editor, giving you a chance to add the changes you collected. In the Debian 
+      changelog, we typically just refer the reader to the ``changelog.md`` file. When you run the
+      script, you will need to pass it the new version in the format 
+      ``<major>.<minor>.<patch>~rcN``::
 
-        git reset HEAD~1
-        git commit -aS
-        git log --show-signature
+        securedrop/bin/dev-shell ../update_version.sh <major>.<minor>.<patch>~rcN
 
-   #. Ensure the new commit is signed, take note of the commit hash.
+      .. note:: A tilde is used in the version number passed to ``update_version.sh`` to match
+                the format specified in the `Debian docs 
+                <https://www.debian.org/doc/manuals/maint-guide/first.en.html#namever>`_ on how to 
+                name and version a package, whereas a dash is used in the tag version number 
+                since `git does not support the use of tilde 
+                <https://git-scm.com/docs/git-check-ref-format#_description>`_. 
 
-   #. Edit ``1.x.y-rcN.tag`` and replace the commit hash with the new
-      (signed) commit hash.
+   #. Disregard the script-generated ``.tag`` file since this is only used when we need to sign the 
+      final release tag (see `Release Process`_ section).
 
-   #. Delete the old tag and create a new one based on the tag file
-      edited above::
+   #. Sign the commit that was added by the ``update_version.sh`` script::
 
-         git tag -d 1.x.y-rcN
-         git mktag < 1.x.y-rcN.tag > .git/refs/tags/1.x.y-rcN
+        git commit --amend --gpg-sign
 
-#. Push the branch and tags:
+   #. Push the branch::
 
-   * For ``1.x.y~rc1``, push the ``release/1.x.y`` branch and
-     ``1.x.y-rc1`` tag directly.
+        git push origin release/<major>.<minor>.<patch>
 
-   * For subsequent release candidates and the final release version,
-     issue a PR with changelog and version changes into the
-     ``release/1.x.y`` branch, and push the signed tag once the PR is
-     merged.
+   #. Push the unsigned tag (only the final release tag needs to be signed, see 
+      `Release Process`_ section)::
+
+        git push origin <major>.<minor>.<patch>-rcN
 
 #. Build Debian packages and place them on
    ``apt-test.freedom.press``. This is currently done by making a PR
