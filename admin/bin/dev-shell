@@ -9,45 +9,22 @@ set -euo pipefail
 TOPLEVEL=$(git rev-parse --show-toplevel)
 source "${BASH_SOURCE%/*}/../../devops/scripts/ticker"
 
-function docker_image_circle() {
+function docker_image() {
     local out
     out="$(mktemp)"
-    ( cat Dockerfile ; echo COPY . . ) > circle.docker
-    if ! docker build ${DOCKER_BUILD_ARGUMENTS:-} -t securedrop-admin -f circle.docker . >& "$out" ; then
+    cd "${TOPLEVEL}"
+    if ! docker build ${DOCKER_BUILD_ARGUMENTS:-} -t securedrop-admin -f admin/Dockerfile . >& "$out" ; then
         cat "$out"
         status=1
     else
         status=0
     fi
-    rm circle.docker
     return $status
 }
 
-function docker_run_circle() {
+function docker_run() {
     docker run --rm -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-admin "$@"
 }
 
-function docker_image() {
-    docker build \
-           ${DOCKER_BUILD_ARGUMENTS:-} \
-	   --build-arg=USER_ID="$(id -u)" \
-	   --build-arg=USER_NAME="${USER:-root}" \
-           -t securedrop-admin "${TOPLEVEL}/admin"
-}
-
-function docker_run() {
-    docker run \
-	   --rm \
-	   --user "${USER:-root}" \
-	   --volume "${TOPLEVEL}:${TOPLEVEL}" \
-	   --workdir "${TOPLEVEL}/admin" \
-	   -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-admin "$@"
-}
-
-if test -n "${CIRCLE_SHA1:-}" ; then
-   docker_image_circle
-   docker_run_circle "$@"
-else
-   ticker docker_image
-   docker_run "$@"
-fi
+docker_image
+docker_run "$@"
