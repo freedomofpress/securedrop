@@ -268,6 +268,7 @@ The version of rsync installed by default on macOS is extremely out-of-date, as 
 .. _Homebrew: https://brew.sh/
 .. _homebrew-cask: http://sourabhbajaj.com/mac-setup/Vagrant/README.html
 
+
 Fork & Clone the Repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -292,3 +293,13 @@ Ensure your virtualenv is activated and install the packages.
     pip install --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
 .. note:: You will need to run this everytime new packages are added.
+
+Qubes
+~~~~~
+
+To configure a multi-machine evironment in Qubes, follow the Quick Start instructions above to
+create a standalone VM named ``sd-dev``, then follow the Linux instructions above to install the
+required packages, *omitting* Virtualbox.
+
+Then, complete the steps described in :doc:`qubes_staging`.
+
