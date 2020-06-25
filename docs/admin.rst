@@ -134,7 +134,7 @@ whether they will be using FreeOTP or a YubiKey for two-factor authentication.
 
 .. note::
   We don't allow the username **deleted** as we use it to mark the
-  journalist which are deleted from the system.
+  journalists which are deleted from the system.
 
 FreeOTP
 ^^^^^^^

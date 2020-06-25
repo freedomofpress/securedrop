@@ -1089,7 +1089,7 @@ def test_admin_add_user_with_invalid_username(journalist_app, test_admin):
                                   password=VALID_PASSWORD,
                                   is_admin=None))
 
-    assert "Invalid username '{}'".format(username) in resp.data.decode('utf-8')
+    assert "Invalid username" in resp.data.decode('utf-8')
 
 
 def test_deleted_user_cannot_login(journalist_app):

@@ -38,10 +38,9 @@ def name_length_validation(form, field):
 
 
 def check_invalid_usernames(form, field):
-    invalid_usernames = ['deleted']
-    if field.data in invalid_usernames:
+    if field.data in Journalist.INVALID_USERNAMES:
         raise ValidationError(gettext(
-            "Invalid username '{}'".format(field.data)))
+            "Invalid username"))
 
 
 class NewUserForm(FlaskForm):

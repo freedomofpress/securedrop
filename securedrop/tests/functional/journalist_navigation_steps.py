@@ -341,7 +341,7 @@ class JournalistNavigationStepsMixin:
         self.wait_for(lambda: self.driver.find_element_by_css_selector(".form-validation-error"))
 
         error_msg = self.driver.find_element_by_css_selector(".form-validation-error")
-        assert "Invalid username '{}'".format(invalid_username) in error_msg.text
+        assert "Invalid username" in error_msg.text
 
     def _admin_adds_a_user(self, is_admin=False, new_username=""):
         self.safe_click_by_id("add-user")
