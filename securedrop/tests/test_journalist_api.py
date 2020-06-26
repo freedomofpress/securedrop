@@ -380,9 +380,7 @@ def test_authorized_user_get_all_submissions_with_disconnected_submissions(journ
                                                                            test_submissions,
                                                                            journalist_api_token):
     with journalist_app.test_client() as app:
-        source_id = test_submissions['submissions'][0].source_id
-        source = Source.query.filter(Source.id == source_id).one()
-        db.session.delete(source)
+        db.session.delete(test_submissions['source'])
         db.session.commit()
         response = app.get(url_for('api.get_all_submissions'),
                            headers=get_api_headers(journalist_api_token))
