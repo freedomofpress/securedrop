@@ -228,11 +228,11 @@ Release Process
    #. Build logs should be saved and published according to the `build
       log guidelines
       <https://github.com/freedomofpress/securedrop/wiki/Build-logs>`_.
-#. Step through the signing ceremony for the ``Release`` file(s)
-   (there may be multiple if Tor is also updated along with the
-   SecureDrop release).
-#. Coordinate with the Infrastructure team to put signed Debian
-   packages on ``apt-qa.freedom.press``:
+#. In a clone of the private
+   `securedrop-debian-packages-lfs <https://github.com/freedomofpress/securedrop-debian-packages-lfs>`_
+   repository, create a branch from ``master`` called ``release``.
+#. In your local branch, commit the built packages to the ``core/xenial``
+   directory.
 
    * If the release includes a Tor update, make sure to include the
      new Tor Debian packages.
@@ -240,17 +240,26 @@ Release Process
      corresponding grsecurity-patched kernel packages, including both
      ``linux-image-*`` and ``linux-firmware-image-*`` packages as
      appropriate.
-
+#. Run the ``tools/publish`` script. This will create the ``Release`` file.
+#. Commit the changes made by the ``tools/publish`` script.
+#. Push your commits to the remote ``release`` branch. This will trigger an
+   automatic upload of the packages to ``apt-qa.freedom.press``, but the
+   packages will not yet be installable.
+#. Create a `draft PR <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests#draft-pull-requests>`__
+   from ``release`` into ``master``. Make sure to include a link to the build
+   logs in the PR description.
+#. A reviewer must verify the build logs, obtain and sign the generated ``Release``
+   file, and append the detached signature to the PR. The PR should remain in
+   draft mode. The packages on ``apt-qa.freedom.press`` are now installable.
 #. Coordinate with one or more team members to confirm a successful
    clean install in production VMs using the packages on
    ``apt-qa.freedom.press``.
-#. Ask Infrastructure to perform the DNS cutover to switch
-   ``apt-qa.freedom.press`` to ``apt.freedom.press``. Once complete,
-   the release is live.
-#. Issue a PR to merge the release branch changes into ``master``. Once the PR is
-   merged, verify that the `public documentation <https://docs.securedrop.org/>`_
-   refers to the new release version. If not, log in to ReadTheDocs and start a
-   build of the ``master`` version.
+#. If no issues are discovered in final QA, promote the packaging PR out of draft
+   mode.
+#. A reviewer must merge the packaging PR. This will publish the packages on
+   ``apt.freedom.press``.
+#. The reviewer must delete the ``release`` branch so that it can be re-created
+   during the next release.
 #. Create a `release
    <https://github.com/freedomofpress/securedrop/releases>`_ on GitHub
    with a brief summary of the changes in this release.
@@ -258,6 +267,8 @@ Release Process
 #. Make sure that the release is announced from the SecureDrop Twitter account.
 #. Make sure that members of `the support portal
    <https://support.freedom.press>`_ are notified about the release.
+#. Make sure that version string monitored by FPF's Icinga monitoring system
+   is updated by the infrastructure team.
 #. Update the upgrade testing boxes following this process:
    :ref:`updating_upgrade_boxes`.
 
