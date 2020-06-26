@@ -2,7 +2,11 @@
 
 ## 1.5.0~rc1
 
+* 
 
+## 1.4.1
+
+* Bugfix: Updated securedrop-admin utility to validate instance configuration correctly when v3 onion services are disabled (#5334)`
 
 ## 1.4.0
 
