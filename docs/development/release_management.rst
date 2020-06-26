@@ -260,6 +260,11 @@ Release Process
    ``apt.freedom.press``.
 #. The reviewer must delete the ``release`` branch so that it can be re-created
    during the next release.
+#. Issue a PR in the ``securedrop`` repository to merge the release branch
+   changes into ``master``. Once the PR is merged, verify that the
+   `public documentation <https://docs.securedrop.org/>`_
+   refers to the new release version. If not, log in to ReadTheDocs and start a
+   build of the ``master`` version.
 #. Create a `release
    <https://github.com/freedomofpress/securedrop/releases>`_ on GitHub
    with a brief summary of the changes in this release.
