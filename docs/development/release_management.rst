@@ -17,6 +17,8 @@ roles for a SecureDrop release:
 - **Localization Manager:** to manage outreach to the translator community, and
   to coordinate translation updates of existing strings.
 
+- **Deputy LM:** like the RM, this role is backed up by another team member.
+
 - **Communications Manager:** to prepare and distribute pre-release and
   release messaging (including standard upgrade instructions, release notes,
   social media posts, and support portal announcements)
