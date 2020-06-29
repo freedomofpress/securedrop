@@ -65,9 +65,9 @@ Under **Configuration Slot**, click **Configuration Slot 1**.
 .. _`Yubikey manual`: https://www.yubico.com/wp-content/uploads/2015/03/YubiKeyManual_v3.4.pdf
 
 In the section titled **OATH-HOTP parameters**, uncheck the box for
-**OATH Token Identifier (6 bytes)**. Next, uncheck the box for **Hide
-secret**. This will display the **Secret Key (20 bytes Hex)**
-field.
+**OATH Token Identifier (6 bytes)**. Leave the HOTP length at 6 digits. 
+Next, uncheck the box for **Hide secret**. This will display the **Secret Key 
+(20 bytes Hex)** field.
 
 .. important:: Make a note somewhere safe of the **Secret Key (20
                bytes Hex)** value.
@@ -81,7 +81,7 @@ choose a location to save the log file. When the configuration is
 done, you should see green text saying **YubiKey configured** at the
 top of the window.
 
-|YubiKey config successful|
+|YubiKey Config Successful|
 
 Adding Users
 ------------
@@ -109,3 +109,4 @@ will insert the 6-digit code that you will need to log in.
 .. |YubiKey Overview| image:: images/yubikey_overview.png
 .. |YubiKey Config| image:: images/yubikey_oath_hotp_configuration.png
 .. |YubiKey Config Successful| image:: images/yubikey_configuration_successful.png
+
