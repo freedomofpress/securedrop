@@ -1,5 +1,5 @@
 ---
-build_ossec_deb_pkg_dependencies: ['libevent1-dev','libpcre2-dev']
+build_ossec_deb_pkg_dependencies: ['libevent-dev','libpcre2-dev']
 
 ossec_server_hostname: ossec-server
 ossec_version: 3.6.0

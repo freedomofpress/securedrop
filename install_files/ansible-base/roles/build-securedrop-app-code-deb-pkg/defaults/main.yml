@@ -46,5 +46,6 @@ securedrop_app_rsync_opts:
 securedrop_local_build: "../../build"
 
 # Always build packages targeting Xenial.
-securedrop_build_xenial_support: True
-securedrop_package_dist: xenial
+securedrop_build_xenial_support: False
+securedrop_build_focal_support: True
+securedrop_package_dist: focal

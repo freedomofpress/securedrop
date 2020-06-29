@@ -27,7 +27,7 @@ apparmor_profiles:
   - usr.sbin.apache2
 
 # Installing the securedrop-app-code.deb package
-securedrop_staging_install_target_distro: xenial
+securedrop_staging_install_target_distro: focal
 securedrop_app_code_deb: "securedrop-app-code_{{ securedrop_app_code_version }}+{{ securedrop_staging_install_target_distro }}_amd64" # do not enter .deb extension
 
 # Enable Tor over SSH by default
