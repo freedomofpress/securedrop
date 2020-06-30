@@ -17,7 +17,7 @@ You can always find a regular project contributor to answer any questions you ma
 `SecureDrop instant messaging channel
 <https://gitter.im/freedomofpress/securedrop>`__. You can also register on `the
 forum <https://forum.securedrop.org/>`__ for more information and to
-participate in longer discussions. 
+participate in longer discussions.
 
 .. note:: Not sure where to start? You can always ask for advice in the `chat
           room <https://gitter.im/freedomofpress/securedrop>`__.
@@ -76,18 +76,16 @@ development environment to preview changes, run tests locally, etc.
 
 
 Technical Writers
-~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 Technical writers and editors are invited to review the `documentation
 <https://docs.securedrop.org/>`__ and fix any mistakes in accordance with the
-`documentation guidelines <documentation_guidelines>`__.
+:doc:`documentation guidelines <documentation_guidelines>`.
 
 If this is your first time helping with SecureDrop documentation, consider
 working on `low-hanging fruit`_ to become familiar with the process.
 
 .. _`low-hanging fruit`: https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+label%3A%22good+first+issue%22+label%3Adocs
-
-If you're looking to contribute to copywriting user-facing text within the UI itself, see _`these issues <https://github.com/freedomofpress/securedrop-ux/labels/NeedsCopywriting>`__ in `our separate User Experience repo <https://github.com/freedomofpress/securedrop-ux/>`__.
 
 Documentation Issues
 --------------------
@@ -96,6 +94,9 @@ Documentation Issues
 * `Middle-priority <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3Adocs>`__
 * `Low-priority <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3Adocs+label%3AP-low>`__
 
+If you're looking to contribute to copywriting user-facing text in the SecureDrop UI,
+see `these issues <https://github.com/freedomofpress/securedrop-ux/labels/NeedsCopywriting>`__
+in `our separate User Experience repo <https://github.com/freedomofpress/securedrop-ux/>`__.
 
 DevOps
 ~~~~~~
@@ -147,11 +148,16 @@ forum discussions are also welcome.
 
 
 UX Contributors
-~~~~~~~~~
+~~~~~~~~~~~~~~~
 
-If you have interaction or visual design skills, copywriting for UI skills, or have user research skills, check out `our separate User Experience repo <https://github.com/freedomofpress/securedrop-ux/>`__ for SecureDrop here on GitHub. There is a wiki with notes from weekly meetings, design standards, design principles, links-out to past research synthesis efforts, and ongoing and past project efforts documented as Issues, there.
+If you have interaction or visual design skills, UI copywriting skills, or
+user research skills, check out `our User Experience repo <https://github.com/freedomofpress/securedrop-ux/>`__.
+It includes a wiki with notes from UX meetings, design standards, design
+principles, links to past research synthesis efforts, and ongoing and past
+work documented in the form of issues.
 
-If you have front-end development skills, take a look at these issues on the primary SecureDrop repo in GitHub:
+If you have front-end development skills, take a look at these issues on the
+primary SecureDrop repo in GitHub:
 
 * `All issues labeled "UX" <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3AUX>`__
 * `CSS/SASS <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3ACSS%2FSASS>`__ and `HTML <https://github.com/freedomofpress/securedrop/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3AHTML>`__
@@ -159,7 +165,7 @@ If you have front-end development skills, take a look at these issues on the pri
 
 
 Forum Moderators and Support
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Those running a production instance of SecureDrop are encouraged to `read the
 support documentation <https://securedrop-support.readthedocs.io/>`__ to get
