@@ -285,10 +285,10 @@ class Reply(db.Model):
             uuid = self.journalist.uuid
         json_submission = {
             'source_url': url_for('api.single_source',
-                                  source_uuid=self.source.uuid),
+                                  source_uuid=self.source.uuid) if self.source else None,
             'reply_url': url_for('api.single_reply',
                                  source_uuid=self.source.uuid,
-                                 reply_uuid=self.uuid),
+                                 reply_uuid=self.uuid) if self.source else None,
             'filename': self.filename,
             'size': self.size,
             'journalist_username': username,
