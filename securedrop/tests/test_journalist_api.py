@@ -415,6 +415,20 @@ def test_authorized_user_can_get_single_submission(journalist_app,
             test_submissions['source'].submissions[0].size
 
 
+def test_authorized_user_can_get_all_replies_with_disconnected_replies(journalist_app,
+                                                                       test_files,
+                                                                       journalist_api_token):
+    with journalist_app.test_client() as app:
+        db.session.execute(
+            "DELETE FROM sources WHERE id = :id",
+            {"id": test_files["source"].id}
+        )
+        response = app.get(url_for('api.get_all_replies'),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+
 def test_authorized_user_can_get_all_replies(journalist_app, test_files,
                                              journalist_api_token):
     with journalist_app.test_client() as app:
