@@ -376,6 +376,20 @@ def test_authorized_user_can_get_all_submissions(journalist_app,
         assert observed_submissions == expected_submissions
 
 
+def test_authorized_user_get_all_submissions_with_disconnected_submissions(journalist_app,
+                                                                           test_submissions,
+                                                                           journalist_api_token):
+    with journalist_app.test_client() as app:
+        db.session.execute(
+            "DELETE FROM sources WHERE id = :id",
+            {"id": test_submissions["source"].id}
+        )
+        response = app.get(url_for('api.get_all_submissions'),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+
 def test_authorized_user_get_source_submissions(journalist_app,
                                                 test_submissions,
                                                 journalist_api_token):
