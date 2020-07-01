@@ -785,7 +785,6 @@ big-bellied
 big-boned
 big-shouldered
 big-ticket
-bigoted
 bilateral
 biliary
 bilingual
@@ -838,7 +837,6 @@ blank
 blanketed
 blaring
 blase
-blasphemous
 blasted
 blasting
 blatant
@@ -858,11 +856,7 @@ blistering
 blithe
 blocked
 blond
-blood-filled
 bloodless
-bloodshot
-bloodthirsty
-bloody-minded
 blotched
 blotchy
 blow-by-blow
@@ -1319,7 +1313,6 @@ clinical
 clinking
 clip-on
 clipped
-clitoral
 cloaked
 clockwise
 clogged
@@ -1620,7 +1613,6 @@ copacetic
 copious
 coppery
 copyrighted
-coquettish
 coral
 corded
 cordial
@@ -2584,7 +2576,6 @@ exhausted
 exhaustible
 exhausting
 exhaustive
-exhibitionistic
 exhilarating
 exigent
 existent
@@ -2681,7 +2672,6 @@ factory-made
 factual
 facultative
 faddish
-faecal
 fail-safe
 failing
 faint
@@ -3357,7 +3347,6 @@ herbal
 herbivorous
 herculean
 here
-hermaphroditic
 hermeneutic
 hermetic
 heroic
@@ -4165,9 +4154,6 @@ leal
 lean
 least
 leavened
-lecherous
-leering
-leery
 leeward
 left
 left-hand
@@ -4198,7 +4184,6 @@ lessened
 lesser
 lethargic
 level
-lewd
 lexical
 liable
 liberated
@@ -4632,7 +4617,6 @@ molten
 momentous
 monetary
 moneyed
-mongoloid
 monistic
 monkish
 mono
@@ -4650,7 +4634,6 @@ monotheistic
 monotonic
 monounsaturated
 monozygotic
-monstrous
 montane
 monthly
 monumental
@@ -5345,7 +5328,6 @@ personalized
 perspicacious
 persuasive
 pertinent
-perverse
 pessimistic
 petrous
 petty
@@ -5486,7 +5468,6 @@ popular
 populated
 populous
 porcine
-pornographic
 porous
 port
 portable
@@ -5605,8 +5586,6 @@ private
 privileged
 privy
 pro
-pro-choice
-pro-life
 proactive
 probabilistic
 probable
@@ -5776,7 +5755,6 @@ raised
 raising
 rallying
 rampant
-rancid
 rancorous
 random
 randomized
@@ -6150,7 +6128,6 @@ scapular
 scarce
 scarred
 scathing
-scatological
 scattered
 scenic
 scented
@@ -6293,7 +6270,6 @@ serous
 serpentine
 serried
 serviceable
-servile
 sessile
 set
 settled
@@ -6348,7 +6324,6 @@ shiftless
 shimmery
 shining
 shipshape
-shitless
 shivery
 shopworn
 short
@@ -6749,7 +6724,6 @@ strident
 stringy
 strip-mined
 striped
-stripped
 strong
 strong-minded
 structural
@@ -7668,7 +7642,6 @@ unlovely
 unlucky
 unmade
 unmanageable
-unmanly
 unmanned
 unmarked
 unmarketable
@@ -7682,7 +7655,6 @@ unmistakable
 unmitigated
 unmodified
 unmodulated
-unmolested
 unmotivated
 unmoved
 unmoving

@@ -518,7 +518,6 @@ amplifier
 amplitude
 ampulla
 amputation
-amputee
 amulet
 amusement
 amygdala
@@ -1331,8 +1330,6 @@ bassist
 bassoon
 bassoonist
 basswood
-bastardization
-bastardy
 baste
 baster
 basting
@@ -1531,8 +1528,6 @@ biennial
 bier
 bifocals
 bifurcation
-bigamist
-bigamy
 bigeye
 bighorn
 bight
@@ -1628,7 +1623,6 @@ blackberry
 blackbird
 blackboard
 blackening
-blackface
 blackfish
 blackfly
 blackhead
@@ -1699,14 +1693,9 @@ blocking
 blogger
 blond
 blood
-bloodbath
 bloodhound
 bloodletting
-bloodlust
 bloodroot
-bloodshed
-bloodstain
-bloodstream
 bloom
 bloomer
 bloomers
@@ -1807,7 +1796,6 @@ bombardment
 bombast
 bomber
 bomblet
-bombshell
 bombsight
 bonanza
 bonbon
@@ -2084,8 +2072,6 @@ brunt
 brush
 brushwood
 brushwork
-brutality
-brutalization
 bryozoan
 bubble
 buck
@@ -2200,7 +2186,6 @@ businesswoman
 busker
 busload
 busman
-bust
 bustard
 buster
 bustle
@@ -2210,8 +2195,6 @@ busywork
 butadiene
 butane
 butch
-butcher
-butchery
 butler
 butte
 butter
@@ -2544,8 +2527,6 @@ caster
 castigation
 casting
 castle
-castration
-castrato
 casualness
 casualty
 casuistry
@@ -2832,11 +2813,9 @@ chi
 chiaroscuro
 chiasmus
 chic
-chick
 chickadee
 chicken
 chickenpox
-chickenshit
 chickpea
 chickweed
 chicle
@@ -2894,7 +2873,6 @@ chock
 chocolate
 choice
 choir
-choirboy
 choirmaster
 choke
 chokecherry
@@ -3057,7 +3035,6 @@ clearance
 clearing
 clearness
 cleat
-cleavage
 cleaver
 clef
 cleft
@@ -3174,7 +3151,6 @@ cockerel
 cockle
 cockney
 cockpit
-cockroach
 cocoa
 cocobolo
 coconut
@@ -3469,8 +3445,6 @@ confabulation
 confection
 confectioner
 confectionery
-confederate
-confederation
 conferee
 conference
 confession
@@ -3689,7 +3663,6 @@ copperhead
 copperplate
 coppersmith
 copra
-coprolite
 copy
 copybook
 copycat
@@ -3746,7 +3719,6 @@ corporation
 corporatism
 corporatist
 corps
-corpulence
 corpus
 correction
 corrective
@@ -4207,7 +4179,6 @@ dame
 damp
 dampener
 damper
-damsel
 damselfish
 damselfly
 damson
@@ -4352,7 +4323,6 @@ defeat
 defeated
 defeatism
 defeatist
-defecation
 defect
 defendant
 defender
@@ -4373,7 +4343,6 @@ deflector
 defoliant
 defoliation
 deforestation
-deformation
 deformity
 defroster
 degeneracy
@@ -4416,7 +4385,6 @@ demand
 demander
 demarche
 demeanor
-dementia
 demerit
 demigod
 demimonde
@@ -5172,7 +5140,6 @@ dyslexia
 dyspeptic
 dysphagia
 dysphonia
-dysphoria
 dysplasia
 dyspnea
 dysthymia
@@ -5707,12 +5674,8 @@ evocation
 evolution
 evolutionist
 ewe
-ex-boyfriend
-ex-husband
 ex-mayor
 ex-president
-ex-spouse
-ex-wife
 exacerbation
 exaction
 exactness
@@ -5759,8 +5722,6 @@ exhaust
 exhaustion
 exhibit
 exhibition
-exhibitionism
-exhibitionist
 exhibitor
 exhilaration
 exhortation
@@ -5956,8 +5917,6 @@ farthing
 fascia
 fascicle
 fascination
-fascism
-fascist
 fashion
 fast
 fastball
@@ -6590,8 +6549,6 @@ frosting
 frown
 fructose
 frugality
-fruit
-fruitcake
 fruitfulness
 fruition
 frustration
@@ -7244,7 +7201,6 @@ guinea
 guise
 guitar
 guitarist
-gulag
 gulch
 gulf
 gull
@@ -7280,7 +7236,6 @@ gutsiness
 gutter
 guttural
 guy
-guzzler
 gymnasium
 gymnast
 gymnastics
@@ -7469,8 +7424,6 @@ hatchery
 hatchet
 hatchling
 hatchway
-hate
-hater
 hatmaker
 hauler
 hauling
@@ -7544,7 +7497,6 @@ heartwood
 heat
 heater
 heath
-heathen
 heating
 heatstroke
 heave
@@ -7620,7 +7572,6 @@ herder
 here
 heredity
 heresy
-heretic
 heritage
 hermaphrodite
 hermeneutics
@@ -7780,8 +7731,6 @@ homogenization
 homology
 homonym
 homonymy
-homophobe
-homophobia
 homophony
 homunculus
 hone
@@ -8176,7 +8125,6 @@ impossibility
 impossible
 imposter
 imposture
-impotence
 impoundment
 impracticality
 imprecation
@@ -8538,7 +8486,6 @@ interview
 interviewee
 interviewer
 intestine
-intifada
 intimidation
 intolerance
 intonation
@@ -9780,7 +9727,6 @@ mash
 masher
 mask
 masking
-masochism
 mason
 masonry
 masquerade
@@ -9794,7 +9740,6 @@ masseuse
 massif
 mast
 mastectomy
-master
 masterpiece
 masterstroke
 mastery
@@ -10171,8 +10116,6 @@ mink
 minnow
 minoxidil
 minster
-minstrel
-minstrelsy
 mint
 minuet
 minuscule
@@ -10184,14 +10127,11 @@ mirage
 mire
 mirror
 misalignment
-misanthrope
-misanthropy
 misapplication
 misappropriation
 misbehavior
 miscalculation
 miscarriage
-miscegenation
 mischief
 misconception
 misconduct
@@ -10213,7 +10153,6 @@ mismanagement
 mismatch
 misnomer
 miso
-misogynist
 misogyny
 misprint
 mispronunciation
@@ -10319,7 +10258,6 @@ monism
 monitor
 monitoring
 monk
-monkey
 monkfish
 monoamine
 monochrome
@@ -10470,7 +10408,6 @@ mufti
 mug
 mugger
 mugging
-mujahidin
 mulberry
 mulch
 mule
@@ -10501,7 +10438,6 @@ munificence
 muon
 mural
 muralist
-murderess
 murine
 murre
 muscadine
@@ -10586,7 +10522,6 @@ naivete
 nakedness
 naloxone
 naltrexone
-namby-pamby
 name
 name-dropping
 nameplate
@@ -10625,12 +10560,10 @@ nasturtium
 nation
 national
 nationalism
-nationalist
 nationality
 nationalization
 native
 nativism
-nativist
 natural
 naturalism
 naturalist
@@ -11482,7 +11415,6 @@ paramilitary
 paranoia
 paranoid
 parapet
-paraphilia
 paraphrase
 paraplegia
 paraplegic
@@ -11685,7 +11617,6 @@ pedicure
 pedigree
 pediment
 pedometer
-peeing
 peek
 peekaboo
 peel
@@ -12005,7 +11936,6 @@ pinochle
 pinole
 pinon
 pinpoint
-pinprick
 pinscher
 pinstripe
 pintail
@@ -13532,7 +13462,6 @@ retainer
 retake
 retaliation
 retardant
-retardation
 retention
 reticle
 reticule
@@ -15145,7 +15074,6 @@ span
 spandex
 spandrel
 spaniel
-spanking
 spar
 spare
 spareribs
@@ -16381,7 +16309,6 @@ thrill
 thriller
 throat
 throb
-throbbing
 throes
 thrombin
 thrombocytopenia
@@ -17753,7 +17680,6 @@ wolf
 wolfhound
 woman
 womanhood
-womanizer
 womankind
 womanliness
 wombat
