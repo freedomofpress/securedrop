@@ -25,7 +25,7 @@ function find_latest_ci_image() {
     #    --filter="family:fpf-securedrop AND name ~ ^ci-nested-virt-stretch" \
     #    --sort-by=~Name --limit=1 --format="value(Name)"
     # Return hardcoded image id to prevent newer builds from breaking CI
-    echo "ci-nested-virt-stretch-1557975808"
+    echo "ci-nested-virt-stretch-1564072828"
 }
 
 # Call out to GCE API and start a new instance, designating
