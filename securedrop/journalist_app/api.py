@@ -307,7 +307,7 @@ def make_blueprint(config):
     def get_all_replies():
         replies = Reply.query.all()
         return jsonify(
-            {'replies': [reply.to_json() for reply in replies]}), 200
+            {'replies': [reply.to_json() for reply in replies if reply.source]}), 200
 
     @api.route('/user', methods=['GET'])
     @token_required
