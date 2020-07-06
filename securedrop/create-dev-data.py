@@ -4,6 +4,7 @@
 import datetime
 import os
 import argparse
+import math
 from itertools import cycle
 
 from flask import current_app
@@ -15,14 +16,11 @@ import journalist_app
 from sdconfig import config
 from db import db
 from models import Journalist, Reply, Source, Submission
-from specialstrings import submissions
+from specialstrings import strings
 
 
-replies = cycle([
-    'This is a test reply without markup!',
-    'This is a test reply with markup and characters such as \, \\, \', \" and ". ' +  # noqa: W605, E501
-    '<strong>This text should not be bold</strong>!'
-])
+submissions = cycle(strings)
+replies = cycle(strings)
 
 
 def main(staging=False):
@@ -54,9 +52,9 @@ def main(staging=False):
 
         NUM_SOURCES = os.getenv('NUM_SOURCES', 2)
         if NUM_SOURCES == "ALL":
-            # We want all strings, 14 sources will give all the strings based
-            # on current string count.
-            NUM_SOURCES = 14
+            # We ingest two strings per source, so this will create the required
+            # number of sources to include all special strings
+            NUM_SOURCES = math.ceil(len(strings) / 2)
         # Add test sources and submissions
         num_sources = int(NUM_SOURCES)
         for i in range(1, num_sources + 1):

@@ -1,7 +1,7 @@
-from itertools import cycle
-
-
 strings = [
+    """This is a test message without markup!""",
+    """This is a test message with markup and characters such as \, \\, \', \" and ". """ +  # noqa: W605, E501
+    """<strong>This text should not be bold</strong>!""",
     """~!@#$%^&*()_+{}|:"<>?~!@#$%^&*()_+{}|:"<>?~!@#$%^&*()_+{}|:"<>?~!@#$%""",
     """Ω≈ç√∫˜µ≤≥÷
 åß∂ƒ©˙∆˚¬…æ
@@ -142,15 +142,3 @@ Nunc gravida, lorem ut volutpat malesuada, neque mi sodales massa, ut malesuada 
 𝚃𝚑𝚎 𝚚𝚞𝚒𝚌𝚔 𝚋𝚛𝚘𝚠𝚗 𝚏𝚘𝚡 𝚓𝚞𝚖𝚙𝚜 𝚘𝚟𝚎𝚛 𝚝𝚑𝚎 𝚕𝚊𝚣𝚢 𝚍𝚘𝚐
 ⒯⒣⒠ ⒬⒰⒤⒞⒦ ⒝⒭⒪⒲⒩ ⒡⒪⒳ ⒥⒰⒨⒫⒮ ⒪⒱⒠⒭ ⒯⒣⒠ ⒧⒜⒵⒴ ⒟⒪⒢""",  # noqa: W605, E501
 ]
-
-submission_list = ["""This is a test submission without markup!""",
-    """This is a test submission with markup and characters such as \, \\, \', \" and ". """ +  # noqa: W605, E501
-    """<strong>This text should not be bold</strong>!"""]
-submission_list.extend(strings)
-submissions = cycle(submission_list)
-
-replies_list = ['This is a test reply without markup!',
-    'This is a test reply with markup and characters such as \, \\, \', \" and ". ' +  # noqa: W605, E501
-    '<strong>This text should not be bold</strong>!']
-replies_list.extend(strings)
-replies = cycle(replies_list)
