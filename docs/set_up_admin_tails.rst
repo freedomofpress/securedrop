@@ -14,22 +14,27 @@ Start Tails with Persistence Enabled
 ------------------------------------
 
 After you boot the *Admin Workstation* Tails USB on your normal workstation, you
-should see a *Welcome to Tails* screen with *Encrypted Persistent
-Storage*.  Enter your password and click *Unlock*. Do NOT click *Start
-Tails* yet. Under *Additional Settings* click the *plus* sign.
+should see a "Welcome to Tails" screen with a field labeled "Encrypted Persistent
+Storage".  Enter your password and click **Unlock**. Do not click **Start
+Tails** yet. Under "Additional Settings" click **+**.
 
-Click *Administration password*, enter a password for use with this
-specific Tails session and click *Add*. And finally click *Start
-Tails*.
+Click **Administration password**, enter a password for use with this
+specific Tails session, and click **Add**.
 
-.. note:: The *Administration password* is a one-time password. It
+.. note:: The Tails administration password is a one-time password. It
       will reset every time you shut down Tails.
 
-After Tails finishes booting, make sure you're connected to the Internet
-|Network| and that the Tor status onion icon is not crossed out
+During the installation, you will need the unsafe browser to access the firewall
+configuration. To enable it, click "Unsafe Browser" and click **Add**:
+
+|UnsafeBrowser|
+
+Click **Start Tails**. After Tails finishes booting, make sure you're connected
+to the Internet |Network| and that the Tor status onion icon is not crossed out
 |TorStatus|, consulting the icons in the upper right corner of the
 screen.
 
+.. |UnsafeBrowser| image:: images/tails_4x/unsafe-browser.png
 .. |Network| image:: images/network-wired.png
 .. |TorStatus| image:: images/tor-status-indicator.png
 
@@ -167,7 +172,7 @@ in the SecureDrop repository that you just cloned. To use the template:
 
    .. code:: sh
 
-     cp ~/Persistent/securedrop/tails_files/securedrop-keepassx.kdbx \ 
+     cp ~/Persistent/securedrop/tails_files/securedrop-keepassx.kdbx \
         ~/Persistent/keepassx.kdbx
 
 -  Open the KeePassXC program |KeePassXC| which is already installed on
