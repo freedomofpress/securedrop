@@ -27,9 +27,8 @@ apache_allow_from: 127.0.0.1
 
 dns_server:
   - 8.8.8.8
-  - 8.8.4.4
-mon_ip: 10.20.3.2
-app_ip: 10.20.2.2
+mon_ip: 10.0.1.5
+app_ip: 10.0.1.4
 
 pip_deps:
   - name: 'Flask'

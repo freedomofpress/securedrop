@@ -1,3 +1,10 @@
+import pytest
+
+
+test_vars = pytest.securedrop_test_vars
+testinfra_hosts = [test_vars.app_hostname, test_vars.monitor_hostname]
+
+
 def test_release_manager_upgrade_channel(host):
     """
     Ensures that the `do-release-upgrade` command will not

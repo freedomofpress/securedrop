@@ -9,7 +9,6 @@ securedrop_test_vars = pytest.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.app_hostname]
 
 
-@pytest.mark.run_in_prod
 def test_app_iptables_rules(host):
 
     # Build a dict of variables to pass to jinja for iptables comparison

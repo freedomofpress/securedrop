@@ -7,7 +7,6 @@ KERNEL_VERSION = sdvars.grsec_version
 testinfra_hosts = [sdvars.app_hostname, sdvars.monitor_hostname]
 
 
-@pytest.mark.run_in_prod
 def test_ssh_motd_disabled(host):
     """
     Ensure the SSH MOTD (Message of the Day) is disabled.
@@ -18,7 +17,6 @@ def test_ssh_motd_disabled(host):
     assert not f.contains(r"pam\.motd")
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize("package", [
     'linux-image-{}-grsec-securedrop'.format(KERNEL_VERSION),
     'paxctl',
@@ -33,7 +31,6 @@ def test_grsecurity_apt_packages(host, package):
     assert host.package(package).is_installed
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize("package", [
     'linux-signed-image-generic-lts-utopic',
     'linux-signed-image-generic',
@@ -59,7 +56,6 @@ def test_generic_kernels_absent(host, package):
     assert error_text in c.stderr.strip()
 
 
-@pytest.mark.run_in_prod
 def test_grsecurity_lock_file(host):
     """
     Ensure system is rerunning a grsecurity kernel by testing for the
@@ -71,7 +67,6 @@ def test_grsecurity_lock_file(host):
     assert f.size == 0
 
 
-@pytest.mark.run_in_prod
 def test_grsecurity_kernel_is_running(host):
     """
     Make sure the currently running kernel is specific grsec kernel.
@@ -81,7 +76,6 @@ def test_grsecurity_kernel_is_running(host):
     assert c.stdout.strip() == '{}-grsec-securedrop'.format(KERNEL_VERSION)
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('sysctl_opt', [
   ('kernel.grsecurity.grsec_lock', 1),
   ('kernel.grsecurity.rwxmap_logging', 0),
@@ -96,6 +90,7 @@ def test_grsecurity_sysctl_options(host, sysctl_opt):
         assert host.sysctl(sysctl_opt[0]) == sysctl_opt[1]
 
 
+@pytest.mark.skip_in_prod
 @pytest.mark.parametrize('paxtest_check', [
   "Executable anonymous mapping",
   "Executable bss",
@@ -130,6 +125,7 @@ def test_grsecurity_paxtest(host, paxtest_check):
             assert re.search(regex, c.stdout)
 
 
+@pytest.mark.skip_in_prod
 def test_grub_pc_marked_manual(host):
     """
     Ensure the `grub-pc` packaged is marked as manually installed.
@@ -140,7 +136,6 @@ def test_grub_pc_marked_manual(host):
     assert c.stdout.strip() == "grub-pc"
 
 
-@pytest.mark.run_in_prod
 def test_apt_autoremove(host):
     """
     Ensure old packages have been autoremoved.
@@ -220,7 +215,6 @@ def test_kernel_options_enabled_config(host, kernel_opts):
         assert line in kernel_config
 
 
-@pytest.mark.run_in_prod
 def test_mds_mitigations_and_smt_disabled(host):
     """
     Ensure that full mitigations are in place for MDS

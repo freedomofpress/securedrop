@@ -17,8 +17,8 @@
 {% endfor -%}
 -A INPUT -p tcp -m tcp --sport 587 -m state --state RELATED,ESTABLISHED -m comment --comment "Allow ossec email alerts out" -j ACCEPT
 -A INPUT -s {{ app_ip }}/32 -p tcp -m tcp --dport 22 -m comment --comment "Block explicitly SSH from the adjacent SD component" -j DROP
--A INPUT -i {{ default_interface }} -p tcp -m tcp --dport 22 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -m comment --comment "Rate limit incoming ssh traffic" -j ACCEPT
--A INPUT -i {{ default_interface }} -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -s 10.0.1.0/24 -i eth1 -p tcp -m tcp --dport 22 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -m comment --comment "Rate limit incoming ssh traffic" -j ACCEPT
+-A INPUT -s 10.0.1.0/24 -i eth1 -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT
 -A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP
 -A INPUT -m comment --comment "Drop and log all other incoming traffic" -j LOGNDROP
@@ -37,7 +37,7 @@
 -A OUTPUT -d {{ address }}/32 -p udp -m udp --dport 53 -m owner --uid-owner {{ postfix_user_id }} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "postfix dns rule" -j ACCEPT
 {% endfor -%}
 -A OUTPUT -p tcp -m tcp --dport 587 -m owner --uid-owner {{ postfix_user_id }} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow ossec email alerts out" -j ACCEPT
--A OUTPUT -o {{ default_interface }} -p tcp -m owner --uid-owner 0 -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
+-A OUTPUT -o eth1 -p tcp -m owner --uid-owner 0 -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
 -A OUTPUT -o lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT
 -A OUTPUT -m comment --comment "Drop all other outgoing traffic" -j DROP
 -A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-tcp-options --log-ip-options --log-uid

@@ -12,6 +12,7 @@ def test_app_pip_deps(host, exp_pip_pkg):
     assert pip[exp_pip_pkg['name']]['version'] == exp_pip_pkg['version']
 
 
+@pytest.mark.skip_in_prod
 def test_app_wsgi(host):
     """ ensure logging is enabled for source interface in staging """
     f = host.file("/var/www/source.wsgi")
@@ -63,6 +64,7 @@ def test_supervisor_not_installed(host):
     assert host.package("supervisor").is_installed is False
 
 
+@pytest.mark.skip_in_prod
 def test_gpg_key_in_keyring(host):
     """ ensure test gpg key is present in app keyring """
     with host.sudo(sdvars.securedrop_user):

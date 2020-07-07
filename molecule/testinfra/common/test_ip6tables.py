@@ -1,3 +1,9 @@
+import pytest
+
+test_vars = pytest.securedrop_test_vars
+testinfra_hosts = [test_vars.app_hostname, test_vars.monitor_hostname]
+
+
 def test_ip6tables_drop_everything(host):
     """
     Ensure that all IPv6 packets are dropped by default.

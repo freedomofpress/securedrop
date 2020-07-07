@@ -5,7 +5,6 @@ sdvars = pytest.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname, sdvars.monitor_hostname]
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('sysctl_opt', [
   ('net.ipv4.conf.all.accept_redirects', 0),
   ('net.ipv4.conf.all.accept_source_route', 0),
@@ -35,7 +34,6 @@ def test_sysctl_options(host, sysctl_opt):
         assert host.sysctl(sysctl_opt[0]) == sysctl_opt[1]
 
 
-@pytest.mark.run_in_prod
 def test_dns_setting(host):
     """
     Ensure DNS service is hard-coded in resolv.conf config.
@@ -48,7 +46,6 @@ def test_dns_setting(host):
     assert f.contains(r'^nameserver 8\.8\.8\.8$')
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('kernel_module', [
     'bluetooth',
     'iwlwifi',
@@ -67,7 +64,6 @@ def test_blacklisted_kernel_modules(host, kernel_module):
     assert f.contains("^blacklist {}$".format(kernel_module))
 
 
-@pytest.mark.run_in_prod
 def test_swap_disabled(host):
     """
     Ensure swap space is disabled. Prohibit writing memory to swapfiles
@@ -90,7 +86,6 @@ def test_swap_disabled(host):
     assert re.search(rgx, c)
 
 
-@pytest.mark.run_in_prod
 def test_twofactor_disabled_on_tty(host):
     """
     Having 2FA on TTY logins is cumbersome on systems without encrypted drives.
@@ -103,7 +98,6 @@ def test_twofactor_disabled_on_tty(host):
     assert "pam_ecryptfs.so unwrap" not in pam_auth_file
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('sshd_opts', [
   ('UsePAM', 'no'),
   ('ChallengeResponseAuthentication', 'no'),
@@ -122,7 +116,6 @@ def test_sshd_config(host, sshd_opts):
     assert line in sshd_config_file
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('logfile', [
     '/var/log/auth.log',
     '/var/log/syslog',
@@ -141,7 +134,6 @@ def test_no_ecrypt_messages_in_logs(host, logfile):
         assert error_message not in f.content_string
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('package', [
     'libiw30',
     'wpasupplicant',

@@ -5,14 +5,12 @@ sdvars = pytest.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname]
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('pkg', ['apparmor', 'apparmor-utils'])
 def test_apparmor_pkg(host, pkg):
     """ Apparmor package dependencies """
     assert host.package(pkg).is_installed
 
 
-@pytest.mark.run_in_prod
 def test_apparmor_enabled(host):
     """ Check that apparmor is enabled """
     with host.sudo():
@@ -27,7 +25,6 @@ apache2_capabilities = [
 ]
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('cap', apache2_capabilities)
 def test_apparmor_apache_capabilities(host, cap):
     """ check for exact list of expected app-armor capabilities for apache2 """
@@ -37,7 +34,6 @@ def test_apparmor_apache_capabilities(host, cap):
     assert cap in c.stdout
 
 
-@pytest.mark.run_in_prod
 def test_apparmor_apache_exact_capabilities(host):
     """ ensure no extra capabilities are defined for apache2 """
     c = host.check_output("grep -ic capability /etc/apparmor.d/usr.sbin.apache2")
@@ -47,7 +43,6 @@ def test_apparmor_apache_exact_capabilities(host):
 tor_capabilities = ['setgid']
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('cap', tor_capabilities)
 def test_apparmor_tor_capabilities(host, cap):
     """ check for exact list of expected app-armor capabilities for Tor """
@@ -55,7 +50,6 @@ def test_apparmor_tor_capabilities(host, cap):
     assert cap in c.stdout
 
 
-@pytest.mark.run_in_prod
 def test_apparmor_tor_exact_capabilities(host):
     """ ensure no extra capabilities are defined for Tor """
     c = host.check_output("grep -ic capability "
@@ -63,7 +57,6 @@ def test_apparmor_tor_exact_capabilities(host):
     assert str(len(tor_capabilities)) == c
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('profile', [
     'ntpd',
     'apache2',
@@ -81,7 +74,6 @@ def test_apparmor_ensure_not_disabled(host, profile):
         assert not f.exists
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('complain_pkg', sdvars.apparmor_complain)
 def test_app_apparmor_complain(host, complain_pkg):
     """ Ensure app-armor profiles are in complain mode for staging """
@@ -92,7 +84,6 @@ def test_app_apparmor_complain(host, complain_pkg):
         assert complain_pkg in c
 
 
-@pytest.mark.run_in_prod
 def test_app_apparmor_complain_count(host):
     """ Ensure right number of app-armor profiles are in complain mode """
     with host.sudo():
@@ -100,7 +91,6 @@ def test_app_apparmor_complain_count(host):
         assert c == str(len(sdvars.apparmor_complain))
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('aa_enforced', sdvars.apparmor_enforce)
 def test_apparmor_enforced(host, aa_enforced):
     awk = ("awk '/[0-9]+ profiles.*enforce./"
@@ -110,7 +100,6 @@ def test_apparmor_enforced(host, aa_enforced):
         assert aa_enforced in c
 
 
-@pytest.mark.run_in_prod
 def test_apparmor_total_profiles(host):
     """ Ensure number of total profiles is sum of enforced and
         complaining profiles """
@@ -122,7 +111,6 @@ def test_apparmor_total_profiles(host):
         assert host.check_output("aa-status --profiled") >= total_expected
 
 
-@pytest.mark.run_in_prod
 def test_aastatus_unconfined(host):
     """ Ensure that there are no processes that are unconfined but have
         a profile """
@@ -137,7 +125,6 @@ def test_aastatus_unconfined(host):
         assert unconfined_chk in aa_status_output
 
 
-@pytest.mark.run_in_prod
 def test_aa_no_denies_in_syslog(host):
     """ Ensure that there are no apparmor denials in syslog """
     with host.sudo():

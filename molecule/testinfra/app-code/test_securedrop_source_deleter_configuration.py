@@ -4,7 +4,6 @@ sdvars = pytest.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname]
 
 
-@pytest.mark.run_in_prod
 def test_securedrop_source_deleter_service(host):
     """
     Verify configuration of securedrop_source_deleter systemd service.

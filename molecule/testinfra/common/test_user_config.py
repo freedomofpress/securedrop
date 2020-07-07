@@ -7,7 +7,6 @@ sdvars = pytest.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname, sdvars.monitor_hostname]
 
 
-@pytest.mark.run_in_prod
 def test_sudoers_config(host):
     """
     Check sudoers config for passwordless sudo via group membership,
@@ -37,7 +36,6 @@ def test_sudoers_config(host):
     assert re.search(r'Defaults:%sudo\s+!requiretty', sudoers_config, re.M)
 
 
-@pytest.mark.run_in_prod
 def test_sudoers_tmux_env(host):
     """
     Ensure SecureDrop-specific bashrc additions are present.
@@ -75,7 +73,6 @@ def test_sudoers_tmux_env(host):
     assert host_file.content_string.strip() == expected_content
 
 
-@pytest.mark.run_in_prod
 def test_tmux_installed(host):
     """
     Ensure the `tmux` package is present, since it's required for the user env.
@@ -87,7 +84,6 @@ def test_tmux_installed(host):
     assert host.package("tmux").is_installed
 
 
-@pytest.mark.run_in_prod
 def test_sudoers_tmux_env_deprecated(host):
     """
     Previous version of the Ansible config set the tmux config

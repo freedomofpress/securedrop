@@ -9,7 +9,6 @@ securedrop_test_vars = pytest.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.monitor_hostname]
 
 
-@pytest.mark.run_in_prod
 def test_mon_iptables_rules(host):
 
     # Build a dict of variables to pass to jinja for iptables comparison
@@ -46,7 +45,6 @@ def test_mon_iptables_rules(host):
         assert iptables_expected == iptables
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('ossec_service', [
     dict(host="0.0.0.0", proto="tcp", port=22, listening=True),
     dict(host="0.0.0.0", proto="udp", port=1514, listening=True),

@@ -5,7 +5,6 @@ securedrop_test_vars = pytest.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.app_hostname]
 
 
-@pytest.mark.run_in_prod
 def test_apache_default_docroot_is_absent(host):
     """
     Ensure that the default docroot for Apache, containing static HTML
@@ -15,7 +14,6 @@ def test_apache_default_docroot_is_absent(host):
     assert not host.file('/var/www/html').exists
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('package', [
     'apache2',
     'apparmor-utils',
@@ -40,6 +38,7 @@ def test_securedrop_application_apt_dependencies(host, package):
     assert host.package(package).is_installed
 
 
+@pytest.mark.skip_in_prod
 def test_securedrop_application_test_locale(host):
     """
     Ensure both SecureDrop DEFAULT_LOCALE and SUPPORTED_LOCALES are present.
@@ -54,6 +53,7 @@ def test_securedrop_application_test_locale(host):
         assert "\nSUPPORTED_LOCALES = ['el', 'ar', 'en_US']\n" in securedrop_config.content_string
 
 
+@pytest.mark.skip_in_prod
 def test_securedrop_application_test_journalist_key(host):
     """
     Ensure the SecureDrop Application GPG public key file is present.
@@ -85,7 +85,6 @@ def test_securedrop_application_test_journalist_key(host):
             "^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$")
 
 
-@pytest.mark.run_in_prod
 def test_securedrop_application_sqlite_db(host):
     """
     Ensure sqlite database exists for application. The database file should be

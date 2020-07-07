@@ -1,3 +1,8 @@
+import pytest
+
+test_vars = pytest.securedrop_test_vars
+testinfra_hosts = [test_vars.app_hostname, test_vars.monitor_hostname]
+
 # We expect Ubuntu Xenial
 SUPPORTED_CODENAMES = ('xenial')
 SUPPORTED_RELEASES = ('16.04')

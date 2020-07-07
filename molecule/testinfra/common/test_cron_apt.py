@@ -6,7 +6,6 @@ test_vars = pytest.securedrop_test_vars
 testinfra_hosts = [test_vars.app_hostname, test_vars.monitor_hostname]
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('dependency', [
     'cron-apt',
     'ntp'
@@ -25,7 +24,6 @@ def test_cron_apt_dependencies(host, dependency):
     assert host.package(dependency).is_installed
 
 
-@pytest.mark.run_in_prod
 def test_cron_apt_config(host):
     """
     Ensure custom cron-apt config file is present.
@@ -38,7 +36,6 @@ def test_cron_apt_config(host):
     assert f.contains('^EXITON=error$')
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('repo', [
   'deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security main',
   'deb-src http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security main',
@@ -63,7 +60,6 @@ def test_cron_apt_repo_list(host, repo):
     assert f.contains(repo_regex)
 
 
-@pytest.mark.run_in_prod
 def test_cron_apt_repo_config_update(host):
     """
     Ensure cron-apt updates repos from the security.list config.
@@ -79,7 +75,6 @@ def test_cron_apt_repo_config_update(host):
     assert f.contains('^{}$'.format(repo_config))
 
 
-@pytest.mark.run_in_prod
 def test_cron_apt_delete_vanilla_kernels(host):
     """
     Ensure cron-apt removes generic linux image packages when installed.
@@ -95,7 +90,6 @@ def test_cron_apt_delete_vanilla_kernels(host):
     assert f.contains('^{}$'.format(command))
 
 
-@pytest.mark.run_in_prod
 def test_cron_apt_repo_config_upgrade(host):
     """
     Ensure cron-apt upgrades packages from the security.list config.
@@ -112,7 +106,6 @@ def test_cron_apt_repo_config_upgrade(host):
     assert f.contains(re.escape(repo_config))
 
 
-@pytest.mark.run_in_prod
 def test_cron_apt_config_deprecated(host):
     """
     Ensure default cron-apt file to download all updates does not exist.
@@ -121,7 +114,6 @@ def test_cron_apt_config_deprecated(host):
     assert not f.exists
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('cron_job', [
     {'job': '0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt && /sbin/reboot', # noqa
      'state': 'present'},
@@ -148,7 +140,6 @@ def test_cron_apt_cron_jobs(host, cron_job):
         assert not f.contains(regex_job)
 
 
-@pytest.mark.run_in_prod
 def test_cron_apt_all_packages_updated(host):
     """
     Ensure a safe-upgrade has already been run, by checking that no

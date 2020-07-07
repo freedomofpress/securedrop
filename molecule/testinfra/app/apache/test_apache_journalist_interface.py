@@ -28,6 +28,7 @@ wanted_apache_headers = [
   'Header set Referrer-Policy "no-referrer"',
 ]
 
+
 # Test is not DRY; haven't figured out how to parametrize on
 # multiple inputs, so explicitly redeclaring test logic.
 @pytest.mark.parametrize("header", wanted_apache_headers)

@@ -4,7 +4,6 @@ sdvars = pytest.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname]
 
 
-@pytest.mark.run_in_prod
 def test_haveged_config(host):
     """
     Ensure haveged's low entrop watermark is sufficiently high.
@@ -17,7 +16,6 @@ def test_haveged_config(host):
     assert f.contains('^DAEMON_ARGS="-w 2400"$')
 
 
-@pytest.mark.run_in_prod
 def test_haveged_no_duplicate_lines(host):
     """
     Regression test to check for duplicate entries. Earlier playbooks
@@ -30,7 +28,6 @@ def test_haveged_no_duplicate_lines(host):
     assert c.stdout == ""
 
 
-@pytest.mark.run_in_prod
 def test_haveged_is_running(host):
     """
     Ensure haveged service is running, to provide additional entropy.

@@ -19,10 +19,11 @@ fi
 
 cd ~/Persistent/securedrop
 source admin/.venv3/bin/activate
+echo "Installing test dependencies, this may take a while..."
 torify python3 -m pip install --quiet --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
 cd molecule/testinfra
-CI_SD_ENV=prod SECUREDROP_TESTINFRA_TARGET_HOST=prod py.test -n 2 --disable-warnings -m "run_in_prod" 
+CI_SD_ENV=${TEST_ENV:-prod} SECUREDROP_TESTINFRA_TARGET_HOST=${TEST_ENV:-prod} py.test -v -n 4 --disable-warnings -m "not skip_in_prod" 
 
 deactivate
 echo "--------"

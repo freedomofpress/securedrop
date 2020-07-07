@@ -6,7 +6,6 @@ test_vars = pytest.securedrop_test_vars
 testinfra_hosts = [test_vars.app_hostname, test_vars.monitor_hostname]
 
 
-@pytest.mark.run_in_prod
 def test_fpf_apt_repo_present(host):
     """
     Ensure the FPF apt repo, apt.freedom.press, is configured.
@@ -34,7 +33,6 @@ def test_fpf_apt_repo_present(host):
     assert f.contains(repo_regex)
 
 
-@pytest.mark.run_in_prod
 def test_fpf_apt_repo_fingerprint(host):
     """
     Ensure the FPF apt repo has the correct fingerprint on the associated
@@ -55,7 +53,6 @@ uid                  SecureDrop Release Signing Key"""
     assert fpf_gpg_pub_key_info in c.stdout
 
 
-@pytest.mark.run_in_prod
 @pytest.mark.parametrize('old_pubkey', [
     'pub   4096R/FC9F6818 2014-10-26 [expired: 2016-10-27]',
     'pub   4096R/00F4AD77 2016-10-20 [expires: 2017-10-20]',
