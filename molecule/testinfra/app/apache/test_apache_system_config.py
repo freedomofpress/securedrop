@@ -158,9 +158,11 @@ def test_apache_logfiles_no_extras(host):
     `test_apache_logfiles_present` config test. Here, we confirm that the
     total number of Apache logfiles exactly matches the number permitted
     on the Application Server, whether staging or prod.
+    Long-running instances may have rotated and gzipped logfiles, so this
+    test should only look for files ending in '.log'.
     """
     # We need elevated privileges to read files inside /var/log/apache2
     with host.sudo():
-        c = host.run("find /var/log/apache2 -mindepth 1 | wc -l")
+        c = host.run("find /var/log/apache2 -mindepth 1 -name '*.log' | wc -l")
         assert int(c.stdout) == \
             len(securedrop_test_vars.allowed_apache_logfiles)

@@ -42,7 +42,7 @@ apparmor_enforce:
   - "/usr/lib/NetworkManager/nm-dhcp-client.action"
   - "/usr/lib/connman/scripts/dhclient-script"
   - "/usr/sbin/ntpd"
-  - "/usr/sbin/tcpdump"
+  - "/usr/sbin/haveged"
   - "system_tor"
   - "/usr/sbin/apache2"
   - "/usr/sbin/apache2//DEFAULT_URI"
