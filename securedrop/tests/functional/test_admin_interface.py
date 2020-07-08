@@ -56,6 +56,12 @@ class TestAdminInterface(
         self._admin_visits_system_config_page()
         self._admin_can_send_test_alert()
 
+    def test_admin_adds_user_with_invalid_username(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        # Add an user with invalid username
+        self._admin_adds_a_user_with_invalid_username()
+
     def test_admin_adds_admin_user(self):
         self._admin_logs_in()
         self._admin_visits_admin_interface()

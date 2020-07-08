@@ -414,6 +414,7 @@ class Journalist(db.Model):
     MIN_USERNAME_LEN = 3
     MIN_NAME_LEN = 0
     MAX_NAME_LEN = 100
+    INVALID_USERNAMES = ['deleted']
 
     def __init__(self,
                  username: str,
@@ -641,11 +642,17 @@ class Journalist(db.Model):
               username: str,
               password: str,
               token: str) -> 'Journalist':
+
         try:
             user = Journalist.query.filter_by(username=username).one()
         except NoResultFound:
             raise InvalidUsernameException(
                 "invalid username '{}'".format(username))
+
+        if user.username in Journalist.INVALID_USERNAMES and \
+                user.uuid in Journalist.INVALID_USERNAMES:
+            raise InvalidUsernameException(
+                "Invalid username")
 
         if LOGIN_HARDENING:
             cls.throttle_login(user)

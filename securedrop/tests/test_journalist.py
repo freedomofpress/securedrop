@@ -26,7 +26,7 @@ from sdconfig import SDConfig, config
 
 from db import db
 from models import (InvalidPasswordLength, InstanceConfig, Journalist, Reply, Source,
-                    Submission)
+                    InvalidUsernameException, Submission)
 from .utils.instrument import InstrumentedApp
 
 # Smugly seed the RNG for deterministic testing
@@ -1074,6 +1074,66 @@ def test_admin_add_user(journalist_app, test_admin):
             new_user = Journalist.query.filter_by(username=username).one()
             ins.assert_redirects(resp, url_for('admin.new_user_two_factor',
                                                uid=new_user.id))
+
+
+def test_admin_add_user_with_invalid_username(journalist_app, test_admin):
+    username = 'deleted'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=username,
+                                  first_name='',
+                                  last_name='',
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+
+    assert "This username is invalid because it is reserved for internal use by the software." \
+           in resp.data.decode('utf-8')
+
+
+def test_deleted_user_cannot_login(journalist_app):
+    username = 'deleted'
+    uuid = 'deleted'
+
+    # Create a user with username and uuid as deleted
+    with journalist_app.app_context():
+        user, password = utils.db_helper.init_journalist(is_admin=False)
+        otp_secret = user.otp_secret
+        user.username = username
+        user.uuid = uuid
+        db.session.add(user)
+        db.session.commit()
+
+    # Verify that deleted user is not able to login
+    with journalist_app.test_client() as app:
+        resp = app.post(url_for('main.login'),
+                        data=dict(username=username,
+                                  password=password,
+                                  token=otp_secret))
+    assert resp.status_code == 200
+    text = resp.data.decode('utf-8')
+    assert "Login failed" in text
+
+
+def test_deleted_user_cannot_login_exception(journalist_app):
+    username = 'deleted'
+    uuid = 'deleted'
+
+    # Create a user with username and uuid as deleted
+    with journalist_app.app_context():
+        user, password = utils.db_helper.init_journalist(is_admin=False)
+        otp_secret = user.otp_secret
+        user.username = username
+        user.uuid = uuid
+        db.session.add(user)
+        db.session.commit()
+
+    with pytest.raises(InvalidUsernameException):
+        Journalist.login(username,
+                         password,
+                         TOTP(otp_secret).now())
 
 
 def test_admin_add_user_without_username(journalist_app, test_admin):
