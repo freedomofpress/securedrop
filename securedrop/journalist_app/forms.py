@@ -40,7 +40,7 @@ def name_length_validation(form, field):
 def check_invalid_usernames(form, field):
     if field.data in Journalist.INVALID_USERNAMES:
         raise ValidationError(gettext(
-            "Invalid username"))
+            "This username is invalid because it is reserved for internal use by the software."))
 
 
 class NewUserForm(FlaskForm):
