@@ -49,7 +49,7 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <p>
     {{ submission_preferences_form.prevent_document_uploads() }}
-    <label for="prevent_document_uploads">{{ gettext('Prevent sources from uploading documents.  Sources will still be able to send messages.') }}</label>
+    <label for="prevent_document_uploads">{{ gettext('Prevent sources from uploading documents. Sources will still be able to send messages.') }}</label>
   </p>
   <button type="submit" id="submit-submission-preferences">
     <i class="fas fa-pencil-alt"></i> {{ gettext('UPDATE SUBMISSION PREFERENCES') }}
