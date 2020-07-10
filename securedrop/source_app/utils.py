@@ -8,18 +8,24 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from threading import Thread
 
+import typing
+
 import i18n
 import re
 
-from crypto_util import CryptoException
+from crypto_util import CryptoUtil, CryptoException
 from models import Source
+from sdconfig import SDConfig
+
+if typing.TYPE_CHECKING:
+    from typing import Optional  # noqa: F401
 
 
-def logged_in():
+def logged_in() -> bool:
     return 'logged_in' in session
 
 
-def valid_codename(codename):
+def valid_codename(codename: str) -> bool:
     try:
         filesystem_id = current_app.crypto_util.hash_codename(codename)
     except CryptoException as e:
@@ -32,7 +38,7 @@ def valid_codename(codename):
     return source is not None
 
 
-def generate_unique_codename(config):
+def generate_unique_codename(config: SDConfig) -> str:
     """Generate random codenames until we get an unused one"""
     while True:
         codename = current_app.crypto_util.genrandomid(
@@ -61,20 +67,23 @@ def generate_unique_codename(config):
             return codename
 
 
-def get_entropy_estimate():
+def get_entropy_estimate() -> int:
     with io.open('/proc/sys/kernel/random/entropy_avail') as f:
         return int(f.read())
 
 
-def asynchronous(f):
-    def wrapper(*args, **kwargs):
+def asynchronous(f):               # type: ignore
+    def wrapper(*args, **kwargs):  # type: ignore
         thread = Thread(target=f, args=args, kwargs=kwargs)
         thread.start()
     return wrapper
 
 
 @asynchronous
-def async_genkey(crypto_util_, db_uri, filesystem_id, codename):
+def async_genkey(crypto_util_: CryptoUtil,
+                 db_uri: str,
+                 filesystem_id: str,
+                 codename: str) -> None:
     # We pass in the `crypto_util_` so we don't have to reference `current_app`
     # here. The app might not have a pushed context during testing which would
     # cause this asynchronous function to break.
@@ -96,7 +105,7 @@ def async_genkey(crypto_util_, db_uri, filesystem_id, codename):
     session.close()
 
 
-def normalize_timestamps(filesystem_id):
+def normalize_timestamps(filesystem_id: str) -> None:
     """
     Update the timestamps on all of the source's submissions to match that of
     the latest submission. This minimizes metadata that could be useful to
@@ -115,7 +124,7 @@ def normalize_timestamps(filesystem_id):
                 rc)
 
 
-def check_url_file(path, regexp):
+def check_url_file(path: str, regexp: str) -> 'Optional[str]':
     """
     Check that a file exists at the path given and contains a single line
     matching the regexp. Used for checking the source interface address
@@ -133,11 +142,11 @@ def check_url_file(path, regexp):
         return None
 
 
-def get_sourcev2_url():
+def get_sourcev2_url() -> 'Optional[str]':
     return check_url_file("/var/lib/securedrop/source_v2_url",
                           r"^[a-z0-9]{16}\.onion$")
 
 
-def get_sourcev3_url():
+def get_sourcev3_url() -> 'Optional[str]':
     return check_url_file("/var/lib/securedrop/source_v3_url",
                           r"^[a-z0-9]{56}\.onion$")
