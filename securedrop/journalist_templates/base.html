@@ -19,6 +19,12 @@
   <body>
 
     {% if g.user %}
+      {% if g.show_v2_onion_eol_warning %}
+      <div id="v2-onion-eol" class="warning-banner">
+        {{ gettext('<strong>Update Required:</strong> Your SecureDrop servers are still running v2 Onion Services, which are being phased out for security reasons. In February 2021, v2 Onion Services will be disabled, and your SecureDrop servers may become unreachable. <a href="//securedrop.org/v2-onion-eol" rel="noreferrer">Learn More</a>') }}
+      </div>
+      {% endif %}
+
     <div id="logout">
       {{ gettext('Logged on as') }} <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ g.user.username }}</a> |
       {% if g.user and g.user.is_admin %}
