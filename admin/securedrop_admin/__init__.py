@@ -410,7 +410,9 @@ class SiteConfig(object):
              str.split,
              lambda config: True],
             ['v2_onion_services', self.check_for_v2_onion(), bool,
-             'Do you want to enable v2 onion services (recommended only for SecureDrop instances installed before 1.0.0)?',  # noqa: E501
+             'WARNING: For security reasons, support for v2 onion services ' +
+             'will be removed in February 2021. ' +
+             'Do you want to enable v2 onion services?',
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes',
              lambda config: True],
