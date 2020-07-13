@@ -351,20 +351,20 @@ Two weeks before the release: string freeze
 When features for a new SecureDrop release are frozen, the localization manager for the release will:
 
 * :ref:`merge_develop_to_weblate`.
+* Update the `i18n timeline`_ in the translation section of the forum.
 * Post an announcement `to the translation section of the forum <https://forum.securedrop.org/c/translations>`__ (see `an example  <https://forum.securedrop.org/t/4-securedrop-strings-need-work-march-2018-string-freeze/461>`__).
-* Add a prominent Weblate whiteboard announcement that reads `The X.Y.Z deadline is Month day, year at midnight US/Pacific time. String freeze is in effect: no source strings will be modified before the release.`.
-* Remind all developers about the string freeze, in the `chat room <https://gitter.im/freedomofpress/securedrop>`__.
+* Remind all developers about the string freeze in `Gitter <https://gitter.im/freedomofpress/securedrop>`__.
+* Add a `Weblate announcement`_ with the translation timeline for the release.
 * Create a pull request for every source string suggestion coming from translators.
-* Update the `i18n timeline`_ and `Weblate whiteboard`_.
 
 Release day
 ^^^^^^^^^^^
 
 * :ref:`merge_weblate_to_develop`.
 * :ref:`Update the screenshots <updating_screenshots>`.
-* Remove the prominent Weblate whiteboard announcement.
+* Remove the `Weblate announcement`_ about this release's translation timeline.
 * Provide translator credits to add to the SecureDrop release announcement.
-* Update the `i18n timeline`_ and `Weblate whiteboard`_.
+* Update the `i18n timeline`_ in the forum.
 
 Translator credits
 ^^^^^^^^^^^^^^^^^^
@@ -466,7 +466,7 @@ with a release looming, the server can be rebooted.
 .. _`Weblate translation creation page`: https://weblate.securedrop.org/new-lang/securedrop/securedrop/
 .. _`Weblate desktop translation creation page`: https://weblate.securedrop.org/new-lang/securedrop/desktop/
 .. _`i18n timeline`: https://forum.securedrop.org/t/about-the-translations-category/16
-.. _`Weblate whiteboard`: https://weblate.securedrop.org/admin/trans/whiteboardmessage/6/change/
+.. _`Weblate announcement`: https://weblate.securedrop.org/admin/trans/announcement
 
 .. |Weblate commit Lock| image:: ../images/weblate/admin-lock.png
 .. |Weblate commit Locked| image:: ../images/weblate/admin-locked.png
