@@ -65,6 +65,10 @@ def create_app(config: 'SDConfig') -> Flask:
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     db.init_app(app)
 
+    v2_enabled = path.exists(path.join(config.SECUREDROP_DATA_ROOT, 'source_v2_url'))
+    v3_enabled = path.exists(path.join(config.SECUREDROP_DATA_ROOT, 'source_v3_url'))
+    app.config.update(V2_ONION_ENABLED=v2_enabled, V3_ONION_ENABLED=v3_enabled)
+
     app.storage = Storage(config.STORE_DIR,
                           config.TEMP_DIR,
                           config.JOURNALIST_KEY)
@@ -168,6 +172,9 @@ def create_app(config: 'SDConfig') -> Flask:
         g.text_direction = i18n.get_text_direction(g.locale)
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
+
+        if not app.config['V3_ONION_ENABLED'] or app.config['V2_ONION_ENABLED']:
+            g.show_v2_onion_eol_warning = True
 
         if request.path.split('/')[1] == 'api':
             pass  # We use the @token_required decorator for the API endpoints
