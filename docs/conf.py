@@ -309,4 +309,5 @@ linkcheck_ignore = [
   r'http://localhost(:\d+)?/?',
   'https://forum.securedrop.org/admin/users/list/active',
   'https://weblate.securedrop.org/projects/securedrop/securedrop/#repository',
+  'https://github.com/freedomofpress/securedrop-debian-packages-lfs',
 ]
