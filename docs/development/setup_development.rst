@@ -103,11 +103,11 @@ To get started, you can try the following:
 
 .. code:: sh
 
-   cd securedrop/securedrop
-   make dev                                    # run development servers
-   make test                                   # run tests
-   bin/dev-shell bin/run-test tests/functional # functional tests only
-   bin/dev-shell bash                          # shell inside the container
+   cd securedrop
+   make dev                                               # run development servers
+   make test                                              # run tests
+   securedrop/bin/dev-shell bin/run-test tests/functional # functional tests only
+   securedrop/bin/dev-shell bash                          # shell inside the container
 
 .. tip:: The interactive shell in the container does not run
          ``redis``, ``Xvfb`` etc.  However you can import shell helper
@@ -302,4 +302,3 @@ create a standalone VM named ``sd-dev``, then follow the Linux instructions abov
 required packages, *omitting* Virtualbox.
 
 Then, complete the steps described in :doc:`qubes_staging`.
-
