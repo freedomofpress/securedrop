@@ -8,4 +8,4 @@ in the updater to perform the update.
   do so, you will need to reboot to enable it.
 
 .. _`Tails Administrator
-   password`: https://tails.boum.org/doc/first_steps/welcome_screen/administration_password/index.en.html
+   password`: https://tails.boum.org/doc/first_steps/welcome_screen/administration_password/
