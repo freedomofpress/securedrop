@@ -40,5 +40,5 @@ securedrop_cond_reboot_file: /tmp/sd-reboot-now
 
 # If you bump this, also remember to bump in molecule/builder-xenial/tests/vars.yml
 securedrop_pkg_grsec:
-  ver: "4.14.175"
-  depends: "linux-image-4.14.175-grsec-securedrop,linux-image-4.14.154-grsec-securedrop,intel-microcode"
+  ver: "4.14.188"
+  depends: "linux-image-4.14.188-grsec-securedrop,linux-image-4.14.175-grsec-securedrop,intel-microcode"
