@@ -105,7 +105,7 @@ following behaviors:
   - Unwelcome sexual attention
   - Posting (or threatening to post) other people's personally identifying
     information ("doxing")
-  - Respect people's stated personal boundaries
+  - Violation of people's stated personal boundaries
 
 - Following the letter of this Code of Conduct while disregarding its spirit.
   When judging whether certain behavior represents a violation of this code, we
