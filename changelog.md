@@ -2,7 +2,10 @@
 
 ## 1.5.0~rc1
 
-* 
+* Update Tor to 0.4.3.6 (#5374)
+* Add v2 onion service deprecation warning to securedrop-admin (#5370)
+* Add v2 onion service deprecation warning to journalist interface (#5366)
+* Update kernel version to 4.14.188 (#5365)
 
 ## 1.4.1
 
