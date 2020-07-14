@@ -1,12 +1,45 @@
 # Changelog
 
-## 1.5.0~rc1
+## 1.6.0~rc1
 
-* 
+
+
+## 1.5.0
+
+### Web Applications
+
+* Fixes #5378, adds more checks for invalid username (#5380)
+* Add v2 onion service deprecation warning to journalist interface (#5366)
+* Changed modal_warning message in the delete source dialogue to match the context (#5358)
+* Further redaction of wordlist (#5357)
+* Handle case of deleted journalists (#5284)
+
+### Operations
+
+* Remove unused/disabled source onion service info files (#5404)
+* Update Tor to 0.4.3.6 (#5374)
+* Add v2 onion service deprecation warning to securedrop-admin (#5370)
+* Update kernel version to 4.14.188 (#5365)
+* Ignore tmp files in /var/lib/securedrop/shredder (#5308)
+
+### Journalist API
+
+* Handle disconnected replies in API endpoint (#5351)
+* Handle disconnected submissions in API endpoint (#5345)
+
+### Documentation
+
+* Consistent usage of "onion services" terminology (#5379)
+* Add v2 deprecation timeline & warnings to docs (#5373)
+
+### Development
+
+* Add type annotations for source_app/utils.py (#5300)
+* Update syntax for existing type annotations (#5298)
 
 ## 1.4.1
 
-* Bugfix: Updated securedrop-admin utility to validate instance configuration correctly when v3 onion services are disabled (#5334)`
+* Bugfix: Updated securedrop-admin utility to validate instance configuration correctly when v3 onion services are disabled (#5334)
 
 ## 1.4.0
 
@@ -63,7 +96,7 @@
 
 * Improved QA loader script to produce datasets more consistent with production data (#5174, #5200)
 * Updated SecureDrop Core’s Qubes staging environment provisioning, removing requirement for manual reboots and renaming VMs to avoid conflicts with SecureDrop Workstation (#5190, #5099)
-* Dependency updates: 
+* Dependency updates:
   *  pyyaml from 5.1.2 to 5.3.1;
   * urllib from 1.25.3 to  1.25.8;
   * safety from 1.8.4 to 1.8.7;
@@ -72,7 +105,7 @@
   * pylint from 1.8.1 to 2.4.4;
   * markupsafe from 1.0 to 1.1.1;
   * setuptools from 41.6.0 to 46.0.0
-  * astroid from 2.3.3 to 2.4.0 
+  * astroid from 2.3.3 to 2.4.0
   (#5182, #5151, #5133, #5219)
 * Updated makefile lint target to ignore SC2230 shellcheck warnings (#5171)
 * CI: Updated translation tests to run in parallel across set of supported languages (#5062)
