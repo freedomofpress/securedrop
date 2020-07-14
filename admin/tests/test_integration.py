@@ -340,7 +340,7 @@ def verify_locales_prompt(child):
 
 
 def verify_v2_onion_for_first_time(child):
-    child.expect(rb' installed before 1.0.0\)\?\:', timeout=2)  # noqa: E501
+    child.expect(rb'Do you want to enable v2 onion services\?\:', timeout=2)  # noqa: E501
     assert ANSI_ESCAPE.sub('', child.buffer.decode("utf-8")).strip() == 'no'  # noqa: E501
 
 
