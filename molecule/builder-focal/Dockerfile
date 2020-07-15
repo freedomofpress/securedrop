@@ -36,7 +36,10 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
 	libevent-dev \
         unzip 
 
-ADD ./dh-virtualenv_1.2-1_all.deb /tmp/
+# TEMPORARY: install dh-virtualenv from debian unstable
+# No pubkey verification is performed on this package, using only for
+# research spike on focal package support.
+RUN curl -s https://deb.debian.org/debian/pool/main/d/dh-virtualenv/dh-virtualenv_1.2-1_all.deb -o /tmp/dh-virtualenv_1.2-1_all.deb
 RUN apt install -y /tmp/dh-virtualenv_1.2-1_all.deb
 
 RUN paxctl -cm /usr/bin/python3.8 && mkdir -p /tmp/build
