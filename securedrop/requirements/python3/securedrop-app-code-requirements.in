@@ -10,7 +10,7 @@ Flask>0.12.2
 Jinja2>=2.10.1
 jsmin
 markupsafe>=1.1
-mod_wsgi
+mod_wsgi==4.7.1
 passlib
 pretty-bad-protocol>=3.1.1
 psutil>=5.6.6
