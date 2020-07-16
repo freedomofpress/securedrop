@@ -246,7 +246,7 @@ def make_blueprint(config):
         elif user:
             db.session.delete(user)
             db.session.commit()
-            flash(gettext("Deleted user '{user}'").format(
+            flash(gettext("Deleted user '{user}'.").format(
                 user=user.username), "notification")
         else:
             current_app.logger.error(

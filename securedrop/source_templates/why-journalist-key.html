@@ -4,23 +4,21 @@
 <p>{{ gettext("SecureDrop encrypts files and messages after they are submitted. Encrypting messages and files before submission can provide an extra layer of security before your data reaches the SecureDrop server.") }}</p>
 <p>{{ gettext("If you are already familiar with the GPG encryption software, you may wish to encrypt your submissions yourself. To do so:") }}
 <ol>
-    <li>{{ gettext('<a href="{url}">Download</a> the public key. The public key is a text file with the extension <code>.asc</code>').format(url=url_for('info.download_journalist_pubkey'))|safe }}</li>
+    <li>{{ gettext('<a href="{url}">Download</a> the public key. It will be saved to a file called:
+        <p><code>{submission_key_fpr_filename}</code></p>').format(url=url_for('info.download_journalist_pubkey'), submission_key_fpr_filename=submission_key_fpr + '.asc')|safe }}</li>
 <li>{{ gettext('Import it into your GPG keyring.') }}
 <ul>
-<li>{{ gettext('If you are using <a href="{url}">Tails</a>, you can double-click the <code>.asc</code> file you just downloaded and it will be automatically imported to your keyring.').format(url='https://tails.boum.org') }}</li>
-<li>{{ gettext('If you are using Mac/Linux, open the terminal. You can import the key with <code>gpg --import /path/to/key.asc</code>.') }}</li>
+    <li>{{ gettext('If you are using <a href="{url}">Tails</a>, you can double-click the <code>.asc</code> file you just downloaded and it will be automatically imported to your keyring.').format(url='https://tails.boum.org') }}</li>
+    <li>{{ gettext('If you are using a Mac or Linux, open the terminal. You can import the key with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>').format(url_for('info.download_journalist_pubkey'), submission_key_fpr_filename=submission_key_fpr + '.asc')|safe }}</li>
 </ul>
 </li>
-<li>{{ gettext('Encrypt your submission.') }}
-<ol>
-<li>{{ gettext('You will need to be able to identify the key (this is called the "user ID" or UID). Since the public key\'s filename is the key\'s fingerprint (with .asc at the end), you can just copy and paste that. (don\'t include the <code>.asc</code>!)')|safe }}</li>
-<li>{{ gettext('On all systems, open the Terminal and use this gpg command: <code>gpg --recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>')|safe }}</li>
-</ol>
+<li>{{ gettext('Encrypt your submission. Open the terminal and enter this gpg command:') }}
+    <p>{{ gettext('<code>gpg --recipient \'{submission_key_fpr}\' --encrypt /path/to/submission</code>').format(submission_key_fpr=submission_key_fpr)|safe }}</p>
 </li>
-<li>{{ gettext('Upload your encrypted submission. It will have the same filename as the unencrypted file, with .gpg at the end (e.g. <code>roswell_photos.pdf.gpg</code>)') }}</li>
+<li>{{ gettext('Upload your encrypted submission. It will have the same filename as the unencrypted file, with .gpg at the end (e.g. <code>internal_memo.pdf.gpg</code>)') }}</li>
 </ol>
 
-<p>{{ gettext('<strong>Tip:</strong> If you wish to remain anonymous, <strong>do not</strong> use GPG to sign the encrypted file (with the <code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG identity to us.')|safe }}</p>
+<p>{{ gettext('<strong>Important:</strong> If you wish to remain anonymous, <strong>do not</strong> use GPG to sign the encrypted file (with the <code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG identity to us.')|safe }}</p>
 
 <p><a href="/lookup">« {{ gettext('Back to submission page') }}</a></p>
 {% endblock %}
