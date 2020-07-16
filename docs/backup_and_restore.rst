@@ -24,7 +24,7 @@ older submissions in the *Journalist Interface*. As a general practice, you shou
 encourage Journalists to delete regularly unneeded submissions from the *Journalist
 Interface*.
 
-.. tip:: Although it varies, the average throughput of a Tor Hidden Service is
+.. tip:: Although it varies, the average throughput of an onion service is
          about 150 kB/s, or roughly 4 hours for 2GB. Plan your backup and
          restore accordingly.
 

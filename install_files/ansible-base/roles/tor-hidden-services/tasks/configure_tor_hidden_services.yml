@@ -1,5 +1,5 @@
 ---
-- name: Create parent directory for Tor Onion Services.
+- name: Create parent directory for onion services.
   file:
     state: directory
     dest: "{{ tor_hidden_services_parent_dir }}"
@@ -9,7 +9,7 @@
   tags:
     - tor
 
-- name: Create directories for Tor Onion Services.
+- name: Create directories for onion services.
   file:
     state: directory
     dest: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}"

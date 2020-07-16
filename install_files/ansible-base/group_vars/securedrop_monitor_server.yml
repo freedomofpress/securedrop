@@ -11,7 +11,7 @@ local_deb_packages:
   - "securedrop-ossec-server-3.6.0+{{ securedrop_app_code_version }}-amd64.deb"
   - ossec-server-3.6.0-amd64.deb
 
-# Configure the tor Onion Services. The Monitor server has only one,
+# Configure the tor onion services. The Monitor server has only one,
 # for SSH, since no web interfaces.
 tor_instances: "{{ [{ 'service': 'ssh', 'filename': 'mon-ssh-aths'}] if enable_ssh_over_tor else [] }}"
 tor_instances_v3: "{{ [{ 'service': 'sshv3', 'filename': 'mon-ssh.auth_private'}] if enable_ssh_over_tor else [] }}"

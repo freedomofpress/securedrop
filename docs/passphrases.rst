@@ -37,7 +37,7 @@ passphrases:
    -  The admin's personal GPG public key, if you want to potentially encrypt
       sensitive files to it for further analysis.
    -  The account details for the destination email address for OSSEC alerts.
-   -  The Onion Services values required to connect to the *Application* and
+   -  The onion services values required to connect to the *Application* and
       *Monitor Servers*.
 
 
@@ -60,11 +60,7 @@ will require the following set of passphrases:
 
 -  A master passphrase for the persistent volume on the Tails device.
 -  A master passphrase for the KeePassXC password manager, which unlocks
-   passphrases to:
-
-   -  The Hidden Service value required to connect to the Journalist
-      Interface.
-   -  The *Journalist Interface*.
+   the passphrase for logging into the *Journalist Interface*.
 
 The journalist will also need to have a two-factor authenticator, such
 as an Android or iOS device with FreeOTP installed, or a

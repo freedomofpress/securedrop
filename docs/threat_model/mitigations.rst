@@ -155,7 +155,7 @@ Countermeasures Against Vulnerabilities in Tor
 -  A cron job ensures that automatic nightly security updates are applied for OS packages, including Tor
 -  Grsecurity/PaX linux patches prevent the exploitation of certain memory-corruption attacks
 -  AppArmor profiles further reduce process capabilities through Mandatory Access Control
--  Hidden Service authentication is used as a complementary authentication and only used for defense-in-depth/attack surface reduction
+-  Onion service authentication is used as a complementary authentication and only used for defense-in-depth/attack surface reduction
 
 Countermeasures Against Malicious apt Installs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -170,7 +170,7 @@ Countermeasures Against Vulnerabilities in the Hardware Firewall
 -  SecureDrop `Admin Guide <https://docs.securedrop.org/en/stable/admin.html>`__ informs administrators to update the hardware firewall and provides a very restrictive policy for accessing the administrative interface (blocked on app and mon ports of the firewall).
 -  Alert emails are sent out to admins when there are critical pfSense vulnerabilities.
 -  *Application* and *Monitor Servers* use IPTables as host-based firewall for defense-in-depth
--  All application traffic is over Tor Hidden services (end-to-end encrypted) and all software packages are signed. Only DNS and NTP are transmitted over HTTP (unauthenticated and in cleartext)
+-  All application traffic is over Tor onion services (end-to-end encrypted) and all software packages are signed. Only DNS and NTP are transmitted over HTTP (unauthenticated and in cleartext)
 
 Network Infrastructure — FPF Infrastructure or Organization Corporate Network
 -----------------------------------------------------------------------------
@@ -232,6 +232,6 @@ Countermeasures in User Behavior Recommendations
 -  `Journalist Guide <https://docs.securedrop.org/en/stable/journalist.html>`__ informs users of malware risks, the importance of strict comparmentalization of SecureDrop-related activities
 -  `SecureDrop Deployment Guide <https://docs.securedrop.org/en/stable/deployment_practices.html>`__ gives best practices for proper administration of the SecureDrop system, and its public-facing properties like the Landing Page
 -  `Admin Guide <https://docs.securedrop.org/en/stable/admin.html>`__ gives instructions for long-term maintenance of the technical properties of the SecureDrop system, as well as operations to support Journalists
--  All Admin tasks are completed over Tor/Tor authenticated Onion Services after installation
+-  All Admin tasks are completed over Tor/Tor authenticated onion services after installation
 -  Any Journalist/Admin password/2FA credentials resets can only be done by an Admin with password-protected SSH capability or authenticated Onion Service credentials.
 -  Persistent storage on the Admin Workstation is protected with LUKS/dm-crypt encryption

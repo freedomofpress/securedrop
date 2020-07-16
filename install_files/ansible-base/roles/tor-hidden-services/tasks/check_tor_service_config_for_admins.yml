@@ -25,10 +25,10 @@
     that: >
       not (not v3_onion_services and true in _v3_services_state_info)
     msg: >
-      ERROR. The 'sdconfig' settings do not specify v3 Onion Services,
-      but v3 Onion Services were found on the server. If your SecureDrop
+      ERROR. The 'sdconfig' settings do not specify v3 onion services,
+      but v3 onion services were found on the server. If your SecureDrop
       instance has multiple Administrators, contact the other Administrators
-      to request the Tor v3 Onion Service config information. You must copy
+      to request the Tor v3 onion service config information. You must copy
       the 'tor_v3_keys.json' and '*.auth_private' files to this workstation,
       then re-run the install action.
   when:
