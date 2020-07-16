@@ -484,6 +484,10 @@ class Journalist(db.Model):
             raise InvalidUsernameException(
                         'Username "{}" must be at least {} characters long.'
                         .format(username, cls.MIN_USERNAME_LEN))
+        if username in cls.INVALID_USERNAMES:
+            raise InvalidUsernameException(
+                    "This username is invalid because it is reserved "
+                    "for internal use by the software.")
 
     @classmethod
     def check_name_acceptable(cls, name):
