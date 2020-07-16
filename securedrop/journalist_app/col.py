@@ -47,7 +47,7 @@ def make_blueprint(config):
             current_app.logger.error("error deleting collection: %s", e)
             abort(500)
 
-        flash(gettext("{source_name}'s collection deleted")
+        flash(gettext("{source_name}'s collection deleted.")
               .format(source_name=source.journalist_designation),
               "notification")
         return redirect(url_for('main.index'))
