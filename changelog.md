@@ -1,11 +1,23 @@
 # Changelog
 
+## 1.5.0~rc2
+
+* Adds more checks for invalid username (#5380)
+
 ## 1.5.0~rc1
 
 * Update Tor to 0.4.3.6 (#5374)
 * Add v2 onion service deprecation warning to securedrop-admin (#5370)
 * Add v2 onion service deprecation warning to journalist interface (#5366)
 * Update kernel version to 4.14.188 (#5365)
+* Changed modal_warning message in the delete source dialogue to match the context (#5358)
+* Further redaction of wordlist (#5357)
+* Handle disconnected replies in API endpoint (#5351)
+* Handle disconnected submissions in API endpoint (#5345)
+* Ignore tmp files in /var/lib/securedrop/shredder (#5308)
+* Add type annotations for source_app/utils.py (#5300)
+* Update syntax for existing type annotations (#5298)
+* Handle case of deleted journalists (#5284)
 
 ## 1.4.1
 
