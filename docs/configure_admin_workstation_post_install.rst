@@ -22,15 +22,10 @@ but are only accessible to users who possess a shared secret
 (``auth-cookie`` in the Tor documentation) that is generated during the onion
 service setup process.
 
-In order to access an authenticated onion service, you need to add one or more
-"auth-cookie" values to your Tor configuration file (``torrc``) and restart Tor.
-Doing this manually is annoying and error-prone, so SecureDrop includes a set of
-scripts in ``./tails_files`` that can set up a Tails instance to automatically
-configure Tor to access a set of authenticated onion services. In order to
-persist these changes across reboots, the Tails instance must have persistence
-enabled (specifically, the "dotfiles persistence").
-
-.. note:: Starting in version 0.3.7, SecureDrop requires Tails 2.x or greater.
+In order to access an authenticated onion service, you require its authentication
+secret. SecureDrop includes a set of scripts to configure Tails access to the
+authenticated onion services. In order to persist these changes across reboots,
+persistence must be enabled in Tails.
 
 To install the auto-connect configuration, start by navigating to the directory
 with these scripts (``~/Persistent/securedrop/``), and run the install script:
@@ -62,7 +57,7 @@ using the *Admin Workstation* and are unable to connect to any
 of the authenticated onion services, restart Tails and make
 sure to enable persistence.
 
-.. _authenticated onion services: https://tb-manual.torproject.org/onion-services/#onion-service-authentication
+.. _authenticated onion services: https://community.torproject.org/onion-services/advanced/client-auth/
 
 Back Up the Workstations
 ------------------------
