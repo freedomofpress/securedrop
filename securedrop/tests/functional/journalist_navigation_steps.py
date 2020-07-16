@@ -529,6 +529,49 @@ class JournalistNavigationStepsMixin:
         hotp_reset_uid = hotp_reset_button.find_element_by_name("uid")
         assert hotp_reset_uid.is_displayed() is False
 
+    def _admin_editing_invalid_username(self):
+        # Log the new user out
+        self._logout()
+
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
+
+        self._login_user(self.admin, self.admin_pw, self.admin_user["totp"])
+
+        # Go to the admin interface
+        self.safe_click_by_id("link-admin-index")
+
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("button#add-user"))
+
+        # Click the "edit user" link for the new user
+        # self._edit_user(self.new_user['username'])
+        new_user_edit_links = [
+            el
+            for el in self.driver.find_elements_by_tag_name("a")
+            if (el.get_attribute("data-username") == self.new_user["username"])
+        ]
+        assert len(new_user_edit_links) == 1
+        new_user_edit_links[0].click()
+
+        def can_edit_user():
+            h = self.driver.find_elements_by_tag_name("h1")[0]
+            assert 'Edit user "{}"'.format(self.new_user["username"]) == h.text
+
+        self.wait_for(can_edit_user)
+
+        new_username = "deleted"
+
+        self.safe_send_keys_by_css_selector('input[name="username"]', Keys.CONTROL + "a")
+        self.safe_send_keys_by_css_selector('input[name="username"]', Keys.DELETE)
+        self.safe_send_keys_by_css_selector('input[name="username"]', new_username)
+        self.safe_click_by_css_selector("button[type=submit]")
+
+        def user_edited():
+            if not hasattr(self, "accept_languages"):
+                flash_msg = self.driver.find_element_by_css_selector(".flash")
+                assert "Invalid username" in flash_msg.text
+
+        self.wait_for(user_edited)
+
     def _admin_can_edit_new_user(self):
         # Log the new user out
         self._logout()

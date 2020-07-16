@@ -15,6 +15,13 @@ class TestAdminInterface(
         self._new_user_can_log_in()
         self._admin_can_edit_new_user()
 
+    def test_admin_edit_invalid_username(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_adds_a_user()
+        self._new_user_can_log_in()
+        self._admin_editing_invalid_username()
+
     def test_admin_edits_hotp_secret(self):
         # Toggle security slider to force prefs change
         self.set_tbb_securitylevel(ft.TBB_SECURITY_HIGH)
