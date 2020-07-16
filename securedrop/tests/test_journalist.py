@@ -781,7 +781,7 @@ def test_admin_add_user_first_name_too_long_warning(journalist_app, test_admin):
                                   password=VALID_PASSWORD,
                                   is_admin=None))
         text = resp.data.decode('utf-8')
-        assert 'Field can not be more than' in text
+        assert 'Cannot be longer than' in text
 
 
 def test_admin_add_user_last_name_too_long_warning(journalist_app, test_admin):
@@ -795,7 +795,7 @@ def test_admin_add_user_last_name_too_long_warning(journalist_app, test_admin):
                                   password=VALID_PASSWORD,
                                   is_admin=None))
         text = resp.data.decode('utf-8')
-        assert 'Field can not be more than' in text
+        assert 'Cannot be longer than' in text
 
 
 def test_admin_edits_user_invalid_username(
@@ -1244,7 +1244,7 @@ def test_admin_add_user_too_short_username(journalist_app, test_admin):
                                   password='pentagonpapers',
                                   password_again='pentagonpapers',
                                   is_admin=None))
-        msg = 'Field must be at least {} characters long'
+        msg = 'Must be at least {} characters long'
         assert (msg.format(Journalist.MIN_USERNAME_LEN) in resp.data.decode('utf-8'))
 
 
