@@ -820,6 +820,29 @@ def test_admin_edits_user_invalid_username(
                 'error')
 
 
+def test_admin_edits_user_invalid_username_deleted(
+        journalist_app, test_admin, test_journo):
+    """Test expected error message when admin attempts to change a user's
+    username to deleted"""
+    new_username = "deleted"
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(
+                url_for('admin.edit_user', user_id=test_admin['id']),
+                data=dict(username=new_username,
+                          first_name='',
+                          last_name='',
+                          is_admin=None))
+
+            ins.assert_message_flashed(
+                    'Invalid username: This username is invalid because it '
+                    'is reserved for internal use by the software.',
+                    'error')
+
+
 def test_admin_resets_user_hotp_format_non_hexa(
         journalist_app, test_admin, test_journo):
 
