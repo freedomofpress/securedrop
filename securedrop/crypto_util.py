@@ -16,6 +16,8 @@ from redis import Redis
 
 import rm
 
+from models import Source
+
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
 if typing.TYPE_CHECKING:
@@ -172,8 +174,16 @@ class CryptoUtil:
                         for x in range(words_in_random_id))
 
     def display_id(self):
-        return ' '.join([random.choice(self.adjectives),
-                         random.choice(self.nouns)])
+        """Generate random journalist_designation until we get an unused one"""
+        while True:
+            journalist_designation = ' '.join([random.choice(self.adjectives),
+                                               random.choice(self.nouns)])
+
+            matching_journalist_designation = Source.query.filter(
+                Source.journalist_designation == journalist_designation).all()
+
+            if len(matching_journalist_designation) == 0:
+                return journalist_designation
 
     def hash_codename(self, codename, salt=None):
         """Salts and hashes a codename using scrypt.
