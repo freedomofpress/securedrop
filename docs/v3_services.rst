@@ -1,4 +1,4 @@
-SecureDrop v3 Onion Services
+SecureDrop V3 Onion Services
 ============================
 Tor onion services provide anonymous inbound connections to websites and other
 servers exclusively over the Tor network. For example, SecureDrop uses onion services
@@ -16,7 +16,7 @@ SecureDrop will remove support for v2 onion services as part of its 2.0.0
 release, planned for **February 2021**. If you are currently using v2 onion services,
 they will become unreachable at that point.
 
-The unique identifier in V3 onion addresses is 56 characters long - for example:
+The unique identifier in v3 onion addresses is 56 characters long - for example:
 
 .. code-block:: none
 
@@ -37,8 +37,7 @@ such as:
 
    There is no downgrade path from v3 to v2 using the ``securedrop-admin``
    tool. We recommend that you follow the v2+v3 migration path below, and test v3
-   functionality thoroughly before disabling
-   v2 services.
+   functionality thoroughly before :ref:`disabling v2 onion services <disable_v2>`.
 
 Migrating from v2 to v3 only or v2+v3
 -------------------------------------
@@ -284,6 +283,8 @@ You'll find the new *Source Interface* address in the file:
 
   ~/Persistent/securedrop/install_files/ansible-base/app-sourcev3-ths
 
+
+.. _disable_v2:
 
 Disabling v2 onion services
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

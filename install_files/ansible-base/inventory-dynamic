@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Dynamic inventory script for connecting to a Tor Hidden Service
+Dynamic inventory script for connecting to a Tor onion service
 for SSH. The THS must already be provisioned on the target host.
 """
 import json
@@ -38,8 +38,8 @@ class ConfigurationError(Exception):
 def lookup_local_ipv4_address(hostname):
     """
     Extract local IPv4 addresses from site vars for first-run config.
-    After running the playbooks, SSH access is restricted to Authenticated
-    Tor Onion Services.
+    After running the playbooks, SSH access is restricted to authenticated
+    onion services.
     """
     try:
         with io.open(SECUREDROP_SITE_VARS, 'r') as f:
