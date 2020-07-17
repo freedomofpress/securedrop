@@ -142,14 +142,14 @@ organization you are submitting to:
 |Source Interface with Javascript Disabled|
 
 If this is the first time you're using the Tor Browser, it's likely that you
-have JavaScript enabled and that the Tor Browser's security setting is set
+have JavaScript enabled and that the Tor Browser's security level is set
 to "Low". In this case, there will be a purple warning banner at the top of
 the page that encourages you to disable JavaScript and change the security
-setting to "Safest":
+level to "Safest":
 
 |Source Interface Security Slider Warning|
 
-Click the **Security Setting** link in the warning banner, and a message bubble
+Click the **Security Level* link in the warning banner, and a message bubble
 will pop up explaining how to adjust this setting:
 
 |Fix Javascript warning|
@@ -164,7 +164,7 @@ similar to this screenshot:
    The "Safest" setting disables the use of JavaScript on every page you visit
    using Tor Browser, even after a browser restart. This may cause other
    websites you visit using Tor Browser to no longer work correctly, until
-   you adjust the Security Setting again. We recommend keeping the setting at
+   you adjust the Security Level again. We recommend keeping the setting at
    "Safest" during the entirety of the session in which you access an
    organization's SecureDrop instance.
 
