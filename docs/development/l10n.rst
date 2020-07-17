@@ -298,7 +298,7 @@ In those cases, please feel free to correct the existing translation.
 .. _`Weblate dashboard`: https://weblate.securedrop.org/
 .. _`translation category of the SecureDrop forum`: https://forum.securedrop.org/c/translations
 .. _`SecureDrop instant messaging channel`: https://gitter.im/freedomofpress/securedrop
-.. _`Weblate documentation`: http://docs.weblate.org/
+.. _`Weblate documentation`: https://docs.weblate.org/
 .. _`EFF Surveillance Self-Defense glossary`: https://ssd.eff.org/en/glossary/
 
 

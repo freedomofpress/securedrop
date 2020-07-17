@@ -4,7 +4,7 @@ Database Migrations
 SecureDrop uses Alembic_ for database schema migrations. This guide is not a complete explanation of
 what ``alembic`` is or how it is used, so the original documentation should be read.
 
-.. _Alembic: http://alembic.zzzcomputing.com/
+.. _Alembic: https://alembic.sqlalchemy.org/en/latest/
 
 Migration Files
 ---------------

@@ -21,7 +21,7 @@ analysis.
 #. Print the link, URL and info block on the dead trees (the paper),
    as others have suggested.
 #. Add `HSTS headers
-   <http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security>`__.
+   <https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security>`__.
 
 Suggested
 ---------

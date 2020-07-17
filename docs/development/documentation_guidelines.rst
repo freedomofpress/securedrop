@@ -6,7 +6,7 @@ and is built by and hosted on `Read the Docs`_ (RTD). The
 documentation files are stored in the primary SecureDrop git
 repository under the ``docs/`` directory.
 
-.. _ReStructuredText: http://sphinx-doc.org/rest.html
+.. _ReStructuredText: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
 .. _Read the Docs: https://docs.readthedocs.org/en/latest/index.html
 
 To get started editing the docs:
@@ -91,7 +91,7 @@ https://docs.securedrop.org. We use a `webhook`_ to rebuild the documentation
 automatically when commits get pushed to the branch.
 
 .. _upstream Git repository: https://github.com/freedomofpress/securedrop
-.. _webhook: http://docs.readthedocs.org/en/latest/webhooks.html
+.. _webhook: https://docs.readthedocs.io/en/latest/webhooks.html
 
 Style Guide
 -----------
