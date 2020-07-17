@@ -63,7 +63,7 @@ root of the repository:
 Python
 ~~~~~~
 
-All Python code should be `flake8 <http://flake8.pycqa.org/en/latest/>`__
+All Python code should be `flake8 <https://flake8.pycqa.org/en/latest/>`__
 compliant. You can run ``flake8`` locally via:
 
   .. code:: sh
@@ -140,7 +140,7 @@ Example of Type Hint
         # flake8 can not understand type annotation yet.
         # That is why all type annotation relative import
         # statements has to be marked as noqa.
-        # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
+        # https://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
         from typing import Dict  # noqa: F401
 
     class Config(object):

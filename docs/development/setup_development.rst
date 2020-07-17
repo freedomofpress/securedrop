@@ -217,7 +217,7 @@ same as the version in your distro's repos, or may at some point flux out of
 sync. For this reason, and also just as a good general development practice, we
 recommend using a Python virtual environment to install Ansible and other
 development-related tooling. Using `virtualenvwrapper
-<http://virtualenvwrapper.readthedocs.io/en/stable/>`_:
+<https://virtualenvwrapper.readthedocs.io/en/stable/>`_:
 
 .. code:: sh
 
@@ -266,7 +266,7 @@ The version of rsync installed by default on macOS is extremely out-of-date, as 
 .. _VirtualBox: https://www.virtualbox.org/wiki/Downloads
 .. _Ansible: http://docs.ansible.com/intro_installation.html
 .. _Homebrew: https://brew.sh/
-.. _homebrew-cask: http://sourabhbajaj.com/mac-setup/Vagrant/README.html
+.. _homebrew-cask: https://sourabhbajaj.com/mac-setup/Vagrant/README.html
 
 
 Fork & Clone the Repository

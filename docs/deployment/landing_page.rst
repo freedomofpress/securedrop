@@ -29,7 +29,7 @@ headers below) apply only to the /securedrop request URI. This can be done
 in Apache by the encapsulating these settings within a
 `<Location> <https://httpd.apache.org/docs/2.4/mod/core.html#location>`__
 block, which can be defined similarly in nginx by using the
-`location {} <http://nginx.org/en/docs/http/ngx_http_core_module.html#location>`__
+`location {} <https://nginx.org/en/docs/http/ngx_http_core_module.html#location>`__
 directive.
 
 HTTPS Only (No Mixed Content)

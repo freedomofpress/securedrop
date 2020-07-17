@@ -5,7 +5,7 @@ Testing: CI
 
 The SecureDrop project uses CircleCI_ for running automated test suites on code changes.
 
-.. _CircleCI: http://circleci.com/gh/freedomofpress/securedrop/
+.. _CircleCI: https://circleci.com/gh/freedomofpress/securedrop
 
 The relevant files for configuring the CI tests are the ``Makefile`` in
 the main repo, the configuration file at ``.circleci/config.yml``, and
