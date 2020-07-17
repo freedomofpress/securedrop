@@ -119,7 +119,7 @@ types of various functions.
 Any pull request with Python code in SecureDrop should have corresponding type hints
 for all the functions. Type hints and function annotations are defined in 
 `PEP 484 <https://www.python.org/dev/peps/pep-0484>`_ and in `PEP 3107
-<https://www.python.org/dev/peps/pep-3107>`_. We also use the `mypy <http://mypy-lang.org>`_
+<https://www.python.org/dev/peps/pep-3107>`_. We also use the `mypy <https://github.com/python/mypy>`_
 tool in our CI to find bugs in our Python code.
 
 If you are new to Python type hinting, please read the above mentioned PEP documents,
