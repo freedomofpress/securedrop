@@ -5,7 +5,7 @@
   {# Only admins may edit usernames and admin status #}
   <h1>{{ gettext('Edit user "{user}"').format(user=user.username) }}</h1>
   <p><a href="/admin">{{ gettext('Back to admin interface') }}</a></p>
-  <h2>{{ gettext('Change Name &amp; Admin Status') }}</h2>
+  <h2>{{ gettext('Change Name and Admin Status') }}</h2>
   <form method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <p>
