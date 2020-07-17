@@ -721,7 +721,7 @@ def test_admin_edits_user_password_too_long_warning(journalist_app,
                           password=overly_long_password),
                 follow_redirects=True)
 
-            ins.assert_message_flashed('You submitted a bad password! '
+            ins.assert_message_flashed('The password you submitted is invalid. '
                                        'Password not changed.', 'error')
 
 
