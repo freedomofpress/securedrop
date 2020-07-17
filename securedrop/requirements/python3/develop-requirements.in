@@ -3,6 +3,7 @@ bandit
 # yes, we need both boto and boto3
 boto
 boto3
+cffi>=1.14.0
 docker-py
 # Needed for dig ansible lookup
 dnspython
@@ -24,6 +25,7 @@ pylint>=2.5.0
 pytest-xdist
 python-vagrant
 pyyaml>=5.3.1
+ruamel.yaml>=0.16.10
 safety>=1.8.7
 setuptools>=46.0.0
 sphinx
