@@ -75,7 +75,7 @@ Source the setup script using the following command:
 
 You will be prompted for the values of the required environment variables. There
 are some defaults set that you may want to change. You will need to export
-``GOOGLE_CREDENTIALS`` with authentication details for your GCP account, 
+``GOOGLE_CREDENTIALS`` with authentication details for your GCP account,
 which is outside the scope of this guide.
 
 Use Makefile to Provision Hosts
