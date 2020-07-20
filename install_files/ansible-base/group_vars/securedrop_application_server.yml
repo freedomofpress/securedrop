@@ -12,7 +12,7 @@ local_deb_packages:
   - "{{ securedrop_app_code_deb }}.deb"
   - "ossec-agent-3.6.0-amd64.deb"
 
-# Configuring the tor Onion Services
+# Configuring the tor onion services
 tor_instances:
   - "{{ {'service': 'ssh', 'filename': 'app-ssh-aths'} if enable_ssh_over_tor else [] }}"
   - service: source

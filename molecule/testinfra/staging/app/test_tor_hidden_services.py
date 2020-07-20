@@ -22,9 +22,9 @@ def test_tor_service_directories(host, tor_service):
 @pytest.mark.parametrize('tor_service', sdvars.tor_services)
 def test_tor_service_hostnames(host, tor_service):
     """
-    Check contents of tor service hostname file. For normal Onion Services,
-    the file should contain only hostname (.onion URL). For Authenticated
-    Onion Services, it should also contain the HidServAuth cookie.
+    Check contents of tor service hostname file. For normal onion services,
+    the file should contain only hostname (.onion URL). For authenticated
+    onion services, it should also contain the HidServAuth cookie.
     """
     # Declare regex only for THS; we'll build regex for ATHS only if
     # necessary, since we won't have the required values otherwise.
@@ -65,13 +65,13 @@ def test_tor_service_hostnames(host, tor_service):
 @pytest.mark.parametrize('tor_service', sdvars.tor_services)
 def test_tor_services_config(host, tor_service):
     """
-    Ensure torrc file contains relevant lines for Hidden Service declarations.
-    All Onion Services must include:
+    Ensure torrc file contains relevant lines for onion service declarations.
+    All onion services must include:
 
       * HiddenServiceDir
       * HiddenServicePort
 
-    Only v2 authenticated Onion Services must also include:
+    Only v2 authenticated onion services must also include:
 
       * HiddenServiceAuthorizeClient
 

@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: SecureDrop Team <securedrop@freedom.press>
 Homepage: https://securedrop.org
 Package: securedrop-ossec-server
-Version: 3.6.0+1.5.0~rc1
+Version: 3.6.0+1.5.0~rc2
 Architecture: amd64
 Depends: libevent-1.4-2,libpcre2-8-0,ossec-server,securedrop-keyring,securedrop-config
 Replaces: ossec-server

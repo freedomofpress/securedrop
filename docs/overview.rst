@@ -89,8 +89,8 @@ Admins
 The SecureDrop servers are managed by a systems admin; for larger
 newsrooms, there may be a team of systems admins. The admin
 uses a dedicated *Admin Workstation* running `Tails <https://tails.boum.org>`__,
-connects to the *Application* and *Monitor Servers* over authenticated `Tor Onion Services
-<https://www.torproject.org/docs/hidden-services.html>`__, and manages them
+connects to the *Application* and *Monitor Servers* over  `authenticated onion services
+<https://tb-manual.torproject.org/onion-services/>`__, and manages them
 using `Ansible <http://www.ansible.com/>`__.
 
 Sources
@@ -98,7 +98,7 @@ Sources
 
 A source submits documents and messages by using `Tor Browser
 <https://www.torproject.org/projects/torbrowser.html>`__ (or Tails) to access
-the *Source Interface*: a public Tor Hidden Service. Submissions are encrypted
+the *Source Interface*: a public onion service. Submissions are encrypted
 in place on the *Application Server* as they are uploaded.
 
 Journalists
@@ -106,7 +106,7 @@ Journalists
 
 Journalists working in the newsroom use two machines to interact with
 SecureDrop. First, they use a *Journalist Workstation* running Tails to connect
-to the *Journalist Interface*, an authenticated Tor Hidden Service. Journalists
+to the *Journalist Interface*, an authenticated onion service. Journalists
 download `GPG <https://www.gnupg.org/>`__-encrypted submissions and copy them
 to a *Transfer Device* (a thumb drive or DVD). Those submissions are then
 connected to the airgapped *Secure Viewing Station* (*SVS*) which holds the key
