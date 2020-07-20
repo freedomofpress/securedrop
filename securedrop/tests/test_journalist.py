@@ -745,7 +745,7 @@ def test_user_edits_password_too_long_warning(journalist_app, test_journo):
                           password=overly_long_password),
                 follow_redirects=True)
 
-            ins.assert_message_flashed('You submitted a bad password! '
+            ins.assert_message_flashed('The password you submitted is invalid. '
                                        'Password not changed.', 'error')
 
 
@@ -1704,7 +1704,8 @@ def test_too_long_user_password_change(journalist_app, test_journo):
                      follow_redirects=True)
 
             ins.assert_message_flashed(
-                'You submitted a bad password! Password not changed.', 'error')
+                'The password you submitted is invalid. '
+                'Password not changed.', 'error')
 
 
 def test_valid_user_password_change(journalist_app, test_journo):
