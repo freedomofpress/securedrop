@@ -128,7 +128,7 @@ Participants: admins
 -  Adding/removing users
 -  Enabling logging
 -  Sending logs to FPF
--  Generating new Tor Onion Services
+-  Generating new Tor onion services
 -  Updating application's GPG key
 -  Re-IP'ing
 -  Backups

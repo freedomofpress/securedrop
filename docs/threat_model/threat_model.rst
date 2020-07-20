@@ -193,7 +193,7 @@ Assumptions About the World
    valid.
 -  The security assumptions of scrypt with randomly-generated salts are
    valid.
--  The security/anonymity assumptions of Tor and the Hidden Service
+-  The security/anonymity assumptions of Tor and the onion service
    protocol are valid.
 -  The security assumptions of the Tails operating system are valid.
 -  The security assumptions of SecureDrop dependencies, specifically
@@ -241,9 +241,9 @@ What a Compromise of the *Application Server* Can Surrender
 -  The server sees the plaintext submissions of every source.
 -  The server sees the plaintext communication between journalists and
    their sources.
--  The server stores the Tor Hidden Service private key for the source interface.
--  The server stores the Tor Hidden Service private key and ATHS token for the
-   Journalist interface.
+-  The server stores the onion service private key for the source interface.
+-  The server stores the onion service private key and authentication token for
+   the Journalist interface.
 -  The server stores and (optional) TLS private key and certificate (if HTTPS
    is enabled on the source interface)
 -  The server stores hashes of codenames, created with scrypt and
@@ -293,7 +293,7 @@ What a Compromise of the Workstations Can Surrender
    for the *Application Server*, the *Monitor Server*, and the GPG key the
    *Monitor Server* will encrypt OSSEC alerts to.
 -  The *Journalist Workstation* requires Tails with a persistent
-   volume, which stores information such as the Hidden Service value
+   volume, which stores information such as the onion service value
    required to connect to the *Journalist Interface*, as well as a :doc:`database
    with passphrases <../passphrases>` for the
    *Journalist Interface*.
@@ -369,7 +369,7 @@ What Compromise of the Admin's Property Can Surrender
    *Monitor Server*, the attacker needs to obtain the admin's login
    credentials and the admin's two-factor authentication device. Unless
    the attacker has physical access to the servers, the attacker will
-   also need to obtain the Hidden Service values for the Interface and
+   also need to obtain the onion service values for the Interface and
    the servers. This information is stored in a password-protected
    database in a persistent volume on the admin's Tails device. The
    volume is protected by a passphrase. If the admin's two-factor
@@ -384,7 +384,7 @@ What Compromise of the Admin's Property Can Surrender
    Tails device can:
 
    -  Add, modify, and delete files on the volume.
-   -  Access the Hidden Service values used by the Interfaces and the
+   -  Access the onion service values used by the Interfaces and the
       servers.
    -  Access SSH keys and passphrases for the *Application Server* and the
       *Monitor Server*.
@@ -455,7 +455,7 @@ What a Compromise of the Journalist's Property Can Achieve
 -  To access the *Journalist Interface*, the attacker needs to obtain the
    journalist's login credentials and the journalist's two-factor
    authentication device or seed. Unless the attacker has physical access to the
-   server, the attacker will also need to obtain the Hidden Service
+   server, the attacker will also need to obtain the onion service
    value for the Interface. This information is stored in a
    password-protected database in a persistent volume on the
    journalist's Tails device. The volume is protected by a passphrase.
@@ -470,7 +470,7 @@ What a Compromise of the Journalist's Property Can Achieve
    journalist's Tails device can:
 
    -  Add, modify, and delete files on the volume.
-   -  Access the Hidden Service values used by the *Journalist Interface*.
+   -  Access the onion service values used by the *Journalist Interface*.
    -  Access SSH keys and passphrases for the *Application Server* and the
       *Monitor Server*.
 

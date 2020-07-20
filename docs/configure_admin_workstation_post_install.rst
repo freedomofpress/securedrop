@@ -3,8 +3,8 @@ Configure the Admin Workstation Post-Install and Create Backups
 
 .. _auto-connect ATHS:
 
-Auto-connect to the Authenticated Tor Onion Services
------------------------------------------------------
+Auto-connect to the Authenticated Onion Services
+------------------------------------------------
 
 The SecureDrop installation process adds multiple layers of authentication to
 protect access to the most sensitive assets in the SecureDrop system:
@@ -16,21 +16,16 @@ protect access to the most sensitive assets in the SecureDrop system:
 #. SSH on the *Monitor Server*
 
 The installation process blocks direct access to each of these assets, and sets
-up `Authenticated Tor Onion Services`_ (ATHS) to provide authenticated access
-instead. Authenticated Tor Onion Services share the benefits of Tor Hidden
-Services, but are only accessible to users who possess a shared secret
-(``auth-cookie`` in the Tor documentation) that is generated during the hidden
+up `authenticated onion services`_ to provide authenticated access
+instead. Authenticated onion services share the benefits of regular onion services,
+but are only accessible to users who possess a shared secret
+(``auth-cookie`` in the Tor documentation) that is generated during the onion
 service setup process.
 
-In order to access an ATHS, you need to add one or more "auth-cookie" values
-to your Tor configuration file (``torrc``) and restart Tor. Doing this manually
-is annoying and error-prone, so SecureDrop includes a set of scripts in
-``./tails_files`` that can set up a Tails instance to automatically
-configure Tor to access a set of ATHS. In order to persist these changes across
-reboots, the Tails instance must have persistence enabled (specifically, the
-"dotfiles persistence").
-
-.. note:: Starting in version 0.3.7, SecureDrop requires Tails 2.x or greater.
+In order to access an authenticated onion service, you require its authentication
+secret. SecureDrop includes a set of scripts to configure Tails access to the
+authenticated onion services. In order to persist these changes across reboots,
+persistence must be enabled in Tails.
 
 To install the auto-connect configuration, start by navigating to the directory
 with these scripts (``~/Persistent/securedrop/``), and run the install script:
@@ -59,10 +54,10 @@ beginning of every session, and sets up SSH host aliases for the servers.
 The only thing you need to remember to do is enable
 persistence when you boot the *Admin Workstation*. If you are
 using the *Admin Workstation* and are unable to connect to any
-of the authenticated Onion Services, restart Tails and make
+of the authenticated onion services, restart Tails and make
 sure to enable persistence.
 
-.. _Authenticated Tor Onion Services: https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient
+.. _authenticated onion services: https://community.torproject.org/onion-services/advanced/client-auth/
 
 Back Up the Workstations
 ------------------------
