@@ -14,10 +14,10 @@
 <li>{{ gettext('Encrypt your submission.') }}
 <ol>
 <li>{{ gettext('You will need to be able to identify the key (this is called the "user ID" or UID). Since the public key\'s filename is the key\'s fingerprint (with .asc at the end), you can just copy and paste that. (don\'t include the <code>.asc</code>!)')|safe }}</li>
-<li>{{ gettext('On all systems, open the Terminal and use this gpg command: <code>gpg --recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>')|safe }}</li>
+<li>{{ gettext('On all systems, open the terminal and use this gpg command, replacing <code>&lt;user ID&gt;</code> and <code>&lt;filename&gt;</code> with their values:<br><code>gpg --recipient &lt;user ID&gt; --encrypt &lt;filename&gt;</code>')|safe }}</li>
 </ol>
 </li>
-<li>{{ gettext('Upload your encrypted submission. It will have the same filename as the unencrypted file, with .gpg at the end (e.g. <code>roswell_photos.pdf.gpg</code>)') }}</li>
+<li>{{ gettext('Upload your encrypted submission. It will have the same filename as the unencrypted file, with .gpg at the end (e.g. <code>internal_memo.pdf.gpg</code>)') }}</li>
 </ol>
 
 <p>{{ gettext('<strong>Tip:</strong> If you wish to remain anonymous, <strong>do not</strong> use GPG to sign the encrypted file (with the <code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG identity to us.')|safe }}</p>
