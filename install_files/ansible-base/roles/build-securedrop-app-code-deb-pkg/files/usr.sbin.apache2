@@ -280,8 +280,6 @@
   /var/www/securedrop/static/i/logo-footer.png r,
   /var/www/securedrop/static/i/no16-global.png r,
   /var/www/securedrop/static/i/no16.png r,
-  /var/www/securedrop/static/i/securedrop.png r,
-  /var/www/securedrop/static/i/securedrop_small.png r,
   /var/www/securedrop/static/i/server_upload.png r,
   /var/www/securedrop/static/i/star.png r,
   /var/www/securedrop/static/i/success_checkmark.png r,

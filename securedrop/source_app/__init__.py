@@ -91,14 +91,6 @@ def create_app(config: 'SDConfig') -> Flask:
     app.jinja_env.globals['version'] = version.__version__
     # Exported to source templates for being included in instructions
     app.jinja_env.globals['submission_key_fpr'] = config.JOURNALIST_KEY
-    if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
-        app.jinja_env.globals['header_image'] = \
-            config.CUSTOM_HEADER_IMAGE  # type: ignore
-        app.jinja_env.globals['use_custom_header_image'] = True
-    else:
-        app.jinja_env.globals['header_image'] = 'logo.png'
-        app.jinja_env.globals['use_custom_header_image'] = False
-
     app.jinja_env.filters['rel_datetime_format'] = \
         template_filters.rel_datetime_format
     app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
