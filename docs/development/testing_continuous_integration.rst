@@ -5,7 +5,7 @@ Testing: CI
 
 The SecureDrop project uses CircleCI_ for running automated test suites on code changes.
 
-.. _CircleCI: http://circleci.com/gh/freedomofpress/securedrop/
+.. _CircleCI: https://circleci.com/gh/freedomofpress/securedrop
 
 The relevant files for configuring the CI tests are the ``Makefile`` in
 the main repo, the configuration file at ``.circleci/config.yml``, and
@@ -75,7 +75,7 @@ Source the setup script using the following command:
 
 You will be prompted for the values of the required environment variables. There
 are some defaults set that you may want to change. You will need to export
-``GOOGLE_CREDENTIALS`` with authentication details for your GCP account, 
+``GOOGLE_CREDENTIALS`` with authentication details for your GCP account,
 which is outside the scope of this guide.
 
 Use Makefile to Provision Hosts

@@ -30,7 +30,7 @@ The SecureDrop system includes `Flask`_-based web applications for sources and
 journalists. It is deployed across multiple machines with `Ansible`_. Most of
 SecureDrop's code is written in `Python`_.
 
-.. _`Flask`: http://flask.pocoo.org/
+.. _`Flask`: https://flask.palletsprojects.com/
 .. _`Ansible`: https://github.com/ansible/ansible
 .. _`Python`: https://github.com/freedomofpress/securedrop/search?l=python
 
