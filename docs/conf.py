@@ -305,6 +305,7 @@ texinfo_documents = [
 # -- Options for linkcheck --
 
 linkcheck_retries = 3
+linkcheck_workers = 32
 
 linkcheck_ignore = [
     r"http://127.0.0.1(:\d+)?/?",
@@ -312,4 +313,5 @@ linkcheck_ignore = [
     "https://forum.securedrop.org/admin/users/list/active",
     "https://weblate.securedrop.org/projects/securedrop/securedrop/#repository",
     "https://github.com/freedomofpress/securedrop-debian-packages-lfs",
+    r"https://github.com/freedomofpress/securedrop/issues/.*",
 ]
