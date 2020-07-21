@@ -18,7 +18,7 @@ code. A Python example:
 In this code, the string ``You must enter a message or choose a file to
 submit.`` can be automatically extracted for translation. The
 ``gettext`` function to which it is passed is used as a marker by
-`pybabel <http://babel.pocoo.org/>`__ or similar tools to collect the
+`pybabel <https://babel.pocoo.org/en/latest/>`__ or similar tools to collect the
 strings to be translated and store them into a `.pot`_ file at
 ``securedrop/translations/messages.pot``. For instance:
 
@@ -456,7 +456,7 @@ with a release looming, the server can be rebooted.
 .. _`.pot`: https://www.gnu.org/software/gettext/manual/gettext.html#index-files_002c-_002epot
 .. _`.po`: https://www.gnu.org/software/gettext/manual/gettext.html#PO-Files
 .. _`.mo`: https://www.gnu.org/software/gettext/manual/gettext.html#MO-Files
-.. _`pybabel`: http://babel.pocoo.org/
+.. _`pybabel`: https://babel.pocoo.org/en/latest/
 .. _`Weblate`: http://weblate.securedrop.org/
 .. _`SecureDrop git repository`: https://github.com/freedomofpress/securedrop
 .. _`Weblate SecureDrop branch`: https://github.com/freedomofpress/securedrop-i18n

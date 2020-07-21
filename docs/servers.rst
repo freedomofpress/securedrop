@@ -43,16 +43,16 @@ Alternatively, you can use the command line:
 .. code:: sh
 
    cd ~/Persistent
-   torify curl -OOO http://releases.ubuntu.com/16.04.6/{ubuntu-16.04.6-server-amd64.iso,SHA256SUMS{,.gpg}}
+   torify curl -OOO https://releases.ubuntu.com/16.04.6/{ubuntu-16.04.6-server-amd64.iso,SHA256SUMS{,.gpg}}
 
 .. note:: Downloading Ubuntu on the *Admin Workstation* can take a while
    because Tails does everything over Tor, and Tor is typically slow relative
    to the speed of your upstream Internet connection.
 
-.. _Ubuntu Releases page: http://releases.ubuntu.com/
-.. _ubuntu-16.04.6-server-amd64.iso: http://releases.ubuntu.com/16.04.6/ubuntu-16.04.6-server-amd64.iso
-.. _SHA256SUMS: http://releases.ubuntu.com/16.04.6/SHA256SUMS
-.. _SHA256SUMS.gpg: http://releases.ubuntu.com/16.04.6/SHA256SUMS.gpg
+.. _Ubuntu Releases page: https://releases.ubuntu.com/
+.. _ubuntu-16.04.6-server-amd64.iso: https://releases.ubuntu.com/16.04.6/ubuntu-16.04.6-server-amd64.iso
+.. _SHA256SUMS: https://releases.ubuntu.com/16.04.6/SHA256SUMS
+.. _SHA256SUMS.gpg: https://releases.ubuntu.com/16.04.6/SHA256SUMS.gpg
 
 Verify the Ubuntu Installation Media
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -432,7 +432,7 @@ support is preferable, since you want neither WiFi nor Bluetooth.
 
 .. note:: If you encounter issues booting Ubuntu on the NUCs, try
 	  updating the BIOS according to `these instructions
-	  <http://arstechnica.com/gadgets/2014/02/new-intel-nuc-bios-update-fixes-steamos-other-linux-booting-problems/>`__.
+	  <https://arstechnica.com/gadgets/2014/02/new-intel-nuc-bios-update-fixes-steamos-other-linux-booting-problems/>`__.
 
 .. caution:: Some older NUC BIOS versions will cause the server to `brick itself <https://communities.intel.com/message/359708>`__ if the device
     attempts to suspend. This has `since been fixed <https://communities.intel.com/message/432692>`__
