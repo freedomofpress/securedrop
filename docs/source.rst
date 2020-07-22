@@ -149,7 +149,7 @@ level to "Safest":
 
 |Source Interface Security Slider Warning|
 
-Click the **Security Level* link in the warning banner, and a message bubble
+Click the **Security Level** link in the warning banner, and a message bubble
 will pop up explaining how to adjust this setting:
 
 |Fix Javascript warning|
