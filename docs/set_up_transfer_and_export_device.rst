@@ -232,7 +232,7 @@ mitigate that risk.
 
 One option is to restrict write access to the *Export Device* before it is
 plugged into a device other than the *Secure Viewing Station*. Some USB flash
-drives come with a physical write protection switch, and `write blockers <https://www.forensicswiki.org/wiki/Write_Blockers>`__
+drives come with a physical write protection switch, and `write blockers <https://forensicswiki.xyz/wiki/index.php?title=Write_Blockers>`__
 are used in forensics to ensure storage media are not modified during
 examination.
 

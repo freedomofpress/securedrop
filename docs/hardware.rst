@@ -434,10 +434,6 @@ support is preferable, since you want neither WiFi nor Bluetooth.
 	  updating the BIOS according to `these instructions
 	  <https://arstechnica.com/gadgets/2014/02/new-intel-nuc-bios-update-fixes-steamos-other-linux-booting-problems/>`__.
 
-.. caution:: Some older NUC BIOS versions will cause the server to `brick itself <https://communities.intel.com/message/359708>`__ if the device
-    attempts to suspend. This has `since been fixed <https://communities.intel.com/message/432692>`__
-    in a BIOS update. See these `release notes <https://downloadmirror.intel.com/29454/eng/RY_0384_ReleaseNotes.pdf>`__ (PDF) for more details.
-
 2014 Mac Minis
 ~~~~~~~~~~~~~~
 
