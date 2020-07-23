@@ -15,7 +15,7 @@
   failed_when: false
   when: v3_onion_services
 
-- name: Expose Tor v2 Onion URL info to app
+- name: Expose source v2 onion service info to app
   copy:
     dest: /var/lib/securedrop/source_v2_url
     owner: www-data
@@ -25,7 +25,13 @@
       {{ v2_onion_url_lookup_result.stdout|default('') }}
   when: v2_onion_services
 
-- name: Expose Tor v3 Onion URL info to app
+- name: Remove source v2 onion service info if not enabled
+  file:
+    path: /var/lib/securedrop/source_v2_url
+    state: absent
+  when: not v2_onion_services
+
+- name: Expose source v3 onion service info to app
   copy:
     dest: /var/lib/securedrop/source_v3_url
     owner: www-data
@@ -34,3 +40,9 @@
     content: |
       {{ v3_onion_url_lookup_result.stdout|default('') }}
   when: v3_onion_services
+
+- name: Remove source v3 onion service info if not enabled
+  file:
+    path: /var/lib/securedrop/source_v3_url
+    state: absent
+  when: not v3_onion_services
