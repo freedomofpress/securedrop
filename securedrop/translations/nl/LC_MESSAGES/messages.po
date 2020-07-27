@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2020-05-06 21:06+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
+"PO-Revision-Date: 2020-07-25 09:37+0000\n"
+"Last-Translator: Yarno Ritzen <yarnoritzen@gmail.com>\n"
 "Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/nl/>\n"
 "Language: nl\n"
@@ -17,18 +17,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.1.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "{time} geleden"
 
-#: journalist_app/__init__.py:88 journalist_app/__init__.py:137
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
 msgid "You have been logged out due to inactivity"
 msgstr "U bent uitgelogd wegens inactiviteit"
 
-#: journalist_app/__init__.py:146
+#: journalist_app/__init__.py:148
 msgid "You have been logged out due to password change"
 msgstr "U bent uitgelogd omdat uw wachtwoord is veranderd"
 
@@ -80,7 +80,7 @@ msgstr ""
 "geverifieerd."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:308
 msgid "Name not updated: {}"
 msgstr "Naam is niet bijgewerkt: {}"
 
@@ -92,11 +92,11 @@ msgstr "Gebruiker '{user}' verwijderd"
 msgid "Test alert sent. Please check your email."
 msgstr "Testwaarschuwing verstuurd. Controleer uw e-mail."
 
-#: journalist_app/col.py:45
+#: journalist_app/col.py:50
 msgid "{source_name}'s collection deleted"
 msgstr "{source_name}-collectie verwijderd"
 
-#: journalist_app/col.py:56
+#: journalist_app/col.py:61
 msgid "No collections selected."
 msgstr "Geen collecties geselecteerd."
 
@@ -119,24 +119,32 @@ msgstr ""
 msgid "Field can not be more than {max_chars} characters."
 msgstr "Veld mag niet langer dan {max_char} tekens zijn."
 
-#: journalist_app/forms.py:42 source_app/forms.py:12
+#: journalist_app/forms.py:42
+msgid ""
+"This username is invalid because it is reserved for internal use by the "
+"software."
+msgstr ""
+"Deze gebruikersnaam is ongeldig omdat het gereserveerd is for intern gebruik "
+"door de software."
+
+#: journalist_app/forms.py:48 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Dit is een verplicht veld."
 
-#: journalist_app/forms.py:61
+#: journalist_app/forms.py:67
 msgid "You cannot send an empty reply."
 msgstr "U kunt geen lege reactie versturen."
 
-#: journalist_app/forms.py:73
+#: journalist_app/forms.py:79
 msgid "File required."
 msgstr "Bestand verplicht."
 
-#: journalist_app/forms.py:75
+#: journalist_app/forms.py:81
 msgid "You can only upload PNG image files."
 msgstr "U kunt alleen PNG-afbeeldingen uploaden."
 
-#: journalist_app/main.py:122 journalist_app/utils.py:46
-#: journalist_app/utils.py:136
+#: journalist_app/main.py:122 journalist_app/utils.py:47
+#: journalist_app/utils.py:144
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Er trad een onverwachte fout op! Neem contact op met uw beheerder."
 
@@ -148,7 +156,7 @@ msgstr "Bedankt. Uw reactie is opgeslagen."
 msgid "No collections selected for download."
 msgstr "Geen collecties geselecteerd om te downloaden."
 
-#: journalist_app/main.py:157 journalist_app/utils.py:234
+#: journalist_app/main.py:157 journalist_app/utils.py:242
 msgid "No collections selected for deletion."
 msgstr "Geen collecties geselecteerd om te verwijderen."
 
@@ -156,15 +164,15 @@ msgstr "Geen collecties geselecteerd om te verwijderen."
 msgid "No unread submissions for this source."
 msgstr "Geen ongelezen inzendingen van deze bron."
 
-#: journalist_app/utils.py:53
+#: journalist_app/utils.py:54
 msgid "Account updated."
 msgstr "Account is bijgewerkt."
 
-#: journalist_app/utils.py:84
+#: journalist_app/utils.py:92
 msgid "Login failed."
 msgstr "Inloggen mislukt."
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:100
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] ""
@@ -172,7 +180,7 @@ msgstr[0] ""
 msgstr[1] ""
 "Wacht minstens {seconds} seconden voordat u opnieuw probeert in te loggen."
 
-#: journalist_app/utils.py:103
+#: journalist_app/utils.py:111
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
@@ -180,38 +188,38 @@ msgstr ""
 "Wacht op een nieuwe code van uw mobiele applicatie of tweestapstoken "
 "alvorens opnieuw te proberen."
 
-#: journalist_app/utils.py:124
+#: journalist_app/utils.py:132
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "Ongeldige samenstelling voor geheim: gebruik uitsluitend letters A-F en "
 "cijfers 0-9."
 
-#: journalist_app/utils.py:130
+#: journalist_app/utils.py:138
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "Ongeldig geheim: oneven lengte van geheim. Is het geheim correct gespeld?"
 
-#: journalist_app/utils.py:186
+#: journalist_app/utils.py:194
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Inzending verwijderd."
 msgstr[1] "{num} inzendingen verwijderd."
 
-#: journalist_app/utils.py:239
+#: journalist_app/utils.py:250
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} collectie verwijderd"
 msgstr[1] "{num} collecties verwijderd"
 
-#: journalist_app/utils.py:277
+#: journalist_app/utils.py:306
 msgid "Name updated."
 msgstr "Naam is bijgewerkt."
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:315
 msgid "You submitted a bad password! Password not changed."
 msgstr "U heeft een ongeldig wachtwoord ingevoerd! Wachtwoord niet gewijzigd."
 
-#: journalist_app/utils.py:293
+#: journalist_app/utils.py:322
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -221,7 +229,7 @@ msgstr ""
 "correct opgeslagen. Om te voorkomen dat u niet meer kunt inloggen adviseren "
 "wij om uw wachtwoord opnieuw te herstellen."
 
-#: journalist_app/utils.py:302
+#: journalist_app/utils.py:331
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -229,7 +237,7 @@ msgstr ""
 "Wachtwoord updaten is gelukt. Vergeet niet om het op te slaan in uw KeePassX "
 "database. Nieuwe wachtwoord:"
 
-#: journalist_app/utils.py:320
+#: journalist_app/utils.py:349
 msgid "No unread submissions in selected collections."
 msgstr "Geen ongelezen inzendingen in de geselecteerde collecties."
 
@@ -237,7 +245,7 @@ msgstr "Geen ongelezen inzendingen in de geselecteerde collecties."
 msgid "Close"
 msgstr "Sluiten"
 
-#: journalist_templates/_confirmation_modal.html:7
+#: journalist_templates/_confirmation_modal.html:10
 #: source_templates/lookup.html:104
 msgid "Cancel"
 msgstr "Annuleren"
@@ -380,7 +388,7 @@ msgid "Edit"
 msgstr "Bewerken"
 
 #: journalist_templates/admin.html:18 journalist_templates/col.html:125
-#: journalist_templates/index.html:16 journalist_templates/index.html:51
+#: journalist_templates/index.html:16 journalist_templates/index.html:52
 msgid "Delete"
 msgstr "Verwijderen"
 
@@ -483,19 +491,33 @@ msgstr ""
 "Zodra u uw YubiKey geconfigureerd heeft, voert u de zescijferige code "
 "hieronder in:"
 
-#: journalist_templates/base.html:23
+#: journalist_templates/base.html:24
+msgid ""
+"<strong>Update Required:</strong> Your SecureDrop servers are still running "
+"v2 Onion Services, which are being phased out for security reasons. In "
+"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
+"rel=\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>Update Vereist:</strong> Uw SecureDropservers gebruiken nog steeds "
+"v2 Onion Services, die vanwege veiligheidsredenen uitgefaseerd worden. In "
+"februari 2021 zullen V2 Onion Services uitgeschakeld worden, waardoor uw "
+"SecureDropservers mogelijk onbereikbaar worden. <a href=\"//securedrop.org/v2"
+"-onion-eol\" rel=\"noreferrer\">Meer Information</a>"
+
+#: journalist_templates/base.html:29
 msgid "Logged on as"
 msgstr "Aangemeld als"
 
-#: journalist_templates/base.html:25
+#: journalist_templates/base.html:31
 msgid "Admin"
 msgstr "Beheerder"
 
-#: journalist_templates/base.html:27
+#: journalist_templates/base.html:33
 msgid "Log Out"
 msgstr "Uitloggen"
 
-#: journalist_templates/base.html:40
+#: journalist_templates/base.html:46
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -503,7 +525,7 @@ msgstr ""
 "Mogelijk gemaakt door <br> <img src=\"/static/i/securedrop_small.png\" alt="
 "\"SecureDrop\">"
 
-#: journalist_templates/base.html:55
+#: journalist_templates/base.html:61
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Mogelijk gemaakt door <em>SecureDrop {version}</em>."
 
@@ -654,8 +676,8 @@ msgstr "Inzendingsvoorkeuren"
 
 #: journalist_templates/config.html:52
 msgid ""
-"Prevent sources from uploading documents.  Sources will still be able to "
-"send messages."
+"Prevent sources from uploading documents. Sources will still be able to send "
+"messages."
 msgstr ""
 "Voorkom dat bronnen documenten kunnen uploaden. Bronnen kunnen wel nog "
 "berichten verzenden."
@@ -840,7 +862,18 @@ msgstr "De-markeren"
 msgid "Are you sure you want to delete the selected collections?"
 msgstr "Weet u zeker dat u de geselecteerde collecties wilt verwijderen?"
 
-#: journalist_templates/index.html:59
+#: journalist_templates/index.html:48
+msgid ""
+"Warning: If you do this, all files for the selected sources will be "
+"unrecoverable, and the sources will no longer be able to log in using their "
+"previous codename."
+msgstr ""
+"Klik hieronder om de collectie van deze bron te verwijderen. "
+"<em>Waarschuwing: Indien de collectie verwijderd wordt, kunnen de documenten "
+"niet hersteld worden en zal de bron niet langer kunnen inloggen met zijn/"
+"haar vorige codenaam.</em>"
+
+#: journalist_templates/index.html:60
 msgid "No documents have been submitted!"
 msgstr "Geen documenten ingezonden!"
 
@@ -883,7 +916,7 @@ msgstr "Wachtwoord"
 msgid "LOG IN"
 msgstr "INLOGGEN"
 
-#: source_app/__init__.py:124
+#: source_app/__init__.py:123
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
