@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.12.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2020-05-10 14:06+0000\n"
-"Last-Translator: Oktavia <oktaviahrund@gmail.com>\n"
+"PO-Revision-Date: 2020-07-16 15:51+0000\n"
+"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/is/>\n"
 "Language: is\n"
@@ -16,18 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n % 10 != 1 || n % 100 == 11;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.1.1\n"
 "Generated-By: Babel 2.5.1\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "Fyrir {time} síðan"
 
-#: journalist_app/__init__.py:88 journalist_app/__init__.py:137
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
 msgid "You have been logged out due to inactivity"
 msgstr "Útskráning vegna aðgerðaleysis"
 
-#: journalist_app/__init__.py:146
+#: journalist_app/__init__.py:148
 msgid "You have been logged out due to password change"
 msgstr "Útskráning vegna breytingar á lykilorði"
 
@@ -75,7 +75,7 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Það tókst að staðfesta tvíþátta-kóðann fyrir notandann \"{user}\"."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:308
 msgid "Name not updated: {}"
 msgstr "Nafn ekki uppfært: {}"
 
@@ -87,11 +87,11 @@ msgstr "Eyddi notandanum '{user}'"
 msgid "Test alert sent. Please check your email."
 msgstr "Sendi prufuviðvörun. Athugaðu tölvupóstinn þinn."
 
-#: journalist_app/col.py:45
+#: journalist_app/col.py:50
 msgid "{source_name}'s collection deleted"
 msgstr "Safninu {source_name} var eytt"
 
-#: journalist_app/col.py:56
+#: journalist_app/col.py:61
 msgid "No collections selected."
 msgstr "Engin söfn valin."
 
@@ -114,24 +114,32 @@ msgstr ""
 msgid "Field can not be more than {max_chars} characters."
 msgstr "Gagnasvið má ekki vera meira en {max_chars} stafir."
 
-#: journalist_app/forms.py:42 source_app/forms.py:12
+#: journalist_app/forms.py:42
+msgid ""
+"This username is invalid because it is reserved for internal use by the "
+"software."
+msgstr ""
+"Þetta notandanafn er ekki gilt því það er frátekið til innri nota í "
+"hugbúnaðnum."
+
+#: journalist_app/forms.py:48 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Það er nauðsynlegt að fylla þennan reit út."
 
-#: journalist_app/forms.py:61
+#: journalist_app/forms.py:67
 msgid "You cannot send an empty reply."
 msgstr "Þú mátt ekki senda tómt svar."
 
-#: journalist_app/forms.py:73
+#: journalist_app/forms.py:79
 msgid "File required."
 msgstr "Skrá er nauðsynleg."
 
-#: journalist_app/forms.py:75
+#: journalist_app/forms.py:81
 msgid "You can only upload PNG image files."
 msgstr "Þú getur einungis hlaðið upp PNG-myndskrár."
 
-#: journalist_app/main.py:122 journalist_app/utils.py:46
-#: journalist_app/utils.py:136
+#: journalist_app/main.py:122 journalist_app/utils.py:47
+#: journalist_app/utils.py:144
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Óvæn villa kom upp! Hafðu samband við kerfisstjórann þinn."
 
@@ -143,7 +151,7 @@ msgstr "Takk. Svarið þitt hefur verið vistað."
 msgid "No collections selected for download."
 msgstr "Engin söfn valin til niðurhals."
 
-#: journalist_app/main.py:157 journalist_app/utils.py:234
+#: journalist_app/main.py:157 journalist_app/utils.py:242
 msgid "No collections selected for deletion."
 msgstr "Engin söfn valin til eyðingar."
 
@@ -151,15 +159,15 @@ msgstr "Engin söfn valin til eyðingar."
 msgid "No unread submissions for this source."
 msgstr "Engar ólesnar innsendingar hjá þessum heimildarmanni."
 
-#: journalist_app/utils.py:53
+#: journalist_app/utils.py:54
 msgid "Account updated."
 msgstr "Aðgangur uppfærður."
 
-#: journalist_app/utils.py:84
+#: journalist_app/utils.py:92
 msgid "Login failed."
 msgstr "Innskráning mistókst."
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:100
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] ""
@@ -167,7 +175,7 @@ msgstr[0] ""
 msgstr[1] ""
 "Bíddu í a.m.k. {seconds} sekúndur áður en þú reynir innskráningu aftur."
 
-#: journalist_app/utils.py:103
+#: journalist_app/utils.py:111
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
@@ -175,39 +183,39 @@ msgstr ""
 "Bíddu eftir nýjum kóða frá tvíþátta farsímaforriti eða settu inn "
 "dulritunarlykil áður en þú reynir aftur."
 
-#: journalist_app/utils.py:124
+#: journalist_app/utils.py:132
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "Ógilt snið leynilykils: vinsamlegast notaðu einungis stafi frá A-F og tölur "
 "frá 0-9."
 
-#: journalist_app/utils.py:130
+#: journalist_app/utils.py:138
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "Ógilt snið leynilykils: óvenjuleg lengd leynilykils. Slóstu leynilykilinn "
 "rétt inn?"
 
-#: journalist_app/utils.py:186
+#: journalist_app/utils.py:194
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Innsendingu eytt."
 msgstr[1] "{num} innsendingum eytt."
 
-#: journalist_app/utils.py:239
+#: journalist_app/utils.py:250
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} safni eytt"
 msgstr[1] "{num} söfnum eytt"
 
-#: journalist_app/utils.py:277
+#: journalist_app/utils.py:306
 msgid "Name updated."
 msgstr "Nafn uppfært."
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:315
 msgid "You submitted a bad password! Password not changed."
 msgstr "Þú sendir inn rangt lykilorð! Lykilorðið ekki breytt."
 
-#: journalist_app/utils.py:293
+#: journalist_app/utils.py:322
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -217,7 +225,7 @@ msgstr ""
 "að koma í veg fyrir að þú læsist út úr aðgangnum þínum, ættirðu að "
 "endurstilla lykilorðið þitt aftur."
 
-#: journalist_app/utils.py:302
+#: journalist_app/utils.py:331
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -225,7 +233,7 @@ msgstr ""
 "Lykilorð uppfært. Ekki gleyma að vista það í KeePassX gagnagrunninum þínum. "
 "Nýja lykilorðið:"
 
-#: journalist_app/utils.py:320
+#: journalist_app/utils.py:349
 msgid "No unread submissions in selected collections."
 msgstr "Engar ólesnar innsendingar í völdum söfnum."
 
@@ -233,7 +241,7 @@ msgstr "Engar ólesnar innsendingar í völdum söfnum."
 msgid "Close"
 msgstr "Loka"
 
-#: journalist_templates/_confirmation_modal.html:7
+#: journalist_templates/_confirmation_modal.html:10
 #: source_templates/lookup.html:104
 msgid "Cancel"
 msgstr "Hætta við"
@@ -377,7 +385,7 @@ msgid "Edit"
 msgstr "Breyta"
 
 #: journalist_templates/admin.html:18 journalist_templates/col.html:125
-#: journalist_templates/index.html:16 journalist_templates/index.html:51
+#: journalist_templates/index.html:16 journalist_templates/index.html:52
 msgid "Delete"
 msgstr "Eyða"
 
@@ -480,19 +488,33 @@ msgstr ""
 "Þegar þú hefur sett upp YubiKey (dulritunarlykill), settu inn 6-stafa kóðann "
 "hér fyrir neðan:"
 
-#: journalist_templates/base.html:23
+#: journalist_templates/base.html:24
+msgid ""
+"<strong>Update Required:</strong> Your SecureDrop servers are still running "
+"v2 Onion Services, which are being phased out for security reasons. In "
+"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
+"rel=\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>Uppfærsla er nauðsynleg:</strong> SecureDrop-þjónarnir þínir eru enn "
+"að keyra v2 Onion-þjónustur, sem af öryggisástæðum er verið að leggja niður. "
+"Í febrúar 2021, v2 Onion-þjónustur gerðar óvirkar, óvíst er að þá verði hægt "
+"að tengjast SecureDrop-þjónum þínum. <a href=\"//securedrop.org/v2-onion-"
+"eol\" rel=\"noreferrer\">Kanna nánar</a>"
+
+#: journalist_templates/base.html:29
 msgid "Logged on as"
 msgstr "Innskráður sem"
 
-#: journalist_templates/base.html:25
+#: journalist_templates/base.html:31
 msgid "Admin"
 msgstr "Stjórnandi"
 
-#: journalist_templates/base.html:27
+#: journalist_templates/base.html:33
 msgid "Log Out"
 msgstr "Skrá út"
 
-#: journalist_templates/base.html:40
+#: journalist_templates/base.html:46
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -500,7 +522,7 @@ msgstr ""
 "Keyrt með <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 
-#: journalist_templates/base.html:55
+#: journalist_templates/base.html:61
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Keyrt með <em>SecureDrop {version}</em>."
 
@@ -649,8 +671,8 @@ msgstr "Kjörstillingar fyrir innsendingu"
 
 #: journalist_templates/config.html:52
 msgid ""
-"Prevent sources from uploading documents.  Sources will still be able to "
-"send messages."
+"Prevent sources from uploading documents. Sources will still be able to send "
+"messages."
 msgstr ""
 "Koma í veg fyrir að heimildarmenn geti sent inn skjöl. Heimildamenn geta "
 "eftir sem áður sent skilaboð."
@@ -836,7 +858,16 @@ msgstr "Fjarlægja stjörnumerkingu"
 msgid "Are you sure you want to delete the selected collections?"
 msgstr "Ertu viss um að þú viljir eyða völdu söfnunum?"
 
-#: journalist_templates/index.html:59
+#: journalist_templates/index.html:48
+msgid ""
+"Warning: If you do this, all files for the selected sources will be "
+"unrecoverable, and the sources will no longer be able to log in using their "
+"previous codename."
+msgstr ""
+"Aðvörun: Ef þú gerir þetta, verður ekki hægt að endurheimta þessi skjöl og "
+"heimildarmenn munu ekki lengur geta skráð sig inn með fyrra kóðanafni sínu."
+
+#: journalist_templates/index.html:60
 msgid "No documents have been submitted!"
 msgstr "Engin skjöl hafa verið send inn!"
 
@@ -880,7 +911,7 @@ msgstr "Lykilorð"
 msgid "LOG IN"
 msgstr "SKRÁ INN"
 
-#: source_app/__init__.py:124
+#: source_app/__init__.py:123
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -1288,10 +1319,10 @@ msgid ""
 "in your Tor browser's toolbar before moving on. This will clear your Tor "
 "browser activity data on this device."
 msgstr ""
-"Útskráning vegna ónógrar virkni. Smelltu á hnappinn <img src={icon} alt=\""
-"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Nýtt auðkenni</strong> "
-"í verkfærastiku Tor-vafrans. Það mun hreinsa út allar fyrri aðgerðir Tor-"
-"vafrans á þessu tæki."
+"Útskráning vegna ónógrar virkni. Smelltu á hnappinn <img src={icon} alt="
+"\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Nýtt auðkenni</"
+"strong> í verkfærastiku Tor-vafrans. Það mun hreinsa út allar fyrri aðgerðir "
+"Tor-vafrans á þessu tæki."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
