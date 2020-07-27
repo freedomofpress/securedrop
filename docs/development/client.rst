@@ -14,7 +14,7 @@ The source code, and related issues are `hosted on GitHub <https://github.com/fr
 Developer Setup
 ---------------
 
-You may find developer setup instructions in the `SecureDrop Client README <https://github.com/freedomofpress/securedrop-client/blob/master/README.md>`_.
+You may find developer setup instructions in the `SecureDrop Client README <https://github.com/freedomofpress/securedrop-client/blob/main/README.md>`_.
 
 How to Find Help
 ----------------
@@ -107,7 +107,7 @@ abide by it.
 
 Before submitting a pull request, make sure the test suite passes
 (``make check``), because our CI tools will flag broken tests before we're able
-to merge your code into ``master``.
+to merge your code into ``main``.
 
 Most of all, please don't hesitate to get in touch if you need help, advice or
 would like guidance.
