@@ -1,4 +1,4 @@
-Upgrade from 1.3.0 to 1.4.0
+Upgrade from 1.4.1 to 1.5.0
 ===========================
 
 Automatic server upgrades
@@ -6,7 +6,7 @@ Automatic server upgrades
 As with previous releases, your servers will be upgraded to the latest version
 of SecureDrop automatically within 24 hours of the release.
 
-Updating Workstations to SecureDrop 1.4.0
+Updating Workstations to SecureDrop 1.5.0
 -----------------------------------------
 
 Using the graphical updater
@@ -16,7 +16,7 @@ the *SecureDrop Workstation Updater* will alert you to workstation updates. You
 must have `configured an administrator password <https://tails.boum.org/doc/first_steps/startup_options/administration_password/>`_
 on the Tails welcome screen in order to use the graphical updater.
 
-Perform the update to 1.4.0 by clicking "Update Now":
+Perform the update to 1.5.0 by clicking "Update Now":
 
 .. image:: ../images/securedrop-updater.png
 
@@ -36,10 +36,7 @@ update by running the following commands: ::
   git fetch --tags
   gpg --keyserver hkps://keys.openpgp.org --recv-key \
    "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
-  git tag -v 1.4.0
-
-.. important:: Do not skip the ``gpg`` step. This release includes an update
-   of the release key. The old release key is set to expire on June 30, 2020.
+  git tag -v 1.5.0
 
 The output should include the following two lines: ::
 
@@ -50,9 +47,9 @@ Please verify that each character of the fingerprint above matches what is
 on the screen of your workstation. If it does, you can check out the
 new release: ::
 
-    git checkout 1.4.0
+    git checkout 1.5.0
 
-.. important:: If you do see the warning "refname '1.4.0' is ambiguous" in the
+.. important:: If you do see the warning "refname '1.5.0' is ambiguous" in the
   output, we recommend that you contact us immediately at securedrop@freedom.press
   (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__).
 
@@ -77,20 +74,32 @@ graphical prompts to update to the latest version.
    These instructions will be removed from a future version of this
    documentation.
 
+
 .. include:: ../includes/always-backup.txt
 
-New OSSEC alert for iptables misconfigurations
-----------------------------------------------
-This release of SecureDrop introduces a new level 12 alert for detecting
-misconfigurations of the iptables rules on the *Application* and
-*Monitor Servers*. iptables functions as a software firewall, providing defense
-in depth in addition to the rules configured in your hardware firewall.
+Troubleshooting Kernel Issues
+-----------------------------
+SecureDrop 1.5.0 includes a kernel update on the *Application* and *Monitor
+Servers*, from version 4.14.175 to version 4.14.188. As with all kernel updates,
+we have extensively tested this update against
+:ref:`recommended hardware <Specific Hardware Recommendations>`.
 
-We recommend that you check your OSSEC alerts carefully in the days after this
-release, to ensure iptables is configured correctly. Please see our guide to
-:ref:`uncommon OSSEC alerts <uncommon_alerts>` for an example of this alert,
-and for information on how to reinstate the correct configuration.
+If you are running SecureDrop on hardware that is not officially supported, you
+may encounter compatibility issues with the new kernel. For example, the servers
+may not boot, or you may lose network connectivity. If this happens, you can
+temporarily downgrade to the previous kernel version.
 
+.. important::
+
+   To ensure continued secure operation of your SecureDrop instance, it is of
+   critical importance to resolve any compatibility issues with the new kernel
+   as quickly as possible. If you encounter problems with this update, please
+   get in touch with us urgently, so we can help you run the latest supported
+   kernel version.
+
+For information on how to downgrade to the previous kernel, and for additional
+troubleshooting information, please see our :doc:`Kernel Troubleshooting Guide <../kernel_troubleshooting>`.
+   
 Getting Support
 ---------------
 
