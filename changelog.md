@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0~rc3
+
+* Remove unused/disabled source onion service info files (#5404)
+
 ## 1.5.0~rc2
 
 * Fixes #5378, adds more checks for invalid username (#5380)
