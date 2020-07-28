@@ -7,34 +7,34 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2020-05-06 21:06+0000\n"
-"Last-Translator: Andrey <andrey@mailbox.org>\n"
+"PO-Revision-Date: 2020-07-22 19:37+0000\n"
+"Last-Translator: Adham Kurbanov <uz@zu.uz>\n"
 "Language-Team: Russian <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
-"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10.3\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.1.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "{time} назад"
 
-#: journalist_app/__init__.py:88 journalist_app/__init__.py:137
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
 msgid "You have been logged out due to inactivity"
 msgstr "Ваша сессия была завершена из-за неактивности"
 
-#: journalist_app/__init__.py:146
+#: journalist_app/__init__.py:148
 msgid "You have been logged out due to password change"
 msgstr "Ваша сессия была завершена из-за смены пароля"
 
 #: journalist_app/account.py:33
 msgid "Incorrect password or two-factor code."
-msgstr "Неверный пароль или двухэтапный код."
+msgstr "Неверный пароль или код двухфакторной аутентификации."
 
 #: journalist_app/account.py:49
 msgid "Your two-factor credentials have been reset successfully."
@@ -78,7 +78,7 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Двухфакторный код для пользователя \"{user}\" был успешно подтверждён."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:308
 msgid "Name not updated: {}"
 msgstr "Имя не обновлено: {}"
 
@@ -90,11 +90,11 @@ msgstr "Пользователь '{user}' удален"
 msgid "Test alert sent. Please check your email."
 msgstr "Отправлено тестовое предупреждение. Проверьте свою электронную почту."
 
-#: journalist_app/col.py:45
+#: journalist_app/col.py:50
 msgid "{source_name}'s collection deleted"
 msgstr "Коллекция {source_name} удалена"
 
-#: journalist_app/col.py:56
+#: journalist_app/col.py:61
 msgid "No collections selected."
 msgstr "Коллекция не выбрана."
 
@@ -117,24 +117,32 @@ msgstr ""
 msgid "Field can not be more than {max_chars} characters."
 msgstr "В поле можно ввести не более {max_chars} символов."
 
-#: journalist_app/forms.py:42 source_app/forms.py:12
+#: journalist_app/forms.py:42
+msgid ""
+"This username is invalid because it is reserved for internal use by the "
+"software."
+msgstr ""
+"Данное имя пользователя недоступно, так как оно предназначено для "
+"внутреннего использования в ПО."
+
+#: journalist_app/forms.py:48 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Это обязательное поле."
 
-#: journalist_app/forms.py:61
+#: journalist_app/forms.py:67
 msgid "You cannot send an empty reply."
 msgstr "Вы не можете отправить пустой ответ."
 
-#: journalist_app/forms.py:73
+#: journalist_app/forms.py:79
 msgid "File required."
 msgstr "Файл обязателен."
 
-#: journalist_app/forms.py:75
+#: journalist_app/forms.py:81
 msgid "You can only upload PNG image files."
 msgstr "Вы можете загружать изображения только в формате PNG."
 
-#: journalist_app/main.py:122 journalist_app/utils.py:46
-#: journalist_app/utils.py:136
+#: journalist_app/main.py:122 journalist_app/utils.py:47
+#: journalist_app/utils.py:144
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Произошла непредвиденная ошибка! Сообщите об этом администратору."
 
@@ -146,7 +154,7 @@ msgstr "Спасибо. Ваш ответ сохранен."
 msgid "No collections selected for download."
 msgstr "Коллекции для скачивания не выбраны."
 
-#: journalist_app/main.py:157 journalist_app/utils.py:234
+#: journalist_app/main.py:157 journalist_app/utils.py:242
 msgid "No collections selected for deletion."
 msgstr "Не выбраны коллекции для удаления."
 
@@ -154,15 +162,15 @@ msgstr "Не выбраны коллекции для удаления."
 msgid "No unread submissions for this source."
 msgstr "Нет непрочитанных материалов для этого источника."
 
-#: journalist_app/utils.py:53
+#: journalist_app/utils.py:54
 msgid "Account updated."
 msgstr "Аккаунт обновлен."
 
-#: journalist_app/utils.py:84
+#: journalist_app/utils.py:92
 msgid "Login failed."
 msgstr "Авторизация не удалась."
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:100
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] ""
@@ -175,7 +183,7 @@ msgstr[2] ""
 "Подождите минимум {seconds} секунд перед тем как попробовать снова войти в "
 "систему."
 
-#: journalist_app/utils.py:103
+#: journalist_app/utils.py:111
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
@@ -183,38 +191,38 @@ msgstr ""
 "Пожалуйста, дождитесь нового кода от вашего двухфакторного приложения или "
 "электронного ключа, прежде чем повторить попытку."
 
-#: journalist_app/utils.py:124
+#: journalist_app/utils.py:132
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "Недопустимый формат: пожалуйста, используйте только буквы от A-F и цифры 0-9."
 
-#: journalist_app/utils.py:130
+#: journalist_app/utils.py:138
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Неверный формат: количество символов нечетное. Вы ошиблись?"
 
-#: journalist_app/utils.py:186
+#: journalist_app/utils.py:194
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Материал удален."
 msgstr[1] "{num} материала удалены."
 msgstr[2] "{num} материалов удалены."
 
-#: journalist_app/utils.py:239
+#: journalist_app/utils.py:250
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} коллекция удалена"
 msgstr[1] "{num} коллекции удалены"
 msgstr[2] "{num} коллекций удалено"
 
-#: journalist_app/utils.py:277
+#: journalist_app/utils.py:306
 msgid "Name updated."
 msgstr "Имя обновлено."
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:315
 msgid "You submitted a bad password! Password not changed."
 msgstr "Вы ввели неверный пароль! Пароль не был изменен."
 
-#: journalist_app/utils.py:293
+#: journalist_app/utils.py:322
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -223,7 +231,7 @@ msgstr ""
 "Произошла ошибка, новый пароль мог быть сохранен неправильно. Чтобы не "
 "потерять доступ к аккаунту вам нужно снова сбросить пароль.."
 
-#: journalist_app/utils.py:302
+#: journalist_app/utils.py:331
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -231,7 +239,7 @@ msgstr ""
 "Пароль обновлен. Не забудьте сохранить его в базе данных KeePassX. Новый "
 "пароль:"
 
-#: journalist_app/utils.py:320
+#: journalist_app/utils.py:349
 msgid "No unread submissions in selected collections."
 msgstr "Нет непрочитанных материалов в выбранных коллекциях."
 
@@ -239,7 +247,7 @@ msgstr "Нет непрочитанных материалов в выбранн
 msgid "Close"
 msgstr "Закрыть"
 
-#: journalist_templates/_confirmation_modal.html:7
+#: journalist_templates/_confirmation_modal.html:10
 #: source_templates/lookup.html:104
 msgid "Cancel"
 msgstr "Отменить"
@@ -386,7 +394,7 @@ msgid "Edit"
 msgstr "Редактировать"
 
 #: journalist_templates/admin.html:18 journalist_templates/col.html:125
-#: journalist_templates/index.html:16 journalist_templates/index.html:51
+#: journalist_templates/index.html:16 journalist_templates/index.html:52
 msgid "Delete"
 msgstr "Удалить"
 
@@ -487,19 +495,33 @@ msgstr ""
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "После того, как вы настроили ваш YubiKey, введите 6-значный код ниже:"
 
-#: journalist_templates/base.html:23
+#: journalist_templates/base.html:24
+msgid ""
+"<strong>Update Required:</strong> Your SecureDrop servers are still running "
+"v2 Onion Services, which are being phased out for security reasons. In "
+"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
+"rel=\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>Необходимо обновить:</strong> Ваши сервера SecureDrop все ещё "
+"работают на Сервисах Onion v2 и по мерам безопастности будут поэтапно "
+"убраны. В Феврале 2021 года, Сервисы Onion v2 будут отключены и ваши сервера "
+"SecureDrop могут выйти из строя. <a href=\"//securedrop.org/v2-onion-eol\" "
+"rel=\"noreferrer\">Подробнее</a>"
+
+#: journalist_templates/base.html:29
 msgid "Logged on as"
 msgstr "Вы вошли как"
 
-#: journalist_templates/base.html:25
+#: journalist_templates/base.html:31
 msgid "Admin"
 msgstr "Администратор"
 
-#: journalist_templates/base.html:27
+#: journalist_templates/base.html:33
 msgid "Log Out"
 msgstr "Выйти"
 
-#: journalist_templates/base.html:40
+#: journalist_templates/base.html:46
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -507,7 +529,7 @@ msgstr ""
 "Основано на <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 
-#: journalist_templates/base.html:55
+#: journalist_templates/base.html:61
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Основано на <em>SecureDrop {version}</em>."
 
@@ -659,8 +681,8 @@ msgstr "Параметры публикации"
 
 #: journalist_templates/config.html:52
 msgid ""
-"Prevent sources from uploading documents.  Sources will still be able to "
-"send messages."
+"Prevent sources from uploading documents. Sources will still be able to send "
+"messages."
 msgstr ""
 "Запретить источникам загрузку документов. Источники все ещё смогут "
 "отправлять сообщения."
@@ -854,7 +876,17 @@ msgstr "Снять отметку"
 msgid "Are you sure you want to delete the selected collections?"
 msgstr "Вы уверены, что хотите удалить выбранные коллекции?"
 
-#: journalist_templates/index.html:59
+#: journalist_templates/index.html:48
+msgid ""
+"Warning: If you do this, all files for the selected sources will be "
+"unrecoverable, and the sources will no longer be able to log in using their "
+"previous codename."
+msgstr ""
+"Предупреждение: если вы это сделаете, файлы, которые вы здесь видите, будут "
+"безвозвратно удалены, и источник больше не сможет войти в систему, используя "
+"свое предыдущее кодовое имя."
+
+#: journalist_templates/index.html:60
 msgid "No documents have been submitted!"
 msgstr "Отправленные документы отсутствуют!"
 
@@ -898,7 +930,7 @@ msgstr "Пароль"
 msgid "LOG IN"
 msgstr "Войти"
 
-#: source_app/__init__.py:124
+#: source_app/__init__.py:123
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -1167,10 +1199,10 @@ msgid ""
 "\"16\">&nbsp;<strong>New Identity</strong> button in your Tor browser's "
 "toolbar. This will clear your Tor browser activity data on this device."
 msgstr ""
-"Нажмите кнопку <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\""
-">&nbsp;<strong>Новая идентичность</strong> button в панели инструментов "
-"вашего браузера Tor. Это очистит данные об активности вашего браузера Tor на "
-"этом устройстве."
+"Нажмите кнопку <img src={icon} alt=\"broom icon\" width=\"16\" height="
+"\"16\">&nbsp;<strong>Новая идентичность</strong> button в панели "
+"инструментов вашего браузера Tor. Это очистит данные об активности вашего "
+"браузера Tor на этом устройстве."
 
 #: source_templates/lookup.html:7
 msgid "Remember, your codename is:"

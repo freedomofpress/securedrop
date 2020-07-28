@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.8.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2020-05-06 12:06+0000\n"
+"PO-Revision-Date: 2020-07-22 11:37+0000\n"
 "Last-Translator: Dimitris Maroulidis <dmaroulidis@dimitrismaroulidis.com>\n"
 "Language-Team: Greek <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/el/>\n"
@@ -16,18 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.1.1\n"
 "Generated-By: Babel 2.5.1\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "πριν από {time}"
 
-#: journalist_app/__init__.py:88 journalist_app/__init__.py:137
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
 msgid "You have been logged out due to inactivity"
 msgstr "Αποσυνδεθήκατε λόγω αδράνειας"
 
-#: journalist_app/__init__.py:146
+#: journalist_app/__init__.py:148
 msgid "You have been logged out due to password change"
 msgstr "Αποσυνδεθήκατε λόγω αλλαγής κωδικού πρόσβασης"
 
@@ -79,7 +79,7 @@ msgstr ""
 "επαληθεύτηκε επιτυχώς."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:308
 msgid "Name not updated: {}"
 msgstr "Το όνομα δεν ενημερώθηκε: {}"
 
@@ -93,11 +93,11 @@ msgstr ""
 "Η δοκιμαστική ειδοποίηση στάλθηκε. Παρακαλώ δείτε το ηλεκτρονικό ταχυδρομείο "
 "σας."
 
-#: journalist_app/col.py:45
+#: journalist_app/col.py:50
 msgid "{source_name}'s collection deleted"
 msgstr "Η συλλογή του/της {source_name} διαγράφηκε"
 
-#: journalist_app/col.py:56
+#: journalist_app/col.py:61
 msgid "No collections selected."
 msgstr "Δεν έχουν επιλεχθεί συλλογές."
 
@@ -120,24 +120,32 @@ msgstr ""
 msgid "Field can not be more than {max_chars} characters."
 msgstr "Το πεδίο δεν μπορεί να περιέχει παραπάνω από {max_chars} χαρακτήρες."
 
-#: journalist_app/forms.py:42 source_app/forms.py:12
+#: journalist_app/forms.py:42
+msgid ""
+"This username is invalid because it is reserved for internal use by the "
+"software."
+msgstr ""
+"Αυτό το όνομα χρήστη δεν είναι έγκυρο επειδή είναι κατοχυρωμένο για "
+"εσωτερική χρήση του λογισμικού."
+
+#: journalist_app/forms.py:48 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Αυτό το πεδίο είναι υποχρεωτικό."
 
-#: journalist_app/forms.py:61
+#: journalist_app/forms.py:67
 msgid "You cannot send an empty reply."
 msgstr "Δεν μπορείτε να στείλετε κενή απάντηση."
 
-#: journalist_app/forms.py:73
+#: journalist_app/forms.py:79
 msgid "File required."
 msgstr "Απαιτείται αρχείο."
 
-#: journalist_app/forms.py:75
+#: journalist_app/forms.py:81
 msgid "You can only upload PNG image files."
 msgstr "Μπορείτε να ανεβάσετε μόνο αρχεία εικόνας τύπου PNG."
 
-#: journalist_app/main.py:122 journalist_app/utils.py:46
-#: journalist_app/utils.py:136
+#: journalist_app/main.py:122 journalist_app/utils.py:47
+#: journalist_app/utils.py:144
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Παρουσιάστηκε απρόσμενο σφάλμα! Παρακαλώ ειδοποιήστε τον διαχειριστή."
 
@@ -149,7 +157,7 @@ msgstr "Ευχαριστώ. Η απάντησή σας αποθηκεύτηκε.
 msgid "No collections selected for download."
 msgstr "Δεν έχουν επιλεχθεί συλλογές για λήψη."
 
-#: journalist_app/main.py:157 journalist_app/utils.py:234
+#: journalist_app/main.py:157 journalist_app/utils.py:242
 msgid "No collections selected for deletion."
 msgstr "Δεν έχουν επιλεχθεί συλλογές για διαγραφή."
 
@@ -157,15 +165,15 @@ msgstr "Δεν έχουν επιλεχθεί συλλογές για διαγρ�
 msgid "No unread submissions for this source."
 msgstr "Δεν υπάρχουν μη αναγνωσμένες υποβολές για αυτή την πηγή."
 
-#: journalist_app/utils.py:53
+#: journalist_app/utils.py:54
 msgid "Account updated."
 msgstr "Ο λογαριασμός ενημερώθηκε."
 
-#: journalist_app/utils.py:84
+#: journalist_app/utils.py:92
 msgid "Login failed."
 msgstr "Η σύνδεση απέτυχε."
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:100
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] ""
@@ -173,7 +181,7 @@ msgstr[0] ""
 msgstr[1] ""
 "Παρακαλώ περιμένετε τουλάχιστον {seconds} δευτερόλεπτα πριν ξανασυνδεθείτε."
 
-#: journalist_app/utils.py:103
+#: journalist_app/utils.py:111
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
@@ -181,39 +189,39 @@ msgstr ""
 "Παρακαλώ περιμένετε για έναν νέο κωδικό από την εφαρμογή ή το κλειδί "
 "ασφαλείας πριν ξαναδοκιμάσετε."
 
-#: journalist_app/utils.py:124
+#: journalist_app/utils.py:132
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "Άκυρη μορφή μυστικού: παρακαλώ πληκτρολογήστε μόνο γράμματα από A έως F και "
 "αριθμούς από 0 έως 9."
 
-#: journalist_app/utils.py:130
+#: journalist_app/utils.py:138
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "Άκυρη μορφή μυστικού: το μυστικό έχει μονό αριθμό ψηφίων. Μήπως κάνατε "
 "κάποιο λάθος στην πληκτρολόγηση;"
 
-#: journalist_app/utils.py:186
+#: journalist_app/utils.py:194
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Η καταχώρηση διαγράφηκε."
 msgstr[1] "{num} καταχωρήσεις διαγράφηκαν."
 
-#: journalist_app/utils.py:239
+#: journalist_app/utils.py:250
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "Μία συλλογή διαγράφηκε"
 msgstr[1] "{num} συλλογές διαγράφηκαν"
 
-#: journalist_app/utils.py:277
+#: journalist_app/utils.py:306
 msgid "Name updated."
 msgstr "Το όνομα ενημερώθηκε."
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:315
 msgid "You submitted a bad password! Password not changed."
 msgstr "Ο κωδικός που καταχωρήσατε είναι λανθασμένος! Ο κωδικός δεν άλλαξε."
 
-#: journalist_app/utils.py:293
+#: journalist_app/utils.py:322
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -223,7 +231,7 @@ msgstr ""
 "να μην χάσετε την πρόσβαση στον λογαριασμό σας, παρακαλώ επαναφέρετε τον "
 "κωδικό σας ξανά."
 
-#: journalist_app/utils.py:302
+#: journalist_app/utils.py:331
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -231,7 +239,7 @@ msgstr ""
 "Ο κωδικός ανανεώθηκε. Μη ξεχάσετε να τον αποθηκεύσετε στη βάση δεδομένων του "
 "KeePassX σας. Νέος κωδικός:"
 
-#: journalist_app/utils.py:320
+#: journalist_app/utils.py:349
 msgid "No unread submissions in selected collections."
 msgstr "Δεν υπάρχουν μη αναγνωσμένες καταχωρήσεις στις επιλεγμένες συλλογές."
 
@@ -239,7 +247,7 @@ msgstr "Δεν υπάρχουν μη αναγνωσμένες καταχωρήσ
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: journalist_templates/_confirmation_modal.html:7
+#: journalist_templates/_confirmation_modal.html:10
 #: source_templates/lookup.html:104
 msgid "Cancel"
 msgstr "Άκυρο"
@@ -383,7 +391,7 @@ msgid "Edit"
 msgstr "Επεξεργασία"
 
 #: journalist_templates/admin.html:18 journalist_templates/col.html:125
-#: journalist_templates/index.html:16 journalist_templates/index.html:51
+#: journalist_templates/index.html:16 journalist_templates/index.html:52
 msgid "Delete"
 msgstr "Διαγραφή"
 
@@ -487,19 +495,34 @@ msgstr ""
 "Όταν ολοκληρώσετε την παραμετροποίηση του YubiKey σας, πληκτρολογήστε τον "
 "εξαψήφιο κωδικό παρακάτω:"
 
-#: journalist_templates/base.html:23
+#: journalist_templates/base.html:24
+msgid ""
+"<strong>Update Required:</strong> Your SecureDrop servers are still running "
+"v2 Onion Services, which are being phased out for security reasons. In "
+"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
+"rel=\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>Απαιτείται αναβάθμιση:</strong>Οι διακομιστές SecureDrop σας "
+"λειτουργούν ακόμα με v2 Onion Services, οι οποίες είναι σε φάση απόσυρσης "
+"για λόγους ασφαλείας. Το Φεβρουάριο του 2021, οι v2 Onion Services θα "
+"απενεργοποιηθούν οπότε οι διακομιστές SecureDrop σας πιθανώς να είναι "
+"απροσπέλαστοι. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\""
+">Μάθετε περισσότερα</a>"
+
+#: journalist_templates/base.html:29
 msgid "Logged on as"
 msgstr "Συνδεδεμένος/η ώς"
 
-#: journalist_templates/base.html:25
+#: journalist_templates/base.html:31
 msgid "Admin"
 msgstr "Διαχείριση"
 
-#: journalist_templates/base.html:27
+#: journalist_templates/base.html:33
 msgid "Log Out"
 msgstr "Αποσύνδεση"
 
-#: journalist_templates/base.html:40
+#: journalist_templates/base.html:46
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -507,7 +530,7 @@ msgstr ""
 "Με την υποστήριξη του <br> <img src=\"/static/i/securedrop_small.png\" alt="
 "\"SecureDrop\">"
 
-#: journalist_templates/base.html:55
+#: journalist_templates/base.html:61
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Με την υποστήριξη του <em>SecureDrop {version}</em>."
 
@@ -659,10 +682,10 @@ msgstr "Ρυθμίσεις καταχωρήσεων"
 
 #: journalist_templates/config.html:52
 msgid ""
-"Prevent sources from uploading documents.  Sources will still be able to "
-"send messages."
+"Prevent sources from uploading documents. Sources will still be able to send "
+"messages."
 msgstr ""
-"Αποτροπή πηγών από το ανέβασμα εγγράφων.  Οι πηγές θα μπορούν ακόμα να "
+"Αποτροπή πηγών από το ανέβασμα εγγράφων.-Οι πηγές θα μπορούν ακόμα να "
 "στέλνουν μηνύματα."
 
 #: journalist_templates/config.html:55
@@ -852,7 +875,17 @@ msgstr "Απο-επισήμανση"
 msgid "Are you sure you want to delete the selected collections?"
 msgstr "Είστε σίγουροι πως θέλετε να διαγράψετε τις επιλεγμένες συλλογές;"
 
-#: journalist_templates/index.html:59
+#: journalist_templates/index.html:48
+msgid ""
+"Warning: If you do this, all files for the selected sources will be "
+"unrecoverable, and the sources will no longer be able to log in using their "
+"previous codename."
+msgstr ""
+"Προσοχή: Αν το κάνετε αυτό, όλα τα αρχεία για τις επιλεγμένες πηγές δεν θα "
+"είναι ανακτήσιμα, και οι πηγές δεν θα μπορούν πλέον να συνδεθούν "
+"χρησιμοποιώντας το προηγούμενο κωδικό όνομά τους."
+
+#: journalist_templates/index.html:60
 msgid "No documents have been submitted!"
 msgstr "Δεν έχουν καταχωρηθεί έγγραφα!"
 
@@ -896,7 +929,7 @@ msgstr "Κωδικός πρόσβασης"
 msgid "LOG IN"
 msgstr "ΣΥΝΔΕΣΗ"
 
-#: source_app/__init__.py:124
+#: source_app/__init__.py:123
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -1173,8 +1206,8 @@ msgid ""
 "\"16\">&nbsp;<strong>New Identity</strong> button in your Tor browser's "
 "toolbar. This will clear your Tor browser activity data on this device."
 msgstr ""
-"Πατήστε το κουμπί <img src={icon} alt=\"broom icon\" width=\"16\" height=\""
-"16\">&nbsp;<strong>Νέα Ταυτότητα</strong> στη γραμμη εργαλείων του Tor "
+"Πατήστε το κουμπί <img src={icon} alt=\"broom icon\" width=\"16\" height="
+"\"16\">&nbsp;<strong>Νέα Ταυτότητα</strong> στη γραμμη εργαλείων του Tor "
 "browser σας. Αυτό θα διαγράψει τα δεδομένα δραστηριότητας του Tor Browser "
 "σας σε αυτή τη συσκευή."
 

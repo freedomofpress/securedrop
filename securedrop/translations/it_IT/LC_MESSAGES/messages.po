@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2020-05-05 19:06+0000\n"
+"PO-Revision-Date: 2020-07-25 16:37+0000\n"
 "Last-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\n"
 "Language-Team: Italian <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/it/>\n"
@@ -20,18 +20,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.1.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "{time} fa"
 
-#: journalist_app/__init__.py:88 journalist_app/__init__.py:137
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
 msgid "You have been logged out due to inactivity"
 msgstr "La sessione è stata terminata per inattività"
 
-#: journalist_app/__init__.py:146
+#: journalist_app/__init__.py:148
 msgid "You have been logged out due to password change"
 msgstr "Sei stato disconnesso a seguito della modifica della password"
 
@@ -83,7 +83,7 @@ msgstr ""
 "successo."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:308
 msgid "Name not updated: {}"
 msgstr "Nome non aggiornato: {}"
 
@@ -95,11 +95,11 @@ msgstr "Utente \"{user}\" eliminato"
 msgid "Test alert sent. Please check your email."
 msgstr "Avviso di prova inviato. Controllare la propria casella email."
 
-#: journalist_app/col.py:45
+#: journalist_app/col.py:50
 msgid "{source_name}'s collection deleted"
 msgstr "Archivio di {source_name} eliminato"
 
-#: journalist_app/col.py:56
+#: journalist_app/col.py:61
 msgid "No collections selected."
 msgstr "Non è stato selezionato alcun archivio."
 
@@ -123,24 +123,32 @@ msgstr ""
 msgid "Field can not be more than {max_chars} characters."
 msgstr "Il campo non può contenere più di {max_chars} caratteri."
 
-#: journalist_app/forms.py:42 source_app/forms.py:12
+#: journalist_app/forms.py:42
+msgid ""
+"This username is invalid because it is reserved for internal use by the "
+"software."
+msgstr ""
+"Questo nome utente non è valido in quanto è riservato per uso interno da "
+"parte del software."
+
+#: journalist_app/forms.py:48 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Questo campo è obbligatorio."
 
-#: journalist_app/forms.py:61
+#: journalist_app/forms.py:67
 msgid "You cannot send an empty reply."
 msgstr "Non è possibile inviare una risposta vuota."
 
-#: journalist_app/forms.py:73
+#: journalist_app/forms.py:79
 msgid "File required."
 msgstr "File obbligatorio."
 
-#: journalist_app/forms.py:75
+#: journalist_app/forms.py:81
 msgid "You can only upload PNG image files."
 msgstr "Possono essere caricate solo immagini PNG."
 
-#: journalist_app/main.py:122 journalist_app/utils.py:46
-#: journalist_app/utils.py:136
+#: journalist_app/main.py:122 journalist_app/utils.py:47
+#: journalist_app/utils.py:144
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr ""
 "Si è verificato un errore inatteso. Informare il proprio amministratore."
@@ -153,7 +161,7 @@ msgstr "Grazie. La tua risposta è stata archiviata."
 msgid "No collections selected for download."
 msgstr "Nessun archivio è stato selezionato per essere scaricato."
 
-#: journalist_app/main.py:157 journalist_app/utils.py:234
+#: journalist_app/main.py:157 journalist_app/utils.py:242
 msgid "No collections selected for deletion."
 msgstr "Nessun archivio è stato selezionato per essere eliminato."
 
@@ -161,21 +169,21 @@ msgstr "Nessun archivio è stato selezionato per essere eliminato."
 msgid "No unread submissions for this source."
 msgstr "Non ci sono invii non letti per questa fonte."
 
-#: journalist_app/utils.py:53
+#: journalist_app/utils.py:54
 msgid "Account updated."
 msgstr "Account aggiornato."
 
-#: journalist_app/utils.py:84
+#: journalist_app/utils.py:92
 msgid "Login failed."
 msgstr "Accesso non riuscito."
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:100
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] "Attendere almeno {seconds} secondo prima di accedere nuovamente."
 msgstr[1] "Attendere almeno {seconds} secondi prima di accedere nuovamente."
 
-#: journalist_app/utils.py:103
+#: journalist_app/utils.py:111
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
@@ -183,38 +191,38 @@ msgstr ""
 "Attendere un nuovo codice a due fattori dall'applicazione mobile o dalla "
 "chiave di sicurezza prima di tentare nuovamente."
 
-#: journalist_app/utils.py:124
+#: journalist_app/utils.py:132
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "Formato del segreto non valido: utilizzare solo lettere A-F e numeri 0-9."
 
-#: journalist_app/utils.py:130
+#: journalist_app/utils.py:138
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "Formato del segreto non valido: segreto di lunghezza dispari. Forse non è "
 "stato digitato correttamente?"
 
-#: journalist_app/utils.py:186
+#: journalist_app/utils.py:194
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Invio eliminato."
 msgstr[1] "{num} invii eliminati."
 
-#: journalist_app/utils.py:239
+#: journalist_app/utils.py:250
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} archivio eliminato"
 msgstr[1] "{num} archivi eliminati"
 
-#: journalist_app/utils.py:277
+#: journalist_app/utils.py:306
 msgid "Name updated."
 msgstr "Nome aggiornato."
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:315
 msgid "You submitted a bad password! Password not changed."
 msgstr "È stata inserita una password errata. Password non modificata."
 
-#: journalist_app/utils.py:293
+#: journalist_app/utils.py:322
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -224,7 +232,7 @@ msgstr ""
 "salvata correttamente. Per evitare che l'accesso all'account venga bloccato, "
 "reimpostare nuovamente la password."
 
-#: journalist_app/utils.py:302
+#: journalist_app/utils.py:331
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -232,7 +240,7 @@ msgstr ""
 "Password aggiornata. Non dimenticare di salvarla nel proprio database "
 "KeePassX. Nuova password:"
 
-#: journalist_app/utils.py:320
+#: journalist_app/utils.py:349
 msgid "No unread submissions in selected collections."
 msgstr "Non ci sono invii non letti negli archivi selezionati."
 
@@ -240,7 +248,7 @@ msgstr "Non ci sono invii non letti negli archivi selezionati."
 msgid "Close"
 msgstr "Chiudi"
 
-#: journalist_templates/_confirmation_modal.html:7
+#: journalist_templates/_confirmation_modal.html:10
 #: source_templates/lookup.html:104
 msgid "Cancel"
 msgstr "Annulla"
@@ -384,7 +392,7 @@ msgid "Edit"
 msgstr "Modifica"
 
 #: journalist_templates/admin.html:18 journalist_templates/col.html:125
-#: journalist_templates/index.html:16 journalist_templates/index.html:51
+#: journalist_templates/index.html:16 journalist_templates/index.html:52
 msgid "Delete"
 msgstr "Elimina"
 
@@ -488,19 +496,34 @@ msgstr ""
 "Una volta configurata la tua Yubikey, inserisci il codice a 6 cifre qui "
 "sotto:"
 
-#: journalist_templates/base.html:23
+#: journalist_templates/base.html:24
+msgid ""
+"<strong>Update Required:</strong> Your SecureDrop servers are still running "
+"v2 Onion Services, which are being phased out for security reasons. In "
+"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
+"rel=\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>Aggiornamento richiesto:</strong> i tuoi server SecureDrop stanno "
+"ancora eseguendo i servizi Onion v2, che vengono gradualmente eliminati per "
+"motivi di sicurezza. Da febbraio 2021, i servizi Onion v2 verranno "
+"disattivati, e i tuoi server SecureDrop potrebbero diventare "
+"irraggiungibili. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\""
+">Maggiori informazioni</a>"
+
+#: journalist_templates/base.html:29
 msgid "Logged on as"
 msgstr "Accesso eseguito come"
 
-#: journalist_templates/base.html:25
+#: journalist_templates/base.html:31
 msgid "Admin"
 msgstr "Amministratore"
 
-#: journalist_templates/base.html:27
+#: journalist_templates/base.html:33
 msgid "Log Out"
 msgstr "Esci"
 
-#: journalist_templates/base.html:40
+#: journalist_templates/base.html:46
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -508,7 +531,7 @@ msgstr ""
 "Offerto da <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 
-#: journalist_templates/base.html:55
+#: journalist_templates/base.html:61
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Offerto da <em>SecureDrop {version}</em>."
 
@@ -660,8 +683,8 @@ msgstr "Preferenze di invio"
 
 #: journalist_templates/config.html:52
 msgid ""
-"Prevent sources from uploading documents.  Sources will still be able to "
-"send messages."
+"Prevent sources from uploading documents. Sources will still be able to send "
+"messages."
 msgstr ""
 "Impedire alle fonti di caricare documenti. Le stesse potranno comunque "
 "continuare a inviare messaggi."
@@ -849,7 +872,17 @@ msgstr "Rimuovi dai preferiti"
 msgid "Are you sure you want to delete the selected collections?"
 msgstr "Eliminare veramente gli archivi selezionati?"
 
-#: journalist_templates/index.html:59
+#: journalist_templates/index.html:48
+msgid ""
+"Warning: If you do this, all files for the selected sources will be "
+"unrecoverable, and the sources will no longer be able to log in using their "
+"previous codename."
+msgstr ""
+"Attenzione: dopo questa operazione, tutti i file delle fonti selezionate non "
+"potranno essere recuperati. Inoltre le fonti non saranno più in grado di "
+"accedere usando il precedente nome in codice."
+
+#: journalist_templates/index.html:60
 msgid "No documents have been submitted!"
 msgstr "Non è stato inviato alcun documento!"
 
@@ -891,7 +924,7 @@ msgstr "Password"
 msgid "LOG IN"
 msgstr "ACCEDI"
 
-#: source_app/__init__.py:124
+#: source_app/__init__.py:123
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
