@@ -1,33 +1,41 @@
 # Changelog
 
-## 1.5.0~rc3
+## 1.5.0
 
-* Remove unused/disabled source onion service info files (#5404)
-
-## 1.5.0~rc2
+### Web Applications
 
 * Fixes #5378, adds more checks for invalid username (#5380)
+* Add v2 onion service deprecation warning to journalist interface (#5366)
+* Changed modal_warning message in the delete source dialogue to match the context (#5358)
+* Further redaction of wordlist (#5357)
+* Handle case of deleted journalists (#5284)
+
+### Operations
+
+* Remove unused/disabled source onion service info files (#5404)
+* Update Tor to 0.4.3.6 (#5374)
+* Add v2 onion service deprecation warning to securedrop-admin (#5370)
+* Update kernel version to 4.14.188 (#5365)
+* Ignore tmp files in /var/lib/securedrop/shredder (#5308)
+
+### Journalist API
+
+* Handle disconnected replies in API endpoint (#5351)
+* Handle disconnected submissions in API endpoint (#5345)
+
+### Documentation
+
 * Consistent usage of "onion services" terminology (#5379)
 * Add v2 deprecation timeline & warnings to docs (#5373)
 
-## 1.5.0~rc1
+### Development 
 
-* Update Tor to 0.4.3.6 (#5374)
-* Add v2 onion service deprecation warning to securedrop-admin (#5370)
-* Add v2 onion service deprecation warning to journalist interface (#5366)
-* Update kernel version to 4.14.188 (#5365)
-* Changed modal_warning message in the delete source dialogue to match the context (#5358)
-* Further redaction of wordlist (#5357)
-* Handle disconnected replies in API endpoint (#5351)
-* Handle disconnected submissions in API endpoint (#5345)
-* Ignore tmp files in /var/lib/securedrop/shredder (#5308)
 * Add type annotations for source_app/utils.py (#5300)
 * Update syntax for existing type annotations (#5298)
-* Handle case of deleted journalists (#5284)
 
 ## 1.4.1
 
-* Bugfix: Updated securedrop-admin utility to validate instance configuration correctly when v3 onion services are disabled (#5334)`
+* Bugfix: Updated securedrop-admin utility to validate instance configuration correctly when v3 onion services are disabled (#5334)
 
 ## 1.4.0
 
