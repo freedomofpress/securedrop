@@ -26,7 +26,7 @@ from sdconfig import SDConfig, config
 
 from db import db
 from models import (InvalidPasswordLength, InstanceConfig, Journalist, Reply, Source,
-                    Submission)
+                    InvalidUsernameException, Submission)
 from .utils.instrument import InstrumentedApp
 
 # Smugly seed the RNG for deterministic testing
@@ -50,6 +50,66 @@ def _login_user(app, username, password, otp_secret):
                     follow_redirects=True)
     assert resp.status_code == 200
     assert hasattr(g, 'user')  # ensure logged in
+
+
+def test_user_sees_v2_eol_warning_if_only_v2_is_enabled(config, journalist_app, test_journo):
+    journalist_app.config.update(V2_ONION_ENABLED=True, V3_ONION_ENABLED=False)
+    with journalist_app.test_client() as app:
+        _login_user(
+            app,
+            test_journo['username'],
+            test_journo['password'],
+            test_journo['otp_secret'])
+
+        resp = app.get(url_for('main.index'))
+
+    text = resp.data.decode('utf-8')
+    assert "v2-onion-eol" in text, text
+
+
+def test_user_sees_v2_eol_warning_if_both_v2_and_v3_enabled(config, journalist_app, test_journo):
+    journalist_app.config.update(V2_ONION_ENABLED=True, V3_ONION_ENABLED=True)
+    with journalist_app.test_client() as app:
+        _login_user(
+            app,
+            test_journo['username'],
+            test_journo['password'],
+            test_journo['otp_secret'])
+
+        resp = app.get(url_for('main.index'))
+
+    text = resp.data.decode('utf-8')
+    assert "v2-onion-eol" in text, text
+
+
+def test_user_does_not_see_v2_eol_warning_if_only_v3_enabled(config, journalist_app, test_journo):
+    journalist_app.config.update(V2_ONION_ENABLED=False, V3_ONION_ENABLED=True)
+    with journalist_app.test_client() as app:
+        _login_user(
+            app,
+            test_journo['username'],
+            test_journo['password'],
+            test_journo['otp_secret'])
+
+        resp = app.get(url_for('main.index'))
+
+    text = resp.data.decode('utf-8')
+    assert "v2-onion-eol" not in text, text
+
+
+def test_user_sees_v2_eol_warning_if_both_urls_do_not_exist(config, journalist_app, test_journo):
+    journalist_app.config.update(V2_ONION_ENABLED=False, V3_ONION_ENABLED=False)
+    with journalist_app.test_client() as app:
+        _login_user(
+            app,
+            test_journo['username'],
+            test_journo['password'],
+            test_journo['otp_secret'])
+
+        resp = app.get(url_for('main.index'))
+
+    text = resp.data.decode('utf-8')
+    assert "v2-onion-eol" in text, text
 
 
 def test_user_with_whitespace_in_username_can_login(journalist_app):
@@ -760,6 +820,29 @@ def test_admin_edits_user_invalid_username(
                 'error')
 
 
+def test_admin_edits_user_invalid_username_deleted(
+        journalist_app, test_admin, test_journo):
+    """Test expected error message when admin attempts to change a user's
+    username to deleted"""
+    new_username = "deleted"
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(
+                url_for('admin.edit_user', user_id=test_admin['id']),
+                data=dict(username=new_username,
+                          first_name='',
+                          last_name='',
+                          is_admin=None))
+
+            ins.assert_message_flashed(
+                    'Invalid username: This username is invalid because it '
+                    'is reserved for internal use by the software.',
+                    'error')
+
+
 def test_admin_resets_user_hotp_format_non_hexa(
         journalist_app, test_admin, test_journo):
 
@@ -1074,6 +1157,66 @@ def test_admin_add_user(journalist_app, test_admin):
             new_user = Journalist.query.filter_by(username=username).one()
             ins.assert_redirects(resp, url_for('admin.new_user_two_factor',
                                                uid=new_user.id))
+
+
+def test_admin_add_user_with_invalid_username(journalist_app, test_admin):
+    username = 'deleted'
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
+
+        resp = app.post(url_for('admin.add_user'),
+                        data=dict(username=username,
+                                  first_name='',
+                                  last_name='',
+                                  password=VALID_PASSWORD,
+                                  is_admin=None))
+
+    assert "This username is invalid because it is reserved for internal use by the software." \
+           in resp.data.decode('utf-8')
+
+
+def test_deleted_user_cannot_login(journalist_app):
+    username = 'deleted'
+    uuid = 'deleted'
+
+    # Create a user with username and uuid as deleted
+    with journalist_app.app_context():
+        user, password = utils.db_helper.init_journalist(is_admin=False)
+        otp_secret = user.otp_secret
+        user.username = username
+        user.uuid = uuid
+        db.session.add(user)
+        db.session.commit()
+
+    # Verify that deleted user is not able to login
+    with journalist_app.test_client() as app:
+        resp = app.post(url_for('main.login'),
+                        data=dict(username=username,
+                                  password=password,
+                                  token=otp_secret))
+    assert resp.status_code == 200
+    text = resp.data.decode('utf-8')
+    assert "Login failed" in text
+
+
+def test_deleted_user_cannot_login_exception(journalist_app):
+    username = 'deleted'
+    uuid = 'deleted'
+
+    # Create a user with username and uuid as deleted
+    with journalist_app.app_context():
+        user, password = utils.db_helper.init_journalist(is_admin=False)
+        otp_secret = user.otp_secret
+        user.username = username
+        user.uuid = uuid
+        db.session.add(user)
+        db.session.commit()
+
+    with pytest.raises(InvalidUsernameException):
+        Journalist.login(username,
+                         password,
+                         TOTP(otp_secret).now())
 
 
 def test_admin_add_user_without_username(journalist_app, test_admin):

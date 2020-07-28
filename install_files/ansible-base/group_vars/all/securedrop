@@ -2,8 +2,8 @@
 # Variables that apply to both the app and monitor server go in this file
 # If the monitor or app server need different values define the variable in
 # hosts_vars/app.yml or host_vars/mon.yml
-securedrop_app_code_version: "1.4.1"
-securedrop_app_code_sdist_version: "securedrop-app-code-1.4.1"
+securedrop_app_code_version: "1.5.0"
+securedrop_app_code_sdist_version: "securedrop-app-code-1.5.0"
 securedrop_app_code_sdist_name: "{{ securedrop_app_code_sdist_version }}.tar.gz"
 
 grsecurity: true
@@ -40,5 +40,5 @@ securedrop_cond_reboot_file: /tmp/sd-reboot-now
 
 # If you bump this, also remember to bump in molecule/builder-xenial/tests/vars.yml
 securedrop_pkg_grsec:
-  ver: "4.14.175"
-  depends: "linux-image-4.14.175-grsec-securedrop,linux-image-4.14.154-grsec-securedrop,intel-microcode"
+  ver: "4.14.188"
+  depends: "linux-image-4.14.188-grsec-securedrop,linux-image-4.14.175-grsec-securedrop,intel-microcode"

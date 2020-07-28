@@ -4,6 +4,9 @@
     <a href="#close" title="{{ gettext('Close') }}" class="close">X</a>
     <h2>{{ modal_data.modal_header }}</h2>
     <p>{{ modal_data.modal_body }}</p>
+    {% if modal_data.modal_warning is defined %}
+      <p><em>{{ modal_data.modal_warning }}</em></p>
+    {% endif %}
     <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}" class="btn upper">{{ gettext('Cancel') }}</a>
     <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete" class="{{ modal_data.submit_btn_type }} upper">{{ modal_data.submit_btn_text }}</button>
   </div>

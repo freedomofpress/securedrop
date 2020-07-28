@@ -21,9 +21,11 @@ function create_gce_ssh_key() {
 # Lookup the latest GCE image available for use with SD CI.
 # Value will be used in the create call.
 function find_latest_ci_image() {
-    gcloud_call compute images list \
-        --filter="family:fpf-securedrop AND name ~ ^ci-nested-virt-stretch" \
-        --sort-by=~Name --limit=1 --format="value(Name)"
+    #gcloud_call compute images list \
+    #    --filter="family:fpf-securedrop AND name ~ ^ci-nested-virt" \
+    #    --sort-by=~Name --limit=1 --format="value(Name)"
+    # Return hardcoded image id to prevent newer builds from breaking CI
+    echo "ci-nested-virt-buster-1594062724"
 }
 
 # Call out to GCE API and start a new instance, designating

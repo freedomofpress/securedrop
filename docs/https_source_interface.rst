@@ -1,8 +1,8 @@
 HTTPS on the *Source Interface*
 ===============================
 
-The SecureDrop *Source Interface* is served over a Tor Hidden Service,
-requiring a ``*.onion`` URL to access it. While Tor Onion Services provide
+The SecureDrop *Source Interface* is served as an onion service with an ``.onion``
+URL, requiring Tor Browser to access it. While onion services provide
 end-to-end encryption by default, as well as strong anonymity, there are
 several reasons why you might want to consider deploying an additional layer of
 encryption and authentication via HTTPS:
@@ -15,10 +15,10 @@ encryption and authentication via HTTPS:
   they are communicating with the intended organization when they access a
   given Source Interface.
 
-* SecureDrop supports v3 onion services, which use updated cryptographic 
-  primitives that provide better transport-layer encryption than those used 
+* SecureDrop supports v3 onion services, which use updated cryptographic
+  primitives that provide better transport-layer encryption than those used
   by v2 onion services. It is **strongly** recommended that you configure your
-  instance to use :doc:`v3 onion services <v3_services>`, but if you cannot 
+  instance to use :doc:`v3 onion services <v3_services>`, but if you cannot
   switch your instance to v3, using HTTPS on the source interface will provide
   an extra layer of encryption for data in transit.
 

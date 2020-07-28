@@ -39,7 +39,7 @@ def test_tor_torrc_options(host, torrc_option):
     These options should be present regardless of machine role,
     meaning both Application and Monitor server will have them.
 
-    Separate tests will check for specific Onion Services.
+    Separate tests will check for specific onion services.
     """
     f = host.file("/etc/tor/torrc")
     assert f.is_file

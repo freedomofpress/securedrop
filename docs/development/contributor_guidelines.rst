@@ -63,7 +63,7 @@ root of the repository:
 Python
 ~~~~~~
 
-All Python code should be `flake8 <http://flake8.pycqa.org/en/latest/>`__
+All Python code should be `flake8 <https://flake8.pycqa.org/en/latest/>`__
 compliant. You can run ``flake8`` locally via:
 
   .. code:: sh
@@ -117,13 +117,13 @@ easier to maintain in the long run by explicitly specifying the expected input/o
 types of various functions.
 
 Any pull request with Python code in SecureDrop should have corresponding type hints
-for all the functions. Type hints and function annotations are defined in 
+for all the functions. Type hints and function annotations are defined in
 `PEP 484 <https://www.python.org/dev/peps/pep-0484>`_ and in `PEP 3107
-<https://www.python.org/dev/peps/pep-3107>`_. We also use the `mypy <http://mypy-lang.org>`_
+<https://www.python.org/dev/peps/pep-3107>`_. We also use the `mypy <https://github.com/python/mypy>`_
 tool in our CI to find bugs in our Python code.
 
 If you are new to Python type hinting, please read the above mentioned PEP documents,
-and then go through the examples in the 
+and then go through the examples in the
 `mypy documentation <https://mypy.readthedocs.io/en/stable/builtin_types.html>`_.
 Some type annotations are included as code comments due to SecureDrop being Python 2 only when
 they were added, but any annotation syntax supported in Python 3.5 is allowed (i.e. function but not
@@ -140,7 +140,7 @@ Example of Type Hint
         # flake8 can not understand type annotation yet.
         # That is why all type annotation relative import
         # statements has to be marked as noqa.
-        # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
+        # https://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
         from typing import Dict  # noqa: F401
 
     class Config(object):
@@ -170,7 +170,7 @@ Example of Type Hint
     if __name__ == '__main__':
         main()
 
-The above example shows how to do a conditional import of ``Dict`` class from 
+The above example shows how to do a conditional import of ``Dict`` class from
 ``typing`` module. ``typing.TYPE_CHECKING`` will only be true when we use mypy
 to check type annotations.
 

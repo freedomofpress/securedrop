@@ -141,7 +141,9 @@ network firewall. [#]_
 Connect to the pfSense WebGUI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#. Boot the *Admin Workstation* into Tails from the Admin Live USB.
+#. If you have not already done so, boot the *Admin Workstation* into
+   Tails using its designated USB drive. Make sure to enable the unsafe browser
+   on the "Welcome to Tails" screen under "Additional settings".
 
 #. Connect the *Admin Workstation* to the LAN interface. You should see
    a popup notification in Tails that says "Connection Established". If you click

@@ -132,6 +132,10 @@ password manager. Then, you will select whether you would like them to also be
 an admin (this allows them to add or delete other journalist accounts), and
 whether they will be using FreeOTP or a YubiKey for two-factor authentication.
 
+.. note::
+  We don't allow the username **deleted** as we use it to mark the
+  journalists which are deleted from the system.
+
 FreeOTP
 ^^^^^^^
 

@@ -37,10 +37,16 @@ def name_length_validation(form, field):
             .format(max_chars=Journalist.MAX_NAME_LEN)))
 
 
+def check_invalid_usernames(form, field):
+    if field.data in Journalist.INVALID_USERNAMES:
+        raise ValidationError(gettext(
+            "This username is invalid because it is reserved for internal use by the software."))
+
+
 class NewUserForm(FlaskForm):
     username = StringField('username', validators=[
         InputRequired(message=gettext('This field is required.')),
-        minimum_length_validation
+        minimum_length_validation, check_invalid_usernames
     ])
     first_name = StringField('first_name', validators=[name_length_validation, Optional()])
     last_name = StringField('last_name', validators=[name_length_validation, Optional()])

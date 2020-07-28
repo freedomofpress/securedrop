@@ -300,14 +300,14 @@ def make_blueprint(config):
     def get_all_submissions():
         submissions = Submission.query.all()
         return jsonify({'submissions': [submission.to_json() for
-                                        submission in submissions]}), 200
+                                        submission in submissions if submission.source]}), 200
 
     @api.route('/replies', methods=['GET'])
     @token_required
     def get_all_replies():
         replies = Reply.query.all()
         return jsonify(
-            {'replies': [reply.to_json() for reply in replies]}), 200
+            {'replies': [reply.to_json() for reply in replies if reply.source]}), 200
 
     @api.route('/user', methods=['GET'])
     @token_required

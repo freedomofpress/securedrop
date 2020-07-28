@@ -140,7 +140,7 @@ If you need to generate the six digit two-factor code, use the TOTP secret in
 combination with an authenticator application that implements
 `RFC 6238 <https://tools.ietf.org/html/rfc6238>`__, such as
 `FreeOTP <https://freeotp.github.io/>`__ (Android and iOS) or
-`oathtool <http://www.nongnu.org/oath-toolkit/oathtool.1.html>`__
+`oathtool <https://www.nongnu.org/oath-toolkit/oathtool.1.html>`__
 (command line tool, multiple platforms). Instead of typing the TOTP code, you
 can simply scan the following QR code:
 
@@ -217,7 +217,7 @@ same as the version in your distro's repos, or may at some point flux out of
 sync. For this reason, and also just as a good general development practice, we
 recommend using a Python virtual environment to install Ansible and other
 development-related tooling. Using `virtualenvwrapper
-<http://virtualenvwrapper.readthedocs.io/en/stable/>`_:
+<https://virtualenvwrapper.readthedocs.io/en/stable/>`_:
 
 .. code:: sh
 
@@ -266,7 +266,8 @@ The version of rsync installed by default on macOS is extremely out-of-date, as 
 .. _VirtualBox: https://www.virtualbox.org/wiki/Downloads
 .. _Ansible: http://docs.ansible.com/intro_installation.html
 .. _Homebrew: https://brew.sh/
-.. _homebrew-cask: http://sourabhbajaj.com/mac-setup/Vagrant/README.html
+.. _homebrew-cask: https://sourabhbajaj.com/mac-setup/Vagrant/README.html
+
 
 Fork & Clone the Repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -292,3 +293,13 @@ Ensure your virtualenv is activated and install the packages.
     pip install --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
 .. note:: You will need to run this everytime new packages are added.
+
+Qubes
+~~~~~
+
+To configure a multi-machine evironment in Qubes, follow the Quick Start instructions above to
+create a standalone VM named ``sd-dev``, then follow the Linux instructions above to install the
+required packages, *omitting* Virtualbox.
+
+Then, complete the steps described in :doc:`qubes_staging`.
+

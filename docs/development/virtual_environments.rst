@@ -51,7 +51,9 @@ Debian packages on the staging machines:
    ./manage.py add-admin
    pytest -v tests/
 
-To rebuild the local packages for the app code and update on Xenial staging: ::
+To rebuild the local packages for the app code and update on Xenial staging: 
+
+.. code:: sh
 
    make build-debs
    make staging

@@ -376,6 +376,20 @@ def test_authorized_user_can_get_all_submissions(journalist_app,
         assert observed_submissions == expected_submissions
 
 
+def test_authorized_user_get_all_submissions_with_disconnected_submissions(journalist_app,
+                                                                           test_submissions,
+                                                                           journalist_api_token):
+    with journalist_app.test_client() as app:
+        db.session.execute(
+            "DELETE FROM sources WHERE id = :id",
+            {"id": test_submissions["source"].id}
+        )
+        response = app.get(url_for('api.get_all_submissions'),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+
 def test_authorized_user_get_source_submissions(journalist_app,
                                                 test_submissions,
                                                 journalist_api_token):
@@ -413,6 +427,20 @@ def test_authorized_user_can_get_single_submission(journalist_app,
             test_submissions['source'].submissions[0].filename
         assert response.json['size'] == \
             test_submissions['source'].submissions[0].size
+
+
+def test_authorized_user_can_get_all_replies_with_disconnected_replies(journalist_app,
+                                                                       test_files,
+                                                                       journalist_api_token):
+    with journalist_app.test_client() as app:
+        db.session.execute(
+            "DELETE FROM sources WHERE id = :id",
+            {"id": test_files["source"].id}
+        )
+        response = app.get(url_for('api.get_all_replies'),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
 
 
 def test_authorized_user_can_get_all_replies(journalist_app, test_files,

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2020-05-05 19:06+0000\n"
+"PO-Revision-Date: 2020-07-25 22:37+0000\n"
 "Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/"
 "securedrop/securedrop/nb_NO/>\n"
@@ -17,18 +17,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.1.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "{time} siden"
 
-#: journalist_app/__init__.py:88 journalist_app/__init__.py:137
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
 msgid "You have been logged out due to inactivity"
 msgstr "Du har blitt utlogget som følge av inaktivitet"
 
-#: journalist_app/__init__.py:146
+#: journalist_app/__init__.py:148
 msgid "You have been logged out due to password change"
 msgstr "Du har blitt utlogget som følge av passordsendring"
 
@@ -74,7 +74,7 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Tofaktorkoden for brukeren \"{user}\" stemmer."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:308
 msgid "Name not updated: {}"
 msgstr "Navn ikke oppdatert: {}"
 
@@ -86,11 +86,11 @@ msgstr "Slettet brukeren '{user}'"
 msgid "Test alert sent. Please check your email."
 msgstr "Testvarsel sendt. Sjekk e-posten din."
 
-#: journalist_app/col.py:45
+#: journalist_app/col.py:50
 msgid "{source_name}'s collection deleted"
 msgstr "{source_name}s kildeoppføring slettet"
 
-#: journalist_app/col.py:56
+#: journalist_app/col.py:61
 msgid "No collections selected."
 msgstr "Ingen kildeoppføringer valgt."
 
@@ -111,24 +111,32 @@ msgstr "Må være minst {min_chars} tegn langt, men er nå på bare {num_chars}.
 msgid "Field can not be more than {max_chars} characters."
 msgstr "Feltet kan ikke inneholde mer enn {max_chars} tegn."
 
-#: journalist_app/forms.py:42 source_app/forms.py:12
+#: journalist_app/forms.py:42
+msgid ""
+"This username is invalid because it is reserved for internal use by the "
+"software."
+msgstr ""
+"Dette brukernavnet er ugyldig fordi programvaren har reservert det for "
+"intern bruk."
+
+#: journalist_app/forms.py:48 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Dette feltet er påkrevd."
 
-#: journalist_app/forms.py:61
+#: journalist_app/forms.py:67
 msgid "You cannot send an empty reply."
 msgstr "Du kan ikke sende et tomt svar."
 
-#: journalist_app/forms.py:73
+#: journalist_app/forms.py:79
 msgid "File required."
 msgstr "Fil påkrevd."
 
-#: journalist_app/forms.py:75
+#: journalist_app/forms.py:81
 msgid "You can only upload PNG image files."
 msgstr "Du kan kun laste opp PNG-bildefiler."
 
-#: journalist_app/main.py:122 journalist_app/utils.py:46
-#: journalist_app/utils.py:136
+#: journalist_app/main.py:122 journalist_app/utils.py:47
+#: journalist_app/utils.py:144
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "En uventet feil oppstod! Gi din administrator beskjed."
 
@@ -140,7 +148,7 @@ msgstr "Takk. Svaret ditt har blitt lagret."
 msgid "No collections selected for download."
 msgstr "Ingen kildeoppføringer valgt for nedlasting."
 
-#: journalist_app/main.py:157 journalist_app/utils.py:234
+#: journalist_app/main.py:157 journalist_app/utils.py:242
 msgid "No collections selected for deletion."
 msgstr "Ingen kildeoppføringer valgt for sletting."
 
@@ -148,21 +156,21 @@ msgstr "Ingen kildeoppføringer valgt for sletting."
 msgid "No unread submissions for this source."
 msgstr "Ingen uleste innsendelser fra denne kilden."
 
-#: journalist_app/utils.py:53
+#: journalist_app/utils.py:54
 msgid "Account updated."
 msgstr "Konto oppdatert."
 
-#: journalist_app/utils.py:84
+#: journalist_app/utils.py:92
 msgid "Login failed."
 msgstr "Innlogging mislyktes."
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:100
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] "Vent i minst {seconds} sekund før du forsøker å logge inn igjen."
 msgstr[1] "Vent i minst {seconds} sekunder før du forsøker å logge inn igjen."
 
-#: journalist_app/utils.py:103
+#: journalist_app/utils.py:111
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
@@ -170,35 +178,35 @@ msgstr ""
 "Vent på ny tofaktorkode fra ditt mobilprogram eller sikkerhetsnøkkel før du "
 "forsøker igjen."
 
-#: journalist_app/utils.py:124
+#: journalist_app/utils.py:132
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr "Ugyldig hemmelighetsformat: Kun bruk bokstavene A-F og tall fra 0-9."
 
-#: journalist_app/utils.py:130
+#: journalist_app/utils.py:138
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Feil hemmelighet, du har lagt til eller glemt noe."
 
-#: journalist_app/utils.py:186
+#: journalist_app/utils.py:194
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Innsendelse slettet."
 msgstr[1] "{num} innsendelser slettet."
 
-#: journalist_app/utils.py:239
+#: journalist_app/utils.py:250
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} kildeoppføring slettet"
 msgstr[1] "{num} kildeoppføringer slettet"
 
-#: journalist_app/utils.py:277
+#: journalist_app/utils.py:306
 msgid "Name updated."
 msgstr "Navn oppdatert."
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:315
 msgid "You submitted a bad password! Password not changed."
 msgstr "Du la inn et ugyldig passord! Passordet ble derfor ikke endret."
 
-#: journalist_app/utils.py:293
+#: journalist_app/utils.py:322
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -207,7 +215,7 @@ msgstr ""
 "En feil oppstod, og det nye passordet ble kanskje ikke lagret riktig. For å "
 "unngå å bli utelåst fra kontoen bør du tilbakestille passordet ditt på nytt."
 
-#: journalist_app/utils.py:302
+#: journalist_app/utils.py:331
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -215,7 +223,7 @@ msgstr ""
 "Passord oppdatert. Ikke glem å lagre passordet i din KeePassX-database. Det "
 "nye passordet er:"
 
-#: journalist_app/utils.py:320
+#: journalist_app/utils.py:349
 msgid "No unread submissions in selected collections."
 msgstr "Ingen uleste innsendelser i valgte kildeoppføringer."
 
@@ -223,7 +231,7 @@ msgstr "Ingen uleste innsendelser i valgte kildeoppføringer."
 msgid "Close"
 msgstr "Lukk"
 
-#: journalist_templates/_confirmation_modal.html:7
+#: journalist_templates/_confirmation_modal.html:10
 #: source_templates/lookup.html:104
 msgid "Cancel"
 msgstr "Avbryt"
@@ -365,7 +373,7 @@ msgid "Edit"
 msgstr "Rediger"
 
 #: journalist_templates/admin.html:18 journalist_templates/col.html:125
-#: journalist_templates/index.html:16 journalist_templates/index.html:51
+#: journalist_templates/index.html:16 journalist_templates/index.html:52
 msgid "Delete"
 msgstr "Slett"
 
@@ -466,19 +474,33 @@ msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr ""
 "Når du har satt opp din YubiKey, skriv inn den 6 tegn lange koden nedenfor:"
 
-#: journalist_templates/base.html:23
+#: journalist_templates/base.html:24
+msgid ""
+"<strong>Update Required:</strong> Your SecureDrop servers are still running "
+"v2 Onion Services, which are being phased out for security reasons. In "
+"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
+"rel=\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>Oppdatering nødvendig:</strong> Dine SecureDrop-tjenere kjører "
+"fortsatt v2 løk-tjenester, som fases ut av sikkerhetsgrunner. I februar 2021 "
+"vil v2 løk-tjenester bli deaktivert, og dine SecureDrop-tjenere vil kunne "
+"bli utilgjengelige. <a href=\"//securedrop.org/v2-onion-eol\" rel="
+"\"noreferrer\">Lær mer</a>"
+
+#: journalist_templates/base.html:29
 msgid "Logged on as"
 msgstr "Innlogget som"
 
-#: journalist_templates/base.html:25
+#: journalist_templates/base.html:31
 msgid "Admin"
 msgstr "Administrator"
 
-#: journalist_templates/base.html:27
+#: journalist_templates/base.html:33
 msgid "Log Out"
 msgstr "Logg ut"
 
-#: journalist_templates/base.html:40
+#: journalist_templates/base.html:46
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -486,7 +508,7 @@ msgstr ""
 "Drevet av: <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 
-#: journalist_templates/base.html:55
+#: journalist_templates/base.html:61
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Drevet av: <em>SecureDrop {version}</em>."
 
@@ -636,10 +658,10 @@ msgstr "Forsendelsesinnstillinger"
 
 #: journalist_templates/config.html:52
 msgid ""
-"Prevent sources from uploading documents.  Sources will still be able to "
-"send messages."
+"Prevent sources from uploading documents. Sources will still be able to send "
+"messages."
 msgstr ""
-"Hindre kilder fra å laste opp filer, de vil fortsatt kunne sende inn "
+"Forhindre kilder i å laste opp filer. De vil fortsatt kunne sende inn "
 "meldinger."
 
 #: journalist_templates/config.html:55
@@ -821,7 +843,17 @@ msgstr "Fjern stjernemerking"
 msgid "Are you sure you want to delete the selected collections?"
 msgstr "Er du sikker på at du vil slette de markerte kildeoppføringene?"
 
-#: journalist_templates/index.html:59
+#: journalist_templates/index.html:48
+msgid ""
+"Warning: If you do this, all files for the selected sources will be "
+"unrecoverable, and the sources will no longer be able to log in using their "
+"previous codename."
+msgstr ""
+"Advarsel: Om du gjør dette, vil alle filene knyttet til de valgte kildene "
+"bli slettet for godt, og de vil ikke lenger kunne logge seg inn med sitt "
+"forrige kodenavn."
+
+#: journalist_templates/index.html:60
 msgid "No documents have been submitted!"
 msgstr "Ingen dokumenter har blitt sendt!"
 
@@ -865,7 +897,7 @@ msgstr "Passord"
 msgid "LOG IN"
 msgstr "LOGG INN"
 
-#: source_app/__init__.py:124
+#: source_app/__init__.py:123
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -893,8 +925,7 @@ msgstr "Meldingsteksten er for lang."
 
 #: source_app/forms.py:33
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
-msgstr ""
-"Store mengder tekst må lastes opp som ei fil, ikke klippes og limes inn her."
+msgstr "Store mengder tekst må lastes opp som fil, ikke klippes og limes inn."
 
 #: source_app/main.py:33
 msgid ""
@@ -1014,9 +1045,9 @@ msgid ""
 "This codename is what you will use in future visits to receive messages from "
 "our team in response to what you submit on the next screen."
 msgstr ""
-"Dette er kodenavnet som du i framtiden kan bruke for å fortsette "
-"kommunikasjonen med oss, f.eks. for å sjekke om vi har svart på det du "
-"sendte inn."
+"Dette er kodenavnet du kan bruke i fremtiden for å fortsette kommunikasjonen "
+"med oss, f.eks. for å sjekke om vi har besvart det du sender inn i neste "
+"dialogvindu."
 
 #: source_templates/generate.html:34
 msgid ""
@@ -1121,7 +1152,7 @@ msgstr "AVBRYT"
 
 #: source_templates/logout.html:6
 msgid "One more thing..."
-msgstr "En ting til..."
+msgstr "Én ting til…"
 
 #: source_templates/logout.html:7
 msgid ""
@@ -1131,7 +1162,7 @@ msgid ""
 msgstr ""
 "Klikk på <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;"
 "<strong>Ny identitet</strong>-knappen i Tor-nettleserens verktøylinje. Det "
-"vil slette loggen over din bruk av Tor på denne enheten."
+"vil slette loggføringen av din Tor-bruk på denne enheten."
 
 #: source_templates/lookup.html:7
 msgid "Remember, your codename is:"
@@ -1246,7 +1277,7 @@ msgstr "NEI, IKKE ENDA"
 
 #: source_templates/lookup.html:123
 msgid "— No Messages —"
-msgstr "— Ingen Meldinger —"
+msgstr "— Ingen meldinger —"
 
 #: source_templates/notfound.html:3
 msgid "Page not found"
@@ -1267,8 +1298,8 @@ msgid ""
 "in your Tor browser's toolbar before moving on. This will clear your Tor "
 "browser activity data on this device."
 msgstr ""
-"Du ble logget ut på grunn av inaktivitet. Klikk på <img src={icon} alt="
-"\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Ny Identitiet</"
+"Du ble utlogget som følge av inaktivitet. Klikk på <img src={icon} alt="
+"\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Ny identitiet</"
 "strong>-knappen i Tor-nettleserens verktøylinje før du fortsetter. Dette vil "
 "slette loggen over aktivitet i Tor-nettleseren på denne enheten."
 

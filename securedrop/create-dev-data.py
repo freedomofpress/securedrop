@@ -4,6 +4,7 @@
 import datetime
 import os
 import argparse
+import math
 from itertools import cycle
 
 from flask import current_app
@@ -15,18 +16,11 @@ import journalist_app
 from sdconfig import config
 from db import db
 from models import Journalist, Reply, Source, Submission
+from specialstrings import strings
 
-submissions = cycle([
-    'This is a test submission without markup!',
-    'This is a test submission with markup and characters such as \, \\, \', \" and ". ' +  # noqa: W605, E501
-    '<strong>This text should not be bold</strong>!'
-])
 
-replies = cycle([
-    'This is a test reply without markup!',
-    'This is a test reply with markup and characters such as \, \\, \', \" and ". ' +  # noqa: W605, E501
-    '<strong>This text should not be bold</strong>!'
-])
+submissions = cycle(strings)
+replies = cycle(strings)
 
 
 def main(staging=False):
@@ -56,8 +50,13 @@ def main(staging=False):
                                                 first_name="Clark",
                                                 last_name="Kent")
 
+        NUM_SOURCES = os.getenv('NUM_SOURCES', 2)
+        if NUM_SOURCES == "ALL":
+            # We ingest two strings per source, so this will create the required
+            # number of sources to include all special strings
+            NUM_SOURCES = math.ceil(len(strings) / 2)
         # Add test sources and submissions
-        num_sources = int(os.getenv('NUM_SOURCES', 2))
+        num_sources = int(NUM_SOURCES)
         for i in range(1, num_sources + 1):
             if i == 1:
                 # For the first source, the journalist who replied will be deleted
@@ -66,6 +65,7 @@ def main(staging=False):
                 )
                 continue
             create_source_and_submissions(i, num_sources)
+
         # Now let us delete one journalist
         db.session.delete(journalist_tobe_deleted)
         db.session.commit()
@@ -92,7 +92,7 @@ def add_test_user(username, password, otp_secret, is_admin=False,
 
 
 def create_source_and_submissions(
-    source_index, source_count, num_submissions=2, num_replies=2, journalist_who_replied=None
+    source_index, source_count, num_submissions=2, num_replies=2, journalist_who_replied=None  # noqa: W605, E501
 ):
     # Store source in database
     codename = current_app.crypto_util.genrandomid()
@@ -110,11 +110,12 @@ def create_source_and_submissions(
     # Generate some test submissions
     for _ in range(num_submissions):
         source.interaction_count += 1
+        submission_text = next(submissions)
         fpath = current_app.storage.save_message_submission(
             source.filesystem_id,
             source.interaction_count,
             source.journalist_filename,
-            next(submissions)
+            submission_text
         )
         source.last_updated = datetime.datetime.utcnow()
         submission = Submission(source, fpath)
