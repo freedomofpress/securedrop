@@ -1,4 +1,4 @@
-Upgrade from 1.2.2 to 1.3.0
+Upgrade from 1.4.1 to 1.5.0
 ===========================
 
 Automatic server upgrades
@@ -6,13 +6,7 @@ Automatic server upgrades
 As with previous releases, your servers will be upgraded to the latest version
 of SecureDrop automatically within 24 hours of the release.
 
-Please note that the automated upgrade path from 1.2.2 to 1.3.0
-will be supported throughout the 1.3.x and 1.4.x release series. Automated
-upgrades from 1.2.2 will not be supported to the 1.5.x release series or later.
-If your servers fail to automatically upgrade to 1.3.0 after this release,
-please :ref:`contact us <contact_us>` as soon as possible.
-
-Updating Workstations to SecureDrop 1.3.0
+Updating Workstations to SecureDrop 1.5.0
 -----------------------------------------
 
 Using the graphical updater
@@ -22,7 +16,7 @@ the *SecureDrop Workstation Updater* will alert you to workstation updates. You
 must have `configured an administrator password <https://tails.boum.org/doc/first_steps/startup_options/administration_password/>`_
 on the Tails welcome screen in order to use the graphical updater.
 
-Perform the update to 1.3.0 by clicking "Update Now":
+Perform the update to 1.5.0 by clicking "Update Now":
 
 .. image:: ../images/securedrop-updater.png
 
@@ -36,13 +30,13 @@ first delete the graphical updater's temporary flag file, if it exists (the
 
 This will prevent the graphical updater from attempting to re-apply the failed
 update and has no bearing on future updates. You can now perform a manual
-update by  running the following commands: ::
+update by running the following commands: ::
 
   cd ~/Persistent/securedrop
   git fetch --tags
   gpg --keyserver hkps://keys.openpgp.org --recv-key \
    "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
-  git tag -v 1.3.0
+  git tag -v 1.5.0
 
 The output should include the following two lines: ::
 
@@ -53,9 +47,9 @@ Please verify that each character of the fingerprint above matches what is
 on the screen of your workstation. If it does, you can check out the
 new release: ::
 
-    git checkout 1.3.0
+    git checkout 1.5.0
 
-.. important:: If you do see the warning "refname '1.3.0' is ambiguous" in the
+.. important:: If you do see the warning "refname '1.5.0' is ambiguous" in the
   output, we recommend that you contact us immediately at securedrop@freedom.press
   (`GPG encrypted <https://securedrop.org/sites/default/files/fpf-email.asc>`__).
 
@@ -75,14 +69,18 @@ graphical prompts to update to the latest version.
    to the Tails 4 series as soon as possible. Tails 3.x is no longer receiving
    security updates, and is no longer supported by the SecureDrop team.
    Please see our
-   :ref:`instructions for upgrading to Tails 4 <upgrade_to_tails_4>`.
+   :doc:`instructions for upgrading to Tails 4 <../upgrade_to_tails_4>`.
+
+   These instructions will be removed from a future version of this
+   documentation.
+
 
 .. include:: ../includes/always-backup.txt
 
 Troubleshooting Kernel Issues
 -----------------------------
-SecureDrop 1.3.0 includes a kernel update on the *Application* and *Monitor
-Servers*, from version 4.14.154 to version 4.14.175. As with all kernel updates,
+SecureDrop 1.5.0 includes a kernel update on the *Application* and *Monitor
+Servers*, from version 4.14.175 to version 4.14.188. As with all kernel updates,
 we have extensively tested this update against
 :ref:`recommended hardware <Specific Hardware Recommendations>`.
 
@@ -101,9 +99,7 @@ temporarily downgrade to the previous kernel version.
 
 For information on how to downgrade to the previous kernel, and for additional
 troubleshooting information, please see our :doc:`Kernel Troubleshooting Guide <../kernel_troubleshooting>`.
-
-.. _contact_us:
-
+   
 Getting Support
 ---------------
 
