@@ -83,6 +83,7 @@ anonymous sources.
    getting_support
    v3_services
    update_bios
+   upgrade_to_tails_4
    offboarding
    decommission
 
@@ -91,13 +92,9 @@ anonymous sources.
    :name: upgradetoc
    :maxdepth: 2
 
+   upgrade/1.4.1_to_1.5.0.rst
    upgrade/1.4.0_to_1.4.1.rst
    upgrade/1.3.0_to_1.4.0.rst
-   upgrade/1.2.2_to_1.3.0.rst
-   upgrade/1.2.1_to_1.2.2.rst
-   upgrade/1.2.0_to_1.2.1.rst
-   upgrade/1.1.0_to_1.2.0.rst
-   upgrade/1.0.0_to_1.1.0.rst
 
 .. toctree::
    :caption: Developer Documentation

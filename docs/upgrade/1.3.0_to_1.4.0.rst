@@ -72,7 +72,7 @@ graphical prompts to update to the latest version.
    to the Tails 4 series as soon as possible. Tails 3.x is no longer receiving
    security updates, and is no longer supported by the SecureDrop team.
    Please see our
-   :ref:`instructions for upgrading to Tails 4 <upgrade_to_tails_4>`.
+   :doc:`instructions for upgrading to Tails 4 <../upgrade_to_tails_4>`.
 
    These instructions will be removed from a future version of this
    documentation.
