@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.14.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2020-05-06 17:06+0000\n"
-"Last-Translator: 1000101 <jan.hrnko@satoshilabs.com>\n"
+"PO-Revision-Date: 2020-07-25 16:37+0000\n"
+"Last-Translator: 1000101 <b1000101@pm.me>\n"
 "Language-Team: Slovak <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/sk/>\n"
 "Language: sk\n"
@@ -16,18 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.1.1\n"
 "Generated-By: Babel 2.5.1\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "pred {time}"
 
-#: journalist_app/__init__.py:88 journalist_app/__init__.py:137
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
 msgid "You have been logged out due to inactivity"
 msgstr "Boli ste odhlásený/á z dôvodu nečinnosti"
 
-#: journalist_app/__init__.py:146
+#: journalist_app/__init__.py:148
 msgid "You have been logged out due to password change"
 msgstr "Boli ste odhlásený/á z dôvodu zmeny hesla"
 
@@ -78,7 +78,7 @@ msgstr ""
 "Kód dvojfaktorového overenia pre používateľa \"{user}\" bol úspešne overený."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:308
 msgid "Name not updated: {}"
 msgstr "Meno nebolo aktualizované: {}"
 
@@ -90,11 +90,11 @@ msgstr "Používateľ '{user}' bol vymazaný"
 msgid "Test alert sent. Please check your email."
 msgstr "Testovacie upozornenie odoslané. Prosím, skontrolujte si svoj e-mail."
 
-#: journalist_app/col.py:45
+#: journalist_app/col.py:50
 msgid "{source_name}'s collection deleted"
 msgstr "Sada {source_name} zmazaná"
 
-#: journalist_app/col.py:56
+#: journalist_app/col.py:61
 msgid "No collections selected."
 msgstr "Nevybrali ste žiadnu sadu."
 
@@ -117,24 +117,32 @@ msgstr ""
 msgid "Field can not be more than {max_chars} characters."
 msgstr "Pole nesmie byť dlhšie ako {max_chars} znakov."
 
-#: journalist_app/forms.py:42 source_app/forms.py:12
+#: journalist_app/forms.py:42
+msgid ""
+"This username is invalid because it is reserved for internal use by the "
+"software."
+msgstr ""
+"Toto používateľské meno je neplatné, pretože je softvérom rezerované na "
+"interné použitie."
+
+#: journalist_app/forms.py:48 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Toto pole je povinné."
 
-#: journalist_app/forms.py:61
+#: journalist_app/forms.py:67
 msgid "You cannot send an empty reply."
 msgstr "Nemôžete poslať prázdnu odpoveď."
 
-#: journalist_app/forms.py:73
+#: journalist_app/forms.py:79
 msgid "File required."
 msgstr "Súbor je povinný."
 
-#: journalist_app/forms.py:75
+#: journalist_app/forms.py:81
 msgid "You can only upload PNG image files."
 msgstr "Môžete nahrať iba obrázky vo formáte PNG."
 
-#: journalist_app/main.py:122 journalist_app/utils.py:46
-#: journalist_app/utils.py:136
+#: journalist_app/main.py:122 journalist_app/utils.py:47
+#: journalist_app/utils.py:144
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Nastala neočakávaná chyba! Prosím informujte administrátora."
 
@@ -146,7 +154,7 @@ msgstr "Vďaka. Vaša odpoveď bola uložená."
 msgid "No collections selected for download."
 msgstr "Žiadne sady neboli vybrané na stiahnutie."
 
-#: journalist_app/main.py:157 journalist_app/utils.py:234
+#: journalist_app/main.py:157 journalist_app/utils.py:242
 msgid "No collections selected for deletion."
 msgstr "Žiadne sady neboli vybrané na zmazanie."
 
@@ -154,15 +162,15 @@ msgstr "Žiadne sady neboli vybrané na zmazanie."
 msgid "No unread submissions for this source."
 msgstr "Žiadne neprečítané podania od tohto zdroja."
 
-#: journalist_app/utils.py:53
+#: journalist_app/utils.py:54
 msgid "Account updated."
 msgstr "Účet upravený."
 
-#: journalist_app/utils.py:84
+#: journalist_app/utils.py:92
 msgid "Login failed."
 msgstr "Prihlásenie zlyhalo."
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:100
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] ""
@@ -171,7 +179,7 @@ msgstr[1] ""
 "Pred opakovaním prihlásenia prosím počkajte aspoň {seconds} sekundy."
 msgstr[2] "Pred opakovaním prihlásenia prosím počkajte aspoň {seconds} sekúnd."
 
-#: journalist_app/utils.py:103
+#: journalist_app/utils.py:111
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
@@ -179,38 +187,38 @@ msgstr ""
 "Pred pokračovaním prosím počkajte na nový kód z mobilnej aplikácie alebo "
 "bezpečnostného kľúča pre dvojfaktorovú autentifikáciu."
 
-#: journalist_app/utils.py:124
+#: journalist_app/utils.py:132
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "Nesprávny formát hesla: prosím zadávajte iba písmená A až F a čísla 0 až 9."
 
-#: journalist_app/utils.py:130
+#: journalist_app/utils.py:138
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Nesprávny formát hesla: nepárna dĺžka hesla. Spravili ste preklep?"
 
-#: journalist_app/utils.py:186
+#: journalist_app/utils.py:194
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Podanie zmazané."
 msgstr[1] "{num} podania zmazané."
 msgstr[2] "{num} podaní zmazaných."
 
-#: journalist_app/utils.py:239
+#: journalist_app/utils.py:250
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} sada zmazaná"
 msgstr[1] "{num} sady zmazané"
 msgstr[2] "{num} sád zmazaných"
 
-#: journalist_app/utils.py:277
+#: journalist_app/utils.py:306
 msgid "Name updated."
 msgstr "Meno aktualizované."
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:315
 msgid "You submitted a bad password! Password not changed."
 msgstr "Vložili ste nesprávne heslo! Heslo nebolo zmenené."
 
-#: journalist_app/utils.py:293
+#: journalist_app/utils.py:322
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -219,7 +227,7 @@ msgstr ""
 "Vyskytla sa chyba v dôsledku ktorej Vaše heslo nemuselo byť uložené správne. "
 "Aby ste predišli vymknutiu z účtu, mali by ste si heslo opäť zmeniť."
 
-#: journalist_app/utils.py:302
+#: journalist_app/utils.py:331
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -227,7 +235,7 @@ msgstr ""
 "Heslo bolo zmenené. Nezabudnite si ho uložiť vo svojej KeePassX databáze. "
 "Nové heslo:"
 
-#: journalist_app/utils.py:320
+#: journalist_app/utils.py:349
 msgid "No unread submissions in selected collections."
 msgstr "Vo vybratých sadách nie sú žiadne neprečítané podania."
 
@@ -235,7 +243,7 @@ msgstr "Vo vybratých sadách nie sú žiadne neprečítané podania."
 msgid "Close"
 msgstr "Zavrieť"
 
-#: journalist_templates/_confirmation_modal.html:7
+#: journalist_templates/_confirmation_modal.html:10
 #: source_templates/lookup.html:104
 msgid "Cancel"
 msgstr "Zrušiť"
@@ -380,7 +388,7 @@ msgid "Edit"
 msgstr "Upraviť"
 
 #: journalist_templates/admin.html:18 journalist_templates/col.html:125
-#: journalist_templates/index.html:16 journalist_templates/index.html:51
+#: journalist_templates/index.html:16 journalist_templates/index.html:52
 msgid "Delete"
 msgstr "Zmazať"
 
@@ -481,19 +489,33 @@ msgstr ""
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "Akonáhle nastavíte svoj YubiKey, zadajte šesťmiestny kód nižšie:"
 
-#: journalist_templates/base.html:23
+#: journalist_templates/base.html:24
+msgid ""
+"<strong>Update Required:</strong> Your SecureDrop servers are still running "
+"v2 Onion Services, which are being phased out for security reasons. In "
+"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
+"rel=\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>Vyžaduje sa aktualizácia:</strong>Vaše SecureDrop servery stále "
+"používajú v2 Onion Services, ktoré sa z bezpečnostných dôvodov vyraďujú. Vo "
+"Februári 2021 bude v2 Onion Services deaktivovaný a vaše SecureDrop servery "
+"sa môžu stať nedostupnými. <a href=\"//securedrop.org/v2-onion-eol\" rel="
+"\"noreferrer\">Learn More</a>"
+
+#: journalist_templates/base.html:29
 msgid "Logged on as"
 msgstr "Prihlásený/á ako"
 
-#: journalist_templates/base.html:25
+#: journalist_templates/base.html:31
 msgid "Admin"
 msgstr "Administrátor"
 
-#: journalist_templates/base.html:27
+#: journalist_templates/base.html:33
 msgid "Log Out"
 msgstr "Odhlásiť sa"
 
-#: journalist_templates/base.html:40
+#: journalist_templates/base.html:46
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -501,7 +523,7 @@ msgstr ""
 "Používa systém <br> <img src=\"/static/i/securedrop_small.png\" alt="
 "\"SecureDrop\">"
 
-#: journalist_templates/base.html:55
+#: journalist_templates/base.html:61
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Používá systém <em>SecureDrop {version}</em>."
 
@@ -648,10 +670,10 @@ msgstr "Preferencie podania"
 
 #: journalist_templates/config.html:52
 msgid ""
-"Prevent sources from uploading documents.  Sources will still be able to "
-"send messages."
+"Prevent sources from uploading documents. Sources will still be able to send "
+"messages."
 msgstr ""
-"Zabráňte zdrojom nahrávanie dokumentov.  Zdroje budú stále môcť posielať "
+"Zabráňte zdrojom v nahrávaní dokumentov. Zdroje budú stále môcť posielať "
 "správy."
 
 #: journalist_templates/config.html:55
@@ -840,7 +862,16 @@ msgstr "Odznačiť"
 msgid "Are you sure you want to delete the selected collections?"
 msgstr "Naozaj chcete zmazať označené sady?"
 
-#: journalist_templates/index.html:59
+#: journalist_templates/index.html:48
+msgid ""
+"Warning: If you do this, all files for the selected sources will be "
+"unrecoverable, and the sources will no longer be able to log in using their "
+"previous codename."
+msgstr ""
+"Varovanie: Ak to urobíte, zobrazené súbory nebude možné obnoviť a zdroj sa "
+"už nebude môcť prihlásiť pod pôvodným krycím menom."
+
+#: journalist_templates/index.html:60
 msgid "No documents have been submitted!"
 msgstr "Žiadne dokumenty neboli podané!"
 
@@ -884,7 +915,7 @@ msgstr "Heslo"
 msgid "LOG IN"
 msgstr "PRIHLÁSIŤ SA"
 
-#: source_app/__init__.py:124
+#: source_app/__init__.py:123
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="

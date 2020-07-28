@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2020-05-07 20:06+0000\n"
+"PO-Revision-Date: 2020-07-24 20:37+0000\n"
 "Last-Translator: Drashti <drashtipandya37@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/hi/>\n"
@@ -16,18 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.1.1\n"
 "Generated-By: Babel 2.5.1\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "{time} पहले"
 
-#: journalist_app/__init__.py:88 journalist_app/__init__.py:137
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
 msgid "You have been logged out due to inactivity"
 msgstr "निष्क्रियता के कारण आपको लॉग आउट कर दिया गया है"
 
-#: journalist_app/__init__.py:146
+#: journalist_app/__init__.py:148
 msgid "You have been logged out due to password change"
 msgstr "पासवर्ड बदलने  के कारण आप लॉग आउट हो गये है"
 
@@ -73,7 +73,7 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "उपयोगकर्ता \"{user}\" के लिए दो-कारक कोड सफलतापूर्वक सत्यापित किया गया था।"
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:308
 msgid "Name not updated: {}"
 msgstr "नाम अपडेट नही हुआ: {}"
 
@@ -85,11 +85,11 @@ msgstr "उपयोगकर्ता '{user}' हटा दिया गया
 msgid "Test alert sent. Please check your email."
 msgstr "टेस्ट अलर्ट भेजा गया है। कृपया अपना ईमेल देखें।"
 
-#: journalist_app/col.py:45
+#: journalist_app/col.py:50
 msgid "{source_name}'s collection deleted"
 msgstr "{source_name} का संग्रह हटाया गया"
 
-#: journalist_app/col.py:56
+#: journalist_app/col.py:61
 msgid "No collections selected."
 msgstr "कोई संग्रह चयनित नहीं।"
 
@@ -110,24 +110,32 @@ msgstr "फ़ील्ड कम से कम {min_chars} वर्ण लं�
 msgid "Field can not be more than {max_chars} characters."
 msgstr "फ़ील्ड {max_chars} वर्ण से लंबा नहीं होना चाहिए।"
 
-#: journalist_app/forms.py:42 source_app/forms.py:12
+#: journalist_app/forms.py:42
+msgid ""
+"This username is invalid because it is reserved for internal use by the "
+"software."
+msgstr ""
+"यह उपयोगकर्ता नाम अमान्य है क्योंकि यह सॉफ़्टवेयर द्वारा आंतरिक उपयोग के लिए "
+"आरक्षित है।"
+
+#: journalist_app/forms.py:48 source_app/forms.py:12
 msgid "This field is required."
 msgstr "यह फ़ील्ड आवश्यक है।"
 
-#: journalist_app/forms.py:61
+#: journalist_app/forms.py:67
 msgid "You cannot send an empty reply."
 msgstr "आप एक खाली जवाब नहीं भेज सकते।"
 
-#: journalist_app/forms.py:73
+#: journalist_app/forms.py:79
 msgid "File required."
 msgstr "आवश्यक फाइल।"
 
-#: journalist_app/forms.py:75
+#: journalist_app/forms.py:81
 msgid "You can only upload PNG image files."
 msgstr "आप केवल PNG छवि फ़ाइलों को अपलोड कर सकते हैं।"
 
-#: journalist_app/main.py:122 journalist_app/utils.py:46
-#: journalist_app/utils.py:136
+#: journalist_app/main.py:122 journalist_app/utils.py:47
+#: journalist_app/utils.py:144
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "अप्रत्याशित त्रुटि हुई ! कृपया अपने व्यवस्थापक को सूचित करें।"
 
@@ -139,7 +147,7 @@ msgstr "धन्यवाद। आपका उत्तर संग्रह
 msgid "No collections selected for download."
 msgstr "डाउनलोड के लिए कोई संग्रह नहीं चुना गया।"
 
-#: journalist_app/main.py:157 journalist_app/utils.py:234
+#: journalist_app/main.py:157 journalist_app/utils.py:242
 msgid "No collections selected for deletion."
 msgstr "हटाए जाने के लिए कोई संग्रह नहीं चुना गया।"
 
@@ -147,21 +155,21 @@ msgstr "हटाए जाने के लिए कोई संग्रह 
 msgid "No unread submissions for this source."
 msgstr "इस स्रोत के लिए कोई अपठित सबमिशन नहीं है |"
 
-#: journalist_app/utils.py:53
+#: journalist_app/utils.py:54
 msgid "Account updated."
 msgstr "खाता अपडेट किया गया।"
 
-#: journalist_app/utils.py:84
+#: journalist_app/utils.py:92
 msgid "Login failed."
 msgstr "लॉगिन विफल।"
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:100
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] "पुनः प्रवेश करने से पहले कृपया कम से कम {seconds} सेकंड प्रतीक्षा करें।"
 msgstr[1] "पुनः प्रवेश करने से पहले कृपया कम से कम {seconds} सेकंड प्रतीक्षा करें।"
 
-#: journalist_app/utils.py:103
+#: journalist_app/utils.py:111
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
@@ -169,35 +177,35 @@ msgstr ""
 "फिर से प्रयास करने से पहले कृपया अपने दो-कारक मोबाइल ऐप या सुरक्षा से एक नया कोड की "
 "प्रतीक्षा करें।"
 
-#: journalist_app/utils.py:124
+#: journalist_app/utils.py:132
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr "अमान्य गुप्त स्वरूप: कृपया केवल A-F और संख्याएँ 0- 9 ही जमा करें।"
 
-#: journalist_app/utils.py:130
+#: journalist_app/utils.py:138
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "अवैध गुप्त स्वरूप: विषम-लंबाई रहस्य| क्या आपने गुप्त टेक्स्ट को गलत तरीके से लिखा है?"
 
-#: journalist_app/utils.py:186
+#: journalist_app/utils.py:194
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "सबमिशन हटाया गया।"
 msgstr[1] "{num} सबमिशन हटाए गए।"
 
-#: journalist_app/utils.py:239
+#: journalist_app/utils.py:250
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} संग्रह हटाया गया"
 msgstr[1] "{num} संग्रह हटाए गए"
 
-#: journalist_app/utils.py:277
+#: journalist_app/utils.py:306
 msgid "Name updated."
 msgstr "नाम अपडेट किया गया ।"
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:315
 msgid "You submitted a bad password! Password not changed."
 msgstr "आपने एक गलत पासवर्ड सबमिट किया है! पासवर्ड नहीं बदला गया।"
 
-#: journalist_app/utils.py:293
+#: journalist_app/utils.py:322
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -206,14 +214,14 @@ msgstr ""
 "एक त्रुटि थी, और नया पासवर्ड ठीक से सहेजा नहीं गया हो सकता है। आपको अपने खाते से बंद "
 "होने से रोकने के लिए, आपको अपना पासवर्ड दोबारा रीसेट करना चाहिए।"
 
-#: journalist_app/utils.py:302
+#: journalist_app/utils.py:331
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
 msgstr ""
 "पासवर्ड अपडेट किया गया। इसे अपने KeePassX डेटाबेस में सहेजने के लिए मत भूलना नया पासवर्ड:"
 
-#: journalist_app/utils.py:320
+#: journalist_app/utils.py:349
 msgid "No unread submissions in selected collections."
 msgstr "चयनित संग्रह में कोई अपठित सबमिशन नहीं है।"
 
@@ -221,7 +229,7 @@ msgstr "चयनित संग्रह में कोई अपठित �
 msgid "Close"
 msgstr "बंद करे"
 
-#: journalist_templates/_confirmation_modal.html:7
+#: journalist_templates/_confirmation_modal.html:10
 #: source_templates/lookup.html:104
 msgid "Cancel"
 msgstr "रद्द करें"
@@ -360,7 +368,7 @@ msgid "Edit"
 msgstr "संपादित करें"
 
 #: journalist_templates/admin.html:18 journalist_templates/col.html:125
-#: journalist_templates/index.html:16 journalist_templates/index.html:51
+#: journalist_templates/index.html:16 journalist_templates/index.html:52
 msgid "Delete"
 msgstr "हटाएं"
 
@@ -460,19 +468,33 @@ msgstr ""
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "एक बार जब आप अपने YubiKey को कॉन्फ़िगर कर लेते हैं, तो नीचे 6 अंकों का कोड डालें:"
 
-#: journalist_templates/base.html:23
+#: journalist_templates/base.html:24
+msgid ""
+"<strong>Update Required:</strong> Your SecureDrop servers are still running "
+"v2 Onion Services, which are being phased out for security reasons. In "
+"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
+"rel=\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>अपडेट की आवश्यकता:</strong> आपके SecureDrop सर्वर अभी भी v2 प्याज "
+"सेवाएँ चला रहे हैं, जिन्हें सुरक्षा कारणों से चरणबद्ध किया जा रहा है। फरवरी "
+"2021 में, v2 Onion सेवाएँ अक्षम हो जाएंगी, और आपके SecureDrop सर्वर अनुपलब्ध "
+"हो सकते हैं। <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\"> "
+"और अधिक जानें</a>"
+
+#: journalist_templates/base.html:29
 msgid "Logged on as"
 msgstr "जैसे लॉग ऑन"
 
-#: journalist_templates/base.html:25
+#: journalist_templates/base.html:31
 msgid "Admin"
 msgstr "व्यवस्थापक"
 
-#: journalist_templates/base.html:27
+#: journalist_templates/base.html:33
 msgid "Log Out"
 msgstr "लोग आउट"
 
-#: journalist_templates/base.html:40
+#: journalist_templates/base.html:46
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -480,7 +502,7 @@ msgstr ""
 "<br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\"> द्वारा "
 "संचालित"
 
-#: journalist_templates/base.html:55
+#: journalist_templates/base.html:61
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "<em>SecureDrop {version}</em> दवारा संचालित।"
 
@@ -627,9 +649,11 @@ msgstr "सबमिशन पसंदगी"
 
 #: journalist_templates/config.html:52
 msgid ""
-"Prevent sources from uploading documents.  Sources will still be able to "
-"send messages."
-msgstr "दस्तावेज़ अपलोड करने से स्रोतों को रोकें|  स्रोत अभी भी संदेश भेजने में सक्षम होंगे|"
+"Prevent sources from uploading documents. Sources will still be able to send "
+"messages."
+msgstr ""
+"दस्तावेज़ अपलोड करने से स्रोतों को रोकें। स्रोत अभी भी संदेश भेजने में सक्षम "
+"होंगे।"
 
 #: journalist_templates/config.html:55
 msgid "UPDATE SUBMISSION PREFERENCES"
@@ -806,7 +830,16 @@ msgstr "स्टार को हटा दें"
 msgid "Are you sure you want to delete the selected collections?"
 msgstr "क्या आप वाकई चयनित संग्रह हटाना चाहते हैं?"
 
-#: journalist_templates/index.html:59
+#: journalist_templates/index.html:48
+msgid ""
+"Warning: If you do this, all files for the selected sources will be "
+"unrecoverable, and the sources will no longer be able to log in using their "
+"previous codename."
+msgstr ""
+"चेतावनी: अगर आप ऐसा करते हैं, तो चयनित स्रोतों के लिए सभी फाइलें अपरिवर्तनीय "
+"होंगी, और स्रोत अब उनके पिछले कोडनाम का उपयोग करने में लॉग इन नहीं कर पाएंगे।"
+
+#: journalist_templates/index.html:60
 msgid "No documents have been submitted!"
 msgstr "कोई दस्तावेज जमा नहीं किया गया है!"
 
@@ -848,7 +881,7 @@ msgstr "पासवर्ड"
 msgid "LOG IN"
 msgstr "लॉग इन"
 
-#: source_app/__init__.py:124
+#: source_app/__init__.py:123
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -877,8 +910,8 @@ msgstr "संदेश पाठ बहुत लंबा है |"
 #: source_app/forms.py:33
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr ""
-"पाठ के बड़े ब्लॉक को एक फ़ाइल के रूप में अपलोड किया जाना चाहिए, कॉपी और पेस्"
-"ट नहीं किया जाना चाहिए।"
+"पाठ के बड़े ब्लॉक को एक फ़ाइल के रूप में अपलोड किया जाना चाहिए, कॉपी और पेस्ट नहीं किया "
+"जाना चाहिए।"
 
 #: source_app/main.py:33
 msgid ""
@@ -893,8 +926,8 @@ msgid ""
 "You are already logged in. Please verify your codename above as it may "
 "differ from the one displayed on the previous page."
 msgstr ""
-"आप पहले से लॉग इन हैं। कृपया अपना संकेत नाम ऊपर सत्यापित करें क्योंकि यह "
-"पिछले पृष्ठ पर प्रदर्शित करे गए से भिन्न हो सकता है।"
+"आप पहले से लॉग इन हैं। कृपया अपना संकेत नाम ऊपर सत्यापित करें क्योंकि यह पिछले पृष्ठ पर "
+"प्रदर्शित करे गए से भिन्न हो सकता है।"
 
 #: source_app/main.py:171
 msgid "You must enter a message or choose a file to submit."

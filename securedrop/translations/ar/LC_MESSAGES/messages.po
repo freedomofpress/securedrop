@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2020-05-11 13:07+0000\n"
-"Last-Translator: erinm <erinm@riseup.net>\n"
+"PO-Revision-Date: 2020-07-20 14:51+0000\n"
+"Last-Translator: Ahmed Essam <ahmedessamdev@gmail.com>\n"
 "Language-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/ar/>\n"
 "Language: ar\n"
@@ -18,18 +18,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.1.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
 msgid "{time} ago"
 msgstr "{time} مضت"
 
-#: journalist_app/__init__.py:88 journalist_app/__init__.py:137
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
 msgid "You have been logged out due to inactivity"
 msgstr "تم الخروج من الحساب بسبب انعدام النشاط"
 
-#: journalist_app/__init__.py:146
+#: journalist_app/__init__.py:148
 msgid "You have been logged out due to password change"
 msgstr "تم الخروج من الحساب بسبب تغيير كلمة السر"
 
@@ -74,7 +74,7 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "لقد تم التحقق بنجاح من رمز الاستيثاق في خطوتين للمستخدم \"{user}\"."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:279
+#: journalist_app/utils.py:308
 msgid "Name not updated: {}"
 msgstr "الاسم لم يُحدَّث: {}"
 
@@ -86,11 +86,11 @@ msgstr "حُذِفَ المستخدم '{user}'"
 msgid "Test alert sent. Please check your email."
 msgstr "تم إرسال تنبيه تجريبي. تفقّد بريدك الإلكتروني."
 
-#: journalist_app/col.py:45
+#: journalist_app/col.py:50
 msgid "{source_name}'s collection deleted"
 msgstr "المجموعة {source_name} حُذفت"
 
-#: journalist_app/col.py:56
+#: journalist_app/col.py:61
 msgid "No collections selected."
 msgstr "لم يتم اختيار أي مجموعة."
 
@@ -114,24 +114,31 @@ msgstr ""
 msgid "Field can not be more than {max_chars} characters."
 msgstr "هذا الحقل لا يقبل أكثر من {max_chars} محرفًا."
 
-#: journalist_app/forms.py:42 source_app/forms.py:12
+#: journalist_app/forms.py:42
+msgid ""
+"This username is invalid because it is reserved for internal use by the "
+"software."
+msgstr ""
+"اسم المستخدم غير صالح لأن هذا الاسم محجوز للاستخدام الداخلي في البرنامج."
+
+#: journalist_app/forms.py:48 source_app/forms.py:12
 msgid "This field is required."
 msgstr "هذا الحقل مطلوب."
 
-#: journalist_app/forms.py:61
+#: journalist_app/forms.py:67
 msgid "You cannot send an empty reply."
 msgstr "لا يمكن إرسال ردّ فارغ."
 
-#: journalist_app/forms.py:73
+#: journalist_app/forms.py:79
 msgid "File required."
 msgstr "يجب اختيار ملفّ."
 
-#: journalist_app/forms.py:75
+#: journalist_app/forms.py:81
 msgid "You can only upload PNG image files."
 msgstr "الصيغة المقبولة لملفّات الصور هي PNG حصرًا."
 
-#: journalist_app/main.py:122 journalist_app/utils.py:46
-#: journalist_app/utils.py:136
+#: journalist_app/main.py:122 journalist_app/utils.py:47
+#: journalist_app/utils.py:144
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "حدث عطل غير متوقع. الرجاء إبلاغ الإداري."
 
@@ -143,7 +150,7 @@ msgstr "شكرا. لقد حُفظ ردُّك."
 msgid "No collections selected for download."
 msgstr "لَمْ تُختَر أيّ مجموعة لتنزيلها."
 
-#: journalist_app/main.py:157 journalist_app/utils.py:234
+#: journalist_app/main.py:157 journalist_app/utils.py:242
 msgid "No collections selected for deletion."
 msgstr "لَمْ تُختَر أيّ مجموعة لحذفها."
 
@@ -151,15 +158,15 @@ msgstr "لَمْ تُختَر أيّ مجموعة لحذفها."
 msgid "No unread submissions for this source."
 msgstr "لا توجد رسائل غير مقروءة من هذا المصدر."
 
-#: journalist_app/utils.py:53
+#: journalist_app/utils.py:54
 msgid "Account updated."
 msgstr "تم تحديث الحساب."
 
-#: journalist_app/utils.py:84
+#: journalist_app/utils.py:92
 msgid "Login failed."
 msgstr "فشل الولوج."
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:100
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] "ينبغي الانتظار {seconds} ثانية على الأقل قبل محاولة الولوج مجدّدا."
@@ -169,7 +176,7 @@ msgstr[3] "ينبغي الانتظار {seconds} ثوان على الأقل قب
 msgstr[4] "ينبغي الانتظار {seconds} ثانية على الأقل قبل محاولة الولوج مجدّدا."
 msgstr[5] "ينبغي الانتظار {seconds} ثانية على الأقل قبل محاولة الولوج مجدّدا."
 
-#: journalist_app/utils.py:103
+#: journalist_app/utils.py:111
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
@@ -177,19 +184,19 @@ msgstr ""
 "انتظر حتّى يظهر رمز الاستيثاق في خطوتين الجديد على التطبيق الهاتفي أو مفتاح "
 "المصادقة قبل معاودة  المحاولة."
 
-#: journalist_app/utils.py:124
+#: journalist_app/utils.py:132
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "صيغة البيانات السرية غير صحيحة: المقبولة هي الأحرف من A-F و&nbsp;الأرقام من "
 "0-9 فقط."
 
-#: journalist_app/utils.py:130
+#: journalist_app/utils.py:138
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "صيغة البيانات السرية غير صحيحة: عدد كلمات العبارة السرية يجب أن يكون زوجيًّا "
 "لا فرديًّا. تلزم مراجعة الإدخال."
 
-#: journalist_app/utils.py:186
+#: journalist_app/utils.py:194
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "لَمْ تُحذف أي رسالة."
@@ -199,7 +206,7 @@ msgstr[3] "حُذِفَت بعض الرسائل."
 msgstr[4] "حُذِفَت العديد من الرسائل."
 msgstr[5] "حُذِفَت كلّ الرسائل."
 
-#: journalist_app/utils.py:239
+#: journalist_app/utils.py:250
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "لم تُحذَف أي مجموعة"
@@ -209,15 +216,15 @@ msgstr[3] "حُذِفَت {num} مجموعات"
 msgstr[4] "حُذِفَت {num} مجموعة"
 msgstr[5] "حُذِفَت {num} مجموعة"
 
-#: journalist_app/utils.py:277
+#: journalist_app/utils.py:306
 msgid "Name updated."
 msgstr "تم تحديث الاسم."
 
-#: journalist_app/utils.py:286
+#: journalist_app/utils.py:315
 msgid "You submitted a bad password! Password not changed."
 msgstr "كلمة السّرّ المُدخلة غير صحيحة! لذا لا يمكنك تغييرها."
 
-#: journalist_app/utils.py:293
+#: journalist_app/utils.py:322
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -226,7 +233,7 @@ msgstr ""
 "حدث عطل و&nbsp;ربما لم تُحفَظ كلمة السر الجديدة كما ينبغي. لتلافي تعذّر ولوجك "
 "إلى الحساب لاحقا ينبغي عليك معاودة تعيين كلمة السر."
 
-#: journalist_app/utils.py:302
+#: journalist_app/utils.py:331
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -234,7 +241,7 @@ msgstr ""
 "تم تحديث كلمة السر. الرجاء حفظها في قاعدة بيانات KeePassX الخاصة بك . كلمة "
 "السر الجديدة:"
 
-#: journalist_app/utils.py:320
+#: journalist_app/utils.py:349
 msgid "No unread submissions in selected collections."
 msgstr "لا توجد رسائل غير مقروءة في المجموعات المختارة."
 
@@ -242,7 +249,7 @@ msgstr "لا توجد رسائل غير مقروءة في المجموعات ا�
 msgid "Close"
 msgstr "أغلق"
 
-#: journalist_templates/_confirmation_modal.html:7
+#: journalist_templates/_confirmation_modal.html:10
 #: source_templates/lookup.html:104
 msgid "Cancel"
 msgstr "إلغاء"
@@ -392,7 +399,7 @@ msgid "Edit"
 msgstr "تعديل"
 
 #: journalist_templates/admin.html:18 journalist_templates/col.html:125
-#: journalist_templates/index.html:16 journalist_templates/index.html:51
+#: journalist_templates/index.html:16 journalist_templates/index.html:52
 msgid "Delete"
 msgstr "حذف"
 
@@ -493,19 +500,34 @@ msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr ""
 "بعد إتمام ضبط مفتاح الاستيثاق \"YubiKey\" أدخل الرمز المكون من 6 أرقام:"
 
-#: journalist_templates/base.html:23
+#: journalist_templates/base.html:24
+msgid ""
+"<strong>Update Required:</strong> Your SecureDrop servers are still running "
+"v2 Onion Services, which are being phased out for security reasons. In "
+"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
+"rel=\"noreferrer\">Learn More</a>"
+msgstr ""
+"<strong>مطلوب التحديث:</strong> خوادم SecureDrop الخاصة بك لا زالت تستخدم "
+"الإصدار الثانى من خدمات البصلة v2 Onion Services و التى سوف يتم إنهاء العمل "
+"بها لأسباب أمنية. سوف يتم إلغاء تفعيل الإصدار الثانى من خدمات البصلة v2 "
+"Onion Services في فبراير 2021، و ربما يتعذر الوصول إلي خوادم SecureDrop "
+"الخاصة بك. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\""
+">معرفة المزيد</a>"
+
+#: journalist_templates/base.html:29
 msgid "Logged on as"
 msgstr "والج باسم"
 
-#: journalist_templates/base.html:25
+#: journalist_templates/base.html:31
 msgid "Admin"
 msgstr "الإدارة"
 
-#: journalist_templates/base.html:27
+#: journalist_templates/base.html:33
 msgid "Log Out"
 msgstr "اخرج من الحساب"
 
-#: journalist_templates/base.html:40
+#: journalist_templates/base.html:46
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
@@ -513,7 +535,7 @@ msgstr ""
 "هذه الخدمة تشغّلها <br> <img src=\"/static/i/securedrop_small.png\" alt="
 "\"SecureDrop\">"
 
-#: journalist_templates/base.html:55
+#: journalist_templates/base.html:61
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "تشغّله <em>SecureDrop {version} </em>."
 
@@ -659,9 +681,9 @@ msgstr "تفضيلات الإرسال"
 
 #: journalist_templates/config.html:52
 msgid ""
-"Prevent sources from uploading documents.  Sources will still be able to "
-"send messages."
-msgstr "منع المصادر من رفع وثائق. ما تزال المصادر قادرة على توجيه رسائل."
+"Prevent sources from uploading documents. Sources will still be able to send "
+"messages."
+msgstr "منع المصادر من رفع وثائق. سوف تظل المصادر قادرة على توجيه رسائل."
 
 #: journalist_templates/config.html:55
 msgid "UPDATE SUBMISSION PREFERENCES"
@@ -717,8 +739,7 @@ msgstr "صفِّر كلمة السر"
 #: journalist_templates/edit_account.html:49
 msgid "SecureDrop uses automatically generated diceware passwords."
 msgstr ""
-"يستخدم سِكيوردرُب كلمات سرّ مولّدة تلقائيًا بأسلوب النّرد الحاسوبي "
-"(diceware)."
+"يستخدم سِكيوردرُب كلمات سرّ مولّدة تلقائيًا بأسلوب النّرد الحاسوبي (diceware)."
 
 #: journalist_templates/edit_account.html:50
 msgid ""
@@ -841,7 +862,16 @@ msgstr "إزالة النجمة"
 msgid "Are you sure you want to delete the selected collections?"
 msgstr "هل أنت متأكد من أنك تريد حذف المجموعات المختارة؟"
 
-#: journalist_templates/index.html:59
+#: journalist_templates/index.html:48
+msgid ""
+"Warning: If you do this, all files for the selected sources will be "
+"unrecoverable, and the sources will no longer be able to log in using their "
+"previous codename."
+msgstr ""
+"تحذير: اذا فعلت ذلك فسوف تصبح كل ملفات المصادر المختارة غير قابلة للإسترجاع، "
+"و لن يتمكن المصدر من الولوج باستخدام اسمه الرمزي السابق."
+
+#: journalist_templates/index.html:60
 msgid "No documents have been submitted!"
 msgstr "لا توجد مستندات مودعة!"
 
@@ -884,7 +914,7 @@ msgstr "كلمة السر"
 msgid "LOG IN"
 msgstr "لِج"
 
-#: source_app/__init__.py:124
+#: source_app/__init__.py:123
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -928,8 +958,8 @@ msgid ""
 "You are already logged in. Please verify your codename above as it may "
 "differ from the one displayed on the previous page."
 msgstr ""
-"أنت مسجّل أساساً. من فضلك تأكد من اسمك الرمزي أعلاه إذ قد يكون مختلف عن "
-"الإسم الظاهر على الصفحة السابقة."
+"أنت مسجّل أساساً. من فضلك تأكد من اسمك الرمزي أعلاه إذ قد يكون مختلف عن الإسم "
+"الظاهر على الصفحة السابقة."
 
 #: source_app/main.py:171
 msgid "You must enter a message or choose a file to submit."
@@ -1149,9 +1179,9 @@ msgid ""
 "\"16\">&nbsp;<strong>New Identity</strong> button in your Tor browser's "
 "toolbar. This will clear your Tor browser activity data on this device."
 msgstr ""
-"أنقر على الزر <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\""
-">&nbsp;<strong>هوية جديدة</strong> في شريط متصفحك تور إذ أن ذلك من شأنه أن "
-"يمسح أي نشاط قمت به على متصفح تور من عبر هذا الجهاز."
+"أنقر على الزر <img src={icon} alt=\"broom icon\" width=\"16\" height="
+"\"16\">&nbsp;<strong>هوية جديدة</strong> في شريط متصفحك تور إذ أن ذلك من "
+"شأنه أن يمسح أي نشاط قمت به على متصفح تور من عبر هذا الجهاز."
 
 #: source_templates/lookup.html:7
 msgid "Remember, your codename is:"
@@ -1284,9 +1314,10 @@ msgid ""
 "in your Tor browser's toolbar before moving on. This will clear your Tor "
 "browser activity data on this device."
 msgstr ""
-"لقد تم إخراجك من الحساب نظراً لعدم نشاطك. أضعط على زر <img src={icon} alt=\""
-"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>هوية جديدة</strong>في "
-"متصفحك تور ومن شأن ذلك أن يمسح أي نشاط لك على متصفح تور عبر هذا الجهاز."
+"لقد تم إخراجك من الحساب نظراً لعدم نشاطك. أضعط على زر <img src={icon} alt="
+"\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>هوية جديدة</"
+"strong>في متصفحك تور ومن شأن ذلك أن يمسح أي نشاط لك على متصفح تور عبر هذا "
+"الجهاز."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
