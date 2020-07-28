@@ -1,18 +1,18 @@
-Upgrading workstations to Tails 4
----------------------------------
+Upgrading workstations from Tails 3 to Tails 4
+----------------------------------------------
 
 .. important::
 
    Before upgrading your *Admin Workstation* and your *Journalist Workstation*
    to Tails 4, you must first ensure that the version of the SecureDrop code on
    the workstation (which is used for administrative tasks and for configuring
-   the Tails desktop) is at 1.1.0 or a later version.
+   the Tails desktop) is at |version|.
 
    If unsure, you can always run the ``git status`` command in the
    ``~/Persistent/securedrop`` directory to determine the current version. If
-   the output is not  "HEAD detached at 1.1.0" or a later version, you are *not*
+   the output is not  "HEAD detached at |version|", you are *not*
    ready to proceed with the upgrade to Tails 4, and you must first update the
-   workstation using the procedure described in the previous section.
+   workstation using the procedure described in our upgrade guides.
 
 As a precaution, we recommend backing up your workstations before the upgrade
 to Tails 4. See our :doc:`Workstation Backup Guide <../backup_workstations>` for
@@ -20,7 +20,7 @@ more information. We also recommend that you keep a USB drive running Tails 3.16
 on hand in case you need to revert.
 
 Once you have created the backups, create a *Tails 4 Primary USB* which you will
-use to upgrade your workstation. Follow the
+use to upgrade your workstations. Follow the
 `instructions on the Tails website <https://tails.boum.org/install/index.en.html>`__
 to create a fresh Tails drive on a computer running Windows, Mac, or Linux.
 
@@ -30,10 +30,11 @@ another Tails <https://tails.boum.org/upgrade/clone/index.en.html>`__
 to upgrade each workstation USB in turn. This procedure preserves the persistent
 storage volume of each USB drive you upgrade to Tails 4.
 
-Boot each workstation into Tails 4 to verify that the upgrade was successful. On
-the *Admin* and *Journalist Workstations*, set an administrator password on the
-Tails welcome screen, and update the SecureDrop environment using the following
-commands: ::
+Once the upgrade is completed, shut down the *Tails 4 Primary USB* and boot into
+each workstation USB to verify that the upgrades were successful. On the *Secure Viewing Station* USB, the upgrade process is now complete, and no additional configuration is required.
+
+On the *Admin* and *Journalist Workstation* USBs, set an administrator password on the Tails welcome screen, and update the SecureDrop environment using the
+following commands: ::
 
   cd ~/Persistent/securedrop
  ./securedrop-admin setup
@@ -48,8 +49,6 @@ required for the setup process, so you can safely click **Install Only Once**.
    Until you run these commands, the SecureDrop shortcuts on the Tails desktop
    will not work, and the graphical updater will no longer report available
    updates for the SecureDrop code on your workstation.
-
-No additional configuration is required for the *Secure Viewing Station*.
 
 If you experience difficulties with this upgrade, please do not hesitate to
 contact us using any of the methods below. If the upgrade failed and you need
