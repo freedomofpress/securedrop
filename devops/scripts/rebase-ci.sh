@@ -14,8 +14,8 @@ if [[ -n "${CIRCLE_PULL_REQUEST:-}" ]]
 then
     GITHUB_PR_URL="https://api.github.com/repos/freedomofpress/securedrop/pulls/${CIRCLE_PULL_REQUEST##*/}"
 
-    # If current branch is not master or doesnt start with release...
-    if [[ "$CIRCLE_BRANCH" != "master"  && "$CIRCLE_BRANCH" != release*  ]]; then
+    # If current branch is not main or doesnt start with release...
+    if [[ "$CIRCLE_BRANCH" != "main"  && "$CIRCLE_BRANCH" != release*  ]]; then
 
       # Git will yell at you when trying to rebase without author/email configured
       git config --global user.email "ci@freedom.press"
