@@ -27,7 +27,7 @@ Attacks to the Application Code — SecureDrop Respository/Release
 Countermeasures on the Application Code — SecureDrop Repository/Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -  Code (git tags) and releases (packages uploaded to apt) are signed with the airgapped signing key
--  Protection is placed on master and develop branch on GitHub
+-  Protection is placed on `main` and `develop` branch on GitHub
 -  For SecureDrop Developers, two-factor authentication is mandated on GitHub
 -  Community trust is built through 3 trusted code owners and code reviews
 
