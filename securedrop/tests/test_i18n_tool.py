@@ -266,7 +266,7 @@ class TestI18NTool(object):
         k = {'_cwd': join(d, 'i18n')}
         git.add('securedrop', 'install_files', **k)
         git.commit('-m', 'init', '-a', **k)
-        git.checkout('-b', 'i18n', 'main', **k)
+        git.checkout('-b', 'i18n', 'master', **k)
 
         def r():
             return "".join([str(l) for l in caplog.records])
