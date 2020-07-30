@@ -5,7 +5,7 @@
   {# Only admins may edit usernames and admin status #}
   <h1>{{ gettext('Edit user "{user}"').format(user=user.username) }}</h1>
   <p><a href="/admin">{{ gettext('Back to admin interface') }}</a></p>
-  <h2>{{ gettext('Change Name &amp; Admin Status') }}</h2>
+  <h2>{{ gettext('Change Name and Admin Status') }}</h2>
   <form method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <p>
@@ -80,7 +80,7 @@
 <h2>{{ gettext('Reset Two-Factor Authentication') }}</h2>
 
 {% if user %}
-<p>{{ gettext("If a user's two-factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two-factor credentials. Otherwise, they will be locked out of their account.") }}</em></p>
+<p>{{ gettext("If a user's two-factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two-factor credentials. Otherwise, they will be locked out of their account.</em>") }}</p>
 {% else %}
 <p>{{ gettext('If your two-factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em>') }}</p>
 {% endif %}

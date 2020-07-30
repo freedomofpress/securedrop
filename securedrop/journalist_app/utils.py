@@ -313,7 +313,7 @@ def set_diceware_password(user, password):
         user.set_password(password)
     except PasswordError:
         flash(gettext(
-            'You submitted a bad password! Password not changed.'), 'error')
+            'The password you submitted is invalid. Password not changed.'), 'error')
         return False
 
     try:

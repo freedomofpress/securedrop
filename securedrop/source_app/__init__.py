@@ -89,6 +89,8 @@ def create_app(config: 'SDConfig') -> Flask:
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals['version'] = version.__version__
+    # Exported to source templates for being included in instructions
+    app.jinja_env.globals['submission_key_fpr'] = config.JOURNALIST_KEY
     if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
         app.jinja_env.globals['header_image'] = \
             config.CUSTOM_HEADER_IMAGE  # type: ignore

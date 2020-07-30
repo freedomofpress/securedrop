@@ -87,7 +87,7 @@ def create_app(config: 'SDConfig') -> Flask:
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> 'Response':
         # render the message first to ensure it's localized.
-        msg = gettext('You have been logged out due to inactivity')
+        msg = gettext('You have been logged out due to inactivity.')
         session.clear()
         flash(msg, 'error')
         return redirect(url_for('main.login'))
@@ -136,7 +136,7 @@ def create_app(config: 'SDConfig') -> Flask:
         """Store commonly used values in Flask's special g object"""
         if 'expires' in session and datetime.utcnow() >= session['expires']:
             session.clear()
-            flash(gettext('You have been logged out due to inactivity'),
+            flash(gettext('You have been logged out due to inactivity.'),
                   'error')
 
         uid = session.get('uid', None)

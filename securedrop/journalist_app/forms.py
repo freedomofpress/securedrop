@@ -23,17 +23,15 @@ def otp_secret_validation(form, field):
 def minimum_length_validation(form, field):
     if len(field.data) < Journalist.MIN_USERNAME_LEN:
         raise ValidationError(
-            gettext('Field must be at least {min_chars} '
-                    'characters long but only got '
-                    '{num_chars}.'.format(
-                        min_chars=Journalist.MIN_USERNAME_LEN,
-                        num_chars=len(field.data))))
+            gettext('Must be at least {min_chars} '
+                    'characters long.'
+                    .format(min_chars=Journalist.MIN_USERNAME_LEN)))
 
 
 def name_length_validation(form, field):
     if len(field.data) > Journalist.MAX_NAME_LEN:
         raise ValidationError(gettext(
-            'Field can not be more than {max_chars} characters.'
+            'Cannot be longer than {max_chars} characters.'
             .format(max_chars=Journalist.MAX_NAME_LEN)))
 
 
