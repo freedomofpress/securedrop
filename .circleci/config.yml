@@ -297,21 +297,12 @@ workflows:
   version: 2
   securedrop_ci:
     jobs:
-      - docs-linkcheck:
-          filters:
-            branches:
-              only:
-                - master
-      - lint:
-          filters:
-            branches:
-              ignore:
-                - master
+      - lint
       - app-tests:
           filters:
             branches:
               ignore:
-                - master
+                - stable
                 - /docs-.*/
                 - /i18n-.*/
                 - /update-builder-.*/
@@ -321,7 +312,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
+                - stable
                 - /docs-.*/
                 - /i18n-.*/
                 - /update-builder-.*/
@@ -331,7 +322,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
+                - stable
                 - /docs-.*/
                 - /i18n-.*/
                 - /update-builder-.*/
@@ -341,14 +332,14 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
+                - stable
           requires:
             - lint
       - staging-test-with-rebase:
           filters:
             branches:
               ignore:
-                - master
+                - stable
                 - /docs-.*/
                 - /i18n-.*/
           requires:
@@ -357,7 +348,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
+                - stable
           requires:
             - lint
       - deb-tests:
