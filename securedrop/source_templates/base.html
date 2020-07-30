@@ -20,12 +20,6 @@
             <img src="{{ url_for('main.select_logo') }}" class="logo small" alt="{{ gettext('Logo Image') }}" width="250">
           </a>
           {% include 'locales.html' %}
-          {% if use_custom_header_image %}
-          <div class="powered">
-            {{ gettext('Powered by') }}<br>
-            <img src="/static/i/securedrop_small.png" alt="SecureDrop">
-          </div>
-          {% endif %}
         </div>
         {% endblock %}
 

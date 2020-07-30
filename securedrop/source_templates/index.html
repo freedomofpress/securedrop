@@ -27,12 +27,6 @@
         <div class="index-wrap">
           <div class="header">
             <img src="{{ url_for('main.select_logo') }}" alt="{{ gettext('Logo Image') }}" class="logo-image">
-            {% if use_custom_header_image %}
-            <div class="powered">
-              {{ gettext('Powered by') }}<br>
-              <img src="/static/i/securedrop_small.png" alt="SecureDrop">
-            </div>
-            {% endif %}
             <div id="index-locales">
               {% include 'locales.html' %}
             </div>
