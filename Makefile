@@ -39,7 +39,7 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 		--output-file requirements/python3/test-requirements.txt \
 		requirements/python3/test-requirements.in
 	@$(DEVSHELL) pip-compile --generate-hashes \
-                --allow-unsafe \
+				--allow-unsafe \
 		--output-file requirements/python3/securedrop-app-code-requirements.txt \
 		requirements/python3/securedrop-app-code-requirements.in
 	@$(DEVSHELL) pip-compile --generate-hashes \
@@ -292,7 +292,7 @@ translate:  ## Update POT files from translated strings in source code.
 .PHONY: translation-test
 translation-test:  ## Run page layout tests in all supported languages.
 	@echo "Running translation tests..."
-	@$(DEVSHELL) $(SDBIN)/translation-test "$${LOCALE:-$(./i18n_tool.py list-locales)}"
+	@$(DEVSHELL) $(SDBIN)/translation-test $${LOCALES}
 	@echo
 
 .PHONY: list-translators
