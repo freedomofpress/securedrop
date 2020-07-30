@@ -26,7 +26,7 @@ into our `Gitter chat channel for the project <https://gitter.im/freedomofpress/
 
 Every non-public holiday weekday (except Fridays) at 10am (Pacific Time) we
 take part in a public daily stand-up, usually via a
-`meeting on Google Meet https://meet.google.com/ekb-kkhf-mrk`_
+`meeting on Google Meet <https://meet.google.com/ekb-kkhf-mrk>`_
 (although the details of each daily meeting are published on the Gitter channel
 five minutes before the start of the meeting). All are welcome to contribute.
 
