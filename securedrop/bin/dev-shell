@@ -17,7 +17,7 @@ get_port_offset() {
     while true
     do
         tries=$((tries + 1))
-	port_offset=$((tries * 100))
+    port_offset=$((tries * 100))
         vnc=$((port_offset + 5909))
         nc -z localhost "$vnc" || break
     done
@@ -48,13 +48,16 @@ function docker_run() {
     SD_HOSTPORT_SI=$((port_offset + 8080))
     SD_HOSTPORT_VNC=$((port_offset + 5909))
 
-    echo "************************************************************"
-    echo "Exposed Docker ports will be available on localhost with"
-    echo "Port offset: $port_offset"
-    echo "Source interface: $SD_HOSTPORT_SI"
-    echo "Journalist interface: $SD_HOSTPORT_JI"
-    echo "VNC: $SD_HOSTPORT_VNC"
-    echo "************************************************************"
+    if [ "${DOCKER_BUILD_VERBOSE:-'false'}" = "true" ]
+    then
+        echo "************************************************************"
+        echo "Exposed Docker ports will be available on localhost with"
+        echo "Port offset: $port_offset"
+        echo "Source interface: $SD_HOSTPORT_SI"
+        echo "Journalist interface: $SD_HOSTPORT_JI"
+        echo "VNC: $SD_HOSTPORT_VNC"
+        echo "************************************************************"
+    fi
 
     # The --shm-size argument sets up dedicated shared memory for the
     # container. Our tests can fail with the default of 64m.
