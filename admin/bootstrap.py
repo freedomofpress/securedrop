@@ -198,6 +198,17 @@ def envsetup(args, virtualenv_dir=VENV_DIR):
         sdlog.info("Virtualenv already exists, not creating")
 
     install_pip_dependencies(args)
+
+    if args.t:
+        install_pip_dependencies(args, pip_install_cmd=[
+            os.path.join(VENV_DIR, 'bin', 'pip3'),
+            'install',
+            '--no-deps',
+            '-r', os.path.join(DIR, '../securedrop/requirements/python3/develop-requirements.txt'),
+            '--require-hashes',
+            '-U', '--upgrade-strategy', 'only-if-needed',],
+            desc="additional dependencies")
+
     if os.path.exists(os.path.join(DIR, 'setup.py')):
         install_pip_self(args)
 
@@ -226,33 +237,37 @@ def install_pip_dependencies(args, pip_install_cmd=[
         '-r', os.path.join(DIR, 'requirements.txt'),
         '--require-hashes',
         # Make sure to upgrade packages only if necessary.
-        '-U', '--upgrade-strategy', 'only-if-needed',
-]):
+        '-U', '--upgrade-strategy', 'only-if-needed',],
+        desc="Python dependencies"
+):
     """
     Install Python dependencies via pip into virtualenv.
     """
 
-    sdlog.info("Checking Python dependencies for securedrop-admin")
+    sdlog.info("Checking {} for securedrop-admin".format(desc))
     try:
         pip_output = subprocess.check_output(maybe_torify() + pip_install_cmd,
                                              stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         sdlog.debug(e.output)
-        sdlog.error(("Failed to install pip dependencies. Check network"
-                     " connection and try again."))
+        sdlog.error(("Failed to install {}. Check network"
+                     " connection and try again.".format(desc)))
         raise
 
     sdlog.debug(pip_output)
     if "Successfully installed" in str(pip_output):
-        sdlog.info("Python dependencies for securedrop-admin upgraded")
+        sdlog.info("{} for securedrop-admin upgraded".format(desc))
     else:
-        sdlog.info("Python dependencies for securedrop-admin are up-to-date")
+        sdlog.info("{} for securedrop-admin are up-to-date".format(desc))
+
 
 
 def parse_argv(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('-v', action='store_true', default=False,
                         help="Increase verbosity on output")
+    parser.add_argument('-t', action='store_true', default=False,
+                        help="Install additional test dependencies")
     parser.set_defaults(func=envsetup)
 
     subparsers = parser.add_subparsers()
