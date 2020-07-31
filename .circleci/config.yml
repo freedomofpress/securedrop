@@ -115,7 +115,7 @@ jobs:
 
   translation-tests:
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-1604:202007-01
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
@@ -137,7 +137,7 @@ jobs:
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^i18n")
             if ! [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             sudo apt update && sudo apt install python-sh python-pybabel
-            export LOCALE="$(/usr/bin/python2 securedrop/i18n_tool.py list-locales --lines | circleci tests split | tr '\n' ' ')"
+            export LOCALES="$(/usr/bin/python2 securedrop/i18n_tool.py list-locales --lines | circleci tests split | tr '\n' ' ')"
             fromtag=$(docker images | grep securedrop-test-xenial-py3 | head -n1 | awk '{print $2}')
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" make translation-test
 
