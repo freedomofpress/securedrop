@@ -945,8 +945,8 @@ def test_find_or_generate_new_torv3_keys_first_run(tmpdir, capsys):
 
     return_code = securedrop_admin.find_or_generate_new_torv3_keys(args)
 
-    captured = capsys.readouterr()
-    assert 'Tor v3 onion service keys generated' in captured.out
+    out, err = capsys.readouterr()
+    assert 'Tor v3 onion service keys generated' in out
     assert return_code == 0
 
     secret_key_path = os.path.join(args.ansible_path,
@@ -976,8 +976,8 @@ def test_find_or_generate_new_torv3_keys_subsequent_run(tmpdir, capsys):
 
     return_code = securedrop_admin.find_or_generate_new_torv3_keys(args)
 
-    captured = capsys.readouterr()
-    assert 'Tor v3 onion service keys already exist' in captured.out
+    out, err = capsys.readouterr()
+    assert 'Tor v3 onion service keys already exist' in out
     assert return_code == 0
 
     with open(secret_key_path) as f:
