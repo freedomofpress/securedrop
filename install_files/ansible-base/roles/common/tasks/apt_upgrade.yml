@@ -17,9 +17,11 @@
   tags: apt
 
 - name: Check whether tor will be upgraded.
-  command: aptitude search '~U' --display-format '%p' --disable-columns
+  command: "aptitude search '~U' --display-format '%p' --disable-columns"
   register: tor_upgradable_result
   changed_when: false
+  ignore_errors: yes
+
 
 - name: Hold tor package to prevent upgrade breaking SSH connection.
   command: aptitude hold tor

@@ -1,4 +1,12 @@
 ---
+- name: Install resolvconf
+  apt:
+    pkg: resolvconf
+    state: latest
+  tags:
+    - apt
+    - dns
+
 - name: Configure DNS server IP.
   template:
     src: dns_base

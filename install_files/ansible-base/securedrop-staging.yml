@@ -73,8 +73,8 @@
   roles:
     - role: ci-tweaks
       when: "'sdci' == hostvars['localhost']['ansible_user_id']"
-    - { role: install-fpf-repo, tags: [fpfrepo] }
-    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
+    #- { role: install-fpf-repo, tags: [fpfrepo] }
+    #- { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
     - { role: common, tags: common }
     - { role: tor-hidden-services, tags: tor }
     - { role: install-local-packages, tags: [install_local_packages, rebuild],

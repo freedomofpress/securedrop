@@ -6,7 +6,7 @@ Homepage: https://securedrop.org
 Package: securedrop-ossec-agent
 Version: 3.6.0+1.5.0~rc1
 Architecture: amd64
-Depends: libevent,libpcre2-8-0,ossec-agent,securedrop-keyring,securedrop-config
+Depends: libevent-2.1-7,libpcre2-8-0,ossec-agent,securedrop-keyring,securedrop-config
 Replaces: ossec-agent
 Conflicts: securedrop-ossec-server
 Description: Installs the securedrop pre-configured OSSEC agent

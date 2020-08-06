@@ -15,7 +15,7 @@
   tags:
     - reboot
 
-- include: remove_unused_packages.yml
+#- include: remove_unused_packages.yml
 
 - include: apt_upgrade.yml
 
@@ -23,4 +23,4 @@
 
 - include: disable_swap.yml
 
-- include: remove_kernel_modules.yml
+#- include: remove_kernel_modules.yml

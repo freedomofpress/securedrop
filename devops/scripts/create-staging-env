@@ -1,4 +1,3 @@
-#!/bin/bash
 # Wrapper script to determine which VM driver is appropriate for the staging
 # environment, given the host OS and available tooling. Supports:
 #
