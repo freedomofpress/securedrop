@@ -216,23 +216,6 @@ def make_blueprint(config):
         return render_template("edit_account.html", user=user,
                                password=password)
 
-    @view.route('/edit/<int:user_id>/new-password', methods=('POST',))
-    @admin_required
-    def set_password(user_id):
-        try:
-            user = Journalist.query.get(user_id)
-        except NoResultFound:
-            abort(404)
-
-        password = request.form.get('password')
-        if set_diceware_password(user, password) is not False:
-            if user.last_token is not None:
-                revoke_token(user, user.last_token)
-            user.session_nonce += 1
-            db.session.commit()
-
-        return redirect(url_for('admin.edit_user', user_id=user_id))
-
     @view.route('/delete/<int:user_id>', methods=('POST',))
     @admin_required
     def delete_user(user_id):
