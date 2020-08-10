@@ -93,6 +93,14 @@ function adjust_wsgi_configuration {
             perl -pi -e 's/^WSGIProcessGroup journalist.*\n//' "$journalist_conf"
         fi
     fi
+    # Create the WSGI so file link if only on Python3.8
+    wsgi_so_link="/opt/venvs/securedrop-app-code/lib/python3.8/site-packages/mod_wsgi/server/mod_wsgi-py38.so"
+    wsgi_so="/opt/venvs/securedrop-app-code/lib/python3.8/site-packages/mod_wsgi/server/mod_wsgi-py38.cpython-38-x86_64-linux-gnu.so"
+    if test -f "/usr/bin/python3.8"; then
+        if test ! -L  $wsgi_so_link; then
+            ln -s $wsgi_so $wsgi_so_link
+        fi
+    fi
 }
 
 # Manage PaX flags for web app, only required under Xenial.
