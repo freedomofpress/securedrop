@@ -834,7 +834,7 @@ described as follows:
 * Allow UDP NTP from *Application Server* and *Monitor Server* to all
 * Allow TCP any port from *Application Server* and *Monitor Server* to all (this is needed for making connections to the Tor network)
 * Allow TCP 80/443 from *Admin Workstation* to all (in case there is a need to access the web interface of the firewall)
-* Allow TCP ssh from *Admin Workstation* to *Application Server* and *Monitor Server*
+* Allow TCP SSH from *Admin Workstation* to *Application Server* and *Monitor Server*
 * Allow TCP any port from *Admin Workstation* to all
 
 This can be implemented with iptables, Cisco IOS etc. if you have the necessary
