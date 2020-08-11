@@ -1144,7 +1144,7 @@ to minimize metadata that could be used for correlation
 ### Environment
 
 * Add egress host firewall rules
-* Add google-authenticator apache module and basic auth for access to
+* Add google-authenticator Apache module and basic auth for access to
 document interface
 * Encrypt bodies of OSSEC email alerts (add postfix+procmail to monitor
 server)

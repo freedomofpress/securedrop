@@ -86,7 +86,7 @@ common_apache2_directory_declarations = """
         securedrop_code=securedrop_test_vars.securedrop_code)
 
 
-# declare journalist-specific apache configs
+# declare journalist-specific Apache configs
 @pytest.mark.parametrize("apache_opt", [
   "<VirtualHost {}:8080>".format(
       securedrop_test_vars.apache_listening_address),
