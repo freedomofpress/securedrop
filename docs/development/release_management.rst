@@ -48,7 +48,7 @@ Pre-Release
          playbook.yml>`_ and open a PR.
 
       b. Run ``make fetch-tor-packages`` to download the new debs. The script uses
-         apt under the hood, so the Release file on the tor packages is verified according
+         apt under the hood, so the Release file on the Tor packages is verified according
          to Tor's signature, ensuring package integrity.
 
       c. Copy the downloaded packages into the ``securedrop-dev-packages-lfs`` repo,

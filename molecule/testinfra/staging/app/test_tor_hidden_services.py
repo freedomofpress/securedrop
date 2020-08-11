@@ -22,7 +22,7 @@ def test_tor_service_directories(host, tor_service):
 @pytest.mark.parametrize('tor_service', sdvars.tor_services)
 def test_tor_service_hostnames(host, tor_service):
     """
-    Check contents of tor service hostname file. For normal onion services,
+    Check contents of Tor service hostname file. For normal onion services,
     the file should contain only hostname (.onion URL). For authenticated
     onion services, it should also contain the HidServAuth cookie.
     """

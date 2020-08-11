@@ -539,7 +539,7 @@ https://github.com/freedomofpress/securedrop/milestone/47
 ### Operations
 
 * Updated the grsecurity-hardened Linux Kernels to 4.4.144 for app and mon servers (#3662)
-* Updated tor to version 0.3.3.9 (#3624)
+* Updated Tor to version 0.3.3.9 (#3624)
 * Updated Flask to 1.0.2 and Werkzeug to 0.14.1 (#3741)
 * Updated securedrop-keyring package to 0.1.2 (#3752)
 

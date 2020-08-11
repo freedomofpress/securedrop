@@ -30,7 +30,7 @@
         state: directory
         path: "{{ tor_download_dir }}"
 
-    - name: Download tor debs
+    - name: Download Tor debs
       command: apt-get download "{{ item }}={{ tor_version }}"
       args:
         chdir: "{{ tor_download_dir }}"
@@ -40,7 +40,7 @@
       tags: skip_ansible_lint
       with_items: "{{ tor_debs }}"
 
-    - name: Find downloaded tor debs
+    - name: Find downloaded Tor debs
       find:
         paths:
           - "{{ tor_download_dir }}"
@@ -48,7 +48,7 @@
           - '*.deb'
       register: _find_tor_debs_result
 
-    - name: Fetch downloaded tor debs back to submodule
+    - name: Fetch downloaded Tor debs back to submodule
       fetch:
         flat: yes
         src: "{{ item.path }}"

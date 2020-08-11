@@ -175,7 +175,7 @@ def envsetup(args, virtualenv_dir=VENV_DIR):
         install_apt_dependencies(args)
 
         # Technically you can create a virtualenv from within python
-        # but pip can only be run over tor on tails, and debugging that
+        # but pip can only be run over Tor on tails, and debugging that
         # along with instaling a third-party dependency is not worth
         # the effort here.
         sdlog.info("Setting up virtualenv")

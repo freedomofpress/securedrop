@@ -7,8 +7,8 @@ Test Connectivity
 SSH to Both Servers Over Tor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Assuming you haven't disabled ssh over tor, SSH access will be
-restricted to the tor network.
+Assuming you haven't disabled ssh over Tor, SSH access will be
+restricted to the Tor network.
 
 On the *Admin Workstation*, you should be able to SSH to the *Application Server* and the *Monitor Server*. ::
 

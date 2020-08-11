@@ -45,13 +45,13 @@ tor_capabilities = ['setgid']
 
 @pytest.mark.parametrize('cap', tor_capabilities)
 def test_apparmor_tor_capabilities(host, cap):
-    """ check for exact list of expected app-armor capabilities for tor """
+    """ check for exact list of expected app-armor capabilities for Tor """
     c = host.run(r"perl -nE '/^\s+capability\s+(\w+),$/ && say $1' /etc/apparmor.d/usr.sbin.tor")
     assert cap in c.stdout
 
 
 def test_apparmor_tor_exact_capabilities(host):
-    """ ensure no extra capabilities are defined for tor """
+    """ ensure no extra capabilities are defined for Tor """
     c = host.check_output("grep -ic capability "
                           "/etc/apparmor.d/usr.sbin.tor")
     assert str(len(tor_capabilities)) == c
