@@ -137,6 +137,8 @@ Currently the Community Team consists of:
 - Jen Helsby (`@redshiftzero`) - Principal Research Engineer - [jen@freedom.press](mailto:jen@freedom.press)
 - Mickael E. (`@emkll`) - Lead Engineer - [mickael@freedom.press](mailto:mickael@freedom.press)
 
+You can contact the whole Community Team or members individually.
+
 You should contact the Community Team if you have questions or concerns about
 the Code of Conduct (including improvements) or if you feel that you have
 witnessed a Code of Conduct violation. In the even of a violation either
