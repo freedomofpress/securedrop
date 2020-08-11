@@ -113,7 +113,7 @@ function showOrfoxSuggestions() {
 }
 
 /**
-   If the user is not using a Tor browser, suggest it.
+   If the user is not using a Tor Browser, suggest it.
 */
 function suggestTor() {
   hide(".hide-if-not-tor-browser");

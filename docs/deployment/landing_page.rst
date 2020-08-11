@@ -120,7 +120,7 @@ services intercept requests between a potential source and the SecureDrop
 
 Do Not Hyperlink .onion Addresses
 ---------------------------------
-Because a visitor to your *Landing Page* may not be using the Tor browser yet,
+Because a visitor to your *Landing Page* may not be using the Tor Browser yet,
 clicking a link to your SecureDrop instance or to any other .onion address may
 result in an error message. Worse, depending on the browser and network
 configuration, it may cause lookups that an adversary can use to identify
@@ -134,7 +134,7 @@ Avoid Direct Links to SecureDrop.org
 
 We appreciate that you may want to link to `the SecureDrop website <https://securedrop.org/>`__
 to give *Landing Page* visitors more information about the system. Unfortunately,
-if a visitor visits these links without using the Tor browser, this generates
+if a visitor visits these links without using the Tor Browser, this generates
 traffic that an adversary may be able to use to identify SecureDrop-related
 behavior, regardless of the use of HTTPS.
 
