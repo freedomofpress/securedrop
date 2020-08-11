@@ -262,11 +262,20 @@ Release Process
    ``apt.freedom.press``.
 #. The reviewer must delete the ``release`` branch so that it can be re-created
    during the next release.
-#. Issue a PR in the ``securedrop`` repository to merge the release branch
-   changes into ``stable``. Once the PR is merged, verify that the
-   `public documentation <https://docs.securedrop.org/>`_
-   refers to the new release version. If not, log in to ReadTheDocs and start a
-   build of the ``stable`` version.
+#. Update the `public documentation <https://docs.securedrop.org/en/stable>`_ by
+   synchronising the ``stable`` branch with the release branch:
+
+   * If a repository maintainer is available, remove the branch protection on
+     the ``stable`` branch, hard-reset it to the release branch, and force push
+     ``stable``. Then restore branch protection on ``stable``.
+
+   * If a maintainer is not available, create a PR with the release branch
+     changes using ``stable`` as the base. Version number updates will cause
+     conflicts which must be resolved manually before issuing the PR.
+
+#. Verify that the public documentation has been updated, by checking the
+   `ReadTheDocs build history <https://readthedocs.org/projects/securedrop/builds/>`_.
+   If necessary, restart the build.
 #. Create a `release
    <https://github.com/freedomofpress/securedrop/releases>`_ on GitHub
    with a brief summary of the changes in this release.
