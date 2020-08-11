@@ -31,12 +31,12 @@ submissions or messages.
 | Recurring source | * Submit another document or message                       |
 |                  | * Read replies                                             |
 +------------------+------------------------------------------------------------+
-| Journalist       | * Download *all* gpg-encrypted documents from *all* sources|
-|                  | * Download *all* gpg-encrypted messages from *all* sources |
+| Journalist       | * Download *all* GPG-encrypted documents from *all* sources|
+|                  | * Download *all* GPG-encrypted messages from *all* sources |
 |                  | * Reply to *all* sources                                   |
 +------------------+------------------------------------------------------------+
-| Admin            | * Download *all* gpg-encrypted documents from *all* sources|
-|                  | * Download *all* gpg-encrypted messages from *all* sources |
+| Admin            | * Download *all* GPG-encrypted documents from *all* sources|
+|                  | * Download *all* GPG-encrypted messages from *all* sources |
 |                  | * Reply to *all* sources                                   |
 |                  | * Change the SecureDrop instance logo                      |
 |                  | * SSH and root privileges on `app` and `mon` servers       |
