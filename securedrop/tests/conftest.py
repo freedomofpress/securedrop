@@ -91,7 +91,7 @@ def config(tmpdir):
     tmp = data.mkdir('tmp')
     sqlite = data.join('db.sqlite')
 
-    # gpg 2.1+ requires gpg-agent, see #4013
+    # GPG 2.1+ requires gpg-agent, see #4013
     gpg_agent_config = str(keys.join('gpg-agent.conf'))
     with open(gpg_agent_config, 'w+') as f:
         f.write('allow-loopback-pinentry')
