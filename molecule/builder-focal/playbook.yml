@@ -1,0 +1,80 @@
+---
+- name: Build SecureDrop application Debian package from local repository.
+  hosts: builders
+  # Build as fast as possible with each host going individually
+  strategy: free
+  become: yes
+  tasks:
+    - name: Update apt-cache for our security checker
+      apt:
+        update_cache: yes
+      when: ansible_host.endswith("-sd-sec-update")
+  roles:
+    - role: build-securedrop-app-code-deb-pkg
+      tags: app-deb
+      when: ansible_host.endswith("-sd-app")
+
+    - role: build-ossec-deb-pkg
+      tags: ossec-server
+      purpose: server
+      when: ansible_host.endswith("-sd-generic-ossec-server")
+
+    - role: build-ossec-deb-pkg
+      tags: ossec-agent
+      purpose: agent
+      when: ansible_host.endswith("-sd-generic-ossec-agent")
+
+    - role: build-generic-pkg
+      tags: securedrop-ossec-server
+      package_name: securedrop-ossec-server
+      when: ansible_host.endswith("-sd-generic-ossec-server2") or ansible_host == "localhost"
+
+    - role: build-generic-pkg
+      tags: securedrop-ossec-agent
+      package_name: securedrop-ossec-agent
+      when: ansible_host.endswith("-sd-generic-ossec-agent2") or ansible_host == "localhost"
+
+    - role: build-generic-pkg
+      tags: securedrop-keyring
+      package_name: securedrop-keyring
+      when: ansible_host.endswith("-sd-keyring") or ansible_host == "localhost"
+
+    - role: build-generic-pkg
+      tags: securedrop-grsec
+      package_name: securedrop-grsec
+      when: ansible_host.endswith("-sd-grsec") or ansible_host == "localhost"
+
+    - role: build-generic-pkg
+      tags: securedrop-config
+      package_name: securedrop-config
+      when: ansible_host.endswith("-sd-config") or ansible_host == "localhost"
+  tags: rebuild
+
+# Typically we'd perform volume mounting here but to work around docker
+# remote calls (in CircleCI) we have to copy the files instead
+- name: Give dpkg verify container access to debs
+  hosts: testers
+  gather_facts: false
+  vars:
+    sd_build_root: "{{ playbook_dir + '/../../build' }}"
+    sd_target_distro: focal
+    sd_build_dest: "{{ sd_build_root + '/' + sd_target_distro }}"
+
+  tasks:
+    - name: Discover local debian build files
+      find:
+        paths: "{{ sd_build_dest }}"
+        patterns: '*.deb'
+      delegate_to: localhost
+      register: debian_files
+
+    - name: Create build dir
+      file:
+        state: directory
+        path: /tmp/build
+
+    - name: Drop debian files into container
+      copy:
+        src: "{{ item.path }}"
+        dest: /tmp/build/
+      with_items: "{{ debian_files.files }}"
