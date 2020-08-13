@@ -255,7 +255,7 @@ def test_login_and_logout(source_app):
 
         # This is part of the logout page message instructing users
         # to click the 'New Identity' icon
-        assert 'This will clear your Tor browser activity data' in text
+        assert 'This will clear your Tor Browser activity data' in text
 
 
 def test_user_must_log_in_for_protected_views(source_app):
