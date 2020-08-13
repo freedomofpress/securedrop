@@ -342,6 +342,31 @@ request.
 
 .. _i18n_release:
 
+
+Update Weblate screenshots
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can use the script ``securedrop/upload_screenshots.py`` to update
+UI screenshots that are used to illustrate strings in Weblate. The script
+depends on the existence of up-to-date layout test results, which you can
+generate using this command in the base directory:
+
+.. code:: sh
+
+    $ LOCALES=en_US make translation-test
+
+`Obtain your API key <https://weblate.securedrop.org/accounts/profile/#api>`__
+in Weblate. Export the token to the environment variable ``WEBLATE_TOKEN``.
+You can now run this command to perform an upload:
+
+.. code:: sh
+
+    $ securedrop/upload-screenshots.py --token $WEBLATE_TOKEN
+
+If new screenshots were added as part of this run, make sure to associate them
+with relevant strings in Weblate, which you can do from the
+`screenshots list <https://weblate.securedrop.org/screenshots/securedrop/securedrop/>`__.
+
 Release Management
 ------------------
 
