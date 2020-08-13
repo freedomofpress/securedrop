@@ -84,7 +84,7 @@ function looksLikeOrfox() {
 
 /**
    If the source is using Tor Browser, encourage them to turn Tor
-   Browser's Security Setting to "Safest".
+   Browser's Security Level to "Safest".
 */
 function showTorSuggestions() {
   show("#js-warning");
