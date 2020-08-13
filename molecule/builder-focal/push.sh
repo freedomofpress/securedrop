@@ -1,6 +1,6 @@
 #!/bin/bash
 DATE_STR=$(date +"%Y_%m_%d")
-QUAY_REPO=quay.io/freedomofpress/sd-docker-builder-xenial
+QUAY_REPO=quay.io/freedomofpress/sd-docker-builder-focal
 
 set -e
 set -x
