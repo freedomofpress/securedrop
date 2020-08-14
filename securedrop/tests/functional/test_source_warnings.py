@@ -17,7 +17,7 @@ class TestSourceInterfaceBannerWarnings(
 
             warning_banner = self.driver.find_element_by_id("use-tor-browser")
 
-            assert "It is recommended to use the Tor Browser" in warning_banner.text
+            assert "It is recommended to use Tor Browser" in warning_banner.text
 
             # User should be able to dismiss the warning
             warning_dismiss_button = self.driver.find_element_by_id("use-tor-browser-close")
