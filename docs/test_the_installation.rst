@@ -60,7 +60,7 @@ Test the Web Interfaces
 #. Make sure the *Source Interface* is available, and that you can make a
    submission.
 
-   - Open the *Source Interface* in the Tor Browser by clicking on its desktop
+   - Open the *Source Interface* in Tor Browser by clicking on its desktop
      shortcut. Proceed through the codename
      generation (copy this down somewhere) and submit a
      test message or file.
@@ -70,7 +70,7 @@ Test the Web Interfaces
 #. Test that you can access the *Journalist Interface*, and that you can log
    in as the admin user you just created.
 
-   - Open the *Journalist Interface* in the Tor Browser by clicking on its desktop
+   - Open the *Journalist Interface* in Tor Browser by clicking on its desktop
      shortcut.  Enter your passphrase and two-factor code to log in.
    - If you have problems logging in to the *Admin/Journalist Interface*,
      SSH to the *Application Server* and restart the ntp daemon to synchronize

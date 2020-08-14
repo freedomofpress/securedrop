@@ -4,7 +4,7 @@ Tips & Tricks
 Using Tor Browser with the Development Environment
 --------------------------------------------------
 
-We strongly encourage sources to use the Tor Browser when they access
+We strongly encourage sources to use Tor Browser when they access
 the Source Interface. Tor Browser is the easiest way for the average
 person to use Tor without making potentially catastrophic mistakes,
 makes disabling JavaScript easy via the handy NoScript icon in the

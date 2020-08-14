@@ -181,7 +181,7 @@ Connect to the pfSense WebGUI
 #. After a few seconds, the Unsafe Browser should launch. The window
    has a bright red border to remind you to be careful when using
    it. You should close it once you're done configuring the firewall
-   and use the Tor Browser for any other web browsing you might do on
+   and use Tor Browser for any other web browsing you might do on
    the *Admin Workstation*.
 
    |Unsafe Browser Homepage|
