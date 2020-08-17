@@ -77,7 +77,7 @@ def make_blueprint(config):
             except ValueError as e:
                 current_app.logger.error(e)
                 flash(
-                    gettext("There was a temporary problem creating you account. "
+                    gettext("There was a temporary problem creating your account. "
                             "Please try again."
                             ),
                     'error'
