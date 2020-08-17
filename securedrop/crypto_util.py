@@ -175,15 +175,24 @@ class CryptoUtil:
 
     def display_id(self):
         """Generate random journalist_designation until we get an unused one"""
-        while True:
+
+        used_journalist_designation_hits = 0
+        matching_journalist_designation = '123'
+        journalist_designation = ''
+
+        while len(matching_journalist_designation) != 0:
+            if used_journalist_designation_hits >= 50:
+                raise ValueError("Too many duplicate journalist_designation hits")
+
             journalist_designation = ' '.join([random.choice(self.adjectives),
                                                random.choice(self.nouns)])
 
             matching_journalist_designation = Source.query.filter(
                 Source.journalist_designation == journalist_designation).all()
 
-            if len(matching_journalist_designation) == 0:
-                return journalist_designation
+            used_journalist_designation_hits = used_journalist_designation_hits + 1
+
+        return journalist_designation
 
     def hash_codename(self, codename, salt=None):
         """Salts and hashes a codename using scrypt.
