@@ -3,7 +3,7 @@ Setting Up the Development Environment
 
 .. include:: ../includes/docs-branches.txt
 
-Prerequisites
+Overview
 -------------
 
 SecureDrop is a multi-machine design. To make development and testing
@@ -29,11 +29,22 @@ Ubuntu or Debian GNU/Linux
    sudo apt-get update
    sudo apt-get install -y make git
 
+
+Fedora and Other Linux distributions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. note:: To install Docker Engine, you need the 64-bit version of Fedora 30 or higher.
+
+.. code:: sh
+
+   sudo dnf update
+   sudo dnf install -y make git
+
 We recommend using the stable version of Docker CE (Community Edition) which can
 be installed via the official documentation links:
 
 * `Docker CE for Ubuntu`_
 * `Docker CE for Debian`_
+
 
 Make sure to follow the `Post-installation steps for Linux`_, as well.
 
@@ -62,7 +73,7 @@ the following in ``dom0``:
    qvm-start sd-dev
    qvm-sync-appmenus sd-dev
 
-The commands above will created a new StandaloneVM, boot it, then update
+The commands above create a new StandaloneVM, boot it, and then update
 the Qubes menus with applications within that VM. Open a terminal in
 ``sd-dev``, and proceed with installing `Docker CE for Debian`_.
 
