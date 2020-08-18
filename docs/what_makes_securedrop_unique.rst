@@ -42,7 +42,7 @@ Even if a government serves a court order directly to a news organization to
 compel the disclosure of information, SecureDrop logs much less information than
 email providers or phone companies do.
 
-The source can only log into SecureDrop through the Tor Browser, which masks the
+The source can only log into SecureDrop through Tor Browser, which masks the
 source’s IP address to begin with, so there is no indication who the source is
 (unless they disclose it) and where they are sending information from. The Tor IP
 address, the computer, and the browser type that the source is using is not logged

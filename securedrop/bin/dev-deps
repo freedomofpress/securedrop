@@ -54,7 +54,7 @@ function run_sass() {
 }
 
 function reset_demo() {
-    # Set up gpg keys directory structure.
+    # Set up GPG keys directory structure.
     sudo mkdir -p /var/lib/securedrop/{store,keys,tmp}
     sudo chown -R "$(id -u)" /var/lib/securedrop
     cp ./tests/files/test_journalist_key.pub /var/lib/securedrop/keys
@@ -68,7 +68,7 @@ function reset_demo() {
     # Note that we should avoid `gpgconf --kill gpg-agent` since the pkill command will
     # handle killing multiple gpg-agent processes if they exist (this is what we want).
 
-    # Set permissions on gpg-related directories/files.
+    # Set permissions on GPG-related directories/files.
     sudo chown -R "$(id -gn)" /var/lib/securedrop/keys
     chmod 700 /var/lib/securedrop/keys
     chmod 600 /var/lib/securedrop/keys/*

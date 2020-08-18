@@ -166,7 +166,7 @@ def envsetup(args, virtualenv_dir=VENV_DIR):
     Ansible is available to the Admin on subsequent boots without requiring
     installation of packages again.
     """
-    # clean up tails 3.x venv when migrating to tails 4.x
+    # clean up Tails 3.x venv when migrating to Tails 4.x
     clean_up_tails3_venv(virtualenv_dir)
 
     # virtualenv doesnt exist? Install dependencies and create
@@ -175,7 +175,7 @@ def envsetup(args, virtualenv_dir=VENV_DIR):
         install_apt_dependencies(args)
 
         # Technically you can create a virtualenv from within python
-        # but pip can only be run over tor on tails, and debugging that
+        # but pip can only be run over Tor on Tails, and debugging that
         # along with instaling a third-party dependency is not worth
         # the effort here.
         sdlog.info("Setting up virtualenv")

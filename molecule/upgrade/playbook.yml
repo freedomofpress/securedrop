@@ -25,7 +25,7 @@
         msg: "No local debs found, run 'make build-debs'"
       when: not QA_APTTEST
 
-- name: Re-run original tor role
+- name: Re-run original Tor role
   hosts: securedrop
   max_fail_percentage: 0
   any_errors_fatal: yes
@@ -68,7 +68,7 @@
     - role: ossec
       tags: ossec
   post_tasks:
-    - name: Ensure tor is running
+    - name: Ensure Tor is running
       service:
         name: tor
         state: started
@@ -83,7 +83,7 @@
   hosts: localhost
   gather_facts: false
   tasks:
-    - name: Spit out tor details
+    - name: Spit out Tor details
       debug:
         msg:
           - "V2 Source interface available at {{ lookup('file', molecule_ephemeral_directory+'/sd-orig/'+source_ths_path) }}"

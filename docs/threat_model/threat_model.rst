@@ -31,12 +31,12 @@ submissions or messages.
 | Recurring source | * Submit another document or message                       |
 |                  | * Read replies                                             |
 +------------------+------------------------------------------------------------+
-| Journalist       | * Download *all* gpg-encrypted documents from *all* sources|
-|                  | * Download *all* gpg-encrypted messages from *all* sources |
+| Journalist       | * Download *all* GPG-encrypted documents from *all* sources|
+|                  | * Download *all* GPG-encrypted messages from *all* sources |
 |                  | * Reply to *all* sources                                   |
 +------------------+------------------------------------------------------------+
-| Admin            | * Download *all* gpg-encrypted documents from *all* sources|
-|                  | * Download *all* gpg-encrypted messages from *all* sources |
+| Admin            | * Download *all* GPG-encrypted documents from *all* sources|
+|                  | * Download *all* GPG-encrypted messages from *all* sources |
 |                  | * Reply to *all* sources                                   |
 |                  | * Change the SecureDrop instance logo                      |
 |                  | * SSH and root privileges on `app` and `mon` servers       |
@@ -115,7 +115,7 @@ Assumptions About the Source
 -  The source acts reasonably and in good faith, e.g. if the source were to give their credentials or private key material to the attacker that would be unreasonable.
 -  The source would like to remain anonymous, even against a forensic
    attacker.
--  The source obtains an authentic copy of Tails and the Tor Browser.
+-  The source obtains an authentic copy of Tails and Tor Browser.
 -  The source follows our :doc:`guidelines <../source>`
    for using SecureDrop.
 -  The source is accessing an authentic SecureDrop site.
@@ -146,7 +146,7 @@ Assumptions About the Person Installing SecureDrop
 Assumptions About the Source's Computer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  The computer correctly executes Tails or the Tor Browser.
+-  The computer correctly executes Tails or Tor Browser.
 -  The computer is not compromised by malware.
 
 Assumptions About the *Admin Workstation* and the *Journalist Workstation*
@@ -305,7 +305,7 @@ What a Compromise of the Workstations Can Surrender
 What a Compromise of the Source's Property Can Surrender
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Use of `the Tor Browser will leave
+-  Use of `Tor Browser will leave
    traces <https://research.torproject.org/techreports/tbb-forensic-analysis-2013-06-28.pdf>`__
    that can be discovered through a forensic analysis of the source's
    property following either a compromise or physical seizure. Unless

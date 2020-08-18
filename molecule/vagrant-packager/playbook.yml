@@ -45,7 +45,7 @@
     - { role: app, tags: app }
   become: yes
 
-  # This section will put the ssh and iptables rules in place
+  # This section will put the SSH and iptables rules in place
   # It will then add any staging exemptions required
   # at the end of each host section is when the handlers are run.
   # So iptables will not be reloaded until the exemptions are applied

@@ -58,7 +58,7 @@ Countermeasures on both *Source* and *Journalist Interfaces*
 -  All source submissions are encrypted with GPG at rest using the airgapped *Submission Key*
 -  *Interface* sessions are invalidated after a user logs out or inactivity over 120 minutes
 -  Session control on *Interface* includes CSRF token in Flask Framework
--  All *Interface* session data (except language and locale selection) is discarded at logout, and fully deleted upon exiting the Tor Browser
+-  All *Interface* session data (except language and locale selection) is discarded at logout, and fully deleted upon exiting Tor Browser
 -  A number of mitigations are in place as protection against malicious input vulnerabilities on the Source and Journalist Interfaces:
 
     - X-XSS-PROTECTION is enabled

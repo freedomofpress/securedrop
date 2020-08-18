@@ -318,7 +318,7 @@
 
 ### Developer Workflow
 
-* Updated functional tests to run against the Tor Browser (#4347)
+* Updated functional tests to run against Tor Browser (#4347)
 * Consolidated CI lint Makefile targets (#4435)
 * Added 0.12.2  boxes for use with the Molecule upgrade scenario (#4393)
 * Added deb tests to builder image update (#4388)
@@ -539,7 +539,7 @@ https://github.com/freedomofpress/securedrop/milestone/47
 ### Operations
 
 * Updated the grsecurity-hardened Linux Kernels to 4.4.144 for app and mon servers (#3662)
-* Updated tor to version 0.3.3.9 (#3624)
+* Updated Tor to version 0.3.3.9 (#3624)
 * Updated Flask to 1.0.2 and Werkzeug to 0.14.1 (#3741)
 * Updated securedrop-keyring package to 0.1.2 (#3752)
 
@@ -1058,8 +1058,8 @@ This release contains fixes for issues described in the most recent security aud
 * Ensure correct permissions for Tor hidden service directories so new installs won't break (#1052)
 * Clarify server setup steps in the install documentation (#1027, #1061)
 * Clarify that Tor ATHS setup is now automatic and does not require manual changes (#1030)
-* Explain that you can only download files to the "Tor Browser" folder on Tails as of Tails 1.3, due to the addition of AppArmor confinement for the Tor Browser (#1036, #1062).
-* Explain that you must use the Unsafe Browser to configure the network firewall because the Tor Browser will be blocked from accessing LAN addresses starting in Tails 1.5 (#1050)
+* Explain that you can only download files to the "Tor Browser" folder on Tails as of Tails 1.3, due to the addition of AppArmor confinement for Tor Browser (#1036, #1062).
+* Explain that you must use the Unsafe Browser to configure the network firewall because Tor Browser will be blocked from accessing LAN addresses starting in Tails 1.5 (#1050)
 * Fix "gotcha" in network firewall configuration where pfSense guesses the wrong CIDR subnet (#1060)
 * Update the upgrade docs to refer to the latest version of the 0.3.x release series instead of a specific version that would need to be updated every time (#1063)
 
@@ -1144,7 +1144,7 @@ to minimize metadata that could be used for correlation
 ### Environment
 
 * Add egress host firewall rules
-* Add google-authenticator apache module and basic auth for access to
+* Add google-authenticator Apache module and basic auth for access to
 document interface
 * Encrypt bodies of OSSEC email alerts (add postfix+procmail to monitor
 server)

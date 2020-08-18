@@ -181,7 +181,7 @@ Connect to the pfSense WebGUI
 #. After a few seconds, the Unsafe Browser should launch. The window
    has a bright red border to remind you to be careful when using
    it. You should close it once you're done configuring the firewall
-   and use the Tor Browser for any other web browsing you might do on
+   and use Tor Browser for any other web browsing you might do on
    the *Admin Workstation*.
 
    |Unsafe Browser Homepage|
@@ -834,7 +834,7 @@ described as follows:
 * Allow UDP NTP from *Application Server* and *Monitor Server* to all
 * Allow TCP any port from *Application Server* and *Monitor Server* to all (this is needed for making connections to the Tor network)
 * Allow TCP 80/443 from *Admin Workstation* to all (in case there is a need to access the web interface of the firewall)
-* Allow TCP ssh from *Admin Workstation* to *Application Server* and *Monitor Server*
+* Allow TCP SSH from *Admin Workstation* to *Application Server* and *Monitor Server*
 * Allow TCP any port from *Admin Workstation* to all
 
 This can be implemented with iptables, Cisco IOS etc. if you have the necessary

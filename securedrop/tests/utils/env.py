@@ -44,7 +44,7 @@ def init_gpg():
     testing.
     """
 
-    # gpg 2.1+ requires gpg-agent, see #4013
+    # GPG 2.1+ requires gpg-agent, see #4013
     gpg_agent_config = os.path.join(config.GPG_KEY_DIR, 'gpg-agent.conf')
     with open(gpg_agent_config, 'w+') as f:
         f.write('allow-loopback-pinentry')

@@ -26,7 +26,7 @@ USB flash drive, using cash. In any case you must then find a busy coworking
 place or cyber cafe you don't regularly go to and sit at a place with your back
 to a wall to avoid cameras capturing information on your screen or keystrokes.
 
-Get the Tor Browser
+Get Tor Browser
 -------------------
 
 Each SecureDrop instance has a publicly available *Source Interface:* a website
@@ -40,20 +40,20 @@ for anybody observing the network to associate a user's identity (e.g., their
 computer's IP address) with their activity (e.g., uploading information to
 SecureDrop).
 
-The easiest and most secure way to use Tor is to download the Tor Browser from
+The easiest and most secure way to use Tor is to download Tor Browser from
 the `Tor Project website`_. The Tor Browser is a modified version of the Firefox
 web browser. It was designed to protect your security and anonymity while
-using Tor. If there is a chance that downloading the Tor Browser raises
+using Tor. If there is a chance that downloading Tor Browser raises
 suspicion, you have a few alternatives, for example:
 
 * If your mail provider is less likely to be monitored, you can send a mail to
   gettor@torproject.org with the text "linux", "windows" or "osx" in the body
   (for your preferred operating system) and a bot will answer with instructions.
-* You can download a copy of the Tor Browser for your operating system from the
+* You can download a copy of Tor Browser for your operating system from the
   `GitLab mirror <https://gitlab.com/thetorproject/gettorbrowser/tree/torbrowser-releases>`__.
   maintained by the Tor team.
 
-While using the Tor Browser on your personal computer helps hide your activity
+While using Tor Browser on your personal computer helps hide your activity
 on the network, it leaves traces of its own installation on your local
 machine. Your operating system may keep additional logs, for example, of the
 last time you used Tor Browser.
@@ -108,7 +108,7 @@ main website's homepage (for news organizations, typically under sections called
 accepting submissions through SecureDrop in the `SecureDrop Directory`_
 maintained by Freedom of the Press Foundation.
 
-Using the Tor Browser, find the ".onion" address for the *Source Interface* of
+Using Tor Browser, find the ".onion" address for the *Source Interface* of
 the organization that you wish to submit to.
 
 .. tip::
@@ -119,7 +119,7 @@ the organization that you wish to submit to.
 
    If the two addresses don't match, please do not submit to this organization
    yet. Instead, please `contact us <https://securedrop.org/report-an-error>`__
-   through the SecureDrop Website, using the Tor Browser. For additional
+   through the SecureDrop Website, using Tor Browser. For additional
    security, you can use our .onion service address in Tor:
 
    ``secrdrop5wyphb5x.onion/report-an-error``
@@ -134,14 +134,14 @@ Browser to visit the organization's *Source Interface*.
 Making Your First Submission
 ----------------------------
 
-Open the Tor Browser and navigate to the .onion address for the SecureDrop
+Open Tor Browser and navigate to the .onion address for the SecureDrop
 *Source Interface* you wish to make a submission to. The page should look similar
 to the screenshot below, although it will probably have a logo specific to the
 organization you are submitting to:
 
 |Source Interface with Javascript Disabled|
 
-If this is the first time you're using the Tor Browser, it's likely that you
+If this is the first time you're using Tor Browser, it's likely that you
 have JavaScript enabled and that the Tor Browser's security level is set
 to "Low". In this case, there will be a purple warning banner at the top of
 the page that encourages you to disable JavaScript and change the security

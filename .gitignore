@@ -156,7 +156,7 @@ raw-test-output/
 # molecule
 .molecule
 
-#Used in CI for parsing out tor nightly version
+#Used in CI for parsing out Tor nightly version
 .tor_version
 
 # Ignore visual studio code folder
