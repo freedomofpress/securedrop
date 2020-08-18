@@ -30,7 +30,7 @@ Ubuntu or Debian GNU/Linux
    sudo apt-get install -y make git
 
 
-Fedora and Other Linux distributions
+Fedora and Other Linux Distributions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. note:: To install Docker Engine, you need the 64-bit version of Fedora 30 or higher.
 
