@@ -18,6 +18,10 @@ class TestSourceInterface(
         self._source_proceeds_to_login()
         self._source_sees_no_codename()
 
+    def test_journalist_designation_collides(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents_with_colliding_journalist_designation()
+
 
 class TestDownloadKey(
         functional_test.FunctionalTest,

@@ -123,6 +123,24 @@ class SourceNavigationStepsMixin:
 
         self.wait_for(submit_page_loaded)
 
+    def _source_chooses_to_submit_documents_with_colliding_journalist_designation(self):
+        self.source_app.crypto_util.adjectives = self.source_app.crypto_util.adjectives[0]
+        self.source_app.crypto_util.nouns = self.source_app.crypto_util.nouns[0]
+
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_logs_out()
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+
+        def make_source_with_colliding_journalist_designation():
+            self._source_continues_to_submit_page()
+            flash_error = self.driver.find_element_by_class_name("flash error")
+            assert "There was a temporary problem creating your account. Please try again" \
+                   == flash_error.text
+
+        self.wait_for(make_source_with_colliding_journalist_designation)
+
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
             file.write(self.secret_message.encode("utf-8"))
