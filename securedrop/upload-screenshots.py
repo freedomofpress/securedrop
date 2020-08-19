@@ -24,7 +24,7 @@ SCREENSHOTS_GLOB = "*.png"
 # filename into the canonical title we give that screenshot in Weblate.
 #
 # Example conversion: "source-session_timeout.png" -> "source: session timeout"
-CANONICALIZATION_RULES = [(r"\.png$", ""), (r"-", ": "), (r"_", " ")]
+CANONICALIZATION_RULES = ((r"\.png$", ""), (r"-", ": "), (r"_", " "))
 
 # Weblate organizes internationalization work into projects and components,
 # which are part of many URLs, and need to be referenced in some API requests.
@@ -77,7 +77,7 @@ def main():
         request_limit=REQUEST_LIMIT,
         canonicalization_rules=CANONICALIZATION_RULES,
     )
-    uploader.safe_upload()
+    uploader.upload()
 
 
 class WeblateUploader(object):
@@ -94,7 +94,7 @@ class WeblateUploader(object):
         component,
         files,
         request_limit,
-        canonicalization_rules=[],
+        canonicalization_rules=(),
     ):
 
         if len(token) != 40:
@@ -123,16 +123,6 @@ class WeblateUploader(object):
             "Authorization": "Token {}".format(token),
         }
         self.session.headers.update(headers)
-
-    def safe_upload(self):
-        """
-        Uploads all files using the screenshots endpoint. Prior to uploading,
-        obtains the list of all existing screenshots. If a file with a
-        canonicalized title that corresponds to the filename already exists,
-        it will be updated, instead of a new upload being created.
-        """
-        existing_screenshots = self.get_existing_screenshots()
-        self.upload(existing_screenshots)
 
     def get_existing_screenshots(self):
         """
@@ -169,21 +159,29 @@ class WeblateUploader(object):
             filename = re.sub(pattern, repl, filename)
         return filename
 
-    def upload(self, existing_screenshots=[]):
+    def upload(self, check_existing_screenshots=True):
         """
         Uploads all files using the screenshots endpoint. Optionally, checks
         files against a list of existing screenshots and replaces them rather
         than creating new uploads.
         """
+        if check_existing_screenshots is True:
+            existing_screenshots = self.get_existing_screenshots()
+        else:
+            existing_screenshots = []
+
         for file in self.files:
             basename = os.path.basename(file)
             canonical_name = self._canonicalize(basename)
             existing_screenshot_url = None
+
             for screenshot in existing_screenshots:
                 if screenshot["name"] == canonical_name:
                     existing_screenshot_url = screenshot["file_url"]
                     break
+
             image = {"image": open(file, "rb")}
+
             if existing_screenshot_url is not None:
                 print("Replacing existing screenshot {}".format(basename))
                 response = self.session.post(existing_screenshot_url, files=image)
