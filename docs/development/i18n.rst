@@ -356,12 +356,12 @@ generate using this command in the base directory:
     $ LOCALES=en_US make translation-test
 
 `Obtain your API key <https://weblate.securedrop.org/accounts/profile/#api>`__
-in Weblate. Export the token to the environment variable ``WEBLATE_TOKEN``.
+in Weblate. Export the token to the environment variable ``WEBLATE_API_TOKEN``.
 You can now run this command to perform an upload:
 
 .. code:: sh
 
-    $ securedrop/upload-screenshots.py --token $WEBLATE_TOKEN
+    $ securedrop/upload-screenshots.py
 
 If new screenshots were added as part of this run, make sure to associate them
 with relevant strings in Weblate, which you can do from the

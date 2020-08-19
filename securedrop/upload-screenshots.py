@@ -4,7 +4,6 @@ from glob import glob
 from urllib.parse import urljoin
 
 import os
-import argparse
 import re
 import requests
 import sys
@@ -40,23 +39,13 @@ def main():
     Uses the generic WeblateUploader class below to run a SecureDrop screenshot
     upload.
     """
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    parser.add_argument(
-        "--token",
-        help="API token for accessing the weblate API",
-        type=str,
-        required=True,
-    )
-    parser.add_argument(
-        "--baseURL",
-        help="Weblate base URL",
-        default=DEFAULT_BASE_URL,
-        type=str,
-        required=False,
-    )
-    args = parser.parse_args()
+    token = os.getenv("WEBLATE_API_TOKEN", None)
+    base_url = os.getenv("WEBLATE_BASE_URL", DEFAULT_BASE_URL)
+
+    if token is None:
+        raise BadOrMissingTokenError(
+            "No token provided via WEBLATE_API_TOKEN environment variable.", base_url
+        )
 
     screenshot_files = glob(os.path.join(SCREENSHOTS_DIRECTORY, SCREENSHOTS_GLOB))
     if len(screenshot_files) == 0:
@@ -69,8 +58,8 @@ def main():
         sys.exit(1)
 
     uploader = WeblateUploader(
-        token=args.token,
-        base_url=args.baseURL,
+        token=token,
+        base_url=base_url,
         project=PROJECT_SLUG,
         component=COMPONENT_SLUG,
         files=screenshot_files,
@@ -98,11 +87,9 @@ class WeblateUploader(object):
     ):
 
         if len(token) != 40:
-            msg = (
-                "API token is not in expected 40 character format.\n"
-                "Obtain token via {}".format(urljoin(base_url, "accounts/profile/#api"))
+            raise BadOrMissingTokenError(
+                "API token is not in expected 40 character format.", base_url
             )
-            raise BadTokenError(msg)
 
         self.base_url = base_url
         self.screenshots_endpoint = urljoin(base_url, "/api/screenshots/")
@@ -204,8 +191,13 @@ class WeblateUploader(object):
         print("Upload complete. Visit {} to review the results.".format(result_url))
 
 
-class BadTokenError(Exception):
-    pass
+class BadOrMissingTokenError(Exception):
+    def __init__(self, reason="Bad or missing token.", base_url=None):
+        if base_url is not None:
+            reason += " Obtain token via {}".format(
+                urljoin(base_url, "accounts/profile/#api")
+            )
+        super().__init__(reason)
 
 
 class RequestLimitError(Exception):
