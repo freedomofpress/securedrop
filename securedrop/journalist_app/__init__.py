@@ -116,11 +116,11 @@ def create_app(config: 'SDConfig') -> Flask:
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
     @app.before_first_request
-    def expire_blacklisted_tokens():
-        return cleanup_expired_revoked_tokens()
+    def expire_blacklisted_tokens() -> None:
+        cleanup_expired_revoked_tokens()
 
     @app.before_request
-    def load_instance_config():
+    def load_instance_config() -> None:
         app.instance_config = InstanceConfig.get_current()
 
     @app.before_request
