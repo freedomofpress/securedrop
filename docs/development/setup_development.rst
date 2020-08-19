@@ -4,7 +4,7 @@ Setting Up the Development Environment
 .. include:: ../includes/docs-branches.txt
 
 Overview
--------------
+--------
 
 SecureDrop is a multi-machine design. To make development and testing
 easy, we provide a set of virtual environments, each tailored for a
