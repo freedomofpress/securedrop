@@ -1,0 +1,48 @@
+---
+# Playbook to update SecureDrop VMs configured with the latest stable release
+# to use the release candiate packages from apt-test.freedom.press (rather
+# than apt.freedom.press). Updates the apt repo pubkey with a testing pubkey,
+# and alters the apt source lists to point to the test server.
+#
+# Steps to use this playbook from an Admin Workstation:
+#
+#   1. Check out the current production release tag.
+#   2. Provision a SecureDrop instance (hardware or VMs).
+#   4. Run `./securedrop-admin tailsconfig`
+#   5. Run `source admin/.venv3/bin/activate` (so ansible commands work)
+#   6. Run `cd install_files/ansible-base`
+#   7. Run `ansible-playbook -vv --diff securedrop-qa.yml`
+#   8. `ssh app` # start interactive session
+#   9. On the Application Server, run `sudo cron-apt -i -s`
+#   10. Repeat steps 8 & 9 on the Monitor server
+
+- name: Configure prod host to accept Release Candidate packages.
+  environment:
+    LC_ALL: C
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  hosts: securedrop
+  vars:
+    apt_files_to_modify:
+      - /etc/apt/sources.list.d/apt_freedom_press.list
+      - /etc/apt/security.list
+  tasks:
+    - name: Add apt public key for release-candidate repo.
+      apt_key:
+        data: "{{ lookup('file', 'roles/install-fpf-repo/files/apt-test-signing-key.pub') }}"
+        state: present
+
+    - name: Switch apt repo URLs to staging.
+      replace:
+        dest: "{{ item }}"
+        replace: "apt-test.freedom.press"
+        regexp: 'apt\.freedom\.press'
+        backup: yes
+      with_items: "{{ apt_files_to_modify }}"
+      notify: update apt cache
+
+  handlers:
+    - name: update apt cache
+      apt:
+        update_cache: yes
+  become: yes
