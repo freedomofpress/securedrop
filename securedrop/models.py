@@ -82,8 +82,8 @@ class Source(db.Model):
     MAX_CODENAME_LEN = 128
 
     def __init__(self,
-                 filesystem_id: str = None,
-                 journalist_designation: str = None) -> None:
+                 filesystem_id: 'Optional[str]' = None,
+                 journalist_designation: 'Optional[str]' = None) -> None:
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
         self.uuid = str(uuid.uuid4())
