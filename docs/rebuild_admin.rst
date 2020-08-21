@@ -397,7 +397,7 @@ Once the ``./securedrop-admin tailsconfig`` command is complete:
    the servers using ``ssh app`` and ``ssh mon``, accepting the host verification
    prompt if necessary,
  - and verify that the desktop shortcuts for the *Source* and *Journalist Interfaces*
-   work correctly, opening their respective homepages in the Tor Browser.
+   work correctly, opening their respective homepages in Tor Browser.
 
 Next, back up the servers by running the following command in the terminal:
 

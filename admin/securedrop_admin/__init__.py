@@ -720,9 +720,9 @@ def find_or_generate_new_torv3_keys(args):
     # No old keys, generate and store them first
     app_journalist_public_key, \
         app_journalist_private_key = generate_new_v3_keys()
-    # For app ssh service
+    # For app SSH service
     app_ssh_public_key, app_ssh_private_key = generate_new_v3_keys()
-    # For mon ssh service
+    # For mon SSH service
     mon_ssh_public_key, mon_ssh_private_key = generate_new_v3_keys()
     tor_v3_service_info = {
             "app_journalist_public_key": app_journalist_public_key,

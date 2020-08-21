@@ -421,7 +421,7 @@ def _can_decrypt_with_key(journalist_app, msg, passphrase=None):
     Test that the given GPG message can be decrypted.
     """
 
-    # For gpg 2.1+, a non null passphrase _must_ be passed to decrypt()
+    # For GPG 2.1+, a non null passphrase _must_ be passed to decrypt()
     using_gpg_2_1 = StrictVersion(
         journalist_app.crypto_util.gpg.binary_version) >= StrictVersion('2.1')
 

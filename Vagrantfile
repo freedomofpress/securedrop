@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
   # so the key insertion feature should be disabled.
   config.ssh.insert_key = false
 
-  # The staging hosts are just like production but allow non-tor access
+  # The staging hosts are just like production but allow non-Tor access
   # for the web interfaces and ssh.
   config.vm.define 'mon-staging', autostart: false do |staging|
     if ENV['SECUREDROP_SSH_OVER_TOR']

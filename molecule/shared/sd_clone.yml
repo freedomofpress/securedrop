@@ -28,7 +28,7 @@
 
     # Required for mutual compatibility during Ansible 2.7.x -> 2.9.x transition
     # We moved to 2.9.x in v1.3.0, so don't run if historical version is >= to 1.3.0.
-    - name: Patch tor handler
+    - name: Patch Tor handler
       lineinfile:
         dest: "{{ molecule_ephemeral_directory }}/{{ sd_clone_dir }}/{{ sd_ansible_roles }}/tor-hidden-services/handlers/main.yml"
         regexp: '^  include:'

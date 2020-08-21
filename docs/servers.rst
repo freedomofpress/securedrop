@@ -31,7 +31,7 @@ The installation media and the files required to verify it are available on the
 * `SHA256SUMS`_
 * `SHA256SUMS.gpg`_
 
-If you're reading this documentation in the Tor Browser on the *Admin
+If you're reading this documentation in Tor Browser on the *Admin
 Workstation*, you can just click the links above and follow the prompts to save
 them to your Admin Workstation. We recommend saving them to the
 ``/home/amnesia/Persistent/Tor Browser`` directory on the *Admin Workstation*,

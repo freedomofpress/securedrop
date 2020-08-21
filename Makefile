@@ -329,6 +329,13 @@ build-debs-notest: ## Build SecureDrop Debian packages without running tests.
 	@$(SDROOT)/devops/scripts/build-debs.sh notest
 	@echo
 
+.PHONY: build-debs-focal
+build-debs-focal: ## Build and test SecureDrop Debian packages.
+	@echo "Building SecureDrop Debian packages..."
+	@$(SDROOT)/devops/scripts/build-debs.sh notest focal
+	@echo
+
+
 
 ########################
 #

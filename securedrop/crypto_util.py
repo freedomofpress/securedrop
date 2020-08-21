@@ -26,7 +26,7 @@ if typing.TYPE_CHECKING:
     from typing import Dict, List, Text  # noqa: F401
 
 
-# to fix gpg error #78 on production
+# to fix GPG error #78 on production
 os.environ['USERNAME'] = 'www-data'
 
 # SystemRandom sources from the system rand (e.g. urandom, CryptGenRandom, etc)
@@ -105,8 +105,8 @@ class CryptoUtil:
 
         self.do_runtime_tests()
 
-        # --pinentry-mode, required for SecureDrop on gpg 2.1.x+, was
-        # added in gpg 2.1.
+        # --pinentry-mode, required for SecureDrop on GPG 2.1.x+, was
+        # added in GPG 2.1.
         self.gpg_key_dir = gpg_key_dir
         gpg_binary = gnupg.GPG(binary='gpg2', homedir=self.gpg_key_dir)
         if StrictVersion(gpg_binary.binary_version) >= StrictVersion('2.1'):

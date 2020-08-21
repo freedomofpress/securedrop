@@ -1,0 +1,3 @@
+---
+securedrop_build_focal_support: True
+securedrop_staging_install_target_distro: "focal"

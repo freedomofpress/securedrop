@@ -11,7 +11,7 @@
   hosts: securedrop
   become: yes
   tasks:
-    - name: Delete tor related keys
+    - name: Delete Tor related keys
       file:
         state: absent
         path: "/var/lib/tor/services/{{ item }}"

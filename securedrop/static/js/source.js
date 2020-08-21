@@ -84,7 +84,7 @@ function looksLikeOrfox() {
 
 /**
    If the source is using Tor Browser, encourage them to turn Tor
-   Browser's Security Setting to "Safest".
+   Browser's Security Level to "Safest".
 */
 function showTorSuggestions() {
   show("#js-warning");
@@ -113,7 +113,7 @@ function showOrfoxSuggestions() {
 }
 
 /**
-   If the user is not using a Tor browser, suggest it.
+   If the user is not using a Tor Browser, suggest it.
 */
 function suggestTor() {
   hide(".hide-if-not-tor-browser");
