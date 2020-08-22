@@ -697,7 +697,7 @@ class Journalist(db.Model):
         return True
 
     @staticmethod
-    def validate_api_token_and_get_user(token: str) -> 'Union[Journalist, None]':
+    def validate_api_token_and_get_user(token: str) -> 'Optional[Journalist]':
         s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
