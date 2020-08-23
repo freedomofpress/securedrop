@@ -124,9 +124,6 @@ class SourceNavigationStepsMixin:
         self.wait_for(submit_page_loaded)
 
     def _source_chooses_to_submit_documents_with_colliding_journalist_designation(self):
-        self.source_app.crypto_util.adjectives = self.source_app.crypto_util.adjectives[0]
-        self.source_app.crypto_util.nouns = self.source_app.crypto_util.nouns[0]
-
         self.safe_click_by_id("submit-documents-button")
         self.wait_for(lambda: self.driver.find_element_by_id("continue-button"))
         self.safe_click_by_id("continue-button")
@@ -139,7 +136,7 @@ class SourceNavigationStepsMixin:
 
         self.wait_for(lambda: self.driver.find_element_by_css_selector(".error"))
         flash_error = self.driver.find_element_by_css_selector(".error")
-        assert "There was a temporary problem creating your account. Please try again" \
+        assert "There was a temporary problem creating your account. Please try again." \
                == flash_error.text
 
     def _source_submits_a_file(self):

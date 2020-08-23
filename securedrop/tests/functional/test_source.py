@@ -2,6 +2,23 @@ from . import source_navigation_steps, journalist_navigation_steps
 from . import functional_test
 
 
+class TestSourceInterfaceDesignationCollision(
+        functional_test.FunctionalTest,
+        source_navigation_steps.SourceNavigationStepsMixin):
+
+    @classmethod
+    def setup_class(cls):
+        functional_test.FunctionalTest.journalist_designation_collision_test = True
+
+    @classmethod
+    def teardown_class(cls):
+        functional_test.FunctionalTest.journalist_designation_collision_test = False
+
+    def test_display_id_designation_collisions(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents_with_colliding_journalist_designation()
+
+
 class TestSourceInterface(
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationStepsMixin):
@@ -17,10 +34,6 @@ class TestSourceInterface(
         self._source_chooses_to_login()
         self._source_proceeds_to_login()
         self._source_sees_no_codename()
-
-    def test_journalist_designation_collides(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents_with_colliding_journalist_designation()
 
 
 class TestDownloadKey(
