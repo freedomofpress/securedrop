@@ -264,7 +264,8 @@ class FunctionalTest(object):
                     self.admin_user["totp"] = pyotp.TOTP(self.admin_user["secret"])
 
                     if self.journalist_designation_collision_test:
-                        self.source_app.crypto_util.adjectives = self.source_app.crypto_util.adjectives[:1]
+                        self.source_app.crypto_util.adjectives = \
+                            self.source_app.crypto_util.adjectives[:1]
                         self.source_app.crypto_util.nouns = self.source_app.crypto_util.nouns[:1]
 
                     def start_source_server(app):
