@@ -25,7 +25,7 @@ To get started editing the docs:
 
       pip install --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
-.. note:: Ensure you are running in a virtual environment, so you can install, upgrade, and remove packages using the program `pip`. Run the command `python3 -m venv .venv` to create and manage your virtual environments.
+.. include:: ../includes/virtualenv.txt
 
 #. Build the docs for viewing in your web browser:
 
