@@ -1,5 +1,6 @@
 alembic
-argon2_cffi
+argon2_cffi>=20.1.0
+cffi>=1.14.2
 cryptography>2.3
 Flask-Assets
 Flask-Babel
