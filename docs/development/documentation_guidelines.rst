@@ -25,7 +25,7 @@ To get started editing the docs:
 
       pip install --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
-.. include:: ../includes/virtualenv.txt
+.. include:: ../includes/virtualenv.txt   
 
 #. Build the docs for viewing in your web browser:
 
