@@ -376,6 +376,7 @@ Two weeks before the release: string freeze
 When features for a new SecureDrop release are frozen, the localization manager for the release will:
 
 * :ref:`merge_develop_to_weblate`.
+* `Update Weblate screenshots`_ so translators can see new or modified source strings in context.
 * Update the `i18n timeline`_ in the translation section of the forum.
 * Post an announcement `to the translation section of the forum <https://forum.securedrop.org/c/translations>`__ (see `an example  <https://forum.securedrop.org/t/4-securedrop-strings-need-work-march-2018-string-freeze/461>`__).
 * Remind all developers about the string freeze in `Gitter <https://gitter.im/freedomofpress/securedrop>`__.
@@ -386,7 +387,7 @@ Release day
 ^^^^^^^^^^^
 
 * :ref:`merge_weblate_to_develop`.
-* :ref:`Update the screenshots <updating_screenshots>`.
+* :ref:`Update the documentation screenshots <updating_screenshots>`.
 * Remove the `Weblate announcement`_ about this release's translation timeline.
 * Provide translator credits to add to the SecureDrop release announcement.
 * Update the `i18n timeline`_ in the forum.
