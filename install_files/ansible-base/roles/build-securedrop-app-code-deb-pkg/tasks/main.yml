@@ -57,6 +57,13 @@
     src: "changelog-{{ securedrop_package_dist }}"
     dest: "{{ securedrop_app_code_prep_dir }}/debian/changelog"
 
+- name: Replace the files required for focal package
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items: "{{ securedrop_app_focal_files }}"
+  when: securedrop_build_focal_support
+
 - name: Create lib/systemd/services directory in prep directory
   file:
     state: directory

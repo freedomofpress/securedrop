@@ -8,11 +8,6 @@ securedrop_code_filtered: "{{ securedrop_app_code_prep_dir }}/var/www/securedrop
 
 securedrop_pip_requirements: "{{ securedrop_code_filtered }}/requirements/python3/securedrop-app-code-requirements.txt"
 
-# SecureDrop virtualenv location
-securedrop_venv: "/opt/venvs/securedrop-app-code"
-securedrop_venv_bin: "{{ securedrop_venv }}/bin"
-securedrop_venv_site_packages: "{{ securedrop_venv }}/lib/python3.5/site-packages"
-
 # SecureDrop code installation directory
 securedrop_code: /var/www/securedrop
 
@@ -45,4 +40,22 @@ securedrop_app_rsync_opts:
 
 securedrop_local_build: "../../build"
 
-securedrop_package_dist: xenial
+# Default is xenial.
+securedrop_build_focal_support: False
+securedrop_package_dist: "{{ 'focal' if securedrop_build_focal_support else 'xenial' }}"
+
+# SecureDrop virtualenv location
+securedrop_venv: "/opt/venvs/securedrop-app-code"
+securedrop_venv_bin: "{{ securedrop_venv }}/bin"
+securedrop_python_version: "{{ '3.8' if securedrop_build_focal_support else '3.5' }}"
+securedrop_venv_site_packages: "{{ securedrop_venv }}/lib/python{{ securedrop_python_version }}/site-packages"
+
+securedrop_app_focal_files:
+  - src: control-focal
+    dest: "{{ securedrop_app_code_prep_dir }}/debian/control"
+  - src: rules-focal
+    dest: "{{ securedrop_app_code_prep_dir }}/debian/rules"
+  - src: securedrop-app-code.triggers-focal
+    dest: "{{ securedrop_app_code_prep_dir }}/debian/securedrop-app-code.triggers"
+  - src: usr.sbin.apache2-focal
+    dest: "{{ securedrop_app_code_prep_dir }}/etc/apparmor.d/usr.sbin.apache2"
