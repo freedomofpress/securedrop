@@ -123,15 +123,7 @@ class SourceNavigationStepsMixin:
 
         self.wait_for(submit_page_loaded)
 
-    def _source_chooses_to_submit_documents_with_colliding_journalist_designation(self):
-        self.safe_click_by_id("submit-documents-button")
-        self.wait_for(lambda: self.driver.find_element_by_id("continue-button"))
-        self.safe_click_by_id("continue-button")
-        self.wait_for(lambda: self.driver.find_element_by_id("logout"))
-        self.safe_click_by_id("logout")
-        self.driver.get(self.source_location)
-        self.safe_click_by_id("submit-documents-button")
-        self.wait_for(lambda: self.driver.find_element_by_id("continue-button"))
+    def _source_continues_to_submit_page_with_colliding_journalist_designation(self):
         self.safe_click_by_id("continue-button")
 
         self.wait_for(lambda: self.driver.find_element_by_css_selector(".error"))

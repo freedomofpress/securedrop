@@ -76,8 +76,6 @@ class FunctionalTest(object):
     driver_retry_count = 3
     driver_retry_interval = 5
 
-    journalist_designation_collision_test = False
-
     def _unused_port(self):
         s = socket.socket()
         s.bind(("127.0.0.1", 0))
@@ -187,6 +185,11 @@ class FunctionalTest(object):
         if hasattr(self, 'torbrowser_driver'):
             disable_js(self.torbrowser_driver)
 
+    def start_source_server(self, app, source_port):
+        config.SESSION_EXPIRATION_MINUTES = self.session_expiration / 60.0
+
+        app.run(port=source_port, debug=True, use_reloader=False, threaded=True)
+
     @pytest.fixture(autouse=True)
     def set_default_driver(self):
         logging.info("Creating default web driver: %s", self.default_driver_name)
@@ -263,21 +266,11 @@ class FunctionalTest(object):
 
                     self.admin_user["totp"] = pyotp.TOTP(self.admin_user["secret"])
 
-                    if self.journalist_designation_collision_test:
-                        self.source_app.crypto_util.adjectives = \
-                            self.source_app.crypto_util.adjectives[:1]
-                        self.source_app.crypto_util.nouns = self.source_app.crypto_util.nouns[:1]
-
-                    def start_source_server(app):
-                        config.SESSION_EXPIRATION_MINUTES = self.session_expiration / 60.0
-
-                        app.run(port=source_port, debug=True, use_reloader=False, threaded=True)
-
                     def start_journalist_server(app):
                         app.run(port=journalist_port, debug=True, use_reloader=False, threaded=True)
 
                     self.source_process = Process(
-                        target=lambda: start_source_server(self.source_app)
+                        target=lambda: self.start_source_server(self.source_app, source_port)
                     )
 
                     self.journalist_process = Process(
