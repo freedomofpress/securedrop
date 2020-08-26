@@ -355,6 +355,10 @@ generate using this command in the base directory:
 
     $ LOCALES=en_US make translation-test
 
+Inspect the screenshots in the directory ``securedrop/tests/pageslayout/screenshots/en_US``
+and make sure that their content corresponds to the expected version of the
+codebase.
+
 `Obtain your API key <https://weblate.securedrop.org/accounts/profile/#api>`__
 in Weblate. Export the token to the environment variable ``WEBLATE_API_TOKEN``.
 You can now run this command to perform an upload:
