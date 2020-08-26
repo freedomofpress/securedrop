@@ -8,7 +8,7 @@ lint:
 
 platforms:
   - name: app-staging
-    box: bento/ubuntu-16.04
+    box: bento/ubuntu-20.04
     raw_config_args:
       - "cpu_mode = 'host-passthrough'"
       - "video_type = 'virtio'"
@@ -24,7 +24,7 @@ platforms:
       - staging
 
   - name: mon-staging
-    box: bento/ubuntu-16.04
+    box: bento/ubuntu-20.04
     raw_config_args:
       - "cpu_mode = 'host-passthrough'"
       - "video_type = 'virtio'"
@@ -57,7 +57,7 @@ provisioner:
     ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
 
 scenario:
-  name: libvirt-staging-xenial
+  name: libvirt-staging-focal
   test_sequence:
     - destroy
     - create
