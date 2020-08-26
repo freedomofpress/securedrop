@@ -1,4 +1,11 @@
 .. note:: Ensure you are running in a virtual environment, so you can install, upgrade, and       
-          remove packages using the program `pip`. Run the command `python3 -m venv .venv` to create and manage your virtual environments. To begin using the virtual environmen, use the command `source venv/bin/activate` to activate.   
+          remove packages using the program ``pip``. ``pip`` is a package manager for Python that allows you to create a virtual 
+          isolated Python installation and install packages into that virtual installation. You can isolate the installation of   
+          dependencies of a specific application, so that the dependencies of another application do not interfere. 
+          
+          Run the command ``python3 -m venv .venv`` to create and manage your virtual environment. To begin using the virtual 
+          environment, use the command ``source .venv/bin/activate`` to activate.   
         
-          You can also use `virtualenvwrapper <https://virtualenvwrapper.readthedocs.io/en/latest/install.html>`_ which provides the `mkvirtualenv` shell function and is a set of extensions to the `virtualenv` tool. The extensions include wrappers for creating and deleting virtual environments and otherwise managing your development workflow. 
+          You can also use `virtualenvwrapper <https://virtualenvwrapper.readthedocs.io/en/latest/install.html>`_ which provides the    
+          ``mkvirtualenv`` shell function and is a set of extensions to the ``virtualenv`` tool. The extensions include wrappers for 
+          creating and deleting virtual environments and otherwise managing your development workflow. 
