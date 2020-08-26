@@ -13,13 +13,13 @@ To get started editing the docs:
 
 .. _clone_the_rep:
 
-#. Clone the SecureDrop repository:
+1. Clone the SecureDrop repository:
 
    .. code:: sh
 
       git clone https://github.com/freedomofpress/securedrop.git
 
-#. Install the dependencies:
+2. Install the dependencies:
 
    .. code:: sh
 
@@ -27,7 +27,7 @@ To get started editing the docs:
 
 .. include:: ../includes/virtualenv.txt   
 
-#. Build the docs for viewing in your web browser:
+3. Build the docs for viewing in your web browser:
 
    .. code:: sh
 
