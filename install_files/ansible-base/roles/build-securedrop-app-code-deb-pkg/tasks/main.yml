@@ -64,6 +64,11 @@
   with_items: "{{ securedrop_app_focal_files }}"
   when: securedrop_build_focal_support
 
+- name: Create the control file based on distribution
+  template:
+    src: "control.j2"
+    dest: "{{ securedrop_app_code_prep_dir }}/debian/control"
+
 - name: Create lib/systemd/services directory in prep directory
   file:
     state: directory
