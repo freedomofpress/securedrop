@@ -24,24 +24,12 @@ Ensure Git is installed on your system. Use package management tools to update y
 
 Ubuntu or Debian GNU/Linux
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-Run the following commands to update the packages and to install from the default Git repositories:
+Run the following commands to update the package index and to install Git and ``make``:
 
 .. code:: sh
 
    sudo apt-get update
    sudo apt-get install -y make git
-
-
-Fedora and Other Linux Distributions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.. note:: To install Docker Engine, you need the 64-bit version of Fedora 30 or higher.
-
-Run the following commands to update the packages and to install from the default Git repositories:
-
-.. code:: sh
-
-   sudo dnf update
-   sudo dnf install -y make git
 
 We recommend using the stable version of Docker CE (Community Edition) which can
 be installed via the official documentation links:
@@ -49,12 +37,32 @@ be installed via the official documentation links:
 * `Docker CE for Ubuntu`_
 * `Docker CE for Debian`_
 
+Make sure to follow the `post-installation steps for Linux`_.
 
-Make sure to follow the `Post-installation steps for Linux`_, as well.
 
-.. _`Docker CE for Ubuntu`: https://docs.docker.com/install/linux/docker-ce/ubuntu/
-.. _`Docker CE for Debian`: https://docs.docker.com/install/linux/docker-ce/debian/
-.. _`Post-installation steps for Linux`: https://docs.docker.com/install/linux/linux-postinstall/
+Fedora and Other Linux Distributions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. note:: To install Docker Engine, you need the 64-bit version of Fedora 30 or higher.
+
+Run the following commands to update the package index and to install Git and ``make``:
+
+.. code:: sh
+
+   sudo dnf install -y make git
+
+
+We recommend using the stable version of Docker CE (Community Edition) which can
+be installed via the official documentation link:
+
+* `Docker CE for Fedora`_
+
+Make sure to follow the `post-installation steps for Linux`_.
+
+.. _`Docker CE for Ubuntu`: https://docs.docker.com/engine/install/ubuntu/
+.. _`Docker CE for Debian`: https://docs.docker.com/engine/install/debian/
+.. _`Docker CE for Fedora`: https://docs.docker.com/engine/install/fedora/
+.. _`post-installation steps for Linux`: https://docs.docker.com/engine/install/linux-postinstall/
+
 
 macOS
 ~~~~~
