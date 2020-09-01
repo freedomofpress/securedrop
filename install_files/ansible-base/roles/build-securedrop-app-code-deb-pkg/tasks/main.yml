@@ -100,13 +100,22 @@
     - "{{ securedrop_app_code_deb_dir }}/var/www/securedrop/static/.webassets-cache"
     - "{{ securedrop_app_code_deb_dir }}/var/www/securedrop/.well-known/pki-validation"
 
+- name: Copy deployment.py file
+  copy:
+    src: "deployment.py"
+    dest: "/usr/lib/python2.7/dist-packages/dh_virtualenv/deployment.py"
+
+- name: Copy setuptools requirements file
+  copy:
+    src: "setup-requirements.txt"
+    dest: "/tmp/setup-requirements.txt"
+
 - name: Build securedrop-app-code Debian package
   command: dpkg-buildpackage -us -uc
   args:
     chdir: "{{ securedrop_app_code_deb_dir }}"
   environment:
     DH_VIRTUALENV_INSTALL_ROOT: "/opt/venvs"
-    SETUPTOOLS_USE_DISTUTILS: "stdlib"
 
 - name: Find newly built Debian package
   find:
