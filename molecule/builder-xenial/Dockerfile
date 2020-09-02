@@ -13,7 +13,6 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         devscripts \
         dh-python \
         dh-systemd \
-        dh-virtualenv \
         gdb \
         git \
         gnupg2 \
@@ -35,5 +34,12 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         unzip \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/*
+
+#install dh-virtualenv from debian unstable
+RUN echo "deb https://deb.debian.org/debian unstable main contrib" > /etc/apt/sources.list.d/debian-unstable.list
+COPY aptpreferences.conf /etc/apt/preferences.d/debian-unstable
+RUN apt-get install -y debian-archive-keyring
+RUN ln -s /usr/share/keyrings/debian-archive-keyring.gpg /etc/apt/trusted.gpg.d/
+RUN apt-get update && apt-get install -y dh-virtualenv
 
 RUN paxctl -cm /usr/bin/python3.5 && mkdir -p /tmp/build
