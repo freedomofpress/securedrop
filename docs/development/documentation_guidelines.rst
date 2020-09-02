@@ -13,19 +13,21 @@ To get started editing the docs:
 
 .. _clone_the_rep:
 
-#. Clone the SecureDrop repository:
+1. Clone the SecureDrop repository:
 
    .. code:: sh
 
       git clone https://github.com/freedomofpress/securedrop.git
 
-#. Install the dependencies:
+2. Install the dependencies:
 
    .. code:: sh
 
       pip install --no-deps --require-hashes -r securedrop/requirements/python3/develop-requirements.txt
 
-#. Build the docs for viewing in your web browser:
+.. include:: ../includes/virtualenv.txt   
+
+3. Build the docs for viewing in your web browser:
 
    .. code:: sh
 
@@ -150,10 +152,10 @@ called ``securedrop``. This ``securedrop`` directory also contains a
 
      .
      ├── securedrop
-     │   │
-     │  ...
-     │   ├── securedrop
-    ... ...
+     │   │
+     │  ...
+     │   ├── securedrop
+    ... ...
 
 To avoid confusion, paths to files anywhere inside the SecureDrop git repository
 should be written as ``./some_dir/file``, where ``.`` is the top level directory
