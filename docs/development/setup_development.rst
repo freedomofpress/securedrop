@@ -20,7 +20,7 @@ Quick Start
 The Docker based environment is suitable for developing the web application
 and updating the documentation.
 
-Ensure Git is installed on your system. Use package management tools to update your local package index. Once the update is complete, you can download and install Git:
+Follow the instructions below to install the requirements for the Docker-based environment for your operating system.
 
 Ubuntu or Debian GNU/Linux
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -44,7 +44,7 @@ Fedora and Other Linux Distributions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. note:: To install Docker Engine, you need the 64-bit version of Fedora 30 or higher.
 
-Run the following commands to update the package index and to install Git and ``make``:
+Run the following command to update the package index and to install Git and ``make``:
 
 .. code:: sh
 
