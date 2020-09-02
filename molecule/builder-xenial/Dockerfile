@@ -33,7 +33,8 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         sqlite \
         sudo \
         tzdata \
-        unzip
+        unzip \
+        virtualenv
 
 #install dh-virtualenv from debian unstable
 RUN curl https://ftp-master.debian.org/keys/archive-key-10.asc -o /tmp/debian-stable-archive-pubkey.asc && \
