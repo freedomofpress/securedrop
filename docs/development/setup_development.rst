@@ -20,7 +20,8 @@ Quick Start
 The Docker based environment is suitable for developing the web application
 and updating the documentation.
 
-Follow the instructions below to install the requirements for the Docker-based environment for your operating system.
+Follow the instructions below to install the requirements for the Docker-based
+environment for your operating system.
 
 Ubuntu or Debian GNU/Linux
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,8 +41,8 @@ be installed via the official documentation links:
 Make sure to follow the `post-installation steps for Linux`_.
 
 
-Fedora and Other Linux Distributions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Fedora Linux
+~~~~~~~~~~~~
 .. note:: To install Docker Engine, you need the 64-bit version of Fedora 30 or higher.
 
 Run the following command to update the package index and to install Git and ``make``:
