@@ -2,7 +2,10 @@
 import binascii
 import datetime
 import os
+from typing import Optional, List, Union, Any
 
+import flask
+import werkzeug
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
                    render_template, Markup, sessions, request)
 from flask_babel import gettext, ngettext
@@ -14,17 +17,10 @@ from db import db
 from models import (get_one_or_else, Source, Journalist, InvalidUsernameException,
                     WrongPasswordException, FirstOrLastNameError, LoginThrottledException,
                     BadTokenException, SourceStar, PasswordError, Submission, RevokedToken,
-                    InvalidPasswordLength)
+                    InvalidPasswordLength, Reply)
 from store import add_checksum_for_file
 
-import typing
-# https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
-if typing.TYPE_CHECKING:
-    # flake8 can not understand type annotation yet.
-    # That is why all type annotation relative import
-    # statements has to be marked as noqa.
-    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
-    from sdconfig import SDConfig  # noqa: F401
+from sdconfig import SDConfig
 
 
 def logged_in() -> bool:
@@ -38,7 +34,7 @@ def logged_in() -> bool:
     return bool(g.get('user', None))
 
 
-def commit_account_changes(user):
+def commit_account_changes(user: Journalist) -> None:
     if db.session.is_modified(user):
         try:
             db.session.add(user)
@@ -54,14 +50,13 @@ def commit_account_changes(user):
             flash(gettext("Account updated."), "success")
 
 
-def get_source(filesystem_id, include_deleted=False):
+def get_source(filesystem_id: str, include_deleted: bool = False) -> Source:
     """
     Return the Source object with `filesystem_id`
 
     If `include_deleted` is False, only sources with a null `deleted_at` will
     be returned.
     """
-    source = None
     query = Source.query.filter(Source.filesystem_id == filesystem_id)
     if not include_deleted:
         query = query.filter_by(deleted_at=None)
@@ -70,7 +65,12 @@ def get_source(filesystem_id, include_deleted=False):
     return source
 
 
-def validate_user(username, password, token, error_message=None):
+def validate_user(
+    username: str,
+    password: Optional[str],
+    token: Optional[str],
+    error_message: Optional[str] = None
+) -> Optional[Journalist]:
     """
     Validates the user by calling the login and handling exceptions
     :param username: Username
@@ -88,9 +88,7 @@ def validate_user(username, password, token, error_message=None):
             InvalidPasswordLength) as e:
         current_app.logger.error("Login for '{}' failed: {}".format(
             username, e))
-        if not error_message:
-            error_message = gettext('Login failed.')
-        login_flashed_msg = error_message
+        login_flashed_msg = error_message if error_message else gettext('Login failed.')
 
         if isinstance(e, LoginThrottledException):
             login_flashed_msg += " "
@@ -118,7 +116,7 @@ def validate_user(username, password, token, error_message=None):
         return None
 
 
-def validate_hotp_secret(user, otp_secret):
+def validate_hotp_secret(user: Journalist, otp_secret: str) -> bool:
     """
     Validates and sets the HOTP provided by a user
     :param user: the change is for this instance of the User object
@@ -151,7 +149,7 @@ def validate_hotp_secret(user, otp_secret):
     return True
 
 
-def download(zip_basename, submissions):
+def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> werkzeug.Response:
     """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
     containing *submissions*. The ZIP-file, being a
     :class:`tempfile.NamedTemporaryFile`, is stored on disk only
@@ -177,14 +175,17 @@ def download(zip_basename, submissions):
                      as_attachment=True)
 
 
-def delete_file_object(file_object):
+def delete_file_object(file_object: Union[Submission, Reply]) -> None:
     path = current_app.storage.path(file_object.source.filesystem_id, file_object.filename)
     current_app.storage.move_to_shredder(path)
     db.session.delete(file_object)
     db.session.commit()
 
 
-def bulk_delete(filesystem_id, items_selected):
+def bulk_delete(
+    filesystem_id: str,
+    items_selected: List[Union[Submission, Reply]]
+) -> werkzeug.Response:
     for item in items_selected:
         delete_file_object(item)
 
@@ -195,14 +196,14 @@ def bulk_delete(filesystem_id, items_selected):
     return redirect(url_for('col.col', filesystem_id=filesystem_id))
 
 
-def confirm_bulk_delete(filesystem_id, items_selected):
+def confirm_bulk_delete(filesystem_id: str, items_selected: List[Union[Submission, Reply]]) -> str:
     return render_template('delete.html',
                            filesystem_id=filesystem_id,
                            source=g.source,
                            items_selected=items_selected)
 
 
-def make_star_true(filesystem_id):
+def make_star_true(filesystem_id: str) -> None:
     source = get_source(filesystem_id)
     if source.star:
         source.star.starred = True
@@ -211,7 +212,7 @@ def make_star_true(filesystem_id):
         db.session.add(source_star)
 
 
-def make_star_false(filesystem_id):
+def make_star_false(filesystem_id: str) -> None:
     source = get_source(filesystem_id)
     if not source.star:
         source_star = SourceStar(source)
@@ -220,7 +221,7 @@ def make_star_false(filesystem_id):
     source.star.starred = False
 
 
-def col_star(cols_selected):
+def col_star(cols_selected: List[str]) -> werkzeug.Response:
     for filesystem_id in cols_selected:
         make_star_true(filesystem_id)
 
@@ -228,7 +229,7 @@ def col_star(cols_selected):
     return redirect(url_for('main.index'))
 
 
-def col_un_star(cols_selected):
+def col_un_star(cols_selected: List[str]) -> werkzeug.Response:
     for filesystem_id in cols_selected:
         make_star_false(filesystem_id)
 
@@ -236,7 +237,7 @@ def col_un_star(cols_selected):
     return redirect(url_for('main.index'))
 
 
-def col_delete(cols_selected):
+def col_delete(cols_selected: List[str]) -> werkzeug.Response:
     """deleting multiple collections from the index"""
     if len(cols_selected) < 1:
         flash(gettext("No collections selected for deletion."), "error")
@@ -254,7 +255,7 @@ def col_delete(cols_selected):
     return redirect(url_for('main.index'))
 
 
-def make_password(config: 'SDConfig') -> str:
+def make_password(config: SDConfig) -> str:
     while True:
         password = current_app.crypto_util.genrandomid(
             7,
@@ -266,7 +267,7 @@ def make_password(config: 'SDConfig') -> str:
             continue
 
 
-def delete_collection(filesystem_id):
+def delete_collection(filesystem_id: str) -> None:
     # Delete the source's collection of submissions
     path = current_app.storage.path(filesystem_id)
     if os.path.exists(path):
@@ -285,7 +286,7 @@ def delete_collection(filesystem_id):
     db.session.commit()
 
 
-def purge_deleted_sources():
+def purge_deleted_sources() -> None:
     """
     Deletes all Sources with a non-null `deleted_at` attribute.
     """
@@ -299,7 +300,7 @@ def purge_deleted_sources():
             current_app.logger.error("Error deleting source %s: %s", source.uuid, e)
 
 
-def set_name(user, first_name, last_name):
+def set_name(user: Journalist, first_name: Optional[str], last_name: Optional[str]) -> None:
     try:
         user.set_name(first_name, last_name)
         db.session.commit()
@@ -308,7 +309,7 @@ def set_name(user, first_name, last_name):
         flash(gettext('Name not updated: {}'.format(e)), "error")
 
 
-def set_diceware_password(user, password):
+def set_diceware_password(user: Journalist, password: Optional[str]) -> bool:
     try:
         user.set_password(password)
     except PasswordError:
@@ -336,9 +337,9 @@ def set_diceware_password(user, password):
     return True
 
 
-def col_download_unread(cols_selected):
+def col_download_unread(cols_selected: List[str]) -> werkzeug.Response:
     """Download all unread submissions from all selected sources."""
-    submissions = []
+    submissions = []  # type: List[Union[Source, Submission]]
     for filesystem_id in cols_selected:
         id = Source.query.filter(Source.filesystem_id == filesystem_id) \
                          .filter_by(deleted_at=None).one().id
@@ -352,9 +353,9 @@ def col_download_unread(cols_selected):
     return download("unread", submissions)
 
 
-def col_download_all(cols_selected):
+def col_download_all(cols_selected: List[str]) -> werkzeug.Response:
     """Download all submissions from all selected sources."""
-    submissions = []
+    submissions = []  # type: List[Union[Source, Submission]]
     for filesystem_id in cols_selected:
         id = Source.query.filter(Source.filesystem_id == filesystem_id) \
                          .filter_by(deleted_at=None).one().id
@@ -363,7 +364,7 @@ def col_download_all(cols_selected):
     return download("all", submissions)
 
 
-def serve_file_with_etag(db_obj):
+def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> werkzeug.Response:
     file_path = current_app.storage.path(db_obj.source.filesystem_id, db_obj.filename)
     response = send_file(file_path,
                          mimetype="application/pgp-encrypted",
@@ -382,7 +383,7 @@ class JournalistInterfaceSessionInterface(
         sessions.SecureCookieSessionInterface):
     """A custom session interface that skips storing sessions for api requests but
     otherwise just uses the default behaviour."""
-    def save_session(self, app, session, response):
+    def save_session(self, app: flask.Flask, session: Any, response: werkzeug.Response) -> None:
         # If this is an api request do not save the session
         if request.path.split("/")[1] == "api":
             return
@@ -391,7 +392,7 @@ class JournalistInterfaceSessionInterface(
                 app, session, response)
 
 
-def cleanup_expired_revoked_tokens():
+def cleanup_expired_revoked_tokens() -> None:
     """Remove tokens that have now expired from the revoked token table."""
 
     revoked_tokens = db.session.query(RevokedToken).all()
@@ -406,7 +407,7 @@ def cleanup_expired_revoked_tokens():
     db.session.commit()
 
 
-def revoke_token(user, auth_token):
+def revoke_token(user: Journalist, auth_token: str) -> None:
     revoked_token = RevokedToken(token=auth_token, journalist_id=user.id)
     db.session.add(revoked_token)
     db.session.commit()

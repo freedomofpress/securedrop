@@ -44,7 +44,7 @@ ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
 
 def get_one_or_else(query: 'Query',
                     logger: 'Logger',
-                    failure_method: 'Callable[[int], None]') -> None:
+                    failure_method: 'Callable[[int], None]') -> db.Model:
     try:
         return query.one()
     except MultipleResultsFound as e:
@@ -452,7 +452,10 @@ class Journalist(db.Model):
     MAX_PASSWORD_LEN = 128
     MIN_PASSWORD_LEN = 14
 
-    def set_password(self, passphrase: str) -> None:
+    def set_password(self, passphrase: 'Optional[str]') -> None:
+        if passphrase is None:
+            raise PasswordError()
+
         self.check_password_acceptable(passphrase)
 
         # "migrate" from the legacy case
@@ -470,7 +473,7 @@ class Journalist(db.Model):
 
         self.passphrase_hash = argon2.using(**ARGON2_PARAMS).hash(passphrase)
 
-    def set_name(self, first_name, last_name):
+    def set_name(self, first_name: 'Optional[str]', last_name: 'Optional[str]') -> None:
         if first_name:
             self.check_name_acceptable(first_name)
         if last_name:
@@ -509,7 +512,10 @@ class Journalist(db.Model):
         if len(password.split()) < 7:
             raise NonDicewarePassword()
 
-    def valid_password(self, passphrase: str) -> bool:
+    def valid_password(self, passphrase: 'Optional[str]') -> bool:
+        if not passphrase:
+            return False
+
         # Avoid hashing passwords that are over the maximum length
         if len(passphrase) > self.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(passphrase)
@@ -596,7 +602,10 @@ class Journalist(db.Model):
         that many clients add for readability"""
         return ''.join(token.split())
 
-    def verify_token(self, token: str) -> bool:
+    def verify_token(self, token: 'Optional[str]') -> bool:
+        if not token:
+            return False
+
         token = self._format_token(token)
 
         # Store latest token to prevent OTP token reuse
@@ -644,8 +653,8 @@ class Journalist(db.Model):
     @classmethod
     def login(cls,
               username: str,
-              password: str,
-              token: str) -> 'Journalist':
+              password: 'Optional[str]',
+              token: 'Optional[str]') -> 'Journalist':
 
         try:
             user = Journalist.query.filter_by(username=username).one()
