@@ -185,10 +185,10 @@ class FunctionalTest(object):
         if hasattr(self, 'torbrowser_driver'):
             disable_js(self.torbrowser_driver)
 
-    def start_source_server(self, app, source_port):
+    def start_source_server(self, source_port):
         config.SESSION_EXPIRATION_MINUTES = self.session_expiration / 60.0
 
-        app.run(port=source_port, debug=True, use_reloader=False, threaded=True)
+        self.source_app.run(port=source_port, debug=True, use_reloader=False, threaded=True)
 
     @pytest.fixture(autouse=True)
     def set_default_driver(self):
@@ -270,7 +270,7 @@ class FunctionalTest(object):
                         app.run(port=journalist_port, debug=True, use_reloader=False, threaded=True)
 
                     self.source_process = Process(
-                        target=lambda: self.start_source_server(self.source_app, source_port)
+                        target=lambda: self.start_source_server(source_port)
                     )
 
                     self.journalist_process = Process(

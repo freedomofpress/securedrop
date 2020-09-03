@@ -7,13 +7,13 @@ class TestSourceInterfaceDesignationCollision(
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationStepsMixin):
 
-    def start_source_server(self, app, source_port):
+    def start_source_server(self, source_port):
         self.source_app.crypto_util.adjectives = \
             self.source_app.crypto_util.adjectives[:1]
         self.source_app.crypto_util.nouns = self.source_app.crypto_util.nouns[:1]
         config.SESSION_EXPIRATION_MINUTES = self.session_expiration / 60.0
 
-        app.run(port=source_port, debug=True, use_reloader=False, threaded=True)
+        self.source_app.run(port=source_port, debug=True, use_reloader=False, threaded=True)
 
     def test_display_id_designation_collisions(self):
         self._source_visits_source_homepage()
