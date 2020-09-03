@@ -4,4 +4,4 @@
   gather_facts: no
   tasks:
     - name: Install python
-      raw: apt-get update && apt-get install -qq python-minimal apt-transport-https
+      raw: apt-get update && apt-get install -qq python3 apt-transport-https
