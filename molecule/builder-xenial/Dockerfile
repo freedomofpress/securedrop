@@ -1,5 +1,5 @@
-# ubuntu:xenial-20190122
-FROM ubuntu@sha256:e4a134999bea4abb4a27bc437e6118fdddfb172e1b9d683129b74d254af51675
+# ubuntu:xenial-20200902
+FROM ubuntu@sha256:3dd44f7ca10f07f86add9d0dc611998a1641f501833692a2651c96defe8db940
 
 # additional meta-data makes it easier to clean up, find
 LABEL org="Freedom of the Press"
@@ -7,8 +7,10 @@ LABEL image_name="xenial-sd-builder-app"
 
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         apache2-dev \
+        apt-transport-https \
         aptitude \
         coreutils \
+        curl \
         debhelper \
         devscripts \
         dh-python \
@@ -32,14 +34,14 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         sudo \
         tzdata \
         unzip \
-        && apt-get clean \
-        && rm -rf /var/lib/apt/lists/*
+        virtualenv
 
 #install dh-virtualenv from debian unstable
+RUN curl https://ftp-master.debian.org/keys/archive-key-10.asc -o /tmp/debian-stable-archive-pubkey.asc && \
+        apt-key add /tmp/debian-stable-archive-pubkey.asc
 RUN echo "deb https://deb.debian.org/debian unstable main contrib" > /etc/apt/sources.list.d/debian-unstable.list
 COPY aptpreferences.conf /etc/apt/preferences.d/debian-unstable
-RUN apt-get install -y debian-archive-keyring
-RUN ln -s /usr/share/keyrings/debian-archive-keyring.gpg /etc/apt/trusted.gpg.d/
-RUN apt-get update && apt-get install -y dh-virtualenv
+RUN apt-get update && apt-get install -y -t unstable dh-virtualenv
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN paxctl -cm /usr/bin/python3.5 && mkdir -p /tmp/build
