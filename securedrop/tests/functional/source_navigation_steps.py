@@ -123,6 +123,14 @@ class SourceNavigationStepsMixin:
 
         self.wait_for(submit_page_loaded)
 
+    def _source_continues_to_submit_page_with_colliding_journalist_designation(self):
+        self.safe_click_by_id("continue-button")
+
+        self.wait_for(lambda: self.driver.find_element_by_css_selector(".error"))
+        flash_error = self.driver.find_element_by_css_selector(".error")
+        assert "There was a temporary problem creating your account. Please try again." \
+               == flash_error.text
+
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
             file.write(self.secret_message.encode("utf-8"))
