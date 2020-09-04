@@ -1,0 +1,7 @@
+---
+- name: Install base apt depedencies
+  apt:
+    name: "{{ securedrop_common_packages }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600

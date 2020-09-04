@@ -1,0 +1,9 @@
+---
+securedrop_kernel_packages_to_remove:
+  - linux-signed-generic
+  - linux-signed-generic-lts-utopic
+  - linux-signed-image-generic
+  - linux-signed-image-generic-lts-utopic
+  - linux-image-generic-lts-xenial
+  - 'linux-image-.*generic'
+  - 'linux-headers-.*'

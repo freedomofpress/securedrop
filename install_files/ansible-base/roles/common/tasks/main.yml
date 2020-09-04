@@ -1,5 +1,7 @@
 ---
-- include: install_ntp.yml
+- include_vars: "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
+
+- include: install_packages.yml
 
 - include: post_ubuntu_install_checks.yml
 
@@ -8,8 +10,6 @@
 - include: setup_etc_hosts.yml
 
 - include: harden_dns.yml
-
-- include: install_tmux.yml
 
 - include: cron_apt.yml
   tags:
