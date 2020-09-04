@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import os
+from typing import Optional
+from typing import Union
 
+import werkzeug
 from flask import (Blueprint, render_template, request, url_for, redirect, g,
                    current_app, flash, abort)
 from flask_babel import gettext
@@ -15,26 +18,30 @@ from journalist_app.decorators import admin_required
 from journalist_app.utils import (make_password, commit_account_changes, set_diceware_password,
                                   validate_hotp_secret, revoke_token)
 from journalist_app.forms import LogoForm, NewUserForm, SubmissionPreferencesForm
+from sdconfig import SDConfig
 
 
-def make_blueprint(config):
+def make_blueprint(config: SDConfig) -> Blueprint:
     view = Blueprint('admin', __name__)
 
     @view.route('/', methods=('GET', 'POST'))
     @admin_required
-    def index():
+    def index() -> str:
         users = Journalist.query.all()
         return render_template("admin.html", users=users)
 
     @view.route('/config', methods=('GET', 'POST'))
     @admin_required
-    def manage_config():
+    def manage_config() -> Union[str, werkzeug.Response]:
         # The UI prompt ("prevent") is the opposite of the setting ("allow"):
         submission_preferences_form = SubmissionPreferencesForm(
             prevent_document_uploads=not current_app.instance_config.allow_document_uploads)
         logo_form = LogoForm()
         if logo_form.validate_on_submit():
             f = logo_form.logo.data
+
+            if current_app.static_folder is None:
+                abort(500)
             custom_logo_filepath = os.path.join(current_app.static_folder, 'i',
                                                 'custom_logo.png')
             try:
@@ -55,7 +62,7 @@ def make_blueprint(config):
 
     @view.route('/update-submission-preferences', methods=['POST'])
     @admin_required
-    def update_submission_preferences():
+    def update_submission_preferences() -> Optional[werkzeug.Response]:
         form = SubmissionPreferencesForm()
         if form.validate_on_submit():
             # The UI prompt ("prevent") is the opposite of the setting ("allow"):
@@ -63,10 +70,12 @@ def make_blueprint(config):
             value = not bool(request.form.get('prevent_document_uploads'))
             InstanceConfig.set('allow_document_uploads', value)
             return redirect(url_for('admin.manage_config'))
+        else:
+            return None
 
     @view.route('/add', methods=('GET', 'POST'))
     @admin_required
-    def add_user():
+    def add_user() -> Union[str, werkzeug.Response]:
         form = NewUserForm()
         if form.validate_on_submit():
             form_valid = True
@@ -121,7 +130,7 @@ def make_blueprint(config):
 
     @view.route('/2fa', methods=('GET', 'POST'))
     @admin_required
-    def new_user_two_factor():
+    def new_user_two_factor() -> Union[str, werkzeug.Response]:
         user = Journalist.query.get(request.args['uid'])
 
         if request.method == 'POST':
@@ -141,7 +150,7 @@ def make_blueprint(config):
 
     @view.route('/reset-2fa-totp', methods=['POST'])
     @admin_required
-    def reset_two_factor_totp():
+    def reset_two_factor_totp() -> werkzeug.Response:
         uid = request.form['uid']
         user = Journalist.query.get(uid)
         user.is_totp = True
@@ -151,7 +160,7 @@ def make_blueprint(config):
 
     @view.route('/reset-2fa-hotp', methods=['POST'])
     @admin_required
-    def reset_two_factor_hotp():
+    def reset_two_factor_hotp() -> Union[str, werkzeug.Response]:
         uid = request.form['uid']
         otp_secret = request.form.get('otp_secret', None)
         if otp_secret:
@@ -165,7 +174,7 @@ def make_blueprint(config):
 
     @view.route('/edit/<int:user_id>', methods=('GET', 'POST'))
     @admin_required
-    def edit_user(user_id):
+    def edit_user(user_id: int) -> Union[str, werkzeug.Response]:
         user = Journalist.query.get(user_id)
 
         if request.method == 'POST':
@@ -218,7 +227,7 @@ def make_blueprint(config):
 
     @view.route('/delete/<int:user_id>', methods=('POST',))
     @admin_required
-    def delete_user(user_id):
+    def delete_user(user_id: int) -> werkzeug.Response:
         user = Journalist.query.get(user_id)
         if user_id == g.user.id:
             # Do not flash because the interface already has safe guards.
@@ -241,7 +250,7 @@ def make_blueprint(config):
 
     @view.route('/edit/<int:user_id>/new-password', methods=('POST',))
     @admin_required
-    def new_password(user_id):
+    def new_password(user_id: int) -> werkzeug.Response:
         try:
             user = Journalist.query.get(user_id)
         except NoResultFound:
@@ -257,7 +266,7 @@ def make_blueprint(config):
 
     @view.route('/ossec-test')
     @admin_required
-    def ossec_test():
+    def ossec_test() -> werkzeug.Response:
         current_app.logger.error('This is a test OSSEC alert')
         flash(gettext('Test alert sent. Please check your email.'),
               'notification')
