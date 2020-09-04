@@ -1,5 +1,7 @@
 ---
-build_ossec_deb_pkg_dependencies: ['libevent1-dev','libpcre2-dev']
+build_ossec_deb_pkg_dependencies:
+  - "libpcre2-dev"
+  - "{{ 'libevent-dev' if securedrop_build_focal_support else 'libevent1-dev' }}"
 
 ossec_server_hostname: ossec-server
 ossec_version: 3.6.0
@@ -23,3 +25,8 @@ ossec_build_rsync_ansible_hack_opt:
   - "--rsync-path='sudo rsync'"
 
 ossec_source_checksum: sha256:653828a19137b8a7e98af65e873318f7bb48137fe1e61b80577e13c316e04708
+
+# Default is xenial.
+securedrop_build_focal_support: False
+securedrop_package_dist: "{{ 'focal' if securedrop_build_focal_support else 'xenial' }}"
+

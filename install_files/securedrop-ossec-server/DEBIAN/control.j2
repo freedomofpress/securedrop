@@ -6,7 +6,11 @@ Homepage: https://securedrop.org
 Package: securedrop-ossec-server
 Version: 3.6.0+1.6.0~rc1
 Architecture: amd64
+{% if securedrop_build_focal_support %}
+Depends: libevent-2.1.7,libpcre2-8-0,ossec-server,securedrop-keyring,securedrop-config
+{% else %}
 Depends: libevent-1.4-2,libpcre2-8-0,ossec-server,securedrop-keyring,securedrop-config
+{% endif %}
 Replaces: ossec-server
 Conflicts: securedrop-ossec-agent
 Description: Installs the pre-packaged OSSEC server

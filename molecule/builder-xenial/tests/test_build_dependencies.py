@@ -3,6 +3,8 @@ import os
 
 
 SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM")
+SECUREDROP_PYTHON_VERSION = os.environ.get("SECUREDROP_PYTHON_VERSION", "3.5")
+SECUREDROP_DH_VIRTUALENV_VERSION = os.environ.get("SECUREDROP_DH_VIRTUALENV_VERSION", "1.2.1")
 testinfra_hosts = [
         "docker://{}-sd-app".format(SECUREDROP_TARGET_PLATFORM)
 ]
@@ -38,3 +40,27 @@ def test_build_all_packages_updated(host):
     c = host.run('aptitude --simulate -y dist-upgrade')
     assert c.rc == 0
     assert "No packages will be installed, upgraded, or removed." in c.stdout
+
+
+def test_python_version(host):
+    """
+    The Python 3 version shouldn't change between LTS releases, but we're
+    pulling in some packages from Debian for dh-virtualenv support, so
+    we must be careful not to change Python as well.
+    """
+    c = host.run("python3 --version")
+    version_string = "Python {}".format(SECUREDROP_PYTHON_VERSION)
+    assert c.stdout.startswith(version_string)
+
+
+def test_dh_virtualenv(host):
+    """
+    The version of dh-virtualenv in Xenial repos isn't new enough to work
+    with setuptools >= 50, so we pull it in from Debian. Confirm the expected
+    recent version of dh-virtualenv is found. Since we're tracking Debian unstable
+    for this dependency, this check will fail if unstable surprises us with a new
+    version.
+    """
+    c = host.run("dh_virtualenv --version")
+    version_string = "dh_virtualenv {}".format(SECUREDROP_DH_VIRTUALENV_VERSION)
+    assert c.stdout.startswith(version_string)

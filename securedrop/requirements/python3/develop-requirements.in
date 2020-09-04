@@ -1,9 +1,10 @@
 ansible>=2.9.7,<2.10.0
+argon2_cffi>=20.1.0
 bandit
 # yes, we need both boto and boto3
 boto
 boto3
-cffi>=1.14.0
+cffi>=1.14.2
 docker-py
 # Needed for dig ansible lookup
 dnspython

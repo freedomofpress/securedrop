@@ -5,7 +5,7 @@ DEB_DH_INSTALL_ARGS=-X .git
 SECUREDROP_BUILD_PLATFORM=$(shell lsb_release -sc)
 
 %:
-	dh $@ --with python-virtualenv --with systemd
+	dh $@ --buildsystem=dh_virtualenv --with systemd
 
 override_dh_gencontrol:
 	dh_gencontrol -- $(SUBSTVARS)
@@ -23,16 +23,6 @@ override_dh_strip_nondeterminism:
 	find ./debian/ -type f -name 'pip-selfcheck.json' -delete
 	find -type f -name RECORD -exec sed -i -e '/.*\.pyc.*/d' {} +
 	dh_strip_nondeterminism $@
-
-override_dh_virtualenv:
-	dh_virtualenv \
-		--python=/usr/bin/python3.5 \
-		--setuptools \
-		--extra-pip-arg "--verbose" \
-		--extra-pip-arg "--ignore-installed" \
-		--extra-pip-arg "--no-deps" \
-		--extra-pip-arg "--no-binary=:all:" \
-		--extra-pip-arg "--no-cache-dir"
 
 #
 # Have to override the automatic service handling since we have more

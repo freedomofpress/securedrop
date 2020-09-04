@@ -57,6 +57,18 @@
     src: "changelog-{{ securedrop_package_dist }}"
     dest: "{{ securedrop_app_code_prep_dir }}/debian/changelog"
 
+- name: Replace the files required for focal package
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items: "{{ securedrop_app_focal_files }}"
+  when: securedrop_build_focal_support
+
+- name: Create the control file based on distribution
+  template:
+    src: "control.j2"
+    dest: "{{ securedrop_app_code_prep_dir }}/debian/control"
+
 - name: Create lib/systemd/services directory in prep directory
   file:
     state: directory
@@ -105,6 +117,9 @@
   args:
     chdir: "{{ securedrop_app_code_deb_dir }}"
   environment:
+    DH_PIP_EXTRA_ARGS: "--verbose --ignore-installed --no-deps --no-binary=:all: --no-cache-dir"
+    DH_UPGRADE_SETUPTOOLS: "46.0.0"
+    DH_VIRTUALENV_ARGUMENTS: "{{  '--python=/usr/bin/python3.8 --setuptools  46.0.0' if securedrop_build_focal_support else '--python=/usr/bin/python3.5 --setuptools' }}"
     DH_VIRTUALENV_INSTALL_ROOT: "/opt/venvs"
 
 - name: Find newly built Debian package

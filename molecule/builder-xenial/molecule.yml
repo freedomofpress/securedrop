@@ -72,6 +72,7 @@ verifier:
     n: auto
   env:
     SECUREDROP_TARGET_PLATFORM: xenial
+    SECUREDROP_PYTHON_VERSION: "3.5"
   directory: tests/
   lint:
     name: flake8
