@@ -4,7 +4,7 @@ import os
 
 SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM")
 SECUREDROP_PYTHON_VERSION = os.environ.get("SECUREDROP_PYTHON_VERSION", "3.5")
-SECUREDROP_DH_VIRTUALENV_VERSION = os.environ.get("SECUREDROP_DH_VIRTUALENV_VERSION", "1.2.1")
+SECUREDROP_DH_VIRTUALENV_VERSION = os.environ.get("SECUREDROP_DH_VIRTUALENV_VERSION", "0.11")
 testinfra_hosts = [
         "docker://{}-sd-app".format(SECUREDROP_TARGET_PLATFORM)
 ]
@@ -55,11 +55,7 @@ def test_python_version(host):
 
 def test_dh_virtualenv(host):
     """
-    The version of dh-virtualenv in Xenial repos isn't new enough to work
-    with setuptools >= 50, so we pull it in from Debian. Confirm the expected
-    recent version of dh-virtualenv is found. Since we're tracking Debian unstable
-    for this dependency, this check will fail if unstable surprises us with a new
-    version.
+    Confirm the expected version of dh-virtualenv is found.
     """
     c = host.run("dh_virtualenv --version")
     version_string = "dh_virtualenv {}".format(SECUREDROP_DH_VIRTUALENV_VERSION)
