@@ -4,13 +4,11 @@ import pytest
 testinfra_hosts = ["app-staging"]
 sdvars = pytest.securedrop_test_vars
 
-sdbin = "/opt/venvs/securedrop-app-code/bin"
-
 
 @pytest.mark.parametrize('exp_pip_pkg', sdvars.pip_deps)
 def test_app_pip_deps(host, exp_pip_pkg):
     """ Ensure pip dependencies are installed """
-    pip = host.pip_package.get_packages(pip_path=os.path.join(sdbin, "pip"))
+    pip = host.pip_package.get_packages(pip_path=os.path.join(sdvars.securedrop_venv_bin, "pip"))
     assert pip[exp_pip_pkg['name']]['version'] == exp_pip_pkg['version']
 
 
@@ -46,6 +44,18 @@ def test_app_directories(host, app_dir):
 def test_app_code_pkg(host):
     """ ensure securedrop-app-code package is installed """
     assert host.package("securedrop-app-code").is_installed
+
+
+def test_app_code_venv(host):
+    """
+    Ensure the securedrop-app-code virtualenv is correct.
+    """
+    cmd = """test -z $VIRTUAL_ENV && . {}/bin/activate && test "$VIRTUAL_ENV" = "{}" """.format(
+        sdvars.securedrop_venv, sdvars.securedrop_venv
+    )
+
+    result = host.run(cmd)
+    assert result.rc == 0
 
 
 def test_supervisor_not_installed(host):
