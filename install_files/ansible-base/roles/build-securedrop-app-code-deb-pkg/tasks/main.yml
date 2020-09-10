@@ -29,13 +29,13 @@
 - name: Copy requirements.txt to prep directory
   command: cp "{{ securedrop_pip_requirements }}" "{{ securedrop_app_code_prep_dir }}/requirements.txt"
 
-- include: sass.yml
-
-- name: Install SecureDrop Python requirements in container
+- name: Control the version of setuptools used in the default construction of virtual environments
   shell: |
-    pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_app_code_prep_dir }}/requirements.txt
-  tags:
-    - pip
+    pip3 download --require-hashes -r "{{ securedrop_app_code_prep_dir }}/requirements.txt" --dest /tmp/securedrop-app-code-requirements-download
+    rm -f /usr/share/python-wheels/setuptools-*.whl
+    mv /tmp/securedrop-app-code-requirements-download/setuptools-*.whl /usr/share/python-wheels/
+
+- include: sass.yml
 
 - include: translations.yml
 

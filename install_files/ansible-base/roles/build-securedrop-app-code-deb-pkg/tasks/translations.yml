@@ -1,10 +1,18 @@
 ---
 
+- name: Install SecureDrop Python requirements in virtualenv for translation work
+  shell: |
+    python3 -m venv /tmp/securedrop-app-code-i18n-ve
+    /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_app_code_prep_dir }}/requirements.txt
+  tags:
+    - pip
+
 - name: Compile PO to MO.
   shell: >-
     cp config.py.example config.py ;
     trap 'rm config.py' EXIT ;
-    python3 ./i18n_tool.py --verbose translate-messages --compile
+    . /tmp/securedrop-app-code-i18n-ve/bin/activate ;
+    /tmp/securedrop-app-code-i18n-ve/bin/python3 ./i18n_tool.py --verbose translate-messages --compile
   args:
     chdir: "{{ securedrop_code_filtered }}"
   environment:

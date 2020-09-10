@@ -4,7 +4,7 @@ import os
 
 SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM")
 SECUREDROP_PYTHON_VERSION = os.environ.get("SECUREDROP_PYTHON_VERSION", "3.5")
-SECUREDROP_DH_VIRTUALENV_VERSION = os.environ.get("SECUREDROP_DH_VIRTUALENV_VERSION", "0.11")
+
 testinfra_hosts = [
         "docker://{}-sd-app".format(SECUREDROP_TARGET_PLATFORM)
 ]
@@ -16,15 +16,6 @@ def test_sass_gem_installed(host):
     """
     c = host.run("gem list")
     assert "sass (3.4.23)" in c.stdout
-    assert c.rc == 0
-
-
-def test_pip_dependencies_installed(host):
-    """
-    Ensure the development pip dependencies are installed
-    """
-    c = host.run("pip3 list installed")
-    assert "Flask-Babel" in c.stdout
     assert c.rc == 0
 
 
@@ -57,6 +48,7 @@ def test_dh_virtualenv(host):
     """
     Confirm the expected version of dh-virtualenv is found.
     """
+    expected_version = "0.11" if host.system_info.codename == "xenial" else "1.2.1"
+    version_string = "dh_virtualenv {}".format(expected_version)
     c = host.run("dh_virtualenv --version")
-    version_string = "dh_virtualenv {}".format(SECUREDROP_DH_VIRTUALENV_VERSION)
     assert c.stdout.startswith(version_string)
