@@ -79,6 +79,6 @@ class SDConfig:
                 config.DATABASE_NAME
             )
         return db_uri
-        
+
 
 config = SDConfig()  # type: SDConfig

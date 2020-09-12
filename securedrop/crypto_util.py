@@ -37,7 +37,9 @@ DICEWARE_SAFE_CHARS = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzA'
                        'BCDEFGHIJKLMNOPQRSTUVWXYZ')
 
 
-def monkey_patch_delete_handle_status(self: gnupg._parsers.DeleteResult, key: str, value: str) -> None:
+def monkey_patch_delete_handle_status(
+    self: gnupg._parsers.DeleteResult, key: str, value: str
+) -> None:
     """
     Parse a status code from the attached GnuPG process.
     :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
