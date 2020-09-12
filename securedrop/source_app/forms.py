@@ -1,3 +1,4 @@
+import wtforms
 from flask import current_app
 from flask_babel import lazy_gettext as gettext
 from flask_wtf import FlaskForm
@@ -24,7 +25,7 @@ class SubmissionForm(FlaskForm):
     msg = TextAreaField("msg", render_kw={"placeholder": gettext("Write a message.")})
     fh = FileField("fh")
 
-    def validate_msg(self, field):
+    def validate_msg(self, field: wtforms.Field) -> None:
         if len(field.data) > Submission.MAX_MESSAGE_LEN:
             message = gettext("Message text too long.")
             if current_app.instance_config.allow_document_uploads:
