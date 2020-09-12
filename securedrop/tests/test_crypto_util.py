@@ -7,6 +7,8 @@ import os
 import pytest
 import re
 
+from flask import url_for, session
+
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import crypto_util
 import models
@@ -196,6 +198,20 @@ def test_display_id(source_app):
     assert len(id_words) == 2
     assert id_words[0] in source_app.crypto_util.adjectives
     assert id_words[1] in source_app.crypto_util.nouns
+
+
+def test_display_id_designation_collisions(source_app):
+    with source_app.test_client() as app:
+        app.get(url_for('main.generate'))
+        source_app.crypto_util.adjectives = source_app.crypto_util.adjectives[:1]
+        source_app.crypto_util.nouns = source_app.crypto_util.nouns[:1]
+        tab_id = next(iter(session['codenames'].keys()))
+        app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
+
+        with pytest.raises(ValueError) as err:
+            source_app.crypto_util.display_id()
+
+        assert 'Could not generate unique journalist designation for new source' in str(err)
 
 
 def test_genkeypair(source_app):

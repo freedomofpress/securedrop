@@ -18,32 +18,43 @@ RUN apt-get update && apt-get install -y paxctl && \
 
 RUN gem install sass -v 3.4.23
 
-ENV FF_ESR_VER 60.6.1esr
-RUN curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x86_64/en-US/firefox-${FF_ESR_VER}.tar.bz2 && \
-    curl -LO https://ftp.mozilla.org/pub/firefox/releases/${FF_ESR_VER}/linux-x86_64/en-US/firefox-${FF_ESR_VER}.tar.bz2.asc && \
-    gpg --recv-key --keyserver gpg.mozilla.org 0x61B7B526D98F0353 && \
-    gpg --verify firefox-${FF_ESR_VER}.tar.bz2.asc && \
-    tar xjf firefox-*.tar.bz2 && \
-    mv firefox /usr/bin && \
-    paxctl -cm /usr/bin/firefox/firefox
+# Current versions of the test browser software. Tor Browser is based
+# on a specific version of Firefox, noted in Help > About Tor Browser.
+# Ideally we'll keep those in sync.
+ENV FF_VERSION 68.12.0esr
+ENV GECKODRIVER_VERSION v0.27.0
+ENV TBB_VERSION 9.5.4
 
-COPY ./tor_project_public.pub /opt/
+# Import Tor release signing key
+ENV TOR_RELEASE_KEY_FINGERPRINT "EF6E286DDA85EA2A4BA7DE684E2C6E8793298290"
+RUN curl -s https://openpgpkey.torproject.org/.well-known/openpgpkey/torproject.org/hu/kounek7zrdx745qydx6p59t9mqjpuhdf | gpg2 --import -
 
-ENV TBB_VERSION 9.5.3
-RUN gpg --import /opt/tor_project_public.pub && \
-    wget  https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
+# Install Tor Browser
+RUN wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
-    gpg --verify tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
+    gpg2 --verify tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc 2>&1 | grep "Primary key fingerprint:" | sed -e 's/Primary key fingerprint: //' -e 's/ //g' | tail -1 | grep -qE "${TOR_RELEASE_KEY_FINGERPRINT}" && \
     tar -xvJf tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     mkdir -p /root/.local/tbb && mv tor-browser_en-US /root/.local/tbb &&\
     paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/firefox.real && \
     paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/libnspr4.so && \
     paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/plugin-container
 
-ENV GECKODRIVER_CHECKSUM=03be3d3b16b57e0f3e7e8ba7c1e4bf090620c147e6804f6c6f3203864f5e3784
-RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz && \
-    shasum -a 256 geckodriver*tar.gz && \
-    echo "${GECKODRIVER_CHECKSUM}  geckodriver-v0.24.0-linux64.tar.gz" | shasum -a 256 -c - && \
+# Import Mozilla release signing key
+ENV MOZILLA_RELEASE_KEY_FINGERPRINT "14F26682D0916CDD81E37B6D61B7B526D98F0353"
+RUN curl -s https://archive.mozilla.org/pub/firefox/releases/${FF_VERSION}/KEY | gpg2 --import -
+
+# Install the version of Firefox on which Tor Browser is based
+RUN curl -LO https://archive.mozilla.org/pub/firefox/releases/${FF_VERSION}/linux-x86_64/en-US/firefox-${FF_VERSION}.tar.bz2 && \
+    curl -LO https://archive.mozilla.org/pub/firefox/releases/${FF_VERSION}/linux-x86_64/en-US/firefox-${FF_VERSION}.tar.bz2.asc && \
+    gpg2 --verify firefox-${FF_VERSION}.tar.bz2.asc 2>&1 | grep "Primary key fingerprint:" | sed -e 's/Primary key fingerprint: //' -e 's/ //g' | tail -1 | grep -qE "${MOZILLA_RELEASE_KEY_FINGERPRINT}" && \
+    tar xjf firefox-*.tar.bz2 && \
+    mv firefox /usr/bin && \
+    paxctl -cm /usr/bin/firefox/firefox
+
+# Install geckodriver
+RUN wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz && \
+    wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz.asc && \
+    gpg2 --verify geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz.asc && \
     tar -zxvf geckodriver*tar.gz && chmod +x geckodriver && mv geckodriver /bin && \
     paxctl -cm /bin/geckodriver
 

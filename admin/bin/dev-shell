@@ -13,7 +13,10 @@ function docker_image() {
     local out
     out="$(mktemp)"
     cd "${TOPLEVEL}"
-    if ! docker build ${DOCKER_BUILD_ARGUMENTS:-} -t securedrop-admin -f admin/Dockerfile . >& "$out" ; then
+    if ! docker build \
+           --build-arg=USER_ID="$(id -u)" \
+           --build-arg=USER_NAME="${USER:-root}" \
+           ${DOCKER_BUILD_ARGUMENTS:-} -t securedrop-admin -f admin/Dockerfile . >& "$out" ; then
         cat "$out"
         status=1
     else
@@ -23,7 +26,18 @@ function docker_image() {
 }
 
 function docker_run() {
-    docker run --rm -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-admin "$@"
+    if [ -z "${CIRCLECI-}" ]
+    then
+        docker run \
+            --rm \
+            --user "${USER:-root}" \
+            --volume "${TOPLEVEL}:/sd-root" \
+            --workdir "/sd-root/admin" \
+            -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-admin "$@"
+    else
+        docker run --rm -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-admin "$@"
+    fi
+
 }
 
 docker_image

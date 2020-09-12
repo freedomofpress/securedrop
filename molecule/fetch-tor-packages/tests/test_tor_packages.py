@@ -2,13 +2,17 @@ import os
 import pytest
 
 
-testinfra_hosts = ['docker://tor-package-fetcher-xenial']
+testinfra_hosts = [
+    "docker://tor-package-fetcher-xenial",
+    "docker://tor-package-fetcher-focal",
+]
 TOR_DOWNLOAD_DIR = "/tmp/tor-debs"
 TOR_PACKAGES = [
     {"name": "tor", "arch": "amd64"},
     {"name": "tor-geoipdb", "arch": "all"},
 ]
-TOR_VERSION = "0.4.3.6-1~xenial+1"
+# The '{}' will be replaced with platform, e.g. Focal
+TOR_VERSION_TEMPLATE = "0.4.3.6-1~{}+1"
 
 
 def test_tor_apt_repo(host):
@@ -27,7 +31,8 @@ def test_tor_package_versions(host, pkg):
     """
     Inspect package info and confirm we're getting the version we expect.
     """
-    package_name = "{}_{}_{}.deb".format(pkg["name"], TOR_VERSION, pkg["arch"])
+    tor_version = TOR_VERSION_TEMPLATE.format(host.system_info.codename)
+    package_name = "{}_{}_{}.deb".format(pkg["name"], tor_version, pkg["arch"])
     filepath = os.path.join(TOR_DOWNLOAD_DIR, package_name)
     f = host.file(filepath)
     assert f.exists
@@ -35,16 +40,16 @@ def test_tor_package_versions(host, pkg):
 
     cmd = "dpkg-deb -f {} Version".format(filepath)
     package_version = host.check_output(cmd)
-    assert package_version == TOR_VERSION
+    assert package_version == tor_version
 
 
 def test_tor_package_platform(host):
     """
-    Sanity check to ensure we're running on Xenial, which is the only
-    option for SecureDrop distributions supported by upstream Tor Project.
+    Sanity check to ensure we're running on a version of Ubuntu
+    that is supported by the upstream Tor Project, i.e. Xenial or Focal.
     The Trusty channel was disabled by Tor Project on 2019-01-08.
     """
     assert host.system_info.type == "linux"
     assert host.system_info.distribution == "ubuntu"
-    assert host.system_info.codename == "xenial"
-    assert host.system_info.release == "16.04"
+    assert host.system_info.codename in ("xenial", "focal")
+    assert host.system_info.release in ("16.04", "20.04")

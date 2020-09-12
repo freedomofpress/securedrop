@@ -6,6 +6,10 @@ Homepage: http://ossec.net
 Package: ossec-server
 Version: {{ ossec_version }}
 Architecture: amd64
+{% if securedrop_build_focal_support %}
+Depends: libc6 (>=2.7),libssl1.1,adduser,expect,inotify-tools
+{% else %}
 Depends: libc6,libssl1.0.0,adduser,expect,libc6 (>= 2.7),inotify-tools
+{% endif %}
 Conflicts: ossec-agent
 Description: Installs generic OSSEC server

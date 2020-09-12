@@ -364,7 +364,7 @@ def col_download_all(cols_selected: List[str]) -> werkzeug.Response:
     return download("all", submissions)
 
 
-def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> flask.Response:
+def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> werkzeug.Response:
     file_path = current_app.storage.path(db_obj.source.filesystem_id, db_obj.filename)
     response = send_file(file_path,
                          mimetype="application/pgp-encrypted",

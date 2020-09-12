@@ -4,10 +4,12 @@ flake8
 flaky
 mock
 pbr
+pip==19.1
 pip-tools>=4.0.0
-pylint
-pytest
+pylint==2.5.0
+pytest==3.2.0
 requests>=2.22.0
 tox
 pexpect
 urllib3>=1.25.8
+pytest-catchlog
