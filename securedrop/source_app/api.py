@@ -1,18 +1,20 @@
 import json
 import platform
 
+import flask
 from flask import Blueprint, current_app, make_response
 
+from sdconfig import SDConfig
 from source_app.utils import get_sourcev2_url, get_sourcev3_url
 
 import version
 
 
-def make_blueprint(config):
+def make_blueprint(config: SDConfig) -> Blueprint:
     view = Blueprint('api', __name__)
 
     @view.route('/metadata')
-    def metadata():
+    def metadata() -> flask.Response:
         meta = {
             'allow_document_uploads': current_app.instance_config.allow_document_uploads,
             'gpg_fpr': config.JOURNALIST_KEY,
