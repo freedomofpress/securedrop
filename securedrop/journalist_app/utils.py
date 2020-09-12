@@ -149,7 +149,7 @@ def validate_hotp_secret(user: Journalist, otp_secret: str) -> bool:
     return True
 
 
-def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> werkzeug.Response:
+def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> flask.Response:
     """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
     containing *submissions*. The ZIP-file, being a
     :class:`tempfile.NamedTemporaryFile`, is stored on disk only
@@ -364,7 +364,7 @@ def col_download_all(cols_selected: List[str]) -> werkzeug.Response:
     return download("all", submissions)
 
 
-def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> werkzeug.Response:
+def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> flask.Response:
     file_path = current_app.storage.path(db_obj.source.filesystem_id, db_obj.filename)
     response = send_file(file_path,
                          mimetype="application/pgp-encrypted",
