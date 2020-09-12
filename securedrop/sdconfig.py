@@ -18,17 +18,17 @@ class SDConfig:
         self.DATABASE_ENGINE = _config.DATABASE_ENGINE  # type: str
         self.DATABASE_FILE = _config.DATABASE_FILE  # type: str
 
-        self.DATABASE_USERNAME = getattr(_config, "DATABASE_USERNAME")  # type: Optional[str]
-        self.DATABASE_PASSWORD = getattr(_config, "DATABASE_PASSWORD")  # type: Optional[str]
-        self.DATABASE_HOST = getattr(_config, "DATABASE_HOST")  # type: Optional[str]
-        self.DATABASE_NAME = getattr(_config, "DATABASE_NAME")  # type: Optional[str]
+        self.DATABASE_USERNAME = getattr(_config, "DATABASE_USERNAME", None)  # type: Optional[str]
+        self.DATABASE_PASSWORD = getattr(_config, "DATABASE_PASSWORD", None)  # type: Optional[str]
+        self.DATABASE_HOST = getattr(_config, "DATABASE_HOST", None)  # type: Optional[str]
+        self.DATABASE_NAME = getattr(_config, "DATABASE_NAME", None)  # type: Optional[str]
 
         self.ADJECTIVES = _config.ADJECTIVES  # type: str
         self.NOUNS = _config.NOUNS  # type: str
         self.WORD_LIST = _config.WORD_LIST  # type: str
 
         self.DEFAULT_LOCALE = _config.DEFAULT_LOCALE  # type: str
-        self.SUPPORTED_LOCALES = getattr(_config, "SUPPORTED_LOCALES")  # type: Optional[str]
+        self.SUPPORTED_LOCALES = getattr(_config, "SUPPORTED_LOCALES", None)  # type: Optional[str]
 
         self.GPG_KEY_DIR = _config.GPG_KEY_DIR  # type: str
 
@@ -47,7 +47,7 @@ class SDConfig:
         self.SOURCE_TEMPLATES_DIR = _config.SOURCE_TEMPLATES_DIR  # type: str
         self.TEMP_DIR = _config.TEMP_DIR  # type: str
         self.STORE_DIR = _config.STORE_DIR  # type: str
-        self.TRANSLATION_DIRS = getattr(_config, "TRANSLATION_DIRS")  # type: Optional[str]
+        self.TRANSLATION_DIRS = getattr(_config, "TRANSLATION_DIRS", None)  # type: Optional[str]
 
         self.WORKER_PIDFILE = _config.WORKER_PIDFILE  # type: str
 
