@@ -123,7 +123,7 @@ def alembic_config(config):
     ini.read(path.join(base_dir, 'alembic.ini'))
 
     ini.set('alembic', 'script_location', path.join(migrations_dir))
-    ini.set('alembic', 'sqlalchemy.url', 'sqlite:///' + config.DATABASE_FILE)
+    ini.set('alembic', 'sqlalchemy.url', config.DATABASE_URI)
 
     alembic_path = path.join(config.SECUREDROP_DATA_ROOT, 'alembic.ini')
     config.TESTING_ALEMBIC_PATH = alembic_path
