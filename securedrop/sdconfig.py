@@ -4,16 +4,15 @@ from typing import Optional
 from typing import Type
 
 import config as _config
-from config import FlaskConfig
 
 
 class SDConfig:
     def __init__(self) -> None:
         self.JOURNALIST_APP_FLASK_CONFIG_CLS = \
-            _config.JournalistInterfaceFlaskConfig  # type: Type[FlaskConfig]
+            _config.JournalistInterfaceFlaskConfig  # type: Type
 
         self.SOURCE_APP_FLASK_CONFIG_CLS = \
-            _config.SourceInterfaceFlaskConfig  # type: Type[FlaskConfig]
+            _config.SourceInterfaceFlaskConfig  # type: Type
 
         self.DATABASE_ENGINE = _config.DATABASE_ENGINE  # type: str
         self.DATABASE_FILE = _config.DATABASE_FILE  # type: str
