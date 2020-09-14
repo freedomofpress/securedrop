@@ -31,7 +31,7 @@
 
 - name: Control the version of setuptools used in the default construction of virtual environments
   shell: |
-    pip3 download --require-hashes -r "{{ securedrop_app_code_prep_dir }}/requirements.txt" --dest /tmp/securedrop-app-code-requirements-download
+    pip3 download --no-deps --require-hashes -r "{{ securedrop_app_code_prep_dir }}/requirements.txt" --dest /tmp/securedrop-app-code-requirements-download
     rm -f /usr/share/python-wheels/setuptools-*.whl
     mv /tmp/securedrop-app-code-requirements-download/setuptools-*.whl /usr/share/python-wheels/
 
