@@ -20,6 +20,8 @@
   command: aptitude search '~U' --display-format '%p' --disable-columns
   register: tor_upgradable_result
   changed_when: false
+  # aptitude >= 0.7.6 will exit non-zero if no hits
+  failed_when: false
 
 - name: Hold tor package to prevent upgrade breaking SSH connection.
   command: aptitude hold tor
