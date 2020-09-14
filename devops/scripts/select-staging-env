@@ -11,7 +11,9 @@
 set -e
 set -o pipefail
 
-securedrop_platform_suffix="-xenial"
+
+# Support overrides for LTS version
+securedrop_platform_suffix="-${1:-xenial}"
 
 # Respect explicit choice of Vagrant provider if set.
 if [[ -n "${VAGRANT_DEFAULT_PROVIDER:-}" ]] ; then

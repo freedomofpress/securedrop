@@ -195,11 +195,16 @@ docs:  ## Build project documentation with live reload for editing.
 	@echo
 
 .PHONY: staging
-staging:  ## Create a local staging environment in virtual machines.
-	@echo "███ Creating staging environment..."
+staging:  ## Create a local staging environment in virtual machines (Xenial)
+	@echo "███ Creating staging environment on Ubuntu Xenial..."
 	@$(SDROOT)/devops/scripts/create-staging-env
 	@echo
 
+.PHONY: staging-focal
+staging-focal:  ## Create a local staging environment in virtual machines (Focal)
+	@echo "███ Creating staging environment on Ubuntu Focal..."
+	@$(SDROOT)/devops/scripts/create-staging-env focal
+	@echo
 
 .PHONY: testinfra
 testinfra:  ## Run infra tests against a local staging environment.
