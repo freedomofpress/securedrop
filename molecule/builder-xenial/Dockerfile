@@ -7,14 +7,13 @@ LABEL image_name="xenial-sd-builder-app"
 
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         apache2-dev \
-        apt-transport-https \
         aptitude \
         coreutils \
-        curl \
         debhelper \
         devscripts \
         dh-python \
         dh-systemd \
+        dh-virtualenv \
         gdb \
         git \
         gnupg2 \
@@ -28,20 +27,14 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         python3-all \
         python3-pip \
         python3-setuptools \
+        python3-venv \
         rsync \
         ruby \
         sqlite \
         sudo \
         tzdata \
         unzip \
-        virtualenv
-
-#install dh-virtualenv from debian unstable
-RUN curl https://ftp-master.debian.org/keys/archive-key-10.asc -o /tmp/debian-stable-archive-pubkey.asc && \
-        apt-key add /tmp/debian-stable-archive-pubkey.asc
-RUN echo "deb https://deb.debian.org/debian unstable main contrib" > /etc/apt/sources.list.d/debian-unstable.list
-COPY aptpreferences.conf /etc/apt/preferences.d/debian-unstable
-RUN apt-get update && apt-get install -y -t unstable dh-virtualenv
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
 
 RUN paxctl -cm /usr/bin/python3.5 && mkdir -p /tmp/build

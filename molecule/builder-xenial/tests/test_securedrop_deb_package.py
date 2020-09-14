@@ -187,11 +187,10 @@ def test_deb_package_contains_mo_file(host, deb):
     Ensures the `securedrop-app-code` package has at least one
     compiled mo file.
     """
-    deb_package = host.file(deb.format(
-        securedrop_test_vars.securedrop_version))
-    c = host.run("dpkg-deb --contents {}".format(deb_package.path))
+    deb_package = host.file(deb.format(securedrop_test_vars.securedrop_version))
     # Only relevant for the securedrop-app-code package:
     if "securedrop-app-code" in deb_package.path:
+        c = host.run("dpkg-deb --contents {}".format(deb_package.path))
         assert re.search(r"^.*messages\.mo$", c.stdout, re.M)
 
 
