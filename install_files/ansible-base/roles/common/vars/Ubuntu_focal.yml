@@ -1,0 +1,4 @@
+---
+securedrop_kernel_packages_to_remove:
+  - linux-virtual
+  - linux-generic

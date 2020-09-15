@@ -1,0 +1,74 @@
+---
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+lint:
+  name: yamllint
+
+platforms:
+  - name: app-staging
+    box: bento/ubuntu-20.04
+    raw_config_args:
+      - "cpu_mode = 'host-passthrough'"
+      - "video_type = 'virtio'"
+    instance_raw_config_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true"
+      - "vm.network 'private_network', ip: '10.0.1.2'"
+      - "ssh.insert_key = false"
+    memory: 1024
+    private_ip: 10.0.1.2
+    groups:
+      - securedrop_application_server
+      - securedrop
+      - staging
+
+  - name: mon-staging
+    box: bento/ubuntu-20.04
+    raw_config_args:
+      - "cpu_mode = 'host-passthrough'"
+      - "video_type = 'virtio'"
+    instance_raw_config_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true"
+      - "vm.network 'private_network', ip: '10.0.1.3'"
+      - "ssh.insert_key = false"
+    memory: 1024
+    private_ip: 10.0.1.3
+    groups:
+      - securedrop_monitor_server
+      - securedrop
+      - staging
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  config_options:
+    defaults:
+      interpreter_python: auto
+  options:
+    e: "@ansible-override-vars.yml"
+  playbooks:
+    converge: ../../install_files/ansible-base/securedrop-staging.yml
+    create: create.yml
+    destroy: destroy.yml
+    prepare: prepare.yml
+  env:
+    ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
+
+scenario:
+  name: libvirt-staging-focal
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
+  directory: ../testinfra/staging/
+  options:
+    n: auto
+    v: 2
+    junit-xml: ../../junit/testinfra-results.xml

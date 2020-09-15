@@ -13,14 +13,7 @@
 # We must used command due to the use of wildcards
 - name: Remove generic kernel packages.
   command: apt-get remove -y {{ item }}
-  with_items:
-    - linux-signed-generic
-    - linux-signed-generic-lts-utopic
-    - linux-signed-image-generic
-    - linux-signed-image-generic-lts-utopic
-    - linux-image-generic-lts-xenial
-    - 'linux-image-.*generic'
-    - 'linux-headers-.*'
+  with_items: "{{ securedrop_kernel_packages_to_remove }}"
   register: apt_removed_kernels
   changed_when: "'The following packages will be REMOVED' in apt_removed_kernels.stdout"
   tags:
@@ -41,6 +34,7 @@
   with_items: "{{ apt_installed_kernels.stdout_lines }}"
   tags:
     - apt
+    - grsecurity
 
 - name: Remove dependencies that are no longer required
   apt:
