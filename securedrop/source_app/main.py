@@ -129,6 +129,9 @@ def make_blueprint(config):
             except UnicodeDecodeError:
                 current_app.logger.error("Could not decode reply %s" %
                                          reply.filename)
+            except FileNotFoundError:
+                current_app.logger.error("Reply file missing: %s" %
+                                         reply.filename)
             else:
                 reply.date = datetime.utcfromtimestamp(
                     os.stat(reply_path).st_mtime)

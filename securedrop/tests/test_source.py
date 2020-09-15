@@ -269,7 +269,8 @@ def test_user_must_log_in_for_protected_views(source_app):
 
 def test_login_with_whitespace(source_app):
     """
-    Test that codenames with leading or trailing whitespace still work"""
+    Test that codenames with leading or trailing whitespace still work
+    """
 
     def login_test(app, codename):
         resp = app.get(url_for('main.login'))
@@ -297,6 +298,32 @@ def test_login_with_whitespace(source_app):
     for codename_ in codenames:
         with source_app.test_client() as app:
             login_test(app, codename_)
+
+
+def test_login_with_missing_reply_files(source_app):
+    """
+    Test that source can log in when replies are present in database but missing
+    from storage.
+    """
+    source, codename = utils.db_helper.init_source()
+    journalist, _ = utils.db_helper.init_journalist()
+    replies = utils.db_helper.reply(journalist, source, 1)
+    assert len(replies) > 0
+    with source_app.test_client() as app:
+        with patch("io.open") as ioMock:
+            ioMock.side_effect = FileNotFoundError
+            resp = app.get(url_for('main.login'))
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Enter Codename" in text
+
+            resp = app.post(url_for('main.login'),
+                            data=dict(codename=codename),
+                            follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode('utf-8')
+            assert "Submit Files" in text
+            assert session['logged_in'] is True
 
 
 def _dummy_submission(app):
