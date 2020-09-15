@@ -19,7 +19,7 @@ securedrop_staging_scenario="$(./devops/scripts/select-staging-env)"
 
 if [ -z "$TEST_DATA_FILE" ]
 then
-    EXTRA_ANSIBLE_ARGS=()
+    EXTRA_ANSIBLE_ARGS=(-vvv)
 else
     if [ "${MOLECULE_ACTION:-converge}" = 'converge' ]
     then
@@ -33,7 +33,7 @@ printf "Creating staging environment via '%s'...\n" "${securedrop_staging_scenar
 virtualenv_bootstrap
 # Are we in CI? Then lets do full testing post install!
 if [ "$USER" = "sdci" ]; then
-    molecule test -s "${securedrop_staging_scenario}"
+   ANSIBLE_DEBUG=1 molecule test -s "${securedrop_staging_scenario}"
 else
     molecule "${MOLECULE_ACTION:-converge}" -s "${securedrop_staging_scenario}" "${EXTRA_ANSIBLE_ARGS[@]}"
 fi
