@@ -19,7 +19,7 @@ securedrop_staging_scenario="$(./devops/scripts/select-staging-env)"
 
 if [ -z "$TEST_DATA_FILE" ]
 then
-    EXTRA_ANSIBLE_ARGS=(-vvv)
+    EXTRA_ANSIBLE_ARGS=()
 else
     if [ "${MOLECULE_ACTION:-converge}" = 'converge' ]
     then
