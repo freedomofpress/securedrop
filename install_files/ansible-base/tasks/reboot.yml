@@ -1,6 +1,7 @@
 ---
 - name: Reboot if required due to security updates.
   reboot:
+    post_reboot_delay: 30
   tags:
     - reboot
   when: not securedrop_staging_qubes_env|default(False)
