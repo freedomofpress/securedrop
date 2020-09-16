@@ -9,29 +9,16 @@ import werkzeug
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
                    render_template, Markup, sessions, request)
 from flask_babel import gettext, ngettext
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.sql.expression import false
 
 import i18n
 
 from db import db
-from models import (
-    BadTokenException,
-    FirstOrLastNameError,
-    InvalidPasswordLength,
-    InvalidUsernameException,
-    Journalist,
-    LoginThrottledException,
-    PasswordError,
-    Reply,
-    RevokedToken,
-    SeenFile,
-    SeenMessage,
-    SeenReply,
-    Source,
-    SourceStar,
-    Submission,
-    WrongPasswordException,
-    get_one_or_else,
-)
+from models import (get_one_or_else, Source, Journalist, InvalidUsernameException,
+                    WrongPasswordException, FirstOrLastNameError, LoginThrottledException,
+                    BadTokenException, SourceStar, PasswordError, SeenFile, SeenMessage, SeenReply,
+                    Submission, RevokedToken, InvalidPasswordLength, Reply)
 from store import add_checksum_for_file
 
 from sdconfig import SDConfig
@@ -176,34 +163,27 @@ def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> 
     """
     zf = current_app.storage.get_bulk_archive(submissions, zip_directory=zip_basename)
     attachment_filename = "{}--{}.zip".format(
-        zip_basename, datetime.datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S")
-    )
+        zip_basename, datetime.datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
 
-    # mark as seen by the current user
-    journalist_id = g.get("user").id
+    # mark as seen by the current user and update downloaded for submissions
+    journalist_id = g.get('user').id
     for item in submissions:
-        if item.filename.endswith("reply.gpg"):
-            already_seen = SeenReply.query.filter_by(
-                reply_id=item.id, journalist_id=journalist_id
-            ).one_or_none()
-            if not already_seen:
+        try:
+            if item.filename.endswith('reply.gpg'):
                 seen_reply = SeenReply(reply_id=item.id, journalist_id=journalist_id)
                 db.session.add(seen_reply)
-        elif item.filename.endswith("-doc.gz.gpg"):
-            already_seen = SeenFile.query.filter_by(
-                file_id=item.id, journalist_id=journalist_id
-            ).one_or_none()
-            if not already_seen:
+            elif item.filename.endswith('-doc.gz.gpg'):
                 seen_file = SeenFile(file_id=item.id, journalist_id=journalist_id)
                 db.session.add(seen_file)
-        else:
-            already_seen = SeenMessage.query.filter_by(
-                message_id=item.id, journalist_id=journalist_id
-            ).one_or_none()
-            if not already_seen:
+                item.downloaded = True
+            else:
                 seen_message = SeenMessage(message_id=item.id, journalist_id=journalist_id)
                 db.session.add(seen_message)
-        db.session.commit()
+                item.downloaded = True
+
+            db.session.commit()
+        except IntegrityError:
+            pass  # expected not to store that a file was seen by the same user multiple times
 
     return send_file(
         zf.name,

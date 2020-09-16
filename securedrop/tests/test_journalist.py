@@ -2293,12 +2293,6 @@ def test_download_all_selected_sources(journalist_app, test_journo):
             source = i["source"]
             selected.append(source.filesystem_id)
 
-        # Download all submissions from all sources selected
-        resp = app.post(
-            url_for("col.process"),
-            data=dict(action="download-all", cols_selected=selected),
-        )
-
     # The download request was succesful, and the app returned a zipfile
     assert resp.status_code == 200
     assert resp.content_type == "application/zip"
