@@ -9,6 +9,7 @@
 # Set the VAGRANT_DEFAULT_PROVIDER env var to override autodetection.
 #
 # Defaults to `converge` action - override with MOLECULE_ACTION env var
+#
 
 set -e
 set -o pipefail
