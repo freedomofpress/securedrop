@@ -197,17 +197,18 @@ def envsetup(args, virtualenv_dir=VENV_DIR):
     else:
         sdlog.info("Virtualenv already exists, not creating")
 
-    install_pip_dependencies(args)
 
     if args.t:
         install_pip_dependencies(args, pip_install_cmd=[
             os.path.join(VENV_DIR, 'bin', 'pip3'),
             'install',
             '--no-deps',
-            '-r', os.path.join(DIR, '../securedrop/requirements/python3/develop-requirements.txt'),
+            '-r', os.path.join(DIR, 'requirements-testinfra.txt'),
             '--require-hashes',
             '-U', '--upgrade-strategy', 'only-if-needed',],
             desc="additional dependencies")
+    else:
+        install_pip_dependencies(args)
 
     if os.path.exists(os.path.join(DIR, 'setup.py')):
         install_pip_self(args)
