@@ -1060,7 +1060,7 @@ def parse_argv(argv):
     parse_reset_ssh.set_defaults(func=reset_admin_access)
 
     parse_verify = subparsers.add_parser('verify',
-                                            help=verify_install.__doc__)
+                                         help=verify_install.__doc__)
     parse_verify.set_defaults(func=verify_install)
 
     args = parser.parse_args(argv)

@@ -197,7 +197,6 @@ def envsetup(args, virtualenv_dir=VENV_DIR):
     else:
         sdlog.info("Virtualenv already exists, not creating")
 
-
     if args.t:
         install_pip_dependencies(args, pip_install_cmd=[
             os.path.join(VENV_DIR, 'bin', 'pip3'),
@@ -205,8 +204,8 @@ def envsetup(args, virtualenv_dir=VENV_DIR):
             '--no-deps',
             '-r', os.path.join(DIR, 'requirements-testinfra.txt'),
             '--require-hashes',
-            '-U', '--upgrade-strategy', 'only-if-needed',],
-            desc="additional dependencies")
+            '-U', '--upgrade-strategy', 'only-if-needed', ],
+            desc="dependencies with verification support")
     else:
         install_pip_dependencies(args)
 
@@ -238,7 +237,7 @@ def install_pip_dependencies(args, pip_install_cmd=[
         '-r', os.path.join(DIR, 'requirements.txt'),
         '--require-hashes',
         # Make sure to upgrade packages only if necessary.
-        '-U', '--upgrade-strategy', 'only-if-needed',],
+        '-U', '--upgrade-strategy', 'only-if-needed', ],
         desc="Python dependencies"
 ):
     """
@@ -260,7 +259,6 @@ def install_pip_dependencies(args, pip_install_cmd=[
         sdlog.info("{} for securedrop-admin upgraded".format(desc))
     else:
         sdlog.info("{} for securedrop-admin are up-to-date".format(desc))
-
 
 
 def parse_argv(argv):
