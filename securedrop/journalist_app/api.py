@@ -66,6 +66,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def get_endpoints() -> Tuple[flask.Response, int]:
         endpoints = {'sources_url': '/api/v1/sources',
                      'current_user_url': '/api/v1/user',
+                     'all_users_url': '/api/v1/users',
                      'submissions_url': '/api/v1/submissions',
                      'replies_url': '/api/v1/replies',
                      'auth_token_url': '/api/v1/token'}
@@ -322,6 +323,13 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def get_current_user() -> Tuple[flask.Response, int]:
         user = _authenticate_user_from_auth_header(request)
         return jsonify(user.to_json()), 200
+
+    @api.route('/users', methods=['GET'])
+    @token_required
+    def get_all_users() -> Tuple[flask.Response, int]:
+        users = Journalist.query.all()
+        return jsonify(
+            {'users': [user.to_json(all_info=False) for user in users]}), 200
 
     @api.route('/logout', methods=['POST'])
     @token_required
