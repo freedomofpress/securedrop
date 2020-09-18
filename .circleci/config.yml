@@ -277,6 +277,21 @@ jobs:
             if ! [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             make ci-deb-tests
 
+  deb-tests-focal:
+    docker:
+      - image: gcr.io/cloud-builders/docker
+    environment:
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+    steps:
+      - run: apt-get install -y make virtualenv enchant jq python3-dev build-essential
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Test Debian package build on Focal
+          command: |
+            make ci-deb-tests-focal
+
   docs-linkcheck:
     docker:
       - image: circleci/python:3.5
@@ -358,6 +373,15 @@ workflows:
                 - /update-builder-.*/
           requires:
             - lint
+      - deb-tests-focal:
+          filters:
+            branches:
+              ignore:
+                - stable
+                - /docs-.*/
+                - /i18n-.*/
+          requires:
+            - lint
 
   nightly:
     triggers:
@@ -380,6 +404,7 @@ workflows:
                 - develop
     jobs:
       - deb-tests
+      - deb-tests-focal
       - translation-tests
       - docs-linkcheck
       - fetch-tor-debs

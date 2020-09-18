@@ -5,9 +5,9 @@
 
 set -e
 set -o pipefail
-
+TARGET_PLATFORM="${1:-xenial}"
 . ./devops/scripts/boot-strap-venv.sh
 
 virtualenv_bootstrap
 
-molecule test -s builder-xenial
+molecule test -s "builder-${TARGET_PLATFORM}"
