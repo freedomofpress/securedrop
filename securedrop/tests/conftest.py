@@ -140,7 +140,10 @@ def source_app(config):
     app.config['SERVER_NAME'] = 'localhost.localdomain'
     with app.app_context():
         db.create_all()
-        yield app
+        try:
+            yield app
+        finally:
+            db.drop_all()
 
 
 @pytest.fixture(scope='function')
@@ -149,7 +152,10 @@ def journalist_app(config):
     app.config['SERVER_NAME'] = 'localhost.localdomain'
     with app.app_context():
         db.create_all()
-        yield app
+        try:
+            yield app
+        finally:
+            db.drop_all()
 
 
 @pytest.fixture(scope='function')
