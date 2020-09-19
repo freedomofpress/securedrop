@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import configparser
+from typing import Any
+from typing import Iterator
+
 import pretty_bad_protocol as gnupg
 import logging
+
+import py
+from flask import Flask
 from hypothesis import settings
 import os
-import io
 import json
 import psutil
 import pytest
@@ -15,6 +20,7 @@ import subprocess
 
 from flask import url_for
 from pyotp import TOTP
+from typing import Dict
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config as original_config
@@ -79,7 +85,7 @@ def setUpTearDown():
 
 
 @pytest.fixture(scope='function')
-def config(tmpdir):
+def config(tmpdir: py.path.local) -> SDConfig:
     '''Clone the module so we can modify it per test.'''
 
     cnf = SDConfig()
@@ -98,9 +104,10 @@ def config(tmpdir):
 
     gpg = gnupg.GPG('gpg2', homedir=str(keys))
     for ext in ['sec', 'pub']:
-        with io.open(path.join(path.dirname(__file__),
-                               'files',
-                               'test_journalist_key.{}'.format(ext))) as f:
+        file_path = path.join(
+            path.dirname(__file__), 'files', 'test_journalist_key.{}'.format(ext)
+        )
+        with open(file_path) as f:
             gpg.import_keys(f.read())
 
     cnf.SECUREDROP_DATA_ROOT = str(data)
@@ -116,7 +123,7 @@ def config(tmpdir):
 
 
 @pytest.fixture(scope='function')
-def alembic_config(config):
+def alembic_config(config: SDConfig) -> str:
     base_dir = path.join(path.dirname(__file__), '..')
     migrations_dir = path.join(base_dir, 'alembic')
     ini = configparser.ConfigParser()
@@ -126,8 +133,6 @@ def alembic_config(config):
     ini.set('alembic', 'sqlalchemy.url', config.DATABASE_URI)
 
     alembic_path = path.join(config.SECUREDROP_DATA_ROOT, 'alembic.ini')
-    config.TESTING_ALEMBIC_PATH = alembic_path
-
     with open(alembic_path, 'w') as f:
         ini.write(f)
 
@@ -135,7 +140,7 @@ def alembic_config(config):
 
 
 @pytest.fixture(scope='function')
-def source_app(config):
+def source_app(config: SDConfig) -> Iterator[Flask]:
     app = create_source_app(config)
     app.config['SERVER_NAME'] = 'localhost.localdomain'
     with app.app_context():
@@ -147,7 +152,7 @@ def source_app(config):
 
 
 @pytest.fixture(scope='function')
-def journalist_app(config):
+def journalist_app(config: SDConfig) -> Iterator[Flask]:
     app = create_journalist_app(config)
     app.config['SERVER_NAME'] = 'localhost.localdomain'
     with app.app_context():
@@ -159,7 +164,7 @@ def journalist_app(config):
 
 
 @pytest.fixture(scope='function')
-def test_journo(journalist_app):
+def test_journo(journalist_app: Flask) -> Dict[str, Any]:
     with journalist_app.app_context():
         user, password = utils.db_helper.init_journalist(is_admin=False)
         username = user.username
@@ -175,7 +180,7 @@ def test_journo(journalist_app):
 
 
 @pytest.fixture(scope='function')
-def test_admin(journalist_app):
+def test_admin(journalist_app: Flask) -> Dict[str, Any]:
     with journalist_app.app_context():
         user, password = utils.db_helper.init_journalist(is_admin=True)
         username = user.username
@@ -188,7 +193,7 @@ def test_admin(journalist_app):
 
 
 @pytest.fixture(scope='function')
-def test_source(journalist_app):
+def test_source(journalist_app: Flask) -> Dict[str, Any]:
     with journalist_app.app_context():
         source, codename = utils.db_helper.init_source()
         return {'source': source,
@@ -199,7 +204,7 @@ def test_source(journalist_app):
 
 
 @pytest.fixture(scope='function')
-def test_submissions(journalist_app):
+def test_submissions(journalist_app: Flask) -> Dict[str, Any]:
     with journalist_app.app_context():
         source, codename = utils.db_helper.init_source()
         utils.db_helper.submit(source, 2)
@@ -254,9 +259,9 @@ def journalist_api_token(journalist_app, test_journo):
         return response.json['token']
 
 
-def _start_test_rqworker(config):
+def _start_test_rqworker(config: SDConfig) -> None:
     if not psutil.pid_exists(_get_pid_from_file(TEST_WORKER_PIDFILE)):
-        tmp_logfile = io.open('/tmp/test_rqworker.log', 'w')
+        tmp_logfile = open('/tmp/test_rqworker.log', 'w')
         subprocess.Popen(['rqworker', config.RQ_WORKER_NAME,
                           '-P', config.SECUREDROP_ROOT,
                           '--pid', TEST_WORKER_PIDFILE,
@@ -266,7 +271,7 @@ def _start_test_rqworker(config):
                          stderr=subprocess.STDOUT)
 
 
-def _stop_test_rqworker():
+def _stop_test_rqworker() -> None:
     rqworker_pid = _get_pid_from_file(TEST_WORKER_PIDFILE)
     if rqworker_pid:
         os.kill(rqworker_pid, signal.SIGTERM)
@@ -276,14 +281,14 @@ def _stop_test_rqworker():
             pass
 
 
-def _get_pid_from_file(pid_file_name):
+def _get_pid_from_file(pid_file_name: str) -> int:
     try:
-        return int(io.open(pid_file_name).read())
+        return int(open(pid_file_name).read())
     except IOError:
         return -1
 
 
-def _cleanup_test_securedrop_dataroot(config):
+def _cleanup_test_securedrop_dataroot(config: SDConfig) -> None:
     # Keyboard interrupts or dropping to pdb after a test failure sometimes
     # result in the temporary test SecureDrop data root not being deleted.
     try:
