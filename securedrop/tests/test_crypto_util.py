@@ -109,24 +109,6 @@ def test_encrypt_binary_stream(source_app, config, test_source):
         assert fh.read() == plaintext
 
 
-def test_encrypt_fingerprints_not_a_list_or_tuple(source_app, test_source):
-    """If passed a single fingerprint as a string, encrypt should
-    correctly place that string in a list, and encryption/
-    decryption should work as intended."""
-    message = 'test'
-
-    with source_app.app_context():
-        ciphertext = source_app.crypto_util.encrypt(
-            message,
-            source_app.crypto_util.get_fingerprint(test_source['filesystem_id']),
-            source_app.storage.path(test_source['filesystem_id'],
-                                    'somefile.gpg'))
-        plaintext = source_app.crypto_util.decrypt(test_source['codename'],
-                                                   ciphertext)
-
-    assert plaintext == message
-
-
 def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
                                                         config,
                                                         test_source):
@@ -365,7 +347,7 @@ def test_encrypt_then_decrypt_gives_same_result(
         name,
         secret
     )
-    ciphertext = crypto.encrypt(message, str(key))
+    ciphertext = crypto.encrypt(message, [str(key)])
     decrypted_text = crypto.decrypt(secret, ciphertext)
 
     assert decrypted_text == message

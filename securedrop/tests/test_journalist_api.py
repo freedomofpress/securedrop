@@ -683,7 +683,7 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
         source_key = current_app.crypto_util.get_fingerprint(
             test_source['source'].filesystem_id)
         reply_content = current_app.crypto_util.gpg.encrypt(
-            'This is a plaintext reply', source_key).data
+            'This is a plaintext reply', [source_key]).data
 
         response = app.post(url_for('api.all_source_replies',
                                     source_uuid=uuid),
