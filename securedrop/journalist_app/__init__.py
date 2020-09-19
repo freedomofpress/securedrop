@@ -58,10 +58,14 @@ def create_app(config: 'SDConfig') -> Flask:
     v3_enabled = path.exists(path.join(config.SECUREDROP_DATA_ROOT, 'source_v3_url'))
     app.config.update(V2_ONION_ENABLED=v2_enabled, V3_ONION_ENABLED=v3_enabled)
 
+    # TODO: Attaching a Storage dynamically like this essentially disables all type checking
+    # on any code that uses current_app.storage; therefore it should be removed
     app.storage = Storage(config.STORE_DIR,
                           config.TEMP_DIR,
                           config.JOURNALIST_KEY)
 
+    # TODO: Attaching a CryptoUtil dynamically like this essentially disables all type checking
+    # on any code that uses current_app.crypto_util; therefore it should be removed
     app.crypto_util = CryptoUtil(
         scrypt_params=config.SCRYPT_PARAMS,
         scrypt_id_pepper=config.SCRYPT_ID_PEPPER,

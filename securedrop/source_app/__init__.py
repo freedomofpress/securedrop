@@ -44,10 +44,14 @@ def create_app(config: SDConfig) -> Flask:
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
     db.init_app(app)
 
+    # TODO: Attaching a Storage dynamically like this essentially disables all type checking
+    # on any code that uses current_app.storage; therefore it should be removed
     app.storage = Storage(config.STORE_DIR,
                           config.TEMP_DIR,
                           config.JOURNALIST_KEY)
 
+    # TODO: Attaching a CryptoUtil dynamically like this essentially disables all type checking
+    # on any code that uses current_app.crypto_util; therefore it should be removed
     app.crypto_util = CryptoUtil(
         scrypt_params=config.SCRYPT_PARAMS,
         scrypt_id_pepper=config.SCRYPT_ID_PEPPER,
