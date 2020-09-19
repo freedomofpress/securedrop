@@ -33,7 +33,6 @@ def create_app(config: SDConfig) -> Flask:
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
     app.request_class = RequestThatSecuresFileUploads
     app.config.from_object(config.SOURCE_APP_FLASK_CONFIG_CLS)
-    app.sdconfig = config
 
     # The default CSRF token expiration is 1 hour. Since large uploads can
     # take longer than an hour over Tor, we increase the valid window to 24h.

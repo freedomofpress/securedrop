@@ -44,7 +44,6 @@ def create_app(config: 'SDConfig') -> Flask:
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
 
     app.config.from_object(config.JOURNALIST_APP_FLASK_CONFIG_CLS)
-    app.sdconfig = config
     app.session_interface = JournalistInterfaceSessionInterface()
 
     csrf = CSRFProtect(app)
