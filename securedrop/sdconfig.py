@@ -57,25 +57,25 @@ class SDConfig:
 
     @property
     def DATABASE_URI(self) -> str:
-        if config.DATABASE_ENGINE == "sqlite":
-            db_uri = (config.DATABASE_ENGINE + ":///" +
-                      config.DATABASE_FILE)
+        if self.DATABASE_ENGINE == "sqlite":
+            db_uri = (self.DATABASE_ENGINE + ":///" +
+                      self.DATABASE_FILE)
         else:
-            if config.DATABASE_USERNAME is None:
+            if self.DATABASE_USERNAME is None:
                 raise RuntimeError("Missing DATABASE_USERNAME entry from config.py")
-            if config.DATABASE_PASSWORD is None:
+            if self.DATABASE_PASSWORD is None:
                 raise RuntimeError("Missing DATABASE_PASSWORD entry from config.py")
-            if config.DATABASE_HOST is None:
+            if self.DATABASE_HOST is None:
                 raise RuntimeError("Missing DATABASE_HOST entry from config.py")
-            if config.DATABASE_NAME is None:
+            if self.DATABASE_NAME is None:
                 raise RuntimeError("Missing DATABASE_NAME entry from config.py")
 
             db_uri = (
-                config.DATABASE_ENGINE + '://' +
-                config.DATABASE_USERNAME + ':' +
-                config.DATABASE_PASSWORD + '@' +
-                config.DATABASE_HOST + '/' +
-                config.DATABASE_NAME
+                self.DATABASE_ENGINE + '://' +
+                self.DATABASE_USERNAME + ':' +
+                self.DATABASE_PASSWORD + '@' +
+                self.DATABASE_HOST + '/' +
+                self.DATABASE_NAME
             )
         return db_uri
 
