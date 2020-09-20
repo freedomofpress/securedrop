@@ -23,12 +23,12 @@ def test_word_list_does_not_contain_empty_strings(journalist_app):
     assert '' not in journalist_app.crypto_util.adjectives
 
 
-def test_clean():
+def test_validate_name_for_diceware():
     ok = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJ'
           'KLMNOPQRSTUVWXYZ')
     invalids = ['foo bar`', 'bar baz~']
 
-    assert crypto_util._validate_name_for_diceware(ok)
+    crypto_util._validate_name_for_diceware(ok)
 
     for invalid in invalids:
         with pytest.raises(CryptoException) as err:
@@ -140,7 +140,7 @@ def verify_genrandomid(app, locale):
     id = app.crypto_util.genrandomid(locale=locale)
     id_words = id.split()
 
-    assert crypto_util._validate_name_for_diceware(id)
+    crypto_util._validate_name_for_diceware(id)
     assert len(id_words) == CryptoUtil.DEFAULT_WORDS_IN_RANDOM_ID
 
     for word in id_words:
