@@ -148,6 +148,7 @@ def source_app(config: SDConfig) -> Iterator[Flask]:
         try:
             yield app
         finally:
+            db.session.rollback()
             db.drop_all()
 
 
@@ -160,6 +161,7 @@ def journalist_app(config: SDConfig) -> Iterator[Flask]:
         try:
             yield app
         finally:
+            db.session.rollback()
             db.drop_all()
 
 
