@@ -4,6 +4,7 @@ from typing import Optional
 from typing import Type
 
 import config as _config
+from typing import List
 
 
 class SDConfig:
@@ -27,7 +28,7 @@ class SDConfig:
         self.WORD_LIST = _config.WORD_LIST  # type: str
 
         self.DEFAULT_LOCALE = _config.DEFAULT_LOCALE  # type: str
-        self.SUPPORTED_LOCALES = getattr(_config, "SUPPORTED_LOCALES", None)  # type: Optional[str]
+        self.SUPPORTED_LOCALES = getattr(_config, "SUPPORTED_LOCALES", [self.DEFAULT_LOCALE])  # type: List[str]
 
         self.GPG_KEY_DIR = _config.GPG_KEY_DIR  # type: str
 
