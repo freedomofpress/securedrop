@@ -371,6 +371,14 @@ ci-deb-tests:  ## Test SecureDrop Debian packages in CI environment.
 	@$(SDROOT)/devops/scripts/test-built-packages.sh
 	@echo
 
+.PHONY: ci-deb-tests-focal
+ci-deb-tests-focal:  ## Test SecureDrop Debian packages in CI environment.
+	@echo "███ Running Debian package tests in CI..."
+	@$(SDROOT)/devops/scripts/test-built-packages.sh focal
+	@echo
+
+
+
 .PHONY: build-gcloud-docker
 build-gcloud-docker:  ## Build Docker container for Google Cloud SDK.
 	@echo "Building Docker container for Google Cloud SDK..."
