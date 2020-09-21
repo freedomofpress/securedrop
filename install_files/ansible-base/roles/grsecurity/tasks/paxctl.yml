@@ -21,7 +21,8 @@
     - /usr/bin/grub-script-check
 
 - name: Adjust paxctl headers on grub binaries.
-  command: paxctl -zCE {{ item.item }}
+  command: paxctl -z{{ paxctl_header_type[ansible_distribution_release] }}E {{ item.item }}
   with_items: "{{ paxctl_grub_header_check.results }}"
-  when: "item.stdout != '- PaX flags: --------E--- [{{ item.item }}]' or
-         item.rc != 0"
+  when: >
+    item.stdout != '- PaX flags: --------E--- ['+item.item+']'
+    or item.rc != 0
