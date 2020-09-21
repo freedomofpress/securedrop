@@ -17,7 +17,8 @@ set -o pipefail
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-SDBIN=/opt/venvs/securedrop-app-code/bin
+SDVE="/opt/venvs/securedrop-app-code"
+SDBIN="${SDVE}/bin"
 
 database_migration() {
     database_dir='/var/lib/securedrop'
@@ -65,7 +66,7 @@ database_migration() {
     fi
 }
 
-function adjust_wsgi_configuration {
+adjust_wsgi_configuration() {
     journalist_conf="/etc/apache2/sites-available/journalist.conf"
     if test -f $journalist_conf; then
         # Supports passing authorization headers for the SecureDrop API.
@@ -93,6 +94,14 @@ function adjust_wsgi_configuration {
             perl -pi -e 's/^WSGIProcessGroup journalist.*\n//' "$journalist_conf"
         fi
     fi
+}
+
+#
+# Remove any existing byte code files from the virtualenv, to ensure
+# that obsolete dependencies can't linger after they've been removed.
+#
+remove_bytecode() {
+    find "${SDVE}" -name '*.py[co]' -delete
 }
 
 # Manage PaX flags for web app, only required under Xenial.
@@ -174,6 +183,9 @@ case "$1" in
 
     # Munge Apache config while service is stopped.
     adjust_wsgi_configuration
+
+    # Remove Python bytecode from virtualenv
+    remove_bytecode
 
     # Restart apache so it loads with the apparmor profiles in enforce mode.
     service apache2 restart
