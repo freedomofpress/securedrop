@@ -74,9 +74,9 @@ def make_blueprint(config):
                 starred.append(source)
             else:
                 unstarred.append(source)
-            source.num_unread = len(
-                Submission.query.filter_by(source_id=source.id,
-                                           downloaded=False).all())
+            submissions = Submission.query.filter_by(source_id=source.id).all()
+            unseen_submissions = [s for s in submissions if not s.seen]
+            source.num_unread = len(unseen_submissions)
 
         return render_template('index.html',
                                unstarred=unstarred,
@@ -172,13 +172,12 @@ def make_blueprint(config):
     def download_unread_filesystem_id(filesystem_id):
         id = Source.query.filter(Source.filesystem_id == filesystem_id) \
                          .filter_by(deleted_at=None).one().id
-        submissions = Submission.query.filter(
-            Submission.source_id == id,
-            Submission.downloaded == false()).all()
-        if submissions == []:
+        submissions = Submission.query.filter(Submission.source_id == id).all()
+        unseen_submissions = [s for s in submissions if not s.seen]
+        if unseen_submissions == []:
             flash(gettext("No unread submissions for this source."))
             return redirect(url_for('col.col', filesystem_id=filesystem_id))
         source = get_source(filesystem_id)
-        return download(source.journalist_filename, submissions)
+        return download(source.journalist_filename, unseen_submissions)
 
     return view

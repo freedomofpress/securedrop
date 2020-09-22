@@ -21,7 +21,7 @@
 
       <ul id="submissions" class="plain submissions">
         {% for doc in source.collection %}
-          <li class="submission {% if not doc.downloaded and not doc.filename.endswith('reply.gpg') %}unread{% endif %}">
+          <li class="submission {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% endif %}">
             {% if doc.filename.endswith('reply.gpg') %}
               {% if not doc.deleted_by_source %}
                 <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
@@ -30,14 +30,14 @@
                 <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
                 <span title="{{ gettext('Read') }}" class="icon"><i class="fa fa-check"></i></span>
               {% endif %}
-            {% elif not doc.downloaded %}
+            {% elif not doc.seen %}
               <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check unread-cb">
               <span title="{{ gettext('Unread') }}" class="icon"><i class="fa fa-envelope"></i></span>
             {% else %}
               <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
               <span title="{{ gettext('Read') }}" class="icon"><i class="fa fa-envelope-open"></i></span>
             {% endif %}
-            <a class="file {% if not doc.downloaded and not doc.filename.endswith('reply.gpg') %}unread{% else %}read{% endif %}" href="{{ url_for('col.download_single_file', filesystem_id=filesystem_id, fn=doc.filename) }}">
+            <a class="file {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% else %}read{% endif %}" href="{{ url_for('col.download_single_file', filesystem_id=filesystem_id, fn=doc.filename) }}">
               <span class="filename">{{ doc.filename }}</span>
             </a>
             <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat() }}</span></span>

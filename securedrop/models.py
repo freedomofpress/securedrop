@@ -229,6 +229,17 @@ class Submission(db.Model):
         }
         return json_submission
 
+    @property
+    def seen(self) -> bool:
+        """
+        If the submission has been downloaded or seen by any journalist, then the submssion is
+        considered seen.
+        """
+        if self.downloaded or self.seen_files.count() or self.seen_messages.count():
+            return True
+
+        return False
+
 
 class Reply(db.Model):
     __tablename__ = "replies"
@@ -729,7 +740,7 @@ class SeenFile(db.Model):
     file_id = Column(Integer, ForeignKey("submissions.id"), nullable=False)
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=True)
     file = relationship(
-        "Submission", backref=backref("seen_files", cascade="all,delete")
+        "Submission", backref=backref("seen_files", lazy="dynamic", cascade="all,delete")
     )
     journalist = relationship("Journalist", backref=backref("seen_files"))
 
@@ -741,7 +752,7 @@ class SeenMessage(db.Model):
     message_id = Column(Integer, ForeignKey("submissions.id"), nullable=False)
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=True)
     message = relationship(
-        "Submission", backref=backref("seen_messages", cascade="all,delete")
+        "Submission", backref=backref("seen_messages", lazy="dynamic", cascade="all,delete")
     )
     journalist = relationship("Journalist", backref=backref("seen_messages"))
 
