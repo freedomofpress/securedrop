@@ -1,7 +1,0 @@
-.. tip:: We recommend using FreeOTP (available `for Android <https://play.google.com/store/apps/details?id=org.fedorahosted.freeotp>`__
-   and `for iOS <https://itunes.apple.com/us/app/freeotp-authenticator/id872559395>`__)
-   to generate two-factor codes because it is Free Software.
-   However, if it does not work for you for any reason, alternatives exist:
-
-   * Google Authenticator `for Android <https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2>`__ and `iOS <https://itunes.apple.com/us/app/google-authenticator/id388497605>`__ (proprietary)
-   * authenticator `for the desktop <https://pypi.python.org/pypi/authenticator>`__ (Free Software)
