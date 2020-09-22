@@ -10,7 +10,16 @@ from flask import current_app, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer
 
 from db import db
-from models import Journalist, Reply, Source, SourceStar, Submission, RevokedToken
+from models import (
+    Journalist,
+    Reply,
+    Source,
+    SeenFile,
+    SeenMessage,
+    SourceStar,
+    Submission,
+    RevokedToken,
+)
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from .utils.api_helper import get_api_headers
@@ -585,17 +594,16 @@ def test_authorized_user_can_download_submission(journalist_app,
         submission_uuid = test_submissions['source'].submissions[0].uuid
         uuid = test_submissions['source'].uuid
 
-        response = app.get(url_for('api.download_submission',
-                                   source_uuid=uuid,
-                                   submission_uuid=submission_uuid),
-                           headers=get_api_headers(journalist_api_token))
+        response = app.get(
+            url_for(
+                "api.download_submission",
+                source_uuid=uuid,
+                submission_uuid=submission_uuid,
+            ),
+            headers=get_api_headers(journalist_api_token),
+        )
 
         assert response.status_code == 200
-
-        # Submission should now be marked as downloaded in the database
-        submission = Submission.query.get(
-            test_submissions['source'].submissions[0].id)
-        assert submission.downloaded
 
         # Response should be a PGP encrypted download
         assert response.mimetype == 'application/pgp-encrypted'
