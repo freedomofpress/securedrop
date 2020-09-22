@@ -326,7 +326,7 @@ class DowngradeTester(Helper):
                 for _ in range(random.randint(1, 3)):
                     self.add_message(i)
                 # add 0-2 files from each source, some files are set to downloaded
-                for _ in random.randint(0, 2):
+                for _ in range(random.randint(0, 2)):
                     self.add_file(i)
 
             # add 30 replies from randomly-selected journalists to randomly-selected sources
@@ -343,6 +343,7 @@ class DowngradeTester(Helper):
                     selected_journo_id = random.randint(0, self.JOURNO_NUM)
                     self.mark_file_as_seen(submission.id, selected_journo_id)
                 elif random.choice([0, 1]):
+                    selected_journo_id = random.randint(0, self.JOURNO_NUM)
                     self.mark_message_as_seen(submission.id, selected_journo_id)
 
             sql = "SELECT * FROM replies"

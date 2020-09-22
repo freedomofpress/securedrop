@@ -3,23 +3,21 @@ import json
 import os
 import random
 
-from pyotp import TOTP
-from uuid import UUID, uuid4
-
 from flask import current_app, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer
+from pyotp import TOTP
+from uuid import UUID, uuid4
 
 from db import db
 from models import (
     Journalist,
     Reply,
     Source,
-    SeenFile,
-    SeenMessage,
     SourceStar,
     Submission,
     RevokedToken,
 )
+
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from .utils.api_helper import get_api_headers
