@@ -81,18 +81,6 @@ app-lint-full: ## Test pylint compliance, with no checks disabled.
 	@cd securedrop && find . -name '*.py' | xargs pylint
 	@echo
 
-.PHONY: docs-lint
-docs-lint:  ## Check documentation for common syntax errors.
-	@echo "███ Linting documentation..."
-# The `-W` option converts warnings to errors.
-# The `-n` option enables "nit-picky" mode.
-	@make -C docs/ clean && sphinx-build -Wn docs/ docs/_build/html
-	@echo
-
-.PHONY: docs-linkcheck
-docs-linkcheck:  ## Check documentation for broken links.
-	@make -C docs/ clean && sphinx-build -b linkcheck -Wn docs/ docs/_build/html
-
 .PHONY: flake8
 flake8:  ## Validate PEP8 compliance for Python source files.
 	@echo "███ Running flake8..."
@@ -132,7 +120,7 @@ yamllint:  ## Lint YAML files (does not validate syntax!).
 	@echo
 
 .PHONY: lint
-lint: ansible-config-lint app-lint docs-lint flake8 html-lint shellcheck typelint yamllint ## Runs all lint checks
+lint: ansible-config-lint app-lint flake8 html-lint shellcheck typelint yamllint ## Runs all lint checks
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
@@ -186,12 +174,6 @@ test-config: securedrop/config.py
 dev:  ## Run the development server in a Docker container.
 	@echo "███ Starting development server..."
 	@OFFSET_PORTS='false' DOCKER_BUILD_VERBOSE='true' $(DEVSHELL) $(SDBIN)/run
-	@echo
-
-.PHONY: docs
-docs:  ## Build project documentation with live reload for editing.
-	@echo "███ Building docs and watching for changes..."
-	make -C docs/ clean && sphinx-autobuild docs/ docs/_build/html
 	@echo
 
 .PHONY: staging
