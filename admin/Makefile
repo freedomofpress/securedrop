@@ -8,6 +8,7 @@ test:  ## Run tox
 update-pip-requirements: ## Updates all Python requirements files via pip-compile.
 	@echo "███ Updating admin pip requirements..."
 	@bin/dev-shell pip-compile --allow-unsafe --generate-hashes --output-file requirements.txt requirements.in requirements-ansible.in
+	@bin/dev-shell pip-compile --allow-unsafe --generate-hashes --output-file requirements-testinfra.txt requirements.in requirements-ansible.in requirements-testinfra.in
 	@bin/dev-shell pip-compile --allow-unsafe --generate-hashes --output-file requirements-dev.txt requirements-dev.in
 
 # Explaination of the below shell command should it ever break.

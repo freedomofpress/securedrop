@@ -1,0 +1,199 @@
+---
+# Testinfra vars file for app-staigng.
+wanted_apache_headers:
+  - 'Header edit Set-Cookie ^(.*)$ $1;HttpOnly'
+  - 'Header always append X-Frame-Options: DENY'
+  - 'Header set Referrer-Policy "same-origin"'
+  - 'Header set X-XSS-Protection: "1; mode=block"'
+  - 'Header set X-Content-Type-Options: nosniff'
+  - 'Header set X-Download-Options: noopen'
+  - "Header set X-Content-Security-Policy: \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';\""
+  - "Header set Content-Security-Policy: \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';\""
+  - 'Header unset Etag'
+
+securedrop_venv: /opt/venvs/securedrop-app-code
+securedrop_venv_bin: "/opt/venvs/securedrop-app-code/bin"
+securedrop_venv_site_packages: "/opt/venvs/securedrop-app-code/lib/python3.5/site-packages"
+securedrop_code: /var/www/securedrop
+securedrop_data: /var/lib/securedrop
+securedrop_user: www-data
+
+app_hostname: app
+monitor_hostname: mon
+
+apache_listening_address: 127.0.0.1
+apache_source_log: /dev/null
+apache_allow_from: 127.0.0.1
+
+dns_server:
+  - 8.8.8.8
+mon_ip: 10.0.1.5
+app_ip: 10.0.1.4
+
+pip_deps:
+  - name: 'Flask'
+    version: '1.0.2'
+
+apparmor_complain: []
+
+apparmor_enforce:
+  - "/sbin/dhclient"
+  - "/usr/lib/NetworkManager/nm-dhcp-client.action"
+  - "/usr/lib/connman/scripts/dhclient-script"
+  - "/usr/sbin/ntpd"
+  - "/usr/sbin/tcpdump"
+  - "system_tor"
+  - "/usr/sbin/apache2"
+  - "/usr/sbin/apache2//DEFAULT_URI"
+  - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
+  - "/usr/sbin/tor"
+
+app_directories:
+  - /var/www/securedrop
+  - /var/lib/securedrop
+  - /var/lib/securedrop/store
+  - /var/lib/securedrop/keys
+  - /var/lib/securedrop/tmp
+
+tor_services:
+  - name: source
+    ports:
+      - "80"
+    authenticated: no
+    version: 2
+
+  - name: journalist
+    ports:
+      - "80"
+      - "8080"
+    authenticated: yes
+    client: journalist
+    version: 2
+
+  - name: journalistv3
+    ports:
+      - "80"
+    authenticated: yes
+    version: 3
+
+  - name: sourcev3
+    ports:
+      - "80"
+    authenticated: no
+    version: 3
+
+# source-error.log not enabled by default in prod
+allowed_apache_logfiles:
+  - /var/log/apache2/access.log
+  - /var/log/apache2/error.log
+  - /var/log/apache2/journalist-access.log
+  - /var/log/apache2/journalist-error.log
+  - /var/log/apache2/other_vhosts_access.log
+# - /var/log/apache2/source-error.log
+
+# Disable Postfix in staging, since we don't have valid credentials.
+postfix_enabled: True
+
+# Log events for OSSEC alerts we suppress
+log_events_without_ossec_alerts:
+  # Check that using an overloaded guard does not produce an OSSEC alert
+  - name: test_overloaded_tor_guard_does_not_produce_alert
+    alert: >
+      Aug 16 21:54:44 app-staging Tor[26695]: [warn] Your Guard
+      <name> (<fingerprint>) is failing a very large amount of
+      circuits. Most likely this means the Tor network is
+      overloaded, but it could also mean an attack against you
+      or potentially the guard itself.
+
+  # Check that OSSEC keep alive messages sent to the OSSEC manager
+  # do not produce OSSEC alerts.
+  #
+  # For more information see:
+  # https://github.com/ossec/ossec-hids/issues/466
+  # http://ossec-docs.readthedocs.io/en/latest/faq/alerts.html
+  #
+  # Example alert is from:
+  # https://groups.google.com/forum/#!msg/ossec-list/dE3klm84JMU/kGZkRdSl3ZkJ
+  - name: test_ossec_keep_alive_mark_does_not_produce_alert
+    alert: >
+      Dec 02 09:48:40 app-staging ossec-keepalive: --MARK--:
+      &pQSW__BPa5S?%tyDTJ3-iCG2lz2dU))r(F%6tjp8wqpf=]IKFT%ND2k
+      P]ua/W)3-6'eHduX$;$Axqq7Vr.dVZ1SUDSaH)4xTXCIieaEKv47LD-b
+      U)SXMnXO/jPGKn3.!NGBR_5]jD2UoSV9)h%z8G%7.xhI;s)267.rV214
+      O@t2#w)Z(k'UQp9]MyDERrOrG[-,e?iS@B3Rg/kGiR[g6mc0K)/]S]0'
+      +?+'/.[r$fqBR^7iAjoPv4j6SWjeRsLGr%$3#p+buf&u_RC3i/mE3vS3*
+      jp&B1qSJM431TmEg,YJ][ge;6-dJI69?-TB?!BI4?Uza63V3vMY3ake6a
+      hj-%A-m_5lgab!OVR,!pR+;L]eLgilU
+
+
+# Log events we expect an OSSEC alert to occur for
+log_events_with_ossec_alerts:
+  # Check that a denied RWX mmaping would produce an OSSEC alert
+  - name: test_grsec_denied_rwx_mapping_produces_alert
+    alert: >
+      Feb 10 23:34:40 app kernel: [  124.188641] grsec: denied
+      RWX mmap of <anonymous mapping> by /usr/sbin/apache2
+      [apache2:1328] uid/euid:33/33 gid/egid:33/33, parent
+      /usr/sbin/apache2[apache2:1309] uid/euid:0/0 gid/egid:0/0
+    level: "7" # Level 7 alert should be triggered by rule 100101
+    rule_id: "100101"
+
+  # When Ansible playbooks are run, an informative alert should be triggered
+  - name: test_ansible_playbook_triggers_alert
+    alert: >
+      Jul 22 17:06:41 app ansible-apt_key: Invoked with file=None
+      keyserver=None url=None data=-----BEGIN PGP PUBLIC KEY BLOCK
+      -----#012Version: GnuPG
+      v1#012#012mQENBEqg7GsBCACsef8koRT8UyZxiv1Irke5nVpte54TDtTl1
+      za1tOKfthmHbs2I#0124DHWG3qrwGayw+6yb5mMFe0h9Ap9IbilA5a1IdRs
+      dDgViyQQ3kvdfoavFHRxvGON#012tknIyk5Goa36GMBl84gQceRs/4Zx3kx
+      qCV+JYXE9CmdkpkVrh2K3j5+ysDWfD/kO#012dTzwu3WHaAwL8d5MJAGQn2
+      i6bTw4UHytrYemS1DdG/0EThCCyAnPmmb8iBkZlSW8#0126MzVqTrN37yvY
+      WTXk6MwKH50twaX5hzZAlSh9eqRjZLq51DDomO7EumXP90rS5mT#012QrS+
+      wiYfGQttoZfbh3wl5ZjejgEjx+qrnOH7ABEBAAG0JmRlYi50b3Jwcm9qZWN
+      0#012Lm9yZyBhcmNoaXZlIHNpZ25pbmcga2V5iEYEEBECAAYFAkqqojIACg
+      kQ61qJaiiY#012i/WmOgCfTyf3NJ7wHTBckwAeE4MSt5ZtXVsAn0XDq8PWW
+      nk4nK6TlevqK/VoWItF#012iEYEEBECAAYFAkqsYDUACgkQO50JPzGwl0vo
+      JwCcCSokiJSNY+yIr3nBPN/LJldb#012xekAmwfU60GeaWFwz7hqwVFL23x
+      eTpyniEYEEBECAAYFAkt9ndgACgkQYhWWT1sX#012KrI5TACfcBPbsaPA1A
+      UVVXXPv0KeWFYgVaIAoMr3jwd1NYVD6Te3D+yJhGzzCD6P#012iEYEEBECA
+      AYFAkt+li8ACgkQTlMAGaGhvAU4FwCfX3H4Ggm/x0yIAvmt4CW8AP9F#012
+      5D8AoKapuwbjsGncT3UdNFiHminAaq1tiEYEEBECAAYFAky6mjsACgkQhfc
+      mMSeh#012yJpL+gCggxs4C5o+Oznk7WmFrPQ3lbnfDKIAni4p20aRuwx6QW
+      GH8holjzTSmm5F#012iEYEEBECAAYFAlMI0FEACgkQhEMxewZV94DLagCcD
+      G5SR00+00VHzBVE6fDg027e#012N2sAnjNLOYbRSBxBnELUDKC7Vjaz/sAM
+      iEwEExECAAwFAkqg7nQFgwll/3cACgkQ#0123nqvbpTAnH+GJA
+    level: "13"
+    rule_id: "400001"
+
+  # Override and Log (as to not send email of messages pertaining to pssec
+  # server and agent starting up after each reboot.
+  - name: test_ossec_server_started_does_not_produce_email
+    alert: >
+      ossec: Ossec started.
+    level: "1"
+    rule_id: "400502"
+
+  - name: test_ossec_agent_started_does_not_produce_email
+    alert: >
+      ossec: Agent started
+    level: "1"
+    rule_id: "400503"
+
+  - name: test_ossec_server_apache_error_log_alert
+    alert: >
+      [Fri Apr 12 14:39:25.596318 2019] [wsgi:error]
+      [pid 1480:tid 4201987876608] ERROR:flask.app:Login for 'user' failed:
+      invalid username 'user'
+    level: "7"
+    rule_id: "400700"
+
+  - name: test_ossec_server_test_notification_alert
+    alert: >
+      [Fri Apr 12 15:45:05.310796 2019] [wsgi:error]
+      [pid 1479:tid 4201988093696] ERROR:flask.app:This is a test OSSEC alert
+    level: "7"
+    rule_id: "400700"
+
+fpf_apt_repo_url: "https://apt.freedom.press"
+grsec_version: "4.14.175"

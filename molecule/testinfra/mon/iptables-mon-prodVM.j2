@@ -1,0 +1,47 @@
+*filter
+:INPUT DROP
+:FORWARD DROP
+:OUTPUT DROP
+:LOGNDROP -
+-A INPUT -p tcp -m state --state RELATED,ESTABLISHED -m comment --comment "Allow traffic back for tor" -j ACCEPT
+{% for address in dns_server -%}
+-A INPUT -s {{ address }}/32 -p tcp -m tcp --sport 53 -m state --state RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
+-A INPUT -s {{ address }}/32 -p udp -m udp --sport 53 -m state --state RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
+{% endfor -%}
+-A INPUT -p udp -m udp --sport 123 --dport 123 -m state --state RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT
+-A INPUT -p tcp -m multiport --sports 80,8080,443 -m state --state RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT
+-A INPUT -s {{ app_ip }}/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow OSSEC agent to monitor" -j ACCEPT
+{% for address in dns_server -%}
+-A INPUT -s {{ address }}/32 -p tcp -m tcp --sport 53 -m state --state RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
+-A INPUT -s {{ address }}/32 -p udp -m udp --sport 53 -m state --state RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
+{% endfor -%}
+-A INPUT -p tcp -m tcp --sport 587 -m state --state RELATED,ESTABLISHED -m comment --comment "Allow ossec email alerts out" -j ACCEPT
+-A INPUT -s {{ app_ip }}/32 -p tcp -m tcp --dport 22 -m comment --comment "Block explicitly SSH from the adjacent SD component" -j DROP
+-A INPUT -s 10.0.1.0/24 -i eth1 -p tcp -m tcp --dport 22 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -m comment --comment "Rate limit incoming ssh traffic" -j ACCEPT
+-A INPUT -s 10.0.1.0/24 -i eth1 -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT
+-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP
+-A INPUT -m comment --comment "Drop and log all other incoming traffic" -j LOGNDROP
+-A OUTPUT -p tcp -m owner --uid-owner {{ tor_user_id }} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow tor outbound" -j ACCEPT
+-A OUTPUT -m owner --uid-owner {{ tor_user_id }} -m comment --comment "Drop all other traffic for tor" -j LOGNDROP
+-A OUTPUT -m owner --gid-owner {{ ssh_group_gid }} -m comment --comment "Drop all other outbound traffic for ssh user" -j LOGNDROP
+{% for address in dns_server -%}
+-A OUTPUT -d {{ address }}/32 -p tcp -m tcp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
+-A OUTPUT -d {{ address }}/32 -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
+{% endfor -%}
+-A OUTPUT -p udp -m udp --sport 123 --dport 123 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT
+-A OUTPUT -p tcp -m multiport --dports 80,8080,443 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT
+-A OUTPUT -d {{ app_ip }}/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "Allow OSSEC agent to monitor" -j ACCEPT
+{% for address in dns_server -%}
+-A OUTPUT -d {{ address }}/32 -p tcp -m tcp --dport 53 -m owner --uid-owner {{ postfix_user_id }} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "postfix dns rule" -j ACCEPT
+-A OUTPUT -d {{ address }}/32 -p udp -m udp --dport 53 -m owner --uid-owner {{ postfix_user_id }} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "postfix dns rule" -j ACCEPT
+{% endfor -%}
+-A OUTPUT -p tcp -m tcp --dport 587 -m owner --uid-owner {{ postfix_user_id }} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow ossec email alerts out" -j ACCEPT
+-A OUTPUT -o eth1 -p tcp -m owner --uid-owner 0 -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
+-A OUTPUT -o lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT
+-A OUTPUT -m comment --comment "Drop all other outgoing traffic" -j DROP
+-A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-tcp-options --log-ip-options --log-uid
+-A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-ip-options --log-uid
+-A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-ip-options --log-uid
+-A LOGNDROP -j DROP
+COMMIT

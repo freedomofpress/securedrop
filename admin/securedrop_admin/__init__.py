@@ -753,6 +753,15 @@ def install_securedrop(args):
                                  cwd=args.ansible_path)
 
 
+def verify_install(args):
+    """Run configuration tests against SecureDrop servers"""
+
+    sdlog.info("Running configuration tests: ")
+    testinfra_cmd = ["./devops/scripts/run_prod_testinfra"]
+    return subprocess.check_call(testinfra_cmd,
+                                 cwd=os.getcwd())
+
+
 def backup_securedrop(args):
     """Perform backup of the SecureDrop Application Server.
     Creates a tarball of submissions and server config, and fetches
@@ -1049,6 +1058,10 @@ def parse_argv(argv):
     parse_reset_ssh = subparsers.add_parser('reset_admin_access',
                                             help=reset_admin_access.__doc__)
     parse_reset_ssh.set_defaults(func=reset_admin_access)
+
+    parse_verify = subparsers.add_parser('verify',
+                                         help=verify_install.__doc__)
+    parse_verify.set_defaults(func=verify_install)
 
     args = parser.parse_args(argv)
     if getattr(args, 'func', None) is None:
