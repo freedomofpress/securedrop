@@ -5,12 +5,11 @@ from datetime import datetime
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
                    render_template, g, flash, abort)
 from flask_babel import gettext
-from sqlalchemy.sql.expression import false
 
 import store
 
 from db import db
-from models import Source, SourceStar, Submission, Reply
+from models import SeenReply, Source, SourceStar, Submission, Reply
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (validate_user, bulk_delete, download,
                                   confirm_bulk_delete, get_source)
@@ -112,10 +111,13 @@ def make_blueprint(config):
              config.JOURNALIST_KEY],
             output=current_app.storage.path(g.filesystem_id, filename),
         )
-        reply = Reply(g.user, g.source, filename)
 
         try:
+            reply = Reply(g.user, g.source, filename)
             db.session.add(reply)
+            db.session.flush()
+            seen_reply = SeenReply(reply_id=reply.id, journalist_id=g.user.id)
+            db.session.add(seen_reply)
             db.session.commit()
             store.async_add_checksum_for_file(reply)
         except Exception as exc:
