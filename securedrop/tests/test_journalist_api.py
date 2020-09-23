@@ -22,9 +22,9 @@ def test_unauthenticated_user_gets_all_endpoints(journalist_app):
     with journalist_app.test_client() as app:
         response = app.get(url_for('api.get_endpoints'))
 
-        expected_endpoints = ['current_user_url', 'submissions_url',
-                              'sources_url', 'auth_token_url',
-                              'replies_url']
+        expected_endpoints = ['current_user_url', 'all_users_url',
+                              'submissions_url', 'sources_url',
+                              'auth_token_url', 'replies_url']
         expected_endpoints.sort()
         sorted_observed_endpoints = list(response.json.keys())
         sorted_observed_endpoints.sort()
@@ -153,7 +153,8 @@ def test_user_without_token_cannot_get_protected_endpoints(journalist_app,
             url_for('api.single_reply', source_uuid=uuid,
                     reply_uuid=test_files['replies'][0].uuid),
             url_for('api.all_source_replies', source_uuid=uuid),
-            url_for('api.get_current_user')
+            url_for('api.get_current_user'),
+            url_for('api.get_all_users'),
             ]
 
     with journalist_app.test_client() as app:
@@ -637,6 +638,25 @@ def test_authorized_user_can_get_current_user_endpoint(journalist_app,
         assert response.json['uuid'] == test_journo['journalist'].uuid
         assert response.json['first_name'] == test_journo['journalist'].first_name
         assert response.json['last_name'] == test_journo['journalist'].last_name
+
+
+def test_authorized_user_can_get_all_users(journalist_app, test_journo, test_admin,
+                                           journalist_api_token):
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('api.get_all_users'),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+        # Ensure that all the users in the database are returned
+        observed_users = [user['uuid'] for user in response.json['users']]
+        expected_users = [user.uuid for user in Journalist.query.all()]
+        assert observed_users == expected_users
+
+        # Ensure that no fields other than the expected ones are returned
+        expected_fields = ['first_name', 'last_name', 'username', 'uuid']
+        for user in response.json['users']:
+            assert sorted(user.keys()) == expected_fields
 
 
 def test_request_with_missing_auth_header_triggers_403(journalist_app):

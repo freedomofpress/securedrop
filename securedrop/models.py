@@ -710,15 +710,25 @@ class Journalist(db.Model):
 
         return Journalist.query.get(data['id'])
 
-    def to_json(self) -> 'Dict[str, Union[str, bool, str]]':
+    def to_json(self, all_info: bool = True) -> 'Dict[str, Union[str, bool, str]]':
+        """Returns a JSON representation of the journalist user. If all_info is
+           False, potentially sensitive or extraneous fields are excluded. Note
+           that both representations do NOT include credentials."""
+
         json_user = {
             'username': self.username,
-            'last_login': self.last_access.isoformat() + 'Z',
-            'is_admin': self.is_admin,
             'uuid': self.uuid,
             'first_name': self.first_name,
             'last_name': self.last_name
         }
+
+        if all_info is True:
+            json_user['is_admin'] = self.is_admin
+            try:
+                json_user['last_login'] = self.last_access.isoformat() + 'Z'
+            except AttributeError:
+                json_user['last_login'] = None
+
         return json_user
 
 
