@@ -29,9 +29,6 @@ pyyaml>=5.3.1
 ruamel.yaml>=0.16.10
 safety>=1.8.7
 setuptools>=46.0.0
-sphinx
-sphinx-autobuild
-sphinx_rtd_theme
 testinfra
 urllib3>=1.25.8
 yamllint
