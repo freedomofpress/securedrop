@@ -1051,13 +1051,6 @@ def test_seen(journalist_app, journalist_api_token, test_files, test_journo, tes
         submissions_url = url_for('api.get_all_submissions')
         headers = get_api_headers(journalist_api_token)
 
-        # check that /seen reports no submissions, but one reply
-        response = app.get(seen_url, headers=headers)
-        assert response.status_code == 200
-        assert len(response.json["files"]) == 0
-        assert len(response.json["messages"]) == 0
-        assert len(response.json["replies"]) == 1
-
         # check that /submissions contains no seen items
         response = app.get(submissions_url, headers=headers)
         assert response.status_code == 200
@@ -1080,32 +1073,6 @@ def test_seen(journalist_app, journalist_api_token, test_files, test_journo, tes
         response = app.post(seen_url, data=json.dumps(data), headers=headers)
         assert response.status_code == 200
         assert response.json["message"] == "resources marked seen"
-
-        # and check that they are now reported seen
-        response = app.get(seen_url, headers=headers)
-        assert response.status_code == 200
-
-        expected_data = {
-            "files": [
-                {
-                    "file_uuid": file_uuid,
-                    "journalist_uuid": test_journo["uuid"]
-                }
-            ],
-            "messages": [
-                {
-                    "message_uuid": msg_uuid,
-                    "journalist_uuid": test_journo["uuid"]
-                }
-            ],
-            "replies": [
-                {
-                    "reply_uuid": reply_uuid,
-                    "journalist_uuid": test_journo["uuid"]
-                }
-            ],
-        }
-        assert expected_data == response.json
 
         # check that /submissions now contains the seen items
         response = app.get(submissions_url, headers=headers)
@@ -1156,13 +1123,6 @@ def test_seen_bad_requests(journalist_app, journalist_api_token):
     with journalist_app.test_client() as app:
         seen_url = url_for('api.seen')
         headers = get_api_headers(journalist_api_token)
-
-        response = app.get(seen_url, headers=headers)
-        assert response.status_code == 200
-
-        assert len(response.json["files"]) == 0
-        assert len(response.json["messages"]) == 0
-        assert len(response.json["replies"]) == 0
 
         # invalid JSON
         data = "not a mapping"

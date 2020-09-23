@@ -317,44 +317,13 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         return jsonify(
             {'replies': [reply.to_json() for reply in replies if reply.source]}), 200
 
-    @api.route("/seen", methods=["GET", "POST"])
+    @api.route("/seen", methods=["POST"])
     @token_required
     def seen() -> Tuple[flask.Response, int]:
         """
         Lists or marks the source conversation items that the journalist has seen.
         """
         user = _authenticate_user_from_auth_header(request)
-
-        if request.method == "GET":
-            seen_files = [
-                {
-                    "file_uuid": f.file.uuid,
-                    "journalist_uuid": f.journalist.uuid if f.journalist_id else None
-                }
-                for f in SeenFile.query.all()
-            ]
-            seen_messages = [
-                {
-                    "message_uuid": f.message.uuid,
-                    "journalist_uuid": f.journalist.uuid if f.journalist_id else None
-                }
-                for f in SeenMessage.query.all()
-            ]
-            seen_replies = [
-                {
-                    "reply_uuid": f.reply.uuid,
-                    "journalist_uuid": f.journalist.uuid if f.journalist_id else None
-                }
-                for f in SeenReply.query.all()
-            ]
-
-            return jsonify(
-                {
-                    "files": seen_files,
-                    "messages": seen_messages,
-                    "replies": seen_replies,
-                }
-            ), 200
 
         if request.method == "POST":
             if request.json is None or not isinstance(request.json, collections.abc.Mapping):
