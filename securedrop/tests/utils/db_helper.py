@@ -4,6 +4,7 @@ filesystem) interaction.
 """
 import datetime
 import math
+import io
 import os
 import random
 from typing import Dict, List
@@ -81,6 +82,9 @@ def reply(journalist, source, num_replies):
         reply = Reply(journalist, source, fname)
         replies.append(reply)
         db.session.add(reply)
+        db.session.flush()
+        seen_reply = SeenReply(reply_id=reply.id, journalist_id=journalist.id)
+        db.session.add(seen_reply)
 
     db.session.commit()
     return replies
@@ -148,7 +152,7 @@ def init_source():
     return source, codename
 
 
-def submit(source, num_submissions):
+def submit(source, num_submissions, submission_type="message"):
     """Generates and submits *num_submissions*
     :class:`Submission`s on behalf of a :class:`Source`
     *source*.
@@ -168,12 +172,21 @@ def submit(source, num_submissions):
     for _ in range(num_submissions):
         source.interaction_count += 1
         source.pending = False
-        fpath = current_app.storage.save_message_submission(
-            source.filesystem_id,
-            source.interaction_count,
-            source.journalist_filename,
-            str(os.urandom(1))
-        )
+        if submission_type == "file":
+            fpath = current_app.storage.save_file_submission(
+                source.filesystem_id,
+                source.interaction_count,
+                source.journalist_filename,
+                "pipe.txt",
+                io.BytesIO(b"Ceci n'est pas une pipe.")
+            )
+        else:
+            fpath = current_app.storage.save_message_submission(
+                source.filesystem_id,
+                source.interaction_count,
+                source.journalist_filename,
+                str(os.urandom(1))
+            )
         submission = Submission(source, fpath)
         submissions.append(submission)
         db.session.add(source)

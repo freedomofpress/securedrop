@@ -100,11 +100,10 @@ class Source(db.Model):
     def documents_messages_count(self) -> 'Dict[str, int]':
         self.docs_msgs_count = {'messages': 0, 'documents': 0}
         for submission in self.submissions:
-            if submission.filename.endswith('msg.gpg'):
-                self.docs_msgs_count['messages'] += 1
-            elif (submission.filename.endswith('doc.gz.gpg') or
-                  submission.filename.endswith('doc.zip.gpg')):
-                self.docs_msgs_count['documents'] += 1
+            if submission.is_message:
+                self.docs_msgs_count["messages"] += 1
+            elif submission.is_file:
+                self.docs_msgs_count["documents"] += 1
         return self.docs_msgs_count
 
     @property
@@ -212,7 +211,23 @@ class Submission(db.Model):
     def __repr__(self) -> str:
         return '<Submission %r>' % (self.filename)
 
-    def to_json(self) -> 'Dict[str, Union[str, int, bool]]':
+    @property
+    def is_file(self) -> bool:
+        return self.filename.endswith("doc.gz.gpg") or self.filename.endswith("doc.zip.gpg")
+
+    @property
+    def is_message(self) -> bool:
+        return self.filename.endswith("msg.gpg")
+
+    def to_json(self) -> "Dict[str, Union[str, int, bool]]":
+        seen_by = {
+            f.journalist.uuid for f in SeenFile.query.filter(SeenFile.file_id == self.id)
+            if f.journalist
+        }
+        seen_by.update({
+            m.journalist.uuid for m in SeenMessage.query.filter(SeenMessage.message_id == self.id)
+            if m.journalist
+        })
         json_submission = {
             'source_url': url_for('api.single_source',
                                   source_uuid=self.source.uuid) if self.source else None,
@@ -221,11 +236,14 @@ class Submission(db.Model):
                                       submission_uuid=self.uuid) if self.source else None,
             'filename': self.filename,
             'size': self.size,
-            'is_read': self.downloaded,
+            "is_file": self.is_file,
+            "is_message": self.is_message,
+            "is_read": self.seen,
             'uuid': self.uuid,
             'download_url': url_for('api.download_submission',
                                     source_uuid=self.source.uuid,
                                     submission_uuid=self.uuid) if self.source else None,
+            'seen_by': list(seen_by)
         }
         return json_submission
 
@@ -284,17 +302,21 @@ class Reply(db.Model):
     def __repr__(self) -> str:
         return '<Reply %r>' % (self.filename)
 
-    def to_json(self) -> 'Dict[str, Union[str, int, bool]]':
-        username = "deleted"
-        first_name = ""
-        last_name = ""
-        uuid = "deleted"
+    def to_json(self) -> "Dict[str, Union[str, int, bool]]":
+        journalist_username = "deleted"
+        journalist_first_name = ""
+        journalist_last_name = ""
+        journalist_uuid = "deleted"
         if self.journalist:
-            username = self.journalist.username
-            first_name = self.journalist.first_name
-            last_name = self.journalist.last_name
-            uuid = self.journalist.uuid
-        json_submission = {
+            journalist_username = self.journalist.username
+            journalist_first_name = self.journalist.first_name
+            journalist_last_name = self.journalist.last_name
+            journalist_uuid = self.journalist.uuid
+        seen_by = [
+            r.journalist.uuid for r in SeenReply.query.filter(SeenReply.reply_id == self.id)
+            if r.journalist
+        ]
+        json_reply = {
             'source_url': url_for('api.single_source',
                                   source_uuid=self.source.uuid) if self.source else None,
             'reply_url': url_for('api.single_reply',
@@ -302,14 +324,15 @@ class Reply(db.Model):
                                  reply_uuid=self.uuid) if self.source else None,
             'filename': self.filename,
             'size': self.size,
-            'journalist_username': username,
-            'journalist_first_name': first_name,
-            'journalist_last_name': last_name,
-            'journalist_uuid': uuid,
+            'journalist_username': journalist_username,
+            'journalist_first_name': journalist_first_name,
+            'journalist_last_name': journalist_last_name,
+            'journalist_uuid': journalist_uuid,
             'uuid': self.uuid,
             'is_deleted_by_source': self.deleted_by_source,
+            'seen_by': seen_by
         }
-        return json_submission
+        return json_reply
 
 
 class SourceStar(db.Model):
