@@ -13,7 +13,8 @@ import mock
 from flask import current_app
 
 from db import db
-from models import Journalist, Reply, SeenFile, SeenMessage, SeenReply, Source, Submission
+from journalist_app.utils import mark_seen
+from models import Journalist, Reply, SeenReply, Source, Submission
 from sdconfig import config
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
@@ -205,38 +206,6 @@ def new_codename(client, session):
     return codename
 
 
-def mark_replies_seen(journalist_id: int, replies: List[Reply]):
-    """
-    Mark replies as seen.
-    """
-    for reply in replies:
-        seen_reply = SeenReply(journalist_id=journalist_id, reply_id=reply.id)
-        db.session.add(seen_reply)
-    db.session.commit()
-
-
-def mark_messages_seen(journalist_id: int, messages: List[Submission]):
-    """
-    Mark messages as seen.
-    """
-    for message in messages:
-        message.downloaded = True
-        seen_message = SeenMessage(journalist_id=journalist_id, message_id=message.id)
-        db.session.add(seen_message)
-    db.session.commit()
-
-
-def mark_files_seen(journalist_id: int, files: List[Submission]):
-    """
-    Mark files as seen.
-    """
-    for file in files:
-        file.downloaded = True
-        seen_file = SeenFile(journalist_id=journalist_id, file_id=file.id)
-        db.session.add(seen_file)
-    db.session.commit()
-
-
 def bulk_setup_for_seen_only(journo) -> List[Dict]:
     """
     Create some sources with some seen submissions that are not marked as 'downloaded' in the
@@ -260,9 +229,9 @@ def bulk_setup_for_seen_only(journo) -> List[Dict]:
         seen_messages = random.sample(messages, math.ceil(len(messages) / 2))
         seen_replies = random.sample(replies, math.ceil(len(replies) / 2))
 
-        mark_files_seen(journo.id, seen_files)
-        mark_messages_seen(journo.id, seen_messages)
-        mark_replies_seen(journo.id, seen_replies)
+        mark_seen(seen_files, journo)
+        mark_seen(seen_messages, journo)
+        mark_seen(seen_replies, journo)
 
         unseen_files = list(set(files).difference(set(seen_files)))
         unseen_messages = list(set(messages).difference(set(seen_messages)))

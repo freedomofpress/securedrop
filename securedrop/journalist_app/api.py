@@ -16,8 +16,7 @@ from werkzeug.exceptions import default_exceptions
 
 from db import db
 from journalist_app import utils
-from models import (Journalist, Reply, SeenFile, SeenMessage,
-                    SeenReply, Source, Submission,
+from models import (Journalist, Reply, SeenReply, Source, Submission,
                     LoginThrottledException, InvalidUsernameException,
                     BadTokenException, WrongPasswordException)
 from sdconfig import SDConfig

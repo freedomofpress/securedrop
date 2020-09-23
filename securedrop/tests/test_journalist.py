@@ -18,6 +18,7 @@ from sqlalchemy.sql.expression import func
 
 import crypto_util
 import journalist_app as journalist_app_module
+from journalist_app.utils import mark_seen
 import models
 from db import db
 from models import (
@@ -1847,11 +1848,11 @@ def test_delete_collection_updates_db(journalist_app, test_journo, test_source):
         source = Source.query.get(test_source["id"])
         journo = Journalist.query.get(test_journo["id"])
         files = utils.db_helper.submit(source, 2)
-        utils.db_helper.mark_files_seen(journo.id, files)
+        mark_seen(files, journo)
         messages = utils.db_helper.submit(source, 2)
-        utils.db_helper.mark_messages_seen(journo.id, messages)
+        mark_seen(messages, journo)
         replies = utils.db_helper.reply(journo, source, 2)
-        utils.db_helper.mark_replies_seen(journo.id, replies)
+        mark_seen(replies, journo)
 
         journalist_app_module.utils.delete_collection(test_source["filesystem_id"])
 
@@ -2074,9 +2075,7 @@ def test_download_selected_submissions_and_replies_previously_seen(
     db.session.add(seen_file)
     seen_message = SeenMessage(message_id=selected_submissions[1].id, journalist_id=journo.id)
     db.session.add(seen_message)
-    for reply in selected_replies:
-        seen_reply = SeenReply(reply_id=reply.id, journalist_id=journo.id)
-        db.session.add(seen_reply)
+    mark_seen(selected_replies, journo)
     db.session.commit()
 
     with journalist_app.test_client() as app:
