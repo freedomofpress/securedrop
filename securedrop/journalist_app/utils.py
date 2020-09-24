@@ -9,15 +9,29 @@ import werkzeug
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
                    render_template, Markup, sessions, request)
 from flask_babel import gettext, ngettext
-from sqlalchemy.sql.expression import false
 
 import i18n
 
 from db import db
-from models import (get_one_or_else, Source, Journalist, InvalidUsernameException,
-                    WrongPasswordException, FirstOrLastNameError, LoginThrottledException,
-                    BadTokenException, SourceStar, PasswordError, Submission, RevokedToken,
-                    InvalidPasswordLength, Reply)
+from models import (
+    BadTokenException,
+    FirstOrLastNameError,
+    InvalidPasswordLength,
+    InvalidUsernameException,
+    Journalist,
+    LoginThrottledException,
+    PasswordError,
+    Reply,
+    RevokedToken,
+    SeenFile,
+    SeenMessage,
+    SeenReply,
+    Source,
+    SourceStar,
+    Submission,
+    WrongPasswordException,
+    get_one_or_else,
+)
 from store import add_checksum_for_file
 
 from sdconfig import SDConfig
@@ -160,19 +174,43 @@ def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> 
     :param list submissions: A list of :class:`models.Submission`s to
                              include in the ZIP-file.
     """
-    zf = current_app.storage.get_bulk_archive(submissions,
-                                              zip_directory=zip_basename)
+    zf = current_app.storage.get_bulk_archive(submissions, zip_directory=zip_basename)
     attachment_filename = "{}--{}.zip".format(
-        zip_basename, datetime.datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
+        zip_basename, datetime.datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S")
+    )
 
-    # Mark the submissions that have been downloaded as such
-    for submission in submissions:
-        submission.downloaded = True
-    db.session.commit()
+    # mark as seen by the current user
+    journalist_id = g.get("user").id
+    for item in submissions:
+        if item.filename.endswith("reply.gpg"):
+            already_seen = SeenReply.query.filter_by(
+                reply_id=item.id, journalist_id=journalist_id
+            ).one_or_none()
+            if not already_seen:
+                seen_reply = SeenReply(reply_id=item.id, journalist_id=journalist_id)
+                db.session.add(seen_reply)
+        elif item.filename.endswith("-doc.gz.gpg"):
+            already_seen = SeenFile.query.filter_by(
+                file_id=item.id, journalist_id=journalist_id
+            ).one_or_none()
+            if not already_seen:
+                seen_file = SeenFile(file_id=item.id, journalist_id=journalist_id)
+                db.session.add(seen_file)
+        else:
+            already_seen = SeenMessage.query.filter_by(
+                message_id=item.id, journalist_id=journalist_id
+            ).one_or_none()
+            if not already_seen:
+                seen_message = SeenMessage(message_id=item.id, journalist_id=journalist_id)
+                db.session.add(seen_message)
+        db.session.commit()
 
-    return send_file(zf.name, mimetype="application/zip",
-                     attachment_filename=attachment_filename,
-                     as_attachment=True)
+    return send_file(
+        zf.name,
+        mimetype="application/zip",
+        attachment_filename=attachment_filename,
+        as_attachment=True,
+    )
 
 
 def delete_file_object(file_object: Union[Submission, Reply]) -> None:
@@ -338,19 +376,25 @@ def set_diceware_password(user: Journalist, password: Optional[str]) -> bool:
 
 
 def col_download_unread(cols_selected: List[str]) -> werkzeug.Response:
-    """Download all unread submissions from all selected sources."""
-    submissions = []  # type: List[Union[Source, Submission]]
+    """
+    Download all unseen submissions from all selected sources.
+    """
+    unseen_submissions = []  # type: List[Union[Source, Submission]]
+
     for filesystem_id in cols_selected:
-        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
-                         .filter_by(deleted_at=None).one().id
-        submissions += Submission.query.filter(
-            Submission.downloaded == false(),
-            Submission.source_id == id).all()
-    if submissions == []:
-        flash(gettext("No unread submissions in selected collections."),
-              "error")
-        return redirect(url_for('main.index'))
-    return download("unread", submissions)
+        source = (
+            Source.query.filter(Source.filesystem_id == filesystem_id)
+            .filter_by(deleted_at=None)
+            .one()
+        )
+        submissions = Submission.query.filter_by(source_id=source.id).all()
+        unseen_submissions += [s for s in submissions if not s.seen]
+
+    if not unseen_submissions:
+        flash(gettext("No unread submissions in selected collections."), "error")
+        return redirect(url_for("main.index"))
+
+    return download("unread", unseen_submissions)
 
 
 def col_download_all(cols_selected: List[str]) -> werkzeug.Response:

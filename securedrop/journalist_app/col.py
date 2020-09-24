@@ -1,12 +1,23 @@
 # -*- coding: utf-8 -*-
 
-from flask import (Blueprint, redirect, url_for, render_template, flash,
-                   request, abort, send_file, current_app)
+from flask import (
+    Blueprint,
+    abort,
+    current_app,
+    flash,
+    g,
+    redirect,
+    render_template,
+    request,
+    send_file,
+    url_for,
+)
 from flask_babel import gettext
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
 from db import db
-from models import Submission
+from models import Reply, SeenFile, SeenMessage, SeenReply, Submission
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (make_star_true, make_star_false, get_source,
                                   delete_collection, col_download_unread,
@@ -73,20 +84,35 @@ def make_blueprint(config):
 
     @view.route('/<filesystem_id>/<fn>')
     def download_single_file(filesystem_id, fn):
-        """Sends a client the contents of a single file, either a submission
-        or a journalist reply"""
+        """
+        Marks the file being download (the file being downloaded is either a submission message,
+        submission file attachement, or journalist reply) as seen by the current logged-in user and
+        send the file to a client to be saved or opened.
+        """
         if '..' in fn or fn.startswith('/'):
             abort(404)
 
-        # only mark as read when it's a submission (and not a journalist reply)
-        if not fn.endswith('reply.gpg'):
-            try:
-                Submission.query.filter(
-                    Submission.filename == fn).one().downloaded = True
-                db.session.commit()
-            except NoResultFound as e:
-                current_app.logger.error(
-                    "Could not mark " + fn + " as downloaded: %s" % (e,))
+        # mark as seen by the current user
+        try:
+            journalist_id = g.get("user").id
+            if fn.endswith("reply.gpg"):
+                reply = Reply.query.filter(Reply.filename == fn).one()
+                seen_reply = SeenReply(reply_id=reply.id, journalist_id=journalist_id)
+                db.session.add(seen_reply)
+            elif fn.endswith("-doc.gz.gpg") or fn.endswith("doc.zip.gpg"):
+                file = Submission.query.filter(Submission.filename == fn).one()
+                seen_file = SeenFile(file_id=file.id, journalist_id=journalist_id)
+                db.session.add(seen_file)
+            else:
+                message = Submission.query.filter(Submission.filename == fn).one()
+                seen_message = SeenMessage(message_id=message.id, journalist_id=journalist_id)
+                db.session.add(seen_message)
+
+            db.session.commit()
+        except NoResultFound as e:
+            current_app.logger.error("Could not mark {} as seen: {}".format(fn, e))
+        except IntegrityError:
+            pass  # expected not to store that a file was seen by the same user multiple times
 
         return send_file(current_app.storage.path(filesystem_id, fn),
                          mimetype="application/pgp-encrypted")

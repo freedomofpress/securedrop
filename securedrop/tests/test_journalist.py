@@ -1,33 +1,42 @@
 # -*- coding: utf-8 -*-
-import os
-import pytest
-import io
-import random
-import zipfile
 import base64
 import binascii
-
+import io
+import os
+import pytest
+import random
+import zipfile
 from base64 import b64decode
 from io import BytesIO
-from flask import url_for, escape, session, current_app, g
+
+from flask import current_app, escape, g, session, url_for
 from mock import patch
 from pyotp import TOTP
-from sqlalchemy.sql.expression import func
-from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm.exc import StaleDataError
+from sqlalchemy.sql.expression import func
 
 import crypto_util
-import models
 import journalist_app as journalist_app_module
-from . import utils
-
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
+import models
+from db import db
+from models import (
+    InvalidPasswordLength,
+    InstanceConfig,
+    Journalist,
+    Reply,
+    SeenFile,
+    SeenMessage,
+    SeenReply,
+    Source,
+    InvalidUsernameException,
+    Submission
+)
 from sdconfig import SDConfig, config
 
-from db import db
-from models import (InvalidPasswordLength, InstanceConfig, Journalist, Reply, Source,
-                    InvalidUsernameException, Submission)
 from .utils.instrument import InstrumentedApp
+from . import utils
+
 
 # Smugly seed the RNG for deterministic testing
 random.seed(r'¯\_(ツ)_/¯')
@@ -208,6 +217,26 @@ def test_nonempty_replies_are_accepted(journalist_app, test_journo,
 
         text = resp.data.decode('utf-8')
         assert EMPTY_REPLY_TEXT not in text
+
+
+def test_successful_reply_marked_as_seen_by_sender(journalist_app, test_journo, test_source):
+    with journalist_app.test_client() as app:
+        journo = test_journo['journalist']
+        _login_user(app, journo.username, test_journo['password'], test_journo['otp_secret'])
+
+        seen_reply = SeenReply.query.filter_by(journalist_id=journo.id).one_or_none()
+        assert not seen_reply
+
+        resp = app.post(
+            url_for('main.reply'),
+            data={'filesystem_id': test_source['filesystem_id'], 'message': '_'},
+            follow_redirects=True
+        )
+
+        text = resp.data.decode('utf-8')
+        assert EMPTY_REPLY_TEXT not in text
+        seen_reply = SeenReply.query.filter_by(journalist_id=journo.id).one_or_none()
+        assert seen_reply
 
 
 def test_unauthorized_access_redirects_to_login(journalist_app):
@@ -1808,32 +1837,54 @@ def test_delete_source_deletes_submissions(journalist_app,
         assert res is None
 
 
-def test_delete_collection_updates_db(journalist_app,
-                                      test_journo,
-                                      test_source):
-    """Verify that when a source is deleted, their Source identity
-    record, as well as Reply & Submission records associated with
-    that record are purged from the database."""
+def test_delete_collection_updates_db(journalist_app, test_journo, test_source):
+    """
+    Verify that when a source is deleted, the Source record is deleted and all records associated
+    with the source are deleted.
+    """
 
     with journalist_app.app_context():
-        source = Source.query.get(test_source['id'])
-        journo = Journalist.query.get(test_journo['id'])
+        source = Source.query.get(test_source["id"])
+        journo = Journalist.query.get(test_journo["id"])
+        files = utils.db_helper.submit(source, 2)
+        utils.db_helper.mark_files_seen(journo.id, files)
+        messages = utils.db_helper.submit(source, 2)
+        utils.db_helper.mark_messages_seen(journo.id, messages)
+        replies = utils.db_helper.reply(journo, source, 2)
+        utils.db_helper.mark_replies_seen(journo.id, replies)
 
-        utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(journo, source, 2)
+        journalist_app_module.utils.delete_collection(test_source["filesystem_id"])
 
-        journalist_app_module.utils.delete_collection(
-            test_source['filesystem_id'])
-        res = Source.query.filter_by(id=test_source['id']).one_or_none()
-        assert res is None
+        # Verify no source record exists
+        source_result = Source.query.filter_by(id=source.id).all()
+        assert not source_result
 
-        res = Submission.query.filter_by(source_id=test_source['id']) \
-            .one_or_none()
-        assert res is None
+        # Verify no submission from the deleted source exist
+        submissions_result = Submission.query.filter_by(source_id=source.id).all()
+        assert not submissions_result
 
-        res = Reply.query.filter_by(source_id=test_source['id']) \
-            .one_or_none()
-        assert res is None
+        # Verify no replies to the deleted source exist
+        replies_result = Reply.query.filter_by(source_id=source.id).all()
+        assert not replies_result
+
+        # Verify no seen records about the deleted files, messages, or replies exist
+        for file in files:
+            seen_file = SeenFile.query.filter_by(
+                file_id=file.id, journalist_id=journo.id
+            ).one_or_none()
+            assert not seen_file
+
+        for message in messages:
+            seen_message = SeenMessage.query.filter_by(
+                message_id=message.id, journalist_id=journo.id
+            ).one_or_none()
+            assert not seen_message
+
+        for reply in replies:
+            seen_reply = SeenReply.query.filter_by(
+                reply_id=reply.id, journalist_id=journo.id
+            ).one_or_none()
+            assert not seen_reply
 
 
 def test_delete_source_deletes_source_key(journalist_app,
@@ -1936,198 +1987,367 @@ def test_render_locales(config, journalist_app, test_journo, test_source):
     assert url_end + '?l=en_US' in text, text
 
 
-def test_download_selected_submissions_from_source(journalist_app,
-                                                   test_journo,
-                                                   test_source):
-    source = Source.query.get(test_source['id'])
+def test_download_selected_submissions_and_replies(
+    journalist_app, test_journo, test_source
+):
+    journo = Journalist.query.get(test_journo["id"])
+    source = Source.query.get(test_source["id"])
     submissions = utils.db_helper.submit(source, 4)
+    replies = utils.db_helper.reply(journo, source, 4)
     selected_submissions = random.sample(submissions, 2)
-    selected_fnames = [submission.filename
-                       for submission in selected_submissions]
-    selected_fnames.sort()
+    selected_replies = random.sample(replies, 2)
+    selected = [submission.filename for submission in selected_submissions + selected_replies]
+    selected.sort()
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_journo['username'], test_journo['password'],
-                    test_journo['otp_secret'])
+        _login_user(
+            app, journo.username, test_journo["password"], test_journo["otp_secret"]
+        )
         resp = app.post(
-            '/bulk', data=dict(action='download',
-                               filesystem_id=test_source['filesystem_id'],
-                               doc_names_selected=selected_fnames))
+            "/bulk",
+            data=dict(
+                action="download",
+                filesystem_id=test_source["filesystem_id"],
+                doc_names_selected=selected,
+            ),
+        )
 
     # The download request was succesful, and the app returned a zipfile
     assert resp.status_code == 200
-    assert resp.content_type == 'application/zip'
+    assert resp.content_type == "application/zip"
     assert zipfile.is_zipfile(BytesIO(resp.data))
 
-    # The submissions selected are in the zipfile
-    for filename in selected_fnames:
-        # Check that the expected filename is in the zip file
+    # The items selected are in the zipfile and items are marked seen
+    for item in selected_submissions + selected_replies:
         zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
             os.path.join(
                 source.journalist_filename,
-                "%s_%s" % (filename.split('-')[0],
-                           source.last_updated.date()),
-                filename
-            ))
+                "{}_{}".format(item.filename.split("-")[0], source.last_updated.date()),
+                item.filename,
+            )
+        )
         assert zipinfo
 
-    # The submissions not selected are absent from the zipfile
-    not_selected_submissions = set(submissions).difference(
-        selected_submissions)
-    not_selected_fnames = [submission.filename
-                           for submission in not_selected_submissions]
+        seen_file = SeenFile.query.filter_by(
+            file_id=item.id, journalist_id=journo.id
+        ).one_or_none()
+        seen_message = SeenMessage.query.filter_by(
+            message_id=item.id, journalist_id=journo.id
+        ).one_or_none()
+        seen_reply = SeenReply.query.filter_by(
+            reply_id=item.id, journalist_id=journo.id
+        ).one_or_none()
 
-    for filename in not_selected_fnames:
+        if not seen_file and not seen_message and not seen_reply:
+            assert False
+
+    # The items not selected are absent from the zipfile
+    not_selected_submissions = set(submissions).difference(selected_submissions)
+    not_selected_replies = set(replies).difference(selected_replies)
+    not_selected = [i.filename for i in not_selected_submissions.union(not_selected_replies)]
+    for filename in not_selected:
         with pytest.raises(KeyError):
             zipfile.ZipFile(BytesIO(resp.data)).getinfo(
                 os.path.join(
                     source.journalist_filename,
                     source.journalist_designation,
-                    "%s_%s" % (filename.split('-')[0],
-                               source.last_updated.date()),
-                    filename
-                ))
+                    "%s_%s" % (filename.split("-")[0], source.last_updated.date()),
+                    filename,
+                )
+            )
 
 
-def _bulk_download_setup(journo):
-    """Create a couple sources, make some submissions on their behalf,
-    mark some of them as downloaded"""
+def test_download_selected_submissions_and_replies_previously_seen(
+    journalist_app, test_journo, test_source
+):
+    journo = Journalist.query.get(test_journo["id"])
+    source = Source.query.get(test_source["id"])
+    submissions = utils.db_helper.submit(source, 4)
+    replies = utils.db_helper.reply(journo, source, 4)
+    selected_submissions = random.sample(submissions, 2)
+    selected_replies = random.sample(replies, 2)
+    selected = [submission.filename for submission in selected_submissions + selected_replies]
+    selected.sort()
 
-    source0, _ = utils.db_helper.init_source()
-    source1, _ = utils.db_helper.init_source()
+    # Mark selected files, messages, and replies as seen
+    seen_file = SeenFile(file_id=selected_submissions[0].id, journalist_id=journo.id)
+    db.session.add(seen_file)
+    seen_message = SeenMessage(message_id=selected_submissions[1].id, journalist_id=journo.id)
+    db.session.add(seen_message)
+    for reply in selected_replies:
+        seen_reply = SeenReply(reply_id=reply.id, journalist_id=journo.id)
+        db.session.add(seen_reply)
+    db.session.commit()
 
-    submissions0 = utils.db_helper.submit(source0, 2)
-    submissions1 = utils.db_helper.submit(source1, 3)
+    with journalist_app.test_client() as app:
+        _login_user(
+            app, journo.username, test_journo["password"], test_journo["otp_secret"]
+        )
+        resp = app.post(
+            "/bulk",
+            data=dict(
+                action="download",
+                filesystem_id=test_source["filesystem_id"],
+                doc_names_selected=selected,
+            ),
+        )
 
-    downloaded0 = random.sample(submissions0, 1)
-    utils.db_helper.mark_downloaded(*downloaded0)
-    not_downloaded0 = set(submissions0).difference(downloaded0)
+    # The download request was succesful, and the app returned a zipfile
+    assert resp.status_code == 200
+    assert resp.content_type == "application/zip"
+    assert zipfile.is_zipfile(BytesIO(resp.data))
 
-    downloaded1 = random.sample(submissions1, 2)
-    utils.db_helper.mark_downloaded(*downloaded1)
-    not_downloaded1 = set(submissions1).difference(downloaded1)
+    # The items selected are in the zipfile and items are marked seen
+    for item in selected_submissions + selected_replies:
+        zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
+            os.path.join(
+                source.journalist_filename,
+                "{}_{}".format(item.filename.split("-")[0], source.last_updated.date()),
+                item.filename,
+            )
+        )
+        assert zipinfo
 
-    return {
-        'source0': source0,
-        'source1': source1,
-        'submissions0': submissions0,
-        'submissions1': submissions1,
-        'downloaded0': downloaded0,
-        'downloaded1': downloaded1,
-        'not_downloaded0': not_downloaded0,
-        'not_downloaded1': not_downloaded1,
-    }
+        seen_file = SeenFile.query.filter_by(
+            file_id=item.id, journalist_id=journo.id
+        ).one_or_none()
+        seen_message = SeenMessage.query.filter_by(
+            message_id=item.id, journalist_id=journo.id
+        ).one_or_none()
+        seen_reply = SeenReply.query.filter_by(
+            reply_id=item.id, journalist_id=journo.id
+        ).one_or_none()
+
+        if not seen_file and not seen_message and not seen_reply:
+            assert False
+
+    # The items not selected are absent from the zipfile
+    not_selected_submissions = set(submissions).difference(selected_submissions)
+    not_selected_replies = set(replies).difference(selected_replies)
+    not_selected = [i.filename for i in not_selected_submissions.union(not_selected_replies)]
+    for filename in not_selected:
+        with pytest.raises(KeyError):
+            zipfile.ZipFile(BytesIO(resp.data)).getinfo(
+                os.path.join(
+                    source.journalist_filename,
+                    source.journalist_designation,
+                    "%s_%s" % (filename.split("-")[0], source.last_updated.date()),
+                    filename,
+                )
+            )
+
+
+def test_download_selected_submissions_previously_downloaded(
+    journalist_app, test_journo, test_source
+):
+    journo = Journalist.query.get(test_journo["id"])
+    source = Source.query.get(test_source["id"])
+    submissions = utils.db_helper.submit(source, 4)
+    replies = utils.db_helper.reply(journo, source, 4)
+    selected_submissions = random.sample(submissions, 2)
+    selected_replies = random.sample(replies, 2)
+    selected = [submission.filename for submission in selected_submissions + selected_replies]
+    selected.sort()
+
+    # Mark selected submissions as downloaded
+    for submission in selected_submissions:
+        submission.downloaded = True
+        db.session.commit()
+
+    with journalist_app.test_client() as app:
+        _login_user(
+            app, journo.username, test_journo["password"], test_journo["otp_secret"]
+        )
+        resp = app.post(
+            "/bulk",
+            data=dict(
+                action="download",
+                filesystem_id=test_source["filesystem_id"],
+                doc_names_selected=selected,
+            ),
+        )
+
+    # The download request was succesful, and the app returned a zipfile
+    assert resp.status_code == 200
+    assert resp.content_type == "application/zip"
+    assert zipfile.is_zipfile(BytesIO(resp.data))
+
+    # The items selected are in the zipfile
+    for filename in selected:
+        zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
+            os.path.join(
+                source.journalist_filename,
+                "{}_{}".format(filename.split("-")[0], source.last_updated.date()),
+                filename,
+            )
+        )
+        assert zipinfo
+
+    # The items not selected are absent from the zipfile
+    not_selected_submissions = set(submissions).difference(selected_submissions)
+    not_selected_replies = set(replies).difference(selected_replies)
+    not_selected = [i.filename for i in not_selected_submissions.union(not_selected_replies)]
+    for filename in not_selected:
+        with pytest.raises(KeyError):
+            zipfile.ZipFile(BytesIO(resp.data)).getinfo(
+                os.path.join(
+                    source.journalist_filename,
+                    source.journalist_designation,
+                    "%s_%s" % (filename.split("-")[0], source.last_updated.date()),
+                    filename,
+                )
+            )
 
 
 def test_download_unread_all_sources(journalist_app, test_journo):
-    bulk = _bulk_download_setup(Journalist.query.get(test_journo['id']))
+    """
+    Test that downloading all unread creates a zip that contains all unread submissions from the
+    selected sources and marks these submissions as seen.
+    """
+    journo = Journalist.query.get(test_journo["id"])
+
+    bulk = utils.db_helper.bulk_setup_for_seen_only(journo)
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_journo['username'], test_journo['password'],
-                    test_journo['otp_secret'])
+        _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
 
-        # Download all unread messages from all sources
+        # Select all sources supplied from bulk_download_setup
+        selected = []
+        for i in bulk:
+            source = i["source"]
+            selected.append(source.filesystem_id)
+
+        # Download all unread submissions (not replies) from all sources selected
         resp = app.post(
-            url_for('col.process'),
-            data=dict(action='download-unread',
-                      cols_selected=[bulk['source0'].filesystem_id,
-                                     bulk['source1'].filesystem_id]))
+            url_for("col.process"),
+            data=dict(action="download-unread", cols_selected=selected),
+        )
 
     # The download request was succesful, and the app returned a zipfile
     assert resp.status_code == 200
-    assert resp.content_type == 'application/zip'
+    assert resp.content_type == "application/zip"
     assert zipfile.is_zipfile(BytesIO(resp.data))
 
-    # All the not dowloaded submissions are in the zipfile
-    for submission in bulk['not_downloaded0']:
-        zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(os.path.join(
-            "unread",
-            bulk['source0'].journalist_designation,
-            "%s_%s" % (submission.filename.split('-')[0], bulk['source0'].last_updated.date()),
-            submission.filename))
-        assert zipinfo
+    for i in bulk:
+        source = i["source"]
+        seen_files = i["seen_files"]
+        seen_messages = i["seen_messages"]
+        seen_replies = i["seen_replies"]
+        unseen_files = i["unseen_files"]
+        unseen_messages = i["unseen_messages"]
+        unseen_replies = i["unseen_replies"]
+        not_downloaded = i["not_downloaded"]
 
-    for submission in bulk['not_downloaded1']:
-        zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
-            os.path.join(
-                "unread",
-                bulk['source1'].journalist_designation,
-                "%s_%s" % (submission.filename.split('-')[0],
-                           bulk['source1'].last_updated.date()),
-                submission.filename
-            ))
-        assert zipinfo
-
-    # All the downloaded submissions are absent from the zipfile
-    for submission in bulk['downloaded0']:
-        with pytest.raises(KeyError):
-            zipfile.ZipFile(BytesIO(resp.data)).getinfo(
+        # Check that the zip file contains all submissions for the source that haven't been marked
+        # as downloaded and that they are now marked as seen in the database
+        for item in not_downloaded + unseen_files + unseen_messages:
+            zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
                 os.path.join(
                     "unread",
-                    bulk['source0'].journalist_designation,
-                    "%s_%s" % (submission.filename.split('-')[0],
-                               bulk['source0'].last_updated.date()),
-                    submission.filename
-                ))
+                    source.journalist_designation,
+                    "{}_{}".format(item.filename.split("-")[0], source.last_updated.date()),
+                    item.filename,
+                )
+            )
+            assert zipinfo
 
-    for submission in bulk['downloaded1']:
-        with pytest.raises(KeyError):
-            zipfile.ZipFile(BytesIO(resp.data)).getinfo(
-                os.path.join(
-                    "unread",
-                    bulk['source1'].journalist_designation,
-                    "%s_%s" % (submission.filename.split('-')[0],
-                               bulk['source1'].last_updated.date()),
-                    submission.filename
-                ))
+            seen_file = SeenFile.query.filter_by(
+                file_id=item.id, journalist_id=journo.id
+            ).one_or_none()
+            seen_message = SeenMessage.query.filter_by(
+                message_id=item.id, journalist_id=journo.id
+            ).one_or_none()
+
+            if not seen_file and not seen_message:
+                assert False
+
+        # Check that the zip file does not contain any seen data or replies
+        for item in seen_files + seen_messages + seen_replies + unseen_replies:
+            with pytest.raises(KeyError):
+                zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
+                    os.path.join(
+                        "unread",
+                        source.journalist_designation,
+                        "{}_{}".format(item.filename.split("-")[0], source.last_updated.date()),
+                        item.filename,
+                    )
+                )
+                assert zipinfo
 
 
 def test_download_all_selected_sources(journalist_app, test_journo):
-    bulk = _bulk_download_setup(Journalist.query.get(test_journo['id']))
+    """
+    Test that downloading all selected sources creates zip that contains all submissions from the
+    selected sources and marks these submissions as seen.
+    """
+    journo = Journalist.query.get(test_journo["id"])
+
+    bulk = utils.db_helper.bulk_setup_for_seen_only(journo)
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_journo['username'], test_journo['password'],
-                    test_journo['otp_secret'])
+        _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
 
-        # Dowload all messages from source1
-        resp = app.post(
-            url_for('col.process'),
-            data=dict(action='download-all',
-                      cols_selected=[bulk['source1'].filesystem_id]))
+        # Select all sources supplied from bulk_download_setup
+        selected = []
+        for i in bulk:
+            source = i["source"]
+            selected.append(source.filesystem_id)
 
+        # Download all submissions from all sources selected
         resp = app.post(
-            url_for('col.process'),
-            data=dict(action='download-all',
-                      cols_selected=[bulk['source1'].filesystem_id]))
+            url_for("col.process"),
+            data=dict(action="download-all", cols_selected=selected),
+        )
 
     # The download request was succesful, and the app returned a zipfile
     assert resp.status_code == 200
-    assert resp.content_type == 'application/zip'
+    assert resp.content_type == "application/zip"
     assert zipfile.is_zipfile(BytesIO(resp.data))
 
-    # All messages from source1 are in the zipfile
-    for submission in bulk['submissions1']:
-        zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
-            os.path.join(
-                "all",
-                bulk['source1'].journalist_designation,
-                "%s_%s" % (submission.filename.split('-')[0],
-                           bulk['source1'].last_updated.date()),
-                submission.filename)
-            )
-        assert zipinfo
+    for i in bulk:
+        source = i["source"]
+        seen_files = i["seen_files"]
+        seen_messages = i["seen_messages"]
+        seen_replies = i["seen_replies"]
+        unseen_files = i["unseen_files"]
+        unseen_messages = i["unseen_messages"]
+        unseen_replies = i["unseen_replies"]
+        not_downloaded = i["not_downloaded"]
 
-    # All messages from source0 are absent from the zipfile
-    for submission in bulk['submissions0']:
-        with pytest.raises(KeyError):
-            zipfile.ZipFile(BytesIO(resp.data)).getinfo(
+        # Check that the zip file contains all submissions for the source
+        for item in not_downloaded + unseen_files + unseen_messages + seen_files + seen_messages:
+            zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
                 os.path.join(
                     "all",
-                    bulk['source0'].journalist_designation,
-                    "%s_%s" % (submission.filename.split('-')[0],
-                               bulk['source0'].last_updated.date()),
-                    submission.filename)
+                    source.journalist_designation,
+                    "{}_{}".format(item.filename.split("-")[0], source.last_updated.date()),
+                    item.filename,
                 )
+            )
+            assert zipinfo
+
+            seen_file = SeenFile.query.filter_by(
+                file_id=item.id, journalist_id=journo.id
+            ).one_or_none()
+            seen_message = SeenMessage.query.filter_by(
+                message_id=item.id, journalist_id=journo.id
+            ).one_or_none()
+
+            if not seen_file and not seen_message:
+                assert False
+
+        # Check that the zip file does not contain any replies
+        for item in seen_replies + unseen_replies:
+            with pytest.raises(KeyError):
+                zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
+                    os.path.join(
+                        "unread",
+                        source.journalist_designation,
+                        "{}_{}".format(item.filename.split("-")[0], source.last_updated.date()),
+                        item.filename,
+                    )
+                )
+                assert zipinfo
 
 
 def test_single_source_is_successfully_starred(journalist_app,

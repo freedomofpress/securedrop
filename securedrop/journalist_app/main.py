@@ -5,12 +5,11 @@ from datetime import datetime
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
                    render_template, g, flash, abort)
 from flask_babel import gettext
-from sqlalchemy.sql.expression import false
 
 import store
 
 from db import db
-from models import Source, SourceStar, Submission, Reply
+from models import SeenReply, Source, SourceStar, Submission, Reply
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (validate_user, bulk_delete, download,
                                   confirm_bulk_delete, get_source)
@@ -74,9 +73,9 @@ def make_blueprint(config):
                 starred.append(source)
             else:
                 unstarred.append(source)
-            source.num_unread = len(
-                Submission.query.filter_by(source_id=source.id,
-                                           downloaded=False).all())
+            submissions = Submission.query.filter_by(source_id=source.id).all()
+            unseen_submissions = [s for s in submissions if not s.seen]
+            source.num_unread = len(unseen_submissions)
 
         return render_template('index.html',
                                unstarred=unstarred,
@@ -112,10 +111,13 @@ def make_blueprint(config):
              config.JOURNALIST_KEY],
             output=current_app.storage.path(g.filesystem_id, filename),
         )
-        reply = Reply(g.user, g.source, filename)
 
         try:
+            reply = Reply(g.user, g.source, filename)
             db.session.add(reply)
+            db.session.flush()
+            seen_reply = SeenReply(reply_id=reply.id, journalist_id=g.user.id)
+            db.session.add(seen_reply)
             db.session.commit()
             store.async_add_checksum_for_file(reply)
         except Exception as exc:
@@ -172,13 +174,12 @@ def make_blueprint(config):
     def download_unread_filesystem_id(filesystem_id):
         id = Source.query.filter(Source.filesystem_id == filesystem_id) \
                          .filter_by(deleted_at=None).one().id
-        submissions = Submission.query.filter(
-            Submission.source_id == id,
-            Submission.downloaded == false()).all()
-        if submissions == []:
+        submissions = Submission.query.filter(Submission.source_id == id).all()
+        unseen_submissions = [s for s in submissions if not s.seen]
+        if unseen_submissions == []:
             flash(gettext("No unread submissions for this source."))
             return redirect(url_for('col.col', filesystem_id=filesystem_id))
         source = get_source(filesystem_id)
-        return download(source.journalist_filename, submissions)
+        return download(source.journalist_filename, unseen_submissions)
 
     return view

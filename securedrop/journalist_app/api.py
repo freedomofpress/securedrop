@@ -186,18 +186,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             {'submissions': [submission.to_json() for
                              submission in source.submissions]}), 200
 
-    @api.route('/sources/<source_uuid>/submissions/<submission_uuid>/download',  # noqa
-               methods=['GET'])
+    @api.route("/sources/<source_uuid>/submissions/<submission_uuid>/download", methods=["GET"])
     @token_required
     def download_submission(source_uuid: str, submission_uuid: str) -> flask.Response:
         get_or_404(Source, source_uuid, column=Source.uuid)
-        submission = get_or_404(Submission, submission_uuid,
-                                column=Submission.uuid)
-
-        # Mark as downloaded
-        submission.downloaded = True
-        db.session.commit()
-
+        submission = get_or_404(Submission, submission_uuid, column=Submission.uuid)
         return utils.serve_file_with_etag(submission)
 
     @api.route('/sources/<source_uuid>/replies/<reply_uuid>/download',

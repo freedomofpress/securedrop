@@ -3,37 +3,40 @@
 filesystem) interaction.
 """
 import datetime
-import mock
+import math
 import os
+import random
+from typing import Dict, List
 
+import mock
 from flask import current_app
 
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-from sdconfig import config
-import models
-
 from db import db
+from models import Journalist, Reply, SeenFile, SeenMessage, SeenReply, Source, Submission
+from sdconfig import config
 
-# models.{Journalist, Reply}
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 
 def init_journalist(first_name=None, last_name=None, is_admin=False):
     """Initialize a journalist into the database. Return their
-    :class:`models.Journalist` object and password string.
+    :class:`Journalist` object and password string.
 
     :param bool is_admin: Whether the user is an admin.
 
-    :returns: A 2-tuple. The first entry, an :obj:`models.Journalist`
+    :returns: A 2-tuple. The first entry, an :obj:`Journalist`
               corresponding to the row just added to the database. The
               second, their password string.
     """
     username = current_app.crypto_util.genrandomid()
     user_pw = current_app.crypto_util.genrandomid()
-    user = models.Journalist(username=username,
-                             password=user_pw,
-                             first_name=first_name,
-                             last_name=last_name,
-                             is_admin=is_admin)
+    user = Journalist(
+        username=username,
+        password=user_pw,
+        first_name=first_name,
+        last_name=last_name,
+        is_admin=is_admin
+    )
     db.session.add(user)
     db.session.commit()
     return user, user_pw
@@ -42,7 +45,7 @@ def init_journalist(first_name=None, last_name=None, is_admin=False):
 def delete_journalist(journalist):
     """Deletes a journalist from the database.
 
-    :param models.Journalist journalist: The journalist to delete
+    :param Journalist journalist: The journalist to delete
 
     :returns: None
     """
@@ -54,14 +57,14 @@ def reply(journalist, source, num_replies):
     """Generates and submits *num_replies* replies to *source*
     from *journalist*. Returns reply objects as a list.
 
-    :param models.Journalist journalist: The journalist to write the
+    :param Journalist journalist: The journalist to write the
                                      reply from.
 
-    :param models.Source source: The source to send the reply to.
+    :param Source source: The source to send the reply to.
 
     :param int num_replies: Number of random-data replies to make.
 
-    :returns: A list of the :class:`models.Reply`s submitted.
+    :returns: A list of the :class:`Reply`s submitted.
     """
     assert num_replies >= 1
     replies = []
@@ -75,7 +78,7 @@ def reply(journalist, source, num_replies):
              config.JOURNALIST_KEY],
             current_app.storage.path(source.filesystem_id, fname))
 
-        reply = models.Reply(journalist, source, fname)
+        reply = Reply(journalist, source, fname)
         replies.append(reply)
         db.session.add(reply)
 
@@ -90,7 +93,7 @@ def mock_verify_token(testcase):
     :param unittest.TestCase testcase: The test case for which to patch
                                        TOTP verification.
     """
-    patcher = mock.patch('models.Journalist.verify_token')
+    patcher = mock.patch('Journalist.verify_token')
     testcase.addCleanup(patcher.stop)
     testcase.mock_journalist_verify_token = patcher.start()
     testcase.mock_journalist_verify_token.return_value = True
@@ -99,7 +102,7 @@ def mock_verify_token(testcase):
 def mark_downloaded(*submissions):
     """Mark *submissions* as downloaded in the database.
 
-    :param models.Submission submissions: One or more submissions that
+    :param Submission submissions: One or more submissions that
                                       should be marked as downloaded.
     """
     for submission in submissions:
@@ -107,21 +110,21 @@ def mark_downloaded(*submissions):
     db.session.commit()
 
 
-# models.{Source,Submission}
+# {Source,Submission}
 
 def init_source_without_keypair():
     """Initialize a source: create their database record and the
     filesystem directory that stores their submissions & replies.
     Return a source object and their codename string.
 
-    :returns: A 2-tuple. The first entry, the :class:`models.Source`
+    :returns: A 2-tuple. The first entry, the :class:`Source`
     initialized. The second, their codename string.
     """
     # Create source identity and database record
     codename = current_app.crypto_util.genrandomid()
     filesystem_id = current_app.crypto_util.hash_codename(codename)
     journalist_filename = current_app.crypto_util.display_id()
-    source = models.Source(filesystem_id, journalist_filename)
+    source = Source(filesystem_id, journalist_filename)
     db.session.add(source)
     db.session.commit()
     # Create the directory to store their submissions and replies
@@ -136,7 +139,7 @@ def init_source():
     and their GPG key encrypted with their codename. Return a source
     object and their codename string.
 
-    :returns: A 2-tuple. The first entry, the :class:`models.Source`
+    :returns: A 2-tuple. The first entry, the :class:`Source`
     initialized. The second, their codename string.
     """
     source, codename = init_source_without_keypair()
@@ -147,16 +150,16 @@ def init_source():
 
 def submit(source, num_submissions):
     """Generates and submits *num_submissions*
-    :class:`models.Submission`s on behalf of a :class:`models.Source`
+    :class:`Submission`s on behalf of a :class:`Source`
     *source*.
 
-    :param models.Source source: The source on who's behalf to make
+    :param Source source: The source on who's behalf to make
                              submissions.
 
     :param int num_submissions: Number of random-data submissions
                                 to make.
 
-    :returns: A list of the :class:`models.Submission`s submitted.
+    :returns: A list of the :class:`Submission`s submitted.
     """
     assert num_submissions >= 1
     source.last_updated = datetime.datetime.utcnow()
@@ -171,7 +174,7 @@ def submit(source, num_submissions):
             source.journalist_filename,
             str(os.urandom(1))
         )
-        submission = models.Submission(source, fpath)
+        submission = Submission(source, fpath)
         submissions.append(submission)
         db.session.add(source)
         db.session.add(submission)
@@ -187,3 +190,81 @@ def new_codename(client, session):
     tab_id, codename = next(iter(session['codenames'].items()))
     client.post('/create', data={'tab_id': tab_id})
     return codename
+
+
+def mark_replies_seen(journalist_id: int, replies: List[Reply]):
+    """
+    Mark replies as seen.
+    """
+    for reply in replies:
+        seen_reply = SeenReply(journalist_id=journalist_id, reply_id=reply.id)
+        db.session.add(seen_reply)
+    db.session.commit()
+
+
+def mark_messages_seen(journalist_id: int, messages: List[Submission]):
+    """
+    Mark messages as seen.
+    """
+    for message in messages:
+        message.downloaded = True
+        seen_message = SeenMessage(journalist_id=journalist_id, message_id=message.id)
+        db.session.add(seen_message)
+    db.session.commit()
+
+
+def mark_files_seen(journalist_id: int, files: List[Submission]):
+    """
+    Mark files as seen.
+    """
+    for file in files:
+        file.downloaded = True
+        seen_file = SeenFile(journalist_id=journalist_id, file_id=file.id)
+        db.session.add(seen_file)
+    db.session.commit()
+
+
+def bulk_setup_for_seen_only(journo) -> List[Dict]:
+    """
+    Create some sources with some seen submissions that are not marked as 'downloaded' in the
+    database and some seen replies from journo.
+    """
+
+    setup_collection = []
+
+    for i in range(random.randint(2, 4)):
+        collection = {}
+
+        source, _ = init_source()
+
+        submissions = submit(source, random.randint(2, 4))
+        half = math.ceil(len(submissions) / 2)
+        messages = submissions[half:]
+        files = submissions[:half]
+        replies = reply(journo, source, random.randint(1, 3))
+
+        seen_files = random.sample(files, math.ceil(len(files) / 2))
+        seen_messages = random.sample(messages, math.ceil(len(messages) / 2))
+        seen_replies = random.sample(replies, math.ceil(len(replies) / 2))
+
+        mark_files_seen(journo.id, seen_files)
+        mark_messages_seen(journo.id, seen_messages)
+        mark_replies_seen(journo.id, seen_replies)
+
+        unseen_files = list(set(files).difference(set(seen_files)))
+        unseen_messages = list(set(messages).difference(set(seen_messages)))
+        unseen_replies = list(set(replies).difference(set(seen_replies)))
+        not_downloaded = list(set(files + messages).difference(set(seen_files + seen_messages)))
+
+        collection['source'] = source
+        collection['seen_files'] = seen_files
+        collection['seen_messages'] = seen_messages
+        collection['seen_replies'] = seen_replies
+        collection['unseen_files'] = unseen_files
+        collection['unseen_messages'] = unseen_messages
+        collection['unseen_replies'] = unseen_replies
+        collection['not_downloaded'] = not_downloaded
+
+        setup_collection.append(collection)
+
+    return setup_collection
