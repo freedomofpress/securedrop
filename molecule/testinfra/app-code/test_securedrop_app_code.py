@@ -3,7 +3,7 @@ import pytest
 
 securedrop_test_vars = pytest.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.app_hostname]
-
+python_version = securedrop_test_vars.python_version
 
 def test_apache_default_docroot_is_absent(host):
     """
@@ -21,7 +21,7 @@ def test_apache_default_docroot_is_absent(host):
     'gnupg2',
     'haveged',
     'libapache2-mod-xsendfile',
-    'libpython3.5',
+    'libpython{}'.format(python_version),
     'paxctld',
     'python3',
     'redis-server',
