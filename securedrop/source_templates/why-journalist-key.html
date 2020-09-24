@@ -9,7 +9,7 @@
 <li>{{ gettext('Import it into your GPG keyring.') }}
 <ul>
     <li>{{ gettext('If you are using <a href="{url}">Tails</a>, you can double-click the <code>.asc</code> file you just downloaded and it will be automatically imported to your keyring.').format(url='https://tails.boum.org') }}</li>
-    <li>{{ gettext('If you are using a Mac or Linux, open the terminal. You can import the key with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>').format(url_for('info.download_journalist_pubkey'), submission_key_fpr_filename=submission_key_fpr + '.asc')|safe }}</li>
+    <li>{{ gettext('If you are using macOS or Linux, open the terminal. You can import the key with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>').format(url_for('info.download_journalist_pubkey'), submission_key_fpr_filename=submission_key_fpr + '.asc')|safe }}</li>
 </ul>
 </li>
 <li>{{ gettext('Encrypt your submission. Open the terminal and enter this gpg command:') }}
