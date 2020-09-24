@@ -4,6 +4,7 @@ filesystem) interaction.
 """
 import datetime
 import math
+import io
 import os
 import random
 from typing import Dict, List
@@ -12,7 +13,8 @@ import mock
 from flask import current_app
 
 from db import db
-from models import Journalist, Reply, SeenFile, SeenMessage, SeenReply, Source, Submission
+from journalist_app.utils import mark_seen
+from models import Journalist, Reply, SeenReply, Source, Submission
 from sdconfig import config
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
@@ -81,6 +83,9 @@ def reply(journalist, source, num_replies):
         reply = Reply(journalist, source, fname)
         replies.append(reply)
         db.session.add(reply)
+        db.session.flush()
+        seen_reply = SeenReply(reply_id=reply.id, journalist_id=journalist.id)
+        db.session.add(seen_reply)
 
     db.session.commit()
     return replies
@@ -148,7 +153,7 @@ def init_source():
     return source, codename
 
 
-def submit(source, num_submissions):
+def submit(source, num_submissions, submission_type="message"):
     """Generates and submits *num_submissions*
     :class:`Submission`s on behalf of a :class:`Source`
     *source*.
@@ -168,12 +173,21 @@ def submit(source, num_submissions):
     for _ in range(num_submissions):
         source.interaction_count += 1
         source.pending = False
-        fpath = current_app.storage.save_message_submission(
-            source.filesystem_id,
-            source.interaction_count,
-            source.journalist_filename,
-            str(os.urandom(1))
-        )
+        if submission_type == "file":
+            fpath = current_app.storage.save_file_submission(
+                source.filesystem_id,
+                source.interaction_count,
+                source.journalist_filename,
+                "pipe.txt",
+                io.BytesIO(b"Ceci n'est pas une pipe.")
+            )
+        else:
+            fpath = current_app.storage.save_message_submission(
+                source.filesystem_id,
+                source.interaction_count,
+                source.journalist_filename,
+                str(os.urandom(1))
+            )
         submission = Submission(source, fpath)
         submissions.append(submission)
         db.session.add(source)
@@ -190,38 +204,6 @@ def new_codename(client, session):
     tab_id, codename = next(iter(session['codenames'].items()))
     client.post('/create', data={'tab_id': tab_id})
     return codename
-
-
-def mark_replies_seen(journalist_id: int, replies: List[Reply]):
-    """
-    Mark replies as seen.
-    """
-    for reply in replies:
-        seen_reply = SeenReply(journalist_id=journalist_id, reply_id=reply.id)
-        db.session.add(seen_reply)
-    db.session.commit()
-
-
-def mark_messages_seen(journalist_id: int, messages: List[Submission]):
-    """
-    Mark messages as seen.
-    """
-    for message in messages:
-        message.downloaded = True
-        seen_message = SeenMessage(journalist_id=journalist_id, message_id=message.id)
-        db.session.add(seen_message)
-    db.session.commit()
-
-
-def mark_files_seen(journalist_id: int, files: List[Submission]):
-    """
-    Mark files as seen.
-    """
-    for file in files:
-        file.downloaded = True
-        seen_file = SeenFile(journalist_id=journalist_id, file_id=file.id)
-        db.session.add(seen_file)
-    db.session.commit()
 
 
 def bulk_setup_for_seen_only(journo) -> List[Dict]:
@@ -247,9 +229,9 @@ def bulk_setup_for_seen_only(journo) -> List[Dict]:
         seen_messages = random.sample(messages, math.ceil(len(messages) / 2))
         seen_replies = random.sample(replies, math.ceil(len(replies) / 2))
 
-        mark_files_seen(journo.id, seen_files)
-        mark_messages_seen(journo.id, seen_messages)
-        mark_replies_seen(journo.id, seen_replies)
+        mark_seen(seen_files, journo)
+        mark_seen(seen_messages, journo)
+        mark_seen(seen_replies, journo)
 
         unseen_files = list(set(files).difference(set(seen_files)))
         unseen_messages = list(set(messages).difference(set(seen_messages)))

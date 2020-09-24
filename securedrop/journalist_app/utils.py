@@ -9,6 +9,7 @@ import werkzeug
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
                    render_template, Markup, sessions, request)
 from flask_babel import gettext, ngettext
+from sqlalchemy.exc import IntegrityError
 
 import i18n
 
@@ -163,6 +164,32 @@ def validate_hotp_secret(user: Journalist, otp_secret: str) -> bool:
     return True
 
 
+def mark_seen(targets: List[Union[Submission, Reply]], user: Journalist) -> None:
+    """
+    Marks a list of submissions or replies seen by the given journalist.
+    """
+    for t in targets:
+        try:
+            if isinstance(t, Submission):
+                t.downloaded = True
+                if t.is_file:
+                    sf = SeenFile(file_id=t.id, journalist_id=user.id)
+                    db.session.add(sf)
+                elif t.is_message:
+                    sm = SeenMessage(message_id=t.id, journalist_id=user.id)
+                    db.session.add(sm)
+                db.session.commit()
+            elif isinstance(t, Reply):
+                sr = SeenReply(reply_id=t.id, journalist_id=user.id)
+                db.session.add(sr)
+                db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+            if 'UNIQUE constraint failed' in str(e):
+                continue
+            raise
+
+
 def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> werkzeug.Response:
     """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
     containing *submissions*. The ZIP-file, being a
@@ -179,31 +206,7 @@ def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> 
         zip_basename, datetime.datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S")
     )
 
-    # mark as seen by the current user
-    journalist_id = g.get("user").id
-    for item in submissions:
-        if item.filename.endswith("reply.gpg"):
-            already_seen = SeenReply.query.filter_by(
-                reply_id=item.id, journalist_id=journalist_id
-            ).one_or_none()
-            if not already_seen:
-                seen_reply = SeenReply(reply_id=item.id, journalist_id=journalist_id)
-                db.session.add(seen_reply)
-        elif item.filename.endswith("-doc.gz.gpg"):
-            already_seen = SeenFile.query.filter_by(
-                file_id=item.id, journalist_id=journalist_id
-            ).one_or_none()
-            if not already_seen:
-                seen_file = SeenFile(file_id=item.id, journalist_id=journalist_id)
-                db.session.add(seen_file)
-        else:
-            already_seen = SeenMessage.query.filter_by(
-                message_id=item.id, journalist_id=journalist_id
-            ).one_or_none()
-            if not already_seen:
-                seen_message = SeenMessage(message_id=item.id, journalist_id=journalist_id)
-                db.session.add(seen_message)
-        db.session.commit()
+    mark_seen(submissions, g.user)
 
     return send_file(
         zf.name,

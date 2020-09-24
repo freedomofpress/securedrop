@@ -15,7 +15,7 @@ import journalist_app
 
 from sdconfig import config
 from db import db
-from models import Journalist, Reply, Source, Submission
+from models import Journalist, Reply, SeenReply, Source, Submission
 from specialstrings import strings
 
 
@@ -138,6 +138,9 @@ def create_source_and_submissions(
             journalist = journalist_who_replied
         reply = Reply(journalist, source, fname)
         db.session.add(reply)
+        db.session.flush()
+        seen_reply = SeenReply(reply_id=reply.id, journalist_id=journalist.id)
+        db.session.add(seen_reply)
 
     db.session.commit()
 

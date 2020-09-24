@@ -13,16 +13,15 @@ from flask import (
     url_for,
 )
 from flask_babel import gettext
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
 from db import db
-from models import Reply, SeenFile, SeenMessage, SeenReply, Submission
+from models import Reply, Submission
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (make_star_true, make_star_false, get_source,
                                   delete_collection, col_download_unread,
                                   col_download_all, col_star, col_un_star,
-                                  col_delete)
+                                  col_delete, mark_seen)
 
 
 def make_blueprint(config):
@@ -94,25 +93,18 @@ def make_blueprint(config):
 
         # mark as seen by the current user
         try:
-            journalist_id = g.get("user").id
+            journalist = g.get("user")
             if fn.endswith("reply.gpg"):
                 reply = Reply.query.filter(Reply.filename == fn).one()
-                seen_reply = SeenReply(reply_id=reply.id, journalist_id=journalist_id)
-                db.session.add(seen_reply)
+                mark_seen([reply], journalist)
             elif fn.endswith("-doc.gz.gpg") or fn.endswith("doc.zip.gpg"):
                 file = Submission.query.filter(Submission.filename == fn).one()
-                seen_file = SeenFile(file_id=file.id, journalist_id=journalist_id)
-                db.session.add(seen_file)
+                mark_seen([file], journalist)
             else:
                 message = Submission.query.filter(Submission.filename == fn).one()
-                seen_message = SeenMessage(message_id=message.id, journalist_id=journalist_id)
-                db.session.add(seen_message)
-
-            db.session.commit()
+                mark_seen([message], journalist)
         except NoResultFound as e:
             current_app.logger.error("Could not mark {} as seen: {}".format(fn, e))
-        except IntegrityError:
-            pass  # expected not to store that a file was seen by the same user multiple times
 
         return send_file(current_app.storage.path(filesystem_id, fn),
                          mimetype="application/pgp-encrypted")
