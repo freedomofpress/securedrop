@@ -290,11 +290,15 @@ list-translators:  ## Collect the names of translators since the last merge from
 list-all-translators:  ## Collect the names of all translators in the project's history.
 	@$(DEVSHELL) $(SDROOT)/securedrop/i18n_tool.py list-translators --all
 
-# TODO: test this to make sure the paths in update-user-guides work
 .PHONY: update-user-guides
-update-user-guides:  ## Run the page layout tests to regenerate screenshots.
-	@echo "Running page layout tests to update guide screenshots..."
-	@$(DEVSHELL) $(SDBIN)/update-user-guides
+update-user-guides:  ## Regenerate docs screenshots. Set DOCS_REPO_DIR to repo checkout root.
+ifndef DOCS_REPO_DIR
+	$(error DOCS_REPO_DIR must be set to the documentation repo checkout root.)
+endif
+	@echo "Running page layout tests to update screenshots used in user guide..."
+	@$(DEVSHELL) $(SDBIN)/generate-docs-screenshots
+	@echo "Copying screenshots..."
+	cp securedrop/tests/pageslayout/screenshots/en_US/*.png $${DOCS_REPO_DIR}/docs/images/manual/screenshots
 	@echo
 
 
