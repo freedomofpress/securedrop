@@ -15,14 +15,21 @@ set -x
 #          <conflicting-package> <version>
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
+GRSEC_VERSION='4.14.188-grsec'
+
+# Sets default grub boot parameter to the kernel version specified
+# by $GRSEC_VERSION. The debian buster default kernel is 4.19, thus
+# supersedes this 4.14.x series grsecurity kernel at boot-time
+set_grub_default() {
+    GRUB_OPT="'Advanced options for Debian GNU/Linux>Debian GNU/Linux, with Linux $GRSEC_VERSION'"
+    perl -pi -e "s|^GRUB_DEFAULT=.*|GRUB_DEFAULT=$GRUB_OPT|" /etc/default/grub
+}
 
 case "$1" in
     configure)
 
-    # Replace the default GRUB boot option with 0, which defaults to the
-    # highest kernel version. Any kernel provided by apt.freedom.press must
-    # suprecede the ones provided by Ubuntu.
-    sed -i '/^GRUB_DEFAULT=/s/=.*/=0/' /etc/default/grub
+    # Force latest hardened kernel for next boot
+    set_grub_default
     # When using CONFIG_PAX_KERNEXEC, the grsecurity team recommends the kernel
     # is booted with "noefi" on the kernel command line if "CONFIG_EFI" is
     # enabled, as EFI runtime services are necessarily mapped as RWX.
