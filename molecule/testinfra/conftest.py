@@ -28,10 +28,10 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
         hostvars = yaml.safe_load(f)
 
     if os.environ.get("MOLECULE_SCENARIO_NAME").endswith("focal"):
-        hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.8")
+        hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.8")  # noqa: E501
         hostvars['python_version'] = "3.8"
     else:
-        hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.5")
+        hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.5")  # noqa: E501
         hostvars['python_version'] = "3.5"
 
     if with_header:
