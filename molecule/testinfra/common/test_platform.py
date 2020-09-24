@@ -4,8 +4,8 @@ test_vars = pytest.securedrop_test_vars
 testinfra_hosts = [test_vars.app_hostname, test_vars.monitor_hostname]
 
 # We expect Ubuntu Xenial
-SUPPORTED_CODENAMES = ('xenial')
-SUPPORTED_RELEASES = ('16.04')
+SUPPORTED_CODENAMES = ('xenial', 'focal')
+SUPPORTED_RELEASES = ('16.04', '20.04')
 
 
 def test_ansible_version(host):
@@ -23,7 +23,7 @@ def test_ansible_version(host):
 
 def test_platform(host):
     """
-    SecureDrop requires Ubuntu Ubuntu 16.04 LTS.
+    SecureDrop requires Ubuntu Ubuntu 16.04 or 20.04 LTS
     """
     assert host.system_info.type == "linux"
     assert host.system_info.distribution == "ubuntu"
