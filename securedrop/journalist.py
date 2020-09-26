@@ -10,7 +10,7 @@ app = create_app(config)
 
 
 @asynchronous
-def prime_keycache():
+def prime_keycache() -> None:
     """
     Preloads CryptoUtil.keycache.
     """

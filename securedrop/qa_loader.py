@@ -9,32 +9,32 @@ from argparse import ArgumentParser
 from datetime import datetime
 from itertools import cycle
 from os import path
+from typing import Optional
 
 from flask import current_app
+from typing import List
 
 from crypto_util import DICEWARE_SAFE_CHARS
 from db import db
 from journalist_app import create_app
 from models import Journalist, JournalistLoginAttempt, Reply, Source, SourceStar, Submission
+from sdconfig import SDConfig
 from sdconfig import config as sdconfig
 
 
-def random_bool():
+def random_bool() -> bool:
     return bool(random.getrandbits(1))
 
 
-def random_chars(len, nullable, chars=string.ascii_letters):
-    if nullable and random_bool():
-        return None
-    else:
-        return "".join([random.choice(chars) for _ in range(len)])
+def random_chars(len: int, chars: str = string.ascii_letters) -> str:
+    return "".join([random.choice(chars) for _ in range(len)])
 
 
-def bool_or_none():
+def bool_or_none() -> Optional[bool]:
     return random.choice([True, False, None])
 
 
-def random_datetime(nullable):
+def random_datetime(nullable: bool) -> Optional[datetime]:
     if nullable and random_bool():
         return None
     else:
@@ -50,14 +50,14 @@ def random_datetime(nullable):
         )
 
 
-def positive_int(s):
+def positive_int(s: str) -> int:
     i = int(s)
     if i < 1:
         raise ValueError("{} is not >= 1".format(s))
     return i
 
 
-def fraction(s):
+def fraction(s: str) -> float:
     f = float(s)
     if 0 <= f <= 1:
         return f
@@ -82,17 +82,17 @@ replies = cycle(
 )
 
 
-class QaLoader(object):
+class QaLoader:
     def __init__(
         self,
-        config,
-        journalist_count=10,
-        source_count=50,
-        submissions_per_source=1,
-        replies_per_source=1,
-        source_star_fraction=0.1,
-        source_reply_fraction=0.5,
-    ):
+        config: SDConfig,
+        journalist_count: int = 10,
+        source_count: int = 50,
+        submissions_per_source: int = 1,
+        replies_per_source: int = 1,
+        source_star_fraction: float = 0.1,
+        source_reply_fraction:float = 0.5,
+    ) -> None:
         """
         source_star_fraction and source_reply_fraction are simply the
         fraction of sources starred or replied to.
@@ -107,24 +107,24 @@ class QaLoader(object):
         self.source_star_fraction = source_star_fraction
         self.source_reply_fraction = source_reply_fraction
 
-        self.journalists = []
-        self.sources = []
+        self.journalists = []  # type: List[Journalist]
+        self.sources = []  # type: List[Source]
 
-    def new_journalist(self):
+    def new_journalist(self) -> None:
         # Make a diceware-like password
         pw = " ".join(
-            [random_chars(3, nullable=False, chars=DICEWARE_SAFE_CHARS) for _ in range(7)]
+            [random_chars(3, chars=DICEWARE_SAFE_CHARS) for _ in range(7)]
         )
         journalist = Journalist(
-            username=random_chars(random.randint(3, 32), nullable=False),
+            username=random_chars(random.randint(3, 32)),
             password=pw,
             is_admin=random_bool(),
         )
         if random_bool():
             # to add legacy passwords back in
             journalist.passphrase_hash = None
-            journalist.pw_salt = random_chars(32, nullable=False).encode("utf-8")
-            journalist.pw_hash = random_chars(64, nullable=False).encode("utf-8")
+            journalist.pw_salt = random_chars(32).encode("utf-8")
+            journalist.pw_hash = random_chars(64).encode("utf-8")
 
         journalist.is_admin = bool_or_none()
 
@@ -137,7 +137,7 @@ class QaLoader(object):
         db.session.flush()
         self.journalists.append(journalist.id)
 
-    def new_source(self):
+    def new_source(self) -> None:
         codename = current_app.crypto_util.genrandomid()
         filesystem_id = current_app.crypto_util.hash_codename(codename)
         journalist_designation = current_app.crypto_util.display_id()
@@ -151,7 +151,7 @@ class QaLoader(object):
 
         self.sources.append(source.id)
 
-    def new_submission(self, source_id):
+    def new_submission(self, source_id: int) -> None:
         source = Source.query.get(source_id)
 
         source.interaction_count += 1
@@ -169,12 +169,12 @@ class QaLoader(object):
 
         db.session.flush()
 
-    def new_source_star(self, source_id):
+    def new_source_star(self, source_id: int) -> None:
         source = Source.query.get(source_id)
-        star = SourceStar(source, bool_or_none())
+        star = SourceStar(source, random.choice([True, False]))
         db.session.add(star)
 
-    def new_reply(self, journalist_id, source_id):
+    def new_reply(self, journalist_id: int, source_id: int) -> None:
         source = Source.query.get(source_id)
 
         journalist = Journalist.query.get(journalist_id)
@@ -196,13 +196,13 @@ class QaLoader(object):
         db.session.add(reply)
         db.session.flush()
 
-    def new_journalist_login_attempt(self, journalist_id):
+    def new_journalist_login_attempt(self, journalist_id: int) -> None:
         journalist = Journalist.query.get(journalist_id)
         attempt = JournalistLoginAttempt(journalist)
         attempt.timestamp = random_datetime(nullable=True)
         db.session.add(attempt)
 
-    def load(self):
+    def load(self) -> None:
         with self.app.app_context():
             print("Creating {:d} journalists...".format(self.journalist_count))
             for i in range(1, self.journalist_count + 1):
@@ -255,7 +255,7 @@ class QaLoader(object):
             db.session.commit()
 
 
-def arg_parser():
+def arg_parser() -> ArgumentParser:
     parser = ArgumentParser(
         path.basename(__file__), description="Loads data into the database for testing upgrades"
     )
@@ -295,7 +295,7 @@ def arg_parser():
     return parser
 
 
-def main():
+def main() -> None:
     args = arg_parser().parse_args()
     print("Loading data. This may take a while.")
     QaLoader(
