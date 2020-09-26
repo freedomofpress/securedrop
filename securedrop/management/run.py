@@ -7,8 +7,15 @@ import sys
 
 __all__ = ['run']
 
+from typing import Any
 
-def colorize(s, color, bold=False):
+from typing import List
+from typing import TextIO
+
+from typing import Callable
+
+
+def colorize(s: str, color: str, bold: bool = False) -> str:
     """
     Returns the string s surrounded by shell metacharacters to display
     it with the given color and optionally bolded.
@@ -45,25 +52,25 @@ def colorize(s, color, bold=False):
 
 class DevServerProcess(subprocess.Popen):  # pragma: no cover
 
-    def __init__(self, label, cmd, color):
+    def __init__(self, label: str, cmd: List[str], color: str) -> None:
         self.label = label
         self.cmd = cmd
         self.color = color
 
-        super(DevServerProcess, self).__init__(
+        super(DevServerProcess, self).__init__(  # type: ignore
             self.cmd,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             preexec_fn=os.setsid)
 
-    def print_label(self, to):
+    def print_label(self, to: TextIO) -> None:
         label = "\n => {} <= \n\n".format(self.label)
         if to.isatty():
             label = colorize(label, self.color, True)
         to.write(label)
 
-    def fileno(self):
+    def fileno(self) -> int:
         """Implement fileno() in order to use DevServerProcesses with
         select.select directly.
 
@@ -73,12 +80,14 @@ class DevServerProcess(subprocess.Popen):  # pragma: no cover
         available on stdout.
 
         """
+        if not self.stdout:
+            raise RuntimeError()
         return self.stdout.fileno()
 
 
-class DevServerProcessMonitor(object):  # pragma: no cover
+class DevServerProcessMonitor:  # pragma: no cover
 
-    def __init__(self, proc_funcs):
+    def __init__(self, proc_funcs: List[Callable]) -> None:
         self.procs = []
         self.last_proc = None
         atexit.register(self.cleanup)
@@ -86,7 +95,7 @@ class DevServerProcessMonitor(object):  # pragma: no cover
         for pf in proc_funcs:
             self.procs.append(pf())
 
-    def monitor(self):
+    def monitor(self) -> None:
         while True:
             rprocs, _, _ = select.select(self.procs, [], [])
 
@@ -118,7 +127,7 @@ class DevServerProcessMonitor(object):  # pragma: no cover
         for proc in self.procs:
             proc.wait()
 
-    def cleanup(self):
+    def cleanup(self) -> None:
         for proc in self.procs:
             if proc.poll() is None:
                 # When the development servers use automatic reloading, they
@@ -130,7 +139,7 @@ class DevServerProcessMonitor(object):  # pragma: no cover
                 proc.terminate()
 
 
-def run(args):  # pragma: no cover
+def run(args: Any) -> None:  # pragma: no cover
     """
     Starts development servers for both the Source Interface and the
     Journalist Interface concurrently. Their output is collected,

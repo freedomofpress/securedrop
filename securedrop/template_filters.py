@@ -5,26 +5,30 @@ from datetime import datetime
 from jinja2 import Markup, escape
 import math
 
+from jinja2.nodes import EvalContext
 
-def rel_datetime_format(dt, fmt=None, relative=False):
+
+def rel_datetime_format(
+    dt: datetime, fmt: str = 'MMM dd, yyyy hh:mm a',
+    relative: bool = False
+) -> str:
     """Template filter for readable formatting of datetime.datetime"""
     if relative:
         time = dates.format_timedelta(datetime.utcnow() - dt,
                                       locale=get_locale())
         return gettext('{time} ago').format(time=time)
     else:
-        fmt = fmt or 'MMM dd, yyyy hh:mm a'
         return dates.format_datetime(dt, fmt, locale=get_locale())
 
 
-def nl2br(context, value):
+def nl2br(context: EvalContext, value: str) -> str:
     formatted = '<br>\n'.join(escape(value).split('\n'))
     if context.autoescape:
         formatted = Markup(formatted)
     return formatted
 
 
-def filesizeformat(value):
+def filesizeformat(value: int) -> str:
     prefixes = [
         'digital-kilobyte',
         'digital-megabyte',
