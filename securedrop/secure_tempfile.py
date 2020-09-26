@@ -3,6 +3,8 @@ import base64
 import os
 import io
 from tempfile import _TemporaryFileWrapper  # type: ignore
+from typing import Optional
+from typing import Union
 
 from pretty_bad_protocol._util import _STREAMLIKE_TYPES
 from cryptography.exceptions import AlreadyFinalized
@@ -34,7 +36,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
     AES_key_size = 256
     AES_block_size = 128
 
-    def __init__(self, store_dir):
+    def __init__(self, store_dir: str) -> None:
         """Generates an AES key and an initialization vector, and opens
         a file in the `store_dir` directory with a
         pseudorandomly-generated filename.
@@ -56,7 +58,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         self.file = io.open(self.filepath, 'w+b')
         super(SecureTemporaryFile, self).__init__(self.file, self.filepath)
 
-    def create_key(self):
+    def create_key(self) -> None:
         """Generates a unique, pseudorandom AES key, stored ephemerally in
         memory as an instance attribute. Its destruction is ensured by the
         automatic nightly reboots of the SecureDrop application server combined
@@ -68,7 +70,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         self.iv = os.urandom(self.AES_block_size // 8)
         self.initialize_cipher()
 
-    def initialize_cipher(self):
+    def initialize_cipher(self) -> None:
         """Creates the cipher-related objects needed for AES-CTR
         encryption and decryption.
         """
@@ -76,7 +78,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         self.encryptor = self.cipher.encryptor()
         self.decryptor = self.cipher.decryptor()
 
-    def write(self, data):
+    def write(self, data: Union[bytes, str]) -> None:
         """Write `data` to the secure temporary file. This method may be
         called any number of times following instance initialization,
         but after calling :meth:`read`, you cannot write to the file
@@ -87,11 +89,13 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         self.last_action = 'write'
 
         if isinstance(data, str):
-            data = data.encode('utf-8')
+            data_as_bytes = data.encode('utf-8')
+        else:
+            data_as_bytes = data
 
-        self.file.write(self.encryptor.update(data))
+        self.file.write(self.encryptor.update(data_as_bytes))
 
-    def read(self, count=None):
+    def read(self, count: Optional[int] = None) -> bytes:
         """Read `data` from the secure temporary file. This method may
         be called any number of times following instance initialization
         and once :meth:`write has been called at least once, but not
@@ -120,7 +124,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         else:
             return self.decryptor.update(self.file.read())
 
-    def close(self):
+    def close(self) -> None:
         """The __del__ method in tempfile._TemporaryFileWrapper (which
         SecureTemporaryFile class inherits from) calls close() when the
         temporary file is deleted.

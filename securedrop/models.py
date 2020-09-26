@@ -117,28 +117,12 @@ class Source(db.Model):
         return collection
 
     @property
-    def fingerprint(self):
+    def fingerprint(self) -> 'Optional[str]':
         return current_app.crypto_util.get_fingerprint(self.filesystem_id)
 
-    @fingerprint.setter
-    def fingerprint(self, value):
-        raise NotImplementedError
-
-    @fingerprint.deleter
-    def fingerprint(self):
-        raise NotImplementedError
-
     @property
-    def public_key(self) -> str:
+    def public_key(self) -> 'Optional[str]':
         return current_app.crypto_util.get_pubkey(self.filesystem_id)
-
-    @public_key.setter
-    def public_key(self, value: str) -> None:
-        raise NotImplementedError
-
-    @public_key.deleter
-    def public_key(self) -> None:
-        raise NotImplementedError
 
     def to_json(self) -> 'Dict[str, Union[str, bool, int, str]]':
         docs_msg_count = self.documents_messages_count()
@@ -219,7 +203,7 @@ class Submission(db.Model):
     def is_message(self) -> bool:
         return self.filename.endswith("msg.gpg")
 
-    def to_json(self) -> "Dict[str, Union[str, int, bool]]":
+    def to_json(self) -> 'Dict[str, Any]':
         seen_by = {
             f.journalist.uuid for f in SeenFile.query.filter(SeenFile.file_id == self.id)
             if f.journalist
@@ -302,7 +286,7 @@ class Reply(db.Model):
     def __repr__(self) -> str:
         return '<Reply %r>' % (self.filename)
 
-    def to_json(self) -> "Dict[str, Union[str, int, bool]]":
+    def to_json(self) -> 'Dict[str, Any]':
         journalist_username = "deleted"
         journalist_first_name = ""
         journalist_last_name = ""
@@ -360,18 +344,16 @@ class InvalidUsernameException(Exception):
 class FirstOrLastNameError(Exception):
     """Generic error for names that are invalid."""
 
-    def __init__(self, msg):
-        msg = 'Invalid first or last name.'
+    def __init__(self, msg: str) -> None:
         super(FirstOrLastNameError, self).__init__(msg)
 
 
 class InvalidNameLength(FirstOrLastNameError):
     """Raised when attempting to create a Journalist with an invalid name length."""
 
-    def __init__(self, name):
-        self.name_len = len(name)
-        if self.name_len > Journalist.MAX_NAME_LEN:
-            msg = "Name too long (len={})".format(self.name_len)
+    def __init__(self, name: str) -> None:
+        name_len = len(name)
+        msg = "Name too long (len={})".format(name_len)
         super(InvalidNameLength, self).__init__(msg)
 
 
@@ -527,7 +509,7 @@ class Journalist(db.Model):
                     "for internal use by the software.")
 
     @classmethod
-    def check_name_acceptable(cls, name):
+    def check_name_acceptable(cls, name: str) -> None:
         # Enforce a reasonable maximum length for names
         if len(name) > cls.MAX_NAME_LEN:
             raise InvalidNameLength(name)
@@ -721,12 +703,12 @@ class Journalist(db.Model):
         return s.dumps({'id': self.id}).decode('ascii')  # type:ignore
 
     @staticmethod
-    def validate_token_is_not_expired_or_invalid(token):
+    def validate_token_is_not_expired_or_invalid(token: str) -> bool:
         s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
         try:
             s.loads(token)
         except BadData:
-            return None
+            return False
 
         return True
 
@@ -842,10 +824,10 @@ class InstanceConfig(db.Model):
     # updating the configuration.
     metadata_cols = ['version', 'valid_until']
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "<InstanceConfig(version=%s, valid_until=%s)>" % (self.version, self.valid_until)
 
-    def copy(self):
+    def copy(self) -> "InstanceConfig":
         '''Make a copy of only the configuration columns of the given
         InstanceConfig object: i.e., excluding metadata_cols.
         '''
@@ -860,7 +842,7 @@ class InstanceConfig(db.Model):
         return new
 
     @classmethod
-    def get_current(cls):
+    def get_current(cls) -> "InstanceConfig":
         '''If the database was created via db.create_all(), data migrations
         weren't run, and the "instance_config" table is empty.  In this case,
         save and return a base configuration derived from each setting's
@@ -876,7 +858,7 @@ class InstanceConfig(db.Model):
             return current
 
     @classmethod
-    def set(cls, name, value):
+    def set_allow_document_uploads(cls, value: bool) -> None:
         '''Invalidate the current configuration and append a new one with the
         requested change.
         '''
@@ -886,7 +868,7 @@ class InstanceConfig(db.Model):
         db.session.add(old)
 
         new = old.copy()
-        setattr(new, name, value)
+        new.allow_document_uploads = value
         db.session.add(new)
 
         db.session.commit()
