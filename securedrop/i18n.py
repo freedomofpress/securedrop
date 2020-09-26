@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from flask import Flask
 from flask import request, session
 from flask_babel import Babel
 from babel import core
@@ -24,6 +25,12 @@ import os
 import re
 
 from os import path
+
+from typing import List
+
+from typing import Dict
+
+from sdconfig import SDConfig
 
 LOCALE_SPLIT = re.compile('(-|_)')
 LOCALES = ['en_US']
@@ -35,7 +42,7 @@ class LocaleNotFound(Exception):
     """Raised when the desired locale is not in the translations directory"""
 
 
-def setup_app(config, app):
+def setup_app(config: SDConfig, app: Flask) -> None:
     global LOCALES
     global babel
 
@@ -61,14 +68,14 @@ def setup_app(config, app):
 
     LOCALES = _get_supported_locales(
         LOCALES,
-        getattr(config, 'SUPPORTED_LOCALES', None),
-        getattr(config, 'DEFAULT_LOCALE', None),
+        config.SUPPORTED_LOCALES,
+        config.DEFAULT_LOCALE,
         translation_directories)
 
     babel.localeselector(lambda: get_locale(config))
 
 
-def get_locale(config):
+def get_locale(config: SDConfig) -> str:
     """
     Get the locale as follows, by order of precedence:
     - l request argument or session['locale']
@@ -76,7 +83,6 @@ def get_locale(config):
     - config.DEFAULT_LOCALE
     - 'en_US'
     """
-    locale = None
     accept_languages = []
     for l in list(request.accept_languages.values()):
         if '-' in l:
@@ -107,12 +113,12 @@ def get_locale(config):
         return getattr(config, 'DEFAULT_LOCALE', 'en_US')
 
 
-def get_text_direction(locale):
+def get_text_direction(locale: str) -> str:
     return core.Locale.parse(locale).text_direction
 
 
-def _get_supported_locales(locales, supported, default_locale,
-                           translation_directories):
+def _get_supported_locales(locales: List[str], supported: List[str], default_locale: str,
+                           translation_directories: str) -> List[str]:
     """Sanity checks on locales and supported locales from config.py.
     Return the list of supported locales.
     """
@@ -141,7 +147,7 @@ NAME_OVERRIDES = {
 }
 
 
-def get_locale2name():
+def get_locale2name() -> Dict[str, str]:
     locale2name = collections.OrderedDict()
     for l in LOCALES:
         if l in NAME_OVERRIDES:
@@ -152,7 +158,7 @@ def get_locale2name():
     return locale2name
 
 
-def locale_to_rfc_5646(locale):
+def locale_to_rfc_5646(locale: str) -> str:
     lower = locale.lower()
     if 'hant' in lower:
         return 'zh-Hant'
@@ -162,5 +168,5 @@ def locale_to_rfc_5646(locale):
         return LOCALE_SPLIT.split(locale)[0]
 
 
-def get_language(config):
+def get_language(config: SDConfig) -> str:
     return get_locale(config).split('_')[0]

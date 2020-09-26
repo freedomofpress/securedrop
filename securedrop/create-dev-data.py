@@ -6,6 +6,7 @@ import os
 import argparse
 import math
 from itertools import cycle
+from typing import Optional
 
 from flask import current_app
 from sqlalchemy.exc import IntegrityError
@@ -23,7 +24,7 @@ submissions = cycle(strings)
 replies = cycle(strings)
 
 
-def main(staging=False):
+def main(staging: bool = False) -> None:
     app = journalist_app.create_app(config)
     with app.app_context():
         # Add two test users
@@ -71,8 +72,8 @@ def main(staging=False):
         db.session.commit()
 
 
-def add_test_user(username, password, otp_secret, is_admin=False,
-                  first_name="", last_name=""):
+def add_test_user(username: str, password: str, otp_secret: str, is_admin: bool = False,
+                  first_name: str = "", last_name: str = "") -> Optional[Journalist]:
     try:
         user = Journalist(username=username,
                           password=password,
@@ -89,11 +90,16 @@ def add_test_user(username, password, otp_secret, is_admin=False,
     except IntegrityError:
         print("Test user already added")
         db.session.rollback()
+        return None
 
 
 def create_source_and_submissions(
-    source_index, source_count, num_submissions=2, num_replies=2, journalist_who_replied=None  # noqa: W605, E501
-):
+    source_index: int,
+    source_count: int,
+    num_submissions: int = 2,
+    num_replies: int = 2,
+    journalist_who_replied: Optional[Journalist] = None  # noqa: W605, E501
+) -> None:
     # Store source in database
     codename = current_app.crypto_util.genrandomid()
     filesystem_id = current_app.crypto_util.hash_codename(codename)
