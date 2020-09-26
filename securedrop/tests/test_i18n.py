@@ -18,6 +18,7 @@
 #
 import os
 import re
+from pathlib import Path
 
 from db import db
 import i18n
@@ -216,7 +217,7 @@ def test_i18n(journalist_app, config):
     fake_config = SDConfig()
     fake_config.SUPPORTED_LOCALES = [
         'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
-    fake_config.TRANSLATION_DIRS = config.TEMP_DIR
+    fake_config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
 
     # Use our config (and not an app fixture) because the i18n module
     # grabs values at init time and we can't inject them later.
@@ -226,20 +227,6 @@ def test_i18n(journalist_app, config):
             db.create_all()
         assert i18n.LOCALES == fake_config.SUPPORTED_LOCALES
         verify_i18n(app)
-
-
-def test_verify_default_locale_en_us_if_not_defined_in_config(config):
-    class Config:
-        def __getattr__(self, name):
-            if name == 'DEFAULT_LOCALE':
-                raise AttributeError()
-            return getattr(config, name)
-    not_translated = 'code hello i18n'
-    with source_app.create_app(Config()).test_client() as c:
-        with c.application.app_context():
-            db.create_all()
-        c.get('/')
-        assert not_translated == gettext(not_translated)
 
 
 def test_locale_to_rfc_5646():

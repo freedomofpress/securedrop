@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Dict
 from typing import Optional
 
@@ -27,11 +28,6 @@ class SDConfig:
         self.NOUNS = _config.NOUNS  # type: str
         self.WORD_LIST = _config.WORD_LIST  # type: str
 
-        self.DEFAULT_LOCALE = _config.DEFAULT_LOCALE  # type: str
-        self.SUPPORTED_LOCALES = getattr(
-            _config, "SUPPORTED_LOCALES", [self.DEFAULT_LOCALE]
-        )  # type: List[str]
-
         self.GPG_KEY_DIR = _config.GPG_KEY_DIR  # type: str
 
         self.JOURNALIST_KEY = _config.JOURNALIST_KEY  # type: str
@@ -49,7 +45,6 @@ class SDConfig:
         self.SOURCE_TEMPLATES_DIR = _config.SOURCE_TEMPLATES_DIR  # type: str
         self.TEMP_DIR = _config.TEMP_DIR  # type: str
         self.STORE_DIR = _config.STORE_DIR  # type: str
-        self.TRANSLATION_DIRS = getattr(_config, "TRANSLATION_DIRS", None)  # type: Optional[str]
 
         self.WORKER_PIDFILE = _config.WORKER_PIDFILE  # type: str
 
@@ -57,6 +52,21 @@ class SDConfig:
             self.RQ_WORKER_NAME = 'test'  # type: str
         else:
             self.RQ_WORKER_NAME = 'default'
+
+        # Config entries used by i18n.py
+        # Use en_US as the default local if the key is not defined in _config
+        self.DEFAULT_LOCALE = getattr(
+            _config, "DEFAULT_LOCALE", "en_US"
+        )  # type: str
+        self.SUPPORTED_LOCALES = getattr(
+            _config, "SUPPORTED_LOCALES", [self.DEFAULT_LOCALE]
+        )  # type: List[str]
+
+        translation_dirs_in_conf = getattr(_config, "TRANSLATION_DIRS", None)  # type: Optional[str]
+        if translation_dirs_in_conf:
+            self.TRANSLATION_DIRS = Path(translation_dirs_in_conf)  # type: Path
+        else:
+            self.TRANSLATION_DIRS = Path(_config.SECUREDROP_ROOT) / "translations"
 
     @property
     def DATABASE_URI(self) -> str:
