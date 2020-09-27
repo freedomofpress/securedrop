@@ -91,7 +91,7 @@ class QaLoader:
         submissions_per_source: int = 1,
         replies_per_source: int = 1,
         source_star_fraction: float = 0.1,
-        source_reply_fraction:float = 0.5,
+        source_reply_fraction: float = 0.5,
     ) -> None:
         """
         source_star_fraction and source_reply_fraction are simply the
