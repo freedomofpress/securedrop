@@ -47,9 +47,8 @@ sed -i "s@version=\"$(echo "${OLD_VERSION}" | sed 's/\./\\./g')\"@version=\"$NEW
 sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" securedrop/version.py
 
 # Update the version in the Debian packages
-sed -i "s/^\(Version: \).*/\1$NEW_VERSION/" install_files/securedrop-app-code/debian/control
-sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-agent/DEBIAN/control
-sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-server/DEBIAN/control
+sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-agent/DEBIAN/control.j2
+sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-server/DEBIAN/control.j2
 sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-keyring/DEBIAN/control
 sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-config/DEBIAN/control
 
@@ -83,8 +82,10 @@ sed -i "s/\(## ${OLD_VERSION}\)/## ${NEW_VERSION}\n\n\n\n\1/g" changelog.md
 export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
 
-# Update the changelog in the Debian package
+# Update the Xenial changelog in the Debian package
 dch -b -v "${NEW_VERSION}+xenial" -D xenial -c install_files/ansible-base/roles/build-securedrop-app-code-deb-pkg/files/changelog-xenial
+# Update the Focal changelog in the Debian package
+dch -b -v "${NEW_VERSION}+focal" -D focal -c install_files/ansible-base/roles/build-securedrop-app-code-deb-pkg/files/changelog-focal
 # Commit the change
 # Due to `set -e`, providing an empty commit message here will cause the script to abort early.
 git commit -a
