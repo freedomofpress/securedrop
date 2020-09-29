@@ -13,9 +13,9 @@ SecureDrop is an open-source whistleblower submission system that media organiza
 
 ## Documentation
 
-SecureDrop's documentation is built and hosted by [Read the Docs](https://readthedocs.org) at https://docs.securedrop.org.
+SecureDrop's documentation is built and hosted by [Read the Docs](https://readthedocs.org) at https://docs.securedrop.org. It is maintained in a standalone repository: https://github.com/freedomofpress/securedrop-docs
 
-There are multiple versions of the [SecureDrop documentation](https://docs.securedrop.org). By default, the documentation describes the most recent SecureDrop release. It is the best version of the documentation for end users (Sources, Journalists, or Administrators). The **latest** documentation is automatically built from the most recent commit to the SecureDrop development branch. It is most useful for developers and contributors to the project. You can switch between versions of the documentation by using the toolbar in the bottom left corner of the Read the Docs screen.
+By default, the documentation describes the most recent SecureDrop release. This is known as the **stable** version and is recommended for end users (Sources, Journalists, or Administrators). The **latest** documentation is automatically built from the most recent commit to the SecureDrop documentation repository. It is most useful for developers and contributors to the project. You can switch between versions of the documentation by using the toolbar in the bottom left corner of the Read the Docs screen.
 
 ## Found an issue?
 

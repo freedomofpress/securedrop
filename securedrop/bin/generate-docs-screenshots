@@ -15,4 +15,3 @@ maybe_create_config_py
 
 ./i18n_tool.py translate-messages --compile
 pytest -v --page-layout "${@:-tests/pageslayout}"
-cp tests/pageslayout/screenshots/en_US/*.png ../docs/images/manual/screenshots

@@ -229,21 +229,21 @@ class TestI18NTool(object):
         git.init(**k)
         git.config('user.email', "you@example.com", **k)
         git.config('user.name', "Your Name", **k)
-        os.mkdir(join(str(tmpdir), 'includes'))
-        touch('includes/l10n.txt', **k)
-        git.add('includes/l10n.txt', **k)
+        os.makedirs(join(str(tmpdir), 'docs/includes'))
+        touch('docs/includes/l10n.txt', **k)
+        git.add('docs/includes/l10n.txt', **k)
         git.commit('-m', 'init', **k)
 
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-docs',
-            '--documentation-dir', str(tmpdir)])
+            '--docs-repo-dir', str(tmpdir)])
         assert 'l10n.txt updated' in caplog.text
         caplog.clear()
         i18n_tool.I18NTool().main([
             '--verbose',
             'update-docs',
-            '--documentation-dir', str(tmpdir)])
+            '--docs-repo-dir', str(tmpdir)])
         assert 'l10n.txt already up to date' in caplog.text
 
     def test_update_from_weblate(self, tmpdir, caplog):
