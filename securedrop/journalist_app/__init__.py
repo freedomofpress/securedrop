@@ -43,36 +43,28 @@ def create_app(config: 'SDConfig') -> Flask:
                 template_folder=config.JOURNALIST_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
 
-    app.config.from_object(config.JournalistInterfaceFlaskConfig)  # type: ignore
-    app.sdconfig = config
+    app.config.from_object(config.JOURNALIST_APP_FLASK_CONFIG_CLS)
     app.session_interface = JournalistInterfaceSessionInterface()
 
     csrf = CSRFProtect(app)
     Environment(app)
 
-    if config.DATABASE_ENGINE == "sqlite":
-        db_uri = (config.DATABASE_ENGINE + ":///" +
-                  config.DATABASE_FILE)
-    else:
-        db_uri = (
-            config.DATABASE_ENGINE + '://' +
-            config.DATABASE_USERNAME + ':' +
-            config.DATABASE_PASSWORD + '@' +
-            config.DATABASE_HOST + '/' +
-            config.DATABASE_NAME
-        )
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+    app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
     db.init_app(app)
 
     v2_enabled = path.exists(path.join(config.SECUREDROP_DATA_ROOT, 'source_v2_url'))
     v3_enabled = path.exists(path.join(config.SECUREDROP_DATA_ROOT, 'source_v3_url'))
     app.config.update(V2_ONION_ENABLED=v2_enabled, V3_ONION_ENABLED=v3_enabled)
 
+    # TODO: Attaching a Storage dynamically like this disables all type checking (and
+    # breaks code analysis tools) for code that uses current_app.storage; it should be refactored
     app.storage = Storage(config.STORE_DIR,
                           config.TEMP_DIR,
                           config.JOURNALIST_KEY)
 
+    # TODO: Attaching a CryptoUtil dynamically like this disables all type checking (and
+    # breaks code analysis tools) for code that uses current_app.storage; it should be refactored
     app.crypto_util = CryptoUtil(
         scrypt_params=config.SCRYPT_PARAMS,
         scrypt_id_pepper=config.SCRYPT_ID_PEPPER,

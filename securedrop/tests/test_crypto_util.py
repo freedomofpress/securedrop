@@ -23,16 +23,16 @@ def test_word_list_does_not_contain_empty_strings(journalist_app):
     assert '' not in journalist_app.crypto_util.adjectives
 
 
-def test_clean():
+def test_validate_name_for_diceware():
     ok = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJ'
           'KLMNOPQRSTUVWXYZ')
     invalids = ['foo bar`', 'bar baz~']
 
-    assert crypto_util.clean(ok) == ok
+    crypto_util._validate_name_for_diceware(ok)
 
     for invalid in invalids:
         with pytest.raises(CryptoException) as err:
-            crypto_util.clean(invalid)
+            crypto_util._validate_name_for_diceware(invalid)
         assert 'invalid input: {}'.format(invalid) in str(err)
 
 
@@ -109,24 +109,6 @@ def test_encrypt_binary_stream(source_app, config, test_source):
         assert fh.read() == plaintext
 
 
-def test_encrypt_fingerprints_not_a_list_or_tuple(source_app, test_source):
-    """If passed a single fingerprint as a string, encrypt should
-    correctly place that string in a list, and encryption/
-    decryption should work as intended."""
-    message = 'test'
-
-    with source_app.app_context():
-        ciphertext = source_app.crypto_util.encrypt(
-            message,
-            source_app.crypto_util.get_fingerprint(test_source['filesystem_id']),
-            source_app.storage.path(test_source['filesystem_id'],
-                                    'somefile.gpg'))
-        plaintext = source_app.crypto_util.decrypt(test_source['codename'],
-                                                   ciphertext)
-
-    assert plaintext == message
-
-
 def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
                                                         config,
                                                         test_source):
@@ -158,7 +140,7 @@ def verify_genrandomid(app, locale):
     id = app.crypto_util.genrandomid(locale=locale)
     id_words = id.split()
 
-    assert crypto_util.clean(id) == id
+    crypto_util._validate_name_for_diceware(id)
     assert len(id_words) == CryptoUtil.DEFAULT_WORDS_IN_RANDOM_ID
 
     for word in id_words:
@@ -365,7 +347,7 @@ def test_encrypt_then_decrypt_gives_same_result(
         name,
         secret
     )
-    ciphertext = crypto.encrypt(message, str(key))
+    ciphertext = crypto.encrypt(message, [str(key)])
     decrypted_text = crypto.decrypt(secret, ciphertext)
 
     assert decrypted_text == message

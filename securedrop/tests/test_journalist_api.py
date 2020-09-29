@@ -3,7 +3,7 @@ import json
 import os
 import random
 
-from flask import current_app, url_for
+from flask import url_for
 from itsdangerous import TimedJSONWebSignatureSerializer
 from pyotp import TOTP
 from uuid import UUID, uuid4
@@ -706,9 +706,9 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
 
         # First we must encrypt the reply, or it will get rejected
         # by the server.
-        source_key = current_app.crypto_util.get_fingerprint(
+        source_key = journalist_app.crypto_util.get_fingerprint(
             test_source['source'].filesystem_id)
-        reply_content = current_app.crypto_util.gpg.encrypt(
+        reply_content = journalist_app.crypto_util.gpg.encrypt(
             'This is a plaintext reply', source_key).data
 
         response = app.post(url_for('api.all_source_replies',
@@ -739,7 +739,7 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
         expected_filename = '{}-{}-reply.gpg'.format(
             source.interaction_count, source.journalist_filename)
 
-        expected_filepath = current_app.storage.path(
+        expected_filepath = journalist_app.storage.path(
             source.filesystem_id, expected_filename)
 
         with open(expected_filepath, 'rb') as fh:

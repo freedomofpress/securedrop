@@ -331,7 +331,7 @@ class Storage:
                     gzf.write(buf)
 
             current_app.crypto_util.encrypt(
-                stf, self.__gpg_key, encrypted_file_path)
+                stf, [self.__gpg_key], encrypted_file_path)
 
         return encrypted_file_name
 
@@ -359,7 +359,7 @@ class Storage:
                                 message: str) -> str:
         filename = "{0}-{1}-msg.gpg".format(count, journalist_filename)
         msg_loc = self.path(filesystem_id, filename)
-        current_app.crypto_util.encrypt(message, self.__gpg_key, msg_loc)
+        current_app.crypto_util.encrypt(message, [self.__gpg_key], msg_loc)
         return filename
 
 
