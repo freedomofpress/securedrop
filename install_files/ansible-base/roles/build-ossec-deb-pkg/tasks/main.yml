@@ -34,11 +34,13 @@
     url: "{{ ossec_tarball_url }}"
     dest: "{{ build_path }}/{{ ossec_tarball_filename }}"
     checksum: "{{ ossec_source_checksum }}"
+    timeout: "30"
 
 - name: Download OSSEC signature.
   get_url:
     url: "{{ ossec_signature_url }}"
     dest: "{{ build_path }}/{{ ossec_signature_filename }}"
+    timeout: "30"
 
 - name: Copy OSSEC archive GPG key.
   copy: src=../files/OSSEC-ARCHIVE-KEY.asc dest=/tmp/OSSEC-ARCHIVE-KEY.asc
