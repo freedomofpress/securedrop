@@ -46,7 +46,7 @@ def setup_app(config: SDConfig, app: Flask) -> None:
 
     # `babel.translation_directories` is a nightmare
     # We need to set this manually via an absolute path
-    app.config['BABEL_TRANSLATION_DIRECTORIES'] = config.TRANSLATION_DIRS.absolute()
+    app.config['BABEL_TRANSLATION_DIRECTORIES'] = str(config.TRANSLATION_DIRS.absolute())
 
     babel = Babel(app)
     if len(list(babel.translation_directories)) != 1:

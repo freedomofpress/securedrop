@@ -66,7 +66,7 @@ class SDConfig:
         if translation_dirs_in_conf:
             self.TRANSLATION_DIRS = Path(translation_dirs_in_conf)  # type: Path
         else:
-            self.TRANSLATION_DIRS = Path(config.SECUREDROP_ROOT) / "translations"
+            self.TRANSLATION_DIRS = Path(_config.SECUREDROP_ROOT) / "translations"
 
     @property
     def DATABASE_URI(self) -> str:
