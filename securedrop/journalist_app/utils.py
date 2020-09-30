@@ -218,22 +218,36 @@ def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> 
 
 def delete_file_object(file_object: Union[Submission, Reply]) -> None:
     path = current_app.storage.path(file_object.source.filesystem_id, file_object.filename)
-    current_app.storage.move_to_shredder(path)
-    db.session.delete(file_object)
-    db.session.commit()
+    try:
+        current_app.storage.move_to_shredder(path)
+    except ValueError as e:
+        current_app.logger.error("could not queue file for deletion: %s", e)
+        raise
+    finally:
+        db.session.delete(file_object)
+        db.session.commit()
 
 
 def bulk_delete(
     filesystem_id: str,
     items_selected: List[Union[Submission, Reply]]
 ) -> werkzeug.Response:
+    deletion_errors = 0
     for item in items_selected:
-        delete_file_object(item)
+        try:
+            delete_file_object(item)
+        except ValueError:
+            deletion_errors += 1
 
     flash(ngettext("Submission deleted.",
                    "{num} submissions deleted.".format(
                        num=len(items_selected)),
                    len(items_selected)), "notification")
+    if deletion_errors > 0:
+        flash(ngettext("An error occured during deletion - contact an administrator",
+                       "{num} errors occured during deletion - contact an administrator.".format(
+                           num=deletion_errors),
+                       deletion_errors), "error")
     return redirect(url_for('col.col', filesystem_id=filesystem_id))
 
 
