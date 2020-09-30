@@ -9,7 +9,7 @@ set -eu
 export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
 
 TOPLEVEL=$(git rev-parse --show-toplevel)
-BASE_OS=xenial
+BASE_OS="${BASE_OS:-xenial}"
 
 ## Get an integer offset for exposed ports, to support multiple containers
 get_port_offset() {
