@@ -37,6 +37,7 @@ mkdir -p "../test-results"
 export PAGE_LAYOUT_LOCALES
 export TOR_FORCE_NET_CONFIG=0
 
+
 pytest \
     --force-flaky --max-runs=3 \
     --page-layout \

@@ -4,10 +4,13 @@ Flask-Testing
 flaky
 markupsafe>=1.1
 mock
+pathlib2
 pillow>=7.2.0
 pip-tools==4.5.1
 py
-pytest
+pytest>=6.1.1
+pytest-xdist>=2.1.0
+pluggy>=0.13.1
 pytest-cov
 pytest-mock
 hypothesis

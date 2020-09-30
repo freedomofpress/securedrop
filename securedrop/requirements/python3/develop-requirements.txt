@@ -51,6 +51,10 @@ astroid==2.4.0 \
     --hash=sha256:29fa5d46a2404d01c834fcb802a3943685f1fc538eb2a02a161349f5505ac196 \
     --hash=sha256:2fecea42b20abb1922ed65c7b5be27edfba97211b04b2b6abc6a43549a024ea6 \
     # via pylint
+attrs==20.2.0 \
+    --hash=sha256:26b54ddbbb9ee1d34d5d3668dd37d6cf74990ab23c828c2888dccdceee395594 \
+    --hash=sha256:fce7fc47dfc976152e82d53ff92fa0407700c21acd20886a13777a0d20e655dc \
+    # via pytest
 bandit==1.4.0 \
     --hash=sha256:cb977045497f83ec3a02616973ab845c829cdab8144ce2e757fe031104a9abd4 \
     --hash=sha256:de4cc19d6ba32d6f542c6a1ddadb4404571347d83ef1ed1e7afb7d0b38e0c25b \
@@ -257,11 +261,15 @@ idna==2.5 \
 importlib-metadata==0.23 \
     --hash=sha256:aa18d7378b00b40847790e7c27e11673d7fed219354109d0e7b9e5b25dc3ad26 \
     --hash=sha256:d5f18a79777f3aa179c145737780282e27b508fc8fd688cb17c7a813e8bd39af \
-    # via importlib-resources, pre-commit
+    # via importlib-resources, pluggy, pre-commit, pytest
 importlib-resources==1.5.0 \
     --hash=sha256:6f87df66833e1942667108628ec48900e02a4ab4ad850e25fbf07cb17cf734ca \
     --hash=sha256:85dc0b9b325ff78c8bef2e4ff42616094e16b98ebd5e3b50fe7e2f0bbcdcde49 \
     # via -r requirements/python3/develop-requirements.in, pre-commit
+iniconfig==1.0.1 \
+    --hash=sha256:80cf40c597eb564e86346103f609d74efce0f6b4d4f30ec8ce9e2c26411ba437 \
+    --hash=sha256:e5f92f89355a67de0595932a6c6c02ab4afddc6fcdc0bfc5becd0d60884d3f69 \
+    # via pytest
 isort==4.2.15 \
     --hash=sha256:79f46172d3a4e2e53e7016e663cc7a8b538bec525c36675fcfd2767df30b3983 \
     --hash=sha256:cd5d3fc2c16006b567a17193edf4ed9830d9454cbeb5a42ac80b36ea00c23db4 \
@@ -382,11 +390,15 @@ nodeenv==1.3.3 \
 packaging==16.8 \
     --hash=sha256:5d50835fdf0a7edf0b55e311b7c887786504efea1177abd7e69329a8e5ea619e \
     --hash=sha256:99276dc6e3a7851f32027a68f1095cd3f77c148091b092ea867a351811cfe388 \
-    # via dparse, safety
+    # via dparse, pytest, safety
 paramiko==2.6.0 \
     --hash=sha256:99f0179bdc176281d21961a003ffdb2ec369daac1a1007241f53374e376576cf \
     --hash=sha256:f4b2edfa0d226b70bd4ca31ea7e389325990283da23465d572ed1f70a7583041 \
     # via molecule
+pathlib2==2.3.5 ; python_version < "3.6" \
+    --hash=sha256:0ec8205a157c80d7acc301c0b18fbd5d44fe655968f5d947b6ecef5290fc35db \
+    --hash=sha256:6cd9a47b597b37cc57de1c05e56fb1a1c9cc9fab04fe78c29acd090418529868 \
+    # via -r requirements/python3/develop-requirements.in, pytest
 pathspec==0.5.5 \
     --hash=sha256:72c495d1bbe76674219e307f6d1c6062f2e1b0b483a5e4886435127d0df3d0d3 \
     # via yamllint
@@ -402,6 +414,10 @@ pip-tools==4.5.1 \
     --hash=sha256:693f30e451875796b1b25203247f0b4cf48a4c4a5ab7341f4f33ffd498cdcc98 \
     --hash=sha256:be9c796aa88b2eec5cabf1323ba1cb60a08212b84bfb75b8b4037a8ef8cb8cb6 \
     # via -r requirements/python3/develop-requirements.in
+pluggy==0.13.1 \
+    --hash=sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0 \
+    --hash=sha256:966c145cd83c96502c3c3868f50408687b38434af77734af1e9ca461a4081d2d \
+    # via pytest
 poyo==0.4.1 \
     --hash=sha256:103b4ee3e1c7765098fe1cabe43f828db2e2a6079646561a2117e1a809f352d6 \
     --hash=sha256:230ec11c2f35a23410c1f0e474f09fa4e203686f40ab3adca7b039c845d8c325 \
@@ -432,10 +448,10 @@ ptyprocess==0.5.2 \
     --hash=sha256:e64193f0047ad603b71f202332ab5527c5e52aa7c8b609704fc28c0dc20c4365 \
     --hash=sha256:e8c43b5eee76b2083a9badde89fd1bbce6c8942d1045146e100b7b5e014f4f1a \
     # via pexpect
-py==1.4.34 \
-    --hash=sha256:0f2d585d22050e90c7d293b6451c83db097df77871974d90efd5a30dc12fcde3 \
-    --hash=sha256:2ccb79b01769d99115aa600d7eed99f524bf752bba8f041dc1c184853514655a \
-    # via pytest
+py==1.9.0 \
+    --hash=sha256:366389d1db726cd2fcfc79732e75410e5fe4d31db13692115529d34069a043c2 \
+    --hash=sha256:9ca6883ce56b4e8da7e79ac18787889fa5206c79dcc67fb065376cd2fe03f342 \
+    # via pytest, pytest-forked
 pycodestyle==2.5.0 \
     --hash=sha256:95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56 \
     --hash=sha256:e40a936c9a450ad81df37f549d676d127b1b66000a6c500caa2b085bc0ca976c \
@@ -490,13 +506,18 @@ pyparsing==2.2.0 \
     --hash=sha256:0832bcf47acd283788593e7a0f542407bd9550a55a8a8435214a1960e04bcb04 \
     --hash=sha256:fee43f17a9c4087e7ed1605bd6df994c6173c1e977d7ade7b651292fab2bd010 \
     # via packaging
-pytest-xdist==1.18.2 \
-    --hash=sha256:10468377901b80255cf192c4603a94ffe8b1f071f5c912868da5f5cb91170dae \
+pytest-forked==1.3.0 \
+    --hash=sha256:6aa9ac7e00ad1a539c41bec6d21011332de671e938c7637378ec9710204e37ca \
+    --hash=sha256:dc4147784048e70ef5d437951728825a131b81714b398d5d52f17c7c144d8815 \
+    # via pytest-xdist
+pytest-xdist==2.1.0 \
+    --hash=sha256:7c629016b3bb006b88ac68e2b31551e7becf173c76b977768848e2bbed594d90 \
+    --hash=sha256:82d938f1a24186520e2d9d3a64ef7d9ac7ecdf1a0659e095d18e596b8cbd0672 \
     # via -r requirements/python3/develop-requirements.in
-pytest==3.2.0 \
-    --hash=sha256:0225cf10b9e173f84729d5f4648211458a222c6e53a77a85e104bc5f31c244ee \
-    --hash=sha256:d994b4f28c6d449a467ad3d336544945a0dcf350e3b7b301219547ef5aa8125e \
-    # via pytest-xdist, testinfra
+pytest==6.1.1 \
+    --hash=sha256:7a8190790c17d79a11f847fba0b004ee9a8122582ebff4729a082c109e81a4c9 \
+    --hash=sha256:8f593023c1a0f916110285b6efd7f99db07d59546e3d8c36fc60e2ab05d3be92 \
+    # via -r requirements/python3/develop-requirements.in, pytest-forked, pytest-xdist, testinfra
 python-dateutil==2.6.1 \
     --hash=sha256:891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca \
     --hash=sha256:95511bae634d69bc7329ba55e646499a842bc4ec342ad54a8cdb65645a0aad3c \
@@ -566,7 +587,7 @@ sh==1.12.14 \
 six==1.15.0 \
     --hash=sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259 \
     --hash=sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced \
-    # via -r ../admin/requirements.in, ansible-lint, argon2-cffi, astroid, bandit, bcrypt, cfgv, click-completion, cryptography, docker-py, docker-pycreds, dparse, fasteners, git-url-parse, molecule, packaging, pip-tools, pre-commit, prompt-toolkit, pynacl, python-dateutil, stevedore, testinfra, websocket-client
+    # via -r ../admin/requirements.in, ansible-lint, argon2-cffi, astroid, bandit, bcrypt, cfgv, click-completion, cryptography, docker-py, docker-pycreds, dparse, fasteners, git-url-parse, molecule, packaging, pathlib2, pip-tools, pre-commit, prompt-toolkit, pynacl, python-dateutil, stevedore, testinfra, websocket-client
 smmap2==2.0.3 \
     --hash=sha256:b78ee0f1f5772d69ff50b1cbdb01b8c6647a8354f02f23b488cf4b2cfc923956 \
     --hash=sha256:c7530db63f15f09f8251094b22091298e82bf6c699a6b8344aaaef3f2e1276c3 \
@@ -588,7 +609,7 @@ testinfra==3.2.0 \
 toml==0.10.0 \
     --hash=sha256:229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c \
     --hash=sha256:235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e \
-    # via pre-commit, pylint
+    # via pre-commit, pylint, pytest
 tree-format==0.1.2 \
     --hash=sha256:a538523aa78ae7a4b10003b04f3e1b37708e0e089d99c9d3b9e1c71384c9a7f9 \
     --hash=sha256:b5056228dbedde1fb81b79f71fb0c23c98e9d365230df9b29af76e8d8003de11 \
@@ -661,4 +682,4 @@ pip==19.3.1 \
 setuptools==46.0.0 \
     --hash=sha256:2f00f25b780fbfd0787e46891dcccd805b08d007621f24629025f48afef444b5 \
     --hash=sha256:693e0504490ed8420522bf6bc3aa4b0da6a9f1c80c68acfb4e959275fd04cd82 \
-    # via -r ../admin/requirements.in, -r requirements/python3/develop-requirements.in, pytest, safety
+    # via -r ../admin/requirements.in, -r requirements/python3/develop-requirements.in, safety
