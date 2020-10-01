@@ -571,10 +571,9 @@ sh==1.12.14 \
     --hash=sha256:ae3258c5249493cebe73cb4e18253a41ed69262484bad36fdb3efcb8ad8870bb \
     --hash=sha256:b52bf5833ed01c7b5c5fb73a7f71b3d98d48e9b9b8764236237bdc7ecae850fc \
     # via molecule, python-gilt
-six==1.14.0 \
-    --hash=sha256:236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a \
-    --hash=sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c \
-    # via ansible-lint, argon2-cffi, astroid, bandit, bcrypt, cfgv, click-completion, cryptography, docker-py, docker-pycreds, dparse, fasteners, git-url-parse, livereload, molecule, packaging, pip-tools, pre-commit, prompt-toolkit, pynacl, python-dateutil, stevedore, testinfra, websocket-client
+six==1.15.0 \
+    --hash=sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259 \
+    --hash=sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced
 smmap2==2.0.3 \
     --hash=sha256:b78ee0f1f5772d69ff50b1cbdb01b8c6647a8354f02f23b488cf4b2cfc923956 \
     --hash=sha256:c7530db63f15f09f8251094b22091298e82bf6c699a6b8344aaaef3f2e1276c3 \
