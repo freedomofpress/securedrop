@@ -1,4 +1,0 @@
-.. note:: SecureDrop wants your feedback! Confused by something in our
-          documentation? Let us know via `an issue on GitHub
-          <https://github.com/freedomofpress/securedrop/issues/new>`_ or the
-          `community forum <https://forum.securedrop.org/>`_.

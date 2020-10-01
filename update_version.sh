@@ -47,9 +47,8 @@ sed -i "s@version=\"$(echo "${OLD_VERSION}" | sed 's/\./\\./g')\"@version=\"$NEW
 sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" securedrop/version.py
 
 # Update the version in the Debian packages
-sed -i "s/^\(Version: \).*/\1$NEW_VERSION/" install_files/securedrop-app-code/debian/control
-sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-agent/DEBIAN/control
-sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-server/DEBIAN/control
+sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-agent/DEBIAN/control.j2
+sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-server/DEBIAN/control.j2
 sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-keyring/DEBIAN/control
 sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-config/DEBIAN/control
 
@@ -63,17 +62,10 @@ sed -i "s/^\(securedrop_app_code_sdist_version: \"securedrop-app-code-\).*/\1${N
 # Update the version in molecule testinfra vars
 sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" molecule/builder-xenial/tests/vars.yml
 
-# If version doesnt have an rc designator, its considered stable
-# theres a few things that peg to that stable version like upgrade testing logic
-# and strings inside the documentation
-OLD_RELEASE=$(cat molecule/shared/stable.ver)
+# If version doesn't have an rc designator, it's considered stable.
+# The upgrade testing logic relies on this variable.
 if [[ ! $NEW_VERSION == *~rc* ]]; then
     echo "${NEW_VERSION}" > molecule/shared/stable.ver
-    sed -i "s@$(echo "${OLD_RELEASE}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/set_up_admin_tails.rst
-    sed -i "s@$(echo "${OLD_RELEASE}" | sed 's/\./\\./g')@$NEW_VERSION@g" docs/conf.py
-    # Upgrade docs to Ubuntu 16.04 reference current stable version explicitly.
-    # Where we're talking about the 0.12 _series_ (the first to support Xenial),
-    # the phrase "0.12 series" is used, so this regex is safe to run.
 fi
 
 # Update the changelog
@@ -83,8 +75,10 @@ sed -i "s/\(## ${OLD_VERSION}\)/## ${NEW_VERSION}\n\n\n\n\1/g" changelog.md
 export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
 
-# Update the changelog in the Debian package
+# Update the Xenial changelog in the Debian package
 dch -b -v "${NEW_VERSION}+xenial" -D xenial -c install_files/ansible-base/roles/build-securedrop-app-code-deb-pkg/files/changelog-xenial
+# Update the Focal changelog in the Debian package
+dch -b -v "${NEW_VERSION}+focal" -D focal -c install_files/ansible-base/roles/build-securedrop-app-code-deb-pkg/files/changelog-focal
 # Commit the change
 # Due to `set -e`, providing an empty commit message here will cause the script to abort early.
 git commit -a
