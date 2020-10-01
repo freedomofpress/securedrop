@@ -18,8 +18,8 @@ mypy>=0.761
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
 # Now also pin pip due to https://github.com/jazzband/pip-tools/issues/853
-pip==19.1
-pip-tools>=4.0.0
+pip==19.3.1
+pip-tools==4.5.1
 psutil>=5.6.6
 pyenchant
 pylint>=2.5.0
@@ -30,5 +30,5 @@ ruamel.yaml>=0.16.10
 safety>=1.8.7
 setuptools>=46.0.0
 testinfra
-urllib3>=1.25.8
+urllib3>=1.25.9
 yamllint

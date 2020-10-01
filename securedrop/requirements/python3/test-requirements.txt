@@ -15,9 +15,11 @@ attrs==17.4.0 \
 beautifulsoup4==4.6.0 \
     --hash=sha256:11a9a27b7d3bddc6d86f59fb76afb70e921a25ac2d6cc55b40d072bd68435a76 \
     --hash=sha256:7015e76bf32f1f574636c4288399a6de66ce08fb7b2457f628a8d70c0fbabb11 \
-    --hash=sha256:808b6ac932dccb0a4126558f7dfdcf41710dd44a4ef497a0bb59a77f9f078e89
+    --hash=sha256:808b6ac932dccb0a4126558f7dfdcf41710dd44a4ef497a0bb59a77f9f078e89 \
+    # via -r requirements/python3/test-requirements.in
 blinker==1.4 \
-    --hash=sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6
+    --hash=sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6 \
+    # via -r requirements/python3/test-requirements.in
 certifi==2018.11.29 \
     --hash=sha256:47f9c83ef4c0c621eaef743f133f09fa8a74a9b75f037e8624f83bd1b6626cb7 \
     --hash=sha256:993f830721089fef441cdfeb4b2c8c9df86f0c63239f06bd025a76a7daddb033 \
@@ -26,9 +28,9 @@ chardet==3.0.4 \
     --hash=sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae \
     --hash=sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691 \
     # via requests
-click==6.7 \
-    --hash=sha256:29f99fc6125fbc931b758dc053b3114e55c77a6e4c6c3a2674a2dc986016381d \
-    --hash=sha256:f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b \
+click==7.1.2 \
+    --hash=sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a \
+    --hash=sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc \
     # via flask, pip-tools
 coverage==4.4.2 \
     --hash=sha256:007eeef7e23f9473622f7d94a3e029a45d55a92a1f083f0f3512f5ab9a669b05 \
@@ -69,9 +71,11 @@ easyprocess==0.2.3 \
     # via pyvirtualdisplay
 flaky==3.6.0 \
     --hash=sha256:36fa125bceebfe869739b62e203db4653488dff09615e5a4f3d7607d48363c6a \
-    --hash=sha256:c24e321b3b4b4a2d323b646acff6738e7601849832f4280864d69f00a6a9869d
+    --hash=sha256:c24e321b3b4b4a2d323b646acff6738e7601849832f4280864d69f00a6a9869d \
+    # via -r requirements/python3/test-requirements.in
 flask-testing==0.7.1 \
-    --hash=sha256:dc076623d7d850653a018cb64f500948334c8aeb6b10a5a842bf1bcfb98122bc
+    --hash=sha256:dc076623d7d850653a018cb64f500948334c8aeb6b10a5a842bf1bcfb98122bc \
+    # via -r requirements/python3/test-requirements.in
 flask==1.0.2 \
     --hash=sha256:2271c0070dbcb5275fad4a82e29f23ab92682dc45f9dfbc22c02ba9b9322ce48 \
     --hash=sha256:a080b744b7e345ccfcbc77954861cb05b3c63786e93f2b3875e0913d44b43f05 \
@@ -79,7 +83,8 @@ flask==1.0.2 \
 hypothesis==4.22.2 \
     --hash=sha256:7d504c4de30ec2bf9e9421e6dacb76666266bc584440b3fda4ba3ae7ecb8d2fc \
     --hash=sha256:ce7c4a46823f73e9ef548f10963095bf82c787646a09d1886979f007c74b07cc \
-    --hash=sha256:e97ef0a17a6dfb3873aa7e4ef3e6398d5b5ee7fbc5923f2cebfa4a1d5f9eb44b
+    --hash=sha256:e97ef0a17a6dfb3873aa7e4ef3e6398d5b5ee7fbc5923f2cebfa4a1d5f9eb44b \
+    # via -r requirements/python3/test-requirements.in
 idna==2.8 \
     --hash=sha256:c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407 \
     --hash=sha256:ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c \
@@ -128,17 +133,19 @@ markupsafe==1.1.1 \
     --hash=sha256:cd5df75523866410809ca100dc9681e301e3c27567cf498077e8551b6d20e42f \
     --hash=sha256:cdb132fc825c38e1aeec2c8aa9338310d29d337bebbd7baa06889d09a60a1fa2 \
     --hash=sha256:e249096428b3ae81b08327a63a485ad0878de3fb939049038579ac0ef61e17e7 \
-    --hash=sha256:e8313f01ba26fbbe36c7be1966a7b7424942f670f38e666995b88d012765b9be
+    --hash=sha256:e8313f01ba26fbbe36c7be1966a7b7424942f670f38e666995b88d012765b9be \
+    # via -r requirements/python3/test-requirements.in, jinja2
 mock==2.0.0 \
     --hash=sha256:5ce3c71c5545b472da17b72268978914d0252980348636840bd34a00b5cc96c1 \
-    --hash=sha256:b158b6df76edd239b8208d481dc46b6afd45a846b7812ff0ce58971cf5bc8bba
+    --hash=sha256:b158b6df76edd239b8208d481dc46b6afd45a846b7812ff0ce58971cf5bc8bba \
+    # via -r requirements/python3/test-requirements.in
 more-itertools==7.1.0 \
     --hash=sha256:3ad685ff8512bf6dc5a8b82ebf73543999b657eded8c11803d9ba6b648986f4d \
     --hash=sha256:8bb43d1f51ecef60d81854af61a3a880555a14643691cc4b64a6ee269c78f09a \
     # via pytest
-pathlib2==2.3.4 \
-    --hash=sha256:2156525d6576d21c4dcaddfa427fae887ef89a7a9de5cbfe0728b3aafa78427e \
-    --hash=sha256:446014523bb9be5c28128c4d2a10ad6bb60769e78bd85658fe44a450674e0ef8 \
+pathlib2==2.3.5 \
+    --hash=sha256:0ec8205a157c80d7acc301c0b18fbd5d44fe655968f5d947b6ecef5290fc35db \
+    --hash=sha256:6cd9a47b597b37cc57de1c05e56fb1a1c9cc9fab04fe78c29acd090418529868 \
     # via pytest
 pbr==3.1.1 \
     --hash=sha256:05f61c71aaefc02d8e37c0a3eeb9815ff526ea28b3b76324769e6158d7f95be1 \
@@ -170,47 +177,58 @@ pillow==7.2.0 \
     --hash=sha256:ec29604081f10f16a7aea809ad42e27764188fc258b02259a03a8ff7ded3808d \
     --hash=sha256:edf31f1150778abd4322444c393ab9c7bd2af271dd4dafb4208fb613b1f3cdc9 \
     --hash=sha256:f7e30c27477dffc3e85c2463b3e649f751789e0f6c8456099eea7ddd53be4a8a \
-    --hash=sha256:ffe538682dc19cc542ae7c3e504fdf54ca7f86fb8a135e59dd6bc8627eae6cce
-pip-tools==4.0.0 \
-    --hash=sha256:3b9fb8948340eff5869ac83dc85e3a7c62b837cec33609c45c48c2e5aa740ba5 \
-    --hash=sha256:44469037863c3587b4c565caf258e2c752d4235c508cf8410a69164bb65ffc78
+    --hash=sha256:ffe538682dc19cc542ae7c3e504fdf54ca7f86fb8a135e59dd6bc8627eae6cce \
+    # via -r requirements/python3/test-requirements.in
+pip-tools==4.5.1 \
+    --hash=sha256:693f30e451875796b1b25203247f0b4cf48a4c4a5ab7341f4f33ffd498cdcc98 \
+    --hash=sha256:be9c796aa88b2eec5cabf1323ba1cb60a08212b84bfb75b8b4037a8ef8cb8cb6 \
+    # via -r requirements/python3/test-requirements.in
 pluggy==0.12.0 \
     --hash=sha256:0825a152ac059776623854c1543d65a4ad408eb3d33ee114dff91e57ec6ae6fc \
     --hash=sha256:b9817417e95936bf75d85d3f8767f7df6cdde751fc40aed3bb3074cbcb77757c \
     # via pytest
 py==1.5.2 \
     --hash=sha256:8cca5c229d225f8c1e3085be4fcf306090b00850fefad892f9d96c7b6e2f310f \
-    --hash=sha256:ca18943e28235417756316bfada6cd96b23ce60dd532642690dcfdaba988a76d
+    --hash=sha256:ca18943e28235417756316bfada6cd96b23ce60dd532642690dcfdaba988a76d \
+    # via -r requirements/python3/test-requirements.in, pytest
 pysocks==1.6.8 \
     --hash=sha256:3fe52c55890a248676fd69dc9e3c4e811718b777834bcaab7a8125cf9deac672 \
     # via requests
 pytest-cov==2.5.1 \
     --hash=sha256:03aa752cf11db41d281ea1d807d954c4eda35cfa1b21d6971966cc041bbf6e2d \
-    --hash=sha256:890fe5565400902b0c78b5357004aab1c814115894f4f21370e2433256a3eeec
+    --hash=sha256:890fe5565400902b0c78b5357004aab1c814115894f4f21370e2433256a3eeec \
+    # via -r requirements/python3/test-requirements.in
 pytest-mock==1.7.1 \
     --hash=sha256:03a2fea79d0a83a8de2e77e92afe5f0a5ca99a58cc68f843f9a74de34800a943 \
-    --hash=sha256:b879dff61e31fcd4727c227c182f15f222a155293cc64ed5a02d55e0020cf949
+    --hash=sha256:b879dff61e31fcd4727c227c182f15f222a155293cc64ed5a02d55e0020cf949 \
+    # via -r requirements/python3/test-requirements.in
 pytest==3.10 \
     --hash=sha256:630ff1dbe04f469ee78faa5660f712e58b953da7df22ea5d828c9012e134da43 \
-    --hash=sha256:a2b5232735dd0b736cbea9c0f09e5070d78fcaba2823a4f6f09d9a81bd19415c
+    --hash=sha256:a2b5232735dd0b736cbea9c0f09e5070d78fcaba2823a4f6f09d9a81bd19415c \
+    # via -r requirements/python3/test-requirements.in, pytest-cov, pytest-mock
 pyvirtualdisplay==0.2.1 \
-    --hash=sha256:012883851a992f9c53f0dc6a512765a95cf241bdb734af79e6bdfef95c6e9982
+    --hash=sha256:012883851a992f9c53f0dc6a512765a95cf241bdb734af79e6bdfef95c6e9982 \
+    # via -r requirements/python3/test-requirements.in
 requests[socks]==2.22.0 \
     --hash=sha256:11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4 \
-    --hash=sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31
+    --hash=sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31 \
+    # via -r requirements/python3/test-requirements.in
 selenium==3.141.0 \
     --hash=sha256:2d7131d7bc5a5b99a2d9b04aaf2612c411b03b8ca1b1ee8d3de5845a9be2cb3c \
-    --hash=sha256:deaf32b60ad91a4611b98d8002757f29e6f2c2d5fcaf202e1c9ad06d6772300d
+    --hash=sha256:deaf32b60ad91a4611b98d8002757f29e6f2c2d5fcaf202e1c9ad06d6772300d \
+    # via -r requirements/python3/test-requirements.in, tbselenium
 six==1.11.0 \
     --hash=sha256:70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9 \
     --hash=sha256:832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb \
     # via mock, pathlib2, pip-tools, pytest
 tbselenium==0.4.2 \
     --hash=sha256:9f39b7285103442cc389623e1dedc3ef08b1475afd5076bba1d947d92a348d0b \
-    --hash=sha256:e24ff69f610ca294093f399099407124c7ffc6a8325e7d9ca19e93ffc5eb91df
+    --hash=sha256:e24ff69f610ca294093f399099407124c7ffc6a8325e7d9ca19e93ffc5eb91df \
+    # via -r requirements/python3/test-requirements.in
 urllib3==1.25.10 \
     --hash=sha256:91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a \
-    --hash=sha256:e7983572181f5e1522d9c98453462384ee92a0be7fac5f1413a1e35c56cc0461
+    --hash=sha256:e7983572181f5e1522d9c98453462384ee92a0be7fac5f1413a1e35c56cc0461 \
+    # via -r requirements/python3/test-requirements.in, requests, selenium
 werkzeug==0.16.0 \
     --hash=sha256:7280924747b5733b246fe23972186c6b348f9ae29724135a6dfc1e53cea433e7 \
     --hash=sha256:e5f4a1f98b52b18a93da705a7458e55afb26f32bff83ff5d19189f92462d65c4 \
@@ -223,4 +241,5 @@ zipp==0.5.1 \
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==46.0.0 \
     --hash=sha256:2f00f25b780fbfd0787e46891dcccd805b08d007621f24629025f48afef444b5 \
-    --hash=sha256:693e0504490ed8420522bf6bc3aa4b0da6a9f1c80c68acfb4e959275fd04cd82
+    --hash=sha256:693e0504490ed8420522bf6bc3aa4b0da6a9f1c80c68acfb4e959275fd04cd82 \
+    # via -r requirements/python3/test-requirements.in, pytest
