@@ -244,10 +244,8 @@ def bulk_delete(
                        num=len(items_selected)),
                    len(items_selected)), "notification")
     if deletion_errors > 0:
-        flash(ngettext("An error occured during deletion - contact an administrator",
-                       "{num} errors occured during deletion - contact an administrator.".format(
-                           num=deletion_errors),
-                       deletion_errors), "error")
+        current_app.logger.error("Disconnected submission entries (%d) were detected",
+                                 deletion_errors)
     return redirect(url_for('col.col', filesystem_id=filesystem_id))
 
 
