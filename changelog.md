@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.0~rc2
+
+### Web Applications
+
+* Adds error handling for file deletion operations (#5549)
+
 ## 1.6.0~rc1
 
 ### Web Applications
@@ -11,6 +17,7 @@
 
 #### Journalist API
 
+* Add /seen endpoint (#5513)
 * Add /users endpoint (#5506)
 * Add seen tables and update seen status based on downloads in JI (#5505)
 
