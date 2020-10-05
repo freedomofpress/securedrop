@@ -23,7 +23,6 @@ if [[ -n "${VAGRANT_DEFAULT_PROVIDER:-}" ]] ; then
 # environment uses Xenial template VMs only, so we also suppress the platform suffix.
 elif printenv | grep -q ^QUBES_ ; then
     securedrop_vm_provider="qubes"
-    securedrop_platform_suffix=""
 elif [[ "${OSTYPE:-}" == "linux-gnu" ]]; then
     # Default to Libvirt for Linux users, which works well with Tails VM virtualization.
     securedrop_vm_provider="libvirt"

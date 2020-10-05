@@ -11,15 +11,15 @@ driver:
 
 platforms:
   - name: app-staging
-    vm_base: sd-staging-app-base
-    vm_name: sd-staging-app
+    vm_base: sd-staging-app-base-xenial
+    vm_name: sd-staging-app-xenial
     groups:
       - securedrop_application_server
       - staging
 
   - name: mon-staging
-    vm_base: sd-staging-mon-base
-    vm_name: sd-staging-mon
+    vm_base: sd-staging-mon-base-xenial
+    vm_name: sd-staging-mon-xenial
     groups:
       - securedrop_monitor_server
       - staging
@@ -39,7 +39,7 @@ provisioner:
   env:
     ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
 scenario:
-  name: qubes-staging
+  name: qubes-staging-xenial
   # Skip unnecessary "prepare" step in create sequence
   create_sequence:
     - create

@@ -1,0 +1,45 @@
+---
+
+- name: Destroy
+  hosts: localhost
+  connection: local
+  vars:
+    molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
+    molecule_instance_config: "{{ lookup('env',' MOLECULE_INSTANCE_CONFIG') }}"
+    molecule_yml: "{{ lookup('file', molecule_file) | molecule_from_yaml }}"
+    molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"
+  tasks:
+    - name: Check that Qubes admin tools are installed
+      shell: >
+        which qvm-clone
+        || { echo 'qvm-clone not found, install qubes-core-admin-client';
+        exit 1; }
+      changed_when: false
+
+    - name: Halt molecule instance(s)
+      command: qvm-shutdown --wait "{{ item.vm_name }}"
+      register: server
+      failed_when: >-
+         server.rc != 0 and "qvm-shutdown: error: no such domain: '"+item.vm_name+"'" not in server.stderr_lines
+      with_items: "{{ molecule_yml.platforms }}"
+
+    - name: Destroy molecule instance(s)
+      command: qvm-remove --force "{{ item.vm_name }}"
+      register: server
+      failed_when: >-
+         server.rc != 0 and "qvm-remove: error: no such domain: '"+item.vm_name+"'" not in server.stderr_lines
+      with_items: "{{ molecule_yml.platforms }}"
+
+    # Mandatory configuration for Molecule to function.
+
+    - name: Populate instance config
+      set_fact:
+        instance_conf: {}
+
+    - name: Dump instance config
+      copy:
+        # NOTE(retr0h): Workaround for Ansible 2.2.
+        #               https://github.com/ansible/ansible/issues/20885
+        content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
+        dest: "{{ molecule_instance_config }}"
+      when: server.changed | bool

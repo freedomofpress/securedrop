@@ -11,6 +11,7 @@
   command: >
     su -s /bin/bash -c 'gpg
     --homedir {{ securedrop_data }}/keys
+    --no-default-keyring --keyring {{ securedrop_data }}/keys/pubring.gpg
     --import {{ securedrop_data }}/{{ securedrop_app_gpg_public_key }}' {{ securedrop_user }}
   register: gpg_app_key_import
   changed_when: "'imported: 1' in gpg_app_key_import.stderr"

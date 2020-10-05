@@ -15,7 +15,7 @@ set -o pipefail
 
 . ./devops/scripts/boot-strap-venv.sh
 
-securedrop_staging_scenario="$(./devops/scripts/select-staging-env)"
+securedrop_staging_scenario="$(./devops/scripts/select-staging-env "${1}")"
 
 if [ -z "$TEST_DATA_FILE" ]
 then
@@ -27,7 +27,7 @@ else
     fi
 fi
 
-printf "Creating staging environment via '%s'...\n" "${securedrop_staging_scenario}"
+printf "Creating staging environment via '%s'...\\n" "${securedrop_staging_scenario}"
 
 # Run it!
 virtualenv_bootstrap

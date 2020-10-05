@@ -1,0 +1,85 @@
+---
+- name: Create
+  hosts: localhost
+  connection: local
+  vars:
+    molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
+    molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
+    molecule_yml: "{{ lookup('file', molecule_file) | molecule_from_yaml }}"
+  tasks:
+    - name: Check that Qubes admin tools are installed
+      shell: >
+        which qvm-clone
+        || { echo 'qvm-clone not found, install qubes-core-admin-client';
+        exit 1; }
+      changed_when: false
+
+    - name: Clone base image for staging VMs
+      # The "ignore-errors" flag sidesteps an issue with qvm-sync-appmenus. We don't need
+      # app menus for the SD VMs, so an error there need not block provisioning.
+      command: qvm-clone {{ item.vm_base }} {{ item.vm_name }} --ignore-errors
+      register: clone_result
+      failed_when: >-
+        clone_result.rc != 0 and "qvm-clone: error: VM "+item.vm_name+" already exists" not in clone_result.stderr_lines
+      changed_when: >-
+        clone_result.rc == 0 and clone_result.stdout == ""
+      with_items: "{{ molecule_yml.platforms }}"
+
+    - name: Start Qubes VMs
+      command: qvm-start {{ item.vm_name }}
+      register: start_result
+      failed_when: >-
+        start_result.rc != 0 and "domain "+item.vm_name+" is already running" not in start_result.stderr_lines
+      changed_when: >-
+        start_result.rc == 0 and start_result.stdout == ""
+      with_items: "{{ molecule_yml.platforms }}"
+
+    - name: Wait for VMs to boot
+      pause:
+        seconds: 15
+      when: start_result.changed
+
+    - name: Get IP address for instances
+      command: qvm-ls --raw-data --field ip {{ item.vm_name }}
+      register: server_info
+      changed_when: false
+      # Not necessary, using pipe lookup to avoid convoluted Jinja logic.
+      when: false
+      with_items: "{{ molecule_yml.platforms }}"
+
+    # Mandatory configuration for Molecule to function.
+
+    - name: Populate instance config dict
+      set_fact:
+        instance_conf_dict:
+          instance: "{{ item.name }}"
+          address: "{{ lookup('pipe', 'qvm-ls --raw-data --field ip '+item.vm_name) }}"
+          identity_file: "~/.ssh/id_rsa"
+          port: "22"
+          # Hardcoded username, must match the username manually configured during
+          # base VM creation (see developer documentation).
+          user: "sdadmin"
+      with_items: "{{ molecule_yml.platforms }}"
+      register: instance_config_dict
+      when: start_result.changed | bool
+
+    - name: Convert instance config dict to a list
+      set_fact:
+        instance_conf: "{{ instance_config_dict.results | map(attribute='ansible_facts.instance_conf_dict') | list }}"
+      when: start_result.changed | bool
+
+    - name: render ssh_config for instances
+      template:
+        src: ssh_config.j2
+        dest: "/tmp/molecule-qubes-ssh-config"
+      when: start_result.changed | bool
+
+    - debug: var=instance_conf
+
+    - name: Dump instance config
+      copy:
+        # NOTE(retr0h): Workaround for Ansible 2.2.
+        #               https://github.com/ansible/ansible/issues/20885
+        content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
+        dest: "{{ molecule_instance_config }}"
+      when: start_result.changed | bool
