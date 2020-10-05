@@ -1940,6 +1940,94 @@ def test_delete_source_deletes_docs_on_disk(journalist_app,
         utils.asynchronous.wait_for_assertion(assertion)
 
 
+def test_bulk_delete_deletes_db_entries(journalist_app,
+                                        test_source,
+                                        test_journo,
+                                        config):
+    """
+    Verify that when files are deleted, the corresponding db entries are
+    also deleted.
+    """
+
+    with journalist_app.app_context():
+        source = Source.query.get(test_source['id'])
+        journo = Journalist.query.get(test_journo['id'])
+
+        utils.db_helper.submit(source, 2)
+        utils.db_helper.reply(journo, source, 2)
+
+        dir_source_docs = os.path.join(config.STORE_DIR, test_source['filesystem_id'])
+        assert os.path.exists(dir_source_docs)
+
+        subs = Submission.query.filter_by(source_id=source.id).all()
+        assert subs
+
+        replies = Reply.query.filter_by(source_id=source.id).all()
+        assert replies
+
+        file_list = []
+        file_list.extend(subs)
+        file_list.extend(replies)
+
+        with journalist_app.test_request_context('/'):
+            journalist_app_module.utils.bulk_delete(test_source['filesystem_id'],
+                                                    file_list)
+
+        def db_assertion():
+            subs = Submission.query.filter_by(source_id=source.id).all()
+            assert not subs
+
+            replies = Reply.query.filter_by(source_id=source.id).all()
+            assert not replies
+
+        utils.asynchronous.wait_for_assertion(db_assertion)
+
+
+def test_bulk_delete_works_when_files_absent(journalist_app,
+                                             test_source,
+                                             test_journo,
+                                             config):
+    """
+    Verify that when files are deleted but are already missing,
+    the corresponding db entries are still
+    """
+
+    with journalist_app.app_context():
+        source = Source.query.get(test_source['id'])
+        journo = Journalist.query.get(test_journo['id'])
+
+        utils.db_helper.submit(source, 2)
+        utils.db_helper.reply(journo, source, 2)
+
+        dir_source_docs = os.path.join(config.STORE_DIR, test_source['filesystem_id'])
+        assert os.path.exists(dir_source_docs)
+
+        subs = Submission.query.filter_by(source_id=source.id).all()
+        assert subs
+
+        replies = Reply.query.filter_by(source_id=source.id).all()
+        assert replies
+
+        file_list = []
+        file_list.extend(subs)
+        file_list.extend(replies)
+
+        with journalist_app.test_request_context('/'):
+            with patch("store.Storage.move_to_shredder") as delMock:
+                delMock.side_effect = ValueError
+                journalist_app_module.utils.bulk_delete(test_source['filesystem_id'],
+                                                        file_list)
+
+        def db_assertion():
+            subs = Submission.query.filter_by(source_id=source.id).all()
+            assert not subs
+
+            replies = Reply.query.filter_by(source_id=source.id).all()
+            assert not replies
+
+        utils.asynchronous.wait_for_assertion(db_assertion)
+
+
 def test_login_with_invalid_password_doesnt_call_argon2(mocker, test_journo):
     mock_argon2 = mocker.patch('models.argon2.verify')
     invalid_pw = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
