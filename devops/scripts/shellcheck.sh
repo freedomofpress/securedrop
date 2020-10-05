@@ -4,7 +4,7 @@ set -e
 
 
 function run_native_or_in_docker () {
-    EXCLUDE_RULES="SC1091,SC2001,SC2064,SC2181,SC1117"
+    EXCLUDE_RULES="SC1090,SC1091,SC2001,SC2064,SC2181,SC1117"
     if [ "$(command -v shellcheck)" ]; then
         shellcheck -x --exclude="$EXCLUDE_RULES" "$1"
     else
