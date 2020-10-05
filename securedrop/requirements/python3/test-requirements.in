@@ -5,7 +5,7 @@ flaky
 markupsafe>=1.1
 mock
 pillow>=7.2.0
-pip-tools>=4.0.0
+pip-tools==4.5.1
 py
 pytest
 pytest-cov
@@ -16,4 +16,4 @@ setuptools>=46.0.0
 selenium>=3.141.0
 tbselenium>=0.4.2
 pyvirtualdisplay
-urllib3>=1.25.8
+urllib3>=1.25.9

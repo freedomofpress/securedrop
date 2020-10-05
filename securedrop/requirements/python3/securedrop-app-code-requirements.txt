@@ -5,7 +5,8 @@
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements/python3/securedrop-app-code-requirements.txt requirements/python3/securedrop-app-code-requirements.in
 #
 alembic==0.9.9 \
-    --hash=sha256:85bd3ea7633024e4930900bc64fb58f9742dedbc6ebb6ecf25be2ea9a3c1b32e
+    --hash=sha256:85bd3ea7633024e4930900bc64fb58f9742dedbc6ebb6ecf25be2ea9a3c1b32e \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 argon2-cffi==20.1.0 \
     --hash=sha256:05a8ac07c7026542377e38389638a8a1e9b78f1cd8439cd7493b39f08dd75fbf \
     --hash=sha256:0bf066bc049332489bb2d75f69216416329d9dc65deee127152caeb16e5ce7d5 \
@@ -22,7 +23,8 @@ argon2-cffi==20.1.0 \
     --hash=sha256:ba7209b608945b889457f949cc04c8e762bed4fe3fec88ae9a6b7765ae82e496 \
     --hash=sha256:cc0e028b209a5483b6846053d5fd7165f460a1f14774d79e632e75e7ae64b82b \
     --hash=sha256:d8029b2d3e4b4cea770e9e5a0104dd8fa185c1724a0f01528ae4826a6d25f97d \
-    --hash=sha256:da7f0445b71db6d3a72462e04f36544b0de871289b0bc8a7cc87c0f5ec7079fa
+    --hash=sha256:da7f0445b71db6d3a72462e04f36544b0de871289b0bc8a7cc87c0f5ec7079fa \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 asn1crypto==0.24.0 \
     --hash=sha256:2f1adbb7546ed199e3c90ef23ec95c5cf3585bac7d11fb7eb562a3fe89c64e87 \
     --hash=sha256:9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49 \
@@ -59,7 +61,8 @@ cffi==1.14.2 \
     --hash=sha256:e4082d832e36e7f9b2278bc774886ca8207346b99f278e54c9de4834f17232f7 \
     --hash=sha256:e4b9b7af398c32e408c00eb4e0d33ced2f9121fd9fb978e6c1b57edd014a7d15 \
     --hash=sha256:e613514a82539fc48291d01933951a13ae93b6b444a88782480be32245ed4afa \
-    --hash=sha256:f5033952def24172e60493b68717792e3aebb387a8d186c43c020d9363ee7281
+    --hash=sha256:f5033952def24172e60493b68717792e3aebb387a8d186c43c020d9363ee7281 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in, argon2-cffi, cryptography
 click==6.7 \
     --hash=sha256:29f99fc6125fbc931b758dc053b3114e55c77a6e4c6c3a2674a2dc986016381d \
     --hash=sha256:f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b \
@@ -83,29 +86,37 @@ cryptography==2.6.1 \
     --hash=sha256:c8181c7d77388fe26ab8418bb088b1a1ef5fde058c6926790c8a0a3d94075a4a \
     --hash=sha256:d4afbb0840f489b60f5a580a41a1b9c3622e08ecb5eec8614d4fb4cd914c4460 \
     --hash=sha256:d9ed28030797c00f4bc43c86bf819266c76a5ea61d006cd4078a93ebf7da6bfd \
-    --hash=sha256:e603aa7bb52e4e8ed4119a58a03b60323918467ef209e6ff9db3ac382e5cf2c6
+    --hash=sha256:e603aa7bb52e4e8ed4119a58a03b60323918467ef209e6ff9db3ac382e5cf2c6 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 flask-assets==0.12 \
-    --hash=sha256:6031527b89fb3509d1581d932affa5a79dd348cfffb58d0aef99a43461d47847
+    --hash=sha256:6031527b89fb3509d1581d932affa5a79dd348cfffb58d0aef99a43461d47847 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 flask-babel==0.11.2 \
     --hash=sha256:462a3c599b0ccf426ca1757cc612f1db383844efd346d14170da04c8c76dd521 \
-    --hash=sha256:c0d75710bd4b0fe866f9f2347de6e19208712f9cec006436b4c1c15d4cb0c939
+    --hash=sha256:c0d75710bd4b0fe866f9f2347de6e19208712f9cec006436b4c1c15d4cb0c939 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 flask-sqlalchemy==2.4.0 \
     --hash=sha256:0c9609b0d72871c540a7945ea559c8fdf5455192d2db67219509aed680a3d45a \
-    --hash=sha256:8631bbea987bc3eb0f72b1f691d47bd37ceb795e73b59ab48586d76d75a7c605
+    --hash=sha256:8631bbea987bc3eb0f72b1f691d47bd37ceb795e73b59ab48586d76d75a7c605 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 flask-wtf==0.14.2 \
     --hash=sha256:5d14d55cfd35f613d99ee7cba0fc3fbbe63ba02f544d349158c14ca15561cc36 \
-    --hash=sha256:d9a9e366b32dcbb98ef17228e76be15702cd2600675668bca23f63a7947fd5ac
+    --hash=sha256:d9a9e366b32dcbb98ef17228e76be15702cd2600675668bca23f63a7947fd5ac \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 flask==1.0.2 \
     --hash=sha256:2271c0070dbcb5275fad4a82e29f23ab92682dc45f9dfbc22c02ba9b9322ce48 \
-    --hash=sha256:a080b744b7e345ccfcbc77954861cb05b3c63786e93f2b3875e0913d44b43f05
+    --hash=sha256:a080b744b7e345ccfcbc77954861cb05b3c63786e93f2b3875e0913d44b43f05 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in, flask-assets, flask-babel, flask-sqlalchemy, flask-wtf
 itsdangerous==0.24 \
     --hash=sha256:cbb3fcf8d3e33df861709ecaf89d9e6629cff0a217bc2848f1b41cd30d360519 \
     # via flask
 jinja2==2.10.1 \
     --hash=sha256:065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013 \
-    --hash=sha256:14dd6caf1527abb21f08f86c784eac40853ba93edb79552aa1e4b8aef1b61c7b
+    --hash=sha256:14dd6caf1527abb21f08f86c784eac40853ba93edb79552aa1e4b8aef1b61c7b \
+    # via -r requirements/python3/securedrop-app-code-requirements.in, flask, flask-babel
 jsmin==2.2.2 \
-    --hash=sha256:b6df99b2cd1c75d9d342e4335b535789b8da9107ec748212706ef7bbe5c2553b
+    --hash=sha256:b6df99b2cd1c75d9d342e4335b535789b8da9107ec748212706ef7bbe5c2553b \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 mako==1.0.7 \
     --hash=sha256:4e02fde57bd4abb5ec400181e4c314f56ac3e49ba4fb8b0d50bba18cb27d25ae \
     # via alembic
@@ -142,14 +153,18 @@ markupsafe==1.1.1 \
     --hash=sha256:cd5df75523866410809ca100dc9681e301e3c27567cf498077e8551b6d20e42f \
     --hash=sha256:cdb132fc825c38e1aeec2c8aa9338310d29d337bebbd7baa06889d09a60a1fa2 \
     --hash=sha256:e249096428b3ae81b08327a63a485ad0878de3fb939049038579ac0ef61e17e7 \
-    --hash=sha256:e8313f01ba26fbbe36c7be1966a7b7424942f670f38e666995b88d012765b9be
+    --hash=sha256:e8313f01ba26fbbe36c7be1966a7b7424942f670f38e666995b88d012765b9be \
+    # via -r requirements/python3/securedrop-app-code-requirements.in, jinja2, mako
 mod-wsgi==4.6.7 \
-    --hash=sha256:b788abaf0b903a64a7bb8dae609f2e4790c87e6f3d716aa6bc97936410fcbfcc
+    --hash=sha256:b788abaf0b903a64a7bb8dae609f2e4790c87e6f3d716aa6bc97936410fcbfcc \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 passlib==1.7.1 \
     --hash=sha256:3d948f64138c25633613f303bcc471126eae67c04d5e3f6b7b8ce6242f8653e0 \
-    --hash=sha256:43526aea08fa32c6b6dbbbe9963c4c767285b78147b7437597f992812f69d280
+    --hash=sha256:43526aea08fa32c6b6dbbbe9963c4c767285b78147b7437597f992812f69d280 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 pretty-bad-protocol==3.1.1 \
-    --hash=sha256:fb73797eb6344e3680c919e2af367f9a019ee7c189d3ed7f5d843edde911f73b
+    --hash=sha256:fb73797eb6344e3680c919e2af367f9a019ee7c189d3ed7f5d843edde911f73b \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 psutil==5.7.0 \
     --hash=sha256:1413f4158eb50e110777c4f15d7c759521703bd6beb58926f1d562da40180058 \
     --hash=sha256:298af2f14b635c3c7118fd9183843f4e73e681bb6f01e12284d4d70d48a60953 \
@@ -161,13 +176,15 @@ psutil==5.7.0 \
     --hash=sha256:d008ddc00c6906ec80040d26dc2d3e3962109e40ad07fd8a12d0284ce5e0e4f8 \
     --hash=sha256:d84029b190c8a66a946e28b4d3934d2ca1528ec94764b180f7d6ea57b0e75e26 \
     --hash=sha256:e2d0c5b07c6fe5a87fa27b7855017edb0d52ee73b71e6ee368fae268605cc3f5 \
-    --hash=sha256:f344ca230dd8e8d5eee16827596f1c22ec0876127c28e800d7ae20ed44c4b310
+    --hash=sha256:f344ca230dd8e8d5eee16827596f1c22ec0876127c28e800d7ae20ed44c4b310 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in, pretty-bad-protocol
 pycparser==2.18 \
     --hash=sha256:99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226 \
     # via cffi
 pyotp==2.2.6 \
     --hash=sha256:8f0df1fcf9e86cec41f0a31c91212b1a04fca6dd353426917222b21864b9310b \
-    --hash=sha256:dd9130dd91a0340d89a0f06f887dbd76dd07fb95a8886dc4bc401239f2eebd69
+    --hash=sha256:dd9130dd91a0340d89a0f06f887dbd76dd07fb95a8886dc4bc401239f2eebd69 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 python-dateutil==2.7.2 \
     --hash=sha256:3220490fb9741e2342e1cf29a503394fdac874bc39568288717ee67047ff29df \
     --hash=sha256:9d8074be4c993fbe4947878ce593052f71dac82932a677d49194d8ce9778002e \
@@ -181,13 +198,16 @@ pytz==2017.3 \
     # via babel
 qrcode==5.3 \
     --hash=sha256:4115ccee832620df16b659d4653568331015c718a754855caf5930805d76924e \
-    --hash=sha256:60222a612b83231ed99e6cb36e55311227c395d0d0f62e41bb51ebbb84a9a22b
+    --hash=sha256:60222a612b83231ed99e6cb36e55311227c395d0d0f62e41bb51ebbb84a9a22b \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 redis==3.3.6 \
     --hash=sha256:45682ecf226c7611efe731974c4fa3390170ba045b9cdb26f0051114a5c2a68b \
-    --hash=sha256:f2609a85e5f37f489ba3b5652e1175dc3711c4d7a7818c4f657615810afd23df
+    --hash=sha256:f2609a85e5f37f489ba3b5652e1175dc3711c4d7a7818c4f657615810afd23df \
+    # via -r requirements/python3/securedrop-app-code-requirements.in, rq
 rq==1.1.0 \
     --hash=sha256:2798d26a7b850e759f23f69695a389d676a9c08f2c14f96f0d34d9648c9d5616 \
-    --hash=sha256:4f27c6a690d1bd02b9157e615d8819555b9b359c0c4ec8ff0013d160c31b40bb
+    --hash=sha256:4f27c6a690d1bd02b9157e615d8819555b9b359c0c4ec8ff0013d160c31b40bb \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 scrypt==0.8.0 \
     --hash=sha256:3422d11652cd12550540675e9fb54a1de6d60f3cbfedfb067284ef028589e2ee \
     --hash=sha256:4e3cd639cc83e3f2c2241a01ebef9487c48b1ddf2d78f430d82d8f9ef60c6271 \
@@ -198,26 +218,31 @@ scrypt==0.8.0 \
     --hash=sha256:c0f90cabb8f6eaec05de5ce9aa9a9b67dc63d644e6b803beb1c43ae9b9452b65 \
     --hash=sha256:c37a1f8440d7c621d9f23f3c1f2a28848bc50fefbca581fd7a1b01583a083c07 \
     --hash=sha256:d4a5a4f53450b8ef629bbf1ee4be6105c69936e49b3d8bc621ac2287f0c86020 \
-    --hash=sha256:dc9abe69799ca423b938a06ddc33e5873e493ffcd68dbb9ba48396979b210d39
+    --hash=sha256:dc9abe69799ca423b938a06ddc33e5873e493ffcd68dbb9ba48396979b210d39 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 sh==1.12.14 \
     --hash=sha256:ae3258c5249493cebe73cb4e18253a41ed69262484bad36fdb3efcb8ad8870bb \
-    --hash=sha256:b52bf5833ed01c7b5c5fb73a7f71b3d98d48e9b9b8764236237bdc7ecae850fc
+    --hash=sha256:b52bf5833ed01c7b5c5fb73a7f71b3d98d48e9b9b8764236237bdc7ecae850fc \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 six==1.11.0 \
     --hash=sha256:70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9 \
     --hash=sha256:832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb \
     # via argon2-cffi, cryptography, python-dateutil, qrcode
 sqlalchemy==1.3.3 \
-    --hash=sha256:91c54ca8345008fceaec987e10924bf07dcab36c442925357e5a467b36a38319
+    --hash=sha256:91c54ca8345008fceaec987e10924bf07dcab36c442925357e5a467b36a38319 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in, alembic, flask-sqlalchemy
 typing==3.6.4 ; python_version < "3.8" \
     --hash=sha256:3a887b021a77b292e151afb75323dea88a7bc1b3dfa92176cff8e44c8b68bddf \
     --hash=sha256:b2c689d54e1144bbcfd191b0832980a21c2dbcf7b5ff7a66248a60c90e951eb8 \
-    --hash=sha256:d400a9344254803a2368533e4533a4200d21eb7b6b729c173bc38201a74db3f2
+    --hash=sha256:d400a9344254803a2368533e4533a4200d21eb7b6b729c173bc38201a74db3f2 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 webassets==0.12.1 \
     --hash=sha256:e7d9c8887343123fd5b32309b33167428cb1318cdda97ece12d0907fd69d38db \
     # via flask-assets
 werkzeug==0.16.0 \
     --hash=sha256:7280924747b5733b246fe23972186c6b348f9ae29724135a6dfc1e53cea433e7 \
-    --hash=sha256:e5f4a1f98b52b18a93da705a7458e55afb26f32bff83ff5d19189f92462d65c4
+    --hash=sha256:e5f4a1f98b52b18a93da705a7458e55afb26f32bff83ff5d19189f92462d65c4 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in, flask
 wtforms==2.1 \
     --hash=sha256:ffdf10bd1fa565b8233380cb77a304cd36fd55c73023e91d4b803c96bc11d46f \
     # via flask-wtf
@@ -225,4 +250,5 @@ wtforms==2.1 \
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==46.0.0 \
     --hash=sha256:2f00f25b780fbfd0787e46891dcccd805b08d007621f24629025f48afef444b5 \
-    --hash=sha256:693e0504490ed8420522bf6bc3aa4b0da6a9f1c80c68acfb4e959275fd04cd82
+    --hash=sha256:693e0504490ed8420522bf6bc3aa4b0da6a9f1c80c68acfb4e959275fd04cd82 \
+    # via -r requirements/python3/securedrop-app-code-requirements.in
