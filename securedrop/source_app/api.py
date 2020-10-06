@@ -8,7 +8,7 @@ import version
 
 
 with open("/etc/lsb-release", "r") as f:
-    server_os = f.readlines()[1].split("=")[1]
+    server_os = f.readlines()[1].split("=")[1].strip("\n")
 
 
 def make_blueprint(config):
