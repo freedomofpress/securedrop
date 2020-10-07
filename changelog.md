@@ -1,15 +1,10 @@
 # Changelog
 
-## 1.6.0~rc2
+## 1.6.0
 
 ### Web Applications
 
 * Adds error handling for file deletion operations (#5549)
-
-## 1.6.0~rc1
-
-### Web Applications
-
 * Update source Interface to render /lookup if replies are missing (#5497)
 * Remove traces of obsolete dependencies from virtualenv (#5487)
 * Internationalize "Show Password" on Journalist Interface (#5483)
