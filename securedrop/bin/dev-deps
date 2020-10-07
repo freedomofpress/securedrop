@@ -19,6 +19,7 @@ function run_xvfb() {
 }
 
 function run_redis() {
+    rm -f "${REPOROOT}/securedrop/dump.rdb"
     setsid redis-server >& /tmp/redis.out || cat /tmp/redis.out
 }
 
