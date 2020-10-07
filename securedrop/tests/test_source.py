@@ -583,8 +583,7 @@ def test_why_journalist_key(source_app):
 
 
 def test_metadata_route(config, source_app):
-    with patch.object(source_app_api.platform, "linux_distribution") as mocked_platform:
-        mocked_platform.return_value = ("Ubuntu", "16.04", "xenial")
+    with patch.object(source_app_api, "server_os", new="16.04"):
         with source_app.test_client() as app:
             resp = app.get(url_for('api.metadata'))
             assert resp.status_code == 200
