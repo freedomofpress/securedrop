@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2020-07-17 05:51+0000\n"
-"Last-Translator: robbpa <robbpaun@gmail.com>\n"
+"PO-Revision-Date: 2020-10-06 16:16+0000\n"
+"Last-Translator: Jobava <jobaval10n@gmail.com>\n"
 "Language-Team: Romanian <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/ro/>\n"
 "Language: ro\n"
@@ -24,24 +24,24 @@ msgstr ""
 msgid "{time} ago"
 msgstr "acum {time}"
 
-#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
-msgid "You have been logged out due to inactivity"
-msgstr "Ai fost deconectat(ă) din cauza inactivității"
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:131
+msgid "You have been logged out due to inactivity."
+msgstr "Ai fost deconectat(ă) din cauza inactivității."
 
-#: journalist_app/__init__.py:148
+#: journalist_app/__init__.py:140
 msgid "You have been logged out due to password change"
 msgstr "Ai fost deconectat(ă) în urma schimbării parolei"
 
-#: journalist_app/account.py:33
+#: journalist_app/account.py:36
 msgid "Incorrect password or two-factor code."
 msgstr "Parolă sau cod de autentificare cu doi factori greșit(ă)."
 
-#: journalist_app/account.py:49
+#: journalist_app/account.py:52
 msgid "Your two-factor credentials have been reset successfully."
 msgstr ""
 "Datele pentru autentificarea cu doi factori au fost resetate cu succes."
 
-#: journalist_app/account.py:53 journalist_app/admin.py:136
+#: journalist_app/account.py:56 journalist_app/admin.py:136
 msgid "There was a problem verifying the two-factor code. Please try again."
 msgstr ""
 "A apărut o problemă la verificarea datelor pentru autentificarea cu doi "
@@ -81,23 +81,23 @@ msgstr ""
 "verificat cu succes."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:308
+#: journalist_app/utils.py:350
 msgid "Name not updated: {}"
 msgstr "Nume neactualizat: {}"
 
-#: journalist_app/admin.py:249
-msgid "Deleted user '{user}'"
-msgstr "Utilizatorul „{user}” a fost șters"
+#: journalist_app/admin.py:232
+msgid "Deleted user '{user}'."
+msgstr "Utilizatorul „{user}” a fost șters."
 
-#: journalist_app/admin.py:279
+#: journalist_app/admin.py:262
 msgid "Test alert sent. Please check your email."
 msgstr "A fost transmisă alerta de test. Te rugăm să îți verifici e-mailul."
 
-#: journalist_app/col.py:50
-msgid "{source_name}'s collection deleted"
-msgstr "Colecția lui {source_name} a fost ștearsă"
+#: journalist_app/col.py:60
+msgid "{source_name}'s collection deleted."
+msgstr "Colecția lui {source_name} a fost ștearsă."
 
-#: journalist_app/col.py:61
+#: journalist_app/col.py:71
 msgid "No collections selected."
 msgstr "Nu a fost selectată nicio colecție."
 
@@ -109,18 +109,15 @@ msgstr "Doar administratorii pot accesa această pagină."
 msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
 msgstr "Secretele HOTP au 40 de caractere lungime - ai introdus {num_chars}."
 
-#: journalist_app/forms.py:30
-msgid ""
-"Field must be at least {min_chars} characters long but only got {num_chars}."
-msgstr ""
-"Câmpul trebuie să aibă cel puțin {min_chars} caractere, dar sunt numai "
-"{num_chars}."
+#: journalist_app/forms.py:28
+msgid "Must be at least {min_chars} characters long."
+msgstr "Trebuie să aibă cel puțin {min_chars} caractere."
 
-#: journalist_app/forms.py:37
-msgid "Field can not be more than {max_chars} characters."
-msgstr "Câmpul nu poate avea mai mult de {max_chars} caractere."
+#: journalist_app/forms.py:35
+msgid "Cannot be longer than {max_chars} characters."
+msgstr "Nu poate avea mai mult de {max_chars} caractere."
 
-#: journalist_app/forms.py:42
+#: journalist_app/forms.py:40
 msgid ""
 "This username is invalid because it is reserved for internal use by the "
 "software."
@@ -128,53 +125,53 @@ msgstr ""
 "Acest nume de utilizator este nevalid deoarece este rezervat pentru "
 "utilizare internă de către software."
 
-#: journalist_app/forms.py:48 source_app/forms.py:12
+#: journalist_app/forms.py:46 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Acest câmp este obligatoriu."
 
-#: journalist_app/forms.py:67
+#: journalist_app/forms.py:65
 msgid "You cannot send an empty reply."
 msgstr "Nu poți trimite un răspuns gol."
 
-#: journalist_app/forms.py:79
+#: journalist_app/forms.py:77
 msgid "File required."
 msgstr "Trebuie să existe un fișier."
 
-#: journalist_app/forms.py:81
+#: journalist_app/forms.py:79
 msgid "You can only upload PNG image files."
 msgstr "Poți încărca doar fișiere de imagini PNG."
 
-#: journalist_app/main.py:122 journalist_app/utils.py:47
-#: journalist_app/utils.py:144
+#: journalist_app/main.py:124 journalist_app/utils.py:58
+#: journalist_app/utils.py:157
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr ""
 "A apărut o eroare neașteptată! Te rugăm să îți informezi administratorul."
 
-#: journalist_app/main.py:133
+#: journalist_app/main.py:135
 msgid "Thanks. Your reply has been stored."
 msgstr "Îți mulțumim. Răspunsul tău a fost stocat."
 
-#: journalist_app/main.py:154
+#: journalist_app/main.py:156
 msgid "No collections selected for download."
 msgstr "Nu a fost selectată nicio colecție pentru descărcare."
 
-#: journalist_app/main.py:157 journalist_app/utils.py:242
+#: journalist_app/main.py:159 journalist_app/utils.py:284
 msgid "No collections selected for deletion."
 msgstr "Nu a fost selectată nicio colecție pentru ștergere."
 
-#: journalist_app/main.py:179
+#: journalist_app/main.py:180
 msgid "No unread submissions for this source."
 msgstr "Nu sunt trimiteri necitite de la această sursă."
 
-#: journalist_app/utils.py:54
+#: journalist_app/utils.py:65
 msgid "Account updated."
 msgstr "Contul a fost actualizat."
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:106
 msgid "Login failed."
 msgstr "Autentificarea a eșuat."
 
-#: journalist_app/utils.py:100
+#: journalist_app/utils.py:113
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] ""
@@ -187,7 +184,7 @@ msgstr[2] ""
 "Te rugăm să aștepți cel puțin {seconds} de secunde înainte de a te "
 "autentifica din nou."
 
-#: journalist_app/utils.py:111
+#: journalist_app/utils.py:124
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
@@ -195,40 +192,40 @@ msgstr ""
 "Te rugăm să aștepți un cod nou de la aplicația mobilă pentru autentificarea "
 "cu doi factori sau cheia de securitate înainte de a încerca din nou."
 
-#: journalist_app/utils.py:132
+#: journalist_app/utils.py:145
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "Secret cu format nevalid: trebuie folosite doar litere de la A la F și cifre "
 "de la 0 la 9."
 
-#: journalist_app/utils.py:138
+#: journalist_app/utils.py:151
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "Secret cu format nevalid: lungimea este impară. Ai tastat greșit secretul?"
 
-#: journalist_app/utils.py:194
+#: journalist_app/utils.py:236
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "{num} trimitere a fost ștearsă."
 msgstr[1] "{num} trimiteri au fost șterse."
 msgstr[2] "{num} de trimiteri au fost șterse."
 
-#: journalist_app/utils.py:250
+#: journalist_app/utils.py:292
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} colecție a fost ștearsă"
 msgstr[1] "{num} colecții au fost șterse"
 msgstr[2] "{num} de colecții au fost șterse"
 
-#: journalist_app/utils.py:306
+#: journalist_app/utils.py:348
 msgid "Name updated."
 msgstr "Numele a fost actualizat."
 
-#: journalist_app/utils.py:315
-msgid "You submitted a bad password! Password not changed."
-msgstr "Ai introdus o parolă greșită! Parola nu a fost schimbată."
+#: journalist_app/utils.py:357
+msgid "The password you submitted is invalid. Password not changed."
+msgstr "Parola introdusă este nevalidă. Parola nu a fost modificată."
 
-#: journalist_app/utils.py:322
+#: journalist_app/utils.py:364
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -238,7 +235,7 @@ msgstr ""
 "corect. Pentru a evita pierderea accesului la cont, trebuie să resetezi din "
 "nou parola."
 
-#: journalist_app/utils.py:331
+#: journalist_app/utils.py:373
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -246,7 +243,7 @@ msgstr ""
 "Parola a fost actualizată. Nu uita să o salvezi în baza ta de date KeePassX. "
 "Parola nouă este:"
 
-#: journalist_app/utils.py:349
+#: journalist_app/utils.py:397
 msgid "No unread submissions in selected collections."
 msgstr "Nicio trimitere necitită în colecțiile selectate."
 
@@ -508,14 +505,14 @@ msgstr ""
 #: journalist_templates/base.html:24
 msgid ""
 "<strong>Update Required:</strong> Your SecureDrop servers are still running "
-"v2 Onion Services, which are being phased out for security reasons. In "
-"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"v2 onion services, which are being phased out for security reasons. In "
+"February 2021, v2 onion services will be disabled, and your SecureDrop "
 "servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
 "rel=\"noreferrer\">Learn More</a>"
 msgstr ""
 "<strong>Actualizare necesară:</strong> Serverele dvs. SecureDrop încă "
-"rulează v2 Onion Services, care sunt înlocuite treptat din motive de "
-"securitate. În Februarie 2021, v2 Onion Services vor fi dezactivate, iar "
+"rulează v2 onion services, care sunt înlocuite treptat din motive de "
+"securitate. În Februarie 2021, v2 onion services vor fi dezactivate, iar "
 "serverele dvs. SecureDrop vor deveni imposibil de accesat. <a href=\""
 "//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Află mai multe</a>"
 
@@ -531,15 +528,7 @@ msgstr "Administrator"
 msgid "Log Out"
 msgstr "Deconectare"
 
-#: journalist_templates/base.html:46
-msgid ""
-"Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
-"\">"
-msgstr ""
-"Oferit de <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
-"\">"
-
-#: journalist_templates/base.html:61
+#: journalist_templates/base.html:56
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Oferit de <em>SecureDrop {version}</em>."
 
@@ -725,8 +714,8 @@ msgid "Edit user \"{user}\""
 msgstr "Editează utilizatorul „{user}”"
 
 #: journalist_templates/edit_account.html:8
-msgid "Change Name &amp; Admin Status"
-msgstr "Schimbă numele &amp; rolul de administrator"
+msgid "Change Name and Admin Status"
+msgstr "Schimbă numele și rolul de administrator"
 
 #: journalist_templates/edit_account.html:27
 #: journalist_templates/edit_account.html:43
@@ -789,13 +778,13 @@ msgid ""
 "If a user's two-factor authentication credentials have been lost or "
 "compromised, you can reset them here. <em>If you do this, make sure the user "
 "is present and ready to set up their device with the new two-factor "
-"credentials. Otherwise, they will be locked out of their account."
+"credentials. Otherwise, they will be locked out of their account.</em>"
 msgstr ""
 "Dacă acreditările de autentificare cu doi factori ale unui utilizator au "
 "fost pierdute sau compromise, le poți reseta aici.<em>Dacă le resetezi, "
 "asigură-te că utilizatorul este prezent și gata să-și seteze dispozitivul "
 "folosind noile acreditări cu doi factori de autentificare, altminteri nu va "
-"mai putea intra în cont."
+"mai putea intra în cont.</em>"
 
 #: journalist_templates/edit_account.html:85
 msgid ""
@@ -931,12 +920,16 @@ msgstr "Autentifică-te pentru acces la interfața jurnalistului"
 msgid "Password"
 msgstr "Parolă"
 
-#: journalist_templates/login.html:12 source_templates/index.html:65
+#: journalist_templates/login.html:10
+msgid "Show password"
+msgstr "Arată parola"
+
+#: journalist_templates/login.html:12 source_templates/index.html:59
 #: source_templates/logout.html:3
 msgid "LOG IN"
 msgstr "CONECTARE"
 
-#: source_app/__init__.py:123
+#: source_app/__init__.py:117
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -983,35 +976,41 @@ msgstr ""
 "Ești deja conectat(ă). Te rugăm să îți verifici numele de cod de mai sus, "
 "pentru că poate diferi de cel afișat în pagina anterioară."
 
-#: source_app/main.py:171
+#: source_app/main.py:80
+msgid "There was a temporary problem creating your account. Please try again."
+msgstr ""
+"A apărut o problemă temporară la crearea contului. Te rugăm să încerci din "
+"nou."
+
+#: source_app/main.py:184
 msgid "You must enter a message or choose a file to submit."
 msgstr "Trebuie să introduci un mesaj sau să alegi un fișier de trimis."
 
-#: source_app/main.py:175
+#: source_app/main.py:188
 msgid "You must enter a message."
 msgstr "Trebuie să introduci un mesaj."
 
-#: source_app/main.py:206
+#: source_app/main.py:219
 msgid "Thanks! We received your message."
 msgstr "Îți mulțumim! Am primit mesajul tău."
 
-#: source_app/main.py:208
+#: source_app/main.py:221
 msgid "Thanks! We received your document."
 msgstr "Îți mulțumim! Am primit documentul tău."
 
-#: source_app/main.py:210
+#: source_app/main.py:223
 msgid "Thanks! We received your message and document."
 msgstr "Îți mulțumim! Am primit mesajul și documentul."
 
-#: source_app/main.py:271
+#: source_app/main.py:284
 msgid "Reply deleted"
 msgstr "Răspunsul a fost șters"
 
-#: source_app/main.py:289
+#: source_app/main.py:302
 msgid "All replies have been deleted"
 msgstr "Toate răspunsurile au fost șterse"
 
-#: source_app/main.py:303
+#: source_app/main.py:316
 msgid "Sorry, that is not a recognized codename."
 msgstr "Ne pare rău, acesta nu este un nume de cod recunoscut."
 
@@ -1019,12 +1018,7 @@ msgstr "Ne pare rău, acesta nu este un nume de cod recunoscut."
 msgid "Protecting Journalists and Sources"
 msgstr "Pentru protecția jurnaliștilor și a surselor"
 
-#: source_templates/base.html:25 source_templates/footer.html:4
-#: source_templates/index.html:32
-msgid "Powered by"
-msgstr "Oferit de"
-
-#: source_templates/base.html:34
+#: source_templates/base.html:28
 msgid "LOG OUT"
 msgstr "DECONECTARE"
 
@@ -1059,6 +1053,10 @@ msgstr ""
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
 msgstr "Ți-ai uitat numele de cod?"
+
+#: source_templates/footer.html:4
+msgid "Powered by"
+msgstr "Oferit de"
 
 #: source_templates/footer.html:7
 msgid ""
@@ -1113,75 +1111,75 @@ msgstr "TRIMITE DOCUMENTE"
 
 #: source_templates/index.html:16
 msgid ""
-"Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Setting</"
+"Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</"
 "strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> "
 "&nbsp;button in your browser’s toolbar to change it."
 msgstr ""
-"<a id=\"disable-js\" href=\"\"><strong>Setările de securitate</strong></a> "
-"din browserul tău Tor sunt prea slabe. Folosește butonul <img src=\"{icon}\" "
-"alt=\"shield icon\"> &nbsp;din bara de instrumente a browserului și schimbă-"
-"le."
+"<a id=\"disable-js\" href=\"\"><strong>Nivelul de securitate</strong></a> "
+"din browserul tău Tor este prea slab. Folosește butonul <img src=\"{icon}\" "
+"alt=\"shield icon\"> &nbsp;din bara de instrumente a browserului pentru a-l "
+"schimba."
 
 #: source_templates/index.html:17
 msgid ""
-"<strong>It is recommended to use the Tor Browser to access SecureDrop:</"
-"strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to "
-"install it</a>, or ignore this warning to continue."
+"<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> "
+"<a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</"
+"a>, or ignore this warning to continue."
 msgstr ""
-"<strong>Îți recomandăm să folosești browserul Tor pentru a accesa SecureDrop:"
-"</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Află cum îl "
-"poți instala</a> sau ignoră acest avertisment pentru a continua."
+"<strong>Îți recomandăm să folosești browserul Tor pentru a accesa "
+"SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Află "
+"cum îl poți instala</a> sau ignoră acest avertisment pentru a continua."
 
 #: source_templates/index.html:18
 msgid ""
 "<strong>It is recommended you use the desktop version of Tor Browser to "
 "access SecureDrop, as Orfox does not provide the same level of security and "
-"anonymity as the desktop versions.</strong> <a id=\"recommend-tor\" href="
+"anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href="
 "\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to "
 "continue."
 msgstr ""
 "<strong>Îți recomandăm să folosești browserul Tor în versiunea pentru "
-"calculator pentru a accesa SecureDrop, deoarece Orfox nu oferă același nivel "
-"de securitate și anonimitate.</strong> <a id=\"recommend-tor\" href="
-"\"{tor_browser_url}\">Află cum îl poți instala</a> sau ignoră acest "
+"calculator ca să accesezi SecureDrop, deoarece Orfox nu oferă același nivel "
+"de securitate și anonimitate.</strong> <a id=\"recommend-tor\" href=\""
+"{tor_browser_url}\">Află cum îl poți instala</a> sau ignoră acest "
 "avertisment pentru a continua."
 
-#: source_templates/index.html:45
+#: source_templates/index.html:39
 msgid "First submission"
 msgstr "Prima trimitere"
 
-#: source_templates/index.html:47
+#: source_templates/index.html:41
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Este prima dată când trimiți ceva pe SecureDrop? Începe de aici."
 
-#: source_templates/index.html:51
+#: source_templates/index.html:45
 msgid "GET STARTED"
 msgstr "ÎNCEPE"
 
-#: source_templates/index.html:59
+#: source_templates/index.html:53
 msgid "Return visit"
 msgstr "Am revenit"
 
-#: source_templates/index.html:61
+#: source_templates/index.html:55
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr ""
 "Ai deja un nume de cod? Vezi dacă ai primit răspunsuri sau trimite ceva nou."
 
-#: source_templates/index.html:79
+#: source_templates/index.html:73
 msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
 msgstr ""
 "Dă click pe <img src=\"{icon}\" alt=\"shield icon\"> în bara de instrumente "
 "de mai sus"
 
-#: source_templates/index.html:80
+#: source_templates/index.html:74
 msgid "Select <strong>Advanced Security Settings</strong>"
 msgstr "Selectează <strong>Setări avansate de securitate</strong>"
 
-#: source_templates/index.html:81
+#: source_templates/index.html:75
 msgid "Select <strong>Safest</strong>"
 msgstr "Selectează <strong>Cele mai sigure</strong>"
 
-#: source_templates/index.html:83
+#: source_templates/index.html:77
 msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\">Reîmprospătează pagina</a>, și ai terminat!"
 
@@ -1204,8 +1202,8 @@ msgstr "Încă ceva..."
 #: source_templates/logout.html:7
 msgid ""
 "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height="
-"\"16\">&nbsp;<strong>New Identity</strong> button in your Tor browser's "
-"toolbar. This will clear your Tor browser activity data on this device."
+"\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's "
+"toolbar. This will clear your Tor Browser activity data on this device."
 msgstr ""
 "Dă clic pe butonul <img src={icon} alt=\"broom icon\" width=\"16\" height="
 "\"16\">&nbsp;<strong>Identitate nouă</strong> din bara de instrumente a "
@@ -1343,8 +1341,8 @@ msgstr "Important"
 msgid ""
 "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom "
 "icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button "
-"in your Tor browser's toolbar before moving on. This will clear your Tor "
-"browser activity data on this device."
+"in your Tor Browser's toolbar before moving on. This will clear your Tor "
+"Browser activity data on this device."
 msgstr ""
 "Ai fost deconectat(ă) din cauza inactivității. Dă clic pe butonul <img "
 "src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;"
@@ -1373,7 +1371,7 @@ msgstr ""
 #: source_templates/tor2web-warning.html:6
 msgid ""
 "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject."
-"org/projects/torbrowser.html\">Tor browser</a> instead."
+"org/projects/torbrowser.html\">Tor Browser</a> instead."
 msgstr ""
 "<strong>Îți recomandăm puternic</strong> să folosești <a href=\"www."
 "torproject.org/projects/torbrowser.html\">browserul Tor</a> în schimb."
@@ -1443,17 +1441,19 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:7
 msgid ""
-"<a href=\"{url}\">Download</a> the public key. The public key is a text file "
-"with the extension <code>.asc</code>"
+"<a href=\"{url}\">Download</a> the public key. It will be saved to a file "
+"called:\n"
+"        <p><code>{submission_key_fpr_filename}</code></p>"
 msgstr ""
-"<a href=\"{url}\">Descarcă</a> cheia publică. Cheia publică este un fișier "
-"text cu extensia <code>.asc</code>"
+"<a href=\"{url}\">Descarcă</a> cheia publică. Va fi salvată într-un fișier "
+"denumit:\n"
+"        <p><code>{submission_key_fpr_filename}</code></p>"
 
-#: source_templates/why-journalist-key.html:8
+#: source_templates/why-journalist-key.html:9
 msgid "Import it into your GPG keyring."
 msgstr "Importă cheia în inelul de securitate GPG."
 
-#: source_templates/why-journalist-key.html:10
+#: source_templates/why-journalist-key.html:11
 msgid ""
 "If you are using <a href=\"{url}\">Tails</a>, you can double-click the "
 "<code>.asc</code> file you just downloaded and it will be automatically "
@@ -1463,62 +1463,79 @@ msgstr ""
 "<code>.asc</code> pe care l-ai descărcat și va fi importat automat în inelul "
 "tău de securitate."
 
-#: source_templates/why-journalist-key.html:11
+#: source_templates/why-journalist-key.html:12
 msgid ""
-"If you are using Mac/Linux, open the terminal. You can import the key with "
-"<code>gpg --import /path/to/key.asc</code>."
+"If you are using macOS or Linux, open the terminal. You can import the key "
+"with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
 msgstr ""
-"Dacă folosești Mac/Linux, deschide terminalul. Poți importa cheia cu "
-"<code>gpg --import /cale/către/key.asc</code>."
+"Dacă folosești macOS sau Linux, deschide terminalul. Poți importa cheia cu:"
+"<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
 
-#: source_templates/why-journalist-key.html:14
-msgid "Encrypt your submission."
-msgstr "Criptează trimiterea."
+#: source_templates/why-journalist-key.html:15
+msgid "Encrypt your submission. Open the terminal and enter this gpg command:"
+msgstr ""
+"Criptează fișierele trimise. Deschide terminalul și introdu această comandă "
+"gpg:"
 
 #: source_templates/why-journalist-key.html:16
 msgid ""
-"You will need to be able to identify the key (this is called the \"user ID\" "
-"or UID). Since the public key's filename is the key's fingerprint (with .asc "
-"at the end), you can just copy and paste that. (don't include the <code>."
-"asc</code>!)"
-msgstr ""
-"Va trebui să poți identifica cheia cu ajutorul unui „ID utilizator” sau UID. "
-"Denumirea fișierului de cheie publică este și amprenta digitală a cheii (cu ."
-"asc la sfârșit), așa că poți copia și lipi această denumire (fără a include "
-"<code>.asc</code>!)."
-
-#: source_templates/why-journalist-key.html:17
-msgid ""
-"On all systems, open the Terminal and use this gpg command: <code>gpg --"
-"recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
-msgstr ""
-"Pe toate sistemele, deschide un terminal și folosește următoarea comandă "
-"gpg: <code>gpg --recipient &lt; user ID&gt; --encrypt roswell_photos.pdf</"
+"<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/submission</"
 "code>"
+msgstr ""
+"<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/"
+"submission</code>"
 
-#: source_templates/why-journalist-key.html:20
+#: source_templates/why-journalist-key.html:18
 msgid ""
 "Upload your encrypted submission. It will have the same filename as the "
-"unencrypted file, with .gpg at the end (e.g. <code>roswell_photos.pdf.gpg</"
+"unencrypted file, with .gpg at the end (e.g. <code>internal_memo.pdf.gpg</"
 "code>)"
 msgstr ""
 "Încarcă trimiterea criptată. Va avea aceeași denumire de fișier ca fișierul "
-"necriptat, dar cu .gpg la sfârșit (de ex. <code>roswell_photos.pdf.gpg</"
-"code>)"
+"necriptat, dar cu .gpg la sfârșit (de ex. <code>internal_memo.pdf.gpg</code>)"
 
-#: source_templates/why-journalist-key.html:23
+#: source_templates/why-journalist-key.html:21
 msgid ""
-"<strong>Tip:</strong> If you wish to remain anonymous, <strong>do not</"
+"<strong>Important:</strong> If you wish to remain anonymous, <strong>do not</"
 "strong> use GPG to sign the encrypted file (with the <code>--sign</code> or "
 "<code>-s</code> flag) as this will reveal your GPG identity to us."
 msgstr ""
-"<strong>Pont:</strong> Dacă vrei să rămâi anonim(ă), <strong>nu folosi</"
+"<strong>Important:</strong> Dacă vrei să rămâi anonim(ă), <strong>nu folosi</"
 "strong> GPG pentru a semna fișiere criptate (cu argumentul <code>--sign</"
 "code> sau <code>-s</code>) pentru că ne va dezvălui identitatea ta GPG."
 
-#: source_templates/why-journalist-key.html:25
+#: source_templates/why-journalist-key.html:23
 msgid "Back to submission page"
 msgstr "Înapoi la pagina de trimitere"
+
+#~ msgid ""
+#~ "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt="
+#~ "\"SecureDrop\">"
+#~ msgstr ""
+#~ "Oferit de <br> <img src=\"/static/i/securedrop_small.png\" alt="
+#~ "\"SecureDrop\">"
+
+#~ msgid "Encrypt your submission."
+#~ msgstr "Criptează trimiterea."
+
+#~ msgid ""
+#~ "You will need to be able to identify the key (this is called the \"user ID"
+#~ "\" or UID). Since the public key's filename is the key's fingerprint "
+#~ "(with .asc at the end), you can just copy and paste that. (don't include "
+#~ "the <code>.asc</code>!)"
+#~ msgstr ""
+#~ "Va trebui să poți identifica cheia cu ajutorul unui „ID utilizator” sau "
+#~ "UID. Denumirea fișierului de cheie publică este și amprenta digitală a "
+#~ "cheii (cu .asc la sfârșit), așa că poți copia și lipi această denumire "
+#~ "(fără a include <code>.asc</code>!)."
+
+#~ msgid ""
+#~ "On all systems, open the Terminal and use this gpg command: <code>gpg --"
+#~ "recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
+#~ msgstr ""
+#~ "Pe toate sistemele, deschide un terminal și folosește următoarea comandă "
+#~ "gpg: <code>gpg --recipient &lt; user ID&gt; --encrypt roswell_photos.pdf</"
+#~ "code>"
 
 #~ msgid "The source '{original_name}' has been renamed to '{new_name}'"
 #~ msgstr "Sursa „{original_name}” a fost redenumită „{new_name}”"

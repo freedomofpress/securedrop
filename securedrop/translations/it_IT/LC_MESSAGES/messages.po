@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2020-07-25 16:37+0000\n"
+"PO-Revision-Date: 2020-10-02 11:00+0000\n"
 "Last-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\n"
 "Language-Team: Italian <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/it/>\n"
@@ -27,23 +27,23 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} fa"
 
-#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
-msgid "You have been logged out due to inactivity"
-msgstr "La sessione è stata terminata per inattività"
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:131
+msgid "You have been logged out due to inactivity."
+msgstr "La sessione è stata terminata per inattività."
 
-#: journalist_app/__init__.py:148
+#: journalist_app/__init__.py:140
 msgid "You have been logged out due to password change"
 msgstr "Sei stato disconnesso a seguito della modifica della password"
 
-#: journalist_app/account.py:33
+#: journalist_app/account.py:36
 msgid "Incorrect password or two-factor code."
 msgstr "Password o codice a due fattori errati."
 
-#: journalist_app/account.py:49
+#: journalist_app/account.py:52
 msgid "Your two-factor credentials have been reset successfully."
 msgstr "L'autenticazione a due fattori è stata ripristinata con successo."
 
-#: journalist_app/account.py:53 journalist_app/admin.py:136
+#: journalist_app/account.py:56 journalist_app/admin.py:136
 msgid "There was a problem verifying the two-factor code. Please try again."
 msgstr ""
 "C'è stato un problema nella verifica del codice a due fattori. Riprovare "
@@ -83,23 +83,23 @@ msgstr ""
 "successo."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:308
+#: journalist_app/utils.py:350
 msgid "Name not updated: {}"
 msgstr "Nome non aggiornato: {}"
 
-#: journalist_app/admin.py:249
-msgid "Deleted user '{user}'"
-msgstr "Utente \"{user}\" eliminato"
+#: journalist_app/admin.py:232
+msgid "Deleted user '{user}'."
+msgstr "Utente \"{user}\" eliminato."
 
-#: journalist_app/admin.py:279
+#: journalist_app/admin.py:262
 msgid "Test alert sent. Please check your email."
 msgstr "Avviso di prova inviato. Controllare la propria casella email."
 
-#: journalist_app/col.py:50
-msgid "{source_name}'s collection deleted"
-msgstr "Archivio di {source_name} eliminato"
+#: journalist_app/col.py:60
+msgid "{source_name}'s collection deleted."
+msgstr "Archivio di {source_name} eliminato."
 
-#: journalist_app/col.py:61
+#: journalist_app/col.py:71
 msgid "No collections selected."
 msgstr "Non è stato selezionato alcun archivio."
 
@@ -112,18 +112,15 @@ msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
 msgstr ""
 "Le password HOTP sono di 40 caratteri - ne sono stati inseriti {num_chars}."
 
-#: journalist_app/forms.py:30
-msgid ""
-"Field must be at least {min_chars} characters long but only got {num_chars}."
-msgstr ""
-"Il campo deve essere almeno di {min_chars} caratteri, ne sono stati trovati "
-"solo {num_chars}."
+#: journalist_app/forms.py:28
+msgid "Must be at least {min_chars} characters long."
+msgstr "Deve essere lungo almeno {min_chars} caratteri."
 
-#: journalist_app/forms.py:37
-msgid "Field can not be more than {max_chars} characters."
-msgstr "Il campo non può contenere più di {max_chars} caratteri."
+#: journalist_app/forms.py:35
+msgid "Cannot be longer than {max_chars} characters."
+msgstr "No può contenere più di {max_chars} caratteri."
 
-#: journalist_app/forms.py:42
+#: journalist_app/forms.py:40
 msgid ""
 "This username is invalid because it is reserved for internal use by the "
 "software."
@@ -131,59 +128,59 @@ msgstr ""
 "Questo nome utente non è valido in quanto è riservato per uso interno da "
 "parte del software."
 
-#: journalist_app/forms.py:48 source_app/forms.py:12
+#: journalist_app/forms.py:46 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Questo campo è obbligatorio."
 
-#: journalist_app/forms.py:67
+#: journalist_app/forms.py:65
 msgid "You cannot send an empty reply."
 msgstr "Non è possibile inviare una risposta vuota."
 
-#: journalist_app/forms.py:79
+#: journalist_app/forms.py:77
 msgid "File required."
 msgstr "File obbligatorio."
 
-#: journalist_app/forms.py:81
+#: journalist_app/forms.py:79
 msgid "You can only upload PNG image files."
 msgstr "Possono essere caricate solo immagini PNG."
 
-#: journalist_app/main.py:122 journalist_app/utils.py:47
-#: journalist_app/utils.py:144
+#: journalist_app/main.py:124 journalist_app/utils.py:58
+#: journalist_app/utils.py:157
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr ""
 "Si è verificato un errore inatteso. Informare il proprio amministratore."
 
-#: journalist_app/main.py:133
+#: journalist_app/main.py:135
 msgid "Thanks. Your reply has been stored."
 msgstr "Grazie. La tua risposta è stata archiviata."
 
-#: journalist_app/main.py:154
+#: journalist_app/main.py:156
 msgid "No collections selected for download."
 msgstr "Nessun archivio è stato selezionato per essere scaricato."
 
-#: journalist_app/main.py:157 journalist_app/utils.py:242
+#: journalist_app/main.py:159 journalist_app/utils.py:284
 msgid "No collections selected for deletion."
 msgstr "Nessun archivio è stato selezionato per essere eliminato."
 
-#: journalist_app/main.py:179
+#: journalist_app/main.py:180
 msgid "No unread submissions for this source."
 msgstr "Non ci sono invii non letti per questa fonte."
 
-#: journalist_app/utils.py:54
+#: journalist_app/utils.py:65
 msgid "Account updated."
 msgstr "Account aggiornato."
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:106
 msgid "Login failed."
 msgstr "Accesso non riuscito."
 
-#: journalist_app/utils.py:100
+#: journalist_app/utils.py:113
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] "Attendere almeno {seconds} secondo prima di accedere nuovamente."
 msgstr[1] "Attendere almeno {seconds} secondi prima di accedere nuovamente."
 
-#: journalist_app/utils.py:111
+#: journalist_app/utils.py:124
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
@@ -191,38 +188,38 @@ msgstr ""
 "Attendere un nuovo codice a due fattori dall'applicazione mobile o dalla "
 "chiave di sicurezza prima di tentare nuovamente."
 
-#: journalist_app/utils.py:132
+#: journalist_app/utils.py:145
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "Formato del segreto non valido: utilizzare solo lettere A-F e numeri 0-9."
 
-#: journalist_app/utils.py:138
+#: journalist_app/utils.py:151
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "Formato del segreto non valido: segreto di lunghezza dispari. Forse non è "
 "stato digitato correttamente?"
 
-#: journalist_app/utils.py:194
+#: journalist_app/utils.py:236
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Invio eliminato."
 msgstr[1] "{num} invii eliminati."
 
-#: journalist_app/utils.py:250
+#: journalist_app/utils.py:292
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} archivio eliminato"
 msgstr[1] "{num} archivi eliminati"
 
-#: journalist_app/utils.py:306
+#: journalist_app/utils.py:348
 msgid "Name updated."
 msgstr "Nome aggiornato."
 
-#: journalist_app/utils.py:315
-msgid "You submitted a bad password! Password not changed."
-msgstr "È stata inserita una password errata. Password non modificata."
+#: journalist_app/utils.py:357
+msgid "The password you submitted is invalid. Password not changed."
+msgstr "La password insertita non è valida. Password non modificata."
 
-#: journalist_app/utils.py:322
+#: journalist_app/utils.py:364
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -232,7 +229,7 @@ msgstr ""
 "salvata correttamente. Per evitare che l'accesso all'account venga bloccato, "
 "reimpostare nuovamente la password."
 
-#: journalist_app/utils.py:331
+#: journalist_app/utils.py:373
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -240,7 +237,7 @@ msgstr ""
 "Password aggiornata. Non dimenticare di salvarla nel proprio database "
 "KeePassX. Nuova password:"
 
-#: journalist_app/utils.py:349
+#: journalist_app/utils.py:397
 msgid "No unread submissions in selected collections."
 msgstr "Non ci sono invii non letti negli archivi selezionati."
 
@@ -346,7 +343,7 @@ msgid ""
 "verification code below:"
 msgstr ""
 "Una volta accoppiato FreeOTP con questo account, inserire il codice di "
-"verifica a  sei cifre qui sotto:"
+"verifica a sei cifre qui sotto:"
 
 #: journalist_templates/account_new_two_factor.html:18
 #: journalist_templates/admin_new_user_two_factor.html:20
@@ -499,14 +496,14 @@ msgstr ""
 #: journalist_templates/base.html:24
 msgid ""
 "<strong>Update Required:</strong> Your SecureDrop servers are still running "
-"v2 Onion Services, which are being phased out for security reasons. In "
-"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"v2 onion services, which are being phased out for security reasons. In "
+"February 2021, v2 onion services will be disabled, and your SecureDrop "
 "servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
 "rel=\"noreferrer\">Learn More</a>"
 msgstr ""
 "<strong>Aggiornamento richiesto:</strong> i tuoi server SecureDrop stanno "
-"ancora eseguendo i servizi Onion v2, che vengono gradualmente eliminati per "
-"motivi di sicurezza. Da febbraio 2021, i servizi Onion v2 verranno "
+"ancora eseguendo i servizi onion v2, che vengono gradualmente eliminati per "
+"motivi di sicurezza. Da febbraio 2021, i servizi onion v2 verranno "
 "disattivati, e i tuoi server SecureDrop potrebbero diventare "
 "irraggiungibili. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\""
 ">Maggiori informazioni</a>"
@@ -523,15 +520,7 @@ msgstr "Amministratore"
 msgid "Log Out"
 msgstr "Esci"
 
-#: journalist_templates/base.html:46
-msgid ""
-"Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
-"\">"
-msgstr ""
-"Offerto da <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
-"\">"
-
-#: journalist_templates/base.html:61
+#: journalist_templates/base.html:56
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Offerto da <em>SecureDrop {version}</em>."
 
@@ -719,7 +708,7 @@ msgid "Edit user \"{user}\""
 msgstr "Modifica utente \"{user}\""
 
 #: journalist_templates/edit_account.html:8
-msgid "Change Name &amp; Admin Status"
+msgid "Change Name and Admin Status"
 msgstr "Cambia nome e stato di amministratore"
 
 #: journalist_templates/edit_account.html:27
@@ -781,12 +770,12 @@ msgid ""
 "If a user's two-factor authentication credentials have been lost or "
 "compromised, you can reset them here. <em>If you do this, make sure the user "
 "is present and ready to set up their device with the new two-factor "
-"credentials. Otherwise, they will be locked out of their account."
+"credentials. Otherwise, they will be locked out of their account.</em>"
 msgstr ""
 "Se l'autenticazione a due fattori di un utente è stata persa o compromessa, "
 "è possibile reimpostarla qui. <em>Se lo fai, assicurati che l'utente sia "
 "presente e pronto a configurare il suo dispositivo con le nuove credenziali "
-"a due fattori, altrimenti, non potrà più accedere al suo account</em>."
+"a due fattori, altrimenti, non potrà più accedere al suo account.</em>"
 
 #: journalist_templates/edit_account.html:85
 msgid ""
@@ -919,12 +908,16 @@ msgstr "Accedere per utilizzare l'interfaccia giornalista"
 msgid "Password"
 msgstr "Password"
 
-#: journalist_templates/login.html:12 source_templates/index.html:65
+#: journalist_templates/login.html:10
+msgid "Show password"
+msgstr "Mostra password"
+
+#: journalist_templates/login.html:12 source_templates/index.html:59
 #: source_templates/logout.html:3
 msgid "LOG IN"
 msgstr "ACCEDI"
 
-#: source_app/__init__.py:123
+#: source_app/__init__.py:117
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -975,35 +968,41 @@ msgstr ""
 "riportato sopra poiché potrebbe differire da quello visualizzato nella "
 "pagina precedente."
 
-#: source_app/main.py:171
+#: source_app/main.py:80
+msgid "There was a temporary problem creating your account. Please try again."
+msgstr ""
+"C'è stato un problema temporaneo nella creazione dell'account. Riprovare "
+"nuovamente."
+
+#: source_app/main.py:184
 msgid "You must enter a message or choose a file to submit."
 msgstr "È necessario inserire un messaggio o scegliere un file da inviare."
 
-#: source_app/main.py:175
+#: source_app/main.py:188
 msgid "You must enter a message."
 msgstr "È necessario inserire un messaggio."
 
-#: source_app/main.py:206
+#: source_app/main.py:219
 msgid "Thanks! We received your message."
 msgstr "Grazie! Abbiamo ricevuto il tuo messaggio."
 
-#: source_app/main.py:208
+#: source_app/main.py:221
 msgid "Thanks! We received your document."
 msgstr "Grazie! Abbiamo ricevuto il tuo documento."
 
-#: source_app/main.py:210
+#: source_app/main.py:223
 msgid "Thanks! We received your message and document."
 msgstr "Grazie! Abbiamo ricevuto il tuo messaggio e il documento."
 
-#: source_app/main.py:271
+#: source_app/main.py:284
 msgid "Reply deleted"
 msgstr "Risposta eliminata"
 
-#: source_app/main.py:289
+#: source_app/main.py:302
 msgid "All replies have been deleted"
 msgstr "Tutte le risposte sono state eliminate"
 
-#: source_app/main.py:303
+#: source_app/main.py:316
 msgid "Sorry, that is not a recognized codename."
 msgstr "Questo nome in codice non è riconosciuto."
 
@@ -1011,12 +1010,7 @@ msgstr "Questo nome in codice non è riconosciuto."
 msgid "Protecting Journalists and Sources"
 msgstr "Proteggi giornalisti e fonti"
 
-#: source_templates/base.html:25 source_templates/footer.html:4
-#: source_templates/index.html:32
-msgid "Powered by"
-msgstr "Offerto da"
-
-#: source_templates/base.html:34
+#: source_templates/base.html:28
 msgid "LOG OUT"
 msgstr "ESCI"
 
@@ -1051,6 +1045,10 @@ msgstr ""
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
 msgstr "Nome in codice dimenticato?"
+
+#: source_templates/footer.html:4
+msgid "Powered by"
+msgstr "Offerto da"
 
 #: source_templates/footer.html:7
 msgid ""
@@ -1105,20 +1103,20 @@ msgstr "INVIA DOCUMENTI"
 
 #: source_templates/index.html:16
 msgid ""
-"Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Setting</"
+"Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</"
 "strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> "
 "&nbsp;button in your browser’s toolbar to change it."
 msgstr ""
-"L'<a id=\"disable-js\" href=\"\"><strong>impostazione di sicurezza</strong></"
-"a> del proprio browser Tor è troppo bassa. Utilizzare il pulsante <img src="
-"\"{icon}\" alt=\"icona di uno scudo\"> &nbsp;nella barra degli strumenti del "
+"L'<a id=\"disable-js\" href=\"\"><strong>livello di sicurezza</strong></a> "
+"del proprio browser Tor è troppo bassa. Utilizzare il pulsante <img src=\""
+"{icon}\" alt=\"icona di uno scudo\"> &nbsp;nella barra degli strumenti del "
 "browser per modificarla."
 
 #: source_templates/index.html:17
 msgid ""
-"<strong>It is recommended to use the Tor Browser to access SecureDrop:</"
-"strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to "
-"install it</a>, or ignore this warning to continue."
+"<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> "
+"<a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</"
+"a>, or ignore this warning to continue."
 msgstr ""
 "<strong>Si consiglia di usare il browser Tor per accedere a SecureDrop: </"
 "strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">Scopri come "
@@ -1128,52 +1126,52 @@ msgstr ""
 msgid ""
 "<strong>It is recommended you use the desktop version of Tor Browser to "
 "access SecureDrop, as Orfox does not provide the same level of security and "
-"anonymity as the desktop versions.</strong> <a id=\"recommend-tor\" href="
+"anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href="
 "\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to "
 "continue."
 msgstr ""
 "<strong>Si consiglia di usare la versione desktop del browser Tor per "
-"accedere a SecureDrop, in quanto Orfox non non garantisce lo stesso livello "
-"di sicurezza e anonimato della versione desktop. </strong><a id=\"recommend-"
+"accedere a SecureDrop, in quanto Orfox non garantisce lo stesso livello di "
+"sicurezza e anonimato della versione desktop. </strong><a id=\"recommend-"
 "tor\" href=\"{tor_browser_url}\">Scopri come installarlo</a>, o ignora "
 "questo avviso per continuare."
 
-#: source_templates/index.html:45
+#: source_templates/index.html:39
 msgid "First submission"
 msgstr "Primo invio"
 
-#: source_templates/index.html:47
+#: source_templates/index.html:41
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Primo invio al nostro SecureDrop? Inizia qui."
 
-#: source_templates/index.html:51
+#: source_templates/index.html:45
 msgid "GET STARTED"
 msgstr "INIZIA"
 
-#: source_templates/index.html:59
+#: source_templates/index.html:53
 msgid "Return visit"
 msgstr "Visitatore di ritorno"
 
-#: source_templates/index.html:61
+#: source_templates/index.html:55
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr ""
 "Hai già un nome in codice? Controlla le risposte o invia qualcosa di nuovo."
 
-#: source_templates/index.html:79
+#: source_templates/index.html:73
 msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
 msgstr ""
 "Fare clic su <img src=\"{icon}\" alt=\"icona di uno scudo\"> nella barra "
 "degli strumenti qui sopra"
 
-#: source_templates/index.html:80
+#: source_templates/index.html:74
 msgid "Select <strong>Advanced Security Settings</strong>"
 msgstr "Selezionare <strong>Impostazioni di sicurezza avanzate</strong>"
 
-#: source_templates/index.html:81
+#: source_templates/index.html:75
 msgid "Select <strong>Safest</strong>"
 msgstr "Selezionare <strong>Massima sicurezza</strong>"
 
-#: source_templates/index.html:83
+#: source_templates/index.html:77
 msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\">Aggiorna questa pagina</a>, e hai finito!"
 
@@ -1196,11 +1194,11 @@ msgstr "Ancora una cosa..."
 #: source_templates/logout.html:7
 msgid ""
 "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height="
-"\"16\">&nbsp;<strong>New Identity</strong> button in your Tor browser's "
-"toolbar. This will clear your Tor browser activity data on this device."
+"\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's "
+"toolbar. This will clear your Tor Browser activity data on this device."
 msgstr ""
-"Fare clic sul pulsante <img src={icon} alt=\"icona di una scopa\" width="
-"\"16\" height=\"16\">&nbsp;<strong>Nuova identità</strong> nella barra degli "
+"Fare clic sul pulsante <img src={icon} alt=\"icona di una scopa\" width=\"16"
+"\" height=\"16\">&nbsp;<strong>Nuova identità</strong> nella barra degli "
 "strumenti del browser Tor. Questo cancellerà tutti i dati sulle attività di "
 "Tor da questo dispositivo."
 
@@ -1334,8 +1332,8 @@ msgstr "Importante"
 msgid ""
 "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom "
 "icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button "
-"in your Tor browser's toolbar before moving on. This will clear your Tor "
-"browser activity data on this device."
+"in your Tor Browser's toolbar before moving on. This will clear your Tor "
+"Browser activity data on this device."
 msgstr ""
 "È stata eseguita la disconnessione per inattività. Fare clic sul pulsante "
 "<img src={icon} alt=\"icona di una scopa\" width=\"16\" height=\"16\">&nbsp;"
@@ -1364,7 +1362,7 @@ msgstr ""
 #: source_templates/tor2web-warning.html:6
 msgid ""
 "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject."
-"org/projects/torbrowser.html\">Tor browser</a> instead."
+"org/projects/torbrowser.html\">Tor Browser</a> instead."
 msgstr ""
 "<strong>Consigliamo vivamente</strong> di usare invece il <a href=\"www."
 "torproject.org/projects/torbrowser.html\">browser Tor</a>."
@@ -1433,17 +1431,19 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:7
 msgid ""
-"<a href=\"{url}\">Download</a> the public key. The public key is a text file "
-"with the extension <code>.asc</code>"
+"<a href=\"{url}\">Download</a> the public key. It will be saved to a file "
+"called:\n"
+"        <p><code>{submission_key_fpr_filename}</code></p>"
 msgstr ""
-"<a href=\"{url}\">Scarica</a> la chiave pubblica. La chiave pubblica è un "
-"file di testo con estensione <code>.asc</code>"
+"<a href=\"{url}\">Scarica</a> la chiave pubblica. Verrà salvata in un file "
+"chiamato:\n"
+"        <p><code>{submission_key_fpr_filename}</code></p>"
 
-#: source_templates/why-journalist-key.html:8
+#: source_templates/why-journalist-key.html:9
 msgid "Import it into your GPG keyring."
 msgstr "Importala nel tuo portachiavi GPG."
 
-#: source_templates/why-journalist-key.html:10
+#: source_templates/why-journalist-key.html:11
 msgid ""
 "If you are using <a href=\"{url}\">Tails</a>, you can double-click the "
 "<code>.asc</code> file you just downloaded and it will be automatically "
@@ -1453,61 +1453,81 @@ msgstr ""
 "<code>.asc</code> appena scaricato e verrà automaticamente importato nel tuo "
 "portachiavi."
 
-#: source_templates/why-journalist-key.html:11
+#: source_templates/why-journalist-key.html:12
 msgid ""
-"If you are using Mac/Linux, open the terminal. You can import the key with "
-"<code>gpg --import /path/to/key.asc</code>."
+"If you are using macOS or Linux, open the terminal. You can import the key "
+"with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
 msgstr ""
-"Se stai utilizzando Mac/Linux, apri il terminale. Puoi importare la chiave "
-"con il comando <code>gpg --import /path/to/key.asc</code>."
+"Se stai utilizzando Mac OS o Linux, apri il terminale. Puoi importare la "
+"chiave con: <p><code>gpg --import /percorso/file/"
+"{submission_key_fpr_filename}</code></p>"
 
-#: source_templates/why-journalist-key.html:14
-msgid "Encrypt your submission."
-msgstr "Cifra il messaggio o il documento da inviare."
+#: source_templates/why-journalist-key.html:15
+msgid "Encrypt your submission. Open the terminal and enter this gpg command:"
+msgstr ""
+"Esegui la cifratura dell'invio. Apri il terminale e digita questo comando "
+"gpg:"
 
 #: source_templates/why-journalist-key.html:16
 msgid ""
-"You will need to be able to identify the key (this is called the \"user ID\" "
-"or UID). Since the public key's filename is the key's fingerprint (with .asc "
-"at the end), you can just copy and paste that. (don't include the <code>."
-"asc</code>!)"
+"<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/submission</"
+"code>"
 msgstr ""
-"Dovrai essere in grado di identificare la chiave (questa è chiamata \"user ID"
-"\" o UID). Poiché il nome del file della chiave pubblica è l'impronta "
-"digitale della chiave stessa (con estensione .asc), puoi semplicemente "
-"copiarlo e incollarlo (non includere l'estensione <code>.asc</code>!)"
+"<code>gpg --recipient '{submission_key_fpr}' --encrypt /percoso/file/"
+"inviato</code>"
 
-#: source_templates/why-journalist-key.html:17
-msgid ""
-"On all systems, open the Terminal and use this gpg command: <code>gpg --"
-"recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
-msgstr ""
-"Su ogni sistema, apri un terminale e usa il seguente comando gpg:  <code>gpg "
-"--recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
-
-#: source_templates/why-journalist-key.html:20
+#: source_templates/why-journalist-key.html:18
 msgid ""
 "Upload your encrypted submission. It will have the same filename as the "
-"unencrypted file, with .gpg at the end (e.g. <code>roswell_photos.pdf.gpg</"
+"unencrypted file, with .gpg at the end (e.g. <code>internal_memo.pdf.gpg</"
 "code>)"
 msgstr ""
 "Carica il materiale cifrato. Il file avrà lo stesso nome del file originale "
-"con l'aggiunta dell'estensione .gpg alla fine (ad esempio "
-"<code>roswell_photos.pdf.gpg</code>)"
+"con l'aggiunta dell'estensione .gpg alla fine (ad esempio <code>memo_interno."
+"pdf.gpg</code>)"
 
-#: source_templates/why-journalist-key.html:23
+#: source_templates/why-journalist-key.html:21
 msgid ""
-"<strong>Tip:</strong> If you wish to remain anonymous, <strong>do not</"
+"<strong>Important:</strong> If you wish to remain anonymous, <strong>do not</"
 "strong> use GPG to sign the encrypted file (with the <code>--sign</code> or "
 "<code>-s</code> flag) as this will reveal your GPG identity to us."
 msgstr ""
-"<strong>Consiglio:</strong> per rimanere anonimi <strong>non usare</strong> "
-"GPG per firmare il file cifrato (con il flag <code>--sign</code> o <code>-s</"
-"code>) perché questo ci rivelerebbe la tua identità GPG."
+"<strong>Importante:</strong> per rimanere anonimi <strong>non usare</strong> "
+"GPG per firmare il file cifrato (con il flag <code>--sign</code> o "
+"<code>-s</code>) perché questo ci rivelerebbe la tua identità GPG."
 
-#: source_templates/why-journalist-key.html:25
+#: source_templates/why-journalist-key.html:23
 msgid "Back to submission page"
 msgstr "Torna alla pagina di invio documenti e messaggi"
+
+#~ msgid ""
+#~ "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt="
+#~ "\"SecureDrop\">"
+#~ msgstr ""
+#~ "Offerto da <br> <img src=\"/static/i/securedrop_small.png\" alt="
+#~ "\"SecureDrop\">"
+
+#~ msgid "Encrypt your submission."
+#~ msgstr "Cifra il messaggio o il documento da inviare."
+
+#~ msgid ""
+#~ "You will need to be able to identify the key (this is called the \"user ID"
+#~ "\" or UID). Since the public key's filename is the key's fingerprint "
+#~ "(with .asc at the end), you can just copy and paste that. (don't include "
+#~ "the <code>.asc</code>!)"
+#~ msgstr ""
+#~ "Dovrai essere in grado di identificare la chiave (questa è chiamata "
+#~ "\"user ID\" o UID). Poiché il nome del file della chiave pubblica è "
+#~ "l'impronta digitale della chiave stessa (con estensione .asc), puoi "
+#~ "semplicemente copiarlo e incollarlo (non includere l'estensione <code>."
+#~ "asc</code>!)"
+
+#~ msgid ""
+#~ "On all systems, open the Terminal and use this gpg command: <code>gpg --"
+#~ "recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
+#~ msgstr ""
+#~ "Su ogni sistema, apri un terminale e usa il seguente comando gpg:  "
+#~ "<code>gpg --recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 
 #~ msgid "The source '{original_name}' has been renamed to '{new_name}'"
 #~ msgstr "La fonte \"{original_name}\" è stata rinominata in \"{new_name}\""
