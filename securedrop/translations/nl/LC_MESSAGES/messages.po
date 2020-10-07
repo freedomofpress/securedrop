@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2020-07-27 11:37+0000\n"
-"Last-Translator: erinm <erinm@riseup.net>\n"
+"PO-Revision-Date: 2020-10-04 11:07+0000\n"
+"Last-Translator: Thom <thom.pp9@gmail.com>\n"
 "Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/"
 "securedrop/nl/>\n"
 "Language: nl\n"
@@ -24,31 +24,31 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} geleden"
 
-#: journalist_app/__init__.py:90 journalist_app/__init__.py:139
-msgid "You have been logged out due to inactivity"
-msgstr "U bent uitgelogd wegens inactiviteit"
+#: journalist_app/__init__.py:90 journalist_app/__init__.py:131
+msgid "You have been logged out due to inactivity."
+msgstr "U bent wegens inactiviteit uitgelogd."
 
-#: journalist_app/__init__.py:148
+#: journalist_app/__init__.py:140
 msgid "You have been logged out due to password change"
-msgstr "U bent uitgelogd omdat uw wachtwoord is veranderd"
+msgstr "U bent uitgelogd omdat uw wachtwoord is gewijzigd"
 
-#: journalist_app/account.py:33
+#: journalist_app/account.py:36
 msgid "Incorrect password or two-factor code."
-msgstr "Foutief wachtwoord of tweestapstoken."
+msgstr "Onjuist wachtwoord of tweestapstoken."
 
-#: journalist_app/account.py:49
+#: journalist_app/account.py:52
 msgid "Your two-factor credentials have been reset successfully."
 msgstr "Uw tweestapsauthenticatie is succesvol opnieuw ingesteld."
 
-#: journalist_app/account.py:53 journalist_app/admin.py:136
+#: journalist_app/account.py:56 journalist_app/admin.py:136
 msgid "There was a problem verifying the two-factor code. Please try again."
 msgstr ""
-"Er is een fout opgetreden tijdens de verificatie van de "
-"tweestapsauthenticatie. Probeer het opnieuw."
+"Er was een probleem bij de verificatie van de tweestapstoken. Probeer het "
+"nogmaals."
 
 #: journalist_app/admin.py:42
 msgid "Image updated."
-msgstr "Afbeelding is bijgewerkt."
+msgstr "Afbeelding bijgewerkt."
 
 #: journalist_app/admin.py:62
 msgid "Preferences saved."
@@ -60,43 +60,41 @@ msgid ""
 "try again."
 msgstr ""
 "Er was een fout met het automatisch gegenereerde wachtwoord. Gebruiker niet "
-"aangemaakt. Probeer het opnieuw."
+"aangemaakt. Probeer het nogmaals."
 
 #: journalist_app/admin.py:103 journalist_app/admin.py:186
 msgid "Username \"{user}\" already taken."
-msgstr "Gebruikersnaam \"{user}\" is al in gebruik."
+msgstr "Gebruikersnaam \"{user}\" al in gebruik."
 
 #: journalist_app/admin.py:106
 msgid ""
 "An error occurred saving this user to the database. Please inform your admin."
 msgstr ""
-"Er is een fout opgetreden bij het opslaan van deze gebruiker in de database. "
-"Neem contact op met uw beheerder."
+"Er trad een fout op bij het opslaan van deze gebruiker in de database. Neem "
+"contact op met uw beheerder."
 
 #: journalist_app/admin.py:130
 msgid "The two-factor code for user \"{user}\" was verified successfully."
-msgstr ""
-"De tweestapsauthenticatie voor gebruiker \"{user}\" is succesvol "
-"geverifieerd."
+msgstr "De tweestapstoken voor gebruiker \"{user}\" is succesvol geverifieerd."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:308
+#: journalist_app/utils.py:350
 msgid "Name not updated: {}"
-msgstr "Naam is niet bijgewerkt: {}"
+msgstr "Naam niet bijgewerkt: {}"
 
-#: journalist_app/admin.py:249
-msgid "Deleted user '{user}'"
-msgstr "Gebruiker '{user}' verwijderd"
+#: journalist_app/admin.py:232
+msgid "Deleted user '{user}'."
+msgstr "Gebruiker '{user}' verwijderd."
 
-#: journalist_app/admin.py:279
+#: journalist_app/admin.py:262
 msgid "Test alert sent. Please check your email."
 msgstr "Testwaarschuwing verstuurd. Controleer uw e-mail."
 
-#: journalist_app/col.py:50
-msgid "{source_name}'s collection deleted"
-msgstr "{source_name}-collectie verwijderd"
+#: journalist_app/col.py:60
+msgid "{source_name}'s collection deleted."
+msgstr "{source_name}-collectie verwijderd."
 
-#: journalist_app/col.py:61
+#: journalist_app/col.py:71
 msgid "No collections selected."
 msgstr "Geen collecties geselecteerd."
 
@@ -106,120 +104,117 @@ msgstr "Alleen beheerders hebben toegang tot deze pagina."
 
 #: journalist_app/forms.py:19
 msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
-msgstr "HOTP geheimen zijn 40 tekens lang. U hebt er {num_chars} ingevoerd."
+msgstr "HOTP-geheimen zijn 40 tekens lang - u heeft er {num_chars} ingevoerd."
 
-#: journalist_app/forms.py:30
-msgid ""
-"Field must be at least {min_chars} characters long but only got {num_chars}."
-msgstr ""
-"Veld moet minstens {min_chars} karakters lang zijn, maar bevat er slechts "
-"{num_chars}."
+#: journalist_app/forms.py:28
+msgid "Must be at least {min_chars} characters long."
+msgstr "Moet minstens {min_chars} tekens lang zijn."
 
-#: journalist_app/forms.py:37
-msgid "Field can not be more than {max_chars} characters."
-msgstr "Veld mag niet langer dan {max_char} tekens zijn."
+#: journalist_app/forms.py:35
+msgid "Cannot be longer than {max_chars} characters."
+msgstr "Kan niet langer dan {max_chars} tekens zijn."
 
-#: journalist_app/forms.py:42
+#: journalist_app/forms.py:40
 msgid ""
 "This username is invalid because it is reserved for internal use by the "
 "software."
 msgstr ""
-"Deze gebruikersnaam is ongeldig omdat het gereserveerd is for intern gebruik "
-"door de software."
+"Deze gebruikersnaam is ongeldig, omdat het voor intern gebruik door de "
+"software is gereserveerd."
 
-#: journalist_app/forms.py:48 source_app/forms.py:12
+#: journalist_app/forms.py:46 source_app/forms.py:12
 msgid "This field is required."
-msgstr "Dit is een verplicht veld."
+msgstr "Dit veld is verplicht."
 
-#: journalist_app/forms.py:67
+#: journalist_app/forms.py:65
 msgid "You cannot send an empty reply."
 msgstr "U kunt geen lege reactie versturen."
 
-#: journalist_app/forms.py:79
+#: journalist_app/forms.py:77
 msgid "File required."
 msgstr "Bestand verplicht."
 
-#: journalist_app/forms.py:81
+#: journalist_app/forms.py:79
 msgid "You can only upload PNG image files."
-msgstr "U kunt alleen PNG-afbeeldingen uploaden."
+msgstr "U kunt alleen PNG-afbeeldingsbestanden uploaden."
 
-#: journalist_app/main.py:122 journalist_app/utils.py:47
-#: journalist_app/utils.py:144
+#: journalist_app/main.py:124 journalist_app/utils.py:58
+#: journalist_app/utils.py:157
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Er trad een onverwachte fout op! Neem contact op met uw beheerder."
 
-#: journalist_app/main.py:133
+#: journalist_app/main.py:135
 msgid "Thanks. Your reply has been stored."
 msgstr "Bedankt. Uw reactie is opgeslagen."
 
-#: journalist_app/main.py:154
+#: journalist_app/main.py:156
 msgid "No collections selected for download."
 msgstr "Geen collecties geselecteerd om te downloaden."
 
-#: journalist_app/main.py:157 journalist_app/utils.py:242
+#: journalist_app/main.py:159 journalist_app/utils.py:284
 msgid "No collections selected for deletion."
 msgstr "Geen collecties geselecteerd om te verwijderen."
 
-#: journalist_app/main.py:179
+#: journalist_app/main.py:180
 msgid "No unread submissions for this source."
 msgstr "Geen ongelezen inzendingen van deze bron."
 
-#: journalist_app/utils.py:54
+#: journalist_app/utils.py:65
 msgid "Account updated."
-msgstr "Account is bijgewerkt."
+msgstr "Account bijgewerkt."
 
-#: journalist_app/utils.py:92
+#: journalist_app/utils.py:106
 msgid "Login failed."
 msgstr "Inloggen mislukt."
 
-#: journalist_app/utils.py:100
+#: journalist_app/utils.py:113
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] ""
-"Wacht minstens {seconds} seconde voordat u opnieuw probeert in te loggen."
+"Wacht minstens {seconds} seconde voordat u nogmaals probeert in te loggen."
 msgstr[1] ""
-"Wacht minstens {seconds} seconden voordat u opnieuw probeert in te loggen."
+"Wacht minstens {seconds} seconden voordat u nogmaals probeert in te loggen."
 
-#: journalist_app/utils.py:111
+#: journalist_app/utils.py:124
 msgid ""
 "Please wait for a new code from your two-factor mobile app or security key "
 "before trying again."
 msgstr ""
 "Wacht op een nieuwe code van uw mobiele applicatie of tweestapstoken "
-"alvorens opnieuw te proberen."
+"alvorens nogmaals te proberen."
 
-#: journalist_app/utils.py:132
+#: journalist_app/utils.py:145
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 "Ongeldige samenstelling voor geheim: gebruik uitsluitend letters A-F en "
 "cijfers 0-9."
 
-#: journalist_app/utils.py:138
+#: journalist_app/utils.py:151
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "Ongeldig geheim: oneven lengte van geheim. Is het geheim correct gespeld?"
 
-#: journalist_app/utils.py:194
+#: journalist_app/utils.py:236
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Inzending verwijderd."
 msgstr[1] "{num} inzendingen verwijderd."
 
-#: journalist_app/utils.py:250
+#: journalist_app/utils.py:292
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} collectie verwijderd"
 msgstr[1] "{num} collecties verwijderd"
 
-#: journalist_app/utils.py:306
+#: journalist_app/utils.py:348
 msgid "Name updated."
-msgstr "Naam is bijgewerkt."
+msgstr "Naam bijgewerkt."
 
-#: journalist_app/utils.py:315
-msgid "You submitted a bad password! Password not changed."
-msgstr "U heeft een ongeldig wachtwoord ingevoerd! Wachtwoord niet gewijzigd."
+#: journalist_app/utils.py:357
+msgid "The password you submitted is invalid. Password not changed."
+msgstr "U heeft een ongeldig wachtwoord ingevoerd. Wachtwoord niet gewijzigd."
 
-#: journalist_app/utils.py:322
+#: journalist_app/utils.py:364
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -227,17 +222,17 @@ msgid ""
 msgstr ""
 "Er is een probleem opgetreden en het nieuwe wachtwoord is mogelijk niet "
 "correct opgeslagen. Om te voorkomen dat u niet meer kunt inloggen adviseren "
-"wij om uw wachtwoord opnieuw te herstellen."
+"wij om uw wachtwoord nogmaals te herstellen."
 
-#: journalist_app/utils.py:331
+#: journalist_app/utils.py:373
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
 msgstr ""
-"Wachtwoord updaten is gelukt. Vergeet niet om het op te slaan in uw KeePassX "
-"database. Nieuwe wachtwoord:"
+"Wachtwoord bijgewerkt. Vergeet het niet in uw KeePassX-database op te slaan. "
+"Nieuwe wachtwoord:"
 
-#: journalist_app/utils.py:349
+#: journalist_app/utils.py:397
 msgid "No unread submissions in selected collections."
 msgstr "Geen ongelezen inzendingen in de geselecteerde collecties."
 
@@ -315,7 +310,7 @@ msgstr "Open de FreeOTP-app"
 #: journalist_templates/account_new_two_factor.html:10
 #: journalist_templates/admin_new_user_two_factor.html:11
 msgid "Tap the QR code symbol at the top"
-msgstr "Tik op de QR code bovenaan"
+msgstr "Tik op het symbool voor de QR-code bovenaan"
 
 #: journalist_templates/account_new_two_factor.html:11
 #: journalist_templates/admin_new_user_two_factor.html:12
@@ -494,16 +489,16 @@ msgstr ""
 #: journalist_templates/base.html:24
 msgid ""
 "<strong>Update Required:</strong> Your SecureDrop servers are still running "
-"v2 Onion Services, which are being phased out for security reasons. In "
-"February 2021, v2 Onion Services will be disabled, and your SecureDrop "
+"v2 onion services, which are being phased out for security reasons. In "
+"February 2021, v2 onion services will be disabled, and your SecureDrop "
 "servers may become unreachable. <a href=\"//securedrop.org/v2-onion-eol\" "
 "rel=\"noreferrer\">Learn More</a>"
 msgstr ""
-"<strong>Update Vereist:</strong> Uw SecureDropservers gebruiken nog steeds "
-"v2 Onion Services, die vanwege veiligheidsredenen uitgefaseerd worden. In "
-"februari 2021 zullen V2 Onion Services uitgeschakeld worden, waardoor uw "
-"SecureDropservers mogelijk onbereikbaar worden. <a href=\"//securedrop.org/v2"
-"-onion-eol\" rel=\"noreferrer\">Meer Information</a>"
+"<strong>Update vereist:</strong> Uw SecureDrop-servers gebruiken nog steeds "
+"v2 onion services, die vanwege veiligheidsredenen uitgefaseerd worden. In "
+"februari 2021 zullen v2 onion services worden uitgeschakeld, waardoor uw "
+"SecureDrop-servers mogelijk onbereikbaar worden. <a href=\"//securedrop.org/"
+"v2-onion-eol\" rel=\"noreferrer\">Meer weten</a>"
 
 #: journalist_templates/base.html:29
 msgid "Logged on as"
@@ -517,15 +512,7 @@ msgstr "Beheerder"
 msgid "Log Out"
 msgstr "Uitloggen"
 
-#: journalist_templates/base.html:46
-msgid ""
-"Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
-"\">"
-msgstr ""
-"Mogelijk gemaakt door <br> <img src=\"/static/i/securedrop_small.png\" alt="
-"\"SecureDrop\">"
-
-#: journalist_templates/base.html:61
+#: journalist_templates/base.html:56
 msgid "Powered by <em>SecureDrop {version}</em>."
 msgstr "Mogelijk gemaakt door <em>SecureDrop {version}</em>."
 
@@ -712,8 +699,8 @@ msgid "Edit user \"{user}\""
 msgstr "Gebruiker \"{user}\" bewerken"
 
 #: journalist_templates/edit_account.html:8
-msgid "Change Name &amp; Admin Status"
-msgstr "Wijzig naam &amp; beheerdersstatus"
+msgid "Change Name and Admin Status"
+msgstr "Wijzig naam en beheerdersstatus"
 
 #: journalist_templates/edit_account.html:27
 #: journalist_templates/edit_account.html:43
@@ -774,13 +761,13 @@ msgid ""
 "If a user's two-factor authentication credentials have been lost or "
 "compromised, you can reset them here. <em>If you do this, make sure the user "
 "is present and ready to set up their device with the new two-factor "
-"credentials. Otherwise, they will be locked out of their account."
+"credentials. Otherwise, they will be locked out of their account.</em>"
 msgstr ""
-"Indien gebruiker zijn inloggegevens voor tweestapsauthenticatie kwijt is of "
+"Als een gebruiker zijn inloggegevens voor tweestapsauthenticatie kwijt is of "
 "mogelijk niet meer veilig, dan kunt u het hier herstellen. <em>Zorg ervoor "
 "dat de gebruiker aanwezig is op het moment dat dit gedaan wordt en dat hun "
 "apparaat gereed is voor inrichting met een nieuwe tweeledige authenticatie. "
-"Anders kan de gebruiker niet meer inloggen op hun account."
+"Anders kan de gebruiker niet meer op zijn/haar account inloggen.</em>"
 
 #: journalist_templates/edit_account.html:85
 msgid ""
@@ -789,7 +776,7 @@ msgid ""
 "this, make sure you are ready to set up your new device, otherwise you will "
 "be locked out of your account.</em>"
 msgstr ""
-"Indien uw  tweestapsauthenticatie kwijt of gecompromitteerd zijn of u heeft "
+"Indien uw tweestapsauthenticatie kwijt of gecompromitteerd zijn of u heeft "
 "een nieuw apparaat, kunt u uw gegevens hier herstellen. <em>Indien u dit "
 "doet, zorg dan dat alles is voorbereid om uw nieuw apparaat in te stellen, "
 "anders wordt u buitengesloten van uw account.</em>"
@@ -800,7 +787,8 @@ msgid ""
 "the first option. For security keys like the YubiKey, choose the second one."
 msgstr ""
 "Om tweestapsauthenticatie voor mobiele apps zoals FreeOTP te herstellen, "
-"kies de eerste optie. Voor tokens zoals YubiKeys kiest u de tweede."
+"kies de eerste optie. Voor beveiligingssleutels zoals YubiKeys kiest u de "
+"tweede."
 
 #: journalist_templates/edit_account.html:112
 msgid "Reset two-factor authentication for mobile apps, such as FreeOTP"
@@ -812,11 +800,11 @@ msgstr "HERSTEL INSTELLINGEN VOOR MOBIELE APPLICATIE"
 
 #: journalist_templates/edit_account.html:113
 msgid "Reset two-factor authentication for security keys, like a YubiKey"
-msgstr "Reset tweefactorauthenticatie voor tokens, zoals YubiKeys"
+msgstr "Reset tweefactorauthenticatie voor beveiligingssleutels, zoals YubiKeys"
 
 #: journalist_templates/edit_account.html:113
 msgid "RESET SECURITY KEY CREDENTIALS"
-msgstr "HERSTEL INSTELLINGEN VOOR TOKEN"
+msgstr "HERSTEL INSTELLINGEN VOOR BEVEILIGINGSSLEUTEL"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -910,12 +898,16 @@ msgstr "Inloggen om de interface voor journalisten te openen"
 msgid "Password"
 msgstr "Wachtwoord"
 
-#: journalist_templates/login.html:12 source_templates/index.html:65
+#: journalist_templates/login.html:10
+msgid "Show password"
+msgstr "Toon wachtwoord"
+
+#: journalist_templates/login.html:12 source_templates/index.html:59
 #: source_templates/logout.html:3
 msgid "LOG IN"
 msgstr "INLOGGEN"
 
-#: source_app/__init__.py:123
+#: source_app/__init__.py:117
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -963,35 +955,41 @@ msgstr ""
 "U bent al ingelogd. Verifieer uw codenaam hierboven want die zou kunnen "
 "afwijken van de codenaam op de vorige pagina."
 
-#: source_app/main.py:171
+#: source_app/main.py:80
+msgid "There was a temporary problem creating your account. Please try again."
+msgstr ""
+"Er was een tijdelijk probleem met het aanmaken van uw account. Probeer het "
+"nogmaals."
+
+#: source_app/main.py:184
 msgid "You must enter a message or choose a file to submit."
 msgstr "U moet een bericht invoeren of een bestand selecteren om te versturen."
 
-#: source_app/main.py:175
+#: source_app/main.py:188
 msgid "You must enter a message."
 msgstr "U moet een bericht invoeren ."
 
-#: source_app/main.py:206
+#: source_app/main.py:219
 msgid "Thanks! We received your message."
 msgstr "Bedankt! We hebben uw bericht ontvangen."
 
-#: source_app/main.py:208
+#: source_app/main.py:221
 msgid "Thanks! We received your document."
 msgstr "Bedankt! We hebben uw document ontvangen."
 
-#: source_app/main.py:210
+#: source_app/main.py:223
 msgid "Thanks! We received your message and document."
 msgstr "Bedankt! We hebben uw bericht en document ontvangen."
 
-#: source_app/main.py:271
+#: source_app/main.py:284
 msgid "Reply deleted"
 msgstr "Reactie verwijderd"
 
-#: source_app/main.py:289
+#: source_app/main.py:302
 msgid "All replies have been deleted"
 msgstr "Alle reacties zijn verwijderd"
 
-#: source_app/main.py:303
+#: source_app/main.py:316
 msgid "Sorry, that is not a recognized codename."
 msgstr "Helaas is dit een onbekende codenaam."
 
@@ -999,12 +997,7 @@ msgstr "Helaas is dit een onbekende codenaam."
 msgid "Protecting Journalists and Sources"
 msgstr "Journalisten en bronnen beschermen"
 
-#: source_templates/base.html:25 source_templates/footer.html:4
-#: source_templates/index.html:32
-msgid "Powered by"
-msgstr "Mogelijk gemaakt door"
-
-#: source_templates/base.html:34
+#: source_templates/base.html:28
 msgid "LOG OUT"
 msgstr "UITLOGGEN"
 
@@ -1037,6 +1030,10 @@ msgstr ""
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
 msgstr "Uw codenaam vergeten?"
+
+#: source_templates/footer.html:4
+msgid "Powered by"
+msgstr "Mogelijk gemaakt door"
 
 #: source_templates/footer.html:7
 msgid ""
@@ -1078,12 +1075,12 @@ msgid ""
 " questions or are interested in additional information. Unlike passwords, "
 "there is no way to retrieve a lost codename."
 msgstr ""
-"Omdat we gebruikers van onze <strong>SecureDrop</strong>-service niet "
-"traceren,\n"
-"is het gebruik van deze codenaam de enige manier die we hebben om met u te "
+"Omdat we gebruikers van onze <strong>SecureDrop</strong>-service niet volgen,"
+"\n"
+" is het gebruik van deze codenaam de enige manier die we hebben om met u te "
 "communiceren mochten we vragen hebben of geïnteresseerd zijn in extra "
-"informatie. In tegenstelling tot wachtwoorden kunnen verloren codenamen niet "
-"teruggehaald worden."
+"informatie. In tegenstelling tot wachtwoorden\n"
+" kunnen verloren codenamen niet teruggehaald worden."
 
 #: source_templates/generate.html:43
 msgid "SUBMIT DOCUMENTS"
@@ -1091,20 +1088,19 @@ msgstr "DOCUMENTEN INZENDEN"
 
 #: source_templates/index.html:16
 msgid ""
-"Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Setting</"
+"Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</"
 "strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> "
 "&nbsp;button in your browser’s toolbar to change it."
 msgstr ""
 "De <a id=\"disable-js\" href=\"\"><strong>veiligheidsinstellingen</strong></"
-"a> van je Tor-browser zijn niet strikt genoeg. Gebruik de <img src="
-"\"{icon}\" alt=\"schildicoon\">-knop in de werkbalk van je browser om dit te "
-"wijzigen."
+"a> van uw Tor-browser zijn niet strikt genoeg. Gebruik de <img src=\"{icon}\""
+" alt=\"shield icon\">-knop in de werkbalk van uw browser om dit te wijzigen."
 
 #: source_templates/index.html:17
 msgid ""
-"<strong>It is recommended to use the Tor Browser to access SecureDrop:</"
-"strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to "
-"install it</a>, or ignore this warning to continue."
+"<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> "
+"<a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</"
+"a>, or ignore this warning to continue."
 msgstr ""
 "<strong>Het wordt aangeraden om de Tor Browser te gebruiken om SecureDrop te "
 "bezoeken:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Lees "
@@ -1115,52 +1111,52 @@ msgstr ""
 msgid ""
 "<strong>It is recommended you use the desktop version of Tor Browser to "
 "access SecureDrop, as Orfox does not provide the same level of security and "
-"anonymity as the desktop versions.</strong> <a id=\"recommend-tor\" href="
+"anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href="
 "\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to "
 "continue."
 msgstr ""
-"<strong>Het wordt aangeraden om de desktop versie van de Tor Browser te "
+"<strong>Het wordt aangeraden om de desktop-versie van de Tor Browser te "
 "gebruiken om SecureDrop te bezoeken, want Orfox biedt niet hetzelfde "
-"veiligheids- en anonimiteitsniveau als de desktop versies.</strong> <a id="
-"\"recommend-tor\" href=\"{tor_browser_url}\">Leer hier hoe deze te "
+"veiligheids- en anonimiteitsniveau als de desktop-versie.</strong> <a id"
+"=\"recommend-tor\" href=\"{tor_browser_url}\">Leer hier hoe deze te "
 "installeren is</a> of negeer deze waarschuwing om door te gaan."
 
-#: source_templates/index.html:45
+#: source_templates/index.html:39
 msgid "First submission"
 msgstr "Eerste inzending"
 
-#: source_templates/index.html:47
+#: source_templates/index.html:41
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Eerste keer dat u iets naar onze SecureDrop inzendt? Begin hier."
 
-#: source_templates/index.html:51
+#: source_templates/index.html:45
 msgid "GET STARTED"
 msgstr "BEGIN"
 
-#: source_templates/index.html:59
+#: source_templates/index.html:53
 msgid "Return visit"
 msgstr "Terugkerend bezoek"
 
-#: source_templates/index.html:61
+#: source_templates/index.html:55
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr ""
 "Hebt u al een codenaam? Controleer of er antwoorden zijn of stuur iets "
 "nieuws in."
 
-#: source_templates/index.html:79
+#: source_templates/index.html:73
 msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
 msgstr ""
 "Klik op het <img src=\"{icon}\" alt=\"schildicoon\"> in de werkbalk hierboven"
 
-#: source_templates/index.html:80
+#: source_templates/index.html:74
 msgid "Select <strong>Advanced Security Settings</strong>"
 msgstr "Klik op <strong>geavanceerde beveiligingsinstellingen</strong>"
 
-#: source_templates/index.html:81
+#: source_templates/index.html:75
 msgid "Select <strong>Safest</strong>"
 msgstr "Selecteer <strong>veiligst</strong>"
 
-#: source_templates/index.html:83
+#: source_templates/index.html:77
 msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\">Ververs deze pagina</a> en je bent klaar!"
 
@@ -1183,13 +1179,12 @@ msgstr "Nog één ding…"
 #: source_templates/logout.html:7
 msgid ""
 "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height="
-"\"16\">&nbsp;<strong>New Identity</strong> button in your Tor browser's "
-"toolbar. This will clear your Tor browser activity data on this device."
+"\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's "
+"toolbar. This will clear your Tor Browser activity data on this device."
 msgstr ""
-"Klik op de <img src={icon} alt=\"broom icon\" width=\"16\" height="
-"\"16\">&nbsp;<strong>Niewe identiteit</strong>-knop in de werkbalk van je "
-"Tor browser. Hierdoor wordt uw Tor Browser geschiedenis gewist van dit "
-"apparaat."
+"Klik op de <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\""
+">&nbsp;<strong>Nieuwe identiteit</strong>-knop in de werkbalk van uw Tor "
+"Browser. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
 
 #: source_templates/lookup.html:7
 msgid "Remember, your codename is:"
@@ -1323,13 +1318,13 @@ msgstr "Belangrijk"
 msgid ""
 "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom "
 "icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button "
-"in your Tor browser's toolbar before moving on. This will clear your Tor "
-"browser activity data on this device."
+"in your Tor Browser's toolbar before moving on. This will clear your Tor "
+"Browser activity data on this device."
 msgstr ""
-"U bent uitgelogd vanwege inactiviteit. Klik op de <img src={icon} alt="
-"\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Niewe identiteit</"
-"strong>-knop in de werkbalk van je Tor browser voor je verder gaat. Hierdoor "
-"wordt uw Tor Browser geschiedenis gewist van dit apparaat."
+"U bent uitgelogd vanwege inactiviteit. Klik op de <img src={icon} alt=\"broom"
+" icon\" width=\"16\" height=\"16\">&nbsp;<strong>Nieuwe identiteit</strong>-"
+"knop in de werkbalk van uw Tor Browser voordat u verder gaat. Hierdoor wordt "
+"uw Tor Browser geschiedenis van dit apparaat gewist."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
@@ -1352,10 +1347,10 @@ msgstr ""
 #: source_templates/tor2web-warning.html:6
 msgid ""
 "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject."
-"org/projects/torbrowser.html\">Tor browser</a> instead."
+"org/projects/torbrowser.html\">Tor Browser</a> instead."
 msgstr ""
 "We <strong>raden u ten zeerste aan</strong> om in plaats daarvan de <a href="
-"\"www.torproject.org/projects/torbrowser.html\">Tor browser</a> te gebruiken."
+"\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> te gebruiken."
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
@@ -1422,17 +1417,19 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:7
 msgid ""
-"<a href=\"{url}\">Download</a> the public key. The public key is a text file "
-"with the extension <code>.asc</code>"
+"<a href=\"{url}\">Download</a> the public key. It will be saved to a file "
+"called:\n"
+"        <p><code>{submission_key_fpr_filename}</code></p>"
 msgstr ""
-"<a href=\"{url}\">Download</a> de publieke sleutel. De publieke sleutel is "
-"een tekstbestand met de <code>.asc</code>-bestandsextensie"
+"<a href=\"{url}\">Download</a> de publieke sleutel. Het zal naar het "
+"volgende bestand worden opgeslagen:\n"
+"        <p><code>{submission_key_fpr_filename}</code></p>"
 
-#: source_templates/why-journalist-key.html:8
+#: source_templates/why-journalist-key.html:9
 msgid "Import it into your GPG keyring."
 msgstr "Importeer dit in uw GPG sleutelring."
 
-#: source_templates/why-journalist-key.html:10
+#: source_templates/why-journalist-key.html:11
 msgid ""
 "If you are using <a href=\"{url}\">Tails</a>, you can double-click the "
 "<code>.asc</code> file you just downloaded and it will be automatically "
@@ -1442,62 +1439,81 @@ msgstr ""
 "<code>.asc</code>-bestand dat u zojuist gedownload hebt en het wordt "
 "automatisch toegevoegd aan uw sleutelring."
 
-#: source_templates/why-journalist-key.html:11
+#: source_templates/why-journalist-key.html:12
 msgid ""
-"If you are using Mac/Linux, open the terminal. You can import the key with "
-"<code>gpg --import /path/to/key.asc</code>."
+"If you are using macOS or Linux, open the terminal. You can import the key "
+"with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
 msgstr ""
-"Indien u Mac/Linux gebruikt, open de terminal. U kunt de sleutel importeren "
-"met <code>gpg --import /pad/naar/key.asc</code>."
+"Als u macOS of Linux gebruikt, open de terminal. U kunt de sleutel "
+"importeren met <p><code>gpg --import /pad/naar/"
+"{submission_key_fpr_filename}</code></p>"
 
-#: source_templates/why-journalist-key.html:14
-msgid "Encrypt your submission."
-msgstr "Versleutel uw inzending."
+#: source_templates/why-journalist-key.html:15
+msgid "Encrypt your submission. Open the terminal and enter this gpg command:"
+msgstr ""
+"Versleutel uw inzending. Open de terminal en voer deze gpg-opdracht uit:"
 
 #: source_templates/why-journalist-key.html:16
 msgid ""
-"You will need to be able to identify the key (this is called the \"user ID\" "
-"or UID). Since the public key's filename is the key's fingerprint (with .asc "
-"at the end), you can just copy and paste that. (don't include the <code>."
-"asc</code>!)"
+"<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/submission</"
+"code>"
 msgstr ""
-"U moet de sleutel kunnen identificeren (dit heet \"user ID\" of UID). Omdat "
-"de bestandsnaam van de publieke sleutel ook de vingerafdruk van de sleutel "
-"(met .asc aan het einde) is, kunt u deze gewoon kopiëren en plakken (zorg er "
-"wel voor dat u het <code>.asc</code>-gedeelte niet mee kopieert!)"
+"<code>gpg --recipient '{submission_key_fpr}' --encrypt /pad/naar/"
+"inzending</code>"
 
-#: source_templates/why-journalist-key.html:17
-msgid ""
-"On all systems, open the Terminal and use this gpg command: <code>gpg --"
-"recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
-msgstr ""
-"Op alle systemen, open de Terminal en voer de volgende gpg-opdracht uit: "
-"<code>gpg --recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
-
-#: source_templates/why-journalist-key.html:20
+#: source_templates/why-journalist-key.html:18
 msgid ""
 "Upload your encrypted submission. It will have the same filename as the "
-"unencrypted file, with .gpg at the end (e.g. <code>roswell_photos.pdf.gpg</"
+"unencrypted file, with .gpg at the end (e.g. <code>internal_memo.pdf.gpg</"
 "code>)"
 msgstr ""
 "Upload uw versleutelde inzending. Deze moet dezelfde bestandsnaam hebben als "
-"het onversleutelde bestand, met .gpg als bestandsextensie (bijv.: "
-"<code>roswell_photos.pdf.gpg</code>)"
+"het onversleutelde bestand, met .gpg aan het einde (bijv. <code>internal_memo"
+".pdf.gpg</code>)"
 
-#: source_templates/why-journalist-key.html:23
+#: source_templates/why-journalist-key.html:21
 msgid ""
-"<strong>Tip:</strong> If you wish to remain anonymous, <strong>do not</"
+"<strong>Important:</strong> If you wish to remain anonymous, <strong>do not</"
 "strong> use GPG to sign the encrypted file (with the <code>--sign</code> or "
 "<code>-s</code> flag) as this will reveal your GPG identity to us."
 msgstr ""
-"<strong>Tip:</strong> Indien u anoniem wilt blijven,gebruik dan "
-"<strong>niet</strong> GPG om het versleutelde bestand te tekenen (met de "
-"<code>--sign</code> of <code>-s</code> markering) aangezien wij hierdoor uw "
-"GPG-identiteit kunnen zien."
+"<strong>Belangrijk:</strong> Als u anoniem wilt blijven, gebruik dan "
+"<strong>niet</strong> GPG om het versleutelde bestand te ondertekenen (met "
+"de <code>--sign</code> of <code>-s</code> markering) aangezien wij hierdoor "
+"uw GPG-identiteit kunnen zien."
 
-#: source_templates/why-journalist-key.html:25
+#: source_templates/why-journalist-key.html:23
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
+
+#~ msgid ""
+#~ "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt="
+#~ "\"SecureDrop\">"
+#~ msgstr ""
+#~ "Mogelijk gemaakt door <br> <img src=\"/static/i/securedrop_small.png\" "
+#~ "alt=\"SecureDrop\">"
+
+#~ msgid "Encrypt your submission."
+#~ msgstr "Versleutel uw inzending."
+
+#~ msgid ""
+#~ "You will need to be able to identify the key (this is called the \"user ID"
+#~ "\" or UID). Since the public key's filename is the key's fingerprint "
+#~ "(with .asc at the end), you can just copy and paste that. (don't include "
+#~ "the <code>.asc</code>!)"
+#~ msgstr ""
+#~ "U moet de sleutel kunnen identificeren (dit heet \"user ID\" of UID). "
+#~ "Omdat de bestandsnaam van de publieke sleutel ook de vingerafdruk van de "
+#~ "sleutel (met .asc aan het einde) is, kunt u deze gewoon kopiëren en "
+#~ "plakken (zorg er wel voor dat u het <code>.asc</code>-gedeelte niet mee "
+#~ "kopieert!)"
+
+#~ msgid ""
+#~ "On all systems, open the Terminal and use this gpg command: <code>gpg --"
+#~ "recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
+#~ msgstr ""
+#~ "Op alle systemen, open de Terminal en voer de volgende gpg-opdracht uit: "
+#~ "<code>gpg --recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 
 #~ msgid "The source '{original_name}' has been renamed to '{new_name}'"
 #~ msgstr "De bron '{original_name}' is hernoemd naar '{new_name}'"
