@@ -1,8 +1,46 @@
 # Changelog
 
-## 1.6.0~rc1
+## 1.7.0~rc1
 
 
+
+## 1.6.0
+
+### Web Applications
+
+* Adds error handling for file deletion operations (#5549)
+* Update source Interface to render /lookup if replies are missing (#5497)
+* Remove traces of obsolete dependencies from virtualenv (#5487)
+* Internationalize "Show Password" on Journalist Interface (#5483)
+* Remove duplicated route (#5440)
+
+#### Journalist API
+
+* Add /seen endpoint (#5513)
+* Add /users endpoint (#5506)
+* Add seen tables and update seen status based on downloads in JI (#5505)
+
+### Operations
+
+* Added 30 sec delay for post-reboot checks (#5504)
+* Update Tor to 0.4.4.5 (#5502)
+* Use built-in .venv module in dh_virtualenv to build application code package (#5484)
+* Update cffi and argon_cffi (#5458)
+
+### Documentation
+
+* Add note on creating virtualenv and Fedora install docs (#5478)
+* Fix capitalization for readability (#5447, #5448)
+* Add instructions to update public docs during release (#5441)
+
+### Development
+
+* Add preliminary support for testing Ubuntu Focal (#5518, #5515, #5486, #5482, #5465, #5444)
+* Add type annotations to journalist app (#5464, #5460)
+* Add no_implicit_optional in mypy config (#5457)
+* Adds QA playbook test a production instance (#5452)
+* Add Weblate screenshot uploader tool (#5450)
+* Updated testinfra tests to optionally run against a production instance (#5318)
 
 ## 1.5.0
 
