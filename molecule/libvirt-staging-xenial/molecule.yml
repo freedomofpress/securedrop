@@ -3,8 +3,8 @@ driver:
   name: vagrant
   provider:
     name: libvirt
-lint:
-  name: yamllint
+lint: |
+    yamllint
 
 platforms:
   - name: app-staging
@@ -41,8 +41,8 @@ platforms:
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
+  lint: |
+    ansible-lint
   config_options:
     defaults:
       interpreter_python: auto
@@ -65,8 +65,8 @@ scenario:
     - verify
 verifier:
   name: testinfra
-  lint:
-    name: flake8
+  lint: |
+    flake8
   directory: ../testinfra
   options:
     n: auto

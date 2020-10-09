@@ -1,3 +1,4 @@
+ansible-lint>=4.2.0
 ansible>=2.9.7,<2.10.0
 argon2_cffi>=20.1.0
 bandit
@@ -12,7 +13,8 @@ flake8
 html-linter
 importlib-resources
 markupsafe>=1.1
-molecule>=2.22
+molecule>=3.0.1
+molecule-vagrant>=0.3
 mypy>=0.761
 # Needed for ansible network filter
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
@@ -31,6 +33,6 @@ pyyaml>=5.3.1
 ruamel.yaml>=0.16.10
 safety>=1.8.7
 setuptools>=46.0.0
-testinfra
+testinfra>=5.3.1
 urllib3>=1.25.9
 yamllint

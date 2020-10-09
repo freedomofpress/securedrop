@@ -1,10 +1,10 @@
 import pytest
 import re
 
+import testutils
 
-test_vars = pytest.securedrop_test_vars
+test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [test_vars.app_hostname, test_vars.monitor_hostname]
-
 
 @pytest.mark.parametrize('dependency', [
     'cron-apt',

@@ -1,6 +1,8 @@
 import pytest
 
-sdvars = pytest.securedrop_test_vars
+import testutils
+
+sdvars = testutils.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname]
 
 
@@ -8,7 +10,7 @@ def test_securedrop_shredder_service(host):
     """
     Verify configuration of securedrop_shredder systemd service.
     """
-    securedrop_test_vars = pytest.securedrop_test_vars
+    securedrop_test_vars = sdvars
     service_file = "/lib/systemd/system/securedrop_shredder.service"
     expected_content = "\n".join([
         "[Unit]",

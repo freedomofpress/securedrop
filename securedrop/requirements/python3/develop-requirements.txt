@@ -4,16 +4,13 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements/python3/develop-requirements.txt ../admin/requirements-ansible.in ../admin/requirements.in requirements/python3/develop-requirements.in
 #
-ansible-lint==4.1.0 \
-    --hash=sha256:9430ea6e654ba4bf5b9c6921efc040f46cda9c4fd2896a99ff71d21037bcb123 \
-    --hash=sha256:c1b442b01091eca13ef11d98c3376e9489ba5b69a8467828ca86044f384bc0a1 \
-    # via molecule
+ansible-lint==4.2.0 \
+    --hash=sha256:b9fc9a6564f5d60a4284497f966f38ef78f0e2505edbe2bd1225f1ade31c2d8a \
+    --hash=sha256:eb925d8682d70563ccb80e2aca7b3edf84fb0b768cea3edc6846aac7abdc414a \
+    # via -r requirements/python3/develop-requirements.in
 ansible==2.9.7 \
     --hash=sha256:7222ce925536a25b2912364e13b03a3e21dbf2f96799ebff304f48509324de7b \
-    # via -r ../admin/requirements-ansible.in, -r requirements/python3/develop-requirements.in, ansible-lint, molecule
-anyconfig==0.9.7 \
-    --hash=sha256:4d6016ae6eecc5e502bc7e99ae0639c5710c5c67bde5f21b06b9eaafd9ce0e7e \
-    # via molecule
+    # via -r ../admin/requirements-ansible.in, -r requirements/python3/develop-requirements.in, ansible-lint, molecule, molecule-vagrant
 apipkg==1.4 \
     --hash=sha256:2e38399dbe842891fe85392601aab8f40a8f4cc5a9053c326de35a1cc0297ac6 \
     --hash=sha256:65d2aa68b28e7d31233bb2ba8eb31cda40e4671f8ac2d6b241e358c9652a74b9 \
@@ -158,13 +155,17 @@ chardet==3.0.4 \
     --hash=sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae \
     --hash=sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691 \
     # via binaryornot, requests
-click-completion==0.3.1 \
-    --hash=sha256:7ca12978493a7450486cef155845af4fae48744c3f97b7250a254de65c9e5e5a \
+click-completion==0.5.2 \
+    --hash=sha256:5bf816b81367e638a190b6e91b50779007d14301b3f9f3145d68e3cade7bce86 \
+    # via molecule
+click-help-colors==0.8 \
+    --hash=sha256:0d841a4058ec88c47f93ff6f32547a055f8e0a0273f6bd6cb3e08430f195131d \
+    --hash=sha256:119e5faf69cfc919c995c5962326ac8fd87f11e56a371af594e3dfd8458f4c6e \
     # via molecule
 click==7.1.2 \
     --hash=sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a \
     --hash=sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc \
-    # via click-completion, cookiecutter, git-url-parse, molecule, pip-tools, python-gilt, safety
+    # via click-completion, click-help-colors, cookiecutter, git-url-parse, molecule, pip-tools, python-gilt, safety
 colorama==0.3.9 \
     --hash=sha256:463f8483208e921368c9f306094eb6f725c6ca42b0f97e313cb5d5512459feda \
     --hash=sha256:48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1 \
@@ -191,6 +192,10 @@ cryptography==2.7 \
     --hash=sha256:f27d93f0139a3c056172ebb5d4f9056e770fdf0206c2f422ff2ebbad142e09ed \
     --hash=sha256:f57b76e46a58b63d1c6375017f4564a28f19a5ca912691fd2e4261b3414b618d \
     # via -r ../admin/requirements-ansible.in, ansible, paramiko
+distro==1.5.0 \
+    --hash=sha256:0e58756ae38fbd8fc3020d54badb8eae17c5b9dcbed388b17bb55b8a5928df92 \
+    --hash=sha256:df74eed763e18d10d0da624258524ae80486432cd17392d9c3d96f5e83cd2799 \
+    # via selinux
 dnspython==1.15.0 \
     --hash=sha256:40f563e1f7a7b80dc5a4e76ad75c23da53d62f1e15e6e517293b04e1f84ead7c \
     --hash=sha256:861e6e58faa730f9845aaaa9c6c832851fbf89382ac52915a51f89c71accdd31 \
@@ -230,7 +235,7 @@ fasteners==0.14.1 \
 flake8==3.7.7 \
     --hash=sha256:859996073f341f2670741b51ec1e67a01da142831aa1fdc6242dbf88dffbe661 \
     --hash=sha256:a796a115208f5c03b18f332f7c11729812c8c3ded6c46319c59b53efd3819da8 \
-    # via -r requirements/python3/develop-requirements.in, molecule
+    # via -r requirements/python3/develop-requirements.in
 future==0.16.0 \
     --hash=sha256:e39ced1ab767b5936646cedba8bcce582398233d6a627067d4c6a454c90cfedb \
     # via cookiecutter
@@ -348,10 +353,14 @@ mccabe==0.6.1 \
     --hash=sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42 \
     --hash=sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f \
     # via flake8, pylint
-molecule==2.22 \
-    --hash=sha256:12fa4231ed69c6e7f50432588eaace36cea917a8c73c1751269ce55df32ced24 \
-    --hash=sha256:d9d7621167041ae2a8eb19f1f8dc23c071cdab2cd3ca80655e2c8796b4c00e09 \
+molecule-vagrant==0.3 \
+    --hash=sha256:5fcacbb9544e2736ce206a01c72f25cf74cbfe147df1722930d0373d87499907 \
+    --hash=sha256:94b9aec5b1c7b499f549539bdd8d73c74afcce0a20776efd82f3f4ebae40ca98 \
     # via -r requirements/python3/develop-requirements.in
+molecule==3.0.2.1 \
+    --hash=sha256:555514a06687cc798aa67581b6523701b40149a0ddcfd366f7c663904d700e84 \
+    --hash=sha256:906e6b1213c72877738a1b764ace722636b0bec5df1a311c27380b63f8d21bb6 \
+    # via -r requirements/python3/develop-requirements.in, molecule-vagrant
 monotonic==1.4 \
     --hash=sha256:0bcd2b14e3b7ee7cfde796e408176ceffa01d89646f2e532964ef2aae0c9fa3e \
     --hash=sha256:a02611d5b518cd4051bf22d21bd0ae55b3a03f2d2993a19b6c90d9d168691f84 \
@@ -417,7 +426,7 @@ pip-tools==4.5.1 \
 pluggy==0.13.1 \
     --hash=sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0 \
     --hash=sha256:966c145cd83c96502c3c3868f50408687b38434af77734af1e9ca461a4081d2d \
-    # via pytest
+    # via molecule, pytest
 poyo==0.4.1 \
     --hash=sha256:103b4ee3e1c7765098fe1cabe43f828db2e2a6079646561a2117e1a809f352d6 \
     --hash=sha256:230ec11c2f35a23410c1f0e474f09fa4e203686f40ab3adca7b039c845d8c325 \
@@ -443,7 +452,7 @@ psutil==5.7.0 \
     --hash=sha256:d84029b190c8a66a946e28b4d3934d2ca1528ec94764b180f7d6ea57b0e75e26 \
     --hash=sha256:e2d0c5b07c6fe5a87fa27b7855017edb0d52ee73b71e6ee368fae268605cc3f5 \
     --hash=sha256:f344ca230dd8e8d5eee16827596f1c22ec0876127c28e800d7ae20ed44c4b310 \
-    # via -r requirements/python3/develop-requirements.in, molecule
+    # via -r requirements/python3/develop-requirements.in
 ptyprocess==0.5.2 \
     --hash=sha256:e64193f0047ad603b71f202332ab5527c5e52aa7c8b609704fc28c0dc20c4365 \
     --hash=sha256:e8c43b5eee76b2083a9badde89fd1bbce6c8942d1045146e100b7b5e014f4f1a \
@@ -529,7 +538,7 @@ python-gilt==1.2.1 \
     # via molecule
 python-vagrant==0.5.15 \
     --hash=sha256:af9a8a9802d382d45dbea96aa3cfbe77c6e6ad65b3fe7b7c799d41ab988179c6 \
-    # via -r requirements/python3/develop-requirements.in
+    # via -r requirements/python3/develop-requirements.in, molecule-vagrant
 pyyaml==5.3.1 \
     --hash=sha256:06a0d7ba600ce0b2d2fe2e78453a470b5a6e000a985dd4a4e54e436cc36b0e97 \
     --hash=sha256:240097ff019d7c70a4922b6869d8a86407758333f02203e0fc6ff79c5dcede76 \
@@ -542,7 +551,7 @@ pyyaml==5.3.1 \
     --hash=sha256:b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d \
     --hash=sha256:cc8955cfbfc7a115fa81d85284ee61147059a753344bc51098f3ccd69b0d7e0c \
     --hash=sha256:d13155f591e6fcc1ec3b30685d50bf0711574e2c0dfffd7644babf8b5102ca1a \
-    # via -r ../admin/requirements.in, -r requirements/python3/develop-requirements.in, ansible, ansible-lint, aspy.yaml, bandit, dparse, molecule, pre-commit, python-gilt, yamllint
+    # via -r ../admin/requirements.in, -r requirements/python3/develop-requirements.in, ansible, ansible-lint, aspy.yaml, bandit, dparse, molecule, molecule-vagrant, pre-commit, python-gilt, yamllint
 requests==2.22.0 \
     --hash=sha256:11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4 \
     --hash=sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31 \
@@ -580,14 +589,22 @@ safety==1.8.7 \
     --hash=sha256:05f77773bbab834502328b29ed013677aa53ed0c22b6e330aef7d2a7e1dfd838 \
     --hash=sha256:3016631e0dd17193d6cf12e8ed1af92df399585e8ee0e4b1300d9e7e32b54903 \
     # via -r requirements/python3/develop-requirements.in
+selinux==0.2.1 \
+    --hash=sha256:820adcf1b4451c9cc7759848797703263ba0eb6a4cad76d73548a9e0d57b7926 \
+    --hash=sha256:d435f514e834e3fdc0941f6a29d086b80b2ea51b28112aee6254bd104ee42a74 \
+    # via molecule-vagrant
 sh==1.12.14 \
     --hash=sha256:ae3258c5249493cebe73cb4e18253a41ed69262484bad36fdb3efcb8ad8870bb \
     --hash=sha256:b52bf5833ed01c7b5c5fb73a7f71b3d98d48e9b9b8764236237bdc7ecae850fc \
     # via molecule, python-gilt
+shellingham==1.3.2 \
+    --hash=sha256:576c1982bea0ba82fb46c36feb951319d7f42214a82634233f58b40d858a751e \
+    --hash=sha256:7f6206ae169dc1a03af8a138681b3f962ae61cc93ade84d0585cca3aaf770044 \
+    # via click-completion
 six==1.15.0 \
     --hash=sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259 \
     --hash=sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced \
-    # via -r ../admin/requirements.in, ansible-lint, argon2-cffi, astroid, bandit, bcrypt, cfgv, click-completion, cryptography, docker-py, docker-pycreds, dparse, fasteners, git-url-parse, molecule, packaging, pathlib2, pip-tools, pre-commit, prompt-toolkit, pynacl, python-dateutil, stevedore, testinfra, websocket-client
+    # via -r ../admin/requirements.in, ansible-lint, argon2-cffi, astroid, bandit, bcrypt, cfgv, click-completion, cryptography, docker-py, docker-pycreds, dparse, fasteners, git-url-parse, molecule, packaging, pathlib2, pip-tools, pre-commit, prompt-toolkit, pynacl, python-dateutil, stevedore, websocket-client
 smmap2==2.0.3 \
     --hash=sha256:b78ee0f1f5772d69ff50b1cbdb01b8c6647a8354f02f23b488cf4b2cfc923956 \
     --hash=sha256:c7530db63f15f09f8251094b22091298e82bf6c699a6b8344aaaef3f2e1276c3 \
@@ -596,16 +613,17 @@ stevedore==1.28.0 \
     --hash=sha256:e3d96b2c4e882ec0c1ff95eaebf7b575a779fd0ccb4c741b9832bed410d58b3d \
     --hash=sha256:f1c7518e7b160336040fee272174f1f7b29a46febb3632502a8f2055f973d60b \
     # via bandit
-tabulate==0.8.3 \
-    --hash=sha256:8af07a39377cee1103a5c8b3330a421c2d99b9141e9cc5ddd2e3263fea416943 \
+tabulate==0.8.7 \
+    --hash=sha256:ac64cb76d53b1231d364babcd72abbb16855adac7de6665122f97b593f1eb2ba \
+    --hash=sha256:db2723a20d04bcda8522165c73eea7c300eda74e0ce852d9022e0159d7895007 \
     # via molecule
 template-remover==0.1.9 \
     --hash=sha256:480f1ce63f56affac1edb29356afcca1260e8409cd928fcf9438fc149df5ff41 \
     # via html-linter
-testinfra==3.2.0 \
-    --hash=sha256:16201d64659ec0c2d25f65d6ce1f5367668b7b4eb102450efd4f8983a399d7d0 \
-    --hash=sha256:5cebf61fee13c2e83b5e177431e751e243fc779293377c5e0c3b43910bb7e870 \
-    # via -r requirements/python3/develop-requirements.in, molecule
+testinfra==5.3.1 \
+    --hash=sha256:9d3a01fb787253df76ac4ab46d18a84d4b01be877ed1b5812e590dcf480a627e \
+    --hash=sha256:baf1d809ea2dc22c0cb5b9441bf4e17c1eb653e1ccc02cc63137d0ab467fa1de \
+    # via -r requirements/python3/develop-requirements.in
 toml==0.10.0 \
     --hash=sha256:229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c \
     --hash=sha256:235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e \
@@ -682,4 +700,4 @@ pip==19.3.1 \
 setuptools==46.0.0 \
     --hash=sha256:2f00f25b780fbfd0787e46891dcccd805b08d007621f24629025f48afef444b5 \
     --hash=sha256:693e0504490ed8420522bf6bc3aa4b0da6a9f1c80c68acfb4e959275fd04cd82 \
-    # via -r ../admin/requirements.in, -r requirements/python3/develop-requirements.in, safety
+    # via -r ../admin/requirements.in, -r requirements/python3/develop-requirements.in, safety, selinux

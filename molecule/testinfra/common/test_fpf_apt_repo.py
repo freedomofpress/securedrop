@@ -2,8 +2,11 @@ import pytest
 import re
 
 
-test_vars = pytest.securedrop_test_vars
+import testutils
+
+test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [test_vars.app_hostname, test_vars.monitor_hostname]
+
 
 
 def test_fpf_apt_repo_present(host):

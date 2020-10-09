@@ -1,8 +1,9 @@
 import pytest
 import re
 
+import testutils
 
-sdvars = pytest.securedrop_test_vars
+sdvars = testutils.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname]
 
 # Prod Tor services may have unexpected configs

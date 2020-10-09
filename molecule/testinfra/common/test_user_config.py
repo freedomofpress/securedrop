@@ -3,7 +3,9 @@ import textwrap
 import pytest
 
 
-sdvars = pytest.securedrop_test_vars
+import testutils
+
+sdvars = testutils.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname, sdvars.monitor_hostname]
 
 
