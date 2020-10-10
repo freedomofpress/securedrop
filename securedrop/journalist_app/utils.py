@@ -3,6 +3,7 @@ import binascii
 import datetime
 import os
 from typing import Optional, List, Union, Any
+from urllib.parse import urlparse
 
 import flask
 import werkzeug
@@ -201,7 +202,19 @@ def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> 
     :param list submissions: A list of :class:`models.Submission`s to
                              include in the ZIP-file.
     """
-    zf = current_app.storage.get_bulk_archive(submissions, zip_directory=zip_basename)
+    try:
+        zf = current_app.storage.get_bulk_archive(submissions, zip_directory=zip_basename)
+    except FileNotFoundError as e:
+        flash(
+            gettext("An unexpected error occurred! Please inform your admin."),
+            "error"
+        )
+
+        current_app.logger.error("File {} could not be found.".format(e.filename))
+
+        referrer = urlparse(request.referrer).path
+        return redirect(referrer)
+
     attachment_filename = "{}--{}.zip".format(
         zip_basename, datetime.datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S")
     )
