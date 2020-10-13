@@ -23,11 +23,11 @@ msgstr ""
 msgid "{time} ago"
 msgstr "před {time}"
 
-#: journalist_app/__init__.py:90 journalist_app/__init__.py:131
+#: journalist_app/__init__.py:82 journalist_app/__init__.py:123
 msgid "You have been logged out due to inactivity."
 msgstr "Z důvodu neaktivity jste byli odhlášeni."
 
-#: journalist_app/__init__.py:140
+#: journalist_app/__init__.py:132
 msgid "You have been logged out due to password change"
 msgstr "Z důvodu změny hesla jste byl/a odhlášen/a"
 
@@ -76,7 +76,7 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Dvoufaktorový kód pro uživatele \"{user}\" byl ověřen."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:350
+#: journalist_app/utils.py:367
 msgid "Name not updated: {}"
 msgstr "Jméno nebylo aktualizováno: {}"
 
@@ -100,19 +100,34 @@ msgstr "Nevybral/a jste žádnou sadu."
 msgid "Only admins can access this page."
 msgstr "Na tuto stránku mají přístup pouze administrátoři."
 
-#: journalist_app/forms.py:19
-msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
-msgstr "HOTP hesla mají 40 znaků - zadal/a jste {num_chars} znaků."
+#: journalist_app/forms.py:18
+#, fuzzy
+#| msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
+msgid "HOTP secrets are 40 characters long - you have entered {num}."
+msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
+msgstr[0] "HOTP hesla mají 40 znaků - zadal/a jste {num} znaků."
+msgstr[1] "HOTP hesla mají 40 znaků - zadal/a jste {num} znaků."
+msgstr[2] "HOTP hesla mají 40 znaků - zadal/a jste {num} znaků."
 
-#: journalist_app/forms.py:28
-msgid "Must be at least {min_chars} characters long."
-msgstr "Uživatelské jméno musí mít alespoň {min_chars} znaků."
-
-#: journalist_app/forms.py:35
-msgid "Cannot be longer than {max_chars} characters."
-msgstr "Uživatelské jméno nemůže obsahovat více než {max_chars} znaků."
+#: journalist_app/forms.py:29
+#, fuzzy
+#| msgid "Must be at least {min_chars} characters long."
+msgid "Must be at least {num} characters long."
+msgid_plural "Must be at least {num} characters long."
+msgstr[0] "Uživatelské jméno musí mít alespoň {num} znaků."
+msgstr[1] "Uživatelské jméno musí mít alespoň {num} znaků."
+msgstr[2] "Uživatelské jméno musí mít alespoň {num} znaků."
 
 #: journalist_app/forms.py:40
+#, fuzzy
+#| msgid "Cannot be longer than {max_chars} characters."
+msgid "Cannot be longer than {num} characters."
+msgid_plural "Cannot be longer than {num} characters."
+msgstr[0] "Uživatelské jméno nemůže obsahovat více než {num} znaků."
+msgstr[1] "Uživatelské jméno nemůže obsahovat více než {num} znaků."
+msgstr[2] "Uživatelské jméno nemůže obsahovat více než {num} znaků."
+
+#: journalist_app/forms.py:50
 msgid ""
 "This username is invalid because it is reserved for internal use by the "
 "software."
@@ -120,19 +135,19 @@ msgstr ""
 "Toto uživatelské jméno je neplatné, protože je rezervováno pro interní "
 "použití."
 
-#: journalist_app/forms.py:46 source_app/forms.py:12
+#: journalist_app/forms.py:56 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Toto pole je povinné."
 
-#: journalist_app/forms.py:65
+#: journalist_app/forms.py:75
 msgid "You cannot send an empty reply."
 msgstr "Nemůžete odeslat prázdnou odpověď."
 
-#: journalist_app/forms.py:77
+#: journalist_app/forms.py:87
 msgid "File required."
 msgstr "Soubor je povinný."
 
-#: journalist_app/forms.py:79
+#: journalist_app/forms.py:89
 msgid "You can only upload PNG image files."
 msgstr "Nahrávat lze jen obrázky ve formátu PNG."
 
@@ -149,7 +164,7 @@ msgstr "Děkujeme. Vaše odpověď byla uložena."
 msgid "No collections selected for download."
 msgstr "Nevybral/a jste žádnou sadu ke stažení."
 
-#: journalist_app/main.py:159 journalist_app/utils.py:284
+#: journalist_app/main.py:159 journalist_app/utils.py:301
 msgid "No collections selected for deletion."
 msgstr "Nevybral/a jste žádnou sadu k smazání."
 
@@ -166,14 +181,14 @@ msgid "Login failed."
 msgstr "Přihlášení selhalo."
 
 #: journalist_app/utils.py:113
-msgid "Please wait at least {seconds} second before logging in again."
-msgid_plural "Please wait at least {seconds} seconds before logging in again."
+msgid "Please wait at least {num} second before logging in again."
+msgid_plural "Please wait at least {num} seconds before logging in again."
 msgstr[0] ""
 "Před dalším pokusem o přihlášení prosím počkejte alespoň jednu vteřinu."
 msgstr[1] ""
-"Před dalším pokusem o přihlášení prosím počkejte alespoň {seconds} vteřiny."
+"Před dalším pokusem o přihlášení prosím počkejte alespoň {num} vteřiny."
 msgstr[2] ""
-"Před dalším pokusem o přihlášení prosím počkejte alespoň {seconds} vteřin."
+"Před dalším pokusem o přihlášení prosím počkejte alespoň {num} vteřin."
 
 #: journalist_app/utils.py:124
 msgid ""
@@ -191,29 +206,29 @@ msgstr "Nesprávný formát hesla: prosím použijte pouze písmena A-F a čísl
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Nesprávná forma hesla: lichá délka hesla. Neudělal/a jste překlep?"
 
-#: journalist_app/utils.py:236
+#: journalist_app/utils.py:244
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Podání smazáno."
 msgstr[1] "{num} podání smazána."
 msgstr[2] "{num} podání smazáno."
 
-#: journalist_app/utils.py:292
+#: journalist_app/utils.py:309
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} sada smazaná"
 msgstr[1] "{num} sady smazány"
 msgstr[2] "{num} sad smazano"
 
-#: journalist_app/utils.py:348
+#: journalist_app/utils.py:365
 msgid "Name updated."
 msgstr "Jméno aktualizováno."
 
-#: journalist_app/utils.py:357
+#: journalist_app/utils.py:374
 msgid "The password you submitted is invalid. Password not changed."
 msgstr "Vložené heslo je neplatné. Heslo nebylo změněno."
 
-#: journalist_app/utils.py:364
+#: journalist_app/utils.py:381
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -222,7 +237,7 @@ msgstr ""
 "Nastala chyba a nové heslo možná nebylo uloženo správně. Měl/a byste znovu "
 "zadat heslo, abyste zabránil/a ztrátě přístupu k Vašemu účtu."
 
-#: journalist_app/utils.py:373
+#: journalist_app/utils.py:390
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -230,7 +245,7 @@ msgstr ""
 "Heslo aktualizováno. Nezapomeňte si jej uložit do vaší KeePassX databáze. "
 "Nové heslo:"
 
-#: journalist_app/utils.py:397
+#: journalist_app/utils.py:414
 msgid "No unread submissions in selected collections."
 msgstr "Ve vybraných sadách nejsou žádná nepřečtená podání."
 
@@ -245,24 +260,24 @@ msgstr "Zrušit"
 
 #: journalist_templates/_source_row.html:23
 msgid "1 doc"
-msgid_plural "{doc_num} docs"
+msgid_plural "{num} docs"
 msgstr[0] "1 dokument"
-msgstr[1] "{doc_num} dokumenty"
-msgstr[2] "{doc_num} dokumentů"
+msgstr[1] "{num} dokumenty"
+msgstr[2] "{num} dokumentů"
 
 #: journalist_templates/_source_row.html:24
 msgid "1 message"
-msgid_plural "{msg_num} messages"
+msgid_plural "{num} messages"
 msgstr[0] "1 zpráva"
-msgstr[1] "{msg_num} zprávy"
-msgstr[2] "{msg_num} zpráv"
+msgstr[1] "{num} zprávy"
+msgstr[2] "{num} zpráv"
 
 #: journalist_templates/_source_row.html:27
 msgid "1 unread"
-msgid_plural "{num_unread} unread"
+msgid_plural "{num} unread"
 msgstr[0] "1 nepřečtená"
-msgstr[1] "{num_unread} nepřečtené"
-msgstr[2] "{num_unread} nepřečtených"
+msgstr[1] "{num} nepřečtené"
+msgstr[2] "{num} nepřečtených"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -664,13 +679,13 @@ msgstr "AKTUALIZOVAT PREFERENCE PODÁNÍ"
 msgid ""
 "The following file has been selected for <strong>permanent deletion</strong>:"
 msgid_plural ""
-"The following {files} files have been selected for <strong>permanent "
-"deletion</strong>:"
+"The following {num} files have been selected for <strong>permanent deletion</"
+"strong>:"
 msgstr[0] "Následující soubor byl vybrán pro <strong>trvalé smazání</strong>:"
 msgstr[1] ""
-"Následující {files} soubory byly vybrány pro <strong>trvalé smazání</strong>:"
+"Následující {num} soubory byly vybrány pro <strong>trvalé smazání</strong>:"
 msgstr[2] ""
-"Následujících {files} souborů bylo vybráno pro <strong>trvalé smazání</"
+"Následujících {num} souborů bylo vybráno pro <strong>trvalé smazání</"
 "strong>:"
 
 #: journalist_templates/delete.html:20
@@ -894,7 +909,7 @@ msgstr "Zobrazit heslo"
 msgid "LOG IN"
 msgstr "PŘIHLÁSIT SE"
 
-#: source_app/__init__.py:117
+#: source_app/__init__.py:109
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -1087,9 +1102,9 @@ msgid ""
 "<a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</"
 "a>, or ignore this warning to continue."
 msgstr ""
-"<strong>SecureDrop doporučujeme používat v prohlížeči Tor:</strong> <a id"
-"=\"recommend-tor\" href=\"{tor_browser_url}\">Zjistěte, jak Tor "
-"nainstalovat</a> nebo ignorujte tuto zprávu a pokračujte."
+"<strong>SecureDrop doporučujeme používat v prohlížeči Tor:</strong> <a id="
+"\"recommend-tor\" href=\"{tor_browser_url}\">Zjistěte, jak Tor nainstalovat</"
+"a> nebo ignorujte tuto zprávu a pokračujte."
 
 #: source_templates/index.html:18
 msgid ""
@@ -1101,8 +1116,8 @@ msgid ""
 msgstr ""
 "<strong>SecureDrop doporučujeme používat ve verzi prohlížeče Tor pro "
 "počítač, protože Orfox neposkytuje stejnou úroveň bezpečnosti a anonymity "
-"jako verze pro počítač.</strong> <a id=\"recommend-tor\" href=\""
-"{tor_browser_url}\">Zjistěte, jak ji nainstalovat</a>."
+"jako verze pro počítač.</strong> <a id=\"recommend-tor\" href="
+"\"{tor_browser_url}\">Zjistěte, jak ji nainstalovat</a>."
 
 #: source_templates/index.html:39
 msgid "First submission"
@@ -1163,9 +1178,9 @@ msgid ""
 "\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's "
 "toolbar. This will clear your Tor Browser activity data on this device."
 msgstr ""
-"Klepněte na <img src={icon} alt=\"ikona koštěte\" width=\"16\" height=\"16\""
-">&nbsp;<strong>Nová identita</strong> na liště svého prohlížeče Tor. Smažete "
-"tím data o aktivitě prohlížeče Tor na tomto zařízení."
+"Klepněte na <img src={icon} alt=\"ikona koštěte\" width=\"16\" height="
+"\"16\">&nbsp;<strong>Nová identita</strong> na liště svého prohlížeče Tor. "
+"Smažete tím data o aktivitě prohlížeče Tor na tomto zařízení."
 
 #: source_templates/lookup.html:7
 msgid "Remember, your codename is:"
@@ -1419,8 +1434,8 @@ msgid ""
 "with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
 msgstr ""
 "Pokud používáte mac či Linux, otevřete terminál. Klíč pak můžete importovat "
-"příkazem <p><code>gpg --import /path/to/"
-"{submission_key_fpr_filename}</code></p>"
+"příkazem <p><code>gpg --import /path/to/{submission_key_fpr_filename}</"
+"code></p>"
 
 #: source_templates/why-journalist-key.html:15
 msgid "Encrypt your submission. Open the terminal and enter this gpg command:"
@@ -1440,8 +1455,8 @@ msgid ""
 "code>)"
 msgstr ""
 "Nahrajte svůj zašifrovaný příspěvek. Bude mít stejný název jako "
-"nezašifrovaný soubor s .gpg na konci (např. <code>interni_informace.pdf."
-"gpg</code>)"
+"nezašifrovaný soubor s .gpg na konci (např. <code>interni_informace.pdf.gpg</"
+"code>)"
 
 #: source_templates/why-journalist-key.html:21
 msgid ""

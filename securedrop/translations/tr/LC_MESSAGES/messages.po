@@ -23,11 +23,11 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} önce"
 
-#: journalist_app/__init__.py:90 journalist_app/__init__.py:131
+#: journalist_app/__init__.py:82 journalist_app/__init__.py:123
 msgid "You have been logged out due to inactivity."
 msgstr "Uzun süredir bir işlem yapmadığınız için oturumunuz kapatıldı."
 
-#: journalist_app/__init__.py:140
+#: journalist_app/__init__.py:132
 msgid "You have been logged out due to password change"
 msgstr "Parolanız değiştirildiği için oturumunuz kapatıldı"
 
@@ -78,7 +78,7 @@ msgstr ""
 "\"{user}\" kullanıcısı için iki aşamalı kimlik doğrulama kodu doğrulandı."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:350
+#: journalist_app/utils.py:367
 msgid "Name not updated: {}"
 msgstr "Ad güncellenmedi: {}"
 
@@ -102,21 +102,29 @@ msgstr "Herhangi bir derleme seçilmemiş."
 msgid "Only admins can access this page."
 msgstr "Bu sayfaya yalnızca yöneticiler erişebilir."
 
-#: journalist_app/forms.py:19
-msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
-msgstr ""
-"HOTP parolaları 40 karakter uzunluğundadır - Henüz {num_chars} karakter "
+#: journalist_app/forms.py:18
+msgid "HOTP secrets are 40 characters long - you have entered {num}."
+msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
+msgstr[0] ""
+"HOTP parolaları 40 karakter uzunluğundadır - Henüz {num} karakter "
+"yazdınız."
+msgstr[1] ""
+"HOTP parolaları 40 karakter uzunluğundadır - Henüz {num} karakter "
 "yazdınız."
 
-#: journalist_app/forms.py:28
-msgid "Must be at least {min_chars} characters long."
-msgstr "En az {min_chars} karakter uzunluğunda olmalıdır."
-
-#: journalist_app/forms.py:35
-msgid "Cannot be longer than {max_chars} characters."
-msgstr "En fazla {max_chars} karakter yazılabilir."
+#: journalist_app/forms.py:29
+msgid "Must be at least {num} characters long."
+msgid_plural "Must be at least {num} characters long."
+msgstr[0] "En az {num} karakter uzunluğunda olmalıdır."
+msgstr[1] "En az {num} karakter uzunluğunda olmalıdır."
 
 #: journalist_app/forms.py:40
+msgid "Cannot be longer than {num} characters."
+msgid_plural "Cannot be longer than {num} characters."
+msgstr[0] "En fazla {num} karakter yazılabilir."
+msgstr[1] "En fazla {num} karakter yazılabilir."
+
+#: journalist_app/forms.py:50
 msgid ""
 "This username is invalid because it is reserved for internal use by the "
 "software."
@@ -124,19 +132,19 @@ msgstr ""
 "Bu kullanıcı adı geçersiz, çünkü yazılım tarafından içsel olarak kullanıma "
 "tahsis edilmiştir."
 
-#: journalist_app/forms.py:46 source_app/forms.py:12
+#: journalist_app/forms.py:56 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Bu alanın doldurulması zorunludur."
 
-#: journalist_app/forms.py:65
+#: journalist_app/forms.py:75
 msgid "You cannot send an empty reply."
 msgstr "Boş bir yanıt gönderemezsiniz."
 
-#: journalist_app/forms.py:77
+#: journalist_app/forms.py:87
 msgid "File required."
 msgstr "Dosya gerekli."
 
-#: journalist_app/forms.py:79
+#: journalist_app/forms.py:89
 msgid "You can only upload PNG image files."
 msgstr "Yalnız PNG biçiminde görsel dosyaları yükleyebilirsiniz."
 
@@ -153,7 +161,7 @@ msgstr "Teşekkürler. Yanıtınız kaydedildi."
 msgid "No collections selected for download."
 msgstr "İndirilecek bir derleme seçilmemiş."
 
-#: journalist_app/main.py:159 journalist_app/utils.py:284
+#: journalist_app/main.py:159 journalist_app/utils.py:301
 msgid "No collections selected for deletion."
 msgstr "Silinecek bir derleme seçilmemiş."
 
@@ -170,12 +178,12 @@ msgid "Login failed."
 msgstr "Oturum açılamadı."
 
 #: journalist_app/utils.py:113
-msgid "Please wait at least {seconds} second before logging in again."
-msgid_plural "Please wait at least {seconds} seconds before logging in again."
+msgid "Please wait at least {num} second before logging in again."
+msgid_plural "Please wait at least {num} seconds before logging in again."
 msgstr[0] ""
-"Lütfen yeniden oturum açmayı denemeden önce {seconds} saniye bekleyin."
+"Lütfen yeniden oturum açmayı denemeden önce {num} saniye bekleyin."
 msgstr[1] ""
-"Lütfen yeniden oturum açmayı denemeden önce {seconds} saniye bekleyin."
+"Lütfen yeniden oturum açmayı denemeden önce {num} saniye bekleyin."
 
 #: journalist_app/utils.py:124
 msgid ""
@@ -196,27 +204,27 @@ msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "Gizli biçim hatalı: Gizli kod tek uzunlukta. Gizli kodu yanlış mı yazdınız?"
 
-#: journalist_app/utils.py:236
+#: journalist_app/utils.py:244
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Gönderi silindi."
 msgstr[1] "{num} gönderi silindi."
 
-#: journalist_app/utils.py:292
+#: journalist_app/utils.py:309
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} derleme silindi"
 msgstr[1] "{num} derleme silindi"
 
-#: journalist_app/utils.py:348
+#: journalist_app/utils.py:365
 msgid "Name updated."
 msgstr "Ad güncellendi."
 
-#: journalist_app/utils.py:357
+#: journalist_app/utils.py:374
 msgid "The password you submitted is invalid. Password not changed."
 msgstr "Girdiğiniz parola kötü! Parola değiştirilmedi."
 
-#: journalist_app/utils.py:364
+#: journalist_app/utils.py:381
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -225,7 +233,7 @@ msgstr ""
 "Bir sorun çıktı. Yeni parola doğru olarak kaydedilmemiş olabilir. Hesabınızı "
 "kullanmaya devam edebilmeniz için parolayı yeniden sıfırlamanız gerekli."
 
-#: journalist_app/utils.py:373
+#: journalist_app/utils.py:390
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -233,7 +241,7 @@ msgstr ""
 "Parola güncellendi. Parolanızı KeePassX veritabanınıza kaydetmeyi unutmayın. "
 "Yeni parola:"
 
-#: journalist_app/utils.py:397
+#: journalist_app/utils.py:414
 msgid "No unread submissions in selected collections."
 msgstr "Seçilmiş derlemelerde okunmamış bir gönderi yok."
 
@@ -248,21 +256,21 @@ msgstr "İptal"
 
 #: journalist_templates/_source_row.html:23
 msgid "1 doc"
-msgid_plural "{doc_num} docs"
+msgid_plural "{num} docs"
 msgstr[0] "1 belge"
-msgstr[1] "{doc_num} belge"
+msgstr[1] "{num} belge"
 
 #: journalist_templates/_source_row.html:24
 msgid "1 message"
-msgid_plural "{msg_num} messages"
+msgid_plural "{num} messages"
 msgstr[0] "1 ileti"
-msgstr[1] "{msg_num} ileti"
+msgstr[1] "{num} ileti"
 
 #: journalist_templates/_source_row.html:27
 msgid "1 unread"
-msgid_plural "{num_unread} unread"
+msgid_plural "{num} unread"
 msgstr[0] "1 okunmamış"
-msgstr[1] "{num_unread} okunmamış"
+msgstr[1] "{num} okunmamış"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -676,12 +684,12 @@ msgstr "GÖNDERİM TERCİHLERİNİ GÜNCELLE"
 msgid ""
 "The following file has been selected for <strong>permanent deletion</strong>:"
 msgid_plural ""
-"The following {files} files have been selected for <strong>permanent "
-"deletion</strong>:"
+"The following {num} files have been selected for <strong>permanent deletion</"
+"strong>:"
 msgstr[0] ""
 "Aşağıdaki dosya <strong>kalıcı bir şekilde silinmek</strong> üzere seçilmiş:"
 msgstr[1] ""
-"Aşağıdaki {files} dosya <strong>kalıcı bir şekilde silinmek</strong> üzere "
+"Aşağıdaki {num} dosya <strong>kalıcı bir şekilde silinmek</strong> üzere "
 "seçilmiş:"
 
 #: journalist_templates/delete.html:20
@@ -912,7 +920,7 @@ msgstr "Parolayı Göster"
 msgid "LOG IN"
 msgstr "OTURUM AÇ"
 
-#: source_app/__init__.py:117
+#: source_app/__init__.py:109
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -962,7 +970,8 @@ msgstr ""
 
 #: source_app/main.py:80
 msgid "There was a temporary problem creating your account. Please try again."
-msgstr "Hesabınızı oluştururken geçici bir sorun çıktı. Lütfen yeniden deneyin."
+msgstr ""
+"Hesabınızı oluştururken geçici bir sorun çıktı. Lütfen yeniden deneyin."
 
 #: source_app/main.py:184
 msgid "You must enter a message or choose a file to submit."
@@ -1120,9 +1129,9 @@ msgid ""
 msgstr ""
 "<strong>SecureDrop uygulamasına erişmek için Tor Tarayıcının masaüstü "
 "sürümünü kullanmanız önerilir. Orfox masaüstü sürümlerle aynı güvenlik ve "
-"anonimlik düzeylerini sağlamaz</strong>.<a id=\"recommend-tor\" href=\""
-"{tor_browser_url}\">Nasıl kuracağınızı öğrenin</a> veya bu uyarıyı görmezden "
-"gelerek devam edin."
+"anonimlik düzeylerini sağlamaz</strong>.<a id=\"recommend-tor\" href="
+"\"{tor_browser_url}\">Nasıl kuracağınızı öğrenin</a> veya bu uyarıyı "
+"görmezden gelerek devam edin."
 
 #: source_templates/index.html:39
 msgid "First submission"

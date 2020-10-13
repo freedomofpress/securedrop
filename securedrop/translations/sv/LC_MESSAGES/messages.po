@@ -23,11 +23,11 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} sedan"
 
-#: journalist_app/__init__.py:90 journalist_app/__init__.py:131
+#: journalist_app/__init__.py:82 journalist_app/__init__.py:123
 msgid "You have been logged out due to inactivity."
 msgstr "Du har blivit utloggad på grund av inaktivitet."
 
-#: journalist_app/__init__.py:140
+#: journalist_app/__init__.py:132
 msgid "You have been logged out due to password change"
 msgstr "Du har blivit utloggad på grund av lösenordsbyte"
 
@@ -77,7 +77,7 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Tvåfaktorsautentisering för användaren \"{user}\" bekräftades."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:350
+#: journalist_app/utils.py:367
 msgid "Name not updated: {}"
 msgstr "Namn ej uppdaterat: {}"
 
@@ -101,19 +101,25 @@ msgstr "Inga samlingar är valda."
 msgid "Only admins can access this page."
 msgstr "Endast administratörer har tillgång till denna sida."
 
-#: journalist_app/forms.py:19
-msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
-msgstr "HOTP-hemligheter är 40 tecken långa - du har fyllt i {num_chars}."
+#: journalist_app/forms.py:18
+msgid "HOTP secrets are 40 characters long - you have entered {num}."
+msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
+msgstr[0] "HOTP-hemligheter är 40 tecken långa - du har fyllt i {num}."
+msgstr[1] "HOTP-hemligheter är 40 tecken långa - du har fyllt i {num}."
 
-#: journalist_app/forms.py:28
-msgid "Must be at least {min_chars} characters long."
-msgstr "Måste vara minst {min_chars} tecken långt."
-
-#: journalist_app/forms.py:35
-msgid "Cannot be longer than {max_chars} characters."
-msgstr "Kan inte vara längre än {max_chars} tecken."
+#: journalist_app/forms.py:29
+msgid "Must be at least {num} characters long."
+msgid_plural "Must be at least {num} characters long."
+msgstr[0] "Måste vara minst {num} tecken långt."
+msgstr[1] "Måste vara minst {num} tecken långt."
 
 #: journalist_app/forms.py:40
+msgid "Cannot be longer than {num} characters."
+msgid_plural "Cannot be longer than {num} characters."
+msgstr[0] "Kan inte vara längre än {num} tecken."
+msgstr[1] "Kan inte vara längre än {num} tecken."
+
+#: journalist_app/forms.py:50
 msgid ""
 "This username is invalid because it is reserved for internal use by the "
 "software."
@@ -121,19 +127,19 @@ msgstr ""
 "Detta användarnamn får inte nyttas, av den anledning att det är reserverad "
 "av programvaran för intern bruk."
 
-#: journalist_app/forms.py:46 source_app/forms.py:12
+#: journalist_app/forms.py:56 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Detta fält är obligatoriskt."
 
-#: journalist_app/forms.py:65
+#: journalist_app/forms.py:75
 msgid "You cannot send an empty reply."
 msgstr "Du kan inte skicka ett tomt svar."
 
-#: journalist_app/forms.py:77
+#: journalist_app/forms.py:87
 msgid "File required."
 msgstr "Fil krävs."
 
-#: journalist_app/forms.py:79
+#: journalist_app/forms.py:89
 msgid "You can only upload PNG image files."
 msgstr "Du kan endast ladda upp PNG-bildfiler."
 
@@ -150,7 +156,7 @@ msgstr "Tack. Ditt svar har sparats."
 msgid "No collections selected for download."
 msgstr "Inga samlingar valda för nedladdning."
 
-#: journalist_app/main.py:159 journalist_app/utils.py:284
+#: journalist_app/main.py:159 journalist_app/utils.py:301
 msgid "No collections selected for deletion."
 msgstr "Inga samlingar har markerats för radering."
 
@@ -167,12 +173,12 @@ msgid "Login failed."
 msgstr "Inloggningen misslyckades."
 
 #: journalist_app/utils.py:113
-msgid "Please wait at least {seconds} second before logging in again."
-msgid_plural "Please wait at least {seconds} seconds before logging in again."
+msgid "Please wait at least {num} second before logging in again."
+msgid_plural "Please wait at least {num} seconds before logging in again."
 msgstr[0] ""
-"Var snäll och vänta åtminstone {seconds} sekund innan du loggar in igen."
+"Var snäll och vänta åtminstone {num} sekund innan du loggar in igen."
 msgstr[1] ""
-"Var snäll och vänta åtminstone {seconds} sekunder innan du loggar in igen."
+"Var snäll och vänta åtminstone {num} sekunder innan du loggar in igen."
 
 #: journalist_app/utils.py:124
 msgid ""
@@ -192,27 +198,27 @@ msgstr ""
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Ogiltigt format i hemlighet: ojämn längd. Skrev du fel?"
 
-#: journalist_app/utils.py:236
+#: journalist_app/utils.py:244
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Inlämningen har tagits bort."
 msgstr[1] "{num} inlämningar har tagits bort."
 
-#: journalist_app/utils.py:292
+#: journalist_app/utils.py:309
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} samling har tagits bort"
 msgstr[1] "{num} samlingar har tagits bort"
 
-#: journalist_app/utils.py:348
+#: journalist_app/utils.py:365
 msgid "Name updated."
 msgstr "Namn uppdaterat."
 
-#: journalist_app/utils.py:357
+#: journalist_app/utils.py:374
 msgid "The password you submitted is invalid. Password not changed."
 msgstr "Lösenordet du angav är ogiltigt! Lösenordet har inte ändrats."
 
-#: journalist_app/utils.py:364
+#: journalist_app/utils.py:381
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -222,7 +228,7 @@ msgstr ""
 "korrekt. För att undvika att du blir utelåst från ditt konto, bör du "
 "återställa ditt lösenord en gång till."
 
-#: journalist_app/utils.py:373
+#: journalist_app/utils.py:390
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -230,7 +236,7 @@ msgstr ""
 "Lösenord uppdaterat. Glöm inte att spara det i din KeePassX databas. Det nya "
 "lösenordet är:"
 
-#: journalist_app/utils.py:397
+#: journalist_app/utils.py:414
 msgid "No unread submissions in selected collections."
 msgstr "Inga olästa inlämningar i valda samlingar."
 
@@ -245,21 +251,21 @@ msgstr "Avbryt"
 
 #: journalist_templates/_source_row.html:23
 msgid "1 doc"
-msgid_plural "{doc_num} docs"
+msgid_plural "{num} docs"
 msgstr[0] "1 dokument"
-msgstr[1] "{doc_num} dokument"
+msgstr[1] "{num} dokument"
 
 #: journalist_templates/_source_row.html:24
 msgid "1 message"
-msgid_plural "{msg_num} messages"
+msgid_plural "{num} messages"
 msgstr[0] "1 meddelande"
-msgstr[1] "{msg_num} meddelanden"
+msgstr[1] "{num} meddelanden"
 
 #: journalist_templates/_source_row.html:27
 msgid "1 unread"
-msgid_plural "{num_unread} unread"
+msgid_plural "{num} unread"
 msgstr[0] "1 oläst"
-msgstr[1] "{num_unread} olästa"
+msgstr[1] "{num} olästa"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -665,11 +671,11 @@ msgstr "UPPDATERA INLÄMNINGSINSTÄLLNINGAR"
 msgid ""
 "The following file has been selected for <strong>permanent deletion</strong>:"
 msgid_plural ""
-"The following {files} files have been selected for <strong>permanent "
-"deletion</strong>:"
+"The following {num} files have been selected for <strong>permanent deletion</"
+"strong>:"
 msgstr[0] "Följande fil har valts för <strong> permanent borttagning</strong>:"
 msgstr[1] ""
-"Följande {files} filer har valts för <strong> permanent borttagning</strong>:"
+"Följande {num} filer har valts för <strong> permanent borttagning</strong>:"
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
@@ -894,7 +900,7 @@ msgstr "Visa lösenord"
 msgid "LOG IN"
 msgstr "LOGGA IN"
 
-#: source_app/__init__.py:117
+#: source_app/__init__.py:109
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
