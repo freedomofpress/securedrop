@@ -1,9 +1,14 @@
-from __future__ import print_function
-
+import argparse
 import datetime
 import os
 import sys
 import time
+from argparse import _SubParsersAction
+
+from typing import List
+from typing import Optional
+
+from flask.ctx import AppContext
 
 from db import db
 from rm import secure_delete
@@ -11,7 +16,7 @@ from models import Reply, Source, Submission
 from management import app_context
 
 
-def find_disconnected_db_submissions(path):
+def find_disconnected_db_submissions(path: str) -> List[Submission]:
     """
     Finds Submission records whose file does not exist.
     """
@@ -27,7 +32,7 @@ def find_disconnected_db_submissions(path):
     return disconnected_submissions
 
 
-def check_for_disconnected_db_submissions(args):
+def check_for_disconnected_db_submissions(args: argparse.Namespace) -> None:
     """
     Check for Submission records whose files are missing.
     """
@@ -42,7 +47,7 @@ def check_for_disconnected_db_submissions(args):
             print("No problems were found. All submissions' files are present.")
 
 
-def list_disconnected_db_submissions(args):
+def list_disconnected_db_submissions(args: argparse.Namespace) -> None:
     """
     List the IDs of Submission records whose files are missing.
     """
@@ -57,7 +62,7 @@ def list_disconnected_db_submissions(args):
             print(s.id)
 
 
-def delete_disconnected_db_submissions(args):
+def delete_disconnected_db_submissions(args: argparse.Namespace) -> None:
     """
     Delete Submission records whose files are missing.
     """
@@ -78,7 +83,7 @@ def delete_disconnected_db_submissions(args):
             print("Not removing disconnected submissions in database.")
 
 
-def find_disconnected_fs_submissions(path):
+def find_disconnected_fs_submissions(path: str) -> List[str]:
     """
     Finds files in the store that lack a Submission or Reply record.
     """
@@ -93,18 +98,20 @@ def find_disconnected_fs_submissions(path):
         for f in files:
             files_in_fs[f] = os.path.abspath(os.path.join(directory, f))
 
-    disconnected_files = []
+    disconnected_files_and_sizes = []
     for f, p in files_in_fs.items():
         if f not in files_in_db:
             filesize = os.stat(p).st_size
-            disconnected_files.append((p, filesize))
+            disconnected_files_and_sizes.append((p, filesize))
 
-    disconnected_files = [t[0] for t in sorted(disconnected_files, key=lambda t: t[1])]
+    disconnected_files = [
+        file for (file, size) in sorted(disconnected_files_and_sizes, key=lambda t: t[1])
+    ]
 
     return disconnected_files
 
 
-def check_for_disconnected_fs_submissions(args):
+def check_for_disconnected_fs_submissions(args: argparse.Namespace) -> None:
     """
     Check for files without a corresponding Submission or Reply record in the database.
     """
@@ -119,7 +126,7 @@ def check_for_disconnected_fs_submissions(args):
             print("No unexpected files were found in the store.")
 
 
-def list_disconnected_fs_submissions(args):
+def list_disconnected_fs_submissions(args: argparse.Namespace) -> None:
     """
     List files without a corresponding Submission or Reply record in the database.
     """
@@ -134,7 +141,7 @@ def list_disconnected_fs_submissions(args):
             print(f)
 
 
-def delete_disconnected_fs_submissions(args):
+def delete_disconnected_fs_submissions(args: argparse.Namespace) -> None:
     """
     Delete files without a corresponding Submission record in the database.
     """
@@ -170,7 +177,9 @@ def delete_disconnected_fs_submissions(args):
                 print("Not removing {}.".format(f))
 
 
-def were_there_submissions_today(args, context=None):
+def were_there_submissions_today(
+    args: argparse.Namespace, context: Optional[AppContext] = None
+) -> None:
     with context or app_context():
         something = (
             db.session.query(Source)
@@ -182,7 +191,7 @@ def were_there_submissions_today(args, context=None):
         open(count_file, "w").write(something and "1" or "0")
 
 
-def add_check_db_disconnect_parser(subps):
+def add_check_db_disconnect_parser(subps: _SubParsersAction) -> None:
     check_db_disconnect_subp = subps.add_parser(
         "check-disconnected-db-submissions",
         help="Check for submissions that exist in the database but not the filesystem.",
@@ -190,7 +199,7 @@ def add_check_db_disconnect_parser(subps):
     check_db_disconnect_subp.set_defaults(func=check_for_disconnected_db_submissions)
 
 
-def add_check_fs_disconnect_parser(subps):
+def add_check_fs_disconnect_parser(subps: _SubParsersAction) -> None:
     check_fs_disconnect_subp = subps.add_parser(
         "check-disconnected-fs-submissions",
         help="Check for submissions that exist in the filesystem but not in the database.",
@@ -198,7 +207,7 @@ def add_check_fs_disconnect_parser(subps):
     check_fs_disconnect_subp.set_defaults(func=check_for_disconnected_fs_submissions)
 
 
-def add_delete_db_disconnect_parser(subps):
+def add_delete_db_disconnect_parser(subps: _SubParsersAction) -> None:
     delete_db_disconnect_subp = subps.add_parser(
         "delete-disconnected-db-submissions",
         help="Delete submissions that exist in the database but not the filesystem.",
@@ -209,7 +218,7 @@ def add_delete_db_disconnect_parser(subps):
     )
 
 
-def add_delete_fs_disconnect_parser(subps):
+def add_delete_fs_disconnect_parser(subps: _SubParsersAction) -> None:
     delete_fs_disconnect_subp = subps.add_parser(
         "delete-disconnected-fs-submissions",
         help="Delete submissions that exist in the filesystem but not the database.",
@@ -220,7 +229,7 @@ def add_delete_fs_disconnect_parser(subps):
     )
 
 
-def add_list_db_disconnect_parser(subps):
+def add_list_db_disconnect_parser(subps: _SubParsersAction) -> None:
     list_db_disconnect_subp = subps.add_parser(
         "list-disconnected-db-submissions",
         help="List submissions that exist in the database but not the filesystem.",
@@ -228,7 +237,7 @@ def add_list_db_disconnect_parser(subps):
     list_db_disconnect_subp.set_defaults(func=list_disconnected_db_submissions)
 
 
-def add_list_fs_disconnect_parser(subps):
+def add_list_fs_disconnect_parser(subps: _SubParsersAction) -> None:
     list_fs_disconnect_subp = subps.add_parser(
         "list-disconnected-fs-submissions",
         help="List submissions that exist in the filesystem but not the database.",
@@ -236,7 +245,7 @@ def add_list_fs_disconnect_parser(subps):
     list_fs_disconnect_subp.set_defaults(func=list_disconnected_fs_submissions)
 
 
-def add_were_there_submissions_today(subps):
+def add_were_there_submissions_today(subps: _SubParsersAction) -> None:
     parser = subps.add_parser(
         "were-there-submissions-today",
         help=("Update the file indicating " "whether submissions were received in the past 24h."),

@@ -11,6 +11,11 @@ import signal
 import sys
 import time
 import traceback
+from argparse import _SubParsersAction
+from typing import Optional
+
+from flask.ctx import AppContext
+from typing import List
 
 sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
 
@@ -43,13 +48,13 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
 
 
-def obtain_input(text):
+def obtain_input(text: str) -> str:
     """Wrapper for testability as suggested in
     https://github.com/pytest-dev/pytest/issues/1598#issuecomment-224761877"""
     return input(text)
 
 
-def reset(args, context=None):
+def reset(args: argparse.Namespace, context: Optional[AppContext] = None) -> int:
     """Clears the SecureDrop development applications' state, restoring them to
     the way they were immediately after running `setup_dev.sh`. This command:
     1. Erases the development sqlite database file.
@@ -116,15 +121,15 @@ def reset(args, context=None):
     return 0
 
 
-def add_admin(args):
+def add_admin(args: argparse.Namespace) -> int:
     return _add_user(is_admin=True)
 
 
-def add_journalist(args):
+def add_journalist(args: argparse.Namespace) -> int:
     return _add_user()
 
 
-def _get_username():
+def _get_username() -> str:
     while True:
         username = obtain_input('Username: ')
         try:
@@ -135,7 +140,7 @@ def _get_username():
             return username
 
 
-def _get_first_name():
+def _get_first_name() -> Optional[str]:
     while True:
         first_name = obtain_input('First name: ')
         if not first_name:
@@ -147,7 +152,7 @@ def _get_first_name():
             print('Invalid name: ' + str(e))
 
 
-def _get_last_name():
+def _get_last_name() -> Optional[str]:
     while True:
         last_name = obtain_input('Last name: ')
         if not last_name:
@@ -159,7 +164,7 @@ def _get_last_name():
             print('Invalid name: ' + str(e))
 
 
-def _get_yubikey_usage():
+def _get_yubikey_usage() -> bool:
     '''Function used to allow for test suite mocking'''
     while True:
         answer = obtain_input('Will this user be using a YubiKey [HOTP]? '
@@ -172,7 +177,7 @@ def _get_yubikey_usage():
             print('Invalid answer. Please type "y" or "n"')
 
 
-def _make_password():
+def _make_password() -> str:
     while True:
         password = current_app.crypto_util.genrandomid(7)
         try:
@@ -182,7 +187,7 @@ def _make_password():
             continue
 
 
-def _add_user(is_admin=False, context=None):
+def _add_user(is_admin: bool = False, context: Optional[AppContext] = None) -> int:
     with context or app_context():
         username = _get_username()
         first_name = _get_first_name()
@@ -247,21 +252,21 @@ def _add_user(is_admin=False, context=None):
         return 0
 
 
-def _get_username_to_delete():
+def _get_username_to_delete() -> str:
     return obtain_input('Username to delete: ')
 
 
-def _get_delete_confirmation(user):
+def _get_delete_confirmation(username: str) -> bool:
     confirmation = obtain_input('Are you sure you want to delete user '
-                                '"{}" (y/n)?'.format(user))
+                                '"{}" (y/n)?'.format(username))
     if confirmation.lower() != 'y':
         print('Confirmation not received: user "{}" was NOT '
-              'deleted'.format(user))
+              'deleted'.format(username))
         return False
     return True
 
 
-def delete_user(args, context=None):
+def delete_user(args: argparse.Namespace, context: Optional[AppContext] = None) -> int:
     """Deletes a journalist or admin from the application."""
     with context or app_context():
         username = _get_username_to_delete()
@@ -295,13 +300,13 @@ def delete_user(args, context=None):
     return 0
 
 
-def clean_tmp(args):
+def clean_tmp(args: argparse.Namespace) -> int:
     """Cleanup the SecureDrop temp directory. """
     if not os.path.exists(args.directory):
         log.debug('{} does not exist, do nothing'.format(args.directory))
         return 0
 
-    def listdir_fullpath(d):
+    def listdir_fullpath(d: str) -> List[str]:
         return [os.path.join(d, f) for f in os.listdir(d)]
 
     too_old = args.days * 24 * 60 * 60
@@ -316,7 +321,7 @@ def clean_tmp(args):
     return 0
 
 
-def init_db(args):
+def init_db(args: argparse.Namespace) -> None:
     user = pwd.getpwnam(args.user)
     subprocess.check_call(['sqlite3', config.DATABASE_FILE, '.databases'])
     os.chown(config.DATABASE_FILE, user.pw_uid, user.pw_gid)
@@ -324,7 +329,7 @@ def init_db(args):
     subprocess.check_call(['alembic', 'upgrade', 'head'])
 
 
-def get_args():
+def get_args() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog=__file__, description='Management '
                                      'and testing utility for SecureDrop.')
     parser.add_argument('-v', '--verbose', action='store_true')
@@ -386,7 +391,7 @@ def get_args():
     return parser
 
 
-def set_clean_tmp_parser(subps, name):
+def set_clean_tmp_parser(subps: _SubParsersAction, name: str) -> None:
     parser = subps.add_parser(name, help='Cleanup the '
                               'SecureDrop temp directory.')
     default_days = 7
@@ -404,14 +409,14 @@ def set_clean_tmp_parser(subps, name):
     parser.set_defaults(func=clean_tmp)
 
 
-def setup_verbosity(args):
+def setup_verbosity(args: argparse.Namespace) -> None:
     if args.verbose:
         logging.getLogger(__name__).setLevel(logging.DEBUG)
     else:
         logging.getLogger(__name__).setLevel(logging.INFO)
 
 
-def _run_from_commandline():  # pragma: no cover
+def _run_from_commandline() -> None:  # pragma: no cover
     try:
         parser = get_args()
         args = parser.parse_args()
