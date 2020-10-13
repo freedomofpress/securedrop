@@ -2,13 +2,14 @@ import pytest
 import os
 import re
 import tempfile
+import testutils
 
 
 SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM")
 testinfra_hosts = [
         "docker://{}-sd-dpkg-verification".format(SECUREDROP_TARGET_PLATFORM)
 ]
-securedrop_test_vars = pytest.securedrop_test_vars
+securedrop_test_vars = testutils.securedrop_test_vars
 
 
 def extract_package_name_from_filepath(filepath):

@@ -1,8 +1,8 @@
 ---
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  yamllint
 platforms:
   - name: focal-sd-app
     groups:
@@ -50,8 +50,8 @@ provisioner:
     ANSIBLE_CALLBACK_WHITELIST: skippy
     ANSIBLE_STDOUT_CALLBACK: skippy
     ANSIBLE_GATHER_TIMEOUT: "120"
-  lint:
-    name: ansible-lint
+  lint: |
+    ansible-lint
   playbooks:
     converge: playbook.yml
 scenario:
@@ -77,5 +77,5 @@ verifier:
     SECUREDROP_PYTHON_VERSION: "3.8"
   # Reuse the same test suite for all packages
   directory: ../builder-xenial/tests/
-  lint:
-    name: flake8
+  lint: |
+    flake8
