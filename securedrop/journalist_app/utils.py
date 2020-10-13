@@ -111,10 +111,10 @@ def validate_user(
             # ngettext is needed although we always have period > 1
             # see https://github.com/freedomofpress/securedrop/issues/2422
             login_flashed_msg += ngettext(
-                "Please wait at least {seconds} second "
-                "before logging in again.",
-                "Please wait at least {seconds} seconds "
-                "before logging in again.", period).format(seconds=period)
+                "Please wait at least {num} second before logging in again.",
+                "Please wait at least {num} seconds before logging in again.",
+                period
+            ).format(num=period)
         else:
             try:
                 user = Journalist.query.filter_by(
@@ -239,10 +239,15 @@ def bulk_delete(
         except ValueError:
             deletion_errors += 1
 
-    flash(ngettext("Submission deleted.",
-                   "{num} submissions deleted.".format(
-                       num=len(items_selected)),
-                   len(items_selected)), "notification")
+    num_selected = len(items_selected)
+    flash(
+        ngettext(
+            "Submission deleted.",
+            "{num} submissions deleted.",
+            num_selected
+        ).format(num=num_selected),
+        "notification"
+    )
     if deletion_errors > 0:
         current_app.logger.error("Disconnected submission entries (%d) were detected",
                                  deletion_errors)
