@@ -13,6 +13,7 @@ def test_release_manager_upgrade_channel(host):
     """
     expected_channels = {
         "xenial": "never",
+        "focal": "never",
     }
 
     config_path = "/etc/update-manager/release-upgrades"

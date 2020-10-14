@@ -10,7 +10,6 @@ import io
 import os
 import yaml
 
-
 # The config tests target staging by default. It's possible to override
 # for e.g. prod, but the associated vars files are not yet ported.
 target_host = os.environ.get('SECUREDROP_TESTINFRA_TARGET_HOST', 'staging')
@@ -27,6 +26,13 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
     filepath = os.path.join(os.path.dirname(__file__), "vars", hostname+".yml")
     with io.open(filepath, 'r') as f:
         hostvars = yaml.safe_load(f)
+
+    if os.environ.get("MOLECULE_SCENARIO_NAME").endswith("focal"):
+        hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.8")  # noqa: E501
+        hostvars['python_version'] = "3.8"
+    else:
+        hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.5")  # noqa: E501
+        hostvars['python_version'] = "3.5"
 
     if with_header:
         hostvars = dict(securedrop_test_vars=hostvars)
