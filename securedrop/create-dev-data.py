@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import io
 import os
 import argparse
 import math
@@ -19,7 +20,7 @@ from models import Journalist, Reply, SeenReply, Source, Submission
 from specialstrings import strings
 
 
-submissions = cycle(strings)
+messages = cycle(strings)
 replies = cycle(strings)
 
 
@@ -60,11 +61,11 @@ def main(staging=False):
         for i in range(1, num_sources + 1):
             if i == 1:
                 # For the first source, the journalist who replied will be deleted
-                create_source_and_submissions(
+                create_dev_data(
                     i, num_sources, journalist_who_replied=journalist_tobe_deleted
                 )
                 continue
-            create_source_and_submissions(i, num_sources)
+            create_dev_data(i, num_sources)
 
         # Now let us delete one journalist
         db.session.delete(journalist_tobe_deleted)
@@ -91,8 +92,13 @@ def add_test_user(username, password, otp_secret, is_admin=False,
         db.session.rollback()
 
 
-def create_source_and_submissions(
-    source_index, source_count, num_submissions=2, num_replies=2, journalist_who_replied=None  # noqa: W605, E501
+def create_dev_data(
+    source_index,
+    source_count,
+    num_files=2,
+    num_messages=2,
+    num_replies=2,
+    journalist_who_replied=None  # noqa: W605, E501
 ):
     # Store source in database
     codename = current_app.crypto_util.genrandomid()
@@ -107,15 +113,29 @@ def create_source_and_submissions(
     os.mkdir(current_app.storage.path(source.filesystem_id))
     current_app.crypto_util.genkeypair(source.filesystem_id, codename)
 
-    # Generate some test submissions
-    for _ in range(num_submissions):
+    # Generate some test messages
+    for _ in range(num_messages):
         source.interaction_count += 1
-        submission_text = next(submissions)
+        submission_text = next(messages)
         fpath = current_app.storage.save_message_submission(
             source.filesystem_id,
             source.interaction_count,
             source.journalist_filename,
             submission_text
+        )
+        source.last_updated = datetime.datetime.utcnow()
+        submission = Submission(source, fpath)
+        db.session.add(submission)
+
+    # Generate some test files
+    for _ in range(num_files):
+        source.interaction_count += 1
+        fpath = current_app.storage.save_file_submission(
+            source.filesystem_id,
+            source.interaction_count,
+            source.journalist_filename,
+            "memo.txt",
+            io.BytesIO(b"This is an example of a plain text file upload.")
         )
         source.last_updated = datetime.datetime.utcnow()
         submission = Submission(source, fpath)
@@ -146,9 +166,14 @@ def create_source_and_submissions(
 
     print(
         "Test source {}/{} (codename: '{}', journalist designation '{}') "
-        "added with {} submissions and {} replies".format(
-            source_index, source_count, codename, journalist_designation,
-            num_submissions, num_replies
+        "added with {} files, {} messages, and {} replies".format(
+            source_index,
+            source_count,
+            codename,
+            journalist_designation,
+            num_files,
+            num_messages,
+            num_replies
         )
     )
 
