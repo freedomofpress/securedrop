@@ -212,7 +212,7 @@ def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> 
 
         current_app.logger.error("File {} could not be found.".format(e.filename))
 
-        referrer = urlparse(request.referrer).path
+        referrer = urlparse(str(request.referrer)).path
         return redirect(referrer)
 
     attachment_filename = "{}--{}.zip".format(
