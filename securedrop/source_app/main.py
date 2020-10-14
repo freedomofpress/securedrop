@@ -4,6 +4,9 @@ import io
 
 from base64 import urlsafe_b64encode
 from datetime import datetime
+from typing import Union
+
+import werkzeug
 from flask import (Blueprint, render_template, flash, redirect, url_for, g,
                    session, current_app, request, Markup, abort)
 from flask_babel import gettext
@@ -13,6 +16,7 @@ import store
 
 from db import db
 from models import Source, Submission, Reply, get_one_or_else
+from sdconfig import SDConfig
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
                               async_genkey, normalize_timestamps,
@@ -20,15 +24,15 @@ from source_app.utils import (logged_in, generate_unique_codename,
 from source_app.forms import LoginForm, SubmissionForm
 
 
-def make_blueprint(config):
+def make_blueprint(config: SDConfig) -> Blueprint:
     view = Blueprint('main', __name__)
 
     @view.route('/')
-    def index():
+    def index() -> str:
         return render_template('index.html')
 
     @view.route('/generate', methods=('GET', 'POST'))
-    def generate():
+    def generate() -> Union[str, werkzeug.Response]:
         if logged_in():
             flash(gettext(
                 "You were redirected because you are already logged in. "
@@ -51,7 +55,9 @@ def make_blueprint(config):
         return render_template('generate.html', codename=codename, tab_id=tab_id)
 
     @view.route('/org-logo')
-    def select_logo():
+    def select_logo() -> werkzeug.Response:
+        if current_app.static_folder is None:
+            abort(500)
         if os.path.exists(os.path.join(current_app.static_folder, 'i',
                           'custom_logo.png')):
             return redirect(url_for('static', filename='i/custom_logo.png'))
@@ -59,7 +65,7 @@ def make_blueprint(config):
             return redirect(url_for('static', filename='i/logo.png'))
 
     @view.route('/create', methods=['POST'])
-    def create():
+    def create() -> werkzeug.Response:
         if session.get('logged_in', False):
             flash(gettext("You are already logged in. Please verify your codename above as it " +
                           "may differ from the one displayed on the previous page."),
@@ -111,7 +117,7 @@ def make_blueprint(config):
 
     @view.route('/lookup', methods=('GET',))
     @login_required
-    def lookup():
+    def lookup() -> str:
         replies = []
         source_inbox = Reply.query.filter(Reply.source_id == g.source.id) \
                                   .filter(Reply.deleted_by_source == False).all()  # noqa
@@ -164,7 +170,7 @@ def make_blueprint(config):
 
     @view.route('/submit', methods=('POST',))
     @login_required
-    def submit():
+    def submit() -> werkzeug.Response:
         allow_document_uploads = current_app.instance_config.allow_document_uploads
         form = SubmissionForm()
         if not form.validate():
@@ -267,7 +273,7 @@ def make_blueprint(config):
 
     @view.route('/delete', methods=('POST',))
     @login_required
-    def delete():
+    def delete() -> werkzeug.Response:
         """This deletes the reply from the source's inbox, but preserves
         the history for journalists such that they can view conversation
         history.
@@ -286,7 +292,7 @@ def make_blueprint(config):
 
     @view.route('/delete-all', methods=('POST',))
     @login_required
-    def batch_delete():
+    def batch_delete() -> werkzeug.Response:
         replies = Reply.query.filter(Reply.source_id == g.source.id) \
                              .filter(Reply.deleted_by_source == False).all()  # noqa
         if len(replies) == 0:
@@ -303,7 +309,7 @@ def make_blueprint(config):
         return redirect(url_for('.lookup'))
 
     @view.route('/login', methods=('GET', 'POST'))
-    def login():
+    def login() -> Union[str, werkzeug.Response]:
         form = LoginForm()
         if form.validate_on_submit():
             codename = request.form['codename'].strip()
@@ -318,7 +324,7 @@ def make_blueprint(config):
         return render_template('login.html', form=form)
 
     @view.route('/logout')
-    def logout():
+    def logout() -> Union[str, werkzeug.Response]:
         """
         If a user is logged in, show them a logout page that prompts them to
         click the New Identity button in Tor Browser to complete their session.
