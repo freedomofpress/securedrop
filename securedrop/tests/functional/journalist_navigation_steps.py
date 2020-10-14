@@ -753,6 +753,17 @@ class JournalistNavigationStepsMixin:
 
         assert self.secret_message == submission
 
+    def _journalist_downloads_message_missing_file(self):
+        self._journalist_selects_the_first_source()
+
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("ul#submissions"))
+
+        submissions = self.driver.find_elements_by_css_selector("#submissions a")
+        assert 1 == len(submissions)
+
+        file_link = submissions[0]
+        file_link.click()
+
     def _journalist_composes_reply(self):
         reply_text = (
             "Thanks for the documents. Can you submit more " "information about the main program?"
@@ -1097,3 +1108,39 @@ class JournalistNavigationStepsMixin:
         for checkbox in checkboxes:
             classes = checkbox.get_attribute("class")
             assert "unread-cb" in classes
+
+    def _journalist_sees_unexpected_error_message(self):
+        notification = self.driver.find_element_by_css_selector(".error")
+
+        if not hasattr(self, "accept_languages"):
+            expected_text = "An unexpected error occurred! Please inform your admin."
+            assert expected_text in notification.text
+
+    def _journalist_is_on_collection_page(self):
+        return self.wait_for(
+            lambda: self.driver.find_element_by_css_selector("div.journalist-view-single")
+        )
+
+    def _journalist_clicks_source_unread(self):
+        self.driver.find_element_by_css_selector("span.unread a").click()
+
+    def _journalist_selects_first_source_then_download_all(self):
+        checkboxes = self.driver.find_elements_by_name("cols_selected")
+        assert len(checkboxes) == 1
+        checkboxes[0].click()
+
+        self.driver.find_element_by_xpath("//button[@value='download-all']").click()
+
+    def _journalist_selects_first_source_then_download_unread(self):
+        checkboxes = self.driver.find_elements_by_name("cols_selected")
+        assert len(checkboxes) == 1
+        checkboxes[0].click()
+
+        self.driver.find_element_by_xpath("//button[@value='download-unread']").click()
+
+    def _journalist_selects_message_then_download_selected(self):
+        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
+        assert len(checkboxes) == 1
+        checkboxes[0].click()
+
+        self.driver.find_element_by_xpath("//button[@value='download']").click()
