@@ -16,7 +16,7 @@ import journalist_app
 
 from sdconfig import config
 from db import db
-from models import Journalist, Reply, SeenReply, Source, Submission
+from models import Journalist, Reply, SeenFile, SeenMessage, SeenReply, Source, Submission
 from specialstrings import strings
 
 
@@ -31,18 +31,22 @@ def main(staging=False):
         test_password = "correct horse battery staple profanity oil chewy"
         test_otp_secret = "JHCOGO7VCER3EJ4L"
 
-        add_test_user("journalist",
-                      test_password,
-                      test_otp_secret,
-                      is_admin=True)
+        journalist_who_saw = add_test_user(
+            "journalist",
+            test_password,
+            test_otp_secret,
+            is_admin=True
+        )
 
         if staging:
             return
 
-        add_test_user("dellsberg",
-                      test_password,
-                      test_otp_secret,
-                      is_admin=False)
+        dellsberg = add_test_user(
+            "dellsberg",
+            test_password,
+            test_otp_secret,
+            is_admin=False
+        )
 
         journalist_tobe_deleted = add_test_user("clarkkent",
                                                 test_password,
@@ -51,21 +55,24 @@ def main(staging=False):
                                                 first_name="Clark",
                                                 last_name="Kent")
 
-        NUM_SOURCES = os.getenv('NUM_SOURCES', 2)
+        NUM_SOURCES = os.getenv('NUM_SOURCES', 3)
         if NUM_SOURCES == "ALL":
             # We ingest two strings per source, so this will create the required
             # number of sources to include all special strings
             NUM_SOURCES = math.ceil(len(strings) / 2)
-        # Add test sources and submissions
+
+        # Create source data
         num_sources = int(NUM_SOURCES)
-        for i in range(1, num_sources + 1):
-            if i == 1:
-                # For the first source, the journalist who replied will be deleted
-                create_dev_data(
-                    i, num_sources, journalist_who_replied=journalist_tobe_deleted
-                )
-                continue
-            create_dev_data(i, num_sources)
+        for i in range(num_sources):
+            # For the first source, the journalist who replied will be deleted, otherwise dellsberg
+            journalist_who_replied = journalist_tobe_deleted if i == 0 else dellsberg
+
+            create_source_data(
+                i,
+                num_sources,
+                journalist_who_replied,
+                journalist_who_saw
+            )
 
         # Now let us delete one journalist
         db.session.delete(journalist_tobe_deleted)
@@ -92,13 +99,14 @@ def add_test_user(username, password, otp_secret, is_admin=False,
         db.session.rollback()
 
 
-def create_dev_data(
+def create_source_data(
     source_index,
     source_count,
+    journalist_who_replied,
+    journalist_who_saw,
     num_files=2,
     num_messages=2,
     num_replies=2,
-    journalist_who_replied=None  # noqa: W605, E501
 ):
     # Store source in database
     codename = current_app.crypto_util.genrandomid()
@@ -113,7 +121,13 @@ def create_dev_data(
     os.mkdir(current_app.storage.path(source.filesystem_id))
     current_app.crypto_util.genkeypair(source.filesystem_id, codename)
 
+    # Mark a third of sources as seen, a third as partially-seen, and a third as unseen
+    seen_files = 0 if source_index % 3 == 0 else math.floor(num_files / (source_index % 3))
+    seen_messages = 0 if source_index % 3 == 0 else math.floor(num_messages / (source_index % 3))
+    seen_replies = 0 if source_index % 3 == 0 else math.floor(num_replies / (source_index % 3))
+
     # Generate some test messages
+    seen_messages_count = 0
     for _ in range(num_messages):
         source.interaction_count += 1
         submission_text = next(messages)
@@ -126,8 +140,17 @@ def create_dev_data(
         source.last_updated = datetime.datetime.utcnow()
         submission = Submission(source, fpath)
         db.session.add(submission)
+        if seen_messages_count < seen_messages:
+            seen_messages_count = seen_messages_count + 1
+            db.session.flush()
+            seen_message = SeenMessage(
+                message_id=submission.id,
+                journalist_id=journalist_who_saw.id
+            )
+            db.session.add(seen_message)
 
     # Generate some test files
+    seen_files_count = 0
     for _ in range(num_files):
         source.interaction_count += 1
         fpath = current_app.storage.save_file_submission(
@@ -140,8 +163,17 @@ def create_dev_data(
         source.last_updated = datetime.datetime.utcnow()
         submission = Submission(source, fpath)
         db.session.add(submission)
+        if seen_files_count < seen_files:
+            seen_files_count = seen_files_count + 1
+            db.session.flush()
+            seen_file = SeenFile(
+                file_id=submission.id,
+                journalist_id=journalist_who_saw.id
+            )
+            db.session.add(seen_file)
 
     # Generate some test replies
+    seen_replies_count = 0
     for _ in range(num_replies):
         source.interaction_count += 1
         fname = "{}-{}-reply.gpg".format(source.interaction_count,
@@ -152,22 +184,29 @@ def create_dev_data(
              config.JOURNALIST_KEY],
             current_app.storage.path(source.filesystem_id, fname))
 
-        if not journalist_who_replied:
-            journalist = Journalist.query.first()
-        else:
-            journalist = journalist_who_replied
-        reply = Reply(journalist, source, fname)
+        reply = Reply(journalist_who_replied, source, fname)
         db.session.add(reply)
         db.session.flush()
-        seen_reply = SeenReply(reply_id=reply.id, journalist_id=journalist.id)
+        # Journalist who replied has seen the reply
+        seen_reply = SeenReply(
+            reply_id=reply.id,
+            journalist_id=journalist_who_replied.id
+        )
         db.session.add(seen_reply)
+        if seen_replies_count < seen_replies:
+            seen_replies_count = seen_replies_count + 1
+            seen_reply = SeenReply(
+                reply_id=reply.id,
+                journalist_id=journalist_who_saw.id
+            )
+            db.session.add(seen_reply)
 
     db.session.commit()
 
     print(
         "Test source {}/{} (codename: '{}', journalist designation '{}') "
         "added with {} files, {} messages, and {} replies".format(
-            source_index,
+            source_index + 1,
             source_count,
             codename,
             journalist_designation,
