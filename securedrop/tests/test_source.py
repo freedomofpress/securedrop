@@ -758,6 +758,24 @@ def test_source_session_expiration_create(config, source_app):
         assert 'You were logged out due to inactivity' in text
 
 
+def test_source_no_session_expiration_message_when_not_logged_in(config, source_app):
+    """If sources never logged in, no message should be displayed
+    after SESSION_EXPIRATION_MINUTES."""
+
+    with source_app.test_client() as app:
+        seconds_session_expire = 1
+        config.SESSION_EXPIRATION_MINUTES = seconds_session_expire / 60.
+
+        resp = app.get(url_for('main.index'))
+        assert resp.status_code == 200
+
+        time.sleep(seconds_session_expire + 1)
+
+        refreshed_resp = app.get(url_for('main.index'), follow_redirects=True)
+        text = refreshed_resp.data.decode('utf-8')
+        assert 'You were logged out due to inactivity' not in text
+
+
 def test_csrf_error_page(config, source_app):
     source_app.config['WTF_CSRF_ENABLED'] = True
     with source_app.test_client() as app:
