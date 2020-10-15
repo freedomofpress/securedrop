@@ -101,10 +101,9 @@ class FunctionalTest(object):
         time.sleep(1)
         ActionChains(driver).send_keys(Keys.TAB).\
             send_keys(Keys.RETURN).perform()
-        alert = self.wait_for(lambda: driver.switch_to.alert)
-        alert.send_keys(str(level))
+        ActionChains(driver).send_keys(str(level)).\
+            send_keys(Keys.RETURN).perform()
         time.sleep(1)
-        self.wait_for(lambda: alert.accept())
 
     def create_torbrowser_driver(self):
         logging.info("Creating TorBrowserDriver")
