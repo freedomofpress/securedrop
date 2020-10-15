@@ -2,6 +2,8 @@
 
 export DISPLAY=:1
 
+export REPOROOT="${REPOROOT:-$(git rev-parse --show-toplevel)}"
+
 function run_tor {
     tor > /tmp/tor.out 2>&1 || cat /tmp/tor.out
 }
@@ -43,7 +45,6 @@ function append_to_exit() {
 }
 
 function maybe_create_config_py() {
-    REPOROOT=$(git rev-parse --show-toplevel)
     if ! test -f "${REPOROOT}/securedrop/config.py" ; then
         append_to_exit "rm ${REPOROOT}/securedrop/config.py"
         (cd "$REPOROOT" && make test-config)
