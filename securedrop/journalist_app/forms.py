@@ -3,6 +3,7 @@
 from flask_babel import lazy_gettext as gettext
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
+from wtforms import Field
 from wtforms import (TextAreaField, StringField, BooleanField, HiddenField,
                      ValidationError)
 from wtforms.validators import InputRequired, Optional
@@ -10,7 +11,7 @@ from wtforms.validators import InputRequired, Optional
 from models import Journalist
 
 
-def otp_secret_validation(form, field):
+def otp_secret_validation(form: FlaskForm, field: Field) -> None:
     strip_whitespace = field.data.replace(' ', '')
     if len(strip_whitespace) != 40:
         raise ValidationError(gettext(
@@ -20,7 +21,7 @@ def otp_secret_validation(form, field):
             )))
 
 
-def minimum_length_validation(form, field):
+def minimum_length_validation(form: FlaskForm, field: Field) -> None:
     if len(field.data) < Journalist.MIN_USERNAME_LEN:
         raise ValidationError(
             gettext('Must be at least {min_chars} '
@@ -28,14 +29,14 @@ def minimum_length_validation(form, field):
                     .format(min_chars=Journalist.MIN_USERNAME_LEN)))
 
 
-def name_length_validation(form, field):
+def name_length_validation(form: FlaskForm, field: Field) -> None:
     if len(field.data) > Journalist.MAX_NAME_LEN:
         raise ValidationError(gettext(
             'Cannot be longer than {max_chars} characters.'
             .format(max_chars=Journalist.MAX_NAME_LEN)))
 
 
-def check_invalid_usernames(form, field):
+def check_invalid_usernames(form: FlaskForm, field: Field) -> None:
     if field.data in Journalist.INVALID_USERNAMES:
         raise ValidationError(gettext(
             "This username is invalid because it is reserved for internal use by the software."))

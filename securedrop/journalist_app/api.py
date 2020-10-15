@@ -153,7 +153,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             utils.delete_collection(source.filesystem_id)
             return jsonify({'message': 'Source and submissions deleted'}), 200
         else:
-            abort(404)
+            abort(405)
 
     @api.route('/sources/<source_uuid>/add_star', methods=['POST'])
     @token_required
@@ -218,7 +218,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             utils.delete_file_object(submission)
             return jsonify({'message': 'Submission deleted'}), 200
         else:
-            abort(404)
+            abort(405)
 
     @api.route('/sources/<source_uuid>/replies', methods=['GET', 'POST'])
     @token_required
@@ -286,7 +286,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                             'uuid': reply.uuid,
                             'filename': reply.filename}), 201
         else:
-            abort(404)
+            abort(405)
 
     @api.route('/sources/<source_uuid>/replies/<reply_uuid>',
                methods=['GET', 'DELETE'])
@@ -300,7 +300,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             utils.delete_file_object(reply)
             return jsonify({'message': 'Reply deleted'}), 200
         else:
-            abort(404)
+            abort(405)
 
     @api.route('/submissions', methods=['GET'])
     @token_required

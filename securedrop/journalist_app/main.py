@@ -2,6 +2,9 @@
 import os
 
 from datetime import datetime
+from typing import Union
+
+import werkzeug
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
                    render_template, g, flash, abort)
 from flask_babel import gettext
@@ -13,13 +16,14 @@ from models import SeenReply, Source, SourceStar, Submission, Reply
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (validate_user, bulk_delete, download,
                                   confirm_bulk_delete, get_source)
+from sdconfig import SDConfig
 
 
-def make_blueprint(config):
+def make_blueprint(config: SDConfig) -> Blueprint:
     view = Blueprint('main', __name__)
 
     @view.route('/login', methods=('GET', 'POST'))
-    def login():
+    def login() -> Union[str, werkzeug.Response]:
         if request.method == 'POST':
             user = validate_user(request.form['username'],
                                  request.form['password'],
@@ -41,14 +45,16 @@ def make_blueprint(config):
         return render_template("login.html")
 
     @view.route('/logout')
-    def logout():
+    def logout() -> werkzeug.Response:
         session.pop('uid', None)
         session.pop('expires', None)
         session.pop('nonce', None)
         return redirect(url_for('main.index'))
 
     @view.route('/org-logo')
-    def select_logo():
+    def select_logo() -> werkzeug.Response:
+        if current_app.static_folder is None:
+            abort(500)
         if os.path.exists(os.path.join(current_app.static_folder, 'i',
                           'custom_logo.png')):
             return redirect(url_for('static', filename='i/custom_logo.png'))
@@ -56,7 +62,7 @@ def make_blueprint(config):
             return redirect(url_for('static', filename='i/logo.png'))
 
     @view.route('/')
-    def index():
+    def index() -> str:
         unstarred = []
         starred = []
 
@@ -82,7 +88,7 @@ def make_blueprint(config):
                                starred=starred)
 
     @view.route('/reply', methods=('POST',))
-    def reply():
+    def reply() -> werkzeug.Response:
         """Attempt to send a Reply from a Journalist to a Source. Empty
         messages are rejected, and an informative error message is flashed
         on the client. In the case of unexpected errors involving database
@@ -138,14 +144,14 @@ def make_blueprint(config):
             return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
 
     @view.route('/flag', methods=('POST',))
-    def flag():
+    def flag() -> str:
         g.source.flagged = True
         db.session.commit()
         return render_template('flag.html', filesystem_id=g.filesystem_id,
                                codename=g.source.journalist_designation)
 
     @view.route('/bulk', methods=('POST',))
-    def bulk():
+    def bulk() -> Union[str, werkzeug.Response]:
         action = request.form['action']
 
         doc_names_selected = request.form.getlist('doc_names_selected')
@@ -171,7 +177,7 @@ def make_blueprint(config):
             abort(400)
 
     @view.route('/download_unread/<filesystem_id>')
-    def download_unread_filesystem_id(filesystem_id):
+    def download_unread_filesystem_id(filesystem_id: str) -> werkzeug.Response:
         id = Source.query.filter(Source.filesystem_id == filesystem_id) \
                          .filter_by(deleted_at=None).one().id
         submissions = Submission.query.filter(Submission.source_id == id).all()
