@@ -5,8 +5,8 @@ driver:
   name: vagrant
   provider:
     name: libvirt
-lint:
-  name: yamllint
+lint: |
+  yamllint
 
 platforms:
   - name: app-staging
@@ -47,8 +47,8 @@ platforms:
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
+  lint: |
+    ansible-lint
   inventory:
     links:
       group_vars: ../../install_files/ansible-base/group_vars
@@ -76,5 +76,5 @@ scenario:
     - converge
 verifier:
   name: testinfra
-  lint:
+  lint: |
     name: flake8

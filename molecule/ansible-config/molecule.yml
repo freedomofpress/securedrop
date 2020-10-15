@@ -6,8 +6,8 @@ driver:
     login_cmd_template: 'docker exec -ti {instance} bash'
     ansible_connection_options:
       connection: local
-lint:
-  name: yamllint
+lint: |
+  yamllint
 platforms:
   - name: localhost
 provisioner:
@@ -15,8 +15,8 @@ provisioner:
   playbooks:
     prepare: ''
     create: ''
-  lint:
-    name: ansible-lint
+  lint: |
+    ansible-lint
   config_options:
     defaults:
       callback_whitelist: "profile_tasks, timer"
@@ -33,5 +33,5 @@ scenario:
     - verify
 verifier:
   name: testinfra
-  lint:
-    name: flake8
+  lint: |
+    flake8
