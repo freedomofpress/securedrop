@@ -121,7 +121,7 @@ def create_app(config: SDConfig) -> Flask:
     def setup_g() -> Optional[werkzeug.Response]:
         """Store commonly used values in Flask's special g object"""
 
-        if 'expires' in session and datetime.utcnow() >= session['expires']:
+        if 'expires' in session and datetime.utcnow() >= session['expires'] and logged_in():
             msg = render_template('session_timeout.html')
 
             # clear the session after we render the message so it's localized
