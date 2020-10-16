@@ -194,13 +194,6 @@ testinfra:  ## Run infra tests against a local staging environment.
 	@MOLECULE_ACTION=verify $(SDROOT)/devops/scripts/create-staging-env
 	@echo
 
-.PHONY: libvirt-share
-libvirt-share:  ## Configure ACLs to allow RWX for libvirt VM (e.g. Admin Workstation).
-	@echo "███ Configuring ACLs for admin workstation..."
-	@find "$(SDROOT)" -type d -and -user $$USER -exec setfacl -m u:libvirt-qemu:rwx {} +
-	@find "$(SDROOT)" -type f -and -user $$USER -exec setfacl -m u:libvirt-qemu:rw {} +
-	@echo
-
 .PHONY: self-signed-https-certs
 self-signed-https-certs:  ## Generate self-signed certs for testing the HTTPS config.
 	@echo "███ Generating self-signed HTTPS certs for testing..."
