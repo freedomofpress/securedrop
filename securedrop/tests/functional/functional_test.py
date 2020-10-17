@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 
+import json
 import logging
 import os
 import signal
@@ -28,8 +29,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.remote_connection import LOGGER
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
 from sqlalchemy.exc import IntegrityError
 from tbselenium.tbdriver import TorBrowserDriver
 from tbselenium.utils import disable_js
@@ -83,26 +82,36 @@ class FunctionalTest(object):
         s.close()
         return port
 
-    def set_tbb_securitylevel(self, level):
-
-        if level not in {TBB_SECURITY_HIGH, TBB_SECURITY_MEDIUM, TBB_SECURITY_LOW}:
-            raise ValueError("Invalid Tor Brouser security setting: " + str(level))
+    def _set_tbb_pref(self, name, value):
 
         if self.torbrowser_driver is None:
             self.create_torbrowser_driver()
         driver = self.torbrowser_driver
 
-        driver.get("about:config")
-        accept_risk_button = driver.find_element_by_id("warningButton")
-        if accept_risk_button:
-            accept_risk_button.click()
-        ActionChains(driver).send_keys(Keys.RETURN).\
-            send_keys("extensions.torbutton.security_slider").perform()
-        time.sleep(1)
-        ActionChains(driver).send_keys(Keys.TAB).\
-            send_keys(Keys.RETURN).perform()
-        ActionChains(driver).send_keys(str(level)).\
-            send_keys(Keys.RETURN).perform()
+        try:
+            script = 'const { Services } = '\
+                     'ChromeUtils.import("resource://gre/modules/Services.jsm");'
+            script += 'Services.prefs.'
+            if isinstance(value, bool):
+                script += 'setBoolPref'
+            elif isinstance(value, (str)):
+                script += 'setStringPref'
+            else:
+                script += 'setIntPref'
+            script += '({0}, {1});'.format(json.dumps(name), json.dumps(value))
+            driver.set_context(driver.CONTEXT_CHROME)
+            driver.execute_script(script)
+        except Exception:
+            raise
+        finally:
+            driver.set_context(driver.CONTEXT_CONTENT)
+
+    def set_tbb_securitylevel(self, level):
+
+        if level not in {TBB_SECURITY_HIGH, TBB_SECURITY_MEDIUM, TBB_SECURITY_LOW}:
+            raise ValueError("Invalid Tor Browser security setting: " + str(level))
+
+        self._set_tbb_pref("extensions.torbutton.security_slider", level)
         time.sleep(1)
 
     def create_torbrowser_driver(self):
