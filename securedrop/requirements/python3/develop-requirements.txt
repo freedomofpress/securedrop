@@ -571,6 +571,9 @@ smmap2==2.0.3 \
     --hash=sha256:b78ee0f1f5772d69ff50b1cbdb01b8c6647a8354f02f23b488cf4b2cfc923956 \
     --hash=sha256:c7530db63f15f09f8251094b22091298e82bf6c699a6b8344aaaef3f2e1276c3 \
     # via gitdb2
+sqlalchemy-stubs==0.3 \
+    --hash=sha256:a3318c810697164e8c818aa2d90bac570c1a0e752ced3ec25455b309c0bee8fd \
+    --hash=sha256:ca1250605a39648cc433f5c70cb1a6f9fe0b60bdda4c51e1f9a2ab3651daadc8
 stevedore==1.28.0 \
     --hash=sha256:e3d96b2c4e882ec0c1ff95eaebf7b575a779fd0ccb4c741b9832bed410d58b3d \
     --hash=sha256:f1c7518e7b160336040fee272174f1f7b29a46febb3632502a8f2055f973d60b \

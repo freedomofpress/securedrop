@@ -9,6 +9,7 @@ import werkzeug
 from flask import abort, Blueprint, current_app, jsonify, request
 from functools import wraps
 
+from sqlalchemy import Column
 from sqlalchemy.exc import IntegrityError
 from os import path
 from uuid import UUID
@@ -53,7 +54,7 @@ def token_required(f: Callable) -> Callable:
     return decorated_function
 
 
-def get_or_404(model: db.Model, object_id: str, column: str) -> db.Model:
+def get_or_404(model: db.Model, object_id: str, column: Column) -> db.Model:
     result = model.query.filter(column == object_id).one_or_none()
     if result is None:
         abort(404)

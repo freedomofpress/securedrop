@@ -32,3 +32,4 @@ setuptools>=46.0.0
 testinfra
 urllib3>=1.25.9
 yamllint
+sqlalchemy-stubs==0.3
