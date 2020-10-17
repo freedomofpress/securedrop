@@ -23,7 +23,7 @@ from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from sdconfig import SDConfig
 from source_app import main, info, api
 from source_app.decorators import ignore_static
-from source_app.utils import logged_in
+from source_app.utils import logged_in, was_in_generate_flow
 from store import Storage
 
 
@@ -109,7 +109,7 @@ def create_app(config: SDConfig) -> Flask:
                 'provide anonymity. '
                 '<a href="{url}">Why is this dangerous?</a>')
                 .format(url=url_for('info.tor2web_warning'))),
-                  "banner-warning")
+                "banner-warning")
 
     @app.before_request
     @ignore_static
@@ -121,14 +121,26 @@ def create_app(config: SDConfig) -> Flask:
     def setup_g() -> Optional[werkzeug.Response]:
         """Store commonly used values in Flask's special g object"""
 
-        if 'expires' in session and datetime.utcnow() >= session['expires'] and logged_in():
+        if 'expires' in session and datetime.utcnow() >= session['expires']:
             msg = render_template('session_timeout.html')
+
+            # Before the session is cleared, record the fact that
+            # the user was in the codename generation flow or logged in
+            generate_flow_record = session.get('generate_flow_record', was_in_generate_flow())
+            login_record = session.get('login_record', logged_in())
 
             # clear the session after we render the message so it's localized
             session.clear()
 
-            # Redirect to index with flashed message
-            flash(Markup(msg), "important")
+            # Persist these records across sessions to distinguish users whose sessions expired
+            # from users who never logged in or generated a codename
+            session['generate_flow_record'] = generate_flow_record
+            session['login_record'] = login_record
+
+            # Redirect to index with flashed message only if
+            # the user has ever logged in OR has ever gone through the codename generation flow
+            if session['generate_flow_record'] or session['login_record']:
+                flash(Markup(msg), "important")
             return redirect(url_for('main.index'))
 
         session['expires'] = datetime.utcnow() + \
