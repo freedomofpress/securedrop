@@ -72,7 +72,10 @@
     <br>
     <span id="password" class="password">{{ password }}</span>
   </p>
-  <button type="submit" id="reset-password" class="upper"><i class="fas fa-sync"></i> {{ gettext('Reset Password') }}</button>
+  <button type="submit" id="reset-password" class="upper">
+    <img src="{{ url_for('static', filename='icons/sync.png') }}" class="icon" height="15" alt="sync-icon">
+    {{ gettext('Reset Password') }}
+  </button>
 </form>
 
 <hr class="no-line">
@@ -105,7 +108,11 @@
   <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button id="button-reset-two-factor-{{ type }}" tooltip="{{ tooltip_text }}" type="submit" class="pull-right"><i class="fas fa-sync"></i> {{ button_text }}<span class="tooltip">{{ tooltip_text }}</span></button>
+  <button id="button-reset-two-factor-{{ type }}" tooltip="{{ tooltip_text }}" type="submit" class="pull-right">
+    <img src="{{ url_for('static', filename='icons/sync.png') }}" class="icon" height="15" alt="sync-icon">
+    {{ button_text }}
+    <span class="tooltip">{{ tooltip_text }}</span>
+  </button>
 </form>
 {%- endmacro %}
 

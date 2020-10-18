@@ -3,7 +3,10 @@
 <h1>{{ gettext('Admin Interface') }}</h1>
 
 <form action="{{ url_for('admin.add_user') }}">
-  <button type="submit" id="add-user"><i class="fa fa-plus"></i>{{ gettext('ADD USER') }}</button>
+  <button type="submit" id="add-user">
+    <img src="{{ url_for('static', filename='icons/plus.png') }}" class="icon" height="15" alt="plus-icon">
+    {{ gettext('ADD USER') }}
+  </button>
 </form>
 
 <hr class="no-line">
@@ -22,11 +25,27 @@
     {% for user in users %}
       <tr class="user">
         <td>{{ user.username }}</td>
-        <td><a href="/admin/edit/{{ user.id }}" class="plain edit-user-button" data-username="{{ user.username }}"><i class="fa fa-edit" title="{{ gettext('Edit user {username}').format(username=user.username) }}"></i></a></td>
+        <td>
+          <a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}">
+            <i title="{{ gettext('Edit user {username}').format(username=user.username) }}">
+              <img src="{{ url_for('static', filename='icons/edit-user.png') }}" class="icon" height="16" alt="edit-user-icon">
+            </i>
+          </a>
+        </td>
 	{% if user.id == g.user.id %}
-        <td><i class="far fa-trash-alt disabled-delete-button"></i></td>
+        <td>
+          <i class="disabled-delete-button"></i>
+          <img src="{{ url_for('static', filename='icons/trash-disabled.png') }}" height="16" alt="trash-disabled-icon">
+        </td>
 	{% else %}
-        <td><button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}"><i class="far fa-trash-alt" title="{{ gettext('Delete user {username}').format(username=user.username) }}"></i></button></td>
+        <td>
+          <button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}">
+            <!-- <i title="{{ gettext('Delete user {username}').format(username=user.username) }}"> -->
+              <img src="{{ url_for('static', filename='icons/trash.png') }}" class="off-hover" height="16" alt="trash-icon">
+              <img src="{{ url_for('static', filename='icons/trash-hover-red.png') }}" class="on-hover" height="16" alt="trash-icon">
+            <!-- </i> -->
+          </button>
+        </td>
 	{% endif %}
         <td><time class="date" title="{{ user.created_on }}">{{ user.created_on|rel_datetime_format(relative=True) }}</time></td>
         {% if user.last_access %}
@@ -45,7 +64,8 @@
 <hr class="no-line">
 
 <a href="{{ url_for('admin.manage_config') }}" class="btn" id="update-instance-config">
-  <i class="fas fa-pencil-alt"></i> {{ gettext('INSTANCE CONFIG') }}
+  <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" height="15" alt="edit-icon">
+  {{ gettext('INSTANCE CONFIG') }}
 </a>
 
 <hr class="no-line">
