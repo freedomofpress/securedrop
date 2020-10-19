@@ -23,11 +23,11 @@ msgstr ""
 msgid "{time} ago"
 msgstr "Fyrir {time} síðan"
 
-#: journalist_app/__init__.py:90 journalist_app/__init__.py:131
+#: journalist_app/__init__.py:82 journalist_app/__init__.py:123
 msgid "You have been logged out due to inactivity."
 msgstr "Þú hefur verið skráð/ur út vegna aðgerðaleysis."
 
-#: journalist_app/__init__.py:140
+#: journalist_app/__init__.py:132
 msgid "You have been logged out due to password change"
 msgstr "Útskráning vegna breytingar á lykilorði"
 
@@ -75,7 +75,7 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Það tókst að staðfesta tvíþátta-kóðann fyrir notandann \"{user}\"."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:350
+#: journalist_app/utils.py:367
 msgid "Name not updated: {}"
 msgstr "Nafn ekki uppfært: {}"
 
@@ -99,19 +99,27 @@ msgstr "Engin söfn valin."
 msgid "Only admins can access this page."
 msgstr "Einungis stjórnendur fá aðgang að þessari síðu."
 
-#: journalist_app/forms.py:19
-msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
-msgstr "HOTP leynilyklar eru 40 stafa langir - þú hefur sett inn {num_chars}."
+#: journalist_app/forms.py:18
+msgid "HOTP secrets are 40 characters long - you have entered {num}."
+msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
+msgstr[0] ""
+"HOTP leynilyklar eru 40 stafa langir - þú hefur sett inn {num}."
+msgstr[1] ""
+"HOTP leynilyklar eru 40 stafa langir - þú hefur sett inn {num}."
 
-#: journalist_app/forms.py:28
-msgid "Must be at least {min_chars} characters long."
-msgstr "Verður að vera a.m.k. {min_chars} stafa langt."
-
-#: journalist_app/forms.py:35
-msgid "Cannot be longer than {max_chars} characters."
-msgstr "Má ekki vera meira en {max_chars} stafir."
+#: journalist_app/forms.py:29
+msgid "Must be at least {num} characters long."
+msgid_plural "Must be at least {num} characters long."
+msgstr[0] "Verður að vera a.m.k. {num} stafa langt."
+msgstr[1] "Verður að vera a.m.k. {num} stafa langt."
 
 #: journalist_app/forms.py:40
+msgid "Cannot be longer than {num} characters."
+msgid_plural "Cannot be longer than {num} characters."
+msgstr[0] "Má ekki vera meira en {num} stafir."
+msgstr[1] "Má ekki vera meira en {num} stafir."
+
+#: journalist_app/forms.py:50
 msgid ""
 "This username is invalid because it is reserved for internal use by the "
 "software."
@@ -119,19 +127,19 @@ msgstr ""
 "Þetta notandanafn er ekki gilt því það er frátekið til innri nota í "
 "hugbúnaðnum."
 
-#: journalist_app/forms.py:46 source_app/forms.py:12
+#: journalist_app/forms.py:56 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Það er nauðsynlegt að fylla þennan reit út."
 
-#: journalist_app/forms.py:65
+#: journalist_app/forms.py:75
 msgid "You cannot send an empty reply."
 msgstr "Þú mátt ekki senda tómt svar."
 
-#: journalist_app/forms.py:77
+#: journalist_app/forms.py:87
 msgid "File required."
 msgstr "Skrá er nauðsynleg."
 
-#: journalist_app/forms.py:79
+#: journalist_app/forms.py:89
 msgid "You can only upload PNG image files."
 msgstr "Þú getur einungis hlaðið upp PNG-myndskrár."
 
@@ -148,7 +156,7 @@ msgstr "Takk. Svarið þitt hefur verið vistað."
 msgid "No collections selected for download."
 msgstr "Engin söfn valin til niðurhals."
 
-#: journalist_app/main.py:159 journalist_app/utils.py:284
+#: journalist_app/main.py:159 journalist_app/utils.py:301
 msgid "No collections selected for deletion."
 msgstr "Engin söfn valin til eyðingar."
 
@@ -165,12 +173,12 @@ msgid "Login failed."
 msgstr "Innskráning mistókst."
 
 #: journalist_app/utils.py:113
-msgid "Please wait at least {seconds} second before logging in again."
-msgid_plural "Please wait at least {seconds} seconds before logging in again."
+msgid "Please wait at least {num} second before logging in again."
+msgid_plural "Please wait at least {num} seconds before logging in again."
 msgstr[0] ""
-"Bíddu í a.m.k. {seconds} sekúndu áður en þú reynir innskráningu aftur."
+"Bíddu í a.m.k. {num} sekúndu áður en þú reynir innskráningu aftur."
 msgstr[1] ""
-"Bíddu í a.m.k. {seconds} sekúndur áður en þú reynir innskráningu aftur."
+"Bíddu í a.m.k. {num} sekúndur áður en þú reynir innskráningu aftur."
 
 #: journalist_app/utils.py:124
 msgid ""
@@ -192,27 +200,27 @@ msgstr ""
 "Ógilt snið leynilykils: óvenjuleg lengd leynilykils. Slóstu leynilykilinn "
 "rétt inn?"
 
-#: journalist_app/utils.py:236
+#: journalist_app/utils.py:244
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Innsendingu eytt."
 msgstr[1] "{num} innsendingum eytt."
 
-#: journalist_app/utils.py:292
+#: journalist_app/utils.py:309
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} safni eytt"
 msgstr[1] "{num} söfnum eytt"
 
-#: journalist_app/utils.py:348
+#: journalist_app/utils.py:365
 msgid "Name updated."
 msgstr "Nafn uppfært."
 
-#: journalist_app/utils.py:357
+#: journalist_app/utils.py:374
 msgid "The password you submitted is invalid. Password not changed."
 msgstr "Þú sendir inn ógilt lykilorð. Lykilorði ekki breytt."
 
-#: journalist_app/utils.py:364
+#: journalist_app/utils.py:381
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -222,7 +230,7 @@ msgstr ""
 "að koma í veg fyrir að þú læsist út úr aðgangnum þínum, ættirðu að "
 "endurstilla lykilorðið þitt aftur."
 
-#: journalist_app/utils.py:373
+#: journalist_app/utils.py:390
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -230,7 +238,7 @@ msgstr ""
 "Lykilorð uppfært. Ekki gleyma að vista það í KeePassX gagnagrunninum þínum. "
 "Nýja lykilorðið:"
 
-#: journalist_app/utils.py:397
+#: journalist_app/utils.py:414
 msgid "No unread submissions in selected collections."
 msgstr "Engar ólesnar innsendingar í völdum söfnum."
 
@@ -245,21 +253,21 @@ msgstr "Hætta við"
 
 #: journalist_templates/_source_row.html:23
 msgid "1 doc"
-msgid_plural "{doc_num} docs"
+msgid_plural "{num} docs"
 msgstr[0] "1 skjal"
-msgstr[1] "{doc_num} skjöl"
+msgstr[1] "{num} skjöl"
 
 #: journalist_templates/_source_row.html:24
 msgid "1 message"
-msgid_plural "{msg_num} messages"
+msgid_plural "{num} messages"
 msgstr[0] "1 skilaboð"
-msgstr[1] "{msg_num} skilaboð"
+msgstr[1] "{num} skilaboð"
 
 #: journalist_templates/_source_row.html:27
 msgid "1 unread"
-msgid_plural "{num_unread} unread"
+msgid_plural "{num} unread"
 msgstr[0] "1 ólesið"
-msgstr[1] "{num_unread} ólesin"
+msgstr[1] "{num} ólesin"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -674,12 +682,12 @@ msgstr "UPPFÆRA KJÖRSTILLINGAR FYRIR INNSENDINGU"
 msgid ""
 "The following file has been selected for <strong>permanent deletion</strong>:"
 msgid_plural ""
-"The following {files} files have been selected for <strong>permanent "
-"deletion</strong>:"
+"The following {num} files have been selected for <strong>permanent deletion</"
+"strong>:"
 msgstr[0] ""
 "Eftirfarandi skrá hefur verið valin til að <strong>eyða varanlega</strong>:"
 msgstr[1] ""
-"Eftirfarandi {files} skrár hafa verið valdar til að <strong>eyða varanlega</"
+"Eftirfarandi {num} skrár hafa verið valdar til að <strong>eyða varanlega</"
 "strong>:"
 
 #: journalist_templates/delete.html:20
@@ -905,7 +913,7 @@ msgstr "Birta lykilorð"
 msgid "LOG IN"
 msgstr "SKRÁ INN"
 
-#: source_app/__init__.py:117
+#: source_app/__init__.py:109
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -1113,8 +1121,8 @@ msgid ""
 msgstr ""
 "<strong>Mælt er með því að nota skjáborðsútgáfu Tor-vafrans til aðgangs að "
 "SecureDrop, þar sem Orfox gefur ekki sama stig öryggis og nafnleyndar eins "
-"og skjáborðsútgáfurnar.</strong> <a id=\"recommend-tor\" href=\""
-"{tor_browser_url}\">Sjáðu hvernig á að setja upp Tor-vafrann</a>, eða "
+"og skjáborðsútgáfurnar.</strong> <a id=\"recommend-tor\" href="
+"\"{tor_browser_url}\">Sjáðu hvernig á að setja upp Tor-vafrann</a>, eða "
 "hunsaðu þessa aðvörun til að halda áfram."
 
 #: source_templates/index.html:39
@@ -1440,8 +1448,8 @@ msgid ""
 "with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
 msgstr ""
 "Ef þú ert að nota macOS eða Linux, opnaðu þá skjáhermi (terminal). Þú getur "
-"flutt inn dulritunarlykilinn með skipuninni: <p><code>gpg --import "
-"/slóð/á/{submission_key_fpr_filename}</code></p>"
+"flutt inn dulritunarlykilinn með skipuninni: <p><code>gpg --import /slóð/á/"
+"{submission_key_fpr_filename}</code></p>"
 
 #: source_templates/why-journalist-key.html:15
 msgid "Encrypt your submission. Open the terminal and enter this gpg command:"

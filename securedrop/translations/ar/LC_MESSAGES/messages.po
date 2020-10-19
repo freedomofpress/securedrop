@@ -25,11 +25,11 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} مضت"
 
-#: journalist_app/__init__.py:90 journalist_app/__init__.py:131
+#: journalist_app/__init__.py:82 journalist_app/__init__.py:123
 msgid "You have been logged out due to inactivity."
 msgstr "تم الخروج من الحساب بسبب انعدام النشاط."
 
-#: journalist_app/__init__.py:140
+#: journalist_app/__init__.py:132
 msgid "You have been logged out due to password change"
 msgstr "تم الخروج من الحساب بسبب تغيير كلمة السر"
 
@@ -74,7 +74,7 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "لقد تم التحقق بنجاح من رمز الاستيثاق في خطوتين للمستخدم \"{user}\"."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:350
+#: journalist_app/utils.py:367
 msgid "Name not updated: {}"
 msgstr "الاسم لم يُحدَّث: {}"
 
@@ -98,40 +98,74 @@ msgstr "لم يتم اختيار أي مجموعة."
 msgid "Only admins can access this page."
 msgstr "الإداريون وحدهم بوسعهم النّفاذ إلى هذه الصفحة."
 
-#: journalist_app/forms.py:19
-msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
-msgstr ""
-"تتألّف كلمة السرّ من نوع HOTP من 40 مَحرَفًا على الأقل، لكنّك أدخلت {num_chars} "
+#: journalist_app/forms.py:18
+#, fuzzy
+#| msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
+msgid "HOTP secrets are 40 characters long - you have entered {num}."
+msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
+msgstr[0] ""
+"تتألّف كلمة السرّ من نوع HOTP من 40 مَحرَفًا على الأقل، لكنّك أدخلت {num} "
+"محرفا."
+msgstr[1] ""
+"تتألّف كلمة السرّ من نوع HOTP من 40 مَحرَفًا على الأقل، لكنّك أدخلت {num} "
+"محرفا."
+msgstr[2] ""
+"تتألّف كلمة السرّ من نوع HOTP من 40 مَحرَفًا على الأقل، لكنّك أدخلت {num} "
+"محرفا."
+msgstr[3] ""
+"تتألّف كلمة السرّ من نوع HOTP من 40 مَحرَفًا على الأقل، لكنّك أدخلت {num} "
+"محرفا."
+msgstr[4] ""
+"تتألّف كلمة السرّ من نوع HOTP من 40 مَحرَفًا على الأقل، لكنّك أدخلت {num} "
+"محرفا."
+msgstr[5] ""
+"تتألّف كلمة السرّ من نوع HOTP من 40 مَحرَفًا على الأقل، لكنّك أدخلت {num} "
 "محرفا."
 
-#: journalist_app/forms.py:28
-msgid "Must be at least {min_chars} characters long."
-msgstr "يجب أن يحوي {min_chars} حرفًا على الأقل."
-
-#: journalist_app/forms.py:35
-msgid "Cannot be longer than {max_chars} characters."
-msgstr "هذا الحقل لا يقبل أكثر من {max_chars} محرفًا."
+#: journalist_app/forms.py:29
+#, fuzzy
+#| msgid "Must be at least {min_chars} characters long."
+msgid "Must be at least {num} characters long."
+msgid_plural "Must be at least {num} characters long."
+msgstr[0] "يجب أن يحوي {num} حرفًا على الأقل."
+msgstr[1] "يجب أن يحوي {num} حرفًا على الأقل."
+msgstr[2] "يجب أن يحوي {num} حرفًا على الأقل."
+msgstr[3] "يجب أن يحوي {num} حرفًا على الأقل."
+msgstr[4] "يجب أن يحوي {num} حرفًا على الأقل."
+msgstr[5] "يجب أن يحوي {num} حرفًا على الأقل."
 
 #: journalist_app/forms.py:40
+#, fuzzy
+#| msgid "Cannot be longer than {max_chars} characters."
+msgid "Cannot be longer than {num} characters."
+msgid_plural "Cannot be longer than {num} characters."
+msgstr[0] "هذا الحقل لا يقبل أكثر من {num} محرفًا."
+msgstr[1] "هذا الحقل لا يقبل أكثر من {num} محرفًا."
+msgstr[2] "هذا الحقل لا يقبل أكثر من {num} محرفًا."
+msgstr[3] "هذا الحقل لا يقبل أكثر من {num} محرفًا."
+msgstr[4] "هذا الحقل لا يقبل أكثر من {num} محرفًا."
+msgstr[5] "هذا الحقل لا يقبل أكثر من {num} محرفًا."
+
+#: journalist_app/forms.py:50
 msgid ""
 "This username is invalid because it is reserved for internal use by the "
 "software."
 msgstr ""
 "اسم المستخدم غير صالح لأن هذا الاسم محجوز للاستخدام الداخلي في البرنامج."
 
-#: journalist_app/forms.py:46 source_app/forms.py:12
+#: journalist_app/forms.py:56 source_app/forms.py:12
 msgid "This field is required."
 msgstr "هذا الحقل مطلوب."
 
-#: journalist_app/forms.py:65
+#: journalist_app/forms.py:75
 msgid "You cannot send an empty reply."
 msgstr "لا يمكن إرسال ردّ فارغ."
 
-#: journalist_app/forms.py:77
+#: journalist_app/forms.py:87
 msgid "File required."
 msgstr "يجب اختيار ملفّ."
 
-#: journalist_app/forms.py:79
+#: journalist_app/forms.py:89
 msgid "You can only upload PNG image files."
 msgstr "الصيغة المقبولة لملفّات الصور هي PNG حصرًا."
 
@@ -148,7 +182,7 @@ msgstr "شكرا. لقد حُفظ ردُّك."
 msgid "No collections selected for download."
 msgstr "لَمْ تُختَر أيّ مجموعة لتنزيلها."
 
-#: journalist_app/main.py:159 journalist_app/utils.py:284
+#: journalist_app/main.py:159 journalist_app/utils.py:301
 msgid "No collections selected for deletion."
 msgstr "لَمْ تُختَر أيّ مجموعة لحذفها."
 
@@ -165,14 +199,14 @@ msgid "Login failed."
 msgstr "فشل الولوج."
 
 #: journalist_app/utils.py:113
-msgid "Please wait at least {seconds} second before logging in again."
-msgid_plural "Please wait at least {seconds} seconds before logging in again."
+msgid "Please wait at least {num} second before logging in again."
+msgid_plural "Please wait at least {num} seconds before logging in again."
 msgstr[0] "ينبغي الانتظار {seconds} ثانية على الأقل قبل محاولة الولوج مجدّدا."
 msgstr[1] "ينبغي الانتظار لثانية على الأقل قبل محاولة الولوج مجدّدا."
 msgstr[2] "ينبغي الانتظار لثانيتين على الأقل قبل محاولة الولوج مجدّدا."
-msgstr[3] "ينبغي الانتظار {seconds} ثوان على الأقل قبل محاولة الولوج مجدّدا."
-msgstr[4] "ينبغي الانتظار {seconds} ثانية على الأقل قبل محاولة الولوج مجدّدا."
-msgstr[5] "ينبغي الانتظار {seconds} ثانية على الأقل قبل محاولة الولوج مجدّدا."
+msgstr[3] "ينبغي الانتظار {num} ثوان على الأقل قبل محاولة الولوج مجدّدا."
+msgstr[4] "ينبغي الانتظار {num} ثانية على الأقل قبل محاولة الولوج مجدّدا."
+msgstr[5] "ينبغي الانتظار {num} ثانية على الأقل قبل محاولة الولوج مجدّدا."
 
 #: journalist_app/utils.py:124
 msgid ""
@@ -194,7 +228,7 @@ msgstr ""
 "صيغة البيانات السرية غير صحيحة: عدد كلمات العبارة السرية يجب أن يكون زوجيًّا "
 "لا فرديًّا. تلزم مراجعة الإدخال."
 
-#: journalist_app/utils.py:236
+#: journalist_app/utils.py:244
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "لَمْ تُحذف أي رسالة."
@@ -204,7 +238,7 @@ msgstr[3] "حُذِفَت بعض الرسائل."
 msgstr[4] "حُذِفَت العديد من الرسائل."
 msgstr[5] "حُذِفَت كلّ الرسائل."
 
-#: journalist_app/utils.py:292
+#: journalist_app/utils.py:309
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "لم تُحذَف أي مجموعة"
@@ -214,15 +248,15 @@ msgstr[3] "حُذِفَت {num} مجموعات"
 msgstr[4] "حُذِفَت {num} مجموعة"
 msgstr[5] "حُذِفَت {num} مجموعة"
 
-#: journalist_app/utils.py:348
+#: journalist_app/utils.py:365
 msgid "Name updated."
 msgstr "تم تحديث الاسم."
 
-#: journalist_app/utils.py:357
+#: journalist_app/utils.py:374
 msgid "The password you submitted is invalid. Password not changed."
 msgstr "كلمة السر المُدخلة غير صحيحة! لم يتم تغييرها."
 
-#: journalist_app/utils.py:364
+#: journalist_app/utils.py:381
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -231,7 +265,7 @@ msgstr ""
 "حدث عطل و&nbsp;ربما لم تُحفَظ كلمة السر الجديدة كما ينبغي. لتلافي تعذّر ولوجك "
 "إلى الحساب لاحقا ينبغي عليك معاودة تعيين كلمة السر."
 
-#: journalist_app/utils.py:373
+#: journalist_app/utils.py:390
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -239,7 +273,7 @@ msgstr ""
 "تم تحديث كلمة السر. الرجاء حفظها في قاعدة بيانات KeePassX الخاصة بك . كلمة "
 "السر الجديدة:"
 
-#: journalist_app/utils.py:397
+#: journalist_app/utils.py:414
 msgid "No unread submissions in selected collections."
 msgstr "لا توجد رسائل غير مقروءة في المجموعات المختارة."
 
@@ -254,33 +288,33 @@ msgstr "إلغاء"
 
 #: journalist_templates/_source_row.html:23
 msgid "1 doc"
-msgid_plural "{doc_num} docs"
+msgid_plural "{num} docs"
 msgstr[0] "لا مستندات"
 msgstr[1] "مستند واحد"
 msgstr[2] "مستندان"
 msgstr[3] "مستندات"
-msgstr[4] "{doc_num} مستندات"
-msgstr[5] "{doc_num} مستندات"
+msgstr[4] "{num} مستندات"
+msgstr[5] "{num} مستندات"
 
 #: journalist_templates/_source_row.html:24
 msgid "1 message"
-msgid_plural "{msg_num} messages"
+msgid_plural "{num} messages"
 msgstr[0] "لا رسائل"
 msgstr[1] "رسالة واحدة"
 msgstr[2] "رسالتان"
-msgstr[3] "{msg_num} رسائل"
-msgstr[4] "{msg_num} رسالة"
-msgstr[5] "{msg_num} رسالة"
+msgstr[3] "{num} رسائل"
+msgstr[4] "{num} رسالة"
+msgstr[5] "{num} رسالة"
 
 #: journalist_templates/_source_row.html:27
 msgid "1 unread"
-msgid_plural "{num_unread} unread"
+msgid_plural "{num} unread"
 msgstr[0] "لا رسائل غير مقروءة"
 msgstr[1] "رسالة واحدة غير مقروءة"
 msgstr[2] "رسالتان اثنتان غير مقروءتان"
-msgstr[3] "{num_unread} رسائل غير مقروءة"
-msgstr[4] "{num_unread} رسالة غير مقروءة"
-msgstr[5] "{num_unread} رسالة غير مقروءة"
+msgstr[3] "{num} رسائل غير مقروءة"
+msgstr[4] "{num} رسالة غير مقروءة"
+msgstr[5] "{num} رسالة غير مقروءة"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -510,8 +544,8 @@ msgstr ""
 "الإصدار الثاني من خدمات البصلة onion services و التى سوف يتم إنهاء العمل بها "
 "لأسباب أمنية. سوف يتم إلغاء تفعيل الإصدار الثاني من خدمات البصلة onion "
 "services في فبراير 2021، و ربما يتعذر الوصول إلي خوادم SecureDrop الخاصة بك. "
-"<a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">لمعرفة "
-"المزيد</a>"
+"<a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">لمعرفة المزيد</"
+"a>"
 
 #: journalist_templates/base.html:29
 msgid "Logged on as"
@@ -683,14 +717,14 @@ msgstr "تحديث تفضيلات الإرسال"
 msgid ""
 "The following file has been selected for <strong>permanent deletion</strong>:"
 msgid_plural ""
-"The following {files} files have been selected for <strong>permanent "
-"deletion</strong>:"
+"The following {num} files have been selected for <strong>permanent deletion</"
+"strong>:"
 msgstr[0] "لم يُختر أيّ ملف<strong> لحذفه نهائيا</strong>:"
 msgstr[1] "اختير الملف التالي <strong>لحذفه نهائيا</strong>:"
 msgstr[2] "اختير الملفان التاليان <strong>لحذفهما نهائيا</strong>:"
-msgstr[3] "اختيرت الملفات {files} التالية <strong>لحذفها نهائيا</strong>:"
-msgstr[4] "اختيرت الملفات {files} التالية <strong>لحذفها نهائيا</strong>:"
-msgstr[5] "اختيرت الملفات {files} التالية <strong>لحذفها نهائيا</strong>:"
+msgstr[3] "اختيرت الملفات {num} التالية <strong>لحذفها نهائيا</strong>:"
+msgstr[4] "اختيرت الملفات {num} التالية <strong>لحذفها نهائيا</strong>:"
+msgstr[5] "اختيرت الملفات {num} التالية <strong>لحذفها نهائيا</strong>:"
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
@@ -771,8 +805,8 @@ msgid ""
 "credentials. Otherwise, they will be locked out of their account.</em>"
 msgstr ""
 "إذا فقد المستخدم بيانات الاستيثاق في خطوتين أو انكشفت، فيمكن تصفيرها من هنا. "
-"<em> لفعل ذلك ينبغي أن يكون المستخدم حاضرًا و&nbsp;مستعدًّا لضبط جهازه "
-"بوظيفة الاستيثاق في خطوتين مجدّدًا وإلا لن يمكنه الولوج إلى الحساب.</em>"
+"<em> لفعل ذلك ينبغي أن يكون المستخدم حاضرًا و&nbsp;مستعدًّا لضبط جهازه بوظيفة "
+"الاستيثاق في خطوتين مجدّدًا وإلا لن يمكنه الولوج إلى الحساب.</em>"
 
 #: journalist_templates/edit_account.html:85
 msgid ""
@@ -908,7 +942,7 @@ msgstr "إظهار كلمة السر"
 msgid "LOG IN"
 msgstr "لِج"
 
-#: source_app/__init__.py:117
+#: source_app/__init__.py:109
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -1090,8 +1124,8 @@ msgid ""
 "&nbsp;button in your browser’s toolbar to change it."
 msgstr ""
 "حاليًا <a id=\"disable-js\" href=\"\"><strong>مستوى الأمان</strong></a> في "
-"متصفّح تور أضعف مما ينبغي. اضغط على زرّ <img src=\"{icon}\" alt=\"shield "
-"icon\"> &nbsp في شريط أدوات متصفحك لتغييرها."
+"متصفّح تور أضعف مما ينبغي. اضغط على زرّ <img src=\"{icon}\" alt=\"shield icon"
+"\"> &nbsp في شريط أدوات متصفحك لتغييرها."
 
 #: source_templates/index.html:17
 msgid ""
@@ -1099,9 +1133,9 @@ msgid ""
 "<a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</"
 "a>, or ignore this warning to continue."
 msgstr ""
-"<strong>نوصي باستخدام متصفح تور للنفاذ إلى سِكيوردرُپ :</strong> <a id"
-"=\"recommend-tor\" href=\"{tor_browser_url}\">طالع خطوات التنصيب</a> أو "
-"تجاهل هذا التحذير للمواصلة."
+"<strong>نوصي باستخدام متصفح تور للنفاذ إلى سِكيوردرُپ :</strong> <a id="
+"\"recommend-tor\" href=\"{tor_browser_url}\">طالع خطوات التنصيب</a> أو تجاهل "
+"هذا التحذير للمواصلة."
 
 #: source_templates/index.html:18
 msgid ""
@@ -1177,9 +1211,9 @@ msgid ""
 "\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's "
 "toolbar. This will clear your Tor Browser activity data on this device."
 msgstr ""
-"اضغط على الزر <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\""
-">&nbsp;<strong>هوية جديدة</strong> في شريط متصفحك تور إذ أن ذلك من شأنه أن "
-"يمسح أي نشاط قمت به على متصفح تور من هذا الجهاز."
+"اضغط على الزر <img src={icon} alt=\"broom icon\" width=\"16\" height="
+"\"16\">&nbsp;<strong>هوية جديدة</strong> في شريط متصفحك تور إذ أن ذلك من "
+"شأنه أن يمسح أي نشاط قمت به على متصفح تور من هذا الجهاز."
 
 #: source_templates/lookup.html:7
 msgid "Remember, your codename is:"
@@ -1447,9 +1481,9 @@ msgid ""
 "unencrypted file, with .gpg at the end (e.g. <code>internal_memo.pdf.gpg</"
 "code>)"
 msgstr ""
-"ارفع المستندات المُعماة المراد إيداعها. سوف يكون لها نفس اسم الملف غير "
-"المُعمّى مع الامتداد gpg. في نهاية الاسم (مثال <code dir=\"ltr\""
-">internal_memo.pdf.gpg</code>)"
+"ارفع المستندات المُعماة المراد إيداعها. سوف يكون لها نفس اسم الملف غير المُعمّى "
+"مع الامتداد gpg. في نهاية الاسم (مثال <code dir=\"ltr\">internal_memo.pdf."
+"gpg</code>)"
 
 #: source_templates/why-journalist-key.html:21
 msgid ""

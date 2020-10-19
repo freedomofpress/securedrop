@@ -23,11 +23,11 @@ msgstr ""
 msgid "{time} ago"
 msgstr "pred {time}"
 
-#: journalist_app/__init__.py:90 journalist_app/__init__.py:131
+#: journalist_app/__init__.py:82 journalist_app/__init__.py:123
 msgid "You have been logged out due to inactivity."
 msgstr "Boli ste odhlásený/á z dôvodu nečinnosti."
 
-#: journalist_app/__init__.py:140
+#: journalist_app/__init__.py:132
 msgid "You have been logged out due to password change"
 msgstr "Boli ste odhlásený/á z dôvodu zmeny hesla"
 
@@ -78,7 +78,7 @@ msgstr ""
 "Kód dvojfaktorového overenia pre používateľa \"{user}\" bol úspešne overený."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:350
+#: journalist_app/utils.py:367
 msgid "Name not updated: {}"
 msgstr "Meno nebolo aktualizované: {}"
 
@@ -102,19 +102,34 @@ msgstr "Nevybrali ste žiadnu sadu."
 msgid "Only admins can access this page."
 msgstr "Táto stránka je prístupná iba pre administrátorov."
 
-#: journalist_app/forms.py:19
-msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
-msgstr "HOTP heslá sú 40 znakov dlhé - zadali ste {num_chars} znakov."
+#: journalist_app/forms.py:18
+#, fuzzy
+#| msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
+msgid "HOTP secrets are 40 characters long - you have entered {num}."
+msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
+msgstr[0] "HOTP heslá sú 40 znakov dlhé - zadali ste {num} znakov."
+msgstr[1] "HOTP heslá sú 40 znakov dlhé - zadali ste {num} znakov."
+msgstr[2] "HOTP heslá sú 40 znakov dlhé - zadali ste {num} znakov."
 
-#: journalist_app/forms.py:28
-msgid "Must be at least {min_chars} characters long."
-msgstr "Musí byť aspoň {min_chars} znakov dlhé."
-
-#: journalist_app/forms.py:35
-msgid "Cannot be longer than {max_chars} characters."
-msgstr "Nesmie byť dlhšie ako {max_chars} znakov."
+#: journalist_app/forms.py:29
+#, fuzzy
+#| msgid "Must be at least {min_chars} characters long."
+msgid "Must be at least {num} characters long."
+msgid_plural "Must be at least {num} characters long."
+msgstr[0] "Musí byť aspoň {num} znakov dlhé."
+msgstr[1] "Musí byť aspoň {num} znakov dlhé."
+msgstr[2] "Musí byť aspoň {num} znakov dlhé."
 
 #: journalist_app/forms.py:40
+#, fuzzy
+#| msgid "Cannot be longer than {max_chars} characters."
+msgid "Cannot be longer than {num} characters."
+msgid_plural "Cannot be longer than {num} characters."
+msgstr[0] "Nesmie byť dlhšie ako {num} znakov."
+msgstr[1] "Nesmie byť dlhšie ako {num} znakov."
+msgstr[2] "Nesmie byť dlhšie ako {num} znakov."
+
+#: journalist_app/forms.py:50
 msgid ""
 "This username is invalid because it is reserved for internal use by the "
 "software."
@@ -122,19 +137,19 @@ msgstr ""
 "Toto používateľské meno je neplatné, pretože je softvérom rezerované na "
 "interné použitie."
 
-#: journalist_app/forms.py:46 source_app/forms.py:12
+#: journalist_app/forms.py:56 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Toto pole je povinné."
 
-#: journalist_app/forms.py:65
+#: journalist_app/forms.py:75
 msgid "You cannot send an empty reply."
 msgstr "Nemôžete poslať prázdnu odpoveď."
 
-#: journalist_app/forms.py:77
+#: journalist_app/forms.py:87
 msgid "File required."
 msgstr "Súbor je povinný."
 
-#: journalist_app/forms.py:79
+#: journalist_app/forms.py:89
 msgid "You can only upload PNG image files."
 msgstr "Môžete nahrať iba obrázky vo formáte PNG."
 
@@ -151,7 +166,7 @@ msgstr "Vďaka. Vaša odpoveď bola uložená."
 msgid "No collections selected for download."
 msgstr "Žiadne sady neboli vybrané na stiahnutie."
 
-#: journalist_app/main.py:159 journalist_app/utils.py:284
+#: journalist_app/main.py:159 journalist_app/utils.py:301
 msgid "No collections selected for deletion."
 msgstr "Žiadne sady neboli vybrané na zmazanie."
 
@@ -168,13 +183,13 @@ msgid "Login failed."
 msgstr "Prihlásenie zlyhalo."
 
 #: journalist_app/utils.py:113
-msgid "Please wait at least {seconds} second before logging in again."
-msgid_plural "Please wait at least {seconds} seconds before logging in again."
+msgid "Please wait at least {num} second before logging in again."
+msgid_plural "Please wait at least {num} seconds before logging in again."
 msgstr[0] ""
-"Pred opakovaním prihlásenia prosím počkajte aspoň {seconds} sekundu."
+"Pred opakovaním prihlásenia prosím počkajte aspoň {num} sekundu."
 msgstr[1] ""
-"Pred opakovaním prihlásenia prosím počkajte aspoň {seconds} sekundy."
-msgstr[2] "Pred opakovaním prihlásenia prosím počkajte aspoň {seconds} sekúnd."
+"Pred opakovaním prihlásenia prosím počkajte aspoň {num} sekundy."
+msgstr[2] "Pred opakovaním prihlásenia prosím počkajte aspoň {num} sekúnd."
 
 #: journalist_app/utils.py:124
 msgid ""
@@ -193,29 +208,29 @@ msgstr ""
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Nesprávny formát hesla: nepárna dĺžka hesla. Spravili ste preklep?"
 
-#: journalist_app/utils.py:236
+#: journalist_app/utils.py:244
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Podanie zmazané."
 msgstr[1] "{num} podania zmazané."
 msgstr[2] "{num} podaní zmazaných."
 
-#: journalist_app/utils.py:292
+#: journalist_app/utils.py:309
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "{num} sada zmazaná"
 msgstr[1] "{num} sady zmazané"
 msgstr[2] "{num} sád zmazaných"
 
-#: journalist_app/utils.py:348
+#: journalist_app/utils.py:365
 msgid "Name updated."
 msgstr "Meno aktualizované."
 
-#: journalist_app/utils.py:357
+#: journalist_app/utils.py:374
 msgid "The password you submitted is invalid. Password not changed."
 msgstr "Zadané heslo je neplatné. Heslo nebolo zmenené."
 
-#: journalist_app/utils.py:364
+#: journalist_app/utils.py:381
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -224,7 +239,7 @@ msgstr ""
 "Vyskytla sa chyba v dôsledku ktorej Vaše heslo nemuselo byť uložené správne. "
 "Aby ste predišli vymknutiu z účtu, mali by ste si heslo opäť zmeniť."
 
-#: journalist_app/utils.py:373
+#: journalist_app/utils.py:390
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -232,7 +247,7 @@ msgstr ""
 "Heslo bolo zmenené. Nezabudnite si ho uložiť vo svojej KeePassX databáze. "
 "Nové heslo:"
 
-#: journalist_app/utils.py:397
+#: journalist_app/utils.py:414
 msgid "No unread submissions in selected collections."
 msgstr "Vo vybratých sadách nie sú žiadne neprečítané podania."
 
@@ -247,24 +262,24 @@ msgstr "Zrušiť"
 
 #: journalist_templates/_source_row.html:23
 msgid "1 doc"
-msgid_plural "{doc_num} docs"
+msgid_plural "{num} docs"
 msgstr[0] "1 dokument"
-msgstr[1] "{doc_num} dokumenty"
-msgstr[2] "{doc_num} dokumentov"
+msgstr[1] "{num} dokumenty"
+msgstr[2] "{num} dokumentov"
 
 #: journalist_templates/_source_row.html:24
 msgid "1 message"
-msgid_plural "{msg_num} messages"
+msgid_plural "{num} messages"
 msgstr[0] "1 správa"
-msgstr[1] "{msg_num} správy"
-msgstr[2] "{msg_num} správ"
+msgstr[1] "{num} správy"
+msgstr[2] "{num} správ"
 
 #: journalist_templates/_source_row.html:27
 msgid "1 unread"
-msgid_plural "{num_unread} unread"
+msgid_plural "{num} unread"
 msgstr[0] "1 neprečítaná"
-msgstr[1] "{num_unread} neprečítané"
-msgstr[2] "{num_unread} neprečítaných"
+msgstr[1] "{num} neprečítané"
+msgstr[2] "{num} neprečítaných"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -673,15 +688,15 @@ msgstr "AKTUALIZOVAŤ PREFERENCIE PODANIA"
 msgid ""
 "The following file has been selected for <strong>permanent deletion</strong>:"
 msgid_plural ""
-"The following {files} files have been selected for <strong>permanent "
-"deletion</strong>:"
+"The following {num} files have been selected for <strong>permanent deletion</"
+"strong>:"
 msgstr[0] ""
 "Nasledujúci súbor bol označený na <strong>permanentné vymazanie</strong>:"
 msgstr[1] ""
-"Nasledujúce {files} súbory boli označené na <strong>permanentné vymazanie</"
+"Nasledujúce {num} súbory boli označené na <strong>permanentné vymazanie</"
 "strong>:"
 msgstr[2] ""
-"Nasledujúcich {files} súborov bolo označených na <strong>permanentné "
+"Nasledujúcich {num} súborov bolo označených na <strong>permanentné "
 "vymazanie</strong>:"
 
 #: journalist_templates/delete.html:20
@@ -908,7 +923,7 @@ msgstr "Ukázať heslo"
 msgid "LOG IN"
 msgstr "PRIHLÁSIŤ SA"
 
-#: source_app/__init__.py:117
+#: source_app/__init__.py:109
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -1117,8 +1132,8 @@ msgid ""
 msgstr ""
 "<strong>Pre prístup k SecureDrop odporúčame používať desktopovú verziu "
 "prehliadača Tor, pretože Orfox neposkytuje rovnakú úroveň zabezpečenia a "
-"súkromia ako desktopové verzia.</strong> <a id=\"recommend-tor\" href=\""
-"{tor_browser_url}\">Zistite ako ju nainštalovať</a>, alebo ignorujte toto "
+"súkromia ako desktopové verzia.</strong> <a id=\"recommend-tor\" href="
+"\"{tor_browser_url}\">Zistite ako ju nainštalovať</a>, alebo ignorujte toto "
 "varovanie a pokračujte ďalej."
 
 #: source_templates/index.html:39
@@ -1457,20 +1472,21 @@ msgid ""
 "with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
 msgstr ""
 "Ak používate Mac/Linux, otvorte si terminál. Kľúč si môžete importovať "
-"pomocou: <p><code>gpg --import /path/to/"
-"{submission_key_fpr_filename}</code></p>"
+"pomocou: <p><code>gpg --import /path/to/{submission_key_fpr_filename}</"
+"code></p>"
 
 #: source_templates/why-journalist-key.html:15
 msgid "Encrypt your submission. Open the terminal and enter this gpg command:"
-msgstr "Zašifrujte svoj príspevok. Otvorte terminál a zadajte tento príkaz gpg:"
+msgstr ""
+"Zašifrujte svoj príspevok. Otvorte terminál a zadajte tento príkaz gpg:"
 
 #: source_templates/why-journalist-key.html:16
 msgid ""
 "<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/submission</"
 "code>"
 msgstr ""
-"<code>gpg --recipient '{submission_key_fpr}' --encrypt /ceska/k/"
-"príspevok</code>"
+"<code>gpg --recipient '{submission_key_fpr}' --encrypt /ceska/k/príspevok</"
+"code>"
 
 #: source_templates/why-journalist-key.html:18
 msgid ""

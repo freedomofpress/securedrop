@@ -23,11 +23,11 @@ msgstr ""
 msgid "{time} ago"
 msgstr "πριν από {time}"
 
-#: journalist_app/__init__.py:90 journalist_app/__init__.py:131
+#: journalist_app/__init__.py:82 journalist_app/__init__.py:123
 msgid "You have been logged out due to inactivity."
 msgstr "Αποσυνδεθήκατε λόγω αδράνειας."
 
-#: journalist_app/__init__.py:140
+#: journalist_app/__init__.py:132
 msgid "You have been logged out due to password change"
 msgstr "Αποσυνδεθήκατε λόγω αλλαγής κωδικού πρόσβασης"
 
@@ -79,7 +79,7 @@ msgstr ""
 "επαληθεύτηκε επιτυχώς."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:350
+#: journalist_app/utils.py:367
 msgid "Name not updated: {}"
 msgstr "Το όνομα δεν ενημερώθηκε: {}"
 
@@ -105,19 +105,27 @@ msgstr "Δεν έχουν επιλεχθεί συλλογές."
 msgid "Only admins can access this page."
 msgstr "Μόνο οι διαχειριστές έχουν πρόσβαση σε αυτήν την σελίδα."
 
-#: journalist_app/forms.py:19
-msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
-msgstr "Τα μυστικά HOTP έχουν μήκος 40 χαρακτήρων - έχετε εισάγει {num_chars}."
+#: journalist_app/forms.py:18
+msgid "HOTP secrets are 40 characters long - you have entered {num}."
+msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
+msgstr[0] ""
+"Τα μυστικά HOTP έχουν μήκος 40 χαρακτήρων - έχετε εισάγει {num}."
+msgstr[1] ""
+"Τα μυστικά HOTP έχουν μήκος 40 χαρακτήρων - έχετε εισάγει {num}."
 
-#: journalist_app/forms.py:28
-msgid "Must be at least {min_chars} characters long."
-msgstr "Πρέπει να έχει τουλάχιστον {min_chars} χαρακτήρες."
-
-#: journalist_app/forms.py:35
-msgid "Cannot be longer than {max_chars} characters."
-msgstr "Δεν μπορεί να περιέχει παραπάνω από {max_chars} χαρακτήρες."
+#: journalist_app/forms.py:29
+msgid "Must be at least {num} characters long."
+msgid_plural "Must be at least {num} characters long."
+msgstr[0] "Πρέπει να έχει τουλάχιστον {num} χαρακτήρες."
+msgstr[1] "Πρέπει να έχει τουλάχιστον {num} χαρακτήρες."
 
 #: journalist_app/forms.py:40
+msgid "Cannot be longer than {num} characters."
+msgid_plural "Cannot be longer than {num} characters."
+msgstr[0] "Δεν μπορεί να περιέχει παραπάνω από {num} χαρακτήρες."
+msgstr[1] "Δεν μπορεί να περιέχει παραπάνω από {num} χαρακτήρες."
+
+#: journalist_app/forms.py:50
 msgid ""
 "This username is invalid because it is reserved for internal use by the "
 "software."
@@ -125,19 +133,19 @@ msgstr ""
 "Αυτό το όνομα χρήστη δεν είναι έγκυρο επειδή είναι κατοχυρωμένο για "
 "εσωτερική χρήση του λογισμικού."
 
-#: journalist_app/forms.py:46 source_app/forms.py:12
+#: journalist_app/forms.py:56 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Αυτό το πεδίο είναι υποχρεωτικό."
 
-#: journalist_app/forms.py:65
+#: journalist_app/forms.py:75
 msgid "You cannot send an empty reply."
 msgstr "Δεν μπορείτε να στείλετε κενή απάντηση."
 
-#: journalist_app/forms.py:77
+#: journalist_app/forms.py:87
 msgid "File required."
 msgstr "Απαιτείται αρχείο."
 
-#: journalist_app/forms.py:79
+#: journalist_app/forms.py:89
 msgid "You can only upload PNG image files."
 msgstr "Μπορείτε να ανεβάσετε μόνο αρχεία εικόνας τύπου PNG."
 
@@ -154,7 +162,7 @@ msgstr "Ευχαριστώ. Η απάντησή σας αποθηκεύτηκε.
 msgid "No collections selected for download."
 msgstr "Δεν έχουν επιλεχθεί συλλογές για λήψη."
 
-#: journalist_app/main.py:159 journalist_app/utils.py:284
+#: journalist_app/main.py:159 journalist_app/utils.py:301
 msgid "No collections selected for deletion."
 msgstr "Δεν έχουν επιλεχθεί συλλογές για διαγραφή."
 
@@ -171,12 +179,12 @@ msgid "Login failed."
 msgstr "Η σύνδεση απέτυχε."
 
 #: journalist_app/utils.py:113
-msgid "Please wait at least {seconds} second before logging in again."
-msgid_plural "Please wait at least {seconds} seconds before logging in again."
+msgid "Please wait at least {num} second before logging in again."
+msgid_plural "Please wait at least {num} seconds before logging in again."
 msgstr[0] ""
-"Παρακαλώ περιμένετε τουλάχιστον {seconds} δευτερόλεπτο πριν ξανασυνδεθείτε."
+"Παρακαλώ περιμένετε τουλάχιστον {num} δευτερόλεπτο πριν ξανασυνδεθείτε."
 msgstr[1] ""
-"Παρακαλώ περιμένετε τουλάχιστον {seconds} δευτερόλεπτα πριν ξανασυνδεθείτε."
+"Παρακαλώ περιμένετε τουλάχιστον {num} δευτερόλεπτα πριν ξανασυνδεθείτε."
 
 #: journalist_app/utils.py:124
 msgid ""
@@ -198,27 +206,27 @@ msgstr ""
 "Άκυρη μορφή μυστικού: το μυστικό έχει μονό αριθμό ψηφίων. Μήπως κάνατε "
 "κάποιο λάθος στην πληκτρολόγηση;"
 
-#: journalist_app/utils.py:236
+#: journalist_app/utils.py:244
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "Η καταχώρηση διαγράφηκε."
 msgstr[1] "{num} καταχωρήσεις διαγράφηκαν."
 
-#: journalist_app/utils.py:292
+#: journalist_app/utils.py:309
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "Μία συλλογή διαγράφηκε"
 msgstr[1] "{num} συλλογές διαγράφηκαν"
 
-#: journalist_app/utils.py:348
+#: journalist_app/utils.py:365
 msgid "Name updated."
 msgstr "Το όνομα ενημερώθηκε."
 
-#: journalist_app/utils.py:357
+#: journalist_app/utils.py:374
 msgid "The password you submitted is invalid. Password not changed."
 msgstr "Ο κωδικός που καταχωρήσατε δεν είναι έγκυρος. Ο κωδικός δεν άλλαξε."
 
-#: journalist_app/utils.py:364
+#: journalist_app/utils.py:381
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -228,7 +236,7 @@ msgstr ""
 "να μην χάσετε την πρόσβαση στον λογαριασμό σας, παρακαλώ επαναφέρετε τον "
 "κωδικό σας ξανά."
 
-#: journalist_app/utils.py:373
+#: journalist_app/utils.py:390
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -236,7 +244,7 @@ msgstr ""
 "Ο κωδικός ανανεώθηκε. Μη ξεχάσετε να τον αποθηκεύσετε στη βάση δεδομένων του "
 "KeePassX σας. Νέος κωδικός:"
 
-#: journalist_app/utils.py:397
+#: journalist_app/utils.py:414
 msgid "No unread submissions in selected collections."
 msgstr "Δεν υπάρχουν μη αναγνωσμένες καταχωρήσεις στις επιλεγμένες συλλογές."
 
@@ -251,21 +259,21 @@ msgstr "Άκυρο"
 
 #: journalist_templates/_source_row.html:23
 msgid "1 doc"
-msgid_plural "{doc_num} docs"
+msgid_plural "{num} docs"
 msgstr[0] "Ένα έγγραφο"
-msgstr[1] "{doc_num} έγγραφα"
+msgstr[1] "{num} έγγραφα"
 
 #: journalist_templates/_source_row.html:24
 msgid "1 message"
-msgid_plural "{msg_num} messages"
+msgid_plural "{num} messages"
 msgstr[0] "1 μήνυμα"
-msgstr[1] "{msg_num} μηνύματα"
+msgstr[1] "{num} μηνύματα"
 
 #: journalist_templates/_source_row.html:27
 msgid "1 unread"
-msgid_plural "{num_unread} unread"
+msgid_plural "{num} unread"
 msgstr[0] "1 μη αναγνωσμένο"
-msgstr[1] "{num_unread} μη αναγνωσμένα"
+msgstr[1] "{num} μη αναγνωσμένα"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -685,12 +693,12 @@ msgstr "ΑΝΑΝΕΩΣΗ ΡΥΘΜΙΣΕΩΝ ΚΑΤΑΧΩΡΗΣΕΩΝ"
 msgid ""
 "The following file has been selected for <strong>permanent deletion</strong>:"
 msgid_plural ""
-"The following {files} files have been selected for <strong>permanent "
-"deletion</strong>:"
+"The following {num} files have been selected for <strong>permanent deletion</"
+"strong>:"
 msgstr[0] ""
 "Το ακόλουθο αρχείο έχει επιλεχθεί για <strong>μόνιμη διαγραφή</strong>:"
 msgstr[1] ""
-"Τα ακόλουθα {files} αρχεία έχουν επιλεχθεί για <strong>μόνιμη διαγραφή</"
+"Τα ακόλουθα {num} αρχεία έχουν επιλεχθεί για <strong>μόνιμη διαγραφή</"
 "strong>:"
 
 #: journalist_templates/delete.html:20
@@ -922,7 +930,7 @@ msgstr "Προβολή κωδικού"
 msgid "LOG IN"
 msgstr "ΣΥΝΔΕΣΗ"
 
-#: source_app/__init__.py:117
+#: source_app/__init__.py:109
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="

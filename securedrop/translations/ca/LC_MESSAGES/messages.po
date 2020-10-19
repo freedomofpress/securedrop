@@ -23,11 +23,11 @@ msgstr ""
 msgid "{time} ago"
 msgstr "fa {time}"
 
-#: journalist_app/__init__.py:90 journalist_app/__init__.py:131
+#: journalist_app/__init__.py:82 journalist_app/__init__.py:123
 msgid "You have been logged out due to inactivity."
 msgstr "S'ha desconnectat la sessió per inactivitat."
 
-#: journalist_app/__init__.py:140
+#: journalist_app/__init__.py:132
 msgid "You have been logged out due to password change"
 msgstr "S'ha desconnectat la sessió per un canvi de la contrasenya"
 
@@ -77,7 +77,7 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "El codi de factor doble per a «{user}» s'ha verificat correctament."
 
 #: journalist_app/admin.py:200 journalist_app/admin.py:208
-#: journalist_app/utils.py:350
+#: journalist_app/utils.py:367
 msgid "Name not updated: {}"
 msgstr "El nom no s'ha actualitzat: {}"
 
@@ -101,21 +101,29 @@ msgstr "No s’ha seleccionat cap col·lecció."
 msgid "Only admins can access this page."
 msgstr "Només els administradors poden accedir a aquesta pàgina."
 
-#: journalist_app/forms.py:19
-msgid "HOTP secrets are 40 characters long - you have entered {num_chars}."
-msgstr ""
+#: journalist_app/forms.py:18
+msgid "HOTP secrets are 40 characters long - you have entered {num}."
+msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
+msgstr[0] ""
 "Els secrets HOTP tenen una mida de 40 caràcters, però n’heu introduït "
-"{num_chars}."
+"{num}."
+msgstr[1] ""
+"Els secrets HOTP tenen una mida de 40 caràcters, però n’heu introduït "
+"{num}."
 
-#: journalist_app/forms.py:28
-msgid "Must be at least {min_chars} characters long."
-msgstr "Cal que tingui com a mínim {min_chars} caràcters."
-
-#: journalist_app/forms.py:35
-msgid "Cannot be longer than {max_chars} characters."
-msgstr "No pot tenir més de {max_chars} caràcters."
+#: journalist_app/forms.py:29
+msgid "Must be at least {num} characters long."
+msgid_plural "Must be at least {num} characters long."
+msgstr[0] "Cal que tingui com a mínim {num} caràcters."
+msgstr[1] "Cal que tingui com a mínim {num} caràcters."
 
 #: journalist_app/forms.py:40
+msgid "Cannot be longer than {num} characters."
+msgid_plural "Cannot be longer than {num} characters."
+msgstr[0] "No pot tenir més de {num} caràcters."
+msgstr[1] "No pot tenir més de {num} caràcters."
+
+#: journalist_app/forms.py:50
 msgid ""
 "This username is invalid because it is reserved for internal use by the "
 "software."
@@ -123,19 +131,19 @@ msgstr ""
 "Aquest nom d'usuari no és vàlid perquè és reservat per a ús intern del "
 "programari."
 
-#: journalist_app/forms.py:46 source_app/forms.py:12
+#: journalist_app/forms.py:56 source_app/forms.py:12
 msgid "This field is required."
 msgstr "Aquest camp és obligatori."
 
-#: journalist_app/forms.py:65
+#: journalist_app/forms.py:75
 msgid "You cannot send an empty reply."
 msgstr "No podeu enviar una resposta buida."
 
-#: journalist_app/forms.py:77
+#: journalist_app/forms.py:87
 msgid "File required."
 msgstr "El fitxer és obligatori."
 
-#: journalist_app/forms.py:79
+#: journalist_app/forms.py:89
 msgid "You can only upload PNG image files."
 msgstr "Només podeu pujar fitxers d’imatge PNG."
 
@@ -152,7 +160,7 @@ msgstr "Gràcies. S'ha emmagatzemat la resposta."
 msgid "No collections selected for download."
 msgstr "No s’ha seleccionat cap col·lecció per baixar."
 
-#: journalist_app/main.py:159 journalist_app/utils.py:284
+#: journalist_app/main.py:159 journalist_app/utils.py:301
 msgid "No collections selected for deletion."
 msgstr "No s’ha seleccionat cap col·lecció per suprimir."
 
@@ -169,12 +177,12 @@ msgid "Login failed."
 msgstr "Ha fallat l’inici de la sessió."
 
 #: journalist_app/utils.py:113
-msgid "Please wait at least {seconds} second before logging in again."
-msgid_plural "Please wait at least {seconds} seconds before logging in again."
+msgid "Please wait at least {num} second before logging in again."
+msgid_plural "Please wait at least {num} seconds before logging in again."
 msgstr[0] ""
-"Espereu com a mínim {seconds} segon abans d’iniciar la sessió novament."
+"Espereu com a mínim {num} segon abans d’iniciar la sessió novament."
 msgstr[1] ""
-"Espereu com a mínim {seconds} segons abans d’iniciar la sessió novament."
+"Espereu com a mínim {num} segons abans d’iniciar la sessió novament."
 
 #: journalist_app/utils.py:124
 msgid ""
@@ -195,28 +203,28 @@ msgstr ""
 "El format del secret no és vàlid: la mida no coincideix. L’heu inserit "
 "correctament?"
 
-#: journalist_app/utils.py:236
+#: journalist_app/utils.py:244
 msgid "Submission deleted."
 msgid_plural "{num} submissions deleted."
 msgstr[0] "S’ha suprimit l’enviament."
 msgstr[1] "S’han suprimit {num} enviaments."
 
-#: journalist_app/utils.py:292
+#: journalist_app/utils.py:309
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "S’ha suprimit {num} col·lecció"
 msgstr[1] "S’han suprimit {num} col·leccions"
 
-#: journalist_app/utils.py:348
+#: journalist_app/utils.py:365
 msgid "Name updated."
 msgstr "S'ha actualitzat el nom."
 
-#: journalist_app/utils.py:357
+#: journalist_app/utils.py:374
 msgid "The password you submitted is invalid. Password not changed."
 msgstr ""
 "La contrasenya que heu enviat no és vàlida! No s’ha canviat la contrasenya."
 
-#: journalist_app/utils.py:364
+#: journalist_app/utils.py:381
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
@@ -225,7 +233,7 @@ msgstr ""
 "S'ha produït un error i potser la contrasenya nova no s'ha desat "
 "correctament. Per evitar blocar el compte, canvieu novament la contrasenya."
 
-#: journalist_app/utils.py:373
+#: journalist_app/utils.py:390
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
@@ -233,7 +241,7 @@ msgstr ""
 "S'ha actualitzat la contrasenya. No oblideu desar-la en la vostra base de "
 "dades del KeePassX. Contrasenya nova:"
 
-#: journalist_app/utils.py:397
+#: journalist_app/utils.py:414
 msgid "No unread submissions in selected collections."
 msgstr "No hi ha cap enviament sense llegir a les col·leccions seleccionades."
 
@@ -248,21 +256,21 @@ msgstr "Cancel·la"
 
 #: journalist_templates/_source_row.html:23
 msgid "1 doc"
-msgid_plural "{doc_num} docs"
+msgid_plural "{num} docs"
 msgstr[0] "1 document"
-msgstr[1] "{doc_num} documents"
+msgstr[1] "{num} documents"
 
 #: journalist_templates/_source_row.html:24
 msgid "1 message"
-msgid_plural "{msg_num} messages"
+msgid_plural "{num} messages"
 msgstr[0] "1 missatge"
-msgstr[1] "{msg_num} missatges"
+msgstr[1] "{num} missatges"
 
 #: journalist_templates/_source_row.html:27
 msgid "1 unread"
-msgid_plural "{num_unread} unread"
+msgid_plural "{num} unread"
 msgstr[0] "1 sense llegir"
-msgstr[1] "{num_unread} sense llegir"
+msgstr[1] "{num} sense llegir"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -497,8 +505,8 @@ msgstr ""
 "SecureDrop encara executen serveis onion v2, que s'estan substituint per "
 "motius de seguretat. El febrer de 20201, els serveis onion v2 "
 "s'inhabilitaran i els vostres servidors de SecureDrop podrien no ser "
-"accessibles. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\""
-">Més informació</a>"
+"accessibles. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer"
+"\">Més informació</a>"
 
 #: journalist_templates/base.html:29
 msgid "Logged on as"
@@ -677,8 +685,8 @@ msgstr "PREFERÈNCIES D'ENVIAMENT D'ACTUALITZACIONS"
 msgid ""
 "The following file has been selected for <strong>permanent deletion</strong>:"
 msgid_plural ""
-"The following {files} files have been selected for <strong>permanent "
-"deletion</strong>:"
+"The following {num} files have been selected for <strong>permanent deletion</"
+"strong>:"
 msgstr[0] ""
 "S'ha seleccionat el fitxer següent per <strong>suprimir definitivament</"
 "strong>:"
@@ -912,7 +920,7 @@ msgstr "Mostra la contrasenya"
 msgid "LOG IN"
 msgstr "INICIA LA SESSIÓ"
 
-#: source_app/__init__.py:117
+#: source_app/__init__.py:109
 msgid ""
 "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This "
 "<strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href="
@@ -1108,8 +1116,8 @@ msgid ""
 "a>, or ignore this warning to continue."
 msgstr ""
 "<strong>És recomanable l'ús del navegador Tor per accedir a SecureDrop:</"
-"strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">Apreneu com instal"
-"·lar-lo</a> o ignoreu aquest avís per continuar."
+"strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">Apreneu com "
+"instal·lar-lo</a> o ignoreu aquest avís per continuar."
 
 #: source_templates/index.html:18
 msgid ""
@@ -1186,10 +1194,10 @@ msgid ""
 "\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's "
 "toolbar. This will clear your Tor Browser activity data on this device."
 msgstr ""
-"Feu clic al botó <img src={icon} alt=\"icona broom\" width=\"16\" height=\"16"
-"\">&nbsp;<strong>Identitat nova</strong> de la barra d'eines del navegador "
-"Tor. Això buidarà les dades d'activitat en el navegador Tor en aquest "
-"aparell."
+"Feu clic al botó <img src={icon} alt=\"icona broom\" width=\"16\" height="
+"\"16\">&nbsp;<strong>Identitat nova</strong> de la barra d'eines del "
+"navegador Tor. Això buidarà les dades d'activitat en el navegador Tor en "
+"aquest aparell."
 
 #: source_templates/lookup.html:7
 msgid "Remember, your codename is:"
@@ -1458,8 +1466,8 @@ msgid ""
 "<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/submission</"
 "code>"
 msgstr ""
-"<code>gpg --recipient '{submission_key_fpr}' --encrypt /camí/a/"
-"l'enviament</code>"
+"<code>gpg --recipient '{submission_key_fpr}' --encrypt /camí/a/l'enviament</"
+"code>"
 
 #: source_templates/why-journalist-key.html:18
 msgid ""
@@ -1468,8 +1476,8 @@ msgid ""
 "code>)"
 msgstr ""
 "Pugeu el vostre enviament xifrat. Tindrà el mateix nom de fitxer que el "
-"fitxer sense xifrar, amb .gpg al final (p. ex. <code>informe_intern.pdf."
-"gpg</code>)"
+"fitxer sense xifrar, amb .gpg al final (p. ex. <code>informe_intern.pdf.gpg</"
+"code>)"
 
 #: source_templates/why-journalist-key.html:21
 msgid ""
@@ -1478,8 +1486,8 @@ msgid ""
 "<code>-s</code> flag) as this will reveal your GPG identity to us."
 msgstr ""
 "<strong>Important:</strong> si voleu romandre anònimament, <strong>no</"
-"strong> useu el GPG per signar el fitxer xifrat (amb el paràmetre "
-"<code>--sign</code> o bé <code>-s</code>) perquè això ens revelarà la vostra "
+"strong> useu el GPG per signar el fitxer xifrat (amb el paràmetre <code>--"
+"sign</code> o bé <code>-s</code>) perquè això ens revelarà la vostra "
 "identitat GPG."
 
 #: source_templates/why-journalist-key.html:23

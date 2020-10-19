@@ -2,7 +2,7 @@
 {% block body %}
 
 {% with count=items_selected|length %}
-<p>{{ ngettext('The following file has been selected for <strong>permanent deletion</strong>:', 'The following {files} files have been selected for <strong>permanent deletion</strong>:', count).format(files=count)|safe }}</p>
+<p>{{ ngettext('The following file has been selected for <strong>permanent deletion</strong>:', 'The following {num} files have been selected for <strong>permanent deletion</strong>:', count).format(num=count)|safe }}</p>
 {% endwith %}
 
 <form action="/bulk" method="post">
