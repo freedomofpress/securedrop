@@ -1,5 +1,3 @@
-import pytest
-
 import testutils
 
 test_vars = testutils.securedrop_test_vars

@@ -1,10 +1,10 @@
-
-
 class Myvalues:
-  def __init__(self):
-    pass
+    def __init__(self):
+        pass
+
 
 securedrop_test_vars = Myvalues()
+
 
 def inject_vars(value):
     res = Myvalues()
