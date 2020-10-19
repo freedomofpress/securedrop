@@ -5,7 +5,7 @@
   <div class="designation">
     {% if source.star.starred %}
       <button class="button-star starred" type="submit" formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}">
-        <img src="{{ url_for('static', filename='icons/starred.png') }}" class="icon-star-source" height="15" alt="starred-icon">
+        <img src="{{ url_for('static', filename='icons/starred.png') }}" class="icon-drop icon-star-source" height="15" alt="starred-icon">
       </button>
       <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
       <a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
