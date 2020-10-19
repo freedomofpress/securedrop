@@ -13,8 +13,8 @@
       </a>
     {% else %}
       <button class="button-star un-starred" type="submit" formaction="{{ url_for('col.add_star', filesystem_id=source.filesystem_id) }}">
-        <img src="{{ url_for('static', filename='icons/unstarred.png') }}" class="icon-star-source off-hover" height="15" alt="unstarred-icon">
-        <img src="{{ url_for('static', filename='icons/starred.png') }}" class="icon-star-source on-hover" height="15" alt="starred-icon">
+        <img src="{{ url_for('static', filename='icons/unstarred.png') }}" class="icon-drop icon-star-source off-hover" height="15" alt="unstarred-icon">
+        <img src="{{ url_for('static', filename='icons/starred.png') }}" class="icon-drop icon-star-source on-hover" height="15" alt="starred-icon">
       </button>
       <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
       <a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
@@ -24,11 +24,11 @@
   </div>
   <div class="submission-count">
     <span>
-      <img src="{{ url_for('static', filename='icons/files.png') }}" class="icon" height="16" alt="files-icon">
+      <img src="{{ url_for('static', filename='icons/files.png') }}" class="icon-drop" height="16" alt="files-icon">
       {{ ngettext('1 doc', '{doc_num} docs', docs).format(doc_num=docs) }}
     </span>
     <span>
-      <img src="{{ url_for('static', filename='icons/messages.png') }}" class="icon" height="13" alt="messages-icon">
+      <img src="{{ url_for('static', filename='icons/messages.png') }}" class="icon-drop" height="13" alt="messages-icon">
       {{ ngettext('1 message', '{msg_num} messages', msgs).format(msg_num=msgs) }}
     </span>
     {% if source.num_unread > 0 %}
