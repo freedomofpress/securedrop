@@ -25,29 +25,17 @@
   <div class="submission-count">
     <span>
       <img src="{{ url_for('static', filename='icons/files.png') }}" class="icon-drop" height="16" alt="files-icon">
-<<<<<<< HEAD
       {{ ngettext('1 doc', '{num} docs', docs).format(num=docs) }}
     </span>
     <span>
       <img src="{{ url_for('static', filename='icons/messages.png') }}" class="icon-drop" height="13" alt="messages-icon">
       {{ ngettext('1 message', '{num} messages', msgs).format(num=msgs) }}
-=======
-      {{ ngettext('1 doc', '{doc_num} docs', docs).format(doc_num=docs) }}
-    </span>
-    <span>
-      <img src="{{ url_for('static', filename='icons/messages.png') }}" class="icon-drop" height="13" alt="messages-icon">
-      {{ ngettext('1 message', '{msg_num} messages', msgs).format(msg_num=msgs) }}
->>>>>>> c51322d641ecf8272138a0baea6e81110f99cbfc
     </span>
     {% if source.num_unread > 0 %}
       <span class="unread">
         <a class="btn small" href="/download_unread/{{ source.filesystem_id }}">
           <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" height="13" alt="download-icon">
-<<<<<<< HEAD
           {{ ngettext('1 unread', '{num} unread', source.num_unread).format(num=source.num_unread) }}
-=======
-          {{ ngettext('1 unread', '{num_unread} unread', source.num_unread).format(num_unread=source.num_unread) }}
->>>>>>> c51322d641ecf8272138a0baea6e81110f99cbfc
         </a>
       </span>
     {% endif %}
