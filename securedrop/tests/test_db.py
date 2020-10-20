@@ -4,22 +4,8 @@ import pytest
 from mock import MagicMock
 
 from .utils import db_helper
-from models import (Journalist, Submission, Reply, Source, get_one_or_else,
+from models import (Journalist, Submission, Reply, get_one_or_else,
                     LoginThrottledException)
-
-
-def test_source_public_key_setter_unimplemented(journalist_app, test_source):
-    with journalist_app.app_context():
-        source = Source.query.first()
-        with pytest.raises(NotImplementedError):
-            source.public_key = 'a curious developer tries to set a pubkey!'
-
-
-def test_source_public_key_delete_unimplemented(journalist_app, test_source):
-    with journalist_app.app_context():
-        source = Source.query.first()
-        with pytest.raises(NotImplementedError):
-            del source.public_key
 
 
 def test_get_one_or_else_returns_one(journalist_app, test_journo):

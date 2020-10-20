@@ -9,6 +9,12 @@ import requests
 import sys
 
 # Used to generate URLs for API endpoints and links; exposed as argument
+from typing import List
+
+from typing import Tuple
+
+from typing import Dict
+
 DEFAULT_BASE_URL = "https://weblate.securedrop.org"
 
 # Where we look for screenshots: the page layout test results in English
@@ -23,7 +29,7 @@ SCREENSHOTS_GLOB = "*.png"
 # filename into the canonical title we give that screenshot in Weblate.
 #
 # Example conversion: "source-session_timeout.png" -> "source: session timeout"
-CANONICALIZATION_RULES = ((r"\.png$", ""), (r"-", ": "), (r"_", " "))
+CANONICALIZATION_RULES = [(r"\.png$", ""), (r"-", ": "), (r"_", " ")]
 
 # Weblate organizes internationalization work into projects and components,
 # which are part of many URLs, and need to be referenced in some API requests.
@@ -34,7 +40,7 @@ COMPONENT_SLUG = "securedrop"
 REQUEST_LIMIT = 50
 
 
-def main():
+def main() -> None:
     """
     Uses the generic WeblateUploader class below to run a SecureDrop screenshot
     upload.
@@ -69,7 +75,7 @@ def main():
     uploader.upload()
 
 
-class WeblateUploader(object):
+class WeblateUploader:
     """
     Manages Weblate screenshot batch uploads, matching filenames against
     titles of existing screenshots to create/update as appropriate.
@@ -77,14 +83,14 @@ class WeblateUploader(object):
 
     def __init__(
         self,
-        token,
-        base_url,
-        project,
-        component,
-        files,
-        request_limit,
-        canonicalization_rules=(),
-    ):
+        token: str,
+        base_url: str,
+        project: str,
+        component: str,
+        files: List[str],
+        request_limit: int,
+        canonicalization_rules: List[Tuple[str, str]],
+    ) -> None:
 
         if len(token) != 40:
             raise BadOrMissingTokenError(
@@ -111,7 +117,7 @@ class WeblateUploader(object):
         }
         self.session.headers.update(headers)
 
-    def get_existing_screenshots(self):
+    def get_existing_screenshots(self) -> List[Dict[str, str]]:
         """
         Obtains a list of all existing screenshots, and returns it as a list
         in the API's format. Paginates up to the request limit.
@@ -120,7 +126,7 @@ class WeblateUploader(object):
 
         # API results are paginated, so we must loop through a set of results and
         # concatenate them.
-        screenshots = []
+        screenshots = []  # type: List[Dict[str, str]]
         request_count = 0
         while next_screenshots_url is not None:
             response = self.session.get(next_screenshots_url)
@@ -136,7 +142,7 @@ class WeblateUploader(object):
                 raise RequestLimitError(msg)
         return screenshots
 
-    def _canonicalize(self, filename):
+    def _canonicalize(self, filename: str) -> str:
         """
         Derives a human-readable title from a filename using the defined
         canonicalization rules, if any. This is used to later update the
@@ -146,7 +152,7 @@ class WeblateUploader(object):
             filename = re.sub(pattern, repl, filename)
         return filename
 
-    def upload(self, check_existing_screenshots=True):
+    def upload(self, check_existing_screenshots: bool = True) -> None:
         """
         Uploads all files using the screenshots endpoint. Optionally, checks
         files against a list of existing screenshots and replaces them rather
@@ -192,11 +198,10 @@ class WeblateUploader(object):
 
 
 class BadOrMissingTokenError(Exception):
-    def __init__(self, reason="Bad or missing token.", base_url=None):
-        if base_url is not None:
-            reason += " Obtain token via {}".format(
-                urljoin(base_url, "accounts/profile/#api")
-            )
+    def __init__(self, reason: str, base_url: str) -> None:
+        reason += " Obtain token via {}".format(
+            urljoin(base_url, "accounts/profile/#api")
+        )
         super().__init__(reason)
 
 

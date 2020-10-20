@@ -1,14 +1,21 @@
 from io import BytesIO
+from typing import Optional, BinaryIO
 
 from flask import wrappers
+from werkzeug.formparser import FormDataParser
 
 from secure_tempfile import SecureTemporaryFile
 
 
 class RequestThatSecuresFileUploads(wrappers.Request):
 
-    def _secure_file_stream(self, total_content_length, content_type,
-                            filename=None, content_length=None):
+    def _secure_file_stream(
+        self,
+        total_content_length: int,
+        content_type: Optional[str],
+        filename: Optional[str] = None,
+        content_length: Optional[int] = None,
+    ) -> BinaryIO:
         """Storage class for data streamed in from requests.
 
         If the data is relatively small (512KB), just store it in
@@ -27,7 +34,7 @@ class RequestThatSecuresFileUploads(wrappers.Request):
             return SecureTemporaryFile('/tmp')  # nosec
         return BytesIO()
 
-    def make_form_data_parser(self):
+    def make_form_data_parser(self) -> FormDataParser:
         return self.form_data_parser_class(self._secure_file_stream,
                                            self.charset,
                                            self.encoding_errors,

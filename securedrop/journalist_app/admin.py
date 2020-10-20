@@ -68,7 +68,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             # The UI prompt ("prevent") is the opposite of the setting ("allow"):
             flash(gettext("Preferences saved."), "submission-preferences-success")
             value = not bool(request.form.get('prevent_document_uploads'))
-            InstanceConfig.set('allow_document_uploads', value)
+            InstanceConfig.set_allow_document_uploads(value)
             return redirect(url_for('admin.manage_config'))
         else:
             return None
