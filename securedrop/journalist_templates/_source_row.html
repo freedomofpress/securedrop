@@ -4,15 +4,18 @@
   <time class="date" title="{{ source.last_updated|rel_datetime_format }}" datetime="{{ source.last_updated|rel_datetime_format(fmt="%Y-%m-%d %H:%M:%S%Z") }}">{{ source.last_updated|rel_datetime_format(relative=True) }}</time>
   <div class="designation">
     {% if source.star.starred %}
-      <button class="button-star starred" type="submit"
-              formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}"><i class="fa fa-star"></i></button>
+      <button class="button-star starred" type="submit" formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}">
+        <img src="{{ url_for('static', filename='icons/starred.png') }}" class="icon-drop icon-star-source" height="15" alt="starred-icon">
+      </button>
       <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
       <a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
         {{ source.journalist_designation }}
       </a>
     {% else %}
-      <button class="button-star un-starred" type="submit"
-        formaction="{{ url_for('col.add_star', filesystem_id=source.filesystem_id) }}"><i class="fa fa-star"></i></button>
+      <button class="button-star un-starred" type="submit" formaction="{{ url_for('col.add_star', filesystem_id=source.filesystem_id) }}">
+        <img src="{{ url_for('static', filename='icons/unstarred.png') }}" class="icon-drop icon-star-source off-hover" height="15" alt="unstarred-icon">
+        <img src="{{ url_for('static', filename='icons/starred.png') }}" class="icon-drop icon-star-source on-hover" height="15" alt="starred-icon">
+      </button>
       <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
       <a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
         {{ source.journalist_designation }}
@@ -20,11 +23,20 @@
     {% endif %}
   </div>
   <div class="submission-count">
-    <span><i class="far fa-file-archive"></i> {{ ngettext('1 doc', '{num} docs', docs).format(num=docs) }}</span>
-    <span><i class="far fa-file-alt"></i> {{ ngettext('1 message', '{num} messages', msgs).format(num=msgs) }}</span>
+    <span>
+      <img src="{{ url_for('static', filename='icons/files.png') }}" class="icon-drop" height="16" alt="files-icon">
+      {{ ngettext('1 doc', '{num} docs', docs).format(num=docs) }}
+    </span>
+    <span>
+      <img src="{{ url_for('static', filename='icons/messages.png') }}" class="icon-drop" height="13" alt="messages-icon">
+      {{ ngettext('1 message', '{num} messages', msgs).format(num=msgs) }}
+    </span>
     {% if source.num_unread > 0 %}
       <span class="unread">
-        <a class="btn small" href="/download_unread/{{ source.filesystem_id }}"><i class="fa fa-download"></i> {{ ngettext('1 unread', '{num} unread', source.num_unread).format(num=source.num_unread)}}</a>
+        <a class="btn small" href="/download_unread/{{ source.filesystem_id }}">
+          <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" height="13" alt="download-icon">
+          {{ ngettext('1 unread', '{num} unread', source.num_unread).format(num=source.num_unread) }}
+        </a>
       </span>
     {% endif %}
   </div>
