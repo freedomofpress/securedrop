@@ -68,7 +68,7 @@ class NotEncrypted(Exception):
     pass
 
 
-def safe_renames(old, new):
+def safe_renames(old: str, new: str) -> None:
     """safe_renames(old, new)
 
     This is a modified version of Python's os.renames that does not
@@ -108,11 +108,11 @@ class Storage:
             os.makedirs(self.__shredder_path, mode=0o700)
 
     @property
-    def storage_path(self):
+    def storage_path(self) -> str:
         return self.__storage_path
 
     @property
-    def shredder_path(self):
+    def shredder_path(self) -> str:
         return self.__shredder_path
 
     def shredder_contains(self, path: str) -> bool:
@@ -221,7 +221,7 @@ class Storage:
                     ))
         return zip_file
 
-    def move_to_shredder(self, path: str):
+    def move_to_shredder(self, path: str) -> None:
         """
         Moves content from the store to the shredder for secure deletion.
 
@@ -250,7 +250,7 @@ class Storage:
         current_app.logger.info("Moving {} to shredder: {}".format(path, dest))
         safe_renames(path, dest)
 
-    def clear_shredder(self):
+    def clear_shredder(self) -> None:
         current_app.logger.info("Clearing shredder")
         directories = []
         targets = []

@@ -9,7 +9,6 @@ import math
 from itertools import cycle
 
 from flask import current_app
-from sqlalchemy.exc import IntegrityError
 
 os.environ["SECUREDROP_ENV"] = "dev"  # noqa
 import journalist_app
@@ -24,7 +23,7 @@ messages = cycle(strings)
 replies = cycle(strings)
 
 
-def main(staging=False):
+def main(staging: bool = False) -> None:
     app = journalist_app.create_app(config)
     with app.app_context():
         # Add two test users
@@ -79,35 +78,31 @@ def main(staging=False):
         db.session.commit()
 
 
-def add_test_user(username, password, otp_secret, is_admin=False,
-                  first_name="", last_name=""):
-    try:
-        user = Journalist(username=username,
-                          password=password,
-                          is_admin=is_admin,
-                          first_name=first_name,
-                          last_name=last_name)
-        user.otp_secret = otp_secret
-        db.session.add(user)
-        db.session.commit()
-        print('Test user successfully added: '
-              'username={}, password={}, otp_secret={}, is_admin={}'
-              ''.format(username, password, otp_secret, is_admin))
-        return user
-    except IntegrityError:
-        print("Test user already added")
-        db.session.rollback()
+def add_test_user(username: str, password: str, otp_secret: str, is_admin: bool = False,
+                  first_name: str = "", last_name: str = "") -> Journalist:
+    user = Journalist(username=username,
+                      password=password,
+                      is_admin=is_admin,
+                      first_name=first_name,
+                      last_name=last_name)
+    user.otp_secret = otp_secret
+    db.session.add(user)
+    db.session.commit()
+    print('Test user successfully added: '
+          'username={}, password={}, otp_secret={}, is_admin={}'
+          ''.format(username, password, otp_secret, is_admin))
+    return user
 
 
 def create_source_data(
-    source_index,
-    source_count,
-    journalist_who_replied,
-    journalist_who_saw,
-    num_files=2,
-    num_messages=2,
-    num_replies=2,
-):
+    source_index: int,
+    source_count: int,
+    journalist_who_replied: Journalist,
+    journalist_who_saw: Journalist,
+    num_files: int = 2,
+    num_messages: int = 2,
+    num_replies: int = 2,
+) -> None:
     # Store source in database
     codename = current_app.crypto_util.genrandomid()
     filesystem_id = current_app.crypto_util.hash_codename(codename)
