@@ -40,10 +40,10 @@
 	{% else %}
         <td>
           <button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}">
-            <!-- <i title="{{ gettext('Delete user {username}').format(username=user.username) }}"> -->
+            <i title="{{ gettext('Delete user {username}').format(username=user.username) }}">
               <img src="{{ url_for('static', filename='icons/trash.png') }}" class="off-hover" height="16" alt="trash-icon">
               <img src="{{ url_for('static', filename='icons/trash-hover-red.png') }}" class="on-hover" height="16" alt="trash-icon">
-            <!-- </i> -->
+            </i>
           </button>
         </td>
 	{% endif %}
