@@ -313,6 +313,7 @@
   /var/www/securedrop/static/icons/envelope-closed.png r,
   /var/www/securedrop/static/icons/envelope-open.png r,
   /var/www/securedrop/static/icons/files.png r,
+  /var/www/securedrop/static/icons/info-circle-blue-grey.png r,
   /var/www/securedrop/static/icons/messages.png r,
   /var/www/securedrop/static/icons/pencil-alt.png r,
   /var/www/securedrop/static/icons/plus.png r,
