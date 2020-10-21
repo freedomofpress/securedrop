@@ -4,7 +4,7 @@
 
 <form action="{{ url_for('admin.add_user') }}">
   <button type="submit" id="add-user">
-    <img src="{{ url_for('static', filename='icons/plus.png') }}" class="icon" height="15" alt="plus-icon">
+    <img src="{{ url_for('static', filename='icons/plus.png') }}" class="icon" width="13" height="15" alt="plus-icon">
     {{ gettext('ADD USER') }}
   </button>
 </form>
@@ -28,21 +28,21 @@
         <td>
           <a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}">
             <i title="{{ gettext('Edit user {username}').format(username=user.username) }}">
-              <img src="{{ url_for('static', filename='icons/edit-user.png') }}" class="icon" height="16" alt="edit-user-icon">
+              <img src="{{ url_for('static', filename='icons/edit-user.png') }}" class="icon" width="18" height="16" alt="edit-user-icon">
             </i>
           </a>
         </td>
 	{% if user.id == g.user.id %}
         <td>
           <i class="disabled-delete-button"></i>
-          <img src="{{ url_for('static', filename='icons/trash-disabled.png') }}" height="16" alt="trash-disabled-icon">
+          <img src="{{ url_for('static', filename='icons/trash-disabled.png') }}" width="14" height="16" alt="trash-disabled-icon">
         </td>
 	{% else %}
         <td>
           <button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}">
             <i title="{{ gettext('Delete user {username}').format(username=user.username) }}">
-              <img src="{{ url_for('static', filename='icons/trash.png') }}" class="off-hover" height="16" alt="trash-icon">
-              <img src="{{ url_for('static', filename='icons/trash-hover-red.png') }}" class="on-hover" height="16" alt="trash-icon">
+              <img src="{{ url_for('static', filename='icons/trash.png') }}" class="off-hover" width="14" height="16" alt="trash-icon">
+              <img src="{{ url_for('static', filename='icons/trash-hover-red.png') }}" class="on-hover" width="14" height="16" alt="trash-icon">
             </i>
           </button>
         </td>
@@ -64,7 +64,7 @@
 <hr class="no-line">
 
 <a href="{{ url_for('admin.manage_config') }}" class="btn" id="update-instance-config">
-  <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" height="15" alt="edit-icon">
+  <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="edit-icon">
   {{ gettext('INSTANCE CONFIG') }}
 </a>
 
