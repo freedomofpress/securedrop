@@ -53,7 +53,8 @@ class SDConfig:
 
         self.WORKER_PIDFILE = _config.WORKER_PIDFILE  # type: str
 
-        if _config.env == 'test':
+        self.env = getattr(_config, 'env', 'prod')  # type: str
+        if self.env == 'test':
             self.RQ_WORKER_NAME = 'test'  # type: str
         else:
             self.RQ_WORKER_NAME = 'default'
