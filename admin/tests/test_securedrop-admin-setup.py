@@ -58,24 +58,26 @@ class TestSecureDropAdmin(object):
 
     def test_install_pip_dependencies_up_to_date(self, caplog):
         args = argparse.Namespace()
-        bootstrap.install_pip_dependencies(args, ['/bin/echo'])
+        with mock.patch.object(subprocess, "check_output", return_value=b"up to date"):
+            bootstrap.install_pip_dependencies(args)
         assert 'securedrop-admin are up-to-date' in caplog.text
 
     def test_install_pip_dependencies_upgraded(self, caplog):
         args = argparse.Namespace()
-        bootstrap.install_pip_dependencies(
-            args, ['/bin/echo', 'Successfully installed'])
+        with mock.patch.object(subprocess, "check_output", return_value=b"Successfully installed"):
+            bootstrap.install_pip_dependencies(args)
         assert 'securedrop-admin upgraded' in caplog.text
 
     def test_install_pip_dependencies_fail(self, caplog):
         args = argparse.Namespace()
-        with pytest.raises(subprocess.CalledProcessError):
-            bootstrap.install_pip_dependencies(
-                args, ['/bin/sh', '-c',
-                       'echo in stdout ; echo in stderr >&2 ; false'])
+        with mock.patch.object(
+            subprocess,
+            "check_output",
+            side_effect=subprocess.CalledProcessError(returncode=2, cmd="", output=b"failed")
+        ):
+            with pytest.raises(subprocess.CalledProcessError):
+                bootstrap.install_pip_dependencies(args)
         assert 'Failed to install' in caplog.text
-        assert 'in stdout' in caplog.text
-        assert 'in stderr' in caplog.text
 
     def test_python3_stretch_venv_deleted_in_buster(self, tmpdir, caplog):
         venv_path = str(tmpdir)

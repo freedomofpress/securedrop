@@ -760,20 +760,20 @@ class TestSiteConfig(object):
             asked if the prior question was answered appropriately."""
 
         questions = [
-            ['first_question',
+            ('first_question',
              False,
              bool,
              u'Test Question 1',
              None,
              lambda x: x.lower() == 'yes',
-             lambda config: True],
-            ['dependent_question',
+             lambda config: True),
+            ('dependent_question',
              'default_value',
              str,
              u'Test Question 2',
              None,
              None,
-             lambda config: config.get('first_question', False)]
+             lambda config: config.get('first_question', False))
         ]
         args = argparse.Namespace(site_config='tests/files/site-specific',
                                   ansible_path='tests/files',
@@ -788,7 +788,9 @@ class TestSiteConfig(object):
             config = site_config.user_prompt_config()
             assert config['dependent_question'] != 'default_value'
 
-            site_config.desc[0][1] = True
+            edited_first_question = list(site_config.desc[0])
+            edited_first_question[1] = True
+            site_config.desc[0] = tuple(edited_first_question)
 
             config = site_config.user_prompt_config()
             assert config['dependent_question'] == 'default_value'
@@ -868,7 +870,7 @@ class TestSiteConfig(object):
         site_config = securedrop_admin.SiteConfig(args)
 
         def auto_prompt(prompt, default, **kwargs):
-            if 'validator' in kwargs:
+            if 'validator' in kwargs and kwargs['validator']:
                 assert kwargs['validator'].validate(Document(default))
             return default
 

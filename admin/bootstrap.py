@@ -23,6 +23,9 @@ import os
 import shutil
 import subprocess
 import sys
+from typing import Iterator
+
+from typing import List
 
 sdlog = logging.getLogger(__name__)
 
@@ -30,7 +33,7 @@ DIR = os.path.dirname(os.path.realpath(__file__))
 VENV_DIR = os.path.join(DIR, ".venv3")
 
 
-def setup_logger(verbose=False):
+def setup_logger(verbose: bool = False) -> None:
     """ Configure logging handler """
     # Set default level on parent
     sdlog.setLevel(logging.DEBUG)
@@ -42,7 +45,7 @@ def setup_logger(verbose=False):
     sdlog.addHandler(stdout)
 
 
-def run_command(command):
+def run_command(command: List[str]) -> Iterator[bytes]:
     """
     Wrapper function to display stdout for running command,
     similar to how shelling out in a Bash script displays rolling output.
@@ -53,6 +56,8 @@ def run_command(command):
     popen = subprocess.Popen(command,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
+    if popen.stdout is None:
+        raise EnvironmentError("Could not run command: None stdout")
     for stdout_line in iter(popen.stdout.readline, b""):
         yield stdout_line
     popen.stdout.close()
@@ -61,12 +66,12 @@ def run_command(command):
         raise subprocess.CalledProcessError(return_code, command)
 
 
-def is_tails():
+def is_tails() -> bool:
     try:
         id = subprocess.check_output('lsb_release --id --short',
                                      shell=True).decode('utf-8').strip()
     except subprocess.CalledProcessError:
-        id = None
+        return False
 
     # dirty hack to unreliably detect Tails 4.0~beta2
     if id == 'Debian':
@@ -76,7 +81,7 @@ def is_tails():
     return id == 'Tails'
 
 
-def clean_up_tails3_venv(virtualenv_dir=VENV_DIR):
+def clean_up_tails3_venv(virtualenv_dir: str = VENV_DIR) -> None:
     """
     Tails 3.x, based on debian stretch uses libpython3.5, whereas Tails 4.x is
     based on Debian Buster and uses libpython3.7. This means that the Tails 3.x
@@ -90,7 +95,7 @@ def clean_up_tails3_venv(virtualenv_dir=VENV_DIR):
             dist = subprocess.check_output('lsb_release --codename --short',
                                            shell=True).strip()
         except subprocess.CalledProcessError:
-            dist = None
+            return None
 
         # tails4 is based on buster
         if dist == b'buster':
@@ -104,21 +109,21 @@ def clean_up_tails3_venv(virtualenv_dir=VENV_DIR):
                 sdlog.info("Tails 3 Python 3 virtualenv deleted.")
 
 
-def checkenv(args):
+def checkenv(args: argparse.Namespace) -> None:
     clean_up_tails3_venv(VENV_DIR)
     if not os.path.exists(os.path.join(VENV_DIR, "bin/activate")):
         sdlog.error('Please run "securedrop-admin setup".')
         sys.exit(1)
 
 
-def maybe_torify():
+def maybe_torify() -> List[str]:
     if is_tails():
         return ['torify']
     else:
         return []
 
 
-def install_apt_dependencies(args):
+def install_apt_dependencies(args: argparse.Namespace) -> None:
     """
     Install apt dependencies in Tails. In order to install Ansible in
     a virtualenv, first there are a number of Python prerequisites.
@@ -154,7 +159,7 @@ def install_apt_dependencies(args):
         raise
 
 
-def envsetup(args, virtualenv_dir=VENV_DIR):
+def envsetup(args: argparse.Namespace, virtualenv_dir: str = VENV_DIR) -> None:
     """Installs Admin tooling required for managing SecureDrop. Specifically:
 
         * updates apt-cache
@@ -198,14 +203,11 @@ def envsetup(args, virtualenv_dir=VENV_DIR):
         sdlog.info("Virtualenv already exists, not creating")
 
     if args.t:
-        install_pip_dependencies(args, pip_install_cmd=[
-            os.path.join(VENV_DIR, 'bin', 'pip3'),
-            'install',
-            '--no-deps',
-            '-r', os.path.join(DIR, 'requirements-testinfra.txt'),
-            '--require-hashes',
-            '-U', '--upgrade-strategy', 'only-if-needed', ],
-            desc="dependencies with verification support")
+        install_pip_dependencies(
+            args,
+            requirements_file='requirements-testinfra.txt',
+            desc="dependencies with verification support"
+        )
     else:
         install_pip_dependencies(args)
 
@@ -215,7 +217,7 @@ def envsetup(args, virtualenv_dir=VENV_DIR):
     sdlog.info("Finished installing SecureDrop dependencies")
 
 
-def install_pip_self(args):
+def install_pip_self(args: argparse.Namespace) -> None:
     pip_install_cmd = [
         os.path.join(VENV_DIR, 'bin', 'pip3'),
         'install', '-e', DIR
@@ -229,20 +231,22 @@ def install_pip_self(args):
         raise
 
 
-def install_pip_dependencies(args, pip_install_cmd=[
-        os.path.join(VENV_DIR, 'bin', 'pip3'),
-        'install',
-        '--no-deps',
-        # Specify requirements file.
-        '-r', os.path.join(DIR, 'requirements.txt'),
-        '--require-hashes',
-        # Make sure to upgrade packages only if necessary.
-        '-U', '--upgrade-strategy', 'only-if-needed', ],
-        desc="Python dependencies"
-):
+def install_pip_dependencies(
+    args: argparse.Namespace,
+    requirements_file: str = "requirements.txt",
+    desc: str = "Python dependencies",
+) -> None:
     """
     Install Python dependencies via pip into virtualenv.
     """
+    pip_install_cmd = [
+        os.path.join(VENV_DIR, 'bin', 'pip3'),
+        'install',
+        '--no-deps',
+        '-r', os.path.join(DIR, requirements_file),
+        '--require-hashes',
+        '-U', '--upgrade-strategy', 'only-if-needed',
+    ]
 
     sdlog.info("Checking {} for securedrop-admin".format(desc))
     try:
@@ -261,7 +265,7 @@ def install_pip_dependencies(args, pip_install_cmd=[
         sdlog.info("{} for securedrop-admin are up-to-date".format(desc))
 
 
-def parse_argv(argv):
+def parse_argv(argv: List[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument('-v', action='store_true', default=False,
                         help="Increase verbosity on output")
