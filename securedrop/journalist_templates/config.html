@@ -12,7 +12,8 @@
 
 <p>
   <a class="btn" href="{{ url_for('admin.ossec_test') }}" id="test-ossec-alert">
-    <i class="fa fa-bell"></i> {{ gettext('SEND TEST OSSEC ALERT') }}
+    <img src="{{ url_for('static', filename='icons/bell.png') }}" class="icon" width="13" height="15" alt="">
+    {{ gettext('SEND TEST OSSEC ALERT') }}
   </a>
 </p>
 
@@ -36,7 +37,8 @@
     {{ gettext('Recommended size: 500px * 450px') }}
   </h5>
   <button type="submit" id="submit-logo-update">
-    <i class="fas fa-pencil-alt"></i> {{ gettext('UPDATE LOGO') }}
+    <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
+    {{ gettext('UPDATE LOGO') }}
   </button>
   {% include 'logo_upload_flashed.html' %}
 </form>
@@ -52,7 +54,8 @@
     <label for="prevent_document_uploads">{{ gettext('Prevent sources from uploading documents. Sources will still be able to send messages.') }}</label>
   </p>
   <button type="submit" id="submit-submission-preferences">
-    <i class="fas fa-pencil-alt"></i> {{ gettext('UPDATE SUBMISSION PREFERENCES') }}
+    <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
+    {{ gettext('UPDATE SUBMISSION PREFERENCES') }}
   </button>
   {% include 'submission_preferences_saved_flash.html' %}
 </form>

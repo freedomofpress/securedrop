@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 <p class="flash notification">
-  <i class="fa fa-info-circle pull-left"></i>
+  <img src="{{ url_for('static', filename='icons/info-circle-blue-grey.png') }}" class="icon" width="18" height="18" alt="{{ gettext('info icon') }}">
 {{ gettext('Thanks!') }}
 </p>
 

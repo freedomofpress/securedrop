@@ -4,7 +4,7 @@
 
   <p class="breadcrumbs">
     <a href="/">{{ gettext('All Sources') }}</a>
-    <i class="fa fa-chevron-right"></i>
+    <img src="{{ url_for('static', filename='icons/chevron-right.png') }}" class="icon" width="9" height="14" alt="">
     <strong>{{ source.journalist_designation }}</strong>
   </p>
 
@@ -13,9 +13,15 @@
     <form action="/bulk" method="post">
       <p>
         <div id="select-container"></div>
-        <button type="submit" name="action" value="download" class="small"><i class="fa fa-download"></i> {{ gettext('Download Selected') }}</button>
+        <button type="submit" name="action" value="download" class="small">
+          <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" width="11" height="13" alt=""> {{ gettext('Download Selected') }}
+        </button>
         <a href="#delete-selected-confirmation-modal" id="delete-selected-link">
-          <button type="button" class="small danger"><i class="far fa-trash-alt"></i> {{ gettext('Delete Selected') }}</button>
+          <button type="button" class="small danger">
+            <img src="{{ url_for('static', filename='icons/trash.png') }}" class="icon off-hover" width="11" height="13" alt="">
+            <img src="{{ url_for('static', filename='icons/trash-hover-white.png') }}" class="icon on-hover" width="11" height="13" alt="">
+            {{ gettext('Delete Selected') }}
+          </button>
         </a>
       </p>
 
@@ -25,17 +31,25 @@
             {% if doc.filename.endswith('reply.gpg') %}
               {% if not doc.deleted_by_source %}
                 <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
-                <span title="{{ gettext('Reply') }}" class="icon"><i class="fa fa-reply pull right"></i></span>
+                <span title="{{ gettext('Reply') }}" class="icon">
+                  <img src="{{ url_for('static', filename='icons/reply.png') }}" class="icon" width="16" height="16" alt="{{ gettext('reply icon') }}">
+                </span>
               {% else %}
                 <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
-                <span title="{{ gettext('Read') }}" class="icon"><i class="fa fa-check"></i></span>
+                <span title="{{ gettext('Read') }}" class="icon">
+                  <img src="{{ url_for('static', filename='icons/check.png') }}" class="icon" width="16" height="12" alt="{{ gettext('check icon') }}">
+                </span>
               {% endif %}
             {% elif not doc.seen %}
               <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check unread-cb">
-              <span title="{{ gettext('Unread') }}" class="icon"><i class="fa fa-envelope"></i></span>
+              <span title="{{ gettext('Unread') }}" class="icon">
+                <img src="{{ url_for('static', filename='icons/envelope-closed.png') }}" class="icon" width="16" height="15" alt="{{ gettext('closed envelope icon') }}">
+              </span>
             {% else %}
               <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
-              <span title="{{ gettext('Read') }}" class="icon"><i class="fa fa-envelope-open"></i></span>
+              <span title="{{ gettext('Read') }}" class="icon">
+                <img src="{{ url_for('static', filename='icons/envelope-open.png') }}" class="icon" width="16" height="15" alt="{{ gettext('open envelope icon') }}">
+              </span>
             {% endif %}
             <a class="file {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% else %}read{% endif %}" href="{{ url_for('col.download_single_file', filesystem_id=filesystem_id, fn=doc.filename) }}">
               <span class="filename">{{ doc.filename }}</span>
@@ -43,11 +57,17 @@
             <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat() }}</span></span>
 
             {% if doc.filename.endswith('-doc.gz.gpg') %}
-              <i title="{{ gettext('Uploaded Document') }}" class="far fa-file-archive pull-right"></i>
+              <i title="{{ gettext('Uploaded Document') }}" class="pull-right">
+                <img src="{{ url_for('static', filename='icons/files.png') }}" width="14" height="16" alt="{{ gettext('files icon') }}">
+              </i>
             {% elif doc.filename.endswith('-reply.gpg') %}
-              <i title="{{ gettext('Reply') }}" class="fa fa-reply pull-right"></i>
+              <i title="{{ gettext('Reply') }}" class="pull-right">
+                <img src="{{ url_for('static', filename='icons/reply.png') }}" width="16" height="16" alt="{{ gettext('reply icon') }}">
+              </i>
             {% else %}
-              <i title="{{ gettext('Message') }}" class="far fa-file-alt pull-right"></i>
+              <i title="{{ gettext('Message') }}" class="pull-right">
+                <img src="{{ url_for('static', filename='icons/messages.png') }}" width="15" height="13" alt="{{ gettext('messages icon') }}">
+              </i>
             {% endif %}
           </li>
         {% endfor %}
@@ -109,7 +129,11 @@
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}">
     <div class="center">
       <a href="#delete-collection-confirmation-modal" id="delete-collection-link">
-        <button type="button" class="danger"><i class="far fa-trash-alt"></i> {{ gettext('DELETE SOURCE AND SUBMISSIONS') }}</button>
+        <button type="button" class="danger">
+          <img src="{{ url_for('static', filename='icons/trash.png') }}" class="icon off-hover" width="13" height="15" alt="">
+          <img src="{{ url_for('static', filename='icons/trash-hover-white.png') }}" class="icon on-hover" width="13" height="15" alt="">
+          {{ gettext('DELETE SOURCE AND SUBMISSIONS') }}
+        </button>
       </a>
     </div>
 
