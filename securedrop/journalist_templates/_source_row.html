@@ -28,7 +28,7 @@
       {{ ngettext('1 doc', '{num} docs', docs).format(num=docs) }}
     </span>
     <span>
-      <img src="{{ url_for('static', filename='icons/messages.png') }}" class="icon-drop" width="14" height="13" alt="">
+      <img src="{{ url_for('static', filename='icons/messages.png') }}" class="icon-drop" width="16" height="14" alt="">
       {{ ngettext('1 message', '{num} messages', msgs).format(num=msgs) }}
     </span>
     {% if source.num_unread > 0 %}
