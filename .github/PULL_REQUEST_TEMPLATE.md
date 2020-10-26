@@ -38,9 +38,11 @@ Any special considerations for deployment? Consider both:
 
 - [ ] I have written a test plan and validated it for this PR
 
-### If you made changes to documentation:
+Choose one of the following:
 
-- [ ] Doc linting (`make docs-lint`) passed locally
+- [ ] I have opened a PR in the [docs repo](https://github.com/freedomofpress/securedrop-docs) for these changes, or will do so later
+- [ ] I would appreciate help with the documentation
+- [ ] These changes do not require documentation
 
 ### If you added or updated a code dependency:
 
