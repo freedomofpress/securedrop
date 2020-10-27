@@ -124,7 +124,8 @@ def create_app(config: SDConfig) -> Flask:
         if 'expires' in session and datetime.utcnow() >= session['expires']:
             msg = render_template('session_timeout.html')
 
-            # Show expiration message only if the user was in the codename generation flow or was logged in
+            # Show expiration message only if the user was
+            # either in the codename generation flow or logged in
             show_expiration_message = any([
                 session.get('show_expiration_message'),
                 logged_in(),
@@ -134,7 +135,7 @@ def create_app(config: SDConfig) -> Flask:
             # clear the session after we render the message so it's localized
             session.clear()
 
-            # Persist this properety across sessions to distinguish users whose sessions actually expired
+            # Persist this properety across sessions to distinguish users whose sessions expired
             # from users who never logged in or generated a codename
             session['show_expiration_message'] = show_expiration_message
 
