@@ -727,8 +727,7 @@ def test_source_session_expiration(config, source_app):
         # which is always present and 'csrf_token' which leaks no info)
         session.pop('expires', None)
         session.pop('csrf_token', None)
-        session.pop('generate_flow_record', None)
-        session.pop('login_record', None)
+        session.pop('show_expiration_message', None)
         assert not session
 
         text = resp.data.decode('utf-8')
@@ -754,8 +753,7 @@ def test_source_session_expiration_create(config, source_app):
         # which is always present and 'csrf_token' which leaks no info)
         session.pop('expires', None)
         session.pop('csrf_token', None)
-        session.pop('generate_flow_record', None)
-        session.pop('login_record', None)
+        session.pop('show_expiration_message', None)
         assert not session
 
         text = resp.data.decode('utf-8')

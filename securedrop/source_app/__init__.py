@@ -124,22 +124,22 @@ def create_app(config: SDConfig) -> Flask:
         if 'expires' in session and datetime.utcnow() >= session['expires']:
             msg = render_template('session_timeout.html')
 
-            # Before the session is cleared, record the fact that
-            # the user was in the codename generation flow or logged in
-            generate_flow_record = session.get('generate_flow_record', was_in_generate_flow())
-            login_record = session.get('login_record', logged_in())
+            # Show expiration message only if the user was in the codename generation flow or was logged in
+            show_expiration_message = any([
+                session.get('show_expiration_message'),
+                logged_in(),
+                was_in_generate_flow(),
+            ])
 
             # clear the session after we render the message so it's localized
             session.clear()
 
-            # Persist these records across sessions to distinguish users whose sessions expired
+            # Persist this properety across sessions to distinguish users whose sessions actually expired
             # from users who never logged in or generated a codename
-            session['generate_flow_record'] = generate_flow_record
-            session['login_record'] = login_record
+            session['show_expiration_message'] = show_expiration_message
 
-            # Redirect to index with flashed message only if
-            # the user has ever logged in OR has ever gone through the codename generation flow
-            if session['generate_flow_record'] or session['login_record']:
+            # Redirect to index with flashed message
+            if session['show_expiration_message']:
                 flash(Markup(msg), "important")
             return redirect(url_for('main.index'))
 
