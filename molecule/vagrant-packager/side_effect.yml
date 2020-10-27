@@ -32,7 +32,7 @@
   connection: local
   tasks:
     - name: Halt vagrant instances
-      molecule_vagrant:
+      vagrant:
         instance_name: "{{ item.name }}"
         instance_raw_config_args: "{{ item.instance_raw_config_args | default(omit) }}"
         platform_box: "{{ item.box }}"
