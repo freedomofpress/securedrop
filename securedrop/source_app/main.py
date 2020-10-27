@@ -257,7 +257,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 current_app.logger.info("generating key, entropy: {}".format(
                     entropy_avail))
             else:
-                current_app.logger.warn(
+                current_app.logger.warning(
                         "skipping key generation. entropy: {}".format(
                                 entropy_avail))
 

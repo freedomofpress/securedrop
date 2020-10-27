@@ -21,6 +21,10 @@ if typing.TYPE_CHECKING:
     from typing import Optional  # noqa: F401
 
 
+def was_in_generate_flow() -> bool:
+    return 'codenames' in session
+
+
 def logged_in() -> bool:
     return 'logged_in' in session
 

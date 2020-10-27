@@ -23,7 +23,7 @@ from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from sdconfig import SDConfig
 from source_app import main, info, api
 from source_app.decorators import ignore_static
-from source_app.utils import logged_in
+from source_app.utils import logged_in, was_in_generate_flow
 from store import Storage
 
 
@@ -109,7 +109,7 @@ def create_app(config: SDConfig) -> Flask:
                 'provide anonymity. '
                 '<a href="{url}">Why is this dangerous?</a>')
                 .format(url=url_for('info.tor2web_warning'))),
-                  "banner-warning")
+                "banner-warning")
 
     @app.before_request
     @ignore_static
@@ -124,11 +124,24 @@ def create_app(config: SDConfig) -> Flask:
         if 'expires' in session and datetime.utcnow() >= session['expires']:
             msg = render_template('session_timeout.html')
 
+            # Show expiration message only if the user was
+            # either in the codename generation flow or logged in
+            show_expiration_message = any([
+                session.get('show_expiration_message'),
+                logged_in(),
+                was_in_generate_flow(),
+            ])
+
             # clear the session after we render the message so it's localized
             session.clear()
 
+            # Persist this properety across sessions to distinguish users whose sessions expired
+            # from users who never logged in or generated a codename
+            session['show_expiration_message'] = show_expiration_message
+
             # Redirect to index with flashed message
-            flash(Markup(msg), "important")
+            if session['show_expiration_message']:
+                flash(Markup(msg), "important")
             return redirect(url_for('main.index'))
 
         session['expires'] = datetime.utcnow() + \

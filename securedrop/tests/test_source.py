@@ -727,6 +727,7 @@ def test_source_session_expiration(config, source_app):
         # which is always present and 'csrf_token' which leaks no info)
         session.pop('expires', None)
         session.pop('csrf_token', None)
+        session.pop('show_expiration_message', None)
         assert not session
 
         text = resp.data.decode('utf-8')
@@ -752,10 +753,29 @@ def test_source_session_expiration_create(config, source_app):
         # which is always present and 'csrf_token' which leaks no info)
         session.pop('expires', None)
         session.pop('csrf_token', None)
+        session.pop('show_expiration_message', None)
         assert not session
 
         text = resp.data.decode('utf-8')
         assert 'You were logged out due to inactivity' in text
+
+
+def test_source_no_session_expiration_message_when_not_logged_in(config, source_app):
+    """If sources never logged in, no message should be displayed
+    after SESSION_EXPIRATION_MINUTES."""
+
+    with source_app.test_client() as app:
+        seconds_session_expire = 1
+        config.SESSION_EXPIRATION_MINUTES = seconds_session_expire / 60.
+
+        resp = app.get(url_for('main.index'))
+        assert resp.status_code == 200
+
+        time.sleep(seconds_session_expire + 1)
+
+        refreshed_resp = app.get(url_for('main.index'), follow_redirects=True)
+        text = refreshed_resp.data.decode('utf-8')
+        assert 'You were logged out due to inactivity' not in text
 
 
 def test_csrf_error_page(config, source_app):
