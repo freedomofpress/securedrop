@@ -9,6 +9,7 @@ Vars should be placed in `testinfra/vars/<hostname>.yml`.
 import io
 import os
 import yaml
+import testutils
 
 # The config tests target staging by default. It's possible to override
 # for e.g. prod, but the associated vars files are not yet ported.
@@ -52,5 +53,13 @@ def lookup_molecule_info():
     return molecule_instance_config
 
 
-def pytest_namespace():
-    return securedrop_import_testinfra_vars(target_host, with_header=True)
+class Myvalues:
+    def __init__(self):
+        pass
+
+
+value = securedrop_import_testinfra_vars(target_host)
+res = Myvalues()
+for key, value in value.items():
+    setattr(res, key, value)
+testutils.securedrop_test_vars = res

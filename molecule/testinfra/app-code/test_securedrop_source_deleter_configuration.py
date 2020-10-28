@@ -1,14 +1,13 @@
-import pytest
+import testutils
 
-sdvars = pytest.securedrop_test_vars
-testinfra_hosts = [sdvars.app_hostname]
+securedrop_test_vars = testutils.securedrop_test_vars
+testinfra_hosts = [securedrop_test_vars.app_hostname]
 
 
 def test_securedrop_source_deleter_service(host):
     """
     Verify configuration of securedrop_source_deleter systemd service.
     """
-    securedrop_test_vars = pytest.securedrop_test_vars
     service_file = "/lib/systemd/system/securedrop_source_deleter.service"
     expected_content = "\n".join([
         "[Unit]",

@@ -1,6 +1,6 @@
-import pytest
+import testutils
 
-sdvars = pytest.securedrop_test_vars
+sdvars = testutils.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname]
 
 
@@ -8,7 +8,7 @@ def test_securedrop_rqworker_service(host):
     """
     Verify configuration of securedrop_rqworker systemd service.
     """
-    securedrop_test_vars = pytest.securedrop_test_vars
+    securedrop_test_vars = sdvars
     service_file = "/lib/systemd/system/securedrop_rqworker.service"
 
     expected_content = "\n".join([

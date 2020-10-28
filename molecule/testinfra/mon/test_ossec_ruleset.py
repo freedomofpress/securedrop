@@ -1,7 +1,9 @@
 import pytest
 import re
 
-sdvars = pytest.securedrop_test_vars
+import testutils
+
+sdvars = testutils.securedrop_test_vars
 testinfra_hosts = [sdvars.monitor_hostname]
 alert_level_regex = re.compile(r"Level: '(\d+)'")
 rule_id_regex = re.compile(r"Rule id: '(\d+)'")

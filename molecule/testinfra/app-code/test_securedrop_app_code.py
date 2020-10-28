@@ -1,7 +1,9 @@
 import pytest
 
 
-securedrop_test_vars = pytest.securedrop_test_vars
+import testutils
+
+securedrop_test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.app_hostname]
 python_version = securedrop_test_vars.python_version
 

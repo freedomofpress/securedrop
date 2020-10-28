@@ -3,8 +3,8 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  yamllint
 platforms:
   - name: tor-package-fetcher-xenial
     image: "quay.io/freedomofpress/sd-docker-builder-xenial"
@@ -16,8 +16,8 @@ platforms:
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
+  lint: |
+    ansible-lint
   config_options:
     defaults:
       interpreter_python: auto
@@ -34,5 +34,5 @@ verifier:
   name: testinfra
   options:
     connection: docker
-  lint:
-    name: flake8
+  lint: |
+    flake8

@@ -26,8 +26,8 @@ platforms:
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
+  lint: |
+    ansible-lint
   config_options:
     defaults:
       callback_whitelist: "profile_tasks, timer"
@@ -50,7 +50,7 @@ scenario:
 verifier:
   name: testinfra
   lint:
-    name: flake8
+    flake8
   directory: ../testinfra
   options:
     n: auto

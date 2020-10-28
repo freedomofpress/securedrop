@@ -9,7 +9,7 @@
   tasks:
 
     - name: Create molecule instance(s)
-      molecule_vagrant:
+      vagrant:
         instance_name: "{{ item.name }}"
         instance_interfaces: "{{ item.interfaces | default(omit) }}"
         instance_raw_config_args: "{{ item.instance_raw_config_args | default(omit) }}"
