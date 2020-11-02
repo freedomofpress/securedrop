@@ -116,7 +116,7 @@ class TestJournalistMissingFile(
         journalist home page."""
         self._journalist_logs_in()
         self._journalist_clicks_source_unread()
-        self._journalist_sees_unexpected_error_message()
+        self._journalist_sees_missing_file_error_message()
         self._is_on_journalist_homepage()
 
     def test_select_source_and_download_all(self, missing_msg_file):
@@ -124,7 +124,7 @@ class TestJournalistMissingFile(
         from the journalist home page."""
         self._journalist_logs_in()
         self._journalist_selects_first_source_then_download_all()
-        self._journalist_sees_unexpected_error_message()
+        self._journalist_sees_missing_file_error_message()
         self._is_on_journalist_homepage()
 
     def test_select_source_and_download_unread(self, missing_msg_file):
@@ -132,7 +132,7 @@ class TestJournalistMissingFile(
         button from the journalist home page."""
         self._journalist_logs_in()
         self._journalist_selects_first_source_then_download_unread()
-        self._journalist_sees_unexpected_error_message()
+        self._journalist_sees_missing_file_error_message()
         self._is_on_journalist_homepage()
 
     def test_download_message(self, missing_msg_file):
@@ -141,7 +141,7 @@ class TestJournalistMissingFile(
         self._journalist_logs_in()
         self._journalist_checks_messages()
         self._journalist_downloads_message_missing_file()
-        self._journalist_sees_unexpected_error_message()
+        self._journalist_sees_missing_file_error_message()
         self._journalist_is_on_collection_page()
 
     def test_select_message_and_download_selected(self, missing_msg_file):
@@ -150,5 +150,5 @@ class TestJournalistMissingFile(
         self._journalist_logs_in()
         self._journalist_selects_the_first_source()
         self._journalist_selects_message_then_download_selected()
-        self._journalist_sees_unexpected_error_message()
+        self._journalist_sees_missing_file_error_message()
         self._journalist_is_on_collection_page()

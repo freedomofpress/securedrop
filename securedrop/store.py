@@ -201,6 +201,8 @@ class Storage:
                        for i in selected_submissions])
         # The below nested for-loops are there to create a more usable
         # folder structure per #383
+        missing_files = False
+
         with zipfile.ZipFile(zip_file, 'w') as zip:
             for source in sources:
                 fname = ""
@@ -208,18 +210,27 @@ class Storage:
                                if s.source.journalist_designation == source]
                 for submission in submissions:
                     filename = self.path(submission.source.filesystem_id, submission.filename)
-                    document_number = submission.filename.split('-')[0]
-                    if zip_directory == submission.source.journalist_filename:
-                        fname = zip_directory
+
+                    if os.path.exists(filename):
+                        document_number = submission.filename.split('-')[0]
+                        if zip_directory == submission.source.journalist_filename:
+                            fname = zip_directory
+                        else:
+                            fname = os.path.join(zip_directory, source)
+                        zip.write(filename, arcname=os.path.join(
+                            fname,
+                            "%s_%s" % (document_number,
+                                       submission.source.last_updated.date()),
+                            os.path.basename(filename)
+                        ))
                     else:
-                        fname = os.path.join(zip_directory, source)
-                    zip.write(filename, arcname=os.path.join(
-                        fname,
-                        "%s_%s" % (document_number,
-                                   submission.source.last_updated.date()),
-                        os.path.basename(filename)
-                    ))
-        return zip_file
+                        missing_files = True
+                        current_app.logger.error("File {} not found".format(filename))
+
+        if missing_files:
+            raise FileNotFoundError
+        else:
+            return zip_file
 
     def move_to_shredder(self, path: str) -> None:
         """

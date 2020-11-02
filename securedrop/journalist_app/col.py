@@ -95,13 +95,16 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if '..' in fn or fn.startswith('/'):
             abort(404)
 
-        file_ = current_app.storage.path(filesystem_id, fn)
-        if not Path(file_).is_file():
+        file = current_app.storage.path(filesystem_id, fn)
+        if not Path(file).is_file():
             flash(
-                gettext("An unexpected error occurred! Please inform your admin."),
+                gettext(
+                    "An error occured: file not found. "
+                    + "An admin can find more information in the system logs."
+                ),
                 "error"
             )
-            current_app.logger.error("File {} could not be found.".format(file_))
+            current_app.logger.error("File {} not found".format(file))
             return redirect(url_for("col.col", filesystem_id=filesystem_id))
 
         # mark as seen by the current user

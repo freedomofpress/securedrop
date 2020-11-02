@@ -1109,12 +1109,15 @@ class JournalistNavigationStepsMixin:
             classes = checkbox.get_attribute("class")
             assert "unread-cb" in classes
 
-    def _journalist_sees_unexpected_error_message(self):
+    def _journalist_sees_missing_file_error_message(self):
         notification = self.driver.find_element_by_css_selector(".error")
 
-        if not hasattr(self, "accept_languages"):
-            expected_text = "An unexpected error occurred! Please inform your admin."
-            assert expected_text in notification.text
+        if self.accept_languages is None:
+            expected_text = (
+                "An error occured: file not found. "
+                + "An admin can find more information in the system logs."
+            )
+            assert expected_text == notification.text
 
     def _journalist_is_on_collection_page(self):
         return self.wait_for(

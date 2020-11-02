@@ -204,14 +204,14 @@ def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> 
     """
     try:
         zf = current_app.storage.get_bulk_archive(submissions, zip_directory=zip_basename)
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         flash(
-            gettext("An unexpected error occurred! Please inform your admin."),
+            gettext(
+                "An error occured: file not found. "
+                + "An admin can find more information in the system logs."
+            ),
             "error"
         )
-
-        current_app.logger.error("File {} could not be found.".format(e.filename))
-
         referrer = urlparse(str(request.referrer)).path
         return redirect(referrer)
 

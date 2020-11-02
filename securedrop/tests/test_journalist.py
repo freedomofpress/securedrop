@@ -2,6 +2,7 @@
 import base64
 import binascii
 import io
+from mock import call
 import os
 from pathlib import Path
 import pytest
@@ -2288,24 +2289,25 @@ def test_download_selected_submissions_previously_downloaded(
 
 
 @pytest.fixture(scope="function")
-def selected_missing_file(journalist_app, test_source):
-    """Fixture for the download tests with missing file in storage."""
+def selected_missing_files(journalist_app, test_source):
+    """Fixture for the download tests with missing files in storage."""
     source = Source.query.get(test_source["id"])
     submissions = utils.db_helper.submit(source, 2)
-    selected = [s.filename for s in submissions]
+    selected = sorted([s.filename for s in submissions])
 
     storage_path = Path(journalist_app.storage.storage_path)
-    msg_files = [p for p in storage_path.rglob("*") if p.is_file()]
+    msg_files = sorted([p for p in storage_path.rglob("*") if p.is_file()])
     assert len(msg_files) == 2
-    msg_files[0].unlink()
+    for file in msg_files:
+        file.unlink()
 
     yield selected
 
 
-def test_download_selected_submissions_missing_file(
-    journalist_app, test_journo, test_source, mocker, selected_missing_file
+def test_download_selected_submissions_missing_files(
+    journalist_app, test_journo, test_source, mocker, selected_missing_files
 ):
-    """Tests download of selected submissions with missing file in storage."""
+    """Tests download of selected submissions with missing files in storage."""
     mocked_error_logger = mocker.patch('journalist.app.logger.error')
     journo = Journalist.query.get(test_journo["id"])
 
@@ -2321,31 +2323,32 @@ def test_download_selected_submissions_missing_file(
             data=dict(
                 action="download",
                 filesystem_id=test_source["filesystem_id"],
-                doc_names_selected=selected_missing_file,
+                doc_names_selected=selected_missing_files,
             )
         )
 
     assert resp.status_code == 302
 
-    missing_file = (
-        Path(journalist_app.storage.storage_path)
-        .joinpath(test_source["filesystem_id"])
-        .joinpath(selected_missing_file[0])
-        .as_posix()
-    )
+    expected_calls = []
+    for file in selected_missing_files:
+        missing_file = (
+            Path(journalist_app.storage.storage_path)
+            .joinpath(test_source["filesystem_id"])
+            .joinpath(file)
+            .as_posix()
+        )
+        expected_calls.append(call("File {} not found".format(missing_file)))
 
-    mocked_error_logger.assert_called_once_with(
-        "File {} could not be found.".format(missing_file)
-    )
+    mocked_error_logger.assert_has_calls(expected_calls)
 
 
 def test_download_single_submission_missing_file(
-    journalist_app, test_journo, test_source, mocker, selected_missing_file
+    journalist_app, test_journo, test_source, mocker, selected_missing_files
 ):
-    """Tests download of single submissions with missing file in storage."""
+    """Tests download of single submissions with missing files in storage."""
     mocked_error_logger = mocker.patch('journalist.app.logger.error')
     journo = Journalist.query.get(test_journo["id"])
-    missing_file = selected_missing_file[0]
+    missing_file = selected_missing_files[0]
 
     with journalist_app.test_client() as app:
         _login_user(
@@ -2372,7 +2375,7 @@ def test_download_single_submission_missing_file(
     )
 
     mocked_error_logger.assert_called_once_with(
-        "File {} could not be found.".format(missing_file)
+        "File {} not found".format(missing_file)
     )
 
 
