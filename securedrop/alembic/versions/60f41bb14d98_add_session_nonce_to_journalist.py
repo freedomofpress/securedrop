@@ -17,6 +17,8 @@ depends_on = None
 
 
 def upgrade():
+    conn = op.get_bind()
+    conn.execute("PRAGMA legacy_alter_table=ON")
     # Save existing journalist table.
     op.rename_table('journalists', 'journalists_tmp')
 
@@ -24,7 +26,6 @@ def upgrade():
     op.add_column('journalists_tmp', sa.Column('session_nonce', sa.Integer()))
 
     # Populate nonce column.
-    conn = op.get_bind()
     journalists = conn.execute(
         sa.text("SELECT * FROM journalists_tmp")).fetchall()
 
@@ -57,7 +58,6 @@ def upgrade():
         sa.UniqueConstraint('uuid')
     )
 
-    conn = op.get_bind()
     conn.execute('''
         INSERT INTO journalists
         SELECT id, uuid, username, first_name, last_name, pw_salt, pw_hash,

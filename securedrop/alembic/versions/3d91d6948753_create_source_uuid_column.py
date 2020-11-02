@@ -18,6 +18,8 @@ depends_on = None
 
 
 def upgrade():
+    conn = op.get_bind()
+    conn.execute("PRAGMA legacy_alter_table=ON")
     # Schema migration
     op.rename_table("sources", "sources_tmp")
 
@@ -25,7 +27,6 @@ def upgrade():
     op.add_column("sources_tmp", sa.Column("uuid", sa.String(length=36)))
 
     # Add UUIDs to sources_tmp table.
-    conn = op.get_bind()
     sources = conn.execute(sa.text("SELECT * FROM sources_tmp")).fetchall()
 
     for source in sources:

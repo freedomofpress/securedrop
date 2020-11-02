@@ -18,6 +18,8 @@ depends_on = None
 
 
 def upgrade():
+    conn = op.get_bind()
+    conn.execute("PRAGMA legacy_alter_table=ON")
     # Schema migration
     op.rename_table("replies", "replies_tmp")
 
@@ -25,7 +27,6 @@ def upgrade():
     op.add_column("replies_tmp", sa.Column("uuid", sa.String(length=36)))
 
     # Populate new column in replies_tmp table.
-    conn = op.get_bind()
     replies = conn.execute(sa.text("SELECT * FROM replies_tmp")).fetchall()
 
     for reply in replies:
