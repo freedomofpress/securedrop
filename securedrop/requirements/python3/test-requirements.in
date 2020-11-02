@@ -17,6 +17,6 @@ hypothesis
 requests[socks]>2.21.0
 setuptools>=46.0.0
 selenium>=3.141.0
-tbselenium>=0.4.2
+tbselenium>=0.5.2
 pyvirtualdisplay
 urllib3>=1.25.9

@@ -2,6 +2,8 @@ from . import functional_test as ft
 from . import journalist_navigation_steps
 from . import source_navigation_steps
 
+from tbselenium.utils import SECURITY_LOW
+
 
 class TestAdminInterface(
         ft.FunctionalTest,
@@ -23,9 +25,7 @@ class TestAdminInterface(
         self._admin_editing_invalid_username()
 
     def test_admin_edits_hotp_secret(self):
-        # Toggle security slider to force prefs change
-        self.set_tbb_securitylevel(ft.TBB_SECURITY_HIGH)
-        self.set_tbb_securitylevel(ft.TBB_SECURITY_LOW)
+        self.set_tbb_securitylevel(SECURITY_LOW)
 
         self._admin_logs_in()
         self._admin_visits_admin_interface()
@@ -35,9 +35,7 @@ class TestAdminInterface(
         self._admin_visits_edit_hotp()
 
     def test_admin_edits_totp_secret(self):
-        # Toggle security slider to force prefs change
-        self.set_tbb_securitylevel(ft.TBB_SECURITY_HIGH)
-        self.set_tbb_securitylevel(ft.TBB_SECURITY_LOW)
+        self.set_tbb_securitylevel(SECURITY_LOW)
 
         self._admin_logs_in()
         self._admin_visits_admin_interface()

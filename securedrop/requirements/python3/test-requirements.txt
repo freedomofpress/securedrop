@@ -241,9 +241,8 @@ six==1.11.0 \
     --hash=sha256:70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9 \
     --hash=sha256:832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb \
     # via mock, packaging, pathlib2, pip-tools
-tbselenium==0.4.2 \
-    --hash=sha256:9f39b7285103442cc389623e1dedc3ef08b1475afd5076bba1d947d92a348d0b \
-    --hash=sha256:e24ff69f610ca294093f399099407124c7ffc6a8325e7d9ca19e93ffc5eb91df \
+tbselenium==0.5.2 \
+    --hash=sha256:84dcc3f250b0c6bb4ce4bdb0d62de1d086343334019accb5469c21897afebb06 \
     # via -r requirements/python3/test-requirements.in
 toml==0.10.1 \
     --hash=sha256:926b612be1e5ce0634a2ca03470f95169cf16f939018233a670519cb4ac58b0f \
