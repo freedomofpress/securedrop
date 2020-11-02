@@ -191,7 +191,7 @@ def mark_seen(targets: List[Union[Submission, Reply]], user: Journalist) -> None
             raise
 
 
-def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> flask.Response:
+def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> werkzeug.Response:
     """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
     containing *submissions*. The ZIP-file, being a
     :class:`tempfile.NamedTemporaryFile`, is stored on disk only
