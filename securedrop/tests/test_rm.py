@@ -13,11 +13,11 @@ def test_secure_delete_capability(config):
 
     path = os.environ["PATH"]
     try:
-        os.environ["PATH"] = "{}:{}".format("/sbin", config.TEMP_DIR)
+        os.environ["PATH"] = "{}".format(config.TEMP_DIR)
         assert rm.check_secure_delete_capability() is False
         fakeshred = os.path.join(config.TEMP_DIR, "shred")
         with open(fakeshred, "w") as f:
-            f.write("#!/bin/bash\nexit1\n")
+            f.write("#!/bin/bash\nexit 1\n")
         os.chmod(fakeshred, 0o700)
         assert rm.check_secure_delete_capability() is False
     finally:
