@@ -18,6 +18,8 @@ depends_on = None
 
 
 def upgrade():
+    conn = op.get_bind()
+    conn.execute("PRAGMA legacy_alter_table=ON")
     # Schema migration
     op.rename_table("submissions", "submissions_tmp")
 
@@ -25,7 +27,6 @@ def upgrade():
     op.add_column("submissions_tmp", sa.Column("uuid", sa.String(length=36)))
 
     # Add UUIDs to submissions_tmp table.
-    conn = op.get_bind()
     submissions = conn.execute(sa.text("SELECT * FROM submissions_tmp")).fetchall()
 
     for submission in submissions:

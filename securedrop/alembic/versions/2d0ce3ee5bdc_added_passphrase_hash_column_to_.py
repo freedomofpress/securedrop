@@ -23,7 +23,8 @@ def upgrade():
 def downgrade():
     # sqlite has no `drop column` command, so we recreate the original table
     # then load it from a temp table
-
+    conn = op.get_bind()
+    conn.execute("PRAGMA legacy_alter_table=ON")
     op.rename_table("journalists", "journalists_tmp")
 
     op.create_table(
@@ -43,7 +44,6 @@ def downgrade():
         sa.UniqueConstraint("username"),
     )
 
-    conn = op.get_bind()
     conn.execute(
         """
         INSERT INTO journalists
