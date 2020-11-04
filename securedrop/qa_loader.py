@@ -107,8 +107,8 @@ class QaLoader:
         self.source_star_fraction = source_star_fraction
         self.source_reply_fraction = source_reply_fraction
 
-        self.journalists = []  # type: List[Journalist]
-        self.sources = []  # type: List[Source]
+        self.journalists = []  # type: List[int]
+        self.sources = []  # type: List[int]
 
     def new_journalist(self) -> None:
         # Make a diceware-like password

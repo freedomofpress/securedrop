@@ -407,17 +407,20 @@ class Journalist(db.Model):
     last_name = Column(String(255), nullable=True)
     pw_salt = Column(LargeBinary(32), nullable=True)  # type: Column[Optional[bytes]]
     pw_hash = Column(LargeBinary(256), nullable=True)  # type: Column[Optional[bytes]]
-    is_admin = Column(Boolean)
+    is_admin = Column(Boolean)  # type: Column[Optional[bool]]
     session_nonce = Column(Integer, nullable=False, default=0)
 
     otp_secret = Column(String(16), default=pyotp.random_base32)
-    is_totp = Column(Boolean, default=True)
-    hotp_counter = Column(Integer, default=0)
+    is_totp = Column(Boolean, default=True)  # type: Column[Optional[bool]]
+    hotp_counter = Column(Integer, default=0)  # type: Column[Optional[int]]
     last_token = Column(String(6))
 
-    created_on = Column(DateTime, default=datetime.datetime.utcnow)
-    last_access = Column(DateTime)
-    passphrase_hash = Column(String(256))
+    created_on = Column(
+        DateTime,
+        default=datetime.datetime.utcnow
+    )  # type: Column[Optional[datetime.datetime]]
+    last_access = Column(DateTime)  # type: Column[Optional[datetime.datetime]]
+    passphrase_hash = Column(String(256))  # type: Column[Optional[str]]
     login_attempts = relationship(
         "JournalistLoginAttempt",
         backref="journalist"
@@ -633,7 +636,8 @@ class Journalist(db.Model):
             # between the client and the server. The total valid
             # window is 1:30s.
             return self.totp.verify(token, valid_window=1)
-        else:
+
+        if self.hotp_counter is not None:
             for counter_val in range(
                     self.hotp_counter,
                     self.hotp_counter + 20):
@@ -641,7 +645,8 @@ class Journalist(db.Model):
                     self.hotp_counter = counter_val + 1
                     db.session.commit()
                     return True
-            return False
+
+        return False
 
     _LOGIN_ATTEMPT_PERIOD = 60  # seconds
     _MAX_LOGIN_ATTEMPTS_PER_PERIOD = 5
@@ -739,9 +744,9 @@ class Journalist(db.Model):
 
         if all_info is True:
             json_user['is_admin'] = self.is_admin
-            try:
+            if self.last_access:
                 json_user['last_login'] = self.last_access.isoformat() + 'Z'
-            except AttributeError:
+            else:
                 json_user['last_login'] = None
 
         return json_user
@@ -796,7 +801,10 @@ class JournalistLoginAttempt(db.Model):
     passwords or two-factor tokens."""
     __tablename__ = "journalist_login_attempt"
     id = Column(Integer, primary_key=True)
-    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+    timestamp = Column(
+        DateTime,
+        default=datetime.datetime.utcnow
+    )  # type: Column[Optional[datetime.datetime]]
     journalist_id = Column(Integer, ForeignKey('journalists.id'))
 
     def __init__(self, journalist: Journalist) -> None:
