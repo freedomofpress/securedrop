@@ -23,6 +23,9 @@ import rm
 
 from models import Source
 
+# monkey patch to work with Focal gnupg.
+# https://github.com/isislovecruft/python-gnupg/issues/250
+gnupg._parsers.Verify.TRUST_LEVELS["DECRYPTION_COMPLIANCE_MODE"] = 23
 
 # to fix GPG error #78 on production
 os.environ['USERNAME'] = 'www-data'
