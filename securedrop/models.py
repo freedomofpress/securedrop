@@ -16,24 +16,16 @@ from itsdangerous import TimedJSONWebSignatureSerializer, BadData
 from jinja2 import Markup
 from passlib.hash import argon2
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, Query, RelationshipProperty
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, LargeBinary
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from db import db
 
-import typing
+from typing import Callable, Optional, Union, Dict, List, Any
+from logging import Logger
+from pyotp import OTP
 
-if typing.TYPE_CHECKING:
-    # flake8 can not understand type annotation yet.
-    # That is why all type annotation relative import
-    # statements has to be marked as noqa.
-    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
-    from typing import Callable, Optional, Union, Dict, List, Any  # noqa: F401
-    from io import BufferedIOBase  # noqa: F401
-    from logging import Logger  # noqa: F401
-    from sqlalchemy import Query  # noqa: F401
-    from pyotp import OTP  # noqa: F401
 
 LOGIN_HARDENING = True
 if os.environ.get('SECUREDROP_ENV') == 'test':
@@ -42,7 +34,7 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
 ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
 
 
-def get_one_or_else(query: 'Query',
+def get_one_or_else(query: Query,
                     logger: 'Logger',
                     failure_method: 'Callable[[int], None]') -> db.Model:
     try:
@@ -65,7 +57,9 @@ class Source(db.Model):
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
     last_updated = Column(DateTime)
-    star = relationship("SourceStar", uselist=False, backref="source")
+    star = relationship(
+        "SourceStar", uselist=False, backref="source"
+    )  # type: RelationshipProperty[SourceStar]
 
     # sources are "pending" and don't get displayed to journalists until they
     # submit something
@@ -82,8 +76,8 @@ class Source(db.Model):
     MAX_CODENAME_LEN = 128
 
     def __init__(self,
-                 filesystem_id: 'Optional[str]' = None,
-                 journalist_designation: 'Optional[str]' = None) -> None:
+                 filesystem_id: str,
+                 journalist_designation: str) -> None:
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
         self.uuid = str(uuid.uuid4())
@@ -173,7 +167,7 @@ class Submission(db.Model):
     source = relationship(
         "Source",
         backref=backref("submissions", order_by=id, cascade="delete")
-        )
+    )  # type: RelationshipProperty[Source]
 
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
@@ -253,13 +247,14 @@ class Reply(db.Model):
         "Journalist",
         backref=backref(
             'replies',
-            order_by=id))
+            order_by=id)
+    )  # type: RelationshipProperty[Journalist]
 
     source_id = Column(Integer, ForeignKey('sources.id'))
     source = relationship(
         "Source",
         backref=backref("replies", order_by=id, cascade="delete")
-        )
+    )  # type: RelationshipProperty[Source]
 
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
@@ -408,10 +403,10 @@ class Journalist(db.Model):
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), unique=True, nullable=False)
     username = Column(String(255), nullable=False, unique=True)
-    first_name = Column(String(255))
-    last_name = Column(String(255))
-    pw_salt = Column(LargeBinary(32))
-    pw_hash = Column(LargeBinary(256))
+    first_name = Column(String(255), nullable=True)
+    last_name = Column(String(255), nullable=True)
+    pw_salt = Column(LargeBinary(32), nullable=True)  # type: Column[Optional[bytes]]
+    pw_hash = Column(LargeBinary(256), nullable=True)  # type: Column[Optional[bytes]]
     is_admin = Column(Boolean)
     session_nonce = Column(Integer, nullable=False, default=0)
 
@@ -425,7 +420,8 @@ class Journalist(db.Model):
     passphrase_hash = Column(String(256))
     login_attempts = relationship(
         "JournalistLoginAttempt",
-        backref="journalist")
+        backref="journalist"
+    )  # type: RelationshipProperty[JournalistLoginAttempt]
 
     MIN_USERNAME_LEN = 3
     MIN_NAME_LEN = 0
@@ -444,10 +440,10 @@ class Journalist(db.Model):
         self.username = username
         if first_name:
             self.check_name_acceptable(first_name)
-        self.first_name = first_name
+            self.first_name = first_name
         if last_name:
             self.check_name_acceptable(last_name)
-        self.last_name = last_name
+            self.last_name = last_name
         self.set_password(password)
         self.is_admin = is_admin
         self.uuid = str(uuid.uuid4())
@@ -462,7 +458,7 @@ class Journalist(db.Model):
 
     _LEGACY_SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
-    def _scrypt_hash(self, password: str, salt: str) -> str:
+    def _scrypt_hash(self, password: str, salt: bytes) -> str:
         return scrypt.hash(str(password), salt, **self._LEGACY_SCRYPT_PARAMS)
 
     MAX_PASSWORD_LEN = 128
@@ -489,13 +485,13 @@ class Journalist(db.Model):
 
         self.passphrase_hash = argon2.using(**ARGON2_PARAMS).hash(passphrase)
 
-    def set_name(self, first_name: 'Optional[str]', last_name: 'Optional[str]') -> None:
+    def set_name(self, first_name: Optional[str], last_name: Optional[str]) -> None:
         if first_name:
             self.check_name_acceptable(first_name)
+            self.first_name = first_name
         if last_name:
             self.check_name_acceptable(last_name)
-        self.first_name = first_name
-        self.last_name = last_name
+            self.last_name = last_name
 
     @classmethod
     def check_username_acceptable(cls, username: str) -> None:
@@ -544,6 +540,11 @@ class Journalist(db.Model):
             is_valid = argon2.verify(passphrase, self.passphrase_hash)
         else:
             # legacy support
+            if self.pw_salt is None:
+                raise ValueError(
+                    "Should never happen: pw_salt is none for legacy Journalist {}".format(self.id)
+                )
+
             is_valid = pyotp.utils.compare_digest(
                 self._scrypt_hash(passphrase, self.pw_salt),
                 self.pw_hash)
@@ -566,10 +567,8 @@ class Journalist(db.Model):
 
     def set_hotp_secret(self, otp_secret: str) -> None:
         self.otp_secret = base64.b32encode(
-            binascii.unhexlify(
-                otp_secret.replace(
-                    " ",
-                    "")))
+            binascii.unhexlify(otp_secret.replace(" ", ""))
+        ).decode("ascii")
         self.is_totp = False
         self.hotp_counter = 0
 
@@ -726,7 +725,7 @@ class Journalist(db.Model):
 
         return Journalist.query.get(data['id'])
 
-    def to_json(self, all_info: bool = True) -> 'Dict[str, Union[str, bool, str]]':
+    def to_json(self, all_info: bool = True) -> Dict[str, Any]:
         """Returns a JSON representation of the journalist user. If all_info is
            False, potentially sensitive or extraneous fields are excluded. Note
            that both representations do NOT include credentials."""
@@ -736,7 +735,7 @@ class Journalist(db.Model):
             'uuid': self.uuid,
             'first_name': self.first_name,
             'last_name': self.last_name
-        }
+        }  # type: Dict[str, Any]
 
         if all_info is True:
             json_user['is_admin'] = self.is_admin
@@ -756,8 +755,10 @@ class SeenFile(db.Model):
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=True)
     file = relationship(
         "Submission", backref=backref("seen_files", lazy="dynamic", cascade="all,delete")
-    )
-    journalist = relationship("Journalist", backref=backref("seen_files"))
+    )  # type: RelationshipProperty[Submission]
+    journalist = relationship(
+        "Journalist", backref=backref("seen_files")
+    )  # type: RelationshipProperty[Journalist]
 
 
 class SeenMessage(db.Model):
@@ -768,8 +769,10 @@ class SeenMessage(db.Model):
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=True)
     message = relationship(
         "Submission", backref=backref("seen_messages", lazy="dynamic", cascade="all,delete")
-    )
-    journalist = relationship("Journalist", backref=backref("seen_messages"))
+    )  # type: RelationshipProperty[Submission]
+    journalist = relationship(
+        "Journalist", backref=backref("seen_messages")
+    )  # type: RelationshipProperty[Journalist]
 
 
 class SeenReply(db.Model):
@@ -778,8 +781,12 @@ class SeenReply(db.Model):
     id = Column(Integer, primary_key=True)
     reply_id = Column(Integer, ForeignKey("replies.id"), nullable=False)
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=True)
-    reply = relationship("Reply", backref=backref("seen_replies", cascade="all,delete"))
-    journalist = relationship("Journalist", backref=backref("seen_replies"))
+    reply = relationship(
+        "Reply", backref=backref("seen_replies", cascade="all,delete")
+    )  # type: RelationshipProperty[Reply]
+    journalist = relationship(
+        "Journalist", backref=backref("seen_replies")
+    )  # type: RelationshipProperty[Journalist]
 
 
 class JournalistLoginAttempt(db.Model):
