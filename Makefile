@@ -176,6 +176,13 @@ dev:  ## Run the development server in a Docker container.
 	@OFFSET_PORTS='false' DOCKER_BUILD_VERBOSE='true' $(DEVSHELL) $(SDBIN)/run
 	@echo
 
+.PHONY: dev-focal
+dev-focal:  ## Run the development server in a Docker container.
+	@echo "███ Starting development server..."
+	@OFFSET_PORTS='false' DOCKER_BUILD_VERBOSE='true' BASE_OS='focal' $(DEVSHELL) $(SDBIN)/run
+	@echo
+
+
 .PHONY: staging
 staging:  ## Create a local staging environment in virtual machines (Xenial)
 	@echo "███ Creating staging environment on Ubuntu Xenial..."
@@ -216,6 +223,12 @@ clean:  ## DANGER! Delete all uncommitted files, virtual machines, Onion address
 test:  ## Run the test suite in a Docker container.
 	@echo "███ Running SecureDrop application tests..."
 	@$(DEVSHELL) $(SDBIN)/run-test -v $${TESTFILES:-tests}
+	@echo
+
+.PHONY: test-focal
+test-focal:  ## Run the test suite in a Docker container.
+	@echo "███ Running SecureDrop application tests..."
+	@BASE_OS='focal' $(DEVSHELL) $(SDBIN)/run-test -v $${TESTFILES:-tests}
 	@echo
 
 .PHONY: docker-vnc
