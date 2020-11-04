@@ -20,6 +20,8 @@ from . import functional_test as ft
 from . import journalist_navigation_steps
 from . import source_navigation_steps
 
+from tbselenium.utils import SECURITY_LOW
+
 
 class TestJournalist(
     ft.FunctionalTest,
@@ -65,9 +67,7 @@ class TestJournalist(
         self._source_submits_a_file()
         self._source_logs_out()
 
-        # Toggle security slider to force prefs change
-        self.set_tbb_securitylevel(ft.TBB_SECURITY_HIGH)
-        self.set_tbb_securitylevel(ft.TBB_SECURITY_LOW)
+        self.set_tbb_securitylevel(SECURITY_LOW)
 
         self._journalist_logs_in()
         self._journalist_uses_js_filter_by_sources()
