@@ -472,6 +472,11 @@ def cleanup_expired_revoked_tokens() -> None:
 
 
 def revoke_token(user: Journalist, auth_token: str) -> None:
-    revoked_token = RevokedToken(token=auth_token, journalist_id=user.id)
-    db.session.add(revoked_token)
-    db.session.commit()
+    try:
+        revoked_token = RevokedToken(token=auth_token, journalist_id=user.id)
+        db.session.add(revoked_token)
+        db.session.commit()
+    except IntegrityError as e:
+        db.session.rollback()
+        if "UNIQUE constraint failed: revoked_tokens.token" not in str(e):
+            raise e
