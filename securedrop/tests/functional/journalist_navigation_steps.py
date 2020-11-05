@@ -1114,8 +1114,8 @@ class JournalistNavigationStepsMixin:
 
         if self.accept_languages is None:
             expected_text = (
-                "An error occured: file not found. "
-                + "An admin can find more information in the system logs."
+                "Your download failed because a file could not be found. An admin can find "
+                + "more information in the system and monitoring logs."
             )
             assert expected_text == notification.text
 

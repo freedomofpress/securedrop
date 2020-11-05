@@ -207,8 +207,8 @@ def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> 
     except FileNotFoundError:
         flash(
             gettext(
-                "An error occured: file not found. "
-                + "An admin can find more information in the system logs."
+                "Your download failed because a file could not be found. An admin can find "
+                + "more information in the system and monitoring logs."
             ),
             "error"
         )
