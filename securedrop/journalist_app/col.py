@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from pathlib import Path
+
 from flask import (
     Blueprint,
     abort,
@@ -92,6 +94,18 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         """
         if '..' in fn or fn.startswith('/'):
             abort(404)
+
+        file = current_app.storage.path(filesystem_id, fn)
+        if not Path(file).is_file():
+            flash(
+                gettext(
+                    "Your download failed because a file could not be found. An admin can find "
+                    + "more information in the system and monitoring logs."
+                ),
+                "error"
+            )
+            current_app.logger.error("File {} not found".format(file))
+            return redirect(url_for("col.col", filesystem_id=filesystem_id))
 
         # mark as seen by the current user
         try:

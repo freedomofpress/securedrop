@@ -3,6 +3,7 @@ import binascii
 import datetime
 import os
 from typing import Optional, List, Union, Any
+from urllib.parse import urlparse
 
 import flask
 import werkzeug
@@ -190,7 +191,7 @@ def mark_seen(targets: List[Union[Submission, Reply]], user: Journalist) -> None
             raise
 
 
-def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> flask.Response:
+def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> werkzeug.Response:
     """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
     containing *submissions*. The ZIP-file, being a
     :class:`tempfile.NamedTemporaryFile`, is stored on disk only
@@ -201,7 +202,19 @@ def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> 
     :param list submissions: A list of :class:`models.Submission`s to
                              include in the ZIP-file.
     """
-    zf = current_app.storage.get_bulk_archive(submissions, zip_directory=zip_basename)
+    try:
+        zf = current_app.storage.get_bulk_archive(submissions, zip_directory=zip_basename)
+    except FileNotFoundError:
+        flash(
+            gettext(
+                "Your download failed because a file could not be found. An admin can find "
+                + "more information in the system and monitoring logs."
+            ),
+            "error"
+        )
+        referrer = urlparse(str(request.referrer)).path
+        return redirect(referrer)
+
     attachment_filename = "{}--{}.zip".format(
         zip_basename, datetime.datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S")
     )
