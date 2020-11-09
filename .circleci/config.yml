@@ -51,6 +51,49 @@ common-steps:
       paths:
         - /caches/layers.tar
 
+  - &focalcreatecachedir
+    run:
+      name: Ensure cache dir exists and permissions are good
+      command: |
+        sudo mkdir -p /focalcaches && sudo chown circleci: -R /focalcaches
+
+  - &focalrestorecache
+    restore_cache:
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/focal/python3/Dockerfile" }}
+      paths:
+        - /focalcaches/layers.tar.gz
+
+  - &focalloadimagelayers
+    run:
+      name: Load image layer cache on Focal
+      command: |
+        set +o pipefail
+        docker load -i /focalcaches/layers.tar || true
+
+  - &focaldockerimagebuild
+    run:
+      name: Build Docker images for Focal
+      command: |
+        set +o pipefail
+        docker images
+        fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
+        cd securedrop && DOCKER_BUILD_VERBOSE=true DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" BASE_OS=focal ./bin/dev-shell true
+
+  - &focalsaveimagelayers
+    run:
+      name: Save Docker image layer cache on Focal
+      command: |
+        docker images
+        docker save -o /focalcaches/layers.tar securedrop-test-focal-py3:latest
+
+  - &focalsavecache
+    save_cache:
+      key: v1-sd-layers-{{ checksum "securedrop/dockerfiles/focal/python3/Dockerfile" }}
+      paths:
+        - /focalcaches/layers.tar
+
+
+
 version: 2
 jobs:
   lint:
@@ -79,6 +122,39 @@ jobs:
       - run:
           name: Run shellcheck
           command: make shellcheck
+
+  focal-app-tests:
+    machine:
+      enabled: true
+    environment:
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: focal
+    parallelism: 3
+    steps:
+      - checkout
+      - *rebaseontarget
+      - *focalcreatecachedir
+      - *focalrestorecache
+      - *focalloadimagelayers
+      - *focaldockerimagebuild
+      - *focalsaveimagelayers
+      - *focalsavecache
+
+      - run:
+          name: Run tests on Focal
+          command: |
+            BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|update-builder)")
+            if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
+            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
+            fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make test-focal
+          no_output_timeout: 15m
+
+      - store_test_results:
+          path: ~/project/test-results-focal
+
+      - store_artifacts:
+          path: ~/project/test-results-focal
 
   app-tests:
     machine:
@@ -298,6 +374,14 @@ workflows:
     jobs:
       - lint
       - app-tests:
+          filters:
+            branches:
+              ignore:
+                - /i18n-.*/
+                - /update-builder-.*/
+          requires:
+            - lint
+      - focal-app-tests:
           filters:
             branches:
               ignore:
