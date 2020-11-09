@@ -92,5 +92,5 @@ function reset_demo() {
 
     gpg2 --homedir /var/lib/securedrop/keys --no-default-keyring --keyring /var/lib/securedrop/keys/pubring.gpg --import /var/lib/securedrop/keys/test_journalist_key.pub
 
-    ./create-dev-data.py
+    ./loaddata.py
 }

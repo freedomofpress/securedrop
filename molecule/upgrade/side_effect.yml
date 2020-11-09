@@ -22,14 +22,14 @@
       args:
         chdir: /var/www/securedrop
 
-    - name: Slap in latest create-dev-data script
+    - name: Slap in latest loaddata script
       copy:
-        src: ../../securedrop/create-dev-data.py
-        dest: /var/www/securedrop/create-dev-data.py
+        src: ../../securedrop/loaddata.py
+        dest: /var/www/securedrop/loaddata.py
         mode: 0555
 
     - name: Insert journalist test user
-      command: /var/www/securedrop/create-dev-data.py --staging
+      command: /var/www/securedrop/loaddata.py
       args:
         chdir: /var/www/securedrop
   become: yes
