@@ -822,13 +822,12 @@ class JournalistNavigationStepsMixin:
     def _visit_edit_hotp_secret(self):
         self._visit_edit_secret(
             "hotp",
-            "Reset two-factor authentication for security keys like Yubikey")
+            "Reset two-factor authentication for security keys, like a YubiKey")
 
     def _visit_edit_totp_secret(self):
         self._visit_edit_secret(
             "totp",
-            "Reset two-factor authentication for mobile apps such as FreeOTP or "
-            "Google Authenticator"
+            "Reset two-factor authentication for mobile apps, such as FreeOTP"
         )
 
     def _admin_visits_add_user(self):
@@ -896,7 +895,9 @@ class JournalistNavigationStepsMixin:
             assert tip_opacity == "1"
 
             if not self.accept_languages:
-                assert tip_text == "Reset two-factor authentication for security keys like Yubikey"
+                assert (
+                    tip_text == "Reset two-factor authentication for security keys, like a YubiKey"
+                )
 
             self.safe_click_by_id("button-reset-two-factor-hotp")
 
@@ -927,8 +928,7 @@ class JournalistNavigationStepsMixin:
             assert tip_opacity == "1"
             if not self.accept_languages:
                 expected_text = (
-                    "Reset two-factor authentication for mobile apps such as FreeOTP "
-                    "or Google Authenticator"
+                    "Reset two-factor authentication for mobile apps, such as FreeOTP"
                 )
                 assert tip_text == expected_text
 

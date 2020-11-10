@@ -113,13 +113,16 @@ class SourceNavigationStepsMixin:
             headline = self.driver.find_element_by_class_name("headline")
             assert "Submit Files or Messages" == headline.text
 
-    def _source_continues_to_submit_page(self):
+    def _source_continues_to_submit_page(self, files_allowed=True):
         self.safe_click_by_id("continue-button")
 
         def submit_page_loaded():
             if not self.accept_languages:
                 headline = self.driver.find_element_by_class_name("headline")
-                assert "Submit Files or Messages" == headline.text
+                if files_allowed:
+                    assert "Submit Files or Messages" == headline.text
+                else:
+                    assert "Submit Messages" == headline.text
 
         self.wait_for(submit_page_loaded)
 

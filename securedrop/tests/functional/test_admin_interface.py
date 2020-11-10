@@ -83,7 +83,7 @@ class TestAdminInterface(
 
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
+        self._source_continues_to_submit_page(files_allowed=False)
         self._source_does_not_sees_document_attachment_item()
 
     def test_allow_file_submission(self):
