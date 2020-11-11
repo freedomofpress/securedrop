@@ -1,7 +1,15 @@
 alembic
 argon2_cffi>=20.1.0
 cffi>=1.14.2
+
+# The next release of cryptography after 3.2.1 will remove support for
+# OpenSSL 1.0.2, which is what we have on Xenial. If we're not on
+# Focal the next time the following requirement needs to be updated,
+# we will have to consider bundling a binary wheel of cryptography in
+# the securedrop-app-code package, so it includes a supported version
+# of OpenSSL.
 cryptography>=3.2
+
 Flask-Assets
 Flask-Babel
 Flask-SQLAlchemy
