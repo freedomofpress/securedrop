@@ -153,7 +153,7 @@ class JournalistNavigationStepsMixin:
         self._journalist_clicks_on_modal("delete-collections")
 
         def collection_deleted():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
                 assert "1 collection deleted" in flash_msg.text
 
@@ -163,7 +163,7 @@ class JournalistNavigationStepsMixin:
         self._journalist_clicks_on_modal("delete-selected")
 
         def submission_deleted():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
                 assert "Submission deleted." in flash_msg.text
 
@@ -275,7 +275,7 @@ class JournalistNavigationStepsMixin:
         self.safe_click_by_id("submit-logo-update")
 
         def updated_image():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
                 assert "Image updated." in flash_msg.text
 
@@ -327,7 +327,7 @@ class JournalistNavigationStepsMixin:
 
         self.wait_for(lambda: self.driver.find_element_by_id("username"))
 
-        if not hasattr(self, "accept_languages"):
+        if not self.accept_languages:
             # The add user page has a form with an "ADD USER" button
             btns = self.driver.find_elements_by_tag_name("button")
             assert "ADD USER" in [el.text for el in btns]
@@ -349,7 +349,7 @@ class JournalistNavigationStepsMixin:
 
         self.wait_for(lambda: self.driver.find_element_by_id("username"))
 
-        if not hasattr(self, "accept_languages"):
+        if not self.accept_languages:
             # The add user page has a form with an "ADD USER" button
             btns = self.driver.find_elements_by_tag_name("button")
             assert "ADD USER" in [el.text for el in btns]
@@ -364,7 +364,7 @@ class JournalistNavigationStepsMixin:
                        last_name=self.new_user['last_name'],
                        is_admin=is_admin)
 
-        if not hasattr(self, "accept_languages"):
+        if not self.accept_languages:
             # Clicking submit on the add user form should redirect to
             # the FreeOTP page
             h1s = [h1.text for h1 in self.driver.find_elements_by_tag_name("h1")]
@@ -380,7 +380,7 @@ class JournalistNavigationStepsMixin:
         self.safe_click_by_css_selector("button[type=submit]")
 
         def user_token_added():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 # Successfully verifying the code should redirect to the admin
                 # interface, and flash a message indicating success
                 flash_msg = self.driver.find_elements_by_css_selector(".flash")
@@ -403,7 +403,7 @@ class JournalistNavigationStepsMixin:
                 logging.info("Selenium has failed to click yet again; retrying.")
 
         def user_deleted():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
                 assert "Deleted user" in flash_msg.text
 
@@ -414,7 +414,7 @@ class JournalistNavigationStepsMixin:
         alert_button.click()
 
         def test_alert_sent():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
                 assert "Test alert sent. Please check your email." in flash_msg.text
 
@@ -566,7 +566,7 @@ class JournalistNavigationStepsMixin:
         self.safe_click_by_css_selector("button[type=submit]")
 
         def user_edited():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
                 assert "Invalid username" in flash_msg.text
 
@@ -608,7 +608,7 @@ class JournalistNavigationStepsMixin:
         self.safe_click_by_css_selector("button[type=submit]")
 
         def user_edited():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
                 assert "Account updated." in flash_msg.text
 
@@ -676,7 +676,7 @@ class JournalistNavigationStepsMixin:
         assert 0 != len(code_names), code_names
         assert 1 <= len(code_names), code_names
 
-        if not hasattr(self, "accept_languages"):
+        if not self.accept_languages:
             # There should be a "1 unread" span in the sole collection entry
             unread_span = self.driver.find_element_by_css_selector("span.unread")
             assert "1 unread" in unread_span.text
@@ -776,7 +776,7 @@ class JournalistNavigationStepsMixin:
         self.driver.find_element_by_id("reply-button").click()
 
         def reply_stored():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 assert "Thanks. Your reply has been stored." in self.driver.page_source
 
         self.wait_for(reply_stored)
@@ -805,7 +805,7 @@ class JournalistNavigationStepsMixin:
             explanatory_tooltip_opacity = explanatory_tooltip.value_of_css_property("opacity")
             assert explanatory_tooltip_opacity == "1"
 
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 assert explanatory_tooltip.text == tooltip_text
 
         self.wait_for(explanatory_tooltip_is_correct)
@@ -822,13 +822,12 @@ class JournalistNavigationStepsMixin:
     def _visit_edit_hotp_secret(self):
         self._visit_edit_secret(
             "hotp",
-            "Reset two-factor authentication for security keys like Yubikey")
+            "Reset two-factor authentication for security keys, like a YubiKey")
 
     def _visit_edit_totp_secret(self):
         self._visit_edit_secret(
             "totp",
-            "Reset two-factor authentication for mobile apps such as FreeOTP or "
-            "Google Authenticator"
+            "Reset two-factor authentication for mobile apps, such as FreeOTP"
         )
 
     def _admin_visits_add_user(self):
@@ -895,8 +894,10 @@ class JournalistNavigationStepsMixin:
 
             assert tip_opacity == "1"
 
-            if not hasattr(self, "accept_languages"):
-                assert tip_text == "Reset two-factor authentication for security keys like Yubikey"
+            if not self.accept_languages:
+                assert (
+                    tip_text == "Reset two-factor authentication for security keys, like a YubiKey"
+                )
 
             self.safe_click_by_id("button-reset-two-factor-hotp")
 
@@ -925,10 +926,9 @@ class JournalistNavigationStepsMixin:
                 "#button-reset-two-factor-totp span")[0].text
 
             assert tip_opacity == "1"
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 expected_text = (
-                    "Reset two-factor authentication for mobile apps such as FreeOTP "
-                    "or Google Authenticator"
+                    "Reset two-factor authentication for mobile apps, such as FreeOTP"
                 )
                 assert tip_text == expected_text
 

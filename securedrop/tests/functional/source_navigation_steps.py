@@ -109,17 +109,20 @@ class SourceNavigationStepsMixin:
     def _source_hits_cancel_at_submit_page(self):
         self.driver.find_element_by_id("cancel").click()
 
-        if not hasattr(self, "accept_languages"):
+        if not self.accept_languages:
             headline = self.driver.find_element_by_class_name("headline")
             assert "Submit Files or Messages" == headline.text
 
-    def _source_continues_to_submit_page(self):
+    def _source_continues_to_submit_page(self, files_allowed=True):
         self.safe_click_by_id("continue-button")
 
         def submit_page_loaded():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 headline = self.driver.find_element_by_class_name("headline")
-                assert "Submit Files or Messages" == headline.text
+                if files_allowed:
+                    assert "Submit Files or Messages" == headline.text
+                else:
+                    assert "Submit Messages" == headline.text
 
         self.wait_for(submit_page_loaded)
 
@@ -144,7 +147,7 @@ class SourceNavigationStepsMixin:
             self.wait_for_source_key(self.source_name)
 
             def file_submitted():
-                if not hasattr(self, "accept_languages"):
+                if not self.accept_languages:
                     notification = self.driver.find_element_by_css_selector(".success")
                     expected_notification = "Thank you for sending this information to us"
                     assert expected_notification in notification.text
@@ -160,7 +163,7 @@ class SourceNavigationStepsMixin:
         self._source_clicks_submit_button_on_submission_page()
 
         def message_submitted():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 notification = self.driver.find_element_by_css_selector(".success")
                 assert "Thank" in notification.text
 
@@ -198,7 +201,7 @@ class SourceNavigationStepsMixin:
         confirm_button.click()
 
         def reply_deleted():
-            if not hasattr(self, "accept_languages"):
+            if not self.accept_languages:
                 notification = self.driver.find_element_by_class_name("notification")
                 assert "Reply deleted" in notification.text
 
@@ -228,7 +231,7 @@ class SourceNavigationStepsMixin:
     def _source_sees_session_timeout_message(self):
         notification = self.driver.find_element_by_css_selector(".important")
 
-        if not hasattr(self, "accept_languages"):
+        if not self.accept_languages:
             expected_text = "You were logged out due to inactivity."
             assert expected_text in notification.text
 
@@ -242,13 +245,13 @@ class SourceNavigationStepsMixin:
     def _source_sees_already_logged_in_in_other_tab_message(self):
         notification = self.driver.find_element_by_css_selector(".notification")
 
-        if not hasattr(self, "accepted_languages"):
+        if not self.accept_languages:
             expected_text = "You are already logged in."
             assert expected_text in notification.text
 
     def _source_sees_redirect_already_logged_in_message(self):
         notification = self.driver.find_element_by_css_selector(".notification")
 
-        if not hasattr(self, "accepted_languages"):
+        if not self.accept_languages:
             expected_text = "You were redirected because you are already logged in."
             assert expected_text in notification.text
