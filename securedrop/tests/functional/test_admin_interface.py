@@ -97,3 +97,15 @@ class TestAdminInterface(
         self._source_chooses_to_submit_documents()
         self._source_continues_to_submit_page()
         self._source_sees_document_attachment_item()
+
+    def test_orgname_is_changed(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_visits_system_config_page()
+        self._admin_sets_organization_name()
+
+        self._source_visits_source_homepage()
+        self._source_sees_orgname(name=self.orgname_new)
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_sees_orgname(name=self.orgname_new)

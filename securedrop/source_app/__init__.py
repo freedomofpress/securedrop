@@ -168,6 +168,12 @@ def create_app(config: SDConfig) -> Flask:
                 del session['codename']
                 return redirect(url_for('main.index'))
             g.loc = app.storage.path(g.filesystem_id)
+
+        if app.instance_config.organization_name:
+            g.organization_name = app.instance_config.organization_name
+        else:
+            g.organization_name = gettext('SecureDrop')
+
         return None
 
     @app.errorhandler(404)

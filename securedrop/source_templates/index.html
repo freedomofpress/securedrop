@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ g.html_lang }}" dir="{{ g.text_direction }}">
   <head>
-    <title>SecureDrop | {{ gettext('Protecting Journalists and Sources') }}</title>
+    <title> {{ g.organization_name }} | {{ gettext('Protecting Journalists and Sources') }}</title>
 
     <link rel="stylesheet" href="/static/css/source.css">
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
@@ -26,7 +26,7 @@
            See _source_index.sass for a more full understanding. #}
         <div class="index-wrap">
           <div class="header">
-            <img src="{{ url_for('main.select_logo') }}" alt="{{ gettext('Logo Image') }}" class="logo-image">
+            <img src="{{ url_for('main.select_logo') }}" alt="{{ g.organization_name }} | {{ gettext('Logo Image') }}" class="logo-image">
             <div id="index-locales">
               {% include 'locales.html' %}
             </div>

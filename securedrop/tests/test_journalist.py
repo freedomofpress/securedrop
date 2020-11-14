@@ -17,6 +17,7 @@ from pyotp import TOTP
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.sql.expression import func
+from html import escape as htmlescape
 
 import journalist_app as journalist_app_module
 from journalist_app.utils import mark_seen
@@ -1495,6 +1496,69 @@ def test_no_prevent_document_uploads(journalist_app, test_admin):
             app.post(url_for('admin.update_submission_preferences'),
                      follow_redirects=True)
             ins.assert_message_flashed('Preferences saved.', 'submission-preferences-success')
+
+
+def test_orgname_valid_succeeds(journalist_app, test_admin):
+    test_name = "Walden Inquirer"
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        form = journalist_app_module.forms.OrgNameForm(
+            organization_name=test_name)
+        assert InstanceConfig.get_current().organization_name == "SecureDrop"
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.update_org_name'),
+                     data=form.data,
+                     follow_redirects=True)
+            ins.assert_message_flashed('Preferences saved.', 'org-name-success')
+            assert InstanceConfig.get_current().organization_name == test_name
+
+
+def test_orgname_null_fails(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        form = journalist_app_module.forms.OrgNameForm(
+            organization_name=None)
+        assert InstanceConfig.get_current().organization_name == "SecureDrop"
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.update_org_name'),
+                     data=form.data,
+                     follow_redirects=True)
+            ins.assert_message_flashed('This field is required.', 'org-name-error')
+            assert InstanceConfig.get_current().organization_name == "SecureDrop"
+
+
+def test_orgname_oversized_fails(journalist_app, test_admin):
+    test_name = "1234567812345678123456781234567812345678123456781234567812345678a"
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        form = journalist_app_module.forms.OrgNameForm(
+            organization_name=test_name)
+        assert InstanceConfig.get_current().organization_name == "SecureDrop"
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.update_org_name'),
+                     data=form.data,
+                     follow_redirects=True)
+            ins.assert_message_flashed('Cannot be longer than 64 characters.', 'org-name-error')
+            assert InstanceConfig.get_current().organization_name == "SecureDrop"
+
+
+def test_orgname_html_escaped(journalist_app, test_admin):
+    t_name = '"> <a href=foo>'
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        form = journalist_app_module.forms.OrgNameForm(
+            organization_name=t_name)
+        assert InstanceConfig.get_current().organization_name == "SecureDrop"
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.update_org_name'),
+                     data=form.data,
+                     follow_redirects=True)
+            ins.assert_message_flashed('Preferences saved.', 'org-name-success')
+            assert InstanceConfig.get_current().organization_name == htmlescape(t_name, quote=True)
 
 
 def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):

@@ -25,7 +25,7 @@
 <p>{{ gettext('Here you can update the image displayed on the SecureDrop web interfaces:') }}</p>
 
 <p>
-  <img src="{{ url_for('main.select_logo') }}" class="logo small" alt="SecureDrop" width="250">
+  <img src="{{ url_for('main.select_logo') }}" class="logo small" alt="{{ g.organization_name }}" width="250">
 </p>
 
 <form method="post" enctype="multipart/form-data">
@@ -41,7 +41,8 @@
     <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
     {{ gettext('UPDATE LOGO') }}
   </button>
-  {% include 'logo_upload_flashed.html' %}
+  {% set prefs_filter = ["logo-success","logo-error"] %}
+  {% include 'preferences_saved_flash.html' %}
 </form>
 
 <hr class="no-line">
@@ -58,7 +59,26 @@
     <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
     {{ gettext('UPDATE SUBMISSION PREFERENCES') }}
   </button>
-  {% include 'submission_preferences_saved_flash.html' %}
+  {% set prefs_filter = ["submission-preferences-success","submission-preferences-error"] %}
+  {% include 'preferences_saved_flash.html' %}
+</form>
+
+<hr class="no-line">
+
+<h2>{{ gettext('Organization Name') }}</h2>
+
+<form action="{{ url_for('admin.update_org_name') }}" method="post">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <p>
+    <label for="organization_name">{{ gettext('Set your organization name:') }}</label>
+    {{ organization_name_form.organization_name() }}
+  </p>
+  <button type="submit" id="submit-update-org-name">
+    <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
+    {{ gettext('SET ORGANIZATION NAME') }}
+  </button>
+  {% set prefs_filter = ["org-name-error","org-name-success"] %}
+  {% include 'preferences_saved_flash.html' %}
 </form>
 
 {% endblock %}

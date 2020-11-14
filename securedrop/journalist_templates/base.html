@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SecureDrop</title>
+    <title>{{ g.organization_name }}</title>
 
     <link rel="stylesheet" href="/static/css/journalist.css">
 
@@ -39,7 +39,7 @@
       <div class="container">
         {% block header %}
         <div id="header">
-          <a href="{{ url_for('main.index') }}" class="no-bottom-border"><img src="{{ url_for('main.select_logo') }}" class="logo small" alt="SecureDrop" width="250"></a>
+          <a href="{{ url_for('main.index') }}" class="no-bottom-border"><img src="{{ url_for('main.select_logo') }}" class="logo small" alt="{{ g.organization_name }}" width="250"></a>
           {% include 'locales.html' %}
         </div>
         {% endblock %}

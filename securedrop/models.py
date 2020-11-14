@@ -825,11 +825,15 @@ class InstanceConfig(db.Model):
     interface.  The current version has valid_until=None.
     '''
 
+    # Limits length of org name used in SI and JI titles, image alt texts etc.
+    MAX_ORG_NAME_LEN = 64
+
     __tablename__ = 'instance_config'
     version = Column(Integer, primary_key=True)
     valid_until = Column(DateTime, default=None, unique=True)
 
     allow_document_uploads = Column(Boolean, default=True)
+    organization_name = Column(String(255), nullable=True, default="SecureDrop")
 
     # Columns not listed here will be included by InstanceConfig.copy() when
     # updating the configuration.
@@ -867,6 +871,31 @@ class InstanceConfig(db.Model):
             db.session.add(current)
             db.session.commit()
             return current
+
+    @classmethod
+    def check_name_acceptable(cls, name: str) -> None:
+        # Enforce a reasonable maximum length for names
+        if name is None or len(name) == 0:
+            raise InvalidNameLength(name)
+        if len(name) > cls.MAX_ORG_NAME_LEN:
+            raise InvalidNameLength(name)
+
+    @classmethod
+    def set_organization_name(cls, name: str) -> None:
+        '''Invalidate the current configuration and append a new one with the
+        new organization name.
+        '''
+
+        old = cls.get_current()
+        old.valid_until = datetime.datetime.utcnow()
+        db.session.add(old)
+
+        new = old.copy()
+        cls.check_name_acceptable(name)
+        new.organization_name = name
+        db.session.add(new)
+
+        db.session.commit()
 
     @classmethod
     def set_allow_document_uploads(cls, value: bool) -> None:
