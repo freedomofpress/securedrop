@@ -1,0 +1,7 @@
+codecov:
+  disable_default_path_fixes: false
+ignore:
+  - "securedrop/upload-screenshots.py"
+  - "securedrop/qa_loader.py"
+  - "securedrop/create-dev-data.py"
+  - "securedrop/specialstrings.py"
