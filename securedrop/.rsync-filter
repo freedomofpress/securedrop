@@ -38,6 +38,8 @@ include static/i/font-awesome/
 include static/i/font-awesome/**
 include static/i/tipbox/
 include static/i/tipbox/**
+include static/icons/
+include static/icons/**
 include static/js/
 include static/js/*.js
 include static/js/libs/
