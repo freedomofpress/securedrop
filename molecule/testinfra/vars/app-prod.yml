@@ -20,7 +20,7 @@ app_directories:
   - /var/lib/securedrop/tmp
 
 apparmor_enforce:
-  - "/sbin/dhclient"
+  - "sbin/dhclient"
   - "/usr/lib/NetworkManager/nm-dhcp-client.action"
   - "/usr/lib/connman/scripts/dhclient-script"
   - "/usr/sbin/ntpd"
