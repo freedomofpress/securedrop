@@ -100,8 +100,12 @@ class TestJournalistMissingFile(
         self._source_logs_out()
 
         # Remove the message file from the store
+        filesystem_id = self.source_app.crypto_util.hash_codename(self.source_name)
         storage_path = Path(self.journalist_app.storage.storage_path)
-        msg_files = [p for p in storage_path.rglob("*") if p.is_file()]
+        msg_files = [
+            p for p in storage_path.rglob("*")
+            if p.is_file() and filesystem_id in p.parts
+        ]
         assert len(msg_files) == 1
         msg_files[0].unlink()
 
