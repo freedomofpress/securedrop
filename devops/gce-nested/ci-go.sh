@@ -12,6 +12,7 @@ set -e
 set -u
 set -o pipefail
 
+export BASE_OS="${BASE_OS:-xenial}"
 
 ./devops/gce-nested/gce-start.sh
 ./devops/gce-nested/gce-runner.sh
