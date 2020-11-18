@@ -307,6 +307,7 @@
   /var/www/securedrop/static/i/x_icon-sd_blue.png r,
   /var/www/securedrop/static/icons/bell.png r,
   /var/www/securedrop/static/icons/check.png r,
+  /var/www/securedrop/static/icons/chevron-left.png r,
   /var/www/securedrop/static/icons/chevron-right.png r,
   /var/www/securedrop/static/icons/download.png r,
   /var/www/securedrop/static/icons/edit-user.png r,

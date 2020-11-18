@@ -20,5 +20,8 @@
 
 <p>{{ gettext('<strong>Important:</strong> If you wish to remain anonymous, <strong>do not</strong> use GPG to sign the encrypted file (with the <code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG identity to us.')|safe }}</p>
 
-<p><a href="/lookup">« {{ gettext('Back to submission page') }}</a></p>
+<p>
+    <img src="{{ url_for('static', filename='icons/chevron-left.png') }}" class="icon" width="9" height="14" alt="">
+    <a href="/lookup">{{ gettext('Back to submission page') }}</a>
+</p>
 {% endblock %}
