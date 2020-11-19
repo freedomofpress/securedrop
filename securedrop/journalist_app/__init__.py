@@ -18,7 +18,7 @@ import version
 
 from crypto_util import CryptoUtil
 from db import db
-from journalist_app import account, admin, api, main, col
+from journalist_app import account, admin, api, apiv2, main, col
 from journalist_app.utils import (get_source, logged_in,
                                   JournalistInterfaceSessionInterface,
                                   cleanup_expired_revoked_tokens)
@@ -205,6 +205,9 @@ def create_app(config: 'SDConfig') -> Flask:
     app.register_blueprint(col.make_blueprint(config), url_prefix='/col')
     api_blueprint = api.make_blueprint(config)
     app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+    api_v2_blueprint = apiv2.make_blueprint(config)
+    app.register_blueprint(api_v2_blueprint, url_prefix='/api/v2')
     csrf.exempt(api_blueprint)
+    csrf.exempt(api_v2_blueprint)
 
     return app
