@@ -60,7 +60,7 @@ def create_app(config: SDConfig) -> Flask:
     # The default CSRF token expiration is 1 hour. Since large uploads can
     # take longer than an hour over Tor, we increase the valid window to 24h.
     app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60 * 24
-    CSRFProtect(app)
+    csrf = CSRFProtect(app)
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
@@ -103,7 +103,8 @@ def create_app(config: SDConfig) -> Flask:
     for module in [main, info, api]:
         app.register_blueprint(module.make_blueprint(config))  # type: ignore
 
-    app.register_blueprint(apiv2.make_blueprint(config), url_prefix='/api/v2')
+    api_v2_blueprint = apiv2.make_blueprint(config)
+    app.register_blueprint(api_v2_blueprint, url_prefix='/api/v2')
 
     @app.before_request
     @ignore_static
@@ -154,5 +155,7 @@ def create_app(config: SDConfig) -> Flask:
     @app.errorhandler(500)
     def internal_error(error: werkzeug.exceptions.HTTPException) -> Tuple[str, int]:
         return render_template('error.html'), 500
+
+    csrf.exempt(api_v2_blueprint)
 
     return app
