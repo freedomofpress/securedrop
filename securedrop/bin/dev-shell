@@ -59,9 +59,16 @@ function docker_run() {
         echo "************************************************************"
     fi
 
+    # If this is a CI run, pass CodeCov settings into the container.
+    if [ -n "${CIRCLE_BRANCH:-}" ] ; then
+        ci_env=$(bash <(curl -s https://codecov.io/env))
+    else
+        ci_env=""
+    fi
+
     # The --shm-size argument sets up dedicated shared memory for the
     # container. Our tests can fail with the default of 64m.
-    docker run \
+    docker run $ci_env \
            --shm-size 2g \
            --rm \
            -p "127.0.0.1:${SD_HOSTPORT_VNC}:5909" \
@@ -72,6 +79,7 @@ function docker_run() {
            -e LANG=C.UTF-8 \
            -e PAGE_LAYOUT_LOCALES \
            -e PATH \
+           -e BASE_OS=$BASE_OS \
            --user "${USER:-root}" \
            --volume "${TOPLEVEL}:${TOPLEVEL}" \
            --workdir "${TOPLEVEL}/securedrop" \

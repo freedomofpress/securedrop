@@ -26,7 +26,7 @@ if [ -n "${CIRCLE_BRANCH:-}" ] ; then
     touch tests/log/firefox.log
     function finish {
         cp tests/log/firefox.log ../test-results
-        bash <(curl -s https://codecov.io/bash)
+        bash <(curl -s https://codecov.io/bash -cF "$BASE_OS")
     }
     trap finish EXIT
 fi
