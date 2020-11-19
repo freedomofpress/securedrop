@@ -157,6 +157,8 @@ class Source(db.Model):
         # if revoked_token is not None:
         #     return None
 
+        return Source.query.get(data['id'])
+
     def generate_api_token(self, expiration: int) -> str:
         s = TimedJSONWebSignatureSerializer(
             current_app.config['SECRET_KEY'], expires_in=expiration)
