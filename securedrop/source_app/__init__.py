@@ -22,7 +22,7 @@ from db import db
 from models import InstanceConfig, Source
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from sdconfig import SDConfig
-from source_app import main, info, api
+from source_app import main, info, api, apiv2
 from source_app.decorators import ignore_static
 from source_app.utils import logged_in, was_in_generate_flow
 from store import Storage
@@ -120,6 +120,8 @@ def create_app(config: SDConfig) -> Flask:
 
     for module in [main, info, api]:
         app.register_blueprint(module.make_blueprint(config))  # type: ignore
+
+    app.register_blueprint(apiv2.make_blueprint(config), url_prefix='/api/v2')
 
     @app.before_request
     @ignore_static
