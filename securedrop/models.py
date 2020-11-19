@@ -19,6 +19,7 @@ from passlib.hash import argon2
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref, Query, RelationshipProperty
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, LargeBinary
+from sqlalchemy.types import TypeDecorator
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from db import db
@@ -34,6 +35,32 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
 
 ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
 
+
+class HexByteString(TypeDecorator):
+    impl = String
+
+    # TODO: rewrite, this is bad
+    def process_bind_param(self, value, dialect):
+        # Null fields are allowed if column is nullable
+        if not value:
+            return value
+
+        # Values already in hex are allowed
+        if isinstance(value, str):
+            bytes.fromhex(value)  # test if hex already
+            return value
+
+        # Bytes should be converted to hex
+        if not isinstance(value, bytes):
+            raise TypeError("Expected bytes")
+
+        return value.hex()
+
+    def process_result_value(self, value, dialect):
+        return bytes.fromhex(value) if value else None
+
+
+# Class signalmixin?
 
 def get_one_or_else(query: Query,
                     logger: 'Logger',
@@ -71,12 +98,32 @@ class Source(db.Model):
     # when deletion of the source was requested
     deleted_at = Column(DateTime)
 
+    # Required for Signal Protocol
+    identity_key = Column(HexByteString, nullable=True)
+    signed_prekey = Column(HexByteString, nullable=True)
+    signed_prekey_timestamp = Column(Integer, nullable=True)
+    prekey_signature = Column(HexByteString, nullable=True)
+    registration_id = Column(Integer, nullable=True)
+
+    # Optional for Signal Protocol
+    prekey = relationship(
+        "SourcePreKey", backref="source"
+    )
+
+    # Don't create or bother checking excessively long codenames to prevent DoS
+    NUM_WORDS = 7
+    MAX_CODENAME_LEN = 128
+
     def __init__(self,
                  filesystem_id: str,
                  journalist_designation: str) -> None:
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
         self.uuid = str(uuid.uuid4())
+
+    def is_signal_registered(self) -> bool:
+        """If any of these fields are null, one cannot communicate with them via Signal"""
+        return self.identity_key and self.signed_prekey and self.signed_prekey_timestamp and self.registration_id and self.prekey_signature
 
     def __repr__(self) -> str:
         return '<Source %r>' % (self.journalist_designation)
@@ -114,6 +161,11 @@ class Source(db.Model):
     def public_key(self) -> 'Optional[str]':
         return current_app.crypto_util.get_pubkey(self.filesystem_id)
 
+    def signal_registration(self) -> bool:
+        # Check if registration id in use
+        # Check all required components are present
+        pass
+
     def to_json(self) -> 'Dict[str, Union[str, bool, int, str]]':
         docs_msg_count = self.documents_messages_count()
 
@@ -135,11 +187,6 @@ class Source(db.Model):
             'is_starred': starred,
             'last_updated': last_updated,
             'interaction_count': self.interaction_count,
-            'key': {
-              'type': 'PGP',
-              'public': self.public_key,
-              'fingerprint': self.fingerprint
-            },
             'number_of_documents': docs_msg_count['documents'],
             'number_of_messages': docs_msg_count['messages'],
             'submissions_url': url_for('api.all_source_submissions',
@@ -148,10 +195,32 @@ class Source(db.Model):
             'remove_star_url': url_for('api.remove_star',
                                        source_uuid=self.uuid),
             'replies_url': url_for('api.all_source_replies',
-                                   source_uuid=self.uuid)
+                                   source_uuid=self.uuid),
+            'identity_key': self.identity_key,
+            'signed_prekey': self.signed_prekey,
+            'signed_prekey_timestamp': self.signed_prekey_timestamp,
+            'prekey_signature': self.prekey_signature,
+            'registration_id': self.registration_id,
             }
         return json_source
 
+
+class SourcePreKey(db.Model):
+    __tablename__ = 'source_prekeys'
+    id = Column(Integer, primary_key=True)  # pre_key_id
+    source_id = Column("source_id", Integer, ForeignKey('sources.id'))
+    pre_key = Column(HexByteString)
+
+
+# class SubmissionMetadata(db.Model): contains metadata of messages
+# class SourceToJournalistDeliveries(db.Model): contains e2e messages to be delievered to journalists from sources. Messages
+# are deleted after fetching.
+# class JournalistToSourceDeliveries(db.Model): contains e2e messages to be delivered to sources from journalists. Messages are deleted
+# after fetching. TODO: The same message is sent to other journalists using group messaging and will be in their source to journalist queue.
+# One could also imagine a JournalistToJournalistDeliveries table here, but that's a story for another day.
+# class FileMetadata(db.Model): contains metadata of files
+# Why keep metadata? To keep the seen by functionality working. If seen by is moved to client-only (with updates sent as messages to other journalists)
+# then the metadata can be deleted.
 
 class Submission(db.Model):
     MAX_MESSAGE_LEN = 100000
@@ -418,6 +487,14 @@ class Journalist(db.Model):
         backref="journalist"
     )  # type: RelationshipProperty[JournalistLoginAttempt]
 
+    # Required for Signal Protocol
+    identity_key = Column(HexByteString, nullable=True)
+    signed_prekey = Column(HexByteString, nullable=True)
+    signed_prekey_timestamp = Column(Integer, nullable=True)
+    prekey_signature = Column(HexByteString, nullable=True)
+    registration_id = Column(Integer, nullable=True)
+    # TODO: prekey OT
+
     MIN_USERNAME_LEN = 3
     MIN_NAME_LEN = 0
     MAX_NAME_LEN = 100
@@ -487,6 +564,10 @@ class Journalist(db.Model):
         if last_name:
             self.check_name_acceptable(last_name)
             self.last_name = last_name
+
+    def is_signal_registered(self) -> bool:
+        """If any of these fields are null, one cannot communicate with them via Signal"""
+        return self.identity_key and self.signed_prekey and self.signed_prekey_timestamp and self.registration_id and self.prekey_signature
 
     @classmethod
     def check_username_acceptable(cls, username: str) -> None:
@@ -736,7 +817,12 @@ class Journalist(db.Model):
             'username': self.username,
             'uuid': self.uuid,
             'first_name': self.first_name,
-            'last_name': self.last_name
+            'last_name': self.last_name,
+            'identity_key': self.identity_key,
+            'signed_prekey': self.signed_prekey,
+            'signed_prekey_timestamp': self.signed_prekey_timestamp,
+            'prekey_signature': self.prekey_signature,
+            'registration_id': self.registration_id,
         }  # type: Dict[str, Any]
 
         if all_info is True:
