@@ -129,6 +129,40 @@ class Source(db.Model):
     def __repr__(self) -> str:
         return '<Source %r>' % (self.journalist_designation)
 
+    @classmethod
+    def login(cls, codename: str) -> 'Source':
+        try:
+            filesystem_id = current_app.crypto_util.hash_codename(codename)
+        except CryptoException as e:
+            current_app.logger.info(
+                    "Could not compute filesystem ID for codename '{}': {}".format(
+                        codename, e))
+            abort(500)
+
+        source = Source.query.filter_by(filesystem_id=filesystem_id).first()
+        if not source:
+            raise WrongPasswordException
+        else:
+            return source
+
+    @staticmethod
+    def validate_api_token_and_get_user(token: str) -> 'Optional[Source]':
+        s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except BadData:
+            return None
+
+        # Would need to also add source token endpoint logout functionality
+        # revoked_token = RevokedToken.query.filter_by(token=token).one_or_none()
+        # if revoked_token is not None:
+        #     return None
+
+    def generate_api_token(self, expiration: int) -> str:
+        s = TimedJSONWebSignatureSerializer(
+            current_app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id}).decode('ascii')  # type:ignore
+
     @property
     def journalist_filename(self) -> str:
         valid_chars = 'abcdefghijklmnopqrstuvwxyz1234567890-_'
@@ -161,11 +195,6 @@ class Source(db.Model):
     @property
     def public_key(self) -> 'Optional[str]':
         return current_app.crypto_util.get_pubkey(self.filesystem_id)
-
-    def signal_registration(self) -> bool:
-        # Check if registration id in use
-        # Check all required components are present
-        pass
 
     def to_json(self) -> 'Dict[str, Union[str, bool, int, str]]':
         docs_msg_count = self.documents_messages_count()
