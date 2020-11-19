@@ -7,27 +7,15 @@ grsec_version: "4.14.188"
 
 # These values will be interpolated with values populated above
 # via helper functions in the tests.
-build_directories:
-  # The build scripts for securedrop-app-code run separate from the others,
-  # i.e. lacking the `/tmp/build` pardir.
-  - /tmp/securedrop-app-code-{securedrop_version}_amd64/
-  - /tmp/build/securedrop-keyring-{keyring_version}+{securedrop_version}-amd64/
-  - /tmp/build/securedrop-config-{config_version}+{securedrop_version}-amd64/
-  - /tmp/build/securedrop-ossec-agent-{ossec_version}+{securedrop_version}-amd64/
-  - /tmp/build/securedrop-ossec-server-{ossec_version}+{securedrop_version}-amd64/
-  - /tmp/build/ossec-agent-{ossec_version}-amd64/
-  - /tmp/build/ossec-server-{ossec_version}-amd64/
-  - /tmp/build
-
-build_deb_packages:
-  - /tmp/build/securedrop-app-code_{securedrop_version}+{securedrop_target_platform}_amd64.deb
-  - /tmp/build/securedrop-ossec-agent-{ossec_version}+{securedrop_version}-amd64.deb
-  - /tmp/build/securedrop-ossec-server-{ossec_version}+{securedrop_version}-amd64.deb
-  - /tmp/build/ossec-server-{ossec_version}-amd64.deb
-  - /tmp/build/ossec-agent-{ossec_version}-amd64.deb
-  - /tmp/build/securedrop-keyring-{keyring_version}+{securedrop_version}-amd64.deb
-  - /tmp/build/securedrop-config-{config_version}+{securedrop_version}-amd64.deb
-  - /tmp/build/securedrop-grsec-{grsec_version}-amd64.deb
+deb_paths:
+  securedrop_app_code: /tmp/build/securedrop-app-code_{securedrop_version}+{securedrop_target_platform}_amd64.deb
+  securedrop_ossec_agent: /tmp/build/securedrop-ossec-agent-{ossec_version}+{securedrop_version}-amd64.deb
+  securedrop_ossec_server: /tmp/build/securedrop-ossec-server-{ossec_version}+{securedrop_version}-amd64.deb
+  ossec_server: /tmp/build/ossec-server-{ossec_version}-amd64.deb
+  ossec_agent: /tmp/build/ossec-agent-{ossec_version}-amd64.deb
+  securedrop_keyring: /tmp/build/securedrop-keyring-{keyring_version}+{securedrop_version}-amd64.deb
+  securedrop_config: /tmp/build/securedrop-config-{config_version}+{securedrop_version}-amd64.deb
+  securedrop_grsec: /tmp/build/securedrop-grsec-{grsec_version}-amd64.deb
 
 lintian_tags:
   # - non-standard-file-perm
