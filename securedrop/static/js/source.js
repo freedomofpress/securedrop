@@ -1,4 +1,4 @@
-const TBB_UA_REGEX = /Mozilla\/5\.0 \((Windows NT 10\.0|X11; Linux x86_64|Macintosh; Intel Mac OS X 10\.14|Windows NT 10\.0; Win64; x64); rv:[0-9]{2}\.0\) Gecko\/20100101 Firefox\/([0-9]{2})\.0/;
+const TBB_UA_REGEX = /Mozilla\/5\.0 \((Windows NT 10\.0|X11; Linux x86_64|Macintosh; Intel Mac OS X 10\.[0-9]{2}|Windows NT 10\.0; Win64; x64|Android; Mobile); rv:[0-9]{2}\.0\) Gecko\/20100101 Firefox\/([0-9]{2})\.0/
 const ORFOX_UA_REGEX = /Mozilla\/5\.0 \(Android; Mobile; rv:[0-9]{2}\.0\) Gecko\/20100101 Firefox\/([0-9]{2})\.0/;
 
 function fadeIn(el, duration = 200, displayStyle = "block") {
