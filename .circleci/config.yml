@@ -274,7 +274,7 @@ jobs:
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|update-builder)")
             if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             cd journalist_gui
-            xvfb-run -a pipenv run python3 test_gui.py
+            QT_QPA_PLATFORM=offscreen pipenv run python3 test_gui.py
 
   static-analysis-and-no-known-cves:
     machine:
