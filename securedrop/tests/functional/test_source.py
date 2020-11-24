@@ -48,7 +48,7 @@ class TestDownloadKey(
 
     def test_journalist_key_from_source_interface(self):
         data = self.return_downloaded_content(self.source_location +
-                                              "/journalist-key", None)
+                                              "/public-key", None)
 
         data = data.decode('utf-8')
         assert "BEGIN PGP PUBLIC KEY BLOCK" in data
