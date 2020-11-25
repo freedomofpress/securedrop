@@ -64,6 +64,8 @@ provisioner:
       pipelining: True
   playbooks:
     side_effect: side_effect.yml
+  connection_options:
+    ansible_ssh_common_args: -o IdentitiesOnly=yes
 
 scenario:
   name: upgrade

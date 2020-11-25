@@ -8,6 +8,7 @@
   synchronize:
     src: "{{ molecule_dir }}/../../build/{{ rep_dist }}/"
     dest: /var/repos/debs/
+    use_ssh_args: yes
     delete: yes
 
 - name: Establish config
