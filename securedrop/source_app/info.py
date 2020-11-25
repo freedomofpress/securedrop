@@ -19,7 +19,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         return render_template("use-tor-browser.html")
 
     @view.route('/public-key')
-    def download_journalist_pubkey() -> flask.Response:
+    def download_public_key() -> flask.Response:
         journalist_pubkey = current_app.crypto_util.gpg.export_keys(
             config.JOURNALIST_KEY)
         data = BytesIO(journalist_pubkey.encode('utf-8'))
@@ -29,7 +29,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                          as_attachment=True)
 
     @view.route('/why-public-key')
-    def why_download_journalist_pubkey() -> str:
+    def why_download_public_key() -> str:
         return render_template("why-public-key.html")
 
     return view

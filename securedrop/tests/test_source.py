@@ -204,7 +204,7 @@ def test_lookup(source_app):
         text = resp.data.decode('utf-8')
         assert "public key" in text
         # download the public key
-        resp = app.get(url_for('info.download_journalist_pubkey'))
+        resp = app.get(url_for('info.download_public_key'))
         text = resp.data.decode('utf-8')
         assert "BEGIN PGP PUBLIC KEY BLOCK" in text
 
@@ -576,7 +576,7 @@ def test_why_use_tor_browser(source_app):
 
 def test_why_journalist_key(source_app):
     with source_app.test_client() as app:
-        resp = app.get(url_for('info.why_download_journalist_pubkey'))
+        resp = app.get(url_for('info.why_download_public_key'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Why download the team's public key?" in text
