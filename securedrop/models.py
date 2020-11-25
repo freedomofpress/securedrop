@@ -104,6 +104,7 @@ class Source(db.Model):
     identity_key = Column(HexByteString, nullable=True)
     signed_prekey = Column(HexByteString, nullable=True)
     signed_prekey_timestamp = Column(Integer, nullable=True)
+    signed_prekey_id = Column(Integer, nullable=True)
     prekey_signature = Column(HexByteString, nullable=True)
     registration_id = Column(Integer, nullable=True)
 
@@ -234,6 +235,7 @@ class Source(db.Model):
             'signed_prekey_timestamp': self.signed_prekey_timestamp,
             'prekey_signature': self.prekey_signature.hex(),
             'registration_id': self.registration_id,
+            'signed_prekey_id': self.signed_prekey_id,
             }
         return json_source
 
@@ -245,15 +247,44 @@ class SourcePreKey(db.Model):
     pre_key = Column(HexByteString)
 
 
-# class SubmissionMetadata(db.Model): contains metadata of messages
-# class SourceToJournalistDeliveries(db.Model): contains e2e messages to be delievered to journalists from sources. Messages
-# are deleted after fetching.
 # class JournalistToSourceDeliveries(db.Model): contains e2e messages to be delivered to sources from journalists. Messages are deleted
 # after fetching. TODO: The same message is sent to other journalists using group messaging and will be in their source to journalist queue.
 # One could also imagine a JournalistToJournalistDeliveries table here, but that's a story for another day.
 # class FileMetadata(db.Model): contains metadata of files
 # Why keep metadata? To keep the seen by functionality working. If seen by is moved to client-only (with updates sent as messages to other journalists)
 # then the metadata can be deleted.
+
+class SourceMessage(db.Model):
+    """
+    Messages from sources to be delivered.
+    Rows are deleted after they have been delivered to a journalist.
+    Per-submission metadata is not stored on the server after delivery.
+
+    TODO: Sketch out how to deliver seen by and similar features client-to-client.
+    TODO: Reject messages that are too large (DoS vector).
+    """
+    __tablename__ = 'source_messages'
+    id = Column(Integer, primary_key=True)
+    uuid = Column(String(36), unique=True, nullable=False)
+    source_id = Column(Integer, ForeignKey('sources.id'))
+    journalist_id = Column(Integer, ForeignKey('journalists.id'))
+    message = Column(HexByteString, nullable=False)
+
+    def __init__(self, source: Source, journalist: 'Journalist', message: bytes) -> None:
+        self.source_id = source.id
+        self.journalist_id = journalist.id
+        self.uuid = str(uuid.uuid4())
+        self.message = message
+
+    def __repr__(self) -> str:
+        return '<SourceMessage %r>' % (self.filename)
+
+    def to_json(self) -> 'Dict[str, Any]':
+        json_source_message = {
+            'message': self.message.hex(),
+        }
+        return json_source_message
+
 
 class Submission(db.Model):
     MAX_MESSAGE_LEN = 100000
@@ -526,6 +557,7 @@ class Journalist(db.Model):
     signed_prekey_timestamp = Column(Integer, nullable=True)
     prekey_signature = Column(HexByteString, nullable=True)
     registration_id = Column(Integer, nullable=True)
+    signed_prekey_id = Column(Integer, nullable=True)
     # TODO: prekey OT
 
     MIN_USERNAME_LEN = 3
@@ -865,6 +897,7 @@ class Journalist(db.Model):
             'last_name': self.last_name,
             'identity_key': self.identity_key.hex(),
             'signed_prekey': self.signed_prekey.hex(),
+            'signed_prekey_id': self.signed_prekey_id,
             'signed_prekey_timestamp': self.signed_prekey_timestamp,
             'prekey_signature': self.prekey_signature.hex(),
             'registration_id': self.registration_id,

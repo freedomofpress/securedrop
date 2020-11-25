@@ -7,7 +7,7 @@ from functools import wraps
 from sqlalchemy import Column
 
 from flask import Blueprint, current_app, make_response, jsonify, request, abort
-from models import Source, WrongPasswordException, Journalist
+from models import Source, WrongPasswordException, Journalist, SourceMessage
 from werkzeug.exceptions import default_exceptions
 
 from db import db
@@ -105,6 +105,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         signed_prekey_timestamp = creds.get('signed_prekey_timestamp', None)
         prekey_signature = creds.get('prekey_signature', None)
         registration_id = creds.get('registration_id', None)
+        signed_prekey_id = creds.get('signed_prekey_id', None)
         # TODO: handle OT prekeys
 
         if identity_key is None:
@@ -117,6 +118,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             abort(400, 'prekey_signature field is missing')
         if registration_id is None:
             abort(400, 'registration_id field is missing')
+        if signed_prekey_id is None:
+            abort(400, 'signed_prekey_id field is missing')
 
         # TODO: Server _could_ also verify the prekey sig and reject.
         # Clients will be doing this too on their end, but we could also do here.
@@ -134,6 +137,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         user.signed_prekey_timestamp = signed_prekey_timestamp
         user.prekey_signature = prekey_signature
         user.registration_id = registration_id
+        user.signed_prekey_id = signed_prekey_id
 
         response = jsonify({
             'message': 'your account is now registered for messaging'
@@ -187,6 +191,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         # TODO: Add one-time prekeys
         response = jsonify({
+            'signed_prekey_id': journalist.signed_prekey_id,
             'journalist_uuid': journalist.uuid,
             'identity_key': journalist.identity_key.hex(),
             'signed_prekey': journalist.signed_prekey.hex(),
@@ -195,6 +200,30 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             'registration_id': journalist.registration_id,
         })
         return response, 200
+
+    @api.route('/journalists/<journalist_uuid>/messages', methods=['POST'])
+    @token_required
+    def send_message(journalist_uuid: str) -> Tuple[flask.Response, int]:
+        """
+        Send a message to journalist_uuid.
+        """
+        if request.json is None:
+                abort(400, 'please send requests in valid JSON')
+
+        if 'message' not in request.json:
+                abort(400, 'message not found in request body')
+
+        user = _authenticate_user_from_auth_header(request)
+        journalist = get_or_404(Journalist, journalist_uuid, column=Journalist.uuid)
+
+        data = request.json
+        if not data['message']:
+            abort(400, 'message should not be empty')
+
+        message = SourceMessage(user, journalist, data['message'])
+        db.session.add(message)
+        db.session.commit()
+        return jsonify({'message': 'Your message has been stored'}), 200
 
     def _handle_api_http_exception(
         error: werkzeug.exceptions.HTTPException
