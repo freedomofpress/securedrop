@@ -4,6 +4,7 @@ import json
 import flask
 import werkzeug
 from functools import wraps
+from sqlalchemy import Column
 
 from flask import Blueprint, current_app, make_response, jsonify, request, abort
 from models import Source, WrongPasswordException, Journalist
@@ -33,6 +34,13 @@ def _authenticate_user_from_auth_header(request: flask.Request) -> Source:
     if not authenticated_user:
         return abort(403, 'API token is invalid or expired.')
     return authenticated_user
+
+
+def get_or_404(model: db.Model, object_id: str, column: Column) -> db.Model:
+    result = model.query.filter(column == object_id).one_or_none()
+    if result is None:
+        abort(404)
+    return result
 
 
 def token_required(f: Callable) -> Callable:
@@ -170,8 +178,23 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @token_required
     def prekey_bundle(journalist_uuid: str) -> Tuple[flask.Response, int]:
         """
+        Get a prekey bundle to start a new session with journalist_uuid.
         """
-        pass
+        # Threat: Enables source to enumerate journalist uuids
+        # This endpoint also would need rate limiting as it allows an attacker to
+        # potentially exhaust the one-time prekey supply.
+        journalist = get_or_404(Journalist, journalist_uuid, column=Journalist.uuid)
+
+        # TODO: Add one-time prekeys
+        response = jsonify({
+            'journalist_uuid': journalist.uuid,
+            'identity_key': journalist.identity_key.hex(),
+            'signed_prekey': journalist.signed_prekey.hex(),
+            'signed_prekey_timestamp': journalist.signed_prekey_timestamp,
+            'prekey_signature': journalist.prekey_signature.hex(),
+            'registration_id': journalist.registration_id,
+        })
+        return response, 200
 
     def _handle_api_http_exception(
         error: werkzeug.exceptions.HTTPException
