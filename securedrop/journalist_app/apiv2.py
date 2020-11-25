@@ -19,7 +19,7 @@ from db import db
 from journalist_app import utils
 from models import (Journalist, Reply, SeenReply, Source, Submission,
                     LoginThrottledException, InvalidUsernameException,
-                    BadTokenException, WrongPasswordException)
+                    BadTokenException, WrongPasswordException, SourceMessage)
 from sdconfig import SDConfig
 from store import NotEncrypted
 
@@ -36,7 +36,6 @@ TODO: Second roundtrip to confirm receipt prior to deletion?
 ENDPOINTS:
 * Signed prekey refresh endpoint
 * OT Prekey refresh endpoint
-* Fetch message
 * TK: blob store
 * TK: admin
 """
@@ -242,6 +241,30 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             'registration_id': source.registration_id,
         })
         return response, 200
+
+    @api.route('/messages', methods=['GET'])
+    @token_required
+    def get_message() -> Tuple[flask.Response, int]:
+        """
+        Get messages from sources.
+
+        This endpoint is generic such that journalist-to-journalist
+        messages can be added later.
+
+        TODO: Pagination
+        TODO: Delete message after fetch
+        """
+        user = _authenticate_user_from_auth_header(request)
+        source_message = SourceMessage.query.filter_by(journalist_id=user.id).first()
+        if source_message:
+            source = Source.query.filter_by(id=source_message.source_id).one() # TODO: backref
+            return jsonify({
+                "source_uuid": source.uuid,
+                "message_uuid": source_message.uuid,
+                "message": source_message.message.hex(),
+            }), 200
+        else:
+            return jsonify({"resp": "no messages"}), 200
 
     @api.route('/sources', methods=['GET'])
     @token_required
