@@ -229,10 +229,10 @@ class Source(db.Model):
                                        source_uuid=self.uuid),
             'replies_url': url_for('api.all_source_replies',
                                    source_uuid=self.uuid),
-            'identity_key': self.identity_key,
-            'signed_prekey': self.signed_prekey,
+            'identity_key': self.identity_key.hex(),
+            'signed_prekey': self.signed_prekey.hex(),
             'signed_prekey_timestamp': self.signed_prekey_timestamp,
-            'prekey_signature': self.prekey_signature,
+            'prekey_signature': self.prekey_signature.hex(),
             'registration_id': self.registration_id,
             }
         return json_source
@@ -863,10 +863,10 @@ class Journalist(db.Model):
             'uuid': self.uuid,
             'first_name': self.first_name,
             'last_name': self.last_name,
-            'identity_key': self.identity_key,
-            'signed_prekey': self.signed_prekey,
+            'identity_key': self.identity_key.hex(),
+            'signed_prekey': self.signed_prekey.hex(),
             'signed_prekey_timestamp': self.signed_prekey_timestamp,
-            'prekey_signature': self.prekey_signature,
+            'prekey_signature': self.prekey_signature.hex(),
             'registration_id': self.registration_id,
         }  # type: Dict[str, Any]
 

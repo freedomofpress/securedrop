@@ -223,6 +223,25 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         return response, 200
 
+    @api.route('/sources/<source_uuid>/prekey_bundle', methods=['GET'])
+    @token_required
+    def prekey_bundle(source_uuid: str) -> Tuple[flask.Response, int]:
+        """
+        Get a prekey bundle to start a new session with source_uuid.
+        """
+        source = get_or_404(Source, source_uuid, column=Source.uuid)
+
+        # TODO: Add one-time prekeys
+        response = jsonify({
+            'source_uuid': source.uuid,
+            'identity_key': source.identity_key.hex(),
+            'signed_prekey': source.signed_prekey.hex(),
+            'signed_prekey_timestamp': source.signed_prekey_timestamp,
+            'prekey_signature': source.prekey_signature.hex(),
+            'registration_id': source.registration_id,
+        })
+        return response, 200
+
     @api.route('/sources', methods=['GET'])
     @token_required
     def get_all_sources() -> Tuple[flask.Response, int]:
