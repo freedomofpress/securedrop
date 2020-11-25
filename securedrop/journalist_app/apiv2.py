@@ -180,6 +180,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         signed_prekey_timestamp = creds.get('signed_prekey_timestamp', None)
         prekey_signature = creds.get('prekey_signature', None)
         registration_id = creds.get('registration_id', None)
+        signed_prekey_id = creds.get('signed_prekey_id', None)
         # TODO: handle OT prekeys
 
         if identity_key is None:
@@ -188,6 +189,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             abort(400, 'signed_prekey field is missing')
         if signed_prekey_timestamp is None:
             abort(400, 'signed_prekey_timestamp field is missing')
+        if signed_prekey_id is None:
+            abort(400, 'signed_prekey_id field is missing')
         if prekey_signature is None:
             abort(400, 'prekey_signature field is missing')
         if registration_id is None:
@@ -209,6 +212,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         user.signed_prekey_timestamp = signed_prekey_timestamp
         user.prekey_signature = prekey_signature
         user.registration_id = registration_id
+        user.signed_prekey_id = signed_prekey_id
 
         response = jsonify({
             'message': 'your account is now registered for messaging'
