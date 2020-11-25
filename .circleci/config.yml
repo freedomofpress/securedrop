@@ -354,13 +354,6 @@ jobs:
             BASE_OS=focal make ci-go
           no_output_timeout: 35m
 
-      - run:
-          name: Ensure environment torn down
-          # Always report true, since env should will destroyed already
-          # if all tests passed.
-          command: make ci-teardown || true
-          when: always
-
       - store_test_results:
           path: ~/sd/junit
 

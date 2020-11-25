@@ -16,4 +16,3 @@ export BASE_OS="${BASE_OS:-xenial}"
 
 ./devops/gce-nested/gce-start.sh
 ./devops/gce-nested/gce-runner.sh
-./devops/gce-nested/gce-stop.sh

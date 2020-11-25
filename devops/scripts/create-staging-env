@@ -33,7 +33,7 @@ printf "Creating staging environment via '%s'...\\n" "${securedrop_staging_scena
 virtualenv_bootstrap
 # Are we in CI? Then lets do full testing post install!
 if [ "$USER" = "sdci" ]; then
-    molecule test -s "${securedrop_staging_scenario}"
+    molecule test --destroy=never -s "${securedrop_staging_scenario}"
 else
     molecule "${MOLECULE_ACTION:-converge}" -s "${securedrop_staging_scenario}" "${EXTRA_ANSIBLE_ARGS[@]}"
 fi
