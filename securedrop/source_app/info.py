@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import flask
-from flask import Blueprint, render_template, send_file, current_app
+from flask import Blueprint, render_template, send_file, current_app, redirect, url_for
+import werkzeug
 
 from io import BytesIO  # noqa
 
@@ -27,6 +28,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                          mimetype="application/pgp-keys",
                          attachment_filename=config.JOURNALIST_KEY + ".asc",
                          as_attachment=True)
+
+    @view.route('/journalist-key')
+    def download_journalist_key() -> werkzeug.wrappers.Response:
+        return redirect(url_for('.download_public_key'), code=301)
 
     @view.route('/why-public-key')
     def why_download_public_key() -> str:
