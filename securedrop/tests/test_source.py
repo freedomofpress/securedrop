@@ -5,7 +5,7 @@ import subprocess
 import time
 
 from io import BytesIO, StringIO
-from flask import session, escape, current_app, url_for, g
+from flask import session, escape, current_app, url_for, g, request
 from mock import patch, ANY
 
 import crypto_util
@@ -204,9 +204,19 @@ def test_lookup(source_app):
         text = resp.data.decode('utf-8')
         assert "public key" in text
         # download the public key
-        resp = app.get(url_for('info.download_journalist_pubkey'))
+        resp = app.get(url_for('info.download_public_key'))
         text = resp.data.decode('utf-8')
         assert "BEGIN PGP PUBLIC KEY BLOCK" in text
+
+
+def test_journalist_key_redirects_to_public_key(source_app):
+    """Test that the /journalist-key route redirects to /public-key."""
+    with source_app.test_client() as app:
+        resp = app.get(url_for('info.download_journalist_key'))
+        assert resp.status_code == 301
+        resp = app.get(url_for('info.download_journalist_key'), follow_redirects=True)
+        assert request.path == url_for('info.download_public_key')
+        assert "BEGIN PGP PUBLIC KEY BLOCK" in resp.data.decode('utf-8')
 
 
 def test_login_and_logout(source_app):
@@ -576,7 +586,7 @@ def test_why_use_tor_browser(source_app):
 
 def test_why_journalist_key(source_app):
     with source_app.test_client() as app:
-        resp = app.get(url_for('info.why_download_journalist_pubkey'))
+        resp = app.get(url_for('info.why_download_public_key'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Why download the team's public key?" in text

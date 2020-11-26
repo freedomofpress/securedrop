@@ -223,7 +223,7 @@ class SourceNavigationStepsMixin:
         self.driver.get(self.source_location + "/tor2web-warning")
 
     def _source_why_journalist_key(self):
-        self.driver.get(self.source_location + "/why-journalist-key")
+        self.driver.get(self.source_location + "/why-public-key")
 
     def _source_waits_for_session_to_timeout(self):
         time.sleep(self.session_expiration + 2)

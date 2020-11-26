@@ -40,11 +40,11 @@
 
 <p class="explanation extended-explanation">
 {% if allow_document_uploads %}
-{{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_journalist_pubkey')) }}
+{{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_public_key')) }}
 {% else %}
-{{ gettext('If you are already familiar with GPG, you can optionally encrypt your messages with our <a href="{url}" class="text-link">public key</a> before submission.').format(url=url_for('info.download_journalist_pubkey')) }}
+{{ gettext('If you are already familiar with GPG, you can optionally encrypt your messages with our <a href="{url}" class="text-link">public key</a> before submission.').format(url=url_for('info.download_public_key')) }}
 {% endif %}
-{{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_journalist_pubkey')) }}</p>
+{{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_public_key')) }}</p>
 
 <hr class="no-line">
 
