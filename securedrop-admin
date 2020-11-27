@@ -5,9 +5,10 @@
 # the top level of the SecureDrop repository
 set -eo pipefail
 
+b=$(basename "$0")
 u=$(id -u)
 if test "$u" = "0"; then
-    echo "Please do not run \"$0\" directly as root."
+    echo "Please do not run \"$b\" directly as root."
     exit 1
 fi
 
