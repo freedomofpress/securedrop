@@ -66,16 +66,5 @@ def test_listening_ports(host, ossec_service):
     """
     socket = "{proto}://{host}:{port}".format(**ossec_service)
     with host.sudo():
-        # Really hacky work-around for bug found in testinfra 1.12.0
-        # https://github.com/philpep/testinfra/issues/311
-        if "udp" in socket:
-            lsof_socket = "{proto}@{host}:{port}".format(**ossec_service)
-            udp_check = host.run("lsof -n -i"+lsof_socket)
-
-            if ossec_service['listening']:
-                assert udp_check.rc == 0
-            else:
-                assert udp_check.rc == 1
-        else:
-            assert (host.socket(socket).is_listening ==
-                    ossec_service['listening'])
+        assert (host.socket(socket).is_listening ==
+                ossec_service['listening'])
