@@ -390,7 +390,7 @@ mypy==0.761 \
     --hash=sha256:c6d27bd20c3ba60d5b02f20bd28e20091d6286a699174dfad515636cb09b5a72 \
     --hash=sha256:e2bb577d10d09a2d8822a042a23b8d62bc3b269667c9eb8e60a6edfa000211b1 \
     --hash=sha256:f97a605d7c8bc2c6d1172c2f0d5a65b24142e11a58de689046e62c2d632ca8c1 \
-    # via -r requirements/python3/develop-requirements.in
+    # via -r requirements/python3/develop-requirements.in, sqlalchemy-stubs
 netaddr==0.7.19 \
     --hash=sha256:38aeec7cdd035081d3a4c306394b19d677623bf76fa0913f6695127c7753aefd \
     --hash=sha256:56b3558bd71f3f6999e4c52e349f38660e54a7a8a9943335f73dfc96883e08ca \
@@ -613,7 +613,8 @@ smmap2==2.0.3 \
     # via gitdb2
 sqlalchemy-stubs==0.3 \
     --hash=sha256:a3318c810697164e8c818aa2d90bac570c1a0e752ced3ec25455b309c0bee8fd \
-    --hash=sha256:ca1250605a39648cc433f5c70cb1a6f9fe0b60bdda4c51e1f9a2ab3651daadc8
+    --hash=sha256:ca1250605a39648cc433f5c70cb1a6f9fe0b60bdda4c51e1f9a2ab3651daadc8 \
+    # via -r requirements/python3/develop-requirements.in
 stevedore==1.28.0 \
     --hash=sha256:e3d96b2c4e882ec0c1ff95eaebf7b575a779fd0ccb4c741b9832bed410d58b3d \
     --hash=sha256:f1c7518e7b160336040fee272174f1f7b29a46febb3632502a8f2055f973d60b \
@@ -664,7 +665,7 @@ typing-extensions==3.7.4.1 \
     --hash=sha256:091ecc894d5e908ac75209f10d5b4f118fbdb2eb1ede6a63544054bb1edb41f2 \
     --hash=sha256:910f4656f54de5993ad9304959ce9bb903f90aadc7c67a0bef07e678014e892d \
     --hash=sha256:cf8b63fedea4d89bab840ecbb93e75578af28f76f66c35889bd7065f5af88575 \
-    # via mypy
+    # via mypy, sqlalchemy-stubs
 urllib3==1.25.10 \
     --hash=sha256:91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a \
     --hash=sha256:e7983572181f5e1522d9c98453462384ee92a0be7fac5f1413a1e35c56cc0461 \

@@ -1,5 +1,6 @@
 beautifulsoup4
 blinker
+coverage>=4.5.2
 Flask-Testing
 flaky
 markupsafe>=1.1
