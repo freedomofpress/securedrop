@@ -7,7 +7,7 @@ set -eo pipefail
 
 u=$(id -u)
 if test "$u" = "0"; then
-    echo "Please do not run this script directly as root."
+    echo "Please do not run \"$0\" directly as root."
     exit 1
 fi
 
