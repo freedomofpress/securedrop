@@ -1,0 +1,11 @@
+[Unit]
+Description=The OSSEC HIDS %i server
+After=network.target 
+
+[Service]
+Type=simple
+ExecStartPre=/usr/bin/env /var/ossec/bin/%p-%i -t
+ExecStart=/usr/bin/env /var/ossec/bin/%p-%i -f
+
+[Install]
+WantedBy=multi-user.target
