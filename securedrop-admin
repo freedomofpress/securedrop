@@ -6,8 +6,8 @@
 set -eo pipefail
 
 b=$(basename "$0")
-u=$(id -u)
-if test "$u" = "0"; then
+u=$(whoami)
+if test "$u" = "root"; then
     echo "Please do not run \"$b\" directly as root."
     exit 1
 fi
