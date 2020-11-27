@@ -1,6 +1,6 @@
 ---
 # Single handler to operate on *both* OSSEC hosts, server & client.
 - name: restart ossec
-  service:
+  systemd:
     name: ossec
     state: restarted

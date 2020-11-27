@@ -1,0 +1,10 @@
+[Unit]
+Description=OSSEC service
+
+[Service]
+Type=forking
+ExecStart=/var/ossec/bin/ossec-control start
+ExecStop=/var/ossec/bin/ossec-control stop
+
+[Install]
+WantedBy=multi-user.target

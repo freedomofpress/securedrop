@@ -113,3 +113,20 @@
     creates: /var/ossec/etc/sslmanager.cert
   tags:
     - ossec_auth
+
+- name: Copy the systemd service file
+  copy:
+    src: ossec.service
+    dest: "/etc/systemd/system/ossec.service"
+
+- name: Remove the old style /etc/init.d/ossec file
+  file:
+    path: "/etc/init.d/ossec"
+    state: absent
+
+- name: Enable the OSSEC service
+  systemd:
+    name: ossec
+    daemon_reload: yes
+    enabled: yes
+    masked: no
