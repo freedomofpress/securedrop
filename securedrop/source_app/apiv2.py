@@ -7,7 +7,7 @@ from functools import wraps
 from sqlalchemy import Column
 
 from flask import Blueprint, current_app, make_response, jsonify, request, abort
-from models import Source, WrongPasswordException, Journalist, SourceMessage
+from models import Source, WrongPasswordException, Journalist, SourceMessage, JournalistReply
 from werkzeug.exceptions import default_exceptions
 
 from db import db
@@ -224,6 +224,27 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         db.session.add(message)
         db.session.commit()
         return jsonify({'message': 'Your message has been stored'}), 200
+
+    @api.route('/messages', methods=['GET'])
+    @token_required
+    def get_message() -> Tuple[flask.Response, int]:
+        """
+        Get messages from journalists.
+
+        TODO: Pagination
+        TODO: Delete message after fetch
+        """
+        user = _authenticate_user_from_auth_header(request)
+        reply = JournalistReply.query.filter_by(source_id=user.id).first()
+        if reply:
+            journalist = Journalist.query.filter_by(id=reply.journalist_id).one() # TODO: backref
+            return jsonify({
+                "journalist_uuid": journalist.uuid,
+                "message_uuid": reply.uuid,
+                "message": reply.message.hex(),
+            }), 200
+        else:
+            return jsonify({"resp": "no messages"}), 200
 
     def _handle_api_http_exception(
         error: werkzeug.exceptions.HTTPException
