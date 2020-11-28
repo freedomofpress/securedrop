@@ -17,7 +17,7 @@ from werkzeug.exceptions import default_exceptions
 
 from db import db
 from journalist_app import utils
-from models import (Journalist, Reply, SeenReply, Source, Submission,
+from models import (Journalist, Reply, SeenReply, Source, Submission, JournalistReply,
                     LoginThrottledException, InvalidUsernameException,
                     BadTokenException, WrongPasswordException, SourceMessage)
 from sdconfig import SDConfig
@@ -265,6 +265,30 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             }), 200
         else:
             return jsonify({"resp": "no messages"}), 200
+
+    @api.route('/sources/<source_uuid>/messages', methods=['POST'])
+    @token_required
+    def send_message(source_uuid: str) -> Tuple[flask.Response, int]:
+        """
+        Send a message to source_uuid.
+        """
+        if request.json is None:
+                abort(400, 'please send requests in valid JSON')
+
+        if 'message' not in request.json:
+                abort(400, 'message not found in request body')
+
+        user = _authenticate_user_from_auth_header(request)
+        source = get_or_404(Source, source_uuid, column=Source.uuid)
+
+        data = request.json
+        if not data['message']:
+            abort(400, 'message should not be empty')
+
+        message = JournalistReply(source, user, data['message'])
+        db.session.add(message)
+        db.session.commit()
+        return jsonify({'message': 'Your message has been stored'}), 200
 
     @api.route('/sources', methods=['GET'])
     @token_required
