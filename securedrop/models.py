@@ -256,11 +256,11 @@ class SourcePreKey(db.Model):
 
 class SourceMessage(db.Model):
     """
-    Messages from sources to be delivered.
+    Messages to journalists from sources to be delivered.
     Rows are deleted after they have been delivered to a journalist.
     Per-submission metadata is not stored on the server after delivery.
 
-    TODO: Sketch out how to deliver seen by and similar features client-to-client.
+    TODO: Sketch out how to deliver seen by and similar features client-to-client (i.e. add a j2j table).
     TODO: Reject messages that are too large (DoS vector).
     """
     __tablename__ = 'source_messages'
@@ -281,6 +281,40 @@ class SourceMessage(db.Model):
 
     def to_json(self) -> 'Dict[str, Any]':
         json_source_message = {
+            'message_uuid': self.uuid,
+            'message': self.message.hex(),
+        }
+        return json_source_message
+
+
+class JournalistReply(db.Model):
+    """
+    Messages to sources from journalists to be delivered.
+    Rows are deleted after they have been delivered to a source.
+    Per-submission metadata is not stored on the server after delivery.
+
+    TODO: Reject messages that are too large (DoS vector).
+    TODO: Rate limiting.
+    """
+    __tablename__ = 'journalist_replies'
+    id = Column(Integer, primary_key=True)
+    uuid = Column(String(36), unique=True, nullable=False)
+    source_id = Column(Integer, ForeignKey('sources.id'))
+    journalist_id = Column(Integer, ForeignKey('journalists.id'))
+    message = Column(HexByteString, nullable=False)
+
+    def __init__(self, source: Source, journalist: 'Journalist', message: bytes) -> None:
+        self.source_id = source.id
+        self.journalist_id = journalist.id
+        self.uuid = str(uuid.uuid4())
+        self.message = message
+
+    def __repr__(self) -> str:
+        return '<JournalistReply %r>' % (self.filename)
+
+    def to_json(self) -> 'Dict[str, Any]':
+        json_source_message = {
+            'message_uuid': self.uuid,
             'message': self.message.hex(),
         }
         return json_source_message
