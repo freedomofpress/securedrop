@@ -6,3 +6,22 @@
   tags:
     - dns
     - hardening
+
+- name: Disable systemd-resolved on Focal
+  systemd:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+  when: ansible_distribution_release == 'focal'
+  tags:
+    - dns
+    - hardening
+
+- name: Create resolv.conf for Focal
+  template:
+    src: dns_base
+    dest: /etc/resolv.conf
+  when: ansible_distribution_release == 'focal'
+  tags:
+    - dns
+    - hardening
