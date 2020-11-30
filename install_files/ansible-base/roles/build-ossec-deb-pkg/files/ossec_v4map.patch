@@ -1,0 +1,13 @@
+diff --git a/src/Makefile b/src/Makefile
+index 1a3c9bdd..a6045947 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -54,7 +54,7 @@ DEFINES+=-D${uname_S}
+ # Uncomment the DEFINES statement below if you are
+ # running Linux and want to use AF_UNSPEC instead of
+ # AF_INET6 to fully support IPv4 addresses.
+-#DEFINES+=-DNOV4MAP
++DEFINES+=-DNOV4MAP
+ 
+ ifneq (,$(filter ${REUSE_ID},yes y Y 1))
+ 	DEFINES+=-DREUSE_ID

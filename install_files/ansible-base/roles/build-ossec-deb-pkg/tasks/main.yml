@@ -67,6 +67,18 @@
     src: "{{ build_path }}/{{ ossec_tarball_filename }}"
     dest: /tmp
 
+- name: Copy temporary patch to fix ipv4 mapping
+  copy:
+    src: ossec_v4map.patch
+    dest: /tmp/
+
+- name: Apply patch
+  patch:
+    remote_src: true
+    src: "/tmp/ossec_v4map.patch"
+    basedir: "/tmp/ossec-hids-{{ ossec_version }}"
+    strip: 1
+
 - name: Create /etc directory within source directory.
   file:
     state: directory
