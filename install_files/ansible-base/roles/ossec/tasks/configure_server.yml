@@ -119,5 +119,9 @@
     src: ossec@.service
     dest: "/etc/systemd/system/ossec@.service"
 
-- name: Enable the service
-  command: systemctl enable ossec@dbd ossec@agentlessd ossec@csyslogd ossec@maild ossec@execd ossec@analysisd ossec@logcollector ossec@remoted ossec@syscheckd ossec@monitord
+- name: Enable the OSSEC service(s)
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+    masked: no
+  with_items: {{ ossec_service_names }}
