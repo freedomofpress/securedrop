@@ -55,6 +55,26 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     """Source API"""
     api = Blueprint('apiv2', __name__)
 
+
+    # Before every post, we validate the payload before processing the request
+    @api.before_request
+    def validate_data() -> None:
+        if request.method == 'POST':
+            if not request.data:
+                dataless_endpoints = [
+                    'confirm_message'
+                ]
+                for endpoint in dataless_endpoints:
+                    if request.endpoint == 'apiv2.' + endpoint:
+                        return
+                abort(400, 'malformed request')
+            # other requests must have valid JSON payload
+            else:
+                try:
+                    json.loads(request.data.decode('utf-8'))
+                except (ValueError):
+                    abort(400, 'malformed request')
+
     # TODO: rate limit source login
     @api.route('/token', methods=['POST'])
     def get_token() -> Tuple[flask.Response, int]:
@@ -245,6 +265,28 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             }), 200
         else:
             return jsonify({"resp": "no messages"}), 200
+
+    @api.route('/messages/confirmation/<message_uuid>', methods=['POST'])
+    @token_required
+    def confirm_message(message_uuid: str) -> Tuple[flask.Response, int]:
+        """
+        Confirm receipt of message_uuid.
+        """
+        user = _authenticate_user_from_auth_header(request)
+        reply = JournalistReply.query.filter_by(uuid=message_uuid).first()
+
+        # TODO: the timing of response reveals which of these two scenarios is happening
+        # Source trying to delete another's message
+        if reply.source_id != user.id:
+            abort(404, 'message not found with this (source uuid, message uuid) pair')
+
+        if not reply:  # Legit 404 (could replace with get_or_404, but wanted to customize message)
+            abort(404, 'message not found with this (source uuid, message uuid) pair')
+
+        # Message confirmed received by client. Remove from server.
+        db.session.delete(reply)
+        db.session.commit()
+        return jsonify({'message': 'Confirmed receipt of message'}), 200
 
     def _handle_api_http_exception(
         error: werkzeug.exceptions.HTTPException
