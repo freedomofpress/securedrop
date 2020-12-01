@@ -95,16 +95,15 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @api.before_request
     def validate_data() -> None:
         if request.method == 'POST':
-            # flag, star, and logout can have empty payloads
             if not request.data:
                 dataless_endpoints = [
                     'add_star',
                     'remove_star',
-                    'flag',
                     'logout',
+                    'confirm_message'
                 ]
                 for endpoint in dataless_endpoints:
-                    if request.endpoint == 'api.' + endpoint:
+                    if request.endpoint == 'apiv2.' + endpoint:
                         return
                 abort(400, 'malformed request')
             # other requests must have valid JSON payload
@@ -290,6 +289,28 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         db.session.commit()
         return jsonify({'message': 'Your message has been stored'}), 200
 
+    @api.route('/messages/confirmation/<message_uuid>', methods=['POST'])
+    @token_required
+    def confirm_message(message_uuid: str) -> Tuple[flask.Response, int]:
+        """
+        Confirm receipt of message_uuid.
+        """
+        user = _authenticate_user_from_auth_header(request)
+        source_message = SourceMessage.query.filter_by(uuid=message_uuid).first()
+
+        # TODO: the timing of response reveals which of these two scenarios is happening
+        # Journalist trying to delete another's message
+        if source_message.journalist_id != user.id:
+            abort(404, 'message not found with this (journalist uuid, message uuid) pair')
+
+        if not source_message:  # Legit 404 (could replace with get_or_404, but wanted to customize message)
+            abort(404, 'message not found with this (journalist uuid, message uuid) pair')
+
+        # Message confirmed received by client. Remove from server.
+        db.session.delete(source_message)
+        db.session.commit()
+        return jsonify({'message': 'Confirmed receipt of message'}), 200
+
     @api.route('/sources', methods=['GET'])
     @token_required
     def get_all_sources() -> Tuple[flask.Response, int]:
@@ -323,6 +344,22 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         users = Journalist.query.all()
         return jsonify(
             {'users': [user.to_json(all_info=False) for user in users]}), 200
+
+    @api.route('/sources/<source_uuid>/add_star', methods=['POST'])
+    @token_required
+    def add_star(source_uuid: str) -> Tuple[flask.Response, int]:
+        source = get_or_404(Source, source_uuid, column=Source.uuid)
+        utils.make_star_true(source.filesystem_id)
+        db.session.commit()
+        return jsonify({'message': 'Star added'}), 201
+
+    @api.route('/sources/<source_uuid>/remove_star', methods=['DELETE'])
+    @token_required
+    def remove_star(source_uuid: str) -> Tuple[flask.Response, int]:
+        source = get_or_404(Source, source_uuid, column=Source.uuid)
+        utils.make_star_false(source.filesystem_id)
+        db.session.commit()
+        return jsonify({'message': 'Star removed'}), 200
 
     @api.route('/logout', methods=['POST'])
     @token_required
