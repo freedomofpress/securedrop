@@ -116,12 +116,17 @@
 
 - name: Copy the systemd service file
   copy:
-    src: ossec@.service
-    dest: "/etc/systemd/system/ossec@.service"
+    src: ossec.service
+    dest: "/etc/systemd/system/ossec.service"
 
-- name: Enable the OSSEC service(s)
+- name: Remove the old style /etc/init.d/ossec file
+  file:
+    path: "/etc/init.d/ossec"
+    state: absent
+
+- name: Enable the OSSEC service
   systemd:
-    name: "{{ item }}"
+    name: ossec
+    daemon_reload: yes
     enabled: yes
     masked: no
-  with_items: "{{ ossec_service_names }}"
