@@ -92,5 +92,13 @@ function reset_demo() {
 
     gpg2 --homedir /var/lib/securedrop/keys --no-default-keyring --keyring /var/lib/securedrop/keys/pubring.gpg --import /var/lib/securedrop/keys/test_journalist_key.pub
 
-    ./loaddata.py
+    # Can't pass an array environment variable with "docker --env", so
+    # break up the string we can pass.
+    if [ -n "${LOADDATA_ARGS:-""}" ]
+    then
+        IFS=" " read -r -a loaddata_arg_array <<< "${LOADDATA_ARGS}"
+        ./loaddata.py "${loaddata_arg_array[@]}"
+    else
+        ./loaddata.py
+    fi
 }

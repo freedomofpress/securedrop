@@ -1,6 +1,10 @@
 #!/opt/venvs/securedrop-app-code/bin/python
 # -*- coding: utf-8 -*-
 
+"""
+Loads test data into the SecureDrop database.
+"""
+
 import argparse
 import datetime
 import io
@@ -33,8 +37,6 @@ from specialstrings import strings
 
 messages = cycle(strings)
 replies = cycle(strings)
-
-DEFAULT_SEED = 1312
 
 
 def fraction(s: str) -> float:
@@ -90,14 +92,6 @@ def random_datetime(nullable: bool) -> Optional[datetime.datetime]:
     )
 
 
-def default_journalist_count() -> str:
-    return os.environ.get("NUM_JOURNALISTS", "0")
-
-
-def default_source_count() -> str:
-    return os.environ.get("NUM_SOURCES", "3")
-
-
 def set_source_count(s: str) -> int:
     """
     Sets the source count from command line arguments.
@@ -117,6 +111,7 @@ def add_journalist(
     is_admin: bool = False,
     first_name: str = "",
     last_name: str = "",
+    progress: Optional[Tuple[int, int]] = None,
 ) -> Journalist:
     """
     Adds a single journalist account.
@@ -147,10 +142,16 @@ def add_journalist(
     attempt.timestamp = random_datetime(nullable=True)
     db.session.add(attempt)
     db.session.commit()
+
     print(
-        "Journalist successfully added: "
-        "username={}, password={}, otp_secret={}, is_admin={}"
-        "".format(username, test_password, test_otp_secret, is_admin)
+        "Created {}journalist{} (username={}, password={}, otp_secret={}, is_admin={})".format(
+            "additional " if progress else "",
+            " {}/{}".format(*progress) if progress else "",
+            username,
+            test_password,
+            test_otp_secret,
+            is_admin,
+        )
     )
     return journalist
 
@@ -181,9 +182,7 @@ def submit_message(source: Source, journalist_who_saw: Optional[Journalist]) -> 
     db.session.flush()
 
     if journalist_who_saw:
-        seen_message = SeenMessage(
-            message_id=submission.id, journalist_id=journalist_who_saw.id
-        )
+        seen_message = SeenMessage(message_id=submission.id, journalist_id=journalist_who_saw.id)
         db.session.add(seen_message)
         db.session.flush()
 
@@ -217,9 +216,7 @@ def add_reply(
     Adds a single reply to a source.
     """
     record_source_interaction(source)
-    fname = "{}-{}-reply.gpg".format(
-        source.interaction_count, source.journalist_filename
-    )
+    fname = "{}-{}-reply.gpg".format(source.interaction_count, source.journalist_filename)
     current_app.crypto_util.encrypt(
         next(replies),
         [
@@ -238,9 +235,7 @@ def add_reply(
     db.session.add(author_seen_reply)
 
     if journalist_who_saw:
-        other_seen_reply = SeenReply(
-            reply_id=reply.id, journalist_id=journalist_who_saw.id
-        )
+        other_seen_reply = SeenReply(reply_id=reply.id, journalist_id=journalist_who_saw.id)
         db.session.add(other_seen_reply)
 
     db.session.commit()
@@ -276,98 +271,126 @@ def star_source(source: Source) -> None:
     db.session.commit()
 
 
+def create_default_journalists() -> Tuple[Journalist, ...]:
+    """
+    Adds a set of journalists that should always be created.
+    """
+    try:
+        default_journalist = add_journalist("journalist", is_admin=True)
+    except IntegrityError as e:
+        db.session.rollback()
+        if "UNIQUE constraint failed: journalists." in str(e):
+            default_journalist = Journalist.query.filter_by(username="journalist").one()
+        else:
+            raise e
+
+    try:
+        dellsberg = add_journalist("dellsberg")
+    except IntegrityError as e:
+        db.session.rollback()
+        if "UNIQUE constraint failed: journalists." in str(e):
+            dellsberg = Journalist.query.filter_by(username="dellsberg").one()
+        else:
+            raise e
+
+    try:
+        journalist_to_be_deleted = add_journalist(
+            username="clarkkent", first_name="Clark", last_name="Kent"
+        )
+    except IntegrityError as e:
+        db.session.rollback()
+        if "UNIQUE constraint failed: journalists." in str(e):
+            journalist_to_be_deleted = Journalist.query.filter_by(username="clarkkent").one()
+        else:
+            raise e
+
+    return default_journalist, dellsberg, journalist_to_be_deleted
+
+
+def add_journalists(args: argparse.Namespace) -> None:
+    total = args.journalist_count + 1
+    for i in range(1, total):
+        add_journalist(progress=(i, total))
+
+
+def add_sources(args: argparse.Namespace, journalists: Tuple[Journalist, ...]) -> None:
+    """
+    Add sources with submissions and replies.
+    """
+    default_journalist, dellsberg, journalist_to_be_deleted = journalists
+
+    starred_sources_count = int(args.source_count * args.source_star_fraction)
+    replied_sources_count = int(args.source_count * args.source_reply_fraction)
+    seen_message_count = max(
+        int(args.source_count * args.messages_per_source * args.seen_message_fraction),
+        1,
+    )
+    seen_file_count = max(
+        int(args.source_count * args.files_per_source * args.seen_file_fraction), 1
+    )
+
+    for i in range(1, args.source_count + 1):
+        source, codename = add_source()
+
+        for _ in range(args.messages_per_source):
+            submit_message(source, random.choice(journalists) if seen_message_count > 0 else None)
+            seen_message_count -= 1
+
+        for _ in range(args.files_per_source):
+            submit_file(source, random.choice(journalists) if seen_file_count > 0 else None)
+            seen_file_count -= 1
+
+        if i <= starred_sources_count:
+            star_source(source)
+
+        if i <= replied_sources_count:
+            for _ in range(args.replies_per_source):
+                journalist_who_replied = random.choice([dellsberg, journalist_to_be_deleted])
+                journalist_who_saw = random.choice([default_journalist, None])
+                add_reply(source, journalist_who_replied, journalist_who_saw)
+
+        print(
+            "Created source {}/{} (codename: '{}', journalist designation '{}', "
+            "files: {}, messages: {}, replies: {})".format(
+                i,
+                args.source_count,
+                codename,
+                source.journalist_designation,
+                args.files_per_source,
+                args.messages_per_source,
+                args.replies_per_source if i <= replied_sources_count else 0,
+            )
+        )
+
+
 def load(args: argparse.Namespace) -> None:
     """
     Populate the database.
     """
-    random.seed(args.seed)
+    if args.seed:
+        random.seed(args.seed)
 
     if not os.environ.get("SECUREDROP_ENV"):
         os.environ["SECUREDROP_ENV"] = "dev"
 
     app = journalist_app.create_app(config)
     with app.app_context():
-        try:
-            default_journalist = add_journalist("journalist", is_admin=True)
-        except IntegrityError as e:
-            db.session.rollback()
-            if "UNIQUE constraint failed: journalists." in str(e):
-                default_journalist = Journalist.query.filter_by(username="journalist").one()
-            else:
-                raise e
+        journalists = create_default_journalists()
 
-        try:
-            dellsberg = add_journalist("dellsberg")
-        except IntegrityError as e:
-            db.session.rollback()
-            if "UNIQUE constraint failed: journalists." in str(e):
-                dellsberg = Journalist.query.filter_by(username="dellsberg").one()
-            else:
-                raise e
+        add_journalists(args)
 
-        try:
-            journalist_to_be_deleted = add_journalist(
-                username="clarkkent", first_name="Clark", last_name="Kent"
-            )
-        except IntegrityError as e:
-            db.session.rollback()
-            if 'UNIQUE constraint failed: journalists.' in str(e):
-                journalist_to_be_deleted = Journalist.query.filter_by(username="clarkkent").one()
-            else:
-                raise e
-
-        for i in range(1, args.journalist_count + 1):
-            add_journalist()
-
-        starred_sources_count = int(args.source_count * args.source_star_fraction)
-        replied_sources_count = int(args.source_count * args.source_reply_fraction)
-
-        for i in range(1, args.source_count + 1):
-            source, codename = add_source()
-
-            for _ in range(args.messages_per_source):
-                journalist_who_saw = random.choice(
-                    [default_journalist, dellsberg, None]
-                )
-                submit_message(source, journalist_who_saw)
-
-            for _ in range(args.files_per_source):
-                journalist_who_saw = random.choice(
-                    [default_journalist, dellsberg, None]
-                )
-                submit_file(source, journalist_who_saw)
-
-            if i <= starred_sources_count:
-                star_source(source)
-
-            reply_to_source = i <= replied_sources_count
-            if reply_to_source:
-                for _ in range(args.replies_per_source):
-                    journalist_who_replied = random.choice(
-                        [dellsberg, journalist_to_be_deleted]
-                    )
-                    journalist_who_saw = random.choice([default_journalist, None])
-                    add_reply(source, journalist_who_replied, journalist_who_saw)
-
-            print(
-                "Source {}/{} (codename: '{}', journalist designation '{}') "
-                "added (files: {}, messages: {}, replies: {}".format(
-                    i,
-                    args.source_count,
-                    codename,
-                    source.journalist_designation,
-                    args.files_per_source,
-                    args.messages_per_source,
-                    args.replies_per_source if reply_to_source else 0,
-                )
-            )
+        add_sources(args, journalists)
 
         # delete one journalist
+        _, _, journalist_to_be_deleted = journalists
         db.session.delete(journalist_to_be_deleted)
         db.session.commit()
 
 
-def arg_parser() -> argparse.ArgumentParser:
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parses the command line arguments.
+    """
     parser = argparse.ArgumentParser(
         os.path.basename(__file__),
         description="Loads test data into the database",
@@ -375,13 +398,13 @@ def arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--journalist-count",
         type=non_negative_int,
-        default=default_journalist_count(),
+        default=0,
         help=("Number of journalists to create in addition to the default accounts"),
     )
     parser.add_argument(
         "--source-count",
         type=set_source_count,
-        default=default_source_count(),
+        default=3,
         help=(
             'Number of sources to create, or "ALL" to create a number sufficient to '
             "demonstrate all of our test strings."
@@ -390,19 +413,19 @@ def arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--messages-per-source",
         type=non_negative_int,
-        default=1,
+        default=2,
         help=("Number of submitted messages to create for each source"),
     )
     parser.add_argument(
         "--files-per-source",
         type=non_negative_int,
-        default=1,
+        default=2,
         help=("Number of submitted files to create for each source"),
     )
     parser.add_argument(
         "--replies-per-source",
         type=non_negative_int,
-        default=1,
+        default=2,
         help=("Number of replies to create for any source that receives replies"),
     )
     parser.add_argument(
@@ -414,17 +437,27 @@ def arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--source-reply-fraction",
         type=fraction,
-        default=0.75,
+        default=1,
         help=("Fraction of sources with replies"),
     )
     parser.add_argument(
+        "--seen-message-fraction",
+        type=fraction,
+        default=0.75,
+        help=("Fraction of messages seen by a journalist"),
+    )
+    parser.add_argument(
+        "--seen-file-fraction",
+        type=fraction,
+        default=0.75,
+        help=("Fraction of files seen by a journalist"),
+    )
+    parser.add_argument(
         "--seed",
-        type=non_negative_int,
-        default=DEFAULT_SEED,
         help=("Random number seed (for reproducible datasets)"),
     )
-    return parser
+    return parser.parse_args()
 
 
 if __name__ == "__main__":  # pragma: no cover
-    load(arg_parser().parse_args())
+    load(parse_arguments())
