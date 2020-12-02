@@ -46,10 +46,20 @@
         color: $color_grimace_blue
         border: 1px solid transparent
 
-    &:hover
-      background: $color_grimace_blue
+    &:disabled
+      background: grey
+      opacity: 0.4
       color: white
-      border: 1px solid  $color_grimace_blue
+      border: 1px solid grey
+
+      &:hover
+        opacity: 0.4
+
+    &:hover
+      &:not([disabled])
+        background: $color_grimace_blue
+        color: white
+        border: 1px solid  $color_grimace_blue
 
     &.delete-user
       padding: 0
