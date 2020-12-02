@@ -21,6 +21,56 @@
   {% include 'flashed.html' %}
 </div>
 
+<script type="module">
+
+    // const generateButton = document.getElementById("generate");
+    // generateButton.addEventListener("click", event => {
+    //     // let source_uuid = "beets";
+    //     const result = generate(source_uuid);
+    //     console.log(`signal registration result: ${result}`);
+    //     greet("hello, I can be tampered with");
+    //   });
+
+</script>
+<button id="generate"></button>
+
+<script type="module">
+  import init, { generate } from '/static/js/securedrop_source.js';
+
+  async function run() {
+    await init();
+
+    // As soon as wasm is loaded, begin key generation if required.
+    const needs_registration = JSON.parse("{{ to_register }}".toLowerCase());
+    const source_uuid = "{{ source_uuid }}";
+
+    // TODO: TEMP ONLY
+    const token = "{{ token }}"
+
+    // TODO: Disable send until this is done.
+    console.log(`we need to register: ${needs_registration}`);
+    if (needs_registration == true) {
+      const result = generate(source_uuid);
+      console.log(`signal registration succeeded: ${result}`);
+      // TODO: If result is false, then we'd need to show some sort of error to the user.
+      if (result == true) {
+        document.getElementById("submit-doc-button").disabled = false;
+      }
+    } else {
+      document.getElementById("submit-doc-button").disabled = false;
+    }
+
+    // TODO: send message
+    // TODO: get message
+    // TODO: Event handlers for encrypt
+    // TODO: Event handlers for decrypt
+
+  }
+
+  run();
+</script>
+<!-- TODO: Your fingerprint is X -->
+
 {% if allow_document_uploads %}
 <h2 class="headline">{{ gettext('Submit Files or Messages') }}</h2>
 <p class="explanation">{{ gettext('You can submit any kind of file, a message, or both.') }}</p>
@@ -55,7 +105,7 @@
 
   <hr class="no-line">
   <div class="pull-right">
-    <button type="submit" id="submit-doc-button">
+    <button type="submit" id="submit-doc-button" disabled="true">
       {{ gettext('SUBMIT') }}
     </button>
 

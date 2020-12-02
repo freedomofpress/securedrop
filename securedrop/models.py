@@ -124,7 +124,10 @@ class Source(db.Model):
 
     def is_signal_registered(self) -> bool:
         """If any of these fields are null, one cannot communicate with them via Signal"""
-        return self.identity_key and self.signed_prekey and self.signed_prekey_timestamp and self.registration_id and self.prekey_signature
+        if self.identity_key and self.signed_prekey and self.signed_prekey_timestamp and self.registration_id and self.prekey_signature:
+            return True
+        else:
+            return False
 
     def __repr__(self) -> str:
         return '<Source %r>' % (self.journalist_designation)
@@ -664,7 +667,10 @@ class Journalist(db.Model):
 
     def is_signal_registered(self) -> bool:
         """If any of these fields are null, one cannot communicate with them via Signal"""
-        return self.identity_key and self.signed_prekey and self.signed_prekey_timestamp and self.registration_id and self.prekey_signature
+        if self.identity_key and self.signed_prekey and self.signed_prekey_timestamp and self.registration_id and self.prekey_signature:
+            return True
+        else:
+            return False
 
     @classmethod
     def check_username_acceptable(cls, username: str) -> None:
