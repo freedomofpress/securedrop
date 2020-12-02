@@ -92,6 +92,14 @@ def random_datetime(nullable: bool) -> Optional[datetime.datetime]:
     )
 
 
+def default_journalist_count() -> str:
+    return os.environ.get("NUM_JOURNALISTS", "0")
+
+
+def default_source_count() -> str:
+    return os.environ.get("NUM_SOURCES", "3")
+
+
 def set_source_count(s: str) -> int:
     """
     Sets the source count from command line arguments.
@@ -308,8 +316,8 @@ def create_default_journalists() -> Tuple[Journalist, ...]:
 
 
 def add_journalists(args: argparse.Namespace) -> None:
-    total = args.journalist_count + 1
-    for i in range(1, total):
+    total = args.journalist_count
+    for i in range(1, total + 1):
         add_journalist(progress=(i, total))
 
 
@@ -398,13 +406,13 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "--journalist-count",
         type=non_negative_int,
-        default=0,
+        default=default_journalist_count(),
         help=("Number of journalists to create in addition to the default accounts"),
     )
     parser.add_argument(
         "--source-count",
         type=set_source_count,
-        default=3,
+        default=default_source_count(),
         help=(
             'Number of sources to create, or "ALL" to create a number sufficient to '
             "demonstrate all of our test strings."
