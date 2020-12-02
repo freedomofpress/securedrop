@@ -32,7 +32,7 @@
     //   });
 
 </script>
-<button id="generate"></button>
+<!--<button id="generate"></button>-->
 
 <script type="module">
   import init, { generate } from '/static/js/securedrop_source.js';
@@ -40,22 +40,31 @@
   async function run() {
     await init();
 
-    // As soon as wasm is loaded, begin key generation if required.
+    // As soon as wasm is loaded, we begin key generation if it's not done yet.
     const needs_registration = JSON.parse("{{ to_register }}".toLowerCase());
     const source_uuid = "{{ source_uuid }}";
 
     // TODO: TEMP ONLY
     const token = "{{ token }}"
 
-    // TODO: Disable send until this is done.
     console.log(`we need to register: ${needs_registration}`);
     if (needs_registration == true) {
-      const result = generate(source_uuid);
-      console.log(`signal registration succeeded: ${result}`);
-      // TODO: If result is false, then we'd need to show some sort of error to the user.
-      if (result == true) {
-        document.getElementById("submit-doc-button").disabled = false;
-      }
+
+      let keygen_data = generate(source_uuid);
+      console.log(`signal key generation succeeded: ${keygen_data}`);
+      // TODO: If keygen_success is false, then we'd need to show some sort of error to the user.
+      let request = new XMLHttpRequest();
+      request.open("POST", "http://127.0.0.1:8080/api/v2/register", true);
+      request.setRequestHeader("Content-Type", "application/json");
+      request.setRequestHeader("Authorization", `Token ${token}`);
+
+      request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+          document.getElementById("submit-doc-button").disabled = false;
+        }
+      };
+
+      request.send(JSON.stringify(keygen_data));
     } else {
       document.getElementById("submit-doc-button").disabled = false;
     }
