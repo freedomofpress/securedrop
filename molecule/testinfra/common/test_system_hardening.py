@@ -110,6 +110,11 @@ def test_twofactor_disabled_on_tty(host):
   ('PasswordAuthentication', 'no'),
   ('PubkeyAuthentication', 'yes'),
   ('RSAAuthentication', 'yes'),
+  ('AllowGroups', 'ssh'),
+  ('AllowTcpForwarding', 'no'),
+  ('AllowAgentForwarding', 'no'),
+  ('PermitTunnel', 'no'),
+  ('X11Forwarding', 'no'),
 ])
 def test_sshd_config(host, sshd_opts):
     """
