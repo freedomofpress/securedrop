@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="{{ g.html_lang }}" dir="{{ g.text_direction }}">
   <head>
-    <title> {{ g.organization_name }} | {{ gettext('Protecting Journalists and Sources') }}</title>
+    {% if g.organization_name == "SecureDrop" %}
+    <title>{{ g.organization_name }} | {{ gettext('Protecting Journalists and Sources') }}</title>
+    {% else %}
+    <title>{{ g.organization_name }} | {{ gettext('SecureDrop') }}</title>
+    {% endif %}
 
     <link rel="stylesheet" href="/static/css/source.css">
     <link rel="icon" type="image/png" href="/static/i/favicon.png">

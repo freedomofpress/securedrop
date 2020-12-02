@@ -56,7 +56,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 flash("Unable to process the image file."
                       " Try another one.", "logo-error")
             finally:
-                return redirect(url_for("admin.manage_config"))
+                return redirect(url_for("admin.manage_config") + "#config-logoimage")
         else:
             for field, errors in list(logo_form.errors.items()):
                 for error in errors:
@@ -75,13 +75,13 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             flash(gettext("Preferences saved."), "submission-preferences-success")
             value = not bool(request.form.get('prevent_document_uploads'))
             InstanceConfig.set_allow_document_uploads(value)
-            return redirect(url_for('admin.manage_config'))
+            return redirect(url_for('admin.manage_config') + "#config-preventuploads")
         else:
             for field, errors in list(form.errors.items()):
                 for error in errors:
                     flash(gettext("Preferences not updated.") + " " + error,
                           "submission-preferences-error")
-        return redirect(url_for('admin.manage_config'))
+        return redirect(url_for('admin.manage_config') + "#config-preventuploads")
 
     @view.route('/update-org-name', methods=['POST'])
     @admin_required
@@ -94,12 +94,12 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 flash(gettext("Preferences saved."), "org-name-success")
             except Exception:
                 flash(gettext('Failed to update organization name.'), 'org-name-error')
-            return redirect(url_for('admin.manage_config'))
+            return redirect(url_for('admin.manage_config') + "#config-orgname")
         else:
             for field, errors in list(form.errors.items()):
                 for error in errors:
                     flash(error, "org-name-error")
-        return redirect(url_for('admin.manage_config'))
+        return redirect(url_for('admin.manage_config') + "#config-orgname")
 
     @view.route('/add', methods=('GET', 'POST'))
     @admin_required
@@ -302,7 +302,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def ossec_test() -> werkzeug.Response:
         current_app.logger.error('This is a test OSSEC alert')
         flash(gettext('Test alert sent. Please check your email.'),
-              'notification')
-        return redirect(url_for('admin.manage_config'))
+              'testalert-notification')
+        return redirect(url_for('admin.manage_config') + "#config-testalert")
 
     return view
