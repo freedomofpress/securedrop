@@ -18,6 +18,7 @@ from db import db
 from models import Submission, Reply, get_one_or_else
 from passphrases import PassphraseGenerator
 from sdconfig import SDConfig
+from source_app.apiv2 import TOKEN_EXPIRATION_MINS
 from source_app.decorators import login_required
 from source_app.session_manager import SessionManager
 from source_app.utils import normalize_timestamps, fit_codenames_into_cookie, \
@@ -138,9 +139,15 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if not current_app.crypto_util.get_fingerprint(logged_in_source.filesystem_id):
             current_app.crypto_util.genkeypair(logged_in_source)
 
+        current_app.logger.info("client needs to register still?: {}".format(
+                    g.source.is_signal_registered()))
+
         return render_template(
             'lookup.html',
             is_user_logged_in=True,
+            token=session["token"],
+            source_uuid=g.source.uuid,
+            to_register=not g.source.is_signal_registered(),
             allow_document_uploads=current_app.instance_config.allow_document_uploads,
             replies=replies,
             new_user_codename=session.get('new_user_codename', None),
@@ -281,10 +288,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         form = LoginForm()
         if form.validate_on_submit():
             try:
-                SessionManager.log_user_in(
+                source = SessionManager.log_user_in(
                     db_session=db.session,
                     supplied_passphrase=request.form['codename'].strip()
-                )
+                ).get_db_record()
+                session['token'] = source.generate_api_token(expiration=TOKEN_EXPIRATION_MINS * 60)
             except InvalidPassphraseError:
                 current_app.logger.info("Login failed for invalid codename")
                 flash(gettext("Sorry, that is not a recognized codename."), "error")
@@ -308,6 +316,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             # If a user specified a locale, save it and restore it
             session.clear()
             session['locale'] = g.localeinfo.id
+            # TODO: Invalidate token if it exists
 
             return render_template('logout.html')
         else:
