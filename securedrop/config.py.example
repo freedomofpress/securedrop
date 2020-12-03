@@ -1,9 +1,11 @@
 import os
 
 # Default values for production, may be overridden later based on environment
-class FlaskConfig(object):
+class FlaskConfig:
     DEBUG = False
+    MAX_CONTENT_LENGTH = 524288000
     TESTING = False
+    USE_X_SENDFILE = False
     WTF_CSRF_ENABLED = True
 
 # Use different secret keys for the two different applications so their

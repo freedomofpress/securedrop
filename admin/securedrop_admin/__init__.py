@@ -33,6 +33,11 @@ import subprocess
 import sys
 import json
 import base64
+from typing import Any
+from typing import Optional
+from typing import TypeVar
+from typing import Union
+
 import prompt_toolkit
 from prompt_toolkit.document import Document
 from prompt_toolkit.validation import Validator, ValidationError
@@ -40,6 +45,17 @@ import yaml
 from pkg_resources import parse_version
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import x25519
+from typing import List
+
+from typing import Set
+
+from typing import Dict
+
+from typing import Tuple
+
+from typing import Callable
+
+from typing import Type
 
 sdlog = logging.getLogger(__name__)
 RELEASE_KEY = '22245C81E3BAEB4138B36061310F561200F4AD77'
@@ -62,24 +78,30 @@ class JournalistAlertEmailException(Exception):
     pass
 
 
-class SiteConfig(object):
+# The type of each entry within SiteConfig.desc
+_T = TypeVar('_T', bound=Union[int, str, bool])
+# (var, default, type, prompt, validator, transform, condition)
+_DescEntryType = Tuple[str, _T, Type[_T], str, Optional[Validator], Optional[Callable], Callable]
+
+
+class SiteConfig:
 
     class ValidateNotEmpty(Validator):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             if document.text != '':
                 return True
             raise ValidationError(
                 message="Must not be an empty string")
 
     class ValidateTime(Validator):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             if document.text.isdigit() and int(document.text) in range(0, 24):
                 return True
             raise ValidationError(
                 message="Must be an integer between 0 and 23")
 
     class ValidateUser(Validator):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             text = document.text
             if text != '' and text != 'root' and text != 'amnesia':
                 return True
@@ -87,7 +109,7 @@ class SiteConfig(object):
                 message="Must not be root, amnesia or an empty string")
 
     class ValidateIP(Validator):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             try:
                 ipaddress.ip_address(document.text)
                 return True
@@ -95,7 +117,7 @@ class SiteConfig(object):
                 raise ValidationError(message=str(e))
 
     class ValidateNameservers(Validator):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             candidates = LIST_SPLIT_RE.split(document.text)
             if len(candidates) > MAX_NAMESERVERS:
                 raise ValidationError(message="Specify no more than three nameservers.")
@@ -111,18 +133,18 @@ class SiteConfig(object):
             return True
 
     @staticmethod
-    def split_list(text):
+    def split_list(text: str) -> List[str]:
         """
         Splits a string containing a list of values separated by commas or whitespace.
         """
         return LIST_SPLIT_RE.split(text)
 
     class ValidatePath(Validator):
-        def __init__(self, basedir):
+        def __init__(self, basedir: str) -> None:
             self.basedir = basedir
             super(SiteConfig.ValidatePath, self).__init__()
 
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             if document.text == '':
                 raise ValidationError(
                     message='an existing file name is required')
@@ -133,14 +155,14 @@ class SiteConfig(object):
                 message=path + ' file does not exist')
 
     class ValidateOptionalPath(ValidatePath):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             if document.text == '':
                 return True
             return super(SiteConfig.ValidateOptionalPath, self).validate(
                 document)
 
     class ValidateYesNo(Validator):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             text = document.text.lower()
             if text == 'yes' or text == 'no':
                 return True
@@ -148,11 +170,11 @@ class SiteConfig(object):
 
     class ValidateYesNoForV3(Validator):
 
-        def __init__(self, *args, **kwargs):
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
             Validator.__init__(*args, **kwargs)
             self.caller = args[0]
 
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             text = document.text.lower()
             # Raise error if admin tries to disable v3 when v2
             # is already disabled.
@@ -164,7 +186,7 @@ class SiteConfig(object):
             raise ValidationError(message="Must be either yes or no")
 
     class ValidateFingerprint(Validator):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             text = document.text.replace(' ', '')
             if text == '65A1B5FF195B56353CC63DFFCC40EF1228271441':
                 raise ValidationError(
@@ -178,24 +200,24 @@ class SiteConfig(object):
             return True
 
     class ValidateOptionalFingerprint(ValidateFingerprint):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             if document.text == '':
                 return True
             return super(SiteConfig.ValidateOptionalFingerprint,
                          self).validate(document)
 
     class ValidateInt(Validator):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             if re.match(r'\d+$', document.text):
                 return True
             raise ValidationError(message="Must be an integer")
 
     class Locales(object):
-        def __init__(self, appdir):
+        def __init__(self, appdir: str) -> None:
             self.translation_dir = os.path.realpath(
                 os.path.join(appdir, 'translations'))
 
-        def get_translations(self):
+        def get_translations(self) -> Set[str]:
             translations = set(['en_US'])
             for dirname in os.listdir(self.translation_dir):
                 if dirname != 'messages.pot':
@@ -203,11 +225,11 @@ class SiteConfig(object):
             return translations
 
     class ValidateLocales(Validator):
-        def __init__(self, basedir):
+        def __init__(self, basedir: str) -> None:
             self.basedir = basedir
             super(SiteConfig.ValidateLocales, self).__init__()
 
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             desired = document.text.split()
             existing = SiteConfig.Locales(self.basedir).get_translations()
             missing = set(desired) - set(existing)
@@ -218,7 +240,7 @@ class SiteConfig(object):
                     missing))
 
     class ValidateOSSECUsername(Validator):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             text = document.text
             if text and '@' not in text and 'test' != text:
                 return True
@@ -226,7 +248,7 @@ class SiteConfig(object):
                 message="The SASL username should not include the domain name")
 
     class ValidateOSSECPassword(Validator):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             text = document.text
             if len(text) >= 8 and 'password123' != text:
                 return True
@@ -234,7 +256,7 @@ class SiteConfig(object):
                 message="Password for OSSEC email account must be strong")
 
     class ValidateEmail(Validator):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             text = document.text
             if text == '':
                 raise ValidationError(
@@ -245,7 +267,7 @@ class SiteConfig(object):
             return True
 
     class ValidateOSSECEmail(ValidateEmail):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             super(SiteConfig.ValidateOSSECEmail, self).validate(document)
             text = document.text
             if 'ossec@ossec.test' != text:
@@ -255,175 +277,176 @@ class SiteConfig(object):
                          "ossec@ossec.test"))
 
     class ValidateOptionalEmail(ValidateEmail):
-        def validate(self, document):
+        def validate(self, document: Document) -> bool:
             if document.text == '':
                 return True
             return super(SiteConfig.ValidateOptionalEmail, self).validate(
                 document)
 
-    def __init__(self, args):
+    def __init__(self, args: argparse.Namespace) -> None:
         self.args = args
-        self.config = {}
+        self.config = {}  # type: Dict
         # Hold runtime configuration before save, to support
         # referencing other responses during validation
-        self._config_in_progress = {}
+        self._config_in_progress = {}  # type: Dict
         translations = SiteConfig.Locales(
             self.args.app_path).get_translations()
-        translations = " ".join(translations)
+        translations_as_str = " ".join(translations)
+
         self.desc = [
-            ['ssh_users', 'sd', str,
+            ('ssh_users', 'sd', str,
              'Username for SSH access to the servers',
              SiteConfig.ValidateUser(),
              None,
-             lambda config: True],
-            ['daily_reboot_time', 4, int,
+             lambda config: True),
+            ('daily_reboot_time', 4, int,
              'Daily reboot time of the server (24-hour clock)',
              SiteConfig.ValidateTime(),
              int,
-             lambda config: True],
-            ['app_ip', '10.20.2.2', str,
+             lambda config: True),
+            ('app_ip', '10.20.2.2', str,
              'Local IPv4 address for the Application Server',
              SiteConfig.ValidateIP(),
              None,
-             lambda config: True],
-            ['monitor_ip', '10.20.3.2', str,
+             lambda config: True),
+            ('monitor_ip', '10.20.3.2', str,
              'Local IPv4 address for the Monitor Server',
              SiteConfig.ValidateIP(),
              None,
-             lambda config: True],
-            ['app_hostname', 'app', str,
+             lambda config: True),
+            ('app_hostname', 'app', str,
              'Hostname for Application Server',
              SiteConfig.ValidateNotEmpty(),
              None,
-             lambda config: True],
-            ['monitor_hostname', 'mon', str,
+             lambda config: True),
+            ('monitor_hostname', 'mon', str,
              'Hostname for Monitor Server',
              SiteConfig.ValidateNotEmpty(),
              None,
-             lambda config: True],
-            ['dns_server', ['8.8.8.8', '8.8.4.4'], list,
+             lambda config: True),
+            ('dns_server', ['8.8.8.8', '8.8.4.4'], list,
              'DNS server(s)',
              SiteConfig.ValidateNameservers(),
              SiteConfig.split_list,
-             lambda config: True],
-            ['securedrop_app_gpg_public_key', 'SecureDrop.asc', str,
+             lambda config: True),
+            ('securedrop_app_gpg_public_key', 'SecureDrop.asc', str,
              'Local filepath to public key for ' +
              'SecureDrop Application GPG public key',
              SiteConfig.ValidatePath(self.args.ansible_path),
              None,
-             lambda config: True],
-            ['securedrop_app_https_on_source_interface', False, bool,
+             lambda config: True),
+            ('securedrop_app_https_on_source_interface', False, bool,
              'Whether HTTPS should be enabled on ' +
              'Source Interface (requires EV cert)',
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes',
-             lambda config: True],
-            ['securedrop_app_https_certificate_cert_src', '', str,
+             lambda config: True),
+            ('securedrop_app_https_certificate_cert_src', '', str,
              'Local filepath to HTTPS certificate',
              SiteConfig.ValidateOptionalPath(self.args.ansible_path),
              None,
              lambda config: config.get(
-                'securedrop_app_https_on_source_interface')],
-            ['securedrop_app_https_certificate_key_src', '', str,
+                'securedrop_app_https_on_source_interface')),
+            ('securedrop_app_https_certificate_key_src', '', str,
              'Local filepath to HTTPS certificate key',
              SiteConfig.ValidateOptionalPath(self.args.ansible_path),
              None,
              lambda config: config.get(
-                'securedrop_app_https_on_source_interface')],
-            ['securedrop_app_https_certificate_chain_src', '', str,
+                'securedrop_app_https_on_source_interface')),
+            ('securedrop_app_https_certificate_chain_src', '', str,
              'Local filepath to HTTPS certificate chain file',
              SiteConfig.ValidateOptionalPath(self.args.ansible_path),
              None,
              lambda config: config.get(
-                'securedrop_app_https_on_source_interface')],
-            ['securedrop_app_gpg_fingerprint', '', str,
+                'securedrop_app_https_on_source_interface')),
+            ('securedrop_app_gpg_fingerprint', '', str,
              'Full fingerprint for the SecureDrop Application GPG Key',
              SiteConfig.ValidateFingerprint(),
              self.sanitize_fingerprint,
-             lambda config: True],
-            ['ossec_alert_gpg_public_key', 'ossec.pub', str,
+             lambda config: True),
+            ('ossec_alert_gpg_public_key', 'ossec.pub', str,
              'Local filepath to OSSEC alerts GPG public key',
              SiteConfig.ValidatePath(self.args.ansible_path),
              None,
-             lambda config: True],
-            ['ossec_gpg_fpr', '', str,
+             lambda config: True),
+            ('ossec_gpg_fpr', '', str,
              'Full fingerprint for the OSSEC alerts GPG public key',
              SiteConfig.ValidateFingerprint(),
              self.sanitize_fingerprint,
-             lambda config: True],
-            ['ossec_alert_email', '', str,
+             lambda config: True),
+            ('ossec_alert_email', '', str,
              'Admin email address for receiving OSSEC alerts',
              SiteConfig.ValidateOSSECEmail(),
              None,
-             lambda config: True],
-            ['journalist_alert_gpg_public_key', '', str,
+             lambda config: True),
+            ('journalist_alert_gpg_public_key', '', str,
              'Local filepath to journalist alerts GPG public key (optional)',
              SiteConfig.ValidateOptionalPath(self.args.ansible_path),
              None,
-             lambda config: True],
-            ['journalist_gpg_fpr', '', str,
+             lambda config: True),
+            ('journalist_gpg_fpr', '', str,
              'Full fingerprint for the journalist alerts ' +
              'GPG public key (optional)',
              SiteConfig.ValidateOptionalFingerprint(),
              self.sanitize_fingerprint,
-             lambda config: config.get('journalist_alert_gpg_public_key')],
-            ['journalist_alert_email', '', str,
+             lambda config: config.get('journalist_alert_gpg_public_key')),
+            ('journalist_alert_email', '', str,
              'Email address for receiving journalist alerts (optional)',
              SiteConfig.ValidateOptionalEmail(),
              None,
-             lambda config: config.get('journalist_alert_gpg_public_key')],
-            ['smtp_relay', "smtp.gmail.com", str,
+             lambda config: config.get('journalist_alert_gpg_public_key')),
+            ('smtp_relay', "smtp.gmail.com", str,
              'SMTP relay for sending OSSEC alerts',
              SiteConfig.ValidateNotEmpty(),
              None,
-             lambda config: True],
-            ['smtp_relay_port', 587, int,
+             lambda config: True),
+            ('smtp_relay_port', 587, int,
              'SMTP port for sending OSSEC alerts',
              SiteConfig.ValidateInt(),
              int,
-             lambda config: True],
-            ['sasl_domain', "gmail.com", str,
+             lambda config: True),
+            ('sasl_domain', "gmail.com", str,
              'SASL domain for sending OSSEC alerts',
              None,
              None,
-             lambda config: True],
-            ['sasl_username', '', str,
+             lambda config: True),
+            ('sasl_username', '', str,
              'SASL username for sending OSSEC alerts',
              SiteConfig.ValidateOSSECUsername(),
              None,
-             lambda config: True],
-            ['sasl_password', '', str,
+             lambda config: True),
+            ('sasl_password', '', str,
              'SASL password for sending OSSEC alerts',
              SiteConfig.ValidateOSSECPassword(),
              None,
-             lambda config: True],
-            ['enable_ssh_over_tor', True, bool,
+             lambda config: True),
+            ('enable_ssh_over_tor', True, bool,
              'Enable SSH over Tor (recommended, disables SSH over LAN). ' +
              'If you respond no, SSH will be available over LAN only',
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes',
-             lambda config: True],
-            ['securedrop_supported_locales', [], list,
+             lambda config: True),
+            ('securedrop_supported_locales', [], list,
              'Space separated list of additional locales to support '
-             '(' + translations + ')',
+             '(' + translations_as_str + ')',
              SiteConfig.ValidateLocales(self.args.app_path),
              str.split,
-             lambda config: True],
-            ['v2_onion_services', self.check_for_v2_onion(), bool,
+             lambda config: True),
+            ('v2_onion_services', self.check_for_v2_onion(), bool,
              'WARNING: For security reasons, support for v2 onion services ' +
              'will be removed in February 2021. ' +
              'Do you want to enable v2 onion services?',
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes',
-             lambda config: True],
-            ['v3_onion_services', self.check_for_v3_onion, bool,
+             lambda config: True),
+            ('v3_onion_services', self.check_for_v3_onion, bool,
              'Do you want to enable v3 onion services (recommended)?',
              SiteConfig.ValidateYesNoForV3(self),
              lambda x: x.lower() == 'yes',
-             lambda config: True],
-        ]
+             lambda config: True),
+        ]  # type: List[_DescEntryType]
 
-    def load_and_update_config(self, validate: bool = True, prompt: bool = True):
+    def load_and_update_config(self, validate: bool = True, prompt: bool = True) -> bool:
         if self.exists():
             self.config = self.load(validate)
         elif not prompt:
@@ -432,7 +455,7 @@ class SiteConfig(object):
 
         return self.update_config(prompt)
 
-    def update_config(self, prompt: bool = True):
+    def update_config(self, prompt: bool = True) -> bool:
         if prompt:
             self.config.update(self.user_prompt_config())
         self.save()
@@ -441,7 +464,7 @@ class SiteConfig(object):
         self.validate_https_and_v3()
         return True
 
-    def validate_https_and_v3(self):
+    def validate_https_and_v3(self) -> bool:
         """
         Checks if https is enabled with v3 onion service.
 
@@ -459,7 +482,7 @@ class SiteConfig(object):
             return False
         return True
 
-    def check_for_v2_onion(self):
+    def check_for_v2_onion(self) -> bool:
         """
         Check if v2 onion services are already enabled or not.
         """
@@ -474,7 +497,7 @@ class SiteConfig(object):
                 return True
         return False
 
-    def check_for_v3_onion(self):
+    def check_for_v3_onion(self) -> bool:
         """
         Check if v3 onion services should be enabled by default or not.
         """
@@ -484,7 +507,7 @@ class SiteConfig(object):
         v3_value = self.config.get("v3_onion_services", True)
         return v3_value or not v2_value
 
-    def user_prompt_config(self):
+    def user_prompt_config(self) -> Dict[str, Any]:
         self._config_in_progress = {}
         for desc in self.desc:
             (var, default, type, prompt, validator, transform,
@@ -496,7 +519,9 @@ class SiteConfig(object):
                                                             self.config.get(var))  # noqa: E501
         return self._config_in_progress
 
-    def user_prompt_config_one(self, desc, from_config):
+    def user_prompt_config_one(
+        self, desc: _DescEntryType, from_config: Optional[Any]
+    ) -> Any:
         (var, default, type, prompt, validator, transform, condition) = desc
         if from_config is not None and var != "v3_onion_services":
             # v3_onion_services must be true if v2 is disabled by the admin
@@ -513,7 +538,9 @@ class SiteConfig(object):
             default = default()
         return self.validated_input(prompt, default, validator, transform)
 
-    def validated_input(self, prompt, default, validator, transform):
+    def validated_input(
+        self, prompt: str, default: Any, validator: Validator, transform: Optional[Callable]
+    ) -> Any:
         if type(default) is bool:
             default = default and 'yes' or 'no'
         if type(default) is int:
@@ -522,21 +549,18 @@ class SiteConfig(object):
             default = " ".join(default)
         if type(default) is not str:
             default = str(default)
-        kwargs = {}
-        if validator:
-            kwargs['validator'] = validator
         value = prompt_toolkit.prompt(prompt,
                                       default=default,
-                                      **kwargs)
+                                      validator=validator)
         if transform:
             return transform(value)
         else:
             return value
 
-    def sanitize_fingerprint(self, value):
+    def sanitize_fingerprint(self, value: str) -> str:
         return value.upper().replace(' ', '')
 
-    def validate_gpg_keys(self):
+    def validate_gpg_keys(self) -> bool:
         keys = (('securedrop_app_gpg_public_key',
                  'securedrop_app_gpg_fingerprint'),
 
@@ -567,13 +591,13 @@ class SiteConfig(object):
                     "the public key {}".format(public_key))
         return True
 
-    def validate_journalist_alert_email(self):
+    def validate_journalist_alert_email(self) -> bool:
         if (self.config['journalist_alert_gpg_public_key'] == '' and
                 self.config['journalist_gpg_fpr'] == ''):
             return True
 
-        class Document(object):
-            def __init__(self, text):
+        class Document:
+            def __init__(self, text: str) -> None:
                 self.text = text
 
         try:
@@ -584,16 +608,16 @@ class SiteConfig(object):
                 "journalist alerts email: " + e.message)
         return True
 
-    def exists(self):
+    def exists(self) -> bool:
         return os.path.exists(self.args.site_config)
 
-    def save(self):
+    def save(self) -> None:
         with io.open(self.args.site_config, 'w') as site_config_file:
             yaml.safe_dump(self.config,
                            site_config_file,
                            default_flow_style=False)
 
-    def clean_config(self, config: dict) -> dict:
+    def clean_config(self, config: Dict) -> Dict:
         """
         Cleans a loaded config without prompting.
 
@@ -633,7 +657,7 @@ class SiteConfig(object):
                     self._config_in_progress[var] = clean_config[var]
         return clean_config
 
-    def load(self, validate=True):
+    def load(self, validate: bool = True) -> Dict:
         """
         Loads the site configuration file.
 
@@ -654,7 +678,7 @@ class SiteConfig(object):
             raise
 
 
-def setup_logger(verbose=False):
+def setup_logger(verbose: bool = False) -> None:
     """ Configure logging handler """
     # Set default level on parent
     sdlog.setLevel(logging.DEBUG)
@@ -666,13 +690,13 @@ def setup_logger(verbose=False):
     sdlog.addHandler(stdout)
 
 
-def sdconfig(args):
+def sdconfig(args: argparse.Namespace) -> int:
     """Configure SD site settings"""
     SiteConfig(args).load_and_update_config(validate=False)
     return 0
 
 
-def generate_new_v3_keys():
+def generate_new_v3_keys() -> Tuple[str, str]:
     """This function generate new keys for Tor v3 onion
     services and returns them as as tuple.
 
@@ -690,23 +714,12 @@ def generate_new_v3_keys():
         format=serialization.PublicFormat.Raw)
 
     # Base32 encode and remove base32 padding characters (`=`)
-    # Using try/except blocks for Python 2/3 support.
-    try:
-        public = base64.b32encode(public_bytes).replace('=', '') \
-                       .decode("utf-8")
-    except TypeError:
-        public = base64.b32encode(public_bytes).replace(b'=', b'') \
-                       .decode("utf-8")
-    try:
-        private = base64.b32encode(private_bytes).replace('=', '') \
-                        .decode("utf-8")
-    except TypeError:
-        private = base64.b32encode(private_bytes).replace(b'=', b'') \
-                        .decode("utf-8")
+    public = base64.b32encode(public_bytes).replace(b'=', b'').decode("utf-8")
+    private = base64.b32encode(private_bytes).replace(b'=', b'').decode("utf-8")
     return public, private
 
 
-def find_or_generate_new_torv3_keys(args):
+def find_or_generate_new_torv3_keys(args: argparse.Namespace) -> int:
     """
     This method will either read v3 Tor onion service keys if found or generate
     a new public/private keypair.
@@ -739,7 +752,7 @@ def find_or_generate_new_torv3_keys(args):
     return 0
 
 
-def install_securedrop(args):
+def install_securedrop(args: argparse.Namespace) -> int:
     """Install/Update SecureDrop"""
     SiteConfig(args).load_and_update_config(prompt=False)
 
@@ -748,12 +761,13 @@ def install_securedrop(args):
                "servers.")
     sdlog.info("The sudo password is only necessary during initial "
                "installation.")
-    return subprocess.check_call([os.path.join(args.ansible_path,
-                                 'securedrop-prod.yml'), '--ask-become-pass'],
-                                 cwd=args.ansible_path)
+    return subprocess.check_call(
+        [os.path.join(args.ansible_path, 'securedrop-prod.yml'), '--ask-become-pass'],
+        cwd=args.ansible_path
+    )
 
 
-def verify_install(args):
+def verify_install(args: argparse.Namespace) -> int:
     """Run configuration tests against SecureDrop servers"""
 
     sdlog.info("Running configuration tests: ")
@@ -762,7 +776,7 @@ def verify_install(args):
                                  cwd=os.getcwd())
 
 
-def backup_securedrop(args):
+def backup_securedrop(args: argparse.Namespace) -> int:
     """Perform backup of the SecureDrop Application Server.
     Creates a tarball of submissions and server config, and fetches
     back to the Admin Workstation. Future `restore` actions can be performed
@@ -775,7 +789,7 @@ def backup_securedrop(args):
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
-def restore_securedrop(args):
+def restore_securedrop(args: argparse.Namespace) -> int:
     """Perform restore of the SecureDrop Application Server.
     Requires a tarball of submissions and server config, created via
     the `backup` action."""
@@ -811,7 +825,7 @@ def restore_securedrop(args):
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
-def run_tails_config(args):
+def run_tails_config(args: argparse.Namespace) -> int:
     """Configure Tails environment post SD install"""
     sdlog.info("Configuring Tails workstation environment")
     sdlog.info(("You'll be prompted for the temporary Tails admin password,"
@@ -827,13 +841,13 @@ def run_tails_config(args):
                                  cwd=args.ansible_path)
 
 
-def check_for_updates_wrapper(args):
+def check_for_updates_wrapper(args: argparse.Namespace) -> int:
     check_for_updates(args)
     # Because the command worked properly exit with 0.
     return 0
 
 
-def check_for_updates(args):
+def check_for_updates(args: argparse.Namespace) -> Tuple[bool, str]:
     """Check for SecureDrop updates"""
     sdlog.info("Checking for SecureDrop updates...")
 
@@ -865,7 +879,9 @@ def check_for_updates(args):
     return False, latest_tag
 
 
-def get_release_key_from_keyserver(args, keyserver=None, timeout=45):
+def get_release_key_from_keyserver(
+    args: argparse.Namespace, keyserver: Optional[str] = None, timeout: int = 45
+) -> None:
     gpg_recv = ['timeout', str(timeout), 'gpg', '--batch', '--no-tty',
                 '--recv-key']
     release_key = [RELEASE_KEY]
@@ -879,7 +895,7 @@ def get_release_key_from_keyserver(args, keyserver=None, timeout=45):
     subprocess.check_call(get_key_cmd, cwd=args.root)
 
 
-def update(args):
+def update(args: argparse.Namespace) -> int:
     """Verify, and apply latest SecureDrop workstation update"""
     sdlog.info("Applying SecureDrop updates...")
 
@@ -956,7 +972,7 @@ def update(args):
     return 0
 
 
-def get_logs(args):
+def get_logs(args: argparse.Namespace) -> int:
     """Get logs for forensics and debugging purposes"""
     sdlog.info("Gathering logs for forensics and debugging")
     ansible_cmd = [
@@ -969,7 +985,7 @@ def get_logs(args):
     return 0
 
 
-def set_default_paths(args):
+def set_default_paths(args: argparse.Namespace) -> argparse.Namespace:
     if not args.ansible_path:
         args.ansible_path = args.root + "/install_files/ansible-base"
     args.ansible_path = os.path.realpath(args.ansible_path)
@@ -982,7 +998,7 @@ def set_default_paths(args):
     return args
 
 
-def reset_admin_access(args):
+def reset_admin_access(args: argparse.Namespace) -> int:
     """Resets SSH access to the SecureDrop servers, locking it to
     this Admin Workstation."""
     sdlog.info("Resetting SSH access to the SecureDrop servers")
@@ -993,7 +1009,7 @@ def reset_admin_access(args):
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
-def parse_argv(argv):
+def parse_argv(argv: List[str]) -> argparse.Namespace:
     class ArgParseFormatterCombo(argparse.ArgumentDefaultsHelpFormatter,
                                  argparse.RawTextHelpFormatter):
         """Needed to combine formatting classes for help output"""
@@ -1071,7 +1087,7 @@ def parse_argv(argv):
     return set_default_paths(args)
 
 
-def main(argv):
+def main(argv: List[str]) -> None:
     args = parse_argv(argv)
     setup_logger(args.v)
     if args.v:
