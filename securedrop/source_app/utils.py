@@ -9,10 +9,34 @@ import re
 from crypto_util import CryptoException
 from models import Source
 from passphrases import PassphraseGenerator, DicewarePassphrase
+from models import Journalist, Source
 from sdconfig import SDConfig
 
 if typing.TYPE_CHECKING:
     from typing import Optional  # noqa: F401
+
+
+def active_securedrop_groups() -> typing.Dict:
+    # This is hardcoded for demo purposes. There would need to be logic around
+    # populating this (i.e. onboarding/offboarding).
+    journalist = Journalist.query.filter_by(username="journalist").first()
+
+    # We would only return those journalists for which they have completed
+    # signal registration.
+    if not journalist.is_signal_registered():
+        return {"default": ""}
+
+    if not journalist:
+        abort(404)  # Temp for testing, should be 500
+
+    journalist_uuid = journalist.uuid
+
+    # In production, we'd need to provide a list of journalists. Then we'd use
+    # Signal group messaging to construct the journalists to talk to.
+    #
+    # This is also the step where for multi-tenancy we can add multiple groups,
+    # and allow sources to select the group/organization they wish to message.
+    return {"default": journalist_uuid}
 
 
 def was_in_generate_flow() -> bool:

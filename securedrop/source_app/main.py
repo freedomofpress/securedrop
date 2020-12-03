@@ -50,7 +50,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         codenames = session.get('codenames', {})
         codenames[tab_id] = codename
         session['codenames'] = codenames
-
+        source = Source.login(codename)
+        session['token'] = source.generate_api_token(expiration=TOKEN_EXPIRATION_MINS * 60)
         session['new_user'] = True
         return render_template('generate.html', codename=codename, tab_id=tab_id)
 
@@ -140,14 +141,18 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if not current_app.crypto_util.get_fingerprint(g.filesystem_id):
             current_app.crypto_util.genkeypair(g.filesystem_id, g.codename)
 
-        current_app.logger.info("client needs to register still?: {}".format(
-                    g.source.is_signal_registered()))
-
+        # Note on multi-tenancy:
+        # securedrop_group indicates which set of journalists to contact.
+        # This is passed as an argument such that after login or account creation
+        # there could be an additional screen to allow the user to select _which_
+        # set of journalists to contact
+        current_group = active_securedrop_groups()["default"]
         return render_template(
             'lookup.html',
             token=session["token"],
             source_uuid=g.source.uuid,
             to_register=not g.source.is_signal_registered(),
+            securedrop_group=current_group,
             allow_document_uploads=current_app.instance_config.allow_document_uploads,
             codename=g.codename,
             replies=replies,
@@ -288,7 +293,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             codename = request.form['codename'].strip()
             if valid_codename(codename):
                 session.update(codename=codename, logged_in=True)
-                # TEMP (would need this on the generate route too)
                 source = Source.login(codename)
                 session['token'] = source.generate_api_token(expiration=TOKEN_EXPIRATION_MINS * 60)
                 return redirect(url_for('.lookup', from_login='1'))
