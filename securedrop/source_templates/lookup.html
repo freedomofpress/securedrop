@@ -35,7 +35,7 @@
 <!--<button id="generate"></button>-->
 
 <script type="module">
-  import init, { generate } from '/static/js/securedrop_source.js';
+  import init, { SecureDropSourceSession } from '/static/js/securedrop_source.js';
 
   async function run() {
     await init();
@@ -51,7 +51,8 @@
     console.log(`we need to register: ${needs_registration}`);
     if (needs_registration == true) {
 
-      let keygen_data = generate(source_uuid);
+      let session = SecureDropSourceSession.new(source_uuid);
+      let keygen_data = session.generate();
       console.log(`signal key generation succeeded: ${keygen_data}`);
       // TODO: If keygen_success is false, then we'd need to show some sort of error to the user.
       let request = new XMLHttpRequest();
