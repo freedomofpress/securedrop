@@ -21,17 +21,6 @@
   {% include 'flashed.html' %}
 </div>
 
-<script type="module">
-
-    // const generateButton = document.getElementById("generate");
-    // generateButton.addEventListener("click", event => {
-    //     // let source_uuid = "beets";
-    //     const result = generate(source_uuid);
-    //     console.log(`signal registration result: ${result}`);
-    //     greet("hello, I can be tampered with");
-    //   });
-
-</script>
 <!--<button id="generate"></button>-->
 
 <script type="module">
@@ -49,9 +38,9 @@
     const token = "{{ token }}"
 
     console.log(`we need to register: ${needs_registration}`);
-    if (needs_registration == true) {
+    var session = SecureDropSourceSession.new(source_uuid);
 
-      var session = SecureDropSourceSession.new(source_uuid);
+    if (needs_registration == true) {
       var keygen_data = session.generate();
       console.log(`signal key generation succeeded: ${keygen_data}`);
       // TODO: If keygen_success is false, then we'd need to show some sort of error to the user.
@@ -103,9 +92,43 @@
 
     console.log(`user is registered, waiting for message send`);
 
-    // TODO: send message
+    const submitButton = document.getElementById("submit-doc-button");
+    submitButton.addEventListener("click", event => {
+      // Clear success message so we can see it succeed again
+      if (document.getElementById("success-message")) {
+        document.getElementById("success-message").value = "";
+      }
+
+      var message_text = document.getElementById("message-input").value;
+      // TODO: Don't do anything if message empty
+      var ciphertext = session.encrypt(journalist_uuid, message_text);
+      console.log(`message text: ${message_text}`);
+      console.log(`ciphertext: ${ciphertext}`);
+
+      var submit_request = new XMLHttpRequest();
+      submit_request.open("POST", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/messages`, true);
+      submit_request.setRequestHeader("Content-Type", "application/json");
+      submit_request.setRequestHeader("Authorization", `Token ${token}`);
+
+      submit_request.onreadystatechange = function () {
+        if (submit_request.readyState === 4 && submit_request.status === 200) {
+          const success_div = document.createElement("div");
+          success_div.id = "success-message"
+          const success_emoji = document.createTextNode("sent! ✅");
+          success_div.appendChild(success_emoji);
+          document.getElementById("below-the-submit").appendChild(success_div);
+          console.log("sent successfully!")
+        }
+      };
+      submit_request.send(JSON.stringify({
+        "message": ciphertext,
+      }));
+
+      // Now reset UI for next message
+      document.getElementById("message-input").value = "";
+      });
+
     // TODO: get message
-    // TODO: Event handlers for encrypt
     // TODO: Event handlers for decrypt
 
   }
@@ -131,36 +154,31 @@
 
 <hr class="no-line">
 
-<form id="upload" method="post" action="{{ url_for('main.submit') }}" enctype="multipart/form-data" autocomplete="off">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <div class="snippet">
+<div class="snippet">
 {% if allow_document_uploads %}
-    <div class="attachment grid-item center">
-      <img class="center" id="upload-icon" src="{{ url_for('static', filename='i/arrow-upload-large.png') }}" width="56" height="56">
-      {{ form.fh() }}
-      <p class="center" id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
-    </div>
+  <div class="attachment grid-item center">
+    <img class="center" id="upload-icon" src="{{ url_for('static', filename='i/arrow-upload-large.png') }}" width="56" height="56">
+    {{ form.fh() }}
+    <p class="center" id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
+  </div>
 {% endif %}
-    <div class="message grid-item{% if not allow_document_uploads %} wide{% endif %}">
-        {{ form.msg(class="fill-parent") }}
-    </div>
+  <div class="message grid-item{% if not allow_document_uploads %} wide{% endif %}">
+      {{ form.msg(class="fill-parent", id="message-input") }}
   </div>
+</div>
 
-  <hr class="no-line">
-  <div class="pull-right">
-    <button type="submit" id="submit-doc-button" disabled="true">
-      {{ gettext('SUBMIT') }}
-    </button>
+<hr class="no-line">
+<div class="pull-right" id="below-the-submit">
+  <button type="submit" id="submit-doc-button" disabled="true">
+    {{ gettext('SUBMIT') }}
+  </button>
 
-
-
-    <a href="{{ url_for('main.lookup') }}" class="btn secondary" id="cancel">
-      <img class="icon off-hover" src="{{ url_for('static', filename='i/x_icon-button_blue.png') }}" width="9" height="11">
-      <img class="icon on-hover" src="{{ url_for('static', filename='i/x_icon-grimace_blue.png') }}" width="9" height="11">
-      {{ gettext('CANCEL') }}
-    </a>
-  </div>
-</form>
+  <a href="{{ url_for('main.lookup') }}" class="btn secondary" id="cancel">
+    <img class="icon off-hover" src="{{ url_for('static', filename='i/x_icon-button_blue.png') }}" width="9" height="11">
+    <img class="icon on-hover" src="{{ url_for('static', filename='i/x_icon-grimace_blue.png') }}" width="9" height="11">
+    {{ gettext('CANCEL') }}
+  </a>
+</div>
 
 <hr class="no-line">
 

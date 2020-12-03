@@ -162,7 +162,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             source_uuid=g.source.uuid,
             to_register=not g.source.is_signal_registered(),
             securedrop_group=current_group,
-            allow_document_uploads=current_app.instance_config.allow_document_uploads,
+            allow_document_uploads=False,  # temp
             codename=g.codename,
             replies=replies,
             flagged=g.source.flagged,
