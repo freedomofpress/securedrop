@@ -59,6 +59,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         session["codenames_expire"] = datetime.utcnow() + timedelta(
             minutes=config.SESSION_EXPIRATION_MINUTES
         )
+        source = SessionManager.log_user_in(db_session=db.session, supplied_passphrase=codename).get_db_record()
+        session['token'] = source.generate_api_token(expiration=TOKEN_EXPIRATION_MINS * 60)
+        session['new_user'] = True
         return render_template('generate.html', codename=codename, tab_id=tab_id)
 
     @view.route('/create', methods=['POST'])
@@ -139,15 +142,19 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if not current_app.crypto_util.get_fingerprint(logged_in_source.filesystem_id):
             current_app.crypto_util.genkeypair(logged_in_source)
 
-        current_app.logger.info("client needs to register still?: {}".format(
-                    g.source.is_signal_registered()))
-
+        # Note on multi-tenancy:
+        # securedrop_group indicates which set of journalists to contact.
+        # This is passed as an argument such that after login or account creation
+        # there could be an additional screen to allow the user to select _which_
+        # set of journalists to contact
+        current_group = active_securedrop_groups()["default"]
         return render_template(
             'lookup.html',
             is_user_logged_in=True,
             token=session["token"],
             source_uuid=g.source.uuid,
             to_register=not g.source.is_signal_registered(),
+            securedrop_group=current_group,
             allow_document_uploads=current_app.instance_config.allow_document_uploads,
             replies=replies,
             new_user_codename=session.get('new_user_codename', None),

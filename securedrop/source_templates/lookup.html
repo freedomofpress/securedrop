@@ -41,6 +41,7 @@
     // As soon as wasm is loaded, we begin key generation if it's not done yet.
     const needs_registration = JSON.parse("{{ to_register }}".toLowerCase());
     const source_uuid = "{{ source_uuid }}";
+    const securedrop_group = "{{ securedrop_group }}";
 
     // TODO: TEMP ONLY
     const token = "{{ token }}"
@@ -58,11 +59,24 @@
 
       request.onreadystatechange = function () {
         if (request.readyState === 4 && request.status === 200) {
+          console.log("registered successfully!")
+        }
+      };
+      request.send(JSON.stringify(keygen_data));
+
+      // Todo when we have multiple journalists
+      // For each journalist for which we do not have prekeys:
+      let prekey_request = new XMLHttpRequest();
+      prekey_request.open("GET", "http://127.0.0.1:8080/api/v2/groups", true);
+      prekey_request.setRequestHeader("Content-Type", "application/json");
+      prekey_request.setRequestHeader("Authorization", `Token ${token}`);
+
+      prekey_request.onreadystatechange = function () {
+        if (prekey_request.readyState === 4 && prekey_request.status === 200) {
           document.getElementById("submit-doc-button").disabled = false;
         }
       };
-
-      request.send(JSON.stringify(keygen_data));
+      prekey_request.send();
     } else {
       document.getElementById("submit-doc-button").disabled = false;
     }

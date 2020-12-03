@@ -13,6 +13,7 @@ from werkzeug.exceptions import default_exceptions
 from db import db
 from sdconfig import SDConfig
 from typing import Callable, Optional, Union, Dict, List, Any, Tuple
+from source_app.utils import active_securedrop_groups
 
 
 TOKEN_EXPIRATION_MINS = 60 * 8
@@ -175,27 +176,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         Get SecureDrop group membership information. This lets a source know
         who they should be encrypting their messages to on the journalist side.
         """
-
-        # This is hardcoded for demo purposes. There would need to be logic around
-        # populating this (i.e. onboarding/offboarding).
-        journalist = Journalist.query.filter_by(username="journalist").first()
-
-        # We would only return those journalists for which they have completed
-        # signal registration.
-        if not journalist.is_signal_registered():
-            abort(500)
-
-        if not journalist:
-            abort(404)  # Temp for testing, should be 500
-
-        journalist_uuid = journalist.uuid
-
-        # In production, we'd need to provide a list of journalists. Then we'd use
-        # Signal group messaging to construct the journalists to talk to.
-        #
-        # This is also the step where for multi-tenancy we can add multiple groups,
-        # and allow sources to select the group/organization they wish to message.
-        response = jsonify({"default": journalist_uuid})
+        response = jsonify(active_securedrop_groups())
         return response, 200
 
     @api.route('/journalists/<journalist_uuid>/prekey_bundle', methods=['GET'])
