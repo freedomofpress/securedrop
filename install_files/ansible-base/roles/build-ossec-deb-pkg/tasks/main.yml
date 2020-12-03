@@ -121,20 +121,25 @@
   file:
     state: absent
     path: "{{ ossec_build_dir }}/etc/init.d/ossec"
-  when: ansible_host.endswith("-sd-generic-ossec-server")
-
+  when:
+    - ansible_host.endswith("-sd-generic-ossec-server")
+    - ansible_distribution_release == "focal"
 
 - name: Create directory for our systemd based service file
   file:
     state: directory
     path: "{{ ossec_build_dir }}/etc/systemd/system"
-  when: ansible_host.endswith("-sd-generic-ossec-server")
+  when:
+    - ansible_host.endswith("-sd-generic-ossec-server")
+    - ansible_distribution_release == "focal"
 
 - name: Copy our systemd based service file
   copy:
     src: ossec.service
     dest: "{{ ossec_build_dir }}/etc/systemd/system/ossec.service"
-  when: ansible_host.endswith("-sd-generic-ossec-server")
+  when:
+    - ansible_host.endswith("-sd-generic-ossec-server")
+    - ansible_distribution_release == "focal"
 
 - name: Build SecureDrop OSSEC deb package.
   command: dpkg-deb --build {{ ossec_build_dir }}
