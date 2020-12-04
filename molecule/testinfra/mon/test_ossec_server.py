@@ -22,12 +22,12 @@ def test_ossec_connectivity(host):
         assert c == desired_output
 
 
-def test_service_start_style(host):
+def test_ossec_service_start_style(host):
     """
-    Ensures to check that the service starts via sysv scrip in Xenial, and
-    uses the systemd service in Focal.
+    Ensure that the OSSEC services are managed by systemd under Focal,
+    but by sysv under Xenial.
     """
-    if python_version == "3.8":
+    if host.system_info.codename == "focal":
         value = "/etc/systemd/system/ossec.service"
     else:
         value = "/etc/init.d/ossec"
