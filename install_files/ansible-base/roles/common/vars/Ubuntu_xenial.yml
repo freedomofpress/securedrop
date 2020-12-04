@@ -7,3 +7,5 @@ securedrop_kernel_packages_to_remove:
   - linux-image-generic-lts-xenial
   - 'linux-image-.*generic'
   - 'linux-headers-.*'
+
+resolvconf_target_filepath: /etc/resolvconf/resolv.conf.d/base
