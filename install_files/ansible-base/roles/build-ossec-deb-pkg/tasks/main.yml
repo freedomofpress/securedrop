@@ -117,12 +117,12 @@
     - etc
     - usr
 
-- name: Delete the old service file for server
+- name: Delete the old service file
   file:
     state: absent
     path: "{{ ossec_build_dir }}/etc/init.d/ossec"
   when:
-    - ansible_host.endswith("-sd-generic-ossec-server")
+    - ansible_host.find("-sd-generic-ossec") != -1
     - ansible_distribution_release == "focal"
 
 - name: Create directory for our systemd based service file
@@ -130,7 +130,7 @@
     state: directory
     path: "{{ ossec_build_dir }}/etc/systemd/system"
   when:
-    - ansible_host.endswith("-sd-generic-ossec-server")
+    - ansible_host.find("-sd-generic-ossec") != -1
     - ansible_distribution_release == "focal"
 
 - name: Copy our systemd based service file
@@ -138,7 +138,7 @@
     src: ossec.service
     dest: "{{ ossec_build_dir }}/etc/systemd/system/ossec.service"
   when:
-    - ansible_host.endswith("-sd-generic-ossec-server")
+    - ansible_host.find("-sd-generic-ossec") != -1
     - ansible_distribution_release == "focal"
 
 - name: Build SecureDrop OSSEC deb package.
