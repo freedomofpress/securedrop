@@ -3,6 +3,8 @@ import gzip
 import re
 import subprocess
 import time
+import os
+import shutil
 
 from io import BytesIO, StringIO
 from flask import session, escape, url_for, g, request
@@ -21,8 +23,40 @@ from source_app import main as source_app_main
 from source_app import api as source_app_api
 from .utils.db_helper import new_codename
 from .utils.instrument import InstrumentedApp
+from sdconfig import config
 
 overly_long_codename = 'a' * (PassphraseGenerator.MAX_PASSPHRASE_LENGTH + 1)
+
+
+def test_logo_default_available(source_app):
+    # if the custom image is available, this test will fail
+    custom_image_location = os.path.join(config.SECUREDROP_ROOT, "static/i/custom_logo.png")
+    if os.path.exists(custom_image_location):
+        os.remove(custom_image_location)
+
+    with source_app.test_client() as app:
+        response = app.get(url_for('main.select_logo'), follow_redirects=False)
+
+        assert response.status_code == 302
+        observed_headers = response.headers
+        assert 'Location' in list(observed_headers.keys())
+        assert url_for('static', filename='i/logo.png') in observed_headers['Location']
+
+
+def test_logo_custom_available(source_app):
+    # if the custom image is available, this test will fail
+    custom_image = os.path.join(config.SECUREDROP_ROOT, "static/i/custom_logo.png")
+    default_image = os.path.join(config.SECUREDROP_ROOT, "static/i/logo.png")
+    if os.path.exists(default_image) and not os.path.exists(custom_image):
+        shutil.copyfile(default_image, custom_image)
+
+    with source_app.test_client() as app:
+        response = app.get(url_for('main.select_logo'), follow_redirects=False)
+
+        assert response.status_code == 302
+        observed_headers = response.headers
+        assert 'Location' in list(observed_headers.keys())
+        assert url_for('static', filename='i/custom_logo.png') in observed_headers['Location']
 
 
 def test_page_not_found(source_app):
@@ -32,6 +66,19 @@ def test_page_not_found(source_app):
             resp = app.get('UNKNOWN')
             assert resp.status_code == 404
             ins.assert_template_used('notfound.html')
+
+
+def test_orgname_default_set(source_app):
+
+    class dummy_current():
+        organization_name = None
+
+    with patch.object(InstanceConfig, 'get_current') as iMock:
+        with source_app.test_client() as app:
+            iMock.return_value = dummy_current()
+            resp = app.get(url_for('main.index'))
+            assert resp.status_code == 200
+            assert g.organization_name == "SecureDrop"
 
 
 def test_index(source_app):
