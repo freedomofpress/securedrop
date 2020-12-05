@@ -31,6 +31,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def index() -> str:
         return render_template('index.html')
 
+    @view.route('/underconstruction')
+    def journos_not_onboarded() -> str:
+        return render_template('incomplete_setup.html')
+
     @view.route('/generate', methods=('GET', 'POST'))
     def generate() -> Union[str, werkzeug.Response]:
         if logged_in():
@@ -50,8 +54,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         codenames = session.get('codenames', {})
         codenames[tab_id] = codename
         session['codenames'] = codenames
-        source = Source.login(codename)
-        session['token'] = source.generate_api_token(expiration=TOKEN_EXPIRATION_MINS * 60)
         session['new_user'] = True
         return render_template('generate.html', codename=codename, tab_id=tab_id)
 
@@ -104,49 +106,22 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 os.mkdir(current_app.storage.path(filesystem_id))
 
             session['logged_in'] = True
+            session['token'] = source.generate_api_token(expiration=TOKEN_EXPIRATION_MINS * 60)
         return redirect(url_for('.lookup'))
 
     @view.route('/lookup', methods=('GET',))
     @login_required
     def lookup() -> str:
-        replies = []
-        source_inbox = Reply.query.filter(Reply.source_id == g.source.id) \
-                                  .filter(Reply.deleted_by_source == False).all()  # noqa
-
-        for reply in source_inbox:
-            reply_path = current_app.storage.path(
-                g.filesystem_id,
-                reply.filename,
-            )
-            try:
-                with io.open(reply_path, "rb") as f:
-                    contents = f.read()
-                reply_obj = current_app.crypto_util.decrypt(g.codename, contents)
-                reply.decrypted = reply_obj
-            except UnicodeDecodeError:
-                current_app.logger.error("Could not decode reply %s" %
-                                         reply.filename)
-            except FileNotFoundError:
-                current_app.logger.error("Reply file missing: %s" %
-                                         reply.filename)
-            else:
-                reply.date = datetime.utcfromtimestamp(
-                    os.stat(reply_path).st_mtime)
-                replies.append(reply)
-
-        # Sort the replies by date
-        replies.sort(key=operator.attrgetter('date'), reverse=True)
-
-        # Generate a keypair to encrypt replies from the journalist
-        if not current_app.crypto_util.get_fingerprint(g.filesystem_id):
-            current_app.crypto_util.genkeypair(g.filesystem_id, g.codename)
-
         # Note on multi-tenancy:
         # securedrop_group indicates which set of journalists to contact.
         # This is passed as an argument such that after login or account creation
         # there could be an additional screen to allow the user to select _which_
         # set of journalists to contact
         current_group = active_securedrop_groups()["default"]
+
+        if not current_group:
+            return redirect(url_for('main.journos_not_onboarded'))
+
         return render_template(
             'lookup.html',
             token=session["token"],
