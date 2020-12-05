@@ -116,7 +116,8 @@
           success_div.id = "success-message"
           const success_emoji = document.createTextNode("sent! ✅");
           success_div.appendChild(success_emoji);
-          document.getElementById("below-the-submit").appendChild(success_div);
+          document.getElementById("below-the-submit").prepend(success_div);
+          setTimeout(removeSendMsg, 3000); // Remove this message in 3 seconds
           console.log("sent successfully!")
         }
       };
@@ -128,9 +129,18 @@
       document.getElementById("message-input").value = "";
       });
 
-    // TODO: confirmation
     function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // Temp: Investigate best way to sanitize plaintext messages prior to display
+    function sanitizeString(str) {
+      str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
+      return str.trim();
+    }
+
+    function removeSendMsg() {
+      document.getElementById("success-message").remove();
     }
 
     while (true) {
@@ -150,12 +160,22 @@
               reply_data["journalist_uuid"],
               reply_data["message"],
               );
-            console.log(`decrypted message: ${plaintext}`);
+            console.log(`decrypted new message!: ${plaintext}`);
+            // At this point, we might want to store messages somewhere more persistent
+            // (e.g. some browser storage that works while in Private Browsing Mode).
+            // Otherwise, when a user refreshes, their messages will be gone.
 
-            // TODO: Display
+            // Security note: at this point we need to sanitize the plaintext prior to
+            // displaying in the browser. For now we use sanitizeString, but we may
+            // want to bring in another dependency for this.
+            const reply_div = document.createElement("div");
+            reply_div.className = "reply";
+            const success_blquote = document.createElement("blockquote");
+            success_blquote.textContent = sanitizeString(plaintext);
+            reply_div.appendChild(success_blquote);
+            document.getElementById("replies").appendChild(reply_div);
 
-
-            // Confirm
+            // Now send confirmation.
             var message_uuid = reply_data["message_uuid"];
             var confirm = new XMLHttpRequest();
             confirm.open("POST", `http://127.0.0.1:8080/api/v2/messages/confirmation/${message_uuid}`, true);
@@ -171,7 +191,7 @@
       request.send();
 
       // Wait
-      await sleep(30000);
+      await sleep(15000);
     }
   }
 
@@ -185,14 +205,6 @@
 {% else %}
 <h2 class="headline">{{ gettext('Submit Messages') }}</h2>
 {% endif %}
-
-<p class="explanation extended-explanation">
-{% if allow_document_uploads %}
-{{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_public_key')) }}
-{% else %}
-{{ gettext('If you are already familiar with GPG, you can optionally encrypt your messages with our <a href="{url}" class="text-link">public key</a> before submission.').format(url=url_for('info.download_public_key')) }}
-{% endif %}
-{{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_public_key')) }}</p>
 
 <hr class="no-line">
 
@@ -231,12 +243,6 @@
     <p>{{ gettext("When you receive a reply, to protect your identity in the unlikely event someone learns your codename, your replies will disappear after your session ends. You can respond by submitting new files and messages above.") }}</p>
   </aside>
     <hr class="no-line">
-    <!--{% for reply in replies %}
-      <div class="reply">
-        <blockquote>{{ reply.decrypted | nl2br }}</blockquote>
-        <div class="clearfix"></div>
-      </div>
-    {% endfor %}-->
 </div>
 
 {% endblock %}
