@@ -22,6 +22,8 @@ from typing import Dict
 import rm
 
 from models import Source
+from passphrases import DicewarePassphrase
+
 
 # monkey patch to work with Focal gnupg.
 # https://github.com/isislovecruft/python-gnupg/issues/250
@@ -66,7 +68,6 @@ class CryptoException(Exception):
 class CryptoUtil:
 
     GPG_KEY_TYPE = "RSA"
-    DEFAULT_WORDS_IN_RANDOM_ID = 8
 
     # All reply keypairs will be "created" on the same day SecureDrop (then
     # Strongbox) was publicly released for the first time.
@@ -87,12 +88,10 @@ class CryptoUtil:
                  scrypt_id_pepper: str,
                  scrypt_gpg_pepper: str,
                  securedrop_root: str,
-                 word_list: str,
                  nouns_file: str,
                  adjectives_file: str,
                  gpg_key_dir: str) -> None:
         self.__securedrop_root = securedrop_root
-        self.__word_list = word_list
 
         if os.environ.get('SECUREDROP_ENV') in ('dev', 'test'):
             # Optimize crypto to speed up tests (at the expense of security
@@ -119,9 +118,6 @@ class CryptoUtil:
         else:
             self.gpg = gpg_binary
 
-        # map code for a given language to a localized wordlist
-        self.__language2words = {}  # type: Dict[str, List[str]]
-
         with io.open(nouns_file) as f:
             self.nouns = f.read().splitlines()
 
@@ -137,40 +133,6 @@ class CryptoUtil:
         # crash if we don't have a way to securely remove files
         if not rm.check_secure_delete_capability():
             raise AssertionError("Secure file deletion is not possible.")
-
-    def get_wordlist(self, locale: str) -> List[str]:
-        """" Ensure the wordlist for the desired locale is read and available
-        in the words global variable. If there is no wordlist for the
-        desired local, fallback to the default english wordlist.
-
-        The localized wordlist are read from wordlists/{locale}.txt but
-        for backward compatibility purposes the english wordlist is read
-        from the config.WORD_LIST file.
-        """
-
-        if locale not in self.__language2words:
-            if locale != 'en':
-                path = os.path.join(self.__securedrop_root,
-                                    'wordlists',
-                                    locale + '.txt')
-                if os.path.exists(path):
-                    wordlist_path = path
-                else:
-                    wordlist_path = self.__word_list
-            else:
-                wordlist_path = self.__word_list
-
-            with io.open(wordlist_path) as f:
-                content = f.read().splitlines()
-                self.__language2words[locale] = content
-
-        return self.__language2words[locale]
-
-    def genrandomid(self,
-                    words_in_random_id: int = DEFAULT_WORDS_IN_RANDOM_ID,
-                    locale: str = 'en') -> str:
-        return ' '.join(random.choice(self.get_wordlist(locale))
-                        for x in range(words_in_random_id))
 
     def display_id(self) -> str:
         """Generate random journalist_designation until we get an unused one"""
@@ -189,7 +151,7 @@ class CryptoUtil:
 
         raise ValueError("Could not generate unique journalist designation for new source")
 
-    def hash_codename(self, codename: str, salt: Optional[str] = None) -> str:
+    def hash_codename(self, codename: DicewarePassphrase, salt: Optional[str] = None) -> str:
         """Salts and hashes a codename using scrypt.
 
         :param codename: A source's codename.
@@ -198,10 +160,9 @@ class CryptoUtil:
         """
         if salt is None:
             salt = self.scrypt_id_pepper
-        _validate_name_for_diceware(codename)
         return b32encode(scrypt.hash(codename, salt, **self.scrypt_params)).decode('utf-8')
 
-    def genkeypair(self, name: str, secret: str) -> gnupg._parsers.GenKey:
+    def genkeypair(self, name: str, secret: DicewarePassphrase) -> gnupg._parsers.GenKey:
         """Generate a GPG key through batch file key generation. A source's
         codename is salted with SCRYPT_GPG_PEPPER and hashed with scrypt to
         provide the passphrase used to encrypt their private key. Their name
@@ -222,11 +183,11 @@ class CryptoUtil:
 
         """
         _validate_name_for_diceware(name)
-        secret = self.hash_codename(secret, salt=self.scrypt_gpg_pepper)
+        hashed_secret = self.hash_codename(secret, salt=self.scrypt_gpg_pepper)
         genkey_obj = self.gpg.gen_key(self.gpg.gen_key_input(
             key_type=self.GPG_KEY_TYPE,
             key_length=self.__gpg_key_length,
-            passphrase=secret,
+            passphrase=hashed_secret,
             name_email=name,
             name_real="Source Key",
             creation_date=self.DEFAULT_KEY_CREATION_DATE.isoformat(),
@@ -336,7 +297,7 @@ class CryptoUtil:
         else:
             raise CryptoException(out.stderr)
 
-    def decrypt(self, secret: str, ciphertext: bytes) -> str:
+    def decrypt(self, secret: DicewarePassphrase, ciphertext: bytes) -> str:
         """
         >>> crypto = current_app.crypto_util
         >>> key = crypto.genkeypair('randomid', 'randomid')

@@ -18,7 +18,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.sql.expression import func
 
-import crypto_util
 import journalist_app as journalist_app_module
 from journalist_app.utils import mark_seen
 import models
@@ -35,7 +34,7 @@ from models import (
     InvalidUsernameException,
     Submission
 )
-from sdconfig import SDConfig, config
+from sdconfig import config
 
 from .utils.instrument import InstrumentedApp
 from . import utils
@@ -138,15 +137,6 @@ def test_user_with_whitespace_in_username_can_login(journalist_app):
     with journalist_app.test_client() as app:
         _login_user(app, username_with_whitespace, password,
                     otp_secret)
-
-
-def test_make_password(journalist_app):
-    with patch.object(crypto_util.CryptoUtil, 'genrandomid',
-                      side_effect=['bad', VALID_PASSWORD]):
-        fake_config = SDConfig()
-        with journalist_app.test_request_context('/'):
-            password = journalist_app_module.utils.make_password(fake_config)
-            assert password == VALID_PASSWORD
 
 
 def test_reply_error_logging(journalist_app, test_journo, test_source):

@@ -5,11 +5,12 @@ import subprocess
 import time
 
 from io import BytesIO, StringIO
-from flask import session, escape, current_app, url_for, g, request
+from flask import session, escape, url_for, g, request
 from mock import patch, ANY
 
 import crypto_util
 import source
+from passphrases import PassphraseGenerator
 from . import utils
 import version
 
@@ -21,7 +22,7 @@ from source_app import api as source_app_api
 from .utils.db_helper import new_codename
 from .utils.instrument import InstrumentedApp
 
-overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
+overly_long_codename = 'a' * (PassphraseGenerator.MAX_PASSPHRASE_LENGTH + 1)
 
 
 def test_page_not_found(source_app):
@@ -43,32 +44,6 @@ def test_index(source_app):
         assert 'Return visit' in text
 
 
-def test_all_words_in_wordlist_validate(source_app):
-    """Verify that all words in the wordlist are allowed by the form
-    validation. Otherwise a source will have a codename and be unable to
-    return."""
-
-    with source_app.app_context():
-        wordlist_en = current_app.crypto_util.get_wordlist('en')
-
-    # chunk the words to cut down on the number of requets we make
-    # otherwise this test is *slow*
-    chunks = [wordlist_en[i:i + 7] for i in range(0, len(wordlist_en), 7)]
-
-    with source_app.test_client() as app:
-        for words in chunks:
-            resp = app.post(url_for('main.login'),
-                            data=dict(codename=' '.join(words)),
-                            follow_redirects=True)
-            assert resp.status_code == 200
-            text = resp.data.decode('utf-8')
-            # If the word does not validate, then it will show
-            # 'Invalid input'. If it does validate, it should show that
-            # it isn't a recognized codename.
-            assert 'Sorry, that is not a recognized codename.' in text
-            assert 'logged_in' not in session
-
-
 def _find_codename(html):
     """Find a source codename (diceware passphrase) in HTML"""
     # Codenames may contain HTML escape characters, and the wordlist
@@ -78,22 +53,6 @@ def _find_codename(html):
     codename_match = re.search(codename_re, html)
     assert codename_match is not None
     return codename_match.group('codename')
-
-
-def test_generate(source_app):
-    with source_app.test_client() as app:
-        resp = app.get(url_for('main.generate'))
-        assert resp.status_code == 200
-        session_codename = next(iter(session['codenames'].values()))
-
-    text = resp.data.decode('utf-8')
-    assert "This codename is what you will use in future visits" in text
-
-    codename = _find_codename(resp.data.decode('utf-8'))
-    assert len(codename.split()) == Source.NUM_WORDS
-    # codename is also stored in the session - make sure it matches the
-    # codename displayed to the source
-    assert codename == escape(session_codename)
 
 
 def test_generate_already_logged_in(source_app):
@@ -123,22 +82,19 @@ def test_create_new_source(source_app):
         assert 'codenames' not in session
 
 
-def test_generate_too_long_codename(source_app):
-    """Generate a codename that exceeds the maximum codename length"""
+def test_generate(source_app):
+    with source_app.test_client() as app:
+        resp = app.get(url_for('main.generate'))
+        assert resp.status_code == 200
+        session_codename = next(iter(session['codenames'].values()))
 
-    with patch.object(source_app.logger, 'warning') as logger:
-        with patch.object(crypto_util.CryptoUtil, 'genrandomid',
-                          side_effect=[overly_long_codename,
-                                       'short codename']):
-            with source_app.test_client() as app:
-                resp = app.post(url_for('main.generate'))
-                assert resp.status_code == 200
+    text = resp.data.decode('utf-8')
+    assert "This codename is what you will use in future visits" in text
 
-    logger.assert_called_with(
-        "Generated a source codename that was too long, "
-        "skipping it. This should not happen. "
-        "(Codename='{}')".format(overly_long_codename)
-    )
+    codename = _find_codename(resp.data.decode('utf-8'))
+    # codename is also stored in the session - make sure it matches the
+    # codename displayed to the source
+    assert codename == escape(session_codename)
 
 
 def test_create_duplicate_codename_logged_in_not_in_session(source_app):
@@ -644,7 +600,7 @@ def test_login_with_overly_long_codename(source_app):
             assert resp.status_code == 200
             text = resp.data.decode('utf-8')
             assert ("Field must be between 1 and {} characters long."
-                    .format(Source.MAX_CODENAME_LEN)) in text
+                    .format(PassphraseGenerator.MAX_PASSPHRASE_LENGTH)) in text
             assert not mock_hash_codename.called, \
                 "Called hash_codename for codename w/ invalid length"
 

@@ -15,6 +15,7 @@ from flask import current_app
 from db import db
 from journalist_app.utils import mark_seen
 from models import Journalist, Reply, SeenReply, Source, Submission
+from passphrases import PassphraseGenerator
 from sdconfig import config
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
@@ -30,8 +31,8 @@ def init_journalist(first_name=None, last_name=None, is_admin=False):
               corresponding to the row just added to the database. The
               second, their password string.
     """
-    username = current_app.crypto_util.genrandomid()
-    user_pw = current_app.crypto_util.genrandomid()
+    username = PassphraseGenerator.get_default().generate_passphrase()
+    user_pw = PassphraseGenerator.get_default().generate_passphrase()
     user = Journalist(
         username=username,
         password=user_pw,
@@ -126,7 +127,7 @@ def init_source_without_keypair():
     initialized. The second, their codename string.
     """
     # Create source identity and database record
-    codename = current_app.crypto_util.genrandomid()
+    codename = PassphraseGenerator.get_default().generate_passphrase()
     filesystem_id = current_app.crypto_util.hash_codename(codename)
     journalist_filename = current_app.crypto_util.display_id()
     source = Source(filesystem_id, journalist_filename)

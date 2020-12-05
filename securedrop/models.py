@@ -71,10 +71,6 @@ class Source(db.Model):
     # when deletion of the source was requested
     deleted_at = Column(DateTime)
 
-    # Don't create or bother checking excessively long codenames to prevent DoS
-    NUM_WORDS = 7
-    MAX_CODENAME_LEN = 128
-
     def __init__(self,
                  filesystem_id: str,
                  journalist_designation: str) -> None:

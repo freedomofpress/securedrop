@@ -10,6 +10,8 @@ from itertools import cycle
 
 from flask import current_app
 
+from passphrases import PassphraseGenerator
+
 os.environ["SECUREDROP_ENV"] = "dev"  # noqa
 import journalist_app
 
@@ -104,7 +106,7 @@ def create_source_data(
     num_replies: int = 2,
 ) -> None:
     # Store source in database
-    codename = current_app.crypto_util.genrandomid()
+    codename = PassphraseGenerator.get_default().generate_passphrase()
     filesystem_id = current_app.crypto_util.hash_codename(codename)
     journalist_designation = current_app.crypto_util.display_id()
     source = Source(filesystem_id, journalist_designation)

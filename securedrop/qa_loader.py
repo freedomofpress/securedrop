@@ -19,6 +19,7 @@ from db import db
 from journalist_app import create_app
 from models import Journalist, JournalistLoginAttempt, Reply, Source, SourceStar, Submission
 from sdconfig import SDConfig
+from passphrases import PassphraseGenerator
 from sdconfig import config as sdconfig
 
 
@@ -138,7 +139,7 @@ class QaLoader:
         self.journalists.append(journalist.id)
 
     def new_source(self) -> None:
-        codename = current_app.crypto_util.genrandomid()
+        codename = PassphraseGenerator.get_default().generate_passphrase()
         filesystem_id = current_app.crypto_util.hash_codename(codename)
         journalist_designation = current_app.crypto_util.display_id()
         source = Source(filesystem_id, journalist_designation)
