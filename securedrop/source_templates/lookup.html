@@ -128,9 +128,51 @@
       document.getElementById("message-input").value = "";
       });
 
-    // TODO: get message
-    // TODO: Event handlers for decrypt
+    // TODO: confirmation
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
+    while (true) {
+      // Download
+      var request = new XMLHttpRequest();
+      request.open("GET", "http://127.0.0.1:8080/api/v2/messages", true);
+      request.setRequestHeader("Content-Type", "application/json");
+      request.setRequestHeader("Authorization", `Token ${token}`);
+
+      request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+          var reply_data = JSON.parse(this.response);
+
+          if (reply_data["resp"] == 'NEW_MSG') {
+            console.log("got new reply");
+            var plaintext = session.decrypt(
+              reply_data["journalist_uuid"],
+              reply_data["message"],
+              );
+            console.log(`decrypted message: ${plaintext}`);
+
+            // TODO: Display
+
+
+            // Confirm
+            var message_uuid = reply_data["message_uuid"];
+            var confirm = new XMLHttpRequest();
+            confirm.open("POST", `http://127.0.0.1:8080/api/v2/messages/confirmation/${message_uuid}`, true);
+            confirm.setRequestHeader("Content-Type", "application/json");
+            confirm.setRequestHeader("Authorization", `Token ${token}`);
+            confirm.onreadystatechange = function () {
+              console.log(`sent confirmation of message ${message_uuid} on server`);
+            }
+            confirm.send();
+          }
+        }
+      };
+      request.send();
+
+      // Wait
+      await sleep(30000);
+    }
   }
 
   run();
@@ -182,47 +224,19 @@
 
 <hr class="no-line">
 
-<h2 class="headline">{{ gettext('Read Replies') }}</h2>
+<h2 class="headline">{{ gettext('Responses') }}</h2>
 
 <div id="replies">
-  {% if replies %}
-    <aside>
-      <p>{{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above.") }}</p>
-    </aside>
+  <aside>
+    <p>{{ gettext("When you receive a reply, to protect your identity in the unlikely event someone learns your codename, your replies will disappear after your session ends. You can respond by submitting new files and messages above.") }}</p>
+  </aside>
     <hr class="no-line">
-    {% for reply in replies %}
+    <!--{% for reply in replies %}
       <div class="reply">
-        <time class="date" title="{{ reply.date|rel_datetime_format }}" datetime="{{ reply.date }}">{{ reply.date|rel_datetime_format(relative=True) }}</time>
-        <form id="delete" class="message" method="post" action="{{ url_for('main.delete') }}" autocomplete="off">
-          <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-          <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off">
-          <a href="#confirm-delete-{{ reply.filename }}" class="delete">
-            <img class="icon off-hover" id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/trash-x-out.png') }}" width="16" height="20">
-            <img class="icon on-hover" id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/trash-x-solid.png') }}" width="16" height="20">
-          </a>
-          <div id="confirm-delete-{{ reply.filename }}" class="confirm-prompt">
-            <p>{{ gettext('Delete this reply?') }}
-              <a href="#delete">{{ gettext('Cancel') }}</a>
-              <button type="submit" class="danger" id="confirm-delete-reply-button-{{ reply.filename }}">{{ gettext('DELETE') }}</button>
-            </p>
-          </div>
-        </form>
         <blockquote>{{ reply.decrypted | nl2br }}</blockquote>
         <div class="clearfix"></div>
       </div>
-    {% endfor %}
-    <form id="delete-all" method="post" action="{{ url_for('main.batch_delete') }}">
-      <a class="btn danger" href="#delete-all-confirm">{{ gettext('DELETE ALL REPLIES') }}</a>
-      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      <div id="delete-all-confirm" class="hidden-prompt">
-        <p><strong>{{ gettext('Are you finished with the replies?') }}</strong></p>
-        <button class="danger" type="submit">{{ gettext('YES, DELETE ALL REPLIES') }}</button>
-        <a class="btn" href="#delete-all">{{ gettext('NO, NOT YET') }}</a>
-      </div>
-    </form>
-  {% else %}
-    <h4 id="no-replies" class="explanation">{{ gettext('— No Messages —') }}</h4>
-  {% endif %}
+    {% endfor %}-->
 </div>
 
 {% endblock %}
