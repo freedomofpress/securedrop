@@ -240,12 +240,13 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if reply:
             journalist = Journalist.query.filter_by(id=reply.journalist_id).one() # TODO: backref
             return jsonify({
+                "resp": "NEW_MSG",
                 "journalist_uuid": journalist.uuid,
                 "message_uuid": reply.uuid,
                 "message": reply.message.hex(),
             }), 200
         else:
-            return jsonify({"resp": "no messages"}), 200
+            return jsonify({"resp": "NO_MSG"}), 200
 
     @api.route('/messages/confirmation/<message_uuid>', methods=['POST'])
     @token_required
