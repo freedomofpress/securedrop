@@ -1,0 +1,12 @@
+[Unit]
+Description=OSSEC service for agent
+
+[Service]
+Type=forking
+ExecStart=/var/ossec/bin/ossec-control start
+ExecStop=/var/ossec/bin/ossec-control stop
+RemainAfterExit=True
+SuccessExitStatus=1
+
+[Install]
+WantedBy=multi-user.target
