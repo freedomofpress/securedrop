@@ -21,6 +21,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 
 # Number of times to try flaky clicks.
+from source_user import _SourceScryptManager
+
 CLICK_ATTEMPTS = 15
 
 
@@ -979,7 +981,9 @@ class JournalistNavigationStepsMixin:
         ActionChains(self.driver).move_to_element(confirm_btn).click().perform()
 
     def _source_delete_key(self):
-        filesystem_id = self.source_app.crypto_util.hash_codename(self.source_name)
+        filesystem_id = _SourceScryptManager.get_default().derive_source_filesystem_id(
+            self.source_name
+        )
         self.source_app.crypto_util.delete_reply_keypair(filesystem_id)
 
     def _journalist_continues_after_flagging(self):

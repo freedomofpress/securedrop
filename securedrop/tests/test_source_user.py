@@ -4,9 +4,12 @@ import pytest
 
 from db import db
 from passphrases import PassphraseGenerator
+
+from source_user import InvalidPassphraseError
 from source_user import SourceDesignationCollisionError
 from source_user import SourcePassphraseCollisionError
 from source_user import _SourceScryptManager
+from source_user import authenticate_source_user
 from source_user import create_source_user
 
 
@@ -64,6 +67,37 @@ class TestSourceUser:
                     source_app_storage=source_app.storage,
                 )
 
+    def test_authenticate_source_user(self, source_app):
+        # Given a source in the DB
+        passphrase = PassphraseGenerator.get_default().generate_passphrase()
+        source_user = create_source_user(
+            db_session=db.session,
+            source_passphrase=passphrase,
+            source_app_crypto_util=source_app.crypto_util,
+            source_app_storage=source_app.storage,
+        )
+
+        # When they try to authenticate using their passphrase
+        authenticated_user = authenticate_source_user(passphrase)
+
+        # It succeeds and the user is mapped to the right source in the DB
+        assert authenticated_user
+        assert authenticated_user.db_record_id == source_user.db_record_id
+
+    def test_authenticate_source_user_wrong_passphrase(self, source_app):
+        # Given a source in the DB
+        create_source_user(
+            db_session=db.session,
+            source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
+            source_app_crypto_util=source_app.crypto_util,
+            source_app_storage=source_app.storage,
+        )
+
+        # When a user tries to authenticate using a wrong passphrase, it fails
+        wrong_passphrase = "rehydrate flaring study raven fence extenuate linguist"
+        with pytest.raises(InvalidPassphraseError):
+            authenticate_source_user(wrong_passphrase)
+
 
 class TestSourceScryptManager:
     def test(self):
@@ -87,3 +121,7 @@ class TestSourceScryptManager:
 
         expected_gpg_secret = "AWCRZVPA6YTQ2A3552LZJW3VO7L3ZONDFT6A6VPRGPGQQSNENRLA3EVRW4LZYNSUV5QIKNFZMJ2BMOVORG43ZETV5ZCRQKLJNOC2BXY="  # noqa: E501
         assert expected_gpg_secret == gpg_secret
+
+    def test_get_default(self):
+        scrypt_mgr = _SourceScryptManager.get_default()
+        assert scrypt_mgr

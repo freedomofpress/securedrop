@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block body %}
 
-{% if new_user %}
+{% if new_user_codename %}
 <div class="code-reminder pull-left" id="codename-hint">
   <div id="codename-hint-visible">
     <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17" height="20"> {{ gettext('Remember, your codename is:') }}
     <a id="codename-hint-show" class="show pull-right visible-codename" href="#codename-hint-visible">{{ gettext('Show') }}</a>
     <div id="codename-hint-content" class="hidden-codename codename">
       <a id="codename-hint-hide" class="pull-right" href="#codename-hint">{{ gettext('Hide') }}</a>
-      <p>{{ codename }}</p>
+      <p>{{ new_user_codename }}</p>
     </div>
   </div>
 </div>

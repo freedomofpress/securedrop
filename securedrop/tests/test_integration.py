@@ -17,6 +17,7 @@ from flask import current_app, escape, g, session
 from pyotp import HOTP, TOTP
 
 import journalist_app as journalist_app_module
+from source_app.session_manager import SessionManager
 from . import utils
 from .utils.instrument import InstrumentedApp
 
@@ -58,7 +59,9 @@ def test_submit_message(source_app, journalist_app, test_journo):
         app.get('/generate')
         tab_id = next(iter(session['codenames'].keys()))
         app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
-        filesystem_id = g.filesystem_id
+        source_user = SessionManager.get_logged_in_user()
+        filesystem_id = source_user.filesystem_id
+
         # redirected to submission form
         resp = app.post('/submit', data=dict(
             msg=test_msg,
@@ -156,7 +159,9 @@ def test_submit_file(source_app, journalist_app, test_journo):
         app.get('/generate')
         tab_id = next(iter(session['codenames'].keys()))
         app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
-        filesystem_id = g.filesystem_id
+        source_user = SessionManager.get_logged_in_user()
+        filesystem_id = source_user.filesystem_id
+
         # redirected to submission form
         resp = app.post('/submit', data=dict(
             msg="",
@@ -256,17 +261,16 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
 
     with source_app.test_client() as app:
         app.get('/generate')
-        tab_id = next(iter(session['codenames'].keys()))
+        tab_id, codename = next(iter(session['codenames'].items()))
         app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
-        codename = session['codename']
-        filesystem_id = g.filesystem_id
         # redirected to submission form
         resp = app.post('/submit', data=dict(
             msg=test_msg,
             fh=(BytesIO(b''), ''),
         ), follow_redirects=True)
         assert resp.status_code == 200
-        assert not g.source.flagged
+        source_user = SessionManager.get_logged_in_user()
+        assert not source_user.get_db_record().flagged
         app.get('/logout')
 
     with journalist_app.test_client() as app:
@@ -285,7 +289,12 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
         resp = app.post('/login', data=dict(
             codename=codename), follow_redirects=True)
         assert resp.status_code == 200
-        assert not g.source.flagged
+
+        source_user = SessionManager.get_logged_in_user()
+        assert not source_user.get_db_record().flagged
+
+        source_user = SessionManager.get_logged_in_user()
+        filesystem_id = source_user.filesystem_id
         app.get('/logout')
 
     with journalist_app.test_client() as app:
@@ -299,7 +308,10 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
             codename=codename), follow_redirects=True)
         assert resp.status_code == 200
         app.get('/lookup')
-        assert g.source.flagged
+
+        source_user = SessionManager.get_logged_in_user()
+        assert source_user.get_db_record().flagged
+
         app.get('/logout')
 
     # Block up to 15s for the reply keypair, so we can test sending a reply
@@ -347,7 +359,8 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
     _can_decrypt_with_key(
         journalist_app,
         data,
-        codename)
+        source_user.gpg_secret
+    )
 
     # Test deleting reply on the journalist interface
     last_reply_number = len(
@@ -416,7 +429,7 @@ def _helper_filenames_delete(journalist_app, soup, i):
     utils.asynchronous.wait_for_assertion(assertion)
 
 
-def _can_decrypt_with_key(journalist_app, msg, passphrase=None):
+def _can_decrypt_with_key(journalist_app, msg, source_gpg_secret=None):
     """
     Test that the given GPG message can be decrypted.
     """
@@ -425,15 +438,16 @@ def _can_decrypt_with_key(journalist_app, msg, passphrase=None):
     using_gpg_2_1 = StrictVersion(
         journalist_app.crypto_util.gpg.binary_version) >= StrictVersion('2.1')
 
-    if passphrase:
-        passphrase = journalist_app.crypto_util.hash_codename(
-            passphrase,
-            salt=journalist_app.crypto_util.scrypt_gpg_pepper)
+    if source_gpg_secret:
+        final_passphrase = source_gpg_secret
     elif using_gpg_2_1:
-        passphrase = 'dummy passphrase'
+        final_passphrase = 'dummy passphrase'
+    else:
+        final_passphrase = None
 
     decrypted_data = journalist_app.crypto_util.gpg.decrypt(
-        msg, passphrase=passphrase)
+        msg, passphrase=final_passphrase
+    )
     assert decrypted_data.ok, \
         "Could not decrypt msg with key, gpg says: {}" \
         .format(decrypted_data.stderr)

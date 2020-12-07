@@ -3,7 +3,14 @@ import logging
 import subprocess
 
 from datetime import datetime
-from flask import session, current_app, abort, g
+
+import werkzeug
+from flask import flash
+from flask import redirect
+from flask import render_template
+from flask import current_app
+from flask import url_for
+from markupsafe import Markup
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from threading import Thread
@@ -12,7 +19,7 @@ import typing
 
 import re
 
-from crypto_util import CryptoUtil, CryptoException
+from crypto_util import CryptoUtil
 from models import Source
 from passphrases import DicewarePassphrase
 from source_user import SourceUser
@@ -21,25 +28,14 @@ if typing.TYPE_CHECKING:
     from typing import Optional
 
 
-def was_in_generate_flow() -> bool:
-    return 'codenames' in session
+def redirect_to_index_and_show_logout_message(session: typing.Dict) -> werkzeug.Response:
+    msg = render_template('session_timeout.html')
 
+    # Clear the session after we render the message so it's localized
+    session.clear()
 
-def logged_in() -> bool:
-    return 'logged_in' in session
-
-
-def valid_codename(codename: str) -> bool:
-    try:
-        filesystem_id = current_app.crypto_util.hash_codename(codename)
-    except CryptoException as e:
-        current_app.logger.info(
-                "Could not compute filesystem ID for codename '{}': {}".format(
-                    codename, e))
-        abort(500)
-
-    source = Source.query.filter_by(filesystem_id=filesystem_id).first()
-    return source is not None
+    flash(Markup(msg), "important")
+    return redirect(url_for('main.index'))
 
 
 def get_entropy_estimate() -> int:
@@ -57,46 +53,38 @@ def asynchronous(f):               # type: ignore
 @asynchronous
 def async_genkey(crypto_util_: CryptoUtil,
                  db_uri: str,
-                 filesystem_id: str,
-                 codename: DicewarePassphrase) -> None:
+                 source_user: SourceUser
+                 ) -> None:
     # We pass in the `crypto_util_` so we don't have to reference `current_app`
     # here. The app might not have a pushed context during testing which would
     # cause this asynchronous function to break.
+    crypto_util_.genkeypair(source_user)
 
     # Register key generation as update to the source, so sources will
     # filter to the top of the list in the journalist interface if a
     # flagged source logs in and has a key generated for them. #789
-    session = sessionmaker(bind=create_engine(db_uri))()
+    db_session = sessionmaker(bind=create_engine(db_uri))()
     try:
-        source = session.query(Source).filter(Source.filesystem_id == filesystem_id).one()
-
-        # TODO(AD): To be removed in my next PR where I will directly pass a source_user
-        #  to async_genkey()
-        source_user = SourceUser(
-            db_record=source,
-            filesystem_id=filesystem_id,
-            gpg_secret=crypto_util_.hash_codename(codename, salt=crypto_util_.scrypt_gpg_pepper)
-        )
-        crypto_util_.genkeypair(source_user)
-
+        source = source_user.get_db_record()
         source.last_updated = datetime.utcnow()
-        session.commit()
+        db_session.commit()
     except Exception as e:
         logging.getLogger(__name__).error(
                 "async_genkey for source (filesystem_id={}): {}"
-                .format(filesystem_id, e))
+                .format(source_user.filesystem_id, e))
+    finally:
+        db_session.close()
 
-    session.close()
 
-
-def normalize_timestamps(filesystem_id: str) -> None:
+def normalize_timestamps(logged_in_source: SourceUser) -> None:
     """
     Update the timestamps on all of the source's submissions to match that of
     the latest submission. This minimizes metadata that could be useful to
     investigators. See #301.
     """
-    sub_paths = [current_app.storage.path(filesystem_id, submission.filename)
-                 for submission in g.source.submissions]
+    source_in_db = logged_in_source.get_db_record()
+    sub_paths = [current_app.storage.path(logged_in_source.filesystem_id, submission.filename)
+                 for submission in source_in_db.submissions]
     if len(sub_paths) > 1:
         args = ["touch"]
         args.extend(sub_paths[:-1])

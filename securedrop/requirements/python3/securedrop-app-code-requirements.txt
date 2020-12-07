@@ -207,18 +207,6 @@ rq==1.1.0 \
     --hash=sha256:2798d26a7b850e759f23f69695a389d676a9c08f2c14f96f0d34d9648c9d5616 \
     --hash=sha256:4f27c6a690d1bd02b9157e615d8819555b9b359c0c4ec8ff0013d160c31b40bb \
     # via -r requirements/python3/securedrop-app-code-requirements.in
-scrypt==0.8.0 \
-    --hash=sha256:3422d11652cd12550540675e9fb54a1de6d60f3cbfedfb067284ef028589e2ee \
-    --hash=sha256:4e3cd639cc83e3f2c2241a01ebef9487c48b1ddf2d78f430d82d8f9ef60c6271 \
-    --hash=sha256:59a03822df232a30246b59a3801292a350d19fa636f11ea86df2214f35dade22 \
-    --hash=sha256:60e8c96a287ab892d9c7e1523d157ccfbdbe66da0c31738c8ed5732c2eea6a23 \
-    --hash=sha256:7e3be5fe70f74a01a83c60da0b010b2fe6c3d3a11b8a1c9532b583c9a440d529 \
-    --hash=sha256:ae2fd88756fb4d98ccc5e2639af55eeb80863b3f9f6e0f539e5ce050964cdd5e \
-    --hash=sha256:c0f90cabb8f6eaec05de5ce9aa9a9b67dc63d644e6b803beb1c43ae9b9452b65 \
-    --hash=sha256:c37a1f8440d7c621d9f23f3c1f2a28848bc50fefbca581fd7a1b01583a083c07 \
-    --hash=sha256:d4a5a4f53450b8ef629bbf1ee4be6105c69936e49b3d8bc621ac2287f0c86020 \
-    --hash=sha256:dc9abe69799ca423b938a06ddc33e5873e493ffcd68dbb9ba48396979b210d39 \
-    # via -r requirements/python3/securedrop-app-code-requirements.in
 sh==1.12.14 \
     --hash=sha256:ae3258c5249493cebe73cb4e18253a41ed69262484bad36fdb3efcb8ad8870bb \
     --hash=sha256:b52bf5833ed01c7b5c5fb73a7f71b3d98d48e9b9b8764236237bdc7ecae850fc \

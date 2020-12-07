@@ -5,6 +5,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Any
 from typing import Iterator
+from unittest import mock
 
 import pretty_bad_protocol as gnupg
 import logging
@@ -22,6 +23,8 @@ import subprocess
 from flask import url_for
 from pyotp import TOTP
 from typing import Dict
+
+from source_user import _SourceScryptManager
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from sdconfig import SDConfig, config as original_config
@@ -83,6 +86,22 @@ def setUpTearDown():
     yield
     _stop_test_rqworker()
     _cleanup_test_securedrop_dataroot(original_config)
+
+
+@pytest.fixture(scope="session")
+def insecure_scrypt() -> Iterator[None]:
+    """Make scrypt insecure but fast for the test suite."""
+    insecure_scrypt_mgr = _SourceScryptManager(
+        salt_for_gpg_secret=b"abcd",
+        salt_for_filesystem_id=b"1234",
+        # Insecure but fast
+        scrypt_n=2 ** 1,
+        scrypt_r=1,
+        scrypt_p=1,
+    )
+
+    with mock.patch.object(_SourceScryptManager, "get_default", return_value=insecure_scrypt_mgr):
+        yield
 
 
 @pytest.fixture(scope="session")

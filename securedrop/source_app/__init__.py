@@ -3,13 +3,12 @@ from typing import Optional
 
 import werkzeug
 from flask import (Flask, render_template, flash, Markup, request, g, session,
-                   url_for, redirect)
+                   url_for)
 from flask_babel import gettext
 from flask_assets import Environment
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from jinja2 import evalcontextfilter
 from os import path
-from sqlalchemy.orm.exc import NoResultFound
 from typing import Tuple
 
 import i18n
@@ -18,12 +17,12 @@ import version
 
 from crypto_util import CryptoUtil
 from db import db
-from models import InstanceConfig, Source
+from models import InstanceConfig
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from sdconfig import SDConfig
 from source_app import main, info, api
 from source_app.decorators import ignore_static
-from source_app.utils import logged_in, was_in_generate_flow
+from source_app.utils import redirect_to_index_and_show_logout_message
 from store import Storage
 
 
@@ -52,9 +51,6 @@ def create_app(config: SDConfig) -> Flask:
     # TODO: Attaching a CryptoUtil dynamically like this disables all type checking (and
     # breaks code analysis tools) for code that uses current_app.storage; it should be refactored
     app.crypto_util = CryptoUtil(
-        scrypt_params=config.SCRYPT_PARAMS,
-        scrypt_id_pepper=config.SCRYPT_ID_PEPPER,
-        scrypt_gpg_pepper=config.SCRYPT_GPG_PEPPER,
         securedrop_root=config.SECUREDROP_ROOT,
         nouns_file=config.NOUNS,
         adjectives_file=config.ADJECTIVES,
@@ -63,10 +59,7 @@ def create_app(config: SDConfig) -> Flask:
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> werkzeug.Response:
-        msg = render_template('session_timeout.html')
-        session.clear()
-        flash(Markup(msg), "important")
-        return redirect(url_for('main.index'))
+        return redirect_to_index_and_show_logout_message(session)
 
     assets = Environment(app)
     app.config['assets'] = assets
@@ -118,56 +111,16 @@ def create_app(config: SDConfig) -> Flask:
     @app.before_request
     @ignore_static
     def setup_g() -> Optional[werkzeug.Response]:
-        """Store commonly used values in Flask's special g object"""
-
         if 'expires' in session and datetime.utcnow() >= session['expires']:
-            msg = render_template('session_timeout.html')
-
-            # Show expiration message only if the user was
-            # either in the codename generation flow or logged in
-            show_expiration_message = any([
-                session.get('show_expiration_message'),
-                logged_in(),
-                was_in_generate_flow(),
-            ])
-
-            # clear the session after we render the message so it's localized
-            session.clear()
-
-            # Persist this properety across sessions to distinguish users whose sessions expired
-            # from users who never logged in or generated a codename
-            session['show_expiration_message'] = show_expiration_message
-
-            # Redirect to index with flashed message
-            if session['show_expiration_message']:
-                flash(Markup(msg), "important")
-            return redirect(url_for('main.index'))
+            # If the session as has expired, redirect to index with flashed message
+            # if the user was in the middle of the generate flow
+            if 'codenames' in session:
+                return redirect_to_index_and_show_logout_message(session)
 
         session['expires'] = datetime.utcnow() + \
             timedelta(minutes=getattr(config,
                                       'SESSION_EXPIRATION_MINUTES',
                                       120))
-
-        # ignore_static here because `crypto_util.hash_codename` is scrypt
-        # (very time consuming), and we don't need to waste time running if
-        # we're just serving a static resource that won't need to access
-        # these common values.
-        if logged_in():
-            g.codename = session['codename']
-            g.filesystem_id = app.crypto_util.hash_codename(g.codename)
-            try:
-                g.source = Source.query \
-                            .filter(Source.filesystem_id == g.filesystem_id) \
-                            .filter_by(deleted_at=None) \
-                            .one()
-            except NoResultFound as e:
-                app.logger.error(
-                    "Found no Sources when one was expected: %s" %
-                    (e,))
-                del session['logged_in']
-                del session['codename']
-                return redirect(url_for('main.index'))
-            g.loc = app.storage.path(g.filesystem_id)
 
         if app.instance_config.organization_name:
             g.organization_name = app.instance_config.organization_name

@@ -26,7 +26,6 @@ pyotp
 qrcode
 redis>=3.3.6
 rq>=1.1.0
-scrypt
 setuptools>=46.0.0
 sh
 SQLAlchemy>=1.3.0
