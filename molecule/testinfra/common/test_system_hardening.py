@@ -40,7 +40,11 @@ def test_dns_setting(host):
     """
     Ensure DNS service is hard-coded in resolv.conf config.
     """
-    f = host.file('/etc/resolvconf/resolv.conf.d/base')
+    if host.system_info.codename == "focal":
+        fpath = "/etc/resolv.conf"
+    else:
+        fpath = "/etc/resolvconf/resolv.conf.d/base"
+    f = host.file(fpath)
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"

@@ -3,3 +3,5 @@ securedrop_kernel_packages_to_remove:
   - linux-virtual
   - linux-generic
   - 'linux-image-.*generic'
+
+resolvconf_target_filepath: /etc/resolv.conf

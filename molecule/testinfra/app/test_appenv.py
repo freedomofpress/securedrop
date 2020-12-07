@@ -72,7 +72,8 @@ def test_gpg_key_in_keyring(host):
     with host.sudo(sdvars.securedrop_user):
         c = host.run("gpg --homedir /var/lib/securedrop/keys "
                      "--list-keys 28271441")
-        assert "pub   4096R/28271441 2013-10-12" in c.stdout
+        assert "2013-10-12" in c.stdout
+        assert "28271441" in c.stdout
 
 
 def test_ensure_logo(host):

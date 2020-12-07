@@ -4,6 +4,7 @@
 # for storage as artifacts on the build, so devs can review via web.
 set -e
 set -u
+BASE_OS="${BASE_OS:-xenial}"
 
 
 TOPLEVEL="$(git rev-parse --show-toplevel)"
@@ -51,9 +52,15 @@ function copy_securedrop_repo() {
 
 # Main logic
 copy_securedrop_repo
-ssh_gce "make build-debs-notest"
 
 # The test results should be collected regardless of pass/fail,
 # so register a trap to ensure the fetch always runs.
 trap fetch_junit_test_results EXIT
-ssh_gce "make staging"
+if [ "${BASE_OS:-'xenial'}" = "xenial" ]
+then
+	ssh_gce "make build-debs-notest"
+	ssh_gce "make staging"
+else
+	ssh_gce "make build-debs-notest-focal"
+	ssh_gce "make staging-focal"
+fi

@@ -5,6 +5,7 @@ import testutils
 
 securedrop_test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.monitor_hostname]
+python_version = securedrop_test_vars.python_version
 
 
 def test_ossec_connectivity(host):
@@ -19,6 +20,20 @@ def test_ossec_connectivity(host):
     with host.sudo():
         c = host.check_output("/var/ossec/bin/list_agents -a")
         assert c == desired_output
+
+
+def test_ossec_service_start_style(host):
+    """
+    Ensure that the OSSEC services are managed by systemd under Focal,
+    but by sysv under Xenial.
+    """
+    if host.system_info.codename == "focal":
+        value = "/etc/systemd/system/ossec.service"
+    else:
+        value = "/etc/init.d/ossec"
+    with host.sudo():
+        c = host.check_output("systemctl status ossec")
+        assert value in c
 
 
 # Permissions don't match between Ansible and OSSEC deb packages postinst.

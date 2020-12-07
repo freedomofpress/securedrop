@@ -86,6 +86,7 @@
 - name: Run OSSEC installer script on extracted source.
   command: /tmp/ossec-hids-{{ ossec_version }}/install.sh
 
+
 - name: Create OSSEC build directory.
   file:
     state: directory
@@ -115,6 +116,38 @@
   with_items:
     - etc
     - usr
+
+- name: Delete the old service file
+  file:
+    state: absent
+    path: "{{ ossec_build_dir }}/etc/init.d/ossec"
+  when:
+    - ansible_host.find("-sd-generic-ossec") != -1
+    - ansible_distribution_release == "focal"
+
+- name: Create directory for our systemd based service file
+  file:
+    state: directory
+    path: "{{ ossec_build_dir }}/etc/systemd/system"
+  when:
+    - ansible_host.find("-sd-generic-ossec") != -1
+    - ansible_distribution_release == "focal"
+
+- name: Copy our systemd based service file for ossec-server
+  copy:
+    src: ossec.service
+    dest: "{{ ossec_build_dir }}/etc/systemd/system/ossec.service"
+  when:
+    - ansible_host.endswith("-sd-generic-ossec-server")
+    - ansible_distribution_release == "focal"
+
+- name: Copy our systemd based service file for ossec-agent
+  copy:
+    src: ossec-agent.service
+    dest: "{{ ossec_build_dir }}/etc/systemd/system/ossec.service"
+  when:
+    - ansible_host.endswith("-sd-generic-ossec-agent")
+    - ansible_distribution_release == "focal"
 
 - name: Build SecureDrop OSSEC deb package.
   command: dpkg-deb --build {{ ossec_build_dir }}

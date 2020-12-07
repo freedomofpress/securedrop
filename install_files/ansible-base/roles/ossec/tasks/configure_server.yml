@@ -113,3 +113,10 @@
     creates: /var/ossec/etc/sslmanager.cert
   tags:
     - ossec_auth
+
+- name: Enable the OSSEC service
+  systemd:
+    name: ossec
+    daemon_reload: yes
+    enabled: yes
+    masked: no

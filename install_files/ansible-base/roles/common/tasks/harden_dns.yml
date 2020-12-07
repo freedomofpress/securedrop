@@ -2,7 +2,17 @@
 - name: Configure DNS server IP.
   template:
     src: dns_base
-    dest: /etc/resolvconf/resolv.conf.d/base
+    dest: "{{ resolvconf_target_filepath }}"
+  tags:
+    - dns
+    - hardening
+
+- name: Disable systemd-resolved on Focal
+  systemd:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+  when: ansible_distribution_release == 'focal'
   tags:
     - dns
     - hardening
