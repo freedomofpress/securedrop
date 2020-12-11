@@ -1,0 +1,8 @@
+- name: Configure apt sources.
+  template:
+    src: sources.list.j2
+    dest: /etc/apt/sources.list
+    mode: "0644"
+    owner: root
+  tags:
+    - apt
