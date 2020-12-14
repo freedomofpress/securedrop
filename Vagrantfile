@@ -71,7 +71,11 @@ Vagrant.configure("2") do |config|
       config.ssh.port = 22
     end
     prod.vm.hostname = "mon-prod"
-    prod.vm.box = "bento/ubuntu-16.04"
+    if ENV['USE_FOCAL']
+      prod.vm.box = "bento/ubuntu-20.04"
+    else
+      prod.vm.box = "bento/ubuntu-16.04"
+    end
     prod.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: internal_network_name
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "libvirt" do |lv, override|
@@ -86,7 +90,11 @@ Vagrant.configure("2") do |config|
       config.ssh.port = 22
     end
     prod.vm.hostname = "app-prod"
-    prod.vm.box = "bento/ubuntu-16.04"
+    if ENV['USE_FOCAL']
+      prod.vm.box = "bento/ubuntu-20.04"
+    else
+      prod.vm.box = "bento/ubuntu-16.04"
+    end
     prod.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: internal_network_name
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "virtualbox" do |v|
