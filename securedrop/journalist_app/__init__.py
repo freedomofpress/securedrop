@@ -70,7 +70,6 @@ def create_app(config: 'SDConfig') -> Flask:
         scrypt_id_pepper=config.SCRYPT_ID_PEPPER,
         scrypt_gpg_pepper=config.SCRYPT_GPG_PEPPER,
         securedrop_root=config.SECUREDROP_ROOT,
-        word_list=config.WORD_LIST,
         nouns_file=config.NOUNS,
         adjectives_file=config.ADJECTIVES,
         gpg_key_dir=config.GPG_KEY_DIR,

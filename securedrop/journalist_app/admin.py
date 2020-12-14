@@ -11,14 +11,16 @@ from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
+import i18n
 from db import db
 from models import (InstanceConfig, Journalist, InvalidUsernameException,
                     FirstOrLastNameError, PasswordError)
 from journalist_app.decorators import admin_required
-from journalist_app.utils import (make_password, commit_account_changes, set_diceware_password,
+from journalist_app.utils import (commit_account_changes, set_diceware_password,
                                   validate_hotp_secret, revoke_token)
 from journalist_app.forms import LogoForm, NewUserForm, SubmissionPreferencesForm
 from sdconfig import SDConfig
+from passphrases import PassphraseGenerator
 
 
 def make_blueprint(config: SDConfig) -> Blueprint:
@@ -124,8 +126,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 return redirect(url_for('admin.new_user_two_factor',
                                         uid=new_user.id))
 
+        password = PassphraseGenerator.get_default().generate_passphrase(
+            preferred_language=i18n.get_language(config)
+        )
         return render_template("admin_add_user.html",
-                               password=make_password(config),
+                               password=password,
                                form=form)
 
     @view.route('/2fa', methods=('GET', 'POST'))
@@ -221,7 +226,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             commit_account_changes(user)
 
-        password = make_password(config)
+        password = PassphraseGenerator.get_default().generate_passphrase(
+            preferred_language=i18n.get_language(config)
+        )
         return render_template("edit_account.html", user=user,
                                password=password)
 

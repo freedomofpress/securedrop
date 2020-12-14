@@ -9,6 +9,8 @@ import re
 
 from flask import url_for, session
 
+from passphrases import PassphraseGenerator
+
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import crypto_util
 import models
@@ -18,7 +20,6 @@ from db import db
 
 
 def test_word_list_does_not_contain_empty_strings(journalist_app):
-    assert '' not in journalist_app.crypto_util.get_wordlist('en')
     assert '' not in journalist_app.crypto_util.nouns
     assert '' not in journalist_app.crypto_util.adjectives
 
@@ -136,38 +137,8 @@ def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
         assert plaintext == message
 
 
-def verify_genrandomid(app, locale):
-    id = app.crypto_util.genrandomid(locale=locale)
-    id_words = id.split()
-
-    crypto_util._validate_name_for_diceware(id)
-    assert len(id_words) == CryptoUtil.DEFAULT_WORDS_IN_RANDOM_ID
-
-    for word in id_words:
-        assert word in app.crypto_util.get_wordlist(locale)
-
-
-def test_genrandomid_default_locale_is_en(source_app):
-    verify_genrandomid(source_app, 'en')
-
-
-def test_get_wordlist(source_app, config):
-    locales = []
-    wordlists_path = os.path.join(config.SECUREDROP_ROOT, 'wordlists')
-    for f in os.listdir(wordlists_path):
-        if f.endswith('.txt') and f != 'en.txt':
-            locales.append(f.split('.')[0])
-
-    with source_app.app_context():
-        list_en = source_app.crypto_util.get_wordlist('en')
-        for locale in locales:
-            assert source_app.crypto_util.get_wordlist(locale) != list_en
-            verify_genrandomid(source_app, locale)
-            assert source_app.crypto_util.get_wordlist('unknown') == list_en
-
-
 def test_hash_codename(source_app):
-    codename = source_app.crypto_util.genrandomid()
+    codename = PassphraseGenerator.get_default().generate_passphrase()
     hashed_codename = source_app.crypto_util.hash_codename(codename)
 
     assert re.compile('^[2-7A-Z]{103}=$').match(hashed_codename)
@@ -198,7 +169,7 @@ def test_display_id_designation_collisions(source_app):
 
 def test_genkeypair(source_app):
     with source_app.app_context():
-        codename = source_app.crypto_util.genrandomid()
+        codename = PassphraseGenerator.get_default().generate_passphrase()
         filesystem_id = source_app.crypto_util.hash_codename(codename)
         journalist_filename = source_app.crypto_util.display_id()
         source = models.Source(filesystem_id, journalist_filename)
@@ -231,7 +202,7 @@ def parse_gpg_date_string(date_string):
 
 def test_reply_keypair_creation_and_expiration_dates(source_app):
     with source_app.app_context():
-        codename = source_app.crypto_util.genrandomid()
+        codename = PassphraseGenerator.get_default().generate_passphrase()
         filesystem_id = source_app.crypto_util.hash_codename(codename)
         journalist_filename = source_app.crypto_util.display_id()
         source = models.Source(filesystem_id, journalist_filename)

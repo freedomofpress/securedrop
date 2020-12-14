@@ -26,7 +26,6 @@ class SDConfig:
 
         self.ADJECTIVES = _config.ADJECTIVES  # type: str
         self.NOUNS = _config.NOUNS  # type: str
-        self.WORD_LIST = _config.WORD_LIST  # type: str
 
         self.GPG_KEY_DIR = _config.GPG_KEY_DIR  # type: str
 

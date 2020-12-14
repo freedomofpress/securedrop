@@ -12,8 +12,6 @@ from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
 from flask_babel import gettext, ngettext
 from sqlalchemy.exc import IntegrityError
 
-import i18n
-
 from db import db
 from models import (
     BadTokenException,
@@ -35,8 +33,6 @@ from models import (
     get_one_or_else,
 )
 from store import add_checksum_for_file
-
-from sdconfig import SDConfig
 
 
 def logged_in() -> bool:
@@ -324,18 +320,6 @@ def col_delete(cols_selected: List[str]) -> werkzeug.Response:
               "notification")
 
     return redirect(url_for('main.index'))
-
-
-def make_password(config: SDConfig) -> str:
-    while True:
-        password = current_app.crypto_util.genrandomid(
-            7,
-            i18n.get_language(config))
-        try:
-            Journalist.check_password_acceptable(password)
-            return password
-        except PasswordError:
-            continue
 
 
 def delete_collection(filesystem_id: str) -> None:

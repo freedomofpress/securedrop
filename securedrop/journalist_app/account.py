@@ -6,9 +6,11 @@ from flask import (Blueprint, render_template, request, g, redirect, url_for,
                    flash, session)
 from flask_babel import gettext
 
+import i18n
 from db import db
-from journalist_app.utils import (make_password, set_diceware_password, set_name, validate_user,
+from journalist_app.utils import (set_diceware_password, set_name, validate_user,
                                   validate_hotp_secret)
+from passphrases import PassphraseGenerator
 from sdconfig import SDConfig
 
 
@@ -17,7 +19,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @view.route('/account', methods=('GET',))
     def edit() -> str:
-        password = make_password(config)
+        password = PassphraseGenerator.get_default().generate_passphrase(
+            preferred_language=i18n.get_language(config)
+        )
         return render_template('edit_account.html',
                                password=password)
 
