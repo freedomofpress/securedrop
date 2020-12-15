@@ -2,6 +2,7 @@ Port 22
 ListenAddress {{ ssh_listening_address }}:22
 Protocol 2
 HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
 HostKey /etc/ssh/ssh_host_ed25519_key
 
 # Enforce privilege separation by creating unprivileged child process
@@ -39,7 +40,6 @@ UseDNS no
 # Cipher selection
 
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes128-ctr
-HostKeyAlgorithms ssh-ed25519,rsa-sha2-256,rsa-sha2-512
 # Don't use SHA1 for kex
 KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
 # Don't use SHA1 for hashing, don't use encrypt-and-MAC mode
