@@ -73,6 +73,34 @@
     name: apache2
     state: reloaded
 
+- name: Copy disable_v2.py script for Focal
+  copy:
+    src: "{{ role_path }}/files/disable_v2.py"
+    dest: /opt/disable_v2.py
+  when: ansible_distribution_release == 'focal'
+
+- name: Execute disable_v2 script on Focal
+  command: python3 /opt/disable_v2.py /etc/tor/torrc /etc/tor/torrc
+  when: ansible_distribution_release == 'focal'
+
+- name: Remove v2 tor source directory
+  file:
+    state: absent
+    path: /var/lib/tor/services/source
+  when: ansible_distribution_release == 'focal'
+
+- name: Remove v2 tor journalist directory
+  file:
+    state: absent
+    path: /var/lib/tor/services/journalist
+  when: ansible_distribution_release == 'focal'
+
+- name: Remove disable_v2.py script on Focal
+  file:
+    state: absent
+    path: /opt/disable_v2.py
+  when: ansible_distribution_release == 'focal'
+
 - name: Reload Tor service
   service:
     name: tor
