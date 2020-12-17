@@ -71,7 +71,11 @@ Vagrant.configure("2") do |config|
       config.ssh.port = 22
     end
     prod.vm.hostname = "mon-prod"
-    prod.vm.box = "bento/ubuntu-16.04"
+    if ENV['USE_FOCAL']
+      prod.vm.box = "bento/ubuntu-20.04"
+    else
+      prod.vm.box = "bento/ubuntu-16.04"
+    end
     prod.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: internal_network_name
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "libvirt" do |lv, override|
@@ -86,7 +90,11 @@ Vagrant.configure("2") do |config|
       config.ssh.port = 22
     end
     prod.vm.hostname = "app-prod"
-    prod.vm.box = "bento/ubuntu-16.04"
+    if ENV['USE_FOCAL']
+      prod.vm.box = "bento/ubuntu-20.04"
+    else
+      prod.vm.box = "bento/ubuntu-16.04"
+    end
     prod.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: internal_network_name
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "virtualbox" do |v|
@@ -110,6 +118,32 @@ Vagrant.configure("2") do |config|
         'securedrop_monitor_server' => %w(mon-prod),
         'securedrop' => %w(app-prod mon-prod)
       }
+    end
+  end
+
+  config.vm.define 'apt-local', autostart: false do |prod|
+    prod.vm.hostname = "apt-local"
+    prod.vm.box = "bento/ubuntu-20.04"
+    prod.vm.network "private_network", ip: "10.0.1.7", virtualbox__intnet: internal_network_name
+    prod.vm.synced_folder './', '/vagrant', disabled: true
+    prod.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+    end
+    prod.vm.provider "libvirt" do |lv, override|
+      lv.memory = 1024
+      lv.video_type = "virtio"
+    end
+    prod.vm.provision "ansible" do |ansible|
+      ansible.playbook = "devops/apt-local.yml"
+      ansible.galaxy_role_file = "molecule/upgrade/requirements.yml"
+      ansible.galaxy_roles_path = ".galaxy_roles"
+      ansible.verbose = 'v'
+      # the production playbook verifies that staging default values are not
+      # used will need to skip the this role to run in Vagrant
+      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
+      # Taken from the parallel execution tips and tricks
+      # https://docs.vagrantup.com/v2/provisioning/ansible.html
+      ansible.limit = 'all,localhost'
     end
   end
 

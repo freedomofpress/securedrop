@@ -145,6 +145,9 @@ securedrop/static/.webassets-cache
 # https://github.com/mitchellh/vagrant/issues/6705
 .bundle
 
+# Vagrant-added ansible-galaxy roles
+.galaxy_roles
+
 # ignore ansible retry files
 *.retry
 

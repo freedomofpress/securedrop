@@ -1,0 +1,48 @@
+---
+- name: Confirm local debs present
+  hosts: localhost
+  gather_facts: no
+  tasks:
+      # Before running apt-server logic, confirm we have local
+      # debs built.
+    - name: Find local deb files
+      find:
+        paths: "../build/focal/"
+        patterns: "*.deb"
+      register: _find_debs_result
+
+    - name: Ensure debs were found
+      assert:
+        that:
+          - "_find_debs_result.files|length >= 8"
+        msg: "No local debs found, run 'make build-debs-focal'"
+
+- name: Configure apt-server
+  hosts: apt-local
+  become: yes
+  tasks:
+    - import_tasks: ../molecule/upgrade/local_apt_mirror.yml
+    - import_tasks: ../molecule/upgrade/local_apt_with_debs.yml
+
+  vars:
+    QA_APTTEST: False
+    rep_dist: "focal"
+    molecule_dir: "../molecule/upgrade"
+    dpkg_dir: /var/repos/debs
+    rep_component: main
+    rep_arch: i386 amd64
+    release_file: "/var/repos/base/dists/{{ rep_dist }}/Release"
+    nginx_sites:
+      default:
+        - listen 80
+        - root "/var/repos/base"
+        - location / { autoindex on; }
+        - location /gpg { alias /var/repos/base/; }
+      encrypted:
+        - listen 443 ssl
+        - server_name apt.freedom.press
+        - ssl_certificate /etc/ssl/certs/apt_freedom_press.pem
+        - ssl_certificate_key /etc/ssl/private/apt_freedom_press.priv
+        - root "/var/repos/base"
+        - location / { autoindex on; }
+
