@@ -164,7 +164,7 @@ def add_journalist(
     return journalist
 
 
-def record_source_interaction(source) -> None:
+def record_source_interaction(source: Source) -> None:
     """
     Updates the source's interaction count, pending status, and timestamp.
     """
