@@ -20,8 +20,14 @@
 
     {% if g.user %}
       {% if g.show_v2_onion_eol_warning %}
-      <div id="v2-onion-eol" class="warning-banner">
-        {{ gettext('<strong>Update Required:</strong> Your SecureDrop servers are still running v2 onion services, which are being phased out for security reasons. In February 2021, v2 onion services will be disabled, and your SecureDrop servers may become unreachable. <a href="//securedrop.org/v2-onion-eol" rel="noreferrer">Learn More</a>') }}
+      <div id="v2-onion-eol" class="alert-banner">
+        {{ gettext('<strong>Update Required:</strong> You must switch your SecureDrop to v3 onion services to ensure that it is reachable after April 30, 2021. <a href="//securedrop.org/v2-onion-eol" rel="noreferrer">Learn More</a>') }}
+      </div>
+      {% endif %}
+
+      {% if g.show_v2_onion_migration_warning %}
+      <div id="v2-onion-eol" class="alert-banner">
+        {{ gettext('<strong>Update Required:</strong> Your SecureDrop servers are still reachable via v2 and v3 onion services. Make sure admins, journalists, and sources are using v3 onion services - then disable v2 onion services. <a href="//securedrop.org/v2-onion-eol" rel="noreferrer">Learn More</a>') }}
       </div>
       {% endif %}
 

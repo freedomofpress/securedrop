@@ -53,8 +53,13 @@ def create_app(config: 'SDConfig') -> Flask:
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
     db.init_app(app)
 
-    v2_enabled = path.exists(path.join(config.SECUREDROP_DATA_ROOT, 'source_v2_url'))
-    v3_enabled = path.exists(path.join(config.SECUREDROP_DATA_ROOT, 'source_v3_url'))
+    def _url_exists(u: str) -> bool:
+        return path.exists(path.join(config.SECUREDROP_DATA_ROOT, u))
+
+    v2_enabled = _url_exists('source_v2_url') or ((not _url_exists('source_v2_url'))
+                                                  and (not _url_exists('source_v3_url')))
+    v3_enabled = _url_exists('source_v3_url')
+
     app.config.update(V2_ONION_ENABLED=v2_enabled, V3_ONION_ENABLED=v3_enabled)
 
     # TODO: Attaching a Storage dynamically like this disables all type checking (and
@@ -161,8 +166,11 @@ def create_app(config: 'SDConfig') -> Flask:
         else:
             g.organization_name = gettext('SecureDrop')
 
-        if not app.config['V3_ONION_ENABLED'] or app.config['V2_ONION_ENABLED']:
+        if app.config['V2_ONION_ENABLED'] and not app.config['V3_ONION_ENABLED']:
             g.show_v2_onion_eol_warning = True
+
+        if app.config['V2_ONION_ENABLED'] and app.config['V3_ONION_ENABLED']:
+            g.show_v2_onion_migration_warning = True
 
         if request.path.split('/')[1] == 'api':
             pass  # We use the @token_required decorator for the API endpoints
