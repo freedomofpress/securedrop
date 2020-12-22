@@ -302,6 +302,19 @@ class JournalistNavigationStepsMixin:
             assert "Preferences saved." in flash_msg.text
         self.wait_for(preferences_saved, timeout=self.timeout * 6)
 
+    def _admin_sets_organization_name(self):
+        assert self.orgname_default == self.driver.title
+        self.driver.find_element_by_id('organization_name').clear()
+        self.safe_send_keys_by_id("organization_name", self.orgname_new)
+        self.safe_click_by_id("submit-update-org-name")
+
+        def preferences_saved():
+            flash_msg = self.driver.find_element_by_css_selector(".flash")
+            assert "Preferences saved." in flash_msg.text
+
+        self.wait_for(preferences_saved, timeout=self.timeout * 6)
+        assert self.orgname_new == self.driver.title
+
     def _add_user(self, username, first_name="", last_name="", is_admin=False, hotp=None):
         self.safe_send_keys_by_css_selector('input[name="username"]', username)
 

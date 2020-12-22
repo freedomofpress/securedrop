@@ -7,25 +7,30 @@
 
 <h1>{{ gettext('Instance Configuration') }}</h1>
 
-<h2>{{ gettext('Alerts') }}</h2>
+<h2 id="config-orgname">{{ gettext('Organization Name') }}</h2>
 
-<p>{{ gettext('Send an encrypted email to verify if OSSEC alerts work correctly:') }}</p>
-
-<p>
-  <a class="btn" href="{{ url_for('admin.ossec_test') }}" id="test-ossec-alert">
-    <img src="{{ url_for('static', filename='icons/bell.png') }}" class="icon" width="13" height="15" alt="">
-    {{ gettext('SEND TEST OSSEC ALERT') }}
-  </a>
-</p>
+<form action="{{ url_for('admin.update_org_name') }}" method="post">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <p>
+    <label for="organization_name">{{ gettext('Set the organization name used on the SecureDrop web interfaces:') }}</label><br>
+    {{ organization_name_form.organization_name() }}
+  </p>
+  <button type="submit" id="submit-update-org-name">
+    <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
+    {{ gettext('SET ORGANIZATION NAME') }}
+  </button>
+  {% set prefs_filter = ["org-name-error","org-name-success"] %}
+  {% include 'preferences_saved_flash.html' %}
+</form>
 
 <hr class="no-line">
 
-<h2>{{ gettext('Logo Image') }}</h2>
+<h2 id="config-logoimage">{{ gettext('Logo Image') }}</h2>
 
 <p>{{ gettext('Here you can update the image displayed on the SecureDrop web interfaces:') }}</p>
 
 <p>
-  <img src="{{ url_for('main.select_logo') }}" class="logo small" alt="SecureDrop" width="250">
+  <img src="{{ url_for('main.select_logo') }}" class="logo small" alt="{{ g.organization_name }}" width="250">
 </p>
 
 <form method="post" enctype="multipart/form-data">
@@ -41,12 +46,13 @@
     <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
     {{ gettext('UPDATE LOGO') }}
   </button>
-  {% include 'logo_upload_flashed.html' %}
+  {% set prefs_filter = ["logo-success","logo-error"] %}
+  {% include 'preferences_saved_flash.html' %}
 </form>
 
 <hr class="no-line">
 
-<h2>{{ gettext('Submission Preferences') }}</h2>
+<h2 id="config-preventuploads">{{ gettext('Submission Preferences') }}</h2>
 
 <form action="{{ url_for('admin.update_submission_preferences') }}" method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
@@ -58,7 +64,23 @@
     <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
     {{ gettext('UPDATE SUBMISSION PREFERENCES') }}
   </button>
-  {% include 'submission_preferences_saved_flash.html' %}
+  {% set prefs_filter = ["submission-preferences-success","submission-preferences-error"] %}
+  {% include 'preferences_saved_flash.html' %}
 </form>
+
+<hr class="no-line">
+
+<h2 id="config-testalert">{{ gettext('Alerts') }}</h2>
+
+<p>{{ gettext('Send an encrypted email to verify if OSSEC alerts work correctly:') }}</p>
+
+<p>
+  <a class="btn" href="{{ url_for('admin.ossec_test') }}" id="test-ossec-alert">
+    <img src="{{ url_for('static', filename='icons/bell.png') }}" class="icon" width="13" height="15" alt="">
+    {{ gettext('SEND TEST OSSEC ALERT') }}
+  </a>
+  {% set prefs_filter = ["testalert-success","testalert-error","testalert-notification"] %}
+  {% include 'preferences_saved_flash.html' %}
+</p>
 
 {% endblock %}

@@ -8,7 +8,7 @@ from wtforms import (TextAreaField, StringField, BooleanField, HiddenField,
                      ValidationError)
 from wtforms.validators import InputRequired, Optional
 
-from models import Journalist
+from models import Journalist, InstanceConfig
 
 
 def otp_secret_validation(form: FlaskForm, field: Field) -> None:
@@ -43,6 +43,17 @@ def name_length_validation(form: FlaskForm, field: Field) -> None:
                 'Cannot be longer than {num} characters.',
                 Journalist.MAX_NAME_LEN
             ).format(num=Journalist.MAX_NAME_LEN)
+        )
+
+
+def check_orgname(form: FlaskForm, field: Field) -> None:
+    if len(field.data) > InstanceConfig.MAX_ORG_NAME_LEN:
+        raise ValidationError(
+            ngettext(
+                'Cannot be longer than {num} characters.',
+                'Cannot be longer than {num} characters.',
+                InstanceConfig.MAX_ORG_NAME_LEN
+            ).format(num=InstanceConfig.MAX_ORG_NAME_LEN)
         )
 
 
@@ -81,6 +92,13 @@ class ReplyForm(FlaskForm):
 
 class SubmissionPreferencesForm(FlaskForm):
     prevent_document_uploads = BooleanField('prevent_document_uploads')
+
+
+class OrgNameForm(FlaskForm):
+    organization_name = StringField('organization_name', validators=[
+        InputRequired(message=gettext('This field is required.')),
+        check_orgname
+    ])
 
 
 class LogoForm(FlaskForm):

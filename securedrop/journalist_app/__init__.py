@@ -156,6 +156,11 @@ def create_app(config: 'SDConfig') -> Flask:
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
 
+        if app.instance_config.organization_name:
+            g.organization_name = app.instance_config.organization_name
+        else:
+            g.organization_name = gettext('SecureDrop')
+
         if not app.config['V3_ONION_ENABLED'] or app.config['V2_ONION_ENABLED']:
             g.show_v2_onion_eol_warning = True
 

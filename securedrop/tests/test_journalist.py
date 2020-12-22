@@ -17,6 +17,7 @@ from pyotp import TOTP
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.sql.expression import func
+from html import escape as htmlescape
 
 import journalist_app as journalist_app_module
 from journalist_app.utils import mark_seen
@@ -1495,6 +1496,119 @@ def test_no_prevent_document_uploads(journalist_app, test_admin):
             app.post(url_for('admin.update_submission_preferences'),
                      follow_redirects=True)
             ins.assert_message_flashed('Preferences saved.', 'submission-preferences-success')
+            assert InstanceConfig.get_current().allow_document_uploads is True
+
+
+def test_prevent_document_uploads_invalid(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        form_true = journalist_app_module.forms.SubmissionPreferencesForm(
+            prevent_document_uploads=True)
+        app.post(url_for('admin.update_submission_preferences'),
+                 data=form_true.data,
+                 follow_redirects=True)
+        assert InstanceConfig.get_current().allow_document_uploads is False
+
+        with patch('flask_wtf.FlaskForm.validate_on_submit') as fMock:
+            fMock.return_value = False
+            form_false = journalist_app_module.forms.SubmissionPreferencesForm(
+                prevent_document_uploads=False)
+            app.post(url_for('admin.update_submission_preferences'),
+                     data=form_false.data,
+                     follow_redirects=True)
+            assert InstanceConfig.get_current().allow_document_uploads is False
+
+
+def test_orgname_default_set(journalist_app, test_admin):
+
+    class dummy_current():
+        organization_name = None
+
+    with patch.object(InstanceConfig, 'get_current') as iMock:
+        with journalist_app.test_client() as app:
+            iMock.return_value = dummy_current()
+            _login_user(app, test_admin['username'], test_admin['password'],
+                        test_admin['otp_secret'])
+            assert g.organization_name == "SecureDrop"
+
+
+def test_orgname_valid_succeeds(journalist_app, test_admin):
+    test_name = "Walden Inquirer"
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        form = journalist_app_module.forms.OrgNameForm(
+            organization_name=test_name)
+        assert InstanceConfig.get_current().organization_name == "SecureDrop"
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.update_org_name'),
+                     data=form.data,
+                     follow_redirects=True)
+            ins.assert_message_flashed('Preferences saved.', 'org-name-success')
+            assert InstanceConfig.get_current().organization_name == test_name
+
+
+def test_orgname_null_fails(journalist_app, test_admin):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        form = journalist_app_module.forms.OrgNameForm(
+            organization_name=None)
+        assert InstanceConfig.get_current().organization_name == "SecureDrop"
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.update_org_name'),
+                     data=form.data,
+                     follow_redirects=True)
+            ins.assert_message_flashed('This field is required.', 'org-name-error')
+            assert InstanceConfig.get_current().organization_name == "SecureDrop"
+
+
+def test_orgname_oversized_fails(journalist_app, test_admin):
+    test_name = "1234567812345678123456781234567812345678123456781234567812345678a"
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        form = journalist_app_module.forms.OrgNameForm(
+            organization_name=test_name)
+        assert InstanceConfig.get_current().organization_name == "SecureDrop"
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.update_org_name'),
+                     data=form.data,
+                     follow_redirects=True)
+            ins.assert_message_flashed('Cannot be longer than 64 characters.', 'org-name-error')
+            assert InstanceConfig.get_current().organization_name == "SecureDrop"
+
+
+def test_orgname_html_escaped(journalist_app, test_admin):
+    t_name = '"> <a href=foo>'
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        form = journalist_app_module.forms.OrgNameForm(
+            organization_name=t_name)
+        assert InstanceConfig.get_current().organization_name == "SecureDrop"
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.update_org_name'),
+                     data=form.data,
+                     follow_redirects=True)
+            ins.assert_message_flashed('Preferences saved.', 'org-name-success')
+            assert InstanceConfig.get_current().organization_name == htmlescape(t_name, quote=True)
+
+
+def test_logo_default_available(journalist_app):
+    # if the custom image is available, this test will fail
+    custom_image_location = os.path.join(config.SECUREDROP_ROOT, "static/i/custom_logo.png")
+    if os.path.exists(custom_image_location):
+        os.remove(custom_image_location)
+
+    with journalist_app.test_client() as app:
+        response = app.get(url_for('main.select_logo'), follow_redirects=False)
+
+        assert response.status_code == 302
+        observed_headers = response.headers
+        assert 'Location' in list(observed_headers.keys())
+        assert url_for('static', filename='i/logo.png') in observed_headers['Location']
 
 
 def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
@@ -1520,6 +1634,13 @@ def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
                          follow_redirects=True)
 
                 ins.assert_message_flashed("Image updated.", "logo-success")
+        with journalist_app.test_client() as app:
+            response = app.get(url_for('main.select_logo'), follow_redirects=False)
+
+            assert response.status_code == 302
+            observed_headers = response.headers
+            assert 'Location' in list(observed_headers.keys())
+            assert url_for('static', filename='i/custom_logo.png') in observed_headers['Location']
     finally:
         # Restore original image to logo location for subsequent tests
         with io.open(logo_image_location, 'wb') as logo_file:
@@ -1542,6 +1663,38 @@ def test_logo_upload_with_invalid_filetype_fails(journalist_app, test_admin):
                                        "logo-error")
         text = resp.data.decode('utf-8')
         assert "You can only upload PNG image files." in text
+
+
+def test_logo_upload_save_fails(journalist_app, test_admin):
+    # Save original logo to restore after test run
+    logo_image_location = os.path.join(config.SECUREDROP_ROOT,
+                                       "static/i/logo.png")
+    with io.open(logo_image_location, 'rb') as logo_file:
+        original_image = logo_file.read()
+
+    try:
+        with journalist_app.test_client() as app:
+            _login_user(app, test_admin['username'], test_admin['password'],
+                        test_admin['otp_secret'])
+            # Create 1px * 1px 'white' PNG file from its base64 string
+            form = journalist_app_module.forms.LogoForm(
+                logo=(BytesIO(base64.decodebytes
+                      (b"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
+                       b"VR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=")), 'test.png')
+            )
+            with InstrumentedApp(journalist_app) as ins:
+                with patch('werkzeug.datastructures.FileStorage.save') as sMock:
+                    sMock.side_effect = Exception
+                    app.post(url_for('admin.manage_config'),
+                             data=form.data,
+                             follow_redirects=True)
+
+                    ins.assert_message_flashed("Unable to process the image file."
+                                               " Try another one.", "logo-error")
+    finally:
+        # Restore original image to logo location for subsequent tests
+        with io.open(logo_image_location, 'wb') as logo_file:
+            logo_file.write(original_image)
 
 
 def test_creation_of_ossec_test_log_event(journalist_app, test_admin, mocker):

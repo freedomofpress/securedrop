@@ -1,7 +1,7 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
   {% for category, message in messages %}
-    {% if category != "banner-warning" and category != "logo-success" and category != "logo-error" and category != "submission-preferences-success" %}
+    {% if category not in ["banner-warning","logo-success","logo-error","submission-preferences-success","submission-preferences-error","org-name-success","org-name-error", "testalert-success", "testalert-error", "testalert-notification"] %}
       <div class="flash {{ category }}">
         {% if category == "notification" %}
         <img src="{{ url_for('static', filename='i/font-awesome/info-circle-black.png') }}" height="16" width="20">

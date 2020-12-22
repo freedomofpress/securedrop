@@ -22,6 +22,9 @@ class SourceNavigationStepsMixin:
     def _is_on_logout_page(self):
         return self.wait_for(lambda: self.driver.find_element_by_id("click-new-identity-tor"))
 
+    def _source_sees_orgname(self, name="SecureDrop"):
+        assert name in self.driver.title
+
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
         assert self._is_on_source_homepage()

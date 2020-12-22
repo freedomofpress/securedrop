@@ -1,0 +1,19 @@
+{% if prefs_filter is defined  and prefs_filter|length %}
+    {% with messages = get_flashed_messages(with_categories=True, category_filter=prefs_filter) %}
+      {% for category, message in messages %}
+    {#  Get the end of the of the category message which
+        contains the category status.(success/error/notification)#}
+        {% set category_status = category.split('-')|last %}
+          <div class="flash {{ category_status }}">
+          {% if category_status == "success" %}
+              <img src="{{ url_for('static', filename='i/success_checkmark.png') }}" height="17" width="20">
+          {% elif category_status == "error" %}
+              <img src="{{ url_for('static', filename='i/font-awesome/exclamation-triangle-black.png') }}" height="17" width="20">
+          {% elif category_status == "notification" %}
+              <img src="{{ url_for('static', filename='i/font-awesome/info-circle-black.png') }}" height="16" width="20">
+          {% endif %}
+              {{ message }}
+          </div>
+      {% endfor %}
+    {% endwith %}
+{% endif %}

@@ -13,12 +13,13 @@ from sqlalchemy.orm.exc import NoResultFound
 
 import i18n
 from db import db
+from html import escape
 from models import (InstanceConfig, Journalist, InvalidUsernameException,
                     FirstOrLastNameError, PasswordError)
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (commit_account_changes, set_diceware_password,
                                   validate_hotp_secret, revoke_token)
-from journalist_app.forms import LogoForm, NewUserForm, SubmissionPreferencesForm
+from journalist_app.forms import LogoForm, NewUserForm, SubmissionPreferencesForm, OrgNameForm
 from sdconfig import SDConfig
 from passphrases import PassphraseGenerator
 
@@ -38,6 +39,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         # The UI prompt ("prevent") is the opposite of the setting ("allow"):
         submission_preferences_form = SubmissionPreferencesForm(
             prevent_document_uploads=not current_app.instance_config.allow_document_uploads)
+        organization_name_form = OrgNameForm(
+            organization_name=current_app.instance_config.organization_name)
         logo_form = LogoForm()
         if logo_form.validate_on_submit():
             f = logo_form.logo.data
@@ -53,13 +56,14 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 flash("Unable to process the image file."
                       " Try another one.", "logo-error")
             finally:
-                return redirect(url_for("admin.manage_config"))
+                return redirect(url_for("admin.manage_config") + "#config-logoimage")
         else:
             for field, errors in list(logo_form.errors.items()):
                 for error in errors:
                     flash(error, "logo-error")
             return render_template("config.html",
                                    submission_preferences_form=submission_preferences_form,
+                                   organization_name_form=organization_name_form,
                                    logo_form=logo_form)
 
     @view.route('/update-submission-preferences', methods=['POST'])
@@ -71,9 +75,31 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             flash(gettext("Preferences saved."), "submission-preferences-success")
             value = not bool(request.form.get('prevent_document_uploads'))
             InstanceConfig.set_allow_document_uploads(value)
-            return redirect(url_for('admin.manage_config'))
+            return redirect(url_for('admin.manage_config') + "#config-preventuploads")
         else:
-            return None
+            for field, errors in list(form.errors.items()):
+                for error in errors:
+                    flash(gettext("Preferences not updated.") + " " + error,
+                          "submission-preferences-error")
+        return redirect(url_for('admin.manage_config') + "#config-preventuploads")
+
+    @view.route('/update-org-name', methods=['POST'])
+    @admin_required
+    def update_org_name() -> Union[str, werkzeug.Response]:
+        form = OrgNameForm()
+        if form.validate_on_submit():
+            try:
+                value = request.form['organization_name']
+                InstanceConfig.set_organization_name(escape(value, quote=True))
+                flash(gettext("Preferences saved."), "org-name-success")
+            except Exception:
+                flash(gettext('Failed to update organization name.'), 'org-name-error')
+            return redirect(url_for('admin.manage_config') + "#config-orgname")
+        else:
+            for field, errors in list(form.errors.items()):
+                for error in errors:
+                    flash(error, "org-name-error")
+        return redirect(url_for('admin.manage_config') + "#config-orgname")
 
     @view.route('/add', methods=('GET', 'POST'))
     @admin_required
@@ -276,7 +302,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def ossec_test() -> werkzeug.Response:
         current_app.logger.error('This is a test OSSEC alert')
         flash(gettext('Test alert sent. Please check your email.'),
-              'notification')
-        return redirect(url_for('admin.manage_config'))
+              'testalert-notification')
+        return redirect(url_for('admin.manage_config') + "#config-testalert")
 
     return view

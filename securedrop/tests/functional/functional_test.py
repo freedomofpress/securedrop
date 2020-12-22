@@ -62,6 +62,9 @@ class FunctionalTest(object):
     timeout = 10
     poll_frequency = 0.1
 
+    orgname_default = "SecureDrop"
+    orgname_new = "Walden Inquirer"
+
     accept_languages = None
     default_driver_name = TORBROWSER
     driver = None
