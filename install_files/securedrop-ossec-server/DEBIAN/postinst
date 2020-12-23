@@ -28,7 +28,12 @@ case "$1" in
 
         chown root:${GROUP} ${OSSEC_HOME}/rules/local_rules.xml
         chmod 440 ${OSSEC_HOME}/rules/local_rules.xml
-
+        
+        # Ensure correct gnupg directory permissions and ownership
+        chown -R ossec:${GROUP} ${OSSEC_HOME}/.gnupg
+        find ${OSSEC_HOME}/.gnupg -type f -exec chmod 600 {} \;
+        find ${OSSEC_HOME}/.gnupg -type d -exec chmod 700 {} \;
+      	
         # Replace localhost with 127.0.0.1 for smtp_server due to
         #  https://github.com/ossec/ossec-hids/issues/1145
         sed -i -e "s/<smtp_server>localhost<\/smtp_server>/<smtp_server>127.0.0.1<\/smtp_server>/g" /var/ossec/etc/ossec.conf
