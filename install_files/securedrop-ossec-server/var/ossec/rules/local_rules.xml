@@ -233,4 +233,11 @@
     <regex>System configuration error:</regex>
     <description>Indicates a problem with the configuration of the SecureDrop servers.</description>
   </rule>
+  <rule id="400901" level="12" >
+    <if_sid>530</if_sid>
+    <options>alert_by_email</options> <!-- force email to be sent -->
+    <match>ossec: output: 'v2_service_check'</match>
+    <regex>HiddenServiceVersion 2</regex>
+    <description>v2 onion services are still enabled. Support for v2 onion services is deprecated and will be removed starting in February 2021. To preserve access to SecureDrop, you must migrate to v3 onion services: https://securedrop.org/v2-onion-eol</description>
+  </rule>
 </group>
