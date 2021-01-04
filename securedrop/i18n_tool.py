@@ -56,6 +56,7 @@ class I18NTool:
         'sk': {'name': 'Slovak', 'desktop': 'sk', },
         'sv': {'name': 'Swedish', 'desktop': 'sv', },
         'tr': {'name': 'Turkish', 'desktop': 'tr', },
+        'zh_Hans': {'name': 'Chinese, Simplified', 'desktop': 'zh_Hans', },
         'zh_Hant': {'name': 'Chinese, Traditional', 'desktop': 'zh_Hant', },
     }
     release_tag_re = re.compile(r"^\d+\.\d+\.\d+$")
