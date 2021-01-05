@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import configparser
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Any
 from typing import Iterator
 
 import pretty_bad_protocol as gnupg
 import logging
 
-import py
 from flask import Flask
 from hypothesis import settings
 import os
@@ -84,42 +85,53 @@ def setUpTearDown():
     _cleanup_test_securedrop_dataroot(original_config)
 
 
+@pytest.fixture(scope="session")
+def gpg_key_dir() -> Iterator[Path]:
+    """Set up the journalist test key in GPG and the parent folder.
+
+    This fixture takes about 2s to complete hence we use the "session" scope to only run it once.
+    """
+    with TemporaryDirectory() as tmp_gpg_dir_name:
+        tmp_gpg_dir = Path(tmp_gpg_dir_name)
+
+        # GPG 2.1+ requires gpg-agent, see #4013
+        gpg_agent_config = tmp_gpg_dir / "gpg-agent.conf"
+        gpg_agent_config.write_text("allow-loopback-pinentry")
+
+        # Import the test key in GPG
+        gpg = gnupg.GPG("gpg2", homedir=str(tmp_gpg_dir))
+        test_keys_dir = Path(__file__).parent / "files"
+        for ext in ["sec", "pub"]:
+            key_file = test_keys_dir / "test_journalist_key.{}".format(ext)
+            gpg.import_keys(key_file.read_text())
+
+        yield tmp_gpg_dir
+
+
 @pytest.fixture(scope='function')
-def config(tmpdir: py.path.local) -> SDConfig:
-    '''Clone the module so we can modify it per test.'''
+def config(gpg_key_dir: Path) -> Iterator[SDConfig]:
+    config = SDConfig()
+    config.GPG_KEY_DIR = str(gpg_key_dir)
 
-    cnf = SDConfig()
+    # Setup the filesystem for the application
+    with TemporaryDirectory() as data_dir_name:
+        data_dir = Path(data_dir_name)
+        config.SECUREDROP_DATA_ROOT = str(data_dir)
 
-    data = tmpdir.mkdir('data')
-    keys = data.mkdir('keys')
-    os.chmod(str(keys), 0o700)
-    store = data.mkdir('store')
-    tmp = data.mkdir('tmp')
-    sqlite = data.join('db.sqlite')
+        store_dir = data_dir / "store"
+        store_dir.mkdir()
+        config.STORE_DIR = str(store_dir)
 
-    # GPG 2.1+ requires gpg-agent, see #4013
-    gpg_agent_config = str(keys.join('gpg-agent.conf'))
-    with open(gpg_agent_config, 'w+') as f:
-        f.write('allow-loopback-pinentry')
+        tmp_dir = data_dir / "tmp"
+        tmp_dir.mkdir()
+        config.TEMP_DIR = str(tmp_dir)
 
-    gpg = gnupg.GPG('gpg2', homedir=str(keys))
-    for ext in ['sec', 'pub']:
-        file_path = path.join(
-            path.dirname(__file__), 'files', 'test_journalist_key.{}'.format(ext)
-        )
-        with open(file_path) as f:
-            gpg.import_keys(f.read())
+        # Create the db file
+        sqlite_db_path = data_dir / "db.sqlite"
+        config.DATABASE_FILE = str(sqlite_db_path)
+        subprocess.check_call(["sqlite3", config.DATABASE_FILE, ".databases"])
 
-    cnf.SECUREDROP_DATA_ROOT = str(data)
-    cnf.GPG_KEY_DIR = str(keys)
-    cnf.STORE_DIR = str(store)
-    cnf.TEMP_DIR = str(tmp)
-    cnf.DATABASE_FILE = str(sqlite)
-
-    # create the db file
-    subprocess.check_call(['sqlite3', cnf.DATABASE_FILE, '.databases'])
-
-    return cnf
+        yield config
 
 
 @pytest.fixture(scope='function')
