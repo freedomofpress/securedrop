@@ -5,3 +5,12 @@ securedrop_kernel_packages_to_remove:
   - 'linux-image-.*generic'
 
 resolvconf_target_filepath: /etc/resolv.conf
+
+securedrop_common_packages:
+  - apt-transport-https
+  - aptitude
+  - unattended-upgrades
+  - ntp
+  - ntpdate
+  - resolvconf
+  - tmux
