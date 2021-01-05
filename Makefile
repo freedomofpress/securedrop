@@ -128,7 +128,7 @@ safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 	@echo "███ Running safety..."
 	@for req_file in `find . -type f -name '*requirements.txt'`; do \
 		echo "Checking file $$req_file" \
-		&& safety check --full-report -r $$req_file \
+		&& safety check --ignore 39252 --full-report -r $$req_file \
 		&& echo -e '\n' \
 		|| exit 1; \
 	done
