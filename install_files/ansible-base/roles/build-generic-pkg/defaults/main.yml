@@ -12,3 +12,8 @@ securedrop_app_rsync_opts:
   - "--exclude=*aths"
   - "--exclude=*.deb"
   - "--exclude=*.j2"
+
+package_name: ""
+package_dirname: "{{ package_name }}"
+package_path: "{{ role_path }}/../../../{{ package_dirname }}/"
+build_path: "{{ securedrop_generic_build_path }}/{{ package_name }}"

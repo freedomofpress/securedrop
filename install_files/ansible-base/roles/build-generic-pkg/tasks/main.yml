@@ -1,8 +1,7 @@
 ---
-- name: Reduce weird path re-usage
-  set_fact:
-    package_path: "{{ role_path }}/../../../{{ package_name }}/"
-    build_path: "{{ securedrop_generic_build_path }}/{{ package_name }}"
+- name: Ensure package name is set
+  assert:
+    that: package_name != ""
 
 - name: Ensure build directory in-place
   file:
@@ -21,8 +20,7 @@
 
 - name: Find any jinja templates
   find:
-    # No longer seeing the `package_path` variable - seems like a bug
-    paths: "{{ role_path }}/../../../{{ package_name }}/"
+    paths: "{{ package_path }}/"
     patterns: "*.j2"
     recurse: yes
   become: no
@@ -38,7 +36,8 @@
 - name: Template out any jinja files found and copy over
   template:
     src: "{{ item.path }}"
-    dest: "{{ build_path }}/{{ item.path | regex_replace('^\\/.*'+package_name, '') | regex_replace ('\\.j2$','') }}"
+    dest: "{{ build_path }}/{{ item.path | regex_replace('^\\/.*'+package_dirname, '') | regex_replace ('\\.j2$','') }}"
+    mode: "{{ '0755' if 'postinst' in item.path|basename else '0644' }}"
   with_items: "{{ jinja_files_found.files }}"
 
 - name: run bash script to build generic packages
