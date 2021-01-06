@@ -237,6 +237,20 @@ def test_unattended_upgrades_functional(host):
         assert expected_result in c.stdout
 
 
+def test_reboot_required_cron(host):
+    """
+    Unatteded-upgrades does not reboot the system if the updates don't require it.
+    However, we use daily reboots for SecureDrop to ensure memory is cleared periodically.
+    Here, we ensure that reboot-required flag is dropped twice daily to ensure the system
+    is rebooted every day at the scheduled time.
+    """
+    if host.system_info.codename != "xenial":
+        with host.sudo():
+            cronlist = host.run("crontab -l").stdout
+            cronjob = "* */12 * * * touch /var/run/reboot-required"
+            assert cronjob in cronlist
+
+
 def test_all_packages_updated(host):
     """
     Ensure a safe-upgrade has already been run, by checking that no

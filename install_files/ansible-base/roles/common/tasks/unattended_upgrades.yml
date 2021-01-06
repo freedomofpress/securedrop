@@ -1,9 +1,12 @@
 ---
-- name: Install unattended-upgrades package.
+- name: Install unattended-upgrades package and update-notifier-common
   apt:
-    name: unattended-upgrades
-    state: latest
+    name: "{{ item }}"
+    state: present
     update_cache: yes
+  with_items:
+    - unattended-upgrades
+    - update-notifier-common
   tags:
     - apt
     - unattended-upgrades
@@ -29,3 +32,12 @@
   tags:
     - apt
     - unattended-upgrades
+
+- name: Add cron job to indicate to unattended-upgrades that a reboot is required.
+  cron:
+    name: Indicate that a reboot is required at the scheduled time.
+    job: "touch /var/run/reboot-required"
+    hour: "*/12"
+  tags:
+    - cron
+    - unatted-upgrades
