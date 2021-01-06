@@ -1,9 +1,9 @@
-// Automatically upgrade packages from these (origin:archive) pairs
-Unattended-Upgrade::Allowed-Origins {
-	"${distro_id}:${distro_codename}";
-	"${distro_id}:${distro_codename}-security";
-	"${distro_id}:${distro_codename}-updates";
-	"SecureDrop:${distro_codename}";
+// Automatically upgrade packages from these (origin:archive/codename) pairs
+Unattended-Upgrade::Origins-Pattern {
+        "origin=${distro_id},archive=${distro_codename}";
+        "origin=${distro_id},archive=${distro_codename}-security";
+        "origin=${distro_id},archive=${distro_codename}-updates";
+        "origin=SecureDrop,codename=${distro_codename}";
 };
 
 // List of packages to not update (regexp are supported)
