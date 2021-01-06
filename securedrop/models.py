@@ -457,7 +457,7 @@ class Journalist(db.Model):
 
     _LEGACY_SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
-    def _scrypt_hash(self, password: str, salt: bytes) -> str:
+    def _scrypt_hash(self, password: str, salt: bytes) -> bytes:
         return scrypt.hash(str(password), salt, **self._LEGACY_SCRYPT_PARAMS)
 
     MAX_PASSWORD_LEN = 128
