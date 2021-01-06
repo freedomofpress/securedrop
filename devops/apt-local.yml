@@ -29,6 +29,7 @@
     rep_dist: "focal"
     molecule_dir: "../molecule/upgrade"
     dpkg_dir: /var/repos/debs
+    rep_origin: SecureDrop
     rep_component: main
     rep_arch: i386 amd64
     release_file: "/var/repos/base/dists/{{ rep_dist }}/Release"
@@ -45,4 +46,3 @@
         - ssl_certificate_key /etc/ssl/private/apt_freedom_press.priv
         - root "/var/repos/base"
         - location / { autoindex on; }
-
