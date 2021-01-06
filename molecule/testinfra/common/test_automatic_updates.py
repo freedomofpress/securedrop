@@ -195,7 +195,7 @@ def test_unattended_upgrades_config(host):
         assert f.is_file
         assert f.user == "root"
         assert f.mode == 0o644
-        assert f.contains("SecureDrop:${distro_codename}")
+        assert f.contains("origin=SecureDrop,codename=${distro_codename}")
 
 
 @pytest.mark.parametrize('option', [
@@ -226,8 +226,8 @@ def test_unattended_upgrades_functional(host):
         c = host.run('sudo unattended-upgrades -d')
         assert c.rc == 0
         expected_origins = (
-            "Allowed origins are: o=Ubuntu,a=focal, o=Ubuntu,a=focal-security"
-            ", o=Ubuntu,a=focal-updates, o=SecureDrop,a=focal"
+            "Allowed origins are: origin=Ubuntu,archive=focal, origin=Ubuntu,archive=focal-security"
+            ", origin=Ubuntu,archive=focal-updates, origin=SecureDrop,codename=focal"
         )
         expected_result = (
             "No packages found that can be upgraded unattended and no pending auto-removals"
