@@ -3,7 +3,6 @@ import binascii
 import datetime
 import base64
 import os
-import scrypt
 import pyotp
 import qrcode
 # Using svg because it doesn't require additional dependencies
@@ -11,6 +10,8 @@ import qrcode.image.svg
 import uuid
 from io import BytesIO
 
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.kdf import scrypt
 from flask import current_app, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer, BadData
 from jinja2 import Markup
@@ -455,10 +456,17 @@ class Journalist(db.Model):
             self.username,
             " [admin]" if self.is_admin else "")
 
-    _LEGACY_SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
-
     def _scrypt_hash(self, password: str, salt: bytes) -> bytes:
-        return scrypt.hash(str(password), salt, **self._LEGACY_SCRYPT_PARAMS)
+        backend = default_backend()
+        scrypt_instance = scrypt.Scrypt(
+            length=64,
+            salt=salt,
+            n=2**14,
+            r=8,
+            p=1,
+            backend=backend,
+        )
+        return scrypt_instance.derive(password.encode("utf-8"))
 
     MAX_PASSWORD_LEN = 128
     MIN_PASSWORD_LEN = 14

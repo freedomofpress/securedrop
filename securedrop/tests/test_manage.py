@@ -11,8 +11,8 @@ import manage
 import mock
 from management import submissions
 from models import Journalist, db
-
-from .utils import db_helper
+from passphrases import PassphraseGenerator
+from source_user import create_source_user
 
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
@@ -224,7 +224,13 @@ def test_were_there_submissions_today(source_app, config):
         args = argparse.Namespace(data_root=data_root, verbose=logging.DEBUG)
 
         count_file = os.path.join(data_root, 'submissions_today.txt')
-        source, codename = db_helper.init_source_without_keypair()
+        source_user = create_source_user(
+            db_session=db.session,
+            source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
+            source_app_crypto_util=source_app.crypto_util,
+            source_app_storage=source_app.storage,
+        )
+        source = source_user.get_db_record()
         source.last_updated = (datetime.datetime.utcnow() - datetime.timedelta(hours=24*2))
         db.session.commit()
         submissions.were_there_submissions_today(args, context)

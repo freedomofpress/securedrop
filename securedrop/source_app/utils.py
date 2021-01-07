@@ -10,16 +10,15 @@ from threading import Thread
 
 import typing
 
-import i18n
 import re
 
 from crypto_util import CryptoUtil, CryptoException
 from models import Source
-from passphrases import PassphraseGenerator, DicewarePassphrase
-from sdconfig import SDConfig
+from passphrases import DicewarePassphrase
+from source_user import SourceUser
 
 if typing.TYPE_CHECKING:
-    from typing import Optional  # noqa: F401
+    from typing import Optional
 
 
 def was_in_generate_flow() -> bool:
@@ -43,21 +42,6 @@ def valid_codename(codename: str) -> bool:
     return source is not None
 
 
-def generate_unique_codename(config: SDConfig) -> DicewarePassphrase:
-    """Generate random codenames until we get an unused one"""
-    while True:
-        passphrase = PassphraseGenerator.get_default().generate_passphrase(
-            preferred_language=i18n.get_language(config)
-        )
-        # scrypt (slow)
-        filesystem_id = current_app.crypto_util.hash_codename(passphrase)
-
-        matching_sources = Source.query.filter(
-            Source.filesystem_id == filesystem_id).all()
-        if len(matching_sources) == 0:
-            return passphrase
-
-
 def get_entropy_estimate() -> int:
     with io.open('/proc/sys/kernel/random/entropy_avail') as f:
         return int(f.read())
@@ -78,21 +62,30 @@ def async_genkey(crypto_util_: CryptoUtil,
     # We pass in the `crypto_util_` so we don't have to reference `current_app`
     # here. The app might not have a pushed context during testing which would
     # cause this asynchronous function to break.
-    crypto_util_.genkeypair(filesystem_id, codename)
 
     # Register key generation as update to the source, so sources will
     # filter to the top of the list in the journalist interface if a
     # flagged source logs in and has a key generated for them. #789
     session = sessionmaker(bind=create_engine(db_uri))()
     try:
-        source = session.query(Source).filter(
-            Source.filesystem_id == filesystem_id).one()
+        source = session.query(Source).filter(Source.filesystem_id == filesystem_id).one()
+
+        # TODO(AD): To be removed in my next PR where I will directly pass a source_user
+        #  to async_genkey()
+        source_user = SourceUser(
+            db_record=source,
+            filesystem_id=filesystem_id,
+            gpg_secret=crypto_util_.hash_codename(codename, salt=crypto_util_.scrypt_gpg_pepper)
+        )
+        crypto_util_.genkeypair(source_user)
+
         source.last_updated = datetime.utcnow()
         session.commit()
     except Exception as e:
         logging.getLogger(__name__).error(
                 "async_genkey for source (filesystem_id={}): {}"
                 .format(filesystem_id, e))
+
     session.close()
 
 

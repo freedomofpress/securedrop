@@ -27,6 +27,8 @@ from passphrases import DicewarePassphrase
 
 # monkey patch to work with Focal gnupg.
 # https://github.com/isislovecruft/python-gnupg/issues/250
+from source_user import SourceUser
+
 gnupg._parsers.Verify.TRUST_LEVELS["DECRYPTION_COMPLIANCE_MODE"] = 23
 
 # to fix GPG error #78 on production
@@ -151,6 +153,7 @@ class CryptoUtil:
 
         raise ValueError("Could not generate unique journalist designation for new source")
 
+    # TODO(AD): This will be removed in my next PR and replaced by SourceUser
     def hash_codename(self, codename: DicewarePassphrase, salt: Optional[str] = None) -> str:
         """Salts and hashes a codename using scrypt.
 
@@ -162,33 +165,14 @@ class CryptoUtil:
             salt = self.scrypt_id_pepper
         return b32encode(scrypt.hash(codename, salt, **self.scrypt_params)).decode('utf-8')
 
-    def genkeypair(self, name: str, secret: DicewarePassphrase) -> gnupg._parsers.GenKey:
-        """Generate a GPG key through batch file key generation. A source's
-        codename is salted with SCRYPT_GPG_PEPPER and hashed with scrypt to
-        provide the passphrase used to encrypt their private key. Their name
-        should be their filesystem id.
-
-        >>> if not gpg.list_keys(hash_codename('randomid')):
-        ...     genkeypair(hash_codename('randomid'), 'randomid').type
-        ... else:
-        ...     u'P'
-        u'P'
-
-        :param name: The source's filesystem id (their codename, salted
-                         with SCRYPT_ID_PEPPER, and hashed with scrypt).
-        :param secret: The source's codename.
-        :returns: a :class:`GenKey <gnupg._parser.GenKey>` object, on which
-                  the ``__str__()`` method may be called to return the
-                  generated key's fingeprint.
-
+    def genkeypair(self, source_user: SourceUser) -> gnupg._parsers.GenKey:
+        """Generate a GPG key through batch file key generation.
         """
-        _validate_name_for_diceware(name)
-        hashed_secret = self.hash_codename(secret, salt=self.scrypt_gpg_pepper)
         genkey_obj = self.gpg.gen_key(self.gpg.gen_key_input(
             key_type=self.GPG_KEY_TYPE,
             key_length=self.__gpg_key_length,
-            passphrase=hashed_secret,
-            name_email=name,
+            passphrase=source_user.gpg_secret,
+            name_email=source_user.filesystem_id,
             name_real="Source Key",
             creation_date=self.DEFAULT_KEY_CREATION_DATE.isoformat(),
             expire_date=self.DEFAULT_KEY_EXPIRATION_DATE
@@ -311,9 +295,3 @@ class CryptoUtil:
         data = self.gpg.decrypt(ciphertext, passphrase=hashed_codename).data
 
         return data.decode('utf-8')
-
-
-def _validate_name_for_diceware(name: str) -> None:
-    for char in name:
-        if char not in DICEWARE_SAFE_CHARS:
-            raise CryptoException("invalid input: {0}".format(name))

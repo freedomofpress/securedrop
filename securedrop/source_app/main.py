@@ -10,18 +10,21 @@ import werkzeug
 from flask import (Blueprint, render_template, flash, redirect, url_for, g,
                    session, current_app, request, Markup, abort)
 from flask_babel import gettext
-from sqlalchemy.exc import IntegrityError
 
+import i18n
 import store
 
 from db import db
-from models import Source, Submission, Reply, get_one_or_else
+from models import Submission, Reply, get_one_or_else
+from passphrases import PassphraseGenerator
 from sdconfig import SDConfig
 from source_app.decorators import login_required
-from source_app.utils import (logged_in, generate_unique_codename,
+from source_app.utils import (logged_in,
                               async_genkey, normalize_timestamps,
                               valid_codename, get_entropy_estimate)
 from source_app.forms import LoginForm, SubmissionForm
+from source_user import create_source_user, SourcePassphraseCollisionError, \
+    SourceDesignationCollisionError
 
 
 def make_blueprint(config: SDConfig) -> Blueprint:
@@ -41,7 +44,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                   "notification")
             return redirect(url_for('.lookup'))
 
-        codename = generate_unique_codename(config)
+        codename = PassphraseGenerator.get_default().generate_passphrase(
+            preferred_language=i18n.get_language(config)
+        )
 
         # Generate a unique id for each browser tab and associate the codename with this id.
         # This will allow retrieval of the codename displayed in the tab from which the source has
@@ -66,41 +71,25 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @view.route('/create', methods=['POST'])
     def create() -> werkzeug.Response:
-        if session.get('logged_in', False):
+        if logged_in():
             flash(gettext("You are already logged in. Please verify your codename above as it " +
                           "may differ from the one displayed on the previous page."),
                   'notification')
         else:
             tab_id = request.form['tab_id']
             codename = session['codenames'][tab_id]
-            session['codename'] = codename
-
             del session['codenames']
 
-            filesystem_id = current_app.crypto_util.hash_codename(codename)
             try:
-                source = Source(filesystem_id, current_app.crypto_util.display_id())
-            except ValueError as e:
-                current_app.logger.error(e)
-                flash(
-                    gettext("There was a temporary problem creating your account. "
-                            "Please try again."
-                            ),
-                    'error'
+                current_app.logger.info("Creating new source user...")
+                create_source_user(
+                    db_session=db.session,
+                    source_passphrase=codename,
+                    source_app_crypto_util=current_app.crypto_util,
+                    source_app_storage=current_app.storage,
                 )
-                return redirect(url_for('.index'))
-
-            db.session.add(source)
-            try:
-                db.session.commit()
-            except IntegrityError as e:
-                db.session.rollback()
-                current_app.logger.error(
-                    "Attempt to create a source with duplicate codename: %s" %
-                    (e,))
-
-                # Issue 2386: don't log in on duplicates
-                del session['codename']
+            except (SourcePassphraseCollisionError, SourceDesignationCollisionError) as e:
+                current_app.logger.error("Could not create a source: {}".format(e))
 
                 # Issue 4361: Delete 'logged_in' if it's in the session
                 try:
@@ -108,11 +97,19 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 except KeyError:
                     pass
 
-                abort(500)
-            else:
-                os.mkdir(current_app.storage.path(filesystem_id))
+                flash(
+                    gettext(
+                        "There was a temporary problem creating your account. Please try again."
+                    ),
+                    "error"
+                )
+                return redirect(url_for('.index'))
 
+            # All done - source user was successfully created
+            current_app.logger.info("New source user created")
             session['logged_in'] = True
+            session['codename'] = codename
+
         return redirect(url_for('.lookup'))
 
     @view.route('/lookup', methods=('GET',))
