@@ -21,13 +21,13 @@
     {% if g.user %}
       {% if g.show_v2_onion_eol_warning %}
       <div id="v2-onion-eol" class="alert-banner">
-        <img src="{{ url_for('static', filename='i/bang-circle.png') }}" width="20" height="20"> {{ gettext('<strong>Update Required:</strong> Your SecureDrop servers must be updated to use v3 onion services by April 30 to remain live. <a href="//securedrop.org/v2-onion-eol" rel="noreferrer">Learn More</a>') }}
+        <img src="{{ url_for('static', filename='i/bang-circle.png') }}" width="20" height="20"> {{ gettext('<strong>Update Required</strong>&nbsp;&nbsp;Your SecureDrop servers must be updated to v3 onion services by April 30 to remain live. <a href="//securedrop.org/v2-onion-eol" rel="noreferrer">Learn More</a>') }}
       </div>
       {% endif %}
 
       {% if g.show_v2_onion_migration_warning %}
       <div id="v2-complete-migration" class="alert-banner">
-        <img src="{{ url_for('static', filename='i/bang-circle.png') }}" width="20" height="20"> {{ gettext('<strong>Update Required:</strong> Steps remain to complete your onion service update. Please notifyyour admin. <a href="//securedrop.org/v2-onion-eol" rel="noreferrer">Learn More</a>') }}
+        <img src="{{ url_for('static', filename='i/bang-circle.png') }}" width="20" height="20"> {{ gettext('<strong>Update Required</strong>&nbsp;&nbsp;Steps remain to complete your onion service update. Please notify admin. <a href="//securedrop.org/v2-onion-eol" rel="noreferrer">Learn More</a>') }}
       </div>
       {% endif %}
 
