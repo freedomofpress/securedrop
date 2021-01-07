@@ -5,8 +5,6 @@ HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_ecdsa_key
 HostKey /etc/ssh/ssh_host_ed25519_key
 
-# Enforce privilege separation by creating unprivileged child process
-UsePrivilegeSeparation yes
 KeyRegenerationInterval 3600
 ServerKeyBits 4096
 
@@ -39,7 +37,7 @@ UseDNS no
 
 # Cipher selection
 
-Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes128-ctr
+Ciphers aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes128-ctr
 # Don't use SHA1 for kex
 KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
 # Don't use SHA1 for hashing, don't use encrypt-and-MAC mode
