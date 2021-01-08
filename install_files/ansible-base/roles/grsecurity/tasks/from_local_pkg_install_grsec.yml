@@ -1,0 +1,8 @@
+---
+- name: Copy locally built securedrop-grsec metapackage
+  copy:
+    src: "../../build/{{ ansible_distribution_release }}/securedrop-grsec-{{ securedrop_pkg_grsec.ver }}{{ '+focal' if securedrop_staging_install_target_distro|default('') == 'focal' else '' }}-amd64.deb"
+    dest: /root/securedrop-grsec.deb
+
+- name: Install locally built securedrop-grsec metapackage
+  command: apt-get install -y -f /root/securedrop-grsec.deb

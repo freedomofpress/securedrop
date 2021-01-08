@@ -31,6 +31,7 @@
     state: latest
   async: 500
   poll: 10
+  when: not install_local_packages|default(False)
   tags:
     - apt
     - grsec
@@ -42,6 +43,7 @@
   # Read-only task for
   changed_when: false
   register: grsec_str
+  when: ansible_distribution_release == "xenial"
   tags:
     - grsec
     - kernel
@@ -51,6 +53,7 @@
   stat:
     path: /boot/grub/grubenv
   register: grubenv_check_initial_result
+  when: ansible_distribution_release == "xenial"
   tags:
     - grsec
     - grub
@@ -63,6 +66,7 @@
   # so "changed" status can only be determined by comparing
   # checksums on that file. We'll do so in the subsequent task.
   changed_when: false
+  when: ansible_distribution_release == "xenial"
   tags:
     - grsec
     - grub
@@ -80,6 +84,7 @@
   register: grubenv_check_configured_result
   changed_when: grubenv_check_initial_result.stat.checksum !=
                 grubenv_check_configured_result.stat.checksum
+  when: ansible_distribution_release == "xenial"
   tags:
     - grsec
     - grub

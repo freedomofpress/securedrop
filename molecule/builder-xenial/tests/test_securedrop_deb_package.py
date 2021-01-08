@@ -61,12 +61,16 @@ def make_deb_paths() -> Dict[str, Path]:
     Jinja-based evaluation of the YAML files (so we can't trivially
     reuse vars in other var values, as is the case with Ansible).
     """
+    grsec_version = securedrop_test_vars["grsec_version"]
+    if SECUREDROP_TARGET_PLATFORM == "focal":
+        grsec_version = grsec_version+"+focal"
+
     substitutions = dict(
         securedrop_version=securedrop_test_vars["securedrop_version"],
         ossec_version=securedrop_test_vars["ossec_version"],
         keyring_version=securedrop_test_vars["keyring_version"],
         config_version=securedrop_test_vars["config_version"],
-        grsec_version=securedrop_test_vars["grsec_version"],
+        grsec_version=grsec_version,
         securedrop_target_platform=securedrop_test_vars["securedrop_target_platform"],
     )
 
@@ -405,10 +409,17 @@ def test_grsec_metapackage(host: Host):
 
     c = host.run("dpkg-deb --contents {}".format(deb_paths["securedrop_grsec"]))
     contents = c.stdout
+    if SECUREDROP_TARGET_PLATFORM == "xenial":
+        # Post-install kernel hook for managing PaX flags must exist.
+        assert re.search(r"^.*\./etc/kernel/postinst.d/paxctl-grub$", contents, re.M)
+        # Config file for paxctld should not be present
+        assert not re.search(r"^.*\./opt/securedrop/paxctld.conf$", contents, re.M)
+    else:
+        assert not re.search(r"^.*\./etc/kernel/postinst.d/paxctl-grub$", contents, re.M)
+        assert re.search(r"^.*\./opt/securedrop/paxctld.conf$", contents, re.M)
+
     # Custom sysctl options should be present
     assert re.search(r"^.*\./etc/sysctl.d/30-securedrop.conf$", contents, re.M)
-    # Post-install kernel hook for managing PaX flags must exist.
-    assert re.search(r"^.*\./etc/kernel/postinst.d/paxctl-grub$", contents, re.M)
 
 
 def test_control_helper_files_are_present(host: Host):

@@ -15,6 +15,11 @@
   tags:
     - grsec
 
+- include: from_local_pkg_install_grsec.yml
+  when: install_local_packages|default(False)
+  tags:
+    - grsec
+
 - include: clean_packages.yml
 
 - include: apply_grsec_lock.yml

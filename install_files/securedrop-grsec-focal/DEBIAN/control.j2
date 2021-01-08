@@ -1,0 +1,12 @@
+Package: securedrop-grsec
+Source: securedrop-grsec
+Version: {{ securedrop_pkg_grsec.ver }}+{{ ansible_distribution_release }}
+Architecture: amd64
+Maintainer: SecureDrop Team <securedrop@freedom.press>
+Depends: {{ securedrop_pkg_grsec.depends }},paxctld
+Section: admin
+Priority: optional
+Homepage: https://securedrop.org
+Description: Metapackage providing a grsecurity-patched Linux kernel for use
+ with SecureDrop. Depends on the most recently built patched kernel maintained
+ by FPF. Package also includes sysctl and PaX flags calls for GRUB.
