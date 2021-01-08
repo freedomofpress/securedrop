@@ -11,7 +11,6 @@ from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
-import i18n
 from db import db
 from html import escape
 from models import (InstanceConfig, Journalist, InvalidUsernameException,
@@ -153,7 +152,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                                         uid=new_user.id))
 
         password = PassphraseGenerator.get_default().generate_passphrase(
-            preferred_language=i18n.get_language(config)
+            preferred_language=g.localeinfo.language
         )
         return render_template("admin_add_user.html",
                                password=password,
@@ -253,7 +252,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             commit_account_changes(user)
 
         password = PassphraseGenerator.get_default().generate_passphrase(
-            preferred_language=i18n.get_language(config)
+            preferred_language=g.localeinfo.language
         )
         return render_template("edit_account.html", user=user,
                                password=password)

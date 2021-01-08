@@ -15,151 +15,222 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from flask import Flask
-from flask import request, session
-from flask_babel import Babel
-from babel import core
-
 import collections
-import os
-import re
 
-from typing import List
+from typing import Dict, List
 
-from typing import Dict
+from babel.core import (
+    Locale,
+    UnknownLocaleError,
+    get_locale_identifier,
+    negotiate_locale,
+    parse_locale,
+)
+from flask import Flask, g, request, session
+from flask_babel import Babel
 
 from sdconfig import SDConfig
 
-LOCALE_SPLIT = re.compile('(-|_)')
-LOCALES = ['en_US']
-babel = None
+
+class RequestLocaleInfo:
+    """
+    Convenience wrapper around a babel.core.Locale.
+    """
+
+    def __init__(self, locale: str):
+        self.locale = Locale.parse(locale)
+
+    def __str__(self) -> str:
+        """
+        The Babel string representation of the locale.
+        """
+        return str(self.locale)
+
+    @property
+    def text_direction(self) -> str:
+        """
+        The Babel text direction: ltr or rtl.
+
+        Used primarily to set text direction in HTML via the "dir"
+        attribute.
+        """
+        return self.locale.text_direction
+
+    @property
+    def language(self) -> str:
+        """
+        The Babel language name.
+
+        Just the language, without subtag info like region or script.
+        """
+        return self.locale.language
+
+    @property
+    def id(self) -> str:
+        """
+        The Babel string representation of the locale.
+
+        This should match the name of the directory containing its
+        translations.
+        """
+        return str(self.locale)
+
+    @property
+    def language_tag(self) -> str:
+        """
+        Returns a BCP47/RFC5646 language tag for the locale.
+
+        Language tags are used in HTTP headers and the HTML lang
+        attribute.
+        """
+        return get_locale_identifier(parse_locale(str(self.locale)), sep="-")
 
 
-class LocaleNotFound(Exception):
+def configure_babel(config: SDConfig, app: Flask) -> None:
+    """
+    Set up Flask-Babel according to the SecureDrop configuration.
+    """
+    # Tell Babel where to find our translations.
+    translations_directory = str(config.TRANSLATION_DIRS.absolute())
+    app.config["BABEL_TRANSLATION_DIRECTORIES"] = translations_directory
 
-    """Raised when the desired locale is not in the translations directory"""
-
-
-def setup_app(config: SDConfig, app: Flask) -> None:
-    global LOCALES
-    global babel
-
-    # `babel.translation_directories` is a nightmare
-    # We need to set this manually via an absolute path
-    app.config['BABEL_TRANSLATION_DIRECTORIES'] = str(config.TRANSLATION_DIRS.absolute())
-
+    # Create the app's Babel instance. Passing the app to the
+    # constructor causes the instance to attach itself to the app.
     babel = Babel(app)
-    if len(list(babel.translation_directories)) != 1:
-        raise AssertionError(
-            'Expected exactly one translation directory but got {}.'
-            .format(babel.translation_directories))
 
-    translation_directories = next(babel.translation_directories)
-    for dirname in os.listdir(translation_directories):
-        if dirname != 'messages.pot':
-            LOCALES.append(dirname)
+    # verify that Babel is only using the translations we told it about
+    if list(babel.translation_directories) != [translations_directory]:
+        raise ValueError(
+            "Babel translation directories ({}) do not match SecureDrop configuration ({})".format(
+                babel.translation_directories, [translations_directory]
+            )
+        )
 
-    LOCALES = _get_supported_locales(
-        LOCALES,
-        config.SUPPORTED_LOCALES,
-        config.DEFAULT_LOCALE,
-        translation_directories)
-
+    # register the function used to determine the locale of a request
     babel.localeselector(lambda: get_locale(config))
+
+
+def validate_locale_configuration(config: SDConfig, app: Flask) -> None:
+    """
+    Ensure that the configured locales are valid and translated.
+    """
+    if config.DEFAULT_LOCALE not in config.SUPPORTED_LOCALES:
+        raise ValueError(
+            'The default locale "{}" is not included in the set of supported locales "{}"'.format(
+                config.DEFAULT_LOCALE, config.SUPPORTED_LOCALES
+            )
+        )
+
+    translations = app.babel_instance.list_translations()
+    for locale in config.SUPPORTED_LOCALES:
+        if locale == "en_US":
+            continue
+
+        parsed = Locale.parse(locale)
+        if parsed not in translations:
+            raise ValueError(
+                'Configured locale "{}" is not in the set of translated locales "{}"'.format(
+                    parsed, translations
+                )
+            )
+
+
+LOCALES = collections.OrderedDict()  # type: collections.OrderedDict[str, str]
+
+
+def map_locale_display_names(config: SDConfig) -> None:
+    """
+    Create a map of locale identifiers to names for display.
+
+    For most of our supported languages, we only provide one
+    translation, so including the full display name is not necessary
+    to distinguish them. For languages with more than one translation,
+    like Chinese, we do need the additional detail.
+    """
+    language_locale_counts = collections.defaultdict(int)  # type: Dict[str, int]
+    for l in sorted(config.SUPPORTED_LOCALES):
+        locale = Locale.parse(l)
+        language_locale_counts[locale.language_name] += 1
+
+    locale_map = collections.OrderedDict()
+    for l in sorted(config.SUPPORTED_LOCALES):
+        locale = Locale.parse(l)
+        if language_locale_counts[locale.language_name] == 1:
+            name = locale.language_name
+        else:
+            name = locale.display_name
+        locale_map[str(locale)] = name
+
+    global LOCALES
+    LOCALES = locale_map
+
+
+def configure(config: SDConfig, app: Flask) -> None:
+    configure_babel(config, app)
+    validate_locale_configuration(config, app)
+    map_locale_display_names(config)
 
 
 def get_locale(config: SDConfig) -> str:
     """
+    Return the best supported locale for a request.
+
     Get the locale as follows, by order of precedence:
     - l request argument or session['locale']
     - browser suggested locale, from the Accept-Languages header
     - config.DEFAULT_LOCALE
-    - 'en_US'
+    """
+    # Default to any locale set in the session.
+    locale = session.get("locale")
+
+    # A valid locale specified in request.args takes precedence.
+    if request.args.get("l"):
+        negotiated = negotiate_locale([request.args["l"]], LOCALES.keys())
+        if negotiated:
+            locale = negotiated
+
+    # If the locale is not in the session or request.args, negotiate
+    # the best supported option from the browser's accepted languages.
+    if not locale:
+        locale = negotiate_locale(get_accepted_languages(), LOCALES.keys())
+
+    # Finally, fall back to the default locale if necessary.
+    return locale or config.DEFAULT_LOCALE
+
+
+def get_accepted_languages() -> List[str]:
+    """
+    Convert a request's list of accepted languages into locale identifiers.
     """
     accept_languages = []
-    for l in list(request.accept_languages.values()):
-        if '-' in l:
-            sep = '-'
-        else:
-            sep = '_'
+    for l in request.accept_languages.values():
         try:
-            accept_languages.append(str(core.Locale.parse(l, sep)))
-        except Exception:
+            parsed = Locale.parse(l, "-")
+            accept_languages.append(str(parsed))
+
+            # We only have two Chinese translations, simplified
+            # and traditional, based on script and not
+            # region. Browsers tend to send identifiers with
+            # region, e.g. zh-CN or zh-TW. Babel can generally
+            # infer the script from those, so we can fabricate a
+            # fallback entry without region, in the hope that it
+            # will match one of our translations and the site will
+            # at least be more legible at first contact than the
+            # probable default locale of English.
+            if parsed.language == "zh" and parsed.script:
+                accept_languages.append(
+                    str(Locale(language=parsed.language, script=parsed.script))
+                )
+        except (ValueError, UnknownLocaleError):
             pass
-    if 'l' in request.args:
-        if len(request.args['l']) == 0:
-            if 'locale' in session:
-                del session['locale']
-            locale = core.negotiate_locale(accept_languages, LOCALES)
-        else:
-            locale = core.negotiate_locale([request.args['l']], LOCALES)
-            session['locale'] = locale
-    else:
-        if 'locale' in session:
-            locale = session['locale']
-        else:
-            locale = core.negotiate_locale(accept_languages, LOCALES)
-
-    if locale:
-        return locale
-    else:
-        return config.DEFAULT_LOCALE
+    return accept_languages
 
 
-def get_text_direction(locale: str) -> str:
-    return core.Locale.parse(locale).text_direction
-
-
-def _get_supported_locales(locales: List[str], supported: List[str], default_locale: str,
-                           translation_directories: str) -> List[str]:
-    """Sanity checks on locales and supported locales from config.py.
-    Return the list of supported locales.
+def set_locale(config: SDConfig) -> None:
     """
-
-    if not supported:
-        return [default_locale or 'en_US']
-    unsupported = set(supported) - set(locales)
-    if unsupported:
-        raise LocaleNotFound(
-            "config.py SUPPORTED_LOCALES contains {} which is not among the "
-            "locales found in the {} directory: {}".format(
-                list(unsupported),
-                translation_directories,
-                locales))
-    if default_locale and default_locale not in supported:
-        raise LocaleNotFound("config.py SUPPORTED_LOCALES contains {} "
-                             "which does not include "
-                             "the value of DEFAULT_LOCALE '{}'".format(
-                                 supported, default_locale))
-
-    return list(supported)
-
-
-NAME_OVERRIDES = {
-    'nb_NO':  'norsk',
-}
-
-
-def get_locale2name() -> Dict[str, str]:
-    locale2name = collections.OrderedDict()
-    for l in LOCALES:
-        if l in NAME_OVERRIDES:
-            locale2name[l] = NAME_OVERRIDES[l]
-        else:
-            locale = core.Locale.parse(l)
-            locale2name[l] = locale.languages[locale.language]
-    return locale2name
-
-
-def locale_to_rfc_5646(locale: str) -> str:
-    lower = locale.lower()
-    if 'hant' in lower:
-        return 'zh-Hant'
-    elif 'hans' in lower:
-        return 'zh-Hans'
-    else:
-        return LOCALE_SPLIT.split(locale)[0]
-
-
-def get_language(config: SDConfig) -> str:
-    return get_locale(config).split('_')[0]
+    Update locale info in request and session.
+    """
+    locale = get_locale(config)
+    g.localeinfo = RequestLocaleInfo(locale)
+    session["locale"] = locale
+    g.locales = LOCALES

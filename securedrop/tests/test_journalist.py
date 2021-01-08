@@ -545,6 +545,7 @@ def test_admin_edits_user_password_session_invalidate(journalist_app,
         # Also ensure that session is now invalid.
         session.pop('expires', None)
         session.pop('csrf_token', None)
+        session.pop('locale', None)
         assert not session, session
 
 
@@ -2719,6 +2720,7 @@ def test_journalist_session_expiration(config, journalist_app, test_journo):
         # which is always present and 'csrf_token' which leaks no info)
         session.pop('expires', None)
         session.pop('csrf_token', None)
+        session.pop('locale', None)
         assert not session, session
         assert ('You have been logged out due to inactivity' in
                 resp.data.decode('utf-8'))

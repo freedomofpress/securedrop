@@ -102,7 +102,7 @@ def create_app(config: 'SDConfig') -> Flask:
     for code in default_exceptions:
         app.errorhandler(code)(_handle_http_exception)
 
-    i18n.setup_app(config, app)
+    i18n.configure(config, app)
 
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
@@ -156,10 +156,7 @@ def create_app(config: 'SDConfig') -> Flask:
         if uid:
             g.user = Journalist.query.get(uid)
 
-        g.locale = i18n.get_locale(config)
-        g.text_direction = i18n.get_text_direction(g.locale)
-        g.html_lang = i18n.locale_to_rfc_5646(g.locale)
-        g.locales = i18n.get_locale2name()
+        i18n.set_locale(config)
 
         if app.instance_config.organization_name:
             g.organization_name = app.instance_config.organization_name

@@ -334,9 +334,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             # Clear the session after we render the message so it's localized
             # If a user specified a locale, save it and restore it
-            user_locale = g.locale
             session.clear()
-            session['locale'] = user_locale
+            session['locale'] = g.localeinfo.id
 
             return render_template('logout.html')
         else:

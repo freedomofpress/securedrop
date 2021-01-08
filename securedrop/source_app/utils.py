@@ -10,7 +10,6 @@ from threading import Thread
 
 import typing
 
-import i18n
 import re
 
 from crypto_util import CryptoUtil, CryptoException
@@ -47,7 +46,7 @@ def generate_unique_codename(config: SDConfig) -> DicewarePassphrase:
     """Generate random codenames until we get an unused one"""
     while True:
         passphrase = PassphraseGenerator.get_default().generate_passphrase(
-            preferred_language=i18n.get_language(config)
+            preferred_language=g.localeinfo.language
         )
         # scrypt (slow)
         filesystem_id = current_app.crypto_util.hash_codename(passphrase)

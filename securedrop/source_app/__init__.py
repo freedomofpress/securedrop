@@ -34,6 +34,14 @@ def create_app(config: SDConfig) -> Flask:
     app.request_class = RequestThatSecuresFileUploads
     app.config.from_object(config.SOURCE_APP_FLASK_CONFIG_CLS)
 
+    i18n.configure(config, app)
+
+    @app.before_request
+    @ignore_static
+    def setup_i18n() -> None:
+        """Store i18n-related values in Flask's special g object"""
+        i18n.set_locale(config)
+
     # The default CSRF token expiration is 1 hour. Since large uploads can
     # take longer than an hour over Tor, we increase the valid window to 24h.
     app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60 * 24
@@ -71,8 +79,6 @@ def create_app(config: SDConfig) -> Flask:
     assets = Environment(app)
     app.config['assets'] = assets
 
-    i18n.setup_app(config, app)
-
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals['version'] = version.__version__
@@ -85,15 +91,6 @@ def create_app(config: SDConfig) -> Flask:
 
     for module in [main, info, api]:
         app.register_blueprint(module.make_blueprint(config))  # type: ignore
-
-    @app.before_request
-    @ignore_static
-    def setup_i18n() -> None:
-        """Store i18n-related values in Flask's special g object"""
-        g.locale = i18n.get_locale(config)
-        g.text_direction = i18n.get_text_direction(g.locale)
-        g.html_lang = i18n.locale_to_rfc_5646(g.locale)
-        g.locales = i18n.get_locale2name()
 
     @app.before_request
     @ignore_static

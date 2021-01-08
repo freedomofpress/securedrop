@@ -62,21 +62,23 @@
   list-style-type: none
   width: 100%
 
+.menu__item
+  border-bottom: 1px solid $color_grey_light
+
+.menu__item:last-of-type li
+  border-bottom: 0
+
 .menu__item a
   display: flex
   align-items: center
   width: 100%
-  padding: 2*$spacing-unit
-  border-bottom: 1px solid $color_grey_light
+  padding: $spacing-unit
   text-decoration: none
   &:hover, &:focus, &:active
     background-color: #e8e8e8
 
 .menu__item a span
   text-transform: capitalize
-
-.menu__item:last-of-type a
-  border-bottom: 0
 
 .menu__checkbox:checked ~ .menu__items
   display: flex
