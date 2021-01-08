@@ -20,8 +20,14 @@
 
     {% if g.user %}
       {% if g.show_v2_onion_eol_warning %}
-      <div id="v2-onion-eol" class="warning-banner">
-        {{ gettext('<strong>Update Required:</strong> Your SecureDrop servers are still running v2 onion services, which are being phased out for security reasons. In February 2021, v2 onion services will be disabled, and your SecureDrop servers may become unreachable. <a href="//securedrop.org/v2-onion-eol" rel="noreferrer">Learn More</a>') }}
+      <div id="v2-onion-eol" class="alert-banner">
+        <img src="{{ url_for('static', filename='i/bang-circle.png') }}" width="20" height="20"> {{ gettext('<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href="//securedrop.org/v2-onion-eol" rel="noreferrer">Learn More</a>') }}
+      </div>
+      {% endif %}
+
+      {% if g.show_v2_onion_migration_warning %}
+      <div id="v2-complete-migration" class="alert-banner">
+        <img src="{{ url_for('static', filename='i/bang-circle.png') }}" width="20" height="20"> {{ gettext('<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href="//securedrop.org/v2-onion-eol" rel="noreferrer">Learn More</a>') }}
       </div>
       {% endif %}
 

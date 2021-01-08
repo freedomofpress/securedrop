@@ -76,7 +76,8 @@ def test_user_sees_v2_eol_warning_if_only_v2_is_enabled(config, journalist_app, 
         resp = app.get(url_for('main.index'))
 
     text = resp.data.decode('utf-8')
-    assert "v2-onion-eol" in text, text
+    assert 'id="v2-onion-eol"' in text, text
+    assert 'id="v2-complete-migration"' not in text, text
 
 
 def test_user_sees_v2_eol_warning_if_both_v2_and_v3_enabled(config, journalist_app, test_journo):
@@ -91,7 +92,8 @@ def test_user_sees_v2_eol_warning_if_both_v2_and_v3_enabled(config, journalist_a
         resp = app.get(url_for('main.index'))
 
     text = resp.data.decode('utf-8')
-    assert "v2-onion-eol" in text, text
+    assert 'id="v2-onion-eol"' not in text, text
+    assert 'id="v2-complete-migration"' in text, text
 
 
 def test_user_does_not_see_v2_eol_warning_if_only_v3_enabled(config, journalist_app, test_journo):
@@ -106,22 +108,8 @@ def test_user_does_not_see_v2_eol_warning_if_only_v3_enabled(config, journalist_
         resp = app.get(url_for('main.index'))
 
     text = resp.data.decode('utf-8')
-    assert "v2-onion-eol" not in text, text
-
-
-def test_user_sees_v2_eol_warning_if_both_urls_do_not_exist(config, journalist_app, test_journo):
-    journalist_app.config.update(V2_ONION_ENABLED=False, V3_ONION_ENABLED=False)
-    with journalist_app.test_client() as app:
-        _login_user(
-            app,
-            test_journo['username'],
-            test_journo['password'],
-            test_journo['otp_secret'])
-
-        resp = app.get(url_for('main.index'))
-
-    text = resp.data.decode('utf-8')
-    assert "v2-onion-eol" in text, text
+    assert 'id="v2-onion-eol"' not in text, text
+    assert 'id="v2-complete-migration"' not in text, text
 
 
 def test_user_with_whitespace_in_username_can_login(journalist_app):

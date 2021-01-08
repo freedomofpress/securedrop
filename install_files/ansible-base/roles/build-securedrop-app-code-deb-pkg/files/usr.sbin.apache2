@@ -261,6 +261,7 @@
   /var/www/securedrop/static/i/delete_gray.png r,
   /var/www/securedrop/static/i/delete_red.png r,
   /var/www/securedrop/static/i/bang-stop.png r,
+  /var/www/securedrop/static/i/bang-circle.png r,
   /var/www/securedrop/static/i/favicon.png r,
   /var/www/securedrop/static/i/font-awesome/black/guard.svg r,
   /var/www/securedrop/static/i/font-awesome/black/times.svg r,
