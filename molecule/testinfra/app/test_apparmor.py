@@ -59,12 +59,7 @@ def test_apparmor_tor_exact_capabilities(host):
     assert str(len(tor_capabilities)) == c
 
 
-@pytest.mark.parametrize('profile', [
-    'ntpd',
-    'apache2',
-    'tcpdump',
-    'tor',
-])
+@pytest.mark.parametrize('profile', sdvars.apparmor_enforce)
 def test_apparmor_ensure_not_disabled(host, profile):
     """
     Explicitly check that enforced profiles are NOT in /etc/apparmor.d/disable
@@ -106,11 +101,10 @@ def test_apparmor_total_profiles(host):
     """ Ensure number of total profiles is sum of enforced and
         complaining profiles """
     with host.sudo():
-        total_expected = str(len(sdvars.apparmor_enforce)
-                             + len(sdvars.apparmor_complain))
+        total_expected = len(sdvars.apparmor_enforce) + len(sdvars.apparmor_complain)
         # Xenial about ~20 profiles, so let's expect
         # *at least* the sum.
-        assert host.check_output("aa-status --profiled") >= total_expected
+        assert int(host.check_output("aa-status --profiled")) >= total_expected
 
 
 def test_aastatus_unconfined(host):

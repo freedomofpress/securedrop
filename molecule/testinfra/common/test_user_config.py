@@ -96,7 +96,5 @@ def test_sudoers_tmux_env_deprecated(host):
     old setting isn't still active.
     """
 
-    admin_user = "vagrant"
-
-    f = host.file("/home/{}/.bashrc".format(admin_user))
+    f = host.file("/home/{}/.bashrc".format(sdvars.admin_user))
     assert not f.contains(r"^. \/etc\/bashrc\.securedrop_additions$")
