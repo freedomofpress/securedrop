@@ -5,7 +5,7 @@ from typing import Optional
 from typing import Type
 
 import config as _config
-from typing import List
+from typing import Set
 
 
 class SDConfig:
@@ -58,9 +58,11 @@ class SDConfig:
         self.DEFAULT_LOCALE = getattr(
             _config, "DEFAULT_LOCALE", "en_US"
         )  # type: str
-        self.SUPPORTED_LOCALES = getattr(
+        supported_locales = set(getattr(
             _config, "SUPPORTED_LOCALES", [self.DEFAULT_LOCALE]
-        )  # type: List[str]
+        ))  # type: Set[str]
+        supported_locales.add(self.DEFAULT_LOCALE)
+        self.SUPPORTED_LOCALES = sorted(list(supported_locales))
 
         translation_dirs_in_conf = getattr(_config, "TRANSLATION_DIRS", None)  # type: Optional[str]
         if translation_dirs_in_conf:

@@ -1,6 +1,6 @@
-<div class="flash important-header" dir="{{ g.text_direction }}">
+<div class="flash important-header" dir="{{ g.localeinfo.text_direction }}">
   <strong>{{ gettext('Important') }}</strong>
 </div>
-<div class="localized" dir="{{ g.text_direction }}">
+<div class="localized" dir="{{ g.localeinfo.text_direction }}">
     <p>{{ gettext('You were logged out due to inactivity. Click the <img src={icon} alt="broom icon" width="16" height="16">&nbsp;<strong>New Identity</strong> button in your Tor Browser\'s toolbar before moving on. This will clear your Tor Browser activity data on this device.').format(icon=url_for('static', filename='i/torbroom-coral.png'))  }}</p>
 </div>

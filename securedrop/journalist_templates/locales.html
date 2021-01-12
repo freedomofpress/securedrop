@@ -6,7 +6,7 @@
       <img class="menu__trigger-icon" src="/static/i/languages_globe.png" width="18" height="18">
     </div>
     <div class="menu-text-container">
-      <span class="menu__trigger-text">{{ g.locales[g.locale] }}</span>
+      <span class="menu__trigger-text">{{ g.locales[g.localeinfo.id] }}</span>
     </div>
     <div class="menu-trigger-container">
       <img class="menu__trigger-icon" src="/static/i/languages_arrow.png" width="12" height="18">
@@ -16,7 +16,7 @@
   <ul class="menu__items">
     {% for locale in g.locales %}
       <li class="menu__item">
-        {% if locale != g.locale %}
+        {% if locale != g.localeinfo.id %}
           {% set args = {} %}
           {% set _ = args.update(request.args or {}) %}
           {% set _ = args.update(request.view_args or {}) %}

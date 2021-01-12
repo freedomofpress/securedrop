@@ -26,6 +26,7 @@ import i18n_tool
 import journalist_app as journalist_app_module
 import pytest
 import source_app
+from babel.core import Locale, UnknownLocaleError
 from flask import render_template
 from flask import render_template_string
 from flask import request
@@ -54,7 +55,7 @@ def verify_i18n(app):
             {{ gettext('code hello i18n') }}
             ''').strip() == not_translated
 
-    for lang in ('fr_FR', 'fr', 'fr-FR'):
+    for lang in ('fr', 'fr-FR'):
         headers = Headers([('Accept-Language', lang)])
         with app.test_request_context(headers=headers):
             assert not hasattr(request, 'babel_locale')
@@ -96,45 +97,57 @@ def verify_i18n(app):
             ''').strip() == translated_ar
 
     with app.test_client() as c:
+
+        # a request without Accept-Language or "l" argument gets the
+        # default locale
         page = c.get('/login')
-        assert session.get('locale') is None
+        assert session.get('locale') == 'en_US'
         assert not_translated == gettext(not_translated)
         assert b'?l=fr_FR' in page.data
         assert b'?l=en_US' not in page.data
 
-        page = c.get('/login?l=fr_FR',
-                     headers=Headers([('Accept-Language', 'en_US')]))
+        # the session locale should change when the "l" request
+        # argument is present and valid
+        page = c.get('/login?l=fr_FR', headers=Headers([('Accept-Language', 'en_US')]))
         assert session.get('locale') == 'fr_FR'
         assert translated_fr == gettext(not_translated)
         assert b'?l=fr_FR' not in page.data
         assert b'?l=en_US' in page.data
 
+        # confirm that the chosen locale, now in the session, is used
+        # despite not matching the client's Accept-Language header
         c.get('/', headers=Headers([('Accept-Language', 'en_US')]))
         assert session.get('locale') == 'fr_FR'
         assert translated_fr == gettext(not_translated)
 
+        # the session locale should not change if an empty "l" request
+        # argument is sent
         c.get('/?l=')
-        assert session.get('locale') is None
-        assert not_translated == gettext(not_translated)
+        assert session.get('locale') == 'fr_FR'
+        assert translated_fr == gettext(not_translated)
 
+        # the session locale should not change if no "l" request
+        # argument is sent
+        c.get('/')
+        assert session.get('locale') == 'fr_FR'
+        assert translated_fr == gettext(not_translated)
+
+        # sending an invalid locale identifier should not change the
+        # session locale
+        c.get('/?l=YY_ZZ')
+        assert session.get('locale') == 'fr_FR'
+        assert translated_fr == gettext(not_translated)
+
+        # requesting a valid locale via the request argument "l"
+        # should change the session locale
         c.get('/?l=en_US', headers=Headers([('Accept-Language', 'fr_FR')]))
         assert session.get('locale') == 'en_US'
         assert not_translated == gettext(not_translated)
 
+        # again, the session locale should stick even if not included
+        # in the client's Accept-Language header
         c.get('/', headers=Headers([('Accept-Language', 'fr_FR')]))
         assert session.get('locale') == 'en_US'
-        assert not_translated == gettext(not_translated)
-
-        c.get('/?l=', headers=Headers([('Accept-Language', 'fr_FR')]))
-        assert session.get('locale') is None
-        assert translated_fr == gettext(not_translated)
-
-        c.get('/')
-        assert session.get('locale') is None
-        assert not_translated == gettext(not_translated)
-
-        c.get('/?l=YY_ZZ')
-        assert session.get('locale') is None
         assert not_translated == gettext(not_translated)
 
     with app.test_request_context():
@@ -148,30 +161,6 @@ def verify_i18n(app):
         c.get('/?l=ar')
         base = render_template('base.html')
         assert 'dir="rtl"' in base
-
-    # the canonical locale name is norsk bokmål but
-    # this is overriden with just norsk by i18n.NAME_OVERRIDES
-    with app.test_client() as c:
-        c.get('/?l=nb_NO')
-        base = render_template('base.html')
-        assert 'norsk' in base
-        assert 'norsk bo' not in base
-
-
-def test_get_supported_locales():
-    locales = ['en_US', 'fr_FR']
-    assert ['en_US'] == i18n._get_supported_locales(
-        locales, None, None, None)
-    locales = ['en_US', 'fr_FR']
-    supported = ['en_US', 'not_found']
-    with pytest.raises(i18n.LocaleNotFound) as excinfo:
-        i18n._get_supported_locales(locales, supported, None, None)
-    assert "contains ['not_found']" in str(excinfo.value)
-    supported = ['fr_FR']
-    locale = 'not_found'
-    with pytest.raises(i18n.LocaleNotFound) as excinfo:
-        i18n._get_supported_locales(locales, supported, locale, None)
-    assert "DEFAULT_LOCALE 'not_found'" in str(excinfo.value)
 
 
 # Grab the journalist_app fixture to trigger creation of resources
@@ -197,7 +186,7 @@ def test_i18n(journalist_app, config):
     pybabel('init', '-i', pot, '-d', config.TEMP_DIR, '-l', 'en_US')
 
     for (l, s) in (('fr_FR', 'code bonjour'),
-                   ('zh_Hans_CN', 'code chinese'),
+                   ('zh_Hans', 'code chinese'),
                    ('ar', 'code arabic'),
                    ('nb_NO', 'code norwegian'),
                    ('es_ES', 'code spanish')):
@@ -215,8 +204,7 @@ def test_i18n(journalist_app, config):
     ])
 
     fake_config = SDConfig()
-    fake_config.SUPPORTED_LOCALES = [
-        'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
+    fake_config.SUPPORTED_LOCALES = ['ar', 'en_US', 'fr_FR', 'nb_NO', 'zh_Hans']
     fake_config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
 
     # Use our config (and not an app fixture) because the i18n module
@@ -225,16 +213,42 @@ def test_i18n(journalist_app, config):
                 source_app.create_app(fake_config)):
         with app.app_context():
             db.create_all()
-        assert i18n.LOCALES == fake_config.SUPPORTED_LOCALES
+        assert list(i18n.LOCALES.keys()) == fake_config.SUPPORTED_LOCALES
         verify_i18n(app)
 
 
-def test_locale_to_rfc_5646():
-    assert i18n.locale_to_rfc_5646('en') == 'en'
-    assert i18n.locale_to_rfc_5646('en-US') == 'en'
-    assert i18n.locale_to_rfc_5646('en_US') == 'en'
-    assert i18n.locale_to_rfc_5646('en-us') == 'en'
-    assert i18n.locale_to_rfc_5646('zh-hant') == 'zh-Hant'
+def test_supported_locales(config):
+    fake_config = SDConfig()
+
+    # Check that an invalid locale raises an error during app
+    # configuration.
+    fake_config.SUPPORTED_LOCALES = ['en_US', 'yy_ZZ']
+    fake_config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
+
+    with pytest.raises(UnknownLocaleError):
+        journalist_app_module.create_app(fake_config)
+
+    with pytest.raises(UnknownLocaleError):
+        source_app.create_app(fake_config)
+
+    # Check that a valid but unsupported locale raises an error during
+    # app configuration.
+    fake_config.SUPPORTED_LOCALES = ['en_US', 'wae_CH']
+    fake_config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
+
+    with pytest.raises(ValueError, match="not in the set of translated locales"):
+        journalist_app_module.create_app(fake_config)
+
+    with pytest.raises(ValueError, match="not in the set of translated locales"):
+        source_app.create_app(fake_config)
+
+
+def test_language_tags():
+    assert i18n.RequestLocaleInfo(Locale.parse('en')).language_tag == 'en'
+    assert i18n.RequestLocaleInfo(Locale.parse('en-US', sep="-")).language_tag == 'en-US'
+    assert i18n.RequestLocaleInfo(Locale.parse('en-us', sep="-")).language_tag == 'en-US'
+    assert i18n.RequestLocaleInfo(Locale.parse('en_US')).language_tag == 'en-US'
+    assert i18n.RequestLocaleInfo(Locale.parse('zh_Hant')).language_tag == 'zh-Hant'
 
 
 # Grab the journalist_app fixture to trigger creation of resources
@@ -245,17 +259,17 @@ def test_html_en_lang_correct(journalist_app, config):
     app = journalist_app_module.create_app(config).test_client()
     resp = app.get('/', follow_redirects=True)
     html = resp.data.decode('utf-8')
-    assert re.compile('<html .*lang="en".*>').search(html), html
+    assert re.compile('<html lang="en-US".*>').search(html), html
 
     app = source_app.create_app(config).test_client()
     resp = app.get('/', follow_redirects=True)
     html = resp.data.decode('utf-8')
-    assert re.compile('<html .*lang="en".*>').search(html), html
+    assert re.compile('<html lang="en-US".*>').search(html), html
 
     # check '/generate' too because '/' uses a different template
     resp = app.get('/generate', follow_redirects=True)
     html = resp.data.decode('utf-8')
-    assert re.compile('<html .*lang="en".*>').search(html), html
+    assert re.compile('<html lang="en-US".*>').search(html), html
 
 
 # Grab the journalist_app fixture to trigger creation of resources
@@ -269,14 +283,47 @@ def test_html_fr_lang_correct(journalist_app, config):
     app = journalist_app_module.create_app(config).test_client()
     resp = app.get('/?l=fr_FR', follow_redirects=True)
     html = resp.data.decode('utf-8')
-    assert re.compile('<html .*lang="fr".*>').search(html), html
+    assert re.compile('<html lang="fr-FR".*>').search(html), html
 
     app = source_app.create_app(config).test_client()
     resp = app.get('/?l=fr_FR', follow_redirects=True)
     html = resp.data.decode('utf-8')
-    assert re.compile('<html .*lang="fr".*>').search(html), html
+    assert re.compile('<html lang="fr-FR".*>').search(html), html
 
     # check '/generate' too because '/' uses a different template
     resp = app.get('/generate?l=fr_FR', follow_redirects=True)
     html = resp.data.decode('utf-8')
-    assert re.compile('<html .*lang="fr".*>').search(html), html
+    assert re.compile('<html lang="fr-FR".*>').search(html), html
+
+
+# Grab the journalist_app fixture to trigger creation of resources
+def test_html_attributes(journalist_app, config):
+    """Check that HTML lang and dir attributes respect locale."""
+
+    # Then delete it because using it won't test what we want
+    del journalist_app
+
+    config.SUPPORTED_LOCALES = ['ar', 'en_US']
+    app = journalist_app_module.create_app(config).test_client()
+    resp = app.get('/?l=ar', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert '<html lang="ar" dir="rtl">' in html
+    resp = app.get('/?l=en_US', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert '<html lang="en-US" dir="ltr">' in html
+
+    app = source_app.create_app(config).test_client()
+    resp = app.get('/?l=ar', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert '<html lang="ar" dir="rtl">' in html
+    resp = app.get('/?l=en_US', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert '<html lang="en-US" dir="ltr">' in html
+
+    # check '/generate' too because '/' uses a different template
+    resp = app.get('/generate?l=ar', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert '<html lang="ar" dir="rtl">' in html
+    resp = app.get('/generate?l=en_US', follow_redirects=True)
+    html = resp.data.decode('utf-8')
+    assert '<html lang="en-US" dir="ltr">' in html
