@@ -2,7 +2,46 @@
 
 ## 1.7.0~rc1
 
+### Web Applications
 
+* Add Simplified Chinese to our supported languages (#5069)
+* Enhance UI for account creation (#5574)
+* Improve reminder on Journalist Interface to enable v3 onion services (#5679)
+* Prevent unhandled exception in Journalist Interface when deleting a file (#5549)
+* Prevent unhandled exception and add error message in Journalist Interface when download fails due to missing file (#5573)
+* No longer show session expiration on source interface when not logged in  (#5582)
+* Allow admins to set org name on Journalist Interface (#5629)
+* Ensure Tor Browser warning appears on Source Interface for MacOS users (#5647)
+* Prevent unhandled exception when submitting a password quickly multiple times (#5618)
+* No longer call the SecureDrop Submission key a journalist key on Source Interface (#5651)
+* Update navigational symbol to migrate to previous page on Journalist Interface (#5641)
+
+### Operations
+
+* Prepare for upcoming support for Ubuntu 20.04 (Focal) (#5527, #5529, #5538, #5544, #5556, #5559, #5581, #5602, #5604, #5608, #5614, #5615 #5619, #5669, #5674, #5691)
+* Update Tor to 0.4.4.6 (#5648)
+* Add daily OSSEC alert if v2 onion services are enabled (#5673, #5682)
+* OSSEC alert improvements and fixes (#5665, #5330)
+* Fix failure during `securedrop-admin install` when Ansible config is stale (#4366)
+* Update dependencies (#5585, #5612, #5623, #5671)
+
+### Translations
+
+* Allow more strings to be translated (#5567)
+* Ensure translators get credit for translations (#5571)
+
+### Developer-Only
+
+* Migrate documentation to new repository (#5520, #5583, #5587)
+* Add more type annotations (#5531, #5532, #5533, #5534, #5536, #5547, #5597, #5589, #5600, #5616)
+* Continuous integration updates (#5542, #5550, #5658)
+* Add file attachments and seen records when generating test data (#5580, #5645)
+* Improve functional tests (#5590, #5610, #5621, #5631, #5634)
+* Improve test coverage (#5632, #5644, #5657, #5662)
+* Refactor and improve testing during development (#5558, #5575, #5686, #5683, #5595)
+* Update Xenial builder image (#5561) and vagrant boxes for SecureDrop 1.6.0 (#5569)
+* Fix SSH connection failure in Molecule upgrade script (#5654)
+* Replace FontAwesome glyphs with PNGs (#5593, #5625, #5628)
 
 ## 1.6.0
 
