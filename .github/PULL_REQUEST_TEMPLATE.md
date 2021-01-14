@@ -34,6 +34,10 @@ Any special considerations for deployment? Consider both:
 
 - [ ] [Configuration tests](https://docs.securedrop.org/en/latest/development/testing_configuration_tests.html) pass
 
+### If you added or removed a file deployed with the application:
+
+- [ ] I have updated AppArmor rules to include the change
+
 ### If you made non-trivial code changes:
 
 - [ ] I have written a test plan and validated it for this PR
