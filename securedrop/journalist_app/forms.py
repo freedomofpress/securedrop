@@ -28,7 +28,7 @@ def minimum_length_validation(form: FlaskForm, field: Field) -> None:
     if len(field.data) < Journalist.MIN_USERNAME_LEN:
         raise ValidationError(
             ngettext(
-                'Must be at least {num} characters long.',
+                'Must be at least {num} character long.',
                 'Must be at least {num} characters long.',
                 Journalist.MIN_USERNAME_LEN
             ).format(num=Journalist.MIN_USERNAME_LEN)
@@ -39,7 +39,7 @@ def name_length_validation(form: FlaskForm, field: Field) -> None:
     if len(field.data) > Journalist.MAX_NAME_LEN:
         raise ValidationError(
             ngettext(
-                'Cannot be longer than {num} characters.',
+                'Cannot be longer than {num} character.',
                 'Cannot be longer than {num} characters.',
                 Journalist.MAX_NAME_LEN
             ).format(num=Journalist.MAX_NAME_LEN)
@@ -50,7 +50,7 @@ def check_orgname(form: FlaskForm, field: Field) -> None:
     if len(field.data) > InstanceConfig.MAX_ORG_NAME_LEN:
         raise ValidationError(
             ngettext(
-                'Cannot be longer than {num} characters.',
+                'Cannot be longer than {num} character.',
                 'Cannot be longer than {num} characters.',
                 InstanceConfig.MAX_ORG_NAME_LEN
             ).format(num=InstanceConfig.MAX_ORG_NAME_LEN)
