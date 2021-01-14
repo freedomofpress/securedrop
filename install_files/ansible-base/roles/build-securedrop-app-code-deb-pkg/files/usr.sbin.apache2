@@ -336,7 +336,6 @@
   /var/www/securedrop/translations/ r,
   /var/www/securedrop/translations/** r,
   /var/www/securedrop/version.py r,
-  /var/www/securedrop/wordlist r,
   /var/www/securedrop/wordlists/ r,
   /var/www/securedrop/wordlists/** r,
   /var/www/securedrop/worker.py r,
