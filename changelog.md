@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.0~rc2
+
+* Fixup commits for RC1 changes:
+  - AppArmor rule fixes (#5705)
+  - String pluralization improvements (#5707)
+
 ## 1.7.0~rc1
 
 ### Web Applications
