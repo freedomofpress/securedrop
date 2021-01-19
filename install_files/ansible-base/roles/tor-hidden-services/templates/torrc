@@ -16,7 +16,7 @@ HiddenServicePort 80 127.0.0.1:8080
 HiddenServiceAuthorizeClient stealth journalist
 {% endif %}
 
-{% if enable_ssh_over_tor %}
+{% if enable_ssh_over_tor and v2_onion_services %}
 HiddenServiceDir /var/lib/tor/services/ssh
 HiddenServiceVersion 2
 HiddenServicePort 22 127.0.0.1:22
