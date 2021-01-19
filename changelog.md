@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.0~rc3
+
+* Disable v2 ssh ATHS when v2 onion services are disabled
+
 ## 1.7.0~rc2
 
 * Fixup commits for RC1 changes:
