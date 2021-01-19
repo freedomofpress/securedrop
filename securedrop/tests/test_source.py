@@ -7,6 +7,8 @@ import os
 import shutil
 
 from io import BytesIO, StringIO
+from pathlib import Path
+
 from flask import session, escape, url_for, g, request
 from mock import patch, ANY
 
@@ -21,7 +23,7 @@ from journalist_app.utils import delete_collection
 from models import InstanceConfig, Source, Reply
 from source_app import main as source_app_main
 from source_app import api as source_app_api
-from .utils.db_helper import new_codename
+from .utils.db_helper import new_codename, submit
 from .utils.instrument import InstrumentedApp
 from sdconfig import config
 
@@ -650,6 +652,71 @@ def test_login_with_overly_long_codename(source_app):
                     .format(PassphraseGenerator.MAX_PASSPHRASE_LENGTH)) in text
             assert not mock_hash_codename.called, \
                 "Called hash_codename for codename w/ invalid length"
+
+
+def test_normalize_timestamps(source_app):
+    """
+    Check function of source_app.utils.normalize_timestamps.
+
+    All submissions for a source should have the same timestamp. Any
+    existing submissions' files that did not exist at the time of a
+    new submission should not be created by normalize_timestamps.
+    """
+    with source_app.test_client() as app:
+        # create a source
+        source, codename = utils.db_helper.init_source()
+
+        # create one submission
+        first_submission = submit(source, 1)[0]
+
+        # delete the submission's file from the store
+        first_submission_path = Path(
+            source_app.storage.path(source.filesystem_id, first_submission.filename)
+        )
+        first_submission_path.unlink()
+        assert not first_submission_path.exists()
+
+        # log in as the source
+        resp = app.post(url_for('main.login'),
+                        data=dict(codename=codename),
+                        follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Submit Files" in text
+        assert session['logged_in'] is True
+
+        # submit another message
+        resp = _dummy_submission(app)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Thanks! We received your message" in text
+
+        # sleep to ensure timestamps would differ
+        time.sleep(1)
+
+        # submit another message
+        resp = _dummy_submission(app)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Thanks! We received your message" in text
+
+        # only two of the source's three submissions should have files in the store
+        assert 3 == len(source.submissions)
+        submission_paths = [
+            Path(source_app.storage.path(source.filesystem_id, s.filename))
+            for s in source.submissions
+        ]
+        extant_paths = [p for p in submission_paths if p.exists()]
+        assert 2 == len(extant_paths)
+
+        # verify that the deleted file has not been recreated
+        assert not first_submission_path.exists()
+        assert first_submission_path not in extant_paths
+
+        # and the timestamps of all existing files should match exactly
+        assert extant_paths[0].stat().st_atime_ns == extant_paths[1].stat().st_atime_ns
+        assert extant_paths[0].stat().st_ctime_ns == extant_paths[1].stat().st_ctime_ns
+        assert extant_paths[0].stat().st_mtime_ns == extant_paths[1].stat().st_mtime_ns
 
 
 def test_failed_normalize_timestamps_logs_warning(source_app):
