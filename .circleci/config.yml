@@ -225,9 +225,9 @@ jobs:
 
   admin-tests:
     docker:
-      - image: gcr.io/cloud-builders/docker
+      - image: cimg/python:3.7
     steps:
-      - run: apt-get install -y make jq
+      - run: sudo apt update && sudo apt-get install -y make jq
       - checkout
       - setup_remote_docker
       - run:
@@ -239,9 +239,9 @@ jobs:
 
   fetch-tor-debs:
     docker:
-      - image: gcr.io/cloud-builders/docker
+      - image: cimg/python:3.7
     steps:
-      - run: apt-get install -y make virtualenv python3-pip enchant jq
+      - run: sudo apt-get update && sudo apt-get install -y make virtualenv python3-pip enchant jq rsync
       - checkout
       - setup_remote_docker
       - run:
@@ -369,12 +369,12 @@ jobs:
 
   deb-tests:
     docker:
-      - image: gcr.io/cloud-builders/docker
+      - image: cimg/python:3.7
     environment:
       LC_ALL: C.UTF-8
       LANG: C.UTF-8
     steps:
-      - run: apt-get install -y make virtualenv enchant jq python3-dev build-essential
+      - run: sudo apt-get update && sudo apt-get install -y make virtualenv enchant jq python3-dev build-essential rsync
       - checkout
       - setup_remote_docker
       - run:
@@ -386,12 +386,12 @@ jobs:
 
   deb-tests-focal:
     docker:
-      - image: gcr.io/cloud-builders/docker
+      - image: cimg/python:3.7
     environment:
       LC_ALL: C.UTF-8
       LANG: C.UTF-8
     steps:
-      - run: apt-get install -y make virtualenv enchant jq python3-dev build-essential
+      - run: sudo apt-get update && sudo apt-get install -y make virtualenv enchant jq python3-dev build-essential rsync
       - checkout
       - setup_remote_docker
       - run:
