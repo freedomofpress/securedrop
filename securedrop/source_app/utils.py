@@ -97,15 +97,15 @@ def async_genkey(crypto_util_: CryptoUtil,
 
 def normalize_timestamps(filesystem_id: str) -> None:
     """
-    Update the timestamps on all of the source's submissions to match that of
-    the latest submission. This minimizes metadata that could be useful to
-    investigators. See #301.
+    Update the timestamps on all of the source's submissions. This
+    minimizes metadata that could be useful to investigators. See
+    #301.
     """
     sub_paths = [current_app.storage.path(filesystem_id, submission.filename)
                  for submission in g.source.submissions]
     if len(sub_paths) > 1:
-        args = ["touch"]
-        args.extend(sub_paths[:-1])
+        args = ["touch", "--no-create"]
+        args.extend(sub_paths)
         rc = subprocess.call(args)
         if rc != 0:
             current_app.logger.warning(
