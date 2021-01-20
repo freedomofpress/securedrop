@@ -153,7 +153,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @view.route('/bulk', methods=('POST',))
     def bulk() -> Union[str, werkzeug.Response]:
         action = request.form['action']
-
+        error_redirect = url_for('col.col', filesystem_id=g.filesystem_id)
         doc_names_selected = request.form.getlist('doc_names_selected')
         selected_docs = [doc for doc in g.source.collection
                          if doc.filename in doc_names_selected]
@@ -164,11 +164,13 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             elif action in ('delete', 'confirm_delete'):
                 flash(gettext("No collections selected for deletion."),
                       "error")
-            return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
+            return redirect(error_redirect)
 
         if action == 'download':
             source = get_source(g.filesystem_id)
-            return download(source.journalist_filename, selected_docs)
+            return download(
+                source.journalist_filename, selected_docs, on_error_redirect=error_redirect
+            )
         elif action == 'delete':
             return bulk_delete(g.filesystem_id, selected_docs)
         elif action == 'confirm_delete':
