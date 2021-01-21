@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.0~rc4
+
+* Update v2 deprecation warning date from February to March
+* Prevent unhandled exception when download fails due to missing file (#5733)
+* Hide v2 deprecation warning when only v3 is enabled (#5726)
+* No longer create an empty submission file if the original file was deleted from the file system (#5724)
+
 ## 1.7.0~rc3
 
 * Disable v2 ssh ATHS when v2 onion services are disabled
