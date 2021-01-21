@@ -434,7 +434,7 @@ class SiteConfig:
              lambda config: True),
             ('v2_onion_services', self.check_for_v2_onion(), bool,
              'WARNING: For security reasons, support for v2 onion services ' +
-             'will be removed in February 2021. ' +
+             'will be removed in March 2021. ' +
              'Do you want to enable v2 onion services?',
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes',
