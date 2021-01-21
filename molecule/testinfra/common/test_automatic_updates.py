@@ -118,13 +118,16 @@ def test_cron_apt_delete_vanilla_kernels(host):
     """
 
     f = host.file('/etc/cron-apt/action.d/9-remove')
-    assert f.is_file
-    assert f.user == "root"
-    assert f.mode == 0o644
-    command = str('remove -y'
-                  ' linux-image-generic-lts-xenial linux-image-.*generic'
-                  ' -o quiet=2')
-    assert f.contains('^{}$'.format(command))
+    if host.system_info.codename == "xenial":
+        assert f.is_file
+        assert f.user == "root"
+        assert f.mode == 0o644
+        command = str('remove -y'
+                      ' linux-image-generic-lts-xenial linux-image-.*generic'
+                      ' -o quiet=2')
+        assert f.contains('^{}$'.format(command))
+    else:
+        assert not f.exists
 
 
 def test_cron_apt_repo_config_upgrade(host):
@@ -198,6 +201,20 @@ def test_unattended_upgrades_config(host):
         assert f.contains("origin=SecureDrop,codename=${distro_codename}")
 
 
+def test_unattended_securedrop_specific(host):
+    """
+    Ensures the 80securedrop config is correct only under Ubuntu Focal
+    """
+    f = host.file('/etc/apt/apt.conf.d/80securedrop')
+    if host.system_info.codename == "xenial":
+        assert not f.exists
+    else:
+        assert f.is_file
+        assert f.user == "root"
+        assert f.mode == 0o644
+        assert f.contains("Automatic-Reboot-Time")
+
+
 @pytest.mark.parametrize('option', [
   'APT::Periodic::Update-Package-Lists "1";',
   'APT::Periodic::Unattended-Upgrade "1";',
@@ -244,11 +261,17 @@ def test_reboot_required_cron(host):
     Here, we ensure that reboot-required flag is dropped twice daily to ensure the system
     is rebooted every day at the scheduled time.
     """
-    if host.system_info.codename != "xenial":
-        with host.sudo():
-            cronlist = host.run("crontab -l").stdout
-            cronjob = "* */12 * * * touch /var/run/reboot-required"
-            assert cronjob in cronlist
+    f = host.file('/etc/cron.d/reboot-flag')
+
+    if host.system_info.codename == "xenial":
+        assert not f.exists
+    else:
+        assert f.is_file
+        assert f.user == "root"
+        assert f.mode == 0o644
+
+        line = '^{}$'.format(re.escape("* */12 * * * touch /var/run/reboot-required"))
+        assert f.contains(line)
 
 
 def test_all_packages_updated(host):

@@ -543,10 +543,18 @@ def test_config_package_contains_expected_files(host: Host) -> None:
     Inspect the package contents to ensure all config files are included in
     the package.
     """
-    wanted_files = [
-        "/etc/cron-apt/action.d/9-remove",
-        "/etc/profile.d/securedrop_additions.sh",
-    ]
+    if SECUREDROP_TARGET_DISTRIBUTION == "xenial":
+        wanted_files = [
+            "/etc/cron-apt/action.d/9-remove",
+            "/etc/profile.d/securedrop_additions.sh",
+        ]
+    else:
+        wanted_files = [
+            "/etc/profile.d/securedrop_additions.sh",
+            "/opt/securedrop/20auto-upgrades",
+            "/opt/securedrop/50unattended-upgrades",
+            "/opt/securedrop/reboot-flag",
+        ]
     c = host.run("dpkg-deb --contents {}".format(deb_paths["securedrop_config"]))
     for wanted_file in wanted_files:
         assert re.search(

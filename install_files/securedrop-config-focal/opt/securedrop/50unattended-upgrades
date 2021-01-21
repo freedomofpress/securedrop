@@ -49,7 +49,11 @@ Unattended-Upgrade::Automatic-Reboot "true";
 // If automatic reboot is enabled and needed, reboot at the specific
 // time instead of immediately
 //  Default: "now"
-Unattended-Upgrade::Automatic-Reboot-Time "{{ daily_reboot_time }}:00";
+// This is set in a template in the common role under the file 80securedrop
+
+// Automatically reboot even if there are users currently logged in
+// when Unattended-Upgrade::Automatic-Reboot is set to true
+Unattended-Upgrade::Automatic-Reboot-WithUsers "true";
 
 // Use apt bandwidth limit feature, this example limits the download
 // speed to 70kb/sec
