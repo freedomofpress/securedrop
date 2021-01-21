@@ -65,11 +65,15 @@ def make_deb_paths() -> Dict[str, Path]:
     if SECUREDROP_TARGET_PLATFORM == "focal":
         grsec_version = grsec_version+"+focal"
 
+    config_version = securedrop_test_vars["config_version"]
+    if SECUREDROP_TARGET_PLATFORM == "focal":
+        config_version = config_version+"+focal"
+
     substitutions = dict(
         securedrop_version=securedrop_test_vars["securedrop_version"],
         ossec_version=securedrop_test_vars["ossec_version"],
         keyring_version=securedrop_test_vars["keyring_version"],
-        config_version=securedrop_test_vars["config_version"],
+        config_version=config_version,
         grsec_version=grsec_version,
         securedrop_target_platform=securedrop_test_vars["securedrop_target_platform"],
     )

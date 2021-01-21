@@ -48,6 +48,7 @@
     - role: build-generic-pkg
       tags: securedrop-config
       package_name: securedrop-config
+      package_dirname: securedrop-config-focal
       when: ansible_host.endswith("-sd-config") or ansible_host == "localhost"
   tags: rebuild
 

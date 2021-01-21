@@ -1,0 +1,24 @@
+#!/bin/sh
+# postinst script for securedrop-config-focal
+
+set -e
+set -x
+
+case "$1" in
+    configure)
+    # Configuration required for unattended-upgrades
+    cp /opt/securedrop/20auto-upgrades /etc/apt/apt.conf.d/
+    cp /opt/securedrop/50unattended-upgrades /etc/apt/apt.conf.d/
+    cp /opt/securedrop/reboot-flag /etc/cron.d/
+
+    ;;
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+exit 0

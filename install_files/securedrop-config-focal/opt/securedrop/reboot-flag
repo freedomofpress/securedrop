@@ -1,0 +1,4 @@
+# The purpose of this cron is to drop the reboot-required flag every 12 hours
+# to ensure the system is rebooted nightly, regardless of updates being installed
+# or not.
+* */12 * * * touch /var/run/reboot-required
