@@ -3,7 +3,6 @@ import binascii
 import datetime
 import os
 from typing import Optional, List, Union, Any
-from urllib.parse import urlparse
 
 import flask
 import werkzeug
@@ -187,7 +186,11 @@ def mark_seen(targets: List[Union[Submission, Reply]], user: Journalist) -> None
             raise
 
 
-def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> werkzeug.Response:
+def download(
+    zip_basename: str,
+    submissions: List[Union[Submission, Reply]],
+    on_error_redirect: Optional[str] = None
+) -> werkzeug.Response:
     """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
     containing *submissions*. The ZIP-file, being a
     :class:`tempfile.NamedTemporaryFile`, is stored on disk only
@@ -208,8 +211,9 @@ def download(zip_basename: str, submissions: List[Union[Submission, Reply]]) -> 
             ),
             "error"
         )
-        referrer = urlparse(str(request.referrer)).path
-        return redirect(referrer)
+        if on_error_redirect is None:
+            on_error_redirect = url_for('main.index')
+        return redirect(on_error_redirect)
 
     attachment_filename = "{}--{}.zip".format(
         zip_basename, datetime.datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S")
