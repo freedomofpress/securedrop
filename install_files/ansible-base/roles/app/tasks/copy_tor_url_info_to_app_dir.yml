@@ -23,12 +23,16 @@
     mode: "0644"
     content: |
       {{ v2_onion_url_lookup_result.stdout|default('') }}
+  notify:
+    - restart apache2
   when: v2_onion_services
 
 - name: Remove source v2 onion service info if not enabled
   file:
     path: /var/lib/securedrop/source_v2_url
     state: absent
+  notify:
+    - restart apache2
   when: not v2_onion_services
 
 - name: Expose source v3 onion service info to app
@@ -39,10 +43,14 @@
     mode: "0644"
     content: |
       {{ v3_onion_url_lookup_result.stdout|default('') }}
+  notify:
+    - restart apache2
   when: v3_onion_services
 
 - name: Remove source v3 onion service info if not enabled
   file:
     path: /var/lib/securedrop/source_v3_url
     state: absent
+  notify:
+    - restart apache2
   when: not v3_onion_services
