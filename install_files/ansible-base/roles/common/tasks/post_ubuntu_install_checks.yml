@@ -38,8 +38,10 @@
   command: "ntpdate ntp.ubuntu.com"
   register: ntpdate_result
   changed_when: "'offset' in ntpdate_result.stdout"
-  ignore_errors: yes
   become: yes
+  fail:
+    msg: "{{ ntpdate_result.stderr }}"
+  when: "ntpdate_result.rc != 0 and 'NTP socket is in use' not in ntpdate_result.stderr"
   tags:
     - ntp
 
