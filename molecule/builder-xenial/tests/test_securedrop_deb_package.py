@@ -65,9 +65,11 @@ def make_deb_paths() -> Dict[str, Path]:
     if SECUREDROP_TARGET_PLATFORM == "focal":
         grsec_version = grsec_version+"+focal"
 
-    config_version = securedrop_test_vars["config_version"]
+    config_version = "{}+{}".format(securedrop_test_vars["config_version"],
+                                    securedrop_test_vars["securedrop_version"])
+
     if SECUREDROP_TARGET_PLATFORM == "focal":
-        config_version = config_version+"+focal"
+        config_version += "+focal"
 
     substitutions = dict(
         securedrop_version=securedrop_test_vars["securedrop_version"],
@@ -546,10 +548,18 @@ def test_config_package_contains_expected_files(host: Host) -> None:
     Inspect the package contents to ensure all config files are included in
     the package.
     """
-    wanted_files = [
-        "/etc/cron-apt/action.d/9-remove",
-        "/etc/profile.d/securedrop_additions.sh",
-    ]
+    if SECUREDROP_TARGET_PLATFORM == "xenial":
+        wanted_files = [
+            "/etc/cron-apt/action.d/9-remove",
+            "/etc/profile.d/securedrop_additions.sh",
+        ]
+    else:
+        wanted_files = [
+            "/etc/profile.d/securedrop_additions.sh",
+            "/opt/securedrop/20auto-upgrades",
+            "/opt/securedrop/50unattended-upgrades",
+            "/opt/securedrop/reboot-flag",
+        ]
     c = host.run("dpkg-deb --contents {}".format(deb_paths["securedrop_config"]))
     for wanted_file in wanted_files:
         assert re.search(

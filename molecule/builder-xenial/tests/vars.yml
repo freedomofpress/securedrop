@@ -14,7 +14,7 @@ deb_paths:
   ossec_server: /tmp/build/ossec-server-{ossec_version}-amd64.deb
   ossec_agent: /tmp/build/ossec-agent-{ossec_version}-amd64.deb
   securedrop_keyring: /tmp/build/securedrop-keyring-{keyring_version}+{securedrop_version}-amd64.deb
-  securedrop_config: /tmp/build/securedrop-config-{config_version}+{securedrop_version}-amd64.deb
+  securedrop_config: /tmp/build/securedrop-config-{config_version}-amd64.deb
   securedrop_grsec: /tmp/build/securedrop-grsec-{grsec_version}-amd64.deb
 
 lintian_tags:
