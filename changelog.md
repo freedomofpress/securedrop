@@ -1,31 +1,13 @@
 # Changelog
 
-## 1.7.0~rc4
-
-* Update v2 deprecation warning date from February to March
-* Prevent unhandled exception when download fails due to missing file (#5733)
-* Hide v2 deprecation warning when only v3 is enabled (#5726)
-* No longer create an empty submission file if the original file was deleted from the file system (#5724)
-
-## 1.7.0~rc3
-
-* Disable v2 ssh ATHS when v2 onion services are disabled
-
-## 1.7.0~rc2
-
-* Fixup commits for RC1 changes:
-  - AppArmor rule fixes (#5705)
-  - String pluralization improvements (#5707)
-
-## 1.7.0~rc1
+## 1.7.0
 
 ### Web Applications
 
 * Add Simplified Chinese to our supported languages (#5069)
 * Enhance UI for account creation (#5574)
 * Improve reminder on Journalist Interface to enable v3 onion services (#5679)
-* Prevent unhandled exception in Journalist Interface when deleting a file (#5549)
-* Prevent unhandled exception and add error message in Journalist Interface when download fails due to missing file (#5573)
+* Prevent unhandled exception and add error message in Journalist Interface when download fails due to missing file (#5549, #5573, #5733)
 * No longer show session expiration on source interface when not logged in  (#5582)
 * Allow admins to set org name on Journalist Interface (#5629)
 * Ensure Tor Browser warning appears on Source Interface for MacOS users (#5647)
@@ -44,7 +26,7 @@
 
 ### Translations
 
-* Allow more strings to be translated (#5567)
+* Allow more strings to be translated (#5567, #5707)
 * Ensure translators get credit for translations (#5571)
 
 ### Developer-Only
@@ -103,7 +85,7 @@
 ### Web Applications
 
 * Fixes #5378, adds more checks for invalid username (#5380)
-* Add v2 onion service deprecation warning to journalist interface (#5366)
+* Add v2 onion service deprecation warning to journalist interface (#5366, #5726)
 * Changed modal_warning message in the delete source dialogue to match the context (#5358)
 * Further redaction of wordlist (#5357)
 * Handle case of deleted journalists (#5284)
