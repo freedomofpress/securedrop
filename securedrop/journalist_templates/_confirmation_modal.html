@@ -7,7 +7,9 @@
     {% if modal_data.modal_warning is defined %}
       <p><em>{{ modal_data.modal_warning }}</em></p>
     {% endif %}
-    <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}" class="btn upper">{{ gettext('Cancel') }}</a>
-    <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete" class="{{ modal_data.submit_btn_type }} upper">{{ modal_data.submit_btn_text }}</button>
+    <center>
+      <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}" class="btn cancel small">{{ gettext('Cancel') }}</a>
+      <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete" class="small {{ modal_data.submit_btn_type }}">{{ modal_data.submit_btn_text }}</button>
+    </center>
   </div>
 </div>
