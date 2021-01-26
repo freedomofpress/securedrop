@@ -296,13 +296,13 @@ jobs:
           name: Check Python dependencies for CVEs
           command: |
             fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "sudo pip3 install -q --upgrade safety && make -C .. safety"
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "pip3 install -U -q --upgrade safety && make -C .. safety"
 
       - run:
           name: Run static security testing on source code
           command: |
             fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "sudo pip3 install -q --upgrade pip && sudo pip3 install -q --upgrade bandit && make -C .. bandit"
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "pip3 install -U -q --upgrade pip && pip3 install -U -q --upgrade bandit && make -C .. bandit"
 
 
   staging-test-with-rebase:
