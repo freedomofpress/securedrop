@@ -32,6 +32,7 @@
 * Prevent unhandled exception when submitting a password quickly multiple times (#5618)
 * No longer call the SecureDrop Submission key a journalist key on Source Interface (#5651)
 * Update navigational symbol to migrate to previous page on Journalist Interface (#5641)
+* Replace FontAwesome glyphs with PNGs (#5593, #5625, #5628)
 
 ### Operations
 
@@ -58,7 +59,6 @@
 * Refactor and improve testing during development (#5558, #5575, #5686, #5683, #5595)
 * Update Xenial builder image (#5561) and vagrant boxes for SecureDrop 1.6.0 (#5569)
 * Fix SSH connection failure in Molecule upgrade script (#5654)
-* Replace FontAwesome glyphs with PNGs (#5593, #5625, #5628)
 
 ## 1.6.0
 
