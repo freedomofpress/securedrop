@@ -1952,6 +1952,30 @@ def test_edit_hotp(journalist_app, test_journo):
             ins.assert_redirects(resp, url_for('account.new_two_factor'))
 
 
+def test_delete_data_deletes_submissions_retaining_source(journalist_app,
+                                                          test_journo,
+                                                          test_source):
+    """Verify that when only a source's data is deleted, the submissions
+    are deleted but the source is not."""
+
+    with journalist_app.app_context():
+        source = Source.query.get(test_source['id'])
+        journo = Journalist.query.get(test_journo['id'])
+
+        utils.db_helper.submit(source, 2)
+        utils.db_helper.reply(journo, source, 2)
+
+        assert len(source.collection) == 4
+
+        journalist_app_module.utils.delete_source_files(
+            test_source['filesystem_id'])
+
+        res = Source.query.filter_by(id=test_source['id']).one_or_none()
+        assert res is not None
+
+        assert len(source.collection) == 0
+
+
 def test_delete_source_deletes_submissions(journalist_app,
                                            test_journo,
                                            test_source):

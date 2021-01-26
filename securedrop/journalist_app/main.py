@@ -6,7 +6,7 @@ from typing import Union
 
 import werkzeug
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
-                   render_template, g, flash, abort)
+                   render_template, g, flash, abort, Markup)
 from flask_babel import gettext
 
 import store
@@ -138,8 +138,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                                                              g.user.id,
                                                              exc.__class__))
         else:
-            flash(gettext("Thanks. Your reply has been stored."),
-                  "notification")
+            flash(Markup(gettext("<b>Success!</b> Your reply has been stored.")),
+                  "success")
         finally:
             return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
 
@@ -159,11 +159,18 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                          if doc.filename in doc_names_selected]
         if selected_docs == []:
             if action == 'download':
-                flash(gettext("No collections selected for download."),
-                      "error")
+                flash(
+                  Markup(
+                    gettext(
+                      "<b>Nothing Selected</b> You must select one or more items for download.")),
+                  "error")
             elif action in ('delete', 'confirm_delete'):
-                flash(gettext("No collections selected for deletion."),
-                      "error")
+                flash(
+                  Markup(
+                    gettext(
+                      "<b>Nothing Selected</b> You must select one or more items for deletion.")),
+                  "error")
+
             return redirect(error_redirect)
 
         if action == 'download':

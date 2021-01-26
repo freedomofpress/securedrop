@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-all">
-  <h1><span class="headline">{{ gettext('Sources') }}</span></h1>
+  <h1><span class="headline">{{ gettext('All Sources') }}</span></h1>
   {% if unstarred or starred %}
     <div id="filter-container"></div>
     <form id="process-collections" action="{{ url_for('col.process') }}" method="post">
@@ -24,13 +24,26 @@
           <img src="{{ url_for('static', filename='icons/unstar.png') }}" class="icon" width="15" height="14" alt="">
           {{ gettext('Un-star') }}
         </button>
-        <a href="#delete-confirmation-modal" id="delete-collections-link">
-          <button type="button" class="small danger">
-            <img src="{{ url_for('static', filename='icons/trash.png') }}" class="icon off-hover" width="11" height="13" alt="">
-            <img src="{{ url_for('static', filename='icons/trash-hover-white.png') }}" class="icon on-hover" width="11" height="13" alt="">
-            {{ gettext('Delete') }}
-          </button>
-        </a>
+        <div class="delete-menu-button"><a href="#delete-sources-modal" id="delete-collections-link">
+          <button type="button" id="btn-delete-sources" class="small danger"> {{ gettext('Delete') }} </button> </a>
+      <!-- Delete confirmation modal -->
+      {% with %}
+        {% set modal_data = {
+                              "modal_id": "delete-sources-modal",
+                            }
+        %}
+        {% include '_sources_confirmation_modal.html' %}
+      {% endwith %}
+      <!-- Delete confirmation modal -->
+      {% with %}
+        {% set modal_data = {
+                              "modal_id": "delete-sources-confirm-modal",
+                            }
+        %}
+        {% include '_sources_confirmation_final_modal.html' %}
+      {% endwith %}
+      </div>
+
       </p>
 
       {% if starred %}
@@ -54,22 +67,6 @@
           {% endfor %}
         </ul>
       {% endif %}
-
-      <!-- Delete confirmation modal -->
-      {% with %}
-        {% set modal_data = {
-                              "modal_id": "delete-confirmation-modal",
-                              "modal_header": gettext('Delete Confirmation'),
-                              "modal_body": gettext('Are you sure you want to delete the selected collections?'),
-                              "modal_warning": gettext('Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename.'),
-                              "cancel_id": "cancel-collections-deletions",
-                              "submit_id": "delete-collections",
-                              "submit_btn_type": "danger",
-                              "submit_btn_text": gettext('Delete')
-                            }
-        %}
-        {% include '_confirmation_modal.html' %}
-      {% endwith %}
 
     </form>
   {% else %}

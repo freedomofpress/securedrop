@@ -49,11 +49,14 @@
           {% include 'locales.html' %}
         </div>
         {% endblock %}
+        <div class="panel-container column">
+          <div class="flash-panel">
+            {% include 'flashed.html' %}
+          </div>
+          <div class="panel selected">
 
-        <div class="panel selected">
-          {% include 'flashed.html' %}
-
-          {% block body %}{% endblock %}
+            {% block body %}{% endblock %}
+          </div>
         </div>
       </div>
 

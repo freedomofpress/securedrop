@@ -128,13 +128,13 @@ def test_submit_message(source_app, journalist_app, test_journo):
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         soup = BeautifulSoup(text, 'html.parser')
-        assert "Submission deleted." in text
+        assert "The item has been deleted." in text
 
         # confirm that submission deleted and absent in list of submissions
         resp = app.get(col_url)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "No documents to display." in text
+        assert "No submissions to display." in text
 
         # the file should be deleted from the filesystem
         # since file deletion is handled by a polling worker, this test
@@ -231,14 +231,14 @@ def test_submit_file(source_app, journalist_app, test_journo):
         ), follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Submission deleted." in text
+        assert "The item has been deleted." in text
         soup = BeautifulSoup(resp.data, 'html.parser')
 
         # confirm that submission deleted and absent in list of submissions
         resp = app.get(col_url)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "No documents to display." in text
+        assert "No submissions to display." in text
 
         # the file should be deleted from the filesystem
         # since file deletion is handled by a polling worker, this test
@@ -321,7 +321,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
             pass
         else:
             text = resp.data.decode('utf-8')
-            assert "Thanks. Your reply has been stored." in text
+            assert "Your reply has been stored." in text
 
         resp = app.get(col_url)
         text = resp.data.decode('utf-8')
@@ -406,7 +406,7 @@ def _helper_filenames_delete(journalist_app, soup, i):
         doc_names_selected=checkbox_values
     ), follow_redirects=True)
     assert resp.status_code == 200
-    assert "Submission deleted." in resp.data.decode('utf-8')
+    assert "The item has been deleted." in resp.data.decode('utf-8')
 
     # Make sure the files were deleted from the filesystem
     def assertion():
@@ -506,7 +506,9 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
         assert resp.status_code == 200
 
         text = resp.data.decode('utf-8')
-        assert escape("{}'s collection deleted".format(col_name)) in text
+        assert escape(
+            "The account and data for the source {} has been deleted.".format(col_name)) in text
+
         assert "No documents have been submitted!" in text
         assert async_genkey.called
 
@@ -549,7 +551,7 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
         ), follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "{} collections deleted".format(num_sources) in text
+        assert "The accounts and all data for {} sources".format(num_sources) in text
         assert async_genkey.called
 
         # simulate the source_deleter's work

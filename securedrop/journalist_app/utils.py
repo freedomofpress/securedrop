@@ -99,7 +99,7 @@ def validate_user(
             InvalidPasswordLength) as e:
         current_app.logger.error("Login for '{}' failed: {}".format(
             username, e))
-        login_flashed_msg = error_message if error_message else gettext('Login failed.')
+        login_flashed_msg = error_message if error_message else gettext('<b>Login failed.</b>')
 
         if isinstance(e, LoginThrottledException):
             login_flashed_msg += " "
@@ -123,7 +123,7 @@ def validate_user(
             except Exception:
                 pass
 
-        flash(login_flashed_msg, "error")
+        flash(Markup(login_flashed_msg), "error")
         return None
 
 
@@ -254,12 +254,12 @@ def bulk_delete(
 
     num_selected = len(items_selected)
     flash(
-        ngettext(
-            "Submission deleted.",
-            "{num} submissions deleted.",
+        Markup(ngettext(
+            "<b>Success!</b> The item has been deleted.",
+            "<b>Success!</b> {num} items have been deleted.",
             num_selected
-        ).format(num=num_selected),
-        "notification"
+        ).format(num=num_selected)),
+        "success"
     )
     if deletion_errors > 0:
         current_app.logger.error("Disconnected submission entries (%d) were detected",
@@ -319,14 +319,51 @@ def col_delete(cols_selected: List[str]) -> werkzeug.Response:
         db.session.commit()
 
         num = len(cols_selected)
-        flash(ngettext('{num} collection deleted', '{num} collections deleted',
-                       num).format(num=num),
-              "notification")
+        flash(
+           Markup(
+             ngettext(
+               '<b>Success!</b> The account and all data for {num} source have been deleted.',
+               '<b>Success!</b> The accounts and all data for {num} sources have been deleted',
+               num).format(num=num)),
+           "success")
+
+    return redirect(url_for('main.index'))
+
+
+def delete_source_files(filesystem_id: str) -> None:
+    """deletes submissions and replies for specified source"""
+    source = get_source(filesystem_id, include_deleted=True)
+    if source is not None:
+        # queue all files for deletion and remove them from the database
+        for f in source.collection:
+            try:
+                delete_file_object(f)
+            except Exception:
+                pass
+
+
+def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
+    """deletes store data for selected sources"""
+    if len(cols_selected) < 1:
+        flash(
+            Markup(
+                gettext("<b>Nothing Selected</b> You must select one or more items for deletion.")),
+            "error")
+    else:
+
+        for filesystem_id in cols_selected:
+            delete_source_files(filesystem_id)
+
+        flash(
+            Markup(
+                gettext('<b>Success!</b> The files and messages have been deleted.')),
+            "success")
 
     return redirect(url_for('main.index'))
 
 
 def delete_collection(filesystem_id: str) -> None:
+    """deletes source account including files and reply key"""
     # Delete the source's collection of submissions
     path = current_app.storage.path(filesystem_id)
     if os.path.exists(path):
