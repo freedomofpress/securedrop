@@ -1,3 +1,33 @@
+securedrop-app-code (1.8.0~rc1+focal) focal; urgency=medium
+
+  * 
+
+ -- SecureDrop Team <securedrop@freedom.press>  Tue, 26 Jan 2021 18:12:21 -0800
+
+securedrop-app-code (1.7.0~rc4+focal) focal; urgency=medium
+
+  * See changelog.md 
+
+ -- SecureDrop Team <securedrop@freedom.press>  Thu, 21 Jan 2021 13:36:19 -0800
+
+securedrop-app-code (1.7.0~rc3+focal) focal; urgency=medium
+
+  * See changelog.md
+
+ -- SecureDrop Team <securedrop@freedom.press>  Tue, 19 Jan 2021 20:52:40 +0000
+
+securedrop-app-code (1.7.0~rc2+focal) focal; urgency=medium
+
+  * See changelog.md
+
+ -- SecureDrop Team <securedrop@freedom.press>  Thu, 14 Jan 2021 17:45:17 -0800
+
+securedrop-app-code (1.7.0~rc1+focal) focal; urgency=medium
+
+  * See changelog.md 
+
+ -- SecureDrop Team <securedrop@freedom.press>  Tue, 12 Jan 2021 21:01:25 +0000
+
 securedrop-app-code (1.7.0~rc1+focal) focal; urgency=medium
 
   * See changelog.md
