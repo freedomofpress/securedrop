@@ -30,6 +30,8 @@
 
     - name: Insert journalist test user
       command: /var/www/securedrop/loaddata.py
+      environment:
+        CRYPTOGRAPHY_ALLOW_OPENSSL_102: "True"
       args:
         chdir: /var/www/securedrop
   become: yes
