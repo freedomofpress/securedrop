@@ -10,42 +10,107 @@ from typing import Set
 
 class SDConfig:
     def __init__(self) -> None:
-        self.JOURNALIST_APP_FLASK_CONFIG_CLS = \
-            _config.JournalistInterfaceFlaskConfig  # type: Type
+        try:
+            self.JOURNALIST_APP_FLASK_CONFIG_CLS = (
+                _config.JournalistInterfaceFlaskConfig
+            )  # type: Type
+        except AttributeError:
+            pass
 
-        self.SOURCE_APP_FLASK_CONFIG_CLS = \
-            _config.SourceInterfaceFlaskConfig  # type: Type
+        try:
+            self.SOURCE_APP_FLASK_CONFIG_CLS = _config.SourceInterfaceFlaskConfig  # type: Type
+        except AttributeError:
+            pass
 
-        self.DATABASE_ENGINE = _config.DATABASE_ENGINE  # type: str
-        self.DATABASE_FILE = _config.DATABASE_FILE  # type: str
+        try:
+            self.DATABASE_ENGINE = _config.DATABASE_ENGINE  # type: str
+        except AttributeError:
+            pass
+
+        try:
+            self.DATABASE_FILE = _config.DATABASE_FILE  # type: str
+        except AttributeError:
+            pass
 
         self.DATABASE_USERNAME = getattr(_config, "DATABASE_USERNAME", None)  # type: Optional[str]
         self.DATABASE_PASSWORD = getattr(_config, "DATABASE_PASSWORD", None)  # type: Optional[str]
         self.DATABASE_HOST = getattr(_config, "DATABASE_HOST", None)  # type: Optional[str]
         self.DATABASE_NAME = getattr(_config, "DATABASE_NAME", None)  # type: Optional[str]
 
-        self.ADJECTIVES = _config.ADJECTIVES  # type: str
-        self.NOUNS = _config.NOUNS  # type: str
+        try:
+            self.ADJECTIVES = _config.ADJECTIVES  # type: str
+        except AttributeError:
+            pass
 
-        self.GPG_KEY_DIR = _config.GPG_KEY_DIR  # type: str
+        try:
+            self.NOUNS = _config.NOUNS  # type: str
+        except AttributeError:
+            pass
 
-        self.JOURNALIST_KEY = _config.JOURNALIST_KEY  # type: str
-        self.JOURNALIST_TEMPLATES_DIR = _config.JOURNALIST_TEMPLATES_DIR  # type: str
+        try:
+            self.GPG_KEY_DIR = _config.GPG_KEY_DIR  # type: str
+        except AttributeError:
+            pass
 
-        self.SCRYPT_GPG_PEPPER = _config.SCRYPT_GPG_PEPPER  # type: str
-        self.SCRYPT_ID_PEPPER = _config.SCRYPT_ID_PEPPER  # type: str
-        self.SCRYPT_PARAMS = _config.SCRYPT_PARAMS  # type: Dict[str, int]
+        try:
+            self.JOURNALIST_KEY = _config.JOURNALIST_KEY  # type: str
+        except AttributeError:
+            pass
 
-        self.SECUREDROP_DATA_ROOT = _config.SECUREDROP_DATA_ROOT  # type: str
-        self.SECUREDROP_ROOT = _config.SECUREDROP_ROOT  # type: str
+        try:
+            self.JOURNALIST_TEMPLATES_DIR = _config.JOURNALIST_TEMPLATES_DIR  # type: str
+        except AttributeError:
+            pass
 
-        self.SESSION_EXPIRATION_MINUTES = _config.SESSION_EXPIRATION_MINUTES  # type: int
+        try:
+            self.SCRYPT_GPG_PEPPER = _config.SCRYPT_GPG_PEPPER  # type: str
+        except AttributeError:
+            pass
 
-        self.SOURCE_TEMPLATES_DIR = _config.SOURCE_TEMPLATES_DIR  # type: str
-        self.TEMP_DIR = _config.TEMP_DIR  # type: str
-        self.STORE_DIR = _config.STORE_DIR  # type: str
+        try:
+            self.SCRYPT_ID_PEPPER = _config.SCRYPT_ID_PEPPER  # type: str
+        except AttributeError:
+            pass
 
-        self.WORKER_PIDFILE = _config.WORKER_PIDFILE  # type: str
+        try:
+            self.SCRYPT_PARAMS = _config.SCRYPT_PARAMS  # type: Dict[str, int]
+        except AttributeError:
+            pass
+
+        try:
+            self.SECUREDROP_DATA_ROOT = _config.SECUREDROP_DATA_ROOT  # type: str
+        except AttributeError:
+            pass
+
+        try:
+            self.SECUREDROP_ROOT = _config.SECUREDROP_ROOT  # type: str
+        except AttributeError:
+            pass
+
+        try:
+            self.SESSION_EXPIRATION_MINUTES = _config.SESSION_EXPIRATION_MINUTES  # type: int
+        except AttributeError:
+            pass
+
+        try:
+            self.SOURCE_TEMPLATES_DIR = _config.SOURCE_TEMPLATES_DIR  # type: str
+        except AttributeError:
+            pass
+
+        try:
+            self.TEMP_DIR = _config.TEMP_DIR  # type: str
+        except AttributeError:
+            pass
+
+        try:
+            self.STORE_DIR = _config.STORE_DIR  # type: str
+        except AttributeError:
+            pass
+
+        try:
+            self.WORKER_PIDFILE = _config.WORKER_PIDFILE  # type: str
+        except AttributeError:
+            pass
 
         self.env = getattr(_config, 'env', 'prod')  # type: str
         if self.env == 'test':
@@ -54,7 +119,7 @@ class SDConfig:
             self.RQ_WORKER_NAME = 'default'
 
         # Config entries used by i18n.py
-        # Use en_US as the default local if the key is not defined in _config
+        # Use en_US as the default locale if the key is not defined in _config
         self.DEFAULT_LOCALE = getattr(
             _config, "DEFAULT_LOCALE", "en_US"
         )  # type: str
@@ -68,7 +133,10 @@ class SDConfig:
         if translation_dirs_in_conf:
             self.TRANSLATION_DIRS = Path(translation_dirs_in_conf)  # type: Path
         else:
-            self.TRANSLATION_DIRS = Path(_config.SECUREDROP_ROOT) / "translations"
+            try:
+                self.TRANSLATION_DIRS = Path(_config.SECUREDROP_ROOT) / "translations"
+            except AttributeError:
+                pass
 
     @property
     def DATABASE_URI(self) -> str:

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.1
+
+* Bugfix:  Fixes an issue affecting availability of Source and Journalist Interfaces for a subset of instances. (#5759)
+
 ## 1.7.0
 
 ### Web Applications
