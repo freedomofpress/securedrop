@@ -3,9 +3,9 @@ from subprocess import check_output
 import re
 import pytest
 
-SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM")
+SECUREDROP_TARGET_DISTRIBUTION = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION")
 testinfra_hosts = [
-        "docker://{}-sd-sec-update".format(SECUREDROP_TARGET_PLATFORM)
+        "docker://{}-sd-sec-update".format(SECUREDROP_TARGET_DISTRIBUTION)
 ]
 
 

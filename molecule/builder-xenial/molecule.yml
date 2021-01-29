@@ -71,7 +71,7 @@ verifier:
     # provided by pytest-xdist
     n: auto
   env:
-    SECUREDROP_TARGET_PLATFORM: xenial
+    SECUREDROP_TARGET_DISTRIBUTION: xenial
     SECUREDROP_PYTHON_VERSION: "3.5"
   directory: tests/
   lint: |

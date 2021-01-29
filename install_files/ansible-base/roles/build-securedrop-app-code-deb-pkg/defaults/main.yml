@@ -40,14 +40,10 @@ securedrop_app_rsync_opts:
 
 securedrop_local_build: "../../build"
 
-# Default is xenial.
-securedrop_build_focal_support: False
-securedrop_package_dist: "{{ 'focal' if securedrop_build_focal_support else 'xenial' }}"
-
 # SecureDrop virtualenv location
 securedrop_venv: "/opt/venvs/securedrop-app-code"
 securedrop_venv_bin: "{{ securedrop_venv }}/bin"
-securedrop_python_version: "{{ '3.8' if securedrop_build_focal_support else '3.5' }}"
+securedrop_python_version: "{{ '3.8' if securedrop_target_distribution == 'focal' else '3.5' }}"
 securedrop_venv_site_packages: "{{ securedrop_venv }}/lib/python{{ securedrop_python_version }}/site-packages"
 
 securedrop_app_focal_files:
