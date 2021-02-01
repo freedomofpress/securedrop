@@ -254,6 +254,24 @@ def test_unattended_upgrades_functional(host):
         assert expected_result in c.stdout
 
 
+@pytest.mark.parametrize('service', [
+  'apt-daily',
+  'apt-daily.timer',
+  'apt-daily-upgrade',
+  'apt-daily-upgrade.timer',
+ ])
+def test_apt_daily_services_and_timers_enabled(host, service):
+    """
+    Ensure the services and timers used for unattended upgrades are enabled
+    in Ubuntu 20.04 Focal.
+    """
+    if host.system_info.codename != "xenial":
+        with host.sudo():
+            # The services are started only when the upgrades are being performed.
+            s = host.service(service)
+            assert s.is_enabled
+
+
 def test_reboot_required_cron(host):
     """
     Unatteded-upgrades does not reboot the system if the updates don't require it.
