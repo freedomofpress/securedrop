@@ -24,7 +24,7 @@
           <img src="{{ url_for('static', filename='icons/unstar.png') }}" class="icon" width="15" height="14" alt="">
           {{ gettext('Un-star') }}
         </button>
-        <a href="#delete-confirmation-modal" id="delete-collections-link">
+        <a href="#delete-sources-modal" id="delete-collections-link">
           <button type="button" class="small danger">
             <img src="{{ url_for('static', filename='icons/trash.png') }}" class="icon off-hover" width="11" height="13" alt="">
             <img src="{{ url_for('static', filename='icons/trash-hover-white.png') }}" class="icon on-hover" width="11" height="13" alt="">
@@ -58,17 +58,30 @@
       <!-- Delete confirmation modal -->
       {% with %}
         {% set modal_data = {
-                              "modal_id": "delete-confirmation-modal",
+                              "modal_id": "delete-sources-modal",
                               "modal_header": gettext('Delete Confirmation'),
                               "modal_body": gettext('Are you sure you want to delete the selected collections?'),
                               "modal_warning": gettext('Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename.'),
                               "cancel_id": "cancel-collections-deletions",
-                              "submit_id": "delete-collections",
                               "submit_btn_type": "danger",
                               "submit_btn_text": gettext('Delete')
                             }
         %}
-        {% include '_confirmation_modal.html' %}
+        {% include '_sources_confirmation_modal.html' %}
+      {% endwith %}
+      <!-- Delete confirmation modal -->
+      {% with %}
+        {% set modal_data = {
+                              "modal_id": "delete-sources-confirm-modal",
+                              "modal_header": gettext('Are you really sure?'),
+                              "modal_body": gettext('RIP your sources'),
+                              "cancel_id": "cancel-collections-deletions",
+                              "submit_id": "delete-collections",
+                              "submit_btn_type": "danger",
+                              "submit_btn_text": gettext('Really Delete em')
+                            }
+        %}
+        {% include '_sources_confirmation_final_modal.html' %}
       {% endwith %}
 
     </form>
