@@ -1,0 +1,39 @@
+.delete-menu-button
+  display: inline
+  transform: rotate(0deg)
+  position: static
+
+  .menu-modal-dialog
+    position: fixed
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    background: rgba(0, 0, 0, 0.2)
+    z-index: 99999
+    opacity: 0
+    -moz-transition: opacity 100ms ease-in
+    transition: opacity 100ms ease-in
+    pointer-events: none
+
+    &:target
+      opacity: 1
+      pointer-events: auto
+
+    .external
+      position: fixed
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+
+    div.delete-menu-dialog
+      width: 300px
+      position: fixed
+      left: 200px
+      margin: 13% 50% auto
+      padding: 20px 20px 43px 40px
+      background: white
+      -moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5)
+      box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5)
+      border: 1.5px solid #000c6c

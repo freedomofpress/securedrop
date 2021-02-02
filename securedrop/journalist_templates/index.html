@@ -24,37 +24,8 @@
           <img src="{{ url_for('static', filename='icons/unstar.png') }}" class="icon" width="15" height="14" alt="">
           {{ gettext('Un-star') }}
         </button>
-        <a href="#delete-sources-modal" id="delete-collections-link">
-          <button type="button" class="small danger">
-            <img src="{{ url_for('static', filename='icons/trash.png') }}" class="icon off-hover" width="11" height="13" alt="">
-            <img src="{{ url_for('static', filename='icons/trash-hover-white.png') }}" class="icon on-hover" width="11" height="13" alt="">
-            {{ gettext('Delete') }}
-          </button>
-        </a>
-      </p>
-
-      {% if starred %}
-        <ul id="cols" class="plain starred">
-          {% for source in starred %}
-            {% with %}
-              {% set loop_index = loop.index %}
-              {% include '_source_row.html' %}
-            {% endwith %}
-          {% endfor %}
-        </ul>
-      {% endif %}
-
-      {% if unstarred %}
-        <ul id="cols" class="plain unstarred">
-          {% for source in unstarred %}
-            {% with %}
-              {% set loop_index = loop.index %}
-              {% include '_source_row.html' %}
-            {% endwith %}
-          {% endfor %}
-        </ul>
-      {% endif %}
-
+        <div class="delete-menu-button"><a href="#delete-sources-modal" id="delete-collections-link">
+          <button type="button" class="small danger"> {{ gettext('Delete') }} </button> </a>
       <!-- Delete confirmation modal -->
       {% with %}
         {% set modal_data = {
@@ -83,6 +54,31 @@
         %}
         {% include '_sources_confirmation_final_modal.html' %}
       {% endwith %}
+      </div>
+
+      </p>
+
+      {% if starred %}
+        <ul id="cols" class="plain starred">
+          {% for source in starred %}
+            {% with %}
+              {% set loop_index = loop.index %}
+              {% include '_source_row.html' %}
+            {% endwith %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if unstarred %}
+        <ul id="cols" class="plain unstarred">
+          {% for source in unstarred %}
+            {% with %}
+              {% set loop_index = loop.index %}
+              {% include '_source_row.html' %}
+            {% endwith %}
+          {% endfor %}
+        </ul>
+      {% endif %}
 
     </form>
   {% else %}

@@ -1,7 +1,6 @@
-<div id="{{ modal_data.modal_id }}" class="modal-dialog">
+<div id="{{ modal_data.modal_id }}" class="menu-modal-dialog">
   <a href="#close" class="external"></a>
-  <div>
-    <a href="#close" title="{{ gettext('Close') }}" class="close">X</a>
+  <div class="delete-menu-dialog">
     <h2>{{ modal_data.modal_header }}</h2>
     <p>{{ modal_data.modal_body }}</p>
     {% if modal_data.modal_warning is defined %}
