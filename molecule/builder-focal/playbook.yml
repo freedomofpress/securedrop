@@ -58,8 +58,8 @@
   gather_facts: false
   vars:
     sd_build_root: "{{ playbook_dir + '/../../build' }}"
-    sd_target_distro: focal
-    sd_build_dest: "{{ sd_build_root + '/' + sd_target_distro }}"
+    securedrop_target_distribution: focal
+    sd_build_dest: "{{ sd_build_root + '/' + securedrop_target_distribution }}"
 
   tasks:
     - name: Discover local debian build files

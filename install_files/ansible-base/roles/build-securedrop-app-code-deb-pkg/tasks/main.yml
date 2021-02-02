@@ -54,7 +54,7 @@
 
 - name: Replace placeholder changelog to dist-specific changelog
   copy:
-    src: "changelog-{{ securedrop_package_dist }}"
+    src: "changelog-{{ securedrop_target_distribution }}"
     dest: "{{ securedrop_app_code_prep_dir }}/debian/changelog"
 
 - name: Replace the files required for focal package
@@ -62,7 +62,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
   with_items: "{{ securedrop_app_focal_files }}"
-  when: securedrop_build_focal_support
+  when: securedrop_target_distribution == "focal"
 
 - name: Create the control file based on distribution
   template:

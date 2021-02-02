@@ -38,11 +38,11 @@ def test_cron_apt_config(host):
 
 
 @pytest.mark.parametrize('repo', [
-  'deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security main',
-  'deb-src http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security main',
-  'deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security universe',
-  'deb-src http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security universe',
-  'deb [arch=amd64] {fpf_apt_repo_url} {securedrop_target_platform} main',
+  'deb http://security.ubuntu.com/ubuntu {securedrop_target_distribution}-security main',
+  'deb-src http://security.ubuntu.com/ubuntu {securedrop_target_distribution}-security main',
+  'deb http://security.ubuntu.com/ubuntu {securedrop_target_distribution}-security universe',
+  'deb-src http://security.ubuntu.com/ubuntu {securedrop_target_distribution}-security universe',
+  'deb [arch=amd64] {fpf_apt_repo_url} {securedrop_target_distribution} main',
 ])
 def test_cron_apt_repo_list(host, repo):
     """
@@ -51,7 +51,7 @@ def test_cron_apt_repo_list(host, repo):
     """
     repo_config = repo.format(
         fpf_apt_repo_url=test_vars.fpf_apt_repo_url,
-        securedrop_target_platform=host.system_info.codename
+        securedrop_target_distribution=host.system_info.codename
     )
     f = host.file('/etc/apt/security.list')
     assert f.is_file

@@ -2,11 +2,11 @@ import pytest
 import os
 
 
-SECUREDROP_TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM")
+SECUREDROP_TARGET_DISTRIBUTION = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION")
 SECUREDROP_PYTHON_VERSION = os.environ.get("SECUREDROP_PYTHON_VERSION", "3.5")
 
 testinfra_hosts = [
-        "docker://{}-sd-app".format(SECUREDROP_TARGET_PLATFORM)
+        "docker://{}-sd-app".format(SECUREDROP_TARGET_DISTRIBUTION)
 ]
 
 

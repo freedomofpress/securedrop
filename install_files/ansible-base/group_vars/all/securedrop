@@ -2,9 +2,8 @@
 # Variables that apply to both the app and monitor server go in this file
 # If the monitor or app server need different values define the variable in
 # hosts_vars/app.yml or host_vars/mon.yml
-securedrop_app_code_version: "1.8.0~rc1"
-securedrop_app_code_sdist_version: "securedrop-app-code-1.8.0-rc1"
-securedrop_app_code_sdist_name: "{{ securedrop_app_code_sdist_version }}.tar.gz"
+securedrop_version: "1.8.0~rc1"
+securedrop_app_code_sdist_name: "securedrop-app-code-{{ securedrop_version | replace('~', '-') }}.tar.gz"
 
 grsecurity: true
 install_local_packages: false
@@ -27,8 +26,8 @@ apparmor_profiles:
   - usr.sbin.apache2
 
 # Installing the securedrop-app-code.deb package
-securedrop_staging_install_target_distro: xenial
-securedrop_app_code_deb: "securedrop-app-code_{{ securedrop_app_code_version }}+{{ securedrop_staging_install_target_distro }}_amd64" # do not enter .deb extension
+securedrop_target_distribution: xenial
+securedrop_app_code_deb: "securedrop-app-code_{{ securedrop_version }}+{{ securedrop_target_distribution }}_amd64" # do not enter .deb extension
 
 # Enable Tor over SSH by default
 enable_ssh_over_tor: true

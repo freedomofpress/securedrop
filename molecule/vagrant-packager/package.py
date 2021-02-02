@@ -130,7 +130,7 @@ def main():
         TARGET_VERSION = f.read().strip()
 
     # Default to Xenial as base OS.
-    TARGET_PLATFORM = os.environ.get("SECUREDROP_TARGET_PLATFORM", "xenial")
+    TARGET_DISTRIBUTION = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION", "xenial")
 
     for srv in ["app-staging", "mon-staging"]:
 
@@ -185,7 +185,9 @@ def main():
                         join(EPHEMERAL_DIRS['build'], 'Vagrantfile'))
 
         print("Creating tar file")
-        box_file = join(BOX_BUILD_DIR, "{}-{}_{}.box".format(srv, TARGET_PLATFORM, TARGET_VERSION))
+        box_file = join(
+            BOX_BUILD_DIR, "{}-{}_{}.box".format(srv, TARGET_DISTRIBUTION, TARGET_VERSION)
+        )
         with tarfile.open(box_file, "w|gz") as tar:
             for boxfile in ["box.img", "Vagrantfile", "metadata.json"]:
                 tar.add(join(EPHEMERAL_DIRS["build"], boxfile),
@@ -194,7 +196,7 @@ def main():
         print("Box created at {}".format(box_file))
 
         print("Updating box metadata")
-        update_box_metadata(srv, box_file, TARGET_PLATFORM, TARGET_VERSION)
+        update_box_metadata(srv, box_file, TARGET_DISTRIBUTION, TARGET_VERSION)
 
         print("Clean-up tmp space")
         shutil.rmtree(EPHEMERAL_DIRS['tmp'])

@@ -7,7 +7,7 @@
   when: not securedrop_staging_qubes_env|default(False)
 
 - name: Gracefully halt Qubes staging VM
-  command: qvm-shutdown --wait {{ "sd-staging-app" if "app" in inventory_hostname else "sd-staging-mon" }}-{{ securedrop_staging_install_target_distro }}
+  command: qvm-shutdown --wait {{ "sd-staging-app" if "app" in inventory_hostname else "sd-staging-mon" }}-{{ securedrop_target_distribution }}
   become: no
   delegate_to: localhost
   when: securedrop_staging_qubes_env|default(False)
@@ -17,7 +17,7 @@
 - name: Boot Qubes staging VM
   shell: >
     qvm-start
-    {{ "sd-staging-app" if "app" in inventory_hostname else "sd-staging-mon" }}-{{ securedrop_staging_install_target_distro }}
+    {{ "sd-staging-app" if "app" in inventory_hostname else "sd-staging-mon" }}-{{ securedrop_target_distribution }}
     && sleep 30
   become: no
   delegate_to: localhost

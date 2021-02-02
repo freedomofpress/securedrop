@@ -1,7 +1,7 @@
 ---
 build_ossec_deb_pkg_dependencies:
   - "libpcre2-dev"
-  - "{{ 'libevent-dev' if securedrop_build_focal_support else 'libevent1-dev' }}"
+  - "{{ 'libevent-dev' if securedrop_target_distribution == 'focal' else 'libevent1-dev' }}"
 
 ossec_server_hostname: ossec-server
 ossec_version: 3.6.0
@@ -10,10 +10,10 @@ ossec_version: 3.6.0
 build_path: /tmp/build
 
 repo_src_path: "{{ build_path }}/ossec-{{ purpose }}"
-ossec_build_dir: "{{ build_path }}/ossec-{{ purpose }}-{{ ossec_version }}-amd64"
+ossec_build_dir: "{{ build_path }}/ossec-{{ purpose }}-{{ ossec_version }}+{{ securedrop_target_distribution }}-amd64"
 
 # Destination on Ansible controller where built deb packages will be placed.
-ossec_build_deb_package_local_dest_dir: "../../build/{{ ansible_distribution_release }}/"
+ossec_build_deb_package_local_dest_dir: "../../build/{{ securedrop_target_distribution }}/"
 
 ossec_build_rsync_generic_opts:
   - "--exclude=*.git"
@@ -25,8 +25,3 @@ ossec_build_rsync_ansible_hack_opt:
   - "--rsync-path='sudo rsync'"
 
 ossec_source_checksum: sha256:653828a19137b8a7e98af65e873318f7bb48137fe1e61b80577e13c316e04708
-
-# Default is xenial.
-securedrop_build_focal_support: False
-securedrop_package_dist: "{{ 'focal' if securedrop_build_focal_support else 'xenial' }}"
-

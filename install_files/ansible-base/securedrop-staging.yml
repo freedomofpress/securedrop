@@ -9,7 +9,7 @@
   tasks:
     - name: Establish list of files in build/
       find:
-        paths: "../../build/{{ securedrop_staging_install_target_distro }}"
+        paths: "../../build/{{ securedrop_target_distribution }}"
       register: search_deb_results
 
     - set_fact:
@@ -19,8 +19,8 @@
 
     - name: Fail if package is missing from build dir
       fail:
-        msg: "run 'make build-debs' - ../../build/{{ securedrop_staging_install_target_distro }}/{{item}} missing"
-      when: "'../../build/'+securedrop_staging_install_target_distro+'/'+item not in found_debs"
+        msg: "run 'make build-debs' - ../../build/{{ securedrop_target_distribution }}/{{item}} missing"
+      when: "'../../build/' + securedrop_target_distribution + '/' + item not in found_debs"
       with_items: "{{ expected_debs }}"
 
 - name: Prepare servers for installation
