@@ -21,6 +21,14 @@
       SecureDrop cannot be installed. For details, see
       https://github.com/freedomofpress/securedrop/issues/4058
 
+- name: Remove cloud-init
+  apt:
+    name: cloud-init
+    state: absent
+    purge: yes
+  tags:
+    - apt
+
 - name: Install python and packages required by installer
   raw: apt install -y python apt-transport-https dnsutils
   register: _apt_install_prereqs_results
