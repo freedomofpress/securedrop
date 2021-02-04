@@ -4,7 +4,10 @@ import re
 import testutils
 
 sdvars = testutils.securedrop_test_vars
-KERNEL_VERSION = sdvars.grsec_version
+if host.system_info.codename == "xenial":
+    KERNEL_VERSION = sdvars.grsec_version_xenial
+else:
+    KERNEL_VERSION = sdvars.grsec_version_focal
 testinfra_hosts = [sdvars.app_hostname, sdvars.monitor_hostname]
 
 
