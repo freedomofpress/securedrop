@@ -38,6 +38,10 @@ enable_ssh_over_tor: true
 securedrop_cond_reboot_file: /tmp/sd-reboot-now
 
 # If you bump this, also remember to bump in molecule/builder-xenial/tests/vars.yml
-securedrop_pkg_grsec:
+securedrop_pkg_grsec_xenial:
   ver: "4.14.188"
   depends: "linux-image-4.14.188-grsec-securedrop,linux-image-4.14.175-grsec-securedrop,intel-microcode"
+
+securedrop_pkg_grsec_focal:
+  ver: "5.4.88"
+  depends: "linux-image-5.4.88-grsec-securedrop,linux-image-4.14.188-grsec-securedrop,intel-microcode"
