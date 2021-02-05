@@ -129,7 +129,7 @@ else's behalf without their consent.
 
 ### How to get help
 
-The Community Team is made up established members of the community who
+The Community Team is made up of established members of the community who
 assist with resolving conflicts within the community.
 
 Currently the Community Team consists of:
@@ -165,7 +165,7 @@ taken seriously and looked into.
 
 ## How the Community Team responds to incidents
 
-The Community Team does not have a fixed of set responses to some enumerated
+The Community Team does not have a fixed set of responses to some enumerated
 set of incidents that may occur. The Community Team operates on a
 case-by-case basis taking into account past behavior; the relationship between
 the person(s) who were harmed and the person(s) causing the harm; the responses
