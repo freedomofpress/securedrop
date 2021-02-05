@@ -223,7 +223,7 @@ def test_wireless_disabled_in_kernel_config(host, kernel_opts):
         kernel_config = host.file(kernel_config_path).content_string
 
         line = "# CONFIG_{} is not set".format(kernel_opts)
-        assert line in kernel_config
+        assert line in kernel_config or kernel_opts not in kernel_config
 
 
 @pytest.mark.parametrize('kernel_opts', [
