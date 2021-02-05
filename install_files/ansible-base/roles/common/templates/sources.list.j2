@@ -1,0 +1,13 @@
+## newer versions of the distribution.
+deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} main
+
+## newer versions of the distribution.
+deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe
+
+## Major bug fix updates produced after the final release of the
+## distribution.
+deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}-updates main
+
+### Security fixes for distribution packages
+deb http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security main
+deb http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security universe

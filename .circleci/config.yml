@@ -93,7 +93,6 @@ common-steps:
         - /focalcaches/layers.tar
 
 
-
 version: 2
 jobs:
   lint:
