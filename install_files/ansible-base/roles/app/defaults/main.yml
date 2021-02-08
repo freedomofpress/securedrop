@@ -50,9 +50,12 @@ apache_packages:
   - libapache2-mod-xsendfile
 
 apache_templates:
-  - ports.conf
-  - sites-available/journalist.conf
-  - sites-available/source.conf
+  - src: ports.conf
+    dest: /etc/apache2/ports.conf
+  - src: sites-available/{{ ansible_distribution_release }}/journalist.conf
+    dest: /etc/apache2/sites-available/journalist.conf
+  - src: sites-available/{{ ansible_distribution_release }}/source.conf
+    dest: /etc/apache2/sites-available/source.conf
 
 # Apache modules required for the SecureDrop application. Will be enabled.
 apache_modules:

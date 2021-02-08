@@ -2,7 +2,7 @@
 - name: Install apache packages.
   apt:
     pkg: "{{ apache_packages }}"
-    state: latest
+    state: present
     update_cache: yes
     cache_valid_time: 3600
   tags:
@@ -32,8 +32,8 @@
 
 - name: Copy Apache ports and site configs.
   template:
-    src: "{{ item }}"
-    dest: /etc/apache2/{{ item }}
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: root
     mode: "0644"
   with_items: "{{ apache_templates }}"
