@@ -1,5 +1,6 @@
 [Unit]
 Description=OSSEC service
+After=network.target
 
 [Service]
 Type=forking
