@@ -62,3 +62,7 @@ maximal_queue_lifetime = 14d
 # Used to remap outbound from address in emails
 smtp_generic_maps = hash:/etc/postfix/generic
 {% endif %}
+{% if ansible_distribution_release == 'focal' %}
+# Restriction for client RCPT TO command, details at http://www.postfix.org/postconf.5.html#smtpd_recipient_restrictions
+smtpd_recipient_restrictions = reject_unauth_destination
+{% endif %}
