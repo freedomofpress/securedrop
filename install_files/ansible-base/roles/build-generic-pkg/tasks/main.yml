@@ -29,7 +29,7 @@
 
 - name: Create any necessary parent directories for jinja files
   file:
-    path: "{{ build_path }}/{{ item.path | dirname |regex_replace('^\\/.*'+package_name, '') }}"
+    path: "{{ build_path }}/{{ item.path | dirname |regex_replace('^\\/.*'+package_dirname, '') }}"
     state: directory
   with_items: "{{ jinja_files_found.files }}"
 

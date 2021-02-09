@@ -4,7 +4,6 @@ import re
 import testutils
 
 sdvars = testutils.securedrop_test_vars
-KERNEL_VERSION = sdvars.grsec_version
 testinfra_hosts = [sdvars.app_hostname, sdvars.monitor_hostname]
 
 
@@ -19,7 +18,7 @@ def test_ssh_motd_disabled(host):
 
 
 @pytest.mark.parametrize("package", [
-    'linux-image-{}-grsec-securedrop'.format(KERNEL_VERSION),
+    'linux-image-{}-grsec-securedrop',
     'paxctl',
     'securedrop-grsec',
 ])
@@ -29,6 +28,12 @@ def test_grsecurity_apt_packages(host, package):
     Includes the FPF-maintained metapackage, as well as paxctl, for managing
     PaX flags on binaries.
     """
+    if host.system_info.codename == "xenial":
+        KERNEL_VERSION = sdvars.grsec_version_xenial
+    else:
+        KERNEL_VERSION = sdvars.grsec_version_focal
+    if package.startswith("linux-image"):
+        package = package.format(KERNEL_VERSION)
     assert host.package(package).is_installed
 
 
@@ -72,6 +77,10 @@ def test_grsecurity_kernel_is_running(host):
     """
     Make sure the currently running kernel is specific grsec kernel.
     """
+    if host.system_info.codename == "xenial":
+        KERNEL_VERSION = sdvars.grsec_version_xenial
+    else:
+        KERNEL_VERSION = sdvars.grsec_version_focal
     c = host.run('uname -r')
     assert c.stdout.strip().endswith('-grsec-securedrop')
     assert c.stdout.strip() == '{}-grsec-securedrop'.format(KERNEL_VERSION)
@@ -205,12 +214,16 @@ def test_wireless_disabled_in_kernel_config(host, kernel_opts):
     remove wireless support from the kernel. Let's make sure wireless is
     disabled in the running kernel config!
     """
+    if host.system_info.codename == "xenial":
+        KERNEL_VERSION = sdvars.grsec_version_xenial
+    else:
+        KERNEL_VERSION = sdvars.grsec_version_focal
     with host.sudo():
         kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
         kernel_config = host.file(kernel_config_path).content_string
 
         line = "# CONFIG_{} is not set".format(kernel_opts)
-        assert line in kernel_config
+        assert line in kernel_config or kernel_opts not in kernel_config
 
 
 @pytest.mark.parametrize('kernel_opts', [
@@ -223,6 +236,10 @@ def test_kernel_options_enabled_config(host, kernel_opts):
     Tests kernel config for options that should be enabled
     """
 
+    if host.system_info.codename == "xenial":
+        KERNEL_VERSION = sdvars.grsec_version_xenial
+    else:
+        KERNEL_VERSION = sdvars.grsec_version_focal
     with host.sudo():
         kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
         kernel_config = host.file(kernel_config_path).content_string

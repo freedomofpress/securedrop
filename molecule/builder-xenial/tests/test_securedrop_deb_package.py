@@ -61,10 +61,17 @@ def make_deb_paths() -> Dict[str, Path]:
     Jinja-based evaluation of the YAML files (so we can't trivially
     reuse vars in other var values, as is the case with Ansible).
     """
-    grsec_version = "{}+{}".format(
-        securedrop_test_vars["grsec_version"],
-        SECUREDROP_TARGET_DISTRIBUTION
-    )
+
+    if SECUREDROP_TARGET_DISTRIBUTION == "xenial":
+        grsec_version = "{}+{}".format(
+            securedrop_test_vars["grsec_version_xenial"],
+            SECUREDROP_TARGET_DISTRIBUTION
+        )
+    else:
+        grsec_version = "{}+{}".format(
+            securedrop_test_vars["grsec_version_focal"],
+            SECUREDROP_TARGET_DISTRIBUTION
+        )
 
     substitutions = dict(
         securedrop_version=securedrop_test_vars["securedrop_version"],
