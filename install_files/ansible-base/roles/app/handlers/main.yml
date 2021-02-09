@@ -5,8 +5,15 @@
     name: tor
     state: restarted
 
-- name: reload iptables rules
+- name: reload iptables rules for xenial
   shell: iptables-restore < /etc/network/iptables/rules_v4
+  when:
+    - ansible_distribution_release == 'xenial'
+
+- name: reload iptables rules for focal
+  shell: iptables-restore < /etc/iptables/rules.v4
+  when:
+    - ansible_distribution_release == 'focal'
 
 ## App/securedrop section
 - name: restart apache2
