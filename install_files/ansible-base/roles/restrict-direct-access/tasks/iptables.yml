@@ -35,6 +35,8 @@
     owner: root
     group: root
     dest: /etc/network/iptables
+  when:
+    - ansible_distribution_release == 'xenial'
 
 - name: Determine local platform specific routing info
   set_fact:
@@ -59,7 +61,7 @@
 - name: Copy IPv4 iptables rules.
   template:
     src: rules_v4
-    dest: /etc/network/iptables/rules_v4
+    dest: "{{ '/etc/iptables/rules.v4' if ansible_distribution_release == 'focal' else  '/etc/network/iptables/rules_v4' }}"
     owner: root
     mode: "0644"
   notify: drop flag for reboot
@@ -67,6 +69,6 @@
 - name: Copy IPv6 iptables rules.
   copy:
     src: iptables_rules_v6
-    dest: /etc/network/iptables/rules_v6
+    dest: "{{ '/etc/iptables/rules.v6' if ansible_distribution_release == 'focal' else  '/etc/network/iptables/rules_v6' }}"
     owner: root
     mode: "0644"
