@@ -39,6 +39,8 @@
     dest: /etc/network/if-up.d/load_iptables
     owner: root
     mode: "0744"
+  when:
+    - ansible_distribution_release == 'xenial'
 
 - name: Create iptables directory.
   file:
