@@ -1,0 +1,3 @@
+---
+iptables_v4_path: /etc/iptables/rules.v4
+iptables_v6_path: /etc/iptables/rules.v6
