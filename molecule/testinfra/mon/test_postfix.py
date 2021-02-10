@@ -37,6 +37,12 @@ def test_postfix_generic_maps(host):
     """
     assert not host.file("/etc/postfix/generic").exists
     assert not host.file("/etc/postfix/main.cf").contains("^smtp_generic_maps")
+    if host.system_info.codename == "focal":
+        assert host.file("/etc/postfix/main.cf").contains(
+                         "^smtpd_recipient_restrictions = reject_unauth_destination")
+    if host.system_info.codename == "xenial":
+        assert not host.file("/etc/postfix/main.cf").contains(
+                             "^smtpd_recipient_restrictions = reject_unauth_destination")
 
 
 def test_postfix_service(host):
