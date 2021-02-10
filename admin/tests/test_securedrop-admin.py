@@ -55,6 +55,72 @@ class TestSecureDropAdmin(object):
         assert 'HIDDEN' not in out
         assert 'VISIBLE' in out
 
+    def test_update_check_decorator_when_no_update_needed(self, caplog):
+        """
+        When a function decorated with `@update_check_required` is run
+          And the `--force` argument was not given
+          And no update is required
+        Then the update check should run to completion
+          And no errors should be displayed
+          And the program should not exit
+          And the decorated function should be run
+        """
+        with mock.patch(
+            "securedrop_admin.check_for_updates", side_effect=[[False, "1.5.0"]]
+        ) as mocked_check, mock.patch("sys.exit") as mocked_exit:
+            # The decorator itself interprets --force
+            args = argparse.Namespace(force=False)
+            rv = securedrop_admin.update_check_required("update_check_test")(
+                lambda _: 100
+            )(args)
+            assert mocked_check.called
+            assert not mocked_exit.called
+            assert rv == 100
+            assert caplog.text == ''
+
+    def test_update_check_decorator_when_update_needed(self, caplog):
+        """
+        When a function decorated with `@update_check_required` is run
+          And the `--force` argument was not given
+          And an update is required
+        Then the update check should run to completion
+          And an error referencing the command should be displayed
+          And the program should exit
+        """
+        with mock.patch(
+            "securedrop_admin.check_for_updates", side_effect=[[True, "1.5.0"]]
+        ) as mocked_check, mock.patch("sys.exit") as mocked_exit:
+            # The decorator itself interprets --force
+            args = argparse.Namespace(force=False)
+            securedrop_admin.update_check_required("update_check_test")(
+                lambda _: _
+            )(args)
+            assert mocked_check.called
+            assert mocked_exit.called
+            assert "update_check_test" in caplog.text
+
+    def test_update_check_decorator_when_skipped(self, caplog):
+        """
+        When a function decorated with `@update_check_required` is run
+          And the `--force` argument was given
+        Then the update check should not run
+          And a message should be displayed acknowledging this
+          And the program should not exit
+          And the decorated function should be run
+        """
+        with mock.patch(
+            "securedrop_admin.check_for_updates", side_effect=[[True, "1.5.0"]]
+        ) as mocked_check, mock.patch("sys.exit") as mocked_exit:
+            # The decorator itself interprets --force
+            args = argparse.Namespace(force=True)
+            rv = securedrop_admin.update_check_required("update_check_test")(
+                lambda _: 100
+            )(args)
+            assert not mocked_check.called
+            assert not mocked_exit.called
+            assert "--force" in caplog.text
+            assert rv == 100
+
     def test_check_for_updates_update_needed(self, tmpdir, caplog):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
