@@ -18,7 +18,6 @@ def test_app_iptables_rules(host):
 
     # Build a dict of variables to pass to jinja for iptables comparison
     kwargs = dict(
-        ssh_ip=local.interface("eth0").addresses[0],
         mon_ip=os.environ.get('MON_IP', securedrop_test_vars.mon_ip),
         default_interface=host.check_output("ip r | head -n 1 | "
                                             "awk '{ print $5 }'"),
@@ -26,6 +25,10 @@ def test_app_iptables_rules(host):
         securedrop_user_id=host.check_output("id -u www-data"),
         ssh_group_gid=host.check_output("getent group ssh | cut -d: -f3"),
         dns_server=securedrop_test_vars.dns_server)
+
+    # Required for testing under Qubes.
+    if local.interface("eth0").exists:
+        kwargs["ssh_ip"] = local.interface("eth0").addresses[0]
 
     # Build iptables scrape cmd, purge comments + counters
     iptables = r"iptables-save | sed 's/ \[[0-9]*\:[0-9]*\]//g' | egrep -v '^#'"
