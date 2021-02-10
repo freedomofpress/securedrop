@@ -1,4 +1,6 @@
 ---
+- include_vars: "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
+
 - include: app_install_fpf_deb_pkgs.yml
   when: securedrop_app_install_from_repo
 

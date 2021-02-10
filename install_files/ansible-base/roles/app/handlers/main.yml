@@ -6,14 +6,7 @@
     state: restarted
 
 - name: reload iptables rules for xenial
-  shell: iptables-restore < /etc/network/iptables/rules_v4
-  when:
-    - ansible_distribution_release == 'xenial'
-
-- name: reload iptables rules for focal
-  shell: iptables-restore < /etc/iptables/rules.v4
-  when:
-    - ansible_distribution_release == 'focal'
+  shell: iptables-restore < "{{ iptables_v4_path }}"
 
 ## App/securedrop section
 - name: restart apache2
