@@ -4,5 +4,10 @@
     dest: /etc/apt/sources.list
     mode: "0644"
     owner: root
+  notify: update apt cache
   tags:
     - apt
+
+# Ensure apt cache is updated before proceeding, otherwise
+# packages may fail to install.
+- meta: flush_handlers

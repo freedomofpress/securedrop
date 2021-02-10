@@ -1,0 +1,83 @@
+---
+# Testinfra vars file for app-staigng.
+wanted_apache_headers:
+  - 'Header edit Set-Cookie ^(.*)$ $1;HttpOnly'
+  - 'Header always append X-Frame-Options: DENY'
+  - 'Header set Referrer-Policy "same-origin"'
+  - 'Header set X-XSS-Protection: "1; mode=block"'
+  - 'Header set X-Content-Type-Options: nosniff'
+  - 'Header set X-Download-Options: noopen'
+  - "Header set X-Content-Security-Policy: \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';\""
+  - "Header set Content-Security-Policy: \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';\""
+  - 'Header unset Etag'
+
+securedrop_venv: /opt/venvs/securedrop-app-code
+securedrop_venv_bin: "{{ securedrop_venv }}/bin"
+securedrop_venv_site_packages: "{{ securedrop_venv }}/lib/python3.5/site-packages"
+securedrop_code: /var/www/securedrop
+securedrop_data: /var/lib/securedrop
+securedrop_user: www-data
+
+app_hostname: app-staging
+monitor_hostname: mon-staging
+
+apache_listening_address: 127.0.0.1
+apache_source_log: /var/log/apache2/source-error.log
+apache_allow_from: 127.0.0.1
+
+dns_server:
+  - 8.8.8.8
+  - 8.8.4.4
+mon_ip: 10.137.0.51
+app_ip: 10.137.0.50
+
+pip_deps:
+  - name: 'Flask'
+    version: '1.0.2'
+
+apparmor_complain: []
+
+app_directories:
+  - /var/www/securedrop
+  - /var/lib/securedrop
+  - /var/lib/securedrop/store
+  - /var/lib/securedrop/keys
+  - /var/lib/securedrop/tmp
+
+tor_services:
+  - name: source
+    ports:
+      - "80"
+    authenticated: no
+    version: 2
+
+  - name: journalist
+    ports:
+      - "80"
+      - "8080"
+    authenticated: yes
+    client: journalist
+    version: 2
+
+  - name: journalistv3
+    ports:
+      - "80"
+    authenticated: yes
+    version: 3
+
+  - name: sourcev3
+    ports:
+      - "80"
+    authenticated: no
+    version: 3
+
+# Staging permits presence of "source-error.log".
+allowed_apache_logfiles:
+  - /var/log/apache2/access.log
+  - /var/log/apache2/error.log
+  - /var/log/apache2/journalist-access.log
+  - /var/log/apache2/journalist-error.log
+  - /var/log/apache2/other_vhosts_access.log
+  - /var/log/apache2/source-error.log
+
+fpf_apt_repo_url: "https://apt-test.freedom.press"

@@ -1,97 +1,17 @@
 ---
-# Testinfra vars file for app-staigng.
-wanted_apache_headers:
-  - 'Header edit Set-Cookie ^(.*)$ $1;HttpOnly'
-  - 'Header always append X-Frame-Options: DENY'
-  - 'Header set Referrer-Policy "same-origin"'
-  - 'Header set X-XSS-Protection: "1; mode=block"'
-  - 'Header set X-Content-Type-Options: nosniff'
-  - 'Header set X-Download-Options: noopen'
-  - "Header set X-Content-Security-Policy: \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';\""
-  - "Header set Content-Security-Policy: \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';\""
-  - 'Header unset Etag'
-
-securedrop_venv: /opt/venvs/securedrop-app-code
-securedrop_venv_bin: /opt/venvs/securedrop-app-code/bin
-securedrop_venv_site_packages: /opt/venvs/securedrop-app-code/lib/python{}/site-packages
-securedrop_code: /var/www/securedrop
-securedrop_data: /var/lib/securedrop
-securedrop_user: www-data
-admin_user: vagrant
-
-app_hostname: app-staging
-monitor_hostname: mon-staging
-
-apache_listening_address: 127.0.0.1
-apache_source_log: /var/log/apache2/source-error.log
-apache_allow_from: 127.0.0.1
-
 dns_server:
   - 8.8.8.8
   - 8.8.4.4
-mon_ip: 10.0.1.3
-app_ip: 10.0.1.2
 
-pip_deps:
-  - name: 'Flask'
-    version: '1.0.2'
-
-apparmor_complain: []
-
-apparmor_enforce:
-  - "sbin/dhclient"
-  - "/usr/lib/NetworkManager/nm-dhcp-client.action"
-  - "/usr/lib/connman/scripts/dhclient-script"
-  - "/usr/sbin/ntpd"
-  - "/usr/sbin/tcpdump"
-  - "system_tor"
-  - "/usr/sbin/apache2"
-  - "/usr/sbin/apache2//DEFAULT_URI"
-  - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
-  - "/usr/sbin/tor"
-
-app_directories:
-  - /var/www/securedrop
-  - /var/lib/securedrop
-  - /var/lib/securedrop/store
-  - /var/lib/securedrop/keys
-  - /var/lib/securedrop/tmp
-
+# Hardcoding the IPv4 addresses will ONLY work with local testing in Vagrant.
+app_ip: 10.0.137.50
+app_hostname: app-staging
 tor_services:
-  - name: source
+  - name: ssh
     ports:
-      - "80"
-    authenticated: no
-    version: 2
-
-  - name: journalist
-    ports:
-      - "80"
-      - "8080"
-    authenticated: yes
-    client: journalist
-    version: 2
-
-  - name: journalistv3
-    ports:
-      - "80"
-    authenticated: yes
-    version: 3
-
-  - name: sourcev3
-    ports:
-      - "80"
-    authenticated: no
-    version: 3
-
-# Staging permits presence of "source-error.log".
-allowed_apache_logfiles:
-  - /var/log/apache2/access.log
-  - /var/log/apache2/error.log
-  - /var/log/apache2/journalist-access.log
-  - /var/log/apache2/journalist-error.log
-  - /var/log/apache2/other_vhosts_access.log
-  - /var/log/apache2/source-error.log
+      - "22" # assumes remote and local ports are identical
+    authenticated: yes # value will automatically be coerced to boolean
+    client: admin
 
 # Disable Postfix in staging, since we don't have valid credentials.
 postfix_enabled: False
@@ -182,21 +102,4 @@ log_events_with_ossec_alerts:
     level: "1"
     rule_id: "400503"
 
-  - name: test_ossec_server_apache_error_log_alert
-    alert: >
-      [Fri Apr 12 14:39:25.596318 2019] [wsgi:error]
-      [pid 1480:tid 4201987876608] ERROR:flask.app:Login for 'user' failed:
-      invalid username 'user'
-    level: "7"
-    rule_id: "400700"
-
-  - name: test_ossec_server_test_notification_alert
-    alert: >
-      [Fri Apr 12 15:45:05.310796 2019] [wsgi:error]
-      [pid 1479:tid 4201988093696] ERROR:flask.app:This is a test OSSEC alert
-    level: "7"
-    rule_id: "400700"
-
 fpf_apt_repo_url: "https://apt-test.freedom.press"
-grsec_version_xenial: "4.14.188"
-grsec_version_focal: "5.4.88"

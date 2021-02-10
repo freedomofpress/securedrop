@@ -13,6 +13,8 @@ testinfra_hosts = [securedrop_test_vars.monitor_hostname]
 @pytest.mark.skip_in_prod
 def test_mon_iptables_rules(host):
 
+    local = host.get_host("local://")
+
     # Build a dict of variables to pass to jinja for iptables comparison
     kwargs = dict(
         app_ip=os.environ.get('APP_IP', securedrop_test_vars.app_ip),
@@ -23,9 +25,13 @@ def test_mon_iptables_rules(host):
         postfix_user_id=host.check_output("id -u postfix"),
         dns_server=securedrop_test_vars.dns_server)
 
+    # Required for testing under Qubes.
+    if local.interface("eth0").exists:
+        kwargs["ssh_ip"] = local.interface("eth0").addresses[0]
+
     # Build iptables scrape cmd, purge comments + counters
     iptables = r"iptables-save | sed 's/ \[[0-9]*\:[0-9]*\]//g' | egrep -v '^#'"
-    environment = os.environ.get("CI_SD_ENV", "staging")
+    environment = os.environ.get("SECUREDROP_TESTINFRA_TARGET_HOST", "staging")
     iptables_file = "{}/iptables-mon-{}.j2".format(
         os.path.dirname(os.path.abspath(__file__)),
         environment)

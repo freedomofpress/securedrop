@@ -49,9 +49,11 @@ scenario:
     - converge
 verifier:
   name: testinfra
-  lint:
+  lint: |
     flake8
   directory: ../testinfra
   options:
     n: auto
     v: 2
+  env:
+    SECUREDROP_TESTINFRA_TARGET_HOST: qubes-staging

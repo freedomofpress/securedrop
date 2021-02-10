@@ -6,3 +6,7 @@
 # as necessary.
 - name: reboot
   include: "{{ role_path }}/../../tasks/reboot.yml"
+
+- name: update apt cache
+  apt:
+    update_cache: yes
