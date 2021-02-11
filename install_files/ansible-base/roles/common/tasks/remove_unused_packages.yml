@@ -7,6 +7,12 @@
     - apt
     - hardening
 
+# Remove the apparmor config file for snapd
+- name: Remove snapd config for apparmor
+  file:
+    path: /etc/apparmor.d/usr.lib.snapd.snap-confine.real
+    state: absent
+
 # After installing securedrop-grsec, remove
 # old generic kernels to avoid accidental
 # boots into a less secure environment.
