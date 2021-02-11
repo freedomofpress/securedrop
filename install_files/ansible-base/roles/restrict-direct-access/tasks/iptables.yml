@@ -27,6 +27,8 @@
     dest: /etc/network/if-up.d/load_iptables
     owner: root
     mode: "0744"
+  when:
+    - ansible_distribution_release == 'xenial'
 
 - name: Create iptables directory.
   file:
@@ -35,6 +37,8 @@
     owner: root
     group: root
     dest: /etc/network/iptables
+  when:
+    - ansible_distribution_release == 'xenial'
 
 - name: Determine local platform specific routing info
   set_fact:
@@ -59,7 +63,7 @@
 - name: Copy IPv4 iptables rules.
   template:
     src: rules_v4
-    dest: /etc/network/iptables/rules_v4
+    dest: "{{ iptables_v4_path }}"
     owner: root
     mode: "0644"
   notify: drop flag for reboot
@@ -67,6 +71,6 @@
 - name: Copy IPv6 iptables rules.
   copy:
     src: iptables_rules_v6
-    dest: /etc/network/iptables/rules_v6
+    dest: "{{ iptables_v6_path }}"
     owner: root
     mode: "0644"

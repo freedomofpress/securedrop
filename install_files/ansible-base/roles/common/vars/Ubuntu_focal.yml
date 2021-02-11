@@ -9,6 +9,7 @@ resolvconf_target_filepath: /etc/resolv.conf
 securedrop_common_packages:
   - apt-transport-https
   - aptitude
+  - iptables-persistent
   - unattended-upgrades
   - ntp
   - ntpdate

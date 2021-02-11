@@ -154,3 +154,14 @@ def test_no_ecrypt_messages_in_logs(host, logfile):
 def test_unused_packages_are_removed(host, package):
     """ Check if unused package is present """
     assert host.package(package).is_installed is False
+
+
+def test_iptables_packages(host):
+    """
+    Focal hosts should use iptables-persistent for enforcing
+    firewall config across reboots.
+    """
+    if host.system_info.codename == "focal":
+        assert host.package("iptables-persistent").is_installed
+    else:
+        assert not host.package("iptables-persistent").is_installed

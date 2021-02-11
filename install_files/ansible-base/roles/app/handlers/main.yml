@@ -5,9 +5,6 @@
     name: tor
     state: restarted
 
-- name: reload iptables rules
-  shell: iptables-restore < /etc/network/iptables/rules_v4
-
 ## App/securedrop section
 - name: restart apache2
   service:
