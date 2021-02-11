@@ -2,18 +2,28 @@ Port 22
 ListenAddress {{ ssh_listening_address }}:22
 Protocol 2
 HostKey /etc/ssh/ssh_host_rsa_key
-HostKey /etc/ssh/ssh_host_dsa_key
 HostKey /etc/ssh/ssh_host_ecdsa_key
-UsePrivilegeSeparation yes
+HostKey /etc/ssh/ssh_host_ed25519_key
+
 KeyRegenerationInterval 3600
 ServerKeyBits 4096
+
+# Logging options
+
 SyslogFacility AUTH
 LogLevel INFO
+
+# Authentication options
+
 LoginGraceTime 120
 PermitRootLogin no
 StrictModes yes
 RSAAuthentication yes
 PubkeyAuthentication yes
+PasswordAuthentication no
+# Only users in the ssh group to authenticate
+AllowGroups ssh
+# Don't use host-based authentication
 IgnoreRhosts yes
 RhostsRSAAuthentication no
 HostbasedAuthentication no
@@ -22,20 +32,33 @@ ChallengeResponseAuthentication no
 KerberosAuthentication no
 KerberosGetAFSToken no
 GSSAPIAuthentication no
+UsePAM no
+UseDNS no
+
+# Cipher selection
+
+Ciphers aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes128-ctr
+# Don't use SHA1 for kex
+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+# Don't use SHA1 for hashing, don't use encrypt-and-MAC mode
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com
+
+# Network
+
+ClientAliveInterval 300
+ClientAliveCountMax 0
+# Do not allow remote port forwarding to bind to non-loopback addresses
+GatewayPorts no
+# DisableX11 and agent forwarding, tunnelling
+AllowTcpForwarding no
+AllowAgentForwarding no
+PermitTunnel no
 X11Forwarding no
 X11DisplayOffset 10
+
+# Misc configuration
+
 PrintMotd no
 PrintLastLog yes
 TCPKeepAlive yes
 AcceptEnv LANG LC_*
-UsePAM no
-UseDNS no
-ClientAliveInterval 300
-ClientAliveCountMax 0
-Ciphers aes256-gcm@openssh.com,aes256-ctr,chacha20-poly1305@openssh.com
-KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
-MACs hmac-sha2-256,hmac-sha2-512
-GatewayPorts no
-AllowGroups ssh
-AllowTcpForwarding no
-PasswordAuthentication no
