@@ -4,8 +4,17 @@
 set -e
 set -x
 
+# Issue #5782
+# Set Prompt=never for distro upgrades
+update_release_prompt() {
+    set -e
+    upgrade_config='/etc/update-manager/release-upgrades'
+    sed -i 's/Prompt=.*/Prompt=never/' "$upgrade_config"
+}
+
 case "$1" in
     configure)
+    update_release_prompt
     # Configuration required for unattended-upgrades
     cp /opt/securedrop/20auto-upgrades /etc/apt/apt.conf.d/
     cp /opt/securedrop/50unattended-upgrades /etc/apt/apt.conf.d/
