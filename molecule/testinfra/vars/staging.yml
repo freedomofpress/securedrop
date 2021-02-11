@@ -199,4 +199,4 @@ log_events_with_ossec_alerts:
 
 fpf_apt_repo_url: "https://apt-test.freedom.press"
 grsec_version_xenial: "4.14.188"
-grsec_version_focal: "5.4.88"
+grsec_version_focal: "5.4.97"

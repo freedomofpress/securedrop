@@ -4,7 +4,7 @@ ossec_version: "3.6.0"
 keyring_version: "0.1.4"
 config_version: "0.1.4"
 grsec_version_xenial: "4.14.188"
-grsec_version_focal: "5.4.88"
+grsec_version_focal: "5.4.97"
 
 # These values will be interpolated with values populated above
 # via helper functions in the tests.
