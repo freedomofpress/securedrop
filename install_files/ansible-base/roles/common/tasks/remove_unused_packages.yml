@@ -3,6 +3,7 @@
   apt:
     name: "{{ unused_packages }}"
     state: absent
+    purge: yes
   tags:
     - apt
     - hardening
