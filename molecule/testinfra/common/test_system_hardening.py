@@ -148,8 +148,9 @@ def test_no_ecrypt_messages_in_logs(host, logfile):
 @pytest.mark.parametrize('package', [
     'cloud-init',
     'libiw30',
-    'wpasupplicant',
+    'snapd',
     'wireless-tools',
+    'wpasupplicant',
 ])
 def test_unused_packages_are_removed(host, package):
     """ Check if unused package is present """
@@ -165,3 +166,10 @@ def test_iptables_packages(host):
         assert host.package("iptables-persistent").is_installed
     else:
         assert not host.package("iptables-persistent").is_installed
+
+
+def test_snapd_absent(host):
+    assert not host.file("/lib/systemd/system/snapd.service").exists
+    assert not host.file("/etc/apparmor.d/usr.lib.snapd.snap-confine.real").exists
+    assert not host.file("/usr/bin/snap").exists
+    assert not host.file("/var/lib/snapd/snaps").exists

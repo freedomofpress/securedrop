@@ -49,3 +49,4 @@ unused_packages:
   - libiw30
   - wireless-tools
   - wpasupplicant
+  - snapd
