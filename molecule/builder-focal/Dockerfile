@@ -21,7 +21,6 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         libffi-dev \
         libssl-dev \
         make \
-        ntp \
         paxctl \
         python3-all \
         python3-pip \

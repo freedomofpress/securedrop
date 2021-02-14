@@ -37,16 +37,27 @@ pip_deps:
 apparmor_complain: []
 
 apparmor_enforce:
-  - "/sbin/dhclient"
-  - "/usr/lib/NetworkManager/nm-dhcp-client.action"
-  - "/usr/lib/connman/scripts/dhclient-script"
-  - "/usr/sbin/ntpd"
-  - "/usr/sbin/tcpdump"
-  - "system_tor"
-  - "/usr/sbin/apache2"
-  - "/usr/sbin/apache2//DEFAULT_URI"
-  - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
-  - "/usr/sbin/tor"
+  focal:
+    - "sbin/dhclient"
+    - "/usr/lib/NetworkManager/nm-dhcp-client.action"
+    - "/usr/lib/connman/scripts/dhclient-script"
+    - "/usr/sbin/tcpdump"
+    - "system_tor"
+    - "/usr/sbin/apache2"
+    - "/usr/sbin/apache2//DEFAULT_URI"
+    - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
+    - "/usr/sbin/tor"
+  xenial:
+    - "sbin/dhclient"
+    - "/usr/lib/NetworkManager/nm-dhcp-client.action"
+    - "/usr/lib/connman/scripts/dhclient-script"
+    - "/usr/sbin/ntpd"
+    - "/usr/sbin/tcpdump"
+    - "system_tor"
+    - "/usr/sbin/apache2"
+    - "/usr/sbin/apache2//DEFAULT_URI"
+    - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
+    - "/usr/sbin/tor"
 
 app_directories:
   - /var/www/securedrop

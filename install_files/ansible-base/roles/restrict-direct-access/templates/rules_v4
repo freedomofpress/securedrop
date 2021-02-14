@@ -60,8 +60,8 @@
 {% endfor -%}
 
 # NTP rules
--A OUTPUT -p udp --sport 123 --dport 123 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
--A INPUT -p udp --sport 123 --dport 123 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
+-A OUTPUT -p udp --dport 123 -m owner --uid-owner {{ time_service_user }} -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
+-A INPUT -p udp --sport 123 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
 
 # apt rules can't be restricted by destination address because iptables will only resolve FQDNs once at startup
 -A OUTPUT -p tcp --match multiport --dports 80,8080,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"

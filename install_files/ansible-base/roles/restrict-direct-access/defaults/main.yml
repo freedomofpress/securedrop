@@ -40,3 +40,5 @@ tor_v3_service_map:
   app-journalist.auth_private: "app_journalist_private_key"
   app-ssh.auth_private: "app_ssh_private_key"
   mon-ssh.auth_private: "mon_ssh_private_key"
+
+time_service_user: '{{ "root" if ansible_distribution_release == "xenial" else "systemd-timesync" }}'

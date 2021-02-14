@@ -56,4 +56,5 @@ verifier:
     n: auto
     v: 2
   env:
+    SECUREDROP_TARGET_DISTRIBUTION: xenial
     SECUREDROP_TESTINFRA_TARGET_HOST: qubes-staging

@@ -62,7 +62,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-build/*.deb
+build/**
 develop-eggs/
 dist/
 downloads/
