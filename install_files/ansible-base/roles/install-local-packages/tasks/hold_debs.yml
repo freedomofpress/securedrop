@@ -1,5 +1,5 @@
 ---
-# The Ansible config runs an aptitude safe-upgrade on every playbook invocation,
+# The Ansible config runs an apt-get dist-upgrade on every playbook invocation,
 # which will clobber the locally built packages with prod packages from the apt
 # repo. Let's set the packages to "hold" so they don't auto-upgrade.
 
@@ -9,10 +9,7 @@
   changed_when: false
   with_items: "{{ local_deb_packages }}"
 
-# Using apt-mark only applies to `apt` or `apt-get` actions, so we'll use a two-pass
-# approach to hold the locally built packages, so that neither apt nor aptitude
-# tries to upgrade them on subsequent playbook runs.
-
+# Using apt-mark applies to both `apt` or `apt-get` actions.
 - name: Mark packages as held, so they aren't upgraded automatically (via apt).
   command: apt-mark hold {{ item.stdout }}
   register: apt_mark_hold_result
@@ -21,11 +18,4 @@
   # to the value prior to installation.
   changed_when: item.stdout not in apt_mark_showhold_result.stdout_lines
   when: item.stdout not in apt_mark_showhold_result.stdout_lines
-  with_items: "{{ local_deb_packages_name_check.results }}"
-
-- name: Mark packages as held, so they aren't upgraded automatically (via aptitude).
-  command: aptitude hold {{ item.stdout }}
-  # `aptitude hold <package>` doesn't give any meaningful output to handle idempotence,
-  # so let's mark the task as no changes.
-  changed_when: false
   with_items: "{{ local_deb_packages_name_check.results }}"
