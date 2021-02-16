@@ -2,17 +2,6 @@
 # Configuration for unattended upgrades is almost exclusively managed by the
 # securedrop-config package under Focal.
 
-- name: Configure unattended-upgrades to reboot daily at the scheduled time.
-  template:
-    src: 80securedrop.j2
-    dest: /etc/apt/apt.conf.d/80securedrop
-    mode: 0644
-    owner: root
-    group: root
-  tags:
-    - apt
-    - unattended-upgrades
-
 - name: Ensure apt-daily and apt-daily-upgrade services are unmasked, started and enabled.
   systemd:
     name: "{{ item }}"

@@ -146,9 +146,11 @@ def test_no_ecrypt_messages_in_logs(host, logfile):
 
 
 @pytest.mark.parametrize('package', [
+    'aptitude',
     'cloud-init',
     'libiw30',
     'snapd',
+    'torsocks',
     'wireless-tools',
     'wpasupplicant',
 ])

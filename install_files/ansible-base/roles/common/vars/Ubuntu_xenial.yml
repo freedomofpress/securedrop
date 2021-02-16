@@ -12,7 +12,6 @@ resolvconf_target_filepath: /etc/resolvconf/resolv.conf.d/base
 
 securedrop_common_packages:
   - apt-transport-https
-  - aptitude
   - cron-apt
   - ntp
   - ntpdate
