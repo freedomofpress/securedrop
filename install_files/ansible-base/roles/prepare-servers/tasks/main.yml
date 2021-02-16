@@ -21,6 +21,11 @@
       SecureDrop cannot be installed. For details, see
       https://github.com/freedomofpress/securedrop/issues/4058
 
+- name: Install python and packages required by installer
+  raw: apt install -y python3 apt-transport-https dnsutils ubuntu-release-upgrader-core
+  register: _apt_install_prereqs_results
+  changed_when: "'0 upgraded, 0 newly installed, 0 to remove' not in _apt_install_prereqs_results.stdout"
+
 - name: Remove cloud-init
   apt:
     name: cloud-init
@@ -28,8 +33,3 @@
     purge: yes
   tags:
     - apt
-
-- name: Install python and packages required by installer
-  raw: apt install -y python apt-transport-https dnsutils
-  register: _apt_install_prereqs_results
-  changed_when: "'0 upgraded, 0 newly installed, 0 to remove' not in _apt_install_prereqs_results.stdout"
