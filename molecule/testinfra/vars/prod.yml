@@ -197,4 +197,5 @@ log_events_with_ossec_alerts:
     rule_id: "400700"
 
 fpf_apt_repo_url: "https://apt.freedom.press"
-grsec_version: "4.14.188"
+grsec_version_xenial: "4.14.188"
+grsec_version_focal: "5.4.97"
