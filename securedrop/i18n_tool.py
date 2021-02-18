@@ -91,15 +91,25 @@ class I18NTool:
                 '--version', args.version,
                 "--msgid-bugs-address=securedrop@freedom.press",
                 "--copyright-holder=Freedom of the Press Foundation",
+                "--add-comments=Translators:",
+                "--strip-comments",
+                "--add-location=never",
+                "--no-wrap",
                 *sources)
+
             sed('-i', '-e', '/^"POT-Creation-Date/d', messages_file)
 
             if (self.file_is_modified(messages_file) and
                     len(os.listdir(args.translations_dir)) > 1):
                 tglob = '{}/*/LC_MESSAGES/*.po'.format(args.translations_dir)
                 for translation in glob.iglob(tglob):
-                    msgmerge('--previous', '--update', translation,
-                             messages_file)
+                    msgmerge(
+                        '--previous',
+                        '--update',
+                        '--no-wrap',
+                        translation,
+                        messages_file
+                    )
                 log.warning("messages translations updated in {}".format(
                             messages_file))
             else:
@@ -141,15 +151,34 @@ class I18NTool:
             pos = [f for f in os.listdir(args.translations_dir) if f.endswith('.po')]
             linguas = [l[:-3] for l in pos]
             content = "\n".join(linguas) + "\n"
-            open(join(args.translations_dir, 'LINGUAS'), 'w').write(content)
+            linguas_file = join(args.translations_dir, 'LINGUAS')
+            try:
+                open(linguas_file, 'w').write(content)
 
-            for source in args.sources.split(','):
-                target = source.rstrip('.in')
-                msgfmt('--desktop',
-                       '--template', source,
-                       '-o', target,
-                       '-d', '.',
-                       _cwd=args.translations_dir)
+                for source in args.sources.split(','):
+                    target = source.rstrip('.in')
+                    msgfmt('--desktop',
+                           '--template', source,
+                           '-o', target,
+                           '-d', '.',
+                           _cwd=args.translations_dir)
+                    self.sort_desktop_template(join(args.translations_dir, target))
+            finally:
+                if os.path.exists(linguas_file):
+                    os.unlink(linguas_file)
+
+    def sort_desktop_template(self, template: str) -> None:
+        """
+        Sorts the lines containing the icon names.
+        """
+        lines = open(template).readlines()
+        names = sorted(l for l in lines if l.startswith("Name"))
+        others = (l for l in lines if not l.startswith("Name"))
+        with open(template, "w") as new_template:
+            for line in others:
+                new_template.write(line)
+            for line in names:
+                new_template.write(line)
 
     def set_translate_parser(self,
                              parser: argparse.ArgumentParser,
