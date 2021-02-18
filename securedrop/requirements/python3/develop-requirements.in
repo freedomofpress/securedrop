@@ -6,7 +6,7 @@ bandit
 boto
 boto3
 cffi>=1.14.2
-docker-py
+docker
 # Needed for dig ansible lookup
 dnspython
 flake8
