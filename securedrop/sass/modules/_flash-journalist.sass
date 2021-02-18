@@ -2,12 +2,13 @@
   .flash
     display: flex
     flex-flow: row nowrap
-    align-items: flex-start
-    border-radius: 10px
-    margin: 10px
-    padding: 10px
+    align-items: center
+    margin: 0px 0px 10px 0px
+    padding: 20px 
     text-align: left
-    font-size: medium
+    font-size: 0.9em
+    line-height: 1.4em
+    color: #333
 
     &:dir(rtl)
       text-align: right
@@ -16,27 +17,33 @@
       font-size: 18pt
 
     &.success
-      border: 1px solid #E1F1E5
-      background-color: #E6FFEB
+      background-color: $color_success_background
 
-      strong
-        color: #299549
+      b
+        color: $color_success_text_strong
+        padding-right: 0.5em
 
     &.notification
-      border: 1px solid #8ed9f6
-      background-color: #e3f7fc
+      background-color: $color_notification_background
       font-size: medium
       font-weight: normal
 
       i
-        color: #4f7685
+        color: $color_notification_text_strong
+      b
+        color: $color_notification_text_strong
+        padding-right: 0.5em
 
     &.error
-      border: 1px solid $color_error_border
       background-color: $color_error_background
 
       i
-        color: #D62727
+        color: $color_error_text_strong
+
+      b
+        color: $color_error_text_strong
+        margin-top: 1px
+        padding-right: 0.5em
 
     &.important-header
       margin: auto 6px
@@ -67,5 +74,5 @@
       p
         color: #555555
 
-    img.icon
-      margin-right: 5px
+    img
+      margin-right: 8px

@@ -8,8 +8,10 @@
       <p><em>{{ modal_data.modal_warning }}</em></p>
     {% endif %}
     <center>
-      <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}" class="btn cancel small">{{ gettext('Cancel') }}</a>
-      <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete" class="small {{ modal_data.submit_btn_type }}">{{ modal_data.submit_btn_text }}</button>
+      <div class="btn-row">
+        <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}" class="btn cancel small">{{ gettext('Cancel') }}</a>
+        <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete" class="btn small {{ modal_data.submit_btn_type }}">{{ modal_data.submit_btn_text }}</button>
+      </div>
     </center>
   </div>
 </div>
