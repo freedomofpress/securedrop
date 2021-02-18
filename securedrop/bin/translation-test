@@ -36,7 +36,7 @@ printf "Running tests in these locales: %s\n" "$LOCALES"
 # separately avoids this.
 for locale in $LOCALES
 do
-  PAGE_LAYOUT_LOCALES=$locale pytest \
+  TEST_LOCALES=$locale pytest \
     -v \
     --force-flaky --max-runs=3 \
     --page-layout \

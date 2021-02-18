@@ -33,13 +33,15 @@ fi
 
 mkdir -p "../test-results"
 
-: "${PAGE_LAYOUT_LOCALES:=en_US,ar}"
-export PAGE_LAYOUT_LOCALES
+: "${TEST_LOCALES:="ar en_US"}"
+export TEST_LOCALES
 export TOR_FORCE_NET_CONFIG=0
 
 
 pytest \
     --force-flaky --max-runs=3 \
+    -rx \
+    --no-success-flaky-report \
     --page-layout \
     --durations 10 \
     --junitxml=../test-results/junit.xml \

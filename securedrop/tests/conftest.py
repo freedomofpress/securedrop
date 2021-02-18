@@ -32,6 +32,7 @@ from journalist_app import create_app as create_journalist_app
 import models
 from source_app import create_app as create_source_app
 from . import utils
+from .utils import i18n
 
 # The PID file for the redis worker is hard-coded below.
 # Ideally this constant would be provided by a test harness.
@@ -129,6 +130,8 @@ def config(gpg_key_dir: Path) -> Generator[SDConfig, None, None]:
         sqlite_db_path = data_dir / "db.sqlite"
         config.DATABASE_FILE = str(sqlite_db_path)
         subprocess.check_call(["sqlite3", config.DATABASE_FILE, ".databases"])
+
+        config.SUPPORTED_LOCALES = i18n.get_test_locales()
 
         yield config
 

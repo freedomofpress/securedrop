@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# flake8: noqa: E741
 import gzip
 import re
 import subprocess
@@ -9,8 +10,11 @@ from datetime import date
 from io import BytesIO, StringIO
 from pathlib import Path
 
+from flaky import flaky
 from flask import session, escape, url_for, g, request
+from flask_babel import gettext
 from mock import patch, ANY
+import pytest
 
 import crypto_util
 import source
@@ -26,6 +30,7 @@ from source_app import main as source_app_main
 from source_app import api as source_app_api
 from source_app import get_logo_url
 from .utils.db_helper import new_codename, submit
+from .utils.i18n import get_test_locales, language_tag, page_language, xfail_untranslated_messages
 from .utils.instrument import InstrumentedApp
 from sdconfig import config
 
@@ -634,13 +639,30 @@ def test_submit_sanitizes_filename(source_app):
                                         mtime=0)
 
 
-def test_tor2web_warning_headers(source_app):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_tor2web_warning_headers(config, source_app, locale):
     with source_app.test_client() as app:
-        resp = app.get(url_for('main.index'),
-                       headers=[('X-tor2web', 'encrypted')])
-        assert resp.status_code == 200
-        text = resp.data.decode('utf-8')
-        assert "You appear to be using Tor2Web." in text
+        with InstrumentedApp(app) as ins:
+            resp = app.get(url_for('main.index', l=locale), headers=[('X-tor2web', 'encrypted')])
+            assert resp.status_code == 200
+
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = [
+                "WARNING:",
+                "You appear to be using Tor2Web, which does not provide anonymity.",
+                "Why is this dangerous?",
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(
+                    '<strong>{}</strong>&nbsp;{}&nbsp;<a href="{}">{}</a>'.format(
+                        escape(gettext(msgids[0])),
+                        escape(gettext(msgids[1])),
+                        url_for('info.tor2web_warning'),
+                        escape(gettext(msgids[2])),
+                    ),
+                    'banner-warning'
+                )
 
 
 def test_tor2web_warning(source_app):
