@@ -720,11 +720,23 @@ def update_check_required(cmd_name: str) -> Callable[[_FuncT], _FuncT]:
 
             update_status, latest_tag = check_for_updates(cli_args)
             if update_status is True:
+
+                # Useful for troubleshooting
+                branch_status = get_git_branch(cli_args)
+
                 sdlog.error("You are not running the most recent signed SecureDrop release "
                             "on this workstation.")
                 sdlog.error("Latest available version: {}".format(latest_tag))
+
+                if branch_status is not None:
+                    sdlog.error("Current branch status: {}".format(branch_status))
+                else:
+                    sdlog.error("Problem determining current branch status.")
+
                 sdlog.error("Running outdated or mismatched code can cause significant "
                             "technical issues.")
+                sdlog.error("To display more information about your repository state, run:\n\n\t"
+                            "git status\n")
                 sdlog.error("If you are certain you want to proceed, run:\n\n\t"
                             "./securedrop-admin --force {}\n".format(cmd_name))
                 sdlog.error("To apply the latest updates, run:\n\n\t"
@@ -905,7 +917,10 @@ def check_for_updates(args: argparse.Namespace) -> Tuple[bool, str]:
     """Check for SecureDrop updates"""
     sdlog.info("Checking for SecureDrop updates...")
 
-    # Determine what branch we are on
+    # Determine what tag we are likely to be on. Caveat: git describe
+    # may produce very surprising results, because it will locate the most recent
+    # _reachable_ tag. However, in our current branching model, it can be
+    # relied on to determine if we're on the latest tag or not.
     current_tag = subprocess.check_output(['git', 'describe'],
                                           cwd=args.root).decode('utf-8').rstrip('\n')  # noqa: E501
 
@@ -931,6 +946,19 @@ def check_for_updates(args: argparse.Namespace) -> Tuple[bool, str]:
         return True, latest_tag
     sdlog.info("All updates applied")
     return False, latest_tag
+
+
+def get_git_branch(args: argparse.Namespace) -> Optional[str]:
+    """
+    Returns the starred line of `git branch` output.
+    """
+    git_branch_raw = subprocess.check_output(['git', 'branch'],
+                                             cwd=args.root).decode('utf-8')
+    match = re.search(r"\* (.*)\n", git_branch_raw)
+    if match is not None and len(match.groups()) > 0:
+        return match.group(1)
+    else:
+        return None
 
 
 def get_release_key_from_keyserver(
