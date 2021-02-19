@@ -55,6 +55,80 @@ class TestSecureDropAdmin(object):
         assert 'HIDDEN' not in out
         assert 'VISIBLE' in out
 
+    def test_update_check_decorator_when_no_update_needed(self, caplog):
+        """
+        When a function decorated with `@update_check_required` is run
+          And the `--force` argument was not given
+          And no update is required
+        Then the update check should run to completion
+          And no errors should be displayed
+          And the program should not exit
+          And the decorated function should be run
+        """
+        with mock.patch(
+            "securedrop_admin.check_for_updates", side_effect=[[False, "1.5.0"]]
+        ) as mocked_check, mock.patch(
+            "securedrop_admin.get_git_branch", side_effect=["develop"]
+        ), mock.patch("sys.exit") as mocked_exit:
+            # The decorator itself interprets --force
+            args = argparse.Namespace(force=False)
+            rv = securedrop_admin.update_check_required("update_check_test")(
+                lambda _: 100
+            )(args)
+            assert mocked_check.called
+            assert not mocked_exit.called
+            assert rv == 100
+            assert caplog.text == ''
+
+    def test_update_check_decorator_when_update_needed(self, caplog):
+        """
+        When a function decorated with `@update_check_required` is run
+          And the `--force` argument was not given
+          And an update is required
+        Then the update check should run to completion
+          And an error referencing the command should be displayed
+          And the current branch state should be included in the output
+          And the program should exit
+        """
+        with mock.patch(
+            "securedrop_admin.check_for_updates", side_effect=[[True, "1.5.0"]]
+        ) as mocked_check, mock.patch(
+            "securedrop_admin.get_git_branch", side_effect=["bad_branch"]
+        ), mock.patch("sys.exit") as mocked_exit:
+            # The decorator itself interprets --force
+            args = argparse.Namespace(force=False)
+            securedrop_admin.update_check_required("update_check_test")(
+                lambda _: _
+            )(args)
+            assert mocked_check.called
+            assert mocked_exit.called
+            assert "update_check_test" in caplog.text
+            assert "bad_branch" in caplog.text
+
+    def test_update_check_decorator_when_skipped(self, caplog):
+        """
+        When a function decorated with `@update_check_required` is run
+          And the `--force` argument was given
+        Then the update check should not run
+          And a message should be displayed acknowledging this
+          And the program should not exit
+          And the decorated function should be run
+        """
+        with mock.patch(
+            "securedrop_admin.check_for_updates", side_effect=[[True, "1.5.0"]]
+        ) as mocked_check, mock.patch(
+            "securedrop_admin.get_git_branch", side_effect=["develop"]
+        ), mock.patch("sys.exit") as mocked_exit:
+            # The decorator itself interprets --force
+            args = argparse.Namespace(force=True)
+            rv = securedrop_admin.update_check_required("update_check_test")(
+                lambda _: 100
+            )(args)
+            assert not mocked_check.called
+            assert not mocked_exit.called
+            assert "--force" in caplog.text
+            assert rv == 100
+
     def test_check_for_updates_update_needed(self, tmpdir, caplog):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
@@ -127,6 +201,40 @@ class TestSecureDropAdmin(object):
                 assert "All updates applied" in caplog.text
                 assert update_status is False
                 assert tag == '0.6.1'
+
+    @pytest.mark.parametrize(
+        "git_output, expected_rv",
+        [
+            (b'* develop\n',
+             'develop'),
+            (b' develop\n'
+             b'* release/1.7.0\n',
+             'release/1.7.0'),
+            (b'* (HEAD detached at 1.7.0)\n'
+             b'  develop\n'
+             b'  release/1.7.0\n',
+             '(HEAD detached at 1.7.0)'),
+            (b'  main\n'
+             b'* valid_+!@#$%&_branch_name\n',
+             'valid_+!@#$%&_branch_name'),
+            (b'Unrecognized output.',
+             None)
+        ]
+    )
+    def test_get_git_branch(self, git_output, expected_rv):
+        """
+        When `git branch` completes with exit code 0
+          And the output conforms to the expected format
+          Then `get_git_branch` should return a description of the current HEAD
+
+        When `git branch` completes with exit code 0
+          And the output does not conform to the expected format
+          Then `get_git_branch` should return `None`
+        """
+        args = argparse.Namespace(root=None)
+        with mock.patch('subprocess.check_output', side_effect=[git_output]):
+            rv = securedrop_admin.get_git_branch(args)
+            assert rv == expected_rv
 
     def test_update_exits_if_not_needed(self, tmpdir, caplog):
         git_repo_path = str(tmpdir)

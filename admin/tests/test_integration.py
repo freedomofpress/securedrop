@@ -359,7 +359,7 @@ def verify_install_has_valid_config():
     Checks that securedrop-admin install validates the configuration.
     """
     cmd = os.path.join(os.path.dirname(CURRENT_DIR), 'securedrop_admin/__init__.py')
-    child = pexpect.spawn('python {0} --root {1} install'.format(cmd, SD_DIR))
+    child = pexpect.spawn('python {0} --force --root {1} install'.format(cmd, SD_DIR))
     child.expect(b"SUDO password:", timeout=5)
     child.close()
 
@@ -369,7 +369,7 @@ def test_install_with_no_config():
     Checks that securedrop-admin install complains about a missing config file.
     """
     cmd = os.path.join(os.path.dirname(CURRENT_DIR), 'securedrop_admin/__init__.py')
-    child = pexpect.spawn('python {0} --root {1} install'.format(cmd, SD_DIR))
+    child = pexpect.spawn('python {0} --force --root {1} install'.format(cmd, SD_DIR))
     child.expect(b'ERROR: Please run "securedrop-admin sdconfig" first.', timeout=5)
     child.expect(pexpect.EOF, timeout=5)
     child.close()
@@ -380,7 +380,7 @@ def test_install_with_no_config():
 def test_sdconfig_on_first_run():
     cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                        'securedrop_admin/__init__.py')
-    child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
+    child = pexpect.spawn('python {0} --force --root {1} sdconfig'.format(cmd, SD_DIR))
     verify_username_prompt(child)
     child.sendline('')
     verify_reboot_prompt(child)
@@ -444,7 +444,7 @@ def test_sdconfig_on_first_run():
 def test_sdconfig_both_v2_v3_true():
     cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                        'securedrop_admin/__init__.py')
-    child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
+    child = pexpect.spawn('python {0} --force --root {1} sdconfig'.format(cmd, SD_DIR))
     verify_username_prompt(child)
     child.sendline('')
     verify_reboot_prompt(child)
@@ -508,7 +508,7 @@ def test_sdconfig_both_v2_v3_true():
 def test_sdconfig_only_v2_true():
     cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                        'securedrop_admin/__init__.py')
-    child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
+    child = pexpect.spawn('python {0} --force --root {1} sdconfig'.format(cmd, SD_DIR))
     verify_username_prompt(child)
     child.sendline('')
     verify_reboot_prompt(child)
@@ -572,7 +572,7 @@ def test_sdconfig_only_v2_true():
 def test_sdconfig_enable_journalist_alerts():
     cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                        'securedrop_admin/__init__.py')
-    child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
+    child = pexpect.spawn('python {0} --force --root {1} sdconfig'.format(cmd, SD_DIR))
     verify_username_prompt(child)
     child.sendline('')
     verify_reboot_prompt(child)
@@ -641,7 +641,7 @@ def test_sdconfig_enable_journalist_alerts():
 def test_sdconfig_enable_https_on_source_interface():
     cmd = os.path.join(os.path.dirname(CURRENT_DIR),
                        'securedrop_admin/__init__.py')
-    child = pexpect.spawn('python {0} --root {1} sdconfig'.format(cmd, SD_DIR))
+    child = pexpect.spawn('python {0} --force --root {1} sdconfig'.format(cmd, SD_DIR))
     verify_username_prompt(child)
     child.sendline('')
     verify_reboot_prompt(child)

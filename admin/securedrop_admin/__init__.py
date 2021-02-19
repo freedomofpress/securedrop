@@ -24,6 +24,7 @@ instances.
 """
 
 import argparse
+import functools
 import ipaddress
 import logging
 import os
@@ -45,6 +46,9 @@ import yaml
 from pkg_resources import parse_version
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import x25519
+
+from typing import cast
+
 from typing import List
 
 from typing import Set
@@ -80,6 +84,11 @@ class JournalistAlertEmailException(Exception):
 
 # The type of each entry within SiteConfig.desc
 _T = TypeVar('_T', bound=Union[int, str, bool])
+
+# The function type used for the @update_check_required decorator; see
+# https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators
+_FuncT = TypeVar('_FuncT', bound=Callable[..., Any])
+
 # (var, default, type, prompt, validator, transform, condition)
 _DescEntryType = Tuple[str, _T, Type[_T], str, Optional[Validator], Optional[Callable], Callable]
 
@@ -516,7 +525,7 @@ class SiteConfig:
                 self._config_in_progress[var] = ''
                 continue
             self._config_in_progress[var] = self.user_prompt_config_one(desc,
-                                                            self.config.get(var))  # noqa: E501
+                                                                        self.config.get(var))  # noqa: E501
         return self._config_in_progress
 
     def user_prompt_config_one(
@@ -690,6 +699,57 @@ def setup_logger(verbose: bool = False) -> None:
     sdlog.addHandler(stdout)
 
 
+def update_check_required(cmd_name: str) -> Callable[[_FuncT], _FuncT]:
+    """
+    This decorator can be added to any subcommand that is part of securedrop-admin
+    via `@update_check_required("name_of_subcommand")`. It forces a check for
+    updates, and aborts if the locally installed code is out of date. It should
+    be generally added to all subcommands that make modifications on the
+    server or on the Admin Workstation.
+
+    The user can override this check by specifying the --force argument before
+    any subcommand.
+    """
+    def decorator_update_check(func: _FuncT) -> _FuncT:
+        @functools.wraps(func)
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            cli_args = args[0]
+            if cli_args.force:
+                sdlog.info("Skipping update check because --force argument was provided.")
+                return func(*args, **kwargs)
+
+            update_status, latest_tag = check_for_updates(cli_args)
+            if update_status is True:
+
+                # Useful for troubleshooting
+                branch_status = get_git_branch(cli_args)
+
+                sdlog.error("You are not running the most recent signed SecureDrop release "
+                            "on this workstation.")
+                sdlog.error("Latest available version: {}".format(latest_tag))
+
+                if branch_status is not None:
+                    sdlog.error("Current branch status: {}".format(branch_status))
+                else:
+                    sdlog.error("Problem determining current branch status.")
+
+                sdlog.error("Running outdated or mismatched code can cause significant "
+                            "technical issues.")
+                sdlog.error("To display more information about your repository state, run:\n\n\t"
+                            "git status\n")
+                sdlog.error("If you are certain you want to proceed, run:\n\n\t"
+                            "./securedrop-admin --force {}\n".format(cmd_name))
+                sdlog.error("To apply the latest updates, run:\n\n\t"
+                            "./securedrop-admin update\n")
+                sdlog.error("If this fails, see the latest upgrade guide on "
+                            "https://docs.securedrop.org/ for instructions.")
+                sys.exit(1)
+            return func(*args, **kwargs)
+        return cast(_FuncT, wrapper)
+    return decorator_update_check
+
+
+@update_check_required("sdconfig")
 def sdconfig(args: argparse.Namespace) -> int:
     """Configure SD site settings"""
     SiteConfig(args).load_and_update_config(validate=False)
@@ -752,8 +812,10 @@ def find_or_generate_new_torv3_keys(args: argparse.Namespace) -> int:
     return 0
 
 
+@update_check_required("install")
 def install_securedrop(args: argparse.Namespace) -> int:
     """Install/Update SecureDrop"""
+
     SiteConfig(args).load_and_update_config(prompt=False)
 
     sdlog.info("Now installing SecureDrop on remote servers.")
@@ -767,6 +829,7 @@ def install_securedrop(args: argparse.Namespace) -> int:
     )
 
 
+@update_check_required("verify")
 def verify_install(args: argparse.Namespace) -> int:
     """Run configuration tests against SecureDrop servers"""
 
@@ -776,6 +839,7 @@ def verify_install(args: argparse.Namespace) -> int:
                                  cwd=os.getcwd())
 
 
+@update_check_required("backup")
 def backup_securedrop(args: argparse.Namespace) -> int:
     """Perform backup of the SecureDrop Application Server.
     Creates a tarball of submissions and server config, and fetches
@@ -789,6 +853,7 @@ def backup_securedrop(args: argparse.Namespace) -> int:
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
+@update_check_required("restore")
 def restore_securedrop(args: argparse.Namespace) -> int:
     """Perform restore of the SecureDrop Application Server.
     Requires a tarball of submissions and server config, created via
@@ -825,6 +890,7 @@ def restore_securedrop(args: argparse.Namespace) -> int:
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
+@update_check_required("tailsconfig")
 def run_tails_config(args: argparse.Namespace) -> int:
     """Configure Tails environment post SD install"""
     sdlog.info("Configuring Tails workstation environment")
@@ -851,7 +917,10 @@ def check_for_updates(args: argparse.Namespace) -> Tuple[bool, str]:
     """Check for SecureDrop updates"""
     sdlog.info("Checking for SecureDrop updates...")
 
-    # Determine what branch we are on
+    # Determine what tag we are likely to be on. Caveat: git describe
+    # may produce very surprising results, because it will locate the most recent
+    # _reachable_ tag. However, in our current branching model, it can be
+    # relied on to determine if we're on the latest tag or not.
     current_tag = subprocess.check_output(['git', 'describe'],
                                           cwd=args.root).decode('utf-8').rstrip('\n')  # noqa: E501
 
@@ -877,6 +946,19 @@ def check_for_updates(args: argparse.Namespace) -> Tuple[bool, str]:
         return True, latest_tag
     sdlog.info("All updates applied")
     return False, latest_tag
+
+
+def get_git_branch(args: argparse.Namespace) -> Optional[str]:
+    """
+    Returns the starred line of `git branch` output.
+    """
+    git_branch_raw = subprocess.check_output(['git', 'branch'],
+                                             cwd=args.root).decode('utf-8')
+    match = re.search(r"\* (.*)\n", git_branch_raw)
+    if match is not None and len(match.groups()) > 0:
+        return match.group(1)
+    else:
+        return None
 
 
 def get_release_key_from_keyserver(
@@ -972,6 +1054,7 @@ def update(args: argparse.Namespace) -> int:
     return 0
 
 
+@update_check_required("logs")
 def get_logs(args: argparse.Namespace) -> int:
     """Get logs for forensics and debugging purposes"""
     sdlog.info("Gathering logs for forensics and debugging")
@@ -998,6 +1081,7 @@ def set_default_paths(args: argparse.Namespace) -> argparse.Namespace:
     return args
 
 
+@update_check_required("reset_admin_access")
 def reset_admin_access(args: argparse.Namespace) -> int:
     """Resets SSH access to the SecureDrop servers, locking it to
     this Admin Workstation."""
@@ -1021,6 +1105,8 @@ def parse_argv(argv: List[str]) -> argparse.Namespace:
                         help="Increase verbosity on output")
     parser.add_argument('-d', action='store_true', default=False,
                         help="Developer mode. Not to be used in production.")
+    parser.add_argument('--force', action='store_true', required=False,
+                        help="force command execution without update check")
     parser.add_argument('--root', required=True,
                         help="path to the root of the SecureDrop repository")
     parser.add_argument('--site-config',
