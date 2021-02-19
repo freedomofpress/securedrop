@@ -124,6 +124,7 @@
   /var/lib/securedrop/keys/*.app-staging.* w,
   /var/lib/securedrop/keys/gpg-agent.conf r,
   /var/lib/securedrop/keys/openpgp-revocs.d/* rw,
+  /var/lib/securedrop/keys/private-keys-v1.d/ rw,
   /var/lib/securedrop/keys/private-keys-v1.d/* rw,
   /var/lib/securedrop/keys/pubring.gpg r,
   /var/lib/securedrop/keys/pubring.gpg rw,
