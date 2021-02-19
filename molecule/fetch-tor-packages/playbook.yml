@@ -12,7 +12,7 @@
     tor_repo_pubkey: "{{ sd_repo_root + '/install_files/ansible-base/roles/tor-hidden-services/files/tor-signing-key.pub' }}"
     tor_repo_url: "deb https://deb.torproject.org/torproject.org {{ ansible_distribution_release }} main"
     # Used to fetch a precise version; must also be updated in the test vars
-    tor_version: "0.4.4.6-1~{{ ansible_distribution_release }}+1"
+    tor_version: "0.4.5.6-1~{{ ansible_distribution_release }}+1"
 
   tasks:
     - name: Add Tor apt repo pubkey
