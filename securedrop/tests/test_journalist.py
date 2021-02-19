@@ -64,52 +64,63 @@ def _login_user(app, username, password, otp_secret):
     assert hasattr(g, 'user')  # ensure logged in
 
 
-def test_user_sees_v2_eol_warning_if_only_v2_is_enabled(config, journalist_app, test_journo):
-    journalist_app.config.update(V2_ONION_ENABLED=True, V3_ONION_ENABLED=False)
+def test_user_sees_os_warning_if_server_past_eol(config, journalist_app, test_journo):
+    journalist_app.config.update(OS_PAST_EOL=True, OS_NEAR_EOL=False)
     with journalist_app.test_client() as app:
         _login_user(
-            app,
-            test_journo['username'],
-            test_journo['password'],
-            test_journo['otp_secret'])
+            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+        )
 
-        resp = app.get(url_for('main.index'))
+        resp = app.get(url_for("main.index"))
 
-    text = resp.data.decode('utf-8')
-    assert 'id="v2-onion-eol"' in text, text
-    assert 'id="v2-complete-migration"' not in text, text
+    text = resp.data.decode("utf-8")
+    assert 'id="os-past-eol"' in text, text
+    assert 'id="os-near-eol"' not in text, text
 
 
-def test_user_sees_v2_eol_warning_if_both_v2_and_v3_enabled(config, journalist_app, test_journo):
-    journalist_app.config.update(V2_ONION_ENABLED=True, V3_ONION_ENABLED=True)
+def test_user_sees_os_warning_if_server_past_eol_sanity_check(config, journalist_app, test_journo):
+    """
+    Sanity check (both conditions cannot be True but test guard against developer error)
+    """
+    journalist_app.config.update(OS_PAST_EOL=True, OS_NEAR_EOL=True)
     with journalist_app.test_client() as app:
         _login_user(
-            app,
-            test_journo['username'],
-            test_journo['password'],
-            test_journo['otp_secret'])
+            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+        )
 
-        resp = app.get(url_for('main.index'))
+        resp = app.get(url_for("main.index"))
 
-    text = resp.data.decode('utf-8')
-    assert 'id="v2-onion-eol"' not in text, text
-    assert 'id="v2-complete-migration"' in text, text
+    text = resp.data.decode("utf-8")
+    assert 'id="os-past-eol"' in text, text
+    assert 'id="os-near-eol"' not in text, text
 
 
-def test_user_does_not_see_v2_eol_warning_if_only_v3_enabled(config, journalist_app, test_journo):
-    journalist_app.config.update(V2_ONION_ENABLED=False, V3_ONION_ENABLED=True)
+def test_user_sees_os_warning_if_server_close_to_eol(config, journalist_app, test_journo):
+    journalist_app.config.update(OS_PAST_EOL=False, OS_NEAR_EOL=True)
     with journalist_app.test_client() as app:
         _login_user(
-            app,
-            test_journo['username'],
-            test_journo['password'],
-            test_journo['otp_secret'])
+            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+        )
 
-        resp = app.get(url_for('main.index'))
+        resp = app.get(url_for("main.index"))
 
-    text = resp.data.decode('utf-8')
-    assert 'id="v2-onion-eol"' not in text, text
-    assert 'id="v2-complete-migration"' not in text, text
+    text = resp.data.decode("utf-8")
+    assert 'id="os-past-eol"' not in text, text
+    assert 'id="os-near-eol"' in text, text
+
+
+def test_user_does_not_see_os_warning_if_server_is_current(config, journalist_app, test_journo):
+    journalist_app.config.update(OS_PAST_EOL=False, OS_NEAR_EOL=False)
+    with journalist_app.test_client() as app:
+        _login_user(
+            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+        )
+
+        resp = app.get(url_for("main.index"))
+
+    text = resp.data.decode("utf-8")
+    assert 'id="os-past-eol"' not in text, text
+    assert 'id="os-near-eol"' not in text, text
 
 
 def test_user_with_whitespace_in_username_can_login(journalist_app):

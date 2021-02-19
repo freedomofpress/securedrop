@@ -28,6 +28,11 @@
         {% endblock %}
 
         <div class="panel selected">
+          {% if g.show_offline_message %}
+          <h1>{{ gettext("We're sorry, our SecureDrop is currently offline.") }}</h1>
+          <p>{{ gettext("Please try again later. Check our website for more information.") }}</p>
+          {% else %}
+
           {% if 'logged_in' in session %}
             <a href="{{ url_for('main.logout') }}" class="btn pull-right" id="logout">{{ gettext('LOG OUT') }}</a>
           {% endif %}
@@ -36,8 +41,9 @@
             <hr class="no-line">
           {% endif %}
 
-          {% block body %}{% endblock %}
+          {% endif %}
 
+          {% block body %}{% endblock %}
         </div>
       </div>
 
