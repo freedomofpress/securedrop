@@ -5,6 +5,8 @@
   when:
     - ansible_distribution_release == "focal"
 
+- include: apt_upgrade.yml
+
 - include: install_packages.yml
 
 - include: post_ubuntu_install_checks.yml
@@ -28,8 +30,6 @@
     - reboot
 
 - include: remove_unused_packages.yml
-
-- include: apt_upgrade.yml
 
 - include: sysctl.yml
 

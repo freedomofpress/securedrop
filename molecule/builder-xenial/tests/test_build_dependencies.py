@@ -28,7 +28,7 @@ def test_build_all_packages_updated(host):
     all upgrades, security and otherwise, have been applied to the VM
     used to build packages.
     """
-    c = host.run('aptitude --simulate -y dist-upgrade')
+    c = host.run('apt-get --simulate -y dist-upgrade')
     assert c.rc == 0
     assert "No packages will be installed, upgraded, or removed." in c.stdout
 

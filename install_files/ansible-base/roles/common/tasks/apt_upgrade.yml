@@ -10,21 +10,30 @@
   tags:
     - apt
 
-- name: Install aptitude.
+- name: Configure apt preferences
+  template:
+    src: 80securedrop.j2
+    dest: /etc/apt/apt.conf.d/80securedrop
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - apt
+
+- name: Remove aptitude.
   apt:
     name: aptitude
-    state: present
+    state: absent
   tags: apt
 
 - name: Check whether tor will be upgraded.
-  command: aptitude search '~U' --display-format '%p' --disable-columns
+  shell: apt list --upgradable -a | perl -F/ -lanE 'print $F[0]' | grep -v ^Listing | sort -u
   register: tor_upgradable_result
   changed_when: false
-  # aptitude >= 0.7.6 will exit non-zero if no hits
   failed_when: false
 
 - name: Hold tor package to prevent upgrade breaking SSH connection.
-  command: aptitude hold tor
+  command: apt-mark hold tor
   register: tor_hold_package_result
   when:
     - "'tor' in tor_upgradable_result.stdout_lines"
@@ -33,21 +42,20 @@
     # If we're connecting to an Onion URL, then it's over Tor.
     - (ansible_host|default(ansible_host)).endswith('.onion')
 
-- name: Perform safe upgrade to ensure all the packages are updated.
+- name: Perform dist upgrade to ensure all the packages are updated.
   apt:
-    upgrade: safe
+    upgrade: dist
   tags:
     - apt
     - apt-upgrade
 
 - name: Remove hold on tor package, to permit automatic upgrades.
-  command: aptitude unhold tor
+  command: apt-mark unhold tor
   # Report changed status if we marked the package as held previously.
   # Not using a conditional `when` to control task execution because
   # we want to ensure the hold is removed, otherwise nightly upgrades
   # will not install security patches.
   changed_when: tor_hold_package_result is changed
-
 
   # Ansible doesn't support notifying handlers based on file existence, results,
   # e.g. via registered `stat` results, only only on changed=true task results,

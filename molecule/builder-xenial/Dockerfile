@@ -7,7 +7,6 @@ LABEL image_name="xenial-sd-builder-app"
 
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         apache2-dev \
-        aptitude \
         coreutils \
         debhelper \
         devscripts \

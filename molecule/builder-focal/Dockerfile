@@ -8,7 +8,6 @@ LABEL image_name="focal-sd-builder-app"
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         apache2-dev \
-        aptitude \
         coreutils \
         debhelper \
         devscripts \

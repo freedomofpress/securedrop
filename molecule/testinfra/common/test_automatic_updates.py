@@ -203,16 +203,19 @@ def test_unattended_upgrades_config(host):
 
 def test_unattended_securedrop_specific(host):
     """
-    Ensures the 80securedrop config is correct only under Ubuntu Focal
+    Ensures the 80securedrop config is correct. Under Ubuntu Focal,
+    it will include unattended-upgrade settings. Under all hosts,
+    it will disable installing 'recommended' packages.
     """
     f = host.file('/etc/apt/apt.conf.d/80securedrop')
-    if host.system_info.codename == "xenial":
-        assert not f.exists
-    else:
-        assert f.is_file
-        assert f.user == "root"
-        assert f.mode == 0o644
+    assert f.is_file
+    assert f.user == "root"
+    assert f.mode == 0o644
+    assert f.contains('APT::Install-Recommends "false";')
+    if host.system_info.codename == "focal":
         assert f.contains("Automatic-Reboot-Time")
+    else:
+        assert not f.contains("Automatic-Reboot-Time")
 
 
 @pytest.mark.parametrize('option', [
@@ -301,10 +304,13 @@ def test_all_packages_updated(host):
     for use with Selenium. Therefore apt will report it's possible to upgrade
     Firefox, which we'll need to mark as "OK" in terms of the tests.
     """
-    c = host.run('aptitude --simulate -y safe-upgrade')
+    c = host.run('apt-get dist-upgrade --simulate')
     assert c.rc == 0
     # Staging hosts will have locally built deb packages, marked as held.
     # Staging and development will have a version-locked Firefox pinned for
     # Selenium compatibility; if the holds are working, they shouldn't be
     # upgraded.
-    assert "No packages will be installed, upgraded, or removed." in c.stdout
+    # Example output:
+    #   0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
+    # Don't test for the "not upgraded" because those map to held packages.
+    assert "0 upgraded, 0 newly installed, 0 to remove" in c.stdout
