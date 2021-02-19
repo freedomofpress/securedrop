@@ -5,7 +5,7 @@ import subprocess
 import time
 import os
 import shutil
-
+from datetime import date
 from io import BytesIO, StringIO
 from pathlib import Path
 
@@ -18,6 +18,7 @@ from passphrases import PassphraseGenerator
 from . import utils
 import version
 
+import server_os
 from db import db
 from journalist_app.utils import delete_collection
 from models import InstanceConfig, Source, Reply
@@ -28,6 +29,78 @@ from .utils.instrument import InstrumentedApp
 from sdconfig import config
 
 overly_long_codename = 'a' * (PassphraseGenerator.MAX_PASSPHRASE_LENGTH + 1)
+
+
+def test_source_interface_is_disabled_when_xenial_is_eol(config, source_app):
+    disabled_endpoints = [
+        "main.index",
+        "main.generate",
+        "main.login",
+        "info.download_public_key",
+        "info.tor2web_warning",
+        "info.recommend_tor_browser",
+        "info.why_download_public_key",
+    ]
+    static_assets = [
+        "css/source.css",
+        "i/custom_logo.png",
+        "i/font-awesome/fa-globe-black.png",
+        "i/favicon.png",
+    ]
+    with source_app.test_client() as app:
+        server_os.installed_version = "16.04"
+        server_os.XENIAL_EOL_DATE = date(2020, 1, 1)
+        for endpoint in disabled_endpoints:
+            resp = app.get(url_for(endpoint))
+            assert resp.status_code == 200
+            text = resp.data.decode("utf-8")
+            assert "We're sorry, our SecureDrop is currently offline." in text
+        # Ensure static assets are properly served
+        for asset in static_assets:
+            resp = app.get(url_for("static", filename=asset))
+            assert resp.status_code == 200
+            text = resp.data.decode("utf-8")
+            assert "We're sorry, our SecureDrop is currently offline." not in text
+
+
+def test_source_interface_is_not_disabled_before_xenial_eol(config, source_app):
+    disabled_endpoints = [
+        "main.index",
+        "main.generate",
+        "main.login",
+        "info.download_public_key",
+        "info.tor2web_warning",
+        "info.recommend_tor_browser",
+        "info.why_download_public_key",
+    ]
+    with source_app.test_client() as app:
+        server_os.installed_version = "16.04"
+        server_os.XENIAL_EOL_DATE = date(2200, 1, 1)
+        for endpoint in disabled_endpoints:
+            resp = app.get(url_for(endpoint), follow_redirects=True)
+            assert resp.status_code == 200
+            text = resp.data.decode("utf-8")
+            assert "We're sorry, our SecureDrop is currently offline." not in text
+
+
+def test_source_interface_is_not_disabled_for_focal(config, source_app):
+    disabled_endpoints = [
+        "main.index",
+        "main.generate",
+        "main.login",
+        "info.download_public_key",
+        "info.tor2web_warning",
+        "info.recommend_tor_browser",
+        "info.why_download_public_key",
+    ]
+    with source_app.test_client() as app:
+        server_os.installed_version = "20.04"
+        server_os.XENIAL_EOL_DATE = date(2020, 1, 1)
+        for endpoint in disabled_endpoints:
+            resp = app.get(url_for(endpoint))
+            assert resp.status_code == 200
+            text = resp.data.decode("utf-8")
+            assert "We're sorry, our SecureDrop is currently offline." not in text
 
 
 def test_logo_default_available(source_app):

@@ -21,6 +21,7 @@ from journalist_app.utils import (get_source, logged_in,
                                   JournalistInterfaceSessionInterface,
                                   cleanup_expired_revoked_tokens)
 from models import InstanceConfig, Journalist
+from server_os import is_os_near_eol, is_os_past_eol
 from store import Storage
 
 import typing
@@ -53,8 +54,7 @@ def create_app(config: 'SDConfig') -> Flask:
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
     db.init_app(app)
 
-    def _url_exists(u: str) -> bool:
-        return path.exists(path.join(config.SECUREDROP_DATA_ROOT, u))
+    app.config.update(OS_PAST_EOL=is_os_past_eol(), OS_NEAR_EOL=is_os_near_eol())
 
     # TODO: Attaching a Storage dynamically like this disables all type checking (and
     # breaks code analysis tools) for code that uses current_app.storage; it should be refactored
@@ -156,6 +156,11 @@ def create_app(config: 'SDConfig') -> Flask:
             g.organization_name = app.instance_config.organization_name
         else:
             g.organization_name = gettext('SecureDrop')
+
+        if app.config["OS_PAST_EOL"]:
+            g.show_os_past_eol_warning = True
+        elif app.config["OS_NEAR_EOL"]:
+            g.show_os_near_eol_warning = True
 
         if request.path.split('/')[1] == 'api':
             pass  # We use the @token_required decorator for the API endpoints

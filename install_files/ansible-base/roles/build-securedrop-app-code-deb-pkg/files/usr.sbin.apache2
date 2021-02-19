@@ -1,4 +1,3 @@
-# Last Modified: Wed Oct 29 08:16:32 2014
 #include <tunables/global>
 
 /usr/sbin/apache2 {
@@ -336,6 +335,7 @@
   /var/www/securedrop/template_filters.py r,
   /var/www/securedrop/translations/ r,
   /var/www/securedrop/translations/** r,
+  /var/www/securedrop/server_os.py r,
   /var/www/securedrop/version.py r,
   /var/www/securedrop/wordlists/ r,
   /var/www/securedrop/wordlists/** r,
