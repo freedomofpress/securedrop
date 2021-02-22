@@ -30,22 +30,10 @@ def test_apache_headers_source_interface(host, header):
     'WSGIScriptAlias / /var/www/source.wsgi',
     'Header set Cache-Control "no-store"',
     'Header set Referrer-Policy "same-origin"',
+    'Header unset Etag',
     "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),
-    """
-<Directory {}/static>
-  Order allow,deny
-  Allow from all
-  # Cache static resources for 1 hour
-  Header set Cache-Control "max-age=3600"
-</Directory>
-""".strip('\n').format(securedrop_test_vars.securedrop_code),
     'XSendFile        Off',
     'LimitRequestBody 524288000',
-    'ErrorDocument 400 /notfound',
-    'ErrorDocument 401 /notfound',
-    'ErrorDocument 403 /notfound',
-    'ErrorDocument 404 /notfound',
-    'ErrorDocument 500 /notfound',
     "ErrorLog {}".format(securedrop_test_vars.apache_source_log),
 ])
 def test_apache_config_source_interface(host, apache_opt):
@@ -62,5 +50,89 @@ def test_apache_config_source_interface(host, apache_opt):
     assert f.user == "root"
     assert f.group == "root"
     assert f.mode == 0o644
+    regex = "^{}$".format(re.escape(apache_opt))
+    assert re.search(regex, f.content_string, re.M)
+
+
+@pytest.mark.parametrize("apache_opt", [
+    """
+<Directory />
+  Options None
+  AllowOverride None
+  Require all denied
+</Directory>
+""".strip('\n'),
+    """
+<Directory {}/static>
+  Require all granted
+  # Cache static resources for 1 hour
+  Header set Cache-Control "max-age=3600"
+</Directory>
+""".strip('\n').format(securedrop_test_vars.securedrop_code),
+    """
+<Directory {}>
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Require ip 127.0.0.1
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Require all denied
+  </LimitExcept>
+</Directory>
+""".strip('\n').format(securedrop_test_vars.securedrop_code),
+])
+def test_apache_config_source_interface_access_control_focal(host, apache_opt):
+    """
+    Verifies the access control directives for the Source Interface.
+    Using a separate test because Xenial / Focal syntax differs.
+    """
+    if host.system_info.codename != "focal":
+        return True
+    f = host.file("/etc/apache2/sites-available/source.conf")
+    regex = "^{}$".format(re.escape(apache_opt))
+    assert re.search(regex, f.content_string, re.M)
+
+
+@pytest.mark.parametrize("apache_opt", [
+    """
+<Directory />
+  Options None
+  AllowOverride None
+  Order deny,allow
+  Deny from all
+</Directory>
+""".strip('\n'),
+    """
+<Directory {}/static>
+  Order allow,deny
+  Allow from all
+  # Cache static resources for 1 hour
+  Header set Cache-Control "max-age=3600"
+</Directory>
+""".strip('\n').format(securedrop_test_vars.securedrop_code),
+    """
+<Directory {}>
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Order allow,deny
+    allow from 127.0.0.1
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
+""".strip('\n').format(securedrop_test_vars.securedrop_code),
+])
+def test_apache_config_source_interface_access_control_xenial(host, apache_opt):
+    """
+    Verifies the access control directives for the Source Interface.
+    Using a separate test because Xenial / Focal syntax differs.
+    """
+    if host.system_info.codename != "xenial":
+        return True
+    f = host.file("/etc/apache2/sites-available/source.conf")
     regex = "^{}$".format(re.escape(apache_opt))
     assert re.search(regex, f.content_string, re.M)
