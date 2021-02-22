@@ -14,6 +14,7 @@ from flask import (
     send_file,
     url_for,
     Markup,
+    escape,
 )
 import werkzeug
 from flask_babel import gettext
@@ -63,11 +64,16 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             abort(500)
 
         flash(
-          Markup(
-            gettext(
-                    "<b>Success!</b> The account and data for the source {s} has been deleted."
-                   ).format(s=source.journalist_designation)),
-          "success")
+            Markup(
+                "<b>{}</b> {}".format(
+                    # Translators: Here, "Success!" appears before a message
+                    # confirming the success of an operation.
+                    escape(gettext("Success!")),
+                    escape(gettext(
+                        "The account and data for the source {} has been deleted.").format(
+                            source.journalist_designation))
+                )
+            ), 'success')
 
         return redirect(url_for('main.index'))
 
@@ -79,9 +85,13 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                    'delete-data': col_delete_data}
         if 'cols_selected' not in request.form:
             flash(
-                Markup(
-                    gettext('<b>Nothing Selected</b> You must select one or more items.')),
-                'error')
+                Markup("<b>{}</b> {}".format(
+                    # Translators: Here, "Nothing Selected" appears before a message
+                    # asking the user to select one or more items.
+                    escape(gettext('Nothing Selected')),
+                    escape(gettext('You must select one or more items.'))
+                    )
+                ), 'error')
             return redirect(url_for('main.index'))
 
         # getlist is cgi.FieldStorage.getlist

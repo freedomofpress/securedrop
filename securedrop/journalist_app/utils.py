@@ -7,7 +7,7 @@ from typing import Optional, List, Union, Any
 import flask
 import werkzeug
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
-                   render_template, Markup, sessions, request)
+                   render_template, Markup, sessions, request, escape)
 from flask_babel import gettext, ngettext
 from sqlalchemy.exc import IntegrityError
 
@@ -253,14 +253,17 @@ def bulk_delete(
             deletion_errors += 1
 
     num_selected = len(items_selected)
+    success_message = ngettext(
+        "The item has been deleted.", "{num} items have been deleted.",
+        num_selected).format(num=num_selected)
+
     flash(
-        Markup(ngettext(
-            "<b>Success!</b> The item has been deleted.",
-            "<b>Success!</b> {num} items have been deleted.",
-            num_selected
-        ).format(num=num_selected)),
-        "success"
-    )
+        Markup(
+           "<b>{}</b> {}".format(
+               # Translators: Here, "Success!" appears before a message
+               # indicating a successful deletion
+               escape(gettext("Success!")), escape(success_message))), 'success')
+
     if deletion_errors > 0:
         current_app.logger.error("Disconnected submission entries (%d) were detected",
                                  deletion_errors)
@@ -319,13 +322,18 @@ def col_delete(cols_selected: List[str]) -> werkzeug.Response:
         db.session.commit()
 
         num = len(cols_selected)
+
+        success_message = ngettext(
+            "The account and all data for {n} source have been deleted.",
+            "The accounts and all data for {n} sources have been deleted.",
+            num).format(n=num)
+
         flash(
-           Markup(
-             ngettext(
-               '<b>Success!</b> The account and all data for {num} source have been deleted.',
-               '<b>Success!</b> The accounts and all data for {num} sources have been deleted.',
-               num).format(num=num)),
-           "success")
+            Markup(
+               "<b>{}</b> {}".format(
+                   # Translators: Here, "Success!" appears before a message
+                   # indicating a successful deletion
+                   escape(gettext("Success!")), escape(success_message))), 'success')
 
     return redirect(url_for('main.index'))
 
@@ -347,8 +355,12 @@ def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
     if len(cols_selected) < 1:
         flash(
             Markup(
-                gettext("<b>Nothing Selected</b> You must select one or more items for deletion.")),
-            "error")
+                "<b>{}</b> {}".format(
+                    # Translators: Here, "Nothing Selected" appears before a message
+                    # asking the user to select one or more items
+                    escape(gettext("Nothing Selected")),
+                    escape(gettext("You must select one or more items for deletion.")))
+                ), 'error')
     else:
 
         for filesystem_id in cols_selected:
@@ -356,8 +368,12 @@ def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
 
         flash(
             Markup(
-                gettext('<b>Success!</b> The files and messages have been deleted.')),
-            "success")
+                "<b>{}</b> {}".format(
+                    # Translators: Here, "Success" appears before a message
+                    # indicating a successful deletion
+                    escape(gettext("Success!")),
+                    escape(gettext("The files and messages have been deleted.")))
+                ), 'success')
 
     return redirect(url_for('main.index'))
 

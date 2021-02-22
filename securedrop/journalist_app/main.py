@@ -6,7 +6,7 @@ from typing import Union
 
 import werkzeug
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
-                   render_template, g, flash, abort, Markup)
+                   render_template, g, flash, abort, Markup, escape)
 from flask_babel import gettext
 
 import store
@@ -138,8 +138,16 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                                                              g.user.id,
                                                              exc.__class__))
         else:
-            flash(Markup(gettext("<b>Success!</b> Your reply has been stored.")),
-                  "success")
+
+            flash(
+                Markup(
+                    "<b>{}</b> {}".format(
+                        # Translators: Here, "Success!" appears before a message
+                        # confirming the success of an operation.
+                        escape(gettext("Success!")),
+                        escape(gettext("Your reply has been stored."))
+                    )
+                ), 'success')
         finally:
             return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
 
@@ -160,16 +168,24 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if selected_docs == []:
             if action == 'download':
                 flash(
-                  Markup(
-                    gettext(
-                      "<b>Nothing Selected</b> You must select one or more items for download.")),
-                  "error")
+                    Markup(
+                        "<b>{}</b> {}".format(
+                            # Translators: Here, "Nothing Selected" appears before a message
+                            # asking the users to select one or more items
+                            escape(gettext("Nothing Selected")),
+                            escape(gettext("You must select one or more items for download"))
+                        )
+                    ), 'error')
             elif action in ('delete', 'confirm_delete'):
                 flash(
-                  Markup(
-                    gettext(
-                      "<b>Nothing Selected</b> You must select one or more items for deletion.")),
-                  "error")
+                    Markup(
+                        "<b>{}</b> {}".format(
+                            # Translators: Here, "Nothing Selected" appears before a message
+                            # asking the users to select one or more items
+                            escape(gettext("Nothing Selected")),
+                            escape(gettext("You must select one or more items for deletion"))
+                        )
+                    ), 'error')
 
             return redirect(error_redirect)
 
