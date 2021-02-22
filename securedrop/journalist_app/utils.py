@@ -7,7 +7,7 @@ from typing import Optional, List, Union, Any
 import flask
 import werkzeug
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
-                   render_template, Markup, sessions, request)
+                   render_template, Markup, sessions, request, escape)
 from flask_babel import gettext, ngettext
 from sqlalchemy.exc import IntegrityError
 
@@ -99,7 +99,7 @@ def validate_user(
             InvalidPasswordLength) as e:
         current_app.logger.error("Login for '{}' failed: {}".format(
             username, e))
-        login_flashed_msg = error_message if error_message else gettext('Login failed.')
+        login_flashed_msg = error_message if error_message else gettext('<b>Login failed.</b>')
 
         if isinstance(e, LoginThrottledException):
             login_flashed_msg += " "
@@ -123,7 +123,7 @@ def validate_user(
             except Exception:
                 pass
 
-        flash(login_flashed_msg, "error")
+        flash(Markup(login_flashed_msg), "error")
         return None
 
 
@@ -253,14 +253,17 @@ def bulk_delete(
             deletion_errors += 1
 
     num_selected = len(items_selected)
+    success_message = ngettext(
+        "The item has been deleted.", "{num} items have been deleted.",
+        num_selected).format(num=num_selected)
+
     flash(
-        ngettext(
-            "Submission deleted.",
-            "{num} submissions deleted.",
-            num_selected
-        ).format(num=num_selected),
-        "notification"
-    )
+        Markup(
+           "<b>{}</b> {}".format(
+               # Translators: Here, "Success!" appears before a message
+               # indicating a successful deletion
+               escape(gettext("Success!")), escape(success_message))), 'success')
+
     if deletion_errors > 0:
         current_app.logger.error("Disconnected submission entries (%d) were detected",
                                  deletion_errors)
@@ -319,14 +322,64 @@ def col_delete(cols_selected: List[str]) -> werkzeug.Response:
         db.session.commit()
 
         num = len(cols_selected)
-        flash(ngettext('{num} collection deleted', '{num} collections deleted',
-                       num).format(num=num),
-              "notification")
+
+        success_message = ngettext(
+            "The account and all data for {n} source have been deleted.",
+            "The accounts and all data for {n} sources have been deleted.",
+            num).format(n=num)
+
+        flash(
+            Markup(
+               "<b>{}</b> {}".format(
+                   # Translators: Here, "Success!" appears before a message
+                   # indicating a successful deletion
+                   escape(gettext("Success!")), escape(success_message))), 'success')
+
+    return redirect(url_for('main.index'))
+
+
+def delete_source_files(filesystem_id: str) -> None:
+    """deletes submissions and replies for specified source"""
+    source = get_source(filesystem_id, include_deleted=True)
+    if source is not None:
+        # queue all files for deletion and remove them from the database
+        for f in source.collection:
+            try:
+                delete_file_object(f)
+            except Exception:
+                pass
+
+
+def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
+    """deletes store data for selected sources"""
+    if len(cols_selected) < 1:
+        flash(
+            Markup(
+                "<b>{}</b> {}".format(
+                    # Translators: Here, "Nothing Selected" appears before a message
+                    # asking the user to select one or more items
+                    escape(gettext("Nothing Selected")),
+                    escape(gettext("You must select one or more items for deletion.")))
+                ), 'error')
+    else:
+
+        for filesystem_id in cols_selected:
+            delete_source_files(filesystem_id)
+
+        flash(
+            Markup(
+                "<b>{}</b> {}".format(
+                    # Translators: Here, "Success" appears before a message
+                    # indicating a successful deletion
+                    escape(gettext("Success!")),
+                    escape(gettext("The files and messages have been deleted.")))
+                ), 'success')
 
     return redirect(url_for('main.index'))
 
 
 def delete_collection(filesystem_id: str) -> None:
+    """deletes source account including files and reply key"""
     # Delete the source's collection of submissions
     path = current_app.storage.path(filesystem_id)
     if os.path.exists(path):

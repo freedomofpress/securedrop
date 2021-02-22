@@ -1,0 +1,32 @@
+<div id="{{ modal_data.modal_id }}" class="menu-modal-dialog">
+  <a href="#close" class="external"></a>
+  <div id="delete-menu-dialog">
+    <div id="delete-menu-no-select">
+      <p class="modal-danger-text">
+      <span class="modal-danger-text">{{ gettext("Nothing Selected") }}</span>
+      </p>
+      <p>
+      {{ gettext("You must select one or more items for deletion.") }}
+      </p>
+    </div>
+    <div id="delete-menu-cta">
+    <p>
+      <span id="delete-menu-summary"></span>
+    </p>
+    <p>
+    {{ gettext("What would you like to delete?") }}
+    </p>
+    <p>
+      <button id="delete-files-and-messages" type="submit" name="action" value="delete-data" class="small btn danger modal-stacked">{{ gettext('Files and Messages') }}</button>
+    </p>
+    <p>
+      <a href="#delete-sources-confirm-modal" id="delete-collections">
+        <button type="button" class="small danger btn modal-stacked">{{ gettext('Source Accounts') }}</button>
+      </a>
+    </p>
+    </div>
+    <p>
+      <a href="#close" id="delete-menu-dialog-cancel">{{ gettext('Cancel') }}</a>
+    </p>
+  </div>
+</div>

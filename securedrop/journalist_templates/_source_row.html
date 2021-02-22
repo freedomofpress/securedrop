@@ -23,6 +23,7 @@
     {% endif %}
   </div>
   <div class="submission-count">
+    <input type="hidden" name="count-{{ source.journalist_designation|lower|replace(" ", "_") }}" class="submission-count-element" value="{{ docs + msgs }}">
     <span>
       <img src="{{ url_for('static', filename='icons/files.png') }}" class="icon-drop" width="14" height="16" alt="">
       {{ ngettext('1 doc', '{num} docs', docs).format(num=docs) }}

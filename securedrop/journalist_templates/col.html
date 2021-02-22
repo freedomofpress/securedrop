@@ -9,7 +9,7 @@
   </p>
 
   {% if source.collection %}
-    <p>{{ gettext('The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG.') }}</p>
+    <p>{{ gettext('All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station.') }}</p>
     <form action="/bulk" method="post">
       <p>
         <div id="select-container"></div>
@@ -18,8 +18,6 @@
         </button>
         <a href="#delete-selected-confirmation-modal" id="delete-selected-link">
           <button type="button" class="small danger">
-            <img src="{{ url_for('static', filename='icons/trash.png') }}" class="icon off-hover" width="11" height="13" alt="">
-            <img src="{{ url_for('static', filename='icons/trash-hover-white.png') }}" class="icon on-hover" width="11" height="13" alt="">
             {{ gettext('Delete Selected') }}
           </button>
         </a>
@@ -78,7 +76,7 @@
         {% set modal_data = {
                               "modal_id": "delete-selected-confirmation-modal",
                               "modal_header": gettext('Delete Confirmation'),
-                              "modal_body": gettext('Are you sure you want to delete the selected documents?'),
+                              "modal_body": gettext('Are you sure you want to delete the selected submissions?'),
                               "cancel_id": "cancel-selected-deletions",
                               "submit_id": "delete-selected",
                               "submit_btn_type": "danger",
@@ -93,14 +91,14 @@
 
     </form>
   {% else %}
-    <p><br>{{ gettext('No documents to display.') }}</p>
+    <p><br>{{ gettext('No submissions to display.') }}</p>
   {% endif %}
 
   <hr class="cut-out">
   <hr class="no-line">
   <h3>{{ gettext('Reply') }}</h3>
   {% if source.has_key %}
-    <p>{{ gettext('You can write a secure reply to the person who submitted these documents:') }}</p>
+    <p>{{ gettext('You can write a secure reply to the person who submitted these messages and/or files:') }}</p>
     <form action="{{ url_for('main.reply') }}" method="post" autocomplete="off">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
@@ -120,19 +118,14 @@
     </form>
   {% endif %}
   <hr class="no-line">
-  <hr class="cut-out">
-  <p>{{ gettext("Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>")|safe }}</p>
-
   <form id="delete-collection" action="{{ url_for('col.delete_single', filesystem_id=filesystem_id) }}" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}">
-    <div class="center">
+    <div class="center highlight">
       <a href="#delete-collection-confirmation-modal" id="delete-collection-link">
         <button type="button" class="danger">
-          <img src="{{ url_for('static', filename='icons/trash.png') }}" class="icon off-hover" width="13" height="15" alt="">
-          <img src="{{ url_for('static', filename='icons/trash-hover-white.png') }}" class="icon on-hover" width="13" height="15" alt="">
-          {{ gettext('DELETE SOURCE AND SUBMISSIONS') }}
+          {{ gettext('Delete Source Account') }}
         </button>
       </a>
     </div>
@@ -141,12 +134,21 @@
     {% with %}
       {% set modal_data = {
                             "modal_id": "delete-collection-confirmation-modal",
-                            "modal_header": gettext('Delete Confirmation'),
-                            "modal_body": gettext('Are you sure you want to delete this collection?'),
+                            "modal_header": gettext('Are you sure?'),
+                            "modal_body": gettext('<p>
+Deleting the account for <b>{source}</b> will:
+<ul>
+<li>prevent them from logging in with their codename again
+<li>prevent your organization from sending replies
+</ul>
+</p>
+<p>
+All files, messages, and replies will also be deleted when their account is deleted.
+</p>'.format(source=source.journalist_designation)),
                             "cancel_id": "cancel-collection-deletions",
                             "submit_id": "delete-collection-button",
                             "submit_btn_type": "danger",
-                            "submit_btn_text": gettext('Delete')
+                            "submit_btn_text": gettext('Yes, Delete Source Account')
                           }
       %}
       {% include '_confirmation_modal.html' %}

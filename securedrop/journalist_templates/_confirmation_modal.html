@@ -1,13 +1,17 @@
 <div id="{{ modal_data.modal_id }}" class="modal-dialog">
   <a href="#close" class="external"></a>
   <div>
-    <a href="#close" title="{{ gettext('Close') }}" class="close">X</a>
+    <a href="#close" title="{{ gettext('Close') }}" class="close"> <img src="{{ url_for('static', filename='i/modal-x-white.png') }}" height="24" width="24"></a>
     <h2>{{ modal_data.modal_header }}</h2>
     <p>{{ modal_data.modal_body }}</p>
     {% if modal_data.modal_warning is defined %}
       <p><em>{{ modal_data.modal_warning }}</em></p>
     {% endif %}
-    <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}" class="btn upper">{{ gettext('Cancel') }}</a>
-    <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete" class="{{ modal_data.submit_btn_type }} upper">{{ modal_data.submit_btn_text }}</button>
+    <center>
+      <div class="btn-row">
+        <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}" class="btn cancel small">{{ gettext('Cancel') }}</a>
+        <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete" class="btn small {{ modal_data.submit_btn_type }}">{{ modal_data.submit_btn_text }}</button>
+      </div>
+    </center>
   </div>
 </div>

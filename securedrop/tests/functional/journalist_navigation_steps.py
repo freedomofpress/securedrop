@@ -140,6 +140,12 @@ class JournalistNavigationStepsMixin:
     def _journalist_clicks_on_modal(self, click_id):
         self.safe_click_by_id(click_id)
 
+    def _journalist_clicks_delete_collections_cancel_on_first_modal(self):
+        self._journalist_clicks_on_modal("delete-menu-dialog-cancel")
+
+    def _journalist_clicks_delete_collections_cancel_on_second_modal(self):
+        self._journalist_clicks_on_modal("cancel-collections-deletions")
+
     def _journalist_clicks_delete_collections_cancel_on_modal(self):
         self._journalist_clicks_on_modal("cancel-collections-deletions")
 
@@ -149,13 +155,21 @@ class JournalistNavigationStepsMixin:
     def _journalist_clicks_delete_collection_cancel_on_modal(self):
         self._journalist_clicks_on_modal("cancel-collection-deletions")
 
-    def _journalist_clicks_delete_collections_on_modal(self):
+    def _journalist_clicks_delete_files_on_first_modal(self):
+        self._journalist_clicks_on_modal("delete-files-and-messages")
+
+    def _journalist_clicks_delete_collections_on_first_modal(self):
         self._journalist_clicks_on_modal("delete-collections")
+
+        self.wait_for(lambda: self.driver.find_element_by_id("delete-collections-confirm"))
+
+    def _journalist_clicks_delete_collections_on_second_modal(self):
+        self._journalist_clicks_on_modal("delete-collections-confirm")
 
         def collection_deleted():
             if not self.accept_languages:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
-                assert "1 collection deleted" in flash_msg.text
+                assert "The account and all data for 1 source have been deleted." in flash_msg.text
 
         self.wait_for(collection_deleted)
 
@@ -165,7 +179,7 @@ class JournalistNavigationStepsMixin:
         def submission_deleted():
             if not self.accept_languages:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
-                assert "Submission deleted." in flash_msg.text
+                assert "The item has been deleted." in flash_msg.text
 
         self.wait_for(submission_deleted)
 
@@ -181,7 +195,7 @@ class JournalistNavigationStepsMixin:
         self.wait_for(lambda: self.driver.find_element_by_id("delete-selected-confirmation-modal"))
 
     def _journalist_clicks_delete_collections_link(self):
-        self._journalist_clicks_delete_link("delete-collections-link", "delete-confirmation-modal")
+        self._journalist_clicks_delete_link("delete-collections-link", "delete-sources-modal")
 
     def _journalist_clicks_delete_collection_link(self):
         self._journalist_clicks_delete_link(
@@ -226,19 +240,64 @@ class JournalistNavigationStepsMixin:
             self.safe_click_all_by_css_selector('input[type="checkbox"][name="cols_selected"]')
 
         self._journalist_clicks_delete_collections_link()
-        self._journalist_clicks_delete_collections_cancel_on_modal()
+        self._journalist_clicks_delete_collections_cancel_on_first_modal()
 
         sources = self.driver.find_elements_by_class_name("code-name")
         assert len(sources) > 0
 
         self._journalist_clicks_delete_collections_link()
-        self._journalist_clicks_delete_collections_on_modal()
+        self._journalist_clicks_delete_collections_on_first_modal()
+        self._journalist_clicks_delete_collections_cancel_on_second_modal()
+
+        self._journalist_clicks_delete_collections_link()
+        self._journalist_clicks_delete_collections_on_first_modal()
+        self._journalist_clicks_delete_collections_on_second_modal()
 
         # We should be redirected to the index without those boxes selected.
         def no_sources():
             assert len(self.driver.find_elements_by_class_name("code-name")) == 0
 
         self.wait_for(no_sources)
+
+    def _journalist_uses_index_delete_files_button_confirmation(self):
+        sources = self.driver.find_elements_by_class_name("code-name")
+        assert len(sources) > 0
+
+        try:
+            # If JavaScript is enabled, use the select_all button.
+            self.driver.find_element_by_id("select_all")
+            self.safe_click_by_id("select_all")
+        except NoSuchElementException:
+            self.safe_click_all_by_css_selector('input[type="checkbox"][name="cols_selected"]')
+
+        self._journalist_clicks_delete_collections_link()
+        time.sleep(5)
+        self._journalist_clicks_delete_collections_cancel_on_first_modal()
+        time.sleep(5)
+
+        sources = self.driver.find_elements_by_class_name("code-name")
+        assert len(sources) > 0
+
+        self._journalist_clicks_delete_collections_link()
+        time.sleep(5)
+        self._journalist_clicks_delete_files_on_first_modal()
+        time.sleep(5)
+
+        # We should be redirected to the index with the source present, files
+        # and messages zeroed, and a success flash message present
+
+        def one_source_no_files():
+            assert len(self.driver.find_elements_by_class_name("code-name")) == 1
+            if not self.accept_languages:
+                flash_msg = self.driver.find_element_by_css_selector(".flash")
+                assert "The files and messages have been deleted" in flash_msg.text
+            if not self.accept_languages:
+                count_div = self.driver.find_element_by_css_selector(".submission-count")
+                assert "0 docs" in count_div.text
+                assert "0 messages" in count_div.text
+
+        self.wait_for(one_source_no_files)
+        time.sleep(5)
 
     def _admin_logs_in(self):
         self.admin = self.admin_user["name"]
@@ -790,7 +849,7 @@ class JournalistNavigationStepsMixin:
 
         def reply_stored():
             if not self.accept_languages:
-                assert "Thanks. Your reply has been stored." in self.driver.page_source
+                assert "Your reply has been stored." in self.driver.page_source
 
         self.wait_for(reply_stored)
 

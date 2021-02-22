@@ -13,6 +13,8 @@ from flask import (
     request,
     send_file,
     url_for,
+    Markup,
+    escape,
 )
 import werkzeug
 from flask_babel import gettext
@@ -24,7 +26,7 @@ from journalist_app.forms import ReplyForm
 from journalist_app.utils import (make_star_true, make_star_false, get_source,
                                   delete_collection, col_download_unread,
                                   col_download_all, col_star, col_un_star,
-                                  col_delete, mark_seen)
+                                  col_delete, col_delete_data, mark_seen)
 from sdconfig import SDConfig
 
 
@@ -61,18 +63,35 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             current_app.logger.error("error deleting collection: %s", e)
             abort(500)
 
-        flash(gettext("{source_name}'s collection deleted.")
-              .format(source_name=source.journalist_designation),
-              "notification")
+        flash(
+            Markup(
+                "<b>{}</b> {}".format(
+                    # Translators: Here, "Success!" appears before a message
+                    # confirming the success of an operation.
+                    escape(gettext("Success!")),
+                    escape(gettext(
+                        "The account and data for the source {} has been deleted.").format(
+                            source.journalist_designation))
+                )
+            ), 'success')
+
         return redirect(url_for('main.index'))
 
     @view.route('/process', methods=('POST',))
     def process() -> werkzeug.Response:
         actions = {'download-unread': col_download_unread,
                    'download-all': col_download_all, 'star': col_star,
-                   'un-star': col_un_star, 'delete': col_delete}
+                   'un-star': col_un_star, 'delete': col_delete,
+                   'delete-data': col_delete_data}
         if 'cols_selected' not in request.form:
-            flash(gettext('No collections selected.'), 'error')
+            flash(
+                Markup("<b>{}</b> {}".format(
+                    # Translators: Here, "Nothing Selected" appears before a message
+                    # asking the user to select one or more items.
+                    escape(gettext('Nothing Selected')),
+                    escape(gettext('You must select one or more items.'))
+                    )
+                ), 'error')
             return redirect(url_for('main.index'))
 
         # getlist is cgi.FieldStorage.getlist

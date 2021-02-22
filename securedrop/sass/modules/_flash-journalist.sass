@@ -1,0 +1,78 @@
+=flash
+  .flash
+    display: flex
+    flex-flow: row nowrap
+    align-items: center
+    margin: 0px 0px 10px 0px
+    padding: 20px 
+    text-align: left
+    font-size: 0.9em
+    line-height: 1.4em
+    color: #333
+
+    &:dir(rtl)
+      text-align: right
+
+    i
+      font-size: 18pt
+
+    &.success
+      background-color: $color_success_background
+
+      b
+        color: $color_success_text_strong
+        padding-right: 0.5em
+
+    &.notification
+      background-color: $color_notification_background
+      font-size: medium
+      font-weight: normal
+
+      i
+        color: $color_notification_text_strong
+      b
+        color: $color_notification_text_strong
+        padding-right: 0.5em
+
+    &.error
+      background-color: $color_error_background
+
+      i
+        color: $color_error_text_strong
+
+      b
+        color: $color_error_text_strong
+        margin-top: 1px
+        padding-right: 0.5em
+
+    &.important-header
+      margin: auto 6px
+      color: $color_urgent_coral
+
+    &.important
+      border-top: 1px solid #ece6e7
+      border-left: 6px solid $color_urgent_coral
+      border-bottom: 1px solid $color_urgent_coral
+      border-right: 1px solid #ece6e7
+      border-radius: 2px
+      margin-bottom: 30px
+      padding-left: 20px
+      padding-right: 8px
+      background-color: #FDFDFD
+      color: #383838
+      align-items: center
+
+      &:dir(rtl)
+        padding-left: 8px
+        padding-right: 20px
+        text-align: right
+        border-top: 1px solid #ece6e7
+        border-left: 1px solid #ece6e7
+        border-bottom: 1px solid $color_urgent_coral
+        border-right: 6px solid $color_urgent_coral
+
+      p
+        color: #555555
+
+    img
+      margin-right: 8px
