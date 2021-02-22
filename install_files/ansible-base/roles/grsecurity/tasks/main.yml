@@ -4,6 +4,7 @@
 - include: check_installation.yml
 
 - include: paxctl.yml
+  when: ansible_distribution_release == "xenial"
   tags:
     - paxctl
     - kernel

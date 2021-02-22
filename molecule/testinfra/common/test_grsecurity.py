@@ -19,7 +19,6 @@ def test_ssh_motd_disabled(host):
 
 @pytest.mark.parametrize("package", [
     'linux-image-{}-grsec-securedrop',
-    'paxctl',
     'securedrop-grsec',
 ])
 def test_grsecurity_apt_packages(host, package):
@@ -155,48 +154,67 @@ def test_apt_autoremove(host):
     assert "The following packages will be REMOVED" not in c.stdout
 
 
-@pytest.mark.xfail(reason="PaX flags unset at install time, see issue #3916")
-@pytest.mark.parametrize("binary", [
-    "/usr/sbin/grub-probe",
-    "/usr/sbin/grub-mkdevicemap",
-    "/usr/bin/grub-script-check",
-])
-def test_pax_flags(host, binary):
+def test_paxctl(host):
     """
-    Ensure PaX flags are set correctly on critical Grub binaries.
-    These flags are maintained as part of a post-install kernel hook
-    in the `securedrop-grsec` metapackage. If they aren't set correctly,
-    the machine may fail to boot into a new kernel.
+    As of Focal, paxctl is not used, and shouldn't be installed.
     """
-
-    f = host.file("/etc/kernel/postinst.d/paxctl-grub")
-    assert f.is_file
-    assert f.contains("^paxctl -zCE {}".format(binary))
-
-    c = host.run("paxctl -v {}".format(binary))
-    assert c.rc == 0
-
-    assert "- PaX flags: --------E--- [{}]".format(binary) in c.stdout
-    assert "EMUTRAMP is enabled" in c.stdout
-    # Tracking regressions; previous versions of the Ansible config set
-    # the "p" and "m" flags.
-    assert "PAGEEXEC is disabled" not in c.stdout
-    assert "MPROTECT is disabled" not in c.stdout
-
-
-def test_paxctld(host):
-    """
-    Ensures that paxctld is configured and running. Only relevant
-    for Focal hosts.
-    """
+    p = host.package("paxctl")
     if host.system_info.codename == "xenial":
+        assert p.is_installed
+    else:
+        assert not p.is_installed
+
+
+def test_paxctld_xenial(host):
+    """
+    Xenial-specific paxctld config checks.
+    Ensures paxctld is running and enabled, and relevant
+    exemptions are present in the config file.
+    """
+    if host.system_info.codename != "xenial":
         return True
+    hostname = host.ansible.get_variables()["inventory_hostname"]
+    # Under Xenial, apache2 pax flags managed by securedrop-app-code.
+    if "app" not in hostname:
+        return True
+
     assert host.package("paxctld").is_installed
-    assert host.file("/etc/paxctld.conf").is_file
-    assert host.file("/opt/securedrop/paxctld.conf").is_file
+    f = host.file("/etc/paxctld.conf")
+    assert f.is_file
+    assert f.contains("^/usr/sbin/apache2\tm")
+
     s = host.service("paxctld")
     assert s.is_enabled
     assert s.is_running
+
+
+def test_paxctld_focal(host):
+    """
+    Focal-specific paxctld config checks.
+    Ensures paxctld is running and enabled, and relevant
+    exemptions are present in the config file.
+    """
+    if host.system_info.codename != "focal":
+        return True
+
+    assert host.package("paxctld").is_installed
+    f = host.file("/etc/paxctld.conf")
+    assert f.is_file
+
+    s = host.service("paxctld")
+    assert s.is_enabled
+    assert s.is_running
+
+    # The securedrop-grsec metapackage will copy the config
+    # out of /opt/ to ensure the file is always clobbered on changes.
+    assert host.file("/opt/securedrop/paxctld.conf").is_file
+
+    hostname = host.ansible.get_variables()["inventory_hostname"]
+    # Under Focal, apache2 pax flags managed by securedrop-grsec metapackage.
+    # Both hosts, app & mon, should have the same exemptions. Check precedence
+    # between install-local-packages & apt-test repo for securedrop-grsec.
+    if "app" in hostname:
+        assert f.contains("^/usr/sbin/apache2\tm")
 
 
 @pytest.mark.parametrize('kernel_opts', [
