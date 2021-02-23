@@ -12,5 +12,4 @@ securedrop_common_packages:
   - unattended-upgrades
   - ntp
   - ntpdate
-  - resolvconf
   - tmux
