@@ -30,29 +30,17 @@ securedrop_app_https_certificate_cert_src: securedrop_source_onion.crt
 securedrop_app_https_certificate_key_src: securedrop_source_onion.key
 securedrop_app_https_certificate_chain_src: DigiCertCA.crt
 
-# List of SSL ciphers honored by Source Interface vhost. Order matters!
-# The `SSLHonorCipherOrder` option is set to true, so ciphers below are
-# listed in order of preference.
-securedrop_app_https_ssl_ciphers:
-  - ECDHE-ECDSA-AES256-GCM-SHA384
-  - ECDHE-RSA-AES256-GCM-SHA384
-  - ECDHE-ECDSA-CHACHA20-POLY1305
-  - ECDHE-RSA-CHACHA20-POLY1305
-  - ECDHE-ECDSA-AES128-GCM-SHA256
-  - ECDHE-RSA-AES128-GCM-SHA256
-  - ECDHE-ECDSA-AES256-SHA384
-  - ECDHE-RSA-AES256-SHA384
-  - ECDHE-ECDSA-AES128-SHA256
-  - ECDHE-RSA-AES128-SHA256
-
 apache_packages:
   - apache2
   - libapache2-mod-xsendfile
 
 apache_templates:
-  - ports.conf
-  - sites-available/journalist.conf
-  - sites-available/source.conf
+  - src: ports.conf
+    dest: /etc/apache2/ports.conf
+  - src: sites-available/{{ ansible_distribution_release }}/journalist.conf
+    dest: /etc/apache2/sites-available/journalist.conf
+  - src: sites-available/{{ ansible_distribution_release }}/source.conf
+    dest: /etc/apache2/sites-available/source.conf
 
 # Apache modules required for the SecureDrop application. Will be enabled.
 apache_modules:

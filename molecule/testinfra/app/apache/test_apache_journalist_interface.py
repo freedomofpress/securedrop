@@ -6,34 +6,9 @@ import testutils
 securedrop_test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.app_hostname]
 
-# Setting once so it can be reused in multiple tests.
-wanted_apache_headers = [
-  'Header edit Set-Cookie ^(.*)$ $1;HttpOnly',
-  'Header always append X-Frame-Options: DENY',
-  'Header set Referrer-Policy "no-referrer"',
-  'Header set X-XSS-Protection: "1; mode=block"',
-  'Header set X-Content-Type-Options: nosniff',
-  'Header set X-Download-Options: noopen',
-  'Header set X-Content-Security-Policy: "'
-  'default-src \'none\'; '
-  'script-src \'self\'; '
-  'style-src \'self\'; '
-  'img-src \'self\'; '
-  'font-src \'self\';"',
-  'Header set Content-Security-Policy: "'
-  'default-src \'none\'; '
-  'script-src \'self\'; '
-  'style-src \'self\'; '
-  'img-src \'self\'; '
-  'font-src \'self\';"',
-  'Header set Referrer-Policy "no-referrer"',
-]
 
-
-# Test is not DRY; haven't figured out how to parametrize on
-# multiple inputs, so explicitly redeclaring test logic.
-@pytest.mark.parametrize("header", wanted_apache_headers)
-def test_apache_headers_journalist_interface(host, header):
+@pytest.mark.parametrize("header, value", securedrop_test_vars.wanted_apache_headers.items())
+def test_apache_headers_journalist_interface(host, header, value):
     """
     Test for expected headers in Document Interface vhost config.
     """
@@ -42,50 +17,14 @@ def test_apache_headers_journalist_interface(host, header):
     assert f.user == "root"
     assert f.group == "root"
     assert f.mode == 0o644
-    header_regex = "^{}$".format(re.escape(header))
-    assert re.search(header_regex, f.content_string, re.M)
-
-
-# Block of directory declarations for Apache vhost is common
-# to both Source and Journalist interfaces. Hardcoding these values
-# across multiple test files to speed up development; they should be
-# written once and imported in a DRY manner.
-common_apache2_directory_declarations = """
-<Directory />
-  Options None
-  AllowOverride None
-  Order deny,allow
-  Deny from all
-</Directory>
-
-<Directory /var/www/>
-  Options None
-  AllowOverride None
-  <Limit GET POST HEAD DELETE>
-    Order allow,deny
-    allow from {apache_allow_from}
-  </Limit>
-  <LimitExcept GET POST HEAD DELETE>
-    Order deny,allow
-    Deny from all
-  </LimitExcept>
-</Directory>
-
-<Directory {securedrop_code}>
-  Options None
-  AllowOverride None
-  <Limit GET POST HEAD DELETE>
-    Order allow,deny
-    allow from {apache_allow_from}
-  </Limit>
-  <LimitExcept GET POST HEAD DELETE>
-    Order deny,allow
-    Deny from all
-  </LimitExcept>
-</Directory>
-""".lstrip().rstrip().format(
-        apache_allow_from=securedrop_test_vars.apache_allow_from,
-        securedrop_code=securedrop_test_vars.securedrop_code)
+    if host.system_info.codename == "focal":
+        header_unset = "Header onsuccess unset {}".format(header)
+        assert f.contains(header_unset)
+        header_set = "Header always set {} \"{}\"".format(header, value)
+        assert f.contains(header_set)
+    else:
+        header_regex = "^Header set {}.*{}.*$".format(re.escape(header), re.escape(value))
+        assert re.search(header_regex, f.content_string, re.M)
 
 
 # declare journalist-specific Apache configs
@@ -101,14 +40,6 @@ common_apache2_directory_declarations = """
   'WSGIPassAuthorization On',
   'Header set Cache-Control "no-store"',
   "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),
-  """
-<Directory {}/static>
-  Order allow,deny
-  Allow from all
-  # Cache static resources for 1 hour
-  Header set Cache-Control "max-age=3600"
-</Directory>
-""".strip('\n').format(securedrop_test_vars.securedrop_code),
   'XSendFile        On',
   'LimitRequestBody 524288000',
   'XSendFilePath    /var/lib/securedrop/store/',
@@ -134,13 +65,22 @@ def test_apache_config_journalist_interface(host, apache_opt):
     assert re.search(regex, f.content_string, re.M)
 
 
-def test_apache_journalist_interface_vhost(host):
+def test_apache_config_journalist_interface_headers_per_distro(host):
     """
-    Ensure the document root is configured with correct access restrictions
-    for serving Journalist Interface application code.
+    During migration to Focal, we updated the syntax for forcing HTTP headers.
+    Honor the old Xenial syntax until EOL.
     """
     f = host.file("/etc/apache2/sites-available/journalist.conf")
-    assert common_apache2_directory_declarations in f.content_string
+    if host.system_info.codename == "xenial":
+        assert f.contains("Header always append X-Frame-Options: DENY")
+        assert f.contains('Header set Referrer-Policy "no-referrer"')
+        assert f.contains('Header edit Set-Cookie ^(.*)$ $1;HttpOnly')
+    else:
+        assert f.contains("Header onsuccess unset X-Frame-Options")
+        assert f.contains('Header always set X-Frame-Options "DENY"')
+        assert f.contains('Header onsuccess unset Referrer-Policy')
+        assert f.contains('Header always set Referrer-Policy "no-referrer"')
+        assert f.contains('Header edit Set-Cookie ^(.*)$ $1;HttpOnly')
 
 
 def test_apache_logging_journalist_interface(host):
@@ -167,3 +107,87 @@ def test_apache_logging_journalist_interface(host):
         # just the string "combined" and nothing else.
         assert not f.contains("^combined$")
         assert f.contains("GET")
+
+
+@pytest.mark.parametrize("apache_opt", [
+    """
+<Directory />
+  Options None
+  AllowOverride None
+  Require all denied
+</Directory>
+""".strip('\n'),
+    """
+<Directory {}/static>
+  Require all granted
+  # Cache static resources for 1 hour
+  Header set Cache-Control "max-age=3600"
+</Directory>
+""".strip('\n').format(securedrop_test_vars.securedrop_code),
+    """
+<Directory {}>
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD DELETE>
+    Require ip 127.0.0.1
+  </Limit>
+  <LimitExcept GET POST HEAD DELETE>
+    Require all denied
+  </LimitExcept>
+</Directory>
+""".strip('\n').format(securedrop_test_vars.securedrop_code),
+])
+def test_apache_config_journalist_interface_access_control_focal(host, apache_opt):
+    """
+    Verifies the access control directives for the Journalist Interface.
+    Using a separate test because Xenial / Focal syntax differs.
+    """
+    if host.system_info.codename != "focal":
+        return True
+    f = host.file("/etc/apache2/sites-available/journalist.conf")
+    regex = "^{}$".format(re.escape(apache_opt))
+    assert re.search(regex, f.content_string, re.M)
+
+
+@pytest.mark.parametrize("apache_opt", [
+    """
+<Directory />
+  Options None
+  AllowOverride None
+  Order deny,allow
+  Deny from all
+</Directory>
+""".strip('\n'),
+    """
+<Directory {}/static>
+  Order allow,deny
+  Allow from all
+  # Cache static resources for 1 hour
+  Header set Cache-Control "max-age=3600"
+</Directory>
+""".strip('\n').format(securedrop_test_vars.securedrop_code),
+    """
+<Directory {}>
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD DELETE>
+    Order allow,deny
+    allow from 127.0.0.1
+  </Limit>
+  <LimitExcept GET POST HEAD DELETE>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
+""".strip('\n').format(securedrop_test_vars.securedrop_code),
+])
+def test_apache_config_journalist_interface_access_control_xenial(host, apache_opt):
+    """
+    Verifies the access control directives for the Source Interface.
+    Using a separate test because Xenial / Focal syntax differs.
+    """
+    if host.system_info.codename != "xenial":
+        return True
+    f = host.file("/etc/apache2/sites-available/journalist.conf")
+    regex = "^{}$".format(re.escape(apache_opt))
+    assert re.search(regex, f.content_string, re.M)
