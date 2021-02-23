@@ -291,7 +291,7 @@ def test_reboot_required_cron(host):
         assert f.user == "root"
         assert f.mode == 0o644
 
-        line = '^{}$'.format(re.escape("* */12 * * * touch /var/run/reboot-required"))
+        line = '^{}$'.format(re.escape("0 */12 * * * root touch /var/run/reboot-required"))
         assert f.contains(line)
 
 
