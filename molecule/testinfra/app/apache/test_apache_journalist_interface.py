@@ -17,10 +17,14 @@ def test_apache_headers_journalist_interface(host, header, value):
     assert f.user == "root"
     assert f.group == "root"
     assert f.mode == 0o644
-    header_unset = "Header onsuccess unset {}".format(header)
-    assert f.contains(header_unset)
-    header_set = "Header always set {} \"{}\"".format(header, value)
-    assert f.contains(header_set)
+    if host.system_info.codename == "focal":
+        header_unset = "Header onsuccess unset {}".format(header)
+        assert f.contains(header_unset)
+        header_set = "Header always set {} \"{}\"".format(header, value)
+        assert f.contains(header_set)
+    else:
+        header_regex = "^Header set {}.*{}.*$".format(re.escape(header), re.escape(value))
+        assert re.search(header_regex, f.content_string, re.M)
 
 
 # declare journalist-specific Apache configs
@@ -29,8 +33,6 @@ def test_apache_headers_journalist_interface(host, header, value):
       securedrop_test_vars.apache_listening_address),
   "WSGIDaemonProcess journalist processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(  # noqa
       securedrop_test_vars.securedrop_code),
-  'Header onsuccess unset Referrer-Policy',
-  'Header always set Referrer-Policy "no-referrer"',
   (
       'WSGIScriptAlias / /var/www/journalist.wsgi '
       'process-group=journalist application-group=journalist'
@@ -61,6 +63,24 @@ def test_apache_config_journalist_interface(host, apache_opt):
     assert f.mode == 0o644
     regex = "^{}$".format(re.escape(apache_opt))
     assert re.search(regex, f.content_string, re.M)
+
+
+def test_apache_config_journalist_interface_headers_per_distro(host):
+    """
+    During migration to Focal, we updated the syntax for forcing HTTP headers.
+    Honor the old Xenial syntax until EOL.
+    """
+    f = host.file("/etc/apache2/sites-available/journalist.conf")
+    if host.system_info.codename == "xenial":
+        assert f.contains("Header always append X-Frame-Options: DENY")
+        assert f.contains('Header set Referrer-Policy "no-referrer"')
+        assert f.contains('Header edit Set-Cookie ^(.*)$ $1;HttpOnly')
+    else:
+        assert f.contains("Header onsuccess unset X-Frame-Options")
+        assert f.contains('Header always set X-Frame-Options "DENY"')
+        assert f.contains('Header onsuccess unset Referrer-Policy')
+        assert f.contains('Header always set Referrer-Policy "no-referrer"')
+        assert f.contains('Header edit Set-Cookie ^(.*)$ $1;HttpOnly')
 
 
 def test_apache_logging_journalist_interface(host):
