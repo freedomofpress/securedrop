@@ -49,6 +49,10 @@ if __name__ == "__main__":
         print("The Tor configuration in the backup matches the server.")
         sys.exit(0)
 
+    if (3 in server_versions) and (3 in backup_versions):
+        print("V3 services detected in backup and server - proceeding with v3-only restore")
+        sys.exit(0)
+
     print(
         "The Tor configuration on the app server offers version {} services.".format(
             strset(server_versions)

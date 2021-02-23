@@ -73,7 +73,6 @@ def filter_v2(filename):
                         i += 1
                         continue
 
-
         result.append(line)
         i += 1
 
