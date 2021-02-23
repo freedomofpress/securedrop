@@ -45,3 +45,6 @@ securedrop_pkg_grsec_xenial:
 securedrop_pkg_grsec_focal:
   ver: "5.4.97"
   depends: "linux-image-5.4.97-grsec-securedrop,intel-microcode"
+
+# Mostly useful for local package installation
+grsec_version: "{{ securedrop_pkg_grsec_xenial.ver if securedrop_target_distribution == 'xenial' else securedrop_pkg_grsec_focal.ver }}"

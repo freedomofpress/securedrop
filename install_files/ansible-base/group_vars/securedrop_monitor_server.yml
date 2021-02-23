@@ -9,6 +9,7 @@ local_deb_packages:
   - "securedrop-keyring-0.1.4+{{ securedrop_version }}+{{ securedrop_target_distribution }}-amd64.deb"
   - "securedrop-config-0.1.4+{{ securedrop_version }}+{{ securedrop_target_distribution }}-amd64.deb"
   - "securedrop-ossec-server-3.6.0+{{ securedrop_version }}+{{ securedrop_target_distribution }}-amd64.deb"
+  - securedrop-grsec-{{ grsec_version }}+{{ securedrop_target_distribution }}-amd64.deb
   - ossec-server-3.6.0+{{ securedrop_target_distribution }}-amd64.deb
 
 # Configure the tor onion services. The Monitor server has only one,
