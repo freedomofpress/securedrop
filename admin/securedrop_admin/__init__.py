@@ -89,7 +89,23 @@ _T = TypeVar('_T', bound=Union[int, str, bool])
 # https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators
 _FuncT = TypeVar('_FuncT', bound=Callable[..., Any])
 
-# (var, default, type, prompt, validator, transform, condition)
+# Configuration description tuples drive the CLI user experience and the
+# validation logic of the  securedrop-admin tool. A tuple is in the following
+# format.
+#
+# (var, default, type, prompt, validator, transform, condition):
+#
+# var         configuration variable name (will be stored in `site-specific`)
+# default     default value (can be a callable)
+# type        configuration variable type
+# prompt      text prompt presented to the user
+# validator   input validator based on `prompt_toolkit`'s Validator class
+# transform   transformation function to run on input
+# condition   condition under which this prompt is shown, receives the
+#             in-progress configuration object as input. Used for "if this
+#             then that" branching of prompts.
+#
+# The mypy type description of the format follows.
 _DescEntryType = Tuple[str, _T, Type[_T], str, Optional[Validator], Optional[Callable], Callable]
 
 
@@ -302,6 +318,8 @@ class SiteConfig:
             self.args.app_path).get_translations()
         translations_as_str = " ".join(translations)
 
+        is_v2_legacy_config = self.check_for_v2_onion()
+
         self.desc = [
             ('ssh_users', 'sd', str,
              'Username for SSH access to the servers',
@@ -442,17 +460,17 @@ class SiteConfig:
              str.split,
              lambda config: True),
             ('v2_onion_services', self.check_for_v2_onion(), bool,
-             'WARNING: For security reasons, support for v2 onion services ' +
-             'will be removed in March 2021. ' +
-             'Do you want to enable v2 onion services?',
+             'WARNING: v2 onion services cannot be installed on a server ' +
+             'running Ubuntu 20.04, and will be removed completely after ' +
+             'April 30, 2021. Do you want to keep v2 onion services enabled?',
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes',
-             lambda config: True),
+             lambda config: is_v2_legacy_config),
             ('v3_onion_services', self.check_for_v3_onion, bool,
              'Do you want to enable v3 onion services (recommended)?',
              SiteConfig.ValidateYesNoForV3(self),
              lambda x: x.lower() == 'yes',
-             lambda config: True),
+             lambda config: is_v2_legacy_config),
         ]  # type: List[_DescEntryType]
 
     def load_and_update_config(self, validate: bool = True, prompt: bool = True) -> bool:
@@ -465,8 +483,21 @@ class SiteConfig:
         return self.update_config(prompt)
 
     def update_config(self, prompt: bool = True) -> bool:
+
+        # Stash old onion configuration before potentially overwriting it.
+        v2_value = self.config.get('v2_onion_services', False)
+        v3_value = self.config.get('v3_onion_services', True)
+
         if prompt:
             self.config.update(self.user_prompt_config())
+
+        # On recent installations, we do not prompt for enabling v3 onion
+        # services, but we still (re-)write the values to the configuration
+        # until v2 support is fully removed.
+        if self.config.get('v3_onion_services') == '':
+            self.config['v2_onion_services'] = v2_value
+            self.config['v3_onion_services'] = v3_value
+
         self.save()
         self.validate_gpg_keys()
         self.validate_journalist_alert_email()
