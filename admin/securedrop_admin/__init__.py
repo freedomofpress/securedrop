@@ -89,7 +89,23 @@ _T = TypeVar('_T', bound=Union[int, str, bool])
 # https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators
 _FuncT = TypeVar('_FuncT', bound=Callable[..., Any])
 
-# (var, default, type, prompt, validator, transform, condition)
+# Configuration description tuples drive the CLI user experience and the
+# validation logic of the  securedrop-admin tool. A tuple is in the following
+# format.
+#
+# (var, default, type, prompt, validator, transform, condition):
+#
+# var         configuration variable name (will be stored in `site-specific`)
+# default     default value (can be a callable)
+# type        configuration variable type
+# prompt      text prompt presented to the user
+# validator   input validator based on `prompt_toolkit`'s Validator class
+# transform   transformation function to run on input
+# condition   condition under which this prompt is shown, receives the
+#             in-progress configuration object as input. Used for "if this
+#             then that" branching of prompts.
+#
+# The mypy type description of the format follows.
 _DescEntryType = Tuple[str, _T, Type[_T], str, Optional[Validator], Optional[Callable], Callable]
 
 
@@ -442,9 +458,8 @@ class SiteConfig:
              str.split,
              lambda config: True),
             ('v2_onion_services', self.check_for_v2_onion(), bool,
-             'WARNING: For security reasons, support for v2 onion services ' +
-             'will be removed in March 2021. ' +
-             'Do you want to enable v2 onion services?',
+             'WARNING: v2 onion services cannot be installed on servers ' +
+             'running Ubuntu 20.04. Do you want to enable v2 onion services?',
              SiteConfig.ValidateYesNo(),
              lambda x: x.lower() == 'yes',
              lambda config: True),
