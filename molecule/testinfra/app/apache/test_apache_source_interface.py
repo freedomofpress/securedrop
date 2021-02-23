@@ -7,8 +7,8 @@ securedrop_test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.app_hostname]
 
 
-@pytest.mark.parametrize("header", securedrop_test_vars.wanted_apache_headers)
-def test_apache_headers_source_interface(host, header):
+@pytest.mark.parametrize("header, value", securedrop_test_vars.wanted_apache_headers.items())
+def test_apache_headers_source_interface(host, header, value):
     """
     Test for expected headers in Source Interface vhost config.
     """
@@ -17,8 +17,10 @@ def test_apache_headers_source_interface(host, header):
     assert f.user == "root"
     assert f.group == "root"
     assert f.mode == 0o644
-    header_regex = "^{}$".format(re.escape(header))
-    assert re.search(header_regex, f.content_string, re.M)
+    header_unset = "Header onsuccess unset {}".format(header)
+    assert f.contains(header_unset)
+    header_set = "Header always set {} \"{}\"".format(header, value)
+    assert f.contains(header_set)
 
 
 @pytest.mark.parametrize("apache_opt", [
@@ -29,7 +31,8 @@ def test_apache_headers_source_interface(host, header):
     'WSGIProcessGroup source',
     'WSGIScriptAlias / /var/www/source.wsgi',
     'Header set Cache-Control "no-store"',
-    'Header set Referrer-Policy "same-origin"',
+    'Header onsuccess unset Referrer-Policy',
+    'Header always set Referrer-Policy "same-origin"',
     'Header unset Etag',
     "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),
     'XSendFile        Off',
