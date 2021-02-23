@@ -44,4 +44,4 @@ securedrop_pkg_grsec_xenial:
 
 securedrop_pkg_grsec_focal:
   ver: "5.4.97"
-  depends: "linux-image-5.4.97-grsec-securedrop,linux-image-4.14.188-grsec-securedrop,intel-microcode"
+  depends: "linux-image-5.4.97-grsec-securedrop,intel-microcode"
