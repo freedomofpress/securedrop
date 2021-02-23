@@ -105,10 +105,10 @@ def test_apache_logging_journalist_interface(host):
 <Directory {}>
   Options None
   AllowOverride None
-  <Limit GET POST HEAD>
+  <Limit GET POST HEAD DELETE>
     Require ip 127.0.0.1
   </Limit>
-  <LimitExcept GET POST HEAD>
+  <LimitExcept GET POST HEAD DELETE>
     Require all denied
   </LimitExcept>
 </Directory>
