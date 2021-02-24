@@ -243,7 +243,7 @@ def test_unattended_upgrades_functional(host):
     are up-to-date.
     """
     if host.system_info.codename != "xenial":
-        c = host.run('sudo unattended-upgrades -d')
+        c = host.run('sudo unattended-upgrades --dry-run --debug')
         assert c.rc == 0
         expected_origins = (
             "Allowed origins are: origin=Ubuntu,archive=focal, origin=Ubuntu,archive=focal-security"

@@ -1,12 +1,11 @@
 ---
-- name: Get the grsec version of the current scenario
-  set_fact:
-    grsec_version: "{% if ansible_distribution_release == 'xenial' %}{{ securedrop_pkg_grsec_xenial.ver }}{% else %}{{ securedrop_pkg_grsec_focal.ver }}{% endif %}"
-
 - name: Copy locally built securedrop-grsec metapackage
   copy:
     src: "../../build/{{ securedrop_target_distribution }}/securedrop-grsec-{{ grsec_version }}+{{ securedrop_target_distribution }}-amd64.deb"
-    dest: /root/securedrop-grsec.deb
+    dest: "/root/securedrop-grsec-{{ grsec_version }}+{{ securedrop_target_distribution }}-amd64.deb"
 
 - name: Install locally built securedrop-grsec metapackage
-  command: apt-get install -y -f /root/securedrop-grsec.deb
+  command: apt-get install -y -f "/root/securedrop-grsec-{{ grsec_version }}+{{ securedrop_target_distribution }}-amd64.deb"
+
+- name: Mark package as held, so it doesn't update to apt-test version
+  command: apt-mark hold securedrop-grsec

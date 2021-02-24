@@ -33,6 +33,9 @@ def test_sysctl_options(host, sysctl_opt):
     due to the heavy use of Tor.
     """
     with host.sudo():
+        # For Focal, we disable IPv6 entirely, so the IPv6 sysctl options won't exist
+        if sysctl_opt[0].startswith("net.ipv6") and host.system_info.codename == "focal":
+            return True
         assert host.sysctl(sysctl_opt[0]) == sysctl_opt[1]
 
 

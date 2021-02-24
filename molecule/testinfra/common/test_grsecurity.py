@@ -277,3 +277,15 @@ def test_mds_mitigations_and_smt_disabled(host):
         grub_config = host.file(grub_config_path)
 
         assert grub_config.contains("mds=full,nosmt")
+
+
+def test_kernel_boot_options(host):
+    """
+    Ensure command-line options for currently booted kernel are set.
+    """
+    with host.sudo():
+        f = host.file("/proc/cmdline")
+        boot_opts = f.content_string.split()
+    assert "noefi" in boot_opts
+    if host.system_info.codename == "focal":
+        assert "ipv6.disable=1" in boot_opts

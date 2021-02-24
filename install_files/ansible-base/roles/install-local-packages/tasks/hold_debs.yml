@@ -13,9 +13,5 @@
 - name: Mark packages as held, so they aren't upgraded automatically (via apt).
   command: apt-mark hold {{ item.stdout }}
   register: apt_mark_hold_result
-  # The packages will have the "hold" state cleared during the previous task
-  # for `dpkg -i <deb>`. Therefore let's determine changed state by comparing
-  # to the value prior to installation.
-  changed_when: item.stdout not in apt_mark_showhold_result.stdout_lines
-  when: item.stdout not in apt_mark_showhold_result.stdout_lines
+  changed_when: not apt_mark_showhold_result.stdout.endswith("was already set on hold")
   with_items: "{{ local_deb_packages_name_check.results }}"
