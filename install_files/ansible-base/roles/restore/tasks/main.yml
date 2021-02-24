@@ -32,6 +32,7 @@
   connection: local
   become: no
   command: "python {{ role_path }}/files/compare_torrc.py {{ torrc_check_dir.path }}"
+  register: compare_result
 
 - name: Remove temporary directory for Tor configuration check
   connection: local
@@ -52,7 +53,17 @@
     dest: /
     remote_src: yes
     src: "/tmp/{{ restore_file}}"
-  when: restore_skip_tor is not defined
+  when: (restore_skip_tor is not defined) and
+        ("V3 services detected" not in compare_result.stdout)
+
+- name: Extract backup, using v3 services only
+  unarchive:
+    dest: /
+    remote_src: yes
+    src: "/tmp/{{ restore_file}}"
+    exclude: "var/lib/tor/services/source,var/lib/tor/services/journalist,var/lib/tor/services/ssh"
+  when: (restore_skip_tor is not defined) and
+        ("V3 services detected" in compare_result.stdout)
 
 - name: Extract backup, skipping tor service configuration
   unarchive:
@@ -72,6 +83,36 @@
   service:
     name: apache2
     state: reloaded
+
+- name: Copy disable_v2.py script for Focal
+  copy:
+    src: "{{ role_path }}/files/disable_v2.py"
+    dest: /opt/disable_v2.py
+  when: (ansible_distribution_release == 'focal') or
+        ("V3 services detected" in compare_result.stdout)
+
+- name: Execute disable_v2 script on Focal
+  command: python3 /opt/disable_v2.py /etc/tor/torrc /etc/tor/torrc
+  when: (ansible_distribution_release == 'focal') or
+        ("V3 services detected" in compare_result.stdout)
+
+- name: Remove v2 tor source directory
+  file:
+    state: absent
+    path: /var/lib/tor/services/source
+  when: ansible_distribution_release == 'focal'
+
+- name: Remove v2 tor journalist directory
+  file:
+    state: absent
+    path: /var/lib/tor/services/journalist
+  when: ansible_distribution_release == 'focal'
+
+- name: Remove disable_v2.py script on Focal
+  file:
+    state: absent
+    path: /opt/disable_v2.py
+  when: ansible_distribution_release == 'focal'
 
 - name: Reload Tor service
   service:
