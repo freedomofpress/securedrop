@@ -72,3 +72,5 @@ verifier:
     n: auto
     v: 2
     junit-xml: ../../junit/testinfra-results.xml
+  env:
+    SECUREDROP_TARGET_DISTRIBUTION: xenial

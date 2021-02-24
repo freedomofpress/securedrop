@@ -19,7 +19,7 @@ def test_automatic_updates_dependencies(host):
     """
     apt_dependencies = {
         'xenial': ['cron-apt', 'ntp'],
-        'focal': ['unattended-upgrades', 'ntp']
+        'focal': ['unattended-upgrades']
     }
 
     for package in apt_dependencies[host.system_info.codename]:

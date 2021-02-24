@@ -1,5 +1,5 @@
 ---
-- name: Install base apt depedencies
+- name: Install base apt dependencies
   apt:
     name: "{{ securedrop_common_packages }}"
     state: present

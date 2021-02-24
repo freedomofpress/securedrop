@@ -10,6 +10,4 @@ securedrop_common_packages:
   - apt-transport-https
   - iptables-persistent
   - unattended-upgrades
-  - ntp
-  - ntpdate
   - tmux

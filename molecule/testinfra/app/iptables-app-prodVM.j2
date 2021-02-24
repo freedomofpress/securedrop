@@ -11,7 +11,7 @@
 -A INPUT -s {{ address }}/32 -p tcp -m tcp --sport 53 -m state --state RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
 -A INPUT -s {{ address }}/32 -p udp -m udp --sport 53 -m state --state RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
 {% endfor -%}
--A INPUT -p udp -m udp --sport 123 --dport 123 -m state --state RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT
+-A INPUT -p udp -m udp --sport 123 -m state --state RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT
 -A INPUT -p tcp -m multiport --sports 80,8080,443 -m state --state RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT
 -A INPUT -s {{ mon_ip }}/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT
 -A INPUT -s {{ mon_ip }}/32 -p tcp -m tcp --dport 22 -m comment --comment "Block explicitly SSH from the adjacent SD component" -j DROP
@@ -31,7 +31,7 @@
 -A OUTPUT -d {{ address }}/32 -p tcp -m tcp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
 -A OUTPUT -d {{ address }}/32 -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT
 {% endfor -%}
--A OUTPUT -p udp -m udp --sport 123 --dport 123 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT
+-A OUTPUT -p udp -m udp --dport 123 -m owner --uid-owner {{ time_service_user }} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT
 -A OUTPUT -p tcp -m multiport --dports 80,8080,443 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT
 -A OUTPUT -d {{ mon_ip }}/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT
 -A OUTPUT -o eth1 -p tcp -m owner --uid-owner 0 -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT

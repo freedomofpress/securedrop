@@ -65,3 +65,5 @@ verifier:
   options:
     n: auto
     v: 2
+  env:
+    SECUREDROP_TARGET_DISTRIBUTION: xenial

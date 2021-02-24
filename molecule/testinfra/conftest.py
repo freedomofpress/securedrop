@@ -9,7 +9,10 @@ Vars should be placed in `testinfra/vars/<hostname>.yml`.
 import io
 import os
 import yaml
+from typing import Any, Dict
+
 import testutils
+
 
 # The config tests target staging by default. It's possible to override
 # for e.g. prod, but the associated vars files are not yet ported.
@@ -50,25 +53,30 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
     return hostvars
 
 
-def lookup_molecule_info():
-    """
-    Molecule automatically writes YAML files documenting dynamic host info
-    such as remote IPs. Read that file and pass back the config dict.
-    """
-    molecule_instance_config_path = os.path.abspath(
-            os.environ['MOLECULE_INSTANCE_CONFIG'])
-    with open(molecule_instance_config_path, 'r') as f:
-        molecule_instance_config = yaml.safe_load(f)
-    return molecule_instance_config
+class TestVars(dict):
+    managed_attrs = {}  # type: Dict[str, Any]
+
+    def __init__(self, initial: Dict[str, Any]) -> None:
+        self.securedrop_target_distribution = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION")
+        self.managed_attrs.update(initial)
+
+    def __getattr__(self, name: str) -> Any:
+        """
+        If the requested attribute names a dict in managed_attrs and that
+        contains a key with the name of the target distribution,
+        e.g. "focal", return that. Otherwise return the entire item
+        under the requested name.
+        """
+        try:
+            attr = self.managed_attrs[name]
+            if isinstance(attr, dict) and self.securedrop_target_distribution in attr:
+                return attr[self.securedrop_target_distribution]
+            return attr
+        except KeyError:
+            raise AttributeError(name)
+
+    def __str__(self) -> str:
+        return str(self.managed_attrs)
 
 
-class Myvalues:
-    def __init__(self):
-        pass
-
-
-value = securedrop_import_testinfra_vars(target_host)
-res = Myvalues()
-for key, value in value.items():
-    setattr(res, key, value)
-testutils.securedrop_test_vars = res
+testutils.securedrop_test_vars = TestVars(securedrop_import_testinfra_vars(target_host))
