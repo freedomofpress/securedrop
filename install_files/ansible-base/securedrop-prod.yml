@@ -28,6 +28,15 @@
   max_fail_percentage: 0
   any_errors_fatal: yes
   pre_tasks:
+    - name: Verify that v2 onion services are not enabled on a Focal install
+      assert:
+        that:
+          - "v2_onion_services|bool != true"
+        fail_msg: >-
+          V2 services were enabled via ./securedrop-admin sdconfig, but are not
+          available on Focal. Please run sdconfig again, disabling v2 services.
+      when: ansible_distribution_release == 'focal'
+
     - name: Check if install has been done before
       stat:
         path: /var/www/securedrop
