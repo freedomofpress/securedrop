@@ -53,22 +53,16 @@
   tags:
     - ntp
 
-- name: Disable VirtualBox service vboxadd to avoid conflict with systemd-timesyncd.
+- name: Disable VirtualBox services to avoid conflict with systemd-timesyncd.
   systemd:
-    name: vboxadd
+    name: "{{ item }}"
     enabled: no
     state: stopped
   when: ansible_distribution_release == "focal"
-  become: yes
-  tags:
-    - ntp
-
-- name: Disable VirtualBox service vboxadd-service to avoid conflict with systemd-timesyncd.
-  systemd:
-    name: vboxadd-service
-    enabled: no
-    state: stopped
-  when: ansible_distribution_release == "focal"
+  failed_when: false
+  with_items:
+    - vboxadd
+    - vboxadd-service
   become: yes
   tags:
     - ntp
