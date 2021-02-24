@@ -35,7 +35,7 @@ See the [Installation Guide](https://docs.securedrop.org/en/stable/#installtoc).
 
 ## How to Contribute to SecureDrop
 
-See our [contribution page](CONTRIBUTING.md)
+See our [contribution page](CONTRIBUTING.md).
 
 ## Developer Quickstart
 
