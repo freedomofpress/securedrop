@@ -2,7 +2,41 @@
 
 ## 1.8.0~rc1
 
-*
+### Web applications
+
+* Provide end-of-life messaging and disable source interface after Xenial End-of-life (#5789)
+* Adds safe deletion functionality to the Journalist Interface (#5770)
+* source\_app.utils.normalizer\_timestamps will no longer create an empty file (#5724)
+
+### Operations
+
+* Support Ubuntu 20.04 Focal for SecureDrop server installs (#4728)
+* Update and add annotations to SSH configuration for servers (#5666)
+* (Focal) Disable v2 onion addresses on restore (#5677)
+* (Focal) Replace cron-apt with unattended-upgrades (#5684)
+* Remove cloud-init package during server installation (#5771)
+* (Focal) Update Kernel to 5.4.97 for Focal (#5785)
+* (Focal) Disable LTS upgrade prompt (#5786)
+* Check for updates before most securedrop-admin commands(#5788)
+* Install release-upgrader in prepare-servers role (#5792)
+* (Focal) Remove aptitude and disable install-recommends(#5793)
+* (Focal) Update and annotate Apache configuration (#5797)
+* Update Tor to 0.4.5.6 (#5803)
+* (Focal) Replace ntp and ntpdate by systemd-timesyncd (#5806)
+* Use paxctl under Xenial, Paxctld for Focal (#5808)
+* (Focal) Remove resolvconf (#5809)
+* (Focal) Disable ipv6 via cmdline (#5810)
+* (Focal) Add check to prevent Onion Service v2 install (#5819)
+
+### Translations
+
+* Update translated strings (#5790)
+* Reduce localization manager review noise (#5791)
+
+### Development
+
+* Qualify debian packages with target distribution (#5765)
+* Always update Tor Browser to the latest release (#5774)
 
 ## 1.7.1
 
