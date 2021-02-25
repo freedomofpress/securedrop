@@ -21,11 +21,11 @@
     {% if g.user %}
     {% if g.show_os_past_eol_warning %}
     <div id="os-past-eol" class="alert-banner">
-      <img src="{{ url_for('static', filename='i/bang-circle.png') }}" width="20" height="20"> {{ gettext ('<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href="//securedrop.org/xenial-eol" rel="noreferrer">Learn More</a>') }}
+      <img src="{{ url_for('static', filename='i/bang-circle.png') }}" width="20" height="20"> {{ gettext ('<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href="//securedrop.org/xenial-eol" rel="noreferrer">Learn More</a>') }}
     </div>
     {% elif g.show_os_near_eol_warning %}
     <div id="os-near-eol" class="alert-banner">
-      <img src="{{ url_for('static', filename='i/bang-circle.png') }}" width="20" height="20"> {{ gettext ('<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual update is urgently required to remain safe. Please contact your adminstrator. <a href="//securedrop.org/xenial-eol" rel="noreferrer">Learn More</a>') }}
+      <img src="{{ url_for('static', filename='i/bang-circle.png') }}" width="20" height="20"> {{ gettext ('<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href="//securedrop.org/xenial-eol" rel="noreferrer">Learn More</a>') }}
     </div>
     {% endif %}
 

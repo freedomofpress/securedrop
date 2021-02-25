@@ -507,7 +507,7 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
 
         text = resp.data.decode('utf-8')
         assert escape(
-            "The account and data for the source {} has been deleted.".format(col_name)) in text
+            "The account and data for the source {} have been deleted.".format(col_name)) in text
 
         assert "No documents have been submitted!" in text
         assert async_genkey.called
