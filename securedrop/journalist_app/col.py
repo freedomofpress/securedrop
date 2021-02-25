@@ -70,7 +70,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                     # confirming the success of an operation.
                     escape(gettext("Success!")),
                     escape(gettext(
-                        "The account and data for the source {} has been deleted.").format(
+                        "The account and data for the source {} have been deleted.").format(
                             source.journalist_designation))
                 )
             ), 'success')
