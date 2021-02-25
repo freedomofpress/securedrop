@@ -260,8 +260,7 @@ def bulk_delete(
     flash(
         Markup(
            "<b>{}</b> {}".format(
-               # Translators: Here, "Success!" appears before a message
-               # indicating a successful deletion
+               # Translators: Precedes a message confirming the success of an operation.
                escape(gettext("Success!")), escape(success_message))), 'success')
 
     if deletion_errors > 0:
@@ -331,8 +330,7 @@ def col_delete(cols_selected: List[str]) -> werkzeug.Response:
         flash(
             Markup(
                "<b>{}</b> {}".format(
-                   # Translators: Here, "Success!" appears before a message
-                   # indicating a successful deletion
+                   # Translators: Precedes a message confirming the success of an operation.
                    escape(gettext("Success!")), escape(success_message))), 'success')
 
     return redirect(url_for('main.index'))
@@ -356,8 +354,7 @@ def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
         flash(
             Markup(
                 "<b>{}</b> {}".format(
-                    # Translators: Here, "Nothing Selected" appears before a message
-                    # asking the user to select one or more items
+                    # Translators: Error shown when a user has not selected items to act on.
                     escape(gettext("Nothing Selected")),
                     escape(gettext("You must select one or more items for deletion.")))
                 ), 'error')
@@ -369,8 +366,7 @@ def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
         flash(
             Markup(
                 "<b>{}</b> {}".format(
-                    # Translators: Here, "Success" appears before a message
-                    # indicating a successful deletion
+                    # Translators: Precedes a message confirming the success of an operation.
                     escape(gettext("Success!")),
                     escape(gettext("The files and messages have been deleted.")))
                 ), 'success')

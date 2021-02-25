@@ -66,8 +66,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         flash(
             Markup(
                 "<b>{}</b> {}".format(
-                    # Translators: Here, "Success!" appears before a message
-                    # confirming the success of an operation.
+                    # Translators: Precedes a message confirming the success of an operation.
                     escape(gettext("Success!")),
                     escape(gettext(
                         "The account and data for the source {} has been deleted.").format(
@@ -86,8 +85,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if 'cols_selected' not in request.form:
             flash(
                 Markup("<b>{}</b> {}".format(
-                    # Translators: Here, "Nothing Selected" appears before a message
-                    # asking the user to select one or more items.
+                    # Translators: Error shown when a user has not selected items to act on.
                     escape(gettext('Nothing Selected')),
                     escape(gettext('You must select one or more items.'))
                     )
