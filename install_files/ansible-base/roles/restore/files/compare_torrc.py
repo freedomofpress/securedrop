@@ -46,11 +46,11 @@ if __name__ == "__main__":
     backup_versions = get_tor_versions(os.path.join(tempdir, "backup/etc/tor/torrc"))
 
     if server_versions == backup_versions:
-        print("The Tor configuration in the backup matches the server.")
+        print("Valid configuration: the Tor configuration in the backup matches the server.")
         sys.exit(0)
 
     if (3 in server_versions) and (3 in backup_versions):
-        print("V3 services detected in backup and server - proceeding with v3-only restore")
+        print("Valid configuration: V3 services only`")
         sys.exit(0)
 
     print(
@@ -65,9 +65,11 @@ if __name__ == "__main__":
         )
     )
 
-    print("\nRestoring a backup with a different Tor configuration than the server ")
-    print("is currently unsupported. If you require technical assistance, please ")
-    print("contact the SecureDrop team via the support portal or at ")
+    print("\nIncompatible configuration: Restoring a backup including a different ")
+    print("Tor configuration than the server Tor configuration is unsupported. ")
+    print("Optionally, use --preserve-tor-config to apply a data-only backup.")
+    print("If you require technical assistance, please contact the ")
+    print("SecureDrop team via the support portal or at ")
     print("securedrop@freedom.press.")
 
     sys.exit(1)
