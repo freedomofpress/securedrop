@@ -15,7 +15,7 @@ Flask-Babel
 Flask-SQLAlchemy
 Flask-WTF
 Flask>0.12.2
-Jinja2>=2.10.1
+Jinja2>=2.11.3
 jsmin
 markupsafe>=1.1
 mod_wsgi
