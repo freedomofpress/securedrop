@@ -1,3 +1,4 @@
+Jinja2>=2.11.3
 ansible-lint>=4.2.0
 ansible>=2.9.7,<2.10.0
 argon2_cffi>=20.1.0
