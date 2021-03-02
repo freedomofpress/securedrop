@@ -857,8 +857,8 @@ def verify_install(args: argparse.Namespace) -> int:
 @update_check_required("backup")
 def backup_securedrop(args: argparse.Namespace) -> int:
     """Perform backup of the SecureDrop Application Server.
-    Creates a tarball of submissions and server config, and fetches
-    back to the Admin Workstation. Future `restore` actions can be performed
+    Creates a tarball of submissions and server config, excluding SSH config, and
+    fetches back to the Admin Workstation. Future `restore` actions can be performed
     with the backup tarball."""
     sdlog.info("Backing up the SecureDrop Application Server")
     ansible_cmd = [
@@ -870,7 +870,8 @@ def backup_securedrop(args: argparse.Namespace) -> int:
 
 @update_check_required("restore")
 def restore_securedrop(args: argparse.Namespace) -> int:
-    """Perform restore of the SecureDrop Application Server.
+    """Perform restore of the SecureDrop Application Server data, Source
+    Interface config, and Journalist Interface config.
     Requires a tarball of submissions and server config, created via
     the `backup` action."""
     sdlog.info("Restoring the SecureDrop Application Server from backup")

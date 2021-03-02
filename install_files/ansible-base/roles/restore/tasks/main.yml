@@ -53,6 +53,9 @@
     dest: /
     remote_src: yes
     src: "/tmp/{{ restore_file}}"
+    exclude:
+      - "var/lib/tor/services/ssh"
+      - "var/lib/tor/services/sshv3"
   when: (restore_skip_tor is not defined) and
         ("V3 services detected" not in compare_result.stdout)
 
@@ -61,7 +64,11 @@
     dest: /
     remote_src: yes
     src: "/tmp/{{ restore_file}}"
-    exclude: "var/lib/tor/services/source,var/lib/tor/services/journalist,var/lib/tor/services/ssh"
+    exclude:
+      - "var/lib/tor/services/source"
+      - "var/lib/tor/services/journalist"
+      - "var/lib/tor/services/ssh"
+      - "var/lib/tor/services/sshv3"
   when: (restore_skip_tor is not defined) and
         ("V3 services detected" in compare_result.stdout)
 
@@ -70,7 +77,9 @@
     dest: /
     remote_src: yes
     src: "/tmp/{{ restore_file}}"
-    exclude: "var/lib/tor,etc/tor/torrc"
+    exclude:
+      - "var/lib/tor"
+      - "etc/tor/torrc"
   when: restore_skip_tor is defined
 
 - name: Reconfigure securedrop-app-code
