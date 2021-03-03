@@ -173,7 +173,10 @@ def test_paxctld_xenial(host):
     """
     if host.system_info.codename != "xenial":
         return True
-    hostname = host.ansible.get_variables()["inventory_hostname"]
+
+    hostname = host.check_output('hostname -s')
+    assert (("app" in hostname) or ("mon" in hostname))
+
     # Under Xenial, apache2 pax flags managed by securedrop-app-code.
     if "app" not in hostname:
         return True
@@ -209,7 +212,9 @@ def test_paxctld_focal(host):
     # out of /opt/ to ensure the file is always clobbered on changes.
     assert host.file("/opt/securedrop/paxctld.conf").is_file
 
-    hostname = host.ansible.get_variables()["inventory_hostname"]
+    hostname = host.check_output('hostname -s')
+    assert (("app" in hostname) or ("mon" in hostname))
+
     # Under Focal, apache2 pax flags managed by securedrop-grsec metapackage.
     # Both hosts, app & mon, should have the same exemptions. Check precedence
     # between install-local-packages & apt-test repo for securedrop-grsec.
