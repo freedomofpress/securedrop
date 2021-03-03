@@ -88,7 +88,7 @@ def test_app_apparmor_complain_count(host):
         assert c == str(len(sdvars.apparmor_complain))
 
 
-@pytest.mark.parametrize('aa_enforced', sdvars.apparmor_enforce)
+@pytest.mark.parametrize('aa_enforced', sdvars.apparmor_enforce_actual)
 def test_apparmor_enforced(host, aa_enforced):
     awk = ("awk '/[0-9]+ profiles.*enforce./"
            "{flag=1;next}/^[0-9]+.*/{flag=0}flag'")
