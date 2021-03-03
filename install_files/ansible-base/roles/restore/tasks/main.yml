@@ -82,7 +82,7 @@
     remote_src: yes
     src: "/tmp/{{ restore_file}}"
     exclude: "var/lib/tor,etc/tor/torrc"
-  when: not restore_skip_tor
+  when: restore_skip_tor
 
 - name: Reconfigure securedrop-app-code
   command: dpkg-reconfigure securedrop-app-code
