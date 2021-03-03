@@ -1,5 +1,9 @@
 import pytest
-import re
+import warnings
+import io
+import difflib
+import os
+from jinja2 import Template
 
 import testutils
 
@@ -99,39 +103,47 @@ def test_grsecurity_sysctl_options(host, sysctl_opt):
         assert host.sysctl(sysctl_opt[0]) == sysctl_opt[1]
 
 
-@pytest.mark.skip_in_prod
-@pytest.mark.parametrize('paxtest_check', [
-  "Executable anonymous mapping",
-  "Executable bss",
-  "Executable data",
-  "Executable heap",
-  "Executable stack",
-  "Executable shared library bss",
-  "Executable shared library data",
-  "Executable anonymous mapping (mprotect)",
-  "Executable bss (mprotect)",
-  "Executable data (mprotect)",
-  "Executable heap (mprotect)",
-  "Executable stack (mprotect)",
-  "Executable shared library bss (mprotect)",
-  "Executable shared library data (mprotect)",
-  "Writable text segments",
-  "Return to function (memcpy)",
-  "Return to function (memcpy, PIE)",
-])
-def test_grsecurity_paxtest(host, paxtest_check):
+def test_grsecurity_paxtest(host):
     """
-    Check that paxtest does not report anything vulnerable
-    Requires the package paxtest to be installed.
-    The paxtest package is currently being installed in the app-test role.
+    Check that paxtest reports the expected mitigations. These are
+    "Killed" for most of the checks, with the notable exception of the
+    memcpy ones. Only newer versions of paxtest will fail the latter,
+    regardless of kernel.
     """
-    if host.exists("/usr/bin/paxtest"):
+    if not host.exists("/usr/bin/paxtest"):
+        warnings.warn("Installing paxtest to run kernel tests")
         with host.sudo():
-            c = host.run("paxtest blackhat")
-            assert c.rc == 0
-            assert "Vulnerable" not in c.stdout
-            regex = r"^{}\s*:\sKilled$".format(re.escape(paxtest_check))
-            assert re.search(regex, c.stdout)
+            host.run("apt-get update && apt-get install -y paxtest")
+    try:
+        with host.sudo():
+            # Log to /tmp to avoid cluttering up /root.
+            paxtest_cmd = "paxtest blackhat /tmp/paxtest.log"
+            # Select only predictably formatted lines; omit
+            # the guesses, since the number of bits can vary
+            paxtest_cmd += " | grep -P '^(Executable|Return)'"
+            paxtest_results = host.check_output(paxtest_cmd)
+
+        paxtest_template_path = "{}/paxtest_results.j2".format(
+            os.path.dirname(os.path.abspath(__file__)))
+
+        memcpy_result = "Killed"
+        # Versions of paxtest newer than 0.9.12 or so will report
+        # "Vulnerable" on memcpy tests, see details in
+        # https://github.com/freedomofpress/securedrop/issues/1039
+        if host.system_info.codename == "focal":
+            memcpy_result = "Vulnerable"
+        with io.open(paxtest_template_path, 'r') as f:
+            paxtest_template = Template(f.read().rstrip())
+            paxtest_expected = paxtest_template.render(memcpy_result=memcpy_result)
+
+        # The stdout prints here will only be displayed if the test fails
+        for paxtest_diff in difflib.context_diff(paxtest_expected.split('\n'),
+                                                 paxtest_results.split('\n')):
+            print(paxtest_diff)
+        assert paxtest_results == paxtest_expected
+    finally:
+        with host.sudo():
+            host.run("apt-get remove -y paxtest")
 
 
 @pytest.mark.skip_in_prod
