@@ -192,9 +192,7 @@ def test_unattended_upgrades_config(host):
     Ensures the 50unattended-upgrades config is correct only under Ubuntu Focal
     """
     f = host.file('/etc/apt/apt.conf.d/50unattended-upgrades')
-    if host.system_info.codename == "xenial":
-        assert not f.exists
-    else:
+    if host.system_info.codename != "xenial":
         assert f.is_file
         assert f.user == "root"
         assert f.mode == 0o644
