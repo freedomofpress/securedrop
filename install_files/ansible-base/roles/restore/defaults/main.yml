@@ -1,0 +1,5 @@
+---
+# By default, server restores overwrite the Tor config with the version in the
+# backup. add the `--preserve-tor-config` to preserve the server's existing config.
+
+restore_skip_tor: False
