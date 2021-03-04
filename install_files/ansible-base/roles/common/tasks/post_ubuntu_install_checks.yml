@@ -71,6 +71,7 @@
   systemd:
     name: systemd-timesyncd
     enabled: yes
+    masked: no
     state: started
   when: ansible_distribution_release == "focal"
   become: yes
