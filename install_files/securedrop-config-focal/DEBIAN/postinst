@@ -15,10 +15,15 @@ update_release_prompt() {
 case "$1" in
     configure)
     update_release_prompt
-    # Configuration required for unattended-upgrades
-    cp /opt/securedrop/20auto-upgrades /etc/apt/apt.conf.d/
-    cp /opt/securedrop/50unattended-upgrades /etc/apt/apt.conf.d/
-    cp /opt/securedrop/reboot-flag /etc/cron.d/
+
+    # Configuration required for cron-apt
+    rm -f /etc/cron-apt/action.d/3-download
+    cp /opt/securedrop/cron-apt/0-update /etc/cron-apt/action.d/
+    cp /opt/securedrop/cron-apt/5-upgrade /etc/cron-apt/action.d/
+    cp /opt/securedrop/cron-apt/9-remove /etc/cron-apt/action.d/
+    cp /opt/securedrop/cron-apt/cron-apt-config /etc/cron-apt/config
+
+    cp /opt/securedrop/80securedrop /etc/apt/apt.conf.d/
 
     ;;
     abort-upgrade|abort-remove|abort-deconfigure)

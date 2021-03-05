@@ -1,0 +1,17 @@
+// Don't install packages from "Recommends" field, we'll manage dependencies
+// explicitly to avoid pulling in packages from e.g. universe.
+APT::Install-Recommends "false";
+
+// Here we set the dpkg options to force the old conffile if it's already present
+// or force the default config if no config is present
+// see https://github.com/freedomofpress/securedrop/pull/911
+Dpkg::Options {
+    "--force-confdef";
+    "--force-confold";
+}
+
+// Disables unattended-upgrades config, since we use cron-apt
+APT::Periodic::AutocleanInterval "0";
+APT::Periodic::Download-Upgradeable-Packages "0";
+APT::Periodic::Unattended-Upgrade "0";
+APT::Periodic::Update-Package-Lists "0";

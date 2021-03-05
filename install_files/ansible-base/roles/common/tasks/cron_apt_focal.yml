@@ -1,0 +1,10 @@
+---
+- name: Create cron job for running cron-apt updates nightly.
+  template:
+    src: cron-apt-cron-job.j2
+    dest: /etc/cron.d/cron-apt
+    mode: "0644"
+    owner: root
+  tags:
+    - apt
+    - cron-apt

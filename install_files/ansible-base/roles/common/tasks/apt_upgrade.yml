@@ -11,8 +11,11 @@
     - apt
 
 - name: Configure apt preferences
-  template:
-    src: 80securedrop.j2
+  copy:
+    # Copy file from package to ensure it's present early, particularly
+    # the don't-install-recommended-packages setting. After initial install,
+    # updates can be provided via "securedrop-config" package.
+    src: "{{ role_path }}/../../../securedrop-config-focal/opt/securedrop/80securedrop"
     dest: /etc/apt/apt.conf.d/80securedrop
     mode: 0644
     owner: root

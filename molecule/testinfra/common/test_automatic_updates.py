@@ -11,34 +11,25 @@ def test_automatic_updates_dependencies(host):
     """
     Ensure critical packages are installed. If any of these are missing,
     the system will fail to receive automatic updates.
-
-    In Xenial, the apt config uses cron-apt, rather than unattended-upgrades.
-    Previously the apt.freedom.press repo was not reporting any "Origin" field,
-    making use of unattended-upgrades problematic.
-    In Focal, the apt config uses unattended-upgrades.
     """
     apt_dependencies = {
         'xenial': ['cron-apt', 'ntp'],
-        'focal': ['unattended-upgrades']
+        'focal': ['cron-apt']
     }
 
-    for package in apt_dependencies[host.system_info.codename]:
-        assert host.package(package).is_installed
+    assert host.package("cron-apt").is_installed
 
 
 def test_cron_apt_config(host):
     """
-    Ensure custom cron-apt config file is present in Xenial, and absent in Focal
+    Ensure custom cron-apt config file is present.
     """
     f = host.file('/etc/cron-apt/config')
-    if host.system_info.codename == "xenial":
-        assert f.is_file
-        assert f.user == "root"
-        assert f.mode == 0o644
-        assert f.contains('^SYSLOGON="always"$')
-        assert f.contains('^EXITON=error$')
-    else:
-        assert not f.exists
+    assert f.is_file
+    assert f.user == "root"
+    assert f.mode == 0o644
+    assert f.contains('^SYSLOGON="always"$')
+    assert f.contains('^EXITON=error$')
 
 
 @pytest.mark.parametrize('repo', [
@@ -97,16 +88,18 @@ def test_cron_apt_repo_config_update(host):
     """
 
     f = host.file('/etc/cron-apt/action.d/0-update')
+    assert f.is_file
+    assert f.user == "root"
+    assert f.mode == 0o644
     if host.system_info.codename == "xenial":
-        assert f.is_file
-        assert f.user == "root"
-        assert f.mode == 0o644
         repo_config = str('update -o quiet=2'
                           ' -o Dir::Etc::SourceList=/etc/apt/security.list'
                           ' -o Dir::Etc::SourceParts=""')
         assert f.contains('^{}$'.format(repo_config))
     else:
-        assert not f.exists
+        repo_config = str('update -o quiet=2'
+                          ' -o Dir::Etc::SourceParts=""')
+        assert f.contains('^{}$'.format(repo_config))
 
 
 def test_cron_apt_delete_vanilla_kernels(host):
@@ -118,35 +111,44 @@ def test_cron_apt_delete_vanilla_kernels(host):
     """
 
     f = host.file('/etc/cron-apt/action.d/9-remove')
+    assert f.is_file
+    assert f.user == "root"
+    assert f.mode == 0o644
     if host.system_info.codename == "xenial":
-        assert f.is_file
-        assert f.user == "root"
-        assert f.mode == 0o644
         command = str('remove -y'
                       ' linux-image-generic-lts-xenial linux-image-.*generic'
                       ' -o quiet=2')
         assert f.contains('^{}$'.format(command))
     else:
-        assert not f.exists
+        command = str('remove -y'
+                      ' linux-virtual linux-generic linux-image-.*generic'
+                      ' -o quiet=2')
+        assert f.contains('^{}$'.format(command))
 
 
 def test_cron_apt_repo_config_upgrade(host):
     """
     Ensure cron-apt upgrades packages from the security.list config.
     """
-    f = host.file('/etc/cron-apt/action.d/5-security')
     if host.system_info.codename == "xenial":
-        assert f.is_file
-        assert f.user == "root"
-        assert f.mode == 0o644
-        assert f.contains('^autoclean -y$')
+        f = host.file("/etc/cron-apt/action.d/5-security")
+    else:
+        f = host.file("/etc/cron-apt/action.d/5-upgrade")
+    assert f.is_file
+    assert f.user == "root"
+    assert f.mode == 0o644
+    assert f.contains('^autoclean -y$')
+    if host.system_info.codename == "xenial":
         repo_config = str('dist-upgrade -y -o APT::Get::Show-Upgraded=true'
                           ' -o Dir::Etc::SourceList=/etc/apt/security.list'
                           ' -o Dpkg::Options::=--force-confdef'
                           ' -o Dpkg::Options::=--force-confold')
         assert f.contains(re.escape(repo_config))
     else:
-        assert not f.exists
+        repo_config = str('dist-upgrade -y -o APT::Get::Show-Upgraded=true'
+                          ' -o Dpkg::Options::=--force-confdef'
+                          ' -o Dpkg::Options::=--force-confold')
+        assert f.contains(re.escape(repo_config))
 
 
 def test_cron_apt_config_deprecated(host):
@@ -173,136 +175,59 @@ def test_cron_apt_cron_jobs(host, cron_job):
     """
     f = host.file('/etc/cron.d/cron-apt')
 
-    if host.system_info.codename == "xenial":
-        assert f.is_file
-        assert f.user == "root"
-        assert f.mode == 0o644
-
-        regex_job = '^{}$'.format(re.escape(cron_job['job']))
-        if cron_job['state'] == 'present':
-            assert f.contains(regex_job)
-        else:
-            assert not f.contains(regex_job)
-    else:
-        assert not f.exists
-
-
-def test_unattended_upgrades_config(host):
-    """
-    Ensures the 50unattended-upgrades config is correct only under Ubuntu Focal
-    """
-    f = host.file('/etc/apt/apt.conf.d/50unattended-upgrades')
-    if host.system_info.codename != "xenial":
-        assert f.is_file
-        assert f.user == "root"
-        assert f.mode == 0o644
-        assert f.contains("origin=SecureDrop,codename=${distro_codename}")
-        assert f.contains('Dpkg::Options "force-confold";')
-        assert f.contains('Dpkg::Options "force-confdef";')
-
-
-def test_unattended_securedrop_specific(host):
-    """
-    Ensures the 80securedrop config is correct. Under Ubuntu Focal,
-    it will include unattended-upgrade settings. Under all hosts,
-    it will disable installing 'recommended' packages.
-    """
-    f = host.file('/etc/apt/apt.conf.d/80securedrop')
     assert f.is_file
     assert f.user == "root"
     assert f.mode == 0o644
-    assert f.contains('APT::Install-Recommends "false";')
-    if host.system_info.codename == "focal":
-        assert f.contains("Automatic-Reboot-Time")
+
+    regex_job = '^{}$'.format(re.escape(cron_job['job']))
+    if cron_job['state'] == 'present':
+        assert f.contains(regex_job)
     else:
-        assert not f.contains("Automatic-Reboot-Time")
+        assert not f.contains(regex_job)
 
 
-@pytest.mark.parametrize('option', [
-  'APT::Periodic::Update-Package-Lists "1";',
-  'APT::Periodic::Unattended-Upgrade "1";',
-  'APT::Periodic::AutocleanInterval "1";',
- ])
-def test_auto_upgrades_config(host, option):
+apt_config_options = {
+    "APT::Install-Recommends": "false",
+    "Dpkg::Options": [
+        "--force-confold",
+        "--force-confdef",
+    ],
+    "APT::Periodic::Update-Package-Lists": "0",
+    "APT::Periodic::Unattended-Upgrade": "0",
+    "APT::Periodic::AutocleanInterval": "0",
+}
+
+
+@pytest.mark.parametrize("k, v", apt_config_options.items())
+def test_unattended_upgrades_config(host, k, v):
     """
-    Ensures the 20auto-upgrades config is correct only under Ubuntu Focal
+    Ensures apt configuration is as expected.
     """
-    f = host.file('/etc/apt/apt.conf.d/20auto-upgrades')
-    if host.system_info.codename == "xenial":
-        assert not f.exists
+    # Dump apt config to inspect end state, apt will build config
+    # from all conf files on disk, e.g. 80securedrop.
+    c = host.run("apt-config dump --format '%v%n' {}".format(k))
+    assert c.rc == 0
+    # Some values are lists, so support that in the params
+    if hasattr(v, "__getitem__"):
+        for i in v:
+            assert i in c.stdout
     else:
-        assert f.is_file
-        assert f.user == "root"
-        assert f.mode == 0o644
-        assert f.contains('^{}$'.format(option))
-
-
-def test_unattended_upgrades_functional(host):
-    """
-    Ensure unatteded-upgrades completes successfully and ensures all packages
-    are up-to-date.
-    """
-    if host.system_info.codename != "xenial":
-        c = host.run('sudo unattended-upgrades --dry-run --debug')
-        assert c.rc == 0
-        expected_origins = (
-            "Allowed origins are: origin=Ubuntu,archive=focal, origin=Ubuntu,archive=focal-security"
-            ", origin=Ubuntu,archive=focal-updates, origin=SecureDrop,codename=focal"
-        )
-        expected_result = (
-            "No packages found that can be upgraded unattended and no pending auto-removals"
-        )
-
-        assert expected_origins in c.stdout
-        assert expected_result in c.stdout
-
-
-@pytest.mark.parametrize('service', [
-  'apt-daily',
-  'apt-daily.timer',
-  'apt-daily-upgrade',
-  'apt-daily-upgrade.timer',
- ])
-def test_apt_daily_services_and_timers_enabled(host, service):
-    """
-    Ensure the services and timers used for unattended upgrades are enabled
-    in Ubuntu 20.04 Focal.
-    """
-    if host.system_info.codename != "xenial":
-        with host.sudo():
-            # The services are started only when the upgrades are being performed.
-            s = host.service(service)
-            assert s.is_enabled
+        assert v in c.stdout
 
 
 def test_reboot_required_cron(host):
     """
-    Unatteded-upgrades does not reboot the system if the updates don't require it.
-    However, we use daily reboots for SecureDrop to ensure memory is cleared periodically.
-    Here, we ensure that reboot-required flag is dropped twice daily to ensure the system
-    is rebooted every day at the scheduled time.
+    Legacy check, ensures that a reboot-flag cron job does not exist.
+    Was briefly used to configure unattended-upgrades.
     """
     f = host.file('/etc/cron.d/reboot-flag')
-
-    if host.system_info.codename == "xenial":
-        assert not f.exists
-    else:
-        assert f.is_file
-        assert f.user == "root"
-        assert f.mode == 0o644
-
-        line = '^{}$'.format(re.escape("0 */12 * * * root touch /var/run/reboot-required"))
-        assert f.contains(line)
+    assert not f.exists
 
 
 def test_all_packages_updated(host):
     """
-    Ensure a safe-upgrade has already been run, by checking that no
+    Ensure a dist-upgrade has already been run, by checking that no
     packages are eligible for upgrade currently.
-
-    The Ansible config installs a specific, out-of-date version of Firefox
-    for use with Selenium. Therefore apt will report it's possible to upgrade
-    Firefox, which we'll need to mark as "OK" in terms of the tests.
     """
     c = host.run('apt-get dist-upgrade --simulate')
     assert c.rc == 0

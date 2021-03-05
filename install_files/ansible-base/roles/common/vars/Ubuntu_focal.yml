@@ -8,6 +8,6 @@ resolvconf_target_filepath: /etc/resolv.conf
 
 securedrop_common_packages:
   - apt-transport-https
+  - cron-apt
   - iptables-persistent
-  - unattended-upgrades
   - tmux
