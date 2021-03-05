@@ -275,6 +275,20 @@ def test_apt_daily_services_and_timers_enabled(host, service):
             assert s.is_enabled
 
 
+def test_apt_daily_timer_schedule(host):
+    if host.system_info.codename != "xenial":
+        c = host.run("systemctl show apt-daily.timer")
+        assert "TimersCalendar={ OnCalendar=*-*-* 00/3:00:00 ;" in c.stdout
+        assert "RandomizedDelayUSec=1h" in c.stdout
+
+
+def test_apt_daily_upgrade_timer_schedule(host):
+    if host.system_info.codename != "xenial":
+        c = host.run("systemctl show apt-daily-upgrade.timer")
+        assert "TimersCalendar={ OnCalendar=*-*-* 04:00:00 ;" in c.stdout
+        assert "RandomizedDelayUSec=1h" in c.stdout
+
+
 def test_reboot_required_cron(host):
     """
     Unatteded-upgrades does not reboot the system if the updates don't require it.
