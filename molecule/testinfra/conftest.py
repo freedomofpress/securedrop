@@ -43,9 +43,11 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
     if testing_focal:
         hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.8")  # noqa: E501
         hostvars['python_version'] = "3.8"
+        hostvars['apparmor_enforce_actual'] = hostvars['apparmor_enforce']['focal']
     else:
         hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.5")  # noqa: E501
         hostvars['python_version'] = "3.5"
+        hostvars['apparmor_enforce_actual'] = hostvars['apparmor_enforce']['xenial']
 
     if with_header:
         hostvars = dict(securedrop_test_vars=hostvars)
