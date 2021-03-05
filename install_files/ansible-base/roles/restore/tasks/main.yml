@@ -32,6 +32,7 @@
   connection: local
   become: no
   command: "python {{ role_path }}/files/compare_torrc.py {{ torrc_check_dir.path }}"
+  ignore_errors: yes
   register: compare_result
 
 - name: Remove temporary directory for Tor configuration check
@@ -41,6 +42,16 @@
     path: "{{ torrc_check_dir.path }}"
     state: absent
   when: torrc_check_dir.path is defined
+
+- name: Verify that the backup Tor config is compatible with the server Tor config
+  assert:
+    that:
+      - "'Valid configuration' in compare_result.stdout"
+    fail_msg:
+      - "This backup's tor configuration cannot be applied on this server."
+      - "A data-only restore can be applied using the --preserve-tor-config argument"
+      - "More info: {{ compare_result.stdout }}"
+  when: not restore_skip_tor
 
 - name: Copy backup to application server
   synchronize:
@@ -53,8 +64,8 @@
     dest: /
     remote_src: yes
     src: "/tmp/{{ restore_file}}"
-  when: (restore_skip_tor is not defined) and
-        ("V3 services detected" not in compare_result.stdout)
+  when: (not restore_skip_tor) and
+        ("V3 services only" not in compare_result.stdout)
 
 - name: Extract backup, using v3 services only
   unarchive:
@@ -62,8 +73,8 @@
     remote_src: yes
     src: "/tmp/{{ restore_file}}"
     exclude: "var/lib/tor/services/source,var/lib/tor/services/journalist,var/lib/tor/services/ssh"
-  when: (restore_skip_tor is not defined) and
-        ("V3 services detected" in compare_result.stdout)
+  when: (not restore_skip_tor) and
+        ("V3 services only" in compare_result.stdout)
 
 - name: Extract backup, skipping tor service configuration
   unarchive:
@@ -71,7 +82,7 @@
     remote_src: yes
     src: "/tmp/{{ restore_file}}"
     exclude: "var/lib/tor,etc/tor/torrc"
-  when: restore_skip_tor is defined
+  when: restore_skip_tor
 
 - name: Reconfigure securedrop-app-code
   command: dpkg-reconfigure securedrop-app-code
@@ -84,35 +95,52 @@
     name: apache2
     state: reloaded
 
-- name: Copy disable_v2.py script for Focal
+- name: Copy disable_v2.py script
   copy:
     src: "{{ role_path }}/files/disable_v2.py"
     dest: /opt/disable_v2.py
-  when: (ansible_distribution_release == 'focal') or
-        ("V3 services detected" in compare_result.stdout)
+  when: (not restore_skip_tor) and
+        ("V3 services only" in compare_result.stdout)
 
-- name: Execute disable_v2 script on Focal
+- name: Execute disable_v2 script
   command: python3 /opt/disable_v2.py /etc/tor/torrc /etc/tor/torrc
-  when: (ansible_distribution_release == 'focal') or
-        ("V3 services detected" in compare_result.stdout)
+  when: (not restore_skip_tor) and
+        ("V3 services only" in compare_result.stdout)
 
 - name: Remove v2 tor source directory
   file:
     state: absent
     path: /var/lib/tor/services/source
-  when: ansible_distribution_release == 'focal'
+  when: (not restore_skip_tor) and
+        ("V3 services only" in compare_result.stdout)
 
 - name: Remove v2 tor journalist directory
   file:
     state: absent
     path: /var/lib/tor/services/journalist
-  when: ansible_distribution_release == 'focal'
+  when: (not restore_skip_tor) and
+        ("V3 services only" in compare_result.stdout)
 
-- name: Remove disable_v2.py script on Focal
+- name: Remove v2 tor ssh directory
+  file:
+    state: absent
+    path: /var/lib/tor/services/ssh
+  when: (not restore_skip_tor) and
+        ("V3 services only" in compare_result.stdout)
+
+- name: Remove v2 source_url application file
+  file:
+    state: absent
+    path: /var/lib/securedrop/source_v2_url
+  when: (not restore_skip_tor) and
+        ("V3 services only" in compare_result.stdout)
+
+- name: Remove disable_v2.py script
   file:
     state: absent
     path: /opt/disable_v2.py
-  when: ansible_distribution_release == 'focal'
+  when: (not restore_skip_tor) and
+        ("V3 services only" in compare_result.stdout)
 
 - name: Reload Tor service
   service:

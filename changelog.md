@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.8.0~rc2
+
+### Operations
+
+* Bugfix: Force UTF-8 for tmux (#5844)
+* Bugfix (Focal): Ensure the systemd-timesyncd service is not masked (#5842)
+* Update restore playbook to compare when torconfigs are being updated (#5834)
+
+### Web applications
+
+* String tweaks and fixes in response to translator feedback (#5827)
+
 ## 1.8.0~rc1
 
 ### Web applications
