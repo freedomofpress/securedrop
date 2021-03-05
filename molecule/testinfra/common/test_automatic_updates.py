@@ -199,6 +199,8 @@ def test_unattended_upgrades_config(host):
         assert f.user == "root"
         assert f.mode == 0o644
         assert f.contains("origin=SecureDrop,codename=${distro_codename}")
+        assert f.contains('Dpkg::Options "force-confold";')
+        assert f.contains('Dpkg::Options "force-confdef";')
 
 
 def test_unattended_securedrop_specific(host):
