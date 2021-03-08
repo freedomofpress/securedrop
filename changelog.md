@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.0~rc3
+
+* Bugfix: Ensure unattended-upgrades accepts package config defaults
+
 ## 1.8.0~rc2
 
 ### Operations
