@@ -199,7 +199,7 @@ apt_config_options = {
     "APT::Periodic::Enable": "1",
     "Unattended-Upgrade::AutoFixInterruptedDpkg": "true",
     "Unattended-Upgrade::Automatic-Reboot": "true",
-    "Unattended-Upgrade::Automatic-Reboot-Time": "now",
+    "Unattended-Upgrade::Automatic-Reboot-Time": "4:00",
     "Unattended-Upgrade::Automatic-Reboot-WithUsers": "true",
     "Unattended-Upgrade::Origins-Pattern": [
         "origin=${distro_id},archive=${distro_codename}",
@@ -285,16 +285,24 @@ def test_apt_daily_services_and_timers_enabled(host, service):
 
 
 def test_apt_daily_timer_schedule(host):
+    """
+    Timer for running apt-daily, i.e. 'apt-get update', should be 2h
+    before the daily_reboot_time.
+    """
     if host.system_info.codename != "xenial":
         c = host.run("systemctl show apt-daily.timer")
-        assert "TimersCalendar={ OnCalendar=*-*-* 03:00:00 ;" in c.stdout
+        assert "TimersCalendar={ OnCalendar=*-*-* 02:00:00 ;" in c.stdout
         assert "RandomizedDelayUSec=20m" in c.stdout
 
 
 def test_apt_daily_upgrade_timer_schedule(host):
+    """
+    Timer for running apt-daily-upgrade, i.e. 'apt-get upgrade', should be 1h
+    before the daily_reboot_time, and 1h after the apt-daily time.
+    """
     if host.system_info.codename != "xenial":
         c = host.run("systemctl show apt-daily-upgrade.timer")
-        assert "TimersCalendar={ OnCalendar=*-*-* 04:00:00 ;" in c.stdout
+        assert "TimersCalendar={ OnCalendar=*-*-* 03:00:00 ;" in c.stdout
         assert "RandomizedDelayUSec=20m" in c.stdout
 
 
