@@ -196,6 +196,7 @@ apt_config_options = {
     "APT::Periodic::Update-Package-Lists": "1",
     "APT::Periodic::Unattended-Upgrade": "1",
     "APT::Periodic::AutocleanInterval": "1",
+    "APT::Periodic::Enable": "1",
     "Unattended-Upgrade::AutoFixInterruptedDpkg": "true",
     "Unattended-Upgrade::Automatic-Reboot": "true",
     "Unattended-Upgrade::Automatic-Reboot-Time": "now",
@@ -212,7 +213,7 @@ apt_config_options = {
 @pytest.mark.parametrize("k, v", apt_config_options.items())
 def test_unattended_upgrades_config(host, k, v):
     """
-    Ensures the 50unattended-upgrades config is correct only under Ubuntu Focal
+    Ensures the apt and unattended-upgrades config is correct only under Ubuntu Focal
     """
     if host.system_info.codename == "xenial":
         return True
