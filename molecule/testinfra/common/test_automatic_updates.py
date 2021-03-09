@@ -187,20 +187,45 @@ def test_cron_apt_cron_jobs(host, cron_job):
         assert not f.exists
 
 
-def test_unattended_upgrades_config(host):
+apt_config_options = {
+    "APT::Install-Recommends": "false",
+    "Dpkg::Options": [
+        "--force-confold",
+        "--force-confdef",
+    ],
+    "APT::Periodic::Update-Package-Lists": "1",
+    "APT::Periodic::Unattended-Upgrade": "1",
+    "APT::Periodic::AutocleanInterval": "1",
+    "Unattended-Upgrade::AutoFixInterruptedDpkg": "true",
+    "Unattended-Upgrade::Automatic-Reboot": "true",
+    "Unattended-Upgrade::Automatic-Reboot-Time": "now",
+    "Unattended-Upgrade::Automatic-Reboot-WithUsers": "true",
+    "Unattended-Upgrade::Origins-Pattern": [
+        "origin=${distro_id},archive=${distro_codename}",
+        "origin=${distro_id},archive=${distro_codename}-security",
+        "origin=${distro_id},archive=${distro_codename}-updates",
+        "origin=SecureDrop,codename=${distro_codename}",
+    ],
+}
+
+
+@pytest.mark.parametrize("k, v", apt_config_options.items())
+def test_unattended_upgrades_config(host, k, v):
     """
     Ensures the 50unattended-upgrades config is correct only under Ubuntu Focal
     """
-    f = host.file('/etc/apt/apt.conf.d/50unattended-upgrades')
     if host.system_info.codename == "xenial":
-        assert not f.exists
+        return True
+    # Dump apt config to inspect end state, apt will build config
+    # from all conf files on disk, e.g. 80securedrop.
+    c = host.run("apt-config dump --format '%v%n' {}".format(k))
+    assert c.rc == 0
+    # Some values are lists, so support that in the params
+    if hasattr(v, "__getitem__"):
+        for i in v:
+            assert i in c.stdout
     else:
-        assert f.is_file
-        assert f.user == "root"
-        assert f.mode == 0o644
-        assert f.contains("origin=SecureDrop,codename=${distro_codename}")
-        assert f.contains('Dpkg::Options "force-confold";')
-        assert f.contains('Dpkg::Options "force-confdef";')
+        assert v in c.stdout
 
 
 def test_unattended_securedrop_specific(host):
@@ -218,25 +243,6 @@ def test_unattended_securedrop_specific(host):
         assert f.contains("Automatic-Reboot-Time")
     else:
         assert not f.contains("Automatic-Reboot-Time")
-
-
-@pytest.mark.parametrize('option', [
-  'APT::Periodic::Update-Package-Lists "1";',
-  'APT::Periodic::Unattended-Upgrade "1";',
-  'APT::Periodic::AutocleanInterval "1";',
- ])
-def test_auto_upgrades_config(host, option):
-    """
-    Ensures the 20auto-upgrades config is correct only under Ubuntu Focal
-    """
-    f = host.file('/etc/apt/apt.conf.d/20auto-upgrades')
-    if host.system_info.codename == "xenial":
-        assert not f.exists
-    else:
-        assert f.is_file
-        assert f.user == "root"
-        assert f.mode == 0o644
-        assert f.contains('^{}$'.format(option))
 
 
 def test_unattended_upgrades_functional(host):
@@ -280,15 +286,15 @@ def test_apt_daily_services_and_timers_enabled(host, service):
 def test_apt_daily_timer_schedule(host):
     if host.system_info.codename != "xenial":
         c = host.run("systemctl show apt-daily.timer")
-        assert "TimersCalendar={ OnCalendar=*-*-* 00/3:00:00 ;" in c.stdout
-        assert "RandomizedDelayUSec=1h" in c.stdout
+        assert "TimersCalendar={ OnCalendar=*-*-* 03:00:00 ;" in c.stdout
+        assert "RandomizedDelayUSec=20m" in c.stdout
 
 
 def test_apt_daily_upgrade_timer_schedule(host):
     if host.system_info.codename != "xenial":
         c = host.run("systemctl show apt-daily-upgrade.timer")
         assert "TimersCalendar={ OnCalendar=*-*-* 04:00:00 ;" in c.stdout
-        assert "RandomizedDelayUSec=1h" in c.stdout
+        assert "RandomizedDelayUSec=20m" in c.stdout
 
 
 def test_reboot_required_cron(host):
