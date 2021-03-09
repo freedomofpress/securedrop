@@ -2,6 +2,24 @@
 # Configuration for unattended upgrades is almost exclusively managed by the
 # securedrop-config package under Focal.
 
+- name: Create override dirs for apt-daily timers
+  file:
+    state: directory
+    mode: "0755"
+    path: "{{ item.dest|dirname }}"
+  with_items: "{{ unattended_upgrades_timer_overrides }}"
+
+- name: Add overrides for apt-daily timers
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0644"
+  notify: systemd daemon-reload
+  with_items: "{{ unattended_upgrades_timer_overrides }}"
+
+  # Ensure daemon-reload has happened before starting/enabling
+- meta: flush_handlers
+
 - name: Ensure apt-daily and apt-daily-upgrade services are unmasked, started and enabled.
   systemd:
     name: "{{ item }}"
