@@ -2,6 +2,7 @@
 // Reboot should happen after nightly upgrades. Timing of upgrade
 // is configured via apt.daily.timer
 Unattended-Upgrade::Automatic-Reboot-Time "now";
+APT::Periodic::Enable "1";
 {% endif %}
 // Don't install packages from "Recommends" field, we'll manage dependencies
 // explicitly to avoid pulling in packages from e.g. universe.
