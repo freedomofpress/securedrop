@@ -62,5 +62,7 @@ Unattended-Upgrade::Automatic-Reboot-WithUsers "true";
 // Here we set the dpkg options to force the old conffile if it's already present
 // or force the default config if no config is present
 // see https://github.com/freedomofpress/securedrop/pull/911
-Dpkg::Options "force-confdef";
-Dpkg::Options "force-confold";
+Dpkg::Options {
+    "--force-confdef";
+    "--force-confold";
+}

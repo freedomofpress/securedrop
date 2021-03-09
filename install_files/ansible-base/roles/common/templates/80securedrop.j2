@@ -3,6 +3,7 @@
 // time instead of immediately
 //  Default: "now"
 Unattended-Upgrade::Automatic-Reboot-Time "{{ daily_reboot_time }}:00";
+APT::Periodic::Enable "1";
 {% endif %}
 // Don't install packages from "Recommends" field, we'll manage dependencies
 // explicitly to avoid pulling in packages from e.g. universe.
