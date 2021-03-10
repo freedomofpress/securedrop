@@ -15,6 +15,8 @@ from sdconfig import SDConfig
 from typing import Callable, Optional, Union, Dict, List, Any, Tuple
 from source_app.utils import active_securedrop_groups
 
+import signal_protocol
+
 
 TOKEN_EXPIRATION_MINS = 60 * 8
 
