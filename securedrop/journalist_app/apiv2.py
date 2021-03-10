@@ -30,8 +30,7 @@ Message: From source to journalist
 File: Encrypted blob encrypted symmetrically and stored in blob store. NOT IMPLEMENTED.
 
 BEHAVIOR CHANGE:
-* Messages and replies encrypted per-recipient and are deleted after download.
-TODO: Second roundtrip to confirm receipt prior to deletion?
+* Messages and replies encrypted per-recipient and are deleted after download (once confirmed by client).
 
 ENDPOINTS:
 * Signed prekey refresh endpoint
@@ -344,22 +343,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         users = Journalist.query.all()
         return jsonify(
             {'users': [user.to_json(all_info=False) for user in users]}), 200
-
-    @api.route('/sources/<source_uuid>/add_star', methods=['POST'])
-    @token_required
-    def add_star(source_uuid: str) -> Tuple[flask.Response, int]:
-        source = get_or_404(Source, source_uuid, column=Source.uuid)
-        utils.make_star_true(source.filesystem_id)
-        db.session.commit()
-        return jsonify({'message': 'Star added'}), 201
-
-    @api.route('/sources/<source_uuid>/remove_star', methods=['DELETE'])
-    @token_required
-    def remove_star(source_uuid: str) -> Tuple[flask.Response, int]:
-        source = get_or_404(Source, source_uuid, column=Source.uuid)
-        utils.make_star_false(source.filesystem_id)
-        db.session.commit()
-        return jsonify({'message': 'Star removed'}), 200
 
     @api.route('/logout', methods=['POST'])
     @token_required
