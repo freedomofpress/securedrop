@@ -27,6 +27,7 @@
   when:
     - ansible_distribution_release == "focal"
   tags:
+    - ua
     - reboot
 
 - include: remove_unused_packages.yml

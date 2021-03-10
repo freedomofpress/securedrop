@@ -1,8 +1,4 @@
 ---
-# Set the time at which the servers reboot to apply nightly updates
-# and aid in clearing memory. Only the hour is configurable.
-daily_reboot_time: 4 # An integer between 0 and 23
-
 disabled_kernel_modules:
   - btusb
   - bluetooth
@@ -53,3 +49,19 @@ unused_packages:
   - wireless-tools
   - wpasupplicant
   - snapd
+
+# Template declaration for setting the upgrade time to a predictable time,
+# matching the 'daily_reboot_time' time via sdconfig.
+unattended_upgrades_timer_overrides:
+  - src: apt-daily-timer-override.j2
+    dest: /etc/systemd/system/apt-daily.timer.d/override.conf
+  - src: apt-daily-upgrade-timer-override.j2
+    dest: /etc/systemd/system/apt-daily-upgrade.timer.d/override.conf
+
+# Set the time at which the servers reboot to apply nightly updates
+# and aid in clearing memory. Only the hour is configurable, via sdconfig.
+# The other options are for unattended-upgrades, when to run
+# 'apt-get update' and 'apt-get upgrade'.
+daily_reboot_time: 4 # An integer between 0 and 23
+daily_update_time: "{{ (daily_reboot_time|int - 2) % 24 }}"
+daily_upgrade_time: "{{ (daily_reboot_time|int - 1) % 24 }}"

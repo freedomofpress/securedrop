@@ -10,3 +10,7 @@
 - name: update apt cache
   apt:
     update_cache: yes
+
+- name: systemd daemon-reload
+  systemd:
+    daemon_reload: yes
