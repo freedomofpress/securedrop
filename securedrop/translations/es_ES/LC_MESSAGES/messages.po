@@ -4,20 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2021-01-24 11:37+0000\n"
-"Last-Translator: Zuhualime Akoochimoya <zakooch@protonmail.ch>\n"
-"Language-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/securedrop/es/>\n"
-"Language: es_ES\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-03-09 00:37+0000\nLast-Translator: Gonzalo Bulnes Guilpain <gon.bulnes@fastmail.com>\nLanguage-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/securedrop/es/>\nLanguage: es_ES\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.3.2\nGenerated-By: Babel 2.4.0\n"
 
 msgid "{time} ago"
 msgstr "hace {time}"
@@ -73,11 +60,19 @@ msgstr "Usuario '{user}' eliminado."
 msgid "Test alert sent. Please check your email."
 msgstr "Alerta de prueba enviada. Por favor revisa tu correo electrónico."
 
-msgid "{source_name}'s collection deleted."
-msgstr "Colección de {source_name} eliminada."
+#. Precedes a message confirming the success of an operation.
+msgid "Success!"
+msgstr "¡Éxito!"
 
-msgid "No collections selected."
-msgstr "No hay colecciones seleccionadas."
+msgid "The account and data for the source {} have been deleted."
+msgstr "La cuenta y los datos para la fuente {} han sido borrados."
+
+#. Error shown when a user has not selected items to act on.
+msgid "Nothing Selected"
+msgstr "Nada Seleccionado"
+
+msgid "You must select one or more items."
+msgstr "Debes seleccionar uno o más ítems."
 
 msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr "Tu descarga falló porque un archivo no pudo ser encontrado. Un administrador puede encontrar más información en los registros de sistema y monitoreo."
@@ -101,7 +96,7 @@ msgstr[0] "No puede tener más que {num} carácter."
 msgstr[1] "No puede tener más que {num} caracteres."
 
 msgid "This username is invalid because it is reserved for internal use by the software."
-msgstr "Este nombre de usuario es inválido porque está reservado para su uso interno por el software."
+msgstr "Este nombre de usuario es inválido porque está reservado para uso interno por el software."
 
 msgid "This field is required."
 msgstr "Este campo es obligatorio."
@@ -118,14 +113,14 @@ msgstr "Solo puedes subir archivos de imágenes PNG."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "¡Ocurrió un error inesperado! Por favor informa a tu administrador."
 
-msgid "Thanks. Your reply has been stored."
-msgstr "Gracias. Tu respuesta ha sido guardada."
+msgid "Your reply has been stored."
+msgstr "Tu respuesta ha sido guardada."
 
-msgid "No collections selected for download."
-msgstr "No hay colecciones seleccionadas para descargar."
+msgid "You must select one or more items for download"
+msgstr "Debes seleccionar uno o más ítems para descargar"
 
-msgid "No collections selected for deletion."
-msgstr "No hay colecciones seleccionadas para eliminar."
+msgid "You must select one or more items for deletion"
+msgstr "Debes seleccionar uno o más ítems para eliminar"
 
 msgid "No unread submissions for this source."
 msgstr "No hay envíos sin leer para esta fuente."
@@ -133,8 +128,8 @@ msgstr "No hay envíos sin leer para esta fuente."
 msgid "Account updated."
 msgstr "Cuenta actualizada."
 
-msgid "Login failed."
-msgstr "El inicio de sesión falló."
+msgid "<b>Login failed.</b>"
+msgstr "<b>El inicio de sesión falló.</b>"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -150,15 +145,24 @@ msgstr "Formato del secreto inválido: por favor envía solo las letras A-F y lo
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "El formato del secreto es inválido: secreto de longitud impar. ¿Has escrito mal el secreto?"
 
-msgid "Submission deleted."
-msgid_plural "{num} submissions deleted."
-msgstr[0] "Envío eliminado."
-msgstr[1] "{num} envíos eliminados."
+msgid "The item has been deleted."
+msgid_plural "{num} items have been deleted."
+msgstr[0] "El ítem ha sido borrado."
+msgstr[1] "{num} ítems han sido borrados."
 
-msgid "{num} collection deleted"
-msgid_plural "{num} collections deleted"
-msgstr[0] "{num} colección eliminada"
-msgstr[1] "{num} colecciones eliminadas"
+msgid "No collections selected for deletion."
+msgstr "No hay colecciones seleccionadas para eliminar."
+
+msgid "The account and all data for {n} source have been deleted."
+msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgstr[0] "La cuenta y todos los datos de {n} fuente han sido eliminados."
+msgstr[1] "Las cuentas y todos los datos de {n} fuentes han sido eliminados."
+
+msgid "You must select one or more items for deletion."
+msgstr "Debes seleccionar uno o más ítems para eliminar."
+
+msgid "The files and messages have been deleted."
+msgstr "Los archivos y mensajes han sido eliminados."
 
 msgid "Name updated."
 msgstr "Nombre actualizado."
@@ -205,6 +209,33 @@ msgid_plural "{num} unread"
 msgstr[0] "1 sin leer"
 msgstr[1] "{num} sin leer"
 
+msgid "When the account for a source is deleted:"
+msgstr "Cuando la cuenta para una fuente es eliminada:"
+
+msgid "The source will no longer be able to log in with their codename."
+msgstr "La fuente ya no podrá iniciar sesión con su nombre clave."
+
+msgid "You will not be able to send them replies."
+msgstr "No podrás enviarle respuestas."
+
+msgid "All files and messages from that source will also be destroyed."
+msgstr "Todos los archivos y mensajes de esa fuente también serán destruídos."
+
+msgid "Are you sure this is what you want?"
+msgstr "¿Estás seguro de que es lo que quieres?"
+
+msgid "Yes, Delete Selected Source Accounts"
+msgstr "Sí, eliminar cuentas de la fuente seleccionada"
+
+msgid "What would you like to delete?"
+msgstr "¿Qué deseas eliminar?"
+
+msgid "Files and Messages"
+msgstr "Archivos y Mensajes"
+
+msgid "Source Accounts"
+msgstr "Cuentas de Fuentes"
+
 msgid "Change Secret"
 msgstr "Cambiar Secreto"
 
@@ -236,7 +267,7 @@ msgid "Can't scan the barcode? You can manually pair FreeOTP with your SecureDro
 msgstr "¿No puedes escanear el código de barras? Puedes emparejar manualmente FreeOTP con tu cuenta SecureDrop ingresando el siguiente secreto de dos factores en la aplicación:"
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
-msgstr "Una vez que conectes FreeOTP con esta cuenta, ingresa abajo el código de verificación de 6 dígitos:"
+msgstr "Una vez que conectes FreeOTP con esta cuenta, ingresa el código de verificación de 6 dígitos a continuación:"
 
 msgid "Enable YubiKey (OATH-HOTP)"
 msgstr "Habilitar el dispositivo YubiKey (OATH-HOTP)"
@@ -323,7 +354,7 @@ msgid "Is using a YubiKey [HOTP]"
 msgstr "Está utilizando un dispositivo YubiKey [HOTP]"
 
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
-msgstr "¡Casi listo! Para terminar de agregar este nuevo usuario, haz que siga las instrucciones de abajo para configurar la autenticación de dos factores con FreeOTP. Una vez que haya agregado una entrada para esta cuenta en la aplicación, haz que ingrese uno de los códigos de 6 dígitos generados por la misma para confirmar que la autenticación de dos factores esté configurada correctamente."
+msgstr "¡Casi listo! Para terminar de agregar este nuevo usuario, haz que configure la autenticación de dos factores con FreeOTP siguiendo las instrucciones abajo. Una vez que haya agregado una entrada para esta cuenta en la aplicación, haz que ingrese uno de los códigos de 6 dígitos de la aplicación para confirmar que la autenticación de dos factores esté configurada correctamente."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "¿No puedes escanear el código de barras? Puedes emparejar manualmente esta cuenta ingresando el siguiente secreto de dos factores en la aplicación:"
@@ -331,11 +362,11 @@ msgstr "¿No puedes escanear el código de barras? Puedes emparejar manualmente 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "Una vez que hayas configurado tu YubiKey, ingresa abajo el código de verificación de 6 dígitos:"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Actualización Requerida</strong>&nbsp;&nbsp;Configura Servicios Onion v3 antes del 30 de abril para mantener tus servidores SecureDrop en línea. Por favor contacta a tu administrador. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Aprende Más</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Situación crítica de Seguridad:</strong>&nbsp;&nbsp;El sistema operativo usado en tus servidores SecureDrop ha alcanzado el final de su ciclo de vida. Se necesita una actualización manual para rehabilitar la Interfaz de Fuente y permanecer seguro. Por favor contacta a tu administrador. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Aprender Más</a>"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Actualización Requerida</strong>&nbsp;&nbsp;Completa la configuración de Servicios Onion v3 antes del 30 de abril. Por favor contacta a tu administrador. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Aprende Más</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Situación crítica de Seguridad:</strong>&nbsp;&nbsp;El sistema operativo usado en tus servidores SecureDrop alcanzará el final de su ciclo de vida el 30 de abril de 2021. Se necesita urgentemente una actualización manual para permanecer seguro. Por favor contacta a tu administrador. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Aprender Más</a>"
 
 msgid "Logged on as"
 msgstr "Sesión iniciada como"
@@ -352,8 +383,8 @@ msgstr "Con tecnología de <em>SecureDrop {version}</em>."
 msgid "All Sources"
 msgstr "Todas las Fuentes"
 
-msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
-msgstr "Los documentos están guardados y cifrados por seguridad. Para leerlos, tendrás que descifrarlos usando GPG."
+msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
+msgstr "Todos los mensajes, archivos y respuestas de las fuentes están guardados como archivos cifrados por seguridad. Para leerlos, necesitarás descifrarlos en tu Estación de Visualización Segura."
 
 msgid "Download Selected"
 msgstr "Descargar lo Seleccionado"
@@ -397,17 +428,17 @@ msgstr "ícono de mensajes"
 msgid "Delete Confirmation"
 msgstr "Confirmar la eliminación"
 
-msgid "Are you sure you want to delete the selected documents?"
-msgstr "¿Estás seguro de que deseas eliminar los documentos seleccionados?"
+msgid "Are you sure you want to delete the selected submissions?"
+msgstr "¿Estás seguro de que deseas eliminar los envíos seleccionados?"
 
 msgid "DELETE"
 msgstr "ELIMINAR"
 
-msgid "No documents to display."
-msgstr "No hay documentos que mostrar."
+msgid "No submissions to display."
+msgstr "No hay envíos que mostrar."
 
-msgid "You can write a secure reply to the person who submitted these documents:"
-msgstr "Puedes escribir una respuesta segura a la persona que presentó estos documentos:"
+msgid "You can write a secure reply to the person who submitted these messages and/or files:"
+msgstr "Puedes escribir una respuesta segura a la persona que envió estos mensajes y/o archivos:"
 
 msgid "You've flagged this source for reply."
 msgstr "Has marcado esta fuente para responder."
@@ -421,14 +452,14 @@ msgstr "Haz clic abajo si deseas escribir una respuesta a esta fuente."
 msgid "FLAG THIS SOURCE FOR REPLY"
 msgstr "MARCAR ESTA FUENTE PARA RESPONDER"
 
-msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
-msgstr "Haz clic abajo para eliminar la colección de esta fuente. <em>Advertencia: Si haces esto, los archivos que se ven aquí serán irrecuperables y la fuente ya no podrá acceder usando su nombre clave anterior.</em>"
+msgid "Delete Source Account"
+msgstr "Eliminar Cuenta de Fuente"
 
-msgid "DELETE SOURCE AND SUBMISSIONS"
-msgstr "ELIMINAR FUENTE Y ENVÍOS"
+msgid "Are you sure?"
+msgstr "¿Estás seguro?"
 
-msgid "Are you sure you want to delete this collection?"
-msgstr "¿Estás seguro de que deseas eliminar esta colección?"
+msgid "Yes, Delete Source Account"
+msgstr "Sí, eliminar cuenta de fuente"
 
 msgid "Instance Configuration"
 msgstr "Configuración de Instancia"
@@ -526,7 +557,7 @@ msgid "Reset Two-Factor Authentication"
 msgstr "Restablecer la Autenticación de Dos Factores"
 
 msgid "If a user's two-factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two-factor credentials. Otherwise, they will be locked out of their account.</em>"
-msgstr "Si un usuario ha perdido o comprometido las credenciales de autenticación de dos factores, puedes restablecerlas aquí. <em>Si haces esto, asegúrate que el usuario esté presente y listo para configurar su dispositivo con las nuevas credenciales de dos factores. De lo contrario, será bloqueado de su cuenta.</em>"
+msgstr "Si un usuario ha perdido sus credenciales de autenticación de dos factores o sospecha que han sido comprometidas, puedes restablecerlas aquí. <em>Si haces esto, asegúrate que el usuario esté presente y listo para configurar su dispositivo con las nuevas credenciales de dos factores. De lo contrario, será bloqueado de su cuenta.</em>"
 
 msgid "If your two-factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em>"
 msgstr "Si tus credenciales de autenticación de dos factores se han perdido o han sido comprometidas, o si tienes un dispositivo nuevo, puedes restablecer tus credenciales aquí. <em>Si haces esto, asegúrate de estar listo para configurar tu nuevo dispositivo, de lo contrario el acceso a tu cuenta será bloqueado.</em>"
@@ -535,7 +566,7 @@ msgid "To reset two-factor authentication for mobile apps such as FreeOTP, choos
 msgstr "Para restablecer la autenticación de dos factores para aplicaciones móviles como FreeOTP, elige la primera opción. Para llaves de seguridad como el YubiKey, elige la segunda."
 
 msgid "Reset two-factor authentication for mobile apps, such as FreeOTP"
-msgstr "Restablecimiento de autenticación de dos factores en aplicaciones móviles como FreeOTP"
+msgstr "Restablecer autenticación de dos factores en aplicaciones móviles como FreeOTP"
 
 msgid "RESET MOBILE APP CREDENTIALS"
 msgstr "RESTABLECER CREDENCIALES DE APLICACIONES MÓVILES"
@@ -558,9 +589,6 @@ msgstr "SecureDrop generará una llave de cifrado segura para esta fuente la pr�
 msgid "Continue to the list of documents for {codename}..."
 msgstr "Continuar a la lista de documentos para {codename}..."
 
-msgid "Sources"
-msgstr "Fuentes"
-
 msgid "Download Unread"
 msgstr "Descargar No Leídos"
 
@@ -572,12 +600,6 @@ msgstr "Marcar"
 
 msgid "Un-star"
 msgstr "Desmarcar"
-
-msgid "Are you sure you want to delete the selected collections?"
-msgstr "¿Estás seguro de que deseas eliminar las colecciones seleccionadas?"
-
-msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
-msgstr "Advertencia: Si haces esto, todos los archivos de las fuentes seleccionadas serán irrecuperables y las fuentes ya no podrán acceder usando sus nombres clave anteriores."
 
 msgid "No documents have been submitted!"
 msgstr "¡No se han enviado documentos!"
@@ -600,6 +622,9 @@ msgstr "¿Estás seguro de que deseas eliminar el usuario {username}?"
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "¿Estás seguro de que deseas restablecer la autenticación de dos factores para {username}?"
 
+msgid "Sources selected: "
+msgstr "Fuentes seleccionadas: "
+
 msgid "Login to access the journalist interface"
 msgstr "Inicio de sesión para acceder a la interfaz de periodista"
 
@@ -613,7 +638,7 @@ msgid "LOG IN"
 msgstr "INICIAR SESIÓN"
 
 msgid "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This <strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
-msgstr "<strong>ADVERTENCIA:&nbsp;</strong> Parece que estás usando Tor2Web. Esto <strong>&nbsp;no&nbsp;</strong> proporciona anonimato. <a href=\"{url}\">¿Por qué es peligroso esto?</a>"
+msgstr "<strong>ADVERTENCIA:&nbsp;</strong> Pareces estar usando Tor2Web. Esto <strong>&nbsp; no &nbsp;</strong> proporciona anonimato. <a href=\"{url}\"> ¿Por qué es peligroso? </a>"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Este campo debe tener de 1 a {max_codename_len} caracteres de longitud."
@@ -628,10 +653,10 @@ msgid "Message text too long."
 msgstr "Texto del mensaje demasiado largo."
 
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
-msgstr "Bloques de texto grandes deben ser subidos como archivo, no copiados y pegados."
+msgstr "Bloques de texto grandes deben ser cargados como archivo, no copiados y pegados."
 
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
-msgstr "Fuiste redirigido porque ya estabas en sesión. Si deseas crear una cuenta nueva, primero debes cerrar la sesión."
+msgstr "Fuiste redirigido porque ya tenías una sesión iniciada. Si deseas crear una cuenta nueva, debes cerrar la sesión primero."
 
 msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgstr "Ya tienes una sesión iniciada. Por favor verifica arriba tu nombre clave, ya que pudiera diferir del mostrado en la página previa."
@@ -669,6 +694,12 @@ msgstr "Protegiendo a Periodistas y Fuentes"
 msgid "SecureDrop Home"
 msgstr "Inicio de SecureDrop"
 
+msgid "We're sorry, our SecureDrop is currently offline."
+msgstr "Lo sentimos, nuestro SecureDrop no está en línea en este momento."
+
+msgid "Please try again later. Check our website for more information."
+msgstr "Por favor intenta de nuevo más tarde. Comprueba nuestro sitio web para más información."
+
 msgid "LOG OUT"
 msgstr "CERRAR SESIÓN"
 
@@ -680,9 +711,6 @@ msgstr "Lo sentimos, el sitio web encontró un error y no pudo completar tu soli
 
 msgid "Look up a codename..."
 msgstr "Buscar un nombre clave..."
-
-msgid "Success!"
-msgstr "¡Éxito!"
 
 msgid "Thank you for sending this information to us. Please check back later for replies."
 msgstr "Gracias por enviarnos esta información. Por favor, verifica más tarde por respuestas."
@@ -727,7 +755,7 @@ msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</stron
 msgstr "<strong>Se recomienda que uses el Navegador Tor para acceder a SecureDrop:</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">Aprende cómo instalarlo</a>, o ignora esta advertencia para continuar."
 
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Se recomienda que uses la versión de escritorio del Navegador Tor para acceder a SecureDrop, ya que Orfox no proporciona el mismo nivel de seguridad y anonimato que ella.</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">Aprende cómo instalarlo</a>, o ignora esta advertencia para continuar."
+msgstr "<strong>Se recomienda que uses la versión de escritorio del Navegador Tor para acceder a SecureDrop, ya que Orfox no proporciona el mismo nivel de seguridad y anonimato.</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\"> Aprende cómo instalarlo</a>, o ignora esta advertencia para continuar."
 
 msgid "First submission"
 msgstr "Primer envío"
@@ -745,7 +773,7 @@ msgid "Already have a codename? Check for replies or submit something new."
 msgstr "¿Ya tienes un nombre clave? Revisa si hay respuestas o envía algo nuevo."
 
 msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "Haz clic en <img src=\"{icon}\" alt=\"shield icon\">, arriba en la barra de herramientas"
+msgstr "Haz clic en el <img src=\"{icon}\" alt=\"ícon de escudo\">, arriba en la barra de herramientas"
 
 msgid "Select <strong>Advanced Security Settings</strong>"
 msgstr "Selecciona <strong>Configuración de seguridad avanzada</strong>"
@@ -754,7 +782,7 @@ msgid "Select <strong>Safest</strong>"
 msgstr "Selecciona <strong>El más seguro de todos</strong>"
 
 msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "¡<a href=\"/\">Refresca esta página</a>, y estás listo!"
+msgstr "¡<a href=\"/\">Refresca esta página</a>, y está listo!"
 
 msgid "Enter Codename"
 msgstr "Introduce Nombre Clave"
@@ -769,7 +797,7 @@ msgid "One more thing..."
 msgstr "Una cosa más..."
 
 msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
-msgstr "Haz clic en el botón <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Nueva identidad</strong> en la barra de herramientas del Navegador Tor. Esto borrará los datos de actividad de tu Navegador Tor en este dispositivo."
+msgstr "Haz clic en el botón <img src={icon} alt=\"ícono de escoba\" width=\"16\" height=\"16\">&nbsp;<strong>Nueva identidad</strong> en la barra de herramientas del Navegador Tor. Esto borrará los datos de actividad de tu Navegador Tor en este dispositivo."
 
 msgid "Remember, your codename is:"
 msgstr "Recuerda que tu nombre clave es:"
@@ -784,7 +812,7 @@ msgid "Sorry we haven't responded yet!"
 msgstr "¡Sentimos no haber respondido todavía!"
 
 msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "Nuestro SecureDrop experimentó recientemente un pico de actividad. Por razones de seguridad, la creación de un canal de comunicación de doble vía fue demorada hasta que inicies sesión nuevamente."
+msgstr "Nuestro SecureDrop experimentó recientemente un pico de actividad. Por razones de seguridad, la creación de un canal de comunicación de doble vía fue demorada hasta que hayas iniciado sesión nuevamente."
 
 msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 msgstr "Por favor quédate tranquilo que hemos podido descargar tu envío, y vuelve a comprobar más tarde por una respuesta."
@@ -814,7 +842,7 @@ msgid "Read Replies"
 msgstr "Leer Respuestas"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
-msgstr "Has recibido una respuesta. Para proteger tu identidad en el improbable caso de que alguien descubra tu nombre clave, por favor, borra todas las respuestas cuando hayas terminado con ellas. Esto también nos permite saber que has recibido nuestra respuesta. Puedes responder enviando nuevos archivos y mensajes arriba."
+msgstr "Has recibido una respuesta. Para proteger tu identidad en el caso improbable de que alguien descubra tu nombre clave, por favor, borra todas las respuestas cuando hayas terminado con ellas. Esto también nos permite saber que has recibido nuestra respuesta. Puedes responder enviando nuevos archivos y mensajes arriba."
 
 msgid "Delete this reply?"
 msgstr "¿Deseas eliminar esta respuesta?"
@@ -844,7 +872,7 @@ msgid "Important"
 msgstr "Importante"
 
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Tu sesión fue cerrada debido a inactividad. Haz clic en el botón <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Nueva identidad</strong> en la barra de herramientas del Navegador Tor antes de proseguir. Esto borrará los datos de actividad de tu Navegador Tor en este dispositivo."
+msgstr "Tu sesión ha terminado debido a inactividad. Haz clic en el botón <img src={icon} alt=\"icon de escoba\" width=\"16\" height=\"16\">&nbsp;<strong>Nueva identidad</strong> en la barra de herramientas del Navegador Tor antes de proseguir. Esto borrará los datos de actividad de tu Navegador Tor en este dispositivo."
 
 msgid "Why is there a warning about Tor2Web?"
 msgstr "¿Por qué hay una advertencia acerca de Tor2Web?"
@@ -896,7 +924,7 @@ msgid "If you are using <a href=\"{url}\">Tails</a>, you can double-click the <c
 msgstr "Si estás usando <a href=\"{url}\">Tails</a>, puedes hacer doble click en el archivo <code>.asc</code> que acabas de descargar, y automáticamente será importado a tu llavero."
 
 msgid "If you are using macOS or Linux, open the terminal. You can import the key with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
-msgstr "Si estás usando macOS o Linux, abre la terminal. Puedes importar la llave con:<p><code> gpg --import /ruta/hacia/{submission_key_fpr_filename}</code></p>"
+msgstr "Si estás usando macOS o Linux, abre la terminal. Puedes importar la llave con:<p><code>gpg --import /ruta/hacia/{submission_key_fpr_filename}</code></p>"
 
 msgid "Encrypt your submission. Open the terminal and enter this gpg command:"
 msgstr "Cifra tu envío. Abre la terminal e ingresa este comando gpg:"
@@ -905,13 +933,50 @@ msgid "<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/submissio
 msgstr "<code>gpg --recipient '{submission_key_fpr}' --encrypt /ruta/hacia/envío</code>"
 
 msgid "Upload your encrypted submission. It will have the same filename as the unencrypted file, with .gpg at the end (e.g. <code>internal_memo.pdf.gpg</code>)"
-msgstr "Sube tu envío cifrado. Este va tener el mismo nombre que el archivo que no lo está, con .gpg al final (por ejemplo <code>internal_memo.pdf.gpg</code>)"
+msgstr "Sube tu envío cifrado. Este va tener el mismo nombre que el archivo que no lo está, con .gpg al final (por ejemplo <code>memo_interno.pdf.gpg</code>)"
 
 msgid "<strong>Important:</strong> If you wish to remain anonymous, <strong>do not</strong> use GPG to sign the encrypted file (with the <code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG identity to us."
 msgstr "<strong>Importante:</strong> Si deseas permanecer anónimo, <strong>no</strong> firmes con GPG el archivo cifrado (usando las opciones <code>--sign</code> o <code>-s</code>) ya que al hacerlo nos revelarías tu identidad GPG."
 
 msgid "Back to submission page"
 msgstr "Regresar a la página de envío"
+
+#~ msgid "{source_name}'s collection deleted."
+#~ msgstr "Colección de {source_name} eliminada."
+
+#~ msgid "Submission deleted."
+#~ msgid_plural "{num} submissions deleted."
+#~ msgstr[0] "Envío eliminado."
+#~ msgstr[1] "{num} envíos eliminados."
+
+#~ msgid "{num} collection deleted"
+#~ msgid_plural "{num} collections deleted"
+#~ msgstr[0] "{num} colección eliminada"
+#~ msgstr[1] "{num} colecciones eliminadas"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Actualización Requerida</strong>&nbsp;&nbsp;Configura Servicios Onion v3 antes del 30 de abril para mantener tus servidores SecureDrop en línea. Por favor contacta a tu administrador. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Aprende Más</a>"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Actualización Requerida</strong>&nbsp;&nbsp;Completa la configuración de Servicios Onion v3 antes del 30 de abril. Por favor contacta a tu administrador. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Aprende Más</a>"
+
+#~ msgid "Are you sure you want to delete the selected documents?"
+#~ msgstr "¿Estás seguro de que deseas eliminar los documentos seleccionados?"
+
+#~ msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
+#~ msgstr "Haz clic abajo para eliminar la colección de esta fuente. <em>Advertencia: Si haces esto, los archivos que se ven aquí serán irrecuperables y la fuente ya no podrá acceder usando su nombre clave anterior.</em>"
+
+#~ msgid "DELETE SOURCE AND SUBMISSIONS"
+#~ msgstr "ELIMINAR FUENTE Y ENVÍOS"
+
+#~ msgid "Are you sure you want to delete this collection?"
+#~ msgstr "¿Estás seguro de que deseas eliminar esta colección?"
+
+#~ msgid "Are you sure you want to delete the selected collections?"
+#~ msgstr "¿Estás seguro de que deseas eliminar las colecciones seleccionadas?"
+
+#~ msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
+#~ msgstr "Advertencia: Si haces esto, todos los archivos de las fuentes seleccionadas serán irrecuperables y las fuentes ya no podrán acceder usando sus nombres clave anteriores."
 
 #~ msgid "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 #~ msgstr "Con tecnología de <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
@@ -1027,9 +1092,6 @@ msgstr "Regresar a la página de envío"
 #~ msgid "<a href=\"/\">Click here</a> to refresh the page"
 #~ msgstr "<a href=\"/\">Haga clic aquí</a> para actualizar la página"
 
-#~ msgid "<strong>Critical Security:</strong> The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is urgently required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Learn More</a>"
-#~ msgstr "<strong>Situación crítica de Seguridad:</strong> El sistema operativo usado en sus servidores SecureDrop ha alcanzado el final de su ciclo de vida. Se necesita urgentemente una actualización manual para permanecer seguro - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Aprender Más</a>"
-
 #~ msgid "Turn off NoScript's cross-site request sanitization setting"
 #~ msgstr "Desactivar la opción de limpieza de scripts inter-sitio de NoScript"
 
@@ -1116,9 +1178,6 @@ msgstr "Regresar a la página de envío"
 
 #~ msgid "If you want to submit information, you are <strong>strongly advised</strong> to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to access our site safely and anonymously."
 #~ msgstr "Si desea enviar información, usted esta <strong>encarecidamente aconsejado</strong> a instalar <a href=\"torproject.org/download.html.en\">Tor</a> y usarlo para entrar a nuestro sitio seguramente y anónimamente."
-
-#~ msgid "Are you sure you want to delete the {size} selected submissions?"
-#~ msgstr "¿Está seguro de que desea eliminar las {size} sumisiones seleccionadas?"
 
 #~ msgid "{doc_num} docs"
 #~ msgstr "{doc_num} docs"
