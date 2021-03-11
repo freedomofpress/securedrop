@@ -4,20 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2021-01-26 17:22+0000\n"
-"Last-Translator: John Hensley <john@freedom.press>\n"
-"Language-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/securedrop/securedrop/nb_NO/>\n"
-"Language: nb_NO\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-03-08 22:37+0000\nLast-Translator: John Hensley <john@freedom.press>\nLanguage-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/securedrop/securedrop/nb_NO/>\nLanguage: nb_NO\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.3.2\nGenerated-By: Babel 2.4.0\n"
 
 msgid "{time} ago"
 msgstr "{time} siden"
@@ -73,11 +60,19 @@ msgstr "Slettet brukeren '{user}'."
 msgid "Test alert sent. Please check your email."
 msgstr "Testvarsel sendt. Sjekk e-posten din."
 
-msgid "{source_name}'s collection deleted."
-msgstr "{source_name}s kildeoppføring slettet."
+#. Precedes a message confirming the success of an operation.
+msgid "Success!"
+msgstr "Suksess!"
 
-msgid "No collections selected."
-msgstr "Ingen kildeoppføringer valgt."
+msgid "The account and data for the source {} have been deleted."
+msgstr "Kontoen og dataene knyttet til kilden {} har blitt slettet."
+
+#. Error shown when a user has not selected items to act on.
+msgid "Nothing Selected"
+msgstr "Ingenting valgt"
+
+msgid "You must select one or more items."
+msgstr "Du må velge ett eller flere elementer."
 
 msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr "Nedlastingen mislyktes fordi en fil ikke ble funnet. En administrator kan finne detaljer om feilen i system- og driftsloggene."
@@ -118,14 +113,14 @@ msgstr "Du kan kun laste opp PNG-bildefiler."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "En uventet feil oppstod! Gi din administrator beskjed."
 
-msgid "Thanks. Your reply has been stored."
-msgstr "Takk. Svaret ditt har blitt lagret."
+msgid "Your reply has been stored."
+msgstr "Svaret ditt har blitt lagret."
 
-msgid "No collections selected for download."
-msgstr "Ingen kildeoppføringer valgt for nedlasting."
+msgid "You must select one or more items for download"
+msgstr "Du må velge ett eller flere elementer for nedlasting"
 
-msgid "No collections selected for deletion."
-msgstr "Ingen kildeoppføringer valgt for sletting."
+msgid "You must select one or more items for deletion"
+msgstr "Du må velge ett eller flere elementer for sletting"
 
 msgid "No unread submissions for this source."
 msgstr "Ingen uleste innsendelser fra denne kilden."
@@ -133,8 +128,8 @@ msgstr "Ingen uleste innsendelser fra denne kilden."
 msgid "Account updated."
 msgstr "Konto oppdatert."
 
-msgid "Login failed."
-msgstr "Innlogging mislyktes."
+msgid "<b>Login failed.</b>"
+msgstr "<b>Innlogging mislyktes.</b>"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -150,15 +145,24 @@ msgstr "Ugyldig hemmelighetsformat: Kun bruk bokstavene A-F og tall fra 0-9."
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Feil hemmelighet, du har lagt til eller glemt noe."
 
-msgid "Submission deleted."
-msgid_plural "{num} submissions deleted."
-msgstr[0] "Innsendelse slettet."
-msgstr[1] "{num} innsendelser slettet."
+msgid "The item has been deleted."
+msgid_plural "{num} items have been deleted."
+msgstr[0] "Elementet har blitt slettet."
+msgstr[1] "{num} elementer har blitt slettet."
 
-msgid "{num} collection deleted"
-msgid_plural "{num} collections deleted"
-msgstr[0] "{num} kildeoppføring slettet"
-msgstr[1] "{num} kildeoppføringer slettet"
+msgid "No collections selected for deletion."
+msgstr "Ingen kildeoppføringer valgt for sletting."
+
+msgid "The account and all data for {n} source have been deleted."
+msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgstr[0] "Kontoen og dataene knyttet til {n} kilde har blitt slettet."
+msgstr[1] "Kontoene og dataene knyttet til {n} kilder har blitt slettet."
+
+msgid "You must select one or more items for deletion."
+msgstr "Du må velge ett eller flere elementer for sletting."
+
+msgid "The files and messages have been deleted."
+msgstr "Filene og meldingene har blitt slettet."
 
 msgid "Name updated."
 msgstr "Navn oppdatert."
@@ -204,6 +208,33 @@ msgid "1 unread"
 msgid_plural "{num} unread"
 msgstr[0] "Én ulest"
 msgstr[1] "{num} uleste"
+
+msgid "When the account for a source is deleted:"
+msgstr "Når kontoen knyttet til en kilde slettes:"
+
+msgid "The source will no longer be able to log in with their codename."
+msgstr "Kilden vil ikke lenger kunne logge seg inn med sitt kodenavn."
+
+msgid "You will not be able to send them replies."
+msgstr "Du vil ikke lenger kunne sende svar til kilden."
+
+msgid "All files and messages from that source will also be destroyed."
+msgstr "Alle filer og meldinger fra den kilden vil også bli slettet."
+
+msgid "Are you sure this is what you want?"
+msgstr "Er du sikker på at du vil gjøre dette?"
+
+msgid "Yes, Delete Selected Source Accounts"
+msgstr "Ja, slett kontoene til de valgte kildene"
+
+msgid "What would you like to delete?"
+msgstr "Hva ønsker du å slette?"
+
+msgid "Files and Messages"
+msgstr "Filer og meldinger"
+
+msgid "Source Accounts"
+msgstr "Kildekontoer"
 
 msgid "Change Secret"
 msgstr "Endre hemmelighet"
@@ -331,11 +362,11 @@ msgstr "Kan du ikke skanne strekkoden? Du kan koble FreeOTP til denne kontoen ma
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "Når du har satt opp din YubiKey, skriv inn den 6 tegn lange koden nedenfor:"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Oppdatering nødvendig:</strong>&nbsp;&nbsp;Sett opp v3 Onion-tjenester før 30. april 2021 for å fortsatt holde SecureDrop-systemet oppsettet deres tilgjengelig. Kontakt din administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Lær mer</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Sikkerhetskritisk:</strong>&nbsp;&nbsp;Operativsystemet på tjenerne som drifter denne installasjonen av SecureDrop har nådd slutten av sin levetid. En manuell oppgradering kreves for å reaktivere kilde-nettsiden og opprettholde sikkerheten. Kontakt din administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Les mer</a>"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Oppdatering nødvendig:</strong>&nbsp;&nbsp;Sett opp v3 Onion-tjenester før 30. april. Kontakt din administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Lær mer</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Sikkerhetskritisk:</strong>&nbsp;&nbsp;Operativsystemet på tjenerne som drifter denne installasjonen av SecureDrop vil nå slutten av sin levetid den 30. april 2021. En manuell oppgradering må gjøres innen kort tid for å opprettholde sikkerheten. Kontakt din administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Les mer</a>"
 
 msgid "Logged on as"
 msgstr "Innlogget som"
@@ -352,8 +383,8 @@ msgstr "Drevet av: <em>SecureDrop {version}</em>."
 msgid "All Sources"
 msgstr "Alle kilder"
 
-msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
-msgstr "Dokumentene er lagret kryptert av hensyn til sikkerhet. For å lese dem, må du dekryptere dem med GPG."
+msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
+msgstr "Alle meldinger, filer og svar fra kilder er lagret som krypterte filer av hensyn til sikkerhet. For å lese dem, må du dekryptere dem på Secure Viewing Station."
 
 msgid "Download Selected"
 msgstr "Last ned valgte"
@@ -397,17 +428,17 @@ msgstr "meldinger-ikon"
 msgid "Delete Confirmation"
 msgstr "Bekreftelse av sletting"
 
-msgid "Are you sure you want to delete the selected documents?"
-msgstr "Er du sikker på at du vil slette de markerte dokumentene?"
+msgid "Are you sure you want to delete the selected submissions?"
+msgstr "Er du sikker på at du vil slette de markerte bidragene?"
 
 msgid "DELETE"
 msgstr "SLETT"
 
-msgid "No documents to display."
-msgstr "Ingen dokumenter å vise."
+msgid "No submissions to display."
+msgstr "Ingen bidragene å vise."
 
-msgid "You can write a secure reply to the person who submitted these documents:"
-msgstr "Du kan skrive et sikkert svar til personen som sendte inn dette bidraget:"
+msgid "You can write a secure reply to the person who submitted these messages and/or files:"
+msgstr "Du kan skrive et sikkert svar til personen som sendte inn disse meldingene og/eller filene:"
 
 msgid "You've flagged this source for reply."
 msgstr "Du har markert denne kilden for å kunne sende et svar til personen."
@@ -421,14 +452,14 @@ msgstr "Klikk her, om du ønsker skrive et svar til kilden."
 msgid "FLAG THIS SOURCE FOR REPLY"
 msgstr "MARKER DENNE KILDEN FOR Å SVARE"
 
-msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
-msgstr "Klikk nedenfor for å slette kildeoppføringer fra denne kilden. <em>Advarsel: Om du gjør dette, vil alle filene under bli slettet for godt og kilden vil ikke lenger kunne logge seg inn med kodenavnet for å fortsette kommunikasjonen.</em>"
+msgid "Delete Source Account"
+msgstr "Slett kilde-konto"
 
-msgid "DELETE SOURCE AND SUBMISSIONS"
-msgstr "SLETT KILDEDATA OG INNSENDELSER"
+msgid "Are you sure?"
+msgstr "Er du sikker?"
 
-msgid "Are you sure you want to delete this collection?"
-msgstr "Er du sikker på at du vil slette alle kildeoppføringer fra denne kilden?"
+msgid "Yes, Delete Source Account"
+msgstr "Ja, slett kildens konto"
 
 msgid "Instance Configuration"
 msgstr "Instans-oppsett"
@@ -558,9 +589,6 @@ msgstr "SecureDrop vil generere en sikker krypteringsnøkkel for denne kilden ne
 msgid "Continue to the list of documents for {codename}..."
 msgstr "Fortsett til listen over innsendelser fra {codename}…"
 
-msgid "Sources"
-msgstr "Kilder"
-
 msgid "Download Unread"
 msgstr "Last ned uleste"
 
@@ -572,12 +600,6 @@ msgstr "Stjernemerk"
 
 msgid "Un-star"
 msgstr "Fjern stjernemerking"
-
-msgid "Are you sure you want to delete the selected collections?"
-msgstr "Er du sikker på at du vil slette de markerte kildeoppføringene?"
-
-msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
-msgstr "Advarsel: Om du gjør dette, vil alle filene knyttet til de valgte kildene bli slettet for godt, og de vil ikke lenger kunne logge seg inn med sitt forrige kodenavn."
 
 msgid "No documents have been submitted!"
 msgstr "Ingen dokumenter har blitt sendt!"
@@ -599,6 +621,9 @@ msgstr "Er du sikker på at du vil slette brukeren {username}?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "Er du sikker på at du vil tilbakestille tofaktor-autentisering for {username}?"
+
+msgid "Sources selected: "
+msgstr "Kildeoppføringer valgt: "
 
 msgid "Login to access the journalist interface"
 msgstr "Logg inn for å få tilgang til journalist-portalen"
@@ -669,6 +694,12 @@ msgstr "Sikkerhet for journalister og kilder"
 msgid "SecureDrop Home"
 msgstr "SecureDrop hjem"
 
+msgid "We're sorry, our SecureDrop is currently offline."
+msgstr "Vi beklager, vår SecureDrop er for tiden ute av drift."
+
+msgid "Please try again later. Check our website for more information."
+msgstr "Vennligst prøv igjen senere. Se vår nettside for mer informasjon."
+
 msgid "LOG OUT"
 msgstr "LOGG UT"
 
@@ -680,9 +711,6 @@ msgstr "Beklager, det oppstod en feil og siden kunne ikke lastes."
 
 msgid "Look up a codename..."
 msgstr "Logg inn med kodenavn…"
-
-msgid "Success!"
-msgstr "Suksess!"
 
 msgid "Thank you for sending this information to us. Please check back later for replies."
 msgstr "Takk for at du sendte inn informasjon. Kom gjerne tilbake for å se etter en tilbakemelding fra oss."
@@ -913,6 +941,43 @@ msgstr "<strong>Viktig:</strong> Om du ønsker å være helt anonym, <strong>ikk
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
 
+#~ msgid "{source_name}'s collection deleted."
+#~ msgstr "{source_name}s kildeoppføring slettet."
+
+#~ msgid "Submission deleted."
+#~ msgid_plural "{num} submissions deleted."
+#~ msgstr[0] "Innsendelse slettet."
+#~ msgstr[1] "{num} innsendelser slettet."
+
+#~ msgid "{num} collection deleted"
+#~ msgid_plural "{num} collections deleted"
+#~ msgstr[0] "{num} kildeoppføring slettet"
+#~ msgstr[1] "{num} kildeoppføringer slettet"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Oppdatering nødvendig:</strong>&nbsp;&nbsp;Sett opp v3 Onion-tjenester før 30. april 2021 for å fortsatt holde SecureDrop-systemet oppsettet deres tilgjengelig. Kontakt din administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Lær mer</a>"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Oppdatering nødvendig:</strong>&nbsp;&nbsp;Sett opp v3 Onion-tjenester før 30. april. Kontakt din administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Lær mer</a>"
+
+#~ msgid "Are you sure you want to delete the selected documents?"
+#~ msgstr "Er du sikker på at du vil slette de markerte dokumentene?"
+
+#~ msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
+#~ msgstr "Klikk nedenfor for å slette kildeoppføringer fra denne kilden. <em>Advarsel: Om du gjør dette, vil alle filene under bli slettet for godt og kilden vil ikke lenger kunne logge seg inn med kodenavnet for å fortsette kommunikasjonen.</em>"
+
+#~ msgid "DELETE SOURCE AND SUBMISSIONS"
+#~ msgstr "SLETT KILDEDATA OG INNSENDELSER"
+
+#~ msgid "Are you sure you want to delete this collection?"
+#~ msgstr "Er du sikker på at du vil slette alle kildeoppføringer fra denne kilden?"
+
+#~ msgid "Are you sure you want to delete the selected collections?"
+#~ msgstr "Er du sikker på at du vil slette de markerte kildeoppføringene?"
+
+#~ msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
+#~ msgstr "Advarsel: Om du gjør dette, vil alle filene knyttet til de valgte kildene bli slettet for godt, og de vil ikke lenger kunne logge seg inn med sitt forrige kodenavn."
+
 #~ msgid "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 #~ msgstr "Drevet av: <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 
@@ -1024,9 +1089,6 @@ msgstr "Tilbake til innsendelsesside"
 #~ msgid "<a href=\"/\">Click here</a> to refresh the page"
 #~ msgstr "<a href=\"/\">Klikk her</a> for å oppdatere siden"
 
-#~ msgid "<strong>Critical Security:</strong> The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is urgently required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Learn More</a>"
-#~ msgstr "<strong>Sikkerhetskritisk:</strong> Operativsystemet på tjenerne som drifter denne installasjonen av SecureDrop har nådd slutten av sin levetid. En manuell oppgradering må gjøres innen kort tid for å opprettholde sikkerheten - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Les mer</a>"
-
 #~ msgid "Turn off NoScript's cross-site request sanitization setting"
 #~ msgstr "Skru av NoScript-innstillingen for \"Vask mistenkelige mellomsidige forespørsler\""
 
@@ -1113,9 +1175,6 @@ msgstr "Tilbake til innsendelsesside"
 
 #~ msgid "If you want to submit information, you are <strong>strongly advised</strong> to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to access our site safely and anonymously."
 #~ msgstr "Om du vil sende oss informasjon, anbefales det <strong>på det sterkeste</strong> å installerere <a href=\"https://www.torproject.org/download.html.en\">Tor</a> og bruke Tor-nettleseren for å sikkert og anonymt besøke siden."
-
-#~ msgid "Are you sure you want to delete the {size} selected submissions?"
-#~ msgstr "Er du sikker på at du vil slette de {size} markerte bidragene?"
 
 #~ msgid "{doc_num} docs"
 #~ msgstr "{doc_num} dok."
