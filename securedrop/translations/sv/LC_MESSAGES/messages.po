@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.5-rc4\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-01-23 12:37+0000\n"
-"Last-Translator: SwITsys <eric@westgren.net>\n"
-"Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\n"
-"Language: sv\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-03-08 22:37+0000\nLast-Translator: John Hensley <john@freedom.press>\nLanguage-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\nLanguage: sv\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.3.2\nGenerated-By: Babel 2.4.0\n"
 
 msgid "{time} ago"
 msgstr "{time} sedan"
@@ -72,11 +60,19 @@ msgstr "Användare '{user}' har tagits bort."
 msgid "Test alert sent. Please check your email."
 msgstr "Test-larm skickat. Vänligen kontrollera din e-post."
 
-msgid "{source_name}'s collection deleted."
-msgstr "{source_name}s samling har raderats."
+#. Precedes a message confirming the success of an operation.
+msgid "Success!"
+msgstr "Det lyckades!"
 
-msgid "No collections selected."
-msgstr "Inga samlingar är valda."
+msgid "The account and data for the source {} have been deleted."
+msgstr "Kontot och informationen för källan {} har raderats."
+
+#. Error shown when a user has not selected items to act on.
+msgid "Nothing Selected"
+msgstr "Inget markerat"
+
+msgid "You must select one or more items."
+msgstr "Du måste välja ett eller flera meddelanden."
 
 msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr "Din nedladdning misslyckades eftersom filen inte hittades. En administratör kan hitta mer i systemloggarna."
@@ -117,14 +113,14 @@ msgstr "Du kan endast ladda upp PNG-bildfiler."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Ett oväntat fel uppstod! Informera din administratör."
 
-msgid "Thanks. Your reply has been stored."
-msgstr "Tack. Ditt svar har sparats."
+msgid "Your reply has been stored."
+msgstr "Ditt svar har sparats."
 
-msgid "No collections selected for download."
-msgstr "Inga samlingar valda för nedladdning."
+msgid "You must select one or more items for download"
+msgstr "Du måste välja ett eller flera meddelanden för nedladdning"
 
-msgid "No collections selected for deletion."
-msgstr "Inga samlingar har markerats för radering."
+msgid "You must select one or more items for deletion"
+msgstr "Du måste välja ett eller flera meddelanden för radering"
 
 msgid "No unread submissions for this source."
 msgstr "Det finns inga olästa inlämningar från denna källa."
@@ -132,8 +128,8 @@ msgstr "Det finns inga olästa inlämningar från denna källa."
 msgid "Account updated."
 msgstr "Kontot uppdaterat."
 
-msgid "Login failed."
-msgstr "Inloggningen misslyckades."
+msgid "<b>Login failed.</b>"
+msgstr "<b>Inloggningen misslyckades.</b>"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -149,15 +145,24 @@ msgstr "Ogiltigt format i hemlighet: vänligen använd endast bokstäverna A-F o
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Ogiltigt format i hemlighet: ojämn längd. Skrev du fel?"
 
-msgid "Submission deleted."
-msgid_plural "{num} submissions deleted."
-msgstr[0] "Inlämningen har tagits bort."
-msgstr[1] "{num} inlämningar har tagits bort."
+msgid "The item has been deleted."
+msgid_plural "{num} items have been deleted."
+msgstr[0] "Meddelandet har raderats."
+msgstr[1] "{num} meddelanden har raderats."
 
-msgid "{num} collection deleted"
-msgid_plural "{num} collections deleted"
-msgstr[0] "{num} samling har tagits bort"
-msgstr[1] "{num} samlingar har tagits bort"
+msgid "No collections selected for deletion."
+msgstr "Inga samlingar har markerats för radering."
+
+msgid "The account and all data for {n} source have been deleted."
+msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgstr[0] "Kontot och all data för {n} källa har raderats."
+msgstr[1] "Konton och data för {n} källor har raderats."
+
+msgid "You must select one or more items for deletion."
+msgstr "Du måste välja ett eller flera meddelanden för radering."
+
+msgid "The files and messages have been deleted."
+msgstr "Filer och meddelanden har raderats."
 
 msgid "Name updated."
 msgstr "Namn uppdaterat."
@@ -203,6 +208,33 @@ msgid "1 unread"
 msgid_plural "{num} unread"
 msgstr[0] "1 oläst"
 msgstr[1] "{num} olästa"
+
+msgid "When the account for a source is deleted:"
+msgstr "När kontot för en källa raderas:"
+
+msgid "The source will no longer be able to log in with their codename."
+msgstr "Kommer källan inte längre kunna logga in med sitt kodnamn."
+
+msgid "You will not be able to send them replies."
+msgstr "Du kommer inte kunna skicka källan något svar."
+
+msgid "All files and messages from that source will also be destroyed."
+msgstr "Alla filer och meddelanden från den källan kommer också att raderas."
+
+msgid "Are you sure this is what you want?"
+msgstr "Är du säker på att detta är det du vill?"
+
+msgid "Yes, Delete Selected Source Accounts"
+msgstr "Ja, radera den markerade källan"
+
+msgid "What would you like to delete?"
+msgstr "Vad vill du radera?"
+
+msgid "Files and Messages"
+msgstr "Filer och meddelanden"
+
+msgid "Source Accounts"
+msgstr "Källor"
 
 msgid "Change Secret"
 msgstr "Ändra hemlighet"
@@ -330,11 +362,11 @@ msgstr "Kan du inte skanna koden? Du kan manuellt koppla FreeOTP till detta kont
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "När du har konfigurerat din Yubikey, ange den sexsiffriga koden nedan:"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Uppdatering krävs</strong>&nbsp;&nbsp;Sätt upp v3 Onion Services före 30:e April för att dina SecureDrop serverar ska fortsätta fungera. Kontakta din administratör. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Kritisk sårbarhet:</strong>&nbsp;&nbsp;Operativsystemet som används av dina SecureDrop-servrar har passerat sin livslängd. En manuell uppdatering krävs snarast för att återaktivera källgränssnittet och för att fortsätta vara säker. Vänligen kontakta din administratör. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Läs mer</a>"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Update Krävs</strong>&nbsp;&nbsp;Gör klart uppsättningen av v3 Onion Services före 30:e April. Kontakta din administratör. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Läs mer</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Kritisk sårbarhet:</strong> Operativsystemet som används av dina SecureDrop-servrar kommer passera sin livslängd 30 April 2021. En manuell uppdatering krävs snarast för att skydda systemet. Vänligen kontakta din administratör. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Läs mer</a>"
 
 msgid "Logged on as"
 msgstr "Inloggad som"
@@ -351,8 +383,8 @@ msgstr "Körs på <em>SecureDrop {version}</em>."
 msgid "All Sources"
 msgstr "Alla källor"
 
-msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
-msgstr "För ökad säkerhet sparas dokumenten krypterat. För att läsa dessa, behöver du avkryptera dem med GPG."
+msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
+msgstr "Alla meddelanden, filer och svar sparas som krypterade filer av säkerhetsskäl. För att läsa dessa, behöver du avkryptera dem på din “Secure Viewing Station”."
 
 msgid "Download Selected"
 msgstr "Ladda ned markerade"
@@ -396,17 +428,17 @@ msgstr "Meddelande"
 msgid "Delete Confirmation"
 msgstr "Verifiera radering"
 
-msgid "Are you sure you want to delete the selected documents?"
-msgstr "Är du säker att du vill ta bort de markerade dokumenten?"
+msgid "Are you sure you want to delete the selected submissions?"
+msgstr "Är du säker att du vill ta bort de markerade inlämningarna?"
 
 msgid "DELETE"
 msgstr "TA BORT"
 
-msgid "No documents to display."
-msgstr "Inga dokument att visa."
+msgid "No submissions to display."
+msgstr "Inga inlämningar att visa."
 
-msgid "You can write a secure reply to the person who submitted these documents:"
-msgstr "Du kan skriva ett säkert svar till personen som lämnade dessa dokument:"
+msgid "You can write a secure reply to the person who submitted these messages and/or files:"
+msgstr "Du kan skriva ett säkert svar till personen som lämnade dessa meddelanden och/eller filer:"
 
 msgid "You've flagged this source for reply."
 msgstr "Du har flaggat den här källan för svar."
@@ -420,14 +452,14 @@ msgstr "Klicka nedan ifall du vill skriva ett svar till denna källa."
 msgid "FLAG THIS SOURCE FOR REPLY"
 msgstr "FLAGGA DEN HÄR KÄLLAN FÖR SVAR"
 
-msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
-msgstr "Klicka nedan för att ta bort den här källans samling. <em>Varning: Ifall du gör detta blir det omöjligt att återskapa filerna som listas här och källan kommer inte längre att kunna logga in med sitt förra kodnamn. </em>"
+msgid "Delete Source Account"
+msgstr "Radera en källa"
 
-msgid "DELETE SOURCE AND SUBMISSIONS"
-msgstr "RADERA KÄLLA OCH INLÄMNINGAR"
+msgid "Are you sure?"
+msgstr "Är du säker?"
 
-msgid "Are you sure you want to delete this collection?"
-msgstr "Är du säker att du vill ta bort den här samlingen?"
+msgid "Yes, Delete Source Account"
+msgstr "Ja, radera källan"
 
 msgid "Instance Configuration"
 msgstr "Instanskonfiguration"
@@ -557,9 +589,6 @@ msgstr "SecureDrop kommer att generera en säker krypteringsnyckel för den här
 msgid "Continue to the list of documents for {codename}..."
 msgstr "Fortsätt till listan med dokument för {codename}..."
 
-msgid "Sources"
-msgstr "Källor"
-
 msgid "Download Unread"
 msgstr "Ladda ned olästa"
 
@@ -571,12 +600,6 @@ msgstr "Stjärnmärk"
 
 msgid "Un-star"
 msgstr "Ta bort stjärnmärkning"
-
-msgid "Are you sure you want to delete the selected collections?"
-msgstr "Är du säker att du vill ta bort de markerade samlingarna?"
-
-msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
-msgstr "Varning: Ifall du gör detta blir det omöjligt att återskapa alla filerna for utvalda källor, och dom kommer inte längre att kunna logga in med sina förra kodnamn."
 
 msgid "No documents have been submitted!"
 msgstr "Inga dokument har lämnats in!"
@@ -598,6 +621,9 @@ msgstr "Är du säker på att du vill ta bort användaren {username}?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "Är du säker att du vill återställa tvåfaktorsautentiseringen för {username}?"
+
+msgid "Sources selected: "
+msgstr "Källor valda: "
 
 msgid "Login to access the journalist interface"
 msgstr "Logga in för att få tillgång till journalistgränssnittet"
@@ -668,6 +694,12 @@ msgstr "Skyddar journalister och källor"
 msgid "SecureDrop Home"
 msgstr "SecureDrop Hem"
 
+msgid "We're sorry, our SecureDrop is currently offline."
+msgstr "Vi ber om ursäkt, men vår SecureDrop är för närvarande offline."
+
+msgid "Please try again later. Check our website for more information."
+msgstr "Försök igen senare. Läs på vår hemsida för mer information."
+
 msgid "LOG OUT"
 msgstr "LOGGA UT"
 
@@ -679,9 +711,6 @@ msgstr "Tyvärr uppstod ett fel som gjorde att webbsidan inte kunde genomföra �
 
 msgid "Look up a codename..."
 msgstr "Sök ett kodnamn..."
-
-msgid "Success!"
-msgstr "Det lyckades!"
 
 msgid "Thank you for sending this information to us. Please check back later for replies."
 msgstr "Tack för att du skickade denna information till oss. Kom tillbaka senare och kontrollera om du fått svar."
@@ -912,6 +941,43 @@ msgstr "<strong> Viktigt:</strong> Ifall du önskar att förbli anonym, <strong>
 msgid "Back to submission page"
 msgstr "Tillbaka till inlämningssidan"
 
+#~ msgid "{source_name}'s collection deleted."
+#~ msgstr "{source_name}s samling har raderats."
+
+#~ msgid "Submission deleted."
+#~ msgid_plural "{num} submissions deleted."
+#~ msgstr[0] "Inlämningen har tagits bort."
+#~ msgstr[1] "{num} inlämningar har tagits bort."
+
+#~ msgid "{num} collection deleted"
+#~ msgid_plural "{num} collections deleted"
+#~ msgstr[0] "{num} samling har tagits bort"
+#~ msgstr[1] "{num} samlingar har tagits bort"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Uppdatering krävs</strong>&nbsp;&nbsp;Sätt upp v3 Onion Services före 30:e April för att dina SecureDrop serverar ska fortsätta fungera. Kontakta din administratör. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Update Krävs</strong>&nbsp;&nbsp;Gör klart uppsättningen av v3 Onion Services före 30:e April. Kontakta din administratör. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Läs mer</a>"
+
+#~ msgid "Are you sure you want to delete the selected documents?"
+#~ msgstr "Är du säker att du vill ta bort de markerade dokumenten?"
+
+#~ msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
+#~ msgstr "Klicka nedan för att ta bort den här källans samling. <em>Varning: Ifall du gör detta blir det omöjligt att återskapa filerna som listas här och källan kommer inte längre att kunna logga in med sitt förra kodnamn. </em>"
+
+#~ msgid "DELETE SOURCE AND SUBMISSIONS"
+#~ msgstr "RADERA KÄLLA OCH INLÄMNINGAR"
+
+#~ msgid "Are you sure you want to delete this collection?"
+#~ msgstr "Är du säker att du vill ta bort den här samlingen?"
+
+#~ msgid "Are you sure you want to delete the selected collections?"
+#~ msgstr "Är du säker att du vill ta bort de markerade samlingarna?"
+
+#~ msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
+#~ msgstr "Varning: Ifall du gör detta blir det omöjligt att återskapa alla filerna for utvalda källor, och dom kommer inte längre att kunna logga in med sina förra kodnamn."
+
 #~ msgid "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 #~ msgstr "Körs på <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 
@@ -1026,9 +1092,6 @@ msgstr "Tillbaka till inlämningssidan"
 #~ msgid "<a href=\"/\">Click here</a> to refresh the page"
 #~ msgstr "<a href=\"/\">Klicka här </a> för att uppdatera sidan"
 
-#~ msgid "<strong>Critical Security:</strong> The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is urgently required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Learn More</a>"
-#~ msgstr "<strong>Kritisk sårbarhet:</strong> Operativsystemet som används av dina SecureDrop-servrar har passerat sin livslängd. En manuell uppdatering krävs snarast för att skydda systemet - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Läs mer</a>"
-
 #~ msgid "Turn off NoScript's cross-site request sanitization setting"
 #~ msgstr "Stäng av \"NoScript's cross-site request sanitization\" inställningen"
 
@@ -1115,9 +1178,6 @@ msgstr "Tillbaka till inlämningssidan"
 
 #~ msgid "If you want to submit information, you are <strong>strongly advised</strong> to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to access our site safely and anonymously."
 #~ msgstr "Ifall du vill lämna in information, råder vi dig <strong>starkt</strong> att installera <a href=\"torproject.org/download.html.en\">Tor</a> och använda den för att få tillgång till vår sida tryggt och anonymt."
-
-#~ msgid "Are you sure you want to delete the {size} selected submissions?"
-#~ msgstr "Är du säker att du vill ta bort de {size} markerade inlämningarna?"
 
 #~ msgid "{doc_num} docs"
 #~ msgstr "{doc_num} dokument"
