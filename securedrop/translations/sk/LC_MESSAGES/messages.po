@@ -4,28 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.14.0~rc1\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-01-26 17:50+0000\n"
-"Last-Translator: John Hensley <john@freedom.press>\n"
-"Language-Team: Slovak <https://weblate.securedrop.org/projects/securedrop/securedrop/sk/>\n"
-"Language: sk\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.14.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-03-07 21:37+0000\nLast-Translator: 1000101 <b1000101@pm.me>\nLanguage-Team: Slovak <https://weblate.securedrop.org/projects/securedrop/securedrop/sk/>\nLanguage: sk\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\nX-Generator: Weblate 4.3.2\nGenerated-By: Babel 2.5.1\n"
 
 msgid "{time} ago"
 msgstr "pred {time}"
 
 msgid "You have been logged out due to inactivity."
-msgstr "Boli ste odhlásený/á z dôvodu nečinnosti."
+msgstr "Boli ste odhlásení z dôvodu nečinnosti."
 
 msgid "You have been logged out due to password change"
-msgstr "Boli ste odhlásený/á z dôvodu zmeny hesla"
+msgstr "Kvôli zmene hesla ste boli odhlásení"
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -72,14 +60,22 @@ msgstr "Používateľ '{user}' bol vymazaný."
 msgid "Test alert sent. Please check your email."
 msgstr "Testovacie upozornenie odoslané. Prosím, skontrolujte si svoj e-mail."
 
-msgid "{source_name}'s collection deleted."
-msgstr "Sada {source_name} zmazaná."
+#. Precedes a message confirming the success of an operation.
+msgid "Success!"
+msgstr "Úspech!"
 
-msgid "No collections selected."
-msgstr "Nevybrali ste žiadnu sadu."
+msgid "The account and data for the source {} have been deleted."
+msgstr "Účet a dáta pre zdroj {} boli zmazané."
+
+#. Error shown when a user has not selected items to act on.
+msgid "Nothing Selected"
+msgstr "Nič nebolo vybrané"
+
+msgid "You must select one or more items."
+msgstr "Musíte vybrať jednu či viac položiek."
 
 msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "Vaše sťahovanie sa zlyhalo, pretože sa súbor nenašiel. Admin vie zistiť viac informácií v logoch systému a monitoringu."
+msgstr "Sťahovanie zlyhalo, pretože súbor sa nenašiel. Administrátor môže nájsť viac informácií v logoch."
 
 msgid "Only admins can access this page."
 msgstr "Táto stránka je prístupná iba pre administrátorov."
@@ -120,32 +116,32 @@ msgstr "Môžete nahrať iba obrázky vo formáte PNG."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Nastala neočakávaná chyba! Prosím informujte administrátora."
 
-msgid "Thanks. Your reply has been stored."
-msgstr "Vďaka. Vaša odpoveď bola uložená."
+msgid "Your reply has been stored."
+msgstr "Vaša odpoveď bola uložená."
 
-msgid "No collections selected for download."
-msgstr "Žiadne sady neboli vybrané na stiahnutie."
+msgid "You must select one or more items for download"
+msgstr "Musíte vybrať jednu či viac položiek na stiahnutie"
 
-msgid "No collections selected for deletion."
-msgstr "Žiadne sady neboli vybrané na zmazanie."
+msgid "You must select one or more items for deletion"
+msgstr "Musíte vybrať jednu či viac položiek na zmazanie"
 
 msgid "No unread submissions for this source."
 msgstr "Žiadne neprečítané podania od tohto zdroja."
 
 msgid "Account updated."
-msgstr "Účet upravený."
+msgstr "Účet bol aktualizovaný."
 
-msgid "Login failed."
-msgstr "Prihlásenie zlyhalo."
+msgid "<b>Login failed.</b>"
+msgstr "<b>Prihlásenie zlyhalo.</b>"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
-msgstr[0] "Pred opakovaným prihlásením prosím počkajte aspoň {num} sekundu."
-msgstr[1] "Pred opakovaným prihlásením prosím počkajte aspoň {num} sekundy."
-msgstr[2] "Pred opakovaným prihlásením prosím počkajte aspoň {num} sekúnd."
+msgstr[0] "Pred opakovaním prihlásenia prosím počkajte aspoň {num} sekundu."
+msgstr[1] "Pred opakovaním prihlásenia prosím počkajte aspoň {num} sekundy."
+msgstr[2] "Pred opakovaním prihlásenia prosím počkajte aspoň {num} sekúnd."
 
 msgid "Please wait for a new code from your two-factor mobile app or security key before trying again."
-msgstr "Pred pokračovaním prosím počkajte na nový kód z mobilnej aplikácie alebo bezpečnostného kľúča pre dvojfaktorovú autentifikáciu."
+msgstr "Pred pokračovaním prosím počkajte na nový kód z mobilnej aplikácie, alebo bezpečnostného kľúča pre dvojfaktorovú autentifikáciu."
 
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr "Nesprávny formát hesla: prosím zadávajte iba písmená A až F a čísla 0 až 9."
@@ -153,20 +149,29 @@ msgstr "Nesprávny formát hesla: prosím zadávajte iba písmená A až F a č�
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Nesprávny formát hesla: nepárna dĺžka hesla. Spravili ste preklep?"
 
-msgid "Submission deleted."
-msgid_plural "{num} submissions deleted."
-msgstr[0] "Podanie zmazané."
-msgstr[1] "{num} podania zmazané."
-msgstr[2] "{num} podaní zmazaných."
+msgid "The item has been deleted."
+msgid_plural "{num} items have been deleted."
+msgstr[0] "Položka bola zmazaná."
+msgstr[1] "{num} položky boli zmazané."
+msgstr[2] "{num} položiek bolo zmazaných."
 
-msgid "{num} collection deleted"
-msgid_plural "{num} collections deleted"
-msgstr[0] "{num} sada zmazaná"
-msgstr[1] "{num} sady zmazané"
-msgstr[2] "{num} sád zmazaných"
+msgid "No collections selected for deletion."
+msgstr "Žiadne sady neboli vybrané na zmazanie."
+
+msgid "The account and all data for {n} source have been deleted."
+msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgstr[0] "Účet a všetky dáta pre {n} zdroj boli zmazané."
+msgstr[1] "Účet a všetky dáta pre {n} zdroje boli zmazané."
+msgstr[2] "Účet a všetky dáta pre {n} zdrojov bolo zmazaných."
+
+msgid "You must select one or more items for deletion."
+msgstr "Musíte vybrať jednu či viac položiek na zmazanie."
+
+msgid "The files and messages have been deleted."
+msgstr "Súbory a odpovede boli zmazané."
 
 msgid "Name updated."
-msgstr "Meno aktualizované."
+msgstr "Meno bolo aktualizované."
 
 msgid "The password you submitted is invalid. Password not changed."
 msgstr "Zadané heslo je neplatné. Heslo nebolo zmenené."
@@ -213,6 +218,33 @@ msgstr[0] "1 neprečítaná"
 msgstr[1] "{num} neprečítané"
 msgstr[2] "{num} neprečítaných"
 
+msgid "When the account for a source is deleted:"
+msgstr "Ak je účet zdroja vymazaný:"
+
+msgid "The source will no longer be able to log in with their codename."
+msgstr "Zdroj sa už nebude môcť prihlásiť pod svojím krycím menom."
+
+msgid "You will not be able to send them replies."
+msgstr "Nebudete môcť zdroju zasielať odpovede."
+
+msgid "All files and messages from that source will also be destroyed."
+msgstr "Všetky súbory a správy od daného zdroja budú zničené."
+
+msgid "Are you sure this is what you want?"
+msgstr "Ste si istí, že to chcete spraviť?"
+
+msgid "Yes, Delete Selected Source Accounts"
+msgstr "Áno, chcem zmazať účty vybraných zdrojov"
+
+msgid "What would you like to delete?"
+msgstr "Čo chcete zmazať?"
+
+msgid "Files and Messages"
+msgstr "Súbory a správy"
+
+msgid "Source Accounts"
+msgstr "Účty zdrojov"
+
 msgid "Change Secret"
 msgstr "Zmeniť heslo"
 
@@ -238,10 +270,10 @@ msgid "Tap the QR code symbol at the top"
 msgstr "Klepnite na QR kód v hornej časti"
 
 msgid "Your phone will now be in \"scanning\" mode. When you are in this mode, scan the barcode below:"
-msgstr "Váš telefón bude teraz v skenovacom móde. Vrámci tohto módu prosím naskenujte QR kód nižšie:"
+msgstr "Váš telefón bude teraz v skenovacom móde. V rámci tohto módu prosím naskenujte QR kód nižšie:"
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with your SecureDrop account by entering the following two-factor secret into the app:"
-msgstr "Nemôžete nasnímať čiarový kód? Môžete manuálne spárovať FreeOTP s vašim SecureDrop účtom zadaním nasledujúceho dvojfaktorového tajomstva do aplikácie:"
+msgstr "Nemôžete nasnímať čiarový kód? Môžete manuálne spárovať FreeOTP s vaším SecureDrop účtom zadaním nasledujúceho dvojfaktorového tajomstva do aplikácie:"
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "Po spárovaní FreeOTP s týmto účtom, zadajte šesťmiestny overovací kód nižšie:"
@@ -286,7 +318,7 @@ msgid "edit user icon"
 msgstr "ikona úprav používateľa"
 
 msgid "trash icon disabled"
-msgstr "ikona koša deaktivovaná"
+msgstr "deaktivovaná ikona koša"
 
 msgid "Delete user {username}"
 msgstr "Zmazať používateľa {username}"
@@ -325,13 +357,13 @@ msgid "The user's password will be:"
 msgstr "Heslo používateľa bude:"
 
 msgid "Is Admin"
-msgstr "Je Administrátor"
+msgstr "Je administrátor"
 
 msgid "Is using a YubiKey [HOTP]"
 msgstr "Používa YubiKey [HOTP]"
 
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
-msgstr "Máte takmer hotovo! Pre dokončenie pridávania tohto používateľa, požiadajte danú osobu o nasledovanie nižšie uvedených pokynov na nastavenie dvojfaktorovej autentifikácie pomocou FreeOTP. Akonáhle si používateľ pridá záznam pre tento účet do aplikácie, požiadajte ich, aby zadali jeden zo šesťmiestnych kódov. Týmto kódom sa potvrdí správnosť fungovania dvojfaktorovej autentifikácie."
+msgstr "Už to skoro máte! Pre dokončenie pridávania tohto používateľa, požiadajte danú osobu o nasledovanie nižšie uvedených pokynov na nastavenie dvojfaktorovej autentifikácie pomocou FreeOTP. Akonáhle si používateľ pridá záznam pre tento účet do aplikácie, požiadajte ich, aby zadali jeden zo šesťmiestnych kódov. Týmto kódom sa potvrdí správnosť fungovania dvojfaktorovej autentifikácie."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Nemôžete nasnímať čiarový kód? Môžete manuálne spárovať FreeOTP s týmto účtom zadaním nasledujúceho dvojfaktorového tajomstva do aplikácie:"
@@ -339,14 +371,14 @@ msgstr "Nemôžete nasnímať čiarový kód? Môžete manuálne spárovať Free
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "Akonáhle nastavíte svoj YubiKey, zadajte šesťmiestny kód nižšie:"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Vyžaduje sa aktualizácia</strong>&nbsp;&nbsp;Do 30. apríla nastavte služby cibule v3, aby boli vaše servery SecureDrop online. Kontaktujte svojho správcu. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Viac informácií</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Kritické bezpečnostné riziko:</strong>&nbsp;&nbsp;Operačný systém vašich SecureDrop serverov dosiahol koniec životnosti (EoL). Pre opätovné spustenie rozhrania pre zdroje je vyžadovaná manuálna aktualizácia. Kontaktujte prosím svojho administrátora. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Viac informácií</a>"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Potrebná aktualizácia</strong>&nbsp;&nbsp;Dokončite nastavenie služieb v3 Onion pred 30. aprílom. Prosím kontaktujte vášho administrátora. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Zistiť viac</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Kritické bezpečnostné riziko:</strong>&nbsp;&nbsp; 30. apríla končí operačnému systému vašich SecureDrop serverov životnosť (EoL). Kontaktujte prosím svojho administrátora. Pre ďalšie zabezpečenie je vyžadovaná aktualizácia.<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Viac informácií</a>"
 
 msgid "Logged on as"
-msgstr "Prihlásený/á ako"
+msgstr "Ste prihlásení ako"
 
 msgid "Admin"
 msgstr "Administrátor"
@@ -360,8 +392,8 @@ msgstr "Používá systém <em>SecureDrop {version}</em>."
 msgid "All Sources"
 msgstr "Všetky zdroje"
 
-msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
-msgstr "Dokumenty sú z bezpečnostných dôvodov uložené šifrovane. Ak si ich chcete prečítať, musíte ich dešifrovať pomocou GPG."
+msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
+msgstr "Všetky správy, súbory a odpovede od zdrojov sú kvôli zabezpečeniu ukladané ako šifrované súbory. Aby ste si ich mohli prečítať, musíte ich najprv dešifrovať na bezpečnom počítači (Secure Viewing Station)."
 
 msgid "Download Selected"
 msgstr "Stiahnuť vybrané"
@@ -405,17 +437,17 @@ msgstr "ikona správ"
 msgid "Delete Confirmation"
 msgstr "Potvrdiť zmazanie"
 
-msgid "Are you sure you want to delete the selected documents?"
-msgstr "Naozaj chcete zmazať vybraté dokumenty?"
+msgid "Are you sure you want to delete the selected submissions?"
+msgstr "Naozaj chcete zmazať zvolené podania?"
 
 msgid "DELETE"
 msgstr "ZMAZAŤ"
 
-msgid "No documents to display."
-msgstr "Žiadne dokumenty na zobrazenie."
+msgid "No submissions to display."
+msgstr "Žiadne podania na zobrazenie."
 
-msgid "You can write a secure reply to the person who submitted these documents:"
-msgstr "Môžete napísať bezpečnú odpoveď osobe, ktorá podala tieto dokumenty:"
+msgid "You can write a secure reply to the person who submitted these messages and/or files:"
+msgstr "Môžete napísať bezpečnú odpoveď osobe, ktorá poslala dané správy a/alebo dokumenty:"
 
 msgid "You've flagged this source for reply."
 msgstr "Označili ste tento zdroj na odpoveď."
@@ -429,14 +461,14 @@ msgstr "Pre odpoveď tomuto zdroju kliknite nižšie."
 msgid "FLAG THIS SOURCE FOR REPLY"
 msgstr "OZNAČIŤ TENTO ZDROJ NA ODPOVEĎ"
 
-msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
-msgstr "Kliknite nižšie pre zmazanie sady tohto zdroja. <em>Varovanie: Ak to urobíte, zobrazené súbory nebude možné obnoviť a zdroj sa už nebude môcť prihlásiť pod pôvodným krycím menom.</em>"
+msgid "Delete Source Account"
+msgstr "Zmazať účet zdroja"
 
-msgid "DELETE SOURCE AND SUBMISSIONS"
-msgstr "ZMAZAŤ ZDROJ A PODANIA"
+msgid "Are you sure?"
+msgstr "Naozaj to chcete urobiť?"
 
-msgid "Are you sure you want to delete this collection?"
-msgstr "Ste si istí, že chcete zmazať túto sadu?"
+msgid "Yes, Delete Source Account"
+msgstr "Áno, chcem zmazať účet zdroja"
 
 msgid "Instance Configuration"
 msgstr "Nastavenie inštancie"
@@ -466,7 +498,7 @@ msgid "Submission Preferences"
 msgstr "Preferencie podania"
 
 msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
-msgstr "Zabráňte zdrojom v nahrávaní dokumentov. Zdroje budú stále môcť posielať správy."
+msgstr "Zabráňte zdrojom v nahrávaní dokumentov. Zdroje budú môcť naďalej posielať správy."
 
 msgid "UPDATE SUBMISSION PREFERENCES"
 msgstr "AKTUALIZOVAŤ PREFERENCIE PODANIA"
@@ -496,7 +528,7 @@ msgid "Edit user \"{user}\""
 msgstr "Upraviť používateľa „{user}“"
 
 msgid "Change Name and Admin Status"
-msgstr "Zmeniť meno and administračný stav"
+msgstr "Zmeniť meno a status administrátora"
 
 msgid "UPDATE"
 msgstr "AKTUALIZOVAŤ"
@@ -535,7 +567,7 @@ msgid "Reset Two-Factor Authentication"
 msgstr "Resetovať dvojfaktorovú autentifikáciu"
 
 msgid "If a user's two-factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two-factor credentials. Otherwise, they will be locked out of their account.</em>"
-msgstr "Ak boli používateľove údaje k dvojfaktorovému overovaniu stratené alebo kompromitované, môžete ich resetovať tu. <em>Najskôr sa však uistite, že daný používateľ je prítomný a pripravený nastaviť na zariadenie nové údaje k dvojfaktorovému overovaniu. V opačnom prípade prístup k účtu stratí.</em>"
+msgstr "Ak boli používateľove údaje k dvojfaktorovému overovaniu stratené alebo kompromitované, môžete ich resetovať tu. <em>Najskôr sa však uistite, že daný používateľ je prítomný a pripravený nastaviť na svoje zariadenie nové údaje k dvojfaktorovému overovaniu. V opačnom prípade prístup k účtu stratí.</em>"
 
 msgid "If your two-factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em>"
 msgstr "Ak boli vaše údaje k dvojfaktorovému overovaniu stratené alebo kompromitované, alebo ak máte nové zariadenie, môžete si vaše údaje resetovať tu. <em>Najskôr sa však uistite, že ste pripravení nastaviť si vaše nové zariadenie, inak stratíte prístup k vašemu účtu.</em>"
@@ -567,9 +599,6 @@ msgstr "Keď sa tento zdroj nabudúce prihlási, SecureDrop mu vygeneruje zabezp
 msgid "Continue to the list of documents for {codename}..."
 msgstr "Pokračujte na zoznam dokumentov pre {codename}..."
 
-msgid "Sources"
-msgstr "Zdroje"
-
 msgid "Download Unread"
 msgstr "Stiahnuť neprečítané"
 
@@ -581,12 +610,6 @@ msgstr "Označiť"
 
 msgid "Un-star"
 msgstr "Odznačiť"
-
-msgid "Are you sure you want to delete the selected collections?"
-msgstr "Naozaj chcete zmazať označené sady?"
-
-msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
-msgstr "Varovanie: Ak to urobíte, zobrazené súbory nebude možné obnoviť a zdroj sa už nebude môcť prihlásiť pod pôvodným krycím menom."
 
 msgid "No documents have been submitted!"
 msgstr "Žiadne dokumenty neboli podané!"
@@ -608,6 +631,9 @@ msgstr "Naozaj chcete zmazať používateľa {username}?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "Naozaj chcete resetovať dvojfaktorovú autentifikáciu pre používateľa {username}?"
+
+msgid "Sources selected: "
+msgstr "Vybrané zdroje: "
 
 msgid "Login to access the journalist interface"
 msgstr "Prihláste sa do novinárskeho rozhrania"
@@ -640,10 +666,10 @@ msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "Veľké bloky textu musia byť nahraté ako súbor, nie skopírované a vložené."
 
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
-msgstr "Boli ste presmerovaný/á, pretože už ste prihlásený/á. Ak chcete vytvoriť nový účet, musíte sa najprv odhlásiť."
+msgstr "Boli ste presmerovaní, pretože už ste prihlásení. Ak chcete vytvoriť nový účet, musíte sa najprv odhlásiť."
 
 msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
-msgstr "Už ste prihlásený/á. Hore si overte správnosť svojho krycieho mena, keďže sa môže líšiť od toho zobrazeného na predošlej stránke."
+msgstr "Už ste prihlásení. Hore si overte správnosť svojho krycieho mena, keďže sa môže líšiť od toho zobrazeného na predošlej stránke."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "Pri vytváraní vášho účtu sa vyskytol dočasný problém. Prosím, skúste to znova."
@@ -676,7 +702,13 @@ msgid "Protecting Journalists and Sources"
 msgstr "Chránime novinárov a zdroje"
 
 msgid "SecureDrop Home"
-msgstr "SecureDrop Domov"
+msgstr "Domovská stránka SecureDrop"
+
+msgid "We're sorry, our SecureDrop is currently offline."
+msgstr "Prepáčte, náš SecureDrop je v súčasnosti offline."
+
+msgid "Please try again later. Check our website for more information."
+msgstr "Skúste to prosím neskôr. Viac informácií nájdete na našej webovej stránke."
 
 msgid "LOG OUT"
 msgstr "ODHLÁSIŤ SA"
@@ -685,13 +717,10 @@ msgid "Server error"
 msgstr "Serverová chyba"
 
 msgid "Sorry, the website encountered an error and was unable to complete your request."
-msgstr "Prepáčte, na webovej stránke sa vyskytla chyba a stránka nebola schopná dokončiť vašu požiadavku."
+msgstr "Prepáčte, na webovej stránke sa vyskytla chyba."
 
 msgid "Look up a codename..."
 msgstr "Vyhľadať krycie meno..."
-
-msgid "Success!"
-msgstr "Úspech!"
 
 msgid "Thank you for sending this information to us. Please check back later for replies."
 msgstr "Ďakujeme za zaslanie tejto informácie. Prosím vráťte sa neskôr skontrolovať odpovede."
@@ -778,7 +807,7 @@ msgid "One more thing..."
 msgstr "Ešte posledná vec..."
 
 msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
-msgstr "Kliknite na ikonu <img src={icon} alt=\"ikona metly\" width=\"16\" height=\"16\">&nbsp;<strong>Nová identita</strong> na lište prehliadača Tor. Tak sa vymažú dáta o aktivite Tor prehliadača na tomto zariadení."
+msgstr "Kliknite na ikonu <img src={icon} alt=\"ikona metly\" width=\"16\" height=\"16\">&nbsp;<strong>Nová identita</strong> na lište svojho prehliadača Tor. Zmažete tým dáta o aktivite prehliadača Tor na tomto zariadení."
 
 msgid "Remember, your codename is:"
 msgstr "Pamätajte, vaše krycie meno je:"
@@ -853,7 +882,7 @@ msgid "Important"
 msgstr "Dôležité"
 
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Boli ste odhlásený/á z dôvodu nečinnosti. Skôr než budete pokračovať, kliknite na ikonu <img src={icon} alt=\"ikona metly\" width=\"16\" height=\"16\">&nbsp;<strong>Nová identita</strong> na lište prehliadača Tor. To vymaže dáta o aktivite Tor prehliadača na tomto zariadení."
+msgstr "Boli ste odhlásení z dôvodu nečinnosti. Skôr než budete pokračovať, kliknite na ikonu <img src={icon} alt=\"ikona metly\" width=\"16\" height=\"16\">&nbsp;<strong>Nová identita</strong> na lište prehliadača Tor. To vymaže dáta o aktivite Tor prehliadača na tomto zariadení."
 
 msgid "Why is there a warning about Tor2Web?"
 msgstr "Prečo je tu upozornenie o Tor2Web?"
@@ -862,7 +891,7 @@ msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgstr "Používanie Tor2Web na pripojenie k SecureDrop neochráni vašu anonymitu."
 
 msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
-msgstr "Ktokoľvek moniturujúci vašu Internetovú komunikáciu (vláda, poskytovateľ pripojenia) vás môže identifikovať."
+msgstr "Ktokoľvek moniturujúci vašu internetovú komunikáciu (vláda, poskytovateľ pripojenia) vás môže identifikovať."
 
 msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
 msgstr "<strong>Odporúčame</strong>použiť <a href=\"www.torproject.org/projects/torbrowser.html\">prehliadač Tor</a>."
@@ -886,7 +915,7 @@ msgid "Why download the team's public key?"
 msgstr "Prečo si stiahnuť verejný kľúč tímu?"
 
 msgid "SecureDrop encrypts files and messages after they are submitted. Encrypting messages and files before submission can provide an extra layer of security before your data reaches the SecureDrop server."
-msgstr "SecureDrop šifruje súbory a správy až po ich podaní. Šifrovanie správ a súborov pred podaním môže pridať dodatočnú vrstvu bezpečnosti predtým, než sa vaše dáta dostanú na server SecureDrop-u."
+msgstr "SecureDrop šifruje súbory a správy až po ich podaní. Šifrovanie správ a súborov pred podaním môže pridať dodatočnú vrstvu bezpečnosti predtým, než sa vaše dáta dostanú na server SecureDrop."
 
 msgid "If you are already familiar with the GPG encryption software, you may wish to encrypt your submissions yourself. To do so:"
 msgstr "Ak ovládate prácu s GPG, môžete si zašifrovať svoje podanie sami. Ak to chcete, spravte nasledujúce:"
@@ -921,6 +950,39 @@ msgstr "<strong>Dôležité:</strong> Ak chcete zostať v anonymite, <strong>nep
 
 msgid "Back to submission page"
 msgstr "Späť na stránku podania"
+
+#~ msgid "{source_name}'s collection deleted."
+#~ msgstr "Sada {source_name} zmazaná."
+
+#~ msgid "Submission deleted."
+#~ msgid_plural "{num} submissions deleted."
+#~ msgstr[0] "Podanie zmazané."
+#~ msgstr[1] "{num} podania zmazané."
+#~ msgstr[2] "{num} podaní zmazaných."
+
+#~ msgid "{num} collection deleted"
+#~ msgid_plural "{num} collections deleted"
+#~ msgstr[0] "{num} sada zmazaná"
+#~ msgstr[1] "{num} sady zmazané"
+#~ msgstr[2] "{num} sád zmazaných"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Potrebná aktualizácia</strong>&nbsp;&nbsp;Dokončite nastavenie služieb v3 Onion pred 30. aprílom. Prosím kontaktujte vášho administrátora. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Zistiť viac</a>"
+
+#~ msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
+#~ msgstr "Kliknite nižšie pre zmazanie sady tohto zdroja. <em>Varovanie: Ak to urobíte, zobrazené súbory nebude možné obnoviť a zdroj sa už nebude môcť prihlásiť pod pôvodným krycím menom.</em>"
+
+#~ msgid "DELETE SOURCE AND SUBMISSIONS"
+#~ msgstr "ZMAZAŤ ZDROJ A PODANIA"
+
+#~ msgid "Are you sure you want to delete this collection?"
+#~ msgstr "Ste si istí, že chcete zmazať túto sadu?"
+
+#~ msgid "Are you sure you want to delete the selected collections?"
+#~ msgstr "Naozaj chcete zmazať označené sady?"
+
+#~ msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
+#~ msgstr "Varovanie: Ak to urobíte, zobrazené súbory nebude možné obnoviť a zdroj sa už nebude môcť prihlásiť pod pôvodným krycím menom."
 
 #~ msgid "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 #~ msgstr "Používa systém <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
