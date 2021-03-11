@@ -331,51 +331,69 @@ class I18NTool:
             if updated:
                 self.commit_changes(args, code)
 
-    def translators(self, args: argparse.Namespace, path: str, since: Optional[str]) -> Set[str]:
+    def translators(
+        self, args: argparse.Namespace, path: str, since_commit: Optional[str]
+    ) -> Set[str]:
         """
         Return the set of people who've modified a file in Weblate.
 
         Extracts all the authors of translation changes to the given
-        path since the given timestamp. Translation changes are
+        path since the given commit. Translation changes are
         identified by the presence of "Translated using Weblate" in
         the commit message.
         """
 
-        if since:
-            path_changes = git(
-                '--no-pager', '-C', args.root,
-                'log', '--format=%aN\x1e%s', '--since', since, args.target, '--', path,
-                _encoding='utf-8'
-            )
-        else:
-            path_changes = git(
-                '--no-pager', '-C', args.root,
-                'log', '--format=%aN\x1e%s', args.target, '--', path,
-                _encoding='utf-8'
-            )
-        path_changes = u"{}".format(path_changes)
-        path_changes = [c.split('\x1e') for c in path_changes.strip().split('\n')]
+        log_command = ["git", "--no-pager", "-C", args.root, "log", "--format=%aN\x1e%s\x1e%H"]
+
+        if since_commit:
+            since = self.get_commit_timestamp(args.root, since_commit)
+            log_command.extend(["--since", since])
+
+        log_command.extend([args.target, '--', path])
+
+        log_lines = subprocess.check_output(log_command).decode("utf-8").strip().split("\n")
+        path_changes = [c.split('\x1e') for c in log_lines]
         path_changes = [
-            c for c in path_changes if len(c) > 1 and self.translated_commit_re.match(c[1])
+            c for c in path_changes if len(c) > 1
+            and c[2] != since_commit
+            and self.translated_commit_re.match(c[1])
         ]
-        path_authors = [c[0] for c in path_changes]
-        return set(path_authors)
+        log.debug("Path changes for %s: %s", path, path_changes)
+        translators = set([c[0] for c in path_changes])
+        log.debug("Translators for %s: %s", path, translators)
+        return translators
+
+    def get_path_commits(self, root: str, path: str) -> List[str]:
+        """
+        Returns the list of commit hashes involving the path, most recent first.
+        """
+        return git(
+            "--no-pager", "-C", root, "log", "--format=%H", path, _encoding='utf-8'
+        ).splitlines()
 
     def commit_changes(self, args: argparse.Namespace, code: str) -> None:
         self.require_git_email_name(args.root)
         authors = set()  # type: Set[str]
         diffs = u"{}".format(git('--no-pager', '-C', args.root, 'diff', '--name-only', '--cached'))
 
+        # for each modified file, find the last commit made by this
+        # function, then collect all the contributors since that
+        # commit, so they can be credited in this one. if no commit
+        # with the right message is found, just use the most recent
+        # commit that touched the file.
         for path in sorted(diffs.strip().split('\n')):
-            previous_message = u"{}".format(git(
-                '--no-pager', '-C', args.root, 'log', '-n', '1', path,
-                _encoding='utf-8'))
-            m = self.updated_commit_re.search(previous_message)
-            origin = None
-            if m:
-                origin = m.group(1)
-            since = self.get_commit_timestamp(args.root, origin)
-            authors |= self.translators(args, path, since)
+            path_commits = self.get_path_commits(args.root, path)
+            since_commit = None
+            for path_commit in path_commits:
+                commit_message = "{}".format(
+                    git('--no-pager', '-C', args.root, 'show', path_commit, _encoding='utf-8')
+                )
+                m = self.updated_commit_re.search(commit_message)
+                if m:
+                    since_commit = m.group(1)
+                    break
+            log.debug("Crediting translators of %s since %s", path, since_commit)
+            authors |= self.translators(args, path, since_commit)
 
         authors_as_str = u"\n  ".join(sorted(authors))
 
@@ -517,11 +535,12 @@ class I18NTool:
         self.ensure_i18n_remote(args)
         app_template = "securedrop/translations/{}/LC_MESSAGES/messages.po"
         desktop_template = "install_files/ansible-base/roles/tails-config/templates/{}.po"
-        since = self.get_commit_timestamp(args.root, args.since) if not args.all else None
+        since = None
         if args.all:
             print("Listing all translators who have ever helped")
         else:
-            print("Listing translators who have helped since {}".format(args.since))
+            since = args.since if args.since else self.get_last_release(args.root)
+            print("Listing translators who have helped since {}".format(since))
         for code, info in sorted(self.supported_languages.items()):
             translators = set([])
             paths = [
