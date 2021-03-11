@@ -4,26 +4,13 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2021-01-22 01:37+0000\n"
-"Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
-"Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\n"
-"Language: zh_Hant\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-03-08 22:37+0000\nLast-Translator: John Hensley <john@freedom.press>\nLanguage-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\nLanguage: zh_Hant\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 4.3.2\nGenerated-By: Babel 2.4.0\n"
 
 msgid "{time} ago"
 msgstr "{time} 之前"
 
 msgid "You have been logged out due to inactivity."
-msgstr "您因閒置太久已被登出"
+msgstr "因為閒置太久，已將您登出。"
 
 msgid "You have been logged out due to password change"
 msgstr "因密碼變更已被登出"
@@ -68,16 +55,24 @@ msgid "Name not updated: {}"
 msgstr "名稱未更新: {}"
 
 msgid "Deleted user '{user}'."
-msgstr "删除了用户「{user}」"
+msgstr "已刪除使用者「{user}」"
 
 msgid "Test alert sent. Please check your email."
 msgstr "已送出測試警報，請檢查電郵信箱。"
 
-msgid "{source_name}'s collection deleted."
-msgstr "{source_name} 集件已删除"
+#. Precedes a message confirming the success of an operation.
+msgid "Success!"
+msgstr "成功！"
 
-msgid "No collections selected."
-msgstr "並未選擇任何的集件。"
+msgid "The account and data for the source {} have been deleted."
+msgstr "線人{} 的帳戶與資料皆已全數删除。"
+
+#. Error shown when a user has not selected items to act on.
+msgid "Nothing Selected"
+msgstr "無選取"
+
+msgid "You must select one or more items."
+msgstr "須至少選取一個項目。"
 
 msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr "因為找不到檔案，下載失敗。系統管理員能在系統及監控記錄中查詢更多資訊。"
@@ -115,14 +110,14 @@ msgstr "僅可上傳 PNG 格式的圖片檔。"
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "發生預期之外的錯誤！請通知系統管理員。"
 
-msgid "Thanks. Your reply has been stored."
-msgstr "謝謝，我們已儲存您的回覆。"
+msgid "Your reply has been stored."
+msgstr "您的回覆已儲存。"
 
-msgid "No collections selected for download."
-msgstr "未選擇要下載的集件。"
+msgid "You must select one or more items for download"
+msgstr "須至少選取一項欲下載的項目。"
 
-msgid "No collections selected for deletion."
-msgstr "未選擇要刪除的集件。"
+msgid "You must select one or more items for deletion"
+msgstr "須至少選取一項要刪除的集件。"
 
 msgid "No unread submissions for this source."
 msgstr "此位線人無未讀的提交。"
@@ -130,8 +125,8 @@ msgstr "此位線人無未讀的提交。"
 msgid "Account updated."
 msgstr "帳戶已更新。"
 
-msgid "Login failed."
-msgstr "登錄失敗。"
+msgid "<b>Login failed.</b>"
+msgstr "<b>登錄失敗。</b>"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -146,13 +141,22 @@ msgstr "無效的動態密碼格式：只可提交 A-F 之間的字母和 0-9 �
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "動態密碼格式不符：輸入長度為奇數。是否輸入錯誤？"
 
-msgid "Submission deleted."
-msgid_plural "{num} submissions deleted."
-msgstr[0] "{num} 個提交已删除。"
+msgid "The item has been deleted."
+msgid_plural "{num} items have been deleted."
+msgstr[0] "{num}隻件已被删除。"
 
-msgid "{num} collection deleted"
-msgid_plural "{num} collections deleted"
-msgstr[0] "{num} 集件已删除"
+msgid "No collections selected for deletion."
+msgstr "未選擇要刪除的集件。"
+
+msgid "The account and all data for {n} source have been deleted."
+msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgstr[0] "這些帳號與{n}位線人的資料皆已刪除。"
+
+msgid "You must select one or more items for deletion."
+msgstr "須至少選取一項要刪除的集件。"
+
+msgid "The files and messages have been deleted."
+msgstr "所有的檔案與訊息都已删除。"
 
 msgid "Name updated."
 msgstr "名稱已更新。"
@@ -195,6 +199,33 @@ msgstr "下載圖標"
 msgid "1 unread"
 msgid_plural "{num} unread"
 msgstr[0] "{num} 未讀"
+
+msgid "When the account for a source is deleted:"
+msgstr "若某位線人的帳號被刪除："
+
+msgid "The source will no longer be able to log in with their codename."
+msgstr "這名線人將無法再利用其代碼名登入。"
+
+msgid "You will not be able to send them replies."
+msgstr "您將無法向其傳送回覆。"
+
+msgid "All files and messages from that source will also be destroyed."
+msgstr "此位線人的檔案與訊息已被銷毀。"
+
+msgid "Are you sure this is what you want?"
+msgstr "確定要這麼做？"
+
+msgid "Yes, Delete Selected Source Accounts"
+msgstr "是的，刪除選取的安全帳號"
+
+msgid "What would you like to delete?"
+msgstr "您要刪除什麼？"
+
+msgid "Files and Messages"
+msgstr "檔案和訊息"
+
+msgid "Source Accounts"
+msgstr "線人帳號"
 
 msgid "Change Secret"
 msgstr "更改動能態密碼"
@@ -322,11 +353,11 @@ msgstr "無法掃描條碼？您可以輸入以下雙重驗證密鑰以便手動
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "設定 Yubikey 後，請在下面輸入 6 位數字代碼："
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>更新需求：</strong> 請及早在 4月30日前昇級為  v3 Onion 以確保您的 SecureDrop 伺服器平穩運作。詳情請聯繫管理員 <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">取得進一步資訊</a>。"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>重要安全課題：</strong> &nbsp;&nbsp;SecureDrop 伺服器作業系統已逾使用年限，亟需手動更新才能啟用線人界面與維持安全。請聯絡網管人員 - <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">了解進一步資訊</a>"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>需要更新</strong>&nbsp;&nbsp;請在四月三十日前完成第三代 Onion 服務設置。聯繫您的系統管理員。<a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">了解更多</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>重要安全課題:</strong> &nbsp;&nbsp;SecureDrop 伺服器作業系統將在月30日超過使用年限，亟需手動更新以維持安全。 請聯絡網管人員 <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">了解詳情</a>"
 
 msgid "Logged on as"
 msgstr "登入為"
@@ -343,8 +374,8 @@ msgstr "由 <em> SecureDrop {version}</em> 搭建。"
 msgid "All Sources"
 msgstr "所有線人消息來源"
 
-msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
-msgstr "為安全起見，所有文件都經加密儲存。須以 GPG 解密方可查閱文件。"
+msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
+msgstr "為安全起見，所有來自線人的訊息、檔案與回覆都經加密儲存。須透過檢視安全平台解密方可查閱。"
 
 msgid "Download Selected"
 msgstr "下載所選的部份"
@@ -388,17 +419,17 @@ msgstr "訊息圖示"
 msgid "Delete Confirmation"
 msgstr "刪除確認動作"
 
-msgid "Are you sure you want to delete the selected documents?"
-msgstr "確認要刪除所挑選文件？"
+msgid "Are you sure you want to delete the selected submissions?"
+msgstr "確認要删除選取的提交資料？"
 
 msgid "DELETE"
 msgstr "删除"
 
-msgid "No documents to display."
-msgstr "無文件可顯示。"
+msgid "No submissions to display."
+msgstr "無提收文件顯示。"
 
-msgid "You can write a secure reply to the person who submitted these documents:"
-msgstr "您可以撰寫安全的回覆訊息給文件提交者："
+msgid "You can write a secure reply to the person who submitted these messages and/or files:"
+msgstr "您可以撰寫安全的回覆訊息給提交者："
 
 msgid "You've flagged this source for reply."
 msgstr "您已把這名線人標記為待回覆。"
@@ -412,14 +443,14 @@ msgstr "如要回覆此名線人，請點擊下方。"
 msgid "FLAG THIS SOURCE FOR REPLY"
 msgstr "請對此位線人加註旗誌，以進行回覆"
 
-msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
-msgstr "點擊下方來刪除這名線人的集件。<em>警告：如果這麼做，這裏看到的檔案將無法恢復，而線人將無法用之前的代號登錄。</em>"
+msgid "Delete Source Account"
+msgstr "刪除線人帳號"
 
-msgid "DELETE SOURCE AND SUBMISSIONS"
-msgstr "刪除線人與其提交的資料"
+msgid "Are you sure?"
+msgstr "確定嗎？"
 
-msgid "Are you sure you want to delete this collection?"
-msgstr "確認要刪除此一集件？"
+msgid "Yes, Delete Source Account"
+msgstr "是的，請刪除線人帳號"
 
 msgid "Instance Configuration"
 msgstr "架設主機設定"
@@ -516,7 +547,7 @@ msgid "Reset Two-Factor Authentication"
 msgstr "重置雙因素驗證授權"
 
 msgid "If a user's two-factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two-factor credentials. Otherwise, they will be locked out of their account.</em>"
-msgstr "如果用户雙因素驗證的證明已丢失或遭破壞，可以在此重置它們。<em>如果這麼做，確認該用戶在場，而且在其設置上已設好新的雙因素驗證。否则，他們的帳戶將被鎖住。"
+msgstr "如果用户雙因素驗證的證明已丢失或遭破壞，可以在此重置它們。<em>如果這麼做，確認該用戶在場，而且在其設置上已設好新的雙因素驗證。否则，他們的帳戶將被鎖住。</em>"
 
 msgid "If your two-factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em>"
 msgstr "如果你的雙因素驗證證明已丢失或遭到破壞，或是你有一件新設備，可以在此重置你的證明。<em> 如果要這麼做，請確認新設備已設置妥當，否则你的帳戶會被鎖住。</em>"
@@ -548,9 +579,6 @@ msgstr "SecureDrop 會在這個線人下次登入時產生新的加密金鑰。�
 msgid "Continue to the list of documents for {codename}..."
 msgstr "繼續 {codename} 文件列表..."
 
-msgid "Sources"
-msgstr "線人消息源"
-
 msgid "Download Unread"
 msgstr "下載未讀文件"
 
@@ -562,12 +590,6 @@ msgstr "標星"
 
 msgid "Un-star"
 msgstr "未標星"
-
-msgid "Are you sure you want to delete the selected collections?"
-msgstr "確認要刪除所挑選的集件？"
-
-msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
-msgstr "警告：如果這麼做，所選取的檔案將無法回復，而線人將無法再利用之前的代號登錄。"
 
 msgid "No documents have been submitted!"
 msgstr "未有文件被提交！"
@@ -589,6 +611,9 @@ msgstr "確認要刪除這名 {username} 用戶？"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "確認要重置 {username} 的雙因素驗證？"
+
+msgid "Sources selected: "
+msgstr "選取的線人： "
 
 msgid "Login to access the journalist interface"
 msgstr "登入記者使用介面"
@@ -659,6 +684,12 @@ msgstr "保護新聞記者與消息來源線人"
 msgid "SecureDrop Home"
 msgstr "SecureDrop 首頁"
 
+msgid "We're sorry, our SecureDrop is currently offline."
+msgstr "抱歉，目前 SecureDrop 關機維修。"
+
+msgid "Please try again later. Check our website for more information."
+msgstr "請稍後再試或查看官網取得更多資訊。"
+
 msgid "LOG OUT"
 msgstr "登出"
 
@@ -670,9 +701,6 @@ msgstr "對不起，網站出錯，未能完成您的請求。"
 
 msgid "Look up a codename..."
 msgstr "查詢代號..."
-
-msgid "Success!"
-msgstr "成功！"
 
 msgid "Thank you for sending this information to us. Please check back later for replies."
 msgstr "感谢你發送此一訊息給我們。請稍晚再來查看回覆。"
@@ -875,7 +903,7 @@ msgstr "如果您熟悉 GPG 加密軟體，您可以在上傳文件前先自行�
 msgid ""
 "<a href=\"{url}\">Download</a> the public key. It will be saved to a file called:\n"
 "        <p><code>{submission_key_fpr_filename}</code></p>"
-msgstr "<a href=\"{url}\">下載</a>公鑰。它會自動儲存為 <p><code>{submission_key_fpr_filename}</code></p>"
+msgstr "<a href=\"{url}\">下載</a>公鑰。它會自動儲存為:\n        <p><code>{submission_key_fpr_filename}</code></p>"
 
 msgid "Import it into your GPG keyring."
 msgstr "匯入至您的 GPG 鑰匙圈。"
@@ -884,7 +912,7 @@ msgid "If you are using <a href=\"{url}\">Tails</a>, you can double-click the <c
 msgstr "如果您正使用 <a href=\"{url}\">Tails</a>，可以雙擊剛才下載的 <code>.asc</code>文件，它會自動地加入到您的鑰匙圈中。"
 
 msgid "If you are using macOS or Linux, open the terminal. You can import the key with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
-msgstr "如果您使用 MacOS/Linux 系統，請打開終端機，用以下指令匯入金鑰：<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>。"
+msgstr "如果您使用 MacOS 或 Linux 系統，請打開終端機，用以下指令匯入金鑰：<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>。"
 
 msgid "Encrypt your submission. Open the terminal and enter this gpg command:"
 msgstr "加密提交的文件，請在文字指令程式下輸入以下 gpg 指令："
@@ -893,13 +921,48 @@ msgid "<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/submissio
 msgstr "<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/submission</code>"
 
 msgid "Upload your encrypted submission. It will have the same filename as the unencrypted file, with .gpg at the end (e.g. <code>internal_memo.pdf.gpg</code>)"
-msgstr "上傳已加密的提交文件。文件名稱應該和未加密前的文件一樣，但多添加了 .gpg 副檔名，（例如  <code>internal_memo.pdf.gpg</code>）"
+msgstr "上傳已加密的提交文件。文件名稱應該和未加密前的文件一樣，但多添加了 .gpg 副檔名，（例如 <code>internal_memo.pdf.gpg</code>）"
 
 msgid "<strong>Important:</strong> If you wish to remain anonymous, <strong>do not</strong> use GPG to sign the encrypted file (with the <code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG identity to us."
 msgstr "<strong>重要：</strong>如果您希望保持匿名，<strong>請勿</strong>在 GPG 加密文件時進行數位簽署（使用 <code>--sign</code> 或 <code>-s</code> 指令參數），這樣做會向我們揭示您的 GPG 身份。"
 
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#~ msgid "{source_name}'s collection deleted."
+#~ msgstr "{source_name} 集件已删除"
+
+#~ msgid "Submission deleted."
+#~ msgid_plural "{num} submissions deleted."
+#~ msgstr[0] "{num} 個提交已删除。"
+
+#~ msgid "{num} collection deleted"
+#~ msgid_plural "{num} collections deleted"
+#~ msgstr[0] "{num} 集件已删除"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>更新需求：</strong> 請及早在 4月30日前昇級為  v3 Onion 以確保您的 SecureDrop 伺服器平穩運作。詳情請聯繫管理員 <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">取得進一步資訊</a>。"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>需要更新</strong>&nbsp;&nbsp;請在四月三十日前完成第三代 Onion 服務設置。聯繫您的系統管理員。<a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">了解更多</a>"
+
+#~ msgid "Are you sure you want to delete the selected documents?"
+#~ msgstr "確認要刪除所挑選文件？"
+
+#~ msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
+#~ msgstr "點擊下方來刪除這名線人的集件。<em>警告：如果這麼做，這裏看到的檔案將無法恢復，而線人將無法用之前的代號登錄。</em>"
+
+#~ msgid "DELETE SOURCE AND SUBMISSIONS"
+#~ msgstr "刪除線人與其提交的資料"
+
+#~ msgid "Are you sure you want to delete this collection?"
+#~ msgstr "確認要刪除此一集件？"
+
+#~ msgid "Are you sure you want to delete the selected collections?"
+#~ msgstr "確認要刪除所挑選的集件？"
+
+#~ msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
+#~ msgstr "警告：如果這麼做，所選取的檔案將無法回復，而線人將無法再利用之前的代號登錄。"
 
 #~ msgid "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 #~ msgstr "由<br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">搭建"
@@ -1012,9 +1075,6 @@ msgstr "返回提交文件頁面"
 #~ msgid "<a href=\"/\">Click here</a> to refresh the page"
 #~ msgstr "<a href=\"/\">點擊此處</a> 以刷新頁面"
 
-#~ msgid "<strong>Critical Security:</strong> The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is urgently required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Learn More</a>"
-#~ msgstr "<strong>重要安全課題:</strong> SecureDrop 伺服器作業系統已逾使用年限，亟需手動更新以維持安全。 - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">進一步了解</a>"
-
 #~ msgid "Turn off NoScript's cross-site request sanitization setting"
 #~ msgstr "關閉 NoScript 禁止跨站請求的設置"
 
@@ -1101,9 +1161,6 @@ msgstr "返回提交文件頁面"
 
 #~ msgid "If you want to submit information, you are <strong>strongly advised</strong> to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to access our site safely and anonymously."
 #~ msgstr "如果您想提交資訊，<strong>強烈建議</strong>安裝 <a href=\"torproject.org/download.html.en\">Tor</a> 瀏覽器並利用它安全、匿名地訪問我們的網站。"
-
-#~ msgid "Are you sure you want to delete the {size} selected submissions?"
-#~ msgstr "確認要删除所選的 {size} 大小的提交？"
 
 #~ msgid "{doc_num} docs"
 #~ msgstr "文件編號 {doc_num}"
