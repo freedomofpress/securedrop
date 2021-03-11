@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.6~rc2\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-01-26 01:37+0000\n"
-"Last-Translator: John Hensley <john@freedom.press>\n"
-"Language-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/securedrop/hi/>\n"
-"Language: hi\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.6~rc2\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-03-08 22:37+0000\nLast-Translator: John Hensley <john@freedom.press>\nLanguage-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/securedrop/hi/>\nLanguage: hi\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.3.2\nGenerated-By: Babel 2.5.1\n"
 
 msgid "{time} ago"
 msgstr "{time} पहले"
@@ -72,11 +60,19 @@ msgstr "उपयोगकर्ता '{user}' हटा दिया गया
 msgid "Test alert sent. Please check your email."
 msgstr "टेस्ट अलर्ट भेजा गया है। कृपया अपना ईमेल देखें।"
 
-msgid "{source_name}'s collection deleted."
-msgstr "{source_name} का संग्रह हटाया गया|"
+#. Precedes a message confirming the success of an operation.
+msgid "Success!"
+msgstr "सफल हुआ!"
 
-msgid "No collections selected."
-msgstr "कोई संग्रह चयनित नहीं।"
+msgid "The account and data for the source {} have been deleted."
+msgstr "स्रोत {} के लिए खाता और डेटा हटा दिया गया है।"
+
+#. Error shown when a user has not selected items to act on.
+msgid "Nothing Selected"
+msgstr "कुछ भी चयनित नहीं"
+
+msgid "You must select one or more items."
+msgstr "आपको एक या अधिक आइटम का चयन करना होगा।"
 
 msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr "फ़ाइल डाउनलोड नहीं हो पाने के कारण आपका डाउनलोड विफल रहा। एक व्यवस्थापक सिस्टम और निगरानी लॉग में अधिक जानकारी पा सकता है।"
@@ -117,14 +113,14 @@ msgstr "आप केवल PNG छवि फ़ाइलों को अपल
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "अप्रत्याशित त्रुटि हुई ! कृपया अपने व्यवस्थापक को सूचित करें।"
 
-msgid "Thanks. Your reply has been stored."
-msgstr "धन्यवाद। आपका उत्तर संग्रहीत किया गया है।"
+msgid "Your reply has been stored."
+msgstr "आपका उत्तर संग्रहीत किया गया है।"
 
-msgid "No collections selected for download."
-msgstr "डाउनलोड के लिए कोई संग्रह नहीं चुना गया।"
+msgid "You must select one or more items for download"
+msgstr "आपको डाउनलोड के लिए एक या अधिक आइटम का चयन करना होगा"
 
-msgid "No collections selected for deletion."
-msgstr "हटाए जाने के लिए कोई संग्रह नहीं चुना गया।"
+msgid "You must select one or more items for deletion"
+msgstr "आपको हटाने के लिए एक या अधिक आइटम का चयन करना होगा"
 
 msgid "No unread submissions for this source."
 msgstr "इस स्रोत के लिए कोई अपठित सबमिशन नहीं है |"
@@ -132,8 +128,8 @@ msgstr "इस स्रोत के लिए कोई अपठित सब
 msgid "Account updated."
 msgstr "खाता अपडेट किया गया।"
 
-msgid "Login failed."
-msgstr "लॉगिन विफल।"
+msgid "<b>Login failed.</b>"
+msgstr "<b>लॉगिन विफल।</b>"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -149,15 +145,24 @@ msgstr "अमान्य गुप्त स्वरूप: कृपया �
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "अवैध गुप्त स्वरूप: विषम-लंबाई रहस्य| क्या आपने गुप्त टेक्स्ट को गलत तरीके से लिखा है?"
 
-msgid "Submission deleted."
-msgid_plural "{num} submissions deleted."
-msgstr[0] "सबमिशन हटाया गया।"
-msgstr[1] "{num} सबमिशन हटाए गए।"
+msgid "The item has been deleted."
+msgid_plural "{num} items have been deleted."
+msgstr[0] "आइटम हटा दिया गया है।"
+msgstr[1] "{num} आइटम हटा दिए गए हैं।"
 
-msgid "{num} collection deleted"
-msgid_plural "{num} collections deleted"
-msgstr[0] "{num} संग्रह हटाया गया"
-msgstr[1] "{num} संग्रह हटाए गए"
+msgid "No collections selected for deletion."
+msgstr "हटाए जाने के लिए कोई संग्रह नहीं चुना गया।"
+
+msgid "The account and all data for {n} source have been deleted."
+msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgstr[0] "खाता और {n} स्रोत के सभी डेटा हटा दिए गए हैं।"
+msgstr[1] "{n} स्रोतों के खाते और सभी डेटा हटा दिए गए हैं।"
+
+msgid "You must select one or more items for deletion."
+msgstr "आपको हटाने के लिए एक या अधिक आइटम का चयन करना होगा।"
+
+msgid "The files and messages have been deleted."
+msgstr "फ़ाइलें और संदेश हटा दिए गए हैं।"
 
 msgid "Name updated."
 msgstr "नाम अपडेट किया गया ।"
@@ -203,6 +208,33 @@ msgid "1 unread"
 msgid_plural "{num} unread"
 msgstr[0] "एक बिना पढ़ा"
 msgstr[1] "{num} बिना पढ़ा"
+
+msgid "When the account for a source is deleted:"
+msgstr "जब स्रोत के लिए खाता हटा दिया जाता है:"
+
+msgid "The source will no longer be able to log in with their codename."
+msgstr "स्रोत अब उनके कोडनेम से लॉग इन नहीं कर सकेगा।"
+
+msgid "You will not be able to send them replies."
+msgstr "आप उन्हें उत्तर नहीं भेज पाएंगे।"
+
+msgid "All files and messages from that source will also be destroyed."
+msgstr "उस स्रोत की सभी फाइलें और संदेश भी नष्ट हो जाएंगे।"
+
+msgid "Are you sure this is what you want?"
+msgstr "क्या आप वाकई यह चाहते हैं कि आप क्या चाहते हैं?"
+
+msgid "Yes, Delete Selected Source Accounts"
+msgstr "हां, चयनित स्रोत खाते हटाएं"
+
+msgid "What would you like to delete?"
+msgstr "आप क्या हटाना चाहेंगे?"
+
+msgid "Files and Messages"
+msgstr "फ़ाइलें और संदेश"
+
+msgid "Source Accounts"
+msgstr "स्रोत लेखे"
 
 msgid "Change Secret"
 msgstr "गुप्त बदलें"
@@ -330,11 +362,11 @@ msgstr "बारकोड को स्कैन नहीं कर सकत�
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "एक बार जब आप अपने YubiKey को कॉन्फ़िगर कर लेते हैं, तो नीचे 6 अंकों का कोड डालें:"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>अपडेट आवश्यक है</strong>&nbsp;&nbsp;अपने सिक्योरड्रॉप सर्वर को ऑनलाइन रखने के लिए 30 अप्रैल से पहले v3 प्याज सेवाएँ सेट करें। कृपया अपने व्यवस्थापक से संपर्क करें। <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">और जानें</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>गंभीर सिक्यूरिटी समस्या:</strong>आपके SecureDrop सर्वर द्वारा उपयोग किए जाने वाला ऑपरेटिंग सिस्टम बहुत पुरानी हो चुकी है। सुरक्षित रहने के लिए मैन्युअल अपडेट की तत्काल आवश्यकता है - <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">और जानें</a>"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>आवश्यक अपडेट करें</strong>&nbsp;&nbsp;30 अप्रैल से पहले v3 प्याज सेवा सेटअप पूरा करें। कृपया अपने व्यवस्थापक से संपर्क करें। <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">और जानें</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>गंभीर सिक्यूरिटी समस्या:</strong>आपके SecureDrop सर्वर द्वारा उपयोग किए जाने वाला ऑपरेटिंग सिस्टम बहुत पुरानी हो चुकी है। सुरक्षित रहने के लिए मैन्युअल अपडेट की तत्काल आवश्यकता है - <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">और जानें</a>"
 
 msgid "Logged on as"
 msgstr "जैसे लॉग ऑन"
@@ -351,8 +383,8 @@ msgstr "<em>SecureDrop {version}</em> दवारा संचालित।"
 msgid "All Sources"
 msgstr "सभी स्रोत"
 
-msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
-msgstr "दस्तावेज सुरक्षा के लिए एन्क्रिप्टेड जमा किए जाते हैं। उन्हें पढ़ने के लिए, आपको GPG का उपयोग करके उन्हें डिक्रिप्ट करना होगा।"
+msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
+msgstr "स्रोतों से सभी संदेश, फ़ाइलें और उत्तर सुरक्षा के लिए एन्क्रिप्टेड फ़ाइलों के रूप में संग्रहीत किए जाते हैं। उन्हें पढ़ने के लिए, आपको उन्हें अपने सिक्योर व्यूइंग स्टेशन पर डिक्रिप्ट करना होगा।"
 
 msgid "Download Selected"
 msgstr "डाउनलोड चयनित"
@@ -396,16 +428,16 @@ msgstr ""
 msgid "Delete Confirmation"
 msgstr "पुष्टिकरण हटाएं"
 
-msgid "Are you sure you want to delete the selected documents?"
+msgid "Are you sure you want to delete the selected submissions?"
 msgstr "क्या आप वाकई चयनित दस्तावेज़ हटाना चाहते हैं?"
 
 msgid "DELETE"
 msgstr "हटाएँ"
 
-msgid "No documents to display."
-msgstr "प्रदर्शित करने के लिए कोई दस्तावेज़ नहीं |"
+msgid "No submissions to display."
+msgstr "प्रदर्शित करने के लिए कोई सबमिशन नहीं।"
 
-msgid "You can write a secure reply to the person who submitted these documents:"
+msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "आप इन दस्तावेजों को सबमिट करने वाले व्यक्ति को एक सुरक्षित उत्तर लिख सकते हैं:"
 
 msgid "You've flagged this source for reply."
@@ -420,14 +452,14 @@ msgstr "यदि आप इस स्रोत को उत्तर लिख
 msgid "FLAG THIS SOURCE FOR REPLY"
 msgstr "उत्तर के लिए इस स्रोत को फ़्लैग करें"
 
-msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
-msgstr "इस स्रोत के संग्रह को हटाने के लिए नीचे क्लिक करें <em> चेतावनी: अगर आप ऐसा करते हैं, तो यहां देखी जाने वाली फ़ाइलें पुनर्प्राप्त नहीं हो सकेंगी और स्रोत अब उनके पिछले कोडनाम का उपयोग करके लॉगिन नहीं कर पाएगे।</em>"
+msgid "Delete Source Account"
+msgstr "स्रोत खाता हटाएं"
 
-msgid "DELETE SOURCE AND SUBMISSIONS"
-msgstr "स्रोत और सबमिशन हटाएं"
+msgid "Are you sure?"
+msgstr "क्या आपको यकीन है?"
 
-msgid "Are you sure you want to delete this collection?"
-msgstr "क्या आप इस संग्रह को मिटाना चाहते हैं?"
+msgid "Yes, Delete Source Account"
+msgstr "हाँ, स्रोत खाता हटाएं"
 
 msgid "Instance Configuration"
 msgstr "इंस्टेंस कॉन्फ़िगरेशन"
@@ -557,9 +589,6 @@ msgstr "सेक्योरड्राप इस स्रोत के ल�
 msgid "Continue to the list of documents for {codename}..."
 msgstr "{codename} के लिए दस्तावेज़ों की सूची पर जारी रखें..."
 
-msgid "Sources"
-msgstr "स्रोत"
-
 msgid "Download Unread"
 msgstr "न पढ़े मसाज डाउनलोड करें"
 
@@ -571,12 +600,6 @@ msgstr "तारांकित करें"
 
 msgid "Un-star"
 msgstr "स्टार को हटा दें"
-
-msgid "Are you sure you want to delete the selected collections?"
-msgstr "क्या आप वाकई चयनित संग्रह हटाना चाहते हैं?"
-
-msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
-msgstr "चेतावनी: अगर आप ऐसा करते हैं, तो चयनित स्रोतों के लिए सभी फाइलें अपरिवर्तनीय होंगी, और स्रोत अब उनके पिछले कोडनाम का उपयोग करने में लॉग इन नहीं कर पाएंगे।"
 
 msgid "No documents have been submitted!"
 msgstr "कोई दस्तावेज जमा नहीं किया गया है!"
@@ -598,6 +621,9 @@ msgstr "क्या आप वाकई उपयोगकर्ता {usernam
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "क्या आप वाकई {username} के लिए दो-कारक प्रमाणीकरण को रीसेट करना चाहते हैं?"
+
+msgid "Sources selected: "
+msgstr "चयनित स्रोत: "
 
 msgid "Login to access the journalist interface"
 msgstr "पत्रकार इंटरफेस प्रवेशने के लिए लॉगिन करें"
@@ -668,6 +694,12 @@ msgstr "पत्रकारों और स्रोतों की रक�
 msgid "SecureDrop Home"
 msgstr "SecureDrop होम"
 
+msgid "We're sorry, our SecureDrop is currently offline."
+msgstr "हमें खेद है, हमारा SecureDrop वर्तमान में ऑफ़लाइन है।"
+
+msgid "Please try again later. Check our website for more information."
+msgstr "बाद में पुन: प्रयास करें। अधिक जानकारी के लिए हमारी वेबसाइट देखें।"
+
 msgid "LOG OUT"
 msgstr "लोग आउट"
 
@@ -679,9 +711,6 @@ msgstr "क्षमा करें, वेबसाइट को एक त्
 
 msgid "Look up a codename..."
 msgstr "एक कोडनाम खोजें..."
-
-msgid "Success!"
-msgstr "सफल हुआ!"
 
 msgid "Thank you for sending this information to us. Please check back later for replies."
 msgstr "हमें यह जानकारी भेजने के लिए धन्यवाद। उत्तर के लिए बाद में जांच करें।"
@@ -912,6 +941,40 @@ msgstr "<strong>महत्वपूर्ण:</strong> यदि आप गु
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
 
+#~ msgid "{source_name}'s collection deleted."
+#~ msgstr "{source_name} का संग्रह हटाया गया|"
+
+#~ msgid "Submission deleted."
+#~ msgid_plural "{num} submissions deleted."
+#~ msgstr[0] "सबमिशन हटाया गया।"
+#~ msgstr[1] "{num} सबमिशन हटाए गए।"
+
+#~ msgid "{num} collection deleted"
+#~ msgid_plural "{num} collections deleted"
+#~ msgstr[0] "{num} संग्रह हटाया गया"
+#~ msgstr[1] "{num} संग्रह हटाए गए"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>अपडेट आवश्यक है</strong>&nbsp;&nbsp;अपने सिक्योरड्रॉप सर्वर को ऑनलाइन रखने के लिए 30 अप्रैल से पहले v3 प्याज सेवाएँ सेट करें। कृपया अपने व्यवस्थापक से संपर्क करें। <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">और जानें</a>"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>आवश्यक अपडेट करें</strong>&nbsp;&nbsp;30 अप्रैल से पहले v3 प्याज सेवा सेटअप पूरा करें। कृपया अपने व्यवस्थापक से संपर्क करें। <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">और जानें</a>"
+
+#~ msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
+#~ msgstr "इस स्रोत के संग्रह को हटाने के लिए नीचे क्लिक करें <em> चेतावनी: अगर आप ऐसा करते हैं, तो यहां देखी जाने वाली फ़ाइलें पुनर्प्राप्त नहीं हो सकेंगी और स्रोत अब उनके पिछले कोडनाम का उपयोग करके लॉगिन नहीं कर पाएगे।</em>"
+
+#~ msgid "DELETE SOURCE AND SUBMISSIONS"
+#~ msgstr "स्रोत और सबमिशन हटाएं"
+
+#~ msgid "Are you sure you want to delete this collection?"
+#~ msgstr "क्या आप इस संग्रह को मिटाना चाहते हैं?"
+
+#~ msgid "Are you sure you want to delete the selected collections?"
+#~ msgstr "क्या आप वाकई चयनित संग्रह हटाना चाहते हैं?"
+
+#~ msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
+#~ msgstr "चेतावनी: अगर आप ऐसा करते हैं, तो चयनित स्रोतों के लिए सभी फाइलें अपरिवर्तनीय होंगी, और स्रोत अब उनके पिछले कोडनाम का उपयोग करने में लॉग इन नहीं कर पाएंगे।"
+
 #~ msgid "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 #~ msgstr "<br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\"> द्वारा संचालित"
 
@@ -1022,9 +1085,6 @@ msgstr "सबमिशन पृष्ठ पर वापस जाएं"
 
 #~ msgid "<a href=\"/\">Click here</a> to refresh the page"
 #~ msgstr "पृष्ठ को ताज़ा करने के लिए <a href=\"/\">यहां दबाएँ</a>"
-
-#~ msgid "<strong>Critical Security:</strong> The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is urgently required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Learn More</a>"
-#~ msgstr "<strong>गंभीर सिक्यूरिटी समस्या:</strong>आपके SecureDrop सर्वर द्वारा उपयोग किए जाने वाला ऑपरेटिंग सिस्टम बहुत पुरानी हो चुकी है। सुरक्षित रहने के लिए मैन्युअल अपडेट की तत्काल आवश्यकता है - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">और जानें</a>"
 
 #~ msgid "Turn off NoScript's cross-site request sanitization setting"
 #~ msgstr "NoScript की क्रॉस-साइट अनुरोध सैनिटाइजेशन सेटिंग को बंद करें"
