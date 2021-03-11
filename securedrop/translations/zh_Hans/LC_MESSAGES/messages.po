@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.6~rc2\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-01-22 01:37+0000\n"
-"Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
-"Language-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hans/>\n"
-"Language: zh_Hans\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.6~rc2\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-03-08 22:37+0000\nLast-Translator: John Hensley <john@freedom.press>\nLanguage-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hans/>\nLanguage: zh_Hans\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 4.3.2\nGenerated-By: Babel 2.5.1\n"
 
 msgid "{time} ago"
 msgstr "{time} 之前"
@@ -72,11 +60,19 @@ msgstr "已删除用户'{user}'。"
 msgid "Test alert sent. Please check your email."
 msgstr "已发送测试警报。请检查您的邮箱。"
 
-msgid "{source_name}'s collection deleted."
-msgstr "{source_name} 集合已删除。"
+#. Precedes a message confirming the success of an operation.
+msgid "Success!"
+msgstr "成功！"
 
-msgid "No collections selected."
-msgstr "未选择任何的集合。"
+msgid "The account and data for the source {} have been deleted."
+msgstr "已删除{}线人的帐号和数据。"
+
+#. Error shown when a user has not selected items to act on.
+msgid "Nothing Selected"
+msgstr "请选择项目"
+
+msgid "You must select one or more items."
+msgstr "您必须选择之前一个项目。"
 
 msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr "找不到文件，下载失败。管理员可以在系统日志中查看更多信息。"
@@ -114,14 +110,14 @@ msgstr "您只能上传 PNG 图片文件。"
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "出现一个意外的错误！请通知系统管理员。"
 
-msgid "Thanks. Your reply has been stored."
-msgstr "谢谢，您的回复已经被储存。"
+msgid "Your reply has been stored."
+msgstr "您的回复已经被储存。"
 
-msgid "No collections selected for download."
-msgstr "未选择要下载的集合。"
+msgid "You must select one or more items for download"
+msgstr "未选择要下载的集合"
 
-msgid "No collections selected for deletion."
-msgstr "未选择要删除的集合。"
+msgid "You must select one or more items for deletion"
+msgstr "未选择要删除的集合"
 
 msgid "No unread submissions for this source."
 msgstr "该线人无未读内容。"
@@ -129,8 +125,8 @@ msgstr "该线人无未读内容。"
 msgid "Account updated."
 msgstr "账号已更新。"
 
-msgid "Login failed."
-msgstr "登录失败。"
+msgid "<b>Login failed.</b>"
+msgstr "<b>登录失败。</b>"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -145,13 +141,22 @@ msgstr "无效密码格式：请使用 A-F 和数字 0-9。"
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "无效密码格式：奇数长度的密钥。您是不是输错了？"
 
-msgid "Submission deleted."
-msgid_plural "{num} submissions deleted."
-msgstr[0] "{num} 个内容已删除。"
+msgid "The item has been deleted."
+msgid_plural "{num} items have been deleted."
+msgstr[0] "已删除{num}个项目。"
 
-msgid "{num} collection deleted"
-msgid_plural "{num} collections deleted"
-msgstr[0] "{num} 个集合已删除"
+msgid "No collections selected for deletion."
+msgstr "未选择要删除的集合。"
+
+msgid "The account and all data for {n} source have been deleted."
+msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgstr[0] "{n}位线人的帐号与数据已删除。"
+
+msgid "You must select one or more items for deletion."
+msgstr "未选择要删除的集合。"
+
+msgid "The files and messages have been deleted."
+msgstr "已删除全部文件和消息。"
 
 msgid "Name updated."
 msgstr "已更新名称。"
@@ -194,6 +199,33 @@ msgstr "下载图标"
 msgid "1 unread"
 msgid_plural "{num} unread"
 msgstr[0] "{num} 个未读"
+
+msgid "When the account for a source is deleted:"
+msgstr "若某位线人的帐号被删除："
+
+msgid "The source will no longer be able to log in with their codename."
+msgstr "这位线人将无法用其代号登录。"
+
+msgid "You will not be able to send them replies."
+msgstr "你将无法向他们发送回复。"
+
+msgid "All files and messages from that source will also be destroyed."
+msgstr "此线人的所有文件和消息都讲被删除。"
+
+msgid "Are you sure this is what you want?"
+msgstr "确认要这样做？"
+
+msgid "Yes, Delete Selected Source Accounts"
+msgstr "是的，删除选中的线人帐号"
+
+msgid "What would you like to delete?"
+msgstr "你要删除什么？"
+
+msgid "Files and Messages"
+msgstr "文件和消息"
+
+msgid "Source Accounts"
+msgstr "线人帐号"
 
 msgid "Change Secret"
 msgstr "更改密码"
@@ -321,11 +353,11 @@ msgstr "无法扫描二维码？您可手动输入下列两步验证密钥以将
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "当你配置好 YubiKey 后，输入下面的 6 位口令："
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>需要更新</strong>请在4月30日前为 SecureDrop 服务器升级到v3版洋葱服务，否则服务器会无法访问。请联系管理员。<a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">了解更多</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>安全隐患：</strong>您使用的操作系统已经达到了使用年限，请您手动更新来重新启用线人界面。请联系你的管理员。<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">进一步了解</a>"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>需要更新</strong>请在4月30日前完成 SecureDrop 服务器的v3版洋葱服务的升级，否则服务器会无法访问。请联系管理员。<a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">了解更多</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>安全隐患：</strong>您使用的操作系统将在2021年4月30日达到使用年限。请您手动更新来保证安全。请联系你的管理员。<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">进一步了解</a>"
 
 msgid "Logged on as"
 msgstr "以身份登录"
@@ -342,8 +374,8 @@ msgstr "由 <em>SecureDrop {version}</em> 提供支持。"
 msgid "All Sources"
 msgstr "所有线人"
 
-msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
-msgstr "安全起见，所有文件都经过加密存储。如果想要阅读，必须使用GPG解密。"
+msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
+msgstr "安全起见，线人的所有消息、文件和回复都经过加密存储。如果想要阅读，必须在脱机安全机上解密。"
 
 msgid "Download Selected"
 msgstr "下载所选的部分"
@@ -387,17 +419,17 @@ msgstr "消息图标"
 msgid "Delete Confirmation"
 msgstr "确认删除"
 
-msgid "Are you sure you want to delete the selected documents?"
-msgstr "你确定要删除这些选中的文件吗？"
+msgid "Are you sure you want to delete the selected submissions?"
+msgstr "你确定要删除这些选中的提交资料吗？"
 
 msgid "DELETE"
 msgstr "删除"
 
-msgid "No documents to display."
-msgstr "无文件可显示。"
+msgid "No submissions to display."
+msgstr "无接受文件可显示。"
 
-msgid "You can write a secure reply to the person who submitted these documents:"
-msgstr "您可以撰写一个私密的回复给文件的提供者："
+msgid "You can write a secure reply to the person who submitted these messages and/or files:"
+msgstr "您可以撰写一个私密的回复给消息或文件的提供者："
 
 msgid "You've flagged this source for reply."
 msgstr "您已经把这名线人标记为待回复。"
@@ -411,14 +443,14 @@ msgstr "如果要回复此名线人，请点击下方。"
 msgid "FLAG THIS SOURCE FOR REPLY"
 msgstr "标记此线人为待回复"
 
-msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
-msgstr "点击下方来删除这名线人的文件。<em>警告：如果你这么做，这里看到的文件无法恢复，且线人将无法用之前的代号登陆。</em>"
+msgid "Delete Source Account"
+msgstr "删除线人账户"
 
-msgid "DELETE SOURCE AND SUBMISSIONS"
-msgstr "删除线人与其提交的资料"
+msgid "Are you sure?"
+msgstr "确定吗？"
 
-msgid "Are you sure you want to delete this collection?"
-msgstr "确认要删除这些文件？"
+msgid "Yes, Delete Source Account"
+msgstr "是的，删除线人帐号"
 
 msgid "Instance Configuration"
 msgstr "实例设置"
@@ -547,9 +579,6 @@ msgstr "SecureDrop 将在此线人下次登录时为其生成安全加密密钥�
 msgid "Continue to the list of documents for {codename}..."
 msgstr "继续至 {codename} 的文档列表···"
 
-msgid "Sources"
-msgstr "线人"
-
 msgid "Download Unread"
 msgstr "下载未读项"
 
@@ -561,12 +590,6 @@ msgstr "标星"
 
 msgid "Un-star"
 msgstr "去星"
-
-msgid "Are you sure you want to delete the selected collections?"
-msgstr "您是否确定要删除选定合集？"
-
-msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
-msgstr "警告：如果你这么做，选中的线人的所有文件无法恢复，且线人将无法用之前的代号登陆。"
 
 msgid "No documents have been submitted!"
 msgstr "无已提交的文档！"
@@ -588,6 +611,9 @@ msgstr "您是否确定要删除用户 {username}？"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "您是否确定要重置 {username} 的两步认证？"
+
+msgid "Sources selected: "
+msgstr "已选择的来源： "
 
 msgid "Login to access the journalist interface"
 msgstr "登录以访问记者界面"
@@ -658,6 +684,12 @@ msgstr "庇护记者及线人"
 msgid "SecureDrop Home"
 msgstr "SecureDrop 首页"
 
+msgid "We're sorry, our SecureDrop is currently offline."
+msgstr "抱歉，SecureDrop目前不可用。"
+
+msgid "Please try again later. Check our website for more information."
+msgstr "请稍候再试。访问我们的官网获取更多信息。"
+
 msgid "LOG OUT"
 msgstr "登出"
 
@@ -669,9 +701,6 @@ msgstr "很抱歉，此网站遇到了错误且无法完成您的请求。"
 
 msgid "Look up a codename..."
 msgstr "查询代号···"
-
-msgid "Success!"
-msgstr "成功！"
 
 msgid "Thank you for sending this information to us. Please check back later for replies."
 msgstr "感谢您向我们提供此信息。请稍后回来查看回复。"
@@ -902,6 +931,38 @@ msgstr "<strong>重要提示：</strong>若您想保持匿名身份，<strong>�
 msgid "Back to submission page"
 msgstr "返回提交页面"
 
+#~ msgid "{source_name}'s collection deleted."
+#~ msgstr "{source_name} 集合已删除。"
+
+#~ msgid "Submission deleted."
+#~ msgid_plural "{num} submissions deleted."
+#~ msgstr[0] "{num} 个内容已删除。"
+
+#~ msgid "{num} collection deleted"
+#~ msgid_plural "{num} collections deleted"
+#~ msgstr[0] "{num} 个集合已删除"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>需要更新</strong>请在4月30日前为 SecureDrop 服务器升级到v3版洋葱服务，否则服务器会无法访问。请联系管理员。<a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">了解更多</a>"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>需要更新</strong>请在4月30日前完成 SecureDrop 服务器的v3版洋葱服务的升级，否则服务器会无法访问。请联系管理员。<a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">了解更多</a>"
+
+#~ msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
+#~ msgstr "点击下方来删除这名线人的文件。<em>警告：如果你这么做，这里看到的文件无法恢复，且线人将无法用之前的代号登陆。</em>"
+
+#~ msgid "DELETE SOURCE AND SUBMISSIONS"
+#~ msgstr "删除线人与其提交的资料"
+
+#~ msgid "Are you sure you want to delete this collection?"
+#~ msgstr "确认要删除这些文件？"
+
+#~ msgid "Are you sure you want to delete the selected collections?"
+#~ msgstr "您是否确定要删除选定合集？"
+
+#~ msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
+#~ msgstr "警告：如果你这么做，选中的线人的所有文件无法恢复，且线人将无法用之前的代号登陆。"
+
 #~ msgid "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 #~ msgstr "由 <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\"> 提供支持"
 
@@ -961,9 +1022,6 @@ msgstr "返回提交页面"
 
 #~ msgid "SecureDrop now uses automatically generated diceware passwords."
 #~ msgstr "SecureDrop 现使用虚拟骰子自动生成密码。"
-
-#~ msgid "<strong>Critical Security:</strong> The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is urgently required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Learn More</a>"
-#~ msgstr "<strong>安全隐患:</strong> 您使用的操作系统已经达到了使用年限，急需手动更新以保持安全 - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">进一步了解</a>"
 
 #~ msgid "Is Administrator"
 #~ msgstr "是管理员"
