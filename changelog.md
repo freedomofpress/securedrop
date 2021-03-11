@@ -1,35 +1,11 @@
 # Changelog
 
-## 1.8.0~rc5
-
-* No-op release to verify unattended upgrade functionality
-
-## 1.8.0~rc4
-
-* Bugfix: Ensure unattended-upgrades accepts package config defaults (#5855)
-
-## 1.8.0~rc3
-
-* Bugfix: Ensure unattended-upgrades accepts package config defaults
-
-## 1.8.0~rc2
-
-### Operations
-
-* Bugfix: Force UTF-8 for tmux (#5844)
-* Bugfix (Focal): Ensure the systemd-timesyncd service is not masked (#5842)
-* Update restore playbook to compare when torconfigs are being updated (#5834)
-
-### Web applications
-
-* String tweaks and fixes in response to translator feedback (#5827)
-
-## 1.8.0~rc1
+## 1.8.0
 
 ### Web applications
 
 * Provide end-of-life messaging and disable source interface after Xenial End-of-life (#5789)
-* Adds safe deletion functionality to the Journalist Interface (#5770)
+* Adds safe deletion functionality to the Journalist Interface (#5770, #5827)
 * source\_app.utils.normalizer\_timestamps will no longer create an empty file (#5724)
 
 ### Operations
@@ -51,6 +27,10 @@
 * (Focal) Remove resolvconf (#5809)
 * (Focal) Disable ipv6 via cmdline (#5810)
 * (Focal) Add check to prevent Onion Service v2 install (#5819)
+* (Focal) Force UTF-8 for tmux (#5844)
+* (Focal): Ensure the systemd-timesyncd service is not masked (#5842)
+* Update restore playbook to compare when torconfigs are being updated (#5834)
+* (Focal) Ensure unattended-upgrades accepts package config defaults (#5855)
 
 ### Translations
 
