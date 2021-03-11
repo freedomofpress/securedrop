@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.6~rc2\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-01-26 01:37+0000\n"
-"Last-Translator: robbpa <robbpaun@gmail.com>\n"
-"Language-Team: Romanian <https://weblate.securedrop.org/projects/securedrop/securedrop/ro/>\n"
-"Language: ro\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.6~rc2\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-03-08 22:37+0000\nLast-Translator: John Hensley <john@freedom.press>\nLanguage-Team: Romanian <https://weblate.securedrop.org/projects/securedrop/securedrop/ro/>\nLanguage: ro\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\nX-Generator: Weblate 4.3.2\nGenerated-By: Babel 2.5.1\n"
 
 msgid "{time} ago"
 msgstr "acum {time}"
@@ -72,11 +60,19 @@ msgstr "Utilizatorul „{user}” a fost șters."
 msgid "Test alert sent. Please check your email."
 msgstr "A fost transmisă alerta de test. Te rugăm să îți verifici e-mailul."
 
-msgid "{source_name}'s collection deleted."
-msgstr "Colecția lui {source_name} a fost ștearsă."
+#. Precedes a message confirming the success of an operation.
+msgid "Success!"
+msgstr "Succes!"
 
-msgid "No collections selected."
-msgstr "Nu a fost selectată nicio colecție."
+msgid "The account and data for the source {} have been deleted."
+msgstr "Contul și datele aferente sursei {} au fost șterse."
+
+#. Error shown when a user has not selected items to act on.
+msgid "Nothing Selected"
+msgstr "Nimic selectat"
+
+msgid "You must select one or more items."
+msgstr "Trebuie să selectezi unul sau mai multe elemente."
 
 msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr "Descărcarea a eșuat deoarece nu a fost găsit un fișier. Un administrator poate găsi mai multe informații în sistem și în jurnalele de monitorizare."
@@ -120,14 +116,14 @@ msgstr "Poți încărca doar fișiere de imagini PNG."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "A apărut o eroare neașteptată! Te rugăm să îți informezi administratorul."
 
-msgid "Thanks. Your reply has been stored."
-msgstr "Îți mulțumim. Răspunsul tău a fost stocat."
+msgid "Your reply has been stored."
+msgstr "Răspunsul tău a fost stocat."
 
-msgid "No collections selected for download."
-msgstr "Nu a fost selectată nicio colecție pentru descărcare."
+msgid "You must select one or more items for download"
+msgstr "Trebuie să selectezi unul sau mai multe elemente pentru descărcare"
 
-msgid "No collections selected for deletion."
-msgstr "Nu a fost selectată nicio colecție pentru ștergere."
+msgid "You must select one or more items for deletion"
+msgstr "Trebuie să selectezi unul sau mai multe elemente pentru ștergere"
 
 msgid "No unread submissions for this source."
 msgstr "Nu sunt trimiteri necitite de la această sursă."
@@ -135,8 +131,8 @@ msgstr "Nu sunt trimiteri necitite de la această sursă."
 msgid "Account updated."
 msgstr "Contul a fost actualizat."
 
-msgid "Login failed."
-msgstr "Autentificarea a eșuat."
+msgid "<b>Login failed.</b>"
+msgstr "<b>Autentificarea a eșuat.</b>"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -153,17 +149,26 @@ msgstr "Secret cu format nevalid: trebuie folosite doar litere de la A la F și 
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Secret cu format nevalid: lungimea este impară. Ai tastat greșit secretul?"
 
-msgid "Submission deleted."
-msgid_plural "{num} submissions deleted."
-msgstr[0] "{num} trimitere a fost ștearsă."
-msgstr[1] "{num} trimiteri au fost șterse."
-msgstr[2] "{num} de trimiteri au fost șterse."
+msgid "The item has been deleted."
+msgid_plural "{num} items have been deleted."
+msgstr[0] "Elementul a fost șters."
+msgstr[1] "Au fost șterse {num} elemente."
+msgstr[2] "Au fost șterse {num} de elemente."
 
-msgid "{num} collection deleted"
-msgid_plural "{num} collections deleted"
-msgstr[0] "{num} colecție a fost ștearsă"
-msgstr[1] "{num} colecții au fost șterse"
-msgstr[2] "{num} de colecții au fost șterse"
+msgid "No collections selected for deletion."
+msgstr "Nu a fost selectată nicio colecție pentru ștergere."
+
+msgid "The account and all data for {n} source have been deleted."
+msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgstr[0] "Contul și toate datele pentru {n} sursă au fost șterse."
+msgstr[1] "Conturile și toate datele pentru {n} surse au fost șterse."
+msgstr[2] "Conturile și toate datele pentru {n} de surse au fost șterse."
+
+msgid "You must select one or more items for deletion."
+msgstr "Trebuie să selectezi unul sau mai multe elemente pentru ștergere."
+
+msgid "The files and messages have been deleted."
+msgstr "Fișierele și mesajele au fost șterse."
 
 msgid "Name updated."
 msgstr "Numele a fost actualizat."
@@ -212,6 +217,33 @@ msgid_plural "{num} unread"
 msgstr[0] "{num} necitit"
 msgstr[1] "{num} necitite"
 msgstr[2] "{num} necitite"
+
+msgid "When the account for a source is deleted:"
+msgstr "Când este șters contul unei surse:"
+
+msgid "The source will no longer be able to log in with their codename."
+msgstr "Sursa nu se va mai putea autentifica folosind numele de cod."
+
+msgid "You will not be able to send them replies."
+msgstr "Nu vei mai putea să îi trimiți răspunsuri."
+
+msgid "All files and messages from that source will also be destroyed."
+msgstr "Toate fișierele și mesajele de la sursa respectivă vor fi și ele distruse."
+
+msgid "Are you sure this is what you want?"
+msgstr "Sigur vrei să faci asta?"
+
+msgid "Yes, Delete Selected Source Accounts"
+msgstr "Da, șterge conturile de surse selectate"
+
+msgid "What would you like to delete?"
+msgstr "Ce ai vrea să ștergi?"
+
+msgid "Files and Messages"
+msgstr "Fișiere și mesaje"
+
+msgid "Source Accounts"
+msgstr "Conturi de surse"
 
 msgid "Change Secret"
 msgstr "Schimbă secretul"
@@ -339,11 +371,11 @@ msgstr "Nu poți scana codul de bare? Poți asocia manual FreeOTP cu acest cont 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "După ce ai configurat cheia fizică YubiKey, introdu codul de 6 cifre de mai jos:"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Actualizare necesară</strong>&nbsp;&nbsp;Configurați v3 Onion Services până pe 30 aprilie pentru a vă menține serverele SecureDrop online. Contactați administratorul. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Mai multe</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Alertă critică de securitate:</strong>&nbsp;&nbsp;Sistemul de operare folosit de serverele SecureDrop a ajuns la sfârșitul duratei de viață. Este necesară trecerea manuală la o versiune superioară pentru reactivarea interfeței pentru surse și pentru a rămâne în siguranță. Contactează administratorul. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Află mai multe</a>"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Actualizare necesară</strong>&nbsp;&nbsp;Finalizați configurarea v3 Onion Services înainte de 30 aprilie. Contactați administratorul. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Mai multe</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Alertă critică de securitate:</strong> Sistemul de operare folosit de serverele SecureDrop va ajunge la sfârșitul duratei de viață la data de 30 aprilie 2021. Este necesară de urgență trecerea manuală la o versiune superioară pentru a rămâne în siguranță. Contactează administratorul. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Află mai multe</a>"
 
 msgid "Logged on as"
 msgstr "Autentificat ca"
@@ -360,8 +392,8 @@ msgstr "Oferit de <em>SecureDrop {version}</em>."
 msgid "All Sources"
 msgstr "Toate sursele"
 
-msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
-msgstr "Pentru securitate, documentele sunt stocate în mod criptat. Pentru a le citi, trebuie să le decriptezi cu GPG."
+msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
+msgstr "Toate mesajele, fișierele și răspunsurile de la surse sunt stocate ca fișiere criptate pentru securitate. Pentru a le citi, trebuie să le decriptezi pe stația de afișare securizată."
 
 msgid "Download Selected"
 msgstr "Descarcă selecția"
@@ -405,17 +437,17 @@ msgstr "pictogramă de mesaje"
 msgid "Delete Confirmation"
 msgstr "Confirmarea ștergerii"
 
-msgid "Are you sure you want to delete the selected documents?"
-msgstr "Sigur vrei să ștergi documentele selectate?"
+msgid "Are you sure you want to delete the selected submissions?"
+msgstr "Sigur vrei să ștergi trimiterile selectate?"
 
 msgid "DELETE"
 msgstr "ȘTERGE"
 
-msgid "No documents to display."
-msgstr "Nu sunt documente de afișat."
+msgid "No submissions to display."
+msgstr "Nicio trimitere de afișat."
 
-msgid "You can write a secure reply to the person who submitted these documents:"
-msgstr "Poți scrie un răspuns securizat persoanei care a trimis aceste documente:"
+msgid "You can write a secure reply to the person who submitted these messages and/or files:"
+msgstr "Poți scrie un răspuns securizat persoanei care a trimis aceste mesaje și/sau fișiere:"
 
 msgid "You've flagged this source for reply."
 msgstr "Ai marcat această sursă pentru răspuns."
@@ -429,14 +461,14 @@ msgstr "Dă clic mai jos dacă vrei să-i răspunzi acestei surse."
 msgid "FLAG THIS SOURCE FOR REPLY"
 msgstr "MARCHEAZĂ ACEASTĂ SURSĂ PENTRU RĂSPUNS"
 
-msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
-msgstr "Dă clic mai jos pentru a șterge colecția acestei surse. <em>Avertisment: Dacă o ștergi, fișierele de aici nu vor mai putea fi recuperate și sursa nu se va mai putea autentifica folosind numele de cod anterior.</em>"
+msgid "Delete Source Account"
+msgstr "Șterge contul de sursă"
 
-msgid "DELETE SOURCE AND SUBMISSIONS"
-msgstr "ȘTERGE SURSA ȘI TRIMITERILE"
+msgid "Are you sure?"
+msgstr "Ești sigur(ă)?"
 
-msgid "Are you sure you want to delete this collection?"
-msgstr "Sigur vrei să ștergi această colecție?"
+msgid "Yes, Delete Source Account"
+msgstr "Da, șterge contul de sursă"
 
 msgid "Instance Configuration"
 msgstr "Configurarea instanței"
@@ -567,9 +599,6 @@ msgstr "SecureDrop va genera o cheie de criptare securizată pentru această sur
 msgid "Continue to the list of documents for {codename}..."
 msgstr "Deschide lista de documente pentru {codename}..."
 
-msgid "Sources"
-msgstr "Surse"
-
 msgid "Download Unread"
 msgstr "Descarcă necitite"
 
@@ -581,12 +610,6 @@ msgstr "Marchează cu stea"
 
 msgid "Un-star"
 msgstr "Elimină marcajul cu stea"
-
-msgid "Are you sure you want to delete the selected collections?"
-msgstr "Sigur vrei să ștergi colecțiile selectate?"
-
-msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
-msgstr "Avertisment: Dacă ștergi, toate fișierele surselor selectate vor fi irecuperabile și sursele nu se vor mai putea autentifica folosind numele de cod anterioare."
 
 msgid "No documents have been submitted!"
 msgstr "Nu a fost trimis niciun document!"
@@ -608,6 +631,9 @@ msgstr "Sigur vrei să ștergi utilizatorul {username}?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "Sigur vrei să resetezi autentificarea cu doi factori pentru {username}?"
+
+msgid "Sources selected: "
+msgstr "Surse selectate: "
 
 msgid "Login to access the journalist interface"
 msgstr "Autentifică-te pentru acces la interfața jurnalistului"
@@ -678,6 +704,12 @@ msgstr "Pentru protecția jurnaliștilor și a surselor"
 msgid "SecureDrop Home"
 msgstr "Acasă SecureDrop"
 
+msgid "We're sorry, our SecureDrop is currently offline."
+msgstr "Ne pare rău, contul nostru SecureDrop este acum offline."
+
+msgid "Please try again later. Check our website for more information."
+msgstr "Încearcă mai târziu. Intră pe site-ul nostru web pentru mai multe informații."
+
 msgid "LOG OUT"
 msgstr "DECONECTARE"
 
@@ -689,9 +721,6 @@ msgstr "Ne pare rău, site-ul a întâmpinat o eroare și nu a reușit să final
 
 msgid "Look up a codename..."
 msgstr "Caută un nume de cod..."
-
-msgid "Success!"
-msgstr "Succes!"
 
 msgid "Thank you for sending this information to us. Please check back later for replies."
 msgstr "Îți mulțumim că ne-ai trimis aceste informații. Te rugăm să revii mai târziu pentru a citi răspunsurile."
@@ -922,6 +951,42 @@ msgstr "<strong>Important:</strong> Dacă vrei să rămâi anonim(ă), <strong>n
 msgid "Back to submission page"
 msgstr "Înapoi la pagina de trimitere"
 
+#~ msgid "{source_name}'s collection deleted."
+#~ msgstr "Colecția lui {source_name} a fost ștearsă."
+
+#~ msgid "Submission deleted."
+#~ msgid_plural "{num} submissions deleted."
+#~ msgstr[0] "{num} trimitere a fost ștearsă."
+#~ msgstr[1] "{num} trimiteri au fost șterse."
+#~ msgstr[2] "{num} de trimiteri au fost șterse."
+
+#~ msgid "{num} collection deleted"
+#~ msgid_plural "{num} collections deleted"
+#~ msgstr[0] "{num} colecție a fost ștearsă"
+#~ msgstr[1] "{num} colecții au fost șterse"
+#~ msgstr[2] "{num} de colecții au fost șterse"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Actualizare necesară</strong>&nbsp;&nbsp;Configurați v3 Onion Services până pe 30 aprilie pentru a vă menține serverele SecureDrop online. Contactați administratorul. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Mai multe</a>"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Actualizare necesară</strong>&nbsp;&nbsp;Finalizați configurarea v3 Onion Services înainte de 30 aprilie. Contactați administratorul. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Mai multe</a>"
+
+#~ msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
+#~ msgstr "Dă clic mai jos pentru a șterge colecția acestei surse. <em>Avertisment: Dacă o ștergi, fișierele de aici nu vor mai putea fi recuperate și sursa nu se va mai putea autentifica folosind numele de cod anterior.</em>"
+
+#~ msgid "DELETE SOURCE AND SUBMISSIONS"
+#~ msgstr "ȘTERGE SURSA ȘI TRIMITERILE"
+
+#~ msgid "Are you sure you want to delete this collection?"
+#~ msgstr "Sigur vrei să ștergi această colecție?"
+
+#~ msgid "Are you sure you want to delete the selected collections?"
+#~ msgstr "Sigur vrei să ștergi colecțiile selectate?"
+
+#~ msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
+#~ msgstr "Avertisment: Dacă ștergi, toate fișierele surselor selectate vor fi irecuperabile și sursele nu se vor mai putea autentifica folosind numele de cod anterioare."
+
 #~ msgid "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 #~ msgstr "Oferit de <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 
@@ -1032,9 +1097,6 @@ msgstr "Înapoi la pagina de trimitere"
 
 #~ msgid "<a href=\"/\">Click here</a> to refresh the page"
 #~ msgstr "<a href=\"/\">Dă clic aici</a> pentru a reîmprospăta pagina"
-
-#~ msgid "<strong>Critical Security:</strong> The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is urgently required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Learn More</a>"
-#~ msgstr "<strong>Alertă critică de securitate:</strong> Sistemul de operare folosit de serverele SecureDrop a ajuns la sfârșitul duratei de viață. Este necesară de urgență actualizarea manuală a sistemului pentru a rămâne în siguranță - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Află mai multe</a>"
 
 #~ msgid "Turn off NoScript's cross-site request sanitization setting"
 #~ msgstr "Dezactivează setarea din NoScript pentru „cross-site request sanitization”"
