@@ -4,20 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2021-01-24 01:37+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
-"Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\n"
-"Language: nl\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-03-10 14:19+0000\nLast-Translator: kwadronaut <kwadronaut@autistici.org>\nLanguage-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\nLanguage: nl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.3.2\nGenerated-By: Babel 2.4.0\n"
 
 msgid "{time} ago"
 msgstr "{time} geleden"
@@ -47,7 +34,7 @@ msgid "Preferences saved."
 msgstr "Voorkeuren opgeslagen."
 
 msgid "Preferences not updated."
-msgstr "Voorkeuren niet geüpdatet."
+msgstr "Voorkeuren niet bijgewerkt."
 
 msgid "Failed to update organization name."
 msgstr "Het updaten van de organisatienaam is mislukt."
@@ -73,11 +60,19 @@ msgstr "Gebruiker '{user}' verwijderd."
 msgid "Test alert sent. Please check your email."
 msgstr "Testwaarschuwing verstuurd. Controleer uw e-mail."
 
-msgid "{source_name}'s collection deleted."
-msgstr "{source_name}-collectie verwijderd."
+#. Precedes a message confirming the success of an operation.
+msgid "Success!"
+msgstr "Gelukt!"
 
-msgid "No collections selected."
-msgstr "Geen collecties geselecteerd."
+msgid "The account and data for the source {} have been deleted."
+msgstr "Het account en de data van de bron {} zijn verwijderd."
+
+#. Error shown when a user has not selected items to act on.
+msgid "Nothing Selected"
+msgstr "Niets geselecteerd"
+
+msgid "You must select one or more items."
+msgstr "U moet één of meerdere elementen selecteren."
 
 msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr "Uw download is mislukt omdat een bestand niet kon worden gevonden. Een administrator kan meer informatie vinden in de systeem en monitoring logs."
@@ -118,14 +113,14 @@ msgstr "U kunt alleen PNG-afbeeldingsbestanden uploaden."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Er trad een onverwachte fout op! Neem contact op met uw beheerder."
 
-msgid "Thanks. Your reply has been stored."
-msgstr "Bedankt. Uw reactie is opgeslagen."
+msgid "Your reply has been stored."
+msgstr "Uw reactie is opgeslagen."
 
-msgid "No collections selected for download."
-msgstr "Geen collecties geselecteerd om te downloaden."
+msgid "You must select one or more items for download"
+msgstr "U moet één of meerdere items selecteren om te downloaden"
 
-msgid "No collections selected for deletion."
-msgstr "Geen collecties geselecteerd om te verwijderen."
+msgid "You must select one or more items for deletion"
+msgstr "U moet één of meer items selecteren om te verwijderen"
 
 msgid "No unread submissions for this source."
 msgstr "Geen ongelezen inzendingen van deze bron."
@@ -133,8 +128,8 @@ msgstr "Geen ongelezen inzendingen van deze bron."
 msgid "Account updated."
 msgstr "Account bijgewerkt."
 
-msgid "Login failed."
-msgstr "Inloggen mislukt."
+msgid "<b>Login failed.</b>"
+msgstr "<b>Inloggen mislukt.</b>"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -150,15 +145,24 @@ msgstr "Ongeldige samenstelling voor geheim: gebruik uitsluitend letters A-F en 
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr "Ongeldig geheim: oneven lengte van geheim. Is het geheim correct gespeld?"
 
-msgid "Submission deleted."
-msgid_plural "{num} submissions deleted."
-msgstr[0] "Inzending verwijderd."
-msgstr[1] "{num} inzendingen verwijderd."
+msgid "The item has been deleted."
+msgid_plural "{num} items have been deleted."
+msgstr[0] "Het item is verwijderd."
+msgstr[1] "Alle {num} items zijn verwijderd."
 
-msgid "{num} collection deleted"
-msgid_plural "{num} collections deleted"
-msgstr[0] "{num} collectie verwijderd"
-msgstr[1] "{num} collecties verwijderd"
+msgid "No collections selected for deletion."
+msgstr "Geen collecties geselecteerd om te verwijderen."
+
+msgid "The account and all data for {n} source have been deleted."
+msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgstr[0] "Het account en alle data van {n} bron zijn verwijderd."
+msgstr[1] "De accounts en alle data van de {n} bronnen zijn verwijderd."
+
+msgid "You must select one or more items for deletion."
+msgstr "U moet één of meer items selecteren om te verwijderen."
+
+msgid "The files and messages have been deleted."
+msgstr "De bestanden en berichten zijn verwijderd."
 
 msgid "Name updated."
 msgstr "Naam bijgewerkt."
@@ -205,6 +209,33 @@ msgid_plural "{num} unread"
 msgstr[0] "1 ongelezen"
 msgstr[1] "{num} ongelezen"
 
+msgid "When the account for a source is deleted:"
+msgstr "Als het account van een bron verwijderd wordt:"
+
+msgid "The source will no longer be able to log in with their codename."
+msgstr "De bron zal niet langer kunnen aanmelden met hun codenaam."
+
+msgid "You will not be able to send them replies."
+msgstr "U zal de bron geen berichten meer kunnen sturen."
+
+msgid "All files and messages from that source will also be destroyed."
+msgstr "Alle bestanden en berichten van deze bron zullen ook worden vernietigd."
+
+msgid "Are you sure this is what you want?"
+msgstr "Bent u zeker dat dit is wat u wilt?"
+
+msgid "Yes, Delete Selected Source Accounts"
+msgstr "Ja, verwijder de geselecteerde accounts van de bronnen"
+
+msgid "What would you like to delete?"
+msgstr "Wat zou u willen verwijderen?"
+
+msgid "Files and Messages"
+msgstr "Bestanden en berichten"
+
+msgid "Source Accounts"
+msgstr "Bronaccounts"
+
 msgid "Change Secret"
 msgstr "Verander geheim"
 
@@ -218,7 +249,7 @@ msgid "Enable FreeOTP"
 msgstr "FreeOTP inschakelen"
 
 msgid "You're almost done! To finish resetting your two-factor authentication, follow the instructions below to set up FreeOTP. Once you've added the entry for your account in the app, enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
-msgstr "U bent bijna klaar! Om het resetten van uw tweestapsauthenticatie te voltooien volgt u de instructies van FreeOTP. Zodra u uw account in de app hebt toegevoegd, moet u de zescijferige code van de app invoeren om te bevestigen dat de tweestapsauthenticatie correct is ingesteld."
+msgstr "U bent bijna klaar! Om het resetten van uw tweestapsauthenticatie te voltooien volgt u de instructies hieronder hoe u FreeOTP instelt. Zodra u uw account in de app hebt toegevoegd, moet u de zescijferige code van de app invoeren om te bevestigen dat de tweestapsauthenticatie correct is ingericht."
 
 msgid "Install FreeOTP on your phone"
 msgstr "Installeer FreeOTP op uw telefoon"
@@ -233,10 +264,10 @@ msgid "Your phone will now be in \"scanning\" mode. When you are in this mode, s
 msgstr "Uw telefoon staat nu in \"scan\"-modus. Zodra u in deze modus zit, scan dan de onderstaande barcode:"
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with your SecureDrop account by entering the following two-factor secret into the app:"
-msgstr "Lukt het scannen van de barcode niet? U kunt proberen handmatig FreeOTP aan uw SecureDrop-account linken door de volgende geheime code in uw applicatie in te voeren:"
+msgstr "Lukt het scannen van de barcode niet? U kunt handmatig FreeOTP aan uw SecureDrop-account linken door de volgende geheime code in uw applicatie in te voeren:"
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
-msgstr "Zodra u FreeOTP aan uw account hebt gelinkt, voer dan hieronder de zescijferige authenticatiecode in:"
+msgstr "Zodra u FreeOTP aan uw account hebt gelinkt, voer dan hieronder de zescijferige verificatiecode in:"
 
 msgid "Enable YubiKey (OATH-HOTP)"
 msgstr "YubiKey inschakelen (OATH-HOTP)"
@@ -317,7 +348,7 @@ msgid "The user's password will be:"
 msgstr "Het wachtwoord van de gebruiker zal zijn:"
 
 msgid "Is Admin"
-msgstr "Beheerder"
+msgstr "Is beheerder"
 
 msgid "Is using a YubiKey [HOTP]"
 msgstr "Gebruikt een YubiKey [HOTP]"
@@ -326,16 +357,16 @@ msgid "You're almost done! To finish adding this new user, have them follow the 
 msgstr "U bent bijna klaar! Om het toevoegen van deze nieuwe gebruiker af te ronden, moet u de gebruiker de onderstaande instructies laten volgen om de tweestapsauthenticatie met FreeOTP in te stellen. Zodra dit account is toegevoegd, moet u de gebruiker vervolgens de zescijferige code uit de app invoeren om te bevestigen dat de tweestapsauthenticatie succesvol is ingericht."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
-msgstr "Lukt het niet de barcode te scannen? U kunt handmatig FreeOTP aan uw account linken door onderstaande authenticatiecode in de applicatie in te voeren:"
+msgstr "Lukt het niet de barcode te scannen? U kunt handmatig FreeOTP aan dit account linken door onderstaande authenticatiecode in de applicatie in te voeren:"
 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "Zodra u uw YubiKey geconfigureerd heeft, voert u de zescijferige code hieronder in:"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Update vereist</strong>Stel v3 Onion services in voor 30 april om uw SecureDrop servers online te houden. Neem alstublieft contact op met uw administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Lees meer</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Kritiek veiligheidsprobleem:</strong>&nbsp;&nbsp;Het besturingssysteem op uw SecureDrop servers is aan het einde van zijn levensduur. Een handmatige upgrade is vereist om de broninterface opnieuw in te schakelen en veilig te blijven. Neem contact op met uw beheerder.<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Meer informatie.</a>"
 
-msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Update vereist</strong>&nbsp;&nbsp;Voltooi de v3 Onion Services installatie voor 30 april. Neem alstublieft contact op met uw administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Lees meer</a>"
+msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+msgstr "<strong>Kritiek veiligheidsprobleem:</strong>&nbsp;&nbsp;Het besturingssysteem op uw SecureDrop servers zal aan het zijn levensduur zijn op 30 april 2021. Een handmatige upgrade is dringend vereist om veilig te blijven. Gelieve uw beheerder te contacteren. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Meer informatie.</a>"
 
 msgid "Logged on as"
 msgstr "Aangemeld als"
@@ -352,8 +383,8 @@ msgstr "Mogelijk gemaakt door <em>SecureDrop {version}</em>."
 msgid "All Sources"
 msgstr "Alle bronnen"
 
-msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
-msgstr "De documenten zijn versleuteld opgeslagen. Om de documenten te lezen, moeten ze ontsleuteld worden met behulp van GPG."
+msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
+msgstr "Alle berichten, bestanden en antwoorden van bronnen worden opgeslagen als versleutelde bestanden om veiligheidsredenen. Om ze te lezen, moeten ze ontsleuteld worden op uw Secure Viewing Station."
 
 msgid "Download Selected"
 msgstr "Geselecteerde downloaden"
@@ -397,17 +428,17 @@ msgstr "berichten icoon"
 msgid "Delete Confirmation"
 msgstr "Bevestiging verwijderen"
 
-msgid "Are you sure you want to delete the selected documents?"
-msgstr "Weet u zeker dat u de geselecteerde documenten wilt verwijderen?"
+msgid "Are you sure you want to delete the selected submissions?"
+msgstr "Weet u zeker dat u de geselecteerde inzendingen wilt verwijderen?"
 
 msgid "DELETE"
 msgstr "VERWIJDER"
 
-msgid "No documents to display."
-msgstr "Geen documenten om weer te geven."
+msgid "No submissions to display."
+msgstr "Geen inzendingen om te tonen."
 
-msgid "You can write a secure reply to the person who submitted these documents:"
-msgstr "U kunt beveiligd reageren naar de persoon die deze documenten gestuurd heeft:"
+msgid "You can write a secure reply to the person who submitted these messages and/or files:"
+msgstr "U kunt beveiligd reageren naar de persoon die deze berichten en/of bestanden gestuurd heeft:"
 
 msgid "You've flagged this source for reply."
 msgstr "U heeft deze bron gemarkeerd om te reageren."
@@ -421,14 +452,14 @@ msgstr "Klik hieronder indien u wilt reageren naar deze bron."
 msgid "FLAG THIS SOURCE FOR REPLY"
 msgstr "MARKEER DEZE BRON OM TE REAGEREN"
 
-msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
-msgstr "Klik hieronder om de collectie van deze bron te verwijderen. <em>Waarschuwing: Indien de collectie verwijderd wordt, kunnen de documenten niet hersteld worden en zal de bron niet langer kunnen inloggen met zijn/haar vorige codenaam.</em>"
+msgid "Delete Source Account"
+msgstr "Verwijder bronaccount"
 
-msgid "DELETE SOURCE AND SUBMISSIONS"
-msgstr "VERWIJDER BRON EN INZENDINGEN"
+msgid "Are you sure?"
+msgstr "Bent u zeker?"
 
-msgid "Are you sure you want to delete this collection?"
-msgstr "Weet u zeker dat u deze collectie wilt verwijderen?"
+msgid "Yes, Delete Source Account"
+msgstr "Ja, verwijder bronaccount"
 
 msgid "Instance Configuration"
 msgstr "Instantie configureren"
@@ -558,9 +589,6 @@ msgstr "SecureDrop zal de volgende keer dat de bron inlogt een veilige encryptie
 msgid "Continue to the list of documents for {codename}..."
 msgstr "Ga door naar documentenlijst van {codename}…"
 
-msgid "Sources"
-msgstr "Bronnen"
-
 msgid "Download Unread"
 msgstr "Ongelezen downloaden"
 
@@ -572,12 +600,6 @@ msgstr "Markeren"
 
 msgid "Un-star"
 msgstr "De-markeren"
-
-msgid "Are you sure you want to delete the selected collections?"
-msgstr "Weet u zeker dat u de geselecteerde collecties wilt verwijderen?"
-
-msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
-msgstr "Waarschuwing: Als u dit doet, kunnen alle documenten voor de geselecteerde bronnen niet hersteld en de bronnen niet langer kunnen inloggen met hun vorige codenaam."
 
 msgid "No documents have been submitted!"
 msgstr "Geen documenten ingezonden!"
@@ -599,6 +621,9 @@ msgstr "Weet u zeker dat u de gebruiker {username} wilt verwijderen?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "Weet u zeker dat u de tweestapsauthenticatie voor {username} wilt herstellen?"
+
+msgid "Sources selected: "
+msgstr "Geselecteerde bronnen: "
 
 msgid "Login to access the journalist interface"
 msgstr "Inloggen om de interface voor journalisten te openen"
@@ -669,6 +694,12 @@ msgstr "Journalisten en bronnen beschermen"
 msgid "SecureDrop Home"
 msgstr "SecureDrop home"
 
+msgid "We're sorry, our SecureDrop is currently offline."
+msgstr "Het spijt ons, onze SecureDrop is momenteel offline."
+
+msgid "Please try again later. Check our website for more information."
+msgstr "Probeer het later opnieuw. Kijk op onze website voor meer informatie."
+
 msgid "LOG OUT"
 msgstr "UITLOGGEN"
 
@@ -680,9 +711,6 @@ msgstr "Sorry, de website ondervond een fout en kon uw verzoek niet voltooien."
 
 msgid "Look up a codename..."
 msgstr "Zoek naar een codenaam..."
-
-msgid "Success!"
-msgstr "Gelukt!"
 
 msgid "Thank you for sending this information to us. Please check back later for replies."
 msgstr "Bedankt voor het inzenden van deze informatie. Kom later terug om reacties te bekijken."
@@ -913,6 +941,43 @@ msgstr "<strong>Belangrijk:</strong> Als u anoniem wilt blijven, gebruik dan <st
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
 
+#~ msgid "{source_name}'s collection deleted."
+#~ msgstr "{source_name}-collectie verwijderd."
+
+#~ msgid "Submission deleted."
+#~ msgid_plural "{num} submissions deleted."
+#~ msgstr[0] "Inzending verwijderd."
+#~ msgstr[1] "{num} inzendingen verwijderd."
+
+#~ msgid "{num} collection deleted"
+#~ msgid_plural "{num} collections deleted"
+#~ msgstr[0] "{num} collectie verwijderd"
+#~ msgstr[1] "{num} collecties verwijderd"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Set up v3 Onion Services before April 30 to keep your SecureDrop servers online. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Update vereist</strong>Stel v3 Onion services in voor 30 april om uw SecureDrop servers online te houden. Neem alstublieft contact op met uw administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Lees meer</a>"
+
+#~ msgid "<strong>Update Required</strong>&nbsp;&nbsp;Complete the v3 Onion Services setup before April 30. Please contact your administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Update vereist</strong>&nbsp;&nbsp;Voltooi de v3 Onion Services installatie voor 30 april. Neem alstublieft contact op met uw administrator. <a href=\"//securedrop.org/v2-onion-eol\" rel=\"noreferrer\">Lees meer</a>"
+
+#~ msgid "Are you sure you want to delete the selected documents?"
+#~ msgstr "Weet u zeker dat u de geselecteerde documenten wilt verwijderen?"
+
+#~ msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
+#~ msgstr "Klik hieronder om de collectie van deze bron te verwijderen. <em>Waarschuwing: Indien de collectie verwijderd wordt, kunnen de documenten niet hersteld worden en zal de bron niet langer kunnen inloggen met zijn/haar vorige codenaam.</em>"
+
+#~ msgid "DELETE SOURCE AND SUBMISSIONS"
+#~ msgstr "VERWIJDER BRON EN INZENDINGEN"
+
+#~ msgid "Are you sure you want to delete this collection?"
+#~ msgstr "Weet u zeker dat u deze collectie wilt verwijderen?"
+
+#~ msgid "Are you sure you want to delete the selected collections?"
+#~ msgstr "Weet u zeker dat u de geselecteerde collecties wilt verwijderen?"
+
+#~ msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
+#~ msgstr "Waarschuwing: Als u dit doet, kunnen alle documenten voor de geselecteerde bronnen niet hersteld en de bronnen niet langer kunnen inloggen met hun vorige codenaam."
+
 #~ msgid "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 #~ msgstr "Mogelijk gemaakt door <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 
@@ -1024,9 +1089,6 @@ msgstr "Terug naar inzendingenpagina"
 #~ msgid "<a href=\"/\">Click here</a> to refresh the page"
 #~ msgstr "<a href=\"/\">Klik hier</a> om de pagina te verversen"
 
-#~ msgid "<strong>Critical Security:</strong> The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is urgently required to remain safe - <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">Learn More</a>"
-#~ msgstr "<strong>Kritiek veiligheidsprobleem:</strong> het besturingssysteem op uw SecureDrop servers is aan het zijn levensduur. Een handmatige upgrade is dringend vereist om veilig te blijven — <a href=\"//securedrop.org/xenial-upgrade\" rel=\"noreferrer\">meer informatie.</a>"
-
 #~ msgid "1. Click on the NoScript button."
 #~ msgstr "1. Klik op het NoScript pictogram."
 
@@ -1071,9 +1133,6 @@ msgstr "Terug naar inzendingenpagina"
 
 #~ msgid "If you want to submit information, you are <strong>strongly advised</strong> to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to access our site safely and anonymously."
 #~ msgstr "Indien u informatie wilt inzenden adviseren wij <strong>ten zeerste aan</strong> om <a href=\"torproject.org/download.html.en\">Tor</a> te installeren en te gebruiken zodat u veilig en anoniem onze site kunt bezoeken."
-
-#~ msgid "Are you sure you want to delete the {size} selected submissions?"
-#~ msgstr "Weet u zeker dat u de {size} geselecteerde inzendingen wilt verwijderen?"
 
 #~ msgid "{doc_num} docs"
 #~ msgstr "{doc_num} documenten"
