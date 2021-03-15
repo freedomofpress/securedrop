@@ -54,16 +54,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         session['new_user'] = True
         return render_template('generate.html', codename=codename, tab_id=tab_id)
 
-    @view.route('/org-logo')
-    def select_logo() -> werkzeug.Response:
-        if current_app.static_folder is None:
-            abort(500)
-        if os.path.exists(os.path.join(current_app.static_folder, 'i',
-                          'custom_logo.png')):
-            return redirect(url_for('static', filename='i/custom_logo.png'))
-        else:
-            return redirect(url_for('static', filename='i/logo.png'))
-
     @view.route('/create', methods=['POST'])
     def create() -> werkzeug.Response:
         if session.get('logged_in', False):

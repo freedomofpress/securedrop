@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
-
 from datetime import datetime
 from typing import Union
 
@@ -52,16 +50,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         session.pop('expires', None)
         session.pop('nonce', None)
         return redirect(url_for('main.index'))
-
-    @view.route('/org-logo')
-    def select_logo() -> werkzeug.Response:
-        if current_app.static_folder is None:
-            abort(500)
-        if os.path.exists(os.path.join(current_app.static_folder, 'i',
-                          'custom_logo.png')):
-            return redirect(url_for('static', filename='i/custom_logo.png'))
-        else:
-            return redirect(url_for('static', filename='i/logo.png'))
 
     @view.route("/")
     def index() -> str:

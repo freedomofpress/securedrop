@@ -21,7 +21,7 @@
         {% block header %}
         <div id="header">
           <a href="{% if 'logged_in' in session %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}" class="no-bottom-border">
-            <img src="{{ url_for('main.select_logo') }}" class="logo small" alt="{{ g.organization_name }} | {{ gettext('SecureDrop Home') }}" width="250">
+            <img src="{{ g.logo }}" class="logo small" alt="{{ g.organization_name }} | {{ gettext('SecureDrop Home') }}" width="250">
           </a>
           {% include 'locales.html' %}
         </div>

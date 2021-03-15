@@ -30,7 +30,7 @@
 <p>{{ gettext('Here you can update the image displayed on the SecureDrop web interfaces:') }}</p>
 
 <p>
-  <img src="{{ url_for('main.select_logo') }}" class="logo small" alt="{{ g.organization_name }}" width="250">
+  <img src="{{ g.logo }}" class="logo small" alt="{{ g.organization_name }}" width="250">
 </p>
 
 <form method="post" enctype="multipart/form-data">
