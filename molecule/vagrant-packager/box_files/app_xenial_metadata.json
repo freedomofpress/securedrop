@@ -188,6 +188,28 @@
         }
       ],
       "version": "1.7.1"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "b0c2908dfdf7f705ee1c38949744b04008b4654a201b6ca319eb07fcc688fba8",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/app-staging-xenial_1.8.0.box"
+        }
+      ],
+      "version": "1.8.0"
+    },
+    {
+      "providers": [
+        {
+          "checksum": "f05ec782c52714a66af8fe70e109e325c2674db590243e4555964c9adc9e6f3d",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/app-staging-xenial_1.8.0.box"
+        }
+      ],
+      "version": "1.8.0"
     }
   ]
 }
