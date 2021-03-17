@@ -7,6 +7,9 @@ from typing import Type
 import config as _config
 from typing import Set
 
+from signal_protocol.curve import KeyPair
+from signal_protocol.sealed_sender import ServerCertificate
+
 
 class SDConfig:
     def __init__(self) -> None:
@@ -111,6 +114,33 @@ class SDConfig:
             self.WORKER_PIDFILE = _config.WORKER_PIDFILE  # type: str
         except AttributeError:
             pass
+
+        # Server cert generation for sealed sender.
+        # In a production deployment, this would be generated along with the other
+        # app code bits at install time (e.g. the Flask secret key)
+        SERVER_ID = 666
+
+        # TEMP: HARDCODED for demo purposes
+        # trust_root = KeyPair.generate()
+        # trust_root.private_key().serialize()
+        trust_root_priv = b'\xd8?\xb8\x8a\x01\xc8j\xe3@\x89F\xa3c\x8cL\xf7\xfb(\xdc%\xfc\xcb,T\xd5\xcb\x02C[\xf7\xf3H'
+        # trust_root.public_key().serialize()
+        trust_root_pub = b"\x05\xa0\x0f\xdfy\xea7\x8f\xc8M\r'\xf5f=\xa3\xdd\xc4p\xee\xb1Qt\x14N\xa0\xbc\xe84\xa8\x1d\xaa:"
+        trust_root = KeyPair.from_public_and_private(trust_root_pub, trust_root_priv)
+
+        # server_key = KeyPair.generate()
+        # server_key.private_key().serialize()
+        server_key_priv = b'\xe0\xe6\x13\x92\x11\xc7<\x1c\xb2\x93i\xdb\xd0\x0cL\xe2\xaa\xdf\xc1\xe5\xe08{\x8fO\xea;\x8b4?\xb7S'
+        # server_key.public_key().serialize()
+        server_key_pub = b'\x05\x1e-\xe1\x05\xea2]\xe98\x04\xd9\xf4\r\x1dE\xde\xf2\x8c\x03\x08+\xa0A\x08\xa0\xf75\x1e\xa0\x99{\x00'
+        server_key = KeyPair.from_public_and_private(server_key_pub, server_key_priv)
+
+        self.trust_root = trust_root
+        self.server_key = server_key
+
+        self.server_cert = ServerCertificate(
+            SERVER_ID, server_key.public_key(), trust_root.private_key()
+        )
 
         self.env = getattr(_config, 'env', 'prod')  # type: str
         if self.env == 'test':

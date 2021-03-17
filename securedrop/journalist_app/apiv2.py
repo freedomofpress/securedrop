@@ -20,9 +20,11 @@ from journalist_app import utils
 from models import (Journalist, Reply, SeenReply, Source, Submission, JournalistReply,
                     LoginThrottledException, InvalidUsernameException,
                     BadTokenException, WrongPasswordException, SourceMessage)
-from sdconfig import SDConfig
+from sdconfig import config, SDConfig
 from store import NotEncrypted
 
+from signal_protocol.curve import PublicKey
+from signal_protocol.sealed_sender import SenderCertificate
 
 """
 Reply: From journalist to source
@@ -221,6 +223,34 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         return response, 200
 
+    @api.route('/sender_cert', methods=['GET'])
+    @token_required
+    def sender_cert() -> Tuple[flask.Response, int]:
+        """
+        Get sender cert
+        """
+        user = _authenticate_user_from_auth_header(request)
+
+        if not user.is_signal_registered():
+            abort(400, 'your account is not registered')
+
+        expiration = 123  # TODO: timestamp
+        DEVICE_ID = 1
+        sender_cert = SenderCertificate(
+            user.uuid,
+            user.uuid,
+            PublicKey.deserialize(user.identity_key),
+            DEVICE_ID,
+            expiration,
+            config.server_cert,
+            config.server_key.private_key(),
+        )
+        response = jsonify({
+            'sender_cert': sender_cert.serialized().hex(),
+            'trust_root': config.trust_root.public_key().serialize().hex(),
+        })
+        return response, 200
+
     @api.route('/sources/<source_uuid>/prekey_bundle', methods=['GET'])
     @token_required
     def prekey_bundle(source_uuid: str) -> Tuple[flask.Response, int]:
@@ -250,14 +280,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         messages can be added later.
 
         TODO: Pagination
-        TODO: Delete message after fetch
         """
         user = _authenticate_user_from_auth_header(request)
         source_message = SourceMessage.query.filter_by(journalist_id=user.id).first()
         if source_message:
-            source = Source.query.filter_by(id=source_message.source_id).one() # TODO: backref
             return jsonify({
-                "source_uuid": source.uuid,
                 "message_uuid": source_message.uuid,
                 "message": source_message.message.hex(),
             }), 200
@@ -283,7 +310,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if not data['message']:
             abort(400, 'message should not be empty')
 
-        message = JournalistReply(source, user, data['message'])
+        message = JournalistReply(source, data['message'])
         db.session.add(message)
         db.session.commit()
         return jsonify({'message': 'Your message has been stored'}), 200
