@@ -99,7 +99,7 @@ def validate_user(
             InvalidPasswordLength) as e:
         current_app.logger.error("Login for '{}' failed: {}".format(
             username, e))
-        login_flashed_msg = error_message if error_message else gettext('<b>Login failed.</b>')
+        login_flashed_msg = error_message if error_message else gettext('Login failed.')
 
         if isinstance(e, LoginThrottledException):
             login_flashed_msg += " "
@@ -123,7 +123,7 @@ def validate_user(
             except Exception:
                 pass
 
-        flash(Markup(login_flashed_msg), "error")
+        flash(login_flashed_msg, "error")
         return None
 
 
@@ -414,7 +414,7 @@ def set_name(user: Journalist, first_name: Optional[str], last_name: Optional[st
         db.session.commit()
         flash(gettext('Name updated.'), "success")
     except FirstOrLastNameError as e:
-        flash(gettext('Name not updated: {}'.format(e)), "error")
+        flash(gettext('Name not updated: {message}').format(message=e), "error")
 
 
 def set_diceware_password(user: Journalist, password: Optional[str]) -> bool:
@@ -437,11 +437,20 @@ def set_diceware_password(user: Journalist, password: Optional[str]) -> bool:
         return False
 
     # using Markup so the HTML isn't escaped
-    flash(Markup("<p>" + gettext(
-        "Password updated. Don't forget to "
-        "save it in your KeePassX database. New password:") +
-        ' <span><code>{}</code></span></p>'.format(password)),
-        'success')
+    flash(
+        Markup(
+            "<p>{message} <span><code>{password}</code></span></p>".format(
+                message=Markup.escape(
+                    gettext(
+                        "Password updated. Don't forget to save it in your KeePassX database. "
+                        "New password:"
+                    )
+                ),
+                password=Markup.escape("" if password is None else password)
+            )
+        ),
+        'success'
+    )
     return True
 
 
