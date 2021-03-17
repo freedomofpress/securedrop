@@ -269,12 +269,10 @@ class SourceMessage(db.Model):
     __tablename__ = 'source_messages'
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), unique=True, nullable=False)
-    source_id = Column(Integer, ForeignKey('sources.id'))
     journalist_id = Column(Integer, ForeignKey('journalists.id'))
     message = Column(HexByteString, nullable=False)
 
-    def __init__(self, source: Source, journalist: 'Journalist', message: bytes) -> None:
-        self.source_id = source.id
+    def __init__(self, journalist: 'Journalist', message: bytes) -> None:
         self.journalist_id = journalist.id
         self.uuid = str(uuid.uuid4())
         self.message = message
@@ -303,12 +301,10 @@ class JournalistReply(db.Model):
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), unique=True, nullable=False)
     source_id = Column(Integer, ForeignKey('sources.id'))
-    journalist_id = Column(Integer, ForeignKey('journalists.id'))
     message = Column(HexByteString, nullable=False)
 
-    def __init__(self, source: Source, journalist: 'Journalist', message: bytes) -> None:
+    def __init__(self, source: Source, message: bytes) -> None:
         self.source_id = source.id
-        self.journalist_id = journalist.id
         self.uuid = str(uuid.uuid4())
         self.message = message
 
