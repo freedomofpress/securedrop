@@ -42,8 +42,10 @@ function apiSend( method, url, token, req_body, fn_success_callback, get_respons
     }
 }
 
-function onRegistrationSuccess() {
-    console.log("registered successfully!")
+function onRegistrationSuccess(session, token) {
+    console.log("registered successfully!");
+    // We get a fresh sender cert at the beginning of every session
+    getSenderCert(session, token);
 }
 
 function onPrekeySucccess(session, prekey_data) {
@@ -67,8 +69,7 @@ function onPrekeySucccess(session, prekey_data) {
 function onReplySucccess(session, reply_data, token) {
     if (reply_data["resp"] == 'NEW_MSG') {
         console.log("got new reply");
-        var plaintext = session.decrypt(
-            reply_data["journalist_uuid"],
+        var plaintext = session.sealed_sender_decrypt(
             reply_data["message"],
         );
         console.log(`decrypted new message!: ${plaintext}`);
@@ -114,7 +115,17 @@ function prepareSession( session, needs_registration, securedrop_group, token ) 
     if (needs_registration == true) {
         var keygen_data = session.generate();  // keygen_data just contains the public parts
         console.log(`signal key generation succeeded: ${keygen_data}`);
-        apiSend( "POST", "http://127.0.0.1:8080/api/v2/register", token, keygen_data, onRegistrationSuccess );
+        var request = new XMLHttpRequest();
+        request.open("POST", "http://127.0.0.1:8080/api/v2/register", true);
+        request.setRequestHeader("Content-Type", "application/json");
+        request.setRequestHeader("Authorization", `Token ${token}`);
+
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 && request.status === 200) {
+                onRegistrationSuccess(session, token);
+            }
+        };
+        request.send(JSON.stringify(keygen_data));
 
         // Todo (when we have multiple journalists): form a group
         // i.e. we'd need to: For each journalist for which we do not have prekeys do the below logic
@@ -133,17 +144,36 @@ function prepareSession( session, needs_registration, securedrop_group, token ) 
           }
         };
         prekey_request.send();
-      } else {
+    } else {
         document.getElementById("submit-doc-button").disabled = false;
-      }
+        // TODO: Get existing session from server
+        // We get a fresh sender cert at the beginning of every session (even if not newly registered)
+        getSenderCert(session, token);
+    }
 
-      console.log(`user is registered, waiting for message send`);
+    console.log(`user is registered, waiting for message send`);
+}
+
+function getSenderCert(session, token ) {
+    var request = new XMLHttpRequest();
+    request.open("GET", "http://127.0.0.1:8080/api/v2/sender_cert", true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.setRequestHeader("Authorization", `Token ${token}`);
+
+    request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+            var resp_data = JSON.parse(this.response);
+            var result = session.get_cert_and_validate(resp_data["sender_cert"], resp_data["trust_root"]);
+            console.log(`sender_cert result: ${result}`);
+        }
+    };
+    request.send();
 }
 
 function messageEncryptAndSend( session, journalist_uuid, token ) {
     var message_text = document.getElementById("message-input").value;
     // TODO: Don't do anything if message empty
-    var ciphertext = session.encrypt(journalist_uuid, message_text);
+    var ciphertext = session.sealed_sender_encrypt(journalist_uuid, message_text);
     console.log(`message text: ${message_text}`);
     console.log(`ciphertext: ${ciphertext}`);
 

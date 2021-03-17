@@ -11,12 +11,14 @@ from models import Source, WrongPasswordException, Journalist, SourceMessage, Jo
 from werkzeug.exceptions import default_exceptions
 
 from db import db
-from sdconfig import SDConfig
+from sdconfig import config, SDConfig
 from typing import Callable, Optional, Union, Dict, List, Any, Tuple
 from source_app.utils import active_securedrop_groups
 
 import signal_protocol
 
+from signal_protocol.curve import PublicKey
+from signal_protocol.sealed_sender import SenderCertificate
 
 TOKEN_EXPIRATION_MINS = 60 * 8
 
@@ -144,7 +146,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if signed_prekey_id is None:
             abort(400, 'signed_prekey_id field is missing')
 
-        # TODO: Server _could_ also verify the prekey sig and reject.
+        # TODO: Server also verifies the prekey sig and rejects if invalid.
         # Clients will be doing this too on their end, but we could also do here.
 
         # This enables enumeration of in-use registration ids. This is fine since these are public.
@@ -169,6 +171,34 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         db.session.add(user)
         db.session.commit()
 
+        return response, 200
+
+    @api.route('/sender_cert', methods=['GET'])
+    @token_required
+    def sender_cert() -> Tuple[flask.Response, int]:
+        """
+        Get sender cert
+        """
+        user = _authenticate_user_from_auth_header(request)
+
+        if not user.is_signal_registered():
+            abort(400, 'your account is not registered')
+
+        expiration = 123  # TODO: timestamp
+        DEVICE_ID = 1
+        sender_cert = SenderCertificate(
+            user.uuid,
+            user.uuid,
+            PublicKey.deserialize(user.identity_key),
+            DEVICE_ID,
+            expiration,
+            config.server_cert,
+            config.server_key.private_key(),
+        )
+        response = jsonify({
+            'sender_cert': sender_cert.serialized().hex(),
+            'trust_root': config.trust_root.public_key().serialize().hex(),
+        })
         return response, 200
 
     @api.route('/groups', methods=['GET'])
@@ -223,7 +253,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if not data['message']:
             abort(400, 'message should not be empty')
 
-        message = SourceMessage(user, journalist, data['message'])
+        message = SourceMessage(journalist, data['message'])
         db.session.add(message)
         db.session.commit()
         return jsonify({'message': 'Your message has been stored'}), 200
@@ -235,15 +265,12 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         Get messages from journalists.
 
         TODO: Pagination
-        TODO: Delete message after fetch
         """
         user = _authenticate_user_from_auth_header(request)
         reply = JournalistReply.query.filter_by(source_id=user.id).first()
         if reply:
-            journalist = Journalist.query.filter_by(id=reply.journalist_id).one() # TODO: backref
             return jsonify({
                 "resp": "NEW_MSG",
-                "journalist_uuid": journalist.uuid,
                 "message_uuid": reply.uuid,
                 "message": reply.message.hex(),
             }), 200
