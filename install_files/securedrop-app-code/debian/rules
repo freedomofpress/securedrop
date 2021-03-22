@@ -28,6 +28,7 @@ override_dh_virtualenv:
 	dh_virtualenv \
 		--python=/usr/bin/python3 \
 		--builtin-venv \
+		--preinstall setuptools-scm==5.0.2 \
 		--extra-pip-arg "--verbose" \
 		--extra-pip-arg "--no-deps" \
 		--extra-pip-arg "--no-binary=:all:" \
