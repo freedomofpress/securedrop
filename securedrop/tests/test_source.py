@@ -20,9 +20,10 @@ import crypto_util
 import source
 from passphrases import PassphraseGenerator
 from . import utils
+import server_os
+import source_app as source_app_module
 import version
 
-import server_os
 from db import db
 from journalist_app.utils import delete_collection
 from models import InstanceConfig, Source, Reply
@@ -53,20 +54,21 @@ def test_source_interface_is_disabled_when_xenial_is_eol(config, source_app):
         "i/font-awesome/fa-globe-black.png",
         "i/favicon.png",
     ]
-    with source_app.test_client() as app:
-        server_os.installed_version = "16.04"
-        server_os.XENIAL_EOL_DATE = date(2020, 1, 1)
-        for endpoint in disabled_endpoints:
-            resp = app.get(url_for(endpoint))
-            assert resp.status_code == 200
-            text = resp.data.decode("utf-8")
-            assert "We're sorry, our SecureDrop is currently offline." in text
-        # Ensure static assets are properly served
-        for asset in static_assets:
-            resp = app.get(url_for("static", filename=asset))
-            assert resp.status_code == 200
-            text = resp.data.decode("utf-8")
-            assert "We're sorry, our SecureDrop is currently offline." not in text
+    with patch("server_os.get_os_release", return_value="16.04"):
+        with patch("server_os.get_xenial_eol_date", return_value=date(2020, 1, 1)):
+            app = source_app_module.create_app(config)
+            with app.test_client() as test_client:
+                for endpoint in disabled_endpoints:
+                    resp = test_client.get(url_for(endpoint))
+                    assert resp.status_code == 200
+                    text = resp.data.decode("utf-8")
+                    assert "We're sorry, our SecureDrop is currently offline." in text
+                # Ensure static assets are properly served
+                for asset in static_assets:
+                    resp = test_client.get(url_for("static", filename=asset))
+                    assert resp.status_code == 200
+                    text = resp.data.decode("utf-8")
+                    assert "We're sorry, our SecureDrop is currently offline." not in text
 
 
 def test_source_interface_is_not_disabled_before_xenial_eol(config, source_app):
@@ -79,14 +81,20 @@ def test_source_interface_is_not_disabled_before_xenial_eol(config, source_app):
         "info.recommend_tor_browser",
         "info.why_download_public_key",
     ]
-    with source_app.test_client() as app:
-        server_os.installed_version = "16.04"
-        server_os.XENIAL_EOL_DATE = date(2200, 1, 1)
-        for endpoint in disabled_endpoints:
-            resp = app.get(url_for(endpoint), follow_redirects=True)
-            assert resp.status_code == 200
-            text = resp.data.decode("utf-8")
-            assert "We're sorry, our SecureDrop is currently offline." not in text
+    with patch("server_os.get_os_release", return_value="16.04"):
+        with patch("server_os.get_xenial_eol_date", return_value=date(2200, 1, 1)):
+            app = source_app_module.create_app(config)
+            with app.test_client() as test_client:
+                print(
+                    "OS_RELEASE: {} EOL DATE: {}".format(
+                        server_os.get_os_release(), server_os.get_xenial_eol_date()
+                    )
+                )
+                for endpoint in disabled_endpoints:
+                    resp = test_client.get(url_for(endpoint), follow_redirects=True)
+                    assert resp.status_code == 200
+                    text = resp.data.decode("utf-8")
+                    assert "We're sorry, our SecureDrop is currently offline." not in text
 
 
 def test_source_interface_is_not_disabled_for_focal(config, source_app):
@@ -99,14 +107,15 @@ def test_source_interface_is_not_disabled_for_focal(config, source_app):
         "info.recommend_tor_browser",
         "info.why_download_public_key",
     ]
-    with source_app.test_client() as app:
-        server_os.installed_version = "20.04"
-        server_os.XENIAL_EOL_DATE = date(2020, 1, 1)
-        for endpoint in disabled_endpoints:
-            resp = app.get(url_for(endpoint))
-            assert resp.status_code == 200
-            text = resp.data.decode("utf-8")
-            assert "We're sorry, our SecureDrop is currently offline." not in text
+    with patch("server_os.get_os_release", return_value="20.04"):
+        with patch("server_os.get_xenial_eol_date", return_value=date(2020, 1, 1)):
+            app = source_app_module.create_app(config)
+            with app.test_client() as test_client:
+                for endpoint in disabled_endpoints:
+                    resp = test_client.get(url_for(endpoint))
+                    assert resp.status_code == 200
+                    text = resp.data.decode("utf-8")
+                    assert "We're sorry, our SecureDrop is currently offline." not in text
 
 
 def test_logo_default_available(source_app):
@@ -690,7 +699,7 @@ def test_why_journalist_key(source_app):
 
 
 def test_metadata_route(config, source_app):
-    with patch.object(source_app_api, "server_os", new="16.04"):
+    with patch("server_os.get_os_release", return_value="16.04"):
         with source_app.test_client() as app:
             resp = app.get(url_for('api.metadata'))
             assert resp.status_code == 200
