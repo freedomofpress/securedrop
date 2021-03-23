@@ -449,18 +449,17 @@ def col_download_unread(cols_selected: List[str]) -> werkzeug.Response:
     """
     Download all unseen submissions from all selected sources.
     """
-    unseen_submissions = []  # type: List[Union[Source, Submission]]
-
-    for filesystem_id in cols_selected:
-        source = (
-            Source.query.filter(Source.filesystem_id == filesystem_id)
-            .filter_by(deleted_at=None)
-            .one()
+    unseen_submissions = (
+        Submission.query.join(Source)
+        .filter(
+            Source.deleted_at.is_(None),
+            Source.filesystem_id.in_(cols_selected)
         )
-        submissions = Submission.query.filter_by(source_id=source.id).all()
-        unseen_submissions += [s for s in submissions if not s.seen]
+        .filter(~Submission.seen_files.any(), ~Submission.seen_messages.any())
+        .all()
+    )
 
-    if not unseen_submissions:
+    if len(unseen_submissions) == 0:
         flash(gettext("No unread submissions in selected collections."), "error")
         return redirect(url_for("main.index"))
 

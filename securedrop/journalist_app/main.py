@@ -8,6 +8,8 @@ import werkzeug
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
                    render_template, g, flash, abort, Markup, escape)
 from flask_babel import gettext
+from sqlalchemy.orm import joinedload
+from sqlalchemy.sql import func
 
 import store
 
@@ -61,31 +63,60 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         else:
             return redirect(url_for('static', filename='i/logo.png'))
 
-    @view.route('/')
+    @view.route("/")
     def index() -> str:
-        unstarred = []
-        starred = []
+        # Gather the count of unread submissions for each source
+        # ID. This query will be joined in the queries for starred and
+        # unstarred sources below, and the unread counts added to
+        # their result sets as an extra column.
+        unread_stmt = (
+            db.session.query(Submission.source_id, func.count("*").label("num_unread"))
+            .filter_by(seen_files=None, seen_messages=None)
+            .group_by(Submission.source_id)
+            .subquery()
+        )
 
-        # Long SQLAlchemy statements look best when formatted according to
-        # the Pocoo style guide, IMHO:
-        # http://www.pocoo.org/internal/styleguide/
-        sources = Source.query.filter_by(pending=False, deleted_at=None) \
-                              .filter(Source.last_updated.isnot(None)) \
-                              .order_by(Source.last_updated.desc()) \
-                              .all()
-        for source in sources:
-            star = SourceStar.query.filter_by(source_id=source.id).first()
-            if star and star.starred:
-                starred.append(source)
-            else:
-                unstarred.append(source)
-            submissions = Submission.query.filter_by(source_id=source.id).all()
-            unseen_submissions = [s for s in submissions if not s.seen]
-            source.num_unread = len(unseen_submissions)
+        # Query for starred sources, along with their unread
+        # submission counts.
+        starred = (
+            db.session.query(Source, unread_stmt.c.num_unread)
+            .filter_by(pending=False, deleted_at=None)
+            .filter(Source.last_updated.isnot(None))
+            .filter(SourceStar.starred.is_(True))
+            .outerjoin(SourceStar)
+            .options(joinedload(Source.submissions))
+            .options(joinedload(Source.star))
+            .outerjoin(unread_stmt, Source.id == unread_stmt.c.source_id)
+            .order_by(Source.last_updated.desc())
+            .all()
+        )
 
-        return render_template('index.html',
-                               unstarred=unstarred,
-                               starred=starred)
+        # Now, add "num_unread" attributes to the source entities.
+        for source, num_unread in starred:
+            source.num_unread = num_unread or 0
+        starred = [source for source, num_unread in starred]
+
+        # Query for sources without stars, along with their unread
+        # submission counts.
+        unstarred = (
+            db.session.query(Source, unread_stmt.c.num_unread)
+            .filter_by(pending=False, deleted_at=None)
+            .filter(Source.last_updated.isnot(None))
+            .filter(~Source.star.has(SourceStar.starred.is_(True)))
+            .options(joinedload(Source.submissions))
+            .options(joinedload(Source.star))
+            .outerjoin(unread_stmt, Source.id == unread_stmt.c.source_id)
+            .order_by(Source.last_updated.desc())
+            .all()
+        )
+
+        # Again, add "num_unread" attributes to the source entities.
+        for source, num_unread in unstarred:
+            source.num_unread = num_unread or 0
+        unstarred = [source for source, num_unread in unstarred]
+
+        response = render_template("index.html", unstarred=unstarred, starred=starred)
+        return response
 
     @view.route('/reply', methods=('POST',))
     def reply() -> werkzeug.Response:
@@ -200,12 +231,17 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @view.route('/download_unread/<filesystem_id>')
     def download_unread_filesystem_id(filesystem_id: str) -> werkzeug.Response:
-        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
-                         .filter_by(deleted_at=None).one().id
-        submissions = Submission.query.filter(Submission.source_id == id).all()
-        unseen_submissions = [s for s in submissions if not s.seen]
-        if unseen_submissions == []:
-            flash(gettext("No unread submissions for this source."))
+        unseen_submissions = (
+            Submission.query.join(Source)
+            .filter(
+                Source.deleted_at.is_(None),
+                Source.filesystem_id == filesystem_id
+            )
+            .filter(~Submission.seen_files.any(), ~Submission.seen_messages.any())
+            .all()
+        )
+        if len(unseen_submissions) == 0:
+            flash(gettext("No unread submissions for this source."), "error")
             return redirect(url_for('col.col', filesystem_id=filesystem_id))
         source = get_source(filesystem_id)
         return download(source.journalist_filename, unseen_submissions)
