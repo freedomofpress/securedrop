@@ -29,3 +29,4 @@ SQLAlchemy>=1.3.0
 typing;python_version<"3.8"
 Werkzeug>=0.15.3
 signal_protocol==0.2.2
+signal_groups==0.1.0

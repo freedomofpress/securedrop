@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Dict
 from typing import Optional
@@ -7,6 +8,7 @@ from typing import Type
 import config as _config
 from typing import Set
 
+from signal_groups.api.server_params import ServerSecretParams
 from signal_protocol.curve import KeyPair
 from signal_protocol.sealed_sender import ServerCertificate
 
@@ -134,6 +136,11 @@ class SDConfig:
         # server_key.public_key().serialize()
         server_key_pub = b'\x05\x1e-\xe1\x05\xea2]\xe98\x04\xd9\xf4\r\x1dE\xde\xf2\x8c\x03\x08+\xa0A\x08\xa0\xf75\x1e\xa0\x99{\x00'
         server_key = KeyPair.from_public_and_private(server_key_pub, server_key_priv)
+
+        # server parameters
+        randomness = os.urandom(32)
+        self.server_secret_params = ServerSecretParams.generate(randomness)
+        self.server_public_params = self.server_secret_params.get_public_params()
 
         self.trust_root = trust_root
         self.server_key = server_key
