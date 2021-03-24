@@ -1,9 +1,21 @@
 ---
-- name: Prepare
-  hosts: all
-  gather_facts: False
+- name: Prepare upgrade boxes
+  hosts: localhost
+  become: no
   tasks:
-    - name: Install python for Ansible
-      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
-      become: True
-      changed_when: False
+    # Ensure boxes are added from the on-disk (in-repo) JSON metadata file.
+    # We do this to ensure that the latest version declared in that file is
+    # imported to the Vagrant box store before creating new VMs.
+    - name: Fetch custom Vagrant boxes
+      command: vagrant box add ../vagrant-packager/box_files/{{ item }}_xenial_metadata.json
+      register: _box_add_result
+      changed_when: >
+        "The box you're attempting to add already exists" not in _box_add_result.stderr
+      failed_when: >
+        "The box you're attempting to add already exists" not in _box_add_result.stderr and
+        _box_add_result.rc != 0
+      with_items:
+        - app
+        - mon
+
+- import_playbook: ../shared/sd_clone.yml sd_version="{{ lookup('env','SD_UPGRADE_BASE') }}"
