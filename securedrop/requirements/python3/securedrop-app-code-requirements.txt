@@ -278,3 +278,6 @@ setuptools==56.0.0 \
 signal-protocol==0.2.2 \
     --hash=sha256:77c13323ddf9247b88590837f93e55e4994f8328c2742fd4c09d8e09250a372b \
     # note: this was manually added
+signal-groups==0.1.0 \
+    --hash=sha256:7bd71deab60162dae29b5eb2630d12f37d7350721cf312017b7566e8f070ac4a \
+    # note: this was manually added

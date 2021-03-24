@@ -173,6 +173,19 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         return response, 200
 
+    @api.route('/server_params', methods=['GET'])
+    @token_required
+    def server_public_params() -> Tuple[flask.Response, int]:
+        """
+        Get server public parameters
+        """
+        user = _authenticate_user_from_auth_header(request)
+
+        response = jsonify({
+            'server_public_params': config.server_public_params.serialize().hex(),
+        })
+        return response, 200
+
     @api.route('/sender_cert', methods=['GET'])
     @token_required
     def sender_cert() -> Tuple[flask.Response, int]:
