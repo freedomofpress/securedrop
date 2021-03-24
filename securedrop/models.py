@@ -248,12 +248,24 @@ class SourcePreKey(db.Model):
     pre_key = Column(HexByteString)
 
 
-# class JournalistToSourceDeliveries(db.Model): contains e2e messages to be delivered to sources from journalists. Messages are deleted
-# after fetching. TODO: The same message is sent to other journalists using group messaging and will be in their source to journalist queue.
-# One could also imagine a JournalistToJournalistDeliveries table here, but that's a story for another day.
-# class FileMetadata(db.Model): contains metadata of files
-# Why keep metadata? To keep the seen by functionality working. If seen by is moved to client-only (with updates sent as messages to other journalists)
-# then the metadata can be deleted.
+class Group(db.Model):
+    __tablename__ = 'groups'
+    id = Column(Integer, primary_key=True)
+    group_uid = Column(HexByteString, nullable=False, unique=True)
+    group_public_params = Column(HexByteString, nullable=False)
+
+    def __init__(self, group_uid: bytes, group_public_params: bytes) -> None:
+        self.group_uid = group_uid
+        self.group_public_params = group_public_params
+
+
+class GroupMember(db.Model):
+    __tablename__ = 'group_members'
+    id = Column(Integer, primary_key=True)
+    group_id = Column("group_id", Integer, ForeignKey('groups.id'))
+    uid_ciphertext = Column(HexByteString, nullable=False)
+    is_admin = Column(Boolean, default=False, nullable=False)
+
 
 class SourceMessage(db.Model):
     """
