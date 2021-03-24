@@ -46,6 +46,9 @@ function onRegistrationSuccess(session, token) {
     console.log("registered successfully!");
     // We get a fresh sender cert at the beginning of every session
     getSenderCert(session, token);
+    // We also get the server parameters
+    getServerParams(session, token);
+    getAuthCredential(session, token);
 }
 
 function onPrekeySucccess(session, prekey_data) {
@@ -149,6 +152,8 @@ function prepareSession( session, needs_registration, securedrop_group, token ) 
         // TODO: Get existing session from server
         // We get a fresh sender cert at the beginning of every session (even if not newly registered)
         getSenderCert(session, token);
+        getServerParams(session, token);
+        getAuthCredential(session, token);
     }
 
     console.log(`user is registered, waiting for message send`);
@@ -165,6 +170,38 @@ function getSenderCert(session, token ) {
             var resp_data = JSON.parse(this.response);
             var result = session.get_cert_and_validate(resp_data["sender_cert"], resp_data["trust_root"]);
             console.log(`sender_cert result: ${result}`);
+        }
+    };
+    request.send();
+}
+
+function getAuthCredential( session, token ) {
+    var request = new XMLHttpRequest();
+    request.open("GET", "http://127.0.0.1:8080/api/v2/auth_credential", true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.setRequestHeader("Authorization", `Token ${token}`);
+
+    request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+            var resp_data = JSON.parse(this.response);
+            var result = session.save_auth_credential(resp_data["auth_credential"]);
+            console.log(`got auth_credential, result: ${result}`);
+        }
+    };
+    request.send();
+}
+
+function getServerParams( session, token ) {
+    var request = new XMLHttpRequest();
+    request.open("GET", "http://127.0.0.1:8080/api/v2/server_params", true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.setRequestHeader("Authorization", `Token ${token}`);
+
+    request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+            var resp_data = JSON.parse(this.response);
+            var result = session.save_server_params(resp_data["server_public_params"]);
+            console.log(`got server params, result: ${result}`);
         }
     };
     request.send();
