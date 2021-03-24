@@ -11,7 +11,13 @@ lint: |
 platforms:
   - name: app-staging
     box: fpf/securedrop-app-xenial
+    # We can't pin an explicit version and also provide a custom box URL.
+    # Vagrant claims to pull the newest version of a custom box URL, but
+    # is sometimes satisfied with a local box of the same name, but older
+    # version. That's why we run 'vagrant box add' with the JSON file
+    # in the prepare.yml step.
     box_url: "../vagrant-packager/box_files/app_xenial_metadata.json"
+    # box_version: "1.8.0"
     instance_raw_config_args:
       - "ssh.insert_key = false"
     provider_override_args:
@@ -64,17 +70,18 @@ provisioner:
       pipelining: True
   playbooks:
     side_effect: side_effect.yml
+    prepare: prepare.yml
   connection_options:
     ansible_ssh_common_args: -o IdentitiesOnly=yes
 
 scenario:
   name: upgrade
   create_sequence:
+    - prepare
     - create
-    - dependency
   converge_sequence:
+    - prepare
     - create
-    - dependency
     - converge
 verifier:
   name: testinfra
