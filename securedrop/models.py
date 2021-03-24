@@ -268,6 +268,10 @@ class GroupMember(db.Model):
     uid_ciphertext = Column(HexByteString, nullable=False)
     is_admin = Column(Boolean, default=False, nullable=False)
 
+    def __init__(self, group: 'Group', uid_ciphertext: bytes, is_admin: bool =False) -> None:
+        self.group_id = group.id
+        self.uid_ciphertext = uid_ciphertext
+        self.is_admin = is_admin
 
 class SourceMessage(db.Model):
     """
