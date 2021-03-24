@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 import json
+from uuid import UUID
+import os
 
 import flask
 import werkzeug
@@ -171,6 +173,28 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         db.session.add(user)
         db.session.commit()
 
+        return response, 200
+
+    @api.route('/auth_credential', methods=['GET'])
+    @token_required
+    def auth_credential() -> Tuple[flask.Response, int]:
+        """
+        Get auth_credential for user
+        """
+        user = _authenticate_user_from_auth_header(request)
+        randomness = os.urandom(32)
+
+        # uid in 16 BE bytes
+        uid = UUID(user.uuid).bytes
+
+        redemption_time = 123456  # TODO
+        auth_credential_response = config.server_secret_params.issue_auth_credential(
+            randomness, uid, redemption_time
+        )
+
+        response = jsonify({
+            'auth_credential': auth_credential_response.serialize().hex(),
+        })
         return response, 200
 
     @api.route('/server_params', methods=['GET'])
