@@ -7,3 +7,12 @@
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
       become: True
       changed_when: False
+
+    # More recent Bento boxes dropped this dependency, but our packages assume it's present,
+    # since it is on a default ISO install of Ubuntu Server.
+    - name: Install release-updater-core pkg
+      apt:
+        name: ubuntu-release-updater-core
+        state: present
+        update_cache: yes
+        cache_valid_time: 3600
