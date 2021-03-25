@@ -21,6 +21,21 @@
       SecureDrop cannot be installed. For details, see
       https://github.com/freedomofpress/securedrop/issues/4058
 
+- name: Check SecureBoot status
+  raw: 'mokutil --sb-state'
+  ignore_errors: yes
+  register: _mokutil_results
+
+- name: Verify that SecureBoot is not enabled
+  assert:
+    that:
+      - "'SecureBoot enabled' not in _mokutil_results.stdout"
+      - "'SecureBoot enabled' not in _mokutil_results.stderr"
+    fail_msg: >-
+      SecureBoot is enabled. SecureDrop cannot be installed, as it uses a
+      custom kernel that is not signed. Please disable SecureBoot on the
+      target servers and try again.
+
 - name: Install python and packages required by installer
   raw: apt install -y python3 apt-transport-https dnsutils ubuntu-release-upgrader-core
   register: _apt_install_prereqs_results
