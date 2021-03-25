@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Optional
 
 import werkzeug
@@ -26,6 +27,22 @@ from source_app.decorators import ignore_static
 from source_app.utils import logged_in, was_in_generate_flow
 from store import Storage
 from server_os import is_os_past_eol
+
+
+def get_logo_url(app: Flask) -> str:
+    if not app.static_folder:
+        raise FileNotFoundError
+
+    custom_logo_filename = "i/custom_logo.png"
+    default_logo_filename = "i/logo.png"
+    custom_logo_path = Path(app.static_folder) / custom_logo_filename
+    default_logo_path = Path(app.static_folder) / default_logo_filename
+    if custom_logo_path.is_file():
+        return url_for("static", filename=custom_logo_filename)
+    elif default_logo_path.is_file():
+        return url_for("static", filename=default_logo_filename)
+
+    raise FileNotFoundError
 
 
 def create_app(config: SDConfig) -> Flask:
@@ -182,6 +199,11 @@ def create_app(config: SDConfig) -> Flask:
             g.organization_name = app.instance_config.organization_name
         else:
             g.organization_name = gettext('SecureDrop')
+
+        try:
+            g.logo = get_logo_url(app)
+        except FileNotFoundError:
+            app.logger.error("Site logo not found.")
 
         return None
 

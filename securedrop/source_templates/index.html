@@ -30,7 +30,7 @@
            See _source_index.sass for a more full understanding. #}
         <div class="index-wrap">
           <div class="header">
-            <img src="{{ url_for('main.select_logo') }}" alt="{{ g.organization_name }} | {{ gettext('Logo Image') }}" class="logo-image">
+            <img src="{{ g.logo }}" alt="{{ g.organization_name }} | {{ gettext('Logo Image') }}" class="logo-image">
             <div id="index-locales">
               {% include 'locales.html' %}
             </div>

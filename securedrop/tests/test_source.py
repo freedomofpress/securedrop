@@ -24,6 +24,7 @@ from journalist_app.utils import delete_collection
 from models import InstanceConfig, Source, Reply
 from source_app import main as source_app_main
 from source_app import api as source_app_api
+from source_app import get_logo_url
 from .utils.db_helper import new_codename, submit
 from .utils.instrument import InstrumentedApp
 from sdconfig import config
@@ -110,12 +111,10 @@ def test_logo_default_available(source_app):
         os.remove(custom_image_location)
 
     with source_app.test_client() as app:
-        response = app.get(url_for('main.select_logo'), follow_redirects=False)
-
-        assert response.status_code == 302
-        observed_headers = response.headers
-        assert 'Location' in list(observed_headers.keys())
-        assert url_for('static', filename='i/logo.png') in observed_headers['Location']
+        logo_url = get_logo_url(source_app)
+        assert logo_url.endswith('i/logo.png')
+        response = app.get(logo_url, follow_redirects=False)
+        assert response.status_code == 200
 
 
 def test_logo_custom_available(source_app):
@@ -126,12 +125,10 @@ def test_logo_custom_available(source_app):
         shutil.copyfile(default_image, custom_image)
 
     with source_app.test_client() as app:
-        response = app.get(url_for('main.select_logo'), follow_redirects=False)
-
-        assert response.status_code == 302
-        observed_headers = response.headers
-        assert 'Location' in list(observed_headers.keys())
-        assert url_for('static', filename='i/custom_logo.png') in observed_headers['Location']
+        logo_url = get_logo_url(source_app)
+        assert logo_url.endswith('i/custom_logo.png')
+        response = app.get(logo_url, follow_redirects=False)
+        assert response.status_code == 200
 
 
 def test_page_not_found(source_app):

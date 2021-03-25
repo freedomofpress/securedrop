@@ -1603,12 +1603,10 @@ def test_logo_default_available(journalist_app):
         os.remove(custom_image_location)
 
     with journalist_app.test_client() as app:
-        response = app.get(url_for('main.select_logo'), follow_redirects=False)
-
-        assert response.status_code == 302
-        observed_headers = response.headers
-        assert 'Location' in list(observed_headers.keys())
-        assert url_for('static', filename='i/logo.png') in observed_headers['Location']
+        logo_url = journalist_app_module.get_logo_url(journalist_app)
+        assert logo_url.endswith("/static/i/logo.png")
+        response = app.get(logo_url, follow_redirects=False)
+        assert response.status_code == 200
 
 
 def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
@@ -1619,14 +1617,17 @@ def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
         original_image = logo_file.read()
 
     try:
+        logo_bytes = base64.decodebytes(
+            b"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
+            b"VR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
+        )
+
         with journalist_app.test_client() as app:
             _login_user(app, test_admin['username'], test_admin['password'],
                         test_admin['otp_secret'])
             # Create 1px * 1px 'white' PNG file from its base64 string
             form = journalist_app_module.forms.LogoForm(
-                logo=(BytesIO(base64.decodebytes
-                      (b"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
-                       b"VR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=")), 'test.png')
+                logo=(BytesIO(logo_bytes), 'test.png')
             )
             with InstrumentedApp(journalist_app) as ins:
                 app.post(url_for('admin.manage_config'),
@@ -1635,12 +1636,11 @@ def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
 
                 ins.assert_message_flashed("Image updated.", "logo-success")
         with journalist_app.test_client() as app:
-            response = app.get(url_for('main.select_logo'), follow_redirects=False)
-
-            assert response.status_code == 302
-            observed_headers = response.headers
-            assert 'Location' in list(observed_headers.keys())
-            assert url_for('static', filename='i/custom_logo.png') in observed_headers['Location']
+            logo_url = journalist_app_module.get_logo_url(journalist_app)
+            assert logo_url.endswith("/static/i/custom_logo.png")
+            response = app.get(logo_url, follow_redirects=False)
+            assert response.status_code == 200
+            assert response.data == logo_bytes
     finally:
         # Restore original image to logo location for subsequent tests
         with io.open(logo_image_location, 'wb') as logo_file:
