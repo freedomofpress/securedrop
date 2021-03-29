@@ -47,3 +47,10 @@
 <decoder name="dhclient">
   <program_name>dhclient</program_name>
 </decoder>
+
+<!--
+  The default fwupd tries to auto-update and generates error.
+-->
+<decoder name="fwupd">
+  <program_name>fwupd</program_name>
+</decoder>
