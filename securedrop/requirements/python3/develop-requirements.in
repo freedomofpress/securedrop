@@ -26,12 +26,12 @@ pip==19.3.1
 pip-tools==4.5.1
 psutil>=5.6.6
 pyenchant
-pylint>=2.5.0
+pylint>=2.7.0; python_version > '3.6'
 py>=1.10.0
 pytest>=6.1.1
 pytest-xdist>=2.1.0
 python-vagrant
-pyyaml>=5.3.1
+pyyaml>=5.4.1; python_version > '3.6'
 ruamel.yaml>=0.16.10
 safety>=1.8.7
 setuptools>=46.0.0
