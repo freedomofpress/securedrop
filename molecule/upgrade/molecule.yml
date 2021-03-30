@@ -22,6 +22,8 @@ platforms:
       - "ssh.insert_key = false"
     provider_override_args:
       - "vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
+    provider_options:
+      video_type: '"virtio"'
     memory: 1024
     private_ip: 10.0.1.2
     groups:
@@ -36,6 +38,8 @@ platforms:
       - "ssh.insert_key = false"
     provider_override_args:
       - "vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
+    provider_options:
+      video_type: '"virtio"'
     memory: 1024
     private_ip: 10.0.1.3
     groups:
