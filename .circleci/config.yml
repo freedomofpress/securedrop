@@ -100,7 +100,7 @@ jobs:
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
-      BASE_OS: xenial
+      BASE_OS: focal
     steps:
       - checkout
       - *rebaseontarget
@@ -115,8 +115,8 @@ jobs:
       - run:
           name: Run all linters but shellcheck
           command: |
-            fromtag=$(docker images |grep securedrop-test-xenial-py3 |head -n1 |awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-xenial-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "/opt/venvs/securedrop-app-code/bin/pip3 install --require-hashes -r requirements/python3/develop-requirements.txt && make -C .. ansible-config-lint app-lint flake8 html-lint typelint yamllint"
+            fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "/opt/venvs/securedrop-app-code/bin/pip3 install --require-hashes -r requirements/python3/develop-requirements.txt && make -C .. ansible-config-lint app-lint flake8 html-lint typelint yamllint"
 
       - run:
           name: Run shellcheck
