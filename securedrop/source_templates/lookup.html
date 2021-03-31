@@ -44,13 +44,10 @@
 
     const submitButton = document.getElementById("submit-doc-button");
 
-    for (ind in securedrop_group) {
-      submitButton.addEventListener("click", event => {
+    submitButton.addEventListener("click", event => {
       removeSendMsg();
-      var journalist_uuid = securedrop_group[ind];
-      messageEncryptAndSend(session, journalist_uuid, token);
-      });
-    }
+      messageEncryptAndSend(session, securedrop_group, token);
+    });
 
     // message checking loop
     while (true) {
