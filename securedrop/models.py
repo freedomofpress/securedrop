@@ -494,7 +494,7 @@ class Journalist(db.Model):
         if len(username) < cls.MIN_USERNAME_LEN:
             raise InvalidUsernameException(
                 ngettext(
-                    'Must be at least one character long.',
+                    'Must be at least {num} character long.',
                     'Must be at least {num} characters long.',
                     cls.MIN_USERNAME_LEN
                 ).format(num=cls.MIN_USERNAME_LEN)
