@@ -110,6 +110,10 @@ function onMessageSendSuccess() {
     }
 }
 
+function onGroupAddSuccess() {
+    console.log("sent group deets to journalist");
+}
+
 function onConfirmationSuccess() {
     console.log(`sent confirmation of message on server`);
 }
@@ -170,20 +174,29 @@ async function prepareSession( session, needs_registration, securedrop_group, to
         await sleep(1000);
 
         // Step 2. Fetch prekey bundles for each journalist in our group.
+        var session2 = session;
         for (ind in securedrop_group) {
             var prekey_request = new XMLHttpRequest();
             var journalist_uuid = securedrop_group[ind];
+
             prekey_request.open("GET", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/prekey_bundle`, true);
             prekey_request.setRequestHeader("Content-Type", "application/json");
             prekey_request.setRequestHeader("Authorization", `Token ${token}`);
 
             prekey_request.onreadystatechange = function () {
-            if (prekey_request.readyState === 4 && prekey_request.status === 200) {
-                var prekey_data = JSON.parse(this.response)
-                onPrekeySucccess(session, prekey_data);
-            }
+                if (prekey_request.readyState === 4 && prekey_request.status === 200) {
+                    var prekey_data = JSON.parse(this.response)
+                    onPrekeySucccess(session2, prekey_data);
+                }
             };
             prekey_request.send();
+
+            await sleep(100);
+
+            var ciphertext = session2.sealed_send_encrypted_group_key(journalist_uuid);
+            console.log(`encrypted group key: ${ciphertext}`);
+            var payload = {"message": ciphertext,};
+            apiSend( "POST", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/messages`, token, payload, onGroupAddSuccess );
         };
 
         // TODO: In the future, we may be registered, but not all these steps have necessarily succeeded.
