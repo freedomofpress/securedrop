@@ -262,18 +262,23 @@ function getServerParams( session, token ) {
     request.send();
 }
 
-function messageEncryptAndSend( session, journalist_uuid, token ) {
-    var message_text = document.getElementById("message-input").value;
-    // TODO: Don't do anything if message empty
-    var ciphertext = session.sealed_sender_encrypt(journalist_uuid, message_text);
-    console.log(`message text: ${message_text}`);
-    console.log(`ciphertext: ${ciphertext}`);
+function messageEncryptAndSend( session, securedrop_group, token ) {
+    // Encrypt and send message for each group participant
+    for (ind in securedrop_group) {
+        var journalist_uuid = securedrop_group[ind];
+        var message_text = document.getElementById("msg").value;
+        // TODO: Don't do anything if message empty
+        var ciphertext = session.group_sealed_sender_encrypt(journalist_uuid, message_text);
+        console.log(`message text: ${message_text}`);
+        console.log(`ciphertext: ${ciphertext}`);
 
-    var payload = {"message": ciphertext,};
-    apiSend( "POST", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/messages`, token, payload, onMessageSendSuccess );
+        var payload = {"message": ciphertext,};
+        console.log(`now sending to: ${journalist_uuid}`);
+        apiSend( "POST", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/messages`, token, payload, onMessageSendSuccess );
+    }
 
     // Now reset UI for next message
-    document.getElementById("message-input").value = "";
+    document.getElementById("msg").value = "";
 }
 
 function messageDecryptAndSend( session, token ) {
