@@ -1,18 +1,1 @@
-# application code
-/securedrop/ @redshiftzero @kushaldas
-
-# updater GUI
-/journalist_gui/ @redshiftzero @kushaldas
-
-# admin CLI
-/admin/ @redshiftzero @kushaldas @emkll
-
-# docs
-/docs/ @zenmonkeykstop @redshiftzero @kushaldas @emkll
-
-# ansible / deployment
-/devops/        @conorsch @kushaldas @emkll
-/install_files/ @conorsch @kushaldas @emkll
-/molecule/      @conorsch @kushaldas @emkll
-/testinfra/     @conorsch @kushaldas @emkll
-/tails_files/   @conorsch @kushaldas @emkll
+*       @freedomofpress/securedrop-maintainers
