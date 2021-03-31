@@ -9,7 +9,7 @@ from functools import wraps
 from sqlalchemy import Column
 
 from flask import Blueprint, current_app, make_response, jsonify, request, abort
-from models import Source, WrongPasswordException, Journalist, SourceMessage, JournalistReply
+from models import Group, GroupMember, Source, WrongPasswordException, Journalist, SourceMessage, JournalistReply
 from werkzeug.exceptions import default_exceptions
 
 from db import db
@@ -19,6 +19,8 @@ from source_app.utils import active_securedrop_groups
 
 import signal_protocol
 
+from signal_groups.api.auth import AuthCredentialPresentation
+from signal_groups.api.groups import GroupPublicParams, UuidCiphertext
 from signal_protocol.curve import PublicKey
 from signal_protocol.sealed_sender import SenderCertificate
 
@@ -174,6 +176,93 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         db.session.commit()
 
         return response, 200
+
+    # This intentionally does not have @token_required, in the body of the
+    # request, the user must present a valid AuthCredentialPresentation
+    @api.route('/groups', methods=['POST'])
+    def create_group() -> Tuple[flask.Response, int]:
+        """
+        Create group
+        """
+        if request.json is None:
+                abort(400, 'please send requests in valid JSON')
+
+        req = json.loads(request.data.decode('utf-8'))
+        raw_auth_credential_presentation = req.get('auth_credential_presentation', None)
+        group_id = req.get('group_id', None)
+        raw_group_public_params = req.get('group_public_params', None)
+        group_members = req.get('group_members', [])
+        group_admins = req.get('group_admins', [])
+
+        if raw_auth_credential_presentation is None:
+            abort(400, 'auth_credential_presentation not found in request body')
+        if group_id is None:
+            abort(400, 'group_id field is missing')
+        if raw_group_public_params is None:
+            abort(400, 'group_public_params field is missing')
+        if not group_members:
+            abort(400, 'group_members field is missing')
+        if not group_admins:
+            abort(400, 'group_admins field is missing')
+
+        try:
+            group_public_params = GroupPublicParams.deserialize(bytes.fromhex(raw_group_public_params))
+        except ValueError:
+            abort(400, 'err: could not deserialize GroupPublicParams')
+
+        try:
+            auth_credential_presentation = AuthCredentialPresentation.deserialize(bytes.fromhex(raw_auth_credential_presentation))
+        except ValueError:
+            abort(400, 'err: could not deserialize AuthCredentialPresentation')
+
+        # Before doing anything, we must verify the auth credential presentation.
+        config.server_secret_params.verify_auth_credential_presentation(group_public_params, auth_credential_presentation)
+
+        group_creator_uuid_ciphertext = auth_credential_presentation.get_uuid_ciphertext()
+        new_group_id = bytes(group_public_params.get_group_identifier())
+
+        # We ensure the group_id is not already in use on the server.
+        group = Group.query.filter_by(group_uid=new_group_id).first()
+        if group:
+            abort(400, 'err: group already exists')
+        # This means that users can enumerate group_ids.
+        # But, they can't do anything with that info unless they are the admin.
+        new_group = Group(new_group_id, group_public_params.serialize())
+
+        members_uuid_cipher_to_add = []
+        admins_uuid_cipher_to_add = []
+
+        for entry in group_members:
+            members_uuid_cipher_to_add.append(bytes.fromhex(entry))
+
+        for entry in group_admins:
+            admins_uuid_cipher_to_add.append(bytes.fromhex(entry))
+
+        # We check the Uidciphertext is making a group including themselves.
+        # TODO: allow a third role "Admin" that create groups for Journalists and Sources (i.e.
+        # without themselves in it)?
+        if group_creator_uuid_ciphertext.serialize().hex() not in group_members + group_admins:
+            abort(400, 'err: cannot create a group for others')
+
+        # -- PERMISSIONS FOR GROUP CREATORS --
+        # For sources, they must NOT be an admin.
+        if group_creator_uuid_ciphertext.serialize().hex() in group_admins:
+            abort(400, 'err: source group creators should not be admins')
+
+        # -- PERMISSIONS FOR OTHER GROUP MEMBERS --
+        # Server knows the group creator is the source, so all other users should be admins.
+        if len(group_admins) != len(group_admins) + len(group_members) - 1:
+            abort(400, 'err: all journalists should be admins')
+
+        # Now that we've validated everything. Let's add the new objects to the database.
+        db.session.add(new_group)
+        for member in members_uuid_cipher_to_add:
+            db.session.add(GroupMember(new_group, member, is_admin=False))
+        for admin in admins_uuid_cipher_to_add:
+            db.session.add(GroupMember(new_group, member, is_admin=True))
+        db.session.commit()
+
+        return jsonify({'message': 'Your group has been created'}), 200
 
     @api.route('/auth_credential', methods=['GET'])
     @token_required
