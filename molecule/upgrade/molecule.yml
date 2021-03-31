@@ -10,13 +10,13 @@ lint: |
 
 platforms:
   - name: app-staging
-    box: fpf/securedrop-app-xenial
+    box: fpf/securedrop-app-focal
     # We can't pin an explicit version and also provide a custom box URL.
     # Vagrant claims to pull the newest version of a custom box URL, but
     # is sometimes satisfied with a local box of the same name, but older
     # version. That's why we run 'vagrant box add' with the JSON file
     # in the prepare.yml step.
-    box_url: "../vagrant-packager/box_files/app_xenial_metadata.json"
+    box_url: "../vagrant-packager/box_files/app_focal_metadata.json"
     # box_version: "1.8.0"
     instance_raw_config_args:
       - "ssh.insert_key = false"
@@ -32,8 +32,8 @@ platforms:
       - staging
 
   - name: mon-staging
-    box: fpf/securedrop-mon-xenial
-    box_url: "../vagrant-packager/box_files/mon_xenial_metadata.json"
+    box: fpf/securedrop-mon-focal
+    box_url: "../vagrant-packager/box_files/mon_focal_metadata.json"
     instance_raw_config_args:
       - "ssh.insert_key = false"
     provider_override_args:

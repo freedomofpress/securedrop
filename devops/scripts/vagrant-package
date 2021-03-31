@@ -12,7 +12,7 @@ set -o pipefail
 virtualenv_bootstrap
 
 echo '######################'
-echo 'Building Xenial boxes'
+echo 'Building Focal boxes'
 echo '######################'
 molecule test -s vagrant-packager
 molecule/vagrant-packager/package.py

@@ -7,7 +7,7 @@
     # We do this to ensure that the latest version declared in that file is
     # imported to the Vagrant box store before creating new VMs.
     - name: Fetch custom Vagrant boxes
-      command: vagrant box add ../vagrant-packager/box_files/{{ item }}_xenial_metadata.json
+      command: vagrant box add ../vagrant-packager/box_files/{{ item }}_focal_metadata.json
       register: _box_add_result
       changed_when: >
         "The box you're attempting to add already exists" not in _box_add_result.stderr

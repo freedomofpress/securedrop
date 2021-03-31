@@ -1,0 +1,17 @@
+{
+  "description": "Testing VM image for SecureDrop Application Server running Ubuntu Focal.",
+  "name": "fpf/securedrop-app-focal",
+  "versions": [
+    {
+      "providers": [
+        {
+          "checksum": "c6e15fba3e494d36f7c56d19b7f6bd0a3a871c68dc659291022e4adf53865375",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/app-staging-focal_1.8.0.box"
+        }
+      ],
+      "version": "1.8.0"
+    }
+  ]
+}

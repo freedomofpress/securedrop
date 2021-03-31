@@ -25,7 +25,7 @@ etc_hosts:
       line: "{{ app_ip }}  app-staging"
 
 # Set Xenial as apt repo channel for hosting deb packages
-rep_dist: xenial
+rep_dist: focal
 
 # Override path to repo root, to use the nested repo on the previous version.
 # See molecule/shared/sd_clone.yml for details on the path structure.

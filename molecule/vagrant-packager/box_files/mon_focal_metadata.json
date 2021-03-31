@@ -1,0 +1,17 @@
+{
+  "description": "Testing VM image for SecureDrop Monitor Server running Ubuntu Focal.",
+  "name": "fpf/securedrop-mon-focal",
+  "versions": [
+    {
+      "providers": [
+        {
+          "checksum": "f6ef1e220af89ff22b144dbc84bb2dfed25ab31148f4280d943a21e03823a9f7",
+          "checksum_type": "sha256",
+          "name": "libvirt",
+          "url": "https://dev-bin.ops.securedrop.org/vagrant/mon-staging-focal_1.8.0.box"
+        }
+      ],
+      "version": "1.8.0"
+    }
+  ]
+}
