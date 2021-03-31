@@ -99,13 +99,15 @@ function onReplySucccess(session, reply_data, token) {
 }
 
 function onMessageSendSuccess() {
-    const success_div = document.createElement("div");
-    success_div.id = "success-message"
-    const success_emoji = document.createTextNode("sent! ✅");
-    success_div.appendChild(success_emoji);
-    document.getElementById("below-the-submit").prepend(success_div);
-    setTimeout(removeSendMsg, 3000); // Remove this message in 3 seconds
-    console.log("sent successfully!")
+    if (!document.getElementById("success-message")) {
+        const success_div = document.createElement("div");
+        success_div.id = "success-message"
+        const success_emoji = document.createTextNode("sent! ✅");
+        success_div.appendChild(success_emoji);
+        document.getElementById("below-the-submit").prepend(success_div);
+        setTimeout(removeSendMsg, 3000); // Remove this message in 3 seconds
+        console.log("sent successfully!")
+    }
 }
 
 function onConfirmationSuccess() {
@@ -142,16 +144,19 @@ async function prepareSession( session, needs_registration, securedrop_group, to
         var members = [
             { string: session.uuid()}
         ];
-        var journalist_uuid = securedrop_group;
-        var admins = [
-            { string: journalist_uuid }
-        ];
+        var admins = []
+        for (ind in securedrop_group) {
+            admins.push({
+                string: securedrop_group[ind]
+            })
+        };
+        console.log(admins);
 
         // Note: we must have AuthCred to create the group.
-        await sleep(1000);
+        await sleep(2000);
         var public_group_data = session.create_group(members, admins);
         var group_request = new XMLHttpRequest();
-        group_request.open("POST", "http://127.0.0.1:8080/api/v2/groups", true);
+        group_request.open("POST", "http://127.0.0.1:8080/api/v2/groups/new", true);
         group_request.setRequestHeader("Content-Type", "application/json");
         group_request.setRequestHeader("Authorization", `Token ${token}`);
 
@@ -162,21 +167,24 @@ async function prepareSession( session, needs_registration, securedrop_group, to
         };
         group_request.send(JSON.stringify(public_group_data));
 
-        // Step 2. Fetch prekey bundles for each journalist in our group.
-        // But for now the group is a single journalist.
-        var journalist_uuid = securedrop_group;
-        var prekey_request = new XMLHttpRequest();
-        prekey_request.open("GET", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/prekey_bundle`, true);
-        prekey_request.setRequestHeader("Content-Type", "application/json");
-        prekey_request.setRequestHeader("Authorization", `Token ${token}`);
+        await sleep(1000);
 
-        prekey_request.onreadystatechange = function () {
-          if (prekey_request.readyState === 4 && prekey_request.status === 200) {
-            var prekey_data = JSON.parse(this.response)
-            onPrekeySucccess(session, prekey_data);
-          }
+        // Step 2. Fetch prekey bundles for each journalist in our group.
+        for (ind in securedrop_group) {
+            var prekey_request = new XMLHttpRequest();
+            var journalist_uuid = securedrop_group[ind];
+            prekey_request.open("GET", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/prekey_bundle`, true);
+            prekey_request.setRequestHeader("Content-Type", "application/json");
+            prekey_request.setRequestHeader("Authorization", `Token ${token}`);
+
+            prekey_request.onreadystatechange = function () {
+            if (prekey_request.readyState === 4 && prekey_request.status === 200) {
+                var prekey_data = JSON.parse(this.response)
+                onPrekeySucccess(session, prekey_data);
+            }
+            };
+            prekey_request.send();
         };
-        prekey_request.send();
 
         // TODO: In the future, we may be registered, but not all these steps have necessarily succeeded.
         // When we log back in, we should pick up where we left off. For example, we don't attempt

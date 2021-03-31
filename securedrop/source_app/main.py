@@ -15,7 +15,7 @@ from sqlalchemy.exc import IntegrityError
 import store
 
 from db import db
-from models import Source, Submission, Reply, get_one_or_else
+from models import Source, Submission, Reply, get_one_or_else, active_securedrop_groups
 from sdconfig import SDConfig
 from source_app.apiv2 import TOKEN_EXPIRATION_MINS
 from source_app.decorators import login_required

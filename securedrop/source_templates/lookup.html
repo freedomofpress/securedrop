@@ -32,7 +32,7 @@
     // As soon as wasm is loaded, we begin key generation if it's not done yet.
     const needs_registration = JSON.parse("{{ to_register }}".toLowerCase());
     const source_uuid = "{{ source_uuid }}";
-    const securedrop_group = "{{ securedrop_group }}";
+    const securedrop_group = {{ securedrop_group|tojson }};  //[{{','.join(securedrop_group)}}]
 
     // TODO: TEMP ONLY
     const token = "{{ token }}"
@@ -42,16 +42,15 @@
 
     await prepareSession( session, needs_registration, securedrop_group, token );
 
-    // Todo when we have multiple journalists
-    // For each journalist for which we do not have prekeys:
-    // But for now the group is a single journalist.
-    var journalist_uuid = securedrop_group;
-
     const submitButton = document.getElementById("submit-doc-button");
-    submitButton.addEventListener("click", event => {
+
+    for (ind in securedrop_group) {
+      submitButton.addEventListener("click", event => {
       removeSendMsg();
+      var journalist_uuid = securedrop_group[ind];
       messageEncryptAndSend(session, journalist_uuid, token);
       });
+    }
 
     // message checking loop
     while (true) {

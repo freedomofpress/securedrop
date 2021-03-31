@@ -9,13 +9,12 @@ from functools import wraps
 from sqlalchemy import Column
 
 from flask import Blueprint, current_app, make_response, jsonify, request, abort
-from models import Group, GroupMember, Source, WrongPasswordException, Journalist, SourceMessage, JournalistReply
+from models import Group, GroupMember, Source, WrongPasswordException, Journalist, SourceMessage, JournalistReply, active_securedrop_groups
 from werkzeug.exceptions import default_exceptions
 
 from db import db
 from sdconfig import config, SDConfig
 from typing import Callable, Optional, Union, Dict, List, Any, Tuple
-from source_app.utils import active_securedrop_groups
 
 import signal_protocol
 
@@ -177,9 +176,20 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         return response, 200
 
+    @api.route('/groups', methods=['GET'])
+    @token_required
+    def groups() -> Tuple[flask.Response, int]:
+        """
+        Get SecureDrop group membership information. This lets a source know
+        who is onboarded to each organization.
+        """
+
+        response = jsonify(active_securedrop_groups())
+        return response, 200
+
     # This intentionally does not have @token_required, in the body of the
     # request, the user must present a valid AuthCredentialPresentation
-    @api.route('/groups', methods=['POST'])
+    @api.route('/groups/new', methods=['POST'])
     def create_group() -> Tuple[flask.Response, int]:
         """
         Create group
@@ -325,16 +335,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             'sender_cert': sender_cert.serialized().hex(),
             'trust_root': config.trust_root.public_key().serialize().hex(),
         })
-        return response, 200
-
-    @api.route('/groups', methods=['GET'])
-    @token_required
-    def groups() -> Tuple[flask.Response, int]:
-        """
-        Get SecureDrop group membership information. This lets a source know
-        who they should be encrypting their messages to on the journalist side.
-        """
-        response = jsonify(active_securedrop_groups())
         return response, 200
 
     @api.route('/journalists/<journalist_uuid>/prekey_bundle', methods=['GET'])

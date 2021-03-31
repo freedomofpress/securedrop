@@ -10,6 +10,7 @@ import qrcode
 import qrcode.image.svg
 import uuid
 from io import BytesIO
+import typing
 
 from flask import current_app, url_for
 from flask_babel import gettext, ngettext
@@ -34,6 +35,23 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
     LOGIN_HARDENING = False
 
 ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
+
+
+def active_securedrop_groups() -> typing.Dict:
+    # We only return those journalists for which they have completed
+    # signal registration.
+    journalists = Journalist.query.all()
+    journalists_uuids = []
+    for journalist in journalists:
+        if journalist.is_signal_registered():
+            journalists_uuids.append(journalist.uuid)
+
+    if not journalists:
+        return {"default": ""}
+
+    # This is also the step where for multi-tenancy we can add multiple groups,
+    # and allow sources to select the group/organization they wish to message.
+    return {"default": journalists_uuids}
 
 
 class HexByteString(TypeDecorator):

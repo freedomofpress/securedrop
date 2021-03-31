@@ -20,7 +20,7 @@ from db import db
 from journalist_app import utils
 from models import (Group, GroupMember, Journalist, Reply, SeenReply, Source, Submission, JournalistReply,
                     LoginThrottledException, InvalidUsernameException,
-                    BadTokenException, WrongPasswordException, SourceMessage)
+                    BadTokenException, WrongPasswordException, SourceMessage, active_securedrop_groups)
 from sdconfig import config, SDConfig
 from store import NotEncrypted
 
@@ -327,9 +327,20 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         else:
             return jsonify({"resp": "no messages"}), 200
 
+    @api.route('/groups', methods=['GET'])
+    @token_required
+    def groups() -> Tuple[flask.Response, int]:
+        """
+        Get SecureDrop group membership information. This lets a source know
+        who is onboarded to each organization.
+        """
+
+        response = jsonify(active_securedrop_groups())
+        return response, 200
+
     # This intentionally does not have @token_required, in the body of the
     # request, the user must present a valid AuthCredentialPresentation
-    @api.route('/groups', methods=['POST'])
+    @api.route('/groups/new', methods=['POST'])
     def create_group() -> Tuple[flask.Response, int]:
         """
         Create group
