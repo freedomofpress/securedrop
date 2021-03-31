@@ -112,7 +112,7 @@ function onConfirmationSuccess() {
     console.log(`sent confirmation of message on server`);
 }
 
-function prepareSession( session, needs_registration, securedrop_group, token ) {
+async function prepareSession( session, needs_registration, securedrop_group, token ) {
     console.log(`we need to register: ${needs_registration}`);
 
     if (needs_registration == true) {
@@ -126,15 +126,45 @@ function prepareSession( session, needs_registration, securedrop_group, token ) 
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
                 onRegistrationSuccess(session, token);
+                console.log('finished registration callback');
+
             }
         };
         request.send(JSON.stringify(keygen_data));
 
-        // Todo (when we have multiple journalists): form a group
-        // i.e. we'd need to: For each journalist for which we do not have prekeys do the below logic
+        // In group world we need to:
+        //   1. Form a group since - this is our first login!
+        //   2. Fetch prekey bundles for each journalist in our group.
+        //   3. Distribute the GroupMasterKey with our journalists.
+        //   4. Now we can message!
+
+        // Step 1. Form a group.
+        var members = [
+            { string: session.uuid()}
+        ];
+        var journalist_uuid = securedrop_group;
+        var admins = [
+            { string: journalist_uuid }
+        ];
+
+        // Note: we must have AuthCred to create the group.
+        await sleep(1000);
+        var public_group_data = session.create_group(members, admins);
+        var group_request = new XMLHttpRequest();
+        group_request.open("POST", "http://127.0.0.1:8080/api/v2/groups", true);
+        group_request.setRequestHeader("Content-Type", "application/json");
+        group_request.setRequestHeader("Authorization", `Token ${token}`);
+
+        group_request.onreadystatechange = function () {
+            if (group_request.readyState === 4 && group_request.status === 200) {
+                console.log("created group successfully");
+            }
+        };
+        group_request.send(JSON.stringify(public_group_data));
+
+        // Step 2. Fetch prekey bundles for each journalist in our group.
         // But for now the group is a single journalist.
         var journalist_uuid = securedrop_group;
-
         var prekey_request = new XMLHttpRequest();
         prekey_request.open("GET", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/prekey_bundle`, true);
         prekey_request.setRequestHeader("Content-Type", "application/json");
@@ -147,6 +177,10 @@ function prepareSession( session, needs_registration, securedrop_group, token ) 
           }
         };
         prekey_request.send();
+
+        // TODO: In the future, we may be registered, but not all these steps have necessarily succeeded.
+        // When we log back in, we should pick up where we left off. For example, we don't attempt
+        // to create the group again if we have it stored.
     } else {
         document.getElementById("submit-doc-button").disabled = false;
         // TODO: Get existing session from server

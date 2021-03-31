@@ -38,7 +38,7 @@
     console.log(`we need to register: ${needs_registration}`);
     var session = SecureDropSourceSession.new(source_uuid);
 
-    prepareSession( session, needs_registration, securedrop_group, token );
+    await prepareSession( session, needs_registration, securedrop_group, token );
 
     // Todo when we have multiple journalists
     // For each journalist for which we do not have prekeys:
