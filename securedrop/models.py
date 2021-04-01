@@ -12,6 +12,7 @@ import uuid
 from io import BytesIO
 
 from flask import current_app, url_for
+from flask_babel import gettext, ngettext
 from itsdangerous import TimedJSONWebSignatureSerializer, BadData
 from jinja2 import Markup
 from passlib.hash import argon2
@@ -342,10 +343,8 @@ class FirstOrLastNameError(Exception):
 class InvalidNameLength(FirstOrLastNameError):
     """Raised when attempting to create a Journalist with an invalid name length."""
 
-    def __init__(self, name: str) -> None:
-        name_len = len(name)
-        msg = "Name too long (len={})".format(name_len)
-        super(InvalidNameLength, self).__init__(msg)
+    def __init__(self) -> None:
+        super(InvalidNameLength, self).__init__(gettext("Name too long"))
 
 
 class LoginThrottledException(Exception):
@@ -380,11 +379,9 @@ class InvalidPasswordLength(PasswordError):
 
     def __str__(self) -> str:
         if self.passphrase_len > Journalist.MAX_PASSWORD_LEN:
-            return "Password too long (len={})".format(self.passphrase_len)
+            return "Password is too long."
         if self.passphrase_len < Journalist.MIN_PASSWORD_LEN:
-            return "Password needs to be at least {} characters".format(
-                Journalist.MIN_PASSWORD_LEN
-            )
+            return "Password is too short."
         return ""   # return empty string that can be appended harmlessly
 
 
@@ -496,18 +493,25 @@ class Journalist(db.Model):
     def check_username_acceptable(cls, username: str) -> None:
         if len(username) < cls.MIN_USERNAME_LEN:
             raise InvalidUsernameException(
-                        'Username "{}" must be at least {} characters long.'
-                        .format(username, cls.MIN_USERNAME_LEN))
+                ngettext(
+                    'Must be at least {num} character long.',
+                    'Must be at least {num} characters long.',
+                    cls.MIN_USERNAME_LEN
+                ).format(num=cls.MIN_USERNAME_LEN)
+            )
         if username in cls.INVALID_USERNAMES:
             raise InvalidUsernameException(
+                gettext(
                     "This username is invalid because it is reserved "
-                    "for internal use by the software.")
+                    "for internal use by the software."
+                )
+            )
 
     @classmethod
     def check_name_acceptable(cls, name: str) -> None:
         # Enforce a reasonable maximum length for names
         if len(name) > cls.MAX_NAME_LEN:
-            raise InvalidNameLength(name)
+            raise InvalidNameLength()
 
     @classmethod
     def check_password_acceptable(cls, password: str) -> None:
@@ -675,13 +679,11 @@ class Journalist(db.Model):
         try:
             user = Journalist.query.filter_by(username=username).one()
         except NoResultFound:
-            raise InvalidUsernameException(
-                "invalid username '{}'".format(username))
+            raise InvalidUsernameException(gettext("Invalid username"))
 
         if user.username in Journalist.INVALID_USERNAMES and \
                 user.uuid in Journalist.INVALID_USERNAMES:
-            raise InvalidUsernameException(
-                "Invalid username")
+            raise InvalidUsernameException(gettext("Invalid username"))
 
         if LOGIN_HARDENING:
             cls.throttle_login(user)
@@ -876,9 +878,9 @@ class InstanceConfig(db.Model):
     def check_name_acceptable(cls, name: str) -> None:
         # Enforce a reasonable maximum length for names
         if name is None or len(name) == 0:
-            raise InvalidNameLength(name)
+            raise InvalidNameLength()
         if len(name) > cls.MAX_ORG_NAME_LEN:
-            raise InvalidNameLength(name)
+            raise InvalidNameLength()
 
     @classmethod
     def set_organization_name(cls, name: str) -> None:

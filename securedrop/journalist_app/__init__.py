@@ -94,9 +94,8 @@ def create_app(config: 'SDConfig') -> Flask:
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> 'Response':
-        # render the message first to ensure it's localized.
-        msg = gettext('You have been logged out due to inactivity.')
         session.clear()
+        msg = gettext('You have been logged out due to inactivity.')
         flash(msg, 'error')
         return redirect(url_for('main.login'))
 

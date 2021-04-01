@@ -79,7 +79,7 @@ function docker_run() {
            -e LOADDATA_ARGS \
            -e LC_ALL=C.UTF-8 \
            -e LANG=C.UTF-8 \
-           -e PAGE_LAYOUT_LOCALES \
+           -e TEST_LOCALES \
            -e PATH \
            -e BASE_OS=$BASE_OS \
            --user "${USER:-root}" \

@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Optional
 
 import werkzeug
-from flask import (Flask, render_template, flash, Markup, request, g, session,
+from flask import (Flask, render_template, escape, flash, Markup, request, g, session,
                    url_for, redirect)
 from flask_babel import gettext
 from flask_assets import Environment
@@ -127,14 +127,21 @@ def create_app(config: SDConfig) -> Flask:
         # ignore_static here so we only flash a single message warning
         # about Tor2Web, corresponding to the initial page load.
         if 'X-tor2web' in request.headers:
-            flash(Markup(gettext(
-                '<strong>WARNING:&nbsp;</strong> '
-                'You appear to be using Tor2Web. '
-                'This <strong>&nbsp;does not&nbsp;</strong> '
-                'provide anonymity. '
-                '<a href="{url}">Why is this dangerous?</a>')
-                .format(url=url_for('info.tor2web_warning'))),
-                "banner-warning")
+            flash(
+                Markup(
+                    '<strong>{}</strong>&nbsp;{}&nbsp;<a href="{}">{}</a>'.format(
+                        escape(gettext("WARNING:")),
+                        escape(
+                            gettext(
+                                'You appear to be using Tor2Web, which does not provide anonymity.'
+                            )
+                        ),
+                        url_for('info.tor2web_warning'),
+                        escape(gettext('Why is this dangerous?')),
+                    )
+                ),
+                "banner-warning"
+            )
 
     @app.before_request
     @ignore_static

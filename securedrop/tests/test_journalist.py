@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# flake8: noqa: E741
 import base64
 import binascii
 import io
@@ -11,7 +12,9 @@ import zipfile
 from base64 import b64decode
 from io import BytesIO
 
+from flaky import flaky
 from flask import current_app, escape, g, session, url_for
+from flask_babel import gettext, ngettext
 from mock import patch
 from pyotp import TOTP
 from sqlalchemy.exc import IntegrityError
@@ -38,6 +41,7 @@ from models import (
 from sdconfig import config
 
 from .utils.instrument import InstrumentedApp
+from .utils.i18n import get_plural_tests, get_test_locales, language_tag, page_language, xfail_untranslated_messages
 from . import utils
 
 
@@ -46,12 +50,6 @@ random.seed(r'¯\_(ツ)_/¯')
 
 VALID_PASSWORD = 'correct horse battery staple generic passphrase hooray'
 VALID_PASSWORD_2 = 'another correct horse battery staple generic passphrase'
-
-# These are factored out of the tests because some test have a
-# postive/negative case under varying conditions, and we don't want
-# false postives after modifying a string in the application.
-EMPTY_REPLY_TEXT = "You cannot send an empty reply."
-ADMIN_LINK = '<a href="/admin/" id="link-admin-index">'
 
 
 def _login_user(app, username, password, otp_secret):
@@ -166,7 +164,9 @@ def test_reply_error_logging(journalist_app, test_journo, test_source):
             exception_class))
 
 
-def test_reply_error_flashed_message(journalist_app, test_journo, test_source):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_reply_error_flashed_message(config, journalist_app, test_journo, test_source, locale):
     exception_class = StaleDataError
 
     with journalist_app.test_client() as app:
@@ -176,43 +176,58 @@ def test_reply_error_flashed_message(journalist_app, test_journo, test_source):
         with InstrumentedApp(app) as ins:
             with patch.object(db.session, 'commit',
                               side_effect=exception_class()):
-                app.post(url_for('main.reply'),
-                         data={'filesystem_id': test_source['filesystem_id'],
-                               'message': '_'})
+                resp = app.post(
+                    url_for('main.reply', l=locale),
+                    data={'filesystem_id': test_source['filesystem_id'], 'message': '_'},
+                    follow_redirects=True
+                )
 
-            ins.assert_message_flashed(
-                'An unexpected error occurred! Please '
-                'inform your admin.', 'error')
+                assert page_language(resp.data) == language_tag(locale)
+                msgids = ['An unexpected error occurred! Please inform your admin.']
+                with xfail_untranslated_messages(config, locale, msgids):
+                    ins.assert_message_flashed(gettext(msgids[0]), 'error')
 
 
-def test_empty_replies_are_rejected(journalist_app, test_journo, test_source):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_empty_replies_are_rejected(config, journalist_app, test_journo, test_source, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'],
                     test_journo['password'], test_journo['otp_secret'])
-        resp = app.post(url_for('main.reply'),
+        resp = app.post(url_for('main.reply', l=locale),
                         data={'filesystem_id': test_source['filesystem_id'],
                               'message': ''},
                         follow_redirects=True)
 
-        text = resp.data.decode('utf-8')
-        assert EMPTY_REPLY_TEXT in text
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['You cannot send an empty reply.']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
 
-def test_nonempty_replies_are_accepted(journalist_app, test_journo,
-                                       test_source):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_nonempty_replies_are_accepted(config, journalist_app, test_journo, test_source, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'],
                     test_journo['password'], test_journo['otp_secret'])
-        resp = app.post(url_for('main.reply'),
-                        data={'filesystem_id': test_source['filesystem_id'],
-                              'message': '_'},
-                        follow_redirects=True)
+        resp = app.post(
+            url_for('main.reply', l=locale),
+            data={'filesystem_id': test_source['filesystem_id'], 'message': '_'},
+            follow_redirects=True
+        )
 
-        text = resp.data.decode('utf-8')
-        assert EMPTY_REPLY_TEXT not in text
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['You cannot send an empty reply.']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) not in resp.data.decode('utf-8')
 
 
-def test_successful_reply_marked_as_seen_by_sender(journalist_app, test_journo, test_source):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_successful_reply_marked_as_seen_by_sender(
+    config, journalist_app, test_journo, test_source, locale
+):
     with journalist_app.test_client() as app:
         journo = test_journo['journalist']
         _login_user(app, journo.username, test_journo['password'], test_journo['otp_secret'])
@@ -221,13 +236,15 @@ def test_successful_reply_marked_as_seen_by_sender(journalist_app, test_journo, 
         assert not seen_reply
 
         resp = app.post(
-            url_for('main.reply'),
+            url_for('main.reply', l=locale),
             data={'filesystem_id': test_source['filesystem_id'], 'message': '_'},
             follow_redirects=True
         )
 
-        text = resp.data.decode('utf-8')
-        assert EMPTY_REPLY_TEXT not in text
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['You cannot send an empty reply.']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) not in resp.data.decode('utf-8')
         seen_reply = SeenReply.query.filter_by(journalist_id=journo.id).one_or_none()
         assert seen_reply
 
@@ -239,36 +256,60 @@ def test_unauthorized_access_redirects_to_login(journalist_app):
             ins.assert_redirects(resp, url_for('main.login'))
 
 
-def test_login_throttle(journalist_app, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_login_throttle(config, journalist_app, test_journo, locale):
     # Overwrite the default value used during testing
     original_hardening = models.LOGIN_HARDENING
     models.LOGIN_HARDENING = True
     try:
         with journalist_app.test_client() as app:
-            for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
-                resp = app.post(
-                    url_for('main.login'),
-                    data=dict(username=test_journo['username'],
-                              password='invalid',
-                              token='invalid'))
-                assert resp.status_code == 200
-                text = resp.data.decode('utf-8')
-                assert "Login failed" in text
+            with InstrumentedApp(app) as ins:
+                for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
+                    resp = app.post(
+                        url_for('main.login'),
+                        data=dict(
+                            username=test_journo['username'],
+                            password='invalid',
+                            token='invalid'
+                        )
+                    )
+                    assert resp.status_code == 200
+                    text = resp.data.decode('utf-8')
+                    assert "Login failed" in text
 
-            resp = app.post(
-                url_for('main.login'),
-                data=dict(username=test_journo['username'],
-                          password='invalid',
-                          token='invalid'))
-            assert resp.status_code == 200
-            text = resp.data.decode('utf-8')
-            assert ("Please wait at least {} seconds".format(
-                Journalist._LOGIN_ATTEMPT_PERIOD) in text)
+                resp = app.post(
+                    url_for('main.login', l=locale),
+                    data=dict(
+                        username=test_journo['username'],
+                        password='invalid',
+                        token='invalid'
+                    )
+                )
+                assert page_language(resp.data) == language_tag(locale)
+                msgids = [
+                    "Login failed.",
+                    "Please wait at least {num} second before logging in again."
+                ]
+                with xfail_untranslated_messages(config, locale, msgids):
+                    ins.assert_message_flashed(
+                        "{} {}".format(
+                            gettext(msgids[0]),
+                            ngettext(
+                                msgids[1],
+                                "Please wait at least {num} seconds before logging in again.",
+                                Journalist._LOGIN_ATTEMPT_PERIOD
+                            ).format(num=Journalist._LOGIN_ATTEMPT_PERIOD)
+                        ),
+                        'error'
+                    )
     finally:
         models.LOGIN_HARDENING = original_hardening
 
 
-def test_login_throttle_is_not_global(journalist_app, test_journo, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_login_throttle_is_not_global(config, journalist_app, test_journo, test_admin, locale):
     """The login throttling should be per-user, not global. Global login
     throttling can prevent all users logging into the application."""
 
@@ -278,71 +319,106 @@ def test_login_throttle_is_not_global(journalist_app, test_journo, test_admin):
     models.LOGIN_HARDENING = True
     try:
         with journalist_app.test_client() as app:
-            for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
-                resp = app.post(
-                    url_for('main.login'),
-                    data=dict(username=test_journo['username'],
-                              password='invalid',
-                              token='invalid'))
-                assert resp.status_code == 200
-                text = resp.data.decode('utf-8')
-                assert "Login failed" in text
+            with InstrumentedApp(app) as ins:
+                for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
+                    resp = app.post(
+                        url_for('main.login', l=locale),
+                        data=dict(
+                            username=test_journo['username'],
+                            password='invalid',
+                            token='invalid'
+                        )
+                    )
+                    assert page_language(resp.data) == language_tag(locale)
+                    msgids = ['Login failed.']
+                    with xfail_untranslated_messages(config, locale, msgids):
+                        assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
-            resp = app.post(
-                url_for('main.login'),
-                data=dict(username=test_journo['username'],
-                          password='invalid',
-                          token='invalid'))
-            assert resp.status_code == 200
-            text = resp.data.decode('utf-8')
-            assert ("Please wait at least {} seconds".format(
-                Journalist._LOGIN_ATTEMPT_PERIOD) in text)
+                resp = app.post(
+                    url_for('main.login', l=locale),
+                    data=dict(
+                        username=test_journo['username'],
+                        password='invalid',
+                        token='invalid'
+                    )
+                )
+                assert page_language(resp.data) == language_tag(locale)
+                msgids = [
+                    "Login failed.",
+                    "Please wait at least {num} second before logging in again."
+                ]
+                with xfail_untranslated_messages(config, locale, msgids):
+                    ins.assert_message_flashed(
+                        "{} {}".format(
+                            gettext(msgids[0]),
+                            ngettext(
+                                msgids[1],
+                                "Please wait at least {num} seconds before logging in again.",
+                                Journalist._LOGIN_ATTEMPT_PERIOD
+                            ).format(num=Journalist._LOGIN_ATTEMPT_PERIOD)
+                        ),
+                        'error'
+                    )
 
             # A different user should be able to login
             resp = app.post(
-                url_for('main.login'),
+                url_for('main.login', l=locale),
                 data=dict(username=test_admin['username'],
                           password=test_admin['password'],
                           token=TOTP(test_admin['otp_secret']).now()),
                 follow_redirects=True)
-            assert resp.status_code == 200
-            text = resp.data.decode('utf-8')
-            assert "Sources" in text
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = ['All Sources']
+            with xfail_untranslated_messages(config, locale, msgids):
+                assert gettext(msgids[0]) in resp.data.decode('utf-8')
     finally:
         models.LOGIN_HARDENING = original_hardening
 
 
-def test_login_invalid_credentials(journalist_app, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_login_invalid_credentials(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
-        resp = app.post(url_for('main.login'),
+        resp = app.post(url_for('main.login', l=locale),
                         data=dict(username=test_journo['username'],
                                   password='invalid',
                                   token='mocked'))
-    assert resp.status_code == 200
-    text = resp.data.decode('utf-8')
-    assert "Login failed" in text
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Login failed.']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
 
-def test_validate_redirect(journalist_app):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_validate_redirect(config, journalist_app, locale):
     with journalist_app.test_client() as app:
-        resp = app.post(url_for('main.index'), follow_redirects=True)
-        assert resp.status_code == 200
-        text = resp.data.decode('utf-8')
-        assert "Login to access" in text
+        resp = app.post(url_for('main.index', l=locale), follow_redirects=True)
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Login to access the journalist interface']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
 
-def test_login_valid_credentials(journalist_app, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_login_valid_credentials(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
         resp = app.post(
-            url_for('main.login'),
+            url_for('main.login', l=locale),
             data=dict(username=test_journo['username'],
                       password=test_journo['password'],
                       token=TOTP(test_journo['otp_secret']).now()),
             follow_redirects=True)
-    assert resp.status_code == 200  # successful login redirects to index
-    text = resp.data.decode('utf-8')
-    assert "Sources" in text
-    assert "No documents have been submitted!" in text
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = [
+            'All Sources',
+            'No documents have been submitted!'
+        ]
+        with xfail_untranslated_messages(config, locale, msgids):
+            resp_text = resp.data.decode('utf-8')
+            for msgid in msgids:
+                assert gettext(msgid) in resp_text
 
 
 def test_admin_login_redirects_to_index(journalist_app, test_admin):
@@ -409,7 +485,7 @@ def test_admin_has_link_to_admin_index_page_in_index_page(journalist_app,
                       token=TOTP(test_admin['otp_secret']).now()),
             follow_redirects=True)
     text = resp.data.decode('utf-8')
-    assert ADMIN_LINK in text
+    assert '<a href="/admin/" id="link-admin-index">' in text
 
 
 def test_user_lacks_link_to_admin_index_page_in_index_page(journalist_app,
@@ -422,7 +498,7 @@ def test_user_lacks_link_to_admin_index_page_in_index_page(journalist_app,
                       token=TOTP(test_journo['otp_secret']).now()),
             follow_redirects=True)
     text = resp.data.decode('utf-8')
-    assert ADMIN_LINK not in text
+    assert '<a href="/admin/" id="link-admin-index">' not in text
 
 
 def test_admin_logout_redirects_to_index(journalist_app, test_admin):
@@ -445,17 +521,22 @@ def test_user_logout_redirects_to_index(journalist_app, test_journo):
             ins.assert_redirects(resp, url_for('main.index'))
 
 
-def test_admin_index(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_index(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.get(url_for('admin.index'))
-        assert resp.status_code == 200
-        text = resp.data.decode('utf-8')
-        assert "Admin Interface" in text
+        resp = app.get(url_for('admin.index', l=locale))
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Admin Interface']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
 
-def test_admin_delete_user(journalist_app, test_admin, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_delete_user(config, journalist_app, test_admin, test_journo, locale):
     # Verify journalist is in the database
     with journalist_app.app_context():
         assert Journalist.query.get(test_journo['id']) is not None
@@ -463,22 +544,28 @@ def test_admin_delete_user(journalist_app, test_admin, test_journo):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.post(url_for('admin.delete_user',
-                                user_id=test_journo['id']),
-                        follow_redirects=True)
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(
+                url_for('admin.delete_user', user_id=test_journo['id'], l=locale),
+                follow_redirects=True
+            )
 
-        # Assert correct interface behavior
-        assert resp.status_code == 200
-        text = resp.data.decode('utf-8')
-        assert escape("Deleted user '{}'".format(test_journo['username'])) \
-            in text
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = ["Deleted user '{user}'."]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(
+                    gettext(msgids[0]).format(user=test_journo['username']),
+                    'notification'
+                )
 
     # Verify journalist is no longer in the database
     with journalist_app.app_context():
         assert Journalist.query.get(test_journo['id']) is None
 
 
-def test_admin_cannot_delete_self(journalist_app, test_admin, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_cannot_delete_self(config, journalist_app, test_admin, test_journo, locale):
     # Verify journalist is in the database
     with journalist_app.app_context():
         assert Journalist.query.get(test_journo['id']) is not None
@@ -486,48 +573,70 @@ def test_admin_cannot_delete_self(journalist_app, test_admin, test_journo):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.post(url_for('admin.delete_user',
-                                user_id=test_admin['id']),
-                        follow_redirects=True)
+        resp = app.post(
+            url_for('admin.delete_user', user_id=test_admin['id'], l=locale),
+            follow_redirects=True
+        )
 
         # Assert correct interface behavior
         assert resp.status_code == 403
 
-        resp = app.get(url_for('admin.index'), follow_redirects=True)
+        resp = app.get(url_for('admin.index', l=locale), follow_redirects=True)
         assert resp.status_code == 200
-        text = resp.data.decode('utf-8')
-        assert "Admin Interface" in text
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = [
+            "Admin Interface",
+            "Edit user {username}",
+            "Delete user {username}"
+        ]
+        with xfail_untranslated_messages(config, locale, msgids):
+            resp_text = resp.data.decode('utf-8')
+            assert gettext(msgids[0]) in resp_text
 
-        # The user can be edited and deleted
-        assert escape("Edit user {}".format(test_journo['username'])) in text
-        assert escape("Delete user {}".format(test_journo['username'])) in text
-        # The admin can be edited but cannot deleted
-        assert escape("Edit user {}".format(test_admin['username'])) in text
-        assert escape("Delete user {}".format(test_admin['username'])) \
-            not in text
+            # The user can be edited and deleted
+            assert escape(
+                gettext("Edit user {username}").format(username=test_journo['username'])
+            ) in resp_text
+            assert escape(
+                gettext("Delete user {username}").format(username=test_journo['username'])
+            ) in resp_text
+            # The admin can be edited but cannot deleted
+            assert escape(
+                gettext("Edit user {username}").format(username=test_admin['username'])
+            ) in resp_text
+            assert escape(
+                gettext("Delete user {username}").format(username=test_admin['username'])
+            ) not in resp_text
 
 
-def test_admin_edits_user_password_success_response(journalist_app,
-                                                    test_admin,
-                                                    test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_edits_user_password_success_response(
+    config, journalist_app, test_admin, test_journo, locale
+):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
 
-        resp = app.post(url_for('admin.new_password',
-                                user_id=test_journo['id']),
+        resp = app.post(url_for('admin.new_password', user_id=test_journo['id'], l=locale),
                         data=dict(password=VALID_PASSWORD_2),
                         follow_redirects=True)
         assert resp.status_code == 200
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = [
+            "Password updated. Don't forget to save it in your KeePassX database. New password:"
+        ]
+        with xfail_untranslated_messages(config, locale, msgids):
+            resp_text = resp.data.decode('utf-8')
+            assert escape(gettext(msgids[0])) in resp_text
+            assert VALID_PASSWORD_2 in resp_text
 
-        text = resp.data.decode('utf-8')
-        assert 'Password updated.' in text
-        assert VALID_PASSWORD_2 in text
 
-
-def test_admin_edits_user_password_session_invalidate(journalist_app,
-                                                      test_admin,
-                                                      test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_edits_user_password_session_invalidate(
+    config, journalist_app, test_admin, test_journo, locale
+):
     # Start the journalist session.
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
@@ -538,20 +647,28 @@ def test_admin_edits_user_password_session_invalidate(journalist_app,
             _login_user(admin_app, test_admin['username'], test_admin['password'],
                         test_admin['otp_secret'])
 
-            resp = admin_app.post(url_for('admin.new_password',
-                                          user_id=test_journo['id']),
-                                  data=dict(password=VALID_PASSWORD_2),
-                                  follow_redirects=True)
+            resp = admin_app.post(
+                url_for('admin.new_password', user_id=test_journo['id'], l=locale),
+                data=dict(password=VALID_PASSWORD_2),
+                follow_redirects=True
+            )
             assert resp.status_code == 200
-
-            text = resp.data.decode('utf-8')
-            assert 'Password updated.' in text
-            assert VALID_PASSWORD_2 in text
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = [
+                "Password updated. Don't forget to save it in your KeePassX database. New password:"
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                resp_text = resp.data.decode('utf-8')
+                assert escape(gettext(msgids[0])) in resp_text
+                assert VALID_PASSWORD_2 in resp_text
 
         # Now verify the password change error is flashed.
-        resp = app.get(url_for('main.index'), follow_redirects=True)
-        text = resp.data.decode('utf-8')
-        assert 'You have been logged out due to password change' in text
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.get(url_for('main.index', l=locale), follow_redirects=True)
+            msgids = ['You have been logged out due to password change']
+            assert page_language(resp.data) == language_tag(locale)
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]), 'error')
 
         # Also ensure that session is now invalid.
         session.pop('expires', None)
@@ -571,26 +688,36 @@ def test_admin_deletes_invalid_user_404(journalist_app, test_admin):
         assert resp.status_code == 404
 
 
-def test_admin_edits_user_password_error_response(journalist_app,
-                                                  test_admin,
-                                                  test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_edits_user_password_error_response(
+    config, journalist_app, test_admin, test_journo, locale
+):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
 
         with patch('sqlalchemy.orm.scoping.scoped_session.commit',
                    side_effect=Exception()):
-            resp = app.post(url_for('admin.new_password',
-                                    user_id=test_journo['id']),
-                            data=dict(password=VALID_PASSWORD_2),
-                            follow_redirects=True)
+            with InstrumentedApp(journalist_app) as ins:
+                resp = app.post(
+                    url_for('admin.new_password', user_id=test_journo['id'], l=locale),
+                    data=dict(password=VALID_PASSWORD_2),
+                    follow_redirects=True
+                )
+                assert page_language(resp.data) == language_tag(locale)
+                msgids = [
+                    'There was an error, and the new password might not have been '
+                    'saved correctly. To prevent you from getting locked '
+                    'out of your account, you should reset your password again.'
+                ]
+                with xfail_untranslated_messages(config, locale, msgids):
+                    ins.assert_message_flashed(gettext(msgids[0]), 'error')
 
-        text = resp.data.decode('utf-8')
-        assert ('There was an error, and the new password might not have '
-                'been saved correctly.') in text
 
-
-def test_user_edits_password_success_response(journalist_app, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_user_edits_password_success_response(config, journalist_app, test_journo, locale):
     original_hardening = models.LOGIN_HARDENING
     try:
         # Set this to false because we login then immediately reuse the same
@@ -602,15 +729,20 @@ def test_user_edits_password_success_response(journalist_app, test_journo):
             _login_user(app, test_journo['username'], test_journo['password'],
                         test_journo['otp_secret'])
             token = TOTP(test_journo['otp_secret']).now()
-            resp = app.post(url_for('account.new_password'),
+            resp = app.post(url_for('account.new_password', l=locale),
                             data=dict(current_password=test_journo['password'],
                                       token=token,
                                       password=VALID_PASSWORD_2),
                             follow_redirects=True)
 
-            text = resp.data.decode('utf-8')
-            assert "Password updated." in text
-            assert VALID_PASSWORD_2 in text
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = [
+                "Password updated. Don't forget to save it in your KeePassX database. New password:"
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                resp_text = resp.data.decode('utf-8')
+                assert escape(gettext(msgids[0])) in resp_text
+                assert VALID_PASSWORD_2 in resp_text
     finally:
         models.LOGIN_HARDENING = original_hardening
 
@@ -643,7 +775,9 @@ def test_user_edits_password_expires_session(journalist_app, test_journo):
         models.LOGIN_HARDENING = original_hardening
 
 
-def test_user_edits_password_error_reponse(journalist_app, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_user_edits_password_error_response(config, journalist_app, test_journo, locale):
     original_hardening = models.LOGIN_HARDENING
     try:
         # Set this to false because we login then immediately reuse the same
@@ -660,31 +794,57 @@ def test_user_edits_password_error_reponse(journalist_app, test_journo):
             with patch.object(Journalist, 'verify_token', return_value=True):
                 with patch.object(db.session, 'commit',
                                   side_effect=Exception()):
-                    resp = app.post(
-                        url_for('account.new_password'),
-                        data=dict(current_password=test_journo['password'],
-                                  token='mocked',
-                                  password=VALID_PASSWORD_2),
-                        follow_redirects=True)
+                    with InstrumentedApp(journalist_app) as ins:
+                        resp = app.post(
+                            url_for('account.new_password', l=locale),
+                            data=dict(
+                                current_password=test_journo['password'],
+                                token='mocked',
+                                password=VALID_PASSWORD_2
+                            ),
+                            follow_redirects=True
+                        )
 
-            text = resp.data.decode('utf-8')
-            assert ('There was an error, and the new password might not have '
-                    'been saved correctly.') in text
+                        assert page_language(resp.data) == language_tag(locale)
+                        msgids = [
+                            (
+                                'There was an error, and the new password might not have been '
+                                'saved correctly. To prevent you from getting locked '
+                                'out of your account, you should reset your password again.'
+                            )
+                        ]
+                        with xfail_untranslated_messages(config, locale, msgids):
+                            ins.assert_message_flashed(gettext(msgids[0]), 'error')
     finally:
         models.LOGIN_HARDENING = original_hardening
 
 
-def test_admin_add_user_when_username_already_taken(journalist_app, test_admin):
-    with journalist_app.test_client() as app:
-        _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
-        resp = app.post(url_for('admin.add_user'),
-                        data=dict(username=test_admin['username'],
-                                  first_name='',
-                                  last_name='',
-                                  password=VALID_PASSWORD,
-                                  is_admin=None))
-        text = resp.data.decode('utf-8')
-        assert 'already taken' in text
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_when_username_already_taken(config, journalist_app, test_admin, locale):
+    with journalist_app.test_client() as client:
+        _login_user(
+            client, test_admin['username'], test_admin['password'], test_admin['otp_secret']
+        )
+        with InstrumentedApp(journalist_app) as ins:
+            resp = client.post(
+                url_for('admin.add_user', l=locale),
+                data=dict(
+                    username=test_admin['username'],
+                    first_name='',
+                    last_name='',
+                    password=VALID_PASSWORD,
+                    is_admin=None
+                ),
+            )
+            assert page_language(resp.data) == language_tag(locale)
+
+            msgids = ['Username "{username}" already taken.']
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(
+                    gettext(msgids[0]).format(username=test_admin["username"]),
+                    'error'
+                )
 
 
 def test_max_password_length():
@@ -708,8 +868,8 @@ def test_login_password_too_long(journalist_app, test_journo, mocker):
     text = resp.data.decode('utf-8')
     assert "Login failed" in text
     mocked_error_logger.assert_called_once_with(
-        "Login for '{}' failed: Password too long (len={})".format(
-            test_journo['username'], Journalist.MAX_PASSWORD_LEN + 1))
+        "Login for '{}' failed: Password is too long.".format(test_journo['username'])
+    )
 
 
 def test_min_password_length():
@@ -772,7 +932,9 @@ def test_user_edits_password_too_long_warning(journalist_app, test_journo):
                                        'Password not changed.', 'error')
 
 
-def test_admin_add_user_password_too_long_warning(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_password_too_long_warning(config, journalist_app, test_admin, locale):
     overly_long_password = VALID_PASSWORD + \
         'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
     with journalist_app.test_client() as app:
@@ -780,71 +942,91 @@ def test_admin_add_user_password_too_long_warning(journalist_app, test_admin):
                     test_admin['otp_secret'])
 
         with InstrumentedApp(journalist_app) as ins:
-            app.post(
-                url_for('admin.add_user'),
-                data=dict(username='dellsberg',
-                          first_name='',
-                          last_name='',
-                          password=overly_long_password,
-                          is_admin=None))
+            resp = app.post(
+                url_for('admin.add_user', l=locale),
+                data=dict(
+                    username='dellsberg',
+                    first_name='',
+                    last_name='',
+                    password=overly_long_password,
+                    is_admin=None
+                ),
+            )
 
-            ins.assert_message_flashed(
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = [
                 'There was an error with the autogenerated password. User not '
-                'created. Please try again.', 'error')
+                'created. Please try again.'
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]), 'error')
 
 
-def test_admin_add_user_first_name_too_long_warning(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_first_name_too_long_warning(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         overly_long_name = 'a' * (Journalist.MAX_NAME_LEN + 1)
         _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
-        resp = app.post(url_for('admin.add_user'),
-                        data=dict(username=test_admin['username'],
-                                  first_name=overly_long_name,
-                                  last_name='',
-                                  password=VALID_PASSWORD,
-                                  is_admin=None))
-        text = resp.data.decode('utf-8')
-        assert 'Cannot be longer than' in text
+
+        resp = app.post(
+            url_for('admin.add_user', l=locale),
+            data=dict(
+                username=test_admin['username'],
+                first_name=overly_long_name,
+                last_name='',
+                password=VALID_PASSWORD,
+                is_admin=None
+            ),
+        )
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Cannot be longer than {num} character.']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert (
+                ngettext(
+                    'Cannot be longer than {num} character.',
+                    'Cannot be longer than {num} characters.',
+                    Journalist.MAX_NAME_LEN
+                ).format(num=Journalist.MAX_NAME_LEN)
+                in resp.data.decode('utf-8')
+            )
 
 
-def test_admin_add_user_last_name_too_long_warning(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_last_name_too_long_warning(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         overly_long_name = 'a' * (Journalist.MAX_NAME_LEN + 1)
         _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
-        resp = app.post(url_for('admin.add_user'),
-                        data=dict(username=test_admin['username'],
-                                  first_name='',
-                                  last_name=overly_long_name,
-                                  password=VALID_PASSWORD,
-                                  is_admin=None))
-        text = resp.data.decode('utf-8')
-        assert 'Cannot be longer than' in text
+
+        resp = app.post(
+            url_for('admin.add_user', l=locale),
+            data=dict(
+                username=test_admin['username'],
+                first_name='',
+                last_name=overly_long_name,
+                password=VALID_PASSWORD,
+                is_admin=None
+            ),
+        )
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Cannot be longer than {num} character.']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert (
+                ngettext(
+                    'Cannot be longer than {num} character.',
+                    'Cannot be longer than {num} characters.',
+                    Journalist.MAX_NAME_LEN
+                ).format(num=Journalist.MAX_NAME_LEN)
+                in resp.data.decode('utf-8')
+            )
 
 
-def test_admin_edits_user_invalid_username(
-        journalist_app, test_admin, test_journo):
-    """Test expected error message when admin attempts to change a user's
-    username to a username that is taken by another user."""
-    new_username = test_journo['username']
-    with journalist_app.test_client() as app:
-        _login_user(app, test_admin['username'], test_admin['password'],
-                    test_admin['otp_secret'])
-
-        with InstrumentedApp(journalist_app) as ins:
-            app.post(
-                url_for('admin.edit_user', user_id=test_admin['id']),
-                data=dict(username=new_username,
-                          first_name='',
-                          last_name='',
-                          is_admin=None))
-
-            ins.assert_message_flashed(
-                'Username "{}" already taken.'.format(new_username),
-                'error')
-
-
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
 def test_admin_edits_user_invalid_username_deleted(
-        journalist_app, test_admin, test_journo):
+    config, journalist_app, test_admin, test_journo, locale
+):
     """Test expected error message when admin attempts to change a user's
     username to deleted"""
     new_username = "deleted"
@@ -853,17 +1035,27 @@ def test_admin_edits_user_invalid_username_deleted(
                     test_admin['otp_secret'])
 
         with InstrumentedApp(journalist_app) as ins:
-            app.post(
-                url_for('admin.edit_user', user_id=test_admin['id']),
-                data=dict(username=new_username,
-                          first_name='',
-                          last_name='',
-                          is_admin=None))
+            resp = app.post(
+                url_for('admin.edit_user', user_id=test_admin['id'], l=locale),
+                data=dict(
+                    username=new_username,
+                    first_name='',
+                    last_name='',
+                    is_admin=None
+                ),
+                follow_redirects=True
+            )
 
-            ins.assert_message_flashed(
-                    'Invalid username: This username is invalid because it '
-                    'is reserved for internal use by the software.',
-                    'error')
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = [
+                'Invalid username: {message}',
+                'This username is invalid because it is reserved for internal use by the software.'
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(
+                    gettext(msgids[0]).format(message=gettext(msgids[1])),
+                    'error'
+                )
 
 
 def test_admin_resets_user_hotp_format_non_hexa(
@@ -1119,16 +1311,21 @@ def test_user_resets_totp(journalist_app, test_journo):
 
     assert new_secret != old_secret
 
-
-def test_admin_resets_hotp_with_missing_otp_secret_key(journalist_app,
-                                                       test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_resets_hotp_with_missing_otp_secret_key(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.post(url_for('admin.reset_two_factor_hotp'),
-                        data=dict(uid=test_admin['id']))
+        resp = app.post(
+            url_for('admin.reset_two_factor_hotp', l=locale),
+            data=dict(uid=test_admin['id']),
+        )
 
-    assert 'Change Secret' in resp.data.decode('utf-8')
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Change Secret']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
 
 def test_admin_new_user_2fa_redirect(journalist_app, test_admin, test_journo):
@@ -1142,25 +1339,39 @@ def test_admin_new_user_2fa_redirect(journalist_app, test_admin, test_journo):
             ins.assert_redirects(resp, url_for('admin.index'))
 
 
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
 def test_http_get_on_admin_new_user_two_factor_page(
-        journalist_app,
-        test_admin,
-        test_journo):
+    config,
+    journalist_app,
+    test_admin,
+    test_journo,
+    locale
+):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.get(url_for('admin.new_user_two_factor', uid=test_journo['id']))
-    # any GET req should take a user to the admin.new_user_two_factor page
-    assert 'FreeOTP' in resp.data.decode('utf-8')
+        resp = app.get(
+            url_for('admin.new_user_two_factor', uid=test_journo['id'], l=locale),
+        )
+
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Enable FreeOTP']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
 
-def test_http_get_on_admin_add_user_page(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_http_get_on_admin_add_user_page(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
-        resp = app.get(url_for('admin.add_user'))
-        # any GET req should take a user to the admin_add_user page
-        assert 'ADD USER' in resp.data.decode('utf-8')
+        resp = app.get(url_for('admin.add_user', l=locale))
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['ADD USER']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
 
 def test_admin_add_user(journalist_app, test_admin):
@@ -1182,24 +1393,35 @@ def test_admin_add_user(journalist_app, test_admin):
                                                uid=new_user.id))
 
 
-def test_admin_add_user_with_invalid_username(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_with_invalid_username(config, journalist_app, test_admin, locale):
     username = 'deleted'
 
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'], test_admin['otp_secret'])
 
-        resp = app.post(url_for('admin.add_user'),
-                        data=dict(username=username,
-                                  first_name='',
-                                  last_name='',
-                                  password=VALID_PASSWORD,
-                                  is_admin=None))
+        resp = app.post(
+            url_for('admin.add_user', l=locale),
+            data=dict(
+                username=username,
+                first_name='',
+                last_name='',
+                password=VALID_PASSWORD,
+                is_admin=None
+            ),
+        )
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = [
+            "This username is invalid because it is reserved for internal use by the software."
+        ]
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) in resp.data.decode("utf-8")
 
-    assert "This username is invalid because it is reserved for internal use by the software." \
-           in resp.data.decode('utf-8')
 
-
-def test_deleted_user_cannot_login(journalist_app):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_deleted_user_cannot_login(config, journalist_app, locale):
     username = 'deleted'
     uuid = 'deleted'
 
@@ -1212,18 +1434,38 @@ def test_deleted_user_cannot_login(journalist_app):
         db.session.add(user)
         db.session.commit()
 
-    # Verify that deleted user is not able to login
-    with journalist_app.test_client() as app:
-        resp = app.post(url_for('main.login'),
-                        data=dict(username=username,
-                                  password=password,
-                                  token=otp_secret))
-    assert resp.status_code == 200
-    text = resp.data.decode('utf-8')
-    assert "Login failed" in text
+    with InstrumentedApp(journalist_app) as ins:
+        # Verify that deleted user is not able to login
+        with journalist_app.test_client() as app:
+            resp = app.post(
+                url_for('main.login', l=locale),
+                data=dict(
+                    username=username,
+                    password=password,
+                    token=otp_secret
+                ),
+            )
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = [
+                "Login failed.",
+                (
+                    "Please wait for a new code from your two-factor mobile"
+                    " app or security key before trying again."
+                )
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(
+                    "{} {}".format(
+                        gettext(msgids[0]),
+                        gettext(msgids[1]),
+                    ),
+                    'error'
+                )
 
 
-def test_deleted_user_cannot_login_exception(journalist_app):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_deleted_user_cannot_login_exception(journalist_app, locale):
     username = 'deleted'
     uuid = 'deleted'
 
@@ -1236,102 +1478,159 @@ def test_deleted_user_cannot_login_exception(journalist_app):
         db.session.add(user)
         db.session.commit()
 
-    with pytest.raises(InvalidUsernameException):
-        Journalist.login(username,
-                         password,
-                         TOTP(otp_secret).now())
+    with journalist_app.test_request_context('/'):
+        with pytest.raises(InvalidUsernameException):
+            Journalist.login(username, password, TOTP(otp_secret).now())
 
 
-def test_admin_add_user_without_username(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_without_username(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
 
-        resp = app.post(url_for('admin.add_user'),
-                        data=dict(username='',
-                                  password=VALID_PASSWORD,
-                                  is_admin=None))
+        resp = app.post(
+            url_for('admin.add_user', l=locale),
+            data=dict(username='', password=VALID_PASSWORD, is_admin=None),
+        )
 
-    assert 'This field is required.' in resp.data.decode('utf-8')
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['This field is required.']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
 
-def test_admin_add_user_too_short_username(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_too_short_username(config, journalist_app, test_admin, locale):
     username = 'a' * (Journalist.MIN_USERNAME_LEN - 1)
 
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
 
-        resp = app.post(url_for('admin.add_user'),
-                        data=dict(username=username,
-                                  password='pentagonpapers',
-                                  password_again='pentagonpapers',
-                                  is_admin=None))
-        msg = 'Must be at least {} characters long'
-        assert (msg.format(Journalist.MIN_USERNAME_LEN) in resp.data.decode('utf-8'))
+        resp = app.post(
+            url_for('admin.add_user', l=locale),
+            data=dict(
+                username=username,
+                password='pentagonpapers',
+                password_again='pentagonpapers',
+                is_admin=None
+            ),
+        )
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Must be at least {num} character long.']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert(
+                ngettext(
+                    'Must be at least {num} character long.',
+                    'Must be at least {num} characters long.',
+                    Journalist.MIN_USERNAME_LEN
+                ).format(num=Journalist.MIN_USERNAME_LEN)
+                in resp.data.decode('utf-8')
+            )
 
 
-def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize(
+    "locale, secret",
+    (
+        (locale, "a" * i)
+        for locale in get_test_locales()
+        for i in get_plural_tests()[locale] if i != 0
+    )
+)
+def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin, locale, secret):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
 
-        resp = app.post(url_for('admin.add_user'),
-                        data=dict(username='dellsberg',
-                                  first_name='',
-                                  last_name='',
-                                  password=VALID_PASSWORD,
-                                  password_again=VALID_PASSWORD,
-                                  is_admin=None,
-                                  is_hotp=True,
-                                  otp_secret='123'))
-        assert 'HOTP secrets are 40 characters' in resp.data.decode('utf-8')
+        resp = app.post(
+            url_for('admin.add_user', l=locale),
+            data=dict(
+                username='dellsberg',
+                first_name='',
+                last_name='',
+                password=VALID_PASSWORD,
+                password_again=VALID_PASSWORD,
+                is_admin=None,
+                is_hotp=True,
+                otp_secret=secret
+            ),
+        )
+        journalist_app.logger.critical("response: %s", resp.data)
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['HOTP secrets are 40 characters long - you have entered {num}.']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert (
+                ngettext(
+                    'HOTP secrets are 40 characters long - you have entered {num}.',
+                    'HOTP secrets are 40 characters long - you have entered {num}.',
+                    len(secret)
+                ).format(num=len(secret))
+                in resp.data.decode("utf-8")
+            )
 
 
-def test_admin_add_user_yubikey_valid_length(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_yubikey_valid_length(journalist_app, test_admin, locale):
     otp = '1234567890123456789012345678901234567890'
 
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
 
-        resp = app.post(url_for('admin.add_user'),
-                        data=dict(username='dellsberg',
-                                  first_name='',
-                                  last_name='',
-                                  password=VALID_PASSWORD,
-                                  password_again=VALID_PASSWORD,
-                                  is_admin=None,
-                                  is_hotp=True,
-                                  otp_secret=otp),
-                        follow_redirects=True)
+        resp = app.post(
+            url_for('admin.add_user', l=locale),
+            data=dict(
+                username='dellsberg',
+                first_name='',
+                last_name='',
+                password=VALID_PASSWORD,
+                password_again=VALID_PASSWORD,
+                is_admin=None,
+                is_hotp=True,
+                otp_secret=otp
+            ),
+            follow_redirects=True
+        )
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Enable YubiKey (OATH-HOTP)']
+        with xfail_untranslated_messages(config, locale, msgids):
+            # Should redirect to the token verification page
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
-    # Should redirect to the token verification page
-    assert 'Enable YubiKey (OATH-HOTP)' in resp.data.decode('utf-8')
 
-
-def test_admin_add_user_yubikey_correct_length_with_whitespace(
-        journalist_app,
-        test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_yubikey_correct_length_with_whitespace(journalist_app, test_admin, locale):
     otp = '12 34 56 78 90 12 34 56 78 90 12 34 56 78 90 12 34 56 78 90'
 
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
 
-        resp = app.post(url_for('admin.add_user'),
-                        data=dict(username='dellsberg',
-                                  first_name='',
-                                  last_name='',
-                                  password=VALID_PASSWORD,
-                                  password_again=VALID_PASSWORD,
-                                  is_admin=None,
-                                  is_hotp=True,
-                                  otp_secret=otp),
-                        follow_redirects=True)
-
-    # Should redirect to the token verification page
-    assert 'Enable YubiKey (OATH-HOTP)' in resp.data.decode('utf-8')
+        resp = app.post(
+            url_for('admin.add_user', l=locale),
+            data=dict(
+                username='dellsberg',
+                first_name='',
+                last_name='',
+                password=VALID_PASSWORD,
+                password_again=VALID_PASSWORD,
+                is_admin=None,
+                is_hotp=True,
+                otp_secret=otp
+            ),
+            follow_redirects=True
+        )
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Enable YubiKey (OATH-HOTP)']
+        with xfail_untranslated_messages(config, locale, msgids):
+            # Should redirect to the token verification page
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
 
 def test_admin_sets_user_to_admin(journalist_app, test_admin):
@@ -1415,34 +1714,58 @@ def test_admin_adds_first_name_last_name_to_user(journalist_app, test_admin):
     Journalist.query.filter(Journalist.username == new_user).one()
 
 
-def test_admin_adds_invalid_first_last_name_to_user(journalist_app, test_admin):
-    new_user = 'admin-invalid-first-name-last-name-user-test'
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_adds_invalid_first_last_name_to_user(config, journalist_app, test_admin, locale):
+    with journalist_app.test_client() as client:
+        new_user = 'admin-invalid-first-name-last-name-user-test'
 
-    with journalist_app.test_client() as app:
-        _login_user(app, test_admin['username'], test_admin['password'],
-                    test_admin['otp_secret'])
+        _login_user(
+            client, test_admin['username'], test_admin['password'], test_admin['otp_secret']
+        )
 
-        resp = app.post(url_for('admin.add_user'),
-                        data=dict(username=new_user,
-                                  first_name='',
-                                  last_name='',
-                                  password=VALID_PASSWORD,
-                                  is_admin=None))
-        assert resp.status_code in (200, 302)
+        resp = client.post(
+            url_for('admin.add_user'),
+            data=dict(
+                username=new_user,
+                first_name='',
+                last_name='',
+                password=VALID_PASSWORD,
+                is_admin=None
+            )
+        )
+        assert resp.status_code == 302
         journo = Journalist.query.filter(Journalist.username == new_user).one()
 
         overly_long_name = 'a' * (Journalist.MAX_NAME_LEN + 1)
-        resp = app.post(url_for('admin.edit_user', user_id=journo.id),
-                        data=dict(username=overly_long_name,
-                                  first_name=overly_long_name,
-                                  last_name='test name'),
-                        follow_redirects=True)
-    assert resp.status_code in (200, 302)
-    text = resp.data.decode('utf-8')
-    assert 'Name not updated' in text
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = client.post(
+                url_for('admin.edit_user', user_id=journo.id, l=locale),
+                data=dict(
+                    username=new_user,
+                    first_name=overly_long_name,
+                    last_name='test name'
+                ),
+                follow_redirects=True,
+            )
+            assert resp.status_code == 200
+            assert page_language(resp.data) == language_tag(locale)
+
+            msgids = [
+                "Name not updated: {message}",
+                "Name too long"
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(
+                    gettext(msgids[0]).format(message=gettext("Name too long")),
+                    'error'
+                )
 
 
-def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_integrity_error(config, journalist_app, test_admin, mocker, locale):
     mocked_error_logger = mocker.patch('journalist_app.admin.current_app.logger.error')
     mocker.patch('journalist_app.admin.Journalist',
                  side_effect=IntegrityError('STATEMENT', 'PARAMETERS', None))
@@ -1452,23 +1775,32 @@ def test_admin_add_user_integrity_error(journalist_app, test_admin, mocker):
                     test_admin['otp_secret'])
 
         with InstrumentedApp(journalist_app) as ins:
-            app.post(url_for('admin.add_user'),
-                     data=dict(username='username',
-                               first_name='',
-                               last_name='',
-                               password=VALID_PASSWORD,
-                               is_admin=None))
-            ins.assert_message_flashed(
-                "An error occurred saving this user to the database."
-                " Please inform your admin.",
-                "error")
+            resp = app.post(
+                url_for('admin.add_user', l=locale),
+                data=dict(
+                    username='username',
+                    first_name='',
+                    last_name='',
+                    password=VALID_PASSWORD,
+                    is_admin=None
+                ),
+            )
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = [
+                "An error occurred saving this user to the database. "
+                "Please inform your admin."
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]), "error")
 
     log_event = mocked_error_logger.call_args[0][0]
     assert ("Adding user 'username' failed: (builtins.NoneType) "
             "None\n[SQL: STATEMENT]\n[parameters: 'PARAMETERS']") in log_event
 
 
-def test_prevent_document_uploads(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_prevent_document_uploads(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
@@ -1479,13 +1811,20 @@ def test_prevent_document_uploads(journalist_app, test_admin):
                  follow_redirects=True)
         assert InstanceConfig.get_current().allow_document_uploads is False
         with InstrumentedApp(journalist_app) as ins:
-            app.post(url_for('admin.update_submission_preferences'),
-                     data=form.data,
-                     follow_redirects=True)
-            ins.assert_message_flashed('Preferences saved.', 'submission-preferences-success')
+            resp = app.post(
+                url_for('admin.update_submission_preferences', l=locale),
+                data=form.data,
+                follow_redirects=True
+            )
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = ['Preferences saved.']
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]), 'submission-preferences-success')
 
 
-def test_no_prevent_document_uploads(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_no_prevent_document_uploads(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
@@ -1493,10 +1832,15 @@ def test_no_prevent_document_uploads(journalist_app, test_admin):
                  follow_redirects=True)
         assert InstanceConfig.get_current().allow_document_uploads is True
         with InstrumentedApp(journalist_app) as ins:
-            app.post(url_for('admin.update_submission_preferences'),
-                     follow_redirects=True)
-            ins.assert_message_flashed('Preferences saved.', 'submission-preferences-success')
+            resp = app.post(
+                url_for('admin.update_submission_preferences', l=locale),
+                follow_redirects=True
+            )
             assert InstanceConfig.get_current().allow_document_uploads is True
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = ['Preferences saved.']
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]), 'submission-preferences-success')
 
 
 def test_prevent_document_uploads_invalid(journalist_app, test_admin):
@@ -1533,7 +1877,9 @@ def test_orgname_default_set(journalist_app, test_admin):
             assert g.organization_name == "SecureDrop"
 
 
-def test_orgname_valid_succeeds(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_orgname_valid_succeeds(config, journalist_app, test_admin, locale):
     test_name = "Walden Inquirer"
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
@@ -1542,14 +1888,21 @@ def test_orgname_valid_succeeds(journalist_app, test_admin):
             organization_name=test_name)
         assert InstanceConfig.get_current().organization_name == "SecureDrop"
         with InstrumentedApp(journalist_app) as ins:
-            app.post(url_for('admin.update_org_name'),
-                     data=form.data,
-                     follow_redirects=True)
-            ins.assert_message_flashed('Preferences saved.', 'org-name-success')
+            resp = app.post(
+                url_for('admin.update_org_name', l=locale),
+                data=form.data,
+                follow_redirects=True
+            )
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = ['Preferences saved.']
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]), 'org-name-success')
             assert InstanceConfig.get_current().organization_name == test_name
 
 
-def test_orgname_null_fails(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_orgname_null_fails(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
@@ -1557,14 +1910,21 @@ def test_orgname_null_fails(journalist_app, test_admin):
             organization_name=None)
         assert InstanceConfig.get_current().organization_name == "SecureDrop"
         with InstrumentedApp(journalist_app) as ins:
-            app.post(url_for('admin.update_org_name'),
-                     data=form.data,
-                     follow_redirects=True)
-            ins.assert_message_flashed('This field is required.', 'org-name-error')
+            resp = app.post(
+                url_for('admin.update_org_name', l=locale),
+                data=form.data,
+                follow_redirects=True
+            )
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = ['This field is required.']
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]), 'org-name-error')
             assert InstanceConfig.get_current().organization_name == "SecureDrop"
 
 
-def test_orgname_oversized_fails(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_orgname_oversized_fails(config, journalist_app, test_admin, locale):
     test_name = "1234567812345678123456781234567812345678123456781234567812345678a"
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
@@ -1572,15 +1932,28 @@ def test_orgname_oversized_fails(journalist_app, test_admin):
         form = journalist_app_module.forms.OrgNameForm(
             organization_name=test_name)
         assert InstanceConfig.get_current().organization_name == "SecureDrop"
-        with InstrumentedApp(journalist_app) as ins:
-            app.post(url_for('admin.update_org_name'),
-                     data=form.data,
-                     follow_redirects=True)
-            ins.assert_message_flashed('Cannot be longer than 64 characters.', 'org-name-error')
-            assert InstanceConfig.get_current().organization_name == "SecureDrop"
+        resp = app.post(
+            url_for('admin.update_org_name', l=locale),
+            data=form.data,
+            follow_redirects=True
+        )
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Cannot be longer than {num} character.']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert (
+                ngettext(
+                    'Cannot be longer than {num} character.',
+                    'Cannot be longer than {num} characters.',
+                    InstanceConfig.MAX_ORG_NAME_LEN
+                ).format(num=InstanceConfig.MAX_ORG_NAME_LEN)
+                in resp.data.decode('utf-8')
+            )
+        assert InstanceConfig.get_current().organization_name == "SecureDrop"
 
 
-def test_orgname_html_escaped(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_orgname_html_escaped(config, journalist_app, test_admin, locale):
     t_name = '"> <a href=foo>'
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
@@ -1589,10 +1962,15 @@ def test_orgname_html_escaped(journalist_app, test_admin):
             organization_name=t_name)
         assert InstanceConfig.get_current().organization_name == "SecureDrop"
         with InstrumentedApp(journalist_app) as ins:
-            app.post(url_for('admin.update_org_name'),
-                     data=form.data,
-                     follow_redirects=True)
-            ins.assert_message_flashed('Preferences saved.', 'org-name-success')
+            resp = app.post(
+                url_for('admin.update_org_name', l=locale),
+                data=form.data,
+                follow_redirects=True
+            )
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = ['Preferences saved.']
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]), 'org-name-success')
             assert InstanceConfig.get_current().organization_name == htmlescape(t_name, quote=True)
 
 
@@ -1609,7 +1987,9 @@ def test_logo_default_available(journalist_app):
         assert response.status_code == 200
 
 
-def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_logo_upload_with_valid_image_succeeds(config, journalist_app, test_admin, locale):
     # Save original logo to restore after test run
     logo_image_location = os.path.join(config.SECUREDROP_ROOT,
                                        "static/i/logo.png")
@@ -1630,11 +2010,16 @@ def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
                 logo=(BytesIO(logo_bytes), 'test.png')
             )
             with InstrumentedApp(journalist_app) as ins:
-                app.post(url_for('admin.manage_config'),
-                         data=form.data,
-                         follow_redirects=True)
+                resp = app.post(
+                    url_for('admin.manage_config', l=locale),
+                    data=form.data,
+                    follow_redirects=True
+                )
+                assert page_language(resp.data) == language_tag(locale)
+                msgids = ['Image updated.']
+                with xfail_untranslated_messages(config, locale, msgids):
+                    ins.assert_message_flashed(gettext(msgids[0]), 'logo-success')
 
-                ins.assert_message_flashed("Image updated.", "logo-success")
         with journalist_app.test_client() as app:
             logo_url = journalist_app_module.get_logo_url(journalist_app)
             assert logo_url.endswith("/static/i/custom_logo.png")
@@ -1647,7 +2032,9 @@ def test_logo_upload_with_valid_image_succeeds(journalist_app, test_admin):
             logo_file.write(original_image)
 
 
-def test_logo_upload_with_invalid_filetype_fails(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_logo_upload_with_invalid_filetype_fails(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
@@ -1656,16 +2043,21 @@ def test_logo_upload_with_invalid_filetype_fails(journalist_app, test_admin):
             logo=(BytesIO(b'filedata'), 'bad.exe')
         )
         with InstrumentedApp(journalist_app) as ins:
-            resp = app.post(url_for('admin.manage_config'),
-                            data=form.data,
-                            follow_redirects=True)
-            ins.assert_message_flashed("You can only upload PNG image files.",
-                                       "logo-error")
-        text = resp.data.decode('utf-8')
-        assert "You can only upload PNG image files." in text
+            resp = app.post(
+                url_for('admin.manage_config', l=locale),
+                data=form.data,
+                follow_redirects=True
+            )
+
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = ["You can only upload PNG image files."]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]), "logo-error")
 
 
-def test_logo_upload_save_fails(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_logo_upload_save_fails(config, journalist_app, test_admin, locale):
     # Save original logo to restore after test run
     logo_image_location = os.path.join(config.SECUREDROP_ROOT,
                                        "static/i/logo.png")
@@ -1685,12 +2077,16 @@ def test_logo_upload_save_fails(journalist_app, test_admin):
             with InstrumentedApp(journalist_app) as ins:
                 with patch('werkzeug.datastructures.FileStorage.save') as sMock:
                     sMock.side_effect = Exception
-                    app.post(url_for('admin.manage_config'),
-                             data=form.data,
-                             follow_redirects=True)
+                    resp = app.post(
+                        url_for('admin.manage_config', l=locale),
+                        data=form.data,
+                        follow_redirects=True
+                    )
 
-                    ins.assert_message_flashed("Unable to process the image file."
-                                               " Try another one.", "logo-error")
+                    assert page_language(resp.data) == language_tag(locale)
+                    msgids = ["Unable to process the image file. Try another one."]
+                    with xfail_untranslated_messages(config, locale, msgids):
+                        ins.assert_message_flashed(gettext(msgids[0]), "logo-error")
     finally:
         # Restore original image to logo location for subsequent tests
         with io.open(logo_image_location, 'wb') as logo_file:
@@ -1709,7 +2105,9 @@ def test_creation_of_ossec_test_log_event(journalist_app, test_admin, mocker):
     )
 
 
-def test_logo_upload_with_empty_input_field_fails(journalist_app, test_admin):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_logo_upload_with_empty_input_field_fails(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
@@ -1719,12 +2117,16 @@ def test_logo_upload_with_empty_input_field_fails(journalist_app, test_admin):
         )
 
         with InstrumentedApp(journalist_app) as ins:
-            resp = app.post(url_for('admin.manage_config'),
-                            data=form.data,
-                            follow_redirects=True)
+            resp = app.post(
+                url_for('admin.manage_config', l=locale),
+                data=form.data,
+                follow_redirects=True
+            )
 
-            ins.assert_message_flashed("File required.", "logo-error")
-    assert 'File required.' in resp.data.decode('utf-8')
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = ["File required."]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]), "logo-error")
 
 
 def test_admin_page_restriction_http_gets(journalist_app, test_journo):
@@ -1785,18 +2187,31 @@ def test_user_authorization_for_posts(journalist_app):
             assert resp.status_code == 302
 
 
-def test_incorrect_current_password_change(journalist_app, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_incorrect_current_password_change(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
                     test_journo['otp_secret'])
-        resp = app.post(url_for('account.new_password'),
-                        data=dict(password=VALID_PASSWORD,
-                                  token='mocked',
-                                  current_password='badpw'),
-                        follow_redirects=True)
-
-    text = resp.data.decode('utf-8')
-    assert 'Incorrect password or two-factor code' in text
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(
+                url_for('account.new_password', l=locale),
+                data=dict(
+                    password=VALID_PASSWORD,
+                    token='mocked',
+                    current_password='badpw'
+                ),
+                follow_redirects=True)
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = [
+                'Incorrect password or two-factor code.',
+                (
+                    "Please wait for a new code from your two-factor mobile"
+                    " app or security key before trying again."
+                )
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]) + " " + gettext(msgids[1]), "error")
 
 
 # need a journalist app for the app context
@@ -1863,7 +2278,9 @@ def test_journalist_reply_view(journalist_app, test_source, test_journo):
         assert resp.status_code == 302
 
 
-def test_too_long_user_password_change(journalist_app, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_too_long_user_password_change(config, journalist_app, test_journo, locale):
     overly_long_password = VALID_PASSWORD + \
         'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
@@ -1872,56 +2289,96 @@ def test_too_long_user_password_change(journalist_app, test_journo):
                     test_journo['otp_secret'])
 
         with InstrumentedApp(journalist_app) as ins:
-            app.post(url_for('account.new_password'),
-                     data=dict(password=overly_long_password,
-                               token=TOTP(test_journo['otp_secret']).now(),
-                               current_password=test_journo['password']),
-                     follow_redirects=True)
+            resp = app.post(
+                url_for('account.new_password', l=locale),
+                data=dict(
+                    password=overly_long_password,
+                    token=TOTP(test_journo['otp_secret']).now(),
+                    current_password=test_journo['password']
+                ),
+                follow_redirects=True)
 
-            ins.assert_message_flashed(
-                'The password you submitted is invalid. '
-                'Password not changed.', 'error')
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = ['The password you submitted is invalid. Password not changed.']
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(gettext(msgids[0]), 'error')
 
 
-def test_valid_user_password_change(journalist_app, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_valid_user_password_change(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
                     test_journo['otp_secret'])
 
-        resp = app.post(url_for('account.new_password'),
+        resp = app.post(url_for('account.new_password', l=locale),
                         data=dict(password=VALID_PASSWORD_2,
                                   token=TOTP(test_journo['otp_secret']).now(),
                                   current_password=test_journo['password']),
                         follow_redirects=True)
 
-        assert 'Password updated.' in resp.data.decode('utf-8')
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = [
+            "Password updated. Don't forget to save it in your KeePassX database. New password:"
+        ]
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert escape(gettext(msgids[0])) in resp.data.decode('utf-8')
 
 
-def test_valid_user_first_last_name_change(journalist_app, test_journo):
+
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_valid_user_first_last_name_change(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
                     test_journo['otp_secret'])
 
-        resp = app.post(url_for('account.change_name'),
-                        data=dict(first_name='test',
-                                  last_name='test'),
-                        follow_redirects=True)
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(
+                url_for('account.change_name', l=locale),
+                data=dict(first_name='test', last_name='test'),
+                follow_redirects=True
+            )
 
-        assert 'Name updated.' in resp.data.decode('utf-8')
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = [
+                "Name updated.",
+                "Name too long"
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(
+                    gettext(msgids[0]).format(gettext("Name too long")),
+                    'success'
+                )
 
 
-def test_valid_user_invalid_first_last_name_change(journalist_app, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_valid_user_invalid_first_last_name_change(journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
         overly_long_name = 'a' * (Journalist.MAX_NAME_LEN + 1)
         _login_user(app, test_journo['username'], test_journo['password'],
                     test_journo['otp_secret'])
 
-        resp = app.post(url_for('account.change_name'),
-                        data=dict(first_name=overly_long_name,
-                                  last_name=overly_long_name),
-                        follow_redirects=True)
-
-        assert 'Name not updated' in resp.data.decode('utf-8')
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(
+                url_for('account.change_name', l=locale),
+                data=dict(
+                    first_name=overly_long_name,
+                    last_name=overly_long_name
+                ),
+                follow_redirects=True
+            )
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = [
+                "Name not updated: {message}",
+                "Name too long"
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(
+                    gettext(msgids[0]).format(message=gettext("Name too long")),
+                    'error'
+                )
 
 
 def test_regenerate_totp(journalist_app, test_journo):
@@ -2735,7 +3192,9 @@ def test_single_source_is_successfully_unstarred(journalist_app,
         assert not source.star.starred
 
 
-def test_journalist_session_expiration(config, journalist_app, test_journo):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_journalist_session_expiration(config, journalist_app, test_journo, locale):
     # set the expiration to ensure we trigger an expiration
     config.SESSION_EXPIRATION_MINUTES = -1
     with journalist_app.test_client() as app:
@@ -2749,7 +3208,11 @@ def test_journalist_session_expiration(config, journalist_app, test_journo):
             ins.assert_redirects(resp, url_for('main.index'))
         assert 'uid' in session
 
-        resp = app.get(url_for('account.edit'), follow_redirects=True)
+        resp = app.get(url_for('account.edit', l=locale), follow_redirects=True)
+        # because the session is being cleared when it expires, the
+        # response should always be in English.
+        assert page_language(resp.data) == 'en-US'
+        assert 'You have been logged out due to inactivity.' in resp.data.decode('utf-8')
 
         # check that the session was cleared (apart from 'expires'
         # which is always present and 'csrf_token' which leaks no info)
@@ -2757,11 +3220,19 @@ def test_journalist_session_expiration(config, journalist_app, test_journo):
         session.pop('csrf_token', None)
         session.pop('locale', None)
         assert not session, session
-        assert ('You have been logged out due to inactivity' in
-                resp.data.decode('utf-8'))
 
 
-def test_csrf_error_page(journalist_app):
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_csrf_error_page(config, journalist_app, locale):
+    # get the locale into the session
+    with journalist_app.test_client() as app:
+        resp = app.get(url_for('main.login', l=locale))
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['Show password']
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
+
     journalist_app.config['WTF_CSRF_ENABLED'] = True
     with journalist_app.test_client() as app:
         with InstrumentedApp(journalist_app) as ins:
@@ -2770,8 +3241,10 @@ def test_csrf_error_page(journalist_app):
 
         resp = app.post(url_for('main.login'), follow_redirects=True)
 
-        text = resp.data.decode('utf-8')
-        assert 'You have been logged out due to inactivity' in text
+        # because the session is being cleared when it expires, the
+        # response should always be in English.
+        assert page_language(resp.data) == 'en-US'
+        assert 'You have been logged out due to inactivity.' in resp.data.decode('utf-8')
 
 
 def test_col_process_aborts_with_bad_action(journalist_app, test_journo):

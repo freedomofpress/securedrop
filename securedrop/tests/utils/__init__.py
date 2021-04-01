@@ -8,6 +8,17 @@ from . import db_helper  # noqa
 from . import env  # noqa
 
 
+def flaky_filter_xfail(err, *args):
+    """
+    Tell the pytest flaky plugin to not retry XFailed errors.
+
+    If the test is expected to fail, let's not run it again.
+    """
+    return '_pytest.outcomes.XFailed' == '{}.{}'.format(
+        err[0].__class__.__module__, err[0].__class__.__qualname__
+    )
+
+
 def login_user(app, test_user):
     resp = app.post('/login',
                     data={'username': test_user['username'],

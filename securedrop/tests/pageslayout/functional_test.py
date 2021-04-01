@@ -30,8 +30,8 @@ from PIL import Image
 
 
 def list_locales():
-    if "PAGE_LAYOUT_LOCALES" in os.environ:
-        locales = os.environ["PAGE_LAYOUT_LOCALES"].split(",")
+    if "TEST_LOCALES" in os.environ:
+        locales = os.environ["TEST_LOCALES"].split()
     else:
         locales = ["en_US"]
     return locales

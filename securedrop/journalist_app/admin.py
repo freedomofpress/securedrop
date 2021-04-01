@@ -52,8 +52,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 f.save(custom_logo_filepath)
                 flash(gettext("Image updated."), "logo-success")
             except Exception:
-                flash("Unable to process the image file."
-                      " Try another one.", "logo-error")
+                # Translators: This error is shown when an uploaded image cannot be used.
+                flash(gettext("Unable to process the image file. Try another one."), "logo-error")
             finally:
                 return redirect(url_for("admin.manage_config") + "#config-logoimage")
         else:
@@ -131,13 +131,16 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 form_valid = False
             except InvalidUsernameException as e:
                 form_valid = False
-                flash('Invalid username: ' + str(e), "error")
+                # Translators: Here, "{message}" explains the problem with the username.
+                flash(gettext('Invalid username: {message}').format(message=e), "error")
             except IntegrityError as e:
                 db.session.rollback()
                 form_valid = False
                 if "UNIQUE constraint failed: journalists.username" in str(e):
-                    flash(gettext('Username "{user}" already taken.'.format(
-                        user=username)), "error")
+                    flash(
+                        gettext('Username "{username}" already taken.').format(username=username),
+                        "error"
+                    )
                 else:
                     flash(gettext("An error occurred saving this user"
                                   " to the database."
@@ -214,7 +217,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 try:
                     Journalist.check_username_acceptable(new_username)
                 except InvalidUsernameException as e:
-                    flash('Invalid username: ' + str(e), 'error')
+                    flash(gettext('Invalid username: {message}').format(message=e), "error")
                     return redirect(url_for("admin.edit_user",
                                             user_id=user_id))
 
@@ -222,10 +225,12 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                     pass
                 elif Journalist.query.filter_by(
                         username=new_username).one_or_none():
-                    flash(gettext(
-                        'Username "{user}" already taken.').format(
-                            user=new_username),
-                        "error")
+                    flash(
+                        gettext('Username "{username}" already taken.').format(
+                            username=new_username
+                        ),
+                        "error"
+                    )
                     return redirect(url_for("admin.edit_user",
                                             user_id=user_id))
                 else:
@@ -236,7 +241,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 Journalist.check_name_acceptable(first_name)
                 user.first_name = first_name
             except FirstOrLastNameError as e:
-                flash(gettext('Name not updated: {}'.format(e)), "error")
+                # Translators: Here, "{message}" explains the problem with the name.
+                flash(gettext('Name not updated: {message}').format(message=e), "error")
                 return redirect(url_for("admin.edit_user", user_id=user_id))
 
             try:
@@ -244,7 +250,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 Journalist.check_name_acceptable(last_name)
                 user.last_name = last_name
             except FirstOrLastNameError as e:
-                flash(gettext('Name not updated: {}'.format(e)), "error")
+                flash(gettext('Name not updated: {message}').format(message=e), "error")
                 return redirect(url_for("admin.edit_user", user_id=user_id))
 
             user.is_admin = bool(request.form.get('is_admin'))
