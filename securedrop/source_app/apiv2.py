@@ -13,6 +13,7 @@ from models import Group, GroupMember, Source, WrongPasswordException, Journalis
 from werkzeug.exceptions import default_exceptions
 
 from db import db
+import shared_api
 from sdconfig import config, SDConfig
 from typing import Callable, Optional, Union, Dict, List, Any, Tuple
 
@@ -277,65 +278,19 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @api.route('/auth_credential', methods=['GET'])
     @token_required
     def auth_credential() -> Tuple[flask.Response, int]:
-        """
-        Get auth_credential for user
-        """
         user = _authenticate_user_from_auth_header(request)
-        randomness = os.urandom(32)
-
-        # uid in 16 BE bytes
-        uid = UUID(user.uuid).bytes
-
-        redemption_time = 123456  # TODO
-        auth_credential_response = config.server_secret_params.issue_auth_credential(
-            randomness, uid, redemption_time
-        )
-
-        response = jsonify({
-            'auth_credential': auth_credential_response.serialize().hex(),
-        })
-        return response, 200
+        return shared_api.auth_credential(user)
 
     @api.route('/server_params', methods=['GET'])
     @token_required
     def server_public_params() -> Tuple[flask.Response, int]:
-        """
-        Get server public parameters
-        """
-        user = _authenticate_user_from_auth_header(request)
-
-        response = jsonify({
-            'server_public_params': config.server_public_params.serialize().hex(),
-        })
-        return response, 200
+        return shared_api.server_public_params()
 
     @api.route('/sender_cert', methods=['GET'])
     @token_required
     def sender_cert() -> Tuple[flask.Response, int]:
-        """
-        Get sender cert
-        """
         user = _authenticate_user_from_auth_header(request)
-
-        if not user.is_signal_registered():
-            abort(400, 'your account is not registered')
-
-        expiration = 123  # TODO: timestamp
-        DEVICE_ID = 1
-        sender_cert = SenderCertificate(
-            user.uuid,
-            user.uuid,
-            PublicKey.deserialize(user.identity_key),
-            DEVICE_ID,
-            expiration,
-            config.server_cert,
-            config.server_key.private_key(),
-        )
-        response = jsonify({
-            'sender_cert': sender_cert.serialized().hex(),
-            'trust_root': config.trust_root.public_key().serialize().hex(),
-        })
-        return response, 200
+        return shared_api.sender_cert(user)
 
     @api.route('/journalists/<journalist_uuid>/prekey_bundle', methods=['GET'])
     @token_required
