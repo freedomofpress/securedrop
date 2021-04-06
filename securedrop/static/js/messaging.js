@@ -42,12 +42,13 @@ function apiSend( method, url, token, req_body, fn_success_callback, get_respons
     }
 }
 
-function onRegistrationSuccess(session, token) {
+async function onRegistrationSuccess(session, token) {
     console.log("registered successfully!");
     // We get a fresh sender cert at the beginning of every session
     getSenderCert(session, token);
     // We also get the server parameters
     getServerParams(session, token);
+    await sleep(250);
     getAuthCredential(session, token);
 }
 
@@ -129,9 +130,9 @@ async function prepareSession( session, needs_registration, securedrop_group, to
         request.setRequestHeader("Content-Type", "application/json");
         request.setRequestHeader("Authorization", `Token ${token}`);
 
-        request.onreadystatechange = function () {
+        request.onreadystatechange = async function () {
             if (request.readyState === 4 && request.status === 200) {
-                onRegistrationSuccess(session, token);
+                await onRegistrationSuccess(session, token);
                 console.log('finished registration callback');
 
             }
@@ -171,7 +172,7 @@ async function prepareSession( session, needs_registration, securedrop_group, to
         };
         group_request.send(JSON.stringify(public_group_data));
 
-        await sleep(1000);
+        await sleep(250);
 
         // Step 2. Fetch prekey bundles for each journalist in our group.
         var session2 = session;
@@ -191,7 +192,7 @@ async function prepareSession( session, needs_registration, securedrop_group, to
             };
             prekey_request.send();
 
-            await sleep(100);
+            await sleep(1000);
 
             var ciphertext = session2.sealed_send_encrypted_group_key(journalist_uuid);
             console.log(`encrypted group key: ${ciphertext}`);
@@ -208,6 +209,7 @@ async function prepareSession( session, needs_registration, securedrop_group, to
         // We get a fresh sender cert at the beginning of every session (even if not newly registered)
         getSenderCert(session, token);
         getServerParams(session, token);
+        await sleep(250);
         getAuthCredential(session, token);
     }
 
