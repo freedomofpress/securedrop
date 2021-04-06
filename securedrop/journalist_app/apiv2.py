@@ -297,13 +297,26 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     # This intentionally does not have @token_required, in the body of the
     # request, the user must present a valid AuthCredentialPresentation
+    @api.route('/groups/members', methods=['POST'])
+    def get_group_members() -> Tuple[flask.Response, int]:
+        group = shared_api.auth_as_group_member(request)
+        if group:
+            members = GroupMember.query.filter_by(group_id=group.id).all()
+            uuid_ciphertexts = [x.uid_ciphertext.hex() for x in members]
+            response = jsonify({'members': uuid_ciphertexts})
+            return response, 200
+        else:
+            abort(403, 'err: could not authenticate')
+
+    # This intentionally does not have @token_required, in the body of the
+    # request, the user must present a valid AuthCredentialPresentation
     @api.route('/groups/new', methods=['POST'])
     def create_group() -> Tuple[flask.Response, int]:
         """
         Create group
         """
         if request.json is None:
-                abort(400, 'please send requests in valid JSON')
+            abort(400, 'please send requests in valid JSON')
 
         req = json.loads(request.data.decode('utf-8'))
         raw_auth_credential_presentation = req.get('auth_credential_presentation', None)
@@ -334,7 +347,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             abort(400, 'err: could not deserialize AuthCredentialPresentation')
 
         # Before doing anything, we must verify the auth credential presentation.
-        config.server_secret_params.verify_auth_credential_presentation(group_public_params, auth_credential_presentation)
+        try:
+            config.server_secret_params.verify_auth_credential_presentation(group_public_params, auth_credential_presentation)
+        except ZkGroupException:
+            abort(403, 'err: invalid AuthCredentialPresentation')
 
         group_creator_uuid_ciphertext = auth_credential_presentation.get_uuid_ciphertext()
         new_group_id = bytes(group_public_params.get_group_identifier())
@@ -373,10 +389,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         # Now that we've validated everything. Let's add the new objects to the database.
         db.session.add(new_group)
+        db.session.commit()
         for member in members_uuid_cipher_to_add:
             db.session.add(GroupMember(new_group, member, is_admin=False))
         for admin in admins_uuid_cipher_to_add:
-            db.session.add(GroupMember(new_group, member, is_admin=True))
+            db.session.add(GroupMember(new_group, admin, is_admin=True))
         db.session.commit()
 
         return jsonify({'message': 'Your group has been created'}), 200
