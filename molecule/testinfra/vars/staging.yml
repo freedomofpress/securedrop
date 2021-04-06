@@ -203,6 +203,21 @@ log_events_with_ossec_alerts:
     level: "7"
     rule_id: "400700"
 
+  # Override and log fwupd-specific errors under Ubuntu Focal
+  - name: test_ossec_fwupd_fuplugin_uefi_suppressed
+    alert: >
+      Mar  1 13:22:53 app fwupd[133921]: 13:22:53:0883 FuPluginUefi
+      Error opening directory â€œ/sys/firmware/efi/esrt/entriesâ€�: No such file or directory
+    level: "0"
+    rule_id: "100111"
+
+  - name: test_ossec_fwupd_fuengine_suppressed
+    alert: >
+      Mar  1 13:22:53 mon fwupd[133921]: 13:22:53:0576 FuEngine
+      Failed to load SMBIOS: invalid DMI data size, got 2527 bytes, expected 2745
+    level: "0"
+    rule_id: "100112"
+
 fpf_apt_repo_url: "https://apt-test.freedom.press"
 grsec_version_xenial: "4.14.188"
 grsec_version_focal: "5.4.97"
