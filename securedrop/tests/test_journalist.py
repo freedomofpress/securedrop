@@ -1538,7 +1538,7 @@ def test_admin_add_user_too_short_username(config, journalist_app, test_admin, l
     (
         (locale, "a" * i)
         for locale in get_test_locales()
-        for i in get_plural_tests()[locale] if i != 0
+        for i in get_plural_tests()[locale] if i != 0  # pylint: disable=undefined-variable
     )
 )
 def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin, locale, secret):
