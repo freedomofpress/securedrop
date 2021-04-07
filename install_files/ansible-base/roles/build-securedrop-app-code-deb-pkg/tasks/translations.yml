@@ -1,8 +1,10 @@
 ---
 
 - name: Install SecureDrop Python requirements in virtualenv for translation work
-  shell: |
-    python3 -m venv /tmp/securedrop-app-code-i18n-ve
+  shell: >
+    set -e &&
+    python3 -m venv /tmp/securedrop-app-code-i18n-ve &&
+    /tmp/securedrop-app-code-i18n-ve/bin/pip3 install "setuptools-scm==5.0.2" &&
     /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_app_code_prep_dir }}/requirements.txt
   tags:
     - pip

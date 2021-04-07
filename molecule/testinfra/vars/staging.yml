@@ -133,6 +133,20 @@ log_events_without_ossec_alerts:
       jp&B1qSJM431TmEg,YJ][ge;6-dJI69?-TB?!BI4?Uza63V3vMY3ake6a
       hj-%A-m_5lgab!OVR,!pR+;L]eLgilU
 
+  # Override and suppress fwupd-specific errors under Ubuntu Focal
+  - name: test_ossec_fwupd_fuplugin_uefi_does_not_produce_alert
+    alert: >
+      Mar  1 13:22:53 app fwupd[133921]: 13:22:53:0883 FuPluginUefi
+      Error opening directory â€œ/sys/firmware/efi/esrt/entriesâ€�: No such file or directory
+    level: "0"
+    rule_id: "100111"
+
+  - name: test_ossec_fwupd_fuengine_does_not_produce_alert
+    alert: >
+      Mar  1 13:22:53 mon fwupd[133921]: 13:22:53:0576 FuEngine
+      Failed to load SMBIOS: invalid DMI data size, got 2527 bytes, expected 2745
+    level: "0"
+    rule_id: "100112"
 
 # Log events we expect an OSSEC alert to occur for
 log_events_with_ossec_alerts:

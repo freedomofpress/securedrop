@@ -1,0 +1,102 @@
+---
+- name: Create temporary directory for Tor configuration check
+  connection: local
+  become: no
+  tempfile:
+    state: directory
+  register: torrc_check_dir
+
+- name: Fetch current Tor configuration from app server
+  become: no
+  fetch:
+    src: /etc/tor/torrc
+    dest: "{{ torrc_check_dir.path }}"
+
+- name: Create directory to hold the Tor configuration from the backup
+  connection: local
+  become: no
+  file:
+    path: "{{ torrc_check_dir.path }}/backup"
+    state: directory
+
+- name: Extract Tor configuration from backup
+  connection: local
+  become: no
+  unarchive:
+    dest: "{{ torrc_check_dir.path }}/backup/"
+    src: "{{ restore_file }}"
+    extra_opts:
+      - "etc/tor/torrc"
+
+- name: Check for Tor configuration differences between the backup and server
+  connection: local
+  become: no
+  command: "python {{ role_path }}/files/compare_torrc.py {{ torrc_check_dir.path }}"
+  ignore_errors: yes
+  register: compare_result
+
+- name: Remove temporary directory for Tor configuration check
+  connection: local
+  become: no
+  file:
+    path: "{{ torrc_check_dir.path }}"
+    state: absent
+  when: torrc_check_dir.path is defined
+
+- name: Verify that the backup Tor config is compatible with the server Tor config
+  assert:
+    that:
+      - "'Valid configuration' in compare_result.stdout"
+    fail_msg:
+      - "This backup's tor configuration cannot be applied on this server."
+      - "A data-only restore can be applied using the --preserve-tor-config argument"
+      - "More info: {{ compare_result.stdout }}"
+  when: not restore_skip_tor
+
+- name: Copy backup to application server
+  synchronize:
+    src: "{{ restore_file }}"
+    dest: /tmp/{{ restore_file }}
+    partial: yes
+
+- name: Extract backup
+  unarchive:
+    dest: /
+    remote_src: yes
+    src: "/tmp/{{ restore_file}}"
+    exclude:
+      - "var/lib/tor/services/ssh"
+      - "var/lib/tor/services/sshv3"
+  when: (not restore_skip_tor) and
+        ("V3 services only" not in compare_result.stdout)
+
+- name: Extract backup, using v3 services only
+  unarchive:
+    dest: /
+    remote_src: yes
+    src: "/tmp/{{ restore_file}}"
+    exclude:
+      - "var/lib/tor/services/source,var/lib/tor/services/journalist"
+      - "var/lib/tor/services/ssh"
+      -  "var/lib/tor/services/sshv3"
+  when: (not restore_skip_tor) and
+        ("V3 services only" in compare_result.stdout)
+
+- name: Extract backup, skipping tor service configuration
+  unarchive:
+    dest: /
+    remote_src: yes
+    src: "/tmp/{{ restore_file}}"
+    exclude: "var/lib/tor,etc/tor/torrc"
+  when: restore_skip_tor
+
+- name: Reconfigure securedrop-app-code
+  command: dpkg-reconfigure securedrop-app-code
+
+- name: Reconfigure securedrop-config
+  command: dpkg-reconfigure securedrop-config
+
+- name: Reload Apache service
+  service:
+    name: apache2
+    state: reloaded

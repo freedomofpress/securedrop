@@ -1,0 +1,40 @@
+---
+- name: Copy disable_v2.py script
+  copy:
+    src: "{{ role_path }}/files/disable_v2.py"
+    dest: /opt/disable_v2.py
+  when: ("V3 services only" in compare_result.stdout)
+
+- name: Execute disable_v2 script
+  command: python3 /opt/disable_v2.py /etc/tor/torrc /etc/tor/torrc
+  when: ("V3 services only" in compare_result.stdout)
+
+- name: Remove v2 tor source directory
+  file:
+    state: absent
+    path: /var/lib/tor/services/source
+  when: ("V3 services only" in compare_result.stdout)
+
+- name: Remove v2 tor journalist directory
+  file:
+    state: absent
+    path: /var/lib/tor/services/journalist
+  when: ("V3 services only" in compare_result.stdout)
+
+- name: Remove v2 tor ssh directory
+  file:
+    state: absent
+    path: /var/lib/tor/services/ssh
+  when: ("V3 services only" in compare_result.stdout)
+
+- name: Remove v2 source_url application file
+  file:
+    state: absent
+    path: /var/lib/securedrop/source_v2_url
+  when: ("V3 services only" in compare_result.stdout)
+
+- name: Remove disable_v2.py script
+  file:
+    state: absent
+    path: /opt/disable_v2.py
+  when: ("V3 services only" in compare_result.stdout)

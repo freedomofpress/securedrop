@@ -1,0 +1,16 @@
+---
+- name: Reload Tor service
+  service:
+    name: tor
+    state: reloaded
+  async: 60
+  poll: 0
+  register: tor_reload_job
+
+- name: Wait for Tor reload
+  async_status:
+    jid: "{{ tor_reload_job.ansible_job_id }}"
+  register: tor_reload
+  until: tor_reload.finished
+  retries: 6
+  delay: 10

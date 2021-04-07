@@ -74,6 +74,25 @@
 </group>
 
 <!--
+  fwupd auto-updates realted rules.
+-->
+
+<group name="fwupd">
+  <rule id="100111" level="0">
+    <decoded_as>fwupd</decoded_as>
+    <match>Error opening directory</match>
+    <description>fwupd error</description>
+    <options>no_email_alert</options>
+  </rule>
+  <rule id="100112" level="0">
+    <decoded_as>fwupd</decoded_as>
+    <match>Failed to load SMBIOS</match>
+    <description>fwupd error for auto updates</description>
+    <options>no_email_alert</options>
+  </rule>
+</group>
+
+<!--
   Do not alert on stagging VM dhcp client errors. These events should not occur
   in production environments
 -->
