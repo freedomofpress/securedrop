@@ -10,7 +10,7 @@
   shell: >
     awk '!/HiddenServiceVersion 2/'
     RS="HiddenServiceDir" ORS="HiddenServiceDir"
-    /etc/tor/torrc.bak > /etc/tor/torrc
+    /etc/tor/torrc.bak | sed '$d' > /etc/tor/torrc
   when: ("V3 services only" in compare_result.stdout)
 
 - name: Check Tor config
