@@ -4,7 +4,9 @@
 
 *
 
-## 1.8.1~rc1
+## 1.8.1
+
+### Operations
 
 * Install a fixed version of setuptools-scm before building packages (#5877)
 * Update pylint from 2.5.0 to 2.7.4, pyyaml from 5.3.1 to 5.4.1 (#5884)
