@@ -4,7 +4,7 @@
   shell: >
     set -e &&
     python3 -m venv /tmp/securedrop-app-code-i18n-ve &&
-    /tmp/securedrop-app-code-i18n-ve/bin/pip3 install "setuptools-scm==5.0.2" &&
+    /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --require-hashes -r <(echo 'setuptools-scm==5.0.2 --hash=sha256:bd5c4e37f74c103e117549f89aeb3c244488c4a6422df786d1a7d03257f16b34') &&
     /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_app_code_prep_dir }}/requirements.txt
   tags:
     - pip
