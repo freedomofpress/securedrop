@@ -1,12 +1,46 @@
 ---
-- name: Copy disable_v2.py script
+- name: Backup torrc file
   copy:
-    src: "{{ role_path }}/files/disable_v2.py"
-    dest: /opt/disable_v2.py
+    src: /etc/tor/torrc
+    dest: /etc/tor/torrc.bak
+    remote_src: yes
   when: ("V3 services only" in compare_result.stdout)
 
-- name: Execute disable_v2 script
-  command: python3 /opt/disable_v2.py /etc/tor/torrc /etc/tor/torrc
+- name: Remove v2 service definitions from torrc.
+  shell: >
+    awk '!/HiddenServiceVersion 2/'
+    RS="HiddenServiceDir" ORS="HiddenServiceDir"
+    /etc/tor/torrc.bak | sed '$d' > /etc/tor/torrc
+  when: ("V3 services only" in compare_result.stdout)
+
+- name: Check Tor config
+  command: tor --verify-config
+  register: tor_verify
+  become_user: debian-tor
+  when: ("V3 services only" in compare_result.stdout)
+
+- name: Verify that Tor config is valid
+  assert:
+    that:
+      - "'Configuration was valid' in tor_verify.stdout"
+    fail_msg:
+      - "Removal of obsolete V2 configuration blocks failed - the new"
+      - "configuration file is invalid."
+  when: ("V3 services only" in compare_result.stdout)
+
+- name: Verify that V2 config directives are removed
+  assert:
+    that:
+      - "'Onion service version 2 are deprecated' not in tor_verify.stdout"
+    fail_msg:
+      - "V2 configurations were not successfully removed. Please review /etc/tor/torrc"
+      - "and manually remove any v2 service definitions."
+  when: ("V3 services only" in compare_result.stdout)
+
+- name: Remove backup torrc file
+  file:
+    state: absent
+    path: /etc/tor/torrc.bak
   when: ("V3 services only" in compare_result.stdout)
 
 - name: Remove v2 tor source directory
@@ -31,10 +65,4 @@
   file:
     state: absent
     path: /var/lib/securedrop/source_v2_url
-  when: ("V3 services only" in compare_result.stdout)
-
-- name: Remove disable_v2.py script
-  file:
-    state: absent
-    path: /opt/disable_v2.py
   when: ("V3 services only" in compare_result.stdout)

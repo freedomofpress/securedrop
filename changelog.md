@@ -4,6 +4,18 @@
 
 *
 
+## 1.8.1
+
+### Operations
+
+* Install a fixed version of setuptools-scm before building packages (#5877)
+* Update pylint from 2.5.0 to 2.7.4, pyyaml from 5.3.1 to 5.4.1 (#5884)
+* Suppress OSSEC alert caused by fwupd not being active (#5882)
+* Exclude SSH onion service config from restores (#5886)
+* Add support for custom logos in backups (#5880)
+* Add check for SecureBoot status in installer (#5879)
+* Restore playbook validates Tor config after v2 service removal (#5894)
+
 ## 1.8.0
 
 ### Web applications
