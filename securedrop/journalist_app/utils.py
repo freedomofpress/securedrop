@@ -205,9 +205,12 @@ def download(
         zf = current_app.storage.get_bulk_archive(submissions, zip_directory=zip_basename)
     except FileNotFoundError:
         flash(
-            gettext(
+            ngettext(
+                "Your download failed because the file could not be found. An admin can find "
+                + "more information in the system and monitoring logs.",
                 "Your download failed because a file could not be found. An admin can find "
-                + "more information in the system and monitoring logs."
+                + "more information in the system and monitoring logs.",
+                len(submissions)
             ),
             "error"
         )

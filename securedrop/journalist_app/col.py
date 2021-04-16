@@ -116,7 +116,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if not Path(file).is_file():
             flash(
                 gettext(
-                    "Your download failed because a file could not be found. An admin can find "
+                    "Your download failed because the file could not be found. An admin can find "
                     + "more information in the system and monitoring logs."
                 ),
                 "error"
