@@ -26,6 +26,9 @@ if [ -n "${CIRCLE_BRANCH:-}" ] ; then
     touch tests/log/firefox.log
     function finish {
         cp tests/log/firefox.log ../test-results
+        echo "BEGIN-CODECOV-CHECK"
+        env
+        echo "END-CODECOV-CHECK"
         bash <(curl -s https://codecov.io/bash -cF "$BASE_OS")
     }
     trap finish EXIT
