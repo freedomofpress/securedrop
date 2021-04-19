@@ -97,6 +97,7 @@ version: 2
 jobs:
   lint:
     machine:
+      image: ubuntu-2004:202010-01
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
@@ -124,6 +125,7 @@ jobs:
 
   focal-app-tests:
     machine:
+      image: ubuntu-2004:202010-01
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
@@ -157,6 +159,7 @@ jobs:
 
   app-tests:
     machine:
+      image: ubuntu-2004:202010-01
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
@@ -190,7 +193,7 @@ jobs:
 
   translation-tests:
     machine:
-      image: ubuntu-1604:202007-01
+      image: ubuntu-2004:202010-01
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
@@ -277,6 +280,7 @@ jobs:
 
   static-analysis-and-no-known-cves:
     machine:
+      image: ubuntu-2004:202010-01
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
@@ -306,6 +310,7 @@ jobs:
 
   staging-test-with-rebase:
     machine:
+      image: ubuntu-2004:202010-01
       enabled: true
 
     working_directory: ~/sd
@@ -337,6 +342,7 @@ jobs:
 
   staging-test-with-rebase-focal:
     machine:
+      image: ubuntu-2004:202010-01
       enabled: true
 
     working_directory: ~/sd
