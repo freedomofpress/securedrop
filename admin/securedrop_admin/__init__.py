@@ -883,25 +883,23 @@ def restore_securedrop(args: argparse.Namespace) -> int:
     # Would like readable output if there's a problem
     os.environ["ANSIBLE_STDOUT_CALLBACK"] = "debug"
 
-    ansible_cmd_full_restore = [
+    ansible_cmd = [
         'ansible-playbook',
         os.path.join(args.ansible_path, 'securedrop-restore.yml'),
         '-e',
+    ]
+
+    ansible_cmd_extras = [
         "restore_file='{}'".format(restore_file_basename),
     ]
 
-    ansible_cmd_skip_tor = [
-        'ansible-playbook',
-        os.path.join(args.ansible_path, 'securedrop-restore.yml'),
-        '-e',
-        "restore_file='{}' restore_skip_tor='True'".format(restore_file_basename),
-    ]
-
     if args.restore_skip_tor:
-        ansible_cmd = ansible_cmd_skip_tor
-    else:
-        ansible_cmd = ansible_cmd_full_restore
+        ansible_cmd_extras.append("restore_skip_tor='True'")
 
+    if args.restore_manual_transfer:
+        ansible_cmd_extras.append("restore_manual_transfer='True'")
+
+    ansible_cmd.append(' '.join(ansible_cmd_extras))
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
@@ -1160,6 +1158,11 @@ def parse_argv(argv: List[str]) -> argparse.Namespace:
                                action='store_true',
                                dest='restore_skip_tor',
                                help="Preserve the server's current Tor config")
+
+    parse_restore.add_argument("--no-transfer", default=False,
+                               action='store_true',
+                               dest='restore_manual_transfer',
+                               help="Restore using a backup file already present on the server")
 
     parse_update = subparsers.add_parser('update', help=update.__doc__)
     parse_update.set_defaults(func=update)
