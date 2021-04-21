@@ -6,10 +6,6 @@ driver:
 lint: |
   yamllint
 platforms:
-  - name: tor-package-fetcher-xenial
-    image: "quay.io/freedomofpress/sd-docker-builder-xenial"
-    distro: xenial
-
   - name: tor-package-fetcher-focal
     image: "quay.io/freedomofpress/sd-docker-builder-focal"
     distro: focal
