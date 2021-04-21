@@ -189,13 +189,7 @@ dev-focal:  ## Run the development server in a Docker container.
 
 
 .PHONY: staging
-staging:  ## Create a local staging environment in virtual machines (Xenial)
-	@echo "███ Creating staging environment on Ubuntu Xenial..."
-	@$(SDROOT)/devops/scripts/create-staging-env xenial
-	@echo
-
-.PHONY: staging-focal
-staging-focal:  ## Create a local staging environment in virtual machines (Focal)
+staging:  ## Create a local staging environment in virtual machines (Focal)
 	@echo "███ Creating staging environment on Ubuntu Focal..."
 	@$(SDROOT)/devops/scripts/create-staging-env focal
 	@echo
