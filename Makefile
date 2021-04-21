@@ -181,12 +181,6 @@ dev:  ## Run the development server in a Docker container.
 	@OFFSET_PORTS='false' DOCKER_BUILD_VERBOSE='true' $(DEVSHELL) $(SDBIN)/run
 	@echo
 
-.PHONY: dev-focal
-dev-focal:  ## Run the development server in a Docker container.
-	@echo "███ Starting development server..."
-	@OFFSET_PORTS='false' DOCKER_BUILD_VERBOSE='true' BASE_OS='focal' $(DEVSHELL) $(SDBIN)/run
-	@echo
-
 
 .PHONY: staging
 staging:  ## Create a local staging environment in virtual machines (Focal)
