@@ -308,27 +308,15 @@ endif
 ###########
 
 .PHONY: build-debs
-build-debs: ## Build and test SecureDrop Debian packages (for Xenial)
-	@echo "Building SecureDrop Debian packages for Xenial..."
+build-debs: ## Build and test SecureDrop Debian packages (for Focal)
+	@echo "Building SecureDrop Debian packages for Focal..."
 	@$(SDROOT)/devops/scripts/build-debs.sh
 	@echo
 
 .PHONY: build-debs-notest
-build-debs-notest: ## Build SecureDrop Debian packages (for Xenial) without running tests.
-	@echo "Building SecureDrop Debian packages for Xenial; skipping tests..."
-	@$(SDROOT)/devops/scripts/build-debs.sh notest
-	@echo
-
-.PHONY: build-debs-focal
-build-debs-focal: ## Build and test SecureDrop Debian packages (for Focal)
-	@echo "Building SecureDrop Debian packages for Focal..."
-	@$(SDROOT)/devops/scripts/build-debs.sh test focal
-	@echo
-
-.PHONY: build-debs-notest-focal
-build-debs-notest-focal: ## Build SecureDrop Debian packages (for Focal) without running tests.
+build-debs-notest: ## Build SecureDrop Debian packages (for Focal) without running tests.
 	@echo "Building SecureDrop Debian packages for Focal; skipping tests..."
-	@$(SDROOT)/devops/scripts/build-debs.sh notest focal
+	@$(SDROOT)/devops/scripts/build-debs.sh notest
 	@echo
 
 

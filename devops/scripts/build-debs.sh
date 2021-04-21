@@ -11,7 +11,7 @@ set -o pipefail
 virtualenv_bootstrap
 
 RUN_TESTS="${1:-test}"
-TARGET_PLATFORM="${2:-xenial}"
+TARGET_PLATFORM="${2:-focal}"
 SCENARIO_NAME="builder-${TARGET_PLATFORM}"
 
 case "$RUN_TESTS" in
