@@ -87,3 +87,21 @@ def test_tor_services_config(host, tor_service):
     # Check for block in file, to ensure declaration order
     service_regex = "\n".join([dir_regex, port_regex])
     assert service_regex in f.content_string
+
+
+def test_tor_apache_url_files(host):
+    """
+    Ensure that the Tor Source Interface address matches those present
+    in files used by the Source Interface /metadata endpoint.
+    """
+
+    v3_url_file = host.file("/var/lib/securedrop/source_v3_url")
+    v3_source_hostname = host.file("/var/lib/tor/services/sourcev3/hostname")
+
+    with host.sudo():
+        # v2 source file should no longer be present
+        assert not host.file("/var/lib/securedrop/source_v2_url").exists
+
+        assert v3_source_hostname.exists
+        assert v3_url_file.exists
+        assert v3_url_file.content_string == v3_source_hostname.content_string
