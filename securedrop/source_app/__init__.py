@@ -26,7 +26,6 @@ from source_app import main, info, api
 from source_app.decorators import ignore_static
 from source_app.utils import logged_in, was_in_generate_flow
 from store import Storage
-from server_os import is_os_past_eol
 
 
 def get_logo_url(app: Flask) -> str:
@@ -59,17 +58,6 @@ def create_app(config: SDConfig) -> Flask:
     def setup_i18n() -> None:
         """Store i18n-related values in Flask's special g object"""
         i18n.set_locale(config)
-
-    app.config.update(OS_PAST_EOL=is_os_past_eol())
-
-    @app.before_request
-    @ignore_static
-    def disable_ui() -> Optional[str]:
-        if app.config["OS_PAST_EOL"]:
-            session.clear()
-            g.show_offline_message = True
-            return render_template("base.html")
-        return None
 
     # The default CSRF token expiration is 1 hour. Since large uploads can
     # take longer than an hour over Tor, we increase the valid window to 24h.
