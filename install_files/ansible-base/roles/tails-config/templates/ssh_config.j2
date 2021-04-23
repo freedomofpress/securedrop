@@ -1,23 +1,5 @@
-{% set svc_grep = "grep -Po '.{16}\.onion' svc-ssh-aths" %}
 {% set svc_awk = "awk -F ':' '{print $1 \".onion\"}' svc-ssh.auth_private" %}
 
-{% if v2_onion_services and not v3_onion_services -%}
-{% for svc in ssh_onion_lookup.results %}
-Host {{ svc.item }}
-  {% set svc_grep = "grep -Po '.{16}\.onion' "+svc.item+"-ssh-aths" -%}
-  {% set direct_ip = hostvars[inventory_hostname][svc.item+'_ip'] -%}
-  User {{ ssh_users }}
-  Hostname {{ lookup('pipe', svc_grep) if (svc.stat.exists and enable_ssh_over_tor) else direct_ip }}
-  {% if enable_ssh_over_tor and svc.stat.exists -%}
-  ProxyCommand /bin/nc -X 5 -x 127.0.0.1:9050 %h %p
-  {% else -%}
-  ProxyCommand none
-  {% endif %}
-
-{% endfor %}
-{% endif %}
-
-{% if v3_onion_services -%}
 {% for svc in ssh_v3_onion_lookup.results %}
 Host {{ svc.item }}
   {% set svc_awk = "awk -F ':' '{print $1 \".onion\"}' "+svc.item+"-ssh.auth_private" -%}
@@ -31,20 +13,3 @@ Host {{ svc.item }}
   {% endif %}
 
 {% endfor %}
-{% endif %}
-
-{% if v2_onion_services and v3_onion_services -%}
-{% for svc in ssh_onion_lookup.results %}
-Host {{ svc.item + "-legacy" }}
-  {% set svc_grep = "grep -Po '.{16}\.onion' "+svc.item+"-ssh-aths" -%}
-  {% set direct_ip = hostvars[inventory_hostname][svc.item+'_ip'] -%}
-  User {{ ssh_users }}
-  Hostname {{ lookup('pipe', svc_grep) if (svc.stat.exists and enable_ssh_over_tor) else direct_ip }}
-  {% if enable_ssh_over_tor and svc.stat.exists -%}
-  ProxyCommand /bin/nc -X 5 -x 127.0.0.1:9050 %h %p
-  {% else -%}
-  ProxyCommand none
-  {% endif %}
-
-{% endfor %}
-{% endif %}

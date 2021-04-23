@@ -3,9 +3,6 @@
 # installation. On the Admin Workstation, these files will be present
 # after running the playbooks, but on the Journalist Workstation, they must
 # be copied manually by the Admin.
-# Desktop shortcuts default to v3 URLs when available - as `site-specific`
-# is not copied to Journalist Workstations, the {v2,v3}_onion_service
-# booleans can't be used to choose a preference.
 
 - name: Check for v3 Source Interface file
   stat:
@@ -17,23 +14,11 @@
     path: app-journalist.auth_private
   register: v3_journalist_file
 
-- name: Look up v2 Source Interface URL.
-  command: grep -Po '.{16}\.onion' app-source-ths
-  changed_when: false
-  register: source_interface_lookup_result
-  when: v3_source_file.stat.exists == false
-
 - name: Look up v3 Source Interface URL.
   command: grep -Po '.{56}\.onion' app-sourcev3-ths
   changed_when: false
   register: sourcev3_interface_lookup_result
   when: v3_source_file.stat.exists == true
-
-- name: Look up v2 Journalist Interface URL.
-  command: grep -Po '.{16}\.onion' app-journalist-aths
-  changed_when: false
-  register: journalist_interface_lookup_result
-  when: v3_source_file.stat.exists == false
 
 - name: Look up v3 Journalist Interface URL.
   command: awk -F ':' '{print $1 ".onion"}' app-journalist.auth_private
@@ -60,11 +45,11 @@
 
 - name: Set the right variable for source
   set_fact:
-    source_iface: "{{ sourcev3_interface_lookup_result if (v3_source_file.stat.exists == true) else source_interface_lookup_result }}"
+    source_iface: "{{ sourcev3_interface_lookup_result }}"
 
 - name: Set the right variable for journalist
   set_fact:
-    journalist_iface: "{{ journalistv3_interface_lookup_result if (v3_source_file.stat.exists == true) else journalist_interface_lookup_result }}"
+    journalist_iface: "{{ journalistv3_interface_lookup_result }}"
 
 - debug:
     var: source_iface
