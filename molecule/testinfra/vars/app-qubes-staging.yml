@@ -40,20 +40,6 @@ app_directories:
   - /var/lib/securedrop/tmp
 
 tor_services:
-  - name: source
-    ports:
-      - "80"
-    authenticated: no
-    version: 2
-
-  - name: journalist
-    ports:
-      - "80"
-      - "8080"
-    authenticated: yes
-    client: journalist
-    version: 2
-
   - name: journalistv3
     ports:
       - "80"

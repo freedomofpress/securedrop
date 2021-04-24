@@ -7,11 +7,7 @@ app_hostname: app-prod
 app_ip: 10.0.1.4
 
 tor_services:
-  - ssh
-
-tor_stealth_services:
-  - service: "HiddenServicePort 22 127.0.0.1:22"
-    stealth: admin
+  - sshv3
 
 # Postfix should indeed be running on prod hosts, otherwise
 # OSSEC alerts cannot be delivered. It's disabled in staging.
