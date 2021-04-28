@@ -21,25 +21,6 @@
   delegate_to: localhost
   delegate_facts: True
 
-- name: Copy load_iptables if-up script.
-  copy:
-    src: load_iptables
-    dest: /etc/network/if-up.d/load_iptables
-    owner: root
-    mode: "0744"
-  when:
-    - ansible_distribution_release == 'xenial'
-
-- name: Create iptables directory.
-  file:
-    state: directory
-    mode: "0700"
-    owner: root
-    group: root
-    dest: /etc/network/iptables
-  when:
-    - ansible_distribution_release == 'xenial'
-
 - name: Determine local platform specific routing info
   set_fact:
     admin_route_map: "{{ admin_net_int[hostvars['localhost']['ansible_system']] }}"

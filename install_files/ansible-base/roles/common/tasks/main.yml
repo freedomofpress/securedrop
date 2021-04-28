@@ -2,8 +2,6 @@
 - include_vars: "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
 
 - include: apt_sources.yml
-  when:
-    - ansible_distribution_release == "focal"
 
 - include: apt_upgrade.yml
 
@@ -17,15 +15,7 @@
 
 - include: harden_dns.yml
 
-- include: cron_apt.yml
-  when:
-    - ansible_distribution_release == "xenial"
-  tags:
-    - reboot
-
 - include: unattended_upgrades.yml
-  when:
-    - ansible_distribution_release == "focal"
   tags:
     - ua
     - reboot

@@ -1,6 +1,4 @@
 ---
-- include: validate_apt_version.yml
-
 - name: Install SecureDrop apt repo GPG signing key.
   apt_key:
     state: present

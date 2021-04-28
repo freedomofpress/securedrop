@@ -1,5 +1,0 @@
-# Configuration for cron-apt. For further information about the possible
-# configuration settings see /usr/share/doc/cron-apt/README.gz.
-
-SYSLOGON="always"
-EXITON=error
