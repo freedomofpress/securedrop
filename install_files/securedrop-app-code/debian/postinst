@@ -104,26 +104,8 @@ remove_bytecode() {
     find "${SDVE}" -name '*.py[co]' -delete
 }
 
-# Manage PaX flags for web app, only required under Xenial.
-# paxctld will already be present on Xenial due to apt dependencies,
-# then we substitute the config inline
-set_paxctld_config() {
-    paxctld_config="/etc/paxctld.conf"
-    if [ -f "$paxctld_config" ]; then
-        if ! grep -q '^/usr/sbin/apache2' "$paxctld_config"; then
-            printf '%s\t%s\n' "/usr/sbin/apache2" "m" >> "$paxctld_config"
-            systemctl restart paxctld
-        fi
-        systemctl enable paxctld
-        systemctl start paxctld
-    fi
-}
-
 case "$1" in
     configure)
-
-    # Ensure PaX flags are set appropriately
-    set_paxctld_config
 
     # Ensure SecureDrop's necessary directories are created
     for dir in /var/lib/securedrop/{,tmp,shredder,store,keys,/keys/private-keys-v1.d,/keys/openpgp-revocs.d,backups} /var/www/securedrop; do
