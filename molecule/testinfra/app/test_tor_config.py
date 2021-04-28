@@ -22,8 +22,7 @@ def test_tor_packages(host, package):
 def test_tor_service_running(host):
     """
     Ensure Tor is running and enabled. Tor is required for SSH access,
-    so it must be enabled to start on boot. Checks systemd-style services,
-    used by Xenial.
+    so it must be enabled to start on boot.
     """
     s = host.service("tor")
     assert s.is_running

@@ -30,17 +30,6 @@ apparmor_enforce:
     - "/usr/sbin/apache2//DEFAULT_URI"
     - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
     - "/usr/sbin/tor"
-  xenial:
-    - "sbin/dhclient"
-    - "/usr/lib/NetworkManager/nm-dhcp-client.action"
-    - "/usr/lib/connman/scripts/dhclient-script"
-    - "/usr/sbin/ntpd"
-    - "/usr/sbin/tcpdump"
-    - "system_tor"
-    - "/usr/sbin/apache2"
-    - "/usr/sbin/apache2//DEFAULT_URI"
-    - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
-    - "/usr/sbin/tor"
 
 apparmor_complain: []
 

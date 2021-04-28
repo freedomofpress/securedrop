@@ -31,23 +31,9 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
     with io.open(filepath, 'r') as f:
         hostvars = yaml.safe_load(f)
 
-    # Testing against both Focal and Xenial must be supported for now in both
-    # staging scenarios, and in prod via `USE_FOCAL=1 ./securedrop-admin verify`
-    testing_focal = False
-    scenario_env = "MOLECULE_SCENARIO_NAME"
-    if scenario_env in os.environ and os.environ.get(scenario_env).endswith("focal"):
-        testing_focal = True
-    if "USE_FOCAL" in os.environ:
-        testing_focal = True
-
-    if testing_focal:
-        hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.8")  # noqa: E501
-        hostvars['python_version'] = "3.8"
-        hostvars['apparmor_enforce_actual'] = hostvars['apparmor_enforce']['focal']
-    else:
-        hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.5")  # noqa: E501
-        hostvars['python_version'] = "3.5"
-        hostvars['apparmor_enforce_actual'] = hostvars['apparmor_enforce']['xenial']
+    hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.8")  # noqa: E501
+    hostvars['python_version'] = "3.8"
+    hostvars['apparmor_enforce_actual'] = hostvars['apparmor_enforce']['focal']
 
     if with_header:
         hostvars = dict(securedrop_test_vars=hostvars)

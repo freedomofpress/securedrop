@@ -75,7 +75,5 @@ verifier:
   env:
     SECUREDROP_TARGET_DISTRIBUTION: focal
     SECUREDROP_PYTHON_VERSION: "3.8"
-  # Reuse the same test suite for all packages
-  directory: ../builder-xenial/tests/
   lint: |
     flake8
