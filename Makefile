@@ -219,10 +219,7 @@ test:  ## Run the test suite in a Docker container.
 	@echo
 
 .PHONY: test-focal
-test-focal:  ## Run the test suite in a Docker container.
-	@echo "███ Running SecureDrop application tests..."
-	@BASE_OS='focal' $(DEVSHELL) $(SDBIN)/run-test -v $${TESTFILES:-tests}
-	@echo
+test-focal:  test
 
 .PHONY: docker-vnc
 docker-vnc:  ## Open a VNC connection to a running Docker instance.
@@ -230,7 +227,6 @@ docker-vnc:  ## Open a VNC connection to a running Docker instance.
 	@$(SDROOT)/devops/scripts/vnc-docker-connect.sh
 	@echo
 
-# Xenial upgrade targets
 .PHONY: upgrade-start
 upgrade-start:  ## Boot an upgrade test environment using libvirt.
 	@echo "███ Starting upgrade test environment..."
@@ -344,14 +340,6 @@ ci-deb-tests:  ## Test SecureDrop Debian packages in CI environment.
 	@$(SDROOT)/devops/scripts/test-built-packages.sh
 	@echo
 
-.PHONY: ci-deb-tests-focal
-ci-deb-tests-focal:  ## Test SecureDrop Debian packages in CI environment.
-	@echo "███ Running Debian package tests in CI..."
-	@$(SDROOT)/devops/scripts/test-built-packages.sh focal
-	@echo
-
-
-
 .PHONY: build-gcloud-docker
 build-gcloud-docker:  ## Build Docker container for Google Cloud SDK.
 	@echo "Building Docker container for Google Cloud SDK..."
@@ -368,7 +356,7 @@ vagrant-package:  ## Package a Vagrant box of the last stable SecureDrop release
 	@echo
 
 .PHONY: fetch-tor-packages
-fetch-tor-packages:  ## Retrieves the most recent Tor packages for Xenial, for apt repo.
+fetch-tor-packages:  ## Retrieves the most recent Tor packages, for apt repo.
 	@echo "Fetching most recent Tor packages..."
 	@$(SDROOT)/devops/scripts/fetch-tor-packages.sh
 	@echo

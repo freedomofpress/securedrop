@@ -65,8 +65,6 @@ sed -i "s/\(## ${OLD_VERSION}\)/## ${NEW_VERSION}\n\n\n\n\1/g" changelog.md
 export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
 
-# Update the Xenial changelog in the Debian package
-dch -b -v "${NEW_VERSION}+xenial" -D xenial -c install_files/ansible-base/roles/build-securedrop-app-code-deb-pkg/files/changelog-xenial
 # Update the Focal changelog in the Debian package
 dch -b -v "${NEW_VERSION}+focal" -D focal -c install_files/ansible-base/roles/build-securedrop-app-code-deb-pkg/files/changelog-focal
 # Commit the change
