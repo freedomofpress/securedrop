@@ -8,8 +8,8 @@ import json
 import os
 
 TOR_SVC_PATH = "/var/lib/tor/services/"
-JOURNALIST_DIR = "journalist"
-SOURCE_DIR = "source"
+JOURNALIST_DIR = "journalistv3"
+SOURCE_DIR = "sourcev3"
 
 
 def extract_sd_onion_data(tor_path=TOR_SVC_PATH,
@@ -17,27 +17,25 @@ def extract_sd_onion_data(tor_path=TOR_SVC_PATH,
                           source_dir=SOURCE_DIR,
                           protocol="http"):
 
-    for interface in [journalist_dir, source_dir]:
+    def get_int_addr(interface):
         hostname_file = os.path.join(TOR_SVC_PATH, interface, 'hostname')
         try:
             with open(hostname_file) as f:
                 tor_config = f.readline().rstrip().split()
-
             onion_addr = "{p}://{a}".format(p=protocol, a=tor_config[0])
-            auth_token = tor_config[1]
-
-        # This must be a source interface because we dont see hidservauth info
-        except IndexError:
-            source_int = onion_addr
-        # One of the files doesn't exist :| Maybe tor setup hasnt run yet.
+            return onion_addr
+        # The file doesn't exist :/ Maybe tor setup hasn't run yet.
         except IOError:
-            return dict()
-        else:
-            journalist_int = onion_addr
+           pass
+
+    try:
+        journalist_int = get_int_addr(JOURNALIST_DIR)
+        source_int = get_int_addr(SOURCE_DIR)
+    except IOError:
+        return dict()
 
     return dict(journalist_location=journalist_int,
-                source_location=source_int,
-                hidserv_token=auth_token)
+                source_location=source_int)
 
 
 if __name__ == '__main__':

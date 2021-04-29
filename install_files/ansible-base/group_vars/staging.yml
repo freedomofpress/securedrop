@@ -52,9 +52,6 @@ postfix_enable_service: no
 # Otherwise, all SSH connections would be forced over Tor.
 enable_ssh_over_tor: false
 
-# v3 onion services should be available in staging for testing.
-v3_onion_services: true
-
 install_local_packages: true
 
 # Don't install app-code package from the FPF apt repo, since we want to run

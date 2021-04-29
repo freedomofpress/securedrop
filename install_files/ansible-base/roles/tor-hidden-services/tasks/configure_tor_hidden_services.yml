@@ -17,8 +17,7 @@
     group: "{{ tor_user }}"
     mode: "0700"
   with_flattened:
-    - "{{ tor_instances if v2_onion_services else [] }}"
-    - "{{ tor_instances_v3 if v3_onion_services else [] }}"
+    - "{{ tor_instances_v3 }}"
   tags:
     - tor
 
@@ -31,8 +30,6 @@
     mode: "0700"
   with_items: "{{ tor_instances_v3 }}"
   when:
-    - v3_onion_services
-    # Source Interface is always public, don't configure client auth
     - "'source' not in item.service"
   tags:
     - tor
@@ -57,7 +54,6 @@
   delegate_to: localhost
   # Local action, so we don't want elevated privileges
   become: no
-  when: "v3_onion_services"
   register: onion_v3_generation
   changed_when: "'onion service keys generated' in onion_v3_generation.stdout"
   tags:
@@ -72,7 +68,6 @@
   become: no
   # Suppress output since it contains Tor keys
   no_log: true
-  when: "v3_onion_services"
   tags:
     - tor
     - admin
@@ -81,7 +76,6 @@
   set_fact:
     tor_v3_ssh_pubkey: "{{ v3_local_key_info.app_ssh_public_key if 'securedrop_application_server' in group_names else v3_local_key_info.mon_ssh_public_key }}"
   when:
-    - v3_onion_services
     - "'sshv3' in tor_auth_instances_v3"
     - enable_ssh_over_tor
   tags:
@@ -98,7 +92,6 @@
   notify:
     - restart tor
   when:
-    - v3_onion_services
     - "'journalistv3' in tor_auth_instances_v3"
   tags:
     - tor
@@ -114,7 +107,6 @@
   notify:
     - restart tor
   when:
-    - v3_onion_services
     - "'sshv3' in tor_auth_instances_v3"
     - enable_ssh_over_tor
   tags:
@@ -122,7 +114,6 @@
 
 - name: Flush handlers to restart Tor.
   meta: flush_handlers
-  when: "v3_onion_services"
   tags:
     - tor
 
@@ -130,6 +121,5 @@
   service:
     name: tor
     state: started
-  when: "v3_onion_services"
   tags:
     - tor

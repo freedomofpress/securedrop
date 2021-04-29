@@ -814,15 +814,6 @@ class TestSiteConfig(object):
 
     def verify_desc_consistency(self, site_config, desc):
         self.verify_desc_consistency_optional(site_config, desc)
-        (var, default, etype, prompt, validator, transform, condition) = desc
-        with pytest.raises(ValidationError):
-            site_config.user_prompt_config_one(desc, '')
-            # If we are testing v3_onion_services, that will create a default
-            # value of 'yes', means it will not raise the ValidationError. We
-            # are generating it below for test to behave properly with all
-            # other test cases.
-            if var == "v3_onion_services":
-                raise ValidationError()
 
     def verify_prompt_boolean(
             self, site_config, desc):
@@ -831,34 +822,6 @@ class TestSiteConfig(object):
         assert site_config.user_prompt_config_one(desc, True) is True
         assert site_config.user_prompt_config_one(desc, False) is False
         assert site_config.user_prompt_config_one(desc, 'YES') is True
-        assert site_config.user_prompt_config_one(desc, 'NO') is False
-
-    def verify_prompt_boolean_for_v3(
-            self, site_config, desc):
-        """As v3_onion_services input depends on input of
-           v2_onion_service, the answers will change.
-        """
-        self.verify_desc_consistency(site_config, desc)
-        (var, default, etype, prompt, validator, transform, condition) = desc
-        assert site_config.user_prompt_config_one(desc, True) is True
-        # Because if no v2_onion_service, v3 will become True
-        assert site_config.user_prompt_config_one(desc, False) is True
-        assert site_config.user_prompt_config_one(desc, 'YES') is True
-        # Because if no v2_onion_service, v3 will become True
-        assert site_config.user_prompt_config_one(desc, 'NO') is True
-
-        # Now we will set v2_onion_services as True so that we
-        # can set v3_onion_service as False. This is the case
-        # when an admin particularly marked v3 as False.
-        site_config._config_in_progress = {"v2_onion_services": True}
-        site_config.config = {"v3_onion_services": False}
-
-        # The next two tests should use the default from the above line,
-        # means it will return False value.
-        assert site_config.user_prompt_config_one(desc, True) is False
-        assert site_config.user_prompt_config_one(desc, 'YES') is False
-
-        assert site_config.user_prompt_config_one(desc, False) is False
         assert site_config.user_prompt_config_one(desc, 'NO') is False
 
     def test_desc_conditional(self):
@@ -915,8 +878,6 @@ class TestSiteConfig(object):
     verify_prompt_enable_ssh_over_tor = verify_prompt_boolean
 
     verify_prompt_securedrop_app_gpg_public_key = verify_desc_consistency
-    verify_prompt_v2_onion_services = verify_prompt_boolean
-    verify_prompt_v3_onion_services = verify_prompt_boolean_for_v3
 
     def verify_prompt_not_empty(self, site_config, desc):
         with pytest.raises(ValidationError):
@@ -1094,22 +1055,3 @@ def test_find_or_generate_new_torv3_keys_subsequent_run(tmpdir, capsys):
         v3_onion_service_keys = json.load(f)
 
     assert v3_onion_service_keys == old_keys
-
-
-def test_v3_and_https_cert_message(tmpdir, capsys):
-    args = argparse.Namespace(site_config='UNKNOWN',
-                              ansible_path='tests/files',
-                              app_path=dirname(__file__))
-    site_config = securedrop_admin.SiteConfig(args)
-    site_config.config = {"v3_onion_services": False,
-                          "securedrop_app_https_certificate_cert_src": "ab.crt"}  # noqa: E501
-    # This should return True as v3 is not setup
-    assert site_config.validate_https_and_v3()
-
-    # This should return False as v3 and https are both setup
-    site_config.config.update({"v3_onion_services": True})
-    assert not site_config.validate_https_and_v3()
-
-    # This should return True as https is not setup
-    site_config.config.update({"securedrop_app_https_certificate_cert_src": ""})  # noqa: E501
-    assert site_config.validate_https_and_v3()

@@ -2,15 +2,9 @@
 mon_ip: 10.0.1.5
 
 tor_services:
-  - ssh
-  - source
-  - journalist
-
-tor_stealth_services:
-  - service: "HiddenServicePort 22 127.0.0.1:22"
-    stealth: admin
-  - service: "HiddenServicePort 80 127.0.0.1:8080"
-    stealth: journalist
+  - sshv3
+  - sourcev3
+  - journalistv3
 
 app_directories:
   - /var/www/securedrop

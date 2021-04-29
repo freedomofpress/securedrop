@@ -21,7 +21,6 @@
 - name: Gather apptest facts to dict to prepare for output
   set_fact:
     _tbb_selenium_dict:
-      hidserv_token: "{{ ansible_local.tor_app.hidserv_token }}"
       journalist_location: "{{ ansible_local.tor_app.journalist_location  }}"
       source_location: "{{ ansible_local.tor_app.source_location  }}"
       timeout: "{{ tbb_timeout }}"

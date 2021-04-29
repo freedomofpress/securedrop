@@ -64,7 +64,7 @@ from typing import Type
 sdlog = logging.getLogger(__name__)
 RELEASE_KEY = '22245C81E3BAEB4138B36061310F561200F4AD77'
 DEFAULT_KEYSERVER = 'hkps://keys.openpgp.org'
-SUPPORT_ONION_URL = 'http://support6kv2242qx.onion'
+SUPPORT_ONION_URL = 'http://sup6h5iyiyenvjkfxbgrjynm5wsgijjoatvnvdgyyi7je3xqm4kh6uqd.onion'
 SUPPORT_URL = 'https://support.freedom.press'
 EXIT_SUCCESS = 0
 EXIT_SUBPROCESS_ERROR = 1
@@ -189,23 +189,6 @@ class SiteConfig:
     class ValidateYesNo(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text.lower()
-            if text == 'yes' or text == 'no':
-                return True
-            raise ValidationError(message="Must be either yes or no")
-
-    class ValidateYesNoForV3(Validator):
-
-        def __init__(self, *args: Any, **kwargs: Any) -> None:
-            Validator.__init__(*args, **kwargs)
-            self.caller = args[0]
-
-        def validate(self, document: Document) -> bool:
-            text = document.text.lower()
-            # Raise error if admin tries to disable v3 when v2
-            # is already disabled.
-            if text == 'no' and \
-                    not self.caller._config_in_progress.get("v2_onion_services"):  # noqa: E501
-                raise ValidationError(message="Since you disabled v2 onion services, you must enable v3 onion services.")  # noqa: E501
             if text == 'yes' or text == 'no':
                 return True
             raise ValidationError(message="Must be either yes or no")
@@ -457,17 +440,6 @@ class SiteConfig:
              SiteConfig.ValidateLocales(self.args.app_path),
              str.split,
              lambda config: True),
-            ('v2_onion_services', self.check_for_v2_onion(), bool,
-             'WARNING: v2 onion services cannot be installed on servers ' +
-             'running Ubuntu 20.04. Do you want to enable v2 onion services?',
-             SiteConfig.ValidateYesNo(),
-             lambda x: x.lower() == 'yes',
-             lambda config: True),
-            ('v3_onion_services', self.check_for_v3_onion, bool,
-             'Do you want to enable v3 onion services (recommended)?',
-             SiteConfig.ValidateYesNoForV3(self),
-             lambda x: x.lower() == 'yes',
-             lambda config: True),
         ]  # type: List[_DescEntryType]
 
     def load_and_update_config(self, validate: bool = True, prompt: bool = True) -> bool:
@@ -485,51 +457,7 @@ class SiteConfig:
         self.save()
         self.validate_gpg_keys()
         self.validate_journalist_alert_email()
-        self.validate_https_and_v3()
         return True
-
-    def validate_https_and_v3(self) -> bool:
-        """
-        Checks if https is enabled with v3 onion service.
-
-        :returns: False if both v3 and https enabled, True otherwise.
-        """
-        warning_msg = ("You have configured HTTPS on your source interface "
-                       "and v3 onion services. "
-                       "IMPORTANT: Ensure that you update your certificate "
-                       "to include your v3 source URL before advertising "
-                       "it to sources! ")
-
-        if self.config.get("v3_onion_services", False) and \
-                self.config.get("securedrop_app_https_certificate_cert_src"):
-            print(warning_msg)
-            return False
-        return True
-
-    def check_for_v2_onion(self) -> bool:
-        """
-        Check if v2 onion services are already enabled or not.
-        """
-        source_ths = os.path.join(self.args.ansible_path, "app-source-ths")
-        if os.path.exists(source_ths):  # Means old installation
-            data = ""
-            with open(source_ths) as fobj:
-                data = fobj.read()
-
-            data = data.strip()
-            if len(data) < 56:  # Old v2 onion address
-                return True
-        return False
-
-    def check_for_v3_onion(self) -> bool:
-        """
-        Check if v3 onion services should be enabled by default or not.
-        """
-        v2_value = self._config_in_progress.get("v2_onion_services", False)
-        # We need to see the value in the configuration file
-        # for v3_onion_services
-        v3_value = self.config.get("v3_onion_services", True)
-        return v3_value or not v2_value
 
     def user_prompt_config(self) -> Dict[str, Any]:
         self._config_in_progress = {}
@@ -547,10 +475,7 @@ class SiteConfig:
         self, desc: _DescEntryType, from_config: Optional[Any]
     ) -> Any:
         (var, default, type, prompt, validator, transform, condition) = desc
-        if from_config is not None and var != "v3_onion_services":
-            # v3_onion_services must be true if v2 is disabled by the admin
-            # otherwise, we may end up in a situation where both v2 and v3
-            # are disabled by the admin (by mistake).
+        if from_config is not None:
             default = from_config
         prompt += ': '
 
