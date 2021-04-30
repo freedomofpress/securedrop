@@ -55,11 +55,10 @@
 
 - name: Install apt dependencies for building OSSEC packages.
   apt:
-    name: "{{ item }}"
+    name: "{{ build_ossec_deb_pkg_dependencies }}"
     state: present
     update_cache: yes
     cache_valid_time: 3600
-  with_items: "{{ build_ossec_deb_pkg_dependencies }}"
 
 - name: Extract OSSEC source tarball.
   unarchive:
