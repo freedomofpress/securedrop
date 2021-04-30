@@ -23,10 +23,7 @@ msgstr ""
 msgid "Name too long"
 msgstr "Správa je príliš dlhá."
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
-msgid "Must be at least one character long."
+msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
 msgstr[0] "Musí byť aspoň {num} znak dlhé."
 msgstr[1] "Musí byť aspoň {num} znaky dlhé."
@@ -132,12 +129,6 @@ msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
 msgstr[0] "HOTP heslá sú 40 znakov dlhé - zadali ste {num} znak."
 msgstr[1] "HOTP heslá sú 40 znakov dlhé - zadali ste {num} znaky."
 msgstr[2] "HOTP heslá sú 40 znakov dlhé - zadali ste {num} znakov."
-
-msgid "Must be at least {num} character long."
-msgid_plural "Must be at least {num} characters long."
-msgstr[0] "Musí byť aspoň {num} znak dlhé."
-msgstr[1] "Musí byť aspoň {num} znaky dlhé."
-msgstr[2] "Musí byť aspoň {num} znakov dlhé."
 
 msgid "Cannot be longer than {num} character."
 msgid_plural "Cannot be longer than {num} characters."
@@ -416,12 +407,6 @@ msgstr "Nemôžete nasnímať čiarový kód? Môžete manuálne spárovať Free
 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "Akonáhle nastavíte svoj YubiKey, zadajte šesťmiestny kód nižšie:"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Kritické bezpečnostné riziko:</strong>&nbsp;&nbsp;Operačný systém vašich SecureDrop serverov dosiahol koniec životnosti (EoL). Pre opätovné spustenie rozhrania pre zdroje je vyžadovaná manuálna aktualizácia. Kontaktujte prosím svojho administrátora. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Viac informácií</a>"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Kritické bezpečnostné riziko:</strong>&nbsp;&nbsp; 30. apríla končí operačnému systému vašich SecureDrop serverov životnosť (EoL). Kontaktujte prosím svojho administrátora. Pre ďalšie zabezpečenie je vyžadovaná aktualizácia.<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Viac informácií</a>"
 
 msgid "Logged on as"
 msgstr "Ste prihlásení ako"
@@ -1002,6 +987,21 @@ msgstr "<strong>Dôležité:</strong> Ak chcete zostať v anonymite, <strong>nep
 
 msgid "Back to submission page"
 msgstr "Späť na stránku podania"
+
+#, fuzzy
+#~| msgid "Must be at least {num} character long."
+#~| msgid_plural "Must be at least {num} characters long."
+#~ msgid "Must be at least one character long."
+#~ msgid_plural "Must be at least {num} characters long."
+#~ msgstr[0] "Musí byť aspoň {num} znak dlhé."
+#~ msgstr[1] "Musí byť aspoň {num} znaky dlhé."
+#~ msgstr[2] "Musí byť aspoň {num} znakov dlhé."
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Kritické bezpečnostné riziko:</strong>&nbsp;&nbsp;Operačný systém vašich SecureDrop serverov dosiahol koniec životnosti (EoL). Pre opätovné spustenie rozhrania pre zdroje je vyžadovaná manuálna aktualizácia. Kontaktujte prosím svojho administrátora. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Viac informácií</a>"
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Kritické bezpečnostné riziko:</strong>&nbsp;&nbsp; 30. apríla končí operačnému systému vašich SecureDrop serverov životnosť (EoL). Kontaktujte prosím svojho administrátora. Pre ďalšie zabezpečenie je vyžadovaná aktualizácia.<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Viac informácií</a>"
 
 #~ msgid "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This <strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 #~ msgstr "<strong>VAROVANIE:&nbsp;</strong> Zdá sa, že používate Tor2Web. Toto <strong>&nbsp;neposkytuje&nbsp;</strong> anonymitu. <a href=\"{url}\">Prečo je to nebezpečné?</a>"

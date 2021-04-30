@@ -24,10 +24,7 @@ msgstr ""
 msgid "Name too long"
 msgstr "إن نص الرسالة طويلٌ جداً."
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
-msgid "Must be at least one character long."
+msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
 msgstr[0] "يجب ألا يحوي أي حرف."
 msgstr[1] "يجب أن يحوي حرفًا واحدًا على الأقل."
@@ -139,15 +136,6 @@ msgstr[2] "تتألّف كلمة السرّ من نوع HOTP من 40 حرفًا 
 msgstr[3] "تتألّف كلمة السرّ من نوع HOTP من 40 حرفًا على الأقل - أنت أدخلت {num} حروف."
 msgstr[4] "تتألّف كلمة السرّ من نوع HOTP من 40 حرفًا على الأقل - أنت أدخلت {num} حرفًا."
 msgstr[5] "تتألّف كلمة السرّ من نوع HOTP من 40 حرفًا على الأقل - أنت أدخلت {num} حرفًا."
-
-msgid "Must be at least {num} character long."
-msgid_plural "Must be at least {num} characters long."
-msgstr[0] "يجب ألا يحوي أي حرف."
-msgstr[1] "يجب أن يحوي حرفًا واحدًا على الأقل."
-msgstr[2] "يجب أن يحوي حرفين على الأقل."
-msgstr[3] "يجب أن يحوي {num} حروف على الأقل."
-msgstr[4] "يجب أن يحوي {num} حرفًا على الأقل."
-msgstr[5] "يجب أن يحوي {num} حرفًا على الأقل."
 
 msgid "Cannot be longer than {num} character."
 msgid_plural "Cannot be longer than {num} characters."
@@ -447,12 +435,6 @@ msgstr "هل عجزت عن مسح وقراءة شريط الرموز أي الب
 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "بعد إتمام ضبط مفتاح الاستيثاق \"YubiKey\" أدخل الرمز المكون من 6 أرقام:"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>تنبيه أمني حرج</strong>&nbsp;&nbsp;نظام التشغيل المستخدم فى خواديم SecureDrop الخاصة بك قد بلغ نهاية مدة الخدمة. لا بد من ترقيته يدويا لإعادة تفعيل واجهة المصدر والمحافظة على الأمان. من فضلك تواصل مع مسئولك<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">لمعرفة المزيد</a>"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>تنبيه أمنى حرج</strong>&nbsp;&nbsp;نظام التشغيل المستخدم فى خواديم SecureDrop الخاصة بك قد سوف يبلغ نهاية مدة الخدمة في 30 أبريل/نيسان 2021. لا بد من ترقيته يدويا للحفاظ على الأمان. من فضلك تواصل مع مسئولك<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">لمعرفة المزيد</a>"
 
 msgid "Logged on as"
 msgstr "والج باسم"
@@ -1036,6 +1018,24 @@ msgstr "<strong>هام:</strong> إذا كنت ترغب في البقاء مجه
 
 msgid "Back to submission page"
 msgstr "الرجوع إلى صفحة الإيداع"
+
+#, fuzzy
+#~| msgid "Must be at least {num} character long."
+#~| msgid_plural "Must be at least {num} characters long."
+#~ msgid "Must be at least one character long."
+#~ msgid_plural "Must be at least {num} characters long."
+#~ msgstr[0] "يجب ألا يحوي أي حرف."
+#~ msgstr[1] "يجب أن يحوي حرفًا واحدًا على الأقل."
+#~ msgstr[2] "يجب أن يحوي حرفين على الأقل."
+#~ msgstr[3] "يجب أن يحوي {num} حروف على الأقل."
+#~ msgstr[4] "يجب أن يحوي {num} حرفًا على الأقل."
+#~ msgstr[5] "يجب أن يحوي {num} حرفًا على الأقل."
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>تنبيه أمني حرج</strong>&nbsp;&nbsp;نظام التشغيل المستخدم فى خواديم SecureDrop الخاصة بك قد بلغ نهاية مدة الخدمة. لا بد من ترقيته يدويا لإعادة تفعيل واجهة المصدر والمحافظة على الأمان. من فضلك تواصل مع مسئولك<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">لمعرفة المزيد</a>"
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>تنبيه أمنى حرج</strong>&nbsp;&nbsp;نظام التشغيل المستخدم فى خواديم SecureDrop الخاصة بك قد سوف يبلغ نهاية مدة الخدمة في 30 أبريل/نيسان 2021. لا بد من ترقيته يدويا للحفاظ على الأمان. من فضلك تواصل مع مسئولك<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">لمعرفة المزيد</a>"
 
 #~ msgid "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This <strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 #~ msgstr "<strong>تنبيه:</strong> يبدو أنك تستخدم خدمة Tor2Web. يجب <strong> الانتباه إلى أنّ هذه الوسيلة لا تحقق المجهولية للمستخدم</strong>. <a href=\"{url}\"> ما الخطر في ذلك؟</a>"

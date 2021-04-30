@@ -27,10 +27,7 @@ msgstr ""
 msgid "Name too long"
 msgstr "Testo del messaggio troppo lungo."
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
-msgid "Must be at least one character long."
+msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
 msgstr[0] "Deve essere lungo almeno {num} carattere."
 msgstr[1] "Deve essere lungo almeno {num} caratteri."
@@ -134,11 +131,6 @@ msgid "HOTP secrets are 40 characters long - you have entered {num}."
 msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
 msgstr[0] "Le password HOTP sono di 40 caratteri - ne è stato inserito {num}."
 msgstr[1] "Le password HOTP sono di 40 caratteri - ne sono stati inseriti {num}."
-
-msgid "Must be at least {num} character long."
-msgid_plural "Must be at least {num} characters long."
-msgstr[0] "Deve essere lungo almeno {num} carattere."
-msgstr[1] "Deve essere lungo almeno {num} caratteri."
 
 msgid "Cannot be longer than {num} character."
 msgid_plural "Cannot be longer than {num} characters."
@@ -410,12 +402,6 @@ msgstr "Impossibile eseguire la scansione del codice a barre? È possibile accop
 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "Una volta configurata la tua Yubikey, inserisci il codice di 6 cifre qui sotto:"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Sicurezza critica:</strong>&nbsp;&nbsp;il sistema operativo usato dai propri server SecureDrop ha raggiunto la fine del suo ciclo di vita. È richiesto un aggiornamento manuale per abilitare nuovamente l'interfaccia per le fonti e rimanere al sicuro. Contattare il proprio amministartore. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Maggiorni informazioni</a>"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Sicurezza critica:</strong>&nbsp;&nbsp;il sistema operativo usato dai propri server SecureDrop raggiungerà la fine del suo ciclo di vita il 30 aprile 2021. È urgentemente richiesto un aggiornamento manuale per rimanere al sicuro. Contattare il proprio amministartore. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Maggiorni informazioni</a>"
 
 msgid "Logged on as"
 msgstr "Accesso eseguito come"
@@ -995,6 +981,20 @@ msgstr "<strong>Importante:</strong> per rimanere anonimi <strong>non usare</str
 
 msgid "Back to submission page"
 msgstr "Torna alla pagina di invio documenti e messaggi"
+
+#, fuzzy
+#~| msgid "Must be at least {num} character long."
+#~| msgid_plural "Must be at least {num} characters long."
+#~ msgid "Must be at least one character long."
+#~ msgid_plural "Must be at least {num} characters long."
+#~ msgstr[0] "Deve essere lungo almeno {num} carattere."
+#~ msgstr[1] "Deve essere lungo almeno {num} caratteri."
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Sicurezza critica:</strong>&nbsp;&nbsp;il sistema operativo usato dai propri server SecureDrop ha raggiunto la fine del suo ciclo di vita. È richiesto un aggiornamento manuale per abilitare nuovamente l'interfaccia per le fonti e rimanere al sicuro. Contattare il proprio amministartore. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Maggiorni informazioni</a>"
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Sicurezza critica:</strong>&nbsp;&nbsp;il sistema operativo usato dai propri server SecureDrop raggiungerà la fine del suo ciclo di vita il 30 aprile 2021. È urgentemente richiesto un aggiornamento manuale per rimanere al sicuro. Contattare il proprio amministartore. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Maggiorni informazioni</a>"
 
 #~ msgid "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This <strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 #~ msgstr "<strong>ATTENZIONE:</strong> sembra che tu stia usando Tor2Web. Questo <strong>non</strong> fornisce anonimato. <a href=\"{url}\">Perché è pericoloso?</a>"

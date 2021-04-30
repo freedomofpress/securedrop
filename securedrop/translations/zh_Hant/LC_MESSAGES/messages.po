@@ -24,10 +24,7 @@ msgstr ""
 msgid "Name too long"
 msgstr "訊息文字過長。"
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
-msgid "Must be at least one character long."
+msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
 msgstr[0] "须至少有 {num} 個字符長度。"
 
@@ -129,10 +126,6 @@ msgstr "本頁面僅限管理員訪問。"
 msgid "HOTP secrets are 40 characters long - you have entered {num}."
 msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
 msgstr[0] "HOTP secrets 需為 40 個字符長，已輸入 {num} 個字符。"
-
-msgid "Must be at least {num} character long."
-msgid_plural "Must be at least {num} characters long."
-msgstr[0] "须至少有 {num} 個字符長度。"
 
 msgid "Cannot be longer than {num} character."
 msgid_plural "Cannot be longer than {num} characters."
@@ -397,12 +390,6 @@ msgstr "無法掃描條碼？您可以輸入以下雙重驗證密鑰以便手動
 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "設定 Yubikey 後，請在下面輸入 6 位數字代碼："
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>重要安全課題：</strong> &nbsp;&nbsp;SecureDrop 伺服器作業系統已逾使用年限，亟需手動更新才能啟用線人界面與維持安全。請聯絡網管人員 - <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">了解進一步資訊</a>"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>重要安全課題:</strong> &nbsp;&nbsp;SecureDrop 伺服器作業系統將在月30日超過使用年限，亟需手動更新以維持安全。 請聯絡網管人員 <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">了解詳情</a>"
 
 msgid "Logged on as"
 msgstr "登入為"
@@ -981,6 +968,19 @@ msgstr "<strong>重要：</strong>如果您希望保持匿名，<strong>請勿</
 
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#, fuzzy
+#~| msgid "Must be at least {num} character long."
+#~| msgid_plural "Must be at least {num} characters long."
+#~ msgid "Must be at least one character long."
+#~ msgid_plural "Must be at least {num} characters long."
+#~ msgstr[0] "须至少有 {num} 個字符長度。"
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>重要安全課題：</strong> &nbsp;&nbsp;SecureDrop 伺服器作業系統已逾使用年限，亟需手動更新才能啟用線人界面與維持安全。請聯絡網管人員 - <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">了解進一步資訊</a>"
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>重要安全課題:</strong> &nbsp;&nbsp;SecureDrop 伺服器作業系統將在月30日超過使用年限，亟需手動更新以維持安全。 請聯絡網管人員 <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">了解詳情</a>"
 
 #~ msgid "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This <strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 #~ msgstr "<strong> 警告：&nbsp;</strong> 看來你正在使用 Tor2Web。 它 <strong>&nbsp;不能&nbsp;</strong> 提供匿名功能 <a href=\"{url}\">這樣為什麼有危險？</a>"
