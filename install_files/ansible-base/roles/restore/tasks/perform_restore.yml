@@ -23,8 +23,10 @@
   connection: local
   become: no
   unarchive:
+    # Avoid creating an unnecessary local copy
+    remote_src: yes
     dest: "{{ torrc_check_dir.path }}/backup/"
-    src: "{{ restore_file }}"
+    src: "{{playbook_dir}}/{{ restore_file }}"
     extra_opts:
       - "etc/tor/torrc"
 
