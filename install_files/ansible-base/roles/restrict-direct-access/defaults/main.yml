@@ -35,4 +35,6 @@ tor_v3_service_map:
   app-ssh.auth_private: "app_ssh_private_key"
   mon-ssh.auth_private: "mon_ssh_private_key"
 
-time_service_user: '{{ "root" if ansible_distribution_release == "xenial" else "systemd-timesync" }}'
+# As of Ubuntu Focal 20.04, the time_server user is 'systemd-timesync',
+# whereas earlier versions of Ubuntu used 'root'.
+time_service_user: "systemd-timesync"

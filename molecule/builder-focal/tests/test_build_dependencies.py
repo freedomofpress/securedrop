@@ -48,7 +48,7 @@ def test_dh_virtualenv(host):
     """
     Confirm the expected version of dh-virtualenv is found.
     """
-    expected_version = "0.11" if host.system_info.codename == "xenial" else "1.2.1"
+    expected_version = "1.2.1"
     version_string = "dh_virtualenv {}".format(expected_version)
     c = host.run("dh_virtualenv --version")
     assert c.stdout.startswith(version_string)

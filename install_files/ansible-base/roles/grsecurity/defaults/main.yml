@@ -11,8 +11,3 @@ grsec_sysctl_flags:
     # exist otherwise.
   - name: "vm.heap_stack_gap"
     value: "1048576"
-
-# Lookup table for how to create PaX flags, depending on OS.
-paxctl_header_type:
-  xenial: C
-  focal: c

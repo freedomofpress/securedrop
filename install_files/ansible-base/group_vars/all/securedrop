@@ -26,7 +26,7 @@ apparmor_profiles:
   - usr.sbin.apache2
 
 # Installing the securedrop-app-code.deb package
-securedrop_target_distribution: xenial
+securedrop_target_distribution: focal
 securedrop_app_code_deb: "securedrop-app-code_{{ securedrop_version }}+{{ securedrop_target_distribution }}_amd64" # do not enter .deb extension
 
 # Enable Tor over SSH by default
@@ -37,14 +37,10 @@ enable_ssh_over_tor: true
 # the many roles of the current prod playbook
 securedrop_cond_reboot_file: /tmp/sd-reboot-now
 
-# If you bump this, also remember to bump in molecule/builder-xenial/tests/vars.yml
-securedrop_pkg_grsec_xenial:
-  ver: "4.14.188"
-  depends: "linux-image-4.14.188-grsec-securedrop,linux-image-4.14.175-grsec-securedrop,intel-microcode"
-
+# If you bump this, also remember to bump in molecule/builder-focal/tests/vars.yml
 securedrop_pkg_grsec_focal:
   ver: "5.4.97"
   depends: "linux-image-5.4.97-grsec-securedrop,intel-microcode"
 
 # Mostly useful for local package installation
-grsec_version: "{{ securedrop_pkg_grsec_xenial.ver if securedrop_target_distribution == 'xenial' else securedrop_pkg_grsec_focal.ver }}"
+grsec_version: "{{ securedrop_pkg_grsec_focal.ver }}"

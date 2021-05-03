@@ -23,10 +23,7 @@ msgstr ""
 msgid "Name too long"
 msgstr "Texti skilaboðanna er of langur."
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
-msgid "Must be at least one character long."
+msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
 msgstr[0] "Verður að vera a.m.k. {num} stafur að lengd."
 msgstr[1] "Verður að vera a.m.k. {num} stafa langt."
@@ -130,11 +127,6 @@ msgid "HOTP secrets are 40 characters long - you have entered {num}."
 msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
 msgstr[0] "HOTP leynilyklar eru 40 stafa langir - þú hefur sett inn {num}."
 msgstr[1] "HOTP leynilyklar eru 40 stafa langir - þú hefur sett inn {num}."
-
-msgid "Must be at least {num} character long."
-msgid_plural "Must be at least {num} characters long."
-msgstr[0] "Verður að vera a.m.k. {num} stafur að lengd."
-msgstr[1] "Verður að vera a.m.k. {num} stafa langt."
 
 msgid "Cannot be longer than {num} character."
 msgid_plural "Cannot be longer than {num} characters."
@@ -406,12 +398,6 @@ msgstr "Nærðu ekki að skanna strikamerkið? Þú getur parað FreeOTP handvir
 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "Þegar þú hefur sett upp YubiKey (dulritunarlykill), settu inn 6-stafa kóðann hér fyrir neðan:"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Áríðandi öryggismál:</strong>&nbsp;&nbsp;Stýrikerfið sem notað er á SecureDrop-netþjónunum þínum er komið á enda líftíma síns. Til að gæta öryggis er nauðsynlegt að framkvæma handvirka uppfærslu sem fyrst. Hafðu samband við kerfisstjórann þinn. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Kanna nánar</a>"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Áríðandi öryggismál:</strong>&nbsp;&nbsp;Stýrikerfið sem notað er á SecureDrop-þjónunum þínum mun enda líftíma sinn þann 30. apríl, 2021. Til að gæta öryggis er nauðsynlegt að framkvæma handvirka uppfærslu sem fyrst. Hafðu samband við kerfisstjórann þinn. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Kanna nánar</a>"
 
 msgid "Logged on as"
 msgstr "Innskráður sem"
@@ -991,6 +977,20 @@ msgstr "<strong>Mikilvægt:</strong> Ef þú óskar áframhaldandi nafnleyndar, 
 
 msgid "Back to submission page"
 msgstr "Til baka á innsendingasíðuna"
+
+#, fuzzy
+#~| msgid "Must be at least {num} character long."
+#~| msgid_plural "Must be at least {num} characters long."
+#~ msgid "Must be at least one character long."
+#~ msgid_plural "Must be at least {num} characters long."
+#~ msgstr[0] "Verður að vera a.m.k. {num} stafur að lengd."
+#~ msgstr[1] "Verður að vera a.m.k. {num} stafa langt."
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Áríðandi öryggismál:</strong>&nbsp;&nbsp;Stýrikerfið sem notað er á SecureDrop-netþjónunum þínum er komið á enda líftíma síns. Til að gæta öryggis er nauðsynlegt að framkvæma handvirka uppfærslu sem fyrst. Hafðu samband við kerfisstjórann þinn. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Kanna nánar</a>"
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Áríðandi öryggismál:</strong>&nbsp;&nbsp;Stýrikerfið sem notað er á SecureDrop-þjónunum þínum mun enda líftíma sinn þann 30. apríl, 2021. Til að gæta öryggis er nauðsynlegt að framkvæma handvirka uppfærslu sem fyrst. Hafðu samband við kerfisstjórann þinn. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Kanna nánar</a>"
 
 #~ msgid "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This <strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 #~ msgstr "<strong>AÐVÖRUN:&nbsp;</strong> Það lítur út eins og þú sért að nota Tor2Web. Það <strong>&nbsp;gefur þér ekki&nbsp;</strong> nafnleysi. <a href=\"{url}\">Hversvegna er það hættulegt?</a>"

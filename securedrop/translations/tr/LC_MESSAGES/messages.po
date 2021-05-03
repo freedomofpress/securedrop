@@ -23,10 +23,7 @@ msgstr ""
 msgid "Name too long"
 msgstr "İleti metni çok uzun."
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
-msgid "Must be at least one character long."
+msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
 msgstr[0] "{num} karakterden az olamaz."
 msgstr[1] "{num} karakterden az olamaz."
@@ -130,11 +127,6 @@ msgid "HOTP secrets are 40 characters long - you have entered {num}."
 msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
 msgstr[0] "HOTP parolaları 40 karakter uzunluğundadır - sadece {num} karakter yazdınız."
 msgstr[1] "HOTP parolaları 40 karakter uzunluğundadır - sadece {num} karakter yazdınız."
-
-msgid "Must be at least {num} character long."
-msgid_plural "Must be at least {num} characters long."
-msgstr[0] "{num} karakterden az olamaz."
-msgstr[1] "{num} karakterden az olamaz."
 
 msgid "Cannot be longer than {num} character."
 msgid_plural "Cannot be longer than {num} characters."
@@ -406,12 +398,6 @@ msgstr "Barkodu okutamıyor musunuz? Şu iki aşamalı kimlik doğrulama parolas
 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "YubiKey yapılandırmasını tamamladığınızda, aşağıdaki 6 haneli kodu yazın:"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Kritik Güvenlik:</strong>&nbsp;&nbsp;SecureDrop sunucularınız tarafından kullanılan işletim sisteminizin ömrü sona erdi. Kaynak arayüzünü yeniden etkinleştirmek ve güvende kalmak için elle bir güncelleme yapmanız gerekiyor. Lütfen BT yöneticiniz ile görüşün. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Ayrıntılı Bilgi Alın</a>"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Kritik Güvenlik:</strong>&nbsp;&nbsp;SecureDrop sunucularınızda kullanılan işletim sisteminin kullanım ömrü 30 Nisan 2021'de sona eriyor. Güvende kalmak için el ile bir güncelleme yapmanız gerekiyor. Lütfen BT yöneticiniz ile görüşün. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Ayrıntılı Bilgi Alın</a>"
 
 msgid "Logged on as"
 msgstr "Oturum açan"
@@ -991,6 +977,20 @@ msgstr "<strong>Önemli:</strong> Anonim kalmak istiyorsanız, dosyanın GPG tar
 
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"
+
+#, fuzzy
+#~| msgid "Must be at least {num} character long."
+#~| msgid_plural "Must be at least {num} characters long."
+#~ msgid "Must be at least one character long."
+#~ msgid_plural "Must be at least {num} characters long."
+#~ msgstr[0] "{num} karakterden az olamaz."
+#~ msgstr[1] "{num} karakterden az olamaz."
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Kritik Güvenlik:</strong>&nbsp;&nbsp;SecureDrop sunucularınız tarafından kullanılan işletim sisteminizin ömrü sona erdi. Kaynak arayüzünü yeniden etkinleştirmek ve güvende kalmak için elle bir güncelleme yapmanız gerekiyor. Lütfen BT yöneticiniz ile görüşün. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Ayrıntılı Bilgi Alın</a>"
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Kritik Güvenlik:</strong>&nbsp;&nbsp;SecureDrop sunucularınızda kullanılan işletim sisteminin kullanım ömrü 30 Nisan 2021'de sona eriyor. Güvende kalmak için el ile bir güncelleme yapmanız gerekiyor. Lütfen BT yöneticiniz ile görüşün. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Ayrıntılı Bilgi Alın</a>"
 
 #~ msgid "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This <strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 #~ msgstr "<strong>UYARI:&nbsp;</strong> Tor2Web kullanıyor gibi gözüküyorsunuz. Bu size anonimlik <strong>&nbsp;sağlamaz&nbsp;</strong>. <a href=\"{url}\">Bu neden tehlikeli?</a>"

@@ -23,10 +23,7 @@ msgstr ""
 msgid "Name too long"
 msgstr "संदेश पाठ बहुत लंबा है |"
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
-msgid "Must be at least one character long."
+msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
 msgstr[0] "कम से कम {num} वर्ण लंबा होना चाहिए।"
 msgstr[1] "कम से कम {num} अक्षर लंबा होनी चाहिए।"
@@ -130,11 +127,6 @@ msgid "HOTP secrets are 40 characters long - you have entered {num}."
 msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
 msgstr[0] "फ़ील्ड 40 वर्ण लंबा होनी चाहिए, लेकिन {num} मिले।"
 msgstr[1] "फ़ील्ड 40 वर्ण लंबा होनी चाहिए, लेकिन {num} मिले।"
-
-msgid "Must be at least {num} character long."
-msgid_plural "Must be at least {num} characters long."
-msgstr[0] "कम से कम {num} वर्ण लंबा होना चाहिए।"
-msgstr[1] "कम से कम {num} अक्षर लंबा होनी चाहिए।"
 
 msgid "Cannot be longer than {num} character."
 msgid_plural "Cannot be longer than {num} characters."
@@ -406,12 +398,6 @@ msgstr "बारकोड को स्कैन नहीं कर सकत�
 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "एक बार जब आप अपने YubiKey को कॉन्फ़िगर कर लेते हैं, तो नीचे 6 अंकों का कोड डालें:"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>गंभीर सिक्यूरिटी समस्या:</strong>आपके SecureDrop सर्वर द्वारा उपयोग किए जाने वाला ऑपरेटिंग सिस्टम बहुत पुरानी हो चुकी है। सुरक्षित रहने के लिए मैन्युअल अपडेट की तत्काल आवश्यकता है - <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">और जानें</a>"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>गंभीर सिक्यूरिटी समस्या:</strong>आपके SecureDrop सर्वर द्वारा उपयोग किए जाने वाला ऑपरेटिंग सिस्टम बहुत पुरानी हो चुकी है। सुरक्षित रहने के लिए मैन्युअल अपडेट की तत्काल आवश्यकता है - <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">और जानें</a>"
 
 msgid "Logged on as"
 msgstr "जैसे लॉग ऑन"
@@ -991,6 +977,20 @@ msgstr "<strong>महत्वपूर्ण:</strong> यदि आप गु
 
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
+
+#, fuzzy
+#~| msgid "Must be at least {num} character long."
+#~| msgid_plural "Must be at least {num} characters long."
+#~ msgid "Must be at least one character long."
+#~ msgid_plural "Must be at least {num} characters long."
+#~ msgstr[0] "कम से कम {num} वर्ण लंबा होना चाहिए।"
+#~ msgstr[1] "कम से कम {num} अक्षर लंबा होनी चाहिए।"
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>गंभीर सिक्यूरिटी समस्या:</strong>आपके SecureDrop सर्वर द्वारा उपयोग किए जाने वाला ऑपरेटिंग सिस्टम बहुत पुरानी हो चुकी है। सुरक्षित रहने के लिए मैन्युअल अपडेट की तत्काल आवश्यकता है - <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">और जानें</a>"
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>गंभीर सिक्यूरिटी समस्या:</strong>आपके SecureDrop सर्वर द्वारा उपयोग किए जाने वाला ऑपरेटिंग सिस्टम बहुत पुरानी हो चुकी है। सुरक्षित रहने के लिए मैन्युअल अपडेट की तत्काल आवश्यकता है - <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">और जानें</a>"
 
 #~ msgid "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This <strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 #~ msgstr "<strong>चेतावनी:&nbsp;</strong> आप Tor2Web का उपयोग करते हुए दिखाई देते हैं| ये गुमनामी सुनिश्चित <strong>&nbsp;नहीं &nbsp;</strong> करता| <a href=\"{url}\">यह घातक क्यों है?</a>"

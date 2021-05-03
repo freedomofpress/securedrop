@@ -22,20 +22,13 @@ testinfra_hosts = [sdvars.app_hostname, sdvars.monitor_hostname]
   ('net.ipv4.ip_forward', 0),
   ('net.ipv4.tcp_max_syn_backlog', 4096),
   ('net.ipv4.tcp_syncookies', 1),
-  ('net.ipv6.conf.all.disable_ipv6', 1),
-  ('net.ipv6.conf.default.disable_ipv6', 1),
-  ('net.ipv6.conf.lo.disable_ipv6', 1),
 ])
 def test_sysctl_options(host, sysctl_opt):
     """
     Ensure sysctl flags are set correctly. Most of these checks
-    are disabling IPv6 and hardening IPv4, which is appropriate
-    due to the heavy use of Tor.
+    are hardening IPv4, which is appropriate due to the heavy use of Tor.
     """
     with host.sudo():
-        # For Focal, we disable IPv6 entirely, so the IPv6 sysctl options won't exist
-        if sysctl_opt[0].startswith("net.ipv6") and host.system_info.codename == "focal":
-            return True
         assert host.sysctl(sysctl_opt[0]) == sysctl_opt[1]
 
 
@@ -43,11 +36,7 @@ def test_dns_setting(host):
     """
     Ensure DNS service is hard-coded in resolv.conf config.
     """
-    if host.system_info.codename == "focal":
-        fpath = "/etc/resolv.conf"
-    else:
-        fpath = "/etc/resolvconf/resolv.conf.d/base"
-    f = host.file(fpath)
+    f = host.file("/etc/resolv.conf")
     assert f.is_file
     assert f.user == "root"
     assert f.group == "root"
@@ -88,8 +77,8 @@ def test_swap_disabled(host):
     # A leading slash will indicate full path to a swapfile.
     assert not re.search("^/", c, re.M)
 
-    # On Xenial, swapon 2.27.1 shows blank output, with no headers, so
-    # check for empty output as confirmation of no swap.
+    # Since swapon 2.27.1, the summary shows blank output, with no headers,
+    # when no swap is configured, check for empty output as confirmation disabled.
     rgx = re.compile("^$")
 
     assert re.search(rgx, c)
@@ -160,7 +149,7 @@ def test_no_ecrypt_messages_in_logs(host, logfile):
 ])
 def test_unused_packages_are_removed(host, package):
     """ Check if unused package is present """
-    assert host.package(package).is_installed is False
+    assert not host.package(package).is_installed
 
 
 def test_iptables_packages(host):
@@ -168,10 +157,7 @@ def test_iptables_packages(host):
     Focal hosts should use iptables-persistent for enforcing
     firewall config across reboots.
     """
-    if host.system_info.codename == "focal":
-        assert host.package("iptables-persistent").is_installed
-    else:
-        assert not host.package("iptables-persistent").is_installed
+    assert host.package("iptables-persistent").is_installed
 
 
 def test_snapd_absent(host):

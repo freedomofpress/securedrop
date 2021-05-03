@@ -1,7 +1,0 @@
----
-# Permit direct access via SSH
-ssh_net_in_override: 0.0.0.0/0
-
-# In libvirt, we want to connect over eth0, not eth1 which is used for
-# inter-VM communication for OSSEC.
-ssh_ip: "{{ ansible_default_ipv4.address }}"

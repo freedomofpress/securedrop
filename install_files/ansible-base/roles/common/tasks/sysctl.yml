@@ -12,16 +12,3 @@
   tags:
     - sysctl
     - hardening
-
-- name: Set sysctl flags for net.ipv6 config.
-  sysctl:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    sysctl_set: yes
-    state: present
-    reload: yes
-  with_items: "{{ sysctl_flags_ipv6 }}"
-  when: ansible_distribution_release == "xenial"
-  tags:
-    - sysctl
-    - hardening

@@ -1,1 +1,0 @@
-update -o quiet=2 -o Dir::Etc::SourceList=/etc/apt/security.list -o Dir::Etc::SourceParts=""

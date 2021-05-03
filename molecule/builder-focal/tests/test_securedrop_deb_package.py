@@ -62,16 +62,10 @@ def make_deb_paths() -> Dict[str, Path]:
     reuse vars in other var values, as is the case with Ansible).
     """
 
-    if SECUREDROP_TARGET_DISTRIBUTION == "xenial":
-        grsec_version = "{}+{}".format(
-            securedrop_test_vars["grsec_version_xenial"],
-            SECUREDROP_TARGET_DISTRIBUTION
-        )
-    else:
-        grsec_version = "{}+{}".format(
-            securedrop_test_vars["grsec_version_focal"],
-            SECUREDROP_TARGET_DISTRIBUTION
-        )
+    grsec_version = "{}+{}".format(
+        securedrop_test_vars["grsec_version_focal"],
+        SECUREDROP_TARGET_DISTRIBUTION
+    )
 
     substitutions = dict(
         securedrop_version=securedrop_test_vars["securedrop_version"],
@@ -417,14 +411,8 @@ def test_grsec_metapackage(host: Host):
 
     c = host.run("dpkg-deb --contents {}".format(deb_paths["securedrop_grsec"]))
     contents = c.stdout
-    if SECUREDROP_TARGET_DISTRIBUTION == "xenial":
-        # Post-install kernel hook for managing PaX flags must exist.
-        assert re.search(r"^.*\./etc/kernel/postinst.d/paxctl-grub$", contents, re.M)
-        # Config file for paxctld should not be present
-        assert not re.search(r"^.*\./opt/securedrop/paxctld.conf$", contents, re.M)
-    else:
-        assert not re.search(r"^.*\./etc/kernel/postinst.d/paxctl-grub$", contents, re.M)
-        assert re.search(r"^.*\./opt/securedrop/paxctld.conf$", contents, re.M)
+    assert not re.search(r"^.*\./etc/kernel/postinst.d/paxctl-grub$", contents, re.M)
+    assert re.search(r"^.*\./opt/securedrop/paxctld.conf$", contents, re.M)
 
     # Custom sysctl options should be present
     assert re.search(r"^.*\./etc/sysctl.d/30-securedrop.conf$", contents, re.M)
@@ -550,18 +538,12 @@ def test_config_package_contains_expected_files(host: Host) -> None:
     Inspect the package contents to ensure all config files are included in
     the package.
     """
-    if SECUREDROP_TARGET_DISTRIBUTION == "xenial":
-        wanted_files = [
-            "/etc/cron-apt/action.d/9-remove",
-            "/etc/profile.d/securedrop_additions.sh",
-        ]
-    else:
-        wanted_files = [
-            "/etc/profile.d/securedrop_additions.sh",
-            "/opt/securedrop/20auto-upgrades",
-            "/opt/securedrop/50unattended-upgrades",
-            "/opt/securedrop/reboot-flag",
-        ]
+    wanted_files = [
+        "/etc/profile.d/securedrop_additions.sh",
+        "/opt/securedrop/20auto-upgrades",
+        "/opt/securedrop/50unattended-upgrades",
+        "/opt/securedrop/reboot-flag",
+    ]
     c = host.run("dpkg-deb --contents {}".format(deb_paths["securedrop_config"]))
     for wanted_file in wanted_files:
         assert re.search(

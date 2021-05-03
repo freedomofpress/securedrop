@@ -13,14 +13,13 @@ set -o pipefail
 
 
 # Support overrides for LTS version
-securedrop_platform_suffix="-${1:-xenial}"
+securedrop_platform_suffix="-${1:-focal}"
 
 # Respect explicit choice of Vagrant provider if set.
 if [[ -n "${VAGRANT_DEFAULT_PROVIDER:-}" ]] ; then
     securedrop_vm_provider="${VAGRANT_DEFAULT_PROVIDER}"
 # Check whether it appears we're running in Qubes, in which case the standard Vagrant
-# logic will not work at all, due to lack of nested virt support. The Qubes staging
-# environment uses Xenial template VMs only, so we also suppress the platform suffix.
+# logic will not work at all, due to lack of nested virt support.
 elif printenv | grep -q ^QUBES_ ; then
     securedrop_vm_provider="qubes"
 elif [[ "${OSTYPE:-}" == "linux-gnu" ]]; then

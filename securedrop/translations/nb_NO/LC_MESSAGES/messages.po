@@ -24,10 +24,7 @@ msgstr ""
 msgid "Name too long"
 msgstr "Meldingsteksten er for lang."
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
-msgid "Must be at least one character long."
+msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
 msgstr[0] "Må være minst {num} tegn langt."
 msgstr[1] "Må være minst {num} tegn langt."
@@ -131,11 +128,6 @@ msgid "HOTP secrets are 40 characters long - you have entered {num}."
 msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
 msgstr[0] "HOTP-koden skal være 40 tegn lang – du har skrevet inn {num}."
 msgstr[1] "HOTP-koden skal være 40 tegn lang – du har skrevet inn {num}."
-
-msgid "Must be at least {num} character long."
-msgid_plural "Must be at least {num} characters long."
-msgstr[0] "Må være minst {num} tegn langt."
-msgstr[1] "Må være minst {num} tegn langt."
 
 msgid "Cannot be longer than {num} character."
 msgid_plural "Cannot be longer than {num} characters."
@@ -407,12 +399,6 @@ msgstr "Kan du ikke skanne strekkoden? Du kan koble FreeOTP til denne kontoen ma
 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "Når du har satt opp din YubiKey, skriv inn den 6 tegn lange koden nedenfor:"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Sikkerhetskritisk:</strong>&nbsp;&nbsp;Operativsystemet på tjenerne som drifter denne installasjonen av SecureDrop har nådd slutten av sin levetid. En manuell oppgradering kreves for å reaktivere kilde-nettsiden og opprettholde sikkerheten. Kontakt din administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Les mer</a>"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Sikkerhetskritisk:</strong>&nbsp;&nbsp;Operativsystemet på tjenerne som drifter denne installasjonen av SecureDrop vil nå slutten av sin levetid den 30. april 2021. En manuell oppgradering må gjøres innen kort tid for å opprettholde sikkerheten. Kontakt din administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Les mer</a>"
 
 msgid "Logged on as"
 msgstr "Innlogget som"
@@ -992,6 +978,20 @@ msgstr "<strong>Viktig:</strong> Om du ønsker å være helt anonym, <strong>ikk
 
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
+
+#, fuzzy
+#~| msgid "Must be at least {num} character long."
+#~| msgid_plural "Must be at least {num} characters long."
+#~ msgid "Must be at least one character long."
+#~ msgid_plural "Must be at least {num} characters long."
+#~ msgstr[0] "Må være minst {num} tegn langt."
+#~ msgstr[1] "Må være minst {num} tegn langt."
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Sikkerhetskritisk:</strong>&nbsp;&nbsp;Operativsystemet på tjenerne som drifter denne installasjonen av SecureDrop har nådd slutten av sin levetid. En manuell oppgradering kreves for å reaktivere kilde-nettsiden og opprettholde sikkerheten. Kontakt din administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Les mer</a>"
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Sikkerhetskritisk:</strong>&nbsp;&nbsp;Operativsystemet på tjenerne som drifter denne installasjonen av SecureDrop vil nå slutten av sin levetid den 30. april 2021. En manuell oppgradering må gjøres innen kort tid for å opprettholde sikkerheten. Kontakt din administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Les mer</a>"
 
 #~ msgid "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This <strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 #~ msgstr "<strong>ADVARSEL:&nbsp;</strong> Det ser ut som du bruker Tor2Web. Dette <strong>&nbsp;gir ikke&nbsp;</strong> anonym kommunikasjon. <a href=\"{url}\">Hvorfor kan dette være problematisk?</a>"

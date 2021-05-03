@@ -102,8 +102,6 @@ def test_apparmor_total_profiles(host):
         complaining profiles """
     with host.sudo():
         total_expected = len(sdvars.apparmor_enforce) + len(sdvars.apparmor_complain)
-        # Xenial about ~20 profiles, so let's expect
-        # *at least* the sum.
         assert int(host.check_output("aa-status --profiled")) >= total_expected
 
 

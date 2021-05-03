@@ -3,7 +3,6 @@ import pytest
 
 
 testinfra_hosts = [
-    "docker://tor-package-fetcher-xenial",
     "docker://tor-package-fetcher-focal",
 ]
 TOR_DOWNLOAD_DIR = "/tmp/tor-debs"
@@ -46,10 +45,9 @@ def test_tor_package_versions(host, pkg):
 def test_tor_package_platform(host):
     """
     Sanity check to ensure we're running on a version of Ubuntu
-    that is supported by the upstream Tor Project, i.e. Xenial or Focal.
-    The Trusty channel was disabled by Tor Project on 2019-01-08.
+    that is supported by the upstream Tor Project, i.e. Focal.
     """
     assert host.system_info.type == "linux"
     assert host.system_info.distribution == "ubuntu"
-    assert host.system_info.codename in ("xenial", "focal")
-    assert host.system_info.release in ("16.04", "20.04")
+    assert host.system_info.codename == "focal"
+    assert host.system_info.release == "20.04"

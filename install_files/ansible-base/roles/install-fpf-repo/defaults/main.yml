@@ -22,5 +22,5 @@ install_local_packages: False
 apt_repo_pubkey_files:
   - fpf-signing-key.pub
 
-# Enabling support for xenial by default.
+# As of v2.0.0, only Focal is supported.
 apt_repo_target_distro: "{{ ansible_distribution_release }}"

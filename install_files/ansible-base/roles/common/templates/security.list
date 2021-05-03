@@ -1,5 +1,0 @@
-deb http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security main
-deb-src http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security main
-deb http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security universe
-deb-src http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security universe
-deb [arch=amd64] {{ apt_repo_url }} {{ ansible_distribution_release }} main

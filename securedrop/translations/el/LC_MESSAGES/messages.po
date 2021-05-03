@@ -23,10 +23,7 @@ msgstr ""
 msgid "Name too long"
 msgstr "Το κείμενο του μηνύματος είναι πολύ μεγάλο."
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
-msgid "Must be at least one character long."
+msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
 msgstr[0] "Πρέπει να έχει τουλάχιστον {num} χαρακτήρα."
 msgstr[1] "Πρέπει να έχει τουλάχιστον {num} χαρακτήρες."
@@ -130,11 +127,6 @@ msgid "HOTP secrets are 40 characters long - you have entered {num}."
 msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
 msgstr[0] "Τα μυστικά HOTP έχουν μήκος 40 χαρακτήρες. Έχετε εισάγει {num}."
 msgstr[1] "Τα μυστικά HOTP έχουν μήκος 40 χαρακτήρες. Έχετε εισάγει {num}."
-
-msgid "Must be at least {num} character long."
-msgid_plural "Must be at least {num} characters long."
-msgstr[0] "Πρέπει να έχει τουλάχιστον {num} χαρακτήρα."
-msgstr[1] "Πρέπει να έχει τουλάχιστον {num} χαρακτήρες."
 
 msgid "Cannot be longer than {num} character."
 msgid_plural "Cannot be longer than {num} characters."
@@ -406,12 +398,6 @@ msgstr "Δεν μπορείτε να σαρώσετε το barcode; Μπορεί
 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "Όταν ολοκληρώσετε την παραμετροποίηση του YubiKey σας, πληκτρολογήστε τον εξαψήφιο κωδικό παρακάτω:"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Κρίσιμο ζήτημα ασφάλειας:</strong>&nbsp;&nbsp;Το λειτουργικό σύστημα που χρησιμοποιούν οι διακομιστές του SecureDrop σας έχει φτάσει στο τέλος του κύκλου ζωής του. Χρειάζεται χειροκίνητη αναβάθμιση για να επανενεργοποιήσετε τη Διεπαφή πηγών και να παραμείνετε ασφαλείς. Παρακαλώ επικοινωνήστε με τη διαχείριση. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Μάθετε περισσότερα</a>"
-
-msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Κρίσιμο ζήτημα ασφάλειας:</strong>&nbsp;&nbsp;Το λειτουργικό σύστημα που χρησιμοποιούν οι διακομιστές του SecureDrop σας θα φτάσει στο τέλος του κύκλου ζωής του στις 30 Απριλίου 2021. Χρειάζεται επειγόντως μια χειροκίνητη αναβάθμιση για να παραμείνετε ασφαλείς. Παρακαλούμε επικοινωνήστε με τη διαχείριση. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Μάθετε περισσότερα</a>"
 
 msgid "Logged on as"
 msgstr "Συνδεδεμένος/η ως"
@@ -991,6 +977,20 @@ msgstr "<strong>Σημαντικό:</strong> Αν επιθυμείτε να δι
 
 msgid "Back to submission page"
 msgstr "Πίσω στη σελίδα υποβολών"
+
+#, fuzzy
+#~| msgid "Must be at least {num} character long."
+#~| msgid_plural "Must be at least {num} characters long."
+#~ msgid "Must be at least one character long."
+#~ msgid_plural "Must be at least {num} characters long."
+#~ msgstr[0] "Πρέπει να έχει τουλάχιστον {num} χαρακτήρα."
+#~ msgstr[1] "Πρέπει να έχει τουλάχιστον {num} χαρακτήρες."
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Κρίσιμο ζήτημα ασφάλειας:</strong>&nbsp;&nbsp;Το λειτουργικό σύστημα που χρησιμοποιούν οι διακομιστές του SecureDrop σας έχει φτάσει στο τέλος του κύκλου ζωής του. Χρειάζεται χειροκίνητη αναβάθμιση για να επανενεργοποιήσετε τη Διεπαφή πηγών και να παραμείνετε ασφαλείς. Παρακαλώ επικοινωνήστε με τη διαχείριση. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Μάθετε περισσότερα</a>"
+
+#~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers will reach its end-of-life on April 30, 2021. A manual upgrade is urgently required to remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
+#~ msgstr "<strong>Κρίσιμο ζήτημα ασφάλειας:</strong>&nbsp;&nbsp;Το λειτουργικό σύστημα που χρησιμοποιούν οι διακομιστές του SecureDrop σας θα φτάσει στο τέλος του κύκλου ζωής του στις 30 Απριλίου 2021. Χρειάζεται επειγόντως μια χειροκίνητη αναβάθμιση για να παραμείνετε ασφαλείς. Παρακαλούμε επικοινωνήστε με τη διαχείριση. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Μάθετε περισσότερα</a>"
 
 #~ msgid "<strong>WARNING:&nbsp;</strong> You appear to be using Tor2Web. This <strong>&nbsp;does not&nbsp;</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 #~ msgstr "<strong>ΠΡΟΣΟΧΗ:&nbsp;</strong> Φαίνεται πως χρησιμοποιείτε την υπηρεσία Tor2Web. Αυτή <strong>&nbsp;δεν&nbsp;</strong> παρέχει ανωνυμία. <a href=\"{url}\">Γιατί είναι επικίνδυνο αυτό;</a>"

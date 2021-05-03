@@ -42,17 +42,6 @@ apparmor_enforce:
     - "/usr/sbin/apache2//DEFAULT_URI"
     - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
     - "/usr/sbin/tor"
-  xenial:
-    - "sbin/dhclient"
-    - "/usr/lib/NetworkManager/nm-dhcp-client.action"
-    - "/usr/lib/connman/scripts/dhclient-script"
-    - "/usr/sbin/ntpd"
-    - "/usr/sbin/tcpdump"
-    - "system_tor"
-    - "/usr/sbin/apache2"
-    - "/usr/sbin/apache2//DEFAULT_URI"
-    - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
-    - "/usr/sbin/tor"
 
 app_directories:
   - /var/www/securedrop
@@ -188,5 +177,4 @@ log_events_with_ossec_alerts:
     rule_id: "400700"
 
 fpf_apt_repo_url: "https://apt.freedom.press"
-grsec_version_xenial: "4.14.188"
 grsec_version_focal: "5.4.97"

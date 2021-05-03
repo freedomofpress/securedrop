@@ -1,8 +1,0 @@
-{% for host in instance_conf %}
-Host {{ host.instance }}
-  HostName {{ host.address }}
-  Port {{ host.port }}
-  IdentityFile {{ host.identity_file }}
-  PreferredAuthentications publickey
-  User {{ host.user }}
-{%endfor%}

@@ -31,10 +31,7 @@ def test_grsecurity_apt_packages(host, package):
     Includes the FPF-maintained metapackage, as well as paxctl, for managing
     PaX flags on binaries.
     """
-    if host.system_info.codename == "xenial":
-        KERNEL_VERSION = sdvars.grsec_version_xenial
-    else:
-        KERNEL_VERSION = sdvars.grsec_version_focal
+    KERNEL_VERSION = sdvars.grsec_version_focal
     if package.startswith("linux-image"):
         package = package.format(KERNEL_VERSION)
     assert host.package(package).is_installed
@@ -80,10 +77,7 @@ def test_grsecurity_kernel_is_running(host):
     """
     Make sure the currently running kernel is specific grsec kernel.
     """
-    if host.system_info.codename == "xenial":
-        KERNEL_VERSION = sdvars.grsec_version_xenial
-    else:
-        KERNEL_VERSION = sdvars.grsec_version_focal
+    KERNEL_VERSION = sdvars.grsec_version_focal
     c = host.run('uname -r')
     assert c.stdout.strip().endswith('-grsec-securedrop')
     assert c.stdout.strip() == '{}-grsec-securedrop'.format(KERNEL_VERSION)
@@ -171,36 +165,7 @@ def test_paxctl(host):
     As of Focal, paxctl is not used, and shouldn't be installed.
     """
     p = host.package("paxctl")
-    if host.system_info.codename == "xenial":
-        assert p.is_installed
-    else:
-        assert not p.is_installed
-
-
-def test_paxctld_xenial(host):
-    """
-    Xenial-specific paxctld config checks.
-    Ensures paxctld is running and enabled, and relevant
-    exemptions are present in the config file.
-    """
-    if host.system_info.codename != "xenial":
-        return True
-
-    hostname = host.check_output('hostname -s')
-    assert (("app" in hostname) or ("mon" in hostname))
-
-    # Under Xenial, apache2 pax flags managed by securedrop-app-code.
-    if "app" not in hostname:
-        return True
-
-    assert host.package("paxctld").is_installed
-    f = host.file("/etc/paxctld.conf")
-    assert f.is_file
-    assert f.contains("^/usr/sbin/apache2\tm")
-
-    s = host.service("paxctld")
-    assert s.is_enabled
-    assert s.is_running
+    assert not p.is_installed
 
 
 def test_paxctld_focal(host):
@@ -209,9 +174,6 @@ def test_paxctld_focal(host):
     Ensures paxctld is running and enabled, and relevant
     exemptions are present in the config file.
     """
-    if host.system_info.codename != "focal":
-        return True
-
     assert host.package("paxctld").is_installed
     f = host.file("/etc/paxctld.conf")
     assert f.is_file
@@ -249,10 +211,7 @@ def test_wireless_disabled_in_kernel_config(host, kernel_opts):
     remove wireless support from the kernel. Let's make sure wireless is
     disabled in the running kernel config!
     """
-    if host.system_info.codename == "xenial":
-        KERNEL_VERSION = sdvars.grsec_version_xenial
-    else:
-        KERNEL_VERSION = sdvars.grsec_version_focal
+    KERNEL_VERSION = sdvars.grsec_version_focal
     with host.sudo():
         kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
         kernel_config = host.file(kernel_config_path).content_string
@@ -271,10 +230,7 @@ def test_kernel_options_enabled_config(host, kernel_opts):
     Tests kernel config for options that should be enabled
     """
 
-    if host.system_info.codename == "xenial":
-        KERNEL_VERSION = sdvars.grsec_version_xenial
-    else:
-        KERNEL_VERSION = sdvars.grsec_version_focal
+    KERNEL_VERSION = sdvars.grsec_version_focal
     with host.sudo():
         kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
         kernel_config = host.file(kernel_config_path).content_string

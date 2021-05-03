@@ -24,16 +24,11 @@ def test_ossec_connectivity(host):
 
 def test_ossec_service_start_style(host):
     """
-    Ensure that the OSSEC services are managed by systemd under Focal,
-    but by sysv under Xenial.
+    Ensure that the OSSEC services are managed by systemd.
     """
-    if host.system_info.codename == "focal":
-        value = "/etc/systemd/system/ossec.service"
-    else:
-        value = "/etc/init.d/ossec"
     with host.sudo():
         c = host.check_output("systemctl status ossec")
-        assert value in c
+        assert "/etc/systemd/system/ossec.service" in c
 
 
 # Permissions don't match between Ansible and OSSEC deb packages postinst.
