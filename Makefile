@@ -46,6 +46,10 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 		--allow-unsafe \
 		--output-file requirements/python3/docker-requirements.txt \
 		requirements/python3/docker-requirements.in
+	@$(DEVSHELL) pip-compile --generate-hashes \
+		--allow-unsafe \
+		--output-file requirements/python3/translation-requirements.txt \
+		requirements/python3/translation-requirements.in
 
 .PHONY: update-pip-requirements
 update-pip-requirements: update-admin-pip-requirements update-python3-requirements ## Update all requirements with pip-compile.

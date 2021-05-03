@@ -1,1 +1,1 @@
-setuptools==46.0.0
+setuptools>=56.0.0
