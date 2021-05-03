@@ -6,6 +6,7 @@ securedrop_app_code_prep_dir: "/tmp/{{ securedrop_app_code_deb }}-prep"
 # are "filtered" via an `.rsync-filter` file in the src directory.
 securedrop_code_filtered: "{{ securedrop_app_code_prep_dir }}/var/www/securedrop"
 
+securedrop_translation_pip_requirements: "{{ securedrop_code_filtered }}/requirements/python3/translation-requirements.txt"
 securedrop_pip_requirements: "{{ securedrop_code_filtered }}/requirements/python3/securedrop-app-code-requirements.txt"
 
 # SecureDrop code installation directory

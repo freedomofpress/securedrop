@@ -26,6 +26,9 @@
     src: "{{ role_path }}/../../../../MANIFEST.in"
     dest: "{{ securedrop_app_code_prep_dir }}/MANIFEST.in"
 
+- name: Copy translation-requirements.txt to prep directory
+  command: cp "{{ securedrop_translation_pip_requirements }}" "{{ securedrop_app_code_prep_dir }}/translation-requirements.txt"
+
 - name: Copy requirements.txt to prep directory
   command: cp "{{ securedrop_pip_requirements }}" "{{ securedrop_app_code_prep_dir }}/requirements.txt"
 

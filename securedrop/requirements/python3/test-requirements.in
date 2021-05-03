@@ -8,7 +8,7 @@ markupsafe>=1.1
 mock
 pathlib2
 pillow>=8.1.1
-pip-tools==4.5.1
+pip-tools>=6.1.0
 py>=1.10.0
 pytest>=6.1.1
 pytest-xdist>=2.1.0
@@ -17,7 +17,7 @@ pytest-cov
 pytest-mock
 hypothesis
 requests[socks]>2.21.0
-setuptools>=46.0.0
+setuptools>=56.0.0
 selenium>=3.141.0
 tbselenium>=0.5.2
 pyvirtualdisplay
