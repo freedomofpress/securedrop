@@ -16,10 +16,58 @@ set -x
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+configure_postfix_myhostname() {
+    if [ -f /etc/postfix/main.cf ]
+    then
+        sed -i -E "s/^myhostname\\s*=\\s*ossec.server.*$/myhostname = $(hostname -f)/" /etc/postfix/main.cf
+    fi
+}
+
+configure_postfix_generics() {
+    if [ -f /etc/postfix/main.cf ]
+    then
+        python3 - <<EOF
+import pathlib
+import re
+import sys
+try:
+    sasl_id = open("/etc/postfix/sasl_passwd").readline().split()[1].split(":")[0]
+except:
+    print("Could not extract SASL ID from /etc/postfix/sasl_passwd")
+    sys.exit(0)
+
+try:
+    maincf = open("/etc/postfix/main.cf").read()
+    hostname = open("/etc/hostname").readline().strip()
+    rewrite_target = sasl_id
+    generic = pathlib.Path("/etc/postfix/generic")
+    if generic.is_file():
+        rewrite_target = generic.open().readline().split()[1]
+    if '@' in rewrite_target:
+        with generic.open("w") as g:
+            g.write("ossec@{} {}\n".format(hostname, rewrite_target))
+    else:
+        generic.unlink(missing_ok=True)
+        pathlib.Path("/etc/postfix/generic.db").unlink(missing_ok=True)
+except Exception as e:
+    print("Could not update /etc/postfix/generic:", e)
+    print('Please run "securedrop-admin install" from the admin workstation to correct.')
+    sys.exit(0)
+EOF
+        if [ -f /etc/postfix/generic ]
+        then
+            postmap /etc/postfix/generic
+        fi
+    fi
+}
+
 case "$1" in
     configure)
         GROUP="ossec"
         OSSEC_HOME="/var/ossec"
+
+        configure_postfix_myhostname
+        configure_postfix_generics
 
         # Ensure the correct file permissions and ownership are set for the
         # config files.
@@ -28,12 +76,12 @@ case "$1" in
 
         chown root:${GROUP} ${OSSEC_HOME}/rules/local_rules.xml
         chmod 440 ${OSSEC_HOME}/rules/local_rules.xml
-        
+
         # Ensure correct gnupg directory permissions and ownership
         chown -R ossec:${GROUP} ${OSSEC_HOME}/.gnupg
         find ${OSSEC_HOME}/.gnupg -type f -exec chmod 600 {} \;
         find ${OSSEC_HOME}/.gnupg -type d -exec chmod 700 {} \;
-      	
+
         # Replace localhost with 127.0.0.1 for smtp_server due to
         #  https://github.com/ossec/ossec-hids/issues/1145
         sed -i -e "s/<smtp_server>localhost<\/smtp_server>/<smtp_server>127.0.0.1<\/smtp_server>/g" /var/ossec/etc/ossec.conf

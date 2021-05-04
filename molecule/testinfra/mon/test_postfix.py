@@ -29,14 +29,18 @@ def test_postfix_headers(host, header):
 
 def test_postfix_generic_maps(host):
     """
-    Regression test to check that generic Postfix maps are not configured
-    by default. As of #1565 Admins can opt-in to overriding the FROM address
-    used for sending OSSEC alerts, but by default we're preserving the old
-    `ossec@ossec.server` behavior, to avoid breaking email for previously
-    existing instances.
+    Check configuration of Postfix generic map when sasl_domain is set
+    and ossec_from_address is not specified.
     """
-    assert not host.file("/etc/postfix/generic").exists
-    assert not host.file("/etc/postfix/main.cf").contains("^smtp_generic_maps")
+    assert host.file("/etc/postfix/generic").exists
+    assert host.file("/etc/postfix/generic").contains(
+        "^ossec@{} {}@{}".format(
+            securedrop_test_vars.monitor_hostname,
+            securedrop_test_vars.sasl_username,
+            securedrop_test_vars.sasl_domain,
+        )
+    )
+    assert host.file("/etc/postfix/main.cf").contains("^smtp_generic_maps")
     assert host.file("/etc/postfix/main.cf").contains(
                      "^smtpd_recipient_restrictions = reject_unauth_destination")
 
