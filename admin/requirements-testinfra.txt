@@ -4,8 +4,8 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements-testinfra.txt requirements-ansible.in requirements-testinfra.in requirements.in
 #
-ansible==2.9.7 \
-    --hash=sha256:7222ce925536a25b2912364e13b03a3e21dbf2f96799ebff304f48509324de7b
+ansible==2.9.21 \
+    --hash=sha256:4098246b67aa143e1e3af79d99346419e0545d5405d1cdf6e7fd389beab6de5a
     # via -r requirements-ansible.in
 apipkg==1.5 \
     --hash=sha256:37228cda29411948b422fae072f57e31d3396d2ee1c9783775980ee9c9990af6 \
@@ -170,10 +170,11 @@ prompt_toolkit==2.0.9 \
     --hash=sha256:2519ad1d8038fd5fc8e770362237ad0364d16a7650fb5724af6997ed5515e3c1 \
     --hash=sha256:977c6583ae813a37dc1c2e1b715892461fcbdaa57f6fc62f33a528c4886c8f55
     # via -r requirements.in
-py==1.9.0 \
-    --hash=sha256:366389d1db726cd2fcfc79732e75410e5fe4d31db13692115529d34069a043c2 \
-    --hash=sha256:9ca6883ce56b4e8da7e79ac18787889fa5206c79dcc67fb065376cd2fe03f342
+py==1.10.0 \
+    --hash=sha256:21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3 \
+    --hash=sha256:3b80836aa6d1feeaa108e046da6423ab8f6ceda6468545ae8d02d9d58d18818a
     # via
+    #   -r requirements-testinfra.in
     #   pytest
     #   pytest-forked
 pycparser==2.20 \
