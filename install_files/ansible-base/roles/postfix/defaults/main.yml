@@ -1,8 +1,10 @@
 ---
 # Email address listed in the FROM line when sending OSSEc email alerts.
 # Some mail servers require that this match the account that authenticated
-# to send mail. Using the `ossec_from_address` for backwards-compatibility.
-postfix_from_address: "{{ ossec_from_address|default('') }}"
+# to send mail. Using the `ossec_from_address` for
+# backwards-compatibility.
+sasl_id: "{% if sasl_domain %}{{ sasl_username }}@{{ sasl_domain }}{% endif %}"
+postfix_from_address: "{{ ossec_from_address|default(sasl_id) }}"
 
 # Apt dependencies for the ossec server package
 postfix_dependencies:
@@ -11,7 +13,7 @@ postfix_dependencies:
   - mailutils
 
 # Configuration info for procmail and postfix
-postfix_hostname: ossec.server
+postfix_hostname: "{{ monitor_hostname }}"
 
 # Whether to enable Postfix for sending mail. Required in prod,
 # but unnecessary in staging contexts, where SASL authentication
