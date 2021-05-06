@@ -62,7 +62,14 @@ from typing import Callable
 from typing import Type
 
 sdlog = logging.getLogger(__name__)
-RELEASE_KEY = '22245C81E3BAEB4138B36061310F561200F4AD77'
+
+# We list two (2) pubkeys as authorized to sign SecureDrop release artifacts,
+# to provide a transition window during key rotation. On or around v2.0.0,
+# we can remove the older of the two keys and only trust the newer going forward.
+RELEASE_KEYS = [
+    '22245C81E3BAEB4138B36061310F561200F4AD77',
+    '2359E6538C0613E652955E6C188EDD3B7B22E6A3',
+]
 DEFAULT_KEYSERVER = 'hkps://keys.openpgp.org'
 SUPPORT_ONION_URL = 'http://sup6h5iyiyenvjkfxbgrjynm5wsgijjoatvnvdgyyi7je3xqm4kh6uqd.onion'
 SUPPORT_URL = 'https://support.freedom.press'
@@ -906,15 +913,14 @@ def get_release_key_from_keyserver(
 ) -> None:
     gpg_recv = ['timeout', str(timeout), 'gpg', '--batch', '--no-tty',
                 '--recv-key']
-    release_key = [RELEASE_KEY]
+    for release_key in RELEASE_KEYS:
+        # We construct the gpg --recv-key command based on optional keyserver arg.
+        if keyserver:
+            get_key_cmd = gpg_recv + ['--keyserver', keyserver] + [release_key]
+        else:
+            get_key_cmd = gpg_recv + [release_key]
 
-    # We construct the gpg --recv-key command based on optional keyserver arg.
-    if keyserver:
-        get_key_cmd = gpg_recv + ['--keyserver', keyserver] + release_key
-    else:
-        get_key_cmd = gpg_recv + release_key
-
-    subprocess.check_call(get_key_cmd, cwd=args.root)
+        subprocess.check_call(get_key_cmd, cwd=args.root)
 
 
 def update(args: argparse.Namespace) -> int:
@@ -954,7 +960,7 @@ def update(args: argparse.Namespace) -> int:
         # we check that bad_sig_text does not appear, that the release key
         # appears on the second line of the output, and that there is a single
         # match from good_sig_text[]
-        if RELEASE_KEY in gpg_lines[1] and \
+        if (RELEASE_KEYS[0] in gpg_lines[1] or RELEASE_KEYS[1] in gpg_lines[1]) and \
                 len(good_sig_matches) == 1 and \
                 bad_sig_text not in sig_result:
             # Finally, we check that there is no branch of the same name
