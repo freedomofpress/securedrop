@@ -38,17 +38,23 @@ def test_fpf_apt_repo_present(host):
 def test_fpf_apt_repo_fingerprint(host):
     """
     Ensure the FPF apt repo has the correct fingerprint on the associated
-    signing pubkey. The key changed in October 2016, so test for the
-    newest fingerprint, which is installed on systems via the
-    `securedrop-keyring` package.
+    signing pubkey. Recent key rotations have taken place in:
+
+      * 2016-10
+      * 2021-06
+
+    So let's make sure that the fingerprints accepted by the system covers both
+    in the interim.
     """
 
     c = host.run('apt-key finger')
 
-    fpf_gpg_pub_key_info = "2224 5C81 E3BA EB41 38B3  6061 310F 5612 00F4 AD77"
+    fpf_gpg_pub_key_info_old = "2224 5C81 E3BA EB41 38B3  6061 310F 5612 00F4 AD77"
+    fpf_gpg_pub_key_info_new = "2359 E653 8C06 13E6 5295  5E6C 188E DD3B 7B22 E6A3"
 
     assert c.rc == 0
-    assert fpf_gpg_pub_key_info in c.stdout
+    assert fpf_gpg_pub_key_info_old in c.stdout
+    assert fpf_gpg_pub_key_info_new in c.stdout
 
 
 @pytest.mark.parametrize('old_pubkey', [
