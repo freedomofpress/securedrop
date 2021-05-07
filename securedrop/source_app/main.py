@@ -19,8 +19,7 @@ from models import Source, Submission, Reply, get_one_or_else
 from sdconfig import SDConfig
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
-                              async_genkey, normalize_timestamps,
-                              valid_codename, get_entropy_estimate)
+                              normalize_timestamps, valid_codename)
 from source_app.forms import LoginForm, SubmissionForm
 
 
@@ -137,15 +136,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         replies.sort(key=operator.attrgetter('date'), reverse=True)
 
         # Generate a keypair to encrypt replies from the journalist
-        # Only do this if the journalist has flagged the source as one
-        # that they would like to reply to. (Issue #140.)
-        if not current_app.crypto_util.get_fingerprint(g.filesystem_id) and \
-                g.source.flagged:
-            db_uri = current_app.config['SQLALCHEMY_DATABASE_URI']
-            async_genkey(current_app.crypto_util,
-                         db_uri,
-                         g.filesystem_id,
-                         g.codename)
+        if not current_app.crypto_util.get_fingerprint(g.filesystem_id):
+            current_app.crypto_util.genkeypair(g.filesystem_id, g.codename)
 
         return render_template(
             'lookup.html',
@@ -236,25 +228,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             db.session.add(submission)
             new_submissions.append(submission)
 
-        if g.source.pending:
+        # If necessary, generate a keypair to encrypt replies from the journalist
+        if g.source.pending or not current_app.crypto_util.get_fingerprint(g.filesystem_id):
+            current_app.crypto_util.genkeypair(g.filesystem_id, g.codename)
             g.source.pending = False
-
-            # Generate a keypair now, if there's enough entropy (issue #303)
-            # (gpg reads 300 bytes from /dev/random)
-            entropy_avail = get_entropy_estimate()
-            if entropy_avail >= 2400:
-                db_uri = current_app.config['SQLALCHEMY_DATABASE_URI']
-
-                async_genkey(current_app.crypto_util,
-                             db_uri,
-                             g.filesystem_id,
-                             g.codename)
-                current_app.logger.info("generating key, entropy: {}".format(
-                    entropy_avail))
-            else:
-                current_app.logger.warning(
-                        "skipping key generation. entropy: {}".format(
-                                entropy_avail))
 
         g.source.last_updated = datetime.utcnow()
         db.session.commit()

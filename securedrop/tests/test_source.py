@@ -442,40 +442,6 @@ def test_submit_both(source_app):
         assert "Thanks! We received your message and document" in text
 
 
-def test_submit_message_with_low_entropy(source_app):
-    with patch.object(source_app_main, 'async_genkey') as async_genkey:
-        with patch.object(source_app_main, 'get_entropy_estimate') \
-                as get_entropy_estimate:
-            get_entropy_estimate.return_value = 300
-
-            with source_app.test_client() as app:
-                new_codename(app, session)
-                _dummy_submission(app)
-                resp = app.post(
-                    url_for('main.submit'),
-                    data=dict(msg="This is a test.", fh=(StringIO(''), '')),
-                    follow_redirects=True)
-                assert resp.status_code == 200
-                assert not async_genkey.called
-
-
-def test_submit_message_with_enough_entropy(source_app):
-    with patch.object(source_app_main, 'async_genkey') as async_genkey:
-        with patch.object(source_app_main, 'get_entropy_estimate') \
-                as get_entropy_estimate:
-            get_entropy_estimate.return_value = 2400
-
-            with source_app.test_client() as app:
-                new_codename(app, session)
-                _dummy_submission(app)
-                resp = app.post(
-                    url_for('main.submit'),
-                    data=dict(msg="This is a test.", fh=(StringIO(''), '')),
-                    follow_redirects=True)
-                assert resp.status_code == 200
-                assert async_genkey.called
-
-
 def test_delete_all_successfully_deletes_replies(source_app):
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
@@ -732,26 +698,25 @@ def test_failed_normalize_timestamps_logs_warning(source_app):
     still occur, but a warning should be logged (this will trigger an
     OSSEC alert)."""
 
-    with patch("source_app.main.get_entropy_estimate", return_value=8192):
-        with patch.object(source_app.logger, 'warning') as logger:
-            with patch.object(subprocess, 'call', return_value=1):
-                with source_app.test_client() as app:
-                    new_codename(app, session)
-                    _dummy_submission(app)
-                    resp = app.post(
-                        url_for('main.submit'),
-                        data=dict(
-                            msg="This is a test.",
-                            fh=(StringIO(''), '')),
-                        follow_redirects=True)
-                    assert resp.status_code == 200
-                    text = resp.data.decode('utf-8')
-                    assert "Thanks! We received your message" in text
+    with patch.object(source_app.logger, 'warning') as logger:
+        with patch.object(subprocess, 'call', return_value=1):
+            with source_app.test_client() as app:
+                new_codename(app, session)
+                _dummy_submission(app)
+                resp = app.post(
+                    url_for('main.submit'),
+                    data=dict(
+                        msg="This is a test.",
+                        fh=(StringIO(''), '')),
+                    follow_redirects=True)
+                assert resp.status_code == 200
+                text = resp.data.decode('utf-8')
+                assert "Thanks! We received your message" in text
 
-                    logger.assert_called_once_with(
-                        "Couldn't normalize submission "
-                        "timestamps (touch exited with 1)"
-                    )
+                logger.assert_called_once_with(
+                    "Couldn't normalize submission "
+                    "timestamps (touch exited with 1)"
+                )
 
 
 def test_source_is_deleted_while_logged_in(source_app):
