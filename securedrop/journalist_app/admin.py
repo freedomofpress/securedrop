@@ -53,7 +53,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 flash(gettext("Image updated."), "logo-success")
             except Exception:
                 # Translators: This error is shown when an uploaded image cannot be used.
-                flash(gettext("Unable to process the image file. Try another one."), "logo-error")
+                flash(
+                    gettext("Unable to process the image file. Please try another one."),
+                    "logo-error"
+                )
             finally:
                 return redirect(url_for("admin.manage_config") + "#config-logoimage")
         else:
