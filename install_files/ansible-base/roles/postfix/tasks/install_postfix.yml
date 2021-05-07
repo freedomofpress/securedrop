@@ -15,12 +15,23 @@
   tags:
     - postfix
 
-- name: Create mapping for outbound address.
+- name: Create outbound mapping for postfix_from_address in /etc/postfix/generic.
   copy:
-    content: "ossec@{{ postfix_hostname }} {{ postfix_from_address }}"
+    content: "ossec@{{ postfix_hostname }} {{ postfix_from_address }}\n"
     dest: /etc/postfix/generic
   notify: update generic_maps
   when: postfix_from_address != ""
+  tags:
+    - postfix
+
+- name: Remove /etc/postfix/generic database because postfix_from_address is empty.
+  file:
+    state: absent
+    dest: "{{ item }}"
+  with_items:
+    - /etc/postfix/generic
+    - /etc/postfix/generic.db
+  when: postfix_from_address == ""
   tags:
     - postfix
 

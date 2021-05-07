@@ -13,8 +13,13 @@ tor_services:
     authenticated: yes # value will automatically be coerced to boolean
     client: admin
 
-# Disable Postfix in staging, since we don't have valid credentials.
+# Postfix is disabled in staging.
 postfix_enabled: False
+
+# But it does get configured.
+sasl_username: "test"
+sasl_domain: "ossec.test"
+sasl_password: "password123"
 
 # Log events for OSSEC alerts we suppress
 log_events_without_ossec_alerts:
