@@ -3,6 +3,7 @@ import binascii
 import datetime
 import base64
 import os
+import secrets
 import pyotp
 import qrcode
 # Using svg because it doesn't require additional dependencies
@@ -35,6 +36,14 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
     LOGIN_HARDENING = False
 
 ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
+
+
+def generate_otp_secret() -> str:
+    """
+    Generate an OTP secret of 160 bits encoded base32
+    """
+    symbols = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ234567')
+    return ''.join(secrets.choice(symbols) for i in range(32))
 
 
 def get_one_or_else(query: Query,
@@ -404,7 +413,7 @@ class Journalist(db.Model):
     is_admin = Column(Boolean)  # type: Column[Optional[bool]]
     session_nonce = Column(Integer, nullable=False, default=0)
 
-    otp_secret = Column(String(16), default=pyotp.random_base32)
+    otp_secret = Column(String(32), default=generate_otp_secret)
     is_totp = Column(Boolean, default=True)  # type: Column[Optional[bool]]
     hotp_counter = Column(Integer, default=0)  # type: Column[Optional[int]]
     last_token = Column(String(6))
@@ -574,7 +583,7 @@ class Journalist(db.Model):
         return is_valid
 
     def regenerate_totp_shared_secret(self) -> None:
-        self.otp_secret = pyotp.random_base32()
+        self.otp_secret = generate_otp_secret()
 
     def set_hotp_secret(self, otp_secret: str) -> None:
         self.otp_secret = base64.b32encode(
