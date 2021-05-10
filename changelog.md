@@ -4,6 +4,13 @@
 
 *
 
+## 1.8.2~rc1
+
+## Operations
+
+* BUGFIX: restore process no longer copies backup tarballs into memory before unpacking them (#5919)
+* BUGFIX: The From: address for OSSEC alerts is now explicitly set (#5916) 
+
 ## 1.8.1
 
 ### Operations
