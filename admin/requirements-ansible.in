@@ -1,4 +1,4 @@
 Jinja2>=2.11.3
-ansible==2.9.7
+ansible>=2.9.13,<2.10.0
 cryptography>=3.2
 netaddr

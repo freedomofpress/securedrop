@@ -6,6 +6,7 @@ mock
 pbr
 pip>=21.1
 pip-tools>=6.1.0
+py>=1.10.0
 pylint>=2.7.0; python_version > '3.6'
 pytest==3.2.0
 requests>=2.22.0
