@@ -2025,7 +2025,7 @@ def test_logo_upload_save_fails(config, journalist_app, test_admin, locale):
                     )
 
                     assert page_language(resp.data) == language_tag(locale)
-                    msgids = ["Unable to process the image file. Try another one."]
+                    msgids = ["Unable to process the image file. Please try another one."]
                     with xfail_untranslated_messages(config, locale, msgids):
                         ins.assert_message_flashed(gettext(msgids[0]), "logo-error")
     finally:
