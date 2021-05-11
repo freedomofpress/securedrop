@@ -10,8 +10,6 @@ from binascii import unhexlify
 from distutils.version import StrictVersion
 from io import BytesIO
 
-import mock
-import pytest
 from bs4 import BeautifulSoup
 from flask import current_app, escape, g, session
 from pyotp import HOTP, TOTP
@@ -254,7 +252,6 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
             fh=(BytesIO(b''), ''),
         ), follow_redirects=True)
         assert resp.status_code == 200
-        assert not g.source.flagged
         app.get('/logout')
 
     with journalist_app.test_client() as app:
@@ -268,27 +265,6 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
 
         resp = app.get(col_url)
         assert resp.status_code == 200
-
-    with source_app.test_client() as app:
-        resp = app.post('/login', data=dict(
-            codename=codename), follow_redirects=True)
-        assert resp.status_code == 200
-        assert not g.source.flagged
-        app.get('/logout')
-
-    with journalist_app.test_client() as app:
-        _login_user(app, test_journo)
-        resp = app.post('/flag', data=dict(
-            filesystem_id=filesystem_id))
-        assert resp.status_code == 200
-
-    with source_app.test_client() as app:
-        resp = app.post('/login', data=dict(
-            codename=codename), follow_redirects=True)
-        assert resp.status_code == 200
-        app.get('/lookup')
-        assert g.source.flagged
-        app.get('/logout')
 
     assert current_app.crypto_util.get_fingerprint(filesystem_id) is not None
 

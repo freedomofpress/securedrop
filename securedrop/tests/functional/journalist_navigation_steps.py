@@ -1065,9 +1065,6 @@ class JournalistNavigationStepsMixin:
         el.location_once_scrolled_into_view
         ActionChains(self.driver).move_to_element(el).click().perform()
 
-    def _journalist_flags_source(self):
-        self.safe_click_by_id("flag-button")
-
     def _journalist_visits_admin(self):
         self.driver.get(self.journalist_location + "/admin")
 

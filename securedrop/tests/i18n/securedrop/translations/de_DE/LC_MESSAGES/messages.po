@@ -501,10 +501,6 @@ msgstr ""
 "Sie können der Person, die diese Dokumente eingereicht hat, eine sichere "
 "Antwort schreiben:"
 
-#: journalist_templates/col.html:86
-msgid "You've flagged this source for reply."
-msgstr "Sie haben diese Quelle für eine Antwort markiert."
-
 #: journalist_templates/col.html:87
 msgid ""
 "An encryption key will be generated for the source the next time they log "

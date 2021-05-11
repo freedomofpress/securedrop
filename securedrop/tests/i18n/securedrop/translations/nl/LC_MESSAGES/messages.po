@@ -495,10 +495,6 @@ msgid ""
 msgstr ""
 "U kunt beveiligd reageren naar de persoon die deze documenten gestuurd heeft:"
 
-#: journalist_templates/col.html:86
-msgid "You've flagged this source for reply."
-msgstr "U heeft deze bron gemarkeerd om te reageren."
-
 #: journalist_templates/col.html:87
 msgid ""
 "An encryption key will be generated for the source the next time they log "

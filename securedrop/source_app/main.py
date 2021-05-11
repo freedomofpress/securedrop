@@ -144,9 +144,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             allow_document_uploads=current_app.instance_config.allow_document_uploads,
             codename=g.codename,
             replies=replies,
-            flagged=g.source.flagged,
             new_user=session.get('new_user', None),
-            haskey=current_app.crypto_util.get_fingerprint(g.filesystem_id),
             form=SubmissionForm(),
         )
 

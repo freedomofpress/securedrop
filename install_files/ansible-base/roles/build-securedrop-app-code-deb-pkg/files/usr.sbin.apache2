@@ -198,7 +198,6 @@
   /var/www/securedrop/journalist_templates/delete.html r,
   /var/www/securedrop/journalist_templates/edit_account.html r,
   /var/www/securedrop/journalist_templates/error.html r,
-  /var/www/securedrop/journalist_templates/flag.html r,
   /var/www/securedrop/journalist_templates/flashed.html r,
   /var/www/securedrop/journalist_templates/index.html r,
   /var/www/securedrop/journalist_templates/js-strings.html r,

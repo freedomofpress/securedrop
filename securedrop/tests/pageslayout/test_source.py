@@ -94,21 +94,6 @@ class TestSourceLayout(
         self._source_deletes_a_journalist_reply()
         self._screenshot('source-deletes_reply.png')
 
-    def test_source_flagged(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._source_delete_key()
-        self._journalist_visits_col()
-        self._journalist_flags_source()
-        self._source_visits_source_homepage()
-        self._source_chooses_to_login()
-        self._source_proceeds_to_login()
-        self._screenshot('source-flagged.png')
-
     def test_notfound(self):
         self._source_not_found()
         self._screenshot('source-notfound.png')

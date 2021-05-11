@@ -169,13 +169,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         finally:
             return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
 
-    @view.route('/flag', methods=('POST',))
-    def flag() -> str:
-        g.source.flagged = True
-        db.session.commit()
-        return render_template('flag.html', filesystem_id=g.filesystem_id,
-                               codename=g.source.journalist_designation)
-
     @view.route('/bulk', methods=('POST',))
     def bulk() -> Union[str, werkzeug.Response]:
         action = request.form['action']

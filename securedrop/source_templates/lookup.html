@@ -19,16 +19,6 @@
 
 <div class="center">
   {% include 'flashed.html' %}
-
-  {% if flagged and not haskey %}
-    <div class="flash notification">
-      <div class="message">
-        <strong>{{ gettext('Sorry we haven\'t responded yet!') }}</strong>
-        <p>{{ gettext('Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again.') }}</p>
-        <p>{{ gettext('Please rest assured that we were able to download your submission, and check back again later for a reply.') }}</p>
-      </div>
-    </div>
-  {% endif %}
 </div>
 
 {% if allow_document_uploads %}
