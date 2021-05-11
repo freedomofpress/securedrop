@@ -121,23 +121,9 @@ def test_alembic_head_matches_db_models(journalist_app,
 
 
 @pytest.mark.parametrize('migration', ALL_MIGRATIONS)
-def test_alembic_migration_upgrade(alembic_config, config, migration):
-    # run migrations in sequence from base -> head
-    for mig in list_migrations(alembic_config, migration):
-        upgrade(alembic_config, mig)
-
-
-@pytest.mark.parametrize('migration', ALL_MIGRATIONS)
-def test_alembic_migration_downgrade(alembic_config, config, migration):
-    # upgrade to the parameterized test case ("head")
+def test_alembic_migration_up_and_down(alembic_config, config, migration):
     upgrade(alembic_config, migration)
-
-    # run migrations in sequence from "head" -> base
-    migrations = list_migrations(alembic_config, migration)
-    migrations.reverse()
-
-    for mig in migrations:
-        downgrade(alembic_config, mig)
+    downgrade(alembic_config, "base")
 
 
 @pytest.mark.parametrize('migration', ALL_MIGRATIONS)
