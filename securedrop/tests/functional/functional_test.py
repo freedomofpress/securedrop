@@ -53,6 +53,10 @@ LOGGER.setLevel(logging.WARNING)
 FIREFOX = "firefox"
 TORBROWSER = "torbrowser"
 
+# width & height of the browser window. If the top of screenshots is cropped,
+# increase the height of the window so the the whole page fits in the window.
+BROWSER_SIZE = (1024, 1400)
+
 
 class FunctionalTest(object):
     gpg = None
@@ -117,7 +121,7 @@ class FunctionalTest(object):
                 )
                 logging.info("Created Tor Browser web driver")
                 self.torbrowser_driver.set_window_position(0, 0)
-                self.torbrowser_driver.set_window_size(1024, 1200)
+                self.torbrowser_driver.set_window_size(*BROWSER_SIZE)
                 break
             except Exception as e:
                 logging.error("Error creating Tor Browser web driver: %s", e)
@@ -141,7 +145,7 @@ class FunctionalTest(object):
                     firefox_binary=FIREFOX_PATH, firefox_profile=profile
                 )
                 self.firefox_driver.set_window_position(0, 0)
-                self.firefox_driver.set_window_size(1024, 1200)
+                self.firefox_driver.set_window_size(*BROWSER_SIZE)
                 logging.info("Created Firefox web driver")
                 break
             except Exception as e:
