@@ -16,7 +16,6 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         gdb \
         git \
         gnupg2 \
-        haveged \
         inotify-tools \
         libffi-dev \
         libssl-dev \

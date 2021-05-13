@@ -22,7 +22,6 @@ def test_apache_default_docroot_is_absent(host):
     'apparmor-utils',
     'coreutils',
     'gnupg2',
-    'haveged',
     'libapache2-mod-xsendfile',
     'libpython{}'.format(python_version),
     'paxctld',
@@ -39,6 +38,22 @@ def test_securedrop_application_apt_dependencies(host, package):
     due to specification in Depends in package control file.
     """
     assert host.package(package).is_installed
+
+
+@pytest.mark.parametrize('package', [
+    'cron-apt',
+    'haveged',
+    'libapache2-mod-wsgi',
+    'ntp',
+    'ntpdate',
+    'supervisor'
+])
+def test_unwanted_packages_absent(host, package):
+    """
+    Ensure packages that conflict with `securedrop-app-code`
+    or are otherwise unwanted are not present.
+    """
+    assert not host.package(package).is_installed
 
 
 @pytest.mark.skip_in_prod
