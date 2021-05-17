@@ -1,4 +1,3 @@
-import os.path
 import pytest
 
 import testutils
@@ -9,9 +8,12 @@ testinfra_hosts = [sdvars.app_hostname]
 
 @pytest.mark.parametrize('exp_pip_pkg', sdvars.pip_deps)
 def test_app_pip_deps(host, exp_pip_pkg):
-    """ Ensure pip dependencies are installed """
-    pip = host.pip_package.get_packages(pip_path=os.path.join(sdvars.securedrop_venv_bin, "pip"))
-    assert pip[exp_pip_pkg['name']]['version'] == exp_pip_pkg['version']
+    """ Ensure expected package versions are installed """
+    cmd = "{}/bin/python3 -c \"from importlib.metadata import version; print(version('{}'))\"".format( # noqa
+        sdvars.securedrop_venv, exp_pip_pkg['name']
+    )
+    result = host.run(cmd)
+    assert result.stdout.strip() == exp_pip_pkg['version']
 
 
 @pytest.mark.skip_in_prod
