@@ -57,7 +57,10 @@ EOF
         if [ -f /etc/postfix/generic ]
         then
             postmap /etc/postfix/generic
-            postconf -e smtp_generic_maps=hash:/etc/postfix/generic
+            if [ -f /etc/postfix/generic.db ]
+            then
+               postconf -e smtp_generic_maps=hash:/etc/postfix/generic
+            fi
         fi
     fi
 }
