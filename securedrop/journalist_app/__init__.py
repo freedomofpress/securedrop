@@ -76,6 +76,7 @@ def create_app(config: 'SDConfig') -> Flask:
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> 'Response':
+        app.logger.error("The CSRF token is invalid.")
         # render the message first to ensure it's localized.
         msg = gettext('You have been logged out due to inactivity.')
         session.clear()
