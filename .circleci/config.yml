@@ -104,12 +104,12 @@ jobs:
     steps:
       - checkout
       - *rebaseontarget
-      - *createcachedir
-      - *restorecache
-      - *loadimagelayers
-      - *dockerimagebuild
-      - *saveimagelayers
-      - *savecache
+      - *focalcreatecachedir
+      - *focalrestorecache
+      - *focalloadimagelayers
+      - *focaldockerimagebuild
+      - *focalsaveimagelayers
+      - *focalsavecache
       - *installenchant
 
       - run:
