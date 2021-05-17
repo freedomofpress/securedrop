@@ -91,6 +91,7 @@ def create_app(config: 'SDConfig') -> Flask:
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> 'Response':
+        app.logger.error("The CSRF token is invalid.")
         session.clear()
         msg = gettext('You have been logged out due to inactivity.')
         flash(msg, 'error')
