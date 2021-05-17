@@ -305,7 +305,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             db.session.commit()
         return redirect(url_for('admin.edit_user', user_id=user_id))
 
-    @view.route('/ossec-test')
+    @view.route('/ossec-test', methods=('POST',))
     @admin_required
     def ossec_test() -> werkzeug.Response:
         current_app.logger.error('This is a test OSSEC alert')
