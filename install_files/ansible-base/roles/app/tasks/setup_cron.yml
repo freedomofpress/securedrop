@@ -20,6 +20,7 @@
   cron:
     name: Update the number of submissions in the past 24h
     job: "{{ securedrop_code }}/manage.py were-there-submissions-today"
+    minute: "0"
     # 0 -> 23, 1 -> 0, 2 -> 1, ... 23 -> 22
     hour: "{{ (daily_reboot_time + 23) % 24 }}"
   tags:
