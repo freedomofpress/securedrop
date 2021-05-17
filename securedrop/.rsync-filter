@@ -1,4 +1,5 @@
 exclude config.py
+exclude upload-screenshots.py
 include alembic.ini
 include alembic/
 include alembic/env.py
