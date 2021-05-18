@@ -188,6 +188,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         journalist_filename = g.source.journalist_filename
         first_submission = g.source.interaction_count == 0
 
+        if not os.path.exists(current_app.storage.path(g.filesystem_id)):
+            current_app.logger.debug("Store directory not found for source '{}', creating one."
+                                     .format(g.source.journalist_designation))
+            os.mkdir(current_app.storage.path(g.filesystem_id))
+
         if msg:
             g.source.interaction_count += 1
             fnames.append(
