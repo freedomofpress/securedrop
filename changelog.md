@@ -4,6 +4,10 @@
 
 *
 
+## 1.8.2~rc3
+
+* BUGFIX: use post method for ossec-test-alert endpoint (#5947)
+
 ## 1.8.2~rc2
 
 ### Operations
