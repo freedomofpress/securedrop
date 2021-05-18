@@ -4,22 +4,17 @@
 
 *
 
-## 1.8.2~rc3
+## 1.8.2
+
+### Web applications
 
 * BUGFIX: use post method for ossec-test-alert endpoint (#5947)
-
-## 1.8.2~rc2
 
 ### Operations
 
 * Add new pubkey for future release signing key rotation (#5930)
-
-## 1.8.2~rc1
-
-### Operations
-
 * BUGFIX: restore process no longer copies backup tarballs into memory before unpacking them (#5919)
-* BUGFIX: The From: address for OSSEC alerts is now explicitly set (#5916)
+* BUGFIX: The From: address for OSSEC alerts is now explicitly set (#5916, #5937)
 
 ## 1.8.1
 
