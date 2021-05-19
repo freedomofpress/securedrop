@@ -140,17 +140,6 @@ def test_grsecurity_paxtest(host):
             host.run("apt-get remove -y paxtest")
 
 
-@pytest.mark.skip_in_prod
-def test_grub_pc_marked_manual(host):
-    """
-    Ensure the `grub-pc` packaged is marked as manually installed.
-    This is necessary for VirtualBox with Vagrant.
-    """
-    c = host.run('apt-mark showmanual grub-pc')
-    assert c.rc == 0
-    assert c.stdout.strip() == "grub-pc"
-
-
 def test_apt_autoremove(host):
     """
     Ensure old packages have been autoremoved.

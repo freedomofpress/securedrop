@@ -31,6 +31,8 @@
   tags:
     - dns
 
+  # These services will be inside staging VMs via the Bento boxes,
+  # even if those boxes are running on libvirt.
 - name: Disable VirtualBox services to avoid conflict with systemd-timesyncd.
   systemd:
     name: "{{ item }}"

@@ -2,7 +2,6 @@
 # Wrapper script to determine which VM driver is appropriate for the staging
 # environment, given the host OS and available tooling. Supports:
 #
-#   * VirtualBox (the default)
 #   * Libvirt/KVM
 #   * Qubes (via Admin API)
 #
@@ -26,8 +25,9 @@ elif [[ "${OSTYPE:-}" == "linux-gnu" ]]; then
     # Default to Libvirt for Linux users, which works well with Tails VM virtualization.
     securedrop_vm_provider="libvirt"
 else
-    # Default to VirtualBox, since it's the safest bet.
-    securedrop_vm_provider="virtualbox"
+    # We previously maintained Virtualbox support, but don't any longer. Should we?
+    echo "WARNING: Unsupported platform. Libvirt staging environment may not work properly."
+    securedrop_vm_provider="libvirt"
 fi
 
 # Expect the scenario to reside in the molecule/ directory.

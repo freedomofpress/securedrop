@@ -11,57 +11,6 @@ Vagrant.configure("2") do |config|
   # so the key insertion feature should be disabled.
   config.ssh.insert_key = false
 
-  # The staging hosts are just like production but allow non-Tor access
-  # for the web interfaces and ssh.
-  config.vm.define 'mon-staging', autostart: false do |staging|
-    if ENV['SECUREDROP_SSH_OVER_TOR']
-      config.ssh.host = find_ssh_aths("mon-ssh-aths")
-      config.ssh.proxy_command = tor_ssh_proxy_command
-      config.ssh.port = 22
-    elsif ARGV[0] == "ssh"
-      config.ssh.host = "10.0.1.3"
-      config.ssh.port = 22
-    end
-    staging.vm.hostname = "mon-staging"
-    staging.vm.box = "bento/ubuntu-20.04"
-    staging.vm.network "private_network", ip: "10.0.1.3"
-    staging.vm.synced_folder './', '/vagrant', disabled: true
-    staging.vm.provider "libvirt" do |lv, override|
-      lv.video_type = "virtio"
-    end
-  end
-
-  config.vm.define 'app-staging', autostart: false do |staging|
-    if ENV['SECUREDROP_SSH_OVER_TOR']
-      config.ssh.host = find_ssh_aths("app-ssh-aths")
-      config.ssh.proxy_command = tor_ssh_proxy_command
-      config.ssh.port = 22
-    elsif ARGV[0] == "ssh"
-      config.ssh.host = "10.0.1.2"
-      config.ssh.port = 22
-    end
-    staging.vm.hostname = "app-staging"
-    staging.vm.box = "bento/ubuntu-20.04"
-    staging.vm.network "private_network", ip: "10.0.1.2"
-    staging.vm.synced_folder './', '/vagrant', disabled: true
-    staging.vm.provider "virtualbox" do |v|
-      v.memory = 1024
-    end
-    staging.vm.provider "libvirt" do |lv, override|
-      lv.memory = 1024
-      lv.video_type = "virtio"
-    end
-    staging.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
-      ansible.inventory_path = "install_files/ansible-base/inventory-staging"
-      ansible.verbose = 'v'
-      # Taken from the parallel execution tips and tricks
-      # https://docs.vagrantup.com/v2/provisioning/ansible.html
-      ansible.limit = 'all,localhost'
-      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
-    end
-  end
-
   # The prod hosts are just like production but are virtualized.
   # All access to SSH and the web interfaces is only over Tor.
   config.vm.define 'mon-prod', autostart: false do |prod|
@@ -72,7 +21,7 @@ Vagrant.configure("2") do |config|
     end
     prod.vm.hostname = "mon-prod"
     prod.vm.box = "bento/ubuntu-20.04"
-    prod.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: internal_network_name
+    prod.vm.network "private_network", ip: "10.0.1.5"
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "libvirt" do |lv, override|
       lv.video_type = "virtio"
@@ -87,11 +36,8 @@ Vagrant.configure("2") do |config|
     end
     prod.vm.hostname = "app-prod"
     prod.vm.box = "bento/ubuntu-20.04"
-    prod.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: internal_network_name
+    prod.vm.network "private_network", ip: "10.0.1.4"
     prod.vm.synced_folder './', '/vagrant', disabled: true
-    prod.vm.provider "virtualbox" do |v|
-      v.memory = 1024
-    end
     prod.vm.provider "libvirt" do |lv, override|
       lv.memory = 1024
       lv.video_type = "virtio"
@@ -116,11 +62,8 @@ Vagrant.configure("2") do |config|
   config.vm.define 'apt-local', autostart: false do |prod|
     prod.vm.hostname = "apt-local"
     prod.vm.box = "bento/ubuntu-20.04"
-    prod.vm.network "private_network", ip: "10.0.1.7", virtualbox__intnet: internal_network_name
+    prod.vm.network "private_network", ip: "10.0.1.7"
     prod.vm.synced_folder './', '/vagrant', disabled: true
-    prod.vm.provider "virtualbox" do |v|
-      v.memory = 1024
-    end
     prod.vm.provider "libvirt" do |lv, override|
       lv.memory = 1024
       lv.video_type = "virtio"
@@ -176,13 +119,4 @@ def tor_ssh_proxy_command
     exit(1)
   end
   return "#{base_cmd} 127.0.0.1:9050 %h %p"
-end
-
-# Create a unique name for the VirtualBox internal network,
-# based on the directory name of the repo. This is to avoid
-# accidental IP collisions when running multiple instances
-# of the staging or prod environment concurrently.
-def internal_network_name
-  repo_root = File.expand_path(File.dirname(__FILE__))
-  return File.basename(repo_root)
 end
