@@ -4,7 +4,7 @@ import flask
 from flask import Blueprint, current_app, make_response
 
 from sdconfig import SDConfig
-from source_app.utils import get_sourcev2_url, get_sourcev3_url
+from source_app.utils import get_sourcev3_url
 
 import server_os
 import version
@@ -22,7 +22,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             'sd_version': version.__version__,
             'server_os': server_os.get_os_release(),
             'supported_languages': config.SUPPORTED_LOCALES,
-            'v2_source_url': get_sourcev2_url(),
             'v3_source_url': get_sourcev3_url()
         }
         resp = make_response(json.dumps(meta))

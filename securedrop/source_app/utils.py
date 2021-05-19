@@ -118,7 +118,7 @@ def check_url_file(path: str, regexp: str) -> 'Optional[str]':
     """
     Check that a file exists at the path given and contains a single line
     matching the regexp. Used for checking the source interface address
-    files at /var/lib/securedrop/source_{v2,v3}_url.
+    files in /var/lib/securedrop (as the Apache user can't read Tor config)
     """
     try:
         f = open(path, "r")
@@ -130,11 +130,6 @@ def check_url_file(path: str, regexp: str) -> 'Optional[str]':
             return None
     except IOError:
         return None
-
-
-def get_sourcev2_url() -> 'Optional[str]':
-    return check_url_file("/var/lib/securedrop/source_v2_url",
-                          r"^[a-z0-9]{16}\.onion$")
 
 
 def get_sourcev3_url() -> 'Optional[str]':
