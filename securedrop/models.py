@@ -35,8 +35,8 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
 ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
 
 
-def generate_otp_secret() -> bytes:
-    return base64.b32encode(os.urandom(20))
+def generate_otp_secret() -> str:
+    return base64.b32encode(os.urandom(20)).decode()
 
 
 def get_one_or_else(query: Query,
