@@ -1,16 +1,16 @@
 ---
-# Playbook to update SecureDrop VMs to install Focal packages from a local repo
+# Playbook to update SecureDrop VMs to via local repo
 #
 # Steps to use this playbook:
 #
-#   1. On host machine, build packages with `make build-debs-focal`
-#   2. On host machine, provision local apt repo with `vagrant up apt-local`
+#   1. On host machine, build packages with `make build-debs`
+#   2. On host machine, provision local apt repo with `make upgrade-start`
 #   3. Switch to Admin Workstation
-#   3. Continue with prod provisioning as far as `./securedrop-admin sdconfig`
+#   3. Continue with prod provisioning as far as `./securedrop-admin tailsconfig`
 #   5. Run `source admin/.venv3/bin/activate` (so ansible commands work)
 #   6. Run `cd install_files/ansible-base`
 #   7. Run `ansible-playbook -vv --diff securedrop-apt-local.yml`
-#   8. Proceed with `./securedrop-admin install`
+#   8. Proceed with upgrading packages inside VMs
 
 - name: Configure prod host to prioritize local packages.
   environment:

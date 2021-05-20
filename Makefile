@@ -232,34 +232,15 @@ docker-vnc:  ## Open a VNC connection to a running Docker instance.
 	@echo
 
 .PHONY: upgrade-start
-upgrade-start:  ## Boot an upgrade test environment using libvirt.
+upgrade-start:  ## Create a local apt server for testing upgrades in VMs
 	@echo "███ Starting upgrade test environment..."
-	@SD_UPGRADE_BASE=$(STABLE_VER) molecule converge -s upgrade
-	@echo
-
-.PHONY: upgrade-start-qa
-upgrade-start-qa:  ## Boot an upgrade test env using libvirt in remote apt mode.
-	@echo "███ Starting upgrade test environment for remote apt..."
-	@SD_UPGRADE_BASE=$(STABLE_VER) QA_APTTEST=yes molecule converge -s upgrade
+	molecule converge -s upgrade
 	@echo
 
 .PHONY: upgrade-destroy
 upgrade-destroy:  ## Destroy an upgrade test environment.
 	@echo "███ Destroying upgrade test environment..."
-	@SD_UPGRADE_BASE=$(STABLE_VER) molecule destroy -s upgrade
-	@echo
-
-.PHONY: upgrade-test-local
-upgrade-test-local:  ## Upgrade a running test environment with local apt packages.
-	@echo "Testing upgrade with local apt packages..."
-	@molecule side-effect -s upgrade
-	@echo
-
-.PHONY: upgrade-test-qa
-upgrade-test-qa:  ## Upgrade a running test environment with apt packages from the QA repo.
-	@echo "Testing upgrade with packages from QA apt repo..."
-	@QA_APTTEST=yes molecule converge -s upgrade -- --diff -t apt
-	@QA_APTTEST=yes molecule side-effect -s upgrade
+	molecule destroy -s upgrade
 	@echo
 
 ##############
