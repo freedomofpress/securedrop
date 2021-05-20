@@ -407,7 +407,7 @@ class Journalist(db.Model):
     is_admin = Column(Boolean)  # type: Column[Optional[bool]]
     session_nonce = Column(Integer, nullable=False, default=0)
 
-    otp_secret = Column(String(16), default=generate_otp_secret)
+    otp_secret = Column(String(32), default=generate_otp_secret)
     is_totp = Column(Boolean, default=True)  # type: Column[Optional[bool]]
     hotp_counter = Column(Integer, default=0)  # type: Column[Optional[int]]
     last_token = Column(String(6))
