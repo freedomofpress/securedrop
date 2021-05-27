@@ -597,6 +597,16 @@ def test_authorized_user_can_delete_source_conversation(journalist_app,
         assert not Source.query.filter(uuid == uuid).all() == []
 
 
+def test_source_conversation_does_not_support_get(journalist_app, test_source,
+                                                  journalist_api_token):
+    with journalist_app.test_client() as app:
+        uuid = test_source['source'].uuid
+        response = app.get(url_for('api.source_conversation', source_uuid=uuid),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 405
+
+
 def test_authorized_user_can_delete_source_collection(journalist_app,
                                                       test_source,
                                                       journalist_api_token):
