@@ -9,9 +9,9 @@
   assert:
     that:
       - ansible_lsb.id == "Tails" or tails_os_string.matched
-      - ansible_lsb.major_release|int >= 9
+      - ansible_lsb.major_release|int >= 10
     msg: >-
-      SecureDrop requires Tails 3 or greater for workstation environments.
+      SecureDrop requires Tails 4 or greater for workstation environments.
 
 - name: Check for persistence volume.
   stat:
@@ -73,18 +73,16 @@
       The `app-journalist.auth_private` file is missing. Please add the missing
       file under `~/Persistent/securedrop/install_files/ansible-base/ and
       retry the install command.
-  when:
-    - enable_ssh_over_tor
-    - v3_ssh_auth_file_count == "2"
 
 - name: Confirm that the Tor keys file is present
   assert:
     that:
       - v3_tor_key.stat.exists
     msg: >-
-      Authentication files for v3 onion services were found, but the
+      Authentication files for v3 SSH onion services were found, but the
       corresponding `tor_v3_keys.json` file is missing. To enable updates
       to an existing SecureDrop instance, please add this file under
       `~/Persistent/securedrop/install_files/ansible-base`.
   when:
-    - v3_journalist_auth_file.stat.exists
+    - enable_ssh_over_tor
+    - v3_ssh_auth_file_count == "2"
