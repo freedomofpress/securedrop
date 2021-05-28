@@ -42,6 +42,10 @@ COPY aptpreferences.conf /etc/apt/preferences.d/ubuntu-groovy
 
 RUN apt-get update && apt-get install -y dh-virtualenv
 
+# Install Rust for building cryptography
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain=1.52.1 -y
+RUN echo "source $HOME/.cargo/env" >> $HOME/.bashrc
+
 RUN paxctl -cm /usr/bin/python3.8 && mkdir -p /tmp/build
 RUN apt-get clean \
         && rm -rf /var/lib/apt/lists/*
