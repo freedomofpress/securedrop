@@ -121,6 +121,7 @@
     chdir: "{{ securedrop_app_code_deb_dir }}"
   environment:
     DH_VIRTUALENV_INSTALL_ROOT: "/opt/venvs"
+    PATH: /root/.cargo/bin:{{ ansible_env.PATH }}
 
 - name: Find newly built Debian package
   find:
