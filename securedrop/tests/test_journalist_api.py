@@ -181,6 +181,7 @@ def test_user_without_token_cannot_del_protected_endpoints(journalist_app,
             url_for('api.single_submission', source_uuid=uuid,
                     submission_uuid=test_submissions['submissions'][0].uuid),
             url_for('api.remove_star', source_uuid=uuid),
+            url_for('api.source_conversation', source_uuid=uuid),
             ]
 
     with journalist_app.test_client() as app:
@@ -570,6 +571,40 @@ def test_authorized_user_can_delete_single_reply(journalist_app, test_files,
 
         # Reply should now be gone.
         assert Reply.query.filter(Reply.uuid == reply_uuid).all() == []
+
+
+def test_authorized_user_can_delete_source_conversation(journalist_app,
+                                                        test_files,
+                                                        journalist_api_token):
+    with journalist_app.test_client() as app:
+        uuid = test_files['source'].uuid
+        source_id = test_files['source'].id
+
+        # Submissions and Replies both exist
+        assert not Submission.query.filter(source_id == source_id).all() == []
+        assert not Reply.query.filter(source_id == source_id).all() == []
+
+        response = app.delete(url_for('api.source_conversation', source_uuid=uuid),
+                              headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 200
+
+        # Submissions and Replies do not exist
+        assert Submission.query.filter(source_id == source_id).all() == []
+        assert Reply.query.filter(source_id == source_id).all() == []
+
+        # Source still exists
+        assert not Source.query.filter(uuid == uuid).all() == []
+
+
+def test_source_conversation_does_not_support_get(journalist_app, test_source,
+                                                  journalist_api_token):
+    with journalist_app.test_client() as app:
+        uuid = test_source['source'].uuid
+        response = app.get(url_for('api.source_conversation', source_uuid=uuid),
+                           headers=get_api_headers(journalist_api_token))
+
+        assert response.status_code == 405
 
 
 def test_authorized_user_can_delete_source_collection(journalist_app,
