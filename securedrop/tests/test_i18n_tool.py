@@ -14,6 +14,24 @@ import time
 from sh import sed, msginit, pybabel, git, touch
 
 
+def dummy_translate(po):
+    buf = None
+    with io.open(po, "r") as in_file:
+        buf = in_file.readlines()
+
+    with io.open(po, "w") as out_file:
+        for line in buf:
+            if line.startswith("msgid "):
+                out_file.write(line)
+                idstr = line.split("msgid ", 1)
+                out_file.write("msgstr {}".format(idstr[1]))
+
+            elif line.startswith("msgstr "):
+                pass
+            else:
+                out_file.write(line)
+
+
 class TestI18NTool(object):
 
     def setup(self):
@@ -145,6 +163,10 @@ class TestI18NTool(object):
         locale = 'en_US'
         locale_dir = join(str(tmpdir), locale)
         pybabel('init', '-i', messages_file, '-d', str(tmpdir), '-l', locale)
+
+        po_file = join(locale_dir, 'LC_MESSAGES/messages.po')
+        dummy_translate(po_file)
+
         mo_file = join(locale_dir, 'LC_MESSAGES/messages.mo')
         assert not exists(mo_file)
         i18n_tool.I18NTool().main(args)
@@ -194,6 +216,10 @@ class TestI18NTool(object):
         assert not exists(mo_file)
         current_po_mtime = getmtime(po_file)
         assert old_po_mtime < current_po_mtime
+
+        #
+        # Translation would occur here - let's fake it
+        dummy_translate(po_file)
 
         #
         # Compile but do not extract+update
