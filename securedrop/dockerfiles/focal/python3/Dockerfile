@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y paxctl && \
     paxctl -cm /usr/bin/mono-sgen && dpkg-reconfigure mono-runtime-sgen && \
     apt-get install -y apache2-dev coreutils devscripts vim \
                        python3-pip python3-all python3-venv virtualenv libpython3.8-dev libssl-dev \
-                       gnupg2 ruby redis-server git xvfb haveged curl wget \
+                       gnupg2 ruby redis-server git xvfb curl wget \
                        gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo \
                        libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
                        libcairo-gobject2 libgtk-3-0 libstartup-notification0 tor

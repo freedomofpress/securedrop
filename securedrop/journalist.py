@@ -4,7 +4,7 @@ from sdconfig import config
 
 from journalist_app import create_app
 from models import Source
-from source_app.utils import asynchronous
+from execution import asynchronous
 
 app = create_app(config)
 

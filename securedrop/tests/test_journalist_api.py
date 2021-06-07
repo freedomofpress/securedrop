@@ -301,20 +301,6 @@ def test_get_non_existant_source_404s(journalist_app, journalist_api_token):
         assert response.status_code == 404
 
 
-def test_authorized_user_can_flag_a_source(journalist_app, test_source,
-                                           journalist_api_token):
-    with journalist_app.test_client() as app:
-        uuid = test_source['source'].uuid
-        source_id = test_source['source'].id
-        response = app.post(url_for('api.flag', source_uuid=uuid),
-                            headers=get_api_headers(journalist_api_token))
-
-        assert response.status_code == 200
-
-        # Verify that the source was flagged.
-        assert Source.query.get(source_id).flagged
-
-
 def test_authorized_user_can_star_a_source(journalist_app, test_source,
                                            journalist_api_token):
     with journalist_app.test_client() as app:

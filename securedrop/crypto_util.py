@@ -219,8 +219,6 @@ class CryptoUtil:
     def delete_reply_keypair(self, source_filesystem_id: str) -> None:
         fingerprint = self.get_fingerprint(source_filesystem_id)
 
-        # If this source was never flagged for review, they won't have a reply
-        # keypair
         if not fingerprint:
             return
 

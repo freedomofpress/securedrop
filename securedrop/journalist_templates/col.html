@@ -106,16 +106,9 @@
       <hr class="no-line">
       <button id="reply-button" class="button pull-right" type="submit">{{ gettext('SUBMIT') }}</button>
     </form>
-  {% elif source.flagged %}
-    <p class="notification">{{ gettext("You've flagged this source for reply.") }}</p>
-    <p>{{ gettext("An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here.") }}</p>
   {% else %}
-    <p>{{ gettext("Click below if you would like to write a reply to this source.") }}</p>
-    <form action="{{ url_for('main.flag') }}" method="post">
-      <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <button id="flag-button" type="submit">{{ gettext('FLAG THIS SOURCE FOR REPLY') }}</button>
-    </form>
+    <p class="notification">{{ gettext("This source has no encryption key.") }}</p>
+    <p>{{ gettext("An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here.") }}</p>
   {% endif %}
   <hr class="no-line">
   <form id="delete-collection" action="{{ url_for('col.delete_single', filesystem_id=filesystem_id) }}" method="post">

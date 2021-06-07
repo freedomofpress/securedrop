@@ -10,8 +10,6 @@ from binascii import unhexlify
 from distutils.version import StrictVersion
 from io import BytesIO
 
-import mock
-import pytest
 from bs4 import BeautifulSoup
 from flask import current_app, escape, g, session
 from pyotp import HOTP, TOTP
@@ -25,18 +23,6 @@ os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
 # Seed the RNG for deterministic testing
 random.seed('ಠ_ಠ')
-
-
-@pytest.fixture(autouse=True, scope="module")
-def patch_get_entropy_estimate():
-    mock_get_entropy_estimate = mock.patch(
-        "source_app.main.get_entropy_estimate",
-        return_value=8192
-    ).start()
-
-    yield
-
-    mock_get_entropy_estimate.stop()
 
 
 def _login_user(app, user_dict):
@@ -266,7 +252,6 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
             fh=(BytesIO(b''), ''),
         ), follow_redirects=True)
         assert resp.status_code == 200
-        assert not g.source.flagged
         app.get('/logout')
 
     with journalist_app.test_client() as app:
@@ -281,31 +266,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
         resp = app.get(col_url)
         assert resp.status_code == 200
 
-    with source_app.test_client() as app:
-        resp = app.post('/login', data=dict(
-            codename=codename), follow_redirects=True)
-        assert resp.status_code == 200
-        assert not g.source.flagged
-        app.get('/logout')
-
-    with journalist_app.test_client() as app:
-        _login_user(app, test_journo)
-        resp = app.post('/flag', data=dict(
-            filesystem_id=filesystem_id))
-        assert resp.status_code == 200
-
-    with source_app.test_client() as app:
-        resp = app.post('/login', data=dict(
-            codename=codename), follow_redirects=True)
-        assert resp.status_code == 200
-        app.get('/lookup')
-        assert g.source.flagged
-        app.get('/logout')
-
-    # Block up to 15s for the reply keypair, so we can test sending a reply
-    def assertion():
-        assert current_app.crypto_util.get_fingerprint(filesystem_id) is not None
-    utils.asynchronous.wait_for_assertion(assertion, 15)
+    assert current_app.crypto_util.get_fingerprint(filesystem_id) is not None
 
     # Create 2 replies to test deleting on journalist and source interface
     with journalist_app.test_client() as app:
@@ -472,7 +433,6 @@ def test_unicode_reply_with_ansi_env(journalist_app,
 
 def test_delete_collection(mocker, source_app, journalist_app, test_journo):
     """Test the "delete collection" button on each collection page"""
-    async_genkey = mocker.patch('source_app.main.async_genkey')
 
     # first, add a source
     with source_app.test_client() as app:
@@ -510,7 +470,6 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
             "The account and data for the source {} have been deleted.".format(col_name)) in text
 
         assert "No documents have been submitted!" in text
-        assert async_genkey.called
 
         # Make sure the collection is deleted from the filesystem
         def assertion():
@@ -522,7 +481,6 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
 def test_delete_collections(mocker, journalist_app, source_app, test_journo):
     """Test the "delete selected" checkboxes on the index page that can be
     used to delete multiple collections"""
-    async_genkey = mocker.patch('source_app.main.async_genkey')
 
     # first, add some sources
     with source_app.test_client() as app:
@@ -552,7 +510,6 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "The accounts and all data for {} sources".format(num_sources) in text
-        assert async_genkey.called
 
         # simulate the source_deleter's work
         journalist_app_module.utils.purge_deleted_sources()

@@ -56,7 +56,6 @@ class Source(db.Model):
     uuid = Column(String(36), unique=True, nullable=False)
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
-    flagged = Column(Boolean, default=False)
     last_updated = Column(DateTime)
     star = relationship(
         "SourceStar", uselist=False, backref="source"
@@ -132,7 +131,7 @@ class Source(db.Model):
             'uuid': self.uuid,
             'url': url_for('api.single_source', source_uuid=self.uuid),
             'journalist_designation': self.journalist_designation,
-            'is_flagged': self.flagged,
+            'is_flagged': False,
             'is_starred': starred,
             'last_updated': last_updated,
             'interaction_count': self.interaction_count,

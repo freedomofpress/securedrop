@@ -175,11 +175,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @api.route('/sources/<source_uuid>/flag', methods=['POST'])
     @token_required
     def flag(source_uuid: str) -> Tuple[flask.Response, int]:
-        source = get_or_404(Source, source_uuid,
-                            column=Source.uuid)
-        source.flagged = True
-        db.session.commit()
-        return jsonify({'message': 'Source flagged for reply'}), 200
+        return jsonify({'message': 'Sources no longer need to be flagged for reply'}), 200
 
     @api.route('/sources/<source_uuid>/conversation', methods=['DELETE'])
     @token_required

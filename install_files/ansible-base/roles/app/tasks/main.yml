@@ -17,5 +17,3 @@
 - include: install_and_harden_apache.yml
 
 - include: setup_cron.yml
-
-- include: configure_haveged.yml
