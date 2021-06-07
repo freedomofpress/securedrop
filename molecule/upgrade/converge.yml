@@ -2,12 +2,14 @@
 - name: Confirm local debs present
   hosts: localhost
   gather_facts: no
+  vars:
+    molecule_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
   tasks:
       # Before running apt-server logic, confirm we have local
       # debs built.
     - name: Find local deb files
       find:
-        paths: "../build/focal/"
+        paths: "{{ molecule_dir }}/../../build/focal/"
         patterns: "*.deb"
       register: _find_debs_result
 
@@ -21,13 +23,13 @@
   hosts: apt-local
   become: yes
   tasks:
-    - import_tasks: ../molecule/upgrade/local_apt_mirror.yml
-    - import_tasks: ../molecule/upgrade/local_apt_with_debs.yml
+    - import_tasks: local_apt_mirror.yml
+    - import_tasks: local_apt_with_debs.yml
 
   vars:
     QA_APTTEST: False
     rep_dist: "focal"
-    molecule_dir: "../molecule/upgrade"
+    molecule_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
     dpkg_dir: /var/repos/debs
     rep_origin: SecureDrop
     rep_component: main

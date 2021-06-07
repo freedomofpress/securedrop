@@ -1,0 +1,40 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+platforms:
+  - name: app-prod
+    box: bento/ubuntu-20.04
+    raw_config_args:
+      - "cpu_mode = 'host-passthrough'"
+      - "video_type = 'virtio'"
+    instance_raw_config_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true"
+      - "vm.network 'private_network', ip: '10.0.1.4'"
+      - "ssh.insert_key = false"
+    memory: 1024
+    private_ip: 10.0.1.4
+    groups:
+      - securedrop_application_server
+      - securedrop
+
+  - name: mon-prod
+    box: bento/ubuntu-20.04
+    raw_config_args:
+      - "cpu_mode = 'host-passthrough'"
+      - "video_type = 'virtio'"
+    instance_raw_config_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true"
+      - "vm.network 'private_network', ip: '10.0.1.5'"
+      - "ssh.insert_key = false"
+    memory: 1024
+    private_ip: 10.0.1.5
+    groups:
+      - securedrop_monitor_server
+      - securedrop
+
+scenario:
+  name: libvirt-prod-focal
