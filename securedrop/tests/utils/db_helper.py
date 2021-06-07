@@ -207,7 +207,7 @@ def new_codename(client, session):
     return codename
 
 
-def bulk_setup_for_seen_only(journo) -> List[Dict]:
+def bulk_setup_for_seen_only(journo: Journalist) -> List[Dict]:
     """
     Create some sources with some seen submissions that are not marked as 'downloaded' in the
     database and some seen replies from journo.
