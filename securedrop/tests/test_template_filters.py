@@ -47,7 +47,7 @@ def verify_rel_datetime_format(app):
         test_time = datetime.utcnow() - timedelta(hours=2)
         result = template_filters.rel_datetime_format(test_time,
                                                       relative=True)
-        assert "2 heures" in result
+        assert u"2\xa0heures" in result
 
 
 def verify_filesizeformat(app):
@@ -69,18 +69,18 @@ def verify_filesizeformat(app):
 
         c.get('/?l=fr_FR')
         assert session.get('locale') == 'fr_FR'
-        assert "1 octet" == template_filters.filesizeformat(1)
-        assert "2 octets" == template_filters.filesizeformat(2)
+        assert u'1\xa0octet' == template_filters.filesizeformat(1)
+        assert u"2\xa0octets" == template_filters.filesizeformat(2)
         value = 1024 * 3
-        assert "3 ko" == template_filters.filesizeformat(value)
+        assert u"3\u202fko" == template_filters.filesizeformat(value)
         value *= 1024
-        assert "3 Mo" == template_filters.filesizeformat(value)
+        assert u"3\u202fMo" == template_filters.filesizeformat(value)
         value *= 1024
-        assert "3 Go" == template_filters.filesizeformat(value)
+        assert u"3\u202fGo" == template_filters.filesizeformat(value)
         value *= 1024
-        assert "3 To" == template_filters.filesizeformat(value)
+        assert u"3\u202fTo" == template_filters.filesizeformat(value)
         value *= 1024
-        assert "072 To" in template_filters.filesizeformat(value)
+        assert u"072\u202fTo" in template_filters.filesizeformat(value)
 
 
 # We can't use fixtures because these options are set at app init time, and we

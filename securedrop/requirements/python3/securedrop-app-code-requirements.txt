@@ -25,10 +25,12 @@ argon2-cffi==20.1.0 \
     --hash=sha256:d8029b2d3e4b4cea770e9e5a0104dd8fa185c1724a0f01528ae4826a6d25f97d \
     --hash=sha256:da7f0445b71db6d3a72462e04f36544b0de871289b0bc8a7cc87c0f5ec7079fa
     # via -r requirements/python3/securedrop-app-code-requirements.in
-babel==2.5.1 \
-    --hash=sha256:6007daf714d0cd5524bbe436e2d42b3c20e68da66289559341e48d2cd6d25811 \
-    --hash=sha256:f20b2acd44f587988ff185d8949c3e208b4b3d5d20fcab7d91fe481ffa435528
-    # via flask-babel
+babel==2.9.1 \
+    --hash=sha256:ab49e12b91d937cd11f0b67cb259a57ab4ad2b59ac7a3b41d6c06c0ac5b0def9 \
+    --hash=sha256:bc0c176f9f6a994582230df350aa6e05ba2ebe4b3ac317eab29d9be5d2768da0
+    # via
+    #   -r requirements/python3/securedrop-app-code-requirements.in
+    #   flask-babel
 cffi==1.14.2 \
     --hash=sha256:0da50dcbccd7cb7e6c741ab7912b2eff48e85af217d72b57f80ebc616257125e \
     --hash=sha256:12a453e03124069b6896107ee133ae3ab04c624bb10683e1ed1c1663df17c13c \

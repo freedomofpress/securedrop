@@ -1,5 +1,6 @@
 alembic
 argon2_cffi>=20.1.0
+babel>=2.9.1
 cffi>=1.14.2
 
 # This version needs Rust for compilation.
