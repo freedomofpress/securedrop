@@ -326,7 +326,7 @@ def col_delete(cols_selected: List[str]) -> werkzeug.Response:
         num = len(cols_selected)
 
         success_message = ngettext(
-            "The account and all data for {n} source have been deleted.",
+            "The account and all data for the source have been deleted.",
             "The accounts and all data for {n} sources have been deleted.",
             num).format(n=num)
 

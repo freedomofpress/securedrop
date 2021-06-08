@@ -169,7 +169,9 @@ class JournalistNavigationStepsMixin:
         def collection_deleted():
             if not self.accept_languages:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
-                assert "The account and all data for 1 source have been deleted." in flash_msg.text
+                assert (
+                    "The account and all data for the source have been deleted." in flash_msg.text
+                )
 
         self.wait_for(collection_deleted)
 
