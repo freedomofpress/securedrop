@@ -228,12 +228,12 @@ class TestI18NTool(object):
             join(self.dir, 'i18n/code.py'),
             join(self.dir, 'i18n/template.html'),
         ]
-        old_po_mtime = current_po_mtime
+        current_po_mtime = getmtime(po_file)
         i18n_tool.I18NTool().main(args + [
             '--sources', ",".join(source),
             '--compile',
         ])
-        assert old_po_mtime == getmtime(po_file)
+        assert current_po_mtime == getmtime(po_file)
         with io.open(mo_file, mode='rb') as fobj:
             mo = fobj.read()
             assert b'code hello i18n' in mo
