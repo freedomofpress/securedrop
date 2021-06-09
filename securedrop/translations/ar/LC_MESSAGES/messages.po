@@ -66,7 +66,7 @@ msgid "Image updated."
 msgstr "تم تحديث الصورة بنجاح."
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -122,8 +122,16 @@ msgstr "لم يتم اختيار شىء"
 msgid "You must select one or more items."
 msgstr "لا بد من اختيار عنصر أو أكثر."
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+msgstr[1] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+msgstr[2] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+msgstr[3] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+msgstr[4] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+msgstr[5] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
 
 msgid "Only admins can access this page."
 msgstr "الإداريون وحدهم بوسعهم النّفاذ إلى هذه الصفحة."
@@ -211,7 +219,10 @@ msgstr[5] "تم حذف {num} عنصر."
 msgid "No collections selected for deletion."
 msgstr "لَمْ تُختَر أيّ مجموعة لحذفها."
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "لم يتم حذف أي حساب أو أي بيانات."
 msgstr[1] "تم حذف حساب وكل بيانات المصدر."
@@ -508,17 +519,11 @@ msgstr "لا يوجد ايداعات لعرضها."
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "يمكن كتابة رد آمن إلى الشخص الذي أودع هذه الرسائل و/أو الملفات:"
 
-msgid "You've flagged this source for reply."
-msgstr "لقد أشّرت على هذا المصدر للرّدّ عليه."
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "عند ولوج المصدر إلى النظام في المرّة التالية سيُولَّد له مفتاح تعمية، و&nbsp;سيمكنك بعد ذلك كتابة رسائل له هنا."
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "انقر أدناه إذا أردت كتابة رد إلى المصدر."
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "أشّر على المصدر للرَّدِّ عليه"
 
 msgid "Delete Source Account"
 msgstr "حذف حساب المصدر"
@@ -648,18 +653,6 @@ msgstr "تصفير الاستيثاق في خطوتين لمفاتيح المص�
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "إعادة ضبط وتصفير بيانات اعتماد مفاتيح المصادقة"
-
-msgid "info icon"
-msgstr "أيقونة المعلومة"
-
-msgid "Thanks!"
-msgstr "شكرا!"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "سوف يولّد SecureDrop مفتاح تعمية للمصدر في المرة التالية التي يلج فيها إلى حسابه، و&nbsp;بعد توليد المفتاح سوف يظهر حقل للتراسل أسفل مجموعة مستندات المصدر. يمكن استخدام ذلك الحقل للتراسل السّري معه."
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "واصل إلى قائمة مستندات {codename}..."
 
 msgid "Download Unread"
 msgstr "تنزيل المحتوى غير المقروء"
@@ -886,15 +879,6 @@ msgstr "أظهر"
 msgid "Hide"
 msgstr "اخفِ"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "معذرة لأننا لم نردّ حتّى الآن!"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "تعرّضت منصتنا هذه مؤخّرا إلى طفرة في الزيارات، فلأجل الحيطة عطّلنا إنشاء قنوات التواصل ثنائي الاتجاه إلى حين زيارتك التالية."
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "اطمئن إلى أنّنا اتمكنّا من تنزيل الوثائق التي أودعتها، و راجعنا لاحقًا لالتماس ردّ."
-
 msgid "Submit Files or Messages"
 msgstr "إيداع ملفات أو رسائل"
 
@@ -1018,6 +1002,36 @@ msgstr "<strong>هام:</strong> إذا كنت ترغب في البقاء مجه
 
 msgid "Back to submission page"
 msgstr "الرجوع إلى صفحة الإيداع"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "لقد أشّرت على هذا المصدر للرّدّ عليه."
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "انقر أدناه إذا أردت كتابة رد إلى المصدر."
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "أشّر على المصدر للرَّدِّ عليه"
+
+#~ msgid "info icon"
+#~ msgstr "أيقونة المعلومة"
+
+#~ msgid "Thanks!"
+#~ msgstr "شكرا!"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "سوف يولّد SecureDrop مفتاح تعمية للمصدر في المرة التالية التي يلج فيها إلى حسابه، و&nbsp;بعد توليد المفتاح سوف يظهر حقل للتراسل أسفل مجموعة مستندات المصدر. يمكن استخدام ذلك الحقل للتراسل السّري معه."
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "واصل إلى قائمة مستندات {codename}..."
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "معذرة لأننا لم نردّ حتّى الآن!"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "تعرّضت منصتنا هذه مؤخّرا إلى طفرة في الزيارات، فلأجل الحيطة عطّلنا إنشاء قنوات التواصل ثنائي الاتجاه إلى حين زيارتك التالية."
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "اطمئن إلى أنّنا اتمكنّا من تنزيل الوثائق التي أودعتها، و راجعنا لاحقًا لالتماس ردّ."
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."

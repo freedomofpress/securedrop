@@ -61,7 +61,7 @@ msgid "Image updated."
 msgstr "S’ha actualitzat la imatge."
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -117,8 +117,12 @@ msgstr "No hi ha res seleccionat"
 msgid "You must select one or more items."
 msgstr "Cal que seleccioneu un o més elements."
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "La baixada ha fallat perquè no s'ha pogut trobar un fitxer. Un administrador pot obtenir més informació en els registres de sistema i seguiment."
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "La baixada ha fallat perquè no s'ha pogut trobar un fitxer. Un administrador pot obtenir més informació en els registres de sistema i seguiment."
+msgstr[1] "La baixada ha fallat perquè no s'ha pogut trobar un fitxer. Un administrador pot obtenir més informació en els registres de sistema i seguiment."
 
 msgid "Only admins can access this page."
 msgstr "Només els administradors poden accedir a aquesta pàgina."
@@ -190,7 +194,10 @@ msgstr[1] "S'han suprimit {num} elements."
 msgid "No collections selected for deletion."
 msgstr "No s’ha seleccionat cap col·lecció per suprimir."
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "S'ha suprimit el compte i totes les dades d'{n} font."
 msgstr[1] "S'ha suprimit el compte i totes les dades de {n} fonts."
@@ -471,17 +478,11 @@ msgstr "No hi ha cap enviament per mostrar."
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "Podeu escriure una resposta segura a la persona que ha enviat aquests missatges o fitxers:"
 
-msgid "You've flagged this source for reply."
-msgstr "Heu marcat aquesta font per a respondre-li."
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Es generarà una clau per a la font la següent vegada que iniciï sessió, després d'això podreu respondre-hi aquí."
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "Feu clic a sota si voleu escriure una resposta a aquesta font."
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "MARCA AQUESTA FONT PER A RESPONDRE-LI"
 
 msgid "Delete Source Account"
 msgstr "Suprimeix el compte font"
@@ -607,18 +608,6 @@ msgstr "Restableix l'autenticació de factor doble per a claus de seguretat, com
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "RESTABLEIX LES CREDENCIALS DE CLAUS DE SEGURETAT"
-
-msgid "info icon"
-msgstr "icona d'informació"
-
-msgid "Thanks!"
-msgstr "Gràcies!"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "El SecureDrop generarà una clau de xifratge segura per a aquesta font la següent vegada que iniciï sessió. Una vegada s'hagi generat la clau, apareixerà una caixa de resposta sota la seva col·lecció de documents. Podeu usar aquesta caixa per escriure-hi respostes xifrades."
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "Continua cap a la llista de documents de {codename}..."
 
 msgid "Download Unread"
 msgstr "Baixa les pendents de llegir"
@@ -845,15 +834,6 @@ msgstr "Mostra"
 msgid "Hide"
 msgstr "Amaga"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "Encara no hem respost!"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "El nostre SecureDrop ha experimentat un increment d'activitat recentment. Per raons de seguretat, s'ha retardat la creació de canals de comunicació bidireccionals fins que torneu a connectar-vos."
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "Assegureu-vos que hem pogut baixar el vostre enviament i comproveu més endavant si hi ha cap resposta."
-
 msgid "Submit Files or Messages"
 msgstr "Envia fitxers o missatges"
 
@@ -977,6 +957,36 @@ msgstr "<strong>Important:</strong> si voleu romandre anònimament, <strong>no</
 
 msgid "Back to submission page"
 msgstr "Vés enrere a la pàgina d'enviaments"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "Heu marcat aquesta font per a respondre-li."
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "Feu clic a sota si voleu escriure una resposta a aquesta font."
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "MARCA AQUESTA FONT PER A RESPONDRE-LI"
+
+#~ msgid "info icon"
+#~ msgstr "icona d'informació"
+
+#~ msgid "Thanks!"
+#~ msgstr "Gràcies!"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "El SecureDrop generarà una clau de xifratge segura per a aquesta font la següent vegada que iniciï sessió. Una vegada s'hagi generat la clau, apareixerà una caixa de resposta sota la seva col·lecció de documents. Podeu usar aquesta caixa per escriure-hi respostes xifrades."
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "Continua cap a la llista de documents de {codename}..."
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "Encara no hem respost!"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "El nostre SecureDrop ha experimentat un increment d'activitat recentment. Per raons de seguretat, s'ha retardat la creació de canals de comunicació bidireccionals fins que torneu a connectar-vos."
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "Assegureu-vos que hem pogut baixar el vostre enviament i comproveu més endavant si hi ha cap resposta."
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."

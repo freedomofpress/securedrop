@@ -61,7 +61,7 @@ msgid "Image updated."
 msgstr "छवि अपडेट की गई है।"
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -117,8 +117,12 @@ msgstr "कुछ भी चयनित नहीं"
 msgid "You must select one or more items."
 msgstr "आपको एक या अधिक आइटम का चयन करना होगा।"
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "फ़ाइल डाउनलोड नहीं हो पाने के कारण आपका डाउनलोड विफल रहा। एक व्यवस्थापक सिस्टम और निगरानी लॉग में अधिक जानकारी पा सकता है।"
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "फ़ाइल डाउनलोड नहीं हो पाने के कारण आपका डाउनलोड विफल रहा। एक व्यवस्थापक सिस्टम और निगरानी लॉग में अधिक जानकारी पा सकता है।"
+msgstr[1] "फ़ाइल डाउनलोड नहीं हो पाने के कारण आपका डाउनलोड विफल रहा। एक व्यवस्थापक सिस्टम और निगरानी लॉग में अधिक जानकारी पा सकता है।"
 
 msgid "Only admins can access this page."
 msgstr "केवल व्यवस्थापक ही इस पृष्ठ को एक्सेस कर सकते हैं।"
@@ -190,7 +194,10 @@ msgstr[1] "{num} आइटम हटा दिए गए हैं।"
 msgid "No collections selected for deletion."
 msgstr "हटाए जाने के लिए कोई संग्रह नहीं चुना गया।"
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "खाता और {n} स्रोत के सभी डेटा हटा दिए गए हैं।"
 msgstr[1] "{n} स्रोतों के खाते और सभी डेटा हटा दिए गए हैं।"
@@ -471,17 +478,11 @@ msgstr "प्रदर्शित करने के लिए कोई स�
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "आप इन दस्तावेजों को सबमिट करने वाले व्यक्ति को एक सुरक्षित उत्तर लिख सकते हैं:"
 
-msgid "You've flagged this source for reply."
-msgstr "आपने उत्तर के लिए इस स्रोत को चिह्नित किया है |"
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "अगली बार जब वे लॉग इन करते हैं, तो स्रोत के लिए एक एन्क्रिप्शन कुंजी उत्पन्न होगी, जिसके बाद आप यहां स्रोत को जवाब दे पाएंगे।"
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "यदि आप इस स्रोत को उत्तर लिखना चाहते हैं तो नीचे क्लिक करें।"
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "उत्तर के लिए इस स्रोत को फ़्लैग करें"
 
 msgid "Delete Source Account"
 msgstr "स्रोत खाता हटाएं"
@@ -607,18 +608,6 @@ msgstr "सुरक्षा कुंजी जैसे YubiKey के द्
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "सुरक्षा कुंजी क्रेडेंशियल्स रीसेट"
-
-msgid "info icon"
-msgstr ""
-
-msgid "Thanks!"
-msgstr "धन्यवाद!"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "सेक्योरड्राप इस स्रोत के लिए एक सुरक्षित एन्क्रिप्शन कुंजी उत्पन्न करेगा, अगली बार जब वे लॉग इन करेंगे। एक बार कुंजी उत्पन्न हो जाने के बाद, एक दस्तावेज के संग्रह के तहत एक उत्तर बॉक्स दिखाई देगा। आप इस बॉक्स को उनसे एन्क्रिप्शन कए गए उत्तर लिखने के लिए उपयोग कर सकते हैं।"
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "{codename} के लिए दस्तावेज़ों की सूची पर जारी रखें..."
 
 msgid "Download Unread"
 msgstr "न पढ़े मसाज डाउनलोड करें"
@@ -845,15 +834,6 @@ msgstr "दिखाएं"
 msgid "Hide"
 msgstr "छुपाएं"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "क्षमा करें, हमने अभी तक कोई प्रतिक्रिया नहीं दी है!"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "हमारे SecureDrop ने हाल ही में गतिविधि में वृद्धि का अनुभव किया। सुरक्षा कारणों से, जब तक आप फिर से जाँच नहीं करते, तब तक दो-तरफ़ा संचार चैनल के निर्माण में देरी हो रही थी।"
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "कृपया निश्चिंत रहें कि हम आपका सबमिशन डाउनलोड करने में सक्षम थे, और उत्तर के लिए बाद में फिर से जाँच करेंगे।"
-
 msgid "Submit Files or Messages"
 msgstr "फ़ाइलें या संदेश जमा करें"
 
@@ -977,6 +957,33 @@ msgstr "<strong>महत्वपूर्ण:</strong> यदि आप गु
 
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "आपने उत्तर के लिए इस स्रोत को चिह्नित किया है |"
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "यदि आप इस स्रोत को उत्तर लिखना चाहते हैं तो नीचे क्लिक करें।"
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "उत्तर के लिए इस स्रोत को फ़्लैग करें"
+
+#~ msgid "Thanks!"
+#~ msgstr "धन्यवाद!"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "सेक्योरड्राप इस स्रोत के लिए एक सुरक्षित एन्क्रिप्शन कुंजी उत्पन्न करेगा, अगली बार जब वे लॉग इन करेंगे। एक बार कुंजी उत्पन्न हो जाने के बाद, एक दस्तावेज के संग्रह के तहत एक उत्तर बॉक्स दिखाई देगा। आप इस बॉक्स को उनसे एन्क्रिप्शन कए गए उत्तर लिखने के लिए उपयोग कर सकते हैं।"
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "{codename} के लिए दस्तावेज़ों की सूची पर जारी रखें..."
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "क्षमा करें, हमने अभी तक कोई प्रतिक्रिया नहीं दी है!"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "हमारे SecureDrop ने हाल ही में गतिविधि में वृद्धि का अनुभव किया। सुरक्षा कारणों से, जब तक आप फिर से जाँच नहीं करते, तब तक दो-तरफ़ा संचार चैनल के निर्माण में देरी हो रही थी।"
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "कृपया निश्चिंत रहें कि हम आपका सबमिशन डाउनलोड करने में सक्षम थे, और उत्तर के लिए बाद में फिर से जाँच करेंगे।"
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."

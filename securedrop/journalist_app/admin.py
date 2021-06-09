@@ -52,8 +52,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 f.save(custom_logo_filepath)
                 flash(gettext("Image updated."), "logo-success")
             except Exception:
-                # Translators: This error is shown when an uploaded image cannot be used.
                 flash(
+                    # Translators: This error is shown when an uploaded image cannot be used.
                     gettext("Unable to process the image file. Please try another one."),
                     "logo-error"
                 )

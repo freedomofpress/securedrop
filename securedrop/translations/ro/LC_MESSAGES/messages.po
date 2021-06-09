@@ -62,7 +62,7 @@ msgid "Image updated."
 msgstr "Imaginea a fost actualizată."
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -118,8 +118,13 @@ msgstr "Nimic selectat"
 msgid "You must select one or more items."
 msgstr "Trebuie să selectezi unul sau mai multe elemente."
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "Descărcarea a eșuat deoarece nu a fost găsit un fișier. Un administrator poate găsi mai multe informații în sistem și în jurnalele de monitorizare."
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "Descărcarea a eșuat deoarece nu a fost găsit un fișier. Un administrator poate găsi mai multe informații în sistem și în jurnalele de monitorizare."
+msgstr[1] "Descărcarea a eșuat deoarece nu a fost găsit un fișier. Un administrator poate găsi mai multe informații în sistem și în jurnalele de monitorizare."
+msgstr[2] "Descărcarea a eșuat deoarece nu a fost găsit un fișier. Un administrator poate găsi mai multe informații în sistem și în jurnalele de monitorizare."
 
 msgid "Only admins can access this page."
 msgstr "Doar administratorii pot accesa această pagină."
@@ -195,7 +200,10 @@ msgstr[2] "Au fost șterse {num} de elemente."
 msgid "No collections selected for deletion."
 msgstr "Nu a fost selectată nicio colecție pentru ștergere."
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "Contul și toate datele pentru {n} sursă au fost șterse."
 msgstr[1] "Conturile și toate datele pentru {n} surse au fost șterse."
@@ -480,17 +488,11 @@ msgstr "Nicio trimitere de afișat."
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "Poți scrie un răspuns securizat persoanei care a trimis aceste mesaje și/sau fișiere:"
 
-msgid "You've flagged this source for reply."
-msgstr "Ai marcat această sursă pentru răspuns."
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Sursa va primi o cheie de criptare generată data următoare când se autentifică, după care îi vei putea răspunde aici."
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "Dă clic mai jos dacă vrei să-i răspunzi acestei surse."
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "MARCHEAZĂ ACEASTĂ SURSĂ PENTRU RĂSPUNS"
 
 msgid "Delete Source Account"
 msgstr "Șterge contul de sursă"
@@ -617,18 +619,6 @@ msgstr "Resetează 2FA (autentificarea cu doi factori) pentru chei de securitate
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "RESETEAZĂ DATELE DE AUTENTIFICARE PENTRU CHEIA DE SECURITATE"
-
-msgid "info icon"
-msgstr "pictogramă de informații"
-
-msgid "Thanks!"
-msgstr "Îți mulțumim!"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "SecureDrop va genera o cheie de criptare securizată pentru această sursă data viitoare când se va autentifica. După ce a fost generată cheia, sub colecția de documente a sursei va apărea o casetă de răspuns. Poți folosi această casetă pentru a-i scrie răspunsuri criptate."
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "Deschide lista de documente pentru {codename}..."
 
 msgid "Download Unread"
 msgstr "Descarcă necitite"
@@ -855,15 +845,6 @@ msgstr "Arată"
 msgid "Hide"
 msgstr "Ascunde"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "Ne cerem scuze că nu am răspuns încă!"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "Am întâmpinat recent un vârf de activitate pe SecureDrop. Din motive de securitate, crearea canalelor de comunicații bidirecționale a fost întârziată până la următoarea ta autentificare."
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "Te asigurăm că am reușit să descărcăm ce ai trimis. Revino mai târziu pentru un răspuns."
-
 msgid "Submit Files or Messages"
 msgstr "Trimite fișiere sau mesaje"
 
@@ -987,6 +968,36 @@ msgstr "<strong>Important:</strong> Dacă vrei să rămâi anonim(ă), <strong>n
 
 msgid "Back to submission page"
 msgstr "Înapoi la pagina de trimitere"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "Ai marcat această sursă pentru răspuns."
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "Dă clic mai jos dacă vrei să-i răspunzi acestei surse."
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "MARCHEAZĂ ACEASTĂ SURSĂ PENTRU RĂSPUNS"
+
+#~ msgid "info icon"
+#~ msgstr "pictogramă de informații"
+
+#~ msgid "Thanks!"
+#~ msgstr "Îți mulțumim!"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "SecureDrop va genera o cheie de criptare securizată pentru această sursă data viitoare când se va autentifica. După ce a fost generată cheia, sub colecția de documente a sursei va apărea o casetă de răspuns. Poți folosi această casetă pentru a-i scrie răspunsuri criptate."
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "Deschide lista de documente pentru {codename}..."
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "Ne cerem scuze că nu am răspuns încă!"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "Am întâmpinat recent un vârf de activitate pe SecureDrop. Din motive de securitate, crearea canalelor de comunicații bidirecționale a fost întârziată până la următoarea ta autentificare."
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "Te asigurăm că am reușit să descărcăm ce ai trimis. Revino mai târziu pentru un răspuns."
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."

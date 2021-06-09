@@ -62,7 +62,7 @@ msgid "Image updated."
 msgstr "Afbeelding bijgewerkt."
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -118,8 +118,12 @@ msgstr "Niets geselecteerd"
 msgid "You must select one or more items."
 msgstr "U moet één of meerdere elementen selecteren."
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "Uw download is mislukt omdat een bestand niet kon worden gevonden. Een administrator kan meer informatie vinden in de systeem en monitoring logs."
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "Uw download is mislukt omdat een bestand niet kon worden gevonden. Een administrator kan meer informatie vinden in de systeem en monitoring logs."
+msgstr[1] "Uw download is mislukt omdat een bestand niet kon worden gevonden. Een administrator kan meer informatie vinden in de systeem en monitoring logs."
 
 msgid "Only admins can access this page."
 msgstr "Alleen beheerders hebben toegang tot deze pagina."
@@ -191,7 +195,10 @@ msgstr[1] "Alle {num} items zijn verwijderd."
 msgid "No collections selected for deletion."
 msgstr "Geen collecties geselecteerd om te verwijderen."
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "Het account en alle data van {n} bron zijn verwijderd."
 msgstr[1] "De accounts en alle data van de {n} bronnen zijn verwijderd."
@@ -472,17 +479,11 @@ msgstr "Geen inzendingen om te tonen."
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "U kunt beveiligd reageren naar de persoon die deze berichten en/of bestanden gestuurd heeft:"
 
-msgid "You've flagged this source for reply."
-msgstr "U heeft deze bron gemarkeerd om te reageren."
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Er wordt een encryptiesleutel gegenereerd voor de bron en wanneer deze de volgende keer inlogt, kunt u daarna hier reageren naar de bron."
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "Klik hieronder indien u wilt reageren naar deze bron."
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "MARKEER DEZE BRON OM TE REAGEREN"
 
 msgid "Delete Source Account"
 msgstr "Verwijder bronaccount"
@@ -608,18 +609,6 @@ msgstr "Reset tweefactorauthenticatie voor beveiligingssleutels, zoals YubiKeys"
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "HERSTEL INSTELLINGEN VOOR BEVEILIGINGSSLEUTEL"
-
-msgid "info icon"
-msgstr "info icoon"
-
-msgid "Thanks!"
-msgstr "Bedankt!"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "SecureDrop zal de volgende keer dat de bron inlogt een veilige encryptiesleutel genereren. Zodra de sleutel is gegenereerd zal er een antwoordvakje verschijnen onder hun collectie documenten. U kunt dit vakje gebruiken om versleutelde antwoorden naar hun te versturen."
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "Ga door naar documentenlijst van {codename}…"
 
 msgid "Download Unread"
 msgstr "Ongelezen downloaden"
@@ -846,15 +835,6 @@ msgstr "Tonen"
 msgid "Hide"
 msgstr "Verbergen"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "Sorry dat we nog niet hebben gereageerd!"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "Onze SecureDrop heeft onlangs heel wat activiteit gezien. Vanwege veiligheidsredenen is de creatie van een tweezijdig communicatiekanaal uitgesteld totdat u weer ingelogd heeft."
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "Vrees niet, we hebben uw inzending gedownload. Kom terug op een later moment om te kijken of we een antwoord gestuurd hebben."
-
 msgid "Submit Files or Messages"
 msgstr "Verstuur bestanden of berichten"
 
@@ -978,6 +958,36 @@ msgstr "<strong>Belangrijk:</strong> Als u anoniem wilt blijven, gebruik dan <st
 
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "U heeft deze bron gemarkeerd om te reageren."
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "Klik hieronder indien u wilt reageren naar deze bron."
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "MARKEER DEZE BRON OM TE REAGEREN"
+
+#~ msgid "info icon"
+#~ msgstr "info icoon"
+
+#~ msgid "Thanks!"
+#~ msgstr "Bedankt!"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "SecureDrop zal de volgende keer dat de bron inlogt een veilige encryptiesleutel genereren. Zodra de sleutel is gegenereerd zal er een antwoordvakje verschijnen onder hun collectie documenten. U kunt dit vakje gebruiken om versleutelde antwoorden naar hun te versturen."
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "Ga door naar documentenlijst van {codename}…"
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "Sorry dat we nog niet hebben gereageerd!"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "Onze SecureDrop heeft onlangs heel wat activiteit gezien. Vanwege veiligheidsredenen is de creatie van een tweezijdig communicatiekanaal uitgesteld totdat u weer ingelogd heeft."
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "Vrees niet, we hebben uw inzending gedownload. Kom terug op een later moment om te kijken of we een antwoord gestuurd hebben."
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."
