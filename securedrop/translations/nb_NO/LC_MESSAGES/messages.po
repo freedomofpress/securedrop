@@ -62,7 +62,7 @@ msgid "Image updated."
 msgstr "Bilde oppdatert."
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -118,8 +118,12 @@ msgstr "Ingenting valgt"
 msgid "You must select one or more items."
 msgstr "Du må velge ett eller flere elementer."
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "Nedlastingen mislyktes fordi en fil ikke ble funnet. En administrator kan finne detaljer om feilen i system- og driftsloggene."
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "Nedlastingen mislyktes fordi en fil ikke ble funnet. En administrator kan finne detaljer om feilen i system- og driftsloggene."
+msgstr[1] "Nedlastingen mislyktes fordi en fil ikke ble funnet. En administrator kan finne detaljer om feilen i system- og driftsloggene."
 
 msgid "Only admins can access this page."
 msgstr "Kun administratorer har tilgang til denne siden."
@@ -191,7 +195,10 @@ msgstr[1] "{num} elementer har blitt slettet."
 msgid "No collections selected for deletion."
 msgstr "Ingen kildeoppføringer valgt for sletting."
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "Kontoen og dataene knyttet til {n} kilde har blitt slettet."
 msgstr[1] "Kontoene og dataene knyttet til {n} kilder har blitt slettet."
@@ -472,17 +479,11 @@ msgstr "Ingen bidragene å vise."
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "Du kan skrive et sikkert svar til personen som sendte inn disse meldingene og/eller filene:"
 
-msgid "You've flagged this source for reply."
-msgstr "Du har markert denne kilden for å kunne sende et svar til personen."
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Neste gang kilden logger seg inn med kodeordet sitt vil det bli laget en krypteringsnøkkel. Dette vil gjøre at du deretter kan skrive et svar til kilden her."
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "Klikk her, om du ønsker skrive et svar til kilden."
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "MARKER DENNE KILDEN FOR Å SVARE"
 
 msgid "Delete Source Account"
 msgstr "Slett kilde-konto"
@@ -608,18 +609,6 @@ msgstr "Tilbakestill tofaktoroppsett for sikkerhetsnøkler, som YubiKey"
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "Tilbakestill identitetsdetaljer fra sikkerhetsnøkkel"
-
-msgid "info icon"
-msgstr "info-ikon"
-
-msgid "Thanks!"
-msgstr "Takk."
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "SecureDrop vil generere en sikker krypteringsnøkkel for denne kilden neste gang de logger inn. Når nøkkelen har blitt opprettet, vil en svarboks bli synlig i kildeoppføringene av innsendelsene deres. Du kan da bruke denne boksen for å sende krypterte tilbakemeldinger til dem."
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "Fortsett til listen over innsendelser fra {codename}…"
 
 msgid "Download Unread"
 msgstr "Last ned uleste"
@@ -846,15 +835,6 @@ msgstr "Vis"
 msgid "Hide"
 msgstr "Skjul"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "Beklager at vi ikke har svart enda!"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "Vår SecureDrop har nylig hatt en kraftig økning i aktivitet. Av hensyn til sikkerheten, ble muligheten for toveis-kommunikasjon utsatt til neste gang du logger inn."
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "Du skal likevel vite at vi har kunnet laste ned det du sendte. Kom innom senere for å se etter nye svar."
-
 msgid "Submit Files or Messages"
 msgstr "Send inn filer eller meldinger"
 
@@ -978,6 +958,36 @@ msgstr "<strong>Viktig:</strong> Om du ønsker å være helt anonym, <strong>ikk
 
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "Du har markert denne kilden for å kunne sende et svar til personen."
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "Klikk her, om du ønsker skrive et svar til kilden."
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "MARKER DENNE KILDEN FOR Å SVARE"
+
+#~ msgid "info icon"
+#~ msgstr "info-ikon"
+
+#~ msgid "Thanks!"
+#~ msgstr "Takk."
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "SecureDrop vil generere en sikker krypteringsnøkkel for denne kilden neste gang de logger inn. Når nøkkelen har blitt opprettet, vil en svarboks bli synlig i kildeoppføringene av innsendelsene deres. Du kan da bruke denne boksen for å sende krypterte tilbakemeldinger til dem."
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "Fortsett til listen over innsendelser fra {codename}…"
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "Beklager at vi ikke har svart enda!"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "Vår SecureDrop har nylig hatt en kraftig økning i aktivitet. Av hensyn til sikkerheten, ble muligheten for toveis-kommunikasjon utsatt til neste gang du logger inn."
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "Du skal likevel vite at vi har kunnet laste ned det du sendte. Kom innom senere for å se etter nye svar."
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."

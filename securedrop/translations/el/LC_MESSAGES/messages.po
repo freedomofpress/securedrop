@@ -61,7 +61,7 @@ msgid "Image updated."
 msgstr "Η φωτογραφία ενημερώθηκε."
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -117,8 +117,12 @@ msgstr "Δεν έχει επιλεχθεί τίποτα"
 msgid "You must select one or more items."
 msgstr "Πρέπει να επιλέξετε ένα ή περισσότερα αντικείμενα."
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "Η λήψη σας απέτυχε επειδή ένα αρχείο δεν βρέθηκε. Κάποιος διαχειριστής μπορεί να βρει περισσότερες πληροφορίες στα αρχεία καταγραφής συμβάντων συστήματος."
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "Η λήψη σας απέτυχε επειδή ένα αρχείο δεν βρέθηκε. Κάποιος διαχειριστής μπορεί να βρει περισσότερες πληροφορίες στα αρχεία καταγραφής συμβάντων συστήματος."
+msgstr[1] "Η λήψη σας απέτυχε επειδή ένα αρχείο δεν βρέθηκε. Κάποιος διαχειριστής μπορεί να βρει περισσότερες πληροφορίες στα αρχεία καταγραφής συμβάντων συστήματος."
 
 msgid "Only admins can access this page."
 msgstr "Μόνο οι διαχειριστές έχουν πρόσβαση σε αυτήν την σελίδα."
@@ -190,7 +194,10 @@ msgstr[1] "{num} αντικείμενα διαγράφηκαν."
 msgid "No collections selected for deletion."
 msgstr "Δεν έχουν επιλεχθεί συλλογές για διαγραφή."
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "Ο λογαριασμός και τα δεδομένα {n} πηγής έχουν διαγραφεί."
 msgstr[1] "Ο λογαριασμός και τα δεδομένα {n} πηγών έχουν διαγραφεί."
@@ -471,17 +478,11 @@ msgstr "Δεν υπάρχουν υποβολές προς προβολή."
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "Μπορείτε να γράψετε μια ασφαλή απάντηση στο άτομο που υπέβαλε αυτά τα μηνύματα ή/και αρχεία:"
 
-msgid "You've flagged this source for reply."
-msgstr "Σημειώσατε αυτή την πηγή για απάντηση."
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Ένα κλειδί κρυπτογράφησης για την πηγή θα παραχθεί την επόμενη φορά που θα συνδεθεί, και μετά από αυτό θα μπορείτε να απαντήσετε στην πηγή εδώ."
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "Πατήστε παρακάτω αν θέλετε να γράψετε μια απάντηση στην πηγή."
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "ΣΗΜΕΙΩΣΗ ΠΗΓΗΣ ΓΙΑ ΑΠΑΝΤΗΣΗ"
 
 msgid "Delete Source Account"
 msgstr "Διαγραφή λογαριασμού πηγής"
@@ -607,18 +608,6 @@ msgstr "Επαναφορά πιστοποίησης δύο παραγόντων 
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "ΕΠΑΝΑΦΟΡΑ ΣΤΟΙΧΕΙΩΝ ΠΙΣΤΟΠΟΙΗΣΗΣ ΚΛΕΙΔΙΟΥ ΑΣΦΑΛΕΙΑΣ"
-
-msgid "info icon"
-msgstr "εικονίδιο πληροφοριών"
-
-msgid "Thanks!"
-msgstr "Ευχαριστούμε!"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "Το SecureDrop θα δημιουργήσει ένα ασφαλές κλειδί κρυπτογράφησης για αυτή την πηγή την επόμενη φορά που θα συνδεθεί. Μόλις δημιουργηθεί το κλειδί, θα εμφανιστεί ένα πεδίο απάντησης κάτω από την συλλογή εγγράφων του/της. Μπορείτε να χρησιμοποιήσετε αυτό το πεδίο για να του/της γράψετε κρυπτογραφημένες απαντήσεις."
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "Συνέχεια στην λίστα εγγράφων του/της {codename}..."
 
 msgid "Download Unread"
 msgstr "Κατέβασμα μη αναγνωσμένων"
@@ -845,15 +834,6 @@ msgstr "Εμφάνιση"
 msgid "Hide"
 msgstr "Απόκρυψη"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "Συγγνώμη που δεν έχουμε απαντήσει ακόμα!"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "Το SecureDrop μας είχε μια ξαφνική αύξηση δραστηριότητας πρόσφατα. Για λόγους ασφαλείας, η δημιουργία διαύλου επικοινωνίας καθυστερήθηκε μέχρι να ξανασυνδεθείτε."
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "Επιβεβαιώνουμε ότι μπορέσαμε να κατεβάσουμε την καταχώρησή σας. Ελέγξτε ξανά αργότερα για κάποια απάντηση."
-
 msgid "Submit Files or Messages"
 msgstr "Υποβολή αρχείων ή μηνυμάτων"
 
@@ -977,6 +957,36 @@ msgstr "<strong>Σημαντικό:</strong> Αν επιθυμείτε να δι
 
 msgid "Back to submission page"
 msgstr "Πίσω στη σελίδα υποβολών"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "Σημειώσατε αυτή την πηγή για απάντηση."
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "Πατήστε παρακάτω αν θέλετε να γράψετε μια απάντηση στην πηγή."
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "ΣΗΜΕΙΩΣΗ ΠΗΓΗΣ ΓΙΑ ΑΠΑΝΤΗΣΗ"
+
+#~ msgid "info icon"
+#~ msgstr "εικονίδιο πληροφοριών"
+
+#~ msgid "Thanks!"
+#~ msgstr "Ευχαριστούμε!"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "Το SecureDrop θα δημιουργήσει ένα ασφαλές κλειδί κρυπτογράφησης για αυτή την πηγή την επόμενη φορά που θα συνδεθεί. Μόλις δημιουργηθεί το κλειδί, θα εμφανιστεί ένα πεδίο απάντησης κάτω από την συλλογή εγγράφων του/της. Μπορείτε να χρησιμοποιήσετε αυτό το πεδίο για να του/της γράψετε κρυπτογραφημένες απαντήσεις."
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "Συνέχεια στην λίστα εγγράφων του/της {codename}..."
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "Συγγνώμη που δεν έχουμε απαντήσει ακόμα!"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "Το SecureDrop μας είχε μια ξαφνική αύξηση δραστηριότητας πρόσφατα. Για λόγους ασφαλείας, η δημιουργία διαύλου επικοινωνίας καθυστερήθηκε μέχρι να ξανασυνδεθείτε."
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "Επιβεβαιώνουμε ότι μπορέσαμε να κατεβάσουμε την καταχώρησή σας. Ελέγξτε ξανά αργότερα για κάποια απάντηση."
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."

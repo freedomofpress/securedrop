@@ -65,7 +65,7 @@ msgid "Image updated."
 msgstr "Immagine aggiornata."
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -121,8 +121,12 @@ msgstr "Nessun oggetto selezionato"
 msgid "You must select one or more items."
 msgstr "È necessario selezionare uno o più oggetti."
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "Lo scaricamento non è riuscito perché un file non è stato trovato. Un amministratore può avere maggiori informazioni sul sistema e monitorare i log."
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "Lo scaricamento non è riuscito perché un file non è stato trovato. Un amministratore può avere maggiori informazioni sul sistema e monitorare i log."
+msgstr[1] "Lo scaricamento non è riuscito perché un file non è stato trovato. Un amministratore può avere maggiori informazioni sul sistema e monitorare i log."
 
 msgid "Only admins can access this page."
 msgstr "Solo gli amministratori possono accedere a questa pagina."
@@ -194,7 +198,10 @@ msgstr[1] "{num} oggetti sono stati eliminati."
 msgid "No collections selected for deletion."
 msgstr "Nessun archivio è stato selezionato per essere eliminato."
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "L'account è tutti i dati di {n} fonte sono stati eliminati."
 msgstr[1] "Gli account è tutti i dati di {n} fonti sono stati eliminati."
@@ -475,17 +482,11 @@ msgstr "Non ci sono invii da visualizzare."
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "Puoi scrivere una risposta sicura alla persona che ha inviato questi messaggi e/o file:"
 
-msgid "You've flagged this source for reply."
-msgstr "Hai contrassegnato questa fonte per fornire una risposta."
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Una chiave di cifratura sarà generata per la fonte la prossima volta che eseguirà l'accesso, dopodiché potrai rispondere qui."
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "Fare clic qui sotto per scrivere una risposta a questa fonte."
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "CONTRASSEGNA QUESTA FONTE PER UNA RISPOSTA"
 
 msgid "Delete Source Account"
 msgstr "Elimina l'account della fonte"
@@ -611,18 +612,6 @@ msgstr "Ripristina l'autenticazione a due fattori per le chiavi di sicurezza, co
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "RIPRISTINA CREDENZIALI CHIAVI DI SICUREZZA"
-
-msgid "info icon"
-msgstr "icona info"
-
-msgid "Thanks!"
-msgstr "Grazie!"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "SecureDrop genererà una chiave di cifratura sicura per la fonte la prossima volta che eseguirà l'accesso. Una volta che la chiave è stata generata, apparirà una casella di risposta sotto l'archivio di documenti. È possibile usare questa casella per scrivere le risposte cifrate."
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "Continua all'elenco dei documenti di {codename}..."
 
 msgid "Download Unread"
 msgstr "Scarica non letti"
@@ -849,15 +838,6 @@ msgstr "Mostra"
 msgid "Hide"
 msgstr "Nascondi"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "Non c'è ancora alcuna risposta!"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "SecureDrop ha recentemente registrato un sovraccarico di attività. Per motivi di sicurezza, la creazione di un canale di comunicazione bidirezionale è stata posticipata fino a quando non verrà eseguito un nuovo accesso."
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "Assicuriamo che quanto inviato è stato scaricato. Verificare nuovamente in un secondo momento la presenza di una risposta."
-
 msgid "Submit Files or Messages"
 msgstr "Invia file o messaggi"
 
@@ -981,6 +961,36 @@ msgstr "<strong>Importante:</strong> per rimanere anonimi <strong>non usare</str
 
 msgid "Back to submission page"
 msgstr "Torna alla pagina di invio documenti e messaggi"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "Hai contrassegnato questa fonte per fornire una risposta."
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "Fare clic qui sotto per scrivere una risposta a questa fonte."
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "CONTRASSEGNA QUESTA FONTE PER UNA RISPOSTA"
+
+#~ msgid "info icon"
+#~ msgstr "icona info"
+
+#~ msgid "Thanks!"
+#~ msgstr "Grazie!"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "SecureDrop genererà una chiave di cifratura sicura per la fonte la prossima volta che eseguirà l'accesso. Una volta che la chiave è stata generata, apparirà una casella di risposta sotto l'archivio di documenti. È possibile usare questa casella per scrivere le risposte cifrate."
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "Continua all'elenco dei documenti di {codename}..."
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "Non c'è ancora alcuna risposta!"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "SecureDrop ha recentemente registrato un sovraccarico di attività. Per motivi di sicurezza, la creazione di un canale di comunicazione bidirezionale è stata posticipata fino a quando non verrà eseguito un nuovo accesso."
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "Assicuriamo che quanto inviato è stato scaricato. Verificare nuovamente in un secondo momento la presenza di una risposta."
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."

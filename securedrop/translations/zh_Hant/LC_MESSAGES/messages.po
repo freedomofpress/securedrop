@@ -61,7 +61,7 @@ msgid "Image updated."
 msgstr "圖片已更新。"
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -117,8 +117,11 @@ msgstr "無選取"
 msgid "You must select one or more items."
 msgstr "須至少選取一個項目。"
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "因為找不到檔案，下載失敗。系統管理員能在系統及監控記錄中查詢更多資訊。"
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "因為找不到檔案，下載失敗。系統管理員能在系統及監控記錄中查詢更多資訊。"
 
 msgid "Only admins can access this page."
 msgstr "本頁面僅限管理員訪問。"
@@ -186,7 +189,10 @@ msgstr[0] "{num}隻件已被删除。"
 msgid "No collections selected for deletion."
 msgstr "未選擇要刪除的集件。"
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "這些帳號與{n}位線人的資料皆已刪除。"
 
@@ -463,17 +469,11 @@ msgstr "無提收文件顯示。"
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "您可以撰寫安全的回覆訊息給提交者："
 
-msgid "You've flagged this source for reply."
-msgstr "您已把這名線人標記為待回覆。"
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "系統會在線人下次登入時產生新的加密密鑰，之後您可以在這裡回覆線人。"
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "如要回覆此名線人，請點擊下方。"
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "請對此位線人加註旗誌，以進行回覆"
 
 msgid "Delete Source Account"
 msgstr "刪除線人帳號"
@@ -598,18 +598,6 @@ msgstr "重設安全密鑰例如 YubiKey 的雙重驗證"
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "重置安全密鑰憑證"
-
-msgid "info icon"
-msgstr "資訊圖示"
-
-msgid "Thanks!"
-msgstr "感謝您！"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "SecureDrop 會在這個線人下次登入時產生新的加密金鑰。加密金鑰產生後，文件列表下會出現回覆欄。您可以在回覆欄撰寫訊息給線人。"
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "繼續 {codename} 文件列表..."
 
 msgid "Download Unread"
 msgstr "下載未讀文件"
@@ -836,15 +824,6 @@ msgstr "顯示"
 msgid "Hide"
 msgstr "隱藏"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "抱歉，我們尚無回應！"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "SecureDrop 近期遭逢一陣亂流，因安全考量，雙向的交流頻道暫且停止直到用戶再重新登入。"
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "請放心，我們能夠下載您的提交內容。請稍後回來檢查回覆。"
-
 msgid "Submit Files or Messages"
 msgstr "提交檔案和訊息"
 
@@ -968,6 +947,36 @@ msgstr "<strong>重要：</strong>如果您希望保持匿名，<strong>請勿</
 
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "您已把這名線人標記為待回覆。"
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "如要回覆此名線人，請點擊下方。"
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "請對此位線人加註旗誌，以進行回覆"
+
+#~ msgid "info icon"
+#~ msgstr "資訊圖示"
+
+#~ msgid "Thanks!"
+#~ msgstr "感謝您！"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "SecureDrop 會在這個線人下次登入時產生新的加密金鑰。加密金鑰產生後，文件列表下會出現回覆欄。您可以在回覆欄撰寫訊息給線人。"
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "繼續 {codename} 文件列表..."
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "抱歉，我們尚無回應！"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "SecureDrop 近期遭逢一陣亂流，因安全考量，雙向的交流頻道暫且停止直到用戶再重新登入。"
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "請放心，我們能夠下載您的提交內容。請稍後回來檢查回覆。"
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."

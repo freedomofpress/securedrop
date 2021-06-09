@@ -61,7 +61,7 @@ msgid "Image updated."
 msgstr "Bild uppdaterad."
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -117,8 +117,12 @@ msgstr "Inget markerat"
 msgid "You must select one or more items."
 msgstr "Du måste välja ett eller flera meddelanden."
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "Din nedladdning misslyckades eftersom filen inte hittades. En administratör kan hitta mer i systemloggarna."
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "Din nedladdning misslyckades eftersom filen inte hittades. En administratör kan hitta mer i systemloggarna."
+msgstr[1] "Din nedladdning misslyckades eftersom filen inte hittades. En administratör kan hitta mer i systemloggarna."
 
 msgid "Only admins can access this page."
 msgstr "Endast administratörer har tillgång till denna sida."
@@ -190,7 +194,10 @@ msgstr[1] "{num} meddelanden har raderats."
 msgid "No collections selected for deletion."
 msgstr "Inga samlingar har markerats för radering."
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "Kontot och all data för {n} källa har raderats."
 msgstr[1] "Konton och data för {n} källor har raderats."
@@ -471,17 +478,11 @@ msgstr "Inga inlämningar att visa."
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "Du kan skriva ett säkert svar till personen som lämnade dessa meddelanden och/eller filer:"
 
-msgid "You've flagged this source for reply."
-msgstr "Du har flaggat den här källan för svar."
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "En krypteringsnyckel kommer att genereras till denna källa nästa gång den loggar in, därefter kommer du att kunna svara till källan här."
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "Klicka nedan ifall du vill skriva ett svar till denna källa."
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "FLAGGA DEN HÄR KÄLLAN FÖR SVAR"
 
 msgid "Delete Source Account"
 msgstr "Radera en källa"
@@ -607,18 +608,6 @@ msgstr "Nollställ tvåfaktorsautentisering för säkerhetsnyckler som t.ex Yubi
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "ÅTERSTÄLL SÄKERHETSNYCKELSUPPGIFTER"
-
-msgid "info icon"
-msgstr "Info"
-
-msgid "Thanks!"
-msgstr "Tack!"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "SecureDrop kommer att generera en säker krypteringsnyckel för den här källan nästa gång den loggar in. När nyckeln har genererats kommer en svarsruta att dyka upp under dokumentsamlingen. Du kan använda rutan till att skriva krypterade svar."
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "Fortsätt till listan med dokument för {codename}..."
 
 msgid "Download Unread"
 msgstr "Ladda ned olästa"
@@ -845,15 +834,6 @@ msgstr "Visa"
 msgid "Hide"
 msgstr "Göm"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "Tyvärr har vi inte svarat ännu."
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "Vår SecureDrop såg nyligen ökad aktivitet. Av säkerhetsskäl kan du inte upprätta en tvåvägskommunikation innan du checkar in igen."
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "Du kan vara säker på att vi kan läsa ditt meddelande, logga in igen lite senare för att se vårt svar."
-
 msgid "Submit Files or Messages"
 msgstr "Skicka filer eller meddelanden"
 
@@ -977,6 +957,36 @@ msgstr "<strong> Viktigt:</strong> Ifall du önskar att förbli anonym, <strong>
 
 msgid "Back to submission page"
 msgstr "Tillbaka till inlämningssidan"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "Du har flaggat den här källan för svar."
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "Klicka nedan ifall du vill skriva ett svar till denna källa."
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "FLAGGA DEN HÄR KÄLLAN FÖR SVAR"
+
+#~ msgid "info icon"
+#~ msgstr "Info"
+
+#~ msgid "Thanks!"
+#~ msgstr "Tack!"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "SecureDrop kommer att generera en säker krypteringsnyckel för den här källan nästa gång den loggar in. När nyckeln har genererats kommer en svarsruta att dyka upp under dokumentsamlingen. Du kan använda rutan till att skriva krypterade svar."
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "Fortsätt till listan med dokument för {codename}..."
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "Tyvärr har vi inte svarat ännu."
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "Vår SecureDrop såg nyligen ökad aktivitet. Av säkerhetsskäl kan du inte upprätta en tvåvägskommunikation innan du checkar in igen."
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "Du kan vara säker på att vi kan läsa ditt meddelande, logga in igen lite senare för att se vårt svar."
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."

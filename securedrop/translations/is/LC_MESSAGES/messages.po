@@ -61,7 +61,7 @@ msgid "Image updated."
 msgstr "Mynd var uppfærð."
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -117,8 +117,12 @@ msgstr "Ekkert valið"
 msgid "You must select one or more items."
 msgstr "Þú verður að velja eitt eða fleiri atriði."
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "Niðurhalið þitt mistókst vegna þess að skrá fannst ekki. Stjórnandi getur fundið ítarlegri upplýsingar í kerfinu og vöktunarskrám."
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "Niðurhalið þitt mistókst vegna þess að skrá fannst ekki. Stjórnandi getur fundið ítarlegri upplýsingar í kerfinu og vöktunarskrám."
+msgstr[1] "Niðurhalið þitt mistókst vegna þess að skrá fannst ekki. Stjórnandi getur fundið ítarlegri upplýsingar í kerfinu og vöktunarskrám."
 
 msgid "Only admins can access this page."
 msgstr "Einungis stjórnendur fá aðgang að þessari síðu."
@@ -190,7 +194,10 @@ msgstr[1] "{num} atriðum hefur verið eytt."
 msgid "No collections selected for deletion."
 msgstr "Engin söfn valin til eyðingar."
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "Notandaaðgangur og öllum gögnum {n} heimildarmanns hefur verið eytt."
 msgstr[1] "Notandaaðgangur og öllum gögnum {n} heimildarmanna hefur verið eytt."
@@ -471,17 +478,11 @@ msgstr "Engar innsendingar til að birta."
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "Þú getur skrifað öruggt svar til aðilans sem sendi inn þessi skilaboð og/eða skjöl:"
 
-msgid "You've flagged this source for reply."
-msgstr "Þú hefur merkt við að þú ætlir að svara þessum heimildarmanni."
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Dulritunarlykill verður útbúinn fyrir heimildarmanninn næst þegar hán skráir sig inn; eftir það muntu geta svarað heimildarmanninum hér."
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "Smelltu hér fyrir neðan ef þú vilt skrifa svar til þessa heimildarmanns."
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "MERKJA ÞENNAN HEIMILDARMANN TIL AÐ SVARA"
 
 msgid "Delete Source Account"
 msgstr "Eyða notandaaðgangi heimildarmanns"
@@ -607,18 +608,6 @@ msgstr "Endurstilla tvíþátta auðkenningu fyrir öryggislykla, eins og t.d. Y
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "ENDURSTILLA AUÐKENNI ÖRYGGISLYKILS"
-
-msgid "info icon"
-msgstr "tákn fyrir upplýsingar"
-
-msgid "Thanks!"
-msgstr "Takk!"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "SecureDrop mun útbúa öruggan dulritunarlykil fyrir þennan heimildarmann næst þegar hán skráir sig inn. Eftir að dulritunarlykillinn hefur verið útbúinn, mun birtast svarreitur undir skjalasafninu háns. Þú getur notað þennan reit til að skrifa dulrituð svör til háns."
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "Halda áfram í lista yfir skjöl fyrir {codename}..."
 
 msgid "Download Unread"
 msgstr "Niðurhal ólesið"
@@ -845,15 +834,6 @@ msgstr "Sýna"
 msgid "Hide"
 msgstr "Fela"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "Biðjumst velvirðingar á að hafa ekki svarað!"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "SecureDrop-netþjónar okkar urðu nýlega varir við mikla aukningu á virkni. Af öryggisástæðum var beðið með að koma á gagnkvæmum samskiptum þar til þú myndir skrá þig inn aftur."
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "Ekki hafa neinar áhyggjur, við náðum að sækja innsendinguna þína og þú ættir því að skrá þig aftur inn síðar til að athuga með svar frá okkur."
-
 msgid "Submit Files or Messages"
 msgstr "Senda inn skrár eða skilaboð"
 
@@ -977,6 +957,36 @@ msgstr "<strong>Mikilvægt:</strong> Ef þú óskar áframhaldandi nafnleyndar, 
 
 msgid "Back to submission page"
 msgstr "Til baka á innsendingasíðuna"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "Þú hefur merkt við að þú ætlir að svara þessum heimildarmanni."
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "Smelltu hér fyrir neðan ef þú vilt skrifa svar til þessa heimildarmanns."
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "MERKJA ÞENNAN HEIMILDARMANN TIL AÐ SVARA"
+
+#~ msgid "info icon"
+#~ msgstr "tákn fyrir upplýsingar"
+
+#~ msgid "Thanks!"
+#~ msgstr "Takk!"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "SecureDrop mun útbúa öruggan dulritunarlykil fyrir þennan heimildarmann næst þegar hán skráir sig inn. Eftir að dulritunarlykillinn hefur verið útbúinn, mun birtast svarreitur undir skjalasafninu háns. Þú getur notað þennan reit til að skrifa dulrituð svör til háns."
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "Halda áfram í lista yfir skjöl fyrir {codename}..."
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "Biðjumst velvirðingar á að hafa ekki svarað!"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "SecureDrop-netþjónar okkar urðu nýlega varir við mikla aukningu á virkni. Af öryggisástæðum var beðið með að koma á gagnkvæmum samskiptum þar til þú myndir skrá þig inn aftur."
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "Ekki hafa neinar áhyggjur, við náðum að sækja innsendinguna þína og þú ættir því að skrá þig aftur inn síðar til að athuga með svar frá okkur."
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."

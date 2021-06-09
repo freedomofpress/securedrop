@@ -62,7 +62,7 @@ msgid "Image updated."
 msgstr "Obrázek byl aktualizován."
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -118,8 +118,13 @@ msgstr "Nic není vybráno"
 msgid "You must select one or more items."
 msgstr "Musíte vybrat jednu nebo více položek."
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "Stahování selhalo protože soubor nebyl nalezen. Administrátor může najít více informací v systémovém a monitorovacím logu."
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "Stahování selhalo protože soubor nebyl nalezen. Administrátor může najít více informací v systémovém a monitorovacím logu."
+msgstr[1] "Stahování selhalo protože soubor nebyl nalezen. Administrátor může najít více informací v systémovém a monitorovacím logu."
+msgstr[2] "Stahování selhalo protože soubor nebyl nalezen. Administrátor může najít více informací v systémovém a monitorovacím logu."
 
 msgid "Only admins can access this page."
 msgstr "Na tuto stránku mají přístup pouze administrátoři."
@@ -195,7 +200,10 @@ msgstr[2] "{num} položek bylo smazáno."
 msgid "No collections selected for deletion."
 msgstr "Nevybral/a jste žádnou sadu k smazání."
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "Účet a všechna data pro {n} zdroj byla smazána."
 msgstr[1] "Účet a všechna data pro {n} zdroje byla smazána."
@@ -480,17 +488,11 @@ msgstr "Žádná podání k zobrazení."
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "Můžete napsat bezpečnou odpověď člověku, který poslal tyto zprávy a/nebo dokumenty:"
 
-msgid "You've flagged this source for reply."
-msgstr "Označili jste tento zdroj na odpověď."
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Až se zdroj příště přihlásí, bude mu vygenerován šifrovací klíč a poté mu budete moci odpovědět zde."
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "Pro odpověď tomuto zdroji klepněte níže."
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "OZNAČIT TENTO ZDROJ NA ODPOVĚĎ"
 
 msgid "Delete Source Account"
 msgstr "Smazat účet zdroje"
@@ -617,18 +619,6 @@ msgstr "Obnovit dvojfaktorovou autentizaci pro bezpečnostní klíče (např. Yu
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "RESETOVAT PŘIHLAŠOVACÍ ÚDAJE BEZPEČNOSTNÍHO KLÍČE"
-
-msgid "info icon"
-msgstr "ikonka info"
-
-msgid "Thanks!"
-msgstr "Děkujeme!"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "SecureDrop vygeneruje bezpečný šifrovací klíč pro tento zdroj při jeho příštím přihlášení. Jakmile se klíč vygeneruje, objeví se pod kolekcí zdroje textové pole pro odpověď. Přes toto pole můžete tomuto zdroji poslat zašifrovanou odpověď."
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "Pokračujte k seznamu dokumentů „{codename}“..."
 
 msgid "Download Unread"
 msgstr "Stáhnout nepřečtené"
@@ -855,15 +845,6 @@ msgstr "Zobrazit"
 msgid "Hide"
 msgstr "Skrýt"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "Promiňte, že jsme ještě neodpověděli!"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "Náš SecureDrop nedávno zaznamenal prudký nárůst aktivity. Z bezpečnostních důvodů jsme odložili vytvoření obousměrného komunikačního kanálu až do vašeho dalšího přihlášení."
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "Podařilo se nám stáhnout váš příspěvek, přihlaste se prosím později abyste si mohli přečíst naši odpověď."
-
 msgid "Submit Files or Messages"
 msgstr "Nahrání souborů nebo zpráv"
 
@@ -987,6 +968,36 @@ msgstr "<strong>Důležité:</strong> Chcete-li zůstat v anonymitě, <strong>ne
 
 msgid "Back to submission page"
 msgstr "Zpátky na stránku podání"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "Označili jste tento zdroj na odpověď."
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "Pro odpověď tomuto zdroji klepněte níže."
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "OZNAČIT TENTO ZDROJ NA ODPOVĚĎ"
+
+#~ msgid "info icon"
+#~ msgstr "ikonka info"
+
+#~ msgid "Thanks!"
+#~ msgstr "Děkujeme!"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "SecureDrop vygeneruje bezpečný šifrovací klíč pro tento zdroj při jeho příštím přihlášení. Jakmile se klíč vygeneruje, objeví se pod kolekcí zdroje textové pole pro odpověď. Přes toto pole můžete tomuto zdroji poslat zašifrovanou odpověď."
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "Pokračujte k seznamu dokumentů „{codename}“..."
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "Promiňte, že jsme ještě neodpověděli!"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "Náš SecureDrop nedávno zaznamenal prudký nárůst aktivity. Z bezpečnostních důvodů jsme odložili vytvoření obousměrného komunikačního kanálu až do vašeho dalšího přihlášení."
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "Podařilo se nám stáhnout váš příspěvek, přihlaste se prosím později abyste si mohli přečíst naši odpověď."
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."

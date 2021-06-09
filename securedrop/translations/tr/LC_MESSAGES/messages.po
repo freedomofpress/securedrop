@@ -61,7 +61,7 @@ msgid "Image updated."
 msgstr "Görüntü güncellendi."
 
 #. This error is shown when an uploaded image cannot be used.
-msgid "Unable to process the image file. Try another one."
+msgid "Unable to process the image file. Please try another one."
 msgstr ""
 
 msgid "Preferences saved."
@@ -117,8 +117,12 @@ msgstr "Herhangi Bir Şey Seçilmemiş"
 msgid "You must select one or more items."
 msgstr "Bir ya da daha fazla öge seçmelisiniz."
 
-msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr "İndirme işleminiz bir dosya bulunamadığı için başarısız oldu. Bir yönetici sistem ve izleme günlüklerinde sorunla ilgili daha fazla bilgiye ulaşabilir."
+#, fuzzy
+#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
+msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
+msgstr[0] "İndirme işleminiz bir dosya bulunamadığı için başarısız oldu. Bir yönetici sistem ve izleme günlüklerinde sorunla ilgili daha fazla bilgiye ulaşabilir."
+msgstr[1] "İndirme işleminiz bir dosya bulunamadığı için başarısız oldu. Bir yönetici sistem ve izleme günlüklerinde sorunla ilgili daha fazla bilgiye ulaşabilir."
 
 msgid "Only admins can access this page."
 msgstr "Bu sayfaya yalnızca yöneticiler erişebilir."
@@ -190,7 +194,10 @@ msgstr[1] "{num} öge silindi."
 msgid "No collections selected for deletion."
 msgstr "Silinecek bir derleme seçilmemiş."
 
-msgid "The account and all data for {n} source have been deleted."
+#, fuzzy
+#| msgid "The account and all data for {n} source have been deleted."
+#| msgid_plural "The accounts and all data for {n} sources have been deleted."
+msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "{n} kaynağın hesap bilgileri ve verileri silinecek."
 msgstr[1] "{n} kaynağın hesap bilgileri ve verileri silinecek."
@@ -471,17 +478,11 @@ msgstr "Görüntülenecek bir gönderi yok."
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
 msgstr "Bu ileti ve/veya dosyaları gönderen kişiye güvenli bir yanıt yazabilirsiniz:"
 
-msgid "You've flagged this source for reply."
-msgstr "Bu kaynağı yanıtlamak amacıyla işaretlediniz."
+msgid "This source has no encryption key."
+msgstr ""
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Bu kaynağın bir sonraki oturum açışında bir şifreleme anahtarı üretilecek. Ardından kaynağa buradan yanıt yazabilirsiniz."
-
-msgid "Click below if you would like to write a reply to this source."
-msgstr "Bu kaynağa bir yanıt yazmak istiyorsanız aşağıya tıklayın."
-
-msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "BU KAYNAĞI YANITLAMAK İÇİN İŞARETLEYİN"
 
 msgid "Delete Source Account"
 msgstr "Kaynak Hesabını Sil"
@@ -607,18 +608,6 @@ msgstr "YubiKey gibi fiziksel güvenlik anahtarları için iki aşamalı kimlik 
 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "FİZİKSEL GÜVENLİK ANAHTARI KİMLİK BİLGİLERİNİ SIFIRLA"
-
-msgid "info icon"
-msgstr "bilgi simgesi"
-
-msgid "Thanks!"
-msgstr "Teşekkürler!"
-
-msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
-msgstr "SecureDrop bu kaynak için bir sonraki oturum açmasında kullanacağı güvenli bir şifreleme anahtarı üretecek. Anahtar üretildikten sonra, kaynağın belgelerinin derlemesi altında bir yanıt kutusu görüntülenir. Bu kutuyu kullanarak kaynağa şifrelenmiş yanıtlar gönderebilirsiniz."
-
-msgid "Continue to the list of documents for {codename}..."
-msgstr "{codename} belgelerini listelemeye devam edin..."
 
 msgid "Download Unread"
 msgstr "Okunmamışları İndir"
@@ -845,15 +834,6 @@ msgstr "Göster"
 msgid "Hide"
 msgstr "Gizle"
 
-msgid "Sorry we haven't responded yet!"
-msgstr "Üzgünüz, henüz yanıt vermedik!"
-
-msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
-msgstr "Son zamanlarda SecureDrop'umuz üzerinde yoğun etkinlik görüldü. Güvenlik nedenleriyle, iki yönlü iletişim kanalının oluşturulması tekrar girişinize kadar ertelendi."
-
-msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
-msgstr "Gönderinizi indirebildiğimizden emin olabilirsiniz. Bir yanıt olup olmadığını denetlemek için daha sonra tekrar kontrol edin."
-
 msgid "Submit Files or Messages"
 msgstr "Dosya veya İleti Gönderin"
 
@@ -977,6 +957,36 @@ msgstr "<strong>Önemli:</strong> Anonim kalmak istiyorsanız, dosyanın GPG tar
 
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"
+
+#~ msgid "You've flagged this source for reply."
+#~ msgstr "Bu kaynağı yanıtlamak amacıyla işaretlediniz."
+
+#~ msgid "Click below if you would like to write a reply to this source."
+#~ msgstr "Bu kaynağa bir yanıt yazmak istiyorsanız aşağıya tıklayın."
+
+#~ msgid "FLAG THIS SOURCE FOR REPLY"
+#~ msgstr "BU KAYNAĞI YANITLAMAK İÇİN İŞARETLEYİN"
+
+#~ msgid "info icon"
+#~ msgstr "bilgi simgesi"
+
+#~ msgid "Thanks!"
+#~ msgstr "Teşekkürler!"
+
+#~ msgid "SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them."
+#~ msgstr "SecureDrop bu kaynak için bir sonraki oturum açmasında kullanacağı güvenli bir şifreleme anahtarı üretecek. Anahtar üretildikten sonra, kaynağın belgelerinin derlemesi altında bir yanıt kutusu görüntülenir. Bu kutuyu kullanarak kaynağa şifrelenmiş yanıtlar gönderebilirsiniz."
+
+#~ msgid "Continue to the list of documents for {codename}..."
+#~ msgstr "{codename} belgelerini listelemeye devam edin..."
+
+#~ msgid "Sorry we haven't responded yet!"
+#~ msgstr "Üzgünüz, henüz yanıt vermedik!"
+
+#~ msgid "Our SecureDrop recently experienced a surge of activity. For security reasons, the creation of a two-way communication channel was delayed until you checked in again."
+#~ msgstr "Son zamanlarda SecureDrop'umuz üzerinde yoğun etkinlik görüldü. Güvenlik nedenleriyle, iki yönlü iletişim kanalının oluşturulması tekrar girişinize kadar ertelendi."
+
+#~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
+#~ msgstr "Gönderinizi indirebildiğimizden emin olabilirsiniz. Bir yanıt olup olmadığını denetlemek için daha sonra tekrar kontrol edin."
 
 #, fuzzy
 #~| msgid "Must be at least {num} character long."
