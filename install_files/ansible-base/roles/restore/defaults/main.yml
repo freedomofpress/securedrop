@@ -3,3 +3,4 @@
 # backup. add the `--preserve-tor-config` to preserve the server's existing config.
 
 restore_skip_tor: False
+restore_manual_transfer: False

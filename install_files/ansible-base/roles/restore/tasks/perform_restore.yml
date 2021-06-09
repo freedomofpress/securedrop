@@ -55,11 +55,40 @@
       - "More info: {{ compare_result.stdout }}"
   when: not restore_skip_tor
 
+- name: Calculate local backup file checksum
+  connection: local
+  become: no
+  stat:
+    path: "{{ restore_file }}"
+    checksum_algorithm: sha256
+  register: local_backup_file
+  when: restore_manual_transfer
+
+- name: Calculate remote backup file checksum
+  stat:
+    path: "/tmp/{{ restore_file }}"
+    checksum_algorithm: sha256
+  register: remote_backup_file
+  when: restore_manual_transfer
+
+- name: Verify that local and remote backup file checksums match
+  assert:
+    that:
+      - "remote_backup_file.stat.checksum == local_backup_file.stat.checksum"
+    fail_msg:
+      - "Checksum comparison for the local and remote copies of the backup file failed."
+      - "When using the --no-transfer flag. the same file must be present both locally"
+      - "in `install_files/ansible-base and on the Application Server in `/tmp`, to allow"
+      - "for config verification. Please copy the backup file into place on the"
+      - "Application Server before proceeding, or restore without the --no-transfer flag."
+  when: restore_manual_transfer
+
 - name: Copy backup to application server
   synchronize:
     src: "{{ restore_file }}"
     dest: /tmp/{{ restore_file }}
     partial: yes
+  when: not restore_manual_transfer
 
 - name: Extract backup
   unarchive:
