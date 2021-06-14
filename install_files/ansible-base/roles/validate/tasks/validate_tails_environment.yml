@@ -50,6 +50,11 @@
     path: "/home/amnesia/Persistent/securedrop/install_files/ansible-base/app-journalist.auth_private"
   register: v3_journalist_auth_file
 
+- name: Check for Source THS file
+  stat:
+    path: "/home/amnesia/Persistent/securedrop/install_files/ansible-base/app-sourcev3-ths"
+  register: v3_source_file
+
 - name: Check for Tor v3 key file
   stat:
     path: "/home/amnesia/Persistent/securedrop/install_files/ansible-base/tor_v3_keys.json"
@@ -63,7 +68,6 @@
       One of the SSH `.auth_private` files is missing. Please add the missing
       file under `~/Persistent/securedrop/install_files/ansible-base/ and
       retry the install command.
-  when:
 
 - name: Confirm that the Journalist auth file is present
   assert:
@@ -73,6 +77,8 @@
       The `app-journalist.auth_private` file is missing. Please add the missing
       file under `~/Persistent/securedrop/install_files/ansible-base/ and
       retry the install command.
+  when:
+   - v3_source_file.stat.exists
 
 - name: Confirm that the Tor keys file is present
   assert:
