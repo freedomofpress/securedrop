@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0~rc2
+
+* Bugfix: Tails config validation allows for fresh installs (#5990)
+
 ## 2.0.0~rc1
 
 ### Web applications
