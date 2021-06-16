@@ -1,7 +1,7 @@
 <div id="{{ modal_data.modal_id }}" class="modal-dialog">
   <a href="#close" class="external"></a>
   <div>
-    <a href="#close" title="{{ gettext('Close') }}" class="close"> <img src="{{ url_for('static', filename='i/modal-x-white.png') }}" height="24" width="24"></a>
+    <a href="#close" title="{{ gettext('Close') }}" class="close"> <img src="{{ url_for('static', filename='i/modal-x-white.png') }}" alt="{{ gettext('Close') }}" height="24" width="24"></a>
     <h2>{{ modal_data.modal_header }}</h2>
     <p>{{ modal_data.modal_body }}</p>
     {% if modal_data.modal_warning is defined %}
