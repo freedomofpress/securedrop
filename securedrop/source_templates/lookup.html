@@ -4,7 +4,7 @@
 {% if new_user %}
 <div class="code-reminder pull-left" id="codename-hint">
   <div id="codename-hint-visible">
-    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17" height="20"> {{ gettext('Remember, your codename is:') }}
+    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" alt="" width="17" height="20"> {{ gettext('Remember, your codename is:') }}
     <a id="codename-hint-show" class="show pull-right visible-codename" href="#codename-hint-visible">{{ gettext('Show') }}</a>
     <div id="codename-hint-content" class="hidden-codename codename">
       <a id="codename-hint-hide" class="pull-right" href="#codename-hint">{{ gettext('Hide') }}</a>
@@ -43,7 +43,7 @@
   <div class="snippet">
 {% if allow_document_uploads %}
     <div class="attachment grid-item center">
-      <img class="center" id="upload-icon" src="{{ url_for('static', filename='i/arrow-upload-large.png') }}" width="56" height="56">
+      <img class="center" id="upload-icon" src="{{ url_for('static', filename='i/arrow-upload-large.png') }}" alt="" width="56" height="56">
       {{ form.fh() }}
       <p class="center" id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
     </div>
@@ -62,8 +62,8 @@
 
 
     <a href="{{ url_for('main.lookup') }}" class="btn secondary" id="cancel">
-      <img class="icon off-hover" src="{{ url_for('static', filename='i/x_icon-button_blue.png') }}" width="9" height="11">
-      <img class="icon on-hover" src="{{ url_for('static', filename='i/x_icon-grimace_blue.png') }}" width="9" height="11">
+      <img class="icon off-hover" src="{{ url_for('static', filename='i/x_icon-button_blue.png') }}" alt="" width="9" height="11">
+      <img class="icon on-hover" src="{{ url_for('static', filename='i/x_icon-grimace_blue.png') }}" alt="" width="9" height="11">
       {{ gettext('CANCEL') }}
     </a>
   </div>
