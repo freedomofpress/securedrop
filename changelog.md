@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.0~rc3
+
+* Bugfix: torrc_additions file is now created if it doesn't already exist (#5999)
+* Bugfix: updater tag signature verification now matches 2021 key (#5998)
+
 ## 2.0.0~rc2
 
 * Bugfix: Tails config validation allows for fresh installs (#5990)

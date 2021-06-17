@@ -1,3 +1,9 @@
+securedrop-app-code (2.0.0~rc3+focal) focal; urgency=medium
+
+  * see changelog.md
+
+ -- SecureDrop Team <securedrop@freedom.press>  Thu, 17 Jun 2021 10:50:35 -0400
+
 securedrop-app-code (2.0.0~rc2+focal) focal; urgency=medium
 
   * see changelog.md
