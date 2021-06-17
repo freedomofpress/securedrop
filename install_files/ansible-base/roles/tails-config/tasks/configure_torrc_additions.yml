@@ -28,4 +28,5 @@
     owner: root
     group: root
     mode: "0400"
+    create: yes
   when: find_v3_aths_info_result.matched >= 1
