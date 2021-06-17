@@ -277,6 +277,25 @@ class TestSecureDropAdmin(object):
                               b'gpg: Signature made Thu 20 Jul '
                               b'2017 08:12:25 PM EDT\n'
                               b'gpg:                using RSA key '
+                              b'2359E6538C0613E652955E6C188EDD3B7B22E6A3\n'
+                              b'gpg: Good signature from "SecureDrop Release '
+                              b'Signing Key '
+                              b'<securedrop-release-key-2021@freedom.press>"\n',
+
+                              b'gpg: Signature made Thu 20 Jul '
+                              b'2017 08:12:25 PM EDT\n'
+                              b'gpg:                using RSA key '
+                              b'2359E6538C0613E652955E6C188EDD3B7B22E6A3\n'
+                              b'gpg: Good signature from "SecureDrop Release '
+                              b'Signing Key" [unknown]\n'
+                              b'gpg:                 aka "SecureDrop Release '
+                              b'Signing Key '
+                              b'<securedrop-release-key-2021@freedom.press>" '
+                              b'[unknown]\n',
+
+                              b'gpg: Signature made Thu 20 Jul '
+                              b'2017 08:12:25 PM EDT\n'
+                              b'gpg:                using RSA key '
                               b'22245C81E3BAEB4138B36061310F561200F4AD77\n'
                               b'gpg: Good signature from "SecureDrop Release '
                               b'Signing Key" [unknown]\n'
