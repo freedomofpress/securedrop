@@ -948,7 +948,9 @@ def update(args: argparse.Namespace) -> int:
         good_sig_text = ['Good signature from "SecureDrop Release Signing ' +
                          'Key"',
                          'Good signature from "SecureDrop Release Signing ' +
-                         'Key <securedrop-release-key@freedom.press>"']
+                         'Key <securedrop-release-key@freedom.press>"',
+                         'Good signature from "SecureDrop Release Signing ' +
+                         'Key <securedrop-release-key-2021@freedom.press>"']
         bad_sig_text = 'BAD signature'
         gpg_lines = sig_result.split('\n')
 
