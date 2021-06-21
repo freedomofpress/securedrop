@@ -8,8 +8,8 @@ Standards-Version: 3.9.8
 
 Package: securedrop-app-code
 Architecture: amd64
-Conflicts: haveged, libapache2-mod-wsgi, supervisor
-Replaces: haveged, libapache2-mod-wsgi, supervisor
+Conflicts: libapache2-mod-wsgi, supervisor
+Replaces: libapache2-mod-wsgi, supervisor
 {% if securedrop_target_distribution == "focal" %}
 Depends: ${dist:Depends}, ${misc:Depends}, ${python3:Depends}, apache2, apparmor-utils, coreutils, gnupg2, libapache2-mod-xsendfile, libpython3.8, paxctld, python3, python3-distutils, redis-server, securedrop-config, securedrop-keyring, sqlite3
 {% else %}
