@@ -4,24 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.6~rc2\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-03-08 22:37+0000\n"
-"Last-Translator: John Hensley <john@freedom.press>\n"
-"Language-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hans/>\n"
-"Language: zh_Hans\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.6~rc2\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-11 03:44+0000\nLast-Translator: ff98sha <ff98sha@163.com>\nLanguage-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hans/>\nLanguage: zh_Hans\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "消息文本太长。"
+msgstr "名字太长"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -30,10 +16,8 @@ msgstr[0] "该字段需要至少 {num} 个字符。"
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "此用户名无效，因为其被保留为软件内部使用。"
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
-msgstr "更改用户名"
+msgstr "无效的用户名"
 
 msgid "{time} ago"
 msgstr "{time} 之前"
@@ -61,7 +45,7 @@ msgstr "图片已更新。"
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "无法处理图片，请换一张试试。"
 
 msgid "Preferences saved."
 msgstr "设置已保存。"
@@ -77,12 +61,10 @@ msgstr "自动生成密码时发生错误。用户账户未建立。请重试。
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "用户名无效：{message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "用户名 \"{user}\" 已经被占用。"
+msgstr "用户名 \"{username}\" 已经被占用。"
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "保存该用户到数据库时出错。请通知管理员。"
@@ -91,10 +73,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "已成功验证用户 \"{user}\" 的两步验证代码。"
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "未更新名称: {}"
+msgstr "未更新名称: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "已删除用户'{user}'。"
@@ -116,8 +96,6 @@ msgstr "请选择项目"
 msgid "You must select one or more items."
 msgstr "您必须选择之前一个项目。"
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr[0] "找不到文件，下载失败。管理员可以在系统日志中查看更多信息。"
@@ -163,10 +141,8 @@ msgstr "该线人无未读内容。"
 msgid "Account updated."
 msgstr "账号已更新。"
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>登录失败。</b>"
+msgstr "登录失败。"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -188,9 +164,6 @@ msgstr[0] "已删除{num}个项目。"
 msgid "No collections selected for deletion."
 msgstr "未选择要删除的集合。"
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "{n}位线人的帐号与数据已删除。"
@@ -469,7 +442,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "您可以撰写一个私密的回复给消息或文件的提供者："
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "这位线人无加密密钥。"
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "系统会在下次线人登陆时生成新的加密密钥，之后你可以在这里回复线人。"
@@ -647,13 +620,13 @@ msgid "LOG IN"
 msgstr "登录"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "警告："
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "您似乎正在使用 Tor2Web，其不具备匿名性。"
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "为什么这样做很危险？"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "字段长度必须介于 1 至 {max_codename_len} 字节之间。"
@@ -930,7 +903,7 @@ msgid "If you are using <a href=\"{url}\">Tails</a>, you can double-click the <c
 msgstr "若您正使用 <a href=\"{url}\">Tails</a>，您可双击您刚下载的 <code>.asc</code> 以自动导入至您的密钥串。"
 
 msgid "If you are using macOS or Linux, open the terminal. You can import the key with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
-msgstr "若您正使用 macOS/Linux，请打开终端。您可使用 <p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p> 导入密钥。"
+msgstr "若您正使用 macOS/Linux，请打开终端。您可使用 <p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p> 导入密钥"
 
 msgid "Encrypt your submission. Open the terminal and enter this gpg command:"
 msgstr "加密你的提交内容。打开命令行并输入此 PGP 命令："
