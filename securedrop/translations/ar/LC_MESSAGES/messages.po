@@ -4,25 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 # Ahmad Gharbeia أحمد غربية <ahmad@gharbeia.org>, 2017.
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2021-03-09 19:37+0000\n"
-"Last-Translator: Layla Taha <layla@asl19.org>\n"
-"Language-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/securedrop/ar/>\n"
-"Language: ar\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-06-21 19:44+0000\nLast-Translator: Layla Taha <layla@asl19.org>\nLanguage-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/securedrop/ar/>\nLanguage: ar\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "إن نص الرسالة طويلٌ جداً."
+msgstr "الاسم طويلٌ جداً"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -34,12 +19,10 @@ msgstr[4] "يجب أن يحوي {num} حرفًا على الأقل."
 msgstr[5] "يجب أن يحوي {num} حرفًا على الأقل."
 
 msgid "This username is invalid because it is reserved for internal use by the software."
-msgstr "اسم المستخدم غير صالح لأن هذا الاسم محجوز للاستخدام الداخلي في البرنامج."
+msgstr "اسم المستخدم غير صالح لأن هذا الاسم محجوز من قبل البرنامج للاستخدام الداخلي."
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
-msgstr "تغيير اسم المستخدم"
+msgstr "اسم المستخدم غير صالح"
 
 msgid "{time} ago"
 msgstr "{time} مضت"
@@ -67,7 +50,7 @@ msgstr "تم تحديث الصورة بنجاح."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "تعذر استخدام ملف الصورة، يُرجى اختيار صورة أخرى."
 
 msgid "Preferences saved."
 msgstr "تم حفظ الاختيارات."
@@ -83,12 +66,10 @@ msgstr "تعذر إنشاء حساب المستخدم بسبب عطل في تو�
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "اسم المستخدم غير صالح: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "الاسم {user} سبق تخصيصه لمستخدم آخر."
+msgstr "الاسم \"{username}\" سبق تخصيصه لمستخدم آخر."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "حدث عطل خلال حفظ الحساب في قاعدة البيانات. يرجى إبلاغ الإداري."
@@ -97,23 +78,21 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "لقد تم التحقق بنجاح من رمز الاستيثاق في خطوتين للمستخدم \"{user}\"."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "لم يتم تحديث الإسم: {}"
+msgstr "لم يتم تحديث الإسم: {message}"
 
 msgid "Deleted user '{user}'."
-msgstr "حُذِفَ المستخدم '{user}'."
+msgstr "تم حذف المستخدم '{user}'."
 
 msgid "Test alert sent. Please check your email."
-msgstr "تم إرسال تنبيه تجريبي. تفقّد بريدك الإلكتروني."
+msgstr "تم إرسال تنبيه تجريبي. يرجى فحص الإيميل."
 
 #. Precedes a message confirming the success of an operation.
 msgid "Success!"
 msgstr "تم بنجاح!"
 
 msgid "The account and data for the source {} have been deleted."
-msgstr "الحساب والبيانات الخاصة بالمصدر {} تم حذفها."
+msgstr "تم حذف الحساب والبيانات الخاصة بالمصدر {}."
 
 #. Error shown when a user has not selected items to act on.
 msgid "Nothing Selected"
@@ -122,19 +101,17 @@ msgstr "لم يتم اختيار شىء"
 msgid "You must select one or more items."
 msgstr "لا بد من اختيار عنصر أو أكثر."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr[0] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
-msgstr[1] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
-msgstr[2] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
-msgstr[3] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
-msgstr[4] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
-msgstr[5] "لم ينجح التحميل بسبب عدم امكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+msgstr[0] "لم ينجح التحميل بسبب عدم إمكانية العثور على أي ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+msgstr[1] "لم ينجح التحميل بسبب عدم إمكانية العثور على الملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+msgstr[2] "لم ينجح التحميل بسبب عدم إمكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+msgstr[3] "لم ينجح التحميل بسبب عدم إمكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+msgstr[4] "لم ينجح التحميل بسبب عدم إمكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
+msgstr[5] "لم ينجح التحميل بسبب عدم إمكانية العثور على ملف. الإداري يمكنه الحصول على المزيد من المعلومات عن هذا الأمر من خلال سجلات نظام التشغيل والمراقبة."
 
 msgid "Only admins can access this page."
-msgstr "الإداريون وحدهم بوسعهم النّفاذ إلى هذه الصفحة."
+msgstr "الوصول إلى هذه الصفحة حكر على الإداريين."
 
 msgid "HOTP secrets are 40 characters long - you have entered {num}."
 msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
@@ -161,7 +138,7 @@ msgid "You cannot send an empty reply."
 msgstr "لا يمكن إرسال ردّ فارغ."
 
 msgid "File required."
-msgstr "يجب اختيار ملفّ."
+msgstr "يجب اختيار ملف."
 
 msgid "You can only upload PNG image files."
 msgstr "الصيغة المقبولة لملفّات الصور هي PNG حصرًا."
@@ -184,10 +161,8 @@ msgstr "لا توجد رسائل غير مقروءة من هذا المصدر."
 msgid "Account updated."
 msgstr "تم تحديث الحساب."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>فشل الولوج.</b>"
+msgstr "فشل الولوج."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -205,7 +180,7 @@ msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr "صيغة البيانات السرية غير صحيحة: المقبولة هي الأحرف من A-F و&nbsp;الأرقام من 0-9 فقط."
 
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
-msgstr "صيغة البيانات السرية غير صحيحة: عدد كلمات العبارة السرية يجب أن يكون زوجيًّا لا فرديًّا. تلزم مراجعة الإدخال."
+msgstr "صيغة البيانات السرية غير صحيحة: عدد كلمات العبارة السرية يجب أن يكون زوجيًّا لا فرديًّا. هل أخطأت في كتابة العبارة السرية؟"
 
 msgid "The item has been deleted."
 msgid_plural "{num} items have been deleted."
@@ -219,14 +194,11 @@ msgstr[5] "تم حذف {num} عنصر."
 msgid "No collections selected for deletion."
 msgstr "لَمْ تُختَر أيّ مجموعة لحذفها."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "لم يتم حذف أي حساب أو أي بيانات."
 msgstr[1] "تم حذف حساب وكل بيانات المصدر."
-msgstr[2] "‪تم حذف حسابي وكل بيانات المصدرين."
+msgstr[2] "تم حذف حسابي وكل بيانات المصدرين."
 msgstr[3] "تم حذف حسابات و كل بيانات {n} مصادر."
 msgstr[4] "تم حذف حسابات وكل بيانات {n} مصدر."
 msgstr[5] "تم حذف حسابات وكل بيانات {n} مصدر."
@@ -415,10 +387,10 @@ msgid "Back to admin interface"
 msgstr "الرجوع إلى واجهة الإدارة"
 
 msgid "Username can contain spaces"
-msgstr "يمكن أن يحوي اسم المستخدم مسافات"
+msgstr "يمكن أن يحتوي اسم المستخدم على المسافات"
 
 msgid "Username is case-sensitive"
-msgstr "حقل اسم المستخدم يمايز ما بين الأحرف اللاتينية الكبيرة و الصغيرة"
+msgstr "يميز حقل اسم المستخدم ما بين الأحرف اللاتينية الكبيرة و الصغيرة"
 
 msgid "First name"
 msgstr "الاسم"
@@ -442,7 +414,7 @@ msgid "You're almost done! To finish adding this new user, have them follow the 
 msgstr "قاربت على الانتهاء! لإتمام إضافة الحساب على المستخدم الجديد اتّباع التعليمات التالية لضبط الاستيثاق في خطوتين بواسطة FreeOTP. و&nbsp;بعد إضافة مدخلة لهذا الحساب في التطبيق يجب إدخال أحد الرموز المؤلّفة من 6 أرقام للتأكد من صحّة الإعداد."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
-msgstr "هل عجزت عن مسح وقراءة شريط الرموز أي البار كود؟ بامكانك مطابقة وربط بنفسك FreeOTP مع هذا الحساب وذلك عبر تسجيل رمز الاستيثاق في خطوتين التالي في التطبيق."
+msgstr "هل عجزت عن مسح وقراءة البار كود؟ بامكانك ربط FreeOTP مع هذا الحساب عن طريق إدخال رمزي الاستيثاق التاليين في التطبيق:"
 
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr "بعد إتمام ضبط مفتاح الاستيثاق \"YubiKey\" أدخل الرمز المكون من 6 أرقام:"
@@ -457,7 +429,7 @@ msgid "Log Out"
 msgstr "اخرج من الحساب"
 
 msgid "Powered by <em>SecureDrop {version}</em>."
-msgstr "تشغّله <em>SecureDrop {version} </em>."
+msgstr "من <em>SecureDrop {version} </em>."
 
 msgid "All Sources"
 msgstr "كُلّ المصادر"
@@ -520,7 +492,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "يمكن كتابة رد آمن إلى الشخص الذي أودع هذه الرسائل و/أو الملفات:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "هذا المصدر لا يحتوي على مفتاح تعمية."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "عند ولوج المصدر إلى النظام في المرّة التالية سيُولَّد له مفتاح تعمية، و&nbsp;سيمكنك بعد ذلك كتابة رسائل له هنا."
@@ -703,13 +675,13 @@ msgid "LOG IN"
 msgstr "لِج"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "تحذير:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "يبدو أنك تستخدم Tor2Web الذي لا يوفر خاصية إخفاء الهوية."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "لماذا يُعد هذا خطيرًا؟"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "يجب أن يتراوح طول الحقل بين محرف واحد و&nbsp;{max_codename_len} محرفا."
@@ -937,7 +909,7 @@ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"br
 msgstr "لقد تم إخراجك من الحساب نظراً لعدم نشاطك. اضغط على زر <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>هوية جديدة</strong>في متصفحك تور. إن ذلك سيمسح أي نشاط لك على متصفح تور في هذا الجهاز."
 
 msgid "Why is there a warning about Tor2Web?"
-msgstr "لماذا يوجد تنبيه بشأن Tor2Web؟"
+msgstr "لماذا يوجد تحذير بشأن Tor2Web؟"
 
 msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgstr "إنّ استخدام Tor2Web للنفاذ إلى SecureDrop لا يحقّق لك المجهولية."
@@ -986,7 +958,7 @@ msgid "If you are using <a href=\"{url}\">Tails</a>, you can double-click the <c
 msgstr "إذا كنت تستعمل نظام التشغيل <a href=\"{url}\">Tails</a> فيمكنك النقر المزدوج على ملف <code>asc</code> الذي نزّلته و&nbsp;سيُستورد تلقائيا إلى حلقة المفاتيح."
 
 msgid "If you are using macOS or Linux, open the terminal. You can import the key with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
-msgstr "إذا كنت تستخدم macOS أو لينُكس، فيمكنك استيراد المفتاح بواسطة <p><code> من خلال الطرفيّة بواسطة الأمر التالي :<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
+msgstr "إذا كنت تستخدم macOS أو لينُكس، فيمكنك استيراد المفتاح باستخدام الطرفيّة بواسطة الأمر التالي :<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
 
 msgid "Encrypt your submission. Open the terminal and enter this gpg command:"
 msgstr "قم بتعمية ما أرسلته. افتح الطرفية وادخل أمر التعمية gpg:"
