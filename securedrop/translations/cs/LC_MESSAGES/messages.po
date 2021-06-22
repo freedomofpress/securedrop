@@ -4,24 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.14.0~rc1\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-03-03 17:37+0000\n"
-"Last-Translator: Honza Cibulka <honza@datastory.cz>\n"
-"Language-Team: Czech <https://weblate.securedrop.org/projects/securedrop/securedrop/cs/>\n"
-"Language: cs\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.14.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-18 15:44+0000\nLast-Translator: Honza Cibulka <honza@datastory.cz>\nLanguage-Team: Czech <https://weblate.securedrop.org/projects/securedrop/securedrop/cs/>\nLanguage: cs\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "Zpráva je příliš dlouhá."
+msgstr "Uživatelské jméno je příliš dlouhé."
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -32,10 +18,8 @@ msgstr[2] "Uživatelské jméno musí mít alespoň {num} znaků."
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "Toto uživatelské jméno je neplatné, protože je rezervováno pro interní použití."
 
-#, fuzzy
-#| msgid "Invalid input."
 msgid "Invalid username"
-msgstr "Neplatný vstup."
+msgstr "Neplatné uživatelské jméno."
 
 msgid "{time} ago"
 msgstr "před {time}"
@@ -63,7 +47,7 @@ msgstr "Obrázek byl aktualizován."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "Soubor s obrázkem se nepodařilo načíst. Zkuste prosím jiný."
 
 msgid "Preferences saved."
 msgstr "Preference uložené."
@@ -79,12 +63,10 @@ msgstr "Došlo k chybě s automaticky generovaným heslem. Uživatelský účet 
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "Neplatné uživatelské jméno: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "Uživatelské jméno „{user}“ už používá někdo jiný."
+msgstr "Uživatelské jméno \"{user}\" už používá někdo jiný."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "Došlo k chybě při ukládání tohoto uživatele do databáze. Kontaktujte prosím administrátora."
@@ -93,10 +75,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Dvoufaktorový kód pro uživatele \"{user}\" byl ověřen."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "Jméno nebylo aktualizováno: {}"
+msgstr "Jméno nebylo aktualizováno: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "Uživatel „{user}“ byl smazán."
@@ -118,13 +98,11 @@ msgstr "Nic není vybráno"
 msgid "You must select one or more items."
 msgstr "Musíte vybrat jednu nebo více položek."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr[0] "Stahování selhalo protože soubor nebyl nalezen. Administrátor může najít více informací v systémovém a monitorovacím logu."
-msgstr[1] "Stahování selhalo protože soubor nebyl nalezen. Administrátor může najít více informací v systémovém a monitorovacím logu."
-msgstr[2] "Stahování selhalo protože soubor nebyl nalezen. Administrátor může najít více informací v systémovém a monitorovacím logu."
+msgstr[0] "Stahování selhalo, protože soubor nebyl nalezen. Administrátor může najít více informací v systémovém a monitorovacím logu."
+msgstr[1] "Stahování selhalo, protože soubory nebyly nalezeny. Administrátor může najít více informací v systémovém a monitorovacím logu."
+msgstr[2] "Stahování selhalo, protože soubory nebyly nalezeny. Administrátor může najít více informací v systémovém a monitorovacím logu."
 
 msgid "Only admins can access this page."
 msgstr "Na tuto stránku mají přístup pouze administrátoři."
@@ -171,10 +149,8 @@ msgstr "Žádné nepřečtené příspěvky z tohoto zdroje."
 msgid "Account updated."
 msgstr "Uživatelský účet aktualizován."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>Přihlášení selhalo.</b>"
+msgstr "Přihlášení selhalo."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -200,9 +176,6 @@ msgstr[2] "{num} položek bylo smazáno."
 msgid "No collections selected for deletion."
 msgstr "Nevybral/a jste žádnou sadu k smazání."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgstr[0] "Účet a všechna data pro {n} zdroj byla smazána."
@@ -489,7 +462,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "Můžete napsat bezpečnou odpověď člověku, který poslal tyto zprávy a/nebo dokumenty:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "Tento zdroj nemá šifrovací klíč."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Až se zdroj příště přihlásí, bude mu vygenerován šifrovací klíč a poté mu budete moci odpovědět zde."
@@ -669,13 +642,13 @@ msgid "LOG IN"
 msgstr "PŘIHLÁSIT SE"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "VAROVÁNÍ:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "Vypadá to, že používáte Tor2Web, který neposkytuje anonymitu."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "Proč je tohle nebezpečné?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Pole musí mít mezi 1 a {max_codename_len} znaky."
