@@ -4,24 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.14.0~rc1\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-03-07 21:37+0000\n"
-"Last-Translator: 1000101 <b1000101@pm.me>\n"
-"Language-Team: Slovak <https://weblate.securedrop.org/projects/securedrop/securedrop/sk/>\n"
-"Language: sk\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.14.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-13 14:47+0000\nLast-Translator: 1000101 <b1000101@pm.me>\nLanguage-Team: Slovak <https://weblate.securedrop.org/projects/securedrop/securedrop/sk/>\nLanguage: sk\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "Správa je príliš dlhá."
+msgstr "Meno je príliš dlhé"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -32,10 +18,8 @@ msgstr[2] "Musí byť aspoň {num} znakov dlhé."
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "Toto používateľské meno je neplatné, pretože je softvérom rezerované na interné použitie."
 
-#, fuzzy
-#| msgid "Invalid input."
 msgid "Invalid username"
-msgstr "Neplatný vstup."
+msgstr "Neplatné prihlasovacie meno"
 
 msgid "{time} ago"
 msgstr "pred {time}"
@@ -63,7 +47,7 @@ msgstr "Obrázok bol aktualizovaný."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "Obrázok nebolo možné spracovať. Skúste prosím iný."
 
 msgid "Preferences saved."
 msgstr "Preferencie uložené."
@@ -79,12 +63,10 @@ msgstr "Pri generovaní hesla sa vyskytla chyba. Účet nebol vytvorený. Prosí
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "Neplatné prihlasovacie meno: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "Prihlasovacie meno „{user}“ je už obsadené."
+msgstr "Prihlasovacie meno „{username}“ je už obsadené."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "Vyskytla sa chyba pri ukladaní používateľa do databázy. Prosím, kontaktujte administrátora."
@@ -93,10 +75,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Kód dvojfaktorového overenia pre používateľa \"{user}\" bol úspešne overený."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "Meno nebolo aktualizované: {}"
+msgstr "Meno nebolo aktualizované: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "Používateľ '{user}' bol vymazaný."
@@ -118,12 +98,10 @@ msgstr "Nič nebolo vybrané"
 msgid "You must select one or more items."
 msgstr "Musíte vybrať jednu či viac položiek."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr[0] "Sťahovanie zlyhalo, pretože súbor sa nenašiel. Administrátor môže nájsť viac informácií v logoch."
-msgstr[1] "Sťahovanie zlyhalo, pretože súbor sa nenašiel. Administrátor môže nájsť viac informácií v logoch."
+msgstr[1] "Sťahovanie zlyhalo, pretože niektorý zo súborov sa nenašiel. Administrátor môže nájsť viac informácií v logoch."
 msgstr[2] "Sťahovanie zlyhalo, pretože súbor sa nenašiel. Administrátor môže nájsť viac informácií v logoch."
 
 msgid "Only admins can access this page."
@@ -171,10 +149,8 @@ msgstr "Žiadne neprečítané podania od tohto zdroja."
 msgid "Account updated."
 msgstr "Účet bol aktualizovaný."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>Prihlásenie zlyhalo.</b>"
+msgstr "Prihlásenie zlyhalo."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -200,12 +176,9 @@ msgstr[2] "{num} položiek bolo zmazaných."
 msgid "No collections selected for deletion."
 msgstr "Žiadne sady neboli vybrané na zmazanie."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] "Účet a všetky dáta pre {n} zdroj boli zmazané."
+msgstr[0] "Účet a všetky dáta pre zdroj boli zmazané."
 msgstr[1] "Účet a všetky dáta pre {n} zdroje boli zmazané."
 msgstr[2] "Účet a všetky dáta pre {n} zdrojov bolo zmazaných."
 
@@ -489,7 +462,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "Môžete napísať bezpečnú odpoveď osobe, ktorá poslala dané správy a/alebo dokumenty:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "Tento zdroj nemá šifrovací kľúč."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Keď sa zdroj nabudúce prihlási, bude mu vygenerovaný šifrovací kľúč. Následnete tu budete mať môžnosť zdroju odpovedať."
@@ -669,13 +642,13 @@ msgid "LOG IN"
 msgstr "PRIHLÁSIŤ SA"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "POZOR:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "Vyzerá to, že používate Tor2Web, ktorý nechráni anonymitu."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "Prečo je to nebezpečné?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Pole musí mať 1 až {max_codename_len} znakov."
