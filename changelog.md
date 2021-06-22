@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.0~rc4
+
+* Bugfix: remove haveged from securedrop-app-code control file (#6006)
+* Bugfix: disable haveged if it is present (#6008)
+
 ## 2.0.0~rc3
 
 * Bugfix: torrc_additions file is now created if it doesn't already exist (#5999)
