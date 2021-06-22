@@ -4,24 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.6~rc2\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-03-08 22:37+0000\n"
-"Last-Translator: John Hensley <john@freedom.press>\n"
-"Language-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/securedrop/hi/>\n"
-"Language: hi\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.6~rc2\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-22 16:44+0000\nLast-Translator: Kushal Das <kushaldas@gmail.com>\nLanguage-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/securedrop/hi/>\nLanguage: hi\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "संदेश पाठ बहुत लंबा है |"
+msgstr "नाम बहुत लंबा है |"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -31,10 +17,8 @@ msgstr[1] "कम से कम {num} अक्षर लंबा होनी 
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "यह उपयोगकर्ता नाम अमान्य है क्योंकि यह सॉफ़्टवेयर द्वारा आंतरिक उपयोग के लिए आरक्षित है।"
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
-msgstr "उपयोगकर्ता नाम परिवर्तन करें"
+msgstr "यह उपयोगकर्ता नाम अमान्य है"
 
 msgid "{time} ago"
 msgstr "{time} पहले"
@@ -62,7 +46,7 @@ msgstr "छवि अपडेट की गई है।"
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "छवि को संसाधित करने में असमर्थ। कृपया दूसरा प्रयास करें।"
 
 msgid "Preferences saved."
 msgstr "प्राथमिकताएं सेव हो गयी।"
@@ -78,12 +62,10 @@ msgstr "ऑटोग्रेनेरेटेड पासवर्ड के 
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "अमान्य उपयोगकर्ता नाम: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "उपयोगकर्ता नाम \"{user}\" पहले से ही लिया जा चूका है।"
+msgstr "उपयोगकर्ता नाम \"{username}\" पहले से ही लिया जा चूका है।"
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "इस उपयोगकर्ता को डेटाबेस में सहेजने समय त्रुटि हुई। कृपया अपने व्यवस्थापक को सूचित करें।"
@@ -92,10 +74,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "उपयोगकर्ता \"{user}\" के लिए दो-कारक कोड सफलतापूर्वक सत्यापित किया गया था।"
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "नाम अपडेट नही हुआ: {}"
+msgstr "नाम अपडेट नही हुआ: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "उपयोगकर्ता '{user}' हटा दिया गया है।"
@@ -117,8 +97,6 @@ msgstr "कुछ भी चयनित नहीं"
 msgid "You must select one or more items."
 msgstr "आपको एक या अधिक आइटम का चयन करना होगा।"
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr[0] "फ़ाइल डाउनलोड नहीं हो पाने के कारण आपका डाउनलोड विफल रहा। एक व्यवस्थापक सिस्टम और निगरानी लॉग में अधिक जानकारी पा सकता है।"
@@ -167,10 +145,8 @@ msgstr "इस स्रोत के लिए कोई अपठित सब
 msgid "Account updated."
 msgstr "खाता अपडेट किया गया।"
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>लॉगिन विफल।</b>"
+msgstr "लॉगिन विफल।"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -194,12 +170,9 @@ msgstr[1] "{num} आइटम हटा दिए गए हैं।"
 msgid "No collections selected for deletion."
 msgstr "हटाए जाने के लिए कोई संग्रह नहीं चुना गया।"
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] "खाता और {n} स्रोत के सभी डेटा हटा दिए गए हैं।"
+msgstr[0] "खाता और स्रोत के सभी डेटा हटा दिए गए हैं।"
 msgstr[1] "{n} स्रोतों के खाते और सभी डेटा हटा दिए गए हैं।"
 
 msgid "You must select one or more items for deletion."
@@ -230,10 +203,10 @@ msgid "Cancel"
 msgstr "रद्द करें"
 
 msgid "starred icon"
-msgstr ""
+msgstr "तारांकित आइकन"
 
 msgid "unstarred icon"
-msgstr ""
+msgstr "अतारांकित आइकन"
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -246,7 +219,7 @@ msgstr[0] "1 मैसेज"
 msgstr[1] "{num} मैसेजस"
 
 msgid "download icon"
-msgstr ""
+msgstr "डाउनलोड आइकन"
 
 msgid "1 unread"
 msgid_plural "{num} unread"
@@ -350,16 +323,16 @@ msgid "Edit user {username}"
 msgstr "उपयोगकर्ता {username} संपादित करें"
 
 msgid "edit user icon"
-msgstr ""
+msgstr "उपयोगकर्ता आइकन को संपादित करें"
 
 msgid "trash icon disabled"
-msgstr ""
+msgstr "ट्रैश आइकन निष्क्रिय"
 
 msgid "Delete user {username}"
 msgstr "{username} उपयोगकर्ता हटाएं"
 
 msgid "trash icon"
-msgstr ""
+msgstr "ट्रैश आइकन"
 
 msgid "never"
 msgstr "कभी नहीँ"
@@ -434,34 +407,34 @@ msgid "Reply"
 msgstr "जवाब दें"
 
 msgid "reply icon"
-msgstr ""
+msgstr "जवाब दें आइकन"
 
 msgid "Read"
 msgstr "पठित"
 
 msgid "check icon"
-msgstr ""
+msgstr "सही करें आइकन"
 
 msgid "Unread"
 msgstr "अपठित"
 
 msgid "closed envelope icon"
-msgstr ""
+msgstr "बंद लिफाफा आइकन"
 
 msgid "open envelope icon"
-msgstr ""
+msgstr "खुला लिफाफा आइकन"
 
 msgid "Uploaded Document"
 msgstr "अपलोड किए गए दस्तावेज़"
 
 msgid "files icon"
-msgstr ""
+msgstr "फ़ाइलें आइकन"
 
 msgid "Message"
 msgstr "संदेश"
 
 msgid "messages icon"
-msgstr ""
+msgstr "संदेश आइकन"
 
 msgid "Delete Confirmation"
 msgstr "पुष्टिकरण हटाएं"
@@ -479,7 +452,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "आप इन दस्तावेजों को सबमिट करने वाले व्यक्ति को एक सुरक्षित उत्तर लिख सकते हैं:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "इस स्रोत में कोई एन्क्रिप्शन कुंजी नहीं है।"
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "अगली बार जब वे लॉग इन करते हैं, तो स्रोत के लिए एक एन्क्रिप्शन कुंजी उत्पन्न होगी, जिसके बाद आप यहां स्रोत को जवाब दे पाएंगे।"
@@ -658,13 +631,13 @@ msgid "LOG IN"
 msgstr "लॉग इन"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "चेतावनी:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "आप Tor2Web का उपयोग कर रहे हैं, जो गुमनामी प्रदान नहीं करता है।"
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "यह असुरक्षित क्यों है?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "फ़ील्ड 1 और {max_codename_len} वर्णों के बीच लंबा होना चाहिए।"
