@@ -226,11 +226,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             db.session.add(submission)
             new_submissions.append(submission)
 
-        # If necessary, generate a keypair to encrypt replies from the journalist
-        if g.source.pending or not current_app.crypto_util.get_fingerprint(g.filesystem_id):
-            current_app.crypto_util.genkeypair(g.filesystem_id, g.codename)
-            g.source.pending = False
-
+        g.source.pending = False
         g.source.last_updated = datetime.utcnow()
         db.session.commit()
 
