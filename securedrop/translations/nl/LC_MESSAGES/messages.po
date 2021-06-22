@@ -4,25 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2021-03-10 14:19+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
-"Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\n"
-"Language: nl\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-06-21 14:44+0000\nLast-Translator: erinm <erinm@riseup.net>\nLanguage-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\nLanguage: nl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "Bericht is te lang."
+msgstr "Naam is te lang"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -32,8 +17,6 @@ msgstr[1] "Moet ten minste {num} tekens lang zijn."
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "Deze gebruikersnaam is ongeldig, omdat het voor intern gebruik door de software is gereserveerd."
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
 msgstr "Gebruikersnaam wijzigen"
 
@@ -63,7 +46,7 @@ msgstr "Afbeelding bijgewerkt."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "Kan het afbeeldingsbestand niet verwerken. Probeer een andere."
 
 msgid "Preferences saved."
 msgstr "Voorkeuren opgeslagen."
@@ -79,12 +62,10 @@ msgstr "Er was een fout met het automatisch gegenereerde wachtwoord. Gebruiker n
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "Ongeldige gebruikersnaam: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "Gebruikersnaam \"{user}\" al in gebruik."
+msgstr "Gebruikersnaam \"{username}\" al in gebruik."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "Er trad een fout op bij het opslaan van deze gebruiker in de database. Neem contact op met uw beheerder."
@@ -93,10 +74,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "De tweestapstoken voor gebruiker \"{user}\" is succesvol geverifieerd."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "Naam niet bijgewerkt: {}"
+msgstr "Naam niet bijgewerkt: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "Gebruiker '{user}' verwijderd."
@@ -118,11 +97,9 @@ msgstr "Niets geselecteerd"
 msgid "You must select one or more items."
 msgstr "U moet één of meerdere elementen selecteren."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr[0] "Uw download is mislukt omdat een bestand niet kon worden gevonden. Een administrator kan meer informatie vinden in de systeem en monitoring logs."
+msgstr[0] "Uw download is mislukt omdat het bestand niet kon worden gevonden. Een administrator kan meer informatie vinden in de systeem en monitoring logs."
 msgstr[1] "Uw download is mislukt omdat een bestand niet kon worden gevonden. Een administrator kan meer informatie vinden in de systeem en monitoring logs."
 
 msgid "Only admins can access this page."
@@ -168,10 +145,8 @@ msgstr "Geen ongelezen inzendingen van deze bron."
 msgid "Account updated."
 msgstr "Account bijgewerkt."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>Inloggen mislukt.</b>"
+msgstr "Inloggen mislukt."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -195,12 +170,9 @@ msgstr[1] "Alle {num} items zijn verwijderd."
 msgid "No collections selected for deletion."
 msgstr "Geen collecties geselecteerd om te verwijderen."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] "Het account en alle data van {n} bron zijn verwijderd."
+msgstr[0] "Het account en alle data van de bron zijn verwijderd."
 msgstr[1] "De accounts en alle data van de {n} bronnen zijn verwijderd."
 
 msgid "You must select one or more items for deletion."
@@ -480,7 +452,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "U kunt beveiligd reageren naar de persoon die deze berichten en/of bestanden gestuurd heeft:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "Deze bron heeft geen encryptiesleutel."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Er wordt een encryptiesleutel gegenereerd voor de bron en wanneer deze de volgende keer inlogt, kunt u daarna hier reageren naar de bron."
@@ -659,13 +631,13 @@ msgid "LOG IN"
 msgstr "INLOGGEN"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "PAS OP:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "U lijkt Tor2Web te gebruiken, wat geen anonimiteit biedt."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "Waarom is dit gevaarlijk?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Veld moet tussen de 1 en {max_codename_len} tekens lang zijn."
