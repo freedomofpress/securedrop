@@ -86,8 +86,8 @@
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
           <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off">
           <a href="#confirm-delete-{{ reply.filename }}" class="delete">
-            <img class="icon off-hover" id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/trash-x-out.png') }}" alt="{{ gettext('Delete') }}" width="16" height="20">
-            <img class="icon on-hover" id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/trash-x-solid.png') }}" alt="{{ gettext('Delete') }}" width="16" height="20">
+            <img class="icon off-hover" id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/trash-x-out.png') }}" alt="{{ gettext('Delete reply') }}" width="16" height="20">
+            <img class="icon on-hover" id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/trash-x-solid.png') }}" alt="{{ gettext('Delete reply') }}" width="16" height="20">
           </a>
           <div id="confirm-delete-{{ reply.filename }}" class="confirm-prompt">
             <p>{{ gettext('Delete this reply?') }}
