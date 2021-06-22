@@ -4,24 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.5-rc4\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-03-04 17:37+0000\n"
-"Last-Translator: Benet (BennyBeat) R. i Camps <bennybeat@gmail.com>\n"
-"Language-Team: Catalan <https://weblate.securedrop.org/projects/securedrop/securedrop/ca/>\n"
-"Language: ca\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-14 13:44+0000\nLast-Translator: Benet (BennyBeat) R. i Camps <bennybeat@gmail.com>\nLanguage-Team: Catalan <https://weblate.securedrop.org/projects/securedrop/securedrop/ca/>\nLanguage: ca\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "El missatge de text és massa llarg."
+msgstr "El nom és massa llarg"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -31,10 +17,8 @@ msgstr[1] "Cal que tingui com a mínim {num} caràcters."
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "Aquest nom d'usuari no és vàlid perquè és reservat per a ús intern del programari."
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
-msgstr "Canvia el nom d'usuari"
+msgstr "El nom d'usuari no és vàlid"
 
 msgid "{time} ago"
 msgstr "fa {time}"
@@ -62,7 +46,7 @@ msgstr "S’ha actualitzat la imatge."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "No s'ha pogut processar el fitxer d'imatge. Proveu-ho amb un altre fitxer."
 
 msgid "Preferences saved."
 msgstr "S'han desat les preferències."
@@ -78,24 +62,20 @@ msgstr "S'ha produït un error amb la contrasenya generada automàticament. No s
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "El nom d'usuari no és vàlid: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "El nom d’usuari «{user}» ja existeix."
+msgstr "El nom d’usuari «{username}» ja existeix."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "S'ha produït un error en intentar desar aquest usuari en la base de dades. Informeu-ne a l'administrador."
 
 msgid "The two-factor code for user \"{user}\" was verified successfully."
-msgstr "El codi de factor doble per a «{user}» s'ha verificat correctament."
+msgstr "S'ha verificat correctament el codi de factor doble per a «{user}»."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "El nom no s'ha actualitzat: {}"
+msgstr "No s'ha actualitzat el nom: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "S’ha suprimit el compte d’usuari «{user}»."
@@ -117,19 +97,17 @@ msgstr "No hi ha res seleccionat"
 msgid "You must select one or more items."
 msgstr "Cal que seleccioneu un o més elements."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr[0] "La baixada ha fallat perquè no s'ha pogut trobar un fitxer. Un administrador pot obtenir més informació en els registres de sistema i seguiment."
-msgstr[1] "La baixada ha fallat perquè no s'ha pogut trobar un fitxer. Un administrador pot obtenir més informació en els registres de sistema i seguiment."
+msgstr[0] "Ha fallat la baixada perquè no s'ha trobat el fitxer. Un administrador pot obtenir més informació als registres de sistema i seguiment."
+msgstr[1] "Ha fallat la baixada perquè no s'han trobat els fitxers. Un administrador pot obtenir més informació als registres de sistema i seguiment."
 
 msgid "Only admins can access this page."
 msgstr "Només els administradors poden accedir a aquesta pàgina."
 
 msgid "HOTP secrets are 40 characters long - you have entered {num}."
 msgid_plural "HOTP secrets are 40 characters long - you have entered {num}."
-msgstr[0] "Els secrets HOTP tenen una mida de 40 caràcters, però n’heu introduït {num}."
+msgstr[0] "El secret HOTP té una mida de 40 caràcters, però n’heu introduït {num}."
 msgstr[1] "Els secrets HOTP tenen una mida de 40 caràcters, però n’heu introduït {num}."
 
 msgid "Cannot be longer than {num} character."
@@ -156,10 +134,10 @@ msgid "Your reply has been stored."
 msgstr "S'ha emmagatzemat la resposta."
 
 msgid "You must select one or more items for download"
-msgstr "Cal que seleccioneu un o més elements per baixar."
+msgstr "Cal que seleccioneu un o més elements per baixar"
 
 msgid "You must select one or more items for deletion"
-msgstr "Cal que seleccioneu un o més elements per suprimir."
+msgstr "Cal que seleccioneu un o més elements per suprimir"
 
 msgid "No unread submissions for this source."
 msgstr "Aquesta font no té cap enviament sense llegir."
@@ -167,10 +145,8 @@ msgstr "Aquesta font no té cap enviament sense llegir."
 msgid "Account updated."
 msgstr "S’ha actualitzat el compte."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>Ha fallat l’inici de la sessió.</b>"
+msgstr "Ha fallat l’inici de la sessió."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -194,12 +170,9 @@ msgstr[1] "S'han suprimit {num} elements."
 msgid "No collections selected for deletion."
 msgstr "No s’ha seleccionat cap col·lecció per suprimir."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] "S'ha suprimit el compte i totes les dades d'{n} font."
+msgstr[0] "S'ha suprimit el compte i totes les dades de la font."
 msgstr[1] "S'ha suprimit el compte i totes les dades de {n} fonts."
 
 msgid "You must select one or more items for deletion."
@@ -374,7 +347,7 @@ msgid "Back to admin interface"
 msgstr "Torna a la interfície administrativa"
 
 msgid "Username can contain spaces"
-msgstr "El nom d’usuari no pot contenir espais"
+msgstr "El nom d’usuari pot contenir espais"
 
 msgid "Username is case-sensitive"
 msgstr "El nom d’usuari distingeix entre majúscules i minúscules"
@@ -479,7 +452,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "Podeu escriure una resposta segura a la persona que ha enviat aquests missatges o fitxers:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "Aquesta font no té clau de xifratge."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Es generarà una clau per a la font la següent vegada que iniciï sessió, després d'això podreu respondre-hi aquí."
@@ -595,7 +568,7 @@ msgid "If your two-factor authentication credentials have been lost or compromis
 msgstr "Si heu perdut les vostres credencials d'autenticació de factor doble, si s'han compromès o bé teniu un aparell nou, podeu restablir les vostres credencials aquí. <em>Si feu això, assegureu-vos que esteu preparat per configurar l'aparell nou, altrament si us blocarà el compte.</em>"
 
 msgid "To reset two-factor authentication for mobile apps such as FreeOTP, choose the first option. For security keys like the YubiKey, choose the second one."
-msgstr "Per restablir l'autenticació de factor doble per a aplicacions mòbils com ara el FreeOTP, trieu la primera opció. Per a claus de seguretat com ara el YubiKey, trieu la segona."
+msgstr "Per a restablir l'autenticació de factor doble per a aplicacions mòbils com ara el FreeOTP, trieu la primera opció. Per a claus de seguretat com ara el YubiKey, trieu la segona."
 
 msgid "Reset two-factor authentication for mobile apps, such as FreeOTP"
 msgstr "Restableix l'autenticació de factor doble per a aplicacions mòbils, com ara el FreeOTP"
@@ -658,13 +631,13 @@ msgid "LOG IN"
 msgstr "INICIA LA SESSIÓ"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "ADVERTÈNCIA:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "Sembla que feu servir Tor2Web, que no garanteix l'anonimat."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "Per què això és perillós?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "El camp ha de tenir entre 1 i {max_codename_len} caràcters."
@@ -874,7 +847,7 @@ msgid "YES, DELETE ALL REPLIES"
 msgstr "SÍ, SUPRIMEIX TOTES LES RESPOSTES"
 
 msgid "NO, NOT YET"
-msgstr "NO, NO ENCARA"
+msgstr "NO ENCARA"
 
 msgid "— No Messages —"
 msgstr "— No hi ha cap missatge —"
