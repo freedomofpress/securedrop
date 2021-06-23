@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0~rc5
+
+* Bugfix: Prevent creation of a duplicate source keypair (#6011)
+
 ## 2.0.0~rc4
 
 * Bugfix: remove haveged from securedrop-app-code control file (#6006)
