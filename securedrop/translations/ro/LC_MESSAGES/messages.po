@@ -4,24 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.6~rc2\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-03-08 22:37+0000\n"
-"Last-Translator: John Hensley <john@freedom.press>\n"
-"Language-Team: Romanian <https://weblate.securedrop.org/projects/securedrop/securedrop/ro/>\n"
-"Language: ro\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.6~rc2\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-21 14:44+0000\nLast-Translator: erinm <erinm@riseup.net>\nLanguage-Team: Romanian <https://weblate.securedrop.org/projects/securedrop/securedrop/ro/>\nLanguage: ro\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "Textul mesajului este prea lung."
+msgstr "Denumire prea lungă"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -32,10 +18,8 @@ msgstr[2] "Trebuie să aibă cel puțin {num} de caractere."
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "Acest nume de utilizator este nevalid deoarece este rezervat pentru utilizare internă de către software."
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
-msgstr "Schimbă numele de utilizator"
+msgstr "Nume de utilizator nevalid"
 
 msgid "{time} ago"
 msgstr "acum {time}"
@@ -63,7 +47,7 @@ msgstr "Imaginea a fost actualizată."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "Imposibil de procesat fișierul imagine. Încercați altul."
 
 msgid "Preferences saved."
 msgstr "Preferințele au fost salvate."
@@ -79,12 +63,10 @@ msgstr "A apărut o eroare la parola generată automat. Utilizatorul nu a fost c
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "Nume de utilizator nevalid: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "Numele de utilizator „{user}” este deja folosit."
+msgstr "Numele de utilizator „{username}” este deja folosit."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "A apărut o eroare la salvarea utilizatorului în baza de date. Te rugăm să îți informezi administratorul."
@@ -93,10 +75,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Codul de autentificare cu doi factori al utilizatorului „{user}” a fost verificat cu succes."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "Nume neactualizat: {}"
+msgstr "Nume neactualizat: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "Utilizatorul „{user}” a fost șters."
@@ -118,11 +98,9 @@ msgstr "Nimic selectat"
 msgid "You must select one or more items."
 msgstr "Trebuie să selectezi unul sau mai multe elemente."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr[0] "Descărcarea a eșuat deoarece nu a fost găsit un fișier. Un administrator poate găsi mai multe informații în sistem și în jurnalele de monitorizare."
+msgstr[0] "Descărcarea a eșuat deoarece fișierul nu a fost găsit. Un administrator poate găsi mai multe informații în sistem și în jurnalele de monitorizare."
 msgstr[1] "Descărcarea a eșuat deoarece nu a fost găsit un fișier. Un administrator poate găsi mai multe informații în sistem și în jurnalele de monitorizare."
 msgstr[2] "Descărcarea a eșuat deoarece nu a fost găsit un fișier. Un administrator poate găsi mai multe informații în sistem și în jurnalele de monitorizare."
 
@@ -171,10 +149,8 @@ msgstr "Nu sunt trimiteri necitite de la această sursă."
 msgid "Account updated."
 msgstr "Contul a fost actualizat."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>Autentificarea a eșuat.</b>"
+msgstr "Autentificarea a eșuat."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -200,12 +176,9 @@ msgstr[2] "Au fost șterse {num} de elemente."
 msgid "No collections selected for deletion."
 msgstr "Nu a fost selectată nicio colecție pentru ștergere."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] "Contul și toate datele pentru {n} sursă au fost șterse."
+msgstr[0] "Contul și toate datele pentru sursă au fost șterse."
 msgstr[1] "Conturile și toate datele pentru {n} surse au fost șterse."
 msgstr[2] "Conturile și toate datele pentru {n} de surse au fost șterse."
 
@@ -489,7 +462,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "Poți scrie un răspuns securizat persoanei care a trimis aceste mesaje și/sau fișiere:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "Sursa nu are nicio cheie de criptare."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Sursa va primi o cheie de criptare generată data următoare când se autentifică, după care îi vei putea răspunde aici."
@@ -669,13 +642,13 @@ msgid "LOG IN"
 msgstr "CONECTARE"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "AVERTISMENT:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "Se pare că folosiți Tor2Web, care nu asigură anonimitate."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "De ce este periculos?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Câmpul trebuie să aibă între 1 și {max_codename_len} caractere."

@@ -4,24 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.5-rc4\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-03-08 10:37+0000\n"
-"Last-Translator: Volkan <volkangezer@gmail.com>\n"
-"Language-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/securedrop/tr/>\n"
-"Language: tr\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-11 16:44+0000\nLast-Translator: Volkan <volkangezer@gmail.com>\nLanguage-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/securedrop/tr/>\nLanguage: tr\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "İleti metni çok uzun."
+msgstr "İsim çok uzun"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -31,10 +17,8 @@ msgstr[1] "{num} karakterden az olamaz."
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "Bu kullanıcı adı geçersiz, çünkü yazılım tarafından içsel olarak kullanıma tahsis edilmiştir."
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
-msgstr "Kullanıcı adını değiştir"
+msgstr "Geçersiz kullanıcı adı"
 
 msgid "{time} ago"
 msgstr "{time} önce"
@@ -62,7 +46,7 @@ msgstr "Görüntü güncellendi."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "Görüntü dosyası işlenemiyor. Lütfen başka bir tane deneyin."
 
 msgid "Preferences saved."
 msgstr "Tercihler kaydedildi."
@@ -78,12 +62,10 @@ msgstr "Otomatik üretilen parolada bir sorun var. Kullanıcı eklenemedi. Lütf
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "Geçersiz kullanıcı adı: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "\"{user}\" kullanıcı adı başkası tarafından kullanılıyor."
+msgstr "\"{username}\" kullanıcı adı zaten kullanımda."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "Bu kullanıcı veritabanına kaydedilirken bir sorun çıktı. Lütfen yöneticinizi bilgilendirin."
@@ -92,10 +74,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "\"{user}\" kullanıcısı için iki aşamalı kimlik doğrulama kodu doğrulandı."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "Ad güncellenmedi: {}"
+msgstr "Ad güncellenmedi: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "'{user}' kullanıcısı silindi."
@@ -117,11 +97,9 @@ msgstr "Herhangi Bir Şey Seçilmemiş"
 msgid "You must select one or more items."
 msgstr "Bir ya da daha fazla öge seçmelisiniz."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr[0] "İndirme işleminiz bir dosya bulunamadığı için başarısız oldu. Bir yönetici sistem ve izleme günlüklerinde sorunla ilgili daha fazla bilgiye ulaşabilir."
+msgstr[0] "İndirme işleminiz dosya bulunamadığı için başarısız oldu. Bir yönetici sistem ve izleme günlüklerinde sorunla ilgili daha fazla bilgiye ulaşabilir."
 msgstr[1] "İndirme işleminiz bir dosya bulunamadığı için başarısız oldu. Bir yönetici sistem ve izleme günlüklerinde sorunla ilgili daha fazla bilgiye ulaşabilir."
 
 msgid "Only admins can access this page."
@@ -167,10 +145,8 @@ msgstr "Bu kaynağın okunmamış gönderimi yok."
 msgid "Account updated."
 msgstr "Hesap güncellendi."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>Oturum açma başarısız.</b>"
+msgstr "Oturum açma başarısız."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -194,12 +170,9 @@ msgstr[1] "{num} öge silindi."
 msgid "No collections selected for deletion."
 msgstr "Silinecek bir derleme seçilmemiş."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] "{n} kaynağın hesap bilgileri ve verileri silinecek."
+msgstr[0] "Bu kaynağın hesap bilgileri ve verileri silinecek."
 msgstr[1] "{n} kaynağın hesap bilgileri ve verileri silinecek."
 
 msgid "You must select one or more items for deletion."
@@ -479,7 +452,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "Bu ileti ve/veya dosyaları gönderen kişiye güvenli bir yanıt yazabilirsiniz:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "Bu kaynağın şifreleme anahtarı yok."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Bu kaynağın bir sonraki oturum açışında bir şifreleme anahtarı üretilecek. Ardından kaynağa buradan yanıt yazabilirsiniz."
@@ -658,13 +631,13 @@ msgid "LOG IN"
 msgstr "OTURUM AÇ"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "UYARI:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "Anonimlik sağlamayan Tor2Web kullanıyor gibisiniz."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "Bu neden tehlikeli?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Alanda 1 ile {max_codename_len} arasında karakter bulunmalıdır."

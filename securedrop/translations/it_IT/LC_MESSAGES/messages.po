@@ -7,25 +7,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
 # gio <gdamiola@gmail.com>, 2014
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2021-03-05 09:31+0000\n"
-"Last-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\n"
-"Language-Team: Italian <https://weblate.securedrop.org/projects/securedrop/securedrop/it/>\n"
-"Language: it_IT\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-06-18 15:44+0000\nLast-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\nLanguage-Team: Italian <https://weblate.securedrop.org/projects/securedrop/securedrop/it/>\nLanguage: it_IT\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "Testo del messaggio troppo lungo."
+msgstr "Nome troppo lungo"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -35,10 +20,8 @@ msgstr[1] "Deve essere lungo almeno {num} caratteri."
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "Questo nome utente non è valido in quanto è riservato per uso interno da parte del software."
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
-msgstr "Cambia nome utente"
+msgstr "Nome utente non valido"
 
 msgid "{time} ago"
 msgstr "{time} fa"
@@ -66,7 +49,7 @@ msgstr "Immagine aggiornata."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "Impossibile elaborare l'immagine. Provare con un altro file."
 
 msgid "Preferences saved."
 msgstr "Preferenze salvate."
@@ -82,12 +65,10 @@ msgstr "C'è stato un errore con la password generata automaticamente. Utente no
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "Nome utente non valido: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "Il nome utente \"{user}\" è già stato registrato."
+msgstr "Il nome utente \"{username}\" è già stato registrato."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "Si è verificato un errore salvando questo utente nel database. Informare il proprio amministratore."
@@ -96,10 +77,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Il codice a due fattori per l'utente \"{user}\" è stato verificato con successo."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "Nome non aggiornato: {}"
+msgstr "Nome non aggiornato: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "Utente \"{user}\" eliminato."
@@ -121,11 +100,9 @@ msgstr "Nessun oggetto selezionato"
 msgid "You must select one or more items."
 msgstr "È necessario selezionare uno o più oggetti."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr[0] "Lo scaricamento non è riuscito perché un file non è stato trovato. Un amministratore può avere maggiori informazioni sul sistema e monitorare i log."
+msgstr[0] "Lo scaricamento non è riuscito perché il file non è stato trovato. Un amministratore può avere maggiori informazioni sul sistema e monitorare i log."
 msgstr[1] "Lo scaricamento non è riuscito perché un file non è stato trovato. Un amministratore può avere maggiori informazioni sul sistema e monitorare i log."
 
 msgid "Only admins can access this page."
@@ -171,10 +148,8 @@ msgstr "Non ci sono invii non letti per questa fonte."
 msgid "Account updated."
 msgstr "Account aggiornato."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>Accesso non riuscito.</b>"
+msgstr "Accesso non riuscito."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -198,12 +173,9 @@ msgstr[1] "{num} oggetti sono stati eliminati."
 msgid "No collections selected for deletion."
 msgstr "Nessun archivio è stato selezionato per essere eliminato."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] "L'account è tutti i dati di {n} fonte sono stati eliminati."
+msgstr[0] "L'account e tutti i dati della fonte sono stati eliminati."
 msgstr[1] "Gli account è tutti i dati di {n} fonti sono stati eliminati."
 
 msgid "You must select one or more items for deletion."
@@ -483,7 +455,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "Puoi scrivere una risposta sicura alla persona che ha inviato questi messaggi e/o file:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "Questa fonte non ha una chiave di cifratura."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Una chiave di cifratura sarà generata per la fonte la prossima volta che eseguirà l'accesso, dopodiché potrai rispondere qui."
@@ -662,13 +634,13 @@ msgid "LOG IN"
 msgstr "ACCEDI"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "ATTENZIONE:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "Sembra che si stia utilizzando Tor2Web, che non garantisce l'anonimato."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "Perché questo è pericoloso?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Il campo deve avere una lunghezza tra 1 e {max_codename_len} caratteri."
