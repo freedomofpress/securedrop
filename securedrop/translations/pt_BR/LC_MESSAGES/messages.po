@@ -4,37 +4,21 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.4.3\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-03-02 19:59+0000\n"
-"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
-"Language-Team: Portuguese (Brazil) <https://weblate.securedrop.org/projects/securedrop/securedrop/pt_BR/>\n"
-"Language: pt_BR\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.4.3\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-21 14:44+0000\nLast-Translator: erinm <erinm@riseup.net>\nLanguage-Team: Portuguese (Brazil) <https://weblate.securedrop.org/projects/securedrop/securedrop/pt_BR/>\nLanguage: pt_BR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n > 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "Mensagem de texto muito longa."
+msgstr "Nome muito longo"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
-msgstr[0] "Deve conter pelo menos {num} caracteres."
+msgstr[0] "Deve conter pelo menos {num} caractere."
 msgstr[1] "Deve conter pelo menos {num} caracteres."
 
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "Este nome de usuário é inválido porque ele é reservado ao uso interno do software."
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
-msgstr "Alterar nome de usuário"
+msgstr "Nome de usuário inválido"
 
 msgid "{time} ago"
 msgstr "há {time}"
@@ -62,7 +46,7 @@ msgstr "Imagem atualizada."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "Incapaz de processar o arquivo de imagem. Por favor, tente outro."
 
 msgid "Preferences saved."
 msgstr "Preferências salvas."
@@ -78,12 +62,10 @@ msgstr "Houve um erro com a senha gerada automaticamente. O usuário não foi cr
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "Nome de usuário inválido: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "O nome de usuário \"{user}\" já está em uso."
+msgstr "O nome de usuário \"{username}\" já está em uso."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "Erro ao salvar este usuário no banco de dados. Por favor, informe o administrador."
@@ -92,10 +74,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "O código 2FA da.o usuária.o \"{user}\" foi verificado com sucesso."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "Nome não atualizado: {}"
+msgstr "Nome não atualizado: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "Usuário/a '{user}' apagado/a."
@@ -117,12 +97,10 @@ msgstr "Nada foi selecionado"
 msgid "You must select one or more items."
 msgstr "Você deve selecionar um ou mais itens."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr[0] "O seu download falhou, porque o arquivo não foi encontrado. Um(a) admin poderá encontrar mais informações no sistema e nos logs de monitoramento."
-msgstr[1] "O seu download falhou, porque o arquivo não foi encontrado. Um(a) admin poderá encontrar mais informações no sistema e nos logs de monitoramento."
+msgstr[1] "O seu download falhou, porque um arquivo não foi encontrado. Um(a) admin poderá encontrar mais informações no sistema e nos logs de monitoramento."
 
 msgid "Only admins can access this page."
 msgstr "Apenas administradores podem acessar esta página."
@@ -156,10 +134,10 @@ msgid "Your reply has been stored."
 msgstr "Sua resposta foi registrada."
 
 msgid "You must select one or more items for download"
-msgstr "Você deve selecionar um ou mais itens para download."
+msgstr "Você deve selecionar um ou mais itens para download"
 
 msgid "You must select one or more items for deletion"
-msgstr "Você deve selecionar um ou mais itens a serem apagados."
+msgstr "Você deve selecionar um ou mais itens a serem apagados"
 
 msgid "No unread submissions for this source."
 msgstr "Esta fonte não tem nenhum envio não lido."
@@ -167,10 +145,8 @@ msgstr "Esta fonte não tem nenhum envio não lido."
 msgid "Account updated."
 msgstr "Conta atualizada."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>Falha na autenticação.</b>"
+msgstr "Falha na autenticação."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -194,12 +170,9 @@ msgstr[1] "{num} itens foram apagados."
 msgid "No collections selected for deletion."
 msgstr "Nenhuma coleção selecionada para ser apagada."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] "A conta e todos os dados de {n} fonte foram apagados."
+msgstr[0] "A conta e todos os dados de o fonte foram apagados."
 msgstr[1] "A conta e todos os dados de {n} fontes foram apagados."
 
 msgid "You must select one or more items for deletion."
@@ -479,7 +452,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "Você pode escrever uma resposta criptografadas à pessoa que enviou essas mensagens e/ou documentos:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "Esta fonte não possui chave criptográfica."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Uma chave criptográfica será gerada para esta fonte na próxima vez que ela se conectar. Em seguida, você poderá responder a ela aqui."
@@ -658,13 +631,13 @@ msgid "LOG IN"
 msgstr "ACESSAR"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "AVISO:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "Você parece estar usando o Tor2Web, que não fornece anonimato."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "Por que isso é perigoso?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Este campo deve conter entre 1 e {max_codename_len} caracteres."
@@ -766,9 +739,7 @@ msgid ""
 "Because we do not track users of our <strong>SecureDrop</strong>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
-msgstr ""
-"Como não rastreamos as pessoas que utilizam <strong>SecureDrop</strong>,\n"
-" este codinome é a nossa única maneira de entrar em contato com você para fazer perguntas ou pedir mais informações. Contrariamente a uma senha, não é possível recuperar um codinome perdido."
+msgstr "Como não rastreamos as pessoas que utilizam <strong>SecureDrop</strong>, \neste codinome é a nossa única maneira de entrar em contato com você para fazer perguntas ou pedir mais \ninformações. Contrariamente a uma senha, não é possível recuperar um codinome perdido."
 
 msgid "SUBMIT DOCUMENTS"
 msgstr "ENVIAR DOCUMENTOS"

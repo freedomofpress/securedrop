@@ -1,23 +1,8 @@
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2021-03-10 22:37+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
-"Language-Team: German <https://weblate.securedrop.org/projects/securedrop/securedrop/de/>\n"
-"Language: de_DE\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop \\'0.3.5\\'\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-06-21 14:44+0000\nLast-Translator: erinm <erinm@riseup.net>\nLanguage-Team: German <https://weblate.securedrop.org/projects/securedrop/securedrop/de/>\nLanguage: de_DE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "Nachricht zu lang."
+msgstr "Name zu lang"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -27,10 +12,8 @@ msgstr[1] "Muss mindestens {num} Zeichen lang sein."
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "Dieser Benutzername ist ungültig, da er für interne Nutzung durch die Software reserviert ist."
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
-msgstr "Benutzername ändern"
+msgstr "Ungültiger Benutzername"
 
 msgid "{time} ago"
 msgstr "vor {time}"
@@ -58,7 +41,7 @@ msgstr "Bild aktualisiert."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "Die Bilddatei kann nicht verarbeitet werden. Bitte versuchen Sie eine andere."
 
 msgid "Preferences saved."
 msgstr "Einstellungen gespeichert."
@@ -74,12 +57,10 @@ msgstr "Es gab einen Fehler mit dem automatisch generierten Passwort. Der Benutz
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "Ungültiger Benutzername: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "Benutzername \"{user}\" ist bereits vergeben."
+msgstr "Benutzername \"{username}\" ist bereits vergeben."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "Beim Speichern dieses Benutzers in der Datenbank ist ein Fehler aufgetreten. Bitte informieren Sie Ihren Administrator."
@@ -88,10 +69,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Der Zwei-Faktor-Code für Benutzer \"{user}\" wurde erfolgreich überprüft."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "Nicht aktualisierter Name: {}"
+msgstr "Name nicht aktualisiert: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "Gelöschter Benutzer '{user}'."
@@ -113,11 +92,9 @@ msgstr "Nichts ausgewählt"
 msgid "You must select one or more items."
 msgstr "Sie müssen einen oder mehrere Einträge auswählen."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr[0] "Ihr Download ist fehlgeschlagen, weil eine Datei nicht gefunden werden konnte. Ein Administrator kann weitere Informationen in den System- und Überwachungsprotokollen finden."
+msgstr[0] "Ihr Download ist fehlgeschlagen, weil die Datei nicht gefunden werden konnte. Ein Administrator kann weitere Informationen in den System- und Überwachungsprotokollen finden."
 msgstr[1] "Ihr Download ist fehlgeschlagen, weil eine Datei nicht gefunden werden konnte. Ein Administrator kann weitere Informationen in den System- und Überwachungsprotokollen finden."
 
 msgid "Only admins can access this page."
@@ -163,10 +140,8 @@ msgstr "Keine ungelesenen Einreichungen für diese Quelle."
 msgid "Account updated."
 msgstr "Konto aktualisiert."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>Anmeldung fehlgeschlagen.</b>"
+msgstr "Anmeldung fehlgeschlagen."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -190,13 +165,10 @@ msgstr[1] "{num} Einträge wurden gelöscht."
 msgid "No collections selected for deletion."
 msgstr "Es sind keine Sammlungen zum Löschen ausgewählt."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] "Das Konto und alle Daten von {n} Quelle wurden gelöscht."
-msgstr[1] "Die Konten und alle Daten von {n} Quellen wurden gelöscht."
+msgstr[0] "Das Konto und alle Daten für die Quelle wurden gelöscht."
+msgstr[1] "Die Konten und alle Daten für {n} Quellen wurden gelöscht."
 
 msgid "You must select one or more items for deletion."
 msgstr "Sie müssen einen oder mehrere Einträge zum Löschen auswählen."
@@ -292,7 +264,7 @@ msgid "You're almost done! To finish resetting your two-factor authentication, f
 msgstr "Sie sind fast fertig! Um das Zurücksetzen der Zwei-Faktor-Authentifizierung abzuschließen, folgen Sie den Anweisungen unten, um FreeOTP einzurichten. Nachdem Sie den Eintrag für Ihr Konto in der App hinzugefügt haben, geben Sie einen der 6-stelligen Codes aus der App ein, um zu bestätigen, dass die Zwei-Faktor-Authentifizierung korrekt eingerichtet ist."
 
 msgid "Install FreeOTP on your phone"
-msgstr "Installieren Sie FreeOTP auf Ihrem Handy"
+msgstr "Installieren Sie FreeOTP auf Ihrem Smartphone"
 
 msgid "Open the FreeOTP app"
 msgstr "Öffnen Sie die FreeOTP-App"
@@ -301,7 +273,7 @@ msgid "Tap the QR code symbol at the top"
 msgstr "Tippen Sie oben auf das QR-Code-Symbol"
 
 msgid "Your phone will now be in \"scanning\" mode. When you are in this mode, scan the barcode below:"
-msgstr "Ihr Handy geht nun in den \"Scan-Modus\". Scannen Sie in diesem Modus den Barcode unten ein:"
+msgstr "Ihr Smartphone befindet sich nun im \"Scan\"-Modus. Scannen Sie in diesem Modus den unten stehenden Barcode:"
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with your SecureDrop account by entering the following two-factor secret into the app:"
 msgstr "Können Sie den Barcode nicht scannen? Um FreeOTP manuell mit Ihrem SecureDrop-Konto zu verbinden, geben Sie den folgenden Zwei-Faktor-Schlüssel in die App ein:"
@@ -475,7 +447,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "Sie können der Person, die diese Nachrichten und/oder Dateien eingereicht hat, eine sichere Antwort schreiben:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "Diese Quelle hat keinen Verschlüsselungsschlüssel."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Beim nächsten Anmelden wird für die Quelle ein Verschlüsselungsschlüssel generiert, nach dem Sie auf die Quelle antworten können."
@@ -654,13 +626,13 @@ msgid "LOG IN"
 msgstr "ANMELDEN"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "WARNUNG:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "Sie scheinen Tor2Web zu benutzen, das keine Anonymität bietet."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "Warum ist das gefährlich?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Feld muss zwischen 1 und {max_codename_len} Zeichen lang sein."

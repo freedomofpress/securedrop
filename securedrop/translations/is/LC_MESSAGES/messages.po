@@ -4,24 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.12.0~rc1\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-03-02 16:37+0000\n"
-"Last-Translator: Oktavia <oktaviahrund@gmail.com>\n"
-"Language-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/securedrop/is/>\n"
-"Language: is\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n % 10 != 1 || n % 100 == 11;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Report-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-20 17:44+0000\nLast-Translator: Oktavia <oktaviahrund@gmail.com>\nLanguage-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/securedrop/is/>\nLanguage: is\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n % 10 != 1 || n % 100 == 11;\nX-Generator: Weblate 4.6\nproject-Id-Version: SecureDrop 0.12.0~rc1\nGenerated-By: Babel 2.5.1\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "Texti skilaboðanna er of langur."
+msgstr "Nafnið er of langt"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -31,10 +17,8 @@ msgstr[1] "Verður að vera a.m.k. {num} stafa langt."
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "Þetta notandanafn er ekki gilt því það er frátekið til innri nota í hugbúnaðnum."
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
-msgstr "Breyta notandanafni"
+msgstr "Ógilt notandanafn"
 
 msgid "{time} ago"
 msgstr "Fyrir {time} síðan"
@@ -62,7 +46,7 @@ msgstr "Mynd var uppfærð."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "Tókst ekki að meðhöndla myndskrána. Prófaðu einhverja aðra."
 
 msgid "Preferences saved."
 msgstr "Kjörstillingar vistaðar."
@@ -78,12 +62,10 @@ msgstr "Það kom upp villa með sjálfvirkt útbúna lykilorðið. Notandi var 
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "Ógilt notandanafn: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "Notandanafnið \"{user}\" er þegar í notkun."
+msgstr "Notandanafnið \"{user}\" er núþegar í notkun."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "Villa kom upp við vistun þessa notanda í gagnagrunninn. Hafðu samband við kerfisstjórann þinn."
@@ -92,10 +74,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "Það tókst að staðfesta tvíþátta-kóðann fyrir notandann \"{user}\"."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "Nafn ekki uppfært: {}"
+msgstr "Nafn ekki uppfært: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "Eyddi notandanum '{user}'."
@@ -117,12 +97,10 @@ msgstr "Ekkert valið"
 msgid "You must select one or more items."
 msgstr "Þú verður að velja eitt eða fleiri atriði."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr[0] "Niðurhalið þitt mistókst vegna þess að skrá fannst ekki. Stjórnandi getur fundið ítarlegri upplýsingar í kerfinu og vöktunarskrám."
-msgstr[1] "Niðurhalið þitt mistókst vegna þess að skrá fannst ekki. Stjórnandi getur fundið ítarlegri upplýsingar í kerfinu og vöktunarskrám."
+msgstr[0] "Niðurhalið þitt mistókst vegna þess að skráin fannst ekki. Stjórnandi getur fundið ítarlegri upplýsingar í kerfinu og vöktunarskrám."
+msgstr[1] "Niðurhalið þitt mistókst vegna þess að skráin fannst ekki. Stjórnandi getur fundið ítarlegri upplýsingar í kerfinu og vöktunarskrám."
 
 msgid "Only admins can access this page."
 msgstr "Einungis stjórnendur fá aðgang að þessari síðu."
@@ -167,10 +145,8 @@ msgstr "Engar ólesnar innsendingar hjá þessum heimildarmanni."
 msgid "Account updated."
 msgstr "Aðgangur uppfærður."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>Innskráning mistókst.</b>"
+msgstr "Innskráning mistókst."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -194,12 +170,9 @@ msgstr[1] "{num} atriðum hefur verið eytt."
 msgid "No collections selected for deletion."
 msgstr "Engin söfn valin til eyðingar."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] "Notandaaðgangur og öllum gögnum {n} heimildarmanns hefur verið eytt."
+msgstr[0] "Notandaaðgangur og öllum gögnum heimildarmanns hefur verið eytt."
 msgstr[1] "Notandaaðgangur og öllum gögnum {n} heimildarmanna hefur verið eytt."
 
 msgid "You must select one or more items for deletion."
@@ -479,7 +452,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "Þú getur skrifað öruggt svar til aðilans sem sendi inn þessi skilaboð og/eða skjöl:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "Þessi heimild er ekki með neinn dulritunarlykil."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Dulritunarlykill verður útbúinn fyrir heimildarmanninn næst þegar hán skráir sig inn; eftir það muntu geta svarað heimildarmanninum hér."
@@ -658,13 +631,13 @@ msgid "LOG IN"
 msgstr "SKRÁ INN"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "AÐVÖRUN:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "Það lítur út fyrir að þú sért að nota Tor2Web, sem gefur ekki nafnleysi."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "Af hverju er þetta hættulegt?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Gagnasvið verður að vera á milli 1 og {max_codename_len} stafa langt."

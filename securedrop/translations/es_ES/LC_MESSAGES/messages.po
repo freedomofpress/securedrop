@@ -4,25 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2021-03-09 00:37+0000\n"
-"Last-Translator: Gonzalo Bulnes Guilpain <gon.bulnes@fastmail.com>\n"
-"Language-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/securedrop/es/>\n"
-"Language: es_ES\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-06-14 13:44+0000\nLast-Translator: Zuhualime Akoochimoya <zakooch@protonmail.ch>\nLanguage-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/securedrop/es/>\nLanguage: es_ES\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
-#, fuzzy
-#| msgid "Message text too long."
 msgid "Name too long"
-msgstr "Texto del mensaje demasiado largo."
+msgstr "Nombre demasiado largo"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
@@ -32,10 +17,8 @@ msgstr[1] "Debe tener por lo menos {num} caracteres de longitud."
 msgid "This username is invalid because it is reserved for internal use by the software."
 msgstr "Este nombre de usuario es inválido porque está reservado para uso interno por el software."
 
-#, fuzzy
-#| msgid "Change username"
 msgid "Invalid username"
-msgstr "Cambiar nombre de usuario"
+msgstr "Nombre de usuario inválido"
 
 msgid "{time} ago"
 msgstr "hace {time}"
@@ -63,7 +46,7 @@ msgstr "Imagen actualizada."
 
 #. This error is shown when an uploaded image cannot be used.
 msgid "Unable to process the image file. Please try another one."
-msgstr ""
+msgstr "Incapaz de procesar el archivo de imagen. Por favor, intenta con otro."
 
 msgid "Preferences saved."
 msgstr "Preferencias guardadas."
@@ -79,12 +62,10 @@ msgstr "Hubo un error con la contraseña generada automáticamente. El usuario n
 
 #. Here, "{message}" explains the problem with the username.
 msgid "Invalid username: {message}"
-msgstr ""
+msgstr "Nombre de usuario inválido: {message}"
 
-#, fuzzy
-#| msgid "Username \"{user}\" already taken."
 msgid "Username \"{username}\" already taken."
-msgstr "El nombre de usuario \"{user}\" ya se encuentra en uso."
+msgstr "El nombre de usuario \"{username}\" ya se encuentra en uso."
 
 msgid "An error occurred saving this user to the database. Please inform your admin."
 msgstr "Ocurrió un error al guardar este usuario en la base de datos. Por favor informa a tu administrador."
@@ -93,10 +74,8 @@ msgid "The two-factor code for user \"{user}\" was verified successfully."
 msgstr "El código de autenticación de dos factores para el usuario “{user}” fue verificado exitosamente."
 
 #. Here, "{message}" explains the problem with the name.
-#, fuzzy
-#| msgid "Name not updated: {}"
 msgid "Name not updated: {message}"
-msgstr "Nombre no actualizado: {}"
+msgstr "Nombre no actualizado: {message}"
 
 msgid "Deleted user '{user}'."
 msgstr "Usuario '{user}' eliminado."
@@ -118,11 +97,9 @@ msgstr "Nada Seleccionado"
 msgid "You must select one or more items."
 msgstr "Debes seleccionar uno o más ítems."
 
-#, fuzzy
-#| msgid "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
-msgstr[0] "Tu descarga falló porque un archivo no pudo ser encontrado. Un administrador puede encontrar más información en los registros de sistema y monitoreo."
+msgstr[0] "Tu descarga falló porque el archivo no pudo ser encontrado. Un administrador puede encontrar más información en los registros de sistema y monitoreo."
 msgstr[1] "Tu descarga falló porque un archivo no pudo ser encontrado. Un administrador puede encontrar más información en los registros de sistema y monitoreo."
 
 msgid "Only admins can access this page."
@@ -168,10 +145,8 @@ msgstr "No hay envíos sin leer para esta fuente."
 msgid "Account updated."
 msgstr "Cuenta actualizada."
 
-#, fuzzy
-#| msgid "<b>Login failed.</b>"
 msgid "Login failed."
-msgstr "<b>El inicio de sesión falló.</b>"
+msgstr "El inicio de sesión falló."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -195,12 +170,9 @@ msgstr[1] "{num} ítems han sido borrados."
 msgid "No collections selected for deletion."
 msgstr "No hay colecciones seleccionadas para eliminar."
 
-#, fuzzy
-#| msgid "The account and all data for {n} source have been deleted."
-#| msgid_plural "The accounts and all data for {n} sources have been deleted."
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] "La cuenta y todos los datos de {n} fuente han sido eliminados."
+msgstr[0] "La cuenta y todos los datos de la fuente han sido eliminados."
 msgstr[1] "Las cuentas y todos los datos de {n} fuentes han sido eliminados."
 
 msgid "You must select one or more items for deletion."
@@ -270,7 +242,7 @@ msgid "Are you sure this is what you want?"
 msgstr "¿Estás seguro de que es lo que quieres?"
 
 msgid "Yes, Delete Selected Source Accounts"
-msgstr "Sí, eliminar cuentas de la fuente seleccionada"
+msgstr "Sí, eliminar cuentas de fuentes seleccionadas"
 
 msgid "What would you like to delete?"
 msgstr "¿Qué deseas eliminar?"
@@ -480,7 +452,7 @@ msgid "You can write a secure reply to the person who submitted these messages a
 msgstr "Puedes escribir una respuesta segura a la persona que envió estos mensajes y/o archivos:"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "Esta fuente no tiene clave de cifrado."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr "Una llave de cifrado se generará para la fuente la próxima vez que ésta se conecte, después de lo cual podrás responderle desde aquí."
@@ -659,13 +631,13 @@ msgid "LOG IN"
 msgstr "INICIAR SESIÓN"
 
 msgid "WARNING:"
-msgstr ""
+msgstr "ADVERTENCIA:"
 
 msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
+msgstr "Aparentemente estás usando Tor2Web, el cual no provee anonimato."
 
 msgid "Why is this dangerous?"
-msgstr ""
+msgstr "¿Por qué es peligroso esto?"
 
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Este campo debe tener de 1 a {max_codename_len} caracteres de longitud."
@@ -794,7 +766,7 @@ msgid "GET STARTED"
 msgstr "PRIMEROS PASOS"
 
 msgid "Return visit"
-msgstr "Visitar de vuelta"
+msgstr "Nueva visita"
 
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "¿Ya tienes un nombre clave? Revisa si hay respuestas o envía algo nuevo."
@@ -908,10 +880,10 @@ msgid "You Should Use Tor Browser"
 msgstr "Deberías Usar el Navegador Tor"
 
 msgid "If you are not using Tor Browser, you <strong>may not be anonymous</strong>."
-msgstr "Si no estás usando el Navegador Tor, <strong>quizás no estés anónimo</strong>."
+msgstr "Si no estás usando el Navegador Tor, <strong>quizás no seas anónimo</strong>."
 
 msgid "If you want to submit information to SecureDrop, we <strong>strongly advise you</strong> to install Tor Browser and use it to access our site safely and anonymously."
-msgstr "Si quieres enviar información a SecureDrop, <strong>te recomendamos encarecidamente</strong> que instales el Navegador Tor y lo uses para entrar a nuestro sitio de forma segura y anónima."
+msgstr "Si quieres enviar información a SecureDrop, <strong>te recomendamos encarecidamente</strong> que instales el Navegador Tor y lo uses para conectarte a nuestro sitio de forma segura y anónima."
 
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Copia y pega la siguiente dirección en tu navegador y sigue las instrucciones para descargar e instalar el Navegador Tor:"
