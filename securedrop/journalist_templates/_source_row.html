@@ -7,7 +7,7 @@
       <button class="button-star starred" type="submit" formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}" aria-label="{{ gettext('Un-star {designation}').format(designation=source.journalist_designation) }}">
         <img src="{{ url_for('static', filename='icons/starred.png') }}" class="icon-drop icon-star-source" width="16" height="15" alt="{{ gettext('{designation} is starred').format(designation=source.journalist_designation) }}">
       </button>
-      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
+      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" aria-labelledby="starred-source-link-{{ loop_index }}">
       <a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
         {{ source.journalist_designation }}
       </a>
@@ -16,7 +16,7 @@
         <img src="{{ url_for('static', filename='icons/unstarred.png') }}" class="icon-drop icon-star-source off-hover" width="16" height="15" alt="{{ gettext('{designation} is not starred').format(designation=source.journalist_designation) }}">
         <img src="{{ url_for('static', filename='icons/starred.png') }}" class="icon-drop icon-star-source on-hover" width="16" height="15" alt="{{ gettext('{designation} is not starred').format(designation=source.journalist_designation) }}">
       </button>
-      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
+      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" aria-labelledby="un-starred-source-link-{{ loop_index }}">
       <a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
         {{ source.journalist_designation }}
       </a>
