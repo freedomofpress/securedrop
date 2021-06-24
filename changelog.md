@@ -1,34 +1,16 @@
 # Changelog
 
-## 2.0.0~rc5
-
-* Bugfix: Prevent creation of a duplicate source keypair (#6011)
-
-## 2.0.0~rc4
-
-* Bugfix: remove haveged from securedrop-app-code control file (#6006)
-* Bugfix: disable haveged if it is present (#6008)
-
-## 2.0.0~rc3
-
-* Bugfix: torrc_additions file is now created if it doesn't already exist (#5999)
-* Bugfix: updater tag signature verification now matches 2021 key (#5998)
-
-## 2.0.0~rc2
-
-* Bugfix: Tails config validation allows for fresh installs (#5990)
-
-## 2.0.0~rc1
+## 2.0.0
 
 ### Web applications
 
 * Removed inappropriate terms from wordlist (#5895)
 * Updated dependencies: babel from 2.5.1 to 2.9.1; cryptography from 3.2.1 to 3.4.7 (#5968, #5964)
-* Removed flag-for-reply functionality (#5954)
+* Removed flag-for-reply functionality (#5954, #6006, #6008, #6011)
 * Removed workaround for CSRF token set under Python 2 (#5957)
 * Removed `source_v2_url` field from SI metadata endpoint (#5926)
 * Bugfix: store directory is recreated if missing for an existing source (#5944)
-* Removed Xenial-only code from codebase (#5911)
+* Removed Xenial-only code from codebase (#5911, #5990, #5999)
 * Updated error message text (#5905, #5932)
 * Updated server OS information check (#5878)
 * Improved performance of logo image requests (#5874)
@@ -45,6 +27,7 @@
 * Removed upload-screenshots.py from application package (#5941)
 * Updated dependencies: py from 1.9.0 to 1.10.0; ansible from 2.9.7 -> 2.9.21 (#5925)
 * Bugfix: corrected errors in `tailsconfig` validation logic and set requirement for Tails 4.x (#5965)
+* Bugfix: updater tag signature verification now matches 2021 key (#5998)
 * Removed support for v2 service configuration (#5915)
 
 ### Development
