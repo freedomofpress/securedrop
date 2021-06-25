@@ -7,7 +7,7 @@ FOCAL_VERSION = "20.04"
 
 @functools.lru_cache()
 def get_xenial_eol_date() -> date:
-    return date(2021, 4, 30)
+    return date(2025, 4, 30)
 
 
 @functools.lru_cache()
