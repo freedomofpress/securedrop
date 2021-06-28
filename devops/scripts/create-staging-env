@@ -34,5 +34,5 @@ virtualenv_bootstrap
 if [ "$USER" = "sdci" ]; then
     molecule test -s "${securedrop_staging_scenario}"
 else
-    molecule "${MOLECULE_ACTION:-converge}" -s "${securedrop_staging_scenario}" "${EXTRA_ANSIBLE_ARGS[@]}"
+    molecule --debug "${MOLECULE_ACTION:-converge}" -s "${securedrop_staging_scenario}" "${EXTRA_ANSIBLE_ARGS[@]}"
 fi
