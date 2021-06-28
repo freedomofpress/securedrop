@@ -267,8 +267,8 @@ setuptools==56.0.0 \
     --hash=sha256:7430499900e443375ba9449a9cc5d78506b801e929fef4a186496012f93683b5
     # via -r requirements/python3/securedrop-app-code-requirements.in
 signal-protocol==0.2.2 \
-    --hash=sha256:77c13323ddf9247b88590837f93e55e4994f8328c2742fd4c09d8e09250a372b \
+    --hash=sha256:b22aa4f0c41db62dc2883b29d4d9aa64c24bc6284ea034ee0d85ea280c28faef \
     # note: this was manually added
 signal-groups==0.1.0 \
-    --hash=sha256:7bd71deab60162dae29b5eb2630d12f37d7350721cf312017b7566e8f070ac4a \
+    --hash=sha256:f41318d57d24da9482837ba6ad1458d2c6818e8f47dac9705fdc5286789e1914 \
     # note: this was manually added
