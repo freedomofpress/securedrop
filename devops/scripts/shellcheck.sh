@@ -15,13 +15,38 @@ function run_native_or_in_docker () {
 }
 export -f run_native_or_in_docker
 
-# Omitting the `.git/` directory since its hooks won't pass validation, and we
-# don't maintain those scripts. Omitting the `.venv/` dir because we don't control
-# files in there. Omitting the ossec packages because there are a LOT of violations,
-# and we have a separate issue dedicated to cleaning those up.
-find "." \( -path "*/.venv" -o -path "./install_files/ossec-server" \
-    -o -path "./install_files/ossec-agent" \) -prune \
-    -o -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
+# Omitting:
+# - the `.git/` directory since its hooks won't pass # validation, and
+#   we don't maintain those scripts.
+# - the `.venv/` dir because we don't control files in there.
+# - ossec packages because there are a LOT of violations, and we have
+#   a separate issue dedicated to cleaning those up.
+# - Python, JavaScript, YAML, HTML, SASS, PNG files because they're not shell scripts.
+# - Cache directories of mypy, SASS, or Tox.
+# - test results
+find "." \
+     \( \
+        -path '*.html' \
+        -o -path '*.js' \
+        -o -path '*.mo' \
+        -o -path '*.png' \
+        -o -path '*.po' \
+        -o -path '*.py' \
+        -o -path '*.sass' \
+        -o -path '*.yml' \
+        -o -path '*/.mypy_cache/*' \
+        -o -path '*/.sass-cache/*' \
+        -o -path '*/.tox/*' \
+        -o -path '*/.venv' \
+        -o -path './.git' \
+        -o -path './build/*' \
+        -o -path './install_files/ossec-agent' \
+        -o -path './install_files/ossec-server' \
+        -o -path './securedrop/static/*' \
+        -o -path './test-results/*' \
+     \) -prune \
+     -o -type f \
+     -exec file --mime {} + \
     | awk '$2 ~ /x-shellscript/ { print $1 }' \
     | sed 's/://' \
     | xargs -I {} -n1 bash -c 'run_native_or_in_docker "{}"' _
