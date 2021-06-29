@@ -4,11 +4,11 @@
     {% if category not in ["banner-warning","logo-success","logo-error","submission-preferences-success","submission-preferences-error","org-name-success","org-name-error", "testalert-success", "testalert-error", "testalert-notification"] %}
       <div class="flash {{ category }}">
         {% if category == "notification" %}
-        <img src="{{ url_for('static', filename='i/flash-notification.png') }}" height="35" width="15">
+        <img src="{{ url_for('static', filename='i/flash-notification.png') }}" alt="{{ gettext('Notification') }}" height="35" width="15">
         {% elif category == "success" %}
-        <img src="{{ url_for('static', filename='i/flash-success.png') }}" height="15" width="20">
+        <img src="{{ url_for('static', filename='i/flash-success.png') }}" alt="{{ gettext('Success') }}" height="15" width="20">
         {% elif category == "error" %}
-        <img src="{{ url_for('static', filename='i/flash-error.png') }}" height="30" width="9">
+        <img src="{{ url_for('static', filename='i/flash-error.png') }}" alt="{{ gettext('Error') }}" height="30" width="9">
         {% endif %}
         {{ message }}
       </div>

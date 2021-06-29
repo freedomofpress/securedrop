@@ -6,11 +6,11 @@
         {% set category_status = category.split('-')|last %}
           <div class="flash {{ category_status }}">
           {% if category_status == "success" %}
-              <img src="{{ url_for('static', filename='i/flash-success.png') }}" height="15" width="20">
+              <img src="{{ url_for('static', filename='i/flash-success.png') }}" alt="{{ gettext('Success') }}" height="15" width="20">
           {% elif category_status == "error" %}
-              <img src="{{ url_for('static', filename='i/flash-error.png') }}" height="30" width="9">
+              <img src="{{ url_for('static', filename='i/flash-error.png') }}" alt="{{ gettext('Error') }}" height="30" width="9">
           {% elif category_status == "notification" %}
-              <img src="{{ url_for('static', filename='i/flash-notification.png') }}" height="35" width="15">
+              <img src="{{ url_for('static', filename='i/flash-notification.png') }}" alt="{{ gettext('Notification') }}" height="35" width="15">
           {% endif %}
               {{ message }}
           </div>

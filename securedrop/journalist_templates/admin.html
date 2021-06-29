@@ -28,20 +28,20 @@
         <td>
           <a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}">
             <i title="{{ gettext('Edit user {username}').format(username=user.username) }}">
-              <img src="{{ url_for('static', filename='icons/edit-user.png') }}" class="icon" width="18" height="16" alt="{{ gettext('edit user icon') }}">
+              <img src="{{ url_for('static', filename='icons/edit-user.png') }}" class="icon" width="18" height="16" alt="{{ gettext('Edit user {username}').format(username=user.username) }}">
             </i>
           </a>
         </td>
 	{% if user.id == g.user.id %}
         <td>
-          <img src="{{ url_for('static', filename='icons/trash-disabled.png') }}" width="14" height="16" alt="{{ gettext('trash icon disabled') }}">
+          <img src="{{ url_for('static', filename='icons/trash-disabled.png') }}" width="14" height="16" alt="{{ gettext('User deletion disabled') }}">
         </td>
 	{% else %}
         <td>
           <button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}">
             <i title="{{ gettext('Delete user {username}').format(username=user.username) }}">
-              <img src="{{ url_for('static', filename='icons/trash.png') }}" class="off-hover" width="14" height="16" alt="{{ gettext('trash icon') }}">
-              <img src="{{ url_for('static', filename='icons/trash-hover-red.png') }}" class="on-hover" width="14" height="16" alt="{{ gettext('trash icon') }}">
+              <img src="{{ url_for('static', filename='icons/trash.png') }}" class="off-hover" width="14" height="16" alt="{{ gettext('Delete user {username}').format(username=user.username) }}">
+              <img src="{{ url_for('static', filename='icons/trash-hover-red.png') }}" class="on-hover" width="14" height="16" alt="{{ gettext('Delete user {username}').format(username=user.username) }}">
             </i>
           </button>
         </td>

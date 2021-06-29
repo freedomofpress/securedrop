@@ -12,15 +12,15 @@
 <hr class="no-line">
 
 <div class="code">
-  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="20" height="23">
+  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" alt="" width="20" height="23">
   <p id="codename" class="codename">{{ codename }}</p>
   <div class="pull-right">
 
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <button type="submit" id="regenerate-submit" class="small">
-        <img class="icon pull-left off-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}" width="20" height="20">
-        <img class="icon pull-left on-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}"  width="20" height="20">
+        <img class="icon pull-left off-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}" alt="{{ gettext('Refresh codename') }}" width="20" height="20">
+        <img class="icon pull-left on-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}"  alt="{{ gettext('Refresh codename') }}" width="20" height="20">
       </button>
     </form>
   </div>
