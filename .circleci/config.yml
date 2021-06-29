@@ -118,7 +118,7 @@ jobs:
     environment:
       DOCKER_API_VERSION: 1.23
       BASE_OS: focal
-    parallelism: 20
+    parallelism: 21
     steps:
       - checkout
       - *rebaseontarget
@@ -319,6 +319,9 @@ workflows:
       - translation-tests:
           requires:
             - lint
+          filters:
+            branches:
+              only: /i18n-.*/
       - deb-tests:
           filters:
             branches:
