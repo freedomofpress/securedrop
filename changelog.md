@@ -1,8 +1,62 @@
 # Changelog
 
-## 1.9.0~rc1
+## 2.1.0~rc1
 
-*
+
+
+## 2.0.0
+
+### Web applications
+
+* Removed inappropriate terms from wordlist (#5895)
+* Updated dependencies: babel from 2.5.1 to 2.9.1; cryptography from 3.2.1 to 3.4.7 (#5968, #5964)
+* Removed flag-for-reply functionality (#5954, #6006, #6008, #6011)
+* Removed workaround for CSRF token set under Python 2 (#5957)
+* Removed `source_v2_url` field from SI metadata endpoint (#5926)
+* Bugfix: store directory is recreated if missing for an existing source (#5944)
+* Removed Xenial-only code from codebase (#5911, #5990, #5999)
+* Updated error message text (#5905, #5932)
+* Updated server OS information check (#5878)
+* Improved performance of logo image requests (#5874)
+* Improved performance of queries for unseen submissions (#5872)
+
+### Journalist API
+
+* Added /sources/<source_uuid>/conversation endpoint (#5963)
+
+### Operations
+
+* Updated Tor version to 0.4.5.8 (#5971)
+* Bugfix: Application Server submissions checker updated to run once per day (#5927)
+* Removed upload-screenshots.py from application package (#5941)
+* Updated dependencies: py from 1.9.0 to 1.10.0; ansible from 2.9.7 -> 2.9.21 (#5925)
+* Bugfix: corrected errors in `tailsconfig` validation logic and set requirement for Tails 4.x (#5965)
+* Bugfix: updater tag signature verification now matches 2021 key (#5998)
+* Removed support for v2 service configuration (#5915)
+
+### Development
+
+* Updated mypy configuration to expect Python version 3.8 (#5977)
+* Revised upgrade testing logic (#5960)
+* Added Rust toolchain to the builder image (#5966)
+* Removed VirtualBox support in VM scenarios (#5922)
+* Improved efficienciy of alembic upgrade/downgrade tests (#5935)
+* Updated geckodriver and Firefox ESR versions used in tests to latest versions (#5921)
+* Bugfix: corrected Ansible deprecation warning when building deb packages (#5917)
+* Updated dependencies: pip from 19.3.1 to 21.1.1; pip-tools from 4.5.1 to 6.1.0; setuptools from 46.0.0 to 56.0.0; setuptools-scm from 5.0.2 to 6.0.1; pillow from 8.1.1 to 8.2.0 (#5888)
+* Added codecov checksum validation, updated CircleCI machine to Focal (#5907)
+* Added paxtest checks in testinfra suite, fixed tests failing under Focal (#5848, #5839)
+* Bugfix: disabled errant pylint tuple definition checks (#5887)
+
+### Translation
+
+* Improved i18n_tool.py update-from-weblate functionality (#5863)
+* Corrected untranslated messages (#5881)
+
+### Documentation
+
+* Bugfix: screenshots of long pages are created correctly (#5938)
+* Replaced local copy of code of conduct with centralized version (#5889)
 
 ## 1.8.2
 
