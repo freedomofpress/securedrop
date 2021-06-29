@@ -130,7 +130,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             securedrop_group=current_group,
             allow_document_uploads=False,  # temp
             codename=g.codename,
-            replies=replies,
             new_user=session.get('new_user', None),
             form=SubmissionForm(),
         )
