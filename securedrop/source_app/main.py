@@ -130,7 +130,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             to_register=not g.source.is_signal_registered(),
             securedrop_group=current_group,
             allow_document_uploads=False,  # temp
-            replies=replies,
             new_user_codename=session.get('new_user_codename', None),
             form=SubmissionForm(),
         )
