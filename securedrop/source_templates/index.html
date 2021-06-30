@@ -17,9 +17,27 @@
     {% endassets %}
   </head>
   <body id="source-index">
-    <div id="js-warning" class="warning"><img src="{{ url_for('static', filename='i/font-awesome/white/exclamation-circle.svg') }}" alt="" height="12">&nbsp; {{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><strong>Security Level</strong></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> &nbsp;button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg"))  }} </div>
-    <div id="use-tor-browser" class="warning">{{ gettext('<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }} <img id="use-tor-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" alt="{{ gettext('Close') }}" width="12" height="12"></div>
-    <div id="orfox-browser" class="warning">{{ gettext('<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }} <img id="orfox-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" alt="{{ gettext('Close') }}" width="12" height="12"></div>
+    <div id="js-warning" class="warning" role="alert">
+      {# FIXME:
+      <img src="{{ url_for('static', filename='i/font-awesome/white/exclamation-circle.svg') }}" alt="" height="12">&nbsp;
+      #}
+      {{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><strong>Security Level</strong></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> &nbsp;button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg"))  }}
+    </div>
+    {# Warning bubble to help TB users disable JavaScript with NoScript.
+    Included here so the images can preload while the user is first
+    reading the page. Hidden by default. #}
+    <dialog open class="bubble" id="security-setting-info" class="info" role="dialog" aria-labelledby="security-level-heading" aria-describedby="security-level-instructions">
+      <h2 id="security-level-heading" hidden>{{ gettext('How to change your security level') }}</h2>
+      <ol id="security-level-instructions">
+        <li>{{ gettext('Click the <img src="{icon}" alt="&quot;Security Level&quot; button"> in the toolbar above').format(icon=url_for("static", filename="i/font-awesome/black/guard.svg"))  }}</li>
+        <li>{{ gettext('Select <strong>Advanced Security Settings</strong>') }}</li>
+        <li>{{ gettext('Select <strong>Safest</strong>') }}</li>
+      </ol>
+      <p>{{ gettext('<a href="/" aria-label="Follow these instructions, then refresh this page">Refresh this page</a>, and you\'re done!') }}</p>
+
+    </dialog>
+    <div id="use-tor-browser" class="warning" role="alert">{{ gettext('<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }} <img id="use-tor-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" alt="{{ gettext('Close') }}" width="12" height="12"></div>
+    <div id="orfox-browser" class="warning" role="alert">{{ gettext('<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }} <img id="orfox-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" alt="{{ gettext('Close') }}" width="12" height="12"></div>
 
     {% include 'banner_warning_flashed.html' %}
 
@@ -29,31 +47,34 @@
         {# The div `index-wrap` MUST be ordered this way so that the flexbox works on large and small screens
            See _source_index.sass for a more full understanding. #}
         <div class="index-wrap">
-          <div class="header">
+          <header class="header">
+            <h1>{{ g.organization_name }}</h1>
+            {# FIXME:
             <img src="{{ g.logo }}" alt="{{ g.organization_name }} | {{ gettext('Logo Image') }}" class="logo-image">
+            #}
             <div id="index-locales">
               {% include 'locales.html' %}
             </div>
-          </div>
+          </header>
 
           <div class="index-row">
-            <div class="index-column index-left">
-              <div class="index-column-top-container">
-              <h2 class="welcome-text">
+            <section class="index-column index-left" aria-labelledby="first-submission-heading">
+              <div class="index-column-top-container" aria-label="">
+              <h2 id="first-submission-heading" class="welcome-text">
                 {{ gettext('First submission') }}
               </h2>
               <p class="extended-welcome-text">{{ gettext('First time submitting to our SecureDrop? Start here.') }}</p>
               </div>
-              <div class="index-column-bottom-container">
+              <div class="index-column-bottom-container" aria-label="">
                 <a href="{{ url_for('main.generate') }}" id="submit-documents-button" class="btn alt">
                   {{ gettext('GET STARTED') }}
                 </a>
               </div>
-            </div>
+            </section>
             <div id="middle-separator"></div>
-            <div class="index-column index-right">
+            <section class="index-column index-right" aria-labelledby="return-visit-heading">
               <div class="index-column-top-container">
-              <h2 class="welcome-text">
+              <h2 id="return-visit-heading" class="welcome-text">
                 {{ gettext('Return visit') }}
               </h2>
               <p class="extended-welcome-text">{{ gettext('Already have a codename? Check for replies or submit something new.') }}</p>
@@ -63,24 +84,12 @@
                   {{ gettext('LOG IN') }}
                 </a>
               </div>
-            </div>
+            </section>
         </div>
       </div>
       {% include 'footer.html' %}
     </div>
 
-    {# Warning bubble to help TB users disable JavaScript with NoScript.
-    Included here so the images can preload while the user is first
-    reading the page. Hidden by default. #}
-    <div id="security-setting-info" class="bubble info">
-      <ol>
-        <li>{{ gettext('Click the <img src="{icon}" alt="&quot;Security Level&quot; button"> in the toolbar above').format(icon=url_for("static", filename="i/font-awesome/black/guard.svg"))  }}</li>
-        <li>{{ gettext('Select <strong>Advanced Security Settings</strong>') }}</li>
-        <li>{{ gettext('Select <strong>Safest</strong>') }}</li>
-      </ol>
-      <p>{{ gettext('<a href="/">Refresh this page</a>, and you\'re done!') }}</p>
-
-    </div>
 
   </body>
 </html>

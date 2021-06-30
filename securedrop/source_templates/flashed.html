@@ -1,8 +1,11 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
+<section id="flashed" role="alert">
+  <ul>
   {% for category, message in messages %}
     {% if category != 'banner-warning' %}
-      <div class="flash {{ category }}">
+      <li class="flash {{ category }}">
+        {# FIXME:
         {% if category == 'notification' %}
         <img src="{{ url_for('static', filename='i/font-awesome/info-circle-black.png') }}" alt="{{ gettext('Notification') }} width="20" height="16">
         {% elif category == 'error' %}
@@ -10,9 +13,12 @@
         {% elif category == 'important' %}
         <img src="{{ url_for('static', filename='i/bang-stop.png') }}" alt="{{ gettext('Important') }}" width="22" height="22">
         {% endif %}
+        #}
         {{ message }}
-      </div>
+      </li>
     {% endif %}
   {% endfor %}
+  </ul>
+</section>
 {% endif %}
 {% endwith %}

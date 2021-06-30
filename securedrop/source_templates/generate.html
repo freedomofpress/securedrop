@@ -3,34 +3,43 @@
 {% block body %}
 <h1>{{ gettext('Welcome') }}</h1>
 
-<aside class="center">
-  <p>{{ gettext('Please either write this codename down and keep it in a safe place, or memorize it.') }}</p>
-</aside>
+{# FIXME: aside.center #}
+  <p id="codename-instructions" class="center">{{ gettext('Please either write this codename down and keep it in a safe place, or memorize it.') }}</p>
 
-<p class="explanation">{{ gettext('This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen.') }}</p>
+<p id="codename-explanation" class="explanation">{{ gettext('This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen.') }}</p>
 
+{# FIXME:
 <hr class="no-line">
+#}
 
-<div class="code">
+<section class="code">
+  {# FIXME:
   <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" alt="" width="20" height="23">
-  <p id="codename" class="codename">{{ codename }}</p>
+  #}
+  <label id="codename-label" for="codename" hidden>{{ gettext('Codename') }}</label>
+  <output id="codename" class="codename" aria-labelledby="codename-label" aria-describedby="codename-instructions codename-explanation">{{ codename }}</output>
   <div class="pull-right">
 
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <button type="submit" id="regenerate-submit" class="small">
+        {# FIXME:
         <img class="icon pull-left off-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}" alt="{{ gettext('Refresh codename') }}" width="20" height="20">
         <img class="icon pull-left on-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}"  alt="{{ gettext('Refresh codename') }}" width="20" height="20">
+        #}
+        {{ gettext('Refresh codename') }}
       </button>
     </form>
   </div>
-  <div class="clearfix"></div>
+</section>
+{# FIXME:
+<div class="clearfix"></div>
 </div>
 
 <div class="clearfix"></div>
 
 <hr class="no-line">
-
+#}
 <p class="explanation">{{ gettext('Because we do not track users of our <strong>SecureDrop</strong>
  service, in future visits, using this codename will be the only way we have to communicate with you should we have
  questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename.') }}
@@ -40,6 +49,7 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input name="tab_id" type="hidden" value="{{ tab_id }}">
   <button type="submit" class="btn--space pull-right" id="continue-button">
+     {# FIXME: #6003 #}
      {{ gettext('SUBMIT DOCUMENTS') }}
   </button>
 </form>

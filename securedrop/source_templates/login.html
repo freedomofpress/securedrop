@@ -8,21 +8,26 @@
 <form method="post" action="{{ url_for('main.login') }}" autocomplete="off">
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
 
-<p class="center">
-  {{ form.codename(id="login-with-existing-codename", class="codename-box", autocomplete="off", placeholder=gettext('Enter your codename'), autofocus=True) }}
-  <br>
+<div class="center">
+  {{ form.codename(id='login-with-existing-codename', class='codename-box', autocomplete='off', placeholder=gettext('Enter your codename'), autofocus=True, **{'aria-label': gettext('Enter your codename'), 'aria-required': 'true', 'aria-describedby': 'flashed login-with-existing-code-name-errors', 'aria-invalid': 'true' if form.codename.errors else 'false'}) }}
+  {% if form.codename.errors %}
+    <ul id="login-with-existing-code-name-errors" class="form-validation-error" role="alert">
   {% for error in form.codename.errors %}
-    <span class="form-validation-error">{{ error }}</span>
+    <li>{{ error }}</li>
   {% endfor %}
-</p>
+    </ul>
+  {% endif %}
+  </div>
 
 <div class="pull-right">
   <button type="submit" id="login">
     {{ gettext('CONTINUE') }}
   </button>
   <a href="{{ url_for('main.index') }}" class="btn secondary" id="cancel">
+    {# FIXME:
     <img class="icon off-hover" src="{{ url_for('static', filename='i/x_icon-button_blue.png') }}" alt="" width="9" height="11">
     <img class="icon on-hover" src="{{ url_for('static', filename='i/x_icon-grimace_blue.png') }}" alt="" width="9" height="11">
+    #}
     {{ gettext('CANCEL') }}</a>
 </div>
 

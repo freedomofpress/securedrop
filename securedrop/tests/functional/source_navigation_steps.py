@@ -65,7 +65,7 @@ class SourceNavigationStepsMixin:
 
         self.wait_for(lambda: content.is_displayed())
         assert content.is_displayed()
-        content_content = self.driver.find_element_by_css_selector("#codename-hint-content p")
+        content_content = self.driver.find_element_by_css_selector("#codename-hint-content output")
         if verify_source_name:
             assert content_content.text == self.source_name
 

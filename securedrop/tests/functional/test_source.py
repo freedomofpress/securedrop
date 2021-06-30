@@ -43,26 +43,26 @@ class TestSourceInterface(
 
 
 class TestDownloadKey(
-        functional_test.FunctionalTest,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
-
+    functional_test.FunctionalTest,
+    journalist_navigation_steps.JournalistNavigationStepsMixin,
+):
     def test_journalist_key_from_source_interface(self):
-        data = self.return_downloaded_content(self.source_location +
-                                              "/public-key", None)
+        data = self.return_downloaded_content(
+            self.source_location + "/public-key", None
+        )
 
-        data = data.decode('utf-8')
+        data = data.decode("utf-8")
         assert "BEGIN PGP PUBLIC KEY BLOCK" in data
 
 
 class TestDuplicateSourceInterface(
-        functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin):
-
+    functional_test.FunctionalTest, source_navigation_steps.SourceNavigationStepsMixin
+):
     def get_codename_generate(self):
         return self.driver.find_element_by_css_selector("#codename").text
 
     def get_codename_lookup(self):
-        return self.driver.find_element_by_css_selector("#codename-hint-content p").text
+        return self.driver.find_element_by_css_selector("#codename-hint-content output").text
 
     def test_duplicate_generate_pages(self):
         # Test generation of multiple codenames in different browser tabs, ref. issue 4458.

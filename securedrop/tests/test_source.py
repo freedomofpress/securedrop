@@ -101,8 +101,8 @@ def _find_codename(html):
     """Find a source codename (diceware passphrase) in HTML"""
     # Codenames may contain HTML escape characters, and the wordlist
     # contains various symbols.
-    codename_re = (r'<p [^>]*id="codename"[^>]*>'
-                   r'(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>')
+    codename_re = (r'<output [^>]*id="codename"[^>]*>'
+                   r'(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</output>')
     codename_match = re.search(codename_re, html)
     assert codename_match is not None
     return codename_match.group('codename')
