@@ -36,7 +36,7 @@
     const token = "{{ token }}"
 
     console.log(`we need to register: ${needs_registration}`);
-    var session = SecureDropSourceSession.new(source_uuid);
+    var session = SecureDropSourceSession.new(source_uuid, token);
 
     await prepareSession( session, needs_registration, securedrop_group, token );
 
