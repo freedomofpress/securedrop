@@ -42,14 +42,14 @@ function apiSend( method, url, token, req_body, fn_success_callback, get_respons
     }
 }
 
-async function onRegistrationSuccess(session, token) {
+async function onRegistrationSuccess(session) {
     console.log("registered successfully!");
     // We get a fresh sender cert at the beginning of every session
-    getSenderCert(session, token);
+    getSenderCert(session);
     // We also get the server parameters
-    getServerParams(session, token);
+    getServerParams(session);
     await sleep(250);
-    getAuthCredential(session, token);
+    getAuthCredential(session);
 }
 
 function onPrekeySucccess(session, prekey_data) {
@@ -70,7 +70,8 @@ function onPrekeySucccess(session, prekey_data) {
 }
 
 
-function onReplySucccess(session, reply_data, token) {
+function onReplySucccess(session, reply_data) {
+    var token = session.token();
     if (reply_data["resp"] == 'NEW_MSG') {
         console.log("got new reply");
         var plaintext = session.sealed_sender_decrypt(
@@ -119,20 +120,21 @@ function onConfirmationSuccess() {
     console.log(`sent confirmation of message on server`);
 }
 
-async function prepareSession( session, needs_registration, securedrop_group, token ) {
+async function prepareSession( session, needs_registration, securedrop_group ) {
     console.log(`we need to register: ${needs_registration}`);
 
     if (needs_registration == true) {
         var keygen_data = session.generate();  // keygen_data just contains the public parts
         console.log(`signal key generation succeeded: ${keygen_data}`);
         var request = new XMLHttpRequest();
+        var token = session.token();
         request.open("POST", "http://127.0.0.1:8080/api/v2/register", true);
         request.setRequestHeader("Content-Type", "application/json");
         request.setRequestHeader("Authorization", `Token ${token}`);
 
         request.onreadystatechange = async function () {
             if (request.readyState === 4 && request.status === 200) {
-                await onRegistrationSuccess(session, token);
+                await onRegistrationSuccess(session);
                 console.log('finished registration callback');
 
             }
@@ -197,7 +199,7 @@ async function prepareSession( session, needs_registration, securedrop_group, to
             var ciphertext = session2.sealed_send_encrypted_group_key(journalist_uuid);
             console.log(`encrypted group key: ${ciphertext}`);
             var payload = {"message": ciphertext,};
-            apiSend( "POST", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/messages`, token, payload, onGroupAddSuccess );
+            apiSend( "POST", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/messages`, session2.token(), payload, onGroupAddSuccess );
         };
 
         // TODO: In the future, we may be registered, but not all these steps have necessarily succeeded.
@@ -207,17 +209,18 @@ async function prepareSession( session, needs_registration, securedrop_group, to
         document.getElementById("submit-doc-button").disabled = false;
         // TODO: Get existing session from server
         // We get a fresh sender cert at the beginning of every session (even if not newly registered)
-        getSenderCert(session, token);
-        getServerParams(session, token);
+        getSenderCert(session);
+        getServerParams(session);
         await sleep(250);
-        getAuthCredential(session, token);
+        getAuthCredential(session);
     }
 
     console.log(`user is registered, waiting for message send`);
 }
 
-function getSenderCert(session, token ) {
+function getSenderCert(session) {
     var request = new XMLHttpRequest();
+    var token = session.token();
     request.open("GET", "http://127.0.0.1:8080/api/v2/sender_cert", true);
     request.setRequestHeader("Content-Type", "application/json");
     request.setRequestHeader("Authorization", `Token ${token}`);
@@ -232,8 +235,9 @@ function getSenderCert(session, token ) {
     request.send();
 }
 
-function getAuthCredential( session, token ) {
+function getAuthCredential( session ) {
     var request = new XMLHttpRequest();
+    var token = session.token();
     request.open("GET", "http://127.0.0.1:8080/api/v2/auth_credential", true);
     request.setRequestHeader("Content-Type", "application/json");
     request.setRequestHeader("Authorization", `Token ${token}`);
@@ -248,8 +252,9 @@ function getAuthCredential( session, token ) {
     request.send();
 }
 
-function getServerParams( session, token ) {
+function getServerParams( session ) {
     var request = new XMLHttpRequest();
+    var token = session.token();
     request.open("GET", "http://127.0.0.1:8080/api/v2/server_params", true);
     request.setRequestHeader("Content-Type", "application/json");
     request.setRequestHeader("Authorization", `Token ${token}`);
@@ -264,7 +269,7 @@ function getServerParams( session, token ) {
     request.send();
 }
 
-function messageEncryptAndSend( session, securedrop_group, token ) {
+function messageEncryptAndSend( session, securedrop_group ) {
     // Encrypt and send message for each group participant
     for (ind in securedrop_group) {
         var journalist_uuid = securedrop_group[ind];
@@ -276,16 +281,17 @@ function messageEncryptAndSend( session, securedrop_group, token ) {
 
         var payload = {"message": ciphertext,};
         console.log(`now sending to: ${journalist_uuid}`);
-        apiSend( "POST", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/messages`, token, payload, onMessageSendSuccess );
+        apiSend( "POST", `http://127.0.0.1:8080/api/v2/journalists/${journalist_uuid}/messages`, session.token(), payload, onMessageSendSuccess );
     }
 
     // Now reset UI for next message
     document.getElementById("msg").value = "";
 }
 
-function messageDecryptAndSend( session, token ) {
+function messageDecryptAndSend( session ) {
     // Download
     var request = new XMLHttpRequest();
+    var token = session.token();
     request.open("GET", "http://127.0.0.1:8080/api/v2/messages", true);
     request.setRequestHeader("Content-Type", "application/json");
     request.setRequestHeader("Authorization", `Token ${token}`);
@@ -293,7 +299,7 @@ function messageDecryptAndSend( session, token ) {
     request.onreadystatechange = function () {
         if (request.readyState === 4 && request.status === 200) {
             var reply_data = JSON.parse(this.response);
-            onReplySucccess(session, reply_data, token);
+            onReplySucccess(session, reply_data);
         }
     };
     request.send();

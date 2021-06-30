@@ -152,22 +152,6 @@ class Source(db.Model):
     def __repr__(self) -> str:
         return '<Source %r>' % (self.journalist_designation)
 
-    @classmethod
-    def login(cls, codename: str) -> 'Source':
-        try:
-            filesystem_id = current_app.crypto_util.hash_codename(codename)
-        except CryptoException as e:
-            current_app.logger.info(
-                    "Could not compute filesystem ID for codename '{}': {}".format(
-                        codename, e))
-            abort(500)
-
-        source = Source.query.filter_by(filesystem_id=filesystem_id).first()
-        if not source:
-            raise WrongPasswordException
-        else:
-            return source
-
     @staticmethod
     def validate_api_token_and_get_user(token: str) -> 'Optional[Source]':
         s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])

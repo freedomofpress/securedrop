@@ -103,7 +103,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             # All done - source user was successfully created
             current_app.logger.info("New source user created")
             session['new_user_codename'] = codename
-            SessionManager.log_user_in(db_session=db.session, supplied_passphrase=codename)
+            source = SessionManager.log_user_in(db_session=db.session, supplied_passphrase=codename).get_db_record()
 
             session['logged_in'] = True
             session['token'] = source.generate_api_token(expiration=TOKEN_EXPIRATION_MINS * 60)
@@ -111,7 +111,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @view.route('/lookup', methods=('GET',))
     @login_required
-    def lookup() -> str:
+    def lookup(logged_in_source: SourceUser) -> str:
+        source = logged_in_source.get_db_record()
         # Note on multi-tenancy:
         # securedrop_group indicates which set of journalists to contact.
         # This is passed as an argument such that after login or account creation
@@ -126,8 +127,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             'lookup.html',
             is_user_logged_in=True,
             token=session["token"],
-            source_uuid=g.source.uuid,
-            to_register=not g.source.is_signal_registered(),
+            source_uuid=source.uuid,
+            to_register=not source.is_signal_registered(),
             securedrop_group=current_group,
             allow_document_uploads=False,  # temp
             new_user_codename=session.get('new_user_codename', None),

@@ -14,6 +14,7 @@ from werkzeug.exceptions import default_exceptions
 
 from db import db
 import shared_api
+from source_app.session_manager import SessionManager
 from sdconfig import config, SDConfig
 from typing import Callable, Optional, Union, Dict, List, Any, Tuple
 
@@ -95,7 +96,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             abort(400, 'passphrase field is missing')
 
         try:
-            source = Source.login(passphrase)
+            source =  SessionManager.log_user_in(
+                db_session=db.session,
+                supplied_passphrase=passphrase,
+                )
             if not source:
                 return abort(403, 'Token authentication failed.')
             token_expiry = datetime.utcnow() + timedelta(
