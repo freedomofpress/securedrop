@@ -6,6 +6,10 @@ import testutils
 test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [test_vars.app_hostname, test_vars.monitor_hostname]
 
+# Updates and upgrades are scheduled at set times before a scheduled reboot
+OFFSET_UPDATE = 2
+OFFSET_UPGRADE = 1
+
 
 def test_automatic_updates_dependencies(host):
     """
@@ -65,7 +69,7 @@ apt_config_options = {
     "APT::Periodic::Enable": "1",
     "Unattended-Upgrade::AutoFixInterruptedDpkg": "true",
     "Unattended-Upgrade::Automatic-Reboot": "true",
-    "Unattended-Upgrade::Automatic-Reboot-Time": "4:00",
+    "Unattended-Upgrade::Automatic-Reboot-Time": "{}:00".format(test_vars.daily_reboot_time),
     "Unattended-Upgrade::Automatic-Reboot-WithUsers": "true",
     "Unattended-Upgrade::Origins-Pattern": [
         "origin=${distro_id},archive=${distro_codename}",
@@ -145,21 +149,23 @@ def test_apt_daily_services_and_timers_enabled(host, service):
 
 def test_apt_daily_timer_schedule(host):
     """
-    Timer for running apt-daily, i.e. 'apt-get update', should be 2h
+    Timer for running apt-daily, i.e. 'apt-get update', should be OFFSET_UPDATE hrs
     before the daily_reboot_time.
     """
+    t = (int(test_vars.daily_reboot_time) - OFFSET_UPDATE) % 24
     c = host.run("systemctl show apt-daily.timer")
-    assert "TimersCalendar={ OnCalendar=*-*-* 02:00:00 ;" in c.stdout
+    assert "TimersCalendar={ OnCalendar=*-*-* " + "{:02d}".format(t) + ":00:00 ;" in c.stdout
     assert "RandomizedDelayUSec=20m" in c.stdout
 
 
 def test_apt_daily_upgrade_timer_schedule(host):
     """
-    Timer for running apt-daily-upgrade, i.e. 'apt-get upgrade', should be 1h
+    Timer for running apt-daily-upgrade, i.e. 'apt-get upgrade', should be OFFSET_UPGRADE hrs
     before the daily_reboot_time, and 1h after the apt-daily time.
     """
+    t = (int(test_vars.daily_reboot_time) - OFFSET_UPGRADE) % 24
     c = host.run("systemctl show apt-daily-upgrade.timer")
-    assert "TimersCalendar={ OnCalendar=*-*-* 03:00:00 ;" in c.stdout
+    assert "TimersCalendar={ OnCalendar=*-*-* " + "{:02d}".format(t) + ":00:00 ;" in c.stdout
     assert "RandomizedDelayUSec=20m" in c.stdout
 
 

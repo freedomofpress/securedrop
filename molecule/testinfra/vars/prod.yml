@@ -179,3 +179,5 @@ log_events_with_ossec_alerts:
 
 fpf_apt_repo_url: "https://apt.freedom.press"
 grsec_version_focal: "5.4.97"
+
+daily_reboot_time: "4"

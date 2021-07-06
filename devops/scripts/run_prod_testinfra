@@ -29,4 +29,4 @@ cd ~/Persistent/securedrop
 source admin/.venv3/bin/activate
 
 cd molecule/testinfra
-CI_SD_ENV=${TEST_ENV:-prod} SECUREDROP_TESTINFRA_TARGET_HOST=${TEST_ENV:-prod} py.test -v -n 2 --disable-warnings -m "not skip_in_prod" 
+CI_SD_ENV=${TEST_ENV:-prod} SECUREDROP_TESTINFRA_TARGET_HOST=${TEST_ENV:-prod} py.test -v -n 2 --disable-warnings -m "not skip_in_prod"

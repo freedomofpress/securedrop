@@ -14,8 +14,7 @@ from typing import Any, Dict
 import testutils
 
 
-# The config tests target staging by default. It's possible to override
-# for e.g. prod, but the associated vars files are not yet ported.
+# The config tests target staging by default.
 target_host = os.environ.get('SECUREDROP_TESTINFRA_TARGET_HOST', 'staging')
 
 
@@ -34,6 +33,34 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
     hostvars['securedrop_venv_site_packages'] = hostvars["securedrop_venv_site_packages"].format("3.8")  # noqa: E501
     hostvars['python_version'] = "3.8"
     hostvars['apparmor_enforce_actual'] = hostvars['apparmor_enforce']['focal']
+
+    # If the tests are run against a production environment, check local config
+    # and override as necessary.
+    prod_filepath = os.path.join(os.path.dirname(__file__),
+                                 "../../install_files/ansible-base/group_vars/all/site-specific")
+    if os.path.isfile(prod_filepath):
+        with io.open(prod_filepath, 'r') as f:
+            prodvars = yaml.safe_load(f)
+
+        def _prod_override(vars_key, prod_key):
+            if prod_key in prodvars:
+                hostvars[vars_key] = prodvars[prod_key]
+
+        _prod_override('app_ip', 'app_ip')
+        _prod_override('mon_ip', 'monitor_ip')
+        _prod_override('sasl_domain', 'sasl_domain')
+        _prod_override('sasl_username', 'sasl_username')
+        _prod_override('sasl_password', 'sasl_password')
+        _prod_override('daily_reboot_time', 'daily_reboot_time')
+
+        # Check repo targeting, and update vars
+        repo_filepath = os.path.join(os.path.dirname(__file__),
+                                 "../../install_files/ansible-base/roles/install-fpf-repo/defaults/main.yml")  # noqa: E501
+        if os.path.isfile(repo_filepath):
+            with io.open(repo_filepath, 'r') as f:
+                repovars = yaml.safe_load(f)
+                if 'apt_repo_url' in repovars:
+                    hostvars['fpf_apt_repo_url'] = repovars['apt_repo_url']
 
     if with_header:
         hostvars = dict(securedrop_test_vars=hostvars)
