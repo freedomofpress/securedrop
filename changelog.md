@@ -2,7 +2,15 @@
 
 ## 2.1.0~rc1
 
+## 2.0.1
 
+### Operations
+
+* Updated admin dependencies: cryptography from 3.2.1 to 3.4.7, cffi from 1.14.2 to 1.14.5 (#6030)
+
+### Development
+
+* Updated testinfra tests to use site-specific configuration against production instances (#6032)
 
 ## 2.0.0
 

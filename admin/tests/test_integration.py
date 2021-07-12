@@ -586,8 +586,6 @@ def test_check_for_update_when_updates_not_needed(securedrop_git_repo):
     assert child.signalstatus is None
 
 
-# This test will fail until a tag with the 2021 signing key is pushed
-@pytest.mark.xfail
 @flaky(max_runs=3)
 def test_update(securedrop_git_repo):
     gpgdir = os.path.join(os.path.expanduser('~'), '.gnupg')
