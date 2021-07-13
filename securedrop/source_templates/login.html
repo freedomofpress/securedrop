@@ -9,7 +9,11 @@
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
 
 <div class="center">
-  {{ form.codename(id='login-with-existing-codename', class='codename-box', autocomplete='off', placeholder=gettext('Enter your codename'), autofocus=True, **{'aria-label': gettext('Enter your codename'), 'aria-required': 'true', 'aria-describedby': 'flashed login-with-existing-code-name-errors', 'aria-invalid': 'true' if form.codename.errors else 'false'}) }}
+  {% set aria_attributes = {'aria-label': gettext('Enter your codename'), 'aria-required': 'true'} %}
+  {% if form.codename.errors %}
+  {% set _dummy = aria_attributes.update({'aria-describedby': 'flashed login-with-existing-code-name-errors', 'aria-invalid': 'true'}) %}
+  {% endif %}
+  {{ form.codename(id='login-with-existing-codename', class='codename-box', autocomplete='off', placeholder=gettext('Enter your codename'), autofocus=True, **aria_attributes) }}
   {% if form.codename.errors %}
     <ul id="login-with-existing-code-name-errors" class="form-validation-error" role="alert">
   {% for error in form.codename.errors %}

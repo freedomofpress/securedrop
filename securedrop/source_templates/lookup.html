@@ -9,7 +9,12 @@
     <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" alt="" width="17" height="20">
     #}
     <label id="codename-label" for="codename" aria-hidden="true">{{ gettext('Remember, your codename is:') }}</label>
-    <a id="codename-hint-show" class="show pull-right visible-codename" href="#codename-hint-visible" aria-hidden="true">{{ gettext('Show') }}</a>
+    {# ARIA-HIDDEN violates axe rule aria-hidden-focus, because we (a) want to
+    hide the superfluous "show"/"hide" links from screen-readers, (b) do not
+    want to remove these elements from sequential navigation with TABINDEX="-1",
+    and (c) do not have recourse in the Source Interface to scripting the
+    ARIA-HIDDEN value dynamically.  Cf. #6031. #}
+    <a id="codename-hint-show" class="show pull-right visible-codename" href="#codename-hint-visible" aria-hidden="true" tabindex="-1">{{ gettext('Show') }}</a>
     <div id="codename-hint-content" class="hidden-codename codename">
       <a id="codename-hint-hide" class="pull-right" href="#codename-hint" aria-hidden="true">{{ gettext('Hide') }}</a>
       <output id="codename" aria-labelledby="codename-label">{{ codename }}</output>
@@ -99,13 +104,13 @@
 <div id="replies">
   {% if replies %}
     <output role="status">
-      <p>{{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above.") }}</p>
+      {{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above.") }}
     </output>
     {# FIXME:
     <hr class="no-line">
     #}
     {% for reply in replies %}
-      <article class="reply" role="article" aria-labelledby="timestamp-{{ reply.filename }}">
+      <article class="reply" aria-labelledby="timestamp-{{ reply.filename }}">
         <time id="timestamp-{{ reply.filename }}" class="date" title="{{ reply.date|rel_datetime_format }}" datetime="{{ reply.date }}" aria-hidden="true">{{ reply.date|rel_datetime_format(relative=True) }}</time>
         <form id="delete" class="message" method="post" action="{{ url_for('main.delete') }}" autocomplete="off">
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
@@ -117,7 +122,7 @@
             <img class="icon on-hover" id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/trash-x-solid.png') }}" alt="{{ gettext('Delete reply') }}" width="16" height="20">
             #}
           </a>
-          <dialog open id="confirm-delete-{{ reply.filename }}" class="confirm-prompt" role="dialog" aria-labelledby="delete-heading-{{ reply.filename }}">
+          <dialog open id="confirm-delete-{{ reply.filename }}" class="confirm-prompt" aria-labelledby="delete-heading-{{ reply.filename }}">
             <h3 id="delete-heading-{{ reply.filename }}" hidden>Delete reply from {{ reply.date|rel_datetime_format(relative=True) }}?</h3>
             <p>{{ gettext('Delete this reply?') }}
               <a href="#delete">{{ gettext('Cancel') }}</a>
@@ -134,7 +139,7 @@
     <form id="delete-all" method="post" action="{{ url_for('main.batch_delete') }}">
       <a class="btn danger" href="#delete-all-confirm">{{ gettext('DELETE ALL REPLIES') }}</a>
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      <dialog open id="delete-all-confirm" class="hidden-prompt" role="dialog" aria-labelledby="delete-all-heading">
+      <dialog open id="delete-all-confirm" class="hidden-prompt" aria-labelledby="delete-all-heading">
         <h3 id="delete-all-heading"><strong>{{ gettext('Are you finished with the replies?') }}</strong></h3>
         <button class="danger" type="submit">{{ gettext('YES, DELETE ALL REPLIES') }}</button>
         <a class="btn" href="#delete-all">{{ gettext('NO, NOT YET') }}</a>

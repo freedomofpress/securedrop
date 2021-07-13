@@ -26,7 +26,7 @@
     {# Warning bubble to help TB users disable JavaScript with NoScript.
     Included here so the images can preload while the user is first
     reading the page. Hidden by default. #}
-    <dialog open class="bubble" id="security-setting-info" class="info" role="dialog" aria-labelledby="security-level-heading" aria-describedby="security-level-instructions">
+    <dialog open class="bubble info" id="security-setting-info" aria-labelledby="security-level-heading" aria-describedby="security-level-instructions">
       <h2 id="security-level-heading" hidden>{{ gettext('How to change your security level') }}</h2>
       <ol id="security-level-instructions">
         <li>{{ gettext('Click the <img src="{icon}" alt="&quot;Security Level&quot; button"> in the toolbar above').format(icon=url_for("static", filename="i/font-awesome/black/guard.svg"))  }}</li>
@@ -42,6 +42,7 @@
     {% include 'banner_warning_flashed.html' %}
 
     <div class="content">
+    <main>
       <div class="grid">
         {% include 'flashed.html' %}
         {# The div `index-wrap` MUST be ordered this way so that the flexbox works on large and small screens
@@ -85,9 +86,11 @@
                 </a>
               </div>
             </section>
+          </div>
         </div>
       </div>
       {% include 'footer.html' %}
+    </main>
     </div>
 
 
