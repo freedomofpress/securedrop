@@ -18,10 +18,7 @@
   </head>
   <body id="source-index">
     <div id="js-warning" class="warning" role="alert">
-      {# FIXME:
-      <img src="{{ url_for('static', filename='i/font-awesome/white/exclamation-circle.svg') }}" alt="" height="12">&nbsp;
-      #}
-      {{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><strong>Security Level</strong></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> &nbsp;button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg"))  }}
+      <p>{{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><strong>Security Level</strong></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg")) }}</p>
     </div>
     {# Warning bubble to help TB users disable JavaScript with NoScript.
     Included here so the images can preload while the user is first
@@ -49,10 +46,7 @@
            See _source_index.sass for a more full understanding. #}
         <div class="index-wrap">
           <header class="header">
-            <h1>{{ g.organization_name }}</h1>
-            {# FIXME:
-            <img src="{{ g.logo }}" alt="{{ g.organization_name }} | {{ gettext('Logo Image') }}" class="logo-image">
-            #}
+            <h1><img src="{{ g.logo }}" alt="{{ gettext('{} logo'.format(g.organization_name)) }}" class="logo-image"></h1>
             <div id="index-locales">
               {% include 'locales.html' %}
             </div>
@@ -88,8 +82,8 @@
             </section>
           </div>
         </div>
-      </div>
       {% include 'footer.html' %}
+      </div>
     </main>
     </div>
 

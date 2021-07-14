@@ -2,9 +2,6 @@
 {% with messages = get_flashed_messages(with_categories=True, category_filter=["banner-warning"]) %}
   {% for category, message in messages %}
   <p class="flash {{ category }}" role="alert">
-    {# FIXME:
-    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/exclamation-triangle-black.png') }}" alt="{{ gettext('Warning') }}" width="20" height="17">
-    #}
  {{ message }}</p>
   {% endfor %}
 {% endwith %}

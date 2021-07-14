@@ -5,15 +5,6 @@
   {% for category, message in messages %}
     {% if category != 'banner-warning' %}
       <li class="flash {{ category }}">
-        {# FIXME:
-        {% if category == 'notification' %}
-        <img src="{{ url_for('static', filename='i/font-awesome/info-circle-black.png') }}" alt="{{ gettext('Notification') }} width="20" height="16">
-        {% elif category == 'error' %}
-        <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/exclamation-triangle-black.png') }}" alt="{{ gettext('Error') }}" width="20" height="17">
-        {% elif category == 'important' %}
-        <img src="{{ url_for('static', filename='i/bang-stop.png') }}" alt="{{ gettext('Important') }}" width="22" height="22">
-        {% endif %}
-        #}
         {{ message }}
       </li>
     {% endif %}

@@ -23,15 +23,11 @@
   {% endif %}
   </div>
 
-<div class="pull-right">
+<div class="pull-right section-spacing">
   <button type="submit" id="login">
     {{ gettext('CONTINUE') }}
   </button>
   <a href="{{ url_for('main.index') }}" class="btn secondary" id="cancel">
-    {# FIXME:
-    <img class="icon off-hover" src="{{ url_for('static', filename='i/x_icon-button_blue.png') }}" alt="" width="9" height="11">
-    <img class="icon on-hover" src="{{ url_for('static', filename='i/x_icon-grimace_blue.png') }}" alt="" width="9" height="11">
-    #}
     {{ gettext('CANCEL') }}</a>
 </div>
 

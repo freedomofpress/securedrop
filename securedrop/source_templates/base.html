@@ -21,10 +21,7 @@
         <header>
         {% block header %}
           <a href="{% if 'logged_in' in session %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}" class="no-bottom-border">
-            {# FIXME:
-            <img src="{{ g.logo }}" class="logo small" alt="{{ g.organization_name }} | {{ gettext('SecureDrop Home') }}" width="250">
-            #}
-            {{ g.organization_name }} | {{ gettext('SecureDrop Home')}}
+            <img src="{{ g.logo }}" class="logo small" alt="{{ g.organization_name }} logo" width="250">
           </a>
           {% include 'locales.html' %}
         {% endblock %}
@@ -43,12 +40,6 @@
               <a href="{{ url_for('main.logout') }}" class="btn pull-right" id="logout">{{ gettext('LOG OUT') }}</a>
             </nav>
           {% endif %}
-
-          {# FIXME:
-          {% if not new_user%}
-            <hr class="no-line">
-          {% endif %}
-          #}
 
           {% endif %}
 

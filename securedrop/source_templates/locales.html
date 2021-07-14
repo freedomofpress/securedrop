@@ -3,18 +3,8 @@
   <h2 id="locale-menu-heading" hidden>
     {{ gettext('Selected language')}}: {{ g.locales[g.localeinfo.id] }}
   </h2>
-  <label for="menu-1-checkbox" class="menu__trigger" aria-hidden="true">
-    {# FIXME:
-    <div class="menu-icon-container">
-      <img class="menu__trigger-icon" src="/static/i/languages_globe.png" alt="" width="18" height="18">
-    </div>
-    #}
+  <label id="locale-menu-trigger" for="menu-1-checkbox" class="menu__trigger" aria-hidden="true">
     {{ g.locales[g.localeinfo.id] }}
-    {# FIXME:
-    <div class="menu-trigger-container">
-      <img class="menu__trigger-icon" src="/static/i/languages_arrow.png" alt="" width="12" height="18">
-    </div>
-    #}
   </label>
   <input id="menu-1-checkbox" class="menu__checkbox visually-hidden" type="checkbox" role="button" aria-label="{{ gettext('Choose language') }}" aria-haspopup="menu" aria-controls="locales-menu" aria-pressed="true">
 

@@ -1,13 +1,9 @@
 {% extends "base.html" %}
 
-{% block header %}
-{{ super() }}
+{% block body %}
 {% if new_user %}
 <section class="code-reminder pull-left" id="codename-hint" aria-label="{{ gettext('Codename') }}">
   <div id="codename-hint-visible">
-    {# FIXME:
-    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" alt="" width="17" height="20">
-    #}
     <label id="codename-label" for="codename" aria-hidden="true">{{ gettext('Remember, your codename is:') }}</label>
     {# ARIA-HIDDEN violates axe rule aria-hidden-focus, because we (a) want to
     hide the superfluous "show"/"hide" links from screen-readers, (b) do not
@@ -21,17 +17,8 @@
     </div>
   </div>
 </section>
-{# FIXME:
-<hr class="header-separator-high">
-#}
-{% else %}
-{# FIXME:
-<hr class="no-line">
-#}
 {% endif %}
-{% endblock %}
 
-{% block body %}
 <div class="center">
   {% include 'flashed.html' %}
 </div>
@@ -52,19 +39,12 @@
 {% endif %}
 {{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_public_key')) }}</p>
 
-{# FIXME:
-<hr class="no-line">
-#}
-
-<form id="upload" method="post" action="{{ url_for('main.submit') }}" enctype="multipart/form-data" autocomplete="off">
+<form id="upload" class="section-spacing" method="post" action="{{ url_for('main.submit') }}" enctype="multipart/form-data" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <div class="snippet">
 {% if allow_document_uploads %}
     <div class="attachment grid-item center">
-      {# FIXME:
-      <img class="center" id="upload-icon" src="{{ url_for('static', filename='i/arrow-upload-large.png') }}" alt="" width="56" height="56">
-      #}
-      {{ form.fh(**{"aria-describedby": "max-file-size"}) }}
+      <span class="fh">{{ form.fh(**{"aria-describedby": "max-file-size"}) }}</span>
       <p class="center" id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
     </div>
 {% endif %}
@@ -73,10 +53,7 @@
     </div>
   </div>
 
-  {# FIXME:
-  <hr class="no-line">
-  #}
-  <div class="pull-right">
+  <div class="pull-right section-spacing">
     <button type="submit" id="submit-doc-button">
       {{ gettext('SUBMIT') }}
     </button>
@@ -84,19 +61,11 @@
 
 
     <a href="{{ url_for('main.lookup') }}" class="btn secondary" id="cancel">
-      {# FIXME:
-      <img class="icon off-hover" src="{{ url_for('static', filename='i/x_icon-button_blue.png') }}" alt="" width="9" height="11">
-      <img class="icon on-hover" src="{{ url_for('static', filename='i/x_icon-grimace_blue.png') }}" alt="" width="9" height="11">
-      #}
       {{ gettext('CANCEL') }}
     </a>
   </div>
 </form>
 </section>
-
-{# FIXME:
-<hr class="no-line">
-#}
 
 <section aria-labelledby="replies-heading">
 <h2 id="replies-heading" class="headline">{{ gettext('Read Replies') }}</h2>
@@ -106,9 +75,6 @@
     <output role="status">
       {{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above.") }}
     </output>
-    {# FIXME:
-    <hr class="no-line">
-    #}
     {% for reply in replies %}
       <article class="reply" aria-labelledby="timestamp-{{ reply.filename }}">
         <time id="timestamp-{{ reply.filename }}" class="date" title="{{ reply.date|rel_datetime_format }}" datetime="{{ reply.date }}" aria-hidden="true">{{ reply.date|rel_datetime_format(relative=True) }}</time>
@@ -116,11 +82,7 @@
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
           <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off">
           <a href="#confirm-delete-{{ reply.filename }}" id="delete-reply-{{ reply.filename }}" class="delete" aria-label="{{ gettext('Delete this reply') }}">
-            {{ gettext('Delete') }}
-            {# FIXME:
-            <img class="icon off-hover" id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/trash-x-out.png') }}" alt="{{ gettext('Delete reply') }}" width="16" height="20">
-            <img class="icon on-hover" id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/trash-x-solid.png') }}" alt="{{ gettext('Delete reply') }}" width="16" height="20">
-            #}
+            <span>{{ gettext('Delete') }}</span>
           </a>
           <dialog open id="confirm-delete-{{ reply.filename }}" class="confirm-prompt" aria-labelledby="delete-heading-{{ reply.filename }}">
             <h3 id="delete-heading-{{ reply.filename }}" hidden>Delete reply from {{ reply.date|rel_datetime_format(relative=True) }}?</h3>
@@ -131,9 +93,6 @@
           </dialog>
         </form>
         <blockquote>{{ reply.decrypted | nl2br }}</blockquote>
-        {# FIXME:
-        <div class="clearfix"></div>
-        #}
       </article>
     {% endfor %}
     <form id="delete-all" method="post" action="{{ url_for('main.batch_delete') }}">
@@ -146,7 +105,7 @@
       </dialog>
     </form>
   {% else %}
-    <output role="status" id="no-replies" class="explanation">{{ gettext('— No Messages —') }}</output>
+    <output role="status" id="no-replies" class="explanation">{{ gettext('No Messages') }}</output>
   {% endif %}
 </div>
 </section>
