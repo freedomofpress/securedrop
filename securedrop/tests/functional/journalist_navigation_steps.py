@@ -468,6 +468,10 @@ class JournalistNavigationStepsMixin:
         for i in range(CLICK_ATTEMPTS):
             try:
                 self.safe_click_by_css_selector(".delete-user")
+                self.wait_for(
+                    lambda: expected_conditions.element_to_be_clickable((By.ID, "delete-selected"))
+                )
+                self.safe_click_by_id("delete-selected")
                 self.alert_wait()
                 self.alert_accept()
                 break
