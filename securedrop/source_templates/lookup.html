@@ -99,7 +99,7 @@
       <a class="btn danger" href="#delete-all-confirm">{{ gettext('DELETE ALL REPLIES') }}</a>
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <dialog open id="delete-all-confirm" class="hidden-prompt" aria-labelledby="delete-all-heading">
-        <h3 id="delete-all-heading"><strong>{{ gettext('Are you finished with the replies?') }}</strong></h3>
+        <h3 id="delete-all-heading">{{ gettext('Are you finished with the replies?') }}</h3>
         <button class="danger" type="submit">{{ gettext('YES, DELETE ALL REPLIES') }}</button>
         <a class="btn" href="#delete-all">{{ gettext('NO, NOT YET') }}</a>
       </dialog>

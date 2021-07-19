@@ -18,7 +18,7 @@
   </head>
   <body id="source-index">
     <div id="js-warning" class="warning" role="alert">
-      <p>{{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><strong>Security Level</strong></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg")) }}</p>
+      <p>{{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><b>Security Level</b></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg")) }}</p>
     </div>
     {# Warning bubble to help TB users disable JavaScript with NoScript.
     Included here so the images can preload while the user is first
@@ -27,8 +27,8 @@
       <h2 id="security-level-heading" hidden>{{ gettext('How to change your security level') }}</h2>
       <ol id="security-level-instructions">
         <li>{{ gettext('Click the <img src="{icon}" alt="&quot;Security Level&quot; button"> in the toolbar above').format(icon=url_for("static", filename="i/font-awesome/black/guard.svg"))  }}</li>
-        <li>{{ gettext('Select <strong>Advanced Security Settings</strong>') }}</li>
-        <li>{{ gettext('Select <strong>Safest</strong>') }}</li>
+        <li>{{ gettext('Select <b>Advanced Security Settings</b>') }}</li>
+        <li>{{ gettext('Select <b>Safest</b>') }}</li>
       </ol>
       <p>{{ gettext('<a href="/" aria-label="Follow these instructions, then refresh this page">Refresh this page</a>, and you\'re done!') }}</p>
 
