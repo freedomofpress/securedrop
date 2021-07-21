@@ -18,7 +18,8 @@ from jinja2 import Markup
 from passlib.hash import argon2
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref, Query, RelationshipProperty
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, LargeBinary
+from sqlalchemy import Column, Index, Integer, String, Boolean, DateTime, LargeBinary
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from db import db
@@ -832,7 +833,6 @@ class InstanceConfig(db.Model):
     __tablename__ = 'instance_config'
     version = Column(Integer, primary_key=True)
     valid_until = Column(DateTime, default=None, unique=True)
-
     allow_document_uploads = Column(Boolean, default=True)
     organization_name = Column(String(255), nullable=True, default="SecureDrop")
 
@@ -868,10 +868,13 @@ class InstanceConfig(db.Model):
         try:
             return cls.query.filter(cls.valid_until == None).one()  # lgtm [py/test-equals-none]  # noqa: E711, E501
         except NoResultFound:
-            current = cls()
-            db.session.add(current)
-            db.session.commit()
-            return current
+            try:
+                current = cls()
+                db.session.add(current)
+                db.session.commit()
+                return current
+            except IntegrityError:
+                return cls.query.filter(cls.valid_until == None).one()  # lgtm [py/test-equals-none]  # noqa: E711, E501
 
     @classmethod
     def check_name_acceptable(cls, name: str) -> None:
@@ -913,3 +916,11 @@ class InstanceConfig(db.Model):
         db.session.add(new)
 
         db.session.commit()
+
+
+one_active_instance_config_index = Index(
+    'ix_one_active_instance_config',
+    InstanceConfig.valid_until.is_(None),
+    unique=True,
+    sqlite_where=(InstanceConfig.valid_until.is_(None))
+)

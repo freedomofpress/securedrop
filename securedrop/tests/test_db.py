@@ -3,9 +3,19 @@ import pytest
 
 from mock import MagicMock
 
+from sqlalchemy import create_engine
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import sessionmaker
+
 from .utils import db_helper
-from models import (Journalist, Submission, Reply, get_one_or_else,
-                    LoginThrottledException)
+from models import (
+    InstanceConfig,
+    Journalist,
+    Submission,
+    Reply,
+    LoginThrottledException,
+    get_one_or_else
+)
 
 
 def test_get_one_or_else_returns_one(journalist_app, test_journo):
@@ -90,3 +100,32 @@ def test_journalist_string_representation(journalist_app, test_journo):
 def test_source_string_representation(journalist_app, test_source):
     with journalist_app.app_context():
         test_source['source'].__repr__()
+
+
+def test_only_one_active_instance_config_can_exist(config, source_app):
+    """
+    Checks that attempts to add multiple active InstanceConfig records fail.
+
+    InstanceConfig is supposed to be invalidated by setting
+    valid_until to the time the config was no longer in effect. Until
+    we added the partial index preventing multiple rows with a null
+    valid_until, it was possible for the system to create multiple
+    active records, which would cause MultipleResultsFound exceptions
+    in InstanceConfig.get_current.
+    """
+    # create a separate session
+    engine = create_engine(source_app.config['SQLALCHEMY_DATABASE_URI'])
+    session = sessionmaker(bind=engine)()
+
+    # in the separate session, create an InstanceConfig with default
+    # values, but don't commit it
+    conflicting_config = InstanceConfig()
+    session.add(conflicting_config)
+
+    with source_app.app_context():
+        # get_current will create another InstanceConfig with default values
+        InstanceConfig.get_current()
+
+    # now the commit of the first instance should fail
+    with pytest.raises(IntegrityError):
+        session.commit()
