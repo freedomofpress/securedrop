@@ -164,19 +164,6 @@ ready(function() {
     filter_codenames(filterInput.value);
   }
 
-  // Confirm before deleting user on admin page
-  let deleteUser = document.querySelector('button.delete-user');
-  if (deleteUser) {
-    deleteUser.addEventListener('click', function(evt) {
-      let username = this.dataset.username;
-      let confirmed = confirm(get_string("delete-user-confirm-string").supplant({ username: username }));
-      if (!confirmed) {
-        evt.preventDefault();
-      }
-      return confirmed;
-    });
-  };
-
   // Confirm before resetting multifactor authentication on edit user page
   let resetTwoFactorForms = document.querySelectorAll('form.reset-two-factor');
   for (let i = 0; i < resetTwoFactorForms.length; i++) {

@@ -38,12 +38,14 @@
         </td>
 	{% else %}
         <td>
-          <button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}">
-            <i title="{{ gettext('Delete user {username}').format(username=user.username) }}">
-              <img src="{{ url_for('static', filename='icons/trash.png') }}" class="off-hover" width="14" height="16" alt="{{ gettext('Delete user {username}').format(username=user.username) }}">
-              <img src="{{ url_for('static', filename='icons/trash-hover-red.png') }}" class="on-hover" width="14" height="16" alt="{{ gettext('Delete user {username}').format(username=user.username) }}">
-            </i>
-          </button>
+          <a href="?user_id={{ user.id }}#delete-user-confirmation-modal">
+            <button type="button" class="plain delete-user" data-username="{{ user.username}}">
+              <i title="{{ gettext('Delete user {username}').format(username=user.username) }}">
+                <img src="{{ url_for('static', filename='icons/trash.png') }}" class="off-hover" width="14" height="16" alt="{{ gettext('Delete user {username}').format(username=user.username) }}">
+                <img src="{{ url_for('static', filename='icons/trash-hover-red.png') }}" class="on-hover" width="14" height="16" alt="{{ gettext('Delete user {username}').format(username=user.username) }}">
+              </i>
+            </button>
+          </a>
         </td>
 	{% endif %}
         <td><time class="date" title="{{ user.created_on }}">{{ user.created_on|rel_datetime_format(relative=True) }}</time></td>
@@ -55,6 +57,23 @@
       </tr>
     {% endfor %}
   </table>
+
+  <!-- Delete Confirmation modal for user -->
+  {% with %}
+    {% set modal_data = {
+                          "modal_id": "delete-user-confirmation-modal",
+                          "modal_header": gettext('Delete Confirmation'),
+                          "modal_body": gettext('Are you sure you want to delete this user?'),
+                          "modal_action": "/admin/delete/" + request.args.get('user_id') if request.args.get('user_id') else "",
+                          "cancel_id": "cancel-selected-deletions",
+                          "submit_id": "delete-selected",
+                          "submit_btn_type": "danger",
+                          "submit_btn_text": gettext('DELETE')
+                        }
+    %}
+    {% include '_confirmation_modal.html' %}
+  {% endwith %}
+
 </form>
 {% else %}
 <p>{{ gettext('No users to display') }}</p>
