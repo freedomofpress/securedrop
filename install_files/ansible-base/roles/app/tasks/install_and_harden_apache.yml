@@ -1,9 +1,11 @@
 ---
+- name: Update apt cache.
+  shell: apt-get update -q
+
 - name: Install apache packages.
   apt:
     pkg: "{{ apache_packages }}"
     state: present
-    update_cache: yes
     cache_valid_time: 3600
   tags:
     - apt
