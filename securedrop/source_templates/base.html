@@ -37,7 +37,7 @@
 
           {% if 'logged_in' in session %}
             <nav>
-              <a href="{{ url_for('main.logout') }}" class="btn pull-right" id="logout">{{ gettext('LOG OUT') }}</a>
+              <a href="{{ url_for('main.logout') }}" class="btn pull-right" id="logout" aria-label="{{ gettext('Log Out') }}">{{ gettext('LOG OUT') }}</a>
             </nav>
           {% endif %}
 

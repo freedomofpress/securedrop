@@ -34,37 +34,33 @@
   text-align: center
   width: 80%
 
+@media only screen
+  #codename-hint
+    summary
+      cursor: pointer
+
+      &:after
+        content: "Show"
+        display: block
+        float: right
+
+        text-decoration: none
+        color: $color_securedrop_blue
+        border-bottom: 1px solid rgba(0, 117, 247, 0.4)
+
+      &:hover, &:active
+        &:after
+          color: $color_grimace_blue
+          border-bottom: 1px solid rgba(42, 49, 157, 1)
+
+    &[open]
+      summary
+        &:after
+          content: "Hide"
+
 @media only screen and (max-width: 880px)
   #codename-hint
     width: 100%
-
-#codename-hint-visible
-  .visible-codename
-    margin: auto
-    padding: auto
-    height: auto
-    overflow: visible
-
-  .hidden-codename
-    margin: 0
-    padding: 0
-    height: 0
-    overflow: hidden
-
-  &:target
-
-    .visible-codename
-      margin: 0
-      padding: 0
-      height: 0
-      overflow: hidden
-      border: 0
-
-    .hidden-codename
-      margin: auto
-      padding: auto
-      height: auto
-      overflow: visible
 
 input.codename-box
   width: 100%
@@ -72,6 +68,7 @@ input.codename-box
   font-weight: bold
 
 .codename
+  background-color: transparent
   font-family: monospace
   letter-spacing: 0.15em
   font-weight: normal
@@ -160,6 +157,7 @@ p#codename
       font-size: 10px
       font-weight: bold
       padding: 5px
+      margin: 0
 
     a.delete
       float: right
@@ -217,7 +215,7 @@ p#codename
         margin: 0 2%
         padding: 5px 15px
 
-  output#no-replies
+  #no-replies
     display: block
     font-weight: bold
     text-align: center

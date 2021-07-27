@@ -7,9 +7,9 @@
 
 <p id="codename-explanation" class="explanation">{{ gettext('This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen.') }}</p>
 
-<section class="code">
-  <label id="codename-label" for="codename" hidden>{{ gettext('Codename') }}</label>
-  <output id="codename" class="codename" aria-labelledby="codename-label" aria-describedby="codename-instructions codename-explanation">{{ codename }}</output>
+<section class="code" aria-labelledby="codename-heading">
+  <h2 id="codename-heading" class="visually-hidden">{{ gettext('Codename') }}</h2>
+  <mark id="codename" class="codename" aria-describedby="codename-instructions codename-explanation">{{ codename }}</mark>
   <div class="pull-right">
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
@@ -28,7 +28,7 @@
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input name="tab_id" type="hidden" value="{{ tab_id }}">
-  <button type="submit" class="btn--space pull-right" id="continue-button">
+  <button type="submit" class="btn--space pull-right" id="continue-button" aria-label="{{ gettext('Submit Documents') }}">
      {{ gettext('SUBMIT DOCUMENTS') }}
   </button>
 </form>

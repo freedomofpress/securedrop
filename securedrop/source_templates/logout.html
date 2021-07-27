@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
   <nav>
-    <a href="{{ url_for('main.login') }}" class="btn pull-right"> {{ gettext('LOG IN') }}</a>
+    <a href="{{ url_for('main.login') }}" class="btn pull-right" aria-label="{{ gettext('Log In') }}"> {{ gettext('LOG IN') }}</a>
   </nav>
   <section>
   <h1>{{ gettext('One more thing...') }}</h1>

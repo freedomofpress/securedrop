@@ -24,10 +24,10 @@
   </div>
 
 <div class="pull-right section-spacing">
-  <button type="submit" id="login">
+  <button type="submit" id="login" aria-label="{{ gettext('Continue') }}">
     {{ gettext('CONTINUE') }}
   </button>
-  <a href="{{ url_for('main.index') }}" class="btn secondary" id="cancel">
+  <a href="{{ url_for('main.index') }}" class="btn secondary" id="cancel" aria-label="{{ gettext('Cancel') }}">
     {{ gettext('CANCEL') }}</a>
 </div>
 

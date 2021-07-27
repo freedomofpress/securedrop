@@ -39,7 +39,6 @@
     {% include 'banner_warning_flashed.html' %}
 
     <div class="content">
-    <main>
       <div class="grid">
         {% include 'flashed.html' %}
         {# The div `index-wrap` MUST be ordered this way so that the flexbox works on large and small screens
@@ -52,16 +51,16 @@
             </div>
           </header>
 
-          <div class="index-row">
+          <main class="index-row">
             <section class="index-column index-left" aria-labelledby="first-submission-heading">
-              <div class="index-column-top-container" aria-label="">
+              <div class="index-column-top-container">
               <h2 id="first-submission-heading" class="welcome-text">
                 {{ gettext('First submission') }}
               </h2>
               <p class="extended-welcome-text">{{ gettext('First time submitting to our SecureDrop? Start here.') }}</p>
               </div>
-              <div class="index-column-bottom-container" aria-label="">
-                <a href="{{ url_for('main.generate') }}" id="submit-documents-button" class="btn alt">
+              <div class="index-column-bottom-container">
+                <a href="{{ url_for('main.generate') }}" id="submit-documents-button" class="btn alt" aria-label="{{ gettext('Get Started') }}">
                   {{ gettext('GET STARTED') }}
                 </a>
               </div>
@@ -75,16 +74,15 @@
               <p class="extended-welcome-text">{{ gettext('Already have a codename? Check for replies or submit something new.') }}</p>
               </div>
               <div class="index-column-bottom-container">
-                <a href="{{ url_for('main.login') }}" id="login-button" class="btn secondary">
+                <a href="{{ url_for('main.login') }}" id="login-button" class="btn secondary" aria-label="{{ gettext('Log In') }}">
                   {{ gettext('LOG IN') }}
                 </a>
               </div>
             </section>
-          </div>
+          </main>
         </div>
       {% include 'footer.html' %}
       </div>
-    </main>
     </div>
 
 
