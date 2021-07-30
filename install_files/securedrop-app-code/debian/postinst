@@ -104,6 +104,18 @@ remove_bytecode() {
     find "${SDVE}" -name '*.py[co]' -delete
 }
 
+#
+# Modify existing instance to use only TLS1.3 for the source.
+update_to_tls13(){
+    source_conf="/etc/apache2/sites-available/source.conf"
+    if grep -qP '^SSLProtocol all' "$source_conf"; then
+        sed -i '/^SSLProtocol all/c\SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1 -TLSv1.2' "$source_conf"
+        sed -i '/^SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384/d' "$source_conf"
+        sed -i '/^SSLHonorCipherOrder on/c\SSLHonorCipherOrder off' "$source_conf"
+        sed -i '/^SSLCompression off/ a \\SSLSessionTickets off' "$source_conf"
+    fi
+}
+
 case "$1" in
     configure)
 
@@ -168,6 +180,9 @@ case "$1" in
 
     # Remove Python bytecode from virtualenv
     remove_bytecode
+
+    # Add TLS1.3 configruation to the source configruation if required
+    update_to_tls13
 
     # Restart apache so it loads with the apparmor profiles in enforce mode.
     service apache2 restart
