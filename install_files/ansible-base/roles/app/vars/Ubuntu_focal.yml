@@ -1,9 +1,0 @@
----
-# List of SSL ciphers honored by Source Interface vhost. Order matters!
-# The `SSLHonorCipherOrder` option is set to true, so ciphers below are
-# listed in order of preference.
-securedrop_app_https_ssl_ciphers:
-  - ECDHE-ECDSA-AES256-GCM-SHA384
-  - ECDHE-RSA-AES256-GCM-SHA384
-  - ECDHE-ECDSA-AES128-GCM-SHA256
-  - ECDHE-RSA-AES128-GCM-SHA256
