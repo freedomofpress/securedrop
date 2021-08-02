@@ -3,7 +3,7 @@ securedrop_version: "2.1.0~rc1"
 ossec_version: "3.6.0"
 keyring_version: "0.1.5"
 config_version: "0.1.4"
-grsec_version_focal: "5.4.97"
+grsec_version_focal: "5.4.136"
 
 # These values will be interpolated with values populated above
 # via helper functions in the tests.
