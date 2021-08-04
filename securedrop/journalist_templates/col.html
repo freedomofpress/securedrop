@@ -25,47 +25,33 @@
 
       <ul id="submissions" class="plain submissions">
         {% for doc in source.collection %}
-          <li class="submission {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% endif %}">
+          <li class="submission {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% endif %}" aria-labelledby="doc-link-{{ loop.index }} status-icon-{{ loop.index }} type-icon-{{ loop.index }}">
             {% if doc.filename.endswith('reply.gpg') %}
               {% if not doc.deleted_by_source %}
-                <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
-                <span title="{{ gettext('Reply') }}" class="icon">
-                  <img src="{{ url_for('static', filename='icons/reply.png') }}" class="icon" width="16" height="16" alt="{{ gettext('Reply') }}">
-                </span>
+                <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check" aria-labelledby="doc-link-{{ loop.index }}">
+                <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/reply.png') }}" class="icon" width="16" height="16" alt="{{ gettext('Unread') }}" title="{{ gettext('Unread') }}">
               {% else %}
-                <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
-                <span title="{{ gettext('Read') }}" class="icon">
-                  <img src="{{ url_for('static', filename='icons/check.png') }}" class="icon" width="16" height="12" alt="{{ gettext('Reply read') }}">
-                </span>
+                <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check" aria-labelledby="doc-link-{{ loop.index }}">
+                <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/check.png') }}" class="icon" width="16" height="12" alt="{{ gettext('Read') }}" title="{{ gettext('Read') }}">
               {% endif %}
             {% elif not doc.seen %}
-              <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check unread-cb">
-              <span title="{{ gettext('Unread') }}" class="icon">
-                <img src="{{ url_for('static', filename='icons/envelope-closed.png') }}" class="icon" width="16" height="15" alt="{{ gettext('Unread') }}">
-              </span>
+              <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check unread-cb" aria-labelledby="doc-link-{{ loop.index }}">
+              <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/envelope-closed.png') }}" class="icon" width="16" height="15" alt="{{ gettext('Unread') }}" title="{{ gettext('Unread') }}">
             {% else %}
-              <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
-              <span title="{{ gettext('Read') }}" class="icon">
-                <img src="{{ url_for('static', filename='icons/envelope-open.png') }}" class="icon" width="16" height="15" alt="{{ gettext('Read') }}">
-              </span>
+              <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check" aria-labelledby="doc-link-{{ loop.index }}">
+              <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/envelope-open.png') }}" class="icon" width="16" height="15" alt="{{ gettext('Read') }}" title="{{ gettext('Read') }}">
             {% endif %}
-            <a class="file {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% else %}read{% endif %}" href="{{ url_for('col.download_single_file', filesystem_id=filesystem_id, fn=doc.filename) }}">
+            <a id="doc-link-{{ loop.index }}" class="file {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% else %}read{% endif %}" href="{{ url_for('col.download_single_file', filesystem_id=filesystem_id, fn=doc.filename) }}">
               <span class="filename">{{ doc.filename }}</span>
             </a>
             <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat() }}</span></span>
 
             {% if doc.filename.endswith('-doc.gz.gpg') %}
-              <i title="{{ gettext('Uploaded Document') }}" class="pull-right">
-                <img src="{{ url_for('static', filename='icons/files.png') }}" width="14" height="16" alt="{{ gettext('Uploaded Document') }}">
-              </i>
+              <img id="type-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/files.png') }}" class="pull-right" width="14" height="16" alt="{{ gettext('Uploaded Document') }}" title="{{ gettext('Uploaded Document') }}">
             {% elif doc.filename.endswith('-reply.gpg') %}
-              <i title="{{ gettext('Reply') }}" class="pull-right">
-                <img src="{{ url_for('static', filename='icons/reply.png') }}" width="16" height="16" alt="{{ gettext('Reply') }}">
-              </i>
+              <img id="type-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/reply.png') }}" class="pull-right" width="16" height="16" alt="{{ gettext('Reply') }}" title="{{ gettext('Reply') }}">
             {% else %}
-              <i title="{{ gettext('Message') }}" class="pull-right">
-                <img src="{{ url_for('static', filename='icons/messages.png') }}" width="15" height="13" alt="{{ gettext('Message') }}">
-              </i>
+              <img id="type-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/messages.png') }}" class="pull-right" width="15" height="13" alt="{{ gettext('Message') }}" title="{{ gettext('Message') }}">
             {% endif %}
           </li>
         {% endfor %}
