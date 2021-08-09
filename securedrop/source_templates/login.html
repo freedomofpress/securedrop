@@ -6,30 +6,30 @@
 <h1>{{ gettext('Enter Codename') }}</h1>
 
 <form method="post" action="{{ url_for('main.login') }}" autocomplete="off">
-<input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
 
-<div class="center">
-  {% set aria_attributes = {'aria-label': gettext('Enter your codename'), 'aria-required': 'true'} %}
-  {% if form.codename.errors %}
-  {% set _dummy = aria_attributes.update({'aria-describedby': 'flashed login-with-existing-code-name-errors', 'aria-invalid': 'true'}) %}
-  {% endif %}
-  {{ form.codename(id='login-with-existing-codename', class='codename-box', autocomplete='off', placeholder=gettext('Enter your codename'), autofocus=True, **aria_attributes) }}
-  {% if form.codename.errors %}
+  <div class="center">
+    {% set aria_attributes = {'aria-label': gettext('Enter your codename'), 'aria-required': 'true'} %}
+    {% if form.codename.errors %}
+    {% set _dummy = aria_attributes.update({'aria-describedby': 'flashed login-with-existing-code-name-errors', 'aria-invalid': 'true'}) %}
+    {% endif %}
+    {{ form.codename(id='login-with-existing-codename', class='codename-box', autocomplete='off', placeholder=gettext('Enter your codename'), autofocus=True, **aria_attributes) }}
+    {% if form.codename.errors %}
     <ul id="login-with-existing-code-name-errors" class="form-validation-error" role="alert">
-  {% for error in form.codename.errors %}
-    <li>{{ error }}</li>
-  {% endfor %}
+      {% for error in form.codename.errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
     </ul>
-  {% endif %}
+    {% endif %}
   </div>
 
-<div class="pull-right section-spacing">
-  <button type="submit" id="login" aria-label="{{ gettext('Continue') }}">
-    {{ gettext('CONTINUE') }}
-  </button>
-  <a href="{{ url_for('main.index') }}" class="btn secondary" id="cancel" aria-label="{{ gettext('Cancel') }}">
-    {{ gettext('CANCEL') }}</a>
-</div>
+  <div class="pull-right section-spacing">
+    <button type="submit" id="login" aria-label="{{ gettext('Continue') }}">
+      {{ gettext('CONTINUE') }}
+    </button>
+    <a href="{{ url_for('main.index') }}" class="btn secondary" id="cancel" aria-label="{{ gettext('Cancel') }}">
+      {{ gettext('CANCEL') }}</a>
+  </div>
 
 </form>
 {% endblock %}

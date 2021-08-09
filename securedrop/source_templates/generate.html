@@ -3,13 +3,17 @@
 {% block body %}
 <h1>{{ gettext('Welcome') }}</h1>
 
-  <p id="codename-instructions" class="aside center">{{ gettext('Please either write this codename down and keep it in a safe place, or memorize it.') }}</p>
+<p id="codename-instructions" class="aside center">
+  {{ gettext('Please either write this codename down and keep it in a safe place, or memorize it.') }}</p>
 
-<p id="codename-explanation" class="explanation">{{ gettext('This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen.') }}</p>
+<p id="codename-explanation" class="explanation">
+  {{ gettext('This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen.') }}
+</p>
 
 <section class="code" aria-labelledby="codename-heading">
   <h2 id="codename-heading" class="visually-hidden">{{ gettext('Codename') }}</h2>
-  <mark id="codename" class="codename" aria-describedby="codename-instructions codename-explanation">{{ codename }}</mark>
+  <mark id="codename" class="codename"
+    aria-describedby="codename-instructions codename-explanation">{{ codename }}</mark>
   <div class="pull-right">
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
@@ -20,7 +24,8 @@
   </div>
 </section>
 
-<p class="explanation">{{ gettext('Because we do not track users of our <b>SecureDrop</b>
+<p class="explanation">
+  {{ gettext('Because we do not track users of our <b>SecureDrop</b>
  service, in future visits, using this codename will be the only way we have to communicate with you should we have
  questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename.') }}
 </p>
@@ -28,8 +33,9 @@
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input name="tab_id" type="hidden" value="{{ tab_id }}">
-  <button type="submit" class="btn--space pull-right" id="continue-button" aria-label="{{ gettext('Submit Documents') }}">
-     {{ gettext('SUBMIT DOCUMENTS') }}
+  <button type="submit" class="btn--space pull-right" id="continue-button"
+    aria-label="{{ gettext('Submit Documents') }}">
+    {{ gettext('SUBMIT DOCUMENTS') }}
   </button>
 </form>
 {% endblock %}

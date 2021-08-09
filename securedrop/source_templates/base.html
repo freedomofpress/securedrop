@@ -1,55 +1,60 @@
 <!DOCTYPE html>
 <html lang="{{ g.localeinfo.language_tag }}" dir="{{ g.localeinfo.text_direction }}">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% if g.organization_name == "SecureDrop" %}
-    <title>{{ g.organization_name }} | {{ gettext('Protecting Journalists and Sources') }}</title>
-    {% else %}
-    <title>{{ g.organization_name }} | {{ gettext('SecureDrop') }}</title>
-    {% endif %}
 
-    <link rel="stylesheet" href="/static/css/source.css">
-    <link rel="icon" type="image/png" href="/static/i/favicon.png">
-    {% block extrahead %}{% endblock %}
-  </head>
-  <body>
-    {% include 'banner_warning_flashed.html' %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if g.organization_name == "SecureDrop" %}
+  <title>{{ g.organization_name }} | {{ gettext('Protecting Journalists and Sources') }}</title>
+  {% else %}
+  <title>{{ g.organization_name }} | {{ gettext('SecureDrop') }}</title>
+  {% endif %}
 
-    <div class="content">
-      <div class="container">
-        <header>
+  <link rel="stylesheet" href="/static/css/source.css">
+  <link rel="icon" type="image/png" href="/static/i/favicon.png">
+  {% block extrahead %}{% endblock %}
+</head>
+
+<body>
+  {% include 'banner_warning_flashed.html' %}
+
+  <div class="content">
+    <div class="container">
+      <header>
         {% block header %}
-          <a href="{% if 'logged_in' in session %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}" class="no-bottom-border">
-            <img src="{{ g.logo }}" class="logo small" alt="{{ g.organization_name }} logo" width="250">
-          </a>
-          {% include 'locales.html' %}
+        <a href="{% if 'logged_in' in session %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}"
+          class="no-bottom-border">
+          <img src="{{ g.logo }}" class="logo small" alt="{{ g.organization_name }} logo" width="250">
+        </a>
+        {% include 'locales.html' %}
         {% endblock %}
-        </header>
+      </header>
 
-        <main>
-          {% if g.show_offline_message %}
-          <section>
+      <main>
+        {% if g.show_offline_message %}
+        <section>
           <h1>{{ gettext("We're sorry, our SecureDrop is currently offline.") }}</h1>
           <p>{{ gettext("Please try again later. Check our website for more information.") }}</p>
-          </section>
-          {% else %}
+        </section>
+        {% else %}
 
-          {% if 'logged_in' in session %}
-            <nav>
-              <a href="{{ url_for('main.logout') }}" class="btn pull-right" id="logout" aria-label="{{ gettext('Log Out') }}">{{ gettext('LOG OUT') }}</a>
-            </nav>
-          {% endif %}
+        {% if 'logged_in' in session %}
+        <nav>
+          <a href="{{ url_for('main.logout') }}" class="btn pull-right" id="logout"
+            aria-label="{{ gettext('Log Out') }}">{{ gettext('LOG OUT') }}</a>
+        </nav>
+        {% endif %}
 
-          {% endif %}
+        {% endif %}
 
-          {% block body %}{% endblock %}
-        </main>
-      </div>
-
-      {% block footer %}
-      {% include 'footer.html' %}
-      {% endblock %}
+        {% block body %}{% endblock %}
+      </main>
     </div>
-  </body>
+
+    {% block footer %}
+    {% include 'footer.html' %}
+    {% endblock %}
+  </div>
+</body>
+
 </html>

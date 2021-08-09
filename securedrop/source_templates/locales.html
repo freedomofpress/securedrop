@@ -6,26 +6,28 @@
   <label id="locale-menu-trigger" for="menu-1-checkbox" class="menu__trigger" aria-hidden="true">
     {{ g.locales[g.localeinfo.id] }}
   </label>
-  <input id="menu-1-checkbox" class="menu__checkbox visually-hidden" type="checkbox" role="button" aria-label="{{ gettext('Choose language') }}" aria-haspopup="menu" aria-controls="locales-menu" aria-pressed="true">
+  <input id="menu-1-checkbox" class="menu__checkbox visually-hidden" type="checkbox" role="button"
+    aria-label="{{ gettext('Choose language') }}" aria-haspopup="menu" aria-controls="locales-menu" aria-pressed="true">
 
   <ul id="locales-menu" class="menu__items" role="menu" aria-labelledby="menu-1-checkbox">
     {% for locale in g.locales.keys() %}
-      <li class="menu__item" role="none">
-        {% if locale != g.localeinfo.id %}
-          {% set args = {} %}
-          {% set _ = args.update(request.args or {}) %}
-          {% set _ = args.update(request.view_args or {}) %}
-          {% set _ = args.update({'l': locale}) %}
-          {% set checked = 'false' %}
-          {% set url = url_for(request.endpoint or 'main.index', **args) %}
-        {% else %}
-          {% set url = '' %}
-          {% set checked = 'true' %}
-        {% endif %}
-        <a href="{{ url }}" rel="nofollow" class="no-bottom-border" lang="{{ locale }}" hreflang="{{ locale }}" role="menuitemradio" aria-checked="{{ checked }}">
-          {{ g.locales[locale] }}
-        </a>
-      </li>
+    <li class="menu__item" role="none">
+      {% if locale != g.localeinfo.id %}
+      {% set args = {} %}
+      {% set _ = args.update(request.args or {}) %}
+      {% set _ = args.update(request.view_args or {}) %}
+      {% set _ = args.update({'l': locale}) %}
+      {% set checked = 'false' %}
+      {% set url = url_for(request.endpoint or 'main.index', **args) %}
+      {% else %}
+      {% set url = '' %}
+      {% set checked = 'true' %}
+      {% endif %}
+      <a href="{{ url }}" rel="nofollow" class="no-bottom-border" lang="{{ locale }}" hreflang="{{ locale }}"
+        role="menuitemradio" aria-checked="{{ checked }}">
+        {{ g.locales[locale] }}
+      </a>
+    </li>
     {% endfor %}
   </ul>
 </section>
