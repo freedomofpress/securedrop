@@ -16,9 +16,9 @@ pluggy>=0.13.1
 pytest-cov
 pytest-mock
 hypothesis
-requests[socks]>2.21.0
+requests[socks]>=2.26.0
 setuptools>=56.0.0
 selenium>=3.141.0
 tbselenium>=0.5.2
 pyvirtualdisplay
-urllib3>=1.25.9
+urllib3>=1.26.5

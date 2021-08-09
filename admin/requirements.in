@@ -1,5 +1,5 @@
 markupsafe>=1.1
 prompt_toolkit==2.0.9
-pyyaml>=5.4.1; python_version > '3.6'
+pyyaml>=5.4.1
 setuptools>=56.0.0
 six==1.15.0

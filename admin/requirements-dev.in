@@ -7,11 +7,11 @@ pbr
 pip>=21.1
 pip-tools>=6.1.0
 py>=1.10.0
-pylint>=2.7.0; python_version > '3.6'
+pylint>=2.7.0
 pytest==3.2.0
-requests>=2.22.0
+requests>=2.26.0
 tox
 pexpect
-urllib3>=1.25.9
+urllib3>=1.26.5
 pytest-catchlog
 setuptools==56.0.0
