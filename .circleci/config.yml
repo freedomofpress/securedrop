@@ -312,8 +312,8 @@ workflows:
       - staging-test-with-rebase:
           filters:
             branches:
-              ignore:
-                - /i18n-.*/
+              only:
+                - /release\/.*/
           requires:
             - lint
       - translation-tests:
