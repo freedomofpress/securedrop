@@ -51,6 +51,7 @@ pytest \
     --page-layout \
     --durations 10 \
     --junitxml=../test-results/junit.xml \
+    --override-ini junit_family=xunit1 \
     --cov-report term-missing \
     --cov-report html:../test-results/cov_html \
     --cov-report xml:../test-results/cov.xml \
