@@ -339,6 +339,7 @@ workflows:
               only:
                 - develop
     jobs:
+      - staging-test-with-rebase
       - static-analysis-and-no-known-cves
 
   weekly:
