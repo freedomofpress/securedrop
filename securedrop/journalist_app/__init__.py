@@ -115,6 +115,8 @@ def create_app(config: 'SDConfig') -> Flask:
     app.jinja_env.filters['rel_datetime_format'] = \
         template_filters.rel_datetime_format
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
+    app.jinja_env.filters['html_datetime_format'] = \
+        template_filters.html_datetime_format
 
     @app.before_first_request
     def expire_blacklisted_tokens() -> None:

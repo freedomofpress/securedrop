@@ -70,7 +70,7 @@
     {% for reply in replies %}
     <article class="reply">
       <h3 class="date"><time title="{{ reply.date|rel_datetime_format }}"
-          datetime="{{ reply.date }}">{{ reply.date|rel_datetime_format(relative=True) }}</time></h3>
+          datetime="{{ reply.date|html_datetime_format }}">{{ reply.date|rel_datetime_format(relative=True) }}</time></h3>
       <form id="delete" class="message" method="post" action="{{ url_for('main.delete') }}" autocomplete="off">
         <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
         <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off">

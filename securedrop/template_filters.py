@@ -49,3 +49,8 @@ def filesizeformat(value: int) -> str:
         prefix = prefixes[i]
         bytes = float(value) / base ** (i + 1)
         return units.format_unit(bytes, prefix, locale=locale, length="short")
+
+
+def html_datetime_format(dt: datetime) -> str:
+    """Return a datetime string that will pass HTML validation"""
+    return dates.format_datetime(dt, 'yyyy-MM-dd HH:mm:ss.SSS')
