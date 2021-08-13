@@ -43,8 +43,8 @@ def test_fpf_apt_repo_fingerprint(host):
       * 2016-10
       * 2021-06
 
-    So let's make sure that the fingerprints accepted by the system covers both
-    in the interim.
+    The old key has been removed, so only the new key's fingerprint should be
+    returned.
     """
 
     c = host.run('apt-key finger')
@@ -53,7 +53,7 @@ def test_fpf_apt_repo_fingerprint(host):
     fpf_gpg_pub_key_info_new = "2359 E653 8C06 13E6 5295  5E6C 188E DD3B 7B22 E6A3"
 
     assert c.rc == 0
-    assert fpf_gpg_pub_key_info_old in c.stdout
+    assert fpf_gpg_pub_key_info_old not in c.stdout
     assert fpf_gpg_pub_key_info_new in c.stdout
 
 
