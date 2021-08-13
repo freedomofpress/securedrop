@@ -40,11 +40,26 @@ class RequestLocaleInfo:
     def __init__(self, locale: str):
         self.locale = Locale.parse(locale)
 
+        # This attribute can be set to `True` to differentiate multiple
+        # locales currently available (supported) for the same language.
+        self.use_display_name = False
+
     def __str__(self) -> str:
         """
         The Babel string representation of the locale.
         """
         return str(self.locale)
+
+    @property
+    def display_name(self) -> str:
+        """
+        Give callers (i.e., templates) the `Locale` object's display name when
+        such resolution is warranted, otherwise the language name---as
+        determined by `map_locale_display_names()`.
+        """
+        if self.use_display_name:
+            return self.locale.display_name
+        return self.locale.language_name
 
     @property
     def text_direction(self) -> str:
@@ -135,7 +150,7 @@ def validate_locale_configuration(config: SDConfig, app: Flask) -> None:
             )
 
 
-LOCALES = collections.OrderedDict()  # type: collections.OrderedDict[str, str]
+LOCALES = collections.OrderedDict()  # type: collections.OrderedDict[str, RequestLocaleInfo]
 
 
 def map_locale_display_names(config: SDConfig) -> None:
@@ -149,17 +164,15 @@ def map_locale_display_names(config: SDConfig) -> None:
     """
     language_locale_counts = collections.defaultdict(int)  # type: Dict[str, int]
     for l in sorted(config.SUPPORTED_LOCALES):
-        locale = Locale.parse(l)
-        language_locale_counts[locale.language_name] += 1
+        locale = RequestLocaleInfo(l)
+        language_locale_counts[locale.language] += 1
 
     locale_map = collections.OrderedDict()
     for l in sorted(config.SUPPORTED_LOCALES):
-        locale = Locale.parse(l)
-        if language_locale_counts[locale.language_name] == 1:
-            name = locale.language_name
-        else:
-            name = locale.display_name
-        locale_map[str(locale)] = name
+        locale = RequestLocaleInfo(l)
+        if language_locale_counts[locale.language] > 1:
+            locale.use_display_name = True
+        locale_map[str(locale)] = locale
 
     global LOCALES
     LOCALES = locale_map
