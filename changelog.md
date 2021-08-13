@@ -2,6 +2,18 @@
 
 ## 2.1.0~rc1
 
+
+
+## 2.0.2
+
+### Operations
+
+* Updated default grsec kernel version from 5.4.97 to 5.4.136 (#6054)
+
+### Development
+
+* Updated pillow dependency from 8.2.0 to 8.3.1 (#6045)
+
 ## 2.0.1
 
 ### Operations
