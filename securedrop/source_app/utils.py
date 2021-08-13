@@ -103,7 +103,10 @@ def fit_codenames_into_cookie(codenames: dict) -> dict:
 
     serialized = json.dumps(codenames).encode()
     if len(codenames) > 1 and len(serialized) > 4000:  # werkzeug.Response.max_cookie_size = 4093
-        current_app.logger.warn(f"Popping oldest of {len(codenames)} codenames ({len(serialized)} bytes) to fit within maximum cookie size")
+        if current_app:
+            current_app.logger.warn(f"Popping oldest of {len(codenames)} "
+                                    f"codenames ({len(serialized)} bytes) to "
+                                    f"fit within maximum cookie size")
         del codenames[list(codenames)[0]]  # FIFO
 
         return fit_codenames_into_cookie(codenames)
