@@ -4,6 +4,7 @@ blinker
 coverage>=4.5.2
 Flask-Testing
 flaky
+html5validator
 markupsafe>=1.1
 mock
 pathlib2
