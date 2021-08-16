@@ -34,6 +34,7 @@ class TestSourceLayout(
         self._source_continues_to_submit_page()
         self._source_submits_a_file()
         self._screenshot('source-lookup.png')
+        self._save_html('source-lookup.html')
 
     def test_lookup_shows_codename(self):
         self._source_visits_source_homepage()
@@ -41,26 +42,31 @@ class TestSourceLayout(
         self._source_continues_to_submit_page()
         self._source_shows_codename()
         self._screenshot('source-lookup-shows-codename.png')
+        self._save_html('source-lookup-shows-codename.html')
 
     def test_login(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_login()
         self._screenshot('source-login.png')
+        self._save_html('source-login.html')
 
     def test_enters_text_in_login_form(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_login()
         self._source_enters_codename_in_login_form()
         self._screenshot('source-enter-codename-in-login.png')
+        self._save_html('source-enter-codename-in-login.html')
 
     def test_use_tor_browser(self):
         self._source_visits_use_tor()
         self._screenshot('source-use_tor_browser.png')
+        self._save_html('source-use_tor_browser.html')
 
     def test_generate(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
         self._screenshot('source-generate.png')
+        self._save_html('source-generate.html')
 
     def test_submission_entered_text(self):
         self._source_visits_source_homepage()
@@ -68,6 +74,7 @@ class TestSourceLayout(
         self._source_continues_to_submit_page()
         self._source_enters_text_in_message_field()
         self._screenshot('source-submission_entered_text.png')
+        self._save_html('source-submission_entered_text.html')
 
     def test_next_submission_flashed_message(self):
         self._source_visits_source_homepage()
@@ -76,6 +83,7 @@ class TestSourceLayout(
         self._source_submits_a_file()
         self._source_submits_a_message()
         self._screenshot('source-next_submission_flashed_message.png')
+        self._save_html('source-next_submission_flashed_message.html')
 
     def test_source_checks_for_reply(self):
         self._source_visits_source_homepage()
@@ -91,20 +99,25 @@ class TestSourceLayout(
         self._source_chooses_to_login()
         self._source_proceeds_to_login()
         self._screenshot('source-checks_for_reply.png')
+        self._save_html('source-checks_for_reply.html')
         self._source_deletes_a_journalist_reply()
         self._screenshot('source-deletes_reply.png')
+        self._save_html('source-deletes_reply.html')
 
     def test_notfound(self):
         self._source_not_found()
         self._screenshot('source-notfound.png')
+        self._save_html('source-notfound.html')
 
     def test_tor2web_warning(self):
         self._source_tor2web_warning()
         self._screenshot('source-tor2web_warning.png')
+        self._save_html('source-tor2web_warning.html')
 
     def test_why_journalist_key(self):
         self._source_why_journalist_key()
         self._screenshot('source-why_journalist_key.png')
+        self._save_html('source-why_journalist_key.html')
 
 
 @pytest.mark.pagelayout
@@ -125,6 +138,7 @@ class TestSourceSessionLayout(
         self._source_enters_text_in_message_field()
         self._source_visits_source_homepage()
         self._screenshot('source-session_timeout.png')
+        self._save_html('source-session_timeout.html')
 
 
 class TestSourceLayoutTorbrowser(
@@ -137,6 +151,7 @@ class TestSourceLayoutTorbrowser(
         self.disable_js_torbrowser_driver()
         self._source_visits_source_homepage()
         self._screenshot('source-index.png')
+        self._save_html('source-index.html')
 
     def test_logout(self):
         self.disable_js_torbrowser_driver()
@@ -146,3 +161,4 @@ class TestSourceLayoutTorbrowser(
         self._source_submits_a_file()
         self._source_logs_out()
         self._screenshot('source-logout_page.png')
+        self._save_html('source-logout_page.html')
