@@ -1,10 +1,10 @@
 {% if g.locales|length > 1 %}
 <section class="menu" aria-labelledby="locale-menu-heading">
   <h2 id="locale-menu-heading" hidden>
-    {{ gettext('Selected language')}}: {{ g.locales[g.localeinfo.id] }}
+    {{ gettext('Selected language')}}: {{ g.locales[g.localeinfo.id].display_name }}
   </h2>
   <label id="locale-menu-trigger" for="menu-1-checkbox" class="menu__trigger" aria-hidden="true">
-    {{ g.locales[g.localeinfo.id] }}
+    {{ g.locales[g.localeinfo.id].display_name }}
   </label>
   <input id="menu-1-checkbox" class="menu__checkbox visually-hidden" type="checkbox" role="button"
     aria-label="{{ gettext('Choose language') }}" aria-haspopup="menu" aria-controls="locales-menu" aria-pressed="true">
@@ -23,9 +23,9 @@
       {% set url = '' %}
       {% set checked = 'true' %}
       {% endif %}
-      <a href="{{ url }}" rel="nofollow" class="no-bottom-border" lang="{{ locale }}" hreflang="{{ locale }}"
+      <a href="{{ url }}" rel="nofollow" class="no-bottom-border" lang="{{ g.locales[locale].language_tag }}" hreflang="{{ g.locales[locale].language_tag }}"
         role="menuitemradio" aria-checked="{{ checked }}">
-        {{ g.locales[locale] }}
+        {{ g.locales[locale].display_name }}
       </a>
     </li>
     {% endfor %}
