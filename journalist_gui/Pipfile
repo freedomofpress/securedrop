@@ -4,7 +4,7 @@ verify_ssl = true
 url = "https://pypi.python.org/simple"
 
 [requires]
-python_version = "3.5"
+python_version = "3.7"
 
 [dev-packages]
 
