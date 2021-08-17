@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from flask import session, g
+from flask import session
 from werkzeug.contrib.cache import SimpleCache
 
 from sdconfig import config
@@ -40,14 +40,6 @@ class SessionManager:
             key=user_passphrase, value=user, timeout=config.SESSION_EXPIRATION_MINUTES * 60
         )
 
-        # Populate the Flask globals and session
-        # TODO(AD): Usage of flask.g and session will be removed in my next PR
-        # This is a temporary compatibility layer to reduce the size of my changes
-        g.codename = user_passphrase
-        g.filesystem_id = user.filesystem_id
-        g.source = user.get_db_record()
-        session["logged_in"] = True
-
     @classmethod
     def log_user_out(cls) -> None:
         try:
@@ -56,12 +48,6 @@ class SessionManager:
             cls._CACHE.delete(user_passphrase)
             # Remove passphrase from the session cookie
             del session[cls._KEY_IN_SESSION_COOKIE]
-        except KeyError:
-            pass
-
-        # TODO(AD): Will be removed in my next PR
-        try:
-            del session["logged_in"]
         except KeyError:
             pass
 

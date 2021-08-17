@@ -16,6 +16,7 @@ from flask_babel import gettext
 from mock import patch, ANY
 import pytest
 
+import source
 from passphrases import PassphraseGenerator
 from source_app.session_manager import SessionManager
 from . import utils
@@ -32,12 +33,13 @@ from source_app import get_logo_url
 from .utils.db_helper import new_codename, submit
 from .utils.i18n import get_test_locales, language_tag, page_language, xfail_untranslated_messages
 from .utils.instrument import InstrumentedApp
-from sdconfig import config
 
 
-def test_logo_default_available(source_app):
+def test_logo_default_available(config, source_app):
     # if the custom image is available, this test will fail
-    custom_image_location = os.path.join(config.SECUREDROP_ROOT, "static/i/custom_logo.png")
+    custom_image_location = os.path.join(
+        config.SECUREDROP_ROOT, "static/i/custom_logo.png"
+    )
     if os.path.exists(custom_image_location):
         os.remove(custom_image_location)
 
@@ -48,7 +50,7 @@ def test_logo_default_available(source_app):
         assert response.status_code == 200
 
 
-def test_logo_custom_available(source_app):
+def test_logo_custom_available(config, source_app):
     # if the custom image is available, this test will fail
     custom_image = os.path.join(config.SECUREDROP_ROOT, "static/i/custom_logo.png")
     default_image = os.path.join(config.SECUREDROP_ROOT, "static/i/logo.png")
@@ -125,7 +127,7 @@ def test_create_new_source(source_app):
         assert resp.status_code == 200
         tab_id = next(iter(session['codenames'].keys()))
         resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
-        assert session['logged_in'] is True
+        assert SessionManager.is_user_logged_in()
         # should be redirected to /lookup
         text = resp.data.decode('utf-8')
         assert "Submit Files" in text
@@ -148,37 +150,35 @@ def test_generate(source_app):
 
 
 def test_create_duplicate_codename_logged_in_not_in_session(source_app):
-    with source_app.test_client() as app:
-        resp = app.get(url_for('main.generate'))
-        assert resp.status_code == 200
-        tab_id = next(iter(session['codenames'].keys()))
+    with patch.object(source.app.logger, 'error') as logger:
+        with source_app.test_client() as app:
+            resp = app.get(url_for('main.generate'))
+            assert resp.status_code == 200
+            tab_id, codename = next(iter(session['codenames'].items()))
 
-        # Create a source the first time
-        resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
-        assert resp.status_code == 200
-        codename = session['codename']
+            # Create a source the first time
+            resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
+            assert resp.status_code == 200
 
-    with source_app.test_client() as app:
-        # Attempt to add the same source
-        with app.session_transaction() as sess:
-            sess['codenames'] = {tab_id: codename}
-        resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
-        assert resp.status_code == 200
-        assert 'codename' not in session
-        assert 'logged_in' not in session
+        with source_app.test_client() as app:
+            # Attempt to add the same source
+            with app.session_transaction() as sess:
+                sess['codenames'] = {tab_id: codename}
+            resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
+            logger.assert_called_once()
+            assert "Could not create a source" in logger.call_args[0][0]
+            assert resp.status_code == 200
+            assert not SessionManager.is_user_logged_in()
 
 
 def test_create_duplicate_codename_logged_in_in_session(source_app):
     with source_app.test_client() as app:
         resp = app.get(url_for('main.generate'))
         assert resp.status_code == 200
-        tab_id = next(iter(session['codenames'].keys()))
-
-        # Create a source the first time
+        tab_id, first_user_codename = next(iter(session['codenames'].items()))
         resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
         assert resp.status_code == 200
-        codename = session['codename']
-        logged_in = session['logged_in']
+        first_user = SessionManager.get_logged_in_user()
 
     # Attempt to add another source in the same session
     with source_app.test_client() as app:
@@ -186,11 +186,13 @@ def test_create_duplicate_codename_logged_in_in_session(source_app):
         assert resp.status_code == 200
         tab_id = next(iter(session['codenames'].keys()))
         with app.session_transaction() as sess:
-            sess['codename'] = codename
-            sess['logged_in'] = logged_in
+            sess[SessionManager._KEY_IN_SESSION_COOKIE] = first_user_codename
+
         resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
         assert resp.status_code == 200
-        assert session['codename'] == codename
+        final_user = SessionManager.get_logged_in_user()
+
+        assert final_user.filesystem_id == first_user.filesystem_id
         text = resp.data.decode('utf-8')
         assert "You are already logged in." in text
         assert "Submit Files" in text
@@ -235,7 +237,7 @@ def test_login_and_logout(source_app):
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Submit Files" in text
-        assert session['logged_in'] is True
+        assert SessionManager.is_user_logged_in()
 
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
@@ -244,25 +246,24 @@ def test_login_and_logout(source_app):
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert 'Sorry, that is not a recognized codename.' in text
-        assert 'logged_in' not in session
+        assert not SessionManager.is_user_logged_in()
 
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
                         data=dict(codename=codename),
                         follow_redirects=True)
         assert resp.status_code == 200
-        assert session['logged_in'] is True
+        assert SessionManager.is_user_logged_in()
 
         resp = app.post(url_for('main.login'),
                         data=dict(codename=codename),
                         follow_redirects=True)
         assert resp.status_code == 200
-        assert session['logged_in'] is True
+        assert SessionManager.is_user_logged_in()
 
         resp = app.get(url_for('main.logout'),
                        follow_redirects=True)
-        assert 'logged_in' not in session
-        assert 'codename' not in session
+        assert not SessionManager.is_user_logged_in()
         text = resp.data.decode('utf-8')
 
         # This is part of the logout page message instructing users
@@ -296,7 +297,7 @@ def test_login_with_whitespace(source_app):
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Submit Files" in text
-        assert session['logged_in'] is True
+        assert SessionManager.is_user_logged_in()
 
     with source_app.test_client() as app:
         codename = new_codename(app, session)
@@ -335,7 +336,7 @@ def test_login_with_missing_reply_files(source_app):
             assert resp.status_code == 200
             text = resp.data.decode('utf-8')
             assert "Submit Files" in text
-            assert session['logged_in'] is True
+            assert SessionManager.is_user_logged_in()
 
 
 def _dummy_submission(app):
@@ -592,7 +593,7 @@ def test_metadata_route(config, source_app):
             assert resp.json.get('v3_source_url') is None
 
 
-def test_metadata_v3_url(config, source_app):
+def test_metadata_v3_url(source_app):
     onion_test_url = "abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion"
     with patch.object(source_app_api, "get_sourcev3_url") as mocked_v3_url:
         mocked_v3_url.return_value = (onion_test_url)
@@ -646,7 +647,7 @@ def test_normalize_timestamps(source_app):
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         assert "Submit Files" in text
-        assert session['logged_in'] is True
+        assert SessionManager.is_user_logged_in()
 
         # submit another message
         resp = _dummy_submission(app)
@@ -715,20 +716,19 @@ def test_source_is_deleted_while_logged_in(source_app):
     index when this happens, and a warning logged."""
     with source_app.test_client() as app:
         codename = new_codename(app, session)
-        resp = app.post('login', data=dict(codename=codename),
-                        follow_redirects=True)
+        app.post('login', data=dict(codename=codename), follow_redirects=True)
 
-        # Now the journalist deletes the source
-        filesystem_id = g.filesystem_id
-        delete_collection(filesystem_id)
+        # Now that the source is logged in, the journalist deletes the source
+        source_user = SessionManager.get_logged_in_user()
+        delete_collection(source_user.filesystem_id)
 
         # Source attempts to continue to navigate
         resp = app.get(url_for('main.lookup'), follow_redirects=True)
         assert resp.status_code == 200
+        assert not SessionManager.is_user_logged_in()
         text = resp.data.decode('utf-8')
         assert 'First submission' in text
-        assert 'logged_in' not in session
-        assert 'codename' not in session
+        assert not SessionManager.is_user_logged_in()
 
 
 def test_login_with_invalid_codename(source_app):
@@ -748,76 +748,65 @@ def test_login_with_invalid_codename(source_app):
 
 def test_source_session_expiration(config, source_app):
     with source_app.test_client() as app:
+        # Given a source user who logs in
         codename = new_codename(app, session)
-
-        # set the expiration to ensure we trigger an expiration
-        config.SESSION_EXPIRATION_MINUTES = -1
-
         resp = app.post(url_for('main.login'),
                         data=dict(codename=codename),
                         follow_redirects=True)
         assert resp.status_code == 200
+
+        # And their session expired just now
         SessionManager.expire_all_user_sessions()
+
+        # When they browse to an authenticated page
         resp = app.get(url_for('main.lookup'), follow_redirects=True)
 
-        # check that the session was cleared (apart from 'expires'
-        # which is always present and 'csrf_token' which leaks no info)
-        session.pop('expires', None)
-        session.pop('csrf_token', None)
-        session.pop('locale', None)
-        session.pop('show_expiration_message', None)
-        assert not session
-
+        # They get redirected to the index page with the "logged out" message
         text = resp.data.decode('utf-8')
         assert 'You were logged out due to inactivity' in text
 
 
 def test_source_session_expiration_create(config, source_app):
     with source_app.test_client() as app:
-
         seconds_session_expire = 1
         config.SESSION_EXPIRATION_MINUTES = seconds_session_expire / 60.
 
-        # Make codename, and then wait for session to expire.
+        # Given a source user who is in the middle of the account creation flow
         resp = app.get(url_for('main.generate'))
         assert resp.status_code == 200
 
+        # And they don't finish the account creation flow in time
         time.sleep(seconds_session_expire + 0.1)
 
-        # Now when we click create, the session will have expired.
+        # When the user tries to complete the create flow
         resp = app.post(url_for('main.create'), follow_redirects=True)
 
-        # check that the session was cleared (apart from 'expires'
-        # which is always present and 'csrf_token' which leaks no info)
-        session.pop('expires', None)
-        session.pop('csrf_token', None)
-        session.pop('locale', None)
-        session.pop('show_expiration_message', None)
-        assert not session
-
+        # They get redirected to the index page with the "logged out" message
         text = resp.data.decode('utf-8')
         assert 'You were logged out due to inactivity' in text
 
 
 def test_source_no_session_expiration_message_when_not_logged_in(config, source_app):
-    """If sources never logged in, no message should be displayed
-    after SESSION_EXPIRATION_MINUTES."""
-
     with source_app.test_client() as app:
         seconds_session_expire = 1
         config.SESSION_EXPIRATION_MINUTES = seconds_session_expire / 60.
 
+        # Given an unauthenticated source user
         resp = app.get(url_for('main.index'))
         assert resp.status_code == 200
 
+        # And their session cookie expired just now
         time.sleep(seconds_session_expire + 1)
 
+        # When they browse again the index page
         refreshed_resp = app.get(url_for('main.index'), follow_redirects=True)
+
+        # The session expiration message is NOT displayed
         text = refreshed_resp.data.decode('utf-8')
         assert 'You were logged out due to inactivity' not in text
 
 
-def test_csrf_error_page(config, source_app):
+def test_csrf_error_page(source_app):
     source_app.config['WTF_CSRF_ENABLED'] = True
     with source_app.test_client() as app:
         with InstrumentedApp(source_app) as ins:
@@ -845,7 +834,7 @@ def test_source_can_only_delete_own_replies(source_app):
                         data={'codename': codename1},
                         follow_redirects=True)
         assert resp.status_code == 200
-        assert g.source.id == source1.id
+        assert SessionManager.get_logged_in_user().db_record_id == source1.id
 
         resp = app.post(url_for('main.delete'),
                         data={'reply_filename': filename},
@@ -861,7 +850,7 @@ def test_source_can_only_delete_own_replies(source_app):
                         data={'codename': codename0},
                         follow_redirects=True)
         assert resp.status_code == 200
-        assert g.source.id == source0.id
+        assert SessionManager.get_logged_in_user().db_record_id == source0.id
 
         resp = app.post(url_for('main.delete'),
                         data={'reply_filename': filename},

@@ -42,7 +42,10 @@ def authenticate_source_user(
     source_filesystem_id = scrypt_manager.derive_source_filesystem_id(supplied_passphrase)
     source_db_record = (
         db_session.query(models.Source)
-        .filter_by(filesystem_id=source_filesystem_id, deleted_at=None,)
+        .filter_by(
+            filesystem_id=source_filesystem_id,
+            deleted_at=None,
+        )
         .one_or_none()
     )
     if source_db_record is None:

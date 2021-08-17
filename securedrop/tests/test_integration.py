@@ -45,7 +45,9 @@ def test_submit_message(journalist_app, source_app, test_journo):
         app.get('/generate')
         tab_id = next(iter(session['codenames'].keys()))
         app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
-        filesystem_id = g.filesystem_id
+        source_user = SessionManager.get_logged_in_user()
+        filesystem_id = source_user.filesystem_id
+
         # redirected to submission form
         resp = app.post('/submit', data=dict(
             msg=test_msg,
@@ -143,7 +145,9 @@ def test_submit_file(journalist_app, source_app, test_journo):
         app.get('/generate')
         tab_id = next(iter(session['codenames'].keys()))
         app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
-        filesystem_id = g.filesystem_id
+        source_user = SessionManager.get_logged_in_user()
+        filesystem_id = source_user.filesystem_id
+
         # redirected to submission form
         resp = app.post('/submit', data=dict(
             msg="",
@@ -243,17 +247,16 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
 
     with source_app.test_client() as app:
         app.get('/generate')
-        tab_id = next(iter(session['codenames'].keys()))
+        tab_id, codename = next(iter(session['codenames'].items()))
         app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
-        codename = session['codename']
-        source_user = SessionManager.get_logged_in_user()
-        filesystem_id = g.filesystem_id
         # redirected to submission form
         resp = app.post('/submit', data=dict(
             msg=test_msg,
             fh=(BytesIO(b''), ''),
         ), follow_redirects=True)
         assert resp.status_code == 200
+        source_user = SessionManager.get_logged_in_user()
+        filesystem_id = source_user.filesystem_id
         app.get('/logout')
 
     with journalist_app.test_client() as app:
