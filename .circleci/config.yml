@@ -176,7 +176,7 @@ jobs:
 
   updater-gui-tests:
     docker:
-      - image: circleci/python:3.5
+      - image: cimg/python:3.7
     steps:
       - checkout
 
