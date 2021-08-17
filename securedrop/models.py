@@ -27,7 +27,7 @@ from db import db
 
 from typing import Callable, Optional, Union, Dict, List, Any
 from logging import Logger
-from pyotp import OTP
+from pyotp import TOTP, HOTP
 
 
 LOGIN_HARDENING = True
@@ -539,6 +539,9 @@ class Journalist(db.Model):
         if not passphrase:
             return False
 
+        # For type checking
+        assert isinstance(self.pw_hash, bytes)
+
         # Avoid hashing passwords that are over the maximum length
         if len(passphrase) > self.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(passphrase)
@@ -584,14 +587,14 @@ class Journalist(db.Model):
         self.hotp_counter = 0
 
     @property
-    def totp(self) -> 'OTP':
+    def totp(self) -> 'TOTP':
         if self.is_totp:
             return pyotp.TOTP(self.otp_secret)
         else:
             raise ValueError('{} is not using TOTP'.format(self))
 
     @property
-    def hotp(self) -> 'OTP':
+    def hotp(self) -> 'HOTP':
         if not self.is_totp:
             return pyotp.HOTP(self.otp_secret)
         else:
@@ -698,6 +701,8 @@ class Journalist(db.Model):
 
             # Prevent TOTP token reuse
             if user.last_token is not None:
+                # For type checking
+                assert isinstance(token, str)
                 if pyotp.utils.compare_digest(token, user.last_token):
                     raise BadTokenException("previously used two-factor code "
                                             "{}".format(token))
