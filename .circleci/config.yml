@@ -230,7 +230,7 @@ jobs:
 
       - run:
           name: Install libqt5designer5
-          command: sudo apt-get update && sudo apt-get install -y libqt5designer5
+          command: sudo apt-get update --allow-releaseinfo-change && sudo apt-get install -y libqt5designer5
 
       - run:
           name: Install requirements
