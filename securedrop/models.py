@@ -539,7 +539,6 @@ class Journalist(db.Model):
         if not passphrase:
             return False
 
-
         # Avoid hashing passwords that are over the maximum length
         if len(passphrase) > self.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(passphrase)
