@@ -540,7 +540,8 @@ class Journalist(db.Model):
             return False
 
         # For type checking
-        assert isinstance(self.pw_hash, bytes)
+        if self.pw_hash:
+            assert isinstance(self.pw_hash, bytes)
 
         # Avoid hashing passwords that are over the maximum length
         if len(passphrase) > self.MAX_PASSWORD_LEN:
