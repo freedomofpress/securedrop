@@ -539,9 +539,6 @@ class Journalist(db.Model):
         if not passphrase:
             return False
 
-        # For type checking
-        if self.pw_hash:
-            assert isinstance(self.pw_hash, bytes)
 
         # Avoid hashing passwords that are over the maximum length
         if len(passphrase) > self.MAX_PASSWORD_LEN:
@@ -559,6 +556,9 @@ class Journalist(db.Model):
                 raise ValueError(
                     "Should never happen: pw_salt is none for legacy Journalist {}".format(self.id)
                 )
+
+            # For type checking
+            assert isinstance(self.pw_hash, bytes)
 
             is_valid = pyotp.utils.compare_digest(
                 self._scrypt_hash(passphrase, self.pw_salt),
