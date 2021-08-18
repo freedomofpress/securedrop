@@ -227,7 +227,7 @@ test-focal:  test
 
 .PHONY: validate-test-html
 validate-test-html:
-	@echo "███ Validating HTML source saved from any page-layout tests run..."
+	@echo "███ Validating HTML source from $(shell find securedrop/tests/pageslayout/html -name "*.html" | wc -l | xargs echo -n) page-layout test(s)"
 	@$(DEVSHELL) html5validator tests/pageslayout/html
 	@echo
 
