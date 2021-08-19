@@ -318,8 +318,8 @@ workflows:
       - staging-test-with-rebase:
           filters:
             branches:
-              ignore:
-                - /i18n-.*/
+              only:
+                - /release\/.*/
           requires:
             - lint
       - translation-tests:
@@ -345,6 +345,7 @@ workflows:
               only:
                 - develop
     jobs:
+      - staging-test-with-rebase
       - static-analysis-and-no-known-cves
 
   weekly:
