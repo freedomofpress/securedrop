@@ -19,7 +19,8 @@ from models import Source, Submission, Reply, get_one_or_else
 from sdconfig import SDConfig
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
-                              normalize_timestamps, valid_codename)
+                              normalize_timestamps, valid_codename,
+                              fit_codenames_into_cookie)
 from source_app.forms import LoginForm, SubmissionForm
 
 
@@ -48,7 +49,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         tab_id = urlsafe_b64encode(os.urandom(64)).decode()
         codenames = session.get('codenames', {})
         codenames[tab_id] = codename
-        session['codenames'] = codenames
+        session['codenames'] = fit_codenames_into_cookie(codenames)
 
         session['new_user'] = True
         return render_template('generate.html', codename=codename, tab_id=tab_id)

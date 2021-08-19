@@ -1,3 +1,4 @@
+import json
 import subprocess
 
 from flask import session, current_app, abort, g
@@ -91,3 +92,23 @@ def check_url_file(path: str, regexp: str) -> 'Optional[str]':
 def get_sourcev3_url() -> 'Optional[str]':
     return check_url_file("/var/lib/securedrop/source_v3_url",
                           r"^[a-z0-9]{56}\.onion$")
+
+
+def fit_codenames_into_cookie(codenames: dict) -> dict:
+    """
+    If `codenames` will approach `werkzeug.Response.max_cookie_size` once
+    serialized, incrementally pop off the oldest codename until the remaining
+    (newer) ones will fit.
+    """
+
+    serialized = json.dumps(codenames).encode()
+    if len(codenames) > 1 and len(serialized) > 4000:  # werkzeug.Response.max_cookie_size = 4093
+        if current_app:
+            current_app.logger.warn(f"Popping oldest of {len(codenames)} "
+                                    f"codenames ({len(serialized)} bytes) to "
+                                    f"fit within maximum cookie size")
+        del codenames[list(codenames)[0]]  # FIFO
+
+        return fit_codenames_into_cookie(codenames)
+
+    return codenames
