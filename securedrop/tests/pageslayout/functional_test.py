@@ -80,3 +80,17 @@ class FunctionalTest(functional_test.FunctionalTest):
         img = Image.open(io.BytesIO(self.driver.get_screenshot_as_png()))
         cropped = autocrop_btm(img)
         cropped.save(os.path.join(log_dir, filename))
+
+    def _save_html(self, filename):
+        # revert the HTTP Accept-Language format
+        locale = self.accept_languages.replace("-", "_")
+
+        html_dir = abspath(
+            os.path.join(dirname(realpath(__file__)), "html", locale)
+        )
+        if not os.path.exists(html_dir):
+            os.makedirs(html_dir)
+
+        html = self.driver.page_source
+        with open(os.path.join(html_dir, filename), 'w') as f:
+            f.write(html)

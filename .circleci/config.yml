@@ -105,6 +105,12 @@ jobs:
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make test
           no_output_timeout: 15m
 
+      # Once HTML can be expected to validate, remove "|| true" and
+      # "informational" status---in other words, fail if validation fails!
+      - run:
+          name: Validate HTML (informational)
+          command: make validate-test-html || true
+
       - store_test_results:
           path: ~/project/test-results
 
