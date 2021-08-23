@@ -84,7 +84,7 @@ jobs:
     environment:
       DOCKER_API_VERSION: 1.23
       BASE_OS: focal
-    parallelism: 3
+    parallelism: 5
     steps:
       - checkout
       - *rebaseontarget
