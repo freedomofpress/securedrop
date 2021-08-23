@@ -11,6 +11,9 @@ cd "${REPOROOT}/securedrop"
 PYTHONPATH=".:${PYTHONPATH:-}"
 export PYTHONPATH
 
+TEST_RESULTS=../test-results
+JUNIT_XML=${TEST_RESULTS}/junit.xml
+
 source "${BASH_SOURCE%/*}/dev-deps"
 
 run_xvfb
@@ -25,7 +28,12 @@ maybe_create_config_py
 if [ -n "${CIRCLE_BRANCH:-}" ] ; then
     touch tests/log/firefox.log
     function finish {
-        cp tests/log/firefox.log ../test-results
+        # Rewrite the TESTCASE[file] attribute in $JUNIT_XML relative to our
+        # working directory so that CircleCI can match timings to files on the
+        # next job.
+        sed -i 's/file="/file="tests\//g' "$JUNIT_XML"
+
+        cp tests/log/firefox.log "$TEST_RESULTS"
         tmpdir=$(mktemp -d -t codecov-XXXX)
         curl -s https://codecov.io/bash > "$tmpdir"/codecov;
         VERSION="$(curl --silent "https://api.github.com/repos/codecov/codecov-bash/releases/latest" | grep '"tag_name":' |sed -E 's/.*"([^"]+)".*/\1/')"
@@ -37,7 +45,7 @@ if [ -n "${CIRCLE_BRANCH:-}" ] ; then
     trap finish EXIT
 fi
 
-mkdir -p "../test-results"
+mkdir -p "$TEST_RESULTS"
 
 : "${TEST_LOCALES:="ar en_US"}"
 export TEST_LOCALES
@@ -50,10 +58,11 @@ pytest \
     --no-success-flaky-report \
     --page-layout \
     --durations 10 \
-    --junitxml=../test-results/junit.xml \
+    --junitxml "$JUNIT_XML" \
+    --override-ini junit_family=xunit1 \
     --cov-report term-missing \
-    --cov-report html:../test-results/cov_html \
-    --cov-report xml:../test-results/cov.xml \
-    --cov-report annotate:../test-results/cov_annotate \
+    --cov-report "html:${TEST_RESULTS}/cov_html" \
+    --cov-report "xml:${TEST_RESULTS}/cov.xml" \
+    --cov-report "annotate:${TEST_RESULTS}/cov_annotate" \
     --cov=. \
     "$@"
