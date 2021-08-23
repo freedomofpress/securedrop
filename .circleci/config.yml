@@ -100,7 +100,41 @@ jobs:
           command: |
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|update-builder)")
             if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
-            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
+            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/{files,functional}/test*py' |circleci tests split --split-by=timings |xargs echo)
+            fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make test
+          no_output_timeout: 15m
+
+      - store_test_results:
+          path: ~/project/test-results
+
+      - store_artifacts:
+          path: ~/project/test-results
+
+  app-page-layout-tests:
+    machine:
+      image: ubuntu-2004:202010-01
+      enabled: true
+    environment:
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: focal
+    parallelism: 3
+    steps:
+      - checkout
+      - *rebaseontarget
+      - *createcachedir
+      - *restorecache
+      - *loadimagelayers
+      - *dockerimagebuild
+      - *saveimagelayers
+      - *savecache
+
+      - run:
+          name: Run tests
+          command: |
+            BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|update-builder)")
+            if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
+            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/pageslayout/test*py' |circleci tests split --split-by=timings |xargs echo)
             fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make test
           no_output_timeout: 15m
@@ -289,6 +323,14 @@ workflows:
     jobs:
       - lint
       - app-tests:
+          filters:
+            branches:
+              ignore:
+                - /i18n-.*/
+                - /update-builder-.*/
+          requires:
+            - lint
+      - app-page-layout-tests:
           filters:
             branches:
               ignore:

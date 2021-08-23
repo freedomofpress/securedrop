@@ -13,7 +13,9 @@ RUN apt-get update && apt-get install -y paxctl && \
                        python3-pip python3-all python3-venv virtualenv libpython3.8-dev libssl-dev \
                        gnupg2 ruby redis-server git xvfb curl wget \
                        gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo \
-                       # for html5validator
+                       # For html5validator.  Used only in "app-page-layout-tests", but we can live
+                       # with its being installed along with everything else since it will be
+                       # cached along with everything else too.
                        default-jdk \
                        libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
                        libcairo-gobject2 libgtk-3-0 libstartup-notification0 tor
