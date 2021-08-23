@@ -88,18 +88,11 @@ for key, f in paths_v3_authfiles.items():
         os.chmod(new_f, 0o400)
         os.chown(new_f, debian_tor_uid, debian_tor_gid)
 
-# restart tor
+# Reload Tor configuration
 try:
-    subprocess.check_call(['systemctl', 'restart', 'tor@default.service'])
+    subprocess.check_call(['systemctl', 'reload', 'tor@default.service'])
 except subprocess.CalledProcessError:
-    sys.exit('Error restarting Tor')
-
-# Turn off "automatic-decompression" in Nautilus to ensure the original
-# submission filename is restored (see
-# https://github.com/freedomofpress/securedrop/issues/1862#issuecomment-311519750).
-subprocess.call(['/usr/bin/dconf', 'write',
-                 '/org/gnome/nautilus/preferences/automatic-decompression',
-                 'false'])
+    sys.exit('Error reloading Tor configuration')
 
 # Set journalist.desktop and source.desktop links as trusted with Nautilus (see
 # https://github.com/freedomofpress/securedrop/issues/2586)
