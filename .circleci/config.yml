@@ -100,7 +100,11 @@ jobs:
           command: |
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|update-builder)")
             if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
-            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/{files,functional}/test*py' |circleci tests split --split-by=timings |xargs echo)
+            JOB_TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/{files,functional}/test*py')
+            echo "JOB_TESTFILES: ${JOB_TESTFILES}"
+            RUN_TESTFILES=$(echo "$JOB_TESTFILES" |circleci tests split --split-by=timings)
+            echo "RUN_TESTFILES: ${RUN_TESTFILES}"
+            export TESTFILES=$RUN_TESTFILES
             fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make test
           no_output_timeout: 15m
@@ -134,7 +138,11 @@ jobs:
           command: |
             BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|update-builder)")
             if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
-            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/pageslayout/test*py' |circleci tests split --split-by=timings |xargs echo)
+            JOB_TESTFILES=$(cd securedrop; circleci tests glob 'tests/pageslayout/test*py')
+            echo "JOB_TESTFILES: ${JOB_TESTFILES}"
+            RUN_TESTFILES=$(echo "$JOB_TESTFILES" |circleci tests split --split-by=timings)
+            echo "RUN_TESTFILES: ${RUN_TESTFILES}"
+            export TESTFILES=$RUN_TESTFILES
             fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make test
           no_output_timeout: 15m
