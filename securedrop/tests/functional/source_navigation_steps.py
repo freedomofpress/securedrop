@@ -58,25 +58,27 @@ class SourceNavigationStepsMixin:
         self.source_name = codename.text
 
     def _source_shows_codename(self, verify_source_name=True):
-        content = self.driver.find_element_by_id("codename-hint-content")
-        assert not content.is_displayed()
+        # The DETAILS element will be missing the OPEN attribute if it is
+        # closed, hiding its contents.
+        content = self.driver.find_element_by_css_selector("details#codename-hint")
+        assert content.get_attribute("open") is None
 
-        self.safe_click_by_id("codename-hint-show")
+        self.safe_click_by_id("codename-hint")
 
-        self.wait_for(lambda: content.is_displayed())
-        assert content.is_displayed()
-        content_content = self.driver.find_element_by_css_selector("#codename-hint-content p")
+        assert content.get_attribute("open") is not None
+        content_content = self.driver.find_element_by_css_selector("details#codename-hint mark")
         if verify_source_name:
             assert content_content.text == self.source_name
 
     def _source_hides_codename(self):
-        content = self.driver.find_element_by_id("codename-hint-content")
-        assert content.is_displayed()
+        # The DETAILS element will have the OPEN attribute if it is open,
+        # displaying its contents.
+        content = self.driver.find_element_by_css_selector("details#codename-hint")
+        assert content.get_attribute("open") is not None
 
-        self.safe_click_by_id("codename-hint-hide")
+        self.safe_click_by_id("codename-hint")
 
-        self.wait_for(lambda: not content.is_displayed())
-        assert not content.is_displayed()
+        assert content.get_attribute("open") is None
 
     def _source_sees_no_codename(self):
         codename = self.driver.find_elements_by_css_selector(".code-reminder")

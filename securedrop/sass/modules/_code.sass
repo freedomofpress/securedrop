@@ -1,9 +1,21 @@
 =code
+  .code, .code-reminder
+    background:
+      image: url(/static/i/font-awesome/lock-black.png)
+      origin: content-box
+      repeat: no-repeat
+      size: 20px 23px
+
   .code
-    background: rgba(0, 0, 0, 0.05)
+    background:
+      color: rgba(0, 0, 0, 0.05)
     box-sizing: border-box
     -moz-box-sizing: border-box
     padding: 10px 15px
     border-bottom: 2px solid $color_warning_red
     font-size: large
     text-align: center
+
+  .code-reminder
+    background:
+      size: 17px 20px

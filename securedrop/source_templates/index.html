@@ -1,86 +1,111 @@
 <!DOCTYPE html>
 <html lang="{{ g.localeinfo.language_tag }}" dir="{{ g.localeinfo.text_direction }}">
-  <head>
-    {% if g.organization_name == "SecureDrop" %}
-    <title>{{ g.organization_name }} | {{ gettext('Protecting Journalists and Sources') }}</title>
-    {% else %}
-    <title>{{ g.organization_name }} | {{ gettext('SecureDrop') }}</title>
-    {% endif %}
 
-    <link rel="stylesheet" href="/static/css/source.css">
-    <link rel="icon" type="image/png" href="/static/i/favicon.png">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  {% if g.organization_name == "SecureDrop" %}
+  <title>{{ g.organization_name }} | {{ gettext('Protecting Journalists and Sources') }}</title>
+  {% else %}
+  <title>{{ g.organization_name }} | {{ gettext('SecureDrop') }}</title>
+  {% endif %}
 
-    {% assets filters="jsmin", output="gen/source.js", "js/source.js" %}
-      <script src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-  </head>
-  <body id="source-index">
-    <div id="js-warning" class="warning"><img src="{{ url_for('static', filename='i/font-awesome/white/exclamation-circle.svg') }}" alt="" height="12">&nbsp; {{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><strong>Security Level</strong></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> &nbsp;button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg"))  }} </div>
-    <div id="use-tor-browser" class="warning">{{ gettext('<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }} <img id="use-tor-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" alt="{{ gettext('Close') }}" width="12" height="12"></div>
-    <div id="orfox-browser" class="warning">{{ gettext('<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }} <img id="orfox-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" alt="{{ gettext('Close') }}" width="12" height="12"></div>
+  <link rel="stylesheet" href="/static/css/source.css">
+  <link rel="icon" type="image/png" href="/static/i/favicon.png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {% include 'banner_warning_flashed.html' %}
+  {% assets filters="jsmin", output="gen/source.js", "js/source.js" %}
+  <script src="{{ ASSET_URL }}"></script>
+  {% endassets %}
+</head>
 
-    <div class="content">
-      <div class="grid">
-        {% include 'flashed.html' %}
-        {# The div `index-wrap` MUST be ordered this way so that the flexbox works on large and small screens
+<body id="source-index">
+  <div id="js-warning" class="warning" role="alert">
+    <p>
+      {{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><b>Security Level</b></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg")) }}
+    </p>
+  </div>
+  {# Warning bubble to help TB users disable JavaScript with NoScript.
+    Included here so the images can preload while the user is first
+    reading the page. Hidden by default. #}
+  <dialog open class="bubble info" id="security-setting-info" aria-labelledby="security-level-heading"
+    aria-describedby="security-level-instructions">
+    <h2 id="security-level-heading" hidden>{{ gettext('How to change your security level') }}</h2>
+    <ol id="security-level-instructions">
+      <li>
+        {{ gettext('Click the <img src="{icon}" alt="&quot;Security Level&quot; button"> in the toolbar above').format(icon=url_for("static", filename="i/font-awesome/black/guard.svg"))  }}
+      </li>
+      <li>{{ gettext('Select <b>Advanced Security Settings</b>') }}</li>
+      <li>{{ gettext('Select <b>Safest</b>') }}</li>
+    </ol>
+    <p>
+      {{ gettext('<a href="/" aria-label="Follow these instructions, then refresh this page">Refresh this page</a>, and you\'re done!') }}
+    </p>
+
+  </dialog>
+  <div id="use-tor-browser" class="warning" role="alert">
+    {{ gettext('<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }}
+    <img id="use-tor-browser-close" class="close"
+      src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" alt="{{ gettext('Close') }}" width="12"
+      height="12"></div>
+  <div id="orfox-browser" class="warning" role="alert">
+    {{ gettext('<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }}
+    <img id="orfox-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}"
+      alt="{{ gettext('Close') }}" width="12" height="12"></div>
+
+  {% include 'banner_warning_flashed.html' %}
+
+  <div class="content">
+    <div class="grid">
+      {% include 'flashed.html' %}
+      {# The div `index-wrap` MUST be ordered this way so that the flexbox works on large and small screens
            See _source_index.sass for a more full understanding. #}
-        <div class="index-wrap">
-          <div class="header">
-            <img src="{{ g.logo }}" alt="{{ g.organization_name }} | {{ gettext('Logo Image') }}" class="logo-image">
-            <div id="index-locales">
-              {% include 'locales.html' %}
-            </div>
+      <div class="index-wrap">
+        <header class="header">
+          <h1><img src="{{ g.logo }}" alt="{{ gettext('{} logo'.format(g.organization_name)) }}" class="logo-image">
+          </h1>
+          <div id="index-locales">
+            {% include 'locales.html' %}
           </div>
+        </header>
 
-          <div class="index-row">
-            <div class="index-column index-left">
-              <div class="index-column-top-container">
-              <h2 class="welcome-text">
+        <main class="index-row">
+          <section class="index-column index-left" aria-labelledby="first-submission-heading">
+            <div class="index-column-top-container">
+              <h2 id="first-submission-heading" class="welcome-text">
                 {{ gettext('First submission') }}
               </h2>
               <p class="extended-welcome-text">{{ gettext('First time submitting to our SecureDrop? Start here.') }}</p>
-              </div>
-              <div class="index-column-bottom-container">
-                <a href="{{ url_for('main.generate') }}" id="submit-documents-button" class="btn alt">
-                  {{ gettext('GET STARTED') }}
-                </a>
-              </div>
             </div>
-            <div id="middle-separator"></div>
-            <div class="index-column index-right">
-              <div class="index-column-top-container">
-              <h2 class="welcome-text">
+            <div class="index-column-bottom-container">
+              <a href="{{ url_for('main.generate') }}" id="submit-documents-button" class="btn alt"
+                aria-label="{{ gettext('Get Started') }}">
+                {{ gettext('GET STARTED') }}
+              </a>
+            </div>
+          </section>
+          <div id="middle-separator"></div>
+          <section class="index-column index-right" aria-labelledby="return-visit-heading">
+            <div class="index-column-top-container">
+              <h2 id="return-visit-heading" class="welcome-text">
                 {{ gettext('Return visit') }}
               </h2>
-              <p class="extended-welcome-text">{{ gettext('Already have a codename? Check for replies or submit something new.') }}</p>
-              </div>
-              <div class="index-column-bottom-container">
-                <a href="{{ url_for('main.login') }}" id="login-button" class="btn secondary">
-                  {{ gettext('LOG IN') }}
-                </a>
-              </div>
+              <p class="extended-welcome-text">
+                {{ gettext('Already have a codename? Check for replies or submit something new.') }}</p>
             </div>
-        </div>
+            <div class="index-column-bottom-container">
+              <a href="{{ url_for('main.login') }}" id="login-button" class="btn secondary"
+                aria-label="{{ gettext('Log In') }}">
+                {{ gettext('LOG IN') }}
+              </a>
+            </div>
+          </section>
+        </main>
       </div>
       {% include 'footer.html' %}
     </div>
+  </div>
 
-    {# Warning bubble to help TB users disable JavaScript with NoScript.
-    Included here so the images can preload while the user is first
-    reading the page. Hidden by default. #}
-    <div id="security-setting-info" class="bubble info">
-      <ol>
-        <li>{{ gettext('Click the <img src="{icon}" alt="&quot;Security Level&quot; button"> in the toolbar above').format(icon=url_for("static", filename="i/font-awesome/black/guard.svg"))  }}</li>
-        <li>{{ gettext('Select <strong>Advanced Security Settings</strong>') }}</li>
-        <li>{{ gettext('Select <strong>Safest</strong>') }}</li>
-      </ol>
-      <p>{{ gettext('<a href="/">Refresh this page</a>, and you\'re done!') }}</p>
 
-    </div>
+</body>
 
-  </body>
 </html>

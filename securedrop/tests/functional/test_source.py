@@ -65,7 +65,7 @@ class TestDuplicateSourceInterface(
         return self.driver.find_element_by_css_selector("#codename").text
 
     def get_codename_lookup(self):
-        return self.driver.find_element_by_css_selector("#codename-hint-content p").text
+        return self.driver.find_element_by_css_selector("#codename-hint mark").text
 
     def test_duplicate_generate_pages(self):
         # Test generation of multiple codenames in different browser tabs, ref. issue 4458.

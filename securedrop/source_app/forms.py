@@ -24,8 +24,9 @@ class LoginForm(FlaskForm):
 
 
 class SubmissionForm(FlaskForm):
-    msg = TextAreaField("msg", render_kw={"placeholder": gettext("Write a message.")})
-    fh = FileField("fh")
+    msg = TextAreaField("msg", render_kw={"placeholder": gettext("Write a message."),
+                                          "aria-label": gettext("Write a message.")})
+    fh = FileField("fh", render_kw={"aria-label": gettext("Select a file to upload.")})
 
     def validate_msg(self, field: wtforms.Field) -> None:
         if len(field.data) > Submission.MAX_MESSAGE_LEN:

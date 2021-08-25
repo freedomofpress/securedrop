@@ -2,6 +2,7 @@
 @import source_index
 @import modules/visually-hidden
 @import modules/menu
+@import modules/locales
 @import modules/flash
 
 +base_rules
@@ -24,45 +25,42 @@
     display: block
 
 #codename-hint
-  background: rgba(0, 0, 0, 0.05)
+  background:
+    color: rgba(0, 0, 0, 0.05)
   box-sizing: border-box
   -moz-box-sizing: border-box
-  margin-top: 5px
+  margin-top: 5px !important
   padding: 5px 10px
   text-align: center
   width: 80%
 
+@media only screen
+  #codename-hint
+    summary
+      cursor: pointer
+
+      &:after
+        content: "Show"
+        display: block
+        float: right
+
+        text-decoration: none
+        color: $color_securedrop_blue
+        border-bottom: 1px solid rgba(0, 117, 247, 0.4)
+
+      &:hover, &:active
+        &:after
+          color: $color_grimace_blue
+          border-bottom: 1px solid rgba(42, 49, 157, 1)
+
+    &[open]
+      summary
+        &:after
+          content: "Hide"
+
 @media only screen and (max-width: 880px)
   #codename-hint
     width: 100%
-
-#codename-hint-visible
-  .visible-codename
-    margin: auto
-    padding: auto
-    height: auto
-    overflow: visible
-
-  .hidden-codename
-    margin: 0
-    padding: 0
-    height: 0
-    overflow: hidden
-
-  &:target
-
-    .visible-codename
-      margin: 0
-      padding: 0
-      height: 0
-      overflow: hidden
-      border: 0
-
-    .hidden-codename
-      margin: auto
-      padding: auto
-      height: auto
-      overflow: visible
 
 input.codename-box
   width: 100%
@@ -70,6 +68,7 @@ input.codename-box
   font-weight: bold
 
 .codename
+  background-color: transparent
   font-family: monospace
   letter-spacing: 0.15em
   font-weight: normal
@@ -105,17 +104,23 @@ p#codename
     width: 80%
 
   .hidden-prompt
+    display: block
+    border: none
     margin: 0
     padding: 0
     height: 0
     overflow: hidden
     text-align: center
+    visibility: hidden
+    width: 80%
+    position: static
 
     &:target
       margin: auto
       padding: auto
       height: auto
       overflow: visible
+      visibility: visible
 
   .danger
     display: inline-block
@@ -152,16 +157,37 @@ p#codename
       font-size: 10px
       font-weight: bold
       padding: 5px
+      margin: 0
 
     a.delete
       float: right
       padding: 5px
       background-color: inherit
       color: $color_urgent_coral
-      font-size: 14px
+      font-size: 0
       clear: right
       text-decoration: none
       border: 0
+
+      span
+        font-size: 0
+
+        &:after
+          content: ""
+          display: inline-block
+          background:
+            image: url(/static/i/trash-x-out.png)
+            position: center
+            repeat: no-repeat
+            size: contain
+          opacity: 0.9
+          height: 16px
+          width: 20px
+
+        &:hover, &:active
+          &:after
+            background:
+              image: url(/static/i/trash-x-solid.png)
 
       &:hover
         color: #FA6E6E
@@ -174,6 +200,7 @@ p#codename
     font-size: 14px
     background: white
     border: 1px solid $color_grey_dark
+    padding: 0
 
     p
       *
@@ -188,12 +215,17 @@ p#codename
         margin: 0 2%
         padding: 5px 15px
 
-h4#no-replies
-  text-align: center
-  color: $color_grey_medium
-  background: $color_grey_xlight
-  padding: 40px
-  margin: 0.5em 0
+  #no-replies
+    display: block
+    font-weight: bold
+    text-align: center
+    color: $color_grey_medium
+    background: $color_grey_xlight
+    padding: 40px
+    margin: 0.5em 0
+
+    &:before, &:after
+      content: " — "
 
 p.explanation
   text-align: left
@@ -221,7 +253,7 @@ p#max-file-size
   font-style: italic
   margin-bottom: 0
 
-div.bubble
+.bubble
   width: 415px
   position: absolute
   background-color: #ffffff
@@ -241,3 +273,52 @@ div.bubble
   image-rendering: crisp-edges
   margin-bottom: 10px
   margin-top: 5px
+
+#regenerate-submit
+  span
+    font-size: 0
+
+    &:after
+      content: ""
+      display: inline-block
+      background:
+        image: url(/static/i/font-awesome/refresh-white.png)
+        position: center
+        repeat: no-repeat
+        size: contain
+      opacity: 0.9
+      height: 20px
+      width: 20px
+
+#cancel
+  &:before
+    content: ""
+    display: inline-block
+    background:
+      image: url(/static/i/x_icon-button_blue.png)
+      origin: content-box
+      position: center
+      repeat: no-repeat
+      size: contain
+    width: 9px
+    height: 11px
+
+  &:hover, &:active
+    &:before
+      background:
+        image: url(/static/i/x_icon-grimace_blue.png)
+
+.back-arrow
+  display: inline-block
+
+  &:before
+    content: ""
+
+    display: inline-block
+    width: 9px
+    height: 14px
+    margin-right: 1ch
+
+    background:
+      image: url(/static/icons/chevron-left.png)
+      size: contain

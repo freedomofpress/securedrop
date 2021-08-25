@@ -2,9 +2,11 @@
 {% block body %}
 <h1>{{ gettext('You Should Use Tor Browser') }}</h1>
 <p>{{ gettext('If you are not using Tor Browser, you <strong>may not be anonymous</strong>.') }}</p>
-<p>{{ gettext('If you want to submit information to SecureDrop, we <strong>strongly advise you</strong> to install Tor Browser and use it to access our site safely and anonymously.') }}</p>
-<p>{{ gettext('Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:') }}
-  <pre>https://www.torproject.org/projects/torbrowser.html</pre>
+<p>{{ gettext('If you want to submit information to SecureDrop, we <strong>strongly advise you</strong> to install Tor Browser and use it to access our site safely and anonymously.') }}
 </p>
-<p>{{ gettext('If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions.') }}</p>
+<p>{{ gettext('Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:') }}
+</p>
+<pre>https://www.torproject.org/projects/torbrowser.html</pre>
+<p>{{ gettext('If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions.') }}
+</p>
 {% endblock %}
