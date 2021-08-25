@@ -33,6 +33,7 @@ from models import (
 )
 from passphrases import PassphraseGenerator
 from sdconfig import config
+from source_user import create_source_user
 from specialstrings import strings
 
 messages = cycle(strings)
@@ -254,18 +255,18 @@ def add_source() -> Tuple[Source, str]:
     Adds a single source.
     """
     codename = PassphraseGenerator.get_default().generate_passphrase()
-    filesystem_id = current_app.crypto_util.hash_codename(codename)
-    journalist_designation = current_app.crypto_util.display_id()
-    source = Source(filesystem_id, journalist_designation)
+    source_user = create_source_user(
+        db_session=db.session,
+        source_passphrase=codename,
+        source_app_crypto_util=current_app.crypto_util,
+        source_app_storage=current_app.storage,
+    )
+    source = source_user.get_db_record()
     source.pending = False
-    db.session.add(source)
     db.session.commit()
 
-    # Create source directory in store
-    os.mkdir(current_app.storage.path(source.filesystem_id))
-
     # Generate source key
-    current_app.crypto_util.genkeypair(source.filesystem_id, codename)
+    current_app.crypto_util.genkeypair(source_user)
 
     return source, codename
 
