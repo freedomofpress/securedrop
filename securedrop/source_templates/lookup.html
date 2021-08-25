@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block body %}
-{% if new_user %}
+{% if new_user_codename %}
 <details class="code-reminder pull-left" id="codename-hint">
   <summary>{{ gettext('Remember, your codename is:') }}</summary>
-  <mark class="codename">{{ codename }}</mark>
+  <mark class="codename">{{ new_user_codename }}</mark>
 </details>
 {% endif %}
 

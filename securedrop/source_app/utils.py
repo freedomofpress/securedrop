@@ -1,48 +1,43 @@
 import json
 import subprocess
 
-from flask import session, current_app, abort, g
+import werkzeug
+from flask import flash
+from flask import redirect
+from flask import render_template
+from flask import current_app
+from flask import url_for
+from markupsafe import Markup
 
 import typing
 
 import re
 
-from crypto_util import CryptoException
-from models import Source
+from source_user import SourceUser
 
 if typing.TYPE_CHECKING:
     from typing import Optional
 
 
-def was_in_generate_flow() -> bool:
-    return 'codenames' in session
+def clear_session_and_redirect_to_logged_out_page(session: typing.Dict) -> werkzeug.Response:
+    msg = render_template('session_timeout.html')
+
+    # Clear the session after we render the message so it's localized
+    session.clear()
+
+    flash(Markup(msg), "important")
+    return redirect(url_for('main.index'))
 
 
-def logged_in() -> bool:
-    return 'logged_in' in session
-
-
-def valid_codename(codename: str) -> bool:
-    try:
-        filesystem_id = current_app.crypto_util.hash_codename(codename)
-    except CryptoException as e:
-        current_app.logger.info(
-                "Could not compute filesystem ID for codename '{}': {}".format(
-                    codename, e))
-        abort(500)
-
-    source = Source.query.filter_by(filesystem_id=filesystem_id).first()
-    return source is not None
-
-
-def normalize_timestamps(filesystem_id: str) -> None:
+def normalize_timestamps(logged_in_source: SourceUser) -> None:
     """
     Update the timestamps on all of the source's submissions. This
     minimizes metadata that could be useful to investigators. See
     #301.
     """
-    sub_paths = [current_app.storage.path(filesystem_id, submission.filename)
-                 for submission in g.source.submissions]
+    source_in_db = logged_in_source.get_db_record()
+    sub_paths = [current_app.storage.path(logged_in_source.filesystem_id, submission.filename)
+                 for submission in source_in_db.submissions]
     if len(sub_paths) > 1:
         args = ["touch", "--no-create"]
         args.extend(sub_paths)

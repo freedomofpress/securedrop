@@ -5,12 +5,13 @@ from hypothesis.strategies import text
 import io
 import os
 import pytest
-import re
 
 from flask import url_for, session
 
 from passphrases import PassphraseGenerator
-from source_user import create_source_user, SourceUser
+
+from source_user import create_source_user
+
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import crypto_util
@@ -62,8 +63,9 @@ def test_encrypt_without_output(source_app, config, test_source):
             message,
             [source_app.crypto_util.get_fingerprint(test_source['filesystem_id']),
              config.JOURNALIST_KEY])
+        source_user = test_source["source_user"]
         plaintext = source_app.crypto_util.decrypt(
-            test_source['codename'],
+            source_user,
             ciphertext)
 
     assert plaintext == message
@@ -83,15 +85,15 @@ def test_encrypt_binary_stream(source_app, config, test_source):
     `gnupg._util._is_stream(plaintext)` returns `True`).
     """
     with source_app.app_context():
+        source_user = test_source["source_user"]
         with io.open(os.path.realpath(__file__)) as fh:
             ciphertext = source_app.crypto_util.encrypt(
                 fh,
-                [source_app.crypto_util.get_fingerprint(test_source['filesystem_id']),
+                [source_app.crypto_util.get_fingerprint(source_user.filesystem_id),
                  config.JOURNALIST_KEY],
-                source_app.storage.path(test_source['filesystem_id'],
-                                        'somefile.gpg'))
-        plaintext = source_app.crypto_util.decrypt(test_source['codename'],
-                                                   ciphertext)
+                source_app.storage.path(source_user.filesystem_id, 'somefile.gpg'))
+
+        plaintext = source_app.crypto_util.decrypt(source_user, ciphertext)
 
     with io.open(os.path.realpath(__file__)) as fh:
         assert fh.read() == plaintext
@@ -103,32 +105,23 @@ def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
     message = 'test'
 
     with source_app.app_context():
+        source_user = test_source["source_user"]
         ciphertext = source_app.crypto_util.encrypt(
             message,
-            [source_app.crypto_util.get_fingerprint(test_source['filesystem_id']),
+            [source_app.crypto_util.get_fingerprint(source_user.filesystem_id),
              config.JOURNALIST_KEY],
-            source_app.storage.path(test_source['filesystem_id'],
-                                    'somefile.gpg'))
-        plaintext = source_app.crypto_util.decrypt(test_source['codename'],
-                                                   ciphertext)
+            source_app.storage.path(source_user.filesystem_id, 'somefile.gpg'))
+        plaintext = source_app.crypto_util.decrypt(source_user, ciphertext)
 
         assert plaintext == message
 
         # Since there's no way to specify which key to use for
         # decryption to python-gnupg, we delete the `source`'s key and
         # ensure we can decrypt with the `config.JOURNALIST_KEY`.
-        source_app.crypto_util.delete_reply_keypair(
-            test_source['filesystem_id'])
+        source_app.crypto_util.delete_reply_keypair(source_user.filesystem_id)
         plaintext = source_app.crypto_util.gpg.decrypt(ciphertext).data.decode('utf-8')
 
         assert plaintext == message
-
-
-def test_hash_codename(source_app):
-    codename = PassphraseGenerator.get_default().generate_passphrase()
-    hashed_codename = source_app.crypto_util.hash_codename(codename)
-
-    assert re.compile('^[2-7A-Z]{103}=$').match(hashed_codename)
 
 
 def test_display_id(source_app):
@@ -300,14 +293,9 @@ def test_encrypt_then_decrypt_gives_same_result(
     https://hypothesis.readthedocs.io
     """
     crypto = source_app.crypto_util
-    # TODO(AD): To be removed in my next PR
-    source_user = SourceUser(
-        db_record=test_source["source"],
-        filesystem_id=test_source["filesystem_id"],
-        gpg_secret=crypto.hash_codename(secret, salt=crypto.scrypt_gpg_pepper)
-    )
+    source_user = test_source["source_user"]
     key = crypto.genkeypair(source_user)
     ciphertext = crypto.encrypt(message, [str(key)])
-    decrypted_text = crypto.decrypt(secret, ciphertext)
+    decrypted_text = crypto.decrypt(source_user, ciphertext)
 
     assert decrypted_text == message

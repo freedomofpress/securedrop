@@ -7,22 +7,23 @@ from datetime import datetime
 from typing import Union
 
 import werkzeug
-from flask import (Blueprint, render_template, flash, redirect, url_for, g,
-                   session, current_app, request, Markup, abort)
+from flask import (Blueprint, render_template, flash, redirect, url_for,
+                   session, current_app, request, Markup, abort, g)
 from flask_babel import gettext
 
 import store
 
 from db import db
-from models import Submission, Reply, get_one_or_else, Source
+
+from models import Submission, Reply, get_one_or_else
 from passphrases import PassphraseGenerator
 from sdconfig import SDConfig
 from source_app.decorators import login_required
-from source_app.utils import (logged_in, normalize_timestamps,
-                              valid_codename, fit_codenames_into_cookie)
+from source_app.session_manager import SessionManager
+from source_app.utils import normalize_timestamps, fit_codenames_into_cookie
 from source_app.forms import LoginForm, SubmissionForm
-from source_user import create_source_user, SourcePassphraseCollisionError, \
-    SourceDesignationCollisionError, SourceUser
+from source_user import authenticate_source_user, InvalidPassphraseError, create_source_user, \
+    SourcePassphraseCollisionError, SourceDesignationCollisionError, SourceUser
 
 
 def make_blueprint(config: SDConfig) -> Blueprint:
@@ -34,7 +35,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @view.route('/generate', methods=('GET', 'POST'))
     def generate() -> Union[str, werkzeug.Response]:
-        if logged_in():
+        if SessionManager.is_user_logged_in():
             flash(gettext(
                 "You were redirected because you are already logged in. "
                 "If you want to create a new account, you should log out "
@@ -53,13 +54,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         codenames = session.get('codenames', {})
         codenames[tab_id] = codename
         session['codenames'] = fit_codenames_into_cookie(codenames)
-
-        session['new_user'] = True
         return render_template('generate.html', codename=codename, tab_id=tab_id)
 
     @view.route('/create', methods=['POST'])
     def create() -> werkzeug.Response:
-        if logged_in():
+        if SessionManager.is_user_logged_in():
             flash(gettext("You are already logged in. Please verify your codename above as it " +
                           "may differ from the one displayed on the previous page."),
                   'notification')
@@ -70,7 +69,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             try:
                 current_app.logger.info("Creating new source user...")
-                create_source_user(
+                new_source_user = create_source_user(
                     db_session=db.session,
                     source_passphrase=codename,
                     source_app_crypto_util=current_app.crypto_util,
@@ -78,13 +77,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 )
             except (SourcePassphraseCollisionError, SourceDesignationCollisionError) as e:
                 current_app.logger.error("Could not create a source: {}".format(e))
-
-                # Issue 4361: Delete 'logged_in' if it's in the session
-                try:
-                    del session['logged_in']
-                except KeyError:
-                    pass
-
                 flash(
                     gettext(
                         "There was a temporary problem creating your account. Please try again."
@@ -95,27 +87,29 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             # All done - source user was successfully created
             current_app.logger.info("New source user created")
-            session['logged_in'] = True
-            session['codename'] = codename
+            session['new_user_codename'] = codename
+            SessionManager.log_user_in(user=new_source_user, user_passphrase=codename)
 
         return redirect(url_for('.lookup'))
 
     @view.route('/lookup', methods=('GET',))
     @login_required
-    def lookup() -> str:
+    def lookup(logged_in_source: SourceUser) -> str:
         replies = []
-        source_inbox = Reply.query.filter(Reply.source_id == g.source.id) \
-                                  .filter(Reply.deleted_by_source == False).all()  # noqa
+        logged_in_source_in_db = logged_in_source.get_db_record()
+        source_inbox = Reply.query.filter_by(
+            source_id=logged_in_source_in_db.id, deleted_by_source=False
+        ).all()
 
         for reply in source_inbox:
             reply_path = current_app.storage.path(
-                g.filesystem_id,
+                logged_in_source.filesystem_id,
                 reply.filename,
             )
             try:
                 with io.open(reply_path, "rb") as f:
                     contents = f.read()
-                reply_obj = current_app.crypto_util.decrypt(g.codename, contents)
+                reply_obj = current_app.crypto_util.decrypt(logged_in_source, contents)
                 reply.decrypted = reply_obj
             except UnicodeDecodeError:
                 current_app.logger.error("Could not decode reply %s" %
@@ -132,31 +126,21 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         replies.sort(key=operator.attrgetter('date'), reverse=True)
 
         # Generate a keypair to encrypt replies from the journalist
-        if not current_app.crypto_util.get_fingerprint(g.filesystem_id):
-            # TODO(AD): Will be simplified in my next PR by using logged_in_user instead of
-            #  fetching it from the DB here
-            source_in_db = Source.query.filter(Source.filesystem_id == g.filesystem_id).one()
-            source_user = SourceUser(
-                db_record=source_in_db,
-                filesystem_id=g.filesystem_id,
-                gpg_secret=current_app.crypto_util.hash_codename(
-                    g.codename, salt=current_app.crypto_util.scrypt_gpg_pepper
-                )
-            )
-            current_app.crypto_util.genkeypair(source_user)
+        if not current_app.crypto_util.get_fingerprint(logged_in_source.filesystem_id):
+            current_app.crypto_util.genkeypair(logged_in_source)
 
         return render_template(
             'lookup.html',
+            is_user_logged_in=True,
             allow_document_uploads=current_app.instance_config.allow_document_uploads,
-            codename=g.codename,
             replies=replies,
-            new_user=session.get('new_user', None),
+            new_user_codename=session.get('new_user_codename', None),
             form=SubmissionForm(),
         )
 
     @view.route('/submit', methods=('POST',))
     @login_required
-    def submit() -> werkzeug.Response:
+    def submit(logged_in_source: SourceUser) -> werkzeug.Response:
         allow_document_uploads = current_app.instance_config.allow_document_uploads
         form = SubmissionForm()
         if not form.validate():
@@ -181,29 +165,29 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             return redirect(f"{url_for('main.lookup')}#flashed")
 
         fnames = []
-        journalist_filename = g.source.journalist_filename
-        first_submission = g.source.interaction_count == 0
+        logged_in_source_in_db = logged_in_source.get_db_record()
+        first_submission = logged_in_source_in_db.interaction_count == 0
 
-        if not os.path.exists(current_app.storage.path(g.filesystem_id)):
+        if not os.path.exists(current_app.storage.path(logged_in_source.filesystem_id)):
             current_app.logger.debug("Store directory not found for source '{}', creating one."
-                                     .format(g.source.journalist_designation))
-            os.mkdir(current_app.storage.path(g.filesystem_id))
+                                     .format(logged_in_source_in_db.journalist_designation))
+            os.mkdir(current_app.storage.path(logged_in_source.filesystem_id))
 
         if msg:
-            g.source.interaction_count += 1
+            logged_in_source_in_db.interaction_count += 1
             fnames.append(
                 current_app.storage.save_message_submission(
-                    g.filesystem_id,
-                    g.source.interaction_count,
-                    journalist_filename,
+                    logged_in_source_in_db.filesystem_id,
+                    logged_in_source_in_db.interaction_count,
+                    logged_in_source_in_db.journalist_filename,
                     msg))
         if fh:
-            g.source.interaction_count += 1
+            logged_in_source_in_db.interaction_count += 1
             fnames.append(
                 current_app.storage.save_file_submission(
-                    g.filesystem_id,
-                    g.source.interaction_count,
-                    journalist_filename,
+                    logged_in_source_in_db.filesystem_id,
+                    logged_in_source_in_db.interaction_count,
+                    logged_in_source_in_db.journalist_filename,
                     fh.filename,
                     fh.stream))
 
@@ -228,24 +212,24 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         new_submissions = []
         for fname in fnames:
-            submission = Submission(g.source, fname)
+            submission = Submission(logged_in_source_in_db, fname)
             db.session.add(submission)
             new_submissions.append(submission)
 
-        g.source.pending = False
-        g.source.last_updated = datetime.utcnow()
+        logged_in_source_in_db.pending = False
+        logged_in_source_in_db.last_updated = datetime.utcnow()
         db.session.commit()
 
         for sub in new_submissions:
             store.async_add_checksum_for_file(sub)
 
-        normalize_timestamps(g.filesystem_id)
+        normalize_timestamps(logged_in_source)
 
         return redirect(f"{url_for('main.lookup')}#flashed")
 
     @view.route('/delete', methods=('POST',))
     @login_required
-    def delete() -> werkzeug.Response:
+    def delete(logged_in_source: SourceUser) -> werkzeug.Response:
         """This deletes the reply from the source's inbox, but preserves
         the history for journalists such that they can view conversation
         history.
@@ -253,7 +237,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         query = Reply.query.filter_by(
             filename=request.form['reply_filename'],
-            source_id=g.source.id)
+            source_id=logged_in_source.db_record_id)
         reply = get_one_or_else(query, current_app.logger, abort)
         reply.deleted_by_source = True
         db.session.add(reply)
@@ -264,8 +248,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @view.route('/delete-all', methods=('POST',))
     @login_required
-    def batch_delete() -> werkzeug.Response:
-        replies = Reply.query.filter(Reply.source_id == g.source.id) \
+    def batch_delete(logged_in_source: SourceUser) -> werkzeug.Response:
+        replies = Reply.query.filter(Reply.source_id == logged_in_source.db_record_id) \
                              .filter(Reply.deleted_by_source == False).all()  # noqa
         if len(replies) == 0:
             current_app.logger.error("Found no replies when at least one was "
@@ -284,15 +268,21 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def login() -> Union[str, werkzeug.Response]:
         form = LoginForm()
         if form.validate_on_submit():
-            codename = request.form['codename'].strip()
-            if valid_codename(codename):
-                session.update(codename=codename, logged_in=True)
-                return redirect(url_for('.lookup', from_login='1'))
+            try:
+                source_user = authenticate_source_user(
+                    db_session=db.session,
+                    supplied_passphrase=request.form['codename'].strip()
+                )
+            except InvalidPassphraseError:
+                current_app.logger.info("Login failed for invalid codename")
+                flash(gettext("Sorry, that is not a recognized codename."), "error")
             else:
-                current_app.logger.info(
-                        "Login failed for invalid codename")
-                flash(gettext("Sorry, that is not a recognized codename."),
-                      "error")
+                # Success: a valid passphrase was supplied
+                SessionManager.log_user_in(
+                    user=source_user, user_passphrase=request.form['codename'].strip()
+                )
+                return redirect(url_for('.lookup', from_login='1'))
+
         return render_template('login.html', form=form)
 
     @view.route('/logout')
@@ -302,7 +292,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         click the New Identity button in Tor Browser to complete their session.
         Otherwise redirect to the main Source Interface page.
         """
-        if logged_in():
+        if SessionManager.is_user_logged_in():
+            SessionManager.log_user_out()
 
             # Clear the session after we render the message so it's localized
             # If a user specified a locale, save it and restore it
