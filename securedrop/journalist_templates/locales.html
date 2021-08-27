@@ -6,7 +6,7 @@
       <img class="menu__trigger-icon" src="/static/i/languages_globe.png" alt="" width="18" height="18">
     </div>
     <div class="menu-text-container">
-      <span class="menu__trigger-text">{{ g.locales[g.localeinfo.id] }}</span>
+      <span class="menu__trigger-text">{{ g.locales[g.localeinfo.id].display_name }}</span>
     </div>
     <div class="menu-trigger-container">
       <img class="menu__trigger-icon" src="/static/i/languages_arrow.png" alt="" width="12" height="18">
@@ -26,7 +26,7 @@
           {% set url = '' %}
         {% endif %}
         <a href="{{ url }}" rel="nofollow" class="no-bottom-border">
-          <span>{{ g.locales[locale] }}</span>
+          <span>{{ g.locales[locale].display_name }}</span>
         </a>
       </li>
     {% endfor %}

@@ -158,6 +158,16 @@ def verify_i18n(app):
         locales = render_template('locales.html')
         assert '?l=fr_FR' in locales
         assert '?l=en_US' not in locales
+
+        # Test that A[lang,hreflang] attributes (if present) will validate as
+        # BCP47/RFC5646 language tags from `i18n.RequestLocaleInfo.language_tag`.
+        if 'lang="' in locales:
+            assert 'lang="en-US"' in locales
+            assert 'lang="fr-FR"' in locales
+        if 'hreflang="' in locales:
+            assert 'hreflang="en-US"' in locales
+            assert 'hreflang="fr-FR"' in locales
+
         c.get('/?l=ar')
         base = render_template('base.html')
         assert 'dir="rtl"' in base
