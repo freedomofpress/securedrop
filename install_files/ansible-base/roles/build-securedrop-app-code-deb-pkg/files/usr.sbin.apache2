@@ -211,6 +211,7 @@
   /var/www/securedrop/sdconfig.py r,
   /var/www/securedrop/secure_tempfile.py r,
   /var/www/securedrop/source.py r,
+  /var/www/securedrop/source_user.py r,
   /var/www/securedrop/source_app/ r,
   /var/www/securedrop/source_app/__init__.py r,
   /var/www/securedrop/source_app/api.py r,

@@ -7,6 +7,9 @@ import re
 import stat
 import zipfile
 
+from passphrases import PassphraseGenerator
+from source_user import create_source_user
+
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from . import utils
 
@@ -217,7 +220,13 @@ def test_add_checksum_for_file(config, db_model):
 
     with app.app_context():
         db.create_all()
-        source, _ = utils.db_helper.init_source_without_keypair()
+        source_user = create_source_user(
+            db_session=db.session,
+            source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
+            source_app_crypto_util=app.crypto_util,
+            source_app_storage=app.storage,
+        )
+        source = source_user.get_db_record()
         target_file_path = app.storage.path(source.filesystem_id, '1-foo-msg.gpg')
         test_message = b'hash me!'
         expected_hash = 'f1df4a6d8659471333f7f6470d593e0911b4d487856d88c83d2d187afa195927'
@@ -259,7 +268,13 @@ def test_async_add_checksum_for_file(config, db_model):
 
     with app.app_context():
         db.create_all()
-        source, _ = utils.db_helper.init_source_without_keypair()
+        source_user = create_source_user(
+            db_session=db.session,
+            source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
+            source_app_crypto_util=app.crypto_util,
+            source_app_storage=app.storage,
+        )
+        source = source_user.get_db_record()
         target_file_path = app.storage.path(source.filesystem_id, '1-foo-msg.gpg')
         test_message = b'hash me!'
         expected_hash = 'f1df4a6d8659471333f7f6470d593e0911b4d487856d88c83d2d187afa195927'

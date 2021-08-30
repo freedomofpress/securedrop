@@ -10,10 +10,10 @@ import re
 from flask import url_for, session
 
 from passphrases import PassphraseGenerator
+from source_user import create_source_user, SourceUser
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import crypto_util
-import models
 
 from crypto_util import CryptoUtil, CryptoException
 from db import db
@@ -22,19 +22,6 @@ from db import db
 def test_word_list_does_not_contain_empty_strings(journalist_app):
     assert '' not in journalist_app.crypto_util.nouns
     assert '' not in journalist_app.crypto_util.adjectives
-
-
-def test_validate_name_for_diceware():
-    ok = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJ'
-          'KLMNOPQRSTUVWXYZ')
-    invalids = ['foo bar`', 'bar baz~']
-
-    crypto_util._validate_name_for_diceware(ok)
-
-    for invalid in invalids:
-        with pytest.raises(CryptoException) as err:
-            crypto_util._validate_name_for_diceware(invalid)
-        assert 'invalid input: {}'.format(invalid) in str(err)
 
 
 def test_encrypt_success(source_app, config, test_source):
@@ -169,15 +156,15 @@ def test_display_id_designation_collisions(source_app):
 
 def test_genkeypair(source_app):
     with source_app.app_context():
-        codename = PassphraseGenerator.get_default().generate_passphrase()
-        filesystem_id = source_app.crypto_util.hash_codename(codename)
-        journalist_filename = source_app.crypto_util.display_id()
-        source = models.Source(filesystem_id, journalist_filename)
-        db.session.add(source)
-        db.session.commit()
-        source_app.crypto_util.genkeypair(source.filesystem_id, codename)
+        source_user = create_source_user(
+            db_session=db.session,
+            source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
+            source_app_storage=source_app.storage,
+            source_app_crypto_util=source_app.crypto_util,
+        )
+        source_app.crypto_util.genkeypair(source_user)
 
-        assert source_app.crypto_util.get_fingerprint(filesystem_id) is not None
+        assert source_app.crypto_util.get_fingerprint(source_user.filesystem_id) is not None
 
 
 def parse_gpg_date_string(date_string):
@@ -202,13 +189,13 @@ def parse_gpg_date_string(date_string):
 
 def test_reply_keypair_creation_and_expiration_dates(source_app):
     with source_app.app_context():
-        codename = PassphraseGenerator.get_default().generate_passphrase()
-        filesystem_id = source_app.crypto_util.hash_codename(codename)
-        journalist_filename = source_app.crypto_util.display_id()
-        source = models.Source(filesystem_id, journalist_filename)
-        db.session.add(source)
-        db.session.commit()
-        source_app.crypto_util.genkeypair(source.filesystem_id, codename)
+        source_user = create_source_user(
+            db_session=db.session,
+            source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
+            source_app_storage=source_app.storage,
+            source_app_crypto_util=source_app.crypto_util,
+        )
+        source_app.crypto_util.genkeypair(source_user)
 
         # crypto_util.get_fingerprint only returns the fingerprint of the key. We need
         # the full output of gpg.list_keys() to check the creation and
@@ -218,7 +205,7 @@ def test_reply_keypair_creation_and_expiration_dates(source_app):
         # it always returns the entire key dictionary instead of just the
         # fingerprint (which is always easily extracted from the entire key
         # dictionary).
-        new_key_fingerprint = source_app.crypto_util.get_fingerprint(filesystem_id)
+        new_key_fingerprint = source_app.crypto_util.get_fingerprint(source_user.filesystem_id)
         new_key = [key for key in source_app.crypto_util.gpg.list_keys()
                    if new_key_fingerprint == key['fingerprint']][0]
 
@@ -313,11 +300,13 @@ def test_encrypt_then_decrypt_gives_same_result(
     https://hypothesis.readthedocs.io
     """
     crypto = source_app.crypto_util
-
-    key = crypto.genkeypair(
-        name,
-        secret
+    # TODO(AD): To be removed in my next PR
+    source_user = SourceUser(
+        db_record=test_source["source"],
+        filesystem_id=test_source["filesystem_id"],
+        gpg_secret=crypto.hash_codename(secret, salt=crypto.scrypt_gpg_pepper)
     )
+    key = crypto.genkeypair(source_user)
     ciphertext = crypto.encrypt(message, [str(key)])
     decrypted_text = crypto.decrypt(secret, ciphertext)
 

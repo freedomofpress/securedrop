@@ -9,11 +9,9 @@ import re
 
 from crypto_util import CryptoException
 from models import Source
-from passphrases import PassphraseGenerator, DicewarePassphrase
-from sdconfig import SDConfig
 
 if typing.TYPE_CHECKING:
-    from typing import Optional  # noqa: F401
+    from typing import Optional
 
 
 def was_in_generate_flow() -> bool:
@@ -35,21 +33,6 @@ def valid_codename(codename: str) -> bool:
 
     source = Source.query.filter_by(filesystem_id=filesystem_id).first()
     return source is not None
-
-
-def generate_unique_codename(config: SDConfig) -> DicewarePassphrase:
-    """Generate random codenames until we get an unused one"""
-    while True:
-        passphrase = PassphraseGenerator.get_default().generate_passphrase(
-            preferred_language=g.localeinfo.language
-        )
-        # scrypt (slow)
-        filesystem_id = current_app.crypto_util.hash_codename(passphrase)
-
-        matching_sources = Source.query.filter(
-            Source.filesystem_id == filesystem_id).all()
-        if len(matching_sources) == 0:
-            return passphrase
 
 
 def normalize_timestamps(filesystem_id: str) -> None:

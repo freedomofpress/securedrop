@@ -13,7 +13,7 @@ from sdconfig import config
 DicewarePassphrase = NewType("DicewarePassphrase", str)
 
 
-_current_generator = None  # type: Optional["PassphraseGenerator"]
+_default_generator = None  # type: Optional["PassphraseGenerator"]
 
 
 class InvalidWordListError(Exception):
@@ -52,7 +52,9 @@ class PassphraseGenerator:
                 raise InvalidWordListError(
                     "The word list for language '{}' only contains {} long-enough words;"
                     " minimum required is {} words.".format(
-                        language, word_list_size, self._WORD_LIST_MINIMUM_SIZE,
+                        language,
+                        word_list_size,
+                        self._WORD_LIST_MINIMUM_SIZE,
                     )
                 )
 
@@ -98,11 +100,11 @@ class PassphraseGenerator:
 
     @classmethod
     def get_default(cls) -> "PassphraseGenerator":
-        global _current_generator
-        if _current_generator is None:
+        global _default_generator
+        if _default_generator is None:
             language_to_words = _parse_available_words_list(Path(config.SECUREDROP_ROOT))
-            _current_generator = cls(language_to_words)
-        return _current_generator
+            _default_generator = cls(language_to_words)
+        return _default_generator
 
     @property
     def available_languages(self) -> Set[str]:

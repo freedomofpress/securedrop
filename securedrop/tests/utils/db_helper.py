@@ -14,9 +14,10 @@ from flask import current_app
 
 from db import db
 from journalist_app.utils import mark_seen
-from models import Journalist, Reply, SeenReply, Source, Submission
+from models import Journalist, Reply, SeenReply, Submission
 from passphrases import PassphraseGenerator
 from sdconfig import config
+from source_user import create_source_user
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 
@@ -118,26 +119,6 @@ def mark_downloaded(*submissions):
 
 # {Source,Submission}
 
-def init_source_without_keypair():
-    """Initialize a source: create their database record and the
-    filesystem directory that stores their submissions & replies.
-    Return a source object and their codename string.
-
-    :returns: A 2-tuple. The first entry, the :class:`Source`
-    initialized. The second, their codename string.
-    """
-    # Create source identity and database record
-    codename = PassphraseGenerator.get_default().generate_passphrase()
-    filesystem_id = current_app.crypto_util.hash_codename(codename)
-    journalist_filename = current_app.crypto_util.display_id()
-    source = Source(filesystem_id, journalist_filename)
-    db.session.add(source)
-    db.session.commit()
-    # Create the directory to store their submissions and replies
-    os.mkdir(current_app.storage.path(source.filesystem_id))
-
-    return source, codename
-
 
 def init_source():
     """Initialize a source: create their database record, the
@@ -148,10 +129,15 @@ def init_source():
     :returns: A 2-tuple. The first entry, the :class:`Source`
     initialized. The second, their codename string.
     """
-    source, codename = init_source_without_keypair()
-    current_app.crypto_util.genkeypair(source.filesystem_id, codename)
-
-    return source, codename
+    passphrase = PassphraseGenerator.get_default().generate_passphrase()
+    source_user = create_source_user(
+        db_session=db.session,
+        source_passphrase=passphrase,
+        source_app_crypto_util=current_app.crypto_util,
+        source_app_storage=current_app.storage,
+    )
+    current_app.crypto_util.genkeypair(source_user)
+    return source_user.get_db_record(), passphrase
 
 
 def submit(source, num_submissions, submission_type="message"):
