@@ -4,8 +4,15 @@
     src: "../../build/{{ securedrop_target_distribution }}/securedrop-grsec-{{ grsec_version }}+{{ securedrop_target_distribution }}-amd64.deb"
     dest: "/root/securedrop-grsec-{{ grsec_version }}+{{ securedrop_target_distribution }}-amd64.deb"
 
-- name: Install locally built securedrop-grsec metapackage
-  command: apt-get install -y -f "/root/securedrop-grsec-{{ grsec_version }}+{{ securedrop_target_distribution }}-amd64.deb"
+# Two-pass approach, first with apt to get the dependencies resolved, second
+# with dpkg to ensure package is reinstalled regardless of version.
+- name: Install locally built securedrop-grsec metapackage (via apt)
+  apt:
+    deb: "/root/securedrop-grsec-{{ grsec_version }}+{{ securedrop_target_distribution }}-amd64.deb"
+  ignore_errors: yes
+
+- name: Install locally built securedrop-grsec metapackage (via dpkg)
+  command: dpkg -i "/root/securedrop-grsec-{{ grsec_version }}+{{ securedrop_target_distribution }}-amd64.deb"
 
 - name: Mark package as held, so it doesn't update to apt-test version
   command: apt-mark hold securedrop-grsec
