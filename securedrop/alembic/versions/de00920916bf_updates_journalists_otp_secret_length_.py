@@ -1,7 +1,7 @@
 """Updates journalists.otp_secret length from 16 to 32
 
 Revision ID: de00920916bf
-Revises: 92fba0be98e9
+Revises: 1ddb81fb88c2
 Create Date: 2021-05-21 15:51:39.202368
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = 'de00920916bf'
-down_revision = '92fba0be98e9'
+down_revision = '1ddb81fb88c2'
 branch_labels = None
 depends_on = None
 
