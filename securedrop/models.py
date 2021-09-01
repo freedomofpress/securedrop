@@ -27,7 +27,7 @@ from db import db
 
 from typing import Callable, Optional, Union, Dict, List, Any
 from logging import Logger
-from pyotp import OTP
+from pyotp import TOTP, HOTP
 
 
 LOGIN_HARDENING = True
@@ -404,7 +404,7 @@ class Journalist(db.Model):
     is_admin = Column(Boolean)  # type: Column[Optional[bool]]
     session_nonce = Column(Integer, nullable=False, default=0)
 
-    otp_secret = Column(String(16), default=pyotp.random_base32)
+    otp_secret = Column(String(32), default=pyotp.random_base32)
     is_totp = Column(Boolean, default=True)  # type: Column[Optional[bool]]
     hotp_counter = Column(Integer, default=0)  # type: Column[Optional[int]]
     last_token = Column(String(6))
@@ -556,6 +556,9 @@ class Journalist(db.Model):
                     "Should never happen: pw_salt is none for legacy Journalist {}".format(self.id)
                 )
 
+            # For type checking
+            assert isinstance(self.pw_hash, bytes)
+
             is_valid = pyotp.utils.compare_digest(
                 self._scrypt_hash(passphrase, self.pw_salt),
                 self.pw_hash)
@@ -584,14 +587,14 @@ class Journalist(db.Model):
         self.hotp_counter = 0
 
     @property
-    def totp(self) -> 'OTP':
+    def totp(self) -> 'TOTP':
         if self.is_totp:
             return pyotp.TOTP(self.otp_secret)
         else:
             raise ValueError('{} is not using TOTP'.format(self))
 
     @property
-    def hotp(self) -> 'OTP':
+    def hotp(self) -> 'HOTP':
         if not self.is_totp:
             return pyotp.HOTP(self.otp_secret)
         else:
@@ -698,6 +701,8 @@ class Journalist(db.Model):
 
             # Prevent TOTP token reuse
             if user.last_token is not None:
+                # For type checking
+                assert isinstance(token, str)
                 if pyotp.utils.compare_digest(token, user.last_token):
                     raise BadTokenException("previously used two-factor code "
                                             "{}".format(token))
