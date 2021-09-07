@@ -94,13 +94,6 @@ try:
 except subprocess.CalledProcessError:
     sys.exit('Error restarting Tor')
 
-# Turn off "automatic-decompression" in Nautilus to ensure the original
-# submission filename is restored (see
-# https://github.com/freedomofpress/securedrop/issues/1862#issuecomment-311519750).
-subprocess.call(['/usr/bin/dconf', 'write',
-                 '/org/gnome/nautilus/preferences/automatic-decompression',
-                 'false'])
-
 # Set journalist.desktop and source.desktop links as trusted with Nautilus (see
 # https://github.com/freedomofpress/securedrop/issues/2586)
 # set euid and env variables to amnesia user
