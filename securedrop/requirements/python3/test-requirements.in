@@ -1,7 +1,7 @@
 Jinja2>=2.11.3
 beautifulsoup4
 blinker
-coverage>=4.5.2
+coverage>=5.0  # #6091
 Flask-Testing
 flaky
 html5validator
