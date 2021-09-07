@@ -39,6 +39,7 @@ import tests.utils.env as env
 from db import db
 from models import Journalist
 from sdconfig import config
+from source_user import _SourceScryptManager
 
 os.environ["SECUREDROP_ENV"] = "test"
 
@@ -287,7 +288,9 @@ class FunctionalTest(object):
                 self.__context.pop()
 
     def wait_for_source_key(self, source_name):
-        filesystem_id = self.source_app.crypto_util.hash_codename(source_name)
+        filesystem_id = _SourceScryptManager.get_default().derive_source_filesystem_id(
+            self.source_name
+        )
 
         def key_available(filesystem_id):
             assert self.source_app.crypto_util.get_fingerprint(filesystem_id)

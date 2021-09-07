@@ -3,7 +3,10 @@
 import configparser
 from pathlib import Path
 from tempfile import TemporaryDirectory
+
 from typing import Any, Generator
+
+from unittest import mock
 
 import pretty_bad_protocol as gnupg
 import logging
@@ -22,7 +25,13 @@ from flask import url_for
 from pyotp import TOTP
 from typing import Dict
 
+# WARNING: This variable must be set before any import of the securedrop code/app
+# or most tests will fail
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
+
+from passphrases import PassphraseGenerator
+from source_user import _SourceScryptManager, create_source_user
+
 from sdconfig import SDConfig, config as original_config
 
 from os import path
@@ -83,6 +92,21 @@ def setUpTearDown():
     yield
     _stop_test_rqworker()
     _cleanup_test_securedrop_dataroot(original_config)
+
+
+def insecure_scrypt() -> Generator[None, None, None]:
+    """Make scrypt insecure but fast for the test suite."""
+    insecure_scrypt_mgr = _SourceScryptManager(
+        salt_for_gpg_secret=b"abcd",
+        salt_for_filesystem_id=b"1234",
+        # Insecure but fast
+        scrypt_n=2 ** 1,
+        scrypt_r=1,
+        scrypt_p=1,
+    )
+
+    with mock.patch.object(_SourceScryptManager, "get_default", return_value=insecure_scrypt_mgr):
+        yield
 
 
 @pytest.fixture(scope="session")
@@ -211,10 +235,20 @@ def test_admin(journalist_app: Flask) -> Dict[str, Any]:
 @pytest.fixture(scope='function')
 def test_source(journalist_app: Flask) -> Dict[str, Any]:
     with journalist_app.app_context():
-        source, codename = utils.db_helper.init_source()
-        return {'source': source,
-                'codename': codename,
-                'filesystem_id': source.filesystem_id,
+        passphrase = PassphraseGenerator.get_default().generate_passphrase()
+        source_user = create_source_user(
+            db_session=db.session,
+            source_passphrase=passphrase,
+            source_app_crypto_util=journalist_app.crypto_util,
+            source_app_storage=journalist_app.storage,
+        )
+        journalist_app.crypto_util.genkeypair(source_user)
+        source = source_user.get_db_record()
+        return {'source_user': source_user,
+                # TODO(AD): Eventually the nexy keys could be removed as they are in source_user
+                'source': source,
+                'codename': passphrase,
+                'filesystem_id': source_user.filesystem_id,
                 'uuid': source.uuid,
                 'id': source.id}
 

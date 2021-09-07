@@ -19,6 +19,7 @@ from pathlib import Path
 
 import pytest
 
+from source_user import _SourceScryptManager
 from . import functional_test as ft
 from . import journalist_navigation_steps
 from . import source_navigation_steps
@@ -116,7 +117,9 @@ class TestJournalistMissingFile(
         self._source_logs_out()
 
         # Remove the message file from the store
-        filesystem_id = self.source_app.crypto_util.hash_codename(self.source_name)
+        filesystem_id = _SourceScryptManager.get_default().derive_source_filesystem_id(
+            self.source_name
+        )
         storage_path = Path(self.journalist_app.storage.storage_path) / filesystem_id
         msg_files = [p for p in storage_path.glob("*-msg.gpg")]
         assert len(msg_files) == 1

@@ -15,6 +15,7 @@ from flask import current_app, escape, g, session
 from pyotp import HOTP, TOTP
 
 import journalist_app as journalist_app_module
+from source_app.session_manager import SessionManager
 from . import utils
 from .utils.instrument import InstrumentedApp
 
@@ -35,7 +36,7 @@ def _login_user(app, user_dict):
     assert hasattr(g, 'user')  # ensure logged in
 
 
-def test_submit_message(source_app, journalist_app, test_journo):
+def test_submit_message(journalist_app, source_app, test_journo):
     """When a source creates an account, test that a new entry appears
     in the journalist interface"""
     test_msg = "This is a test message."
@@ -132,7 +133,7 @@ def test_submit_message(source_app, journalist_app, test_journo):
         utils.asynchronous.wait_for_assertion(assertion)
 
 
-def test_submit_file(source_app, journalist_app, test_journo):
+def test_submit_file(journalist_app, source_app, test_journo):
     """When a source creates an account, test that a new entry appears
     in the journalist interface"""
     test_file_contents = b"This is a test file."
@@ -245,6 +246,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
         tab_id = next(iter(session['codenames'].keys()))
         app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
         codename = session['codename']
+        source_user = SessionManager.get_logged_in_user()
         filesystem_id = g.filesystem_id
         # redirected to submission form
         resp = app.post('/submit', data=dict(
@@ -308,7 +310,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
     _can_decrypt_with_key(
         journalist_app,
         data,
-        codename)
+        source_user.gpg_secret)
 
     # Test deleting reply on the journalist interface
     last_reply_number = len(
@@ -377,7 +379,7 @@ def _helper_filenames_delete(journalist_app, soup, i):
     utils.asynchronous.wait_for_assertion(assertion)
 
 
-def _can_decrypt_with_key(journalist_app, msg, passphrase=None):
+def _can_decrypt_with_key(journalist_app, msg, source_gpg_secret=None):
     """
     Test that the given GPG message can be decrypted.
     """
@@ -386,15 +388,15 @@ def _can_decrypt_with_key(journalist_app, msg, passphrase=None):
     using_gpg_2_1 = StrictVersion(
         journalist_app.crypto_util.gpg.binary_version) >= StrictVersion('2.1')
 
-    if passphrase:
-        passphrase = journalist_app.crypto_util.hash_codename(
-            passphrase,
-            salt=journalist_app.crypto_util.scrypt_gpg_pepper)
+    if source_gpg_secret:
+        final_passphrase = source_gpg_secret
     elif using_gpg_2_1:
-        passphrase = 'dummy passphrase'
+        final_passphrase = 'dummy passphrase'
+    else:
+        final_passphrase = None
 
     decrypted_data = journalist_app.crypto_util.gpg.decrypt(
-        msg, passphrase=passphrase)
+        msg, passphrase=final_passphrase)
     assert decrypted_data.ok, \
         "Could not decrypt msg with key, gpg says: {}" \
         .format(decrypted_data.stderr)
