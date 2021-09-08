@@ -1,4 +1,4 @@
-coverage
+coverage>=5.0  # #6091
 d2to1
 flake8
 flaky
