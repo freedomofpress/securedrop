@@ -1,6 +1,7 @@
 import os
 
 from base64 import b32encode
+from functools import lru_cache
 from typing import Optional
 from typing import TYPE_CHECKING
 
@@ -99,7 +100,7 @@ def create_source_user(
     return SourceUser(source_db_record, filesystem_id, gpg_secret)
 
 
-_default_scrypt_mgr = None  # type: Optional[_SourceScryptManager]
+_default_scrypt_mgr: Optional["_SourceScryptManager"] = None
 
 
 class _SourceScryptManager:
@@ -121,6 +122,8 @@ class _SourceScryptManager:
         self._scrypt_p = scrypt_p
         self._backend = default_backend()
 
+    # Use @lru_cache to not recompute the same values over and over for the same user
+    @lru_cache
     def derive_source_gpg_secret(self, source_passphrase: "DicewarePassphrase") -> str:
         scrypt_for_gpg_secret = scrypt.Scrypt(
             length=64,
@@ -133,6 +136,7 @@ class _SourceScryptManager:
         hashed_passphrase = scrypt_for_gpg_secret.derive(source_passphrase.encode("utf-8"))
         return b32encode(hashed_passphrase).decode("utf-8")
 
+    @lru_cache
     def derive_source_filesystem_id(self, source_passphrase: "DicewarePassphrase") -> str:
         scrypt_for_filesystem_id = scrypt.Scrypt(
             length=64,

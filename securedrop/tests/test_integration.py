@@ -15,6 +15,7 @@ from flask import current_app, escape, g, session
 from pyotp import HOTP, TOTP
 
 import journalist_app as journalist_app_module
+from db import db
 from source_app.session_manager import SessionManager
 from . import utils
 from .utils.instrument import InstrumentedApp
@@ -45,7 +46,7 @@ def test_submit_message(journalist_app, source_app, test_journo):
         app.get('/generate')
         tab_id = next(iter(session['codenames'].keys()))
         app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
-        source_user = SessionManager.get_logged_in_user()
+        source_user = SessionManager.get_logged_in_user(db_session=db.session)
         filesystem_id = source_user.filesystem_id
 
         # redirected to submission form
@@ -145,7 +146,7 @@ def test_submit_file(journalist_app, source_app, test_journo):
         app.get('/generate')
         tab_id = next(iter(session['codenames'].keys()))
         app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
-        source_user = SessionManager.get_logged_in_user()
+        source_user = SessionManager.get_logged_in_user(db_session=db.session)
         filesystem_id = source_user.filesystem_id
 
         # redirected to submission form
@@ -255,7 +256,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
             fh=(BytesIO(b''), ''),
         ), follow_redirects=True)
         assert resp.status_code == 200
-        source_user = SessionManager.get_logged_in_user()
+        source_user = SessionManager.get_logged_in_user(db_session=db.session)
         filesystem_id = source_user.filesystem_id
         app.get('/logout')
 
