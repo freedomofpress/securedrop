@@ -15,4 +15,9 @@ if [ "$2" != "up" ]; then
   exit 0
 fi
 
+
+systemctl stop tor@default
+find /var/lib/tor/ -mindepth 1 -delete
 /usr/bin/python3 /home/amnesia/Persistent/.securedrop/securedrop_init_pre.py
+systemctl start tor@default
+
