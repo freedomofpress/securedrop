@@ -10,7 +10,7 @@
 - name: Copy NetworkManager pre-up hook for managing SecureDrop interfaces.
   become: yes
   copy:
-    src: 65-configure-tor-for-securedrop_pre.sh
+    src: 05-preconfigure-securedrop-client-auth.sh
     dest: "{{ item }}/"
     owner: root
     group: root
