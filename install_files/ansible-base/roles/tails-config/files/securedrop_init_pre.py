@@ -88,12 +88,6 @@ for key, f in paths_v3_authfiles.items():
         os.chmod(new_f, 0o400)
         os.chown(new_f, debian_tor_uid, debian_tor_gid)
 
-# restart tor
-try:
-    subprocess.check_call(['systemctl', 'restart', 'tor@default.service'])
-except subprocess.CalledProcessError:
-    sys.exit('Error restarting Tor')
-
 # Set journalist.desktop and source.desktop links as trusted with Nautilus (see
 # https://github.com/freedomofpress/securedrop/issues/2586)
 # set euid and env variables to amnesia user
@@ -121,30 +115,5 @@ for shortcut in ['source.desktop', 'journalist.desktop']:
     subprocess.call(['gio', 'set', path_desktop + shortcut,
                      'metadata::trusted', 'true'], env=env)
 
-# in Tails 4, reload gnome-shell desktop icons extension to update with changes above
-cmd = ["lsb_release", "--id", "--short"]
-p = subprocess.check_output(cmd)
-distro_id = p.rstrip()
-if distro_id == 'Debian' and os.uname()[1] == 'amnesia':
-    subprocess.call(['gnome-shell-extension-tool', '-r', 'desktop-icons@csoriano'], env=env)
-
-# reacquire uid0 and notify the user
-os.setresuid(0, 0, -1)
-os.setresgid(0, 0, -1)
-success_message = 'You can now access the Journalist Interface.\nIf you are an admin, you can now SSH to the servers.'  # noqa: E501
-subprocess.call(['tails-notify-user',
-                 'SecureDrop successfully auto-configured!',
-                 success_message])
-
-# As the amnesia user, check for SecureDrop workstation updates.
-os.setresgid(amnesia_gid, amnesia_gid, -1)
-os.setresuid(amnesia_uid, amnesia_uid, -1)
-output = subprocess.check_output([path_securedrop_admin_venv,
-                                  path_securedrop_admin_init,
-                                  '--root', path_securedrop_root,
-                                  'check_for_updates'], env=env)
-
-flag_location = "/home/amnesia/Persistent/.securedrop/securedrop_update.flag"
-if b'Update needed' in output or os.path.exists(flag_location):
-    # Start the SecureDrop updater GUI.
-    subprocess.Popen(['python3', path_gui_updater], env=env)
+# reload gnome-shell desktop icons extension to update with changes above
+subprocess.call(['gnome-shell-extension-tool', '-r', 'desktop-icons@csoriano'], env=env)

@@ -1,8 +1,6 @@
 #!/bin/sh
 
-# appends HidServAuth values needed for SecureDrop
-# authenticated onion services to /etc/tor/torrc
-# and reloads Tor
+# notifies the user that SecureDrop is configured, and triggers the updater
 
 # Run only when the interace is not "lo":
 if [ "$1" = "lo" ]; then
@@ -14,4 +12,4 @@ if [ "$2" != "up" ]; then
   exit 0
 fi
 
-/usr/bin/python3 /home/amnesia/Persistent/.securedrop/securedrop_init.py
+/usr/bin/python3 /home/amnesia/Persistent/.securedrop/securedrop_init_post.py

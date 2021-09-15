@@ -7,7 +7,19 @@
     regexp: '^/etc/NetworkManager'
     line: "{{ tails_config_network_manager_dispatcher }}	source=custom-nm-hooks,link"
 
-- name: Copy NetworkManager hook for managing SecureDrop interfaces.
+- name: Copy NetworkManager pre-up hook for managing SecureDrop interfaces.
+  become: yes
+  copy:
+    src: 65-configure-tor-for-securedrop_pre.sh
+    dest: "{{ item }}/"
+    owner: root
+    group: root
+    mode: "0755"
+  with_items:
+    - "{{ tails_config_live_persistence }}/custom-nm-hooks/pre-up.d"
+    - "{{ tails_config_network_manager_dispatcher }}/pre-up.d"
+
+- name: Copy NetworkManager post-config hook to run updater.
   become: yes
   copy:
     src: 65-configure-tor-for-securedrop.sh
@@ -19,7 +31,19 @@
     - "{{ tails_config_live_persistence }}/custom-nm-hooks"
     - "{{ tails_config_network_manager_dispatcher }}"
 
-- name: Run SecureDrop network hook
+
+- name: Run SecureDrop pre-up network hook
   # Writes files to /etc, so elevated privileges are required.
   become: yes
-  command: python "{{ tails_config_securedrop_dotfiles }}/securedrop_init.py"
+  command: python "{{ tails_config_securedrop_dotfiles }}/securedrop_init_pre.py"
+
+- name: Restart Tor
+  become: yes
+  systemd:
+    state: restarted
+    daemon-reload: yes 
+    name: tor
+
+- name: Run SecureDrop post-config network hook
+  become: yes
+  command: python "{{ tails_config_securedrop_dotfiles }}/securedrop_init_post.py"
