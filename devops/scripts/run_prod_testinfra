@@ -17,7 +17,7 @@ trap cleanup EXIT
 
 
 # Are we in Tails?
-if [ -f "/home/amnesia/Persistent/.securedrop/securedrop_init.py" ]
+if [ -f "/home/amnesia/Persistent/.securedrop/securedrop_init_pre.py" ]
 then
     echo "Tails workstation detected, continuing..."
 else

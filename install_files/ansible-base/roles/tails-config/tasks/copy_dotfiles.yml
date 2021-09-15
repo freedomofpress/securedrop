@@ -23,7 +23,18 @@
   # execute, in the context of the NetworkManager hook, which calls it.
   become: yes
   copy:
-    src: securedrop_init.py
+    src: securedrop_init_pre.py
+    dest: "{{ tails_config_securedrop_dotfiles }}/"
+    owner: root
+    group: root
+    mode: "0700"
+
+- name: Copy SecureDrop network hook for updater check.
+  # Elevated privileges for root:root ownership, so only the system can
+  # execute, in the context of the NetworkManager hook, which calls it.
+  become: yes
+  copy:
+    src: securedrop_init_post.py
     dest: "{{ tails_config_securedrop_dotfiles }}/"
     owner: root
     group: root
