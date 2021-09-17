@@ -48,7 +48,17 @@ Choose one of the following:
 - [ ] I would appreciate help with the documentation
 - [ ] These changes do not require documentation
 
-### If you added or updated a code dependency:
+### If you added or updated a production code dependency:
+
+Production code dependencies are defined in:
+
+- `admin/requirements.in`
+- `admin/requirements-ansible.in`
+- `securedrop/requirements/python3/securedrop-app-code-requirements.in`
+
+If you changed another `requirements.in` file that applies only to development
+or testing environments, then no diff review is required, and you can skip
+(remove) this section.
 
 Choose one of the following:
 
