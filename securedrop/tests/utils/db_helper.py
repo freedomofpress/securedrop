@@ -133,7 +133,6 @@ def init_source():
     source_user = create_source_user(
         db_session=db.session,
         source_passphrase=passphrase,
-        source_app_crypto_util=current_app.crypto_util,
         source_app_storage=current_app.storage,
     )
     current_app.crypto_util.genkeypair(source_user)

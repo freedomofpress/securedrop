@@ -116,7 +116,7 @@ def set_source_count(s: str) -> int:
 
 
 def add_journalist(
-    username: str = "",
+    username: str,
     is_admin: bool = False,
     first_name: str = "",
     last_name: str = "",
@@ -127,9 +127,6 @@ def add_journalist(
     """
     test_password = "correct horse battery staple profanity oil chewy"
     test_otp_secret = "JHCOGO7VCER3EJ4L"
-
-    if not username:
-        username = current_app.crypto_util.display_id()
 
     journalist = Journalist(
         username=username,
@@ -258,7 +255,6 @@ def add_source() -> Tuple[Source, str]:
     source_user = create_source_user(
         db_session=db.session,
         source_passphrase=codename,
-        source_app_crypto_util=current_app.crypto_util,
         source_app_storage=current_app.storage,
     )
     source = source_user.get_db_record()
@@ -319,7 +315,7 @@ def create_default_journalists() -> Tuple[Journalist, ...]:
 def add_journalists(args: argparse.Namespace) -> None:
     total = args.journalist_count
     for i in range(1, total + 1):
-        add_journalist(progress=(i, total))
+        add_journalist(username=f"journalist{str(i)}", progress=(i, total))
 
 
 def add_sources(args: argparse.Namespace, journalists: Tuple[Journalist, ...]) -> None:

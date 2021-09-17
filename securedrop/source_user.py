@@ -2,7 +2,9 @@ import os
 
 from base64 import b32encode
 from functools import lru_cache
-from typing import Optional
+from pathlib import Path
+from random import SystemRandom
+from typing import Optional, List
 from typing import TYPE_CHECKING
 
 from cryptography.hazmat.backends import default_backend
@@ -13,7 +15,6 @@ from sqlalchemy.orm import Session
 import models
 
 if TYPE_CHECKING:
-    from crypto_util import CryptoUtil
     from passphrases import DicewarePassphrase
     from store import Storage
 
@@ -67,7 +68,6 @@ class SourceDesignationCollisionError(Exception):
 def create_source_user(
     db_session: Session,
     source_passphrase: "DicewarePassphrase",
-    source_app_crypto_util: "CryptoUtil",
     source_app_storage: "Storage",
 ) -> SourceUser:
     # Derive the source's info from their passphrase
@@ -75,15 +75,34 @@ def create_source_user(
     filesystem_id = scrypt_manager.derive_source_filesystem_id(source_passphrase)
     gpg_secret = scrypt_manager.derive_source_gpg_secret(source_passphrase)
 
-    # Create a designation for the source
-    try:
-        # TODO: Move display_id() out of CryptoUtil
-        journalist_designation = source_app_crypto_util.display_id()
-    except ValueError:
+    # Create a unique journalist designation for the source
+    # TODO: Add unique=True to models.Source.journalist_designation to enforce uniqueness
+    #  as the logic below has a race condition (time we check VS time when we add to the DB)
+    designation_generation_attempts = 0
+    valid_designation = None
+    designation_generator = _DesignationGenerator.get_default()
+    while designation_generation_attempts < 50:
+        # Generate a designation
+        designation_generation_attempts += 1
+        new_designation = designation_generator.generate_journalist_designation()
+
+        # Check to see if it's already used by an existing source
+        existing_source_with_same_designation = db_session.query(
+            models.Source
+        ).filter_by(journalist_designation=new_designation).one_or_none()
+        if not existing_source_with_same_designation:
+            # The designation is not already used - good to go
+            valid_designation = new_designation
+            break
+
+    if not valid_designation:
+        # Could not generate a designation that is not already used
         raise SourceDesignationCollisionError()
 
     # Store the source in the DB
-    source_db_record = models.Source(filesystem_id, journalist_designation)
+    source_db_record = models.Source(
+        filesystem_id=filesystem_id, journalist_designation=valid_designation
+    )
     db_session.add(source_db_record)
     try:
         db_session.commit()
@@ -164,3 +183,51 @@ class _SourceScryptManager:
                 scrypt_p=config.SCRYPT_PARAMS["p"],
             )
         return _default_scrypt_mgr
+
+
+_default_designation_generator: Optional["_DesignationGenerator"] = None
+
+
+class _DesignationGenerator:
+
+    def __init__(self, nouns: List[str], adjectives: List[str]):
+        self._random_generator = SystemRandom()
+
+        # Ensure that there are no empty lists or empty strings
+        if not nouns:
+            raise ValueError("Nouns word list is empty")
+        shortest_noun = min(nouns, key=len)
+        shortest_noun_length = len(shortest_noun)
+        if shortest_noun_length < 1:
+            raise ValueError("Nouns word list contains an empty string")
+
+        if not adjectives:
+            raise ValueError("Adjectives word list is empty")
+        shortest_adjective = min(adjectives, key=len)
+        shortest_adjective_length = len(shortest_adjective)
+        if shortest_adjective_length < 1:
+            raise ValueError("Adjectives word list contains an empty string")
+
+        self._nouns = nouns
+        self._adjectives = adjectives
+
+    def generate_journalist_designation(self) -> str:
+        random_adjective = self._random_generator.choice(self._adjectives)
+        random_noun = self._random_generator.choice(self._nouns)
+        return f"{random_adjective} {random_noun}"
+
+    @classmethod
+    def get_default(cls) -> "_DesignationGenerator":
+        # Late import so _SourceScryptManager can be used without a config.py in the parent folder
+        from sdconfig import config
+
+        global _default_designation_generator
+        if _default_designation_generator is None:
+            # Parse the nouns and adjectives files from the config
+            nouns = Path(config.NOUNS).read_text().strip().splitlines()
+            adjectives = Path(config.ADJECTIVES).read_text().strip().splitlines()
+
+            # Create the generator
+            _default_designation_generator = cls(nouns=nouns, adjectives=adjectives)
+
+        return _default_designation_generator
