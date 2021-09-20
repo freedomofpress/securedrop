@@ -17,7 +17,6 @@
 #
 from tests.functional import journalist_navigation_steps
 from tests.functional import source_navigation_steps
-from tests.functional.functional_test import TORBROWSER
 from . import functional_test
 import pytest
 
@@ -118,47 +117,3 @@ class TestSourceLayout(
         self._source_why_journalist_key()
         self._screenshot('source-why_journalist_key.png')
         self._save_html('source-why_journalist_key.html')
-
-
-@pytest.mark.pagelayout
-class TestSourceSessionLayout(
-        functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
-    default_driver_name = TORBROWSER
-
-    session_expiration = 5
-
-    def test_source_session_timeout(self):
-        self.disable_js_torbrowser_driver()
-        self._source_visits_source_homepage()
-        self._source_clicks_submit_documents_on_homepage()
-        self._source_continues_to_submit_page()
-        self._source_waits_for_session_to_timeout()
-        self._source_enters_text_in_message_field()
-        self._source_visits_source_homepage()
-        self._screenshot('source-session_timeout.png')
-        self._save_html('source-session_timeout.html')
-
-
-class TestSourceLayoutTorbrowser(
-        functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
-    default_driver_name = TORBROWSER
-
-    def test_index(self):
-        self.disable_js_torbrowser_driver()
-        self._source_visits_source_homepage()
-        self._screenshot('source-index.png')
-        self._save_html('source-index.html')
-
-    def test_logout(self):
-        self.disable_js_torbrowser_driver()
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._screenshot('source-logout_page.png')
-        self._save_html('source-logout_page.html')
