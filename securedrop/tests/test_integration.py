@@ -284,7 +284,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
             pass
         else:
             text = resp.data.decode('utf-8')
-            assert "Your reply has been stored." in text
+            assert "The source will receive your reply" in text
 
         resp = app.get(col_url)
         text = resp.data.decode('utf-8')
