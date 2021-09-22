@@ -98,8 +98,6 @@ jobs:
       - run:
           name: Run tests
           command: |
-            BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|update-builder)")
-            if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             JOB_TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/{files,functional}/test*py')
             echo "JOB_TESTFILES: ${JOB_TESTFILES}"
             RUN_TESTFILES=$(echo "$JOB_TESTFILES" |circleci tests split --split-by=timings)
@@ -136,8 +134,6 @@ jobs:
       - run:
           name: Run tests
           command: |
-            BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|update-builder)")
-            if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             JOB_TESTFILES=$(cd securedrop; circleci tests glob 'tests/pageslayout/test*py')
             echo "JOB_TESTFILES: ${JOB_TESTFILES}"
             RUN_TESTFILES=$(echo "$JOB_TESTFILES" |circleci tests split --split-by=timings)
@@ -183,8 +179,6 @@ jobs:
       - run:
           name: Run tests
           command: |
-            BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^i18n")
-            if ! [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             sudo apt update && sudo apt install python3-sh python3-babel
             export LOCALES="$(/usr/bin/python3 securedrop/i18n_tool.py list-locales --lines | circleci tests split | tr '\n' ' ')"
             fromtag=$(docker images | grep securedrop-test-focal-py3 | head -n1 | awk '{print $2}')
@@ -206,8 +200,6 @@ jobs:
       - run:
           name: Run tests
           command: |
-            BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|update-builder)")
-            if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             cd admin; make test
 
   fetch-tor-debs:
@@ -220,8 +212,6 @@ jobs:
       - run:
           name: Fetch Tor packages
           command: |
-            BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|update-builder)")
-            if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             export LC_ALL="C.UTF-8"
             make fetch-tor-packages
 
@@ -244,8 +234,6 @@ jobs:
       - run:
           name: Run tests
           command: |
-            BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n|update-builder)")
-            if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             cd journalist_gui
             QT_QPA_PLATFORM=offscreen pipenv run python3 test_gui.py -v $2>/dev/null
 
@@ -293,8 +281,6 @@ jobs:
       - run:
           name: Run Staging tests on GCE
           command: |
-            BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^(i18n)")
-            if [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             make ci-go
           no_output_timeout: 35m
 
@@ -324,8 +310,6 @@ jobs:
       - run:
           name: Test Debian package build
           command: |
-            BRANCH_MATCH=$(devops/scripts/match-ci-branch.sh "^update-builder")
-            if ! [[ $BRANCH_MATCH =~ ^found ]]; then echo "Skipping: ${BRANCH_MATCH}"; exit 0; fi
             make ci-deb-tests
 
 workflows:
@@ -371,8 +355,9 @@ workflows:
       - staging-test-with-rebase:
           filters:
             branches:
-              only:
-                - /release\/.*/
+              # Ignore needs to be here explicitely as only clause introduced in PR #6086 might be removed afterwards.
+              ignore: /i18n-.*/
+              only: /release\/.*/
           requires:
             - lint
       - translation-tests:
