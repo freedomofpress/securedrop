@@ -128,6 +128,22 @@ log_events_without_ossec_alerts:
     level: "0"
     rule_id: "100112"
 
+  - name: test_ossec_fwupd_udisks2_does_not_produce_alert
+    alert: >
+      Aug 10 14:30:51 mon fwupd[134620]: 14:30:51:0528 FuPluginLinuxSwap    could
+      not parse /proc/swaps: failed to call
+      org.freedesktop.UDisks2.Manager.GetBlockDevices(): The name
+      org.freedesktop.UDisks2 was not provided by any .service files
+    level: "0"
+    rule_id: "100113"
+
+  - name: test_ossec_fwupd_chassis_type_does_not_produce_alert
+    alert: >
+      Sep 18 13:32:22 mon fwupd[134454]: 13:32:22:0632 FuEngine             failed
+      to get chassis type: no structure with type 03
+    level: "0"
+    rule_id: "100114"
+
 # Log events we expect an OSSEC alert to occur for
 log_events_with_ossec_alerts:
   # Check that a denied RWX mmaping would produce an OSSEC alert
