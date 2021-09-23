@@ -163,7 +163,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                     "<b>{}</b> {}".format(
                         # Translators: Precedes a message confirming the success of an operation.
                         escape(gettext("Success!")),
-                        escape(gettext("Your reply has been stored."))
+                        escape(gettext("The source will receive your reply "
+                                       "next time they log in."))
                     )
                 ), 'success')
         finally:

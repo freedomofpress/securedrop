@@ -857,7 +857,7 @@ class JournalistNavigationStepsMixin:
 
         def reply_stored():
             if not self.accept_languages:
-                assert "Your reply has been stored." in self.driver.page_source
+                assert "The source will receive your reply" in self.driver.page_source
 
         self.wait_for(reply_stored)
 
