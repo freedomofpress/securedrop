@@ -192,15 +192,6 @@ case "$1" in
 
     # Version migrations
 
-    if [ -n "$2" ] && [ "$2" = "0.3" ] ; then
-      # Restore custom logo
-      cp /tmp/securedrop_custom_logo.png /var/www/securedrop/static/i/logo.png
-      rm /tmp/securedrop_custom_logo.png
-    fi
-
-    # in versions prior to 0.5.1 a custom logo was installed with u-w
-    chmod u+w /var/www/securedrop/static/i/logo.png
-
     database_migration
 
     ;;
