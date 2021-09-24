@@ -90,6 +90,18 @@
     <description>fwupd error for auto updates</description>
     <options>no_email_alert</options>
   </rule>
+  <rule id="100113" level="0">
+    <decoded_as>fwupd</decoded_as>
+    <match>The name org.freedesktop.UDisks2 was not provided by any .service files</match>
+    <description>fwupd error missing UDisks2</description>
+    <options>no_email_alert</options>
+  </rule>
+  <rule id="100114" level="0">
+    <decoded_as>fwupd</decoded_as>
+    <match>failed to get chassis type: no structure with type 03</match>
+    <description>fwupd error missing structure</description>
+    <options>no_email_alert</options>
+  </rule>
 </group>
 
 <!--
