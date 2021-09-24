@@ -1,5 +1,7 @@
 from typing import Any
 
+from db import db
+
 from flask import redirect, url_for, request, session
 from functools import wraps
 
@@ -14,10 +16,10 @@ def login_required(f: Callable) -> Callable:
     @wraps(f)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
         try:
-            logged_in_source = SessionManager.get_logged_in_user()
+            logged_in_source = SessionManager.get_logged_in_user(db_session=db.session)
 
         except (UserSessionExpired, UserHasBeenDeleted):
-            return clear_session_and_redirect_to_logged_out_page(session)
+            return clear_session_and_redirect_to_logged_out_page(flask_session=session)
 
         except UserNotLoggedIn:
             return redirect(url_for("main.login"))

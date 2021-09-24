@@ -87,10 +87,9 @@ class SDConfig:
         except AttributeError:
             pass
 
-        try:
-            self.SESSION_EXPIRATION_MINUTES = _config.SESSION_EXPIRATION_MINUTES  # type: int
-        except AttributeError:
-            pass
+        self.SESSION_EXPIRATION_MINUTES: int = getattr(
+            _config, "SESSION_EXPIRATION_MINUTES", 120
+        )
 
         try:
             self.SOURCE_TEMPLATES_DIR = _config.SOURCE_TEMPLATES_DIR  # type: str

@@ -19,11 +19,11 @@ if typing.TYPE_CHECKING:
     from typing import Optional
 
 
-def clear_session_and_redirect_to_logged_out_page(session: typing.Dict) -> werkzeug.Response:
+def clear_session_and_redirect_to_logged_out_page(flask_session: typing.Dict) -> werkzeug.Response:
     msg = render_template('session_timeout.html')
 
     # Clear the session after we render the message so it's localized
-    session.clear()
+    flask_session.clear()
 
     flash(Markup(msg), "important")
     return redirect(url_for('main.index'))

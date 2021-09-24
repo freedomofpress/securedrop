@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
 
@@ -84,7 +83,7 @@ def create_app(config: SDConfig) -> Flask:
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> werkzeug.Response:
-        return clear_session_and_redirect_to_logged_out_page(session)
+        return clear_session_and_redirect_to_logged_out_page(flask_session=session)
 
     assets = Environment(app)
     app.config['assets'] = assets
@@ -132,17 +131,6 @@ def create_app(config: SDConfig) -> Flask:
     @app.before_request
     @ignore_static
     def setup_g() -> Optional[werkzeug.Response]:
-        if 'expires' in session and datetime.utcnow() >= session['expires']:
-            # If the session as has expired, redirect to index with flashed message
-            # if the user was in the middle of the generate flow
-            if 'codenames' in session:
-                return clear_session_and_redirect_to_logged_out_page(session)
-
-        session['expires'] = datetime.utcnow() + \
-            timedelta(minutes=getattr(config,
-                                      'SESSION_EXPIRATION_MINUTES',
-                                      120))
-
         if app.instance_config.organization_name:
             g.organization_name = app.instance_config.organization_name
         else:

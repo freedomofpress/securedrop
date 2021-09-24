@@ -1,10 +1,11 @@
+from datetime import datetime, timedelta
 from typing import TYPE_CHECKING
 
-from flask import session, g
-from werkzeug.contrib.cache import SimpleCache
+import sqlalchemy
+from flask import session
 
 from sdconfig import config
-from source_user import SourceUser
+from source_user import SourceUser, authenticate_source_user, InvalidPassphraseError
 
 if TYPE_CHECKING:
     from passphrases import DicewarePassphrase
@@ -27,80 +28,76 @@ class UserHasBeenDeleted(_InvalidUserSession):
 
 
 class SessionManager:
-    _CACHE = SimpleCache()  # A mapping of passphrase -> SourceUser
-    _KEY_IN_SESSION_COOKIE = "codename"  # The key in flask.session for the user's passphrase
+    """Helper to manage the user's session cookie accessible via flask.session."""
+
+    # The keys in flask.session for the user's passphrase and expiration date
+    _SESSION_COOKIE_KEY_FOR_CODENAME = "codename"
+    _SESSION_COOKIE_KEY_FOR_EXPIRATION_DATE = "expires"
 
     @classmethod
-    def log_user_in(cls, user: SourceUser, user_passphrase: "DicewarePassphrase") -> None:
-        # Save the passphrase in the user's session cookie
-        session[cls._KEY_IN_SESSION_COOKIE] = user_passphrase
-
-        # Store the user's information
-        cls._CACHE.set(
-            key=user_passphrase, value=user, timeout=config.SESSION_EXPIRATION_MINUTES * 60
+    def log_user_in(
+        cls,
+        db_session: sqlalchemy.orm.Session,
+        supplied_passphrase: "DicewarePassphrase"
+    ) -> SourceUser:
+        # Validate the passphrase; will raise an exception if it is not valid
+        source_user = authenticate_source_user(
+            db_session=db_session, supplied_passphrase=supplied_passphrase
         )
 
-        # Populate the Flask globals and session
-        # TODO(AD): Usage of flask.g and session will be removed in my next PR
-        # This is a temporary compatibility layer to reduce the size of my changes
-        g.codename = user_passphrase
-        g.filesystem_id = user.filesystem_id
-        g.source = user.get_db_record()
-        session["logged_in"] = True
+        # Save the passphrase in the user's session cookie
+        session[cls._SESSION_COOKIE_KEY_FOR_CODENAME] = supplied_passphrase
+
+        # Save the session expiration date in the user's session cookie
+        session_duration = timedelta(minutes=config.SESSION_EXPIRATION_MINUTES)
+        session[cls._SESSION_COOKIE_KEY_FOR_EXPIRATION_DATE] = datetime.utcnow() + session_duration
+
+        return source_user
 
     @classmethod
     def log_user_out(cls) -> None:
+        # Remove session data from the session cookie
         try:
-            # Retrieve the passphrase from the session cookie and delete the user's info
-            user_passphrase = session[cls._KEY_IN_SESSION_COOKIE]
-            cls._CACHE.delete(user_passphrase)
-            # Remove passphrase from the session cookie
-            del session[cls._KEY_IN_SESSION_COOKIE]
+            del session[cls._SESSION_COOKIE_KEY_FOR_CODENAME]
         except KeyError:
             pass
 
-        # TODO(AD): Will be removed in my next PR
         try:
-            del session["logged_in"]
+            del session[cls._SESSION_COOKIE_KEY_FOR_EXPIRATION_DATE]
         except KeyError:
             pass
 
     @classmethod
-    def get_logged_in_user(cls) -> SourceUser:
+    def get_logged_in_user(cls, db_session: sqlalchemy.orm.Session) -> SourceUser:
         # Retrieve the user's passphrase from the Flask session cookie
         try:
-            user_passphrase = session[cls._KEY_IN_SESSION_COOKIE]
+            user_passphrase = session[cls._SESSION_COOKIE_KEY_FOR_CODENAME]
+            date_session_expires = session[cls._SESSION_COOKIE_KEY_FOR_EXPIRATION_DATE]
         except KeyError:
             cls.log_user_out()
             raise UserNotLoggedIn()
 
-        # Lookup the user's info
-        user_info = cls._CACHE.get(user_passphrase)
-        if not user_info:
+        if datetime.utcnow() >= date_session_expires:
             cls.log_user_out()
             raise UserSessionExpired()
 
-        # Ensure the user hasn't been deleted since the last request
-        if user_info.get_db_record() is None or user_info.get_db_record().deleted_at:
-            cls.log_user_out()
-            raise UserHasBeenDeleted(
-                "Source user {} has been deleted".format(user_info.db_record_id)
+        # Fetch the user's info
+        try:
+            source_user = authenticate_source_user(
+                db_session=db_session, supplied_passphrase=user_passphrase
             )
+        except InvalidPassphraseError:
+            # The cookie contains a passphrase that is invalid: happens if the user was deleted
+            cls.log_user_out()
+            raise UserHasBeenDeleted()
 
-        return user_info
+        return source_user
 
     @classmethod
-    def is_user_logged_in(cls) -> bool:
+    def is_user_logged_in(cls, db_session: sqlalchemy.orm.Session) -> bool:
         try:
-            cls.get_logged_in_user()
+            cls.get_logged_in_user(db_session)
         except _InvalidUserSession:
             return False
 
         return True
-
-    @classmethod
-    def expire_all_user_sessions(cls) -> None:
-        """Expire the session of all currently-logged-in users.
-
-        Should only be used by the unit tests."""
-        cls._CACHE.clear()

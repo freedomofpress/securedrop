@@ -3,7 +3,7 @@ import os
 import io
 
 from base64 import urlsafe_b64encode
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Union
 
 import werkzeug
@@ -20,9 +20,10 @@ from passphrases import PassphraseGenerator
 from sdconfig import SDConfig
 from source_app.decorators import login_required
 from source_app.session_manager import SessionManager
-from source_app.utils import normalize_timestamps, fit_codenames_into_cookie
+from source_app.utils import normalize_timestamps, fit_codenames_into_cookie, \
+    clear_session_and_redirect_to_logged_out_page
 from source_app.forms import LoginForm, SubmissionForm
-from source_user import authenticate_source_user, InvalidPassphraseError, create_source_user, \
+from source_user import InvalidPassphraseError, create_source_user, \
     SourcePassphraseCollisionError, SourceDesignationCollisionError, SourceUser
 
 
@@ -35,7 +36,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @view.route('/generate', methods=('GET', 'POST'))
     def generate() -> Union[str, werkzeug.Response]:
-        if SessionManager.is_user_logged_in():
+        if SessionManager.is_user_logged_in(db_session=db.session):
             flash(gettext(
                 "You were redirected because you are already logged in. "
                 "If you want to create a new account, you should log out "
@@ -54,22 +55,30 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         codenames = session.get('codenames', {})
         codenames[tab_id] = codename
         session['codenames'] = fit_codenames_into_cookie(codenames)
+        session["codenames_expire"] = datetime.utcnow() + timedelta(
+            minutes=config.SESSION_EXPIRATION_MINUTES
+        )
         return render_template('generate.html', codename=codename, tab_id=tab_id)
 
     @view.route('/create', methods=['POST'])
     def create() -> werkzeug.Response:
-        if SessionManager.is_user_logged_in():
+        if SessionManager.is_user_logged_in(db_session=db.session):
             flash(gettext("You are already logged in. Please verify your codename above as it " +
                           "may differ from the one displayed on the previous page."),
                   'notification')
         else:
+            # Ensure the codenames have not expired
+            date_codenames_expire = session.get("codenames_expire")
+            if not date_codenames_expire or datetime.utcnow() >= date_codenames_expire:
+                return clear_session_and_redirect_to_logged_out_page(flask_session=session)
+
             tab_id = request.form['tab_id']
             codename = session['codenames'][tab_id]
             del session['codenames']
 
             try:
                 current_app.logger.info("Creating new source user...")
-                new_source_user = create_source_user(
+                create_source_user(
                     db_session=db.session,
                     source_passphrase=codename,
                     source_app_crypto_util=current_app.crypto_util,
@@ -88,7 +97,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             # All done - source user was successfully created
             current_app.logger.info("New source user created")
             session['new_user_codename'] = codename
-            SessionManager.log_user_in(user=new_source_user, user_passphrase=codename)
+            SessionManager.log_user_in(db_session=db.session, supplied_passphrase=codename)
 
         return redirect(url_for('.lookup'))
 
@@ -269,7 +278,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         form = LoginForm()
         if form.validate_on_submit():
             try:
-                source_user = authenticate_source_user(
+                SessionManager.log_user_in(
                     db_session=db.session,
                     supplied_passphrase=request.form['codename'].strip()
                 )
@@ -278,9 +287,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 flash(gettext("Sorry, that is not a recognized codename."), "error")
             else:
                 # Success: a valid passphrase was supplied
-                SessionManager.log_user_in(
-                    user=source_user, user_passphrase=request.form['codename'].strip()
-                )
                 return redirect(url_for('.lookup', from_login='1'))
 
         return render_template('login.html', form=form)
@@ -292,7 +298,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         click the New Identity button in Tor Browser to complete their session.
         Otherwise redirect to the main Source Interface page.
         """
-        if SessionManager.is_user_logged_in():
+        if SessionManager.is_user_logged_in(db_session=db.session):
             SessionManager.log_user_out()
 
             # Clear the session after we render the message so it's localized
