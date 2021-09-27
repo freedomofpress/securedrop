@@ -8,8 +8,8 @@ ansible-lint==4.2.0 \
     --hash=sha256:b9fc9a6564f5d60a4284497f966f38ef78f0e2505edbe2bd1225f1ade31c2d8a \
     --hash=sha256:eb925d8682d70563ccb80e2aca7b3edf84fb0b768cea3edc6846aac7abdc414a
     # via -r requirements/python3/develop-requirements.in
-ansible==2.9.21 \
-    --hash=sha256:4098246b67aa143e1e3af79d99346419e0545d5405d1cdf6e7fd389beab6de5a
+ansible==2.9.26 \
+    --hash=sha256:3ae02aad2bbedcfb419ce75ebd2a648e9deb73e9e2d8de86c82d6047b1bdeb63
     # via
     #   -r ../admin/requirements-ansible.in
     #   -r requirements/python3/develop-requirements.in
