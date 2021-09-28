@@ -303,7 +303,7 @@ def test_deb_package_contains_no_generated_assets(securedrop_app_code_contents: 
 @pytest.mark.parametrize("deb", deb_paths.values())
 def test_deb_package_contains_expected_conffiles(host: Host, deb: Path):
     """
-    Ensures the `securedrop-app-code` package declares only whitelisted
+    Ensures the `securedrop-app-code` package declares only allow-listed
     `conffiles`. Several files in `/etc/` would automatically be marked
     conffiles, which would break unattended updates to critical package
     functionality such as AppArmor profiles. This test validates overrides
@@ -319,10 +319,11 @@ def test_deb_package_contains_expected_conffiles(host: Host, deb: Path):
         f = host.file(conffiles_path)
 
         assert f.is_file
-        # Ensure that the entirety of the file lists only the logo as conffile;
-        # effectively ensures e.g. AppArmor profiles are not conffiles.
+
         conffiles = f.content_string.rstrip()
-        assert conffiles == "/var/www/securedrop/static/i/logo.png"
+
+        # No files are currently allow-listed to be conffiles
+        assert conffiles == ""
 
     # For the securedrop-config package, we want to ensure there are no
     # conffiles so securedrop_additions.sh is squashed every time

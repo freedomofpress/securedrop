@@ -58,6 +58,18 @@ function permanently_disable_swap() {
 }
 
 
+function migrate_custom_logo() {
+  # Previously, logo customization was done by overwriting the logo file
+  # that ships as part of the package. This is no longer supported. For older
+  # installations, if no custom logo exists, we instantiate it here.
+
+  if [[ -f "/var/www/securedrop/static/i/logo.png" &&
+        ! -e "/var/www/securedrop/static/i/custom_logo.png" ]]; then
+          cp /var/www/securedrop/static/i/logo.png /var/www/securedrop/static/i/custom_logo.png
+  fi
+}
+
+
 function convert_document_to_journalist_interface() {
     # Helper function to migrate the old "Document Interface" config files
     # to the new "Journalist Interface" naming scheme. Affects tor and apache.
@@ -93,13 +105,7 @@ case "$1" in
 
       permanently_disable_swap
       convert_document_to_journalist_interface
-
-      if [ -n "$2" ] && [ "$2" = "0.3" ] ; then
-        # Copy the custom logo (workaround due to #911)
-        cp /var/www/securedrop/static/i/logo.png /tmp/securedrop_custom_logo.png
-        # Remove the custom logo so we don't get an error from dpkg conffiles
-        rm /var/www/securedrop/static/i/logo.png
-      fi
+      migrate_custom_logo
 
       if service_exists 'haveged'; then
         systemctl stop haveged
