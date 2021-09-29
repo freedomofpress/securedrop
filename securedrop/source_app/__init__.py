@@ -97,6 +97,8 @@ def create_app(config: SDConfig) -> Flask:
         template_filters.rel_datetime_format
     app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
+    app.jinja_env.filters['html_datetime_format'] = \
+        template_filters.html_datetime_format
 
     for module in [main, info, api]:
         app.register_blueprint(module.make_blueprint(config))  # type: ignore
