@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-11 16:44+0000\nLast-Translator: Volkan <volkangezer@gmail.com>\nLanguage-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/securedrop/tr/>\nLanguage: tr\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.5-rc4\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2021-06-11 16:44+0000\n"
+"Last-Translator: Volkan <volkangezer@gmail.com>\n"
+"Language-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/securedrop/tr/>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "İsim çok uzun"
@@ -130,8 +142,8 @@ msgstr "Yalnız PNG biçiminde görsel dosyaları yükleyebilirsiniz."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Beklenmeyen bir sorun çıktı! Lütfen sistem yöneticinizi bilgilendirin."
 
-msgid "Your reply has been stored."
-msgstr "Yanıtınız kaydedildi."
+msgid "The source will receive your reply next time they log in."
+msgstr ""
 
 msgid "You must select one or more items for download"
 msgstr "İndirilecek bir ya da daha fazla öge seçmelisiniz"
@@ -202,11 +214,17 @@ msgstr "Kapat"
 msgid "Cancel"
 msgstr "İptal"
 
-msgid "starred icon"
-msgstr "yıldızlı simge"
+msgid "Un-star {designation}"
+msgstr ""
 
-msgid "unstarred icon"
-msgstr "yıldızsız simge"
+msgid "{designation} is starred"
+msgstr ""
+
+msgid "Star {designation}"
+msgstr ""
+
+msgid "{designation} is not starred"
+msgstr ""
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -218,8 +236,8 @@ msgid_plural "{num} messages"
 msgstr[0] "1 ileti"
 msgstr[1] "{num} ileti"
 
-msgid "download icon"
-msgstr "indirme simgesi"
+msgid "Download"
+msgstr "İndir"
 
 msgid "1 unread"
 msgid_plural "{num} unread"
@@ -322,20 +340,27 @@ msgstr "Son oturum açma"
 msgid "Edit user {username}"
 msgstr "{username} kullanıcısını düzenle"
 
-msgid "edit user icon"
-msgstr "kullanıcı düzenleme simgesi"
-
-msgid "trash icon disabled"
+#, fuzzy
+#| msgid "trash icon disabled"
+msgid "User deletion disabled"
 msgstr "devredışı çöp simgesi"
 
 msgid "Delete user {username}"
 msgstr "{username} kullanıcısını sil"
 
-msgid "trash icon"
-msgstr "çöp simgesi"
-
 msgid "never"
 msgstr "hiçbir zaman"
+
+msgid "Delete Confirmation"
+msgstr "Silme Onayı"
+
+#, fuzzy
+#| msgid "Are you sure you want to delete the user {username}?"
+msgid "Are you sure you want to delete this user?"
+msgstr "{username} kullanıcısını silmek istediğinize emin misiniz?"
+
+msgid "DELETE"
+msgstr "SİL"
 
 msgid "No users to display"
 msgstr "Görüntülenecek bir kullanıcı yok"
@@ -403,47 +428,23 @@ msgstr "Seçilmişleri İndir"
 msgid "Delete Selected"
 msgstr "Seçilmişleri Sil"
 
-msgid "Reply"
-msgstr "Yanıtla"
-
-msgid "reply icon"
-msgstr "yanıtla simgesi"
+msgid "Unread"
+msgstr "Okunmamış"
 
 msgid "Read"
 msgstr "Okunmuş"
 
-msgid "check icon"
-msgstr "onay simgesi"
-
-msgid "Unread"
-msgstr "Okunmamış"
-
-msgid "closed envelope icon"
-msgstr "kapalı zarf simgesi"
-
-msgid "open envelope icon"
-msgstr "açık zarf simgesi"
-
 msgid "Uploaded Document"
 msgstr "Yüklenen Belge"
 
-msgid "files icon"
-msgstr "dosyalar simgesi"
+msgid "Reply"
+msgstr "Yanıtla"
 
 msgid "Message"
 msgstr "İleti"
 
-msgid "messages icon"
-msgstr "iletiler simgesi"
-
-msgid "Delete Confirmation"
-msgstr "Silme Onayı"
-
 msgid "Are you sure you want to delete the selected submissions?"
 msgstr "Seçilmiş gönderileri silmek istediğinize emin misiniz?"
-
-msgid "DELETE"
-msgstr "SİL"
 
 msgid "No submissions to display."
 msgstr "Görüntülenecek bir gönderi yok."
@@ -582,11 +583,21 @@ msgstr "YubiKey gibi fiziksel güvenlik anahtarları için iki aşamalı kimlik 
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "FİZİKSEL GÜVENLİK ANAHTARI KİMLİK BİLGİLERİNİ SIFIRLA"
 
+#, fuzzy
+#| msgid "Verification code"
+msgid "Notification"
+msgstr "Doğrulama kodu"
+
+#, fuzzy
+#| msgid "Success!"
+msgid "Success"
+msgstr "Başarılı!"
+
+msgid "Error"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Okunmamışları İndir"
-
-msgid "Download"
-msgstr "İndir"
 
 msgid "Star"
 msgstr "İşaretle"
@@ -608,9 +619,6 @@ msgstr "Okunmamışları Seç"
 
 msgid "Select None"
 msgstr "Seçimi Temizle"
-
-msgid "Are you sure you want to delete the user {username}?"
-msgstr "{username} kullanıcısını silmek istediğinize emin misiniz?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "{username} kullanıcısının iki aşamalı kimlik doğrulamasını sıfırlamak istediğinize emin misiniz?"
@@ -647,6 +655,9 @@ msgstr "Geçersiz girdi."
 
 msgid "Write a message."
 msgstr "Bir ileti yazın."
+
+msgid "Select a file to upload."
+msgstr ""
 
 msgid "Message text too long."
 msgstr "İleti metni çok uzun."
@@ -690,9 +701,6 @@ msgstr "Maalesef, kod adı anlaşılamadı."
 msgid "Protecting Journalists and Sources"
 msgstr "Gazetecileri ve Kaynakları Korumak"
 
-msgid "SecureDrop Home"
-msgstr "SecureDrop Anasayfa"
-
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Maalesef, SecureDrop şu anda çevrimdışı."
 
@@ -735,8 +743,23 @@ msgstr "Lütfen bu kod adını bir yere yazın ve güvenli bir şekilde saklayı
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "Bir sonraki sayfada göndereceğiniz bilgilere, ekibimizin gönderdiği yanıtları almak için yeniden geldiğinizde bu kod adını kullanacaksınız."
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "Kod Adını Yazın"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Refresh codename"
+msgstr "Kod Adını Yazın"
+
+#, fuzzy
+#| msgid ""
+#| "Because we do not track users of our <strong>SecureDrop</strong>\n"
+#| " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#| " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgid ""
-"Because we do not track users of our <strong>SecureDrop</strong>\n"
+"Because we do not track users of our <b>SecureDrop</b>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgstr ""
@@ -744,16 +767,48 @@ msgstr ""
 "sizinle iletişim kurabilmemiz, soru sorabilmemiz ya da ek bilgi gereksinimlerini bildirebilmemiz için kullanılabilecek\n"
 "tek yol sonraki ziyaretlerinizde bu kod adını kullanmanızdır. Parolaların aksine kod adı kaybolduğunda geri alınamaz."
 
+msgid "Submit Documents"
+msgstr ""
+
 msgid "SUBMIT DOCUMENTS"
 msgstr "BELGE GÖNDER"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+#, fuzzy
+#| msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "Tor Tarayıcı<a id=\"disable-js\" href=\"\"><strong>Güvenlik Düzeyi</strong></a> çok düşük. Tor Browser araç çubuğundaki <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;düğmesini kullanarak değiştirebilirsiniz."
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "How to change your security level"
+msgstr ""
+
+#, fuzzy
+#| msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "Yukarıdaki araç çubuğundan <img src=\"{icon}\" alt=\"shield icon\"> düğmesine tıklayın"
+
+#, fuzzy
+#| msgid "Select <strong>Advanced Security Settings</strong>"
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "<strong>Gelişmiş Güvenlik Ayarlarını</strong> seçin"
+
+#, fuzzy
+#| msgid "Select <strong>Safest</strong>"
+msgid "Select <b>Safest</b>"
+msgstr "<strong>En güvenli</strong> seçeneğini seçin"
+
+#, fuzzy
+#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\">Bu sayfayı yenileyin</a> ve işlemi tamamlayın!"
+
+#, fuzzy
+#| msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>SecureDrop uygulamasına erişmek için Tor Tarayıcı kullanmanız önerilir:</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">Nasıl kuracağınızı öğrenin</a> veya bu uyarıyı görmezden gelerek devam edin."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#, fuzzy
+#| msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>SecureDrop uygulamasına erişmek için Tor Tarayıcının masaüstü sürümünü kullanmanız önerilir. Orfox masaüstü sürümlerle aynı güvenlik ve anonimlik düzeylerini sağlamaz</strong>.<a id=\"recommend-tor\" href=\"{tor_browser_url}\">Nasıl kuracağınızı öğrenin</a> veya bu uyarıyı görmezden gelerek devam edin."
 
 msgid "First submission"
@@ -761,6 +816,9 @@ msgstr "İlk gönderim"
 
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "SecureDrop uygulamamıza ilk defa bir şey gönderecekseniz, buradan başlayın."
+
+msgid "Get Started"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "BAŞLAYIN"
@@ -771,17 +829,18 @@ msgstr "Daha önce gelmiştim"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Daha önce bir kod adı aldıysanız yanıtlara bakabilir veya yeni bir şeyler gönderebilirsiniz."
 
-msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "Yukarıdaki araç çubuğundan <img src=\"{icon}\" alt=\"shield icon\"> düğmesine tıklayın"
+#, fuzzy
+#| msgid "Log Out"
+msgid "Log In"
+msgstr "Oturumu Kapat"
 
-msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "<strong>Gelişmiş Güvenlik Ayarlarını</strong> seçin"
+#, fuzzy
+#| msgid "Select None"
+msgid "Selected language"
+msgstr "Seçimi Temizle"
 
-msgid "Select <strong>Safest</strong>"
-msgstr "<strong>En güvenli</strong> seçeneğini seçin"
-
-msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">Bu sayfayı yenileyin</a> ve işlemi tamamlayın!"
+msgid "Choose language"
+msgstr ""
 
 msgid "Enter Codename"
 msgstr "Kod Adını Yazın"
@@ -789,23 +848,22 @@ msgstr "Kod Adını Yazın"
 msgid "Enter your codename"
 msgstr "Kod adınızı yazın"
 
+msgid "Continue"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "İPTAL"
 
 msgid "One more thing..."
 msgstr "Bir şey daha var..."
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Tor Tarayıcı araç çubuğundan <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Yeni Kimlik</strong> üzerine tıklayın. Bu işlem bu aygıt üzerindeki Tor Tarayıcı etkinliklerini siler."
 
 msgid "Remember, your codename is:"
 msgstr "Unutmayın, kod adınız:"
-
-msgid "Show"
-msgstr "Göster"
-
-msgid "Hide"
-msgstr "Gizle"
 
 msgid "Submit Files or Messages"
 msgstr "Dosya veya İleti Gönderin"
@@ -828,13 +886,26 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Ayrıntılı bilgi alın</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "En büyük yükleme boyutu: 500 MB"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Yanıtları Okuyun"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "Bir yanıt aldınız. Pek mümkün olmasa da birinin kod adınızı öğrenme olasılığına karşı kimliğinizi korumak için lütfen yanıtlarla işiniz bittiğinde tümünü silin. Böylece yanıtı görmüş olduğunuzu da anlayabiliriz. Yukarıdan yeni bir ileti ve dosya göndererek yanıt verebilirsiniz."
 
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete this reply"
+msgstr "Bu yanıt silinsin mi?"
+
 msgid "Delete this reply?"
+msgstr "Bu yanıt silinsin mi?"
+
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete All Replies"
 msgstr "Bu yanıt silinsin mi?"
 
 msgid "DELETE ALL REPLIES"
@@ -849,8 +920,10 @@ msgstr "EVET, TÜM YANITLARI SİL"
 msgid "NO, NOT YET"
 msgstr "HAYIR, DAHA DEĞİL"
 
-msgid "— No Messages —"
-msgstr "— Henüz Bir İleti Yok —"
+#, fuzzy
+#| msgid "Message"
+msgid "No Messages"
+msgstr "İleti"
 
 msgid "Page not found"
 msgstr "Sayfa bulunamadı"
@@ -861,7 +934,9 @@ msgstr "Maalesef, isteğinizi yerine getiremiyoruz."
 msgid "Important"
 msgstr "Önemli"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "Bir süredir işlem yapmadığınız için oturumunuz kapatıldı. İlerlemeden önce Tor Tarayıcı araç çubuğundan <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Yeni Kimlik</strong> üzerine tıklayın. Bu işlem bu aygıttaki Tor Tarayıcı etkinlik bilgilerini siler."
 
 msgid "Why is there a warning about Tor2Web?"
@@ -888,7 +963,9 @@ msgstr "Bilgi göndermek istiyorsanız, sitemize güvenli ve anonim bir şekilde
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Tor Tarayıcı uygulamasını indirmek ve kurmak için aşağıdaki adresi kopyalayıp tarayıcınızın adres çubuğuna yapıştırın ve açılacak sayfadaki adımları izleyin:"
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+#, fuzzy
+#| msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Tor Tarayıcı uygulamasını indirmenizin şüphe uyandırma olasılığı varsa ve e-posta sağlayıcınızın izlenme olasılığı daha düşük ise, <pre>gettor@torproject.org</pre> adresine bir e-posta atabilirsiniz. Bir bot yapmanız gerekenleri size yanıt olarak gönderir."
 
 msgid "Why download the team's public key?"
@@ -930,6 +1007,54 @@ msgstr "<strong>Önemli:</strong> Anonim kalmak istiyorsanız, dosyanın GPG tar
 
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"
+
+#~ msgid "Your reply has been stored."
+#~ msgstr "Yanıtınız kaydedildi."
+
+#~ msgid "starred icon"
+#~ msgstr "yıldızlı simge"
+
+#~ msgid "unstarred icon"
+#~ msgstr "yıldızsız simge"
+
+#~ msgid "download icon"
+#~ msgstr "indirme simgesi"
+
+#~ msgid "edit user icon"
+#~ msgstr "kullanıcı düzenleme simgesi"
+
+#~ msgid "trash icon"
+#~ msgstr "çöp simgesi"
+
+#~ msgid "reply icon"
+#~ msgstr "yanıtla simgesi"
+
+#~ msgid "check icon"
+#~ msgstr "onay simgesi"
+
+#~ msgid "closed envelope icon"
+#~ msgstr "kapalı zarf simgesi"
+
+#~ msgid "open envelope icon"
+#~ msgstr "açık zarf simgesi"
+
+#~ msgid "files icon"
+#~ msgstr "dosyalar simgesi"
+
+#~ msgid "messages icon"
+#~ msgstr "iletiler simgesi"
+
+#~ msgid "SecureDrop Home"
+#~ msgstr "SecureDrop Anasayfa"
+
+#~ msgid "Show"
+#~ msgstr "Göster"
+
+#~ msgid "Hide"
+#~ msgstr "Gizle"
+
+#~ msgid "— No Messages —"
+#~ msgstr "— Henüz Bir İleti Yok —"
 
 #~ msgid "You've flagged this source for reply."
 #~ msgstr "Bu kaynağı yanıtlamak amacıyla işaretlediniz."

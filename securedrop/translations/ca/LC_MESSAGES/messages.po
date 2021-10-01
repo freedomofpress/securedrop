@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-14 13:44+0000\nLast-Translator: Benet (BennyBeat) R. i Camps <bennybeat@gmail.com>\nLanguage-Team: Catalan <https://weblate.securedrop.org/projects/securedrop/securedrop/ca/>\nLanguage: ca\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.5-rc4\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2021-06-14 13:44+0000\n"
+"Last-Translator: Benet (BennyBeat) R. i Camps <bennybeat@gmail.com>\n"
+"Language-Team: Catalan <https://weblate.securedrop.org/projects/securedrop/securedrop/ca/>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "El nom és massa llarg"
@@ -130,8 +142,8 @@ msgstr "Només podeu pujar fitxers d’imatge PNG."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "S’ha produït un error inesperat! Informeu-ne l’administrador."
 
-msgid "Your reply has been stored."
-msgstr "S'ha emmagatzemat la resposta."
+msgid "The source will receive your reply next time they log in."
+msgstr ""
 
 msgid "You must select one or more items for download"
 msgstr "Cal que seleccioneu un o més elements per baixar"
@@ -202,11 +214,17 @@ msgstr "Tanca"
 msgid "Cancel"
 msgstr "Cancel·la"
 
-msgid "starred icon"
-msgstr "icona de marcat com a preferit"
+msgid "Un-star {designation}"
+msgstr ""
 
-msgid "unstarred icon"
-msgstr "icona de desmarcat com a preferit"
+msgid "{designation} is starred"
+msgstr ""
+
+msgid "Star {designation}"
+msgstr ""
+
+msgid "{designation} is not starred"
+msgstr ""
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -218,8 +236,8 @@ msgid_plural "{num} messages"
 msgstr[0] "1 missatge"
 msgstr[1] "{num} missatges"
 
-msgid "download icon"
-msgstr "icona de baixada"
+msgid "Download"
+msgstr "Baixa"
 
 msgid "1 unread"
 msgid_plural "{num} unread"
@@ -322,20 +340,27 @@ msgstr "Darrer inici de sessió"
 msgid "Edit user {username}"
 msgstr "Edita el compte {username}"
 
-msgid "edit user icon"
-msgstr "icona d'edició d'usuari"
-
-msgid "trash icon disabled"
+#, fuzzy
+#| msgid "trash icon disabled"
+msgid "User deletion disabled"
 msgstr "icona de paperera desactivada"
 
 msgid "Delete user {username}"
 msgstr "Suprimeix el compte {username}"
 
-msgid "trash icon"
-msgstr "icona de paperera"
-
 msgid "never"
 msgstr "mai"
+
+msgid "Delete Confirmation"
+msgstr "Confirmació de supressió"
+
+#, fuzzy
+#| msgid "Are you sure you want to delete the user {username}?"
+msgid "Are you sure you want to delete this user?"
+msgstr "Segur que voleu suprimir l'usuari {username}?"
+
+msgid "DELETE"
+msgstr "SUPRIMEIX"
 
 msgid "No users to display"
 msgstr "No hi ha cap usuari per mostrar"
@@ -403,47 +428,23 @@ msgstr "Baixa la selecció"
 msgid "Delete Selected"
 msgstr "Suprimeix la selecció"
 
-msgid "Reply"
-msgstr "Respon"
-
-msgid "reply icon"
-msgstr "icona de resposta"
+msgid "Unread"
+msgstr "Per llegir"
 
 msgid "Read"
 msgstr "Llegit"
 
-msgid "check icon"
-msgstr "icona de verificació"
-
-msgid "Unread"
-msgstr "Per llegir"
-
-msgid "closed envelope icon"
-msgstr "icona de sobre tancat"
-
-msgid "open envelope icon"
-msgstr "icona de sobre obert"
-
 msgid "Uploaded Document"
 msgstr "Document penjat"
 
-msgid "files icon"
-msgstr "icona de fitxers"
+msgid "Reply"
+msgstr "Respon"
 
 msgid "Message"
 msgstr "Missatge"
 
-msgid "messages icon"
-msgstr "icona de missatge"
-
-msgid "Delete Confirmation"
-msgstr "Confirmació de supressió"
-
 msgid "Are you sure you want to delete the selected submissions?"
 msgstr "Segur que voleu suprimir els enviaments seleccionats?"
-
-msgid "DELETE"
-msgstr "SUPRIMEIX"
 
 msgid "No submissions to display."
 msgstr "No hi ha cap enviament per mostrar."
@@ -582,11 +583,21 @@ msgstr "Restableix l'autenticació de factor doble per a claus de seguretat, com
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "RESTABLEIX LES CREDENCIALS DE CLAUS DE SEGURETAT"
 
+#, fuzzy
+#| msgid "Verification code"
+msgid "Notification"
+msgstr "Codi de verificació"
+
+#, fuzzy
+#| msgid "Success!"
+msgid "Success"
+msgstr "Finalitzat!"
+
+msgid "Error"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Baixa les pendents de llegir"
-
-msgid "Download"
-msgstr "Baixa"
 
 msgid "Star"
 msgstr "Marca"
@@ -608,9 +619,6 @@ msgstr "Selecciona els pendents de llegir"
 
 msgid "Select None"
 msgstr "No en seleccionis cap"
-
-msgid "Are you sure you want to delete the user {username}?"
-msgstr "Segur que voleu suprimir l'usuari {username}?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "Segur que voleu restablir l'autenticació de factor doble per a {username}?"
@@ -647,6 +655,9 @@ msgstr "L'entrada no és vàlida."
 
 msgid "Write a message."
 msgstr "Escriviu un missatge."
+
+msgid "Select a file to upload."
+msgstr ""
 
 msgid "Message text too long."
 msgstr "El missatge de text és massa llarg."
@@ -690,9 +701,6 @@ msgstr "No es reconeix aquest nom en clau."
 msgid "Protecting Journalists and Sources"
 msgstr "Protegeix els periodistes i les fonts"
 
-msgid "SecureDrop Home"
-msgstr "Inici del SecureDrop"
-
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Vaja, el nostre SecureDrop és fora de línia."
 
@@ -735,8 +743,23 @@ msgstr "Escriviu aquest nom en clau i conserveu-lo en un lloc segur, o memoritze
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "Aquest nom en clau és el que usareu en visites futures per a rebre missatges del nostre equip en resposta a allò que envieu en la pantalla següent."
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "Introduïu el nom en clau"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Refresh codename"
+msgstr "Introduïu el nom en clau"
+
+#, fuzzy
+#| msgid ""
+#| "Because we do not track users of our <strong>SecureDrop</strong>\n"
+#| " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#| " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgid ""
-"Because we do not track users of our <strong>SecureDrop</strong>\n"
+"Because we do not track users of our <b>SecureDrop</b>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgstr ""
@@ -744,16 +767,48 @@ msgstr ""
 "en visites futures, l'ús d'aquest nom en clau serà l'única via que us podrem contactar si tenim preguntes\n"
 "o interès en informació addicional. A diferència de les contrasenyes, no hi ha cap forma de recuperar un nom en clau perdut."
 
+msgid "Submit Documents"
+msgstr ""
+
 msgid "SUBMIT DOCUMENTS"
 msgstr "ENVIA DOCUMENTS"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+#, fuzzy
+#| msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "El <a id=\"disable-js\" href=\"\"><strong>Nivell de seguretat</strong></a> del navegador Tor és massa baix. Useu el botó de la <img src=\"{icon}\" alt=\"icona d'escut\"> de la barra d'eines del navegador per canviar-ho."
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "How to change your security level"
+msgstr ""
+
+#, fuzzy
+#| msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "Feu clic en el botó <img src=\"{icon}\" alt=\"icona d'escut\"> de la barra d'eines superior"
+
+#, fuzzy
+#| msgid "Select <strong>Advanced Security Settings</strong>"
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "Seleccioneu <strong>Configuració avançada de seguretat</strong>"
+
+#, fuzzy
+#| msgid "Select <strong>Safest</strong>"
+msgid "Select <b>Safest</b>"
+msgstr "Seleccioneu <strong>El més segur</strong>"
+
+#, fuzzy
+#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\">Actualitzeu aquesta pàgina</a>, i ja heu acabat!"
+
+#, fuzzy
+#| msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>És recomanable l'ús del navegador Tor per accedir a SecureDrop:</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">Apreneu com instal·lar-lo</a> o ignoreu aquest avís per continuar."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#, fuzzy
+#| msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>És recomanable que useu la versió d'escriptori del navegador Tor per a accedir a SecureDrop, atès que l'Orfox no proporciona el mateix nivell de seguretat i anonimat que la versió d'escriptori.</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">Apreneu com instal·lar-lo</a> o ignoreu aquest avís per a continuar."
 
 msgid "First submission"
@@ -761,6 +816,9 @@ msgstr "Primer enviament"
 
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "És el primer cop que envieu informació amb el SecureDrop? Comenceu aquí."
+
+msgid "Get Started"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "PRIMERS PASSOS"
@@ -771,17 +829,18 @@ msgstr "Visita nova"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Ja teniu un nom en clau? Comproveu les respostes o envieu quelcom nou."
 
-msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "Feu clic en el botó <img src=\"{icon}\" alt=\"icona d'escut\"> de la barra d'eines superior"
+#, fuzzy
+#| msgid "Log Out"
+msgid "Log In"
+msgstr "Tanca la sessió"
 
-msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "Seleccioneu <strong>Configuració avançada de seguretat</strong>"
+#, fuzzy
+#| msgid "Select None"
+msgid "Selected language"
+msgstr "No en seleccionis cap"
 
-msgid "Select <strong>Safest</strong>"
-msgstr "Seleccioneu <strong>El més segur</strong>"
-
-msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">Actualitzeu aquesta pàgina</a>, i ja heu acabat!"
+msgid "Choose language"
+msgstr ""
 
 msgid "Enter Codename"
 msgstr "Introduïu el nom en clau"
@@ -789,23 +848,22 @@ msgstr "Introduïu el nom en clau"
 msgid "Enter your codename"
 msgstr "Introduïu el vostre nom en clau"
 
+msgid "Continue"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "CANCEL·LA"
 
 msgid "One more thing..."
 msgstr "Una cosa més..."
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Feu clic al botó <img src={icon} alt=\"icona broom\" width=\"16\" height=\"16\">&nbsp;<strong>Identitat nova</strong> de la barra d'eines del navegador Tor. Això buidarà les dades d'activitat en el navegador Tor en aquest aparell."
 
 msgid "Remember, your codename is:"
 msgstr "Recordeu, el vostre nom en clau és:"
-
-msgid "Show"
-msgstr "Mostra"
-
-msgid "Hide"
-msgstr "Amaga"
 
 msgid "Submit Files or Messages"
 msgstr "Envia fitxers o missatges"
@@ -828,13 +886,26 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Més informació</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Mida màx. de pujada: 500 MB"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Llegeix les respostes"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "Heu demanat una resposta. Per protegir la vostra identitat en l'improbable cas que algú sàpiga el vostre nom en clau, suprimiu totes les respostes quan n'hàgiu enllestit. Això també ens permet saber que heu rebut la resposta. Podeu respondre enviant fitxers o missatges nous en la part superior."
 
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete this reply"
+msgstr "Voleu suprimir aquesta resposta?"
+
 msgid "Delete this reply?"
+msgstr "Voleu suprimir aquesta resposta?"
+
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete All Replies"
 msgstr "Voleu suprimir aquesta resposta?"
 
 msgid "DELETE ALL REPLIES"
@@ -849,8 +920,10 @@ msgstr "SÍ, SUPRIMEIX TOTES LES RESPOSTES"
 msgid "NO, NOT YET"
 msgstr "NO ENCARA"
 
-msgid "— No Messages —"
-msgstr "— No hi ha cap missatge —"
+#, fuzzy
+#| msgid "Message"
+msgid "No Messages"
+msgstr "Missatge"
 
 msgid "Page not found"
 msgstr "No s'ha trobat la pàgina"
@@ -861,7 +934,9 @@ msgstr "No podem trobar el que demaneu."
 msgid "Important"
 msgstr "Important"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "S'ha tancat la sessió per inactivitat. Feu clic en el botó <img src={icon} alt=\"icona broom\" width=\"16\" height=\"16\">&nbsp;<strong>Identitat nova</strong> en la barra d'eines del navegador Tor abans d'anar-vos-en. Això buidarà les dades d'activitat en el navegador Tor d'aquest aparell."
 
 msgid "Why is there a warning about Tor2Web?"
@@ -888,7 +963,9 @@ msgstr "Si voleu enviar informació a SecureDrop, us <strong>recomanem molt</str
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Copieu i enganxeu l'adreça següent en el vostre navegador i seguiu les instruccions per baixar i instal·lar el navegador Tor:"
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+#, fuzzy
+#| msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Si existeix la possibilitat que baixar el navegador Tor aixequi sospites i és menys probable que el vostre proveïdor de correu estigui en seguiment, podeu enviar un correu a <pre>gettor@torproject.org</pre> i us respondrà un bot amb instruccions."
 
 msgid "Why download the team's public key?"
@@ -930,6 +1007,54 @@ msgstr "<strong>Important:</strong> si voleu romandre anònimament, <strong>no</
 
 msgid "Back to submission page"
 msgstr "Vés enrere a la pàgina d'enviaments"
+
+#~ msgid "Your reply has been stored."
+#~ msgstr "S'ha emmagatzemat la resposta."
+
+#~ msgid "starred icon"
+#~ msgstr "icona de marcat com a preferit"
+
+#~ msgid "unstarred icon"
+#~ msgstr "icona de desmarcat com a preferit"
+
+#~ msgid "download icon"
+#~ msgstr "icona de baixada"
+
+#~ msgid "edit user icon"
+#~ msgstr "icona d'edició d'usuari"
+
+#~ msgid "trash icon"
+#~ msgstr "icona de paperera"
+
+#~ msgid "reply icon"
+#~ msgstr "icona de resposta"
+
+#~ msgid "check icon"
+#~ msgstr "icona de verificació"
+
+#~ msgid "closed envelope icon"
+#~ msgstr "icona de sobre tancat"
+
+#~ msgid "open envelope icon"
+#~ msgstr "icona de sobre obert"
+
+#~ msgid "files icon"
+#~ msgstr "icona de fitxers"
+
+#~ msgid "messages icon"
+#~ msgstr "icona de missatge"
+
+#~ msgid "SecureDrop Home"
+#~ msgstr "Inici del SecureDrop"
+
+#~ msgid "Show"
+#~ msgstr "Mostra"
+
+#~ msgid "Hide"
+#~ msgstr "Amaga"
+
+#~ msgid "— No Messages —"
+#~ msgstr "— No hi ha cap missatge —"
 
 #~ msgid "You've flagged this source for reply."
 #~ msgstr "Heu marcat aquesta font per a respondre-li."

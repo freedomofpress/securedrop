@@ -4,7 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-06-21 14:44+0000\nLast-Translator: erinm <erinm@riseup.net>\nLanguage-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\nLanguage: nl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.3.12\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"POT-Creation-Date: 2017-09-02 07:28+0000\n"
+"PO-Revision-Date: 2021-06-21 14:44+0000\n"
+"Last-Translator: erinm <erinm@riseup.net>\n"
+"Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Naam is te lang"
@@ -130,8 +143,8 @@ msgstr "U kunt alleen PNG-afbeeldingsbestanden uploaden."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Er trad een onverwachte fout op! Neem contact op met uw beheerder."
 
-msgid "Your reply has been stored."
-msgstr "Uw reactie is opgeslagen."
+msgid "The source will receive your reply next time they log in."
+msgstr ""
 
 msgid "You must select one or more items for download"
 msgstr "U moet één of meerdere items selecteren om te downloaden"
@@ -202,11 +215,17 @@ msgstr "Sluiten"
 msgid "Cancel"
 msgstr "Annuleren"
 
-msgid "starred icon"
-msgstr "favorieten icoon"
+msgid "Un-star {designation}"
+msgstr ""
 
-msgid "unstarred icon"
-msgstr "ster verwijderd icoon"
+msgid "{designation} is starred"
+msgstr ""
+
+msgid "Star {designation}"
+msgstr ""
+
+msgid "{designation} is not starred"
+msgstr ""
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -218,8 +237,8 @@ msgid_plural "{num} messages"
 msgstr[0] "1 bericht"
 msgstr[1] "{num} berichten"
 
-msgid "download icon"
-msgstr "download icoon"
+msgid "Download"
+msgstr "Downloaden"
 
 msgid "1 unread"
 msgid_plural "{num} unread"
@@ -322,20 +341,27 @@ msgstr "Laatste login"
 msgid "Edit user {username}"
 msgstr "Gebruiker {username} bewerken"
 
-msgid "edit user icon"
-msgstr "wijzig gebruiker knop"
-
-msgid "trash icon disabled"
+#, fuzzy
+#| msgid "trash icon disabled"
+msgid "User deletion disabled"
 msgstr "prullenbak icoon uitgeschakeld"
 
 msgid "Delete user {username}"
 msgstr "Gebruiker {username} verwijderen"
 
-msgid "trash icon"
-msgstr "prullenbak icoon"
-
 msgid "never"
 msgstr "nooit"
+
+msgid "Delete Confirmation"
+msgstr "Bevestiging verwijderen"
+
+#, fuzzy
+#| msgid "Are you sure you want to delete the user {username}?"
+msgid "Are you sure you want to delete this user?"
+msgstr "Weet u zeker dat u de gebruiker {username} wilt verwijderen?"
+
+msgid "DELETE"
+msgstr "VERWIJDER"
 
 msgid "No users to display"
 msgstr "Geen gebruikers om weer te geven"
@@ -403,47 +429,23 @@ msgstr "Geselecteerde downloaden"
 msgid "Delete Selected"
 msgstr "Geselecteerde verwijderen"
 
-msgid "Reply"
-msgstr "Reageren"
-
-msgid "reply icon"
-msgstr "antwoord icoon"
+msgid "Unread"
+msgstr "Ongelezen"
 
 msgid "Read"
 msgstr "Gelezen"
 
-msgid "check icon"
-msgstr "vinkje icoon"
-
-msgid "Unread"
-msgstr "Ongelezen"
-
-msgid "closed envelope icon"
-msgstr "gesloten envelop icoon"
-
-msgid "open envelope icon"
-msgstr "open envelop icoon"
-
 msgid "Uploaded Document"
 msgstr "Geüploade document"
 
-msgid "files icon"
-msgstr "bestanden icoon"
+msgid "Reply"
+msgstr "Reageren"
 
 msgid "Message"
 msgstr "Bericht"
 
-msgid "messages icon"
-msgstr "berichten icoon"
-
-msgid "Delete Confirmation"
-msgstr "Bevestiging verwijderen"
-
 msgid "Are you sure you want to delete the selected submissions?"
 msgstr "Weet u zeker dat u de geselecteerde inzendingen wilt verwijderen?"
-
-msgid "DELETE"
-msgstr "VERWIJDER"
 
 msgid "No submissions to display."
 msgstr "Geen inzendingen om te tonen."
@@ -582,11 +584,21 @@ msgstr "Reset tweefactorauthenticatie voor beveiligingssleutels, zoals YubiKeys"
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "HERSTEL INSTELLINGEN VOOR BEVEILIGINGSSLEUTEL"
 
+#, fuzzy
+#| msgid "Verification code"
+msgid "Notification"
+msgstr "Verificatiecode"
+
+#, fuzzy
+#| msgid "Success!"
+msgid "Success"
+msgstr "Gelukt!"
+
+msgid "Error"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Ongelezen downloaden"
-
-msgid "Download"
-msgstr "Downloaden"
 
 msgid "Star"
 msgstr "Markeren"
@@ -608,9 +620,6 @@ msgstr "Ongelezen selecteren"
 
 msgid "Select None"
 msgstr "Niets selecteren"
-
-msgid "Are you sure you want to delete the user {username}?"
-msgstr "Weet u zeker dat u de gebruiker {username} wilt verwijderen?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "Weet u zeker dat u de tweestapsauthenticatie voor {username} wilt herstellen?"
@@ -647,6 +656,9 @@ msgstr "Ongeldige invoer."
 
 msgid "Write a message."
 msgstr "Schrijf een bericht."
+
+msgid "Select a file to upload."
+msgstr ""
 
 msgid "Message text too long."
 msgstr "Bericht is te lang."
@@ -690,9 +702,6 @@ msgstr "Helaas is dit een onbekende codenaam."
 msgid "Protecting Journalists and Sources"
 msgstr "Journalisten en bronnen beschermen"
 
-msgid "SecureDrop Home"
-msgstr "SecureDrop home"
-
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Het spijt ons, onze SecureDrop is momenteel offline."
 
@@ -735,8 +744,23 @@ msgstr "Noteer deze codenaam en bewaar op een veilige plaats of leer hem uit het
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "Dit is de codenaam die u gebruikt voor toekomstige bezoeken om berichten te ontvangen ons team in antwoord op wat u op het volgende scherm inzendt."
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "Codenaam invoeren"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Refresh codename"
+msgstr "Codenaam invoeren"
+
+#, fuzzy
+#| msgid ""
+#| "Because we do not track users of our <strong>SecureDrop</strong>\n"
+#| " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#| " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgid ""
-"Because we do not track users of our <strong>SecureDrop</strong>\n"
+"Because we do not track users of our <b>SecureDrop</b>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgstr ""
@@ -744,16 +768,48 @@ msgstr ""
 " is het gebruik van deze codenaam de enige manier die we hebben om met u te communiceren mochten we vragen hebben of geïnteresseerd zijn in extra informatie. In tegenstelling tot wachtwoorden\n"
 " kunnen verloren codenamen niet teruggehaald worden."
 
+msgid "Submit Documents"
+msgstr ""
+
 msgid "SUBMIT DOCUMENTS"
 msgstr "DOCUMENTEN INZENDEN"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+#, fuzzy
+#| msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "De <a id=\"disable-js\" href=\"\"><strong>veiligheidsinstellingen</strong></a> van uw Tor-browser zijn niet strikt genoeg. Gebruik de <img src=\"{icon}\" alt=\"shield icon\">-knop in de werkbalk van uw browser om dit te wijzigen."
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "How to change your security level"
+msgstr ""
+
+#, fuzzy
+#| msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "Klik op het <img src=\"{icon}\" alt=\"schildicoon\"> in de werkbalk hierboven"
+
+#, fuzzy
+#| msgid "Select <strong>Advanced Security Settings</strong>"
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "Klik op <strong>geavanceerde beveiligingsinstellingen</strong>"
+
+#, fuzzy
+#| msgid "Select <strong>Safest</strong>"
+msgid "Select <b>Safest</b>"
+msgstr "Selecteer <strong>veiligst</strong>"
+
+#, fuzzy
+#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\">Ververs deze pagina</a> en je bent klaar!"
+
+#, fuzzy
+#| msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Het wordt aangeraden om de Tor Browser te gebruiken om SecureDrop te bezoeken:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Lees hier informatie om deze te installeren</a> of negeer deze waarschuwing om door te gaan."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#, fuzzy
+#| msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Het wordt aangeraden om de desktop-versie van de Tor Browser te gebruiken om SecureDrop te bezoeken, want Orfox biedt niet hetzelfde veiligheids- en anonimiteitsniveau als de desktop-versie.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Leer hier hoe deze te installeren is</a> of negeer deze waarschuwing om door te gaan."
 
 msgid "First submission"
@@ -761,6 +817,9 @@ msgstr "Eerste inzending"
 
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Eerste keer dat u iets naar onze SecureDrop inzendt? Begin hier."
+
+msgid "Get Started"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "BEGIN"
@@ -771,17 +830,18 @@ msgstr "Vervolgbezoek"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Hebt u al een codenaam? Controleer of er antwoorden zijn of stuur iets nieuws in."
 
-msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "Klik op het <img src=\"{icon}\" alt=\"schildicoon\"> in de werkbalk hierboven"
+#, fuzzy
+#| msgid "Log Out"
+msgid "Log In"
+msgstr "Uitloggen"
 
-msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "Klik op <strong>geavanceerde beveiligingsinstellingen</strong>"
+#, fuzzy
+#| msgid "Select None"
+msgid "Selected language"
+msgstr "Niets selecteren"
 
-msgid "Select <strong>Safest</strong>"
-msgstr "Selecteer <strong>veiligst</strong>"
-
-msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">Ververs deze pagina</a> en je bent klaar!"
+msgid "Choose language"
+msgstr ""
 
 msgid "Enter Codename"
 msgstr "Codenaam invoeren"
@@ -789,23 +849,22 @@ msgstr "Codenaam invoeren"
 msgid "Enter your codename"
 msgstr "Voer uw codenaam in"
 
+msgid "Continue"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "ANNULEREN"
 
 msgid "One more thing..."
 msgstr "Nog één ding…"
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Klik op de <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Nieuwe identiteit</strong>-knop in de werkbalk van uw Tor Browser. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
 
 msgid "Remember, your codename is:"
 msgstr "Vergeet niet, uw codenaam is:"
-
-msgid "Show"
-msgstr "Tonen"
-
-msgid "Hide"
-msgstr "Verbergen"
 
 msgid "Submit Files or Messages"
 msgstr "Verstuur bestanden of berichten"
@@ -828,13 +887,26 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Lees meer</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Maximale bestandsgrootte: 500 MB"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Reacties lezen"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "U heeft een reactie ontvangen. Om uw identiteit te beschermen voor het onwaarschijnlijke geval dat iemand uw codenaam kent, adviseren wij om alle reacties te verwijderen zodra u er klaar mee bent. Hierdoor weten wij ook dat u onze reactie heeft gezien. U kunt reageren door hierboven nieuwe bestanden en berichten te versturen."
 
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete this reply"
+msgstr "Deze reactie verwijderen?"
+
 msgid "Delete this reply?"
+msgstr "Deze reactie verwijderen?"
+
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete All Replies"
 msgstr "Deze reactie verwijderen?"
 
 msgid "DELETE ALL REPLIES"
@@ -849,8 +921,10 @@ msgstr "JA, VERWIJDER ALLE REACTIES"
 msgid "NO, NOT YET"
 msgstr "NEE, NOG NIET"
 
-msgid "— No Messages —"
-msgstr "— Geen berichten —"
+#, fuzzy
+#| msgid "Message"
+msgid "No Messages"
+msgstr "Bericht"
 
 msgid "Page not found"
 msgstr "Pagina niet gevonden"
@@ -861,7 +935,9 @@ msgstr "Sorry, we kunnen niet vinden wat u zoekt."
 msgid "Important"
 msgstr "Belangrijk"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "U bent uitgelogd vanwege inactiviteit. Klik op de <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Nieuwe identiteit</strong>-knop in de werkbalk van uw Tor Browser voordat u verder gaat. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
 
 msgid "Why is there a warning about Tor2Web?"
@@ -888,7 +964,9 @@ msgstr "Indien u informatie wilt inzenden via SecureDrop adviseren wij <strong>t
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Kopieer en plak het volgende adres in uw browser en volg de instructies om de Tor Browser te downloaden en te installeren:"
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+#, fuzzy
+#| msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Als de kans bestaat dat het downloaden van de Tor Browser argwaan wekt en het minder waarschijnlijk is dat uw emailprovider in de gaten wordt gehouden, kan u een e-mail sturen naar <pre>gettor@torproject.org</pre> waarna een bot een email met instructies zals treun ."
 
 msgid "Why download the team's public key?"
@@ -930,6 +1008,54 @@ msgstr "<strong>Belangrijk:</strong> Als u anoniem wilt blijven, gebruik dan <st
 
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
+
+#~ msgid "Your reply has been stored."
+#~ msgstr "Uw reactie is opgeslagen."
+
+#~ msgid "starred icon"
+#~ msgstr "favorieten icoon"
+
+#~ msgid "unstarred icon"
+#~ msgstr "ster verwijderd icoon"
+
+#~ msgid "download icon"
+#~ msgstr "download icoon"
+
+#~ msgid "edit user icon"
+#~ msgstr "wijzig gebruiker knop"
+
+#~ msgid "trash icon"
+#~ msgstr "prullenbak icoon"
+
+#~ msgid "reply icon"
+#~ msgstr "antwoord icoon"
+
+#~ msgid "check icon"
+#~ msgstr "vinkje icoon"
+
+#~ msgid "closed envelope icon"
+#~ msgstr "gesloten envelop icoon"
+
+#~ msgid "open envelope icon"
+#~ msgstr "open envelop icoon"
+
+#~ msgid "files icon"
+#~ msgstr "bestanden icoon"
+
+#~ msgid "messages icon"
+#~ msgstr "berichten icoon"
+
+#~ msgid "SecureDrop Home"
+#~ msgstr "SecureDrop home"
+
+#~ msgid "Show"
+#~ msgstr "Tonen"
+
+#~ msgid "Hide"
+#~ msgstr "Verbergen"
+
+#~ msgid "— No Messages —"
+#~ msgstr "— Geen berichten —"
 
 #~ msgid "You've flagged this source for reply."
 #~ msgstr "U heeft deze bron gemarkeerd om te reageren."

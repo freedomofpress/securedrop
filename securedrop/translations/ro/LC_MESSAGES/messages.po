@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.6~rc2\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-21 14:44+0000\nLast-Translator: erinm <erinm@riseup.net>\nLanguage-Team: Romanian <https://weblate.securedrop.org/projects/securedrop/securedrop/ro/>\nLanguage: ro\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.6~rc2\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2021-06-21 14:44+0000\n"
+"Last-Translator: erinm <erinm@riseup.net>\n"
+"Language-Team: Romanian <https://weblate.securedrop.org/projects/securedrop/securedrop/ro/>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
 msgstr "Denumire prea lungă"
@@ -134,8 +146,8 @@ msgstr "Poți încărca doar fișiere de imagini PNG."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "A apărut o eroare neașteptată! Te rugăm să îți informezi administratorul."
 
-msgid "Your reply has been stored."
-msgstr "Răspunsul tău a fost stocat."
+msgid "The source will receive your reply next time they log in."
+msgstr ""
 
 msgid "You must select one or more items for download"
 msgstr "Trebuie să selectezi unul sau mai multe elemente pentru descărcare"
@@ -209,11 +221,17 @@ msgstr "Închide"
 msgid "Cancel"
 msgstr "Renunță"
 
-msgid "starred icon"
-msgstr "pictogramă cu stea"
+msgid "Un-star {designation}"
+msgstr ""
 
-msgid "unstarred icon"
-msgstr "pictogramă fără stea"
+msgid "{designation} is starred"
+msgstr ""
+
+msgid "Star {designation}"
+msgstr ""
+
+msgid "{designation} is not starred"
+msgstr ""
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -227,8 +245,8 @@ msgstr[0] "1 mesaj"
 msgstr[1] "{num} mesaje"
 msgstr[2] "{num} de mesaje"
 
-msgid "download icon"
-msgstr "pictogramă de descărcare"
+msgid "Download"
+msgstr "Descarcă"
 
 msgid "1 unread"
 msgid_plural "{num} unread"
@@ -332,20 +350,27 @@ msgstr "Ultima autentificare"
 msgid "Edit user {username}"
 msgstr "Editează utilizatorul {username}"
 
-msgid "edit user icon"
-msgstr "pictogramă de editare a utilizatorului"
-
-msgid "trash icon disabled"
+#, fuzzy
+#| msgid "trash icon disabled"
+msgid "User deletion disabled"
 msgstr "pictogramă de coș de gunoi dezactivată"
 
 msgid "Delete user {username}"
 msgstr "Șterge utilizatorul {username}"
 
-msgid "trash icon"
-msgstr "pictogramă de coș de gunoi"
-
 msgid "never"
 msgstr "niciodată"
+
+msgid "Delete Confirmation"
+msgstr "Confirmarea ștergerii"
+
+#, fuzzy
+#| msgid "Are you sure you want to delete the user {username}?"
+msgid "Are you sure you want to delete this user?"
+msgstr "Sigur vrei să ștergi utilizatorul {username}?"
+
+msgid "DELETE"
+msgstr "ȘTERGE"
 
 msgid "No users to display"
 msgstr "Nu sunt utilizatori de afișat"
@@ -413,47 +438,23 @@ msgstr "Descarcă selecția"
 msgid "Delete Selected"
 msgstr "Șterge selecția"
 
-msgid "Reply"
-msgstr "Răspunde"
-
-msgid "reply icon"
-msgstr "pictogramă de răspuns"
+msgid "Unread"
+msgstr "Necitit"
 
 msgid "Read"
 msgstr "Citit"
 
-msgid "check icon"
-msgstr "pictogramă de verificare"
-
-msgid "Unread"
-msgstr "Necitit"
-
-msgid "closed envelope icon"
-msgstr "pictogramă de plic închis"
-
-msgid "open envelope icon"
-msgstr "pictogramă de plic deschis"
-
 msgid "Uploaded Document"
 msgstr "Documentul a fost încărcat"
 
-msgid "files icon"
-msgstr "pictogramă de fișiere"
+msgid "Reply"
+msgstr "Răspunde"
 
 msgid "Message"
 msgstr "Mesaj"
 
-msgid "messages icon"
-msgstr "pictogramă de mesaje"
-
-msgid "Delete Confirmation"
-msgstr "Confirmarea ștergerii"
-
 msgid "Are you sure you want to delete the selected submissions?"
 msgstr "Sigur vrei să ștergi trimiterile selectate?"
-
-msgid "DELETE"
-msgstr "ȘTERGE"
 
 msgid "No submissions to display."
 msgstr "Nicio trimitere de afișat."
@@ -593,11 +594,21 @@ msgstr "Resetează 2FA (autentificarea cu doi factori) pentru chei de securitate
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "RESETEAZĂ DATELE DE AUTENTIFICARE PENTRU CHEIA DE SECURITATE"
 
+#, fuzzy
+#| msgid "Verification code"
+msgid "Notification"
+msgstr "Cod de verificare"
+
+#, fuzzy
+#| msgid "Success!"
+msgid "Success"
+msgstr "Succes!"
+
+msgid "Error"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Descarcă necitite"
-
-msgid "Download"
-msgstr "Descarcă"
 
 msgid "Star"
 msgstr "Marchează cu stea"
@@ -619,9 +630,6 @@ msgstr "Selectează necitite"
 
 msgid "Select None"
 msgstr "Nu selecta nimic"
-
-msgid "Are you sure you want to delete the user {username}?"
-msgstr "Sigur vrei să ștergi utilizatorul {username}?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "Sigur vrei să resetezi autentificarea cu doi factori pentru {username}?"
@@ -658,6 +666,9 @@ msgstr "Date introduse nevalide."
 
 msgid "Write a message."
 msgstr "Scrie un mesaj."
+
+msgid "Select a file to upload."
+msgstr ""
 
 msgid "Message text too long."
 msgstr "Textul mesajului este prea lung."
@@ -701,9 +712,6 @@ msgstr "Ne pare rău, acesta nu este un nume de cod recunoscut."
 msgid "Protecting Journalists and Sources"
 msgstr "Pentru protecția jurnaliștilor și a surselor"
 
-msgid "SecureDrop Home"
-msgstr "Acasă SecureDrop"
-
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Ne pare rău, contul nostru SecureDrop este acum offline."
 
@@ -746,8 +754,23 @@ msgstr "Te rugăm să îți notezi acest nume de cod și să-l păstrezi într-u
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "Pe viitor, vei folosi acest nume de cod pentru a primi mesaje de la echipa noastră ca răspuns la ce vei transmite în ecranul următor."
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "Introdu numele de cod"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Refresh codename"
+msgstr "Introdu numele de cod"
+
+#, fuzzy
+#| msgid ""
+#| "Because we do not track users of our <strong>SecureDrop</strong>\n"
+#| " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#| " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgid ""
-"Because we do not track users of our <strong>SecureDrop</strong>\n"
+"Because we do not track users of our <b>SecureDrop</b>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgstr ""
@@ -755,16 +778,48 @@ msgstr ""
 "în vizitele tale ulterioare, acest nume de cod va fi singura metodă prin care vom putea comunica cu tine\n"
 "în caz că avem întrebări sau dorim să ne trimiți informații suplimentare. Spre deosebire de parole, numele de cod pierdute nu mai pot fi recuperate."
 
+msgid "Submit Documents"
+msgstr ""
+
 msgid "SUBMIT DOCUMENTS"
 msgstr "TRIMITE DOCUMENTE"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+#, fuzzy
+#| msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "<a id=\"disable-js\" href=\"\"><strong>Nivelul de securitate</strong></a> din browserul tău Tor este prea slab. Folosește butonul <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;din bara de instrumente a browserului pentru a-l schimba."
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "How to change your security level"
+msgstr ""
+
+#, fuzzy
+#| msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "Dă click pe <img src=\"{icon}\" alt=\"shield icon\"> în bara de instrumente de mai sus"
+
+#, fuzzy
+#| msgid "Select <strong>Advanced Security Settings</strong>"
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "Selectează <strong>Setări avansate de securitate</strong>"
+
+#, fuzzy
+#| msgid "Select <strong>Safest</strong>"
+msgid "Select <b>Safest</b>"
+msgstr "Selectează <strong>Cele mai sigure</strong>"
+
+#, fuzzy
+#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\">Reîmprospătează pagina</a>, și ai terminat!"
+
+#, fuzzy
+#| msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Îți recomandăm să folosești browserul Tor pentru a accesa SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Află cum îl poți instala</a> sau ignoră acest avertisment pentru a continua."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#, fuzzy
+#| msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Îți recomandăm să folosești browserul Tor în versiunea pentru calculator ca să accesezi SecureDrop, deoarece Orfox nu oferă același nivel de securitate și anonimitate.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Află cum îl poți instala</a> sau ignoră acest avertisment pentru a continua."
 
 msgid "First submission"
@@ -772,6 +827,9 @@ msgstr "Prima trimitere"
 
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Este prima dată când trimiți ceva pe SecureDrop? Începe de aici."
+
+msgid "Get Started"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "ÎNCEPE"
@@ -782,17 +840,18 @@ msgstr "Am revenit"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Ai deja un nume de cod? Vezi dacă ai primit răspunsuri sau trimite ceva nou."
 
-msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "Dă click pe <img src=\"{icon}\" alt=\"shield icon\"> în bara de instrumente de mai sus"
+#, fuzzy
+#| msgid "Log Out"
+msgid "Log In"
+msgstr "Deconectare"
 
-msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "Selectează <strong>Setări avansate de securitate</strong>"
+#, fuzzy
+#| msgid "Select None"
+msgid "Selected language"
+msgstr "Nu selecta nimic"
 
-msgid "Select <strong>Safest</strong>"
-msgstr "Selectează <strong>Cele mai sigure</strong>"
-
-msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">Reîmprospătează pagina</a>, și ai terminat!"
+msgid "Choose language"
+msgstr ""
 
 msgid "Enter Codename"
 msgstr "Introdu numele de cod"
@@ -800,23 +859,22 @@ msgstr "Introdu numele de cod"
 msgid "Enter your codename"
 msgstr "Introdu numele tău de cod"
 
+msgid "Continue"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "RENUNȚĂ"
 
 msgid "One more thing..."
 msgstr "Încă ceva..."
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Dă clic pe butonul <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Identitate nouă</strong> din bara de instrumente a browserului Tor. Îți va șterge activitatea din browserul Tor de pe acest dispozitiv."
 
 msgid "Remember, your codename is:"
 msgstr "Reține, numele tău de cod este:"
-
-msgid "Show"
-msgstr "Arată"
-
-msgid "Hide"
-msgstr "Ascunde"
 
 msgid "Submit Files or Messages"
 msgstr "Trimite fișiere sau mesaje"
@@ -839,13 +897,26 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Află mai multe</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Mărime maximă fișiere la încărcare: 500 MB"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Citește răspunsurile"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "Ai primit un răspuns. Pentru a-ți proteja identitatea în cazul improbabil în care cineva ți-ar afla numele de cod, te rugăm să ștergi toate răspunsurile după ce le-ai citit. Această acțiune ne va anunța că ai aflat că ai primit răspuns. Ne poți răspunde prin trimiterea de noi fișiere și mesaje mai sus."
 
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete this reply"
+msgstr "Ștergi acest răspuns?"
+
 msgid "Delete this reply?"
+msgstr "Ștergi acest răspuns?"
+
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete All Replies"
 msgstr "Ștergi acest răspuns?"
 
 msgid "DELETE ALL REPLIES"
@@ -860,8 +931,10 @@ msgstr "DA, ȘTERGE TOATE RĂSPUNSURILE"
 msgid "NO, NOT YET"
 msgstr "NU, NU ÎNCĂ"
 
-msgid "— No Messages —"
-msgstr "— Niciun mesaj —"
+#, fuzzy
+#| msgid "Message"
+msgid "No Messages"
+msgstr "Mesaj"
 
 msgid "Page not found"
 msgstr "Pagina nu a fost găsită"
@@ -872,7 +945,9 @@ msgstr "Ne pare rău, nu am găsit ce căutai."
 msgid "Important"
 msgstr "Important"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "Ai fost deconectat(ă) din cauza inactivității. Dă clic pe butonul <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Identitate nouă</strong> din bara de instrumente a browserului Tor înainte de a merge mai departe. Îți va șterge activitatea din browserul Tor de pe acest dispozitiv."
 
 msgid "Why is there a warning about Tor2Web?"
@@ -899,7 +974,9 @@ msgstr "Dacă vrei să trimiți informații pe SecureDrop, <strong>îți recoman
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Copiază și lipește următoarea adresă în browser și urmează instrucțiunile pentru a descărca și instala browserul Tor:"
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+#, fuzzy
+#| msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Dacă descărcarea browserului Tor poate trezi suspiciuni și este mai puțin probabil ca furnizorul tău de e-mail să fie monitorizat, poți trimite un e-mail la <pre>gettor@torproject.org</pre> și un robot electronic îți va răspunde cu instrucțiuni."
 
 msgid "Why download the team's public key?"
@@ -941,6 +1018,54 @@ msgstr "<strong>Important:</strong> Dacă vrei să rămâi anonim(ă), <strong>n
 
 msgid "Back to submission page"
 msgstr "Înapoi la pagina de trimitere"
+
+#~ msgid "Your reply has been stored."
+#~ msgstr "Răspunsul tău a fost stocat."
+
+#~ msgid "starred icon"
+#~ msgstr "pictogramă cu stea"
+
+#~ msgid "unstarred icon"
+#~ msgstr "pictogramă fără stea"
+
+#~ msgid "download icon"
+#~ msgstr "pictogramă de descărcare"
+
+#~ msgid "edit user icon"
+#~ msgstr "pictogramă de editare a utilizatorului"
+
+#~ msgid "trash icon"
+#~ msgstr "pictogramă de coș de gunoi"
+
+#~ msgid "reply icon"
+#~ msgstr "pictogramă de răspuns"
+
+#~ msgid "check icon"
+#~ msgstr "pictogramă de verificare"
+
+#~ msgid "closed envelope icon"
+#~ msgstr "pictogramă de plic închis"
+
+#~ msgid "open envelope icon"
+#~ msgstr "pictogramă de plic deschis"
+
+#~ msgid "files icon"
+#~ msgstr "pictogramă de fișiere"
+
+#~ msgid "messages icon"
+#~ msgstr "pictogramă de mesaje"
+
+#~ msgid "SecureDrop Home"
+#~ msgstr "Acasă SecureDrop"
+
+#~ msgid "Show"
+#~ msgstr "Arată"
+
+#~ msgid "Hide"
+#~ msgstr "Ascunde"
+
+#~ msgid "— No Messages —"
+#~ msgstr "— Niciun mesaj —"
 
 #~ msgid "You've flagged this source for reply."
 #~ msgstr "Ai marcat această sursă pentru răspuns."

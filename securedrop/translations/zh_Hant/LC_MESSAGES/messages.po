@@ -4,7 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-06-10 02:44+0000\nLast-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\nLanguage-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\nLanguage: zh_Hant\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.3.12\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"POT-Creation-Date: 2017-09-02 07:28+0000\n"
+"PO-Revision-Date: 2021-06-10 02:44+0000\n"
+"Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
+"Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\n"
+"Language: zh_Hant\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "名稱過長"
@@ -126,8 +139,8 @@ msgstr "僅可上傳 PNG 格式的圖片檔。"
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "發生預期之外的錯誤！請通知系統管理員。"
 
-msgid "Your reply has been stored."
-msgstr "您的回覆已儲存。"
+msgid "The source will receive your reply next time they log in."
+msgstr ""
 
 msgid "You must select one or more items for download"
 msgstr "須至少選取一項欲下載的項目。"
@@ -195,11 +208,17 @@ msgstr "關閉"
 msgid "Cancel"
 msgstr "取消"
 
-msgid "starred icon"
-msgstr "已加星號"
+msgid "Un-star {designation}"
+msgstr ""
 
-msgid "unstarred icon"
-msgstr "未加星號"
+msgid "{designation} is starred"
+msgstr ""
+
+msgid "Star {designation}"
+msgstr ""
+
+msgid "{designation} is not starred"
+msgstr ""
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -209,8 +228,8 @@ msgid "1 message"
 msgid_plural "{num} messages"
 msgstr[0] "{num} 訊息"
 
-msgid "download icon"
-msgstr "下載圖標"
+msgid "Download"
+msgstr "下載"
 
 msgid "1 unread"
 msgid_plural "{num} unread"
@@ -312,20 +331,27 @@ msgstr "上回登入"
 msgid "Edit user {username}"
 msgstr "编辑用户{username}"
 
-msgid "edit user icon"
-msgstr "編輯使用者圖標"
-
-msgid "trash icon disabled"
+#, fuzzy
+#| msgid "trash icon disabled"
+msgid "User deletion disabled"
 msgstr "已停用垃圾桶圖標"
 
 msgid "Delete user {username}"
 msgstr "删除用户 {username}"
 
-msgid "trash icon"
-msgstr "垃圾桶圖示"
-
 msgid "never"
 msgstr "從未"
+
+msgid "Delete Confirmation"
+msgstr "刪除確認動作"
+
+#, fuzzy
+#| msgid "Are you sure you want to delete the user {username}?"
+msgid "Are you sure you want to delete this user?"
+msgstr "確認要刪除這名 {username} 用戶？"
+
+msgid "DELETE"
+msgstr "删除"
 
 msgid "No users to display"
 msgstr "沒有使用者可顯示"
@@ -393,47 +419,23 @@ msgstr "下載所選的部份"
 msgid "Delete Selected"
 msgstr "删除所選部份"
 
-msgid "Reply"
-msgstr "回覆"
-
-msgid "reply icon"
-msgstr "回覆圖示"
+msgid "Unread"
+msgstr "未讀"
 
 msgid "Read"
 msgstr "讀取"
 
-msgid "check icon"
-msgstr "打勾圖示"
-
-msgid "Unread"
-msgstr "未讀"
-
-msgid "closed envelope icon"
-msgstr "密封信件圖示"
-
-msgid "open envelope icon"
-msgstr "開啟信件圖示"
-
 msgid "Uploaded Document"
 msgstr "已上傳的文件"
 
-msgid "files icon"
-msgstr "檔案圖示"
+msgid "Reply"
+msgstr "回覆"
 
 msgid "Message"
 msgstr "訊息"
 
-msgid "messages icon"
-msgstr "訊息圖示"
-
-msgid "Delete Confirmation"
-msgstr "刪除確認動作"
-
 msgid "Are you sure you want to delete the selected submissions?"
 msgstr "確認要删除選取的提交資料？"
-
-msgid "DELETE"
-msgstr "删除"
 
 msgid "No submissions to display."
 msgstr "無提收文件顯示。"
@@ -571,11 +573,21 @@ msgstr "重設安全密鑰例如 YubiKey 的雙重驗證"
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "重置安全密鑰憑證"
 
+#, fuzzy
+#| msgid "Verification code"
+msgid "Notification"
+msgstr "驗證碼"
+
+#, fuzzy
+#| msgid "Success!"
+msgid "Success"
+msgstr "成功！"
+
+msgid "Error"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "下載未讀文件"
-
-msgid "Download"
-msgstr "下載"
 
 msgid "Star"
 msgstr "標星"
@@ -597,9 +609,6 @@ msgstr "選取未讀"
 
 msgid "Select None"
 msgstr "無挑選"
-
-msgid "Are you sure you want to delete the user {username}?"
-msgstr "確認要刪除這名 {username} 用戶？"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "確認要重置 {username} 的雙因素驗證？"
@@ -636,6 +645,9 @@ msgstr "無效輸入。"
 
 msgid "Write a message."
 msgstr "撰寫一則訊息。"
+
+msgid "Select a file to upload."
+msgstr ""
 
 msgid "Message text too long."
 msgstr "訊息文字過長。"
@@ -679,9 +691,6 @@ msgstr "對不起，無法識別這個代號。"
 msgid "Protecting Journalists and Sources"
 msgstr "保護新聞記者與消息來源線人"
 
-msgid "SecureDrop Home"
-msgstr "SecureDrop 首頁"
-
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "抱歉，目前 SecureDrop 關機維修。"
 
@@ -724,8 +733,23 @@ msgstr "請抄下代號並妥善保管，或牢牢記住它。"
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "之後你將使用這個代號來讀取本站團隊對你（在下一個畫面所提交資訊）的回應。"
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "輸入代號"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Refresh codename"
+msgstr "輸入代號"
+
+#, fuzzy
+#| msgid ""
+#| "Because we do not track users of our <strong>SecureDrop</strong>\n"
+#| " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#| " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgid ""
-"Because we do not track users of our <strong>SecureDrop</strong>\n"
+"Because we do not track users of our <b>SecureDrop</b>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgstr ""
@@ -733,16 +757,48 @@ msgstr ""
 "\n"
 "代號和密碼不同，一旦遺失便無法再恢復獲取。"
 
+msgid "Submit Documents"
+msgstr ""
+
 msgid "SUBMIT DOCUMENTS"
 msgstr "提交文件"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+#, fuzzy
+#| msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "Tor 瀏覽器的 <a id=\"disable-js\" href=\"\"><strong>安全性</strong></a>等級過低。請使用瀏覽器工具列中的 <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;按鈕來變更之。"
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "How to change your security level"
+msgstr ""
+
+#, fuzzy
+#| msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "在上方工具列點擊 <img src=\"{icon}\" alt=\"shield icon\">"
+
+#, fuzzy
+#| msgid "Select <strong>Advanced Security Settings</strong>"
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "選取 <strong>進階安全設置</strong>"
+
+#, fuzzy
+#| msgid "Select <strong>Safest</strong>"
+msgid "Select <b>Safest</b>"
+msgstr "選取 <strong>最安全等級</strong>"
+
+#, fuzzy
+#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\">重新載入本頁</a>後，一切已完緒!"
+
+#, fuzzy
+#| msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>高度建議用 Tor 瀏覽器來訪問 SecureDrop :</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\"> 學習如何安裝 Tor</a>，或忽略這則警告繼續操作。"
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#, fuzzy
+#| msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>高度建議使用桌面版本的 Tor 瀏覽器來訪問 SecureDrop， Orfox 的安全層級與匿名保護程度遠不如桌面版:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\"> 學習如何安裝 Tor</a>，或忽略這則警告繼續操作。"
 
 msgid "First submission"
@@ -750,6 +806,9 @@ msgstr "首次提交"
 
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "首次提交資訊給 SecureDrop，請從這裡開始。"
+
+msgid "Get Started"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "開始動手"
@@ -760,17 +819,18 @@ msgstr "返回文件提交訪問頁"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "已有代號名稱？檢查回應或是提交新資料。"
 
-msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "在上方工具列點擊 <img src=\"{icon}\" alt=\"shield icon\">"
+#, fuzzy
+#| msgid "Log Out"
+msgid "Log In"
+msgstr "登出"
 
-msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "選取 <strong>進階安全設置</strong>"
+#, fuzzy
+#| msgid "Select None"
+msgid "Selected language"
+msgstr "無挑選"
 
-msgid "Select <strong>Safest</strong>"
-msgstr "選取 <strong>最安全等級</strong>"
-
-msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">重新載入本頁</a>後，一切已完緒!"
+msgid "Choose language"
+msgstr ""
 
 msgid "Enter Codename"
 msgstr "輸入代號"
@@ -778,23 +838,22 @@ msgstr "輸入代號"
 msgid "Enter your codename"
 msgstr "請輸入您的代號"
 
+msgid "Continue"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "取消"
 
 msgid "One more thing..."
 msgstr "還有一件事...."
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "點擊 Tor 瀏覽器工具列 <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong>按鈕，將可清除此設備上的瀏覽資料記錄。"
 
 msgid "Remember, your codename is:"
 msgstr "記住，您的代號是："
-
-msgid "Show"
-msgstr "顯示"
-
-msgid "Hide"
-msgstr "隱藏"
 
 msgid "Submit Files or Messages"
 msgstr "提交檔案和訊息"
@@ -817,13 +876,26 @@ msgstr "<a href=\"{url}\" class=\"text-link\">了解更多</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "檔案上傳限制：500 MB"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "閱讀回覆"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "您已經收到一則回覆。為保護您的身份，防止某人知道您的代號，請您在讀完回覆後將之全部刪除。這也讓我們知道您有看到我們的回覆。您可以在上面發送一份新檔案與訊息作回應。"
 
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete this reply"
+msgstr "刪除這條回覆嗎？"
+
 msgid "Delete this reply?"
+msgstr "刪除這條回覆嗎？"
+
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete All Replies"
 msgstr "刪除這條回覆嗎？"
 
 msgid "DELETE ALL REPLIES"
@@ -838,8 +910,10 @@ msgstr "是的，删除所有回覆"
 msgid "NO, NOT YET"
 msgstr "不，尚未"
 
-msgid "— No Messages —"
-msgstr "— 無新訊息 —"
+#, fuzzy
+#| msgid "Message"
+msgid "No Messages"
+msgstr "訊息"
 
 msgid "Page not found"
 msgstr "找不到網頁"
@@ -850,7 +924,9 @@ msgstr "對不起，未能處置您的請求。"
 msgid "Important"
 msgstr "重要"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "因聞置過久已遭系統登出，可先點擊 Tor 瀏覽器工具列<img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong>按鍵來清除此設備上的瀏覽記錄。"
 
 msgid "Why is there a warning about Tor2Web?"
@@ -877,7 +953,9 @@ msgstr "如果要向 SecureDrop 提交資訊，我們<strong>強烈建議您</st
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "複製並貼上以下的網址到您的瀏覽器，並依照指示下載和安裝 Tor 瀏覽器："
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+#, fuzzy
+#| msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "如果下載 Tor Browser 容易引發他人懷疑，而郵件服務商較不受到監控，則可以寄信到 <pre>gettor@torproject.org</pre>它利用機器人提供答案指示。"
 
 msgid "Why download the team's public key?"
@@ -919,6 +997,54 @@ msgstr "<strong>重要：</strong>如果您希望保持匿名，<strong>請勿</
 
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#~ msgid "Your reply has been stored."
+#~ msgstr "您的回覆已儲存。"
+
+#~ msgid "starred icon"
+#~ msgstr "已加星號"
+
+#~ msgid "unstarred icon"
+#~ msgstr "未加星號"
+
+#~ msgid "download icon"
+#~ msgstr "下載圖標"
+
+#~ msgid "edit user icon"
+#~ msgstr "編輯使用者圖標"
+
+#~ msgid "trash icon"
+#~ msgstr "垃圾桶圖示"
+
+#~ msgid "reply icon"
+#~ msgstr "回覆圖示"
+
+#~ msgid "check icon"
+#~ msgstr "打勾圖示"
+
+#~ msgid "closed envelope icon"
+#~ msgstr "密封信件圖示"
+
+#~ msgid "open envelope icon"
+#~ msgstr "開啟信件圖示"
+
+#~ msgid "files icon"
+#~ msgstr "檔案圖示"
+
+#~ msgid "messages icon"
+#~ msgstr "訊息圖示"
+
+#~ msgid "SecureDrop Home"
+#~ msgstr "SecureDrop 首頁"
+
+#~ msgid "Show"
+#~ msgstr "顯示"
+
+#~ msgid "Hide"
+#~ msgstr "隱藏"
+
+#~ msgid "— No Messages —"
+#~ msgstr "— 無新訊息 —"
 
 #~ msgid "You've flagged this source for reply."
 #~ msgstr "您已把這名線人標記為待回覆。"

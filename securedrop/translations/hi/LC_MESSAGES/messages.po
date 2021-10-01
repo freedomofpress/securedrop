@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.6~rc2\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-22 16:44+0000\nLast-Translator: Kushal Das <kushaldas@gmail.com>\nLanguage-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/securedrop/hi/>\nLanguage: hi\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.6~rc2\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2021-06-22 16:44+0000\n"
+"Last-Translator: Kushal Das <kushaldas@gmail.com>\n"
+"Language-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/securedrop/hi/>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
 msgstr "नाम बहुत लंबा है |"
@@ -130,8 +142,8 @@ msgstr "आप केवल PNG छवि फ़ाइलों को अपल
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "अप्रत्याशित त्रुटि हुई ! कृपया अपने व्यवस्थापक को सूचित करें।"
 
-msgid "Your reply has been stored."
-msgstr "आपका उत्तर संग्रहीत किया गया है।"
+msgid "The source will receive your reply next time they log in."
+msgstr ""
 
 msgid "You must select one or more items for download"
 msgstr "आपको डाउनलोड के लिए एक या अधिक आइटम का चयन करना होगा"
@@ -202,11 +214,17 @@ msgstr "बंद करे"
 msgid "Cancel"
 msgstr "रद्द करें"
 
-msgid "starred icon"
-msgstr "तारांकित आइकन"
+msgid "Un-star {designation}"
+msgstr ""
 
-msgid "unstarred icon"
-msgstr "अतारांकित आइकन"
+msgid "{designation} is starred"
+msgstr ""
+
+msgid "Star {designation}"
+msgstr ""
+
+msgid "{designation} is not starred"
+msgstr ""
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -218,8 +236,8 @@ msgid_plural "{num} messages"
 msgstr[0] "1 मैसेज"
 msgstr[1] "{num} मैसेजस"
 
-msgid "download icon"
-msgstr "डाउनलोड आइकन"
+msgid "Download"
+msgstr "डाउनलोड"
 
 msgid "1 unread"
 msgid_plural "{num} unread"
@@ -322,20 +340,27 @@ msgstr "पिछला लॉगइन"
 msgid "Edit user {username}"
 msgstr "उपयोगकर्ता {username} संपादित करें"
 
-msgid "edit user icon"
-msgstr "उपयोगकर्ता आइकन को संपादित करें"
-
-msgid "trash icon disabled"
+#, fuzzy
+#| msgid "trash icon disabled"
+msgid "User deletion disabled"
 msgstr "ट्रैश आइकन निष्क्रिय"
 
 msgid "Delete user {username}"
 msgstr "{username} उपयोगकर्ता हटाएं"
 
-msgid "trash icon"
-msgstr "ट्रैश आइकन"
-
 msgid "never"
 msgstr "कभी नहीँ"
+
+msgid "Delete Confirmation"
+msgstr "पुष्टिकरण हटाएं"
+
+#, fuzzy
+#| msgid "Are you sure you want to delete the user {username}?"
+msgid "Are you sure you want to delete this user?"
+msgstr "क्या आप वाकई उपयोगकर्ता {username} को हटाना चाहते हैं?"
+
+msgid "DELETE"
+msgstr "हटाएँ"
 
 msgid "No users to display"
 msgstr "प्रदर्शित करने के लिए कोई उपयोगकर्ता नहीं"
@@ -403,47 +428,23 @@ msgstr "डाउनलोड चयनित"
 msgid "Delete Selected"
 msgstr "चयनित मिटाएं"
 
-msgid "Reply"
-msgstr "जवाब दें"
-
-msgid "reply icon"
-msgstr "जवाब दें आइकन"
+msgid "Unread"
+msgstr "अपठित"
 
 msgid "Read"
 msgstr "पठित"
 
-msgid "check icon"
-msgstr "सही करें आइकन"
-
-msgid "Unread"
-msgstr "अपठित"
-
-msgid "closed envelope icon"
-msgstr "बंद लिफाफा आइकन"
-
-msgid "open envelope icon"
-msgstr "खुला लिफाफा आइकन"
-
 msgid "Uploaded Document"
 msgstr "अपलोड किए गए दस्तावेज़"
 
-msgid "files icon"
-msgstr "फ़ाइलें आइकन"
+msgid "Reply"
+msgstr "जवाब दें"
 
 msgid "Message"
 msgstr "संदेश"
 
-msgid "messages icon"
-msgstr "संदेश आइकन"
-
-msgid "Delete Confirmation"
-msgstr "पुष्टिकरण हटाएं"
-
 msgid "Are you sure you want to delete the selected submissions?"
 msgstr "क्या आप वाकई चयनित दस्तावेज़ हटाना चाहते हैं?"
-
-msgid "DELETE"
-msgstr "हटाएँ"
 
 msgid "No submissions to display."
 msgstr "प्रदर्शित करने के लिए कोई सबमिशन नहीं।"
@@ -582,11 +583,21 @@ msgstr "सुरक्षा कुंजी जैसे YubiKey के द्
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "सुरक्षा कुंजी क्रेडेंशियल्स रीसेट"
 
+#, fuzzy
+#| msgid "Verification code"
+msgid "Notification"
+msgstr "प्रमाणीकरण संख्या"
+
+#, fuzzy
+#| msgid "Success!"
+msgid "Success"
+msgstr "सफल हुआ!"
+
+msgid "Error"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "न पढ़े मसाज डाउनलोड करें"
-
-msgid "Download"
-msgstr "डाउनलोड"
 
 msgid "Star"
 msgstr "तारांकित करें"
@@ -608,9 +619,6 @@ msgstr "न पढ़े हुऐ चुनें"
 
 msgid "Select None"
 msgstr "किसी का चयन न करें"
-
-msgid "Are you sure you want to delete the user {username}?"
-msgstr "क्या आप वाकई उपयोगकर्ता {username} को हटाना चाहते हैं?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "क्या आप वाकई {username} के लिए दो-कारक प्रमाणीकरण को रीसेट करना चाहते हैं?"
@@ -647,6 +655,9 @@ msgstr "अमान्य निवेश।"
 
 msgid "Write a message."
 msgstr "सन्देश लिखिए।"
+
+msgid "Select a file to upload."
+msgstr ""
 
 msgid "Message text too long."
 msgstr "संदेश पाठ बहुत लंबा है |"
@@ -690,9 +701,6 @@ msgstr "क्षमा करें, वह एक मान्यता प्
 msgid "Protecting Journalists and Sources"
 msgstr "पत्रकारों और स्रोतों की रक्षा करते हुए"
 
-msgid "SecureDrop Home"
-msgstr "SecureDrop होम"
-
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "हमें खेद है, हमारा SecureDrop वर्तमान में ऑफ़लाइन है।"
 
@@ -735,8 +743,23 @@ msgstr "कृपया यह संकेत नाम नीचे लिख�
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "यह संकेत नाम आप अगली स्क्रीन पर सबमिट की गई प्रतिक्रिया के उत्तर में हमारे टीम से संदेश प्राप्त करने के लिए भविष्य में आने वाले दौरा में उपयोग करें।"
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "संकेत नाम दर्ज करें"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Refresh codename"
+msgstr "संकेत नाम दर्ज करें"
+
+#, fuzzy
+#| msgid ""
+#| "Because we do not track users of our <strong>SecureDrop</strong>\n"
+#| " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#| " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgid ""
-"Because we do not track users of our <strong>SecureDrop</strong>\n"
+"Because we do not track users of our <b>SecureDrop</b>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgstr ""
@@ -744,16 +767,48 @@ msgstr ""
 "सेवा, भविष्य के दौरे में, इस संकेत नाम का उपयोग करने का एकमात्र तरीका है कि हमारे साथ संवाद करना चाहिए था हमारे पास होना चाहिए प्रश्न या \n"
 "अतिरिक्त जानकारी में रुचि रखते हैं। पासवर्ड के विपरीत, खोई हुई कोडनाम को पुनः प्राप्त करने का कोई तरीका नहीं है।"
 
+msgid "Submit Documents"
+msgstr ""
+
 msgid "SUBMIT DOCUMENTS"
 msgstr "दस्तावेज़ जमा करें"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+#, fuzzy
+#| msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "आपके Tor ब्राउज़र का <a id=\"disable-js\" href=\"\"><strong>सुरक्षा स्तर</strong></a> बहुत कम है। ब्राउज़र टूलबार के <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;बटन से इसे बदलें।"
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "How to change your security level"
+msgstr ""
+
+#, fuzzy
+#| msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "ऊपर दिये गये टूलबार मे <img src=\"{icon}\" alt=\"shield icon\"> &nbsp; पर क्लिक करें"
+
+#, fuzzy
+#| msgid "Select <strong>Advanced Security Settings</strong>"
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "<strong>उन्न्त सुरक्षा स्तर</strong> चुनें"
+
+#, fuzzy
+#| msgid "Select <strong>Safest</strong>"
+msgid "Select <b>Safest</b>"
+msgstr "<strong>सबसे सुरक्षित</strong> चुनें"
+
+#, fuzzy
+#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\">पेज रीफ़्रेश करें</a> और कार्य पूर्न !"
+
+#, fuzzy
+#| msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>SecureDrop तक पहुंचने के लिए Tor ब्राउज़र का उपयोग करने की अनुशंसा की जाती है:</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">इसे इस्तमाल करने के बारे में जानें</a>, या जारी रखने के लिए इस चेतावनी को अनदेखा करें|"
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#, fuzzy
+#| msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>यह अनुशंसा की जाती है कि आप SecureDrop तक पहुंचने के लिए Tor ब्राउजर के डेस्कटॉप संस्करण का उपयोग करें, क्योंकि Orfox समान स्तर की सुरक्षा और डेस्कटॉप संस्करण के जितना गुमनाम नहीं प्रदान करता है।</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">इसे इंस्टॉल करने के बारे में जानें</a>, या जारी रखने के लिए इस चेतावनी को अनदेखा करें।"
 
 msgid "First submission"
@@ -761,6 +816,9 @@ msgstr "पहला सबमिशन"
 
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "पहली बार हमारे सिक्योरड्रॉप को सबमिट करना?, तो यहां से शुरू करें।"
+
+msgid "Get Started"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "शुरु करें"
@@ -771,17 +829,18 @@ msgstr "वापसी का दौरा"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "पहले से ही एक संकेत नाम है? उत्तर के लिए जांचें या कुछ नया सबमिट करें।"
 
-msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "ऊपर दिये गये टूलबार मे <img src=\"{icon}\" alt=\"shield icon\"> &nbsp; पर क्लिक करें"
+#, fuzzy
+#| msgid "Log Out"
+msgid "Log In"
+msgstr "लोग आउट"
 
-msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "<strong>उन्न्त सुरक्षा स्तर</strong> चुनें"
+#, fuzzy
+#| msgid "Select None"
+msgid "Selected language"
+msgstr "किसी का चयन न करें"
 
-msgid "Select <strong>Safest</strong>"
-msgstr "<strong>सबसे सुरक्षित</strong> चुनें"
-
-msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">पेज रीफ़्रेश करें</a> और कार्य पूर्न !"
+msgid "Choose language"
+msgstr ""
 
 msgid "Enter Codename"
 msgstr "संकेत नाम दर्ज करें"
@@ -789,23 +848,22 @@ msgstr "संकेत नाम दर्ज करें"
 msgid "Enter your codename"
 msgstr "आपका संकेत नाम दर्ज करें"
 
+msgid "Continue"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "रद्द करें"
 
 msgid "One more thing..."
 msgstr "एक और चीज़..."
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>नई पहचान </strong> बटन पर क्लिक करें. यह इस उपकरण पर आपके Tor ब्राउज़र गतिविधि डेटा को साफ़ कर देगा."
 
 msgid "Remember, your codename is:"
 msgstr "याद रखें, आपका संकेत नाम है:"
-
-msgid "Show"
-msgstr "दिखाएं"
-
-msgid "Hide"
-msgstr "छुपाएं"
 
 msgid "Submit Files or Messages"
 msgstr "फ़ाइलें या संदेश जमा करें"
@@ -828,13 +886,26 @@ msgstr "<a href=\"{url}\" class=\"text-link\">अधिक जानें</a>|"
 msgid "Maximum upload size: 500 MB"
 msgstr "अधिकतम अपलोड माप: 500 MB"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "उत्तर पढ़ें"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "आपको एक उत्तर मिला है| किसी अनपेक्षित परिस्थिति में की आपका संकेत नाम किसी को पता चल जाये, कृपया पढ़े जा चुके उत्तरों तो मिटा दें| यह इस बात की भी पुष्टि कर देता है की आपको हमारा उत्तर मिल गया है| आप नई फाइलें और संदेश भी जमा कर सकते हैं|"
 
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete this reply"
+msgstr "यह उत्तर हटाएं?"
+
 msgid "Delete this reply?"
+msgstr "यह उत्तर हटाएं?"
+
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete All Replies"
 msgstr "यह उत्तर हटाएं?"
 
 msgid "DELETE ALL REPLIES"
@@ -849,8 +920,10 @@ msgstr "हाँ, सभी उत्तर हटाएं"
 msgid "NO, NOT YET"
 msgstr "नहीं, अभी तक नहीं"
 
-msgid "— No Messages —"
-msgstr "— कोई संदेश नहीं —"
+#, fuzzy
+#| msgid "Message"
+msgid "No Messages"
+msgstr "संदेश"
 
 msgid "Page not found"
 msgstr "पृष्ठ नहीं मिला"
@@ -861,7 +934,9 @@ msgstr "क्षमा करें, हम आपके द्वारा अ
 msgid "Important"
 msgstr "जरूरी"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "आप निष्क्रियता के कारण लॉग आउट हो गया. आगे बढ़ने से पहले अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong> नई पहचान </strong> बटन पर क्लिक करें."
 
 msgid "Why is there a warning about Tor2Web?"
@@ -888,7 +963,9 @@ msgstr "यदि आप SecureDrop को जानकारी जमा क�
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "निम्न एड्रेस को अपने ब्राउज़र में कॉपी और पेस्ट करें और Tor ब्राउज़र को डाउनलोड और इंस्टॉल करने के लिए निर्देशों का पालन करें:"
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+#, fuzzy
+#| msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "यदि आशंका है कि Tor ब्राउज़र डाउनलोड करने से संदेह उठता है और आपके मेल प्रदाता पर नजर रखी जाने की संभावना कम है, तो आप एक मेल भेज सकते हैं इस पर <pre>gettor@torproject.org</pre> और एक बॉट निर्देशों के साथ जवाब देंगे|"
 
 msgid "Why download the team's public key?"
@@ -930,6 +1007,54 @@ msgstr "<strong>महत्वपूर्ण:</strong> यदि आप गु
 
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
+
+#~ msgid "Your reply has been stored."
+#~ msgstr "आपका उत्तर संग्रहीत किया गया है।"
+
+#~ msgid "starred icon"
+#~ msgstr "तारांकित आइकन"
+
+#~ msgid "unstarred icon"
+#~ msgstr "अतारांकित आइकन"
+
+#~ msgid "download icon"
+#~ msgstr "डाउनलोड आइकन"
+
+#~ msgid "edit user icon"
+#~ msgstr "उपयोगकर्ता आइकन को संपादित करें"
+
+#~ msgid "trash icon"
+#~ msgstr "ट्रैश आइकन"
+
+#~ msgid "reply icon"
+#~ msgstr "जवाब दें आइकन"
+
+#~ msgid "check icon"
+#~ msgstr "सही करें आइकन"
+
+#~ msgid "closed envelope icon"
+#~ msgstr "बंद लिफाफा आइकन"
+
+#~ msgid "open envelope icon"
+#~ msgstr "खुला लिफाफा आइकन"
+
+#~ msgid "files icon"
+#~ msgstr "फ़ाइलें आइकन"
+
+#~ msgid "messages icon"
+#~ msgstr "संदेश आइकन"
+
+#~ msgid "SecureDrop Home"
+#~ msgstr "SecureDrop होम"
+
+#~ msgid "Show"
+#~ msgstr "दिखाएं"
+
+#~ msgid "Hide"
+#~ msgstr "छुपाएं"
+
+#~ msgid "— No Messages —"
+#~ msgstr "— कोई संदेश नहीं —"
 
 #~ msgid "You've flagged this source for reply."
 #~ msgstr "आपने उत्तर के लिए इस स्रोत को चिह्नित किया है |"
