@@ -1,5 +1,5 @@
-# ubuntu:focal-20200720
-FROM ubuntu@sha256:60f560e52264ed1cb7829a0d59b1ee7740d7580e0eb293aca2d722136edb1e24
+# ubuntu:focal-20210921
+FROM ubuntu@sha256:3555f4996aea6be945ae1532fa377c88f4b3b9e6d93531f47af5d78a7d5e3761
 
 
 # additional meta-data makes it easier to clean up, find
