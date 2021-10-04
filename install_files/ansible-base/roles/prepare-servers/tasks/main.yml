@@ -49,3 +49,11 @@
     purge: yes
   tags:
     - apt
+
+- name: Upgrade all packages
+  apt:
+    name: "*"
+    state: latest
+    update_cache: yes
+  tags:
+    - apt
