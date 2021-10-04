@@ -13,10 +13,13 @@
   apt_repository:
     repo: deb [arch=amd64] {{ apt_repo_url }} {{ apt_repo_target_distro }} main
     state: present
-    update_cache: yes
+    update_cache: no
   tags:
     - apt
     - fpf_repo
+
+- name: Update apt cache.
+  shell: apt-get update -q
 
 - name: Install the securedrop-keyring package for managing the apt gpg key.
   apt:
