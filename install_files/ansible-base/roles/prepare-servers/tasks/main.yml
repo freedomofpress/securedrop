@@ -49,3 +49,11 @@
     purge: yes
   tags:
     - apt
+
+- name: Ensure dist-upgrade before SecureDrop install
+  apt:
+    upgrade: dist
+    update_cache: yes
+  tags:
+    - apt
+    - apt-upgrade
